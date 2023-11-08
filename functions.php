@@ -1,6 +1,12 @@
 <?php
+/**
+ * Theme Functions.
+ *
+ * @package Nova B2B
+ */
 
 require get_stylesheet_directory() . '/bonn-update-checker/plugin-update-checker.php';
+
 use Bonn\PluginUpdateChecker\v5\PucFactory;
 
 $nova_update_checker = PucFactory::buildUpdateChecker(
@@ -9,17 +15,28 @@ $nova_update_checker = PucFactory::buildUpdateChecker(
 	'nova-b2b'
 );
 
-// Set the branch that contains the stable release.
 $nova_update_checker->setBranch( 'main' );
 
-/**
- * Enqueue child styles.
- */
-function child_enqueue_styles() {
-	wp_enqueue_style( 'child-theme', get_stylesheet_directory_uri() . '/style.css', array(), 100 );
+if ( ! defined( 'NOVA_DIR_PATH' ) ) {
+	define( 'NOVA_DIR_PATH', untrailingslashit( get_stylesheet_directory() ) );
 }
 
-// add_action( 'wp_enqueue_scripts', 'child_enqueue_styles' ); // Remove the // from the beginning of this line if you want the child theme style.css file to load on the front end of your site.
+if ( ! defined( 'NOVA_DIR_URI' ) ) {
+	define( 'NOVA_DIR_URI', untrailingslashit( get_stylesheet_directory_uri() ) );
+}
+
+if ( ! defined( 'NOVA_ARCHIVE_POST_PER_PAGE' ) ) {
+	define( 'NOVA_ARCHIVE_POST_PER_PAGE', 9 );
+}
+
+if ( ! defined( 'NOVA_SEARCH_RESULTS_POST_PER_PAGE' ) ) {
+	define( 'NOVA_SEARCH_RESULTS_POST_PER_PAGE', 9 );
+}
+
+
+require_once NOVA_DIR_PATH . '/inc/helpers/autoloader.php';
+
+
 
 /**
  * Add custom functions here

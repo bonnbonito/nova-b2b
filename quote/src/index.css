@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.signage-title {
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #2F2F2F;
+}
+
+.signage-content {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 200ms;
+}
+
+.signage-content>div {
+  overflow: hidden;
+}
+
+.signage-content.open {
+  grid-template-rows: 1fr;
+}

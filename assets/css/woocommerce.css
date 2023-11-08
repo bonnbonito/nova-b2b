@@ -1,0 +1,27 @@
+.woocommerce div.product .product_title {
+    color: #000;
+}
+
+.product-nav-tabs {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+    margin-top: 1em;
+    border-top: 1px solid #ddd;
+    margin-bottom: 100px;
+}
+
+.product-nav-tabs a {
+    text-transform: uppercase;
+}
+
+.product-nav-tabs .button {
+    font-family: var(--global-heading-font-family);
+    padding-top: 7px;
+}
+
+.product-nav-tabs-left {
+    display: flex;
+    gap: 55px;
+}
