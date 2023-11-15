@@ -8,8 +8,12 @@ namespace NOVA_B2B\INC\Helpers;
 function autoloader( $class ) {
 	// Corrected function to use the file path instead of URI
 	$class_path = get_stylesheet_directory() . '/inc/classes/' . $class . '.php';
+	error_log( `{$class_path} classpath\n`, 3, NOVA_DIR_PATH . '/error.log' );
 	if ( file_exists( $class_path ) ) {
+		error_log( $class_path, 3, NOVA_DIR_PATH . '/error.log' );
 		include $class_path;
+	} else {
+		error_log( `NOT foound {$class_path}`, 3, NOVA_DIR_PATH . '/error.log' );
 	}
 }
 
@@ -17,4 +21,4 @@ function autoloader( $class ) {
 
 require NOVA_DIR_PATH . '/inc/classes/Styles.php';
 require NOVA_DIR_PATH . '/inc/classes/Woocommerce.php';
-require NOVA_DIR_PATH . '/inc/classes/Quote.php';
+require NOVA_DIR_PATH . '/inc/classes/NOVA_Quote.php';

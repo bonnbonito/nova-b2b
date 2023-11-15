@@ -1,7 +1,8 @@
 <?php
 
+namespace NOVA_B2B\INC\CLASSES;
 
-class NOVA_Woocommerce {
+class Woocommerce {
 	/**
 	 * Instance of this class
 	 *
@@ -21,9 +22,9 @@ class NOVA_Woocommerce {
 	 * Class Constructor.
 	 */
 	public function __construct() {
-		remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_title', 5 );
-		remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_product_data_tabs', 10 );
+		// remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_title', 5 );
+		// remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_product_data_tabs', 10 );
 	}
 }
 
-NOVA_Woocommerce::get_instance();
+Woocommerce::get_instance();

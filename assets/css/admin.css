@@ -1,0 +1,57 @@
+#lettersPricingTable {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.pricing-table-wrap {
+    max-height: 400px;
+    overflow: auto;
+}
+
+.pricing-table {
+    /* Your specific styles for 'pricing-table' class */
+    border: 1px solid #ccc;
+    border-collapse: collapse;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.pricing-table th,
+.pricing-table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+    position: relative;
+}
+
+.pricing-table th {
+    background-color: #f2f2f2;
+}
+
+.pricing-table td:hover::before {
+    background-color: rgba(0, 0, 0, .2);
+    content: '';
+    height: 100%;
+    left: -5000px;
+    position: absolute;
+    top: 0;
+    width: 10000px;
+    z-index: 1;
+}
+
+.pricing-table td:hover::after {
+    background-color: rgba(0, 0, 0, .2);
+    content: '';
+    height: 10000px;
+    left: 0;
+    position: absolute;
+    top: -5000px;
+    width: 100%;
+    z-index: 2;
+}
+
+.pricing-table td::before,
+.pricing-table td::after {
+    pointer-events: none;
+}

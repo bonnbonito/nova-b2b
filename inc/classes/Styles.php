@@ -1,6 +1,7 @@
 <?php
+namespace NOVA_B2B\INC\CLASSES;
 
-class Nova_Styles {
+class Styles {
 	/**
 	 * Instance of this class
 	 *
@@ -30,4 +31,4 @@ class Nova_Styles {
 	}
 }
 
-Nova_Styles::get_instance();
+Styles::get_instance();

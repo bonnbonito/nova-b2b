@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import Sidebar from './Sidebar';
 import Signage from './Signage';
@@ -9,23 +9,34 @@ export const AcrylicContext = createContext(null);
 const AcrylicOptions = AcrylicQuote.quote_options;
 
 export default function Accrylic() {
-	const [signage, setSignage] = useState([
-		{
-			id: uuidv4(),
-			type: 'letters',
-			title: 'LETTERS 1',
-			letters: '',
-			comments: '',
-			font: 'Comfortaa',
-			mounting: AcrylicOptions.mounting_options[0].mounting_option,
-			waterproof: AcrylicOptions.waterproof_options[0].option,
-			thickness: AcrylicOptions.acrylic_thickness_options[0],
-			color: AcrylicOptions.colors[0],
-			letterHeight: 1,
-			usdPrice: 0,
-			cadPrice: 0,
-		},
-	]);
+	const [signage, setSignage] = useState([]);
+
+	useEffect(() => {
+		const savedStorage = localStorage.getItem('acrylicStorage');
+		if (savedStorage) {
+			setSignage(JSON.parse(savedStorage));
+		} else {
+			setSignage([
+				{
+					id: uuidv4(),
+					type: 'letters',
+					title: 'LETTERS 1',
+					letters: '',
+					comments: '',
+					font: '',
+					mounting: AcrylicOptions.mounting_options[0].mounting_option,
+					waterproof: AcrylicOptions.waterproof_options[0].option,
+					thickness: AcrylicOptions.acrylic_thickness_options[0],
+					color: { name: '', color: '' },
+					letterHeight: 1,
+					usdPrice: 0,
+					cadPrice: 0,
+					file: '',
+					finishing: AcrylicOptions.finishing_options[0].name,
+				},
+			]);
+		}
+	}, []);
 
 	const defaultArgs = {
 		id: uuidv4(),
@@ -33,8 +44,10 @@ export default function Accrylic() {
 		mounting: AcrylicOptions.mounting_options[0].mounting_option,
 		thickness: AcrylicOptions.acrylic_thickness_options[0],
 		waterproof: AcrylicOptions.waterproof_options[0].option,
+		finishing: AcrylicOptions.finishing_options[0].name,
 		usdPrice: 0,
 		cadPrice: 0,
+		file: '',
 	};
 
 	function addSignage(type) {
@@ -49,12 +62,12 @@ export default function Accrylic() {
 					title: `${type} ${count + 1}`,
 					letters: '',
 					comments: '',
-					font: 'Comfortaa',
+					font: '',
 					mounting: AcrylicOptions.mounting_options[0].mounting_option,
 					waterproof: AcrylicOptions.waterproof_options[0].option,
 					thickness: AcrylicOptions.acrylic_thickness_options[0],
 					thickness_options: AcrylicOptions.acrylic_thickness_options,
-					color: AcrylicOptions.colors[0],
+					color: { name: '', color: '' },
 					letterHeight: 1,
 				};
 			} else {
@@ -75,10 +88,14 @@ export default function Accrylic() {
 		});
 	}
 
+	useEffect(() => {
+		localStorage.setItem('acrylicStorage', JSON.stringify(signage));
+	}, [signage]);
+
 	return (
 		<AcrylicContext.Provider value={{ signage, setSignage, addSignage }}>
-			<div className="flex gap-6">
-				<div className="w-3/4">
+			<div className="md:flex gap-6">
+				<div className="md:w-3/4 w-full">
 					{signage.map((item, index) => (
 						<Signage index={index} id={item.id} item={item}></Signage>
 					))}

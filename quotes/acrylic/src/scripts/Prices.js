@@ -4,7 +4,7 @@ export default function Sidebar({ item }) {
 	return (
 		<div className="block">
 			<div className="flex justify-between py-2 font-title uppercase">
-				{item.title} <span>${item.usdPrice} USD</span>
+				{item.title} <span>${Number(item.usdPrice).toLocaleString()} USD</span>
 			</div>
 			<div className="grid grid-cols-2 py-[2px]">
 				<div className="text-left text-xs font-title">THICKNESS</div>
@@ -56,6 +56,11 @@ export default function Sidebar({ item }) {
 				<div className="text-left text-[10px]">{item.color?.name}</div>
 			</div>
 
+			<div className="grid grid-cols-2 py-[2px]">
+				<div className="text-left text-xs font-title">FINISHING</div>
+				<div className="text-left text-[10px]">{item.finishing}</div>
+			</div>
+
 			{item.type === 'letters' && (
 				<>
 					<div className="grid grid-cols-2 py-[2px]">
@@ -75,6 +80,16 @@ export default function Sidebar({ item }) {
 				<div className="text-left text-xs font-title">COMMENTS</div>
 				<div className="text-left text-[10px] break-words">{item.comments}</div>
 			</div>
+			{item.file && (
+				<div className="grid grid-cols-2 py-[2px]">
+					<div className="text-left text-xs font-title">FILE</div>
+					<div className="text-left text-[10px] break-words">
+						<a href={item.file} target="_blank">
+							View File
+						</a>
+					</div>
+				</div>
+			)}
 		</div>
 	);
 }

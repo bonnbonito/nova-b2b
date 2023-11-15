@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { AcrylicContext } from './Acrylic';
 import Dropdown from './Dropdown';
+import FontsDropdown from './FontsDropdown';
+import UploadFile from './UploadFile';
 import useOutsideClick from './utils/ClickOutside';
 import convert_json from './utils/ConvertJson';
 
@@ -13,11 +15,14 @@ export default function Letters({ item }) {
 	const [comments, setComments] = useState(item.comments);
 	const [font, setFont] = useState(item.font);
 	const [color, setColor] = useState(item.color);
+	const [isLoading, setIsLoading] = useState(false);
 	const [openColor, setOpenColor] = useState(false);
 	const [waterproof, setWaterproof] = useState(item.waterproof);
 	const [selectedThickness, setSelectedThickness] = useState(item.thickness);
 	const thicknessOptions = AcrylicOptions.acrylic_thickness_options;
+	const [fileUrl, setFileUrl] = useState(item.file);
 	const [letterHeightOptions, setLetterHeightOptions] = useState([]);
+	const [selectedFinishing, setSelectedFinishing] = useState(item.finishing);
 
 	const [selectedLetterHeight, setSelectedLetterHeight] = useState(
 		item.letterHeight
@@ -35,6 +40,7 @@ export default function Letters({ item }) {
 	const colorRef = useRef(null);
 
 	const colorOptions = AcrylicOptions.colors;
+	const finishingOptions = AcrylicOptions.finishing_options;
 	const letterPricing =
 		AcrylicOptions.letter_height_x_logo_pricing.length > 0
 			? convert_json(AcrylicOptions.letter_height_x_logo_pricing)
@@ -104,6 +110,8 @@ export default function Letters({ item }) {
 					color: color,
 					letterHeight: selectedLetterHeight,
 					usdPrice: usdPrice,
+					file: fileUrl,
+					finishing: selectedFinishing,
 				};
 			} else {
 				return sign;
@@ -116,7 +124,7 @@ export default function Letters({ item }) {
 
 	const handleComments = (e) => setComments(e.target.value);
 
-	const handleSelectFont = (e) => setFont(e.target.value);
+	const handleSelectFont = (value) => setFont(value);
 
 	const handleonChangeMount = (e) => setSelectedMounting(e.target.value);
 
@@ -134,6 +142,10 @@ export default function Letters({ item }) {
 
 	const handleOnChangeLetterHeight = (e) => {
 		setSelectedLetterHeight(e.target.value);
+	};
+
+	const handleChangeFinishing = (e) => {
+		setSelectedFinishing(e.target.value);
 	};
 
 	useEffect(() => {
@@ -216,6 +228,8 @@ export default function Letters({ item }) {
 		color,
 		usdPrice,
 		selectedLetterHeight,
+		fileUrl,
+		selectedFinishing,
 	]);
 
 	useEffect(() => {
@@ -238,10 +252,6 @@ export default function Letters({ item }) {
 		}
 	}, [selectedThickness]);
 
-	// useEffect(() => {
-	// 	setSelectedLetterHeight(() => lettersHeight.min);
-	// }, [selectedThickness, lettersHeight]);
-
 	useEffect(() => {
 		if (letterPricing.length > 0) {
 			const pricingDetail = letterPricing[selectedLetterHeight - 1];
@@ -263,6 +273,57 @@ export default function Letters({ item }) {
 		setOpenColor(false);
 	});
 
+	const handleFileUpload = async (file) => {
+		setIsLoading(true);
+		const formData = new FormData();
+		formData.append('file', file);
+		formData.append('nonce', AcrylicQuote.nonce);
+		formData.append('action', 'upload_acrylic_file');
+
+		fetch(AcrylicQuote.ajax_url, {
+			method: 'POST',
+			credentials: 'same-origin',
+			headers: {
+				'Cache-Control': 'no-cache',
+			},
+			body: formData,
+		})
+			.then((response) => response.json())
+			.then((data) => {
+				if (data.code == '2' && data.file) {
+					console.log(data.file.url);
+					setFileUrl(data.file.url);
+					setIsLoading(false);
+				}
+			})
+			.catch((error) => console.error('Error:', error));
+	};
+
+	const handleRemoveFile = async () => {
+		setIsLoading(true);
+		const formData = new FormData();
+		formData.append('file', fileUrl);
+		formData.append('nonce', AcrylicQuote.nonce);
+		formData.append('action', 'remove_acrylic_file');
+
+		fetch(AcrylicQuote.ajax_url, {
+			method: 'POST',
+			credentials: 'same-origin',
+			headers: {
+				'Cache-Control': 'no-cache',
+			},
+			body: formData,
+		})
+			.then((response) => response.json())
+			.then((data) => {
+				if (data.code == '2') {
+					setFileUrl('');
+					setIsLoading(false);
+				}
+			})
+			.catch((error) => console.error('Error:', error));
+	};
+
 	return (
 		<>
 			<div className="mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md">
@@ -276,6 +337,7 @@ export default function Letters({ item }) {
 							overflow: 'hidden',
 							fontFamily: font,
 							color: color.color,
+							textShadow: '0px 0px 1px rgba(0, 0, 0, 1)',
 						}}
 					>
 						{letters}
@@ -326,21 +388,25 @@ export default function Letters({ item }) {
 						className="flex items-center select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer"
 						onClick={() => setOpenColor((prev) => !prev)}
 					>
-						{color.name}
+						<span
+							className="rounded-full w-[18px] h-[18px] border mr-2"
+							style={{ backgroundColor: color.color }}
+						></span>
+						{color.name === '' ? 'SELECT COLOR' : color.name}
 					</div>
 					{openColor && (
-						<div className="absolute w-full bg-white z-20 border border-gray-200 rounded-md">
+						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
 							{colorOptions.map((color) => {
 								return (
 									<div
-										className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200"
+										className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
 										onClick={() => {
 											setColor(color);
 											setOpenColor(false);
 										}}
 									>
 										<span
-											className="w-[20px] h-[20px] inline-block rounded-full"
+											className="w-[18px] h-[18px] inline-block rounded-full border"
 											style={{ backgroundColor: color.color }}
 										></span>
 										{color.name}
@@ -351,20 +417,10 @@ export default function Letters({ item }) {
 					)}
 				</div>
 
-				<Dropdown
-					title="Fonts"
-					onChange={handleSelectFont}
-					options={AcrylicQuote.fonts.map((font) => (
-						<option
-							value={font.name}
-							style={{ fontFamily: font.name }}
-							selected={font.name === item.font}
-						>
-							{font.name}
-						</option>
-					))}
-					style={{ fontFamily: font }}
-					value={item.font}
+				<FontsDropdown
+					font={item.font}
+					fonts={AcrylicOptions.fonts}
+					handleSelectFont={handleSelectFont}
 				/>
 
 				<Dropdown
@@ -394,6 +450,20 @@ export default function Letters({ item }) {
 					))}
 					value={item.mounting}
 				/>
+
+				<Dropdown
+					title="Finishing Options"
+					onChange={handleChangeFinishing}
+					options={finishingOptions.map((finishing) => (
+						<option
+							value={finishing.name}
+							selected={finishing.name === item.finishing}
+						>
+							{finishing.name}
+						</option>
+					))}
+					value={item.finishing}
+				/>
 			</div>
 
 			<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -409,15 +479,12 @@ export default function Letters({ item }) {
 						placeholder="ADD COMMENTS"
 					/>
 				</div>
-				<div className="px-[1px]">
-					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-						UPLOAD PDF/AI FILE
-					</label>
-
-					<button className="h-[40px] w-full py-2 px-2 text-center text-red rounded-md text-sm uppercase bg-slate-400 hover:bg-slate-600 font-title leading-[1em]">
-						Upload Design
-					</button>
-				</div>
+				<UploadFile
+					file={item.file}
+					isLoading={isLoading}
+					handleFileUpload={handleFileUpload}
+					handleRemoveFile={handleRemoveFile}
+				/>
 			</div>
 
 			<div className="text-xs text-[#9F9F9F] pt-4">

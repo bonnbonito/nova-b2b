@@ -30,29 +30,44 @@ __webpack_require__.r(__webpack_exports__);
 const AcrylicContext = (0,react__WEBPACK_IMPORTED_MODULE_1__.createContext)(null);
 const AcrylicOptions = AcrylicQuote.quote_options;
 function Accrylic() {
-  const [signage, setSignage] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([{
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_5__["default"])(),
-    type: 'letters',
-    title: 'LETTERS 1',
-    letters: '',
-    comments: '',
-    font: 'Comfortaa',
-    mounting: AcrylicOptions.mounting_options[0].mounting_option,
-    waterproof: AcrylicOptions.waterproof_options[0].option,
-    thickness: AcrylicOptions.acrylic_thickness_options[0],
-    color: AcrylicOptions.colors[0],
-    letterHeight: 1,
-    usdPrice: 0,
-    cadPrice: 0
-  }]);
+  const [signage, setSignage] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]);
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+    const savedStorage = localStorage.getItem('acrylicStorage');
+    if (savedStorage) {
+      setSignage(JSON.parse(savedStorage));
+    } else {
+      setSignage([{
+        id: (0,uuid__WEBPACK_IMPORTED_MODULE_5__["default"])(),
+        type: 'letters',
+        title: 'LETTERS 1',
+        letters: '',
+        comments: '',
+        font: '',
+        mounting: AcrylicOptions.mounting_options[0].mounting_option,
+        waterproof: AcrylicOptions.waterproof_options[0].option,
+        thickness: AcrylicOptions.acrylic_thickness_options[0],
+        color: {
+          name: '',
+          color: ''
+        },
+        letterHeight: 1,
+        usdPrice: 0,
+        cadPrice: 0,
+        file: '',
+        finishing: AcrylicOptions.finishing_options[0].name
+      }]);
+    }
+  }, []);
   const defaultArgs = {
     id: (0,uuid__WEBPACK_IMPORTED_MODULE_5__["default"])(),
     comments: '',
     mounting: AcrylicOptions.mounting_options[0].mounting_option,
     thickness: AcrylicOptions.acrylic_thickness_options[0],
     waterproof: AcrylicOptions.waterproof_options[0].option,
+    finishing: AcrylicOptions.finishing_options[0].name,
     usdPrice: 0,
-    cadPrice: 0
+    cadPrice: 0,
+    file: ''
   };
   function addSignage(type) {
     setSignage(prevSignage => {
@@ -66,12 +81,15 @@ function Accrylic() {
           title: `${type} ${count + 1}`,
           letters: '',
           comments: '',
-          font: 'Comfortaa',
+          font: '',
           mounting: AcrylicOptions.mounting_options[0].mounting_option,
           waterproof: AcrylicOptions.waterproof_options[0].option,
           thickness: AcrylicOptions.acrylic_thickness_options[0],
           thickness_options: AcrylicOptions.acrylic_thickness_options,
-          color: AcrylicOptions.colors[0],
+          color: {
+            name: '',
+            color: ''
+          },
           letterHeight: 1
         };
       } else {
@@ -91,6 +109,9 @@ function Accrylic() {
       return [...prevSignage, newSignage];
     });
   }
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+    localStorage.setItem('acrylicStorage', JSON.stringify(signage));
+  }, [signage]);
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(AcrylicContext.Provider, {
     value: {
       signage,
@@ -98,9 +119,9 @@ function Accrylic() {
       addSignage
     }
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "flex gap-6"
+    className: "md:flex gap-6"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "w-3/4"
+    className: "md:w-3/4 w-full"
   }, signage.map((item, index) => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
     index: index,
     id: item.id,
@@ -159,6 +180,82 @@ function Dropdown({
 
 /***/ }),
 
+/***/ "./src/scripts/FontsDropdown.js":
+/*!**************************************!*\
+  !*** ./src/scripts/FontsDropdown.js ***!
+  \**************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ FontsDropdown)
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _utils_ClickOutside__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./utils/ClickOutside */ "./src/scripts/utils/ClickOutside.js");
+
+
+
+function FontsDropdown({
+  font,
+  handleSelectFont
+}) {
+  const [openFont, setOpenFont] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
+  const fontRef = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
+  (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_2__["default"])(fontRef, () => {
+    setOpenFont(false);
+  });
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "px-[1px] relative",
+    ref: fontRef
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
+  }, "FONT"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex items-center select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer",
+    onClick: () => setOpenFont(prev => !prev),
+    style: {
+      fontFamily: font
+    }
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "truncate"
+  }, font === '' ? 'SELECT FONT' : font)), openFont && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: ""
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
+    class: "p-2 pb-0"
+  }, "Popular Fonts"), AcrylicQuote.quote_options.fonts.popular_fonts.split(',').map(popularfont => {
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: `p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm ${popularfont === font && 'bg-slate-200'}`,
+      style: {
+        fontFamily: popularfont
+      },
+      onClick: () => {
+        handleSelectFont(popularfont);
+        setOpenFont(false);
+      }
+    }, "- ", popularfont);
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
+    class: "p-2 pb-0"
+  }, "Fonts"), AcrylicQuote.quote_options.fonts.fonts.split(',').map(regFont => {
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: `p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm ${regFont === font && 'bg-slate-200'}`,
+      style: {
+        fontFamily: regFont
+      },
+      onClick: () => {
+        handleSelectFont(regFont);
+        setOpenFont(false);
+      }
+    }, "- ", regFont);
+  }))));
+}
+
+/***/ }),
+
 /***/ "./src/scripts/Letters.js":
 /*!********************************!*\
   !*** ./src/scripts/Letters.js ***!
@@ -176,8 +273,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _Acrylic__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Acrylic */ "./src/scripts/Acrylic.js");
 /* harmony import */ var _Dropdown__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Dropdown */ "./src/scripts/Dropdown.js");
-/* harmony import */ var _utils_ClickOutside__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./utils/ClickOutside */ "./src/scripts/utils/ClickOutside.js");
-/* harmony import */ var _utils_ConvertJson__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./utils/ConvertJson */ "./src/scripts/utils/ConvertJson.js");
+/* harmony import */ var _FontsDropdown__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./FontsDropdown */ "./src/scripts/FontsDropdown.js");
+/* harmony import */ var _UploadFile__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./UploadFile */ "./src/scripts/UploadFile.js");
+/* harmony import */ var _utils_ClickOutside__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./utils/ClickOutside */ "./src/scripts/utils/ClickOutside.js");
+/* harmony import */ var _utils_ConvertJson__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./utils/ConvertJson */ "./src/scripts/utils/ConvertJson.js");
+
+
 
 
 
@@ -198,11 +299,14 @@ function Letters({
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(item.comments);
   const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(item.font);
   const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(item.color);
+  const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
   const [openColor, setOpenColor] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
   const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(item.waterproof);
   const [selectedThickness, setSelectedThickness] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(item.thickness);
   const thicknessOptions = AcrylicOptions.acrylic_thickness_options;
+  const [fileUrl, setFileUrl] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(item.file);
   const [letterHeightOptions, setLetterHeightOptions] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]);
+  const [selectedFinishing, setSelectedFinishing] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(item.finishing);
   const [selectedLetterHeight, setSelectedLetterHeight] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(item.letterHeight);
   const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(item.usdPrice);
   const [mountingOptions, setMountingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(AcrylicOptions.mounting_options);
@@ -210,7 +314,8 @@ function Letters({
   const [selectedMounting, setSelectedMounting] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(item.mounting);
   const colorRef = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
   const colorOptions = AcrylicOptions.colors;
-  const letterPricing = AcrylicOptions.letter_height_x_logo_pricing.length > 0 ? (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_5__["default"])(AcrylicOptions.letter_height_x_logo_pricing) : [];
+  const finishingOptions = AcrylicOptions.finishing_options;
+  const letterPricing = AcrylicOptions.letter_height_x_logo_pricing.length > 0 ? (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_7__["default"])(AcrylicOptions.letter_height_x_logo_pricing) : [];
   let perLetterPrice = 0;
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
     console.log('Attempting to preload fonts...');
@@ -266,7 +371,9 @@ function Letters({
           waterproof: waterproof,
           color: color,
           letterHeight: selectedLetterHeight,
-          usdPrice: usdPrice
+          usdPrice: usdPrice,
+          file: fileUrl,
+          finishing: selectedFinishing
         };
       } else {
         return sign;
@@ -276,7 +383,7 @@ function Letters({
   }
   const handleOnChangeLetters = e => setLetters(() => e.target.value);
   const handleComments = e => setComments(e.target.value);
-  const handleSelectFont = e => setFont(e.target.value);
+  const handleSelectFont = value => setFont(value);
   const handleonChangeMount = e => setSelectedMounting(e.target.value);
   const handleOnChangeWaterproof = e => setWaterproof(e.target.value);
   const handleOnChangeThickness = e => {
@@ -288,6 +395,9 @@ function Letters({
   };
   const handleOnChangeLetterHeight = e => {
     setSelectedLetterHeight(e.target.value);
+  };
+  const handleChangeFinishing = e => {
+    setSelectedFinishing(e.target.value);
   };
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
     // Log to ensure we're getting the expected value
@@ -332,7 +442,7 @@ function Letters({
   }, [letters]);
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
     updateSignage();
-  }, [letters, comments, font, selectedThickness, selectedMounting, waterproof, color, usdPrice, selectedLetterHeight]);
+  }, [letters, comments, font, selectedThickness, selectedMounting, waterproof, color, usdPrice, selectedLetterHeight, fileUrl, selectedFinishing]);
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
     const newHeightOptions = letterPricing.filter(item => {
       const value = item[selectedThickness.value];
@@ -345,11 +455,6 @@ function Letters({
       }));
     }
   }, [selectedThickness]);
-
-  // useEffect(() => {
-  // 	setSelectedLetterHeight(() => lettersHeight.min);
-  // }, [selectedThickness, lettersHeight]);
-
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
     if (letterPricing.length > 0) {
       const pricingDetail = letterPricing[selectedLetterHeight - 1];
@@ -359,9 +464,50 @@ function Letters({
       setUsdPrice(totalLetterPrice.toFixed(2));
     }
   }, [selectedLetterHeight, selectedThickness, letters, waterproof, lettersHeight]);
-  (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_4__["default"])(colorRef, () => {
+  (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_6__["default"])(colorRef, () => {
     setOpenColor(false);
   });
+  const handleFileUpload = async file => {
+    setIsLoading(true);
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('nonce', AcrylicQuote.nonce);
+    formData.append('action', 'upload_acrylic_file');
+    fetch(AcrylicQuote.ajax_url, {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: {
+        'Cache-Control': 'no-cache'
+      },
+      body: formData
+    }).then(response => response.json()).then(data => {
+      if (data.code == '2' && data.file) {
+        console.log(data.file.url);
+        setFileUrl(data.file.url);
+        setIsLoading(false);
+      }
+    }).catch(error => console.error('Error:', error));
+  };
+  const handleRemoveFile = async () => {
+    setIsLoading(true);
+    const formData = new FormData();
+    formData.append('file', fileUrl);
+    formData.append('nonce', AcrylicQuote.nonce);
+    formData.append('action', 'remove_acrylic_file');
+    fetch(AcrylicQuote.ajax_url, {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: {
+        'Cache-Control': 'no-cache'
+      },
+      body: formData
+    }).then(response => response.json()).then(data => {
+      if (data.code == '2') {
+        setFileUrl('');
+        setIsLoading(false);
+      }
+    }).catch(error => console.error('Error:', error));
+  };
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -374,7 +520,8 @@ function Letters({
       whiteSpace: 'nowrap',
       overflow: 'hidden',
       fontFamily: font,
-      color: color.color
+      color: color.color,
+      textShadow: '0px 0px 1px rgba(0, 0, 0, 1)'
     }
   }, letters))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "py-4"
@@ -410,35 +557,30 @@ function Letters({
   }, "Color"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex items-center select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer",
     onClick: () => setOpenColor(prev => !prev)
-  }, color.name), openColor && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-full bg-white z-20 border border-gray-200 rounded-md"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "rounded-full w-[18px] h-[18px] border mr-2",
+    style: {
+      backgroundColor: color.color
+    }
+  }), color.name === '' ? 'SELECT COLOR' : color.name), openColor && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
   }, colorOptions.map(color => {
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200",
+      className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
       onClick: () => {
         setColor(color);
         setOpenColor(false);
       }
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-      className: "w-[20px] h-[20px] inline-block rounded-full",
+      className: "w-[18px] h-[18px] inline-block rounded-full border",
       style: {
         backgroundColor: color.color
       }
     }), color.name);
-  }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
-    title: "Fonts",
-    onChange: handleSelectFont,
-    options: AcrylicQuote.fonts.map(font => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      value: font.name,
-      style: {
-        fontFamily: font.name
-      },
-      selected: font.name === item.font
-    }, font.name)),
-    style: {
-      fontFamily: font
-    },
-    value: item.font
+  }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_FontsDropdown__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    font: item.font,
+    fonts: AcrylicOptions.fonts,
+    handleSelectFont: handleSelectFont
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
     title: "Waterproof Option",
     onChange: handleOnChangeWaterproof,
@@ -455,6 +597,14 @@ function Letters({
       selected: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: item.mounting
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: "Finishing Options",
+    onChange: handleChangeFinishing,
+    options: finishingOptions.map(finishing => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: finishing.name,
+      selected: finishing.name === item.finishing
+    }, finishing.name)),
+    value: item.finishing
   })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-2 md:grid-cols-4 gap-4"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -467,13 +617,12 @@ function Letters({
     value: comments,
     onChange: handleComments,
     placeholder: "ADD COMMENTS"
+  })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFile__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    file: item.file,
+    isLoading: isLoading,
+    handleFileUpload: handleFileUpload,
+    handleRemoveFile: handleRemoveFile
   })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "px-[1px]"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
-  }, "UPLOAD PDF/AI FILE"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
-    className: "h-[40px] w-full py-2 px-2 text-center text-red rounded-md text-sm uppercase bg-slate-400 hover:bg-slate-600 font-title leading-[1em]"
-  }, "Upload Design"))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-xs text-[#9F9F9F] pt-4"
   }, "We size the letters in proportion to your chosen font. Some uppercase/lowercase letters may appear shorter or taller than your selected height on the form to maintain visual harmony."));
 }
@@ -497,7 +646,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _Acrylic__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Acrylic */ "./src/scripts/Acrylic.js");
 /* harmony import */ var _Dropdown__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Dropdown */ "./src/scripts/Dropdown.js");
-/* harmony import */ var _utils_ConvertJson__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./utils/ConvertJson */ "./src/scripts/utils/ConvertJson.js");
+/* harmony import */ var _UploadFile__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./UploadFile */ "./src/scripts/UploadFile.js");
+/* harmony import */ var _utils_ConvertJson__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./utils/ConvertJson */ "./src/scripts/utils/ConvertJson.js");
+
 
 
 
@@ -515,7 +666,11 @@ function Logo({
   const [selectedThickness, setSelectedThickness] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(item.thickness);
   const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(item.width);
   const [maxWidthHeight, setMaxWidthHeight] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(23);
+  const [fileUrl, setFileUrl] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(item.file);
   const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(item.usdPrice);
+  const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
+  const [selectedFinishing, setSelectedFinishing] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(item.finishing);
+  const finishingOptions = AcrylicOptions.finishing_options;
   const [maxWidthOptions, setMaxWidthOptions] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(Array.from({
     length: maxWidthHeight
   }, (_, index) => {
@@ -583,8 +738,8 @@ function Logo({
       }
     }
   };
-  const handleOnChangeWidth = e => {
-    setWidth(e.target.value);
+  const handleChangeFinishing = e => {
+    setSelectedFinishing(e.target.value);
   };
   function updateSignage() {
     const updatedSignage = signage.map(sign => {
@@ -597,7 +752,9 @@ function Logo({
           waterproof: waterproof,
           width: width,
           height: height,
-          usdPrice: usdPrice
+          usdPrice: usdPrice,
+          file: fileUrl,
+          finishing: selectedFinishing
         };
       } else {
         return sign;
@@ -610,14 +767,55 @@ function Logo({
   }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
     updateSignage();
-  }, [comments, selectedThickness, selectedMounting, waterproof, width, height, usdPrice]);
+  }, [comments, selectedThickness, selectedMounting, waterproof, width, height, usdPrice, fileUrl, selectedFinishing]);
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
     const logoKey = `logo_pricing_${selectedThickness.value}mm`;
-    const logoPricingTable = logoPricingObject[logoKey]?.length > 0 ? (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_4__["default"])(logoPricingObject[logoKey]) : [];
+    const logoPricingTable = logoPricingObject[logoKey]?.length > 0 ? (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_5__["default"])(logoPricingObject[logoKey]) : [];
     const computed = logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
     const total = (computed * (waterproof === 'Indoor' ? 1 : 1.1)).toFixed(2);
     setUsdPrice(total);
   }, [width, height, selectedThickness, waterproof]);
+  const handleFileUpload = async file => {
+    setIsLoading(true);
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('nonce', AcrylicQuote.nonce);
+    formData.append('action', 'upload_acrylic_file');
+    fetch(AcrylicQuote.ajax_url, {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: {
+        'Cache-Control': 'no-cache'
+      },
+      body: formData
+    }).then(response => response.json()).then(data => {
+      if (data.code == '2' && data.file) {
+        console.log(data.file.url);
+        setFileUrl(data.file.url);
+        setIsLoading(false);
+      }
+    }).catch(error => console.error('Error:', error));
+  };
+  const handleRemoveFile = async () => {
+    setIsLoading(true);
+    const formData = new FormData();
+    formData.append('file', fileUrl);
+    formData.append('nonce', AcrylicQuote.nonce);
+    formData.append('action', 'remove_acrylic_file');
+    fetch(AcrylicQuote.ajax_url, {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: {
+        'Cache-Control': 'no-cache'
+      },
+      body: formData
+    }).then(response => response.json()).then(data => {
+      if (data.code == '2') {
+        setFileUrl('');
+        setIsLoading(false);
+      }
+    }).catch(error => console.error('Error:', error));
+  };
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-2 md:grid-cols-4 gap-4 mb-6"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
@@ -654,6 +852,14 @@ function Logo({
       selected: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: item.mounting
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: "Finishing Options",
+    onChange: handleChangeFinishing,
+    options: finishingOptions.map(finishing => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: finishing.name,
+      selected: finishing.name === item.finishing
+    }, finishing.name)),
+    value: item.finishing
   })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-2 md:grid-cols-4 gap-4"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -666,13 +872,12 @@ function Logo({
     value: item.comments,
     onChange: handleComments,
     placeholder: "ADD COMMENTS"
-  })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "px-[1px]"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
-  }, "UPLOAD PDF/AI FILE"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
-    className: "h-[40px] w-full py-4 px-2 text-center text-white rounded-md text-sm uppercase bg-slate-400 hover:bg-slate-600 font-title leading-[1em]"
-  }, "Upload Design"))));
+  })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFile__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    file: item.file,
+    handleFileUpload: handleFileUpload,
+    handleRemoveFile: handleRemoveFile,
+    isLoading: isLoading
+  })));
 }
 
 /***/ }),
@@ -701,7 +906,7 @@ function Sidebar({
     className: "block"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex justify-between py-2 font-title uppercase"
-  }, item.title, " ", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, "$", item.usdPrice, " USD")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.title, " ", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, "$", Number(item.usdPrice).toLocaleString(), " USD")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-2 py-[2px]"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
@@ -743,7 +948,13 @@ function Sidebar({
     className: "text-left text-xs font-title"
   }, "COLOR"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-[10px]"
-  }, item.color?.name)), item.type === 'letters' && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.color?.name)), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-2 py-[2px]"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-xs font-title"
+  }, "FINISHING"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-[10px]"
+  }, item.finishing)), item.type === 'letters' && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-2 py-[2px]"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
@@ -761,7 +972,16 @@ function Sidebar({
     className: "text-left text-xs font-title"
   }, "COMMENTS"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-[10px] break-words"
-  }, item.comments)));
+  }, item.comments)), item.file && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-2 py-[2px]"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-xs font-title"
+  }, "FILE"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-[10px] break-words"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+    href: item.file,
+    target: "_blank"
+  }, "View File"))));
 }
 
 /***/ }),
@@ -792,8 +1012,12 @@ function Sidebar() {
     signage
   } = (0,react__WEBPACK_IMPORTED_MODULE_1__.useContext)(_Acrylic__WEBPACK_IMPORTED_MODULE_2__.AcrylicContext);
   const totalUsdPrice = signage.reduce((acc, item) => acc + parseFloat(item.usdPrice), 0);
+  const handleAddToCart = () => {
+    console.log(JSON.stringify(signage));
+    localStorage.removeItem('acrylicStorage');
+  };
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "w-1/4"
+    className: "md:w-1/4 w-full mt-8 md:mt-0"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "rounded-md border border-gray-200 p-4 sticky top-8"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -807,8 +1031,9 @@ function Sidebar() {
     className: "text-2xl"
   }, "TOTAL:"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", {
     className: "text-2xl"
-  }, "$", totalUsdPrice.toFixed(2), " USD")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
-    className: "mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
+  }, "$", Number(totalUsdPrice.toFixed(2)).toLocaleString(), " USD")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]",
+    onClick: handleAddToCart
   }, "ADD TO CART"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "mb-5 font-title rounded-md text-gray-400 border border-gray-400 w-full text-center bg-white text-sm h-[49px] hover:bg-gray-400 hover:text-white",
     style: {
@@ -915,6 +1140,115 @@ function Signage({
   }) : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Logo__WEBPACK_IMPORTED_MODULE_5__["default"], {
     item: item
   }))));
+}
+
+/***/ }),
+
+/***/ "./src/scripts/UploadFile.js":
+/*!***********************************!*\
+  !*** ./src/scripts/UploadFile.js ***!
+  \***********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ UploadFile)
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+
+
+function UploadFile({
+  file,
+  setFileUrl,
+  handleFileUpload,
+  handleRemoveFile,
+  isLoading
+}) {
+  const fileRef = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
+  const handleButtonClick = () => {
+    fileRef.current.click();
+  };
+  const handleChange = event => {
+    const file = event.target.files[0];
+    if (file) {
+      handleFileUpload(file, setFileUrl);
+    }
+  };
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "px-[1px]"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
+  }, "UPLOAD PDF/AI FILE"), !file ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "h-[40px] w-full py-2 px-2 text-center text-red rounded-md text-sm uppercase bg-slate-400 hover:bg-slate-600 font-title leading-[1em]",
+    onClick: handleButtonClick,
+    "aria-label": "Upload design file",
+    disabled: isLoading
+  }, isLoading ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex justify-center items-center"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+    class: "animate-spin -ml-1 mr-3 h-5 w-5 text-white",
+    xmlns: "http://www.w3.org/2000/svg",
+    fill: "none",
+    viewBox: "0 0 24 24"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("circle", {
+    class: "opacity-25",
+    cx: "12",
+    cy: "12",
+    r: "10",
+    stroke: "currentColor",
+    "stroke-width": "4"
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    class: "opacity-75",
+    fill: "currentColor",
+    d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+  })), "Uploading...") : 'Upload Design') : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "h-[40px] w-full py-2 px-2 text-center text-red rounded-md text-sm uppercase bg-red-600 hover:bg-red-400 font-title leading-[1em]",
+    onClick: handleRemoveFile,
+    "aria-label": "Remove design file",
+    disabled: isLoading
+  }, isLoading ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex justify-center items-center"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+    class: "animate-spin -ml-1 mr-3 h-5 w-5 text-white",
+    xmlns: "http://www.w3.org/2000/svg",
+    fill: "none",
+    viewBox: "0 0 24 24"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("circle", {
+    class: "opacity-25",
+    cx: "12",
+    cy: "12",
+    r: "10",
+    stroke: "currentColor",
+    "stroke-width": "4"
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    class: "opacity-75",
+    fill: "currentColor",
+    d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+  })), "Removing...") : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex items-center justify-center"
+  }, "Remove design", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    fill: "none",
+    viewBox: "0 0 24 24",
+    strokeWidth: 1.5,
+    stroke: "currentColor",
+    className: "w-5 h-5"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    d: "M6 18L18 6M6 6l12 12"
+  })))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    type: "file",
+    ref: fileRef,
+    class: "hidden",
+    onChange: handleChange,
+    accept: ".pdf,.ai",
+    "aria-label": "File input"
+  }));
 }
 
 /***/ }),

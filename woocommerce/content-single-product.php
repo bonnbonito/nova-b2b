@@ -48,7 +48,7 @@ if ( post_password_required() ) {
 	<div class="product-nav-content" id="productNavContent">
 		<div class="product-nav-content-item" data-nav="quote">
 
-			<div id="novaQuote"></div>
+			<div id="accrylicQuote"></div>
 
 		</div>
 
@@ -72,19 +72,31 @@ if ( post_password_required() ) {
 
 	<?php
 	/**
-	 * Hook: woocommerce_single_product_summary.
+	 * Hook: woocommerce_before_single_product_summary.
 	 *
-	 * @hooked woocommerce_template_single_title - 5
-	 * @hooked woocommerce_template_single_rating - 10
-	 * @hooked woocommerce_template_single_price - 10
-	 * @hooked woocommerce_template_single_excerpt - 20
-	 * @hooked woocommerce_template_single_add_to_cart - 30
-	 * @hooked woocommerce_template_single_meta - 40
-	 * @hooked woocommerce_template_single_sharing - 50
-	 * @hooked WC_Structured_Data::generate_product_data() - 60
+	 * @hooked woocommerce_show_product_sale_flash - 10
+	 * @hooked woocommerce_show_product_images - 20
 	 */
-	do_action( 'woocommerce_single_product_summary' );
+	do_action( 'woocommerce_before_single_product_summary' );
 	?>
+
+	<div class="summary entry-summary">
+		<?php
+		/**
+		 * Hook: woocommerce_single_product_summary.
+		 *
+		 * @hooked woocommerce_template_single_title - 5
+		 * @hooked woocommerce_template_single_rating - 10
+		 * @hooked woocommerce_template_single_price - 10
+		 * @hooked woocommerce_template_single_excerpt - 20
+		 * @hooked woocommerce_template_single_add_to_cart - 30
+		 * @hooked woocommerce_template_single_meta - 40
+		 * @hooked woocommerce_template_single_sharing - 50
+		 * @hooked WC_Structured_Data::generate_product_data() - 60
+		 */
+		do_action( 'woocommerce_single_product_summary' );
+		?>
+	</div>
 
 	<?php
 	/**
@@ -98,4 +110,17 @@ if ( post_password_required() ) {
 	?>
 </div>
 
+<?php do_action( 'woocommerce_after_single_product' ); ?>
+
+<div class="blurred">
+	<div class="blurred-box">
+		<h3>Log in to our business portal</h3>
+		<p>Easily access exclusive partner account through our Business Portal login.</p>
+		<div class="blurred-flex">
+			<div class="blurred-login">
+
+			</div>
+		</div>
+	</div>
+</div>
 <?php do_action( 'woocommerce_after_single_product' ); ?>

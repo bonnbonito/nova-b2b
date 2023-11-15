@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AcrylicContext } from './Acrylic';
 import Dropdown from './Dropdown';
+import UploadFile from './UploadFile';
 import convert_json from './utils/ConvertJson';
 const AcrylicOptions = AcrylicQuote.quote_options;
 
@@ -10,7 +11,11 @@ export default function Logo({ item }) {
 	const [selectedThickness, setSelectedThickness] = useState(item.thickness);
 	const [width, setWidth] = useState(item.width);
 	const [maxWidthHeight, setMaxWidthHeight] = useState(23);
+	const [fileUrl, setFileUrl] = useState(item.file);
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice);
+	const [isLoading, setIsLoading] = useState(false);
+	const [selectedFinishing, setSelectedFinishing] = useState(item.finishing);
+	const finishingOptions = AcrylicOptions.finishing_options;
 	const [maxWidthOptions, setMaxWidthOptions] = useState(
 		Array.from(
 			{
@@ -116,8 +121,8 @@ export default function Logo({ item }) {
 		}
 	};
 
-	const handleOnChangeWidth = (e) => {
-		setWidth(e.target.value);
+	const handleChangeFinishing = (e) => {
+		setSelectedFinishing(e.target.value);
 	};
 
 	function updateSignage() {
@@ -132,6 +137,8 @@ export default function Logo({ item }) {
 					width: width,
 					height: height,
 					usdPrice: usdPrice,
+					file: fileUrl,
+					finishing: selectedFinishing,
 				};
 			} else {
 				return sign;
@@ -154,6 +161,8 @@ export default function Logo({ item }) {
 		width,
 		height,
 		usdPrice,
+		fileUrl,
+		selectedFinishing,
 	]);
 
 	useEffect(() => {
@@ -167,6 +176,57 @@ export default function Logo({ item }) {
 		const total = (computed * (waterproof === 'Indoor' ? 1 : 1.1)).toFixed(2);
 		setUsdPrice(total);
 	}, [width, height, selectedThickness, waterproof]);
+
+	const handleFileUpload = async (file) => {
+		setIsLoading(true);
+		const formData = new FormData();
+		formData.append('file', file);
+		formData.append('nonce', AcrylicQuote.nonce);
+		formData.append('action', 'upload_acrylic_file');
+
+		fetch(AcrylicQuote.ajax_url, {
+			method: 'POST',
+			credentials: 'same-origin',
+			headers: {
+				'Cache-Control': 'no-cache',
+			},
+			body: formData,
+		})
+			.then((response) => response.json())
+			.then((data) => {
+				if (data.code == '2' && data.file) {
+					console.log(data.file.url);
+					setFileUrl(data.file.url);
+					setIsLoading(false);
+				}
+			})
+			.catch((error) => console.error('Error:', error));
+	};
+
+	const handleRemoveFile = async () => {
+		setIsLoading(true);
+		const formData = new FormData();
+		formData.append('file', fileUrl);
+		formData.append('nonce', AcrylicQuote.nonce);
+		formData.append('action', 'remove_acrylic_file');
+
+		fetch(AcrylicQuote.ajax_url, {
+			method: 'POST',
+			credentials: 'same-origin',
+			headers: {
+				'Cache-Control': 'no-cache',
+			},
+			body: formData,
+		})
+			.then((response) => response.json())
+			.then((data) => {
+				if (data.code == '2') {
+					setFileUrl('');
+					setIsLoading(false);
+				}
+			})
+			.catch((error) => console.error('Error:', error));
+	};
 
 	return (
 		<>
@@ -226,6 +286,20 @@ export default function Logo({ item }) {
 					))}
 					value={item.mounting}
 				/>
+
+				<Dropdown
+					title="Finishing Options"
+					onChange={handleChangeFinishing}
+					options={finishingOptions.map((finishing) => (
+						<option
+							value={finishing.name}
+							selected={finishing.name === item.finishing}
+						>
+							{finishing.name}
+						</option>
+					))}
+					value={item.finishing}
+				/>
 			</div>
 
 			<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -241,14 +315,12 @@ export default function Logo({ item }) {
 						placeholder="ADD COMMENTS"
 					/>
 				</div>
-				<div className="px-[1px]">
-					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-						UPLOAD PDF/AI FILE
-					</label>
-					<button className="h-[40px] w-full py-4 px-2 text-center text-white rounded-md text-sm uppercase bg-slate-400 hover:bg-slate-600 font-title leading-[1em]">
-						Upload Design
-					</button>
-				</div>
+				<UploadFile
+					file={item.file}
+					handleFileUpload={handleFileUpload}
+					handleRemoveFile={handleRemoveFile}
+					isLoading={isLoading}
+				/>
 			</div>
 		</>
 	);
