@@ -23,12 +23,141 @@ class Nova_Quote {
 	public function __construct() {
 		add_action( 'wp_enqueue_scripts', array( $this, 'acrylic_nova_scripts' ) );
 		add_action( 'rest_api_init', array( $this, 'nova_rest_quote_file' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_acrylic_script' ) );
+
 		add_action( 'wp_ajax_acrylic_pricing_table', array( $this, 'acrylic_pricing_table' ) );
 		// add_filter( 'acf/init', array( $this, 'afc_load_popular_fonts' ), 10, 3 );
 		add_action( 'wp_ajax_upload_acrylic_file', array( $this, 'upload_acrylic_file' ) );
+		add_action( 'wp_ajax_save_quote', array( $this, 'save_quote' ) );
+		add_action( 'wp_ajax_update_quote', array( $this, 'update_quote' ) );
 		add_action( 'wp_ajax_remove_acrylic_file', array( $this, 'remove_acrylic_file' ) );
+		add_action( 'wp_ajax_quote_to_processing', array( $this, 'quote_to_processing' ) );
+		add_action( 'wp_ajax_delete_quote', array( $this, 'delete_quote' ) );
 		add_filter( 'upload_mimes', array( $this, 'enable_ai_files' ), 1, 1 );
+		add_filter( 'acf/prepare_field/name=signage', array( $this, 'acf_diable_field' ) );
+		add_filter( 'acf/prepare_field/name=partner', array( $this, 'acf_diable_field' ) );
+		add_action( 'template_redirect', array( $this, 'redirect_if_loggedin' ) );
+	}
+
+	public function redirect_if_loggedin() {
+		if ( is_page( 'business-portal-sign-up' ) && is_user_logged_in() ) {
+			wp_redirect( home_url( '/my-account/' ) );
+			exit();
+		}
+	}
+
+	public function acf_diable_field( $field ) {
+		$field['readonly'] = true;
+		return $field;
+	}
+
+	public function delete_quote() {
+		$status = array(
+			'code' => 1,
+		);
+		if ( ! wp_verify_nonce( $_POST['nonce'], 'quote_nonce' ) ) {
+			$status['error']  = 'Nonce error';
+			$status['status'] = 'error';
+			$status['code']   = '3';
+			wp_send_json( $status );
+		}
+		$post_id = $_POST['quote_id'];
+
+		/**delete custom post type with $post_ID */
+		if ( wp_delete_post( $post_id ) ) {
+			$status['status'] = 'success';
+			$status['code']   = '2';
+		} else {
+			$status['error']  = 'Deletion failed';
+			$status['status'] = 'error';
+			$status['code']   = '4';
+		}
+
+		$status['post'] = $_POST;
+
+		wp_send_json( $status );
+	}
+
+	public function quote_to_processing() {
+		$status = array(
+			'code' => 1,
+		);
+		if ( ! wp_verify_nonce( $_POST['nonce'], 'nova_account_nonce' ) ) {
+			wp_send_json( 'Nonce Error' );
+		}
+
+		update_field( 'quote_status', 'processing', $_POST['quote'] );
+
+		$status['code'] = 2;
+		wp_send_json( $status );
+	}
+
+	public function update_quote() {
+		$status = array(
+			'code' => 1,
+		);
+		if ( ! wp_verify_nonce( $_POST['nonce'], 'quote_nonce' ) ) {
+			$status['error']  = 'Nonce error';
+			$status['status'] = 'error';
+			wp_send_json( $status );
+		}
+
+		$status['post']   = $_POST;
+		$status['status'] = 'success';
+
+		wp_send_json( $status );
+	}
+
+	public function save_quote() {
+		$status = array(
+			'code' => 1,
+		);
+		if ( ! wp_verify_nonce( $_POST['nonce'], 'quote_nonce' ) ) {
+			$status['status'] = 'error';
+			$status['error']  = 'Nonce error';
+			wp_send_json( $status );
+		}
+
+		if ( isset( $_POST['quote_id'] ) && isset( $_POST['editing'] ) && $_POST['editing'] === 'edit' ) {
+			$post_id = $_POST['quote_id'];
+		} else {
+
+			$args = array(
+				'post_type'   => 'nova_quote',
+				'post_title'  => $_POST['title'],
+				'post_status' => 'publish',
+			);
+
+			$post_id = wp_insert_post( $args );
+
+		}
+
+		if ( ! is_wp_error( $post_id ) ) {
+
+			if ( isset( $_POST['quote_id'] ) && isset( $_POST['editing'] ) && $_POST['editing'] === 'edit' ) {
+				wp_update_post(
+					array(
+						'ID'         => $_POST['quote_id'],
+						'post_title' => $_POST['title'],
+					)
+				);
+			}
+
+			update_field( 'quote_status', 'draft', $post_id );
+			update_field( 'partner', get_current_user_id(), $post_id );
+			update_field( 'signage', $_POST['signage'], $post_id );
+			update_field( 'final_price', $_POST['total'], $post_id );
+			update_field( 'product', $_POST['product'], $post_id );
+			update_field( 'quote_status', $_POST['quote_status'], $post_id );
+
+			$status['code']   = 2;
+			$status['post']   = $_POST;
+			$status['status'] = 'success';
+		} else {
+			$status['code'] = 3;
+			wp_send_json( $status );
+		}
+
+		wp_send_json( $status );
 	}
 
 	public function enable_ai_files( $mimes ) {
@@ -140,105 +269,76 @@ class Nova_Quote {
 		wp_send_json( $status );
 	}
 
-	public function admin_acrylic_script( $hook ) {
 
-		global $post;
-
-		// First, make sure we are on the post edit screen.
-		if ( 'post.php' !== $hook && 'post-new.php' !== $hook ) {
-			return;
-		}
-
-		wp_register_script( 'admin-acrylic', get_stylesheet_directory_uri() . '/assets/js/admin-acrylic.js', array(), '1.0', true );
-
-		wp_localize_script(
-			'admin-acrylic',
-			'AcrylicAdmin',
-			array(
-				'ajax_url'      => admin_url( 'admin-ajax.php' ),
-				'nonce'         => wp_create_nonce( 'nova_admin_nonce' ),
-				'ID'            => $_GET['post'],
-				'quote_options' => $this->get_quote_options(),
-			)
-		);
-
-		// Check if the global $post object is set and if we're on a product post type.
-		if ( $post && 'product' === $post->post_type ) {
-			// Get the categories of the current post
-			$categories = wp_get_post_terms( $post->ID, 'product_cat', array( 'fields' => 'slugs' ) );
-
-			// Check if 'acrylic' category is assigned to the post
-			if ( in_array( 'acrylic', $categories ) ) {
-				// Enqueue the script
-				wp_enqueue_script( 'admin-acrylic' );
-			}
-		}
-
-		wp_enqueue_style( 'nova-admin', get_stylesheet_directory_uri() . '/assets/css/admin.css' );
-	}
 
 	public function nova_rest_quote_file() {
 		register_rest_route(
 			'nova/v1',
 			'/upload-quote-file',
 			array(
-				'methods'  => 'POST',
-				'callback' => array( $this, 'handle_quote_file_upload' ),
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'handle_quote_file_upload' ),
+				'permission_callback' => function (){},
 			)
 		);
 	}
 
 	public function handle_quote_file_upload( $request ) {
 		return 'DONE';
-		// $files = $request->get_file_params();
-		// $file  = $files['file'];
+		$files = $request->get_file_params();
+		$file  = $files['file'];
 
-		// // Define the upload directory and options.
-		// $upload = wp_upload_bits( $file['name'], null, file_get_contents( $file['tmp_name'] ) );
-		// if ( ! $upload['error'] ) {
-		// $filename = $upload['file'];
+		// Define the upload directory and options.
+		$upload = wp_upload_bits( $file['name'], null, file_get_contents( $file['tmp_name'] ) );
+		if ( ! $upload['error'] ) {
+			$filename = $upload['file'];
 
-		// Move the file to your uploads/quote directory.
-		// $quote_directory = WP_CONTENT_DIR . '/uploads/quote/';
-		// if ( ! file_exists( $quote_directory ) ) {
-		// wp_mkdir_p( $quote_directory );
-		// }
-		// $new_file_path = $quote_directory . basename( $filename );
-		// if ( rename( $filename, $new_file_path ) ) {
-		// return new WP_REST_Response( 'File uploaded successfully', 200 );
-		// }
-		// }
+			$quote_directory = WP_CONTENT_DIR . '/uploads/quote/';
+			if ( ! file_exists( $quote_directory ) ) {
+				wp_mkdir_p( $quote_directory );
+			}
+			$new_file_path = $quote_directory . basename( $filename );
+			if ( rename( $filename, $new_file_path ) ) {
+				return new WP_REST_Response( 'File uploaded successfully', 200 );
+			}
+		}
 
-		// return new WP_Error( 'upload_error', $upload['error'], array( 'status' => 500 ) );
+		return new WP_Error( 'upload_error', $upload['error'], array( 'status' => 500 ) );
 	}
 
 	public function acrylic_nova_scripts() {
 		wp_register_script(
-			'acrylic-quote',
-			get_theme_file_uri( '/quotes/acrylic/build/index.js' ),
+			'nova-quote',
+			get_theme_file_uri( '/quotes/build/index.js' ),
 			array( 'wp-element' ),
 			wp_get_theme()->get( 'Version' ),
 			true
 		);
 
-		wp_register_style( 'acrylic-quote', get_stylesheet_directory_uri() . '/quotes/acrylic/build/index.css', array(), wp_get_theme()->get( 'Version' ) );
+		wp_register_style( 'nova-quote', get_stylesheet_directory_uri() . '/quotes/build/index.css', array(), wp_get_theme()->get( 'Version' ) );
 
 		wp_localize_script(
-			'acrylic-quote',
-			'AcrylicQuote',
+			'nova-quote',
+			'NovaQuote',
 			array(
-				'ajax_url'      => admin_url( 'admin-ajax.php' ),
-				'nonce'         => wp_create_nonce( 'quote_nonce' ),
-				'quote_options' => $this->get_quote_options(),
-				'fonts'         => $this->get_fonts(),
-				'upload_rest'   => esc_url_raw( rest_url( '/nova/v1/upload-quote-file' ) ),
-				'logged_in'     => is_user_logged_in(),
+				'ajax_url'            => admin_url( 'admin-ajax.php' ),
+				'nonce'               => wp_create_nonce( 'quote_nonce' ),
+				'quote_options'       => $this->get_quote_options(),
+				'fonts'               => $this->get_fonts(),
+				'upload_rest'         => esc_url_raw( rest_url( '/nova/v1/upload-quote-file' ) ),
+				'logged_in'           => is_user_logged_in(),
+				'product'             => get_the_ID(),
+				'mockup_account_url'  => esc_url_raw( home_url( '/my-account/mockups/all' ) ),
+				'is_editting'         => $this->is_editting(),
+				'signage'             => $this->get_signage(),
+				'current_quote_id'    => isset( $_GET['qid'] ) ? $_GET['qid'] : null,
+				'current_quote_title' => isset( $_GET['qid'] ) ? get_the_title( $_GET['qid'] ) : null,
 			)
 		);
 
-		if ( is_product( 'product' ) ) {
-			wp_enqueue_script( 'acrylic-quote' );
-			wp_enqueue_style( 'acrylic-quote' );
+		if ( ( is_product( 'product' ) || is_account_page() ) && is_user_logged_in() ) {
+			wp_enqueue_script( 'nova-quote' );
+			wp_enqueue_style( 'nova-quote' );
 		}
 	}
 
@@ -278,6 +378,18 @@ class Nova_Quote {
 					'field_6552c810e7252' => $font,
 				);
 			}
+		}
+	}
+
+	public function is_editting() {
+		$editting = isset( $_GET['qid'] ) && ! empty( $_GET['qid'] ) && isset( $_GET['qedit'] ) && $_GET['qedit'] == 1;
+		return $editting;
+	}
+
+	public function get_signage() {
+		$editting = isset( $_GET['qid'] ) && ! empty( $_GET['qid'] ) && isset( $_GET['qedit'] ) && $_GET['qedit'] == 1;
+		if ( $editting ) {
+			return get_field( 'signage', $_GET['qid'] );
 		}
 	}
 }

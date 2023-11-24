@@ -1,0 +1,127 @@
+.woocommerce div.product .product_title {
+    color: #000;
+}
+
+.product-nav-tabs {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 16px;
+    margin-top: 1em;
+    border-top: 1px solid #ddd;
+    margin-bottom: 40px;
+}
+
+.product-nav-tabs a {
+    text-transform: uppercase;
+}
+
+.product-nav-tabs .button {
+    font-family: var(--global-heading-font-family);
+    padding-top: 7px;
+}
+
+.product-nav-tabs-left {
+    display: flex;
+    gap: 55px;
+}
+
+.product-nav-tabs a {
+    position: relative;
+}
+
+.product-nav-tabs a::before {
+    content: '';
+    display: inline-block;
+    width: 100%;
+    height: 4px;
+    background: transparent;
+    position: absolute;
+    top: -16px;
+    left: 0px;
+}
+
+.product-nav-tabs a.active::before {
+    background: #2F2F2F;
+}
+
+.single-product .product-nav-tabs-left .button {
+    background-color: transparent !important;
+    color: #000;
+    box-shadow: none;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.product-nav-content .product-nav-content-item {
+    display: none;
+}
+
+.product-nav-content .product-nav-content-item.active {
+    display: block;
+}
+
+.product-overview {
+    font-size: 1em;
+    line-height: 2;
+}
+
+.single-product-wrap {
+    position: relative;
+}
+
+.blurred.alignfull {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100vw;
+    z-index: 9;
+    padding: 40px;
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+}
+
+.blurred-box {
+    padding: 20px;
+    height: auto;
+    border-radius: 5px;
+    background: #FFF;
+    box-shadow: 0px 4px 14px 0px rgba(0, 0, 0, 0.25);
+    max-width: 620px;
+    margin: 10% auto auto;
+    font-size: 12px;
+}
+
+.blurred-box h3 {
+    text-transform: uppercase;
+}
+
+.nova_product_specs_group h2 {
+    margin-bottom: 40px;
+}
+
+.spec-item {
+    display: grid;
+    grid-template-columns: 18vw 1fr;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-top: 1px solid #dedede;
+}
+
+.spec-label {
+    font-family: var(--global-heading-font-family);
+    text-transform: uppercase;
+}
+
+.spec-value {
+    font-size: 14px;
+}
+
+.spec-group {
+    margin-bottom: 80px;
+}
+
+.spec-group .spec-item:last-child {
+    border-bottom: 1px solid #dedede;
+}

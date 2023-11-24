@@ -19,6 +19,10 @@ function autoloader( $class ) {
 
 // spl_autoload_register( '\NOVA_B2B\INC\Helpers\autoloader' );
 
-require NOVA_DIR_PATH . '/inc/classes/Styles.php';
+require NOVA_DIR_PATH . '/inc/classes/Roles.php';
+require NOVA_DIR_PATH . '/inc/classes/Admin.php';
+require NOVA_DIR_PATH . '/inc/classes/Scripts.php';
 require NOVA_DIR_PATH . '/inc/classes/Woocommerce.php';
-require NOVA_DIR_PATH . '/inc/classes/NOVA_Quote.php';
+require NOVA_DIR_PATH . '/inc/classes/Nova_Product.php';
+require NOVA_DIR_PATH . '/inc/classes/Nova_Quote.php';
+require NOVA_DIR_PATH . '/inc/classes/Shortcodes.php';

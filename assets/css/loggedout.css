@@ -1,0 +1,12 @@
+.login-status {
+    padding: 4px 10px;
+    border: 1px solid #d5d5d5;
+    text-align: center;
+    display: block;
+    font-size: 12px;
+    ;
+}
+
+.login-status.error {
+    border-color: red;
+}

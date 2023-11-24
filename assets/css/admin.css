@@ -55,3 +55,38 @@
 .pricing-table td::after {
     pointer-events: none;
 }
+
+.signage-item {
+    display: block;
+    padding: 0 20px 20px;
+    background: #fff;
+    border: 1px solid #dedede;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    max-width: 450px;
+    width: 100%;
+}
+
+.signage-details {
+    border: 1px solid #d1d1d1;
+    border-bottom: 0;
+    display: flex;
+    padding: 10px;
+}
+
+.signage-details:last-child {
+    border-bottom: 1px solid #dedede;
+}
+
+.signage-label {
+    font-weight: bold;
+}
+
+.signage-details * {
+    flex: 1;
+}
+
+.total-signage-price h2 {
+    font-size: 30px !important;
+    font-weight: bold !important;
+}

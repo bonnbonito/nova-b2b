@@ -15,6 +15,14 @@ $nova_update_checker = PucFactory::buildUpdateChecker(
 	'nova-b2b'
 );
 
+add_filter(
+	'ai1wm_exclude_themes_from_export',
+	function ( $exclude_filters ) {
+		$exclude_filters[] = '/node_modules';
+		return $exclude_filters;
+	}
+);
+
 $nova_update_checker->setBranch( 'main' );
 
 if ( ! defined( 'NOVA_DIR_PATH' ) ) {
