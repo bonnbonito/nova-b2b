@@ -107,14 +107,25 @@ export default function QuoteView() {
 					<PricesView id={item.id} item={item}></PricesView>
 				))}
 
+				{NovaAccount.note && (
+					<div className="block mb-4">
+						<h5>Note:</h5>
+						<div
+							className="block text-sm"
+							dangerouslySetInnerHTML={{ __html: NovaAccount.note }}
+						></div>
+					</div>
+				)}
+
 				<div className="flex justify-between gap-4">
-					<h4>ESTIMATED TOTAL:</h4> <h4>${totalUsdPrice.toFixed(2)} USD</h4>
+					<h4>ESTIMATED TOTAL:</h4>{' '}
+					<h4>${parseFloat(NovaAccount.final_price).toLocaleString()} USD</h4>
 				</div>
 			</div>
 			<div>
 				{NovaAccount.quote_status.value === 'ready' && (
 					<div className="rounded mb-3 px-4 py-3 border border-nova-light font-title text-white bg-nova-primary text-xs inline-block hover:text-white hover:bg-nova-secondary w-full text-center cursor-pointer">
-						FOR PAYMENT
+						CHECKOUT
 					</div>
 				)}
 				<DeleteQuote />

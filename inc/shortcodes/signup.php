@@ -68,7 +68,7 @@
                 </label>
                 <input
                     class="appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
-                    id="businessWebsite" name="businessWebsite" type="url" placeholder="Business Website">
+                    id="businessWebsite" name="businessWebsite" type="text" placeholder="Business Website">
 
             </div>
         </div>

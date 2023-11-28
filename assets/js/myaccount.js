@@ -38,6 +38,9 @@ function process(btn, action) {
 	formData.append('action', action);
 	formData.append('quote', quoteID);
 	formData.append('nonce', NovaMyAccount.nonce);
+	if (action === 'to_checkout') {
+		formData.append('nova_product', NovaQuote.nova_quote_product.ID);
+	}
 
 	fetch(NovaMyAccount.ajax_url, {
 		method: 'POST',
@@ -50,6 +53,9 @@ function process(btn, action) {
 		.then((response) => response.json())
 		.then((data) => {
 			console.log(data);
+			if (action === 'to_checkout') {
+				console.log('Checking out');
+			}
 			if (data.code == 2) {
 				location.reload(true);
 			}

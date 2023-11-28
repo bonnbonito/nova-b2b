@@ -41,6 +41,194 @@ class Woocommerce {
 		add_action( 'nova_account_navigation', array( $this, 'nova_account_navigation' ) );
 		add_action( 'nova_inner_account_nav', array( $this, 'myaccount_nav_avatar' ) );
 		add_action( 'woocommerce_account_content', array( $this, 'nova_account_title' ), 5 );
+		add_filter( 'woocommerce_add_cart_item_data', array( $this, 'nova_add_to_cart_meta' ), 10, 3 );
+		add_filter( 'woocommerce_cart_item_name', array( $this, 'nova_change_product_name' ), 10, 3 );
+		add_filter( 'woocommerce_cart_item_thumbnail', array( $this, 'remove_thumbnail_for_nova_product' ), 10, 3 );
+		add_action( 'woocommerce_before_calculate_totals', array( $this, 'nova_custom_price_refresh' ) );
+		add_action( 'woocommerce_after_cart_item_name', array( $this, 'nova_quote_display_signage' ), 20, 2 );
+		add_action( 'woocommerce_order_item_name', array( $this, 'nova_quote_order_name' ), 10, 3 );
+		add_action( 'woocommerce_checkout_create_order_line_item', array( $this, 'nova_create_order_line_item' ), 10, 4 );
+		add_action( 'woocommerce_order_item_meta_end', array( $this, 'woocommerce_order_item_meta_end' ), 10, 4 );
+		// add_action( 'woocommerce_before_order_itemmeta', array( $this, 'nova_order_item_meta' ), 10, 3 );
+		add_filter( 'woocommerce_order_item_class', array( $this, 'nova_woocommerce_order_item_class' ), 10, 3 );
+		add_filter( 'woocommerce_hidden_order_itemmeta', array( $this, 'nova_hidden_order_itemmeta' ) );
+		add_action( 'woocommerce_before_order_itemmeta', array( $this, 'nova_before_order_itemmeta' ), 10, 3 );
+		add_filter( 'woocommerce_display_item_meta', array( $this, 'nova_display_item_meta' ), 10, 3 );
+		add_action( 'woocommerce_checkout_order_created', array( $this, 'nova_checkout_order_created' ), 10, 1 );
+	}
+
+	public function nova_checkout_order_created( $order ) {
+		$items = $order->get_items();
+
+		foreach ( $items as $item_id => $item ) {
+			$signage  = $item->get_meta( 'signage' );
+			$quote_id = $item->get_meta( 'quote_id' );
+			if ( ! empty( $signage ) && isset( $quote_id ) ) {
+				wp_delete_post( $quote_id );
+			}
+		}
+	}
+
+	public function nova_display_item_meta( $html, $item, $args ) {
+		if ( $item['signage'] ) {
+			return '';
+		}
+		return $html;
+	}
+
+	public function nova_quote_order_name( $title, $item, $visible ) {
+		if ( $item['nova_title'] ) {
+			$title = $item['nova_title'];
+		}
+		return $title;
+	}
+
+	public function nova_before_order_itemmeta( $item_id, $item, $product ) {
+		if ( isset( $item['signage'] ) && isset( $item['nova_title'] ) ) {
+			echo '<p style="font-size: 16px;">Quote Name: <strong>' . $item['nova_title'] . '</strong></p>';
+			echo $this->generate_html_table_from_array( $item['signage'] );
+			if ( isset( $item['nova_note'] ) ) {
+				echo '<p><strong>NOTE:</strong><br>' . $item['nova_note'] . '</p>';
+			}
+			if ( isset( $item['quote_id'] ) ) {
+				echo '<p><strong>Quote ID:</strong> ' . $item['quote_id'] . '</p>';
+			}
+		}
+	}
+
+	public function nova_hidden_order_itemmeta( $array ) {
+		$array[] = 'nova_title';
+		$array[] = 'quote_id';
+		$array[] = 'nova_note';
+		return $array;
+	}
+
+
+	public function nova_woocommerce_order_item_class( $class, $item, $order ) {
+		if ( $item->get_meta( 'signage' ) ) {
+			$class .= ' nova-signage';
+		}
+		return $class;
+	}
+
+	public function nova_order_item_meta( $item_id, $item, $product ) {
+		if ( is_admin() && $item->get_type() === 'line_item' ) {
+			$nova_title = wc_get_order_item_meta( $item_id, 'nova_title', true );
+			if ( ! empty( $nova_title ) ) {
+				// Directly update the order item name in the database
+				global $wpdb;
+				$wpdb->update(
+					$wpdb->prefix . 'woocommerce_order_items',
+					array( 'order_item_name' => $nova_title ),
+					array( 'order_item_id' => $item_id )
+				);
+			}
+		}
+	}
+
+	public function nova_create_order_line_item( $item, $cart_item_key, $values, $order ) {
+		if ( isset( $values['nova_quote'] ) && ! empty( $values['nova_title'] ) ) {
+			$item->add_meta_data( 'nova_title', $values['nova_title'] );
+			$item->add_meta_data( 'signage', $values['signage'] );
+			$item->add_meta_data( 'quote_id', $values['quote_id'] );
+
+			if ( isset( $values['nova_note'] ) && ! empty( $values['nova_note'] ) ) {
+				$item->add_meta_data( 'nova_note', $values['nova_note'] );
+			}
+		}
+	}
+
+	public function woocommerce_order_item_meta_end( $item_id, $item, $order, $bool ) {
+
+		if ( $item->get_meta( 'signage' ) ) {
+			echo $this->generate_html_table_from_array( $item->get_meta( 'signage' ) );
+		}
+		if ( $item->get_meta( 'nova_note' ) ) {
+				echo '<p><strong>NOTE:</strong><br>' . $item->get_meta( 'nova_note' ) . '</p>';
+		}
+	}
+
+	public function note_order_name( $name, $item ) {
+		$nova_title = $item->get_meta( 'nova_title' );
+		if ( ! empty( $nova_title ) ) {
+			return $nova_title;
+		}
+
+		return $name;
+	}
+
+	public function nova_quote_display_signage( $cart_item, $cart_item_key ) {
+		if ( isset( $cart_item['signage'] ) && $cart_item['nova_title'] ) {
+			if ( is_admin() ) {
+				echo '<p>' . $cart_item['nova_title'] . '</p>';
+			}
+
+			echo $this->generate_html_table_from_array( $cart_item['signage'] );
+
+			if ( isset( $cart_item['nova_note'] ) && ! empty( $cart_item['nova_note'] ) ) {
+				echo '<p>NOTE:<br>' . $cart_item['nova_note'] . '</p>';
+			}
+		}
+	}
+
+	public function generate_html_table_from_array( $array ) {
+		$html = '<h6>Projects</h6>';
+
+		foreach ( $array as $object ) {
+			// Start a new table for each object
+			$html .= '<table border="1" style="margin-bottom: 20px !important; border-collapse: collapse; border-color: #d5d5d5 !important;">';
+
+			// Each property of the object gets its own row
+			$html .= '<tr><th style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">ID</th><td style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">' . htmlspecialchars( $object->id ) . '</td></tr>';
+			$html .= '<tr><th style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">Type</th><td style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">' . htmlspecialchars( $object->type ) . '</td></tr>';
+			$html .= '<tr><th style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">Title</th><td style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">' . htmlspecialchars( $object->title ) . '</td></tr>';
+			$html .= '<tr><th style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">Comments</th><td style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">' . htmlspecialchars( $object->comments ) . '</td></tr>';
+			// ... Add other properties here ...
+
+			// End the table for this object
+			$html .= '</table>';
+		}
+
+		return $html;
+	}
+
+	public function nova_custom_price_refresh( $cart_object ) {
+
+		foreach ( $cart_object->get_cart() as $item ) {
+
+			if ( array_key_exists( 'usd_price', $item ) && array_key_exists( 'nova_quote', $item ) ) {
+
+				$item['data']->set_price( $item['usd_price'] );
+			}
+		}
+	}
+	public function remove_thumbnail_for_nova_product( $thumbnail, $cart_item, $cart_item_key ) {
+		$product = $cart_item['data'];
+		if ( is_a( $product, 'WC_Product' ) && $product->is_type( 'nova_quote' ) ) {
+			return '';
+		}
+
+		return $thumbnail;
+	}
+
+	public function nova_change_product_name( $title, $cart_item, $cart_item_key ) {
+		if ( isset( $cart_item['nova_title'] ) ) {
+			$title = $cart_item['nova_title'];
+		}
+		return $title;
+	}
+
+	public function nova_add_to_cart_meta( $cart_item_data, $product_id, $variation_id ) {
+		if ( get_field( 'nova_quote_product', 'option' )->ID === $product_id && isset( $_POST['nova_title'] ) && isset( $_POST['quote_id'] ) ) {
+			$cart_item_data['nova_title'] = sanitize_text_field( $_POST['nova_title'] );
+			$cart_item_data['signage']    = $_POST['signage'];
+			$cart_item_date['quote_id']   = $_POST['quote_id'];
+			$cart_item_date['nova_quote'] = true;
+			if ( isset( $_POST['nova_note'] ) ) {
+				$cart_item_date['nova_note'] = $_POST['nova_note'];
+			}
+		}
+		return $cart_item_data;
 	}
 
 	public function nova_account_title() {
@@ -130,8 +318,9 @@ class Woocommerce {
 
 		$query = new WP_Query(
 			array(
-				'post_type'  => 'nova_quote',
-				'meta_query' => $meta_query,
+				'post_type'   => 'nova_quote',
+				'meta_query'  => $meta_query,
+				'post_status' => 'publish',
 			)
 		);
 
@@ -165,8 +354,9 @@ class Woocommerce {
 
 		$query = new WP_Query(
 			array(
-				'post_type'  => 'nova_quote',
-				'meta_query' => $meta_query,
+				'post_type'   => 'nova_quote',
+				'meta_query'  => $meta_query,
+				'post_status' => 'publish',
 			)
 		);
 
@@ -201,8 +391,9 @@ class Woocommerce {
 
 		$query = new WP_Query(
 			array(
-				'post_type'  => 'nova_quote',
-				'meta_query' => $meta_query,
+				'post_type'   => 'nova_quote',
+				'meta_query'  => $meta_query,
+				'post_status' => 'publish',
 			)
 		);
 
@@ -232,8 +423,9 @@ class Woocommerce {
 
 		$query = new WP_Query(
 			array(
-				'post_type'  => 'nova_quote',
-				'meta_query' => $meta_query,
+				'post_type'   => 'nova_quote',
+				'meta_query'  => $meta_query,
+				'post_status' => 'publish',
 			)
 		);
 

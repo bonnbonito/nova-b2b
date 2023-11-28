@@ -14,6 +14,10 @@
 	<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/payments' ) ); ?>"
 		class="block text-[12px] text-black uppercase mb-2 pl-4">QUOTED</a>
 
+	<a href="<?php echo esc_url( wc_get_endpoint_url( 'orders' ) ); ?>"
+		class="block text-[14px] font-title text-black uppercase mb-2">ORDERS</a>
+
+
 	<div class="block mt-10">
 		<div class="flex text-nova-primary text-sm uppercase font-title items-center">
 			<svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21" fill="none">

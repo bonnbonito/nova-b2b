@@ -1770,11 +1770,18 @@ function QuoteView() {
   }, NovaAccount.product_name ? decodeHTML(NovaAccount.product_name) : 'None')), signage.map(item => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_PricesView__WEBPACK_IMPORTED_MODULE_2__["default"], {
     id: item.id,
     item: item
+  })), NovaAccount.note && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "block mb-4"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, "Note:"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "block text-sm",
+    dangerouslySetInnerHTML: {
+      __html: NovaAccount.note
+    }
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex justify-between gap-4"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, "ESTIMATED TOTAL:"), " ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, "$", totalUsdPrice.toFixed(2), " USD"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, NovaAccount.quote_status.value === 'ready' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, "ESTIMATED TOTAL:"), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, "$", parseFloat(NovaAccount.final_price).toLocaleString(), " USD"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, NovaAccount.quote_status.value === 'ready' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "rounded mb-3 px-4 py-3 border border-nova-light font-title text-white bg-nova-primary text-xs inline-block hover:text-white hover:bg-nova-secondary w-full text-center cursor-pointer"
-  }, "FOR PAYMENT"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_DeleteQuote__WEBPACK_IMPORTED_MODULE_1__.DeleteQuote, null)));
+  }, "CHECKOUT"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_DeleteQuote__WEBPACK_IMPORTED_MODULE_1__.DeleteQuote, null)));
 }
 
 /***/ }),

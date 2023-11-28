@@ -2,7 +2,6 @@ import React, { useContext, useState } from 'react';
 import ModalSave from './ModalSave';
 import { NovaContext } from './NovaQuote';
 import Prices from './Prices';
-import { processQuote } from './utils/QuoteFunctions';
 
 export default function Sidebar() {
 	const { signage } = useContext(NovaContext);

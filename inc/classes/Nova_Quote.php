@@ -31,12 +31,18 @@ class Nova_Quote {
 		add_action( 'wp_ajax_update_quote', array( $this, 'update_quote' ) );
 		add_action( 'wp_ajax_remove_acrylic_file', array( $this, 'remove_acrylic_file' ) );
 		add_action( 'wp_ajax_quote_to_processing', array( $this, 'quote_to_processing' ) );
+		add_action( 'wp_ajax_to_checkout', array( $this, 'nova_to_checkout' ) );
 		add_action( 'wp_ajax_delete_quote', array( $this, 'delete_quote' ) );
 		add_filter( 'upload_mimes', array( $this, 'enable_ai_files' ), 1, 1 );
 		add_filter( 'acf/prepare_field/name=signage', array( $this, 'acf_diable_field' ) );
 		add_filter( 'acf/prepare_field/name=partner', array( $this, 'acf_diable_field' ) );
 		add_action( 'template_redirect', array( $this, 'redirect_if_loggedin' ) );
+		if ( function_exists( 'acf_add_options_page' ) ) {
+			add_action( 'init', array( $this, 'add_options_page' ) );
+		}
 	}
+
+
 
 	public function redirect_if_loggedin() {
 		if ( is_page( 'business-portal-sign-up' ) && is_user_logged_in() ) {
@@ -82,12 +88,57 @@ class Nova_Quote {
 			'code' => 1,
 		);
 		if ( ! wp_verify_nonce( $_POST['nonce'], 'nova_account_nonce' ) ) {
-			wp_send_json( 'Nonce Error' );
+			$status['error']  = 'Nonce error';
+			$status['status'] = 'error';
+			wp_send_json( $status );
 		}
 
 		update_field( 'quote_status', 'processing', $_POST['quote'] );
 
 		$status['code'] = 2;
+		wp_send_json( $status );
+	}
+
+	public function nova_to_checkout() {
+		$status = array(
+			'code' => 1,
+		);
+		if ( ! wp_verify_nonce( $_POST['nonce'], 'nova_account_nonce' ) ) {
+			$status['error']  = 'Nonce error';
+			$status['status'] = 'error';
+			wp_send_json( $status );
+		}
+
+		$post_id = $_POST['quote'];
+
+		$title       = get_the_title( $post_id );
+		$final_price = get_field( 'final_price', $post_id );
+		$product_id  = $_POST['nova_product'];
+		$signage     = json_decode( get_field( 'signage', $post_id ) );
+		$note        = get_field( 'note', $post_id );
+
+		$status['final_price'] = get_field( 'final_price', $post_id );
+		$status['note']        = $note;
+		$status['quote']       = $signage;
+		$status['code']        = 2;
+
+		$product_meta = array(
+			'usd_price'  => $final_price,
+			'signage'    => $signage,
+			'nova_quote' => true,
+			'nova_title' => $title,
+			'quote_id'   => $post_id,
+			'nova_note'  => $note,
+		);
+
+		WC()->cart->add_to_cart(
+			$product_id,
+			1,
+			0,
+			array(),
+			$product_meta,
+		);
+
 		wp_send_json( $status );
 	}
 
@@ -327,10 +378,12 @@ class Nova_Quote {
 				'fonts'               => $this->get_fonts(),
 				'upload_rest'         => esc_url_raw( rest_url( '/nova/v1/upload-quote-file' ) ),
 				'logged_in'           => is_user_logged_in(),
+				'user_role'           =>
 				'product'             => get_the_ID(),
 				'mockup_account_url'  => esc_url_raw( home_url( '/my-account/mockups/all' ) ),
 				'is_editting'         => $this->is_editting(),
 				'signage'             => $this->get_signage(),
+				'nova_quote_product'  => get_field( 'nova_quote_product', 'option' ),
 				'current_quote_id'    => isset( $_GET['qid'] ) ? $_GET['qid'] : null,
 				'current_quote_title' => isset( $_GET['qid'] ) ? get_the_title( $_GET['qid'] ) : null,
 			)
@@ -339,6 +392,16 @@ class Nova_Quote {
 		if ( ( is_product( 'product' ) || is_account_page() ) && is_user_logged_in() ) {
 			wp_enqueue_script( 'nova-quote' );
 			wp_enqueue_style( 'nova-quote' );
+		}
+	}
+
+	public function get_current_user_role_slugs() {
+		if ( is_user_logged_in() ) {
+			$current_user = wp_get_current_user();
+			$roles        = (array) $current_user->roles;
+			return $roles;
+		} else {
+			return array();
 		}
 	}
 
@@ -388,9 +451,21 @@ class Nova_Quote {
 
 	public function get_signage() {
 		$editting = isset( $_GET['qid'] ) && ! empty( $_GET['qid'] ) && isset( $_GET['qedit'] ) && $_GET['qedit'] == 1;
-		if ( $editting ) {
+		if ( $editting && ( get_post_status( $_GET['qid'] ) !== false ) && get_field( 'partner', $_GET['qid'] ) === get_current_user_id() ) {
 			return get_field( 'signage', $_GET['qid'] );
 		}
+	}
+
+	public function add_options_page() {
+		acf_add_options_page(
+			array(
+				'page_title' => 'Nova Options',
+				'menu_title' => 'Nova Options',
+				'menu_slug'  => 'nova-options',
+				'capability' => 'edit_posts',
+				'redirect'   => false,
+			)
+		);
 	}
 }
 

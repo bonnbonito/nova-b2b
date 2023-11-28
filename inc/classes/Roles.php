@@ -33,6 +33,46 @@ class Roles {
 		add_action( 'manage_users_custom_column', array( $this, 'business_id_user_column' ), 10, 3 );
 		add_filter( 'manage_users_sortable_columns', array( $this, 'make_business_id_column_sortable' ) );
 		add_action( 'pre_get_users', array( $this, 'sort_by_business_id_column' ) );
+		add_action( 'set_user_role', array( $this, 'notify_user_approved_partner' ), 10, 3 );
+		add_action( 'set_user_role', array( $this, 'log_role_change' ), 10, 3 );
+	}
+
+	public function log_role_change( $user_id, $new_role, $old_roles ) {
+		$user_info = get_userdata( $user_id );
+		$log_entry = sprintf(
+			"User Role Change: User ID %d (%s) changed from %s to %s\n",
+			$user_id,
+			$user_info->user_login,
+			implode( ', ', $old_roles ),
+			$new_role
+		);
+
+		// Path to your log file
+		$log_file = WP_CONTENT_DIR . '/user-role-changes.log';
+
+		// Write the log entry to file
+		file_put_contents( $log_file, $log_entry, FILE_APPEND );
+	}
+
+	public function notify_user_approved_partner( $user_id, $role, $old_roles ) {
+		if ( in_array( 'pending', $old_roles ) && $role == 'partner' ) {
+			$user_info = get_userdata( $user_id );
+
+			$to         = $user_info->user_email;
+			$first_name = $user_info->first_name;
+
+			$subject  = 'Your Business Partner Status is Approved. Welcome to NOVA Signage!';
+			$message  = '<p>Dear  ' . $first_name . ',</p>';
+			$message .= '<p>Congratulations! Your application to become a business partner with NOVA Signage has been approved. Welcome to the NOVA Signage family!</p>';
+			$message .= "<p>We look forward to collaborating with you to enhance your shop's offerings. If you have any questions, our team is here to assist.</p>";
+			$message .= "<p>Best,\n<br>";
+			$message .= 'NOVA Signage Team</p>';
+
+			$headers = array( 'Content-Type: text/html; charset=UTF-8' );
+
+			wp_mail( $to, $subject, $message, $headers );
+
+		}
 	}
 
 	public function custom_role_login_check( $user, $password ) {
@@ -99,23 +139,26 @@ class Roles {
 		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
 		wp_mail( get_option( 'admin_email' ), $subject, $message, $headers );
+
+		$this->send_user_pending_email( $user_id );
 	}
 
-	public function send_user_activation_email( $user_id ) {
-		$user = new WP_User( $user_id );
-
+	public function send_user_pending_email( $user_id ) {
+		$user       = get_userdata( $user_id );
 		$first_name = get_user_meta( $user_id, 'first_name', true );
+		$user_email = $user->user_email;
 
-		$subject  = 'Your Business Partner Status is Approved. Welcome to NOVA Signage!';
-		$message  = '<p>Dear  ' . $first_name . ',</p>';
-		$message .= '<p>Congratulations! Your application to become a business partner with NOVA Signage has been approved. Welcome to the NOVA Signage family!</p>';
-		$message .= "<p>We look forward to collaborating with you to enhance your shop's offerings. If you have any questions, our team is here to assist.</p>";
-		$message .= "<p>Best,\n<br>";
+		$subject = 'NOVA Signage: Pending Status';
+
+		$message  = '<p>Hello  ' . $first_name . ',</p>';
+		$message .= '<p>Kindly allow 1 business day for the processing of your partner status. Meanwhile, you can place your order in the cart until your status is approved.</p>';
+		$message .= '<p>You will receive an email notification upon the approval of your application.</p>';
+		$message .= "<p>Thank you,\n<br>";
 		$message .= 'NOVA Signage Team</p>';
 
 		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
-		wp_mail( get_option( 'admin_email' ), $subject, $message, $headers );
+		wp_mail( $user_email, $subject, $message, $headers );
 	}
 
 	public function send_user_approved_email( $user_id ) {
@@ -287,7 +330,7 @@ class Roles {
 		update_field( 'state', $state, 'user_ ' . $user_id );
 		update_field( 'zip', $zip, 'user_ ' . $user_id );
 		update_field( 'how_did_you_hear_about_us', $_POST['hear'], 'user_ ' . $user_id );
-		update_field( 'promotions', $_POST['promotions'] === 'yes' ? 1 : 0, 'user_ ' . $user_id );
+		update_field( 'promotions', isset( $_POST['promotions'] ) && $_POST['promotions'] === 'yes' ? 1 : 0, 'user_ ' . $user_id );
 		update_field( 'privacy', $_POST['privacy'] === 'yes' ? 1 : 0, 'user_ ' . $user_id );
 
 		$activation_key = md5( uniqid( rand(), true ) );
@@ -298,7 +341,6 @@ class Roles {
 		$message .= '<p>Thank you for submitting your application as a NOVA Business Partner. Your <b>Business ID</b> number is: ' . $business_id . "\n\n</p>";
 		$message .= '<p>Please click the link below to activate your account:' . "\n\n</p>";
 		$message .= site_url() . '/activate?pu=' . $user_id . '&key=' . $activation_key . "\n\n";
-		$message .= '<p>We will notify you via email once we have approved your application. Feel free to contact NOVA support if you have any questions.' . "\n\n</p>";
 		$message .= "<p>Thank you,\n<br>";
 		$message .= 'NOVA Signage Team</p>';
 
