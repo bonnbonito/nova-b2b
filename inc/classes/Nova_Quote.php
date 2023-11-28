@@ -378,7 +378,7 @@ class Nova_Quote {
 				'fonts'               => $this->get_fonts(),
 				'upload_rest'         => esc_url_raw( rest_url( '/nova/v1/upload-quote-file' ) ),
 				'logged_in'           => is_user_logged_in(),
-				'user_role'           =>
+				'user_role'           => $this->get_current_user_role_slugs(),
 				'product'             => get_the_ID(),
 				'mockup_account_url'  => esc_url_raw( home_url( '/my-account/mockups/all' ) ),
 				'is_editting'         => $this->is_editting(),
