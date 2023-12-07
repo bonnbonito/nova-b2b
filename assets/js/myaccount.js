@@ -38,6 +38,7 @@ function process(btn, action) {
 	formData.append('action', action);
 	formData.append('quote', quoteID);
 	formData.append('nonce', NovaMyAccount.nonce);
+	formData.append('role', NovaQuote.user_role[0]);
 	if (action === 'to_checkout') {
 		formData.append('nova_product', NovaQuote.nova_quote_product.ID);
 	}
@@ -57,6 +58,9 @@ function process(btn, action) {
 				console.log('Checking out');
 			}
 			if (data.code == 2) {
+				location.reload(true);
+			} else {
+				alert(data.error);
 				location.reload(true);
 			}
 		})

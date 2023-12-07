@@ -143,12 +143,26 @@ class Scripts {
 
 		global $post;
 
-		if ( 'post.php' !== $hook && 'post-new.php' !== $hook ) {
+		if ( 'post.php' !== $hook && 'post-new.php' !== $hook && 'toplevel_page_nova-options' !== $hook ) {
 			return;
 		}
 
 		wp_register_script( 'admin-acrylic', get_stylesheet_directory_uri() . '/assets/js/admin-acrylic.js', array(), '1.0', true );
 		wp_register_script( 'admin-quote', get_stylesheet_directory_uri() . '/assets/js/admin-quote.js', array(), '1.0', true );
+		wp_register_script( 'dropbox-api', get_stylesheet_directory_uri() . '/assets/js/dropbox.js', array(), '1.0', true );
+
+		wp_localize_script(
+			'dropbox-api',
+			'DropboxNova',
+			array(
+				'ajax_url'     => admin_url( 'admin-ajax.php' ),
+				'nonce'        => wp_create_nonce( 'dropbox' ),
+				'redirect_uri' => get_field( 'dropbox_redirect_url', 'option' ),
+				'app_key'      => get_field( 'dropbox_app_key', 'option' ),
+				'secret_key'   => get_field( 'dropbox_secret_key', 'option' ),
+				'token'        => get_field( 'dropbox_token_access', 'option' ),
+			)
+		);
 
 		wp_localize_script(
 			'admin-acrylic',
@@ -182,6 +196,10 @@ class Scripts {
 		}
 
 		wp_enqueue_style( 'nova-admin', get_stylesheet_directory_uri() . '/assets/css/admin.css' );
+
+		if ( 'toplevel_page_nova-options' === $hook ) {
+			wp_enqueue_script( 'dropbox-api' );
+		}
 	}
 }
 

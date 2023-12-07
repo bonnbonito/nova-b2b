@@ -43,7 +43,17 @@ function ModalSave({ action, btnClass, label }) {
 		} else if (hasEmptyLogo) {
 			setError('Error: Please upload a file to the logo');
 		} else {
-			setError(''); // No error
+			if (
+				(NovaQuote.user_role[0] === 'pending' &&
+					action === 'update-processing') ||
+				action === 'processing'
+			) {
+				setError(
+					'Error: Your account is not yet approved. You cannot submit a quotation yet.'
+				);
+			} else {
+				setError(''); // No error
+			}
 		}
 	}, [signage]);
 

@@ -90,3 +90,11 @@
     font-size: 30px !important;
     font-weight: bold !important;
 }
+
+#dropboxAPI {
+    padding: 10px;
+    background: red;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+}

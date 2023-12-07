@@ -112,9 +112,7 @@ export default function PricesView({ item }) {
 					<div className="grid grid-cols-[160px_1fr] py-[2px]">
 						<div className="text-left text-xs font-title">FILE</div>
 						<div className="text-left text-[10px] break-words">
-							<a href={item.file} target="_blank">
-								View File
-							</a>
+							{item.fileName}
 						</div>
 					</div>
 				)}

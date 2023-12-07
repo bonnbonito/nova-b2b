@@ -540,6 +540,7 @@ function Letters({
   const [selectedThickness, setSelectedThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.thickness);
   const thicknessOptions = NovaOptions.acrylic_thickness_options;
   const [fileUrl, setFileUrl] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.file);
+  const [fileName, setFileName] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.fileName);
   const [letterHeightOptions, setLetterHeightOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const [selectedFinishing, setSelectedFinishing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.finishing);
   const [selectedLetterHeight, setSelectedLetterHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.letterHeight);
@@ -608,6 +609,7 @@ function Letters({
           letterHeight: selectedLetterHeight,
           usdPrice: usdPrice,
           file: fileUrl,
+          fileName: fileName,
           finishing: selectedFinishing
         };
       } else {
@@ -677,7 +679,7 @@ function Letters({
   }, [letters]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-  }, [letters, comments, font, selectedThickness, selectedMounting, waterproof, color, usdPrice, selectedLetterHeight, fileUrl, selectedFinishing]);
+  }, [letters, comments, font, selectedThickness, selectedMounting, waterproof, color, usdPrice, selectedLetterHeight, fileUrl, fileName, selectedFinishing]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const newHeightOptions = letterPricing.filter(item => {
       const value = item[selectedThickness.value];
@@ -702,8 +704,84 @@ function Letters({
   (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__["default"])(colorRef, () => {
     setOpenColor(false);
   });
+  const checkAndCreateFolder = async () => {
+    const folderPath = `/NOVA-CRM/${NovaQuote.business_id}`;
+    try {
+      // Check if the folder exists
+      let response = await fetch('https://api.dropboxapi.com/2/files/get_metadata', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${NovaQuote.dropbox_token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          path: folderPath
+        })
+      });
+      const metadata = await response.json();
+      if (response.ok) {
+        console.log('Folder already exists:', metadata);
+        return;
+      }
+      response = await fetch('https://api.dropboxapi.com/2/files/create_folder_v2', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${NovaQuote.dropbox_token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          autorename: false,
+          path: folderPath
+        })
+      });
+      const data = await response.json();
+      if (response.ok) {
+        console.log('Folder created successfully:', data);
+      } else {
+        throw new Error(data.error_summary || 'Unknown error during folder creation');
+      }
+    } catch (error) {
+      // Handle errors for both checking and creating the folder
+      console.error('Error:', error);
+    }
+  };
   const handleFileUpload = async file => {
     setIsLoading(true);
+    await checkAndCreateFolder();
+
+    // Prepare the Dropbox upload header
+    const dropboxArgs = JSON.stringify({
+      path: `/NOVA-CRM/${NovaQuote.business_id}/${file.name}`,
+      mode: 'add',
+      autorename: true,
+      mute: false
+    });
+
+    // Create a new FormData object for the file
+    const formData = new FormData();
+    formData.append('file', file);
+    fetch('https://content.dropboxapi.com/2/files/upload', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${NovaQuote.dropbox_token}`,
+        'Dropbox-API-Arg': dropboxArgs,
+        'Content-Type': 'application/octet-stream'
+      },
+      body: file // Send the file directly in the body
+    }).then(response => response.json()).then(data => {
+      console.log('File uploaded:', data);
+      // Assuming `data` contains file path or URL on Dropbox
+      setFileUrl(data.path_display);
+      setFileName(data.name);
+      setIsLoading(false);
+    }).catch(error => {
+      console.error('Error:', error);
+      setIsLoading(false);
+    });
+  };
+  const handleFileUpload2 = async file => {
+    setIsLoading(true);
+    checkAndCreateFolder();
     const formData = new FormData();
     formData.append('file', file);
     formData.append('nonce', NovaQuote.nonce);
@@ -724,6 +802,33 @@ function Letters({
     }).catch(error => console.error('Error:', error));
   };
   const handleRemoveFile = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch('https://api.dropboxapi.com/2/files/delete_v2', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${NovaQuote.dropbox_token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          path: fileUrl // Assuming fileUrl contains the path of the file in Dropbox
+        })
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        console.log('File removed:', data);
+        setFileUrl('');
+      } else {
+        throw new Error(data.error_summary || 'Unknown error during file deletion');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const handleRemoveFile2 = async () => {
     setIsLoading(true);
     const formData = new FormData();
     formData.append('file', fileUrl);
@@ -1169,7 +1274,11 @@ function ModalSave({
     } else if (hasEmptyLogo) {
       setError('Error: Please upload a file to the logo');
     } else {
-      setError(''); // No error
+      if (NovaQuote.user_role[0] === 'pending' && action === 'update-processing' || action === 'processing') {
+        setError('Error: Your account is not yet approved. You cannot submit a quotation yet.');
+      } else {
+        setError(''); // No error
+      }
     }
   }, [signage]);
   const loadingStatus = () => {
@@ -1329,6 +1438,7 @@ function Accrylic() {
         usdPrice: 0,
         cadPrice: 0,
         file: '',
+        fileName: '',
         finishing: NovaOptions.finishing_options[0].name
       }]);
     }
@@ -1354,7 +1464,8 @@ function Accrylic() {
     finishing: NovaOptions.finishing_options[0].name,
     usdPrice: 0,
     cadPrice: 0,
-    file: ''
+    file: '',
+    fileName: ''
   };
   function addSignage(type) {
     setSignage(prevSignage => {
@@ -1526,10 +1637,7 @@ function Prices({
     className: "text-left text-xs font-title"
   }, "FILE"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-[10px] break-words"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
-    href: item.file,
-    target: "_blank"
-  }, "View File"))));
+  }, item.fileName)));
 }
 
 /***/ }),
@@ -1646,10 +1754,7 @@ function PricesView({
     className: "text-left text-xs font-title"
   }, "FILE"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-[10px] break-words"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
-    href: item.file,
-    target: "_blank"
-  }, "View File")))));
+  }, item.fileName))));
 }
 
 /***/ }),
@@ -1802,8 +1907,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ModalSave__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ModalSave */ "./src/scripts/ModalSave.js");
 /* harmony import */ var _NovaQuote__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./NovaQuote */ "./src/scripts/NovaQuote.js");
 /* harmony import */ var _Prices__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Prices */ "./src/scripts/Prices.js");
-/* harmony import */ var _utils_QuoteFunctions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./utils/QuoteFunctions */ "./src/scripts/utils/QuoteFunctions.js");
-
 
 
 

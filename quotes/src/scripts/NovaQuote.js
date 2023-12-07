@@ -36,6 +36,7 @@ export default function Accrylic() {
 					usdPrice: 0,
 					cadPrice: 0,
 					file: '',
+					fileName: '',
 					finishing: NovaOptions.finishing_options[0].name,
 				},
 			]);
@@ -65,6 +66,7 @@ export default function Accrylic() {
 		usdPrice: 0,
 		cadPrice: 0,
 		file: '',
+		fileName: '',
 	};
 
 	function addSignage(type) {

@@ -40,6 +40,57 @@ class Nova_Quote {
 		if ( function_exists( 'acf_add_options_page' ) ) {
 			add_action( 'init', array( $this, 'add_options_page' ) );
 		}
+		add_action( 'admin_init', array( $this, 'handle_dropbox_oauth_redirect' ) );
+	}
+
+	public function handle_dropbox_oauth_redirect() {
+		if ( isset( $_GET['code'] ) && isset( $_GET['state'] ) ) {
+			$authorizationCode = sanitize_text_field( $_GET['code'] );
+			$state             = sanitize_text_field( $_GET['state'] );
+
+			if ( ! wp_verify_nonce( $state, 'dropbox' ) ) {
+				// Handle the error appropriately
+				wp_die( 'Invalid state parameter', 'Error', 403 );
+			}
+
+			$accessToken = $this->exchangeAuthorizationCodeForAccessToken( $authorizationCode );
+
+			if ( $accessToken ) {
+				update_field( 'dropbox_token_access', $accessToken, 'option' );
+			} else {
+				// Handle the error if the access token is not retrieved
+				wp_die( 'Error retrieving access token', 'Error', 403 );
+			}
+		}
+	}
+
+
+
+	public function exchangeAuthorizationCodeForAccessToken( $authorizationCode ) {
+		$clientId     = get_field( 'dropbox_app_key', 'option' );
+		$clientSecret = get_field( 'dropbox_secret_key', 'option' );
+		$redirectUri  = get_field( 'dropbox_redirect_url', 'option' );
+
+		$url    = 'https://api.dropboxapi.com/oauth2/token';
+		$params = array(
+			'code'          => $authorizationCode,
+			'grant_type'    => 'authorization_code',
+			'client_id'     => $clientId,
+			'client_secret' => $clientSecret,
+			'redirect_uri'  => $redirectUri,
+		);
+
+		$response = wp_remote_post( $url, array( 'body' => $params ) );
+
+		if ( is_wp_error( $response ) ) {
+			// Handle error
+			return null;
+		}
+
+		$body = wp_remote_retrieve_body( $response );
+		$data = json_decode( $body, true );
+
+		return $data['access_token'] ?? null;
 	}
 
 
@@ -93,6 +144,13 @@ class Nova_Quote {
 			wp_send_json( $status );
 		}
 
+		if ( $_POST['role'] === 'pending' ) {
+			$status['code']   = 3;
+			$status['error']  = 'Pending Account';
+			$status['status'] = 'error';
+			wp_send_json( $status );
+		}
+
 		update_field( 'quote_status', 'processing', $_POST['quote'] );
 
 		$status['code'] = 2;
@@ -105,6 +163,13 @@ class Nova_Quote {
 		);
 		if ( ! wp_verify_nonce( $_POST['nonce'], 'nova_account_nonce' ) ) {
 			$status['error']  = 'Nonce error';
+			$status['status'] = 'error';
+			wp_send_json( $status );
+		}
+
+		if ( $_POST['role'] === 'pending' ) {
+			$status['code']   = 3;
+			$status['error']  = 'Pending Account';
 			$status['status'] = 'error';
 			wp_send_json( $status );
 		}
@@ -386,6 +451,8 @@ class Nova_Quote {
 				'nova_quote_product'  => get_field( 'nova_quote_product', 'option' ),
 				'current_quote_id'    => isset( $_GET['qid'] ) ? $_GET['qid'] : null,
 				'current_quote_title' => isset( $_GET['qid'] ) ? get_the_title( $_GET['qid'] ) : null,
+				'dropbox_token'       => get_field( 'dropbox_token_access', 'option' ),
+				'business_id'         => get_field( 'business_id', 'user_' . get_current_user_id() ),
 			)
 		);
 
@@ -457,7 +524,7 @@ class Nova_Quote {
 	}
 
 	public function add_options_page() {
-		acf_add_options_page(
+		$parent = acf_add_options_page(
 			array(
 				'page_title' => 'Nova Options',
 				'menu_title' => 'Nova Options',
@@ -466,6 +533,12 @@ class Nova_Quote {
 				'redirect'   => false,
 			)
 		);
+	}
+
+
+
+	public function dropbox_api() {
+		echo 'Test';
 	}
 }
 
