@@ -41,6 +41,105 @@ class Nova_Quote {
 			add_action( 'init', array( $this, 'add_options_page' ) );
 		}
 		add_action( 'admin_init', array( $this, 'handle_dropbox_oauth_redirect' ) );
+		add_action( 'acf/save_post', array( $this, 'for_quotation_email_action' ) );
+		add_action( 'acf/save_post', array( $this, 'for_payment_email_action' ) );
+		add_action( 'quote_to_processing', array( $this, 'for_quotation_email' ) );
+		add_action( 'processing_to_payment', array( $this, 'for_payment_email' ) );
+		add_action( 'wp', array( $this, 'single_quote_redirect' ) );
+	}
+
+	public function single_quote_redirect() {
+		if ( is_singular( 'nova_quote' ) ) {
+			wp_redirect( home_url( '/' ), 301 );
+			die;
+		}
+	}
+
+	public function for_payment_email( $post_id ) {
+
+		$user_id   = get_field( 'partner', $post_id );
+		$user_info = get_userdata( $user_id );
+
+		$to         = $user_info->user_email;
+		$first_name = $user_info->first_name;
+
+		$subject  = 'NOVA - Order Invoice';
+		$message  = '<p>Hello ' . $first_name . ',</p>';
+		$message .= '<p>Please review the details for Order #' . $post_id . '.</p>';
+		$message .= '<p>If everything aligns with your expectations, we would appreciate your prompt consideration for payment.</p>';
+		$message .= '<p><a href="' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '">' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '</a></p>';
+		$message .= '<p>If you have any questions or concerns, feel free to reach out to our customer service team.</p>';
+
+		$message .= "<p>Best,\n<br>";
+		$message .= 'NOVA Signage Team</p>';
+
+		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
+
+		wp_mail( $to, $subject, $message, $headers );
+	}
+
+	public function for_quotation_email( $post_id ) {
+
+		$user_id   = get_field( 'partner', $post_id );
+		$user_info = get_userdata( $user_id );
+
+		$to         = $user_info->user_email;
+		$first_name = $user_info->first_name;
+
+		$subject  = 'NOVA - New Order Receieved';
+		$message  = '<p>Thank you for your order, ' . $first_name . '.</p>';
+		$message .= "<p>We'll get back to you within 24 business hours for any clarifications and confirmation of your design requirements.</p>";
+		$message .= '<p>For reference, please review the details below: </p>';
+		$message .= '<p><a href="' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '">' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '</a></p>';
+
+		$message .= "<p>Best,\n<br>";
+		$message .= 'NOVA Signage Team</p>';
+
+		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
+
+		wp_mail( $to, $subject, $message, $headers );
+
+		$to_admin         = get_option( 'admin_email' );
+		$to_admin_message = 'You received a new order from' . $first_name . '. Congratulations!';
+		wp_mail( $to_admin, $subject, $to_admin_message, $headers );
+	}
+
+	public function for_payment_email_action( $post_id ) {
+
+		if ( wp_is_post_autosave( $post_id ) || wp_is_post_revision( $post_id ) ) {
+			return;
+		}
+
+		if ( 'nova_quote' !== get_post_type( $post_id ) ) {
+			return;
+		}
+
+		$quote_status = get_field( 'quote_status', $post_id );
+
+		if ( 'ready' !== $quote_status['value'] ) {
+			return;
+		}
+
+		do_action( 'processing_to_payment', $post_id );
+	}
+
+	public function for_quotation_email_action( $post_id ) {
+
+		if ( wp_is_post_autosave( $post_id ) || wp_is_post_revision( $post_id ) ) {
+			return;
+		}
+
+		if ( 'nova_quote' !== get_post_type( $post_id ) ) {
+			return;
+		}
+
+		$quote_status = get_field( 'quote_status', $post_id );
+
+		if ( 'processing' !== $quote_status['value'] ) {
+			return;
+		}
+
+		do_action( 'quote_to_processing', $post_id );
 	}
 
 	public function handle_dropbox_oauth_redirect() {
@@ -152,6 +251,7 @@ class Nova_Quote {
 		}
 
 		update_field( 'quote_status', 'processing', $_POST['quote'] );
+		do_action( 'quote_to_processing', $_POST['quote'] );
 
 		$status['code'] = 2;
 		wp_send_json( $status );
@@ -176,11 +276,12 @@ class Nova_Quote {
 
 		$post_id = $_POST['quote'];
 
-		$title       = get_the_title( $post_id );
-		$final_price = get_field( 'final_price', $post_id );
-		$product_id  = $_POST['nova_product'];
-		$signage     = json_decode( get_field( 'signage', $post_id ) );
-		$note        = get_field( 'note', $post_id );
+		$title        = get_the_title( $post_id );
+		$final_price  = get_field( 'final_price', $post_id );
+		$product_id   = $_POST['nova_product'];
+		$product_name = $_POST['product'];
+		$signage      = json_decode( get_field( 'signage', $post_id ) );
+		$note         = get_field( 'note', $post_id );
 
 		$status['final_price'] = get_field( 'final_price', $post_id );
 		$status['note']        = $note;
@@ -194,7 +295,23 @@ class Nova_Quote {
 			'nova_title' => $title,
 			'quote_id'   => $post_id,
 			'nova_note'  => $note,
+			'product'    => $product_name,
 		);
+
+		$product_data = array(
+			'post_title'   => wp_strip_all_tags( $title ),
+			'post_content' => '',
+			'post_status'  => 'publish',
+			'post_type'    => 'product',
+			'meta_input'   => array(
+				'_regular_price' => $final_price,
+				'_price'         => $final_price,
+			),
+		);
+
+		$product_id = wp_insert_post( $product_data );
+
+		wp_set_object_terms( $product_id, 'nova_quote', 'product_type' );
 
 		WC()->cart->add_to_cart(
 			$product_id,

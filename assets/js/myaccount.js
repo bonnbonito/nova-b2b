@@ -27,7 +27,8 @@ function process(btn, action) {
 		'cursor-not-allowed',
 		'flex',
 		'justify-center',
-		'items-center'
+		'items-center',
+		'pointer-events-none'
 	);
 	btn.innerHTML = `<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
       <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -41,6 +42,7 @@ function process(btn, action) {
 	formData.append('role', NovaQuote.user_role[0]);
 	if (action === 'to_checkout') {
 		formData.append('nova_product', NovaQuote.nova_quote_product.ID);
+		formData.append('product', btn.dataset.product);
 	}
 
 	fetch(NovaMyAccount.ajax_url, {
@@ -58,7 +60,9 @@ function process(btn, action) {
 				console.log('Checking out');
 			}
 			if (data.code == 2) {
-				location.reload(true);
+				let event = new Event('added_to_cart');
+				document.body.dispatchEvent(event);
+				btn.innerHTML = `Added to Cart`;
 			} else {
 				alert(data.error);
 				location.reload(true);

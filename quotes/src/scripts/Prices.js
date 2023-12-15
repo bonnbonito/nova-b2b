@@ -52,17 +52,16 @@ export default function Prices({ item }) {
 			</div>
 
 			<div className="grid grid-cols-2 py-[2px]">
-				<div className="text-left text-xs font-title">COLOR</div>
-				<div className="text-left text-[10px]">{item.color?.name}</div>
-			</div>
-
-			<div className="grid grid-cols-2 py-[2px]">
 				<div className="text-left text-xs font-title">FINISHING</div>
 				<div className="text-left text-[10px]">{item.finishing}</div>
 			</div>
 
 			{item.type === 'letters' && (
 				<>
+					<div className="grid grid-cols-2 py-[2px]">
+						<div className="text-left text-xs font-title">COLOR</div>
+						<div className="text-left text-[10px]">{item.color?.name}</div>
+					</div>
 					<div className="grid grid-cols-2 py-[2px]">
 						<div className="text-left text-xs font-title">FONT</div>
 						<div className="text-left text-[10px] break-words">{item.font}</div>

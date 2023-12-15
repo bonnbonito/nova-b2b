@@ -44,9 +44,8 @@ function ModalSave({ action, btnClass, label }) {
 			setError('Error: Please upload a file to the logo');
 		} else {
 			if (
-				(NovaQuote.user_role[0] === 'pending' &&
-					action === 'update-processing') ||
-				action === 'processing'
+				NovaQuote.user_role[0] === 'pending' &&
+				(action === 'update-processing' || action === 'processing')
 			) {
 				setError(
 					'Error: Your account is not yet approved. You cannot submit a quotation yet.'

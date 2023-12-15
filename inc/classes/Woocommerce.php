@@ -3,6 +3,7 @@
 namespace NOVA_B2B\INC\CLASSES;
 
 use WP_Query;
+use Kadence\Theme;
 
 class Woocommerce {
 	/**
@@ -55,6 +56,87 @@ class Woocommerce {
 		add_action( 'woocommerce_before_order_itemmeta', array( $this, 'nova_before_order_itemmeta' ), 10, 3 );
 		add_filter( 'woocommerce_display_item_meta', array( $this, 'nova_display_item_meta' ), 10, 3 );
 		add_action( 'woocommerce_checkout_order_created', array( $this, 'nova_checkout_order_created' ), 10, 1 );
+		add_action( 'after_setup_theme', array( $this, 'edit_cart_summary_title' ) );
+		add_action( 'woocommerce_cart_actions', array( $this, 'update_quantity_script' ) );
+		add_action( 'woocommerce_before_cart', array( $this, 'edit_cart_form_wrap_before' ), 1 );
+	}
+
+	public function update_quantity_script() {
+		?>
+<script>
+function initializeQuantityButtons() {
+	const cartForm = document.querySelector('form.woocommerce-cart-form');
+	const updateCartButton = document.querySelector('button[name="update_cart"]');
+	const quantityChanges = document.querySelectorAll('.quantity-change');
+
+	quantityChanges.forEach(q => {
+		const decrease = q.querySelector('.decrease');
+		const increase = q.querySelector('.increase');
+		const input = q.querySelector('input.qty');
+
+		// Remove existing event listeners
+		increase.removeEventListener('click', increaseClickListener);
+		decrease.removeEventListener('click', decreaseClickListener);
+
+		// Add new event listeners
+		increase.addEventListener('click', increaseClickListener);
+		decrease.addEventListener('click', decreaseClickListener);
+
+		function increaseClickListener(e) {
+			increaseHandler(e, input);
+		}
+
+		function decreaseClickListener(e) {
+			decreaseHandler(e, input);
+		}
+	});
+
+	function increaseHandler(e, input) {
+		e.preventDefault();
+		let currentValue = parseInt(input.value, 10);
+		input.value = currentValue + 1;
+		updateCartButton.disabled = false;
+	}
+
+	function decreaseHandler(e, input) {
+		e.preventDefault();
+		let currentValue = parseInt(input.value, 10);
+		if (currentValue > 1) {
+			input.value = currentValue - 1;
+			updateCartButton.disabled = false;
+		}
+	}
+}
+
+
+document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
+jQuery(document.body).on('updated_cart_totals', initializeQuantityButtons);
+</script>
+		<?php
+	}
+
+
+
+	public function edit_cart_summary_title() {
+		$kadence_theme_class = \Kadence\Theme::instance();
+		remove_action( 'woocommerce_before_cart_table', array( $kadence_theme_class->components['woocommerce'], 'cart_summary_title' ) );
+		add_action(
+			'woocommerce_before_cart_table',
+			function () {
+				echo '<div class="cart-summary"><h2>' . esc_html__( 'PRODUCTS', 'kadence' ) . '</h2></div>';
+			}
+		);
+	}
+
+	public function edit_cart_form_wrap_before() {
+		$kadence_theme_class = \Kadence\Theme::instance();
+		remove_action( 'woocommerce_before_cart', array( $kadence_theme_class->components['woocommerce'], 'cart_form_wrap_before' ) );
+		add_action(
+			'woocommerce_before_cart',
+			function () {
+				echo '<div class="nova-woo-cart-form-wrap">';
+			}
+		);
 	}
 
 	public function nova_checkout_order_created( $order ) {
@@ -86,7 +168,7 @@ class Woocommerce {
 	public function nova_before_order_itemmeta( $item_id, $item, $product ) {
 		if ( isset( $item['signage'] ) && isset( $item['nova_title'] ) ) {
 			echo '<p style="font-size: 16px;">Quote Name: <strong>' . $item['nova_title'] . '</strong></p>';
-			echo $this->generate_html_table_from_array( $item['signage'] );
+			echo $this->generate_html_table_from_array( $item['signage'], $item['product'] );
 			if ( isset( $item['nova_note'] ) ) {
 				echo '<p><strong>NOTE:</strong><br>' . $item['nova_note'] . '</p>';
 			}
@@ -131,6 +213,7 @@ class Woocommerce {
 			$item->add_meta_data( 'nova_title', $values['nova_title'] );
 			$item->add_meta_data( 'signage', $values['signage'] );
 			$item->add_meta_data( 'quote_id', $values['quote_id'] );
+			$item->add_meta_data( 'product', $values['quote_id'] );
 
 			if ( isset( $values['nova_note'] ) && ! empty( $values['nova_note'] ) ) {
 				$item->add_meta_data( 'nova_note', $values['nova_note'] );
@@ -141,7 +224,7 @@ class Woocommerce {
 	public function woocommerce_order_item_meta_end( $item_id, $item, $order, $bool ) {
 
 		if ( $item->get_meta( 'signage' ) ) {
-			echo $this->generate_html_table_from_array( $item->get_meta( 'signage' ) );
+			echo $this->generate_html_table_from_array( $item->get_meta( 'signage' ), $item->get_meta( 'product' ) );
 		}
 		if ( $item->get_meta( 'nova_note' ) ) {
 				echo '<p><strong>NOTE:</strong><br>' . $item->get_meta( 'nova_note' ) . '</p>';
@@ -163,7 +246,7 @@ class Woocommerce {
 				echo '<p>' . $cart_item['nova_title'] . '</p>';
 			}
 
-			echo $this->generate_html_table_from_array( $cart_item['signage'] );
+			echo $this->generate_html_table_from_array( $cart_item['signage'], $cart_item['product'] );
 
 			if ( isset( $cart_item['nova_note'] ) && ! empty( $cart_item['nova_note'] ) ) {
 				echo '<p>NOTE:<br>' . $cart_item['nova_note'] . '</p>';
@@ -171,22 +254,58 @@ class Woocommerce {
 		}
 	}
 
-	public function generate_html_table_from_array( $array ) {
+	public function generate_html_table_from_array( $array, $product ) {
 		$html = '<h6>Projects</h6>';
 
 		foreach ( $array as $object ) {
-			// Start a new table for each object
-			$html .= '<table border="1" style="margin-bottom: 20px !important; border-collapse: collapse; border-color: #d5d5d5 !important;">';
+
+			$html .= '<table border="1" style="margin-bottom: 20px !important; border-collapse: collapse; border-color: #d5d5d5 !important; margin-bottom: 10px;">';
 
 			// Each property of the object gets its own row
-			$html .= '<tr><th style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">ID</th><td style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">' . htmlspecialchars( $object->id ) . '</td></tr>';
-			$html .= '<tr><th style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">Type</th><td style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">' . htmlspecialchars( $object->type ) . '</td></tr>';
-			$html .= '<tr><th style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">Title</th><td style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">' . htmlspecialchars( $object->title ) . '</td></tr>';
-			$html .= '<tr><th style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">Comments</th><td style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">' . htmlspecialchars( $object->comments ) . '</td></tr>';
-			// ... Add other properties here ...
+			$html .= '<tr><th style="padding: 10px !important; border: 1px solid #d5d5d5 !important; width: 50%;">Type</th><td style="padding: 10px !important; border: 1px solid #d5d5d5 !important; width: 50%; text-transform: uppercase;
+			">' . htmlspecialchars( $object->type ) . '</td></tr>';
 
-			// End the table for this object
+			$html .= '<tr><th style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">Title</th><td style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">' . htmlspecialchars( $object->title ) . '</td></tr>';
+
+			if ( isset( $object->width ) && ! empty( $object->width ) ) {
+				$html .= '<tr><th style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">Width</th><td style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">' . htmlspecialchars( $object->width ) . '</td></tr>';
+			}
+
+			if ( isset( $object->height ) && ! empty( $object->height ) ) {
+				$html .= '<tr><th style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">Height</th><td style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">' . htmlspecialchars( $object->height ) . '</td></tr>';
+			}
+
+			if ( isset( $object->letters ) && ! empty( $object->letters ) ) {
+				$html .= '<tr><th style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">Letters</th><td style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">' . htmlspecialchars( $object->letters ) . '</td></tr>';
+			}
+			if ( isset( $object->mounting ) && ! empty( $object->mounting ) ) {
+				$html .= '<tr><th style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">Mounting</th><td style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">' . htmlspecialchars( $object->mounting ) . '</td></tr>';
+			}
+			if ( isset( $object->font ) && ! empty( $object->font ) ) {
+				$html .= '<tr><th style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">Font</th><td style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">' . htmlspecialchars( $object->font ) . '</td></tr>';
+			}
+			if ( isset( $object->waterproof ) && ! empty( $object->waterproof ) ) {
+				$html .= '<tr><th style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">Environment</th><td style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">' . htmlspecialchars( $object->waterproof ) . '</td></tr>';
+			}
+			if ( isset( $object->thickness ) && ! empty( $object->thickness ) ) {
+				$html .= '<tr><th style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">Thickness</th><td style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">' . htmlspecialchars( $object->thickness->thickness ) . '</td></tr>';
+			}
+			if ( isset( $object->color->name ) && ! empty( $object->color->name ) ) {
+				$html .= '<tr><th style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">Color</th><td style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">' . htmlspecialchars( $object->color->name ) . '</td></tr>';
+			}
+			if ( isset( $object->letterHeight ) && ! empty( $object->letterHeight ) ) {
+				$html .= '<tr><th style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">Letter Height</th><td style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">' . htmlspecialchars( $object->letterHeight ) . '</td></tr>';
+			}
+			if ( isset( $object->height ) && ! empty( $object->finishing ) ) {
+				$html .= '<tr><th style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">Finishing</th><td style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">' . htmlspecialchars( $object->finishing ) . '</td></tr>';
+			}
+
+			if ( isset( $object->file ) && ! empty( $object->file ) ) {
+				$html .= '<tr><th style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">File</th><td style="padding: 10px !important; border: 1px solid #d5d5d5 !important;">' . htmlspecialchars( $object->file ) . '</td></tr>';
+			}
+
 			$html .= '</table>';
+
 		}
 
 		return $html;
@@ -223,6 +342,7 @@ class Woocommerce {
 			$cart_item_data['nova_title'] = sanitize_text_field( $_POST['nova_title'] );
 			$cart_item_data['signage']    = $_POST['signage'];
 			$cart_item_date['quote_id']   = $_POST['quote_id'];
+			$cart_item_date['product']    = $_POST['product'];
 			$cart_item_date['nova_quote'] = true;
 			if ( isset( $_POST['nova_note'] ) ) {
 				$cart_item_date['nova_note'] = $_POST['nova_note'];

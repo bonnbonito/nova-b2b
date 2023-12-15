@@ -15,7 +15,7 @@ export default function Accrylic() {
 	const [signage, setSignage] = useState([]);
 
 	function setDefaultSignage(signage) {
-		const savedStorage = JSON.parse(localStorage.getItem('novaQuoteStorage'));
+		const savedStorage = JSON.parse(localStorage.getItem('novaQuoteStorage2'));
 		console.log(savedStorage);
 		if (savedStorage?.length > 0) {
 			setSignage(savedStorage);
@@ -38,6 +38,7 @@ export default function Accrylic() {
 					file: '',
 					fileName: '',
 					finishing: NovaOptions.finishing_options[0].name,
+					product: NovaQuote.product,
 				},
 			]);
 		}
@@ -67,6 +68,7 @@ export default function Accrylic() {
 		cadPrice: 0,
 		file: '',
 		fileName: '',
+		product: NovaQuote.product,
 	};
 
 	function addSignage(type) {

@@ -1007,6 +1007,7 @@ function Logo({
   const [fileUrl, setFileUrl] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.file);
   const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.usdPrice);
   const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const [fileName, setFileName] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.fileName);
   const [selectedFinishing, setSelectedFinishing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.finishing);
   const finishingOptions = NovaOptions.finishing_options;
   const [maxWidthOptions, setMaxWidthOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(Array.from({
@@ -1092,6 +1093,7 @@ function Logo({
           height: height,
           usdPrice: usdPrice,
           file: fileUrl,
+          fileName: fileName,
           finishing: selectedFinishing
         };
       } else {
@@ -1105,7 +1107,7 @@ function Logo({
   }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-  }, [comments, selectedThickness, selectedMounting, waterproof, width, height, usdPrice, fileUrl, selectedFinishing]);
+  }, [comments, selectedThickness, selectedMounting, waterproof, width, height, usdPrice, fileUrl, fileName, selectedFinishing]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const logoKey = `logo_pricing_${selectedThickness.value}mm`;
     const logoPricingTable = logoPricingObject[logoKey]?.length > 0 ? (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_4__["default"])(logoPricingObject[logoKey]) : [];
@@ -1113,46 +1115,107 @@ function Logo({
     const total = (computed * (waterproof === 'Indoor' ? 1 : 1.1)).toFixed(2);
     setUsdPrice(total);
   }, [width, height, selectedThickness, waterproof]);
+  const checkAndCreateFolder = async () => {
+    const folderPath = `/NOVA-CRM/${NovaQuote.business_id}`;
+    try {
+      // Check if the folder exists
+      let response = await fetch('https://api.dropboxapi.com/2/files/get_metadata', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${NovaQuote.dropbox_token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          path: folderPath
+        })
+      });
+      const metadata = await response.json();
+      if (response.ok) {
+        console.log('Folder already exists:', metadata);
+        return;
+      }
+      response = await fetch('https://api.dropboxapi.com/2/files/create_folder_v2', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${NovaQuote.dropbox_token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          autorename: false,
+          path: folderPath
+        })
+      });
+      const data = await response.json();
+      if (response.ok) {
+        console.log('Folder created successfully:', data);
+      } else {
+        throw new Error(data.error_summary || 'Unknown error during folder creation');
+      }
+    } catch (error) {
+      // Handle errors for both checking and creating the folder
+      console.error('Error:', error);
+    }
+  };
   const handleFileUpload = async file => {
     setIsLoading(true);
+    await checkAndCreateFolder();
+
+    // Prepare the Dropbox upload header
+    const dropboxArgs = JSON.stringify({
+      path: `/NOVA-CRM/${NovaQuote.business_id}/${file.name}`,
+      mode: 'add',
+      autorename: true,
+      mute: false
+    });
+
+    // Create a new FormData object for the file
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('nonce', NovaQuote.nonce);
-    formData.append('action', 'upload_acrylic_file');
-    fetch(NovaQuote.ajax_url, {
+    fetch('https://content.dropboxapi.com/2/files/upload', {
       method: 'POST',
-      credentials: 'same-origin',
       headers: {
-        'Cache-Control': 'no-cache'
+        Authorization: `Bearer ${NovaQuote.dropbox_token}`,
+        'Dropbox-API-Arg': dropboxArgs,
+        'Content-Type': 'application/octet-stream'
       },
-      body: formData
+      body: file // Send the file directly in the body
     }).then(response => response.json()).then(data => {
-      if (data.code == '2' && data.file) {
-        console.log(data.file.url);
-        setFileUrl(data.file.url);
-        setIsLoading(false);
-      }
-    }).catch(error => console.error('Error:', error));
+      console.log('File uploaded:', data);
+      // Assuming `data` contains file path or URL on Dropbox
+      setFileUrl(data.path_display);
+      setFileName(data.name);
+      setIsLoading(false);
+    }).catch(error => {
+      console.error('Error:', error);
+      setIsLoading(false);
+    });
   };
   const handleRemoveFile = async () => {
     setIsLoading(true);
-    const formData = new FormData();
-    formData.append('file', fileUrl);
-    formData.append('nonce', NovaQuote.nonce);
-    formData.append('action', 'remove_acrylic_file');
-    fetch(NovaQuote.ajax_url, {
-      method: 'POST',
-      credentials: 'same-origin',
-      headers: {
-        'Cache-Control': 'no-cache'
-      },
-      body: formData
-    }).then(response => response.json()).then(data => {
-      if (data.code == '2') {
+    try {
+      const response = await fetch('https://api.dropboxapi.com/2/files/delete_v2', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${NovaQuote.dropbox_token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          path: fileUrl // Assuming fileUrl contains the path of the file in Dropbox
+        })
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        console.log('File removed:', data);
         setFileUrl('');
-        setIsLoading(false);
+      } else {
+        throw new Error(data.error_summary || 'Unknown error during file deletion');
       }
-    }).catch(error => console.error('Error:', error));
+    } catch (error) {
+      console.error('Error:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-2 md:grid-cols-4 gap-4 mb-6"
@@ -1274,7 +1337,7 @@ function ModalSave({
     } else if (hasEmptyLogo) {
       setError('Error: Please upload a file to the logo');
     } else {
-      if (NovaQuote.user_role[0] === 'pending' && action === 'update-processing' || action === 'processing') {
+      if (NovaQuote.user_role[0] === 'pending' && (action === 'update-processing' || action === 'processing')) {
         setError('Error: Your account is not yet approved. You cannot submit a quotation yet.');
       } else {
         setError(''); // No error
@@ -1415,7 +1478,7 @@ const NovaOptions = NovaQuote.quote_options;
 function Accrylic() {
   const [signage, setSignage] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   function setDefaultSignage(signage) {
-    const savedStorage = JSON.parse(localStorage.getItem('novaQuoteStorage'));
+    const savedStorage = JSON.parse(localStorage.getItem('novaQuoteStorage2'));
     console.log(savedStorage);
     if (savedStorage?.length > 0) {
       setSignage(savedStorage);
@@ -1439,7 +1502,8 @@ function Accrylic() {
         cadPrice: 0,
         file: '',
         fileName: '',
-        finishing: NovaOptions.finishing_options[0].name
+        finishing: NovaOptions.finishing_options[0].name,
+        product: NovaQuote.product
       }]);
     }
   }
@@ -1465,7 +1529,8 @@ function Accrylic() {
     usdPrice: 0,
     cadPrice: 0,
     file: '',
-    fileName: ''
+    fileName: '',
+    product: NovaQuote.product
   };
   function addSignage(type) {
     setSignage(prevSignage => {
@@ -1605,15 +1670,15 @@ function Prices({
     className: "grid grid-cols-2 py-[2px]"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
-  }, "COLOR"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "text-left text-[10px]"
-  }, item.color?.name)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "grid grid-cols-2 py-[2px]"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "text-left text-xs font-title"
   }, "FINISHING"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-[10px]"
   }, item.finishing)), item.type === 'letters' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-2 py-[2px]"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-xs font-title"
+  }, "COLOR"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-[10px]"
+  }, item.color?.name)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-2 py-[2px]"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
@@ -1722,15 +1787,15 @@ function PricesView({
     className: "grid grid-cols-[160px_1fr] py-[2px]"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
-  }, "COLOR"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "text-left text-[10px]"
-  }, item.color?.name)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "grid grid-cols-[160px_1fr] py-[2px]"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "text-left text-xs font-title"
   }, "FINISHING"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-[10px]"
   }, item.finishing)), item.type === 'letters' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-[160px_1fr] py-[2px]"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-xs font-title"
+  }, "COLOR"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-[10px]"
+  }, item.color?.name)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-[160px_1fr] py-[2px]"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
@@ -1932,19 +1997,19 @@ function Sidebar() {
     className: "text-2xl"
   }, "TOTAL:"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", {
     className: "text-2xl"
-  }, "$", Number(totalUsdPrice.toFixed(2)).toLocaleString(), " USD")), signage.length > 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, NovaQuote.is_editting === '1' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }, "$", Number(totalUsdPrice.toFixed(2)).toLocaleString(), " USD")), signage.length > 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, NovaQuote.is_editting === '1' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, NovaQuote.user_role[0] !== 'pending' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_1__["default"], {
     action: "update-processing",
     label: "For Quotation",
     btnClass: "mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }) : '', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_1__["default"], {
     action: "update",
     label: "Update Quote",
     btnClass: "mb-5 font-title border border-nova-light rounded-md text-nova-gray w-full text-center bg-white text-sm h-[49px] hover:bg-nova-light hover:text-white shadow-[0_0_0_1px_rgba(0,0,0,0.3)]"
-  })) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  })) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, NovaQuote.user_role[0] !== 'pending' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_1__["default"], {
     action: "processing",
     label: "For Quotation",
     btnClass: "mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }) : '', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_1__["default"], {
     action: "draft",
     label: "Save Quote",
     btnClass: "mb-5 font-title border border-nova-light rounded-md text-nova-gray w-full text-center bg-white text-sm h-[49px] hover:bg-nova-light hover:text-white shadow-[0_0_0_1px_rgba(0,0,0,0.3)]"

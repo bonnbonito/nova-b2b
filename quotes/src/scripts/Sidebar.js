@@ -33,11 +33,16 @@ export default function Sidebar() {
 					<>
 						{NovaQuote.is_editting === '1' ? (
 							<>
-								<ModalSave
-									action="update-processing"
-									label="For Quotation"
-									btnClass="mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
-								/>
+								{NovaQuote.user_role[0] !== 'pending' ? (
+									<ModalSave
+										action="update-processing"
+										label="For Quotation"
+										btnClass="mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
+									/>
+								) : (
+									''
+								)}
+
 								<ModalSave
 									action="update"
 									label="Update Quote"
@@ -46,11 +51,16 @@ export default function Sidebar() {
 							</>
 						) : (
 							<>
-								<ModalSave
-									action="processing"
-									label="For Quotation"
-									btnClass="mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
-								/>
+								{NovaQuote.user_role[0] !== 'pending' ? (
+									<ModalSave
+										action="processing"
+										label="For Quotation"
+										btnClass="mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
+									/>
+								) : (
+									''
+								)}
+
 								<ModalSave
 									action="draft"
 									label="Save Quote"

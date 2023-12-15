@@ -23,9 +23,13 @@ $product_id = get_field( 'product' );
 			?>
 					" class="p-2 border rounded text-nova-gray text-[10px] tracking-[1px] hover:bg-nova-gray hover:text-white">Edit
 			Order</a>
+			<?php if ( ! current_user_can( 'pending' ) ) { ?>
 		<a href="/" data-type="quotation" data-id="<?php the_ID(); ?>"
 			class="p-2 border rounded text-white bg-nova-primary text-[10px] tracking-[1px] hover:bg-nova-secondary">For
 			Quotation</a>
+		<?php } ?>
+
+
 		<?php elseif ( get_field( 'quote_status' )['value'] == 'processing' ) : ?>
 		<a href="<?php echo esc_url( '/my-account/mockups/view?qid=' . get_the_ID() ); ?>"
 			class="p-2 border rounded text-nova-gray text-[10px] tracking-[1px] hover:bg-nova-gray hover:text-white">View
@@ -36,8 +40,9 @@ $product_id = get_field( 'product' );
 			class="p-2 border rounded text-nova-gray text-[10px] tracking-[1px] hover:bg-nova-gray hover:text-white">View
 			Details</a>
 		<a href="/" data-type="checkout" data-id="<?php the_ID(); ?>"
+			data-product="<?php echo get_the_title( $product_id ); ?>"
 			class="p-2 border rounded bg-green-600 text-white text-[10px] tracking-[1px] hover:bg-green-400 cursor-pointer">
-			Checkout</a>
+			Add To Cart</a>
 		<?php endif; ?>
 	</div>
 </div>
