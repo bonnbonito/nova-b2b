@@ -125,3 +125,7 @@
 .spec-group .spec-item:last-child {
     border-bottom: 1px solid #dedede;
 }
+
+.img-wrap {
+    height: 55px;
+}

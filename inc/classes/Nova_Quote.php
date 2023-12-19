@@ -152,10 +152,14 @@ class Nova_Quote {
 				wp_die( 'Invalid state parameter', 'Error', 403 );
 			}
 
-			$accessToken = $this->exchangeAuthorizationCodeForAccessToken( $authorizationCode );
+			$tokens = $this->exchangeAuthorizationCodeForAccessToken( $authorizationCode );
+
+			$accessToken  = $tokens['access_token'];
+			$refreshToken = $tokens['refresh_token'];
 
 			if ( $accessToken ) {
 				update_field( 'dropbox_token_access', $accessToken, 'option' );
+				update_field( 'dropbox_refresh_token', $refreshToken, 'option' );
 			} else {
 				// Handle the error if the access token is not retrieved
 				wp_die( 'Error retrieving access token', 'Error', 403 );
@@ -189,7 +193,10 @@ class Nova_Quote {
 		$body = wp_remote_retrieve_body( $response );
 		$data = json_decode( $body, true );
 
-		return $data['access_token'] ?? null;
+		return array(
+			'access_token'  => $data['access_token'] ?? null,
+			'refresh_token' => $data['refresh_token'] ?? null,
+		);
 	}
 
 
@@ -554,22 +561,25 @@ class Nova_Quote {
 			'nova-quote',
 			'NovaQuote',
 			array(
-				'ajax_url'            => admin_url( 'admin-ajax.php' ),
-				'nonce'               => wp_create_nonce( 'quote_nonce' ),
-				'quote_options'       => $this->get_quote_options(),
-				'fonts'               => $this->get_fonts(),
-				'upload_rest'         => esc_url_raw( rest_url( '/nova/v1/upload-quote-file' ) ),
-				'logged_in'           => is_user_logged_in(),
-				'user_role'           => $this->get_current_user_role_slugs(),
-				'product'             => get_the_ID(),
-				'mockup_account_url'  => esc_url_raw( home_url( '/my-account/mockups/all' ) ),
-				'is_editting'         => $this->is_editting(),
-				'signage'             => $this->get_signage(),
-				'nova_quote_product'  => get_field( 'nova_quote_product', 'option' ),
-				'current_quote_id'    => isset( $_GET['qid'] ) ? $_GET['qid'] : null,
-				'current_quote_title' => isset( $_GET['qid'] ) ? get_the_title( $_GET['qid'] ) : null,
-				'dropbox_token'       => get_field( 'dropbox_token_access', 'option' ),
-				'business_id'         => get_field( 'business_id', 'user_' . get_current_user_id() ),
+				'ajax_url'              => admin_url( 'admin-ajax.php' ),
+				'nonce'                 => wp_create_nonce( 'quote_nonce' ),
+				'quote_options'         => $this->get_quote_options(),
+				'fonts'                 => $this->get_fonts(),
+				'upload_rest'           => esc_url_raw( rest_url( '/nova/v1/upload-quote-file' ) ),
+				'logged_in'             => is_user_logged_in(),
+				'user_role'             => $this->get_current_user_role_slugs(),
+				'product'               => get_the_ID(),
+				'mockup_account_url'    => esc_url_raw( home_url( '/my-account/mockups/all' ) ),
+				'is_editting'           => $this->is_editting(),
+				'signage'               => $this->get_signage(),
+				'nova_quote_product'    => get_field( 'nova_quote_product', 'option' ),
+				'current_quote_id'      => isset( $_GET['qid'] ) ? $_GET['qid'] : null,
+				'current_quote_title'   => isset( $_GET['qid'] ) ? get_the_title( $_GET['qid'] ) : null,
+				'dropbox_app_key'       => get_field( 'dropbox_app_key', 'option' ),
+				'dropbox_secret'        => get_field( 'dropbox_secret_key', 'option' ),
+				'dropbox_token'         => get_field( 'dropbox_token_access', 'option' ),
+				'dropbox_refresh_token' => get_field( 'dropbox_refresh_token', 'option' ),
+				'business_id'           => get_field( 'business_id', 'user_' . get_current_user_id() ),
 			)
 		);
 

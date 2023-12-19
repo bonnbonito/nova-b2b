@@ -1,13 +1,9 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 
-export default function UploadFile({
-	file,
-	setFileUrl,
-	handleFileUpload,
-	handleRemoveFile,
-	isLoading,
-}) {
+export default function UploadFile({ file, fileUrl, setFileUrl, setFileName }) {
 	const fileRef = useRef(null);
+	const [isLoading, setIsLoading] = useState(false);
+	const [accessToken, setAccessToken] = useState('');
 
 	const handleButtonClick = () => {
 		fileRef.current.click();
@@ -16,7 +12,185 @@ export default function UploadFile({
 	const handleChange = (event) => {
 		const file = event.target.files[0];
 		if (file) {
-			handleFileUpload(file, setFileUrl);
+			handleFileUpload(file, setFileUrl, setFileName);
+			event.target.value = '';
+		} else {
+			console.log('no file to upload');
+		}
+	};
+
+	const getRefreshToken = async () => {
+		const clientId = NovaQuote.dropbox_app_key;
+		const clientSecret = NovaQuote.dropbox_secret;
+		const refreshToken = NovaQuote.dropbox_refresh_token;
+
+		const url = 'https://api.dropboxapi.com/oauth2/token';
+		const params = new URLSearchParams({
+			grant_type: 'refresh_token',
+			refresh_token: refreshToken,
+			client_id: clientId,
+			client_secret: clientSecret,
+		});
+
+		try {
+			const response = await fetch(url, {
+				method: 'POST',
+				body: params,
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+			});
+
+			if (!response.ok) {
+				throw new Error('Network response was not ok');
+			}
+
+			const data = await response.json();
+			return data.access_token;
+		} catch (error) {
+			console.error('Error:', error);
+			return null;
+		}
+	};
+
+	const checkAndCreateFolder = async (accessToken) => {
+		const folderPath = `/NOVA-CRM/${NovaQuote.business_id}`;
+
+		try {
+			// Check if the folder exists
+			let response = await fetch(
+				'https://api.dropboxapi.com/2/files/get_metadata',
+				{
+					method: 'POST',
+					headers: {
+						Authorization: `Bearer ${accessToken}`,
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+						path: folderPath,
+					}),
+				}
+			);
+
+			const metadata = await response.json();
+
+			if (response.ok) {
+				return;
+			}
+
+			response = await fetch(
+				'https://api.dropboxapi.com/2/files/create_folder_v2',
+				{
+					method: 'POST',
+					headers: {
+						Authorization: `Bearer ${accessToken}`,
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+						autorename: false,
+						path: folderPath,
+					}),
+				}
+			);
+
+			const data = await response.json();
+
+			if (response.ok) {
+				console.log('Folder created successfully:', data);
+			} else {
+				throw new Error(
+					data.error_summary || 'Unknown error during folder creation'
+				);
+			}
+		} catch (error) {
+			// Handle errors for both checking and creating the folder
+			console.error('Error:', error);
+		}
+	};
+
+	const handleFileUpload = async (file, setFileUrl, setFileName) => {
+		setIsLoading(true);
+
+		const token = await getRefreshToken();
+
+		if (token) {
+			setAccessToken(token);
+			await checkAndCreateFolder(token);
+
+			// Prepare the Dropbox upload header
+			const dropboxArgs = JSON.stringify({
+				path: `/NOVA-CRM/${NovaQuote.business_id}/${file.name}`,
+				mode: 'add',
+				autorename: true,
+				mute: false,
+			});
+
+			// Create a new FormData object for the file
+			const formData = new FormData();
+			formData.append('file', file);
+
+			fetch('https://content.dropboxapi.com/2/files/upload', {
+				method: 'POST',
+				headers: {
+					Authorization: `Bearer ${token}`,
+					'Dropbox-API-Arg': dropboxArgs,
+					'Content-Type': 'application/octet-stream',
+				},
+				body: file, // Send the file directly in the body
+			})
+				.then((response) => response.json())
+				.then((data) => {
+					// Assuming `data` contains file path or URL on Dropbox
+					setFileUrl(data.path_display);
+					setFileName(data.name);
+					setIsLoading(false);
+				})
+				.catch((error) => {
+					console.error('Error:', error);
+					setIsLoading(false);
+				});
+		} else {
+			console.error('Failed to obtain access token');
+			setIsLoading(false);
+			return;
+		}
+	};
+
+	const handleRemoveFile = async () => {
+		setIsLoading(true);
+
+		try {
+			const response = await fetch(
+				'https://api.dropboxapi.com/2/files/delete_v2',
+				{
+					method: 'POST',
+					headers: {
+						Authorization: `Bearer ${accessToken}`,
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+						path: fileUrl, // Assuming fileUrl contains the path of the file in Dropbox
+					}),
+				}
+			);
+
+			const data = await response.json();
+
+			if (response.ok) {
+				console.log('File removed:', data);
+				setFileUrl('');
+			} else {
+				throw new Error(
+					data.error_summary || 'Unknown error during file deletion'
+				);
+			}
+		} catch (error) {
+			console.error('Error:', error);
+		} finally {
+			if (fileRef.current) {
+				fileRef.current.value = '';
+			}
+			setIsLoading(false);
 		}
 	};
 

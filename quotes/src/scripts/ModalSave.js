@@ -81,13 +81,15 @@ function ModalSave({ action, btnClass, label }) {
 			formData.append('signage', JSON.stringify(signage));
 			formData.append('total', totalUsdPrice.toFixed(2));
 			formData.append('quote_status', 'draft');
+			console.log(action);
+
+			if (action === 'update-processing' || action === 'processing') {
+				formData.append('quote_status', 'processing');
+			}
 
 			if (action === 'update' || action === 'update-processing') {
 				formData.append('quote_id', NovaQuote.current_quote_id);
 				formData.append('editing', 'edit');
-				if (action === 'update-processing') {
-					formData.append('quote_status', 'processing');
-				}
 			}
 
 			const status = await processQuote(formData);

@@ -59,6 +59,53 @@ class Woocommerce {
 		add_action( 'after_setup_theme', array( $this, 'edit_cart_summary_title' ) );
 		add_action( 'woocommerce_cart_actions', array( $this, 'update_quantity_script' ) );
 		add_action( 'woocommerce_before_cart', array( $this, 'edit_cart_form_wrap_before' ), 1 );
+		add_action( 'woocommerce_checkout_after_customer_details', array( $this, 'remove_checkout_coupon_form' ), 10 );
+		add_filter( 'woocommerce_cart_totals_order_total_html', array( $this, 'woocommerce_cart_totals_order_total_html' ) );
+		add_filter( 'woocommerce_endpoint_order-received_title', array( $this, 'order_received_title' ), 20, 2 );
+		add_filter( 'woocommerce_thankyou_order_received_text', array( $this, 'woocommerce_thankyou_order_received_text' ) );
+		add_shortcode( 'product_features', array( $this, 'product_features' ) );
+	}
+
+	public function product_features() {
+		ob_start();
+		if ( have_rows( 'features' ) ) :
+			?>
+<div class="flex justify-between product-features-icons">
+			<?php
+			while ( have_rows( 'features' ) ) :
+				the_row();
+				$image = get_sub_field( 'icon' );
+				?>
+	<div class="text-center">
+		<div class="img-wrap h-[55px]">
+			<img class="mx-auto" src="<?php echo esc_url( $image['url'] ); ?>"
+				alt="<?php echo esc_attr( $image['alt'] ); ?>" />
+		</div>
+		<h5 class="uppercase tracking-[1.8px] mt-9"><?php the_sub_field( 'name' ); ?></h5>
+	</div>
+	<?php endwhile; ?>
+</div>
+
+			<?php
+		endif;
+		return ob_get_clean();
+	}
+
+	public function woocommerce_thankyou_order_received_text( $text ) {
+		return 'Your payment is being processed.';
+	}
+
+	public function order_received_title( $title, $order_id ) {
+		return 'Thank You!';
+	}
+
+	public function woocommerce_cart_totals_order_total_html( $value ) {
+		$value = preg_replace( '/<strong\b[^>]*>(.*?)<\/strong>/', '$1', $value );
+		return $value;
+	}
+
+	public function remove_checkout_coupon_form() {
+		remove_action( 'woocommerce_before_checkout_form', 'woocommerce_checkout_coupon_form', 10 );
 	}
 
 	public function update_quantity_script() {
@@ -175,6 +222,9 @@ jQuery(document.body).on('updated_cart_totals', initializeQuantityButtons);
 			if ( isset( $item['quote_id'] ) ) {
 				echo '<p><strong>Quote ID:</strong> ' . $item['quote_id'] . '</p>';
 			}
+			if ( isset( $item['signage'] ) ) {
+				echo '<p><strong>Product:</strong> ' . get_the_title( $item['signage'][0]->product ) . '</p>';
+			}
 		}
 	}
 
@@ -255,6 +305,66 @@ jQuery(document.body).on('updated_cart_totals', initializeQuantityButtons);
 	}
 
 	public function generate_html_table_from_array( $array, $product ) {
+		$html = '<h6>Projects</h6>';
+
+		foreach ( $array as $object ) {
+
+			$html .= '<div style="padding: 10px; border: 1pxz solid #d2d2d2 !important;">';
+
+			// Each property of the object gets its own row
+
+			$html .= '<p style="font-size: 125%; margin-bottom: 8px;">' . htmlspecialchars( $object->title ) . '</p>';
+
+			$html .= '<p>';
+			if ( isset( $object->type ) && ! empty( $object->type ) ) {
+				$html .= '<strong>Type: </strong>' . htmlspecialchars( $object->type ) . '<br>';
+			}
+
+			if ( isset( $object->width ) && ! empty( $object->width ) ) {
+				$html .= '<strong>Width: </strong>' . htmlspecialchars( $object->width ) . '<br>';
+			}
+
+			if ( isset( $object->height ) && ! empty( $object->height ) ) {
+				$html .= '<strong>Height: </strong>' . htmlspecialchars( $object->height ) . '<br>';
+			}
+
+			if ( isset( $object->letters ) && ! empty( $object->letters ) ) {
+				$html .= '<strong>Letters: </strong>' . htmlspecialchars( $object->letters ) . '<br>';
+			}
+			if ( isset( $object->mounting ) && ! empty( $object->mounting ) ) {
+				$html .= '<strong>Mounting: </strong>' . htmlspecialchars( $object->mounting ) . '<br>';
+			}
+			if ( isset( $object->font ) && ! empty( $object->font ) ) {
+				$html .= '<strong>Font: </strong>' . htmlspecialchars( $object->font ) . '<br>';
+			}
+			if ( isset( $object->waterproof ) && ! empty( $object->waterproof ) ) {
+				$html .= '<strong>Environment: </strong>' . htmlspecialchars( $object->waterproof ) . '<br>';
+			}
+			if ( isset( $object->thickness ) && ! empty( $object->thickness ) ) {
+				$html .= '<strong>Thickness: </strong>' . htmlspecialchars( $object->thickness->thickness ) . '<br>';
+			}
+			if ( isset( $object->color->name ) && ! empty( $object->color->name ) ) {
+				$html .= '<strong>Color: </strong>' . htmlspecialchars( $object->color->name ) . '<br>';
+			}
+			if ( isset( $object->letterHeight ) && ! empty( $object->letterHeight ) ) {
+				$html .= '<strong>Letter Height: </strong>' . htmlspecialchars( $object->letterHeight ) . '<br>';
+			}
+			if ( isset( $object->finishing ) && ! empty( $object->finishing ) ) {
+				$html .= '<strong>Finishing: </strong>' . htmlspecialchars( $object->finishing ) . '<br>';
+			}
+
+			if ( isset( $object->file ) && ! empty( $object->file ) ) {
+				$html .= '<strong>File: </strong>' . htmlspecialchars( $object->file ) . '<br>';
+			}
+
+			$html .= '</div>';
+
+		}
+
+		return $html;
+	}
+
+	public function generate_html_table_from_array2( $array, $product ) {
 		$html = '<h6>Projects</h6>';
 
 		foreach ( $array as $object ) {
@@ -687,6 +797,121 @@ jQuery(document.body).on('updated_cart_totals', initializeQuantityButtons);
 	<a href="<?php echo wp_logout_url( '/' ); ?>" class="text-black text-[10px]">LOG OUT</a>
 </div>
 		<?php
+	}
+
+	public function show_details( $signage, $quoteID ) {
+		ob_start();
+		?>
+<div id="quote-<?php echo $quoteID; ?>" style="display:none;max-width:550px; width: 100%;">
+	<div class="pb-8 mb-8 border-b-nova-light border-b">
+		<?php
+		foreach ( $signage as $item ) {
+			?>
+
+		<div class="block">
+			<div class="flex justify-between py-2 font-title uppercase">
+				<?php echo $item->title; ?>
+				<span>$<?php echo number_format( $item->usdPrice, 2 ); ?> USD</span>
+			</div>
+
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">TYPE</div>
+				<div class="text-left text-[10px] uppercase">
+					<?php echo $item->type; ?>
+				</div>
+			</div>
+
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">THICKNESS</div>
+				<div class="text-left text-[10px] uppercase">
+					<?php echo $item->thickness->thickness; ?>
+				</div>
+			</div>
+
+			<?php if ( $item->type === 'logo' ) : ?>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">WIDTH</div>
+				<div class="text-left text-[10px] break-words">
+					<?php echo $item->width; ?>"
+				</div>
+			</div>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">HEIGHT</div>
+				<div class="text-left text-[10px] break-words">
+					<?php echo $item->height; ?>"
+				</div>
+			</div>
+				<?php
+			endif;
+			?>
+
+			<?php if ( $item->type === 'letters' ) : ?>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">LETTER HEIGHT</div>
+				<div class="text-left text-[10px] break-words">
+					<?php echo $item->letterHeight; ?>"
+				</div>
+			</div>
+			<?php endif; ?>
+
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">MOUNTING</div>
+				<div class="text-left text-[10px]"><?php echo $item->mounting; ?></div>
+			</div>
+
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">WATERPROOF</div>
+				<div class="text-left text-[10px]"><?php echo $item->waterproof; ?></div>
+			</div>
+
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">FINISHING</div>
+				<div class="text-left text-[10px]"><?php echo $item->finishing; ?></div>
+			</div>
+
+			<?php if ( $item->type === 'letters' ) : ?>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">COLOR</div>
+				<div class="text-left text-[10px]"><?php echo $item->color->name; ?></div>
+			</div>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">FONT</div>
+				<div class="text-left text-[10px] break-words">
+					<?php echo $item->font; ?>
+				</div>
+			</div>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">LINE TEXT</div>
+				<div class="text-left text-[10px] break-words">
+					<?php echo $item->letters; ?>
+				</div>
+			</div>
+			<?php endif; ?>
+
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">COMMENTS</div>
+				<div class="text-left text-[10px] break-words">
+					<?php echo $item->comments; ?>
+				</div>
+			</div>
+			<?php if ( ! empty( $item->file ) ) : ?>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">FILE</div>
+				<div class="text-left text-[10px] break-words">
+					<?php echo $item->fileName; ?>
+				</div>
+			</div>
+			<?php endif; ?>
+		</div>
+
+
+			<?php
+		}
+		?>
+	</div>
+</div>
+		<?php
+			echo ob_get_clean();
 	}
 }
 

@@ -1,3 +1,7 @@
+.woocommerce-form-coupon-toggle {
+    display: none;
+}
+
 .woocommerce-cart-form .cart_item {
     padding: 20px;
     border: 1px solid #D2D2D2;
@@ -147,4 +151,94 @@
 
 .cart-summary h2 {
     margin-bottom: 16px !important;
+}
+
+.woocommerce-shipping-totals.shipping th {
+    text-transform: uppercase;
+    font-size: 18px;
+    font-weight: 400 !important;
+    font-family: var(--global-heading-font-family);
+    letter-spacing: 1.8px;
+}
+
+.woocommerce-shipping-totals.shipping td {
+    text-align: right;
+}
+
+.woocommerce-checkout-review-order-table .woocommerce-shipping-totals.shipping th,
+.woocommerce-checkout-review-order-table .woocommerce-shipping-totals.shipping td {
+    padding: 2rem 1rem;
+}
+
+.woocommerce .woocommerce-checkout-review-order-table ul#shipping_method li {
+    justify-content: flex-end;
+}
+
+.woocommerce-checkout-review-order {
+    border-top: 1px solid #D2D2D2;
+}
+
+.site form.checkout #order_review_heading {
+    margin-bottom: 2.5rem;
+}
+
+.site .woocommerce ul.order_details li {
+    border-right: 0;
+    padding-right: 0;
+    margin-right: 0;
+    font-size: 16px;
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    align-items: center;
+    padding-top: .25em;
+    padding-bottom: .25em;
+}
+
+.site .woocommerce ul.woocommerce-order-overview.woocommerce-thankyou-order-details {
+    margin-top: 20px;
+    padding-top: 20px;
+    margin-bottom: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #D2D2D2;
+    border-bottom: 1px solid #D2D2D2;
+}
+
+.woocommerce ul.order_details li span {
+    text-transform: none;
+}
+
+.woocommerce-thankyou-order-details~p {
+    display: none;
+}
+
+.product-features-icons img {
+    margin: auto;
+}
+
+.img-wrap {
+    height: 55px;
+    display: block;
+}
+
+@media (min-width: 1025px) {
+    .site form.checkout #order_review_heading {
+        float: none;
+        width: 100%;
+        padding-left: 0;
+    }
+
+    .site form.checkout .woocommerce-checkout-review-order {
+        width: 100%;
+        padding-left: 0;
+        float: none;
+    }
+}
+
+@media (min-width: 768px) {
+    .site .woocommerce ul.woocommerce-order-overview.woocommerce-thankyou-order-details {
+        margin-top: 120px;
+        padding-top: 80px;
+        margin-bottom: 80px;
+        padding-bottom: 80px;
+    }
 }
