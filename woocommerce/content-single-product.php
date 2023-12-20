@@ -133,7 +133,8 @@ if ( post_password_required() ) {
 					</div>
 					<div class="px-0">
 						<h6 class="uppercase tracking-[1.6px]"><?php the_sub_field( 'title' ); ?></h6>
-						<div class="text-[10px] md:text-[14px] leading-loose"><?php the_sub_field( 'content' ); ?></div>
+						<div class="md:text-[14px] leading-loose tracking-[1.4px]">
+							<?php the_sub_field( 'content' ); ?></div>
 					</div>
 				</div>
 				<?php endwhile; ?>
