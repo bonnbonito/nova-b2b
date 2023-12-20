@@ -23,19 +23,15 @@ if ( ! apply_filters( 'woocommerce_order_item_visible', true, $item ) ) {
 	return;
 }
 
-print_r( $item );
-
 ?>
 <tr
 	class="<?php echo esc_attr( apply_filters( 'woocommerce_order_item_class', 'woocommerce-table__line-item order_item', $item, $order ) ); ?>">
 
-	<td class="woocommerce-table__product-name product-name product-name px-4 py-8" colspan="2">
+	<td class="woocommerce-table__product-name product-name product-name px-4 py-4" colspan="2">
 		<?php
+
 		$is_visible        = $product && $product->is_visible();
 		$product_permalink = apply_filters( 'woocommerce_order_item_permalink', $is_visible ? $product->get_permalink( $item ) : '', $item, $order );
-
-		echo wp_kses_post( apply_filters( 'woocommerce_order_item_name', $product_permalink ? sprintf( '<a href="%s">%s</a>', $product_permalink, $item->get_name() ) : $item->get_name(), $item, $is_visible ) );
-
 
 		$qty          = $item->get_quantity();
 		$refunded_qty = $order->get_qty_refunded_for_item( $item_id );
@@ -46,7 +42,59 @@ print_r( $item );
 			$qty_display = esc_html( $qty );
 		}
 
-		echo apply_filters( 'woocommerce_order_item_quantity_html', ' <strong class="product-quantity">' . sprintf( '&times;&nbsp;%s', $qty_display ) . '</strong>', $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
+
+		if ( $item->get_meta( 'signage' ) ) {
+
+			?>
+
+		<div class="text-xs uppercase">
+			<div>
+				<span class="text-sm font-title tracking-[1.4px]">ID:</span>
+				<?php echo $item['quote_id']; ?>
+			</div>
+			<div>
+				<span class="text-sm font-title tracking-[1.4px]">DATE:</span> 11/4/2023
+			</div>
+			<div>
+				<span class="text-sm font-title tracking-[1.4px]">NAME:</span>
+				<?php echo $item['nova_title']; ?>
+			</div>
+			<div>
+				<span class="text-sm font-title">PRODUCT:</span>
+				<?php echo $item['product']; ?>
+			</div>
+			<div class="woocommerce-table__product-total product-total">
+				<h6 class="uppercase text-right">
+					<span class="tracking-[1.6px]">SUBTOTAL:</span>
+					<?php echo $order->get_formatted_line_subtotal( $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				</h6>
+			</div>
+		</div>
+
+			<?php
+
+		} else {
+			?>
+		<div class="font-title text-sm uppercase tracking-[1.4px] mb-5 md:mb-1 sample-board-detail">
+			<?php
+
+			echo wp_kses_post( apply_filters( 'woocommerce_order_item_name', $product_permalink ? sprintf( '<a href="%s">%s</a>', $product_permalink, $item->get_name() ) : $item->get_name(), $item, $is_visible ) );
+
+			echo apply_filters( 'woocommerce_order_item_quantity_html', ' <strong class="product-quantity">' . sprintf( '&times;&nbsp;%s', $qty_display ) . '</strong>', $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
+			?>
+		</div>
+
+		<div class="woocommerce-table__product-total product-total">
+			<h6 class="uppercase text-right"><span class="tracking-[1.6px]">SUBTOTAL:</span>
+				<?php echo $order->get_formatted_line_subtotal( $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			</h6>
+		</div>
+
+			<?php
+
+		}
 
 		do_action( 'woocommerce_order_item_meta_start', $item_id, $item, $order, false );
 
@@ -56,9 +104,7 @@ print_r( $item );
 		?>
 	</td>
 
-	<td class="woocommerce-table__product-total product-total">
-		<?php echo $order->get_formatted_line_subtotal( $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-	</td>
+
 
 </tr>
 

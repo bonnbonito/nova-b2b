@@ -188,17 +188,24 @@
     margin-right: 0;
     font-size: 16px;
     display: grid;
-    grid-template-columns: 250px 1fr;
-    align-items: center;
+    grid-template-columns: 200px 1fr;
+    align-items: baseline;
     padding-top: .25em;
     padding-bottom: .25em;
+}
+
+.woocommerce-checkout label {
+    text-transform: uppercase;
+    font-family: var(--global-heading-font-family);
+    letter-spacing: 1.6px;
+    font-weight: 400 !important;
 }
 
 .site .woocommerce ul.woocommerce-order-overview.woocommerce-thankyou-order-details {
     margin-top: 20px;
     padding-top: 20px;
     margin-bottom: 20px;
-    padding-top: 20px;
+    padding-bottom: 20px;
     border-top: 1px solid #D2D2D2;
     border-bottom: 1px solid #D2D2D2;
 }
@@ -217,6 +224,60 @@
 
 .img-wrap {
     height: 55px;
+    display: block;
+}
+
+.woocommerce table.shop_table tfoot tr.order-detail th,
+.woocommerce table.shop_table tfoot tr.order-detail td {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.order-detail th,
+.order-detail thead {
+    text-transform: uppercase;
+    font-weight: 400 !important;
+    font-family: var(--global-heading-font-family);
+}
+
+.detail-cart_subtotal th {
+    letter-spacing: 2.4px;
+}
+
+.detail-order_total th {
+    letter-spacing: 3px;
+}
+
+.detail-order_total th,
+.detail-order_total td {
+    font-size: 30px;
+    font-family: var(--global-heading-font-family);
+    font-weight: 400 !important;
+}
+
+.detail-cart_subtotal th,
+.detail-cart_subtotal td {
+    font-size: 24px;
+    font-family: var(--global-heading-font-family) !important;
+    font-weight: 400 !important;
+}
+
+.sample-board-detail a {
+    color: #2F2F2F;
+}
+
+.woocommerce-table--order-details.shop_table.order_details {
+    border-top: 1px solid var(--global-gray-400);
+    margin-top: 20px;
+}
+
+.woocommerce-table--order-details tfoot tr td {
+    font-family: var(--global-heading-font-family) !important;
+    font-weight: 400 !important;
+}
+
+.product-nav-tabs-mobile.show [data-menu] {
     display: block;
 }
 
@@ -240,5 +301,15 @@
         padding-top: 80px;
         margin-bottom: 80px;
         padding-bottom: 80px;
+    }
+
+    .woocommerce-table--order-details.shop_table.order_details {
+        margin-top: 50px;
+    }
+
+    .woocommerce table.shop_table tfoot tr.order-detail th,
+    .woocommerce table.shop_table tfoot tr.order-detail td {
+        padding-top: 30px;
+        padding-bottom: 30px;
     }
 }

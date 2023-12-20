@@ -49,7 +49,7 @@ class Woocommerce {
 		add_action( 'woocommerce_after_cart_item_name', array( $this, 'nova_quote_display_signage' ), 20, 2 );
 		add_action( 'woocommerce_order_item_name', array( $this, 'nova_quote_order_name' ), 10, 3 );
 		add_action( 'woocommerce_checkout_create_order_line_item', array( $this, 'nova_create_order_line_item' ), 10, 4 );
-		add_action( 'woocommerce_order_item_meta_end', array( $this, 'woocommerce_order_item_meta_end' ), 10, 4 );
+		// add_action( 'woocommerce_order_item_meta_end', array( $this, 'woocommerce_order_item_meta_end' ), 10, 4 );
 		// add_action( 'woocommerce_before_order_itemmeta', array( $this, 'nova_order_item_meta' ), 10, 3 );
 		add_filter( 'woocommerce_order_item_class', array( $this, 'nova_woocommerce_order_item_class' ), 10, 3 );
 		add_filter( 'woocommerce_hidden_order_itemmeta', array( $this, 'nova_hidden_order_itemmeta' ) );
@@ -70,13 +70,13 @@ class Woocommerce {
 		ob_start();
 		if ( have_rows( 'features' ) ) :
 			?>
-<div class="flex justify-between product-features-icons">
+<div class="md:flex justify-between product-features-icons gap-12">
 			<?php
 			while ( have_rows( 'features' ) ) :
 				the_row();
 				$image = get_sub_field( 'icon' );
 				?>
-	<div class="text-center">
+	<div class="text-center md:mb-0 mb-[40px]">
 		<div class="img-wrap h-[55px]">
 			<img class="mx-auto" src="<?php echo esc_url( $image['url'] ); ?>"
 				alt="<?php echo esc_attr( $image['alt'] ); ?>" />
@@ -748,7 +748,7 @@ jQuery(document.body).on('updated_cart_totals', initializeQuantityButtons);
 		if ( have_rows( 'faqs' ) ) {
 			?>
 <div id="faqItems" class="has-faq accordion">
-	<h2 class="uppercase">Frequently asked Questions</h2>
+	<h2 class="uppercase text-center mb-10">Frequently asked Questions</h2>
 			<?php
 			while ( have_rows( 'faqs' ) ) {
 				the_row();

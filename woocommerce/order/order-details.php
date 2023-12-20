@@ -40,7 +40,7 @@ if ( $show_downloads ) {
 }
 ?>
 
-<div class="grid grid-cols-1 md:grid-cols-2 gap-20">
+<div class="flex flex-col-reverse md:grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20">
 	<div>
 		<div class="woocommerce-order-details">
 			<?php do_action( 'woocommerce_order_details_before_order_table', $order ); ?>
@@ -49,15 +49,6 @@ if ( $show_downloads ) {
 				<?php esc_html_e( 'Order details', 'woocommerce' ); ?></h4>
 
 			<table class="woocommerce-table woocommerce-table--order-details shop_table order_details">
-
-				<thead>
-					<tr>
-						<th class="woocommerce-table__product-name product-name">
-							<?php esc_html_e( 'Product', 'woocommerce' ); ?></th>
-						<th class="woocommerce-table__product-table product-total">
-							<?php esc_html_e( 'Total', 'woocommerce' ); ?></th>
-					</tr>
-				</thead>
 
 				<tbody>
 					<?php
@@ -87,9 +78,9 @@ if ( $show_downloads ) {
 					<?php
 					foreach ( $order->get_order_item_totals() as $key => $total ) {
 						?>
-					<tr>
+					<tr class="order-detail detail-<?php echo $key; ?>">
 						<th scope="row"><?php echo esc_html( $total['label'] ); ?></th>
-						<td><?php echo wp_kses_post( $total['value'] ); ?></td>
+						<td class="text-right"><?php echo wp_kses_post( $total['value'] ); ?></td>
 					</tr>
 						<?php
 					}

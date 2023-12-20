@@ -24,11 +24,11 @@ $show_shipping = ! wc_ship_to_billing_address_only() && $order->needs_shipping_a
 	<?php if ( $show_shipping ) : ?>
 
 	<div class="woocommerce-columns woocommerce-columns--addresses addresses">
-		<div class="woocommerce-column  woocommerce-column--billing-address mb-20">
+		<div class="woocommerce-column  woocommerce-column--billing-address mb-5 md:mb-20">
 
 			<?php endif; ?>
 
-			<h4 class="woocommerce-column__title uppercase tracking-[2.4px] mb-9">
+			<h4 class="woocommerce-column__title uppercase tracking-[2.4px] mb-4 md:mb-9">
 				<?php esc_html_e( 'Billing details', 'woocommerce' ); ?>
 			</h4>
 
@@ -98,16 +98,52 @@ $show_shipping = ! wc_ship_to_billing_address_only() && $order->needs_shipping_a
 		</div><!-- /.col-1 -->
 
 		<div class="woocommerce-column woocommerce-column--2 woocommerce-column--shipping-address col-2">
-			<h4 class="woocommerce-column__title uppercase tracking-[2.4px] mb-9">
+			<h4 class="woocommerce-column__title uppercase tracking-[2.4px] mb-4 md:mb-9">
 				<?php esc_html_e( 'Shipping details', 'woocommerce' ); ?>
 			</h4>
-			<address class="border-none pl-0">
-				<?php echo wp_kses_post( $order->get_formatted_shipping_address( esc_html__( 'N/A', 'woocommerce' ) ) ); ?>
 
-				<?php if ( $order->get_shipping_phone() ) : ?>
-				<p class="woocommerce-customer-details--phone"><?php echo esc_html( $order->get_shipping_phone() ); ?>
-				</p>
+
+			<address class="border-none pl-0">
+				<?php if ( $order->get_shipping_first_name() && $order->get_shipping_last_name() ) : ?>
+				<div class="grid grid-cols-[180px_1fr] items-center py-1 gap-10">
+					<h6 class="uppercase tracking-[1.6px] mb-0">Name:</h6>
+					<span
+						class="text-sm"><?php echo $order->get_shipping_first_name() . ' ' . $order->get_shipping_last_name(); ?></span>
+				</div>
 				<?php endif; ?>
+
+				<?php
+				if ( $order->get_billing_phone() ) :
+					?>
+				<div class="grid grid-cols-[180px_1fr] items-center py-1 gap-10">
+					<h6 class="uppercase tracking-[1.6px] mb-0">Phone:</h6>
+					<span class="text-sm"><?php echo $order->get_billing_phone(); ?></span>
+				</div>
+				<?php endif; ?>
+
+				<?php
+				$shipping_address_1 = $order->get_shipping_address_1();
+				$shipping_address_2 = $order->get_shipping_address_2();
+				$shipping_city      = $order->get_shipping_city();
+				$shipping_state     = $order->get_shipping_state();
+				$shipping_postcode  = $order->get_shipping_postcode();
+				$shipping_country   = $order->get_shipping_country();
+				$shipping_address   = $shipping_address_1;
+				if ( ! empty( $shipping_address_2 ) ) {
+					$shipping_address .= ', <br>' . $shipping_address_2;
+				}
+				$shipping_address .= ', ' . $shipping_city;
+				$shipping_address .= ',<br> ' . $shipping_state;
+				$shipping_address .= ', ' . $shipping_postcode;
+				$shipping_address .= ', ' . $shipping_country;
+				?>
+
+				<div class="grid grid-cols-[180px_1fr] items-start py-1 gap-10">
+					<h6 class="uppercase tracking-[1.6px] mb-0">Shipping Address:</h6>
+					<address class="border-none p-0 text-sm"><?php echo $shipping_address; ?></address>
+				</div>
+
+
 			</address>
 		</div><!-- /.col-2 -->
 

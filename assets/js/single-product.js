@@ -13,6 +13,30 @@ navTabs.forEach((tab) => {
 		productNavContent
 			.querySelector(`.product-nav-content-item[data-nav="${navContent}"]`)
 			.classList.add('active');
+
+		const tabHref = tab.getAttribute('href') || tab.id; // Get href or ID value
+		window.history.pushState({}, '', tabHref);
+
 		window.dispatchEvent(new Event('resize'));
 	});
+});
+
+function parameterExists(param) {
+	const queryParams = new URLSearchParams(window.location.search);
+	return queryParams.has(param);
+}
+
+window.addEventListener('load', () => {
+	const hash = window.location.hash;
+	console.log(!parameterExists('qedit'));
+	if (!parameterExists('qedit')) {
+		if (hash) {
+			console.log(hash);
+			document.querySelector('a[href="' + hash + '"]').click();
+			console.log('remove');
+		} else {
+			document.querySelector('a[href="#overview"]').click();
+			console.log('remove');
+		}
+	}
 });
