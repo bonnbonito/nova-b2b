@@ -24,7 +24,13 @@ class Scripts {
 	}
 
 	public function nova_woocommerce_scripts() {
+
 		wp_enqueue_style( 'nova-output', get_stylesheet_directory_uri() . '/assets/css/dist/output.css' );
+
+		wp_register_script( 'splide', get_stylesheet_directory_uri() . '/assets/js/splide.min.js', array(), '4.1.4' );
+		wp_register_script( 'splide-init', get_stylesheet_directory_uri() . '/assets/js/splide-init.js', array( 'splide' ), wp_get_theme()->get( 'Version' ), false, false );
+		wp_register_style( 'splide', get_stylesheet_directory_uri() . '/assets/css/splide.min.css', array(), '4.1.4' );
+
 		wp_register_style( 'nova-single-product', get_stylesheet_directory_uri() . '/assets/css/single-product.css', array( 'nova-output' ), wp_get_theme()->get( 'Version' ) );
 		wp_register_style( 'nova-woo', get_stylesheet_directory_uri() . '/assets/css/woo.css', array( 'nova-output' ), wp_get_theme()->get( 'Version' ) );
 		wp_register_style( 'nova-loggedout', get_stylesheet_directory_uri() . '/assets/css/loggedout.css', array( 'nova-output' ), wp_get_theme()->get( 'Version' ) );
@@ -33,6 +39,8 @@ class Scripts {
 		wp_enqueue_script( 'fancyapps', get_stylesheet_directory_uri() . '/assets/js/fancybox.umd.js', array(), '5.0.0', true );
 		wp_enqueue_style( 'fancyapps', get_stylesheet_directory_uri() . '/assets/css/fancybox.css', array( 'nova-output' ), '5.0.0' );
 		if ( is_singular( 'product' ) ) {
+			wp_enqueue_script( 'splide' );
+			wp_enqueue_style( 'splide' );
 			wp_enqueue_script( 'nova-accordion' );
 			wp_enqueue_style( 'nova-single-product' );
 			wp_enqueue_script( 'nova-single-product' );

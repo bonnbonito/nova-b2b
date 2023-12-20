@@ -121,19 +121,19 @@ if ( post_password_required() ) {
 				while ( have_rows( 'installations' ) ) :
 					the_row();
 					?>
-				<div class="installation-item grid grid-cols-[280px_1fr] md:mb-0 mb-5">
+				<div class="installation-item grid md:grid-cols-[280px_1fr] md:mb-0 mb-5 gap-4">
 					<div>
 						<?php
 						$image = get_sub_field( 'image' );
 						if ( ! empty( $image ) ) :
 							?>
-						<img src="<?php echo esc_url( $image['url'] ); ?>"
+						<img class="w-full" src="<?php echo esc_url( $image['url'] ); ?>"
 							alt="<?php echo esc_attr( $image['alt'] ); ?>" />
 						<?php endif; ?>
 					</div>
-					<div class="px-4">
+					<div class="px-0">
 						<h6 class="uppercase tracking-[1.6px]"><?php the_sub_field( 'title' ); ?></h6>
-						<div class="text-[14px] leading-loose"><?php the_sub_field( 'content' ); ?></div>
+						<div class="text-[10px] md:text-[14px] leading-loose"><?php the_sub_field( 'content' ); ?></div>
 					</div>
 				</div>
 				<?php endwhile; ?>

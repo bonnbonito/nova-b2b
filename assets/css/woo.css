@@ -277,9 +277,7 @@
     font-weight: 400 !important;
 }
 
-.product-nav-tabs-mobile.show [data-menu] {
-    display: block;
-}
+
 
 @media (min-width: 1025px) {
     .site form.checkout #order_review_heading {

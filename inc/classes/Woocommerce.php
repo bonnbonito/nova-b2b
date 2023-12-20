@@ -58,6 +58,7 @@ class Woocommerce {
 		add_action( 'woocommerce_checkout_order_created', array( $this, 'nova_checkout_order_created' ), 10, 1 );
 		add_action( 'after_setup_theme', array( $this, 'edit_cart_summary_title' ) );
 		add_action( 'woocommerce_cart_actions', array( $this, 'update_quantity_script' ) );
+		add_action( 'woocommerce_after_add_to_cart_button', array( $this, 'update_single_quantity_script' ) );
 		add_action( 'woocommerce_before_cart', array( $this, 'edit_cart_form_wrap_before' ), 1 );
 		add_action( 'woocommerce_checkout_after_customer_details', array( $this, 'remove_checkout_coupon_form' ), 10 );
 		add_filter( 'woocommerce_cart_totals_order_total_html', array( $this, 'woocommerce_cart_totals_order_total_html' ) );
@@ -158,6 +159,55 @@ function initializeQuantityButtons() {
 
 document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 jQuery(document.body).on('updated_cart_totals', initializeQuantityButtons);
+</script>
+		<?php
+	}
+
+
+	public function update_single_quantity_script() {
+		?>
+<script>
+function initializeQuantityButtons() {
+	const quantityChanges = document.querySelectorAll('.quantity-change');
+
+	quantityChanges.forEach(q => {
+		const decrease = q.querySelector('.decrease');
+		const increase = q.querySelector('.increase');
+		const input = q.querySelector('input.qty');
+
+		// Remove existing event listeners
+		increase.removeEventListener('click', increaseClickListener);
+		decrease.removeEventListener('click', decreaseClickListener);
+
+		// Add new event listeners
+		increase.addEventListener('click', increaseClickListener);
+		decrease.addEventListener('click', decreaseClickListener);
+
+		function increaseClickListener(e) {
+			increaseHandler(e, input);
+		}
+
+		function decreaseClickListener(e) {
+			decreaseHandler(e, input);
+		}
+	});
+
+	function increaseHandler(e, input) {
+		e.preventDefault();
+		let currentValue = parseInt(input.value, 10);
+		input.value = currentValue + 1;
+	}
+
+	function decreaseHandler(e, input) {
+		e.preventDefault();
+		let currentValue = parseInt(input.value, 10);
+		if (currentValue > 1) {
+			input.value = currentValue - 1;
+		}
+	}
+}
+
+document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 </script>
 		<?php
 	}
