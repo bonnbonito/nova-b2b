@@ -281,7 +281,6 @@ p.faq-question.active svg line:first-child {
 
 #sampleBoard .single_add_to_cart_button {
     width: 100%;
-    margin-top: 1em;
     float: none;
     -webkit-user-select: none;
     /* Safari */
@@ -322,6 +321,51 @@ p.faq-question.active svg line:first-child {
 
 .cursor-pointer svg {
     pointer-events: none;
+}
+
+.p-dropdown-wrap .p-dropdown {
+    height: 55px;
+    border: 1px solid #d2d2d2;
+    border-radius: 5px;
+    padding: 10px;
+    font-family: var(--global-heading-font-family);
+    text-transform: uppercase;
+    flex: 1;
+}
+
+div#productCat {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+div#productCurrent {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5em;
+    line-height: 0;
+}
+
+.p-dropdown-current,
+.p-dropdown-current>div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem;
+}
+
+.p-dropdown-current>div {
+    line-height: 1;
+    justify-content: flex-start;
+}
+
+. div#productCurrent {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5em;
+    line-height: 0;
 }
 
 @media (min-width: 768px) {

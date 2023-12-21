@@ -21,27 +21,27 @@ $product_id = get_field( 'product' );
 				get_permalink( $product_id ) . '?qid=' . get_the_ID() . '&qedit=1'
 			);
 			?>
-					" class="p-2 border rounded text-nova-gray text-[10px] tracking-[1px] hover:bg-nova-gray hover:text-white">Edit
+					" class="p-2 border rounded text-nova-gray text-[10px] tracking-[1px] hover:bg-nova-gray hover:text-white w-[110px] text-center">Edit
 			Order</a>
 			<?php if ( ! current_user_can( 'pending' ) ) { ?>
 		<a href="/" data-type="quotation" data-id="<?php the_ID(); ?>"
-			class="p-2 border rounded text-white bg-nova-primary text-[10px] tracking-[1px] hover:bg-nova-secondary">For
+			class="p-2 border rounded text-white bg-nova-primary text-[10px] tracking-[1px] hover:bg-nova-secondary w-[110px] text-center">For
 			Quotation</a>
 		<?php } ?>
 
 
 		<?php elseif ( get_field( 'quote_status' )['value'] == 'processing' ) : ?>
 		<a href="<?php echo esc_url( '/my-account/mockups/view?qid=' . get_the_ID() ); ?>"
-			class="p-2 border rounded text-nova-gray text-[10px] tracking-[1px] hover:bg-nova-gray hover:text-white">View
+			class="p-2 border rounded text-nova-gray text-[10px] tracking-[1px] hover:bg-nova-gray hover:text-white w-[110px] text-center">View
 			Details</a>
-		<span class=" p-2 rounded text-[10px] w-[100px] text-center">Processing<br> Quotation</span>
+		<span class="p-2 rounded text-[10px] w-[110px] text-center tracking-[1.2px]">Processing<br> Quotation</span>
 		<?php else : ?>
 		<a href="<?php echo esc_url( '/my-account/mockups/view?qid=' . get_the_ID() ); ?>"
-			class="p-2 border rounded text-nova-gray text-[10px] tracking-[1px] hover:bg-nova-gray hover:text-white">View
+			class="p-2 border rounded text-nova-gray text-[10px] tracking-[1px] hover:bg-nova-gray hover:text-white w-[110px] text-center">View
 			Details</a>
 		<a href="/" data-type="checkout" data-id="<?php the_ID(); ?>"
 			data-product="<?php echo get_the_title( $product_id ); ?>"
-			class="p-2 border rounded bg-green-600 text-white text-[10px] tracking-[1px] hover:bg-green-400 cursor-pointer">
+			class="p-2 border rounded bg-green-600 text-white text-[10px] tracking-[1px] hover:bg-green-400 cursor-pointer w-[110px] text-center">
 			Add To Cart</a>
 		<?php endif; ?>
 	</div>

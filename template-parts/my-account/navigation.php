@@ -7,7 +7,7 @@
 		class="block text-[14px] font-title text-black uppercase mb-2">ACCOUNT</a>
 	<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/all' ) ); ?>"
 		class="block text-[14px] font-title text-black uppercase mb-2">MOCKUPS</a>
-	<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/all' ) ); ?>"
+	<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/drafts' ) ); ?>"
 		class="block text-[12px] text-black uppercase mb-2 pl-4">DRAFTS</a>
 	<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/processing' ) ); ?>"
 		class="block text-[12px] text-black uppercase mb-2 pl-4">PROCESSING</a>

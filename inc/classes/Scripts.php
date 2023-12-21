@@ -37,7 +37,15 @@ class Scripts {
 		wp_register_script( 'nova-single-product', get_stylesheet_directory_uri() . '/assets/js/single-product.js', array(), wp_get_theme()->get( 'Version' ), true );
 		wp_register_script( 'nova-accordion', get_stylesheet_directory_uri() . '/assets/js/accordion.js', array(), wp_get_theme()->get( 'Version' ), true );
 		wp_enqueue_script( 'fancyapps', get_stylesheet_directory_uri() . '/assets/js/fancybox.umd.js', array(), '5.0.0', true );
+
 		wp_enqueue_style( 'fancyapps', get_stylesheet_directory_uri() . '/assets/css/fancybox.css', array( 'nova-output' ), '5.0.0' );
+
+		wp_register_style( 'nova-account', get_stylesheet_directory_uri() . '/assets/css/account.css', array( 'nova-output' ), wp_get_theme()->get( 'Version' ) );
+
+		if ( is_account_page() ) {
+			wp_enqueue_style( 'nova-account' );
+		}
+
 		if ( is_singular( 'product' ) ) {
 			wp_enqueue_script( 'splide' );
 			wp_enqueue_style( 'splide' );

@@ -65,6 +65,52 @@ class Woocommerce {
 		add_filter( 'woocommerce_endpoint_order-received_title', array( $this, 'order_received_title' ), 20, 2 );
 		add_filter( 'woocommerce_thankyou_order_received_text', array( $this, 'woocommerce_thankyou_order_received_text' ) );
 		add_shortcode( 'product_features', array( $this, 'product_features' ) );
+		add_shortcode( 'product_dropdown_nav', array( $this, 'product_dropdown_nav' ) );
+		add_action( 'woocommerce_before_single_product', array( $this, 'show_product_dropdown_nav' ) );
+	}
+
+	public function product_dropdown_nav() {
+		ob_start();
+		?>
+<div class="md:flex md:gap-10 p-dropdown-wrap mb-24 mt-10">
+	<div class="p-dropdown cursor-pointer mb-4 md:mb-0">
+		<div id="productCat" class="p-dropdown-current overflow-hidden">
+			<div id="productCatCurrent"><img
+					src="<?php echo get_stylesheet_directory_uri() . '/assets/img/p-icon.png'; ?>">
+				Acrylic</div>
+			<svg xmlns="http://www.w3.org/2000/svg" width="15" height="8" viewBox="0 0 15 8" fill="none">
+				<path d="M13.3516 2L7.8861 6.54054L2.00021 2" stroke="black" stroke-width="2" stroke-linecap="square"
+					stroke-linejoin="round" />
+			</svg>
+		</div>
+		<div id="productCat-list">
+
+		</div>
+	</div>
+
+	<div class="p-dropdown cursor-pointer">
+		<div id="novaProduct" class="p-dropdown-current overflow-hidden">
+			<div id="novaProductCurrent"><img
+					src="<?php echo get_stylesheet_directory_uri() . '/assets/img/p-icon.png'; ?>">
+				<span class="truncate"><?php the_title(); ?></span>
+			</div>
+			<svg xmlns="http://www.w3.org/2000/svg" width="15" height="8" viewBox="0 0 15 8" fill="none">
+				<path d="M13.3516 2L7.8861 6.54054L2.00021 2" stroke="black" stroke-width="2" stroke-linecap="square"
+					stroke-linejoin="round" />
+			</svg>
+		</div>
+		<div id="novaProduct-list">
+
+		</div>
+	</div>
+
+</div>
+		<?php
+		return ob_get_clean();
+	}
+
+	public function show_product_dropdown_nav() {
+		echo do_shortcode( '[product_dropdown_nav]' );
 	}
 
 	public function product_features() {
@@ -165,10 +211,27 @@ jQuery(document.body).on('updated_cart_totals', initializeQuantityButtons);
 
 
 	public function update_single_quantity_script() {
+		global $product;
 		?>
 <script>
 function initializeQuantityButtons() {
 	const quantityChanges = document.querySelectorAll('.quantity-change');
+	const currentPrice = '<?php echo $product->get_price(); ?>';
+	const currencySymbol = '<?php echo get_woocommerce_currency_symbol(); ?>';
+
+	function computePrice(qty) {
+
+		let computeprice = qty * parseFloat(currentPrice);
+		console.log(computeprice);
+		computeprice = computeprice.toLocaleString('en-US', {
+			minimumFractionDigits: 2,
+			maximumFractionDigits: 2
+		});
+
+		document.getElementById("watchPrice").innerHTML = currencySymbol + computeprice;
+
+	}
+
 
 	quantityChanges.forEach(q => {
 		const decrease = q.querySelector('.decrease');
@@ -183,6 +246,8 @@ function initializeQuantityButtons() {
 		increase.addEventListener('click', increaseClickListener);
 		decrease.addEventListener('click', decreaseClickListener);
 
+
+
 		function increaseClickListener(e) {
 			increaseHandler(e, input);
 		}
@@ -196,6 +261,12 @@ function initializeQuantityButtons() {
 		e.preventDefault();
 		let currentValue = parseInt(input.value, 10);
 		input.value = currentValue + 1;
+
+		console.log(input.value);
+
+		computePrice(input.value);
+
+
 	}
 
 	function decreaseHandler(e, input) {
@@ -203,7 +274,9 @@ function initializeQuantityButtons() {
 		let currentValue = parseInt(input.value, 10);
 		if (currentValue > 1) {
 			input.value = currentValue - 1;
+			computePrice(input.value)
 		}
+		console.log(input.value);
 	}
 }
 
