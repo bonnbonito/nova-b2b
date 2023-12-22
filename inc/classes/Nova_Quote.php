@@ -264,6 +264,13 @@ class Nova_Quote {
 		wp_send_json( $status );
 	}
 
+	public function product_exists_by_title( $product_title ) {
+		$existing_product = get_page_by_title( $product_title, 'OBJECT', 'product' );
+
+		return $existing_product ? $existing_product->ID : false;
+	}
+
+
 	public function nova_to_checkout() {
 		$status = array(
 			'code' => 1,
@@ -303,6 +310,7 @@ class Nova_Quote {
 			'quote_id'   => $post_id,
 			'nova_note'  => $note,
 			'product'    => $product_name,
+			'product_id' => $product_id,
 		);
 
 		$product_data = array(
@@ -316,12 +324,17 @@ class Nova_Quote {
 			),
 		);
 
-		$product_id = wp_insert_post( $product_data );
+		if ( $this->product_exists_by_title( wp_strip_all_tags( $title ) ) ) {
 
-		wp_set_object_terms( $product_id, 'nova_quote', 'product_type' );
+			$created_product = $this->product_exists_by_title( wp_strip_all_tags( $title ) );
+
+		} else {
+			$created_product = wp_insert_post( $product_data );
+			wp_set_object_terms( $created_product, 'nova_quote', 'product_type' );
+		}
 
 		WC()->cart->add_to_cart(
-			$product_id,
+			$created_product,
 			1,
 			0,
 			array(),
