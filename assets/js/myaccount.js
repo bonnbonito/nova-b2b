@@ -62,6 +62,8 @@ function process(btn, action) {
 					let event = new Event('added_to_cart');
 					document.body.dispatchEvent(event);
 					btn.innerHTML = `Added to Cart`;
+				} else {
+					location.reload(true);
 				}
 			} else {
 				alert(data.error);
