@@ -56,13 +56,13 @@ function process(btn, action) {
 		.then((response) => response.json())
 		.then((data) => {
 			console.log(data);
-			if (action === 'to_checkout') {
-				console.log('Checking out');
-			}
+
 			if (data.code == 2) {
-				let event = new Event('added_to_cart');
-				document.body.dispatchEvent(event);
-				btn.innerHTML = `Added to Cart`;
+				if (action === 'to_checkout') {
+					let event = new Event('added_to_cart');
+					document.body.dispatchEvent(event);
+					btn.innerHTML = `Added to Cart`;
+				}
 			} else {
 				alert(data.error);
 				location.reload(true);

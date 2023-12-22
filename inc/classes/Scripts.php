@@ -33,6 +33,7 @@ class Scripts {
 
 		wp_register_style( 'nova-single-product', get_stylesheet_directory_uri() . '/assets/css/single-product.css', array( 'nova-output' ), wp_get_theme()->get( 'Version' ) );
 		wp_register_style( 'nova-woo', get_stylesheet_directory_uri() . '/assets/css/woo.css', array( 'nova-output' ), wp_get_theme()->get( 'Version' ) );
+		wp_register_script( 'nova-woo', get_stylesheet_directory_uri() . '/assets/js/woo.js', array( 'jquery' ), wp_get_theme()->get( 'Version' ), false, false );
 		wp_register_style( 'nova-loggedout', get_stylesheet_directory_uri() . '/assets/css/loggedout.css', array( 'nova-output' ), wp_get_theme()->get( 'Version' ) );
 		wp_register_script( 'nova-single-product', get_stylesheet_directory_uri() . '/assets/js/single-product.js', array(), wp_get_theme()->get( 'Version' ), true );
 		wp_register_script( 'nova-accordion', get_stylesheet_directory_uri() . '/assets/js/accordion.js', array(), wp_get_theme()->get( 'Version' ), true );
@@ -56,6 +57,7 @@ class Scripts {
 
 		if ( is_cart() || is_checkout() ) {
 			wp_enqueue_style( 'nova-woo' );
+			wp_enqueue_script( 'nova-woo' );
 		}
 
 		if ( ! is_user_logged_in() ) {
