@@ -261,12 +261,16 @@ export default function Letters({ item }) {
 			perLetterPrice = pricingDetail[selectedThickness.value];
 			const quantity = letters.trim().length;
 			const totalLetterPrice =
-				quantity * perLetterPrice * (waterproof === 'Indoor' ? 1 : 1.1);
+				quantity *
+				perLetterPrice *
+				(waterproof === 'Indoor' ? 1 : 1.1) *
+				(selectedFinishing == 'Gloss' ? 1.1 : 1);
 			setUsdPrice(totalLetterPrice.toFixed(2));
 		}
 	}, [
 		selectedLetterHeight,
 		selectedThickness,
+		selectedFinishing,
 		letters,
 		waterproof,
 		lettersHeight,

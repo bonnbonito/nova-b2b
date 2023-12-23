@@ -697,10 +697,10 @@ function Letters({
       const pricingDetail = letterPricing[selectedLetterHeight - 1];
       perLetterPrice = pricingDetail[selectedThickness.value];
       const quantity = letters.trim().length;
-      const totalLetterPrice = quantity * perLetterPrice * (waterproof === 'Indoor' ? 1 : 1.1);
+      const totalLetterPrice = quantity * perLetterPrice * (waterproof === 'Indoor' ? 1 : 1.1) * (selectedFinishing == 'Gloss' ? 1.1 : 1);
       setUsdPrice(totalLetterPrice.toFixed(2));
     }
-  }, [selectedLetterHeight, selectedThickness, letters, waterproof, lettersHeight]);
+  }, [selectedLetterHeight, selectedThickness, selectedFinishing, letters, waterproof, lettersHeight]);
   (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__["default"])(colorRef, () => {
     setOpenColor(false);
   });
