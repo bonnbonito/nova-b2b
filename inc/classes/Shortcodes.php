@@ -23,6 +23,15 @@ class Shortcodes {
 		add_shortcode( 'activate_account', array( $this, 'activate_account' ) );
 		add_shortcode( 'nova_login_form', array( $this, 'nova_login_form' ) );
 		add_shortcode( 'blurred_login', array( $this, 'nova_login_form' ) );
+		add_shortcode( 'nova_front_login', array( $this, 'nova_front_login' ) );
+	}
+
+	public function nova_front_login() {
+		ob_start();
+
+		require NOVA_DIR_PATH . '/inc/shortcodes/front-login.php';
+
+		return ob_get_clean();
 	}
 
 	public function nova_signup() {

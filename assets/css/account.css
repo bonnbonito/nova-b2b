@@ -1,3 +1,7 @@
+.woocommerce-orders-table__cell-order-actions a:not(:last-child) {
+    margin-right: 4px;
+}
+
 @media (max-width: 767px) {
     .nova-account-navaigation {
         display: none;

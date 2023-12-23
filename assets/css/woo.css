@@ -277,7 +277,51 @@
     font-weight: 400 !important;
 }
 
+.cart_totals .cart-subtotal td {
+    text-align: right;
+    font-family: var(--global-heading-font-family);
+    font-size: 18px;
+}
 
+.woocommerce ul#shipping_method li {
+    justify-content: flex-end;
+    font-family: var(--global-heading-font-family);
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+.cart-collaterals .cart_totals .order-total th,
+.cart-collaterals .cart_totals .order-total td {
+    font-size: 30px;
+    font-family: var(--global-heading-font-family);
+    text-transform: uppercase;
+    font-weight: 400;
+}
+
+.cart-collaterals .cart_totals .order-total td {
+    text-align: right;
+}
+
+.woocommerce-cart .cart-collaterals .cart_totals tr th,
+.woocommerce-cart .cart-collaterals .cart_totals tr td {
+    border-top: 0 !important;
+}
+
+#payment ul.wc_payment_methods {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 40px;
+}
+
+#payment ul.wc_payment_methods::before {
+    display: none !important;
+}
+
+#payment ul.wc_payment_methods li {
+    padding: 20px;
+    border: 1px solid #d2d2d2;
+    border-radius: 5px;
+}
 
 @media (min-width: 1025px) {
     .site form.checkout #order_review_heading {
@@ -294,6 +338,22 @@
 }
 
 @media (min-width: 768px) {
+
+    #payment ul.wc_payment_methods {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 40px;
+    }
+
+    #payment ul.wc_payment_methods::before {
+        display: none !important;
+    }
+
+    .cart-collaterals .cart_totals .order-total th,
+    .cart-collaterals .cart_totals .order-total td {
+        padding-top: 60px;
+    }
+
     .site .woocommerce ul.woocommerce-order-overview.woocommerce-thankyou-order-details {
         margin-top: 120px;
         padding-top: 80px;

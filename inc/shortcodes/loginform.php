@@ -11,6 +11,6 @@
             class="text-xs p-2 mt-1 block w-full rounded border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
     </label>
     <input type="hidden" name="action" value="nova_login">
-    <button type="submit" class="block rounded button" id="submitBtn">Submit</button>
+    <button type="submit" class="block rounded button" id="submitBtn">Sign In</button>
     <div id="loginStatus"></div>
 </form>
