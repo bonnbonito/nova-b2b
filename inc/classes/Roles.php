@@ -3,6 +3,7 @@ namespace NOVA_B2B\INC\CLASSES;
 
 use WP_User;
 use WP_Error;
+use WC;
 
 class Roles {
 	/**
@@ -347,13 +348,28 @@ class Roles {
 		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
 		// Send activation email
-		wp_mail( $businessEmail, $subject, $message, $headers );
+		// wp_mail( $businessEmail, $subject, $message, $headers );
+
+		$this->send_email( $businessEmail, $subject, $message, array(), array() );
 
 		$status['code'] = 2;
 		$status['post'] = $_POST;
 
 		wp_send_json( $status );
 	}
+
+	public function send_email( $to, $subject, $content, $headers = array(), $attachments = array() ) {
+		// Get the WooCommerce emailer instance
+		$mailer = WC()->mailer();
+
+		// Wrap the content with WooCommerce email template
+		$wrapped_content = $mailer->wrap_message( $subject, $content );
+
+		// Send the email using WooCommerce's mailer
+		$mailer->send( $to, $subject, $wrapped_content, $headers, $attachments );
+	}
+
+
 
 	public function create_roles() {
 		global $wp_roles;
