@@ -75,7 +75,7 @@ class Roles {
 
 			$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
-			wp_mail( $to, $subject, $message, $headers );
+			$this->send_email( $to, $subject, $message, $headers, array() );
 
 		}
 	}
@@ -143,7 +143,7 @@ class Roles {
 
 		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
-		wp_mail( get_option( 'admin_email' ), $subject, $message, $headers );
+		$this->send_email( get_option( 'admin_email' ), $subject, $message, $headers, array() );
 
 		$this->send_user_pending_email( $user_id );
 	}
@@ -163,7 +163,7 @@ class Roles {
 
 		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
-		wp_mail( $user_email, $subject, $message, $headers );
+		$this->send_email( $user_email, $subject, $message, $headers, array() );
 	}
 
 	public function send_user_approved_email( $user_id ) {
@@ -180,7 +180,7 @@ class Roles {
 
 		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
-		wp_mail( $user->user_email, $subject, $message, $headers );
+		$this->send_email( $user->user_email, $subject, $message, $headers, array() );
 	}
 
 	public function nova_login() {
@@ -384,7 +384,7 @@ class Roles {
 
 		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
-		wp_mail( $user_email, $subject, $message, $headers );
+		$this->send_email( $user_email, $subject, $message, $headers, array() );
 	}
 
 	public function user_send_activate( $meta_id, $user_id, $meta_key, $_meta_value ) {
@@ -449,7 +449,7 @@ class Roles {
 		wp_send_json( $status );
 	}
 
-	public function send_email( $to, $subject, $content, $headers = array(), $attachments = array() ) {
+	public function send_email( $to, $subject, $content, $headers = array( 'Content-Type: text/html; charset=UTF-8' ), $attachments = array() ) {
 		// Get the WooCommerce emailer instance
 		$mailer = WC()->mailer();
 
