@@ -48,10 +48,10 @@ class Shortcodes {
 			'<p>Thank you,<br>' .
 			'NOVA Signage Team</p>';
 
-		// $mailer = WC()->mailer();
+		$mailer = WC()->mailer();
 
 		// Wrap the content with WooCommerce email template
-		// $wrapped_content = $mailer->wrap_message( $subject, $message );
+		$wrapped_content = $mailer->wrap_message( $subject, $message );
 
 		// Send the email using WooCommerce's mailer
 		// $mailer->send( $user_email, $subject, $wrapped_content, '', '' );

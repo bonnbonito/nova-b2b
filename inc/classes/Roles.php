@@ -37,7 +37,7 @@ class Roles {
 		add_action( 'pre_get_users', array( $this, 'sort_by_business_id_column' ) );
 		add_action( 'set_user_role', array( $this, 'notify_user_approved_partner' ), 10, 3 );
 		add_action( 'set_user_role', array( $this, 'log_role_change' ), 10, 3 );
-		add_action( 'added_user_meta', array( $this, 'user_send_activate' ), 10, 4 );
+		// add_action( 'added_user_meta', array( $this, 'user_send_activate' ), 10, 4 );
 	}
 
 
@@ -346,8 +346,6 @@ class Roles {
 		$activation_key = md5( uniqid( rand(), true ) );
 		update_user_meta( $user_id, 'account_activation_key', $activation_key );
 
-		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
-
 		// Send activation email
 		// wp_mail( $businessEmail, $subject, $message, $headers );
 
@@ -361,7 +359,32 @@ class Roles {
 			'activation_key' => $activation_key,
 		);
 
+		$this->send_user_activate_email( $user_id );
+
 		wp_send_json( $status );
+	}
+
+	public function send_user_activate_email( $user_id ) {
+
+		$business_id    = get_field( 'business_id', 'user_' . $user_id );
+		$user_data      = get_userdata( $user_id );
+		$user_email     = $user_data->user_email;
+		$firstName      = $user_data->first_name;
+		$activation_key = get_user_meta( $user_id, 'account_activation_key', true );
+
+		$subject = 'NOVA Signage: Activate Your Account';
+
+		$message = '<p>Hello ' . $firstName . ',</p>' .
+		'<p>Thank you for submitting your application as a NOVA Business Partner. Your <b>Business ID</b> number is: ' . $business_id . '</p>' .
+		'<p>Please click the link below to activate your account:</p>' .
+		'<p><a href="' . home_url() . '/activate?pu=' . $user_id . '&key=' . $activation_key . '">' .
+		home_url() . '/activate?pu=' . $user_id . '&key=' . $activation_key . '</a></p>' .
+		'<p>Thank you,<br>' .
+		'NOVA Signage Team</p>';
+
+		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
+
+		wp_mail( $user_email, $subject, $message, $headers );
 	}
 
 	public function user_send_activate( $meta_id, $user_id, $meta_key, $_meta_value ) {
