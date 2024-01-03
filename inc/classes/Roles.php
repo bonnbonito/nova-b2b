@@ -37,7 +37,10 @@ class Roles {
 		add_action( 'pre_get_users', array( $this, 'sort_by_business_id_column' ) );
 		add_action( 'set_user_role', array( $this, 'notify_user_approved_partner' ), 10, 3 );
 		add_action( 'set_user_role', array( $this, 'log_role_change' ), 10, 3 );
+		add_action( 'added_user_meta', array( $this, 'user_send_activate' ), 10, 4 );
 	}
+
+
 
 	public function log_role_change( $user_id, $new_role, $old_roles ) {
 		$user_info = get_userdata( $user_id );
@@ -340,6 +343,9 @@ class Roles {
 		update_field( 'promotions', isset( $_POST['promotions'] ) && $_POST['promotions'] === 'yes' ? 1 : 0, 'user_ ' . $user_id );
 		update_field( 'privacy', $_POST['privacy'] === 'yes' ? 1 : 0, 'user_ ' . $user_id );
 
+		$activation_key = md5( uniqid( rand(), true ) );
+		update_user_meta( $user_id, 'account_activation_key', $activation_key );
+
 		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
 		// Send activation email
@@ -348,13 +354,44 @@ class Roles {
 		$status['code']   = 2;
 		$status['post']   = $_POST;
 		$status['result'] = array(
-			'business_id' => $business_id,
-			'email'       => $businessEmail,
-			'first_name'  => $firstName,
-			'user_id'     => $user_id,
+			'business_id'    => $business_id,
+			'email'          => $businessEmail,
+			'first_name'     => $firstName,
+			'user_id'        => $user_id,
+			'activation_key' => $activation_key,
 		);
 
 		wp_send_json( $status );
+	}
+
+	public function user_send_activate( $meta_id, $user_id, $meta_key, $_meta_value ) {
+		if ( 'account_activation_key' === $meta_key ) {
+
+			$business_id    = get_field( 'business_id', 'user_' . $user_id );
+			$user_data      = get_userdata( $user_id );
+			$user_email     = $user_data->user_email;
+			$firstName      = $user_data->first_name;
+			$activation_key = get_user_meta( $user_id, 'account_activation_key', true );
+
+			$subject = 'NOVA Signage: Activate Your Account';
+
+			$message = '<p>Hello ' . $firstName . ',</p>' .
+			'<p>Thank you for submitting your application as a NOVA Business Partner. Your <b>Business ID</b> number is: ' . $business_id . '</p>' .
+			'<p>Please click the link below to activate your account:</p>' .
+			'<p><a href="' . home_url() . '/activate?pu=' . $user_id . '&key=' . $activation_key . '">' .
+			home_url() . '/activate?pu=' . $user_id . '&key=' . $activation_key . '</a></p>' .
+			'<p>Thank you,<br>' .
+			'NOVA Signage Team</p>';
+
+			$mailer = WC()->mailer();
+
+			// Wrap the content with WooCommerce email template
+			$wrapped_content = $mailer->wrap_message( $subject, $message );
+
+			// Send the email using WooCommerce's mailer
+			$mailer->send( $user_email, $subject, $wrapped_content, '', '' );
+
+		}
 	}
 
 	public function send_activation() {
@@ -367,20 +404,18 @@ class Roles {
 			wp_send_json( 'Nonce Error' );
 		}
 
-		$user_id       = $_POST['user_id'];
-		$firstName     = sanitize_text_field( $_POST['first_name'] );
-		$businessEmail = sanitize_email( $_POST['email'] );
-		$business_id   = sanitize_text_field( $_POST['business_id'] );
-
-		$activation_key = md5( uniqid( rand(), true ) );
-		update_user_meta( $user_id, 'account_activation_key', $activation_key );
+		$user_id        = $_POST['user_id'];
+		$firstName      = sanitize_text_field( $_POST['first_name'] );
+		$businessEmail  = sanitize_email( $_POST['email'] );
+		$business_id    = sanitize_text_field( $_POST['business_id'] );
+		$activation_key = $_POST['activation_key'];
 
 		$subject  = 'NOVA Signage: Activate Your Account';
 		$message  = '<p>Hello  ' . $firstName . ',</p>';
 		$message .= '<p>Thank you for submitting your application as a NOVA Business Partner. Your <b>Business ID</b> number is: ' . $business_id . "\n\n</p>";
 		$message .= '<p>Please click the link below to activate your account:' . "\n\n</p>";
-		$message .= '<a href="' . site_url() . '/activate?pu=' . $user_id . '&key=' . $activation_key . '">';
-		$message .= site_url() . '/activate?pu=' . $user_id . '&key=' . $activation_key . "</a>\n\n";
+		$message .= '<a href="' . home_url() . '/activate?pu=' . $user_id . '&key=' . $activation_key . '">';
+		$message .= home_url() . '/activate?pu=' . $user_id . '&key=' . $activation_key . "</a>\n\n";
 		$message .= "<p>Thank you,\n<br>";
 		$message .= 'NOVA Signage Team</p>';
 

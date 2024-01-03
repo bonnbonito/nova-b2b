@@ -38,22 +38,23 @@ class Shortcodes {
 		$firstName      = $user_data->first_name;
 		$activation_key = get_user_meta( $user_id, 'account_activation_key', true );
 
-		$subject  = 'NOVA Signage: Activate Your Account';
-		$message  = '<p>Hello  ' . $firstName . ',</p>';
-		$message .= '<p>Thank you for submitting your application as a NOVA Business Partner. Your <b>Business ID</b> number is: ' . $business_id . "\n\n</p>";
-		$message .= '<p>Please click the link below to activate your account:' . "\n\n</p>";
-		$message .= '<a href="' . site_url() . '/activate?pu=' . $user_id . '&key=' . $activation_key . '">';
-		$message .= site_url() . '/activate?pu=' . $user_id . '&key=' . $activation_key . "</a>\n\n";
-		$message .= "<p>Thank you,\n<br>";
-		$message .= 'NOVA Signage Team</p>';
+		$subject = 'NOVA Signage: Activate Your Account';
 
-		$mailer = WC()->mailer();
+		$message = '<p>Hello ' . $firstName . ',</p>' .
+			'<p>Thank you for submitting your application as a NOVA Business Partner. Your <b>Business ID</b> number is: ' . $business_id . '</p>' .
+			'<p>Please click the link below to activate your account:</p>' .
+			'<p><a href="' . site_url() . '/activate?pu=' . $user_id . '&key=' . $activation_key . '">' .
+			site_url() . '/activate?pu=' . $user_id . '&key=' . $activation_key . '</a></p>' .
+			'<p>Thank you,<br>' .
+			'NOVA Signage Team</p>';
+
+		// $mailer = WC()->mailer();
 
 		// Wrap the content with WooCommerce email template
-		$wrapped_content = $mailer->wrap_message( $subject, $message );
+		// $wrapped_content = $mailer->wrap_message( $subject, $message );
 
 		// Send the email using WooCommerce's mailer
-		$mailer->send( $user_email, $subject, $wrapped_content, '', '' );
+		// $mailer->send( $user_email, $subject, $wrapped_content, '', '' );
 
 		return ob_get_clean();
 	}
