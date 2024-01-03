@@ -24,6 +24,38 @@ class Shortcodes {
 		add_shortcode( 'nova_login_form', array( $this, 'nova_login_form' ) );
 		add_shortcode( 'blurred_login', array( $this, 'nova_login_form' ) );
 		add_shortcode( 'nova_front_login', array( $this, 'nova_front_login' ) );
+		add_shortcode( 'signup_activation', array( $this, 'signup_activation' ) );
+	}
+
+	public function signup_activation() {
+		ob_start();
+
+		$user_id = $_GET['user_id'];
+
+		$business_id    = get_field( 'business_id', 'user_' . $user_id );
+		$user_data      = get_userdata( $user_id );
+		$user_email     = $user_data->user_email;
+		$firstName      = $user_data->first_name;
+		$activation_key = get_user_meta( $user_id, 'account_activation_key', true );
+
+		$subject  = 'NOVA Signage: Activate Your Account';
+		$message  = '<p>Hello  ' . $firstName . ',</p>';
+		$message .= '<p>Thank you for submitting your application as a NOVA Business Partner. Your <b>Business ID</b> number is: ' . $business_id . "\n\n</p>";
+		$message .= '<p>Please click the link below to activate your account:' . "\n\n</p>";
+		$message .= '<a href="' . site_url() . '/activate?pu=' . $user_id . '&key=' . $activation_key . '">';
+		$message .= site_url() . '/activate?pu=' . $user_id . '&key=' . $activation_key . "</a>\n\n";
+		$message .= "<p>Thank you,\n<br>";
+		$message .= 'NOVA Signage Team</p>';
+
+		$mailer = WC()->mailer();
+
+		// Wrap the content with WooCommerce email template
+		$wrapped_content = $mailer->wrap_message( $subject, $message );
+
+		// Send the email using WooCommerce's mailer
+		$mailer->send( $user_email, $subject, $wrapped_content, '', '' );
+
+		return ob_get_clean();
 	}
 
 	public function nova_front_login() {

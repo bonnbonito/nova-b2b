@@ -70,8 +70,9 @@ class Scripts {
 			'nova-registration',
 			'NovaSignUp',
 			array(
-				'ajax_url' => admin_url( 'admin-ajax.php' ),
-				'nonce'    => wp_create_nonce( 'nova_signup_nonce' ),
+				'ajax_url'    => admin_url( 'admin-ajax.php' ),
+				'nonce'       => wp_create_nonce( 'nova_signup_nonce' ),
+				'success_url' => home_url( 'signup-success' ),
 			)
 		);
 

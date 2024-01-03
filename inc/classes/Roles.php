@@ -351,6 +351,7 @@ class Roles {
 			'business_id' => $business_id,
 			'email'       => $businessEmail,
 			'first_name'  => $firstName,
+			'user_id'     => $user_id,
 		);
 
 		wp_send_json( $status );
