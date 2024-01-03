@@ -123,7 +123,7 @@ function novaRegistration() {
 
 		// Validate form data here
 
-		var formData = new FormData(this);
+		let formData = new FormData(this);
 
 		formData.append('nonce', NovaSignUp.nonce);
 
@@ -141,10 +141,31 @@ function novaRegistration() {
 			.then((data) => {
 				console.log(data);
 				if (data.code == 2) {
-					novaSignUpForm.reset();
-					alert(
-						'Application submitted. Please check your email and click on the activation link.'
-					);
+					const businessEmail = document.getElementById('businessEmail').value;
+					let formData = new FormData();
+					formData.append('action', 'send_activation');
+					formData.append('email', data.result.email);
+					formData.append('first_name', data.result.first_name);
+					formData.append('nonce', NovaSignUp.nonce);
+					formData.append('business_id', data.result.business_id);
+
+					fetch(NovaSignUp.ajax_url, {
+						method: 'POST',
+						credentials: 'same-origin',
+						headers: {
+							'Cache-Control': 'no-cache',
+						},
+						body: formData,
+					})
+						.then((response) => response.json())
+						.then((data) => {
+							console.log(data);
+
+							novaSignUpForm.reset();
+							alert(
+								'Application submitted. Please check your email and click on the activation link.'
+							);
+						});
 				} else {
 					alert(data.error);
 				}

@@ -26,6 +26,7 @@ class Roles {
 		add_action( 'init', array( $this, 'create_roles' ) );
 		add_action( 'wp_ajax_nopriv_nova_signup', array( $this, 'nova_signup' ) );
 		add_action( 'wp_ajax_nopriv_nova_login', array( $this, 'nova_login' ) );
+		add_action( 'wp_ajax_nopriv_send_activation', array( $this, 'send_activation' ) );
 		add_action( 'template_redirect', array( $this, 'custom_activation_page_redirect' ) );
 		add_action( 'admin_menu', array( $this, 'add_pending_users_count_bubble' ) );
 		add_filter( 'wp_authenticate_user', array( $this, 'custom_role_login_check' ), 10, 2 );
@@ -250,7 +251,12 @@ class Roles {
 		);
 
 		if ( ! wp_verify_nonce( $_POST['nonce'], 'nova_signup_nonce' ) ) {
-			wp_send_json( 'Nonce Error' );
+			wp_send_json(
+				$status = array(
+					'code'  => 5,
+					'error' => 'Nonce Error',
+				)
+			);
 		}
 
 		$username        = sanitize_user( $_POST['username'] );
@@ -334,27 +340,53 @@ class Roles {
 		update_field( 'promotions', isset( $_POST['promotions'] ) && $_POST['promotions'] === 'yes' ? 1 : 0, 'user_ ' . $user_id );
 		update_field( 'privacy', $_POST['privacy'] === 'yes' ? 1 : 0, 'user_ ' . $user_id );
 
-		$activation_key = md5( uniqid( rand(), true ) );
-		update_user_meta( $user_id, 'account_activation_key', $activation_key );
-
-		$subject  = 'NOVA Signage: Activate Your Account';
-		$message  = '<p>Hello  ' . $userData['first_name'] . ',</p>';
-		$message .= '<p>Thank you for submitting your application as a NOVA Business Partner. Your <b>Business ID</b> number is: ' . $business_id . "\n\n</p>";
-		$message .= '<p>Please click the link below to activate your account:' . "\n\n</p>";
-		$message .= site_url() . '/activate?pu=' . $user_id . '&key=' . $activation_key . "\n\n";
-		$message .= "<p>Thank you,\n<br>";
-		$message .= 'NOVA Signage Team</p>';
-
 		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
 		// Send activation email
 		// wp_mail( $businessEmail, $subject, $message, $headers );
 
+		$status['code']   = 2;
+		$status['post']   = $_POST;
+		$status['result'] = array(
+			'business_id' => $business_id,
+			'email'       => $businessEmail,
+			'first_name'  => $firstName,
+		);
+
+		wp_send_json( $status );
+	}
+
+	public function send_activation() {
+
+		$status = array(
+			'code' => 1,
+		);
+
+		if ( ! wp_verify_nonce( $_POST['nonce'], 'nova_signup_nonce' ) ) {
+			wp_send_json( 'Nonce Error' );
+		}
+
+		$user_id       = $_POST['user_id'];
+		$firstName     = sanitize_text_field( $_POST['first_name'] );
+		$businessEmail = sanitize_email( $_POST['email'] );
+		$business_id   = sanitize_text_field( $_POST['business_id'] );
+
+		$activation_key = md5( uniqid( rand(), true ) );
+		update_user_meta( $user_id, 'account_activation_key', $activation_key );
+
+		$subject  = 'NOVA Signage: Activate Your Account';
+		$message  = '<p>Hello  ' . $firstName . ',</p>';
+		$message .= '<p>Thank you for submitting your application as a NOVA Business Partner. Your <b>Business ID</b> number is: ' . $business_id . "\n\n</p>";
+		$message .= '<p>Please click the link below to activate your account:' . "\n\n</p>";
+		$message .= '<a href="' . site_url() . '/activate?pu=' . $user_id . '&key=' . $activation_key . '">';
+		$message .= site_url() . '/activate?pu=' . $user_id . '&key=' . $activation_key . "</a>\n\n";
+		$message .= "<p>Thank you,\n<br>";
+		$message .= 'NOVA Signage Team</p>';
+
 		$this->send_email( $businessEmail, $subject, $message, array(), array() );
 
 		$status['code'] = 2;
 		$status['post'] = $_POST;
-
 		wp_send_json( $status );
 	}
 
