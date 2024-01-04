@@ -151,6 +151,7 @@ export default function Letters({ item }) {
 	};
 
 	const handleOnChangeLetterHeight = (e) => {
+		console.log(e.target.value);
 		setSelectedLetterHeight(e.target.value);
 	};
 
@@ -347,12 +348,12 @@ export default function Letters({ item }) {
 			<div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
 				<Dropdown
 					title="Thickness"
-					value={item.thickness.value}
+					value={selectedThickness.value}
 					onChange={handleOnChangeThickness}
 					options={thicknessOptions.map((thickness) => (
 						<option
 							value={thickness.value}
-							selected={thickness === item.thickness}
+							selected={thickness === selectedThickness}
 						>
 							{thickness.thickness}
 						</option>
@@ -362,6 +363,7 @@ export default function Letters({ item }) {
 				<Dropdown
 					title="Letters Height"
 					onChange={handleOnChangeLetterHeight}
+					onBlur={handleOnChangeLetterHeight}
 					options={letterHeightOptions}
 					value={item.letterHeight}
 				/>

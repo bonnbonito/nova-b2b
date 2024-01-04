@@ -298,7 +298,8 @@ function Dropdown({
   onChange,
   options,
   value,
-  style
+  style,
+  onBlur
 }) {
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "px-[1px]"
@@ -308,6 +309,7 @@ function Dropdown({
     style: style,
     className: "border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px]",
     onChange: onChange,
+    onBlur: onBlur,
     value: value || ''
   }, options));
 }
@@ -633,6 +635,7 @@ function Letters({
     target > 9 ? setSelectedLetterHeight(2) : setSelectedLetterHeight(1);
   };
   const handleOnChangeLetterHeight = e => {
+    console.log(e.target.value);
     setSelectedLetterHeight(e.target.value);
   };
   const handleChangeFinishing = e => {
@@ -757,15 +760,16 @@ function Letters({
     className: "grid grid-cols-2 md:grid-cols-4 gap-4 mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Thickness",
-    value: item.thickness.value,
+    value: selectedThickness.value,
     onChange: handleOnChangeThickness,
     options: thicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: thickness.value,
-      selected: thickness === item.thickness
+      selected: thickness === selectedThickness
     }, thickness.thickness))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Letters Height",
     onChange: handleOnChangeLetterHeight,
+    onBlur: handleOnChangeLetterHeight,
     options: letterHeightOptions,
     value: item.letterHeight
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
