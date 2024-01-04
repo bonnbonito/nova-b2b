@@ -917,6 +917,8 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 </div>
 <div class="kadence-customer-name">
 	<h5 class="uppercase mt-2 mb-0 block"><?php echo esc_html( $current_user->display_name ); ?></h5>
+	<div class="block text-[14px] text-black uppercase"><span class="font-title text-[12px]">BUSINESS ID:</span>
+		<?php echo get_field( 'business_id', 'user_' . get_current_user_id() ); ?></div>
 	<a href="<?php echo wp_logout_url( '/' ); ?>" class="text-black text-[10px]">LOG OUT</a>
 </div>
 		<?php

@@ -7,6 +7,14 @@ import useOutsideClick from './utils/ClickOutside';
 import convert_json from './utils/ConvertJson';
 
 const NovaOptions = NovaQuote.quote_options;
+const lowerCasePricing = parseFloat(
+	NovaOptions.lowercase_pricing ? NovaOptions.lowercase_pricing : 1
+);
+const smallPunctuations = parseFloat(
+	NovaOptions.small_punctuations_pricing
+		? NovaOptions.small_punctuations_pricing
+		: 1
+);
 //const AcrylicLetterPricing = JSON.parse(NovaOptions.letter_x_logo_pricing);
 
 export default function Letters({ item }) {
@@ -258,13 +266,35 @@ export default function Letters({ item }) {
 	useEffect(() => {
 		if (letterPricing.length > 0) {
 			const pricingDetail = letterPricing[selectedLetterHeight - 1];
-			perLetterPrice = pricingDetail[selectedThickness.value];
-			const quantity = letters.trim().length;
-			const totalLetterPrice =
-				quantity *
-				perLetterPrice *
-				(waterproof === 'Indoor' ? 1 : 1.1) *
-				(selectedFinishing == 'Gloss' ? 1.1 : 1);
+			const baseLetterPrice = pricingDetail[selectedThickness.value];
+
+			let totalLetterPrice = 0;
+			const lettersArray = letters.trim().split('');
+
+			lettersArray.forEach((letter) => {
+				let letterPrice = baseLetterPrice;
+
+				if (letter.match(/[a-z]/)) {
+					// Check for lowercase letter
+					letterPrice *= lowerCasePricing; // 80% of the base price
+				} else if (letter.match(/[A-Z]/)) {
+					// Check for uppercase letter
+					// Uppercase letters use 100% of base price, so no change needed
+				} else if (letter.match(/[`~"*,.\-']/)) {
+					// Check for small punctuation marks
+					letterPrice *= smallPunctuations; // 30% of the base price
+				} else if (letter.match(/[^a-zA-Z]/)) {
+					// Check for symbol (not a letter or small punctuation)
+					// Symbols use 100% of base price, so no change needed
+				}
+
+				// Adjusting for waterproof and finishing
+				letterPrice *= waterproof === 'Indoor' ? 1 : 1.1;
+				letterPrice *= selectedFinishing === 'Gloss' ? 1.1 : 1;
+
+				totalLetterPrice += letterPrice;
+			});
+
 			setUsdPrice(totalLetterPrice.toFixed(2));
 		}
 	}, [
