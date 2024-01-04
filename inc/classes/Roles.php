@@ -70,7 +70,7 @@ class Roles {
 			$message  = '<p>Dear  ' . $first_name . ',</p>';
 			$message .= '<p>Congratulations! Your application to become a business partner with NOVA Signage has been approved. Welcome to the NOVA Signage family!</p>';
 			$message .= "<p>We look forward to collaborating with you to enhance your shop's offerings. If you have any questions, our team is here to assist.</p>";
-			$message .= "<p>Best,\n<br>";
+			$message .= '<p>Best,<br>';
 			$message .= 'NOVA Signage Team</p>';
 
 			$headers = array( 'Content-Type: text/html; charset=UTF-8' );
@@ -158,7 +158,7 @@ class Roles {
 		$message  = '<p>Hello  ' . $first_name . ',</p>';
 		$message .= '<p>Kindly allow 1 business day for the processing of your partner status. Meanwhile, you can place your order in the cart until your status is approved.</p>';
 		$message .= '<p>You will receive an email notification upon the approval of your application.</p>';
-		$message .= "<p>Thank you,\n<br>";
+		$message .= '<p>Thank you,<br>';
 		$message .= 'NOVA Signage Team</p>';
 
 		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
@@ -175,7 +175,7 @@ class Roles {
 		$message  = '<p>Dear  ' . $first_name . ',</p>';
 		$message .= '<p>Congratulations! Your application to become a business partner with NOVA Signage has been approved. Welcome to the NOVA Signage family!</p>';
 		$message .= "<p>We look forward to collaborating with you to enhance your shop's offerings. If you have any questions, our team is here to assist.</p>";
-		$message .= "<p>Best,\n<br>";
+		$message .= '<p>Best,<br>';
 		$message .= 'NOVA Signage Team</p>';
 
 		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
@@ -374,17 +374,9 @@ class Roles {
 
 		$subject = 'NOVA Signage: Activate Your Account';
 
-		$message = '<p>Hello ' . $firstName . ',</p>' .
-		'<p>Thank you for submitting your application as a NOVA Business Partner. Your <b>Business ID</b> number is: ' . $business_id . '</p>' .
-		'<p>Please click the link below to activate your account:</p>' .
-		'<p><a href="' . home_url() . '/activate?pu=' . $user_id . '&key=' . $activation_key . '">' .
-		home_url() . '/activate?pu=' . $user_id . '&key=' . $activation_key . '</a></p>' .
-		'<p>Thank you,<br>' .
-		'NOVA Signage Team</p>';
+		$message = '<p>Hello ' . $firstName . ',</p><p><a href="https://novasignage.com/activate?pu=' . $user_id . '&key=' . $activation_key . '">Activate Account</a></p><p>Thank you,<br>NOVA Signage Team</p>';
 
-		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
-
-		$this->send_email( $user_email, $subject, $message, $headers, array() );
+		$this->send_email( $user_email, $subject, $message );
 	}
 
 	public function user_send_activate( $meta_id, $user_id, $meta_key, $_meta_value ) {
@@ -439,7 +431,7 @@ class Roles {
 		$message .= '<p>Please click the link below to activate your account:' . "\n\n</p>";
 		$message .= '<a href="' . home_url() . '/activate?pu=' . $user_id . '&key=' . $activation_key . '">';
 		$message .= home_url() . '/activate?pu=' . $user_id . '&key=' . $activation_key . "</a>\n\n";
-		$message .= "<p>Thank you,\n<br>";
+		$message .= '<p>Thank you,<br>';
 		$message .= 'NOVA Signage Team</p>';
 
 		$this->send_email( $businessEmail, $subject, $message, array(), array() );

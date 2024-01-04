@@ -1608,6 +1608,7 @@ const decodeHTML = html => {
 function QuoteView() {
   const NovaAccount = NovaMyAccount.quote;
   const signage = JSON.parse(NovaAccount.data);
+  const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     console.log('Attempting to preload fonts...');
     async function preloadFonts() {
@@ -1636,6 +1637,34 @@ function QuoteView() {
     }
   }
   const totalUsdPrice = signage.reduce((acc, item) => acc + parseFloat(item.usdPrice), 0);
+  const addToCart = () => {
+    setIsLoading(true);
+    const formData = new FormData();
+    formData.append('action', 'to_checkout');
+    formData.append('quote', NovaAccount.ID);
+    formData.append('nonce', NovaMyAccount.nonce);
+    formData.append('role', NovaQuote.user_role[0]);
+    formData.append('nova_product', NovaQuote.nova_quote_product.ID);
+    formData.append('product', NovaAccount.product_name ? decodeHTML(NovaAccount.product_name) : 'None');
+    fetch(NovaMyAccount.ajax_url, {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: {
+        'Cache-Control': 'no-cache'
+      },
+      body: formData
+    }).then(response => response.json()).then(data => {
+      console.log(data);
+      if (data.code == 2) {
+        let event = new Event('added_to_cart');
+        document.body.dispatchEvent(event);
+        setIsLoading(false);
+      } else {
+        alert(data.error);
+        location.reload(true);
+      }
+    }).catch(error => console.error('Error:', error));
+  };
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-2 items-center mb-4 "
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h6", {
@@ -1707,8 +1736,12 @@ function QuoteView() {
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex justify-between gap-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, "ESTIMATED TOTAL:"), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, "$", parseFloat(NovaAccount.final_price).toLocaleString(), " USD"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, NovaAccount.quote_status.value === 'ready' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "rounded mb-3 px-4 py-3 border border-nova-light font-title text-white bg-nova-primary text-xs inline-block hover:text-white hover:bg-nova-secondary w-full text-center cursor-pointer"
-  }, "CHECKOUT"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_DeleteQuote__WEBPACK_IMPORTED_MODULE_1__.DeleteQuote, null)));
+    className: "rounded mb-3 px-4 py-3 border border-nova-light font-title text-white bg-nova-primary text-xs inline-block hover:text-white hover:bg-nova-secondary w-full text-center cursor-pointer uppercase",
+    disabled: isLoading,
+    onClick: addToCart
+  }, isLoading ? 'Adding To Cart...' : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "tracking-[1.6px]"
+  }, "ADD TO CART")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_DeleteQuote__WEBPACK_IMPORTED_MODULE_1__.DeleteQuote, null)));
 }
 
 /***/ }),
