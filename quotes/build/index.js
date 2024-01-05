@@ -521,8 +521,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const NovaOptions = NovaQuote.quote_options;
-const lowerCasePricing = parseFloat(NovaOptions.lowercase_pricing ? NovaOptions.lowercase_pricing : 1);
-const smallPunctuations = parseFloat(NovaOptions.small_punctuations_pricing ? NovaOptions.small_punctuations_pricing : 1);
+let lowerCasePricing = 1; // Default value
+let smallPunctuations = 1; // Default value
+
+if (NovaOptions && typeof NovaOptions === 'object') {
+  lowerCasePricing = parseFloat(NovaOptions.lowercase_pricing ? NovaOptions.lowercase_pricing : 1);
+  smallPunctuations = parseFloat(NovaOptions.small_punctuations_pricing ? NovaOptions.small_punctuations_pricing : 1);
+}
 //const AcrylicLetterPricing = JSON.parse(NovaOptions.letter_x_logo_pricing);
 
 function Letters({
