@@ -3,7 +3,21 @@
 }
 
 @media (max-width: 767px) {
-    .nova-account-navaigation {
-        display: none;
+    .md-hidden {
+        display: block !important;
+    }
+
+    .woocommerce.woocommerce .woocommerce-info .button {
+        margin-top: 1em;
+    }
+}
+
+@media (min-width: 768px) {
+    .md-hidden {
+        display: none !important;
+    }
+
+    .md-block {
+        display: block !important;
     }
 }

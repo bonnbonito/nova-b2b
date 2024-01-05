@@ -1,24 +1,27 @@
 <div class="nova-account-navaigation  w-full border border-[#D2D2D2] p-4 rounded self-start">
 	<?php do_action( 'nova_inner_account_nav' ); ?>
 
-	<a href="<?php echo esc_url( wc_get_endpoint_url( 'my-account' ) ); ?>"
-		class="mt-10 block text-[14px] font-title text-black uppercase mb-2">Dashboard</a>
-	<a href="<?php echo esc_url( wc_get_endpoint_url( 'edit-account' ) ); ?>"
-		class="block text-[14px] font-title text-black uppercase mb-2">ACCOUNT</a>
-	<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/all' ) ); ?>"
-		class="block text-[14px] font-title text-black uppercase mb-2">MOCKUPS</a>
-	<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/drafts' ) ); ?>"
-		class="block text-[12px] text-black uppercase mb-2 pl-4">DRAFTS</a>
-	<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/processing' ) ); ?>"
-		class="block text-[12px] text-black uppercase mb-2 pl-4">PROCESSING</a>
-	<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/payments' ) ); ?>"
-		class="block text-[12px] text-black uppercase mb-2 pl-4">QUOTED</a>
+	<div class="">
+		<a href="<?php echo esc_url( wc_get_endpoint_url( 'my-account' ) ); ?>"
+			class="hidden md:block mt-10 block text-[14px] font-title text-black uppercase mb-2">Dashboard</a>
+		<a href="<?php echo esc_url( wc_get_endpoint_url( 'edit-account' ) ); ?>"
+			class="hidden md:block text-[14px] font-title text-black uppercase mb-2">ACCOUNT</a>
+		<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/all' ) ); ?>"
+			class="block mt-4 md:mt-0 text-[14px] font-title text-black uppercase mb-2">MOCKUPS</a>
+		<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/drafts' ) ); ?>"
+			class="hidden md:block text-[12px] text-black uppercase mb-2 pl-4">DRAFTS</a>
+		<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/processing' ) ); ?>"
+			class="hidden md:block text-[12px] text-black uppercase mb-2 pl-4">PROCESSING</a>
+		<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/payments' ) ); ?>"
+			class="hidden md:block text-[12px] text-black uppercase mb-2 pl-4">QUOTED</a>
 
-	<a href="<?php echo esc_url( wc_get_endpoint_url( 'orders' ) ); ?>"
-		class="block text-[14px] font-title text-black uppercase mb-2">ORDERS</a>
+		<a href="<?php echo esc_url( wc_get_endpoint_url( 'orders' ) ); ?>"
+			class="block text-[14px] font-title text-black uppercase mb-2">ORDERS</a>
+
+	</div>
 
 
-	<div class="block mt-10">
+	<div class="block mt-4 md:mt-10">
 		<div class="flex text-nova-primary text-sm uppercase font-title items-center">
 			<svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21" fill="none">
 				<path
@@ -32,5 +35,7 @@
 			class="px-4 py-2 text-xs uppercase font-title text-nova-gray block border rounded-sm text-center hover:bg-nova-gray hover:text-white">Contact
 			Us</a>
 	</div>
+
+
 
 </div>

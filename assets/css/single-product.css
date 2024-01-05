@@ -110,6 +110,17 @@
     border-top: 1px solid #dedede;
 }
 
+@media (max-width: 767px) {
+    .spec-item {
+        grid-template-columns: 112px 1fr;
+        grid-gap: 1em
+    }
+
+    .spec-item * {
+        font-size: 12px !important;
+    }
+}
+
 .spec-label {
     font-family: var(--global-heading-font-family);
     text-transform: uppercase;

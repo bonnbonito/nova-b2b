@@ -796,7 +796,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 	public function mockups_nav() {
 		global $wp_query;
 		?>
-<div class="border-b font-title uppercase flex gap-11 mb-8">
+<div class="border-b font-title uppercase flex gap-6 md:gap-11 mb-8">
 	<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/all' ) ); ?>"
 		class="py-4 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/all'] ) ? 'border-black' : 'border-transparent' ); ?> mb-[-4px] text-black">ALL
 		Mockups</a>
