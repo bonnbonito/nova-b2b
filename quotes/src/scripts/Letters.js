@@ -151,13 +151,57 @@ export default function Letters({ item }) {
 	};
 
 	const handleOnChangeLetterHeight = (e) => {
-		console.log(e.target.value);
+		console.log(e);
 		setSelectedLetterHeight(e.target.value);
 	};
 
 	const handleChangeFinishing = (e) => {
+		console.log(e);
 		setSelectedFinishing(e.target.value);
 	};
+
+	useEffect(() => {
+		if (letterPricing.length > 0) {
+			const pricingDetail = letterPricing[selectedLetterHeight - 1];
+			const baseLetterPrice = pricingDetail[selectedThickness.value];
+
+			let totalLetterPrice = 0;
+			const lettersArray = letters.trim().split('');
+
+			lettersArray.forEach((letter) => {
+				let letterPrice = baseLetterPrice;
+
+				if (letter.match(/[a-z]/)) {
+					// Check for lowercase letter
+					letterPrice *= lowerCasePricing; // 80% of the base price
+				} else if (letter.match(/[A-Z]/)) {
+					// Check for uppercase letter
+					// Uppercase letters use 100% of base price, so no change needed
+				} else if (letter.match(/[`~"*,.\-']/)) {
+					// Check for small punctuation marks
+					letterPrice *= smallPunctuations; // 30% of the base price
+				} else if (letter.match(/[^a-zA-Z]/)) {
+					// Check for symbol (not a letter or small punctuation)
+					// Symbols use 100% of base price, so no change needed
+				}
+
+				// Adjusting for waterproof and finishing
+				letterPrice *= waterproof === 'Indoor' ? 1 : 1.1;
+				letterPrice *= selectedFinishing === 'Gloss' ? 1.1 : 1;
+
+				totalLetterPrice += letterPrice;
+			});
+
+			setUsdPrice(totalLetterPrice.toFixed(2));
+		}
+	}, [
+		selectedLetterHeight,
+		selectedThickness,
+		selectedFinishing,
+		letters,
+		waterproof,
+		lettersHeight,
+	]);
 
 	useEffect(() => {
 		// Log to ensure we're getting the expected value
@@ -264,49 +308,6 @@ export default function Letters({ item }) {
 		}
 	}, [selectedThickness]);
 
-	useEffect(() => {
-		if (letterPricing.length > 0) {
-			const pricingDetail = letterPricing[selectedLetterHeight - 1];
-			const baseLetterPrice = pricingDetail[selectedThickness.value];
-
-			let totalLetterPrice = 0;
-			const lettersArray = letters.trim().split('');
-
-			lettersArray.forEach((letter) => {
-				let letterPrice = baseLetterPrice;
-
-				if (letter.match(/[a-z]/)) {
-					// Check for lowercase letter
-					letterPrice *= lowerCasePricing; // 80% of the base price
-				} else if (letter.match(/[A-Z]/)) {
-					// Check for uppercase letter
-					// Uppercase letters use 100% of base price, so no change needed
-				} else if (letter.match(/[`~"*,.\-']/)) {
-					// Check for small punctuation marks
-					letterPrice *= smallPunctuations; // 30% of the base price
-				} else if (letter.match(/[^a-zA-Z]/)) {
-					// Check for symbol (not a letter or small punctuation)
-					// Symbols use 100% of base price, so no change needed
-				}
-
-				// Adjusting for waterproof and finishing
-				letterPrice *= waterproof === 'Indoor' ? 1 : 1.1;
-				letterPrice *= selectedFinishing === 'Gloss' ? 1.1 : 1;
-
-				totalLetterPrice += letterPrice;
-			});
-
-			setUsdPrice(totalLetterPrice.toFixed(2));
-		}
-	}, [
-		selectedLetterHeight,
-		selectedThickness,
-		selectedFinishing,
-		letters,
-		waterproof,
-		lettersHeight,
-	]);
-
 	useOutsideClick(colorRef, () => {
 		setOpenColor(false);
 	});
@@ -359,6 +360,18 @@ export default function Letters({ item }) {
 						</option>
 					))}
 				/>
+
+				<div className="px-[1px]">
+					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+						Letters Height
+					</label>
+					<select
+						className="border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px]"
+						onChange={handleOnChangeLetterHeight}
+					>
+						{letterHeightOptions}
+					</select>
+				</div>
 
 				<Dropdown
 					title="Letters Height"

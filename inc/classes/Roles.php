@@ -143,7 +143,9 @@ class Roles {
 
 		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
-		$this->send_email( get_option( 'admin_email' ), $subject, $message, $headers, array() );
+		$emails = $this->get_admin_and_customer_rep_emails();
+
+		$this->send_email( $emails, $subject, $message, $headers, array() );
 
 		$this->send_user_pending_email( $user_id );
 	}
@@ -450,6 +452,24 @@ class Roles {
 
 		// Send the email using WooCommerce's mailer
 		$mailer->send( $to, $subject, $wrapped_content, $headers, $attachments );
+	}
+
+	public function get_admin_and_customer_rep_emails() {
+		$user_emails = array();
+
+		// Get users with the 'administrator' role
+		$admin_users = get_users( array( 'role' => 'administrator' ) );
+		foreach ( $admin_users as $user ) {
+			$user_emails[] = $user->user_email;
+		}
+
+		// Get users with the 'customer-rep' role
+		$customer_rep_users = get_users( array( 'role' => 'customer-rep' ) );
+		foreach ( $customer_rep_users as $user ) {
+			$user_emails[] = $user->user_email;
+		}
+
+		return $user_emails;
 	}
 
 

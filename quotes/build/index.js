@@ -298,8 +298,7 @@ function Dropdown({
   onChange,
   options,
   value,
-  style,
-  onBlur
+  style
 }) {
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "px-[1px]"
@@ -309,7 +308,6 @@ function Dropdown({
     style: style,
     className: "border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px]",
     onChange: onChange,
-    onBlur: onBlur,
     value: value || ''
   }, options));
 }
@@ -635,12 +633,43 @@ function Letters({
     target > 9 ? setSelectedLetterHeight(2) : setSelectedLetterHeight(1);
   };
   const handleOnChangeLetterHeight = e => {
-    console.log(e.target.value);
+    console.log(e);
     setSelectedLetterHeight(e.target.value);
   };
   const handleChangeFinishing = e => {
+    console.log(e);
     setSelectedFinishing(e.target.value);
   };
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (letterPricing.length > 0) {
+      const pricingDetail = letterPricing[selectedLetterHeight - 1];
+      const baseLetterPrice = pricingDetail[selectedThickness.value];
+      let totalLetterPrice = 0;
+      const lettersArray = letters.trim().split('');
+      lettersArray.forEach(letter => {
+        let letterPrice = baseLetterPrice;
+        if (letter.match(/[a-z]/)) {
+          // Check for lowercase letter
+          letterPrice *= lowerCasePricing; // 80% of the base price
+        } else if (letter.match(/[A-Z]/)) {
+          // Check for uppercase letter
+          // Uppercase letters use 100% of base price, so no change needed
+        } else if (letter.match(/[`~"*,.\-']/)) {
+          // Check for small punctuation marks
+          letterPrice *= smallPunctuations; // 30% of the base price
+        } else if (letter.match(/[^a-zA-Z]/)) {
+          // Check for symbol (not a letter or small punctuation)
+          // Symbols use 100% of base price, so no change needed
+        }
+
+        // Adjusting for waterproof and finishing
+        letterPrice *= waterproof === 'Indoor' ? 1 : 1.1;
+        letterPrice *= selectedFinishing === 'Gloss' ? 1.1 : 1;
+        totalLetterPrice += letterPrice;
+      });
+      setUsdPrice(totalLetterPrice.toFixed(2));
+    }
+  }, [selectedLetterHeight, selectedThickness, selectedFinishing, letters, waterproof, lettersHeight]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     // Log to ensure we're getting the expected value
 
@@ -697,36 +726,6 @@ function Letters({
       }));
     }
   }, [selectedThickness]);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (letterPricing.length > 0) {
-      const pricingDetail = letterPricing[selectedLetterHeight - 1];
-      const baseLetterPrice = pricingDetail[selectedThickness.value];
-      let totalLetterPrice = 0;
-      const lettersArray = letters.trim().split('');
-      lettersArray.forEach(letter => {
-        let letterPrice = baseLetterPrice;
-        if (letter.match(/[a-z]/)) {
-          // Check for lowercase letter
-          letterPrice *= lowerCasePricing; // 80% of the base price
-        } else if (letter.match(/[A-Z]/)) {
-          // Check for uppercase letter
-          // Uppercase letters use 100% of base price, so no change needed
-        } else if (letter.match(/[`~"*,.\-']/)) {
-          // Check for small punctuation marks
-          letterPrice *= smallPunctuations; // 30% of the base price
-        } else if (letter.match(/[^a-zA-Z]/)) {
-          // Check for symbol (not a letter or small punctuation)
-          // Symbols use 100% of base price, so no change needed
-        }
-
-        // Adjusting for waterproof and finishing
-        letterPrice *= waterproof === 'Indoor' ? 1 : 1.1;
-        letterPrice *= selectedFinishing === 'Gloss' ? 1.1 : 1;
-        totalLetterPrice += letterPrice;
-      });
-      setUsdPrice(totalLetterPrice.toFixed(2));
-    }
-  }, [selectedLetterHeight, selectedThickness, selectedFinishing, letters, waterproof, lettersHeight]);
   (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__["default"])(colorRef, () => {
     setOpenColor(false);
   });
@@ -766,7 +765,14 @@ function Letters({
       value: thickness.value,
       selected: thickness === selectedThickness
     }, thickness.thickness))
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "px-[1px]"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
+  }, "Letters Height"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
+    className: "border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px]",
+    onChange: handleOnChangeLetterHeight
+  }, letterHeightOptions)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Letters Height",
     onChange: handleOnChangeLetterHeight,
     onBlur: handleOnChangeLetterHeight,

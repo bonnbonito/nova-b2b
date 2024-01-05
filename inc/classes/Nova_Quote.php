@@ -100,7 +100,7 @@ class Nova_Quote {
 		wp_mail( $to, $subject, $message, $headers );
 
 		$to_admin         = get_option( 'admin_email' );
-		$to_admin_message = 'You received a new order from' . $first_name . '. Congratulations!';
+		$to_admin_message = 'You received a new order from ' . $first_name . '. Congratulations!';
 		wp_mail( $to_admin, $subject, $to_admin_message, $headers );
 	}
 
