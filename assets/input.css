@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+header.page-title {
+    border-bottom: 1px solid #D2D2D2;
+    padding-bottom: 10px;
+}

@@ -1418,7 +1418,7 @@ function Prices({
     className: "block"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex justify-between py-2 font-title uppercase"
-  }, item.title, " ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, "$", Number(item.usdPrice).toLocaleString(), " USD")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.title, " ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, "$", Number(item.usdPrice).toLocaleString(), " USD")), item.thickness && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-2 py-[2px]"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
@@ -1442,43 +1442,43 @@ function Prices({
     className: "text-left text-xs font-title"
   }, "LETTER HEIGHT"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-[10px] break-words"
-  }, item.letterHeight, "\""))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.letterHeight, "\""))), item.mounting && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-2 py-[2px]"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
   }, "MOUNTING"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-[10px]"
-  }, item.mounting)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.mounting)), item.waterproof && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-2 py-[2px]"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
   }, "WATERPROOF"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-[10px]"
-  }, item.waterproof)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.waterproof)), item.finishing && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-2 py-[2px]"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
   }, "FINISHING"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-[10px]"
-  }, item.finishing)), item.type === 'letters' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.finishing)), item.type === 'letters' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.color.name && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-2 py-[2px]"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
   }, "COLOR"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-[10px]"
-  }, item.color?.name)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.color?.name)), item.font && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-2 py-[2px]"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
   }, "FONT"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-[10px] break-words"
-  }, item.font)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.font)), item.letters && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-2 py-[2px]"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
   }, "LINE TEXT"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-[10px] break-words"
-  }, item.letters))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.letters))), item.comments && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-2 py-[2px]"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
@@ -1598,7 +1598,7 @@ function PricesView({
     className: "text-left text-xs font-title"
   }, "LINE TEXT"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-[10px] break-words"
-  }, item.letters))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.letters))), item.comments && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-[160px_1fr] py-[2px]"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"

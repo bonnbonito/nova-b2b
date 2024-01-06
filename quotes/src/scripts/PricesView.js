@@ -103,13 +103,15 @@ export default function PricesView({ item }) {
 						</div>
 					</>
 				)}
-
-				<div className="grid grid-cols-[160px_1fr] py-[2px]">
-					<div className="text-left text-xs font-title">COMMENTS</div>
-					<div className="text-left text-[10px] break-words">
-						{item.comments}
+				{item.comments && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px]">
+						<div className="text-left text-xs font-title">COMMENTS</div>
+						<div className="text-left text-[10px] break-words">
+							{item.comments}
+						</div>
 					</div>
-				</div>
+				)}
+
 				{item.file && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px]">
 						<div className="text-left text-xs font-title">FILE</div>
