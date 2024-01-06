@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import html2pdf from 'html2pdf.js/dist/html2pdf.min';
+import { useEffect, useRef, useState } from 'react';
 import { DeleteQuote } from './DeleteQuote';
 import PricesView from './PricesView';
 
@@ -11,7 +12,9 @@ const decodeHTML = (html) => {
 export default function QuoteView() {
 	const NovaAccount = NovaMyAccount.quote;
 	const signage = JSON.parse(NovaAccount.data);
+	const quoteRef = useRef(null);
 	const [isLoading, setIsLoading] = useState(false);
+	const [isDownloading, setIsDownloading] = useState(false);
 
 	useEffect(() => {
 		console.log('Attempting to preload fonts...');
@@ -46,6 +49,45 @@ export default function QuoteView() {
 		0
 	);
 
+	const printHandler = (e) => {
+		e.preventDefault();
+
+		if (quoteRef.current && !isDownloading) {
+			setIsDownloading(true); // Disable the button and show loading state
+
+			const options = {
+				margin: [10, 10, 10, 10], // Top, Left, Bottom, Right
+				filename: `Quote-${NovaAccount.ID}.pdf`,
+				image: { type: 'jpeg', quality: 0.98 },
+				html2canvas: { scale: 2, letterRendering: true },
+				jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+				windowHeight: quoteRef.current.scrollHeight,
+				windowWidth: quoteRef.current.scrollWidth,
+			};
+
+			const clone = quoteRef.current.cloneNode(true);
+			const elementsToRemove = clone.querySelectorAll('.exclude-from-pdf');
+			elementsToRemove.forEach((el) => el.remove());
+
+			html2pdf()
+				.from(clone)
+				.set(options)
+				.toPdf()
+				.get('pdf')
+				.then((pdf) => {
+					console.log('PDF generated', pdf);
+				})
+				.save()
+				.then(() => {
+					setIsDownloading(false);
+				})
+				.catch((error) => {
+					console.error('Error generating PDF:', error);
+					setIsDownloading(false);
+				});
+		}
+	};
+
 	const addToCart = () => {
 		setIsLoading(true);
 
@@ -76,6 +118,7 @@ export default function QuoteView() {
 					let event = new Event('added_to_cart');
 					document.body.dispatchEvent(event);
 					setIsLoading(false);
+					alert('Added to cart');
 				} else {
 					alert(data.error);
 					location.reload(true);
@@ -86,96 +129,118 @@ export default function QuoteView() {
 
 	return (
 		<>
-			<div>
-				<div className="flex gap-2 items-center mb-4 ">
-					<h6 className="m-0 text-nova-primary">
-						STATUS:{' '}
-						<span className="text-sm font-normal font-thin">
-							{NovaAccount.quote_status.label}
-						</span>
-					</h6>
-				</div>
-				<div className="mb-10 block">
-					<h4 className="uppercase">QUOTE ID: {NovaAccount.ID}</h4>
-				</div>
-				<div className="flex gap-2 items-center">
-					<h6 className="leading-[2] m-0">INITIAL QUOTE REQUESTED ON:</h6>{' '}
-					<span className="text-sm">{NovaAccount.published}</span>
-				</div>
-				<div className="flex gap-2 items-center">
-					<h6 className="leading-[2] m-0">LAST QUOTE SAVED:</h6>{' '}
-					<span className="text-sm">{NovaAccount.updated_date}</span>
-				</div>
-				<div className="flex gap-2 items-center mb-6">
-					<h6 className="leading-[2] m-0">QUOTE NAME:</h6>{' '}
-					<span className="text-sm">{decodeHTML(NovaAccount.title)}</span>
-				</div>
-				<div className="flex gap-2 items-center">
-					<h6 className="leading-[2] m-0">PARTNER ID:</h6>{' '}
-					<span className="text-sm">
-						{NovaAccount.business_id ? NovaAccount.business_id : 'None'}
-					</span>
-				</div>
-				<div className="flex gap-2 items-center mb-6">
-					<h6 className="leading-[2] m-0">COMPANY NAME:</h6>{' '}
-					<span className="text-sm">
-						{NovaAccount.company_name ? NovaAccount.company_name : 'None'}
-					</span>
-				</div>
-				<div className="flex gap-2 items-center">
-					<h6 className="leading-[2] m-0">PARTNER ID:</h6>{' '}
-					<span className="text-sm">
-						{NovaAccount.business_id ? NovaAccount.business_id : 'None'}
-					</span>
-				</div>
-				<div className="flex gap-2 items-center">
-					<h6 className="leading-[2] m-0">MATERIAL:</h6>{' '}
-					<span className="text-sm">
-						{NovaAccount.material ? NovaAccount.material : 'None'}
-					</span>
-				</div>
-				<div className="flex gap-2 items-center mb-8 pb-8 border-b-nova-light border-b">
-					<h6 className="leading-[2] m-0">PRODUCT:</h6>{' '}
-					<span className="text-sm">
-						{NovaAccount.product_name
-							? decodeHTML(NovaAccount.product_name)
-							: 'None'}
-					</span>
-				</div>
-				{signage.map((item) => (
-					<PricesView id={item.id} item={item}></PricesView>
-				))}
-
-				{NovaAccount.note && (
-					<div className="block mb-4">
-						<h5>Note:</h5>
-						<div
-							className="block text-sm"
-							dangerouslySetInnerHTML={{ __html: NovaAccount.note }}
-						></div>
-					</div>
-				)}
-
-				<div className="flex justify-between gap-4">
-					<h4>ESTIMATED TOTAL:</h4>{' '}
-					<h4>${parseFloat(NovaAccount.final_price).toLocaleString()} USD</h4>
-				</div>
+			<div className="flex pb-4 mb-4 border-b justify-between">
+				<a
+					href={NovaQuote.mockup_account_url}
+					className="border-nova-light rounded px-4 py-3 border font-title text-nova-gray uppercase text-xs bg-white inline-flex items-center hover:text-black hover:bg-nova-light"
+				>
+					← Back To Mockups
+				</a>
+				<a
+					onClick={printHandler}
+					className={`rounded px-4 py-3 border ${
+						!isDownloading
+							? 'border-nova-light font-title text-nova-primary bg-white'
+							: 'border-gray-300 text-gray-500 bg-gray-100'
+					} text-xs inline-block hover:text-white hover:bg-nova-primary w-[160px] text-center cursor-pointer`}
+					disabled={isDownloading}
+				>
+					{isDownloading ? 'Downloading...' : 'DOWNLOAD PDF'}
+				</a>
 			</div>
-			<div>
-				{NovaAccount.quote_status.value === 'ready' && (
-					<div
-						className="rounded mb-3 px-4 py-3 border border-nova-light font-title text-white bg-nova-primary text-xs inline-block hover:text-white hover:bg-nova-secondary w-full text-center cursor-pointer uppercase"
-						disabled={isLoading}
-						onClick={addToCart}
-					>
-						{isLoading ? (
-							'Adding To Cart...'
-						) : (
-							<span className="tracking-[1.6px]">ADD TO CART</span>
-						)}
+
+			<div className="grid grid-cols-1 md:grid-cols-[1fr_160px] gap-4">
+				<div id="quoteDiv" ref={quoteRef} className="pb-6">
+					<div className="flex gap-2 items-center mb-4 ">
+						<h6 className="m-0 text-nova-primary">
+							STATUS:{' '}
+							<span className="text-sm font-normal font-thin">
+								{NovaAccount.quote_status.label}
+							</span>
+						</h6>
 					</div>
-				)}
-				<DeleteQuote />
+					<div className="mb-10 block">
+						<h4 className="uppercase">QUOTE ID: {NovaAccount.ID}</h4>
+					</div>
+					<div className="flex gap-2 items-center">
+						<h6 className="leading-[2] m-0">INITIAL QUOTE REQUESTED ON:</h6>{' '}
+						<span className="text-sm">{NovaAccount.published}</span>
+					</div>
+					<div className="flex gap-2 items-center">
+						<h6 className="leading-[2] m-0">LAST QUOTE SAVED:</h6>{' '}
+						<span className="text-sm">{NovaAccount.updated_date}</span>
+					</div>
+					<div className="flex gap-2 items-center mb-6">
+						<h6 className="leading-[2] m-0">QUOTE NAME:</h6>{' '}
+						<span className="text-sm">{decodeHTML(NovaAccount.title)}</span>
+					</div>
+					<div className="flex gap-2 items-center">
+						<h6 className="leading-[2] m-0">PARTNER ID:</h6>{' '}
+						<span className="text-sm">
+							{NovaAccount.business_id ? NovaAccount.business_id : 'None'}
+						</span>
+					</div>
+					<div className="flex gap-2 items-center mb-6">
+						<h6 className="leading-[2] m-0">COMPANY NAME:</h6>{' '}
+						<span className="text-sm">
+							{NovaAccount.company_name ? NovaAccount.company_name : 'None'}
+						</span>
+					</div>
+					<div className="flex gap-2 items-center">
+						<h6 className="leading-[2] m-0">PARTNER ID:</h6>{' '}
+						<span className="text-sm">
+							{NovaAccount.business_id ? NovaAccount.business_id : 'None'}
+						</span>
+					</div>
+					<div className="flex gap-2 items-center">
+						<h6 className="leading-[2] m-0">MATERIAL:</h6>{' '}
+						<span className="text-sm">
+							{NovaAccount.material ? NovaAccount.material : 'None'}
+						</span>
+					</div>
+					<div className="flex gap-2 items-center mb-8 pb-8 border-b-nova-light border-b">
+						<h6 className="leading-[2] m-0">PRODUCT:</h6>{' '}
+						<span className="text-sm">
+							{NovaAccount.product_name
+								? decodeHTML(NovaAccount.product_name)
+								: 'None'}
+						</span>
+					</div>
+					{signage.map((item) => (
+						<PricesView id={item.id} item={item}></PricesView>
+					))}
+
+					{NovaAccount.note && (
+						<div className="block mb-4">
+							<h5>Note:</h5>
+							<div
+								className="block text-sm"
+								dangerouslySetInnerHTML={{ __html: NovaAccount.note }}
+							></div>
+						</div>
+					)}
+
+					<div className="flex justify-between gap-4">
+						<h4>ESTIMATED TOTAL:</h4>{' '}
+						<h4>${parseFloat(NovaAccount.final_price).toLocaleString()} USD</h4>
+					</div>
+				</div>
+				<div>
+					{NovaAccount.quote_status.value === 'ready' && (
+						<div
+							className="rounded mb-3 px-4 py-3 border border-nova-light font-title text-white bg-nova-primary text-xs inline-block hover:text-white hover:bg-nova-secondary w-full text-center cursor-pointer uppercase"
+							disabled={isLoading}
+							onClick={addToCart}
+						>
+							{isLoading ? (
+								'Adding To Cart...'
+							) : (
+								<span className="tracking-[1.6px]">ADD TO CART</span>
+							)}
+						</div>
+					)}
+					<DeleteQuote />
+				</div>
 			</div>
 		</>
 	);

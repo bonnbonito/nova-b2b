@@ -177,43 +177,43 @@
                 <h6 class="uppercase text-[#2f2f2f]">How did you hear about us?</h6>
             </div>
             <div class="sm:flex flex-1 w-full gap-y-14 flex-wrap">
-                <div class="flex items-center mb-4 w-1/4">
+                <div class="flex items-center mb-4 w-full sm:w-1/4">
                     <input id="google" type="checkbox" value="google" name="hear[]"
                         class="w-5 h-5 text-nova-primary border-nova-light focus:ring-nova-primary ">
                     <label for="google" class="ms-3 text-sm font-medium text-nova-gray">Google</label>
                 </div>
-                <div class="flex items-center mb-4 w-1/4">
+                <div class="flex items-center mb-4 w-full sm:w-1/4">
                     <input id="youtube" type="checkbox" value="youtube" name="hear[]"
                         class="w-5 h-5 text-nova-primary border-nova-light focus:ring-nova-primary ">
                     <label for="youtube" class="ms-3 text-sm font-medium text-nova-gray">Youtube</label>
                 </div>
-                <div class="flex items-center mb-4 w-1/4">
+                <div class="flex items-center mb-4 w-full sm:w-1/4">
                     <input id="amazon" type="checkbox" value="amazon" name="hear[]"
                         class="w-5 h-5 text-nova-primary border-nova-light focus:ring-nova-primary ">
                     <label for="amazon" class="ms-3 text-sm font-medium text-nova-gray">Amazon</label>
                 </div>
-                <div class="flex items-center mb-4 w-1/4">
+                <div class="flex items-center mb-4 w-full sm:w-1/4">
                     <input id="repeat-customer" type="checkbox" value="repeat-customer" name="hear[]"
                         class="w-5 h-5 text-nova-primary border-nova-light focus:ring-nova-primary ">
                     <label for="repeat-customer" class="ms-3 text-sm font-medium text-nova-gray">Repeat
                         Customer</label>
                 </div>
-                <div class="flex items-center mb-4 w-1/4">
+                <div class="flex items-center mb-4 w-full sm:w-1/4">
                     <input id="facebook" type="checkbox" value="facebook" name="hear[]"
                         class="w-5 h-5 text-nova-primary border-nova-light focus:ring-nova-primary ">
                     <label for="facebook" class="ms-3 text-sm font-medium text-nova-gray">Facebook</label>
                 </div>
-                <div class="flex items-center mb-4 w-1/4">
+                <div class="flex items-center mb-4 w-full sm:w-1/4">
                     <input id="referral" type="checkbox" value="referral" name="hear[]"
                         class="w-5 h-5 text-nova-primary border-nova-light focus:ring-nova-primary ">
                     <label for="referral" class="ms-3 text-sm font-medium text-nova-gray">Referral</label>
                 </div>
-                <div class="flex items-center mb-4 w-1/4">
+                <div class="flex items-center mb-4 w-full sm:w-1/4">
                     <input id="newsletter" type="checkbox" value="newsletter" name="hear[]"
                         class="w-5 h-5 text-nova-primary border-nova-light focus:ring-nova-primary ">
                     <label for="newsletter" class="ms-3 text-sm font-medium text-nova-gray">Email/Newsletter</label>
                 </div>
-                <div class="flex items-center mb-4 w-1/4">
+                <div class="flex items-center mb-4 w-full sm:w-1/4">
                     <input id="other" type="checkbox" value="other" name="hear[]"
                         class="w-5 h-5 text-nova-primary border-nova-light focus:ring-nova-primary ">
                     <label for="other" class="ms-3 text-sm font-medium text-nova-gray">Other</label>

@@ -12,7 +12,7 @@ module.exports = {
 			title: ['"Secular One"', 'sans-serif'],
 		},
 	},
-	important: '#nova',
+	important: '#novaReact',
 	plugins: [
 		require('tailwindcss-animate'),
 		require('@tailwindcss/typography'),

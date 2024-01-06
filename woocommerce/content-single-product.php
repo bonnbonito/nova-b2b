@@ -45,7 +45,7 @@ if ( post_password_required() ) {
 			<h6><a class="button" href="#overview" data-menu="overview">Overview</a></h6>
 			<h6><a class="button" href="#specs" data-menu="specs">Tech Specs</a></h6>
 			<h6><a class="button" href="#installation" data-menu="installation">Installation</a></h6>
-			<h6><a class="button" href="#sample" data-menu="sample">Sample Board</a></h6>
+			<h6 style="display: none;"><a class="button" href="#sample" data-menu="sample">Sample Board</a></h6>
 		</div>
 
 		<div id="productNavMobile" class="product-nav-tabs-mobile" onclick="toggleShowClass()">
@@ -58,7 +58,7 @@ if ( post_password_required() ) {
 			<h6 data-menu="overview" class="selected">Overview</a></h6>
 			<h6 data-menu="specs">Tech Specs</a></h6>
 			<h6 data-menu="installation">Installation</a></h6>
-			<h6 data-menu="sample">Sample Board</a></h6>
+			<h6 data-menu="sample" style="display: none;">Sample Board</a></h6>
 		</div>
 
 		<a href="#quote"
@@ -91,8 +91,8 @@ if ( post_password_required() ) {
 	<div class="product-nav-content" id="productNavContent">
 		<div class="product-nav-content-item <?php echo ( isset( $_GET['qedit'] ) && $_GET['qedit'] == '1' ? 'active' : '' ); ?>"
 			data-nav="quote">
-
 			<div id="novaQuote"></div>
+
 
 		</div>
 
@@ -116,7 +116,7 @@ if ( post_password_required() ) {
 		<div class="product-nav-content-item" data-nav="installation">
 			<h2 class="mb-10 uppercase">Installation</h2>
 
-			<div class="md:grid md:grid-cols-2 gap-x-10">
+			<div class="md:grid md:grid-cols-2 gap-x-10 gap-y-6">
 				<?php
 				while ( have_rows( 'installations' ) ) :
 					the_row();

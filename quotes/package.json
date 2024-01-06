@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "preview": "npm-run-all --parallel sync wpstart tailwindwatch",
+    "preview": "npm-run-all --parallel sync wpstart",
     "sync": "browser-sync start --config bs-config.js",
     "buildwp": "wp-scripts build",
     "build": "npm-run-all --sequential buildwp tailwindbuild",
@@ -31,6 +31,8 @@
     "@radix-ui/react-icons": "^1.3.0",
     "@radix-ui/react-popover": "1.0.7",
     "@radix-ui/themes": "^2.0.1",
+    "html2canvas": "^1.4.1",
+    "html2pdf.js": "^0.10.1",
     "react-tooltip": "^5.22.0",
     "tailwind-merge": "^2.0.0",
     "tailwindcss-animate": "^1.0.7"

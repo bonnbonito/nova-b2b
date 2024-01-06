@@ -34,7 +34,11 @@ function novaLogin(formID) {
 					if (data.code == 2) {
 						submitBtn.remove();
 						loginStatus.innerHTML = `<div class="login-status">Refreshing...</div>`;
-						location.reload(true);
+						if (data.is_product == 'yes') {
+							location.reload(true);
+						} else {
+							window.location.href = NovaLogin.dashboard_url;
+						}
 					} else {
 						loginStatus.innerHTML = `<div class="login-status error">${data.error}</div>`;
 					}

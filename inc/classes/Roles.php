@@ -216,7 +216,8 @@ class Roles {
 			$status['code'] = 2;
 		}
 
-		$status['referrer'] = wp_get_referer();
+		$status['referrer']   = wp_get_referer();
+		$status['is_product'] = $_POST['product_page'];
 		wp_send_json( $status );
 	}
 

@@ -1,7 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 .signage-title {
   font-size: 30px;
   font-style: normal;

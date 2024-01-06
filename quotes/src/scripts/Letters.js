@@ -367,18 +367,6 @@ export default function Letters({ item }) {
 					))}
 				/>
 
-				<div className="px-[1px]">
-					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-						Letters Height
-					</label>
-					<select
-						className="border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px]"
-						onChange={handleOnChangeLetterHeight}
-					>
-						{letterHeightOptions}
-					</select>
-				</div>
-
 				<Dropdown
 					title="Letters Height"
 					onChange={handleOnChangeLetterHeight}

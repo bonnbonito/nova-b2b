@@ -88,6 +88,7 @@ class Scripts {
 			array(
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
 				'nonce'    => wp_create_nonce( 'nova_login_nonce' ),
+				'dashboard_url' => home_url( '/my-account')
 			)
 		);
 
