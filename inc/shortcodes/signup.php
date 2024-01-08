@@ -239,8 +239,9 @@
             <div class="flex items-center mb-4 w-full">
                 <input id="privacy" type="checkbox" value="yes" name="privacy"
                     class="w-5 h-5 text-nova-primary border-nova-light focus:ring-nova-primary" required>
-                <label for="privacy" class="ms-3 text-sm font-medium text-nova-gray">Yes, I have read the Privacy
-                    Policy.</label>
+                <label for="privacy" class="ms-3 text-sm font-medium text-nova-gray">Yes, I have read the <a
+                        class="text-black" href="/privacy-policy" target="_blank">Privacy
+                        Policy.</a></label>
             </div>
         </div>
 
