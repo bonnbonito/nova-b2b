@@ -36,10 +36,11 @@ class Shortcodes {
     <?php
 			while ( have_rows( 'homepage_grid' ) ) :
 				the_row();
+				$image = get_sub_field( 'image' )['id'];
 				?>
 
     <div class="homepage-layout-item">
-        <img src="http://nova.test/wp-content/uploads/2024/01/acrylic.png" alt="">
+        <?php echo wp_get_attachment_image( $image, 'full' ); ?>
         <div class="homepage-layout-content">
             <h3 class="mb-0"><?php the_sub_field( 'title' ); ?></h3>
             <p><?php the_sub_field( 'content' ); ?></p>
