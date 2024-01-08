@@ -25,6 +25,35 @@ class Shortcodes {
 		add_shortcode( 'blurred_login', array( $this, 'nova_login_form' ) );
 		add_shortcode( 'nova_front_login', array( $this, 'nova_front_login' ) );
 		add_shortcode( 'signup_activation', array( $this, 'signup_activation' ) );
+		add_shortcode( 'homepage_grid', array( $this, 'homepage_grid' ) );
+	}
+
+	public function homepage_grid() {
+		ob_start();
+		if ( have_rows( 'homepage_grid' ) ) :
+			?>
+<div class="homepage-layout mobile-slider">
+    <?php
+			while ( have_rows( 'homepage_grid' ) ) :
+				the_row();
+				?>
+
+    <div class="homepage-layout-item">
+        <img src="http://nova.test/wp-content/uploads/2024/01/acrylic.png" alt="">
+        <div class="homepage-layout-content">
+            <h3 class="mb-0"><?php the_sub_field( 'title' ); ?></h3>
+            <p><?php the_sub_field( 'content' ); ?></p>
+        </div>
+    </div>
+
+    <?php endwhile; ?>
+</div>
+<?php
+
+		endif;
+		?>
+<?php
+		return ob_get_clean();
 	}
 
 	public function signup_activation() {

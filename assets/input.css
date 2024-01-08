@@ -6,3 +6,70 @@ header.page-title {
     border-bottom: 1px solid #D2D2D2;
     padding-bottom: 10px;
 }
+
+.homepage-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 40px 24px;
+}
+
+.homepage-layout-item img {
+    width: 100%;
+    aspect-ratio: .75;
+    object-fit: cover;
+}
+
+.homepage-layout-item {
+    position: relative;
+}
+
+.homepage-layout-content {
+    position: absolute;
+    bottom: 0;
+    padding: 24px;
+    color: #fff;
+    width: 100%;
+    letter-spacing: 1.6px;
+}
+
+.homepage-layout-content h3 {
+    text-transform: uppercase;
+    color: #fff;
+    margin-bottom: 0;
+    letter-spacing: 3px;
+}
+
+/* enable Flickity by default */
+.mobile-slider:after {
+    content: 'flickity';
+    display: none;
+    /* hide :after */
+}
+
+@media (max-width: 767px) {
+    .homepage-layout {
+        display: block;
+    }
+
+    .homepage-layout-item {
+        width: 70%;
+        margin-right: 16px;
+    }
+
+    .homepage-layout-content h3 {
+        font-size: 16px;
+        letter-spacing: 1.6px;
+    }
+
+    .homepage-layout-content {
+        letter-spacing: 1.2px;
+    }
+}
+
+@media screen and (min-width: 768px) {
+
+    /* disable Flickity for large devices */
+    .mobile-slider:after {
+        content: '';
+    }
+}

@@ -39,6 +39,11 @@ class Scripts {
 		wp_register_script( 'nova-accordion', get_stylesheet_directory_uri() . '/assets/js/accordion.js', array(), wp_get_theme()->get( 'Version' ), true );
 		wp_enqueue_script( 'fancyapps', get_stylesheet_directory_uri() . '/assets/js/fancybox.umd.js', array(), '5.0.0', true );
 
+		wp_register_style( 'flickity', get_stylesheet_directory_uri() . '/assets/css/flickity.min.css', array(), '2.2.1' );
+		wp_register_script( 'flickity', get_stylesheet_directory_uri() . '/assets/js/flickity.min.js', array(), '2.2.1', false );
+
+		wp_register_script( 'flickity-init', get_stylesheet_directory_uri() . '/assets/js/flickity-init.js', array( 'flickity' ), wp_get_theme()->get( 'Version' ), true );
+
 		wp_enqueue_style( 'fancyapps', get_stylesheet_directory_uri() . '/assets/css/fancybox.css', array( 'nova-output' ), '5.0.0' );
 
 		wp_register_style( 'nova-account', get_stylesheet_directory_uri() . '/assets/css/account.css', array( 'nova-output' ), wp_get_theme()->get( 'Version' ) );
@@ -86,9 +91,9 @@ class Scripts {
 			'nova-login',
 			'NovaLogin',
 			array(
-				'ajax_url' => admin_url( 'admin-ajax.php' ),
-				'nonce'    => wp_create_nonce( 'nova_login_nonce' ),
-				'dashboard_url' => home_url( '/my-account')
+				'ajax_url'      => admin_url( 'admin-ajax.php' ),
+				'nonce'         => wp_create_nonce( 'nova_login_nonce' ),
+				'dashboard_url' => home_url( '/my-account' ),
 			)
 		);
 
@@ -110,6 +115,12 @@ class Scripts {
 
 		if ( is_account_page() ) {
 			wp_enqueue_script( 'nova-account' );
+		}
+
+		if ( is_front_page() ) {
+			wp_enqueue_style( 'flickity' );
+			wp_enqueue_script( 'flickity' );
+			wp_enqueue_script( 'flickity-init' );
 		}
 	}
 

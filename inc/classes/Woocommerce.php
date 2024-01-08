@@ -924,6 +924,122 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		<?php
 	}
 
+	public function show_details_order( $signage, $quoteID, $subtotal ) {
+		ob_start();
+		?>
+<div id="quote-<?php echo $quoteID; ?>" style="display:none;max-width:550px; width: 100%;">
+	<div class="pb-8 mb-8 border-b-nova-light border-b">
+		<?php
+		foreach ( $signage as $item ) {
+			?>
+
+		<div class="block">
+			<div class="flex justify-between py-2 font-title uppercase">
+				<?php echo $item->title; ?>
+				<span>$<?php echo number_format( $item->usdPrice, 2 ); ?> USD</span>
+			</div>
+
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">TYPE</div>
+				<div class="text-left text-[10px] uppercase">
+					<?php echo $item->type; ?>
+				</div>
+			</div>
+
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">THICKNESS</div>
+				<div class="text-left text-[10px] uppercase">
+					<?php echo $item->thickness->thickness; ?>
+				</div>
+			</div>
+
+			<?php if ( $item->type === 'logo' ) : ?>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">WIDTH</div>
+				<div class="text-left text-[10px] break-words">
+					<?php echo $item->width; ?>"
+				</div>
+			</div>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">HEIGHT</div>
+				<div class="text-left text-[10px] break-words">
+					<?php echo $item->height; ?>"
+				</div>
+			</div>
+				<?php
+			endif;
+			?>
+
+			<?php if ( $item->type === 'letters' ) : ?>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">LETTER HEIGHT</div>
+				<div class="text-left text-[10px] break-words">
+					<?php echo $item->letterHeight; ?>"
+				</div>
+			</div>
+			<?php endif; ?>
+
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">MOUNTING</div>
+				<div class="text-left text-[10px]"><?php echo $item->mounting; ?></div>
+			</div>
+
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">WATERPROOF</div>
+				<div class="text-left text-[10px]"><?php echo $item->waterproof; ?></div>
+			</div>
+
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">FINISHING</div>
+				<div class="text-left text-[10px]"><?php echo $item->finishing; ?></div>
+			</div>
+
+			<?php if ( $item->type === 'letters' ) : ?>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">COLOR</div>
+				<div class="text-left text-[10px]"><?php echo $item->color->name; ?></div>
+			</div>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">FONT</div>
+				<div class="text-left text-[10px] break-words">
+					<?php echo $item->font; ?>
+				</div>
+			</div>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">LINE TEXT</div>
+				<div class="text-left text-[10px] break-words">
+					<?php echo $item->letters; ?>
+				</div>
+			</div>
+			<?php endif; ?>
+
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">COMMENTS</div>
+				<div class="text-left text-[10px] break-words">
+					<?php echo $item->comments; ?>
+				</div>
+			</div>
+			<?php if ( ! empty( $item->file ) ) : ?>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">FILE</div>
+				<div class="text-left text-[10px] break-words">
+					<?php echo $item->fileName; ?>
+				</div>
+			</div>
+			<?php endif; ?>
+		</div>
+
+
+			<?php
+		}
+		?>
+	</div>
+	<h6 class="uppercase flex">Subtotal: <span class="ml-auto"><?php echo $subtotal; ?></span></h6>
+</div>
+		<?php
+			echo ob_get_clean();
+	}
+
 	public function show_details( $signage, $quoteID ) {
 		ob_start();
 		?>
