@@ -300,16 +300,20 @@ function Dropdown({
   value,
   style
 }) {
+  // Determine if the value is empty or null and set a class accordingly
+  const selectClass = value ? 'text-black' : 'text-[#dddddd]';
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "px-[1px]"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
   }, title), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
     style: style,
-    className: "border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px]",
+    className: `border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] ${selectClass}`,
     onChange: onChange,
     value: value || ''
-  }, options));
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    value: ""
+  }, "CHOOSE OPTION"), options));
 }
 
 /***/ }),
@@ -445,20 +449,26 @@ function FontsDropdown({
   (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_1__["default"])(fontRef, () => {
     setOpenFont(false);
   });
+  const handleCustomFontSelection = () => {
+    // TODO: Add your logic here for custom font selection
+    console.log('Custom font selected');
+    handleSelectFont('Custom font');
+    setOpenFont(false);
+  };
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "px-[1px] relative",
     ref: fontRef
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
   }, "FONT"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "flex items-center select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer",
+    className: `flex items-center select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${font ? 'text-black' : 'text-[#dddddd]'}`,
     onClick: () => setOpenFont(prev => !prev),
     style: {
       fontFamily: font
     }
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "truncate"
-  }, font === '' ? 'SELECT FONT' : font)), openFont && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, font === '' ? 'CHOOSE OPTION' : font)), openFont && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: ""
@@ -488,7 +498,10 @@ function FontsDropdown({
         setOpenFont(false);
       }
     }, "- ", regFont);
-  }))));
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
+    onClick: handleCustomFontSelection
+  }, "- Custom Font"))));
 }
 
 /***/ }),
@@ -635,7 +648,7 @@ function Letters({
     const selected = thicknessOptions.filter(option => option.value === target);
     console.log(selected[0]);
     setSelectedThickness(() => selected[0]);
-    target > 9 ? setSelectedLetterHeight(2) : setSelectedLetterHeight(1);
+    target > 9 ? setSelectedLetterHeight('') : setSelectedLetterHeight('');
   };
   const handleOnChangeLetterHeight = e => {
     console.log(e);
@@ -646,7 +659,7 @@ function Letters({
     setSelectedFinishing(e.target.value);
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (letterPricing.length > 0) {
+    if (letterPricing.length > 0 && selectedLetterHeight && selectedThickness) {
       const pricingDetail = letterPricing[selectedLetterHeight - 1];
       const baseLetterPrice = pricingDetail[selectedThickness.value];
       let totalLetterPrice = 0;
@@ -679,7 +692,7 @@ function Letters({
     // Log to ensure we're getting the expected value
 
     let newMountingOptions;
-    if (selectedThickness.value === '3') {
+    if (selectedThickness?.value === '3') {
       if (selectedMounting === 'Flush stud') {
         setSelectedMounting(() => NovaOptions.mounting_options[0].mounting_option);
       }
@@ -720,8 +733,8 @@ function Letters({
     updateSignage();
   }, [letters, comments, font, selectedThickness, selectedMounting, waterproof, color, usdPrice, selectedLetterHeight, fileUrl, fileName, selectedFinishing]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    const newHeightOptions = letterPricing.filter(item => {
-      const value = item[selectedThickness.value];
+    const newHeightOptions = letterPricing?.filter(item => {
+      const value = item[selectedThickness?.value];
       return value !== '' && value !== null && value !== undefined && value !== false && !isNaN(value);
     });
     if (newHeightOptions.length > 0) {
@@ -749,7 +762,7 @@ function Letters({
       color: color.color,
       textShadow: '0px 0px 1px rgba(0, 0, 0, 1)'
     }
-  }, letters))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, letters ? letters : 'PREVIEW'))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "py-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
@@ -764,7 +777,7 @@ function Letters({
     className: "grid grid-cols-2 md:grid-cols-4 gap-4 mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Thickness",
-    value: selectedThickness.value,
+    value: selectedThickness?.value,
     onChange: handleOnChangeThickness,
     options: thicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: thickness.value,
@@ -773,7 +786,6 @@ function Letters({
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Letters Height",
     onChange: handleOnChangeLetterHeight,
-    onBlur: handleOnChangeLetterHeight,
     options: letterHeightOptions,
     value: item.letterHeight
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -782,14 +794,14 @@ function Letters({
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
   }, "Color"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "flex items-center select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer",
+    className: `flex items-center select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${color.name ? 'text-black' : 'text-[#dddddd]'}`,
     onClick: () => setOpenColor(prev => !prev)
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "rounded-full w-[18px] h-[18px] border mr-2",
     style: {
       backgroundColor: color.color
     }
-  }), color.name === '' ? 'SELECT COLOR' : color.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }), color.name === '' ? 'CHOOSE OPTION' : color.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
   }, colorOptions.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -997,11 +1009,13 @@ function Logo({
     updateSignage();
   }, [comments, selectedThickness, selectedMounting, waterproof, width, height, usdPrice, fileUrl, fileName, selectedFinishing]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    const logoKey = `logo_pricing_${selectedThickness.value}mm`;
-    const logoPricingTable = logoPricingObject[logoKey]?.length > 0 ? (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_4__["default"])(logoPricingObject[logoKey]) : [];
-    const computed = logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
-    const total = (computed * (waterproof === 'Indoor' ? 1 : 1.1)).toFixed(2);
-    setUsdPrice(total);
+    if (width && height && selectedThickness && waterproof) {
+      const logoKey = `logo_pricing_${selectedThickness.value}mm`;
+      const logoPricingTable = logoPricingObject[logoKey]?.length > 0 ? (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_4__["default"])(logoPricingObject[logoKey]) : [];
+      const computed = logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
+      const total = (computed * (waterproof === 'Indoor' ? 1 : 1.1)).toFixed(2);
+      setUsdPrice(total);
+    }
   }, [width, height, selectedThickness, waterproof]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-2 md:grid-cols-4 gap-4 mb-6"
@@ -1112,17 +1126,29 @@ function ModalSave({
     const checkForEmptyLetters = signageArray => {
       return signageArray.some(item => item.type === 'letters' && item.letters === '');
     };
+    const checkForEmptyLettersHeight = signageArray => {
+      return signageArray.some(item => item.type === 'letters' && item.letterHeight === '');
+    };
+    const checkForEmptyLettersThickness = signageArray => {
+      return signageArray.some(item => item.type === 'letters' && item.thickness === '');
+    };
     const checkForEmptyLogo = signageArray => {
       return signageArray.some(item => item.type === 'logo' && item.file === '');
     };
     const hasEmptyLetters = checkForEmptyLetters(signage);
     const hasEmptyLogo = checkForEmptyLogo(signage);
+    const hasEmptyLettersHeight = checkForEmptyLettersHeight(signage);
+    const hasEmptyLettersThickness = checkForEmptyLettersThickness(signage);
     if (hasEmptyLetters && hasEmptyLogo) {
       setError('Error: Please add Letter text and upload a file to the Logo');
     } else if (hasEmptyLetters) {
       setError('Error: Please add a content to the Letters');
     } else if (hasEmptyLogo) {
       setError('Error: Please upload a file to the logo');
+    } else if (hasEmptyLettersThickness) {
+      setError('Error: Please choose a letter thickness');
+    } else if (hasEmptyLettersHeight) {
+      setError('Error: Please choose a letter height');
     } else {
       if (NovaQuote.user_role[0] === 'pending' && (action === 'update-processing' || action === 'processing')) {
         setError('Error: Your account is not yet approved. You cannot submit a quotation yet.');
@@ -1278,19 +1304,19 @@ function Accrylic() {
         letters: '',
         comments: '',
         font: '',
-        mounting: NovaOptions.mounting_options[0].mounting_option,
-        waterproof: NovaOptions.waterproof_options[0].option,
-        thickness: NovaOptions.acrylic_thickness_options[0],
+        mounting: '',
+        waterproof: '',
+        thickness: '',
         color: {
           name: '',
           color: ''
         },
-        letterHeight: 1,
+        letterHeight: '',
         usdPrice: 0,
         cadPrice: 0,
         file: '',
         fileName: '',
-        finishing: NovaOptions.finishing_options[0].name,
+        finishing: '',
         product: NovaQuote.product
       }]);
     }
@@ -1310,10 +1336,10 @@ function Accrylic() {
   const defaultArgs = {
     id: (0,uuid__WEBPACK_IMPORTED_MODULE_4__["default"])(),
     comments: '',
-    mounting: NovaOptions.mounting_options[0].mounting_option,
-    thickness: NovaOptions.acrylic_thickness_options[0],
-    waterproof: NovaOptions.waterproof_options[0].option,
-    finishing: NovaOptions.finishing_options[0].name,
+    mounting: '',
+    thickness: '',
+    waterproof: '',
+    finishing: '',
     usdPrice: 0,
     cadPrice: 0,
     file: '',
@@ -1333,22 +1359,22 @@ function Accrylic() {
           letters: '',
           comments: '',
           font: '',
-          mounting: NovaOptions.mounting_options[0].mounting_option,
-          waterproof: NovaOptions.waterproof_options[0].option,
-          thickness: NovaOptions.acrylic_thickness_options[0],
-          thickness_options: NovaOptions.acrylic_thickness_options,
+          mounting: '',
+          waterproof: '',
+          thickness: '',
+          thickness_options: '',
           color: {
             name: '',
             color: ''
           },
-          letterHeight: 1
+          letterHeight: ''
         };
       } else {
         args = {
           type: type,
           title: `${type} ${count + 1}`,
-          width: 1,
-          height: 1
+          width: '',
+          height: ''
         };
       }
       const newSignage = {
@@ -1424,19 +1450,19 @@ function Prices({
     className: "text-left text-xs font-title"
   }, "THICKNESS"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-[10px] uppercase"
-  }, item.thickness.thickness)), item.type === 'logo' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.thickness.thickness)), item.type === 'logo' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.width && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-2 py-[2px]"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
   }, "WIDTH"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-[10px] break-words"
-  }, item.width, "\"")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.width, "\"")), item.height && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-2 py-[2px]"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
   }, "HEIGHT"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-[10px] break-words"
-  }, item.height, "\""))), item.type === 'letters' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.height, "\""))), item.type === 'letters' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.letterHeight && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-2 py-[2px]"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
@@ -1544,37 +1570,37 @@ function PricesView({
     className: "text-left text-xs font-title"
   }, "THICKNESS"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-[10px] uppercase"
-  }, item.thickness.thickness)), item.type === 'logo' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.thickness.thickness)), item.type === 'logo' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.width && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-[160px_1fr] py-[2px]"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
   }, "WIDTH"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-[10px] break-words"
-  }, item.width, "\"")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.width, "\"")), item.height && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-[160px_1fr] py-[2px]"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
   }, "HEIGHT"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-[10px] break-words"
-  }, item.height, "\""))), item.type === 'letters' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.height, "\""))), item.type === 'letters' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.letterHeight && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-[160px_1fr] py-[2px]"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
   }, "LETTER HEIGHT"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-[10px] break-words"
-  }, item.letterHeight, "\""))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.letterHeight, "\""))), item.mounting && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-[160px_1fr] py-[2px]"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
   }, "MOUNTING"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-[10px]"
-  }, item.mounting)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.mounting)), item.waterproof && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-[160px_1fr] py-[2px]"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
   }, "WATERPROOF"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-[10px]"
-  }, item.waterproof)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.waterproof)), item.finishing && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-[160px_1fr] py-[2px]"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
@@ -1882,7 +1908,7 @@ function Sidebar() {
     className: "text-2xl"
   }, "$", Number(totalUsdPrice.toFixed(2)).toLocaleString(), " USD")), signage.length > 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, NovaQuote.is_editting === '1' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, NovaQuote.user_role[0] !== 'pending' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_1__["default"], {
     action: "update-processing",
-    label: "For Quotation",
+    label: "Submit Quote",
     btnClass: "mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
   }) : '', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_1__["default"], {
     action: "update",
@@ -1894,7 +1920,7 @@ function Sidebar() {
     btnClass: "mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
   }) : '', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_1__["default"], {
     action: "draft",
-    label: "Save Quote",
+    label: "Save to Draft",
     btnClass: "mb-5 font-title border border-nova-light rounded-md text-nova-gray w-full text-center bg-white text-sm h-[49px] hover:bg-nova-light hover:text-white shadow-[0_0_0_1px_rgba(0,0,0,0.3)]"
   })))));
 }

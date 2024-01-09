@@ -9,19 +9,28 @@ export default function FontsDropdown({ font, handleSelectFont }) {
 		setOpenFont(false);
 	});
 
+	const handleCustomFontSelection = () => {
+		// TODO: Add your logic here for custom font selection
+		console.log('Custom font selected');
+		handleSelectFont('Custom font');
+		setOpenFont(false);
+	};
+
 	return (
 		<div className="px-[1px] relative" ref={fontRef}>
 			<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
 				FONT
 			</label>
 			<div
-				className="flex items-center select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer"
+				className={`flex items-center select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
+					font ? 'text-black' : 'text-[#dddddd]'
+				}`}
 				onClick={() => setOpenFont((prev) => !prev)}
 				style={{
 					fontFamily: font,
 				}}
 			>
-				<div className="truncate">{font === '' ? 'SELECT FONT' : font}</div>
+				<div className="truncate">{font === '' ? 'CHOOSE OPTION' : font}</div>
 			</div>
 			{openFont && (
 				<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
@@ -62,6 +71,13 @@ export default function FontsDropdown({ font, handleSelectFont }) {
 								</div>
 							);
 						})}
+						{/* Custom Font Option */}
+						<div
+							className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
+							onClick={handleCustomFontSelection}
+						>
+							- Custom Font
+						</div>
 					</div>
 				</div>
 			)}

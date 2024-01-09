@@ -42,46 +42,60 @@ export default function PricesView({ item }) {
 
 				{item.type === 'logo' && (
 					<>
-						<div className="grid grid-cols-[160px_1fr] py-[2px]">
-							<div className="text-left text-xs font-title">WIDTH</div>
-							<div className="text-left text-[10px] break-words">
-								{item.width}"
+						{item.width && (
+							<div className="grid grid-cols-[160px_1fr] py-[2px]">
+								<div className="text-left text-xs font-title">WIDTH</div>
+								<div className="text-left text-[10px] break-words">
+									{item.width}"
+								</div>
 							</div>
-						</div>
-						<div className="grid grid-cols-[160px_1fr] py-[2px]">
-							<div className="text-left text-xs font-title">HEIGHT</div>
-							<div className="text-left text-[10px] break-words">
-								{item.height}"
+						)}
+						{item.height && (
+							<div className="grid grid-cols-[160px_1fr] py-[2px]">
+								<div className="text-left text-xs font-title">HEIGHT</div>
+								<div className="text-left text-[10px] break-words">
+									{item.height}"
+								</div>
 							</div>
-						</div>
+						)}
 					</>
 				)}
 
 				{item.type === 'letters' && (
 					<>
-						<div className="grid grid-cols-[160px_1fr] py-[2px]">
-							<div className="text-left text-xs font-title">LETTER HEIGHT</div>
-							<div className="text-left text-[10px] break-words">
-								{item.letterHeight}"
+						{item.letterHeight && (
+							<div className="grid grid-cols-[160px_1fr] py-[2px]">
+								<div className="text-left text-xs font-title">
+									LETTER HEIGHT
+								</div>
+								<div className="text-left text-[10px] break-words">
+									{item.letterHeight}"
+								</div>
 							</div>
-						</div>
+						)}
 					</>
 				)}
 
-				<div className="grid grid-cols-[160px_1fr] py-[2px]">
-					<div className="text-left text-xs font-title">MOUNTING</div>
-					<div className="text-left text-[10px]">{item.mounting}</div>
-				</div>
+				{item.mounting && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px]">
+						<div className="text-left text-xs font-title">MOUNTING</div>
+						<div className="text-left text-[10px]">{item.mounting}</div>
+					</div>
+				)}
 
-				<div className="grid grid-cols-[160px_1fr] py-[2px]">
-					<div className="text-left text-xs font-title">WATERPROOF</div>
-					<div className="text-left text-[10px]">{item.waterproof}</div>
-				</div>
+				{item.waterproof && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px]">
+						<div className="text-left text-xs font-title">WATERPROOF</div>
+						<div className="text-left text-[10px]">{item.waterproof}</div>
+					</div>
+				)}
 
-				<div className="grid grid-cols-[160px_1fr] py-[2px]">
-					<div className="text-left text-xs font-title">FINISHING</div>
-					<div className="text-left text-[10px]">{item.finishing}</div>
-				</div>
+				{item.finishing && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px]">
+						<div className="text-left text-xs font-title">FINISHING</div>
+						<div className="text-left text-[10px]">{item.finishing}</div>
+					</div>
+				)}
 
 				{item.type === 'letters' && (
 					<>

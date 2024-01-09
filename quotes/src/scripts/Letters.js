@@ -153,7 +153,7 @@ export default function Letters({ item }) {
 		);
 		console.log(selected[0]);
 		setSelectedThickness(() => selected[0]);
-		target > 9 ? setSelectedLetterHeight(2) : setSelectedLetterHeight(1);
+		target > 9 ? setSelectedLetterHeight('') : setSelectedLetterHeight('');
 	};
 
 	const handleOnChangeLetterHeight = (e) => {
@@ -167,7 +167,7 @@ export default function Letters({ item }) {
 	};
 
 	useEffect(() => {
-		if (letterPricing.length > 0) {
+		if (letterPricing.length > 0 && selectedLetterHeight && selectedThickness) {
 			const pricingDetail = letterPricing[selectedLetterHeight - 1];
 			const baseLetterPrice = pricingDetail[selectedThickness.value];
 
@@ -213,7 +213,7 @@ export default function Letters({ item }) {
 		// Log to ensure we're getting the expected value
 
 		let newMountingOptions;
-		if (selectedThickness.value === '3') {
+		if (selectedThickness?.value === '3') {
 			if (selectedMounting === 'Flush stud') {
 				setSelectedMounting(
 					() => NovaOptions.mounting_options[0].mounting_option
@@ -295,8 +295,8 @@ export default function Letters({ item }) {
 	]);
 
 	useEffect(() => {
-		const newHeightOptions = letterPricing.filter((item) => {
-			const value = item[selectedThickness.value];
+		const newHeightOptions = letterPricing?.filter((item) => {
+			const value = item[selectedThickness?.value];
 			return (
 				value !== '' &&
 				value !== null &&
@@ -334,7 +334,7 @@ export default function Letters({ item }) {
 							textShadow: '0px 0px 1px rgba(0, 0, 0, 1)',
 						}}
 					>
-						{letters}
+						{letters ? letters : 'PREVIEW'}
 					</div>
 				</div>
 			</div>
@@ -355,7 +355,7 @@ export default function Letters({ item }) {
 			<div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
 				<Dropdown
 					title="Thickness"
-					value={selectedThickness.value}
+					value={selectedThickness?.value}
 					onChange={handleOnChangeThickness}
 					options={thicknessOptions.map((thickness) => (
 						<option
@@ -370,7 +370,6 @@ export default function Letters({ item }) {
 				<Dropdown
 					title="Letters Height"
 					onChange={handleOnChangeLetterHeight}
-					onBlur={handleOnChangeLetterHeight}
 					options={letterHeightOptions}
 					value={item.letterHeight}
 				/>
@@ -380,14 +379,16 @@ export default function Letters({ item }) {
 						Color
 					</label>
 					<div
-						className="flex items-center select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer"
+						className={`flex items-center select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
+							color.name ? 'text-black' : 'text-[#dddddd]'
+						}`}
 						onClick={() => setOpenColor((prev) => !prev)}
 					>
 						<span
 							className="rounded-full w-[18px] h-[18px] border mr-2"
 							style={{ backgroundColor: color.color }}
 						></span>
-						{color.name === '' ? 'SELECT COLOR' : color.name}
+						{color.name === '' ? 'CHOOSE OPTION' : color.name}
 					</div>
 					{openColor && (
 						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">

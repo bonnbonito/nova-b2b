@@ -169,15 +169,17 @@ export default function Logo({ item }) {
 	]);
 
 	useEffect(() => {
-		const logoKey = `logo_pricing_${selectedThickness.value}mm`;
-		const logoPricingTable =
-			logoPricingObject[logoKey]?.length > 0
-				? convert_json(logoPricingObject[logoKey])
-				: [];
-		const computed =
-			logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
-		const total = (computed * (waterproof === 'Indoor' ? 1 : 1.1)).toFixed(2);
-		setUsdPrice(total);
+		if (width && height && selectedThickness && waterproof) {
+			const logoKey = `logo_pricing_${selectedThickness.value}mm`;
+			const logoPricingTable =
+				logoPricingObject[logoKey]?.length > 0
+					? convert_json(logoPricingObject[logoKey])
+					: [];
+			const computed =
+				logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
+			const total = (computed * (waterproof === 'Indoor' ? 1 : 1.1)).toFixed(2);
+			setUsdPrice(total);
+		}
 	}, [width, height, selectedThickness, waterproof]);
 
 	return (

@@ -32,11 +32,7 @@ if ( post_password_required() ) {
 }
 ?>
 <div id="product-<?php the_ID(); ?>" <?php wc_product_class( 'single-product-wrap', $product ); ?>>
-	<?php if ( ! is_user_logged_in() ) : ?>
-	<div class="blurred alignfull">
-		<?php echo do_shortcode( '[kadence_element id=" 202"]' ); ?>
-	</div>
-	<?php endif; ?>
+
 
 	<?php woocommerce_template_single_title(); ?>
 
@@ -63,8 +59,7 @@ if ( post_password_required() ) {
 
 		<a href="#quote"
 			class="button <?php echo ( isset( $_GET['qedit'] ) && $_GET['qedit'] == '1' ? 'active' : '' ); ?>"
-			data-menu="quote">Get
-			Quote</a>
+			data-menu="quote">Instant Quote</a>
 	</div>
 
 	<script>
@@ -91,6 +86,9 @@ if ( post_password_required() ) {
 	<div class="product-nav-content" id="productNavContent">
 		<div class="product-nav-content-item <?php echo ( isset( $_GET['qedit'] ) && $_GET['qedit'] == '1' ? 'active' : '' ); ?>"
 			data-nav="quote">
+			<?php if ( ! is_user_logged_in() ) : ?>
+				<?php echo do_shortcode( '[kadence_element id=" 202"]' ); ?>
+			<?php endif; ?>
 			<div id="novaQuote"></div>
 
 
@@ -127,8 +125,9 @@ if ( post_password_required() ) {
 						$image = get_sub_field( 'image' );
 						if ( ! empty( $image ) ) :
 							?>
-						<img class="w-full" src="<?php echo esc_url( $image['url'] ); ?>"
-							alt="<?php echo esc_attr( $image['alt'] ); ?>" />
+						<a href="<?php echo esc_url( $image['url'] ); ?>"><img class="w-full"
+								src="<?php echo esc_url( $image['url'] ); ?>"
+								alt="<?php echo esc_attr( $image['alt'] ); ?>" /></a>
 						<?php endif; ?>
 					</div>
 					<div class="px-0">

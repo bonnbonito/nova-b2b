@@ -27,6 +27,18 @@ function ModalSave({ action, btnClass, label }) {
 			);
 		};
 
+		const checkForEmptyLettersHeight = (signageArray) => {
+			return signageArray.some(
+				(item) => item.type === 'letters' && item.letterHeight === ''
+			);
+		};
+
+		const checkForEmptyLettersThickness = (signageArray) => {
+			return signageArray.some(
+				(item) => item.type === 'letters' && item.thickness === ''
+			);
+		};
+
 		const checkForEmptyLogo = (signageArray) => {
 			return signageArray.some(
 				(item) => item.type === 'logo' && item.file === ''
@@ -35,6 +47,8 @@ function ModalSave({ action, btnClass, label }) {
 
 		const hasEmptyLetters = checkForEmptyLetters(signage);
 		const hasEmptyLogo = checkForEmptyLogo(signage);
+		const hasEmptyLettersHeight = checkForEmptyLettersHeight(signage);
+		const hasEmptyLettersThickness = checkForEmptyLettersThickness(signage);
 
 		if (hasEmptyLetters && hasEmptyLogo) {
 			setError('Error: Please add Letter text and upload a file to the Logo');
@@ -42,6 +56,10 @@ function ModalSave({ action, btnClass, label }) {
 			setError('Error: Please add a content to the Letters');
 		} else if (hasEmptyLogo) {
 			setError('Error: Please upload a file to the logo');
+		} else if (hasEmptyLettersThickness) {
+			setError('Error: Please choose a letter thickness');
+		} else if (hasEmptyLettersHeight) {
+			setError('Error: Please choose a letter height');
 		} else {
 			if (
 				NovaQuote.user_role[0] === 'pending' &&
