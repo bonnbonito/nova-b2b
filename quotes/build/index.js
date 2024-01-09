@@ -300,7 +300,6 @@ function Dropdown({
   value,
   style
 }) {
-  // Determine if the value is empty or null and set a class accordingly
   const selectClass = value ? 'text-black' : 'text-[#dddddd]';
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "px-[1px]"
