@@ -54,7 +54,7 @@ export default function Sidebar() {
 								{NovaQuote.user_role[0] !== 'pending' ? (
 									<ModalSave
 										action="processing"
-										label="For Quotation"
+										label="Submit Quote"
 										btnClass="mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
 									/>
 								) : (
