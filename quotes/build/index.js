@@ -1769,7 +1769,10 @@ function QuoteView() {
     }).catch(error => console.error('Error:', error));
   };
   const quotePrice = parseFloat(NovaAccount.final_price);
-  const estimatedShipping = parseFloat(quotePrice * 0.155);
+  const flatRate = 14.75;
+  const standardRate = parseFloat(quotePrice * 0.075);
+  const expediteRate = parseFloat(quotePrice * 0.155);
+  const estimatedShipping = Math.max(flatRate, standardRate, expediteRate);
   const estimatedTotal = parseFloat(quotePrice + estimatedShipping);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex pb-4 mb-4 border-b justify-between"

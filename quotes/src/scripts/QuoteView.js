@@ -128,7 +128,10 @@ export default function QuoteView() {
 	};
 
 	const quotePrice = parseFloat(NovaAccount.final_price);
-	const estimatedShipping = parseFloat(quotePrice * 0.155);
+	const flatRate = 14.75;
+	const standardRate = parseFloat(quotePrice * 0.075);
+	const expediteRate = parseFloat(quotePrice * 0.155);
+	const estimatedShipping = Math.max(flatRate, standardRate, expediteRate);
 	const estimatedTotal = parseFloat(quotePrice + estimatedShipping);
 
 	return (
