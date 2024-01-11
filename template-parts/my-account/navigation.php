@@ -6,6 +6,8 @@
 			class="hidden md:block mt-10 block text-[14px] font-title text-black uppercase mb-2">Dashboard</a>
 		<a href="<?php echo esc_url( wc_get_endpoint_url( 'edit-account' ) ); ?>"
 			class="hidden md:block text-[14px] font-title text-black uppercase mb-2">ACCOUNT</a>
+		<a href="<?php echo esc_url( wc_get_endpoint_url( 'edit-address' ) ); ?>"
+			class="hidden md:block text-[14px] font-title text-black uppercase mb-2">ADDRESS</a>
 		<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/all' ) ); ?>"
 			class="block mt-4 md:mt-0 text-[14px] font-title text-black uppercase mb-2">MOCKUPS</a>
 		<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/drafts' ) ); ?>"

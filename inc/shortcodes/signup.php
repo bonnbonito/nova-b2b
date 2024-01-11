@@ -103,8 +103,8 @@
                     class="rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
                     required>
                     <option value="">Select Country</option>
-                    <option value="us">US</option>
-                    <option value="ca">Canada</option>
+                    <option value="US">US</option>
+                    <option value="CA">Canada</option>
                 </select>
             </div>
         </div>
@@ -116,7 +116,7 @@
                 </label>
                 <input
                     class="appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
-                    id="street" name="street" type="text" placeholder="Street Address">
+                    id="street" name="street" type="text" placeholder="Street Address" required>
             </div>
         </div>
 
@@ -127,7 +127,7 @@
                 </label>
                 <input
                     class="appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
-                    id="city" name="city" type="text" placeholder="Town/City">
+                    id="city" name="city" type="text" placeholder="Town/City" required>
             </div>
 
             <div class="form-field flex-1 mb-9 md:mb-0">
@@ -147,7 +147,7 @@
                 </label>
                 <input
                     class="appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
-                    id="zip" name="zip" type="text" placeholder="Zip Code">
+                    id="zip" name="zip" type="text" placeholder="Zip Code" required>
             </div>
         </div>
 

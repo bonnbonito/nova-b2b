@@ -93,14 +93,14 @@ function novaRegistration() {
 		defaultOption.value = '';
 		state.appendChild(defaultOption);
 
-		if (e.target.value === 'us') {
+		if (e.target.value === 'US') {
 			for (const stateCode in US_STATES) {
 				const option = document.createElement('option');
 				option.value = stateCode;
 				option.text = US_STATES[stateCode];
 				state.appendChild(option);
 			}
-		} else if (e.target.value === 'ca') {
+		} else if (e.target.value === 'CA') {
 			for (const provinceCode in CAD_STATES) {
 				const option = document.createElement('option');
 				option.value = provinceCode;

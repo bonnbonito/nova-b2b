@@ -127,6 +127,10 @@ export default function QuoteView() {
 			.catch((error) => console.error('Error:', error));
 	};
 
+	const quotePrice = parseFloat(NovaAccount.final_price);
+	const estimatedShipping = parseFloat(quotePrice * 0.155);
+	const estimatedTotal = parseFloat(quotePrice + estimatedShipping);
+
 	return (
 		<>
 			<div className="flex pb-4 mb-4 border-b justify-between">
@@ -221,9 +225,24 @@ export default function QuoteView() {
 					)}
 
 					<div className="flex justify-between gap-4">
-						<h4>ESTIMATED TOTAL:</h4>{' '}
-						<h4>${parseFloat(NovaAccount.final_price).toLocaleString()} USD</h4>
+						<h5>ESTIMATED SHIPPING:</h5>{' '}
+						<h5>${estimatedShipping.toLocaleString()} USD</h5>
 					</div>
+
+					<div className="flex justify-between gap-4">
+						<h5>ESTIMATED SUBTOTAL:</h5>{' '}
+						<h5>${quotePrice.toLocaleString()} USD</h5>
+					</div>
+
+					<div className="flex justify-between gap-4 border-b pb-14 mt-8">
+						<h4>ESTIMATED TOTAL:</h4>{' '}
+						<h4>${estimatedTotal.toLocaleString()} USD</h4>
+					</div>
+
+					<p className="mt-4 text-[10px] text-[#5E5E5E]">
+						Freight charges may vary based on factors such as shipping
+						destination, package size, and delivery speed. 
+					</p>
 				</div>
 				<div>
 					{NovaAccount.quote_status.value === 'ready' && (

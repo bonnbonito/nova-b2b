@@ -314,6 +314,40 @@ class Roles {
 			);
 		}
 
+		$billing_keys = array(
+			'billing_first_name' => $firstName,
+			'billing_last_name'  => $lastName,
+			'billing_company'    => $businessName,
+			'billing_email'      => $businessEmail,
+			'billing_phone'      => $businessPhone,
+			'billing_address_1'  => $street,
+			'billing_city'       => $city,
+			'billing_state'      => $state,
+			'billing_postcode'   => $zip,
+			'billing_country'    => $country,
+		);
+
+		$shipping_keys = array(
+			'shipping_first_name' => $firstName,
+			'shipping_last_name'  => $lastName,
+			'shipping_company'    => $businessName,
+			'shipping_email'      => $businessEmail,
+			'shipping_phone'      => $businessPhone,
+			'shipping_address_1'  => $street,
+			'shipping_city'       => $city,
+			'shipping_state'      => $state,
+			'shipping_postcode'   => $zip,
+			'shipping_country'    => $country,
+		);
+
+		foreach ( $billing_keys as $key => $value ) {
+			update_user_meta( $user_id, $key, $value );
+		}
+
+		foreach ( $shipping_keys as $key => $value ) {
+			update_user_meta( $user_id, $key, $value );
+		}
+
 		wp_update_user(
 			array(
 				'ID'         => $user_id,
@@ -342,6 +376,7 @@ class Roles {
 		update_field( 'city', $city, 'user_ ' . $user_id );
 		update_field( 'state', $state, 'user_ ' . $user_id );
 		update_field( 'zip', $zip, 'user_ ' . $user_id );
+		update_field( 'country', $country, 'user_ ' . $user_id );
 		update_field( 'how_did_you_hear_about_us', $_POST['hear'], 'user_ ' . $user_id );
 		update_field( 'promotions', isset( $_POST['promotions'] ) && $_POST['promotions'] === 'yes' ? 1 : 0, 'user_ ' . $user_id );
 		update_field( 'privacy', $_POST['privacy'] === 'yes' ? 1 : 0, 'user_ ' . $user_id );

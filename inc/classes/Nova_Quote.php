@@ -568,7 +568,7 @@ class Nova_Quote {
 			true
 		);
 
-		wp_register_style( 'nova-quote', get_stylesheet_directory_uri() . '/quotes/build/index.css', array(), wp_get_theme()->get( 'Version' ) );
+		wp_register_style( 'nova-quote', get_stylesheet_directory_uri() . '/quotes/build/index.css', array( 'nova-output' ), wp_get_theme()->get( 'Version' ) );
 
 		wp_localize_script(
 			'nova-quote',

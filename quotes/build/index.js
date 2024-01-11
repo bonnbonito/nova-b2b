@@ -1768,6 +1768,9 @@ function QuoteView() {
       }
     }).catch(error => console.error('Error:', error));
   };
+  const quotePrice = parseFloat(NovaAccount.final_price);
+  const estimatedShipping = parseFloat(quotePrice * 0.155);
+  const estimatedTotal = parseFloat(quotePrice + estimatedShipping);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex pb-4 mb-4 border-b justify-between"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
@@ -1853,7 +1856,13 @@ function QuoteView() {
     }
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex justify-between gap-4"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, "ESTIMATED TOTAL:"), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, "$", parseFloat(NovaAccount.final_price).toLocaleString(), " USD"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, NovaAccount.quote_status.value === 'ready' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, "ESTIMATED SHIPPING:"), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, "$", estimatedShipping.toLocaleString(), " USD")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex justify-between gap-4"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, "ESTIMATED SUBTOTAL:"), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, "$", quotePrice.toLocaleString(), " USD")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex justify-between gap-4 border-b pb-14 mt-8"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, "ESTIMATED TOTAL:"), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, "$", estimatedTotal.toLocaleString(), " USD")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    className: "mt-4 text-[10px] text-[#5E5E5E]"
+  }, "Freight charges may vary based on factors such as shipping destination, package size, and delivery speed.\xA0")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, NovaAccount.quote_status.value === 'ready' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "rounded mb-3 px-4 py-3 border border-nova-light font-title text-white bg-nova-primary text-xs inline-block hover:text-white hover:bg-nova-secondary w-full text-center cursor-pointer uppercase",
     disabled: isLoading,
     onClick: addToCart
