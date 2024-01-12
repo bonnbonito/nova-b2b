@@ -33,27 +33,30 @@ class Shortcodes {
 		if ( have_rows( 'homepage_grid' ) ) :
 			?>
 <div class="homepage-layout mobile-slider">
-    <?php
+			<?php
 			while ( have_rows( 'homepage_grid' ) ) :
 				the_row();
 				$image = get_sub_field( 'image' )['id'];
 				?>
 
-    <div class="homepage-layout-item">
-        <?php echo wp_get_attachment_image( $image, 'full' ); ?>
-        <div class="homepage-layout-content">
-            <h3 class="mb-0"><?php the_sub_field( 'title' ); ?></h3>
-            <p><?php the_sub_field( 'content' ); ?></p>
-        </div>
-    </div>
+	<div class="homepage-layout-item">
+				<?php echo wp_get_attachment_image( $image, 'full' ); ?>
+		<div class="homepage-layout-content">
+			<h3 class="mb-0"><?php the_sub_field( 'title' ); ?></h3>
+			<p><?php the_sub_field( 'content' ); ?></p>
+		</div>
+				<?php if ( get_sub_field( 'link' ) ) : ?>
+		<a href="<?php the_sub_field( 'linke' ); ?>"></a>
+		<?php endif; ?>
+	</div>
 
-    <?php endwhile; ?>
+	<?php endwhile; ?>
 </div>
-<?php
+			<?php
 
 		endif;
 		?>
-<?php
+		<?php
 		return ob_get_clean();
 	}
 

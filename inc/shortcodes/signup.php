@@ -228,13 +228,6 @@
             to programs and events emails from NOVA.</p>
 
         <div class="flex flex-1 w-full gap-y-6 flex-wrap mb-14">
-            <div class="flex items-center mb-4 w-full">
-                <input id="promotions" type="checkbox" value="yes" name="promotions"
-                    class="w-5 h-5 text-nova-primary border-nova-light focus:ring-nova-primary ">
-                <label for="promotions" class="ms-3 text-sm font-medium text-nova-gray">Yes, I would like to receive
-                    news
-                    and promotions from NOVA through email.</label>
-            </div>
 
             <div class="flex items-center mb-4 w-full">
                 <input id="privacy" type="checkbox" value="yes" name="privacy"

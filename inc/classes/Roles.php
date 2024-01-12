@@ -88,6 +88,10 @@ class Roles {
 			if ( in_array( 'temporary', $roles, true ) ) {
 				return new WP_Error( 'temporary_account', __( 'Please Activate your email' ) );
 			}
+
+			if ( in_array( 'pending', $roles, true ) ) {
+				return new WP_Error( 'pending_account', __( 'Your account is still pending.' ) );
+			}
 		}
 
 		return $user;

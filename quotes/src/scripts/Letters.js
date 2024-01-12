@@ -153,7 +153,12 @@ export default function Letters({ item }) {
 		);
 		console.log(selected[0]);
 		setSelectedThickness(() => selected[0]);
-		target > 9 ? setSelectedLetterHeight('') : setSelectedLetterHeight('');
+		if (parseInt(target) === 3 && parseInt(selectedLetterHeight) > 24) {
+			setSelectedLetterHeight('');
+		}
+		if (parseInt(target) > 11 && parseInt(selectedLetterHeight) === 1) {
+			setSelectedLetterHeight('');
+		}
 	};
 
 	const handleOnChangeLetterHeight = (e) => {
