@@ -84,6 +84,8 @@ function novaRegistration() {
 	const state = document.getElementById('state');
 	const pstField = document.getElementById('pstField');
 	const postInput = pstField.querySelector('input');
+	const taxField = document.getElementById('taxField');
+	const taxFieldInput = taxField.querySelector('input');
 
 	country.addEventListener('change', (e) => {
 		while (state.options.length > 0) {
@@ -102,6 +104,8 @@ function novaRegistration() {
 				option.text = US_STATES[stateCode];
 				state.appendChild(option);
 			}
+			taxField.classList.add('hidden');
+			taxFieldInput.removeAttribute('disabled');
 		} else if (e.target.value === 'CA') {
 			for (const provinceCode in CAD_STATES) {
 				const option = document.createElement('option');
@@ -109,6 +113,9 @@ function novaRegistration() {
 				option.text = CAD_STATES[provinceCode];
 				state.appendChild(option);
 			}
+
+			taxField.classList.remove('hidden');
+			taxFieldInput.setAttribute('required', true);
 		}
 		// You can continue to add similar logic for other countries if needed
 	});

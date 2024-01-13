@@ -84,14 +84,7 @@
 
             </div>
 
-            <div class="form-field flex-1">
-                <label class="block mb-2 font-title uppercase" for="taxId">
-                    Tax ID or Business Registration Number
-                </label>
-                <input
-                    class="appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
-                    id="taxId" name="taxId" type="text" placeholder="Tax ID/Business Registration #">
-            </div>
+
         </div>
 
         <div class="md:flex md:gap-x-20 mb-9">
@@ -106,6 +99,15 @@
                     <option value="US">US</option>
                     <option value="CA">Canada</option>
                 </select>
+            </div>
+
+            <div class="form-field flex-1 hidden" id="taxField">
+                <label class="block mb-2 font-title uppercase" for="taxId">
+                    Federal Business Number
+                </label>
+                <input
+                    class="appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
+                    id="taxId" name="taxId" type="text" placeholder="Tax ID/Business Registration #">
             </div>
         </div>
 
