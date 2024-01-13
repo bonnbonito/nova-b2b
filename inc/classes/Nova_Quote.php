@@ -202,7 +202,7 @@ class Nova_Quote {
 
 
 	public function redirect_if_loggedin() {
-		if ( is_page( 'business-portal-sign-up' ) && is_user_logged_in() ) {
+		if ( ( is_page( 'business-portal-sign-up' ) || is_page( 'business-portal' ) ) && is_user_logged_in() ) {
 			wp_redirect( home_url( '/my-account/' ) );
 			exit();
 		}
