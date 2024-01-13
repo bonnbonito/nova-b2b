@@ -4,12 +4,19 @@ import { NovaContext } from './NovaQuote';
 import Prices from './Prices';
 
 export default function Sidebar() {
-	const { signage } = useContext(NovaContext);
+	const { signage, currency } = useContext(NovaContext);
 
 	const totalUsdPrice = signage.reduce(
 		(acc, item) => acc + parseFloat(item.usdPrice),
 		0
 	);
+
+	const totalCadPrice = signage.reduce(
+		(acc, item) => acc + parseFloat(item.cadPrice),
+		0
+	);
+
+	const totalPrice = currency === 'USD' ? totalUsdPrice : totalCadPrice;
 
 	return (
 		<div className="md:w-1/4 w-full mt-8 md:mt-0">
@@ -25,7 +32,7 @@ export default function Sidebar() {
 				<div className="flex justify-between my-5">
 					<h4 className="text-2xl">TOTAL:</h4>
 					<h4 className="text-2xl">
-						${Number(totalUsdPrice.toFixed(2)).toLocaleString()} USD
+						{currency}${Number(totalPrice.toFixed(2)).toLocaleString()}
 					</h4>
 				</div>
 

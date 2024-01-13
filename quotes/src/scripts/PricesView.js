@@ -1,7 +1,8 @@
 import React from 'react';
 
 export default function PricesView({ item }) {
-	console.log(item);
+	const currency = wcumcs_vars_data.currency;
+	const price = currency === 'USD' ? item.usdPrice : item.cadPrice;
 	return (
 		<div className="pb-8 mb-8 border-b-nova-light border-b">
 			{item.type === 'letters' && (
@@ -31,7 +32,9 @@ export default function PricesView({ item }) {
 			<div className="block">
 				<div className="flex justify-between py-2 font-title uppercase">
 					{item.title}{' '}
-					<span>${Number(item.usdPrice).toLocaleString()} USD</span>
+					<span>
+						{currency}${Number(price).toFixed(2).toLocaleString()}
+					</span>
 				</div>
 				<div className="grid grid-cols-[160px_1fr] py-[2px]">
 					<div className="text-left text-xs font-title">THICKNESS</div>

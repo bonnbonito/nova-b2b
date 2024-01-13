@@ -1,4 +1,5 @@
 export default function PrintView() {
+	const currency = wcumcs_vars_data.currency;
 	return (
 		<div id="quoteDiv" ref={quoteRef} className="pb-6">
 			<div className="flex gap-2 items-center mb-4 ">
@@ -72,7 +73,9 @@ export default function PrintView() {
 
 			<div className="flex justify-between gap-4">
 				<h4>ESTIMATED TOTAL:</h4>{' '}
-				<h4>${parseFloat(NovaAccount.final_price).toLocaleString()} USD</h4>
+				<h4>
+					{currency}${parseFloat(NovaAccount.final_price).toLocaleString()}
+				</h4>
 			</div>
 		</div>
 	);

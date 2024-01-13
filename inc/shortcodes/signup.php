@@ -151,6 +151,22 @@
             </div>
         </div>
 
+        <div id="pstField" class="hidden">
+
+            <div class="md:flex md:gap-x-20 mb-9">
+                <div class="form-field md:w-1/2">
+                    <label class="block mb-2 font-title uppercase" for="street">
+                        PST #
+                    </label>
+                    <input
+                        class="appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
+                        id="pst" name="pst" type="text" placeholder="PST #">
+                </div>
+            </div>
+
+        </div>
+
+
         <div class="md:flex md:gap-x-20 md:gap-y-10 mb-14 flex-wrap">
             <div class="form-field md:w-1/2 mb-9 md:mb-0">
                 <label class="block mb-2 font-title uppercase" for="username">
@@ -222,10 +238,6 @@
 
         </div>
 
-        <p class="text-sm tracking-[1.4px]">By checking this box, you are agreeing to receive new product information,
-            special promotions
-            and invitations
-            to programs and events emails from NOVA.</p>
 
         <div class="flex flex-1 w-full gap-y-6 flex-wrap mb-14">
 

@@ -1,6 +1,7 @@
 <?php
 namespace NOVA_B2B\INC\CLASSES;
 
+use WC;
 class Scripts {
 	/**
 	 * Instance of this class
@@ -110,6 +111,9 @@ class Scripts {
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
 				'nonce'    => wp_create_nonce( 'nova_account_nonce' ),
 				'quote'    => $this->get_quote(),
+				'tax_rate' => $this->get_woocommerce_tax_rate_by_country_and_state(),
+				'country'  => $this->get_customer_country_code(),
+				'state'    => $this->get_customer_state_code(),
 			)
 		);
 
@@ -123,6 +127,67 @@ class Scripts {
 			wp_enqueue_script( 'flickity-init' );
 		}
 	}
+
+	public function get_customer_country_code() {
+		$user_id = get_current_user_id();
+
+		if ( ! $user_id ) {
+			return false;
+		}
+
+		$country_code = get_user_meta( $user_id, 'shipping_country', true );
+
+		return ! empty( $country_code ) ? $country_code : false;
+	}
+
+
+	public function get_customer_state_code() {
+		$user_id = get_current_user_id();
+
+		if ( ! $user_id ) {
+			return false;
+		}
+
+		$state_code = get_user_meta( $user_id, 'shipping_state', true );
+
+		return ! empty( $state_code ) ? $state_code : false;
+	}
+
+
+	public function get_woocommerce_tax_rate_by_country_and_state() {
+		global $wpdb;
+
+		$customer = WC()->customer;
+
+		$country_code = $customer->get_shipping_country();
+		$state_code   = $customer->get_shipping_state();
+
+		if ( empty( $country_code ) ) {
+			$country_code = '';
+		}
+		if ( empty( $state_code ) ) {
+			$state_code = '';
+		}
+
+		$tax_rates = $wpdb->get_results(
+			$wpdb->prepare(
+				"
+            SELECT tax_rate, tax_rate_name
+            FROM {$wpdb->prefix}woocommerce_tax_rates
+            WHERE tax_rate_country = %s
+            AND tax_rate_state = %s
+            AND tax_rate_class = ''
+            ORDER BY tax_rate_order
+            ",
+				$country_code,
+				$state_code
+			)
+		);
+
+		return $tax_rates ? $tax_rates[0] : null;
+	}
+
+
 
 	public function get_product_cat_name_by_id( $product_id ) {
 		$terms = wp_get_post_terms( $product_id, 'product_cat' );

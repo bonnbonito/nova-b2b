@@ -13,6 +13,7 @@ export default function Logo({ item }) {
 	const [maxWidthHeight, setMaxWidthHeight] = useState(23);
 	const [fileUrl, setFileUrl] = useState(item.file);
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice);
+	const [cadPrice, setCadPrice] = useState(item.cadPrice);
 	const [isLoading, setIsLoading] = useState(false);
 	const [fileName, setFileName] = useState(item.fileName);
 	const [selectedFinishing, setSelectedFinishing] = useState(item.finishing);

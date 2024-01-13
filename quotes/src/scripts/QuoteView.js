@@ -11,6 +11,8 @@ const decodeHTML = (html) => {
 
 export default function QuoteView() {
 	const NovaAccount = NovaMyAccount.quote;
+	const taxRate = NovaMyAccount.tax_rate;
+	const currency = wcumcs_vars_data.currency;
 	const signage = JSON.parse(NovaAccount.data);
 	const quoteRef = useRef(null);
 	const [isLoading, setIsLoading] = useState(false);
@@ -128,11 +130,18 @@ export default function QuoteView() {
 	};
 
 	const quotePrice = parseFloat(NovaAccount.final_price);
+	const exchangeRate = parseFloat(wcumcs_vars_data.currency_data.rate);
+	const finalPrice =
+		currency === 'USD' ? quotePrice : quotePrice * exchangeRate;
 	const flatRate = 14.75;
-	const standardRate = parseFloat(quotePrice * 0.075);
-	const expediteRate = parseFloat(quotePrice * 0.155);
+	const standardRate = parseFloat(finalPrice * 0.075);
+	const expediteRate = parseFloat(finalPrice * 0.155);
+	const tax = taxRate ? parseFloat(taxRate.tax_rate / 100) : 0;
+	const taxCompute = parseFloat(finalPrice * tax);
 	const estimatedShipping = Math.max(flatRate, standardRate, expediteRate);
-	const estimatedTotal = parseFloat(quotePrice + estimatedShipping);
+	const estimatedTotal = parseFloat(
+		finalPrice + estimatedShipping + taxCompute
+	);
 
 	return (
 		<>
@@ -229,17 +238,32 @@ export default function QuoteView() {
 
 					<div className="flex justify-between gap-4">
 						<h5>ESTIMATED SHIPPING:</h5>{' '}
-						<h5>${estimatedShipping.toLocaleString()} USD</h5>
+						<h5>
+							{currency}${estimatedShipping.toFixed(2).toLocaleString()}
+						</h5>
 					</div>
 
 					<div className="flex justify-between gap-4">
 						<h5>ESTIMATED SUBTOTAL:</h5>{' '}
-						<h5>${quotePrice.toLocaleString()} USD</h5>
+						<h5>
+							{currency}${finalPrice.toFixed(2).toLocaleString()}
+						</h5>
 					</div>
+
+					{taxRate && (
+						<div className="flex justify-between gap-4">
+							<h5>{taxRate.tax_rate_name}</h5>{' '}
+							<h5>
+								{currency}${taxCompute.toFixed(2).toLocaleString()}
+							</h5>
+						</div>
+					)}
 
 					<div className="flex justify-between gap-4 border-b pb-14 mt-8">
 						<h4>ESTIMATED TOTAL:</h4>{' '}
-						<h4>${estimatedTotal.toLocaleString()} USD</h4>
+						<h4>
+							{currency}${estimatedTotal.toFixed(2).toLocaleString()}
+						</h4>
 					</div>
 
 					<p className="mt-4 text-[10px] text-[#5E5E5E]">

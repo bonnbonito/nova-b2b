@@ -54,6 +54,47 @@ header.page-title {
     /* hide :after */
 }
 
+#nova .wcumcs-switcher-buttons.wcumcs-container li.wcumcs-list-item {
+    display: block;
+    float: none;
+    transition: .3s cubic-bezier(.075, .82, .165, 1);
+}
+
+#nova .wcumcs-switcher-buttons.wcumcs-container li.wcumcs-list-item a {
+    width: 18px;
+    height: 18px;
+    border-radius: 12px;
+    overflow: hidden;
+    display: block;
+    margin-left: auto;
+    padding: 0;
+}
+
+#nova .wcumcs-switcher-buttons.wcumcs-container li.wcumcs-list-item a img {
+    height: 100%;
+}
+
+#nova .wcumcs-list {
+    display: inline-block;
+    overflow: visible;
+    padding-bottom: 14px;
+    position: relative;
+    margin-bottom: -16px;
+    margin-left: 0;
+}
+
+#nova .wcumcs-switcher-buttons.wcumcs-container li.wcumcs-list-item:not(.selected) {
+    position: absolute;
+    pointer-events: none;
+    opacity: 0;
+}
+
+#nova .wcumcs-switcher-buttons.wcumcs-container:hover li.wcumcs-list-item:not(.selected) {
+    transform: translateY(24px);
+    opacity: 1;
+    pointer-events: auto;
+}
+
 @media (max-width: 767px) {
     .homepage-layout {
         display: block;

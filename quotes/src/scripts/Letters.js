@@ -7,6 +7,7 @@ import useOutsideClick from './utils/ClickOutside';
 import convert_json from './utils/ConvertJson';
 
 const NovaOptions = NovaQuote.quote_options;
+const exchangeRate = wcumcs_vars_data.currency_data.rate;
 
 let lowerCasePricing = 1; // Default value
 let smallPunctuations = 1; // Default value
@@ -43,6 +44,7 @@ export default function Letters({ item }) {
 		item.letterHeight
 	);
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice);
+	const [cadPrice, setCadPrice] = useState(item.cadPrice);
 	const [mountingOptions, setMountingOptions] = useState(
 		NovaOptions.mounting_options
 	);
@@ -125,6 +127,7 @@ export default function Letters({ item }) {
 					color: color,
 					letterHeight: selectedLetterHeight,
 					usdPrice: usdPrice,
+					cadPrice: cadPrice,
 					file: fileUrl,
 					fileName: fileName,
 					finishing: selectedFinishing,
@@ -204,6 +207,7 @@ export default function Letters({ item }) {
 			});
 
 			setUsdPrice(totalLetterPrice.toFixed(2));
+			setCadPrice((totalLetterPrice * parseFloat(exchangeRate)).toFixed(2));
 		}
 	}, [
 		selectedLetterHeight,

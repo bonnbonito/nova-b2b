@@ -283,6 +283,7 @@ class Roles {
 		$city            = isset( $_POST['city'] ) ? sanitize_text_field( $_POST['city'] ) : '';
 		$state           = isset( $_POST['state'] ) ? sanitize_text_field( $_POST['state'] ) : '';
 		$zip             = isset( $_POST['zip'] ) ? sanitize_text_field( $_POST['zip'] ) : '';
+		$pst             = isset( $_POST['pst'] ) ? sanitize_text_field( $_POST['pst'] ) : '';
 		$country         = isset( $_POST['country'] ) ? sanitize_text_field( $_POST['country'] ) : '';
 		$promotions      = isset( $_POST['promotions'] ) ? sanitize_text_field( $_POST['promotions'] ) : '';
 		$privacy         = isset( $_POST['privacy'] ) ? sanitize_text_field( $_POST['privacy'] ) : '';
@@ -342,6 +343,7 @@ class Roles {
 			'shipping_state'      => $state,
 			'shipping_postcode'   => $zip,
 			'shipping_country'    => $country,
+			'shipping_pst'        => $pst,
 		);
 
 		foreach ( $billing_keys as $key => $value ) {
@@ -381,6 +383,7 @@ class Roles {
 		update_field( 'state', $state, 'user_ ' . $user_id );
 		update_field( 'zip', $zip, 'user_ ' . $user_id );
 		update_field( 'country', $country, 'user_ ' . $user_id );
+		update_field( 'pst', $pst, 'user_ ' . $user_id );
 		update_field( 'how_did_you_hear_about_us', $_POST['hear'], 'user_ ' . $user_id );
 		update_field( 'promotions', isset( $_POST['promotions'] ) && $_POST['promotions'] === 'yes' ? 1 : 0, 'user_ ' . $user_id );
 		update_field( 'privacy', $_POST['privacy'] === 'yes' ? 1 : 0, 'user_ ' . $user_id );

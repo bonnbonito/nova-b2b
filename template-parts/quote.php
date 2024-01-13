@@ -1,12 +1,22 @@
 <?php
 $product_id = get_field( 'product' );
+
+$price = get_field( 'final_price' );
+
+$currency_settings = new WooCommerce_Ultimate_Multi_Currency_Suite_Settings( '' );
+
+$exchange_rate_cad = $currency_settings->get_option( 'exchange_rate_cad' );
+
+$final_price = get_woocommerce_currency() === 'USD' ? $price : $price * $exchange_rate_cad;
+
 ?>
 <div id="quote-<?php the_ID(); ?>" class="rounded border p-4 mb-4 text-xs uppercase">
 	<div class="block flex-wrap gap-4 md:flex">
 		<div class="basis-[150px] grow">
 			<div class="block"><span class="font-title text-sm">ID:</span> <?php the_ID(); ?> <div
 					class="text-[16px] self-center font-title ml-auto float-right block md:hidden md-hidden">
-					$<?php echo number_format( (float) get_field( 'final_price' ), 2 ); ?></div>
+					<?php echo get_woocommerce_currency_symbol() . number_format( (float) $final_price, 2 ); ?>
+				</div>
 			</div>
 			<div><span class="font-title text-sm">DATE:</span> <?php echo get_the_date(); ?></div>
 
@@ -18,7 +28,7 @@ $product_id = get_field( 'product' );
 		</div>
 		<div class="flex grow-[2] gap-2 justify-end font-title items-center">
 			<div class="text-[16px] self-center hidden md-block">
-				$<?php echo number_format( (float) get_field( 'final_price' ), 2 ); ?>
+				<?php echo get_woocommerce_currency_symbol() . number_format( (float) $final_price, 2 ); ?>
 			</div>
 			<?php if ( get_field( 'quote_status' )['value'] == 'draft' ) : ?>
 			<a href="

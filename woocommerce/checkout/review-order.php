@@ -138,7 +138,7 @@ $woo_instance = \NOVA_B2B\INC\CLASSES\Woocommerce::get_instance();
 				<?php foreach ( WC()->cart->get_tax_totals() as $code => $tax ) : // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited ?>
 		<tr class="tax-rate tax-rate-<?php echo esc_attr( sanitize_title( $code ) ); ?>">
 			<th class="px-4 py-8"><?php echo esc_html( $tax->label ); ?></th>
-			<td class="px-4 py-8"><?php echo wp_kses_post( $tax->formatted_amount ); ?></td>
+			<td class="px-4 py-8 text-right" colspan=2><?php echo wp_kses_post( $tax->formatted_amount ); ?></td>
 		</tr>
 		<?php endforeach; ?>
 		<?php else : ?>

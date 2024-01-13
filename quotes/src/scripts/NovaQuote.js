@@ -14,8 +14,8 @@ const NovaOptions = NovaQuote.quote_options;
 export default function Accrylic() {
 	const [signage, setSignage] = useState([]);
 
-	function setDefaultSignage(signage) {
-		const savedStorage = JSON.parse(localStorage.getItem('novaQuoteStorage2'));
+	function setDefaultSignage() {
+		const savedStorage = JSON.parse(localStorage.getItem('novaQuoteStorage'));
 		console.log(savedStorage);
 		if (savedStorage?.length > 0) {
 			setSignage(savedStorage);
@@ -113,8 +113,10 @@ export default function Accrylic() {
 		localStorage.setItem('novaQuoteStorage', JSON.stringify(signage));
 	}, [signage]);
 
+	const currency = wcumcs_vars_data.currency;
+
 	return (
-		<NovaContext.Provider value={{ signage, setSignage, addSignage }}>
+		<NovaContext.Provider value={{ signage, setSignage, addSignage, currency }}>
 			<div className="md:flex gap-6">
 				<div className="md:w-3/4 w-full">
 					{signage.map((item, index) => (

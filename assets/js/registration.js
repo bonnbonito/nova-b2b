@@ -82,6 +82,8 @@ function novaRegistration() {
 
 	const country = document.getElementById('country');
 	const state = document.getElementById('state');
+	const pstField = document.getElementById('pstField');
+	const postInput = pstField.querySelector('input');
 
 	country.addEventListener('change', (e) => {
 		while (state.options.length > 0) {
@@ -109,6 +111,17 @@ function novaRegistration() {
 			}
 		}
 		// You can continue to add similar logic for other countries if needed
+	});
+
+	state.addEventListener('change', (e) => {
+		const target = e.target.value;
+		if (target === 'BC') {
+			pstField.classList.remove('hidden');
+			postInput.setAttribute('required', true);
+		} else {
+			pstField.classList.add('hidden');
+			postInput.removeAttribute('required');
+		}
 	});
 
 	novaSignUpForm.addEventListener('submit', function (event) {

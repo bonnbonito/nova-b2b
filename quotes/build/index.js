@@ -533,6 +533,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const NovaOptions = NovaQuote.quote_options;
+const exchangeRate = wcumcs_vars_data.currency_data.rate;
 let lowerCasePricing = 1; // Default value
 let smallPunctuations = 1; // Default value
 
@@ -564,6 +565,7 @@ function Letters({
   const [selectedFinishing, setSelectedFinishing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.finishing);
   const [selectedLetterHeight, setSelectedLetterHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.letterHeight);
   const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.usdPrice);
+  const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.cadPrice);
   const [mountingOptions, setMountingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(NovaOptions.mounting_options);
   const [lettersHeight, setLettersHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(NovaOptions.letters_height);
   const [selectedMounting, setSelectedMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.mounting);
@@ -627,6 +629,7 @@ function Letters({
           color: color,
           letterHeight: selectedLetterHeight,
           usdPrice: usdPrice,
+          cadPrice: cadPrice,
           file: fileUrl,
           fileName: fileName,
           finishing: selectedFinishing
@@ -690,6 +693,7 @@ function Letters({
         totalLetterPrice += letterPrice;
       });
       setUsdPrice(totalLetterPrice.toFixed(2));
+      setCadPrice((totalLetterPrice * parseFloat(exchangeRate)).toFixed(2));
     }
   }, [selectedLetterHeight, selectedThickness, selectedFinishing, letters, waterproof, lettersHeight]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
@@ -910,6 +914,7 @@ function Logo({
   const [maxWidthHeight, setMaxWidthHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(23);
   const [fileUrl, setFileUrl] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.file);
   const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.usdPrice);
+  const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.cadPrice);
   const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [fileName, setFileName] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.fileName);
   const [selectedFinishing, setSelectedFinishing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.finishing);
@@ -1197,6 +1202,7 @@ function ModalSave({
       const status = await (0,_utils_QuoteFunctions__WEBPACK_IMPORTED_MODULE_3__.processQuote)(formData);
       console.log(status);
       if (status === 'success') {
+        localStorage.removeItem('novaQuoteStorage');
         if (action !== 'update') {
           window.location.replace(NovaQuote.mockup_account_url);
         }
@@ -1295,8 +1301,8 @@ const SignageCount = (signage, type) => signage.filter(sign => sign.type === typ
 const NovaOptions = NovaQuote.quote_options;
 function Accrylic() {
   const [signage, setSignage] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  function setDefaultSignage(signage) {
-    const savedStorage = JSON.parse(localStorage.getItem('novaQuoteStorage2'));
+  function setDefaultSignage() {
+    const savedStorage = JSON.parse(localStorage.getItem('novaQuoteStorage'));
     console.log(savedStorage);
     if (savedStorage?.length > 0) {
       setSignage(savedStorage);
@@ -1393,11 +1399,13 @@ function Accrylic() {
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     localStorage.setItem('novaQuoteStorage', JSON.stringify(signage));
   }, [signage]);
+  const currency = wcumcs_vars_data.currency;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(NovaContext.Provider, {
     value: {
       signage,
       setSignage,
-      addSignage
+      addSignage,
+      currency
     }
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:flex gap-6"
@@ -1444,11 +1452,13 @@ __webpack_require__.r(__webpack_exports__);
 function Prices({
   item
 }) {
+  const currency = wcumcs_vars_data.currency;
+  const price = currency === 'USD' ? item.usdPrice : item.cadPrice;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "block"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex justify-between py-2 font-title uppercase"
-  }, item.title, " ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, "$", Number(item.usdPrice).toLocaleString(), " USD")), item.thickness && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.title, ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, currency, "$", Number(price).toLocaleString())), item.thickness && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-2 py-[2px]"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
@@ -1543,7 +1553,8 @@ __webpack_require__.r(__webpack_exports__);
 function PricesView({
   item
 }) {
-  console.log(item);
+  const currency = wcumcs_vars_data.currency;
+  const price = currency === 'USD' ? item.usdPrice : item.cadPrice;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "pb-8 mb-8 border-b-nova-light border-b"
   }, item.type === 'letters' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -1568,7 +1579,7 @@ function PricesView({
     className: "block"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex justify-between py-2 font-title uppercase"
-  }, item.title, ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, "$", Number(item.usdPrice).toLocaleString(), " USD")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.title, ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, currency, "$", Number(price).toFixed(2).toLocaleString())), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-[160px_1fr] py-[2px]"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
@@ -1674,6 +1685,8 @@ const decodeHTML = html => {
 };
 function QuoteView() {
   const NovaAccount = NovaMyAccount.quote;
+  const taxRate = NovaMyAccount.tax_rate;
+  const currency = wcumcs_vars_data.currency;
   const signage = JSON.parse(NovaAccount.data);
   const quoteRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
@@ -1774,11 +1787,15 @@ function QuoteView() {
     }).catch(error => console.error('Error:', error));
   };
   const quotePrice = parseFloat(NovaAccount.final_price);
+  const exchangeRate = parseFloat(wcumcs_vars_data.currency_data.rate);
+  const finalPrice = currency === 'USD' ? quotePrice : quotePrice * exchangeRate;
   const flatRate = 14.75;
-  const standardRate = parseFloat(quotePrice * 0.075);
-  const expediteRate = parseFloat(quotePrice * 0.155);
+  const standardRate = parseFloat(finalPrice * 0.075);
+  const expediteRate = parseFloat(finalPrice * 0.155);
+  const tax = taxRate ? parseFloat(taxRate.tax_rate / 100) : 0;
+  const taxCompute = parseFloat(finalPrice * tax);
   const estimatedShipping = Math.max(flatRate, standardRate, expediteRate);
-  const estimatedTotal = parseFloat(quotePrice + estimatedShipping);
+  const estimatedTotal = parseFloat(finalPrice + estimatedShipping + taxCompute);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex pb-4 mb-4 border-b justify-between"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
@@ -1864,11 +1881,13 @@ function QuoteView() {
     }
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex justify-between gap-4"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, "ESTIMATED SHIPPING:"), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, "$", estimatedShipping.toLocaleString(), " USD")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, "ESTIMATED SHIPPING:"), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, currency, "$", estimatedShipping.toFixed(2).toLocaleString())), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex justify-between gap-4"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, "ESTIMATED SUBTOTAL:"), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, "$", quotePrice.toLocaleString(), " USD")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, "ESTIMATED SUBTOTAL:"), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, currency, "$", finalPrice.toFixed(2).toLocaleString())), taxRate && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex justify-between gap-4"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, taxRate.tax_rate_name), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, currency, "$", taxCompute.toFixed(2).toLocaleString())), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex justify-between gap-4 border-b pb-14 mt-8"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, "ESTIMATED TOTAL:"), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, "$", estimatedTotal.toLocaleString(), " USD")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, "ESTIMATED TOTAL:"), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, currency, "$", estimatedTotal.toFixed(2).toLocaleString())), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
     className: "mt-4 text-[10px] text-[#5E5E5E]"
   }, "Freight charges may vary based on factors such as shipping destination, package size, and delivery speed.\xA0")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, NovaAccount.quote_status.value === 'ready' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "rounded mb-3 px-4 py-3 border border-nova-light font-title text-white bg-nova-primary text-xs inline-block hover:text-white hover:bg-nova-secondary w-full text-center cursor-pointer uppercase",
@@ -1904,9 +1923,12 @@ __webpack_require__.r(__webpack_exports__);
 
 function Sidebar() {
   const {
-    signage
+    signage,
+    currency
   } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_NovaQuote__WEBPACK_IMPORTED_MODULE_2__.NovaContext);
   const totalUsdPrice = signage.reduce((acc, item) => acc + parseFloat(item.usdPrice), 0);
+  const totalCadPrice = signage.reduce((acc, item) => acc + parseFloat(item.cadPrice), 0);
+  const totalPrice = currency === 'USD' ? totalUsdPrice : totalCadPrice;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-1/4 w-full mt-8 md:mt-0"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -1922,7 +1944,7 @@ function Sidebar() {
     className: "text-2xl"
   }, "TOTAL:"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", {
     className: "text-2xl"
-  }, "$", Number(totalUsdPrice.toFixed(2)).toLocaleString(), " USD")), signage.length > 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, NovaQuote.is_editting === '1' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, NovaQuote.user_role[0] !== 'pending' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }, currency, "$", Number(totalPrice.toFixed(2)).toLocaleString())), signage.length > 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, NovaQuote.is_editting === '1' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, NovaQuote.user_role[0] !== 'pending' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_1__["default"], {
     action: "update-processing",
     label: "Submit Quote",
     btnClass: "mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"

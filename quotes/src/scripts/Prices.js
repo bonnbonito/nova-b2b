@@ -1,10 +1,15 @@
 import React from 'react';
 
 export default function Prices({ item }) {
+	const currency = wcumcs_vars_data.currency;
+	const price = currency === 'USD' ? item.usdPrice : item.cadPrice;
 	return (
 		<div className="block">
 			<div className="flex justify-between py-2 font-title uppercase">
-				{item.title} <span>${Number(item.usdPrice).toLocaleString()} USD</span>
+				{item.title}{' '}
+				<span>
+					{currency}${Number(price).toLocaleString()}
+				</span>
 			</div>
 			{item.thickness && (
 				<div className="grid grid-cols-2 py-[2px]">
