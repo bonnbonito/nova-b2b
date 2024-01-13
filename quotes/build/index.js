@@ -1791,10 +1791,9 @@ function QuoteView() {
   const finalPrice = currency === 'USD' ? quotePrice : quotePrice * exchangeRate;
   const flatRate = 14.75;
   const standardRate = parseFloat(finalPrice * 0.075);
-  const expediteRate = parseFloat(finalPrice * 0.155);
   const tax = taxRate ? parseFloat(taxRate.tax_rate / 100) : 0;
   const taxCompute = parseFloat(finalPrice * tax);
-  const estimatedShipping = Math.max(flatRate, standardRate, expediteRate);
+  const estimatedShipping = Math.max(flatRate, standardRate);
   const estimatedTotal = parseFloat(finalPrice + estimatedShipping + taxCompute);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex pb-4 mb-4 border-b justify-between"
