@@ -300,7 +300,6 @@ class Nova_Quote {
 		$status['final_price'] = get_field( 'final_price', $post_id );
 		$status['note']        = $note;
 		$status['quote']       = $signage;
-		$status['code']        = 2;
 
 		$product_meta = array(
 			'usd_price'  => $final_price,
@@ -333,13 +332,17 @@ class Nova_Quote {
 			wp_set_object_terms( $created_product, 'nova_quote', 'product_type' );
 		}
 
-		WC()->cart->add_to_cart(
-			$created_product,
-			1,
-			0,
-			array(),
-			$product_meta,
-		);
+		if ( $created_product ) {
+			WC()->cart->add_to_cart(
+				$created_product,
+				1,
+				0,
+				array(),
+				$product_meta,
+			);
+			$status['code']          = 2;
+			$status['product_added'] = 'yes';
+		}
 
 		wp_send_json( $status );
 	}
