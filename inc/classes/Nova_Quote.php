@@ -331,6 +331,14 @@ class Nova_Quote {
 			wp_send_json( $status );
 		}
 
+		$checkout_id = $_POST['product_id'];
+
+		if ( ! $checkout_id ) {
+			$status['error']  = 'No Product';
+			$status['status'] = 'error';
+			wp_send_json( $status );
+		}
+
 		if ( $_POST['role'] === 'pending' ) {
 			$status['code']   = 3;
 			$status['error']  = 'Pending Account';
@@ -346,7 +354,6 @@ class Nova_Quote {
 		$product_name = $_POST['product'];
 		$signage      = json_decode( get_field( 'signage', $post_id ) );
 		$note         = get_field( 'note', $post_id );
-		$checkout_id  = $_POST['product_id'];
 
 		$status['final_price'] = get_field( 'final_price', $post_id );
 		$status['note']        = $note;
@@ -638,6 +645,7 @@ class Nova_Quote {
 				'dropbox_token'         => get_field( 'dropbox_token_access', 'option' ),
 				'dropbox_refresh_token' => get_field( 'dropbox_refresh_token', 'option' ),
 				'business_id'           => get_field( 'business_id', 'user_' . get_current_user_id() ),
+				'generated_product_id'  => isset( $_GET['qid'] ) ? get_post_meta( $_GET['qid'], 'nova_product_generated_id', true ) : null,
 			)
 		);
 

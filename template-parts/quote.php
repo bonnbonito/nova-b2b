@@ -56,7 +56,7 @@ $final_price = get_woocommerce_currency() === 'USD' ? $price : $price * $exchang
 			<a href="<?php echo esc_url( '/my-account/mockups/view?qid=' . get_the_ID() ); ?>"
 				class="p-2 border rounded text-nova-gray text-[10px] tracking-[1px] hover:bg-nova-gray hover:text-white w-[110px] text-center">View
 				Details</a>
-			<a href="/" data-type="checkout" data-id="<?php the_ID(); ?>"
+			<a href="#" data-type="checkout" data-id="<?php the_ID(); ?>"
 				data-product="<?php echo get_the_title( $product_id ); ?>"
 				data-product_id="<?php echo get_post_meta( get_the_ID(), 'nova_product_generated_id', true ); ?>"
 				class="p-2 border rounded bg-green-600 text-white text-[10px] tracking-[1px] hover:bg-green-400 cursor-pointer w-[110px] text-center">
