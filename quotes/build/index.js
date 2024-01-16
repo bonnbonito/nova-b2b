@@ -1766,6 +1766,7 @@ function QuoteView() {
     formData.append('role', NovaQuote.user_role[0]);
     formData.append('nova_product', NovaQuote.nova_quote_product.ID);
     formData.append('product', NovaAccount.product_name ? decodeHTML(NovaAccount.product_name) : 'None');
+    formData.append('product_id', NovaQuote.generated_product_id);
     fetch(NovaMyAccount.ajax_url, {
       method: 'POST',
       credentials: 'same-origin',

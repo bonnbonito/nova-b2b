@@ -103,6 +103,7 @@ export default function QuoteView() {
 			'product',
 			NovaAccount.product_name ? decodeHTML(NovaAccount.product_name) : 'None'
 		);
+		formData.append('product_id', NovaQuote.generated_product_id);
 
 		fetch(NovaMyAccount.ajax_url, {
 			method: 'POST',
