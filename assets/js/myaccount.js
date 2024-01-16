@@ -43,6 +43,7 @@ function process(btn, action) {
 	if (action === 'to_checkout') {
 		formData.append('nova_product', NovaQuote.nova_quote_product.ID);
 		formData.append('product', btn.dataset.product);
+		formData.append('product_id', btn.dataset.product_id);
 	}
 
 	fetch(NovaMyAccount.ajax_url, {

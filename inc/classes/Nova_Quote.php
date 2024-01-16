@@ -45,6 +45,7 @@ class Nova_Quote {
 		add_action( 'acf/save_post', array( $this, 'for_payment_email_action' ) );
 		add_action( 'quote_to_processing', array( $this, 'for_quotation_email' ) );
 		add_action( 'processing_to_payment', array( $this, 'for_payment_email' ) );
+		add_action( 'processing_to_payment', array( $this, 'create_nova_quote_product' ), 1 );
 		add_action( 'wp', array( $this, 'single_quote_redirect' ) );
 	}
 
@@ -53,6 +54,55 @@ class Nova_Quote {
 			wp_redirect( home_url( '/' ), 301 );
 			die;
 		}
+	}
+
+	public function create_nova_quote_product( $post_id ) {
+
+		$title        = get_the_title( $post_id );
+		$final_price  = get_field( 'final_price', $post_id );
+		$product_id   = get_field( 'product', $post_id )->ID;
+		$product_name = get_field( 'product', $post_id )->post_titl;
+		$signage      = json_decode( get_field( 'signage', $post_id ) );
+		$note         = get_field( 'note', $post_id );
+
+		$status['final_price'] = get_field( 'final_price', $post_id );
+		$status['note']        = $note;
+		$status['quote']       = $signage;
+
+		$product_meta = array(
+			'usd_price'  => $final_price,
+			'signage'    => $signage,
+			'nova_quote' => true,
+			'nova_title' => $title,
+			'quote_id'   => $post_id,
+			'nova_note'  => $note,
+			'product'    => $product_name,
+			'product_id' => $product_id,
+		);
+
+		$product_data = array(
+			'post_title'   => wp_strip_all_tags( $title ),
+			'post_content' => '',
+			'post_status'  => 'publish',
+			'post_type'    => 'product',
+			'meta_input'   => array(
+				'_regular_price' => $final_price,
+				'_price'         => $final_price,
+			),
+		);
+
+		if ( $this->product_exists_by_title( wp_strip_all_tags( $title ) ) ) {
+
+			$created_product = $this->product_exists_by_title( wp_strip_all_tags( $title ) );
+
+		} else {
+			$created_product = wp_insert_post( $product_data );
+			wp_set_object_terms( $created_product, 'nova_quote', 'product_type' );
+		}
+
+		update_post_meta( $post_id, 'nova_product_generated_id', $created_product );
+
+		return $created_product;
 	}
 
 	public function for_payment_email( $post_id ) {
@@ -296,6 +346,7 @@ class Nova_Quote {
 		$product_name = $_POST['product'];
 		$signage      = json_decode( get_field( 'signage', $post_id ) );
 		$note         = get_field( 'note', $post_id );
+		$checkout_id  = $_POST['product_id'];
 
 		$status['final_price'] = get_field( 'final_price', $post_id );
 		$status['note']        = $note;
@@ -323,18 +374,9 @@ class Nova_Quote {
 			),
 		);
 
-		if ( $this->product_exists_by_title( wp_strip_all_tags( $title ) ) ) {
-
-			$created_product = $this->product_exists_by_title( wp_strip_all_tags( $title ) );
-
-		} else {
-			$created_product = wp_insert_post( $product_data );
-			wp_set_object_terms( $created_product, 'nova_quote', 'product_type' );
-		}
-
-		if ( $created_product ) {
+		if ( $checkout_id ) {
 			WC()->cart->add_to_cart(
-				$created_product,
+				$checkout_id,
 				1,
 				0,
 				array(),
