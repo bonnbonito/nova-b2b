@@ -125,7 +125,9 @@ class Nova_Quote {
 
 		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
-		wp_mail( $to, $subject, $message, $headers );
+		$role_instance = \NOVA_B2B\INC\CLASSES\Roles::get_instance();
+
+		$role_instance->send_email( $to, $subject, $message, $headers, array() );
 	}
 
 	public function for_quotation_email( $post_id ) {
@@ -147,11 +149,14 @@ class Nova_Quote {
 
 		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
-		wp_mail( $to, $subject, $message, $headers );
+		$role_instance = \NOVA_B2B\INC\CLASSES\Roles::get_instance();
+
+		$role_instance->send_email( $to, $subject, $message, $headers, array() );
 
 		$to_admin         = get_option( 'admin_email' );
 		$to_admin_message = 'You received a new order from ' . $first_name . '. Congratulations!';
-		wp_mail( $to_admin, $subject, $to_admin_message, $headers );
+
+		$role_instance->send_email( $to_admin, $subject, $to_admin_message, $headers, array() );
 	}
 
 	public function for_payment_email_action( $post_id ) {

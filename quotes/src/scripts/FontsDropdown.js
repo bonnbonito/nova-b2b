@@ -34,8 +34,16 @@ export default function FontsDropdown({ font, handleSelectFont }) {
 			</div>
 			{openFont && (
 				<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
+					{/* Custom Font Option */}
+					<div
+						className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
+						onClick={handleCustomFontSelection}
+					>
+						- Custom Font
+					</div>
 					<div className="">
 						<h5 class="p-2 pb-0">Popular Fonts</h5>
+
 						{NovaQuote.quote_options.fonts.popular_fonts
 							.split(',')
 							.map((popularfont) => {
@@ -71,13 +79,6 @@ export default function FontsDropdown({ font, handleSelectFont }) {
 								</div>
 							);
 						})}
-						{/* Custom Font Option */}
-						<div
-							className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
-							onClick={handleCustomFontSelection}
-						>
-							- Custom Font
-						</div>
 					</div>
 				</div>
 			)}

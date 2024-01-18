@@ -470,6 +470,9 @@ function FontsDropdown({
   }, font === '' ? 'CHOOSE OPTION' : font)), openFont && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
+    onClick: handleCustomFontSelection
+  }, "- Custom Font"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: ""
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
     class: "p-2 pb-0"
@@ -497,10 +500,7 @@ function FontsDropdown({
         setOpenFont(false);
       }
     }, "- ", regFont);
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
-    onClick: handleCustomFontSelection
-  }, "- Custom Font"))));
+  }))));
 }
 
 /***/ }),
