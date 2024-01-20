@@ -21,10 +21,10 @@ export default function Sidebar() {
 	const exchangeRate = parseFloat(wcumcs_vars_data.currency_data.rate);
 
 	const flatRate = currency === 'USD' ? 14.75 : 14.75 * exchangeRate;
-	const standardRate = totalPrice * 0.075;
-	const estimatedShipping = parseFloat(Math.max(flatRate, standardRate));
 
-	console.log(standardRate, estimatedShipping);
+	const standardRate = parseFloat(totalPrice * 0.075);
+
+	const estimatedShipping = parseFloat(Math.max(flatRate, standardRate));
 
 	const tax = taxRate ? parseFloat(taxRate.tax_rate / 100) : 0;
 	const taxCompute = parseFloat(totalPrice * tax);

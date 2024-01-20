@@ -134,11 +134,16 @@ export default function QuoteView() {
 	const exchangeRate = parseFloat(wcumcs_vars_data.currency_data.rate);
 	const finalPrice =
 		currency === 'USD' ? quotePrice : quotePrice * exchangeRate;
+
 	const flatRate = currency === 'USD' ? 14.75 : 14.75 * exchangeRate;
+
 	const standardRate = parseFloat(finalPrice * 0.075);
+
+	const estimatedShipping = Math.max(flatRate, standardRate);
+
 	const tax = taxRate ? parseFloat(taxRate.tax_rate / 100) : 0;
 	const taxCompute = parseFloat(finalPrice * tax);
-	const estimatedShipping = Math.max(flatRate, standardRate);
+
 	const estimatedTotal = parseFloat(
 		finalPrice + estimatedShipping + taxCompute
 	);
@@ -237,16 +242,16 @@ export default function QuoteView() {
 					)}
 
 					<div className="flex justify-between gap-4">
-						<h5>ESTIMATED SHIPPING:</h5>{' '}
+						<h5>ESTIMATED SUBTOTAL:</h5>{' '}
 						<h5>
-							{currency}${estimatedShipping.toFixed(2).toLocaleString()}
+							{currency}${finalPrice.toFixed(2).toLocaleString()}
 						</h5>
 					</div>
 
 					<div className="flex justify-between gap-4">
-						<h5>ESTIMATED SUBTOTAL:</h5>{' '}
+						<h5>ESTIMATED SHIPPING:</h5>{' '}
 						<h5>
-							{currency}${finalPrice.toFixed(2).toLocaleString()}
+							{currency}${estimatedShipping.toFixed(2).toLocaleString()}
 						</h5>
 					</div>
 

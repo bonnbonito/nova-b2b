@@ -1797,9 +1797,9 @@ function QuoteView() {
   const finalPrice = currency === 'USD' ? quotePrice : quotePrice * exchangeRate;
   const flatRate = currency === 'USD' ? 14.75 : 14.75 * exchangeRate;
   const standardRate = parseFloat(finalPrice * 0.075);
+  const estimatedShipping = Math.max(flatRate, standardRate);
   const tax = taxRate ? parseFloat(taxRate.tax_rate / 100) : 0;
   const taxCompute = parseFloat(finalPrice * tax);
-  const estimatedShipping = Math.max(flatRate, standardRate);
   const estimatedTotal = parseFloat(finalPrice + estimatedShipping + taxCompute);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex pb-4 mb-4 border-b justify-between"
@@ -1886,9 +1886,9 @@ function QuoteView() {
     }
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex justify-between gap-4"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, "ESTIMATED SHIPPING:"), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, currency, "$", estimatedShipping.toFixed(2).toLocaleString())), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, "ESTIMATED SUBTOTAL:"), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, currency, "$", finalPrice.toFixed(2).toLocaleString())), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex justify-between gap-4"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, "ESTIMATED SUBTOTAL:"), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, currency, "$", finalPrice.toFixed(2).toLocaleString())), taxRate && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, "ESTIMATED SHIPPING:"), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, currency, "$", estimatedShipping.toFixed(2).toLocaleString())), taxRate && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex justify-between gap-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, taxRate.tax_rate_name), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, currency, "$", taxCompute.toFixed(2).toLocaleString())), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex justify-between gap-4 border-b pb-14 mt-8"
@@ -1937,9 +1937,8 @@ function Sidebar() {
   const totalPrice = currency === 'USD' ? totalUsdPrice : totalCadPrice;
   const exchangeRate = parseFloat(wcumcs_vars_data.currency_data.rate);
   const flatRate = currency === 'USD' ? 14.75 : 14.75 * exchangeRate;
-  const standardRate = totalPrice * 0.075;
+  const standardRate = parseFloat(totalPrice * 0.075);
   const estimatedShipping = parseFloat(Math.max(flatRate, standardRate));
-  console.log(standardRate, estimatedShipping);
   const tax = taxRate ? parseFloat(taxRate.tax_rate / 100) : 0;
   const taxCompute = parseFloat(totalPrice * tax);
   const estimateTotalPrice = totalPrice + estimatedShipping + taxCompute;
