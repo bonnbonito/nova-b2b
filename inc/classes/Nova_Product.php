@@ -92,9 +92,9 @@ endif;
 		<h6><a class="button <?php echo ( ! $tab ? 'active' : '' ); ?>"
 				href="<?php echo get_permalink(); ?>">Overview</a></h6>
 		<h6><a class="button <?php echo ( $tab === 'tech-specs' ? 'active' : '' ); ?>"
-				href="<?php echo get_permalink(); ?>/tech-specs">Tech Specs</a></h6>
+				href="<?php echo untrailingslashit( get_permalink() ); ?>/tech-specs">Tech Specs</a></h6>
 		<h6><a class="button <?php echo ( $tab === 'installation' ? 'active' : '' ); ?>"
-				href="<?php echo get_permalink(); ?>/installation">Installation</a></h6>
+				href="<?php untrailingslashit( get_permalink() ); ?>/installation">Installation</a></h6>
 		<!-- <h6><a class="button active" href="#">Sample Board</a></h6> -->
 	</div>
 
@@ -111,9 +111,8 @@ endif;
 		<h6 data-menu="sample" style="display: none;">Sample Board</a></h6>
 	</div>
 
-			<?php $quote = get_field( 'instant_quote_link', $id ); ?>
 
-	<a href="<?php echo get_permalink(); ?>/quote"
+	<a href="<?php echo untrailingslashit( get_permalink() ); ?>/quote"
 		class="button <?php echo ( $tab === 'quote' ? 'active' : '' ); ?>">Instant
 		Quote</a>
 </div>
