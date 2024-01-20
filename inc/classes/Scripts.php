@@ -117,7 +117,7 @@ class Scripts {
 			)
 		);
 
-		if ( is_account_page() ) {
+		if ( is_account_page() || is_singular( 'signage' ) ) {
 			wp_enqueue_script( 'nova-account' );
 		}
 

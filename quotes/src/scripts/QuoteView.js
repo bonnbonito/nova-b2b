@@ -134,7 +134,7 @@ export default function QuoteView() {
 	const exchangeRate = parseFloat(wcumcs_vars_data.currency_data.rate);
 	const finalPrice =
 		currency === 'USD' ? quotePrice : quotePrice * exchangeRate;
-	const flatRate = 14.75;
+	const flatRate = currency === 'USD' ? 14.75 : 14.75 * exchangeRate;
 	const standardRate = parseFloat(finalPrice * 0.075);
 	const tax = taxRate ? parseFloat(taxRate.tax_rate / 100) : 0;
 	const taxCompute = parseFloat(finalPrice * tax);

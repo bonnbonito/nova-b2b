@@ -5,6 +5,7 @@ import Prices from './Prices';
 
 export default function Sidebar() {
 	const { signage, currency } = useContext(NovaContext);
+	const taxRate = NovaMyAccount.tax_rate;
 
 	const totalUsdPrice = signage.reduce(
 		(acc, item) => acc + parseFloat(item.usdPrice),
@@ -17,6 +18,18 @@ export default function Sidebar() {
 	);
 
 	const totalPrice = currency === 'USD' ? totalUsdPrice : totalCadPrice;
+	const exchangeRate = parseFloat(wcumcs_vars_data.currency_data.rate);
+
+	const flatRate = currency === 'USD' ? 14.75 : 14.75 * exchangeRate;
+	const standardRate = totalPrice * 0.075;
+	const estimatedShipping = parseFloat(Math.max(flatRate, standardRate));
+
+	console.log(standardRate, estimatedShipping);
+
+	const tax = taxRate ? parseFloat(taxRate.tax_rate / 100) : 0;
+	const taxCompute = parseFloat(totalPrice * tax);
+
+	const estimateTotalPrice = totalPrice + estimatedShipping + taxCompute;
 
 	return (
 		<div className="md:w-1/4 w-full mt-8 md:mt-0">
@@ -26,13 +39,36 @@ export default function Sidebar() {
 						<Prices id={item.id} item={item}></Prices>
 					))}
 
-					<hr />
+					<hr className="mt-5" />
 				</div>
+
+				<div className="block mb-2">
+					<div className="flex justify-between pt-2 font-title uppercase md:tracking-[1.6px]">
+						SUBTOTAL
+						<span>
+							{currency}${Number(totalPrice.toFixed(2)).toLocaleString()}
+						</span>
+					</div>
+					<div className="flex justify-between font-title uppercase md:tracking-[1.6px]">
+						SHIPPING
+						<span>
+							{currency}${Number(estimatedShipping.toFixed(2)).toLocaleString()}
+						</span>
+					</div>
+					<div className="flex justify-between font-title uppercase md:tracking-[1.6px]">
+						{NovaMyAccount.tax_rate.tax_rate_name}
+						<span>
+							{currency}${Number(taxCompute.toFixed(2)).toLocaleString()}
+						</span>
+					</div>
+				</div>
+
+				<hr />
 
 				<div className="flex justify-between my-5">
 					<h4 className="text-2xl">TOTAL:</h4>
 					<h4 className="text-2xl">
-						{currency}${Number(totalPrice.toFixed(2)).toLocaleString()}
+						{currency}${Number(estimateTotalPrice.toFixed(2)).toLocaleString()}
 					</h4>
 				</div>
 
