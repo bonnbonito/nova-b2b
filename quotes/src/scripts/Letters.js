@@ -34,7 +34,7 @@ export default function Letters({ item }) {
 	const [openColor, setOpenColor] = useState(false);
 	const [waterproof, setWaterproof] = useState(item.waterproof);
 	const [selectedThickness, setSelectedThickness] = useState(item.thickness);
-	const thicknessOptions = NovaOptions.acrylic_thickness_options;
+	const thicknessOptions = NovaOptions.signage_thickness_options;
 	const [fileUrl, setFileUrl] = useState(item.file);
 	const [fileName, setFileName] = useState(item.fileName);
 	const [letterHeightOptions, setLetterHeightOptions] = useState([]);

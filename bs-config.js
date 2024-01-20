@@ -30,7 +30,7 @@ module.exports = {
 		ignoreInitial: true,
 	},
 	server: false,
-	proxy: 'nova.test',
+	proxy: 'novasignage.test',
 	port: 3002,
 	middleware: false,
 	serveStatic: [],

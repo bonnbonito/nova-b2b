@@ -558,7 +558,7 @@ function Letters({
   const [openColor, setOpenColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.waterproof);
   const [selectedThickness, setSelectedThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.thickness);
-  const thicknessOptions = NovaOptions.acrylic_thickness_options;
+  const thicknessOptions = NovaOptions.signage_thickness_options;
   const [fileUrl, setFileUrl] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.file);
   const [fileName, setFileName] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.fileName);
   const [letterHeightOptions, setLetterHeightOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
@@ -929,7 +929,7 @@ function Logo({
     }, val, "\"");
   }));
   const [height, setHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.height);
-  const thicknessOptions = NovaOptions.acrylic_thickness_options;
+  const thicknessOptions = NovaOptions.signage_thickness_options;
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.waterproof);
   const [mountingOptions, setMountingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(NovaOptions.mounting_options);
@@ -1202,7 +1202,7 @@ function ModalSave({
       const status = await (0,_utils_QuoteFunctions__WEBPACK_IMPORTED_MODULE_3__.processQuote)(formData);
       console.log(status);
       if (status === 'success') {
-        localStorage.removeItem('novaQuoteStorage');
+        localStorage.removeItem(window.location.href + NovaQuote.user_id);
         if (action !== 'update') {
           window.location.replace(NovaQuote.mockup_account_url);
         }
@@ -1302,7 +1302,7 @@ const NovaOptions = NovaQuote.quote_options;
 function Accrylic() {
   const [signage, setSignage] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   function setDefaultSignage() {
-    const savedStorage = JSON.parse(localStorage.getItem('novaQuoteStorage'));
+    const savedStorage = JSON.parse(localStorage.getItem(window.location.href + NovaQuote.user_id));
     console.log(savedStorage);
     if (savedStorage?.length > 0) {
       setSignage(savedStorage);
@@ -1335,7 +1335,12 @@ function Accrylic() {
     if (NovaQuote.is_editting === '1') {
       const currentSignage = JSON.parse(NovaQuote.signage);
       if (currentSignage) {
-        setSignage(currentSignage);
+        const savedStorage = JSON.parse(localStorage.getItem(window.location.href + NovaQuote.user_id));
+        if (savedStorage?.length > 0) {
+          setSignage(savedStorage);
+        } else {
+          setSignage(currentSignage);
+        }
       } else {
         window.location.href = window.location.pathname;
       }
@@ -1397,7 +1402,7 @@ function Accrylic() {
     });
   }
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    localStorage.setItem('novaQuoteStorage', JSON.stringify(signage));
+    localStorage.setItem(window.location.href + NovaQuote.user_id, JSON.stringify(signage));
   }, [signage]);
   const currency = wcumcs_vars_data.currency;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(NovaContext.Provider, {

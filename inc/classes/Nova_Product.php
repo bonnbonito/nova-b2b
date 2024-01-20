@@ -18,7 +18,125 @@ class Nova_Quote {
 		add_action( 'template_redirect', array( $this, 'redirect_nova_quote_single_product' ) );
 		add_filter( 'views_edit-product', array( $this, 'add_nova_quote_products_subsubsub' ), 30 );
 		add_filter( 'views_edit-product', array( $this, 'change_all_count' ) );
+		// add_filter( 'the_title', array( $this, 'modify_acrylic_post_title' ), 10, 2 );
+		add_action( 'nova_signange_after_title', array( $this, 'signage_nav_tabs' ) );
+		add_action( 'nova_product_installation', array( $this, 'nova_product_installation' ) );
 	}
+
+	public function nova_product_installation() {
+		if ( have_rows( 'installations' ) ) :
+			?>
+<div class="product-nav-content-item" data-nav="installation">
+	<h2 class="mb-10 uppercase">Installation</h2>
+
+	<div class="md:grid md:grid-cols-2 gap-x-10 gap-y-6">
+			<?php
+			while ( have_rows( 'installations' ) ) :
+				the_row();
+				?>
+		<div class="installation-item grid md:grid-cols-[280px_1fr] md:mb-0 mb-5 gap-4">
+			<div>
+				<?php
+					$image = get_sub_field( 'image' );
+				if ( ! empty( $image ) ) :
+					?>
+				<a href="<?php echo esc_url( $image['url'] ); ?>"><img class="w-full"
+						src="<?php echo esc_url( $image['url'] ); ?>"
+						alt="<?php echo esc_attr( $image['alt'] ); ?>" /></a>
+				<?php endif; ?>
+			</div>
+			<div class="px-0">
+				<h6 class="uppercase tracking-[1.6px]"><?php the_sub_field( 'title' ); ?></h6>
+				<div class="md:text-[14px] leading-loose tracking-[1.4px]">
+					<?php echo get_sub_field( 'content' ); ?></div>
+			</div>
+		</div>
+		<?php endwhile; ?>
+	</div>
+
+
+</div>
+			<?php
+endif;
+	}
+
+	public function get_parent_or_current_id() {
+		global $post;
+
+		if ( isset( $post ) ) {
+			if ( $post->post_parent != 0 ) {
+				return $post->post_parent;
+			}
+			return $post->ID;
+		}
+		return false;
+	}
+
+
+
+	public function signage_nav_tabs() {
+		global $post;
+
+		$id = get_the_ID();
+
+		if ( $post->post_type !== 'signage' ) {
+			return;
+		}
+		if ( $post->post_parent > 0 ) {
+
+			$tab = get_query_var( 'pagetab' );
+
+			?>
+<div class="product-nav-tabs not-tab">
+	<div id="productNovaNav" class="product-nav-tabs-left">
+		<h6><a class="button <?php echo ( ! $tab ? 'active' : '' ); ?>"
+				href="<?php echo get_permalink(); ?>">Overview</a></h6>
+		<h6><a class="button <?php echo ( $tab === 'tech-specs' ? 'active' : '' ); ?>"
+				href="<?php echo get_permalink(); ?>/tech-specs">Tech Specs</a></h6>
+		<h6><a class="button <?php echo ( $tab === 'installation' ? 'active' : '' ); ?>"
+				href="<?php echo get_permalink(); ?>/installation">Installation</a></h6>
+		<!-- <h6><a class="button active" href="#">Sample Board</a></h6> -->
+	</div>
+
+	<div id="productNavMobile" class="product-nav-tabs-mobile" onclick="toggleShowClass()">
+		<h6 id="current"><span id="text">Overview</span> <svg xmlns="http://www.w3.org/2000/svg" width="13" height="7"
+				viewBox="0 0 13 7" fill="none">
+				<path d="M11 2L6.66667 6L2 2" stroke="black" stroke-width="1.5" stroke-linecap="square"
+					stroke-linejoin="round" />
+			</svg>
+		</h6>
+		<h6 data-menu="overview" class="selected">Overview</a></h6>
+		<h6 data-menu="specs">Tech Specs</a></h6>
+		<h6 data-menu="installation">Installation</a></h6>
+		<h6 data-menu="sample" style="display: none;">Sample Board</a></h6>
+	</div>
+
+			<?php $quote = get_field( 'instant_quote_link', $id ); ?>
+
+	<a href="<?php echo get_permalink(); ?>/quote"
+		class="button <?php echo ( $tab === 'quote' ? 'active' : '' ); ?>">Instant
+		Quote</a>
+</div>
+
+			<?php
+		}
+	}
+
+
+
+	public function modify_acrylic_post_title( $title, $post_id ) {
+
+		$post = get_post( $post_id );
+
+		if ( $post->post_type == 'signage' && $post->post_parent != 0 && ! is_admin() ) {
+			$parent_post = get_post( $post->post_parent );
+
+			return $parent_post->post_title;
+		}
+
+		return $title;
+	}
+
 
 	public function change_all_count( $views ) {
 		$allcount     = $this->get_all_products_count();

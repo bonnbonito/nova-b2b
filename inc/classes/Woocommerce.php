@@ -72,6 +72,7 @@ class Woocommerce {
 		// add_action( 'woocommerce_save_account_details', array( $this, 'save_my_account_billing_shipping_fields' ) );
 		add_filter( 'woocommerce_currency_symbol', array( $this, 'currency_symbol' ), 10, 2 );
 		add_filter( 'woocommerce_shipping_fields', array( $this, 'add_pst_field' ) );
+		add_action( 'nova_signange_before_content', array( $this, 'show_product_dropdown_nav' ) );
 	}
 
 	public function add_pst_field( $fields ) {

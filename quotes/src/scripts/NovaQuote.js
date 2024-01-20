@@ -15,7 +15,9 @@ export default function Accrylic() {
 	const [signage, setSignage] = useState([]);
 
 	function setDefaultSignage() {
-		const savedStorage = JSON.parse(localStorage.getItem('novaQuoteStorage'));
+		const savedStorage = JSON.parse(
+			localStorage.getItem(window.location.href + NovaQuote.user_id)
+		);
 		console.log(savedStorage);
 		if (savedStorage?.length > 0) {
 			setSignage(savedStorage);
@@ -48,7 +50,14 @@ export default function Accrylic() {
 		if (NovaQuote.is_editting === '1') {
 			const currentSignage = JSON.parse(NovaQuote.signage);
 			if (currentSignage) {
-				setSignage(currentSignage);
+				const savedStorage = JSON.parse(
+					localStorage.getItem(window.location.href + NovaQuote.user_id)
+				);
+				if (savedStorage?.length > 0) {
+					setSignage(savedStorage);
+				} else {
+					setSignage(currentSignage);
+				}
 			} else {
 				window.location.href = window.location.pathname;
 			}
@@ -110,7 +119,10 @@ export default function Accrylic() {
 	}
 
 	useEffect(() => {
-		localStorage.setItem('novaQuoteStorage', JSON.stringify(signage));
+		localStorage.setItem(
+			window.location.href + NovaQuote.user_id,
+			JSON.stringify(signage)
+		);
 	}, [signage]);
 
 	const currency = wcumcs_vars_data.currency;

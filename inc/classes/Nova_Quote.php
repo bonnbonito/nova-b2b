@@ -24,12 +24,12 @@ class Nova_Quote {
 		add_action( 'wp_enqueue_scripts', array( $this, 'acrylic_nova_scripts' ) );
 		add_action( 'rest_api_init', array( $this, 'nova_rest_quote_file' ) );
 
-		add_action( 'wp_ajax_acrylic_pricing_table', array( $this, 'acrylic_pricing_table' ) );
+		add_action( 'wp_ajax_signage_pricing_table', array( $this, 'signage_pricing_table' ) );
 		// add_filter( 'acf/init', array( $this, 'afc_load_popular_fonts' ), 10, 3 );
-		add_action( 'wp_ajax_upload_acrylic_file', array( $this, 'upload_acrylic_file' ) );
+		add_action( 'wp_ajax_upload_signage_file', array( $this, 'upload_signage_file' ) );
 		add_action( 'wp_ajax_save_quote', array( $this, 'save_quote' ) );
 		add_action( 'wp_ajax_update_quote', array( $this, 'update_quote' ) );
-		add_action( 'wp_ajax_remove_acrylic_file', array( $this, 'remove_acrylic_file' ) );
+		add_action( 'wp_ajax_remove_signage_file', array( $this, 'remove_signage_file' ) );
 		add_action( 'wp_ajax_quote_to_processing', array( $this, 'quote_to_processing' ) );
 		add_action( 'wp_ajax_to_checkout', array( $this, 'nova_to_checkout' ) );
 		add_action( 'wp_ajax_delete_quote', array( $this, 'delete_quote' ) );
@@ -47,6 +47,24 @@ class Nova_Quote {
 		add_action( 'processing_to_payment', array( $this, 'for_payment_email' ) );
 		add_action( 'processing_to_payment', array( $this, 'create_nova_quote_product' ), 1 );
 		add_action( 'wp', array( $this, 'single_quote_redirect' ) );
+		add_action( 'nova_product_instant_quote', array( $this, 'nova_product_instant_quote' ) );
+		add_action( 'init', array( $this, 'custom_rewrite_rule' ), 10, 0 );
+		add_filter( 'query_vars', array( $this, 'custom_query_vars' ) );
+	}
+
+	public function custom_query_vars( $vars ) {
+		$vars[] = 'pagetab';
+		return $vars;
+	}
+
+	public function custom_rewrite_rule() {
+		add_rewrite_rule( '^custom/([^/]*)/([^/]*)/(installation|tech-specs|sample-board|quote)/?$', 'index.php?signage=$matches[1]/$matches[2]&pagetab=$matches[3]', 'top' );
+	}
+
+	public function nova_product_instant_quote() {
+		?>
+<div id="novaQuote"></div>
+		<?php
 	}
 
 	public function single_quote_redirect() {
@@ -476,7 +494,7 @@ class Nova_Quote {
 		return $mimes;
 	}
 
-	public function remove_acrylic_file() {
+	public function remove_signage_file() {
 		$status = array(
 			'code' => 1,
 		);
@@ -506,7 +524,7 @@ class Nova_Quote {
 		wp_send_json( $status );
 	}
 
-	public function upload_acrylic_file() {
+	public function upload_signage_file() {
 		$status = array(
 			'code'     => 1,
 			'uploaded' => 0,
@@ -559,7 +577,7 @@ class Nova_Quote {
 	}
 
 
-	public function acrylic_pricing_table() {
+	public function signage_pricing_table() {
 		$status = array(
 			'code' => 1,
 		);
@@ -570,7 +588,7 @@ class Nova_Quote {
 
 		$id = $_POST['id'];
 
-		$acrylic_options = get_field( 'acrylic_quote_options', $id );
+		$acrylic_options = get_field( 'signage_quote_options', $id );
 
 		$pricing = $acrylic_options['letter_height_x_logo_pricing'];
 
@@ -638,6 +656,7 @@ class Nova_Quote {
 				'upload_rest'           => esc_url_raw( rest_url( '/nova/v1/upload-quote-file' ) ),
 				'logged_in'             => is_user_logged_in(),
 				'user_role'             => $this->get_current_user_role_slugs(),
+				'user_id'               => get_current_user_id(),
 				'product'               => get_the_ID(),
 				'mockup_account_url'    => esc_url_raw( home_url( '/my-account/mockups/all' ) ),
 				'is_editting'           => $this->is_editting(),
@@ -654,7 +673,7 @@ class Nova_Quote {
 			)
 		);
 
-		if ( ( is_product( 'product' ) || is_account_page() ) && is_user_logged_in() ) {
+		if ( ( is_product( 'product' ) || is_account_page() ) && is_user_logged_in() || get_post_type() === 'signage' ) {
 			wp_enqueue_script( 'nova-quote' );
 			wp_enqueue_style( 'nova-quote' );
 		}
@@ -670,8 +689,13 @@ class Nova_Quote {
 		}
 	}
 
+	public function get_parent_id() {
+		global $post;
+		return $post->post_parent != 0 ? $post->post_parent : $post->ID;
+	}
+
 	public function get_quote_options() {
-		return get_field( 'acrylic_quote_options' );
+		return get_field( 'signage_quote_options', get_the_ID() );
 	}
 
 	public function get_fonts() {

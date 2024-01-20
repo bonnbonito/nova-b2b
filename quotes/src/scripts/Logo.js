@@ -34,7 +34,7 @@ export default function Logo({ item }) {
 		)
 	);
 	const [height, setHeight] = useState(item.height);
-	const thicknessOptions = NovaOptions.acrylic_thickness_options;
+	const thicknessOptions = NovaOptions.signage_thickness_options;
 	const [comments, setComments] = useState('');
 	const [waterproof, setWaterproof] = useState(item.waterproof);
 	const [mountingOptions, setMountingOptions] = useState(

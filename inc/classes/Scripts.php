@@ -53,7 +53,7 @@ class Scripts {
 			wp_enqueue_style( 'nova-account' );
 		}
 
-		if ( is_singular( 'product' ) ) {
+		if ( is_singular( 'product' ) || is_singular( 'signage' ) ) {
 			wp_enqueue_script( 'splide' );
 			wp_enqueue_style( 'splide' );
 			wp_enqueue_script( 'nova-accordion' );
@@ -239,7 +239,7 @@ class Scripts {
 
 
 	public function get_quote_options() {
-		return get_field( 'acrylic_quote_options' );
+		return get_field( 'signage_quote_options', get_the_ID() );
 	}
 
 	public function nova_admin_scripts( $hook ) {
@@ -289,9 +289,13 @@ class Scripts {
 		if ( $post && 'product' === $post->post_type ) {
 			$categories = wp_get_post_terms( $post->ID, 'product_cat', array( 'fields' => 'slugs' ) );
 
-			if ( in_array( 'acrylic', $categories ) ) {
+			if ( in_array( 'signage', $categories ) ) {
 				wp_enqueue_script( 'admin-acrylic' );
 			}
+		}
+
+		if ( $post && 'signage' === $post->post_type ) {
+			wp_enqueue_script( 'admin-acrylic' );
 		}
 
 		if ( $post && 'nova_quote' === $post->post_type ) {

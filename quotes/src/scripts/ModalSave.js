@@ -113,7 +113,7 @@ function ModalSave({ action, btnClass, label }) {
 			const status = await processQuote(formData);
 			console.log(status);
 			if (status === 'success') {
-				localStorage.removeItem('novaQuoteStorage');
+				localStorage.removeItem(window.location.href + NovaQuote.user_id);
 				if (action !== 'update') {
 					window.location.replace(NovaQuote.mockup_account_url);
 				}

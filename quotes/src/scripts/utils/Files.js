@@ -2,7 +2,7 @@ export const handleFileUpload = async (file, setFileUrl) => {
 	const formData = new FormData();
 	formData.append('file', file);
 	formData.append('nonce', NovaQuote.nonce);
-	formData.append('action', 'upload_acrylic_file');
+	formData.append('action', 'upload_signage_file');
 
 	fetch(NovaQuote.ajax_url, {
 		method: 'POST',
@@ -26,7 +26,7 @@ export const handleRemoveFile = async (fileUrl, setFileUrl) => {
 	const formData = new FormData();
 	formData.append('file', fileUrl);
 	formData.append('nonce', NovaQuote.nonce);
-	formData.append('action', 'remove_acrylic_file');
+	formData.append('action', 'remove_signage_file');
 
 	fetch(NovaQuote.ajax_url, {
 		method: 'POST',

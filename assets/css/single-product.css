@@ -46,12 +46,12 @@
     background: #2F2F2F;
 }
 
-.single-product .product-nav-tabs-left .button {
+.product-nav-tabs-left .button {
     background-color: transparent !important;
-    color: #000;
-    box-shadow: none;
-    padding-left: 0;
-    padding-right: 0;
+    color: #000 !important;
+    box-shadow: none !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
 }
 
 .product-nav-content .product-nav-content-item {
