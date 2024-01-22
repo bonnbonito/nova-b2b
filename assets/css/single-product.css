@@ -42,7 +42,7 @@
     left: 0px;
 }
 
-.product-nav-tabs a.active::before {
+.product-nav-tabs .product-nav-tabs-left a.active::before {
     background: #2F2F2F;
 }
 

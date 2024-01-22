@@ -73,6 +73,51 @@ class Woocommerce {
 		add_filter( 'woocommerce_currency_symbol', array( $this, 'currency_symbol' ), 10, 2 );
 		add_filter( 'woocommerce_shipping_fields', array( $this, 'add_pst_field' ) );
 		add_action( 'nova_signange_before_content', array( $this, 'show_product_dropdown_nav' ) );
+		add_filter( 'woocommerce_package_rates', array( $this, 'custom_shipping_logic' ), 99999, 2 );
+	}
+
+	public function custom_shipping_logic( $rates, $package ) {
+		function custom_shipping_logic( $rates, $package ) {
+			// Get the total cart cost
+			$cart_total = WC()->cart->cart_contents_total;
+
+			// Calculate the standard and expedite costs
+			$standard_cost = $cart_total * 0.075; // 7.5%
+			$expedite_cost = $cart_total * 0.155; // 15.5%
+
+			// Assuming the method IDs are 'flat_rate', 'standard', and 'expedite'
+			$flat_rate = isset( $rates['flat_rate:4'] ) ? $rates['flat_rate:4'] : null;
+			$standard  = isset( $rates['flat_rate:2'] ) ? $rates['flat_rate:2'] : null;
+			$expedite  = isset( $rates['flat_rate:3'] ) ? $rates['flat_rate:3'] : null;
+
+			// Update the standard and expedite rates
+			if ( $standard ) {
+				$rates['flat_rate:2']->cost = $standard_cost;
+			}
+			if ( $expedite ) {
+				$rates['flat_rate:3']->cost = $expedite_cost;
+			}
+
+			// Check and unset the lower cost between Flat Rate and Standard
+			if ( $flat_rate && $standard ) {
+				if ( $flat_rate->cost < $standard_cost ) {
+					unset( $rates['flat_rate:4'] );
+				} else {
+					unset( $rates['flat_rate:2'] );
+				}
+			}
+
+			// Check if the address is Vancouver and modify Expedite
+			if ( isset( $package['destination']['city'] ) && strtolower( $package['destination']['city'] ) === 'vancouver' ) {
+				if ( $expedite ) {
+					$rates['flat_rate:3']->cost = min( $expedite_cost, $standard_cost, ( isset( $flat_rate->cost ) ? $flat_rate->cost : PHP_INT_MAX ) );
+					// Unset other rates to show only Expedite
+					unset( $rates['flat_rate:2'], $rates['flat_rate:4'] );
+				}
+			}
+
+			return $rates;
+		}
 	}
 
 	public function add_pst_field( $fields ) {

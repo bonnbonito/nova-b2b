@@ -86,6 +86,17 @@ endif;
 
 			$tab = get_query_var( 'pagetab' );
 
+			switch ( $tab ) {
+				case 'tech-specs':
+					$tab_title = 'Tech Specs';
+					break;
+				case 'installation':
+					$tab_title = 'Installation';
+					break;
+				default:
+					$tab_title = 'Overview';
+			}
+
 			?>
 <div class="product-nav-tabs not-tab">
 	<div id="productNovaNav" class="product-nav-tabs-left">
@@ -94,20 +105,23 @@ endif;
 		<h6><a class="button <?php echo ( $tab === 'tech-specs' ? 'active' : '' ); ?>"
 				href="<?php echo untrailingslashit( get_permalink() ); ?>/tech-specs">Tech Specs</a></h6>
 		<h6><a class="button <?php echo ( $tab === 'installation' ? 'active' : '' ); ?>"
-				href="<?php untrailingslashit( get_permalink() ); ?>/installation">Installation</a></h6>
+				href="<?php echo untrailingslashit( get_permalink() ); ?>/installation">Installation</a></h6>
 		<!-- <h6><a class="button active" href="#">Sample Board</a></h6> -->
 	</div>
 
 	<div id="productNavMobile" class="product-nav-tabs-mobile" onclick="toggleShowClass()">
-		<h6 id="current"><span id="text">Overview</span> <svg xmlns="http://www.w3.org/2000/svg" width="13" height="7"
-				viewBox="0 0 13 7" fill="none">
+		<h6 id="current"><span id="text"><?php echo $tab_title; ?></span> <svg xmlns="http://www.w3.org/2000/svg"
+				width="13" height="7" viewBox="0 0 13 7" fill="none">
 				<path d="M11 2L6.66667 6L2 2" stroke="black" stroke-width="1.5" stroke-linecap="square"
 					stroke-linejoin="round" />
 			</svg>
 		</h6>
-		<h6 data-menu="overview" class="selected">Overview</a></h6>
-		<h6 data-menu="specs">Tech Specs</a></h6>
-		<h6 data-menu="installation">Installation</a></h6>
+		<h6 data-menu="overview"><a class="text-button <?php echo ( ! $tab ? 'selected' : '' ); ?>"
+				href="<?php echo get_permalink(); ?>">Overview</a></a></h6>
+		<h6 data-menu="specs"><a class="text-button <?php echo ( $tab === 'tech-specs' ? 'selected' : '' ); ?>"
+				href="<?php echo untrailingslashit( get_permalink() ); ?>/tech-specs">Tech Specs</a></a></h6>
+		<h6 data-menu="installation"><a class="text-button <?php echo ( $tab === 'installation' ? 'active' : '' ); ?>"
+				href="<?php echo untrailingslashit( get_permalink() ); ?>/installation">Installation</a></a></h6>
 		<h6 data-menu="sample" style="display: none;">Sample Board</a></h6>
 	</div>
 
@@ -116,6 +130,15 @@ endif;
 		class="button <?php echo ( $tab === 'quote' ? 'active' : '' ); ?>">Instant
 		Quote</a>
 </div>
+
+<script>
+const productNavMobile = document.getElementById('productNavMobile');
+
+function toggleShowClass() {
+	let element = document.getElementById('productNavMobile');
+	element.classList.toggle('show');
+}
+</script>
 
 			<?php
 		}
