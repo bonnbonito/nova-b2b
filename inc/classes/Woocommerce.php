@@ -203,8 +203,8 @@ class Woocommerce {
 		<?php endif; ?>
 	</div>
 	<div class="md:w-2/3">
-		<img class="w-full h-full object-cover aspect-[4/3]" src="<?php echo esc_url( $image['url'] ); ?>"
-			alt="<?php echo esc_attr( $image['alt'] ); ?>" />
+		<a href="<?php echo esc_url( $image['url'] ); ?>"><img class="w-full h-full object-cover aspect-[4/3]"
+				src="<?php echo esc_url( $image['url'] ); ?>" alt="<?php echo esc_attr( $image['alt'] ); ?>" /></a>
 	</div>
 </div>
 
