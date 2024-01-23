@@ -37,7 +37,7 @@ class Nova_Quote {
 		<div class="installation-item grid md:grid-cols-[280px_1fr] md:mb-0 mb-5 gap-4">
 			<div>
 				<?php
-					$image = get_sub_field( 'image' );
+				$image = get_sub_field( 'image' );
 				if ( ! empty( $image ) ) :
 					?>
 				<a href="<?php echo esc_url( $image['url'] ); ?>"><img class="w-full"
@@ -46,7 +46,7 @@ class Nova_Quote {
 				<?php endif; ?>
 			</div>
 			<div class="px-0">
-				<h6 class="uppercase tracking-[1.6px]"><?php the_sub_field( 'title' ); ?></h6>
+				<h6 class="uppercase tracking-[1.6px]"><?php echo get_sub_field( 'title' ); ?></h6>
 				<div class="md:text-[14px] leading-loose tracking-[1.4px]">
 					<?php echo get_sub_field( 'content' ); ?></div>
 			</div>
@@ -57,7 +57,7 @@ class Nova_Quote {
 
 </div>
 			<?php
-endif;
+	endif;
 	}
 
 	public function get_parent_or_current_id() {
@@ -116,13 +116,22 @@ endif;
 					stroke-linejoin="round" />
 			</svg>
 		</h6>
-		<h6 data-menu="overview"><a class="text-button <?php echo ( ! $tab ? 'selected' : '' ); ?>"
+			<?php if ( $tab !== '' ) : ?>
+		<h6 data-menu="overview" class="py-1"><a class="text-button block <?php echo ( ! $tab ? 'selected' : '' ); ?>"
 				href="<?php echo get_permalink(); ?>">Overview</a></a></h6>
-		<h6 data-menu="specs"><a class="text-button <?php echo ( $tab === 'tech-specs' ? 'selected' : '' ); ?>"
+		<?php endif; ?>
+			<?php if ( $tab !== 'tech-specs' ) : ?>
+		<h6 data-menu="specs" class="py-1"><a
+				class="text-button block <?php echo ( $tab === 'tech-specs' ? 'selected' : '' ); ?>"
 				href="<?php echo untrailingslashit( get_permalink() ); ?>/tech-specs">Tech Specs</a></a></h6>
-		<h6 data-menu="installation"><a class="text-button <?php echo ( $tab === 'installation' ? 'active' : '' ); ?>"
+		<?php endif; ?>
+			<?php if ( $tab !== 'installation' ) : ?>
+		<h6 data-menu="installation" class="py-1"><a
+				class="text-button block <?php echo ( $tab === 'installation' ? 'active' : '' ); ?>"
 				href="<?php echo untrailingslashit( get_permalink() ); ?>/installation">Installation</a></a></h6>
+		<?php endif; ?>
 		<h6 data-menu="sample" style="display: none;">Sample Board</a></h6>
+
 	</div>
 
 
@@ -144,8 +153,6 @@ function toggleShowClass() {
 		}
 	}
 
-
-
 	public function modify_acrylic_post_title( $title, $post_id ) {
 
 		$post = get_post( $post_id );
@@ -158,7 +165,6 @@ function toggleShowClass() {
 
 		return $title;
 	}
-
 
 	public function change_all_count( $views ) {
 		$allcount     = $this->get_all_products_count();
@@ -232,7 +238,6 @@ function toggleShowClass() {
 
 		return $products->found_posts;
 	}
-
 
 	public function redirect_nova_quote_single_product() {
 		if ( is_singular( 'product' ) && is_product() ) {

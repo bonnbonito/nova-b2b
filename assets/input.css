@@ -7,6 +7,15 @@ header.page-title {
     padding-bottom: 10px;
 }
 
+h3 {
+    letter-spacing: 3px;
+}
+
+p,
+a {
+    letter-spacing: 1.6px;
+}
+
 .homepage-layout {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;

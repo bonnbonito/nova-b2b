@@ -42,11 +42,11 @@ class Shortcodes {
 	<div class="homepage-layout-item">
 				<?php echo wp_get_attachment_image( $image, 'full' ); ?>
 		<div class="homepage-layout-content">
-			<h3 class="mb-0"><?php the_sub_field( 'title' ); ?></h3>
-			<p><?php the_sub_field( 'content' ); ?></p>
+			<h3 class="mb-0"><?php echo get_sub_field( 'title' ); ?></h3>
+			<p><?php echo get_sub_field( 'content' ); ?></p>
 		</div>
 				<?php if ( get_sub_field( 'link' ) ) : ?>
-		<a href="<?php the_sub_field( 'linke' ); ?>"></a>
+		<a href="<?php echo get_sub_field( 'linke' ); ?>"></a>
 		<?php endif; ?>
 	</div>
 

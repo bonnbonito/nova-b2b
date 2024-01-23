@@ -66,6 +66,7 @@ class Woocommerce {
 		add_filter( 'woocommerce_endpoint_order-received_title', array( $this, 'order_received_title' ), 20, 2 );
 		add_filter( 'woocommerce_thankyou_order_received_text', array( $this, 'woocommerce_thankyou_order_received_text' ) );
 		add_shortcode( 'product_features', array( $this, 'product_features' ) );
+		add_shortcode( 'product_guides', array( $this, 'product_guides' ) );
 		add_shortcode( 'product_dropdown_nav', array( $this, 'product_dropdown_nav' ) );
 		add_action( 'woocommerce_before_single_product', array( $this, 'show_product_dropdown_nav' ) );
 		// add_action( 'woocommerce_edit_account_form', array( $this, 'my_account_billing_shipping_fields' ), 5 );
@@ -183,6 +184,36 @@ class Woocommerce {
 		echo do_shortcode( '[product_dropdown_nav]' );
 	}
 
+	public function product_guides() {
+		ob_start();
+		if ( have_rows( 'product_guides' ) ) :
+			while ( have_rows( 'product_guides' ) ) :
+				the_row();
+				?>
+<div class="md:flex gap-20 items-center mb-10 md:mb-20">
+				<?php
+				$image = get_sub_field( 'image' );
+				?>
+	<div class="md:w-1/3 mb-5 md:mb-0">
+		<h3 class="uppercase"><?php echo get_sub_field( 'title' ); ?></h3>
+		<p class="text-[16px] mb-4"><?php echo get_sub_field( 'content' ); ?></p>
+				<?php if ( get_sub_field( 'link' ) ) : ?>
+		<a href="<?php echo esc_url( get_sub_field( 'link' )['url'] ); ?>"
+			class="text-nova-secondary lowercase underline text-[16px]"><?php echo get_sub_field( 'link' )['title']; ?></a>
+		<?php endif; ?>
+	</div>
+	<div class="md:w-2/3">
+		<img class="w-full h-full object-cover aspect-[4/3]" src="<?php echo esc_url( $image['url'] ); ?>"
+			alt="<?php echo esc_attr( $image['alt'] ); ?>" />
+	</div>
+</div>
+
+				<?php
+		endwhile;
+endif;
+		return ob_get_clean();
+	}
+
 	public function product_features() {
 		ob_start();
 		if ( have_rows( 'features' ) ) :
@@ -198,7 +229,7 @@ class Woocommerce {
 			<img class="mx-auto" src="<?php echo esc_url( $image['url'] ); ?>"
 				alt="<?php echo esc_attr( $image['alt'] ); ?>" />
 		</div>
-		<h5 class="uppercase tracking-[1.8px] mt-9"><?php the_sub_field( 'name' ); ?></h5>
+		<h5 class="uppercase tracking-[1.8px] mt-9"><?php echo get_sub_field( 'name' ); ?></h5>
 	</div>
 	<?php endwhile; ?>
 </div>
@@ -905,7 +936,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 			while ( have_rows( 'tech_specs_group' ) ) :
 				the_row();
 				?>
-	<h2><?php the_sub_field( 'title' ); ?></h2>
+	<h2><?php echo get_sub_field( 'title' ); ?></h2>
 				<?php
 				if ( have_rows( 'specs' ) ) :
 					?>
@@ -916,10 +947,10 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 						?>
 		<div class="spec-item">
 			<div class="spec-label">
-						<?php the_sub_field( 'name' ); ?>
+						<?php echo get_sub_field( 'name' ); ?>
 			</div>
 			<div class="spec-value">
-						<?php the_sub_field( 'value' ); ?>
+						<?php echo get_sub_field( 'value' ); ?>
 			</div>
 		</div>
 
@@ -947,8 +978,8 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 				the_row();
 				?>
 	<div class="faq-item visible">
-		<p class="faq-question"><?php the_sub_field( 'question' ); ?> <svg width="14" height="14" viewBox="0 0 14 14"
-				fill="none" xmlns="http://www.w3.org/2000/svg">
+		<p class="faq-question"><?php echo get_sub_field( 'question' ); ?> <svg width="14" height="14"
+				viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
 				<line x1="7" y1="1" x2="7" y2="13" stroke="black" stroke-width="2" stroke-linecap="round">
 				</line>
 				<line x1="13" y1="7" x2="1" y2="7" stroke="black" stroke-width="2" stroke-linecap="round">
@@ -959,7 +990,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 				<div class="content-wrapper">
 					<?php if ( get_sub_field( 'answer' ) ) : ?>
 					<div class="post-content-container" style="padding-top: 2em;">
-						<?php the_sub_field( 'answer' ); ?>
+						<?php echo get_sub_field( 'answer' ); ?>
 					</div>
 					<?php endif; ?>
 				</div>
@@ -1037,7 +1068,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 				</div>
 			</div>
 				<?php
-			endif;
+				endif;
 			?>
 
 			<?php if ( $item->type === 'letters' ) : ?>
@@ -1153,7 +1184,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 				</div>
 			</div>
 				<?php
-			endif;
+				endif;
 			?>
 
 			<?php if ( $item->type === 'letters' ) : ?>
