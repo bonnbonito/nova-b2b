@@ -71,6 +71,11 @@ if ( $show_downloads ) {
 					}
 
 					do_action( 'woocommerce_order_details_after_order_table_items', $order );
+
+					$pending_payment = get_post_meta( $order_id, '_original_total', true );
+					$payment_select  = get_post_meta( $order_id, '_payment_select', true );
+
+
 					?>
 				</tbody>
 
@@ -84,7 +89,23 @@ if ( $show_downloads ) {
 					</tr>
 						<?php
 					}
-					?>
+
+
+
+					if ( $payment_select && 'full' !== $payment_select ) :
+						?>
+
+					<tr class="order-detail detail-order_total pending-payment">
+						<th scope="row">Pending payment</th>
+						<td class="text-right"><?php echo wc_price( $pending_payment ); ?></td>
+					</tr>
+
+
+					<?php endif; ?>
+
+
+
+
 					<?php if ( $order->get_customer_note() ) : ?>
 					<tr>
 						<th><?php esc_html_e( 'Note:', 'woocommerce' ); ?></th>
@@ -93,6 +114,8 @@ if ( $show_downloads ) {
 					<?php endif; ?>
 				</tfoot>
 			</table>
+
+
 
 			<?php do_action( 'woocommerce_order_details_after_order_table', $order ); ?>
 		</div>

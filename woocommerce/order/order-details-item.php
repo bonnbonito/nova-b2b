@@ -121,6 +121,8 @@ $woo_instance = \NOVA_B2B\INC\CLASSES\Woocommerce::get_instance();
 
 </tr>
 
+
+
 <?php if ( $show_purchase_note && $purchase_note ) : ?>
 
 <tr class="woocommerce-table__product-purchase-note product-purchase-note">

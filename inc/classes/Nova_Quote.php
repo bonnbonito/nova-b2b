@@ -63,8 +63,12 @@ class Nova_Quote {
 
 	public function nova_product_instant_quote() {
 		?>
+		<?php if ( ! is_user_logged_in() ) : ?>
+			<?php echo do_shortcode( '[kadence_element id=" 202"]' ); ?>
+		<?php else : ?>
 <div id="novaQuote"></div>
-		<?php
+			<?php
+	endif;
 	}
 
 	public function single_quote_redirect() {

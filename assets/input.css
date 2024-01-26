@@ -63,6 +63,15 @@ a {
     /* hide :after */
 }
 
+#nova .peer:checked~.group .peer-checked\:group\:bg-indigo-600 {
+    background-color: #4F46E5;
+    border: none;
+}
+
+#nova .peer:checked~.group .peer-checked\:group\:visible {
+    display: block;
+}
+
 #nova .wcumcs-switcher-buttons.wcumcs-container li.wcumcs-list-item {
     display: block;
     float: none;

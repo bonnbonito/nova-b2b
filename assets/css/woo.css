@@ -311,6 +311,28 @@
     border-top: 0 !important;
 }
 
+ul#payment-select {
+    list-style: none outside;
+}
+
+ul#payment-select li {
+    margin: 0 0 0.5em;
+    line-height: 1.5em;
+    list-style: none outside;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+ul#payment-select li input {
+    margin-right: 5px;
+}
+
+ul#payment-select li input {
+    background-image: none;
+}
+
 #payment ul.wc_payment_methods {
     display: grid;
     grid-template-columns: 1fr 1fr;

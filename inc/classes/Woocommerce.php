@@ -5,6 +5,7 @@ namespace NOVA_B2B\INC\CLASSES;
 use WP_Query;
 use Kadence\Theme;
 use WC;
+use WC_Order_Item_Shipping;
 
 class Woocommerce {
 	/**
@@ -75,6 +76,137 @@ class Woocommerce {
 		add_filter( 'woocommerce_shipping_fields', array( $this, 'add_pst_field' ) );
 		add_action( 'nova_signange_before_content', array( $this, 'show_product_dropdown_nav' ) );
 		add_filter( 'woocommerce_package_rates', array( $this, 'custom_shipping_logic' ), 99999, 2 );
+		add_action( 'wp_ajax_update_checkout_total', array( $this, 'handle_ajax_update_checkout_total' ) );
+		add_action( 'wp_ajax_nopriv_update_checkout_total', array( $this, 'handle_ajax_update_checkout_total' ) );
+		add_filter( 'woocommerce_cart_get_total', array( $this, 'custom_modify_cart_total' ), 10, 1 );
+		add_action( 'woocommerce_checkout_order_processed', array( $this, 'create_adjusted_duplicate_order' ), 10, 3 );
+	}
+
+	public function create_duplicate_order_with_adjustment( $order, $payment_select, $total, $shipping, $tax ) {
+		// Create a new order
+		$new_order = wc_create_order();
+
+		// Copy items from the current order to the new order
+		foreach ( $order->get_items() as $item_id => $item ) {
+			// Add product to the new order
+			// error_log( $item );
+			$new_item = $new_order->add_product(
+				$item->get_product(),
+				$item->get_quantity(),
+				array(
+					'subtotal' => $item->get_subtotal(),
+					'total'    => $item->get_total(), // Adjust if necessary based on your logic
+				)
+			);
+
+			// Ensure the new item was added successfully
+			if ( ! $new_item ) {
+				error_log( 'Failed to add product to the new order.' );
+				continue;
+			} else {
+				error_log( 'created ' . $new_item );
+			}
+
+			$created_item = $new_order->get_item( $new_item );
+
+			// Copy all meta data from the original item to the new item
+
+			error_log( print_r( $created_item, true ) );
+
+			$signage_meta = $item->get_meta( 'signage' );
+			$created_item->add_meta_data( 'signage', $signage_meta, true );
+			$created_item->save(); // Save the new item to store meta data
+		}
+
+		// Set customer and address data from the original order
+		$new_order->set_customer_id( $order->get_customer_id() );
+		$new_order->set_address( $order->get_address( 'billing' ), 'billing' );
+		$new_order->set_address( $order->get_address( 'shipping' ), 'shipping' );
+
+		// Adjust totals if necessary
+		$new_order->set_total( $total );
+		$new_order->set_shipping_total( $shipping );
+		$new_order->set_cart_tax( $tax );
+
+		// Handle shipping as an order item if necessary
+		// [Your shipping handling logic here]
+
+		// Add a note and save the new order
+		$new_order->add_order_note( 'This order is a follow-up for Order #' . $order->get_id() );
+		$new_order->calculate_totals();
+		$new_order->save();
+
+		// Optionally, reset session variables or perform additional actions
+
+		return $new_order->get_id();
+	}
+
+
+
+
+	public function create_adjusted_duplicate_order( $order_id, $posted_data, $order ) {
+		$payment_select = WC()->session->get( 'payment_select' );
+
+		if ( isset( $payment_select ) && $payment_select !== 'full' ) {
+
+			$tax      = WC()->session->get( 'original_tax' );
+			$shipping = WC()->session->get( 'original_shipping' );
+			$total    = WC()->session->get( 'original_total' );
+
+			// Save the session values as order meta for the original order
+			update_post_meta( $order_id, '_payment_select', $payment_select );
+			update_post_meta( $order_id, '_original_tax', $tax );
+			update_post_meta( $order_id, '_original_shipping', $shipping );
+			update_post_meta( $order_id, '_original_total', $total );
+
+			// Create the adjusted duplicate order
+			$new_order_id = $this->create_duplicate_order_with_adjustment( $order, $payment_select, $total, $shipping, $tax );
+
+			// Optionally, link the new order with the original by storing the new order ID in the original order's meta
+			update_post_meta( $order_id, '_adjusted_duplicate_order_id', $new_order_id );
+
+			// Reset the session variables
+			WC()->session->__unset( 'payment_select' );
+			WC()->session->__unset( 'original_tax' );
+			WC()->session->__unset( 'original_shipping' );
+			WC()->session->__unset( 'original_total' );
+		}
+	}
+
+
+	public function custom_modify_cart_total( $total ) {
+		if ( WC()->session ) {
+			$payment_select = WC()->session->get( 'payment_select' );
+
+			// Save the original total, shipping, and tax values only once to avoid overwriting
+
+			// If the payment method is 'net30', set the total to 0
+			if ( $payment_select && 'full' !== $payment_select ) {
+				WC()->session->set( 'original_total', $total );
+				WC()->session->set( 'original_shipping', WC()->cart->get_shipping_total() );
+				WC()->session->set( 'original_tax', WC()->cart->get_taxes_total() );
+				return 0;
+			}
+		}
+
+		return $total;
+	}
+
+	public function handle_ajax_update_checkout_total() {
+		$payment_select = isset( $_POST['payment_select'] ) ? sanitize_text_field( $_POST['payment_select'] ) : 'full';
+
+		if ( WC()->session ) {
+			WC()->session->set( 'payment_select', $payment_select );
+
+		} else {
+			error_log( 'WooCommerce session not initialized.' );
+		}
+
+		wp_send_json_success(
+			array(
+				'payment' => $payment_select,
+			)
+		);
 	}
 
 	public function custom_shipping_logic( $rates, $package ) {
@@ -91,30 +223,30 @@ class Woocommerce {
 			$expedite  = isset( $rates['flat_rate:3'] ) ? $rates['flat_rate:3'] : null;
 
 			// Update the standard and expedite rates
-			if ( $standard ) {
-				$rates['flat_rate:2']->cost = $standard_cost;
-			}
-			if ( $expedite ) {
-				$rates['flat_rate:3']->cost = $expedite_cost;
-			}
+		if ( $standard ) {
+			$rates['flat_rate:2']->cost = $standard_cost;
+		}
+		if ( $expedite ) {
+			$rates['flat_rate:3']->cost = $expedite_cost;
+		}
 
 			// Check and unset the lower cost between Flat Rate and Standard
-			if ( $flat_rate && $standard ) {
-				if ( $flat_rate->cost < $standard_cost ) {
-					unset( $rates['flat_rate:4'] );
-				} else {
-					unset( $rates['flat_rate:2'] );
-				}
+		if ( $flat_rate && $standard ) {
+			if ( $flat_rate->cost < $standard_cost ) {
+				unset( $rates['flat_rate:4'] );
+			} else {
+				unset( $rates['flat_rate:2'] );
 			}
+		}
 
 			// Check if the address is Vancouver and modify Expedite
-			if ( isset( $package['destination']['city'] ) && strtolower( $package['destination']['city'] ) === 'vancouver' ) {
-				if ( $expedite ) {
-					$rates['flat_rate:3']->cost = min( $expedite_cost, $standard_cost, ( isset( $flat_rate->cost ) ? $flat_rate->cost : PHP_INT_MAX ) );
-					// Unset other rates to show only Expedite
-					unset( $rates['flat_rate:2'], $rates['flat_rate:4'] );
-				}
+		if ( isset( $package['destination']['city'] ) && strtolower( $package['destination']['city'] ) === 'vancouver' ) {
+			if ( $expedite ) {
+				$rates['flat_rate:3']->cost = min( $expedite_cost, $standard_cost, ( isset( $flat_rate->cost ) ? $flat_rate->cost : PHP_INT_MAX ) );
+				// Unset other rates to show only Expedite
+				unset( $rates['flat_rate:2'], $rates['flat_rate:4'] );
 			}
+		}
 
 			return $rates;
 	}
@@ -142,39 +274,39 @@ class Woocommerce {
 		ob_start();
 		?>
 <div class="md:flex md:gap-10 p-dropdown-wrap mb-24 mt-10">
-    <div class="p-dropdown cursor-pointer mb-4 md:mb-0">
-        <div id="productCat" class="p-dropdown-current overflow-hidden">
-            <div id="productCatCurrent"><img
-                    src="<?php echo get_stylesheet_directory_uri() . '/assets/img/p-icon.png'; ?>">
-                Acrylic</div>
-            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="8" viewBox="0 0 15 8" fill="none">
-                <path d="M13.3516 2L7.8861 6.54054L2.00021 2" stroke="black" stroke-width="2" stroke-linecap="square"
-                    stroke-linejoin="round" />
-            </svg>
-        </div>
-        <div id="productCat-list">
+	<div class="p-dropdown cursor-pointer mb-4 md:mb-0">
+		<div id="productCat" class="p-dropdown-current overflow-hidden">
+			<div id="productCatCurrent"><img
+					src="<?php echo get_stylesheet_directory_uri() . '/assets/img/p-icon.png'; ?>">
+				Acrylic</div>
+			<svg xmlns="http://www.w3.org/2000/svg" width="15" height="8" viewBox="0 0 15 8" fill="none">
+				<path d="M13.3516 2L7.8861 6.54054L2.00021 2" stroke="black" stroke-width="2" stroke-linecap="square"
+					stroke-linejoin="round" />
+			</svg>
+		</div>
+		<div id="productCat-list">
 
-        </div>
-    </div>
+		</div>
+	</div>
 
-    <div class="p-dropdown cursor-pointer">
-        <div id="novaProduct" class="p-dropdown-current overflow-hidden">
-            <div id="novaProductCurrent"><img
-                    src="<?php echo get_stylesheet_directory_uri() . '/assets/img/p-icon.png'; ?>">
-                <span class="truncate"><?php the_title(); ?></span>
-            </div>
-            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="8" viewBox="0 0 15 8" fill="none">
-                <path d="M13.3516 2L7.8861 6.54054L2.00021 2" stroke="black" stroke-width="2" stroke-linecap="square"
-                    stroke-linejoin="round" />
-            </svg>
-        </div>
-        <div id="novaProduct-list">
+	<div class="p-dropdown cursor-pointer">
+		<div id="novaProduct" class="p-dropdown-current overflow-hidden">
+			<div id="novaProductCurrent"><img
+					src="<?php echo get_stylesheet_directory_uri() . '/assets/img/p-icon.png'; ?>">
+				<span class="truncate"><?php the_title(); ?></span>
+			</div>
+			<svg xmlns="http://www.w3.org/2000/svg" width="15" height="8" viewBox="0 0 15 8" fill="none">
+				<path d="M13.3516 2L7.8861 6.54054L2.00021 2" stroke="black" stroke-width="2" stroke-linecap="square"
+					stroke-linejoin="round" />
+			</svg>
+		</div>
+		<div id="novaProduct-list">
 
-        </div>
-    </div>
+		</div>
+	</div>
 
 </div>
-<?php
+		<?php
 		return ob_get_clean();
 	}
 
@@ -189,24 +321,24 @@ class Woocommerce {
 				the_row();
 				?>
 <div class="md:flex gap-20 items-center mb-10 md:mb-20">
-    <?php
+				<?php
 				$image = get_sub_field( 'image' );
 				?>
-    <div class="md:w-1/3 mb-5 md:mb-0">
-        <h3 class="uppercase"><?php echo get_sub_field( 'title' ); ?></h3>
-        <p class="text-[16px] mb-4"><?php echo get_sub_field( 'content' ); ?></p>
-        <?php if ( get_sub_field( 'link' ) ) : ?>
-        <a href="<?php echo esc_url( get_sub_field( 'link' )['url'] ); ?>"
-            class="text-nova-secondary lowercase underline text-[16px]"><?php echo get_sub_field( 'link' )['title']; ?></a>
-        <?php endif; ?>
-    </div>
-    <div class="md:w-2/3">
-        <a href="<?php echo esc_url( $image['url'] ); ?>"><img class="w-full h-full object-cover aspect-[4/3]"
-                src="<?php echo esc_url( $image['url'] ); ?>" alt="<?php echo esc_attr( $image['alt'] ); ?>" /></a>
-    </div>
+	<div class="md:w-1/3 mb-5 md:mb-0">
+		<h3 class="uppercase"><?php echo get_sub_field( 'title' ); ?></h3>
+		<p class="text-[16px] mb-4"><?php echo get_sub_field( 'content' ); ?></p>
+				<?php if ( get_sub_field( 'link' ) ) : ?>
+		<a href="<?php echo esc_url( get_sub_field( 'link' )['url'] ); ?>"
+			class="text-nova-secondary lowercase underline text-[16px]"><?php echo get_sub_field( 'link' )['title']; ?></a>
+		<?php endif; ?>
+	</div>
+	<div class="md:w-2/3">
+		<a href="<?php echo esc_url( $image['url'] ); ?>"><img class="w-full h-full object-cover aspect-[4/3]"
+				src="<?php echo esc_url( $image['url'] ); ?>" alt="<?php echo esc_attr( $image['alt'] ); ?>" /></a>
+	</div>
 </div>
 
-<?php
+				<?php
 		endwhile;
 endif;
 		return ob_get_clean();
@@ -217,22 +349,22 @@ endif;
 		if ( have_rows( 'features' ) ) :
 			?>
 <div class="md:flex justify-between product-features-icons gap-12">
-    <?php
+			<?php
 			while ( have_rows( 'features' ) ) :
 				the_row();
 				$image = get_sub_field( 'icon' );
 				?>
-    <div class="text-center md:mb-0 mb-[40px]">
-        <div class="img-wrap h-[55px]">
-            <img class="mx-auto" src="<?php echo esc_url( $image['url'] ); ?>"
-                alt="<?php echo esc_attr( $image['alt'] ); ?>" />
-        </div>
-        <h5 class="uppercase tracking-[1.8px] mt-9"><?php echo get_sub_field( 'name' ); ?></h5>
-    </div>
-    <?php endwhile; ?>
+	<div class="text-center md:mb-0 mb-[40px]">
+		<div class="img-wrap h-[55px]">
+			<img class="mx-auto" src="<?php echo esc_url( $image['url'] ); ?>"
+				alt="<?php echo esc_attr( $image['alt'] ); ?>" />
+		</div>
+		<h5 class="uppercase tracking-[1.8px] mt-9"><?php echo get_sub_field( 'name' ); ?></h5>
+	</div>
+	<?php endwhile; ?>
 </div>
 
-<?php
+			<?php
 		endif;
 		return ob_get_clean();
 	}
@@ -258,54 +390,54 @@ endif;
 		?>
 <script>
 function initializeQuantityButtons() {
-    const cartForm = document.querySelector('form.woocommerce-cart-form');
-    const updateCartButton = document.querySelector('button[name="update_cart"]');
-    const quantityChanges = document.querySelectorAll('.quantity-change');
+	const cartForm = document.querySelector('form.woocommerce-cart-form');
+	const updateCartButton = document.querySelector('button[name="update_cart"]');
+	const quantityChanges = document.querySelectorAll('.quantity-change');
 
-    quantityChanges.forEach(q => {
-        const decrease = q.querySelector('.decrease');
-        const increase = q.querySelector('.increase');
-        const input = q.querySelector('input.qty');
+	quantityChanges.forEach(q => {
+		const decrease = q.querySelector('.decrease');
+		const increase = q.querySelector('.increase');
+		const input = q.querySelector('input.qty');
 
-        // Remove existing event listeners
-        increase.removeEventListener('click', increaseClickListener);
-        decrease.removeEventListener('click', decreaseClickListener);
+		// Remove existing event listeners
+		increase.removeEventListener('click', increaseClickListener);
+		decrease.removeEventListener('click', decreaseClickListener);
 
-        // Add new event listeners
-        increase.addEventListener('click', increaseClickListener);
-        decrease.addEventListener('click', decreaseClickListener);
+		// Add new event listeners
+		increase.addEventListener('click', increaseClickListener);
+		decrease.addEventListener('click', decreaseClickListener);
 
-        function increaseClickListener(e) {
-            increaseHandler(e, input);
-        }
+		function increaseClickListener(e) {
+			increaseHandler(e, input);
+		}
 
-        function decreaseClickListener(e) {
-            decreaseHandler(e, input);
-        }
-    });
+		function decreaseClickListener(e) {
+			decreaseHandler(e, input);
+		}
+	});
 
-    function increaseHandler(e, input) {
-        e.preventDefault();
-        let currentValue = parseInt(input.value, 10);
-        input.value = currentValue + 1;
-        updateCartButton.disabled = false;
-    }
+	function increaseHandler(e, input) {
+		e.preventDefault();
+		let currentValue = parseInt(input.value, 10);
+		input.value = currentValue + 1;
+		updateCartButton.disabled = false;
+	}
 
-    function decreaseHandler(e, input) {
-        e.preventDefault();
-        let currentValue = parseInt(input.value, 10);
-        if (currentValue > 1) {
-            input.value = currentValue - 1;
-            updateCartButton.disabled = false;
-        }
-    }
+	function decreaseHandler(e, input) {
+		e.preventDefault();
+		let currentValue = parseInt(input.value, 10);
+		if (currentValue > 1) {
+			input.value = currentValue - 1;
+			updateCartButton.disabled = false;
+		}
+	}
 }
 
 
 document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 jQuery(document.body).on('updated_cart_totals', initializeQuantityButtons);
 </script>
-<?php
+		<?php
 	}
 
 
@@ -314,74 +446,74 @@ jQuery(document.body).on('updated_cart_totals', initializeQuantityButtons);
 		?>
 <script>
 function initializeQuantityButtons() {
-    const quantityChanges = document.querySelectorAll('.quantity-change');
-    const currentPrice = '<?php echo $product->get_price(); ?>';
-    const currencySymbol = '<?php echo get_woocommerce_currency_symbol(); ?>';
+	const quantityChanges = document.querySelectorAll('.quantity-change');
+	const currentPrice = '<?php echo $product->get_price(); ?>';
+	const currencySymbol = '<?php echo get_woocommerce_currency_symbol(); ?>';
 
-    function computePrice(qty) {
+	function computePrice(qty) {
 
-        let computeprice = qty * parseFloat(currentPrice);
-        console.log(computeprice);
-        computeprice = computeprice.toLocaleString('en-US', {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        });
+		let computeprice = qty * parseFloat(currentPrice);
+		console.log(computeprice);
+		computeprice = computeprice.toLocaleString('en-US', {
+			minimumFractionDigits: 2,
+			maximumFractionDigits: 2
+		});
 
-        document.getElementById("watchPrice").innerHTML = currencySymbol + computeprice;
+		document.getElementById("watchPrice").innerHTML = currencySymbol + computeprice;
 
-    }
-
-
-    quantityChanges.forEach(q => {
-        const decrease = q.querySelector('.decrease');
-        const increase = q.querySelector('.increase');
-        const input = q.querySelector('input.qty');
-
-        // Remove existing event listeners
-        increase.removeEventListener('click', increaseClickListener);
-        decrease.removeEventListener('click', decreaseClickListener);
-
-        // Add new event listeners
-        increase.addEventListener('click', increaseClickListener);
-        decrease.addEventListener('click', decreaseClickListener);
+	}
 
 
+	quantityChanges.forEach(q => {
+		const decrease = q.querySelector('.decrease');
+		const increase = q.querySelector('.increase');
+		const input = q.querySelector('input.qty');
 
-        function increaseClickListener(e) {
-            increaseHandler(e, input);
-        }
+		// Remove existing event listeners
+		increase.removeEventListener('click', increaseClickListener);
+		decrease.removeEventListener('click', decreaseClickListener);
 
-        function decreaseClickListener(e) {
-            decreaseHandler(e, input);
-        }
-    });
-
-    function increaseHandler(e, input) {
-        e.preventDefault();
-        let currentValue = parseInt(input.value, 10);
-        input.value = currentValue + 1;
-
-        console.log(input.value);
-
-        computePrice(input.value);
+		// Add new event listeners
+		increase.addEventListener('click', increaseClickListener);
+		decrease.addEventListener('click', decreaseClickListener);
 
 
-    }
 
-    function decreaseHandler(e, input) {
-        e.preventDefault();
-        let currentValue = parseInt(input.value, 10);
-        if (currentValue > 1) {
-            input.value = currentValue - 1;
-            computePrice(input.value)
-        }
-        console.log(input.value);
-    }
+		function increaseClickListener(e) {
+			increaseHandler(e, input);
+		}
+
+		function decreaseClickListener(e) {
+			decreaseHandler(e, input);
+		}
+	});
+
+	function increaseHandler(e, input) {
+		e.preventDefault();
+		let currentValue = parseInt(input.value, 10);
+		input.value = currentValue + 1;
+
+		console.log(input.value);
+
+		computePrice(input.value);
+
+
+	}
+
+	function decreaseHandler(e, input) {
+		e.preventDefault();
+		let currentValue = parseInt(input.value, 10);
+		if (currentValue > 1) {
+			input.value = currentValue - 1;
+			computePrice(input.value)
+		}
+		console.log(input.value);
+	}
 }
 
 document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 </script>
-<?php
+		<?php
 	}
 
 
@@ -708,7 +840,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		}
 		?>
 <h2 class="pb-4 mb-4 uppercase mt-0"><?php echo $endpoint_title; ?></h2>
-<?php
+		<?php
 	}
 
 	public function nova_account_navigation() {
@@ -896,17 +1028,17 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		global $wp_query;
 		?>
 <div class="border-b font-title uppercase flex gap-6 md:gap-11 mb-8">
-    <a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/all' ) ); ?>"
-        class="py-4 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/all'] ) ? 'border-black' : 'border-transparent' ); ?> mb-[-4px] text-black">ALL
-        Mockups</a>
-    <a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/drafts' ) ); ?>"
-        class="py-4 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/drafts'] ) ? 'border-black' : 'border-transparent' ); ?> mb-[-4px] text-black">Drafts</a>
-    <a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/processing' ) ); ?>"
-        class="py-4 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/processing'] ) ? 'border-black' : 'border-transparent' ); ?> mb-[-4px] text-black">Processing</a>
-    <a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/payments' ) ); ?>"
-        class="py-4 py-4 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/payments'] ) ? 'border-black' : 'border-transparent' ); ?> mb-[-4px] text-black">Quoted</a>
+	<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/all' ) ); ?>"
+		class="py-4 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/all'] ) ? 'border-black' : 'border-transparent' ); ?> mb-[-4px] text-black">ALL
+		Mockups</a>
+	<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/drafts' ) ); ?>"
+		class="py-4 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/drafts'] ) ? 'border-black' : 'border-transparent' ); ?> mb-[-4px] text-black">Drafts</a>
+	<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/processing' ) ); ?>"
+		class="py-4 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/processing'] ) ? 'border-black' : 'border-transparent' ); ?> mb-[-4px] text-black">Processing</a>
+	<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/payments' ) ); ?>"
+		class="py-4 py-4 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/payments'] ) ? 'border-black' : 'border-transparent' ); ?> mb-[-4px] text-black">Quoted</a>
 </div>
-<?php
+		<?php
 	}
 
 	public function add_mockups_link_my_account( $items ) {
@@ -930,39 +1062,39 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		if ( have_rows( 'tech_specs_group' ) ) :
 			?>
 <div class="nova_product_specs_group">
-    <?php
+			<?php
 			while ( have_rows( 'tech_specs_group' ) ) :
 				the_row();
 				?>
-    <h2><?php echo get_sub_field( 'title' ); ?></h2>
-    <?php
+	<h2><?php echo get_sub_field( 'title' ); ?></h2>
+				<?php
 				if ( have_rows( 'specs' ) ) :
 					?>
-    <div class="spec-group">
-        <?php
+	<div class="spec-group">
+					<?php
 					while ( have_rows( 'specs' ) ) :
 						the_row();
 						?>
-        <div class="spec-item">
-            <div class="spec-label">
-                <?php echo get_sub_field( 'name' ); ?>
-            </div>
-            <div class="spec-value">
-                <?php echo get_sub_field( 'value' ); ?>
-            </div>
-        </div>
+		<div class="spec-item">
+			<div class="spec-label">
+						<?php echo get_sub_field( 'name' ); ?>
+			</div>
+			<div class="spec-value">
+						<?php echo get_sub_field( 'value' ); ?>
+			</div>
+		</div>
 
-        <?php
+						<?php
 						endwhile;
 					?>
-    </div>
-    <?php
+	</div>
+					<?php
 		endif;
 				?>
 
-    <?php endwhile; ?>
+	<?php endwhile; ?>
 </div>
-<?php
+			<?php
 		endif;
 	}
 
@@ -970,36 +1102,36 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		if ( have_rows( 'faqs' ) ) {
 			?>
 <div id="faqItems" class="has-faq accordion">
-    <h2 class="uppercase text-center mb-10">Frequently asked Questions</h2>
-    <?php
+	<h2 class="uppercase text-center mb-10">Frequently asked Questions</h2>
+			<?php
 			while ( have_rows( 'faqs' ) ) {
 				the_row();
 				?>
-    <div class="faq-item visible">
-        <p class="faq-question"><?php echo get_sub_field( 'question' ); ?> <svg width="14" height="14"
-                viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <line x1="7" y1="1" x2="7" y2="13" stroke="black" stroke-width="2" stroke-linecap="round">
-                </line>
-                <line x1="13" y1="7" x2="1" y2="7" stroke="black" stroke-width="2" stroke-linecap="round">
-                </line>
-            </svg></p>
-        <div class="expander">
-            <div class="expander-content">
-                <div class="content-wrapper">
-                    <?php if ( get_sub_field( 'answer' ) ) : ?>
-                    <div class="post-content-container" style="padding-top: 2em;">
-                        <?php echo get_sub_field( 'answer' ); ?>
-                    </div>
-                    <?php endif; ?>
-                </div>
-            </div>
-        </div>
-    </div>
-    <?php
+	<div class="faq-item visible">
+		<p class="faq-question"><?php echo get_sub_field( 'question' ); ?> <svg width="14" height="14"
+				viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<line x1="7" y1="1" x2="7" y2="13" stroke="black" stroke-width="2" stroke-linecap="round">
+				</line>
+				<line x1="13" y1="7" x2="1" y2="7" stroke="black" stroke-width="2" stroke-linecap="round">
+				</line>
+			</svg></p>
+		<div class="expander">
+			<div class="expander-content">
+				<div class="content-wrapper">
+					<?php if ( get_sub_field( 'answer' ) ) : ?>
+					<div class="post-content-container" style="padding-top: 2em;">
+						<?php echo get_sub_field( 'answer' ); ?>
+					</div>
+					<?php endif; ?>
+				</div>
+			</div>
+		</div>
+	</div>
+				<?php
 			}
 			?>
 </div>
-<?php
+			<?php
 		}
 	}
 
@@ -1007,135 +1139,135 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		$current_user = wp_get_current_user();
 		?>
 <div class="kadence-account-avatar">
-    <div class="kadence-customer-image">
-        <a class="kt-link-to-gravatar" href="https://gravatar.com/" target="_blank" rel="no"
-            title="<?php echo esc_attr__( 'Update Profile Photo', 'kadence' ); ?>">
-            <?php echo get_avatar( $current_user->ID, 40, null, null, array( 'class' => array( 'rounded-full' ) ) ); ?>
-        </a>
-    </div>
+	<div class="kadence-customer-image">
+		<a class="kt-link-to-gravatar" href="https://gravatar.com/" target="_blank" rel="no"
+			title="<?php echo esc_attr__( 'Update Profile Photo', 'kadence' ); ?>">
+			<?php echo get_avatar( $current_user->ID, 40, null, null, array( 'class' => array( 'rounded-full' ) ) ); ?>
+		</a>
+	</div>
 </div>
 <div class="kadence-customer-name">
-    <h5 class="uppercase mt-2 mb-0 block"><?php echo esc_html( $current_user->display_name ); ?></h5>
-    <div class="block text-[14px] text-black uppercase"><span class="font-title text-[12px]">BUSINESS ID:</span>
-        <?php echo get_field( 'business_id', 'user_' . get_current_user_id() ); ?></div>
-    <a href="<?php echo wp_logout_url( '/' ); ?>" class="text-black text-[10px]">LOG OUT</a>
+	<h5 class="uppercase mt-2 mb-0 block"><?php echo esc_html( $current_user->display_name ); ?></h5>
+	<div class="block text-[14px] text-black uppercase"><span class="font-title text-[12px]">BUSINESS ID:</span>
+		<?php echo get_field( 'business_id', 'user_' . get_current_user_id() ); ?></div>
+	<a href="<?php echo wp_logout_url( '/' ); ?>" class="text-black text-[10px]">LOG OUT</a>
 </div>
-<?php
+		<?php
 	}
 
 	public function show_details_order( $signage, $quoteID, $subtotal ) {
 		ob_start();
 		?>
 <div id="quote-<?php echo $quoteID; ?>" style="display:none;max-width:550px; width: 100%;">
-    <div class="pb-8 mb-8 border-b-nova-light border-b">
-        <?php
+	<div class="pb-8 mb-8 border-b-nova-light border-b">
+		<?php
 		foreach ( $signage as $item ) {
 			?>
 
-        <div class="block">
-            <div class="flex justify-between py-2 font-title uppercase">
-                <?php echo $item->title; ?>
-                <span>$<?php echo number_format( $item->usdPrice, 2 ); ?> USD</span>
-            </div>
+		<div class="block">
+			<div class="flex justify-between py-2 font-title uppercase">
+				<?php echo $item->title; ?>
+				<span>$<?php echo number_format( $item->usdPrice, 2 ); ?> USD</span>
+			</div>
 
-            <div class="grid grid-cols-2 py-[2px]">
-                <div class="text-left text-xs font-title">TYPE</div>
-                <div class="text-left text-[10px] uppercase">
-                    <?php echo $item->type; ?>
-                </div>
-            </div>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">TYPE</div>
+				<div class="text-left text-[10px] uppercase">
+					<?php echo $item->type; ?>
+				</div>
+			</div>
 
-            <div class="grid grid-cols-2 py-[2px]">
-                <div class="text-left text-xs font-title">THICKNESS</div>
-                <div class="text-left text-[10px] uppercase">
-                    <?php echo $item->thickness->thickness; ?>
-                </div>
-            </div>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">THICKNESS</div>
+				<div class="text-left text-[10px] uppercase">
+					<?php echo $item->thickness->thickness; ?>
+				</div>
+			</div>
 
-            <?php if ( $item->type === 'logo' ) : ?>
-            <div class="grid grid-cols-2 py-[2px]">
-                <div class="text-left text-xs font-title">WIDTH</div>
-                <div class="text-left text-[10px] break-words">
-                    <?php echo $item->width; ?>"
-                </div>
-            </div>
-            <div class="grid grid-cols-2 py-[2px]">
-                <div class="text-left text-xs font-title">HEIGHT</div>
-                <div class="text-left text-[10px] break-words">
-                    <?php echo $item->height; ?>"
-                </div>
-            </div>
-            <?php
+			<?php if ( $item->type === 'logo' ) : ?>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">WIDTH</div>
+				<div class="text-left text-[10px] break-words">
+					<?php echo $item->width; ?>"
+				</div>
+			</div>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">HEIGHT</div>
+				<div class="text-left text-[10px] break-words">
+					<?php echo $item->height; ?>"
+				</div>
+			</div>
+				<?php
 				endif;
 			?>
 
-            <?php if ( $item->type === 'letters' ) : ?>
-            <div class="grid grid-cols-2 py-[2px]">
-                <div class="text-left text-xs font-title">LETTER HEIGHT</div>
-                <div class="text-left text-[10px] break-words">
-                    <?php echo $item->letterHeight; ?>"
-                </div>
-            </div>
-            <?php endif; ?>
+			<?php if ( $item->type === 'letters' ) : ?>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">LETTER HEIGHT</div>
+				<div class="text-left text-[10px] break-words">
+					<?php echo $item->letterHeight; ?>"
+				</div>
+			</div>
+			<?php endif; ?>
 
-            <div class="grid grid-cols-2 py-[2px]">
-                <div class="text-left text-xs font-title">MOUNTING</div>
-                <div class="text-left text-[10px]"><?php echo $item->mounting; ?></div>
-            </div>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">MOUNTING</div>
+				<div class="text-left text-[10px]"><?php echo $item->mounting; ?></div>
+			</div>
 
-            <div class="grid grid-cols-2 py-[2px]">
-                <div class="text-left text-xs font-title">WATERPROOF</div>
-                <div class="text-left text-[10px]"><?php echo $item->waterproof; ?></div>
-            </div>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">WATERPROOF</div>
+				<div class="text-left text-[10px]"><?php echo $item->waterproof; ?></div>
+			</div>
 
-            <div class="grid grid-cols-2 py-[2px]">
-                <div class="text-left text-xs font-title">FINISHING</div>
-                <div class="text-left text-[10px]"><?php echo $item->finishing; ?></div>
-            </div>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">FINISHING</div>
+				<div class="text-left text-[10px]"><?php echo $item->finishing; ?></div>
+			</div>
 
-            <?php if ( $item->type === 'letters' ) : ?>
-            <div class="grid grid-cols-2 py-[2px]">
-                <div class="text-left text-xs font-title">COLOR</div>
-                <div class="text-left text-[10px]"><?php echo $item->color->name; ?></div>
-            </div>
-            <div class="grid grid-cols-2 py-[2px]">
-                <div class="text-left text-xs font-title">FONT</div>
-                <div class="text-left text-[10px] break-words">
-                    <?php echo $item->font; ?>
-                </div>
-            </div>
-            <div class="grid grid-cols-2 py-[2px]">
-                <div class="text-left text-xs font-title">LINE TEXT</div>
-                <div class="text-left text-[10px] break-words">
-                    <?php echo $item->letters; ?>
-                </div>
-            </div>
-            <?php endif; ?>
+			<?php if ( $item->type === 'letters' ) : ?>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">COLOR</div>
+				<div class="text-left text-[10px]"><?php echo $item->color->name; ?></div>
+			</div>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">FONT</div>
+				<div class="text-left text-[10px] break-words">
+					<?php echo $item->font; ?>
+				</div>
+			</div>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">LINE TEXT</div>
+				<div class="text-left text-[10px] break-words">
+					<?php echo $item->letters; ?>
+				</div>
+			</div>
+			<?php endif; ?>
 
-            <div class="grid grid-cols-2 py-[2px]">
-                <div class="text-left text-xs font-title">COMMENTS</div>
-                <div class="text-left text-[10px] break-words">
-                    <?php echo $item->comments; ?>
-                </div>
-            </div>
-            <?php if ( ! empty( $item->file ) ) : ?>
-            <div class="grid grid-cols-2 py-[2px]">
-                <div class="text-left text-xs font-title">FILE</div>
-                <div class="text-left text-[10px] break-words">
-                    <?php echo $item->fileName; ?>
-                </div>
-            </div>
-            <?php endif; ?>
-        </div>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">COMMENTS</div>
+				<div class="text-left text-[10px] break-words">
+					<?php echo $item->comments; ?>
+				</div>
+			</div>
+			<?php if ( ! empty( $item->file ) ) : ?>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">FILE</div>
+				<div class="text-left text-[10px] break-words">
+					<?php echo $item->fileName; ?>
+				</div>
+			</div>
+			<?php endif; ?>
+		</div>
 
 
-        <?php
+			<?php
 		}
 		?>
-    </div>
-    <h6 class="uppercase flex">Subtotal: <span class="ml-auto"><?php echo $subtotal; ?></span></h6>
+	</div>
+	<h6 class="uppercase flex">Subtotal: <span class="ml-auto"><?php echo $subtotal; ?></span></h6>
 </div>
-<?php
+		<?php
 			echo ob_get_clean();
 	}
 
@@ -1143,114 +1275,114 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		ob_start();
 		?>
 <div id="quote-<?php echo $quoteID; ?>" style="display:none;max-width:550px; width: 100%;">
-    <div class="pb-8 mb-8 border-b-nova-light border-b">
-        <?php
+	<div class="pb-8 mb-8 border-b-nova-light border-b">
+		<?php
 		foreach ( $signage as $item ) {
 			?>
 
-        <div class="block">
-            <div class="flex justify-between py-2 font-title uppercase">
-                <?php echo $item->title; ?>
-                <span>$<?php echo number_format( $item->usdPrice, 2 ); ?> USD</span>
-            </div>
+		<div class="block">
+			<div class="flex justify-between py-2 font-title uppercase">
+				<?php echo $item->title; ?>
+				<span><?php echo get_woocommerce_currency_symbol(); ?><?php echo ( get_woocommerce_currency() === 'USD' ? number_format( $item->usdPrice, 2 ) : number_format( $item->cadPrice, 2 ) ); ?></span>
+			</div>
 
-            <div class="grid grid-cols-2 py-[2px]">
-                <div class="text-left text-xs font-title">TYPE</div>
-                <div class="text-left text-[10px] uppercase">
-                    <?php echo $item->type; ?>
-                </div>
-            </div>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">TYPE</div>
+				<div class="text-left text-[10px] uppercase">
+					<?php echo $item->type; ?>
+				</div>
+			</div>
 
-            <div class="grid grid-cols-2 py-[2px]">
-                <div class="text-left text-xs font-title">THICKNESS</div>
-                <div class="text-left text-[10px] uppercase">
-                    <?php echo $item->thickness->thickness; ?>
-                </div>
-            </div>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">THICKNESS</div>
+				<div class="text-left text-[10px] uppercase">
+					<?php echo $item->thickness->thickness; ?>
+				</div>
+			</div>
 
-            <?php if ( $item->type === 'logo' ) : ?>
-            <div class="grid grid-cols-2 py-[2px]">
-                <div class="text-left text-xs font-title">WIDTH</div>
-                <div class="text-left text-[10px] break-words">
-                    <?php echo $item->width; ?>"
-                </div>
-            </div>
-            <div class="grid grid-cols-2 py-[2px]">
-                <div class="text-left text-xs font-title">HEIGHT</div>
-                <div class="text-left text-[10px] break-words">
-                    <?php echo $item->height; ?>"
-                </div>
-            </div>
-            <?php
+			<?php if ( $item->type === 'logo' ) : ?>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">WIDTH</div>
+				<div class="text-left text-[10px] break-words">
+					<?php echo $item->width; ?>"
+				</div>
+			</div>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">HEIGHT</div>
+				<div class="text-left text-[10px] break-words">
+					<?php echo $item->height; ?>"
+				</div>
+			</div>
+				<?php
 				endif;
 			?>
 
-            <?php if ( $item->type === 'letters' ) : ?>
-            <div class="grid grid-cols-2 py-[2px]">
-                <div class="text-left text-xs font-title">LETTER HEIGHT</div>
-                <div class="text-left text-[10px] break-words">
-                    <?php echo $item->letterHeight; ?>"
-                </div>
-            </div>
-            <?php endif; ?>
+			<?php if ( $item->type === 'letters' ) : ?>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">LETTER HEIGHT</div>
+				<div class="text-left text-[10px] break-words">
+					<?php echo $item->letterHeight; ?>"
+				</div>
+			</div>
+			<?php endif; ?>
 
-            <div class="grid grid-cols-2 py-[2px]">
-                <div class="text-left text-xs font-title">MOUNTING</div>
-                <div class="text-left text-[10px]"><?php echo $item->mounting; ?></div>
-            </div>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">MOUNTING</div>
+				<div class="text-left text-[10px]"><?php echo $item->mounting; ?></div>
+			</div>
 
-            <div class="grid grid-cols-2 py-[2px]">
-                <div class="text-left text-xs font-title">WATERPROOF</div>
-                <div class="text-left text-[10px]"><?php echo $item->waterproof; ?></div>
-            </div>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">WATERPROOF</div>
+				<div class="text-left text-[10px]"><?php echo $item->waterproof; ?></div>
+			</div>
 
-            <div class="grid grid-cols-2 py-[2px]">
-                <div class="text-left text-xs font-title">FINISHING</div>
-                <div class="text-left text-[10px]"><?php echo $item->finishing; ?></div>
-            </div>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">FINISHING</div>
+				<div class="text-left text-[10px]"><?php echo $item->finishing; ?></div>
+			</div>
 
-            <?php if ( $item->type === 'letters' ) : ?>
-            <div class="grid grid-cols-2 py-[2px]">
-                <div class="text-left text-xs font-title">COLOR</div>
-                <div class="text-left text-[10px]"><?php echo $item->color->name; ?></div>
-            </div>
-            <div class="grid grid-cols-2 py-[2px]">
-                <div class="text-left text-xs font-title">FONT</div>
-                <div class="text-left text-[10px] break-words">
-                    <?php echo $item->font; ?>
-                </div>
-            </div>
-            <div class="grid grid-cols-2 py-[2px]">
-                <div class="text-left text-xs font-title">LINE TEXT</div>
-                <div class="text-left text-[10px] break-words">
-                    <?php echo $item->letters; ?>
-                </div>
-            </div>
-            <?php endif; ?>
+			<?php if ( $item->type === 'letters' ) : ?>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">COLOR</div>
+				<div class="text-left text-[10px]"><?php echo $item->color->name; ?></div>
+			</div>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">FONT</div>
+				<div class="text-left text-[10px] break-words">
+					<?php echo $item->font; ?>
+				</div>
+			</div>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">LINE TEXT</div>
+				<div class="text-left text-[10px] break-words">
+					<?php echo $item->letters; ?>
+				</div>
+			</div>
+			<?php endif; ?>
 
-            <div class="grid grid-cols-2 py-[2px]">
-                <div class="text-left text-xs font-title">COMMENTS</div>
-                <div class="text-left text-[10px] break-words">
-                    <?php echo $item->comments; ?>
-                </div>
-            </div>
-            <?php if ( ! empty( $item->file ) ) : ?>
-            <div class="grid grid-cols-2 py-[2px]">
-                <div class="text-left text-xs font-title">FILE</div>
-                <div class="text-left text-[10px] break-words">
-                    <?php echo $item->fileName; ?>
-                </div>
-            </div>
-            <?php endif; ?>
-        </div>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">COMMENTS</div>
+				<div class="text-left text-[10px] break-words">
+					<?php echo $item->comments; ?>
+				</div>
+			</div>
+			<?php if ( ! empty( $item->file ) ) : ?>
+			<div class="grid grid-cols-2 py-[2px]">
+				<div class="text-left text-xs font-title">FILE</div>
+				<div class="text-left text-[10px] break-words">
+					<?php echo $item->fileName; ?>
+				</div>
+			</div>
+			<?php endif; ?>
+		</div>
 
 
-        <?php
+			<?php
 		}
 		?>
-    </div>
+	</div>
 </div>
-<?php
+		<?php
 			echo ob_get_clean();
 	}
 

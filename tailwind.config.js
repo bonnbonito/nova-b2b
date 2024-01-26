@@ -20,6 +20,7 @@ module.exports = {
 		},
 		fontFamily: {
 			title: ['"Secular One"', 'sans-serif'],
+			body: ['Lato', 'sans-serif'],
 		},
 	},
 	important: '#nova',
