@@ -44,6 +44,7 @@ function process(btn, action) {
 		formData.append('nova_product', NovaQuote.nova_quote_product.ID);
 		formData.append('product', btn.dataset.product);
 		formData.append('product_id', btn.dataset.product_id);
+		formData.append('product_line', btn.dataset.product_line);
 	}
 
 	fetch(NovaMyAccount.ajax_url, {

@@ -22,9 +22,10 @@ export default function Sidebar() {
 
 	const flatRate = currency === 'USD' ? 14.75 : 14.75 * exchangeRate;
 
-	const standardRate = parseFloat(totalPrice * 0.075);
+	const standardRate = totalPrice > 0 ? parseFloat(totalPrice * 0.075) : 0;
 
-	const estimatedShipping = parseFloat(Math.max(flatRate, standardRate));
+	const estimatedShipping =
+		totalPrice > 0 ? parseFloat(Math.max(flatRate, standardRate)) : 0;
 
 	const tax = taxRate ? parseFloat(taxRate.tax_rate / 100) : 0;
 	const taxCompute = parseFloat(totalPrice * tax);
@@ -49,18 +50,24 @@ export default function Sidebar() {
 							{currency}${Number(totalPrice.toFixed(2)).toLocaleString()}
 						</span>
 					</div>
-					<div className="flex justify-between font-title uppercase md:tracking-[1.6px]">
-						SHIPPING
-						<span>
-							{currency}${Number(estimatedShipping.toFixed(2)).toLocaleString()}
-						</span>
-					</div>
-					<div className="flex justify-between font-title uppercase md:tracking-[1.6px]">
-						{NovaMyAccount.tax_rate.tax_rate_name}
-						<span>
-							{currency}${Number(taxCompute.toFixed(2)).toLocaleString()}
-						</span>
-					</div>
+					{Number(totalPrice) > 0 && (
+						<div className="flex justify-between font-title uppercase md:tracking-[1.6px]">
+							SHIPPING
+							<span>
+								{currency}$
+								{Number(estimatedShipping.toFixed(2)).toLocaleString()}
+							</span>
+						</div>
+					)}
+
+					{NovaMyAccount.tax_rate && (
+						<div className="flex justify-between font-title uppercase md:tracking-[1.6px]">
+							{NovaMyAccount.tax_rate.tax_rate_name}
+							<span>
+								{currency}${Number(taxCompute.toFixed(2)).toLocaleString()}
+							</span>
+						</div>
+					)}
 				</div>
 
 				<hr />

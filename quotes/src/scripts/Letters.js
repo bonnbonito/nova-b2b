@@ -165,12 +165,10 @@ export default function Letters({ item }) {
 	};
 
 	const handleOnChangeLetterHeight = (e) => {
-		console.log(e);
 		setSelectedLetterHeight(e.target.value);
 	};
 
 	const handleChangeFinishing = (e) => {
-		console.log(e);
 		setSelectedFinishing(e.target.value);
 	};
 

@@ -80,11 +80,42 @@ class Woocommerce {
 		add_action( 'wp_ajax_nopriv_update_checkout_total', array( $this, 'handle_ajax_update_checkout_total' ) );
 		add_filter( 'woocommerce_cart_get_total', array( $this, 'custom_modify_cart_total' ), 10, 1 );
 		add_action( 'woocommerce_checkout_order_processed', array( $this, 'create_adjusted_duplicate_order' ), 10, 3 );
+		add_action( 'woocommerce_get_order_item_totals', array( $this, 'deposit_insert_order_total_row' ), 10, 2 );
 	}
 
-	public function create_duplicate_order_with_adjustment( $order, $payment_select, $total, $shipping, $tax ) {
+	public function deposit_insert_order_total_row( $total_rows, $order ) {
+		// Check if the order has the '_deposit_total' meta key
+		$deposit_total = get_post_meta( $order->get_id(), '_deposit_total', true );
+		$from_order    = get_post_meta( $order->get_id(), '_from_order_id', true );
+
+		// If '_deposit_total' meta key doesn't exist, return the original total rows
+		if ( empty( $deposit_total ) || empty( $from_order ) ) {
+			return $total_rows;
+		}
+
+		// Initialize a new array for the modified total rows
+		$new_total_rows = array();
+
+		foreach ( $total_rows as $total_key => $total ) {
+			// Insert your custom row before the 'order_total' row
+			if ( $total_key == 'order_total' ) {
+				$new_total_rows['deposit_total'] = array(
+					'label' => __( 'Deposit:', 'woocommerce' ),
+					'value' => wc_price( -$deposit_total ),
+				);
+			}
+			$new_total_rows[ $total_key ] = $total;
+		}
+
+		return $new_total_rows;
+	}
+
+
+	public function create_duplicate_order_with_adjustment( $order, $payment_select, $total, $shipping, $shipping_method, $tax, $pending_payment ) {
 		// Create a new order
 		$new_order = wc_create_order();
+
+		$pending_payment = $pending_payment ? $pending_payment : $total;
 
 		// Copy items from the current order to the new order
 		foreach ( $order->get_items() as $item_id => $item ) {
@@ -103,18 +134,17 @@ class Woocommerce {
 			if ( ! $new_item ) {
 				error_log( 'Failed to add product to the new order.' );
 				continue;
-			} else {
-				error_log( 'created ' . $new_item );
 			}
 
 			$created_item = $new_order->get_item( $new_item );
 
 			// Copy all meta data from the original item to the new item
+			$meta_data = $item->get_meta_data();
+			foreach ( $meta_data as $meta ) {
+				// Each $meta is an instance of WC_Meta_Data
+				$created_item->add_meta_data( $meta->key, $meta->value, true );
+			}
 
-			error_log( print_r( $created_item, true ) );
-
-			$signage_meta = $item->get_meta( 'signage' );
-			$created_item->add_meta_data( 'signage', $signage_meta, true );
 			$created_item->save(); // Save the new item to store meta data
 		}
 
@@ -123,17 +153,21 @@ class Woocommerce {
 		$new_order->set_address( $order->get_address( 'billing' ), 'billing' );
 		$new_order->set_address( $order->get_address( 'shipping' ), 'shipping' );
 
+		// Handle shipping
+		$shipping_item = new WC_Order_Item_Shipping();
+		$shipping_item->set_method_title( $shipping_method ); // Set to the title of your shipping method
+		$shipping_item->set_method_id( 'custom_shipping_method' ); // Set to an appropriate shipping method ID
+		$shipping_item->set_total( $shipping ); // Set the shipping total to the provided shipping parameter
+		$new_order->add_item( $shipping_item );
+
 		// Adjust totals if necessary
-		$new_order->set_total( $total );
-		$new_order->set_shipping_total( $shipping );
+
 		$new_order->set_cart_tax( $tax );
 
-		// Handle shipping as an order item if necessary
-		// [Your shipping handling logic here]
+		$new_order->set_total( $pending_payment );
 
 		// Add a note and save the new order
 		$new_order->add_order_note( 'This order is a follow-up for Order #' . $order->get_id() );
-		$new_order->calculate_totals();
 		$new_order->save();
 
 		// Optionally, reset session variables or perform additional actions
@@ -145,47 +179,92 @@ class Woocommerce {
 
 
 	public function create_adjusted_duplicate_order( $order_id, $posted_data, $order ) {
-		$payment_select = WC()->session->get( 'payment_select' );
+		$payment_select = (int) WC()->session->get( 'payment_select' );
 
-		if ( isset( $payment_select ) && $payment_select !== 'full' ) {
+		if ( isset( $payment_select ) && $payment_select !== 0 ) {
 
-			$tax      = WC()->session->get( 'original_tax' );
-			$shipping = WC()->session->get( 'original_shipping' );
-			$total    = WC()->session->get( 'original_total' );
+			$tax             = WC()->session->get( 'original_tax' );
+			$shipping        = WC()->session->get( 'original_shipping' );
+			$total           = WC()->session->get( 'original_total' );
+			$shipping_method = WC()->session->get( 'original_shipping_methods' );
+			$pending_payment = WC()->session->get( 'pending_payment' );
+			$deposit_total   = WC()->session->get( 'deposit_total' );
 
 			// Save the session values as order meta for the original order
 			update_post_meta( $order_id, '_payment_select', $payment_select );
 			update_post_meta( $order_id, '_original_tax', $tax );
 			update_post_meta( $order_id, '_original_shipping', $shipping );
 			update_post_meta( $order_id, '_original_total', $total );
+			update_post_meta( $order_id, '_original_shipping_method', $shipping_method );
+			update_post_meta( $order_id, '_pending_payment', $pending_payment );
 
 			// Create the adjusted duplicate order
-			$new_order_id = $this->create_duplicate_order_with_adjustment( $order, $payment_select, $total, $shipping, $tax );
+			$new_order_id = $this->create_duplicate_order_with_adjustment( $order, $payment_select, $total, $shipping, $shipping_method, $tax, $pending_payment );
 
 			// Optionally, link the new order with the original by storing the new order ID in the original order's meta
 			update_post_meta( $order_id, '_adjusted_duplicate_order_id', $new_order_id );
+			update_post_meta( $new_order_id, '_from_order_id', $order_id );
+			update_post_meta( $new_order_id, '_deposit_total', $deposit_total );
+			update_post_meta( $new_order_id, '_pending_payment', $pending_payment );
 
 			// Reset the session variables
 			WC()->session->__unset( 'payment_select' );
 			WC()->session->__unset( 'original_tax' );
 			WC()->session->__unset( 'original_shipping' );
 			WC()->session->__unset( 'original_total' );
+			WC()->session->__unset( 'original_shipping_methods' );
+			WC()->session->__unset( 'pending_payment' );
+			WC()->session->__unset( 'deposit_total' );
 		}
 	}
 
 
 	public function custom_modify_cart_total( $total ) {
 		if ( WC()->session ) {
-			$payment_select = WC()->session->get( 'payment_select' );
+			$payment_select = (int) WC()->session->get( 'payment_select' );
 
 			// Save the original total, shipping, and tax values only once to avoid overwriting
 
 			// If the payment method is 'net30', set the total to 0
-			if ( $payment_select && 'full' !== $payment_select ) {
+			if ( $payment_select && 0 !== $payment_select ) {
+
+				$chosen_methods = WC()->session->get( 'chosen_shipping_methods' );
+
+				$shipping_method_names = array();
+
+				foreach ( $chosen_methods as $method_id ) {
+					// Split the chosen method id to get the method's instance ID
+					list($method, $instance_id) = explode( ':', $method_id );
+
+					// Access all available shipping rates for the current package
+					$available_shipping_rates = WC()->session->get( 'shipping_for_package_0' )['rates'];
+
+					// Check if the chosen method's ID exists in the available rates and retrieve its label (name)
+					if ( isset( $available_shipping_rates[ $method_id ] ) ) {
+						$shipping_method_names[] = $available_shipping_rates[ $method_id ]->get_label();
+					}
+				}
+
+				// Convert the shipping method names array to a string, separated by commas if there are multiple
+				$shipping_names = implode( ', ', $shipping_method_names );
+
+				// Store the shipping method names in the session, join them if multiple
+				WC()->session->set( 'original_shipping_methods', $shipping_names );
+
+				$deposit = get_field( 'deposit', $payment_select ) / 100;
+
+				$new_total = $total * $deposit;
+
+				WC()->session->set( 'pending_payment', $total - $new_total );
+
 				WC()->session->set( 'original_total', $total );
+				WC()->session->set( 'deposit_total', $new_total );
 				WC()->session->set( 'original_shipping', WC()->cart->get_shipping_total() );
 				WC()->session->set( 'original_tax', WC()->cart->get_taxes_total() );
-				return 0;
+
+				return $new_total;
+			} else {
+				WC()->session->__unset( 'pending_payment' );
 			}
 		}
 
@@ -193,7 +272,7 @@ class Woocommerce {
 	}
 
 	public function handle_ajax_update_checkout_total() {
-		$payment_select = isset( $_POST['payment_select'] ) ? sanitize_text_field( $_POST['payment_select'] ) : 'full';
+		$payment_select = isset( $_POST['payment_select'] ) ? (int) $_POST['payment_select'] : 0;
 
 		if ( WC()->session ) {
 			WC()->session->set( 'payment_select', $payment_select );
@@ -618,6 +697,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 			$item->add_meta_data( 'signage', $values['signage'] );
 			$item->add_meta_data( 'quote_id', $values['quote_id'] );
 			$item->add_meta_data( 'product', $values['quote_id'] );
+			$item->add_meta_data( 'product_line', $values['product_line'] );
 
 			if ( isset( $values['nova_note'] ) && ! empty( $values['nova_note'] ) ) {
 				$item->add_meta_data( 'nova_note', $values['nova_note'] );
@@ -803,11 +883,12 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 
 	public function nova_add_to_cart_meta( $cart_item_data, $product_id, $variation_id ) {
 		if ( get_field( 'nova_quote_product', 'option' )->ID === $product_id && isset( $_POST['nova_title'] ) && isset( $_POST['quote_id'] ) ) {
-			$cart_item_data['nova_title'] = sanitize_text_field( $_POST['nova_title'] );
-			$cart_item_data['signage']    = $_POST['signage'];
-			$cart_item_date['quote_id']   = $_POST['quote_id'];
-			$cart_item_date['product']    = $_POST['product'];
-			$cart_item_date['nova_quote'] = true;
+			$cart_item_data['nova_title']   = sanitize_text_field( $_POST['nova_title'] );
+			$cart_item_data['signage']      = $_POST['signage'];
+			$cart_item_date['quote_id']     = $_POST['quote_id'];
+			$cart_item_date['product']      = $_POST['product'];
+			$cart_item_date['product_line'] = $_POST['product_line'];
+			$cart_item_date['nova_quote']   = true;
 			if ( isset( $_POST['nova_note'] ) ) {
 				$cart_item_date['nova_note'] = $_POST['nova_note'];
 			}
@@ -1434,6 +1515,28 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 
 		// Save the data
 		$customer->save();
+	}
+
+	public function get_payment_selections() {
+		$args     = array(
+			'post_type'      => 'payment_type',
+			'posts_per_page' => -1,
+		);
+		$query    = new WP_Query( $args );
+		$payments = array();
+		if ( $query->have_posts() ) {
+			while ( $query->have_posts() ) {
+				$query->the_post();
+				// Save the current post's title and ID
+				$payments[] = array(
+					'title'       => get_the_title(),
+					'id'          => get_the_ID(),
+					'description' => get_field( 'description' ),
+				);
+			}
+			wp_reset_postdata(); // Reset the global post object so that the rest of the page works correctly
+		}
+		return $payments;
 	}
 }
 

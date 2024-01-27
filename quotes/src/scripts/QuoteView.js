@@ -104,6 +104,7 @@ export default function QuoteView() {
 			NovaAccount.product_name ? decodeHTML(NovaAccount.product_name) : 'None'
 		);
 		formData.append('product_id', NovaQuote.generated_product_id);
+		formData.append('product_line', NovaAccount.product_line?.ID);
 
 		fetch(NovaMyAccount.ajax_url, {
 			method: 'POST',
@@ -207,12 +208,7 @@ export default function QuoteView() {
 							{NovaAccount.company_name ? NovaAccount.company_name : 'None'}
 						</span>
 					</div>
-					<div className="flex gap-2 items-center">
-						<h6 className="leading-[2] m-0">PARTNER ID:</h6>{' '}
-						<span className="text-sm">
-							{NovaAccount.business_id ? NovaAccount.business_id : 'None'}
-						</span>
-					</div>
+
 					<div className="flex gap-2 items-center">
 						<h6 className="leading-[2] m-0">MATERIAL:</h6>{' '}
 						<span className="text-sm">

@@ -72,7 +72,7 @@ $woo_instance = \NOVA_B2B\INC\CLASSES\Woocommerce::get_instance();
 			</div>
 			<div>
 				<span class="text-sm font-title">PRODUCT:</span>
-				<?php echo $item['product']; ?>
+				<?php echo get_the_title( $item['product_line'] ); ?>
 			</div>
 			<div class="woocommerce-table__product-total product-total">
 				<h6 class="uppercase text-right">

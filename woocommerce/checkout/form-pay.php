@@ -52,16 +52,24 @@ $totals = $order->get_order_item_totals(); // phpcs:ignore WordPress.WP.GlobalVa
 						echo '<div class="block">';
 						foreach ( $item['signage'] as $signage ) {
 							?>
-					<div class="mb-2 border rounded p-4 inline-block" style="font-size: 90%">
+					<div class="mb-2 p-4 block" style="font-size: 90%">
 						<p class="mb-0"><?php echo $signage->title; ?></p>
 						<ul class="font-size: 80%;">
 							<li>TYPE: <strong class="uppercase"><?php echo $signage->type; ?></strong></li>
+							<?php if ( $signage->thickness ) : ?>
+							<li>THICKNESS: <strong class=""><?php echo $signage->thickness->thickness; ?>"</strong>
+							</li>
+							<?php endif; ?>
 							<?php if ( $signage->letterHeight ) : ?>
 							<li>LETTER HEIGHT: <strong class="uppercase"><?php echo $signage->letterHeight; ?>"</strong>
 							</li>
 							<?php endif; ?>
-							<?php if ( $signage->thickness ) : ?>
-							<li>THICKNESS: <strong class=""><?php echo $signage->thickness->thickness; ?></strong>
+							<?php if ( $signage->width ) : ?>
+							<li>WIDTH: <strong class="uppercase"><?php echo $signage->width; ?>"</strong>
+							</li>
+							<?php endif; ?>
+							<?php if ( $signage->height ) : ?>
+							<li>HEIGHT: <strong class="uppercase"><?php echo $signage->height; ?>"</strong>
 							</li>
 							<?php endif; ?>
 							<?php if ( $signage->letters ) : ?>
@@ -74,6 +82,10 @@ $totals = $order->get_order_item_totals(); // phpcs:ignore WordPress.WP.GlobalVa
 							<?php endif; ?>
 							<?php if ( $signage->color ) : ?>
 							<li>COLOR: <strong class="uppercase"><?php echo $signage->color->name; ?></strong>
+							</li>
+							<?php endif; ?>
+							<?php if ( $signage->waterproof ) : ?>
+							<li>WATERPROOF: <strong class="uppercase"><?php echo $signage->waterproof; ?></strong>
 							</li>
 							<?php endif; ?>
 							<?php if ( $signage->mounting ) : ?>

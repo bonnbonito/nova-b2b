@@ -220,6 +220,7 @@ class Scripts {
 				'company_name' => get_field( 'business_name', 'user_' . $partner_id ),
 				'quote_status' => get_field( 'quote_status', $id ),
 				'product_link' => esc_url( get_permalink( $product_id ) ),
+				'product_line' => $product_id,
 				'note'         => get_field( 'note', $id ),
 			);
 	}

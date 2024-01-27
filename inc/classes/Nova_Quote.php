@@ -83,7 +83,7 @@ class Nova_Quote {
 		$title        = get_the_title( $post_id );
 		$final_price  = get_field( 'final_price', $post_id );
 		$product_id   = get_field( 'product', $post_id )->ID;
-		$product_name = get_field( 'product', $post_id )->post_titl;
+		$product_name = get_field( 'product', $post_id )->post_title;
 		$signage      = json_decode( get_field( 'signage', $post_id ) );
 		$note         = get_field( 'note', $post_id );
 
@@ -378,6 +378,7 @@ class Nova_Quote {
 		$title        = get_the_title( $post_id );
 		$final_price  = get_field( 'final_price', $post_id );
 		$product_id   = $_POST['nova_product'];
+		$product_line = $_POST['product_line'];
 		$product_name = $_POST['product'];
 		$signage      = json_decode( get_field( 'signage', $post_id ) );
 		$note         = get_field( 'note', $post_id );
@@ -385,16 +386,18 @@ class Nova_Quote {
 		$status['final_price'] = get_field( 'final_price', $post_id );
 		$status['note']        = $note;
 		$status['quote']       = $signage;
+		$status['post']        = $_POST;
 
 		$product_meta = array(
-			'usd_price'  => $final_price,
-			'signage'    => $signage,
-			'nova_quote' => true,
-			'nova_title' => $title,
-			'quote_id'   => $post_id,
-			'nova_note'  => $note,
-			'product'    => $product_name,
-			'product_id' => $product_id,
+			'usd_price'    => $final_price,
+			'signage'      => $signage,
+			'nova_quote'   => true,
+			'nova_title'   => $title,
+			'quote_id'     => $post_id,
+			'nova_note'    => $note,
+			'product'      => $product_name,
+			'product_id'   => $product_id,
+			'product_line' => $product_line,
 		);
 
 		$product_data = array(

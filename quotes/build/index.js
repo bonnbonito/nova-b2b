@@ -658,11 +658,9 @@ function Letters({
     }
   };
   const handleOnChangeLetterHeight = e => {
-    console.log(e);
     setSelectedLetterHeight(e.target.value);
   };
   const handleChangeFinishing = e => {
-    console.log(e);
     setSelectedFinishing(e.target.value);
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
@@ -1772,6 +1770,7 @@ function QuoteView() {
     formData.append('nova_product', NovaQuote.nova_quote_product.ID);
     formData.append('product', NovaAccount.product_name ? decodeHTML(NovaAccount.product_name) : 'None');
     formData.append('product_id', NovaQuote.generated_product_id);
+    formData.append('product_line', NovaAccount.product_line?.ID);
     fetch(NovaMyAccount.ajax_url, {
       method: 'POST',
       credentials: 'same-origin',
@@ -1860,12 +1859,6 @@ function QuoteView() {
     className: "flex gap-2 items-center"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h6", {
     className: "leading-[2] m-0"
-  }, "PARTNER ID:"), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "text-sm"
-  }, NovaAccount.business_id ? NovaAccount.business_id : 'None')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "flex gap-2 items-center"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h6", {
-    className: "leading-[2] m-0"
   }, "MATERIAL:"), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "text-sm"
   }, NovaAccount.material ? NovaAccount.material : 'None')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -1937,8 +1930,8 @@ function Sidebar() {
   const totalPrice = currency === 'USD' ? totalUsdPrice : totalCadPrice;
   const exchangeRate = parseFloat(wcumcs_vars_data.currency_data.rate);
   const flatRate = currency === 'USD' ? 14.75 : 14.75 * exchangeRate;
-  const standardRate = parseFloat(totalPrice * 0.075);
-  const estimatedShipping = parseFloat(Math.max(flatRate, standardRate));
+  const standardRate = totalPrice > 0 ? parseFloat(totalPrice * 0.075) : 0;
+  const estimatedShipping = totalPrice > 0 ? parseFloat(Math.max(flatRate, standardRate)) : 0;
   const tax = taxRate ? parseFloat(taxRate.tax_rate / 100) : 0;
   const taxCompute = parseFloat(totalPrice * tax);
   const estimateTotalPrice = totalPrice + estimatedShipping + taxCompute;
@@ -1957,9 +1950,9 @@ function Sidebar() {
     className: "block mb-2"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex justify-between pt-2 font-title uppercase md:tracking-[1.6px]"
-  }, "SUBTOTAL", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, currency, "$", Number(totalPrice.toFixed(2)).toLocaleString())), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "SUBTOTAL", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, currency, "$", Number(totalPrice.toFixed(2)).toLocaleString())), Number(totalPrice) > 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex justify-between font-title uppercase md:tracking-[1.6px]"
-  }, "SHIPPING", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, currency, "$", Number(estimatedShipping.toFixed(2)).toLocaleString())), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "SHIPPING", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, currency, "$", Number(estimatedShipping.toFixed(2)).toLocaleString())), NovaMyAccount.tax_rate && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex justify-between font-title uppercase md:tracking-[1.6px]"
   }, NovaMyAccount.tax_rate.tax_rate_name, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, currency, "$", Number(taxCompute.toFixed(2)).toLocaleString()))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("hr", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex justify-between my-5"
