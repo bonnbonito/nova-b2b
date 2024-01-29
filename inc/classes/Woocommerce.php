@@ -81,6 +81,98 @@ class Woocommerce {
 		add_filter( 'woocommerce_cart_get_total', array( $this, 'custom_modify_cart_total' ), 10, 1 );
 		add_action( 'woocommerce_checkout_order_processed', array( $this, 'create_adjusted_duplicate_order' ), 10, 3 );
 		add_action( 'woocommerce_get_order_item_totals', array( $this, 'deposit_insert_order_total_row' ), 10, 2 );
+		add_action( 'add_meta_boxes', array( $this, 'add_custom_meta_box_to_orders' ) );
+		add_action( 'woocommerce_admin_order_totals_after_tax', array( $this, 'add_deposit_row' ) );
+	}
+
+	public function add_deposit_row( $order_id ) {
+		$deposit_total                   = get_post_meta( $order_id, '_deposit_total', true );
+		$has_adjusted_duplicate_order_id = get_post_meta( $order_id, '_adjusted_duplicate_order_id', true );
+		$original_total                  = get_post_meta( $order_id, '_original_total', true );
+		if ( $deposit_total ) :
+			$order = wc_get_order( $order_id );
+			if ( empty( $has_adjusted_duplicate_order_id ) ) :
+				?>
+<tr>
+	<td class="label"><?php esc_html_e( 'Deposit', 'woocommerce' ); ?>:</td>
+	<td width="1%"></td>
+	<td class="total">
+				<?php
+				if ( ! empty( $deposit_total ) ) {
+					echo '-' . wc_price( $deposit_total, array( 'currency' => $order->get_currency() ) );
+				} else {
+					echo wc_price( 0, array( 'currency' => $order->get_currency() ) );
+				}
+				?>
+	</td>
+</tr>
+
+				<?php
+			endif;
+
+			if ( $original_total ) :
+				?>
+<tr>
+	<td class="label"><?php esc_html_e( 'Overall Total', 'woocommerce' ); ?>:</td>
+	<td width="1%"></td>
+	<td class="total">
+				<?php
+				if ( ! empty( $original_total ) ) {
+					echo wc_price( $original_total, array( 'currency' => $order->get_currency() ) );
+				}
+				?>
+	</td>
+</tr>
+
+				<?php
+			endif;
+		endif;
+	}
+
+	public function add_custom_meta_box_to_orders() {
+		global $pagenow, $post;
+
+		// Ensure we are on the post edit screen
+		if ( 'post.php' !== $pagenow || 'shop_order' !== get_post_type() ) {
+			return;
+		}
+
+		// Ensure the global $post object is set and retrieve the current order ID
+		$order_id = isset( $post->ID ) ? $post->ID : false;
+
+		if ( ! $order_id ) {
+			return;
+		}
+
+		// Check for the specific post meta
+		$has_adjusted_duplicate_order_id = get_post_meta( $order_id, '_adjusted_duplicate_order_id', true );
+
+		// If the meta value exists, add the meta box
+		if ( ! empty( $has_adjusted_duplicate_order_id ) ) {
+			add_meta_box(
+				'pending_payment_order',          // Unique ID for the meta box
+				__( 'Pending Payment Order', 'textdomain' ), // Title of the meta box
+				array( $this, 'pending_payment_oder_content' ), // Callback function to output the content
+				'shop_order',                  // Post type
+				'advanced',                    // Context (where on the screen)
+				'default'                      // Priority
+			);
+		}
+	}
+
+	public function pending_payment_oder_content( $post ) {
+		// Output your custom content here. For example:
+		$order_id       = get_post_meta( $post->ID, '_adjusted_duplicate_order_id', true );
+		$original_total = get_post_meta( $post->ID, '_original_total', true );
+		$order_edit_url = admin_url( 'post.php?post=' . $order_id . '&action=edit' );
+		?>
+<a href="<?php echo esc_url( $order_edit_url ); ?>" class="button button-primary">View Order</a>
+
+<p>Original Total: <?php echo $original_total; ?></p>
+
+		<?php
+
+		// You can include HTML and PHP here to show whatever content you need.
 	}
 
 	public function deposit_insert_order_total_row( $total_rows, $order ) {
@@ -206,6 +298,10 @@ class Woocommerce {
 			update_post_meta( $new_order_id, '_from_order_id', $order_id );
 			update_post_meta( $new_order_id, '_deposit_total', $deposit_total );
 			update_post_meta( $new_order_id, '_pending_payment', $pending_payment );
+			update_post_meta( $new_order_id, '_original_total', $total );
+			update_post_meta( $new_order_id, '_original_tax', $tax );
+			update_post_meta( $new_order_id, '_original_shipping', $shipping );
+			update_post_meta( $new_order_id, '_original_shipping_method', $shipping_method );
 
 			// Reset the session variables
 			WC()->session->__unset( 'payment_select' );
@@ -449,7 +545,7 @@ endif;
 	}
 
 	public function woocommerce_thankyou_order_received_text( $text ) {
-		return 'Your payment is being processed.';
+		return 'Your order is being processed.';
 	}
 
 	public function order_received_title( $title, $order_id ) {
