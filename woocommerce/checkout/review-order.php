@@ -161,7 +161,7 @@ $woo_instance = \NOVA_B2B\INC\CLASSES\Woocommerce::get_instance();
 								<?php echo ( $payment_select == 0 ? 'checked' : '' ); ?> id="payment_0"
 								onchange="updateCheckoutTotal(0)">
 							<span>Full</span>
-							<span class="text-sm font-body block mt-2">Description</span>
+							<span class="text-sm font-body block mt-2 hidden">Description</span>
 						</label>
 					</li>
 					<?php $payments_selection = $woo_instance->get_payment_selections(); ?>
@@ -175,7 +175,7 @@ $woo_instance = \NOVA_B2B\INC\CLASSES\Woocommerce::get_instance();
 								id="payment_<?php echo $selection['id']; ?>"
 								<?php echo ( $payment_select == $selection['id'] ? 'checked' : '' ); ?>
 								onchange="updateCheckoutTotal(<?php echo $selection['id']; ?>)">
-							<span>NET 310</span>
+							<span><?php echo $selection['title']; ?></span>
 							<span class="text-sm font-body block mt-2"><?php echo $selection['description']; ?></span>
 						</label>
 					</li>

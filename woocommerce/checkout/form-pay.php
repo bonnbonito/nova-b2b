@@ -17,7 +17,8 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$totals = $order->get_order_item_totals(); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+$totals  = $order->get_order_item_totals(); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+$from_id = $order->get_meta( '_from_order_id' );
 ?>
 <form id="order_review" method="post">
 
@@ -117,15 +118,30 @@ $totals = $order->get_order_item_totals(); // phpcs:ignore WordPress.WP.GlobalVa
 				<td class="product-quantity">
 					<?php echo apply_filters( 'woocommerce_order_item_quantity_html', ' <strong class="product-quantity">' . sprintf( '&times;&nbsp;%s', esc_html( $item->get_quantity() ) ) . '</strong>', $item ); ?>
                 </td><?php // @codingStandardsIgnoreLine ?>
-				<td class="product-subtotal"><?php echo $order->get_formatted_line_subtotal( $item ); ?></td>
+				<td class="product-subtotal">
+					<?php echo $order->get_formatted_line_subtotal( $item ); ?>
+				</td>
                 <?php // @codingStandardsIgnoreLine ?>
 			</tr>
 			<?php endforeach; ?>
 			<?php endif; ?>
 		</tbody>
 		<tfoot>
+			<?php if ( $from_id ) : ?>
+			<tr>
+                <th scope="row" colspan="2">Overall Total (+shipping):</th><?php // @codingStandardsIgnoreLine ?>
+				<td class="product-total"><?php echo wc_price( $order->get_meta( '_original_total' ) ); ?></td>
+                <?php // @codingStandardsIgnoreLine ?>
+			</tr>
+
+			<?php endif; ?>
 			<?php if ( $totals ) : ?>
-				<?php foreach ( $totals as $total ) : ?>
+				<?php
+				foreach ( $totals as $total ) :
+					if ( $from_id && ( 'Subtotal:' == $total['label'] || 'Shipping:' == $total['label'] ) ) {
+						continue;
+					}
+					?>
 			<tr>
                 <th scope="row" colspan="2"><?php echo $total['label']; ?></th><?php // @codingStandardsIgnoreLine ?>
                 <td class="product-total"><?php echo $total['value']; ?></td><?php // @codingStandardsIgnoreLine ?>

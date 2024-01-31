@@ -76,7 +76,7 @@ if ( $show_downloads ) {
 					$pending_payment  = get_post_meta( $order_id, '_pending_payment', true );
 					$original_payment = get_post_meta( $order_id, '_original_total', true );
 					$payment_select   = get_post_meta( $order_id, '_payment_select', true );
-
+					$from_id          = get_post_meta( $order_id, '_from_order_id', true );
 
 					?>
 				</tbody>
@@ -91,6 +91,7 @@ if ( $show_downloads ) {
 					</tr>
 						<?php
 					}
+
 
 
 
@@ -115,6 +116,12 @@ if ( $show_downloads ) {
 			</table>
 
 			<?php do_action( 'woocommerce_order_details_after_order_table', $order ); ?>
+
+			<?php
+			print_r(
+				$order->get_total()
+			);
+			?>
 		</div>
 
 	</div>

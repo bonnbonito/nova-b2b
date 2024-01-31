@@ -89,8 +89,26 @@ class Woocommerce {
 		$deposit_total                   = get_post_meta( $order_id, '_deposit_total', true );
 		$has_adjusted_duplicate_order_id = get_post_meta( $order_id, '_adjusted_duplicate_order_id', true );
 		$original_total                  = get_post_meta( $order_id, '_original_total', true );
+		$from_order                      = get_post_meta( $order_id, '_from_order_id', true );
+		$order                           = wc_get_order( $order_id );
+		if ( $original_total && $from_order ) :
+			?>
+<tr>
+	<td class="label"><?php esc_html_e( 'Overall Total', 'woocommerce' ); ?>:</td>
+	<td width="1%"></td>
+	<td class="total">
+			<?php
+			if ( ! empty( $original_total ) ) {
+				echo wc_price( $original_total, array( 'currency' => $order->get_currency() ) );
+			}
+			?>
+	</td>
+</tr>
+
+			<?php
+			endif;
 		if ( $deposit_total ) :
-			$order = wc_get_order( $order_id );
+
 			if ( empty( $has_adjusted_duplicate_order_id ) ) :
 				?>
 <tr>
@@ -110,23 +128,7 @@ class Woocommerce {
 				<?php
 			endif;
 
-			if ( $original_total ) :
-				?>
-<tr>
-	<td class="label"><?php esc_html_e( 'Overall Total', 'woocommerce' ); ?>:</td>
-	<td width="1%"></td>
-	<td class="total">
-				<?php
-				if ( ! empty( $original_total ) ) {
-					echo wc_price( $original_total, array( 'currency' => $order->get_currency() ) );
-				}
-				?>
-	</td>
-</tr>
-
-				<?php
-			endif;
-		endif;
+endif;
 	}
 
 	public function add_custom_meta_box_to_orders() {
@@ -151,8 +153,8 @@ class Woocommerce {
 		if ( ! empty( $has_adjusted_duplicate_order_id ) ) {
 			add_meta_box(
 				'pending_payment_order',          // Unique ID for the meta box
-				__( 'Pending Payment Order', 'textdomain' ), // Title of the meta box
-				array( $this, 'pending_payment_oder_content' ), // Callback function to output the content
+				__( 'Pending Payment Order', 'woocommerce' ), // Title of the meta box
+				array( $this, 'pending_payment_order_content' ), // Callback function to output the content
 				'shop_order',                  // Post type
 				'advanced',                    // Context (where on the screen)
 				'default'                      // Priority
@@ -160,7 +162,7 @@ class Woocommerce {
 		}
 	}
 
-	public function pending_payment_oder_content( $post ) {
+	public function pending_payment_order_content( $post ) {
 		// Output your custom content here. For example:
 		$order_id       = get_post_meta( $post->ID, '_adjusted_duplicate_order_id', true );
 		$original_total = get_post_meta( $post->ID, '_original_total', true );
@@ -171,14 +173,19 @@ class Woocommerce {
 <p>Original Total: <?php echo $original_total; ?></p>
 
 		<?php
+		$order = wc_get_order( $post->ID );
+		echo '<pre>';
+		print_r( $order->get_meta_data() );
+		echo '</pre>';
 
 		// You can include HTML and PHP here to show whatever content you need.
 	}
 
 	public function deposit_insert_order_total_row( $total_rows, $order ) {
 		// Check if the order has the '_deposit_total' meta key
-		$deposit_total = get_post_meta( $order->get_id(), '_deposit_total', true );
-		$from_order    = get_post_meta( $order->get_id(), '_from_order_id', true );
+		$deposit_total  = get_post_meta( $order->get_id(), '_deposit_total', true );
+		$from_order     = get_post_meta( $order->get_id(), '_from_order_id', true );
+		$original_total = get_post_meta( $order->get_id(), '_original_total', true );
 
 		// If '_deposit_total' meta key doesn't exist, return the original total rows
 		if ( empty( $deposit_total ) || empty( $from_order ) ) {
@@ -190,13 +197,27 @@ class Woocommerce {
 
 		foreach ( $total_rows as $total_key => $total ) {
 			// Insert your custom row before the 'order_total' row
-			if ( $total_key == 'order_total' ) {
-				$new_total_rows['deposit_total'] = array(
-					'label' => __( 'Deposit:', 'woocommerce' ),
-					'value' => wc_price( -$deposit_total ),
-				);
-			}
-			$new_total_rows[ $total_key ] = $total;
+			$new_total_rows['deposit_total'] = array(
+				'label' => __( 'Deposit:', 'woocommerce' ),
+				'value' => wc_price( -$deposit_total ),
+			);
+			$new_total_rows[ $total_key ]    = $total;
+		}
+
+		if ( $from_order && isset( $new_total_rows['cart_subtotal'] ) ) {
+			unset( $new_total_rows['cart_subtotal'] );
+			unset( $new_total_rows['shipping'] );
+
+			$overall_total_row = array(
+				'overall_total' => array(
+					'label' => __( 'Overall Total (+shipping):', 'woocommerce' ),
+					'value' => wc_price( $original_total ),
+				),
+			);
+
+			// Prepend the custom row to the beginning of the total rows array
+			$new_total_rows = array_merge( $overall_total_row, $new_total_rows );
+
 		}
 
 		return $new_total_rows;
@@ -289,6 +310,7 @@ class Woocommerce {
 			update_post_meta( $order_id, '_original_total', $total );
 			update_post_meta( $order_id, '_original_shipping_method', $shipping_method );
 			update_post_meta( $order_id, '_pending_payment', $pending_payment );
+			update_post_meta( $order_id, '_deposit_total', $deposit_total );
 
 			// Create the adjusted duplicate order
 			$new_order_id = $this->create_duplicate_order_with_adjustment( $order, $payment_select, $total, $shipping, $shipping_method, $tax, $pending_payment );
@@ -441,6 +463,9 @@ class Woocommerce {
 	public function currency_symbol( $currency_symbol, $currency ) {
 		if ( $currency == 'USD' ) {
 			$currency_symbol = 'USD' . $currency_symbol;
+		}
+		if ( $currency === 'CAD' ) {
+			$currency_symbol = 'CAD' . $currency_symbol;
 		}
 		return $currency_symbol;
 	}

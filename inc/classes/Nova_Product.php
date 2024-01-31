@@ -240,14 +240,17 @@ function toggleShowClass() {
 	}
 
 	public function redirect_nova_quote_single_product() {
-		if ( is_singular( 'product' ) && is_product() ) {
+		if ( is_singular( 'product' ) && is_product() || is_singular( 'payment_type' ) ) {
+			/*
 			global $post;
 			$product = wc_get_product( $post->ID );
 
 			if ( $product && $product->is_type( 'nova_quote' ) ) {
 				wp_redirect( home_url() );
 				exit;
-			}
+			}*/
+			wp_redirect( home_url() );
+				exit;
 		}
 	}
 
