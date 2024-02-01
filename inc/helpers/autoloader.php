@@ -19,6 +19,7 @@ function autoloader( $class ) {
 
 // spl_autoload_register( '\NOVA_B2B\INC\Helpers\autoloader' );
 
+
 require NOVA_DIR_PATH . '/inc/classes/Roles.php';
 require NOVA_DIR_PATH . '/inc/classes/Admin.php';
 require NOVA_DIR_PATH . '/inc/classes/Scripts.php';

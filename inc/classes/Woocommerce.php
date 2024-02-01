@@ -83,6 +83,8 @@ class Woocommerce {
 		add_action( 'woocommerce_get_order_item_totals', array( $this, 'deposit_insert_order_total_row' ), 10, 2 );
 		add_action( 'add_meta_boxes', array( $this, 'add_custom_meta_box_to_orders' ) );
 		add_action( 'woocommerce_admin_order_totals_after_tax', array( $this, 'add_deposit_row' ) );
+		add_action( 'wp_ajax_populate_signage', array( $this, 'populate_signage' ) );
+		add_action( 'wp_ajax_nopriv_populate_signage', array( $this, 'populate_signage' ) );
 	}
 
 	public function add_deposit_row( $order_id ) {
@@ -126,9 +128,9 @@ class Woocommerce {
 </tr>
 
 				<?php
-			endif;
+				endif;
 
-endif;
+	endif;
 	}
 
 	public function add_custom_meta_box_to_orders() {
@@ -408,18 +410,18 @@ endif;
 
 	public function custom_shipping_logic( $rates, $package ) {
 		// Get the total cart cost
-			$cart_total = WC()->cart->cart_contents_total;
+		$cart_total = WC()->cart->cart_contents_total;
 
-			// Calculate the standard and expedite costs
-			$standard_cost = $cart_total * 0.075; // 7.5%
-			$expedite_cost = $cart_total * 0.155; // 15.5%
+		// Calculate the standard and expedite costs
+		$standard_cost = $cart_total * 0.075; // 7.5%
+		$expedite_cost = $cart_total * 0.155; // 15.5%
 
-			// Assuming the method IDs are 'flat_rate', 'standard', and 'expedite'
-			$flat_rate = isset( $rates['flat_rate:4'] ) ? $rates['flat_rate:4'] : null;
-			$standard  = isset( $rates['flat_rate:2'] ) ? $rates['flat_rate:2'] : null;
-			$expedite  = isset( $rates['flat_rate:3'] ) ? $rates['flat_rate:3'] : null;
+		// Assuming the method IDs are 'flat_rate', 'standard', and 'expedite'
+		$flat_rate = isset( $rates['flat_rate:4'] ) ? $rates['flat_rate:4'] : null;
+		$standard  = isset( $rates['flat_rate:2'] ) ? $rates['flat_rate:2'] : null;
+		$expedite  = isset( $rates['flat_rate:3'] ) ? $rates['flat_rate:3'] : null;
 
-			// Update the standard and expedite rates
+		// Update the standard and expedite rates
 		if ( $standard ) {
 			$rates['flat_rate:2']->cost = $standard_cost;
 		}
@@ -427,7 +429,7 @@ endif;
 			$rates['flat_rate:3']->cost = $expedite_cost;
 		}
 
-			// Check and unset the lower cost between Flat Rate and Standard
+		// Check and unset the lower cost between Flat Rate and Standard
 		if ( $flat_rate && $standard ) {
 			if ( $flat_rate->cost < $standard_cost ) {
 				unset( $rates['flat_rate:4'] );
@@ -436,7 +438,7 @@ endif;
 			}
 		}
 
-			// Check if the address is Vancouver and modify Expedite
+		// Check if the address is Vancouver and modify Expedite
 		if ( isset( $package['destination']['city'] ) && strtolower( $package['destination']['city'] ) === 'vancouver' ) {
 			if ( $expedite ) {
 				$rates['flat_rate:3']->cost = min( $expedite_cost, $standard_cost, ( isset( $flat_rate->cost ) ? $flat_rate->cost : PHP_INT_MAX ) );
@@ -445,7 +447,7 @@ endif;
 			}
 		}
 
-			return $rates;
+		return $rates;
 	}
 
 	public function add_pst_field( $fields ) {
@@ -470,44 +472,273 @@ endif;
 		return $currency_symbol;
 	}
 
+
+	public function get_parent_ID() {
+		global $post;
+		// Check if it's a singular "signage" post.
+		if ( is_singular( 'signage' ) ) {
+			$parent_id = $post->post_parent;
+
+			// If it's a top-level post or has children, use the current post's details.
+			if ( $parent_id === 0 || $this->has_children( $post->ID, 'signage' ) ) {
+				$output_post_id = $post->ID;
+			} else {
+				$output_post_id = $parent_id;
+			}
+			return $output_post_id;
+		}
+		return 0;
+	}
+
+	public function get_signage_ID() {
+		global $post;
+		// Check if it's a singular "signage" post.
+		if ( is_singular( 'signage' ) ) {
+			$parent_id = $post->post_parent;
+
+			// If it's a top-level post or has children, use the current post's details.
+			if ( $parent_id !== 0 && ! $this->has_children( $post->ID, 'signage' ) ) {
+				return $post->ID;
+			}
+		}
+		return 0;
+	}
+
+	public function output_current_signage( $output_post_id ) {
+		echo get_the_post_thumbnail( $output_post_id, array( 35, 35 ) );
+		echo get_the_title( $output_post_id );
+	}
+
+	public function has_children( $post_id, $post_type = 'page' ) {
+		$children = get_posts(
+			array(
+				'post_type'   => $post_type,
+				'post_parent' => $post_id,
+				'numberposts' => 1, // We only need to check if at least one exists.
+			)
+		);
+		return ! empty( $children );
+	}
+
+
 	public function product_dropdown_nav() {
 		ob_start();
-		?>
-<div class="md:flex md:gap-10 p-dropdown-wrap mb-24 mt-10">
-	<div class="p-dropdown cursor-pointer mb-4 md:mb-0">
-		<div id="productCat" class="p-dropdown-current overflow-hidden">
-			<div id="productCatCurrent"><img
-					src="<?php echo get_stylesheet_directory_uri() . '/assets/img/p-icon.png'; ?>">
-				Acrylic</div>
-			<svg xmlns="http://www.w3.org/2000/svg" width="15" height="8" viewBox="0 0 15 8" fill="none">
-				<path d="M13.3516 2L7.8861 6.54054L2.00021 2" stroke="black" stroke-width="2" stroke-linecap="square"
-					stroke-linejoin="round" />
-			</svg>
-		</div>
-		<div id="productCat-list">
 
+		$signage_query = new WP_Query(
+			array(
+				'post_type'      => 'signage',
+				'post_status'    => 'publish',
+				'posts_per_page' => -1,
+				'post_parent'    => 0,
+			)
+		);
+		?>
+<div class="md:flex md:gap-10 p-dropdown-wrap mb-24 mt-10 relative">
+	<div class="p-dropdown cursor-pointer mb-4 md:mb-0">
+		<div id="productCat" class="p-dropdown-current overflow-hidden grow">
+			<div class="p-drowpdown-wrap grow h-[55px] p-[10px] dropdown-trigger" data-open="productCat-list">
+				<div id="productCatCurrent" class="flex grow gap-2 items-center">
+					<div class="selectedWrap flex items-center gap-3">
+						<?php if ( $this->get_parent_ID() ) : ?>
+							<?php $this->output_current_signage( $this->get_parent_ID() ); ?>
+						<?php else : ?>
+						<div class="text-[#D2D2D2]">SELECT OPTION</div>
+						<?php endif; ?>
+					</div>
+					<svg xmlns="http://www.w3.org/2000/svg" width="15" height="8" viewBox="0 0 15 8" fill="none"
+						class="ml-auto">
+						<path d="M13.3516 2L7.8861 6.54054L2.00021 2" stroke="black" stroke-width="2"
+							stroke-linecap="square" stroke-linejoin="round" />
+					</svg>
+				</div>
+			</div>
 		</div>
+		<?php if ( $signage_query->have_posts() ) { ?>
+		<div id="productCat-list" class="hidden">
+
+			<?php
+			while ( $signage_query->have_posts() ) {
+				$signage_query->the_post();
+				?>
+			<div class="product-cat-item" data-signage="<?php echo get_the_ID(); ?>">
+				<?php the_post_thumbnail( array( 35, 35 ) ); ?>
+				<?php the_title(); ?>
+			</div>
+
+				<?php
+			}
+				wp_reset_postdata();
+			?>
+		</div>
+		<?php } ?>
 	</div>
 
 	<div class="p-dropdown cursor-pointer">
-		<div id="novaProduct" class="p-dropdown-current overflow-hidden">
-			<div id="novaProductCurrent"><img
-					src="<?php echo get_stylesheet_directory_uri() . '/assets/img/p-icon.png'; ?>">
-				<span class="truncate"><?php the_title(); ?></span>
+		<div id="novaProduct" class="p-dropdown-current overflow-hidden grow">
+			<div class="p-drowpdown-wrap grow h-[55px] p-[10px] dropdown-trigger" data-open="novaProduct-list">
+				<div id="novaProductCurrent" class="flex grow gap-2 items-center">
+					<div class="selectedWrap flex items-center gap-3">
+						<?php if ( $this->get_signage_ID() ) : ?>
+							<?php $this->output_current_signage( $this->get_signage_ID() ); ?>
+						<?php else : ?>
+						<span class="text-[#D2D2D2]">SELECT OPTION</span>
+						<?php endif; ?>
+					</div>
+					<svg xmlns="http://www.w3.org/2000/svg" width="15" height="8" viewBox="0 0 15 8" fill="none"
+						class="ml-auto">
+						<path d="M13.3516 2L7.8861 6.54054L2.00021 2" stroke="black" stroke-width="2"
+							stroke-linecap="square" stroke-linejoin="round" />
+					</svg>
+				</div>
 			</div>
-			<svg xmlns="http://www.w3.org/2000/svg" width="15" height="8" viewBox="0 0 15 8" fill="none">
-				<path d="M13.3516 2L7.8861 6.54054L2.00021 2" stroke="black" stroke-width="2" stroke-linecap="square"
-					stroke-linejoin="round" />
-			</svg>
 		</div>
-		<div id="novaProduct-list">
+		<?php
+		$nova_query = new WP_Query(
+			array(
+				'post_type'      => 'signage',
+				'post_status'    => 'publish',
+				'posts_per_page' => -1,
+				'post_parent'    => $this->get_parent_ID(),
+			)
+		);
+		?>
+		<?php if ( $nova_query->have_posts() ) { ?>
+		<div id="novaProduct-list" class="hidden">
 
+			<?php
+			while ( $nova_query->have_posts() ) {
+				$nova_query->the_post();
+				?>
+			<a class="product-cat-item text-black" href="<?php echo esc_url( get_permalink() ); ?>">
+				<?php the_post_thumbnail( array( 35, 35 ) ); ?>
+				<?php the_title(); ?>
+			</a>
+
+				<?php
+			}
+				wp_reset_postdata();
+			?>
 		</div>
+		<?php } ?>
 	</div>
+
+	<script>
+	document.addEventListener("DOMContentLoaded", (event) => {
+		const triggers = document.querySelectorAll('.dropdown-trigger');
+		const productCatList = document.getElementById('productCat-list');
+		const novaProductCurrent = document.getElementById('novaProductCurrent');
+		const novaProductList = document.getElementById('novaProduct-list');
+
+
+
+		productCatList.querySelectorAll('.product-cat-item').forEach(item => {
+			item.addEventListener("click", () => {
+				const parentId = item.dataset.signage;
+				const selectWrap = novaProductCurrent.querySelector('.selectedWrap');
+				const currentWrap = productCatCurrent.querySelector('.selectedWrap');
+				const content = item.innerHTML;
+				currentWrap.innerHTML = content;
+
+				selectWrap.innerHTML =
+					'<span class="text-[#D2D2D2]">LOADING...</span>';
+
+				novaProductList.innerHTML = '';
+
+				const data = new FormData();
+				data.append('action', 'populate_signage');
+				data.append('parent_id', parentId);
+				data.append('nonce', NovaMyAccount.nonce);
+
+
+				productCatList.classList.add('hidden');
+				novaProductList.classList.add('hidden');
+
+				fetch(NovaMyAccount.ajax_url, {
+						method: 'POST',
+						credentials: 'same-origin',
+						headers: {
+							'Cache-Control': 'no-cache',
+						},
+						body: data,
+					})
+					.then((response) => response.json())
+					.then((data) => {
+						selectWrap.innerHTML =
+							'<span class="text-[#D2D2D2]">SELECT OPTION</span>';
+
+
+						novaProductList.innerHTML = data['html'];
+					})
+					.catch((error) => console.error('Error:', error))
+
+			});
+		});
+
+		triggers.forEach(trigger => {
+			trigger.addEventListener('click', e => {
+				e.preventDefault();
+				const open = trigger.dataset.open;
+				const dropdown = document.getElementById(open);
+				dropdown.classList.toggle('hidden');
+
+				document.addEventListener('click', function closeDropdown(event) {
+					const dropdownWrap = document.querySelector('.p-dropdown-wrap');
+
+					if ((!dropdown.contains(event.target) && !dropdownWrap.contains(
+							event.target)) && event.target !== trigger) {
+						dropdown.classList.add('hidden');
+						document.removeEventListener('click', closeDropdown);
+					}
+				});
+			});
+		});
+	});
+	const triggers = document.querySelectorAll('.dropdown-trigger');
+	</script>
 
 </div>
 		<?php
-		return ob_get_clean();
+			return ob_get_clean();
+	}
+
+	public function populate_signage() {
+		$status = array(
+			'code' => 1,
+		);
+		if ( ! wp_verify_nonce( $_POST['nonce'], 'nova_account_nonce' ) ) {
+			$status['error']  = 'Nonce error';
+			$status['status'] = 'error';
+			wp_send_json( $status );
+		}
+
+		$nova_query = new WP_Query(
+			array(
+				'post_type'      => 'signage',
+				'post_status'    => 'publish',
+				'posts_per_page' => -1,
+				'post_parent'    => $_POST['parent_id'],
+			)
+		);
+
+		ob_start();
+		while ( $nova_query->have_posts() ) {
+			$nova_query->the_post();
+			?>
+<a class="product-cat-item text-black" href="<?php echo esc_url( get_permalink() ); ?>">
+			<?php the_post_thumbnail( array( 35, 35 ) ); ?>
+			<?php the_title(); ?>
+</a>
+			<?php
+		}
+		wp_reset_postdata();
+
+		$html = ob_get_clean();
+
+		$status['post'] = $_POST;
+		$status['code'] = 2;
+		$status['html'] = $html;
+
+		wp_send_json( $status );
 	}
 
 	public function show_product_dropdown_nav() {
@@ -539,8 +770,8 @@ endif;
 </div>
 
 				<?php
-		endwhile;
-endif;
+			endwhile;
+	endif;
 		return ob_get_clean();
 	}
 
@@ -565,7 +796,7 @@ endif;
 </div>
 
 			<?php
-		endif;
+			endif;
 		return ob_get_clean();
 	}
 
@@ -639,7 +870,6 @@ jQuery(document.body).on('updated_cart_totals', initializeQuantityButtons);
 </script>
 		<?php
 	}
-
 
 	public function update_single_quantity_script() {
 		global $product;
@@ -716,8 +946,6 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		<?php
 	}
 
-
-
 	public function edit_cart_summary_title() {
 		$kadence_theme_class = \Kadence\Theme::instance();
 		remove_action( 'woocommerce_before_cart_table', array( $kadence_theme_class->components['woocommerce'], 'cart_summary_title' ) );
@@ -789,7 +1017,6 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		return $array;
 	}
 
-
 	public function nova_woocommerce_order_item_class( $class, $item, $order ) {
 		if ( $item->get_meta( 'signage' ) ) {
 			$class .= ' nova-signage';
@@ -832,7 +1059,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 			echo $this->generate_html_table_from_array( $item->get_meta( 'signage' ), $item->get_meta( 'product' ) );
 		}
 		if ( $item->get_meta( 'nova_note' ) ) {
-				echo '<p><strong>NOTE:</strong><br>' . $item->get_meta( 'nova_note' ) . '</p>';
+			echo '<p><strong>NOTE:</strong><br>' . $item->get_meta( 'nova_note' ) . '</p>';
 		}
 	}
 
@@ -1084,7 +1311,6 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		return $title;
 	}
 
-
 	public function mockups_processing_content() {
 		$user_id = get_current_user_id();
 
@@ -1259,7 +1485,6 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		return $vars;
 	}
 
-
 	public function nova_product_specs() {
 		if ( have_rows( 'tech_specs_group' ) ) :
 			?>
@@ -1291,13 +1516,13 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 					?>
 	</div>
 					<?php
-		endif;
+			endif;
 				?>
 
 	<?php endwhile; ?>
 </div>
 			<?php
-		endif;
+			endif;
 	}
 
 	public function nova_product_faqs() {
