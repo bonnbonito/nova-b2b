@@ -25,18 +25,55 @@ class Pending_Payment {
 	public function __construct() {
 		add_action( 'after_setup_theme', array( $this, 'create_custom_table' ) );
 		add_action( 'woocommerce_order_status_completed', array( $this, 'insert_pending_payment' ) );
+		add_action( 'woocommerce_order_status_completed', array( $this, 'change_pending_status' ) );
 		add_action( 'admin_menu', array( $this, 'add_pending_payments_submenu_page' ) );
 		add_action( 'admin_post_nopriv_delete_pending_payment', array( $this, 'handle_delete_order' ) );
 		add_action( 'admin_post_delete_pending_payment', array( $this, 'handle_delete_order' ) );
 		add_action( 'wp', array( $this, 'schedule_pending_payment_checker' ) );
 		add_action( 'check_pending_payments_hook', array( $this, 'check_pending_payments' ) );
 		add_action( 'admin_post_send_payment_reminder', array( $this, 'handle_send_reminder' ) );
+		add_filter( 'kadence_woomail_order_body_text', array( $this, 'pending_payment_order_email_content' ), 999, 5 );
+		// add_filter( 'woocommerce_email_recipient_customer_completed_order', array( $this, 'disable_completed_order_email_for_pending' ), 10, 2 );
 	}
 
-	protected function get_customer_email_from_payment( $payment ) {
-		$order = wc_get_order( $payment->original_order );
-		return $order ? $order->get_billing_email() : false;
+	public function disable_completed_order_email_for_pending( $recipient, $order ) {
+		if ( $order && get_post_meta( $order->get_id(), '_pending_id', true ) ) {
+			return '';
+		}
+
+		return $recipient;
 	}
+
+	public function pending_payment_order_email_content( $body_text, $order, $sent_to_admin, $plain_text, $email ) {
+		$pending_id = $order->get_meta( '_pending_id' );
+		if ( $pending_id ) {
+			$body_text = 'Thank you for the payment';
+		}
+		return $body_text;
+	}
+
+	protected function get_billing_information_from_payment( $payment ) {
+		$order = wc_get_order( $payment->original_order );
+		if ( ! $order ) {
+			return false;
+		}
+
+		$billing_information = array(
+			'first_name' => $order->get_billing_first_name(),
+			'last_name'  => $order->get_billing_last_name(),
+			'email'      => $order->get_billing_email(),
+			'phone'      => $order->get_billing_phone(),
+			'address_1'  => $order->get_billing_address_1(),
+			'address_2'  => $order->get_billing_address_2(),
+			'city'       => $order->get_billing_city(),
+			'state'      => $order->get_billing_state(),
+			'postcode'   => $order->get_billing_postcode(),
+			'country'    => $order->get_billing_country(),
+		);
+
+		return $billing_information;
+	}
+
 
 	public function handle_send_reminder() {
 		if ( isset( $_POST['payment_id'], $_POST['send_reminder_nonce'] ) && wp_verify_nonce( $_POST['send_reminder_nonce'], 'send_reminder_action' ) ) {
@@ -53,11 +90,26 @@ class Pending_Payment {
 	}
 
 	public function send_payment_reminder_email( $payment ) {
-		$subject = 'Pending Payment Reminder';
-		$message = 'This is a reminder that your payment is almost due. Please make sure to complete the payment by ' . $payment->payment_date . '.';
-		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
-		$customer_email = $this->get_customer_email_from_payment( $payment );
+		$payment_type   = $payment->payment_select;
+		$payment_order  = $payment->payment_order;
+		$deposit        = $payment->deposit;
+		$pending_total  = $payment->pending_total;
+		$original_total = $payment->original_total;
+		$currency       = $payment->currency;
+		$payment_date   = $payment->payment_date;
+
+		$customer = $this->get_billing_information_from_payment( $payment );
+
+		$first_name     = $customer['first_name'];
+		$customer_email = $customer['email'];
+
+		$subject = get_field( 'reminder_email_subject', $payment_type );
+
+		$message = get_field( 'reminder_email', $payment_type );
+		$message = str_replace( '{first_name}', $first_name, $message );
+
+		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
 		if ( $customer_email ) {
 			$role_instance = \NOVA_B2B\INC\CLASSES\Roles::get_instance();
@@ -81,8 +133,10 @@ class Pending_Payment {
 		$pending_payments = $wpdb->get_results( $query );
 
 		foreach ( $pending_payments as $payment ) {
-			// Assuming 'name' field contains customer email or order ID to fetch customer email
-			$customer_email = $this->get_customer_email_from_payment( $payment );
+
+			$customer = $this->get_billing_information_from_payment( $payment );
+
+			$customer_email = $customer['email'];
 
 			if ( $customer_email ) {
 				$this->send_payment_reminder_email( $customer_email, $payment );
@@ -240,6 +294,15 @@ class Pending_Payment {
 		return $wpdb->delete( $table_name, array( 'id' => $id ), array( '%d' ) );
 	}
 
+	public function change_pending_status( $order_id ) {
+		$pending_id = get_post_meta( $order_id, '_pending_id', true );
+
+		if ( $pending_id ) {
+			$update_data = array( 'payment_status' => 'Completed' );
+			$this->update_data( $pending_id, $update_data );
+		}
+	}
+
 
 	public function insert_pending_payment( $order_id ) {
 		$pending_order = get_post_meta( $order_id, '_adjusted_duplicate_order_id', true );
@@ -289,6 +352,8 @@ class Pending_Payment {
 			);
 
 			$inserted_id = $this->insert_data( $data, $format );
+
+			update_post_meta( $pending_order, '_pending_id', $inserted_id );
 
 		}
 	}
