@@ -3,7 +3,7 @@
  * Autoloader for theme
  */
 
-namespace NOVA_B2B\INC\Helpers;
+namespace NOVA_B2B\Inc\Helpers;
 
 function autoloader( $class ) {
 	// Corrected function to use the file path instead of URI
@@ -17,7 +17,7 @@ function autoloader( $class ) {
 	}
 }
 
-// spl_autoload_register( '\NOVA_B2B\INC\Helpers\autoloader' );
+// spl_autoload_register( '\NOVA_B2B\Inc\Helpers\autoloader' );
 
 
 require NOVA_DIR_PATH . '/inc/classes/Roles.php';

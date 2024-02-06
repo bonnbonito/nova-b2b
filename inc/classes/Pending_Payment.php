@@ -1,5 +1,5 @@
 <?php
-namespace NOVA_B2B\INC\CLASSES;
+namespace NOVA_B2B\Inc\Classes;
 
 require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
@@ -112,7 +112,7 @@ class Pending_Payment {
 		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
 		if ( $customer_email ) {
-			$role_instance = \NOVA_B2B\INC\CLASSES\Roles::get_instance();
+			$role_instance = \NOVA_B2B\Inc\Classes\Roles::get_instance();
 			$role_instance->send_email( $customer_email, $subject, $message, $headers, array() );
 		}
 	}

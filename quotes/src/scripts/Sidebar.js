@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
+import { NovaContext } from './MetaCutAccrylic';
 import ModalSave from './ModalSave';
-import { NovaContext } from './NovaQuote';
 import Prices from './Prices';
 
 export default function Sidebar() {

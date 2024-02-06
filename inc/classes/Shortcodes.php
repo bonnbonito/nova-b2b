@@ -1,5 +1,5 @@
 <?php
-namespace NOVA_B2B\INC\CLASSES;
+namespace NOVA_B2B\Inc\Classes;
 
 class Shortcodes {
 	/**
@@ -26,6 +26,19 @@ class Shortcodes {
 		add_shortcode( 'nova_front_login', array( $this, 'nova_front_login' ) );
 		add_shortcode( 'signup_activation', array( $this, 'signup_activation' ) );
 		add_shortcode( 'homepage_grid', array( $this, 'homepage_grid' ) );
+		add_shortcode( 'custom_project', array( $this, 'custom_project' ) );
+	}
+
+	public function custom_project() {
+		ob_start();
+		?>
+		<?php if ( ! is_user_logged_in() ) : ?>
+			<?php echo do_shortcode( '[kadence_element id=" 202"]' ); ?>
+		<?php else : ?>
+<div id="customProject"></div>
+			<?php
+	endif;
+		return ob_get_clean();
 	}
 
 	public function homepage_grid() {

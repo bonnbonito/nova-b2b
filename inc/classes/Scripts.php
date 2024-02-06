@@ -1,5 +1,5 @@
 <?php
-namespace NOVA_B2B\INC\CLASSES;
+namespace NOVA_B2B\Inc\Classes;
 
 use WC;
 class Scripts {
@@ -253,6 +253,7 @@ class Scripts {
 
 		wp_register_script( 'admin-acrylic', get_stylesheet_directory_uri() . '/assets/js/admin-acrylic.js', array(), '1.0', true );
 		wp_register_script( 'admin-quote', get_stylesheet_directory_uri() . '/assets/js/admin-quote.js', array(), '1.0', true );
+		wp_register_script( 'admin-projects', get_stylesheet_directory_uri() . '/assets/js/admin-projects.js', array(), '1.0', true );
 		wp_register_script( 'dropbox-api', get_stylesheet_directory_uri() . '/assets/js/dropbox.js', array(), '1.0', true );
 
 		wp_localize_script(
@@ -301,6 +302,18 @@ class Scripts {
 
 		if ( $post && 'nova_quote' === $post->post_type ) {
 			wp_enqueue_script( 'admin-quote' );
+		}
+
+		wp_localize_script(
+			'admin-projects',
+			'CustomProjects',
+			array(
+				'projects' => get_field( 'projects' ),
+			)
+		);
+
+		if ( $post && 'custom_project' === $post->post_type ) {
+			wp_enqueue_script( 'admin-projects' );
 		}
 
 		wp_enqueue_style( 'nova-admin', get_stylesheet_directory_uri() . '/assets/css/admin.css' );

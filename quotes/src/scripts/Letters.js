@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import Dropdown from './Dropdown';
 import FontsDropdown from './FontsDropdown';
-import { NovaContext } from './NovaQuote';
+import { NovaContext } from './MetaCutAccrylic';
 import UploadFile from './UploadFile';
 import useOutsideClick from './utils/ClickOutside';
 import convert_json from './utils/ConvertJson';

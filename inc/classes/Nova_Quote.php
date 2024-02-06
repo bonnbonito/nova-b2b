@@ -1,5 +1,5 @@
 <?php
-namespace NOVA_B2B\INC\CLASSES;
+namespace NOVA_B2B\Inc\Classes;
 
 class Nova_Quote {
 	/**
@@ -21,7 +21,7 @@ class Nova_Quote {
 	 * Class Constructor.
 	 */
 	public function __construct() {
-		add_action( 'wp_enqueue_scripts', array( $this, 'acrylic_nova_scripts' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'quotes_nova_scripts' ) );
 		add_action( 'rest_api_init', array( $this, 'nova_rest_quote_file' ) );
 
 		add_action( 'wp_ajax_signage_pricing_table', array( $this, 'signage_pricing_table' ) );
@@ -33,9 +33,11 @@ class Nova_Quote {
 		add_action( 'wp_ajax_quote_to_processing', array( $this, 'quote_to_processing' ) );
 		add_action( 'wp_ajax_to_checkout', array( $this, 'nova_to_checkout' ) );
 		add_action( 'wp_ajax_delete_quote', array( $this, 'delete_quote' ) );
+		add_action( 'wp_ajax_save_custom_project', array( $this, 'save_custom_project' ) );
 		add_filter( 'upload_mimes', array( $this, 'enable_ai_files' ), 1, 1 );
 		add_filter( 'acf/prepare_field/name=signage', array( $this, 'acf_diable_field' ) );
 		add_filter( 'acf/prepare_field/name=partner', array( $this, 'acf_diable_field' ) );
+		add_filter( 'acf/prepare_field/name=projects', array( $this, 'acf_diable_field' ) );
 		add_action( 'template_redirect', array( $this, 'redirect_if_loggedin' ) );
 		if ( function_exists( 'acf_add_options_page' ) ) {
 			add_action( 'init', array( $this, 'add_options_page' ) );
@@ -66,7 +68,7 @@ class Nova_Quote {
 		<?php if ( ! is_user_logged_in() ) : ?>
 			<?php echo do_shortcode( '[kadence_element id=" 202"]' ); ?>
 		<?php else : ?>
-<div id="novaQuote"></div>
+<div id="metalCutAccrylic"></div>
 			<?php
 	endif;
 	}
@@ -147,7 +149,7 @@ class Nova_Quote {
 
 		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
-		$role_instance = \NOVA_B2B\INC\CLASSES\Roles::get_instance();
+		$role_instance = \NOVA_B2B\Inc\Classes\Roles::get_instance();
 
 		$role_instance->send_email( $to, $subject, $message, $headers, array() );
 	}
@@ -171,7 +173,7 @@ class Nova_Quote {
 
 		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
-		$role_instance = \NOVA_B2B\INC\CLASSES\Roles::get_instance();
+		$role_instance = \NOVA_B2B\Inc\Classes\Roles::get_instance();
 
 		$role_instance->send_email( $to, $subject, $message, $headers, array() );
 
@@ -442,6 +444,40 @@ class Nova_Quote {
 		wp_send_json( $status );
 	}
 
+	public function save_custom_project() {
+		$status = array(
+			'code' => 1,
+		);
+		if ( ! wp_verify_nonce( $_POST['nonce'], 'quote_nonce' ) ) {
+			$status['status'] = 'error';
+			$status['error']  = 'Nonce error';
+			wp_send_json( $status );
+		}
+
+		$args = array(
+			'post_type'   => 'custom_project',
+			'post_title'  => $_POST['title'],
+			'post_status' => 'publish',
+			'post_author' => $_POST['user'],
+		);
+
+		$post_id = wp_insert_post( $args );
+
+		if ( ! is_wp_error( $post_id ) ) {
+
+			update_field( 'projects', $_POST['projects'], $post_id );
+
+			$status['code']   = 2;
+			$status['post']   = $_POST;
+			$status['status'] = 'success';
+		} else {
+			$status['code'] = 3;
+			wp_send_json( $status );
+		}
+
+		wp_send_json( $status );
+	}
+
 	public function save_quote() {
 		$status = array(
 			'code' => 1,
@@ -641,7 +677,7 @@ class Nova_Quote {
 		return new WP_Error( 'upload_error', $upload['error'], array( 'status' => 500 ) );
 	}
 
-	public function acrylic_nova_scripts() {
+	public function quotes_nova_scripts() {
 		wp_register_script(
 			'nova-quote',
 			get_theme_file_uri( '/quotes/build/index.js' ),
@@ -680,7 +716,7 @@ class Nova_Quote {
 			)
 		);
 
-		if ( ( is_product( 'product' ) || is_account_page() ) && is_user_logged_in() || get_post_type() === 'signage' ) {
+		if ( ( is_product( 'product' ) || is_account_page() || is_page( 'custom' ) ) && is_user_logged_in() || get_post_type() === 'signage' ) {
 			wp_enqueue_script( 'nova-quote' );
 			wp_enqueue_style( 'nova-quote' );
 		}

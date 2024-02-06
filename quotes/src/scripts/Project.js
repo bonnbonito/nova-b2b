@@ -2,12 +2,9 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Tooltip } from 'react-tooltip';
 import { v4 as uuidv4 } from 'uuid'; // Make sure to import uuid
 import EditableText from './EditableText';
-import Letters from './Letters';
-import Logo from './Logo';
-import { NovaContext, SignageCount } from './MetaCutAccrylic';
 import { CollapseIcon, DuplicateIcon, TrashIcon } from './svg/Icons';
 
-export default function Signage({ item, index }) {
+export default function Project({ item, index }) {
 	const { signage, setSignage } = useContext(NovaContext);
 	const [open, setOpen] = useState(true);
 	const [itemTitle, setItemTitle] = useState(item.title);

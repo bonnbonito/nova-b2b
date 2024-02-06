@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( ! apply_filters( 'woocommerce_order_item_visible', true, $item ) ) {
 	return;
 }
-$woo_instance = \NOVA_B2B\INC\CLASSES\Woocommerce::get_instance();
+$woo_instance = \NOVA_B2B\Inc\Classes\Woocommerce::get_instance();
 ?>
 <tr
 	class="<?php echo esc_attr( apply_filters( 'woocommerce_order_item_class', 'woocommerce-table__line-item order_item', $item, $order ) ); ?>">

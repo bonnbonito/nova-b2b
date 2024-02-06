@@ -1,5 +1,10 @@
 <?php
-class Nova_Quote {
+
+namespace NOVA_B2B\Inc\Classes;
+
+use WP_Query;
+
+class Nova_Product {
 
 	private static $instance = null;
 
@@ -15,7 +20,7 @@ class Nova_Quote {
 
 		add_filter( 'woocommerce_product_search', array( $this, 'exclude_nova_quote_from_search' ) );
 		add_filter( 'woocommerce_related_products', array( $this, 'exclude_nova_quote_from_related_products' ), 10, 3 );
-		add_action( 'template_redirect', array( $this, 'redirect_nova_quote_single_product' ) );
+		add_action( 'template_redirect', array( $this, 'redirect_singular_post_types' ) );
 		add_filter( 'views_edit-product', array( $this, 'add_nova_quote_products_subsubsub' ), 30 );
 		add_filter( 'views_edit-product', array( $this, 'change_all_count' ) );
 		// add_filter( 'the_title', array( $this, 'modify_acrylic_post_title' ), 10, 2 );
@@ -188,7 +193,7 @@ function toggleShowClass() {
 			),
 			'posts_per_page' => -1,
 		);
-		$products = new WP_Query( $args );
+		$products = new \WP_Query( $args );
 
 		return $products->found_posts;
 	}
@@ -239,8 +244,8 @@ function toggleShowClass() {
 		return $products->found_posts;
 	}
 
-	public function redirect_nova_quote_single_product() {
-		if ( is_singular( 'product' ) && is_product() || is_singular( 'payment_type' ) ) {
+	public function redirect_singular_post_types() {
+		if ( is_singular( 'product' ) && is_product() || is_singular( 'payment_type' ) || is_singular( 'custom_project' ) ) {
 			/*
 			global $post;
 			$product = wc_get_product( $post->ID );
@@ -257,7 +262,7 @@ function toggleShowClass() {
 	// Method to get the singleton instance
 	public static function get_instance() {
 		if ( self::$instance == null ) {
-			self::$instance = new Nova_Quote();
+			self::$instance = new Nova_Product();
 		}
 
 		return self::$instance;
@@ -335,4 +340,4 @@ function toggleShowClass() {
 }
 
 // Initialize the singleton instance
-Nova_Quote::get_instance();
+Nova_Product::get_instance();

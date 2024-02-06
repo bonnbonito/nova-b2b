@@ -1,5 +1,5 @@
 <?php
-namespace NOVA_B2B\INC\CLASSES;
+namespace NOVA_B2B\Inc\Classes;
 
 use WP_User;
 use WP_Error;

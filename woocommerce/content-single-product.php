@@ -89,7 +89,7 @@ if ( post_password_required() ) {
 			<?php if ( ! is_user_logged_in() ) : ?>
 				<?php echo do_shortcode( '[kadence_element id=" 202"]' ); ?>
 			<?php endif; ?>
-			<div id="novaQuote"></div>
+			<div id="metalCutAccrylic"></div>
 
 
 		</div>

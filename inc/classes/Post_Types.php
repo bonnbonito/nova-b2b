@@ -1,6 +1,6 @@
 <?php
 
-namespace NOVA_B2B\INC\CLASSES;
+namespace NOVA_B2B\Inc\Classes;
 
 class Post_Types {
 	/**

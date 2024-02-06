@@ -30,7 +30,7 @@ export default function EditableText({ id, text, onChange }) {
 				viewBox="0 0 24 24"
 				stroke-width="1.5"
 				stroke="red"
-				class="w-3 h-3"
+				class="w-6 h-6"
 			>
 				<path
 					stroke-linecap="round"
@@ -59,7 +59,7 @@ export default function EditableText({ id, text, onChange }) {
 				viewBox="0 0 24 24"
 				stroke-width="1.5"
 				stroke="#008000"
-				class="w-3 h-3"
+				class="w-6 h-6"
 			>
 				<path
 					stroke-linecap="round"
@@ -82,7 +82,7 @@ export default function EditableText({ id, text, onChange }) {
 				viewBox="0 0 24 24"
 				strokeWidth={1.5}
 				stroke="currentColor"
-				className="w-3 h-3 cursor-pointer"
+				className="w-5 h-5 cursor-pointer"
 				aria-label={editing ? 'Confirm changes' : 'Edit label'}
 			>
 				<path

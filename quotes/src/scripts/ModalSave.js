@@ -1,6 +1,6 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { NovaContext } from './NovaQuote';
+import { NovaContext } from './MetaCutAccrylic';
 import { CloseIcon, LoadingIcon } from './svg/Icons';
 import { processQuote } from './utils/QuoteFunctions';
 

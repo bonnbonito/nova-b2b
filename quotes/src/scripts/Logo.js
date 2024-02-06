@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Dropdown from './Dropdown';
-import { NovaContext } from './NovaQuote';
+import { NovaContext } from './MetaCutAccrylic';
 import UploadFile from './UploadFile';
 import convert_json from './utils/ConvertJson';
 const NovaOptions = NovaQuote.quote_options;

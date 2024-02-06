@@ -11,7 +11,7 @@ export const SignageCount = (signage, type) =>
 
 const NovaOptions = NovaQuote.quote_options;
 
-export default function Accrylic() {
+export default function MetalCutAccrylic() {
 	const [signage, setSignage] = useState([]);
 
 	function setDefaultSignage() {
@@ -62,7 +62,7 @@ export default function Accrylic() {
 				window.location.href = window.location.pathname;
 			}
 		} else {
-			setDefaultSignage(signage);
+			setDefaultSignage();
 		}
 	}, []);
 

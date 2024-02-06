@@ -17,7 +17,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$woo_instance = \NOVA_B2B\INC\CLASSES\Woocommerce::get_instance();
+$woo_instance = \NOVA_B2B\Inc\Classes\Woocommerce::get_instance();
 
 do_action( 'woocommerce_before_cart' ); ?>
 

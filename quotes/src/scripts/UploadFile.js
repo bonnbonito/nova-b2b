@@ -110,55 +110,78 @@ export default function UploadFile({ file, fileUrl, setFileUrl, setFileName }) {
 
 	const handleFileUpload = async (file, setFileUrl, setFileName) => {
 		setIsLoading(true);
-
 		const token = await getRefreshToken();
 
-		if (token) {
-			setAccessToken(token);
-			await checkAndCreateFolder(token);
-
-			// Prepare the Dropbox upload header
-			const dropboxArgs = JSON.stringify({
-				path: `/NOVA-CRM/${NovaQuote.business_id}/${file.name}`,
-				mode: 'add',
-				autorename: true,
-				mute: false,
-			});
-
-			// Create a new FormData object for the file
-			const formData = new FormData();
-			formData.append('file', file);
-
-			fetch('https://content.dropboxapi.com/2/files/upload', {
-				method: 'POST',
-				headers: {
-					Authorization: `Bearer ${token}`,
-					'Dropbox-API-Arg': dropboxArgs,
-					'Content-Type': 'application/octet-stream',
-				},
-				body: file, // Send the file directly in the body
-			})
-				.then((response) => response.json())
-				.then((data) => {
-					// Assuming `data` contains file path or URL on Dropbox
-					setFileUrl(data.path_display);
-					setFileName(data.name);
-					setIsLoading(false);
-				})
-				.catch((error) => {
-					console.error('Error:', error);
-					setIsLoading(false);
-				});
-		} else {
+		if (!token) {
 			console.error('Failed to obtain access token');
 			setIsLoading(false);
 			return;
+		}
+
+		setAccessToken(token);
+		await checkAndCreateFolder(token);
+
+		const dropboxArgs = {
+			path: `/NOVA-CRM/${NovaQuote.business_id}/${file.name}`,
+			mode: 'add',
+			autorename: true,
+			mute: false,
+		};
+
+		try {
+			const uploadResponse = await fetch(
+				'https://content.dropboxapi.com/2/files/upload',
+				{
+					method: 'POST',
+					headers: {
+						Authorization: `Bearer ${token}`,
+						'Dropbox-API-Arg': JSON.stringify(dropboxArgs),
+						'Content-Type': 'application/octet-stream',
+					},
+					body: file,
+				}
+			);
+
+			const uploadData = await uploadResponse.json();
+			if (!uploadResponse.ok) throw new Error(uploadData.error_summary);
+
+			console.log(uploadData.path_display);
+
+			// File uploaded successfully, now create a shared link
+			const sharedLinkResponse = await fetch(
+				'https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings',
+				{
+					method: 'POST',
+					headers: {
+						Authorization: `Bearer ${token}`,
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({ path: uploadData.path_display, settings: {} }),
+				}
+			);
+
+			if (!sharedLinkResponse.ok) {
+				console.error('Error response:', await sharedLinkResponse.text()); // Log the raw response text
+				throw new Error(
+					`Error creating shared link: ${sharedLinkResponse.statusText}`
+				);
+			}
+
+			const sharedLinkData = await sharedLinkResponse.json();
+
+			// Successfully obtained the shared link
+			setFileUrl(sharedLinkData.url);
+			setFileName(uploadData.name);
+		} catch (error) {
+			console.error('Error:', error.message);
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
 	const handleRemoveFile = async () => {
 		setIsLoading(true);
-
+		console.log(accessToken);
 		try {
 			const response = await fetch(
 				'https://api.dropboxapi.com/2/files/delete_v2',
