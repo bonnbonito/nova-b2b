@@ -38,6 +38,7 @@ class Nova_Quote {
 		add_filter( 'acf/prepare_field/name=signage', array( $this, 'acf_diable_field' ) );
 		add_filter( 'acf/prepare_field/name=partner', array( $this, 'acf_diable_field' ) );
 		add_filter( 'acf/prepare_field/name=projects', array( $this, 'acf_diable_field' ) );
+		add_filter( 'acf/prepare_field/name=dropbox_token_access', array( $this, 'acf_diable_field' ) );
 		add_action( 'template_redirect', array( $this, 'redirect_if_loggedin' ) );
 		if ( function_exists( 'acf_add_options_page' ) ) {
 			add_action( 'init', array( $this, 'add_options_page' ) );
@@ -52,6 +53,7 @@ class Nova_Quote {
 		add_action( 'nova_product_instant_quote', array( $this, 'nova_product_instant_quote' ) );
 		add_action( 'init', array( $this, 'custom_rewrite_rule' ), 10, 0 );
 		add_filter( 'query_vars', array( $this, 'custom_query_vars' ) );
+		add_action( 'admin_notices', array( $this, 'show_dropbox_oauth_errors' ) );
 	}
 
 	public function custom_query_vars( $vars ) {
@@ -227,24 +229,27 @@ class Nova_Quote {
 			$state             = sanitize_text_field( $_GET['state'] );
 
 			if ( ! wp_verify_nonce( $state, 'dropbox' ) ) {
-				// Handle the error appropriately
-				wp_die( 'Invalid state parameter', 'Error', 403 );
+				wp_redirect( admin_url( 'admin.php?page=nova-options&error=invalid_state' ) );
+				exit;
 			}
 
 			$tokens = $this->exchangeAuthorizationCodeForAccessToken( $authorizationCode );
 
-			$accessToken  = $tokens['access_token'];
-			$refreshToken = $tokens['refresh_token'];
+			$accessToken  = $tokens['access_token'] ?? null;
+			$refreshToken = $tokens['refresh_token'] ?? null;
 
-			if ( $accessToken ) {
+			if ( $accessToken && $refreshToken ) {
 				update_field( 'dropbox_token_access', $accessToken, 'option' );
 				update_field( 'dropbox_refresh_token', $refreshToken, 'option' );
+				wp_redirect( admin_url( 'admin.php?page=nova-options&success=1' ) );
+				exit;
 			} else {
-				// Handle the error if the access token is not retrieved
-				wp_die( 'Error retrieving access token', 'Error', 403 );
+				wp_redirect( admin_url( 'admin.php?page=nova-options&error=token_retrieval_failed' ) );
+				exit;
 			}
 		}
 	}
+
 
 
 
@@ -804,6 +809,32 @@ class Nova_Quote {
 
 	public function dropbox_api() {
 		echo 'Test';
+	}
+
+	public function show_dropbox_oauth_errors() {
+		if ( ! isset( $_GET['page'] ) && 'nova-options' !== $_GET['page'] ) {
+			return;
+		}
+		if ( isset( $_GET['error'] ) ) {
+			$error_message = '';
+
+			switch ( $_GET['error'] ) {
+				case 'invalid_state':
+					$error_message = 'Invalid state parameter. Please try again.';
+					break;
+				case 'token_retrieval_failed':
+					$error_message = 'Error retrieving access token. Please try again.';
+					break;
+			}
+
+			if ( ! empty( $error_message ) ) {
+				echo '<div class="notice notice-error is-dismissible"><p>' . esc_html( $error_message ) . '</p></div>';
+			}
+		}
+
+		if ( isset( $_GET['success'] ) ) {
+			echo '<div class="notice notice-success is-dismissible"><p>Access token successfully retrieved and saved.</p></div>';
+		}
 	}
 }
 
