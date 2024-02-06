@@ -560,10 +560,11 @@ class Woocommerce {
 			while ( $signage_query->have_posts() ) {
 				$signage_query->the_post();
 				?>
-			<div class="product-cat-item" data-signage="<?php echo get_the_ID(); ?>">
+			<a class="product-cat-item text-black" data-signage="<?php echo get_the_ID(); ?>"
+				href="<?php echo esc_url( get_permalink() ); ?>">
 				<?php the_post_thumbnail( array( 35, 35 ) ); ?>
 				<?php the_title(); ?>
-			</div>
+			</a>
 
 				<?php
 			}
@@ -693,7 +694,6 @@ class Woocommerce {
 			});
 		});
 	});
-	const triggers = document.querySelectorAll('.dropdown-trigger');
 	</script>
 
 </div>
