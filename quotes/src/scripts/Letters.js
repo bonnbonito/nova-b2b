@@ -1,12 +1,19 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import Dropdown from './Dropdown';
 import FontsDropdown from './FontsDropdown';
-import { NovaContext } from './MetaCutAccrylic';
+import { LaserCutAcrylicContext } from './LaserCutAcrylic';
 import UploadFile from './UploadFile';
 import useOutsideClick from './utils/ClickOutside';
+import colorOptions from './utils/ColorOptions';
 import convert_json from './utils/ConvertJson';
+import {
+	mountingDefaultOptions,
+	thicknessOptions,
+	waterProofOptions,
+} from './utils/SignageOptions';
 
 const NovaOptions = NovaQuote.quote_options;
+const NovaSingleOptions = NovaQuote.single_quote_options;
 const exchangeRate = wcumcs_vars_data.currency_data.rate;
 
 let lowerCasePricing = 1; // Default value
@@ -25,7 +32,7 @@ if (NovaOptions && typeof NovaOptions === 'object') {
 //const AcrylicLetterPricing = JSON.parse(NovaOptions.letter_x_logo_pricing);
 
 export default function Letters({ item }) {
-	const { signage, setSignage } = useContext(NovaContext);
+	const { signage, setSignage } = useContext(LaserCutAcrylicContext);
 	const [letters, setLetters] = useState(item.letters);
 	const [comments, setComments] = useState(item.comments);
 	const [font, setFont] = useState(item.font);
@@ -34,9 +41,10 @@ export default function Letters({ item }) {
 	const [openColor, setOpenColor] = useState(false);
 	const [waterproof, setWaterproof] = useState(item.waterproof);
 	const [selectedThickness, setSelectedThickness] = useState(item.thickness);
-	const thicknessOptions = NovaOptions.signage_thickness_options;
-	const [fileUrl, setFileUrl] = useState(item.file);
 	const [fileName, setFileName] = useState(item.fileName);
+	const [fileUrl, setFileUrl] = useState(item.fileUrl);
+	const [filePath, setFilePath] = useState(item.filePath);
+	const [file, setFile] = useState(item.file);
 	const [letterHeightOptions, setLetterHeightOptions] = useState([]);
 	const [selectedFinishing, setSelectedFinishing] = useState(item.finishing);
 
@@ -46,7 +54,7 @@ export default function Letters({ item }) {
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice);
 	const [mountingOptions, setMountingOptions] = useState(
-		NovaOptions.mounting_options
+		mountingDefaultOptions
 	);
 
 	const [lettersHeight, setLettersHeight] = useState(
@@ -56,8 +64,7 @@ export default function Letters({ item }) {
 
 	const colorRef = useRef(null);
 
-	const colorOptions = NovaOptions.colors;
-	const finishingOptions = NovaOptions.finishing_options;
+	const finishingOptions = NovaSingleOptions.finishing_options;
 	const letterPricing =
 		NovaOptions.letter_height_x_logo_pricing.length > 0
 			? convert_json(NovaOptions.letter_height_x_logo_pricing)
@@ -128,8 +135,10 @@ export default function Letters({ item }) {
 					letterHeight: selectedLetterHeight,
 					usdPrice: usdPrice,
 					cadPrice: cadPrice,
-					file: fileUrl,
+					file: file,
 					fileName: fileName,
+					filePath: filePath,
+					fileUrl: fileUrl,
 					finishing: selectedFinishing,
 				};
 			} else {
@@ -154,7 +163,6 @@ export default function Letters({ item }) {
 		const selected = thicknessOptions.filter(
 			(option) => option.value === target
 		);
-		console.log(selected[0]);
 		setSelectedThickness(() => selected[0]);
 		if (parseInt(target) === 3 && parseInt(selectedLetterHeight) > 24) {
 			setSelectedLetterHeight('');
@@ -222,31 +230,25 @@ export default function Letters({ item }) {
 		let newMountingOptions;
 		if (selectedThickness?.value === '3') {
 			if (selectedMounting === 'Flush stud') {
-				setSelectedMounting(
-					() => NovaOptions.mounting_options[0].mounting_option
-				);
+				setSelectedMounting(() => mountingDefaultOptions[0].mounting_option);
 			}
 
-			newMountingOptions = NovaOptions.mounting_options.filter(
+			newMountingOptions = mountingDefaultOptions.filter(
 				(option) => option.mounting_option !== 'Flush stud'
 			);
 		} else {
 			if (selectedMounting === 'Stud with Block') {
-				setSelectedMounting(
-					() => NovaOptions.mounting_options[0].mounting_option
-				);
+				setSelectedMounting(() => mountingDefaultOptions[0].mounting_option);
 			}
 			// Exclude 'Stud with Block' option
-			newMountingOptions = NovaOptions.mounting_options.filter(
+			newMountingOptions = mountingDefaultOptions.filter(
 				(option) => option.mounting_option !== 'Stud with Block'
 			);
 		}
 
 		if (waterproof === 'Outdoor') {
 			if (selectedMounting === 'Double sided tape') {
-				setSelectedMounting(
-					() => NovaOptions.mounting_options[0].mounting_option
-				);
+				setSelectedMounting(() => mountingDefaultOptions[0].mounting_option);
 			}
 
 			newMountingOptions = newMountingOptions.filter(
@@ -298,6 +300,7 @@ export default function Letters({ item }) {
 		selectedLetterHeight,
 		fileUrl,
 		fileName,
+		file,
 		selectedFinishing,
 	]);
 
@@ -429,7 +432,7 @@ export default function Letters({ item }) {
 				<Dropdown
 					title="Waterproof Option"
 					onChange={handleOnChangeWaterproof}
-					options={NovaOptions.waterproof_options.map((option) => (
+					options={waterProofOptions.map((option) => (
 						<option
 							value={option.option}
 							selected={option.option == item.waterproof}
@@ -484,7 +487,9 @@ export default function Letters({ item }) {
 				</div>
 
 				<UploadFile
-					file={item.file}
+					setFilePath={setFilePath}
+					setFile={setFile}
+					filePath={filePath}
 					fileUrl={fileUrl}
 					isLoading={isLoading}
 					setFileUrl={setFileUrl}

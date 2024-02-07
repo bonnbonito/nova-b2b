@@ -27,7 +27,6 @@ export default function Project({ item, index }) {
 
 	function duplicateSignage(item, index) {
 		const duplicated = { ...item, id: uuidv4() };
-		console.log(duplicated);
 
 		setSignage((current) => {
 			const updated = [

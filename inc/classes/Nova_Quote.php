@@ -70,7 +70,7 @@ class Nova_Quote {
 		<?php if ( ! is_user_logged_in() ) : ?>
 			<?php echo do_shortcode( '[kadence_element id=" 202"]' ); ?>
 		<?php else : ?>
-<div id="metalCutAccrylic"></div>
+<div id="laserCutAcrylic"></div>
 			<?php
 	endif;
 	}
@@ -717,6 +717,7 @@ class Nova_Quote {
 				'dropbox_token'         => get_field( 'dropbox_token_access', 'option' ),
 				'dropbox_refresh_token' => get_field( 'dropbox_refresh_token', 'option' ),
 				'business_id'           => get_field( 'business_id', 'user_' . get_current_user_id() ),
+				'single_quote_options'  => get_field( 'single_quote_options' ),
 				'generated_product_id'  => isset( $_GET['qid'] ) ? get_post_meta( $_GET['qid'], 'nova_product_generated_id', true ) : null,
 			)
 		);
@@ -743,7 +744,8 @@ class Nova_Quote {
 	}
 
 	public function get_quote_options() {
-		return get_field( 'signage_quote_options', get_the_ID() );
+		$parent_id = wp_get_post_parent_id();
+		return get_field( 'signage_quote_options', $parent_id );
 	}
 
 	public function get_fonts() {

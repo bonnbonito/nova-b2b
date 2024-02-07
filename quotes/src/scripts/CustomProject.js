@@ -27,8 +27,10 @@ export default function CustomProject() {
 					title: 'PROJECT 1',
 					description: '',
 					custom_id: '',
-					file: '',
+					filePath: '',
 					fileName: '',
+					fileUrl: '',
+					file: '',
 				},
 			]);
 		}
@@ -46,8 +48,10 @@ export default function CustomProject() {
 				title: `Project ${count + 1}`,
 				description: '',
 				custom_id: '',
-				file: '',
+				filePath: '',
 				fileName: '',
+				fileUrl: '',
+				file: '',
 			};
 			const newProjects = {
 				...args,
@@ -102,8 +106,9 @@ export default function CustomProject() {
 			const status = await processQuote(formData);
 			console.log(status);
 			if (status === 'success') {
-				alert('Project submitted successfully');
-				setProjects([
+				alert('Project submitted successfully 1234');
+				setProjects(() => []);
+				setProjects(() => [
 					{
 						id: uuidv4(),
 						title: 'PROJECT 1',
@@ -111,6 +116,8 @@ export default function CustomProject() {
 						custom_id: '',
 						file: '',
 						fileName: '',
+						fileUrl: '',
+						filePath: '',
 					},
 				]);
 			} else {

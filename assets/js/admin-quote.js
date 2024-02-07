@@ -63,8 +63,12 @@ function displayLogo(sign) {
             <div class="signage-value">${sign.comments}</div>
         </div>
         <div class="signage-details">
-            <div class="signage-label">FILE</div>
-            <div class="signage-value">${sign.file}</div>
+            <div class="signage-label">FILE PATH</div>
+            <div class="signage-value">${sign.filePath}</div>
+        </div>
+        <div class="signage-details">
+            <div class="signage-label">View File</div>
+            <div class="signage-value"><a href="${sign.fileUrl}" target="_blank">${sign.fileName}</a></div>
         </div>
     `;
 
@@ -111,8 +115,12 @@ function displayLetters(sign) {
             <div class="signage-value">${sign.comments}</div>
         </div>
         <div class="signage-details">
-            <div class="signage-label">FILE</div>
-            <div class="signage-value">${sign.file}</div>
+            <div class="signage-label">FILE PATH</div>
+            <div class="signage-value">${sign.filePath}</div>
+        </div>
+        <div class="signage-details">
+            <div class="signage-label">View File</div>
+            <div class="signage-value"><a href="${sign.fileUrl}" target="_blank">${sign.fileName}</a></div>
         </div>
     `;
 

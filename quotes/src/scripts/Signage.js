@@ -2,13 +2,13 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Tooltip } from 'react-tooltip';
 import { v4 as uuidv4 } from 'uuid'; // Make sure to import uuid
 import EditableText from './EditableText';
+import { LaserCutAcrylicContext, SignageCount } from './LaserCutAcrylic';
 import Letters from './Letters';
 import Logo from './Logo';
-import { NovaContext, SignageCount } from './MetaCutAccrylic';
 import { CollapseIcon, DuplicateIcon, TrashIcon } from './svg/Icons';
 
 export default function Signage({ item, index }) {
-	const { signage, setSignage } = useContext(NovaContext);
+	const { signage, setSignage } = useContext(LaserCutAcrylicContext);
 	const [open, setOpen] = useState(true);
 	const [itemTitle, setItemTitle] = useState(item.title);
 
@@ -30,7 +30,6 @@ export default function Signage({ item, index }) {
 
 	function duplicateSignage(item, index) {
 		const duplicated = { ...item, id: uuidv4() };
-		console.log(duplicated);
 
 		setSignage((current) => {
 			const updated = [
@@ -107,9 +106,9 @@ export default function Signage({ item, index }) {
 			<div className={`signage-content ${open ? 'open' : ''}`}>
 				<div>
 					{item.type === 'letters' ? (
-						<Letters item={item} />
+						<Letters key={item.id} item={item} />
 					) : (
-						<Logo item={item} />
+						<Logo key={item.id} item={item} />
 					)}
 				</div>
 			</div>

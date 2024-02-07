@@ -1,6 +1,13 @@
 import React, { useRef, useState } from 'react';
 
-export default function UploadFile({ file, fileUrl, setFileUrl, setFileName }) {
+export default function UploadFile({
+	setFilePath,
+	filePath,
+	setFileUrl,
+	setFile,
+	fileUrl,
+	setFileName,
+}) {
 	const fileRef = useRef(null);
 	const [isLoading, setIsLoading] = useState(false);
 	const [accessToken, setAccessToken] = useState('');
@@ -12,7 +19,8 @@ export default function UploadFile({ file, fileUrl, setFileUrl, setFileName }) {
 	const handleChange = (event) => {
 		const file = event.target.files[0];
 		if (file) {
-			handleFileUpload(file, setFileUrl, setFileName);
+			setFile(file);
+			handleFileUpload(file, setFileUrl, setFileName, setFilePath);
 			event.target.value = '';
 		} else {
 			console.log('no file to upload');
@@ -108,7 +116,39 @@ export default function UploadFile({ file, fileUrl, setFileUrl, setFileName }) {
 		}
 	};
 
-	const handleFileUpload = async (file, setFileUrl, setFileName) => {
+	const checkForExistingSharedLink = async (token, filePath) => {
+		const response = await fetch(
+			'https://api.dropboxapi.com/2/sharing/list_shared_links',
+			{
+				method: 'POST',
+				headers: {
+					Authorization: `Bearer ${token}`,
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ path: filePath, direct_only: true }), // `direct_only: true` to get direct links only
+			}
+		);
+
+		const data = await response.json();
+
+		if (!response.ok) {
+			throw new Error(data.error_summary);
+		}
+
+		// Check if any shared links exist for the file
+		if (data.links && data.links.length > 0) {
+			return data.links[0]; // Return the first shared link if available
+		}
+
+		return null; // Return null if no shared links exist
+	};
+
+	const handleFileUpload = async (
+		file,
+		setFileUrl,
+		setFileName,
+		setFilePath
+	) => {
 		setIsLoading(true);
 		const token = await getRefreshToken();
 
@@ -123,8 +163,8 @@ export default function UploadFile({ file, fileUrl, setFileUrl, setFileName }) {
 
 		const dropboxArgs = {
 			path: `/NOVA-CRM/${NovaQuote.business_id}/${file.name}`,
-			mode: 'add',
-			autorename: true,
+			mode: 'overwrite',
+			autorename: false,
 			mute: false,
 		};
 
@@ -145,32 +185,47 @@ export default function UploadFile({ file, fileUrl, setFileUrl, setFileName }) {
 			const uploadData = await uploadResponse.json();
 			if (!uploadResponse.ok) throw new Error(uploadData.error_summary);
 
-			console.log(uploadData.path_display);
+			console.log('File updated successfully:', uploadData.path_display);
 
-			// File uploaded successfully, now create a shared link
-			const sharedLinkResponse = await fetch(
-				'https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings',
-				{
-					method: 'POST',
-					headers: {
-						Authorization: `Bearer ${token}`,
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify({ path: uploadData.path_display, settings: {} }),
-				}
+			setFilePath(uploadData.path_display);
+
+			// Check for existing shared links
+			const existingLink = await checkForExistingSharedLink(
+				token,
+				uploadData.path_display
 			);
 
-			if (!sharedLinkResponse.ok) {
-				console.error('Error response:', await sharedLinkResponse.text()); // Log the raw response text
-				throw new Error(
-					`Error creating shared link: ${sharedLinkResponse.statusText}`
+			if (existingLink) {
+				console.log('Existing shared link found:', existingLink.url);
+				setFileUrl(existingLink.url); // Use the existing shared link
+			} else {
+				// Create a new shared link if none exist
+				const sharedLinkResponse = await fetch(
+					'https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings',
+					{
+						method: 'POST',
+						headers: {
+							Authorization: `Bearer ${token}`,
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({
+							path: uploadData.path_display,
+							settings: {},
+						}),
+					}
 				);
+
+				if (!sharedLinkResponse.ok) {
+					console.error('Error response:', await sharedLinkResponse.text());
+					throw new Error(
+						`Error creating shared link: ${sharedLinkResponse.statusText}`
+					);
+				}
+
+				const sharedLinkData = await sharedLinkResponse.json();
+				setFileUrl(sharedLinkData.url); // Use the newly created shared link
 			}
 
-			const sharedLinkData = await sharedLinkResponse.json();
-
-			// Successfully obtained the shared link
-			setFileUrl(sharedLinkData.url);
 			setFileName(uploadData.name);
 		} catch (error) {
 			console.error('Error:', error.message);
@@ -182,6 +237,7 @@ export default function UploadFile({ file, fileUrl, setFileUrl, setFileName }) {
 	const handleRemoveFile = async () => {
 		setIsLoading(true);
 		console.log(accessToken);
+		console.log(filePath);
 		try {
 			const response = await fetch(
 				'https://api.dropboxapi.com/2/files/delete_v2',
@@ -192,7 +248,7 @@ export default function UploadFile({ file, fileUrl, setFileUrl, setFileName }) {
 						'Content-Type': 'application/json',
 					},
 					body: JSON.stringify({
-						path: fileUrl, // Assuming fileUrl contains the path of the file in Dropbox
+						path: filePath, // Assuming fileUrl contains the path of the file in Dropbox
 					}),
 				}
 			);
@@ -202,6 +258,8 @@ export default function UploadFile({ file, fileUrl, setFileUrl, setFileName }) {
 			if (response.ok) {
 				console.log('File removed:', data);
 				setFileUrl('');
+				setFilePath('');
+				setFileName('');
 			} else {
 				throw new Error(
 					data.error_summary || 'Unknown error during file deletion'
@@ -223,7 +281,7 @@ export default function UploadFile({ file, fileUrl, setFileUrl, setFileName }) {
 				UPLOAD PDF/AI FILE
 			</label>
 
-			{!file ? (
+			{!fileUrl ? (
 				<button
 					className="h-[40px] w-full py-2 px-2 text-center text-red rounded-md text-sm uppercase bg-slate-400 hover:bg-slate-600 font-title leading-[1em]"
 					onClick={handleButtonClick}

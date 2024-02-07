@@ -1,12 +1,12 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { NovaContext } from './MetaCutAccrylic';
+import { LaserCutAcrylicContext } from './LaserCutAcrylic';
 import { CloseIcon, LoadingIcon } from './svg/Icons';
 import { processQuote } from './utils/QuoteFunctions';
 
 function ModalSave({ action, btnClass, label }) {
 	const [isLoading, setIsLoading] = useState(false);
-	const { signage } = useContext(NovaContext);
+	const { signage } = useContext(LaserCutAcrylicContext);
 	const [open, setOpen] = useState(false);
 	const [error, setError] = useState('');
 	const [title, setTitle] = useState(() =>
@@ -41,7 +41,7 @@ function ModalSave({ action, btnClass, label }) {
 
 		const checkForEmptyLogo = (signageArray) => {
 			return signageArray.some(
-				(item) => item.type === 'logo' && item.file === ''
+				(item) => item.type === 'logo' && item.filePath === ''
 			);
 		};
 
@@ -89,6 +89,7 @@ function ModalSave({ action, btnClass, label }) {
 	const handleFormSubmit = async (event) => {
 		event.preventDefault(); // Prevent default form submission
 		setIsLoading(true);
+
 		// Form submission logic here
 		try {
 			const formData = new FormData();
@@ -122,6 +123,7 @@ function ModalSave({ action, btnClass, label }) {
 			}
 		} catch (err) {
 			// Handle errors
+			console.log(err);
 			setError('Failed to save quote. Please try again.');
 		} finally {
 			setIsLoading(false);

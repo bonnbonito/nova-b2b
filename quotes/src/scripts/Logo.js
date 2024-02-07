@@ -1,23 +1,33 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Dropdown from './Dropdown';
-import { NovaContext } from './MetaCutAccrylic';
+import { LaserCutAcrylicContext } from './LaserCutAcrylic';
 import UploadFile from './UploadFile';
 import convert_json from './utils/ConvertJson';
-const NovaOptions = NovaQuote.quote_options;
+
+import {
+	mountingDefaultOptions,
+	thicknessOptions,
+	waterProofOptions,
+} from './utils/SignageOptions';
+
+const NovaSingleOptions = NovaQuote.single_quote_options;
+const exchangeRate = wcumcs_vars_data.currency_data.rate;
 
 export default function Logo({ item }) {
-	const { signage, setSignage } = useContext(NovaContext);
+	const { signage, setSignage } = useContext(LaserCutAcrylicContext);
 	const [selectedMounting, setSelectedMounting] = useState(item.mounting);
 	const [selectedThickness, setSelectedThickness] = useState(item.thickness);
 	const [width, setWidth] = useState(item.width);
 	const [maxWidthHeight, setMaxWidthHeight] = useState(23);
-	const [fileUrl, setFileUrl] = useState(item.file);
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice);
 	const [isLoading, setIsLoading] = useState(false);
 	const [fileName, setFileName] = useState(item.fileName);
+	const [fileUrl, setFileUrl] = useState(item.fileUrl);
+	const [filePath, setFilePath] = useState(item.filePath);
+	const [file, setFile] = useState(item.file);
 	const [selectedFinishing, setSelectedFinishing] = useState(item.finishing);
-	const finishingOptions = NovaOptions.finishing_options;
+	const finishingOptions = NovaSingleOptions.finishing_options;
 	const [maxWidthOptions, setMaxWidthOptions] = useState(
 		Array.from(
 			{
@@ -34,11 +44,10 @@ export default function Logo({ item }) {
 		)
 	);
 	const [height, setHeight] = useState(item.height);
-	const thicknessOptions = NovaOptions.signage_thickness_options;
 	const [comments, setComments] = useState('');
 	const [waterproof, setWaterproof] = useState(item.waterproof);
 	const [mountingOptions, setMountingOptions] = useState(
-		NovaOptions.mounting_options
+		mountingDefaultOptions
 	);
 
 	const logoPricingObject = NovaQuote.quote_options.logo_pricing;
@@ -49,31 +58,25 @@ export default function Logo({ item }) {
 		let newMountingOptions;
 		if (selectedThickness.value === '3') {
 			if (selectedMounting === 'Flush stud') {
-				setSelectedMounting(
-					() => NovaOptions.mounting_options[0].mounting_option
-				);
+				setSelectedMounting(() => mountingDefaultOptions[0].mounting_option);
 			}
 
-			newMountingOptions = NovaOptions.mounting_options.filter(
+			newMountingOptions = mountingDefaultOptions.filter(
 				(option) => option.mounting_option !== 'Flush stud'
 			);
 		} else {
 			if (selectedMounting === 'Stud with Block') {
-				setSelectedMounting(
-					() => NovaOptions.mounting_options[0].mounting_option
-				);
+				setSelectedMounting(() => mountingDefaultOptions[0].mounting_option);
 			}
 			// Exclude 'Stud with Block' option
-			newMountingOptions = NovaOptions.mounting_options.filter(
+			newMountingOptions = mountingDefaultOptions.filter(
 				(option) => option.mounting_option !== 'Stud with Block'
 			);
 		}
 
 		if (waterproof === 'Outdoor') {
 			if (selectedMounting === 'Double sided tape') {
-				setSelectedMounting(
-					() => NovaOptions.mounting_options[0].mounting_option
-				);
+				setSelectedMounting(() => mountingDefaultOptions[0].mounting_option);
 			}
 
 			newMountingOptions = newMountingOptions.filter(
@@ -139,15 +142,18 @@ export default function Logo({ item }) {
 					width: width,
 					height: height,
 					usdPrice: usdPrice,
-					file: fileUrl,
-					fileName: fileName,
+					cadPrice: cadPrice,
 					finishing: selectedFinishing,
+					file: file,
+					fileName: fileName,
+					filePath: filePath,
+					fileUrl: fileUrl,
 				};
 			} else {
 				return sign;
 			}
 		});
-		setSignage(updatedSignage);
+		setSignage(() => updatedSignage);
 	}
 
 	useEffect(() => {
@@ -164,13 +170,17 @@ export default function Logo({ item }) {
 		width,
 		height,
 		usdPrice,
+		cadPrice,
 		fileUrl,
 		fileName,
 		selectedFinishing,
+		file,
+		filePath,
 	]);
 
 	useEffect(() => {
-		if (width && height && selectedThickness && waterproof) {
+		// Ensure width, height, and selectedThickness are provided
+		if (width && height && selectedThickness) {
 			const logoKey = `logo_pricing_${selectedThickness.value}mm`;
 			const logoPricingTable =
 				logoPricingObject[logoKey]?.length > 0
@@ -178,8 +188,15 @@ export default function Logo({ item }) {
 					: [];
 			const computed =
 				logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
-			const total = (computed * (waterproof === 'Indoor' ? 1 : 1.1)).toFixed(2);
+
+			let multiplier = 0;
+			if (waterproof) {
+				multiplier = waterproof === 'Indoor' ? 1 : 1.1;
+			}
+
+			const total = (computed * multiplier).toFixed(2);
 			setUsdPrice(total);
+			setCadPrice((total * parseFloat(exchangeRate)).toFixed(2));
 		}
 	}, [width, height, selectedThickness, waterproof]);
 
@@ -202,14 +219,14 @@ export default function Logo({ item }) {
 
 				<Dropdown
 					title="Width"
-					value={item.width}
+					value={width}
 					onChange={(e) => setWidth(e.target.value)}
 					options={maxWidthOptions}
 				/>
 
 				<Dropdown
 					title="Height"
-					value={item.height}
+					value={height}
 					onChange={(e) => setHeight(e.target.value)}
 					options={maxWidthOptions}
 				/>
@@ -217,7 +234,7 @@ export default function Logo({ item }) {
 				<Dropdown
 					title="Waterproof Option"
 					onChange={(e) => setWaterproof(e.target.value)}
-					options={NovaOptions.waterproof_options.map((option) => (
+					options={waterProofOptions.map((option) => (
 						<option
 							value={option.option}
 							selected={option.option == item.waterproof}
@@ -225,7 +242,7 @@ export default function Logo({ item }) {
 							{option.option}
 						</option>
 					))}
-					value={item.waterproof}
+					value={waterproof}
 				/>
 
 				<Dropdown
@@ -239,7 +256,7 @@ export default function Logo({ item }) {
 							{option.mounting_option}
 						</option>
 					))}
-					value={item.mounting}
+					value={selectedMounting}
 				/>
 
 				<Dropdown
@@ -253,7 +270,7 @@ export default function Logo({ item }) {
 							{finishing.name}
 						</option>
 					))}
-					value={item.finishing}
+					value={selectedFinishing}
 				/>
 			</div>
 
@@ -271,7 +288,9 @@ export default function Logo({ item }) {
 					/>
 				</div>
 				<UploadFile
-					file={item.file}
+					setFilePath={setFilePath}
+					setFile={setFile}
+					filePath={filePath}
 					fileUrl={fileUrl}
 					isLoading={isLoading}
 					setFileUrl={setFileUrl}

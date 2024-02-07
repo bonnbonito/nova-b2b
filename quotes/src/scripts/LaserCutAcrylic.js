@@ -4,21 +4,18 @@ import Sidebar from './Sidebar';
 import Signage from './Signage';
 import { PlusIcon } from './svg/Icons';
 
-export const NovaContext = createContext(null);
+export const LaserCutAcrylicContext = createContext(null);
 
 export const SignageCount = (signage, type) =>
 	signage.filter((sign) => sign.type === type).length;
 
-const NovaOptions = NovaQuote.quote_options;
-
-export default function MetalCutAccrylic() {
+export default function LaserCutAcrylic() {
 	const [signage, setSignage] = useState([]);
 
 	function setDefaultSignage() {
 		const savedStorage = JSON.parse(
 			localStorage.getItem(window.location.href + NovaQuote.user_id)
 		);
-		console.log(savedStorage);
 		if (savedStorage?.length > 0) {
 			setSignage(savedStorage);
 		} else {
@@ -37,8 +34,10 @@ export default function MetalCutAccrylic() {
 					letterHeight: '',
 					usdPrice: 0,
 					cadPrice: 0,
-					file: '',
+					filePath: '',
 					fileName: '',
+					fileUrl: '',
+					file: '',
 					finishing: '',
 					product: NovaQuote.product,
 				},
@@ -75,8 +74,10 @@ export default function MetalCutAccrylic() {
 		finishing: '',
 		usdPrice: 0,
 		cadPrice: 0,
-		file: '',
+		filePath: '',
 		fileName: '',
+		fileUrl: '',
+		file: '',
 		product: NovaQuote.product,
 	};
 
@@ -123,12 +124,15 @@ export default function MetalCutAccrylic() {
 			window.location.href + NovaQuote.user_id,
 			JSON.stringify(signage)
 		);
+		console.log(signage);
 	}, [signage]);
 
 	const currency = wcumcs_vars_data.currency;
 
 	return (
-		<NovaContext.Provider value={{ signage, setSignage, addSignage, currency }}>
+		<LaserCutAcrylicContext.Provider
+			value={{ signage, setSignage, addSignage, currency }}
+		>
 			<div className="md:flex gap-6">
 				<div className="md:w-3/4 w-full">
 					{signage.map((item, index) => (
@@ -161,6 +165,6 @@ export default function MetalCutAccrylic() {
 				</div>
 				<Sidebar />
 			</div>
-		</NovaContext.Provider>
+		</LaserCutAcrylicContext.Provider>
 	);
 }

@@ -133,7 +133,11 @@ export default function Prices({ item }) {
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
 						FILE
 					</div>
-					<div className="text-left text-sm break-words">{item.fileName}</div>
+					<div className="text-left text-sm break-words">
+						<a href={item.fileUrl} target="_blank">
+							{item.fileName}
+						</a>
+					</div>
 				</div>
 			)}
 		</div>
