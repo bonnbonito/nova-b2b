@@ -1,16 +1,16 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import Dropdown from './Dropdown';
-import FontsDropdown from './FontsDropdown';
-import { LaserCutAcrylicContext } from './LaserCutAcrylic';
-import UploadFile from './UploadFile';
-import useOutsideClick from './utils/ClickOutside';
-import colorOptions from './utils/ColorOptions';
-import convert_json from './utils/ConvertJson';
+import Dropdown from '../Dropdown';
+import FontsDropdown from '../FontsDropdown';
+import { LaserCutAcrylicContext } from '../LaserCutAcrylic';
+import UploadFile from '../UploadFile';
+import useOutsideClick from '../utils/ClickOutside';
+import colorOptions from '../utils/ColorOptions';
+import convert_json from '../utils/ConvertJson';
 import {
 	mountingDefaultOptions,
 	thicknessOptions,
 	waterProofOptions,
-} from './utils/SignageOptions';
+} from '../utils/SignageOptions';
 
 const NovaOptions = NovaQuote.quote_options;
 const NovaSingleOptions = NovaQuote.single_quote_options;

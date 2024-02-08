@@ -1,14 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
-import Dropdown from './Dropdown';
-import { LaserCutAcrylicContext } from './LaserCutAcrylic';
-import UploadFile from './UploadFile';
-import convert_json from './utils/ConvertJson';
+import Dropdown from '../Dropdown';
+import { LaserCutAcrylicContext } from '../LaserCutAcrylic';
+import UploadFile from '../UploadFile';
+import convert_json from '../utils/ConvertJson';
 
 import {
 	mountingDefaultOptions,
 	thicknessOptions,
 	waterProofOptions,
-} from './utils/SignageOptions';
+} from '../utils/SignageOptions';
 
 const NovaSingleOptions = NovaQuote.single_quote_options;
 const exchangeRate = wcumcs_vars_data.currency_data.rate;

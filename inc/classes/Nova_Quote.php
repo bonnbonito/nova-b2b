@@ -54,6 +54,14 @@ class Nova_Quote {
 		add_action( 'init', array( $this, 'custom_rewrite_rule' ), 10, 0 );
 		add_filter( 'query_vars', array( $this, 'custom_query_vars' ) );
 		add_action( 'admin_notices', array( $this, 'show_dropbox_oauth_errors' ) );
+		add_action( 'kadence_single_before_inner_content', array( $this, 'show_product_dropdown' ) );
+	}
+
+	public function show_product_dropdown() {
+		if ( ! is_page( 'custom' ) ) {
+			return;
+		}
+		echo do_shortcode( '[product_dropdown_nav]' );
 	}
 
 	public function custom_query_vars( $vars ) {

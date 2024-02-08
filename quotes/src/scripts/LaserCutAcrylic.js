@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import Sidebar from './Sidebar';
-import Signage from './Signage';
+import Sidebar from './lasercutAcrylic/Sidebar';
+import Signage from './lasercutAcrylic/Signage';
 import { PlusIcon } from './svg/Icons';
 
 export const LaserCutAcrylicContext = createContext(null);

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { LaserCutAcrylicContext } from './LaserCutAcrylic';
+import { LaserCutAcrylicContext } from '../LaserCutAcrylic';
 import ModalSave from './ModalSave';
 import Prices from './Prices';
 
