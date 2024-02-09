@@ -2803,7 +2803,7 @@ function Logo({
       setUsdPrice(total);
       setCadPrice((total * parseFloat(exchangeRate)).toFixed(2));
     }
-  }, [width, height, selectedThickness, waterproof]);
+  }, [width, height, selectedThickness, waterproof, selectedFinishing]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-2 md:grid-cols-4 gap-4 mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -3232,7 +3232,7 @@ function Logo({
       setUsdPrice(uVTOtal);
       setCadPrice((uVTOtal * parseFloat(exchangeRate)).toFixed(2));
     }
-  }, [width, height, selectedThickness, waterproof]);
+  }, [width, height, selectedThickness, waterproof, selectedFinishing]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-2 md:grid-cols-4 gap-4 mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {

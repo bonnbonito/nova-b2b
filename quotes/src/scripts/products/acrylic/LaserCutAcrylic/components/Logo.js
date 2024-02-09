@@ -181,7 +181,7 @@ export default function Logo({ item }) {
 			setUsdPrice(total);
 			setCadPrice((total * parseFloat(exchangeRate)).toFixed(2));
 		}
-	}, [width, height, selectedThickness, waterproof]);
+	}, [width, height, selectedThickness, waterproof, selectedFinishing]);
 
 	return (
 		<>
