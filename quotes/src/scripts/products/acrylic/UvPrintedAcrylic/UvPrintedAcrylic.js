@@ -22,6 +22,8 @@ export default function UvPrintedAcrylic() {
 			setSignage([
 				{
 					id: uuidv4(),
+					type: 'logo',
+					title: 'LOGO 1',
 					comments: '',
 					mounting: '',
 					thickness: '',
@@ -176,11 +178,7 @@ export default function UvPrintedAcrylic() {
 							setSignage={setSignage}
 							addSignage={addSignage}
 						>
-							{item.type === 'letters' ? (
-								<Letters key={item.id} item={item} />
-							) : (
-								<Logo key={item.id} item={item} />
-							)}
+							<Logo key={item.id} item={item} />
 						</Signage>
 					))}
 

@@ -20,7 +20,7 @@ export default function Signage({
 		return updatedSignage.map((sign) => {
 			const currentCount = (count[sign.type] || 0) + 1;
 			count[sign.type] = currentCount;
-			return { ...sign, title: `${sign.type} ${currentCount}` };
+			return { ...sign };
 		});
 	}
 
@@ -28,7 +28,7 @@ export default function Signage({
 		const updatedSignage = signage.filter(
 			(sign) => sign.id !== itemToRemove.id
 		);
-		setSignage(recountSignageTitles(updatedSignage));
+		setSignage(() => recountSignageTitles(updatedSignage));
 	}
 
 	function duplicateSignage(item, index) {
@@ -71,7 +71,7 @@ export default function Signage({
 			<div className="flex justify-between mb-4">
 				<EditableText
 					id={item.id}
-					text={itemTitle}
+					text={item.title}
 					onChange={handleOnChangeTitle}
 				/>
 

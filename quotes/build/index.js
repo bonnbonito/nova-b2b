@@ -1661,14 +1661,13 @@ function Signage({
       const currentCount = (count[sign.type] || 0) + 1;
       count[sign.type] = currentCount;
       return {
-        ...sign,
-        title: `${sign.type} ${currentCount}`
+        ...sign
       };
     });
   }
   function removeSignage(itemToRemove) {
     const updatedSignage = signage.filter(sign => sign.id !== itemToRemove.id);
-    setSignage(recountSignageTitles(updatedSignage));
+    setSignage(() => recountSignageTitles(updatedSignage));
   }
   function duplicateSignage(item, index) {
     const duplicated = {
@@ -1705,7 +1704,7 @@ function Signage({
     className: "flex justify-between mb-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_EditableText__WEBPACK_IMPORTED_MODULE_2__["default"], {
     id: item.id,
-    text: itemTitle,
+    text: item.title,
     onChange: handleOnChangeTitle
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-6"
@@ -2920,6 +2919,8 @@ function UvPrintedAcrylic() {
     } else {
       setSignage([{
         id: (0,uuid__WEBPACK_IMPORTED_MODULE_6__["default"])(),
+        type: 'logo',
+        title: 'LOGO 1',
         comments: '',
         mounting: '',
         thickness: '',
@@ -3059,10 +3060,7 @@ function UvPrintedAcrylic() {
     signage: signage,
     setSignage: setSignage,
     addSignage: addSignage
-  }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Letters, {
-    key: item.id,
-    item: item
-  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_5__["default"], {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_5__["default"], {
     key: item.id,
     item: item
   }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
