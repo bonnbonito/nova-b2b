@@ -2798,7 +2798,8 @@ function Logo({
       if (waterproof) {
         multiplier = waterproof === 'Indoor' ? 1 : 1.1;
       }
-      const total = (computed * multiplier).toFixed(2);
+      let total = (computed * multiplier).toFixed(2);
+      total *= selectedFinishing === 'Gloss' ? 1.1 : 1;
       setUsdPrice(total);
       setCadPrice((total * parseFloat(exchangeRate)).toFixed(2));
     }
@@ -3225,7 +3226,8 @@ function Logo({
       if (waterproof) {
         multiplier = waterproof === 'Indoor' ? 1 : 1.1;
       }
-      const total = (computed * multiplier).toFixed(2);
+      let total = (computed * multiplier).toFixed(2);
+      total *= selectedFinishing === 'Gloss' ? 1.1 : 1;
       const uVTOtal = (total * UV_PRICE).toFixed(2);
       setUsdPrice(uVTOtal);
       setCadPrice((uVTOtal * parseFloat(exchangeRate)).toFixed(2));
