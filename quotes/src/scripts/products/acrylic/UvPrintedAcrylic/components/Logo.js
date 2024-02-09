@@ -31,7 +31,9 @@ export default function Logo({ item }) {
 	const [filePath, setFilePath] = useState(item.filePath);
 	const [file, setFile] = useState(item.file);
 	const [pieces, setPieces] = useState(item.pieces);
+	const [baseColor, setBaseColor] = useState(item.baseColor);
 	const [selectedFinishing, setSelectedFinishing] = useState(item.finishing);
+	const [printPreference, setPrintPreference] = useState(item.printPreference);
 	const finishingOptions = NovaSingleOptions.finishing_options;
 	const [maxWidthOptions, setMaxWidthOptions] = useState(
 		Array.from(
@@ -113,6 +115,21 @@ export default function Logo({ item }) {
 		setPieces(e.target.value);
 	};
 
+	const printOptions = [
+		{
+			option: 'Print on top',
+		},
+		{
+			option: 'Print from back layer',
+		},
+	];
+
+	const baseColorOptions = [
+		{
+			option: 'Black',
+		},
+	];
+
 	function updateSignage() {
 		const updatedSignage = signage.map((sign) => {
 			if (sign.id === item.id) {
@@ -132,6 +149,8 @@ export default function Logo({ item }) {
 					filePath: filePath,
 					fileUrl: fileUrl,
 					pieces: pieces,
+					baseColor: baseColor,
+					printPreference: printPreference,
 				};
 			} else {
 				return sign;
@@ -161,6 +180,7 @@ export default function Logo({ item }) {
 		file,
 		filePath,
 		pieces,
+		printPreference,
 	]);
 
 	useEffect(() => {
@@ -192,7 +212,7 @@ export default function Logo({ item }) {
 		<>
 			<div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
 				<Dropdown
-					title="Thickness"
+					title="Acrylic Thickness"
 					value={item.thickness?.value}
 					onChange={handleOnChangeThickness}
 					options={thicknessOptions.map((thickness) => (
@@ -206,17 +226,46 @@ export default function Logo({ item }) {
 				/>
 
 				<Dropdown
-					title="Width"
+					title="Logo Width"
 					value={width}
 					onChange={(e) => setWidth(e.target.value)}
 					options={maxWidthOptions}
 				/>
 
 				<Dropdown
-					title="Height"
+					title="Logo Height"
 					value={height}
 					onChange={(e) => setHeight(e.target.value)}
 					options={maxWidthOptions}
+				/>
+
+				<Dropdown
+					title="Printing Preference"
+					value={printPreference}
+					onChange={(e) => setPrintPreference(e.target.value)}
+					options={printOptions.map((option) => (
+						<option
+							value={option.option}
+							selected={option.option == item.printPreference}
+						>
+							{option.option}
+						</option>
+					))}
+				/>
+
+				<Dropdown
+					title="Base Color"
+					onlyValue={true}
+					value={baseColor}
+					onChange={(e) => setBaseColor(e.target.value)}
+					options={baseColorOptions.map((option) => (
+						<option
+							value={option.option}
+							selected={option.option == item.baseColor}
+						>
+							{option.option}
+						</option>
+					))}
 				/>
 
 				<Dropdown
@@ -263,6 +312,7 @@ export default function Logo({ item }) {
 
 				<Dropdown
 					title="Pieces/Cutouts"
+					onlyValue={true}
 					onChange={handleChangePieces}
 					options={piecesOptions.map((piece) => (
 						<option value={piece} selected={piece === item.pieces}>

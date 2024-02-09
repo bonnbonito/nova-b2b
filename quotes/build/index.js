@@ -498,7 +498,8 @@ function Dropdown({
   onChange,
   options,
   value,
-  style
+  style,
+  onlyValue
 }) {
   const selectClass = value ? 'text-black' : 'text-[#dddddd]';
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -510,7 +511,7 @@ function Dropdown({
     className: `border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] ${selectClass}`,
     onChange: onChange,
     value: value
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+  }, !onlyValue && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
     value: ""
   }, "CHOOSE OPTION"), options));
 }
@@ -936,79 +937,91 @@ function Prices({
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex justify-between py-2 font-title uppercase md:tracking-[1.6px]"
   }, item.title, ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, currency, "$", Number(price).toLocaleString())), item.thickness && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "grid grid-cols-2 gap-4 py-[2px]"
+    className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left font-title md:tracking-[1.4px] text-sm"
   }, "THICKNESS"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-sm uppercase"
   }, item.thickness.thickness)), item.type === 'logo' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.width && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "grid grid-cols-2 gap-4 py-[2px]"
+    className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left font-title md:tracking-[1.4px] text-sm"
-  }, "WIDTH"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "LOGO WIDTH"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-sm break-words"
   }, item.width, "\"")), item.height && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "grid grid-cols-2 gap-4 py-[2px]"
+    className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left font-title md:tracking-[1.4px] text-sm"
-  }, "HEIGHT"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "LOGO HEIGHT"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-sm break-words"
-  }, item.height, "\""))), item.type === 'letters' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.letterHeight && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "grid grid-cols-2 gap-4 py-[2px]"
+  }, item.height, "\"")), item.printPreference && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left font-title md:tracking-[1.4px] text-sm"
+  }, "PRINT PREFERENCE"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-sm break-words"
+  }, item.printPreference)), item.baseColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left font-title md:tracking-[1.4px] text-sm"
+  }, "BASE COLOR"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-sm break-words"
+  }, item.baseColor))), item.type === 'letters' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.letterHeight && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left font-title md:tracking-[1.4px] text-sm"
   }, "LETTER HEIGHT"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-sm break-words"
   }, item.letterHeight, "\""))), item.mounting && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "grid grid-cols-2 gap-4 py-[2px]"
+    className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left font-title md:tracking-[1.4px] text-sm"
   }, "MOUNTING"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-sm"
   }, item.mounting)), item.waterproof && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "grid grid-cols-2 gap-4 py-[2px]"
+    className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left font-title md:tracking-[1.4px] text-sm"
   }, "WATERPROOF"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-sm"
   }, item.waterproof)), item.finishing && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "grid grid-cols-2 gap-4 py-[2px]"
+    className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left font-title md:tracking-[1.4px] text-sm"
   }, "FINISHING"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-sm"
   }, item.finishing)), item.type === 'letters' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.color.name && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "grid grid-cols-2 gap-4 py-[2px]"
+    className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left font-title md:tracking-[1.4px] text-sm"
   }, "COLOR"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-sm"
   }, item.color?.name)), item.font && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "grid grid-cols-2 gap-4 py-[2px]"
+    className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left font-title md:tracking-[1.4px] text-sm"
   }, "FONT"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-sm break-words"
   }, item.font)), item.letters && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "grid grid-cols-2 gap-4 py-[2px]"
+    className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left font-title md:tracking-[1.4px] text-sm"
   }, "LINE TEXT"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-sm break-words"
   }, item.letters))), item.pieces && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "grid grid-cols-2 gap-4 py-[2px]"
+    className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left font-title md:tracking-[1.4px] text-sm"
   }, "PIECES", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("small", null, "(CUTOUTS)")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-sm"
   }, item.pieces)), item.comments && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "grid grid-cols-2 gap-4 py-[2px]"
+    className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left font-title md:tracking-[1.4px] text-sm"
   }, "COMMENTS"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-sm break-words"
   }, item.comments)), item.fileUrl && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "grid grid-cols-2 gap-4 py-[2px]"
+    className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left font-title md:tracking-[1.4px] text-sm"
   }, "FILE"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -1075,15 +1088,27 @@ function PricesView({
     className: "grid grid-cols-[160px_1fr] py-[2px]"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
-  }, "WIDTH"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "LOGO WIDTH"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-[10px] break-words"
   }, item.width, "\"")), item.height && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-[160px_1fr] py-[2px]"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
-  }, "HEIGHT"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "LOGO HEIGHT"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-[10px] break-words"
-  }, item.height, "\""))), item.type === 'letters' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.letterHeight && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.height, "\"")), item.printPreference && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-[160px_1fr] py-[2px]"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-xs font-title"
+  }, "PRINT PREFERENCE"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-[10px] break-words"
+  }, item.printPreference)), item.baseColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-[160px_1fr] py-[2px]"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-xs font-title"
+  }, "BASE COLOR"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-[10px] break-words"
+  }, item.baseColor))), item.type === 'letters' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.letterHeight && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-[160px_1fr] py-[2px]"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
@@ -2083,8 +2108,8 @@ function LaserCutAcrylic() {
         fileName: '',
         fileUrl: '',
         file: '',
-        finishing: '',
-        pieces: '',
+        finishing: 'Matte',
+        pieces: '30 pieces or fewer',
         product: NovaQuote.product
       }]);
     }
@@ -2112,7 +2137,7 @@ function LaserCutAcrylic() {
     mounting: '',
     thickness: '',
     waterproof: '',
-    finishing: '',
+    finishing: 'Matte',
     usdPrice: 0,
     cadPrice: 0,
     filePath: '',
@@ -2120,7 +2145,7 @@ function LaserCutAcrylic() {
     fileUrl: '',
     file: '',
     product: NovaQuote.product,
-    pieces: ''
+    pieces: '30 pieces or fewer'
   };
   function addSignage(type) {
     setSignage(prevSignage => {
@@ -2195,10 +2220,10 @@ function LaserCutAcrylic() {
       title: 'Thickness'
     }, {
       key: 'width',
-      title: 'Width'
+      title: 'Logo Width'
     }, {
       key: 'height',
-      title: 'Height'
+      title: 'Logo Height'
     }, {
       key: 'waterproof',
       title: 'Waterproof'
@@ -2815,12 +2840,12 @@ function Logo({
       selected: thickness === item.thickness
     }, thickness.thickness))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "Width",
+    title: "Logo Width",
     value: width,
     onChange: e => setWidth(e.target.value),
     options: maxWidthOptions
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "Height",
+    title: "Logo Height",
     value: height,
     onChange: e => setHeight(e.target.value),
     options: maxWidthOptions
@@ -2926,7 +2951,7 @@ function UvPrintedAcrylic() {
         mounting: '',
         thickness: '',
         waterproof: '',
-        finishing: '',
+        finishing: 'Matte',
         usdPrice: 0,
         cadPrice: 0,
         filePath: '',
@@ -2935,7 +2960,9 @@ function UvPrintedAcrylic() {
         file: '',
         width: '',
         height: '',
-        pieces: '',
+        pieces: '30 pieces or fewer',
+        printPreference: '',
+        baseColor: 'Black',
         product: NovaQuote.product
       }]);
     }
@@ -2963,14 +2990,16 @@ function UvPrintedAcrylic() {
     mounting: '',
     thickness: '',
     waterproof: '',
-    finishing: '',
+    finishing: 'Matte',
     usdPrice: 0,
     cadPrice: 0,
     filePath: '',
     fileName: '',
     fileUrl: '',
     file: '',
-    pieces: '',
+    baseColor: 'Black',
+    pieces: '30 pieces or fewer',
+    printPreference: '',
     product: NovaQuote.product
   };
   function addSignage(type) {
@@ -3022,10 +3051,10 @@ function UvPrintedAcrylic() {
       title: 'Thickness'
     }, {
       key: 'width',
-      title: 'Width'
+      title: 'Logo Width'
     }, {
       key: 'height',
-      title: 'Height'
+      title: 'Logo Height'
     }, {
       key: 'waterproof',
       title: 'Waterproof'
@@ -3041,6 +3070,9 @@ function UvPrintedAcrylic() {
     }, {
       key: 'fileUrl',
       title: 'File'
+    }, {
+      key: 'printPreference',
+      title: 'Print preference'
     }]
   };
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(QuoteContext.Provider, {
@@ -3127,7 +3159,9 @@ function Logo({
   const [filePath, setFilePath] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.filePath);
   const [file, setFile] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.file);
   const [pieces, setPieces] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.pieces);
+  const [baseColor, setBaseColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.baseColor);
   const [selectedFinishing, setSelectedFinishing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.finishing);
+  const [printPreference, setPrintPreference] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.printPreference);
   const finishingOptions = NovaSingleOptions.finishing_options;
   const [maxWidthOptions, setMaxWidthOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(Array.from({
     length: maxWidthHeight
@@ -3184,6 +3218,14 @@ function Logo({
   const handleChangePieces = e => {
     setPieces(e.target.value);
   };
+  const printOptions = [{
+    option: 'Print on top'
+  }, {
+    option: 'Print from back layer'
+  }];
+  const baseColorOptions = [{
+    option: 'Black'
+  }];
   function updateSignage() {
     const updatedSignage = signage.map(sign => {
       if (sign.id === item.id) {
@@ -3202,7 +3244,9 @@ function Logo({
           fileName: fileName,
           filePath: filePath,
           fileUrl: fileUrl,
-          pieces: pieces
+          pieces: pieces,
+          baseColor: baseColor,
+          printPreference: printPreference
         };
       } else {
         return sign;
@@ -3215,7 +3259,7 @@ function Logo({
   }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-  }, [comments, selectedThickness, selectedMounting, waterproof, width, height, usdPrice, cadPrice, fileUrl, fileName, selectedFinishing, file, filePath, pieces]);
+  }, [comments, selectedThickness, selectedMounting, waterproof, width, height, usdPrice, cadPrice, fileUrl, fileName, selectedFinishing, file, filePath, pieces, printPreference]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     // Ensure width, height, and selectedThickness are provided
     if (width && height && selectedThickness) {
@@ -3236,7 +3280,7 @@ function Logo({
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-2 md:grid-cols-4 gap-4 mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "Thickness",
+    title: "Acrylic Thickness",
     value: item.thickness?.value,
     onChange: handleOnChangeThickness,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.thicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -3244,15 +3288,32 @@ function Logo({
       selected: thickness === item.thickness
     }, thickness.thickness))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "Width",
+    title: "Logo Width",
     value: width,
     onChange: e => setWidth(e.target.value),
     options: maxWidthOptions
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "Height",
+    title: "Logo Height",
     value: height,
     onChange: e => setHeight(e.target.value),
     options: maxWidthOptions
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Printing Preference",
+    value: printPreference,
+    onChange: e => setPrintPreference(e.target.value),
+    options: printOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.option,
+      selected: option.option == item.printPreference
+    }, option.option))
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Base Color",
+    onlyValue: true,
+    value: baseColor,
+    onChange: e => setBaseColor(e.target.value),
+    options: baseColorOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.option,
+      selected: option.option == item.baseColor
+    }, option.option))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Waterproof Option",
     onChange: e => setWaterproof(e.target.value),
@@ -3279,6 +3340,7 @@ function Logo({
     value: selectedFinishing
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Pieces/Cutouts",
+    onlyValue: true,
     onChange: handleChangePieces,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.piecesOptions.map(piece => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: piece,

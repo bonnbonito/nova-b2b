@@ -1,4 +1,11 @@
-export default function Dropdown({ title, onChange, options, value, style }) {
+export default function Dropdown({
+	title,
+	onChange,
+	options,
+	value,
+	style,
+	onlyValue,
+}) {
 	const selectClass = value ? 'text-black' : 'text-[#dddddd]';
 
 	return (
@@ -12,7 +19,7 @@ export default function Dropdown({ title, onChange, options, value, style }) {
 				onChange={onChange}
 				value={value}
 			>
-				<option value="">CHOOSE OPTION</option>
+				{!onlyValue && <option value="">CHOOSE OPTION</option>}
 				{options}
 			</select>
 		</div>

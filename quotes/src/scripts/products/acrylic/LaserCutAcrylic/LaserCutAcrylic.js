@@ -39,8 +39,8 @@ export default function LaserCutAcrylic() {
 					fileName: '',
 					fileUrl: '',
 					file: '',
-					finishing: '',
-					pieces: '',
+					finishing: 'Matte',
+					pieces: '30 pieces or fewer',
 					product: NovaQuote.product,
 				},
 			]);
@@ -73,7 +73,7 @@ export default function LaserCutAcrylic() {
 		mounting: '',
 		thickness: '',
 		waterproof: '',
-		finishing: '',
+		finishing: 'Matte',
 		usdPrice: 0,
 		cadPrice: 0,
 		filePath: '',
@@ -81,7 +81,7 @@ export default function LaserCutAcrylic() {
 		fileUrl: '',
 		file: '',
 		product: NovaQuote.product,
-		pieces: '',
+		pieces: '30 pieces or fewer',
 	};
 
 	function addSignage(type) {
@@ -171,11 +171,11 @@ export default function LaserCutAcrylic() {
 			},
 			{
 				key: 'width',
-				title: 'Width',
+				title: 'Logo Width',
 			},
 			{
 				key: 'height',
-				title: 'Height',
+				title: 'Logo Height',
 			},
 			{
 				key: 'waterproof',

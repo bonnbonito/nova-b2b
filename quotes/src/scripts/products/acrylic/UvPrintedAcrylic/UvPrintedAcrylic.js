@@ -28,7 +28,7 @@ export default function UvPrintedAcrylic() {
 					mounting: '',
 					thickness: '',
 					waterproof: '',
-					finishing: '',
+					finishing: 'Matte',
 					usdPrice: 0,
 					cadPrice: 0,
 					filePath: '',
@@ -37,7 +37,9 @@ export default function UvPrintedAcrylic() {
 					file: '',
 					width: '',
 					height: '',
-					pieces: '',
+					pieces: '30 pieces or fewer',
+					printPreference: '',
+					baseColor: 'Black',
 					product: NovaQuote.product,
 				},
 			]);
@@ -70,14 +72,16 @@ export default function UvPrintedAcrylic() {
 		mounting: '',
 		thickness: '',
 		waterproof: '',
-		finishing: '',
+		finishing: 'Matte',
 		usdPrice: 0,
 		cadPrice: 0,
 		filePath: '',
 		fileName: '',
 		fileUrl: '',
 		file: '',
-		pieces: '',
+		baseColor: 'Black',
+		pieces: '30 pieces or fewer',
+		printPreference: '',
 		product: NovaQuote.product,
 	};
 
@@ -134,11 +138,11 @@ export default function UvPrintedAcrylic() {
 			},
 			{
 				key: 'width',
-				title: 'Width',
+				title: 'Logo Width',
 			},
 			{
 				key: 'height',
-				title: 'Height',
+				title: 'Logo Height',
 			},
 			{
 				key: 'waterproof',
@@ -159,6 +163,10 @@ export default function UvPrintedAcrylic() {
 			{
 				key: 'fileUrl',
 				title: 'File',
+			},
+			{
+				key: 'printPreference',
+				title: 'Print preference',
 			},
 		],
 	};

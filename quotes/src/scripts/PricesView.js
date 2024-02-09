@@ -47,7 +47,7 @@ export default function PricesView({ item }) {
 					<>
 						{item.width && (
 							<div className="grid grid-cols-[160px_1fr] py-[2px]">
-								<div className="text-left text-xs font-title">WIDTH</div>
+								<div className="text-left text-xs font-title">LOGO WIDTH</div>
 								<div className="text-left text-[10px] break-words">
 									{item.width}"
 								</div>
@@ -55,9 +55,27 @@ export default function PricesView({ item }) {
 						)}
 						{item.height && (
 							<div className="grid grid-cols-[160px_1fr] py-[2px]">
-								<div className="text-left text-xs font-title">HEIGHT</div>
+								<div className="text-left text-xs font-title">LOGO HEIGHT</div>
 								<div className="text-left text-[10px] break-words">
 									{item.height}"
+								</div>
+							</div>
+						)}
+						{item.printPreference && (
+							<div className="grid grid-cols-[160px_1fr] py-[2px]">
+								<div className="text-left text-xs font-title">
+									PRINT PREFERENCE
+								</div>
+								<div className="text-left text-[10px] break-words">
+									{item.printPreference}
+								</div>
+							</div>
+						)}
+						{item.baseColor && (
+							<div className="grid grid-cols-[160px_1fr] py-[2px]">
+								<div className="text-left text-xs font-title">BASE COLOR</div>
+								<div className="text-left text-[10px] break-words">
+									{item.baseColor}
 								</div>
 							</div>
 						)}

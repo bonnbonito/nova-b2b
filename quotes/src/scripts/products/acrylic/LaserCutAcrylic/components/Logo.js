@@ -201,14 +201,14 @@ export default function Logo({ item }) {
 				/>
 
 				<Dropdown
-					title="Width"
+					title="Logo Width"
 					value={width}
 					onChange={(e) => setWidth(e.target.value)}
 					options={maxWidthOptions}
 				/>
 
 				<Dropdown
-					title="Height"
+					title="Logo Height"
 					value={height}
 					onChange={(e) => setHeight(e.target.value)}
 					options={maxWidthOptions}
