@@ -1,16 +1,17 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import Dropdown from '../Dropdown';
-import FontsDropdown from '../FontsDropdown';
-import { LaserCutAcrylicContext } from '../LaserCutAcrylic';
-import UploadFile from '../UploadFile';
-import useOutsideClick from '../utils/ClickOutside';
-import colorOptions from '../utils/ColorOptions';
-import convert_json from '../utils/ConvertJson';
+import Dropdown from '../../../../Dropdown';
+import FontsDropdown from '../../../../FontsDropdown';
+import UploadFile from '../../../../UploadFile';
+import useOutsideClick from '../../../../utils/ClickOutside';
+import colorOptions from '../../../../utils/ColorOptions';
+import convert_json from '../../../../utils/ConvertJson';
 import {
 	mountingDefaultOptions,
+	piecesOptions,
 	thicknessOptions,
 	waterProofOptions,
-} from '../utils/SignageOptions';
+} from '../../../../utils/SignageOptions';
+import { QuoteContext } from '../LaserCutAcrylic';
 
 const NovaOptions = NovaQuote.quote_options;
 const NovaSingleOptions = NovaQuote.single_quote_options;
@@ -32,7 +33,7 @@ if (NovaOptions && typeof NovaOptions === 'object') {
 //const AcrylicLetterPricing = JSON.parse(NovaOptions.letter_x_logo_pricing);
 
 export default function Letters({ item }) {
-	const { signage, setSignage } = useContext(LaserCutAcrylicContext);
+	const { signage, setSignage } = useContext(QuoteContext);
 	const [letters, setLetters] = useState(item.letters);
 	const [comments, setComments] = useState(item.comments);
 	const [font, setFont] = useState(item.font);
@@ -47,6 +48,7 @@ export default function Letters({ item }) {
 	const [file, setFile] = useState(item.file);
 	const [letterHeightOptions, setLetterHeightOptions] = useState([]);
 	const [selectedFinishing, setSelectedFinishing] = useState(item.finishing);
+	const [pieces, setPieces] = useState(item.pieces);
 
 	const [selectedLetterHeight, setSelectedLetterHeight] = useState(
 		item.letterHeight
@@ -140,6 +142,7 @@ export default function Letters({ item }) {
 					filePath: filePath,
 					fileUrl: fileUrl,
 					finishing: selectedFinishing,
+					pieces: pieces,
 				};
 			} else {
 				return sign;
@@ -178,6 +181,10 @@ export default function Letters({ item }) {
 
 	const handleChangeFinishing = (e) => {
 		setSelectedFinishing(e.target.value);
+	};
+
+	const handleChangePieces = (e) => {
+		setPieces(e.target.value);
 	};
 
 	useEffect(() => {
@@ -230,7 +237,7 @@ export default function Letters({ item }) {
 		let newMountingOptions;
 		if (selectedThickness?.value === '3') {
 			if (selectedMounting === 'Flush stud') {
-				setSelectedMounting(() => mountingDefaultOptions[0].mounting_option);
+				setSelectedMounting('');
 			}
 
 			newMountingOptions = mountingDefaultOptions.filter(
@@ -238,7 +245,7 @@ export default function Letters({ item }) {
 			);
 		} else {
 			if (selectedMounting === 'Stud with Block') {
-				setSelectedMounting(() => mountingDefaultOptions[0].mounting_option);
+				setSelectedMounting('');
 			}
 			// Exclude 'Stud with Block' option
 			newMountingOptions = mountingDefaultOptions.filter(
@@ -248,7 +255,7 @@ export default function Letters({ item }) {
 
 		if (waterproof === 'Outdoor') {
 			if (selectedMounting === 'Double sided tape') {
-				setSelectedMounting(() => mountingDefaultOptions[0].mounting_option);
+				setSelectedMounting('');
 			}
 
 			newMountingOptions = newMountingOptions.filter(
@@ -302,6 +309,7 @@ export default function Letters({ item }) {
 		fileName,
 		file,
 		selectedFinishing,
+		pieces,
 	]);
 
 	useEffect(() => {
@@ -469,6 +477,17 @@ export default function Letters({ item }) {
 						</option>
 					))}
 					value={item.finishing}
+				/>
+
+				<Dropdown
+					title="Pieces/Cutouts"
+					onChange={handleChangePieces}
+					options={piecesOptions.map((pieces) => (
+						<option value={pieces} selected={pieces === item.pieces}>
+							{pieces}
+						</option>
+					))}
+					value={item.pieces}
 				/>
 			</div>
 

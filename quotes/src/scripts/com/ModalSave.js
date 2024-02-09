@@ -1,12 +1,12 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { LaserCutAcrylicContext } from '../LaserCutAcrylic';
+import { QuoteContext } from '../LaserCutAcrylic';
 import { CloseIcon, LoadingIcon } from '../svg/Icons';
 import { processQuote } from '../utils/QuoteFunctions';
 
 function ModalSave({ action, btnClass, label }) {
 	const [isLoading, setIsLoading] = useState(false);
-	const { signage } = useContext(LaserCutAcrylicContext);
+	const { signage } = useContext(QuoteContext);
 	const [open, setOpen] = useState(false);
 	const [error, setError] = useState('');
 	const [title, setTitle] = useState(() =>

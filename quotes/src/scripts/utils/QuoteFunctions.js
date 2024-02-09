@@ -1,4 +1,4 @@
-export const processQuote = async (formData) => {
+const processQuote = async (formData) => {
 	try {
 		const response = await fetch(NovaQuote.ajax_url, {
 			method: 'POST',
@@ -21,3 +21,8 @@ export const processQuote = async (formData) => {
 		return 'error'; // Return 'error' in case of an exception
 	}
 };
+
+const SignageCount = (signage, type) =>
+	signage.filter((sign) => sign.type === type).length;
+
+export { SignageCount, processQuote };

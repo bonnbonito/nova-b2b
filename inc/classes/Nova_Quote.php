@@ -78,7 +78,7 @@ class Nova_Quote {
 		<?php if ( ! is_user_logged_in() ) : ?>
 			<?php echo do_shortcode( '[kadence_element id=" 202"]' ); ?>
 		<?php else : ?>
-<div id="laserCutAcrylic"></div>
+<div id="<?php echo get_field( 'quote_div_id' ); ?>"></div>
 			<?php
 	endif;
 	}

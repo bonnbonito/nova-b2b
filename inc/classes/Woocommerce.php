@@ -796,7 +796,7 @@ class Woocommerce {
 				the_row();
 				$image = get_sub_field( 'icon' );
 				?>
-	<div class="text-center md:mb-0 mb-[40px]">
+	<div class="text-center md:mb-0 mb-[40px] flex-1">
 		<div class="img-wrap h-[55px]">
 			<img class="mx-auto" src="<?php echo esc_url( $image['url'] ); ?>"
 				alt="<?php echo esc_attr( $image['alt'] ); ?>" />

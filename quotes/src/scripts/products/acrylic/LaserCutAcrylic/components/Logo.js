@@ -1,20 +1,21 @@
 import React, { useContext, useEffect, useState } from 'react';
-import Dropdown from '../Dropdown';
-import { LaserCutAcrylicContext } from '../LaserCutAcrylic';
-import UploadFile from '../UploadFile';
-import convert_json from '../utils/ConvertJson';
-
+import Dropdown from '../../../../Dropdown';
+import UploadFile from '../../../../UploadFile';
+import convert_json from '../../../../utils/ConvertJson';
 import {
+	calculateMountingOptions,
 	mountingDefaultOptions,
+	piecesOptions,
 	thicknessOptions,
 	waterProofOptions,
-} from '../utils/SignageOptions';
+} from '../../../../utils/SignageOptions';
+import { QuoteContext } from '../LaserCutAcrylic';
 
 const NovaSingleOptions = NovaQuote.single_quote_options;
 const exchangeRate = wcumcs_vars_data.currency_data.rate;
 
 export default function Logo({ item }) {
-	const { signage, setSignage } = useContext(LaserCutAcrylicContext);
+	const { signage, setSignage } = useContext(QuoteContext);
 	const [selectedMounting, setSelectedMounting] = useState(item.mounting);
 	const [selectedThickness, setSelectedThickness] = useState(item.thickness);
 	const [width, setWidth] = useState(item.width);
@@ -26,6 +27,7 @@ export default function Logo({ item }) {
 	const [fileUrl, setFileUrl] = useState(item.fileUrl);
 	const [filePath, setFilePath] = useState(item.filePath);
 	const [file, setFile] = useState(item.file);
+	const [pieces, setPieces] = useState(item.pieces);
 	const [selectedFinishing, setSelectedFinishing] = useState(item.finishing);
 	const finishingOptions = NovaSingleOptions.finishing_options;
 	const [maxWidthOptions, setMaxWidthOptions] = useState(
@@ -53,38 +55,12 @@ export default function Logo({ item }) {
 	const logoPricingObject = NovaQuote.quote_options.logo_pricing;
 
 	useEffect(() => {
-		// Log to ensure we're getting the expected value
+		if (!selectedThickness || selectedThickness.value === undefined) return;
 
-		let newMountingOptions;
-		if (selectedThickness.value === '3') {
-			if (selectedMounting === 'Flush stud') {
-				setSelectedMounting(() => mountingDefaultOptions[0].mounting_option);
-			}
+		const { newMountingOptions, updatedSelectedMounting } =
+			calculateMountingOptions(selectedThickness, selectedMounting, waterproof);
 
-			newMountingOptions = mountingDefaultOptions.filter(
-				(option) => option.mounting_option !== 'Flush stud'
-			);
-		} else {
-			if (selectedMounting === 'Stud with Block') {
-				setSelectedMounting(() => mountingDefaultOptions[0].mounting_option);
-			}
-			// Exclude 'Stud with Block' option
-			newMountingOptions = mountingDefaultOptions.filter(
-				(option) => option.mounting_option !== 'Stud with Block'
-			);
-		}
-
-		if (waterproof === 'Outdoor') {
-			if (selectedMounting === 'Double sided tape') {
-				setSelectedMounting(() => mountingDefaultOptions[0].mounting_option);
-			}
-
-			newMountingOptions = newMountingOptions.filter(
-				(option) => option.mounting_option !== 'Double sided tape'
-			);
-		}
-
-		// Update the state
+		setSelectedMounting(updatedSelectedMounting); // Update the selected mounting if needed
 		setMountingOptions(newMountingOptions);
 
 		setMaxWidthOptions(() =>
@@ -102,7 +78,7 @@ export default function Logo({ item }) {
 				}
 			)
 		);
-	}, [selectedThickness, waterproof, maxWidthHeight]);
+	}, [selectedThickness, selectedMounting, waterproof, maxWidthHeight]);
 
 	function handleComments(e) {
 		setComments(e.target.value);
@@ -130,6 +106,10 @@ export default function Logo({ item }) {
 		setSelectedFinishing(e.target.value);
 	};
 
+	const handleChangePieces = (e) => {
+		setPieces(e.target.value);
+	};
+
 	function updateSignage() {
 		const updatedSignage = signage.map((sign) => {
 			if (sign.id === item.id) {
@@ -148,6 +128,7 @@ export default function Logo({ item }) {
 					fileName: fileName,
 					filePath: filePath,
 					fileUrl: fileUrl,
+					pieces: pieces,
 				};
 			} else {
 				return sign;
@@ -176,6 +157,7 @@ export default function Logo({ item }) {
 		selectedFinishing,
 		file,
 		filePath,
+		pieces,
 	]);
 
 	useEffect(() => {
@@ -205,7 +187,7 @@ export default function Logo({ item }) {
 			<div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
 				<Dropdown
 					title="Thickness"
-					value={item.thickness.value}
+					value={item.thickness?.value}
 					onChange={handleOnChangeThickness}
 					options={thicknessOptions.map((thickness) => (
 						<option
@@ -271,6 +253,17 @@ export default function Logo({ item }) {
 						</option>
 					))}
 					value={selectedFinishing}
+				/>
+
+				<Dropdown
+					title="Pieces/Cutouts"
+					onChange={handleChangePieces}
+					options={piecesOptions.map((piece) => (
+						<option value={piece} selected={piece === item.pieces}>
+							{piece}
+						</option>
+					))}
+					value={pieces}
 				/>
 			</div>
 

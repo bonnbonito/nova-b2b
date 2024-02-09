@@ -2,13 +2,13 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Tooltip } from 'react-tooltip';
 import { v4 as uuidv4 } from 'uuid'; // Make sure to import uuid
 import EditableText from '../EditableText';
-import { LaserCutAcrylicContext, SignageCount } from '../LaserCutAcrylic';
+import { QuoteContext, SignageCount } from '../LaserCutAcrylic';
 import { CollapseIcon, DuplicateIcon, TrashIcon } from '../svg/Icons';
 import Letters from './Letters';
 import Logo from './Logo';
 
 export default function Signage({ item, index }) {
-	const { signage, setSignage } = useContext(LaserCutAcrylicContext);
+	const { signage, setSignage } = useContext(QuoteContext);
 	const [open, setOpen] = useState(true);
 	const [itemTitle, setItemTitle] = useState(item.title);
 

@@ -119,6 +119,15 @@ export default function Prices({ item }) {
 				</>
 			)}
 
+			{item.pieces && (
+				<div className="grid grid-cols-2 gap-4 py-[2px]">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						PIECES<small>(CUTOUTS)</small>
+					</div>
+					<div className="text-left text-sm">{item.pieces}</div>
+				</div>
+			)}
+
 			{item.comments && (
 				<div className="grid grid-cols-2 gap-4 py-[2px]">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
@@ -128,7 +137,7 @@ export default function Prices({ item }) {
 				</div>
 			)}
 
-			{item.file && (
+			{item.fileUrl && (
 				<div className="grid grid-cols-2 gap-4 py-[2px]">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
 						FILE

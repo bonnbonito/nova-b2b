@@ -1,16 +1,16 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import Sidebar from './lasercutAcrylic/Sidebar';
-import Signage from './lasercutAcrylic/Signage';
-import { PlusIcon } from './svg/Icons';
+import Sidebar from '../../../Sidebar';
+import Signage from '../../../Signage';
+import { PlusIcon } from '../../../svg/Icons';
+import { SignageCount } from '../../../utils/QuoteFunctions';
+import Logo from './components/Logo';
 
-export const LaserCutAcrylicContext = createContext(null);
+export const QuoteContext = createContext(null);
 
-export const SignageCount = (signage, type) =>
-	signage.filter((sign) => sign.type === type).length;
-
-export default function LaserCutAcrylic() {
+export default function UvPrintedAcrylic() {
 	const [signage, setSignage] = useState([]);
+	const currency = wcumcs_vars_data.currency;
 
 	function setDefaultSignage() {
 		const savedStorage = JSON.parse(
@@ -22,23 +22,20 @@ export default function LaserCutAcrylic() {
 			setSignage([
 				{
 					id: uuidv4(),
-					type: 'letters',
-					title: 'LETTERS 1',
-					letters: '',
 					comments: '',
-					font: '',
 					mounting: '',
-					waterproof: '',
 					thickness: '',
-					color: { name: '', color: '' },
-					letterHeight: '',
+					waterproof: '',
+					finishing: '',
 					usdPrice: 0,
 					cadPrice: 0,
 					filePath: '',
 					fileName: '',
 					fileUrl: '',
 					file: '',
-					finishing: '',
+					width: '',
+					height: '',
+					pieces: '',
 					product: NovaQuote.product,
 				},
 			]);
@@ -78,6 +75,7 @@ export default function LaserCutAcrylic() {
 		fileName: '',
 		fileUrl: '',
 		file: '',
+		pieces: '',
 		product: NovaQuote.product,
 	};
 
@@ -124,33 +122,69 @@ export default function LaserCutAcrylic() {
 			window.location.href + NovaQuote.user_id,
 			JSON.stringify(signage)
 		);
-		console.log(signage);
 	}, [signage]);
 
-	const currency = wcumcs_vars_data.currency;
+	const required = {
+		logo: [
+			{
+				key: 'thickness',
+				title: 'Thickness',
+			},
+			{
+				key: 'width',
+				title: 'Width',
+			},
+			{
+				key: 'height',
+				title: 'Height',
+			},
+			{
+				key: 'waterproof',
+				title: 'Waterproof',
+			},
+			{
+				key: 'mounting',
+				title: 'Mounting',
+			},
+			{
+				key: 'finishing',
+				title: 'Finishing',
+			},
+			{
+				key: 'pieces',
+				title: 'Pieces/Cutouts',
+			},
+			{
+				key: 'fileUrl',
+				title: 'File',
+			},
+		],
+	};
 
 	return (
-		<LaserCutAcrylicContext.Provider
+		<QuoteContext.Provider
 			value={{ signage, setSignage, addSignage, currency }}
 		>
 			<div className="md:flex gap-6">
 				<div className="md:w-3/4 w-full">
 					{signage.map((item, index) => (
-						<Signage index={index} id={item.id} item={item}></Signage>
+						<Signage
+							index={index}
+							id={item.id}
+							item={item}
+							signage={signage}
+							setSignage={setSignage}
+							addSignage={addSignage}
+						>
+							{item.type === 'letters' ? (
+								<Letters key={item.id} item={item} />
+							) : (
+								<Logo key={item.id} item={item} />
+							)}
+						</Signage>
 					))}
 
 					<div className="flex gap-2">
-						{SignageCount(signage, 'letters') < 5 && (
-							<button
-								className="flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white"
-								onClick={() => addSignage('letters')}
-								style={{ border: '1px solid #d2d2d2d2' }}
-							>
-								ADD LETTERS
-								<PlusIcon />
-							</button>
-						)}
-
 						{SignageCount(signage, 'logo') < 5 && (
 							<button
 								className="flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white"
@@ -163,8 +197,8 @@ export default function LaserCutAcrylic() {
 						)}
 					</div>
 				</div>
-				<Sidebar />
+				<Sidebar signage={signage} required={required} />
 			</div>
-		</LaserCutAcrylicContext.Provider>
+		</QuoteContext.Provider>
 	);
 }

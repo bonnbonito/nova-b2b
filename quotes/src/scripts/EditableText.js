@@ -99,13 +99,18 @@ export default function EditableText({ id, text, onChange }) {
 		<>
 			{editing ? (
 				<div className="flex gap-2">
-					<input type="text" value={label} onChange={handleOnChange} />
+					<input
+						className="uppercase"
+						type="text"
+						value={label}
+						onChange={handleOnChange}
+					/>
 					{label.length > 0 && <SaveIcon />}
 					<CancelIcon />
 				</div>
 			) : (
 				<div className="flex gap-2">
-					<h3 className="signage-title">{text}</h3>
+					<h3 className="signage-title uppercase">{text}</h3>
 					<EditIcon />
 				</div>
 			)}

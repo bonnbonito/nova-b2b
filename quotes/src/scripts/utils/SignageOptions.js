@@ -59,4 +59,49 @@ const mountingDefaultOptions = [
 	},
 ];
 
-export { mountingDefaultOptions, thicknessOptions, waterProofOptions };
+const calculateMountingOptions = (
+	selectedThickness,
+	selectedMounting,
+	waterproof
+) => {
+	let newMountingOptions;
+	let updatedSelectedMounting = selectedMounting;
+
+	if (selectedThickness && selectedThickness.value === '3') {
+		newMountingOptions = mountingDefaultOptions.filter(
+			(option) => option.mounting_option !== 'Flush stud'
+		);
+		if (updatedSelectedMounting === 'Flush stud') {
+			updatedSelectedMounting = '';
+		}
+	} else {
+		newMountingOptions = mountingDefaultOptions.filter(
+			(option) => option.mounting_option !== 'Stud with Block'
+		);
+		if (updatedSelectedMounting === 'Stud with Block') {
+			updatedSelectedMounting = '';
+		}
+	}
+
+	if (waterproof === 'Outdoor') {
+		newMountingOptions = newMountingOptions.filter(
+			(option) => option.mounting_option !== 'Double sided tape'
+		);
+		if (updatedSelectedMounting === 'Double sided tape') {
+			updatedSelectedMounting =
+				mountingDefaultOptions[0]?.mounting_option ?? '';
+		}
+	}
+
+	return { newMountingOptions, updatedSelectedMounting };
+};
+
+const piecesOptions = ['30 pieces or fewer'];
+
+export {
+	calculateMountingOptions,
+	mountingDefaultOptions,
+	piecesOptions,
+	thicknessOptions,
+	waterProofOptions,
+};

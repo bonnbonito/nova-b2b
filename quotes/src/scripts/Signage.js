@@ -1,14 +1,17 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Tooltip } from 'react-tooltip';
 import { v4 as uuidv4 } from 'uuid'; // Make sure to import uuid
-import EditableText from '../EditableText';
-import { LaserCutAcrylicContext, SignageCount } from '../LaserCutAcrylic';
-import { CollapseIcon, DuplicateIcon, TrashIcon } from '../svg/Icons';
-import Letters from './Letters';
-import Logo from './Logo';
+import EditableText from './EditableText';
+import { CollapseIcon, DuplicateIcon, TrashIcon } from './svg/Icons';
+import { SignageCount } from './utils/QuoteFunctions';
 
-export default function Signage({ item, index }) {
-	const { signage, setSignage } = useContext(LaserCutAcrylicContext);
+export default function Signage({
+	item,
+	index,
+	signage,
+	setSignage,
+	children,
+}) {
 	const [open, setOpen] = useState(true);
 	const [itemTitle, setItemTitle] = useState(item.title);
 
@@ -92,25 +95,21 @@ export default function Signage({ item, index }) {
 						</div>
 					)}
 
-					<div
-						className="cursor-pointer"
-						onClick={() => removeSignage(item)}
-						data-tooltip-id={item.id}
-						data-tooltip-content="Delete"
-					>
-						<TrashIcon />
-						<Tooltip id={item.id} />
-					</div>
+					{signage.length > 1 && (
+						<div
+							className="cursor-pointer"
+							onClick={() => removeSignage(item)}
+							data-tooltip-id={item.id}
+							data-tooltip-content="Delete"
+						>
+							<TrashIcon />
+							<Tooltip id={item.id} />
+						</div>
+					)}
 				</div>
 			</div>
 			<div className={`signage-content ${open ? 'open' : ''}`}>
-				<div>
-					{item.type === 'letters' ? (
-						<Letters key={item.id} item={item} />
-					) : (
-						<Logo key={item.id} item={item} />
-					)}
-				</div>
+				<div>{children}</div>
 			</div>
 		</div>
 	);

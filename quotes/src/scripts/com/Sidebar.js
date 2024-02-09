@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
-import { LaserCutAcrylicContext } from '../LaserCutAcrylic';
+import { QuoteContext } from '../LaserCutAcrylic';
 import ModalSave from './ModalSave';
 import Prices from './Prices';
 
 export default function Sidebar() {
-	const { signage, currency } = useContext(LaserCutAcrylicContext);
+	const { signage, currency } = useContext(QuoteContext);
 	const taxRate = NovaMyAccount.tax_rate;
 
 	const totalUsdPrice = signage.reduce(

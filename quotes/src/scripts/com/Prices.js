@@ -6,7 +6,7 @@ export default function Prices({ item }) {
 	return (
 		<div className="block">
 			<div className="flex justify-between py-2 font-title uppercase md:tracking-[1.6px]">
-				{item.title}{' '}
+				{`${item.title} `}
 				<span>
 					{currency}${Number(price).toLocaleString()}
 				</span>
@@ -128,7 +128,7 @@ export default function Prices({ item }) {
 				</div>
 			)}
 
-			{item.file && (
+			{item.fileUrl && (
 				<div className="grid grid-cols-2 gap-4 py-[2px]">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
 						FILE

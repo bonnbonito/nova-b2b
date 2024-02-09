@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import Dropdown from '../Dropdown';
 import FontsDropdown from '../FontsDropdown';
-import { LaserCutAcrylicContext } from '../LaserCutAcrylic';
+import { QuoteContext } from '../LaserCutAcrylic';
 import UploadFile from '../UploadFile';
 import useOutsideClick from '../utils/ClickOutside';
 import colorOptions from '../utils/ColorOptions';
@@ -32,7 +32,7 @@ if (NovaOptions && typeof NovaOptions === 'object') {
 //const AcrylicLetterPricing = JSON.parse(NovaOptions.letter_x_logo_pricing);
 
 export default function Letters({ item }) {
-	const { signage, setSignage } = useContext(LaserCutAcrylicContext);
+	const { signage, setSignage } = useContext(QuoteContext);
 	const [letters, setLetters] = useState(item.letters);
 	const [comments, setComments] = useState(item.comments);
 	const [font, setFont] = useState(item.font);

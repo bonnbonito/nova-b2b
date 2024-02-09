@@ -120,6 +120,14 @@ export default function PricesView({ item }) {
 						</div>
 					</>
 				)}
+
+				{item.pieces && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px]">
+						<div className="text-left text-xs font-title">PIECES/CUTOUTS</div>
+						<div className="text-left text-[10px]">{item.pieces}</div>
+					</div>
+				)}
+
 				{item.comments && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px]">
 						<div className="text-left text-xs font-title">COMMENTS</div>

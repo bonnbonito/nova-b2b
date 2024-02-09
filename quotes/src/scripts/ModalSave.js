@@ -1,14 +1,12 @@
 import * as Dialog from '@radix-ui/react-dialog';
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { LaserCutAcrylicContext } from '../LaserCutAcrylic';
-import { CloseIcon, LoadingIcon } from '../svg/Icons';
-import { processQuote } from '../utils/QuoteFunctions';
+import React, { useEffect, useRef, useState } from 'react';
+import { CloseIcon, LoadingIcon } from './svg/Icons';
+import { processQuote } from './utils/QuoteFunctions';
 
-function ModalSave({ action, btnClass, label }) {
+function ModalSave({ signage, action, btnClass, label, required }) {
 	const [isLoading, setIsLoading] = useState(false);
-	const { signage } = useContext(LaserCutAcrylicContext);
 	const [open, setOpen] = useState(false);
-	const [error, setError] = useState('');
+	const [error, setError] = useState({});
 	const [title, setTitle] = useState(() =>
 		NovaQuote.current_quote_title ? NovaQuote.current_quote_title : ''
 	);
@@ -20,54 +18,81 @@ function ModalSave({ action, btnClass, label }) {
 		0
 	);
 
+	function checkForMissingValues(signageArray) {
+		let missingFields = [];
+
+		signageArray.forEach((signageItem) => {
+			const type = signageItem.type;
+			const requiredFields = required[type];
+
+			if (requiredFields) {
+				const missingFieldsForItem = requiredFields
+					.filter((field) => {
+						if (field.key === 'color') {
+							return (
+								!signageItem[field.key] ||
+								signageItem[field.key].name === '' ||
+								signageItem[field.key].name === undefined
+							);
+						} else {
+							return (
+								signageItem[field.key] === '' ||
+								signageItem[field.key] === undefined
+							);
+						}
+					})
+					.map((field) => field.title);
+
+				if (missingFieldsForItem.length > 0) {
+					missingFields.push({
+						itemId: signageItem.id,
+						missing: missingFieldsForItem,
+					});
+				}
+			}
+		});
+
+		return missingFields;
+	}
+
 	useEffect(() => {
-		const checkForEmptyLetters = (signageArray) => {
-			return signageArray.some(
-				(item) => item.type === 'letters' && item.letters === ''
-			);
-		};
+		const missingValues = checkForMissingValues(signage);
 
-		const checkForEmptyLettersHeight = (signageArray) => {
-			return signageArray.some(
-				(item) => item.type === 'letters' && item.letterHeight === ''
-			);
-		};
+		if (missingValues && missingValues.length > 0) {
+			let htmlString = '';
 
-		const checkForEmptyLettersThickness = (signageArray) => {
-			return signageArray.some(
-				(item) => item.type === 'letters' && item.thickness === ''
-			);
-		};
+			missingValues.forEach((missing) => {
+				// Find the title of the item with the missing values
+				const itemTitle =
+					signage.find((item) => item.id === missing.itemId)?.title ||
+					'Unknown Item';
 
-		const checkForEmptyLogo = (signageArray) => {
-			return signageArray.some(
-				(item) => item.type === 'logo' && item.filePath === ''
-			);
-		};
+				// Start the HTML string for this item
+				htmlString += `<strong class="uppercase">${itemTitle}</strong>\n<ul>\n`;
 
-		const hasEmptyLetters = checkForEmptyLetters(signage);
-		const hasEmptyLogo = checkForEmptyLogo(signage);
-		const hasEmptyLettersHeight = checkForEmptyLettersHeight(signage);
-		const hasEmptyLettersThickness = checkForEmptyLettersThickness(signage);
+				// Add each missing field as a list item
+				missing.missing.forEach((field) => {
+					htmlString += `    <li>${field}</li>\n`;
+				});
 
-		if (hasEmptyLetters && hasEmptyLogo) {
-			setError('Error: Please add Letter text and upload a file to the Logo');
-		} else if (hasEmptyLetters) {
-			setError('Error: Please add a content to the Letters');
-		} else if (hasEmptyLogo) {
-			setError('Error: Please upload a file to the logo');
-		} else if (hasEmptyLettersThickness) {
-			setError('Error: Please choose a letter thickness');
-		} else if (hasEmptyLettersHeight) {
-			setError('Error: Please choose a letter height');
+				// Close the unordered list for this item
+				htmlString += '</ul>\n';
+			});
+
+			setError({
+				type: 'missing',
+				message: htmlString,
+			});
 		} else {
 			if (
 				NovaQuote.user_role[0] === 'pending' &&
 				(action === 'update-processing' || action === 'processing')
 			) {
-				setError(
-					'Error: Your account is not yet approved. You cannot submit a quotation yet.'
-				);
+				setError({
+					type: 'not_approved',
+					message:
+						'Error: Your account is not yet approved. You cannot submit a quotation yet.',
+				});
 			} else {
 				setError(''); // No error
 			}
@@ -100,7 +125,6 @@ function ModalSave({ action, btnClass, label }) {
 			formData.append('signage', JSON.stringify(signage));
 			formData.append('total', totalUsdPrice.toFixed(2));
 			formData.append('quote_status', 'draft');
-			console.log(action);
 
 			if (action === 'update-processing' || action === 'processing') {
 				formData.append('quote_status', 'processing');
@@ -112,7 +136,6 @@ function ModalSave({ action, btnClass, label }) {
 			}
 
 			const status = await processQuote(formData);
-			console.log(status);
 			if (status === 'success') {
 				localStorage.removeItem(window.location.href + NovaQuote.user_id);
 				if (action !== 'update') {
@@ -123,8 +146,10 @@ function ModalSave({ action, btnClass, label }) {
 			}
 		} catch (err) {
 			// Handle errors
-			console.log(err);
-			setError('Failed to save quote. Please try again.');
+			setError({
+				type: 'not_saved',
+				message: 'Failed to save quote. Please try again.',
+			});
 		} finally {
 			setIsLoading(false);
 			setOpen(false);
@@ -184,7 +209,10 @@ function ModalSave({ action, btnClass, label }) {
 							Error
 						</Dialog.Title>
 						<Dialog.Description className="mt-[10px] mb-5 text-[15px] leading-normal">
-							{error}
+							{error.type === 'missing' && (
+								<h5 className="font-title mb-4 uppercase">Missing Values:</h5>
+							)}
+							<div dangerouslySetInnerHTML={{ __html: error.message }} />
 						</Dialog.Description>
 						<Dialog.Close asChild>
 							<div
