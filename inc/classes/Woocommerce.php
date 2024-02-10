@@ -486,7 +486,7 @@ class Woocommerce {
 				$output_post_id = $parent_id;
 			}
 			return $output_post_id;
-		} elseif ( is_page( 'custom' ) ) {
+		} elseif ( is_page( 'custom' ) || is_page( 'custom-project' ) ) {
 			return $post->ID;
 		}
 		return 0;
@@ -526,7 +526,7 @@ class Woocommerce {
 	public function product_dropdown_nav() {
 		ob_start();
 
-		$custom = get_page_by_path( 'custom' );
+		$custom = get_page_by_path( 'custom-project' );
 
 		$signage_query = new WP_Query(
 			array(

@@ -58,7 +58,7 @@ class Nova_Quote {
 	}
 
 	public function show_product_dropdown() {
-		if ( ! is_page( 'custom' ) ) {
+		if ( ! is_page( 'custom' ) || ! is_page( 'custom-project' ) ) {
 			return;
 		}
 		echo do_shortcode( '[product_dropdown_nav]' );
@@ -75,11 +75,11 @@ class Nova_Quote {
 
 	public function nova_product_instant_quote() {
 		?>
-		<?php if ( ! is_user_logged_in() ) : ?>
-			<?php echo do_shortcode( '[kadence_element id=" 202"]' ); ?>
-		<?php else : ?>
+<?php if ( ! is_user_logged_in() ) : ?>
+<?php echo do_shortcode( '[kadence_element id=" 202"]' ); ?>
+<?php else : ?>
 <div id="<?php echo get_field( 'quote_div_id' ); ?>"></div>
-			<?php
+<?php
 	endif;
 	}
 
@@ -730,7 +730,7 @@ class Nova_Quote {
 			)
 		);
 
-		if ( ( is_product( 'product' ) || is_account_page() || is_page( 'custom' ) ) && is_user_logged_in() || get_post_type() === 'signage' ) {
+		if ( ( is_product( 'product' ) || is_account_page() || is_page( 'custom' ) || is_page('custom-project') ) && is_user_logged_in() || get_post_type() === 'signage' ) {
 			wp_enqueue_script( 'nova-quote' );
 			wp_enqueue_style( 'nova-quote' );
 		}

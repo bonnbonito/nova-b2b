@@ -53,7 +53,7 @@ class Scripts {
 			wp_enqueue_style( 'nova-account' );
 		}
 
-		if ( is_singular( 'product' ) || is_singular( 'signage' ) || is_page( 'custom' ) ) {
+		if ( is_singular( 'product' ) || is_singular( 'signage' ) || is_page( 'custom' ) || is_page( 'custom-project' ) ) {
 			wp_enqueue_script( 'splide' );
 			wp_enqueue_style( 'splide' );
 			wp_enqueue_script( 'nova-accordion' );
@@ -251,6 +251,7 @@ class Scripts {
 			return;
 		}
 
+		wp_register_script( 'admin-signage', get_stylesheet_directory_uri() . '/assets/js/admin-signage.js', array(), '1.0', true );
 		wp_register_script( 'admin-acrylic', get_stylesheet_directory_uri() . '/assets/js/admin-acrylic.js', array(), '1.0', true );
 		wp_register_script( 'admin-quote', get_stylesheet_directory_uri() . '/assets/js/admin-quote.js', array(), '1.0', true );
 		wp_register_script( 'admin-projects', get_stylesheet_directory_uri() . '/assets/js/admin-projects.js', array(), '1.0', true );
@@ -270,8 +271,8 @@ class Scripts {
 		);
 
 		wp_localize_script(
-			'admin-acrylic',
-			'AcrylicAdmin',
+			'admin-signage',
+			'AdminSignage',
 			array(
 				'ajax_url'      => admin_url( 'admin-ajax.php' ),
 				'nonce'         => wp_create_nonce( 'nova_admin_nonce' ),
@@ -297,7 +298,14 @@ class Scripts {
 		}
 
 		if ( $post && 'signage' === $post->post_type ) {
-			wp_enqueue_script( 'admin-acrylic' );
+			wp_enqueue_script( 'admin-signage' );
+			if ( 'laser-cut-acrylic' === $post->post_name ) {
+				wp_enqueue_script( 'admin-acrylic' );
+			}
+
+			if ( 'metal' === $post->post_name ) {
+				wp_enqueue_script( 'admin-acrylic' );
+			}
 		}
 
 		if ( $post && 'nova_quote' === $post->post_type ) {
