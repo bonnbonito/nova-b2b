@@ -9,7 +9,21 @@ import Logo from './components/Logo';
 
 export const QuoteContext = createContext(null);
 
-export default function LaserCutAcrylic() {
+export const acrylicBaseOptions = [
+	{
+		option: 'Black',
+	},
+	{
+		option: 'Standard Colors',
+	},
+	{
+		option: 'Custom (Pantone Code)',
+	},
+];
+
+export const METAL_ACRYLIC_PRICING = 1.3;
+
+export default function MetalLaminate() {
 	const [signage, setSignage] = useState([]);
 	const currency = wcumcs_vars_data.currency;
 
@@ -31,7 +45,8 @@ export default function LaserCutAcrylic() {
 					mounting: '',
 					waterproof: '',
 					thickness: '',
-					color: { name: '', color: '' },
+					acrylicBase: 'Black',
+					metalFinish: { name: '', color: '' },
 					letterHeight: '',
 					usdPrice: 0,
 					cadPrice: 0,
@@ -39,7 +54,6 @@ export default function LaserCutAcrylic() {
 					fileName: '',
 					fileUrl: '',
 					file: '',
-					finishing: 'Matte',
 					pieces: '30 pieces or fewer',
 					product: NovaQuote.product,
 				},
@@ -73,13 +87,13 @@ export default function LaserCutAcrylic() {
 		mounting: '',
 		thickness: '',
 		waterproof: '',
-		finishing: 'Matte',
 		usdPrice: 0,
 		cadPrice: 0,
 		filePath: '',
 		fileName: '',
 		fileUrl: '',
 		file: '',
+		acrylicBase: 'Black',
 		product: NovaQuote.product,
 		pieces: '30 pieces or fewer',
 	};
@@ -96,8 +110,8 @@ export default function LaserCutAcrylic() {
 					title: `${type} ${count + 1}`,
 					letters: '',
 					font: '',
+					metalFinish: { name: '', color: '' },
 					thickness_options: '',
-					color: { name: '', color: '' },
 					letterHeight: '',
 				};
 			} else {
@@ -106,6 +120,7 @@ export default function LaserCutAcrylic() {
 					title: `${type} ${count + 1}`,
 					width: '',
 					height: '',
+					metalLaminate: '',
 				};
 			}
 			const newSignage = {
@@ -132,24 +147,20 @@ export default function LaserCutAcrylic() {
 				title: 'Letters',
 			},
 			{
-				key: 'font',
-				title: 'Font',
+				key: 'thickness',
+				title: 'Thickness',
 			},
 			{
 				key: 'letterHeight',
 				title: 'Letter Height',
 			},
 			{
-				key: 'thickness',
-				title: 'Thickness',
+				key: 'acrylicBase',
+				title: 'Acrylic Base',
 			},
 			{
-				key: 'color',
-				title: 'Color',
-			},
-			{
-				key: 'finishing',
-				title: 'Finishing',
+				key: 'font',
+				title: 'Font',
 			},
 			{
 				key: 'waterproof',
@@ -158,6 +169,10 @@ export default function LaserCutAcrylic() {
 			{
 				key: 'mounting',
 				title: 'Mounting',
+			},
+			{
+				key: 'metalFinishing',
+				title: 'Metal Finishing',
 			},
 			{
 				key: 'pieces',
@@ -178,8 +193,8 @@ export default function LaserCutAcrylic() {
 				title: 'Logo Height',
 			},
 			{
-				key: 'finishing',
-				title: 'Finishing',
+				key: 'acrylicBase',
+				title: 'Acrylic Base',
 			},
 			{
 				key: 'waterproof',
@@ -188,6 +203,10 @@ export default function LaserCutAcrylic() {
 			{
 				key: 'mounting',
 				title: 'Mounting',
+			},
+			{
+				key: 'metalLaminate',
+				title: 'Metal Laminate',
 			},
 			{
 				key: 'pieces',

@@ -6,7 +6,7 @@ export default function Dropdown({
 	style,
 	onlyValue,
 }) {
-	const selectClass = value ? 'text-black' : 'text-[#dddddd]';
+	const selectClass = value || onlyValue ? 'text-black' : 'text-[#dddddd]';
 
 	return (
 		<div className="px-[1px]">

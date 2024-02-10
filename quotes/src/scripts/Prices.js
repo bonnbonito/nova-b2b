@@ -107,9 +107,18 @@ export default function Prices({ item }) {
 				</div>
 			)}
 
+			{item.metalFinishing && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						METAL FINISHING
+					</div>
+					<div className="text-left text-sm">{item.metalFinishing}</div>
+				</div>
+			)}
+
 			{item.type === 'letters' && (
 				<>
-					{item.color.name && (
+					{item.color?.name && (
 						<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 							<div className="text-left font-title md:tracking-[1.4px] text-sm">
 								COLOR
@@ -139,10 +148,37 @@ export default function Prices({ item }) {
 				</>
 			)}
 
+			{item.metalFinish?.name && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						METAL FINISH
+					</div>
+					<div className="text-left text-sm">{item.metalFinish?.name}</div>
+				</div>
+			)}
+
+			{item.metalLaminate && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						METAL LAMINATE
+					</div>
+					<div className="text-left text-sm">{item.metalLaminate}</div>
+				</div>
+			)}
+
+			{item.acrylicBase && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						ACRYLIC BASE
+					</div>
+					<div className="text-left text-sm">{item.acrylicBase}</div>
+				</div>
+			)}
+
 			{item.pieces && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
-						PIECES<small>(CUTOUTS)</small>
+						PIECES
 					</div>
 					<div className="text-left text-sm">{item.pieces}</div>
 				</div>

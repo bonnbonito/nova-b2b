@@ -28,7 +28,7 @@ function ModalSave({ signage, action, btnClass, label, required }) {
 			if (requiredFields) {
 				const missingFieldsForItem = requiredFields
 					.filter((field) => {
-						if (field.key === 'color') {
+						if (field.key === 'color' || field.key === 'metaFinish') {
 							return (
 								!signageItem[field.key] ||
 								signageItem[field.key].name === '' ||

@@ -2,8 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import Dropdown from '../../../../Dropdown';
 import UploadFile from '../../../../UploadFile';
 import convert_json from '../../../../utils/ConvertJson';
-import { QuoteContext } from '../UvPrintedAcrylic';
-
 import {
 	calculateMountingOptions,
 	mountingDefaultOptions,
@@ -12,10 +10,15 @@ import {
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
 
-const NovaSingleOptions = NovaQuote.single_quote_options;
-const exchangeRate = wcumcs_vars_data.currency_data.rate;
+import {
+	METAL_ACRYLIC_PRICING,
+	QuoteContext,
+	acrylicBaseOptions,
+} from '../MetalLaminate';
 
-const UV_PRICE = 1.2;
+import { metalFinishColors } from '../../../../utils/ColorOptions';
+
+const exchangeRate = wcumcs_vars_data.currency_data.rate;
 
 export default function Logo({ item }) {
 	const { signage, setSignage } = useContext(QuoteContext);
@@ -30,11 +33,9 @@ export default function Logo({ item }) {
 	const [fileUrl, setFileUrl] = useState(item.fileUrl);
 	const [filePath, setFilePath] = useState(item.filePath);
 	const [file, setFile] = useState(item.file);
+	const [metalLaminate, setMetalLaminate] = useState(item.metalLaminate);
 	const [pieces, setPieces] = useState(item.pieces);
-	const [baseColor, setBaseColor] = useState(item.baseColor);
-	const [selectedFinishing, setSelectedFinishing] = useState(item.finishing);
-	const [printPreference, setPrintPreference] = useState(item.printPreference);
-	const finishingOptions = NovaSingleOptions.finishing_options;
+	const [acrylicBase, setAcrylicBase] = useState(item.acrylicBase);
 	const [maxWidthOptions, setMaxWidthOptions] = useState(
 		Array.from(
 			{
@@ -107,31 +108,13 @@ export default function Logo({ item }) {
 		}
 	};
 
-	const handleChangeFinishing = (e) => {
-		setSelectedFinishing(e.target.value);
+	const handleChangeMetalLaminate = (e) => {
+		setMetalLaminate(e.target.value);
 	};
 
 	const handleChangePieces = (e) => {
 		setPieces(e.target.value);
 	};
-
-	const printOptions = [
-		{
-			option: 'Print on top',
-		},
-		{
-			option: 'Print from back layer',
-		},
-	];
-
-	const baseColorOptions = [
-		{
-			option: 'Black',
-		},
-		{
-			option: 'Custom Color',
-		},
-	];
 
 	function updateSignage() {
 		const updatedSignage = signage.map((sign) => {
@@ -146,14 +129,13 @@ export default function Logo({ item }) {
 					height: height,
 					usdPrice: usdPrice,
 					cadPrice: cadPrice,
-					finishing: selectedFinishing,
+					metalLaminate: metalLaminate,
 					file: file,
 					fileName: fileName,
 					filePath: filePath,
 					fileUrl: fileUrl,
 					pieces: pieces,
-					baseColor: baseColor,
-					printPreference: printPreference,
+					acrylicBase: acrylicBase,
 				};
 			} else {
 				return sign;
@@ -179,11 +161,11 @@ export default function Logo({ item }) {
 		cadPrice,
 		fileUrl,
 		fileName,
-		selectedFinishing,
+		metalLaminate,
 		file,
 		filePath,
+		acrylicBase,
 		pieces,
-		printPreference,
 	]);
 
 	useEffect(() => {
@@ -202,26 +184,22 @@ export default function Logo({ item }) {
 				multiplier = waterproof === 'Indoor' ? 1 : 1.1;
 			}
 
-			let total = (computed * multiplier).toFixed(2);
-			total *= selectedFinishing === 'Gloss' ? 1.1 : 1;
-			total *= baseColor === 'Custom Color' ? UV_PRICE : 1;
+			let total = (computed * multiplier * METAL_ACRYLIC_PRICING).toFixed(2);
+			total *= acrylicBase === 'Black' ? 1 : 1.1;
+
 			setUsdPrice(total);
 			setCadPrice((total * parseFloat(exchangeRate)).toFixed(2));
+		} else {
+			setUsdPrice(0);
+			setCadPrice(0);
 		}
-	}, [
-		width,
-		height,
-		selectedThickness,
-		waterproof,
-		selectedFinishing,
-		baseColor,
-	]);
+	}, [width, height, selectedThickness, waterproof, acrylicBase]);
 
 	return (
 		<>
 			<div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
 				<Dropdown
-					title="Acrylic Thickness"
+					title="Thickness"
 					value={item.thickness?.value}
 					onChange={handleOnChangeThickness}
 					options={thicknessOptions.map((thickness) => (
@@ -246,34 +224,6 @@ export default function Logo({ item }) {
 					value={height}
 					onChange={(e) => setHeight(e.target.value)}
 					options={maxWidthOptions}
-				/>
-
-				<Dropdown
-					title="Printing Preference"
-					value={printPreference}
-					onChange={(e) => setPrintPreference(e.target.value)}
-					options={printOptions.map((option) => (
-						<option
-							value={option.option}
-							selected={option.option == item.printPreference}
-						>
-							{option.option}
-						</option>
-					))}
-				/>
-
-				<Dropdown
-					title="Base Color"
-					value={baseColor}
-					onChange={(e) => setBaseColor(e.target.value)}
-					options={baseColorOptions.map((option) => (
-						<option
-							value={option.option}
-							selected={option.option == item.baseColor}
-						>
-							{option.option}
-						</option>
-					))}
 				/>
 
 				<Dropdown
@@ -305,22 +255,35 @@ export default function Logo({ item }) {
 				/>
 
 				<Dropdown
-					title="Finishing Options"
-					onChange={handleChangeFinishing}
-					options={finishingOptions.map((finishing) => (
+					title="Metal Laminate"
+					onChange={handleChangeMetalLaminate}
+					options={metalFinishColors.map((laminate) => (
 						<option
-							value={finishing.name}
-							selected={finishing.name === item.finishing}
+							value={laminate.name}
+							selected={laminate.name === item.metalLaminate}
 						>
-							{finishing.name}
+							{laminate.name}
 						</option>
 					))}
-					value={selectedFinishing}
+					value={metalLaminate}
+				/>
+
+				<Dropdown
+					title="Acrylic Base"
+					onChange={(e) => setAcrylicBase(e.target.value)}
+					options={acrylicBaseOptions.map((option) => (
+						<option
+							value={option.option}
+							selected={option.option == item.acrylicBase}
+						>
+							{option.option}
+						</option>
+					))}
+					value={item.acrylicBase}
 				/>
 
 				<Dropdown
 					title="Pieces/Cutouts"
-					onlyValue={true}
 					onChange={handleChangePieces}
 					options={piecesOptions.map((piece) => (
 						<option value={piece} selected={piece === item.pieces}>

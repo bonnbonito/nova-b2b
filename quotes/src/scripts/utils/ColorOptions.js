@@ -149,4 +149,31 @@ const colorOptions = [
 	},
 ];
 
-export default colorOptions;
+const metalFinishColors = [
+	{
+		name: 'Stainless Steel Brushed',
+		color: '#caccce',
+	},
+	{
+		name: 'Stainless Steel Polished',
+		color: '#caccce',
+	},
+	{
+		name: 'Black Titanium Brushed',
+		color: '#14130E',
+	},
+	{
+		name: 'Black Titanium Polished',
+		color: '#14130E',
+	},
+	{
+		name: 'Gold Brushed',
+		color: '#ffbf00',
+	},
+	{
+		name: 'Gold Polished',
+		color: '#ffbf00',
+	},
+];
+
+export { colorOptions, metalFinishColors };
