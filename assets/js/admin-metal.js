@@ -1,21 +1,23 @@
-function display_acryling_pricing_table() {
+function display_meta_pricing_table() {
 	console.info('DOM loaded');
 
 	const adminSignageOptions = AdminSignage.quote_options;
 
-	const acrylicPricing = convert_json(
+	const metalPricing = convert_json(
 		adminSignageOptions.letter_height_x_logo_pricing
 	);
 
-	if (acrylicPricing.length > 0) {
-		const headers = ['Height', '3', '6', '9', '12', '19', '25', '38'];
+	console.log(metalPricing);
 
-		const acrylicTable = createTable(acrylicPricing, headers);
+	if (metalPricing.length > 0) {
+		const headers = ['Height', '3', '6', '9', '12', '20', '26'];
 
-		document.getElementById('lettersPricingTable').appendChild(acrylicTable);
+		const metalTable = createTable(metalPricing, headers);
+
+		document.getElementById('lettersPricingTable').appendChild(metalTable);
 	}
 
-	const logoThicknesses = [3, 6, 9, 12, 19, 25, 38];
+	const logoThicknesses = [3, 6, 9, 12, 20, 26];
 
 	logoThicknesses.forEach((thickness) => {
 		const pricingKey = `logo_pricing_${thickness}mm`;
@@ -33,10 +35,10 @@ function display_acryling_pricing_table() {
 
 if (document.readyState === 'loading') {
 	// Loading hasn't finished yet
-	document.addEventListener('DOMContentLoaded', display_acryling_pricing_table);
+	document.addEventListener('DOMContentLoaded', display_meta_pricing_table);
 } else {
 	// `DOMContentLoaded` has already fired
-	display_acryling_pricing_table();
+	display_meta_pricing_table();
 }
 
 function convert_json(tableString) {
@@ -49,8 +51,11 @@ function convert_json(tableString) {
 	return rows.slice(1).map((row) => {
 		const values = row.split('\t');
 		let obj = headers.reduce((acc, header, index) => {
-			// Convert to the appropriate type; assuming all non-header values are numbers
-			acc[header] = values[index] ? parseFloat(values[index]) : null;
+			// Remove commas and convert to the appropriate type
+			const value = values[index]
+				? parseFloat(values[index].replace(/,/g, ''))
+				: null;
+			acc[header] = value;
 			return acc;
 		}, {});
 		return obj;
@@ -106,7 +111,9 @@ function convertTableToJson(table) {
 	const jsonArray = rows.map((row) => {
 		const values = row.trim().split('\t');
 		let object = headers.reduce((acc, header, index) => {
-			acc[header] = values[index];
+			acc[header] = values[index]
+				? parseFloat(values[index].replace(/,/g, ''))
+				: null;
 			return acc;
 		}, {});
 		return object;

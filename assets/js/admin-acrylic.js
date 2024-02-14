@@ -49,8 +49,11 @@ function convert_json(tableString) {
 	return rows.slice(1).map((row) => {
 		const values = row.split('\t');
 		let obj = headers.reduce((acc, header, index) => {
-			// Convert to the appropriate type; assuming all non-header values are numbers
-			acc[header] = values[index] ? parseFloat(values[index]) : null;
+			// Remove commas and convert to the appropriate type
+			const value = values[index]
+				? parseFloat(values[index].replace(/,/g, ''))
+				: null;
+			acc[header] = value;
 			return acc;
 		}, {});
 		return obj;
@@ -85,10 +88,10 @@ function createTable(dataArray, headers) {
 		headers.slice(1).forEach((key) => {
 			// Skip the first header 'Height'
 			const cell = row.insertCell();
-			// If the value is not null, parse it as a float to clean up the output
+			// If the value is not null, remove commas and parse it as a float
 			// Otherwise, keep it as an empty string
-			cell.textContent =
-				item[key] !== null && !isNaN(item[key]) ? parseFloat(item[key]) : '';
+			const floatValue = parseFloat(item[key].replace(/,/g, ''));
+			cell.textContent = !isNaN(floatValue) ? floatValue.toFixed(2) : '';
 		});
 	});
 

@@ -118,15 +118,6 @@ export default function Prices({ item }) {
 
 			{item.type === 'letters' && (
 				<>
-					{item.color?.name && (
-						<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
-							<div className="text-left font-title md:tracking-[1.4px] text-sm">
-								COLOR
-							</div>
-							<div className="text-left text-sm">{item.color?.name}</div>
-						</div>
-					)}
-
 					{item.font && (
 						<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 							<div className="text-left font-title md:tracking-[1.4px] text-sm">
@@ -146,6 +137,15 @@ export default function Prices({ item }) {
 						</div>
 					)}
 				</>
+			)}
+
+			{item.color?.name && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						COLOR
+					</div>
+					<div className="text-left text-sm">{item.color?.name}</div>
+				</div>
 			)}
 
 			{item.metalFinish?.name && (
@@ -172,6 +172,15 @@ export default function Prices({ item }) {
 						ACRYLIC BASE
 					</div>
 					<div className="text-left text-sm">{item.acrylicBase}</div>
+				</div>
+			)}
+
+			{item.installation && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						INSTALLATION
+					</div>
+					<div className="text-left text-sm">{item.installation}</div>
 				</div>
 			)}
 

@@ -166,6 +166,13 @@ export default function PricesView({ item }) {
 					</div>
 				)}
 
+				{item.installation && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px]">
+						<div className="text-left text-xs font-title">INSTALLATION</div>
+						<div className="text-left text-[10px]">{item.installation}</div>
+					</div>
+				)}
+
 				{item.pieces && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px]">
 						<div className="text-left text-xs font-title">PIECES/CUTOUTS</div>

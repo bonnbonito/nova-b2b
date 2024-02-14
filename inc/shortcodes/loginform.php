@@ -12,6 +12,7 @@
 	</label>
 	<input type="hidden" name="action" value="nova_login">
 	<input type="hidden" name="product_page" value="<?php echo ( is_product( 'product' ) ? 'yes' : 'no' ); ?>">
+	<input type="hidden" name="referrer" value="<?php echo get_the_permalink(); ?>">
 	<button type="submit" class="block rounded button" id="submitBtn">Sign In</button>
 	<div id="loginStatus"></div>
 </form>

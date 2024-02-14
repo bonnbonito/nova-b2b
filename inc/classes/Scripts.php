@@ -253,6 +253,7 @@ class Scripts {
 
 		wp_register_script( 'admin-signage', get_stylesheet_directory_uri() . '/assets/js/admin-signage.js', array(), '1.0', true );
 		wp_register_script( 'admin-acrylic', get_stylesheet_directory_uri() . '/assets/js/admin-acrylic.js', array(), '1.0', true );
+		wp_register_script( 'admin-metal', get_stylesheet_directory_uri() . '/assets/js/admin-metal.js', array(), '1.0', true );
 		wp_register_script( 'admin-quote', get_stylesheet_directory_uri() . '/assets/js/admin-quote.js', array(), '1.0', true );
 		wp_register_script( 'admin-projects', get_stylesheet_directory_uri() . '/assets/js/admin-projects.js', array(), '1.0', true );
 		wp_register_script( 'dropbox-api', get_stylesheet_directory_uri() . '/assets/js/dropbox.js', array(), '1.0', true );
@@ -304,7 +305,7 @@ class Scripts {
 			}
 
 			if ( 'metal' === $post->post_name ) {
-				wp_enqueue_script( 'admin-acrylic' );
+				wp_enqueue_script( 'admin-metal' );
 			}
 		}
 

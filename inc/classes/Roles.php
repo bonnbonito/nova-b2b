@@ -220,6 +220,12 @@ class Roles {
 			$status['code'] = 2;
 		}
 
+		$front_page_url = trailingslashit( home_url( '/' ) );
+		$from           = trailingslashit( $_POST['referrer'] );
+		if ( $from !== $front_page_url ) {
+			$status['reload'] = 'yes';
+		}
+
 		$status['referrer']   = wp_get_referer();
 		$status['is_product'] = $_POST['product_page'];
 		wp_send_json( $status );

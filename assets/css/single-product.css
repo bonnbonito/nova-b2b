@@ -349,6 +349,9 @@ div#productCat-list,
     border-radius: 4px;
     max-height: 190px;
     overflow-y: auto;
+    position: relative;
+    z-index: 9;
+    background-color: #fff;
 }
 
 .product-cat-item {

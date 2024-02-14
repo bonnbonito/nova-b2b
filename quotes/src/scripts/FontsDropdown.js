@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import useOutsideClick from './utils/ClickOutside';
+import { fontDefaultOptions } from './utils/FontOptions';
 
 export default function FontsDropdown({ font, handleSelectFont }) {
 	const [openFont, setOpenFont] = useState(false);
@@ -22,7 +23,7 @@ export default function FontsDropdown({ font, handleSelectFont }) {
 				FONT
 			</label>
 			<div
-				className={`flex items-center select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
+				className={`flex px-2 items-center select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
 					font ? 'text-black' : 'text-[#dddddd]'
 				}`}
 				onClick={() => setOpenFont((prev) => !prev)}
@@ -44,26 +45,24 @@ export default function FontsDropdown({ font, handleSelectFont }) {
 					<div className="">
 						<h5 class="p-2 pb-0">Popular Fonts</h5>
 
-						{NovaQuote.quote_options.fonts.popular_fonts
-							.split(',')
-							.map((popularfont) => {
-								return (
-									<div
-										className={`p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm ${
-											popularfont === font && 'bg-slate-200'
-										}`}
-										style={{ fontFamily: popularfont }}
-										onClick={() => {
-											handleSelectFont(popularfont);
-											setOpenFont(false);
-										}}
-									>
-										- {popularfont}
-									</div>
-								);
-							})}
+						{fontDefaultOptions.popular_fonts.split(',').map((popularfont) => {
+							return (
+								<div
+									className={`p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm ${
+										popularfont === font && 'bg-slate-200'
+									}`}
+									style={{ fontFamily: popularfont }}
+									onClick={() => {
+										handleSelectFont(popularfont);
+										setOpenFont(false);
+									}}
+								>
+									- {popularfont}
+								</div>
+							);
+						})}
 						<h5 class="p-2 pb-0">Fonts</h5>
-						{NovaQuote.quote_options.fonts.fonts.split(',').map((regFont) => {
+						{fontDefaultOptions.fonts.split(',').map((regFont) => {
 							return (
 								<div
 									className={`p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm ${

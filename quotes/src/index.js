@@ -7,11 +7,19 @@ import QuoteView from './scripts/QuoteView';
 import LaserCutAcrylic from './scripts/products/acrylic/LaserCutAcrylic/LaserCutAcrylic';
 import MetalLaminate from './scripts/products/acrylic/MetalLaminate/MetalLaminate';
 import UvPrintedAcrylic from './scripts/products/acrylic/UvPrintedAcrylic/UvPrintedAcrylic';
+import LaserCutAluminum from './scripts/products/metal/LaserCutAluminum/LaserCutAluminum';
 
 if (document.querySelector('#laserCutAcrylic')) {
 	ReactDOM.render(
 		<LaserCutAcrylic />,
 		document.querySelector('#laserCutAcrylic')
+	);
+}
+
+if (document.querySelector('#laserCutAluminum')) {
+	ReactDOM.render(
+		<LaserCutAluminum />,
+		document.querySelector('#laserCutAluminum')
 	);
 }
 

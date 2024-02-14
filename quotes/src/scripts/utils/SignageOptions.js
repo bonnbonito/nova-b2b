@@ -29,6 +29,42 @@ const thicknessOptions = [
 	},
 ];
 
+const metalThicknessOptions = [
+	{
+		thickness: '1/8"',
+		value: '3',
+	},
+	{
+		thickness: '7/32"',
+		value: '6',
+	},
+	{
+		thickness: '3/8"',
+		value: '9',
+	},
+	{
+		thickness: '1/2"',
+		value: '12',
+	},
+	{
+		thickness: '3/4"',
+		value: '20',
+	},
+	{
+		thickness: '1"',
+		value: '26',
+	},
+];
+
+const metalFinishOptions = [
+	{
+		option: 'Brushed',
+	},
+	{
+		option: 'Painted',
+	},
+];
+
 const waterProofOptions = [
 	{
 		option: 'Indoor',
@@ -56,6 +92,15 @@ const mountingDefaultOptions = [
 	},
 	{
 		mounting_option: 'Pad - Combination All',
+	},
+];
+
+const metalInstallationOptions = [
+	{
+		option: 'Plain',
+	},
+	{
+		option: 'Flush Stud',
 	},
 ];
 
@@ -100,6 +145,9 @@ const piecesOptions = ['30 pieces or fewer'];
 
 export {
 	calculateMountingOptions,
+	metalFinishOptions,
+	metalInstallationOptions,
+	metalThicknessOptions,
 	mountingDefaultOptions,
 	piecesOptions,
 	thicknessOptions,

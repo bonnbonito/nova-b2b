@@ -730,7 +730,7 @@ class Nova_Quote {
 			)
 		);
 
-		if ( ( is_product( 'product' ) || is_account_page() || is_page( 'custom' ) || is_page('custom-project') ) && is_user_logged_in() || get_post_type() === 'signage' ) {
+		if ( ( is_product( 'product' ) || is_account_page() || is_page( 'custom' ) || is_page( 'custom-project' ) ) && is_user_logged_in() || get_post_type() === 'signage' ) {
 			wp_enqueue_script( 'nova-quote' );
 			wp_enqueue_style( 'nova-quote' );
 		}

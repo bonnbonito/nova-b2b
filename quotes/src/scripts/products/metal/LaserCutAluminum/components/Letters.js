@@ -3,19 +3,16 @@ import Dropdown from '../../../../Dropdown';
 import FontsDropdown from '../../../../FontsDropdown';
 import UploadFile from '../../../../UploadFile';
 import useOutsideClick from '../../../../utils/ClickOutside';
-import { metalFinishColors } from '../../../../utils/ColorOptions';
+import { colorOptions } from '../../../../utils/ColorOptions';
 import convert_json from '../../../../utils/ConvertJson';
 import {
-	mountingDefaultOptions,
+	metalFinishOptions,
+	metalInstallationOptions,
+	metalThicknessOptions,
 	piecesOptions,
-	thicknessOptions,
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
-import {
-	METAL_ACRYLIC_PRICING,
-	QuoteContext,
-	acrylicBaseOptions,
-} from '../MetalLaminate';
+import { QuoteContext } from '../LaserCutAluminum';
 
 const NovaOptions = NovaQuote.quote_options;
 const NovaSingleOptions = NovaQuote.single_quote_options;
@@ -41,7 +38,7 @@ export default function Letters({ item }) {
 	const [letters, setLetters] = useState(item.letters);
 	const [comments, setComments] = useState(item.comments);
 	const [font, setFont] = useState(item.font);
-	const [acrylicBase, setAcrylicBase] = useState(item.acrylicBase);
+	const [color, setColor] = useState(item.color);
 	const [isLoading, setIsLoading] = useState(false);
 	const [openColor, setOpenColor] = useState(false);
 	const [waterproof, setWaterproof] = useState(item.waterproof);
@@ -51,7 +48,7 @@ export default function Letters({ item }) {
 	const [filePath, setFilePath] = useState(item.filePath);
 	const [file, setFile] = useState(item.file);
 	const [letterHeightOptions, setLetterHeightOptions] = useState([]);
-	const [metalFinish, setMetalFinish] = useState(item.metalFinish);
+	const [selectedFinishing, setSelectedFinishing] = useState(item.finishing);
 	const [pieces, setPieces] = useState(item.pieces);
 
 	const [selectedLetterHeight, setSelectedLetterHeight] = useState(
@@ -59,14 +56,11 @@ export default function Letters({ item }) {
 	);
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice);
-	const [mountingOptions, setMountingOptions] = useState(
-		mountingDefaultOptions
-	);
 
 	const [lettersHeight, setLettersHeight] = useState(
 		NovaOptions.letters_height
 	);
-	const [selectedMounting, setSelectedMounting] = useState(item.mounting);
+	const [installation, setInstallation] = useState(item.installation);
 
 	const colorRef = useRef(null);
 
@@ -134,9 +128,9 @@ export default function Letters({ item }) {
 					comments: comments,
 					font: font,
 					thickness: selectedThickness,
-					mounting: selectedMounting,
+					installation: installation,
 					waterproof: waterproof,
-					acrylicBase: acrylicBase,
+					color: color,
 					letterHeight: selectedLetterHeight,
 					usdPrice: usdPrice,
 					cadPrice: cadPrice,
@@ -144,7 +138,7 @@ export default function Letters({ item }) {
 					fileName: fileName,
 					filePath: filePath,
 					fileUrl: fileUrl,
-					metalFinish: metalFinish,
+					finishing: selectedFinishing,
 					pieces: pieces,
 				};
 			} else {
@@ -160,13 +154,13 @@ export default function Letters({ item }) {
 
 	const handleSelectFont = (value) => setFont(value);
 
-	const handleonChangeMount = (e) => setSelectedMounting(e.target.value);
+	const handleOnChangeInstallation = (e) => setInstallation(e.target.value);
 
 	const handleOnChangeWaterproof = (e) => setWaterproof(e.target.value);
 
 	const handleOnChangeThickness = (e) => {
 		const target = e.target.value;
-		const selected = thicknessOptions.filter(
+		const selected = metalThicknessOptions.filter(
 			(option) => option.value === target
 		);
 		setSelectedThickness(() => selected[0]);
@@ -180,6 +174,14 @@ export default function Letters({ item }) {
 
 	const handleOnChangeLetterHeight = (e) => {
 		setSelectedLetterHeight(e.target.value);
+	};
+
+	const handleChangeFinishing = (e) => {
+		const value = e.target.value;
+		if ('Brushed' === value) {
+			setColor({ name: '', color: '' });
+		}
+		setSelectedFinishing(e.target.value);
 	};
 
 	const handleChangePieces = (e) => {
@@ -212,11 +214,10 @@ export default function Letters({ item }) {
 				}
 
 				// Adjusting for waterproof and finishing
-				letterPrice *= waterproof === 'Indoor' ? 1 : 1.1;
+				letterPrice *= waterproof === 'Indoor' ? 1 : 1.05;
+				letterPrice *= selectedFinishing === 'Gloss' ? 1.1 : 1;
 
 				totalLetterPrice += letterPrice;
-				totalLetterPrice *= METAL_ACRYLIC_PRICING;
-				totalLetterPrice *= acrylicBase === 'Black' ? 1 : 1.1;
 			});
 
 			setUsdPrice(totalLetterPrice.toFixed(2));
@@ -225,47 +226,11 @@ export default function Letters({ item }) {
 	}, [
 		selectedLetterHeight,
 		selectedThickness,
+		selectedFinishing,
 		letters,
 		waterproof,
 		lettersHeight,
-		acrylicBase,
 	]);
-
-	useEffect(() => {
-		// Log to ensure we're getting the expected value
-
-		let newMountingOptions;
-		if (selectedThickness?.value === '3') {
-			if (selectedMounting === 'Flush stud') {
-				setSelectedMounting('');
-			}
-
-			newMountingOptions = mountingDefaultOptions.filter(
-				(option) => option.mounting_option !== 'Flush stud'
-			);
-		} else {
-			if (selectedMounting === 'Stud with Block') {
-				setSelectedMounting('');
-			}
-			// Exclude 'Stud with Block' option
-			newMountingOptions = mountingDefaultOptions.filter(
-				(option) => option.mounting_option !== 'Stud with Block'
-			);
-		}
-
-		if (waterproof === 'Outdoor') {
-			if (selectedMounting === 'Double sided tape') {
-				setSelectedMounting('');
-			}
-
-			newMountingOptions = newMountingOptions.filter(
-				(option) => option.mounting_option !== 'Double sided tape'
-			);
-		}
-
-		// Update the state
-		setMountingOptions(newMountingOptions);
-	}, [selectedThickness, waterproof]);
 
 	useEffect(() => {
 		setLetterHeightOptions(() =>
@@ -300,15 +265,15 @@ export default function Letters({ item }) {
 		comments,
 		font,
 		selectedThickness,
-		selectedMounting,
+		installation,
 		waterproof,
-		acrylicBase,
+		color,
 		usdPrice,
 		selectedLetterHeight,
 		fileUrl,
 		fileName,
 		file,
-		metalFinish,
+		selectedFinishing,
 		pieces,
 	]);
 
@@ -348,7 +313,7 @@ export default function Letters({ item }) {
 							whiteSpace: 'nowrap',
 							overflow: 'hidden',
 							fontFamily: font,
-							color: metalFinish?.color ?? '#000000',
+							color: color.color,
 							textShadow: '0px 0px 1px rgba(0, 0, 0, 1)',
 						}}
 					>
@@ -378,17 +343,10 @@ export default function Letters({ item }) {
 				/>
 
 				<Dropdown
-					title="Letters Height"
-					onChange={handleOnChangeLetterHeight}
-					options={letterHeightOptions}
-					value={item.letterHeight}
-				/>
-
-				<Dropdown
-					title="Acrylic Thickness"
+					title="Thickness"
 					value={selectedThickness?.value}
 					onChange={handleOnChangeThickness}
-					options={thicknessOptions.map((thickness) => (
+					options={metalThicknessOptions.map((thickness) => (
 						<option
 							value={thickness.value}
 							selected={thickness === selectedThickness}
@@ -398,58 +356,67 @@ export default function Letters({ item }) {
 					))}
 				/>
 
-				<div className="px-[1px] relative" ref={colorRef}>
-					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-						Metal Finish
-					</label>
-					<div
-						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-							metalFinish.name ? 'text-black' : 'text-[#dddddd]'
-						}`}
-						onClick={() => setOpenColor((prev) => !prev)}
-					>
-						<span
-							className="rounded-full w-[18px] h-[18px] border mr-2"
-							style={{ backgroundColor: metalFinish.color }}
-						></span>
-						{metalFinish.name === '' ? 'CHOOSE OPTION' : metalFinish.name}
-					</div>
-					{openColor && (
-						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
-							{metalFinishColors.map((color) => {
-								return (
-									<div
-										className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
-										onClick={() => {
-											setMetalFinish(color);
-											setOpenColor(false);
-										}}
-									>
-										<span
-											className="w-[18px] h-[18px] inline-block rounded-full border"
-											style={{ backgroundColor: color.color }}
-										></span>
-										{color.name}
-									</div>
-								);
-							})}
-						</div>
-					)}
-				</div>
+				<Dropdown
+					title="Letters Height"
+					onChange={handleOnChangeLetterHeight}
+					options={letterHeightOptions}
+					value={item.letterHeight}
+				/>
 
 				<Dropdown
-					title="Acrylic Base"
-					onChange={(e) => setAcrylicBase(e.target.value)}
-					options={acrylicBaseOptions.map((option) => (
+					title="Finish Option"
+					onChange={handleChangeFinishing}
+					options={metalFinishOptions.map((finishing) => (
 						<option
-							value={option.option}
-							selected={option.option == item.acrylicBase}
+							value={finishing.option}
+							selected={finishing.option === item.finishing}
 						>
-							{option.option}
+							{finishing.option}
 						</option>
 					))}
-					value={item.acrylicBase}
+					value={item.finishing}
 				/>
+
+				{selectedFinishing === 'Painted' && (
+					<div className="px-[1px] relative" ref={colorRef}>
+						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+							Color
+						</label>
+						<div
+							className={`flex px-2 items-center select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
+								color.name ? 'text-black' : 'text-[#dddddd]'
+							}`}
+							onClick={() => setOpenColor((prev) => !prev)}
+						>
+							<span
+								className="rounded-full w-[18px] h-[18px] border mr-2"
+								style={{ backgroundColor: color.color }}
+							></span>
+							{color.name === '' ? 'CHOOSE OPTION' : color.name}
+						</div>
+						{openColor && (
+							<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
+								{colorOptions.map((color) => {
+									return (
+										<div
+											className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
+											onClick={() => {
+												setColor(color);
+												setOpenColor(false);
+											}}
+										>
+											<span
+												className="w-[18px] h-[18px] inline-block rounded-full border"
+												style={{ backgroundColor: color.color }}
+											></span>
+											{color.name}
+										</div>
+									);
+								})}
+							</div>
+						)}
+					</div>
+				)}
 
 				<Dropdown
 					title="Waterproof Option"
@@ -466,17 +433,17 @@ export default function Letters({ item }) {
 				/>
 
 				<Dropdown
-					title="Mounting Options"
-					onChange={handleonChangeMount}
-					options={mountingOptions.map((option) => (
+					title="Installation Option"
+					onChange={handleOnChangeInstallation}
+					options={metalInstallationOptions.map((option) => (
 						<option
-							value={option.mounting_option}
-							selected={option.mounting_option === selectedMounting}
+							value={option.option}
+							selected={option.option === installation}
 						>
-							{option.mounting_option}
+							{option.option}
 						</option>
 					))}
-					value={item.mounting}
+					value={item.installation}
 				/>
 
 				<Dropdown

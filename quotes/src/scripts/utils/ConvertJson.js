@@ -9,7 +9,9 @@ export default function convert_json(tableString) {
 		const values = row.split('\t');
 		let obj = headers.reduce((acc, header, index) => {
 			// Convert to the appropriate type; assuming all non-header values are numbers
-			acc[header] = values[index] ? parseFloat(values[index]) : null;
+			acc[header] = values[index]
+				? parseFloat(values[index].replace(/,/g, ''))
+				: null;
 			return acc;
 		}, {});
 		return obj;

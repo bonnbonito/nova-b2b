@@ -389,7 +389,7 @@ export default function Letters({ item }) {
 						Color
 					</label>
 					<div
-						className={`flex items-center select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
+						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
 							color.name ? 'text-black' : 'text-[#dddddd]'
 						}`}
 						onClick={() => setOpenColor((prev) => !prev)}
