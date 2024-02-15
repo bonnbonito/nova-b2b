@@ -101,7 +101,9 @@ export default function QuoteView() {
 		formData.append('nova_product', NovaQuote.nova_quote_product.ID);
 		formData.append(
 			'product',
-			NovaAccount.product_name ? decodeHTML(NovaAccount.product_name) : 'None'
+			NovaAccount.product_name
+				? decodeHTML(NovaAccount.product_name)
+				: 'Custom Project'
 		);
 		formData.append('product_id', NovaQuote.generated_product_id);
 		formData.append('product_line', NovaAccount.product_line?.ID);
@@ -140,7 +142,8 @@ export default function QuoteView() {
 
 	const standardRate = parseFloat(finalPrice * 0.075);
 
-	const estimatedShipping = Math.max(flatRate, standardRate);
+	const estimatedShipping =
+		quotePrice > 0 ? Math.max(flatRate, standardRate) : 0;
 
 	const tax = taxRate ? parseFloat(taxRate.tax_rate / 100) : 0;
 	const taxCompute = parseFloat(finalPrice * tax);
@@ -240,14 +243,22 @@ export default function QuoteView() {
 					<div className="flex justify-between gap-4">
 						<h5>ESTIMATED SUBTOTAL:</h5>{' '}
 						<h5>
-							{currency}${finalPrice.toFixed(2).toLocaleString()}
+							{finalPrice > 0
+								? `${currency}$${Number(
+										finalPrice.toFixed(2)
+								  ).toLocaleString()}`
+								: 'TBD'}
 						</h5>
 					</div>
 
 					<div className="flex justify-between gap-4">
 						<h5>ESTIMATED SHIPPING:</h5>{' '}
 						<h5>
-							{currency}${estimatedShipping.toFixed(2).toLocaleString()}
+							{estimatedShipping > 0
+								? `${currency}$${Number(
+										estimatedShipping.toFixed(2)
+								  ).toLocaleString()}`
+								: 'TBD'}
 						</h5>
 					</div>
 
@@ -255,7 +266,11 @@ export default function QuoteView() {
 						<div className="flex justify-between gap-4">
 							<h5>{taxRate.tax_rate_name}</h5>{' '}
 							<h5>
-								{currency}${taxCompute.toFixed(2).toLocaleString()}
+								{taxCompute > 0
+									? `${currency}$${Number(
+											taxCompute.toFixed(2)
+									  ).toLocaleString()}`
+									: 'TBD'}
 							</h5>
 						</div>
 					)}
@@ -263,7 +278,11 @@ export default function QuoteView() {
 					<div className="flex justify-between gap-4 border-b pb-14 mt-8">
 						<h4>ESTIMATED TOTAL:</h4>{' '}
 						<h4>
-							{currency}${estimatedTotal.toFixed(2).toLocaleString()}
+							{estimatedTotal > 0
+								? `${currency}$${Number(
+										estimatedTotal.toFixed(2)
+								  ).toLocaleString()}`
+								: 'TBD'}
 						</h4>
 					</div>
 

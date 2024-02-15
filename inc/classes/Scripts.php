@@ -203,15 +203,16 @@ class Scripts {
 		if ( ! isset( $_GET['qid'] ) ) {
 			return;
 		}
-			$id         = $_GET['qid'];
-			$partner_id = get_field( 'partner', $id );
-			$product_id = get_field( 'product', $id );
+			$id           = $_GET['qid'];
+			$partner_id   = get_field( 'partner', $id );
+			$product_id   = get_field( 'product', $id );
+			$product_name = $product_id ? get_the_title( $product_id ) : 'Custom Project';
 			return array(
 				'ID'           => $id,
 				'title'        => get_the_title( $id ),
 				'data'         => get_field( 'signage', $id ),
 				'final_price'  => get_field( 'final_price', $id ),
-				'product_name' => get_the_title( $product_id ),
+				'product_name' => $product_name,
 				'material'     => $this->get_material_name( $product_id ),
 				'business_id'  => get_field( 'business_id', 'user_' . $partner_id ),
 				'partner'      => $partner_id,
@@ -230,12 +231,13 @@ class Scripts {
 			return 'None'; // Or any default value you wish to return
 		}
 
-		$terms = get_the_terms( $id, 'product_cat' );
-		if ( is_array( $terms ) && ! empty( $terms ) ) {
-			return $terms[0]->name;
+		if ( 'signage' === get_post_type( $id ) ) {
+			$parent_id = wp_get_post_parent_id( $id );
+
+			return $parent_id ? get_the_title( $parent_id ) : get_the_title( $id );
 		}
 
-		return 'None';
+		return 'Custom Project';
 	}
 
 
@@ -304,7 +306,7 @@ class Scripts {
 				wp_enqueue_script( 'admin-acrylic' );
 			}
 
-			if ( 'metal' === $post->post_name ) {
+			if ( 'metal-sign' === $post->post_name ) {
 				wp_enqueue_script( 'admin-metal' );
 			}
 		}

@@ -33,22 +33,24 @@ export default function PricesView({ item }) {
 				<div className="flex justify-between py-2 font-title uppercase">
 					{item.title}{' '}
 					<span>
-						{currency}${Number(price).toFixed(2).toLocaleString()}
+						{price > 0 && `${currency}$${price.toFixed(2).toLocaleString()}`}
 					</span>
 				</div>
-				<div className="grid grid-cols-[160px_1fr] py-[2px]">
-					<div className="text-left text-xs font-title">THICKNESS</div>
-					<div className="text-left text-[10px] uppercase">
-						{item.thickness.thickness}
+				{item.thickness?.thickness && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px]">
+						<div className="text-left text-xs font-title">THICKNESS</div>
+						<div className="text-left text-[14px] uppercase">
+							{item.thickness.thickness}
+						</div>
 					</div>
-				</div>
+				)}
 
 				{item.type === 'logo' && (
 					<>
 						{item.width && (
 							<div className="grid grid-cols-[160px_1fr] py-[2px]">
 								<div className="text-left text-xs font-title">LOGO WIDTH</div>
-								<div className="text-left text-[10px] break-words">
+								<div className="text-left text-[14px] break-words">
 									{item.width}"
 								</div>
 							</div>
@@ -56,7 +58,7 @@ export default function PricesView({ item }) {
 						{item.height && (
 							<div className="grid grid-cols-[160px_1fr] py-[2px]">
 								<div className="text-left text-xs font-title">LOGO HEIGHT</div>
-								<div className="text-left text-[10px] break-words">
+								<div className="text-left text-[14px] break-words">
 									{item.height}"
 								</div>
 							</div>
@@ -66,7 +68,7 @@ export default function PricesView({ item }) {
 								<div className="text-left text-xs font-title">
 									PRINT PREFERENCE
 								</div>
-								<div className="text-left text-[10px] break-words">
+								<div className="text-left text-[14px] break-words">
 									{item.printPreference}
 								</div>
 							</div>
@@ -74,7 +76,7 @@ export default function PricesView({ item }) {
 						{item.baseColor && (
 							<div className="grid grid-cols-[160px_1fr] py-[2px]">
 								<div className="text-left text-xs font-title">BASE COLOR</div>
-								<div className="text-left text-[10px] break-words">
+								<div className="text-left text-[14px] break-words">
 									{item.baseColor}
 								</div>
 							</div>
@@ -89,7 +91,7 @@ export default function PricesView({ item }) {
 								<div className="text-left text-xs font-title">
 									LETTER HEIGHT
 								</div>
-								<div className="text-left text-[10px] break-words">
+								<div className="text-left text-[14px] break-words">
 									{item.letterHeight}"
 								</div>
 							</div>
@@ -100,28 +102,28 @@ export default function PricesView({ item }) {
 				{item.mounting && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px]">
 						<div className="text-left text-xs font-title">MOUNTING</div>
-						<div className="text-left text-[10px]">{item.mounting}</div>
+						<div className="text-left text-[14px]">{item.mounting}</div>
 					</div>
 				)}
 
 				{item.waterproof && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px]">
 						<div className="text-left text-xs font-title">WATERPROOF</div>
-						<div className="text-left text-[10px]">{item.waterproof}</div>
+						<div className="text-left text-[14px]">{item.waterproof}</div>
 					</div>
 				)}
 
 				{item.finishing && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px]">
 						<div className="text-left text-xs font-title">FINISHING</div>
-						<div className="text-left text-[10px]">{item.finishing}</div>
+						<div className="text-left text-[14px]">{item.finishing}</div>
 					</div>
 				)}
 
 				{item.metalFinishing && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px]">
 						<div className="text-left text-xs font-title">METAL FINISHING</div>
-						<div className="text-left text-[10px]">{item.metalFinishing}</div>
+						<div className="text-left text-[14px]">{item.metalFinishing}</div>
 					</div>
 				)}
 
@@ -129,7 +131,7 @@ export default function PricesView({ item }) {
 					<>
 						<div className="grid grid-cols-[160px_1fr] py-[2px]">
 							<div className="text-left text-xs font-title">FONT</div>
-							<div className="text-left text-[10px] break-words">
+							<div className="text-left text-[14px] break-words">
 								{item.font}
 							</div>
 						</div>
@@ -137,13 +139,13 @@ export default function PricesView({ item }) {
 						{item.color && (
 							<div className="grid grid-cols-[160px_1fr] py-[2px]">
 								<div className="text-left text-xs font-title">COLOR</div>
-								<div className="text-left text-[10px]">{item.color?.name}</div>
+								<div className="text-left text-[14px]">{item.color?.name}</div>
 							</div>
 						)}
 
 						<div className="grid grid-cols-[160px_1fr] py-[2px]">
 							<div className="text-left text-xs font-title">LINE TEXT</div>
-							<div className="text-left text-[10px] break-words">
+							<div className="text-left text-[14px] break-words">
 								{item.letters}
 							</div>
 						</div>
@@ -153,7 +155,7 @@ export default function PricesView({ item }) {
 				{item.metalFinish && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px]">
 						<div className="text-left text-xs font-title">METAL FINISH</div>
-						<div className="text-left text-[10px]">
+						<div className="text-left text-[14px]">
 							{item.metalFinish?.name}
 						</div>
 					</div>
@@ -162,29 +164,38 @@ export default function PricesView({ item }) {
 				{item.acrylicBase && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px]">
 						<div className="text-left text-xs font-title">ACRYLIC BASE</div>
-						<div className="text-left text-[10px]">{item.acrylicBase}</div>
+						<div className="text-left text-[14px]">{item.acrylicBase}</div>
 					</div>
 				)}
 
 				{item.installation && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px]">
 						<div className="text-left text-xs font-title">INSTALLATION</div>
-						<div className="text-left text-[10px]">{item.installation}</div>
+						<div className="text-left text-[14px]">{item.installation}</div>
 					</div>
 				)}
 
 				{item.pieces && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px]">
 						<div className="text-left text-xs font-title">PIECES/CUTOUTS</div>
-						<div className="text-left text-[10px]">{item.pieces}</div>
+						<div className="text-left text-[14px]">{item.pieces}</div>
 					</div>
 				)}
 
 				{item.comments && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px]">
 						<div className="text-left text-xs font-title">COMMENTS</div>
-						<div className="text-left text-[10px] break-words">
+						<div className="text-left text-[14px] break-words">
 							{item.comments}
+						</div>
+					</div>
+				)}
+
+				{item.description && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px]">
+						<div className="text-left text-xs font-title">DESCRIPTION</div>
+						<div className="text-left text-[14px] break-words">
+							{item.description}
 						</div>
 					</div>
 				)}
@@ -192,7 +203,7 @@ export default function PricesView({ item }) {
 				{item.file && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px]">
 						<div className="text-left text-xs font-title">FILE</div>
-						<div className="text-left text-[10px] break-words">
+						<div className="text-left text-[14px] break-words">
 							<a href={item.fileUrl} target="_blank">
 								{item.fileName}
 							</a>

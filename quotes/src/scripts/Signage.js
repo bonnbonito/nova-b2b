@@ -68,7 +68,7 @@ export default function Signage({
 
 	return (
 		<div className="rounded-md border border-gray-200 p-4 mb-8">
-			<div className="flex justify-between mb-4">
+			<div className={`flex justify-between ${open ? 'mb-4' : 'mb-0'}`}>
 				<EditableText
 					id={item.id}
 					text={item.title}

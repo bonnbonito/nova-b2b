@@ -14,6 +14,10 @@
   transition: grid-template-rows 200ms;
 }
 
+.signage-content>div {
+  overflow: hidden;
+}
+
 .signage-content.open {
   grid-template-rows: 1fr;
 }

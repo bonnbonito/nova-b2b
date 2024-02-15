@@ -1,13 +1,13 @@
 <?php
 $product_id = get_field( 'product' );
 
-$price = get_field( 'final_price' );
+$price = get_field( 'final_price' ) ? (float) get_field( 'final_price' ) : 0;
 
 $currency_settings = new WooCommerce_Ultimate_Multi_Currency_Suite_Settings( '' );
 
 $exchange_rate_cad = $currency_settings->get_option( 'exchange_rate_cad' );
 
-$final_price = get_woocommerce_currency() === 'USD' ? $price : $price * $exchange_rate_cad;
+$final_price = $price ? ( get_woocommerce_currency() === 'USD' ? $price : $price * $exchange_rate_cad ) : 'TBD';
 
 ?>
 <div id="quote-<?php the_ID(); ?>" class="rounded border p-4 mb-4 text-xs uppercase">
@@ -24,7 +24,7 @@ $final_price = get_woocommerce_currency() === 'USD' ? $price : $price * $exchang
 		<div class="grow-[2] mb-4 md:mb-0">
 			<div class="block"><span class="font-title text-sm">NAME:</span> <?php the_title(); ?></div>
 			<div><span class="font-title text-sm">PRODUCT:</span>
-				<?php echo ( get_field( 'product' ) ? get_field( 'product' )->post_title : '' ); ?></div>
+				<?php echo ( get_field( 'product' ) ? get_field( 'product' )->post_title : 'CUSTOM PROJECT' ); ?></div>
 		</div>
 		<div class="flex grow-[2] gap-2 justify-end font-title items-center">
 			<div class="text-[16px] self-center hidden md-block">

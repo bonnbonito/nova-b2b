@@ -6,20 +6,22 @@ function display_quote_details() {
 		0
 	);
 
+	let priceDisplay = `<h2>Price: TBD</h2>`;
+
+	if (totalUsdPrice) {
+		priceDisplay = `<h2>Price: $${totalUsdPrice.toFixed(2)}</h2>`;
+	}
+
 	const container = document.getElementById('novaquote');
 
 	const totalPrice = document.createElement('div');
 	totalPrice.className = 'total-signage-price';
-	totalPrice.innerHTML = `<h2>Price: $${totalUsdPrice.toFixed(2)}</h2>`;
+	totalPrice.innerHTML = priceDisplay;
 	container.appendChild(totalPrice);
 
 	signage.forEach((sign) => {
 		let html = '';
-		if (sign.type === 'letters') {
-			html = displayLetters(sign);
-		} else {
-			html = displayLogo(sign);
-		}
+		html = displaySignage(sign);
 		const tempDiv = document.createElement('div');
 		tempDiv.className = 'signage-item';
 		tempDiv.innerHTML = html;
@@ -27,101 +29,99 @@ function display_quote_details() {
 	});
 }
 
-function displayLogo(sign) {
+function displaySignage(sign) {
+	const details = [
+		{ label: 'TYPE', value: sign.type },
+		{ label: 'LINE TEXT', value: sign.letters },
+		{
+			label: 'LETTER HEIGHT',
+			value: sign.letterHeight ? sign.letterHeight + '"' : '',
+		},
+		{ label: 'THICKNESS', value: sign.thickness?.thickness },
+		{ label: 'WIDTH', value: sign.width ? sign.width + '"' : '' },
+		{ label: 'HEIGHT', value: sign.height ? sign.height + '"' : '' },
+		{ label: 'MOUNTING', value: sign.mounting },
+		{ label: 'WATERPROOF', value: sign.waterproof },
+		{ label: 'COLOR', value: sign.color?.name },
+		{ label: 'BASE COLOR', value: sign.baseColor },
+		{ label: 'PRINT PREFERENCE', value: sign.printPreference },
+		{ label: 'FINISHING', value: sign.finishing },
+		{ label: 'FONT', value: sign.font },
+		{ label: 'PIECES/CUTOUTS', value: sign.pieces },
+		{ label: 'COMMENTS', value: sign.comments },
+		{ label: 'DESCRIPTION', value: sign.description },
+		{ label: 'FILE PATH', value: sign.filePath },
+		{
+			label: 'View File',
+			value: sign.fileName
+				? `<a href="${sign.fileUrl}" target="_blank">${sign.fileName}</a>`
+				: '',
+		},
+	];
+
+	const htmlDetails = details
+		.filter((detail) => detail.value) // Only include details with a value
+		.map((detail) => {
+			const descriptClass = detail.label === 'DESCRIPTION' ? 'description' : '';
+			return `
+            <div class="signage-details ${descriptClass}">
+                <div class="signage-label">${detail.label}</div>
+                <div class="signage-value">${detail.value}</div>
+            </div>
+        `;
+		})
+		.join(''); // Combine all detail strings into one HTML string
+
+	let htmlTitle = `<h3 style="text-transform: uppercase;">${sign.title}</h3>`;
+
+	if (sign.usdPrice) {
+		htmlTitle = `<h3 style="text-transform: uppercase;">${sign.title} ----- $${sign.usdPrice}</h3>`;
+	}
+
 	const html = `
-        <h3 style="text-transform: uppercase;">${sign.title} ----- $${sign.usdPrice}</h3>
-        <div class="signage-details">
-            <div class="signage-label">THICKNESS</div>
-            <div class="signage-value">${sign.thickness.thickness}</div>
-        </div>
-        <div class="signage-details">
-            <div class="signage-label">WIDTH</div>
-            <div class="signage-value">${sign.width}"</div>
-        </div>
-        <div class="signage-details">
-            <div class="signage-label">HEIGHT</div>
-            <div class="signage-value">${sign.height}"</div>
-        </div>
-        <div class="signage-details">
-            <div class="signage-label">MOUNTING</div>
-            <div class="signage-value">${sign.mounting}</div>
-        </div>
-        <div class="signage-details">
-            <div class="signage-label">WATERPROOF</div>
-            <div class="signage-value">${sign.waterproof}</div>
-        </div>
-        <div class="signage-details">
-            <div class="signage-label">COLOR</div>
-            <div class="signage-value">${sign.color?.name}</div>
-        </div>
-        <div class="signage-details">
-            <div class="signage-label">FINISHING</div>
-            <div class="signage-value">${sign.finishing}</div>
-        </div>
-        <div class="signage-details">
-            <div class="signage-label">COMMENTS</div>
-            <div class="signage-value">${sign.comments}</div>
-        </div>
-        <div class="signage-details">
-            <div class="signage-label">FILE PATH</div>
-            <div class="signage-value">${sign.filePath}</div>
-        </div>
-        <div class="signage-details">
-            <div class="signage-label">View File</div>
-            <div class="signage-value"><a href="${sign.fileUrl}" target="_blank">${sign.fileName}</a></div>
-        </div>
+        ${htmlTitle}
+        ${htmlDetails}
     `;
 
 	return html;
 }
 
 function displayLetters(sign) {
+	const details = [
+		{ label: 'THICKNESS', value: sign.thickness?.thickness + '"' },
+		{ label: 'LETTER HEIGHT', value: sign.letterHeight + '"' },
+		{ label: 'MOUNTING', value: sign.mounting },
+		{ label: 'WATERPROOF', value: sign.waterproof },
+		{ label: 'COLOR', value: sign.color?.name },
+		{ label: 'FINISHING', value: sign.finishing },
+		{ label: 'FONT', value: sign.font },
+		{ label: 'LINE TEXT', value: sign.letters },
+		{ label: 'COMMENTS', value: sign.comments },
+		{ label: 'DESCRIPTION', value: sign.description },
+		{ label: 'FILE PATH', value: sign.filePath },
+		{
+			label: 'View File',
+			value: sign.fileName
+				? `<a href="${sign.fileUrl}" target="_blank">${sign.fileName}</a>`
+				: '',
+		},
+	];
+
+	const htmlDetails = details
+		.filter((detail) => detail.value)
+		.map(
+			(detail) => `
+            <div class="signage-details">
+                <div class="signage-label">${detail.label}</div>
+                <div class="signage-value">${detail.value}</div>
+            </div>
+        `
+		)
+		.join(''); // Join all detail strings into one HTML string
+
 	const html = `
         <h3>${sign.title} ----- $${sign.usdPrice}</h3>
-        <div class="signage-details">
-            <div class="signage-label">THICKNESS</div>
-            <div class="signage-value">${sign.thickness.thickness}"</div>
-        </div>
-        <div class="signage-details">
-            <div class="signage-label">LETTER HEIGHT</div>
-            <div class="signage-value">${sign.letterHeight}"</div>
-        </div>
-        <div class="signage-details">
-            <div class="signage-label">MOUNTING</div>
-            <div class="signage-value">${sign.mounting}</div>
-        </div>
-        <div class="signage-details">
-            <div class="signage-label">WATERPROOF</div>
-            <div class="signage-value">${sign.waterproof}</div>
-        </div>
-        <div class="signage-details">
-            <div class="signage-label">COLOR</div>
-            <div class="signage-value">${sign.color.name}</div>
-        </div>
-        <div class="signage-details">
-            <div class="signage-label">FINISHING</div>
-            <div class="signage-value">${sign.finishing}</div>
-        </div>
-        <div class="signage-details">
-            <div class="signage-label">FONT</div>
-            <div class="signage-value">${sign.font}</div>
-        </div>
-        <div class="signage-details">
-            <div class="signage-label">LINE TEXT</div>
-            <div class="signage-value">${sign.letters}</div>
-        </div>
-        <div class="signage-details">
-            <div class="signage-label">COMMENTS</div>
-            <div class="signage-value">${sign.comments}</div>
-        </div>
-        <div class="signage-details">
-            <div class="signage-label">FILE PATH</div>
-            <div class="signage-value">${sign.filePath}</div>
-        </div>
-        <div class="signage-details">
-            <div class="signage-label">View File</div>
-            <div class="signage-value"><a href="${sign.fileUrl}" target="_blank">${sign.fileName}</a></div>
-        </div>
+        ${htmlDetails}
     `;
 
 	return html;

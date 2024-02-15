@@ -1,17 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react';
-import Dropdown from '../Dropdown';
-import { QuoteContext } from '../LaserCutAcrylic';
-import UploadFile from '../UploadFile';
-import convert_json from '../utils/ConvertJson';
+import Dropdown from '../../../../Dropdown';
+import UploadFile from '../../../../UploadFile';
+import { QuoteContext } from '../LayeredAcrylic';
 
 import {
+	calculateMountingOptions,
+	defaultFinishOptions,
 	mountingDefaultOptions,
+	piecesOptions,
 	thicknessOptions,
 	waterProofOptions,
-} from '../utils/SignageOptions';
+} from '../../../../utils/SignageOptions';
 
 const NovaSingleOptions = NovaQuote.single_quote_options;
-const exchangeRate = wcumcs_vars_data.currency_data.rate;
 
 export default function Logo({ item }) {
 	const { signage, setSignage } = useContext(QuoteContext);
@@ -19,15 +20,19 @@ export default function Logo({ item }) {
 	const [selectedThickness, setSelectedThickness] = useState(item.thickness);
 	const [width, setWidth] = useState(item.width);
 	const [maxWidthHeight, setMaxWidthHeight] = useState(23);
-	const [usdPrice, setUsdPrice] = useState(item.usdPrice);
-	const [cadPrice, setCadPrice] = useState(item.cadPrice);
 	const [isLoading, setIsLoading] = useState(false);
 	const [fileName, setFileName] = useState(item.fileName);
 	const [fileUrl, setFileUrl] = useState(item.fileUrl);
 	const [filePath, setFilePath] = useState(item.filePath);
 	const [file, setFile] = useState(item.file);
+	const [pieces, setPieces] = useState(item.pieces);
+	const [baseColor, setBaseColor] = useState(item.baseColor);
 	const [selectedFinishing, setSelectedFinishing] = useState(item.finishing);
-	const finishingOptions = NovaSingleOptions.finishing_options;
+	const [description, setDescription] = useState(item.description);
+	const [printPreference, setPrintPreference] = useState(item.printPreference);
+	const finishingOptions = NovaSingleOptions.finishing_options
+		? NovaSingleOptions.finishing_options
+		: defaultFinishOptions;
 	const [maxWidthOptions, setMaxWidthOptions] = useState(
 		Array.from(
 			{
@@ -50,41 +55,17 @@ export default function Logo({ item }) {
 		mountingDefaultOptions
 	);
 
+	const handleOnChangeDescription = (e) => setDescription(e.target.value);
+
 	const logoPricingObject = NovaQuote.quote_options.logo_pricing;
 
 	useEffect(() => {
-		// Log to ensure we're getting the expected value
+		if (!selectedThickness || selectedThickness.value === undefined) return;
 
-		let newMountingOptions;
-		if (selectedThickness.value === '3') {
-			if (selectedMounting === 'Flush stud') {
-				setSelectedMounting(() => mountingDefaultOptions[0].mounting_option);
-			}
+		const { newMountingOptions, updatedSelectedMounting } =
+			calculateMountingOptions(selectedThickness, selectedMounting, waterproof);
 
-			newMountingOptions = mountingDefaultOptions.filter(
-				(option) => option.mounting_option !== 'Flush stud'
-			);
-		} else {
-			if (selectedMounting === 'Stud with Block') {
-				setSelectedMounting(() => mountingDefaultOptions[0].mounting_option);
-			}
-			// Exclude 'Stud with Block' option
-			newMountingOptions = mountingDefaultOptions.filter(
-				(option) => option.mounting_option !== 'Stud with Block'
-			);
-		}
-
-		if (waterproof === 'Outdoor') {
-			if (selectedMounting === 'Double sided tape') {
-				setSelectedMounting(() => mountingDefaultOptions[0].mounting_option);
-			}
-
-			newMountingOptions = newMountingOptions.filter(
-				(option) => option.mounting_option !== 'Double sided tape'
-			);
-		}
-
-		// Update the state
+		setSelectedMounting(updatedSelectedMounting); // Update the selected mounting if needed
 		setMountingOptions(newMountingOptions);
 
 		setMaxWidthOptions(() =>
@@ -102,7 +83,7 @@ export default function Logo({ item }) {
 				}
 			)
 		);
-	}, [selectedThickness, waterproof, maxWidthHeight]);
+	}, [selectedThickness, selectedMounting, waterproof, maxWidthHeight]);
 
 	function handleComments(e) {
 		setComments(e.target.value);
@@ -130,6 +111,28 @@ export default function Logo({ item }) {
 		setSelectedFinishing(e.target.value);
 	};
 
+	const handleChangePieces = (e) => {
+		setPieces(e.target.value);
+	};
+
+	const printOptions = [
+		{
+			option: 'Print on top',
+		},
+		{
+			option: 'Print from back layer',
+		},
+	];
+
+	const baseColorOptions = [
+		{
+			option: 'Black',
+		},
+		{
+			option: 'Custom Color',
+		},
+	];
+
 	function updateSignage() {
 		const updatedSignage = signage.map((sign) => {
 			if (sign.id === item.id) {
@@ -141,13 +144,15 @@ export default function Logo({ item }) {
 					waterproof: waterproof,
 					width: width,
 					height: height,
-					usdPrice: usdPrice,
-					cadPrice: cadPrice,
 					finishing: selectedFinishing,
 					file: file,
 					fileName: fileName,
 					filePath: filePath,
 					fileUrl: fileUrl,
+					pieces: pieces,
+					baseColor: baseColor,
+					printPreference: printPreference,
+					description: description,
 				};
 			} else {
 				return sign;
@@ -157,27 +162,24 @@ export default function Logo({ item }) {
 	}
 
 	useEffect(() => {
-		setComments(item.comments);
-	}, []);
-
-	useEffect(() => {
 		updateSignage();
 	}, [
-		comments,
 		selectedThickness,
 		selectedMounting,
 		waterproof,
 		width,
 		height,
-		usdPrice,
-		cadPrice,
 		fileUrl,
 		fileName,
 		selectedFinishing,
 		file,
 		filePath,
+		pieces,
+		description,
+		printPreference,
 	]);
 
+	/*
 	useEffect(() => {
 		// Ensure width, height, and selectedThickness are provided
 		if (width && height && selectedThickness) {
@@ -194,18 +196,28 @@ export default function Logo({ item }) {
 				multiplier = waterproof === 'Indoor' ? 1 : 1.1;
 			}
 
-			const total = (computed * multiplier).toFixed(2);
+			let total = (computed * multiplier).toFixed(2);
+			total *= selectedFinishing === 'Gloss' ? 1.1 : 1;
+			total *= baseColor === 'Custom Color' ? UV_PRICE : 1;
 			setUsdPrice(total);
 			setCadPrice((total * parseFloat(exchangeRate)).toFixed(2));
 		}
-	}, [width, height, selectedThickness, waterproof]);
+	}, [
+		width,
+		height,
+		selectedThickness,
+		waterproof,
+		selectedFinishing,
+		baseColor,
+	]);
+	*/
 
 	return (
 		<>
 			<div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
 				<Dropdown
-					title="Thickness"
-					value={item.thickness.value}
+					title="Acrylic Thickness"
+					value={item.thickness?.value}
 					onChange={handleOnChangeThickness}
 					options={thicknessOptions.map((thickness) => (
 						<option
@@ -218,17 +230,45 @@ export default function Logo({ item }) {
 				/>
 
 				<Dropdown
-					title="Width"
+					title="Logo Width"
 					value={width}
 					onChange={(e) => setWidth(e.target.value)}
 					options={maxWidthOptions}
 				/>
 
 				<Dropdown
-					title="Height"
+					title="Logo Height"
 					value={height}
 					onChange={(e) => setHeight(e.target.value)}
 					options={maxWidthOptions}
+				/>
+
+				<Dropdown
+					title="Printing Preference"
+					value={printPreference}
+					onChange={(e) => setPrintPreference(e.target.value)}
+					options={printOptions.map((option) => (
+						<option
+							value={option.option}
+							selected={option.option == item.printPreference}
+						>
+							{option.option}
+						</option>
+					))}
+				/>
+
+				<Dropdown
+					title="Base Color"
+					value={baseColor}
+					onChange={(e) => setBaseColor(e.target.value)}
+					options={baseColorOptions.map((option) => (
+						<option
+							value={option.option}
+							selected={option.option == item.baseColor}
+						>
+							{option.option}
+						</option>
+					))}
 				/>
 
 				<Dropdown
@@ -272,20 +312,31 @@ export default function Logo({ item }) {
 					))}
 					value={selectedFinishing}
 				/>
+
+				<Dropdown
+					title="Pieces/Cutouts"
+					onlyValue={true}
+					onChange={handleChangePieces}
+					options={piecesOptions.map((piece) => (
+						<option value={piece} selected={piece === item.pieces}>
+							{piece}
+						</option>
+					))}
+					value={pieces}
+				/>
 			</div>
 
 			<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
 				<div className="px-[1px] col-span-3">
 					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-						COMMENTS
+						DESCRIPTION
 					</label>
-					<input
-						className="w-full py-4 px-2 border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400"
-						type="text"
-						value={item.comments}
-						onChange={handleComments}
-						placeholder="ADD COMMENTS"
-					/>
+					<textarea
+						className="h-[160px] rounded-md text-sm"
+						onChange={handleOnChangeDescription}
+					>
+						{description}
+					</textarea>
 				</div>
 				<UploadFile
 					setFilePath={setFilePath}

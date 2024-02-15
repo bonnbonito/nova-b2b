@@ -74,12 +74,18 @@
     padding: 10px;
 }
 
+.signage-details.description {
+    flex-direction: column;
+    gap: 12px;
+}
+
 .signage-details:last-child {
     border-bottom: 1px solid #dedede;
 }
 
 .signage-label {
     font-weight: bold;
+    letter-spacing: 1.4px;
 }
 
 .signage-details * {

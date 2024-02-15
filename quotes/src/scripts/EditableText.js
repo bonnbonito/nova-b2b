@@ -110,7 +110,7 @@ export default function EditableText({ id, text, onChange }) {
 				</div>
 			) : (
 				<div className="flex gap-2">
-					<h3 className="signage-title uppercase">{text}</h3>
+					<h3 className="signage-title uppercase mb-0">{text}</h3>
 					<EditIcon />
 				</div>
 			)}

@@ -3,13 +3,16 @@ import React from 'react';
 export default function Prices({ item }) {
 	const currency = wcumcs_vars_data.currency;
 	const price = currency === 'USD' ? item.usdPrice : item.cadPrice;
+	console.log(price > 0);
 	return (
 		<div className="block">
 			<div className="flex justify-between py-2 font-title uppercase md:tracking-[1.6px]">
-				{item.title}{' '}
-				<span>
-					{currency}${Number(price).toLocaleString()}
-				</span>
+				{item.title}
+				{price > 0 && (
+					<span>
+						{currency}${Number(price).toLocaleString()}
+					</span>
+				)}
 			</div>
 			{item.thickness && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
@@ -211,6 +214,17 @@ export default function Prices({ item }) {
 						<a href={item.fileUrl} target="_blank">
 							{item.fileName}
 						</a>
+					</div>
+				</div>
+			)}
+
+			{item.description && (
+				<div className="block py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						DESCRIPTION
+					</div>
+					<div className="text-left text-sm break-words">
+						{item.description}
 					</div>
 				</div>
 			)}

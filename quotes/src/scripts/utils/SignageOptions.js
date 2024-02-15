@@ -1,3 +1,12 @@
+const defaultFinishOptions = [
+	{
+		name: 'Matte',
+	},
+	{
+		name: 'Gloss',
+	},
+];
+
 const thicknessOptions = [
 	{
 		thickness: '1/8"',
@@ -145,6 +154,7 @@ const piecesOptions = ['30 pieces or fewer'];
 
 export {
 	calculateMountingOptions,
+	defaultFinishOptions,
 	metalFinishOptions,
 	metalInstallationOptions,
 	metalThicknessOptions,

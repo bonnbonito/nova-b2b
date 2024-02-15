@@ -2,17 +2,25 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import 'react-tooltip/dist/react-tooltip.css';
 import './index.css';
-import CustomProject from './scripts/CustomProject';
 import QuoteView from './scripts/QuoteView';
 import LaserCutAcrylic from './scripts/products/acrylic/LaserCutAcrylic/LaserCutAcrylic';
+import LayeredAcrylic from './scripts/products/acrylic/LayeredAcrylic/LayeredAcrylic';
 import MetalLaminate from './scripts/products/acrylic/MetalLaminate/MetalLaminate';
 import UvPrintedAcrylic from './scripts/products/acrylic/UvPrintedAcrylic/UvPrintedAcrylic';
+import CustomProject from './scripts/products/custom/CustomProject';
 import LaserCutAluminum from './scripts/products/metal/LaserCutAluminum/LaserCutAluminum';
 
 if (document.querySelector('#laserCutAcrylic')) {
 	ReactDOM.render(
 		<LaserCutAcrylic />,
 		document.querySelector('#laserCutAcrylic')
+	);
+}
+
+if (document.querySelector('#layeredAcrylic')) {
+	ReactDOM.render(
+		<LayeredAcrylic />,
+		document.querySelector('#layeredAcrylic')
 	);
 }
 

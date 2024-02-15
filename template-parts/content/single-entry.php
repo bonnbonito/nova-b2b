@@ -12,9 +12,7 @@ namespace Kadence;
 if ( kadence()->show_feature_above() ) {
 	get_template_part( 'template-parts/content/entry_thumbnail', get_post_type() );
 }
-if ( 'signage' === get_post_type() ) {
-	do_action( 'nova_signange_before_content' );
-}
+do_action( 'nova_signange_before_content' );
 ?>
 <article id="post-<?php the_ID(); ?>"
 	<?php post_class( 'entry content-bg single-entry' . ( kadence()->option( 'post_footer_area_boxed' ) ? ' post-footer-area-boxed' : '' ) ); ?>>

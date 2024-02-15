@@ -753,7 +753,9 @@ class Woocommerce {
 	}
 
 	public function show_product_dropdown_nav() {
-		echo do_shortcode( '[product_dropdown_nav]' );
+		if ( 'signage' === get_post_type() || is_page( 'custom-project' ) ) {
+			echo do_shortcode( '[product_dropdown_nav]' );
+		}
 	}
 
 	public function product_guides() {
