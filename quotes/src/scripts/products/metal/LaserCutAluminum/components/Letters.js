@@ -15,7 +15,6 @@ import {
 import { QuoteContext } from '../LaserCutAluminum';
 
 const NovaOptions = NovaQuote.quote_options;
-const NovaSingleOptions = NovaQuote.single_quote_options;
 const exchangeRate = wcumcs_vars_data.currency_data.rate;
 
 let lowerCasePricing = 1; // Default value
@@ -34,7 +33,7 @@ if (NovaOptions && typeof NovaOptions === 'object') {
 //const AcrylicLetterPricing = JSON.parse(NovaOptions.letter_x_logo_pricing);
 
 export default function Letters({ item }) {
-	const { signage, setSignage } = useContext(QuoteContext);
+	const { signage, setSignage, missing, setMissing } = useContext(QuoteContext);
 	const [letters, setLetters] = useState(item.letters);
 	const [comments, setComments] = useState(item.comments);
 	const [font, setFont] = useState(item.font);
@@ -269,6 +268,74 @@ export default function Letters({ item }) {
 		waterproof,
 		color,
 		usdPrice,
+		selectedLetterHeight,
+		fileUrl,
+		fileName,
+		file,
+		selectedFinishing,
+		pieces,
+	]);
+
+	const checkAndAddMissingFields = () => {
+		const missingFields = [];
+
+		if (!letters) missingFields.push('Line Text');
+		if (!font) missingFields.push('Font');
+		if (!selectedLetterHeight) missingFields.push('Letter Height');
+		if (!selectedThickness) missingFields.push('Acrylic Thickness');
+		if (!selectedFinishing) missingFields.push('Finish Option');
+		if (selectedFinishing === 'Painted') {
+			if (!color.name) missingFields.push('Color');
+		}
+		if (!waterproof) missingFields.push('Waterproof');
+		if (!installation) missingFields.push('Installation');
+		if (!pieces) missingFields.push('Pieces/Cutouts');
+
+		if (missingFields.length > 0) {
+			setMissing((prevMissing) => {
+				const existingIndex = prevMissing.findIndex(
+					(entry) => entry.id === item.id
+				);
+
+				if (existingIndex !== -1) {
+					const updatedMissing = [...prevMissing];
+					updatedMissing[existingIndex] = {
+						...updatedMissing[existingIndex],
+						missingFields: missingFields,
+					};
+					return updatedMissing;
+				} else if (missingFields.length > 0) {
+					return [
+						...prevMissing,
+						{
+							id: item.id,
+							title: item.title,
+							missingFields: missingFields,
+						},
+					];
+				}
+
+				console.log(prevMissing);
+
+				return prevMissing;
+			});
+		} else {
+			setMissing((current) => {
+				const updatedMissing = current.filter((sign) => sign.id !== item.id);
+				return updatedMissing;
+			});
+		}
+	};
+
+	useEffect(() => {
+		checkAndAddMissingFields();
+	}, [
+		letters,
+		font,
+		color,
+		selectedThickness,
+		installation,
+		waterproof,
 		selectedLetterHeight,
 		fileUrl,
 		fileName,

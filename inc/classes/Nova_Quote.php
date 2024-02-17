@@ -75,11 +75,11 @@ class Nova_Quote {
 
 	public function nova_product_instant_quote() {
 		?>
-<?php if ( ! is_user_logged_in() ) : ?>
-<?php echo do_shortcode( '[kadence_element id=" 202"]' ); ?>
-<?php else : ?>
+		<?php if ( ! is_user_logged_in() ) : ?>
+			<?php echo do_shortcode( '[kadence_element id=" 202"]' ); ?>
+		<?php else : ?>
 <div id="<?php echo get_field( 'quote_div_id' ); ?>"></div>
-<?php
+			<?php
 	endif;
 	}
 
@@ -705,28 +705,29 @@ class Nova_Quote {
 			'nova-quote',
 			'NovaQuote',
 			array(
-				'ajax_url'              => admin_url( 'admin-ajax.php' ),
-				'nonce'                 => wp_create_nonce( 'quote_nonce' ),
-				'quote_options'         => $this->get_quote_options(),
-				'fonts'                 => $this->get_fonts(),
-				'upload_rest'           => esc_url_raw( rest_url( '/nova/v1/upload-quote-file' ) ),
-				'logged_in'             => is_user_logged_in(),
-				'user_role'             => $this->get_current_user_role_slugs(),
-				'user_id'               => get_current_user_id(),
-				'product'               => get_the_ID(),
-				'mockup_account_url'    => esc_url_raw( home_url( '/my-account/mockups/all' ) ),
-				'is_editting'           => $this->is_editting(),
-				'signage'               => $this->get_signage(),
-				'nova_quote_product'    => get_field( 'nova_quote_product', 'option' ),
-				'current_quote_id'      => isset( $_GET['qid'] ) ? $_GET['qid'] : null,
-				'current_quote_title'   => isset( $_GET['qid'] ) ? get_the_title( $_GET['qid'] ) : null,
-				'dropbox_app_key'       => get_field( 'dropbox_app_key', 'option' ),
-				'dropbox_secret'        => get_field( 'dropbox_secret_key', 'option' ),
-				'dropbox_token'         => get_field( 'dropbox_token_access', 'option' ),
-				'dropbox_refresh_token' => get_field( 'dropbox_refresh_token', 'option' ),
-				'business_id'           => get_field( 'business_id', 'user_' . get_current_user_id() ),
-				'single_quote_options'  => get_field( 'single_quote_options' ),
-				'generated_product_id'  => isset( $_GET['qid'] ) ? get_post_meta( $_GET['qid'], 'nova_product_generated_id', true ) : null,
+				'ajax_url'                => admin_url( 'admin-ajax.php' ),
+				'nonce'                   => wp_create_nonce( 'quote_nonce' ),
+				'quote_options'           => $this->get_quote_options(),
+				'fonts'                   => $this->get_fonts(),
+				'upload_rest'             => esc_url_raw( rest_url( '/nova/v1/upload-quote-file' ) ),
+				'logged_in'               => is_user_logged_in(),
+				'user_role'               => $this->get_current_user_role_slugs(),
+				'user_id'                 => get_current_user_id(),
+				'product'                 => get_the_ID(),
+				'mockup_account_url'      => esc_url_raw( home_url( '/my-account/mockups/all' ) ),
+				'is_editting'             => $this->is_editting(),
+				'signage'                 => $this->get_signage(),
+				'nova_quote_product'      => get_field( 'nova_quote_product', 'option' ),
+				'current_quote_id'        => isset( $_GET['qid'] ) ? $_GET['qid'] : null,
+				'current_quote_title'     => isset( $_GET['qid'] ) ? get_the_title( $_GET['qid'] ) : null,
+				'dropbox_app_key'         => get_field( 'dropbox_app_key', 'option' ),
+				'dropbox_secret'          => get_field( 'dropbox_secret_key', 'option' ),
+				'dropbox_token'           => get_field( 'dropbox_token_access', 'option' ),
+				'dropbox_refresh_token'   => get_field( 'dropbox_refresh_token', 'option' ),
+				'business_id'             => get_field( 'business_id', 'user_' . get_current_user_id() ),
+				'single_quote_options'    => get_field( 'single_quote_options' ),
+				'generated_product_id'    => isset( $_GET['qid'] ) ? get_post_meta( $_GET['qid'], 'nova_product_generated_id', true ) : null,
+				'metal_stainless_pricing' => get_field( 'lasercut_stainless_metal_pricing' ),
 			)
 		);
 

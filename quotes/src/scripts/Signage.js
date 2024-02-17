@@ -11,6 +11,7 @@ export default function Signage({
 	signage,
 	setSignage,
 	children,
+	setMissing,
 }) {
 	const [open, setOpen] = useState(true);
 	const [itemTitle, setItemTitle] = useState(item.title);
@@ -25,10 +26,18 @@ export default function Signage({
 	}
 
 	function removeSignage(itemToRemove) {
-		const updatedSignage = signage.filter(
-			(sign) => sign.id !== itemToRemove.id
-		);
-		setSignage(() => recountSignageTitles(updatedSignage));
+		setSignage((currentSignage) => {
+			const updatedSignage = currentSignage.filter(
+				(sign) => sign.id !== itemToRemove.id
+			);
+			return recountSignageTitles(updatedSignage);
+		});
+		setMissing((current) => {
+			const updatedMissing = current.filter(
+				(sign) => sign.id !== itemToRemove.id
+			);
+			return updatedMissing;
+		});
 	}
 
 	function duplicateSignage(item, index) {
@@ -58,8 +67,27 @@ export default function Signage({
 		setSignage(() => updatedSignage);
 	}
 
+	const updateMissingTitle = () => {
+		setMissing((prevMissing) => {
+			const existingIndex = prevMissing.findIndex(
+				(entry) => entry.id === item.id
+			);
+
+			if (existingIndex !== -1) {
+				const updatedMissing = [...prevMissing];
+				updatedMissing[existingIndex] = {
+					...updatedMissing[existingIndex],
+					title: itemTitle,
+				};
+				return updatedMissing;
+			}
+			return prevMissing;
+		});
+	};
+
 	useEffect(() => {
 		updateSignage();
+		updateMissingTitle();
 	}, [itemTitle]);
 
 	function handleOnChangeTitle(value) {

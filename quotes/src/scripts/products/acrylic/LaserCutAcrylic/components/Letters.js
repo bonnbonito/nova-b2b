@@ -33,7 +33,7 @@ if (NovaOptions && typeof NovaOptions === 'object') {
 //const AcrylicLetterPricing = JSON.parse(NovaOptions.letter_x_logo_pricing);
 
 export default function Letters({ item }) {
-	const { signage, setSignage } = useContext(QuoteContext);
+	const { signage, setSignage, setMissing } = useContext(QuoteContext);
 	const [letters, setLetters] = useState(item.letters);
 	const [comments, setComments] = useState(item.comments);
 	const [font, setFont] = useState(item.font);
@@ -292,6 +292,72 @@ export default function Letters({ item }) {
 	useEffect(() => {
 		adjustFontSize();
 	}, [letters]);
+
+	const checkAndAddMissingFields = () => {
+		const missingFields = [];
+
+		if (!letters) missingFields.push('Line Text');
+		if (!font) missingFields.push('Font');
+		if (!selectedLetterHeight) missingFields.push('Letter Height');
+		if (!selectedThickness) missingFields.push('Acrylic Thickness');
+		if (!color.name) missingFields.push('Color');
+		if (!selectedFinishing) missingFields.push('Finishing');
+		if (!waterproof) missingFields.push('Waterproof');
+		if (!selectedMounting) missingFields.push('Mounting');
+		if (!pieces) missingFields.push('Pieces/Cutouts');
+
+		if (missingFields.length > 0) {
+			setMissing((prevMissing) => {
+				const existingIndex = prevMissing.findIndex(
+					(entry) => entry.id === item.id
+				);
+
+				if (existingIndex !== -1) {
+					const updatedMissing = [...prevMissing];
+					updatedMissing[existingIndex] = {
+						...updatedMissing[existingIndex],
+						missingFields: missingFields,
+					};
+					return updatedMissing;
+				} else if (missingFields.length > 0) {
+					return [
+						...prevMissing,
+						{
+							id: item.id,
+							title: item.title,
+							missingFields: missingFields,
+						},
+					];
+				}
+
+				console.log(prevMissing);
+
+				return prevMissing;
+			});
+		} else {
+			setMissing((current) => {
+				const updatedMissing = current.filter((sign) => sign.id !== item.id);
+				return updatedMissing;
+			});
+		}
+	};
+
+	useEffect(() => {
+		checkAndAddMissingFields();
+	}, [
+		letters,
+		font,
+		color,
+		selectedThickness,
+		selectedMounting,
+		waterproof,
+		selectedLetterHeight,
+		fileUrl,
+		fileName,
+		file,
+		selectedFinishing,
+		pieces,
+	]);
 
 	useEffect(() => {
 		updateSignage();

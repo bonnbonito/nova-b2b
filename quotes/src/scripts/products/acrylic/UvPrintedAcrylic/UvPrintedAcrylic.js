@@ -10,6 +10,7 @@ export const QuoteContext = createContext(null);
 
 export default function UvPrintedAcrylic() {
 	const [signage, setSignage] = useState([]);
+	const [missing, setMissing] = useState([]);
 	const currency = wcumcs_vars_data.currency;
 
 	function setDefaultSignage() {
@@ -173,7 +174,7 @@ export default function UvPrintedAcrylic() {
 
 	return (
 		<QuoteContext.Provider
-			value={{ signage, setSignage, addSignage, currency }}
+			value={{ signage, setSignage, addSignage, currency, missing, setMissing }}
 		>
 			<div className="md:flex gap-6">
 				<div className="md:w-3/4 w-full">
@@ -185,6 +186,7 @@ export default function UvPrintedAcrylic() {
 							signage={signage}
 							setSignage={setSignage}
 							addSignage={addSignage}
+							setMissing={setMissing}
 						>
 							<Logo key={item.id} item={item} />
 						</Signage>
@@ -203,7 +205,7 @@ export default function UvPrintedAcrylic() {
 						)}
 					</div>
 				</div>
-				<Sidebar signage={signage} required={required} />
+				<Sidebar signage={signage} required={missing} />
 			</div>
 		</QuoteContext.Provider>
 	);

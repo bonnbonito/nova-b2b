@@ -3,21 +3,24 @@ import Dropdown from '../../../../Dropdown';
 import FontsDropdown from '../../../../FontsDropdown';
 import UploadFile from '../../../../UploadFile';
 import useOutsideClick from '../../../../utils/ClickOutside';
-import { metalFinishColors } from '../../../../utils/ColorOptions';
+import { colorOptions } from '../../../../utils/ColorOptions';
 import convert_json from '../../../../utils/ConvertJson';
+import { waterProofOptions } from '../../../../utils/SignageOptions';
+
 import {
-	mountingDefaultOptions,
-	piecesOptions,
-	thicknessOptions,
-	waterProofOptions,
-} from '../../../../utils/SignageOptions';
-import {
-	METAL_ACRYLIC_PRICING,
-	QuoteContext,
-	acrylicBaseOptions,
-} from '../MetalLaminate';
+	finishOptions,
+	metalFinishOptions,
+	metalInstallationOptions,
+	metalOptions,
+	metalThicknessOptions,
+	stainlessSteelPolishedOptions,
+} from '../../metalOptions';
+
+import { QuoteContext } from '../LaserCutStainless';
 
 const NovaOptions = NovaQuote.quote_options;
+const PricingTable =
+	NovaQuote.metal_stainless_pricing?.letter_height_x_logo_pricing;
 const exchangeRate = wcumcs_vars_data.currency_data.rate;
 
 let lowerCasePricing = 1; // Default value
@@ -36,11 +39,20 @@ if (NovaOptions && typeof NovaOptions === 'object') {
 //const AcrylicLetterPricing = JSON.parse(NovaOptions.letter_x_logo_pricing);
 
 export default function Letters({ item }) {
-	const { signage, setSignage, missing, setMissing } = useContext(QuoteContext);
+	const { signage, setSignage, setMissing } = useContext(QuoteContext);
 	const [letters, setLetters] = useState(item.letters);
 	const [comments, setComments] = useState(item.comments);
 	const [font, setFont] = useState(item.font);
-	const [acrylicBase, setAcrylicBase] = useState(item.acrylicBase);
+
+	const [metal, setMetal] = useState(item.metal);
+	const [stainLessMetalFinish, setStainLessMetalFinish] = useState(
+		item.stainLessMetalFinish
+	);
+	const [stainlessSteelPolished, setStainlessSteelPolished] = useState(
+		item.stainlessSteelPolished
+	);
+
+	const [color, setColor] = useState(item.color);
 	const [isLoading, setIsLoading] = useState(false);
 	const [openColor, setOpenColor] = useState(false);
 	const [waterproof, setWaterproof] = useState(item.waterproof);
@@ -50,29 +62,23 @@ export default function Letters({ item }) {
 	const [filePath, setFilePath] = useState(item.filePath);
 	const [file, setFile] = useState(item.file);
 	const [letterHeightOptions, setLetterHeightOptions] = useState([]);
-	const [metalFinish, setMetalFinish] = useState(item.metalFinish);
-	const [pieces, setPieces] = useState(item.pieces);
+	const [selectedFinishing, setSelectedFinishing] = useState(item.finishing);
 
 	const [selectedLetterHeight, setSelectedLetterHeight] = useState(
 		item.letterHeight
 	);
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice);
-	const [mountingOptions, setMountingOptions] = useState(
-		mountingDefaultOptions
-	);
 
 	const [lettersHeight, setLettersHeight] = useState(
 		NovaOptions.letters_height
 	);
-	const [selectedMounting, setSelectedMounting] = useState(item.mounting);
+	const [installation, setInstallation] = useState(item.installation);
 
 	const colorRef = useRef(null);
 
 	const letterPricing =
-		NovaOptions.letter_height_x_logo_pricing.length > 0
-			? convert_json(NovaOptions.letter_height_x_logo_pricing)
-			: [];
+		PricingTable.length > 0 ? convert_json(PricingTable) : [];
 	let perLetterPrice = 0;
 
 	useEffect(() => {
@@ -133,9 +139,9 @@ export default function Letters({ item }) {
 					comments: comments,
 					font: font,
 					thickness: selectedThickness,
-					mounting: selectedMounting,
+					installation: installation,
 					waterproof: waterproof,
-					acrylicBase: acrylicBase,
+					color: color,
 					letterHeight: selectedLetterHeight,
 					usdPrice: usdPrice,
 					cadPrice: cadPrice,
@@ -143,8 +149,10 @@ export default function Letters({ item }) {
 					fileName: fileName,
 					filePath: filePath,
 					fileUrl: fileUrl,
-					metalFinish: metalFinish,
-					pieces: pieces,
+					finishing: selectedFinishing,
+					stainlessSteelPolished: stainlessSteelPolished,
+					metal: metal,
+					stainLessMetalFinish: stainLessMetalFinish,
 				};
 			} else {
 				return sign;
@@ -159,17 +167,17 @@ export default function Letters({ item }) {
 
 	const handleSelectFont = (value) => setFont(value);
 
-	const handleonChangeMount = (e) => setSelectedMounting(e.target.value);
+	const handleOnChangeInstallation = (e) => setInstallation(e.target.value);
 
 	const handleOnChangeWaterproof = (e) => setWaterproof(e.target.value);
 
 	const handleOnChangeThickness = (e) => {
 		const target = e.target.value;
-		const selected = thicknessOptions.filter(
+		const selected = metalThicknessOptions.filter(
 			(option) => option.value === target
 		);
 		setSelectedThickness(() => selected[0]);
-		if (parseInt(target) === 3 && parseInt(selectedLetterHeight) > 24) {
+		if (parseInt(target) === 4 && parseInt(selectedLetterHeight) > 24) {
 			setSelectedLetterHeight('');
 		}
 		if (parseInt(target) > 11 && parseInt(selectedLetterHeight) === 1) {
@@ -181,8 +189,30 @@ export default function Letters({ item }) {
 		setSelectedLetterHeight(e.target.value);
 	};
 
-	const handleChangePieces = (e) => {
-		setPieces(e.target.value);
+	const handleChangeFinishing = (e) => {
+		const value = e.target.value;
+		if (value === '') {
+			setStainLessMetalFinish('');
+			setColor({ name: '', color: '' });
+			setStainlessSteelPolished('');
+		}
+		if ('Metal Finish' === value) {
+			setColor({ name: '', color: '' });
+		}
+
+		if ('Painted Finish' === value) {
+			setStainLessMetalFinish('');
+		}
+
+		setSelectedFinishing(e.target.value);
+	};
+
+	const handelMetalFinishChange = (e) => {
+		const value = e.target.value;
+		if ('Stainless Steel Polished' !== value) {
+			setStainlessSteelPolished('');
+		}
+		setStainLessMetalFinish(e.target.value);
 	};
 
 	useEffect(() => {
@@ -193,78 +223,73 @@ export default function Letters({ item }) {
 			let totalLetterPrice = 0;
 			const lettersArray = letters.trim().split('');
 
-			lettersArray.forEach((letter) => {
-				let letterPrice = baseLetterPrice;
+			if (
+				lettersArray.length > 0 &&
+				selectedLetterHeight &&
+				waterproof &&
+				selectedThickness
+			) {
+				lettersArray.forEach((letter) => {
+					let letterPrice = baseLetterPrice;
 
-				if (letter.match(/[a-z]/)) {
-					// Check for lowercase letter
-					letterPrice *= lowerCasePricing; // 80% of the base price
-				} else if (letter.match(/[A-Z]/)) {
-					// Check for uppercase letter
-					// Uppercase letters use 100% of base price, so no change needed
-				} else if (letter.match(/[`~"*,.\-']/)) {
-					// Check for small punctuation marks
-					letterPrice *= smallPunctuations; // 30% of the base price
-				} else if (letter.match(/[^a-zA-Z]/)) {
-					// Check for symbol (not a letter or small punctuation)
-					// Symbols use 100% of base price, so no change needed
-				}
+					if (letter.match(/[a-z]/)) {
+						// Check for lowercase letter
+						letterPrice *= lowerCasePricing; // 80% of the base price
+					} else if (letter.match(/[A-Z]/)) {
+						// Check for uppercase letter
+						// Uppercase letters use 100% of base price, so no change needed
+					} else if (letter.match(/[`~"*,.\-']/)) {
+						// Check for small punctuation marks
+						letterPrice *= smallPunctuations; // 30% of the base price
+					} else if (letter.match(/[^a-zA-Z]/)) {
+						// Check for symbol (not a letter or small punctuation)
+						// Symbols use 100% of base price, so no change needed
+					}
 
-				// Adjusting for waterproof and finishing
-				letterPrice *= waterproof === 'Indoor' ? 1 : 1.1;
+					// Adjusting for waterproof and finishing
+					letterPrice *= waterproof === 'Indoor' ? 1 : 1.05;
 
-				totalLetterPrice += letterPrice;
-				totalLetterPrice *= METAL_ACRYLIC_PRICING;
-				totalLetterPrice *= acrylicBase === 'Black' ? 1 : 1.1;
-			});
+					letterPrice *= metal === '316 Stainless Steel' ? 1.3 : 1;
 
-			setUsdPrice(totalLetterPrice.toFixed(2));
-			setCadPrice((totalLetterPrice * parseFloat(exchangeRate)).toFixed(2));
+					if (stainlessSteelPolished) {
+						if ('Standard (Face)' === stainlessSteelPolished) {
+							letterPrice *= 1.3;
+						}
+
+						if ('Premium (Face & Side)' === stainlessSteelPolished) {
+							letterPrice *= 1.7;
+						}
+					}
+
+					if (
+						stainLessMetalFinish &&
+						stainLessMetalFinish !== 'Stainless Steel Brushed' &&
+						stainLessMetalFinish !== 'Stainless Steel Polished'
+					) {
+						letterPrice *= 1.2;
+					}
+
+					totalLetterPrice += letterPrice;
+				});
+
+				setUsdPrice(totalLetterPrice.toFixed(2));
+				setCadPrice((totalLetterPrice * parseFloat(exchangeRate)).toFixed(2));
+			} else {
+				setUsdPrice(0);
+				setCadPrice(0);
+			}
 		}
 	}, [
 		selectedLetterHeight,
 		selectedThickness,
+		selectedFinishing,
 		letters,
 		waterproof,
 		lettersHeight,
-		acrylicBase,
+		metal,
+		stainLessMetalFinish,
+		stainlessSteelPolished,
 	]);
-
-	useEffect(() => {
-		// Log to ensure we're getting the expected value
-
-		let newMountingOptions;
-		if (selectedThickness?.value === '3') {
-			if (selectedMounting === 'Flush stud') {
-				setSelectedMounting('');
-			}
-
-			newMountingOptions = mountingDefaultOptions.filter(
-				(option) => option.mounting_option !== 'Flush stud'
-			);
-		} else {
-			if (selectedMounting === 'Stud with Block') {
-				setSelectedMounting('');
-			}
-			// Exclude 'Stud with Block' option
-			newMountingOptions = mountingDefaultOptions.filter(
-				(option) => option.mounting_option !== 'Stud with Block'
-			);
-		}
-
-		if (waterproof === 'Outdoor') {
-			if (selectedMounting === 'Double sided tape') {
-				setSelectedMounting('');
-			}
-
-			newMountingOptions = newMountingOptions.filter(
-				(option) => option.mounting_option !== 'Double sided tape'
-			);
-		}
-
-		// Update the state
-		setMountingOptions(newMountingOptions);
-	}, [selectedThickness, waterproof]);
 
 	useEffect(() => {
 		setLetterHeightOptions(() =>
@@ -292,79 +317,89 @@ export default function Letters({ item }) {
 		adjustFontSize();
 	}, [letters]);
 
-	useEffect(() => {
-		updateSignage();
-	}, [
-		letters,
-		comments,
-		font,
-		selectedThickness,
-		selectedMounting,
-		waterproof,
-		acrylicBase,
-		usdPrice,
-		selectedLetterHeight,
-		fileUrl,
-		fileName,
-		file,
-		metalFinish,
-		pieces,
-	]);
-
 	const checkAndAddMissingFields = () => {
 		const missingFields = [];
 
 		if (!letters) missingFields.push('Line Text');
 		if (!font) missingFields.push('Font');
+		if (!metal) missingFields.push('Metal Option');
+		if (!selectedThickness) missingFields.push('Metal Thickness');
 		if (!selectedLetterHeight) missingFields.push('Letter Height');
-		if (!selectedThickness) missingFields.push('Acrylic Thickness');
-		if (!metalFinish.name) missingFields.push('Metal Finish');
-		if (!acrylicBase) missingFields.push('Acrylic Base');
+
+		if (!selectedFinishing) missingFields.push('Finish Option');
+		if (selectedFinishing === 'Painted Finish') {
+			if (!color.name) missingFields.push('Color');
+		}
+		if (selectedFinishing === 'Metal Finish') {
+			if (!stainLessMetalFinish) missingFields.push('Metal Finish Option');
+		}
+
+		if (
+			stainLessMetalFinish &&
+			stainLessMetalFinish === 'Stainless Steel Polished'
+		) {
+			if (!stainlessSteelPolished) missingFields.push('Steel Polished');
+		}
+
 		if (!waterproof) missingFields.push('Waterproof');
-		if (!selectedMounting) missingFields.push('Mounting');
-		if (!pieces) missingFields.push('Pieces/Cutouts');
+		if (!installation) missingFields.push('Installation');
 
-		setMissing((prevMissing) => {
-			const existingIndex = prevMissing.findIndex(
-				(entry) => entry.id === item.id
-			);
+		if (missingFields.length > 0) {
+			setMissing((prevMissing) => {
+				const existingIndex = prevMissing.findIndex(
+					(entry) => entry.id === item.id
+				);
 
-			if (existingIndex !== -1) {
-				const updatedMissing = [...prevMissing];
-				updatedMissing[existingIndex] = {
-					...updatedMissing[existingIndex],
-					missingFields: missingFields,
-				};
-				return updatedMissing;
-			} else if (missingFields.length > 0) {
-				return [
-					...prevMissing,
-					{
-						id: item.id,
-						title: item.title,
+				if (existingIndex !== -1) {
+					const updatedMissing = [...prevMissing];
+					updatedMissing[existingIndex] = {
+						...updatedMissing[existingIndex],
 						missingFields: missingFields,
-					},
-				];
-			}
+					};
+					return updatedMissing;
+				} else if (missingFields.length > 0) {
+					return [
+						...prevMissing,
+						{
+							id: item.id,
+							title: item.title,
+							missingFields: missingFields,
+						},
+					];
+				}
 
-			console.log(prevMissing);
+				console.log(prevMissing);
 
-			return prevMissing;
-		});
+				return prevMissing;
+			});
+		} else {
+			setMissing((current) => {
+				const updatedMissing = current.filter((sign) => sign.id !== item.id);
+				return updatedMissing;
+			});
+		}
 	};
 
 	useEffect(() => {
+		updateSignage();
 		checkAndAddMissingFields();
 	}, [
 		letters,
+		comments,
 		font,
 		selectedThickness,
-		selectedMounting,
+		installation,
 		waterproof,
+		color,
+		usdPrice,
 		selectedLetterHeight,
-		metalFinish,
-		acrylicBase,
-		pieces,
+		fileUrl,
+		fileName,
+		file,
+		metal,
+		selectedFinishing,
+		stainLessMetalFinish,
+		stainlessSteelPolished,
 	]);
 
 	useEffect(() => {
@@ -403,7 +438,7 @@ export default function Letters({ item }) {
 							whiteSpace: 'nowrap',
 							overflow: 'hidden',
 							fontFamily: font,
-							color: metalFinish?.color ?? '#000000',
+							color: color.color,
 							textShadow: '0px 0px 1px rgba(0, 0, 0, 1)',
 						}}
 					>
@@ -433,17 +468,21 @@ export default function Letters({ item }) {
 				/>
 
 				<Dropdown
-					title="Letters Height"
-					onChange={handleOnChangeLetterHeight}
-					options={letterHeightOptions}
-					value={item.letterHeight}
+					title="Metal Option"
+					onChange={(e) => setMetal(e.target.value)}
+					options={metalOptions.map((metal) => (
+						<option value={metal.option} selected={metal.option === item.metal}>
+							{metal.option}
+						</option>
+					))}
+					value={item.metal}
 				/>
 
 				<Dropdown
-					title="Acrylic Thickness"
+					title="Metal Thickness"
 					value={selectedThickness?.value}
 					onChange={handleOnChangeThickness}
-					options={thicknessOptions.map((thickness) => (
+					options={metalThicknessOptions.map((thickness) => (
 						<option
 							value={thickness.value}
 							selected={thickness === selectedThickness}
@@ -453,58 +492,99 @@ export default function Letters({ item }) {
 					))}
 				/>
 
-				<div className="px-[1px] relative" ref={colorRef}>
-					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-						Metal Finish
-					</label>
-					<div
-						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-							metalFinish.name ? 'text-black' : 'text-[#dddddd]'
-						}`}
-						onClick={() => setOpenColor((prev) => !prev)}
-					>
-						<span
-							className="rounded-full w-[18px] h-[18px] border mr-2"
-							style={{ backgroundColor: metalFinish.color }}
-						></span>
-						{metalFinish.name === '' ? 'CHOOSE OPTION' : metalFinish.name}
-					</div>
-					{openColor && (
-						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
-							{metalFinishColors.map((color) => {
-								return (
-									<div
-										className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
-										onClick={() => {
-											setMetalFinish(color);
-											setOpenColor(false);
-										}}
-									>
-										<span
-											className="w-[18px] h-[18px] inline-block rounded-full border"
-											style={{ backgroundColor: color.color }}
-										></span>
-										{color.name}
-									</div>
-								);
-							})}
-						</div>
-					)}
-				</div>
+				<Dropdown
+					title="Letters Height"
+					onChange={handleOnChangeLetterHeight}
+					options={letterHeightOptions}
+					value={item.letterHeight}
+				/>
 
 				<Dropdown
-					title="Acrylic Base"
-					onChange={(e) => setAcrylicBase(e.target.value)}
-					options={acrylicBaseOptions.map((option) => (
+					title="Finish Option"
+					onChange={handleChangeFinishing}
+					options={finishOptions.map((finishing) => (
 						<option
-							value={option.option}
-							selected={option.option == item.acrylicBase}
+							value={finishing.option}
+							selected={finishing.option === selectedFinishing}
 						>
-							{option.option}
+							{finishing.option}
 						</option>
 					))}
-					value={item.acrylicBase}
+					value={item.finishing}
 				/>
+
+				{selectedFinishing === 'Metal Finish' && (
+					<Dropdown
+						title="Metal Finish"
+						onChange={handelMetalFinishChange}
+						options={metalFinishOptions.map((metalFinish) => (
+							<option
+								value={metalFinish.option}
+								selected={metalFinish.option === stainLessMetalFinish}
+							>
+								{metalFinish.option}
+							</option>
+						))}
+						value={item.stainLessMetalFinish}
+					/>
+				)}
+
+				{stainLessMetalFinish === 'Stainless Steel Polished' && (
+					<Dropdown
+						title="Steel Polished"
+						onChange={(e) => setStainlessSteelPolished(e.target.value)}
+						options={stainlessSteelPolishedOptions.map((steelPolished) => (
+							<option
+								value={steelPolished.option}
+								selected={steelPolished.option === item.stainlessSteelPolished}
+							>
+								{steelPolished.option}
+							</option>
+						))}
+						value={item.stainlessSteelPolished}
+					/>
+				)}
+
+				{selectedFinishing === 'Painted Finish' && (
+					<div className="px-[1px] relative" ref={colorRef}>
+						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+							Painted Color
+						</label>
+						<div
+							className={`flex px-2 items-center select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
+								color.name ? 'text-black' : 'text-[#dddddd]'
+							}`}
+							onClick={() => setOpenColor((prev) => !prev)}
+						>
+							<span
+								className="rounded-full w-[18px] h-[18px] border mr-2"
+								style={{ backgroundColor: color.color }}
+							></span>
+							{color.name === '' ? 'CHOOSE OPTION' : color.name}
+						</div>
+						{openColor && (
+							<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
+								{colorOptions.map((color) => {
+									return (
+										<div
+											className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
+											onClick={() => {
+												setColor(color);
+												setOpenColor(false);
+											}}
+										>
+											<span
+												className="w-[18px] h-[18px] inline-block rounded-full border"
+												style={{ backgroundColor: color.color }}
+											></span>
+											{color.name}
+										</div>
+									);
+								})}
+							</div>
+						)}
+					</div>
+				)}
 
 				<Dropdown
 					title="Waterproof Option"
@@ -521,28 +601,17 @@ export default function Letters({ item }) {
 				/>
 
 				<Dropdown
-					title="Mounting Options"
-					onChange={handleonChangeMount}
-					options={mountingOptions.map((option) => (
+					title="Installation Option"
+					onChange={handleOnChangeInstallation}
+					options={metalInstallationOptions.map((option) => (
 						<option
-							value={option.mounting_option}
-							selected={option.mounting_option === selectedMounting}
+							value={option.option}
+							selected={option.option === installation}
 						>
-							{option.mounting_option}
+							{option.option}
 						</option>
 					))}
-					value={item.mounting}
-				/>
-
-				<Dropdown
-					title="Pieces/Cutouts"
-					onChange={handleChangePieces}
-					options={piecesOptions.map((pieces) => (
-						<option value={pieces} selected={pieces === item.pieces}>
-							{pieces}
-						</option>
-					))}
-					value={item.pieces}
+					value={item.installation}
 				/>
 			</div>
 

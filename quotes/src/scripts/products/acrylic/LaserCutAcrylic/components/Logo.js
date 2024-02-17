@@ -15,7 +15,7 @@ const NovaSingleOptions = NovaQuote.single_quote_options;
 const exchangeRate = wcumcs_vars_data.currency_data.rate;
 
 export default function Logo({ item }) {
-	const { signage, setSignage } = useContext(QuoteContext);
+	const { signage, setSignage, setMissing } = useContext(QuoteContext);
 	const [selectedMounting, setSelectedMounting] = useState(item.mounting);
 	const [selectedThickness, setSelectedThickness] = useState(item.thickness);
 	const [width, setWidth] = useState(item.width);
@@ -182,6 +182,69 @@ export default function Logo({ item }) {
 			setCadPrice((total * parseFloat(exchangeRate)).toFixed(2));
 		}
 	}, [width, height, selectedThickness, waterproof, selectedFinishing]);
+
+	const checkAndAddMissingFields = () => {
+		const missingFields = [];
+
+		if (!selectedThickness) missingFields.push('Acrylic Thickness');
+		if (!width) missingFields.push('Logo Width');
+		if (!height) missingFields.push('Logo Height');
+		if (!waterproof) missingFields.push('Waterproof');
+		if (!selectedMounting) missingFields.push('Mounting');
+		if (!selectedFinishing) missingFields.push('Finishing');
+		if (!pieces) missingFields.push('Pieces/Cutouts');
+		if (!fileUrl) missingFields.push('PDF/AI File');
+
+		if (missingFields.length > 0) {
+			setMissing((prevMissing) => {
+				const existingIndex = prevMissing.findIndex(
+					(entry) => entry.id === item.id
+				);
+
+				if (existingIndex !== -1) {
+					const updatedMissing = [...prevMissing];
+					updatedMissing[existingIndex] = {
+						...updatedMissing[existingIndex],
+						missingFields: missingFields,
+					};
+					return updatedMissing;
+				} else if (missingFields.length > 0) {
+					return [
+						...prevMissing,
+						{
+							id: item.id,
+							title: item.title,
+							missingFields: missingFields,
+						},
+					];
+				}
+
+				console.log(prevMissing);
+
+				return prevMissing;
+			});
+		} else {
+			setMissing((current) => {
+				const updatedMissing = current.filter((sign) => sign.id !== item.id);
+				return updatedMissing;
+			});
+		}
+	};
+
+	useEffect(() => {
+		checkAndAddMissingFields();
+	}, [
+		width,
+		height,
+		selectedThickness,
+		selectedMounting,
+		waterproof,
+		fileUrl,
+		fileName,
+		file,
+		selectedFinishing,
+		pieces,
+	]);
 
 	return (
 		<>

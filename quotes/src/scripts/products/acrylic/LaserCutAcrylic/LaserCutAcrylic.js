@@ -11,6 +11,7 @@ export const QuoteContext = createContext(null);
 
 export default function LaserCutAcrylic() {
 	const [signage, setSignage] = useState([]);
+	const [missing, setMissing] = useState([]);
 	const currency = wcumcs_vars_data.currency;
 
 	function setDefaultSignage() {
@@ -125,84 +126,9 @@ export default function LaserCutAcrylic() {
 		);
 	}, [signage]);
 
-	const required = {
-		letters: [
-			{
-				key: 'letters',
-				title: 'Letters',
-			},
-			{
-				key: 'font',
-				title: 'Font',
-			},
-			{
-				key: 'letterHeight',
-				title: 'Letter Height',
-			},
-			{
-				key: 'thickness',
-				title: 'Thickness',
-			},
-			{
-				key: 'color',
-				title: 'Color',
-			},
-			{
-				key: 'finishing',
-				title: 'Finishing',
-			},
-			{
-				key: 'waterproof',
-				title: 'Waterproof',
-			},
-			{
-				key: 'mounting',
-				title: 'Mounting',
-			},
-			{
-				key: 'pieces',
-				title: 'Pieces/Cutouts',
-			},
-		],
-		logo: [
-			{
-				key: 'thickness',
-				title: 'Thickness',
-			},
-			{
-				key: 'width',
-				title: 'Logo Width',
-			},
-			{
-				key: 'height',
-				title: 'Logo Height',
-			},
-			{
-				key: 'finishing',
-				title: 'Finishing',
-			},
-			{
-				key: 'waterproof',
-				title: 'Waterproof',
-			},
-			{
-				key: 'mounting',
-				title: 'Mounting',
-			},
-			{
-				key: 'pieces',
-				title: 'Pieces/Cutouts',
-			},
-			{
-				key: 'fileUrl',
-				title: 'File',
-			},
-		],
-	};
-
 	return (
 		<QuoteContext.Provider
-			value={{ signage, setSignage, addSignage, currency }}
+			value={{ signage, setSignage, addSignage, currency, missing, setMissing }}
 		>
 			<div className="md:flex gap-6">
 				<div className="md:w-3/4 w-full">
@@ -214,6 +140,7 @@ export default function LaserCutAcrylic() {
 							signage={signage}
 							setSignage={setSignage}
 							addSignage={addSignage}
+							setMissing={setMissing}
 						>
 							{item.type === 'letters' ? (
 								<Letters key={item.id} item={item} />
@@ -247,7 +174,7 @@ export default function LaserCutAcrylic() {
 						)}
 					</div>
 				</div>
-				<Sidebar signage={signage} required={required} />
+				<Sidebar signage={signage} required={missing} />
 			</div>
 		</QuoteContext.Provider>
 	);

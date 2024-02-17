@@ -25,6 +25,7 @@ export const METAL_ACRYLIC_PRICING = 1.3;
 
 export default function MetalLaminate() {
 	const [signage, setSignage] = useState([]);
+	const [missing, setMissing] = useState([]);
 	const currency = wcumcs_vars_data.currency;
 
 	function setDefaultSignage() {
@@ -140,88 +141,9 @@ export default function MetalLaminate() {
 		);
 	}, [signage]);
 
-	const required = {
-		letters: [
-			{
-				key: 'letters',
-				title: 'Letters',
-			},
-			{
-				key: 'thickness',
-				title: 'Thickness',
-			},
-			{
-				key: 'letterHeight',
-				title: 'Letter Height',
-			},
-			{
-				key: 'acrylicBase',
-				title: 'Acrylic Base',
-			},
-			{
-				key: 'font',
-				title: 'Font',
-			},
-			{
-				key: 'waterproof',
-				title: 'Waterproof',
-			},
-			{
-				key: 'mounting',
-				title: 'Mounting',
-			},
-			{
-				key: 'metalFinishing',
-				title: 'Metal Finishing',
-			},
-			{
-				key: 'pieces',
-				title: 'Pieces/Cutouts',
-			},
-		],
-		logo: [
-			{
-				key: 'thickness',
-				title: 'Thickness',
-			},
-			{
-				key: 'width',
-				title: 'Logo Width',
-			},
-			{
-				key: 'height',
-				title: 'Logo Height',
-			},
-			{
-				key: 'acrylicBase',
-				title: 'Acrylic Base',
-			},
-			{
-				key: 'waterproof',
-				title: 'Waterproof',
-			},
-			{
-				key: 'mounting',
-				title: 'Mounting',
-			},
-			{
-				key: 'metalLaminate',
-				title: 'Metal Laminate',
-			},
-			{
-				key: 'pieces',
-				title: 'Pieces/Cutouts',
-			},
-			{
-				key: 'fileUrl',
-				title: 'File',
-			},
-		],
-	};
-
 	return (
 		<QuoteContext.Provider
-			value={{ signage, setSignage, addSignage, currency }}
+			value={{ signage, setSignage, addSignage, currency, missing, setMissing }}
 		>
 			<div className="md:flex gap-6">
 				<div className="md:w-3/4 w-full">
@@ -233,6 +155,7 @@ export default function MetalLaminate() {
 							signage={signage}
 							setSignage={setSignage}
 							addSignage={addSignage}
+							setMissing={setMissing}
 						>
 							{item.type === 'letters' ? (
 								<Letters key={item.id} item={item} />
@@ -266,7 +189,7 @@ export default function MetalLaminate() {
 						)}
 					</div>
 				</div>
-				<Sidebar signage={signage} required={required} />
+				<Sidebar signage={signage} required={missing} />
 			</div>
 		</QuoteContext.Provider>
 	);

@@ -21,7 +21,7 @@ import { metalFinishColors } from '../../../../utils/ColorOptions';
 const exchangeRate = wcumcs_vars_data.currency_data.rate;
 
 export default function Logo({ item }) {
-	const { signage, setSignage } = useContext(QuoteContext);
+	const { signage, setSignage, setMissing } = useContext(QuoteContext);
 	const [selectedMounting, setSelectedMounting] = useState(item.mounting);
 	const [selectedThickness, setSelectedThickness] = useState(item.thickness);
 	const [width, setWidth] = useState(item.width);
@@ -194,6 +194,65 @@ export default function Logo({ item }) {
 			setCadPrice(0);
 		}
 	}, [width, height, selectedThickness, waterproof, acrylicBase]);
+
+	const checkAndAddMissingFields = () => {
+		const missingFields = [];
+
+		if (!selectedThickness) missingFields.push('Acrylic Thickness');
+		if (!width) missingFields.push('Logo Width');
+		if (!height) missingFields.push('Logo Height');
+		if (!metalLaminate) missingFields.push('Metal Laminate');
+		if (!acrylicBase) missingFields.push('Acrylic Base');
+		if (!waterproof) missingFields.push('Waterproof');
+		if (!selectedMounting) missingFields.push('Mounting');
+		if (!pieces) missingFields.push('Pieces/Cutouts');
+		if (!fileUrl) missingFields.push('PDF/AI File');
+
+		setMissing((prevMissing) => {
+			const existingIndex = prevMissing.findIndex(
+				(entry) => entry.id === item.id
+			);
+
+			if (existingIndex !== -1) {
+				const updatedMissing = [...prevMissing];
+				updatedMissing[existingIndex] = {
+					...updatedMissing[existingIndex],
+					missingFields: missingFields,
+				};
+				return updatedMissing;
+			} else if (missingFields.length > 0) {
+				return [
+					...prevMissing,
+					{
+						id: item.id,
+						title: item.title,
+						missingFields: missingFields,
+					},
+				];
+			}
+
+			console.log(prevMissing);
+
+			return prevMissing;
+		});
+	};
+
+	useEffect(() => {
+		checkAndAddMissingFields();
+	}, [
+		selectedThickness,
+		selectedMounting,
+		waterproof,
+		acrylicBase,
+		pieces,
+		width,
+		height,
+		metalLaminate,
+		fileUrl,
+		fileName,
+		filePath,
+		file,
+	]);
 
 	return (
 		<>

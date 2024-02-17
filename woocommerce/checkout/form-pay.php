@@ -62,7 +62,7 @@ $from_id = $order->get_meta( '_from_order_id' );
 							</li>
 							<?php endif; ?>
 							<?php if ( $signage->letterHeight ) : ?>
-							<li>LETTER HEIGHT: <strong class="uppercase"><?php echo $signage->letterHeight; ?>"</strong>
+							<li>LETTERS HEIGHT: <strong class="uppercase"><?php echo $signage->letterHeight; ?>"</strong>
 							</li>
 							<?php endif; ?>
 							<?php if ( $signage->width ) : ?>

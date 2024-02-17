@@ -9,80 +9,9 @@ import Logo from './components/Logo';
 
 export const QuoteContext = createContext(null);
 
-const initialRequired = {
-	letters: [
-		{
-			key: 'letters',
-			title: 'Letters',
-		},
-		{
-			key: 'font',
-			title: 'Font',
-		},
-		{
-			key: 'letterHeight',
-			title: 'Letter Height',
-		},
-		{
-			key: 'thickness',
-			title: 'Thickness',
-		},
-		{
-			key: 'finishing',
-			title: 'Finishing',
-		},
-		{
-			key: 'waterproof',
-			title: 'Waterproof',
-		},
-		{
-			key: 'installation',
-			title: 'Installation',
-		},
-		{
-			key: 'pieces',
-			title: 'Pieces/Cutouts',
-		},
-	],
-	logo: [
-		{
-			key: 'thickness',
-			title: 'Thickness',
-		},
-		{
-			key: 'width',
-			title: 'Logo Width',
-		},
-		{
-			key: 'height',
-			title: 'Logo Height',
-		},
-		{
-			key: 'finishing',
-			title: 'Finishing',
-		},
-		{
-			key: 'waterproof',
-			title: 'Waterproof',
-		},
-		{
-			key: 'installation',
-			title: 'Installation',
-		},
-		{
-			key: 'pieces',
-			title: 'Pieces/Cutouts',
-		},
-		{
-			key: 'fileUrl',
-			title: 'File',
-		},
-	],
-};
-
 export default function LaserCutAluminum() {
 	const [signage, setSignage] = useState([]);
-	const [required, setRequired] = useState(initialRequired);
+	const [missing, setMissing] = useState([]);
 	const currency = wcumcs_vars_data.currency;
 
 	function setDefaultSignage() {
@@ -200,7 +129,7 @@ export default function LaserCutAluminum() {
 
 	return (
 		<QuoteContext.Provider
-			value={{ signage, setSignage, addSignage, currency }}
+			value={{ signage, setSignage, addSignage, currency, missing, setMissing }}
 		>
 			<div className="md:flex gap-6">
 				<div className="md:w-3/4 w-full">
@@ -212,6 +141,7 @@ export default function LaserCutAluminum() {
 							signage={signage}
 							setSignage={setSignage}
 							addSignage={addSignage}
+							setMissing={setMissing}
 						>
 							{item.type === 'letters' ? (
 								<Letters key={item.id} item={item} />
@@ -245,7 +175,7 @@ export default function LaserCutAluminum() {
 						)}
 					</div>
 				</div>
-				<Sidebar signage={signage} required={required} />
+				<Sidebar signage={signage} required={missing} />
 			</div>
 		</QuoteContext.Provider>
 	);

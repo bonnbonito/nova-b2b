@@ -4,17 +4,21 @@ import UploadFile from '../../../../UploadFile';
 import useOutsideClick from '../../../../utils/ClickOutside';
 import { colorOptions } from '../../../../utils/ColorOptions';
 import convert_json from '../../../../utils/ConvertJson';
+import { waterProofOptions } from '../../../../utils/SignageOptions';
 import {
+	finishOptions,
 	metalFinishOptions,
 	metalInstallationOptions,
+	metalOptions,
 	metalThicknessOptions,
-	piecesOptions,
-	waterProofOptions,
-} from '../../../../utils/SignageOptions';
-import { QuoteContext } from '../LaserCutAluminum';
+	stainlessSteelPolishedOptions,
+} from '../../metalOptions';
 
-const NovaSingleOptions = NovaQuote.single_quote_options;
+import { QuoteContext } from '../LaserCutStainless';
+
 const exchangeRate = wcumcs_vars_data.currency_data.rate;
+
+const PricingTable = NovaQuote.metal_stainless_pricing.logo_pricing;
 
 export default function Logo({ item }) {
 	const { signage, setSignage, setMissing } = useContext(QuoteContext);
@@ -27,10 +31,17 @@ export default function Logo({ item }) {
 	const [fileUrl, setFileUrl] = useState(item.fileUrl);
 	const [filePath, setFilePath] = useState(item.filePath);
 	const [file, setFile] = useState(item.file);
-	const [pieces, setPieces] = useState(item.pieces);
 	const [color, setColor] = useState(item.color);
 	const [openColor, setOpenColor] = useState(false);
 	const [selectedFinishing, setSelectedFinishing] = useState(item.finishing);
+
+	const [metal, setMetal] = useState(item.metal);
+	const [stainLessMetalFinish, setStainLessMetalFinish] = useState(
+		item.stainLessMetalFinish
+	);
+	const [stainlessSteelPolished, setStainlessSteelPolished] = useState(
+		item.stainlessSteelPolished
+	);
 
 	const maxWidthHeightOptions = Array.from(
 		{
@@ -52,30 +63,45 @@ export default function Logo({ item }) {
 
 	const colorRef = useRef(null);
 
-	const logoPricingObject = NovaQuote.quote_options.logo_pricing;
-
 	function handleComments(e) {
 		setComments(e.target.value);
 	}
+
+	const handleOnChangeWaterproof = (e) => setWaterproof(e.target.value);
+
+	const handelMetalFinishChange = (e) => {
+		const value = e.target.value;
+		if ('Stainless Steel Polished' !== value) {
+			setStainlessSteelPolished('');
+		}
+		setStainLessMetalFinish(e.target.value);
+	};
 
 	const handleOnChangeThickness = (e) => {
 		const target = e.target.value;
 		const selected = metalThicknessOptions.filter(
 			(option) => option.value === target
 		);
+		console.log(selected[0]);
 		setSelectedThickness(() => selected[0]);
 	};
 
 	const handleChangeFinishing = (e) => {
 		const value = e.target.value;
-		if ('Brushed' === value) {
+		if (value === '') {
+			setStainLessMetalFinish('');
+			setColor({ name: '', color: '' });
+			setStainlessSteelPolished('');
+		}
+		if ('Metal Finish' === value) {
 			setColor({ name: '', color: '' });
 		}
-		setSelectedFinishing(e.target.value);
-	};
 
-	const handleChangePieces = (e) => {
-		setPieces(e.target.value);
+		if ('Painted Finish' === value) {
+			setStainLessMetalFinish('');
+		}
+
+		setSelectedFinishing(e.target.value);
 	};
 
 	const handleOnChangeInstallation = (e) => setInstallation(e.target.value);
@@ -96,10 +122,12 @@ export default function Logo({ item }) {
 					cadPrice: cadPrice,
 					finishing: selectedFinishing,
 					file: file,
+					metal: metal,
 					fileName: fileName,
 					filePath: filePath,
 					fileUrl: fileUrl,
-					pieces: pieces,
+					stainlessSteelPolished: stainlessSteelPolished,
+					stainLessMetalFinish: stainLessMetalFinish,
 				};
 			} else {
 				return sign;
@@ -112,42 +140,32 @@ export default function Logo({ item }) {
 		setComments(item.comments);
 	}, []);
 
-	useEffect(() => {
-		updateSignage();
-		checkAndAddMissingFields();
-	}, [
-		comments,
-		selectedThickness,
-		selectedMounting,
-		waterproof,
-		width,
-		height,
-		usdPrice,
-		cadPrice,
-		fileUrl,
-		fileName,
-		selectedFinishing,
-		file,
-		filePath,
-		pieces,
-		installation,
-		color,
-	]);
-
 	const checkAndAddMissingFields = () => {
 		const missingFields = [];
 
-		if (!selectedThickness) missingFields.push('Acrylic Thickness');
+		if (!metal) missingFields.push('Metal Option');
+		if (!selectedThickness) missingFields.push('Metal Thickness');
 		if (!width) missingFields.push('Logo Width');
 		if (!height) missingFields.push('Logo Height');
-		if (!waterproof) missingFields.push('Waterproof');
-		if (!selectedFinishing) missingFields.push('Finishing');
-		if (selectedFinishing === 'Painted') {
+		if (!fileUrl) missingFields.push('PDF/AI File');
+
+		if (!selectedFinishing) missingFields.push('Finish Option');
+		if (selectedFinishing === 'Painted Finish') {
 			if (!color.name) missingFields.push('Color');
 		}
+		if (selectedFinishing === 'Metal Finish') {
+			if (!stainLessMetalFinish) missingFields.push('Metal Finish Option');
+		}
+
+		if (
+			stainLessMetalFinish &&
+			stainLessMetalFinish === 'Stainless Steel Polished'
+		) {
+			if (!stainlessSteelPolished) missingFields.push('Steel Polished');
+		}
+
+		if (!waterproof) missingFields.push('Waterproof');
 		if (!installation) missingFields.push('Installation');
-		if (!pieces) missingFields.push('Pieces/Cutouts');
-		if (!fileUrl) missingFields.push('PDF/AI File');
 
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
@@ -172,9 +190,6 @@ export default function Logo({ item }) {
 						},
 					];
 				}
-
-				console.log(prevMissing);
-
 				return prevMissing;
 			});
 		} else {
@@ -186,26 +201,82 @@ export default function Logo({ item }) {
 	};
 
 	useEffect(() => {
+		updateSignage();
+		checkAndAddMissingFields();
+	}, [
+		comments,
+		selectedThickness,
+		selectedMounting,
+		waterproof,
+		width,
+		height,
+		usdPrice,
+		cadPrice,
+		fileUrl,
+		fileName,
+		selectedFinishing,
+		stainLessMetalFinish,
+		stainlessSteelPolished,
+		file,
+		filePath,
+		installation,
+		color,
+		metal,
+	]);
+
+	useEffect(() => {
 		// Ensure width, height, and selectedThickness are provided
 		if (width && height && selectedThickness) {
 			const logoKey = `logo_pricing_${selectedThickness.value}mm`;
 			const logoPricingTable =
-				logoPricingObject[logoKey]?.length > 0
-					? convert_json(logoPricingObject[logoKey])
+				PricingTable[logoKey]?.length > 0
+					? convert_json(PricingTable[logoKey])
 					: [];
+
+			console.log(logoPricingTable);
 			const computed =
 				logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
 
 			let multiplier = 0;
 			if (waterproof) {
-				multiplier = waterproof === 'Indoor' ? 1 : 1.1;
+				multiplier = waterproof === 'Indoor' ? 1 : 1.05;
 			}
 
 			let total = (computed * multiplier).toFixed(2);
+
+			total *= metal === '316 Stainless Steel' ? 1.3 : 1;
+
+			if (stainlessSteelPolished) {
+				if ('Standard (Face)' === stainlessSteelPolished) {
+					total *= 1.3;
+				}
+
+				if ('Premium (Face & Side)' === stainlessSteelPolished) {
+					total *= 1.7;
+				}
+			}
+
+			if (
+				stainLessMetalFinish &&
+				stainLessMetalFinish !== 'Stainless Steel Brushed' &&
+				stainLessMetalFinish !== 'Stainless Steel Polished'
+			) {
+				total *= 1.2;
+			}
+
 			setUsdPrice(total);
 			setCadPrice((total * parseFloat(exchangeRate)).toFixed(2));
 		}
-	}, [width, height, selectedThickness, waterproof, selectedFinishing]);
+	}, [
+		width,
+		height,
+		selectedThickness,
+		waterproof,
+		selectedFinishing,
+		metal,
+		stainLessMetalFinish,
+		stainlessSteelPolished,
+	]);
 
 	useOutsideClick(colorRef, () => {
 		setOpenColor(false);
@@ -215,13 +286,23 @@ export default function Logo({ item }) {
 		<>
 			<div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
 				<Dropdown
-					title="Thickness"
-					value={item.thickness?.value}
+					title="Metal Option"
+					onChange={(e) => setMetal(e.target.value)}
+					options={metalOptions.map((metal) => (
+						<option value={metal.option} selected={metal.option === item.metal}>
+							{metal.option}
+						</option>
+					))}
+					value={item.metal}
+				/>
+				<Dropdown
+					title="Metal Thickness"
+					value={selectedThickness?.value}
 					onChange={handleOnChangeThickness}
 					options={metalThicknessOptions.map((thickness) => (
 						<option
 							value={thickness.value}
-							selected={thickness === item.thickness}
+							selected={thickness === selectedThickness}
 						>
 							{thickness.thickness}
 						</option>
@@ -243,26 +324,12 @@ export default function Logo({ item }) {
 				/>
 
 				<Dropdown
-					title="Waterproof Option"
-					onChange={(e) => setWaterproof(e.target.value)}
-					options={waterProofOptions.map((option) => (
-						<option
-							value={option.option}
-							selected={option.option == item.waterproof}
-						>
-							{option.option}
-						</option>
-					))}
-					value={waterproof}
-				/>
-
-				<Dropdown
 					title="Finish Option"
 					onChange={handleChangeFinishing}
-					options={metalFinishOptions.map((finishing) => (
+					options={finishOptions.map((finishing) => (
 						<option
 							value={finishing.option}
-							selected={finishing.option === item.finishing}
+							selected={finishing.option === selectedFinishing}
 						>
 							{finishing.option}
 						</option>
@@ -270,10 +337,42 @@ export default function Logo({ item }) {
 					value={item.finishing}
 				/>
 
-				{selectedFinishing === 'Painted' && (
+				{selectedFinishing === 'Metal Finish' && (
+					<Dropdown
+						title="Metal Finish"
+						onChange={handelMetalFinishChange}
+						options={metalFinishOptions.map((metalFinish) => (
+							<option
+								value={metalFinish.option}
+								selected={metalFinish.option === stainLessMetalFinish}
+							>
+								{metalFinish.option}
+							</option>
+						))}
+						value={item.stainLessMetalFinish}
+					/>
+				)}
+
+				{stainLessMetalFinish === 'Stainless Steel Polished' && (
+					<Dropdown
+						title="Steel Polished"
+						onChange={(e) => setStainlessSteelPolished(e.target.value)}
+						options={stainlessSteelPolishedOptions.map((steelPolished) => (
+							<option
+								value={steelPolished.option}
+								selected={steelPolished.option === item.stainlessSteelPolished}
+							>
+								{steelPolished.option}
+							</option>
+						))}
+						value={item.stainlessSteelPolished}
+					/>
+				)}
+
+				{selectedFinishing === 'Painted Finish' && (
 					<div className="px-[1px] relative" ref={colorRef}>
 						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-							Color
+							Painted Color
 						</label>
 						<div
 							className={`flex px-2 items-center select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
@@ -312,6 +411,20 @@ export default function Logo({ item }) {
 				)}
 
 				<Dropdown
+					title="Waterproof Option"
+					onChange={handleOnChangeWaterproof}
+					options={waterProofOptions.map((option) => (
+						<option
+							value={option.option}
+							selected={option.option == item.waterproof}
+						>
+							{option.option}
+						</option>
+					))}
+					value={item.waterproof}
+				/>
+
+				<Dropdown
 					title="Installation Option"
 					onChange={handleOnChangeInstallation}
 					options={metalInstallationOptions.map((option) => (
@@ -323,17 +436,6 @@ export default function Logo({ item }) {
 						</option>
 					))}
 					value={item.installation}
-				/>
-
-				<Dropdown
-					title="Pieces/Cutouts"
-					onChange={handleChangePieces}
-					options={piecesOptions.map((piece) => (
-						<option value={piece} selected={piece === item.pieces}>
-							{piece}
-						</option>
-					))}
-					value={pieces}
 				/>
 			</div>
 

@@ -1,8 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Dropdown from '../../../../Dropdown';
 import UploadFile from '../../../../UploadFile';
-import { QuoteContext } from '../LayeredAcrylic';
-
+import convert_json from '../../../../utils/ConvertJson';
 import {
 	calculateMountingOptions,
 	defaultFinishOptions,
@@ -11,11 +10,13 @@ import {
 	thicknessOptions,
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
+import { QuoteContext } from '../LayeredAcrylic';
 
+const exchangeRate = wcumcs_vars_data.currency_data.rate;
 const NovaSingleOptions = NovaQuote.single_quote_options;
 
 export default function Logo({ item }) {
-	const { signage, setSignage } = useContext(QuoteContext);
+	const { signage, setSignage, missing, setMissing } = useContext(QuoteContext);
 	const [selectedMounting, setSelectedMounting] = useState(item.mounting);
 	const [selectedThickness, setSelectedThickness] = useState(item.thickness);
 	const [width, setWidth] = useState(item.width);
@@ -26,10 +27,11 @@ export default function Logo({ item }) {
 	const [filePath, setFilePath] = useState(item.filePath);
 	const [file, setFile] = useState(item.file);
 	const [pieces, setPieces] = useState(item.pieces);
-	const [baseColor, setBaseColor] = useState(item.baseColor);
 	const [selectedFinishing, setSelectedFinishing] = useState(item.finishing);
 	const [description, setDescription] = useState(item.description);
-	const [printPreference, setPrintPreference] = useState(item.printPreference);
+	const [layers, setLayers] = useState(item.layers);
+	const [usdPrice, setUsdPrice] = useState(item.usdPrice);
+	const [cadPrice, setCadPrice] = useState(item.cadPrice);
 	const finishingOptions = NovaSingleOptions.finishing_options
 		? NovaSingleOptions.finishing_options
 		: defaultFinishOptions;
@@ -85,10 +87,6 @@ export default function Logo({ item }) {
 		);
 	}, [selectedThickness, selectedMounting, waterproof, maxWidthHeight]);
 
-	function handleComments(e) {
-		setComments(e.target.value);
-	}
-
 	const handleOnChangeThickness = (e) => {
 		const target = e.target.value;
 		const selected = thicknessOptions.filter(
@@ -115,23 +113,7 @@ export default function Logo({ item }) {
 		setPieces(e.target.value);
 	};
 
-	const printOptions = [
-		{
-			option: 'Print on top',
-		},
-		{
-			option: 'Print from back layer',
-		},
-	];
-
-	const baseColorOptions = [
-		{
-			option: 'Black',
-		},
-		{
-			option: 'Custom Color',
-		},
-	];
+	const layersOptions = [1, 2, 3, 4, 5];
 
 	function updateSignage() {
 		const updatedSignage = signage.map((sign) => {
@@ -150,9 +132,10 @@ export default function Logo({ item }) {
 					filePath: filePath,
 					fileUrl: fileUrl,
 					pieces: pieces,
-					baseColor: baseColor,
-					printPreference: printPreference,
+					layers: layers,
 					description: description,
+					usdPrice: usdPrice,
+					cadPrice: cadPrice,
 				};
 			} else {
 				return sign;
@@ -176,13 +159,14 @@ export default function Logo({ item }) {
 		filePath,
 		pieces,
 		description,
-		printPreference,
+		layers,
+		usdPrice,
+		cadPrice,
 	]);
 
-	/*
 	useEffect(() => {
 		// Ensure width, height, and selectedThickness are provided
-		if (width && height && selectedThickness) {
+		if (width && height && selectedThickness && waterproof) {
 			const logoKey = `logo_pricing_${selectedThickness.value}mm`;
 			const logoPricingTable =
 				logoPricingObject[logoKey]?.length > 0
@@ -198,22 +182,102 @@ export default function Logo({ item }) {
 
 			let total = (computed * multiplier).toFixed(2);
 			total *= selectedFinishing === 'Gloss' ? 1.1 : 1;
-			total *= baseColor === 'Custom Color' ? UV_PRICE : 1;
+
 			setUsdPrice(total);
 			setCadPrice((total * parseFloat(exchangeRate)).toFixed(2));
+		} else {
+			setUsdPrice(0);
+			setCadPrice(0);
 		}
+	}, [width, height, selectedThickness, waterproof, selectedFinishing]);
+
+	const checkAndAddMissingFields = () => {
+		const missingFields = [];
+
+		if (!fileUrl) missingFields.push('PDF/AI File');
+		if (!description) missingFields.push('Description');
+		if (!selectedThickness) missingFields.push('Thickness');
+		if (!width) missingFields.push('Logo Width');
+		if (!height) missingFields.push('Logo Height');
+		if (!layers) missingFields.push('Layers');
+		if (!waterproof) missingFields.push('Waterproof Option');
+		if (!selectedMounting) missingFields.push('Mounting Option');
+		if (!selectedFinishing) missingFields.push('Finishing Option');
+
+		if (missingFields.length > 0) {
+			setMissing((prevMissing) => {
+				const existingIndex = prevMissing.findIndex(
+					(entry) => entry.id === item.id
+				);
+
+				if (existingIndex !== -1) {
+					const updatedMissing = [...prevMissing];
+					updatedMissing[existingIndex] = {
+						...updatedMissing[existingIndex],
+						missingFields: missingFields,
+					};
+					return updatedMissing;
+				} else if (missingFields.length > 0) {
+					return [
+						...prevMissing,
+						{
+							id: item.id,
+							title: item.title,
+							missingFields: missingFields,
+						},
+					];
+				}
+
+				console.log(prevMissing);
+
+				return prevMissing;
+			});
+		} else {
+			setMissing((current) => {
+				const updatedMissing = current.filter((sign) => sign.id !== item.id);
+				return updatedMissing;
+			});
+		}
+	};
+
+	useEffect(() => {
+		checkAndAddMissingFields();
 	}, [
+		fileUrl,
 		width,
 		height,
+		layers,
+		selectedMounting,
 		selectedThickness,
+		description,
 		waterproof,
 		selectedFinishing,
-		baseColor,
 	]);
-	*/
 
 	return (
 		<>
+			<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+				<div className="px-[1px] col-span-3">
+					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+						DESCRIPTION
+					</label>
+					<textarea
+						className="h-[160px] rounded-md text-sm"
+						onChange={handleOnChangeDescription}
+					>
+						{description}
+					</textarea>
+				</div>
+				<UploadFile
+					setFilePath={setFilePath}
+					setFile={setFile}
+					filePath={filePath}
+					fileUrl={fileUrl}
+					isLoading={isLoading}
+					setFileUrl={setFileUrl}
+					setFileName={setFileName}
+				/>
+			</div>
 			<div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
 				<Dropdown
 					title="Acrylic Thickness"
@@ -244,29 +308,12 @@ export default function Logo({ item }) {
 				/>
 
 				<Dropdown
-					title="Printing Preference"
-					value={printPreference}
-					onChange={(e) => setPrintPreference(e.target.value)}
-					options={printOptions.map((option) => (
-						<option
-							value={option.option}
-							selected={option.option == item.printPreference}
-						>
-							{option.option}
-						</option>
-					))}
-				/>
-
-				<Dropdown
-					title="Base Color"
-					value={baseColor}
-					onChange={(e) => setBaseColor(e.target.value)}
-					options={baseColorOptions.map((option) => (
-						<option
-							value={option.option}
-							selected={option.option == item.baseColor}
-						>
-							{option.option}
+					title="Number or Layers"
+					value={layers}
+					onChange={(e) => setLayers(e.target.value)}
+					options={layersOptions.map((layer) => (
+						<option value={layer} selected={layer == item.layers}>
+							{layer}
 						</option>
 					))}
 				/>
@@ -323,29 +370,6 @@ export default function Logo({ item }) {
 						</option>
 					))}
 					value={pieces}
-				/>
-			</div>
-
-			<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-				<div className="px-[1px] col-span-3">
-					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-						DESCRIPTION
-					</label>
-					<textarea
-						className="h-[160px] rounded-md text-sm"
-						onChange={handleOnChangeDescription}
-					>
-						{description}
-					</textarea>
-				</div>
-				<UploadFile
-					setFilePath={setFilePath}
-					setFile={setFile}
-					filePath={filePath}
-					fileUrl={fileUrl}
-					isLoading={isLoading}
-					setFileUrl={setFileUrl}
-					setFileName={setFileName}
 				/>
 			</div>
 		</>

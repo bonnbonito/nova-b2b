@@ -1,21 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import Dropdown from '../../../Dropdown';
 import UploadFile from '../../../UploadFile';
 import { QuoteContext } from '../CustomProject';
 
-import {
-	calculateMountingOptions,
-	defaultFinishOptions,
-	mountingDefaultOptions,
-	piecesOptions,
-	thicknessOptions,
-	waterProofOptions,
-} from '../../../utils/SignageOptions';
-
-const NovaSingleOptions = NovaQuote.single_quote_options;
-
 export default function Logo({ item }) {
-	const { signage, setSignage } = useContext(QuoteContext);
+	const { signage, setSignage, missing, setMissing } = useContext(QuoteContext);
 	const [isLoading, setIsLoading] = useState(false);
 	const [fileName, setFileName] = useState(item.fileName);
 	const [fileUrl, setFileUrl] = useState(item.fileUrl);
@@ -44,42 +32,52 @@ export default function Logo({ item }) {
 		setSignage(() => updatedSignage);
 	}
 
+	const checkAndAddMissingFields = () => {
+		const missingFields = [];
+
+		if (!fileUrl) missingFields.push('File');
+		if (!description) missingFields.push('Description');
+
+		if (missingFields.length > 0) {
+			setMissing((prevMissing) => {
+				const existingIndex = prevMissing.findIndex(
+					(entry) => entry.id === item.id
+				);
+
+				if (existingIndex !== -1) {
+					const updatedMissing = [...prevMissing];
+					updatedMissing[existingIndex] = {
+						...updatedMissing[existingIndex],
+						missingFields: missingFields,
+					};
+					return updatedMissing;
+				} else if (missingFields.length > 0) {
+					return [
+						...prevMissing,
+						{
+							id: item.id,
+							title: item.title,
+							missingFields: missingFields,
+						},
+					];
+				}
+
+				console.log(prevMissing);
+
+				return prevMissing;
+			});
+		} else {
+			setMissing((current) => {
+				const updatedMissing = current.filter((sign) => sign.id !== item.id);
+				return updatedMissing;
+			});
+		}
+	};
+
 	useEffect(() => {
 		updateSignage();
+		checkAndAddMissingFields();
 	}, [fileUrl, fileName, file, filePath, description]);
-
-	/*
-	useEffect(() => {
-		// Ensure width, height, and selectedThickness are provided
-		if (width && height && selectedThickness) {
-			const logoKey = `logo_pricing_${selectedThickness.value}mm`;
-			const logoPricingTable =
-				logoPricingObject[logoKey]?.length > 0
-					? convert_json(logoPricingObject[logoKey])
-					: [];
-			const computed =
-				logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
-
-			let multiplier = 0;
-			if (waterproof) {
-				multiplier = waterproof === 'Indoor' ? 1 : 1.1;
-			}
-
-			let total = (computed * multiplier).toFixed(2);
-			total *= selectedFinishing === 'Gloss' ? 1.1 : 1;
-			total *= baseColor === 'Custom Color' ? UV_PRICE : 1;
-			setUsdPrice(total);
-			setCadPrice((total * parseFloat(exchangeRate)).toFixed(2));
-		}
-	}, [
-		width,
-		height,
-		selectedThickness,
-		waterproof,
-		selectedFinishing,
-		baseColor,
-	]);
-	*/
 
 	return (
 		<>

@@ -9,6 +9,7 @@ import MetalLaminate from './scripts/products/acrylic/MetalLaminate/MetalLaminat
 import UvPrintedAcrylic from './scripts/products/acrylic/UvPrintedAcrylic/UvPrintedAcrylic';
 import CustomProject from './scripts/products/custom/CustomProject';
 import LaserCutAluminum from './scripts/products/metal/LaserCutAluminum/LaserCutAluminum';
+import LaserCutStainless from './scripts/products/metal/LaserCutStainless/LaserCutStainless';
 
 if (document.querySelector('#laserCutAcrylic')) {
 	ReactDOM.render(
@@ -42,6 +43,13 @@ if (document.querySelector('#metalLaminateAcrylic')) {
 	ReactDOM.render(
 		<MetalLaminate />,
 		document.querySelector('#metalLaminateAcrylic')
+	);
+}
+
+if (document.querySelector('#laserCutStainless')) {
+	ReactDOM.render(
+		<LaserCutStainless />,
+		document.querySelector('#laserCutStainless')
 	);
 }
 

@@ -34,7 +34,7 @@ function displaySignage(sign) {
 		{ label: 'TYPE', value: sign.type },
 		{ label: 'LINE TEXT', value: sign.letters },
 		{
-			label: 'LETTER HEIGHT',
+			label: 'LETTERS HEIGHT',
 			value: sign.letterHeight ? sign.letterHeight + '"' : '',
 		},
 		{ label: 'THICKNESS', value: sign.thickness?.thickness },
@@ -89,7 +89,7 @@ function displaySignage(sign) {
 function displayLetters(sign) {
 	const details = [
 		{ label: 'THICKNESS', value: sign.thickness?.thickness + '"' },
-		{ label: 'LETTER HEIGHT', value: sign.letterHeight + '"' },
+		{ label: 'LETTERS HEIGHT', value: sign.letterHeight + '"' },
 		{ label: 'MOUNTING', value: sign.mounting },
 		{ label: 'WATERPROOF', value: sign.waterproof },
 		{ label: 'COLOR', value: sign.color?.name },

@@ -10,6 +10,7 @@ export const QuoteContext = createContext(null);
 
 export default function LayeredAcrylic() {
 	const [signage, setSignage] = useState([]);
+	const [missing, setMissing] = useState([]);
 	const currency = wcumcs_vars_data.currency;
 
 	function setDefaultSignage() {
@@ -93,22 +94,9 @@ export default function LayeredAcrylic() {
 		);
 	}, [signage]);
 
-	const required = {
-		custom: [
-			{
-				key: 'description',
-				title: 'Description',
-			},
-			{
-				key: 'fileUrl',
-				title: 'File',
-			},
-		],
-	};
-
 	return (
 		<QuoteContext.Provider
-			value={{ signage, setSignage, addSignage, currency }}
+			value={{ signage, setSignage, addSignage, currency, missing, setMissing }}
 		>
 			<div className="md:flex gap-6">
 				<div className="md:w-3/4 w-full">
@@ -117,6 +105,8 @@ export default function LayeredAcrylic() {
 							index={index}
 							id={item.id}
 							item={item}
+							missing={missing}
+							setMissing={setMissing}
 							signage={signage}
 							setSignage={setSignage}
 							addSignage={addSignage}
@@ -138,7 +128,7 @@ export default function LayeredAcrylic() {
 						)}
 					</div>
 				</div>
-				<SidebarNoPrice signage={signage} required={required} />
+				<SidebarNoPrice signage={signage} required={missing} />
 			</div>
 		</QuoteContext.Provider>
 	);

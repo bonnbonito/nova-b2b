@@ -18,7 +18,7 @@ const exchangeRate = wcumcs_vars_data.currency_data.rate;
 const UV_PRICE = 1.2;
 
 export default function Logo({ item }) {
-	const { signage, setSignage } = useContext(QuoteContext);
+	const { signage, setSignage, setMissing } = useContext(QuoteContext);
 	const [selectedMounting, setSelectedMounting] = useState(item.mounting);
 	const [selectedThickness, setSelectedThickness] = useState(item.thickness);
 	const [width, setWidth] = useState(item.width);
@@ -166,6 +166,74 @@ export default function Logo({ item }) {
 		setComments(item.comments);
 	}, []);
 
+	const checkAndAddMissingFields = () => {
+		const missingFields = [];
+
+		if (!selectedThickness) missingFields.push('Thickness');
+		if (!width) missingFields.push('Logo Width');
+		if (!height) missingFields.push('Logo Height');
+		if (!printPreference) missingFields.push('Printing Preference');
+		if (!baseColor) missingFields.push('Base Color');
+		if (!waterproof) missingFields.push('Waterproof Option');
+		if (!selectedMounting) missingFields.push('Mounting Option');
+		if (!selectedFinishing) missingFields.push('Finishing Option');
+		if (!pieces) missingFields.push('Pieces/Cutouts');
+		if (!fileUrl) missingFields.push('PDF/AI File');
+
+		if (missingFields.length > 0) {
+			setMissing((prevMissing) => {
+				const existingIndex = prevMissing.findIndex(
+					(entry) => entry.id === item.id
+				);
+
+				if (existingIndex !== -1) {
+					const updatedMissing = [...prevMissing];
+					updatedMissing[existingIndex] = {
+						...updatedMissing[existingIndex],
+						missingFields: missingFields,
+					};
+					return updatedMissing;
+				} else if (missingFields.length > 0) {
+					return [
+						...prevMissing,
+						{
+							id: item.id,
+							title: item.title,
+							missingFields: missingFields,
+						},
+					];
+				}
+
+				console.log(prevMissing);
+
+				return prevMissing;
+			});
+		} else {
+			setMissing((current) => {
+				const updatedMissing = current.filter((sign) => sign.id !== item.id);
+				return updatedMissing;
+			});
+		}
+	};
+
+	useEffect(() => {
+		checkAndAddMissingFields();
+	}, [
+		selectedThickness,
+		selectedMounting,
+		waterproof,
+		width,
+		height,
+		fileUrl,
+		fileName,
+		selectedFinishing,
+		file,
+		filePath,
+		pieces,
+		baseColor,
+		printPreference,
+	]);
+
 	useEffect(() => {
 		updateSignage();
 	}, [
@@ -184,6 +252,7 @@ export default function Logo({ item }) {
 		filePath,
 		pieces,
 		printPreference,
+		baseColor,
 	]);
 
 	useEffect(() => {

@@ -245,6 +245,10 @@ class Scripts {
 		return get_field( 'signage_quote_options', get_the_ID() );
 	}
 
+	public function get_lasercut_stainless_metal_pricing() {
+		return get_field( 'lasercut_stainless_metal_pricing', get_the_ID() );
+	}
+
 	public function nova_admin_scripts( $hook ) {
 
 		global $post;
@@ -256,6 +260,7 @@ class Scripts {
 		wp_register_script( 'admin-signage', get_stylesheet_directory_uri() . '/assets/js/admin-signage.js', array(), '1.0', true );
 		wp_register_script( 'admin-acrylic', get_stylesheet_directory_uri() . '/assets/js/admin-acrylic.js', array(), '1.0', true );
 		wp_register_script( 'admin-metal', get_stylesheet_directory_uri() . '/assets/js/admin-metal.js', array(), '1.0', true );
+		wp_register_script( 'admin-stainless-metal', get_stylesheet_directory_uri() . '/assets/js/admin-stainless-metal.js', array(), '1.0', true );
 		wp_register_script( 'admin-quote', get_stylesheet_directory_uri() . '/assets/js/admin-quote.js', array(), '1.0', true );
 		wp_register_script( 'admin-projects', get_stylesheet_directory_uri() . '/assets/js/admin-projects.js', array(), '1.0', true );
 		wp_register_script( 'dropbox-api', get_stylesheet_directory_uri() . '/assets/js/dropbox.js', array(), '1.0', true );
@@ -285,6 +290,14 @@ class Scripts {
 		);
 
 		wp_localize_script(
+			'admin-stainless-metal',
+			'AdminStainlessMetal',
+			array(
+				'pricing_table' => $this->get_lasercut_stainless_metal_pricing(),
+			)
+		);
+
+		wp_localize_script(
 			'admin-quote',
 			'QuoteAdmin',
 			array(
@@ -308,6 +321,10 @@ class Scripts {
 
 			if ( 'metal-sign' === $post->post_name ) {
 				wp_enqueue_script( 'admin-metal' );
+			}
+
+			if ( 'laser-cut-stainless-steel' === $post->post_name ) {
+				wp_enqueue_script( 'admin-stainless-metal' );
 			}
 		}
 

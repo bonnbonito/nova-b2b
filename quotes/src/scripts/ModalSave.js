@@ -28,7 +28,7 @@ function ModalSave({ signage, action, btnClass, label, required }) {
 			if (requiredFields) {
 				const missingFieldsForItem = requiredFields
 					.filter((field) => {
-						if (field.key === 'color' || field.key === 'metaFinish') {
+						if (field.key === 'color' || field.key === 'metalFinish') {
 							return (
 								!signageItem[field.key] ||
 								signageItem[field.key].name === '' ||
@@ -56,22 +56,14 @@ function ModalSave({ signage, action, btnClass, label, required }) {
 	}
 
 	useEffect(() => {
-		const missingValues = checkForMissingValues(signage);
-
-		if (missingValues && missingValues.length > 0) {
+		if (required && required.length > 0) {
 			let htmlString = '';
 
-			missingValues.forEach((missing) => {
-				// Find the title of the item with the missing values
-				const itemTitle =
-					signage.find((item) => item.id === missing.itemId)?.title ||
-					'Unknown Item';
-
-				// Start the HTML string for this item
-				htmlString += `<strong class="uppercase">${itemTitle}</strong>\n<ul>\n`;
+			required.forEach((missing) => {
+				htmlString += `<strong class="uppercase">${missing.title}</strong>\n<ul>\n`;
 
 				// Add each missing field as a list item
-				missing.missing.forEach((field) => {
+				missing.missingFields.forEach((field) => {
 					htmlString += `    <li>${field}</li>\n`;
 				});
 
