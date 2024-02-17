@@ -90,7 +90,7 @@ function createTable(dataArray, headers) {
 			const cell = row.insertCell();
 			// If the value is not null, remove commas and parse it as a float
 			// Otherwise, keep it as an empty string
-			const floatValue = parseFloat(item[key].replace(/,/g, ''));
+			const floatValue = parseFloat((item[key] + '').replace(/,/g, ''));
 			cell.textContent = !isNaN(floatValue) ? floatValue.toFixed(2) : '';
 		});
 	});

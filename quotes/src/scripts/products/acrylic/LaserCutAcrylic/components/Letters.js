@@ -444,13 +444,6 @@ export default function Letters({ item }) {
 				/>
 
 				<Dropdown
-					title="Letters Height"
-					onChange={handleOnChangeLetterHeight}
-					options={letterHeightOptions}
-					value={item.letterHeight}
-				/>
-
-				<Dropdown
 					title="Acrylic Thickness"
 					value={selectedThickness?.value}
 					onChange={handleOnChangeThickness}
@@ -462,6 +455,13 @@ export default function Letters({ item }) {
 							{thickness.thickness}
 						</option>
 					))}
+				/>
+
+				<Dropdown
+					title="Letters Height"
+					onChange={handleOnChangeLetterHeight}
+					options={letterHeightOptions}
+					value={item.letterHeight}
 				/>
 
 				<div className="px-[1px] relative" ref={colorRef}>

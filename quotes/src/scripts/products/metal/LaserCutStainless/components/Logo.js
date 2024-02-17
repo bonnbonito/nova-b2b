@@ -18,7 +18,7 @@ import { QuoteContext } from '../LaserCutStainless';
 
 const exchangeRate = wcumcs_vars_data.currency_data.rate;
 
-const PricingTable = NovaQuote.metal_stainless_pricing.logo_pricing;
+const PricingTable = NovaQuote.metal_stainless_pricing?.logo_pricing;
 
 export default function Logo({ item }) {
 	const { signage, setSignage, setMissing } = useContext(QuoteContext);

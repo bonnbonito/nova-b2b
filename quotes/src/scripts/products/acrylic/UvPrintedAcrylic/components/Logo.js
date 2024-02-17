@@ -15,7 +15,7 @@ import {
 const NovaSingleOptions = NovaQuote.single_quote_options;
 const exchangeRate = wcumcs_vars_data.currency_data.rate;
 
-const UV_PRICE = 1.2;
+const UV_PRICE = 1.05;
 
 export default function Logo({ item }) {
 	const { signage, setSignage, setMissing } = useContext(QuoteContext);
@@ -274,7 +274,10 @@ export default function Logo({ item }) {
 			let total = (computed * multiplier).toFixed(2);
 			total *= selectedFinishing === 'Gloss' ? 1.1 : 1;
 			total *= baseColor === 'Custom Color' ? UV_PRICE : 1;
-			setUsdPrice(total);
+
+			total *= 1.2;
+
+			setUsdPrice(parseFloat(total).toFixed(2));
 			setCadPrice((total * parseFloat(exchangeRate)).toFixed(2));
 		}
 	}, [

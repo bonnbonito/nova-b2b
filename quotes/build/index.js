@@ -2423,11 +2423,6 @@ function Letters({
     fonts: NovaOptions.fonts,
     handleSelectFont: handleSelectFont
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "Letters Height",
-    onChange: handleOnChangeLetterHeight,
-    options: letterHeightOptions,
-    value: item.letterHeight
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Acrylic Thickness",
     value: selectedThickness?.value,
     onChange: handleOnChangeThickness,
@@ -2435,6 +2430,11 @@ function Letters({
       value: thickness.value,
       selected: thickness === selectedThickness
     }, thickness.thickness))
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Letters Height",
+    onChange: handleOnChangeLetterHeight,
+    options: letterHeightOptions,
+    value: item.letterHeight
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "px-[1px] relative",
     ref: colorRef
@@ -4385,7 +4385,7 @@ __webpack_require__.r(__webpack_exports__);
 
 const NovaSingleOptions = NovaQuote.single_quote_options;
 const exchangeRate = wcumcs_vars_data.currency_data.rate;
-const UV_PRICE = 1.2;
+const UV_PRICE = 1.05;
 function Logo({
   item
 }) {
@@ -4564,7 +4564,8 @@ function Logo({
       let total = (computed * multiplier).toFixed(2);
       total *= selectedFinishing === 'Gloss' ? 1.1 : 1;
       total *= baseColor === 'Custom Color' ? UV_PRICE : 1;
-      setUsdPrice(total);
+      total *= 1.2;
+      setUsdPrice(parseFloat(total).toFixed(2));
       setCadPrice((total * parseFloat(exchangeRate)).toFixed(2));
     }
   }, [width, height, selectedThickness, waterproof, selectedFinishing, baseColor]);
@@ -6499,7 +6500,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const exchangeRate = wcumcs_vars_data.currency_data.rate;
-const PricingTable = NovaQuote.metal_stainless_pricing.logo_pricing;
+const PricingTable = NovaQuote.metal_stainless_pricing?.logo_pricing;
 function Logo({
   item
 }) {
