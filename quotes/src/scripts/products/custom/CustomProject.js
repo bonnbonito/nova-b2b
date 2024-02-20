@@ -8,7 +8,7 @@ import Logo from './components/Logo';
 
 export const QuoteContext = createContext(null);
 
-export default function LayeredAcrylic() {
+export default function CustomProject() {
 	const [signage, setSignage] = useState([]);
 	const [missing, setMissing] = useState([]);
 	const currency = wcumcs_vars_data.currency;

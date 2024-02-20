@@ -21,7 +21,16 @@ class Scripts {
 
 	public function __construct() {
 		add_action( 'wp_enqueue_scripts', array( $this, 'nova_woocommerce_scripts' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_customer_rep_editor_css' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'nova_admin_scripts' ) );
+	}
+
+	public function enqueue_customer_rep_editor_css() {
+		global $post_type;
+
+		if ( current_user_can( 'customer-rep' ) ) {
+			wp_enqueue_style( 'customer-rep-editor-css', get_stylesheet_directory_uri() . '/assets/css/customer-rep.css' );
+		}
 	}
 
 	public function nova_woocommerce_scripts() {
@@ -249,6 +258,10 @@ class Scripts {
 		return get_field( 'lasercut_stainless_metal_pricing', get_the_ID() );
 	}
 
+	public function get_fabricated_metal_pricing() {
+		return get_field( 'fabricated_stainless_metal_pricing', get_the_ID() );
+	}
+
 	public function nova_admin_scripts( $hook ) {
 
 		global $post;
@@ -261,6 +274,7 @@ class Scripts {
 		wp_register_script( 'admin-acrylic', get_stylesheet_directory_uri() . '/assets/js/admin-acrylic.js', array(), '1.0', true );
 		wp_register_script( 'admin-metal', get_stylesheet_directory_uri() . '/assets/js/admin-metal.js', array(), '1.0', true );
 		wp_register_script( 'admin-stainless-metal', get_stylesheet_directory_uri() . '/assets/js/admin-stainless-metal.js', array(), '1.0', true );
+		wp_register_script( 'admin-fabricated-metal', get_stylesheet_directory_uri() . '/assets/js/admin-fabricated-metal.js', array(), '1.0', true );
 		wp_register_script( 'admin-quote', get_stylesheet_directory_uri() . '/assets/js/admin-quote.js', array(), '1.0', true );
 		wp_register_script( 'admin-projects', get_stylesheet_directory_uri() . '/assets/js/admin-projects.js', array(), '1.0', true );
 		wp_register_script( 'dropbox-api', get_stylesheet_directory_uri() . '/assets/js/dropbox.js', array(), '1.0', true );
@@ -298,6 +312,14 @@ class Scripts {
 		);
 
 		wp_localize_script(
+			'admin-fabricated-metal',
+			'AdminFabricatedMetal',
+			array(
+				'pricing_table' => $this->get_fabricated_metal_pricing(),
+			)
+		);
+
+		wp_localize_script(
 			'admin-quote',
 			'QuoteAdmin',
 			array(
@@ -315,6 +337,7 @@ class Scripts {
 
 		if ( $post && 'signage' === $post->post_type ) {
 			wp_enqueue_script( 'admin-signage' );
+
 			if ( 'laser-cut-acrylic' === $post->post_name ) {
 				wp_enqueue_script( 'admin-acrylic' );
 			}
@@ -325,6 +348,10 @@ class Scripts {
 
 			if ( 'laser-cut-stainless-steel' === $post->post_name ) {
 				wp_enqueue_script( 'admin-stainless-metal' );
+			}
+
+			if ( 'fabricated-stainless-steel' === $post->post_name ) {
+				wp_enqueue_script( 'admin-fabricated-metal' );
 			}
 		}
 

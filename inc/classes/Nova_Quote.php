@@ -134,6 +134,10 @@ class Nova_Quote {
 			wp_set_object_terms( $created_product, 'nova_quote', 'product_type' );
 		}
 
+		foreach ( $product_meta as $meta_key => $meta_value ) {
+			update_post_meta( $created_product, $meta_key, $meta_value );
+		}
+
 		update_post_meta( $post_id, 'nova_product_generated_id', $created_product );
 
 		return $created_product;
@@ -141,20 +145,21 @@ class Nova_Quote {
 
 	public function for_payment_email( $post_id ) {
 
-		$user_id   = get_field( 'partner', $post_id );
-		$user_info = get_userdata( $user_id );
+		$user_id       = get_field( 'partner', $post_id );
+		$user_info     = get_userdata( $user_id );
+		$business_id   = get_field( 'business_id', 'user_' . $user_id );
+		$edit_post_url = admin_url( 'post.php?post=' . $post_id . '&action=edit' );
 
 		$to         = $user_info->user_email;
 		$first_name = $user_info->first_name;
 
-		$subject  = 'NOVA - Order Invoice';
+		$subject  = 'NOVA Signage - Quoted Order (ORDER #' . $post_id . ') ';
 		$message  = '<p>Hello ' . $first_name . ',</p>';
-		$message .= '<p>Please review the details for Order #' . $post_id . '.</p>';
-		$message .= '<p>If everything aligns with your expectations, we would appreciate your prompt consideration for payment.</p>';
+		$message .= '<p>Please review the quotation for Order #' . $post_id . '.  below. Kindly proceed to checkout if everything looks good.</p>';
 		$message .= '<p><a href="' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '">' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '</a></p>';
-		$message .= '<p>If you have any questions or concerns, feel free to reach out to our customer service team.</p>';
+		$message .= "<p>Don't hesitate to contact us if you have any questions or concerns.</p>";
 
-		$message .= "<p>Best,\n<br>";
+		$message .= '<p>Thank you,<br>';
 		$message .= 'NOVA Signage Team</p>';
 
 		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
@@ -162,23 +167,35 @@ class Nova_Quote {
 		$role_instance = \NOVA_B2B\Inc\Classes\Roles::get_instance();
 
 		$role_instance->send_email( $to, $subject, $message, $headers, array() );
+
+		$to_admin       = get_option( 'admin_email' );
+		$admin_subject  = 'NOVA Signage - You Sent a Quotation for Order #' . $post_id . '.';
+		$admin_message  = '<p>Hello,</p>';
+		$admin_message .= 'You sent a quotation to ' . $first_name . ' with Business ID: ' . $business_id . ' for their Order #' . $post_id . '.';
+		$admin_message .= '<p>You may review the quotation you sent here:</p>';
+		$admin_message .= '<a href="' . $edit_post_url . '">' . $edit_post_url . '</a>';
+
+		$role_instance->send_email( $to_admin, $admin_subject, $admin_message, $headers, array() );
 	}
 
 	public function for_quotation_email( $post_id ) {
 
-		$user_id   = get_field( 'partner', $post_id );
-		$user_info = get_userdata( $user_id );
+		$user_id       = get_field( 'partner', $post_id );
+		$user_info     = get_userdata( $user_id );
+		$business_id   = get_field( 'business_id', 'user_' . $user_id );
+		$edit_post_url = admin_url( 'post.php?post=' . $post_id . '&action=edit' );
 
 		$to         = $user_info->user_email;
 		$first_name = $user_info->first_name;
 
-		$subject  = 'NOVA - New Order Receieved';
-		$message  = '<p>Thank you for your order, ' . $first_name . '.</p>';
-		$message .= "<p>We'll get back to you within 24 business hours for any clarifications and confirmation of your design requirements.</p>";
-		$message .= '<p>For reference, please review the details below: </p>';
-		$message .= '<p><a href="' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '">' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '</a></p>';
+		$subject  = 'NOVA Signage -  Mockup Submitted for Quotation (ORDER #' . $post_id . ') ';
+		$message  = '<p>Hello ' . $first_name . '.</p>';
+		$message .= '<p>We got your quote request for Order #' . $post_id . '.</p>';
+		$message .= '<p>Our team is reviewing your mockup.</p>';
+		$message .= '<p>Should we require additional information or clarification on your design specifications, we will reach out to you within the next 24 business hours.</p>';
+		$message .= '<p>Please review your order details:<br><a href="' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '">' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '</a></p>';
 
-		$message .= "<p>Best,\n<br>";
+		$message .= '<p>Thank you,<br>';
 		$message .= 'NOVA Signage Team</p>';
 
 		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
@@ -187,10 +204,16 @@ class Nova_Quote {
 
 		$role_instance->send_email( $to, $subject, $message, $headers, array() );
 
-		$to_admin         = get_option( 'admin_email' );
-		$to_admin_message = 'You received a new order from ' . $first_name . '. Congratulations!';
+		$to_admin = get_option( 'admin_email' );
 
-		$role_instance->send_email( $to_admin, $subject, $to_admin_message, $headers, array() );
+		$admin_subject = 'NOVA Signage - You Received a Quotation Request - Order #' . $post_id . '.';
+
+		$to_admin_message  = '<p>Hello,</p>';
+		$to_admin_message .= '<p>' . $first_name . ' with Business ID: <strong>' . $business_id . '</strong> sent a quotation request for their Order #' . $post_id . '.</p>';
+		$to_admin_message .= '<p>You may review the mockup details here:<br></p>';
+		$to_admin_message .= '<a href="' . $edit_post_url . '">' . $edit_post_url . '</a>';
+
+		$role_instance->send_email( $to_admin, $admin_subject, $to_admin_message, $headers, array() );
 	}
 
 	public function for_payment_email_action( $post_id ) {
@@ -228,7 +251,7 @@ class Nova_Quote {
 			return;
 		}
 
-		do_action( 'quote_to_processing', $post_id );
+		// do_action( 'quote_to_processing', $post_id );
 	}
 
 	public function handle_dropbox_oauth_redirect() {
@@ -350,7 +373,8 @@ class Nova_Quote {
 		}
 
 		update_field( 'quote_status', 'processing', $_POST['quote'] );
-		do_action( 'quote_to_processing', $_POST['quote'] );
+
+		$this->for_quotation_email( $_POST['quote'] );
 
 		$status['code'] = 2;
 		wp_send_json( $status );

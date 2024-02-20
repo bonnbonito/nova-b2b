@@ -66,11 +66,12 @@ class Roles {
 			$to         = $user_info->user_email;
 			$first_name = $user_info->first_name;
 
-			$subject  = 'Your Business Partner Status is Approved. Welcome to NOVA Signage!';
-			$message  = '<p style="margin-top: 20px;">Dear  ' . $first_name . ',</p>';
-			$message .= '<p>Congratulations! Your application to become a business partner with NOVA Signage has been approved. Welcome to the NOVA Signage family!</p>';
-			$message .= "<p>We look forward to collaborating with you to enhance your shop's offerings. If you have any questions, our team is here to assist.</p>";
-			$message .= '<p>Best,<br>';
+			$subject  = 'NOVA Signage - Your Business Partner Status is Approved';
+			$message  = '<p style="margin-top: 20px;">Hello  ' . $first_name . ',</p>';
+			$message .= '<p>Welcome to NOVA Signage! Your application to become a Business Partner has been approved.</p>';
+			$message .= '<p>You may now login, explore, and order our products at <a href="' . home_url( '/' ) . '">novasignage.com</a></p>';
+			$message .= '<p>If you have any questions, our team is here to assist you.</p>';
+			$message .= '<p>Congratulations,<br>';
 			$message .= 'NOVA Signage Team</p>';
 
 			$headers = array( 'Content-Type: text/html; charset=UTF-8' );
@@ -140,10 +141,14 @@ class Roles {
 		delete_user_meta( $user_id, 'account_activation_key' );
 		$user = new WP_User( $user_id );
 		$user->set_role( 'pending' );
+		$first_name    = $user->get( 'first_name' );
+		$user_edit_url = admin_url( 'user-edit.php?user_id=' . $user_id );
 
-		$subject  = 'New Partner Application';
-		$message  = '<p style="margin-top: 20px;">A new business partner has submitted their application. Congratulations!</p>';
-		$message .= '<p>Business ID: ' . get_field( 'business_id', 'user_' . $user_id ) . '</p>';
+		$subject  = 'NOVA Signage - You Have a Pending Partner Status';
+		$message  = '<p>Hello,</p>';
+		$message .= '<p style="margin-top: 20px;">' . $first_name . ' with Business ID ' . get_field( 'business_id', 'user_' . $user_id ) . ' submitted a business partner application. </p>';
+		$message .= '<p>Please <strong>APPROVE</strong> or <strong>DENY</strong> their Business Partner Status here:</p>';
+		$message .= '<a href="' . esc_url( $user_edit_url ) . '">Click Here</a>';
 
 		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
@@ -159,11 +164,10 @@ class Roles {
 		$first_name = get_user_meta( $user_id, 'first_name', true );
 		$user_email = $user->user_email;
 
-		$subject = 'NOVA Signage: Pending Status';
+		$subject = 'NOVA Signage - Pending Parnter Status';
 
 		$message  = '<p style="margin-top: 20px;">Hello  ' . $first_name . ',</p>';
-		$message .= '<p>Kindly allow 1 business day for the processing of your partner status. Meanwhile, you can place your order in the cart until your status is approved.</p>';
-		$message .= '<p>You will receive an email notification upon the approval of your application.</p>';
+		$message .= '<p>Kindly wait for 1 business day as we process your Business Partner status. An approval email will be sent to you.</p>';
 		$message .= '<p>Thank you,<br>';
 		$message .= 'NOVA Signage Team</p>';
 
@@ -423,9 +427,9 @@ class Roles {
 		$firstName      = $user_data->first_name;
 		$activation_key = get_user_meta( $user_id, 'account_activation_key', true );
 
-		$subject = 'NOVA Signage: Activate Your Account';
+		$subject = 'NOVA Signage - Activate Your Account';
 
-		$message = '<p style="margin-top: 20px;">Hello ' . $firstName . ',</p><p><a href="https://novasignage.com/activate?pu=' . $user_id . '&key=' . $activation_key . '">Activate Account</a></p><p>Thank you,<br>NOVA Signage Team</p>';
+		$message = '<p style="margin-top: 20px;">Hello ' . $firstName . ',</p><p><a href="' . home_url( '/activate' ) . '?pu=' . $user_id . '&key=' . $activation_key . '">PLEASE ACTIVATE YOUR ACCOUNT HERE</a></p><p>Thank you,<br>NOVA Signage Team</p>';
 
 		$this->send_email( $user_email, $subject, $message );
 	}

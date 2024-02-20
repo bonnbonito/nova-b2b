@@ -1,0 +1,12 @@
+#_kad_classic_meta_control,
+.acf-field[data-name="signage"],
+.toplevel_page_nova-options,
+#menu-posts,
+#menu-comments,
+#menu-posts-custom_project,
+#menu-tools,
+#wc_admin_dashboard_setup,
+#dashboard_quick_press,
+#dashboard_activity {
+    display: none !important;
+}
