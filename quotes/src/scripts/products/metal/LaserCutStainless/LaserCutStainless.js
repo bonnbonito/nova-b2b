@@ -29,6 +29,8 @@ export default function LaserCutStainless() {
 					letters: '',
 					comments: '',
 					font: '',
+					customFont: '',
+					customColor: '',
 					installation: '',
 					waterproof: '',
 					thickness: '',
@@ -85,6 +87,7 @@ export default function LaserCutStainless() {
 		fileUrl: '',
 		file: '',
 		color: { name: '', color: '' },
+		customColor: '',
 		metal: '',
 		stainLessMetalFinish: '',
 		stainlessSteelPolished: '',
@@ -105,6 +108,7 @@ export default function LaserCutStainless() {
 					font: '',
 					thickness_options: '',
 					letterHeight: '',
+					customFont: '',
 				};
 			} else {
 				args = {

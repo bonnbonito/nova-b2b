@@ -41,7 +41,8 @@ export default function LaserCutAluminum() {
 					fileUrl: '',
 					file: '',
 					finishing: '',
-					pieces: '30 pieces or fewer',
+					customFont: '',
+					customColor: '',
 					product: NovaQuote.product,
 				},
 			]);
@@ -82,7 +83,8 @@ export default function LaserCutAluminum() {
 		fileUrl: '',
 		file: '',
 		product: NovaQuote.product,
-		pieces: '30 pieces or fewer',
+		customFont: '',
+		customColor: '',
 	};
 
 	function addSignage(type) {
@@ -129,7 +131,14 @@ export default function LaserCutAluminum() {
 
 	return (
 		<QuoteContext.Provider
-			value={{ signage, setSignage, addSignage, currency, missing, setMissing }}
+			value={{
+				signage,
+				setSignage,
+				addSignage,
+				currency,
+				missing,
+				setMissing,
+			}}
 		>
 			<div className="md:flex gap-6">
 				<div className="md:w-3/4 w-full">

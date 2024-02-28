@@ -8,7 +8,6 @@ import {
 	metalFinishOptions,
 	metalInstallationOptions,
 	metalThicknessOptions,
-	piecesOptions,
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
 import { QuoteContext } from '../LaserCutAluminum';
@@ -17,7 +16,8 @@ const NovaSingleOptions = NovaQuote.single_quote_options;
 const exchangeRate = wcumcs_vars_data.currency_data.rate;
 
 export default function Logo({ item }) {
-	const { signage, setSignage, setMissing } = useContext(QuoteContext);
+	const { signage, setSignage, setMissing, setOverflow } =
+		useContext(QuoteContext);
 	const [selectedMounting, setSelectedMounting] = useState(item.mounting);
 	const [selectedThickness, setSelectedThickness] = useState(item.thickness);
 	const [width, setWidth] = useState(item.width);
@@ -27,10 +27,10 @@ export default function Logo({ item }) {
 	const [fileUrl, setFileUrl] = useState(item.fileUrl);
 	const [filePath, setFilePath] = useState(item.filePath);
 	const [file, setFile] = useState(item.file);
-	const [pieces, setPieces] = useState(item.pieces);
 	const [color, setColor] = useState(item.color);
 	const [openColor, setOpenColor] = useState(false);
 	const [selectedFinishing, setSelectedFinishing] = useState(item.finishing);
+	const [customColor, setCustomColor] = useState(item.customColor);
 
 	const maxWidthHeightOptions = Array.from(
 		{
@@ -99,7 +99,7 @@ export default function Logo({ item }) {
 					fileName: fileName,
 					filePath: filePath,
 					fileUrl: fileUrl,
-					pieces: pieces,
+					customColor: customColor,
 				};
 			} else {
 				return sign;
@@ -129,9 +129,9 @@ export default function Logo({ item }) {
 		selectedFinishing,
 		file,
 		filePath,
-		pieces,
 		installation,
 		color,
+		customColor,
 	]);
 
 	const checkAndAddMissingFields = () => {
@@ -145,8 +145,14 @@ export default function Logo({ item }) {
 		if (selectedFinishing === 'Painted') {
 			if (!color.name) missingFields.push('Color');
 		}
+		if (
+			selectedFinishing === 'Painted' &&
+			color?.name === 'Custom Color' &&
+			!customColor
+		) {
+			missingFields.push('Custom Color Missing');
+		}
 		if (!installation) missingFields.push('Installation');
-		if (!pieces) missingFields.push('Pieces/Cutouts');
 		if (!fileUrl) missingFields.push('PDF/AI File');
 
 		if (missingFields.length > 0) {
@@ -210,6 +216,10 @@ export default function Logo({ item }) {
 	useOutsideClick(colorRef, () => {
 		setOpenColor(false);
 	});
+
+	useEffect(() => {
+		color != 'Custom Color' && setCustomColor('');
+	}, [color]);
 
 	return (
 		<>
@@ -324,20 +334,23 @@ export default function Logo({ item }) {
 					))}
 					value={item.installation}
 				/>
-
-				<Dropdown
-					title="Pieces/Cutouts"
-					onChange={handleChangePieces}
-					options={piecesOptions.map((piece) => (
-						<option value={piece} selected={piece === item.pieces}>
-							{piece}
-						</option>
-					))}
-					value={pieces}
-				/>
 			</div>
 
 			<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+				{color?.name == 'Custom Color' && (
+					<div className="px-[1px] col-span-4">
+						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+							Custom Color
+						</label>
+						<input
+							className="w-full py-4 px-2 border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400"
+							type="text"
+							value={customColor}
+							onChange={(e) => setCustomColor(e.target.value)}
+							placeholder="DESCRIBE CUSTOM COLOR"
+						/>
+					</div>
+				)}
 				<div className="px-[1px] col-span-3">
 					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
 						COMMENTS

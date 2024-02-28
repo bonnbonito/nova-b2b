@@ -131,6 +131,14 @@ export default function Prices({ item }) {
 					<div className="text-left text-sm break-words">{item.font}</div>
 				</div>
 			)}
+			{item.customFont && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						CUSTOM FONT
+					</div>
+					<div className="text-left text-sm break-words">{item.customFont}</div>
+				</div>
+			)}
 			{item.letters && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
@@ -145,6 +153,14 @@ export default function Prices({ item }) {
 						COLOR
 					</div>
 					<div className="text-left text-sm">{item.color?.name}</div>
+				</div>
+			)}
+			{item.customColor && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						CUSTOM COLOR
+					</div>
+					<div className="text-left text-sm">{item.customColor}</div>
 				</div>
 			)}
 			{item.stainLessMetalFinish && (
@@ -171,12 +187,12 @@ export default function Prices({ item }) {
 					<div className="text-left text-sm">{item.metalLaminate}</div>
 				</div>
 			)}
-			{item.acrylicBase && (
+			{item.acrylicBase?.name && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
 						ACRYLIC BASE
 					</div>
-					<div className="text-left text-sm">{item.acrylicBase}</div>
+					<div className="text-left text-sm">{item.acrylicBase.name}</div>
 				</div>
 			)}
 			{item.installation && (

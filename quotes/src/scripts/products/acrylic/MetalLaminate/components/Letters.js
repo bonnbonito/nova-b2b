@@ -3,19 +3,17 @@ import Dropdown from '../../../../Dropdown';
 import FontsDropdown from '../../../../FontsDropdown';
 import UploadFile from '../../../../UploadFile';
 import useOutsideClick from '../../../../utils/ClickOutside';
-import { metalFinishColors } from '../../../../utils/ColorOptions';
+import {
+	colorOptions,
+	metalFinishColors,
+} from '../../../../utils/ColorOptions';
 import convert_json from '../../../../utils/ConvertJson';
 import {
 	mountingDefaultOptions,
-	piecesOptions,
 	thicknessOptions,
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
-import {
-	METAL_ACRYLIC_PRICING,
-	QuoteContext,
-	acrylicBaseOptions,
-} from '../MetalLaminate';
+import { METAL_ACRYLIC_PRICING, QuoteContext } from '../MetalLaminate';
 
 const NovaOptions = NovaQuote.quote_options;
 const exchangeRate = wcumcs_vars_data.currency_data.rate;
@@ -36,13 +34,17 @@ if (NovaOptions && typeof NovaOptions === 'object') {
 //const AcrylicLetterPricing = JSON.parse(NovaOptions.letter_x_logo_pricing);
 
 export default function Letters({ item }) {
-	const { signage, setSignage, missing, setMissing } = useContext(QuoteContext);
+	const { signage, setSignage, setMissing } = useContext(QuoteContext);
 	const [letters, setLetters] = useState(item.letters);
 	const [comments, setComments] = useState(item.comments);
 	const [font, setFont] = useState(item.font);
+	const [customFont, setCustomFont] = useState(item.customFont);
+	const [customColor, setCustomColor] = useState(item.customColor);
 	const [acrylicBase, setAcrylicBase] = useState(item.acrylicBase);
 	const [isLoading, setIsLoading] = useState(false);
 	const [openColor, setOpenColor] = useState(false);
+	const [openFont, setOpenFont] = useState(false);
+	const [openAcrylicColor, setOpenAcrylicColor] = useState(false);
 	const [waterproof, setWaterproof] = useState(item.waterproof);
 	const [selectedThickness, setSelectedThickness] = useState(item.thickness);
 	const [fileName, setFileName] = useState(item.fileName);
@@ -51,7 +53,6 @@ export default function Letters({ item }) {
 	const [file, setFile] = useState(item.file);
 	const [letterHeightOptions, setLetterHeightOptions] = useState([]);
 	const [metalFinish, setMetalFinish] = useState(item.metalFinish);
-	const [pieces, setPieces] = useState(item.pieces);
 
 	const [selectedLetterHeight, setSelectedLetterHeight] = useState(
 		item.letterHeight
@@ -67,6 +68,8 @@ export default function Letters({ item }) {
 	);
 	const [selectedMounting, setSelectedMounting] = useState(item.mounting);
 
+	const acrylicRef = useRef(null);
+	const fontRef = useRef(null);
 	const colorRef = useRef(null);
 
 	const letterPricing =
@@ -144,7 +147,8 @@ export default function Letters({ item }) {
 					filePath: filePath,
 					fileUrl: fileUrl,
 					metalFinish: metalFinish,
-					pieces: pieces,
+					customFont: customFont,
+					customColor: customColor,
 				};
 			} else {
 				return sign;
@@ -181,10 +185,6 @@ export default function Letters({ item }) {
 		setSelectedLetterHeight(e.target.value);
 	};
 
-	const handleChangePieces = (e) => {
-		setPieces(e.target.value);
-	};
-
 	useEffect(() => {
 		if (letterPricing.length > 0 && selectedLetterHeight && selectedThickness) {
 			const pricingDetail = letterPricing[selectedLetterHeight - 1];
@@ -215,7 +215,7 @@ export default function Letters({ item }) {
 
 				totalLetterPrice += letterPrice;
 				totalLetterPrice *= METAL_ACRYLIC_PRICING;
-				totalLetterPrice *= acrylicBase === 'Black' ? 1 : 1.1;
+				totalLetterPrice *= acrylicBase?.name === 'Black' ? 1 : 1.1;
 			});
 
 			setUsdPrice(totalLetterPrice.toFixed(2));
@@ -308,7 +308,8 @@ export default function Letters({ item }) {
 		fileName,
 		file,
 		metalFinish,
-		pieces,
+		customFont,
+		customColor,
 	]);
 
 	const checkAndAddMissingFields = () => {
@@ -316,13 +317,18 @@ export default function Letters({ item }) {
 
 		if (!letters) missingFields.push('Line Text');
 		if (!font) missingFields.push('Font');
+		if (font == 'Custom font' && !customFont) {
+			missingFields.push('Custom Font Missing');
+		}
 		if (!selectedLetterHeight) missingFields.push('Letter Height');
 		if (!selectedThickness) missingFields.push('Acrylic Thickness');
 		if (!metalFinish.name) missingFields.push('Metal Finish');
 		if (!acrylicBase) missingFields.push('Acrylic Base');
+		if (acrylicBase?.name === 'Custom Color' && !customColor) {
+			missingFields.push('Custom Color Missing');
+		}
 		if (!waterproof) missingFields.push('Waterproof');
 		if (!selectedMounting) missingFields.push('Mounting');
-		if (!pieces) missingFields.push('Pieces/Cutouts');
 
 		setMissing((prevMissing) => {
 			const existingIndex = prevMissing.findIndex(
@@ -364,7 +370,8 @@ export default function Letters({ item }) {
 		selectedLetterHeight,
 		metalFinish,
 		acrylicBase,
-		pieces,
+		customFont,
+		customColor,
 	]);
 
 	useEffect(() => {
@@ -387,9 +394,16 @@ export default function Letters({ item }) {
 		}
 	}, [selectedThickness]);
 
-	useOutsideClick(colorRef, () => {
+	useOutsideClick([colorRef, acrylicRef, fontRef], () => {
 		setOpenColor(false);
+		setOpenAcrylicColor(false);
+		setOpenFont(false);
 	});
+
+	useEffect(() => {
+		font != 'Custom font' && setCustomFont('');
+		acrylicBase?.name != 'Custom Color' && setCustomColor('');
+	}, [font, acrylicBase]);
 
 	return (
 		<>
@@ -429,6 +443,9 @@ export default function Letters({ item }) {
 				<FontsDropdown
 					font={item.font}
 					fonts={NovaOptions.fonts}
+					fontRef={fontRef}
+					openFont={openFont}
+					setOpenFont={setOpenFont}
 					handleSelectFont={handleSelectFont}
 				/>
 
@@ -492,19 +509,47 @@ export default function Letters({ item }) {
 					)}
 				</div>
 
-				<Dropdown
-					title="Acrylic Base"
-					onChange={(e) => setAcrylicBase(e.target.value)}
-					options={acrylicBaseOptions.map((option) => (
-						<option
-							value={option.option}
-							selected={option.option == item.acrylicBase}
-						>
-							{option.option}
-						</option>
-					))}
-					value={item.acrylicBase}
-				/>
+				<div className="px-[1px] relative" ref={acrylicRef}>
+					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+						Acrylic Base
+					</label>
+					<div
+						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
+							acrylicBase.name ? 'text-black' : 'text-[#dddddd]'
+						}`}
+						onClick={() => {
+							console.log('Click');
+							setOpenAcrylicColor((prev) => !prev);
+						}}
+					>
+						<span
+							className="rounded-full w-[18px] h-[18px] border mr-2"
+							style={{ backgroundColor: acrylicBase.color }}
+						></span>
+						{acrylicBase.name === '' ? 'CHOOSE OPTION' : acrylicBase.name}
+					</div>
+					{openAcrylicColor && (
+						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
+							{colorOptions.map((color) => {
+								return (
+									<div
+										className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
+										onClick={() => {
+											setAcrylicBase(color);
+											setOpenAcrylicColor(false);
+										}}
+									>
+										<span
+											className="w-[18px] h-[18px] inline-block rounded-full border"
+											style={{ backgroundColor: color.color }}
+										></span>
+										{color.name}
+									</div>
+								);
+							})}
+						</div>
+					)}
+				</div>
 
 				<Dropdown
 					title="Waterproof Option"
@@ -533,20 +578,37 @@ export default function Letters({ item }) {
 					))}
 					value={item.mounting}
 				/>
-
-				<Dropdown
-					title="Pieces/Cutouts"
-					onChange={handleChangePieces}
-					options={piecesOptions.map((pieces) => (
-						<option value={pieces} selected={pieces === item.pieces}>
-							{pieces}
-						</option>
-					))}
-					value={item.pieces}
-				/>
 			</div>
 
 			<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+				{acrylicBase?.name == 'Custom Color' && (
+					<div className="px-[1px] col-span-4">
+						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+							Custom Color
+						</label>
+						<input
+							className="w-full py-4 px-2 border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400"
+							type="text"
+							value={customColor}
+							onChange={(e) => setCustomColor(e.target.value)}
+							placeholder="DESCRIBE CUSTOM COLOR"
+						/>
+					</div>
+				)}
+				{font == 'Custom font' && (
+					<div className="px-[1px] col-span-4">
+						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+							Custom Font
+						</label>
+						<input
+							className="w-full py-4 px-2 border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400"
+							type="text"
+							value={customFont}
+							onChange={(e) => setCustomFont(e.target.value)}
+							placeholder="DESCRIBE CUSTOM FONT"
+						/>
+					</div>
+				)}
 				<div className="px-[1px] col-span-3">
 					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
 						COMMENTS

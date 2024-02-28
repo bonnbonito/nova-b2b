@@ -14,9 +14,6 @@ export const acrylicBaseOptions = [
 		option: 'Black',
 	},
 	{
-		option: 'Standard Colors',
-	},
-	{
 		option: 'Custom (Pantone Code)',
 	},
 ];
@@ -46,7 +43,7 @@ export default function MetalLaminate() {
 					mounting: '',
 					waterproof: '',
 					thickness: '',
-					acrylicBase: 'Black',
+					acrylicBase: { name: 'Black', color: '#000000' },
 					metalFinish: { name: '', color: '' },
 					letterHeight: '',
 					usdPrice: 0,
@@ -55,7 +52,8 @@ export default function MetalLaminate() {
 					fileName: '',
 					fileUrl: '',
 					file: '',
-					pieces: '30 pieces or fewer',
+					customFont: '',
+					customColor: '',
 					product: NovaQuote.product,
 				},
 			]);
@@ -94,9 +92,9 @@ export default function MetalLaminate() {
 		fileName: '',
 		fileUrl: '',
 		file: '',
-		acrylicBase: 'Black',
+		acrylicBase: { name: 'Black', color: '#000000' },
+		customColor: '',
 		product: NovaQuote.product,
-		pieces: '30 pieces or fewer',
 	};
 
 	function addSignage(type) {
@@ -113,6 +111,7 @@ export default function MetalLaminate() {
 					font: '',
 					metalFinish: { name: '', color: '' },
 					thickness_options: '',
+					customFont: '',
 					letterHeight: '',
 				};
 			} else {

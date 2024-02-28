@@ -38,7 +38,6 @@ export default function UvPrintedAcrylic() {
 					file: '',
 					width: '',
 					height: '',
-					pieces: '30 pieces or fewer',
 					printPreference: '',
 					baseColor: 'Black',
 					product: NovaQuote.product,
@@ -81,7 +80,6 @@ export default function UvPrintedAcrylic() {
 		fileUrl: '',
 		file: '',
 		baseColor: 'Black',
-		pieces: '30 pieces or fewer',
 		printPreference: '',
 		product: NovaQuote.product,
 	};
@@ -130,47 +128,6 @@ export default function UvPrintedAcrylic() {
 			JSON.stringify(signage)
 		);
 	}, [signage]);
-
-	const required = {
-		logo: [
-			{
-				key: 'thickness',
-				title: 'Thickness',
-			},
-			{
-				key: 'width',
-				title: 'Logo Width',
-			},
-			{
-				key: 'height',
-				title: 'Logo Height',
-			},
-			{
-				key: 'waterproof',
-				title: 'Waterproof',
-			},
-			{
-				key: 'mounting',
-				title: 'Mounting',
-			},
-			{
-				key: 'finishing',
-				title: 'Finishing',
-			},
-			{
-				key: 'pieces',
-				title: 'Pieces/Cutouts',
-			},
-			{
-				key: 'fileUrl',
-				title: 'File',
-			},
-			{
-				key: 'printPreference',
-				title: 'Print preference',
-			},
-		],
-	};
 
 	return (
 		<QuoteContext.Provider

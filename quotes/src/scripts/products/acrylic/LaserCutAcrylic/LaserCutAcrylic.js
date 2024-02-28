@@ -40,8 +40,9 @@ export default function LaserCutAcrylic() {
 					fileName: '',
 					fileUrl: '',
 					file: '',
+					customFont: '',
+					customColor: '',
 					finishing: 'Matte',
-					pieces: '30 pieces or fewer',
 					product: NovaQuote.product,
 				},
 			]);
@@ -82,7 +83,6 @@ export default function LaserCutAcrylic() {
 		fileUrl: '',
 		file: '',
 		product: NovaQuote.product,
-		pieces: '30 pieces or fewer',
 	};
 
 	function addSignage(type) {
@@ -100,6 +100,8 @@ export default function LaserCutAcrylic() {
 					thickness_options: '',
 					color: { name: '', color: '' },
 					letterHeight: '',
+					customFont: '',
+					customColor: '',
 				};
 			} else {
 				args = {

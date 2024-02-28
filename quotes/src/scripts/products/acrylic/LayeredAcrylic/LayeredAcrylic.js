@@ -38,7 +38,6 @@ export default function LayeredAcrylic() {
 					file: '',
 					width: '',
 					height: '',
-					pieces: '30 pieces or fewer',
 					layers: '',
 					product: NovaQuote.product,
 				},
@@ -79,7 +78,6 @@ export default function LayeredAcrylic() {
 		fileName: '',
 		fileUrl: '',
 		file: '',
-		pieces: '30 pieces or fewer',
 		layers: '',
 		product: NovaQuote.product,
 	};

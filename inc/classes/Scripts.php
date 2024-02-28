@@ -26,7 +26,6 @@ class Scripts {
 	}
 
 	public function enqueue_customer_rep_editor_css() {
-		global $post_type;
 
 		if ( current_user_can( 'customer-rep' ) ) {
 			wp_enqueue_style( 'customer-rep-editor-css', get_stylesheet_directory_uri() . '/assets/css/customer-rep.css' );

@@ -31,6 +31,7 @@ export default function Logo({ item }) {
 	const [filePath, setFilePath] = useState(item.filePath);
 	const [file, setFile] = useState(item.file);
 	const [pieces, setPieces] = useState(item.pieces);
+	const [customColor, setCustomColor] = useState(item.customColor);
 	const [baseColor, setBaseColor] = useState(item.baseColor);
 	const [selectedFinishing, setSelectedFinishing] = useState(item.finishing);
 	const [printPreference, setPrintPreference] = useState(item.printPreference);
@@ -151,8 +152,8 @@ export default function Logo({ item }) {
 					fileName: fileName,
 					filePath: filePath,
 					fileUrl: fileUrl,
-					pieces: pieces,
 					baseColor: baseColor,
+					customColor: customColor,
 					printPreference: printPreference,
 				};
 			} else {
@@ -177,9 +178,9 @@ export default function Logo({ item }) {
 		if (!waterproof) missingFields.push('Waterproof Option');
 		if (!selectedMounting) missingFields.push('Mounting Option');
 		if (!selectedFinishing) missingFields.push('Finishing Option');
-		if (!pieces) missingFields.push('Pieces/Cutouts');
 		if (!fileUrl) missingFields.push('PDF/AI File');
-
+		if (baseColor === 'Custom Color' && !customColor)
+			missingFields.push('Custom Color');
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
 				const existingIndex = prevMissing.findIndex(
@@ -229,9 +230,9 @@ export default function Logo({ item }) {
 		selectedFinishing,
 		file,
 		filePath,
-		pieces,
 		baseColor,
 		printPreference,
+		customColor,
 	]);
 
 	useEffect(() => {
@@ -247,10 +248,10 @@ export default function Logo({ item }) {
 		cadPrice,
 		fileUrl,
 		fileName,
+		customColor,
 		selectedFinishing,
 		file,
 		filePath,
-		pieces,
 		printPreference,
 		baseColor,
 	]);
@@ -389,21 +390,24 @@ export default function Logo({ item }) {
 					))}
 					value={selectedFinishing}
 				/>
-
-				<Dropdown
-					title="Pieces/Cutouts"
-					onlyValue={true}
-					onChange={handleChangePieces}
-					options={piecesOptions.map((piece) => (
-						<option value={piece} selected={piece === item.pieces}>
-							{piece}
-						</option>
-					))}
-					value={pieces}
-				/>
 			</div>
 
 			<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+				{baseColor === 'Custom Color' && (
+					<div className="px-[1px] col-span-4">
+						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+							CUSTOM COLOR
+						</label>
+						<input
+							className="w-full py-4 px-2 border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400"
+							type="text"
+							value={customColor}
+							onChange={(e) => setCustomColor(e.target.value)}
+							placeholder="DESCRIBE CUSTOM COLOR"
+						/>
+					</div>
+				)}
+
 				<div className="px-[1px] col-span-3">
 					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
 						COMMENTS

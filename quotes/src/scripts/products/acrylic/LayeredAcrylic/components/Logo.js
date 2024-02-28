@@ -360,17 +360,6 @@ export default function Logo({ item }) {
 					value={selectedFinishing}
 				/>
 
-				<Dropdown
-					title="Pieces/Cutouts"
-					onlyValue={true}
-					onChange={handleChangePieces}
-					options={piecesOptions.map((piece) => (
-						<option value={piece} selected={piece === item.pieces}>
-							{piece}
-						</option>
-					))}
-					value={pieces}
-				/>
 			</div>
 		</>
 	);

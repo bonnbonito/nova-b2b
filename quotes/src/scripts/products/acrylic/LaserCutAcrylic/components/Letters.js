@@ -7,7 +7,6 @@ import { colorOptions } from '../../../../utils/ColorOptions';
 import convert_json from '../../../../utils/ConvertJson';
 import {
 	mountingDefaultOptions,
-	piecesOptions,
 	thicknessOptions,
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
@@ -48,7 +47,8 @@ export default function Letters({ item }) {
 	const [file, setFile] = useState(item.file);
 	const [letterHeightOptions, setLetterHeightOptions] = useState([]);
 	const [selectedFinishing, setSelectedFinishing] = useState(item.finishing);
-	const [pieces, setPieces] = useState(item.pieces);
+	const [customFont, setCustomFont] = useState(item.customFont);
+	const [customColor, setCustomColor] = useState(item.customColor);
 
 	const [selectedLetterHeight, setSelectedLetterHeight] = useState(
 		item.letterHeight
@@ -142,7 +142,8 @@ export default function Letters({ item }) {
 					filePath: filePath,
 					fileUrl: fileUrl,
 					finishing: selectedFinishing,
-					pieces: pieces,
+					customFont: customFont,
+					customColor: customColor,
 				};
 			} else {
 				return sign;
@@ -188,9 +189,15 @@ export default function Letters({ item }) {
 	};
 
 	useEffect(() => {
-		if (letterPricing.length > 0 && selectedLetterHeight && selectedThickness) {
+		if (
+			letterPricing.length > 0 &&
+			selectedLetterHeight &&
+			selectedThickness &&
+			waterproof
+		) {
 			const pricingDetail = letterPricing[selectedLetterHeight - 1];
 			const baseLetterPrice = pricingDetail[selectedThickness.value];
+			console.log(waterproof);
 
 			let totalLetterPrice = 0;
 			const lettersArray = letters.trim().split('');
@@ -221,6 +228,9 @@ export default function Letters({ item }) {
 
 			setUsdPrice(totalLetterPrice.toFixed(2));
 			setCadPrice((totalLetterPrice * parseFloat(exchangeRate)).toFixed(2));
+		} else {
+			setUsdPrice(0);
+			setCadPrice(0);
 		}
 	}, [
 		selectedLetterHeight,
@@ -298,13 +308,18 @@ export default function Letters({ item }) {
 
 		if (!letters) missingFields.push('Line Text');
 		if (!font) missingFields.push('Font');
+		if (font == 'Custom font' && !customFont) {
+			missingFields.push('Custom Font Missing');
+		}
 		if (!selectedLetterHeight) missingFields.push('Letter Height');
 		if (!selectedThickness) missingFields.push('Acrylic Thickness');
 		if (!color.name) missingFields.push('Color');
+		if (color?.name === 'Custom Color' && !customColor) {
+			missingFields.push('Custom Color Missing');
+		}
 		if (!selectedFinishing) missingFields.push('Finishing');
 		if (!waterproof) missingFields.push('Waterproof');
 		if (!selectedMounting) missingFields.push('Mounting');
-		if (!pieces) missingFields.push('Pieces/Cutouts');
 
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
@@ -356,7 +371,8 @@ export default function Letters({ item }) {
 		fileName,
 		file,
 		selectedFinishing,
-		pieces,
+		customFont,
+		customColor,
 	]);
 
 	useEffect(() => {
@@ -375,7 +391,8 @@ export default function Letters({ item }) {
 		fileName,
 		file,
 		selectedFinishing,
-		pieces,
+		customFont,
+		customColor,
 	]);
 
 	useEffect(() => {
@@ -401,6 +418,11 @@ export default function Letters({ item }) {
 	useOutsideClick(colorRef, () => {
 		setOpenColor(false);
 	});
+
+	useEffect(() => {
+		color != 'Custom Color' && setCustomColor('');
+		font != 'Custom font' && setCustomFont('');
+	}, [color, font]);
 
 	return (
 		<>
@@ -544,20 +566,38 @@ export default function Letters({ item }) {
 					))}
 					value={item.mounting}
 				/>
-
-				<Dropdown
-					title="Pieces/Cutouts"
-					onChange={handleChangePieces}
-					options={piecesOptions.map((pieces) => (
-						<option value={pieces} selected={pieces === item.pieces}>
-							{pieces}
-						</option>
-					))}
-					value={item.pieces}
-				/>
 			</div>
 
 			<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+				{color?.name == 'Custom Color' && (
+					<div className="px-[1px] col-span-4">
+						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+							Custom Color
+						</label>
+						<input
+							className="w-full py-4 px-2 border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400"
+							type="text"
+							value={customColor}
+							onChange={(e) => setCustomColor(e.target.value)}
+							placeholder="DESCRIBE CUSTOM COLOR"
+						/>
+					</div>
+				)}
+				{font == 'Custom font' && (
+					<div className="px-[1px] col-span-4">
+						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+							Custom Font
+						</label>
+						<input
+							className="w-full py-4 px-2 border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400"
+							type="text"
+							value={customFont}
+							onChange={(e) => setCustomFont(e.target.value)}
+							placeholder="DESCRIBE CUSTOM FONT"
+						/>
+					</div>
+				)}
+
 				<div className="px-[1px] col-span-3">
 					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
 						COMMENTS

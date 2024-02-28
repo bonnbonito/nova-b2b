@@ -5,7 +5,6 @@ import convert_json from '../../../../utils/ConvertJson';
 import {
 	calculateMountingOptions,
 	mountingDefaultOptions,
-	piecesOptions,
 	thicknessOptions,
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
@@ -27,7 +26,6 @@ export default function Logo({ item }) {
 	const [fileUrl, setFileUrl] = useState(item.fileUrl);
 	const [filePath, setFilePath] = useState(item.filePath);
 	const [file, setFile] = useState(item.file);
-	const [pieces, setPieces] = useState(item.pieces);
 	const [selectedFinishing, setSelectedFinishing] = useState(item.finishing);
 	const finishingOptions = NovaSingleOptions.finishing_options;
 	const [maxWidthOptions, setMaxWidthOptions] = useState(
@@ -106,10 +104,6 @@ export default function Logo({ item }) {
 		setSelectedFinishing(e.target.value);
 	};
 
-	const handleChangePieces = (e) => {
-		setPieces(e.target.value);
-	};
-
 	function updateSignage() {
 		const updatedSignage = signage.map((sign) => {
 			if (sign.id === item.id) {
@@ -128,7 +122,6 @@ export default function Logo({ item }) {
 					fileName: fileName,
 					filePath: filePath,
 					fileUrl: fileUrl,
-					pieces: pieces,
 				};
 			} else {
 				return sign;
@@ -157,7 +150,6 @@ export default function Logo({ item }) {
 		selectedFinishing,
 		file,
 		filePath,
-		pieces,
 	]);
 
 	useEffect(() => {
@@ -192,7 +184,6 @@ export default function Logo({ item }) {
 		if (!waterproof) missingFields.push('Waterproof');
 		if (!selectedMounting) missingFields.push('Mounting');
 		if (!selectedFinishing) missingFields.push('Finishing');
-		if (!pieces) missingFields.push('Pieces/Cutouts');
 		if (!fileUrl) missingFields.push('PDF/AI File');
 
 		if (missingFields.length > 0) {
@@ -243,7 +234,6 @@ export default function Logo({ item }) {
 		fileName,
 		file,
 		selectedFinishing,
-		pieces,
 	]);
 
 	return (
@@ -317,17 +307,6 @@ export default function Logo({ item }) {
 						</option>
 					))}
 					value={selectedFinishing}
-				/>
-
-				<Dropdown
-					title="Pieces/Cutouts"
-					onChange={handleChangePieces}
-					options={piecesOptions.map((piece) => (
-						<option value={piece} selected={piece === item.pieces}>
-							{piece}
-						</option>
-					))}
-					value={pieces}
 				/>
 			</div>
 

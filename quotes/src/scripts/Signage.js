@@ -12,6 +12,8 @@ export default function Signage({
 	setSignage,
 	children,
 	setMissing,
+	overflow,
+	setOverflow,
 }) {
 	const [open, setOpen] = useState(true);
 	const [itemTitle, setItemTitle] = useState(item.title);
@@ -137,7 +139,9 @@ export default function Signage({
 				</div>
 			</div>
 			<div className={`signage-content ${open ? 'open' : ''}`}>
-				<div>{children}</div>
+				<div className={item.type === 'letters' ? 'overflow-hidden' : ''}>
+					{children}
+				</div>
 			</div>
 		</div>
 	);

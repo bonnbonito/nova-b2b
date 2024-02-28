@@ -63,6 +63,8 @@ export default function Letters({ item }) {
 	const [file, setFile] = useState(item.file);
 	const [letterHeightOptions, setLetterHeightOptions] = useState([]);
 	const [selectedFinishing, setSelectedFinishing] = useState(item.finishing);
+	const [customFont, setCustomFont] = useState(item.customFont);
+	const [customColor, setCustomColor] = useState(item.customColor);
 
 	const [selectedLetterHeight, setSelectedLetterHeight] = useState(
 		item.letterHeight
@@ -153,6 +155,8 @@ export default function Letters({ item }) {
 					stainlessSteelPolished: stainlessSteelPolished,
 					metal: metal,
 					stainLessMetalFinish: stainLessMetalFinish,
+					customFont: customFont,
+					customColor: customColor,
 				};
 			} else {
 				return sign;
@@ -322,6 +326,9 @@ export default function Letters({ item }) {
 
 		if (!letters) missingFields.push('Line Text');
 		if (!font) missingFields.push('Font');
+		if (font == 'Custom font' && !customFont) {
+			missingFields.push('Custom Font Missing');
+		}
 		if (!metal) missingFields.push('Metal Option');
 		if (!selectedThickness) missingFields.push('Metal Thickness');
 		if (!selectedLetterHeight) missingFields.push('Letter Height');
@@ -329,6 +336,10 @@ export default function Letters({ item }) {
 		if (!selectedFinishing) missingFields.push('Finish Option');
 		if (selectedFinishing === 'Painted Finish') {
 			if (!color.name) missingFields.push('Color');
+
+			if (color?.name === 'Custom Color' && !customColor) {
+				missingFields.push('Custom Color Missing');
+			}
 		}
 		if (selectedFinishing === 'Metal Finish') {
 			if (!stainLessMetalFinish) missingFields.push('Metal Finish Option');
@@ -400,6 +411,8 @@ export default function Letters({ item }) {
 		selectedFinishing,
 		stainLessMetalFinish,
 		stainlessSteelPolished,
+		customFont,
+		customColor,
 	]);
 
 	useEffect(() => {
@@ -425,6 +438,11 @@ export default function Letters({ item }) {
 	useOutsideClick(colorRef, () => {
 		setOpenColor(false);
 	});
+
+	useEffect(() => {
+		color != 'Custom Color' && setCustomColor('');
+		font != 'Custom font' && setCustomFont('');
+	}, [color, font]);
 
 	return (
 		<>
@@ -616,6 +634,34 @@ export default function Letters({ item }) {
 			</div>
 
 			<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+				{color?.name == 'Custom Color' && (
+					<div className="px-[1px] col-span-4">
+						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+							Custom Color
+						</label>
+						<input
+							className="w-full py-4 px-2 border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400"
+							type="text"
+							value={customColor}
+							onChange={(e) => setCustomColor(e.target.value)}
+							placeholder="DESCRIBE CUSTOM COLOR"
+						/>
+					</div>
+				)}
+				{font == 'Custom font' && (
+					<div className="px-[1px] col-span-4">
+						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+							Custom Font
+						</label>
+						<input
+							className="w-full py-4 px-2 border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400"
+							type="text"
+							value={customFont}
+							onChange={(e) => setCustomFont(e.target.value)}
+							placeholder="DESCRIBE CUSTOM FONT"
+						/>
+					</div>
+				)}
 				<div className="px-[1px] col-span-3">
 					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
 						COMMENTS

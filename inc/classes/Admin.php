@@ -26,6 +26,42 @@ class Admin {
 		add_action( 'manage_nova_quote_posts_custom_column', array( $this, 'nova_quote_column_display' ), 20, 2 );
 		add_action( 'restrict_manage_posts', array( $this, 'nova_quote_add_custom_filters' ) );
 		add_action( 'pre_get_posts', array( $this, 'nova_quote_filter_query' ) );
+		add_filter( 'editable_roles', array( $this, 'custom_editable_roles' ) );
+		add_action( 'pre_user_query', array( $this, 'restrict_rep_list_to_specific_roles' ) );
+	}
+
+	public function restrict_rep_list_to_specific_roles( $user_search ) {
+		global $wpdb;
+
+		if ( current_user_can( 'customer-rep' ) ) {
+			$user_search->query_where =
+			$user_search->query_where . ' AND ' .
+			$wpdb->prefix . "usermeta.meta_key = '{$wpdb->prefix}capabilities' AND (" .
+			$wpdb->prefix . "usermeta.meta_value LIKE '%pending%' OR " .
+			$wpdb->prefix . "usermeta.meta_value LIKE '%partner%' OR " .
+			$wpdb->prefix . "usermeta.meta_value LIKE '%temporary%' )";
+		}
+	}
+
+	public function custom_editable_roles( $roles ) {
+		if ( current_user_can( 'customer-rep' ) ) {
+			global $wp_roles;
+			if ( ! isset( $wp_roles ) ) {
+				$wp_roles = new WP_Roles();
+			}
+
+			$new_roles     = array();
+			$allowed_roles = array( 'pending', 'partner', 'temporary' );
+
+			foreach ( $allowed_roles as $role ) {
+				if ( isset( $wp_roles->roles[ $role ] ) ) {
+					$new_roles[ $role ] = $wp_roles->roles[ $role ];
+				}
+			}
+
+			return $new_roles;
+		}
+		return $roles;
 	}
 
 	public function nova_quote_add_custom_filters() {

@@ -18,63 +18,32 @@ function ModalSave({ signage, action, btnClass, label, required }) {
 		0
 	);
 
-	function checkForMissingValues(signageArray) {
-		let missingFields = [];
-
-		signageArray.forEach((signageItem) => {
-			const type = signageItem.type;
-			const requiredFields = required[type];
-
-			if (requiredFields) {
-				const missingFieldsForItem = requiredFields
-					.filter((field) => {
-						if (field.key === 'color' || field.key === 'metalFinish') {
-							return (
-								!signageItem[field.key] ||
-								signageItem[field.key].name === '' ||
-								signageItem[field.key].name === undefined
-							);
-						} else {
-							return (
-								signageItem[field.key] === '' ||
-								signageItem[field.key] === undefined
-							);
-						}
-					})
-					.map((field) => field.title);
-
-				if (missingFieldsForItem.length > 0) {
-					missingFields.push({
-						itemId: signageItem.id,
-						missing: missingFieldsForItem,
-					});
-				}
-			}
-		});
-
-		return missingFields;
-	}
-
 	useEffect(() => {
 		if (required && required.length > 0) {
 			let htmlString = '';
 
 			required.forEach((missing) => {
-				htmlString += `<strong class="uppercase">${missing.title}</strong>\n<ul>\n`;
+				if (missing.missingFields.length > 0) {
+					htmlString += `<strong class="uppercase">${missing.title}</strong>\n<ul>\n`;
 
-				// Add each missing field as a list item
-				missing.missingFields.forEach((field) => {
-					htmlString += `    <li>${field}</li>\n`;
+					// Add each missing field as a list item
+					missing.missingFields.forEach((field) => {
+						htmlString += `    <li>${field}</li>\n`;
+					});
+
+					// Close the unordered list for this item
+					htmlString += '</ul>\n';
+				}
+			});
+
+			if (htmlString) {
+				setError({
+					type: 'missing',
+					message: htmlString,
 				});
-
-				// Close the unordered list for this item
-				htmlString += '</ul>\n';
-			});
-
-			setError({
-				type: 'missing',
-				message: htmlString,
-			});
+			} else {
+				setError('');
+			}
 		} else {
 			if (
 				NovaQuote.user_role[0] === 'pending' &&
@@ -157,11 +126,13 @@ function ModalSave({ signage, action, btnClass, label, required }) {
 				<Dialog.Overlay className="bg-black/50 data-[state=open]:animate-overlayShow fixed inset-0 z-[50]" />
 				{!error ? (
 					<Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[550px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none z-[51]">
-						<Dialog.Title className="m-0 font-title uppercase font-medium">
-							Quotation Name
+						<Dialog.Title className="m-0 font-title uppercase font-medium text-2xl">
+							{action === 'processing'
+								? 'Submit Your Quote Request'
+								: 'Save Your Draft'}
 						</Dialog.Title>
 						<Dialog.Description className="mt-[10px] mb-5 text-[15px] leading-normal">
-							Add a title to your quote.
+							Please add a PROJECT NAME.
 						</Dialog.Description>
 						<form ref={formRef} onSubmit={handleFormSubmit}>
 							<input

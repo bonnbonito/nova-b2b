@@ -171,30 +171,42 @@ export default function PricesView({ item }) {
 					</div>
 				)}
 
-				{item.type === 'letters' && (
-					<>
-						<div className="grid grid-cols-[160px_1fr] py-[2px] items-center">
-							<div className="text-left text-xs font-title">FONT</div>
-							<div className="text-left text-[14px] break-words">
-								{item.font}
-							</div>
-						</div>
-
-						{item.color && (
-							<div className="grid grid-cols-[160px_1fr] py-[2px] items-center">
-								<div className="text-left text-xs font-title">COLOR</div>
-								<div className="text-left text-[14px]">{item.color?.name}</div>
-							</div>
-						)}
-
-						<div className="grid grid-cols-[160px_1fr] py-[2px] items-center">
-							<div className="text-left text-xs font-title">LINE TEXT</div>
-							<div className="text-left text-[14px] break-words">
-								{item.letters}
-							</div>
-						</div>
-					</>
+				{item.font && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center">
+						<div className="text-left text-xs font-title">FONT</div>
+						<div className="text-left text-[14px] break-words">{item.font}</div>
+					</div>
 				)}
+
+				{item.customFont && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center">
+						<div className="text-left text-xs font-title">CUSTOM FONT</div>
+						<div className="text-left text-[14px] break-words">
+							{item.customFont}
+						</div>
+					</div>
+				)}
+
+				{item.color && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center">
+						<div className="text-left text-xs font-title">COLOR</div>
+						<div className="text-left text-[14px]">{item.color?.name}</div>
+					</div>
+				)}
+
+				{item.customColor && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center">
+						<div className="text-left text-xs font-title">CUSTOM COLOR</div>
+						<div className="text-left text-[14px]">{item.customColor}</div>
+					</div>
+				)}
+
+				<div className="grid grid-cols-[160px_1fr] py-[2px] items-center">
+					<div className="text-left text-xs font-title">LINE TEXT</div>
+					<div className="text-left text-[14px] break-words">
+						{item.letters}
+					</div>
+				</div>
 
 				{item.metalFinish && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center">
@@ -205,10 +217,10 @@ export default function PricesView({ item }) {
 					</div>
 				)}
 
-				{item.acrylicBase && (
+				{item.acrylicBase?.name && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center">
 						<div className="text-left text-xs font-title">ACRYLIC BASE</div>
-						<div className="text-left text-[14px]">{item.acrylicBase}</div>
+						<div className="text-left text-[14px]">{item.acrylicBase.name}</div>
 					</div>
 				)}
 

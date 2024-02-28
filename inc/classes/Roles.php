@@ -78,6 +78,8 @@ class Roles {
 
 			$this->send_email( $to, $subject, $message, $headers, array() );
 
+			do_action( 'nova_user_partner_approved', $user_info );
+
 		}
 	}
 

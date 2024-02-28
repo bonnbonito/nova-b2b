@@ -1,11 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import Dropdown from '../../../../Dropdown';
 import UploadFile from '../../../../UploadFile';
 import convert_json from '../../../../utils/ConvertJson';
 import {
 	calculateMountingOptions,
 	mountingDefaultOptions,
-	piecesOptions,
 	thicknessOptions,
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
@@ -16,7 +15,10 @@ import {
 	acrylicBaseOptions,
 } from '../MetalLaminate';
 
-import { metalFinishColors } from '../../../../utils/ColorOptions';
+import {
+	colorOptions,
+	metalFinishColors,
+} from '../../../../utils/ColorOptions';
 
 const exchangeRate = wcumcs_vars_data.currency_data.rate;
 
@@ -34,8 +36,9 @@ export default function Logo({ item }) {
 	const [filePath, setFilePath] = useState(item.filePath);
 	const [file, setFile] = useState(item.file);
 	const [metalLaminate, setMetalLaminate] = useState(item.metalLaminate);
-	const [pieces, setPieces] = useState(item.pieces);
 	const [acrylicBase, setAcrylicBase] = useState(item.acrylicBase);
+	const [openAcrylicColor, setOpenAcrylicColor] = useState(false);
+	const [customColor, setCustomColor] = useState(item.customColor);
 	const [maxWidthOptions, setMaxWidthOptions] = useState(
 		Array.from(
 			{
@@ -108,12 +111,10 @@ export default function Logo({ item }) {
 		}
 	};
 
+	const acrylicRef = useRef(null);
+
 	const handleChangeMetalLaminate = (e) => {
 		setMetalLaminate(e.target.value);
-	};
-
-	const handleChangePieces = (e) => {
-		setPieces(e.target.value);
 	};
 
 	function updateSignage() {
@@ -134,8 +135,8 @@ export default function Logo({ item }) {
 					fileName: fileName,
 					filePath: filePath,
 					fileUrl: fileUrl,
-					pieces: pieces,
 					acrylicBase: acrylicBase,
+					customColor: customColor,
 				};
 			} else {
 				return sign;
@@ -165,7 +166,7 @@ export default function Logo({ item }) {
 		file,
 		filePath,
 		acrylicBase,
-		pieces,
+		customColor,
 	]);
 
 	useEffect(() => {
@@ -185,7 +186,7 @@ export default function Logo({ item }) {
 			}
 
 			let total = (computed * multiplier * METAL_ACRYLIC_PRICING).toFixed(2);
-			total *= acrylicBase === 'Black' ? 1 : 1.1;
+			total *= acrylicBase?.name === 'Black' ? 1 : 1.1;
 
 			setUsdPrice(total);
 			setCadPrice((total * parseFloat(exchangeRate)).toFixed(2));
@@ -203,9 +204,11 @@ export default function Logo({ item }) {
 		if (!height) missingFields.push('Logo Height');
 		if (!metalLaminate) missingFields.push('Metal Laminate');
 		if (!acrylicBase) missingFields.push('Acrylic Base');
+		if (acrylicBase?.name === 'Custom Color' && !customColor) {
+			missingFields.push('Custom Color Missing');
+		}
 		if (!waterproof) missingFields.push('Waterproof');
 		if (!selectedMounting) missingFields.push('Mounting');
-		if (!pieces) missingFields.push('Pieces/Cutouts');
 		if (!fileUrl) missingFields.push('PDF/AI File');
 
 		setMissing((prevMissing) => {
@@ -244,7 +247,6 @@ export default function Logo({ item }) {
 		selectedMounting,
 		waterproof,
 		acrylicBase,
-		pieces,
 		width,
 		height,
 		metalLaminate,
@@ -252,6 +254,7 @@ export default function Logo({ item }) {
 		fileName,
 		filePath,
 		file,
+		customColor,
 	]);
 
 	return (
@@ -341,19 +344,61 @@ export default function Logo({ item }) {
 					value={item.acrylicBase}
 				/>
 
-				<Dropdown
-					title="Pieces/Cutouts"
-					onChange={handleChangePieces}
-					options={piecesOptions.map((piece) => (
-						<option value={piece} selected={piece === item.pieces}>
-							{piece}
-						</option>
-					))}
-					value={pieces}
-				/>
+				<div className="px-[1px] relative" ref={acrylicRef}>
+					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+						Acrylic Base
+					</label>
+					<div
+						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
+							acrylicBase.name ? 'text-black' : 'text-[#dddddd]'
+						}`}
+						onClick={() => setOpenAcrylicColor((prev) => !prev)}
+					>
+						<span
+							className="rounded-full w-[18px] h-[18px] border mr-2"
+							style={{ backgroundColor: acrylicBase.color }}
+						></span>
+						{acrylicBase.name === '' ? 'CHOOSE OPTION' : acrylicBase.name}
+					</div>
+					{openAcrylicColor && (
+						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
+							{colorOptions.map((color) => {
+								return (
+									<div
+										className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
+										onClick={() => {
+											setAcrylicBase(color);
+											setOpenAcrylicColor(false);
+										}}
+									>
+										<span
+											className="w-[18px] h-[18px] inline-block rounded-full border"
+											style={{ backgroundColor: color.color }}
+										></span>
+										{color.name}
+									</div>
+								);
+							})}
+						</div>
+					)}
+				</div>
 			</div>
 
 			<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+				{acrylicBase?.name == 'Custom Color' && (
+					<div className="px-[1px] col-span-4">
+						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+							Custom Color
+						</label>
+						<input
+							className="w-full py-4 px-2 border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400"
+							type="text"
+							value={customColor}
+							onChange={(e) => setCustomColor(e.target.value)}
+							placeholder="DESCRIBE CUSTOM COLOR"
+						/>
+					</div>
+				)}
 				<div className="px-[1px] col-span-3">
 					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
 						COMMENTS

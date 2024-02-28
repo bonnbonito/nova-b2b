@@ -2,14 +2,13 @@ import React, { useRef, useState } from 'react';
 import useOutsideClick from './utils/ClickOutside';
 import { fontDefaultOptions } from './utils/FontOptions';
 
-export default function FontsDropdown({ font, handleSelectFont }) {
-	const [openFont, setOpenFont] = useState(false);
-	const fontRef = useRef(null);
-
-	useOutsideClick(fontRef, () => {
-		setOpenFont(false);
-	});
-
+export default function FontsDropdown({
+	font,
+	handleSelectFont,
+	fontRef,
+	openFont,
+	setOpenFont,
+}) {
 	const handleCustomFontSelection = () => {
 		// TODO: Add your logic here for custom font selection
 		console.log('Custom font selected');
