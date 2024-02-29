@@ -79,55 +79,58 @@ export default function Sidebar({ signage, required }) {
 					</h4>
 				</div>
 
-				{signage.length > 0 && (
-					<>
-						{NovaQuote.is_editting === '1' ? (
-							<>
-								{NovaQuote.user_role[0] !== 'pending' ? (
+				{signage.length > 0 &&
+					NovaQuote.quote_status?.value !== 'processing' &&
+					NovaQuote.quote_status?.value !== 'ready' && (
+						<>
+							{NovaQuote.is_editting === '1' ? (
+								<>
+									{NovaQuote.user_role[0] !== 'pending' &&
+									NovaQuote.not_author_but_admin === 'no' ? (
+										<ModalSave
+											signage={signage}
+											required={required}
+											action="update-processing"
+											label="Submit Quote"
+											btnClass="mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
+										/>
+									) : (
+										''
+									)}
+
 									<ModalSave
 										signage={signage}
 										required={required}
-										action="update-processing"
-										label="Submit Quote"
-										btnClass="mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
+										action="update"
+										label="Update Quote"
+										btnClass="mb-5 font-title border border-nova-light rounded-md text-nova-gray w-full text-center bg-white text-sm h-[49px] hover:bg-nova-light hover:text-white shadow-[0_0_0_1px_rgba(0,0,0,0.3)]"
 									/>
-								) : (
-									''
-								)}
+								</>
+							) : (
+								<>
+									{NovaQuote.user_role[0] !== 'pending' ? (
+										<ModalSave
+											signage={signage}
+											required={required}
+											action="processing"
+											label="Submit Quote"
+											btnClass="mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
+										/>
+									) : (
+										''
+									)}
 
-								<ModalSave
-									signage={signage}
-									required={required}
-									action="update"
-									label="Update Quote"
-									btnClass="mb-5 font-title border border-nova-light rounded-md text-nova-gray w-full text-center bg-white text-sm h-[49px] hover:bg-nova-light hover:text-white shadow-[0_0_0_1px_rgba(0,0,0,0.3)]"
-								/>
-							</>
-						) : (
-							<>
-								{NovaQuote.user_role[0] !== 'pending' ? (
 									<ModalSave
 										signage={signage}
 										required={required}
-										action="processing"
-										label="Submit Quote"
-										btnClass="mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
+										action="draft"
+										label="Save to Draft"
+										btnClass="mb-5 font-title border border-nova-light rounded-md text-nova-gray w-full text-center bg-white text-sm h-[49px] hover:bg-nova-light hover:text-white shadow-[0_0_0_1px_rgba(0,0,0,0.3)]"
 									/>
-								) : (
-									''
-								)}
-
-								<ModalSave
-									signage={signage}
-									required={required}
-									action="draft"
-									label="Save to Draft"
-									btnClass="mb-5 font-title border border-nova-light rounded-md text-nova-gray w-full text-center bg-white text-sm h-[49px] hover:bg-nova-light hover:text-white shadow-[0_0_0_1px_rgba(0,0,0,0.3)]"
-								/>
-							</>
-						)}
-					</>
-				)}
+								</>
+							)}
+						</>
+					)}
 			</div>
 		</div>
 	);

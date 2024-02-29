@@ -33,6 +33,7 @@ class Zoho {
 		add_action( 'edit_user_profile_update', array( $this, 'save_lead_id_field' ) );
 		add_action( 'nova_user_partner_approved', array( $this, 'user_add_to_zoho' ) );
 		add_action( 'wp_ajax_generate_zoho_id', array( $this, 'generate_zoho_id' ) );
+		add_action( 'woocommerce_thankyou', array( $this, 'send_order_to_zoho_crm' ), 10, 1 );
 	}
 
 	public function save_lead_id_field( $user_id ) {
@@ -469,6 +470,51 @@ generateZohoId.addEventListener("click", e => {
 		$user_id = $user->ID;
 
 		$this->get_user_zoho_id( $user_id );
+	}
+
+	public function send_order_to_zoho_crm( $order_id ) {
+		if ( ! $order_id ) {
+			return;
+		}
+
+		// Fetch the order
+		$order = wc_get_order( $order_id );
+		if ( ! $order ) {
+			return;
+		}
+	}
+
+	function prepare_zoho_order_data( $order ) {
+		$items = array();
+		foreach ( $order->get_items() as $item_id => $item ) {
+			$product = $item->get_product();
+			$items[] = array(
+				'Product_Code' => $product->get_sku(), // Ensure your products in Zoho CRM have SKUs
+				'Quantity'     => $item->get_quantity(),
+				'List_Price'   => $product->get_price(), // Adjust based on your pricing structure in Zoho CRM
+				'Total'        => $item->get_total(),
+			);
+		}
+
+		// Retrieve the customer ID associated with the order
+		$customer_id = $order->get_customer_id();
+
+		// Use the customer ID to get the user's 'zoho_account_id' ACF field value
+		$zoho_account_id = get_field( 'zoho_account_id', 'user_' . $customer_id );
+
+		// Ensure there's a valid Zoho Account ID
+		if ( ! $zoho_account_id ) {
+			// Handle the case where no Zoho Account ID is found
+			// This could involve logging an error, falling back to a default account, etc.
+		}
+
+		return array(
+			'Subject'         => 'Order #' . $order->get_order_number(),
+			'Account_Name'    => array(
+				'id' => $zoho_account_id,
+			),
+			'Product_Details' => $items,
+		);
 	}
 }
 

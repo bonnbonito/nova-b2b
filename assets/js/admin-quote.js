@@ -1,10 +1,25 @@
 function display_quote_details() {
 	const signage = JSON.parse(QuoteAdmin.signage);
+	const exchangeRate = wcumcs_vars_data.available_currencies.CAD.rate;
+	const cadPrice = document.getElementById('cadPrice');
+	const finalPrice = document.querySelector('#finalPrice input');
+
+	const usdPrice = finalPrice.value;
+
+	cadPrice.innerHTML = (
+		parseFloat(usdPrice) * parseFloat(exchangeRate)
+	).toFixed(2);
 
 	const totalUsdPrice = signage.reduce(
 		(acc, item) => acc + parseFloat(item.usdPrice),
 		0
 	);
+
+	finalPrice.addEventListener('change', (e) => {
+		cadPrice.innerHTML = (
+			parseFloat(e.target.value) * parseFloat(exchangeRate)
+		).toFixed(2);
+	});
 
 	let priceDisplay = `<h2>Price: TBD</h2>`;
 

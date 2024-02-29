@@ -32,11 +32,11 @@ if (NovaOptions && typeof NovaOptions === 'object') {
 //const AcrylicLetterPricing = JSON.parse(NovaOptions.letter_x_logo_pricing);
 
 export default function Letters({ item }) {
-	const { signage, setSignage, setMissing, setOverflow } =
-		useContext(QuoteContext);
+	const { signage, setSignage, setMissing } = useContext(QuoteContext);
 	const [letters, setLetters] = useState(item.letters);
 	const [comments, setComments] = useState(item.comments);
 	const [font, setFont] = useState(item.font);
+	const [openFont, setOpenFont] = useState(false);
 	const [color, setColor] = useState(item.color);
 	const [isLoading, setIsLoading] = useState(false);
 	const [openColor, setOpenColor] = useState(false);
@@ -63,6 +63,7 @@ export default function Letters({ item }) {
 	const [installation, setInstallation] = useState(item.installation);
 
 	const colorRef = useRef(null);
+	const fontRef = useRef(null);
 
 	const letterPricing =
 		NovaOptions.letter_height_x_logo_pricing.length > 0
@@ -278,26 +279,26 @@ export default function Letters({ item }) {
 	const checkAndAddMissingFields = () => {
 		const missingFields = [];
 
-		if (!letters) missingFields.push('Line Text');
-		if (!font) missingFields.push('Font');
+		if (!letters) missingFields.push('Add Line Text');
+		if (!font) missingFields.push('Select Font');
 		if (font == 'Custom font' && !customFont) {
-			missingFields.push('Custom Font Missing');
+			missingFields.push('Add your custom font');
 		}
-		if (!selectedLetterHeight) missingFields.push('Letter Height');
-		if (!selectedThickness) missingFields.push('Acrylic Thickness');
-		if (!selectedFinishing) missingFields.push('Finish Option');
+		if (!selectedLetterHeight) missingFields.push('Select Letter Height');
+		if (!selectedThickness) missingFields.push('Select Acrylic Thickness');
+		if (!selectedFinishing) missingFields.push('Select Finish Option');
 		if (selectedFinishing === 'Painted') {
-			if (!color.name) missingFields.push('Color');
+			if (!color.name) missingFields.push('Select Color');
 		}
 		if (
 			selectedFinishing === 'Painted' &&
 			color?.name === 'Custom Color' &&
 			!customColor
 		) {
-			missingFields.push('Custom Color Missing');
+			missingFields.push('Add the Pantone color code of your custom color.');
 		}
-		if (!waterproof) missingFields.push('Waterproof');
-		if (!installation) missingFields.push('Installation');
+		if (!waterproof) missingFields.push('Select Waterproof');
+		if (!installation) missingFields.push('Select Installation');
 
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
@@ -373,18 +374,15 @@ export default function Letters({ item }) {
 		}
 	}, [selectedThickness]);
 
-	useOutsideClick(colorRef, () => {
+	useOutsideClick([colorRef, fontRef], () => {
 		setOpenColor(false);
+		setOpenFont(false);
 	});
 
 	useEffect(() => {
 		color != 'Custom Color' && setCustomColor('');
 		font != 'Custom font' && setCustomFont('');
 	}, [color, font]);
-
-	useEffect(() => {
-		openColor ? setOverflow(true) : setOverflow(false);
-	}, [openColor]);
 
 	return (
 		<>
@@ -424,6 +422,9 @@ export default function Letters({ item }) {
 				<FontsDropdown
 					font={item.font}
 					fonts={NovaOptions.fonts}
+					fontRef={fontRef}
+					openFont={openFont}
+					setOpenFont={setOpenFont}
 					handleSelectFont={handleSelectFont}
 				/>
 

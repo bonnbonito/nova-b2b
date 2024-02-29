@@ -171,16 +171,16 @@ export default function Logo({ item }) {
 		const missingFields = [];
 
 		if (!selectedThickness) missingFields.push('Thickness');
-		if (!width) missingFields.push('Logo Width');
-		if (!height) missingFields.push('Logo Height');
-		if (!printPreference) missingFields.push('Printing Preference');
-		if (!baseColor) missingFields.push('Base Color');
-		if (!waterproof) missingFields.push('Waterproof Option');
-		if (!selectedMounting) missingFields.push('Mounting Option');
-		if (!selectedFinishing) missingFields.push('Finishing Option');
-		if (!fileUrl) missingFields.push('PDF/AI File');
+		if (!width) missingFields.push('Select Logo Width');
+		if (!height) missingFields.push('Select Logo Height');
+		if (!printPreference) missingFields.push('Select Printing Preference');
+		if (!baseColor) missingFields.push('Select Base Color');
+		if (!waterproof) missingFields.push('Select Waterproof Option');
+		if (!selectedMounting) missingFields.push('Select Mounting Option');
+		if (!selectedFinishing) missingFields.push('Select Finishing Option');
+		if (!fileUrl) missingFields.push('Upload a PDF/AI File');
 		if (baseColor === 'Custom Color' && !customColor)
-			missingFields.push('Custom Color');
+			missingFields.push('Add the Pantone color code of your custom color');
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
 				const existingIndex = prevMissing.findIndex(

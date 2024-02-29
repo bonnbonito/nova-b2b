@@ -38,6 +38,7 @@ class Woocommerce {
 		add_action( 'woocommerce_account_mockups-drafts_endpoint', array( $this, 'mockups_drafts_content' ) );
 		add_action( 'woocommerce_account_mockups-processing_endpoint', array( $this, 'mockups_processing_content' ) );
 		add_action( 'woocommerce_account_mockups-payments_endpoint', array( $this, 'mockups_payments_content' ) );
+		add_action( 'woocommerce_account_mockups-archived_endpoint', array( $this, 'mockups_archived_content' ) );
 		add_action( 'woocommerce_account_mockups-view_endpoint', array( $this, 'mockups_view_content' ) );
 		add_filter( 'woocommerce_endpoint_mockups_title', array( $this, 'mockups_endpoint_title' ), 10, 2 );
 		add_action( 'init', array( $this, 'add_nested_mockups_rewrite_rules' ) );
@@ -1268,6 +1269,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 				break;
 			case 'mockups':
 			case 'mockups-drafts':
+			case 'mockups-archived':
 			case 'mockups-processing':
 			case 'mockups-payments':
 			case 'mockups-view':
@@ -1295,6 +1297,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 
 	public function add_nested_mockups_rewrite_rules() {
 		add_rewrite_endpoint( 'mockups-drafts', EP_ROOT | EP_PAGES );
+		add_rewrite_endpoint( 'mockups-archived', EP_ROOT | EP_PAGES );
 		add_rewrite_endpoint( 'mockups-processing', EP_ROOT | EP_PAGES );
 		add_rewrite_endpoint( 'mockups-payments', EP_ROOT | EP_PAGES );
 		add_rewrite_endpoint( 'mockups-view', EP_ROOT | EP_PAGES );
@@ -1310,6 +1313,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 				$new_items['mockups-drafts']     = 'Mockups Drafts';
 				$new_items['mockups-payments']   = 'Mockups Payments';
 				$new_items['mockups-processing'] = 'Mockups Processing';
+				$new_items['mockups-archived']   = 'Mockups Archived';
 				$new_items['mockups-view']       = 'View Mockup';
 			}
 		}
@@ -1433,6 +1437,74 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		}
 	}
 
+	public function mockups_archived_content() {
+
+		$user_id = get_current_user_id();
+
+		$meta_query = array(
+			'relation' => 'AND',
+			array(
+				'key'     => 'partner',
+				'value'   => $user_id,
+				'compare' => '=',
+			),
+			array(
+				'key'     => 'quote_status',
+				'value'   => 'archived',
+				'compare' => '=',
+			),
+		);
+
+		$query = new WP_Query(
+			array(
+				'post_type'   => 'nova_quote',
+				'meta_query'  => $meta_query,
+				'post_status' => 'publish',
+			)
+		);
+
+		$this->mockups_nav();
+
+		if ( $query->have_posts() ) {
+			while ( $query->have_posts() ) {
+				$query->the_post();
+				get_template_part( 'template-parts/quote' );
+			}
+			wp_reset_postdata();
+		}
+	}
+
+	public function get_all_mockups_quantity( $hook ) {
+		$user_id = get_current_user_id();
+
+		$meta_query = array(
+			'relation' => 'AND',
+			array(
+				'key'     => 'partner',
+				'value'   => $user_id,
+				'compare' => '=',
+			),
+		);
+
+		if ( $hook != 'all' ) {
+			$meta_query[] = array(
+				'key'     => 'quote_status',
+				'value'   => $hook,
+				'compare' => '=',
+			);
+		}
+
+		$query = new WP_Query(
+			array(
+				'post_type'   => 'nova_quote',
+				'meta_query'  => $meta_query,
+				'post_status' => 'publish',
+			)
+		);
+
+		return $query->found_posts;
+	}
+
 	public function add_mockups_content() {
 
 		$user_id = get_current_user_id();
@@ -1467,17 +1539,30 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 
 	public function mockups_nav() {
 		global $wp_query;
+
+		$all        = $this->get_all_mockups_quantity( 'all' );
+		$drafts     = $this->get_all_mockups_quantity( 'draft' );
+		$processing = $this->get_all_mockups_quantity( 'processing' );
+		$quoted     = $this->get_all_mockups_quantity( 'ready' );
+		$archived   = $this->get_all_mockups_quantity( 'archived' );
+
 		?>
 <div class="border-b font-title uppercase flex gap-6 md:gap-11 mb-8">
 	<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/all' ) ); ?>"
 		class="py-4 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/all'] ) ? 'border-black' : 'border-transparent' ); ?> mb-[-4px] text-black">ALL
-		Mockups</a>
+		Mockups <span>(<?php echo $all; ?>)</span></a>
+	<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/archived' ) ); ?>"
+		class="py-4 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/archived'] ) ? 'border-black' : 'border-transparent' ); ?> mb-[-4px] text-black">Archived
+		<span>(<?php echo $archived; ?>)</span></a>
 	<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/drafts' ) ); ?>"
-		class="py-4 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/drafts'] ) ? 'border-black' : 'border-transparent' ); ?> mb-[-4px] text-black">Drafts</a>
+		class="py-4 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/drafts'] ) ? 'border-black' : 'border-transparent' ); ?> mb-[-4px] text-black">Drafts
+		<span>(<?php echo $drafts; ?>)</a>
 	<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/processing' ) ); ?>"
-		class="py-4 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/processing'] ) ? 'border-black' : 'border-transparent' ); ?> mb-[-4px] text-black">Processing</a>
+		class="py-4 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/processing'] ) ? 'border-black' : 'border-transparent' ); ?> mb-[-4px] text-black">Processing
+		<span>(<?php echo $processing; ?>)</a>
 	<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/payments' ) ); ?>"
-		class="py-4 py-4 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/payments'] ) ? 'border-black' : 'border-transparent' ); ?> mb-[-4px] text-black">Quoted</a>
+		class="py-4 py-4 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/payments'] ) ? 'border-black' : 'border-transparent' ); ?> mb-[-4px] text-black">Quoted
+		<span>(<?php echo $quoted; ?>)</a>
 </div>
 		<?php
 	}
@@ -1492,6 +1577,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 	public function add_mockups_endpoint_query_var( $vars ) {
 		$vars['mockups']            = 'mockups/all';
 		$vars['mockups-drafts']     = 'mockups/drafts';
+		$vars['mockups-archived']   = 'mockups/archived';
 		$vars['mockups-processing'] = 'mockups/processing';
 		$vars['mockups-payments']   = 'mockups/payments';
 		$vars['mockups-view']       = 'mockups/view';

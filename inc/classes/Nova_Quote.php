@@ -55,7 +55,36 @@ class Nova_Quote {
 		add_filter( 'query_vars', array( $this, 'custom_query_vars' ) );
 		add_action( 'admin_notices', array( $this, 'show_dropbox_oauth_errors' ) );
 		add_action( 'kadence_single_before_inner_content', array( $this, 'show_product_dropdown' ) );
+		add_action( 'add_meta_boxes', array( $this, 'nova_quote_add_admin_meta_box' ) );
 	}
+
+	public function nova_quote_add_admin_meta_box() {
+		$post_id   = get_field( 'product' )->ID;
+		$post_type = get_field( 'product' )->post_type;
+
+		if ( 'signage' === $post_type ) {
+			add_meta_box(
+				'nova_admin_view_quote',
+				__( 'View Quote', 'textdomain' ),
+				array( $this, 'nova_admin_view_quote_callback' ),
+				'nova_quote',
+				'side',
+				'default'
+			);
+		}
+	}
+
+	public function nova_admin_view_quote_callback() {
+		$post_id   = get_field( 'product' )->ID;
+		$post_type = get_field( 'product' )->post_type;
+		$link      = get_permalink( $post_id ) . 'quote?qid=' . $_GET['post'] . '&qedit=1';
+		?>
+
+<a href="<?php echo esc_url( $link ); ?>" target="_blank" class="button button-primary button-large">View Quote</a>
+
+		<?php
+	}
+
 
 	public function show_product_dropdown() {
 		if ( ! is_page( 'custom' ) || ! is_page( 'custom-project' ) ) {
@@ -80,7 +109,7 @@ class Nova_Quote {
 		<?php else : ?>
 <div id="<?php echo get_field( 'quote_div_id' ); ?>"></div>
 			<?php
-	endif;
+		endif;
 	}
 
 	public function single_quote_redirect() {
@@ -168,7 +197,7 @@ class Nova_Quote {
 
 		$role_instance->send_email( $to, $subject, $message, $headers, array() );
 
-		$to_admin       = get_option( 'admin_email' );
+		$to_admin       = $this->to_admin_customer_rep_emails();
 		$admin_subject  = 'NOVA Signage - You Sent a Quotation for Order #' . $post_id . '.';
 		$admin_message  = '<p>Hello,</p>';
 		$admin_message .= 'You sent a quotation to ' . $first_name . ' with Business ID: ' . $business_id . ' for their Order #' . $post_id . '.';
@@ -204,7 +233,7 @@ class Nova_Quote {
 
 		$role_instance->send_email( $to, $subject, $message, $headers, array() );
 
-		$to_admin = get_option( 'admin_email' );
+		$to_admin = $this->to_admin_customer_rep_emails();
 
 		$admin_subject = 'NOVA Signage - You Received a Quotation Request - Order #' . $post_id . '.';
 
@@ -214,6 +243,21 @@ class Nova_Quote {
 		$to_admin_message .= '<a href="' . $edit_post_url . '">' . $edit_post_url . '</a>';
 
 		$role_instance->send_email( $to_admin, $admin_subject, $to_admin_message, $headers, array() );
+	}
+
+	public function to_admin_customer_rep_emails() {
+		$emails = array( get_option( 'admin_email' ) );
+
+		$customer_rep_users = get_users( array( 'role' => 'customer-rep' ) );
+		$admin_users        = get_users( array( 'role' => 'administrator' ) );
+
+		$all_users = array_merge( $admin_users, $customer_rep_users );
+
+		foreach ( $all_users as $user ) {
+			$emails [] = $user->user_email;
+		}
+
+		return array_unique( $emails );
 	}
 
 	public function for_payment_email_action( $post_id ) {
@@ -537,6 +581,13 @@ class Nova_Quote {
 
 			$post_id = wp_insert_post( $args );
 
+			wp_update_post(
+				array(
+					'ID'         => $post_id,
+					'post_title' => $post_id . ' - ' . $_POST['title'],
+				)
+			);
+
 		}
 
 		if ( ! is_wp_error( $post_id ) ) {
@@ -544,18 +595,22 @@ class Nova_Quote {
 			if ( isset( $_POST['quote_id'] ) && isset( $_POST['editing'] ) && $_POST['editing'] === 'edit' ) {
 				wp_update_post(
 					array(
-						'ID'         => $_POST['quote_id'],
-						'post_title' => $_POST['title'],
+						'ID'         => $post_id,
+						'post_title' => $post_id . ' - ' . $_POST['title'],
 					)
 				);
 			}
 
-			update_field( 'quote_status', 'draft', $post_id );
+			update_field( 'frontend_title', $_POST['title'], $post_id );
 			update_field( 'partner', get_current_user_id(), $post_id );
 			update_field( 'signage', $_POST['signage'], $post_id );
 			update_field( 'final_price', $_POST['total'], $post_id );
 			update_field( 'product', $_POST['product'], $post_id );
 			update_field( 'quote_status', $_POST['quote_status'], $post_id );
+
+			if ( 'processing' == $_POST['quote_status'] ) {
+				$this->for_quotation_email( $post_id );
+			}
 
 			$status['code']   = 2;
 			$status['post']   = $_POST;
@@ -741,9 +796,10 @@ class Nova_Quote {
 				'mockup_account_url'      => esc_url_raw( home_url( '/my-account/mockups/all' ) ),
 				'is_editting'             => $this->is_editting(),
 				'signage'                 => $this->get_signage(),
+				'not_author_but_admin'    => $this->not_author_but_admin(),
 				'nova_quote_product'      => get_field( 'nova_quote_product', 'option' ),
 				'current_quote_id'        => isset( $_GET['qid'] ) ? $_GET['qid'] : null,
-				'current_quote_title'     => isset( $_GET['qid'] ) ? get_the_title( $_GET['qid'] ) : null,
+				'current_quote_title'     => isset( $_GET['qid'] ) ? get_field( 'frontend_title', $_GET['qid'] ) : null,
 				'dropbox_app_key'         => get_field( 'dropbox_app_key', 'option' ),
 				'dropbox_secret'          => get_field( 'dropbox_secret_key', 'option' ),
 				'dropbox_token'           => get_field( 'dropbox_token_access', 'option' ),
@@ -752,6 +808,7 @@ class Nova_Quote {
 				'single_quote_options'    => get_field( 'single_quote_options' ),
 				'generated_product_id'    => isset( $_GET['qid'] ) ? get_post_meta( $_GET['qid'], 'nova_product_generated_id', true ) : null,
 				'metal_stainless_pricing' => get_field( 'lasercut_stainless_metal_pricing' ),
+				'quote_status'            => get_field( 'quote_status', $_GET['qid'] ),
 			)
 		);
 
@@ -817,13 +874,31 @@ class Nova_Quote {
 	}
 
 	public function is_editting() {
-		$editting = isset( $_GET['qid'] ) && ! empty( $_GET['qid'] ) && isset( $_GET['qedit'] ) && $_GET['qedit'] == 1;
-		return $editting;
+
+		$user = wp_get_current_user();
+
+		if ( isset( $_GET['qid'] ) && ! empty( $_GET['qid'] ) ) {
+			if ( isset( $_GET['qedit'] ) && $_GET['qedit'] == 1 ) {
+				if ( in_array( 'administrator', (array) $user->roles ) || in_array( 'customer_rep', (array) $user->roles ) || get_field( 'partner', $_GET['qid'] ) === get_current_user_id() ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	public function not_author_but_admin() {
+		$user = wp_get_current_user();
+		if ( ( in_array( 'administrator', (array) $user->roles ) || in_array( 'customer_rep', (array) $user->roles ) ) && get_field( 'partner', $_GET['qid'] ) !== get_current_user_id() ) {
+			return 'yes';
+		}
+		return 'no';
 	}
 
 	public function get_signage() {
-		$editting = isset( $_GET['qid'] ) && ! empty( $_GET['qid'] ) && isset( $_GET['qedit'] ) && $_GET['qedit'] == 1;
-		if ( $editting && ( get_post_status( $_GET['qid'] ) !== false ) && get_field( 'partner', $_GET['qid'] ) === get_current_user_id() ) {
+
+		if ( $this->is_editting() ) {
 			return get_field( 'signage', $_GET['qid'] );
 		}
 	}
@@ -839,8 +914,6 @@ class Nova_Quote {
 			)
 		);
 	}
-
-
 
 	public function dropbox_api() {
 		echo 'Test';

@@ -178,13 +178,13 @@ export default function Logo({ item }) {
 	const checkAndAddMissingFields = () => {
 		const missingFields = [];
 
-		if (!selectedThickness) missingFields.push('Acrylic Thickness');
-		if (!width) missingFields.push('Logo Width');
-		if (!height) missingFields.push('Logo Height');
-		if (!waterproof) missingFields.push('Waterproof');
-		if (!selectedMounting) missingFields.push('Mounting');
-		if (!selectedFinishing) missingFields.push('Finishing');
-		if (!fileUrl) missingFields.push('PDF/AI File');
+		if (!selectedThickness) missingFields.push('Select Acrylic Thickness');
+		if (!width) missingFields.push('Select Logo Width');
+		if (!height) missingFields.push('Select Logo Height');
+		if (!waterproof) missingFields.push('Select Waterproof');
+		if (!selectedMounting) missingFields.push('Select Mounting');
+		if (!selectedFinishing) missingFields.push('Select Finishing');
+		if (!fileUrl) missingFields.push('Upload a PDF/AI File');
 
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {

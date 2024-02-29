@@ -199,17 +199,17 @@ export default function Logo({ item }) {
 	const checkAndAddMissingFields = () => {
 		const missingFields = [];
 
-		if (!selectedThickness) missingFields.push('Acrylic Thickness');
-		if (!width) missingFields.push('Logo Width');
-		if (!height) missingFields.push('Logo Height');
-		if (!metalLaminate) missingFields.push('Metal Laminate');
-		if (!acrylicBase) missingFields.push('Acrylic Base');
+		if (!selectedThickness) missingFields.push('Select Acrylic Thickness');
+		if (!width) missingFields.push('Select Logo Width');
+		if (!height) missingFields.push('Select Logo Height');
+		if (!metalLaminate) missingFields.push('Select Metal Laminate');
+		if (!acrylicBase) missingFields.push('Select Acrylic Base');
 		if (acrylicBase?.name === 'Custom Color' && !customColor) {
-			missingFields.push('Custom Color Missing');
+			missingFields.push('Add the Pantone color code of your custom color.');
 		}
-		if (!waterproof) missingFields.push('Waterproof');
-		if (!selectedMounting) missingFields.push('Mounting');
-		if (!fileUrl) missingFields.push('PDF/AI File');
+		if (!waterproof) missingFields.push('Select Waterproof');
+		if (!selectedMounting) missingFields.push('Select Mounting');
+		if (!fileUrl) missingFields.push('Upload a PDF/AI File');
 
 		setMissing((prevMissing) => {
 			const existingIndex = prevMissing.findIndex(

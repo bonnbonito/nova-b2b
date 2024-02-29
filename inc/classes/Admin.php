@@ -28,6 +28,23 @@ class Admin {
 		add_action( 'pre_get_posts', array( $this, 'nova_quote_filter_query' ) );
 		add_filter( 'editable_roles', array( $this, 'custom_editable_roles' ) );
 		add_action( 'pre_user_query', array( $this, 'restrict_rep_list_to_specific_roles' ) );
+		add_action( 'manage_nova_quote_posts_custom_column', array( $this, 'show_nova_quote_post_id' ), 10, 2 );
+		add_filter( 'manage_nova_quote_posts_columns', array( $this, 'modify_nova_quote_columns' ) );
+	}
+
+	public function modify_nova_quote_columns( $columns ) {
+
+		$columns['post_id'] = 'Post ID';
+
+		return $columns;
+	}
+
+	public function show_nova_quote_post_id( $column, $post_id ) {
+		switch ( $column ) {
+			case 'post_id':
+				echo $post_id; // Display the Post ID
+				break;
+		}
 	}
 
 	public function restrict_rep_list_to_specific_roles( $user_search ) {

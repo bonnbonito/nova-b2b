@@ -36,6 +36,7 @@ export default function Letters({ item }) {
 	const [letters, setLetters] = useState(item.letters);
 	const [comments, setComments] = useState(item.comments);
 	const [font, setFont] = useState(item.font);
+	const [openFont, setOpenFont] = useState(false);
 	const [color, setColor] = useState(item.color);
 	const [isLoading, setIsLoading] = useState(false);
 	const [openColor, setOpenColor] = useState(false);
@@ -65,6 +66,7 @@ export default function Letters({ item }) {
 	const [selectedMounting, setSelectedMounting] = useState(item.mounting);
 
 	const colorRef = useRef(null);
+	const fontRef = useRef(null);
 
 	const finishingOptions = NovaSingleOptions.finishing_options;
 	const letterPricing =
@@ -306,20 +308,20 @@ export default function Letters({ item }) {
 	const checkAndAddMissingFields = () => {
 		const missingFields = [];
 
-		if (!letters) missingFields.push('Line Text');
-		if (!font) missingFields.push('Font');
+		if (!letters) missingFields.push('Add your Line Text');
+		if (!font) missingFields.push('Select Font');
 		if (font == 'Custom font' && !customFont) {
-			missingFields.push('Custom Font Missing');
+			missingFields.push('Add your custom font');
 		}
-		if (!selectedLetterHeight) missingFields.push('Letter Height');
-		if (!selectedThickness) missingFields.push('Acrylic Thickness');
-		if (!color.name) missingFields.push('Color');
+		if (!selectedLetterHeight) missingFields.push('Select Letter Height');
+		if (!selectedThickness) missingFields.push('Select Acrylic Thickness');
+		if (!color.name) missingFields.push('Select Color');
 		if (color?.name === 'Custom Color' && !customColor) {
-			missingFields.push('Custom Color Missing');
+			missingFields.push('Add the Pantone color code of your custom color.');
 		}
-		if (!selectedFinishing) missingFields.push('Finishing');
-		if (!waterproof) missingFields.push('Waterproof');
-		if (!selectedMounting) missingFields.push('Mounting');
+		if (!selectedFinishing) missingFields.push('Select Finishing');
+		if (!waterproof) missingFields.push('Select Waterproof');
+		if (!selectedMounting) missingFields.push('Select Mounting');
 
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
@@ -415,8 +417,9 @@ export default function Letters({ item }) {
 		}
 	}, [selectedThickness]);
 
-	useOutsideClick(colorRef, () => {
+	useOutsideClick([colorRef, fontRef], () => {
 		setOpenColor(false);
+		setOpenFont(false);
 	});
 
 	useEffect(() => {
@@ -462,6 +465,9 @@ export default function Letters({ item }) {
 				<FontsDropdown
 					font={item.font}
 					fonts={NovaOptions.fonts}
+					fontRef={fontRef}
+					openFont={openFont}
+					setOpenFont={setOpenFont}
 					handleSelectFont={handleSelectFont}
 				/>
 

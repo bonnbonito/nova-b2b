@@ -315,20 +315,20 @@ export default function Letters({ item }) {
 	const checkAndAddMissingFields = () => {
 		const missingFields = [];
 
-		if (!letters) missingFields.push('Line Text');
-		if (!font) missingFields.push('Font');
+		if (!letters) missingFields.push('Add Line Text');
+		if (!font) missingFields.push('Select Font');
 		if (font == 'Custom font' && !customFont) {
-			missingFields.push('Custom Font Missing');
+			missingFields.push('Add your custom font');
 		}
-		if (!selectedLetterHeight) missingFields.push('Letter Height');
-		if (!selectedThickness) missingFields.push('Acrylic Thickness');
-		if (!metalFinish.name) missingFields.push('Metal Finish');
-		if (!acrylicBase) missingFields.push('Acrylic Base');
+		if (!selectedLetterHeight) missingFields.push('Select Letter Height');
+		if (!selectedThickness) missingFields.push('Select Acrylic Thickness');
+		if (!metalFinish.name) missingFields.push('Select Metal Finish');
+		if (!acrylicBase) missingFields.push('Select Acrylic Base');
 		if (acrylicBase?.name === 'Custom Color' && !customColor) {
-			missingFields.push('Custom Color Missing');
+			missingFields.push('Add the Pantone color code of your custom color.');
 		}
-		if (!waterproof) missingFields.push('Waterproof');
-		if (!selectedMounting) missingFields.push('Mounting');
+		if (!waterproof) missingFields.push('Select Waterproof');
+		if (!selectedMounting) missingFields.push('Select Mounting');
 
 		setMissing((prevMissing) => {
 			const existingIndex = prevMissing.findIndex(

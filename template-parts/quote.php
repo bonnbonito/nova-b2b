@@ -11,8 +11,8 @@ $final_price = $price ? ( get_woocommerce_currency() === 'USD' ? $price : $price
 
 ?>
 <div id="quote-<?php the_ID(); ?>" class="rounded border p-4 mb-4 text-xs uppercase">
-	<div class="block flex-wrap gap-4 md:flex">
-		<div class="basis-[150px] grow">
+	<div class="block flex-wrap gap-4 md:grid md:grid-cols-[200px_1fr_2fr]">
+		<div class="basis-[200px] grow">
 			<div class="block"><span class="font-title text-sm">ID:</span> <?php the_ID(); ?> <div
 					class="text-[16px] self-center font-title ml-auto float-right block md:hidden md-hidden">
 					<?php echo get_woocommerce_currency_symbol() . number_format( (float) $final_price, 2 ); ?>
@@ -22,7 +22,8 @@ $final_price = $price ? ( get_woocommerce_currency() === 'USD' ? $price : $price
 
 		</div>
 		<div class="grow-[2] mb-4 md:mb-0">
-			<div class="block"><span class="font-title text-sm">NAME:</span> <?php the_title(); ?></div>
+			<div class="block"><span class="font-title text-sm">NAME:</span> <?php echo get_field( 'frontend_title' ); ?>
+			</div>
 			<div><span class="font-title text-sm">PRODUCT:</span>
 				<?php echo ( get_field( 'product' ) ? get_field( 'product' )->post_title : 'CUSTOM PROJECT' ); ?></div>
 		</div>

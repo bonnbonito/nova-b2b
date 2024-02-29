@@ -52,6 +52,7 @@ export default function LaserCutAcrylic() {
 	useEffect(() => {
 		if (NovaQuote.is_editting === '1') {
 			const currentSignage = JSON.parse(NovaQuote.signage);
+			console.log(currentSignage);
 			if (currentSignage) {
 				const savedStorage = JSON.parse(
 					localStorage.getItem(window.location.href + NovaQuote.user_id)
@@ -62,7 +63,7 @@ export default function LaserCutAcrylic() {
 					setSignage(currentSignage);
 				}
 			} else {
-				window.location.href = window.location.pathname;
+				//window.location.href = window.location.pathname;
 			}
 		} else {
 			setDefaultSignage();

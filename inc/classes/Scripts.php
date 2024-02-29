@@ -217,7 +217,7 @@ class Scripts {
 			$product_name = $product_id ? get_the_title( $product_id ) : 'Custom Project';
 			return array(
 				'ID'           => $id,
-				'title'        => get_the_title( $id ),
+				'title'        => get_field( 'frontend_title', $id ),
 				'data'         => get_field( 'signage', $id ),
 				'final_price'  => get_field( 'final_price', $id ),
 				'product_name' => $product_name,

@@ -137,23 +137,23 @@ export default function Logo({ item }) {
 	const checkAndAddMissingFields = () => {
 		const missingFields = [];
 
-		if (!selectedThickness) missingFields.push('Acrylic Thickness');
-		if (!width) missingFields.push('Logo Width');
-		if (!height) missingFields.push('Logo Height');
-		if (!waterproof) missingFields.push('Waterproof');
-		if (!selectedFinishing) missingFields.push('Finishing');
+		if (!selectedThickness) missingFields.push('Select Acrylic Thickness');
+		if (!width) missingFields.push('Select Logo Width');
+		if (!height) missingFields.push('Select Logo Height');
+		if (!waterproof) missingFields.push('Select Waterproof');
+		if (!selectedFinishing) missingFields.push('Select Finishing');
 		if (selectedFinishing === 'Painted') {
-			if (!color.name) missingFields.push('Color');
+			if (!color.name) missingFields.push('Select Color');
 		}
 		if (
 			selectedFinishing === 'Painted' &&
 			color?.name === 'Custom Color' &&
 			!customColor
 		) {
-			missingFields.push('Custom Color Missing');
+			missingFields.push('Add the Pantone color code of your custom color.');
 		}
-		if (!installation) missingFields.push('Installation');
-		if (!fileUrl) missingFields.push('PDF/AI File');
+		if (!installation) missingFields.push('Select Installation');
+		if (!fileUrl) missingFields.push('Upload a PDF/AI File');
 
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {

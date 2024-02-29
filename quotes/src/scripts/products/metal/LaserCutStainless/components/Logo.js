@@ -144,28 +144,29 @@ export default function Logo({ item }) {
 		const missingFields = [];
 
 		if (!metal) missingFields.push('Metal Option');
-		if (!selectedThickness) missingFields.push('Metal Thickness');
-		if (!width) missingFields.push('Logo Width');
-		if (!height) missingFields.push('Logo Height');
-		if (!fileUrl) missingFields.push('PDF/AI File');
+		if (!selectedThickness) missingFields.push('Select Metal Thickness');
+		if (!width) missingFields.push('Select Logo Width');
+		if (!height) missingFields.push('Select Logo Height');
+		if (!fileUrl) missingFields.push('Upload a PDF/AI File');
 
-		if (!selectedFinishing) missingFields.push('Finish Option');
+		if (!selectedFinishing) missingFields.push('Select Finish Option');
 		if (selectedFinishing === 'Painted Finish') {
-			if (!color.name) missingFields.push('Color');
+			if (!color.name) missingFields.push('Select Color');
 		}
 		if (selectedFinishing === 'Metal Finish') {
-			if (!stainLessMetalFinish) missingFields.push('Metal Finish Option');
+			if (!stainLessMetalFinish)
+				missingFields.push('Select Metal Finish Option');
 		}
 
 		if (
 			stainLessMetalFinish &&
 			stainLessMetalFinish === 'Stainless Steel Polished'
 		) {
-			if (!stainlessSteelPolished) missingFields.push('Steel Polished');
+			if (!stainlessSteelPolished) missingFields.push('Select Steel Polished');
 		}
 
-		if (!waterproof) missingFields.push('Waterproof');
-		if (!installation) missingFields.push('Installation');
+		if (!waterproof) missingFields.push('Select Waterproof');
+		if (!installation) missingFields.push('Select Installation');
 
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {

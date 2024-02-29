@@ -324,36 +324,36 @@ export default function Letters({ item }) {
 	const checkAndAddMissingFields = () => {
 		const missingFields = [];
 
-		if (!letters) missingFields.push('Line Text');
-		if (!font) missingFields.push('Font');
+		if (!letters) missingFields.push('Add Line Text');
+		if (!font) missingFields.push('Select Font');
 		if (font == 'Custom font' && !customFont) {
-			missingFields.push('Custom Font Missing');
+			missingFields.push('Add your custom font');
 		}
 		if (!metal) missingFields.push('Metal Option');
-		if (!selectedThickness) missingFields.push('Metal Thickness');
-		if (!selectedLetterHeight) missingFields.push('Letter Height');
+		if (!selectedThickness) missingFields.push('Select Metal Thickness');
+		if (!selectedLetterHeight) missingFields.push('Select Letter Height');
 
-		if (!selectedFinishing) missingFields.push('Finish Option');
+		if (!selectedFinishing) missingFields.push('Select Finish Option');
 		if (selectedFinishing === 'Painted Finish') {
-			if (!color.name) missingFields.push('Color');
+			if (!color.name) missingFields.push('Select Color');
 
 			if (color?.name === 'Custom Color' && !customColor) {
-				missingFields.push('Custom Color Missing');
+				missingFields.push('Add the Pantone color code of your custom color.');
 			}
 		}
 		if (selectedFinishing === 'Metal Finish') {
-			if (!stainLessMetalFinish) missingFields.push('Metal Finish Option');
+			if (!stainLessMetalFinish) missingFields.push('Select Metal Finish Option');
 		}
 
 		if (
 			stainLessMetalFinish &&
 			stainLessMetalFinish === 'Stainless Steel Polished'
 		) {
-			if (!stainlessSteelPolished) missingFields.push('Steel Polished');
+			if (!stainlessSteelPolished) missingFields.push('Select Steel Polished');
 		}
 
-		if (!waterproof) missingFields.push('Waterproof');
-		if (!installation) missingFields.push('Installation');
+		if (!waterproof) missingFields.push('Select Waterproof');
+		if (!installation) missingFields.push('Select Installation');
 
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {

@@ -34,11 +34,57 @@ class Roles {
 		add_filter( 'manage_users_columns', array( $this, 'add_business_id_column' ) );
 		add_action( 'manage_users_custom_column', array( $this, 'business_id_user_column' ), 10, 3 );
 		add_filter( 'manage_users_sortable_columns', array( $this, 'make_business_id_column_sortable' ) );
+		add_filter( 'manage_users_sortable_columns', array( $this, 'user_id_column_sortable' ) );
 		add_action( 'pre_get_users', array( $this, 'sort_by_business_id_column' ) );
 		add_action( 'set_user_role', array( $this, 'notify_user_approved_partner' ), 10, 3 );
 		add_action( 'set_user_role', array( $this, 'log_role_change' ), 10, 3 );
+		add_action( 'admin_footer', array( $this, 'move_row_actions_js' ) );
+		add_action( 'pre_get_users', array( $this, 'sort_users_by_user_id' ) );
+		// add_action( 'manage_users_columns', array( $this, 'show_user_id' ), 10, 3 );
 		// add_action( 'added_user_meta', array( $this, 'user_send_activate' ), 10, 4 );
 	}
+
+	public function sort_users_by_user_id( $query ) {
+		if ( isset( $query->query_vars['orderby'] ) && 'user_id' == $query->query_vars['orderby'] ) {
+			$query->query_vars['orderby'] = 'ID'; // WordPress user query recognizes 'ID' for sorting by user ID
+		}
+	}
+
+	public function move_row_actions_js() {
+		$screen = get_current_screen();
+		if ( $screen->id === 'users' ) {
+			?>
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+	// Move the row actions from their original location to the 'user_id' column
+	$('#the-list tr').each(function() {
+		var $this = $(this);
+		var rowActions = $this.find('.row-actions').clone(); // Clone the row actions
+		$this.find('.row-actions').remove(); // Remove the original row actions
+
+		// Check if the 'user_id' column exists and append the cloned row actions
+		var userIDCell = $this.find('td.user_id');
+		if (userIDCell.length) {
+			userIDCell.append(rowActions);
+		}
+	});
+});
+</script>
+
+			<?php
+		}
+	}
+
+	public function show_user_id( $value, $column_name, $user_id ) {
+		if ( 'user_id' == $column_name ) {
+			// Create a link to the user's profile page in the WordPress admin
+			$user_edit_link = esc_url( admin_url( "user-edit.php?user_id={$user_id}" ) );
+			// Return the user ID as a clickable link
+			return "<strong><a href='{$user_edit_link}'>{$user_id}</a></strong>";
+		}
+		return $value;
+	}
+
 
 
 
@@ -118,24 +164,28 @@ class Roles {
 		return $columns;
 	}
 
+	public function user_id_column_sortable( $columns ) {
+		$columns['user_id'] = 'user_id';
+		return $columns;
+	}
+
 	public function business_id_user_column( $value, $column_name, $user_id ) {
 		if ( 'business_id' === $column_name ) {
 			return get_field( 'business_id', 'user_' . $user_id );
+		}
+
+		if ( 'user_id' == $column_name ) {
+			$user_edit_link = esc_url( admin_url( "user-edit.php?user_id={$user_id}" ) );
+			// Return the user ID as a clickable link
+			return "<strong><a href='{$user_edit_link}'>{$user_id}</a></strong>";
 		}
 		return $value;
 	}
 
 	public function add_business_id_column( $columns ) {
-		$new_column = array( 'business_id' => 'Business ID' );
-
-		$new_columns = array();
-		foreach ( $columns as $key => $value ) {
-			if ( $key == 'username' ) {
-				$new_columns = array_merge( $new_columns, $new_column );
-			}
-			$new_columns[ $key ] = $value;
-		}
-
+		$cb_column = array( 'cb' => $columns['cb'] );
+		unset( $columns['cb'] );
+		$new_columns = array_merge( $cb_column, array( 'user_id' => 'User ID' ), $columns );
 		return $new_columns;
 	}
 
