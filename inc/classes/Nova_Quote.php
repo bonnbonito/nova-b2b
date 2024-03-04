@@ -65,7 +65,7 @@ class Nova_Quote {
 		if ( 'signage' === $post_type ) {
 			add_meta_box(
 				'nova_admin_view_quote',
-				__( 'View Quote', 'textdomain' ),
+				__( 'View Quote and Details', 'textdomain' ),
 				array( $this, 'nova_admin_view_quote_callback' ),
 				'nova_quote',
 				'side',
@@ -78,10 +78,12 @@ class Nova_Quote {
 		$post_id   = get_field( 'product' )->ID;
 		$post_type = get_field( 'product' )->post_type;
 		$link      = get_permalink( $post_id ) . 'quote?qid=' . $_GET['post'] . '&qedit=1';
+		$details   = home_url( '/my-account/mockups/view/?qid=' . $_GET['post'] );
 		?>
 
-<a href="<?php echo esc_url( $link ); ?>" target="_blank" class="button button-primary button-large">View Quote</a>
-
+<a style="margin-right: 10px;" href="<?php echo esc_url( $link ); ?>" target="_blank"
+	class="button button-primary button-large">View Quote</a>
+<a href="<?php echo esc_url( $details ); ?>" target="_blank" class="button button-primary button-large">View Details</a>
 		<?php
 	}
 
@@ -121,7 +123,7 @@ class Nova_Quote {
 
 	public function create_nova_quote_product( $post_id ) {
 
-		$title        = get_the_title( $post_id );
+		$title        = get_field( 'frontend_title', $post_id );
 		$final_price  = get_field( 'final_price', $post_id );
 		$product_id   = get_field( 'product', $post_id )->ID;
 		$product_name = get_field( 'product', $post_id )->post_title;
@@ -143,33 +145,80 @@ class Nova_Quote {
 			'product_id' => $product_id,
 		);
 
-		$product_data = array(
-			'post_title'   => wp_strip_all_tags( $title ),
-			'post_content' => '',
-			'post_status'  => 'publish',
-			'post_type'    => 'product',
-			'meta_input'   => array(
-				'_regular_price' => $final_price,
-				'_price'         => $final_price,
-			),
-		);
+		ob_start();
+		?>
+<p>Product: <?php echo $product_name; ?></p>
+<strong>Projects</strong>
+		<?php
+					echo '<ul>';
+		foreach ( $signage as $project ) {
+			$projectArray = get_object_vars( $project );
 
-		if ( $this->product_exists_by_title( wp_strip_all_tags( $title ) ) ) {
+			// Check and print the title first
+			if ( isset( $projectArray['title'] ) && ! empty( $projectArray['title'] ) ) {
+				echo '<li><strong>Title: ' . $projectArray['title'] . '</strong></li>';
+				unset( $projectArray['title'] ); // Remove the title so it's not printed again
+			}
 
-			$created_product = $this->product_exists_by_title( wp_strip_all_tags( $title ) );
+			unset( $projectArray['id'] );
 
-		} else {
-			$created_product = wp_insert_post( $product_data );
-			wp_set_object_terms( $created_product, 'nova_quote', 'product_type' );
+			// Iterate over the rest of the project details
+			foreach ( $projectArray as $key => $value ) {
+				// Convert nested objects to a readable format
+				if ( is_object( $value ) ) {
+					$value = get_object_vars( $value );
+					// Create a sub-list for nested objects
+					$valueText = '<ul>';
+					foreach ( $value as $subKey => $subValue ) {
+						$valueText .= '<li>' . ucfirst( $subKey ) . ': ' . $subValue . '</li>';
+					}
+					$valueText .= '</ul>';
+					$value      = $valueText;
+				} elseif ( ! empty( $value ) ) {
+					$value = htmlspecialchars( $value, ENT_QUOTES, 'UTF-8' );
+				}
+
+				if ( $key === 'product' ) {
+					$value = get_the_title( intval( $value ) );
+				}
+
+				// Print the rest of the details
+				if ( ! empty( $value ) ) {
+					echo '<li>' . ucfirst( $key ) . ': ' . $value . '</li>';
+				}
+			}
 		}
+					echo '</ul>';
 
-		foreach ( $product_meta as $meta_key => $meta_value ) {
-			update_post_meta( $created_product, $meta_key, $meta_value );
-		}
+				$content = ob_get_clean();
 
-		update_post_meta( $post_id, 'nova_product_generated_id', $created_product );
+				$product_data = array(
+					'post_title'   => wp_strip_all_tags( $title ),
+					'post_content' => $content,
+					'post_status'  => 'publish',
+					'post_type'    => 'product',
+					'meta_input'   => array(
+						'_regular_price' => $final_price,
+						'_price'         => $final_price,
+					),
+				);
 
-		return $created_product;
+				if ( $this->product_exists_by_title( wp_strip_all_tags( $title ) ) ) {
+
+					$created_product = $this->product_exists_by_title( wp_strip_all_tags( $title ) );
+
+				} else {
+					$created_product = wp_insert_post( $product_data );
+					wp_set_object_terms( $created_product, 'nova_quote', 'product_type' );
+				}
+
+				foreach ( $product_meta as $meta_key => $meta_value ) {
+					update_post_meta( $created_product, $meta_key, $meta_value );
+				}
+
+				update_post_meta( $post_id, 'nova_product_generated_id', $created_product );
+
+				return $created_product;
 	}
 
 	public function for_payment_email( $post_id ) {

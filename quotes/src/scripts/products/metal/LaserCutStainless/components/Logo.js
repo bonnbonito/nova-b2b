@@ -16,7 +16,7 @@ import {
 
 import { QuoteContext } from '../LaserCutStainless';
 
-const exchangeRate = wcumcs_vars_data.currency_data.rate;
+const exchangeRate = 1.3;
 
 const PricingTable = NovaQuote.metal_stainless_pricing?.logo_pricing;
 

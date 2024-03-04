@@ -14,7 +14,7 @@ import { QuoteContext } from '../LaserCutAcrylic';
 
 const NovaOptions = NovaQuote.quote_options;
 const NovaSingleOptions = NovaQuote.single_quote_options;
-const exchangeRate = wcumcs_vars_data.currency_data.rate;
+const exchangeRate = 1.3;
 
 let lowerCasePricing = 1; // Default value
 let smallPunctuations = 1; // Default value
@@ -230,6 +230,7 @@ export default function Letters({ item }) {
 
 			setUsdPrice(totalLetterPrice.toFixed(2));
 			setCadPrice((totalLetterPrice * parseFloat(exchangeRate)).toFixed(2));
+			console.log(exchangeRate);
 		} else {
 			setUsdPrice(0);
 			setCadPrice(0);
@@ -388,6 +389,7 @@ export default function Letters({ item }) {
 		waterproof,
 		color,
 		usdPrice,
+		cadPrice,
 		selectedLetterHeight,
 		fileUrl,
 		fileName,

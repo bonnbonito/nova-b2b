@@ -20,7 +20,7 @@ import {
 	metalFinishColors,
 } from '../../../../utils/ColorOptions';
 
-const exchangeRate = wcumcs_vars_data.currency_data.rate;
+const exchangeRate = 1.3;
 
 export default function Logo({ item }) {
 	const { signage, setSignage, setMissing } = useContext(QuoteContext);

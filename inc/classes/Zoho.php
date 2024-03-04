@@ -27,13 +27,136 @@ class Zoho {
 			add_action( 'init', array( $this, 'add_options_page' ) );
 		}
 		add_action( 'admin_menu', array( $this, 'zoho_crm_connector_menu' ) );
-		add_action( 'show_user_profile', array( $this, 'zoho_contact_id' ) );
-		add_action( 'edit_user_profile', array( $this, 'zoho_contact_id' ) );
+		add_action( 'show_user_profile', array( $this, 'zoho_account_id' ) );
+		add_action( 'edit_user_profile', array( $this, 'zoho_account_id' ) );
 		add_action( 'personal_options_update', array( $this, 'save_lead_id_field' ) );
 		add_action( 'edit_user_profile_update', array( $this, 'save_lead_id_field' ) );
-		add_action( 'nova_user_partner_approved', array( $this, 'user_add_to_zoho' ) );
+		add_action( 'nova_user_partner_approved', array( $this, 'user_add_to_zoho' ), 20 );
 		add_action( 'wp_ajax_generate_zoho_id', array( $this, 'generate_zoho_id' ) );
+		// add_action( 'wp_ajax_generate_zoho_id', array( $this, 'custom_output' ) );
 		add_action( 'woocommerce_thankyou', array( $this, 'send_order_to_zoho_crm' ), 10, 1 );
+	}
+
+	public function nova_singnage_details( $product_id ) {
+		ob_start();
+		$signage = get_post_meta( $product_id, 'signage', true );
+		?>
+<p>Product: <?php echo get_post_meta( $product_id, 'product', true ); ?></p>
+<strong>Projects</strong>
+		<?php
+			echo '<ul>';
+		foreach ( $signage as $project ) {
+			$projectArray = get_object_vars( $project );
+
+			// Check and print the title first
+			if ( isset( $projectArray['title'] ) && ! empty( $projectArray['title'] ) ) {
+				echo '<li><strong>Title: ' . $projectArray['title'] . '</strong></li>';
+				unset( $projectArray['title'] ); // Remove the title so it's not printed again
+			}
+
+			unset( $projectArray['id'] );
+
+			// Iterate over the rest of the project details
+			foreach ( $projectArray as $key => $value ) {
+				// Convert nested objects to a readable format
+				if ( is_object( $value ) ) {
+					$value = get_object_vars( $value );
+					// Create a sub-list for nested objects
+					$valueText = '<ul>';
+					foreach ( $value as $subKey => $subValue ) {
+						$valueText .= '<li>' . ucfirst( $subKey ) . ': ' . $subValue . '</li>';
+					}
+					$valueText .= '</ul>';
+					$value      = $valueText;
+				} elseif ( ! empty( $value ) ) {
+					$value = htmlspecialchars( $value, ENT_QUOTES, 'UTF-8' );
+				}
+
+				// Print the rest of the details
+				if ( ! empty( $value ) ) {
+					echo '<li>' . ucfirst( $key ) . ': ' . $value . '</li>';
+				}
+			}
+		}
+			echo '</ul>';
+
+			return ob_get_clean();
+	}
+
+	public function get_zoho_product_id( $product_id ) {
+
+		$product = wc_get_product( $product_id );
+
+		$access_token = $this->get_zoho_access_token();
+
+		$nova_product_id = $product_id;
+		$search_url      = 'https://www.zohoapis.com/crm/v2/Products/search?criteria=(Nova_Product_ID:equals:' . $nova_product_id . ')';
+		$search_headers  = array( 'Authorization' => 'Zoho-oauthtoken ' . $access_token );
+
+		$search_response = wp_remote_get( $search_url, array( 'headers' => $search_headers ) );
+		$search_body     = json_decode( wp_remote_retrieve_body( $search_response ), true );
+
+		if ( ! empty( $search_body['data'] ) ) {
+			return $search_body['data'][0]['id'];
+
+		} else {
+			$api_url = 'https://www.zohoapis.com/crm/v2/Products';
+
+			$product_data = array(
+				'Product_Name'      => $product->get_name(),
+				'Nova_Product_ID'   => strval( $nova_product_id ),
+				'Unit_Price'        => $product->get_regular_price(),
+				'Product_Edit_Link' => admin_url( 'post.php?post=' . $product_id . '&action=edit' ),
+				'Description'       => $product->get_description(),
+			);
+
+			$headers = array(
+				'Authorization' => 'Zoho-oauthtoken ' . $access_token,
+				'Content-Type'  => 'application/json',
+			);
+
+			$body     = json_encode( array( 'data' => array( $product_data ) ) );
+			$response = wp_remote_post(
+				$api_url,
+				array(
+					'headers'     => $headers,
+					'body'        => $body,
+					'method'      => 'POST',
+					'data_format' => 'body',
+				)
+			);
+
+			$response_body = json_decode( wp_remote_retrieve_body( $response ), true );
+
+			$response_string = print_r( $response, true );
+
+			$this->log_to_file( "Response Product Add: {$response_string}" );
+
+			if ( isset( $response_body['data'][0]['details']['id'] ) ) {
+				// Product added to Zoho CRM successfully, return the new Zoho product ID.
+				$this->log_to_file( "Product Added: {$response_body['data'][0]['details']['id']}" );
+				return $response_body['data'][0]['details']['id'];
+			} else {
+				// Handle errors or unsuccessful attempts to add the product
+				return null;
+			}
+		}
+	}
+
+
+	public function custom_output() {
+		$order = wc_get_order( 1506 );
+
+		foreach ( $order->get_items() as $item_id => $item ) {
+			$product_id = $item->get_id();
+
+			$id = $this->get_zoho_product_id( $product_id );
+
+			$status['zoho_id'][] = $id;
+
+		}
+
+		wp_send_json( $status );
 	}
 
 	public function save_lead_id_field( $user_id ) {
@@ -43,20 +166,19 @@ class Zoho {
 		}
 
 		// Update user meta field
-		update_user_meta( $user_id, 'zoho_contact_id', $_POST['zoho_contact_id'] );
+		update_user_meta( $user_id, 'zoho_account_id', $_POST['zoho_account_id'] );
 	}
 
-	public function zoho_contact_id( $user ) {
+	public function zoho_account_id( $user ) {
 		if ( in_array( 'partner', (array) $user->roles ) ) {
 			?>
 <h3>ZOHO CRM</h3>
-
 <table class="form-table">
 	<tr>
-		<th><label for="zoho_contact_id">Zoho Lead ID</label></th>
+		<th><label for="zoho_account_id">Zoho Lead ID</label></th>
 		<td>
-			<input readonly type="text" name="zoho_contact_id" id="zoho_contact_id"
-				value="<?php echo esc_attr( get_user_meta( $user->ID, 'zoho_contact_id', true ) ); ?>"
+			<input readonly type="text" name="zoho_account_id" id="zoho_account_id"
+				value="<?php echo esc_attr( get_user_meta( $user->ID, 'zoho_account_id', true ) ); ?>"
 				class="regular-text" /><br />
 			<span class="description">This is the user's Lead ID from Zoho CRM</span>
 		</td>
@@ -97,8 +219,8 @@ generateZohoId.addEventListener("click", e => {
 		.then((data) => {
 			console.log(data);
 			generateZohoId.style.display = 'none';
-			if (data.zoho_contact_id) {
-				document.getElementById('zoho_contact_id').value = data.zoho_contact_id;
+			if (data.zoho_account_id) {
+				document.getElementById('zoho_account_id').value = data.zoho_account_id;
 			}
 		})
 		.catch((error) => console.error('Error:', error))
@@ -132,15 +254,15 @@ generateZohoId.addEventListener("click", e => {
 		);
 
 		$account_data = array(
-			'Account_Name'    => $user->billing_company, // Name of the account (typically the company name)
-			'Website'         => get_field( 'business_website', 'user_' . $user_id ), // Assuming you are using ACF to store extra user meta
+			'Account_Name'    => $user->billing_company,
+			'Website'         => get_field( 'business_website', 'user_' . $user_id ),
 			'Phone'           => $user->billing_phone,
 			'Billing_City'    => $user->billing_city,
 			'Billing_Street'  => $user->billing_address_1 . ' ' . $user->billing_address_2,
 			'Billing_State'   => $user->billing_state,
 			'Billing_Code'    => $user->billing_postcode,
 			'Billing_Country' => $user->billing_country,
-			'Nova_User_ID'    => $user_id,
+			'Nova_User_ID'    => strval( $user_id ),
 		);
 
 		$access_token = $this->get_zoho_access_token();
@@ -156,13 +278,17 @@ generateZohoId.addEventListener("click", e => {
 		if ( is_wp_error( $search_response ) ) {
 			$error_message           = $search_response->get_error_message();
 			$status['error_message'] = $error_message;
+			$this->log_to_file( "Error during search: {$error_message}" );
 		}
 
 		$search_body = json_decode( wp_remote_retrieve_body( $search_response ), true );
 		if ( ! empty( $search_body['data'] ) ) {
 			// Lead already exists, fetch the existing Lead ID
-			$zoho_contact_id         = $search_body['data'][0]['id'];
-			$status['error_message'] = 'Lead already exists in Zoho CRM. Lead ID: ' . $zoho_contact_id;
+			$zoho_account_id         = $search_body['data'][0]['id'];
+			$status['error_message'] = 'Lead already exists in Zoho CRM. Lead ID: ' . $zoho_account_id;
+
+			$this->log_to_file( "Lead already exists. Zoho Lead ID: {$zoho_account_id}" );
+
 		} else {
 			// Lead does not exist, proceed to create a new one
 			$zoho_crm_api_url = 'https://www.zohoapis.com/crm/v2/Accounts';
@@ -186,22 +312,32 @@ generateZohoId.addEventListener("click", e => {
 			if ( is_wp_error( $response ) ) {
 				$error_message           = $response->get_error_message();
 				$status['error_message'] = $error_message;
+
+				$this->log_to_file( "Error during lead creation: {$error_message}" );
 			}
 
 			$response_body = json_decode( wp_remote_retrieve_body( $response ), true );
+
+			$response_string = print_r( $response, true );
+
+			$this->log_to_file( "Response: {$response_string}" );
+
 			if ( isset( $response_body['data'][0]['details']['id'] ) ) {
-				$zoho_contact_id = $response_body['data'][0]['details']['id'];
+				$zoho_account_id = $response_body['data'][0]['details']['id'];
 
-				update_user_meta( $user_id, 'zoho_contact_id', $zoho_contact_id );
+				update_user_meta( $user_id, 'zoho_account_id', $zoho_account_id );
 
-				$status['success_message'] = 'New contact added to Zoho CRM successfully. Contact ID: ' . $zoho_contact_id;
+				$status['success_message'] = 'New contact added to Zoho CRM successfully. Contact ID: ' . $zoho_account_id;
 				$status['status']          = 'success';
+
+				$this->log_to_file( "New contact added to Zoho CRM. Contact ID: {$zoho_account_id}" );
 
 			} else {
 				$status['error_message'] = 'Failed to add new contact to Zoho CRM.';
+				$this->log_to_file( 'Failed to add new contact to Zoho CRM.' );
 			}
 		}
-		$status['zoho_contact_id'] = $zoho_contact_id;
+		$status['zoho_account_id'] = $zoho_account_id;
 
 		return $status;
 	}
@@ -469,30 +605,96 @@ generateZohoId.addEventListener("click", e => {
 	public function user_add_to_zoho( $user ) {
 		$user_id = $user->ID;
 
-		$this->get_user_zoho_id( $user_id );
+		$this->log_to_file( "Adding to zoho User ID: {$user_id}" );
+
+		$zoho = $this->get_user_zoho_id( $user_id );
+
+		$this->log_to_file( "Result: {$zoho}" );
 	}
 
 	public function send_order_to_zoho_crm( $order_id ) {
 		if ( ! $order_id ) {
-			return;
+			return null;
 		}
 
-		// Fetch the order
 		$order = wc_get_order( $order_id );
 		if ( ! $order ) {
-			return;
+			return null;
+		}
+
+		$access_token = $this->get_zoho_access_token();
+
+		// Search for an existing sales order with the Order_Number matching $order_id
+		$search_url     = 'https://www.zohoapis.com/crm/v2/Sales_Orders/search?criteria=(Order_Number:equals:' . $order_id . ')';
+		$search_headers = array(
+			'Authorization' => 'Zoho-oauthtoken ' . $access_token,
+		);
+
+		$search_response = wp_remote_get( $search_url, array( 'headers' => $search_headers ) );
+		$search_body     = json_decode( wp_remote_retrieve_body( $search_response ), true );
+
+		if ( ! empty( $search_body['data'] ) ) {
+			$existing_sales_order_id = $search_body['data'][0]['id'];
+			$this->log_to_file( "An existing sales order with Order_Number $order_id was found. Sales Order ID: $existing_sales_order_id" );
+			update_post_meta( $order_id, 'zoho_order_id', $existing_sales_order_id );
+			return $existing_sales_order_id;
+		}
+
+		$sales_order_data = $this->prepare_zoho_order_data( $order_id );
+
+		$api_url = 'https://www.zohoapis.com/crm/v2/Sales_Orders';
+		$headers = array(
+			'Authorization' => 'Zoho-oauthtoken ' . $access_token,
+			'Content-Type'  => 'application/json',
+		);
+		$body    = json_encode( array( 'data' => array( $sales_order_data ) ) );
+
+		$response = wp_remote_post(
+			$api_url,
+			array(
+				'headers'     => $headers,
+				'body'        => $body,
+				'method'      => 'POST',
+				'data_format' => 'body',
+			)
+		);
+
+		$response_body = json_decode( wp_remote_retrieve_body( $response ), true );
+
+		if ( isset( $response_body['data'][0]['details']['id'] ) ) {
+			$new_sales_order_id = $response_body['data'][0]['details']['id'];
+			$this->log_to_file( "New sales order created with ID: $new_sales_order_id" );
+			update_post_meta( $order_id, 'zoho_order_id', $new_sales_order_id );
+			return $new_sales_order_id;
+		} else {
+			$this->log_to_file( "Failed to create a new sales order from order $order_id." );
+			return null;
 		}
 	}
 
-	function prepare_zoho_order_data( $order ) {
+
+	function prepare_zoho_order_data( $order_id ) {
+		$order = wc_get_order( $order_id );
+
+		if ( ! $order ) {
+			return;
+		}
+
 		$items = array();
+
 		foreach ( $order->get_items() as $item_id => $item ) {
 			$product = $item->get_product();
+
+			$zoho_product_id = $this->get_zoho_product_id( $product->get_id() );
+
 			$items[] = array(
-				'Product_Code' => $product->get_sku(), // Ensure your products in Zoho CRM have SKUs
-				'Quantity'     => $item->get_quantity(),
-				'List_Price'   => $product->get_price(), // Adjust based on your pricing structure in Zoho CRM
-				'Total'        => $item->get_total(),
+				'product'      => array(
+					'id' => $zoho_product_id,
+				),
+				'product_code' => $product->get_id(),
+				'quantity'     => $item->get_quantity(),
+				'list_price'   => floatval( $product->get_price() ),
+				'total'        => $item->get_total(),
 			);
 		}
 
@@ -504,8 +706,11 @@ generateZohoId.addEventListener("click", e => {
 
 		// Ensure there's a valid Zoho Account ID
 		if ( ! $zoho_account_id ) {
-			// Handle the case where no Zoho Account ID is found
-			// This could involve logging an error, falling back to a default account, etc.
+			$zoho_account_id = $this->get_user_zoho_id( $customer_id );
+
+			if ( ! $zoho_account_id ) {
+				return;
+			}
 		}
 
 		return array(
@@ -514,7 +719,23 @@ generateZohoId.addEventListener("click", e => {
 				'id' => $zoho_account_id,
 			),
 			'Product_Details' => $items,
+			'Order_Number'    => strval( $order->get_order_number() ),
 		);
+	}
+
+	public function log_to_file( $message ) {
+		$log_file     = WP_CONTENT_DIR . '/zoho-logs/zoho_crm_log.txt'; // Specify the log file path
+		$current_time = current_time( 'Y-m-d H:i:s' );
+		$log_message  = "{$current_time} - {$message}\n";
+
+		// Check if directory exists, if not create it
+		$log_dir = dirname( $log_file );
+		if ( ! file_exists( $log_dir ) ) {
+			wp_mkdir_p( $log_dir );
+		}
+
+		// Append the message to the log file
+		file_put_contents( $log_file, $log_message, FILE_APPEND );
 	}
 }
 

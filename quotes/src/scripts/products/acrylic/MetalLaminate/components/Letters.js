@@ -16,7 +16,7 @@ import {
 import { METAL_ACRYLIC_PRICING, QuoteContext } from '../MetalLaminate';
 
 const NovaOptions = NovaQuote.quote_options;
-const exchangeRate = wcumcs_vars_data.currency_data.rate;
+const exchangeRate = 1.3;
 
 let lowerCasePricing = 1; // Default value
 let smallPunctuations = 1; // Default value
@@ -303,6 +303,7 @@ export default function Letters({ item }) {
 		waterproof,
 		acrylicBase,
 		usdPrice,
+		cadPrice,
 		selectedLetterHeight,
 		fileUrl,
 		fileName,

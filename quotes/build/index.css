@@ -26,6 +26,14 @@
   grid-template-rows: 1fr;
 }
 
+#novaQuoteNote p {
+  margin-bottom: 0.25rem;
+}
+
+#novaQuoteNote {
+  margin-bottom: 40px;
+}
+
 .select {
   border: 1px solid var(--global-gray-400);
   background-size: 16px 100%;

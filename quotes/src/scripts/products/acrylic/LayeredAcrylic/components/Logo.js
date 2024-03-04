@@ -12,7 +12,7 @@ import {
 } from '../../../../utils/SignageOptions';
 import { QuoteContext } from '../LayeredAcrylic';
 
-const exchangeRate = wcumcs_vars_data.currency_data.rate;
+const exchangeRate = 1.3;
 const NovaSingleOptions = NovaQuote.single_quote_options;
 
 export default function Logo({ item }) {

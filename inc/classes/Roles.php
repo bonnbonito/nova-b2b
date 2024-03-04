@@ -24,6 +24,7 @@ class Roles {
 
 	public function __construct() {
 		add_action( 'init', array( $this, 'create_roles' ) );
+		add_action( 'after_setup_theme', array( $this, 'create_custom_table' ) );
 		add_action( 'wp_ajax_nopriv_nova_signup', array( $this, 'nova_signup' ) );
 		add_action( 'wp_ajax_nopriv_nova_login', array( $this, 'nova_login' ) );
 		add_action( 'wp_ajax_nopriv_send_activation', array( $this, 'send_activation' ) );
@@ -426,11 +427,11 @@ jQuery(document).ready(function($) {
 
 		$business_id = strtoupper( $country . $state . '-' . substr( $businessType, 0, 1 ) );
 
-		if ( $user_id < 100 ) {
-			$business_id = $business_id . '0' . $user_id;
-		} else {
-			$business_id = $business_id . $user_id;
-		}
+		$business_type_table = 'type_' . $businessType;
+
+		$business_type_id = $this->insert_business_type( $business_type_table, $user_id );
+
+		$business_id = $business_id . str_pad( $business_type_id, 3, '0', STR_PAD_LEFT );
 
 		update_field( 'business_id', $business_id, 'user_' . $user_id );
 		update_field( 'business_name', $businessName, 'user_ ' . $user_id );
@@ -473,7 +474,6 @@ jQuery(document).ready(function($) {
 
 	public function send_user_activate_email( $user_id ) {
 
-		$business_id    = get_field( 'business_id', 'user_' . $user_id );
 		$user_data      = get_userdata( $user_id );
 		$user_email     = $user_data->user_email;
 		$firstName      = $user_data->first_name;
@@ -610,6 +610,61 @@ jQuery(document).ready(function($) {
 			'Partner',
 			get_role( 'customer' )->capabilities
 		);
+	}
+
+	public function create_custom_table() {
+		global $wpdb;
+
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+
+		$tables = array(
+			'type_sign-shops',
+			'type_printing-shops',
+			'type_display',
+			'type_graphics',
+			'type_marketing-agencies',
+			'type_others',
+		);
+
+		foreach ( $tables as $table ) {
+
+			$sanitized_table_name = str_replace( '-', '_', $table );
+			$table_name           = $wpdb->prefix . $sanitized_table_name;
+
+			$charset_collate = $wpdb->get_charset_collate();
+
+			$sql = "CREATE TABLE $table_name (
+				id mediumint(9) NOT NULL AUTO_INCREMENT,
+				time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+				user_id mediumint(9) NOT NULL,
+				PRIMARY KEY  (id)
+			) $charset_collate;";
+
+			dbDelta( $sql );
+
+		}
+	}
+
+	public function insert_business_type( $type, $user_id ) {
+		global $wpdb;
+		$sanitized_type = str_replace( '-', '_', $type );
+		$table_name     = $wpdb->prefix . $sanitized_type;
+		$current_time   = current_time( 'mysql' );
+
+		$data = array(
+			'time'    => $current_time,
+			'user_id' => $user_id,
+		);
+
+		$format = array( '%s', '%d' );
+
+		$success = $wpdb->insert( $table_name, $data, $format );
+
+		if ( false === $success ) {
+			return new WP_Error( 'db_insert_error', 'Failed to insert business type data into database', $wpdb->last_error );
+		} else {
+			return $wpdb->insert_id;
+		}
 	}
 }
 

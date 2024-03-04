@@ -537,6 +537,7 @@ function ModalSave({
 }) {
   const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [submitted, setSubmitted] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const [submitting, setSubmitting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [open, setOpen] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [count, setCount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0);
   const [error, setError] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({});
@@ -628,6 +629,7 @@ function ModalSave({
   const handleFormSubmit = async event => {
     event.preventDefault(); // Prevent default form submission
     setIsLoading(true);
+    setSubmitting(true);
 
     // Form submission logic here
     try {
@@ -648,15 +650,15 @@ function ModalSave({
       }
       const status = await (0,_utils_QuoteFunctions__WEBPACK_IMPORTED_MODULE_2__.processQuote)(formData);
       if (status === 'success') {
-        setSubmitted(true);
         localStorage.removeItem(window.location.href + NovaQuote.user_id);
+        setSubmitted(true);
         if (action !== 'update') {
-          setCount(3);
+          setCount(2);
           setTimeout(() => {
             window.location.href = NovaQuote.mockup_account_url;
-          }, 2500);
+          }, 1500);
         } else {
-          setCount(3);
+          setCount(2);
         }
       } else {
         alert('Error');
@@ -671,16 +673,12 @@ function ModalSave({
       setIsLoading(false);
       setTimeout(() => {
         setOpen(false);
-      }, 3000);
+        setSubmitting(false);
+      }, 1500);
     }
   };
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (open) {
-      setSubmitted(false);
-    }
-  }, [open]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_3__.Root, {
-    open: open,
+    open: submitting ? true : open,
     onOpenChange: setOpen
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_3__.Trigger, {
     asChild: true
@@ -692,7 +690,7 @@ function ModalSave({
     className: "data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[550px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none z-[51]"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_3__.Title, {
     className: "m-0 font-title uppercase font-medium text-2xl"
-  }, action === 'processing' ? 'Submit Your Quote Request' : 'Save Your Draft'), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_3__.Description, {
+  }, action === 'processing' || action === 'update-processing' ? 'Submit Your Quote Request' : 'Save Your Draft'), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_3__.Description, {
     className: "mt-[10px] mb-5 text-[15px] leading-normal"
   }, "Please add a PROJECT NAME."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", {
     ref: formRef,
@@ -720,7 +718,7 @@ function ModalSave({
     className: "data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[550px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none z-[51]"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_3__.Description, {
     className: "mt-[10px] mb-5 text-[15px] leading-normal"
-  }, action === 'update-processing' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (action === 'processing' || action === 'update-processing') && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     dangerouslySetInnerHTML: {
       __html: toProcessingMessage()
     }
@@ -996,7 +994,7 @@ function PricesView({
     className: "block"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex justify-between py-2 font-title uppercase"
-  }, item.title, ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, price > 0 && `${currency}$${price.toFixed(2).toLocaleString()}`)), item.layers && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.title, ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, price > 0 && `${currency}$${parseFloat(price).toFixed(2).toLocaleString()}`)), item.layers && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-[160px_1fr] py-[2px] items-center"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
@@ -1299,7 +1297,7 @@ function QuoteView() {
     }).catch(error => console.error('Error:', error));
   };
   const quotePrice = parseFloat(NovaAccount.final_price);
-  const exchangeRate = parseFloat(wcumcs_vars_data.currency_data.rate);
+  const exchangeRate = 1.3;
   const finalPrice = currency === 'USD' ? quotePrice : quotePrice * exchangeRate;
   const flatRate = currency === 'USD' ? 14.75 : 14.75 * exchangeRate;
   const standardRate = parseFloat(finalPrice * 0.075);
@@ -1380,7 +1378,8 @@ function QuoteView() {
   })), NovaAccount.note && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "block mb-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, "Note:"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "block text-sm",
+    id: "novaQuoteNote",
+    className: "nova-quote-note block text-sm",
     dangerouslySetInnerHTML: {
       __html: NovaAccount.note
     }
@@ -1433,7 +1432,7 @@ function Sidebar({
   const totalUsdPrice = signage.reduce((acc, item) => acc + parseFloat(item.usdPrice), 0);
   const totalCadPrice = signage.reduce((acc, item) => acc + parseFloat(item.cadPrice), 0);
   const totalPrice = currency === 'USD' ? totalUsdPrice : totalCadPrice;
-  const exchangeRate = parseFloat(wcumcs_vars_data.currency_data.rate);
+  const exchangeRate = 1.3;
   const flatRate = currency === 'USD' ? 14.75 : 14.75 * exchangeRate;
   const standardRate = totalPrice > 0 ? parseFloat(totalPrice * 0.075) : 0;
   const estimatedShipping = totalPrice > 0 ? parseFloat(Math.max(flatRate, standardRate)) : 0;
@@ -1465,7 +1464,7 @@ function Sidebar({
     className: "text-2xl"
   }, "TOTAL:"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", {
     className: "text-2xl"
-  }, currency, "$", Number(estimateTotalPrice.toFixed(2)).toLocaleString())), signage.length > 0 && NovaQuote.quote_status?.value !== 'processing' && NovaQuote.quote_status?.value !== 'ready' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, NovaQuote.is_editting === '1' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, NovaQuote.user_role[0] !== 'pending' && NovaQuote.not_author_but_admin === 'no' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }, currency, "$", Number(estimateTotalPrice.toFixed(2)).toLocaleString())), signage.length > 0 && NovaQuote.quote_status?.value !== 'processing' && NovaQuote.quote_status?.value !== 'ready' && NovaQuote.quote_status?.value !== 'archived' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, NovaQuote.is_editting === '1' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, NovaQuote.user_role[0] !== 'pending' && NovaQuote.not_author_but_admin === 'no' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_1__["default"], {
     signage: signage,
     required: required,
     action: "update-processing",
@@ -2202,7 +2201,7 @@ __webpack_require__.r(__webpack_exports__);
 
 const NovaOptions = NovaQuote.quote_options;
 const NovaSingleOptions = NovaQuote.single_quote_options;
-const exchangeRate = wcumcs_vars_data.currency_data.rate;
+const exchangeRate = 1.3;
 let lowerCasePricing = 1; // Default value
 let smallPunctuations = 1; // Default value
 
@@ -2373,6 +2372,7 @@ function Letters({
       });
       setUsdPrice(totalLetterPrice.toFixed(2));
       setCadPrice((totalLetterPrice * parseFloat(exchangeRate)).toFixed(2));
+      console.log(exchangeRate);
     } else {
       setUsdPrice(0);
       setCadPrice(0);
@@ -2467,7 +2467,7 @@ function Letters({
   }, [letters, font, color, selectedThickness, selectedMounting, waterproof, selectedLetterHeight, fileUrl, fileName, file, selectedFinishing, customFont, customColor]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-  }, [letters, comments, font, selectedThickness, selectedMounting, waterproof, color, usdPrice, selectedLetterHeight, fileUrl, fileName, file, selectedFinishing, customFont, customColor]);
+  }, [letters, comments, font, selectedThickness, selectedMounting, waterproof, color, usdPrice, cadPrice, selectedLetterHeight, fileUrl, fileName, file, selectedFinishing, customFont, customColor]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const newHeightOptions = letterPricing?.filter(item => {
       const value = item[selectedThickness?.value];
@@ -2661,7 +2661,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const NovaSingleOptions = NovaQuote.single_quote_options;
-const exchangeRate = wcumcs_vars_data.currency_data.rate;
+const exchangeRate = 1.3;
 function Logo({
   item
 }) {
@@ -3091,7 +3091,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const exchangeRate = wcumcs_vars_data.currency_data.rate;
+const exchangeRate = 1.3;
 const NovaSingleOptions = NovaQuote.single_quote_options;
 function Logo({
   item
@@ -3574,7 +3574,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const NovaOptions = NovaQuote.quote_options;
-const exchangeRate = wcumcs_vars_data.currency_data.rate;
+const exchangeRate = 1.3;
 let lowerCasePricing = 1; // Default value
 let smallPunctuations = 1; // Default value
 
@@ -3786,7 +3786,7 @@ function Letters({
   }, [letters]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-  }, [letters, comments, font, selectedThickness, selectedMounting, waterproof, acrylicBase, usdPrice, selectedLetterHeight, fileUrl, fileName, file, metalFinish, customFont, customColor]);
+  }, [letters, comments, font, selectedThickness, selectedMounting, waterproof, acrylicBase, usdPrice, cadPrice, selectedLetterHeight, fileUrl, fileName, file, metalFinish, customFont, customColor]);
   const checkAndAddMissingFields = () => {
     const missingFields = [];
     if (!letters) missingFields.push('Add Line Text');
@@ -4044,7 +4044,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const exchangeRate = wcumcs_vars_data.currency_data.rate;
+const exchangeRate = 1.3;
 function Logo({
   item
 }) {
@@ -4528,7 +4528,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const NovaSingleOptions = NovaQuote.single_quote_options;
-const exchangeRate = wcumcs_vars_data.currency_data.rate;
+const exchangeRate = 1.3;
 const UV_PRICE = 1.05;
 function Logo({
   item
@@ -5284,7 +5284,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const NovaOptions = NovaQuote.quote_options;
-const exchangeRate = wcumcs_vars_data.currency_data.rate;
+const exchangeRate = 1.3;
 let lowerCasePricing = 1; // Default value
 let smallPunctuations = 1; // Default value
 
@@ -5475,7 +5475,7 @@ function Letters({
   }, [letters]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-  }, [letters, comments, font, selectedThickness, installation, waterproof, color, usdPrice, selectedLetterHeight, fileUrl, fileName, file, selectedFinishing, customFont, customColor]);
+  }, [letters, comments, font, selectedThickness, installation, waterproof, color, usdPrice, cadPrice, selectedLetterHeight, fileUrl, fileName, file, selectedFinishing, customFont, customColor]);
   const checkAndAddMissingFields = () => {
     const missingFields = [];
     if (!letters) missingFields.push('Add Line Text');
@@ -5721,7 +5721,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const NovaSingleOptions = NovaQuote.single_quote_options;
-const exchangeRate = wcumcs_vars_data.currency_data.rate;
+const exchangeRate = 1.3;
 function Logo({
   item
 }) {
@@ -6217,7 +6217,7 @@ __webpack_require__.r(__webpack_exports__);
 
 const NovaOptions = NovaQuote.quote_options;
 const PricingTable = NovaQuote.metal_stainless_pricing?.letter_height_x_logo_pricing;
-const exchangeRate = wcumcs_vars_data.currency_data.rate;
+const exchangeRate = 1.3;
 let lowerCasePricing = 1; // Default value
 let smallPunctuations = 1; // Default value
 
@@ -6499,7 +6499,7 @@ function Letters({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
-  }, [letters, comments, font, selectedThickness, installation, waterproof, color, usdPrice, selectedLetterHeight, fileUrl, fileName, file, metal, selectedFinishing, stainLessMetalFinish, stainlessSteelPolished, customFont, customColor]);
+  }, [letters, comments, font, selectedThickness, installation, waterproof, color, usdPrice, cadPrice, selectedLetterHeight, fileUrl, fileName, file, metal, selectedFinishing, stainLessMetalFinish, stainlessSteelPolished, customFont, customColor]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const newHeightOptions = letterPricing?.filter(item => {
       const value = item[selectedThickness?.value];
@@ -6718,7 +6718,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const exchangeRate = wcumcs_vars_data.currency_data.rate;
+const exchangeRate = 1.3;
 const PricingTable = NovaQuote.metal_stainless_pricing?.logo_pricing;
 function Logo({
   item

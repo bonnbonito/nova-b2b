@@ -117,11 +117,7 @@ if ( $show_downloads ) {
 
 			<?php do_action( 'woocommerce_order_details_after_order_table', $order ); ?>
 
-			<?php
-			print_r(
-				$order->get_total()
-			);
-			?>
+
 		</div>
 
 	</div>

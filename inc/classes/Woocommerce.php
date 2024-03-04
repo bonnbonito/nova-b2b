@@ -1347,9 +1347,10 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 
 		$query = new WP_Query(
 			array(
-				'post_type'   => 'nova_quote',
-				'meta_query'  => $meta_query,
-				'post_status' => 'publish',
+				'post_type'      => 'nova_quote',
+				'meta_query'     => $meta_query,
+				'post_status'    => 'publish',
+				'posts_per_page' => -1,
 			)
 		);
 
@@ -1383,9 +1384,10 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 
 		$query = new WP_Query(
 			array(
-				'post_type'   => 'nova_quote',
-				'meta_query'  => $meta_query,
-				'post_status' => 'publish',
+				'post_type'      => 'nova_quote',
+				'meta_query'     => $meta_query,
+				'post_status'    => 'publish',
+				'posts_per_page' => -1,
 			)
 		);
 
@@ -1420,9 +1422,10 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 
 		$query = new WP_Query(
 			array(
-				'post_type'   => 'nova_quote',
-				'meta_query'  => $meta_query,
-				'post_status' => 'publish',
+				'post_type'      => 'nova_quote',
+				'meta_query'     => $meta_query,
+				'post_status'    => 'publish',
+				'posts_per_page' => -1,
 			)
 		);
 
@@ -1457,9 +1460,10 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 
 		$query = new WP_Query(
 			array(
-				'post_type'   => 'nova_quote',
-				'meta_query'  => $meta_query,
-				'post_status' => 'publish',
+				'post_type'      => 'nova_quote',
+				'meta_query'     => $meta_query,
+				'post_status'    => 'publish',
+				'posts_per_page' => -1,
 			)
 		);
 
@@ -1496,9 +1500,10 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 
 		$query = new WP_Query(
 			array(
-				'post_type'   => 'nova_quote',
-				'meta_query'  => $meta_query,
-				'post_status' => 'publish',
+				'post_type'      => 'nova_quote',
+				'meta_query'     => $meta_query,
+				'post_status'    => 'publish',
+				'posts_per_page' => -1,
 			)
 		);
 
@@ -1520,9 +1525,10 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 
 		$query = new WP_Query(
 			array(
-				'post_type'   => 'nova_quote',
-				'meta_query'  => $meta_query,
-				'post_status' => 'publish',
+				'post_type'      => 'nova_quote',
+				'meta_query'     => $meta_query,
+				'post_status'    => 'publish',
+				'posts_per_page' => -1,
 			)
 		);
 

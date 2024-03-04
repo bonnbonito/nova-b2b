@@ -22,7 +22,8 @@ $final_price = $price ? ( get_woocommerce_currency() === 'USD' ? $price : $price
 
 		</div>
 		<div class="grow-[2] mb-4 md:mb-0">
-			<div class="block"><span class="font-title text-sm">NAME:</span> <?php echo get_field( 'frontend_title' ); ?>
+			<div class="block"><span class="font-title text-sm">NAME:</span>
+				<?php echo get_field( 'frontend_title' ); ?>
 			</div>
 			<div><span class="font-title text-sm">PRODUCT:</span>
 				<?php echo ( get_field( 'product' ) ? get_field( 'product' )->post_title : 'CUSTOM PROJECT' ); ?></div>
@@ -53,6 +54,26 @@ $final_price = $price ? ( get_woocommerce_currency() === 'USD' ? $price : $price
 				Details</a>
 			<span class="p-2 rounded text-[10px] w-[110px] text-center tracking-[1.2px]">Processing<br>
 				Quotation</span>
+
+			<?php elseif ( get_field( 'quote_status' )['value'] == 'archived' ) : ?>
+			<a href="<?php echo esc_url( '/my-account/mockups/view?qid=' . get_the_ID() ); ?>"
+				class="p-2 border rounded text-nova-gray text-[10px] tracking-[1px] hover:bg-nova-gray hover:text-white w-[110px] text-center">View
+				Details</a>
+				<?php
+				$updated_order = get_field( 'new_quote' );
+
+				if ( $updated_order ) :
+					?>
+
+
+
+			<a href="<?php echo esc_url( '/my-account/mockups/view?qid=' . $updated_order->ID ); ?>"
+				class="p-2 border rounded text-white bg-green-800 text-[10px] tracking-[1px] hover:bg-nova-gray hover:text-white w-[110px] text-center">Updated
+				Order</a>
+			<?php endif; ?>
+
+
+
 			<?php else : ?>
 			<a href="<?php echo esc_url( '/my-account/mockups/view?qid=' . get_the_ID() ); ?>"
 				class="p-2 border rounded text-nova-gray text-[10px] tracking-[1px] hover:bg-nova-gray hover:text-white w-[110px] text-center">View

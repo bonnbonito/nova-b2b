@@ -134,7 +134,7 @@ export default function QuoteView() {
 	};
 
 	const quotePrice = parseFloat(NovaAccount.final_price);
-	const exchangeRate = parseFloat(wcumcs_vars_data.currency_data.rate);
+	const exchangeRate = 1.3;
 	const finalPrice =
 		currency === 'USD' ? quotePrice : quotePrice * exchangeRate;
 
@@ -234,7 +234,8 @@ export default function QuoteView() {
 						<div className="block mb-4">
 							<h5>Note:</h5>
 							<div
-								className="block text-sm"
+								id="novaQuoteNote"
+								className="nova-quote-note block text-sm"
 								dangerouslySetInnerHTML={{ __html: NovaAccount.note }}
 							></div>
 						</div>

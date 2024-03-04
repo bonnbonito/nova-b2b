@@ -18,7 +18,7 @@ export default function Sidebar({ signage, required }) {
 	);
 
 	const totalPrice = currency === 'USD' ? totalUsdPrice : totalCadPrice;
-	const exchangeRate = parseFloat(wcumcs_vars_data.currency_data.rate);
+	const exchangeRate = 1.3;
 
 	const flatRate = currency === 'USD' ? 14.75 : 14.75 * exchangeRate;
 
@@ -81,7 +81,8 @@ export default function Sidebar({ signage, required }) {
 
 				{signage.length > 0 &&
 					NovaQuote.quote_status?.value !== 'processing' &&
-					NovaQuote.quote_status?.value !== 'ready' && (
+					NovaQuote.quote_status?.value !== 'ready' &&
+					NovaQuote.quote_status?.value !== 'archived' && (
 						<>
 							{NovaQuote.is_editting === '1' ? (
 								<>

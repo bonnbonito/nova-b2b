@@ -21,7 +21,7 @@ import { QuoteContext } from '../LaserCutStainless';
 const NovaOptions = NovaQuote.quote_options;
 const PricingTable =
 	NovaQuote.metal_stainless_pricing?.letter_height_x_logo_pricing;
-const exchangeRate = wcumcs_vars_data.currency_data.rate;
+const exchangeRate = 1.3;
 
 let lowerCasePricing = 1; // Default value
 let smallPunctuations = 1; // Default value
@@ -342,7 +342,8 @@ export default function Letters({ item }) {
 			}
 		}
 		if (selectedFinishing === 'Metal Finish') {
-			if (!stainLessMetalFinish) missingFields.push('Select Metal Finish Option');
+			if (!stainLessMetalFinish)
+				missingFields.push('Select Metal Finish Option');
 		}
 
 		if (
@@ -403,6 +404,7 @@ export default function Letters({ item }) {
 		waterproof,
 		color,
 		usdPrice,
+		cadPrice,
 		selectedLetterHeight,
 		fileUrl,
 		fileName,

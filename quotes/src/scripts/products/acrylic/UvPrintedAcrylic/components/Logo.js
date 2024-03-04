@@ -13,7 +13,7 @@ import {
 } from '../../../../utils/SignageOptions';
 
 const NovaSingleOptions = NovaQuote.single_quote_options;
-const exchangeRate = wcumcs_vars_data.currency_data.rate;
+const exchangeRate = 1.3;
 
 const UV_PRICE = 1.05;
 

@@ -33,7 +33,8 @@ export default function PricesView({ item }) {
 				<div className="flex justify-between py-2 font-title uppercase">
 					{item.title}{' '}
 					<span>
-						{price > 0 && `${currency}$${price.toFixed(2).toLocaleString()}`}
+						{price > 0 &&
+							`${currency}$${parseFloat(price).toFixed(2).toLocaleString()}`}
 					</span>
 				</div>
 

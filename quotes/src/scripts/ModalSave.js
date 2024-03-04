@@ -6,6 +6,7 @@ import { processQuote } from './utils/QuoteFunctions';
 function ModalSave({ signage, action, btnClass, label, required }) {
 	const [isLoading, setIsLoading] = useState(false);
 	const [submitted, setSubmitted] = useState(false);
+	const [submitting, setSubmitting] = useState(false);
 	const [open, setOpen] = useState(false);
 	const [count, setCount] = useState(0);
 	const [error, setError] = useState({});
@@ -117,6 +118,7 @@ function ModalSave({ signage, action, btnClass, label, required }) {
 	const handleFormSubmit = async (event) => {
 		event.preventDefault(); // Prevent default form submission
 		setIsLoading(true);
+		setSubmitting(true);
 
 		// Form submission logic here
 		try {
@@ -140,15 +142,15 @@ function ModalSave({ signage, action, btnClass, label, required }) {
 
 			const status = await processQuote(formData);
 			if (status === 'success') {
-				setSubmitted(true);
 				localStorage.removeItem(window.location.href + NovaQuote.user_id);
+				setSubmitted(true);
 				if (action !== 'update') {
-					setCount(3);
+					setCount(2);
 					setTimeout(() => {
 						window.location.href = NovaQuote.mockup_account_url;
-					}, 2500);
+					}, 1500);
 				} else {
-					setCount(3);
+					setCount(2);
 				}
 			} else {
 				alert('Error');
@@ -163,18 +165,13 @@ function ModalSave({ signage, action, btnClass, label, required }) {
 			setIsLoading(false);
 			setTimeout(() => {
 				setOpen(false);
-			}, 3000);
+				setSubmitting(false);
+			}, 1500);
 		}
 	};
 
-	useEffect(() => {
-		if (open) {
-			setSubmitted(false);
-		}
-	}, [open]);
-
 	return (
-		<Dialog.Root open={open} onOpenChange={setOpen}>
+		<Dialog.Root open={submitting ? true : open} onOpenChange={setOpen}>
 			<Dialog.Trigger asChild>
 				<button className={btnClass}>{label}</button>
 			</Dialog.Trigger>
@@ -184,7 +181,7 @@ function ModalSave({ signage, action, btnClass, label, required }) {
 					!submitted ? (
 						<Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[550px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none z-[51]">
 							<Dialog.Title className="m-0 font-title uppercase font-medium text-2xl">
-								{action === 'processing'
+								{action === 'processing' || action === 'update-processing'
 									? 'Submit Your Quote Request'
 									: 'Save Your Draft'}
 							</Dialog.Title>
@@ -226,9 +223,12 @@ function ModalSave({ signage, action, btnClass, label, required }) {
 					) : (
 						<Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[550px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none z-[51]">
 							<Dialog.Description className="mt-[10px] mb-5 text-[15px] leading-normal">
-								{action === 'update-processing' && (
+								{(action === 'processing' ||
+									action === 'update-processing') && (
 									<div
-										dangerouslySetInnerHTML={{ __html: toProcessingMessage() }}
+										dangerouslySetInnerHTML={{
+											__html: toProcessingMessage(),
+										}}
 									></div>
 								)}
 								{action === 'draft' && (
