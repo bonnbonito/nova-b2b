@@ -162,38 +162,39 @@ class Scripts {
 	}
 
 
-	public function get_woocommerce_tax_rate_by_country_and_state() {
+	public function get_woocommerce_tax_rate_by_country_and_state( $country_code = '', $state_code = '' ) {
 		global $wpdb;
 
-		$customer = WC()->customer;
-
-		$country_code = $customer->get_shipping_country();
-		$state_code   = $customer->get_shipping_state();
-
-		if ( empty( $country_code ) ) {
-			$country_code = '';
-		}
-		if ( empty( $state_code ) ) {
-			$state_code = '';
+		// Use global customer as fallback
+		if ( empty( $country_code ) || empty( $state_code ) ) {
+			$customer     = WC()->customer;
+			$country_code = $customer->get_shipping_country() ?: $country_code;
+			$state_code   = $customer->get_shipping_state() ?: $state_code;
 		}
 
-		$tax_rates = $wpdb->get_results(
-			$wpdb->prepare(
-				"
-            SELECT tax_rate, tax_rate_name
-            FROM {$wpdb->prefix}woocommerce_tax_rates
-            WHERE tax_rate_country = %s
-            AND tax_rate_state = %s
-            AND tax_rate_class = ''
-            ORDER BY tax_rate_order
-            ",
-				$country_code,
-				$state_code
-			)
-		);
+		try {
+			$tax_rates = $wpdb->get_results(
+				$wpdb->prepare(
+					"
+                SELECT tax_rate, tax_rate_name
+                FROM {$wpdb->prefix}woocommerce_tax_rates
+                WHERE tax_rate_country = %s
+                AND tax_rate_state = %s
+                AND tax_rate_class = ''
+                ORDER BY tax_rate_order
+                ",
+					$country_code,
+					$state_code
+				)
+			);
 
-		return $tax_rates ? $tax_rates[0] : null;
+			return $tax_rates ? $tax_rates[0] : null;
+		} catch ( Exception $e ) {
+			// Optionally log the error or handle it as needed
+			return null;
+		}
 	}
+
 
 
 

@@ -43,6 +43,7 @@ export default function Letters({ item }) {
 	const [letters, setLetters] = useState(item.letters);
 	const [comments, setComments] = useState(item.comments);
 	const [font, setFont] = useState(item.font);
+	const [openFont, setOpenFont] = useState(false);
 
 	const [metal, setMetal] = useState(item.metal);
 	const [stainLessMetalFinish, setStainLessMetalFinish] = useState(
@@ -78,6 +79,7 @@ export default function Letters({ item }) {
 	const [installation, setInstallation] = useState(item.installation);
 
 	const colorRef = useRef(null);
+	const fontRef = useRef(null);
 
 	const letterPricing =
 		PricingTable.length > 0 ? convert_json(PricingTable) : [];
@@ -437,8 +439,9 @@ export default function Letters({ item }) {
 		}
 	}, [selectedThickness]);
 
-	useOutsideClick(colorRef, () => {
+	useOutsideClick([colorRef, fontRef], () => {
 		setOpenColor(false);
+		setOpenFont(false);
 	});
 
 	useEffect(() => {
@@ -484,6 +487,9 @@ export default function Letters({ item }) {
 				<FontsDropdown
 					font={item.font}
 					fonts={NovaOptions.fonts}
+					fontRef={fontRef}
+					openFont={openFont}
+					setOpenFont={setOpenFont}
 					handleSelectFont={handleSelectFont}
 				/>
 

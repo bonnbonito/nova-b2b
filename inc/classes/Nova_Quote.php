@@ -1,6 +1,8 @@
 <?php
 namespace NOVA_B2B\Inc\Classes;
 
+use TCPDF;
+
 class Nova_Quote {
 	/**
 	 * Instance of this class
@@ -111,7 +113,7 @@ class Nova_Quote {
 		<?php else : ?>
 <div id="<?php echo get_field( 'quote_div_id' ); ?>"></div>
 			<?php
-		endif;
+			endif;
 	}
 
 	public function single_quote_redirect() {
@@ -150,7 +152,7 @@ class Nova_Quote {
 <p>Product: <?php echo $product_name; ?></p>
 <strong>Projects</strong>
 		<?php
-					echo '<ul>';
+				echo '<ul>';
 		foreach ( $signage as $project ) {
 			$projectArray = get_object_vars( $project );
 
@@ -188,37 +190,37 @@ class Nova_Quote {
 				}
 			}
 		}
-					echo '</ul>';
+				echo '</ul>';
 
-				$content = ob_get_clean();
+			$content = ob_get_clean();
 
-				$product_data = array(
-					'post_title'   => wp_strip_all_tags( $title ),
-					'post_content' => $content,
-					'post_status'  => 'publish',
-					'post_type'    => 'product',
-					'meta_input'   => array(
-						'_regular_price' => $final_price,
-						'_price'         => $final_price,
-					),
-				);
+			$product_data = array(
+				'post_title'   => wp_strip_all_tags( $title ),
+				'post_content' => $content,
+				'post_status'  => 'publish',
+				'post_type'    => 'product',
+				'meta_input'   => array(
+					'_regular_price' => $final_price,
+					'_price'         => $final_price,
+				),
+			);
 
-				if ( $this->product_exists_by_title( wp_strip_all_tags( $title ) ) ) {
+			if ( $this->product_exists_by_title( wp_strip_all_tags( $title ) ) ) {
 
-					$created_product = $this->product_exists_by_title( wp_strip_all_tags( $title ) );
+				$created_product = $this->product_exists_by_title( wp_strip_all_tags( $title ) );
 
-				} else {
-					$created_product = wp_insert_post( $product_data );
-					wp_set_object_terms( $created_product, 'nova_quote', 'product_type' );
-				}
+			} else {
+				$created_product = wp_insert_post( $product_data );
+				wp_set_object_terms( $created_product, 'nova_quote', 'product_type' );
+			}
 
-				foreach ( $product_meta as $meta_key => $meta_value ) {
-					update_post_meta( $created_product, $meta_key, $meta_value );
-				}
+			foreach ( $product_meta as $meta_key => $meta_value ) {
+				update_post_meta( $created_product, $meta_key, $meta_value );
+			}
 
-				update_post_meta( $post_id, 'nova_product_generated_id', $created_product );
+			update_post_meta( $post_id, 'nova_product_generated_id', $created_product );
 
-				return $created_product;
+			return $created_product;
 	}
 
 	public function for_payment_email( $post_id ) {
@@ -608,6 +610,364 @@ class Nova_Quote {
 		wp_send_json( $status );
 	}
 
+	public function html_invoice( $post_id ) {
+		ob_start();
+		$instance = \NOVA_B2B\Inc\Classes\Scripts::get_instance();
+		$user_id  = get_field( 'partner', $post_id );
+
+		$title       = get_field( 'frontend_title', $post_id );
+		$final_price = floatval( get_field( 'final_price', $post_id ) );
+
+		$product_id   = get_field( 'product', $post_id )->ID;
+		$product_name = get_field( 'product', $post_id )->post_title;
+		$signage      = json_decode( get_field( 'signage', $post_id ) );
+		$note         = get_field( 'note', $post_id );
+
+		$flat_rate     = 14.75;
+		$standard_rate = $final_price * 0.075;
+
+		$estimatedShipping = $final_price > 0 ? number_format( max( $flat_rate, $standard_rate ), 2, '.', '' ) : 0;
+
+		$tax         = $instance->get_woocommerce_tax_rate_by_country_and_state();
+		$tax_rate    = 0;
+		$tax_compute = 0;
+		if ( $tax ) {
+			$tax_rate_name = $tax->tax_rate_name;
+			$tax_rate      = floatval( $tax->tax_rate / 100 );
+			$tax_compute   = number_format( $final_price * $tax_rate, 2, '.', '' );
+		}
+
+		$estimate_total = $final_price + $tax_compute + $estimatedShipping;
+
+		?>
+<style>
+h1 {
+	color: navy;
+	font-family: times;
+	font-size: 24pt;
+	text-decoration: underline;
+}
+
+p.first {
+	color: #003300;
+	font-family: helvetica;
+	font-size: 12pt;
+}
+
+p.first span {
+	color: #006600;
+	font-style: italic;
+}
+
+p#second {
+	color: rgb(00, 63, 127);
+	font-family: times;
+	font-size: 12pt;
+	text-align: justify;
+}
+
+p#second>span {
+	background-color: #FFFFAA;
+}
+
+table.first {
+	color: #003300;
+	font-family: helvetica;
+	font-size: 8pt;
+	border-left: 3px solid red;
+	border-right: 3px solid #FF00FF;
+	border-top: 3px solid green;
+	border-bottom: 3px solid blue;
+	background-color: #ccffcc;
+}
+
+td {
+	border: 2px solid blue;
+	background-color: #ffffee;
+}
+
+td.second {
+	border: 2px dashed green;
+}
+
+div.test {
+	color: #CC0000;
+	background-color: #FFFF66;
+	font-family: helvetica;
+	font-size: 10pt;
+	border-style: solid solid solid solid;
+	border-width: 2px 2px 2px 2px;
+	border-color: green #FF00FF blue red;
+	text-align: center;
+}
+
+.lowercase {
+	text-transform: lowercase;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+.capitalize {
+	text-transform: capitalize;
+}
+</style>
+<table cellpadding="8">
+	<tr>
+		<td>
+			<h4>QUOTE ID: <?php echo $post_id; ?></h4>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<h6>INITIAL QUOTE REQUESTED ON: <span
+					style="margin-left: 10px; font-weight: normal; font-family: Lato;"><?php echo get_the_date( 'F j, Y', $post_id ); ?></span>
+			</h6>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<h6>LAST QUOTE SAVED: <span
+					style="margin-left: 10px; font-weight: normal; font-family: Lato;"><?php echo get_the_modified_date( 'F j, Y', $post_id ); ?></span>
+			</h6>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<h6>QUOTE NAME: <span
+					style="margin-left: 10px; font-weight: normal; font-family: Lato;"><?php echo get_field( 'frontend_title', $post_id ); ?></span>
+			</h6>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<h6>PARTNER ID: <span
+					style="margin-left: 10px; font-weight: normal; font-family: Lato;"><?php echo get_field( 'business_id', 'user_' . $user_id ); ?></span>
+			</h6>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<h6>COMPANY NAME: <span
+					style="margin-left: 10px; font-weight: normal; font-family: Lato;"><?php echo ( get_field( 'business_name', 'user_' . $user_id ) ? get_field( 'business_name', 'user_' . $user_id ) : 'None' ); ?></span>
+			</h6>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<h6>MATERIAL: <span
+					style="margin-left: 10px; font-weight: normal; font-family: Lato;"><?php echo $instance->get_material_name( $post_id ); ?></span>
+			</h6>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<h6>PRODUCT: <span
+					style="margin-left: 10px; font-weight: normal; font-family: Lato;"><?php echo $product_name; ?></span>
+			</h6>
+		</td>
+	</tr>
+	<tr>
+		<td style="padding-bottom: 20px;">
+			<?php
+			foreach ( $signage as $project ) {
+				$projectArray = get_object_vars( $project );
+				$price        = $projectArray['usdPrice'];
+				?>
+			<table style="margin-bottom: 0;">
+				<tr style="font-size: 17px; font-weight: bold;">
+					<td><?php echo $projectArray['title']; ?></td>
+					<td style="text-align: right;"><?php echo get_woocommerce_currency(); ?>$ <?php echo $price; ?></td>
+				</tr>
+				<?php
+				if ( $projectArray['letters'] ) {
+					$color = $projectArray['color'] ? ' color: ' . $projectArray['color']->color : '';
+					$font  = $projectArray['font'] ? ' font-family: ' . $projectArray['font'] : '';
+					$style = $color . $font;
+					?>
+				<tr>
+					<td>
+						<div style="padding: 100px; border-radius: 8px; border: 1px solid #ddd;">
+							<h1 style="text-align: center; <?php echo $style; ?>">
+								<?php echo $projectArray['letters']; ?></h1>
+						</div>
+					</td>
+					<td></td>
+				</tr>
+				<?php } ?>
+			</table>
+
+				<?php
+				echo '<table>';
+				$projectArray = get_object_vars( $project );
+
+				// Check and print the title first
+				if ( isset( $projectArray['title'] ) && ! empty( $projectArray['title'] ) ) {
+					echo '<tr style="font-size: 14px; text-transform: uppercase;"><td><strong style="text-transform: uppercase;">Title: </strong></td><td>' . $projectArray['title'] . '</td></tr>';
+				}
+
+				if ( $projectArray['thickness'] ) {
+					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">THICKNESS: </strong></td><td>' . $projectArray['thickness']->thickness . '</td></tr>';
+				}
+
+				if ( $projectArray['width'] ) {
+					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">WIDTH: </strong></td><td>' . $projectArray['width'] . '"</td></tr>';
+				}
+
+				if ( $projectArray['height'] ) {
+					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">HEIGHT: </strong></td><td>' . $projectArray['height'] . '"</td></tr>';
+				}
+
+				if ( $projectArray['printPreference'] ) {
+					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">PRINT PREFERENCE: </strong></td><td>' . $projectArray['printPreference'] . '</td></tr>';
+				}
+
+				if ( $projectArray['baseColor'] ) {
+					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">BASE COLOR: </strong></td><td>' . $projectArray['baseColor'] . '</td></tr>';
+				}
+
+				if ( $projectArray['letterHeight'] ) {
+					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">LETTERS HEIGHT: </strong></td><td>' . $projectArray['letterHeight'] . '"</td></tr>';
+				}
+
+				if ( $projectArray['metal'] ) {
+					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">METAL OPTION: </strong></td><td>' . $projectArray['metal'] . '</td></tr>';
+				}
+
+				if ( $projectArray['stainLessMetalFinish'] ) {
+					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">METAL FINISH: </strong></td><td>' . $projectArray['stainLessMetalFinish'] . '</td></tr>';
+				}
+
+				if ( $projectArray['mounting'] ) {
+					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">MOUNTING: </strong></td><td>' . $projectArray['mounting'] . '</td></tr>';
+				}
+
+				if ( $projectArray['waterproof'] ) {
+					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">WATERPROOF: </strong></td><td>' . $projectArray['waterproof'] . '</td></tr>';
+				}
+
+				if ( $projectArray['finishing'] ) {
+					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">FINISHING: </strong></td><td>' . $projectArray['finishing'] . '</td></tr>';
+				}
+
+				if ( $projectArray['metalFinishing'] ) {
+					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">METAL FINISHING: </strong></td><td>' . $projectArray['metalFinishing'] . '</td></tr>';
+				}
+
+				if ( $projectArray['metalFinish'] ) {
+					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">METAL FINISH: </strong></td><td>' . $projectArray['metalFinish'] . '</td></tr>';
+				}
+
+				if ( $projectArray['stainlessSteelPolished'] ) {
+					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">STEEL POLISHED: </strong></td><td>' . $projectArray['stainlessSteelPolished'] . '</td></tr>';
+				}
+
+				if ( $projectArray['font'] ) {
+					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">FONT: </strong></td><td>' . $projectArray['font'] . '</td></tr>';
+				}
+
+				if ( $projectArray['customFont'] ) {
+					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">CUSTOM FONT: </strong></td><td>' . $projectArray['customFont'] . '</td></tr>';
+				}
+
+				if ( $projectArray['color']->name ) {
+					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">COLOR: </strong></td><td>' . $projectArray['color']->name . '</td></tr>';
+				}
+
+				if ( $projectArray['customColor'] ) {
+					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">CUSTOM COLOR: </strong></td><td>' . $projectArray['customColor'] . '</td></tr>';
+				}
+
+				if ( $projectArray['letters'] ) {
+					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">LINE TEXT: </strong></td><td>' . $projectArray['letters'] . '</td></tr>';
+				}
+
+				if ( $projectArray['metalFinish']->name ) {
+					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">METAL FINISH: </strong></td><td>' . $projectArray['metalFinish']->name . '</td></tr>';
+				}
+
+				if ( $projectArray['acrylicBase'] ) {
+					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">ACRYLIC BASE: </strong></td><td>' . $projectArray['acrylicBase']->name . '</td></tr>';
+				}
+
+				if ( $projectArray['installation'] ) {
+					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">INSTALLATION: </strong></td><td>' . $projectArray['installation'] . '</td></tr>';
+				}
+
+				if ( $projectArray['pieces'] ) {
+					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">PIECES/CUTOUTS: </strong></td><td>' . $projectArray['pieces'] . '</td></tr>';
+				}
+
+				if ( $projectArray['comments'] ) {
+					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">COMMENTS: </strong></td><td>' . $projectArray['comments'] . '</td></tr>';
+				}
+
+				if ( $projectArray['description'] ) {
+					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">DESCRIPTION: </strong></td><td>' . $projectArray['description'] . '</td></tr>';
+				}
+
+				if ( $projectArray['fileUrl'] && $projectArray['fileName'] ) {
+					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">FILE: </strong></td><td><a href="' . $projectArray['fileUrl'] . '" target="_blank">' . $projectArray['fileName'] . '</a></td></tr>';
+				}
+
+				echo '</table>';
+			}
+
+			?>
+		</td>
+	</tr>
+	<tr>
+		<td style="padding-top: 20px; border-top: 1px solid #ddd;">
+			<table>
+				<tr>
+					<td>
+						<h5>ESTIMATED SUBTOTAL:</h5>
+					</td>
+					<td style="text-align: right;">
+						<h5><?php echo get_woocommerce_currency(); ?>$
+							<?php echo $final_price; ?></h5>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<h5>ESTIMATED SHIPPING:</h5>
+					</td>
+					<td style="text-align: right;">
+						<h5><?php echo get_woocommerce_currency(); ?>$
+							<?php echo $estimatedShipping; ?></h5>
+					</td>
+				</tr>
+				<?php if ( $tax ) { ?>
+				<tr>
+					<td>
+						<h5><?php echo $tax_rate_name; ?>:</h5>
+					</td>
+					<td style="text-align: right;">
+						<h5><?php echo get_woocommerce_currency(); ?>$
+							<?php echo $tax_compute; ?></h5>
+					</td>
+				</tr>
+				<?php } ?>
+				<tr>
+					<td style="padding-top: 20px; padding-bottom: 20px;">
+						<h4>ESTIMATED TOTAL:
+						</h4>
+					</td>
+					<td style="padding-top: 20px; padding-bottom: 20px; text-align: right;">
+						<h4><?php echo get_woocommerce_currency(); ?>$
+							<?php echo $estimate_total; ?></h4>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+
+		<?php
+			return ob_get_clean();
+	}
+
 	public function save_quote() {
 		$status = array(
 			'code' => 1,
@@ -659,17 +1019,74 @@ class Nova_Quote {
 
 			if ( 'processing' == $_POST['quote_status'] ) {
 				$this->for_quotation_email( $post_id );
+				$this->generate_pdf( $post_id );
 			}
 
 			$status['code']   = 2;
 			$status['post']   = $_POST;
 			$status['status'] = 'success';
+
 		} else {
 			$status['code'] = 3;
 			wp_send_json( $status );
 		}
 
 		wp_send_json( $status );
+	}
+
+	public function generate_pdf( $post_id, $html ) {
+		require_once get_stylesheet_directory() . '/tcpdf/tcpdf.php';
+
+		$pdf = new TCPDF( PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false );
+
+		// set document information
+		$pdf->SetCreator( PDF_CREATOR );
+		$pdf->SetAuthor( 'NOVA Signage' );
+		$pdf->SetTitle( 'Customer Invoice - ' . $post_id );
+		$pdf->SetSubject( '' );
+		$pdf->SetKeywords( '' );
+
+		// remove default header/footer
+		$pdf->setPrintHeader( false );
+		$pdf->setPrintFooter( false );
+
+		// set default monospaced font
+		$pdf->SetDefaultMonospacedFont( PDF_FONT_MONOSPACED );
+
+		// set margins
+		$pdf->SetMargins( PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT );
+		$pdf->SetHeaderMargin( PDF_MARGIN_HEADER );
+		$pdf->SetFooterMargin( PDF_MARGIN_FOOTER );
+
+		// set auto page breaks
+		$pdf->SetAutoPageBreak( true, PDF_MARGIN_BOTTOM );
+
+		// set image scale factor
+		$pdf->setImageScale( PDF_IMAGE_SCALE_RATIO );
+
+		// set some language-dependent strings (optional)
+		// if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
+		// require_once(dirname(__FILE__).'/lang/eng.php');
+		// $pdf->setLanguageArray($l);
+		// }
+
+		// ---------------------------------------------------------
+
+		// set default font subsetting mode
+		$pdf->setFontSubsetting( true );
+
+		// setfont
+		// $pdf->SetFont( 'quicksand', '', 10, '', true );
+
+		$pdf->SetMargins( 10, 10, 10, true );
+
+		// Add a page
+		// This method has several options, check the source code documentation for more information.
+		$pdf->AddPage();
+
+		$pdf->writeHTML( $html, true, false, true, false, '' );
+
+		$pdf->Output( $_SERVER['DOCUMENT_ROOT'] . 'wp-content/customer_invoices/invoice-' . $post_id . '.pdf', 'F' );
 	}
 
 	public function enable_ai_files( $mimes ) {
@@ -760,7 +1177,6 @@ class Nova_Quote {
 		wp_send_json( $status );
 	}
 
-
 	public function signage_pricing_table() {
 		$status = array(
 			'code' => 1,
@@ -780,8 +1196,6 @@ class Nova_Quote {
 		$status['pricing'] = $pricing;
 		wp_send_json( $status );
 	}
-
-
 
 	public function nova_rest_quote_file() {
 		register_rest_route(
