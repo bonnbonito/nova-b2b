@@ -2,12 +2,12 @@
 module.exports = {
 	content: [
 		'./*.php',
-		'./**/*.php',
+		'./template-parts/**/*.php',
 		'./assets/**/*.{php,css,js}',
 		'./inc/**/*.php',
 		'./woocommerce/**/*.php',
 		'./woocommerce/*.php',
-		'./quotes/build/*.{php,css,js}',
+		'./quotes/build/*.{php,js}',
 	],
 	theme: {
 		extend: {

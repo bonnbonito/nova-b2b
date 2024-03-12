@@ -34,7 +34,7 @@ class Admin {
 
 	public function modify_nova_quote_columns( $columns ) {
 
-		$columns['post_id'] = 'Post ID';
+		$columns['post_id'] = 'ID';
 
 		return $columns;
 	}

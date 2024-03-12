@@ -61,8 +61,15 @@ export default function UploadFile({
 		}
 	};
 
+	function getFormattedDate() {
+		const today = new Date();
+		return today.toISOString().split('T')[0]; // Returns 'YYYY-MM-DD'
+	}
+
 	const checkAndCreateFolder = async (accessToken) => {
-		const folderPath = `/NOVA-CRM/${NovaQuote.business_id}`;
+		const folderPath = `/NOVA-CRM/${
+			NovaQuote.business_id
+		}/${getFormattedDate()}`;
 
 		try {
 			// Check if the folder exists
@@ -162,7 +169,9 @@ export default function UploadFile({
 		await checkAndCreateFolder(token);
 
 		const dropboxArgs = {
-			path: `/NOVA-CRM/${NovaQuote.business_id}/${file.name}`,
+			path: `/NOVA-CRM/${NovaQuote.business_id}/${getFormattedDate()}/${
+				file.name
+			}`,
 			mode: 'overwrite',
 			autorename: false,
 			mute: false,

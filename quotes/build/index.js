@@ -641,6 +641,7 @@ function ModalSave({
       formData.append('signage', JSON.stringify(signage));
       formData.append('total', totalUsdPrice.toFixed(2));
       formData.append('quote_status', 'draft');
+      formData.append('currency', wcumcs_vars_data.currency);
       if (action === 'update-processing' || action === 'processing') {
         formData.append('quote_status', 'processing');
       }
@@ -972,7 +973,7 @@ function PricesView({
   const price = currency === 'USD' ? item.usdPrice : item.cadPrice;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "pb-8 mb-8 border-b-nova-light border-b"
-  }, item.type === 'letters' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.type === 'letters' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md exclude-from-pdf"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "w-full self-center"
@@ -991,6 +992,8 @@ function PricesView({
       paddingBottom: '20px'
     }
   }, item.letters))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-xs text-[#5E5E5E] mb-8 mt-1 pl-2"
+  }, "Preview Image. Actual product color may differ.")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "block"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex justify-between py-2 font-title uppercase"
@@ -1227,6 +1230,15 @@ function QuoteView() {
     }
   }
   const totalUsdPrice = signage.reduce((acc, item) => acc + parseFloat(item.usdPrice), 0);
+  const handleDownload = () => {
+    const link = document.createElement('a');
+    link.href = NovaQuote.invoice_url + downloadFile;
+    link.target = '_blank'; // Open in new tab
+    link.rel = 'noopener noreferrer';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
   const printHandler = e => {
     e.preventDefault();
     if (quoteRef.current && !isDownloading) {
@@ -1305,15 +1317,17 @@ function QuoteView() {
   const tax = taxRate ? parseFloat(taxRate.tax_rate / 100) : 0;
   const taxCompute = parseFloat(finalPrice * tax);
   const estimatedTotal = parseFloat(finalPrice + estimatedShipping + taxCompute);
+  const downloadFile = currency === 'CAD' ? '/invoice-' + NovaAccount.ID + '-CAD.pdf' : '/invoice-' + NovaAccount.ID + '.pdf';
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex pb-4 mb-4 border-b justify-between"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
     href: NovaQuote.mockup_account_url,
     className: "border-nova-light rounded px-4 py-3 border font-title text-nova-gray uppercase text-xs bg-white inline-flex items-center hover:text-black hover:bg-nova-light"
   }, "\u2190 Back To Mockups"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
-    onClick: printHandler,
+    href: NovaQuote.invoice_url + downloadFile,
     className: `rounded px-4 py-3 border ${!isDownloading ? 'border-nova-light font-title text-nova-primary bg-white' : 'border-gray-300 text-gray-500 bg-gray-100'} text-xs inline-block hover:text-white hover:bg-nova-primary w-[160px] text-center cursor-pointer`,
-    disabled: isDownloading
+    disabled: isDownloading,
+    target: "_blank"
   }, isDownloading ? 'Downloading...' : 'DOWNLOAD PDF')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-1 md:grid-cols-[1fr_160px] gap-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -1754,8 +1768,13 @@ function UploadFile({
       return null;
     }
   };
+  function getFormattedDate() {
+    const today = new Date();
+    return today.toISOString().split('T')[0]; // Returns 'YYYY-MM-DD'
+  }
+
   const checkAndCreateFolder = async accessToken => {
-    const folderPath = `/NOVA-CRM/${NovaQuote.business_id}`;
+    const folderPath = `/NOVA-CRM/${NovaQuote.business_id}/${getFormattedDate()}`;
     try {
       // Check if the folder exists
       let response = await fetch('https://api.dropboxapi.com/2/files/get_metadata', {
@@ -1831,7 +1850,7 @@ function UploadFile({
     setAccessToken(token);
     await checkAndCreateFolder(token);
     const dropboxArgs = {
-      path: `/NOVA-CRM/${NovaQuote.business_id}/${file.name}`,
+      path: `/NOVA-CRM/${NovaQuote.business_id}/${getFormattedDate()}/${file.name}`,
       mode: 'overwrite',
       autorename: false,
       mute: false
@@ -7464,7 +7483,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 const fontDefaultOptions = {
   popular_fonts: 'Arial,Futura,Helvetica,Garamond,Palatino,Optima,Montserrat,Patua One,Bebas Neue,Versa',
-  fonts: 'Arial Regular,Arial Bold,Arial Rounded,Futura Bold Italic,Futura Extra Black,Helvetica Regular,Helvetica Bold,Arima Semibold,Segoe Print Bold,Malvie,Garamond Regular,Garamond Bold,Times New Roman,Century Schoolbook,Optima,Optima Semibold,Palatino Semibold,Trajan Bold,Twentieth Century,Comfortaa Bold,Fredoka Semibold,Montserrat Bold,Bai Jamjeree Semibold,Boogaloo Regular,Cooper Black,Coiny Regular,Muloka Karesh,Zilla Slab Semibold,Patua One,Antonio Bold,Bebas Neue,Versa,Chateau de Garage,Heavitas'
+  fonts: 'Antonio Bold,Arial Bold,Arial Regular,Arial Rounded,Bai Jamjeree Semibold,Bebas Neue,Boogaloo Regular,Century Schoolbook,Chateau de Garage,Coiny Regular,Comfortaa,Cooper Black,Fredoka,Futura Bold Italic,Futura Extra Black,Garamond Bold,Garamond Regular,Heavitas,Helvetica Bold,Helvetica Regular,Malvie,Montserrat,Muloka Karesh,Optima,Optima Semibold,Palatino Semibold,Patua One,Segoe Print Bold,Times New Roman,Trajan Bold,Twentieth Century,Versa,Zilla Slab Semibold'
 };
 
 /***/ }),

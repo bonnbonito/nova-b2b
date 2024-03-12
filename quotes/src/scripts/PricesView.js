@@ -6,27 +6,32 @@ export default function PricesView({ item }) {
 	return (
 		<div className="pb-8 mb-8 border-b-nova-light border-b">
 			{item.type === 'letters' && (
-				<div className="mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md exclude-from-pdf">
-					<div className="w-full self-center">
-						<div
-							className="self-center text-center"
-							style={{
-								margin: '0',
-								fontSize: '50px',
-								whiteSpace: 'nowrap',
-								overflow: 'hidden',
-								fontFamily: item.font,
-								color: item.color.color,
-								textShadow: '0px 0px 1px rgba(0, 0, 0, 1)',
-								wordBreak: 'break-all',
-								lineHeight: '1.6',
-								paddingBottom: '20px',
-							}}
-						>
-							{item.letters}
+				<>
+					<div className="mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md exclude-from-pdf">
+						<div className="w-full self-center">
+							<div
+								className="self-center text-center"
+								style={{
+									margin: '0',
+									fontSize: '50px',
+									whiteSpace: 'nowrap',
+									overflow: 'hidden',
+									fontFamily: item.font,
+									color: item.color.color,
+									textShadow: '0px 0px 1px rgba(0, 0, 0, 1)',
+									wordBreak: 'break-all',
+									lineHeight: '1.6',
+									paddingBottom: '20px',
+								}}
+							>
+								{item.letters}
+							</div>
 						</div>
 					</div>
-				</div>
+					<div className="text-xs text-[#5E5E5E] mb-8 mt-1 pl-2">
+						Preview Image. Actual product color may differ.
+					</div>
+				</>
 			)}
 
 			<div className="block">

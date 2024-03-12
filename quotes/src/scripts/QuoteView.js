@@ -51,6 +51,16 @@ export default function QuoteView() {
 		0
 	);
 
+	const handleDownload = () => {
+		const link = document.createElement('a');
+		link.href = NovaQuote.invoice_url + downloadFile;
+		link.target = '_blank'; // Open in new tab
+		link.rel = 'noopener noreferrer';
+		document.body.appendChild(link);
+		link.click();
+		document.body.removeChild(link);
+	};
+
 	const printHandler = (e) => {
 		e.preventDefault();
 
@@ -152,6 +162,11 @@ export default function QuoteView() {
 		finalPrice + estimatedShipping + taxCompute
 	);
 
+	const downloadFile =
+		currency === 'CAD'
+			? '/invoice-' + NovaAccount.ID + '-CAD.pdf'
+			: '/invoice-' + NovaAccount.ID + '.pdf';
+
 	return (
 		<>
 			<div className="flex pb-4 mb-4 border-b justify-between">
@@ -162,13 +177,14 @@ export default function QuoteView() {
 					← Back To Mockups
 				</a>
 				<a
-					onClick={printHandler}
+					href={NovaQuote.invoice_url + downloadFile}
 					className={`rounded px-4 py-3 border ${
 						!isDownloading
 							? 'border-nova-light font-title text-nova-primary bg-white'
 							: 'border-gray-300 text-gray-500 bg-gray-100'
 					} text-xs inline-block hover:text-white hover:bg-nova-primary w-[160px] text-center cursor-pointer`}
 					disabled={isDownloading}
+					target="_blank"
 				>
 					{isDownloading ? 'Downloading...' : 'DOWNLOAD PDF'}
 				</a>

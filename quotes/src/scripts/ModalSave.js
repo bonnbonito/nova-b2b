@@ -130,6 +130,7 @@ function ModalSave({ signage, action, btnClass, label, required }) {
 			formData.append('signage', JSON.stringify(signage));
 			formData.append('total', totalUsdPrice.toFixed(2));
 			formData.append('quote_status', 'draft');
+			formData.append('currency', wcumcs_vars_data.currency);
 
 			if (action === 'update-processing' || action === 'processing') {
 				formData.append('quote_status', 'processing');
