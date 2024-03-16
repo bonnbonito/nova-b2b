@@ -54,7 +54,8 @@ do_action( 'woocommerce_before_cart' ); ?>
 
 				<div class="flex-line">
 					<div>
-						<strong>ID:</strong> <?php echo $cart_item['quote_id']; ?>
+						<strong>QUOTE ID:</strong>
+						Q-<?php echo str_pad( $cart_item['quote_id'], 4, '0', STR_PAD_LEFT ); ?>
 					</div>
 
 					<div class="view-remove">
@@ -100,7 +101,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 				</div>
 				<div class="flex-line">
 					<div>
-						<strong>NAME:</strong> <?php echo $cart_item['nova_title']; ?>
+						<strong>NAME:</strong> <?php echo get_field( 'frontend_title', $cart_item['quote_id'] ); ?>
 					</div>
 				</div>
 				<div class="flex-line mb-5">

@@ -571,7 +571,7 @@ generateZohoId.addEventListener("click", e => {
 
 			$body   = wp_remote_retrieve_body( $response );
 			$result = json_decode( $body, true );
-			return $result['access_token'];
+			return $result['access_token'] ?? false;
 		}
 	}
 

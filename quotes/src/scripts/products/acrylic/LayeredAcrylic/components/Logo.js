@@ -256,7 +256,7 @@ export default function Logo({ item }) {
 
 	return (
 		<>
-			<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+			<div className="quote-grid">
 				<div className="px-[1px] col-span-3">
 					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
 						DESCRIPTION
@@ -278,7 +278,7 @@ export default function Logo({ item }) {
 					setFileName={setFileName}
 				/>
 			</div>
-			<div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+			<div className="quote-grid mb-6">
 				<Dropdown
 					title="Acrylic Thickness"
 					value={item.thickness?.value}

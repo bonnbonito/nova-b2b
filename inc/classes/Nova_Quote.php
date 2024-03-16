@@ -57,17 +57,65 @@ class Nova_Quote {
 		add_filter( 'query_vars', array( $this, 'custom_query_vars' ) );
 		add_action( 'admin_notices', array( $this, 'show_dropbox_oauth_errors' ) );
 		add_action( 'kadence_single_before_inner_content', array( $this, 'show_product_dropdown' ) );
-		add_action( 'add_meta_boxes', array( $this, 'nova_quote_add_admin_meta_box' ) );
+		add_action( 'add_meta_boxes', array( $this, 'nova_quote_add_admin_meta_box' ), 10, 2 );
+		add_action( 'add_meta_boxes', array( $this, 'nova_quote_admin_changed' ), 10, 2 );
 	}
 
-	public function nova_quote_add_admin_meta_box() {
-		$post_id   = get_field( 'product' )->ID;
-		$post_type = get_field( 'product' )->post_type;
+	public function nova_quote_admin_changed( $post_type, $post ) {
+
+		if ( $post_type !== 'nova_quote' ) {
+			return;
+		}
+
+		$status = get_field( 'quote_status', $post->ID );
+
+		if ( $status['value'] === 'ready' ) {
+			add_meta_box(
+				'nova_quote_admin_revision',
+				__( 'Updated by:' ),
+				array( $this, 'nova_quote_who_updated' ),
+				'nova_quote',
+				'side',
+				'high'
+			);
+		}
+	}
+
+	public function nova_quote_who_updated( $post ) {
+		$args = array(
+			'post_parent' => $post->ID,
+			'post_type'   => 'revision',
+			'numberposts' => 1,
+			'orderby'     => 'modified',
+			'order'       => 'DESC',
+		);
+
+		$latest_revision = get_children( $args );
+
+		if ( $latest_revision ) {
+			$revision           = array_shift( $latest_revision );
+			$revision_author_id = $revision->post_author;
+
+			// Get the user data of the author of the revision
+			$user_info = get_userdata( $revision_author_id );
+
+			echo '<p><strong>' . esc_html( $user_info->first_name ) . '</strong> (' . $user_info->user_email . ')</p>';
+		} else {
+			echo '<p>No revisions found.</p>';
+		}
+	}
+
+	public function nova_quote_add_admin_meta_box( $post_type, $post ) {
+		if ( $post_type !== 'nova_quote' ) {
+			return;
+		}
+		$post_id   = get_field( 'product' ) ? get_field( 'product' )->ID : 0;
+		$post_type = $post_id ? get_field( 'product' )->post_type : '';
 
 		if ( 'signage' === $post_type ) {
 			add_meta_box(
 				'nova_admin_view_quote',
-				__( 'View Quote and Details', 'textdomain' ),
+				__( 'View Details', 'textdomain' ),
 				array( $this, 'nova_admin_view_quote_callback' ),
 				'nova_quote',
 				'side',
@@ -77,14 +125,9 @@ class Nova_Quote {
 	}
 
 	public function nova_admin_view_quote_callback() {
-		$post_id   = get_field( 'product' )->ID;
-		$post_type = get_field( 'product' )->post_type;
-		$link      = get_permalink( $post_id ) . 'quote?qid=' . $_GET['post'] . '&qedit=1';
-		$details   = home_url( '/my-account/mockups/view/?qid=' . $_GET['post'] );
+		$details = home_url( '/my-account/mockups/view/?qid=' . get_the_ID() );
 		?>
 
-<a style="margin-right: 10px;" href="<?php echo esc_url( $link ); ?>" target="_blank"
-	class="button button-primary button-large">View Quote</a>
 <a href="<?php echo esc_url( $details ); ?>" target="_blank" class="button button-primary button-large">View Details</a>
 		<?php
 	}
@@ -233,9 +276,9 @@ class Nova_Quote {
 		$to         = $user_info->user_email;
 		$first_name = $user_info->first_name;
 
-		$subject  = 'NOVA Signage - Quoted Order (ORDER #' . $post_id . ') ';
+		$subject  = 'NOVA Signage - Quoted Order (Quote ID: Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . ') ';
 		$message  = '<p>Hello ' . $first_name . ',</p>';
-		$message .= '<p>Please review the quotation for Order #' . $post_id . '.  below. Kindly proceed to checkout if everything looks good.</p>';
+		$message .= '<p>Please review the quotation for Quote ID: Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '.  below. Kindly proceed to checkout if everything looks good.</p>';
 		$message .= '<p><a href="' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '">' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '</a></p>';
 		$message .= "<p>Don't hesitate to contact us if you have any questions or concerns.</p>";
 
@@ -249,9 +292,9 @@ class Nova_Quote {
 		$role_instance->send_email( $to, $subject, $message, $headers, array() );
 
 		$to_admin       = $this->to_admin_customer_rep_emails();
-		$admin_subject  = 'NOVA Signage - You Sent a Quotation for Order #' . $post_id . '.';
+		$admin_subject  = 'NOVA Signage - You Sent a Quotation for Quote ID: Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '.';
 		$admin_message  = '<p>Hello,</p>';
-		$admin_message .= 'You sent a quotation to ' . $first_name . ' with Business ID: ' . $business_id . ' for their Order #' . $post_id . '.';
+		$admin_message .= 'You sent a quotation to ' . $first_name . ' with Business ID: ' . $business_id . ' for their Quote ID : Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '.';
 		$admin_message .= '<p>You may review the quotation you sent here:</p>';
 		$admin_message .= '<a href="' . $edit_post_url . '">' . $edit_post_url . '</a>';
 
@@ -268,9 +311,9 @@ class Nova_Quote {
 		$to         = $user_info->user_email;
 		$first_name = $user_info->first_name;
 
-		$subject  = 'NOVA Signage -  Mockup Submitted for Quotation (ORDER #' . $post_id . ') ';
+		$subject  = 'NOVA Signage -  Mockup Submitted for Quotation (Quote ID:  Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . ') ';
 		$message  = '<p>Hello ' . $first_name . '.</p>';
-		$message .= '<p>We got your quote request for Order #' . $post_id . '.</p>';
+		$message .= '<p>We got your quote request for Quote ID: Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '.</p>';
 		$message .= '<p>Our team is reviewing your mockup.</p>';
 		$message .= '<p>Should we require additional information or clarification on your design specifications, we will reach out to you within the next 24 business hours.</p>';
 		$message .= '<p>Please review your order details:<br><a href="' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '">' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '</a></p>';
@@ -286,10 +329,10 @@ class Nova_Quote {
 
 		$to_admin = $this->to_admin_customer_rep_emails();
 
-		$admin_subject = 'NOVA Signage - You Received a Quotation Request - Order #' . $post_id . '.';
+		$admin_subject = 'NOVA Signage - You Received a Quotation Request - Quote ID: Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '.';
 
 		$to_admin_message  = '<p>Hello,</p>';
-		$to_admin_message .= '<p>' . $first_name . ' with Business ID: <strong>' . $business_id . '</strong> sent a quotation request for their Order #' . $post_id . '.</p>';
+		$to_admin_message .= '<p>' . $first_name . ' with Business ID: <strong>' . $business_id . '</strong> sent a quotation request for their Quote ID: Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '.</p>';
 		$to_admin_message .= '<p>You may review the mockup details here:<br></p>';
 		$to_admin_message .= '<a href="' . $edit_post_url . '">' . $edit_post_url . '</a>';
 
@@ -653,7 +696,8 @@ h6 {
 <table>
 	<tr>
 		<td>
-			<h4 style="font-size: 14pt; margin: 0;">QUOTE ID: <?php echo $post_id; ?></h4>
+			<h4 style="font-size: 14pt; margin: 0;">QUOTE ID: Q-<?php echo str_pad( $post_id, 4, '0', STR_PAD_LEFT ); ?>
+			</h4>
 			<p style="padding-bottom: 0; margin-bottom: 0;">INITIAL QUOTE REQUESTED ON: <font face="lato">
 					<?php echo get_the_date( 'F j, Y', $post_id ); ?></font>
 			</p>
@@ -663,7 +707,7 @@ h6 {
 			<p style="padding-bottom: 0; margin-bottom: 0;">QUOTE NAME: <font face="lato">
 					<?php echo get_field( 'frontend_title', $post_id ); ?></font>
 			</p>
-			<p style="padding-bottom: 0; margin-bottom: 0;">PARTNER ID: <font face="lato">
+			<p style="padding-bottom: 0; margin-bottom: 0;">BUSINESS ID: <font face="lato">
 					<?php echo get_field( 'business_id', 'user_' . $user_id ); ?></font>
 			</p>
 			<p style="padding-bottom: 0; margin-bottom: 0;">COMPANY NAME: <font face="lato">
@@ -777,7 +821,7 @@ h6 {
 					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">METAL FINISHING: </strong></td><td><font face="lato">' . $projectArray['metalFinishing'] . '</font></td></tr>';
 				}
 
-				if ( $projectArray['metalFinish'] ) {
+				if ( $projectArray['metalFinish'] && ! is_object( $projectArray['metalFinish'] ) ) {
 					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">METAL FINISH: </strong></td><td><font face="lato">' . $projectArray['metalFinish'] . '</font></td></tr>';
 				}
 
@@ -939,8 +983,9 @@ h6 {
 <table>
 	<tr>
 		<td>
-			<h4 style="font-size: 14pt; margin: 0;">QUOTE ID: <?php echo $post_id; ?></h4>
-			<p style="padding-bottom: 0; margin-bottom: 0;">123INITIAL QUOTE REQUESTED ON: <font face="lato">
+			<h4 style="font-size: 14pt; margin: 0;">QUOTE ID: Q-<?php echo str_pad( $post_id, 4, '0', STR_PAD_LEFT ); ?>
+			</h4>
+			<p style="padding-bottom: 0; margin-bottom: 0;">INITIAL QUOTE REQUESTED ON: <font face="lato">
 					<?php echo get_the_date( 'F j, Y', $post_id ); ?></font>
 			</p>
 			<p style="padding-bottom: 0; margin-bottom: 0;">LAST QUOTE SAVED: <font face="lato">
@@ -949,7 +994,7 @@ h6 {
 			<p style="padding-bottom: 0; margin-bottom: 0;">QUOTE NAME: <font face="lato">
 					<?php echo get_field( 'frontend_title', $post_id ); ?></font>
 			</p>
-			<p style="padding-bottom: 0; margin-bottom: 0;">PARTNER ID: <font face="lato">
+			<p style="padding-bottom: 0; margin-bottom: 0;">BUSINESS ID: <font face="lato">
 					<?php echo get_field( 'business_id', 'user_' . $user_id ); ?></font>
 			</p>
 			<p style="padding-bottom: 0; margin-bottom: 0;">COMPANY NAME: <font face="lato">
@@ -984,7 +1029,7 @@ h6 {
 				</tr>
 				<?php
 				if ( $projectArray['letters'] ) {
-					$color = $projectArray['color'] ? ' color: ' . $projectArray['color']->color : '';
+					$color = isset( $projectArray['color'] ) ? ' color: ' . $projectArray['color']->color : '';
 					$face  = $projectArray['font'] ? strtolower( str_replace( array( 'regular', ' ', 'bold' ), array( '', '_', 'b' ), $projectArray['font'] ) ) : '';
 					$style = $color . $face;
 					?>
@@ -993,7 +1038,7 @@ h6 {
 						<div style="padding: 100px; border-radius: 8px; border: 1px solid #ddd;">
 							<h1 style="text-align: center;">
 								<font size="22" face="<?php echo $face; ?>"
-									<?php echo ( $projectArray['color']->color ? ' color="' . $projectArray['color']->color . '" ' : '' ); ?>>
+									<?php echo ( isset( $projectArray['color'] ) && $projectArray['color']->color ? ' color="' . $projectArray['color']->color . '" ' : '' ); ?>>
 									<?php echo $projectArray['letters']; ?>
 								</font>
 							</h1>
@@ -1063,7 +1108,7 @@ h6 {
 					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">METAL FINISHING: </strong></td><td><font face="lato">' . $projectArray['metalFinishing'] . '</font></td></tr>';
 				}
 
-				if ( isset( $projectArray['metalFinish'] ) && ! empty( $projectArray['metalFinish'] ) ) {
+				if ( isset( $projectArray['metalFinish'] ) && ! empty( $projectArray['metalFinish'] ) && ! is_object( $projectArray['metalFinish'] ) ) {
 					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">METAL FINISH: </strong></td><td><font face="lato">' . $projectArray['metalFinish'] . '</font></td></tr>';
 				}
 
@@ -1073,6 +1118,10 @@ h6 {
 
 				if ( isset( $projectArray['font'] ) && ! empty( $projectArray['font'] ) ) {
 					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">FONT: </strong></td><td><font face="lato">' . $projectArray['font'] . '</font></td></tr>';
+				}
+
+				if ( isset( $projectArray['fontFileUrl'] ) && ! empty( $projectArray['fontFileUrl'] ) && isset( $projectArray['fontFileName'] ) && ! empty( $projectArray['fontFileName'] ) ) {
+					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">FILE: </strong></td><td><font face="lato"><a href="' . $projectArray['fontFileUrl'] . '" target="_blank">' . $projectArray['fontFileName'] . '</a></font></td></tr>';
 				}
 
 				if ( isset( $projectArray['customFont'] ) && ! empty( $projectArray['customFont'] ) ) {
@@ -1244,9 +1293,10 @@ h6 {
 				$this->generate_pdf( $post_id, $html_cad, 'CAD' );
 			}
 
-			$status['code']   = 2;
-			$status['post']   = $_POST;
-			$status['status'] = 'success';
+			$status['code']         = 2;
+			$status['post']         = $_POST;
+			$status['generated_id'] = $post_id;
+			$status['status']       = 'success';
 
 		} else {
 			$status['code'] = 3;
@@ -1481,6 +1531,7 @@ h6 {
 				'user_role'               => $this->get_current_user_role_slugs(),
 				'user_id'                 => get_current_user_id(),
 				'product'                 => get_the_ID(),
+				'quote_url'               => get_permalink( get_the_ID() ) . 'quote/',
 				'mockup_account_url'      => esc_url_raw( home_url( '/my-account/mockups/all' ) ),
 				'is_editting'             => $this->is_editting(),
 				'signage'                 => $this->get_signage(),
@@ -1496,7 +1547,7 @@ h6 {
 				'single_quote_options'    => get_field( 'single_quote_options' ),
 				'generated_product_id'    => isset( $_GET['qid'] ) ? get_post_meta( $_GET['qid'], 'nova_product_generated_id', true ) : null,
 				'metal_stainless_pricing' => get_field( 'lasercut_stainless_metal_pricing' ),
-				'quote_status'            => get_field( 'quote_status', $_GET['qid'] ),
+				'quote_status'            => isset( $_GET['qid'] ) ? get_field( 'quote_status', $_GET['qid'] ) : '',
 			)
 		);
 
@@ -1608,7 +1659,7 @@ h6 {
 	}
 
 	public function show_dropbox_oauth_errors() {
-		if ( ! isset( $_GET['page'] ) && 'nova-options' !== $_GET['page'] ) {
+		if ( ! isset( $_GET['page'] ) || 'nova-options' !== $_GET['page'] ) {
 			return;
 		}
 		if ( isset( $_GET['error'] ) ) {

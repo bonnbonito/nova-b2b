@@ -13,7 +13,8 @@ $final_price = $price ? ( get_woocommerce_currency() === 'USD' ? $price : $price
 <div id="quote-<?php the_ID(); ?>" class="rounded border p-4 mb-4 text-xs uppercase">
 	<div class="block flex-wrap gap-4 md:grid md:grid-cols-[200px_1fr_2fr]">
 		<div class="basis-[200px] grow">
-			<div class="block"><span class="font-title text-sm">ID:</span> <?php the_ID(); ?> <div
+			<div class="block"><span class="font-title text-sm">QUOTE ID:</span>
+				<?php echo 'Q-' . str_pad( get_the_ID(), 4, '0', STR_PAD_LEFT ); ?> <div
 					class="text-[16px] self-center font-title ml-auto float-right block md:hidden md-hidden">
 					<?php echo get_woocommerce_currency_symbol() . number_format( (float) $final_price, 2 ); ?>
 				</div>
@@ -79,13 +80,26 @@ $final_price = $price ? ( get_woocommerce_currency() === 'USD' ? $price : $price
 				class="p-2 border rounded text-nova-gray text-[10px] tracking-[1px] hover:bg-nova-gray hover:text-white w-[110px] text-center">View
 				Details</a>
 
-			<a href="#" data-type="checkout" data-id="<?php the_ID(); ?>"
-				data-product="<?php echo get_the_title( $product_id->ID ); ?>"
-				data-product_line="<?php echo $product_id->ID; ?>"
-				data-product_id="<?php echo get_post_meta( get_the_ID(), 'nova_product_generated_id', true ); ?>"
-				class="p-2 border rounded bg-green-600 text-white text-[10px] tracking-[1px] hover:bg-green-400 cursor-pointer w-[110px] text-center">
-				Add To Cart</a>
-			<?php endif; ?>
+				<?php
+				$cart_product_id = get_post_meta( get_the_ID(), 'nova_product_generated_id', true );
+
+				if ( in_array( $cart_product_id, array_column( WC()->cart->get_cart(), 'product_id' ) ) ) {
+					?>
+			<span class="p-2 border rounded bg-gray-400 text-white text-[10px] tracking-[1px]">ALREADY IN CART<span>
+					<?php
+				} else {
+					?>
+					<a href="#" data-type="checkout" data-id="<?php the_ID(); ?>"
+						data-product="<?php echo get_the_title( $product_id->ID ); ?>"
+						data-product_line="<?php echo $product_id->ID; ?>"
+						data-product_id="<?php echo $cart_product_id; ?>"
+						class="p-2 border rounded bg-green-600 text-white text-[10px] tracking-[1px] hover:bg-green-400 cursor-pointer w-[110px] text-center">Add
+						To Cart</a>
+
+					<?php
+				}
+				endif;
+			?>
 		</div>
 	</div>
 

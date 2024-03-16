@@ -176,18 +176,20 @@ export default function QuoteView() {
 				>
 					← Back To Mockups
 				</a>
-				<a
-					href={NovaQuote.invoice_url + downloadFile}
-					className={`rounded px-4 py-3 border ${
-						!isDownloading
-							? 'border-nova-light font-title text-nova-primary bg-white'
-							: 'border-gray-300 text-gray-500 bg-gray-100'
-					} text-xs inline-block hover:text-white hover:bg-nova-primary w-[160px] text-center cursor-pointer`}
-					disabled={isDownloading}
-					target="_blank"
-				>
-					{isDownloading ? 'Downloading...' : 'DOWNLOAD PDF'}
-				</a>
+				{NovaAccount.quote_status.value === 'ready' && (
+					<a
+						href={NovaQuote.invoice_url + downloadFile}
+						className={`rounded px-4 py-3 border ${
+							!isDownloading
+								? 'border-nova-light font-title text-nova-primary bg-white'
+								: 'border-gray-300 text-gray-500 bg-gray-100'
+						} text-xs inline-block hover:text-white hover:bg-nova-primary w-[160px] text-center cursor-pointer`}
+						disabled={isDownloading}
+						target="_blank"
+					>
+						{isDownloading ? 'Downloading...' : 'DOWNLOAD PDF'}
+					</a>
+				)}
 			</div>
 
 			<div className="grid grid-cols-1 md:grid-cols-[1fr_160px] gap-4">
@@ -201,7 +203,9 @@ export default function QuoteView() {
 						</h6>
 					</div>
 					<div className="mb-10 block">
-						<h4 className="uppercase">QUOTE ID: {NovaAccount.ID}</h4>
+						<h4 className="uppercase">
+							QUOTE ID: Q-{NovaAccount.ID.padStart(4, '0')}
+						</h4>
 					</div>
 					<div className="flex gap-2 items-center">
 						<h6 className="leading-[2] m-0">INITIAL QUOTE REQUESTED ON:</h6>{' '}
@@ -216,7 +220,7 @@ export default function QuoteView() {
 						<span className="text-sm">{decodeHTML(NovaAccount.title)}</span>
 					</div>
 					<div className="flex gap-2 items-center">
-						<h6 className="leading-[2] m-0">PARTNER ID:</h6>{' '}
+						<h6 className="leading-[2] m-0">BUSINESS ID:</h6>{' '}
 						<span className="text-sm">
 							{NovaAccount.business_id ? NovaAccount.business_id : 'None'}
 						</span>

@@ -11,11 +11,7 @@ const processQuote = async (formData) => {
 
 		const data = await response.json();
 		console.log(data); // Optional: to log the response data for debugging
-		if (data.status === 'success') {
-			return 'success';
-		} else {
-			return 'error';
-		}
+		return data;
 	} catch (error) {
 		console.error('Error:', error);
 		return 'error'; // Return 'error' in case of an exception

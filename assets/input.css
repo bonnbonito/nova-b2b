@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+    .quote-grid {
+        @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4;
+    }
+}
+
 header.page-title {
     border-bottom: 1px solid #D2D2D2;
     padding-bottom: 10px;
@@ -131,6 +137,17 @@ a {
     .homepage-layout-content {
         letter-spacing: 1.2px;
     }
+}
+
+.tax-rate td {
+    text-align: right;
+    font-family: var(--global-heading-font-family);
+    font-size: 18px;
+}
+
+.woocommerce mark {
+    background: none;
+    font-weight: bold;
 }
 
 @media screen and (min-width: 768px) {

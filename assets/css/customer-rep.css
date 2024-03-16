@@ -7,6 +7,8 @@
 #menu-tools,
 #wc_admin_dashboard_setup,
 #dashboard_quick_press,
-#dashboard_activity {
+#dashboard_activity,
+#revisionsdiv,
+#authordiv {
     display: none !important;
 }

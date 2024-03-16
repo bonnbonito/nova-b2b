@@ -64,7 +64,7 @@ jQuery(document).ready(function($) {
 		$this.find('.row-actions').remove(); // Remove the original row actions
 
 		// Check if the 'user_id' column exists and append the cloned row actions
-		var userIDCell = $this.find('td.user_id');
+		var userIDCell = $this.find('td.business_id');
 		if (userIDCell.length) {
 			userIDCell.append(rowActions);
 		}
@@ -172,7 +172,9 @@ jQuery(document).ready(function($) {
 
 	public function business_id_user_column( $value, $column_name, $user_id ) {
 		if ( 'business_id' === $column_name ) {
-			return get_field( 'business_id', 'user_' . $user_id );
+			$user_edit_link = esc_url( admin_url( "user-edit.php?user_id={$user_id}" ) );
+			$business_id    = get_field( 'business_id', 'user_' . $user_id );
+			return "<strong><a href='{$user_edit_link}'>{$business_id}</a></strong>";
 		}
 
 		if ( 'user_id' == $column_name ) {
@@ -184,9 +186,11 @@ jQuery(document).ready(function($) {
 	}
 
 	public function add_business_id_column( $columns ) {
-		$cb_column = array( 'cb' => $columns['cb'] );
+		$cb_column    = array( 'cb' => $columns['cb'] );
+		$posts_column = array( 'posts' => $columns['posts'] );
 		unset( $columns['cb'] );
-		$new_columns = array_merge( $cb_column, array( 'user_id' => 'User ID' ), $columns );
+		unset( $columns['posts'] );
+		$new_columns = array_merge( $cb_column, array( 'business_id' => 'Business ID' ), $columns );
 		return $new_columns;
 	}
 
@@ -338,7 +342,7 @@ jQuery(document).ready(function($) {
 		$lastName        = sanitize_text_field( $_POST['lastName'] );
 		$businessName    = isset( $_POST['businessName'] ) ? sanitize_text_field( $_POST['businessName'] ) : '';
 		$businessEmail   = sanitize_email( $_POST['businessEmail'] );
-		$businessWebsite = isset( $_POST['businessWebsite'] ) ? sanitize_url( $_POST['businessWebsite'] ) : '';
+		$businessWebsite = isset( $_POST['businessWebsite'] ) ? esc_url( $_POST['businessWebsite'] ) : '';
 		$businessType    = isset( $_POST['businessType'] ) ? sanitize_text_field( $_POST['businessType'] ) : '';
 		$businessPhone   = isset( $_POST['businessPhone'] ) ? $this->sanitize_phone_number( $_POST['businessPhone'] ) : '';
 		$taxId           = isset( $_POST['taxId'] ) ? sanitize_text_field( $_POST['taxId'] ) : '';

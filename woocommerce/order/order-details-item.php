@@ -59,16 +59,15 @@ $woo_instance = \NOVA_B2B\Inc\Classes\Woocommerce::get_instance();
 				<?php echo apply_filters( 'woocommerce_order_item_quantity_html', ' <strong class="product-quantity text-sm">' . sprintf( '&times;&nbsp;%s', $qty_display ) . '</strong>', $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			</div>
 			<div>
-				<span class="text-sm font-title tracking-[1.4px]">ID:</span>
-				<?php echo $item['quote_id']; ?>
-
+				<span class="text-sm font-title tracking-[1.4px]">QUOTE ID:</span>
+				Q-<?php echo str_pad( $item['quote_id'], 4, '0', STR_PAD_LEFT ); ?>
 			</div>
 			<div>
 				<span class="text-sm font-title tracking-[1.4px]">DATE:</span> 11/4/2023
 			</div>
 			<div>
 				<span class="text-sm font-title tracking-[1.4px]">NAME:</span>
-				<?php echo $item['nova_title']; ?>
+				<?php echo $item['name']; ?>
 			</div>
 			<div>
 				<span class="text-sm font-title">PRODUCT:</span>
@@ -82,7 +81,7 @@ $woo_instance = \NOVA_B2B\Inc\Classes\Woocommerce::get_instance();
 			</div>
 		</div>
 
-			<?php $woo_instance->show_details_order( $item['signage'], $quoteID, $order->get_formatted_line_subtotal( $item ) ); ?>
+			<?php $woo_instance->show_details_order( $item['signage'], $quoteID, $order->get_formatted_line_subtotal( $item ), get_the_title( $item['product_line'] ) ); ?>
 
 
 			<?php

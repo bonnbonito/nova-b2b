@@ -259,7 +259,7 @@ export default function Logo({ item }) {
 
 	return (
 		<>
-			<div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+			<div className="quote-grid mb-6">
 				<Dropdown
 					title="Thickness"
 					value={item.thickness?.value}
@@ -384,7 +384,7 @@ export default function Logo({ item }) {
 				</div>
 			</div>
 
-			<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+			<div className="quote-grid">
 				{acrylicBase?.name == 'Custom Color' && (
 					<div className="px-[1px] col-span-4">
 						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
@@ -395,7 +395,7 @@ export default function Logo({ item }) {
 							type="text"
 							value={customColor}
 							onChange={(e) => setCustomColor(e.target.value)}
-							placeholder="DESCRIBE CUSTOM COLOR"
+							placeholder="ADD THE PANTONE COLOR CODE"
 						/>
 					</div>
 				)}

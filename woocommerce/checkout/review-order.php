@@ -65,15 +65,15 @@ $woo_instance = \NOVA_B2B\Inc\Classes\Woocommerce::get_instance();
 
 				<div class="text-xs uppercase">
 					<div>
-						<span class="text-sm font-title tracking-[1.4px]">ID:</span>
-						<?php echo $cart_item['quote_id']; ?>
+						<span class="text-sm font-title tracking-[1.4px]">QUOTE ID:</span>
+						Q-<?php echo str_pad( $cart_item['quote_id'], 4, '0', STR_PAD_LEFT ); ?>
 					</div>
 					<div>
 						<span class="text-sm font-title tracking-[1.4px]">DATE:</span> 11/4/2023
 					</div>
 					<div>
 						<span class="text-sm font-title tracking-[1.4px]">NAME:</span>
-						<?php echo $cart_item['nova_title']; ?>
+						<?php echo get_field( 'frontend_title', $quoteID ); ?>
 					</div>
 					<div>
 						<span class="text-sm font-title">PRODUCT:</span>

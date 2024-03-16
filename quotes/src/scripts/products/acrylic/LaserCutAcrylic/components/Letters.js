@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import Dropdown from '../../../../Dropdown';
 import FontsDropdown from '../../../../FontsDropdown';
 import UploadFile from '../../../../UploadFile';
+import UploadFont from '../../../../UploadFont';
 import useOutsideClick from '../../../../utils/ClickOutside';
 import { colorOptions } from '../../../../utils/ColorOptions';
 import convert_json from '../../../../utils/ConvertJson';
@@ -46,6 +47,12 @@ export default function Letters({ item }) {
 	const [fileUrl, setFileUrl] = useState(item.fileUrl);
 	const [filePath, setFilePath] = useState(item.filePath);
 	const [file, setFile] = useState(item.file);
+
+	const [fontFileName, setFontFileName] = useState(item.fontFileName);
+	const [fontFileUrl, setFontFileUrl] = useState(item.fontFileUrl);
+	const [fontFilePath, setFontFilePath] = useState(item.fontFilePath);
+	const [fontFile, setFontFile] = useState(item.fontFile);
+
 	const [letterHeightOptions, setLetterHeightOptions] = useState([]);
 	const [selectedFinishing, setSelectedFinishing] = useState(item.finishing);
 	const [customFont, setCustomFont] = useState(item.customFont);
@@ -143,6 +150,10 @@ export default function Letters({ item }) {
 					fileName: fileName,
 					filePath: filePath,
 					fileUrl: fileUrl,
+					fontFile: fontFile,
+					fontFileName: fontFileName,
+					fontFilePath: fontFilePath,
+					fontFileUrl: fontFileUrl,
 					finishing: selectedFinishing,
 					customFont: customFont,
 					customColor: customColor,
@@ -311,8 +322,8 @@ export default function Letters({ item }) {
 
 		if (!letters) missingFields.push('Add your Line Text');
 		if (!font) missingFields.push('Select Font');
-		if (font == 'Custom font' && !customFont) {
-			missingFields.push('Add your custom font');
+		if (font == 'Custom font' && !fontFileUrl) {
+			missingFields.push('Upload your custom font.');
 		}
 		if (!selectedLetterHeight) missingFields.push('Select Letter Height');
 		if (!selectedThickness) missingFields.push('Select Acrylic Thickness');
@@ -371,10 +382,8 @@ export default function Letters({ item }) {
 		waterproof,
 		selectedLetterHeight,
 		fileUrl,
-		fileName,
-		file,
+		fontFileUrl,
 		selectedFinishing,
-		customFont,
 		customColor,
 	]);
 
@@ -393,7 +402,12 @@ export default function Letters({ item }) {
 		selectedLetterHeight,
 		fileUrl,
 		fileName,
+		filePath,
 		file,
+		fontFileUrl,
+		fontFileName,
+		fontFilePath,
+		fontFile,
 		selectedFinishing,
 		customFont,
 		customColor,
@@ -426,7 +440,7 @@ export default function Letters({ item }) {
 
 	useEffect(() => {
 		color != 'Custom Color' && setCustomColor('');
-		font != 'Custom font' && setCustomFont('');
+		font != 'Custom font' && setFontFileUrl('');
 	}, [color, font]);
 
 	return (
@@ -463,7 +477,7 @@ export default function Letters({ item }) {
 				/>
 			</div>
 
-			<div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+			<div className="quote-grid mb-6">
 				<FontsDropdown
 					font={item.font}
 					fonts={NovaOptions.fonts}
@@ -472,6 +486,18 @@ export default function Letters({ item }) {
 					setOpenFont={setOpenFont}
 					handleSelectFont={handleSelectFont}
 				/>
+
+				{font == 'Custom font' && (
+					<UploadFont
+						setFontFilePath={setFontFilePath}
+						setFontFile={setFontFile}
+						fontFilePath={fontFilePath}
+						fontFileUrl={fontFileUrl}
+						isLoading={isLoading}
+						setFontFileUrl={setFontFileUrl}
+						setFontFileName={setFontFileName}
+					/>
+				)}
 
 				<Dropdown
 					title="Acrylic Thickness"
@@ -576,7 +602,7 @@ export default function Letters({ item }) {
 				/>
 			</div>
 
-			<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+			<div className="quote-grid">
 				{color?.name == 'Custom Color' && (
 					<div className="px-[1px] col-span-4">
 						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
@@ -587,21 +613,7 @@ export default function Letters({ item }) {
 							type="text"
 							value={customColor}
 							onChange={(e) => setCustomColor(e.target.value)}
-							placeholder="DESCRIBE CUSTOM COLOR"
-						/>
-					</div>
-				)}
-				{font == 'Custom font' && (
-					<div className="px-[1px] col-span-4">
-						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-							Custom Font
-						</label>
-						<input
-							className="w-full py-4 px-2 border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400"
-							type="text"
-							value={customFont}
-							onChange={(e) => setCustomFont(e.target.value)}
-							placeholder="DESCRIBE CUSTOM FONT"
+							placeholder="ADD THE PANTONE COLOR CODE"
 						/>
 					</div>
 				)}

@@ -40,6 +40,10 @@ export default function LaserCutAcrylic() {
 					fileName: '',
 					fileUrl: '',
 					file: '',
+					fontFilePath: '',
+					fontFileName: '',
+					fontFileUrl: '',
+					fontFile: '',
 					customFont: '',
 					customColor: '',
 					finishing: 'Matte',
@@ -103,6 +107,10 @@ export default function LaserCutAcrylic() {
 					letterHeight: '',
 					customFont: '',
 					customColor: '',
+					fontFilePath: '',
+					fontFileName: '',
+					fontFileUrl: '',
+					fontFile: '',
 				};
 			} else {
 				args = {

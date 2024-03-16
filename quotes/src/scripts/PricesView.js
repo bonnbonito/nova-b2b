@@ -3,27 +3,25 @@ import React from 'react';
 export default function PricesView({ item }) {
 	const currency = wcumcs_vars_data.currency;
 	const price = currency === 'USD' ? item.usdPrice : item.cadPrice;
+	const style = {
+		margin: '0',
+		fontSize: '50px',
+		whiteSpace: 'nowrap',
+		overflow: 'hidden',
+		fontFamily: item.font,
+		//color: item.color.color,
+		textShadow: '0px 0px 1px rgba(0, 0, 0, 1)',
+		wordBreak: 'break-all',
+		lineHeight: '1.6',
+		paddingBottom: '20px',
+	};
 	return (
 		<div className="pb-8 mb-8 border-b-nova-light border-b">
 			{item.type === 'letters' && (
 				<>
 					<div className="mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md exclude-from-pdf">
 						<div className="w-full self-center">
-							<div
-								className="self-center text-center"
-								style={{
-									margin: '0',
-									fontSize: '50px',
-									whiteSpace: 'nowrap',
-									overflow: 'hidden',
-									fontFamily: item.font,
-									color: item.color.color,
-									textShadow: '0px 0px 1px rgba(0, 0, 0, 1)',
-									wordBreak: 'break-all',
-									lineHeight: '1.6',
-									paddingBottom: '20px',
-								}}
-							>
+							<div className="self-center text-center" style={style}>
 								{item.letters}
 							</div>
 						</div>
@@ -159,7 +157,7 @@ export default function PricesView({ item }) {
 					</div>
 				)}
 
-				{item.metalFinish && (
+				{typeof item.metalFinish !== 'object' && item.metalFinish && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center">
 						<div className="text-left text-xs font-title">METAL FINISH</div>
 						<div className="text-left text-[14px]">{item.metalFinish}</div>
@@ -184,11 +182,13 @@ export default function PricesView({ item }) {
 					</div>
 				)}
 
-				{item.customFont && (
+				{item.fontFileUrl && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center">
 						<div className="text-left text-xs font-title">CUSTOM FONT</div>
 						<div className="text-left text-[14px] break-words">
-							{item.customFont}
+							<a href={item.fontFileUrl} target="_blank">
+								asdf{item.fontFileName}
+							</a>
 						</div>
 					</div>
 				)}

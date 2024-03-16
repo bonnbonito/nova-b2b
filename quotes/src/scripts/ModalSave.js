@@ -8,8 +8,8 @@ function ModalSave({ signage, action, btnClass, label, required }) {
 	const [submitted, setSubmitted] = useState(false);
 	const [submitting, setSubmitting] = useState(false);
 	const [open, setOpen] = useState(false);
-	const [count, setCount] = useState(0);
 	const [error, setError] = useState({});
+	const [quoteID, setQuoteID] = useState('');
 	const [title, setTitle] = useState(() =>
 		NovaQuote.current_quote_title ? NovaQuote.current_quote_title : ''
 	);
@@ -20,16 +20,6 @@ function ModalSave({ signage, action, btnClass, label, required }) {
 		(acc, item) => acc + parseFloat(item.usdPrice),
 		0
 	);
-
-	useEffect(() => {
-		if (count === 0) return;
-
-		const timerId = setTimeout(() => {
-			setCount(count - 1);
-		}, 1000);
-
-		return () => clearTimeout(timerId);
-	}, [count]);
 
 	useEffect(() => {
 		if (required && required.length > 0) {
@@ -87,30 +77,46 @@ function ModalSave({ signage, action, btnClass, label, required }) {
 
 	const toProcessingMessage = () => {
 		return `
-    <div>
-      <p class="font-bold">Quote request received.</p>
-	  <p class="mb-4">Check email or in Mockups under <strong><a href="/my-account/mockups/processing/">'Processing'</a></strong> for updates.</p>
-      <p class="text-xs text-center">Closing in ${count}</p>
+    <div class="mb-4">
+      <p class="font-bold mb-4">QUOTE REQUEST RECEIVED.</p>
+	  <p class="font-bold mb-0">Process:</p>
+	  <ol class="mb-4">
+		<li>Our sales team will check this order to provide you with the final pricing.</li>
+		<li>We will notify you via email after 1 business day. You may also check the MOCKUPS under PROCESSING for updates.</li>
+		<li>After you receive the final quotation, add the product to the cart and then proceed to CART.</li>
+		<li>You can add the order quantity on the CART page before proceeding to CHECKOUT.</li>
+	  </ol>
+	  <p class="font-bold mb-0">What's next?</p>
+	  <p>Click <strong>Back to Mockup</strong> to view all your sign mockups.<br>
+	  Click <strong>Create New Mockup</strong> to create a new signage.<br>
+	  Click <strong>Proceed to Portal</strong> to go to the dashboard.</p>
     </div>
   `;
 	};
 
 	const updateMessageHtml = () => {
 		return `
-    <div>
-      <p class="font-bold">Quote updated.</p>
-	  <p class="mb-4">Access it in Mockups under <strong><a href="/my-account/mockups/drafts/">'Drafts'</a></strong>.</p>
-      <p class="text-xs text-center">Closing in ${count}</p>
+    <div class="mb-4">
+      <p class="font-bold mb-4">UPDATED ORDER QUOTE DRAFT</p>
+	  <p class="mb-4">You can still edit this project before sending it to us for the final quotation. Find your saved draft in the <strong>MOCKUPS</strong> section under <strong>DRAFTS</strong>.</p>
+	  <p class="font-bold mb-0">What's next?</p>
+	  <p>Click <strong>Back to Mockup</strong> to continue editing the project.<br>
+	  Click <strong>Create New Mockup</strong> to create a new signage.<br>
+	  Click <strong>Proceed to Portal</strong> to go to the dashboard.</p>
     </div>
   `;
 	};
 
 	const saveDraftMessageHtml = () => {
 		return `
-    <div>
-      <p class="font-bold">Your product draft has been saved.</p>
-	  <p class="mb-4">Access it in Mockups under <strong><a href="/my-account/mockups/drafts/">'Drafts'</a></strong>.</p>
-      <p class="text-xs text-center">Closing in ${count}</p>
+    <div class="mb-4">
+      <p class="font-bold mb-4">PROJECT IS SAVED AS A DRAFT</p>
+	  <p class="mb-4">You can edit your saved draft anytime before submitting a quote. Access your saved draft in <strong>MOCKUPS</strong> under <strong>DRAFTS</strong>.</p>
+	  <p class="font-bold mb-0">What's next?</p>
+	  <p>Click <strong>Back to Mockup</strong> to continue editing the project.<br>
+	  Click <strong>Create New Mockup</strong> to create a new signage.<br>
+	  Click <strong>Proceed to Portal</strong> to go to the dashboard.</p>
+
     </div>
   `;
 	};
@@ -142,17 +148,10 @@ function ModalSave({ signage, action, btnClass, label, required }) {
 			}
 
 			const status = await processQuote(formData);
-			if (status === 'success') {
+			if (status.status === 'success') {
 				localStorage.removeItem(window.location.href + NovaQuote.user_id);
 				setSubmitted(true);
-				if (action !== 'update') {
-					setCount(2);
-					setTimeout(() => {
-						window.location.href = NovaQuote.mockup_account_url;
-					}, 1500);
-				} else {
-					setCount(2);
-				}
+				setQuoteID(status.generated_id);
 			} else {
 				alert('Error');
 			}
@@ -164,10 +163,6 @@ function ModalSave({ signage, action, btnClass, label, required }) {
 			});
 		} finally {
 			setIsLoading(false);
-			setTimeout(() => {
-				setOpen(false);
-				setSubmitting(false);
-			}, 1500);
 		}
 	};
 
@@ -200,6 +195,21 @@ function ModalSave({ signage, action, btnClass, label, required }) {
 									onChange={handleTitleChange}
 									disabled={isLoading}
 								/>
+
+								{action === 'processing' || action === 'update-processing' ? (
+									<p className="text-sm mt-4">
+										<strong>NOTE:</strong> Our team will finalize the pricing
+										for this order once you click Submit. You CANNOT EDIT this
+										project afterwards.
+									</p>
+								) : (
+									<p className="text-sm mt-4">
+										<strong>NOTE:</strong> You can still edit this product after
+										you click{' '}
+										{action === 'update' ? 'UPDATE QUOTE' : 'SAVE TO DRAFT'}. Go
+										to MOCKUPS and select DRAFTS.
+									</p>
+								)}
 
 								<div className="mt-[25px] flex justify-end">
 									{title.length > 0 && (
@@ -242,15 +252,36 @@ function ModalSave({ signage, action, btnClass, label, required }) {
 										dangerouslySetInnerHTML={{ __html: updateMessageHtml() }}
 									></div>
 								)}
-							</Dialog.Description>
-							<Dialog.Close asChild>
-								<div
-									className="text-nova-gray absolute top-[10px] right-[10px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center focus:shadow-[0_0_0_2px] focus:outline-none border cursor-pointer"
-									aria-label="Close"
-								>
-									<CloseIcon />
+								<div className="gap-2 block justify-center sm:flex">
+									{action === 'draft' || action === 'update' ? (
+										<a
+											href={`${NovaQuote.quote_url}?qid=${quoteID}&qedit=1`}
+											className="block mb-4 text-center text-sm px-3 py-2 text-white no-underline bg-nova-primary rounded hover:bg-nova-secondary"
+										>
+											Back to Mockup
+										</a>
+									) : (
+										<a
+											href={`${NovaQuote.mockup_account_url}?qid=${quoteID}&qedit=1`}
+											className="block mb-4 text-center text-sm px-3 py-2 text-white no-underline bg-nova-primary rounded hover:bg-nova-secondary"
+										>
+											Back to Mockups
+										</a>
+									)}
+									<a
+										href={NovaQuote.quote_url}
+										className="block mb-4 text-center text-sm px-3 py-2 text-white no-underline bg-nova-primary rounded hover:bg-nova-secondary"
+									>
+										Create New Mockup
+									</a>
+									<a
+										href={NovaQuote.mockup_account_url}
+										className="block mb-4 text-center text-sm px-3 py-2 text-white no-underline bg-nova-primary rounded hover:bg-nova-secondary"
+									>
+										Proceed to Portal
+									</a>
 								</div>
-							</Dialog.Close>
+							</Dialog.Description>
 						</Dialog.Content>
 					)
 				) : (

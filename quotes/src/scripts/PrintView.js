@@ -11,7 +11,9 @@ export default function PrintView() {
 				</h6>
 			</div>
 			<div className="mb-10 block">
-				<h4 className="uppercase">QUOTE ID: {NovaAccount.ID}</h4>
+				<h4 className="uppercase">
+					QUOTE ID: Q-{NovaAccount.ID.padStart(4, '0')}
+				</h4>
 			</div>
 			<div className="flex gap-2 items-center">
 				<h6 className="leading-[2] m-0">INITIAL QUOTE REQUESTED ON:</h6>{' '}
@@ -26,7 +28,7 @@ export default function PrintView() {
 				<span className="text-sm">{decodeHTML(NovaAccount.title)}</span>
 			</div>
 			<div className="flex gap-2 items-center">
-				<h6 className="leading-[2] m-0">PARTNER ID:</h6>{' '}
+				<h6 className="leading-[2] m-0">BUSINESS ID:</h6>{' '}
 				<span className="text-sm">
 					{NovaAccount.business_id ? NovaAccount.business_id : 'None'}
 				</span>
@@ -38,7 +40,7 @@ export default function PrintView() {
 				</span>
 			</div>
 			<div className="flex gap-2 items-center">
-				<h6 className="leading-[2] m-0">PARTNER ID:</h6>{' '}
+				<h6 className="leading-[2] m-0">BUSINESS ID:</h6>{' '}
 				<span className="text-sm">
 					{NovaAccount.business_id ? NovaAccount.business_id : 'None'}
 				</span>
