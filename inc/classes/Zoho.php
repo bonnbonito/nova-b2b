@@ -175,16 +175,16 @@ class Zoho {
 <h3>ZOHO CRM</h3>
 <table class="form-table">
 	<tr>
-		<th><label for="zoho_account_id">Zoho Lead ID</label></th>
+		<th><label for="zoho_account_id">Zoho Account ID</label></th>
 		<td>
 			<input readonly type="text" name="zoho_account_id" id="zoho_account_id"
 				value="<?php echo esc_attr( get_user_meta( $user->ID, 'zoho_account_id', true ) ); ?>"
 				class="regular-text" /><br />
-			<span class="description">This is the user's Lead ID from Zoho CRM</span>
+			<span class="description">This is the user's Account ID from Zoho CRM</span>
 		</td>
 	</tr>
 	<tr>
-		<th><label for="generate_zoho_id">Generate Zoho Lead ID</label></th>
+		<th><label for="generate_zoho_id">Generate Zoho Account ID</label></th>
 		<td>
 			<button type="button" class="button-primary" id="generate_zoho_id">Generate</button>
 		</td>
@@ -196,7 +196,7 @@ generateZohoId.addEventListener("click", e => {
 
 	e.preventDefault();
 
-	let isConfirmed = confirm("Are you sure you want to generate a new Lead ID?");
+	let isConfirmed = confirm("Are you sure you want to generate a new Account ID?");
 
 	if (!isConfirmed) return;
 
@@ -234,6 +234,8 @@ generateZohoId.addEventListener("click", e => {
 
 		$user = get_userdata( $user_id );
 
+		$business_id = get_field( 'business_id', 'user_' . $user_id );
+
 		$status = array(
 			'status' => 'error',
 		);
@@ -254,7 +256,7 @@ generateZohoId.addEventListener("click", e => {
 		);
 
 		$account_data = array(
-			'Account_Name'    => $user->billing_company,
+			'Account_Name'    => get_field( 'business_id', 'user_' . $user_id ),
 			'Website'         => get_field( 'business_website', 'user_' . $user_id ),
 			'Phone'           => $user->billing_phone,
 			'Billing_City'    => $user->billing_city,
@@ -268,7 +270,7 @@ generateZohoId.addEventListener("click", e => {
 		$access_token = $this->get_zoho_access_token();
 
 		// Search for an existing lead by email
-		$search_url     = 'https://www.zohoapis.com/crm/v2/Accounts/search?criteria=(Email:equals:' . $user->user_email . ')';
+		$search_url     = 'https://www.zohoapis.com/crm/v2/Accounts/search?criteria=(Account_Name:equals:' . $business_id . ')';
 		$search_headers = array(
 			'Authorization' => 'Zoho-oauthtoken ' . $access_token,
 		);
@@ -283,11 +285,11 @@ generateZohoId.addEventListener("click", e => {
 
 		$search_body = json_decode( wp_remote_retrieve_body( $search_response ), true );
 		if ( ! empty( $search_body['data'] ) ) {
-			// Lead already exists, fetch the existing Lead ID
+			// Lead already exists, fetch the existing Account ID
 			$zoho_account_id         = $search_body['data'][0]['id'];
-			$status['error_message'] = 'Lead already exists in Zoho CRM. Lead ID: ' . $zoho_account_id;
+			$status['error_message'] = 'Account already exists in Zoho CRM. Account ID: ' . $zoho_account_id;
 
-			$this->log_to_file( "Lead already exists. Zoho Lead ID: {$zoho_account_id}" );
+			$this->log_to_file( "Account already exists. Zoho Account ID: {$zoho_account_id}" );
 
 		} else {
 			// Lead does not exist, proceed to create a new one
