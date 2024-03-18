@@ -59,7 +59,7 @@ class Shortcodes {
 			<p><?php echo get_sub_field( 'content' ); ?></p>
 		</div>
 				<?php if ( get_sub_field( 'link' ) ) : ?>
-		<a href="<?php echo get_sub_field( 'linke' ); ?>"></a>
+		<a href="<?php echo get_sub_field( 'link' ); ?>"></a>
 		<?php endif; ?>
 	</div>
 
