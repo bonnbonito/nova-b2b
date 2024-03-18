@@ -139,10 +139,11 @@ class Nova_Product {
 
 	</div>
 
-
+			<?php if ( get_field( 'quote_div_id' ) ) : ?>
 	<a href="<?php echo untrailingslashit( get_permalink() ); ?>/quote"
 		class="button <?php echo ( $tab === 'quote' ? 'active' : '' ); ?>">Instant
 		Quote</a>
+	<?php endif; ?>
 </div>
 
 <script>
