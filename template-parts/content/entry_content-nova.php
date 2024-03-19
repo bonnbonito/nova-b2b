@@ -22,16 +22,13 @@ global $post;
 			case 'installation':
 				do_action( 'nova_product_installation' );
 				break;
-			case 'quote':
-				do_action( 'nova_product_instant_quote' );
-				break;
 			case 'sample_board ':
 				do_action( 'nova_product_sample_board' );
 				break;
 			case 'tech-specs':
 				do_action( 'nova_product_specs' );
 				break;
-			default:
+			case 'overview':
 				the_content(
 					sprintf(
 						wp_kses(
@@ -47,6 +44,10 @@ global $post;
 					)
 				);
 				do_action( 'nova_signange_after_content' );
+			case 'quote':
+			default:
+				do_action( 'nova_product_instant_quote' );
+				break;
 		}
 	} else {
 		the_content(

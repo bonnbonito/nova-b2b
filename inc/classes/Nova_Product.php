@@ -95,18 +95,21 @@ class Nova_Product {
 				case 'tech-specs':
 					$tab_title = 'Tech Specs';
 					break;
+				case 'overview':
+					$tab_title = 'Overview';
+					break;
 				case 'installation':
 					$tab_title = 'Installation';
 					break;
 				default:
-					$tab_title = 'Overview';
+					$tab_title = 'Instant Quote';
 			}
 
 			?>
 <div class="product-nav-tabs not-tab">
 	<div id="productNovaNav" class="product-nav-tabs-left">
-		<h6><a class="button <?php echo ( ! $tab ? 'active' : '' ); ?>"
-				href="<?php echo get_permalink(); ?>">Overview</a></h6>
+		<h6><a class="button <?php echo ( $tab === 'overview' ? 'active' : '' ); ?>"
+				href="<?php echo untrailingslashit( get_permalink() ); ?>/overview">Overview</a></h6>
 		<h6><a class="button <?php echo ( $tab === 'tech-specs' ? 'active' : '' ); ?>"
 				href="<?php echo untrailingslashit( get_permalink() ); ?>/tech-specs">Tech Specs</a></h6>
 		<h6><a class="button <?php echo ( $tab === 'installation' ? 'active' : '' ); ?>"
@@ -121,9 +124,9 @@ class Nova_Product {
 					stroke-linejoin="round" />
 			</svg>
 		</h6>
-			<?php if ( $tab !== '' ) : ?>
+			<?php if ( $tab !== 'overview' ) : ?>
 		<h6 data-menu="overview" class="py-1"><a class="text-button block <?php echo ( ! $tab ? 'selected' : '' ); ?>"
-				href="<?php echo get_permalink(); ?>">Overview</a></a></h6>
+				href="<?php echo untrailingslashit( get_permalink() ); ?>/overview">Overview</a></a></h6>
 		<?php endif; ?>
 			<?php if ( $tab !== 'tech-specs' ) : ?>
 		<h6 data-menu="specs" class="py-1"><a
@@ -139,8 +142,8 @@ class Nova_Product {
 
 	</div>
 
-	<a href="<?php echo untrailingslashit( get_permalink() ); ?>/quote"
-		class="button <?php echo ( $tab === 'quote' ? 'active' : '' ); ?>">Instant
+	<a href="<?php echo untrailingslashit( get_permalink() ); ?>"
+		class="button <?php echo ( ! $tab ? 'active' : '' ); ?>">Instant
 		Quote</a>
 </div>
 

@@ -146,7 +146,7 @@ class Nova_Quote {
 	}
 
 	public function custom_rewrite_rule() {
-		add_rewrite_rule( '^custom/([^/]*)/([^/]*)/(installation|tech-specs|sample-board|quote)/?$', 'index.php?signage=$matches[1]/$matches[2]&pagetab=$matches[3]', 'top' );
+		add_rewrite_rule( '^custom/([^/]*)/([^/]*)/(installation|tech-specs|sample-board|quote|overview)/?$', 'index.php?signage=$matches[1]/$matches[2]&pagetab=$matches[3]', 'top' );
 	}
 
 	public function nova_product_instant_quote() {
