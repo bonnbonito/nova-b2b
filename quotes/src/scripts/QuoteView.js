@@ -262,7 +262,14 @@ export default function QuoteView() {
 					)}
 
 					<div className="flex justify-between gap-4">
-						<h5>ESTIMATED SUBTOTAL:</h5>{' '}
+						<h5>
+							{`${
+								NovaAccount.quote_status.value === 'ready'
+									? 'SUBTOTAL'
+									: 'ESTIMATED SUBTOTAL'
+							}`}
+							:
+						</h5>{' '}
 						<h5>
 							{finalPrice > 0
 								? `${currency}$${Number(
@@ -273,7 +280,14 @@ export default function QuoteView() {
 					</div>
 
 					<div className="flex justify-between gap-4">
-						<h5>ESTIMATED SHIPPING:</h5>{' '}
+						<h5>
+							{`${
+								NovaAccount.quote_status.value === 'ready'
+									? 'SHIPPING'
+									: 'ESTIMATED SHIPPING'
+							}`}
+							:
+						</h5>{' '}
 						<h5>
 							{estimatedShipping > 0
 								? `${currency}$${Number(
@@ -297,7 +311,14 @@ export default function QuoteView() {
 					)}
 
 					<div className="flex justify-between gap-4 border-b pb-14 mt-8">
-						<h4>ESTIMATED TOTAL:</h4>{' '}
+						<h4>
+							{`${
+								NovaAccount.quote_status.value === 'ready'
+									? 'TOTAL'
+									: 'ESTIMATED TOTAL'
+							}`}
+							:
+						</h4>{' '}
 						<h4>
 							{estimatedTotal > 0
 								? `${currency}$${Number(

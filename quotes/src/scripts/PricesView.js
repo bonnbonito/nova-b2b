@@ -207,12 +207,14 @@ export default function PricesView({ item }) {
 					</div>
 				)}
 
-				<div className="grid grid-cols-[160px_1fr] py-[2px] items-center">
-					<div className="text-left text-xs font-title">LINE TEXT</div>
-					<div className="text-left text-[14px] break-words">
-						{item.letters}
+				{item.letters && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center">
+						<div className="text-left text-xs font-title">LINE TEXT</div>
+						<div className="text-left text-[14px] break-words">
+							{item.letters}
+						</div>
 					</div>
-				</div>
+				)}
 
 				{item.metalFinish && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center">

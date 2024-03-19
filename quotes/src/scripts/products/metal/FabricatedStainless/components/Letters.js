@@ -232,7 +232,10 @@ export default function Letters({ item }) {
 				lettersArray.forEach((letter) => {
 					let letterPrice = baseLetterPrice;
 
-					if (letter.match(/[a-z]/)) {
+					if (letter === ' ') {
+						// If the character is a space, set the price to 0 and skip further checks
+						letterPrice = 0;
+					} else if (letter.match(/[a-z]/)) {
 						// Check for lowercase letter
 						letterPrice *= lowerCasePricing; // 80% of the base price
 					} else if (letter.match(/[A-Z]/)) {

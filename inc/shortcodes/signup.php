@@ -255,7 +255,9 @@
 
         <div class="flex justify-center">
             <input type="hidden" name="action" value="nova_signup">
-            <button type="submit" class="uppercase font-title w-full max-w-[820px] mx-auto py-2" id="submitBtn">Submit
+            <button type="submit"
+                class="uppercase font-title w-full max-w-[820px] mx-auto py-2 bg-nova-primary hover:bg-nova-secondary"
+                id="submitBtn">Submit
                 Application</button>
         </div>
 

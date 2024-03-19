@@ -153,9 +153,16 @@ class Nova_Quote {
 		?>
 		<?php if ( ! is_user_logged_in() ) : ?>
 			<?php echo do_shortcode( '[kadence_element id=" 202"]' ); ?>
-		<?php else : ?>
+			<?php
+		elseif ( get_field( 'quote_div_id' ) ) :
+			?>
 <div id="<?php echo get_field( 'quote_div_id' ); ?>"></div>
 			<?php
+					else :
+						?>
+<div id="customProject"></div>
+						<?php
+
 			endif;
 	}
 
@@ -898,6 +905,7 @@ h6 {
 				</tr>
 				<tr>
 					<td>
+						<?php echo get_field( 'quote_status' )['value']; ?>
 						<h5 style="font-size: 13pt">ESTIMATED SUBTOTAL:</h5>
 					</td>
 					<td style="text-align: right;">
@@ -1629,7 +1637,7 @@ h6 {
 
 	public function not_author_but_admin() {
 		$user = wp_get_current_user();
-		if ( ( in_array( 'administrator', (array) $user->roles ) || in_array( 'customer_rep', (array) $user->roles ) ) && get_field( 'partner', $_GET['qid'] ) !== get_current_user_id() ) {
+		if ( ( in_array( 'administrator', (array) $user->roles ) || in_array( 'customer_rep', (array) $user->roles ) ) && ( isset( $_GET['qid'] ) && get_field( 'partner', $_GET['qid'] ) !== get_current_user_id() ) ) {
 			return 'yes';
 		}
 		return 'no';
