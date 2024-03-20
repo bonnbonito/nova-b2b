@@ -1117,7 +1117,7 @@ function PricesView({
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
     href: item.fontFileUrl,
     target: "_blank"
-  }, "asdf", item.fontFileName))), item.color && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "asdf", item.fontFileName))), item.color?.name && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-[160px_1fr] py-[2px] items-center"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
@@ -1330,11 +1330,11 @@ function QuoteView() {
   const exchangeRate = 1.3;
   const finalPrice = currency === 'USD' ? quotePrice : quotePrice * exchangeRate;
   const flatRate = currency === 'USD' ? 14.75 : 14.75 * exchangeRate;
-  const standardRate = parseFloat(finalPrice * 0.075);
+  const standardRate = parseFloat((finalPrice * 0.075).toFixed(2));
   const estimatedShipping = quotePrice > 0 ? Math.max(flatRate, standardRate) : 0;
-  const tax = taxRate ? parseFloat(taxRate.tax_rate / 100) : 0;
-  const taxCompute = parseFloat(finalPrice * tax);
-  const estimatedTotal = parseFloat(finalPrice + estimatedShipping + taxCompute);
+  const tax = taxRate ? parseFloat((taxRate.tax_rate / 100).toFixed(2)) : 0;
+  const taxCompute = parseFloat((finalPrice * tax).toFixed(2));
+  const estimatedTotal = parseFloat((finalPrice + estimatedShipping + taxCompute).toFixed(2));
   const downloadFile = currency === 'CAD' ? '/invoice-' + NovaAccount.ID + '-CAD.pdf' : '/invoice-' + NovaAccount.ID + '.pdf';
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex pb-4 mb-4 border-b justify-between"
@@ -1419,11 +1419,11 @@ function QuoteView() {
     className: "flex justify-between gap-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, `${NovaAccount.quote_status.value === 'ready' ? 'SUBTOTAL' : 'ESTIMATED SUBTOTAL'}`, ":"), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, finalPrice > 0 ? `${currency}$${Number(finalPrice.toFixed(2)).toLocaleString()}` : 'TBD')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex justify-between gap-4"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, `${NovaAccount.quote_status.value === 'ready' ? 'SHIPPING' : 'ESTIMATED SHIPPING'}`, ":"), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, estimatedShipping > 0 ? `${currency}$${Number(estimatedShipping.toFixed(2)).toLocaleString()}` : 'TBD')), taxRate && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, "ESTIMATED SHIPPING:"), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, estimatedShipping > 0 ? `${currency}$${Number(estimatedShipping.toFixed(2)).toLocaleString()}` : 'TBD')), taxRate && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex justify-between gap-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, taxRate.tax_rate_name), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, taxCompute > 0 ? `${currency}$${Number(taxCompute.toFixed(2)).toLocaleString()}` : 'TBD')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex justify-between gap-4 border-b pb-14 mt-8"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, `${NovaAccount.quote_status.value === 'ready' ? 'TOTAL' : 'ESTIMATED TOTAL'}`, ":"), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, estimatedTotal > 0 ? `${currency}$${Number(estimatedTotal.toFixed(2)).toLocaleString()}` : 'TBD')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, "ESTIMATED TOTAL:"), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, estimatedTotal > 0 ? `${currency}$${Number(estimatedTotal.toFixed(2)).toLocaleString()}` : 'TBD')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
     className: "mt-4 text-[10px] text-[#5E5E5E]"
   }, "Freight charges may vary based on factors such as shipping destination, package size, and delivery speed.\xA0")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, NovaAccount.quote_status.value === 'ready' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "rounded mb-3 px-4 py-3 border border-nova-light font-title text-white bg-nova-primary text-xs inline-block hover:text-white hover:bg-nova-secondary w-full text-center cursor-pointer uppercase",
@@ -5948,7 +5948,7 @@ function Letters({
       whiteSpace: 'nowrap',
       overflow: 'hidden',
       fontFamily: font,
-      color: color.color,
+      color: color?.color,
       textShadow: '0px 0px 1px rgba(0, 0, 0, 1)'
     }
   }, letters ? letters : 'PREVIEW'))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {

@@ -112,6 +112,7 @@ class Scripts {
 
 		wp_register_script( 'nova-account', get_stylesheet_directory_uri() . '/assets/js/myaccount.js', array(), wp_get_theme()->get( 'Version' ), true );
 
+		$qid = isset( $_GET['qid'] ) ? $_GET['qid'] : '';
 		wp_localize_script(
 			'nova-account',
 			'NovaMyAccount',
@@ -119,7 +120,7 @@ class Scripts {
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
 				'nonce'    => wp_create_nonce( 'nova_account_nonce' ),
 				'quote'    => $this->get_quote(),
-				'tax_rate' => $this->get_woocommerce_tax_rate_by_country_and_state(),
+				'tax_rate' => $this->get_tax_rate_by_project( $qid ),
 				'country'  => $this->get_customer_country_code(),
 				'state'    => $this->get_customer_state_code(),
 			)
@@ -161,15 +162,28 @@ class Scripts {
 		return ! empty( $state_code ) ? $state_code : false;
 	}
 
+	public function get_tax_rate_by_project( $post_id ) {
+		if ( ! $post_id ) {
+			return;
+		}
 
-	public function get_woocommerce_tax_rate_by_country_and_state( $country_code = '', $state_code = '' ) {
+		$user_id = get_field( 'partner', $post_id );
+
+		return $this->get_woocommerce_tax_rate_by_country_and_state( $user_id, '', '' );
+	}
+
+
+	public function get_woocommerce_tax_rate_by_country_and_state( $user_id = null, $country_code = '', $state_code = '' ) {
 		global $wpdb;
+
+		if ( is_null( $user_id ) ) {
+			$user_id = get_current_user_id();
+		}
 
 		// Use global customer as fallback
 		if ( empty( $country_code ) || empty( $state_code ) ) {
-			$customer     = WC()->customer;
-			$country_code = $customer->get_shipping_country() ?: $country_code;
-			$state_code   = $customer->get_shipping_state() ?: $state_code;
+			$country_code = get_user_meta( $user_id, 'shipping_country', true ) ?: $country_code;
+			$state_code   = get_user_meta( $user_id, 'shipping_state', true ) ?: $state_code;
 		}
 
 		try {

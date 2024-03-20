@@ -38,6 +38,7 @@ class Nova_Quote {
 		add_action( 'wp_ajax_save_custom_project', array( $this, 'save_custom_project' ) );
 		add_filter( 'upload_mimes', array( $this, 'enable_ai_files' ), 1, 1 );
 		add_filter( 'acf/prepare_field/name=signage', array( $this, 'acf_diable_field' ) );
+		add_filter( 'acf/prepare_field/name=final_price', array( $this, 'acf_diable_field' ) );
 		add_filter( 'acf/prepare_field/name=partner', array( $this, 'acf_diable_field' ) );
 		add_filter( 'acf/prepare_field/name=projects', array( $this, 'acf_diable_field' ) );
 		add_filter( 'acf/prepare_field/name=dropbox_token_access', array( $this, 'acf_diable_field' ) );
@@ -48,6 +49,7 @@ class Nova_Quote {
 		add_action( 'admin_init', array( $this, 'handle_dropbox_oauth_redirect' ) );
 		add_action( 'acf/save_post', array( $this, 'for_quotation_email_action' ) );
 		add_action( 'acf/save_post', array( $this, 'for_payment_email_action' ) );
+		add_action( 'save_post', array( $this, 'regenerate_pdf' ), 10, 3 );
 		add_action( 'quote_to_processing', array( $this, 'for_quotation_email' ) );
 		add_action( 'processing_to_payment', array( $this, 'for_payment_email' ) );
 		add_action( 'processing_to_payment', array( $this, 'create_nova_quote_product' ), 1 );
@@ -59,6 +61,14 @@ class Nova_Quote {
 		add_action( 'kadence_single_before_inner_content', array( $this, 'show_product_dropdown' ) );
 		add_action( 'add_meta_boxes', array( $this, 'nova_quote_add_admin_meta_box' ), 10, 2 );
 		add_action( 'add_meta_boxes', array( $this, 'nova_quote_admin_changed' ), 10, 2 );
+		add_action( 'wp_enqueue_scripts', array( $this, 'dequeue_lightbox_on_mockups_view' ), 100 );
+	}
+
+	public function dequeue_lightbox_on_mockups_view() {
+		// Check if we're on the 'mockups-view' endpoint
+		if ( function_exists( 'is_wc_endpoint_url' ) && is_wc_endpoint_url( 'mockups-view' ) ) {
+			wp_dequeue_script( 'kadence-lightbox-init' );
+		}
 	}
 
 	public function nova_quote_admin_changed( $post_type, $post ) {
@@ -377,7 +387,7 @@ class Nova_Quote {
 			return;
 		}
 
-		do_action( 'processing_to_payment', $post_id );
+		do_action( 'for_payment_email_action' );
 	}
 
 	public function for_quotation_email_action( $post_id ) {
@@ -397,6 +407,23 @@ class Nova_Quote {
 		}
 
 		// do_action( 'quote_to_processing', $post_id );
+	}
+
+	public function regenerate_pdf( $post_id, $post, $update ) {
+		if ( wp_is_post_autosave( $post_id ) || wp_is_post_revision( $post_id ) ) {
+			return;
+		}
+
+		if ( 'nova_quote' !== get_post_type( $post_id ) ) {
+			return;
+		}
+
+		if ( $update ) {
+			$html     = $this->html_invoice( $post_id );
+			$html_cad = $this->html_invoice_cad( $post_id );
+			$this->generate_pdf( $post_id, $html, 'USD' );
+			$this->generate_pdf( $post_id, $html_cad, 'CAD' );
+		}
 	}
 
 	public function handle_dropbox_oauth_redirect() {
@@ -674,12 +701,12 @@ class Nova_Quote {
 		$signage      = json_decode( get_field( 'signage', $post_id ) );
 		$note         = get_field( 'note', $post_id );
 
-		$flat_rate     = 14.75;
+		$flat_rate     = 14.75 * 1.3;
 		$standard_rate = $final_price * 0.075;
 
 		$estimatedShipping = $final_price > 0 ? number_format( max( $flat_rate, $standard_rate ), 2, '.', '' ) : 0;
 
-		$tax         = $instance->get_woocommerce_tax_rate_by_country_and_state();
+		$tax         = $instance->get_woocommerce_tax_rate_by_country_and_state( $user_id, '', '' );
 		$tax_rate    = 0;
 		$tax_compute = 0;
 		if ( $tax ) {
@@ -749,7 +776,7 @@ h6 {
 				</tr>
 				<?php
 				if ( $projectArray['letters'] ) {
-					$color = $projectArray['color'] ? ' color: ' . $projectArray['color']->color : '';
+					$color = isset( $projectArray['color'] ) ? ' color: ' . $projectArray['color']->color : '';
 					$face  = $projectArray['font'] ? strtolower( str_replace( array( 'regular', ' ', 'bold' ), array( '', '_', 'b' ), $projectArray['font'] ) ) : '';
 					$style = $color . $face;
 					?>
@@ -772,122 +799,7 @@ h6 {
 			</table>
 
 				<?php
-				echo '<table>';
-				$projectArray = get_object_vars( $project );
-
-				// Check and print the title first
-				if ( isset( $projectArray['title'] ) && ! empty( $projectArray['title'] ) ) {
-					echo '<tr style="font-size: 14px; text-transform: uppercase; padding-top: 40px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">Title: </strong></td><td><font face="lato">' . $projectArray['title'] . '</font></td></tr>';
-				}
-
-				if ( $projectArray['thickness'] ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">THICKNESS: </strong></td><td><font face="lato">' . $projectArray['thickness']->thickness . '</font></td></tr>';
-				}
-
-				if ( $projectArray['width'] ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">WIDTH: </strong></td><td><font face="lato">' . $projectArray['width'] . '"</font></td></tr>';
-				}
-
-				if ( $projectArray['height'] ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">HEIGHT: </strong></td><td><font face="lato">' . $projectArray['height'] . '"</font></td></tr>';
-				}
-
-				if ( $projectArray['printPreference'] ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">PRINT PREFERENCE: </strong></td><td><font face="lato">' . $projectArray['printPreference'] . '</font></td></tr>';
-				}
-
-				if ( $projectArray['baseColor'] ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">BASE COLOR: </strong></td><td><font face="lato">' . $projectArray['baseColor'] . '</font></td></tr>';
-				}
-
-				if ( $projectArray['letterHeight'] ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">LETTERS HEIGHT: </strong></td><td><font face="lato">' . $projectArray['letterHeight'] . '"</font></td></tr>';
-				}
-
-				if ( $projectArray['metal'] ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">METAL OPTION: </strong></td><td><font face="lato">' . $projectArray['metal'] . '</font></td></tr>';
-				}
-
-				if ( $projectArray['stainLessMetalFinish'] ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">METAL FINISH: </strong></td><td><font face="lato">' . $projectArray['stainLessMetalFinish'] . '</font></td></tr>';
-				}
-
-				if ( $projectArray['mounting'] ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">MOUNTING: </strong></td><td><font face="lato">' . $projectArray['mounting'] . '</font></td></tr>';
-				}
-
-				if ( $projectArray['waterproof'] ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">WATERPROOF: </strong></td><td><font face="lato">' . $projectArray['waterproof'] . '</font></td></tr>';
-				}
-
-				if ( $projectArray['finishing'] ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">FINISHING: </strong></td><td><font face="lato">' . $projectArray['finishing'] . '</font></td></tr>';
-				}
-
-				if ( $projectArray['metalFinishing'] ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">METAL FINISHING: </strong></td><td><font face="lato">' . $projectArray['metalFinishing'] . '</font></td></tr>';
-				}
-
-				if ( $projectArray['metalFinish'] && ! is_object( $projectArray['metalFinish'] ) ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">METAL FINISH: </strong></td><td><font face="lato">' . $projectArray['metalFinish'] . '</font></td></tr>';
-				}
-
-				if ( $projectArray['stainlessSteelPolished'] ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">STEEL POLISHED: </strong></td><td><font face="lato">' . $projectArray['stainlessSteelPolished'] . '</font></td></tr>';
-				}
-
-				if ( $projectArray['font'] ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">FONT: </strong></td><td><font face="lato">' . $projectArray['font'] . '</font></td></tr>';
-				}
-
-				if ( $projectArray['customFont'] ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">CUSTOM FONT: </strong></td><td><font face="lato">' . $projectArray['customFont'] . '</font></td></tr>';
-				}
-
-				if ( $projectArray['color']->name ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">COLOR: </strong></td><td><font face="lato">' . $projectArray['color']->name . '</font></td></tr>';
-				}
-
-				if ( $projectArray['customColor'] ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">CUSTOM COLOR: </strong></td><td><font face="lato">' . $projectArray['customColor'] . '</font></td></tr>';
-				}
-
-				if ( $projectArray['letters'] ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">LINE TEXT: </strong></td><td><font face="lato">' . $projectArray['letters'] . '</font></td></tr>';
-				}
-
-				if ( $projectArray['metalFinish']->name ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">METAL FINISH: </strong></td><td><font face="lato">' . $projectArray['metalFinish']->name . '</font></td></tr>';
-				}
-
-				if ( $projectArray['acrylicBase'] ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">ACRYLIC BASE: </strong></td><td><font face="lato">' . $projectArray['acrylicBase']->name . '</font></td></tr>';
-				}
-
-				if ( $projectArray['installation'] ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">INSTALLATION: </strong></td><td><font face="lato">' . $projectArray['installation'] . '</font></td></tr>';
-				}
-
-				if ( $projectArray['pieces'] ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">PIECES/CUTOUTS: </strong></td><td><font face="lato">' . $projectArray['pieces'] . '</font></td></tr>';
-				}
-
-				if ( $projectArray['comments'] ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">COMMENTS: </strong></td><td><font face="lato">' . $projectArray['comments'] . '</font></td></tr>';
-				}
-
-				if ( $projectArray['description'] ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">DESCRIPTION: </strong></td><td><font face="lato">' . $projectArray['description'] . '</font></td></tr>';
-				}
-
-				if ( $projectArray['fileUrl'] && $projectArray['fileName'] ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">FILE: </strong></td><td><font face="lato"><a href="' . $projectArray['fileUrl'] . '" target="_blank">' . $projectArray['fileName'] . '</a></font></td></tr>';
-				}
-
-				echo '<tr><td></td></tr>';
-				echo '<tr><td></td></tr>';
-
-				echo '</table>';
+				$this->output_project_item( $project );
 			}
 
 			?>
@@ -905,7 +817,6 @@ h6 {
 				</tr>
 				<tr>
 					<td>
-						<?php echo get_field( 'quote_status' )['value']; ?>
 						<h5 style="font-size: 13pt">ESTIMATED SUBTOTAL:</h5>
 					</td>
 					<td style="text-align: right;">
@@ -969,7 +880,7 @@ h6 {
 
 		$estimatedShipping = $final_price > 0 ? number_format( max( $flat_rate, $standard_rate ), 2, '.', '' ) : 0;
 
-		$tax         = $instance->get_woocommerce_tax_rate_by_country_and_state();
+		$tax         = $instance->get_woocommerce_tax_rate_by_country_and_state( $user_id, '', '' );
 		$tax_rate    = 0;
 		$tax_compute = 0;
 		if ( $tax ) {
@@ -1036,7 +947,7 @@ h6 {
 					<td style="text-align: right;">USD$ <?php echo $price; ?></td>
 				</tr>
 				<?php
-				if ( $projectArray['letters'] ) {
+				if ( isset( $projectArray['letters'] ) ) {
 					$color = isset( $projectArray['color'] ) ? ' color: ' . $projectArray['color']->color : '';
 					$face  = $projectArray['font'] ? strtolower( str_replace( array( 'regular', ' ', 'bold' ), array( '', '_', 'b' ), $projectArray['font'] ) ) : '';
 					$style = $color . $face;
@@ -1060,126 +971,9 @@ h6 {
 			</table>
 
 				<?php
-				echo '<table>';
-				$projectArray = get_object_vars( $project );
 
-				// Check and print the title first
-				if ( isset( $projectArray['title'] ) && ! empty( $projectArray['title'] ) ) {
-					echo '<tr style="font-size: 14px; text-transform: uppercase; padding-top: 40px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">Title: </strong></td><td><font face="lato">' . $projectArray['title'] . '</font></td></tr>';
-				}
+				$this->output_project_item( $project );
 
-				if ( isset( $projectArray['thickness'] ) && ! empty( $projectArray['thickness'] ) && $projectArray['thickness'] ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">THICKNESS: </strong></td><td><font face="lato">' . $projectArray['thickness']->thickness . '</font></td></tr>';
-				}
-
-				if ( isset( $projectArray['width'] ) && ! empty( $projectArray['width'] ) ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">WIDTH: </strong></td><td><font face="lato">' . $projectArray['width'] . '"</font></td></tr>';
-				}
-
-				if ( isset( $projectArray['height'] ) && ! empty( $projectArray['height'] ) ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">HEIGHT: </strong></td><td><font face="lato">' . $projectArray['height'] . '"</font></td></tr>';
-				}
-
-				if ( isset( $projectArray['printPreference'] ) && ! empty( $projectArray['printPreference'] ) ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">PRINT PREFERENCE: </strong></td><td><font face="lato">' . $projectArray['printPreference'] . '</font></td></tr>';
-				}
-
-				if ( isset( $projectArray['baseColor'] ) && ! empty( $projectArray['baseColor'] ) ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">BASE COLOR: </strong></td><td><font face="lato">' . $projectArray['baseColor'] . '</font></td></tr>';
-				}
-
-				if ( isset( $projectArray['letterHeight'] ) && ! empty( $projectArray['letterHeight'] ) ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">LETTERS HEIGHT: </strong></td><td><font face="lato">' . $projectArray['letterHeight'] . '"</font></td></tr>';
-				}
-
-				if ( isset( $projectArray['metal'] ) && ! empty( $projectArray['metal'] ) ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">METAL OPTION: </strong></td><td><font face="lato">' . $projectArray['metal'] . '</font></td></tr>';
-				}
-
-				if ( isset( $projectArray['stainLessMetalFinish'] ) && ! empty( $projectArray['stainLessMetalFinish'] ) ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">METAL FINISH: </strong></td><td><font face="lato">' . $projectArray['stainLessMetalFinish'] . '</font></td></tr>';
-				}
-
-				if ( isset( $projectArray['mounting'] ) && ! empty( $projectArray['mounting'] ) ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">MOUNTING: </strong></td><td><font face="lato">' . $projectArray['mounting'] . '</font></td></tr>';
-				}
-
-				if ( isset( $projectArray['waterproof'] ) && ! empty( $projectArray['waterproof'] ) ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">WATERPROOF: </strong></td><td><font face="lato">' . $projectArray['waterproof'] . '</font></td></tr>';
-				}
-
-				if ( isset( $projectArray['finishing'] ) && ! empty( $projectArray['finishing'] ) ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">FINISHING: </strong></td><td><font face="lato">' . $projectArray['finishing'] . '</font></td></tr>';
-				}
-
-				if ( isset( $projectArray['metalFinishing'] ) && ! empty( $projectArray['metalFinishing'] ) ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">METAL FINISHING: </strong></td><td><font face="lato">' . $projectArray['metalFinishing'] . '</font></td></tr>';
-				}
-
-				if ( isset( $projectArray['metalFinish'] ) && ! empty( $projectArray['metalFinish'] ) && ! is_object( $projectArray['metalFinish'] ) ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">METAL FINISH: </strong></td><td><font face="lato">' . $projectArray['metalFinish'] . '</font></td></tr>';
-				}
-
-				if ( isset( $projectArray['stainlessSteelPolished'] ) && ! empty( $projectArray['stainlessSteelPolished'] ) ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">STEEL POLISHED: </strong></td><td><font face="lato">' . $projectArray['stainlessSteelPolished'] . '</font></td></tr>';
-				}
-
-				if ( isset( $projectArray['font'] ) && ! empty( $projectArray['font'] ) ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">FONT: </strong></td><td><font face="lato">' . $projectArray['font'] . '</font></td></tr>';
-				}
-
-				if ( isset( $projectArray['fontFileUrl'] ) && ! empty( $projectArray['fontFileUrl'] ) && isset( $projectArray['fontFileName'] ) && ! empty( $projectArray['fontFileName'] ) ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">FILE: </strong></td><td><font face="lato"><a href="' . $projectArray['fontFileUrl'] . '" target="_blank">' . $projectArray['fontFileName'] . '</a></font></td></tr>';
-				}
-
-				if ( isset( $projectArray['customFont'] ) && ! empty( $projectArray['customFont'] ) ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">CUSTOM FONT: </strong></td><td><font face="lato">' . $projectArray['customFont'] . '</font></td></tr>';
-				}
-
-				if ( isset( $projectArray['color'] ) && ! empty( $projectArray['color'] ) && isset( $projectArray['color']->name ) ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">COLOR: </strong></td><td><font face="lato">' . $projectArray['color']->name . '</font></td></tr>';
-				}
-
-				if ( isset( $projectArray['customColor'] ) && ! empty( $projectArray['customColor'] ) ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">CUSTOM COLOR: </strong></td><td><font face="lato">' . $projectArray['customColor'] . '</font></td></tr>';
-				}
-
-				if ( isset( $projectArray['letters'] ) && ! empty( $projectArray['letters'] ) ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">LINE TEXT: </strong></td><td><font face="lato">' . $projectArray['letters'] . '</font></td></tr>';
-				}
-
-				if ( isset( $projectArray['metalFinish'] ) && ! empty( $projectArray['metalFinish'] ) && isset( $projectArray['metalFinish']->name ) ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">METAL FINISH: </strong></td><td><font face="lato">' . $projectArray['metalFinish']->name . '</font></td></tr>';
-				}
-
-				if ( isset( $projectArray['acrylicBase'] ) && ! empty( $projectArray['acrylicBase'] ) && isset( $projectArray['acrylicBase']->name ) ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">ACRYLIC BASE: </strong></td><td><font face="lato">' . $projectArray['acrylicBase']->name . '</font></td></tr>';
-				}
-
-				if ( isset( $projectArray['installation'] ) && ! empty( $projectArray['installation'] ) ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">INSTALLATION: </strong></td><td><font face="lato">' . $projectArray['installation'] . '</font></td></tr>';
-				}
-
-				if ( isset( $projectArray['pieces'] ) && ! empty( $projectArray['pieces'] ) ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">PIECES/CUTOUTS: </strong></td><td><font face="lato">' . $projectArray['pieces'] . '</font></td></tr>';
-				}
-
-				if ( isset( $projectArray['comments'] ) && ! empty( $projectArray['comments'] ) ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">COMMENTS: </strong></td><td><font face="lato">' . $projectArray['comments'] . '</font></td></tr>';
-				}
-
-				if ( isset( $projectArray['description'] ) && ! empty( $projectArray['description'] ) ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">DESCRIPTION: </strong></td><td><font face="lato">' . $projectArray['description'] . '</font></td></tr>';
-				}
-
-				if ( isset( $projectArray['fileUrl'] ) && ! empty( $projectArray['fileUrl'] ) && isset( $projectArray['fileName'] ) && ! empty( $projectArray['fileName'] ) ) {
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">FILE: </strong></td><td><font face="lato"><a href="' . $projectArray['fileUrl'] . '" target="_blank">' . $projectArray['fileName'] . '</a></font></td></tr>';
-				}
-
-				echo '<tr><td></td></tr>';
-				echo '<tr><td></td></tr>';
-
-				echo '</table>';
 			}
 
 			?>
@@ -1241,6 +1035,128 @@ h6 {
 
 		<?php
 			return ob_get_clean();
+	}
+
+	public function output_project_item( $project ) {
+		echo '<table>';
+		$projectArray = get_object_vars( $project );
+
+		if ( isset( $projectArray['title'] ) && ! empty( $projectArray['title'] ) ) {
+			echo '<tr style="font-size: 14px; text-transform: uppercase; padding-top: 40px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">Title: </strong></td><td><font face="lato">' . $projectArray['title'] . '</font></td></tr>';
+		}
+
+		if ( isset( $projectArray['thickness'] ) && ! empty( $projectArray['thickness'] ) && $projectArray['thickness'] ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">THICKNESS: </strong></td><td><font face="lato">' . $projectArray['thickness']->thickness . '</font></td></tr>';
+		}
+
+		if ( isset( $projectArray['width'] ) && ! empty( $projectArray['width'] ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">WIDTH: </strong></td><td><font face="lato">' . $projectArray['width'] . '"</font></td></tr>';
+		}
+
+		if ( isset( $projectArray['height'] ) && ! empty( $projectArray['height'] ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">HEIGHT: </strong></td><td><font face="lato">' . $projectArray['height'] . '"</font></td></tr>';
+		}
+
+		if ( isset( $projectArray['printPreference'] ) && ! empty( $projectArray['printPreference'] ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">PRINT PREFERENCE: </strong></td><td><font face="lato">' . $projectArray['printPreference'] . '</font></td></tr>';
+		}
+
+		if ( isset( $projectArray['baseColor'] ) && ! empty( $projectArray['baseColor'] ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">BASE COLOR: </strong></td><td><font face="lato">' . $projectArray['baseColor'] . '</font></td></tr>';
+		}
+
+		if ( isset( $projectArray['letterHeight'] ) && ! empty( $projectArray['letterHeight'] ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">LETTERS HEIGHT: </strong></td><td><font face="lato">' . $projectArray['letterHeight'] . '"</font></td></tr>';
+		}
+
+		if ( isset( $projectArray['metal'] ) && ! empty( $projectArray['metal'] ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">METAL OPTION: </strong></td><td><font face="lato">' . $projectArray['metal'] . '</font></td></tr>';
+		}
+
+		if ( isset( $projectArray['stainLessMetalFinish'] ) && ! empty( $projectArray['stainLessMetalFinish'] ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">METAL FINISH: </strong></td><td><font face="lato">' . $projectArray['stainLessMetalFinish'] . '</font></td></tr>';
+		}
+
+		if ( isset( $projectArray['mounting'] ) && ! empty( $projectArray['mounting'] ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">MOUNTING: </strong></td><td><font face="lato">' . $projectArray['mounting'] . '</font></td></tr>';
+		}
+
+		if ( isset( $projectArray['waterproof'] ) && ! empty( $projectArray['waterproof'] ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">WATERPROOF: </strong></td><td><font face="lato">' . $projectArray['waterproof'] . '</font></td></tr>';
+		}
+
+		if ( isset( $projectArray['finishing'] ) && ! empty( $projectArray['finishing'] ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">FINISHING: </strong></td><td><font face="lato">' . $projectArray['finishing'] . '</font></td></tr>';
+		}
+
+		if ( isset( $projectArray['metalFinishing'] ) && ! empty( $projectArray['metalFinishing'] ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">METAL FINISHING: </strong></td><td><font face="lato">' . $projectArray['metalFinishing'] . '</font></td></tr>';
+		}
+
+		if ( isset( $projectArray['metalFinish'] ) && ! empty( $projectArray['metalFinish'] ) && ! is_object( $projectArray['metalFinish'] ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">METAL FINISH: </strong></td><td><font face="lato">' . $projectArray['metalFinish'] . '</font></td></tr>';
+		}
+
+		if ( isset( $projectArray['stainlessSteelPolished'] ) && ! empty( $projectArray['stainlessSteelPolished'] ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">STEEL POLISHED: </strong></td><td><font face="lato">' . $projectArray['stainlessSteelPolished'] . '</font></td></tr>';
+		}
+
+		if ( isset( $projectArray['font'] ) && ! empty( $projectArray['font'] ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">FONT: </strong></td><td><font face="lato">' . $projectArray['font'] . '</font></td></tr>';
+		}
+
+		if ( isset( $projectArray['fontFileUrl'] ) && ! empty( $projectArray['fontFileUrl'] ) && isset( $projectArray['fontFileName'] ) && ! empty( $projectArray['fontFileName'] ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">FILE: </strong></td><td><font face="lato"><a href="' . $projectArray['fontFileUrl'] . '" target="_blank">' . $projectArray['fontFileName'] . '</a></font></td></tr>';
+		}
+
+		if ( isset( $projectArray['customFont'] ) && ! empty( $projectArray['customFont'] ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">CUSTOM FONT: </strong></td><td><font face="lato">' . $projectArray['customFont'] . '</font></td></tr>';
+		}
+
+		if ( isset( $projectArray['color'] ) && ! empty( $projectArray['color'] ) && isset( $projectArray['color']->name ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">COLOR: </strong></td><td><font face="lato">' . $projectArray['color']->name . '</font></td></tr>';
+		}
+
+		if ( isset( $projectArray['customColor'] ) && ! empty( $projectArray['customColor'] ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">CUSTOM COLOR: </strong></td><td><font face="lato">' . $projectArray['customColor'] . '</font></td></tr>';
+		}
+
+		if ( isset( $projectArray['letters'] ) && ! empty( $projectArray['letters'] ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">LINE TEXT: </strong></td><td><font face="lato">' . $projectArray['letters'] . '</font></td></tr>';
+		}
+
+		if ( isset( $projectArray['metalFinish'] ) && ! empty( $projectArray['metalFinish'] ) && isset( $projectArray['metalFinish']->name ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">METAL FINISH: </strong></td><td><font face="lato">' . $projectArray['metalFinish']->name . '</font></td></tr>';
+		}
+
+		if ( isset( $projectArray['acrylicBase'] ) && ! empty( $projectArray['acrylicBase'] ) && isset( $projectArray['acrylicBase']->name ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">ACRYLIC BASE: </strong></td><td><font face="lato">' . $projectArray['acrylicBase']->name . '</font></td></tr>';
+		}
+
+		if ( isset( $projectArray['installation'] ) && ! empty( $projectArray['installation'] ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">INSTALLATION: </strong></td><td><font face="lato">' . $projectArray['installation'] . '</font></td></tr>';
+		}
+
+		if ( isset( $projectArray['pieces'] ) && ! empty( $projectArray['pieces'] ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">PIECES/CUTOUTS: </strong></td><td><font face="lato">' . $projectArray['pieces'] . '</font></td></tr>';
+		}
+
+		if ( isset( $projectArray['comments'] ) && ! empty( $projectArray['comments'] ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">COMMENTS: </strong></td><td><font face="lato">' . $projectArray['comments'] . '</font></td></tr>';
+		}
+
+		if ( isset( $projectArray['description'] ) && ! empty( $projectArray['description'] ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">DESCRIPTION: </strong></td><td><font face="lato">' . $projectArray['description'] . '</font></td></tr>';
+		}
+
+		if ( isset( $projectArray['fileUrl'] ) && ! empty( $projectArray['fileUrl'] ) && isset( $projectArray['fileName'] ) && ! empty( $projectArray['fileName'] ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">FILE: </strong></td><td><font face="lato"><a href="' . $projectArray['fileUrl'] . '" target="_blank">' . $projectArray['fileName'] . '</a></font></td></tr>';
+		}
+
+		echo '<tr><td></td></tr>';
+		echo '<tr><td></td></tr>';
+
+		echo '</table>';
 	}
 
 	public function save_quote() {
@@ -1313,6 +1229,8 @@ h6 {
 
 		wp_send_json( $status );
 	}
+
+
 
 	public function generate_pdf( $post_id, $html, $currency = 'USD' ) {
 		require_once get_stylesheet_directory() . '/tcpdf/tcpdf.php';

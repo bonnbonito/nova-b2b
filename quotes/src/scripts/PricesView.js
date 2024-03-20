@@ -193,7 +193,7 @@ export default function PricesView({ item }) {
 					</div>
 				)}
 
-				{item.color && (
+				{item.color?.name && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center">
 						<div className="text-left text-xs font-title">COLOR</div>
 						<div className="text-left text-[14px]">{item.color?.name}</div>

@@ -150,16 +150,16 @@ export default function QuoteView() {
 
 	const flatRate = currency === 'USD' ? 14.75 : 14.75 * exchangeRate;
 
-	const standardRate = parseFloat(finalPrice * 0.075);
+	const standardRate = parseFloat((finalPrice * 0.075).toFixed(2));
 
 	const estimatedShipping =
 		quotePrice > 0 ? Math.max(flatRate, standardRate) : 0;
 
-	const tax = taxRate ? parseFloat(taxRate.tax_rate / 100) : 0;
-	const taxCompute = parseFloat(finalPrice * tax);
+	const tax = taxRate ? parseFloat((taxRate.tax_rate / 100).toFixed(2)) : 0;
+	const taxCompute = parseFloat((finalPrice * tax).toFixed(2));
 
 	const estimatedTotal = parseFloat(
-		finalPrice + estimatedShipping + taxCompute
+		(finalPrice + estimatedShipping + taxCompute).toFixed(2)
 	);
 
 	const downloadFile =
@@ -280,14 +280,7 @@ export default function QuoteView() {
 					</div>
 
 					<div className="flex justify-between gap-4">
-						<h5>
-							{`${
-								NovaAccount.quote_status.value === 'ready'
-									? 'SHIPPING'
-									: 'ESTIMATED SHIPPING'
-							}`}
-							:
-						</h5>{' '}
+						<h5>ESTIMATED SHIPPING:</h5>{' '}
 						<h5>
 							{estimatedShipping > 0
 								? `${currency}$${Number(
@@ -311,14 +304,7 @@ export default function QuoteView() {
 					)}
 
 					<div className="flex justify-between gap-4 border-b pb-14 mt-8">
-						<h4>
-							{`${
-								NovaAccount.quote_status.value === 'ready'
-									? 'TOTAL'
-									: 'ESTIMATED TOTAL'
-							}`}
-							:
-						</h4>{' '}
+						<h4>ESTIMATED TOTAL:</h4>{' '}
 						<h4>
 							{estimatedTotal > 0
 								? `${currency}$${Number(

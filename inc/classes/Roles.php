@@ -117,6 +117,7 @@ jQuery(document).ready(function($) {
 			$message  = '<p style="margin-top: 20px;">Hello  ' . $first_name . ',</p>';
 			$message .= '<p>Welcome to NOVA Signage! Your application to become a Business Partner has been approved.</p>';
 			$message .= '<p>You may now login, explore, and order our products at <a href="' . home_url( '/' ) . '">novasignage.com</a></p>';
+			$message .= '<p><a href="' . home_url( '/custom-project' ) . '">[EXPLORE OUR PRODUCTS]</a> | <a href="' . home_url( '/custom-project' ) . '">[START A CUSTOM PROJECT]</a></p>';
 			$message .= '<p>If you have any questions, our team is here to assist you.</p>';
 			$message .= '<p>Congratulations,<br>';
 			$message .= 'NOVA Signage Team</p>';
@@ -231,23 +232,6 @@ jQuery(document).ready(function($) {
 		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
 		$this->send_email( $user_email, $subject, $message, $headers, array() );
-	}
-
-	public function send_user_approved_email( $user_id ) {
-		$user = new WP_User( $user_id );
-
-		$first_name = get_user_meta( $user_id, 'first_name', true );
-
-		$subject  = 'Your Business Partner Status is Approved. Welcome to NOVA Signage!';
-		$message  = '<p style="margin-top: 20px;">Dear  ' . $first_name . ',</p>';
-		$message .= '<p>Congratulations! Your application to become a business partner with NOVA Signage has been approved. Welcome to the NOVA Signage family!</p>';
-		$message .= "<p>We look forward to collaborating with you to enhance your shop's offerings. If you have any questions, our team is here to assist.</p>";
-		$message .= '<p>Best,<br>';
-		$message .= 'NOVA Signage Team</p>';
-
-		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
-
-		$this->send_email( $user->user_email, $subject, $message, $headers, array() );
 	}
 
 	public function nova_login() {
