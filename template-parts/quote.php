@@ -37,7 +37,7 @@ $final_price = $price ? ( get_woocommerce_currency() === 'USD' ? $price : $price
 			<a href="
 					<?php
 					echo esc_url(
-						untrailingslashit( get_permalink( $product_id ) ) . '/quote?qid=' . get_the_ID() . '&qedit=1'
+						untrailingslashit( get_permalink( $product_id ) ) . '/?qid=' . get_the_ID() . '&qedit=1'
 					);
 					?>
 					" class="p-2 border rounded text-nova-gray text-[10px] tracking-[1px] hover:bg-nova-gray hover:text-white w-[110px] text-center">Edit

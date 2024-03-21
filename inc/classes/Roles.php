@@ -222,10 +222,10 @@ jQuery(document).ready(function($) {
 		$first_name = get_user_meta( $user_id, 'first_name', true );
 		$user_email = $user->user_email;
 
-		$subject = 'NOVA Signage - Pending Parnter Status';
+		$subject = 'NOVA Signage - Pending Partner Status';
 
 		$message  = '<p style="margin-top: 20px;">Hello  ' . $first_name . ',</p>';
-		$message .= '<p>Kindly wait for 1 business day as we process your Business Partner status. An approval email will be sent to you.</p>';
+		$message .= '<p>Your Business Partner account will be reviewed within 24 business hours. Please wait for the approval email.</p>';
 		$message .= '<p>Thank you,<br>';
 		$message .= 'NOVA Signage Team</p>';
 

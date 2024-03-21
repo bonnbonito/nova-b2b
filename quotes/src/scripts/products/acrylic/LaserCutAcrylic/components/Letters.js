@@ -33,7 +33,8 @@ if (NovaOptions && typeof NovaOptions === 'object') {
 //const AcrylicLetterPricing = JSON.parse(NovaOptions.letter_x_logo_pricing);
 
 export default function Letters({ item }) {
-	const { signage, setSignage, setMissing } = useContext(QuoteContext);
+	const { signage, setSignage, setMissing, tempFolder } =
+		useContext(QuoteContext);
 	const [letters, setLetters] = useState(item.letters);
 	const [comments, setComments] = useState(item.comments);
 	const [font, setFont] = useState(item.font);
@@ -92,6 +93,9 @@ export default function Letters({ item }) {
 			}
 		}
 		preloadFonts();
+		if (tempFolder.length > 0) {
+			console.log('Temp folder ', tempFolder);
+		}
 	}, []);
 
 	const loadingFonts = async () => {
@@ -577,7 +581,7 @@ export default function Letters({ item }) {
 				/>
 
 				<Dropdown
-					title="Waterproof Option"
+					title="Environment"
 					onChange={handleOnChangeWaterproof}
 					options={waterProofOptions.map((option) => (
 						<option

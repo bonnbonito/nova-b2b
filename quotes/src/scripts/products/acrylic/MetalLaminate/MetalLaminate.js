@@ -23,6 +23,7 @@ export const METAL_ACRYLIC_PRICING = 1.3;
 export default function MetalLaminate() {
 	const [signage, setSignage] = useState([]);
 	const [missing, setMissing] = useState([]);
+	const [tempFolder, setTempFolder] = useState('');
 	const currency = wcumcs_vars_data.currency;
 
 	function setDefaultSignage() {
@@ -148,9 +149,23 @@ export default function MetalLaminate() {
 		);
 	}, [signage]);
 
+	useEffect(() => {
+		if (NovaQuote.is_editting.length === 0) {
+			setTempFolder(`temp-${Math.random().toString(36).substring(2, 9)}`);
+		}
+	}, []);
+
 	return (
 		<QuoteContext.Provider
-			value={{ signage, setSignage, addSignage, currency, missing, setMissing }}
+			value={{
+				signage,
+				setSignage,
+				addSignage,
+				currency,
+				missing,
+				setMissing,
+				tempFolder,
+			}}
 		>
 			<div className="md:flex gap-6">
 				<div className="md:w-3/4 w-full">

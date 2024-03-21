@@ -200,7 +200,7 @@ export default function Logo({ item }) {
 		if (!width) missingFields.push('Select Logo Width');
 		if (!height) missingFields.push('Select Logo Height');
 		if (!layers) missingFields.push('Layers');
-		if (!waterproof) missingFields.push('Select Waterproof Option');
+		if (!waterproof) missingFields.push('Select Environment');
 		if (!selectedMounting) missingFields.push('Select Mounting Option');
 		if (!selectedFinishing) missingFields.push('Select Finishing Option');
 
@@ -319,7 +319,7 @@ export default function Logo({ item }) {
 				/>
 
 				<Dropdown
-					title="Waterproof Option"
+					title="Environment"
 					onChange={(e) => setWaterproof(e.target.value)}
 					options={waterProofOptions.map((option) => (
 						<option

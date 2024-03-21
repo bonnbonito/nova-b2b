@@ -35,7 +35,8 @@ if (NovaOptions && typeof NovaOptions === 'object') {
 //const AcrylicLetterPricing = JSON.parse(NovaOptions.letter_x_logo_pricing);
 
 export default function Letters({ item }) {
-	const { signage, setSignage, setMissing } = useContext(QuoteContext);
+	const { signage, setSignage, setMissing, tempFolder } =
+		useContext(QuoteContext);
 	const [letters, setLetters] = useState(item.letters);
 	const [comments, setComments] = useState(item.comments);
 	const [font, setFont] = useState(item.font);
@@ -425,6 +426,12 @@ export default function Letters({ item }) {
 		acrylicBase?.name != 'Custom Color' && setCustomColor('');
 	}, [font, acrylicBase]);
 
+	useEffect(() => {
+		if (tempFolder.length > 0) {
+			console.log('temp folder ', tempFolder);
+		}
+	}, []);
+
 	return (
 		<>
 			<div className="mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md">
@@ -584,7 +591,7 @@ export default function Letters({ item }) {
 				</div>
 
 				<Dropdown
-					title="Waterproof Option"
+					title="Environment"
 					onChange={handleOnChangeWaterproof}
 					options={waterProofOptions.map((option) => (
 						<option

@@ -1474,7 +1474,7 @@ function Sidebar({
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-1/4 w-full mt-8 md:mt-0"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "rounded-md border border-gray-200 p-4 sticky top-12"
+    className: "rounded-md border border-gray-200 p-4 sticky top-36"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "w-full max-h-[calc(100vh-300px)] overflow-y-auto"
   }, signage.map(item => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Prices__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -1552,7 +1552,7 @@ function Sidebar({
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-1/4 w-full mt-8 md:mt-0"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "rounded-md border border-gray-200 p-4 sticky top-12"
+    className: "rounded-md border border-gray-200 p-4 sticky top-36"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "w-full max-h-[calc(100vh-300px)] overflow-y-auto"
   }, signage.map(item => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Prices__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -2344,6 +2344,7 @@ const QuoteContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)(null);
 function LaserCutAcrylic() {
   const [signage, setSignage] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const [missing, setMissing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  const [tempFolder, setTempFolder] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const currency = wcumcs_vars_data.currency;
   function setDefaultSignage() {
     const savedStorage = JSON.parse(localStorage.getItem(window.location.href + NovaQuote.user_id));
@@ -2460,6 +2461,11 @@ function LaserCutAcrylic() {
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     localStorage.setItem(window.location.href + NovaQuote.user_id, JSON.stringify(signage));
   }, [signage]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (NovaQuote.is_editting.length === 0) {
+      setTempFolder(`temp-${Math.random().toString(36).substring(2, 9)}`);
+    }
+  }, []);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(QuoteContext.Provider, {
     value: {
       signage,
@@ -2467,7 +2473,8 @@ function LaserCutAcrylic() {
       addSignage,
       currency,
       missing,
-      setMissing
+      setMissing,
+      tempFolder
     }
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:flex gap-6"
@@ -2560,7 +2567,8 @@ function Letters({
   const {
     signage,
     setSignage,
-    setMissing
+    setMissing,
+    tempFolder
   } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_LaserCutAcrylic__WEBPACK_IMPORTED_MODULE_9__.QuoteContext);
   const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.letters);
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.comments);
@@ -2604,6 +2612,9 @@ function Letters({
       }
     }
     preloadFonts();
+    if (tempFolder.length > 0) {
+      console.log('Temp folder ', tempFolder);
+    }
   }, []);
   const loadingFonts = async () => {
     const loadPromises = NovaQuote.fonts.map(font => loadFont(font));
@@ -2935,7 +2946,7 @@ function Letters({
     }, finishing.name)),
     value: item.finishing
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "Waterproof Option",
+    title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
@@ -3194,7 +3205,7 @@ function Logo({
     onChange: e => setHeight(e.target.value),
     options: maxWidthOptions
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "Waterproof Option",
+    title: "Environment",
     onChange: e => setWaterproof(e.target.value),
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_4__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
@@ -3582,7 +3593,7 @@ function Logo({
     if (!width) missingFields.push('Select Logo Width');
     if (!height) missingFields.push('Select Logo Height');
     if (!layers) missingFields.push('Layers');
-    if (!waterproof) missingFields.push('Select Waterproof Option');
+    if (!waterproof) missingFields.push('Select Environment');
     if (!selectedMounting) missingFields.push('Select Mounting Option');
     if (!selectedFinishing) missingFields.push('Select Finishing Option');
     if (missingFields.length > 0) {
@@ -3661,7 +3672,7 @@ function Logo({
       selected: layer == item.layers
     }, layer))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "Waterproof Option",
+    title: "Environment",
     onChange: e => setWaterproof(e.target.value),
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_4__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
@@ -3731,6 +3742,7 @@ const METAL_ACRYLIC_PRICING = 1.3;
 function MetalLaminate() {
   const [signage, setSignage] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const [missing, setMissing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  const [tempFolder, setTempFolder] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const currency = wcumcs_vars_data.currency;
   function setDefaultSignage() {
     const savedStorage = JSON.parse(localStorage.getItem(window.location.href + NovaQuote.user_id));
@@ -3853,6 +3865,11 @@ function MetalLaminate() {
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     localStorage.setItem(window.location.href + NovaQuote.user_id, JSON.stringify(signage));
   }, [signage]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (NovaQuote.is_editting.length === 0) {
+      setTempFolder(`temp-${Math.random().toString(36).substring(2, 9)}`);
+    }
+  }, []);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(QuoteContext.Provider, {
     value: {
       signage,
@@ -3860,7 +3877,8 @@ function MetalLaminate() {
       addSignage,
       currency,
       missing,
-      setMissing
+      setMissing,
+      tempFolder
     }
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:flex gap-6"
@@ -3953,7 +3971,8 @@ function Letters({
   const {
     signage,
     setSignage,
-    setMissing
+    setMissing,
+    tempFolder
   } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_MetalLaminate__WEBPACK_IMPORTED_MODULE_9__.QuoteContext);
   const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.letters);
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.comments);
@@ -4220,6 +4239,11 @@ function Letters({
     font != 'Custom font' && setFontFileUrl('');
     acrylicBase?.name != 'Custom Color' && setCustomColor('');
   }, [font, acrylicBase]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (tempFolder.length > 0) {
+      console.log('temp folder ', tempFolder);
+    }
+  }, []);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -4336,7 +4360,7 @@ function Letters({
       }
     }), color.name);
   }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "Waterproof Option",
+    title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
@@ -4601,7 +4625,7 @@ function Logo({
     onChange: e => setHeight(e.target.value),
     options: maxWidthOptions
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "Waterproof Option",
+    title: "Environment",
     onChange: e => setWaterproof(e.target.value),
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_4__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
@@ -5029,7 +5053,7 @@ function Logo({
     if (!height) missingFields.push('Select Logo Height');
     if (!printPreference) missingFields.push('Select Printing Preference');
     if (!baseColor) missingFields.push('Select Base Color');
-    if (!waterproof) missingFields.push('Select Waterproof Option');
+    if (!waterproof) missingFields.push('Select Environment');
     if (!selectedMounting) missingFields.push('Select Mounting Option');
     if (!selectedFinishing) missingFields.push('Select Finishing Option');
     if (!fileUrl) missingFields.push('Upload a PDF/AI File');
@@ -5122,7 +5146,7 @@ function Logo({
       selected: option.option == item.baseColor
     }, option.option))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "Waterproof Option",
+    title: "Environment",
     onChange: e => setWaterproof(e.target.value),
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
@@ -6029,7 +6053,7 @@ function Letters({
       }
     }), color.name);
   }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "Waterproof Option",
+    title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
@@ -6289,7 +6313,7 @@ function Logo({
     onChange: e => setHeight(e.target.value),
     options: maxWidthHeightOptions
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "Waterproof Option",
+    title: "Environment",
     onChange: e => setWaterproof(e.target.value),
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
@@ -6444,7 +6468,6 @@ function LaserCutStainless() {
         product: NovaQuote.product
       }]);
     }
-    console.log(signage);
   }
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting === '1') {
@@ -6521,7 +6544,6 @@ function LaserCutStainless() {
   }
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     localStorage.setItem(window.location.href + NovaQuote.user_id, JSON.stringify(signage));
-    console.log(signage);
   }, [signage]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(QuoteContext.Provider, {
     value: {
@@ -7041,7 +7063,7 @@ function Letters({
       }
     }), color.name);
   }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "Waterproof Option",
+    title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
@@ -7395,7 +7417,7 @@ function Logo({
       }
     }), color.name);
   }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "Waterproof Option",
+    title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,

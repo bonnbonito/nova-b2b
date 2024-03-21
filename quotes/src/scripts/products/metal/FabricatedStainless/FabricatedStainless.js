@@ -48,7 +48,6 @@ export default function LaserCutAluminum() {
 				},
 			]);
 		}
-		console.log(signage);
 	}
 
 	useEffect(() => {
@@ -129,8 +128,6 @@ export default function LaserCutAluminum() {
 			window.location.href + NovaQuote.user_id,
 			JSON.stringify(signage)
 		);
-
-		console.log(signage);
 	}, [signage]);
 
 	return (

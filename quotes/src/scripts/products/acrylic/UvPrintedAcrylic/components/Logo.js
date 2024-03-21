@@ -175,7 +175,7 @@ export default function Logo({ item }) {
 		if (!height) missingFields.push('Select Logo Height');
 		if (!printPreference) missingFields.push('Select Printing Preference');
 		if (!baseColor) missingFields.push('Select Base Color');
-		if (!waterproof) missingFields.push('Select Waterproof Option');
+		if (!waterproof) missingFields.push('Select Environment');
 		if (!selectedMounting) missingFields.push('Select Mounting Option');
 		if (!selectedFinishing) missingFields.push('Select Finishing Option');
 		if (!fileUrl) missingFields.push('Upload a PDF/AI File');
@@ -350,7 +350,7 @@ export default function Logo({ item }) {
 				/>
 
 				<Dropdown
-					title="Waterproof Option"
+					title="Environment"
 					onChange={(e) => setWaterproof(e.target.value)}
 					options={waterProofOptions.map((option) => (
 						<option

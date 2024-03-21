@@ -268,7 +268,7 @@ export default function Logo({ item }) {
 				/>
 
 				<Dropdown
-					title="Waterproof Option"
+					title="Environment"
 					onChange={(e) => setWaterproof(e.target.value)}
 					options={waterProofOptions.map((option) => (
 						<option

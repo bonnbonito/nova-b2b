@@ -412,7 +412,7 @@ export default function Logo({ item }) {
 				)}
 
 				<Dropdown
-					title="Waterproof Option"
+					title="Environment"
 					onChange={handleOnChangeWaterproof}
 					options={waterProofOptions.map((option) => (
 						<option

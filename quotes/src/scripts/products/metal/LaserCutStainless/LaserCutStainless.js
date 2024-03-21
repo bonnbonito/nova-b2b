@@ -50,7 +50,6 @@ export default function LaserCutStainless() {
 				},
 			]);
 		}
-		console.log(signage);
 	}
 
 	useEffect(() => {
@@ -133,8 +132,6 @@ export default function LaserCutStainless() {
 			window.location.href + NovaQuote.user_id,
 			JSON.stringify(signage)
 		);
-
-		console.log(signage);
 	}, [signage]);
 
 	return (

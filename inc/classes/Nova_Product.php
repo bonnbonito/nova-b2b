@@ -102,7 +102,7 @@ class Nova_Product {
 					$tab_title = 'Installation';
 					break;
 				default:
-					$tab_title = 'Instant Quote';
+					$tab_title = get_field( 'quote_div_id', $id ) ? 'Instant Quote' : 'Submit Quote';
 			}
 
 			?>
