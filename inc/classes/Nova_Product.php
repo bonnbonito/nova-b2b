@@ -102,7 +102,7 @@ class Nova_Product {
 					$tab_title = 'Installation';
 					break;
 				default:
-					$tab_title = get_field( 'quote_div_id', $id ) ? 'Instant Quote' : 'Request Quote';
+					$tab_title = 'Instant Quote';
 			}
 
 			?>
@@ -143,7 +143,7 @@ class Nova_Product {
 	</div>
 
 	<a href="<?php echo untrailingslashit( get_permalink() ); ?>"
-		class="button <?php echo ( ! $tab ? 'active' : '' ); ?>"><?php echo ( get_field( 'quote_div_id', $id ) ? 'Instant Quote' : 'Request Quote' ); ?></a>
+		class="button <?php echo ( ! $tab ? 'active' : '' ); ?>">Instant Quote</a>
 </div>
 
 <script>

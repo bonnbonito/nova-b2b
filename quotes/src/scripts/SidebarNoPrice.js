@@ -35,7 +35,7 @@ export default function Sidebar({ signage, required }) {
 						signage={signage}
 						required={required}
 						action="processing"
-						label="Submit Quote"
+						label="Request Quote"
 						btnClass="mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
 					/>
 				)}
