@@ -59,7 +59,7 @@ if ( post_password_required() ) {
 
 		<a href="#quote"
 			class="button <?php echo ( isset( $_GET['qedit'] ) && $_GET['qedit'] == '1' ? 'active' : '' ); ?>"
-			data-menu="quote"><?php echo ( get_field( 'quote_div_id' ) ? 'Instant Quote' : 'Submit Quote' ); ?></a>
+			data-menu="quote"><?php echo ( get_field( 'quote_div_id' ) ? 'Instant Quote' : 'Request Quote' ); ?></a>
 	</div>
 
 	<script>
