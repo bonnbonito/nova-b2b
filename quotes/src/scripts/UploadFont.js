@@ -7,6 +7,7 @@ export default function UploadFont({
 	setFontFile,
 	fontFileUrl,
 	setFontFileName,
+	tempFolder,
 }) {
 	const fileRef = useRef(null);
 	const [isLoading, setIsLoading] = useState(false);
@@ -20,7 +21,13 @@ export default function UploadFont({
 		const file = event.target.files[0];
 		if (file) {
 			setFontFile(file);
-			handleFileUpload(file, setFontFileUrl, setFontFileName, setFontFilePath);
+			handleFileUpload(
+				file,
+				setFontFileUrl,
+				setFontFileName,
+				setFontFilePath,
+				tempFolder
+			);
 			event.target.value = '';
 		} else {
 			console.log('no file to upload');
@@ -67,7 +74,7 @@ export default function UploadFont({
 	}
 
 	const checkAndCreateFolder = async (accessToken) => {
-		const folderPath = `/NOVA-CRM/${NovaQuote.business_id}/Fonts`;
+		const folderPath = `/NOVA-CRM/${NovaQuote.business_id}/${tempFolder}/Fonts`;
 
 		try {
 			// Check if the folder exists
@@ -152,7 +159,8 @@ export default function UploadFont({
 		file,
 		setFontFileUrl,
 		setFontFileName,
-		setFontFilePath
+		setFontFilePath,
+		tempFolder
 	) => {
 		setIsLoading(true);
 		const token = await getRefreshToken();
@@ -167,7 +175,7 @@ export default function UploadFont({
 		await checkAndCreateFolder(token);
 
 		const dropboxArgs = {
-			path: `/NOVA-CRM/${NovaQuote.business_id}/Fonts/${file.name}`,
+			path: `/NOVA-CRM/${NovaQuote.business_id}/${tempFolder}/Fonts/${file.name}`,
 			mode: 'overwrite',
 			autorename: false,
 			mute: false,
@@ -241,7 +249,22 @@ export default function UploadFont({
 
 	const handleRemoveFile = async () => {
 		setIsLoading(true);
-		console.log(accessToken);
+		let currentAccessToken = accessToken;
+
+		if (!currentAccessToken) {
+			console.log('no access token');
+			const token = await getRefreshToken();
+
+			if (!token) {
+				console.error('Failed to obtain access token');
+				setIsLoading(false);
+				return;
+			}
+
+			setAccessToken(token);
+			currentAccessToken = token;
+		}
+
 		console.log(fontFilePath);
 		try {
 			const response = await fetch(
@@ -249,7 +272,7 @@ export default function UploadFont({
 				{
 					method: 'POST',
 					headers: {
-						Authorization: `Bearer ${accessToken}`,
+						Authorization: `Bearer ${currentAccessToken}`,
 						'Content-Type': 'application/json',
 					},
 					body: JSON.stringify({

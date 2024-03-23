@@ -17,23 +17,19 @@ import { QuoteContext } from '../LaserCutAluminum';
 const NovaOptions = NovaQuote.quote_options;
 const exchangeRate = 1.3;
 
-let lowerCasePricing = 1; // Default value
-let smallPunctuations = 1; // Default value
-
-if (NovaOptions && typeof NovaOptions === 'object') {
-	lowerCasePricing = parseFloat(
-		NovaOptions.lowercase_pricing ? NovaOptions.lowercase_pricing : 1
-	);
-	smallPunctuations = parseFloat(
-		NovaOptions.small_punctuations_pricing
-			? NovaOptions.small_punctuations_pricing
-			: 1
-	);
-}
+const lowerCasePricing = parseFloat(
+	NovaQuote.lowercase_pricing ? NovaQuote.lowercase_pricing : 1
+);
+const smallPunctuations = parseFloat(
+	NovaQuote.small_punctuations_pricing
+		? NovaQuote.small_punctuations_pricing
+		: 1
+);
 //const AcrylicLetterPricing = JSON.parse(NovaOptions.letter_x_logo_pricing);
 
 export default function Letters({ item }) {
-	const { signage, setSignage, setMissing } = useContext(QuoteContext);
+	const { signage, setSignage, setMissing, tempFolder } =
+		useContext(QuoteContext);
 	const [letters, setLetters] = useState(item.letters);
 	const [comments, setComments] = useState(item.comments);
 	const [font, setFont] = useState(item.font);
@@ -74,10 +70,9 @@ export default function Letters({ item }) {
 	const fontRef = useRef(null);
 
 	const letterPricing =
-		NovaOptions.letter_height_x_logo_pricing.length > 0
-			? convert_json(NovaOptions.letter_height_x_logo_pricing)
+		NovaQuote.letter_pricing_table?.pricing_table.length > 0
+			? convert_json(NovaQuote.letter_pricing_table.pricing_table)
 			: [];
-	let perLetterPrice = 0;
 
 	useEffect(() => {
 		console.log('Attempting to preload fonts...');
@@ -199,7 +194,12 @@ export default function Letters({ item }) {
 	};
 
 	useEffect(() => {
-		if (letterPricing.length > 0 && selectedLetterHeight && selectedThickness) {
+		if (
+			letterPricing.length > 0 &&
+			selectedLetterHeight &&
+			selectedThickness &&
+			waterproof
+		) {
 			const pricingDetail = letterPricing[selectedLetterHeight - 1];
 			const baseLetterPrice = pricingDetail[selectedThickness.value];
 
@@ -235,6 +235,9 @@ export default function Letters({ item }) {
 
 			setUsdPrice(totalLetterPrice.toFixed(2));
 			setCadPrice((totalLetterPrice * parseFloat(exchangeRate)).toFixed(2));
+		} else {
+			setUsdPrice(0);
+			setCadPrice(0);
 		}
 	}, [
 		selectedLetterHeight,
@@ -458,6 +461,7 @@ export default function Letters({ item }) {
 						isLoading={isLoading}
 						setFontFileUrl={setFontFileUrl}
 						setFontFileName={setFontFileName}
+						tempFolder={tempFolder}
 					/>
 				)}
 
@@ -603,6 +607,7 @@ export default function Letters({ item }) {
 					isLoading={isLoading}
 					setFileUrl={setFileUrl}
 					setFileName={setFileName}
+					tempFolder={tempFolder}
 				/>
 			</div>
 

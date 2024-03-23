@@ -7,6 +7,7 @@ export default function UploadFile({
 	setFile,
 	fileUrl,
 	setFileName,
+	tempFolder,
 }) {
 	const fileRef = useRef(null);
 	const [isLoading, setIsLoading] = useState(false);
@@ -17,10 +18,11 @@ export default function UploadFile({
 	};
 
 	const handleChange = (event) => {
+		console.log(tempFolder);
 		const file = event.target.files[0];
 		if (file) {
 			setFile(file);
-			handleFileUpload(file, setFileUrl, setFileName, setFilePath);
+			handleFileUpload(file, setFileUrl, setFileName, setFilePath, tempFolder);
 			event.target.value = '';
 		} else {
 			console.log('no file to upload');
@@ -67,9 +69,7 @@ export default function UploadFile({
 	}
 
 	const checkAndCreateFolder = async (accessToken) => {
-		const folderPath = `/NOVA-CRM/${
-			NovaQuote.business_id
-		}/${getFormattedDate()}`;
+		const folderPath = `/NOVA-CRM/${NovaQuote.business_id}/${tempFolder}`;
 
 		try {
 			// Check if the folder exists
@@ -154,7 +154,8 @@ export default function UploadFile({
 		file,
 		setFileUrl,
 		setFileName,
-		setFilePath
+		setFilePath,
+		tempFolder
 	) => {
 		setIsLoading(true);
 		const token = await getRefreshToken();
@@ -169,9 +170,7 @@ export default function UploadFile({
 		await checkAndCreateFolder(token);
 
 		const dropboxArgs = {
-			path: `/NOVA-CRM/${NovaQuote.business_id}/${getFormattedDate()}/${
-				file.name
-			}`,
+			path: `/NOVA-CRM/${NovaQuote.business_id}/${tempFolder}/${file.name}`,
 			mode: 'overwrite',
 			autorename: false,
 			mute: false,
@@ -245,19 +244,35 @@ export default function UploadFile({
 
 	const handleRemoveFile = async () => {
 		setIsLoading(true);
-		console.log(accessToken);
+		let currentAccessToken = accessToken;
+
+		if (!currentAccessToken) {
+			console.log('no access token');
+			const token = await getRefreshToken();
+
+			if (!token) {
+				console.error('Failed to obtain access token');
+				setIsLoading(false);
+				return;
+			}
+
+			setAccessToken(token);
+			currentAccessToken = token;
+		}
+
 		console.log(filePath);
+
 		try {
 			const response = await fetch(
 				'https://api.dropboxapi.com/2/files/delete_v2',
 				{
 					method: 'POST',
 					headers: {
-						Authorization: `Bearer ${accessToken}`,
+						Authorization: `Bearer ${currentAccessToken}`, // Use the local variable here
 						'Content-Type': 'application/json',
 					},
 					body: JSON.stringify({
-						path: filePath, // Assuming fileUrl contains the path of the file in Dropbox
+						path: filePath, // Assuming filePath contains the path of the file in Dropbox
 					}),
 				}
 			);

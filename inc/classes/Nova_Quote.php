@@ -30,7 +30,7 @@ class Nova_Quote {
 		// add_filter( 'acf/init', array( $this, 'afc_load_popular_fonts' ), 10, 3 );
 		add_action( 'wp_ajax_upload_signage_file', array( $this, 'upload_signage_file' ) );
 		add_action( 'wp_ajax_save_quote', array( $this, 'save_quote' ) );
-		add_action( 'wp_ajax_update_quote', array( $this, 'update_quote' ) );
+		add_action( 'wp_ajax_update_dropbox_path', array( $this, 'update_dropbox_path' ) );
 		add_action( 'wp_ajax_remove_signage_file', array( $this, 'remove_signage_file' ) );
 		add_action( 'wp_ajax_quote_to_processing', array( $this, 'quote_to_processing' ) );
 		add_action( 'wp_ajax_to_checkout', array( $this, 'nova_to_checkout' ) );
@@ -637,7 +637,7 @@ class Nova_Quote {
 		wp_send_json( $status );
 	}
 
-	public function update_quote() {
+	public function update_dropbox_path() {
 		$status = array(
 			'code' => 1,
 		);
@@ -646,6 +646,11 @@ class Nova_Quote {
 			$status['status'] = 'error';
 			wp_send_json( $status );
 		}
+
+		$quote_id = $_POST['quote_id'];
+		$updated  = $_POST['updated'];
+
+		update_field( 'signage', $updated, $quote_id );
 
 		$status['post']   = $_POST;
 		$status['status'] = 'success';
@@ -1447,33 +1452,37 @@ h6 {
 			'nova-quote',
 			'NovaQuote',
 			array(
-				'ajax_url'                => admin_url( 'admin-ajax.php' ),
-				'invoice_url'             => esc_url_raw( content_url( '/customer_invoices' ) ),
-				'nonce'                   => wp_create_nonce( 'quote_nonce' ),
-				'quote_options'           => $this->get_quote_options(),
-				'fonts'                   => $this->get_fonts(),
-				'upload_rest'             => esc_url_raw( rest_url( '/nova/v1/upload-quote-file' ) ),
-				'logged_in'               => is_user_logged_in(),
-				'user_role'               => $this->get_current_user_role_slugs(),
-				'user_id'                 => get_current_user_id(),
-				'product'                 => get_the_ID(),
-				'quote_url'               => get_permalink( get_the_ID() ) . 'quote/',
-				'mockup_account_url'      => esc_url_raw( home_url( '/my-account/mockups/all' ) ),
-				'is_editting'             => $this->is_editting(),
-				'signage'                 => $this->get_signage(),
-				'not_author_but_admin'    => $this->not_author_but_admin(),
-				'nova_quote_product'      => get_field( 'nova_quote_product', 'option' ),
-				'current_quote_id'        => isset( $_GET['qid'] ) ? $_GET['qid'] : null,
-				'current_quote_title'     => isset( $_GET['qid'] ) ? get_field( 'frontend_title', $_GET['qid'] ) : null,
-				'dropbox_app_key'         => get_field( 'dropbox_app_key', 'option' ),
-				'dropbox_secret'          => get_field( 'dropbox_secret_key', 'option' ),
-				'dropbox_token'           => get_field( 'dropbox_token_access', 'option' ),
-				'dropbox_refresh_token'   => get_field( 'dropbox_refresh_token', 'option' ),
-				'business_id'             => get_field( 'business_id', 'user_' . get_current_user_id() ),
-				'single_quote_options'    => get_field( 'single_quote_options' ),
-				'generated_product_id'    => isset( $_GET['qid'] ) ? get_post_meta( $_GET['qid'], 'nova_product_generated_id', true ) : null,
-				'metal_stainless_pricing' => get_field( 'lasercut_stainless_metal_pricing' ),
-				'quote_status'            => isset( $_GET['qid'] ) ? get_field( 'quote_status', $_GET['qid'] ) : '',
+				'ajax_url'                   => admin_url( 'admin-ajax.php' ),
+				'invoice_url'                => esc_url_raw( content_url( '/customer_invoices' ) ),
+				'nonce'                      => wp_create_nonce( 'quote_nonce' ),
+				'quote_options'              => $this->get_quote_options(),
+				'letter_pricing_table'       => $this->get_letter_pricing_table(),
+				'logo_pricing_tables'        => $this->get_logo_pricing_tables(),
+				'fonts'                      => $this->get_fonts(),
+				'upload_rest'                => esc_url_raw( rest_url( '/nova/v1/upload-quote-file' ) ),
+				'logged_in'                  => is_user_logged_in(),
+				'user_role'                  => $this->get_current_user_role_slugs(),
+				'user_id'                    => get_current_user_id(),
+				'product'                    => get_the_ID(),
+				'quote_url'                  => get_permalink( get_the_ID() ),
+				'mockup_account_url'         => esc_url_raw( home_url( '/my-account/mockups/all' ) ),
+				'is_editting'                => $this->is_editting(),
+				'signage'                    => $this->get_signage(),
+				'not_author_but_admin'       => $this->not_author_but_admin(),
+				'nova_quote_product'         => get_field( 'nova_quote_product', 'option' ),
+				'current_quote_id'           => isset( $_GET['qid'] ) ? $_GET['qid'] : null,
+				'current_quote_title'        => isset( $_GET['qid'] ) ? get_field( 'frontend_title', $_GET['qid'] ) : null,
+				'dropbox_app_key'            => get_field( 'dropbox_app_key', 'option' ),
+				'dropbox_secret'             => get_field( 'dropbox_secret_key', 'option' ),
+				'dropbox_token'              => get_field( 'dropbox_token_access', 'option' ),
+				'dropbox_refresh_token'      => get_field( 'dropbox_refresh_token', 'option' ),
+				'business_id'                => get_field( 'business_id', 'user_' . get_current_user_id() ),
+				'single_quote_options'       => get_field( 'single_quote_options' ),
+				'generated_product_id'       => isset( $_GET['qid'] ) ? get_post_meta( $_GET['qid'], 'nova_product_generated_id', true ) : null,
+				'metal_stainless_pricing'    => get_field( 'lasercut_stainless_metal_pricing' ),
+				'quote_status'               => isset( $_GET['qid'] ) ? get_field( 'quote_status', $_GET['qid'] ) : '',
+				'small_punctuations_pricing' => $this->small_punctuations_pricing(),
+				'lowercase_pricing'          => $this->lowercase_pricing(),
 			)
 		);
 
@@ -1498,8 +1507,55 @@ h6 {
 		return $post->post_parent != 0 ? $post->post_parent : $post->ID;
 	}
 
+	public function get_letter_pricing_table() {
+
+		$table = get_field( 'letter_pricing_table' );
+
+		if ( ! $table ) {
+			$parent_id = wp_get_post_parent_id( get_the_ID() );
+			$table     = get_field( 'letter_pricing_table', $parent_id );
+		}
+
+		return $table;
+	}
+
+	public function lowercase_pricing() {
+
+		$pricing = get_field( 'lowercase_pricing' );
+
+		if ( ! $pricing ) {
+			$parent_id = wp_get_post_parent_id( get_the_ID() );
+			$pricing   = get_field( 'lowercase_pricing', $parent_id );
+		}
+
+		return $pricing;
+	}
+
+	public function small_punctuations_pricing() {
+		$pricing = get_field( 'small_punctuations_pricing' );
+
+		if ( ! $pricing ) {
+			$parent_id = wp_get_post_parent_id( get_the_ID() );
+			$pricing   = get_field( 'small_punctuations_pricing', $parent_id );
+		}
+
+		return $pricing;
+	}
+
+	public function get_logo_pricing_tables() {
+
+		$table = get_field( 'logo_pricing_tables' );
+
+		if ( ! $table ) {
+			$parent_id = wp_get_post_parent_id( get_the_ID() );
+			$table     = get_field( 'logo_pricing_tables', $parent_id );
+		}
+
+		return $table;
+	}
+
 	public function get_quote_options() {
-		$parent_id = wp_get_post_parent_id();
+		$parent_id = wp_get_post_parent_id( get_the_ID() );
 		return get_field( 'signage_quote_options', $parent_id );
 	}
 

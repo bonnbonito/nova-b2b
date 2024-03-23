@@ -4,6 +4,7 @@ import UploadFile from '../../../../UploadFile';
 import useOutsideClick from '../../../../utils/ClickOutside';
 import { colorOptions } from '../../../../utils/ColorOptions';
 import convert_json from '../../../../utils/ConvertJson';
+import { getLogoPricingTablebyThickness } from '../../../../utils/Pricing';
 import { waterProofOptions } from '../../../../utils/SignageOptions';
 import {
 	finishOptions,
@@ -226,8 +227,13 @@ export default function Logo({ item }) {
 	]);
 
 	useEffect(() => {
-		// Ensure width, height, and selectedThickness are provided
-		if (width && height && selectedThickness) {
+		if (
+			width &&
+			height &&
+			selectedThickness &&
+			waterproof &&
+			logoPricingObject !== null
+		) {
 			const logoKey = `logo_pricing_${selectedThickness.value}mm`;
 			const logoPricingTable =
 				PricingTable[logoKey]?.length > 0

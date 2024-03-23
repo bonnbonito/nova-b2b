@@ -3,7 +3,8 @@ import UploadFile from '../../../UploadFile';
 import { QuoteContext } from '../CustomProject';
 
 export default function Logo({ item }) {
-	const { signage, setSignage, missing, setMissing } = useContext(QuoteContext);
+	const { signage, setSignage, missing, setMissing, tempFolder } =
+		useContext(QuoteContext);
 	const [isLoading, setIsLoading] = useState(false);
 	const [fileName, setFileName] = useState(item.fileName);
 	const [fileUrl, setFileUrl] = useState(item.fileUrl);
@@ -101,6 +102,7 @@ export default function Logo({ item }) {
 					isLoading={isLoading}
 					setFileUrl={setFileUrl}
 					setFileName={setFileName}
+					tempFolder={tempFolder}
 				/>
 			</div>
 		</>

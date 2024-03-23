@@ -25,6 +25,7 @@ export default function MetalLaminate() {
 	const [missing, setMissing] = useState([]);
 	const [tempFolder, setTempFolder] = useState('');
 	const currency = wcumcs_vars_data.currency;
+	const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
 
 	function setDefaultSignage() {
 		const savedStorage = JSON.parse(
@@ -151,7 +152,23 @@ export default function MetalLaminate() {
 
 	useEffect(() => {
 		if (NovaQuote.is_editting.length === 0) {
-			setTempFolder(`temp-${Math.random().toString(36).substring(2, 9)}`);
+			const savedStorageFolder = JSON.parse(
+				localStorage.getItem(
+					window.location.href + NovaQuote.user_id + '-folder'
+				)
+			);
+
+			if (savedStorageFolder?.length > 0) {
+				setTempFolder(savedStorageFolder);
+			} else {
+				localStorage.setItem(
+					window.location.href + NovaQuote.user_id + '-folder',
+					JSON.stringify(tempFolderName)
+				);
+				setTempFolder(tempFolderName);
+			}
+		} else {
+			setTempFolder(`Q-${NovaQuote.current_quote_id}`);
 		}
 	}, []);
 
@@ -211,7 +228,7 @@ export default function MetalLaminate() {
 						)}
 					</div>
 				</div>
-				<Sidebar signage={signage} required={missing} />
+				<Sidebar signage={signage} required={missing} tempFolder={tempFolder} />
 			</div>
 		</QuoteContext.Provider>
 	);

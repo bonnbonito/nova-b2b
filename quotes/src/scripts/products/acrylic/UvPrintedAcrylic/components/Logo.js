@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import Dropdown from '../../../../Dropdown';
 import UploadFile from '../../../../UploadFile';
 import convert_json from '../../../../utils/ConvertJson';
+import { getLogoPricingTablebyThickness } from '../../../../utils/Pricing';
 import { QuoteContext } from '../UvPrintedAcrylic';
 
 import {
@@ -18,7 +19,8 @@ const exchangeRate = 1.3;
 const UV_PRICE = 1.05;
 
 export default function Logo({ item }) {
-	const { signage, setSignage, setMissing } = useContext(QuoteContext);
+	const { signage, setSignage, setMissing, tempFolder } =
+		useContext(QuoteContext);
 	const [selectedMounting, setSelectedMounting] = useState(item.mounting);
 	const [selectedThickness, setSelectedThickness] = useState(item.thickness);
 	const [width, setWidth] = useState(item.width);
@@ -58,7 +60,7 @@ export default function Logo({ item }) {
 		mountingDefaultOptions
 	);
 
-	const logoPricingObject = NovaQuote.quote_options.logo_pricing;
+	const logoPricingObject = NovaQuote.logo_pricing_tables;
 
 	useEffect(() => {
 		if (!selectedThickness || selectedThickness.value === undefined) return;
@@ -257,29 +259,44 @@ export default function Logo({ item }) {
 	]);
 
 	useEffect(() => {
-		// Ensure width, height, and selectedThickness are provided
-		if (width && height && selectedThickness) {
-			const logoKey = `logo_pricing_${selectedThickness.value}mm`;
-			const logoPricingTable =
-				logoPricingObject[logoKey]?.length > 0
-					? convert_json(logoPricingObject[logoKey])
-					: [];
-			const computed =
-				logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
+		if (
+			width &&
+			height &&
+			selectedThickness &&
+			waterproof &&
+			logoPricingObject !== null
+		) {
+			const logoPricing = getLogoPricingTablebyThickness(
+				`${selectedThickness.value}mm`,
+				logoPricingObject
+			);
+			if (logoPricing !== undefined) {
+				const logoPricingTable =
+					logoPricing !== undefined ? convert_json(logoPricing) : [];
 
-			let multiplier = 0;
-			if (waterproof) {
-				multiplier = waterproof === 'Indoor' ? 1 : 1.1;
+				const computed =
+					logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
+
+				let multiplier = 0;
+				if (waterproof) {
+					multiplier = waterproof === 'Indoor' ? 1 : 1.1;
+				}
+
+				let total = (computed * multiplier).toFixed(2);
+				total *= selectedFinishing === 'Gloss' ? 1.1 : 1;
+				total *= baseColor === 'Custom Color' ? UV_PRICE : 1;
+
+				total *= 1.2;
+
+				setUsdPrice(parseFloat(total).toFixed(2));
+				setCadPrice((total * parseFloat(exchangeRate)).toFixed(2));
+			} else {
+				setUsdPrice(0);
+				setCadPrice(0);
 			}
-
-			let total = (computed * multiplier).toFixed(2);
-			total *= selectedFinishing === 'Gloss' ? 1.1 : 1;
-			total *= baseColor === 'Custom Color' ? UV_PRICE : 1;
-
-			total *= 1.2;
-
-			setUsdPrice(parseFloat(total).toFixed(2));
-			setCadPrice((total * parseFloat(exchangeRate)).toFixed(2));
+		} else {
+			setUsdPrice(0);
+			setCadPrice(0);
 		}
 	}, [
 		width,
@@ -428,6 +445,7 @@ export default function Logo({ item }) {
 					isLoading={isLoading}
 					setFileUrl={setFileUrl}
 					setFileName={setFileName}
+					tempFolder={tempFolder}
 				/>
 			</div>
 		</>

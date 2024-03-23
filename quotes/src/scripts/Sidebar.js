@@ -4,7 +4,7 @@ import Prices from './Prices';
 
 const currency = wcumcs_vars_data.currency;
 
-export default function Sidebar({ signage, required }) {
+export default function Sidebar({ signage, required, tempFolder }) {
 	const taxRate = NovaMyAccount.tax_rate;
 
 	const totalUsdPrice = signage.reduce(
@@ -72,11 +72,19 @@ export default function Sidebar({ signage, required }) {
 
 				<hr />
 
-				<div className="flex justify-between my-5">
+				<div className="flex justify-between mt-5 mb-3">
 					<h4 className="text-2xl">TOTAL:</h4>
 					<h4 className="text-2xl">
 						{currency}${Number(estimateTotalPrice.toFixed(2)).toLocaleString()}
 					</h4>
+				</div>
+
+				<div className="text-[11px] mb-5">
+					<ul>
+						<li>Tax not included</li>
+						<li>The final quote will be ready in 24 business hours.</li>
+						<li>Extra freight charges may apply for connected fonts.</li>
+					</ul>
 				</div>
 
 				{signage.length > 0 &&
@@ -91,6 +99,7 @@ export default function Sidebar({ signage, required }) {
 										<ModalSave
 											signage={signage}
 											required={required}
+											tempFolder={tempFolder}
 											action="update-processing"
 											label="Submit Quote"
 											btnClass="mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
@@ -101,6 +110,7 @@ export default function Sidebar({ signage, required }) {
 
 									<ModalSave
 										signage={signage}
+										tempFolder={tempFolder}
 										required={required}
 										action="update"
 										label="Update Quote"
@@ -112,6 +122,7 @@ export default function Sidebar({ signage, required }) {
 									{NovaQuote.user_role[0] !== 'pending' ? (
 										<ModalSave
 											signage={signage}
+											tempFolder={tempFolder}
 											required={required}
 											action="processing"
 											label="Submit Quote"
@@ -123,6 +134,7 @@ export default function Sidebar({ signage, required }) {
 
 									<ModalSave
 										signage={signage}
+										tempFolder={tempFolder}
 										required={required}
 										action="draft"
 										label="Save to Draft"
@@ -132,6 +144,8 @@ export default function Sidebar({ signage, required }) {
 							)}
 						</>
 					)}
+
+				<div className="text-sm mb-4">Quote & Draft Validity: 30 days</div>
 			</div>
 		</div>
 	);

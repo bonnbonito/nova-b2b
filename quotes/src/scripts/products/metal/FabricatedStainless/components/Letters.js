@@ -5,6 +5,7 @@ import UploadFile from '../../../../UploadFile';
 import useOutsideClick from '../../../../utils/ClickOutside';
 import { colorOptions } from '../../../../utils/ColorOptions';
 import convert_json from '../../../../utils/ConvertJson';
+import { getLogoPricingTablebyThickness } from '../../../../utils/Pricing';
 import { waterProofOptions } from '../../../../utils/SignageOptions';
 
 import {
@@ -23,19 +24,14 @@ const PricingTable =
 	NovaQuote.metal_stainless_pricing?.letter_height_x_logo_pricing;
 const exchangeRate = 1.3;
 
-let lowerCasePricing = 1; // Default value
-let smallPunctuations = 1; // Default value
-
-if (NovaOptions && typeof NovaOptions === 'object') {
-	lowerCasePricing = parseFloat(
-		NovaOptions.lowercase_pricing ? NovaOptions.lowercase_pricing : 1
-	);
-	smallPunctuations = parseFloat(
-		NovaOptions.small_punctuations_pricing
-			? NovaOptions.small_punctuations_pricing
-			: 1
-	);
-}
+const lowerCasePricing = parseFloat(
+	NovaQuote.lowercase_pricing ? NovaQuote.lowercase_pricing : 1
+);
+const smallPunctuations = parseFloat(
+	NovaQuote.small_punctuations_pricing
+		? NovaQuote.small_punctuations_pricing
+		: 1
+);
 //const AcrylicLetterPricing = JSON.parse(NovaOptions.letter_x_logo_pricing);
 
 export default function Letters({ item }) {

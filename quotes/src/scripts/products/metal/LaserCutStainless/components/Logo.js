@@ -4,6 +4,7 @@ import UploadFile from '../../../../UploadFile';
 import useOutsideClick from '../../../../utils/ClickOutside';
 import { colorOptions } from '../../../../utils/ColorOptions';
 import convert_json from '../../../../utils/ConvertJson';
+import { getLogoPricingTablebyThickness } from '../../../../utils/Pricing';
 import { waterProofOptions } from '../../../../utils/SignageOptions';
 import {
 	finishOptions,
@@ -225,48 +226,66 @@ export default function Logo({ item }) {
 		metal,
 	]);
 
+	const logoPricingObject = NovaQuote.logo_pricing_tables;
+
 	useEffect(() => {
-		// Ensure width, height, and selectedThickness are provided
-		if (width && height && selectedThickness) {
-			const logoKey = `logo_pricing_${selectedThickness.value}mm`;
-			const logoPricingTable =
-				PricingTable[logoKey]?.length > 0
-					? convert_json(PricingTable[logoKey])
-					: [];
+		if (
+			width &&
+			height &&
+			selectedThickness &&
+			waterproof &&
+			logoPricingObject !== null
+		) {
+			const logoPricing = getLogoPricingTablebyThickness(
+				`${selectedThickness.value}mm`,
+				logoPricingObject
+			);
 
-			console.log(logoPricingTable);
-			const computed =
-				logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
+			if (logoPricing !== undefined) {
+				const logoPricingTable =
+					logoPricing !== undefined ? convert_json(logoPricing) : [];
 
-			let multiplier = 0;
-			if (waterproof) {
-				multiplier = waterproof === 'Indoor' ? 1 : 1.05;
-			}
+				const computed =
+					logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
 
-			let total = (computed * multiplier).toFixed(2);
-
-			total *= metal === '316 Stainless Steel' ? 1.3 : 1;
-
-			if (stainlessSteelPolished) {
-				if ('Standard (Face)' === stainlessSteelPolished) {
-					total *= 1.3;
+				let multiplier = 1;
+				if (waterproof) {
+					multiplier = waterproof === 'Indoor' ? 1 : 1.05;
 				}
 
-				if ('Premium (Face & Side)' === stainlessSteelPolished) {
-					total *= 1.7;
+				let total = (computed * multiplier).toFixed(2);
+
+				total *= metal === '316 Stainless Steel' ? 1.3 : 1;
+
+				if (stainlessSteelPolished) {
+					if ('Standard (Face)' === stainlessSteelPolished) {
+						total *= 1.3;
+					}
+
+					if ('Premium (Face & Side)' === stainlessSteelPolished) {
+						total *= 1.7;
+					}
 				}
-			}
 
-			if (
-				stainLessMetalFinish &&
-				stainLessMetalFinish !== 'Stainless Steel Brushed' &&
-				stainLessMetalFinish !== 'Stainless Steel Polished'
-			) {
-				total *= 1.2;
-			}
+				if (
+					stainLessMetalFinish &&
+					stainLessMetalFinish !== 'Stainless Steel Brushed' &&
+					stainLessMetalFinish !== 'Stainless Steel Polished'
+				) {
+					total *= 1.2;
+				}
 
-			setUsdPrice(total);
-			setCadPrice((total * parseFloat(exchangeRate)).toFixed(2));
+				console.log(total);
+
+				setUsdPrice(total.toFixed(2));
+				setCadPrice((total * parseFloat(exchangeRate)).toFixed(2));
+			} else {
+				setUsdPrice(0);
+				setCadPrice(0);
+			}
+		} else {
+			setUsdPrice(0);
+			setCadPrice(0);
 		}
 	}, [
 		width,
@@ -279,7 +298,7 @@ export default function Logo({ item }) {
 		stainlessSteelPolished,
 	]);
 
-	useOutsideClick(colorRef, () => {
+	useOutsideClick([colorRef], () => {
 		setOpenColor(false);
 	});
 

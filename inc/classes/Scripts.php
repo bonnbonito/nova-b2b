@@ -263,6 +263,14 @@ class Scripts {
 		return 'Custom Project';
 	}
 
+	public function get_letter_pricing_table() {
+		return get_field( 'letter_pricing_table', get_the_ID() );
+	}
+
+	public function get_logo_pricing_tables() {
+		return get_field( 'logo_pricing_tables', get_the_ID() );
+	}
+
 
 	public function get_quote_options() {
 		return get_field( 'signage_quote_options', get_the_ID() );
@@ -293,6 +301,9 @@ class Scripts {
 		wp_register_script( 'admin-projects', get_stylesheet_directory_uri() . '/assets/js/admin-projects.js', array(), '1.0', true );
 		wp_register_script( 'dropbox-api', get_stylesheet_directory_uri() . '/assets/js/dropbox.js', array(), '1.0', true );
 
+		wp_register_script( 'admin-letter-pricing', get_stylesheet_directory_uri() . '/assets/js/admin-letter-pricing.js', array(), '1.0', true );
+		wp_register_script( 'admin-logo-pricing', get_stylesheet_directory_uri() . '/assets/js/admin-logo-pricing.js', array(), '1.0', true );
+
 		wp_localize_script(
 			'dropbox-api',
 			'DropboxNova',
@@ -310,10 +321,12 @@ class Scripts {
 			'admin-signage',
 			'AdminSignage',
 			array(
-				'ajax_url'      => admin_url( 'admin-ajax.php' ),
-				'nonce'         => wp_create_nonce( 'nova_admin_nonce' ),
-				'ID'            => isset( $_GET['post'] ) ? $_GET['post'] : 0,
-				'quote_options' => $this->get_quote_options(),
+				'ajax_url'             => admin_url( 'admin-ajax.php' ),
+				'nonce'                => wp_create_nonce( 'nova_admin_nonce' ),
+				'ID'                   => isset( $_GET['post'] ) ? $_GET['post'] : 0,
+				'quote_options'        => $this->get_quote_options(),
+				'letter_pricing_table' => $this->get_letter_pricing_table(),
+				'logo_pricing_tables'  => $this->get_logo_pricing_tables(),
 			)
 		);
 
@@ -366,6 +379,15 @@ class Scripts {
 
 			if ( 'fabricated-stainless-steel' === $post->post_name ) {
 				wp_enqueue_script( 'admin-fabricated-metal' );
+			}
+
+			if ( get_field( 'letter_pricing_table' ) ) {
+				wp_enqueue_script( 'admin-letter-pricing' );
+
+			}
+			if ( get_field( 'logo_pricing_tables' ) ) {
+
+				wp_enqueue_script( 'admin-logo-pricing' );
 			}
 		}
 

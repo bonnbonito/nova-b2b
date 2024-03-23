@@ -165,8 +165,8 @@ function getSignageDetailFields(sign) {
 			label: 'ACRYLIC BASE',
 			value:
 				typeof sign.acrylicBase === 'object' && sign.acrylicBase !== null
-					? sign.metalFinish.name
-					: sign.metalFinish,
+					? sign.acrylicBase.name
+					: sign.acrylicBase,
 		},
 		{ label: 'METAL FINISHING', value: sign.metalFinishing },
 		{ label: 'STEEL POLISHED', value: sign.stainlessSteelPolished },

@@ -9,6 +9,7 @@ import {
 	metalFinishColors,
 } from '../../../../utils/ColorOptions';
 import convert_json from '../../../../utils/ConvertJson';
+import { getLogoPricingTablebyThickness } from '../../../../utils/Pricing';
 import {
 	mountingDefaultOptions,
 	thicknessOptions,
@@ -19,19 +20,14 @@ import { METAL_ACRYLIC_PRICING, QuoteContext } from '../MetalLaminate';
 const NovaOptions = NovaQuote.quote_options;
 const exchangeRate = 1.3;
 
-let lowerCasePricing = 1; // Default value
-let smallPunctuations = 1; // Default value
-
-if (NovaOptions && typeof NovaOptions === 'object') {
-	lowerCasePricing = parseFloat(
-		NovaOptions.lowercase_pricing ? NovaOptions.lowercase_pricing : 1
-	);
-	smallPunctuations = parseFloat(
-		NovaOptions.small_punctuations_pricing
-			? NovaOptions.small_punctuations_pricing
-			: 1
-	);
-}
+const lowerCasePricing = parseFloat(
+	NovaQuote.lowercase_pricing ? NovaQuote.lowercase_pricing : 1
+);
+const smallPunctuations = parseFloat(
+	NovaQuote.small_punctuations_pricing
+		? NovaQuote.small_punctuations_pricing
+		: 1
+);
 //const AcrylicLetterPricing = JSON.parse(NovaOptions.letter_x_logo_pricing);
 
 export default function Letters({ item }) {
@@ -82,8 +78,8 @@ export default function Letters({ item }) {
 	const colorRef = useRef(null);
 
 	const letterPricing =
-		NovaOptions.letter_height_x_logo_pricing.length > 0
-			? convert_json(NovaOptions.letter_height_x_logo_pricing)
+		NovaQuote.letter_pricing_table?.pricing_table.length > 0
+			? convert_json(NovaQuote.letter_pricing_table.pricing_table)
 			: [];
 	let perLetterPrice = 0;
 
@@ -236,6 +232,9 @@ export default function Letters({ item }) {
 
 			setUsdPrice(totalLetterPrice.toFixed(2));
 			setCadPrice((totalLetterPrice * parseFloat(exchangeRate)).toFixed(2));
+		} else {
+			setUsdPrice(0);
+			setCadPrice(0);
 		}
 	}, [
 		selectedLetterHeight,
@@ -426,12 +425,6 @@ export default function Letters({ item }) {
 		acrylicBase?.name != 'Custom Color' && setCustomColor('');
 	}, [font, acrylicBase]);
 
-	useEffect(() => {
-		if (tempFolder.length > 0) {
-			console.log('temp folder ', tempFolder);
-		}
-	}, []);
-
 	return (
 		<>
 			<div className="mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md">
@@ -485,6 +478,7 @@ export default function Letters({ item }) {
 						isLoading={isLoading}
 						setFontFileUrl={setFontFileUrl}
 						setFontFileName={setFontFileName}
+						tempFolder={tempFolder}
 					/>
 				)}
 
@@ -656,6 +650,7 @@ export default function Letters({ item }) {
 					isLoading={isLoading}
 					setFileUrl={setFileUrl}
 					setFileName={setFileName}
+					tempFolder={tempFolder}
 				/>
 			</div>
 

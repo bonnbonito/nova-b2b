@@ -1,6 +1,13 @@
-#lettersPricingTable {
+#lettersPricingTable,
+#outputLetterTable {
     max-height: 400px;
     overflow-y: auto;
+}
+
+.logo-output {
+    width: 100%;
+    overflow: hidden;
+    max-width: 720px;
 }
 
 .pricing-table-wrap {

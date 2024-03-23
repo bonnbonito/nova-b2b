@@ -2,8 +2,9 @@ import * as Dialog from '@radix-ui/react-dialog';
 import React, { useEffect, useRef, useState } from 'react';
 import { CloseIcon, LoadingIcon } from './svg/Icons';
 import { processQuote } from './utils/QuoteFunctions';
+import renameFolder from './utils/renameFolder';
 
-function ModalSave({ signage, action, btnClass, label, required }) {
+function ModalSave({ signage, action, btnClass, label, required, tempFolder }) {
 	const [isLoading, setIsLoading] = useState(false);
 	const [submitted, setSubmitted] = useState(false);
 	const [submitting, setSubmitting] = useState(false);
@@ -150,8 +151,56 @@ function ModalSave({ signage, action, btnClass, label, required }) {
 			const status = await processQuote(formData);
 			if (status.status === 'success') {
 				localStorage.removeItem(window.location.href + NovaQuote.user_id);
-				setSubmitted(true);
+				localStorage.removeItem(
+					window.location.href + NovaQuote.user_id + '-folder'
+				);
+
+				if (NovaQuote.is_editting.length === 0) {
+					console.log('renaming...');
+					const folderPath = `/NOVA-CRM/${NovaQuote.business_id}/${tempFolder}`;
+					const newPath = `/NOVA-CRM/${NovaQuote.business_id}/Q-${status.generated_id}`;
+
+					try {
+						const rename = await renameFolder(folderPath, newPath);
+
+						if (rename) {
+							console.log('updating quote field...');
+
+							const prevSignage = JSON.stringify(signage);
+
+							const updatedSignage = prevSignage.replace(
+								new RegExp(folderPath, 'g'),
+								newPath
+							);
+
+							const newData = new FormData();
+							newData.append('nonce', NovaQuote.nonce);
+							newData.append('updated', updatedSignage);
+							newData.append('quote_id', status.generated_id); // Make sure to use newData here
+							newData.append('action', 'update_dropbox_path');
+
+							const updating = await processQuote(newData);
+
+							if (updating.status === 'success') {
+								console.log('Quote updated successfully');
+							} else {
+								console.error('Error updating quote:', updating);
+								alert('Error');
+							}
+						} else {
+							console.error('Renaming folder failed');
+						}
+					} catch (error) {
+						console.error('An error occurred:', error);
+						alert('An error occurred, please try again.');
+					}
+				}
+
 				setQuoteID(status.generated_id);
+
+				console.log(status);
+
+				setSubmitted(true);
 			} else {
 				alert('Error');
 			}
@@ -161,6 +210,7 @@ function ModalSave({ signage, action, btnClass, label, required }) {
 				type: 'not_saved',
 				message: 'Failed to save quote. Please try again.',
 			});
+			console.log(err);
 		} finally {
 			setIsLoading(false);
 		}

@@ -12,8 +12,6 @@ export default function Signage({
 	setSignage,
 	children,
 	setMissing,
-	overflow,
-	setOverflow,
 }) {
 	const [open, setOpen] = useState(true);
 	const [itemTitle, setItemTitle] = useState(item.title);

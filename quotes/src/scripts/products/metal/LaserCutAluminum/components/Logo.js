@@ -4,6 +4,7 @@ import UploadFile from '../../../../UploadFile';
 import useOutsideClick from '../../../../utils/ClickOutside';
 import { colorOptions } from '../../../../utils/ColorOptions';
 import convert_json from '../../../../utils/ConvertJson';
+import { getLogoPricingTablebyThickness } from '../../../../utils/Pricing';
 import {
 	metalFinishOptions,
 	metalInstallationOptions,
@@ -16,7 +17,7 @@ const NovaSingleOptions = NovaQuote.single_quote_options;
 const exchangeRate = 1.3;
 
 export default function Logo({ item }) {
-	const { signage, setSignage, setMissing, setOverflow } =
+	const { signage, setSignage, setMissing, tempFolder } =
 		useContext(QuoteContext);
 	const [selectedMounting, setSelectedMounting] = useState(item.mounting);
 	const [selectedThickness, setSelectedThickness] = useState(item.thickness);
@@ -52,7 +53,7 @@ export default function Logo({ item }) {
 
 	const colorRef = useRef(null);
 
-	const logoPricingObject = NovaQuote.quote_options.logo_pricing;
+	const logoPricingObject = NovaQuote.logo_pricing_tables;
 
 	function handleComments(e) {
 		setComments(e.target.value);
@@ -192,28 +193,44 @@ export default function Logo({ item }) {
 	};
 
 	useEffect(() => {
-		// Ensure width, height, and selectedThickness are provided
-		if (width && height && selectedThickness) {
-			const logoKey = `logo_pricing_${selectedThickness.value}mm`;
-			const logoPricingTable =
-				logoPricingObject[logoKey]?.length > 0
-					? convert_json(logoPricingObject[logoKey])
-					: [];
-			const computed =
-				logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
+		if (
+			width &&
+			height &&
+			selectedThickness &&
+			waterproof &&
+			logoPricingObject !== null
+		) {
+			const logoPricing = getLogoPricingTablebyThickness(
+				`${selectedThickness.value}mm`,
+				logoPricingObject
+			);
 
-			let multiplier = 0;
-			if (waterproof) {
-				multiplier = waterproof === 'Indoor' ? 1 : 1.1;
+			if (logoPricing !== undefined) {
+				const logoPricingTable =
+					logoPricing !== undefined ? convert_json(logoPricing) : [];
+
+				const computed =
+					logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
+
+				let multiplier = 0;
+				if (waterproof) {
+					multiplier = waterproof === 'Indoor' ? 1 : 1.05;
+				}
+
+				let total = (computed * multiplier).toFixed(2);
+				setUsdPrice(total);
+				setCadPrice((total * parseFloat(exchangeRate)).toFixed(2));
+			} else {
+				setUsdPrice(0);
+				setCadPrice(0);
 			}
-
-			let total = (computed * multiplier).toFixed(2);
-			setUsdPrice(total);
-			setCadPrice((total * parseFloat(exchangeRate)).toFixed(2));
+		} else {
+			setUsdPrice(0);
+			setCadPrice(0);
 		}
 	}, [width, height, selectedThickness, waterproof, selectedFinishing]);
 
-	useOutsideClick(colorRef, () => {
+	useOutsideClick([colorRef], () => {
 		setOpenColor(false);
 	});
 
@@ -370,6 +387,7 @@ export default function Logo({ item }) {
 					fileUrl={fileUrl}
 					setFileUrl={setFileUrl}
 					setFileName={setFileName}
+					tempFolder={tempFolder}
 				/>
 			</div>
 		</>
