@@ -19,10 +19,9 @@ import { QuoteContext } from '../LaserCutStainless';
 
 const exchangeRate = 1.3;
 
-const PricingTable = NovaQuote.metal_stainless_pricing?.logo_pricing;
-
 export default function Logo({ item }) {
-	const { signage, setSignage, setMissing } = useContext(QuoteContext);
+	const { signage, setSignage, setMissing, tempFolder } =
+		useContext(QuoteContext);
 	const [selectedMounting, setSelectedMounting] = useState(item.mounting);
 	const [selectedThickness, setSelectedThickness] = useState(item.thickness);
 	const [width, setWidth] = useState(item.width);
@@ -479,6 +478,7 @@ export default function Logo({ item }) {
 					fileUrl={fileUrl}
 					setFileUrl={setFileUrl}
 					setFileName={setFileName}
+					tempFolder={tempFolder}
 				/>
 			</div>
 		</>

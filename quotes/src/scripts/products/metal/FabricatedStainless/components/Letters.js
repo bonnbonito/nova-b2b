@@ -35,7 +35,8 @@ const smallPunctuations = parseFloat(
 //const AcrylicLetterPricing = JSON.parse(NovaOptions.letter_x_logo_pricing);
 
 export default function Letters({ item }) {
-	const { signage, setSignage, setMissing } = useContext(QuoteContext);
+	const { signage, setSignage, setMissing, tempFolder } =
+		useContext(QuoteContext);
 	const [letters, setLetters] = useState(item.letters);
 	const [comments, setComments] = useState(item.comments);
 	const [font, setFont] = useState(item.font);
@@ -638,6 +639,7 @@ export default function Letters({ item }) {
 					isLoading={isLoading}
 					setFileUrl={setFileUrl}
 					setFileName={setFileName}
+					tempFolder={tempFolder}
 				/>
 			</div>
 

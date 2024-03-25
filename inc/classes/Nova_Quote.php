@@ -754,7 +754,7 @@ h6 {
 				</font>
 			</p>
 			<p style="padding-bottom: 0; margin-bottom: 0;">MATERIAL: <font face="lato">
-					<?php echo $instance->get_material_name( $post_id ); ?></font>
+					<?php echo $instance->get_material_name( $product_id ); ?></font>
 			</p>
 			<p style="padding-bottom: 0; margin-bottom: 40px;">PRODUCT: <font face="lato">
 					<?php echo $product_name; ?></font>
@@ -780,7 +780,7 @@ h6 {
 					<td style="text-align: right;">CAD$ <?php echo $price; ?></td>
 				</tr>
 				<?php
-				if ( $projectArray['letters'] ) {
+				if ( isset( $projectArray['letters'] ) ) {
 					$color = isset( $projectArray['color'] ) ? ' color: ' . $projectArray['color']->color : '';
 					$face  = $projectArray['font'] ? strtolower( str_replace( array( 'regular', ' ', 'bold' ), array( '', '_', 'b' ), $projectArray['font'] ) ) : '';
 					$style = $color . $face;
@@ -790,7 +790,7 @@ h6 {
 						<div style="padding: 100px; border-radius: 8px; border: 1px solid #ddd;">
 							<h1 style="text-align: center;">
 								<font size="22" face="<?php echo $face; ?>"
-									<?php echo ( $projectArray['color']->color ? ' color="' . $projectArray['color']->color . '" ' : '' ); ?>>
+									<?php echo ( isset( $projectArray['color'] ) && $projectArray['color']->color ? ' color="' . $projectArray['color']->color . '" ' : '' ); ?>>
 									<?php echo $projectArray['letters']; ?>
 								</font>
 							</h1>
@@ -926,7 +926,7 @@ h6 {
 				</font>
 			</p>
 			<p style="padding-bottom: 0; margin-bottom: 0;">MATERIAL: <font face="lato">
-					<?php echo $instance->get_material_name( $post_id ); ?></font>
+					<?php echo $instance->get_material_name( $product_id ); ?></font>
 			</p>
 			<p style="padding-bottom: 0; margin-bottom: 40px;">PRODUCT: <font face="lato">
 					<?php echo $product_name; ?></font>
@@ -1111,14 +1111,14 @@ h6 {
 		}
 
 		if ( isset( $projectArray['fontFileUrl'] ) && ! empty( $projectArray['fontFileUrl'] ) && isset( $projectArray['fontFileName'] ) && ! empty( $projectArray['fontFileName'] ) ) {
-			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">FILE: </strong></td><td><font face="lato"><a href="' . $projectArray['fontFileUrl'] . '" target="_blank">' . $projectArray['fontFileName'] . '</a></font></td></tr>';
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">FONT FILE: </strong></td><td><font face="lato"><a href="' . $projectArray['fontFileUrl'] . '" target="_blank">' . $projectArray['fontFileName'] . '</a></font></td></tr>';
 		}
 
 		if ( isset( $projectArray['customFont'] ) && ! empty( $projectArray['customFont'] ) ) {
 			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">CUSTOM FONT: </strong></td><td><font face="lato">' . $projectArray['customFont'] . '</font></td></tr>';
 		}
 
-		if ( isset( $projectArray['color'] ) && ! empty( $projectArray['color'] ) && isset( $projectArray['color']->name ) ) {
+		if ( isset( $projectArray['color'] ) && is_object( $projectArray['color'] ) && ! empty( $projectArray['color']->name ) ) {
 			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">COLOR: </strong></td><td><font face="lato">' . $projectArray['color']->name . '</font></td></tr>';
 		}
 

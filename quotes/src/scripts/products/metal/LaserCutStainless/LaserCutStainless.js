@@ -58,14 +58,7 @@ export default function LaserCutStainless() {
 		if (NovaQuote.is_editting === '1') {
 			const currentSignage = JSON.parse(NovaQuote.signage);
 			if (currentSignage) {
-				const savedStorage = JSON.parse(
-					localStorage.getItem(window.location.href + NovaQuote.user_id)
-				);
-				if (savedStorage?.length > 0) {
-					setSignage(savedStorage);
-				} else {
-					setSignage(currentSignage);
-				}
+				setSignage(currentSignage);
 			} else {
 				window.location.href = window.location.pathname;
 			}

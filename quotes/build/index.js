@@ -6648,12 +6648,7 @@ function LaserCutStainless() {
     if (NovaQuote.is_editting === '1') {
       const currentSignage = JSON.parse(NovaQuote.signage);
       if (currentSignage) {
-        const savedStorage = JSON.parse(localStorage.getItem(window.location.href + NovaQuote.user_id));
-        if (savedStorage?.length > 0) {
-          setSignage(savedStorage);
-        } else {
-          setSignage(currentSignage);
-        }
+        setSignage(currentSignage);
       } else {
         window.location.href = window.location.pathname;
       }
@@ -7335,14 +7330,14 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const exchangeRate = 1.3;
-const PricingTable = NovaQuote.metal_stainless_pricing?.logo_pricing;
 function Logo({
   item
 }) {
   const {
     signage,
     setSignage,
-    setMissing
+    setMissing,
+    tempFolder
   } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_LaserCutStainless__WEBPACK_IMPORTED_MODULE_9__.QuoteContext);
   const [selectedMounting, setSelectedMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.mounting);
   const [selectedThickness, setSelectedThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.thickness);
@@ -7646,7 +7641,8 @@ function Logo({
     filePath: filePath,
     fileUrl: fileUrl,
     setFileUrl: setFileUrl,
-    setFileName: setFileName
+    setFileName: setFileName,
+    tempFolder: tempFolder
   })));
 }
 

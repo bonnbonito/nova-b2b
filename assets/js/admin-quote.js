@@ -134,7 +134,13 @@ function getSignageItemHTML(sign) {
 		.join('');
 
 	const titleSection = getTitleSectionHTML(sign);
-	return `${titleSection}${htmlDetails}`;
+	let previewHtml = '';
+
+	if (sign.type === 'letter') {
+		previewHtml = `LETTER`;
+	}
+
+	return `${titleSection}${previewHtml}${htmlDetails}`;
 }
 
 function getSignageDetailFields(sign) {
