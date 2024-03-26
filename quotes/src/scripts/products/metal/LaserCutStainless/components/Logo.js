@@ -276,7 +276,7 @@ export default function Logo({ item }) {
 
 				console.log(total);
 
-				setUsdPrice(total.toFixed(2));
+				setUsdPrice(parseFloat(total).toFixed(2));
 				setCadPrice((total * parseFloat(exchangeRate)).toFixed(2));
 			} else {
 				setUsdPrice(0);

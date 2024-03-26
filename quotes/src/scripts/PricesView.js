@@ -103,7 +103,7 @@ export default function PricesView({ item }) {
 						{item.letterHeight && (
 							<div className="grid grid-cols-[160px_1fr] py-[2px] items-center">
 								<div className="text-left text-xs font-title">
-									LETTERS HEIGHT
+									Letter Height
 								</div>
 								<div className="text-left text-[14px] break-words">
 									{item.letterHeight}"

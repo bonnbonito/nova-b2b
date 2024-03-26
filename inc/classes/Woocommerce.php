@@ -1782,7 +1782,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 
 			<?php if ( $item->type === 'letters' ) : ?>
 			<div class="grid grid-cols-2 py-[2px]">
-				<div class="text-left text-xs font-title">LETTERS HEIGHT</div>
+				<div class="text-left text-xs font-title">Letter Height</div>
 				<div class="text-left text-[10px] break-words">
 					<?php echo $item->letterHeight; ?>"
 				</div>
@@ -1902,7 +1902,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 
 			<?php if ( $item->type === 'letters' ) : ?>
 			<div class="grid grid-cols-2 py-[2px]">
-				<div class="text-left text-xs font-title">LETTERS HEIGHT</div>
+				<div class="text-left text-xs font-title">Letter Height</div>
 				<div class="text-left text-[10px] break-words">
 					<?php echo $item->letterHeight; ?>"
 				</div>

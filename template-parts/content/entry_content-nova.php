@@ -18,6 +18,7 @@ global $post;
 
 		$template = get_query_var( 'pagetab' );
 
+
 		switch ( $template ) {
 			case 'installation':
 				do_action( 'nova_product_installation' );
@@ -44,6 +45,7 @@ global $post;
 					)
 				);
 				do_action( 'nova_signange_after_content' );
+				break;
 			case 'quote':
 			default:
 				do_action( 'nova_product_instant_quote' );

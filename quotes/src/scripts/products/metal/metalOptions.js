@@ -26,6 +26,37 @@ const metalThicknessOptions = [
 	},
 ];
 
+const fabricatedThicknessOptions = [
+	{
+		thickness: '1"',
+		value: '1',
+	},
+	{
+		thickness: '1.5"',
+		value: '1.5',
+	},
+	{
+		thickness: '2"',
+		value: '2',
+	},
+	{
+		thickness: '3"',
+		value: '3',
+	},
+	{
+		thickness: '4"',
+		value: '4',
+	},
+	{
+		thickness: '5"',
+		value: '5',
+	},
+	{
+		thickness: '6"',
+		value: '6',
+	},
+];
+
 const finishOptions = [
 	{
 		option: 'Metal Finish',
@@ -112,7 +143,28 @@ const metalInstallationOptions = [
 	},
 ];
 
+const fabricatedLogoInstallationOptions = [
+	{
+		option: 'Plain Mount',
+	},
+	{
+		option: 'Stud Mount',
+	},
+];
+
+const fabricatedMetalInstallationOptions = [
+	{
+		option: 'Stud Mount',
+	},
+	{
+		option: 'PVC Backing',
+	},
+];
+
 export {
+	fabricatedLogoInstallationOptions,
+	fabricatedMetalInstallationOptions,
+	fabricatedThicknessOptions,
 	finishOptions,
 	metalFinishColors,
 	metalFinishOptions,

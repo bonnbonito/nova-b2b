@@ -8,6 +8,7 @@ import LayeredAcrylic from './scripts/products/acrylic/LayeredAcrylic/LayeredAcr
 import MetalLaminate from './scripts/products/acrylic/MetalLaminate/MetalLaminate';
 import UvPrintedAcrylic from './scripts/products/acrylic/UvPrintedAcrylic/UvPrintedAcrylic';
 import CustomProject from './scripts/products/custom/CustomProject';
+import FabricatedStainless from './scripts/products/metal/FabricatedStainless/FabricatedStainless';
 import LaserCutAluminum from './scripts/products/metal/LaserCutAluminum/LaserCutAluminum';
 import LaserCutStainless from './scripts/products/metal/LaserCutStainless/LaserCutStainless';
 
@@ -50,6 +51,13 @@ if (document.querySelector('#laserCutStainless')) {
 	ReactDOM.render(
 		<LaserCutStainless />,
 		document.querySelector('#laserCutStainless')
+	);
+}
+
+if (document.querySelector('#metalFabricatedStainless')) {
+	ReactDOM.render(
+		<FabricatedStainless />,
+		document.querySelector('#metalFabricatedStainless')
 	);
 }
 

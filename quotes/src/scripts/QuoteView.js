@@ -308,7 +308,7 @@ export default function QuoteView() {
 						<h4>
 							{estimatedTotal > 0
 								? `${currency}$${Number(
-										estimatedTotal.toFixed(2)
+										estimatedparseFloat(total).toFixed(2)
 								  ).toLocaleString()}`
 								: 'TBD'}
 						</h4>

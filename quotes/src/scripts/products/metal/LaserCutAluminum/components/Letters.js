@@ -480,7 +480,7 @@ export default function Letters({ item }) {
 				/>
 
 				<Dropdown
-					title="Letters Height"
+					title="Letter Height"
 					onChange={handleOnChangeLetterHeight}
 					options={letterHeightOptions}
 					value={item.letterHeight}

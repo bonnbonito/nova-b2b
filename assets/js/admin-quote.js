@@ -149,7 +149,7 @@ function getSignageDetailFields(sign) {
 		{ label: 'TYPE', value: sign.type },
 		{ label: 'LINE TEXT', value: sign.letters },
 		{
-			label: 'LETTERS HEIGHT',
+			label: 'Letter Height',
 			value: sign.letterHeight ? sign.letterHeight + '"' : '',
 		},
 		{ label: 'THICKNESS', value: sign.thickness?.thickness },

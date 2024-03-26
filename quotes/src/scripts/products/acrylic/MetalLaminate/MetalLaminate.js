@@ -24,7 +24,6 @@ export default function MetalLaminate() {
 	const [signage, setSignage] = useState([]);
 	const [missing, setMissing] = useState([]);
 	const [tempFolder, setTempFolder] = useState('');
-	const currency = wcumcs_vars_data.currency;
 	const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
 
 	function setDefaultSignage() {
@@ -178,7 +177,6 @@ export default function MetalLaminate() {
 				signage,
 				setSignage,
 				addSignage,
-				currency,
 				missing,
 				setMissing,
 				tempFolder,
