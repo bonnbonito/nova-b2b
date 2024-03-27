@@ -5628,7 +5628,7 @@ function FabricatedStainless() {
   const [tempFolder, setTempFolder] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
   function setDefaultSignage() {
-    const savedStorage = JSON.parse(localStorage.getItem(window.location.href + NovaQuote.user_id));
+    const savedStorage = JSON.parse(localStorage.getItem(window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id));
     if (savedStorage?.length > 0) {
       setSignage(savedStorage);
     } else {
