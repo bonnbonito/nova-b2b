@@ -6142,8 +6142,10 @@ function Letters({
     if (!selectedLetterHeight) missingFields.push('Select Letter Height');
     if (!waterproof) missingFields.push('Select Environment');
     if (!mounting) missingFields.push('Select Mounting');
-    if (!studLength) missingFields.push('Select Stud Length');
-    if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+    if (mounting === 'Stud with spacer') {
+      if (!studLength) missingFields.push('Select Stud Length');
+      if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+    }
     if (!ledLightColor) missingFields.push('Select LED Light Color');
     if (missingFields.length > 0) {
       setMissing(prevMissing => {

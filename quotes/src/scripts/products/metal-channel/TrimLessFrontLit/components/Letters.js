@@ -353,9 +353,11 @@ export default function Letters({ item }) {
 
 		if (!mounting) missingFields.push('Select Mounting');
 
-		if (!studLength) missingFields.push('Select Stud Length');
+		if (mounting === 'Stud with spacer') {
+			if (!studLength) missingFields.push('Select Stud Length');
 
-		if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+			if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+		}
 
 		if (!ledLightColor) missingFields.push('Select LED Light Color');
 
