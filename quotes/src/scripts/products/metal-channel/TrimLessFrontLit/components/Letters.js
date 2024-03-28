@@ -296,7 +296,9 @@ export default function Letters({ item }) {
 					}
 
 					// Adjusting for waterproof and finishing
-					letterPrice *= waterproof === 'Indoor' ? 1 : 1.1;
+					letterPrice *= waterproof === 'Indoor' ? 1 : 1.03;
+
+					letterPrice *= acrylicCover?.name === 'White' ? 1 : 1.1;
 
 					totalLetterPrice += letterPrice;
 				});
@@ -308,7 +310,7 @@ export default function Letters({ item }) {
 				setCadPrice(0);
 			}
 		}
-	}, [selectedLetterHeight, letters, waterproof, lettersHeight]);
+	}, [selectedLetterHeight, letters, waterproof, lettersHeight, acrylicCover]);
 
 	useEffect(() => {
 		setLetterHeightOptions(() =>

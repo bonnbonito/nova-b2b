@@ -6107,7 +6107,8 @@ function Letters({
           }
 
           // Adjusting for waterproof and finishing
-          letterPrice *= waterproof === 'Indoor' ? 1 : 1.1;
+          letterPrice *= waterproof === 'Indoor' ? 1 : 1.03;
+          letterPrice *= acrylicCover?.name === 'White' ? 1 : 1.1;
           totalLetterPrice += letterPrice;
         });
         setUsdPrice(totalLetterPrice.toFixed(2));
@@ -6117,7 +6118,7 @@ function Letters({
         setCadPrice(0);
       }
     }
-  }, [selectedLetterHeight, letters, waterproof, lettersHeight]);
+  }, [selectedLetterHeight, letters, waterproof, lettersHeight, acrylicCover]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     setLetterHeightOptions(() => Array.from({
       length: parseInt(lettersHeight.max) - parseInt(lettersHeight.min) + 1
