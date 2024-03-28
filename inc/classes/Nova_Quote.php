@@ -1457,6 +1457,7 @@ h6 {
 				'nonce'                      => wp_create_nonce( 'quote_nonce' ),
 				'quote_options'              => $this->get_quote_options(),
 				'letter_pricing_table'       => $this->get_letter_pricing_table(),
+				'letter_pricing_tables'      => $this->get_letter_pricing_tables(),
 				'logo_pricing_tables'        => $this->get_logo_pricing_tables(),
 				'fonts'                      => $this->get_fonts(),
 				'upload_rest'                => esc_url_raw( rest_url( '/nova/v1/upload-quote-file' ) ),
@@ -1516,6 +1517,13 @@ h6 {
 			$parent_id = wp_get_post_parent_id( get_the_ID() );
 			$table     = get_field( 'letter_pricing_table', $parent_id );
 		}
+
+		return $table;
+	}
+
+	public function get_letter_pricing_tables() {
+
+		$table = get_field( 'letter_pricing_tables' );
 
 		return $table;
 	}

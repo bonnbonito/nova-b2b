@@ -4,10 +4,16 @@
     overflow-y: auto;
 }
 
-.logo-output {
+.logo-output,
+.letter-output {
     width: 100%;
     overflow: hidden;
     max-width: 720px;
+}
+
+.letter-output {
+    max-height: 400px;
+    overflow-y: auto;
 }
 
 .pricing-table-wrap {

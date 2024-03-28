@@ -8,6 +8,7 @@ import LayeredAcrylic from './scripts/products/acrylic/LayeredAcrylic/LayeredAcr
 import MetalLaminate from './scripts/products/acrylic/MetalLaminate/MetalLaminate';
 import UvPrintedAcrylic from './scripts/products/acrylic/UvPrintedAcrylic/UvPrintedAcrylic';
 import CustomProject from './scripts/products/custom/CustomProject';
+import TrimLessBackLit from './scripts/products/metal-channel/TrimLessBackLit/TrimLessBackLit';
 import TrimLessFrontLit from './scripts/products/metal-channel/TrimLessFrontLit/TrimLessFrontLit';
 import FabricatedStainless from './scripts/products/metal/FabricatedStainless/FabricatedStainless';
 import LaserCutAluminum from './scripts/products/metal/LaserCutAluminum/LaserCutAluminum';
@@ -59,6 +60,13 @@ if (document.querySelector('#metalChannelTrimlessFrontLit')) {
 	ReactDOM.render(
 		<TrimLessFrontLit />,
 		document.querySelector('#metalChannelTrimlessFrontLit')
+	);
+}
+
+if (document.querySelector('#metalChannelTrimlessBackLit')) {
+	ReactDOM.render(
+		<TrimLessBackLit />,
+		document.querySelector('#metalChannelTrimlessBackLit')
 	);
 }
 

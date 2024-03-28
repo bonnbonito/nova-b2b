@@ -5,11 +5,10 @@ import Signage from '../../../Signage';
 import { PlusIcon } from '../../../svg/Icons';
 import { SignageCount } from '../../../utils/QuoteFunctions';
 import Letters from './components/Letters';
-import Logo from './components/Logo';
 
 export const QuoteContext = createContext(null);
 
-export default function LaserCutAcrylic() {
+export default function TrimLessBackLit() {
 	const [signage, setSignage] = useState([]);
 	const [missing, setMissing] = useState([]);
 	const [tempFolder, setTempFolder] = useState('');
@@ -29,14 +28,21 @@ export default function LaserCutAcrylic() {
 					id: uuidv4(),
 					type: 'letters',
 					title: 'LETTERS 1',
+					depth: '',
 					letters: '',
 					comments: '',
 					font: '',
-					mounting: '',
+					customFont: '',
 					waterproof: '',
 					thickness: '',
-					color: { name: '', color: '' },
+					acrylicCover: { name: 'White', color: '#ffffff' },
+					mounting: '',
+					studLength: '',
+					spacerStandoffDistance: '',
+					color: { name: 'Black', color: '#000000' },
+					customColor: '',
 					letterHeight: '',
+					ledLightColor: '',
 					usdPrice: 0,
 					cadPrice: 0,
 					filePath: '',
@@ -47,9 +53,6 @@ export default function LaserCutAcrylic() {
 					fontFileName: '',
 					fontFileUrl: '',
 					fontFile: '',
-					customFont: '',
-					customColor: '',
-					finishing: 'Matte',
 					product: NovaQuote.product,
 				},
 			]);
@@ -58,22 +61,11 @@ export default function LaserCutAcrylic() {
 
 	useEffect(() => {
 		if (NovaQuote.is_editting === '1') {
-			console.log(NovaQuote.signage);
 			const currentSignage = JSON.parse(NovaQuote.signage);
-			console.log(currentSignage);
 			if (currentSignage) {
-				const savedStorage = JSON.parse(
-					localStorage.getItem(
-						window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id
-					)
-				);
-				if (savedStorage?.length > 0) {
-					setSignage(savedStorage);
-				} else {
-					setSignage(currentSignage);
-				}
+				setSignage(currentSignage);
 			} else {
-				//window.location.href = window.location.pathname;
+				window.location.href = window.location.pathname;
 			}
 		} else {
 			setDefaultSignage();
@@ -82,17 +74,33 @@ export default function LaserCutAcrylic() {
 
 	const defaultArgs = {
 		id: uuidv4(),
+		type: 'letters',
+		title: 'LETTERS 1',
+		depth: '',
+		letters: '',
 		comments: '',
-		mounting: '',
-		thickness: '',
+		font: '',
+		customFont: '',
 		waterproof: '',
-		finishing: 'Matte',
+		thickness: '',
+		acrylicCover: { name: 'White', color: '#ffffff' },
+		mounting: '',
+		studLength: '',
+		spacerStandoffDistance: '',
+		color: { name: 'Black', color: '#000000' },
+		customColor: '',
+		letterHeight: '',
+		ledLightColor: '6500K White',
 		usdPrice: 0,
 		cadPrice: 0,
 		filePath: '',
 		fileName: '',
 		fileUrl: '',
 		file: '',
+		fontFilePath: '',
+		fontFileName: '',
+		fontFileUrl: '',
+		fontFile: '',
 		product: NovaQuote.product,
 	};
 
@@ -106,17 +114,6 @@ export default function LaserCutAcrylic() {
 				args = {
 					type: type,
 					title: `${type} ${count + 1}`,
-					letters: '',
-					font: '',
-					thickness_options: '',
-					color: { name: '', color: '' },
-					letterHeight: '',
-					customFont: '',
-					customColor: '',
-					fontFilePath: '',
-					fontFileName: '',
-					fontFileUrl: '',
-					fontFile: '',
 				};
 			} else {
 				args = {
@@ -188,11 +185,7 @@ export default function LaserCutAcrylic() {
 							addSignage={addSignage}
 							setMissing={setMissing}
 						>
-							{item.type === 'letters' ? (
-								<Letters key={item.id} item={item} />
-							) : (
-								<Logo key={item.id} item={item} />
-							)}
+							<Letters key={item.id} item={item} />
 						</Signage>
 					))}
 
@@ -204,17 +197,6 @@ export default function LaserCutAcrylic() {
 								style={{ border: '1px solid #d2d2d2d2' }}
 							>
 								ADD LETTERS
-								<PlusIcon />
-							</button>
-						)}
-
-						{SignageCount(signage, 'logo') < 5 && (
-							<button
-								className="flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white"
-								onClick={() => addSignage('logo')}
-								style={{ border: '1px solid #d2d2d2d2' }}
-							>
-								ADD LOGO
 								<PlusIcon />
 							</button>
 						)}

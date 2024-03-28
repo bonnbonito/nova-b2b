@@ -17,7 +17,9 @@ export default function FabricatedStainless() {
 
 	function setDefaultSignage() {
 		const savedStorage = JSON.parse(
-			localStorage.getItem(window.location.href + NovaQuote.user_id)
+			localStorage.getItem(
+				window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id
+			)
 		);
 		if (savedStorage?.length > 0) {
 			setSignage(savedStorage);
@@ -123,7 +125,7 @@ export default function FabricatedStainless() {
 
 	useEffect(() => {
 		localStorage.setItem(
-			window.location.href + NovaQuote.user_id,
+			window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id,
 			JSON.stringify(signage)
 		);
 	}, [signage]);

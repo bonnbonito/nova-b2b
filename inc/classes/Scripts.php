@@ -267,6 +267,10 @@ class Scripts {
 		return get_field( 'letter_pricing_table', get_the_ID() );
 	}
 
+	public function get_letter_pricing_tables() {
+		return get_field( 'letter_pricing_tables', get_the_ID() );
+	}
+
 	public function get_logo_pricing_tables() {
 		return get_field( 'logo_pricing_tables', get_the_ID() );
 	}
@@ -321,12 +325,13 @@ class Scripts {
 			'admin-signage',
 			'AdminSignage',
 			array(
-				'ajax_url'             => admin_url( 'admin-ajax.php' ),
-				'nonce'                => wp_create_nonce( 'nova_admin_nonce' ),
-				'ID'                   => isset( $_GET['post'] ) ? $_GET['post'] : 0,
-				'quote_options'        => $this->get_quote_options(),
-				'letter_pricing_table' => $this->get_letter_pricing_table(),
-				'logo_pricing_tables'  => $this->get_logo_pricing_tables(),
+				'ajax_url'              => admin_url( 'admin-ajax.php' ),
+				'nonce'                 => wp_create_nonce( 'nova_admin_nonce' ),
+				'ID'                    => isset( $_GET['post'] ) ? $_GET['post'] : 0,
+				'quote_options'         => $this->get_quote_options(),
+				'letter_pricing_table'  => $this->get_letter_pricing_table(),
+				'letter_pricing_tables' => $this->get_letter_pricing_tables(),
+				'logo_pricing_tables'   => $this->get_logo_pricing_tables(),
 			)
 		);
 
@@ -381,7 +386,7 @@ class Scripts {
 				wp_enqueue_script( 'admin-fabricated-metal' );
 			}
 
-			if ( get_field( 'letter_pricing_table' ) ) {
+			if ( get_field( 'letter_pricing_table' ) || get_field( 'letter_pricing_tables' ) ) {
 				wp_enqueue_script( 'admin-letter-pricing' );
 
 			}

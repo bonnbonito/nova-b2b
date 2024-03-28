@@ -2,6 +2,33 @@ function displayLettersPricingTable() {
 	console.info('DOM loaded');
 
 	const letterPricingTable = AdminSignage.letter_pricing_table;
+	const letterPricingTables = AdminSignage.letter_pricing_tables;
+	console.log(letterPricingTables);
+
+	if (letterPricingTables.length > 0) {
+		const letterOutput = document.querySelectorAll('.letter-output');
+
+		letterPricingTables.forEach((table, index) => {
+			const pricingTable = convertJson(
+				table.letter_pricing.letter_pricing_table
+			);
+
+			if (pricingTable.length > 0) {
+				let headers = Object.keys(pricingTable[0]);
+
+				// Sort headers numerically, keeping 'Height' at the start
+				headers = headers.sort((a, b) => {
+					if (a === 'Height' || a === 'Depth') return -1;
+					if (b === 'Height' || b === 'Depth') return 1;
+					return parseFloat(a) - parseFloat(b);
+				});
+
+				const letterHeightTable = createTable(pricingTable, headers);
+
+				letterOutput[index].appendChild(letterHeightTable);
+			}
+		});
+	}
 
 	if (letterPricingTable && letterPricingTable.pricing_table) {
 		const letterPricingTableJson = convertJson(

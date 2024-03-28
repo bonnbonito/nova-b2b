@@ -126,7 +126,7 @@ export default function FabricatedStainless() {
 
 	useEffect(() => {
 		localStorage.setItem(
-			window.location.href + NovaQuote.user_id,
+			window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id,
 			JSON.stringify(signage)
 		);
 	}, [signage]);
