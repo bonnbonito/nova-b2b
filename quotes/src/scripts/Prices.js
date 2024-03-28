@@ -31,6 +31,14 @@ export default function Prices({ item }) {
 					</div>
 				</div>
 			)}
+			{item.depth?.depth && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						METAL DEPTH
+					</div>
+					<div className="text-left text-sm uppercase">{item.depth.depth}</div>
+				</div>
+			)}
 			{item.width && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
@@ -68,7 +76,7 @@ export default function Prices({ item }) {
 			{item.letterHeight && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
-						Letter Height
+						LETTER HEIGHT
 					</div>
 					<div className="text-left text-sm break-words">
 						{item.letterHeight}"
@@ -160,6 +168,22 @@ export default function Prices({ item }) {
 					<div className="text-left text-sm">{item.color?.name}</div>
 				</div>
 			)}
+			{item.acrylicCover?.name && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						ACRYLIC COVER
+					</div>
+					<div className="text-left text-sm">{item.acrylicCover?.name}</div>
+				</div>
+			)}
+			{item.ledLightColor && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						LED LIGHT COLOR
+					</div>
+					<div className="text-left text-sm">{item.ledLightColor}</div>
+				</div>
+			)}
 			{item.customColor && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
@@ -174,6 +198,22 @@ export default function Prices({ item }) {
 						METAL FINISH
 					</div>
 					<div className="text-left text-sm">{item.stainLessMetalFinish}</div>
+				</div>
+			)}
+			{item.studLength && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						STUD LENGTH
+					</div>
+					<div className="text-left text-sm">{item.studLength}</div>
+				</div>
+			)}
+			{item.spacerStandoffDistance && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						SPACER STANDOFF DISTANCE
+					</div>
+					<div className="text-left text-sm">{item.spacerStandoffDistance}</div>
 				</div>
 			)}
 			{item.metalFinish?.name && (

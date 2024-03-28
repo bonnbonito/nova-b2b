@@ -124,7 +124,9 @@ function getSignageItemHTML(sign) {
                 <div class="signage-details ${
 									field.descriptClass ? field.descriptClass : ''
 								}">
-                    <div class="signage-label">${field.label}</div>
+                    <div class="signage-label" style="text-transform: uppercase;">${
+											field.label
+										}</div>
                     <div class="signage-value" ${dataIdAttribute}>${
 				field.value
 			}</div>
@@ -153,11 +155,14 @@ function getSignageDetailFields(sign) {
 			value: sign.letterHeight ? sign.letterHeight + '"' : '',
 		},
 		{ label: 'THICKNESS', value: sign.thickness?.thickness },
+		{ label: 'METAL DEPTH', value: sign.depth?.depth },
 		{ label: 'WIDTH', value: sign.width ? sign.width + '"' : '' },
 		{ label: 'HEIGHT', value: sign.height ? sign.height + '"' : '' },
 		{ label: 'MOUNTING', value: sign.mounting },
 		{ label: 'ENVIRONMENT', value: sign.waterproof },
 		{ label: 'COLOR', value: sign.color?.name },
+		{ label: 'ACRYLIC COVER', value: sign.acrylicCover?.name },
+		{ label: 'LED LIGHT COLOR', value: sign.ledLightColor },
 		{ label: 'CUSTOM COLOR', value: sign.customColor },
 		{ label: 'METAL', value: sign.metal },
 		{
@@ -177,6 +182,8 @@ function getSignageDetailFields(sign) {
 		{ label: 'METAL FINISHING', value: sign.metalFinishing },
 		{ label: 'STEEL POLISHED', value: sign.stainlessSteelPolished },
 		{ label: 'BASE COLOR', value: sign.baseColor },
+		{ label: 'STUD LENGTH', value: sign.studLength },
+		{ label: 'SPACER STANDOFF DISTANCE', value: sign.spacerStandoffDistance },
 		{ label: 'PRINT PREFERENCE', value: sign.printPreference },
 		{ label: 'FINISHING', value: sign.finishing },
 		{ label: 'INSTALLATION', value: sign.installation },

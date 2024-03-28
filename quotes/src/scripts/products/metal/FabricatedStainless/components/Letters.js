@@ -489,7 +489,6 @@ export default function Letters({ item }) {
 			<div className="quote-grid mb-6">
 				<FontsDropdown
 					font={item.font}
-					fonts={NovaOptions.fonts}
 					fontRef={fontRef}
 					openFont={openFont}
 					setOpenFont={setOpenFont}

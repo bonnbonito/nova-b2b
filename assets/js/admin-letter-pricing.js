@@ -13,8 +13,8 @@ function displayLettersPricingTable() {
 
 			// Sort headers numerically, keeping 'Height' at the start
 			headers = headers.sort((a, b) => {
-				if (a === 'Height') return -1;
-				if (b === 'Height') return 1;
+				if (a === 'Height' || a === 'Depth') return -1;
+				if (b === 'Height' || b === 'Depth') return 1;
 				return parseFloat(a) - parseFloat(b);
 			});
 
@@ -43,7 +43,8 @@ function convertJson(tableString) {
 		return headers.reduce((acc, header, index) => {
 			const rawValue = values[index];
 			acc[header] = rawValue
-				? parseFloat(rawValue.replace(/,/g, '')) || rawValue
+				? (index !== 0 ? parseFloat(rawValue.replace(/,/g, '')) : rawValue) ||
+				  rawValue
 				: null;
 			return acc;
 		}, {});

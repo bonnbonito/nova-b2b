@@ -5,11 +5,10 @@ import Signage from '../../../Signage';
 import { PlusIcon } from '../../../svg/Icons';
 import { SignageCount } from '../../../utils/QuoteFunctions';
 import Letters from './components/Letters';
-import Logo from './components/Logo';
 
 export const QuoteContext = createContext(null);
 
-export default function FabricatedStainless() {
+export default function TrimLessFrontLit() {
 	const [signage, setSignage] = useState([]);
 	const [missing, setMissing] = useState([]);
 	const [tempFolder, setTempFolder] = useState('');
@@ -27,26 +26,31 @@ export default function FabricatedStainless() {
 					id: uuidv4(),
 					type: 'letters',
 					title: 'LETTERS 1',
+					depth: '',
 					letters: '',
 					comments: '',
 					font: '',
 					customFont: '',
-					customColor: '',
-					installation: '',
 					waterproof: '',
 					thickness: '',
-					color: { name: '', color: '' },
+					acrylicCover: { name: 'White', color: '#ffffff' },
+					mounting: '',
+					studLength: '',
+					spacerStandoffDistance: '',
+					color: { name: 'Black', color: '#000000' },
+					customColor: '',
 					letterHeight: '',
+					ledLightColor: '',
 					usdPrice: 0,
 					cadPrice: 0,
 					filePath: '',
 					fileName: '',
 					fileUrl: '',
 					file: '',
-					finishing: '',
-					stainlessSteelPolished: '',
-					stainLessMetalFinish: '',
-					metal: '',
+					fontFilePath: '',
+					fontFileName: '',
+					fontFileUrl: '',
+					fontFile: '',
 					product: NovaQuote.product,
 				},
 			]);
@@ -68,22 +72,33 @@ export default function FabricatedStainless() {
 
 	const defaultArgs = {
 		id: uuidv4(),
+		type: 'letters',
+		title: 'LETTERS 1',
+		depth: '',
+		letters: '',
 		comments: '',
-		installation: '',
-		thickness: '',
+		font: '',
+		customFont: '',
 		waterproof: '',
-		finishing: '',
+		thickness: '',
+		acrylicCover: { name: 'White', color: '#ffffff' },
+		mounting: '',
+		studLength: '',
+		spacerStandoffDistance: '',
+		color: { name: 'Black', color: '#000000' },
+		customColor: '',
+		letterHeight: '',
+		ledLightColor: '6500K White',
 		usdPrice: 0,
 		cadPrice: 0,
 		filePath: '',
 		fileName: '',
 		fileUrl: '',
 		file: '',
-		color: { name: '', color: '' },
-		customColor: '',
-		metal: '',
-		stainLessMetalFinish: '',
-		stainlessSteelPolished: '',
+		fontFilePath: '',
+		fontFileName: '',
+		fontFileUrl: '',
+		fontFile: '',
 		product: NovaQuote.product,
 	};
 
@@ -97,11 +112,6 @@ export default function FabricatedStainless() {
 				args = {
 					type: type,
 					title: `${type} ${count + 1}`,
-					letters: '',
-					font: '',
-					thickness_options: '',
-					letterHeight: '',
-					customFont: '',
 				};
 			} else {
 				args = {
@@ -189,17 +199,6 @@ export default function FabricatedStainless() {
 								style={{ border: '1px solid #d2d2d2d2' }}
 							>
 								ADD LETTERS
-								<PlusIcon />
-							</button>
-						)}
-
-						{SignageCount(signage, 'logo') < 5 && (
-							<button
-								className="flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white"
-								onClick={() => addSignage('logo')}
-								style={{ border: '1px solid #d2d2d2d2' }}
-							>
-								ADD LOGO
 								<PlusIcon />
 							</button>
 						)}
