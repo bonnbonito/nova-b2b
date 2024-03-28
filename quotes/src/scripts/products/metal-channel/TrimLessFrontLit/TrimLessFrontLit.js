@@ -183,11 +183,7 @@ export default function TrimLessFrontLit() {
 							addSignage={addSignage}
 							setMissing={setMissing}
 						>
-							{item.type === 'letters' ? (
-								<Letters key={item.id} item={item} />
-							) : (
-								<Logo key={item.id} item={item} />
-							)}
+							<Letters key={item.id} item={item} />
 						</Signage>
 					))}
 

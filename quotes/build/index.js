@@ -5841,10 +5841,7 @@ function TrimLessFrontLit() {
     setSignage: setSignage,
     addSignage: addSignage,
     setMissing: setMissing
-  }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_5__["default"], {
-    key: item.id,
-    item: item
-  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Logo, {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_5__["default"], {
     key: item.id,
     item: item
   }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
