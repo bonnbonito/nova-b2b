@@ -14,13 +14,12 @@ export default function LaserCutAcrylic() {
 	const [missing, setMissing] = useState([]);
 	const [tempFolder, setTempFolder] = useState('');
 	const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
+	const storage =
+		window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id;
+	const localStorageQuote = localStorage.getItem(storage);
+	const savedStorage = JSON.parse(localStorageQuote);
 
 	function setDefaultSignage() {
-		const savedStorage = JSON.parse(
-			localStorage.getItem(
-				window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id
-			)
-		);
 		if (savedStorage?.length > 0) {
 			setSignage(savedStorage);
 		} else {
@@ -62,11 +61,7 @@ export default function LaserCutAcrylic() {
 			const currentSignage = JSON.parse(NovaQuote.signage);
 			console.log(currentSignage);
 			if (currentSignage) {
-				const savedStorage = JSON.parse(
-					localStorage.getItem(
-						window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id
-					)
-				);
+				const savedStorage = JSON.parse(localStorage.getItem(storage));
 				if (savedStorage?.length > 0) {
 					setSignage(savedStorage);
 				} else {
@@ -137,10 +132,7 @@ export default function LaserCutAcrylic() {
 	}
 
 	useEffect(() => {
-		localStorage.setItem(
-			window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id,
-			JSON.stringify(signage)
-		);
+		localStorage.setItem(storage, JSON.stringify(signage));
 	}, [signage]);
 
 	useEffect(() => {
@@ -187,6 +179,7 @@ export default function LaserCutAcrylic() {
 							setSignage={setSignage}
 							addSignage={addSignage}
 							setMissing={setMissing}
+							storage={storage}
 						>
 							{item.type === 'letters' ? (
 								<Letters key={item.id} item={item} />

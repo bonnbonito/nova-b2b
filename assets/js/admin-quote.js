@@ -187,6 +187,7 @@ function getSignageDetailFields(sign) {
 		{ label: 'PRINT PREFERENCE', value: sign.printPreference },
 		{ label: 'FINISHING', value: sign.finishing },
 		{ label: 'INSTALLATION', value: sign.installation },
+		{ label: 'ACRYLIC REVEAL', value: sign.acrylicReveal },
 		{ label: 'FONT', value: sign.font },
 		{ label: 'PIECES/CUTOUTS', value: sign.pieces },
 		{ label: 'COMMENTS', value: sign.comments },

@@ -60,7 +60,7 @@ export default function Sidebar({ signage, required, tempFolder }) {
 						</div>
 					)}
 
-					{NovaMyAccount.tax_rate && (
+					{Number(totalPrice) > 0 && NovaMyAccount.tax_rate && (
 						<div className="flex justify-between font-title uppercase md:tracking-[1.6px]">
 							{NovaMyAccount.tax_rate.tax_rate_name}
 							<span>
@@ -81,7 +81,7 @@ export default function Sidebar({ signage, required, tempFolder }) {
 
 				<div className="text-[11px] mb-5">
 					<ul>
-						<li>Tax not included</li>
+						{!NovaMyAccount.tax_rate.tax_rate && <li>Tax not included</li>}
 						<li>The final quote will be ready in 24 business hours.</li>
 						<li>Extra freight charges may apply for connected fonts.</li>
 					</ul>

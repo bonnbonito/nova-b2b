@@ -5,7 +5,7 @@ function displayLettersPricingTable() {
 	const letterPricingTables = AdminSignage.letter_pricing_tables;
 	console.log(letterPricingTables);
 
-	if (letterPricingTables.length > 0) {
+	if (letterPricingTables) {
 		const letterOutput = document.querySelectorAll('.letter-output');
 
 		letterPricingTables.forEach((table, index) => {

@@ -1207,6 +1207,10 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 				$html .= '<strong>Acrylic Base: </strong>' . htmlspecialchars( $object->acrylicBase->name ) . '<br>';
 			}
 
+			if ( isset( $object->acrylicReveal ) && ! empty( $object->acrylicReveal ) ) {
+				$html .= '<strong>Acrylic Base: </strong>' . htmlspecialchars( $object->acrylicReveal ) . '<br>';
+			}
+
 			if ( isset( $object->stainlessSteelPolished ) && ! empty( $object->stainlessSteelPolished ) ) {
 				$html .= '<strong>Steel Polished: </strong>' . htmlspecialchars( $object->stainlessSteelPolished ) . '<br>';
 			}

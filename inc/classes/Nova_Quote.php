@@ -1054,6 +1054,10 @@ h6 {
 			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">THICKNESS: </strong></td><td><font face="lato">' . $projectArray['thickness']->thickness . '</font></td></tr>';
 		}
 
+		if ( isset( $projectArray['depth'] ) && ! empty( $projectArray['depth'] ) && $projectArray['depth'] ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">METAL DEPTH: </strong></td><td><font face="lato">' . $projectArray['depth']->depth . '</font></td></tr>';
+		}
+
 		if ( isset( $projectArray['width'] ) && ! empty( $projectArray['width'] ) ) {
 			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">WIDTH: </strong></td><td><font face="lato">' . $projectArray['width'] . '"</font></td></tr>';
 		}
@@ -1080,6 +1084,10 @@ h6 {
 
 		if ( isset( $projectArray['stainLessMetalFinish'] ) && ! empty( $projectArray['stainLessMetalFinish'] ) ) {
 			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">METAL FINISH: </strong></td><td><font face="lato">' . $projectArray['stainLessMetalFinish'] . '</font></td></tr>';
+		}
+
+		if ( isset( $projectArray['acrylicReveal'] ) && ! empty( $projectArray['acrylicReveal'] ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">ACRYLIC REVEAL: </strong></td><td><font face="lato">' . $projectArray['acrylicReveal'] . '</font></td></tr>';
 		}
 
 		if ( isset( $projectArray['mounting'] ) && ! empty( $projectArray['mounting'] ) ) {
@@ -1138,8 +1146,24 @@ h6 {
 			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">ACRYLIC BASE: </strong></td><td><font face="lato">' . $projectArray['acrylicBase']->name . '</font></td></tr>';
 		}
 
+		if ( isset( $projectArray['studLength'] ) && ! empty( $projectArray['studLength'] ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">STUD LENGTH: </strong></td><td><font face="lato">' . $projectArray['studLength'] . '</font></td></tr>';
+		}
+
+		if ( isset( $projectArray['spacerStandoffDistance'] ) && ! empty( $projectArray['spacerStandoffDistance'] ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">SPACER STANDOFF DISTANCE: </strong></td><td><font face="lato">' . $projectArray['spacerStandoffDistance'] . '</font></td></tr>';
+		}
+
+		if ( isset( $projectArray['ledLightColor'] ) && ! empty( $projectArray['ledLightColor'] ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">LED LIGHT COLOR: </strong></td><td><font face="lato">' . $projectArray['ledLightColor'] . '</font></td></tr>';
+		}
+
 		if ( isset( $projectArray['installation'] ) && ! empty( $projectArray['installation'] ) ) {
 			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">INSTALLATION: </strong></td><td><font face="lato">' . $projectArray['installation'] . '</font></td></tr>';
+		}
+
+		if ( isset( $projectArray['acrylicCover'] ) && ! empty( $projectArray['acrylicCover'] ) && isset( $projectArray['acrylicCover']->name ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">ACRYLIC COVER: </strong></td><td><font face="lato">' . $projectArray['acrylicCover']->name . '</font></td></tr>';
 		}
 
 		if ( isset( $projectArray['pieces'] ) && ! empty( $projectArray['pieces'] ) ) {

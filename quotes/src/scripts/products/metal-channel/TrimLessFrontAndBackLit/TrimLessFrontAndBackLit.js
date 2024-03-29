@@ -8,7 +8,7 @@ import Letters from './components/Letters';
 
 export const QuoteContext = createContext(null);
 
-export default function TrimLessBackLit() {
+export default function TrimLessFrontAndBackLit() {
 	const [signage, setSignage] = useState([]);
 	const [missing, setMissing] = useState([]);
 	const [tempFolder, setTempFolder] = useState('');
@@ -20,8 +20,10 @@ export default function TrimLessBackLit() {
 
 	function setDefaultSignage() {
 		if (savedStorage?.length > 0) {
+			console.log('loading saved');
 			setSignage(savedStorage);
 		} else {
+			console.log('setting');
 			setSignage([
 				{
 					id: uuidv4(),
@@ -34,13 +36,14 @@ export default function TrimLessBackLit() {
 					customFont: '',
 					waterproof: '',
 					thickness: '',
-					finishing: '',
+					acrylicCover: { name: 'White', color: '#ffffff' },
 					mounting: '',
 					studLength: '',
 					spacerStandoffDistance: '',
+					color: { name: 'Black', color: '#000000' },
 					customColor: '',
 					letterHeight: '',
-					ledLightColor: '',
+					ledLightColor: '6500K White',
 					usdPrice: 0,
 					cadPrice: 0,
 					filePath: '',
@@ -50,9 +53,7 @@ export default function TrimLessBackLit() {
 					fontFilePath: '',
 					fontFileName: '',
 					fontFileUrl: '',
-					metalFinish: '',
 					fontFile: '',
-					acrylicReveal: '0',
 					product: NovaQuote.product,
 				},
 			]);
@@ -83,12 +84,12 @@ export default function TrimLessBackLit() {
 		customFont: '',
 		waterproof: '',
 		thickness: '',
-		finishing: '',
+		acrylicCover: { name: 'White', color: '#ffffff' },
 		mounting: '',
 		studLength: '',
 		spacerStandoffDistance: '',
+		color: { name: 'Black', color: '#000000' },
 		customColor: '',
-		metalFinish: '',
 		letterHeight: '',
 		ledLightColor: '6500K White',
 		usdPrice: 0,
@@ -101,7 +102,6 @@ export default function TrimLessBackLit() {
 		fontFileName: '',
 		fontFileUrl: '',
 		fontFile: '',
-		acrylicReveal: '0',
 		product: NovaQuote.product,
 	};
 
@@ -172,7 +172,7 @@ export default function TrimLessBackLit() {
 			}}
 		>
 			<div className="md:flex gap-6">
-				<div className="md:w-3/4 w-full">
+				<div className="md:w-3/4 w-full flex flex-col">
 					{signage.map((item, index) => (
 						<Signage
 							index={index}

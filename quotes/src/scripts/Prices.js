@@ -123,6 +123,14 @@ export default function Prices({ item }) {
 					<div className="text-left text-sm">{item.metalFinishing}</div>
 				</div>
 			)}
+			{item.acrylicReveal && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						ACRYLIC REVEAL
+					</div>
+					<div className="text-left text-sm">{item.acrylicReveal}</div>
+				</div>
+			)}
 			{item.stainlessSteelPolished && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
@@ -222,6 +230,14 @@ export default function Prices({ item }) {
 						METAL FINISH
 					</div>
 					<div className="text-left text-sm">{item.metalFinish?.name}</div>
+				</div>
+			)}
+			{typeof item.metalFinish !== 'object' && item.metalFinish && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						METAL FINISH
+					</div>
+					<div className="text-left text-sm">{item.metalFinish}</div>
 				</div>
 			)}
 			{item.metalLaminate && (

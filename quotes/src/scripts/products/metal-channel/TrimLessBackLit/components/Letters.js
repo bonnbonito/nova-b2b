@@ -4,19 +4,21 @@ import FontsDropdown from '../../../../FontsDropdown';
 import UploadFile from '../../../../UploadFile';
 import UploadFont from '../../../../UploadFont';
 import useOutsideClick from '../../../../utils/ClickOutside';
-import {
-	colorOptions,
-	translucentGraphicFilms,
-} from '../../../../utils/ColorOptions';
+import { colorOptions } from '../../../../utils/ColorOptions';
 import convert_json from '../../../../utils/ConvertJson';
+import { getLetterPricingTableByTitle } from '../../../../utils/Pricing';
 import { waterProofOptions } from '../../../../utils/SignageOptions';
 import {
+	acrylicRevealOptions,
 	depthOptions,
+	finishingOptions,
 	ledLightColors,
 	mountingDefaultOptions,
 	spacerStandoffDefaultOptions,
 	studLengthOptions,
 } from '../../metalChannelOptions';
+
+import { metalFinishOptions } from '../../../metal/metalOptions';
 
 import { QuoteContext } from '../TrimLessBackLit';
 
@@ -46,7 +48,10 @@ export default function Letters({ item }) {
 	const [openColor, setOpenColor] = useState(false);
 	const [waterproof, setWaterproof] = useState(item.waterproof);
 
+	const [letterPricing, setLetterPricing] = useState([]);
+
 	const [depth, setDepth] = useState(item.depth);
+	const [acrylicReveal, setAcrylicReveal] = useState(item.acrylicReveal);
 
 	const [fileName, setFileName] = useState(item.fileName);
 	const [fileUrl, setFileUrl] = useState(item.fileUrl);
@@ -61,6 +66,10 @@ export default function Letters({ item }) {
 	const [letterHeightOptions, setLetterHeightOptions] = useState([]);
 	const [customColor, setCustomColor] = useState(item.customColor);
 
+	const [selectedFinishing, setSelectedFinishing] = useState(item.finishing);
+
+	const [metalFinish, setMetalFinish] = useState(item.metalFinish);
+
 	const [selectedLetterHeight, setSelectedLetterHeight] = useState(
 		item.letterHeight
 	);
@@ -72,8 +81,6 @@ export default function Letters({ item }) {
 		max: 40,
 	});
 
-	const [openAcrylicCover, setOpenAcrylicCover] = useState(false);
-	const [acrylicCover, setAcrylicCover] = useState(item.acrylicCover);
 	const [studLength, setStudLength] = useState(item.studLength);
 
 	const [spacerStandoffOptions, setSpacerStandoffOptions] = useState(
@@ -90,12 +97,6 @@ export default function Letters({ item }) {
 
 	const colorRef = useRef(null);
 	const fontRef = useRef(null);
-	const acrylicColorRef = useRef(null);
-
-	const letterPricing =
-		NovaQuote.letter_pricing_table?.pricing_table.length > 0
-			? convert_json(NovaQuote.letter_pricing_table.pricing_table)
-			: [];
 
 	useEffect(() => {
 		console.log('Attempting to preload fonts...');
@@ -107,7 +108,6 @@ export default function Letters({ item }) {
 			}
 		}
 		preloadFonts();
-		console.log(letterPricing);
 	}, []);
 
 	const loadingFonts = async () => {
@@ -171,10 +171,12 @@ export default function Letters({ item }) {
 					fontFileUrl: fontFileUrl,
 					customColor: customColor,
 					ledLightColor: ledLightColor,
-					acrylicCover: acrylicCover,
 					mounting: mounting,
 					studLength: studLength,
+					finishing: selectedFinishing,
 					spacerStandoffDistance: spacerStandoffDistance,
+					metalFinish: metalFinish,
+					acrylicReveal: acrylicReveal,
 				};
 			} else {
 				return sign;
@@ -193,7 +195,27 @@ export default function Letters({ item }) {
 
 	const handleOnChangeWaterproof = (e) => setWaterproof(e.target.value);
 
+	const handleOnChangeAcrylicReveal = (e) => {
+		const target = e.target.value;
+		setAcrylicReveal(() => target);
+	};
+
 	const handleOnChangeLedLight = (e) => setLedLightColor(e.target.value);
+
+	const handleChangeFinishing = (e) => {
+		const target = e.target.value;
+		if (target === 'Metal') {
+			setColor({ name: '', color: '' });
+			setMetalFinish('');
+		} else {
+			setColor({ name: 'Black', color: '#000000' });
+		}
+		setSelectedFinishing(e.target.value);
+	};
+
+	const handelMetalFinishChange = (e) => {
+		setMetalFinish(e.target.value);
+	};
 
 	const handleonChangeSpacerDistance = (e) => {
 		setSpacerStandoffDistance(e.target.value);
@@ -260,57 +282,6 @@ export default function Letters({ item }) {
 	const handleOnChangeLetterHeight = (e) => {
 		setSelectedLetterHeight(e.target.value);
 	};
-
-	useEffect(() => {
-		if (letterPricing.length > 0 && selectedLetterHeight && depth) {
-			const pricingDetail = letterPricing[selectedLetterHeight - 5];
-			const baseLetterPrice = pricingDetail[depth.value];
-
-			let totalLetterPrice = 0;
-			const lettersArray = letters.trim().split('');
-
-			if (
-				lettersArray.length > 0 &&
-				selectedLetterHeight &&
-				waterproof &&
-				depth
-			) {
-				lettersArray.forEach((letter) => {
-					let letterPrice = baseLetterPrice;
-
-					if (letter === ' ') {
-						// If the character is a space, set the price to 0 and skip further checks
-						letterPrice = 0;
-					} else if (letter.match(/[a-z]/)) {
-						// Check for lowercase letter
-						letterPrice *= lowerCasePricing; // 80% of the base price
-					} else if (letter.match(/[A-Z]/)) {
-						// Check for uppercase letter
-						// Uppercase letters use 100% of base price, so no change needed
-					} else if (letter.match(/[`~"*,.\-']/)) {
-						// Check for small punctuation marks
-						letterPrice *= smallPunctuations; // 30% of the base price
-					} else if (letter.match(/[^a-zA-Z]/)) {
-						// Check for symbol (not a letter or small punctuation)
-						// Symbols use 100% of base price, so no change needed
-					}
-
-					// Adjusting for waterproof and finishing
-					letterPrice *= waterproof === 'Indoor' ? 1 : 1.03;
-
-					letterPrice *= acrylicCover?.name === 'White' ? 1 : 1.1;
-
-					totalLetterPrice += letterPrice;
-				});
-
-				setUsdPrice(totalLetterPrice.toFixed(2));
-				setCadPrice((totalLetterPrice * parseFloat(exchangeRate)).toFixed(2));
-			} else {
-				setUsdPrice(0);
-				setCadPrice(0);
-			}
-		}
-	}, [selectedLetterHeight, letters, waterproof, lettersHeight, acrylicCover]);
 
 	useEffect(() => {
 		setLetterHeightOptions(() =>
@@ -405,7 +376,6 @@ export default function Letters({ item }) {
 		font,
 		waterproof,
 		color,
-		acrylicCover,
 		usdPrice,
 		cadPrice,
 		selectedLetterHeight,
@@ -421,33 +391,124 @@ export default function Letters({ item }) {
 		mounting,
 		studLength,
 		spacerStandoffDistance,
+		selectedFinishing,
+		metalFinish,
+		acrylicReveal,
 	]);
 
 	useEffect(() => {
-		const newHeightOptions = letterPricing?.filter((item) => {
-			const value = item[depth?.value];
-			return (
-				value !== '' &&
-				value !== null &&
-				value !== undefined &&
-				value !== false &&
-				!isNaN(value)
+		if (depth?.value) {
+			const table = convert_json(
+				getLetterPricingTableByTitle(
+					depth?.depth,
+					NovaQuote.letter_pricing_tables
+				)
 			);
-		});
+			setLetterPricing(() => table);
 
-		if (newHeightOptions.length > 0) {
-			setLettersHeight(() => ({
-				min: newHeightOptions[0].Depth,
-				max: newHeightOptions[newHeightOptions.length - 1].Depth,
-			}));
+			if (depth.value == 8) {
+				if (selectedLetterHeight < 12) {
+					setSelectedLetterHeight('');
+				}
+				setLettersHeight(() => ({
+					min: 12,
+					max: 40,
+				}));
+			} else {
+				setLettersHeight(() => ({
+					min: 5,
+					max: 40,
+				}));
+			}
 		}
-	}, [depth]);
+	}, [depth, selectedLetterHeight]);
 
-	useOutsideClick([colorRef, fontRef, acrylicColorRef], () => {
+	useOutsideClick([colorRef, fontRef], () => {
 		setOpenColor(false);
 		setOpenFont(false);
-		setOpenAcrylicCover(false);
 	});
+
+	useEffect(() => {
+		if (
+			letterPricing &&
+			selectedLetterHeight &&
+			depth &&
+			waterproof &&
+			acrylicReveal
+		) {
+			const pricingDetail = letterPricing[selectedLetterHeight - 5];
+
+			if (pricingDetail) {
+				let mm = 0;
+				if (acrylicReveal == '1/5"') {
+					mm = '5mm';
+				} else if (acrylicReveal == '2/5"') {
+					mm = '10mm';
+				} else if (acrylicReveal == '3/5"') {
+					mm = '15mm';
+				} else {
+					mm = 0;
+				}
+
+				const baseLetterPrice = pricingDetail[mm];
+
+				let totalLetterPrice = 0;
+				const lettersArray = letters.trim().split('');
+
+				lettersArray.forEach((letter) => {
+					let letterPrice = baseLetterPrice;
+
+					if (letter === ' ') {
+						// If the character is a space, set the price to 0 and skip further checks
+						letterPrice = 0;
+					} else if (letter.match(/[a-z]/)) {
+						// Check for lowercase letter
+						letterPrice *= lowerCasePricing; // 80% of the base price
+					} else if (letter.match(/[A-Z]/)) {
+						// Check for uppercase letter
+						// Uppercase letters use 100% of base price, so no change needed
+					} else if (letter.match(/[`~"*,.\-']/)) {
+						// Check for small punctuation marks
+						letterPrice *= smallPunctuations; // 30% of the base price
+					} else if (letter.match(/[^a-zA-Z]/)) {
+						// Check for symbol (not a letter or small punctuation)
+						// Symbols use 100% of base price, so no change needed
+					}
+
+					// Adjusting for waterproof and finishing
+					letterPrice *= waterproof === 'Indoor' ? 1 : 1.03;
+
+					if (metalFinish && metalFinish.includes('Polished')) {
+						letterPrice *= 1.3;
+					}
+
+					if (metalFinish && metalFinish.includes('Electroplated')) {
+						letterPrice *= 1.2;
+					}
+
+					totalLetterPrice += letterPrice;
+				});
+
+				setUsdPrice(totalLetterPrice.toFixed(2));
+				setCadPrice((totalLetterPrice * parseFloat(exchangeRate)).toFixed(2));
+			} else {
+				setUsdPrice(0);
+				setCadPrice(0);
+			}
+		} else {
+			setUsdPrice(0);
+			setCadPrice(0);
+		}
+	}, [
+		selectedLetterHeight,
+		letters,
+		waterproof,
+		lettersHeight,
+		letterPricing,
+		depth,
+		acrylicReveal,
+		metalFinish,
+	]);
 
 	useEffect(() => {
 		color != 'Custom Color' && setCustomColor('');
@@ -466,7 +527,7 @@ export default function Letters({ item }) {
 							whiteSpace: 'nowrap',
 							overflow: 'hidden',
 							fontFamily: font,
-							color: color.color,
+							color: color?.color || '#000000',
 							textShadow: '0px 0px 1px rgba(0, 0, 0, 1)',
 						}}
 					>
@@ -528,55 +589,76 @@ export default function Letters({ item }) {
 					value={item.letterHeight}
 				/>
 
-				<div className="px-[1px] relative" ref={colorRef}>
-					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-						Return Color
-					</label>
-					<div
-						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-							color.name ? 'text-black' : 'text-[#dddddd]'
-						}`}
-						onClick={() => setOpenColor((prev) => !prev)}
-					>
-						<span
-							className="rounded-full w-[18px] h-[18px] border mr-2"
-							style={{ backgroundColor: color.color }}
-						></span>
-						{color.name === '' ? 'CHOOSE OPTION' : color.name}
-					</div>
-					{openColor && (
-						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
-							{colorOptions.map((color) => {
-								return (
-									<div
-										className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
-										onClick={() => {
-											setColor(color);
-											setOpenColor(false);
-										}}
-									>
-										<span
-											className="w-[18px] h-[18px] inline-block rounded-full border"
-											style={{ backgroundColor: color.color }}
-										></span>
-										{color.name}
-									</div>
-								);
-							})}
-						</div>
-					)}
-				</div>
-
 				<Dropdown
-					title="LED Light Color"
-					onChange={handleOnChangeLedLight}
-					options={ledLightColors.map((color) => (
-						<option value={color} selected={color == item.ledLightColor}>
-							{color}
+					title="Finishing"
+					onChange={handleChangeFinishing}
+					options={finishingOptions.map((finishing) => (
+						<option
+							value={finishing.value}
+							selected={finishing.value === item.finishing}
+						>
+							{finishing.value}
 						</option>
 					))}
-					value={item.ledLightColor}
+					value={item.finishing}
 				/>
+
+				{selectedFinishing === 'Metal' && (
+					<Dropdown
+						title="Metal Finish"
+						onChange={handelMetalFinishChange}
+						options={metalFinishOptions.map((finish) => (
+							<option
+								value={finish.option}
+								selected={finish.option === metalFinish}
+							>
+								{finish.option}
+							</option>
+						))}
+						value={item.metalFinish}
+					/>
+				)}
+
+				{selectedFinishing === 'Painted' && (
+					<div className="px-[1px] relative" ref={colorRef}>
+						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+							Face & Return Color
+						</label>
+						<div
+							className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
+								color.name ? 'text-black' : 'text-[#dddddd]'
+							}`}
+							onClick={() => setOpenColor((prev) => !prev)}
+						>
+							<span
+								className="rounded-full w-[18px] h-[18px] border mr-2"
+								style={{ backgroundColor: color.color }}
+							></span>
+							{color.name === '' ? 'CHOOSE OPTION' : color.name}
+						</div>
+						{openColor && (
+							<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
+								{colorOptions.map((color) => {
+									return (
+										<div
+											className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
+											onClick={() => {
+												setColor(color);
+												setOpenColor(false);
+											}}
+										>
+											<span
+												className="w-[18px] h-[18px] inline-block rounded-full border"
+												style={{ backgroundColor: color.color }}
+											></span>
+											{color.name}
+										</div>
+									);
+								})}
+							</div>
+						)}
+					</div>
+				)}
 
 				<Dropdown
 					title="Environment"
@@ -592,44 +674,27 @@ export default function Letters({ item }) {
 					value={item.waterproof}
 				/>
 
-				<div className="px-[1px] relative" ref={acrylicColorRef}>
-					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-						Acrylic Cover
-					</label>
-					<div
-						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-							acrylicCover.name ? 'text-black' : 'text-[#dddddd]'
-						}`}
-						onClick={() => setOpenAcrylicCover((prev) => !prev)}
-					>
-						<span
-							className="rounded-full w-[18px] h-[18px] border mr-2"
-							style={{ backgroundColor: acrylicCover.color }}
-						></span>
-						{acrylicCover.name === '' ? 'CHOOSE OPTION' : acrylicCover.name}
-					</div>
-					{openAcrylicCover && (
-						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
-							{translucentGraphicFilms.map((color) => {
-								return (
-									<div
-										className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
-										onClick={() => {
-											setAcrylicCover(color);
-											setOpenAcrylicCover(false);
-										}}
-									>
-										<span
-											className="w-[18px] h-[18px] inline-block rounded-full border"
-											style={{ backgroundColor: color.color }}
-										></span>
-										{color.name}
-									</div>
-								);
-							})}
-						</div>
-					)}
-				</div>
+				<Dropdown
+					title="Acrylic Reveal"
+					onChange={handleOnChangeAcrylicReveal}
+					options={acrylicRevealOptions.map((option) => (
+						<option value={option} selected={option == item.acrylicReveal}>
+							{option}
+						</option>
+					))}
+					value={item.acrylicReveal}
+				/>
+
+				<Dropdown
+					title="LED Light Color"
+					onChange={handleOnChangeLedLight}
+					options={ledLightColors.map((color) => (
+						<option value={color} selected={color == item.ledLightColor}>
+							{color}
+						</option>
+					))}
+					value={item.ledLightColor}
+				/>
 
 				<Dropdown
 					title="Mounting"

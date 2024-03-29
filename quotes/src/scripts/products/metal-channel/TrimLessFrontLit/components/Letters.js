@@ -107,7 +107,6 @@ export default function Letters({ item }) {
 			}
 		}
 		preloadFonts();
-		console.log(letterPricing);
 	}, []);
 
 	const loadingFonts = async () => {

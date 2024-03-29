@@ -14,11 +14,6 @@ export default function CustomProject() {
 	const currency = wcumcs_vars_data.currency;
 
 	function setDefaultSignage() {
-		const savedStorage = JSON.parse(
-			localStorage.getItem(
-				window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id
-			)
-		);
 		if (savedStorage?.length > 0) {
 			setSignage(savedStorage);
 		} else {
@@ -92,10 +87,7 @@ export default function CustomProject() {
 	}
 
 	useEffect(() => {
-		localStorage.setItem(
-			window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id,
-			JSON.stringify(signage)
-		);
+		localStorage.setItem(storage, JSON.stringify(signage));
 	}, [signage]);
 
 	return (

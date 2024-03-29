@@ -173,6 +173,13 @@ export default function PricesView({ item }) {
 					</div>
 				)}
 
+				{item.acrylicReveal && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">ACRYLIC REVEAL</div>
+						<div className="text-left text-[14px]">{item.acrylicReveal}</div>
+					</div>
+				)}
+
 				{item.stainlessSteelPolished && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
 						<div className="text-left text-xs font-title">
@@ -241,7 +248,7 @@ export default function PricesView({ item }) {
 					</div>
 				)}
 
-				{item.metalFinish && (
+				{item.metalFinish?.name && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
 						<div className="text-left text-xs font-title">METAL FINISH</div>
 						<div className="text-left text-[14px]">

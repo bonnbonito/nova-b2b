@@ -162,12 +162,12 @@ class Scripts {
 		return ! empty( $state_code ) ? $state_code : false;
 	}
 
-	public function get_tax_rate_by_project( $post_id ) {
-		if ( ! $post_id ) {
-			return;
+	public function get_tax_rate_by_project( $post_id = null ) {
+		if ( $post_id ) {
+			$user_id = get_field( 'partner', $post_id );
+		} else {
+			$user_id = get_current_user_id();
 		}
-
-		$user_id = get_field( 'partner', $post_id );
 
 		return $this->get_woocommerce_tax_rate_by_country_and_state( $user_id, '', '' );
 	}

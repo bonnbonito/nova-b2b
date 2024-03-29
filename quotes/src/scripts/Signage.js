@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Tooltip } from 'react-tooltip';
 import { v4 as uuidv4 } from 'uuid'; // Make sure to import uuid
 import EditableText from './EditableText';
-import { CollapseIcon, DuplicateIcon, TrashIcon } from './svg/Icons';
+import { ClearIcon, CollapseIcon, DuplicateIcon, TrashIcon } from './svg/Icons';
 import { SignageCount } from './utils/QuoteFunctions';
 
 export default function Signage({
@@ -12,9 +12,11 @@ export default function Signage({
 	setSignage,
 	children,
 	setMissing,
+	storage,
 }) {
 	const [open, setOpen] = useState(true);
 	const [itemTitle, setItemTitle] = useState(item.title);
+	const [loading, setLoading] = useState(false);
 
 	function recountSignageTitles(updatedSignage) {
 		const count = {}; // Object to keep track of the count of each type
@@ -67,6 +69,13 @@ export default function Signage({
 		setSignage(() => updatedSignage);
 	}
 
+	const clearStorage = (e) => {
+		e.preventDefault();
+		setLoading(true);
+		localStorage.removeItem(storage);
+		window.location.href = window.location.pathname;
+	};
+
 	const updateMissingTitle = () => {
 		setMissing((prevMissing) => {
 			const existingIndex = prevMissing.findIndex(
@@ -104,6 +113,14 @@ export default function Signage({
 				/>
 
 				<div className="flex gap-6">
+					<div
+						className="cursor-pointer"
+						onClick={clearStorage}
+						data-tooltip-id={`${item.id}`}
+						data-tooltip-content="Create from scratch"
+					>
+						<ClearIcon loading={loading} />
+					</div>
 					<div
 						className="cursor-pointer"
 						onClick={() => setOpen(!open)}
