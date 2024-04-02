@@ -200,12 +200,7 @@ class Woocommerce {
 <p>Original Total: <?php echo $original_total; ?></p>
 
 		<?php
-		$order = wc_get_order( $post->ID );
-		echo '<pre>';
-		print_r( $order->get_meta_data() );
-		echo '</pre>';
 
-		// You can include HTML and PHP here to show whatever content you need.
 	}
 
 	public function deposit_insert_order_total_row( $total_rows, $order ) {

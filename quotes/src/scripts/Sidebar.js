@@ -5,7 +5,9 @@ import Prices from './Prices';
 const currency = wcumcs_vars_data.currency;
 
 export default function Sidebar({ signage, required, tempFolder }) {
-	const taxRate = NovaMyAccount.tax_rate;
+	const taxRateObj = NovaMyAccount.tax_rate;
+	const taxRate = taxRateObj ? parseFloat(taxRateObj.tax_rate / 100) : 0;
+	const taxRateName = taxRateObj ? taxRateObj.tax_rate_name : 'Tax';
 
 	const totalUsdPrice = signage.reduce(
 		(acc, item) => acc + parseFloat(item.usdPrice),
@@ -60,9 +62,9 @@ export default function Sidebar({ signage, required, tempFolder }) {
 						</div>
 					)}
 
-					{Number(totalPrice) > 0 && NovaMyAccount.tax_rate && (
+					{taxRate > 0 && (
 						<div className="flex justify-between font-title uppercase md:tracking-[1.6px]">
-							{NovaMyAccount.tax_rate.tax_rate_name}
+							{taxRateName}
 							<span>
 								{currency}${Number(taxCompute.toFixed(2)).toLocaleString()}
 							</span>
@@ -81,7 +83,7 @@ export default function Sidebar({ signage, required, tempFolder }) {
 
 				<div className="text-[11px] mb-5">
 					<ul>
-						{!NovaMyAccount.tax_rate.tax_rate && <li>Tax not included</li>}
+						{taxRate === 0 && <li>Tax not included</li>}
 						<li>The final quote will be ready in 24 business hours.</li>
 						<li>Extra freight charges may apply for connected fonts.</li>
 					</ul>

@@ -1075,6 +1075,23 @@ function PricesView({
     lineHeight: '1.6',
     paddingBottom: '20px'
   };
+  const headlineRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const adjustFontSize = () => {
+    const container = headlineRef.current.parentNode;
+    const headline = headlineRef.current;
+
+    // Reset the font-size to the maximum desired font-size
+    headline.style.fontSize = '50px';
+
+    // Check if the headline is wider than its container
+    while (headline.scrollWidth > container.offsetWidth && parseFloat(window.getComputedStyle(headline).fontSize) > 0) {
+      // Reduce the font-size by 1px until it fits
+      headline.style.fontSize = `${parseFloat(window.getComputedStyle(headline).fontSize) - 1}px`;
+    }
+  };
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    adjustFontSize();
+  }, []);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "pb-8 mb-8 border-b-nova-light border-b"
   }, item.type === 'letters' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -1083,7 +1100,8 @@ function PricesView({
     className: "w-full self-center"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "self-center text-center",
-    style: style
+    style: style,
+    ref: headlineRef
   }, item.letters))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-xs text-[#5E5E5E] mb-8 mt-1 pl-2"
   }, "Preview Image. Actual product color may differ.")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -1575,7 +1593,9 @@ function Sidebar({
   required,
   tempFolder
 }) {
-  const taxRate = NovaMyAccount.tax_rate;
+  const taxRateObj = NovaMyAccount.tax_rate;
+  const taxRate = taxRateObj ? parseFloat(taxRateObj.tax_rate / 100) : 0;
+  const taxRateName = taxRateObj ? taxRateObj.tax_rate_name : 'Tax';
   const totalUsdPrice = signage.reduce((acc, item) => acc + parseFloat(item.usdPrice), 0);
   const totalCadPrice = signage.reduce((acc, item) => acc + parseFloat(item.cadPrice), 0);
   const totalPrice = currency === 'USD' ? totalUsdPrice : totalCadPrice;
@@ -1603,9 +1623,9 @@ function Sidebar({
     className: "flex justify-between pt-2 font-title uppercase md:tracking-[1.6px]"
   }, "SUBTOTAL", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, currency, "$", Number(totalPrice.toFixed(2)).toLocaleString())), Number(totalPrice) > 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex justify-between font-title uppercase md:tracking-[1.6px]"
-  }, "SHIPPING", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, currency, "$", Number(estimatedShipping.toFixed(2)).toLocaleString())), Number(totalPrice) > 0 && NovaMyAccount.tax_rate && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "SHIPPING", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, currency, "$", Number(estimatedShipping.toFixed(2)).toLocaleString())), taxRate > 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex justify-between font-title uppercase md:tracking-[1.6px]"
-  }, NovaMyAccount.tax_rate.tax_rate_name, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, currency, "$", Number(taxCompute.toFixed(2)).toLocaleString()))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("hr", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, taxRateName, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, currency, "$", Number(taxCompute.toFixed(2)).toLocaleString()))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("hr", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex justify-between mt-5 mb-3"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", {
     className: "text-2xl"
@@ -1613,7 +1633,7 @@ function Sidebar({
     className: "text-2xl"
   }, currency, "$", Number(estimateTotalPrice.toFixed(2)).toLocaleString())), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-[11px] mb-5"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", null, !NovaMyAccount.tax_rate.tax_rate && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Tax not included"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The final quote will be ready in 24 business hours."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Extra freight charges may apply for connected fonts."))), signage.length > 0 && NovaQuote.quote_status?.value !== 'processing' && NovaQuote.quote_status?.value !== 'ready' && NovaQuote.quote_status?.value !== 'archived' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, NovaQuote.is_editting === '1' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, NovaQuote.user_role[0] !== 'pending' && NovaQuote.not_author_but_admin === 'no' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", null, taxRate === 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Tax not included"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The final quote will be ready in 24 business hours."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Extra freight charges may apply for connected fonts."))), signage.length > 0 && NovaQuote.quote_status?.value !== 'processing' && NovaQuote.quote_status?.value !== 'ready' && NovaQuote.quote_status?.value !== 'archived' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, NovaQuote.is_editting === '1' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, NovaQuote.user_role[0] !== 'pending' && NovaQuote.not_author_but_admin === 'no' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_1__["default"], {
     signage: signage,
     required: required,
     tempFolder: tempFolder,

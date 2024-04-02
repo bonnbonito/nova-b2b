@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 export default function PricesView({ item }) {
 	const currency = wcumcs_vars_data.currency;
@@ -15,13 +15,43 @@ export default function PricesView({ item }) {
 		lineHeight: '1.6',
 		paddingBottom: '20px',
 	};
+
+	const headlineRef = useRef(null);
+
+	const adjustFontSize = () => {
+		const container = headlineRef.current.parentNode;
+		const headline = headlineRef.current;
+
+		// Reset the font-size to the maximum desired font-size
+		headline.style.fontSize = '50px';
+
+		// Check if the headline is wider than its container
+		while (
+			headline.scrollWidth > container.offsetWidth &&
+			parseFloat(window.getComputedStyle(headline).fontSize) > 0
+		) {
+			// Reduce the font-size by 1px until it fits
+			headline.style.fontSize = `${
+				parseFloat(window.getComputedStyle(headline).fontSize) - 1
+			}px`;
+		}
+	};
+
+	useEffect(() => {
+		adjustFontSize();
+	}, []);
+
 	return (
 		<div className="pb-8 mb-8 border-b-nova-light border-b">
 			{item.type === 'letters' && (
 				<>
 					<div className="mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md exclude-from-pdf">
 						<div className="w-full self-center">
-							<div className="self-center text-center" style={style}>
+							<div
+								className="self-center text-center"
+								style={style}
+								ref={headlineRef}
+							>
 								{item.letters}
 							</div>
 						</div>

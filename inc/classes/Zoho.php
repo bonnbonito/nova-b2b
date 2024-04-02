@@ -43,7 +43,7 @@ class Zoho {
 		?>
 <p>Product: <?php echo get_post_meta( $product_id, 'product', true ); ?></p>
 <strong>Projects</strong>
-		<?php
+<?php
 			echo '<ul>';
 		foreach ( $signage as $project ) {
 			$projectArray = get_object_vars( $project );
@@ -174,59 +174,59 @@ class Zoho {
 			?>
 <h3>ZOHO CRM</h3>
 <table class="form-table">
-	<tr>
-		<th><label for="zoho_account_id">Zoho Account ID</label></th>
-		<td>
-			<input readonly type="text" name="zoho_account_id" id="zoho_account_id"
-				value="<?php echo esc_attr( get_user_meta( $user->ID, 'zoho_account_id', true ) ); ?>"
-				class="regular-text" /><br />
-			<span class="description">This is the user's Account ID from Zoho CRM</span>
-		</td>
-	</tr>
-	<tr>
-		<th><label for="generate_zoho_id">Generate Zoho Account ID</label></th>
-		<td>
-			<button type="button" class="button-primary" id="generate_zoho_id">Generate</button>
-		</td>
-	</tr>
+    <tr>
+        <th><label for="zoho_account_id">Zoho Account ID</label></th>
+        <td>
+            <input readonly type="text" name="zoho_account_id" id="zoho_account_id"
+                value="<?php echo esc_attr( get_user_meta( $user->ID, 'zoho_account_id', true ) ); ?>"
+                class="regular-text" /><br />
+            <span class="description">This is the user's Account ID from Zoho CRM</span>
+        </td>
+    </tr>
+    <tr>
+        <th><label for="generate_zoho_id">Generate Zoho Account ID</label></th>
+        <td>
+            <button type="button" class="button-primary" id="generate_zoho_id">Generate</button>
+        </td>
+    </tr>
 </table>
 <script>
 const generateZohoId = document.getElementById("generate_zoho_id");
 generateZohoId.addEventListener("click", e => {
 
-	e.preventDefault();
+    e.preventDefault();
 
-	let isConfirmed = confirm("Are you sure you want to generate a new Account ID?");
+    let isConfirmed = confirm("Are you sure you want to generate a new Account ID?");
 
-	if (!isConfirmed) return;
+    if (!isConfirmed) return;
 
-	generateZohoId.disabled = true;
-	generateZohoId.textContent = 'Please wait...';
+    generateZohoId.disabled = true;
+    generateZohoId.textContent = 'Please wait...';
 
-	let formData = new FormData();
-	formData.append('action', 'generate_zoho_id');
-	formData.append('user', userProfileL10n.user_id);
+    let formData = new FormData();
+    formData.append('action', 'generate_zoho_id');
+    formData.append('user', userProfileL10n.user_id);
 
-	fetch(wp.ajax.settings.url, {
-			method: 'POST',
-			credentials: 'same-origin',
-			headers: {
-				'Cache-Control': 'no-cache',
-			},
-			body: formData,
-		})
-		.then((response) => response.json())
-		.then((data) => {
-			console.log(data);
-			generateZohoId.style.display = 'none';
-			if (data.zoho_account_id) {
-				document.getElementById('zoho_account_id').value = data.zoho_account_id;
-			}
-		})
-		.catch((error) => console.error('Error:', error))
+    fetch(wp.ajax.settings.url, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                'Cache-Control': 'no-cache',
+            },
+            body: formData,
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data);
+            generateZohoId.style.display = 'none';
+            if (data.zoho_account_id) {
+                document.getElementById('zoho_account_id').value = data.zoho_account_id;
+            }
+        })
+        .catch((error) => console.error('Error:', error))
 });
 </script>
-			<?php
+<?php
 		}
 	}
 
@@ -480,39 +480,39 @@ generateZohoId.addEventListener("click", e => {
 		// Settings form HTML
 		?>
 <div class="wrap">
-	<h2>Zoho CRM Connector Settings</h2>
-	<form method="post" action="">
-		<table class="form-table">
-			<tr valign="top">
-				<th scope="row">Client ID</th>
-				<td><input type="text" name="zoho_crm_client_id"
-						value="<?php echo get_option( 'zoho_crm_client_id' ); ?>" />
-				</td>
-			</tr>
-			<tr valign="top">
-				<th scope="row">Client Secret</th>
-				<td><input type="text" name="zoho_crm_client_secret"
-						value="<?php echo get_option( 'zoho_crm_client_secret' ); ?>" /></td>
-			</tr>
-			<tr valign="top">
-				<th scope="row">Redirect URI</th>
-				<td><input type="text" name="zoho_crm_redirect_uri"
-						value="<?php echo get_option( 'zoho_crm_redirect_uri' ); ?>" /></td>
-			</tr>
-			<tr valign="top">
-				<th scope="row">Code</th>
-				<td><input type="text" name="zoho_crm_code" value="" /></td>
-			</tr>
-		</table>
-		<input type="submit" name="zoho_crm_connector_submit" value="Get Refresh Token" class="button-primary" />
-	</form>
-		<?php if ( get_option( 'zoho_crm_refresh_token' ) ) : ?>
-	<h2>Refresh Token</h2>
-	<p><?php echo esc_attr( get_option( 'zoho_crm_refresh_token' ) ); ?></p>
-	<?php endif; ?>
+    <h2>Zoho CRM Connector Settings</h2>
+    <form method="post" action="">
+        <table class="form-table">
+            <tr valign="top">
+                <th scope="row">Client ID</th>
+                <td><input type="text" name="zoho_crm_client_id"
+                        value="<?php echo get_option( 'zoho_crm_client_id' ); ?>" />
+                </td>
+            </tr>
+            <tr valign="top">
+                <th scope="row">Client Secret</th>
+                <td><input type="text" name="zoho_crm_client_secret"
+                        value="<?php echo get_option( 'zoho_crm_client_secret' ); ?>" /></td>
+            </tr>
+            <tr valign="top">
+                <th scope="row">Redirect URI</th>
+                <td><input type="text" name="zoho_crm_redirect_uri"
+                        value="<?php echo get_option( 'zoho_crm_redirect_uri' ); ?>" /></td>
+            </tr>
+            <tr valign="top">
+                <th scope="row">Code</th>
+                <td><input type="text" name="zoho_crm_code" value="" /></td>
+            </tr>
+        </table>
+        <input type="submit" name="zoho_crm_connector_submit" value="Get Refresh Token" class="button-primary" />
+    </form>
+    <?php if ( get_option( 'zoho_crm_refresh_token' ) ) : ?>
+    <h2>Refresh Token</h2>
+    <p><?php echo esc_attr( get_option( 'zoho_crm_refresh_token' ) ); ?></p>
+    <?php endif; ?>
 
 </div>
-		<?php
+<?php
 	}
 
 	public function zoho_crm_get_tokens( $client_id, $client_secret, $redirect_uri, $code ) {
@@ -596,10 +596,6 @@ generateZohoId.addEventListener("click", e => {
 				'Website'     => get_field( 'business_website', 'user_' . $user->ID ),
 				'Lead_Source' => 'Nova Website',
 			);
-
-			echo '<pre>';
-			print_r( $user_data );
-			echo '</pre>';
 
 		}
 	}
