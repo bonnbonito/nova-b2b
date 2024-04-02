@@ -1086,7 +1086,7 @@ function PricesView({
     // Check if the headline is wider than its container
     while (headline.scrollWidth > container.offsetWidth && parseFloat(window.getComputedStyle(headline).fontSize) > 0) {
       // Reduce the font-size by 1px until it fits
-      headline.style.fontSize = `${parseFloat(window.getComputedStyle(headline).fontSize) - 1}px`;
+      headline.style.fontSize = `${parseFloat(window.getComputedStyle(headline).fontSize) - 1.5}px`;
     }
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
@@ -1095,7 +1095,7 @@ function PricesView({
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "pb-8 mb-8 border-b-nova-light border-b"
   }, item.type === 'letters' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md exclude-from-pdf"
+    className: "mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md exclude-from-pdf max-w-[834px]"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "w-full self-center"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {

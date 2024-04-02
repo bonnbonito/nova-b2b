@@ -32,7 +32,7 @@ export default function PricesView({ item }) {
 		) {
 			// Reduce the font-size by 1px until it fits
 			headline.style.fontSize = `${
-				parseFloat(window.getComputedStyle(headline).fontSize) - 1
+				parseFloat(window.getComputedStyle(headline).fontSize) - 1.5
 			}px`;
 		}
 	};
@@ -45,7 +45,7 @@ export default function PricesView({ item }) {
 		<div className="pb-8 mb-8 border-b-nova-light border-b">
 			{item.type === 'letters' && (
 				<>
-					<div className="mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md exclude-from-pdf">
+					<div className="mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md exclude-from-pdf max-w-[834px]">
 						<div className="w-full self-center">
 							<div
 								className="self-center text-center"
