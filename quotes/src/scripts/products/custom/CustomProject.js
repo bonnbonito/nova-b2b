@@ -11,43 +11,37 @@ export const QuoteContext = createContext(null);
 export default function CustomProject() {
 	const [signage, setSignage] = useState([]);
 	const [missing, setMissing] = useState([]);
-	const currency = wcumcs_vars_data.currency;
+	const [tempFolder, setTempFolder] = useState('');
+	const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
+	const storage =
+		window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id;
+	const localStorageQuote = localStorage.getItem(storage);
+	const savedStorage = JSON.parse(localStorageQuote);
 
 	function setDefaultSignage() {
-		if (savedStorage?.length > 0) {
-			setSignage(savedStorage);
-		} else {
-			setSignage([
-				{
-					id: uuidv4(),
-					type: 'custom',
-					title: 'CUSTOM PROJECT',
-					description: '',
-					custom_id: '',
-					filePath: '',
-					fileName: '',
-					fileUrl: '',
-					file: '',
-					product: NovaQuote.product,
-				},
-			]);
-		}
+		setSignage([
+			{
+				id: uuidv4(),
+				type: 'custom',
+				title: 'CUSTOM PROJECT',
+				description: '',
+				usdPrice: 0,
+				cadPrice: 0,
+				custom_id: '',
+				filePath: '',
+				fileName: '',
+				fileUrl: '',
+				file: '',
+				product: NovaQuote.product,
+			},
+		]);
 	}
 
 	useEffect(() => {
 		if (NovaQuote.is_editting === '1') {
 			const currentSignage = JSON.parse(NovaQuote.signage);
 			if (currentSignage) {
-				const savedStorage = JSON.parse(
-					localStorage.getItem(
-						window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id
-					)
-				);
-				if (savedStorage?.length > 0) {
-					setSignage(savedStorage);
-				} else {
-					setSignage(currentSignage);
-				}
+				setSignage(currentSignage);
 			} else {
 				window.location.href = window.location.pathname;
 			}
@@ -90,9 +84,38 @@ export default function CustomProject() {
 		localStorage.setItem(storage, JSON.stringify(signage));
 	}, [signage]);
 
+	useEffect(() => {
+		if (NovaQuote.is_editting.length === 0) {
+			const savedStorageFolder = JSON.parse(
+				localStorage.getItem(
+					window.location.href + NovaQuote.user_id + '-folder'
+				)
+			);
+
+			if (savedStorageFolder?.length > 0) {
+				setTempFolder(savedStorageFolder);
+			} else {
+				localStorage.setItem(
+					window.location.href + NovaQuote.user_id + '-folder',
+					JSON.stringify(tempFolderName)
+				);
+				setTempFolder(tempFolderName);
+			}
+		} else {
+			setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+		}
+	}, []);
+
 	return (
 		<QuoteContext.Provider
-			value={{ signage, setSignage, addSignage, currency, missing, setMissing }}
+			value={{
+				signage,
+				setSignage,
+				addSignage,
+				missing,
+				setMissing,
+				tempFolder,
+			}}
 		>
 			<div className="md:flex gap-6">
 				<div className="md:w-3/4 w-full">
@@ -106,6 +129,7 @@ export default function CustomProject() {
 							signage={signage}
 							setSignage={setSignage}
 							addSignage={addSignage}
+							storage={storage}
 						>
 							<Logo key={item.id} item={item} />
 						</Signage>

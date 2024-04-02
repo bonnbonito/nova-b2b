@@ -369,6 +369,10 @@ ul#payment-select li input {
     }
 }
 
+.woocommerce-cart tr.shipping {
+    display: none;
+}
+
 @media (min-width: 768px) {
 
     #payment ul.wc_payment_methods {

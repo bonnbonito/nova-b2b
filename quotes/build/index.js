@@ -5460,35 +5460,32 @@ const QuoteContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)(null);
 function CustomProject() {
   const [signage, setSignage] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const [missing, setMissing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const currency = wcumcs_vars_data.currency;
+  const [tempFolder, setTempFolder] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
+  const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
+  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id;
+  const localStorageQuote = localStorage.getItem(storage);
+  const savedStorage = JSON.parse(localStorageQuote);
   function setDefaultSignage() {
-    if (savedStorage?.length > 0) {
-      setSignage(savedStorage);
-    } else {
-      setSignage([{
-        id: (0,uuid__WEBPACK_IMPORTED_MODULE_6__["default"])(),
-        type: 'custom',
-        title: 'CUSTOM PROJECT',
-        description: '',
-        custom_id: '',
-        filePath: '',
-        fileName: '',
-        fileUrl: '',
-        file: '',
-        product: NovaQuote.product
-      }]);
-    }
+    setSignage([{
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_6__["default"])(),
+      type: 'custom',
+      title: 'CUSTOM PROJECT',
+      description: '',
+      usdPrice: 0,
+      cadPrice: 0,
+      custom_id: '',
+      filePath: '',
+      fileName: '',
+      fileUrl: '',
+      file: '',
+      product: NovaQuote.product
+    }]);
   }
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting === '1') {
       const currentSignage = JSON.parse(NovaQuote.signage);
       if (currentSignage) {
-        const savedStorage = JSON.parse(localStorage.getItem(window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id));
-        if (savedStorage?.length > 0) {
-          setSignage(savedStorage);
-        } else {
-          setSignage(currentSignage);
-        }
+        setSignage(currentSignage);
       } else {
         window.location.href = window.location.pathname;
       }
@@ -5526,14 +5523,27 @@ function CustomProject() {
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     localStorage.setItem(storage, JSON.stringify(signage));
   }, [signage]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (NovaQuote.is_editting.length === 0) {
+      const savedStorageFolder = JSON.parse(localStorage.getItem(window.location.href + NovaQuote.user_id + '-folder'));
+      if (savedStorageFolder?.length > 0) {
+        setTempFolder(savedStorageFolder);
+      } else {
+        localStorage.setItem(window.location.href + NovaQuote.user_id + '-folder', JSON.stringify(tempFolderName));
+        setTempFolder(tempFolderName);
+      }
+    } else {
+      setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+    }
+  }, []);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(QuoteContext.Provider, {
     value: {
       signage,
       setSignage,
       addSignage,
-      currency,
       missing,
-      setMissing
+      setMissing,
+      tempFolder
     }
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:flex gap-6"
@@ -5547,7 +5557,8 @@ function CustomProject() {
     setMissing: setMissing,
     signage: signage,
     setSignage: setSignage,
-    addSignage: addSignage
+    addSignage: addSignage,
+    storage: storage
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_5__["default"], {
     key: item.id,
     item: item
@@ -5622,7 +5633,6 @@ function Logo({
   }
   const checkAndAddMissingFields = () => {
     const missingFields = [];
-    if (!fileUrl) missingFields.push('Upload a PDF/AI File');
     if (!description) missingFields.push('Add your description');
     if (missingFields.length > 0) {
       setMissing(prevMissing => {

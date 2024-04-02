@@ -88,6 +88,7 @@ class Woocommerce {
 		add_action( 'wp_ajax_nopriv_populate_signage', array( $this, 'populate_signage' ) );
 		add_filter( 'woocommerce_order_number', array( $this, 'customize_woocommerce_order_number' ), 10, 2 );
 		add_filter( 'woocommerce_available_payment_gateways', array( $this, 'disable_bacs_for_non_admins' ) );
+		add_filter( 'payment_types', array( $this, 'partner_payment_types' ) );
 	}
 
 	public function disable_bacs_for_non_admins( $available_gateways ) {
@@ -2043,6 +2044,27 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 			wp_reset_postdata(); // Reset the global post object so that the rest of the page works correctly
 		}
 		return apply_filters( 'payment_types', $payments );
+	}
+
+	public function partner_payment_types( $payments ) {
+		$user_id       = get_current_user_id();
+		$payments      = array();
+		$user_payments = get_field( 'payment_type', 'user_' . $user_id );
+		global $post;
+		if ( $user_payments ) :
+
+			foreach ( $user_payments as $post ) :
+				setup_postdata( $post );
+				$payments[] = array(
+					'title'       => get_the_title(),
+					'id'          => get_the_ID(),
+					'description' => get_field( 'description' ),
+				);
+			endforeach;
+			wp_reset_postdata();
+		endif;
+
+		return $payments;
 	}
 
 	public function is_product_in_cart( $product_id ) {

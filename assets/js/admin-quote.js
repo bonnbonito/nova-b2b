@@ -72,11 +72,19 @@ function displaySignageItem(sign) {
 				const signIndex = signage.findIndex((s) => s.id === sign.id);
 				if (signIndex !== -1) {
 					signage[signIndex].usdPrice = newPrice;
+
+					console.log(newPrice);
+
 					const newCadPrice = convertToCAD(newPrice, exchangeRate).toFixed(2);
+
+					console.log(newCadPrice);
+
 					signage[signIndex].cadPrice = newCadPrice;
 					// Update the displayed price
 					document.getElementById(`priceDisplay_${sign.id}`).textContent =
 						newPrice;
+
+					console.log(`.signage-value[data-id="${sign.id}"]`);
 
 					document.querySelector(
 						`.signage-value[data-id="${sign.id}"]`
@@ -147,7 +155,7 @@ function getSignageItemHTML(sign) {
 
 function getSignageDetailFields(sign) {
 	return [
-		{ label: 'CAD PRICE', value: sign.cadPrice },
+		{ label: 'CAD PRICE', value: sign.cadPrice ? sign.cadPrice : '0' },
 		{ label: 'TYPE', value: sign.type },
 		{ label: 'LINE TEXT', value: sign.letters },
 		{
@@ -204,9 +212,7 @@ function getSignageDetailFields(sign) {
 }
 
 function getTitleSectionHTML(sign) {
-	const priceSection = sign.usdPrice
-		? `$<span id="priceDisplay_${sign.id}">${sign.usdPrice}</span>`
-		: '';
+	const priceSection = `$<span id="priceDisplay_${sign.id}">${sign.usdPrice}</span>`;
 	const editButtonHTML = `<div class="button" data-edit="${sign.id}" onclick="toggleEditPriceVisibility('${sign.id}');">Edit Price</div>`;
 
 	return `

@@ -36,7 +36,6 @@ export default function Logo({ item }) {
 	const checkAndAddMissingFields = () => {
 		const missingFields = [];
 
-		if (!fileUrl) missingFields.push('Upload a PDF/AI File');
 		if (!description) missingFields.push('Add your description');
 
 		if (missingFields.length > 0) {
