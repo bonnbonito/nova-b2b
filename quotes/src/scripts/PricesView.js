@@ -9,11 +9,11 @@ export default function PricesView({ item }) {
 		whiteSpace: 'nowrap',
 		overflow: 'hidden',
 		fontFamily: item.font,
-		//color: item.color.color,
+		color: item.color?.color || '#000000',
 		textShadow: '0px 0px 1px rgba(0, 0, 0, 1)',
 		wordBreak: 'break-all',
 		lineHeight: '1.6',
-		paddingBottom: '20px',
+		padding: '0 10px 20px 10px',
 	};
 
 	const headlineRef = useRef(null);
@@ -32,7 +32,7 @@ export default function PricesView({ item }) {
 		) {
 			// Reduce the font-size by 1px until it fits
 			headline.style.fontSize = `${
-				parseFloat(window.getComputedStyle(headline).fontSize) - 1.5
+				parseFloat(window.getComputedStyle(headline).fontSize) - 1
 			}px`;
 		}
 	};
