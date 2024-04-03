@@ -6,7 +6,7 @@ const currency = wcumcs_vars_data.currency;
 
 export default function Sidebar({ signage, required, tempFolder }) {
 	const taxRateObj = NovaMyAccount.tax_rate;
-	const taxRate = taxRateObj ? parseFloat(taxRateObj.tax_rate / 100) : 0;
+	const tax = taxRateObj ? parseFloat(taxRateObj.tax_rate / 100) : 0;
 	const taxRateName = taxRateObj ? taxRateObj.tax_rate_name : 'Tax';
 
 	const totalUsdPrice = signage.reduce(
@@ -29,7 +29,6 @@ export default function Sidebar({ signage, required, tempFolder }) {
 	const estimatedShipping =
 		totalPrice > 0 ? parseFloat(Math.max(flatRate, standardRate)) : 0;
 
-	const tax = taxRate ? parseFloat(taxRate.tax_rate / 100) : 0;
 	const taxCompute = parseFloat(totalPrice * tax);
 
 	const estimateTotalPrice = totalPrice + estimatedShipping + taxCompute;
@@ -62,7 +61,7 @@ export default function Sidebar({ signage, required, tempFolder }) {
 						</div>
 					)}
 
-					{taxRate > 0 && (
+					{tax > 0 && (
 						<div className="flex justify-between font-title uppercase md:tracking-[1.6px]">
 							{taxRateName}
 							<span>
@@ -83,7 +82,7 @@ export default function Sidebar({ signage, required, tempFolder }) {
 
 				<div className="text-[11px] mb-5">
 					<ul>
-						{taxRate === 0 && <li>Tax not included</li>}
+						{tax === 0 && <li>Tax not included</li>}
 						<li>The final quote will be ready in 24 business hours.</li>
 						<li>Extra freight charges may apply for connected fonts.</li>
 					</ul>
