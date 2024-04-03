@@ -644,7 +644,7 @@ class Woocommerce {
 			while ( $nova_query->have_posts() ) {
 				$nova_query->the_post();
 				?>
-			<a class="product-cat-item text-black" href="<?php echo esc_url( get_permalink() ); ?>">
+			<a class="product-cat-item text-black" href="<?php echo esc_url( get_permalink() ); ?>/overview">
 				<?php the_post_thumbnail( array( 35, 35 ) ); ?>
 				<?php the_title(); ?>
 			</a>
@@ -758,7 +758,7 @@ class Woocommerce {
 		while ( $nova_query->have_posts() ) {
 			$nova_query->the_post();
 			?>
-<a class="product-cat-item text-black" href="<?php echo esc_url( get_permalink() ); ?>">
+<a class="product-cat-item text-black" href="<?php echo esc_url( get_permalink() ); ?>/overview">
 			<?php the_post_thumbnail( array( 35, 35 ) ); ?>
 			<?php the_title(); ?>
 </a>
