@@ -14,12 +14,17 @@ import TrimLessFrontLit from './scripts/products/metal-channel/TrimLessFrontLit/
 import FabricatedStainless from './scripts/products/metal/FabricatedStainless/FabricatedStainless';
 import LaserCutAluminum from './scripts/products/metal/LaserCutAluminum/LaserCutAluminum';
 import LaserCutStainless from './scripts/products/metal/LaserCutStainless/LaserCutStainless';
+import PVCPainted from './scripts/products/pvc/PVCPainted/PVCPainted';
 
 if (document.querySelector('#laserCutAcrylic')) {
 	ReactDOM.render(
 		<LaserCutAcrylic />,
 		document.querySelector('#laserCutAcrylic')
 	);
+}
+
+if (document.querySelector('#pvcPainted')) {
+	ReactDOM.render(<PVCPainted />, document.querySelector('#pvcPainted'));
 }
 
 if (document.querySelector('#layeredAcrylic')) {

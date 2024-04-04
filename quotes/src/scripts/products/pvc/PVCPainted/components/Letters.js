@@ -9,16 +9,12 @@ import convert_json from '../../../../utils/ConvertJson';
 import { waterProofOptions } from '../../../../utils/SignageOptions';
 
 import {
-	fabricatedMetalInstallationOptions,
-	fabricatedThicknessOptions,
-	finishOptions,
-	metalFinishOptions,
-	metalOptions,
-} from '../../metalOptions';
+	finishingOptions,
+	installationOptions,
+	thicknessOptions,
+} from '../../pvcOptions';
 
-import { QuoteContext } from '../FabricatedStainless';
-
-const NovaOptions = NovaQuote.quote_options;
+import { QuoteContext } from '../PVCPainted';
 
 const exchangeRate = 1.3;
 
@@ -39,12 +35,6 @@ export default function Letters({ item }) {
 	const [comments, setComments] = useState(item.comments);
 	const [font, setFont] = useState(item.font);
 	const [openFont, setOpenFont] = useState(false);
-
-	const [metal, setMetal] = useState(item.metal);
-	const [stainLessMetalFinish, setStainLessMetalFinish] = useState(
-		item.stainLessMetalFinish
-	);
-
 	const [color, setColor] = useState(item.color);
 	const [isLoading, setIsLoading] = useState(false);
 	const [openColor, setOpenColor] = useState(false);
@@ -63,19 +53,20 @@ export default function Letters({ item }) {
 	const [letterHeightOptions, setLetterHeightOptions] = useState([]);
 	const [selectedFinishing, setSelectedFinishing] = useState(item.finishing);
 	const [customFont, setCustomFont] = useState(item.customFont);
+	const [installation, setInstallation] = useState(item.installation);
 	const [customColor, setCustomColor] = useState(item.customColor);
 
 	const [selectedLetterHeight, setSelectedLetterHeight] = useState(
 		item.letterHeight
 	);
+
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice);
 
 	const [lettersHeight, setLettersHeight] = useState({
-		min: 2,
-		max: 43,
+		min: 4,
+		max: 39,
 	});
-	const [installation, setInstallation] = useState(item.installation);
 
 	const colorRef = useRef(null);
 	const fontRef = useRef(null);
@@ -143,7 +134,6 @@ export default function Letters({ item }) {
 					comments: comments,
 					font: font,
 					thickness: selectedThickness,
-					installation: installation,
 					waterproof: waterproof,
 					color: color,
 					letterHeight: selectedLetterHeight,
@@ -158,9 +148,9 @@ export default function Letters({ item }) {
 					fontFilePath: fontFilePath,
 					fontFileUrl: fontFileUrl,
 					finishing: selectedFinishing,
-					metal: metal,
-					stainLessMetalFinish: stainLessMetalFinish,
+					customFont: customFont,
 					customColor: customColor,
+					installation: installation,
 				};
 			} else {
 				return sign;
@@ -181,22 +171,12 @@ export default function Letters({ item }) {
 
 	const handleOnChangeThickness = (e) => {
 		const target = e.target.value;
-		const selected = fabricatedThicknessOptions.filter(
+		const selected = thicknessOptions.filter(
 			(option) => option.value === target
 		);
-
 		setSelectedThickness(() => selected[0]);
-		if (parseFloat(target) === 2 && parseInt(selectedLetterHeight) < 5) {
-			setSelectedLetterHeight('');
-		}
-		if (
-			parseFloat(target) < 6 &&
-			parseFloat(target) > 1.5 &&
-			parseInt(selectedLetterHeight) < 7
-		) {
-			setSelectedLetterHeight('');
-		}
-		if (parseFloat(target) === 6 && parseInt(selectedLetterHeight) < 11) {
+		console.log(target);
+		if (parseInt(target) === 40) {
 			setSelectedLetterHeight('');
 		}
 	};
@@ -206,92 +186,60 @@ export default function Letters({ item }) {
 	};
 
 	const handleChangeFinishing = (e) => {
-		const value = e.target.value;
-		if (value === '') {
-			setStainLessMetalFinish('');
-			setColor({ name: '', color: '' });
-		}
-		if ('Metal Finish' === value) {
-			setColor({ name: '', color: '' });
-		}
-
-		if ('Painted Finish' === value) {
-			setStainLessMetalFinish('');
-		}
-
 		setSelectedFinishing(e.target.value);
 	};
 
-	const handelMetalFinishChange = (e) => {
-		setStainLessMetalFinish(e.target.value);
+	const handleChangePieces = (e) => {
+		setPieces(e.target.value);
 	};
 
 	useEffect(() => {
-		if (letterPricing.length > 0 && selectedLetterHeight && selectedThickness) {
-			const pricingDetail = letterPricing[selectedLetterHeight - 2];
-			const baseLetterPrice = pricingDetail[selectedThickness.value];
+		if (
+			letterPricing.length > 0 &&
+			selectedLetterHeight &&
+			selectedThickness &&
+			waterproof
+		) {
+			const pricingDetail = letterPricing[selectedLetterHeight - 4];
+
+			const baseLetterPrice = pricingDetail[selectedThickness.thickness];
 
 			let totalLetterPrice = 0;
 			const lettersArray = letters.trim().split('');
 
-			if (
-				lettersArray.length > 0 &&
-				selectedLetterHeight &&
-				waterproof &&
-				selectedThickness
-			) {
-				lettersArray.forEach((letter) => {
-					let letterPrice = baseLetterPrice;
+			lettersArray.forEach((letter) => {
+				let letterPrice = baseLetterPrice;
 
-					if (letter === ' ') {
-						// If the character is a space, set the price to 0 and skip further checks
-						letterPrice = 0;
-					} else if (letter.match(/[a-z]/)) {
-						// Check for lowercase letter
-						letterPrice *= lowerCasePricing; // 80% of the base price
-					} else if (letter.match(/[A-Z]/)) {
-						// Check for uppercase letter
-						// Uppercase letters use 100% of base price, so no change needed
-					} else if (letter.match(/[`~"*,.\-']/)) {
-						// Check for small punctuation marks
-						letterPrice *= smallPunctuations; // 30% of the base price
-					} else if (letter.match(/[^a-zA-Z]/)) {
-						// Check for symbol (not a letter or small punctuation)
-						// Symbols use 100% of base price, so no change needed
-					}
+				if (letter === ' ') {
+					// If the character is a space, set the price to 0 and skip further checks
+					letterPrice = 0;
+				} else if (letter.match(/[a-z]/)) {
+					// Check for lowercase letter
+					letterPrice *= lowerCasePricing; // 80% of the base price
+				} else if (letter.match(/[A-Z]/)) {
+					// Check for uppercase letter
+					// Uppercase letters use 100% of base price, so no change needed
+				} else if (letter.match(/[`~"*,.\-']/)) {
+					// Check for small punctuation marks
+					letterPrice *= smallPunctuations; // 30% of the base price
+				} else if (letter.match(/[^a-zA-Z]/)) {
+					// Check for symbol (not a letter or small punctuation)
+					// Symbols use 100% of base price, so no change needed
+				}
 
-					// Adjusting for waterproof and finishing
-					letterPrice *= waterproof === 'Indoor' ? 1 : 1.1;
+				// Adjusting for waterproof and finishing
+				letterPrice *= waterproof === 'Indoor' ? 1 : 1.03;
+				letterPrice *= selectedFinishing === 'Gloss' ? 1.03 : 1;
+				letterPrice *= installation === 'Double-sided tape' ? 1.01 : 1;
 
-					letterPrice *= metal === '316 Stainless Steel' ? 1.3 : 1;
+				totalLetterPrice += letterPrice;
+			});
 
-					if (
-						stainLessMetalFinish &&
-						stainLessMetalFinish.includes('Polished')
-					) {
-						letterPrice *= 1.1;
-					}
-
-					if (
-						stainLessMetalFinish &&
-						stainLessMetalFinish.includes('Electroplated')
-					) {
-						letterPrice *= 1.2;
-					}
-
-					if (installation === 'PVC Backing') {
-						letterPrice *= 1.05;
-					}
-
-					totalLetterPrice += letterPrice;
-				});
-
-				setUsdPrice(totalLetterPrice.toFixed(2));
-				setCadPrice((totalLetterPrice * parseFloat(exchangeRate)).toFixed(2));
-			} else {
-				setUsdPrice(0);
-				setCadPrice(0);
-			}
+			setUsdPrice(totalLetterPrice.toFixed(2));
+			setCadPrice((totalLetterPrice * parseFloat(exchangeRate)).toFixed(2));
+		} else {
+			setUsdPrice(0);
+			setCadPrice(0);
 		}
 	}, [
 		selectedLetterHeight,
@@ -300,8 +248,6 @@ export default function Letters({ item }) {
 		letters,
 		waterproof,
 		lettersHeight,
-		metal,
-		stainLessMetalFinish,
 		installation,
 	]);
 
@@ -334,28 +280,18 @@ export default function Letters({ item }) {
 	const checkAndAddMissingFields = () => {
 		const missingFields = [];
 
-		if (!letters) missingFields.push('Add Line Text');
+		if (!letters) missingFields.push('Add your Line Text');
 		if (!font) missingFields.push('Select Font');
 		if (font == 'Custom font' && !fontFileUrl) {
 			missingFields.push('Upload your custom font.');
 		}
-		if (!metal) missingFields.push('Metal Option');
-		if (!selectedThickness) missingFields.push('Select Metal Thickness');
 		if (!selectedLetterHeight) missingFields.push('Select Letter Height');
-
-		if (!selectedFinishing) missingFields.push('Select Finish Option');
-		if (selectedFinishing === 'Painted Finish') {
-			if (!color.name) missingFields.push('Select Color');
-
-			if (color?.name === 'Custom Color' && !customColor) {
-				missingFields.push('Add the Pantone color code of your custom color.');
-			}
+		if (!selectedThickness) missingFields.push('Select Thickness');
+		if (!color.name) missingFields.push('Select Color');
+		if (color?.name === 'Custom Color' && !customColor) {
+			missingFields.push('Add the Pantone color code of your custom color.');
 		}
-		if (selectedFinishing === 'Metal Finish') {
-			if (!stainLessMetalFinish)
-				missingFields.push('Select Metal Finish Option');
-		}
-
+		if (!selectedFinishing) missingFields.push('Select Finishing');
 		if (!waterproof) missingFields.push('Select Waterproof');
 		if (!installation) missingFields.push('Select Installation');
 
@@ -394,14 +330,28 @@ export default function Letters({ item }) {
 	};
 
 	useEffect(() => {
-		updateSignage();
 		checkAndAddMissingFields();
+	}, [
+		letters,
+		font,
+		color,
+		selectedThickness,
+		waterproof,
+		selectedLetterHeight,
+		fileUrl,
+		fontFileUrl,
+		selectedFinishing,
+		customColor,
+		installation,
+	]);
+
+	useEffect(() => {
+		updateSignage();
 	}, [
 		letters,
 		comments,
 		font,
 		selectedThickness,
-		installation,
 		waterproof,
 		color,
 		usdPrice,
@@ -409,25 +359,28 @@ export default function Letters({ item }) {
 		selectedLetterHeight,
 		fileUrl,
 		fileName,
+		filePath,
 		file,
-		metal,
-		selectedFinishing,
-		stainLessMetalFinish,
-		customColor,
 		fontFileUrl,
 		fontFileName,
 		fontFilePath,
 		fontFile,
+		selectedFinishing,
+		customFont,
+		customColor,
+		installation,
 	]);
 
 	useEffect(() => {
 		const newHeightOptions = letterPricing?.filter((item) => {
-			const value = item[selectedThickness?.value];
+			const value = item[selectedThickness?.thickness];
 			return (
 				value !== '' &&
 				value !== null &&
 				value !== undefined &&
 				value !== false &&
+				value !== 0 &&
+				value !== '0' &&
 				!isNaN(value)
 			);
 		});
@@ -507,21 +460,10 @@ export default function Letters({ item }) {
 				)}
 
 				<Dropdown
-					title="Metal Option"
-					onChange={(e) => setMetal(e.target.value)}
-					options={metalOptions.map((metal) => (
-						<option value={metal.option} selected={metal.option === item.metal}>
-							{metal.option}
-						</option>
-					))}
-					value={item.metal}
-				/>
-
-				<Dropdown
-					title="Metal Depth"
+					title="Thickness"
 					value={selectedThickness?.value}
 					onChange={handleOnChangeThickness}
-					options={fabricatedThicknessOptions.map((thickness) => (
+					options={thicknessOptions.map((thickness) => (
 						<option
 							value={thickness.value}
 							selected={thickness === selectedThickness}
@@ -538,86 +480,68 @@ export default function Letters({ item }) {
 					value={item.letterHeight}
 				/>
 
+				<div className="px-[1px] relative" ref={colorRef}>
+					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+						Color
+					</label>
+					<div
+						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
+							color.name ? 'text-black' : 'text-[#dddddd]'
+						}`}
+						onClick={() => setOpenColor((prev) => !prev)}
+					>
+						<span
+							className="rounded-full w-[18px] h-[18px] border mr-2"
+							style={{
+								background:
+									color.name == 'Custom Color'
+										? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
+										: color.color,
+							}}
+						></span>
+						{color.name === '' ? 'CHOOSE OPTION' : color.name}
+					</div>
+					{openColor && (
+						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
+							{colorOptions.map((color) => {
+								return (
+									<div
+										className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
+										onClick={() => {
+											setColor(color);
+											setOpenColor(false);
+										}}
+									>
+										<span
+											className="w-[18px] h-[18px] inline-block rounded-full border"
+											style={{
+												background:
+													color.name == 'Custom Color'
+														? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
+														: color.color,
+											}}
+										></span>
+										{color.name}
+									</div>
+								);
+							})}
+						</div>
+					)}
+				</div>
+
 				<Dropdown
 					title="Finish Option"
 					onChange={handleChangeFinishing}
-					options={finishOptions.map((finishing) => (
+					options={finishingOptions.map((finishing) => (
 						<option
-							value={finishing.option}
-							selected={finishing.option === selectedFinishing}
+							value={finishing.name}
+							selected={finishing.name === item.finishing}
 						>
-							{finishing.option}
+							{finishing.name}
 						</option>
 					))}
 					value={item.finishing}
 				/>
-
-				{selectedFinishing === 'Metal Finish' && (
-					<Dropdown
-						title="Metal Finish"
-						onChange={handelMetalFinishChange}
-						options={metalFinishOptions.map((metalFinish) => (
-							<option
-								value={metalFinish.option}
-								selected={metalFinish.option === stainLessMetalFinish}
-							>
-								{metalFinish.option}
-							</option>
-						))}
-						value={item.stainLessMetalFinish}
-					/>
-				)}
-
-				{selectedFinishing === 'Painted Finish' && (
-					<div className="px-[1px] relative" ref={colorRef}>
-						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-							Painted Color
-						</label>
-						<div
-							className={`flex px-2 items-center select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-								color.name ? 'text-black' : 'text-[#dddddd]'
-							}`}
-							onClick={() => setOpenColor((prev) => !prev)}
-						>
-							<span
-								className="rounded-full w-[18px] h-[18px] border mr-2"
-								style={{
-									background:
-										color.name == 'Custom Color'
-											? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-											: color.color,
-								}}
-							></span>
-							{color.name === '' ? 'CHOOSE OPTION' : color.name}
-						</div>
-						{openColor && (
-							<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
-								{colorOptions.map((color) => {
-									return (
-										<div
-											className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
-											onClick={() => {
-												setColor(color);
-												setOpenColor(false);
-											}}
-										>
-											<span
-												className="w-[18px] h-[18px] inline-block rounded-full border"
-												style={{
-													background:
-														color.name == 'Custom Color'
-															? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-															: color.color,
-												}}
-											></span>
-											{color.name}
-										</div>
-									);
-								})}
-							</div>
-						)}
-					</div>
-				)}
 
 				<Dropdown
 					title="Environment"
@@ -634,14 +558,14 @@ export default function Letters({ item }) {
 				/>
 
 				<Dropdown
-					title="Installation Option"
+					title="Installation"
 					onChange={handleOnChangeInstallation}
-					options={fabricatedMetalInstallationOptions.map((option) => (
+					options={installationOptions.map((option) => (
 						<option
-							value={option.option}
-							selected={option.option === installation}
+							value={option.value}
+							selected={option.value === installation}
 						>
-							{option.option}
+							{option.value}
 						</option>
 					))}
 					value={item.installation}

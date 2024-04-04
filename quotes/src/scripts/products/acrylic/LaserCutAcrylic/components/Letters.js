@@ -4,13 +4,13 @@ import FontsDropdown from '../../../../FontsDropdown';
 import UploadFile from '../../../../UploadFile';
 import UploadFont from '../../../../UploadFont';
 import useOutsideClick from '../../../../utils/ClickOutside';
-import { colorOptions } from '../../../../utils/ColorOptions';
 import convert_json from '../../../../utils/ConvertJson';
 import {
 	mountingDefaultOptions,
 	thicknessOptions,
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
+import { colorOptions } from '../ColorOptions';
 import { QuoteContext } from '../LaserCutAcrylic';
 
 const NovaOptions = NovaQuote.quote_options;
@@ -206,6 +206,8 @@ export default function Letters({ item }) {
 			const pricingDetail = letterPricing[selectedLetterHeight - 1];
 			const baseLetterPrice = pricingDetail[selectedThickness.value];
 
+			console.log(color);
+
 			let totalLetterPrice = 0;
 			const lettersArray = letters.trim().split('');
 
@@ -233,6 +235,13 @@ export default function Letters({ item }) {
 				letterPrice *= waterproof === 'Indoor' ? 1 : 1.1;
 				letterPrice *= selectedFinishing === 'Gloss' ? 1.1 : 1;
 
+				if (color?.name === 'Clear') {
+					letterPrice *= 0.9;
+				}
+				if (color?.name === 'Frosted Clear') {
+					letterPrice *= 0.95;
+				}
+
 				totalLetterPrice += letterPrice;
 			});
 
@@ -249,6 +258,7 @@ export default function Letters({ item }) {
 		letters,
 		waterproof,
 		lettersHeight,
+		color,
 	]);
 
 	useEffect(() => {
@@ -526,7 +536,12 @@ export default function Letters({ item }) {
 					>
 						<span
 							className="rounded-full w-[18px] h-[18px] border mr-2"
-							style={{ backgroundColor: color.color }}
+							style={{
+								background:
+									color.name == 'Custom Color'
+										? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
+										: color.color,
+							}}
 						></span>
 						{color.name === '' ? 'CHOOSE OPTION' : color.name}
 					</div>
@@ -543,7 +558,12 @@ export default function Letters({ item }) {
 									>
 										<span
 											className="w-[18px] h-[18px] inline-block rounded-full border"
-											style={{ backgroundColor: color.color }}
+											style={{
+												background:
+													color.name == 'Custom Color'
+														? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
+														: color.color,
+											}}
 										></span>
 										{color.name}
 									</div>

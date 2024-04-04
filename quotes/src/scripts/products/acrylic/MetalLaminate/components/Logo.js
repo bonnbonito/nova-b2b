@@ -374,7 +374,12 @@ export default function Logo({ item }) {
 									>
 										<span
 											className="w-[18px] h-[18px] inline-block rounded-full border"
-											style={{ backgroundColor: color.color }}
+											style={{
+												background:
+													color.name == 'Custom Color'
+														? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
+														: color.color,
+											}}
 										></span>
 										{color.name}
 									</div>
