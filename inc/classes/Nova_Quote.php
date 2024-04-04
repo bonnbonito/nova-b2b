@@ -1602,7 +1602,7 @@ h6 {
 
 	public function get_letter_pricing_table() {
 
-		if ( get_field( 'letter_pricing_table' ) && get_field( 'letter_pricing_table' )['pricing_table'] === '' ) {
+		if ( ( get_field( 'letter_pricing_table' ) && get_field( 'letter_pricing_table' )['pricing_table'] === '' ) || get_field( 'letter_pricing_table' ) === null ) {
 			$parent_id = wp_get_post_parent_id( get_the_ID() );
 			return get_field( 'letter_pricing_table', $parent_id );
 		}
