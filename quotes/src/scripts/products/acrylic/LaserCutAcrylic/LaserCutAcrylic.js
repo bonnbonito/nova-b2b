@@ -57,9 +57,8 @@ export default function LaserCutAcrylic() {
 
 	useEffect(() => {
 		if (NovaQuote.is_editting === '1') {
-			console.log(NovaQuote.signage);
 			const currentSignage = JSON.parse(NovaQuote.signage);
-			console.log(currentSignage);
+
 			if (currentSignage) {
 				const savedStorage = JSON.parse(localStorage.getItem(storage));
 				if (savedStorage?.length > 0) {

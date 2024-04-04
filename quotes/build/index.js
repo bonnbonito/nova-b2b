@@ -1077,6 +1077,9 @@ function PricesView({
   };
   const headlineRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const adjustFontSize = () => {
+    if (!headlineRef.current) {
+      return;
+    }
     const container = headlineRef.current.parentNode;
     const headline = headlineRef.current;
 
@@ -1091,7 +1094,7 @@ function PricesView({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     adjustFontSize();
-  }, []);
+  }, [item.type]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "pb-8 mb-8 border-b-nova-light border-b"
   }, item.type === 'letters' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -2894,9 +2897,7 @@ function LaserCutAcrylic() {
   }
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting === '1') {
-      console.log(NovaQuote.signage);
       const currentSignage = JSON.parse(NovaQuote.signage);
-      console.log(currentSignage);
       if (currentSignage) {
         const savedStorage = JSON.parse(localStorage.getItem(storage));
         if (savedStorage?.length > 0) {
@@ -11673,9 +11674,7 @@ function PVCPainted() {
   }
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting === '1') {
-      console.log(NovaQuote.signage);
       const currentSignage = JSON.parse(NovaQuote.signage);
-      console.log(currentSignage);
       if (currentSignage) {
         const savedStorage = JSON.parse(localStorage.getItem(storage));
         if (savedStorage?.length > 0) {
@@ -12377,7 +12376,6 @@ function Logo({
   const logoPricingObject = NovaQuote.logo_pricing_tables;
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (width && height && selectedThickness && waterproof && logoPricingObject !== null) {
-      console.log(selectedThickness.value);
       const logoPricing = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_4__.getLogoPricingTablebyThickness)(`${selectedThickness.value}`, logoPricingObject);
       if (logoPricing !== undefined) {
         const logoPricingTable = logoPricing !== undefined ? (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_3__["default"])(logoPricing) : [];

@@ -19,6 +19,9 @@ export default function PricesView({ item }) {
 	const headlineRef = useRef(null);
 
 	const adjustFontSize = () => {
+		if (!headlineRef.current) {
+			return;
+		}
 		const container = headlineRef.current.parentNode;
 		const headline = headlineRef.current;
 
@@ -39,7 +42,7 @@ export default function PricesView({ item }) {
 
 	useEffect(() => {
 		adjustFontSize();
-	}, []);
+	}, [item.type]);
 
 	return (
 		<div className="pb-8 mb-8 border-b-nova-light border-b">
