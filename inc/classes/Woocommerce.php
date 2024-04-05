@@ -66,7 +66,7 @@ class Woocommerce {
 		add_action( 'woocommerce_checkout_after_customer_details', array( $this, 'remove_checkout_coupon_form' ), 10 );
 		add_filter( 'woocommerce_cart_totals_order_total_html', array( $this, 'woocommerce_cart_totals_order_total_html' ) );
 		add_filter( 'woocommerce_endpoint_order-received_title', array( $this, 'order_received_title' ), 20, 2 );
-		add_filter( 'woocommerce_thankyou_order_received_text', array( $this, 'woocommerce_thankyou_order_received_text' ) );
+		add_filter( 'woocommerce_thankyou_order_received_text', array( $this, 'woocommerce_thankyou_order_received_text' ), 20, 2 );
 		add_shortcode( 'product_features', array( $this, 'product_features' ) );
 		add_shortcode( 'product_guides', array( $this, 'product_guides' ) );
 		add_shortcode( 'product_dropdown_nav', array( $this, 'product_dropdown_nav' ) );
@@ -862,7 +862,12 @@ class Woocommerce {
 		return ob_get_clean();
 	}
 
-	public function woocommerce_thankyou_order_received_text( $text ) {
+	public function woocommerce_thankyou_order_received_text( $text, $order ) {
+		$from_order_id = $order->get_meta( '_from_order_id' );
+		if ( ! empty( $from_order_id ) ) {
+			// Change the thank you text
+			return 'Thank you for the payment';
+		}
 		return 'Your order is being processed.';
 	}
 

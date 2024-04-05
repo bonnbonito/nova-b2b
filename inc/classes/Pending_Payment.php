@@ -33,7 +33,17 @@ class Pending_Payment {
 		add_action( 'check_pending_payments_hook', array( $this, 'check_pending_payments' ) );
 		add_action( 'admin_post_send_payment_reminder', array( $this, 'handle_send_reminder' ) );
 		add_filter( 'kadence_woomail_order_body_text', array( $this, 'pending_payment_order_email_content' ), 999, 5 );
+		add_action( 'woocommerce_payment_complete', array( $this, 'custom_order_complete' ), 99, 1 );
 		// add_filter( 'woocommerce_email_recipient_customer_completed_order', array( $this, 'disable_completed_order_email_for_pending' ), 10, 2 );
+	}
+
+	public function custom_order_complete( $order_id ) {
+		$order         = wc_get_order( $order_id );
+		$from_order_id = $order->get_meta( '_from_order_id' );
+		if ( ! empty( $from_order_id ) ) {
+			// Change the order status to 'Completed'
+			$order->update_status( 'completed', 'Order auto-completed since this is a pending payment', true );
+		}
 	}
 
 	public function disable_completed_order_email_for_pending( $recipient, $order ) {
@@ -80,10 +90,16 @@ class Pending_Payment {
 			$payment_id = intval( $_POST['payment_id'] );
 			$payment    = $this->get_data( $payment_id );
 
-			print_r( $payment );
-
 			if ( $payment ) {
 				$this->send_payment_reminder_email( $payment );
+
+				$update_data = array(
+					'reminder_sent'      => 'yes',
+					'reminder_sent_date' => current_time( 'mysql' ),
+				);
+
+				$this->update_data( $payment_id, $update_data );
+
 				// Optionally, add a query arg to indicate the email was sent, to show a message to the admin
 				wp_redirect( add_query_arg( 'reminder_sent', 'true', admin_url( 'admin.php?page=pending-payments' ) ) );
 				exit;
@@ -99,7 +115,7 @@ class Pending_Payment {
 		$pending_total  = $payment->pending_total;
 		$original_total = $payment->original_total;
 		$currency       = $payment->currency;
-		$payment_date   = $payment->payment_date;
+		$payment_date   = date( 'F d, Y', strtotime( $payment->payment_date ) );
 		$order          = wc_get_order( $payment_order );
 		if ( ! $order ) {
 			return 'Order not found';
@@ -127,6 +143,7 @@ class Pending_Payment {
 		if ( $customer_email ) {
 			$role_instance = \NOVA_B2B\Inc\Classes\Roles::get_instance();
 			$role_instance->send_email( $customer_email, $subject, $message, $headers, array() );
+
 		}
 	}
 
@@ -147,13 +164,8 @@ class Pending_Payment {
 
 		foreach ( $pending_payments as $payment ) {
 
-			$customer = $this->get_billing_information_from_payment( $payment );
+			$this->send_payment_reminder_email( $payment );
 
-			$customer_email = $customer['email'];
-
-			if ( $customer_email ) {
-				$this->send_payment_reminder_email( $customer_email, $payment );
-			}
 		}
 	}
 
@@ -176,10 +188,9 @@ class Pending_Payment {
 		$order_by = isset( $_GET['order_by'] ) && $_GET['order_by'] === 'payment_date' ? 'payment_date' : 'id';
 
 		$query = $wpdb->prepare(
-			"SELECT id, name, original_order, payment_order, deposit, pending_total, currency, payment_date, payment_select, payment_status
-        FROM {$table_name}
+			"SELECT * FROM {$table_name}
         WHERE payment_status != %s
-        ORDER BY {$order_by} ASC",
+        ORDER BY $order_by ASC",
 			'Completed'
 		);
 
@@ -197,7 +208,7 @@ class Pending_Payment {
 		// Filter form
 		echo '<form method="get">';
 		echo '<input type="hidden" name="page" value="pending-payments"/>'; // Keep the current page
-		echo '<button type="submit" name="order_by" value="payment_date">Order by Payment Date</button>';
+		echo '<button type="submit" name="order_by" value="payment_date" style="display: none;">Order by Payment Date</button>';
 		echo '</form>';
 
 		// Start the table
@@ -209,11 +220,11 @@ class Pending_Payment {
 		echo '<th>Payment Order</th>';
 		echo '<th>Deposit</th>';
 		echo '<th>Pending Total</th>';
-		echo '<th>Currency</th>';
 		echo '<th>Payment Date</th>';
 		echo '<th>Payment Select</th>';
 		echo '<th>Payment Status</th>';
 		echo '<th>Send Reminder Email</th>';
+		echo '<th>Reminder Sent</th>';
 		echo '<th></th>';
 		echo '</tr>';
 		echo '</thead>';
@@ -222,16 +233,21 @@ class Pending_Payment {
 		// Check if there are any results
 		if ( ! empty( $results ) ) {
 			foreach ( $results as $row ) {
+
+				$class = '';
+				if ( strtotime( $row['payment_date'] ) < current_time( 'timestamp' ) ) {
+					$class = ' over';
+				}
+
 				echo '<tr>';
 				echo "<td>{$row['name']}</td>";
 				$order_edit_link1 = admin_url( 'post.php?post=' . absint( $row['original_order'] ) . '&action=edit' );
 				echo "<td><a href='{$order_edit_link1}'>#{$row['original_order']}</a></td>";
 				$order_edit_link = admin_url( 'post.php?post=' . absint( $row['payment_order'] ) . '&action=edit' );
 				echo "<td><a href='{$order_edit_link}'>#{$row['payment_order']}</a></td>";
-				echo "<td>{$row['deposit']}</td>";
+				echo "<td>{$row['currency']}$ {$row['deposit']}</td>";
 				echo "<td>{$row['pending_total']}</td>";
-				echo "<td>{$row['currency']}</td>";
-				echo '<td>' . date( 'F d, Y', strtotime( $row['payment_date'] ) ) . '</td>';
+				echo '<td>' . date( 'F d, Y', strtotime( $row['payment_date'] ) ) . ' - <span class="' . $class . '" style="display: block; padding: 5px;">' . human_time_diff( current_time( 'timestamp' ), strtotime( $row['payment_date'] ) ) . '</span></td>';
 				echo '<td>' . get_the_title( $row['payment_select'] ) . '</td>';
 				echo "<td>{$row['payment_status']}</td>";
 				echo '<td>';
@@ -239,15 +255,18 @@ class Pending_Payment {
 				echo '<input type="hidden" name="action" value="send_payment_reminder"/>';
 				echo '<input type="hidden" name="payment_id" value="' . esc_attr( $row['id'] ) . '"/>';
 				wp_nonce_field( 'send_reminder_action', 'send_reminder_nonce' );
-				echo '<input type="submit" class="button action" value="Send Reminder"/>';
+				echo '<input type="submit" class="button action" value="' . ( ! empty( $row['reminder_sent'] ) ? 'Send Again' : 'Send' ) . '"/>';
 				echo '</form>';
+				echo '</td>';
+				echo '<td>';
+				echo ( ! empty( $row['reminder_sent'] ) ? human_time_diff( strtotime( $row['reminder_sent_date'] ), current_time( 'timestamp' ) ) . ' ago' : 'No' );
 				echo '</td>';
 				echo '<td>';
 				echo '<form method="post" action="' . admin_url( 'admin-post.php' ) . '" onsubmit="return confirm(\'Are you sure you want to delete this order?\');">';
 				echo '<input type="hidden" name="action" value="delete_pending_payment"/>';
 				echo '<input type="hidden" name="delete_order_id" value="' . esc_attr( $row['id'] ) . '"/>';
 				wp_nonce_field( 'delete_order_action', 'delete_order_nonce' );
-				echo '<input type="submit" class="button action" value="Delete"/>';
+				echo '<input type="submit" class="button action delete" value="Delete"/>';
 				echo '</form>';
 				echo '</td>';
 				echo '</tr>';
@@ -260,6 +279,7 @@ class Pending_Payment {
 		echo '</tbody>';
 		echo '</table>';
 		echo '</div>'; // Close the wrap div
+		echo '<style>.over {background-color: red; color: white;}';
 	}
 
 
@@ -272,7 +292,7 @@ class Pending_Payment {
 
 		$sql = "CREATE TABLE $table_name (
 			id mediumint(9) NOT NULL AUTO_INCREMENT,
-			time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+			time datetime DEFAULT NULL,
 			name tinytext NOT NULL,
 			original_order mediumint(9) NOT NULL,
 			payment_order mediumint(9) NOT NULL,
@@ -280,7 +300,9 @@ class Pending_Payment {
 			pending_total varchar(55) NOT NULL,
 			original_total varchar(55) NOT NULL,
 			currency varchar(10) NOT NULL,
-			payment_date datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+			payment_date datetime DEFAULT NULL,
+			reminder_sent varchar(10) NOT NULL,
+			reminder_sent_date varchar(55) NOT NULL,
 			payment_select varchar(10) NOT NULL,
 			payment_status varchar(55) NOT NULL,
 			PRIMARY KEY  (id)

@@ -117,3 +117,8 @@
     cursor: pointer;
     display: inline-block;
 }
+
+.over {
+    background-color: red;
+    color: #fff;
+}
