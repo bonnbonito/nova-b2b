@@ -150,7 +150,9 @@ $woo_instance = \NOVA_B2B\Inc\Classes\Woocommerce::get_instance();
 		<?php endif; ?>
 
 		<?php do_action( 'woocommerce_review_order_before_order_total' ); ?>
-		<?php $payment_select = WC()->session->get( 'payment_select' ) ? WC()->session->get( 'payment_select' ) : 0; ?>
+		<?php
+		$payment_select = WC()->session->get( 'payment_select' ) ? WC()->session->get( 'payment_select' ) : 0;
+		?>
 		<tr class="payment-selection">
 			<th class="px-4 py-8">Payment type</th>
 			<td colspan="2" class="px-4 py-8">

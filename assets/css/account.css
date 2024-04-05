@@ -2,6 +2,10 @@
     margin-right: 4px;
 }
 
+.woocommerce-button.button.pay {
+    background-color: #16a34a;
+}
+
 @media (max-width: 767px) {
     .md-hidden {
         display: block !important;

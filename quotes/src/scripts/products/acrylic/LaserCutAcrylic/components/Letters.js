@@ -284,12 +284,12 @@ export default function Letters({ item }) {
 		}
 
 		if (waterproof === 'Outdoor') {
-			if (selectedMounting === 'Double sided tape') {
+			if (selectedMounting === 'Double-sided tape') {
 				setSelectedMounting('');
 			}
 
 			newMountingOptions = newMountingOptions.filter(
-				(option) => option.mounting_option !== 'Double sided tape'
+				(option) => option.mounting_option !== 'Double-sided tape'
 			);
 		}
 

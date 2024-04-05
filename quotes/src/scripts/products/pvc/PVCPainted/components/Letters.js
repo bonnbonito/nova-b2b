@@ -63,6 +63,9 @@ export default function Letters({ item }) {
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice);
 
+	const [installationSelections, setInstallationSelections] =
+		useState(installationOptions);
+
 	const [lettersHeight, setLettersHeight] = useState({
 		min: 4,
 		max: 39,
@@ -87,6 +90,21 @@ export default function Letters({ item }) {
 		}
 		preloadFonts();
 	}, []);
+
+	useEffect(() => {
+		if ('Outdoor' === waterproof) {
+			if ('Double-sided tape' === installation) {
+				setInstallation('');
+			}
+			let newOptions = installationOptions.filter(
+				(option) => option.value !== 'Double-sided tape'
+			);
+
+			setInstallationSelections(newOptions);
+		} else {
+			setInstallationSelections(installationOptions);
+		}
+	}, [waterproof]);
 
 	const loadingFonts = async () => {
 		const loadPromises = NovaQuote.fonts.map((font) => loadFont(font));
@@ -175,7 +193,6 @@ export default function Letters({ item }) {
 			(option) => option.value === target
 		);
 		setSelectedThickness(() => selected[0]);
-		console.log(target);
 		if (parseInt(target) === 40) {
 			setSelectedLetterHeight('');
 		}
@@ -187,10 +204,6 @@ export default function Letters({ item }) {
 
 	const handleChangeFinishing = (e) => {
 		setSelectedFinishing(e.target.value);
-	};
-
-	const handleChangePieces = (e) => {
-		setPieces(e.target.value);
 	};
 
 	useEffect(() => {
@@ -560,8 +573,9 @@ export default function Letters({ item }) {
 				<Dropdown
 					title="Installation"
 					onChange={handleOnChangeInstallation}
-					options={installationOptions.map((option) => (
+					options={installationSelections.map((option) => (
 						<option
+							key={option.value}
 							value={option.value}
 							selected={option.value === installation}
 						>

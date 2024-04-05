@@ -4,12 +4,11 @@ import Sidebar from '../../../Sidebar';
 import Signage from '../../../Signage';
 import { PlusIcon } from '../../../svg/Icons';
 import { SignageCount } from '../../../utils/QuoteFunctions';
-import Letters from './components/Letters';
 import Logo from './components/Logo';
 
 export const QuoteContext = createContext(null);
 
-export default function PVCPainted() {
+export default function PVCUv() {
 	const [signage, setSignage] = useState([]);
 	const [missing, setMissing] = useState([]);
 	const [tempFolder, setTempFolder] = useState('');
@@ -26,28 +25,18 @@ export default function PVCPainted() {
 			setSignage([
 				{
 					id: uuidv4(),
-					type: 'letters',
-					title: 'LETTERS 1',
-					letters: '',
+					type: 'logo',
+					title: 'LOGO 1',
 					comments: '',
-					font: '',
 					installation: '',
 					waterproof: '',
 					thickness: '',
-					color: { name: '', color: '' },
-					letterHeight: '',
 					usdPrice: 0,
 					cadPrice: 0,
 					filePath: '',
 					fileName: '',
 					fileUrl: '',
 					file: '',
-					fontFilePath: '',
-					fontFileName: '',
-					fontFileUrl: '',
-					fontFile: '',
-					customFont: '',
-					customColor: '',
 					finishing: 'Matte',
 					product: NovaQuote.product,
 				},
@@ -95,31 +84,12 @@ export default function PVCPainted() {
 			// Count how many signages of this type already exist
 			const count = prevSignage.filter((sign) => sign.type === type).length;
 			let args;
-			// Create new signage with incremented title number
-			if (type === 'letters') {
-				args = {
-					type: type,
-					title: `${type} ${count + 1}`,
-					letters: '',
-					font: '',
-					thickness_options: '',
-					color: { name: '', color: '' },
-					letterHeight: '',
-					customFont: '',
-					customColor: '',
-					fontFilePath: '',
-					fontFileName: '',
-					fontFileUrl: '',
-					fontFile: '',
-				};
-			} else {
-				args = {
-					type: type,
-					title: `${type} ${count + 1}`,
-					width: '',
-					height: '',
-				};
-			}
+			args = {
+				type: type,
+				title: `${type} ${count + 1}`,
+				width: '',
+				height: '',
+			};
 			const newSignage = {
 				...defaultArgs,
 				...args,
@@ -180,26 +150,11 @@ export default function PVCPainted() {
 							setMissing={setMissing}
 							storage={storage}
 						>
-							{item.type === 'letters' ? (
-								<Letters key={item.id} item={item} />
-							) : (
-								<Logo key={item.id} item={item} />
-							)}
+							<Logo key={item.id} item={item} />
 						</Signage>
 					))}
 
 					<div className="flex gap-2">
-						{SignageCount(signage, 'letters') < 5 && (
-							<button
-								className="flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white"
-								onClick={() => addSignage('letters')}
-								style={{ border: '1px solid #d2d2d2d2' }}
-							>
-								ADD LETTERS
-								<PlusIcon />
-							</button>
-						)}
-
 						{SignageCount(signage, 'logo') < 5 && (
 							<button
 								className="flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white"
@@ -212,7 +167,12 @@ export default function PVCPainted() {
 						)}
 					</div>
 				</div>
-				<Sidebar signage={signage} required={missing} tempFolder={tempFolder} />
+				<Sidebar
+					signage={signage}
+					required={missing}
+					tempFolder={tempFolder}
+					storage={storage}
+				/>
 			</div>
 		</QuoteContext.Provider>
 	);

@@ -4,7 +4,15 @@ import { CloseIcon, LoadingIcon } from './svg/Icons';
 import { processQuote } from './utils/QuoteFunctions';
 import renameFolder from './utils/renameFolder';
 
-function ModalSave({ signage, action, btnClass, label, required, tempFolder }) {
+function ModalSave({
+	signage,
+	action,
+	btnClass,
+	label,
+	required,
+	tempFolder,
+	storage,
+}) {
 	const [isLoading, setIsLoading] = useState(false);
 	const [submitted, setSubmitted] = useState(false);
 	const [submitting, setSubmitting] = useState(false);
@@ -150,7 +158,7 @@ function ModalSave({ signage, action, btnClass, label, required, tempFolder }) {
 
 			const status = await processQuote(formData);
 			if (status.status === 'success') {
-				localStorage.removeItem(window.location.href + NovaQuote.user_id);
+				localStorage.removeItem(storage);
 				localStorage.removeItem(
 					window.location.href + NovaQuote.user_id + '-folder'
 				);

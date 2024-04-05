@@ -80,6 +80,8 @@ class Pending_Payment {
 			$payment_id = intval( $_POST['payment_id'] );
 			$payment    = $this->get_data( $payment_id );
 
+			print_r( $payment );
+
 			if ( $payment ) {
 				$this->send_payment_reminder_email( $payment );
 				// Optionally, add a query arg to indicate the email was sent, to show a message to the admin
@@ -98,6 +100,11 @@ class Pending_Payment {
 		$original_total = $payment->original_total;
 		$currency       = $payment->currency;
 		$payment_date   = $payment->payment_date;
+		$order          = wc_get_order( $payment_order );
+		if ( ! $order ) {
+			return 'Order not found';
+		}
+		$payment_url = $order->get_checkout_payment_url();
 
 		$customer = $this->get_billing_information_from_payment( $payment );
 
@@ -105,9 +112,15 @@ class Pending_Payment {
 		$customer_email = $customer['email'];
 
 		$subject = get_field( 'reminder_email_subject', $payment_type );
+		$subject = str_replace( '{customer_name}', $first_name, $subject );
+		$subject = str_replace( '{order_number}', $payment_order, $subject );
 
 		$message = get_field( 'reminder_email', $payment_type );
-		$message = str_replace( '{first_name}', $first_name, $message );
+		$message = str_replace( '{customer_name}', $first_name, $message );
+		$message = str_replace( '{invoice_amount}', $currency . '$ ' . $pending_total, $message );
+		$message = str_replace( '{order_number}', $payment_order, $message );
+		$message = str_replace( '{payment_link}', $payment_url, $message );
+		$message = str_replace( '{deadline}', $payment_date, $message );
 
 		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
@@ -162,8 +175,16 @@ class Pending_Payment {
 		// Check if there's a filter request
 		$order_by = isset( $_GET['order_by'] ) && $_GET['order_by'] === 'payment_date' ? 'payment_date' : 'id';
 
+		$query = $wpdb->prepare(
+			"SELECT id, name, original_order, payment_order, deposit, pending_total, currency, payment_date, payment_select, payment_status
+        FROM {$table_name}
+        WHERE payment_status != %s
+        ORDER BY {$order_by} ASC",
+			'Completed'
+		);
+
 		// Fetch data from the custom table
-		$results = $wpdb->get_results( "SELECT id, name, original_order, payment_order, deposit, pending_total, currency, payment_date, payment_select, payment_status FROM {$table_name} ORDER BY {$order_by} ASC", ARRAY_A );
+		$results = $wpdb->get_results( $query, ARRAY_A );
 
 		// Start building the HTML content
 		echo '<div class="wrap">';
@@ -210,7 +231,7 @@ class Pending_Payment {
 				echo "<td>{$row['deposit']}</td>";
 				echo "<td>{$row['pending_total']}</td>";
 				echo "<td>{$row['currency']}</td>";
-				echo "<td>{$row['payment_date']}</td>";
+				echo '<td>' . date( 'F d, Y', strtotime( $row['payment_date'] ) ) . '</td>';
 				echo '<td>' . get_the_title( $row['payment_select'] ) . '</td>';
 				echo "<td>{$row['payment_status']}</td>";
 				echo '<td>';

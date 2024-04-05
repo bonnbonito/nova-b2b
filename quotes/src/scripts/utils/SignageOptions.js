@@ -88,7 +88,7 @@ const mountingDefaultOptions = [
 		mounting_option: 'Plain',
 	},
 	{
-		mounting_option: 'Double sided tape',
+		mounting_option: 'Double-sided tape',
 	},
 	{
 		mounting_option: 'Flush stud',
@@ -139,9 +139,9 @@ const calculateMountingOptions = (
 
 	if (waterproof === 'Outdoor') {
 		newMountingOptions = newMountingOptions.filter(
-			(option) => option.mounting_option !== 'Double sided tape'
+			(option) => option.mounting_option !== 'Double-sided tape'
 		);
-		if (updatedSelectedMounting === 'Double sided tape') {
+		if (updatedSelectedMounting === 'Double-sided tape') {
 			updatedSelectedMounting =
 				mountingDefaultOptions[0]?.mounting_option ?? '';
 		}

@@ -11,7 +11,7 @@ import {
 	thicknessOptions,
 } from '../../pvcOptions';
 
-import { QuoteContext } from '../PVCPainted';
+import { QuoteContext } from '../PVCUv';
 
 const exchangeRate = 1.3;
 

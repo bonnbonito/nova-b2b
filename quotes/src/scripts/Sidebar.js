@@ -4,7 +4,7 @@ import Prices from './Prices';
 
 const currency = wcumcs_vars_data.currency;
 
-export default function Sidebar({ signage, required, tempFolder }) {
+export default function Sidebar({ signage, required, tempFolder, storage }) {
 	const taxRateObj = NovaMyAccount.tax_rate;
 	const tax = taxRateObj ? parseFloat(taxRateObj.tax_rate / 100) : 0;
 	const taxRateName = taxRateObj ? taxRateObj.tax_rate_name : 'Tax';
@@ -101,6 +101,7 @@ export default function Sidebar({ signage, required, tempFolder }) {
 											signage={signage}
 											required={required}
 											tempFolder={tempFolder}
+											storage={storage}
 											action="update-processing"
 											label="Submit Quote"
 											btnClass="mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
@@ -112,6 +113,7 @@ export default function Sidebar({ signage, required, tempFolder }) {
 									<ModalSave
 										signage={signage}
 										tempFolder={tempFolder}
+										storage={storage}
 										required={required}
 										action="update"
 										label="Update Quote"
@@ -124,6 +126,7 @@ export default function Sidebar({ signage, required, tempFolder }) {
 										<ModalSave
 											signage={signage}
 											tempFolder={tempFolder}
+											storage={storage}
 											required={required}
 											action="processing"
 											label="Submit Quote"
@@ -136,6 +139,7 @@ export default function Sidebar({ signage, required, tempFolder }) {
 									<ModalSave
 										signage={signage}
 										tempFolder={tempFolder}
+										storage={storage}
 										required={required}
 										action="draft"
 										label="Save to Draft"

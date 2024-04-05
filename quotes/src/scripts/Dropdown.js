@@ -7,7 +7,6 @@ export default function Dropdown({
 	onlyValue,
 }) {
 	const selectClass = value || onlyValue ? 'text-black' : 'text-[#dddddd]';
-
 	return (
 		<div className="px-[1px]">
 			<label className="uppercase font-title text-sm tracking-[1.4px] px-2">

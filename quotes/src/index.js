@@ -15,6 +15,7 @@ import FabricatedStainless from './scripts/products/metal/FabricatedStainless/Fa
 import LaserCutAluminum from './scripts/products/metal/LaserCutAluminum/LaserCutAluminum';
 import LaserCutStainless from './scripts/products/metal/LaserCutStainless/LaserCutStainless';
 import PVCPainted from './scripts/products/pvc/PVCPainted/PVCPainted';
+import PVCUv from './scripts/products/pvc/PVCUv/PVCUv';
 
 if (document.querySelector('#laserCutAcrylic')) {
 	ReactDOM.render(
@@ -25,6 +26,10 @@ if (document.querySelector('#laserCutAcrylic')) {
 
 if (document.querySelector('#pvcPainted')) {
 	ReactDOM.render(<PVCPainted />, document.querySelector('#pvcPainted'));
+}
+
+if (document.querySelector('#pvcUv')) {
+	ReactDOM.render(<PVCUv />, document.querySelector('#pvcUv'));
 }
 
 if (document.querySelector('#layeredAcrylic')) {

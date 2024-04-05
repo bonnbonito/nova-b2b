@@ -89,6 +89,33 @@ class Woocommerce {
 		add_filter( 'woocommerce_order_number', array( $this, 'customize_woocommerce_order_number' ), 10, 2 );
 		add_filter( 'woocommerce_available_payment_gateways', array( $this, 'disable_bacs_for_non_admins' ) );
 		add_filter( 'payment_types', array( $this, 'partner_payment_types' ) );
+		add_filter( 'woocommerce_order_actions', array( $this, 'remove_send_invoice' ), 10, 2 );
+		add_filter( 'woocommerce_admin_order_actions', array( $this, 'remove_recalculate' ), 10, 2 );
+	}
+
+	public function remove_recalculate( $actions, $order ) {
+		// Check if the order has the '_from_order_id' meta key
+		$from_order_id = get_post_meta( $order->get_id(), '_from_order_id', true );
+
+		if ( ! empty( $from_order_id ) ) {
+			// Remove the 'Recalculate' action
+			unset( $actions['recalculate'] );
+		}
+
+		return $actions;
+	}
+
+	public function remove_send_invoice( $actions, $order ) {
+		// Check if the order has the '_from_order_id' meta key
+		$from_order_id = get_post_meta( $order->get_id(), '_from_order_id', true );
+
+		if ( ! empty( $from_order_id ) ) {
+			// Remove the 'Email Invoice / Order Details to Customer' action
+			unset( $actions['send_order_details'] );
+			unset( $actions['send_order_details_admin'] );
+		}
+
+		return $actions;
 	}
 
 	public function disable_bacs_for_non_admins( $available_gateways ) {
@@ -395,7 +422,6 @@ class Woocommerce {
 				$new_total = $total * $deposit;
 
 				WC()->session->set( 'pending_payment', $total - $new_total );
-
 				WC()->session->set( 'original_total', $total );
 				WC()->session->set( 'deposit_total', $new_total );
 				WC()->session->set( 'original_shipping', WC()->cart->get_shipping_total() );
@@ -414,8 +440,8 @@ class Woocommerce {
 		$payment_select = isset( $_POST['payment_select'] ) ? (int) $_POST['payment_select'] : 0;
 
 		if ( WC()->session ) {
+			WC()->session->__unset( 'payment_select' );
 			WC()->session->set( 'payment_select', $payment_select );
-
 		} else {
 			error_log( 'WooCommerce session not initialized.' );
 		}

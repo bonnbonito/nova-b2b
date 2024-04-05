@@ -49,69 +49,7 @@ $from_id = $order->get_meta( '_from_order_id' );
 								wc_display_item_meta( $item );
 
 								do_action( 'woocommerce_order_item_meta_end', $item_id, $item, $order, false );
-					if ( $item['signage'] ) {
-						echo '<div class="block">';
-						foreach ( $item['signage'] as $signage ) {
-							?>
-					<div class="mb-2 p-4 block" style="font-size: 90%">
-						<p class="mb-0"><?php echo $signage->title; ?></p>
-						<ul class="font-size: 80%;">
-							<li>TYPE: <strong class="uppercase"><?php echo $signage->type; ?></strong></li>
-							<?php if ( $signage->thickness ) : ?>
-							<li>THICKNESS: <strong class=""><?php echo $signage->thickness->thickness; ?>"</strong>
-							</li>
-							<?php endif; ?>
-							<?php if ( $signage->letterHeight ) : ?>
-							<li>Letter Height: <strong class="uppercase"><?php echo $signage->letterHeight; ?>"</strong>
-							</li>
-							<?php endif; ?>
-							<?php if ( $signage->width ) : ?>
-							<li>WIDTH: <strong class="uppercase"><?php echo $signage->width; ?>"</strong>
-							</li>
-							<?php endif; ?>
-							<?php if ( $signage->height ) : ?>
-							<li>HEIGHT: <strong class="uppercase"><?php echo $signage->height; ?>"</strong>
-							</li>
-							<?php endif; ?>
-							<?php if ( $signage->letters ) : ?>
-							<li>LINE TEXT: <strong class=""><?php echo $signage->letters; ?></strong>
-							</li>
-							<?php endif; ?>
-							<?php if ( $signage->font ) : ?>
-							<li>FONT: <strong class="uppercase"><?php echo $signage->font; ?></strong>
-							</li>
-							<?php endif; ?>
-							<?php if ( $signage->color ) : ?>
-							<li>COLOR: <strong class="uppercase"><?php echo $signage->color->name; ?></strong>
-							</li>
-							<?php endif; ?>
-							<?php if ( $signage->waterproof ) : ?>
-							<li>WATERPROOF: <strong class="uppercase"><?php echo $signage->waterproof; ?></strong>
-							</li>
-							<?php endif; ?>
-							<?php if ( $signage->mounting ) : ?>
-							<li>MOUNTING: <strong class="uppercase"><?php echo $signage->mounting; ?></strong>
-							</li>
-							<?php endif; ?>
-							<?php if ( $signage->finishing ) : ?>
-							<li>FINISHING: <strong class="uppercase"><?php echo $signage->finishing; ?></strong>
-							</li>
-							<?php endif; ?>
-							<?php if ( $signage->file ) : ?>
-							<li>FILE: <strong class="uppercase"><?php echo $signage->file; ?></strong>
-							</li>
-							<?php endif; ?>
-							<?php if ( $signage->comments ) : ?>
-							<li>COMMENTS: <?php echo $signage->comments; ?></strong>
-							</li>
-							<?php endif; ?>
-						</ul>
-					</div>
 
-							<?php
-						}
-						echo '</div>';
-					}
 
 					?>
 				</td>
@@ -127,14 +65,7 @@ $from_id = $order->get_meta( '_from_order_id' );
 			<?php endif; ?>
 		</tbody>
 		<tfoot>
-			<?php if ( $from_id ) : ?>
-			<tr>
-                <th scope="row" colspan="2">Overall Total (+shipping):</th><?php // @codingStandardsIgnoreLine ?>
-				<td class="product-total"><?php echo wc_price( $order->get_meta( '_original_total' ) ); ?></td>
-                <?php // @codingStandardsIgnoreLine ?>
-			</tr>
 
-			<?php endif; ?>
 			<?php if ( $totals ) : ?>
 				<?php
 				foreach ( $totals as $total ) :

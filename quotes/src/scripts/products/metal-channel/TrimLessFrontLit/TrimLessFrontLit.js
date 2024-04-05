@@ -199,7 +199,12 @@ export default function TrimLessFrontLit() {
 						)}
 					</div>
 				</div>
-				<Sidebar signage={signage} required={missing} tempFolder={tempFolder} />
+				<Sidebar
+					signage={signage}
+					required={missing}
+					tempFolder={tempFolder}
+					storage={storage}
+				/>
 			</div>
 		</QuoteContext.Provider>
 	);

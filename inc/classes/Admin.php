@@ -236,6 +236,7 @@ class Admin {
 
 	public function add_nova_columns( $defaults ) {
 		// unset( $defaults['author'] );
+		$new_columns['cb']           = $defaults['cb'];
 		$new_columns['quote_id']     = 'Quote ID';
 		$new_columns['date']         = 'Date';
 		$new_columns['business_id']  = 'Business ID';
