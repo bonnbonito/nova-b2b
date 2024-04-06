@@ -298,6 +298,7 @@ export default function Logo({ item }) {
 	]);
 
 	useOutsideClick([colorRef], () => {
+		if (!openColor) return;
 		setOpenColor(false);
 	});
 

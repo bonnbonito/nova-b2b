@@ -231,11 +231,12 @@ export default function Logo({ item }) {
 	}, [width, height, selectedThickness, waterproof, selectedFinishing]);
 
 	useOutsideClick([colorRef], () => {
+		if (!openColor) return;
 		setOpenColor(false);
 	});
 
 	useEffect(() => {
-		color != 'Custom Color' && setCustomColor('');
+		color?.name != 'Custom Color' && setCustomColor('');
 	}, [color]);
 
 	return (

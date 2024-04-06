@@ -394,12 +394,13 @@ export default function Letters({ item }) {
 	}, [selectedThickness]);
 
 	useOutsideClick([colorRef, fontRef], () => {
+		if (!openColor && !openFont) return;
 		setOpenColor(false);
 		setOpenFont(false);
 	});
 
 	useEffect(() => {
-		color != 'Custom Color' && setCustomColor('');
+		color?.name != 'Custom Color' && setCustomColor('');
 		font != 'Custom font' && setFontFileUrl('');
 	}, [color, font]);
 

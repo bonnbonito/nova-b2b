@@ -415,6 +415,7 @@ export default function Letters({ item }) {
 	}, [selectedThickness]);
 
 	useOutsideClick([colorRef, acrylicRef, fontRef], () => {
+		if (!openColor && !openFont && !openAcrylicColor) return;
 		setOpenColor(false);
 		setOpenAcrylicColor(false);
 		setOpenFont(false);

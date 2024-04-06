@@ -424,6 +424,7 @@ export default function Letters({ item }) {
 	}, [depth, selectedLetterHeight]);
 
 	useOutsideClick([colorRef, fontRef], () => {
+		if (!openColor && !openFont) return;
 		setOpenColor(false);
 		setOpenFont(false);
 	});
@@ -511,7 +512,7 @@ export default function Letters({ item }) {
 	]);
 
 	useEffect(() => {
-		color != 'Custom Color' && setCustomColor('');
+		color?.name != 'Custom Color' && setCustomColor('');
 		font != 'Custom font' && setFontFileUrl('');
 	}, [color, font]);
 

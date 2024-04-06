@@ -444,7 +444,7 @@ export default function Letters({ item }) {
 	});
 
 	useEffect(() => {
-		color != 'Custom Color' && setCustomColor('');
+		color?.name != 'Custom Color' && setCustomColor('');
 		font != 'Custom font' && setFontFileUrl('');
 	}, [color, font]);
 

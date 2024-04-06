@@ -132,7 +132,6 @@ export default function LaserCutAcrylic() {
 
 	useEffect(() => {
 		localStorage.setItem(storage, JSON.stringify(signage));
-		console.log('signage');
 	}, [signage]);
 
 	useEffect(() => {

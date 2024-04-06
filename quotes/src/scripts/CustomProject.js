@@ -17,7 +17,6 @@ export default function CustomProject() {
 				window.location.href + NovaQuote.user_id + '-custom-project'
 			)
 		);
-		console.log(savedStorage);
 		if (savedStorage?.length > 0) {
 			setProjects(savedStorage);
 		} else {

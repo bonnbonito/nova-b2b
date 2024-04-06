@@ -448,13 +448,14 @@ export default function Letters({ item }) {
 	}, [depth]);
 
 	useOutsideClick([colorRef, fontRef, acrylicColorRef], () => {
+		if (!openColor && !openFont && !openAcrylicCover) return;
 		setOpenColor(false);
 		setOpenFont(false);
 		setOpenAcrylicCover(false);
 	});
 
 	useEffect(() => {
-		color != 'Custom Color' && setCustomColor('');
+		color?.name != 'Custom Color' && setCustomColor('');
 		font != 'Custom font' && setFontFileUrl('');
 	}, [color, font]);
 

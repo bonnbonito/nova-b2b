@@ -2979,7 +2979,6 @@ function LaserCutAcrylic() {
   }
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     localStorage.setItem(storage, JSON.stringify(signage));
-    console.log('signage');
   }, [signage]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting.length === 0) {
@@ -3229,7 +3228,6 @@ function Letters({
     if (letterPricing.length > 0 && selectedLetterHeight && selectedThickness && waterproof) {
       const pricingDetail = letterPricing[selectedLetterHeight - 1];
       const baseLetterPrice = pricingDetail[selectedThickness.value];
-      console.log(color);
       let totalLetterPrice = 0;
       const lettersArray = letters.trim().split('');
       lettersArray.forEach(letter => {
@@ -3371,11 +3369,12 @@ function Letters({
     }
   }, [selectedThickness]);
   (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__["default"])([colorRef, fontRef], () => {
+    if (!openColor && !openFont) return;
     setOpenColor(false);
-    setOpenColor(false);
+    setOpenFont(false);
   });
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    color != 'Custom Color' && setCustomColor('');
+    color?.name != 'Custom Color' && setCustomColor('');
     font != 'Custom font' && setFontFileUrl('');
   }, [color, font]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -4800,6 +4799,7 @@ function Letters({
     }
   }, [selectedThickness]);
   (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__["default"])([colorRef, acrylicRef, fontRef], () => {
+    if (!openColor && !openFont && !openAcrylicColor) return;
     setOpenColor(false);
     setOpenAcrylicColor(false);
     setOpenFont(false);
@@ -6586,6 +6586,7 @@ function Letters({
     }
   }, [depth, selectedLetterHeight]);
   (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__["default"])([colorRef, fontRef], () => {
+    if (!openColor && !openFont) return;
     setOpenColor(false);
     setOpenFont(false);
   });
@@ -6647,7 +6648,7 @@ function Letters({
     }
   }, [selectedLetterHeight, letters, waterproof, lettersHeight, letterPricing, depth, acrylicReveal, metalFinish]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    color != 'Custom Color' && setCustomColor('');
+    color?.name != 'Custom Color' && setCustomColor('');
     font != 'Custom font' && setFontFileUrl('');
   }, [color, font]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -7389,12 +7390,13 @@ function Letters({
     }
   }, [depth]);
   (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__["default"])([colorRef, fontRef, acrylicColorRef], () => {
+    if (!openColor && !openFont && !openAcrylicCover) return;
     setOpenColor(false);
     setOpenFont(false);
     setOpenAcrylicCover(false);
   });
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    color != 'Custom Color' && setCustomColor('');
+    color?.name != 'Custom Color' && setCustomColor('');
     font != 'Custom font' && setFontFileUrl('');
   }, [color, font]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -8131,12 +8133,13 @@ function Letters({
     }
   }, [depth]);
   (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__["default"])([colorRef, fontRef, acrylicColorRef], () => {
+    if (!openColor && !openFont && !openAcrylicCover) return;
     setOpenColor(false);
     setOpenFont(false);
     setOpenAcrylicCover(false);
   });
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    color != 'Custom Color' && setCustomColor('');
+    color?.name != 'Custom Color' && setCustomColor('');
     font != 'Custom font' && setFontFileUrl('');
   }, [color, font]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -8942,11 +8945,12 @@ function Letters({
     }
   }, [selectedThickness]);
   (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__["default"])([colorRef, fontRef], () => {
+    if (!openColor && !openFont) return;
     setOpenColor(false);
     setOpenFont(false);
   });
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    color != 'Custom Color' && setCustomColor('');
+    color?.name != 'Custom Color' && setCustomColor('');
     font != 'Custom font' && setFontFileUrl('');
   }, [color, font]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -9326,6 +9330,7 @@ function Logo({
     }
   }, [width, height, selectedThickness, waterproof, selectedFinishing, metal, stainLessMetalFinish]);
   (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_3__["default"])([colorRef], () => {
+    if (!openColor) return;
     setOpenColor(false);
   });
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -9953,11 +9958,12 @@ function Letters({
     }
   }, [selectedThickness]);
   (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__["default"])([colorRef, fontRef], () => {
+    if (!openColor && !openFont) return;
     setOpenColor(false);
     setOpenFont(false);
   });
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    color != 'Custom Color' && setCustomColor('');
+    color?.name != 'Custom Color' && setCustomColor('');
     font != 'Custom font' && setFontFileUrl('');
   }, [color, font]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -10297,10 +10303,11 @@ function Logo({
     }
   }, [width, height, selectedThickness, waterproof, selectedFinishing]);
   (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_3__["default"])([colorRef], () => {
+    if (!openColor) return;
     setOpenColor(false);
   });
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    color != 'Custom Color' && setCustomColor('');
+    color?.name != 'Custom Color' && setCustomColor('');
   }, [color]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid mb-6"
@@ -10958,11 +10965,12 @@ function Letters({
     }
   }, [selectedThickness]);
   (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__["default"])([colorRef, fontRef], () => {
+    if (!openColor && !openFont) return;
     setOpenColor(false);
     setOpenFont(false);
   });
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    color != 'Custom Color' && setCustomColor('');
+    color?.name != 'Custom Color' && setCustomColor('');
     font != 'Custom font' && setFontFileUrl('');
   }, [color, font]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -11364,6 +11372,7 @@ function Logo({
     }
   }, [width, height, selectedThickness, waterproof, selectedFinishing, metal, stainLessMetalFinish, stainlessSteelPolished]);
   (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_3__["default"])([colorRef], () => {
+    if (!openColor) return;
     setOpenColor(false);
   });
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -12133,11 +12142,12 @@ function Letters({
     }
   }, [selectedThickness]);
   (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__["default"])([colorRef, fontRef], () => {
+    if (!openColor && !openFont) return;
     setOpenColor(false);
     setOpenFont(false);
   });
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    color != 'Custom Color' && setCustomColor('');
+    color?.name != 'Custom Color' && setCustomColor('');
     font != 'Custom font' && setFontFileUrl('');
   }, [color, font]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -13136,8 +13146,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 
-
-// Hook
 function useOutsideClick(refs, callback) {
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     function handleClickOutside(event) {

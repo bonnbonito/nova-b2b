@@ -206,8 +206,6 @@ export default function Letters({ item }) {
 			const pricingDetail = letterPricing[selectedLetterHeight - 1];
 			const baseLetterPrice = pricingDetail[selectedThickness.value];
 
-			console.log(color);
-
 			let totalLetterPrice = 0;
 			const lettersArray = letters.trim().split('');
 
@@ -438,12 +436,13 @@ export default function Letters({ item }) {
 	}, [selectedThickness]);
 
 	useOutsideClick([colorRef, fontRef], () => {
+		if (!openColor && !openFont) return;
 		setOpenColor(false);
-		setOpenColor(false);
+		setOpenFont(false);
 	});
 
 	useEffect(() => {
-		color != 'Custom Color' && setCustomColor('');
+		color?.name != 'Custom Color' && setCustomColor('');
 		font != 'Custom font' && setFontFileUrl('');
 	}, [color, font]);
 

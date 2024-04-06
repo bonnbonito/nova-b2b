@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 
-// Hook
 export default function useOutsideClick(refs, callback) {
 	useEffect(() => {
 		function handleClickOutside(event) {
