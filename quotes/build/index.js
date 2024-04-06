@@ -2979,6 +2979,7 @@ function LaserCutAcrylic() {
   }
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     localStorage.setItem(storage, JSON.stringify(signage));
+    console.log('signage');
   }, [signage]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting.length === 0) {
@@ -3371,7 +3372,7 @@ function Letters({
   }, [selectedThickness]);
   (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__["default"])([colorRef, fontRef], () => {
     setOpenColor(false);
-    setOpenFont(false);
+    setOpenColor(false);
   });
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     color != 'Custom Color' && setCustomColor('');
@@ -4692,9 +4693,9 @@ function Letters({
 
         // Adjusting for waterproof and finishing
         letterPrice *= waterproof === 'Indoor' ? 1 : 1.1;
+        letterPrice *= _MetalLaminate__WEBPACK_IMPORTED_MODULE_10__.METAL_ACRYLIC_PRICING;
+        letterPrice *= acrylicBase?.name === 'Black' ? 1 : 1.1;
         totalLetterPrice += letterPrice;
-        totalLetterPrice *= _MetalLaminate__WEBPACK_IMPORTED_MODULE_10__.METAL_ACRYLIC_PRICING;
-        totalLetterPrice *= acrylicBase?.name === 'Black' ? 1 : 1.1;
       });
       setUsdPrice(totalLetterPrice.toFixed(2));
       setCadPrice((totalLetterPrice * parseFloat(exchangeRate)).toFixed(2));
@@ -13144,14 +13145,11 @@ function useOutsideClick(refs, callback) {
         callback();
       }
     }
-
-    // Bind the event listener
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      // Unbind the event listener on clean up
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [refs, callback]); // Depend on the entire refs array
+  }, [refs, callback]);
 }
 
 /***/ }),

@@ -172,6 +172,7 @@ export default function Letters({ item }) {
 
 	const handleOnChangeThickness = (e) => {
 		const target = e.target.value;
+		console.log(target);
 		const selected = thicknessOptions.filter(
 			(option) => option.value === target
 		);
@@ -439,7 +440,7 @@ export default function Letters({ item }) {
 
 	useOutsideClick([colorRef, fontRef], () => {
 		setOpenColor(false);
-		setOpenColor(false);
+		setOpenFont(false);
 	});
 
 	useEffect(() => {

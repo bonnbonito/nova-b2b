@@ -224,10 +224,10 @@ export default function Letters({ item }) {
 
 				// Adjusting for waterproof and finishing
 				letterPrice *= waterproof === 'Indoor' ? 1 : 1.1;
+				letterPrice *= METAL_ACRYLIC_PRICING;
+				letterPrice *= acrylicBase?.name === 'Black' ? 1 : 1.1;
 
 				totalLetterPrice += letterPrice;
-				totalLetterPrice *= METAL_ACRYLIC_PRICING;
-				totalLetterPrice *= acrylicBase?.name === 'Black' ? 1 : 1.1;
 			});
 
 			setUsdPrice(totalLetterPrice.toFixed(2));
