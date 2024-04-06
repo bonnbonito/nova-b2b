@@ -1599,7 +1599,8 @@ function Sidebar({
   storage
 }) {
   const taxRateObj = NovaMyAccount.tax_rate;
-  const tax = taxRateObj ? parseFloat(taxRateObj.tax_rate / 100) : 0;
+  //const tax = taxRateObj ? parseFloat(taxRateObj.tax_rate / 100) : 0;
+  const tax = 0;
   const taxRateName = taxRateObj ? taxRateObj.tax_rate_name : 'Tax';
   const totalUsdPrice = signage.reduce((acc, item) => acc + parseFloat(item.usdPrice), 0);
   const totalCadPrice = signage.reduce((acc, item) => acc + parseFloat(item.cadPrice), 0);
@@ -1608,7 +1609,9 @@ function Sidebar({
   const flatRate = currency === 'USD' ? 14.75 : 14.75 * exchangeRate;
   const standardRate = totalPrice > 0 ? parseFloat(totalPrice * 0.075) : 0;
   const estimatedShipping = totalPrice > 0 ? parseFloat(Math.max(flatRate, standardRate)) : 0;
-  const taxCompute = parseFloat(totalPrice * tax);
+
+  //const taxCompute = parseFloat(totalPrice * tax);
+  const taxCompute = 0;
   const estimateTotalPrice = totalPrice + estimatedShipping + taxCompute;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-1/4 w-full mt-8 md:mt-0"

@@ -6,7 +6,8 @@ const currency = wcumcs_vars_data.currency;
 
 export default function Sidebar({ signage, required, tempFolder, storage }) {
 	const taxRateObj = NovaMyAccount.tax_rate;
-	const tax = taxRateObj ? parseFloat(taxRateObj.tax_rate / 100) : 0;
+	//const tax = taxRateObj ? parseFloat(taxRateObj.tax_rate / 100) : 0;
+	const tax = 0;
 	const taxRateName = taxRateObj ? taxRateObj.tax_rate_name : 'Tax';
 
 	const totalUsdPrice = signage.reduce(
@@ -29,7 +30,8 @@ export default function Sidebar({ signage, required, tempFolder, storage }) {
 	const estimatedShipping =
 		totalPrice > 0 ? parseFloat(Math.max(flatRate, standardRate)) : 0;
 
-	const taxCompute = parseFloat(totalPrice * tax);
+	//const taxCompute = parseFloat(totalPrice * tax);
+	const taxCompute = 0;
 
 	const estimateTotalPrice = totalPrice + estimatedShipping + taxCompute;
 
