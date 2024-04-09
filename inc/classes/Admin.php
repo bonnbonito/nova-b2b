@@ -39,6 +39,8 @@ class Admin {
 		add_filter( 'acf/ajax/query_users/args', array( $this, 'search_user_business_id' ), 10, 3 );
 		add_action( 'admin_menu', array( $this, 'export_users_menu' ) );
 		add_action( 'admin_init', array( $this, 'export_users_to_csv_check' ) );
+		add_action( 'admin_menu', array( $this, 'export_quotes_menu' ) );
+		add_action( 'admin_init', array( $this, 'export_quotes_to_csv_check' ) );
 	}
 
 	public function export_users_menu() {
@@ -49,6 +51,31 @@ class Admin {
 			'export-partners',
 			array( $this, 'export_users_page' )
 		);
+	}
+
+	public function export_quotes_menu() {
+		add_management_page(
+			'Export Quotes',
+			'Export Quotes',
+			'manage_options',
+			'export-quotes',
+			array( $this, 'export_quotes_page' )
+		);
+	}
+
+	public function export_quotes_page() {
+		// Security check
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+		}
+
+		// Output the HTML for the page
+		echo '<div class="wrap">';
+		echo '<h1>Export Quotes</h1>';
+		echo '<p>Click the button below to export the quotes to a CSV file.</p>';
+		// Button triggers the export action
+		echo '<a href="' . admin_url( 'tools.php?page=export-quotes&export_quotes=1' ) . '" class="button button-primary">Export Quotes</a>';
+		echo '</div>';
 	}
 
 	public function export_users_page() {
@@ -69,6 +96,49 @@ class Admin {
 	public function export_users_to_csv_check() {
 		if ( isset( $_GET['export_partners'] ) && current_user_can( 'manage_options' ) ) {
 			$this->export_users_to_csv();
+		}
+	}
+
+	public function export_quotes_to_csv_check() {
+		if ( isset( $_GET['export_quotes'] ) && current_user_can( 'manage_options' ) ) {
+			$this->export_quotes_to_csv();
+		}
+	}
+
+	public function export_quotes_to_csv() {
+		// Fetch users with the 'Partner' role
+		if ( isset( $_GET['export_quotes'] ) && current_user_can( 'manage_options' ) ) {
+			$args   = array(
+				'post_type'      => 'nova_quote',
+				'posts_per_page' => -1,
+				'post_status'    => 'publish',
+			);
+			$quotes = get_posts( $args );
+
+			header( 'Content-Type: text/csv; charset=utf-8' );
+			header( 'Content-Disposition: attachment; filename=quotes.csv' );
+
+			$output = fopen( 'php://output', 'w' );
+			fputcsv( $output, array( 'Quote ID', 'Date', 'Business ID', 'Partner Name', 'Status', 'Project Name' ) );
+
+			foreach ( $quotes as $quote ) {
+
+				$user_id      = get_field( 'partner', $quote->ID );
+				$user_info    = get_userdata( $user_id );
+				$partner_name = ( $user_info->first_name ? $user_info->first_name : '' ) . ' ' . ( $user_info->last_name ? $user_info->last_name : '' );
+
+				$quote_data = array(
+					'Quote ID'     => $quote->ID,
+					'Date'         => $quote->post_date,
+					'Business ID'  => get_field( 'business_id', $quote->ID ),
+					'Partner Name' => $partner_name,
+					'Status'       => get_field( 'quote_status', $quote->ID ) ? get_field( 'quote_status', $quote->ID )['label'] : '',
+					'Project Name' => get_field( 'frontend_title', $quote->ID ),
+				);
+				fputcsv( $output, $quote_data );
+			}
+			fclose( $output );
+			exit;
 		}
 	}
 
@@ -288,15 +358,17 @@ class Admin {
 				// Display content for the partner column
 				$user_id   = get_field( 'partner', $post_id );
 				$user_info = get_userdata( $user_id );
-				echo $user_info->first_name . ' ' . $user_info->last_name;
+				echo ( isset( $user_info->first_name ) ? $user_info->first_name : '' ) . ' ' . ( isset( $user_info->last_name ) ? $user_info->last_name : '' );
 				break;
 			case 'quote_status':
-				if ( get_field( 'quote_status' )['value'] === 'processing' ) {
-					echo '<span style="padding: 1em; background-color: #bb2124; color: #fff; display: block; text-align: center; width: 120px;">' . get_field( 'quote_status' )['label'] . '</span>';
-				} elseif ( get_field( 'quote_status' )['value'] === 'ready' ) {
-					echo '<span style="padding: 1em; background-color: #22bb33; color: #fff; display: block; text-align: center; width: 120px;">' . get_field( 'quote_status' )['label'] . '</span>';
-				} else {
-					echo '<span style="padding: 1em; background-color: gray; color: #fff; display: block; text-align: center; width: 120px;">' . get_field( 'quote_status' )['label'] . '</span>';
+				if ( isset( get_field( 'quote_status' )['value'] ) ) {
+					if ( get_field( 'quote_status' )['value'] === 'processing' ) {
+						echo '<span style="padding: 1em; background-color: #bb2124; color: #fff; display: block; text-align: center; width: 120px;">' . get_field( 'quote_status' )['label'] . '</span>';
+					} elseif ( get_field( 'quote_status' )['value'] === 'ready' ) {
+						echo '<span style="padding: 1em; background-color: #22bb33; color: #fff; display: block; text-align: center; width: 120px;">' . get_field( 'quote_status' )['label'] . '</span>';
+					} else {
+						echo '<span style="padding: 1em; background-color: gray; color: #fff; display: block; text-align: center; width: 120px;">' . get_field( 'quote_status' )['label'] . '</span>';
+					}
 				}
 
 				break;

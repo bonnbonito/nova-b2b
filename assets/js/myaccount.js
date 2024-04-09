@@ -2,6 +2,17 @@ function novaMyAccount() {
 	console.log('novaMyAccount');
 	const quotationBtns = document.querySelectorAll('a[data-type="quotation"]');
 	const checkoutBtns = document.querySelectorAll('a[data-type="checkout"]');
+	const deleteBtns = document.querySelectorAll('a[data-type="delete"]');
+
+	deleteBtns.forEach((btn) => {
+		btn.addEventListener('click', (e) => {
+			e.preventDefault();
+			const del = confirm('Are you sure you want to delete?');
+			if (del) {
+				deleteQuote(btn);
+			}
+		});
+	});
 
 	quotationBtns.forEach((btn) => {
 		btn.addEventListener('click', (e) => {
@@ -18,7 +29,46 @@ function novaMyAccount() {
 	});
 }
 
-function process(btn, action) {
+function deleteQuote(btn) {
+	const quoteID = btn.dataset.id;
+	const parentElement = btn.parentNode;
+	parentElement.classList.add('loading');
+	const formData = new FormData();
+	formData.append('action', 'delete_quote');
+	formData.append('quote_id', quoteID);
+	formData.append('nonce', NovaQuote.nonce);
+	formData.append('role', NovaQuote.user_role[0]);
+	parentElement.querySelector('.loading').classList.remove('hidden');
+
+	fetch(NovaMyAccount.ajax_url, {
+		method: 'POST',
+		credentials: 'same-origin',
+		headers: {
+			'Cache-Control': 'no-cache',
+		},
+		body: formData,
+	})
+		.then((response) => response.json())
+		.then((data) => {
+			console.log(data);
+
+			if (data.code == 2) {
+				location.reload(true);
+				parentElement.style.opacity = '0';
+				parentElement.style.transition = '.4s';
+				parentElement.style.height = '0px';
+				parentElement.style.padding = '0px';
+				parentElement.style.margin = '0px';
+				parentElement.style.overflow = 'hidden';
+			} else {
+				alert(data.error);
+				location.reload(true);
+			}
+		})
+		.catch((error) => console.error('Error:', error));
+}
+
+function process(btn) {
 	const quoteID = btn.dataset.id;
 	console.log(quoteID);
 

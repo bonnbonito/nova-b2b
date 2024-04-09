@@ -100,7 +100,7 @@ class Nova_Quote {
 
 		$status = get_field( 'quote_status', $post->ID );
 
-		if ( $status['value'] === 'ready' ) {
+		if ( isset( $status['value'] ) && $status['value'] === 'ready' ) {
 			add_meta_box(
 				'nova_quote_admin_revision',
 				__( 'Updated by:' ),
