@@ -1646,7 +1646,7 @@ function Sidebar({
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ Sidebar)
+/* harmony export */   "default": () => (/* binding */ SidebarNoPrice)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
@@ -1656,8 +1656,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const currency = wcumcs_vars_data.currency;
-function Sidebar({
+function SidebarNoPrice({
   signage,
   required,
   tempFolder,
@@ -1687,6 +1686,8 @@ function Sidebar({
   }, "TBD")), signage.length > 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_1__["default"], {
     signage: signage,
     required: required,
+    tempFolder: tempFolder,
+    storage: storage,
     action: "processing",
     label: "Request Quote",
     btnClass: "mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
@@ -5899,7 +5900,9 @@ function CustomProject() {
     }
   }, "ADD PROJECT", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_SidebarNoPrice__WEBPACK_IMPORTED_MODULE_1__["default"], {
     signage: signage,
-    required: missing
+    required: missing,
+    tempFolder: tempFolder,
+    storage: storage
   })));
 }
 
@@ -13699,7 +13702,6 @@ async function renameFolder(oldPath, newPath) {
       client_secret: clientSecret
     });
     try {
-      console.log(oldPath, newPath);
       const response = await fetch(url, {
         method: 'POST',
         body: params,
@@ -13708,6 +13710,8 @@ async function renameFolder(oldPath, newPath) {
         }
       });
       if (!response.ok) {
+        const error = await response.text();
+        console.error('Error getting access token:', error);
         throw new Error('Network response was not ok');
       }
       const data = await response.json();
@@ -13739,6 +13743,8 @@ async function renameFolder(oldPath, newPath) {
       }
     });
     if (!moveResponse.ok) {
+      const error = await moveResponse.text(); // Get the text of the error response
+      console.error('Failed to move folder. Response:', error);
       throw new Error('Failed to move folder');
     }
     const moveData = await moveResponse.json();

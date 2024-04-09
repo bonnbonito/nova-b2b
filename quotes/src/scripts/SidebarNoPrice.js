@@ -2,9 +2,12 @@ import React from 'react';
 import ModalSave from './ModalSave';
 import Prices from './Prices';
 
-const currency = wcumcs_vars_data.currency;
-
-export default function Sidebar({ signage, required, tempFolder, storage }) {
+export default function SidebarNoPrice({
+	signage,
+	required,
+	tempFolder,
+	storage,
+}) {
 	return (
 		<div className="md:w-1/4 w-full mt-8 md:mt-0">
 			<div className="rounded-md border border-gray-200 p-4 sticky top-36">
@@ -34,6 +37,8 @@ export default function Sidebar({ signage, required, tempFolder, storage }) {
 					<ModalSave
 						signage={signage}
 						required={required}
+						tempFolder={tempFolder}
+						storage={storage}
 						action="processing"
 						label="Request Quote"
 						btnClass="mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"

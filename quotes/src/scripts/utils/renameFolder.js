@@ -13,7 +13,6 @@ export default async function renameFolder(oldPath, newPath) {
 		});
 
 		try {
-			console.log(oldPath, newPath);
 			const response = await fetch(url, {
 				method: 'POST',
 				body: params,
@@ -23,6 +22,8 @@ export default async function renameFolder(oldPath, newPath) {
 			});
 
 			if (!response.ok) {
+				const error = await response.text();
+				console.error('Error getting access token:', error);
 				throw new Error('Network response was not ok');
 			}
 
@@ -58,6 +59,8 @@ export default async function renameFolder(oldPath, newPath) {
 		});
 
 		if (!moveResponse.ok) {
+			const error = await moveResponse.text(); // Get the text of the error response
+			console.error('Failed to move folder. Response:', error);
 			throw new Error('Failed to move folder');
 		}
 

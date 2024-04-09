@@ -148,7 +148,12 @@ export default function CustomProject() {
 						)}
 					</div>
 				</div>
-				<SidebarNoPrice signage={signage} required={missing} />
+				<SidebarNoPrice
+					signage={signage}
+					required={missing}
+					tempFolder={tempFolder}
+					storage={storage}
+				/>
 			</div>
 		</QuoteContext.Provider>
 	);
