@@ -34,7 +34,19 @@ class Pending_Payment {
 		add_action( 'admin_post_send_payment_reminder', array( $this, 'handle_send_reminder' ) );
 		add_filter( 'kadence_woomail_order_body_text', array( $this, 'pending_payment_order_email_content' ), 999, 5 );
 		add_action( 'woocommerce_payment_complete', array( $this, 'custom_order_complete' ), 99, 1 );
+		add_action( 'pre_get_posts', array( $this, 'hide_specific_orders_in_admin' ) );
 		// add_filter( 'woocommerce_email_recipient_customer_completed_order', array( $this, 'disable_completed_order_email_for_pending' ), 10, 2 );
+	}
+
+	public function hide_specific_orders_in_admin( $query ) {
+		if ( is_admin() && $query->is_main_query() && $query->get( 'post_type' ) === 'shop_order' ) {
+			$meta_query   = $query->get( 'meta_query' ) ?: array();
+			$meta_query[] = array(
+				'key'     => '_from_order_id',
+				'compare' => 'NOT EXISTS',
+			);
+			$query->set( 'meta_query', $meta_query );
+		}
 	}
 
 	public function custom_order_complete( $order_id ) {

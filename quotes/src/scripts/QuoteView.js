@@ -13,10 +13,17 @@ export default function QuoteView() {
 	const NovaAccount = NovaMyAccount.quote;
 	const taxRate = NovaMyAccount.tax_rate;
 	const currency = wcumcs_vars_data.currency;
-	const signage = JSON.parse(NovaAccount.data);
+	const signage = NovaMyAccount.quote ? JSON.parse(NovaAccount.data) : null;
 	const quoteRef = useRef(null);
 	const [isLoading, setIsLoading] = useState(false);
 	const [isDownloading, setIsDownloading] = useState(false);
+
+	useEffect(() => {
+		if (!NovaAccount || Object.keys(NovaAccount).length === 0) {
+			window.location.href = NovaQuote.mockup_account_url;
+		}
+		console.log(signage);
+	}, []);
 
 	useEffect(() => {
 		console.log('Attempting to preload fonts...');
@@ -45,60 +52,6 @@ export default function QuoteView() {
 			console.error(`Font ${name} failed to load`);
 		}
 	}
-
-	const totalUsdPrice = signage.reduce(
-		(acc, item) => acc + parseFloat(item.usdPrice),
-		0
-	);
-
-	const handleDownload = () => {
-		const link = document.createElement('a');
-		link.href = NovaQuote.invoice_url + downloadFile;
-		link.target = '_blank'; // Open in new tab
-		link.rel = 'noopener noreferrer';
-		document.body.appendChild(link);
-		link.click();
-		document.body.removeChild(link);
-	};
-
-	const printHandler = (e) => {
-		e.preventDefault();
-
-		if (quoteRef.current && !isDownloading) {
-			setIsDownloading(true); // Disable the button and show loading state
-
-			const options = {
-				margin: [10, 10, 10, 10], // Top, Left, Bottom, Right
-				filename: `Quote-${NovaAccount.ID}.pdf`,
-				image: { type: 'jpeg', quality: 0.98 },
-				html2canvas: { scale: 2, letterRendering: true },
-				jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-				windowHeight: quoteRef.current.scrollHeight,
-				windowWidth: quoteRef.current.scrollWidth,
-			};
-
-			const clone = quoteRef.current.cloneNode(true);
-			const elementsToRemove = clone.querySelectorAll('.exclude-from-pdf');
-			elementsToRemove.forEach((el) => el.remove());
-
-			html2pdf()
-				.from(clone)
-				.set(options)
-				.toPdf()
-				.get('pdf')
-				.then((pdf) => {
-					console.log('PDF generated', pdf);
-				})
-				.save()
-				.then(() => {
-					setIsDownloading(false);
-				})
-				.catch((error) => {
-					console.error('Error generating PDF:', error);
-					setIsDownloading(false);
-				});
-		}
-	};
 
 	const addToCart = () => {
 		setIsLoading(true);
@@ -143,7 +96,9 @@ export default function QuoteView() {
 			.catch((error) => console.error('Error:', error));
 	};
 
-	const quotePrice = parseFloat(NovaAccount.final_price);
+	const quotePrice = NovaAccount?.final_price
+		? parseFloat(NovaAccount.final_price)
+		: 0;
 	const exchangeRate = 1.3;
 	const finalPrice =
 		currency === 'USD' ? quotePrice : quotePrice * exchangeRate;
@@ -162,180 +117,183 @@ export default function QuoteView() {
 		(finalPrice + estimatedShipping + taxCompute).toFixed(2)
 	);
 
-	const downloadFile =
-		currency === 'CAD'
-			? '/invoice-' + NovaAccount.ID + '-CAD.pdf'
-			: '/invoice-' + NovaAccount.ID + '.pdf';
+	const downloadFile = NovaAccount?.ID
+		? currency === 'CAD'
+			? `/invoice-${NovaAccount.ID}-CAD.pdf`
+			: `/invoice-${NovaAccount.ID}.pdf`
+		: null;
 
 	return (
-		<>
-			<div className="flex pb-4 mb-4 border-b justify-between">
-				<a
-					href={NovaQuote.mockup_account_url}
-					className="border-nova-light rounded px-4 py-3 border font-title text-nova-gray uppercase text-xs bg-white inline-flex items-center hover:text-black hover:bg-nova-light"
-				>
-					← Back To Mockups
-				</a>
-				{NovaAccount.quote_status.value === 'ready' && (
+		NovaAccount && (
+			<>
+				<div className="flex pb-4 mb-4 border-b justify-between">
 					<a
-						href={NovaQuote.invoice_url + downloadFile}
-						className={`rounded px-4 py-3 border ${
-							!isDownloading
-								? 'border-nova-light font-title text-nova-primary bg-white'
-								: 'border-gray-300 text-gray-500 bg-gray-100'
-						} text-xs inline-block hover:text-white hover:bg-nova-primary w-[160px] text-center cursor-pointer`}
-						disabled={isDownloading}
-						target="_blank"
+						href={NovaQuote.mockup_account_url}
+						className="border-nova-light rounded px-4 py-3 border font-title text-nova-gray uppercase text-xs bg-white inline-flex items-center hover:text-black hover:bg-nova-light"
 					>
-						{isDownloading ? 'Downloading...' : 'DOWNLOAD PDF'}
+						← Back To Mockups
 					</a>
-				)}
-			</div>
-
-			<div className="grid grid-cols-1 md:grid-cols-[1fr_160px] gap-4">
-				<div id="quoteDiv" ref={quoteRef} className="pb-6">
-					<div className="flex gap-2 items-center mb-4 ">
-						<h6 className="m-0 text-nova-primary">
-							STATUS:{' '}
-							<span className="text-sm font-normal font-thin">
-								{NovaAccount.quote_status.label}
-							</span>
-						</h6>
-					</div>
-					<div className="mb-10 block">
-						<h4 className="uppercase">
-							QUOTE ID: Q-{NovaAccount.ID.padStart(4, '0')}
-						</h4>
-					</div>
-					<div className="flex gap-2 items-center">
-						<h6 className="leading-[2] m-0">INITIAL QUOTE REQUESTED ON:</h6>{' '}
-						<span className="text-sm">{NovaAccount.published}</span>
-					</div>
-					<div className="flex gap-2 items-center">
-						<h6 className="leading-[2] m-0">LAST QUOTE SAVED:</h6>{' '}
-						<span className="text-sm">{NovaAccount.updated_date}</span>
-					</div>
-					<div className="flex gap-2 items-center mb-6">
-						<h6 className="leading-[2] m-0">QUOTE NAME:</h6>{' '}
-						<span className="text-sm">{decodeHTML(NovaAccount.title)}</span>
-					</div>
-					<div className="flex gap-2 items-center">
-						<h6 className="leading-[2] m-0">BUSINESS ID:</h6>{' '}
-						<span className="text-sm">
-							{NovaAccount.business_id ? NovaAccount.business_id : 'None'}
-						</span>
-					</div>
-					<div className="flex gap-2 items-center mb-6">
-						<h6 className="leading-[2] m-0">COMPANY NAME:</h6>{' '}
-						<span className="text-sm">
-							{NovaAccount.company_name ? NovaAccount.company_name : 'None'}
-						</span>
-					</div>
-
-					<div className="flex gap-2 items-center">
-						<h6 className="leading-[2] m-0">MATERIAL:</h6>{' '}
-						<span className="text-sm">
-							{NovaAccount.material ? NovaAccount.material : 'None'}
-						</span>
-					</div>
-					<div className="flex gap-2 items-center mb-8 pb-8 border-b-nova-light border-b">
-						<h6 className="leading-[2] m-0">PRODUCT:</h6>{' '}
-						<span className="text-sm">
-							{NovaAccount.product_name
-								? decodeHTML(NovaAccount.product_name)
-								: 'None'}
-						</span>
-					</div>
-					{signage.map((item) => (
-						<PricesView id={item.id} item={item}></PricesView>
-					))}
-
-					{NovaAccount.note && (
-						<div className="block mb-4">
-							<h5>Note:</h5>
-							<div
-								id="novaQuoteNote"
-								className="nova-quote-note block text-sm"
-								dangerouslySetInnerHTML={{ __html: NovaAccount.note }}
-							></div>
-						</div>
+					{NovaAccount?.quote_status?.value === 'ready' && (
+						<a
+							href={downloadFile && NovaQuote.invoice_url + downloadFile}
+							className={`rounded px-4 py-3 border ${
+								!isDownloading
+									? 'border-nova-light font-title text-nova-primary bg-white'
+									: 'border-gray-300 text-gray-500 bg-gray-100'
+							} text-xs inline-block hover:text-white hover:bg-nova-primary w-[160px] text-center cursor-pointer`}
+							disabled={isDownloading}
+							target="_blank"
+						>
+							{isDownloading ? 'Downloading...' : 'DOWNLOAD PDF'}
+						</a>
 					)}
+				</div>
 
-					<div className="flex justify-between gap-4">
-						<h5>
-							{`${
-								NovaAccount.quote_status.value === 'ready'
-									? 'SUBTOTAL'
-									: 'ESTIMATED SUBTOTAL'
-							}`}
-							:
-						</h5>{' '}
-						<h5>
-							{finalPrice > 0
-								? `${currency}$${Number(
-										finalPrice.toFixed(2)
-								  ).toLocaleString()}`
-								: 'TBD'}
-						</h5>
-					</div>
+				<div className="grid grid-cols-1 md:grid-cols-[1fr_160px] gap-4">
+					<div id="quoteDiv" ref={quoteRef} className="pb-6">
+						<div className="flex gap-2 items-center mb-4 ">
+							<h6 className="m-0 text-nova-primary">
+								STATUS:{' '}
+								<span className="text-sm font-normal font-thin">
+									{NovaAccount?.quote_status?.label}
+								</span>
+							</h6>
+						</div>
+						<div className="mb-10 block">
+							<h4 className="uppercase">
+								QUOTE ID: Q-{NovaAccount?.ID.padStart(4, '0')}
+							</h4>
+						</div>
+						<div className="flex gap-2 items-center">
+							<h6 className="leading-[2] m-0">INITIAL QUOTE REQUESTED ON:</h6>{' '}
+							<span className="text-sm">{NovaAccount?.published}</span>
+						</div>
+						<div className="flex gap-2 items-center">
+							<h6 className="leading-[2] m-0">LAST QUOTE SAVED:</h6>{' '}
+							<span className="text-sm">{NovaAccount?.updated_date}</span>
+						</div>
+						<div className="flex gap-2 items-center mb-6">
+							<h6 className="leading-[2] m-0">QUOTE NAME:</h6>{' '}
+							<span className="text-sm">{decodeHTML(NovaAccount?.title)}</span>
+						</div>
+						<div className="flex gap-2 items-center">
+							<h6 className="leading-[2] m-0">BUSINESS ID:</h6>{' '}
+							<span className="text-sm">
+								{NovaAccount?.business_id ? NovaAccount?.business_id : 'None'}
+							</span>
+						</div>
+						<div className="flex gap-2 items-center mb-6">
+							<h6 className="leading-[2] m-0">COMPANY NAME:</h6>{' '}
+							<span className="text-sm">
+								{NovaAccount?.company_name ? NovaAccount?.company_name : 'None'}
+							</span>
+						</div>
 
-					<div className="flex justify-between gap-4">
-						<h5>ESTIMATED SHIPPING:</h5>{' '}
-						<h5>
-							{estimatedShipping > 0
-								? `${currency}$${Number(
-										estimatedShipping.toFixed(2)
-								  ).toLocaleString()}`
-								: 'TBD'}
-						</h5>
-					</div>
+						<div className="flex gap-2 items-center">
+							<h6 className="leading-[2] m-0">MATERIAL:</h6>{' '}
+							<span className="text-sm">
+								{NovaAccount?.material ? NovaAccount?.material : 'None'}
+							</span>
+						</div>
+						<div className="flex gap-2 items-center mb-8 pb-8 border-b-nova-light border-b">
+							<h6 className="leading-[2] m-0">PRODUCT:</h6>{' '}
+							<span className="text-sm">
+								{NovaAccount?.product_name
+									? decodeHTML(NovaAccount?.product_name)
+									: 'None'}
+							</span>
+						</div>
+						{signage?.map((item) => (
+							<PricesView id={item.id} item={item}></PricesView>
+						))}
 
-					{taxRate && (
+						{NovaAccount?.note && (
+							<div className="block mb-4">
+								<h5>Note:</h5>
+								<div
+									id="novaQuoteNote"
+									className="nova-quote-note block text-sm"
+									dangerouslySetInnerHTML={{ __html: NovaAccount?.note }}
+								></div>
+							</div>
+						)}
+
 						<div className="flex justify-between gap-4">
-							<h5>{taxRate.tax_rate_name}</h5>{' '}
 							<h5>
-								{taxCompute > 0
+								{`${
+									NovaAccount?.quote_status?.value === 'ready'
+										? 'SUBTOTAL'
+										: 'ESTIMATED SUBTOTAL'
+								}`}
+								:
+							</h5>{' '}
+							<h5>
+								{finalPrice > 0
 									? `${currency}$${Number(
-											taxCompute.toFixed(2)
+											finalPrice.toFixed(2)
 									  ).toLocaleString()}`
 									: 'TBD'}
 							</h5>
 						</div>
-					)}
 
-					<div className="flex justify-between gap-4 border-b pb-14 mt-8">
-						<h4>ESTIMATED TOTAL:</h4>{' '}
-						<h4>
-							{estimatedTotal > 0
-								? `${currency}$${Number(
-										parseFloat(estimatedTotal).toFixed(2)
-								  ).toLocaleString()}`
-								: 'TBD'}
-						</h4>
-					</div>
-
-					<p className="mt-4 text-[10px] text-[#5E5E5E]">
-						Freight charges may vary based on factors such as shipping
-						destination, package size, and delivery speed. 
-					</p>
-				</div>
-				<div>
-					{NovaAccount.quote_status.value === 'ready' && (
-						<div
-							className="rounded mb-3 px-4 py-3 border border-nova-light font-title text-white bg-nova-primary text-xs inline-block hover:text-white hover:bg-nova-secondary w-full text-center cursor-pointer uppercase"
-							disabled={isLoading}
-							onClick={addToCart}
-						>
-							{isLoading ? (
-								'Adding To Cart...'
-							) : (
-								<span className="tracking-[1.6px]">ADD TO CART</span>
-							)}
+						<div className="flex justify-between gap-4">
+							<h5>ESTIMATED SHIPPING:</h5>{' '}
+							<h5>
+								{estimatedShipping > 0
+									? `${currency}$${Number(
+											estimatedShipping.toFixed(2)
+									  ).toLocaleString()}`
+									: 'TBD'}
+							</h5>
 						</div>
-					)}
-					<DeleteQuote />
+
+						{taxRate && (
+							<div className="flex justify-between gap-4">
+								<h5>{taxRate.tax_rate_name}</h5>{' '}
+								<h5>
+									{taxCompute > 0
+										? `${currency}$${Number(
+												taxCompute.toFixed(2)
+										  ).toLocaleString()}`
+										: 'TBD'}
+								</h5>
+							</div>
+						)}
+
+						<div className="flex justify-between gap-4 border-b pb-14 mt-8">
+							<h4>ESTIMATED TOTAL:</h4>{' '}
+							<h4>
+								{estimatedTotal > 0
+									? `${currency}$${Number(
+											parseFloat(estimatedTotal).toFixed(2)
+									  ).toLocaleString()}`
+									: 'TBD'}
+							</h4>
+						</div>
+
+						<p className="mt-4 text-[10px] text-[#5E5E5E]">
+							Freight charges may vary based on factors such as shipping
+							destination, package size, and delivery speed. 
+						</p>
+					</div>
+					<div>
+						{NovaAccount?.quote_status.value === 'ready' && (
+							<div
+								className="rounded mb-3 px-4 py-3 border border-nova-light font-title text-white bg-nova-primary text-xs inline-block hover:text-white hover:bg-nova-secondary w-full text-center cursor-pointer uppercase"
+								disabled={isLoading}
+								onClick={addToCart}
+							>
+								{isLoading ? (
+									'Adding To Cart...'
+								) : (
+									<span className="tracking-[1.6px]">ADD TO CART</span>
+								)}
+							</div>
+						)}
+						<DeleteQuote />
+					</div>
 				</div>
-			</div>
-		</>
+			</>
+		)
 	);
 }

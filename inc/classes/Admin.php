@@ -37,6 +37,75 @@ class Admin {
 		add_filter( 'acf/fields/user/query', array( $this, 'modify_acf_user_query' ), 10, 3 );
 		// add_action( 'pre_get_users', array( $this, 'extend_user_search' ) );
 		add_filter( 'acf/ajax/query_users/args', array( $this, 'search_user_business_id' ), 10, 3 );
+		add_action( 'admin_menu', array( $this, 'export_users_menu' ) );
+		add_action( 'admin_init', array( $this, 'export_users_to_csv_check' ) );
+	}
+
+	public function export_users_menu() {
+		add_management_page(
+			'Export Partners',
+			'Export Partners',
+			'manage_options',
+			'export-partners',
+			array( $this, 'export_users_page' )
+		);
+	}
+
+	public function export_users_page() {
+		// Security check
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+		}
+
+		// Output the HTML for the page
+		echo '<div class="wrap">';
+		echo '<h1>Export Partners</h1>';
+		echo '<p>Click the button below to export the partners to a CSV file.</p>';
+		// Button triggers the export action
+		echo '<a href="' . admin_url( 'tools.php?page=export-partners&export_partners=1' ) . '" class="button button-primary">Export Partners</a>';
+		echo '</div>';
+	}
+
+	public function export_users_to_csv_check() {
+		if ( isset( $_GET['export_partners'] ) && current_user_can( 'manage_options' ) ) {
+			$this->export_users_to_csv();
+		}
+	}
+
+	public function export_users_to_csv() {
+		// Fetch users with the 'Partner' role
+		if ( isset( $_GET['export_partners'] ) && current_user_can( 'manage_options' ) ) {
+			$args  = array(
+				'role' => 'Partner',
+			);
+			$users = get_users( $args );
+
+			header( 'Content-Type: text/csv; charset=utf-8' );
+			header( 'Content-Disposition: attachment; filename=users.csv' );
+
+			$output = fopen( 'php://output', 'w' );
+			fputcsv( $output, array( 'Business ID', 'Username', 'Email', 'Date Registered', 'Business Name', 'Business Phone', 'Business Website', 'Street Address', 'City', 'State', 'Zip', 'Country' ) );
+
+			foreach ( $users as $user ) {
+				$user_data = array(
+					'Business ID'      => get_field( 'business_id', 'user_' . $user->ID ),
+					'Username'         => $user->user_login,
+					'Email'            => $user->user_email,
+					'Date Registered'  => $user->user_registered,
+					'Business Name'    => get_field( 'business_name', 'user_' . $user->ID ),
+					'Business Phone'   => get_field( 'business_phone', 'user_' . $user->ID ),
+					'Business Website' => get_field( 'business_website', 'user_' . $user->ID ),
+					'Street'           => get_field( 'street_address', 'user_' . $user->ID ),
+					'City'             => get_field( 'city', 'user_' . $user->ID ),
+					'State'            => get_field( 'state', 'user_' . $user->ID ),
+					'ZIP'              => get_field( 'zip', 'user_' . $user->ID ),
+					'Country'          => get_field( 'country', 'user_' . $user->ID ),
+				);
+				fputcsv( $output, $user_data );
+			}
+			fclose( $output );
+			exit;
+		}
 	}
 
 	public function search_user_business_id( $args, $request, $query ) {

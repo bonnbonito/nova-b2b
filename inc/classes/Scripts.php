@@ -226,8 +226,16 @@ class Scripts {
 		if ( ! isset( $_GET['qid'] ) ) {
 			return;
 		}
-			$id           = $_GET['qid'];
-			$partner_id   = get_field( 'partner', $id );
+			$id         = $_GET['qid'];
+			$partner_id = get_field( 'partner', $id );
+
+		if ( ! isset( $partner_id ) ) {
+			return;
+		}
+
+		$user = wp_get_current_user();
+
+		if ( in_array( 'administrator', (array) $user->roles ) || in_array( 'customer_rep', (array) $user->roles ) || get_field( 'partner', $_GET['qid'] ) === get_current_user_id() ) {
 			$product_id   = get_field( 'product', $id );
 			$product_name = $product_id ? get_the_title( $product_id ) : 'Custom Project';
 			return array(
@@ -247,6 +255,7 @@ class Scripts {
 				'product_line' => $product_id,
 				'note'         => get_field( 'note', $id ),
 			);
+		}
 	}
 
 	public function get_material_name( $id ) {
