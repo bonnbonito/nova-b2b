@@ -130,7 +130,7 @@ class Admin {
 				$quote_data = array(
 					'Quote ID'     => $quote->ID,
 					'Date'         => $quote->post_date,
-					'Business ID'  => get_field( 'business_id', $quote->ID ),
+					'Business ID'  => get_field( 'business_id', 'user_' . $user_id ),
 					'Partner Name' => $partner_name,
 					'Status'       => get_field( 'quote_status', $quote->ID ) ? get_field( 'quote_status', $quote->ID )['label'] : '',
 					'Project Name' => get_field( 'frontend_title', $quote->ID ),
