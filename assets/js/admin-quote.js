@@ -213,13 +213,13 @@ function getSignageDetailFields(sign) {
 
 function getTitleSectionHTML(sign) {
 	const priceSection = `$<span id="priceDisplay_${sign.id}">${sign.usdPrice}</span>`;
-	const editButtonHTML = `<div class="button" data-edit="${sign.id}" onclick="toggleEditPriceVisibility('${sign.id}');">Edit Price</div>`;
+	const editButtonHTML = `<div class="button" data-edit="${sign.id}" onclick="toggleEditPriceVisibility('${sign.id}');" step="0.01">Edit Price</div>`;
 
 	return `
         <h3 style="text-transform: uppercase;">
             ${sign.title} ----- ${priceSection}
             ${editButtonHTML}
-            <input type="number" id="priceInput_${sign.id}" data-edit="${sign.id}" style="display: none;" value="${sign.usdPrice}" />
+            <input type="number" id="priceInput_${sign.id}" data-edit="${sign.id}" style="display: none;" value="${sign.usdPrice}" step="0.01"/>
         </h3>
     `;
 }

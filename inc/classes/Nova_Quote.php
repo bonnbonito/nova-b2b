@@ -42,6 +42,7 @@ class Nova_Quote {
 		add_filter( 'acf/prepare_field/name=final_price', array( $this, 'acf_diable_field' ) );
 		add_filter( 'acf/prepare_field/name=partner', array( $this, 'acf_diable_field' ) );
 		add_filter( 'acf/prepare_field/name=projects', array( $this, 'acf_diable_field' ) );
+		add_filter( 'acf/prepare_field/name=partner_email', array( $this, 'acf_diable_field' ) );
 		add_filter( 'acf/prepare_field/name=dropbox_token_access', array( $this, 'acf_diable_field' ) );
 		add_action( 'template_redirect', array( $this, 'redirect_if_loggedin' ) );
 		if ( function_exists( 'acf_add_options_page' ) ) {
@@ -50,6 +51,7 @@ class Nova_Quote {
 		add_action( 'admin_init', array( $this, 'handle_dropbox_oauth_redirect' ) );
 		// add_action( 'acf/save_post', array( $this, 'for_payment_email_action' ) );
 		add_action( 'acf/save_post', array( $this, 'quote_actions' ), 5, 1 );
+		add_action( 'acf/save_post', array( $this, 'show_partner_email' ), 10, 1 );
 		add_action( 'save_post', array( $this, 'regenerate_pdf' ), 10, 3 );
 		add_action( 'quote_to_processing', array( $this, 'for_quotation_email' ) );
 		add_action( 'quote_to_payment', array( $this, 'for_payment_email' ) );
@@ -64,6 +66,14 @@ class Nova_Quote {
 		add_action( 'add_meta_boxes', array( $this, 'nova_quote_admin_changed' ), 10, 2 );
 		add_action( 'add_meta_boxes', array( $this, 'generated_product_id' ), 10, 2 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'dequeue_lightbox_on_mockups_view' ), 100 );
+	}
+
+	public function show_partner_email( $post_id ) {
+		$partner = get_field( 'partner', $post_id );
+		if ( isset( $partner ) ) {
+			$userdata = get_userdata( $partner );
+			update_field( 'partner_email', $userdata->user_email, $post_id );
+		}
 	}
 
 	public function dequeue_lightbox_on_mockups_view() {
