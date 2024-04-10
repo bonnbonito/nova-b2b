@@ -5,7 +5,7 @@ $price = get_field( 'final_price' ) ? (float) get_field( 'final_price' ) : 0;
 
 $currency_settings = new WooCommerce_Ultimate_Multi_Currency_Suite_Settings( '' );
 
-$exchange_rate_cad = $currency_settings->get_option( 'exchange_rate_cad' );
+$exchange_rate_cad = 1.3;
 
 $final_price = $price ? ( get_woocommerce_currency() === 'USD' ? $price : $price * $exchange_rate_cad ) : 'TBD';
 

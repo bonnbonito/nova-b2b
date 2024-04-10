@@ -2,9 +2,6 @@
 
 namespace NOVA_B2B\Inc\Classes;
 
-use Google_Service_Sheets;
-use Google_Service_Sheets_ValueRange;
-
 class Admin {
 	/**
 	 * Instance of this class
@@ -118,41 +115,11 @@ class Admin {
 			);
 			$quotes = get_posts( $args );
 
-			// header( 'Content-Type: text/csv; charset=utf-8' );
-			// header( 'Content-Disposition: attachment; filename=quotes.csv' );
+			header( 'Content-Type: text/csv; charset=utf-8' );
+			header( 'Content-Disposition: attachment; filename=quotes.csv' );
 
-			// $output = fopen( 'php://output', 'w' );
-			// fputcsv( $output, array( 'Quote ID', 'Date', 'Business ID', 'Partner Name', 'Status', 'Project Name' ) );
-
-			// Initialize Google Client
-			$client = new \Google_Client();
-			$client->setApplicationName( 'Quotes and Partners' );
-			$client->setScopes( array( \Google_Service_Sheets::SPREADSHEETS ) );
-			$client->setAccessType( 'offline' );
-			$client->setAuthConfig( NOVA_DIR_URI . '/credentials.json' );
-
-			print_r( $client );
-
-			try {
-				$client->fetchAccessTokenWithRefreshToken();
-				$accessToken = $client->getAccessToken();
-				if ( ! $accessToken ) {
-					throw new Exception( 'Failed to obtain access token' );
-				}
-			} catch ( Exception $e ) {
-				error_log( 'Error fetching access token: ' . $e->getMessage() );
-				return;
-			}
-
-			// Initialize the Google Sheets API client
-			$service = new Google_Service_Sheets( $client );
-
-			// ID of the spreadsheet
-			$spreadsheetId = '1FyVg4zwZoOp9_6lnNH4pQvI2-tynXRP6sSZtcM9qYFg';
-			$range         = 'Quotes';
-
-			// Prepare data to be uploaded
-			$values = array();
+			$output = fopen( 'php://output', 'w' );
+			fputcsv( $output, array( 'Quote ID', 'Date', 'Business ID', 'Partner Name', 'Status', 'Project Name' ) );
 
 			foreach ( $quotes as $quote ) {
 
@@ -168,21 +135,9 @@ class Admin {
 					'Status'       => get_field( 'quote_status', $quote->ID ) ? get_field( 'quote_status', $quote->ID )['label'] : '',
 					'Project Name' => get_field( 'frontend_title', $quote->ID ),
 				);
-
-				$values[] = $quote_data;
-
-				// fputcsv( $output, $quote_data );
+				fputcsv( $output, $quote_data );
 			}
-
-			$params = array( 'valueInputOption' => 'RAW' );
-			$body   = new Google_Service_Sheets_ValueRange(
-				array(
-					'values' => $values,
-				)
-			);
-			$result = $service->spreadsheets_values->update( $spreadsheetId, $range, $body, $params );
-			echo 'Data uploaded to Google Sheets';
-			// fclose( $output );
+			fclose( $output );
 			exit;
 		}
 	}
@@ -195,26 +150,11 @@ class Admin {
 			);
 			$users = get_users( $args );
 
-			// header( 'Content-Type: text/csv; charset=utf-8' );
-			// header( 'Content-Disposition: attachment; filename=users.csv' );
+			header( 'Content-Type: text/csv; charset=utf-8' );
+			header( 'Content-Disposition: attachment; filename=users.csv' );
 
-			// $output = fopen( 'php://output', 'w' );
-			// fputcsv( $output, array( 'Business ID', 'Username', 'Email', 'Date Registered', 'Business Name', 'Business Phone', 'Business Website', 'Street Address', 'City', 'State', 'Zip', 'Country' ) );
-
-			$client = new \Google_Client();
-			$client->setApplicationName( 'Quotes and Partners' );
-			$client->setScopes( array( \Google_Service_Sheets::SPREADSHEETS ) );
-			$client->setAccessType( 'offline' );
-			$client->setAuthConfig( __DIR__ . '/credentials.json' );
-
-			$service = new Google_Service_Sheets( $client );
-
-			// ID of the spreadsheet
-			$spreadsheetId = '1FyVg4zwZoOp9_6lnNH4pQvI2-tynXRP6sSZtcM9qYFg';
-			$range         = 'Quotes';
-
-			// Prepare data to be uploaded
-			$values = array();
+			$output = fopen( 'php://output', 'w' );
+			fputcsv( $output, array( 'Business ID', 'Username', 'Email', 'Date Registered', 'Business Name', 'Business Phone', 'Business Website', 'Street Address', 'City', 'State', 'Zip', 'Country' ) );
 
 			foreach ( $users as $user ) {
 				$user_data = array(
@@ -231,18 +171,9 @@ class Admin {
 					'ZIP'              => get_field( 'zip', 'user_' . $user->ID ),
 					'Country'          => get_field( 'country', 'user_' . $user->ID ),
 				);
-				$values[]  = $user_data;
-				// fputcsv( $output, $user_data );
+				fputcsv( $output, $user_data );
 			}
-			$params = array( 'valueInputOption' => 'RAW' );
-			$body   = new \Google_Service_Sheets_ValueRange(
-				array(
-					'values' => $values,
-				)
-			);
-			$result = $service->spreadsheets_values->update( $spreadsheetId, $range, $body, $params );
-			echo 'Data uploaded to Google Sheets';
-			// fclose( $output );
+			fclose( $output );
 			exit;
 		}
 	}
