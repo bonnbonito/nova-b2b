@@ -2042,7 +2042,7 @@ function UploadFiles({
       setFilePaths(prev => Array.isArray(prev) ? [...prev, uploadData.path_display] : [uploadData.path_display]);
       const existingLink = await checkForExistingSharedLink(token, uploadData.path_display);
       if (existingLink) {
-        setFileUrls(prev => [...prev, existingLink.url]);
+        setFileUrls(prev => Array.isArray(prev) ? [...prev, existingLink.url] : [existingLink.url]);
       } else {
         const sharedLinkResponse = await fetch('https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings', {
           method: 'POST',
@@ -2056,9 +2056,9 @@ function UploadFiles({
           })
         });
         const sharedLinkData = await sharedLinkResponse.json();
-        setFileUrls(prev => [...prev, sharedLinkData.url]);
+        setFileUrls(prev => Array.isArray(prev) ? [...prev, sharedLinkData.url] : [sharedLinkData.url]);
       }
-      setFileNames(prev => [...prev, uploadData.name]);
+      setFileNames(prev => Array.isArray(prev) ? [...prev, uploadData.name] : [uploadData.name]);
     } catch (error) {
       console.error('Error:', error);
     } finally {
