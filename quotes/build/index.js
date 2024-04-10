@@ -3099,18 +3099,18 @@ function Letters({
   }
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (file) {
-      setFiles(prev => [...prev, file]);
+      setFiles(prev => [...(Array.isArray(prev) ? prev : []), file]);
     }
     if (fileName) {
-      setFileNames(prev => [...prev, fileName]);
+      setFileNames(prev => [...(Array.isArray(prev) ? prev : []), fileName]);
     }
     if (filePath) {
-      setFilePaths(prev => [...prev, filePath]);
+      setFilePaths(prev => [...(Array.isArray(prev) ? prev : []), filePath]);
     }
     if (fileUrl) {
-      setFileUrls(prev => [...prev, fileUrl]);
+      setFileUrls(prev => [...(Array.isArray(prev) ? prev : []), fileUrl]);
     }
-  }, []);
+  }, [file, fileName, filePath, fileUrl]);
   const headlineRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const adjustFontSize = () => {
     const container = headlineRef.current.parentNode;
