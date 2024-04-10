@@ -3099,16 +3099,16 @@ function Letters({
   }
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (file) {
-      setFiles(prev => [...(Array.isArray(prev) ? prev : []), file]);
+      setFiles([file]);
     }
     if (fileName) {
-      setFileNames(prev => [...(Array.isArray(prev) ? prev : []), fileName]);
+      setFileNames([fileName]);
     }
     if (filePath) {
-      setFilePaths(prev => [...(Array.isArray(prev) ? prev : []), filePath]);
+      setFilePaths([filePath]);
     }
     if (fileUrl) {
-      setFileUrls(prev => [...(Array.isArray(prev) ? prev : []), fileUrl]);
+      setFileUrls([fileUrl]);
     }
   }, [file, fileName, filePath, fileUrl]);
   const headlineRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);

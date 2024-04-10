@@ -117,16 +117,16 @@ export default function Letters({ item }) {
 
 	useEffect(() => {
 		if (file) {
-			setFiles((prev) => [...(Array.isArray(prev) ? prev : []), file]);
+			setFiles([file]);
 		}
 		if (fileName) {
-			setFileNames((prev) => [...(Array.isArray(prev) ? prev : []), fileName]);
+			setFileNames([fileName]);
 		}
 		if (filePath) {
-			setFilePaths((prev) => [...(Array.isArray(prev) ? prev : []), filePath]);
+			setFilePaths([filePath]);
 		}
 		if (fileUrl) {
-			setFileUrls((prev) => [...(Array.isArray(prev) ? prev : []), fileUrl]);
+			setFileUrls([fileUrl]);
 		}
 	}, [file, fileName, filePath, fileUrl]);
 
