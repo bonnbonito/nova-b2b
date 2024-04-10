@@ -26,7 +26,8 @@ export default function Logo({ item }) {
 	const [selectedMounting, setSelectedMounting] = useState(item.mounting);
 	const [selectedThickness, setSelectedThickness] = useState(item.thickness);
 	const [width, setWidth] = useState(item.width);
-	const [maxWidthHeight, setMaxWidthHeight] = useState(23);
+	const [height, setHeight] = useState(item.height);
+	const [maxWidthHeight, setMaxWidthHeight] = useState(43);
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice);
 
@@ -52,8 +53,8 @@ export default function Logo({ item }) {
 			}
 		)
 	);
-	const [height, setHeight] = useState(item.height);
-	const [comments, setComments] = useState('');
+
+	const [comments, setComments] = useState(item.comments);
 	const [waterproof, setWaterproof] = useState(item.waterproof);
 	const [mountingOptions, setMountingOptions] = useState(
 		mountingDefaultOptions
@@ -95,17 +96,21 @@ export default function Logo({ item }) {
 			(option) => option.value === target
 		);
 		setSelectedThickness(() => selected[0]);
-		target > 3 ? setMaxWidthHeight(42) : setMaxWidthHeight(23);
-		if (target == 3) {
-			if (height > 25) {
-				setHeight(24);
-			}
+	};
 
+	useEffect(() => {
+		if (parseInt(selectedThickness.value) > 3) {
+			setMaxWidthHeight(42);
+		} else {
+			setMaxWidthHeight(23);
+			if (height > 25) {
+				setHeight('');
+			}
 			if (width > 25) {
-				setWidth(24);
+				setWidth('');
 			}
 		}
-	};
+	}, [selectedThickness]);
 
 	const handleChangeFinishing = (e) => {
 		setSelectedFinishing(e.target.value);
@@ -136,10 +141,6 @@ export default function Logo({ item }) {
 		});
 		setSignage(() => updatedSignage);
 	}
-
-	useEffect(() => {
-		setComments(item.comments);
-	}, []);
 
 	useEffect(() => {
 		updateSignage();

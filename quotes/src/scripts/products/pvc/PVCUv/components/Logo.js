@@ -68,17 +68,21 @@ export default function Logo({ item }) {
 			(option) => option.value === target
 		);
 		setSelectedThickness(() => selected[0]);
-		target > 3 ? setMaxWidthHeight(42) : setMaxWidthHeight(23);
-		if (target == 3) {
-			if (height > 25) {
-				setHeight(24);
-			}
+	};
 
+	useEffect(() => {
+		if (parseInt(selectedThickness.value) > 3) {
+			setMaxWidthHeight(42);
+		} else {
+			setMaxWidthHeight(23);
+			if (height > 25) {
+				setHeight('');
+			}
 			if (width > 25) {
-				setWidth(24);
+				setWidth('');
 			}
 		}
-	};
+	}, [selectedThickness]);
 
 	const handleChangeFinishing = (e) => {
 		setSelectedFinishing(e.target.value);

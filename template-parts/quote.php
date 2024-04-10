@@ -104,7 +104,7 @@ $final_price = $price_with_shipping ? ( get_woocommerce_currency() === 'USD' ? $
 					?>
 			<span class="p-2 border rounded bg-gray-400 text-white text-[10px] tracking-[1px]">ALREADY IN CART<span>
 					<?php
-				} else {
+				} elseif ( $$final_price > 0 ) {
 					?>
 					<a href="#" data-type="checkout" data-id="<?php the_ID(); ?>"
 						data-product="<?php echo get_the_title( $product_id->ID ); ?>"
@@ -113,7 +113,8 @@ $final_price = $price_with_shipping ? ( get_woocommerce_currency() === 'USD' ? $
 						class="p-2 border rounded bg-green-600 text-white text-[10px] tracking-[1px] hover:bg-green-400 cursor-pointer w-[110px] text-center">Add
 						To Cart</a>
 
-					<?php
+						<?php
+
 				}
 				endif;
 			?>
