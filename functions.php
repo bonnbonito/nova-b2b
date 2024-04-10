@@ -7,8 +7,6 @@
 
 require get_stylesheet_directory() . '/bonn-update-checker/plugin-update-checker.php';
 
-require_once __DIR__ . '/vendor/autoload.php';
-
 use Bonn\PluginUpdateChecker\v5\PucFactory;
 
 $nova_update_checker = PucFactory::buildUpdateChecker(

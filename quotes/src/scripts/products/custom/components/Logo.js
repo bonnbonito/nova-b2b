@@ -1,15 +1,21 @@
 import React, { useContext, useEffect, useState } from 'react';
-import UploadFile from '../../../UploadFile';
+import UploadFiles from '../../../UploadFiles';
 import { QuoteContext } from '../CustomProject';
 
 export default function Logo({ item }) {
-	const { signage, setSignage, missing, setMissing, tempFolder } =
-		useContext(QuoteContext);
-	const [isLoading, setIsLoading] = useState(false);
-	const [fileName, setFileName] = useState(item.fileName);
-	const [fileUrl, setFileUrl] = useState(item.fileUrl);
-	const [filePath, setFilePath] = useState(item.filePath);
-	const [file, setFile] = useState(item.file);
+	const {
+		signage,
+		setSignage,
+		missing,
+		setMissing,
+		tempFolder,
+		isLoading,
+		setIsLoading,
+	} = useContext(QuoteContext);
+	const [fileNames, setFileNames] = useState(item.fileNames);
+	const [fileUrls, setFileUrls] = useState(item.fileUrls);
+	const [filePaths, setFilePaths] = useState(item.filePaths);
+	const [files, setFiles] = useState(item.files);
 
 	const [description, setDescription] = useState(item.description);
 
@@ -20,10 +26,10 @@ export default function Logo({ item }) {
 			if (sign.id === item.id) {
 				return {
 					...sign,
-					file: file,
-					fileName: fileName,
-					filePath: filePath,
-					fileUrl: fileUrl,
+					files: files,
+					fileNames: fileNames,
+					filePaths: filePaths,
+					fileUrls: fileUrls,
 					description: description,
 				};
 			} else {
@@ -77,12 +83,12 @@ export default function Logo({ item }) {
 	useEffect(() => {
 		updateSignage();
 		checkAndAddMissingFields();
-	}, [fileUrl, fileName, file, filePath, description]);
+	}, [fileUrls, fileNames, files, filePaths, description]);
 
 	return (
 		<>
 			<div className="quote-grid">
-				<div className="px-[1px] col-span-3">
+				<div className="px-[1px] col-span-4">
 					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
 						DESCRIPTION
 					</label>
@@ -93,15 +99,17 @@ export default function Logo({ item }) {
 						{description}
 					</textarea>
 				</div>
-				<UploadFile
-					setFilePath={setFilePath}
-					setFile={setFile}
-					filePath={filePath}
-					fileUrl={fileUrl}
-					isLoading={isLoading}
-					setFileUrl={setFileUrl}
-					setFileName={setFileName}
+				<UploadFiles
+					setFilePaths={setFilePaths}
+					setFiles={setFiles}
+					filePaths={filePaths}
+					fileUrls={fileUrls}
+					fileNames={fileNames}
+					setFileUrls={setFileUrls}
+					setFileNames={setFileNames}
 					tempFolder={tempFolder}
+					isLoading={isLoading}
+					setIsLoading={setIsLoading}
 				/>
 			</div>
 		</>

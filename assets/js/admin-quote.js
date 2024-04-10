@@ -6,6 +6,126 @@ const finalPriceInput = document.querySelector(
 );
 const exchangeRate = 1.3;
 
+async function updateDropboxFolder() {
+	const updateDropboxFolderButton = document.getElementById(
+		'updateDropboxFolder'
+	);
+	if (updateDropboxFolderButton) {
+		updateDropboxFolderButton.addEventListener('click', async (e) => {
+			// Added async here
+			e.preventDefault();
+			updateDropboxFolderButton.disabled = true;
+			const oldPath = updateDropboxFolderButton.dataset.old;
+			const newPath = updateDropboxFolderButton.dataset.new;
+			const postID = updateDropboxFolderButton.dataset.id;
+			console.log(oldPath, newPath);
+
+			const status = await renameDropboxFolder(oldPath, newPath); // Added await here
+
+			if (status) {
+				const formData = new FormData();
+				formData.append('action', 'update_signage');
+				formData.append('nonce', QuoteAdmin.nonce);
+				formData.append('old_path', oldPath);
+				formData.append('new_path', newPath);
+				formData.append('post_id', postID);
+
+				fetch(QuoteAdmin.ajax_url, {
+					method: 'POST',
+					credentials: 'same-origin',
+					headers: {
+						'Cache-Control': 'no-cache',
+					},
+					body: formData,
+				})
+					.then((response) => response.json())
+					.then((data) => {
+						console.log(data);
+						if (data.code == 2) {
+							location.reload();
+						}
+					})
+					.catch((error) => console.error('Error:', error));
+			}
+		});
+	}
+}
+
+async function renameDropboxFolder(oldPath, newPath) {
+	const getRefreshToken = async () => {
+		const clientId = QuoteAdmin.dropbox_app_key;
+		const clientSecret = QuoteAdmin.dropbox_secret;
+		const refreshToken = QuoteAdmin.dropbox_refresh_token;
+
+		const url = 'https://api.dropboxapi.com/oauth2/token';
+		const params = new URLSearchParams({
+			grant_type: 'refresh_token',
+			refresh_token: refreshToken,
+			client_id: clientId,
+			client_secret: clientSecret,
+		});
+
+		try {
+			const response = await fetch(url, {
+				method: 'POST',
+				body: params,
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+			});
+
+			if (!response.ok) {
+				const error = await response.text();
+				console.error('Error getting access token:', error);
+				throw new Error('Network response was not ok');
+			}
+
+			const data = await response.json();
+			return data.access_token;
+		} catch (error) {
+			console.error('Error:', error);
+			return null;
+		}
+	};
+
+	const accessToken = await getRefreshToken();
+	if (!accessToken) {
+		console.error('Failed to get access token');
+		return false; // indicate failure
+	}
+
+	const moveUrl = 'https://api.dropboxapi.com/2/files/move_v2';
+	const moveParams = JSON.stringify({
+		from_path: oldPath,
+		to_path: newPath,
+		autorename: true,
+	});
+
+	try {
+		const moveResponse = await fetch(moveUrl, {
+			method: 'POST',
+			body: moveParams,
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+				'Content-Type': 'application/json',
+			},
+		});
+
+		if (!moveResponse.ok) {
+			const error = await moveResponse.text(); // Get the text of the error response
+			console.error('Failed to move folder. Response:', error);
+			throw new Error('Failed to move folder');
+		}
+
+		const moveData = await moveResponse.json();
+		console.log('Folder moved successfully:', moveData);
+		return true; // indicate success
+	} catch (error) {
+		console.error('Error moving folder:', error);
+		return false; // indicate failure
+	}
+}
+
 function displayQuoteDetails() {
 	// Initialize and display the CAD price based on the USD price
 	updateCADPriceFromUSD(exchangeRate);
@@ -158,6 +278,7 @@ function getSignageDetailFields(sign) {
 		{ label: 'CAD PRICE', value: sign.cadPrice ? sign.cadPrice : '0' },
 		{ label: 'TYPE', value: sign.type },
 		{ label: 'LINE TEXT', value: sign.letters },
+		{ label: 'LAYERS', value: sign.layers },
 		{
 			label: 'Letter Height',
 			value: sign.letterHeight ? sign.letterHeight + '"' : '',
@@ -208,6 +329,30 @@ function getSignageDetailFields(sign) {
 				? `<a href="${sign.fontFileUrl}" target="_blank">${sign.fontFileName}</a>`
 				: '',
 		},
+		{
+			label: 'File Paths',
+			value:
+				sign.filePaths.length > 0
+					? sign.filePaths
+							.map(
+								(filename, index) =>
+									`<a href="${sign.fileUrls[index]}" target="_blank" style="display: block;">${filename}</a>`
+							)
+							.join('')
+					: '',
+		},
+		{
+			label: 'Files',
+			value:
+				sign.fileNames.length > 0
+					? sign.fileNames
+							.map(
+								(filename, index) =>
+									`<a href="${sign.fileUrls[index]}" target="_blank">${filename}</a>`
+							)
+							.join(', ')
+					: '',
+		},
 	].filter((field) => field.value);
 }
 
@@ -235,7 +380,11 @@ function toggleEditPriceVisibility(signId) {
 }
 
 if (document.readyState === 'loading') {
-	document.addEventListener('DOMContentLoaded', displayQuoteDetails);
+	document.addEventListener('DOMContentLoaded', () => {
+		displayQuoteDetails();
+		updateDropboxFolder();
+	});
 } else {
 	displayQuoteDetails();
+	updateDropboxFolder();
 }

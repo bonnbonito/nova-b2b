@@ -10,10 +10,10 @@ export default function ProjectWrap({ item, index }) {
 	const [open, setOpen] = useState(true);
 	const { projects, setProjects } = useContext(ProjectContext);
 	const [isLoading, setIsLoading] = useState(false);
-	const [fileName, setFileName] = useState(item.fileName);
-	const [fileUrl, setFileUrl] = useState(item.fileUrl);
-	const [filePath, setFilePath] = useState(item.filePath);
-	const [file, setFile] = useState(item.file);
+	const [fileNames, setFileNames] = useState(item.fileNames);
+	const [fileUrls, setFileUrls] = useState(item.fileUrls);
+	const [filePaths, setFilePaths] = useState(item.filePaths);
+	const [files, setFiles] = useState(item.files);
 	const [description, setDescription] = useState(item.description);
 	const [custom_id, setCustom_id] = useState(item.custom_id);
 	const [title, setTitle] = useState(item.title);
@@ -50,7 +50,7 @@ export default function ProjectWrap({ item, index }) {
 			if (project.id === item.id) {
 				return {
 					...project,
-					file: file,
+					files: files,
 					filePath: filePath,
 					fileName: fileName,
 					fileUrl: fileUrl,

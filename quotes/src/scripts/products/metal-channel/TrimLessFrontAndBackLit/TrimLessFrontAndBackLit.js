@@ -18,6 +18,8 @@ export default function TrimLessFrontAndBackLit() {
 	const localStorageQuote = localStorage.getItem(storage);
 	const savedStorage = JSON.parse(localStorageQuote);
 
+	const [isLoading, setIsLoading] = useState(false);
+
 	function setDefaultSignage() {
 		if (savedStorage?.length > 0) {
 			console.log('loading saved');
@@ -46,14 +48,10 @@ export default function TrimLessFrontAndBackLit() {
 					ledLightColor: '6500K White',
 					usdPrice: 0,
 					cadPrice: 0,
-					filePath: '',
-					fileName: '',
-					fileUrl: '',
-					file: '',
-					fontFilePath: '',
-					fontFileName: '',
-					fontFileUrl: '',
-					fontFile: '',
+					filePaths: [],
+					fileNames: [],
+					fileUrls: [],
+					files: [],
 					product: NovaQuote.product,
 				},
 			]);
@@ -94,10 +92,10 @@ export default function TrimLessFrontAndBackLit() {
 		ledLightColor: '6500K White',
 		usdPrice: 0,
 		cadPrice: 0,
-		filePath: '',
-		fileName: '',
-		fileUrl: '',
-		file: '',
+		filePaths: [],
+		fileNames: [],
+		fileUrls: [],
+		files: [],
 		fontFilePath: '',
 		fontFileName: '',
 		fontFileUrl: '',
@@ -169,6 +167,8 @@ export default function TrimLessFrontAndBackLit() {
 				missing,
 				setMissing,
 				tempFolder,
+				isLoading,
+				setIsLoading,
 			}}
 		>
 			<div className="md:flex gap-6">
@@ -183,13 +183,15 @@ export default function TrimLessFrontAndBackLit() {
 							addSignage={addSignage}
 							setMissing={setMissing}
 							storage={storage}
+							isLoading={isLoading}
+							setIsLoading={setIsLoading}
 						>
 							<Letters key={item.id} item={item} />
 						</Signage>
 					))}
 
 					<div className="flex gap-2">
-						{SignageCount(signage, 'letters') < 5 && (
+						{SignageCount(signage, 'letters') < 10 && (
 							<button
 								className="flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white"
 								onClick={() => addSignage('letters')}
@@ -206,6 +208,8 @@ export default function TrimLessFrontAndBackLit() {
 					required={missing}
 					tempFolder={tempFolder}
 					storage={storage}
+					isLoading={isLoading}
+					setIsLoading={setIsLoading}
 				/>
 			</div>
 		</QuoteContext.Provider>

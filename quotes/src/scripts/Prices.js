@@ -292,6 +292,23 @@ export default function Prices({ item }) {
 					</div>
 				</div>
 			)}
+			{item.files && item.fileNames && item.fileUrls && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						FILES
+					</div>
+					<div className="text-left text-sm break-words">
+						{item.fileUrls.map((fileUrl, index) => (
+							<>
+								<a href={fileUrl} target="_blank">
+									{item.fileNames[index]}
+								</a>
+								{index < item.fileUrls.length - 1 ? ', ' : ''}
+							</>
+						))}
+					</div>
+				</div>
+			)}
 			{item.description && (
 				<div className="block py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import Dropdown from '../../../../Dropdown';
 import FontsDropdown from '../../../../FontsDropdown';
-import UploadFile from '../../../../UploadFile';
+import UploadFiles from '../../../../UploadFiles';
 import UploadFont from '../../../../UploadFont';
 import useOutsideClick from '../../../../utils/ClickOutside';
 import {
@@ -31,25 +31,30 @@ const smallPunctuations = parseFloat(
 //const AcrylicLetterPricing = JSON.parse(NovaOptions.letter_x_logo_pricing);
 
 export default function Letters({ item }) {
-	const { signage, setSignage, setMissing, tempFolder } =
-		useContext(QuoteContext);
+	const {
+		signage,
+		setSignage,
+		setMissing,
+		tempFolder,
+		isLoading,
+		setIsLoading,
+	} = useContext(QuoteContext);
 	const [letters, setLetters] = useState(item.letters);
 	const [comments, setComments] = useState(item.comments);
 	const [font, setFont] = useState(item.font);
 	const [customFont, setCustomFont] = useState(item.customFont);
 	const [customColor, setCustomColor] = useState(item.customColor);
 	const [acrylicBase, setAcrylicBase] = useState(item.acrylicBase);
-	const [isLoading, setIsLoading] = useState(false);
 	const [openColor, setOpenColor] = useState(false);
 	const [openFont, setOpenFont] = useState(false);
 	const [openAcrylicColor, setOpenAcrylicColor] = useState(false);
 	const [waterproof, setWaterproof] = useState(item.waterproof);
 	const [selectedThickness, setSelectedThickness] = useState(item.thickness);
 
-	const [fileName, setFileName] = useState(item.fileName);
-	const [fileUrl, setFileUrl] = useState(item.fileUrl);
-	const [filePath, setFilePath] = useState(item.filePath);
-	const [file, setFile] = useState(item.file);
+	const [fileNames, setFileNames] = useState(item.fileNames);
+	const [fileUrls, setFileUrls] = useState(item.fileUrls);
+	const [filePaths, setFilePaths] = useState(item.filePaths);
+	const [files, setFiles] = useState(item.files);
 
 	const [fontFileName, setFontFileName] = useState(item.fontFileName);
 	const [fontFileUrl, setFontFileUrl] = useState(item.fontFileUrl);
@@ -147,10 +152,10 @@ export default function Letters({ item }) {
 					letterHeight: selectedLetterHeight,
 					usdPrice: usdPrice,
 					cadPrice: cadPrice,
-					file: file,
-					fileName: fileName,
-					filePath: filePath,
-					fileUrl: fileUrl,
+					files: files,
+					fileNames: fileNames,
+					filePaths: filePaths,
+					fileUrls: fileUrls,
 					fontFile: fontFile,
 					fontFileName: fontFileName,
 					fontFilePath: fontFilePath,
@@ -320,9 +325,10 @@ export default function Letters({ item }) {
 		usdPrice,
 		cadPrice,
 		selectedLetterHeight,
-		fileUrl,
-		fileName,
-		file,
+		fileUrls,
+		fileNames,
+		files,
+		filePaths,
 		fontFileUrl,
 		fontFileName,
 		fontFilePath,
@@ -639,28 +645,30 @@ export default function Letters({ item }) {
 					</div>
 				)}
 
-				<div className="px-[1px] col-span-3">
+				<div className="px-[1px] col-span-4">
 					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
 						COMMENTS
 					</label>
-					<input
-						className="w-full py-4 px-2 border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400"
-						type="text"
+					<textarea
+						className="w-full py-4 px-2 border-gray-200 color-black text-sm font-bold rounded-md placeholder:text-slate-400"
 						value={comments}
 						onChange={handleComments}
 						placeholder="ADD COMMENTS"
+						rows={4}
 					/>
 				</div>
 
-				<UploadFile
-					setFilePath={setFilePath}
-					setFile={setFile}
-					filePath={filePath}
-					fileUrl={fileUrl}
-					isLoading={isLoading}
-					setFileUrl={setFileUrl}
-					setFileName={setFileName}
+				<UploadFiles
+					setFilePaths={setFilePaths}
+					setFiles={setFiles}
+					filePaths={filePaths}
+					fileUrls={fileUrls}
+					fileNames={fileNames}
+					setFileUrls={setFileUrls}
+					setFileNames={setFileNames}
 					tempFolder={tempFolder}
+					isLoading={isLoading}
+					setIsLoading={setIsLoading}
 				/>
 			</div>
 

@@ -13,6 +13,9 @@ export default function LaserCutAcrylic() {
 	const [signage, setSignage] = useState([]);
 	const [missing, setMissing] = useState([]);
 	const [tempFolder, setTempFolder] = useState('');
+
+	const [isLoading, setIsLoading] = useState(false);
+
 	const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
 	const storage =
 		window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id;
@@ -38,14 +41,10 @@ export default function LaserCutAcrylic() {
 					letterHeight: '',
 					usdPrice: 0,
 					cadPrice: 0,
-					filePath: '',
-					fileName: '',
-					fileUrl: '',
-					file: '',
-					fontFilePath: '',
-					fontFileName: '',
-					fontFileUrl: '',
-					fontFile: '',
+					filePaths: [],
+					fileNames: [],
+					fileUrls: [],
+					files: [],
 					customFont: '',
 					customColor: '',
 					finishing: 'Matte',
@@ -83,10 +82,10 @@ export default function LaserCutAcrylic() {
 		finishing: 'Matte',
 		usdPrice: 0,
 		cadPrice: 0,
-		filePath: '',
-		fileName: '',
-		fileUrl: '',
-		file: '',
+		filePaths: [],
+		fileNames: [],
+		fileUrls: [],
+		files: [],
 		product: NovaQuote.product,
 	};
 
@@ -107,10 +106,10 @@ export default function LaserCutAcrylic() {
 					letterHeight: '',
 					customFont: '',
 					customColor: '',
-					fontFilePath: '',
-					fontFileName: '',
-					fontFileUrl: '',
-					fontFile: '',
+					filePaths: [],
+					fileNames: [],
+					fileUrls: [],
+					files: [],
 				};
 			} else {
 				args = {
@@ -165,6 +164,8 @@ export default function LaserCutAcrylic() {
 				missing,
 				setMissing,
 				tempFolder,
+				isLoading,
+				setIsLoading,
 			}}
 		>
 			<div className="md:flex gap-6">
@@ -178,6 +179,8 @@ export default function LaserCutAcrylic() {
 							setSignage={setSignage}
 							addSignage={addSignage}
 							setMissing={setMissing}
+							isLoading={isLoading}
+							setIsLoading={setIsLoading}
 							storage={storage}
 						>
 							{item.type === 'letters' ? (
@@ -189,7 +192,7 @@ export default function LaserCutAcrylic() {
 					))}
 
 					<div className="flex gap-2">
-						{SignageCount(signage, 'letters') < 5 && (
+						{SignageCount(signage, 'letters') < 10 && (
 							<button
 								className="flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white"
 								onClick={() => addSignage('letters')}
@@ -200,7 +203,7 @@ export default function LaserCutAcrylic() {
 							</button>
 						)}
 
-						{SignageCount(signage, 'logo') < 5 && (
+						{SignageCount(signage, 'logo') < 10 && (
 							<button
 								className="flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white"
 								onClick={() => addSignage('logo')}
@@ -217,6 +220,8 @@ export default function LaserCutAcrylic() {
 					required={missing}
 					tempFolder={tempFolder}
 					storage={storage}
+					isLoading={isLoading}
+					setIsLoading={setIsLoading}
 				/>
 			</div>
 		</QuoteContext.Provider>

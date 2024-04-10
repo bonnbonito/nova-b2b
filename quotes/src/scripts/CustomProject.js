@@ -26,10 +26,10 @@ export default function CustomProject() {
 					title: 'PROJECT 1',
 					description: '',
 					custom_id: '',
-					filePath: '',
-					fileName: '',
-					fileUrl: '',
-					file: '',
+					filePaths: [],
+					fileNames: [],
+					fileUrls: [],
+					files: [],
 				},
 			]);
 		}

@@ -19,6 +19,8 @@ export default function LaserCutAluminum() {
 	const localStorageQuote = localStorage.getItem(storage);
 	const savedStorage = JSON.parse(localStorageQuote);
 
+	const [isLoading, setIsLoading] = useState(false);
+
 	function setDefaultSignage() {
 		if (savedStorage?.length > 0) {
 			setSignage(savedStorage);
@@ -40,10 +42,10 @@ export default function LaserCutAluminum() {
 					cadPrice: 0,
 					filePath: '',
 					fileName: '',
-					fontFilePath: '',
-					fontFileName: '',
-					fontFileUrl: '',
-					fontFile: '',
+					filePaths: [],
+					fileNames: [],
+					fileUrls: [],
+					files: [],
 					fileUrl: '',
 					file: '',
 					finishing: '',
@@ -77,10 +79,10 @@ export default function LaserCutAluminum() {
 		finishing: '',
 		usdPrice: 0,
 		cadPrice: 0,
-		filePath: '',
-		fileName: '',
-		fileUrl: '',
-		file: '',
+		filePaths: [],
+		fileNames: [],
+		fileUrls: [],
+		files: [],
 		product: NovaQuote.product,
 		customFont: '',
 		customColor: '',
@@ -98,10 +100,10 @@ export default function LaserCutAluminum() {
 					title: `${type} ${count + 1}`,
 					letters: '',
 					font: '',
-					fontFilePath: '',
-					fontFileName: '',
-					fontFileUrl: '',
-					fontFile: '',
+					filePaths: [],
+					fileNames: [],
+					fileUrls: [],
+					files: [],
 					thickness_options: '',
 					color: { name: '', color: '' },
 					letterHeight: '',
@@ -160,6 +162,8 @@ export default function LaserCutAluminum() {
 				missing,
 				setMissing,
 				tempFolder,
+				isLoading,
+				setIsLoading,
 			}}
 		>
 			<div className="md:flex gap-6">
@@ -174,6 +178,8 @@ export default function LaserCutAluminum() {
 							addSignage={addSignage}
 							setMissing={setMissing}
 							storage={storage}
+							isLoading={isLoading}
+							setIsLoading={setIsLoading}
 						>
 							{item.type === 'letters' ? (
 								<Letters key={item.id} item={item} />
@@ -184,7 +190,7 @@ export default function LaserCutAluminum() {
 					))}
 
 					<div className="flex gap-2">
-						{SignageCount(signage, 'letters') < 5 && (
+						{SignageCount(signage, 'letters') < 10 && (
 							<button
 								className="flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white"
 								onClick={() => addSignage('letters')}
@@ -195,7 +201,7 @@ export default function LaserCutAluminum() {
 							</button>
 						)}
 
-						{SignageCount(signage, 'logo') < 5 && (
+						{SignageCount(signage, 'logo') < 10 && (
 							<button
 								className="flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white"
 								onClick={() => addSignage('logo')}
@@ -212,6 +218,8 @@ export default function LaserCutAluminum() {
 					required={missing}
 					tempFolder={tempFolder}
 					storage={storage}
+					isLoading={isLoading}
+					setIsLoading={setIsLoading}
 				/>
 			</div>
 		</QuoteContext.Provider>

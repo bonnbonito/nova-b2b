@@ -365,7 +365,13 @@ class Scripts {
 			'admin-quote',
 			'QuoteAdmin',
 			array(
-				'signage' => get_field( 'signage' ),
+				'signage'               => get_field( 'signage' ),
+				'ajax_url'              => admin_url( 'admin-ajax.php' ),
+				'nonce'                 => wp_create_nonce( 'quote_nonce' ),
+				'dropbox_app_key'       => get_field( 'dropbox_app_key', 'option' ),
+				'dropbox_secret'        => get_field( 'dropbox_secret_key', 'option' ),
+				'dropbox_token'         => get_field( 'dropbox_token_access', 'option' ),
+				'dropbox_refresh_token' => get_field( 'dropbox_refresh_token', 'option' ),
 			)
 		);
 

@@ -33,10 +33,10 @@ export default function PVCUv() {
 					thickness: '',
 					usdPrice: 0,
 					cadPrice: 0,
-					filePath: '',
-					fileName: '',
-					fileUrl: '',
-					file: '',
+					filePaths: [],
+					fileNames: [],
+					fileUrls: [],
+					files: [],
 					finishing: 'Matte',
 					product: NovaQuote.product,
 				},
@@ -72,10 +72,10 @@ export default function PVCUv() {
 		finishing: 'Matte',
 		usdPrice: 0,
 		cadPrice: 0,
-		filePath: '',
-		fileName: '',
-		fileUrl: '',
-		file: '',
+		filePaths: [],
+		fileNames: [],
+		fileUrls: [],
+		files: [],
 		product: NovaQuote.product,
 	};
 
@@ -135,6 +135,8 @@ export default function PVCUv() {
 				missing,
 				setMissing,
 				tempFolder,
+				isLoading,
+				setIsLoading,
 			}}
 		>
 			<div className="md:flex gap-6">
@@ -149,13 +151,15 @@ export default function PVCUv() {
 							addSignage={addSignage}
 							setMissing={setMissing}
 							storage={storage}
+							isLoading={isLoading}
+							setIsLoading={setIsLoading}
 						>
 							<Logo key={item.id} item={item} />
 						</Signage>
 					))}
 
 					<div className="flex gap-2">
-						{SignageCount(signage, 'logo') < 5 && (
+						{SignageCount(signage, 'logo') < 10 && (
 							<button
 								className="flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white"
 								onClick={() => addSignage('logo')}
@@ -172,6 +176,8 @@ export default function PVCUv() {
 					required={missing}
 					tempFolder={tempFolder}
 					storage={storage}
+					isLoading={isLoading}
+					setIsLoading={setIsLoading}
 				/>
 			</div>
 		</QuoteContext.Provider>

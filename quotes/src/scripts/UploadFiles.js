@@ -1,38 +1,44 @@
 import React, { useRef, useState } from 'react';
 
-export default function UploadFile({
-	setFilePath,
-	filePath,
-	setFileUrl,
-	setFile,
-	fileUrl,
-	setFileName,
+export default function UploadFiles({
+	setFilePaths,
+	filePaths,
+	setFileUrls,
+	fileUrls,
+	setFileNames,
+	fileNames,
 	tempFolder,
+	isLoading,
+	setIsLoading,
 }) {
 	const fileRef = useRef(null);
-	const [isLoading, setIsLoading] = useState(false);
 	const [accessToken, setAccessToken] = useState('');
+	const maxFiles = 5;
 
 	const handleButtonClick = () => {
+		console.log(fileNames);
+		if (fileNames.length >= maxFiles) {
+			alert(`You can upload a maximum of ${maxFiles} files.`);
+			return;
+		}
 		fileRef.current.click();
 	};
 
-	const handleChange = (event) => {
-		console.log(tempFolder);
+	const handleChange = async (event) => {
 		const files = Array.from(event.target.files).slice(0, 5);
 		if (files.length > 0) {
-			files.forEach((file) => {
-				handleFileUpload(
+			for (const file of files) {
+				await handleFileUpload(
 					file,
-					setFileUrl,
-					setFileName,
-					setFilePath,
+					setFileUrls,
+					setFileNames,
+					setFilePaths,
 					tempFolder
 				);
-			});
+			}
 			event.target.value = ''; // Reset the file input after processing
 		} else {
-			console.log('no file to upload');
+			console.log('No file to upload');
 		}
 	};
 
@@ -70,16 +76,10 @@ export default function UploadFile({
 		}
 	};
 
-	function getFormattedDate() {
-		const today = new Date();
-		return today.toISOString().split('T')[0]; // Returns 'YYYY-MM-DD'
-	}
-
 	const checkAndCreateFolder = async (accessToken) => {
 		const folderPath = `/NOVA-CRM/${NovaQuote.business_id}/${tempFolder}`;
 
 		try {
-			// Check if the folder exists
 			let response = await fetch(
 				'https://api.dropboxapi.com/2/files/get_metadata',
 				{
@@ -88,13 +88,9 @@ export default function UploadFile({
 						Authorization: `Bearer ${accessToken}`,
 						'Content-Type': 'application/json',
 					},
-					body: JSON.stringify({
-						path: folderPath,
-					}),
+					body: JSON.stringify({ path: folderPath }),
 				}
 			);
-
-			const metadata = await response.json();
 
 			if (response.ok) {
 				return;
@@ -108,24 +104,18 @@ export default function UploadFile({
 						Authorization: `Bearer ${accessToken}`,
 						'Content-Type': 'application/json',
 					},
-					body: JSON.stringify({
-						autorename: false,
-						path: folderPath,
-					}),
+					body: JSON.stringify({ path: folderPath }),
 				}
 			);
 
 			const data = await response.json();
 
-			if (response.ok) {
-				console.log('Folder created successfully:', data);
-			} else {
+			if (!response.ok) {
 				throw new Error(
 					data.error_summary || 'Unknown error during folder creation'
 				);
 			}
 		} catch (error) {
-			// Handle errors for both checking and creating the folder
 			console.error('Error:', error);
 		}
 	};
@@ -139,7 +129,7 @@ export default function UploadFile({
 					Authorization: `Bearer ${token}`,
 					'Content-Type': 'application/json',
 				},
-				body: JSON.stringify({ path: filePath, direct_only: true }), // `direct_only: true` to get direct links only
+				body: JSON.stringify({ path: filePath, direct_only: true }),
 			}
 		);
 
@@ -149,19 +139,18 @@ export default function UploadFile({
 			throw new Error(data.error_summary);
 		}
 
-		// Check if any shared links exist for the file
 		if (data.links && data.links.length > 0) {
-			return data.links[0]; // Return the first shared link if available
+			return data.links[0];
 		}
 
-		return null; // Return null if no shared links exist
+		return null;
 	};
 
 	const handleFileUpload = async (
 		file,
-		setFileUrl,
-		setFileName,
-		setFilePath,
+		setFileUrls,
+		setFileNames,
+		setFilePaths,
 		tempFolder
 	) => {
 		setIsLoading(true);
@@ -200,21 +189,16 @@ export default function UploadFile({
 			const uploadData = await uploadResponse.json();
 			if (!uploadResponse.ok) throw new Error(uploadData.error_summary);
 
-			console.log('File updated successfully:', uploadData.path_display);
+			setFilePaths((prev) => [...prev, uploadData.path_display]);
 
-			setFilePath(uploadData.path_display);
-
-			// Check for existing shared links
 			const existingLink = await checkForExistingSharedLink(
 				token,
 				uploadData.path_display
 			);
 
 			if (existingLink) {
-				console.log('Existing shared link found:', existingLink.url);
-				setFileUrl(existingLink.url); // Use the existing shared link
+				setFileUrls((prev) => [...prev, existingLink.url]);
 			} else {
-				// Create a new shared link if none exist
 				const sharedLinkResponse = await fetch(
 					'https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings',
 					{
@@ -230,44 +214,29 @@ export default function UploadFile({
 					}
 				);
 
-				if (!sharedLinkResponse.ok) {
-					console.error('Error response:', await sharedLinkResponse.text());
-					throw new Error(
-						`Error creating shared link: ${sharedLinkResponse.statusText}`
-					);
-				}
-
 				const sharedLinkData = await sharedLinkResponse.json();
-				setFileUrl(sharedLinkData.url); // Use the newly created shared link
+				setFileUrls((prev) => [...prev, sharedLinkData.url]);
 			}
 
-			setFileName(uploadData.name);
+			setFileNames((prev) => [...prev, uploadData.name]);
 		} catch (error) {
-			console.error('Error:', error.message);
+			console.error('Error:', error);
 		} finally {
 			setIsLoading(false);
 		}
 	};
 
-	const handleRemoveFile = async () => {
+	const handleRemoveFile = async (index) => {
 		setIsLoading(true);
-		let currentAccessToken = accessToken;
+		let currentAccessToken = accessToken || (await getRefreshToken());
 
 		if (!currentAccessToken) {
-			console.log('no access token');
-			const token = await getRefreshToken();
-
-			if (!token) {
-				console.error('Failed to obtain access token');
-				setIsLoading(false);
-				return;
-			}
-
-			setAccessToken(token);
-			currentAccessToken = token;
+			console.error('Failed to obtain access token');
+			setIsLoading(false);
+			return;
 		}
 
-		console.log(filePath);
+		const filePath = filePaths[index];
 
 		try {
 			const response = await fetch(
@@ -275,22 +244,19 @@ export default function UploadFile({
 				{
 					method: 'POST',
 					headers: {
-						Authorization: `Bearer ${currentAccessToken}`, // Use the local variable here
+						Authorization: `Bearer ${currentAccessToken}`,
 						'Content-Type': 'application/json',
 					},
-					body: JSON.stringify({
-						path: filePath, // Assuming filePath contains the path of the file in Dropbox
-					}),
+					body: JSON.stringify({ path: filePath }),
 				}
 			);
 
 			const data = await response.json();
 
 			if (response.ok) {
-				console.log('File removed:', data);
-				setFileUrl('');
-				setFilePath('');
-				setFileName('');
+				setFileUrls(fileUrls.filter((_, i) => i !== index));
+				setFilePaths(filePaths.filter((_, i) => i !== index));
+				setFileNames(fileNames.filter((_, i) => i !== index));
 			} else {
 				throw new Error(
 					data.error_summary || 'Unknown error during file deletion'
@@ -299,93 +265,52 @@ export default function UploadFile({
 		} catch (error) {
 			console.error('Error:', error);
 		} finally {
-			if (fileRef.current) {
-				fileRef.current.value = '';
-			}
 			setIsLoading(false);
 		}
 	};
 
 	return (
-		<div className="px-[1px]">
-			<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-				UPLOAD PDF/AI FILE
-			</label>
-
-			{!fileUrl ? (
+		<>
+			<div className="px-[1px]">
+				<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+					UPLOAD PDF/AI FILE
+				</label>
 				<button
 					className="h-[40px] w-full py-2 px-2 text-center text-red rounded-md text-sm uppercase bg-slate-400 hover:bg-slate-600 font-title leading-[1em]"
 					onClick={handleButtonClick}
 					aria-label="Upload design file"
 					disabled={isLoading}
 				>
-					{isLoading ? (
-						<div className="flex justify-center items-center">Uploading...</div>
-					) : (
-						'Upload Design'
-					)}
+					{isLoading ? 'Please wait...' : 'Upload Design'}
 				</button>
-			) : (
-				<button
-					className="h-[40px] w-full py-2 px-2 text-center text-red rounded-md text-sm uppercase bg-red-600 hover:bg-red-400 font-title leading-[1em]"
-					onClick={handleRemoveFile}
-					aria-label="Remove design file"
-					disabled={isLoading}
-				>
-					{isLoading ? (
-						<div className="flex justify-center items-center">
-							<svg
-								class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-								xmlns="http://www.w3.org/2000/svg"
-								fill="none"
-								viewBox="0 0 24 24"
-							>
-								<circle
-									class="opacity-25"
-									cx="12"
-									cy="12"
-									r="10"
-									stroke="currentColor"
-									stroke-width="4"
-								></circle>
-								<path
-									class="opacity-75"
-									fill="currentColor"
-									d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-								></path>
-							</svg>
-							Removing...
-						</div>
-					) : (
-						<div className="flex items-center justify-center">
-							Remove design
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								fill="none"
-								viewBox="0 0 24 24"
-								strokeWidth={1.5}
-								stroke="currentColor"
-								className="w-5 h-5"
-							>
-								<path
-									strokeLinecap="round"
-									strokeLinejoin="round"
-									d="M6 18L18 6M6 6l12 12"
-								/>
-							</svg>
-						</div>
-					)}
-				</button>
-			)}
-			<input
-				type="file"
-				ref={fileRef}
-				class="hidden"
-				onChange={handleChange}
-				accept=".pdf,.ai,.png,.jpg,.jpeg"
-				aria-label="File input"
-				multiple
-			/>
-		</div>
+
+				<input
+					type="file"
+					ref={fileRef}
+					className="hidden"
+					onChange={handleChange}
+					accept=".pdf,.ai,.png,.jpg,.jpeg"
+					aria-label="File input"
+					multiple
+				/>
+			</div>
+			<div className="col-span-4 mb-4">
+				{fileNames.length > 0 && (
+					<div className="grid grid-cols-1 gap-2 text-sm border p-3 bg-slate-100">
+						{fileNames.map((fileName, index) => (
+							<div key={index} className="flex gap-4 items-center">
+								{fileName}
+								<button
+									onClick={() => handleRemoveFile(index)}
+									className="text-xs"
+								>
+									Remove
+								</button>
+							</div>
+						))}
+					</div>
+				)}
+			</div>
+		</>
 	);
 }

@@ -18,6 +18,8 @@ export default function CustomProject() {
 	const localStorageQuote = localStorage.getItem(storage);
 	const savedStorage = JSON.parse(localStorageQuote);
 
+	const [isLoading, setIsLoading] = useState(false);
+
 	function setDefaultSignage() {
 		setSignage([
 			{
@@ -28,10 +30,10 @@ export default function CustomProject() {
 				usdPrice: 0,
 				cadPrice: 0,
 				custom_id: '',
-				filePath: '',
-				fileName: '',
-				fileUrl: '',
-				file: '',
+				filePaths: [],
+				fileNames: [],
+				fileUrls: [],
+				files: [],
 				product: NovaQuote.product,
 			},
 		]);
@@ -56,10 +58,10 @@ export default function CustomProject() {
 		title: 'CUSTOM PROJECT',
 		description: '',
 		custom_id: '',
-		filePath: '',
-		fileName: '',
-		fileUrl: '',
-		file: '',
+		filePaths: [],
+		fileNames: [],
+		fileUrls: [],
+		files: [],
 		product: NovaQuote.product,
 	};
 
@@ -115,6 +117,8 @@ export default function CustomProject() {
 				missing,
 				setMissing,
 				tempFolder,
+				isLoading,
+				setIsLoading,
 			}}
 		>
 			<div className="md:flex gap-6">
@@ -129,6 +133,8 @@ export default function CustomProject() {
 							signage={signage}
 							setSignage={setSignage}
 							addSignage={addSignage}
+							isLoading={isLoading}
+							setIsLoading={setIsLoading}
 							storage={storage}
 						>
 							<Logo key={item.id} item={item} />
@@ -153,6 +159,8 @@ export default function CustomProject() {
 					required={missing}
 					tempFolder={tempFolder}
 					storage={storage}
+					isLoading={isLoading}
+					setIsLoading={setIsLoading}
 				/>
 			</div>
 		</QuoteContext.Provider>

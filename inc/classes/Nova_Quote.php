@@ -34,6 +34,7 @@ class Nova_Quote {
 		add_action( 'wp_ajax_update_dropbox_path', array( $this, 'update_dropbox_path' ) );
 		add_action( 'wp_ajax_remove_signage_file', array( $this, 'remove_signage_file' ) );
 		add_action( 'wp_ajax_quote_to_processing', array( $this, 'quote_to_processing' ) );
+		add_action( 'wp_ajax_update_signage', array( $this, 'update_signage' ) );
 		add_action( 'wp_ajax_to_checkout', array( $this, 'nova_to_checkout' ) );
 		add_action( 'wp_ajax_delete_quote', array( $this, 'delete_quote' ) );
 		add_action( 'wp_ajax_save_custom_project', array( $this, 'save_custom_project' ) );
@@ -64,6 +65,7 @@ class Nova_Quote {
 		add_action( 'kadence_single_before_inner_content', array( $this, 'show_product_dropdown' ) );
 		add_action( 'add_meta_boxes', array( $this, 'nova_quote_add_admin_meta_box' ), 10, 2 );
 		add_action( 'add_meta_boxes', array( $this, 'nova_quote_admin_changed' ), 10, 2 );
+		add_action( 'add_meta_boxes', array( $this, 'update_dropbox_folder' ), 10, 2 );
 		add_action( 'add_meta_boxes', array( $this, 'generated_product_id' ), 10, 2 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'dequeue_lightbox_on_mockups_view' ), 100 );
 	}
@@ -100,6 +102,48 @@ class Nova_Quote {
 
 	public function show_generated_product_id( $post ) {
 		print_r( get_post_meta( $post->ID, 'nova_product_generated_id', true ) );
+	}
+
+	public function update_dropbox_folder( $post_type, $post ) {
+
+		if ( $post_type !== 'nova_quote' ) {
+			return;
+		}
+
+		add_meta_box(
+			'nova_update_dropbox_folder',
+			__( 'Update Dropbox Folder:' ),
+			array( $this, 'nova_update_dropbox_folder' ),
+			'nova_quote',
+			'side',
+			'high'
+		);
+	}
+
+	public function nova_update_dropbox_folder( $post ) {
+		$signage             = get_field( 'signage', $post->ID );
+		$partner             = get_field( 'partner', $post->ID );
+		$partner_business_id = get_field( 'business_id', 'user_' . $partner );
+		$data                = json_decode( $signage, true );
+		$user_folder_arr     = array();
+		foreach ( $data as $item ) {
+			foreach ( $item['filePaths'] as $filePath ) {
+				$parts = explode( '/', $filePath );
+				if ( isset( $parts[2] ) ) {
+					$user_folder_arr[] = $parts[2];
+				}
+			}
+		}
+		$user_folder_arr = array_unique( $user_folder_arr );
+		$old_folder      = $user_folder_arr[0];
+		$old_path        = '/NOVA-CRM/' . $old_folder . '/Q-' . $post->ID;
+		$new_path        = '/NOVA-CRM/' . $partner_business_id . '/Q-' . $post->ID;
+		if ( count( $user_folder_arr ) > 0 && $old_folder !== $partner_business_id ) {
+			?>
+<a class="button button-primary button-large" id="updateDropboxFolder" data-id="<?php echo $post->ID; ?>"
+	data-new="<?php echo $new_path; ?>" data-old="<?php echo $old_path; ?>">Update Dropbox Folder</a>
+			<?php
+		}
 	}
 
 	public function nova_quote_admin_changed( $post_type, $post ) {
@@ -263,10 +307,24 @@ class Nova_Quote {
 					}
 					$valueText .= '</ul>';
 					$value      = $valueText;
-				} elseif ( ! empty( $value ) ) {
+				} elseif ( is_array( $value ) ) {
+					$valueText = '<ul>';
+					foreach ( $value as $subKey => $subValue ) {
+						// Check if the sub-value is an array or object and recursively process it
+						if ( is_array( $subValue ) || is_object( $subValue ) ) {
+							$subValue = '<li>' . ucfirst( $subKey ) . ': ' . json_encode( $subValue ) . '</li>';
+						} else {
+							// Sanitize the sub-value
+							$subValue = htmlspecialchars( $subValue, ENT_QUOTES, 'UTF-8' );
+							$subValue = '<li>' . ucfirst( $subKey ) . ': ' . $subValue . '</li>';
+						}
+						$valueText .= $subValue;
+					}
+					$valueText .= '</ul>';
+					$value      = $valueText;
+				} else {
 					$value = htmlspecialchars( $value, ENT_QUOTES, 'UTF-8' );
 				}
-
 				if ( $key === 'product' ) {
 					$value = get_the_title( intval( $value ) );
 				}
@@ -1130,6 +1188,10 @@ h6 {
 			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">THICKNESS: </strong></td><td><font face="lato">' . $projectArray['thickness']->thickness . '</font></td></tr>';
 		}
 
+		if ( isset( $projectArray['layers'] ) && ! empty( $projectArray['layers'] ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">Layers: </strong></td><td><font face="lato">' . $projectArray['layers'] . '</font></td></tr>';
+		}
+
 		if ( isset( $projectArray['depth'] ) && ! empty( $projectArray['depth'] ) && $projectArray['depth'] ) {
 			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">METAL DEPTH: </strong></td><td><font face="lato">' . $projectArray['depth']->depth . '</font></td></tr>';
 		}
@@ -1256,6 +1318,17 @@ h6 {
 
 		if ( isset( $projectArray['fileUrl'] ) && ! empty( $projectArray['fileUrl'] ) && isset( $projectArray['fileName'] ) && ! empty( $projectArray['fileName'] ) ) {
 			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">FILE: </strong></td><td><font face="lato"><a href="' . $projectArray['fileUrl'] . '" target="_blank">' . $projectArray['fileName'] . '</a></font></td></tr>';
+		}
+
+		if ( isset( $projectArray['fileUrls'] ) && ! empty( $projectArray['fileUrls'] ) && isset( $projectArray['fileNames'] ) && ! empty( $projectArray['fileNames'] ) ) {
+			$filesHtml = '';
+			foreach ( $projectArray['fileUrls'] as $index => $fileUrl ) {
+				// Get the corresponding file name or use the URL as the name if not available
+				$fileName   = $projectArray['fileNames'][ $index ] ?? $fileUrl;
+				$filesHtml .= '<a href="' . htmlspecialchars( $fileUrl, ENT_QUOTES, 'UTF-8' ) . '" target="_blank">' . htmlspecialchars( $fileName, ENT_QUOTES, 'UTF-8' ) . '</a><br>';
+			}
+
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">FILES: </strong></td><td><font face="lato">' . $filesHtml . '</font></td></tr>';
 		}
 
 		echo '<tr><td></td></tr>';
@@ -1398,6 +1471,34 @@ h6 {
 		$mimes['svg'] = 'image/svg+xml';
 		$mimes['ai']  = 'application/postscript';
 		return $mimes;
+	}
+
+	public function update_signage() {
+		$status = array(
+			'code' => 1,
+		);
+
+		if ( ! wp_verify_nonce( $_POST['nonce'], 'quote_nonce' ) ) {
+			wp_send_json( 'Nonce Error' );
+		}
+		$id  = $_POST['post_id'];
+		$old = $_POST['old_path'];
+		$new = $_POST['new_path'];
+
+		// Get the 'signage' field data as a JSON string
+		$signage_json = get_field( 'signage', $id, false );  // Using false to get the raw value
+
+		// Replace old path with new path in the JSON string
+		$new_signage_json = str_replace( $old, $new, $signage_json );
+
+		// Update the 'signage' field with the new JSON string
+		update_field( 'signage', $new_signage_json, $id );
+
+		$status['code']    = 2;
+		$status['signage'] = $new_signage;
+		$status['post']    = $_POST;
+
+		wp_send_json( $status );
 	}
 
 	public function remove_signage_file() {

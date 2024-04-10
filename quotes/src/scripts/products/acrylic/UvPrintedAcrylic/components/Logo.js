@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Dropdown from '../../../../Dropdown';
-import UploadFile from '../../../../UploadFile';
+import UploadFiles from '../../../../UploadFiles';
 import convert_json from '../../../../utils/ConvertJson';
 import { getLogoPricingTablebyThickness } from '../../../../utils/Pricing';
 import { QuoteContext } from '../UvPrintedAcrylic';
@@ -19,19 +19,24 @@ const exchangeRate = 1.3;
 const UV_PRICE = 1.05;
 
 export default function Logo({ item }) {
-	const { signage, setSignage, setMissing, tempFolder } =
-		useContext(QuoteContext);
+	const {
+		signage,
+		setSignage,
+		setMissing,
+		tempFolder,
+		isLoading,
+		setIsLoading,
+	} = useContext(QuoteContext);
 	const [selectedMounting, setSelectedMounting] = useState(item.mounting);
 	const [selectedThickness, setSelectedThickness] = useState(item.thickness);
 	const [width, setWidth] = useState(item.width);
 	const [maxWidthHeight, setMaxWidthHeight] = useState(23);
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice);
-	const [isLoading, setIsLoading] = useState(false);
-	const [fileName, setFileName] = useState(item.fileName);
-	const [fileUrl, setFileUrl] = useState(item.fileUrl);
-	const [filePath, setFilePath] = useState(item.filePath);
-	const [file, setFile] = useState(item.file);
+	const [fileNames, setFileNames] = useState(item.fileNames);
+	const [fileUrls, setFileUrls] = useState(item.fileUrls);
+	const [filePaths, setFilePaths] = useState(item.filePaths);
+	const [files, setFiles] = useState(item.files);
 	const [pieces, setPieces] = useState(item.pieces);
 	const [customColor, setCustomColor] = useState(item.customColor);
 	const [baseColor, setBaseColor] = useState(item.baseColor);
@@ -150,10 +155,10 @@ export default function Logo({ item }) {
 					usdPrice: usdPrice,
 					cadPrice: cadPrice,
 					finishing: selectedFinishing,
-					file: file,
-					fileName: fileName,
-					filePath: filePath,
-					fileUrl: fileUrl,
+					files: files,
+					fileNames: fileNames,
+					filePaths: filePaths,
+					fileUrls: fileUrls,
 					baseColor: baseColor,
 					customColor: customColor,
 					printPreference: printPreference,
@@ -180,7 +185,7 @@ export default function Logo({ item }) {
 		if (!waterproof) missingFields.push('Select Environment');
 		if (!selectedMounting) missingFields.push('Select Mounting Option');
 		if (!selectedFinishing) missingFields.push('Select Finishing Option');
-		if (!fileUrl) missingFields.push('Upload a PDF/AI File');
+		if (fileUrls.length == 0) missingFields.push('Upload a PDF/AI File');
 		if (baseColor === 'Custom Color' && !customColor)
 			missingFields.push('Add the Pantone color code of your custom color');
 		if (missingFields.length > 0) {
@@ -227,11 +232,11 @@ export default function Logo({ item }) {
 		waterproof,
 		width,
 		height,
-		fileUrl,
-		fileName,
+		fileUrls,
+		fileNames,
 		selectedFinishing,
-		file,
-		filePath,
+		files,
+		filePaths,
 		baseColor,
 		printPreference,
 		customColor,
@@ -248,12 +253,12 @@ export default function Logo({ item }) {
 		height,
 		usdPrice,
 		cadPrice,
-		fileUrl,
-		fileName,
+		fileUrls,
+		fileNames,
 		customColor,
 		selectedFinishing,
-		file,
-		filePath,
+		files,
+		filePaths,
 		printPreference,
 		baseColor,
 	]);
@@ -425,27 +430,29 @@ export default function Logo({ item }) {
 					</div>
 				)}
 
-				<div className="px-[1px] col-span-3">
+				<div className="px-[1px] col-span-4">
 					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
 						COMMENTS
 					</label>
-					<input
-						className="w-full py-4 px-2 border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400"
-						type="text"
-						value={item.comments}
+					<textarea
+						className="w-full py-4 px-2 border-gray-200 color-black text-sm font-bold rounded-md placeholder:text-slate-400"
+						value={comments}
 						onChange={handleComments}
 						placeholder="ADD COMMENTS"
+						rows={4}
 					/>
 				</div>
-				<UploadFile
-					setFilePath={setFilePath}
-					setFile={setFile}
-					filePath={filePath}
-					fileUrl={fileUrl}
-					isLoading={isLoading}
-					setFileUrl={setFileUrl}
-					setFileName={setFileName}
+				<UploadFiles
+					setFilePaths={setFilePaths}
+					setFiles={setFiles}
+					filePaths={filePaths}
+					fileUrls={fileUrls}
+					fileNames={fileNames}
+					setFileUrls={setFileUrls}
+					setFileNames={setFileNames}
 					tempFolder={tempFolder}
+					isLoading={isLoading}
+					setIsLoading={setIsLoading}
 				/>
 			</div>
 		</>

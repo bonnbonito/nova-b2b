@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Dropdown from '../../../../Dropdown';
-import UploadFile from '../../../../UploadFile';
+import UploadFiles from '../../../../UploadFiles';
 import convert_json from '../../../../utils/ConvertJson';
 import { getLogoPricingTablebyThickness } from '../../../../utils/Pricing';
 import {
@@ -17,17 +17,25 @@ const exchangeRate = 1.3;
 const NovaSingleOptions = NovaQuote.single_quote_options;
 
 export default function Logo({ item }) {
-	const { signage, setSignage, missing, setMissing, tempFolder } =
-		useContext(QuoteContext);
+	const {
+		signage,
+		setSignage,
+		missing,
+		setMissing,
+		tempFolder,
+		isLoading,
+		setIsLoading,
+	} = useContext(QuoteContext);
 	const [selectedMounting, setSelectedMounting] = useState(item.mounting);
 	const [selectedThickness, setSelectedThickness] = useState(item.thickness);
 	const [width, setWidth] = useState(item.width);
 	const [maxWidthHeight, setMaxWidthHeight] = useState(23);
-	const [isLoading, setIsLoading] = useState(false);
-	const [fileName, setFileName] = useState(item.fileName);
-	const [fileUrl, setFileUrl] = useState(item.fileUrl);
-	const [filePath, setFilePath] = useState(item.filePath);
-	const [file, setFile] = useState(item.file);
+
+	const [fileNames, setFileNames] = useState(item.fileNames);
+	const [fileUrls, setFileUrls] = useState(item.fileUrls);
+	const [filePaths, setFilePaths] = useState(item.filePaths);
+	const [files, setFiles] = useState(item.files);
+
 	const [pieces, setPieces] = useState(item.pieces);
 	const [selectedFinishing, setSelectedFinishing] = useState(item.finishing);
 	const [description, setDescription] = useState(item.description);
@@ -129,10 +137,10 @@ export default function Logo({ item }) {
 					width: width,
 					height: height,
 					finishing: selectedFinishing,
-					file: file,
-					fileName: fileName,
-					filePath: filePath,
-					fileUrl: fileUrl,
+					files: files,
+					fileNames: fileNames,
+					filePaths: filePaths,
+					fileUrls: fileUrls,
 					pieces: pieces,
 					layers: layers,
 					description: description,
@@ -154,11 +162,11 @@ export default function Logo({ item }) {
 		waterproof,
 		width,
 		height,
-		fileUrl,
-		fileName,
+		fileUrls,
+		fileNames,
 		selectedFinishing,
-		file,
-		filePath,
+		files,
+		filePaths,
 		pieces,
 		description,
 		layers,
@@ -210,7 +218,7 @@ export default function Logo({ item }) {
 	const checkAndAddMissingFields = () => {
 		const missingFields = [];
 
-		if (!fileUrl) missingFields.push('Upload a PDF/AI File');
+		if (fileUrls.length == 0) missingFields.push('Upload a PDF/AI File');
 		if (!description) missingFields.push('Add Description');
 		if (!selectedThickness) missingFields.push('Select Thickness');
 		if (!width) missingFields.push('Select Logo Width');
@@ -259,7 +267,7 @@ export default function Logo({ item }) {
 	useEffect(() => {
 		checkAndAddMissingFields();
 	}, [
-		fileUrl,
+		fileUrls,
 		width,
 		height,
 		layers,
@@ -273,7 +281,7 @@ export default function Logo({ item }) {
 	return (
 		<>
 			<div className="quote-grid">
-				<div className="px-[1px] col-span-3">
+				<div className="px-[1px] col-span-4">
 					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
 						DESCRIPTION
 					</label>
@@ -284,15 +292,17 @@ export default function Logo({ item }) {
 						{description}
 					</textarea>
 				</div>
-				<UploadFile
-					setFilePath={setFilePath}
-					setFile={setFile}
-					filePath={filePath}
-					fileUrl={fileUrl}
-					isLoading={isLoading}
-					setFileUrl={setFileUrl}
-					setFileName={setFileName}
+				<UploadFiles
+					setFilePaths={setFilePaths}
+					setFiles={setFiles}
+					filePaths={filePaths}
+					fileUrls={fileUrls}
+					fileNames={fileNames}
+					setFileUrls={setFileUrls}
+					setFileNames={setFileNames}
 					tempFolder={tempFolder}
+					isLoading={isLoading}
+					setIsLoading={setIsLoading}
 				/>
 			</div>
 			<div className="quote-grid mb-6">

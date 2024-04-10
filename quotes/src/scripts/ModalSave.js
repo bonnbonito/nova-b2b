@@ -12,8 +12,9 @@ function ModalSave({
 	required,
 	tempFolder,
 	storage,
+	isLoading,
+	setIsLoading,
 }) {
-	const [isLoading, setIsLoading] = useState(false);
 	const [submitted, setSubmitted] = useState(false);
 	const [submitting, setSubmitting] = useState(false);
 	const [open, setOpen] = useState(false);
@@ -226,9 +227,18 @@ function ModalSave({
 
 	return (
 		<Dialog.Root open={submitting ? true : open} onOpenChange={setOpen}>
-			<Dialog.Trigger asChild>
-				<button className={btnClass}>{label}</button>
-			</Dialog.Trigger>
+			{isLoading ? (
+				<button className={btnClass}>
+					{isLoading ? 'Please wait...' : label}
+				</button>
+			) : (
+				<Dialog.Trigger asChild>
+					<button className={btnClass}>
+						{isLoading ? 'Please wait...' : label}
+					</button>
+				</Dialog.Trigger>
+			)}
+
 			<Dialog.Portal>
 				<Dialog.Overlay className="bg-black/50 data-[state=open]:animate-overlayShow fixed inset-0 z-[50]" />
 				{!error ? (

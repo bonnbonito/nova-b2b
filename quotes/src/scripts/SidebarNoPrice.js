@@ -7,6 +7,8 @@ export default function SidebarNoPrice({
 	required,
 	tempFolder,
 	storage,
+	isLoading,
+	setIsLoading,
 }) {
 	return (
 		<div className="md:w-1/4 w-full mt-8 md:mt-0">
@@ -39,6 +41,8 @@ export default function SidebarNoPrice({
 						required={required}
 						tempFolder={tempFolder}
 						storage={storage}
+						isLoading={isLoading}
+						setIsLoading={setIsLoading}
 						action="processing"
 						label="Request Quote"
 						btnClass="mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
