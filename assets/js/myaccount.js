@@ -68,7 +68,7 @@ function deleteQuote(btn) {
 		.catch((error) => console.error('Error:', error));
 }
 
-function process(btn) {
+function process(btn, action) {
 	const quoteID = btn.dataset.id;
 	console.log(quoteID);
 

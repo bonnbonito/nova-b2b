@@ -1328,7 +1328,7 @@ function PricesView({
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
     href: item.fileUrl,
     target: "_blank"
-  }, item.fileName))), item.fileNames && item.fileUrls && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.fileName))), item.fileNames?.length > 0 && item.fileUrls?.length > 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-[160px_1fr] py-[2px] items-center gap-5"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"

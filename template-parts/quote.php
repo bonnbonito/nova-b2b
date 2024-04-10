@@ -7,7 +7,16 @@ $currency_settings = new WooCommerce_Ultimate_Multi_Currency_Suite_Settings( '' 
 
 $exchange_rate_cad = 1.3;
 
-$final_price = $price ? ( get_woocommerce_currency() === 'USD' ? $price : $price * $exchange_rate_cad ) : 'TBD';
+$flat_rate     = 14.75;
+$standard_rate = $price * 0.075;
+
+$estimatedShipping = $price > 0 ? number_format( max( $flat_rate, $standard_rate ), 2, '.', '' ) : 0;
+
+$price_with_shipping = $price + $estimatedShipping;
+
+$final_price = $price_with_shipping ? ( get_woocommerce_currency() === 'USD' ? $price_with_shipping : $price_with_shipping * $exchange_rate_cad ) : 'TBD';
+
+
 
 ?>
 <div id="quote-<?php the_ID(); ?>" class="quote-row rounded border p-4 mb-4 text-xs uppercase relative pl-8">
