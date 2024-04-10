@@ -1910,7 +1910,7 @@ function UploadFiles({
   const maxFiles = 5;
   const handleButtonClick = () => {
     console.log(fileNames);
-    if (fileNames.length >= maxFiles) {
+    if (fileNames?.length >= maxFiles) {
       alert(`You can upload a maximum of ${maxFiles} files.`);
       return;
     }
@@ -2118,7 +2118,7 @@ function UploadFiles({
     multiple: true
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "col-span-4 mb-4"
-  }, fileNames.length > 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, fileNames?.length > 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-1 gap-2 text-sm border p-3 bg-slate-100"
   }, fileNames.map((fileName, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     key: index,

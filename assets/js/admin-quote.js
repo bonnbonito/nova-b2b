@@ -332,7 +332,7 @@ function getSignageDetailFields(sign) {
 		{
 			label: 'File Paths',
 			value:
-				sign.filePaths.length > 0
+				sign.filePaths?.length > 0
 					? sign.filePaths
 							.map(
 								(filename, index) =>
@@ -344,7 +344,7 @@ function getSignageDetailFields(sign) {
 		{
 			label: 'Files',
 			value:
-				sign.fileNames.length > 0
+				sign.fileNames?.length > 0
 					? sign.fileNames
 							.map(
 								(filename, index) =>

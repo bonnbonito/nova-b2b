@@ -17,7 +17,7 @@ export default function UploadFiles({
 
 	const handleButtonClick = () => {
 		console.log(fileNames);
-		if (fileNames.length >= maxFiles) {
+		if (fileNames?.length >= maxFiles) {
 			alert(`You can upload a maximum of ${maxFiles} files.`);
 			return;
 		}
@@ -295,7 +295,7 @@ export default function UploadFiles({
 				/>
 			</div>
 			<div className="col-span-4 mb-4">
-				{fileNames.length > 0 && (
+				{fileNames?.length > 0 && (
 					<div className="grid grid-cols-1 gap-2 text-sm border p-3 bg-slate-100">
 						{fileNames.map((fileName, index) => (
 							<div key={index} className="flex gap-4 items-center">
