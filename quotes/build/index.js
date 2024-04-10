@@ -1027,7 +1027,7 @@ function Prices({
     className: "text-left font-title md:tracking-[1.4px] text-sm"
   }, "COMMENTS"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-sm break-words"
-  }, item.comments)), item.fileUrl && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.comments)), item.fileUrl && !item.files && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left font-title md:tracking-[1.4px] text-sm"
@@ -1319,7 +1319,7 @@ function PricesView({
     className: "text-left text-xs font-title"
   }, "DESCRIPTION"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-[14px] break-words"
-  }, item.description)), item.file && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.description)), item.fileUrl && !item.fileUrls && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-[160px_1fr] py-[2px] items-center gap-5"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"

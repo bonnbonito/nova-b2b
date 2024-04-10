@@ -347,7 +347,7 @@ export default function PricesView({ item }) {
 					</div>
 				)}
 
-				{item.file && (
+				{item.fileUrl && !item.fileUrls && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
 						<div className="text-left text-xs font-title">FILE</div>
 						<div className="text-left text-[14px] break-words">
