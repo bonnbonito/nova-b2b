@@ -189,7 +189,11 @@ export default function UploadFiles({
 			const uploadData = await uploadResponse.json();
 			if (!uploadResponse.ok) throw new Error(uploadData.error_summary);
 
-			setFilePaths((prev) => [...prev, uploadData.path_display]);
+			setFilePaths((prev) =>
+				Array.isArray(prev)
+					? [...prev, uploadData.path_display]
+					: [uploadData.path_display]
+			);
 
 			const existingLink = await checkForExistingSharedLink(
 				token,
