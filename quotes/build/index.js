@@ -1045,7 +1045,7 @@ function Prices({
   }, item.fileUrls.map((fileUrl, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
     href: fileUrl,
     target: "_blank"
-  }, item.fileNames[index]), index < item.fileUrls.length - 1 ? ', ' : '')))), item.description && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.fileNames[index]), index < item.fileUrls?.length - 1 ? ', ' : '')))), item.description && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "block py-[2px] mb-1"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left font-title md:tracking-[1.4px] text-sm"
@@ -1337,7 +1337,7 @@ function PricesView({
   }, item.fileUrls.map((fileUrl, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
     href: fileUrl,
     target: "_blank"
-  }, item.fileNames[index]), index < item.fileUrls.length - 1 ? ', ' : ''))))));
+  }, item.fileNames[index]), index < item.fileUrls?.length - 1 ? ', ' : ''))))));
 }
 
 /***/ }),
@@ -2384,7 +2384,7 @@ function UploadFont({
     className: "px-[1px]"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
-  }, "UPLOAD FONT FILE"), !fontFileUrl ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+  }, "UPLOAD TTF/OTF File"), !fontFileUrl ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "h-[40px] w-full py-2 px-2 text-center text-red rounded-md text-sm uppercase bg-slate-400 hover:bg-slate-600 font-title leading-[1em]",
     onClick: handleButtonClick,
     "aria-label": "Upload font file",
@@ -3656,7 +3656,7 @@ function Logo({
     if (!waterproof) missingFields.push('Select Waterproof');
     if (!selectedMounting) missingFields.push('Select Mounting');
     if (!selectedFinishing) missingFields.push('Select Finishing');
-    if (fileUrls.length == 0) missingFields.push('Upload a PDF/AI File');
+    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
         const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
@@ -4125,7 +4125,7 @@ function Logo({
   }, [width, height, selectedThickness, waterproof, selectedFinishing]);
   const checkAndAddMissingFields = () => {
     const missingFields = [];
-    if (fileUrls.length == 0) missingFields.push('Upload a PDF/AI File');
+    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
     if (!description) missingFields.push('Add Description');
     if (!selectedThickness) missingFields.push('Select Thickness');
     if (!width) missingFields.push('Select Logo Width');
@@ -5139,7 +5139,7 @@ function Logo({
     }
     if (!waterproof) missingFields.push('Select Waterproof');
     if (!selectedMounting) missingFields.push('Select Mounting');
-    if (fileUrls.length == 0) missingFields.push('Upload a PDF/AI File');
+    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
     setMissing(prevMissing => {
       const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
       if (existingIndex !== -1) {
@@ -5635,7 +5635,7 @@ function Logo({
     if (!waterproof) missingFields.push('Select Environment');
     if (!selectedMounting) missingFields.push('Select Mounting Option');
     if (!selectedFinishing) missingFields.push('Select Finishing Option');
-    if (fileUrls.length == 0) missingFields.push('Upload a PDF/AI File');
+    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
     if (baseColor === 'Custom Color' && !customColor) missingFields.push('Add the Pantone color code of your custom color');
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
@@ -9303,7 +9303,7 @@ function Logo({
     if (!selectedThickness) missingFields.push('Select Metal Depth');
     if (!width) missingFields.push('Select Logo Width');
     if (!height) missingFields.push('Select Logo Height');
-    if (fileUrls.length == 0) missingFields.push('Upload a PDF/AI File');
+    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
     if (!selectedFinishing) missingFields.push('Select Finish Option');
     if (selectedFinishing === 'Painted Finish') {
       if (!color.name) missingFields.push('Select Color');
@@ -10312,7 +10312,7 @@ function Logo({
       missingFields.push('Add the Pantone color code of your custom color.');
     }
     if (!installation) missingFields.push('Select Installation');
-    if (fileUrls.length == 0) missingFields.push('Upload a PDF/AI File');
+    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
         const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
@@ -11367,7 +11367,7 @@ function Logo({
     if (!selectedThickness) missingFields.push('Select Metal Thickness');
     if (!width) missingFields.push('Select Logo Width');
     if (!height) missingFields.push('Select Logo Height');
-    if (fileUrls.length == 0) missingFields.push('Upload a PDF/AI File');
+    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
     if (!selectedFinishing) missingFields.push('Select Finish Option');
     if (selectedFinishing === 'Painted Finish') {
       if (!color.name) missingFields.push('Select Color');
@@ -12531,7 +12531,7 @@ function Logo({
     if (!waterproof) missingFields.push('Select Waterproof');
     if (!installation) missingFields.push('Select Installation');
     if (!selectedFinishing) missingFields.push('Select Finishing');
-    if (fileUrls.length == 0) missingFields.push('Upload a PDF/AI File');
+    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
         const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
@@ -12960,7 +12960,7 @@ function Logo({
     if (!waterproof) missingFields.push('Select Waterproof');
     if (!installation) missingFields.push('Select Installation');
     if (!selectedFinishing) missingFields.push('Select Finishing');
-    if (fileUrls.length == 0) missingFields.push('Upload a PDF/AI File');
+    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
         const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);

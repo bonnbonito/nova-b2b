@@ -9,6 +9,6 @@ A Wordpress Child theme of BeTheme designed for Hineon website.
 
 ## Changelog
 
-### 1.1.0 | 25th Nov 2023 =
+### 1.1.0 | 10th Apr 2024 =
 
-- New Release
+- First commit

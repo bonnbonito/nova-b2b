@@ -303,7 +303,7 @@ export default function Prices({ item }) {
 								<a href={fileUrl} target="_blank">
 									{item.fileNames[index]}
 								</a>
-								{index < item.fileUrls.length - 1 ? ', ' : ''}
+								{index < item.fileUrls?.length - 1 ? ', ' : ''}
 							</>
 						))}
 					</div>

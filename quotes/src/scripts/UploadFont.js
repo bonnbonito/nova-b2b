@@ -306,7 +306,7 @@ export default function UploadFont({
 	return (
 		<div className="px-[1px]">
 			<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-				UPLOAD FONT FILE
+				UPLOAD TTF/OTF File
 			</label>
 
 			{!fontFileUrl ? (

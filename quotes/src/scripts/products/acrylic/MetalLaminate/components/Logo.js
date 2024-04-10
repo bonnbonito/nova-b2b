@@ -229,7 +229,8 @@ export default function Logo({ item }) {
 		}
 		if (!waterproof) missingFields.push('Select Waterproof');
 		if (!selectedMounting) missingFields.push('Select Mounting');
-		if (fileUrls.length == 0) missingFields.push('Upload a PDF/AI File');
+		if (!fileUrls || fileUrls.length === 0)
+			missingFields.push('Upload a PDF/AI File');
 
 		setMissing((prevMissing) => {
 			const existingIndex = prevMissing.findIndex(

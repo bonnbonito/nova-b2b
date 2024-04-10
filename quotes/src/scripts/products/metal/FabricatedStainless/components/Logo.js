@@ -144,7 +144,8 @@ export default function Logo({ item }) {
 		if (!selectedThickness) missingFields.push('Select Metal Depth');
 		if (!width) missingFields.push('Select Logo Width');
 		if (!height) missingFields.push('Select Logo Height');
-		if (fileUrls.length == 0) missingFields.push('Upload a PDF/AI File');
+		if (!fileUrls || fileUrls.length === 0)
+			missingFields.push('Upload a PDF/AI File');
 
 		if (!selectedFinishing) missingFields.push('Select Finish Option');
 		if (selectedFinishing === 'Painted Finish') {

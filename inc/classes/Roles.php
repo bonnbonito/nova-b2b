@@ -117,7 +117,7 @@ jQuery(document).ready(function($) {
 			$message  = '<p style="margin-top: 20px;">Hello  ' . $first_name . ',</p>';
 			$message .= '<p>Welcome to NOVA Signage! Your application to become a Business Partner has been approved.</p>';
 			$message .= '<p>You may now login, explore, and order our products at <a href="' . home_url( '/' ) . '">novasignage.com</a></p>';
-			$message .= '<p><a href="' . home_url( '/custom-project' ) . '">[EXPLORE OUR PRODUCTS]</a> | <a href="' . home_url( '/custom-project' ) . '">[START A CUSTOM PROJECT]</a></p>';
+			$message .= '<p><a href="' . home_url( '/' ) . '">[EXPLORE OUR PRODUCTS]</a> | <a href="' . home_url( '/custom-project' ) . '">[START A CUSTOM PROJECT]</a></p>';
 			$message .= '<p>If you have any questions, our team is here to assist you.</p>';
 			$message .= '<p>Congratulations,<br>';
 			$message .= 'NOVA Signage Team</p>';

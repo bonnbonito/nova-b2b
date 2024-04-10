@@ -160,7 +160,8 @@ export default function Logo({ item }) {
 			missingFields.push('Add the Pantone color code of your custom color.');
 		}
 		if (!installation) missingFields.push('Select Installation');
-		if (fileUrls.length == 0) missingFields.push('Upload a PDF/AI File');
+		if (!fileUrls || fileUrls.length === 0)
+			missingFields.push('Upload a PDF/AI File');
 
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {

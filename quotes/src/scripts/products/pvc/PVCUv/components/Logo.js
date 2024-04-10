@@ -191,7 +191,8 @@ export default function Logo({ item }) {
 		if (!waterproof) missingFields.push('Select Waterproof');
 		if (!installation) missingFields.push('Select Installation');
 		if (!selectedFinishing) missingFields.push('Select Finishing');
-		if (fileUrls.length == 0) missingFields.push('Upload a PDF/AI File');
+		if (!fileUrls || fileUrls.length === 0)
+			missingFields.push('Upload a PDF/AI File');
 
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {

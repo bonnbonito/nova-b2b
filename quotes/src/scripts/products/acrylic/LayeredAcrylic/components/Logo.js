@@ -218,7 +218,8 @@ export default function Logo({ item }) {
 	const checkAndAddMissingFields = () => {
 		const missingFields = [];
 
-		if (fileUrls.length == 0) missingFields.push('Upload a PDF/AI File');
+		if (!fileUrls || fileUrls.length === 0)
+			missingFields.push('Upload a PDF/AI File');
 		if (!description) missingFields.push('Add Description');
 		if (!selectedThickness) missingFields.push('Select Thickness');
 		if (!width) missingFields.push('Select Logo Width');

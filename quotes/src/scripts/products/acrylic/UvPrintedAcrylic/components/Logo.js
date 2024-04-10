@@ -185,7 +185,8 @@ export default function Logo({ item }) {
 		if (!waterproof) missingFields.push('Select Environment');
 		if (!selectedMounting) missingFields.push('Select Mounting Option');
 		if (!selectedFinishing) missingFields.push('Select Finishing Option');
-		if (fileUrls.length == 0) missingFields.push('Upload a PDF/AI File');
+		if (!fileUrls || fileUrls.length === 0)
+			missingFields.push('Upload a PDF/AI File');
 		if (baseColor === 'Custom Color' && !customColor)
 			missingFields.push('Add the Pantone color code of your custom color');
 		if (missingFields.length > 0) {
