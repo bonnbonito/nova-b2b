@@ -3048,6 +3048,10 @@ function Letters({
   const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.fileUrls);
   const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.filePaths);
   const [files, setFiles] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.files);
+  const [fileName, setFileName] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.fileName);
+  const [fileUrl, setFileUrl] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.fileUrl);
+  const [filePath, setFilePath] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.filePath);
+  const [file, setFile] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.file);
   const [fontFileName, setFontFileName] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.fontFileName);
   const [fontFileUrl, setFontFileUrl] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.fontFileUrl);
   const [fontFilePath, setFontFilePath] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.fontFilePath);
@@ -3093,6 +3097,20 @@ function Letters({
       console.error(`Font ${name} failed to load`);
     }
   }
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (file) {
+      setFiles(prev => [...prev, file]);
+    }
+    if (fileName) {
+      setFileNames(prev => [...prev, fileName]);
+    }
+    if (filePath) {
+      setFilePaths(prev => [...prev, filePath]);
+    }
+    if (fileUrl) {
+      setFileUrls(prev => [...prev, fileUrl]);
+    }
+  }, []);
   const headlineRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const adjustFontSize = () => {
     const container = headlineRef.current.parentNode;

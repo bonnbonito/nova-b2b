@@ -49,6 +49,11 @@ export default function Letters({ item }) {
 	const [filePaths, setFilePaths] = useState(item.filePaths);
 	const [files, setFiles] = useState(item.files);
 
+	const [fileName, setFileName] = useState(item.fileName);
+	const [fileUrl, setFileUrl] = useState(item.fileUrl);
+	const [filePath, setFilePath] = useState(item.filePath);
+	const [file, setFile] = useState(item.file);
+
 	const [fontFileName, setFontFileName] = useState(item.fontFileName);
 	const [fontFileUrl, setFontFileUrl] = useState(item.fontFileUrl);
 	const [fontFilePath, setFontFilePath] = useState(item.fontFilePath);
@@ -109,6 +114,21 @@ export default function Letters({ item }) {
 			console.error(`Font ${name} failed to load`);
 		}
 	}
+
+	useEffect(() => {
+		if (file) {
+			setFiles((prev) => [...prev, file]);
+		}
+		if (fileName) {
+			setFileNames((prev) => [...prev, fileName]);
+		}
+		if (filePath) {
+			setFilePaths((prev) => [...prev, filePath]);
+		}
+		if (fileUrl) {
+			setFileUrls((prev) => [...prev, fileUrl]);
+		}
+	}, []);
 
 	const headlineRef = useRef(null);
 
