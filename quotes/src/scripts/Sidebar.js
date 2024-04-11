@@ -108,9 +108,11 @@ export default function Sidebar({
 									NovaQuote.not_author_but_admin === 'no' ? (
 										<ModalSave
 											signage={signage}
-											required={required}
 											tempFolder={tempFolder}
 											storage={storage}
+											isLoading={isLoading}
+											setIsLoading={setIsLoading}
+											required={required}
 											action="update-processing"
 											label="Submit Quote"
 											btnClass="mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
@@ -138,9 +140,9 @@ export default function Sidebar({
 											signage={signage}
 											tempFolder={tempFolder}
 											storage={storage}
-											required={required}
 											isLoading={isLoading}
 											setIsLoading={setIsLoading}
+											required={required}
 											action="processing"
 											label="Submit Quote"
 											btnClass="mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
@@ -153,9 +155,9 @@ export default function Sidebar({
 										signage={signage}
 										tempFolder={tempFolder}
 										storage={storage}
-										required={required}
 										isLoading={isLoading}
 										setIsLoading={setIsLoading}
+										required={required}
 										action="draft"
 										label="Save to Draft"
 										btnClass="mb-5 font-title border border-nova-light rounded-md text-nova-gray w-full text-center bg-white text-sm h-[49px] hover:bg-nova-light hover:text-white shadow-[0_0_0_1px_rgba(0,0,0,0.3)]"
