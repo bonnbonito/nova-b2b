@@ -292,6 +292,8 @@ function getSignageDetailFields(sign) {
 		{ label: 'COLOR', value: sign.color?.name },
 		{ label: 'ACRYLIC COVER', value: sign.acrylicCover?.name },
 		{ label: 'LED LIGHT COLOR', value: sign.ledLightColor },
+		{ label: 'BASE COLOR', value: sign.baseColor },
+		{ label: 'PVC BASE COLOR', value: sign.pvcBaseColor?.name },
 		{ label: 'CUSTOM COLOR', value: sign.customColor },
 		{ label: 'METAL', value: sign.metal },
 		{
@@ -310,7 +312,6 @@ function getSignageDetailFields(sign) {
 		},
 		{ label: 'METAL FINISHING', value: sign.metalFinishing },
 		{ label: 'STEEL POLISHED', value: sign.stainlessSteelPolished },
-		{ label: 'BASE COLOR', value: sign.baseColor },
 		{ label: 'STUD LENGTH', value: sign.studLength },
 		{ label: 'SPACER STANDOFF DISTANCE', value: sign.spacerStandoffDistance },
 		{ label: 'PRINT PREFERENCE', value: sign.printPreference },

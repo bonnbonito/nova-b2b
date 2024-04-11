@@ -1268,6 +1268,10 @@ h6 {
 			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">COLOR: </strong></td><td><font face="lato">' . $projectArray['color']->name . '</font></td></tr>';
 		}
 
+		if ( isset( $projectArray['pvcBaseColor'] ) && is_object( $projectArray['pvcBaseColor'] ) && ! empty( $projectArray['pvcBaseColor']->name ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">PVC BASE COLOR: </strong></td><td><font face="lato">' . $projectArray['pvcBaseColor']->name . '</font></td></tr>';
+		}
+
 		if ( isset( $projectArray['customColor'] ) && ! empty( $projectArray['customColor'] ) ) {
 			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">CUSTOM COLOR: </strong></td><td><font face="lato">' . $projectArray['customColor'] . '</font></td></tr>';
 		}

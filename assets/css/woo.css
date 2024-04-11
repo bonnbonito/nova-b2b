@@ -383,10 +383,6 @@ ul#payment-select li input {
     }
 }
 
-.woocommerce-cart tr.shipping {
-    display: none;
-}
-
 .woocommerce-button.button.pay {
     background-color: #16a34a;
 }

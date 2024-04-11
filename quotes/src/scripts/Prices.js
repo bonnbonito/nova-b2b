@@ -176,6 +176,14 @@ export default function Prices({ item }) {
 					<div className="text-left text-sm">{item.color?.name}</div>
 				</div>
 			)}
+			{item.pvcBaseColor?.name && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						PVC BASE COLOR
+					</div>
+					<div className="text-left text-sm">{item.pvcBaseColor?.name}</div>
+				</div>
+			)}
 			{item.acrylicCover?.name && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">

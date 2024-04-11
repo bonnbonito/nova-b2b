@@ -18,6 +18,8 @@ export default function PVCUv() {
 	const localStorageQuote = localStorage.getItem(storage);
 	const savedStorage = JSON.parse(localStorageQuote);
 
+	const [isLoading, setIsLoading] = useState(false);
+
 	function setDefaultSignage() {
 		if (savedStorage?.length > 0) {
 			setSignage(savedStorage);
@@ -31,6 +33,7 @@ export default function PVCUv() {
 					installation: '',
 					waterproof: '',
 					thickness: '',
+					pvcBaseColor: { name: 'Black', color: '#000000' },
 					usdPrice: 0,
 					cadPrice: 0,
 					filePaths: [],
@@ -71,6 +74,7 @@ export default function PVCUv() {
 		waterproof: '',
 		finishing: 'Matte',
 		usdPrice: 0,
+		pvcBaseColor: { name: 'Black', color: '#000000' },
 		cadPrice: 0,
 		filePaths: [],
 		fileNames: [],

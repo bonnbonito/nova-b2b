@@ -1,6 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
+import useOutsideClick from '../../../../utils/ClickOutside';
+import { colorOptions } from '../../../../utils/ColorOptions';
 import convert_json from '../../../../utils/ConvertJson';
 import { getLogoPricingTablebyThickness } from '../../../../utils/Pricing';
 import { waterProofOptions } from '../../../../utils/SignageOptions';
@@ -30,12 +32,17 @@ export default function Logo({ item }) {
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice);
 	const [fileName, setFileName] = useState(item.fileName);
+	const [openColor, setOpenColor] = useState(false);
+	const [color, setColor] = useState(item.color);
+	const [customColor, setCustomColor] = useState(item.customColor);
 	const [installation, setInstallation] = useState(item.installation);
 	const [fileNames, setFileNames] = useState(item.fileNames);
 	const [fileUrls, setFileUrls] = useState(item.fileUrls);
 	const [filePaths, setFilePaths] = useState(item.filePaths);
 	const [files, setFiles] = useState(item.files);
 	const [selectedFinishing, setSelectedFinishing] = useState(item.finishing);
+	const [installationSelections, setInstallationSelections] =
+		useState(installationOptions);
 
 	const [maxWidthOptions, setMaxWidthOptions] = useState(
 		Array.from(
@@ -52,6 +59,8 @@ export default function Logo({ item }) {
 			}
 		)
 	);
+
+	const colorRef = useRef(null);
 
 	const [height, setHeight] = useState(item.height);
 	const [comments, setComments] = useState('');
@@ -107,6 +116,8 @@ export default function Logo({ item }) {
 					fileNames: fileNames,
 					filePaths: filePaths,
 					fileUrls: fileUrls,
+					color: color,
+					customColor: customColor,
 				};
 			} else {
 				return sign;
@@ -135,6 +146,8 @@ export default function Logo({ item }) {
 		selectedFinishing,
 		files,
 		filePaths,
+		color,
+		customColor,
 	]);
 
 	const logoPricingObject = NovaQuote.logo_pricing_tables;
@@ -250,6 +263,30 @@ export default function Logo({ item }) {
 		selectedFinishing,
 	]);
 
+	useEffect(() => {
+		if ('Outdoor' === waterproof) {
+			if ('Double-sided tape' === installation) {
+				setInstallation('');
+			}
+			let newOptions = installationOptions.filter(
+				(option) => option.value !== 'Double-sided tape'
+			);
+
+			setInstallationSelections(newOptions);
+		} else {
+			setInstallationSelections(installationOptions);
+		}
+	}, [waterproof]);
+
+	useOutsideClick([colorRef], () => {
+		if (!openColor) return;
+		setOpenColor(false);
+	});
+
+	useEffect(() => {
+		color?.name != 'Custom Color' && setCustomColor('');
+	}, [color]);
+
 	return (
 		<>
 			<div className="quote-grid mb-6">
@@ -280,6 +317,55 @@ export default function Logo({ item }) {
 					onChange={(e) => setHeight(e.target.value)}
 					options={maxWidthOptions}
 				/>
+
+				<div className="px-[1px] relative" ref={colorRef}>
+					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+						Color
+					</label>
+					<div
+						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
+							color.name ? 'text-black' : 'text-[#dddddd]'
+						}`}
+						onClick={() => setOpenColor((prev) => !prev)}
+					>
+						<span
+							className="rounded-full w-[18px] h-[18px] border mr-2"
+							style={{
+								background:
+									color.name == 'Custom Color'
+										? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
+										: color.color,
+							}}
+						></span>
+						{color.name === '' ? 'CHOOSE OPTION' : color.name}
+					</div>
+					{openColor && (
+						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
+							{colorOptions.map((color) => {
+								return (
+									<div
+										className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
+										onClick={() => {
+											setColor(color);
+											setOpenColor(false);
+										}}
+									>
+										<span
+											className="w-[18px] h-[18px] inline-block rounded-full border"
+											style={{
+												background:
+													color.name == 'Custom Color'
+														? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
+														: color.color,
+											}}
+										></span>
+										{color.name}
+									</div>
+								);
+							})}
+						</div>
+					)}
+				</div>
 
 				<Dropdown
 					title="Environment"
@@ -312,7 +398,7 @@ export default function Logo({ item }) {
 				<Dropdown
 					title="Installation"
 					onChange={handleOnChangeInstallation}
-					options={installationOptions.map((option) => (
+					options={installationSelections.map((option) => (
 						<option
 							value={option.value}
 							selected={option.value === installation}
@@ -325,6 +411,20 @@ export default function Logo({ item }) {
 			</div>
 
 			<div className="quote-grid">
+				{color?.name == 'Custom Color' && (
+					<div className="px-[1px] col-span-4">
+						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+							Custom Color
+						</label>
+						<input
+							className="w-full py-4 px-2 border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400"
+							type="text"
+							value={customColor}
+							onChange={(e) => setCustomColor(e.target.value)}
+							placeholder="ADD THE PANTONE COLOR CODE"
+						/>
+					</div>
+				)}
 				<div className="px-[1px] col-span-4">
 					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
 						COMMENTS

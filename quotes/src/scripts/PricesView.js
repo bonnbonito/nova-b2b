@@ -249,6 +249,15 @@ export default function PricesView({ item }) {
 					</div>
 				)}
 
+				{item.pvcBaseColor?.name && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">PVC BASE COLOR</div>
+						<div className="text-left text-[14px]">
+							{item.pvcBaseColor?.name}
+						</div>
+					</div>
+				)}
+
 				{item.acrylicCover?.name && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
 						<div className="text-left text-xs font-title">ACRYLIC COVER</div>
