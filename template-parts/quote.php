@@ -112,7 +112,7 @@ $final_price = $price_with_shipping ? ( get_woocommerce_currency() === 'USD' ? $
 			?>
 		</div>
 	</div>
-	<a class="cursor-pointer absolute top-7 right-3" data-type="delete" data-id="<?php echo get_the_ID(); ?>"
+	<a class="cursor-pointer absolute top-4 md:top-7 right-3" data-type="delete" data-id="<?php echo get_the_ID(); ?>"
 		title="Delete Q-<?php echo get_the_ID(); ?>">
 		<svg width=" 15px" height="15px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 			<path
