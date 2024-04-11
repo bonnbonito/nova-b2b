@@ -6,6 +6,7 @@ use WP_Query;
 use Kadence\Theme;
 use WC;
 use WC_Order_Item_Shipping;
+use function is_cart;
 
 class Woocommerce {
 	/**
@@ -480,6 +481,7 @@ class Woocommerce {
 				unset( $rates['flat_rate:4'] );
 			} else {
 				unset( $rates['flat_rate:2'] );
+				unset( $rates['flat_rate:3'] );
 			}
 		}
 
@@ -490,6 +492,10 @@ class Woocommerce {
 				// Unset other rates to show only Expedite
 				unset( $rates['flat_rate:2'], $rates['flat_rate:4'] );
 			}
+		}
+
+		if ( is_cart() ) {
+			unset( $rates['flat_rate:3'] );
 		}
 
 		return $rates;
