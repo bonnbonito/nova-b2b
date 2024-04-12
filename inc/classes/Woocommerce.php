@@ -141,15 +141,54 @@ class Woocommerce {
 	}
 
 	public function add_deposit_row( $order_id ) {
+
 		$deposit_total                   = get_post_meta( $order_id, '_deposit_total', true );
 		$has_adjusted_duplicate_order_id = get_post_meta( $order_id, '_adjusted_duplicate_order_id', true );
+		$pending_payment                 = get_post_meta( $order_id, '_pending_payment', true );
 		$original_total                  = get_post_meta( $order_id, '_original_total', true );
 		$from_order                      = get_post_meta( $order_id, '_from_order_id', true );
+		$original_tax_names              = get_post_meta( $order_id, '_original_tax_names', true );
+		$original_tax                    = get_post_meta( $order_id, '_original_tax', true );
 		$order                           = wc_get_order( $order_id );
-		if ( $original_total && $from_order ) :
+		$original_shipping               = get_post_meta( $order_id, '_original_shipping', true );
+		$original_shipping_method        = get_post_meta( $order_id, '_original_shipping_method', true );
+
+		if ( $original_tax_names && $original_tax && $from_order ) {
 			?>
 <tr>
-	<td class="label"><?php esc_html_e( 'Overall Total', 'woocommerce' ); ?>:</td>
+	<td class="label"><?php echo 'Shipping (' . $original_shipping_method . ')'; ?>:</td>
+	<td width="1%"></td>
+	<td class="total">
+			<?php
+			if ( ! empty( $original_shipping ) ) {
+				echo wc_price( $original_shipping, array( 'currency' => $order->get_currency() ) );
+			}
+			?>
+	</td>
+</tr>
+			<?php
+		}
+
+		if ( $original_tax_names && $original_tax && $from_order ) {
+			?>
+<tr>
+	<td class="label"><?php echo $original_tax_names; ?>:</td>
+	<td width="1%"></td>
+	<td class="total">
+			<?php
+			if ( ! empty( $original_tax ) ) {
+				echo wc_price( $original_tax, array( 'currency' => $order->get_currency() ) );
+			}
+			?>
+	</td>
+</tr>
+			<?php
+		}
+
+		if ( $original_total && $from_order && $from_order ) :
+			?>
+<tr>
+	<td class="label"><?php esc_html_e( 'Overall Total (+shipping & tax)', 'woocommerce' ); ?>:</td>
 	<td width="1%"></td>
 	<td class="total">
 			<?php
@@ -184,6 +223,25 @@ class Woocommerce {
 				endif;
 
 	endif;
+
+		if ( $pending_payment && $has_adjusted_duplicate_order_id ) {
+			?>
+<tr>
+	<td class="label"><?php esc_html_e( 'Pending Payment', 'woocommerce' ); ?>:</td>
+	<td width="1%"></td>
+	<td class="total">
+			<?php
+			if ( ! empty( $pending_payment ) ) {
+				echo wc_price( $pending_payment, array( 'currency' => $order->get_currency() ) );
+			} else {
+				echo wc_price( 0, array( 'currency' => $order->get_currency() ) );
+			}
+			?>
+	</td>
+</tr>
+
+			<?php
+		}
 	}
 
 	public function add_custom_meta_box_to_orders() {
@@ -222,6 +280,9 @@ class Woocommerce {
 		$order_id       = get_post_meta( $post->ID, '_adjusted_duplicate_order_id', true );
 		$original_total = get_post_meta( $post->ID, '_original_total', true );
 		$order_edit_url = admin_url( 'post.php?post=' . $order_id . '&action=edit' );
+
+		print_r( get_post_meta( $post->ID ) );
+
 		?>
 <a href="<?php echo esc_url( $order_edit_url ); ?>" class="button button-primary">View Order</a>
 
@@ -232,12 +293,16 @@ class Woocommerce {
 
 	public function deposit_insert_order_total_row( $total_rows, $order ) {
 		// Check if the order has the '_deposit_total' meta key
-		$deposit_total  = get_post_meta( $order->get_id(), '_deposit_total', true );
-		$from_order     = get_post_meta( $order->get_id(), '_from_order_id', true );
-		$original_total = get_post_meta( $order->get_id(), '_original_total', true );
+		$deposit_total            = get_post_meta( $order->get_id(), '_deposit_total', true );
+		$from_order               = get_post_meta( $order->get_id(), '_from_order_id', true );
+		$original_total           = get_post_meta( $order->get_id(), '_original_total', true );
+		$original_shipping        = get_post_meta( $order->get_id(), '_original_shipping', true );
+		$original_shipping_method = get_post_meta( $order->get_id(), '_original_shipping_method', true );
+		$original_tax_names       = get_post_meta( $order->get_id(), '_original_tax_names', true );
+		$original_tax             = get_post_meta( $order->get_id(), '_original_tax', true );
 
-		// If '_deposit_total' meta key doesn't exist, return the original total rows
-		if ( empty( $deposit_total ) || empty( $from_order ) ) {
+		// If '_from_order_id' meta key doesn't exist, return the original total rows
+		if ( empty( $from_order ) ) {
 			return $total_rows;
 		}
 
@@ -245,7 +310,8 @@ class Woocommerce {
 		$new_total_rows = array();
 
 		foreach ( $total_rows as $total_key => $total ) {
-			// Insert your custom row before the 'order_total' row
+			// Insert your custom row before the 'order_total'
+
 			$new_total_rows['deposit_total'] = array(
 				'label' => __( 'Deposit:', 'woocommerce' ),
 				'value' => wc_price( -$deposit_total ),
@@ -257,11 +323,23 @@ class Woocommerce {
 			unset( $new_total_rows['cart_subtotal'] );
 			unset( $new_total_rows['shipping'] );
 
-			$overall_total_row = array(
-				'overall_total' => array(
-					'label' => __( 'Overall Total (+shipping):', 'woocommerce' ),
-					'value' => wc_price( $original_total ),
-				),
+			if ( $original_shipping && $original_shipping_method ) {
+				$overall_total_row['original_shipping'] = array(
+					'label' => __( 'Shipping(' . $original_shipping_method . '):', 'woocommerce' ),
+					'value' => wc_price( $original_shipping ),
+				);
+			}
+
+			if ( $original_tax_names && $original_tax ) {
+				$overall_total_row['original_tax'] = array(
+					'label' => $original_tax_names,
+					'value' => wc_price( $original_tax ),
+				);
+			}
+
+			$overall_total_row['overall_total'] = array(
+				'label' => __( 'Overall Total (+shipping):', 'woocommerce' ),
+				'value' => wc_price( $original_total ),
 			);
 
 			// Prepend the custom row to the beginning of the total rows array
@@ -317,8 +395,8 @@ class Woocommerce {
 
 		// Handle shipping
 		$shipping_item = new WC_Order_Item_Shipping();
-		$shipping_item->set_method_title( $shipping_method ); // Set to the title of your shipping method
-		$shipping_item->set_method_id( 'custom_shipping_method' ); // Set to an appropriate shipping method ID
+		$shipping_item->set_method_title( $shipping_method );
+		$shipping_item->set_method_id( 'custom_shipping_method' );
 		$shipping_item->set_total( $shipping ); // Set the shipping total to the provided shipping parameter
 		$new_order->add_item( $shipping_item );
 
@@ -351,10 +429,12 @@ class Woocommerce {
 			$shipping_method = WC()->session->get( 'original_shipping_methods' );
 			$pending_payment = WC()->session->get( 'pending_payment' );
 			$deposit_total   = WC()->session->get( 'deposit_total' );
+			$tax_names       = WC()->session->get( 'original_tax_names' );
 
 			// Save the session values as order meta for the original order
 			update_post_meta( $order_id, '_payment_select', $payment_select );
 			update_post_meta( $order_id, '_original_tax', $tax );
+			update_post_meta( $order_id, '_original_tax_names', $tax_names );
 			update_post_meta( $order_id, '_original_shipping', $shipping );
 			update_post_meta( $order_id, '_original_total', $total );
 			update_post_meta( $order_id, '_original_shipping_method', $shipping_method );
@@ -371,6 +451,7 @@ class Woocommerce {
 			update_post_meta( $new_order_id, '_pending_payment', $pending_payment );
 			update_post_meta( $new_order_id, '_original_total', $total );
 			update_post_meta( $new_order_id, '_original_tax', $tax );
+			update_post_meta( $new_order_id, '_original_tax_names', $tax_names );
 			update_post_meta( $new_order_id, '_original_shipping', $shipping );
 			update_post_meta( $new_order_id, '_original_shipping_method', $shipping_method );
 
@@ -382,6 +463,7 @@ class Woocommerce {
 			WC()->session->__unset( 'original_shipping_methods' );
 			WC()->session->__unset( 'pending_payment' );
 			WC()->session->__unset( 'deposit_total' );
+			WC()->session->__unset( 'original_tax_names' );
 		}
 	}
 
@@ -390,38 +472,34 @@ class Woocommerce {
 		if ( WC()->session ) {
 			$payment_select = (int) WC()->session->get( 'payment_select' );
 
-			// Save the original total, shipping, and tax values only once to avoid overwriting
-
-			// If the payment method is 'net30', set the total to 0
 			if ( $payment_select && 0 !== $payment_select ) {
-
-				$chosen_methods = WC()->session->get( 'chosen_shipping_methods' );
-
+				// Handling shipping methods
+				$chosen_methods        = WC()->session->get( 'chosen_shipping_methods' );
 				$shipping_method_names = array();
-
 				foreach ( $chosen_methods as $method_id ) {
-					// Split the chosen method id to get the method's instance ID
 					list($method, $instance_id) = explode( ':', $method_id );
-
-					// Access all available shipping rates for the current package
-					$available_shipping_rates = WC()->session->get( 'shipping_for_package_0' )['rates'];
-
-					// Check if the chosen method's ID exists in the available rates and retrieve its label (name)
+					$available_shipping_rates   = WC()->session->get( 'shipping_for_package_0' )['rates'];
 					if ( isset( $available_shipping_rates[ $method_id ] ) ) {
 						$shipping_method_names[] = $available_shipping_rates[ $method_id ]->get_label();
 					}
 				}
-
-				// Convert the shipping method names array to a string, separated by commas if there are multiple
 				$shipping_names = implode( ', ', $shipping_method_names );
-
-				// Store the shipping method names in the session, join them if multiple
 				WC()->session->set( 'original_shipping_methods', $shipping_names );
 
-				$deposit = get_field( 'deposit', $payment_select ) / 100;
+				// Handling taxes
+				$tax_totals  = WC()->cart->get_tax_totals(); // Retrieves the tax totals as objects
+				$tax_details = array();
+				foreach ( $tax_totals as $code => $tax ) {
+					$tax_details[ $code ] = $tax->label;  // Capturing each tax name
+				}
+				$tax_names = implode( ', ', $tax_details ); // Combine all tax names into a string
+				WC()->session->set( 'original_tax_names', $tax_names ); // Store tax names in the session
 
+				// Calculate new total based on deposit
+				$deposit   = get_field( 'deposit', $payment_select ) / 100;
 				$new_total = $total * $deposit;
 
+				// Storing other session values
 				WC()->session->set( 'pending_payment', $total - $new_total );
 				WC()->session->set( 'original_total', $total );
 				WC()->session->set( 'deposit_total', $new_total );
@@ -433,9 +511,9 @@ class Woocommerce {
 				WC()->session->__unset( 'pending_payment' );
 			}
 		}
-
 		return $total;
 	}
+
 
 	public function handle_ajax_update_checkout_total() {
 		$payment_select = isset( $_POST['payment_select'] ) ? (int) $_POST['payment_select'] : 0;

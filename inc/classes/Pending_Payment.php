@@ -35,7 +35,53 @@ class Pending_Payment {
 		add_filter( 'kadence_woomail_order_body_text', array( $this, 'pending_payment_order_email_content' ), 999, 5 );
 		add_action( 'woocommerce_payment_complete', array( $this, 'custom_order_complete' ), 99, 1 );
 		add_action( 'pre_get_posts', array( $this, 'hide_specific_orders_in_admin' ) );
+		add_action( 'add_meta_boxes', array( $this, 'add_custom_meta_box_to_orders' ) );
 		// add_filter( 'woocommerce_email_recipient_customer_completed_order', array( $this, 'disable_completed_order_email_for_pending' ), 10, 2 );
+	}
+
+	public function add_custom_meta_box_to_orders() {
+		global $pagenow, $post;
+
+		// Ensure we are on the post edit screen
+		if ( 'post.php' !== $pagenow || 'shop_order' !== get_post_type() ) {
+			return;
+		}
+
+		// Ensure the global $post object is set and retrieve the current order ID
+		$order_id = isset( $post->ID ) ? $post->ID : false;
+
+		if ( ! $order_id ) {
+			return;
+		}
+
+		// Check for the specific post meta
+		$_from_order_id = get_post_meta( $order_id, '_from_order_id', true );
+
+		// If the meta value exists, add the meta box
+		if ( ! empty( $_from_order_id ) ) {
+			add_meta_box(
+				'from_order_id',          // Unique ID for the meta box
+				__( 'Original Order', 'woocommerce' ), // Title of the meta box
+				array( $this, 'from_order_id_content' ), // Callback function to output the content
+				'shop_order',                  // Post type
+				'advanced',                    // Context (where on the screen)
+				'default'                      // Priority
+			);
+		}
+	}
+
+	public function from_order_id_content( $post ) {
+		// Output your custom content here. For example:
+		$order_id       = get_post_meta( $post->ID, '_from_order_id', true );
+		$original_total = get_post_meta( $post->ID, '_original_total', true );
+		$order_edit_url = admin_url( 'post.php?post=' . $order_id . '&action=edit' );
+
+		?>
+<a href="<?php echo esc_url( $order_edit_url ); ?>" class="button button-primary">View Order</a>
+
+<p>Original Total: <?php echo $original_total; ?></p>
+
+		<?php
 	}
 
 	public function hide_specific_orders_in_admin( $query ) {
@@ -69,13 +115,13 @@ class Pending_Payment {
 	public function pending_payment_order_email_content( $body_text, $order, $sent_to_admin, $plain_text, $email ) {
 		$pending_id = $order->get_meta( '_pending_id' );
 		if ( $pending_id ) {
-			$body_text = 'Thank you for the payment';
+			$body_text = 'We have received your recent payment for Order #' . $order->get_id() . '. Thank you very much.';
 		}
 		return $body_text;
 	}
 
 	protected function get_billing_information_from_payment( $payment ) {
-		$order = wc_get_order( $payment->original_order );
+		$order = wc_get_order( intval( $payment->original_order ) );
 		if ( ! $order ) {
 			return false;
 		}
@@ -100,17 +146,9 @@ class Pending_Payment {
 	public function handle_send_reminder() {
 		if ( isset( $_POST['payment_id'], $_POST['send_reminder_nonce'] ) && wp_verify_nonce( $_POST['send_reminder_nonce'], 'send_reminder_action' ) ) {
 			$payment_id = intval( $_POST['payment_id'] );
-			$payment    = $this->get_data( $payment_id );
 
-			if ( $payment ) {
-				$this->send_payment_reminder_email( $payment );
-
-				$update_data = array(
-					'reminder_sent'      => 'yes',
-					'reminder_sent_date' => current_time( 'mysql' ),
-				);
-
-				$this->update_data( $payment_id, $update_data );
+			if ( $payment_id ) {
+				$sent = $this->send_payment_reminder_email_manual( $payment_id, $_POST['index'] );
 
 				// Optionally, add a query arg to indicate the email was sent, to show a message to the admin
 				wp_redirect( add_query_arg( 'reminder_sent', 'true', admin_url( 'admin.php?page=pending-payments' ) ) );
@@ -119,44 +157,138 @@ class Pending_Payment {
 		}
 	}
 
-	public function send_payment_reminder_email( $payment ) {
+	public function convert_string_to_slug( $string, $separator = '_' ) {
+		// Convert to lowercase
+		$slug = strtolower( $string );
 
-		$payment_type   = $payment->payment_select;
-		$payment_order  = $payment->payment_order;
-		$deposit        = $payment->deposit;
-		$pending_total  = $payment->pending_total;
-		$original_total = $payment->original_total;
-		$currency       = $payment->currency;
-		$payment_date   = date( 'F d, Y', strtotime( $payment->payment_date ) );
-		$order          = wc_get_order( $payment_order );
-		if ( ! $order ) {
-			return 'Order not found';
-		}
-		$payment_url = $order->get_checkout_payment_url();
+		// Replace spaces with the separator (usually hyphen or underscore)
+		$slug = str_replace( ' ', $separator, $slug );
+
+		// Remove special characters
+		$slug = preg_replace( '/[^a-z0-9' . preg_quote( $separator ) . ']/', '', $slug );
+
+		return $slug;
+	}
+
+	public function send_payment_reminder_email_manual( $payment_id, $index ) {
+		$payment       = $this->get_data( $payment_id );
+		$payment_order = $payment->payment_order;
+		$pending_total = $payment->pending_total;
+		$currency      = $payment->currency;
+		$payment_date  = date( 'F d, Y', strtotime( $payment->payment_date ) );
+
+		$order = wc_get_order( $payment_order );
 
 		$customer = $this->get_billing_information_from_payment( $payment );
+
+		$payment_url = $order->get_checkout_payment_url();
 
 		$first_name     = $customer['first_name'];
 		$customer_email = $customer['email'];
 
-		$subject = get_field( 'reminder_email_subject', $payment_type );
-		$subject = str_replace( '{customer_name}', $first_name, $subject );
-		$subject = str_replace( '{order_number}', $payment_order, $subject );
-
-		$message = get_field( 'reminder_email', $payment_type );
-		$message = str_replace( '{customer_name}', $first_name, $message );
-		$message = str_replace( '{invoice_amount}', $currency . '$ ' . $pending_total, $message );
-		$message = str_replace( '{order_number}', $payment_order, $message );
-		$message = str_replace( '{payment_link}', $payment_url, $message );
-		$message = str_replace( '{deadline}', $payment_date, $message );
-
-		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
-
-		if ( $customer_email ) {
-			$role_instance = \NOVA_B2B\Inc\Classes\Roles::get_instance();
-			$role_instance->send_email( $customer_email, $subject, $message, $headers, array() );
+		if ( ! $order ) {
+			return 'Order not found';
+			die();
 
 		}
+		if ( ! $customer_email ) {
+			return 'No email';
+		}
+
+		if ( ! $index ) {
+			return 'No index';
+			die();
+		}
+
+		$payment_emails = get_field( 'payment_emails', $payment->payment_select );
+
+		if ( $payment_emails ) {
+			$subject = $payment_emails[ $index - 1 ]['subject'];
+
+			$message = $payment_emails[ $index - 1 ]['content'];
+
+			$subject = str_replace( '{customer_name}', $first_name, $subject );
+			$subject = str_replace( '{order_number}', $payment_order, $subject );
+
+			$message = str_replace( '{customer_name}', $first_name, $message );
+			$message = str_replace( '{invoice_amount}', $currency . '$ ' . $pending_total, $message );
+			$message = str_replace( '{order_number}', $payment_order, $message );
+			$message = str_replace( '{payment_link}', $payment_url, $message );
+			$message = str_replace( '{deadline}', $payment_date, $message );
+
+			if ( $customer_email ) {
+				$headers = array( 'Content-Type: text/html; charset=UTF-8' );
+
+				$role_instance = \NOVA_B2B\Inc\Classes\Roles::get_instance();
+				$role_instance->send_email( $customer_email, $subject, $message, $headers, array() );
+				$key = 'payment_email_key_' . $index;
+				update_post_meta( $payment_order, $key, date( 'Y/m/d' ) );
+
+			}
+		}
+	}
+
+	public function send_payment_reminder_email( $payment ) {
+
+		$payment_type        = $payment->payment_select;
+		$payment_order       = $payment->payment_order;
+		$deposit             = $payment->deposit;
+		$pending_total       = $payment->pending_total;
+		$original_total      = $payment->original_total;
+		$currency            = $payment->currency;
+		$payment_date        = date( 'F d, Y', strtotime( $payment->payment_date ) );
+		$payment_date_object = new \DateTime( $payment->payment_date );
+		$today               = new \DateTime();
+
+		$customer = $this->get_billing_information_from_payment( $payment_order );
+
+		$order = wc_get_order( $payment_order );
+		if ( ! $order ) {
+			return 'Order not found';
+		}
+		if ( ! $customer_email ) {
+			return 'No email';
+		}
+		$payment_url = $order->get_checkout_payment_url();
+
+		$first_name     = $customer['first_name'];
+		$customer_email = $customer['email'];
+
+		if ( have_rows( 'payment_emails', $payment_type ) ) :
+			while ( have_rows( 'payment_emails', $payment_type ) ) :
+				the_row();
+				$days = get_sub_field( 'send_after_days' ) ? intval( get_sub_field( 'send_after_days' ) ) : false;
+
+				if ( $days ) {
+					$payment_date_plus_days = clone $payment_date_object;
+					$payment_date_plus_days->modify( "+{$days} days" );
+
+					if ( $today == $payment_date_plus_days ) {
+
+						$subject = get_sub_field( 'subject' );
+						$subject = str_replace( '{customer_name}', $first_name, $subject );
+						$subject = str_replace( '{order_number}', $payment_order, $subject );
+
+						$message = get_sub_field( 'content' );
+						$message = str_replace( '{customer_name}', $first_name, $message );
+						$message = str_replace( '{invoice_amount}', $currency . '$ ' . $pending_total, $message );
+						$message = str_replace( '{order_number}', $payment_order, $message );
+						$message = str_replace( '{payment_link}', $payment_url, $message );
+						$message = str_replace( '{deadline}', $payment_date, $message );
+
+						if ( $customer_email ) {
+							$headers = array( 'Content-Type: text/html; charset=UTF-8' );
+
+							$role_instance = \NOVA_B2B\Inc\Classes\Roles::get_instance();
+							$role_instance->send_email( $customer_email, $subject, $message, $headers, array() );
+							$key = 'payment_email_key_' . get_row_index();
+							update_post_meta( $payment_order, $key, 'sent' );
+						}
+					}
+				}
+
+			endwhile;
+		endif;
 	}
 
 
@@ -168,10 +300,13 @@ class Pending_Payment {
 
 	public function check_pending_payments() {
 		global $wpdb;
-		$table_name     = $wpdb->prefix . 'nova_pendings';
-		$one_week_ahead = date( 'Y-m-d', strtotime( '+1 week' ) );
+		$table_name = $wpdb->prefix . 'nova_pendings';
+		// $one_week_ahead = date( 'Y-m-d', strtotime( '+1 week' ) );
 
-		$query            = $wpdb->prepare( "SELECT * FROM {$table_name} WHERE payment_date <= %s AND payment_status = %s", $one_week_ahead, 'Pending' );
+		// $query = $wpdb->prepare( "SELECT * FROM {$table_name} WHERE payment_date <= %s AND payment_status = %s", $one_week_ahead, 'Pending' );
+
+		$query = $wpdb->prepare( "SELECT * FROM {$table_name} payment_status = %s", 'Pending' );
+
 		$pending_payments = $wpdb->get_results( $query );
 
 		foreach ( $pending_payments as $payment ) {
@@ -234,9 +369,7 @@ class Pending_Payment {
 		echo '<th>Pending Total</th>';
 		echo '<th>Payment Date</th>';
 		echo '<th>Payment Select</th>';
-		echo '<th>Payment Status</th>';
-		echo '<th>Send Reminder Email</th>';
-		echo '<th>Reminder Sent</th>';
+		echo '<th colspan="3">Payment Status</th>';
 		echo '<th></th>';
 		echo '</tr>';
 		echo '</thead>';
@@ -261,18 +394,33 @@ class Pending_Payment {
 				echo "<td>{$row['pending_total']}</td>";
 				echo '<td>' . date( 'F d, Y', strtotime( $row['payment_date'] ) ) . ' - <span class="' . $class . '" style="display: block; padding: 5px;">' . human_time_diff( current_time( 'timestamp' ), strtotime( $row['payment_date'] ) ) . '</span></td>';
 				echo '<td>' . get_the_title( $row['payment_select'] ) . '</td>';
-				echo "<td>{$row['payment_status']}</td>";
-				echo '<td>';
-				echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
-				echo '<input type="hidden" name="action" value="send_payment_reminder"/>';
-				echo '<input type="hidden" name="payment_id" value="' . esc_attr( $row['id'] ) . '"/>';
-				wp_nonce_field( 'send_reminder_action', 'send_reminder_nonce' );
-				echo '<input type="submit" class="button action" value="' . ( ! empty( $row['reminder_sent'] ) ? 'Send Again' : 'Send' ) . '"/>';
-				echo '</form>';
+				echo "<td colspan='3'>";
+
+				if ( have_rows( 'payment_emails', $row['payment_select'] ) ) {
+					echo '<ul class="flex">';
+					while ( have_rows( 'payment_emails', $row['payment_select'] ) ) {
+						the_row( 'payment_emails', $row['payment_select'] );
+
+						$key        = 'payment_email_key_' . get_row_index();
+						$email_sent = get_post_meta( $row['payment_order'], $key, true );
+
+						echo '<li style="display: flex; gap: 1em; align-items: center;">' . get_sub_field( 'email_label' );
+						echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
+						echo '<input type="hidden" name="action" value="send_payment_reminder"/>';
+						echo '<input type="hidden" name="payment_id" value="' . esc_attr( $row['id'] ) . '"/>';
+						echo '<input type="hidden" name="index" value="' . get_row_index() . '"/>';
+						echo '<input type="hidden" name="order_id" value="' . absint( $row['payment_order'] ) . '"/>';
+						echo '<input type="hidden" name="email_key" value="' . esc_attr( $key ) . '"/>';
+						wp_nonce_field( 'send_reminder_action', 'send_reminder_nonce' );
+						echo '<input type="submit" class="button action" value="' . ( isset( $email_sent ) && ! empty( $email_sent ) ? 'Send Again' : 'Send' ) . '"/>';
+						echo '</form>';
+						echo '</li>';
+					}
+					echo '</ul>';
+				}
+
 				echo '</td>';
-				echo '<td>';
-				echo ( ! empty( $row['reminder_sent'] ) ? human_time_diff( strtotime( $row['reminder_sent_date'] ), current_time( 'timestamp' ) ) . ' ago' : 'No' );
-				echo '</td>';
+
 				echo '<td>';
 				echo '<form method="post" action="' . admin_url( 'admin-post.php' ) . '" onsubmit="return confirm(\'Are you sure you want to delete this order?\');">';
 				echo '<input type="hidden" name="action" value="delete_pending_payment"/>';
@@ -409,6 +557,8 @@ class Pending_Payment {
 			$inserted_id = $this->insert_data( $data, $format );
 
 			update_post_meta( $pending_order, '_pending_id', $inserted_id );
+
+			$this->check_pending_payments();
 
 		}
 	}
