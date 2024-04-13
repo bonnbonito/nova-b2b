@@ -564,6 +564,7 @@ class Woocommerce {
 		}
 
 		// Check if the address is Vancouver and modify Expedite
+		/*
 		if ( isset( $package['destination']['city'] ) && strtolower( $package['destination']['city'] ) === 'vancouver' ) {
 			if ( $expedite ) {
 				$rates['flat_rate:3']->cost = min( $expedite_cost, $standard_cost, ( isset( $flat_rate->cost ) ? $flat_rate->cost : PHP_INT_MAX ) );
@@ -571,6 +572,7 @@ class Woocommerce {
 				unset( $rates['flat_rate:2'], $rates['flat_rate:4'] );
 			}
 		}
+		*/
 
 		if ( is_cart() ) {
 			unset( $rates['flat_rate:3'] );

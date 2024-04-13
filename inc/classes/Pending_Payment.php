@@ -115,7 +115,7 @@ class Pending_Payment {
 	public function pending_payment_order_email_content( $body_text, $order, $sent_to_admin, $plain_text, $email ) {
 		$pending_id = $order->get_meta( '_pending_id' );
 		if ( $pending_id ) {
-			$body_text = 'We have received your recent payment for Order #' . $order->get_id() . '. Thank you very much.';
+			$body_text = 'We have received your recent payment for Order #NV' . $order->get_id() . '. Thank you very much.';
 		}
 		return $body_text;
 	}
@@ -171,13 +171,14 @@ class Pending_Payment {
 	}
 
 	public function send_payment_reminder_email_manual( $payment_id, $index ) {
-		$payment       = $this->get_data( $payment_id );
-		$payment_order = $payment->payment_order;
-		$pending_total = $payment->pending_total;
-		$currency      = $payment->currency;
-		$payment_date  = date( 'F d, Y', strtotime( $payment->payment_date ) );
+		$payment          = $this->get_data( $payment_id );
+		$payment_order_id = $payment->payment_order;
+		$payment_order    = '#NV' . $payment->payment_order;
+		$pending_total    = $payment->pending_total;
+		$currency         = $payment->currency;
+		$payment_date     = date( 'F d, Y', strtotime( $payment->payment_date ) );
 
-		$order = wc_get_order( $payment_order );
+		$order = wc_get_order( $payment_order_id );
 
 		$customer = $this->get_billing_information_from_payment( $payment );
 
@@ -231,7 +232,8 @@ class Pending_Payment {
 	public function send_payment_reminder_email( $payment ) {
 
 		$payment_type        = $payment->payment_select;
-		$payment_order       = $payment->payment_order;
+		$payment_order_id    = $payment->payment_order;
+		$payment_order       = '#NV' . $payment->payment_order;
 		$deposit             = $payment->deposit;
 		$pending_total       = $payment->pending_total;
 		$original_total      = $payment->original_total;
@@ -240,9 +242,9 @@ class Pending_Payment {
 		$payment_date_object = new \DateTime( $payment->payment_date );
 		$today               = new \DateTime();
 
-		$customer = $this->get_billing_information_from_payment( $payment_order );
+		$customer = $this->get_billing_information_from_payment( $payment_order_id );
 
-		$order = wc_get_order( $payment_order );
+		$order = wc_get_order( $payment_order_id );
 		if ( ! $order ) {
 			return 'Order not found';
 		}
