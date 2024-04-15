@@ -192,6 +192,22 @@ export default function Prices({ item }) {
 					<div className="text-left text-sm">{item.acrylicCover?.name}</div>
 				</div>
 			)}
+			{item.vinylWhite?.name && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						3M 360 VINYL
+					</div>
+					<div className="text-left text-sm">{item.vinylWhite?.name}</div>
+				</div>
+			)}
+			{item.frontAcrylicCover && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						FRONT ACRYLIC COVER
+					</div>
+					<div className="text-left text-sm">{item.frontAcrylicCover}</div>
+				</div>
+			)}
 			{item.ledLightColor && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
@@ -280,6 +296,14 @@ export default function Prices({ item }) {
 					<div className="text-left text-sm">{item.pieces}</div>
 				</div>
 			)}
+			{item.sets && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						QUANTITY
+					</div>
+					<div className="text-left text-sm">{item.sets}</div>
+				</div>
+			)}
 			{item.comments && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
@@ -300,7 +324,7 @@ export default function Prices({ item }) {
 					</div>
 				</div>
 			)}
-			{item.files && item.fileNames && item.fileUrls && (
+			{item.fileNames?.length > 0 && item.fileUrls?.length > 0 && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
 						FILES

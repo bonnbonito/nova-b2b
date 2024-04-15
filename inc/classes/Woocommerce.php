@@ -46,7 +46,7 @@ class Woocommerce {
 		add_action( 'nova_account_navigation', array( $this, 'nova_account_navigation' ) );
 		add_action( 'nova_inner_account_nav', array( $this, 'myaccount_nav_avatar' ) );
 		add_action( 'woocommerce_account_content', array( $this, 'nova_account_title' ), 5 );
-		add_filter( 'woocommerce_add_cart_item_data', array( $this, 'nova_add_to_cart_meta' ), 10, 3 );
+		// add_filter( 'woocommerce_add_cart_item_data', array( $this, 'nova_add_to_cart_meta' ), 10, 3 );
 		add_filter( 'woocommerce_cart_item_name', array( $this, 'nova_change_product_name' ), 10, 3 );
 		add_filter( 'woocommerce_cart_item_thumbnail', array( $this, 'remove_thumbnail_for_nova_product' ), 10, 3 );
 		add_action( 'woocommerce_before_calculate_totals', array( $this, 'nova_custom_price_refresh' ) );
@@ -92,6 +92,39 @@ class Woocommerce {
 		add_filter( 'payment_types', array( $this, 'partner_payment_types' ) );
 		add_filter( 'woocommerce_order_actions', array( $this, 'remove_send_invoice' ), 10, 2 );
 		add_filter( 'woocommerce_admin_order_actions', array( $this, 'remove_recalculate' ), 10, 2 );
+		// add_filter( 'wcumcs_custom_item_price_final', array( $this, 'change_to_custom_price' ), 20, 4 );
+		// add_action( 'wp', array( $this, 'force_update_price' ) );
+	}
+
+	public function force_update_price() {
+		add_action( 'woocommerce_before_calculate_totals', array( $this, 'nova_cad_item_price' ), 999999, 1 );
+	}
+
+	public function nova_cad_item_price( $cart ) {
+		print_r( $cart );
+		if ( is_admin() && ! defined( 'DOING_AJAX' ) ) {
+			return;
+		}
+
+		if ( did_action( 'woocommerce_before_calculate_totals' ) >= 2 ) {
+			return;
+		}
+
+		$curr_curr = get_woocommerce_currency_symbol();
+
+		foreach ( $cart->get_cart() as  $cart_item_key => $cart_item ) {
+
+			$cart_item['data']->set_price( 12333 );
+		}
+	}
+
+	function change_to_custom_price( $final_price, $price, $product, $currency ) {
+
+		if ( $currency === 'CAD' ) {
+			$final_price = 4233;
+		}
+
+		return $final_price;
 	}
 
 	public function remove_recalculate( $actions, $order ) {
@@ -454,6 +487,7 @@ class Woocommerce {
 			update_post_meta( $new_order_id, '_original_tax_names', $tax_names );
 			update_post_meta( $new_order_id, '_original_shipping', $shipping );
 			update_post_meta( $new_order_id, '_original_shipping_method', $shipping_method );
+			update_post_meta( $new_order_id, '_hide_order', true );
 
 			// Reset the session variables
 			WC()->session->__unset( 'payment_select' );
@@ -538,7 +572,7 @@ class Woocommerce {
 
 		// Calculate the standard and expedite costs
 		$standard_cost = $cart_total * 0.075; // 7.5%
-		$expedite_cost = $cart_total * 0.155; // 15.5%
+		$expedite_cost = $cart_total * 0.155 > 29.5 ? $cart_total * 0.155 : 29.5; // 15.5%
 
 		// Assuming the method IDs are 'flat_rate', 'standard', and 'expedite'
 		$flat_rate = isset( $rates['flat_rate:4'] ) ? $rates['flat_rate:4'] : null;
@@ -559,7 +593,6 @@ class Woocommerce {
 				unset( $rates['flat_rate:4'] );
 			} else {
 				unset( $rates['flat_rate:2'] );
-				unset( $rates['flat_rate:3'] );
 			}
 		}
 
@@ -1407,7 +1440,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 	}
 
 	public function nova_add_to_cart_meta( $cart_item_data, $product_id, $variation_id ) {
-		if ( get_field( 'nova_quote_product', 'option' )->ID === $product_id && isset( $_POST['nova_title'] ) && isset( $_POST['quote_id'] ) ) {
+		if ( isset( get_field( 'nova_quote_product', 'option' )->ID ) && get_field( 'nova_quote_product', 'option' )->ID === $product_id && isset( $_POST['nova_title'] ) && isset( $_POST['quote_id'] ) ) {
 			$cart_item_data['nova_title']   = sanitize_text_field( $_POST['nova_title'] );
 			$cart_item_data['signage']      = $_POST['signage'];
 			$cart_item_date['quote_id']     = $_POST['quote_id'];

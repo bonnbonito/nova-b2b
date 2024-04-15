@@ -116,10 +116,12 @@ class Nova_Quote {
 		$data                = json_decode( $signage, true );
 		$user_folder_arr     = array();
 		foreach ( $data as $item ) {
-			foreach ( $item['filePaths'] as $filePath ) {
-				$parts = explode( '/', $filePath );
-				if ( isset( $parts[2] ) ) {
-					$user_folder_arr[] = $parts[2];
+			if ( isset( $item['filePaths'] ) ) {
+				foreach ( $item['filePaths'] as $filePath ) {
+					$parts = explode( '/', $filePath );
+					if ( isset( $parts[2] ) ) {
+						$user_folder_arr[] = $parts[2];
+					}
 				}
 			}
 		}
@@ -156,8 +158,8 @@ class Nova_Quote {
 			return;
 		}
 		$old_folder = $user_folder_arr[0];
-		$old_path   = '/NOVA-CRM/' . $old_folder . '/Q-' . $post->ID;
-		$new_path   = '/NOVA-CRM/' . $partner_business_id . '/Q-' . $post->ID;
+		$old_path   = '/NOVA-CRM/' . $old_folder . '/Q-' . $post->ID . '/FromClient';
+		$new_path   = '/NOVA-CRM/' . $partner_business_id . '/Q-' . $post->ID . '/FromClient';
 		if ( count( $user_folder_arr ) > 0 && $old_folder !== $partner_business_id ) {
 			?>
 <a class="button button-primary button-large" id="updateDropboxFolder" data-id="<?php echo $post->ID; ?>"
@@ -258,12 +260,12 @@ class Nova_Quote {
 			?>
 <div id="<?php echo get_field( 'quote_div_id' ); ?>"></div>
 <?php
-					else :
-						?>
+				else :
+					?>
 <div id="customProject"></div>
 <?php
 
-			endif;
+				endif;
 	}
 
 	public function single_quote_redirect() {
@@ -303,7 +305,7 @@ class Nova_Quote {
 <p>Product: <?php echo $product_name; ?></p>
 <strong>Projects</strong>
 <?php
-				echo '<ul>';
+			echo '<ul>';
 		foreach ( $signage as $project ) {
 			$projectArray = get_object_vars( $project );
 
@@ -355,32 +357,32 @@ class Nova_Quote {
 				}
 			}
 		}
-				echo '</ul>';
+			echo '</ul>';
 
-			$content = ob_get_clean();
+		$content = ob_get_clean();
 
-			$product_data = array(
-				'post_title'   => wp_strip_all_tags( $title ),
-				'post_content' => $content,
-				'post_status'  => 'publish',
-				'post_type'    => 'product',
-				'meta_input'   => array(
-					'_regular_price' => $final_price,
-					'_price'         => $final_price,
-				),
-			);
+		$product_data = array(
+			'post_title'   => wp_strip_all_tags( $title ),
+			'post_content' => $content,
+			'post_status'  => 'publish',
+			'post_type'    => 'product',
+			'meta_input'   => array(
+				'_regular_price' => $final_price,
+				'_price'         => $final_price,
+			),
+		);
 
-			$existing_product_id = $this->product_exists_by_title( wp_strip_all_tags( $title ) );
-			if ( ! $existing_product_id ) {
-				$existing_product_id = wp_insert_post( $product_data );
-				wp_set_object_terms( $existing_product_id, 'nova_quote', 'product_type' );
-			}
+		$existing_product_id = $this->product_exists_by_title( wp_strip_all_tags( $title ) );
+		if ( ! $existing_product_id ) {
+			$existing_product_id = wp_insert_post( $product_data );
+			wp_set_object_terms( $existing_product_id, 'nova_quote', 'product_type' );
+		}
 
-			foreach ( $product_meta as $meta_key => $meta_value ) {
-				update_post_meta( $existing_product_id, $meta_key, $meta_value );
-			}
+		foreach ( $product_meta as $meta_key => $meta_value ) {
+			update_post_meta( $existing_product_id, $meta_key, $meta_value );
+		}
 
-			update_post_meta( $post_id, 'nova_product_generated_id', $existing_product_id );
+		update_post_meta( $post_id, 'nova_product_generated_id', $existing_product_id );
 	}
 
 	public function for_payment_email( $post_id ) {
@@ -500,6 +502,8 @@ class Nova_Quote {
 			return;
 		}
 
+		$this->update_product_meta( $post_id );
+
 		if ( isset( $_POST['acf']['field_655821f69cbab'] ) ) {
 
 			if ( get_field( 'quote_status', $post_id )['value'] !== 'ready' && $_POST['acf']['field_655821f69cbab'] === 'ready' ) {
@@ -510,6 +514,26 @@ class Nova_Quote {
 				do_action( 'quote_to_processing', $post_id );
 			}
 		}
+	}
+
+	public function update_product_meta( $post_id ) {
+		$product_id = get_post_meta( $post_id, 'nova_product_generated_id', true );
+		if ( ! $product_id ) {
+			return;
+		}
+
+		$newjson = json_decode( get_field( 'signage', $post_id ) );
+		update_field( 'signage', $newjson, $product_id );
+
+		echo '<pre>';
+		print_r( $post_id );
+		print_r( json_decode( get_field( 'signage', $post_id ) ) );
+		echo '</pre>';
+
+		echo '<pre>';
+		print_r( $product_id );
+		print_r( get_field( 'signage', $product_id ) );
+		echo '</pre>';
 	}
 
 	public function for_quotation_email_action( $post_id ) {
@@ -768,6 +792,8 @@ class Nova_Quote {
 			$status['product_added'] = 'yes';
 		}
 
+		$status['post'] = $_POST;
+
 		wp_send_json( $status );
 	}
 
@@ -1009,7 +1035,7 @@ h6 {
 </table>
 
 <?php
-			return ob_get_clean();
+		return ob_get_clean();
 	}
 
 	public function html_invoice( $post_id ) {
@@ -1193,7 +1219,7 @@ h6 {
 </table>
 
 <?php
-			return ob_get_clean();
+		return ob_get_clean();
 	}
 
 	public function output_project_item( $project ) {
@@ -1328,8 +1354,20 @@ h6 {
 			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">ACRYLIC COVER: </strong></td><td><font face="lato">' . $projectArray['acrylicCover']->name . '</font></td></tr>';
 		}
 
+		if ( isset( $projectArray['frontAcrylicCover'] ) && ! empty( $projectArray['frontAcrylicCover'] ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">FRONT ACRYLIC COVER: </strong></td><td><font face="lato">' . $projectArray['frontAcrylicCover'] . '</font></td></tr>';
+		}
+
+		if ( isset( $projectArray['vinylWhite'] ) && ! empty( $projectArray['vinylWhite'] ) && isset( $projectArray['vinylWhite']->name ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">ACRYLIC COVER: </strong></td><td><font face="lato">' . $projectArray['vinylWhite']->name . '</font></td></tr>';
+		}
+
 		if ( isset( $projectArray['pieces'] ) && ! empty( $projectArray['pieces'] ) ) {
 			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">PIECES/CUTOUTS: </strong></td><td><font face="lato">' . $projectArray['pieces'] . '</font></td></tr>';
+		}
+
+		if ( isset( $projectArray['sets'] ) && ! empty( $projectArray['sets'] ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">QUANTITY: </strong></td><td><font face="lato">' . $projectArray['sets'] . '</font></td></tr>';
 		}
 
 		if ( isset( $projectArray['comments'] ) && ! empty( $projectArray['comments'] ) ) {
@@ -1437,9 +1475,13 @@ h6 {
 	public function generate_pdf( $post_id, $html, $currency = 'USD' ) {
 		require_once get_stylesheet_directory() . '/tcpdf/tcpdf.php';
 
+		$partner = get_field( 'partner', $post_id );
+
+		$business_id = get_field( 'business_id', 'user_' . $partner );
+
 		$pdf = new TCPDF( PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false );
 
-		$filename = $currency === 'CAD' ? 'invoice-' . $post_id . '-CAD.pdf' : 'invoice-' . $post_id . '.pdf';
+		$filename = $business_id . '-INV-Q-' . $post_id . '-' . $currency . '.pdf';
 
 		// set document information
 		$pdf->SetCreator( PDF_CREATOR );
@@ -1490,6 +1532,38 @@ h6 {
 
 		$pdf->Output( $_SERVER['DOCUMENT_ROOT'] . 'wp-content/customer_invoices/' . $filename, 'F' );
 	}
+
+	function create_customer_invoice_folder( $business_id, $quote_id ) {
+		// Get the WordPress uploads directory.
+		$upload_dir = wp_upload_dir();
+		$base_dir   = $upload_dir['basedir'] . '/customer_invoices';
+
+		// Ensure the base directory exists.
+		if ( ! file_exists( $base_dir ) ) {
+			if ( ! wp_mkdir_p( $base_dir ) ) {
+				return new WP_Error( 'base_directory_creation_failed', __( 'Failed to create base directory for customer invoices.', 'nova-b2b' ) );
+			}
+		}
+
+		// Define the directory path for the specific business and quote.
+		$business_dir = $base_dir . '/' . $business_id;
+
+		// Check if the business directory exists and create it if it doesn't.
+		if ( ! file_exists( $business_dir ) ) {
+			if ( ! wp_mkdir_p( $business_dir ) ) {
+				print_r( $business_id . 'err' );
+				return new WP_Error( 'business_directory_creation_failed', __( 'Failed to create business directory.', 'nova-b2b' ) );
+			}
+		}
+
+		if ( file_exists( $business_dir ) ) {
+			print_r( $business_id . 'yes' );
+			die();
+		}
+
+		return true;
+	}
+
 
 	public function enable_ai_files( $mimes ) {
 		$mimes['svg'] = 'image/svg+xml';

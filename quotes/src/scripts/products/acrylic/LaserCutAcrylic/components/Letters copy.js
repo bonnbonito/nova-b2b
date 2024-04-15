@@ -251,7 +251,7 @@ export default function Letters({ item }) {
 				totalLetterPrice += letterPrice;
 			});
 
-			setUsdPrice(totalLetterPrice.toFixed(2));
+			setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
 			setCadPrice((totalLetterPrice * parseFloat(exchangeRate)).toFixed(2));
 		} else {
 			setUsdPrice(0);

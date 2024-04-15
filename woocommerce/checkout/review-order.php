@@ -202,7 +202,7 @@ $woo_instance = \NOVA_B2B\Inc\Classes\Woocommerce::get_instance();
 			?>
 		<tr class="order-total future-payment">
 			<th class="px-4 py-8">
-				<h2 class="uppercase text-3xl"><?php esc_html_e( 'Future Payment', 'woocommerce' ); ?></h2>
+				<h2 class="uppercase text-3xl"><?php esc_html_e( 'Pending Payment', 'woocommerce' ); ?></h2>
 			</th>
 			<td colspan="2" class="text-right px-4 py-8">
 				<h5 class="uppercase text-3xl"><?php echo wc_price( WC()->session->get( 'pending_payment' ) ); ?></h5>

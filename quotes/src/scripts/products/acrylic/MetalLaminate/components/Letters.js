@@ -12,6 +12,7 @@ import convert_json from '../../../../utils/ConvertJson';
 import { getLogoPricingTablebyThickness } from '../../../../utils/Pricing';
 import {
 	mountingDefaultOptions,
+	setOptions,
 	thicknessOptions,
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
@@ -77,6 +78,11 @@ export default function Letters({ item }) {
 		NovaOptions.letters_height
 	);
 	const [selectedMounting, setSelectedMounting] = useState(item.mounting);
+
+	const [sets, setSets] = useState(item.sets);
+	const handleOnChangeSets = (e) => {
+		setSets(e.target.value);
+	};
 
 	const acrylicRef = useRef(null);
 	const fontRef = useRef(null);
@@ -163,6 +169,7 @@ export default function Letters({ item }) {
 					metalFinish: metalFinish,
 					customFont: customFont,
 					customColor: customColor,
+					sets: sets,
 				};
 			} else {
 				return sign;
@@ -235,7 +242,9 @@ export default function Letters({ item }) {
 				totalLetterPrice += letterPrice;
 			});
 
-			setUsdPrice(totalLetterPrice.toFixed(2));
+			totalLetterPrice *= sets;
+
+			setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
 			setCadPrice((totalLetterPrice * parseFloat(exchangeRate)).toFixed(2));
 		} else {
 			setUsdPrice(0);
@@ -248,6 +257,7 @@ export default function Letters({ item }) {
 		waterproof,
 		lettersHeight,
 		acrylicBase,
+		sets,
 	]);
 
 	useEffect(() => {
@@ -336,6 +346,7 @@ export default function Letters({ item }) {
 		metalFinish,
 		customFont,
 		customColor,
+		sets,
 	]);
 
 	const checkAndAddMissingFields = () => {
@@ -355,7 +366,7 @@ export default function Letters({ item }) {
 		}
 		if (!waterproof) missingFields.push('Select Waterproof');
 		if (!selectedMounting) missingFields.push('Select Mounting');
-
+		if (!sets) missingFields.push('Select Quantity');
 		setMissing((prevMissing) => {
 			const existingIndex = prevMissing.findIndex(
 				(entry) => entry.id === item.id
@@ -398,6 +409,7 @@ export default function Letters({ item }) {
 		acrylicBase,
 		customColor,
 		fontFileUrl,
+		sets,
 	]);
 
 	useEffect(() => {
@@ -626,6 +638,13 @@ export default function Letters({ item }) {
 						</option>
 					))}
 					value={item.mounting}
+				/>
+
+				<Dropdown
+					title="Quantity"
+					onChange={handleOnChangeSets}
+					options={setOptions}
+					value={sets}
 				/>
 			</div>
 

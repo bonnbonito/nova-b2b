@@ -76,7 +76,7 @@ export default function UploadFile({
 	}
 
 	const checkAndCreateFolder = async (accessToken) => {
-		const folderPath = `/NOVA-CRM/${NovaQuote.business_id}/${tempFolder}`;
+		const folderPath = `/NOVA-CRM/${NovaQuote.business_id}/${tempFolder}/FromClient`;
 
 		try {
 			// Check if the folder exists
@@ -177,7 +177,7 @@ export default function UploadFile({
 		await checkAndCreateFolder(token);
 
 		const dropboxArgs = {
-			path: `/NOVA-CRM/${NovaQuote.business_id}/${tempFolder}/${file.name}`,
+			path: `/NOVA-CRM/${NovaQuote.business_id}/${tempFolder}/FromClient/${file.name}`,
 			mode: 'overwrite',
 			autorename: false,
 			mute: false,

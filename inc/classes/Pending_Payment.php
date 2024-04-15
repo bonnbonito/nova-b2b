@@ -34,10 +34,72 @@ class Pending_Payment {
 		add_action( 'admin_post_send_payment_reminder', array( $this, 'handle_send_reminder' ) );
 		add_filter( 'kadence_woomail_order_body_text', array( $this, 'pending_payment_order_email_content' ), 999, 5 );
 		add_action( 'woocommerce_payment_complete', array( $this, 'custom_order_complete' ), 99, 1 );
-		add_action( 'pre_get_posts', array( $this, 'hide_specific_orders_in_admin' ) );
+		add_action( 'pre_get_posts', array( $this, 'hide_specific_orders' ) );
+		add_filter( 'woocommerce_my_account_my_orders_query', array( $this, 'filter_my_account_orders_query' ) );
 		add_action( 'add_meta_boxes', array( $this, 'add_custom_meta_box_to_orders' ) );
+		add_filter( 'woocommerce_order_number', array( $this, 'pending_payment_order_number' ), 12, 2 );
 		// add_filter( 'woocommerce_email_recipient_customer_completed_order', array( $this, 'disable_completed_order_email_for_pending' ), 10, 2 );
 	}
+
+	public function hide_orders_from_account() {
+		$user             = get_current_user_id();
+		$hidden_order_ids = array();
+
+		// Define the query arguments to fetch orders
+		$args = array(
+			'posts_per_page' => -1,
+			'post_type'      => 'shop_order',
+			'post_status'    => array_keys( wc_get_order_statuses() ),
+			'meta_key'       => '_customer_user',
+			'meta_value'     => $user,
+			'meta_query'     => array(
+				'relation' => 'AND',
+				array(
+					'key'     => '_hide_order',
+					'compare' => 'EXISTS',
+				),
+			),
+		);
+
+		// Create a new WP_Query instance with specified arguments
+		$query = new \WP_Query( $args );
+
+		// Loop through the posts and collect order IDs
+		if ( $query->have_posts() ) {
+			while ( $query->have_posts() ) {
+				$query->the_post();
+				$hidden_order_ids[] = get_the_ID();
+			}
+		}
+
+		// Reset post data to ensure global post data isn't corrupted
+		wp_reset_postdata();
+
+		return $hidden_order_ids;
+	}
+
+
+	public function filter_my_account_orders_query( $args ) {
+
+		$args['exclude'] = $this->hide_orders_from_account();
+
+		return $args;
+	}
+
+	public function pending_payment_order_number( $order_number, $order ) {
+		if ( $order ) {
+			// Check if the order has the '_from_order_id' meta key and retrieve its value
+			$from_order_id = get_post_meta( $order->get_id(), '_from_order_id', true );
+
+			// If '_from_order_id' exists and is not empty, use it as the order number
+			if ( ! empty( $from_order_id ) ) {
+				$order_number = 'NV' . str_pad( $from_order_id, 5, '0', STR_PAD_LEFT );
+			}
+		}
+
+		return $order_number;
+	}
+
 
 	public function add_custom_meta_box_to_orders() {
 		global $pagenow, $post;
@@ -76,6 +138,8 @@ class Pending_Payment {
 		$original_total = get_post_meta( $post->ID, '_original_total', true );
 		$order_edit_url = admin_url( 'post.php?post=' . $order_id . '&action=edit' );
 
+		print_r( get_post_meta( $post->ID ) );
+
 		?>
 <a href="<?php echo esc_url( $order_edit_url ); ?>" class="button button-primary">View Order</a>
 
@@ -84,13 +148,15 @@ class Pending_Payment {
 		<?php
 	}
 
-	public function hide_specific_orders_in_admin( $query ) {
-		if ( is_admin() && $query->is_main_query() && $query->get( 'post_type' ) === 'shop_order' ) {
-			$meta_query   = $query->get( 'meta_query' ) ?: array();
+	public function hide_specific_orders( $query ) {
+		if ( $query->is_main_query() && $query->get( 'post_type' ) === 'shop_order' ) {
+			$meta_query = $query->get( 'meta_query' ) ?: array();
+
 			$meta_query[] = array(
-				'key'     => '_from_order_id',
+				'key'     => '_hide_order',
 				'compare' => 'NOT EXISTS',
 			);
+
 			$query->set( 'meta_query', $meta_query );
 		}
 	}
@@ -559,6 +625,8 @@ class Pending_Payment {
 			$inserted_id = $this->insert_data( $data, $format );
 
 			update_post_meta( $pending_order, '_pending_id', $inserted_id );
+			delete_post_meta( $pending_order, '_hide_order' );
+			update_post_meta( $order_id, '_hide_order', true );
 
 			$this->check_pending_payments();
 

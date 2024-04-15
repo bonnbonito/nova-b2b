@@ -6,6 +6,7 @@ import { getLogoPricingTablebyThickness } from '../../../../utils/Pricing';
 import {
 	calculateMountingOptions,
 	mountingDefaultOptions,
+	setOptions,
 	thicknessOptions,
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
@@ -67,6 +68,11 @@ export default function Logo({ item }) {
 	const [mountingOptions, setMountingOptions] = useState(
 		mountingDefaultOptions
 	);
+
+	const [sets, setSets] = useState(item.sets);
+	const handleOnChangeSets = (e) => {
+		setSets(e.target.value);
+	};
 
 	const logoPricingObject = NovaQuote.logo_pricing_tables;
 
@@ -148,6 +154,7 @@ export default function Logo({ item }) {
 					fileUrls: fileUrls,
 					acrylicBase: acrylicBase,
 					customColor: customColor,
+					sets: sets,
 				};
 			} else {
 				return sign;
@@ -178,6 +185,7 @@ export default function Logo({ item }) {
 		filePaths,
 		acrylicBase,
 		customColor,
+		sets,
 	]);
 
 	useEffect(() => {
@@ -208,6 +216,8 @@ export default function Logo({ item }) {
 				let total = (computed * multiplier * METAL_ACRYLIC_PRICING).toFixed(2);
 				total *= acrylicBase?.name === 'Black' ? 1 : 1.1;
 
+				total *= sets;
+
 				setUsdPrice(parseFloat(total).toFixed(2));
 				setCadPrice((total * parseFloat(exchangeRate)).toFixed(2));
 			} else {
@@ -218,7 +228,7 @@ export default function Logo({ item }) {
 			setUsdPrice(0);
 			setCadPrice(0);
 		}
-	}, [width, height, selectedThickness, waterproof, acrylicBase]);
+	}, [width, height, selectedThickness, waterproof, acrylicBase, sets]);
 
 	const checkAndAddMissingFields = () => {
 		const missingFields = [];
@@ -233,6 +243,7 @@ export default function Logo({ item }) {
 		}
 		if (!waterproof) missingFields.push('Select Waterproof');
 		if (!selectedMounting) missingFields.push('Select Mounting');
+		if (!sets) missingFields.push('Select Quantity');
 		if (!fileUrls || fileUrls.length === 0)
 			missingFields.push('Upload a PDF/AI File');
 
@@ -280,6 +291,7 @@ export default function Logo({ item }) {
 		filePaths,
 		files,
 		customColor,
+		sets,
 	]);
 
 	return (
@@ -398,6 +410,13 @@ export default function Logo({ item }) {
 						</div>
 					)}
 				</div>
+
+				<Dropdown
+					title="Quantity"
+					onChange={handleOnChangeSets}
+					options={setOptions}
+					value={sets}
+				/>
 			</div>
 
 			<div className="quote-grid">

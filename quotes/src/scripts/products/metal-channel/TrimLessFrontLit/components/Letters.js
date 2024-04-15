@@ -7,9 +7,14 @@ import useOutsideClick from '../../../../utils/ClickOutside';
 import {
 	colorOptions,
 	translucentGraphicFilms,
+	whiteOptions,
 } from '../../../../utils/ColorOptions';
+
 import convert_json from '../../../../utils/ConvertJson';
-import { waterProofOptions } from '../../../../utils/SignageOptions';
+import {
+	setOptions,
+	waterProofOptions,
+} from '../../../../utils/SignageOptions';
 import {
 	depthOptions,
 	ledLightColors,
@@ -78,7 +83,6 @@ export default function Letters({ item }) {
 	});
 
 	const [openAcrylicCover, setOpenAcrylicCover] = useState(false);
-	const [acrylicCover, setAcrylicCover] = useState(item.acrylicCover);
 	const [studLength, setStudLength] = useState(item.studLength);
 
 	const [spacerStandoffOptions, setSpacerStandoffOptions] = useState(
@@ -87,6 +91,16 @@ export default function Letters({ item }) {
 
 	const [spacerStandoffDistance, setSpacerStandoffDistance] = useState(
 		item.spacerStandoffDistance
+	);
+
+	const [sets, setSets] = useState(item.sets);
+	const handleOnChangeSets = (e) => {
+		setSets(e.target.value);
+	};
+
+	const [vinylWhite, setVinylWhite] = useState(item.vinylWhite);
+	const [frontAcrylicCover, setFrontAcrylicCover] = useState(
+		item.frontAcrylicCover
 	);
 
 	const [mounting, setMounting] = useState(item.mounting);
@@ -175,10 +189,12 @@ export default function Letters({ item }) {
 					fontFileUrl: fontFileUrl,
 					customColor: customColor,
 					ledLightColor: ledLightColor,
-					acrylicCover: acrylicCover,
+					frontAcrylicCover: frontAcrylicCover,
+					vinylWhite: vinylWhite,
 					mounting: mounting,
 					studLength: studLength,
 					spacerStandoffDistance: spacerStandoffDistance,
+					sets: sets,
 				};
 			} else {
 				return sign;
@@ -203,12 +219,26 @@ export default function Letters({ item }) {
 		setSpacerStandoffDistance(e.target.value);
 	};
 
+	const handleOnChangeWhite = (e) => {
+		const target = e.target.value;
+		setFrontAcrylicCover(target);
+		if (target !== 'White with 3M 3630 Vinyl') {
+			setVinylWhite({
+				name: '',
+				color: '',
+			});
+		}
+	};
+
 	const handleonChangeStudLength = (e) => {
 		const target = e.target.value;
 		setStudLength(() => target);
 
 		if (target === '1.5"') {
 			setSpacerStandoffOptions(() => [
+				{
+					value: '0.5"',
+				},
 				{
 					value: '1"',
 				},
@@ -218,6 +248,9 @@ export default function Letters({ item }) {
 			}
 		} else if (target === '3.2"' || target === '4"') {
 			setSpacerStandoffOptions(() => [
+				{
+					value: '0.5"',
+				},
 				{
 					value: '1"',
 				},
@@ -302,19 +335,28 @@ export default function Letters({ item }) {
 					// Adjusting for waterproof and finishing
 					letterPrice *= waterproof === 'Indoor' ? 1 : 1.03;
 
-					letterPrice *= acrylicCover?.name === 'White' ? 1 : 1.1;
+					letterPrice *= vinylWhite?.name ? 1.1 : 1;
 
 					totalLetterPrice += letterPrice;
 				});
 
-				setUsdPrice(totalLetterPrice.toFixed(2));
+				totalLetterPrice *= sets;
+
+				setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
 				setCadPrice((totalLetterPrice * parseFloat(exchangeRate)).toFixed(2));
 			} else {
 				setUsdPrice(0);
 				setCadPrice(0);
 			}
 		}
-	}, [selectedLetterHeight, letters, waterproof, lettersHeight, acrylicCover]);
+	}, [
+		selectedLetterHeight,
+		letters,
+		waterproof,
+		lettersHeight,
+		vinylWhite,
+		sets,
+	]);
 
 	useEffect(() => {
 		setLetterHeightOptions(() =>
@@ -365,6 +407,12 @@ export default function Letters({ item }) {
 
 		if (!ledLightColor) missingFields.push('Select LED Light Color');
 
+		if (!frontAcrylicCover) missingFields.push('Select Front Acrylic Cover');
+
+		if (frontAcrylicCover === 'White with 3M 3630 Vinyl') {
+			if (!vinylWhite?.name) missingFields.push('Select 3M 3630 Vinyl');
+		}
+
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
 				const existingIndex = prevMissing.findIndex(
@@ -409,7 +457,8 @@ export default function Letters({ item }) {
 		font,
 		waterproof,
 		color,
-		acrylicCover,
+		frontAcrylicCover,
+		vinylWhite,
 		usdPrice,
 		cadPrice,
 		selectedLetterHeight,
@@ -501,6 +550,10 @@ export default function Letters({ item }) {
 					openFont={openFont}
 					setOpenFont={setOpenFont}
 					handleSelectFont={handleSelectFont}
+					setOpenColor={() => {
+						setOpenColor(false);
+						setOpenAcrylicCover(false);
+					}}
 				/>
 
 				{font == 'Custom font' && (
@@ -542,7 +595,11 @@ export default function Letters({ item }) {
 						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
 							color.name ? 'text-black' : 'text-[#dddddd]'
 						}`}
-						onClick={() => setOpenColor((prev) => !prev)}
+						onClick={() => {
+							setOpenColor((prev) => !prev);
+							setOpenFont(false);
+							setOpenAcrylicCover(false);
+						}}
 					>
 						<span
 							className="rounded-full w-[18px] h-[18px] border mr-2"
@@ -608,49 +665,69 @@ export default function Letters({ item }) {
 					value={item.waterproof}
 				/>
 
-				<div className="px-[1px] relative" ref={acrylicColorRef}>
-					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-						Acrylic Cover
-					</label>
-					<div
-						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-							acrylicCover.name ? 'text-black' : 'text-[#dddddd]'
-						}`}
-						onClick={() => setOpenAcrylicCover((prev) => !prev)}
-					>
-						<span
-							className="rounded-full w-[18px] h-[18px] border mr-2"
-							style={{ backgroundColor: acrylicCover.color }}
-						></span>
-						{acrylicCover.name === '' ? 'CHOOSE OPTION' : acrylicCover.name}
-					</div>
-					{openAcrylicCover && (
-						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
-							{translucentGraphicFilms.map((color) => {
-								return (
-									<div
-										className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
-										onClick={() => {
-											setAcrylicCover(color);
-											setOpenAcrylicCover(false);
-										}}
-									>
-										<span
-											className="w-[18px] h-[18px] inline-block rounded-full border"
-											style={{
-												background:
-													color.name == 'Custom Color'
-														? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-														: color.color,
-											}}
-										></span>
-										{color.name}
-									</div>
-								);
-							})}
+				<Dropdown
+					title="Front Acrylic Cover"
+					onChange={handleOnChangeWhite}
+					options={whiteOptions.map((option) => (
+						<option
+							value={option.option}
+							selected={option == item.frontAcrylicCover}
+						>
+							{option.option}
+						</option>
+					))}
+					value={item.frontAcrylicCover}
+				/>
+
+				{frontAcrylicCover === 'White with 3M 3630 Vinyl' && (
+					<div className="px-[1px] relative" ref={acrylicColorRef}>
+						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+							3M 36360 Vinyl
+						</label>
+						<div
+							className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
+								vinylWhite.name ? 'text-black' : 'text-[#dddddd]'
+							}`}
+							onClick={() => {
+								setOpenAcrylicCover((prev) => !prev);
+								setOpenColor(false);
+								setOpenFont(false);
+							}}
+						>
+							<span
+								className="rounded-full w-[18px] h-[18px] border mr-2"
+								style={{ backgroundColor: vinylWhite.color }}
+							></span>
+							{vinylWhite.name === '' ? 'CHOOSE OPTION' : vinylWhite.name}
 						</div>
-					)}
-				</div>
+						{openAcrylicCover && (
+							<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
+								{translucentGraphicFilms.map((color) => {
+									return (
+										<div
+											className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
+											onClick={() => {
+												setVinylWhite(color);
+												setOpenAcrylicCover(false);
+											}}
+										>
+											<span
+												className="w-[18px] h-[18px] inline-block rounded-full border"
+												style={{
+													background:
+														color.name == 'Custom Color'
+															? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
+															: color.color,
+												}}
+											></span>
+											{color.name}
+										</div>
+									);
+								})}
+							</div>
+						)}
+					</div>
+				)}
 
 				<Dropdown
 					title="Mounting"
@@ -696,7 +773,21 @@ export default function Letters({ item }) {
 						/>
 					</>
 				)}
+
+				<Dropdown
+					title="Quantity"
+					onChange={handleOnChangeSets}
+					options={setOptions}
+					value={sets}
+				/>
 			</div>
+
+			{mounting === 'Stud with spacer' && (
+				<div className="text-xs text-[#9F9F9F] mb-4">
+					*Note: The spacer will be black (default) or match the painted sign's
+					color.
+				</div>
+			)}
 
 			<div className="quote-grid">
 				{color?.name == 'Custom Color' && (

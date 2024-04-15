@@ -176,11 +176,16 @@ const metalFinishColors = [
 	},
 ];
 
-const translucentGraphicFilms = [
+const whiteOptions = [
 	{
-		name: 'White',
-		color: '#ffffff',
+		option: 'White',
 	},
+	{
+		option: 'White with 3M 3630 Vinyl',
+	},
+];
+
+const translucentGraphicFilms = [
 	{
 		name: 'Ivory',
 		color: '#ded1b4',
@@ -407,4 +412,9 @@ const translucentGraphicFilms = [
 	},
 ];
 
-export { colorOptions, metalFinishColors, translucentGraphicFilms };
+export {
+	colorOptions,
+	metalFinishColors,
+	translucentGraphicFilms,
+	whiteOptions,
+};

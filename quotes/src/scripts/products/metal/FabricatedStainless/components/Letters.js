@@ -6,7 +6,10 @@ import UploadFont from '../../../../UploadFont';
 import useOutsideClick from '../../../../utils/ClickOutside';
 import { colorOptions } from '../../../../utils/ColorOptions';
 import convert_json from '../../../../utils/ConvertJson';
-import { waterProofOptions } from '../../../../utils/SignageOptions';
+import {
+	setOptions,
+	waterProofOptions,
+} from '../../../../utils/SignageOptions';
 
 import {
 	fabricatedMetalInstallationOptions,
@@ -17,8 +20,6 @@ import {
 } from '../../metalOptions';
 
 import { QuoteContext } from '../FabricatedStainless';
-
-const NovaOptions = NovaQuote.quote_options;
 
 const exchangeRate = 1.3;
 
@@ -81,6 +82,11 @@ export default function Letters({ item }) {
 		max: 43,
 	});
 	const [installation, setInstallation] = useState(item.installation);
+
+	const [sets, setSets] = useState(item.sets);
+	const handleOnChangeSets = (e) => {
+		setSets(e.target.value);
+	};
 
 	const colorRef = useRef(null);
 	const fontRef = useRef(null);
@@ -166,6 +172,7 @@ export default function Letters({ item }) {
 					metal: metal,
 					stainLessMetalFinish: stainLessMetalFinish,
 					customColor: customColor,
+					sets: sets,
 				};
 			} else {
 				return sign;
@@ -288,10 +295,12 @@ export default function Letters({ item }) {
 						letterPrice *= 1.05;
 					}
 
-					totalLetterPrice += letterPrice;
+					totalLetterPrice += parseFloat(letterPrice.toFixed(2));
 				});
 
-				setUsdPrice(totalLetterPrice.toFixed(2));
+				totalLetterPrice *= sets;
+
+				setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
 				setCadPrice((totalLetterPrice * parseFloat(exchangeRate)).toFixed(2));
 			} else {
 				setUsdPrice(0);
@@ -308,6 +317,7 @@ export default function Letters({ item }) {
 		metal,
 		stainLessMetalFinish,
 		installation,
+		sets,
 	]);
 
 	useEffect(() => {
@@ -363,6 +373,7 @@ export default function Letters({ item }) {
 
 		if (!waterproof) missingFields.push('Select Waterproof');
 		if (!installation) missingFields.push('Select Installation');
+		if (!sets) missingFields.push('Select Quantity');
 
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
@@ -424,6 +435,7 @@ export default function Letters({ item }) {
 		fontFileName,
 		fontFilePath,
 		fontFile,
+		sets,
 	]);
 
 	useEffect(() => {
@@ -652,6 +664,13 @@ export default function Letters({ item }) {
 						</option>
 					))}
 					value={item.installation}
+				/>
+
+				<Dropdown
+					title="Quantity"
+					onChange={handleOnChangeSets}
+					options={setOptions}
+					value={sets}
 				/>
 			</div>
 

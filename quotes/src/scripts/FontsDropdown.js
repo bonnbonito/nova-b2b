@@ -8,6 +8,7 @@ export default function FontsDropdown({
 	fontRef,
 	openFont,
 	setOpenFont,
+	setOpenColor,
 }) {
 	const handleCustomFontSelection = () => {
 		// TODO: Add your logic here for custom font selection
@@ -25,7 +26,10 @@ export default function FontsDropdown({
 				className={`flex px-2 items-center select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
 					font ? 'text-black' : 'text-[#dddddd]'
 				}`}
-				onClick={() => setOpenFont((prev) => !prev)}
+				onClick={() => {
+					setOpenFont((prev) => !prev);
+					setOpenColor(false);
+				}}
 				style={{
 					fontFamily: font,
 				}}

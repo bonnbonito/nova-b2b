@@ -51,6 +51,7 @@ export default function LaserCutAluminum() {
 					finishing: '',
 					customFont: '',
 					customColor: '',
+					sets: 1,
 					product: NovaQuote.product,
 				},
 			]);
@@ -86,6 +87,7 @@ export default function LaserCutAluminum() {
 		product: NovaQuote.product,
 		customFont: '',
 		customColor: '',
+		sets: 1,
 	};
 
 	function addSignage(type) {

@@ -9,11 +9,11 @@ import {
 	metalFinishOptions,
 	metalInstallationOptions,
 	metalThicknessOptions,
+	setOptions,
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
 import { QuoteContext } from '../LaserCutAluminum';
 
-const NovaSingleOptions = NovaQuote.single_quote_options;
 const exchangeRate = 1.3;
 
 export default function Logo({ item }) {
@@ -81,8 +81,9 @@ export default function Logo({ item }) {
 		setSelectedFinishing(e.target.value);
 	};
 
-	const handleChangePieces = (e) => {
-		setPieces(e.target.value);
+	const [sets, setSets] = useState(item.sets);
+	const handleOnChangeSets = (e) => {
+		setSets(e.target.value);
 	};
 
 	const handleOnChangeInstallation = (e) => setInstallation(e.target.value);
@@ -107,6 +108,7 @@ export default function Logo({ item }) {
 					filePaths: filePaths,
 					fileUrls: fileUrls,
 					customColor: customColor,
+					sets: sets,
 				};
 			} else {
 				return sign;
@@ -139,6 +141,7 @@ export default function Logo({ item }) {
 		installation,
 		color,
 		customColor,
+		sets,
 	]);
 
 	const checkAndAddMissingFields = () => {
@@ -160,6 +163,7 @@ export default function Logo({ item }) {
 			missingFields.push('Add the Pantone color code of your custom color.');
 		}
 		if (!installation) missingFields.push('Select Installation');
+		if (!sets) missingFields.push('Select Quantity');
 		if (!fileUrls || fileUrls.length === 0)
 			missingFields.push('Upload a PDF/AI File');
 
@@ -225,7 +229,10 @@ export default function Logo({ item }) {
 				}
 
 				let total = (computed * multiplier).toFixed(2);
-				setUsdPrice(total);
+
+				total *= sets;
+
+				setUsdPrice(parseFloat(total).toFixed(2));
 				setCadPrice((total * parseFloat(exchangeRate)).toFixed(2));
 			} else {
 				setUsdPrice(0);
@@ -235,7 +242,7 @@ export default function Logo({ item }) {
 			setUsdPrice(0);
 			setCadPrice(0);
 		}
-	}, [width, height, selectedThickness, waterproof, selectedFinishing]);
+	}, [width, height, selectedThickness, waterproof, selectedFinishing, sets]);
 
 	useOutsideClick([colorRef], () => {
 		if (!openColor) return;
@@ -368,6 +375,13 @@ export default function Logo({ item }) {
 						</option>
 					))}
 					value={item.installation}
+				/>
+
+				<Dropdown
+					title="Quantity"
+					onChange={handleOnChangeSets}
+					options={setOptions}
+					value={sets}
 				/>
 			</div>
 

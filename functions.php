@@ -5,7 +5,7 @@
  * @package Nova B2B
  */
 
-require_once get_stylesheet_directory() . '/vendor/autoload.php';
+// require_once get_stylesheet_directory() . '/vendor/autoload.php';
 require get_stylesheet_directory() . '/bonn-update-checker/plugin-update-checker.php';
 
 

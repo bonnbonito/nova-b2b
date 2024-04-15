@@ -118,9 +118,7 @@ export default function QuoteView() {
 	);
 
 	const downloadFile = NovaAccount?.ID
-		? currency === 'CAD'
-			? `/invoice-${NovaAccount.ID}-CAD.pdf`
-			: `/invoice-${NovaAccount.ID}.pdf`
+		? `/${NovaAccount.business_id}-INV-Q-${NovaAccount.ID}-${currency}.pdf`
 		: null;
 
 	return (

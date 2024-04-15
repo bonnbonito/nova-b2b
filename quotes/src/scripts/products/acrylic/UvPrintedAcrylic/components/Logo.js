@@ -8,7 +8,7 @@ import { QuoteContext } from '../UvPrintedAcrylic';
 import {
 	calculateMountingOptions,
 	mountingDefaultOptions,
-	piecesOptions,
+	setOptions,
 	thicknessOptions,
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
@@ -64,6 +64,11 @@ export default function Logo({ item }) {
 	const [mountingOptions, setMountingOptions] = useState(
 		mountingDefaultOptions
 	);
+
+	const [sets, setSets] = useState(item.sets);
+	const handleOnChangeSets = (e) => {
+		setSets(e.target.value);
+	};
 
 	const logoPricingObject = NovaQuote.logo_pricing_tables;
 
@@ -166,6 +171,7 @@ export default function Logo({ item }) {
 					baseColor: baseColor,
 					customColor: customColor,
 					printPreference: printPreference,
+					sets: sets,
 				};
 			} else {
 				return sign;
@@ -189,10 +195,12 @@ export default function Logo({ item }) {
 		if (!waterproof) missingFields.push('Select Environment');
 		if (!selectedMounting) missingFields.push('Select Mounting Option');
 		if (!selectedFinishing) missingFields.push('Select Finishing Option');
+
 		if (!fileUrls || fileUrls.length === 0)
 			missingFields.push('Upload a PDF/AI File');
 		if (baseColor === 'Custom Color' && !customColor)
 			missingFields.push('Add the Pantone color code of your custom color');
+		if (!sets) missingFields.push('Select Quantity');
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
 				const existingIndex = prevMissing.findIndex(
@@ -245,6 +253,7 @@ export default function Logo({ item }) {
 		baseColor,
 		printPreference,
 		customColor,
+		sets,
 	]);
 
 	useEffect(() => {
@@ -266,6 +275,7 @@ export default function Logo({ item }) {
 		filePaths,
 		printPreference,
 		baseColor,
+		sets,
 	]);
 
 	useEffect(() => {
@@ -298,6 +308,8 @@ export default function Logo({ item }) {
 
 				total *= 1.2;
 
+				total *= sets;
+
 				setUsdPrice(parseFloat(total).toFixed(2));
 				setCadPrice((total * parseFloat(exchangeRate)).toFixed(2));
 			} else {
@@ -315,6 +327,7 @@ export default function Logo({ item }) {
 		waterproof,
 		selectedFinishing,
 		baseColor,
+		sets,
 	]);
 
 	return (
@@ -416,6 +429,13 @@ export default function Logo({ item }) {
 						</option>
 					))}
 					value={selectedFinishing}
+				/>
+
+				<Dropdown
+					title="Quantity"
+					onChange={handleOnChangeSets}
+					options={setOptions}
+					value={sets}
 				/>
 			</div>
 

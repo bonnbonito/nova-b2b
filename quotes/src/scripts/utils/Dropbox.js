@@ -33,7 +33,7 @@ const getRefreshToken = async () => {
 };
 
 const checkAndCreateFolder = async (accessToken) => {
-	const folderPath = `/NOVA-CRM/${NovaQuote.business_id}`;
+	const folderPath = `/NOVA-CRM/${NovaQuote.business_id}/FromClient`;
 
 	try {
 		// Check if the folder exists
@@ -128,7 +128,7 @@ const handleFileUpload = async (file, setFileUrl, setFileName, setFilePath) => {
 	await checkAndCreateFolder(token);
 
 	const dropboxArgs = {
-		path: `/NOVA-CRM/${NovaQuote.business_id}/${file.name}`,
+		path: `/NOVA-CRM/${NovaQuote.business_id}/FromClient/${file.name}`,
 		mode: 'overwrite',
 		autorename: false,
 		mute: false,

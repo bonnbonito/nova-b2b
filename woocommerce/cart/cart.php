@@ -334,7 +334,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 			<?php do_action( 'woocommerce_cart_contents' ); ?>
 
 			<div>
-				<div colspan="6" class="actions">
+				<div colspan="6" class="actions text-right">
 
 
 

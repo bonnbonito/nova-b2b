@@ -45,6 +45,7 @@ export default function LaserCutAcrylic() {
 					fileNames: [],
 					fileUrls: [],
 					files: [],
+					sets: 1,
 					customFont: '',
 					customColor: '',
 					finishing: 'Matte',
@@ -86,6 +87,7 @@ export default function LaserCutAcrylic() {
 		fileNames: [],
 		fileUrls: [],
 		files: [],
+		sets: 1,
 		product: NovaQuote.product,
 	};
 

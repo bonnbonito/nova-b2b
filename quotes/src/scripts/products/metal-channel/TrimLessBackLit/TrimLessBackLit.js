@@ -55,6 +55,7 @@ export default function TrimLessBackLit() {
 					metalFinish: '',
 					fontFile: '',
 					acrylicReveal: '0',
+					sets: 1,
 					product: NovaQuote.product,
 				},
 			]);
@@ -104,6 +105,7 @@ export default function TrimLessBackLit() {
 		fontFileUrl: '',
 		fontFile: '',
 		acrylicReveal: '0',
+		sets: 1,
 		product: NovaQuote.product,
 	};
 

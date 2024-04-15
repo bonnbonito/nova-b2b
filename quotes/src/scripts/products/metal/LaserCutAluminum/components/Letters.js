@@ -10,6 +10,7 @@ import {
 	metalFinishOptions,
 	metalInstallationOptions,
 	metalThicknessOptions,
+	setOptions,
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
 import { QuoteContext } from '../LaserCutAluminum';
@@ -70,6 +71,11 @@ export default function Letters({ item }) {
 		NovaOptions.letters_height
 	);
 	const [installation, setInstallation] = useState(item.installation);
+
+	const [sets, setSets] = useState(item.sets);
+	const handleOnChangeSets = (e) => {
+		setSets(e.target.value);
+	};
 
 	const colorRef = useRef(null);
 	const fontRef = useRef(null);
@@ -154,6 +160,7 @@ export default function Letters({ item }) {
 					finishing: selectedFinishing,
 					customFont: customFont,
 					customColor: customColor,
+					sets: sets,
 				};
 			} else {
 				return sign;
@@ -238,7 +245,9 @@ export default function Letters({ item }) {
 				totalLetterPrice += letterPrice;
 			});
 
-			setUsdPrice(totalLetterPrice.toFixed(2));
+			totalLetterPrice *= sets;
+
+			setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
 			setCadPrice((totalLetterPrice * parseFloat(exchangeRate)).toFixed(2));
 		} else {
 			setUsdPrice(0);
@@ -251,6 +260,7 @@ export default function Letters({ item }) {
 		letters,
 		waterproof,
 		lettersHeight,
+		sets,
 	]);
 
 	useEffect(() => {
@@ -302,6 +312,7 @@ export default function Letters({ item }) {
 		fontFile,
 		selectedFinishing,
 		customFont,
+		sets,
 		customColor,
 	]);
 
@@ -328,7 +339,7 @@ export default function Letters({ item }) {
 		}
 		if (!waterproof) missingFields.push('Select Waterproof');
 		if (!installation) missingFields.push('Select Installation');
-
+		if (!sets) missingFields.push('Select Quantity');
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
 				const existingIndex = prevMissing.findIndex(
@@ -383,6 +394,7 @@ export default function Letters({ item }) {
 		selectedFinishing,
 		customFont,
 		customColor,
+		sets,
 	]);
 
 	useEffect(() => {
@@ -405,11 +417,18 @@ export default function Letters({ item }) {
 		}
 	}, [selectedThickness]);
 
-	useOutsideClick([colorRef, fontRef], () => {
-		if (!openColor && !openFont) return;
-		setOpenColor(false);
-		setOpenFont(false);
-	});
+	if (selectedFinishing === 'Painted') {
+		useOutsideClick([colorRef, fontRef], () => {
+			if (!openColor && !openFont) return;
+			setOpenColor(false);
+			setOpenFont(false);
+		});
+	} else {
+		useOutsideClick([fontRef], () => {
+			if (!openFont) return;
+			setOpenFont(false);
+		});
+	}
 
 	useEffect(() => {
 		color?.name != 'Custom Color' && setCustomColor('');
@@ -455,6 +474,7 @@ export default function Letters({ item }) {
 					font={item.font}
 					fontRef={fontRef}
 					openFont={openFont}
+					setOpenColor={setOpenColor}
 					setOpenFont={setOpenFont}
 					handleSelectFont={handleSelectFont}
 				/>
@@ -516,7 +536,10 @@ export default function Letters({ item }) {
 							className={`flex px-2 items-center select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
 								color.name ? 'text-black' : 'text-[#dddddd]'
 							}`}
-							onClick={() => setOpenColor((prev) => !prev)}
+							onClick={() => {
+								setOpenFont(false);
+								setOpenColor((prev) => !prev);
+							}}
 						>
 							<span
 								className="rounded-full w-[18px] h-[18px] border mr-2"
@@ -584,6 +607,13 @@ export default function Letters({ item }) {
 						</option>
 					))}
 					value={item.installation}
+				/>
+
+				<Dropdown
+					title="Quantity"
+					onChange={handleOnChangeSets}
+					options={setOptions}
+					value={sets}
 				/>
 			</div>
 

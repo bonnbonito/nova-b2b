@@ -50,6 +50,7 @@ export default function FabricatedStainless() {
 					stainlessSteelPolished: '',
 					stainLessMetalFinish: '',
 					metal: '',
+					sets: 1,
 					product: NovaQuote.product,
 				},
 			]);
@@ -87,6 +88,7 @@ export default function FabricatedStainless() {
 		metal: '',
 		stainLessMetalFinish: '',
 		stainlessSteelPolished: '',
+		sets: 1,
 		product: NovaQuote.product,
 	};
 

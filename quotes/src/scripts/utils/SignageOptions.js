@@ -152,6 +152,20 @@ const calculateMountingOptions = (
 
 const piecesOptions = ['30 pieces or fewer'];
 
+const setOptions = Array.from(
+	{
+		length: 30,
+	},
+	(_, index) => {
+		const val = 1 + index;
+		return (
+			<option key={index} value={val}>
+				{val}
+			</option>
+		);
+	}
+);
+
 export {
 	calculateMountingOptions,
 	defaultFinishOptions,
@@ -160,6 +174,7 @@ export {
 	metalThicknessOptions,
 	mountingDefaultOptions,
 	piecesOptions,
+	setOptions,
 	thicknessOptions,
 	waterProofOptions,
 };

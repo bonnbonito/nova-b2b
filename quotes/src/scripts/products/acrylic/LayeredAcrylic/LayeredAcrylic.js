@@ -45,6 +45,7 @@ export default function LayeredAcrylic() {
 					width: '',
 					height: '',
 					layers: '',
+					sets: 1,
 					product: NovaQuote.product,
 				},
 			]);
@@ -78,6 +79,7 @@ export default function LayeredAcrylic() {
 		fileUrls: [],
 		files: [],
 		layers: '',
+		sets: 1,
 		product: NovaQuote.product,
 	};
 

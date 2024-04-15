@@ -38,7 +38,8 @@ export default function TrimLessFrontAndBackLit() {
 					customFont: '',
 					waterproof: '',
 					thickness: '',
-					acrylicCover: { name: 'White', color: '#ffffff' },
+					vinylWhite: { name: '', color: '' },
+					frontAcrylicCover: 'White',
 					mounting: '',
 					studLength: '',
 					spacerStandoffDistance: '',
@@ -52,6 +53,7 @@ export default function TrimLessFrontAndBackLit() {
 					fileNames: [],
 					fileUrls: [],
 					files: [],
+					sets: 1,
 					product: NovaQuote.product,
 				},
 			]);
@@ -82,7 +84,8 @@ export default function TrimLessFrontAndBackLit() {
 		customFont: '',
 		waterproof: '',
 		thickness: '',
-		acrylicCover: { name: 'White', color: '#ffffff' },
+		frontAcrylicCover: 'White',
+		vinylWhite: { name: '', color: '' },
 		mounting: '',
 		studLength: '',
 		spacerStandoffDistance: '',
@@ -100,6 +103,7 @@ export default function TrimLessFrontAndBackLit() {
 		fontFileName: '',
 		fontFileUrl: '',
 		fontFile: '',
+		sets: 1,
 		product: NovaQuote.product,
 	};
 

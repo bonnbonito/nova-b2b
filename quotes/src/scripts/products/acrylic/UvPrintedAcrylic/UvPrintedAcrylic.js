@@ -44,6 +44,7 @@ export default function UvPrintedAcrylic() {
 					height: '',
 					printPreference: '',
 					baseColor: 'Black',
+					sets: 1,
 					product: NovaQuote.product,
 				},
 			]);
@@ -78,6 +79,7 @@ export default function UvPrintedAcrylic() {
 		files: [],
 		baseColor: 'Black',
 		printPreference: '',
+		sets: 1,
 		product: NovaQuote.product,
 	};
 

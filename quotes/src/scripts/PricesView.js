@@ -267,6 +267,24 @@ export default function PricesView({ item }) {
 					</div>
 				)}
 
+				{item.vinylWhite?.name && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">3M 360 VINYL</div>
+						<div className="text-left text-[14px]">{item.vinylWhite?.name}</div>
+					</div>
+				)}
+
+				{item.frontAcrylicCover && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">
+							FRONT ACRYLIC COVER
+						</div>
+						<div className="text-left text-[14px]">
+							{item.frontAcrylicCover}
+						</div>
+					</div>
+				)}
+
 				{item.customColor && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
 						<div className="text-left text-xs font-title">CUSTOM COLOR</div>
@@ -338,6 +356,13 @@ export default function PricesView({ item }) {
 					</div>
 				)}
 
+				{item.sets && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">QUANTITY</div>
+						<div className="text-left text-[14px]">{item.sets}</div>
+					</div>
+				)}
+
 				{item.comments && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
 						<div className="text-left text-xs font-title">COMMENTS</div>
@@ -356,7 +381,7 @@ export default function PricesView({ item }) {
 					</div>
 				)}
 
-				{item.fileUrl && !item.fileUrls && (
+				{item.fileUrl && item.fileUrls?.length == 0 && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
 						<div className="text-left text-xs font-title">FILE</div>
 						<div className="text-left text-[14px] break-words">

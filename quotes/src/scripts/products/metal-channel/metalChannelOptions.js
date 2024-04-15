@@ -33,6 +33,9 @@ const finishingOptions = [
 
 const spacerStandoffDefaultOptions = [
 	{
+		value: '0.5"',
+	},
+	{
 		value: '1"',
 	},
 	{

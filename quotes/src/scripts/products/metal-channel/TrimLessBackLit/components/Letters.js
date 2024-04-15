@@ -7,7 +7,10 @@ import useOutsideClick from '../../../../utils/ClickOutside';
 import { colorOptions } from '../../../../utils/ColorOptions';
 import convert_json from '../../../../utils/ConvertJson';
 import { getLetterPricingTableByTitle } from '../../../../utils/Pricing';
-import { waterProofOptions } from '../../../../utils/SignageOptions';
+import {
+	setOptions,
+	waterProofOptions,
+} from '../../../../utils/SignageOptions';
 import {
 	acrylicRevealOptions,
 	depthOptions,
@@ -100,6 +103,11 @@ export default function Letters({ item }) {
 
 	const [ledLightColor, setLedLightColor] = useState(item.ledLightColor);
 
+	const [sets, setSets] = useState(item.sets);
+	const handleOnChangeSets = (e) => {
+		setSets(e.target.value);
+	};
+
 	const colorRef = useRef(null);
 	const fontRef = useRef(null);
 
@@ -182,6 +190,7 @@ export default function Letters({ item }) {
 					spacerStandoffDistance: spacerStandoffDistance,
 					metalFinish: metalFinish,
 					acrylicReveal: acrylicReveal,
+					sets: sets,
 				};
 			} else {
 				return sign;
@@ -233,6 +242,9 @@ export default function Letters({ item }) {
 		if (target === '1.5"') {
 			setSpacerStandoffOptions(() => [
 				{
+					value: '0.5"',
+				},
+				{
 					value: '1"',
 				},
 			]);
@@ -241,6 +253,9 @@ export default function Letters({ item }) {
 			}
 		} else if (target === '3.2"' || target === '4"') {
 			setSpacerStandoffOptions(() => [
+				{
+					value: '0.5"',
+				},
 				{
 					value: '1"',
 				},
@@ -337,6 +352,8 @@ export default function Letters({ item }) {
 
 		if (!ledLightColor) missingFields.push('Select LED Light Color');
 
+		if (!sets) missingFields.push('Select Quantity');
+
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
 				const existingIndex = prevMissing.findIndex(
@@ -400,6 +417,7 @@ export default function Letters({ item }) {
 		selectedFinishing,
 		metalFinish,
 		acrylicReveal,
+		sets,
 	]);
 
 	useEffect(() => {
@@ -428,12 +446,6 @@ export default function Letters({ item }) {
 			}
 		}
 	}, [depth, selectedLetterHeight]);
-
-	useOutsideClick([colorRef, fontRef], () => {
-		if (!openColor && !openFont) return;
-		setOpenColor(false);
-		setOpenFont(false);
-	});
 
 	useEffect(() => {
 		if (
@@ -496,7 +508,9 @@ export default function Letters({ item }) {
 					totalLetterPrice += letterPrice;
 				});
 
-				setUsdPrice(totalLetterPrice.toFixed(2));
+				totalLetterPrice *= sets;
+
+				setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
 				setCadPrice((totalLetterPrice * parseFloat(exchangeRate)).toFixed(2));
 			} else {
 				setUsdPrice(0);
@@ -515,7 +529,21 @@ export default function Letters({ item }) {
 		depth,
 		acrylicReveal,
 		metalFinish,
+		sets,
 	]);
+
+	if (selectedFinishing === 'Painted') {
+		useOutsideClick([colorRef, fontRef], () => {
+			if (!openColor && !openFont) return;
+			setOpenColor(false);
+			setOpenFont(false);
+		});
+	} else {
+		useOutsideClick([fontRef], () => {
+			if (!openFont) return;
+			setOpenFont(false);
+		});
+	}
 
 	useEffect(() => {
 		color?.name != 'Custom Color' && setCustomColor('');
@@ -563,6 +591,7 @@ export default function Letters({ item }) {
 					openFont={openFont}
 					setOpenFont={setOpenFont}
 					handleSelectFont={handleSelectFont}
+					setOpenColor={setOpenColor}
 				/>
 
 				{font == 'Custom font' && (
@@ -757,7 +786,21 @@ export default function Letters({ item }) {
 						/>
 					</>
 				)}
+
+				<Dropdown
+					title="Quantity"
+					onChange={handleOnChangeSets}
+					options={setOptions}
+					value={sets}
+				/>
 			</div>
+
+			{mounting === 'Stud with spacer' && (
+				<div className="text-xs text-[#9F9F9F] mb-4">
+					*Note: The spacer will be black (default) or match the painted sign's
+					color.
+				</div>
+			)}
 
 			<div className="quote-grid">
 				{color?.name == 'Custom Color' && (

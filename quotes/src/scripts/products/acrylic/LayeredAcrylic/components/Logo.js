@@ -8,6 +8,7 @@ import {
 	defaultFinishOptions,
 	mountingDefaultOptions,
 	piecesOptions,
+	setOptions,
 	thicknessOptions,
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
@@ -66,6 +67,11 @@ export default function Logo({ item }) {
 	const [mountingOptions, setMountingOptions] = useState(
 		mountingDefaultOptions
 	);
+
+	const [sets, setSets] = useState(item.sets);
+	const handleOnChangeSets = (e) => {
+		setSets(e.target.value);
+	};
 
 	const handleOnChangeDescription = (e) => setDescription(e.target.value);
 
@@ -150,6 +156,7 @@ export default function Logo({ item }) {
 					description: description,
 					usdPrice: usdPrice,
 					cadPrice: cadPrice,
+					sets: sets,
 				};
 			} else {
 				return sign;
@@ -176,6 +183,7 @@ export default function Logo({ item }) {
 		layers,
 		usdPrice,
 		cadPrice,
+		sets,
 	]);
 
 	useEffect(() => {
@@ -207,6 +215,8 @@ export default function Logo({ item }) {
 				let total = (computed * multiplier * ASSEMBLY_FEES).toFixed(2);
 				total *= selectedFinishing === 'Gloss' ? 1.1 : 1;
 
+				total *= sets;
+
 				setUsdPrice(parseFloat(total).toFixed(2));
 				setCadPrice((total * parseFloat(exchangeRate)).toFixed(2));
 			} else {
@@ -217,7 +227,7 @@ export default function Logo({ item }) {
 			setUsdPrice(0);
 			setCadPrice(0);
 		}
-	}, [width, height, selectedThickness, waterproof, selectedFinishing]);
+	}, [width, height, selectedThickness, waterproof, selectedFinishing, sets]);
 
 	const checkAndAddMissingFields = () => {
 		const missingFields = [];
@@ -232,6 +242,7 @@ export default function Logo({ item }) {
 		if (!waterproof) missingFields.push('Select Environment');
 		if (!selectedMounting) missingFields.push('Select Mounting Option');
 		if (!selectedFinishing) missingFields.push('Select Finishing Option');
+		if (!sets) missingFields.push('Select Quantity');
 
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
@@ -281,6 +292,7 @@ export default function Logo({ item }) {
 		description,
 		waterproof,
 		selectedFinishing,
+		sets,
 	]);
 
 	return (
@@ -390,6 +402,12 @@ export default function Logo({ item }) {
 						</option>
 					))}
 					value={selectedFinishing}
+				/>
+				<Dropdown
+					title="Quantity"
+					onChange={handleOnChangeSets}
+					options={setOptions}
+					value={sets}
 				/>
 			</div>
 		</>

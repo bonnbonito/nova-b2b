@@ -7,6 +7,7 @@ import useOutsideClick from '../../../../utils/ClickOutside';
 import convert_json from '../../../../utils/ConvertJson';
 import {
 	mountingDefaultOptions,
+	setOptions,
 	thicknessOptions,
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
@@ -77,6 +78,8 @@ export default function Letters({ item }) {
 		NovaOptions.letters_height
 	);
 	const [selectedMounting, setSelectedMounting] = useState(item.mounting);
+
+	const [sets, setSets] = useState(item.sets);
 
 	const colorRef = useRef(null);
 	const fontRef = useRef(null);
@@ -177,6 +180,7 @@ export default function Letters({ item }) {
 					finishing: selectedFinishing,
 					customFont: customFont,
 					customColor: customColor,
+					sets: sets,
 				};
 			} else {
 				return sign;
@@ -190,6 +194,10 @@ export default function Letters({ item }) {
 	const handleComments = (e) => setComments(e.target.value);
 
 	const handleSelectFont = (value) => setFont(value);
+
+	const handleOnChangeSets = (e) => {
+		setSets(e.target.value);
+	};
 
 	const handleonChangeMount = (e) => setSelectedMounting(e.target.value);
 
@@ -268,7 +276,9 @@ export default function Letters({ item }) {
 				totalLetterPrice += letterPrice;
 			});
 
-			setUsdPrice(totalLetterPrice.toFixed(2));
+			totalLetterPrice *= sets;
+
+			setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
 			setCadPrice((totalLetterPrice * parseFloat(exchangeRate)).toFixed(2));
 		} else {
 			setUsdPrice(0);
@@ -282,6 +292,7 @@ export default function Letters({ item }) {
 		waterproof,
 		lettersHeight,
 		color,
+		sets,
 	]);
 
 	useEffect(() => {
@@ -363,6 +374,7 @@ export default function Letters({ item }) {
 		if (!selectedFinishing) missingFields.push('Select Finishing');
 		if (!waterproof) missingFields.push('Select Waterproof');
 		if (!selectedMounting) missingFields.push('Select Mounting');
+		if (!sets) missingFields.push('Select Quantity');
 
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
@@ -412,6 +424,7 @@ export default function Letters({ item }) {
 		fontFileUrl,
 		selectedFinishing,
 		customColor,
+		sets,
 	]);
 
 	useEffect(() => {
@@ -438,6 +451,7 @@ export default function Letters({ item }) {
 		selectedFinishing,
 		customFont,
 		customColor,
+		sets,
 	]);
 
 	useEffect(() => {
@@ -470,13 +484,6 @@ export default function Letters({ item }) {
 		color?.name != 'Custom Color' && setCustomColor('');
 		font != 'Custom font' && setFontFileUrl('');
 	}, [color, font]);
-
-	useEffect(() => {
-		console.log(files);
-		console.log(fileNames);
-		console.log(filePaths);
-		console.log(fileUrls);
-	}, [fileNames, files, filePaths, fileUrls]);
 
 	return (
 		<>
@@ -644,6 +651,13 @@ export default function Letters({ item }) {
 						</option>
 					))}
 					value={item.mounting}
+				/>
+
+				<Dropdown
+					title="Quantity"
+					onChange={handleOnChangeSets}
+					options={setOptions}
+					value={sets}
 				/>
 			</div>
 

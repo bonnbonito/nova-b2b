@@ -5,7 +5,10 @@ import useOutsideClick from '../../../../utils/ClickOutside';
 import { colorOptions } from '../../../../utils/ColorOptions';
 import convert_json from '../../../../utils/ConvertJson';
 import { getLogoPricingTablebyThickness } from '../../../../utils/Pricing';
-import { waterProofOptions } from '../../../../utils/SignageOptions';
+import {
+	setOptions,
+	waterProofOptions,
+} from '../../../../utils/SignageOptions';
 import {
 	fabricatedLogoInstallationOptions,
 	fabricatedThicknessOptions,
@@ -62,6 +65,11 @@ export default function Logo({ item }) {
 	const [comments, setComments] = useState('');
 	const [waterproof, setWaterproof] = useState(item.waterproof);
 	const [installation, setInstallation] = useState(item.installation);
+
+	const [sets, setSets] = useState(item.sets);
+	const handleOnChangeSets = (e) => {
+		setSets(e.target.value);
+	};
 
 	const colorRef = useRef(null);
 
@@ -125,6 +133,7 @@ export default function Logo({ item }) {
 					filePaths: filePaths,
 					fileUrls: fileUrls,
 					stainLessMetalFinish: stainLessMetalFinish,
+					sets: sets,
 				};
 			} else {
 				return sign;
@@ -158,6 +167,8 @@ export default function Logo({ item }) {
 
 		if (!waterproof) missingFields.push('Select Waterproof');
 		if (!installation) missingFields.push('Select Installation');
+
+		if (!sets) missingFields.push('Select Quantity');
 
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
@@ -213,6 +224,7 @@ export default function Logo({ item }) {
 		installation,
 		color,
 		metal,
+		sets,
 	]);
 
 	const logoPricingObject = NovaQuote.logo_pricing_tables;
@@ -259,6 +271,9 @@ export default function Logo({ item }) {
 					total *= 1.2;
 				}
 
+				total = parseFloat(total).toFixed(2);
+				total *= sets;
+
 				setUsdPrice(parseFloat(total).toFixed(2));
 				setCadPrice((total * parseFloat(exchangeRate)).toFixed(2));
 			} else {
@@ -277,6 +292,7 @@ export default function Logo({ item }) {
 		selectedFinishing,
 		metal,
 		stainLessMetalFinish,
+		sets,
 	]);
 
 	useOutsideClick([colorRef], () => {
@@ -432,6 +448,13 @@ export default function Logo({ item }) {
 						</option>
 					))}
 					value={item.installation}
+				/>
+
+				<Dropdown
+					title="Quantity"
+					onChange={handleOnChangeSets}
+					options={setOptions}
+					value={sets}
 				/>
 			</div>
 

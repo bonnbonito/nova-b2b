@@ -2,7 +2,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import React, { useEffect, useRef, useState } from 'react';
 import { CloseIcon, LoadingIcon } from './svg/Icons';
 import { processQuote } from './utils/QuoteFunctions';
-import renameFolder from './utils/renameFolder';
+import { checkAndCreateFolder, renameFolder } from './utils/uploadFunctions';
 
 function ModalSave({
 	signage,
@@ -164,10 +164,20 @@ function ModalSave({
 					window.location.href + NovaQuote.user_id + '-folder'
 				);
 
+				try {
+					const projectFolder = `/NOVA-CRM/${NovaQuote.business_id}/Q-${status.generated_id}/FromClient`;
+					const createFolder = await checkAndCreateFolder(projectFolder);
+					if (createFolder) {
+						console.log('Folder created');
+					}
+				} catch (error) {
+					console.error('An error occurred:', error);
+				}
+
 				if (NovaQuote.is_editting.length === 0) {
 					console.log('renaming...');
-					const folderPath = `/NOVA-CRM/${NovaQuote.business_id}/${tempFolder}`;
-					const newPath = `/NOVA-CRM/${NovaQuote.business_id}/Q-${status.generated_id}`;
+					const folderPath = `/NOVA-CRM/${NovaQuote.business_id}/${tempFolder}/FromClient`;
+					const newPath = `/NOVA-CRM/${NovaQuote.business_id}/Q-${status.generated_id}/FromClient`;
 
 					try {
 						const rename = await renameFolder(folderPath, newPath);

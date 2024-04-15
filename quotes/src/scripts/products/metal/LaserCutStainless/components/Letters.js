@@ -6,7 +6,10 @@ import UploadFont from '../../../../UploadFont';
 import useOutsideClick from '../../../../utils/ClickOutside';
 import { colorOptions } from '../../../../utils/ColorOptions';
 import convert_json from '../../../../utils/ConvertJson';
-import { waterProofOptions } from '../../../../utils/SignageOptions';
+import {
+	setOptions,
+	waterProofOptions,
+} from '../../../../utils/SignageOptions';
 
 import {
 	finishOptions,
@@ -84,6 +87,11 @@ export default function Letters({ item }) {
 		NovaOptions.letters_height
 	);
 	const [installation, setInstallation] = useState(item.installation);
+
+	const [sets, setSets] = useState(item.sets);
+	const handleOnChangeSets = (e) => {
+		setSets(e.target.value);
+	};
 
 	const colorRef = useRef(null);
 	const fontRef = useRef(null);
@@ -170,6 +178,7 @@ export default function Letters({ item }) {
 					metal: metal,
 					stainLessMetalFinish: stainLessMetalFinish,
 					customColor: customColor,
+					sets: sets,
 				};
 			} else {
 				return sign;
@@ -290,9 +299,13 @@ export default function Letters({ item }) {
 					}
 
 					totalLetterPrice += letterPrice;
+
+					totalLetterPrice = parseFloat(totalLetterPrice).toFixed(2);
 				});
 
-				setUsdPrice(totalLetterPrice.toFixed(2));
+				totalLetterPrice *= sets;
+
+				setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
 				setCadPrice((totalLetterPrice * parseFloat(exchangeRate)).toFixed(2));
 			} else {
 				setUsdPrice(0);
@@ -309,6 +322,7 @@ export default function Letters({ item }) {
 		metal,
 		stainLessMetalFinish,
 		stainlessSteelPolished,
+		sets,
 	]);
 
 	useEffect(() => {
@@ -371,6 +385,8 @@ export default function Letters({ item }) {
 
 		if (!waterproof) missingFields.push('Select Waterproof');
 		if (!installation) missingFields.push('Select Installation');
+
+		if (!sets) missingFields.push('Select Quantity');
 
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
@@ -435,6 +451,7 @@ export default function Letters({ item }) {
 		fontFileName,
 		fontFilePath,
 		fontFile,
+		sets,
 	]);
 
 	useEffect(() => {
@@ -457,11 +474,18 @@ export default function Letters({ item }) {
 		}
 	}, [selectedThickness]);
 
-	useOutsideClick([colorRef, fontRef], () => {
-		if (!openColor && !openFont) return;
-		setOpenColor(false);
-		setOpenFont(false);
-	});
+	if (selectedFinishing === 'Painted Finish') {
+		useOutsideClick([colorRef, fontRef], () => {
+			if (!openColor && !openFont) return;
+			setOpenColor(false);
+			setOpenFont(false);
+		});
+	} else {
+		useOutsideClick([fontRef], () => {
+			if (!openFont) return;
+			setOpenFont(false);
+		});
+	}
 
 	useEffect(() => {
 		color?.name != 'Custom Color' && setCustomColor('');
@@ -509,6 +533,7 @@ export default function Letters({ item }) {
 					openFont={openFont}
 					setOpenFont={setOpenFont}
 					handleSelectFont={handleSelectFont}
+					setOpenColor={setOpenColor}
 				/>
 
 				{font == 'Custom font' && (
@@ -611,7 +636,10 @@ export default function Letters({ item }) {
 							className={`flex px-2 items-center select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
 								color.name ? 'text-black' : 'text-[#dddddd]'
 							}`}
-							onClick={() => setOpenColor((prev) => !prev)}
+							onClick={() => {
+								setOpenFont(false);
+								setOpenColor((prev) => !prev);
+							}}
 						>
 							<span
 								className="rounded-full w-[18px] h-[18px] border mr-2"
@@ -679,6 +707,13 @@ export default function Letters({ item }) {
 						</option>
 					))}
 					value={item.installation}
+				/>
+
+				<Dropdown
+					title="Quantity"
+					onChange={handleOnChangeSets}
+					options={setOptions}
+					value={sets}
 				/>
 			</div>
 
