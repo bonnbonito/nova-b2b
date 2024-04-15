@@ -92,36 +92,14 @@ class Woocommerce {
 		add_filter( 'payment_types', array( $this, 'partner_payment_types' ) );
 		add_filter( 'woocommerce_order_actions', array( $this, 'remove_send_invoice' ), 10, 2 );
 		add_filter( 'woocommerce_admin_order_actions', array( $this, 'remove_recalculate' ), 10, 2 );
-		// add_filter( 'wcumcs_custom_item_price_final', array( $this, 'change_to_custom_price' ), 20, 4 );
-		// add_action( 'wp', array( $this, 'force_update_price' ) );
+		add_filter( 'wcumcs_custom_item_price_final', array( $this, 'change_to_custom_price' ), 9999999, 4 );
 	}
 
-	public function force_update_price() {
-		add_action( 'woocommerce_before_calculate_totals', array( $this, 'nova_cad_item_price' ), 999999, 1 );
-	}
-
-	public function nova_cad_item_price( $cart ) {
-		print_r( $cart );
-		if ( is_admin() && ! defined( 'DOING_AJAX' ) ) {
-			return;
-		}
-
-		if ( did_action( 'woocommerce_before_calculate_totals' ) >= 2 ) {
-			return;
-		}
-
-		$curr_curr = get_woocommerce_currency_symbol();
-
-		foreach ( $cart->get_cart() as  $cart_item_key => $cart_item ) {
-
-			$cart_item['data']->set_price( 12333 );
-		}
-	}
 
 	function change_to_custom_price( $final_price, $price, $product, $currency ) {
 
 		if ( $currency === 'CAD' ) {
-			$final_price = 4233;
+			$final_price = $price * 1.3;
 		}
 
 		return $final_price;
@@ -1417,8 +1395,10 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		foreach ( $cart_object->get_cart() as $item ) {
 
 			if ( array_key_exists( 'usd_price', $item ) && array_key_exists( 'nova_quote', $item ) ) {
+				$price = $item['usd_price'];
 
-				$item['data']->set_price( $item['usd_price'] );
+				$item['data']->set_price( $price );
+
 			}
 		}
 	}
