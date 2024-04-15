@@ -119,6 +119,11 @@ a {
     pointer-events: auto;
 }
 
+[type=checkbox],
+[type=radio] {
+    width: 1rem !important;
+}
+
 @media (max-width: 767px) {
     .homepage-layout {
         display: block;

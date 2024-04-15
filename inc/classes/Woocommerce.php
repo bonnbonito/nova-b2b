@@ -98,7 +98,7 @@ class Woocommerce {
 
 	function change_to_custom_price( $final_price, $price, $product, $currency ) {
 
-		if ( $currency === 'CAD' ) {
+		if ( get_woocommerce_currency() == 'CAD' ) {
 			$final_price = $price * 1.3;
 		}
 
