@@ -599,7 +599,7 @@ class Woocommerce {
 
 		$fields['shipping_pst'] = array(
 			'label'    => __( 'PST', 'woocommerce' ), // Change the label to something appropriate
-			'required' => true, // Not required by default
+			'required' => false, // Not required by default
 			'class'    => array( 'form-row-wide', 'custom-field-bc' ), // Custom class for JavaScript
 			'priority' => 105, // Adjust the priority to position it right after the state field
 		);
@@ -1866,6 +1866,44 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		<?php
 	}
 
+
+	public function show_project_details( $projects ) {
+		foreach ( $projects as $project ) {
+			echo '<div class="block">';
+
+			// Display title and price
+			if ( ! empty( $project->title ) ) {
+				$currencySymbol = get_woocommerce_currency_symbol();
+				$price          = get_woocommerce_currency() === 'USD' ? number_format( $project->usdPrice, 2 ) : number_format( $project->cadPrice, 2 );
+				echo "<div class='flex justify-between py-2 font-title uppercase'>{$project->title} <span>{$currencySymbol}{$price}</span></div>";
+			}
+
+			// Loop through all properties of the project
+			foreach ( $project as $key => $value ) {
+				if ( empty( $value ) || is_array( $value ) || is_object( $value ) ) {
+					continue;
+				}
+
+				$formattedKey = strtoupper( str_replace( '_', ' ', $key ) );
+				echo "<div class='grid grid-cols-2 py-[2px]'><div class='text-left text-xs font-title'>{$formattedKey}: </div><div class='text-left text-[10px] uppercase'>{$value}</div></div>";
+			}
+
+			// Handle file URLs and names
+			if ( ! empty( $project->fileUrls ) && is_array( $project->fileUrls ) ) {
+				echo "<div class='grid grid-cols-2 py-[2px]'><div class='text-left text-xs font-title'>FILES: </div><div class='text-left text-[10px] uppercase'>";
+				foreach ( $project->fileUrls as $index => $fileUrl ) {
+					$fileName = $project->fileNames[ $index ] ?? $fileUrl;
+					echo "<a href='" . htmlspecialchars( $fileUrl, ENT_QUOTES, 'UTF-8' ) . "' target='_blank'>" . htmlspecialchars( $fileName, ENT_QUOTES, 'UTF-8' ) . '</a><br>';
+				}
+				echo '</div></div>';
+			}
+
+			echo '</div>'; // Close block div
+		}
+	}
+
+
+
 	public function show_details_order( $signage, $quoteID, $subtotal, $product_line ) {
 		ob_start();
 		?>
@@ -1876,108 +1914,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 			<?php echo $product_line; ?>
 		</h4>
 		<?php
-		foreach ( $signage as $item ) {
-			?>
-
-		<div class="block">
-			<div class="flex justify-between py-2 font-title uppercase">
-				<?php echo $item->title; ?>
-				<span>$<?php echo number_format( $item->usdPrice, 2 ); ?> USD</span>
-			</div>
-
-			<div class="grid grid-cols-2 py-[2px]">
-				<div class="text-left text-xs font-title">TYPE</div>
-				<div class="text-left text-[10px] uppercase">
-					<?php echo $item->type; ?>
-				</div>
-			</div>
-
-			<div class="grid grid-cols-2 py-[2px]">
-				<div class="text-left text-xs font-title">THICKNESS</div>
-				<div class="text-left text-[10px] uppercase">
-					<?php echo $item->thickness->thickness; ?>
-				</div>
-			</div>
-
-			<?php if ( $item->type === 'logo' ) : ?>
-			<div class="grid grid-cols-2 py-[2px]">
-				<div class="text-left text-xs font-title">WIDTH</div>
-				<div class="text-left text-[10px] break-words">
-					<?php echo $item->width; ?>"
-				</div>
-			</div>
-			<div class="grid grid-cols-2 py-[2px]">
-				<div class="text-left text-xs font-title">HEIGHT</div>
-				<div class="text-left text-[10px] break-words">
-					<?php echo $item->height; ?>"
-				</div>
-			</div>
-				<?php
-				endif;
-			?>
-
-			<?php if ( $item->type === 'letters' ) : ?>
-			<div class="grid grid-cols-2 py-[2px]">
-				<div class="text-left text-xs font-title">Letter Height</div>
-				<div class="text-left text-[10px] break-words">
-					<?php echo $item->letterHeight; ?>"
-				</div>
-			</div>
-			<?php endif; ?>
-
-			<div class="grid grid-cols-2 py-[2px]">
-				<div class="text-left text-xs font-title">MOUNTING</div>
-				<div class="text-left text-[10px]"><?php echo $item->mounting; ?></div>
-			</div>
-
-			<div class="grid grid-cols-2 py-[2px]">
-				<div class="text-left text-xs font-title">WATERPROOF</div>
-				<div class="text-left text-[10px]"><?php echo $item->waterproof; ?></div>
-			</div>
-
-			<div class="grid grid-cols-2 py-[2px]">
-				<div class="text-left text-xs font-title">FINISHING</div>
-				<div class="text-left text-[10px]"><?php echo $item->finishing; ?></div>
-			</div>
-
-			<?php if ( $item->type === 'letters' ) : ?>
-			<div class="grid grid-cols-2 py-[2px]">
-				<div class="text-left text-xs font-title">COLOR</div>
-				<div class="text-left text-[10px]"><?php echo $item->color->name; ?></div>
-			</div>
-			<div class="grid grid-cols-2 py-[2px]">
-				<div class="text-left text-xs font-title">FONT</div>
-				<div class="text-left text-[10px] break-words">
-					<?php echo $item->font; ?>
-				</div>
-			</div>
-			<div class="grid grid-cols-2 py-[2px]">
-				<div class="text-left text-xs font-title">LINE TEXT</div>
-				<div class="text-left text-[10px] break-words">
-					<?php echo $item->letters; ?>
-				</div>
-			</div>
-			<?php endif; ?>
-
-			<div class="grid grid-cols-2 py-[2px]">
-				<div class="text-left text-xs font-title">COMMENTS</div>
-				<div class="text-left text-[10px] break-words">
-					<?php echo $item->comments; ?>
-				</div>
-			</div>
-			<?php if ( ! empty( $item->file ) ) : ?>
-			<div class="grid grid-cols-2 py-[2px]">
-				<div class="text-left text-xs font-title">FILE</div>
-				<div class="text-left text-[10px] break-words">
-					<?php echo $item->fileName; ?>
-				</div>
-			</div>
-			<?php endif; ?>
-		</div>
-
-
-			<?php
-		}
+		$this->show_project_details( $signage );
 		?>
 	</div>
 	<h6 class="uppercase flex">Subtotal: <span class="ml-auto"><?php echo $subtotal; ?></span></h6>
@@ -1996,108 +1933,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 			<?php echo ( get_field( 'product', $quoteID ) ? get_field( 'product', $quoteID )->post_title : 'CUSTOM PROJECT' ); ?>
 		</h4>
 		<?php
-		foreach ( $signage as $item ) {
-			?>
-
-		<div class="block">
-			<div class="flex justify-between py-2 font-title uppercase">
-				<?php echo $item->title; ?>
-				<span><?php echo get_woocommerce_currency_symbol(); ?><?php echo ( get_woocommerce_currency() === 'USD' ? number_format( $item->usdPrice, 2 ) : number_format( $item->cadPrice, 2 ) ); ?></span>
-			</div>
-
-			<div class="grid grid-cols-2 py-[2px]">
-				<div class="text-left text-xs font-title">TYPE</div>
-				<div class="text-left text-[10px] uppercase">
-					<?php echo $item->type; ?>
-				</div>
-			</div>
-
-			<div class="grid grid-cols-2 py-[2px]">
-				<div class="text-left text-xs font-title">THICKNESS</div>
-				<div class="text-left text-[10px] uppercase">
-					<?php echo $item->thickness->thickness; ?>
-				</div>
-			</div>
-
-			<?php if ( $item->type === 'logo' ) : ?>
-			<div class="grid grid-cols-2 py-[2px]">
-				<div class="text-left text-xs font-title">WIDTH</div>
-				<div class="text-left text-[10px] break-words">
-					<?php echo $item->width; ?>"
-				</div>
-			</div>
-			<div class="grid grid-cols-2 py-[2px]">
-				<div class="text-left text-xs font-title">HEIGHT</div>
-				<div class="text-left text-[10px] break-words">
-					<?php echo $item->height; ?>"
-				</div>
-			</div>
-				<?php
-				endif;
-			?>
-
-			<?php if ( $item->type === 'letters' ) : ?>
-			<div class="grid grid-cols-2 py-[2px]">
-				<div class="text-left text-xs font-title">Letter Height</div>
-				<div class="text-left text-[10px] break-words">
-					<?php echo $item->letterHeight; ?>"
-				</div>
-			</div>
-			<?php endif; ?>
-
-			<div class="grid grid-cols-2 py-[2px]">
-				<div class="text-left text-xs font-title">MOUNTING</div>
-				<div class="text-left text-[10px]"><?php echo $item->mounting; ?></div>
-			</div>
-
-			<div class="grid grid-cols-2 py-[2px]">
-				<div class="text-left text-xs font-title">WATERPROOF</div>
-				<div class="text-left text-[10px]"><?php echo $item->waterproof; ?></div>
-			</div>
-
-			<div class="grid grid-cols-2 py-[2px]">
-				<div class="text-left text-xs font-title">FINISHING</div>
-				<div class="text-left text-[10px]"><?php echo $item->finishing; ?></div>
-			</div>
-
-			<?php if ( $item->type === 'letters' ) : ?>
-			<div class="grid grid-cols-2 py-[2px]">
-				<div class="text-left text-xs font-title">COLOR</div>
-				<div class="text-left text-[10px]"><?php echo $item->color->name; ?></div>
-			</div>
-			<div class="grid grid-cols-2 py-[2px]">
-				<div class="text-left text-xs font-title">FONT</div>
-				<div class="text-left text-[10px] break-words">
-					<?php echo $item->font; ?>
-				</div>
-			</div>
-			<div class="grid grid-cols-2 py-[2px]">
-				<div class="text-left text-xs font-title">LINE TEXT</div>
-				<div class="text-left text-[10px] break-words">
-					<?php echo $item->letters; ?>
-				</div>
-			</div>
-			<?php endif; ?>
-
-			<div class="grid grid-cols-2 py-[2px]">
-				<div class="text-left text-xs font-title">COMMENTS</div>
-				<div class="text-left text-[10px] break-words">
-					<?php echo $item->comments; ?>
-				</div>
-			</div>
-			<?php if ( ! empty( $item->file ) ) : ?>
-			<div class="grid grid-cols-2 py-[2px]">
-				<div class="text-left text-xs font-title">FILE</div>
-				<div class="text-left text-[10px] break-words">
-					<?php echo $item->fileName; ?>
-				</div>
-			</div>
-			<?php endif; ?>
-		</div>
-
-
-			<?php
-		}
+		$this->show_project_details( $signage );
 		?>
 	</div>
 </div>

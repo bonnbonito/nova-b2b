@@ -61,10 +61,18 @@ $customer = new WC_Customer( $user_id );
 		if ( ! empty( $shipping_address_2 ) ) {
 			$shipping_address .= ', <br>' . $shipping_address_2;
 		}
-				$shipping_address .= ', ' . $shipping_city;
-				$shipping_address .= ',<br> ' . $shipping_state;
+		if ( ! empty( $shipping_city ) ) {
+			$shipping_address .= ', ' . $shipping_city;
+		}
+		if ( ! empty( $shipping_state ) ) {
+			$shipping_address .= ',<br> ' . $shipping_state;
+		}
+		if ( ! empty( $shipping_postcode ) ) {
 				$shipping_address .= ', ' . $shipping_postcode;
+		}
+		if ( ! empty( $shipping_country ) ) {
 				$shipping_address .= ', ' . $shipping_country;
+		}
 		?>
 
 		<div class="grid grid-cols-[180px_1fr] items-start py-1 gap-10">

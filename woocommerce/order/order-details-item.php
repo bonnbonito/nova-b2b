@@ -81,10 +81,10 @@ $woo_instance = \NOVA_B2B\Inc\Classes\Woocommerce::get_instance();
 			</div>
 		</div>
 
-			<?php $woo_instance->show_details_order( $item['signage'], $quoteID, $order->get_formatted_line_subtotal( $item ), get_the_title( $item['product_line'] ) ); ?>
-
-
 			<?php
+
+			$woo_instance->show_details_order( $item['signage'], $quoteID, $order->get_formatted_line_subtotal( $item ), get_the_title( $item['product_line'] ) );
+
 
 		} else {
 			?>

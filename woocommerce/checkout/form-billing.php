@@ -70,10 +70,20 @@ $customer = new WC_Customer( $user_id );
 		if ( ! empty( $billing_address_2 ) ) {
 			$billing_address .= ', <br>' . $billing_address_2;
 		}
+		if ( ! empty( $billing_city ) ) {
 				$billing_address .= ', ' . $billing_city;
+		}
+		if ( ! empty( $billing_state ) ) {
 				$billing_address .= ',<br> ' . $billing_state;
+		}
+
+		if ( ! empty( $billing_postcode ) ) {
 				$billing_address .= ', ' . $billing_postcode;
+		}
+
+		if ( ! empty( $billing_country ) ) {
 				$billing_address .= ', ' . $billing_country;
+		}
 		?>
 
 		<div class="grid grid-cols-[180px_1fr] items-start py-1 gap-10">
