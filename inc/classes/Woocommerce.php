@@ -551,6 +551,9 @@ class Woocommerce {
 		// Calculate the standard and expedite costs
 		$standard_cost = $cart_total * 0.075; // 7.5%
 		$expedite_cost = $cart_total * 0.155 > 29.5 ? $cart_total * 0.155 : 29.5; // 15.5%
+		if ( get_woocommerce_currency() === 'CAD' ) {
+			$expedite_cost *= 1.3;
+		}
 
 		// Assuming the method IDs are 'flat_rate', 'standard', and 'expedite'
 		$flat_rate = isset( $rates['flat_rate:4'] ) ? $rates['flat_rate:4'] : null;
