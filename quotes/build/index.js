@@ -671,19 +671,10 @@ function ModalSave({
       if (status.status === 'success') {
         localStorage.removeItem(storage);
         localStorage.removeItem(window.location.href + NovaQuote.user_id + '-folder');
-        try {
-          const projectFolder = `/NOVA-CRM/${NovaQuote.business_id}/Q-${status.generated_id}/FromClient`;
-          const createFolder = await (0,_utils_uploadFunctions__WEBPACK_IMPORTED_MODULE_3__.checkAndCreateFolder)(projectFolder);
-          if (createFolder) {
-            console.log('Folder created');
-          }
-        } catch (error) {
-          console.error('An error occurred:', error);
-        }
         if (NovaQuote.is_editting.length === 0) {
           console.log('renaming...');
-          const folderPath = `/NOVA-CRM/${NovaQuote.business_id}/${tempFolder}/FromClient`;
-          const newPath = `/NOVA-CRM/${NovaQuote.business_id}/Q-${status.generated_id}/FromClient`;
+          const folderPath = `/NOVA-CRM/${NovaQuote.business_id}/${tempFolder}`;
+          const newPath = `/NOVA-CRM/${NovaQuote.business_id}/Q-${status.generated_id}`;
           try {
             const rename = await (0,_utils_uploadFunctions__WEBPACK_IMPORTED_MODULE_3__.renameFolder)(folderPath, newPath);
             if (rename) {
@@ -709,6 +700,15 @@ function ModalSave({
             console.error('An error occurred:', error);
             alert('An error occurred, please try again.');
           }
+        }
+        try {
+          const projectFolder = `/NOVA-CRM/${NovaQuote.business_id}/Q-${status.generated_id}/FromClient`;
+          const createFolder = await (0,_utils_uploadFunctions__WEBPACK_IMPORTED_MODULE_3__.checkAndCreateFolder)(projectFolder);
+          if (createFolder) {
+            console.log('Folder created');
+          }
+        } catch (error) {
+          console.error('An error occurred:', error);
         }
         setQuoteID(status.generated_id);
         console.log(status);
@@ -3441,6 +3441,7 @@ function Letters({
     fontRef: fontRef,
     openFont: openFont,
     setOpenFont: setOpenFont,
+    setOpenColor: setOpenColor,
     handleSelectFont: handleSelectFont
   }), font == 'Custom font' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFont__WEBPACK_IMPORTED_MODULE_4__["default"], {
     setFontFilePath: setFontFilePath,
@@ -3471,7 +3472,10 @@ function Letters({
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
   }, "Color"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: `flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${color.name ? 'text-black' : 'text-[#dddddd]'}`,
-    onClick: () => setOpenColor(prev => !prev)
+    onClick: () => {
+      setOpenColor(prev => !prev);
+      setOpenFont(false);
+    }
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "rounded-full w-[18px] h-[18px] border mr-2",
     style: {
@@ -14403,7 +14407,7 @@ const renameFolder = async (oldPath, newPath) => {
   const moveParams = JSON.stringify({
     from_path: oldPath,
     to_path: newPath,
-    autorename: true
+    autorename: false
   });
   try {
     const moveResponse = await fetch(moveUrl, {

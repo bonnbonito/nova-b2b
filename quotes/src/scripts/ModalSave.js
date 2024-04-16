@@ -164,20 +164,11 @@ function ModalSave({
 					window.location.href + NovaQuote.user_id + '-folder'
 				);
 
-				try {
-					const projectFolder = `/NOVA-CRM/${NovaQuote.business_id}/Q-${status.generated_id}/FromClient`;
-					const createFolder = await checkAndCreateFolder(projectFolder);
-					if (createFolder) {
-						console.log('Folder created');
-					}
-				} catch (error) {
-					console.error('An error occurred:', error);
-				}
-
 				if (NovaQuote.is_editting.length === 0) {
 					console.log('renaming...');
-					const folderPath = `/NOVA-CRM/${NovaQuote.business_id}/${tempFolder}/FromClient`;
-					const newPath = `/NOVA-CRM/${NovaQuote.business_id}/Q-${status.generated_id}/FromClient`;
+
+					const folderPath = `/NOVA-CRM/${NovaQuote.business_id}/${tempFolder}`;
+					const newPath = `/NOVA-CRM/${NovaQuote.business_id}/Q-${status.generated_id}`;
 
 					try {
 						const rename = await renameFolder(folderPath, newPath);
@@ -213,6 +204,16 @@ function ModalSave({
 						console.error('An error occurred:', error);
 						alert('An error occurred, please try again.');
 					}
+				}
+
+				try {
+					const projectFolder = `/NOVA-CRM/${NovaQuote.business_id}/Q-${status.generated_id}/FromClient`;
+					const createFolder = await checkAndCreateFolder(projectFolder);
+					if (createFolder) {
+						console.log('Folder created');
+					}
+				} catch (error) {
+					console.error('An error occurred:', error);
 				}
 
 				setQuoteID(status.generated_id);

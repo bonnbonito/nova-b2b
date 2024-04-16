@@ -10,7 +10,7 @@ export const renameFolder = async (oldPath, newPath) => {
 	const moveParams = JSON.stringify({
 		from_path: oldPath,
 		to_path: newPath,
-		autorename: true,
+		autorename: false,
 	});
 
 	try {

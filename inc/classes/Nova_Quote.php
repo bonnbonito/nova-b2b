@@ -114,20 +114,40 @@ class Nova_Quote {
 		$partner             = get_field( 'partner', $post->ID );
 		$partner_business_id = get_field( 'business_id', 'user_' . $partner );
 		$data                = json_decode( $signage, true );
+		$show                = false;
 		$user_folder_arr     = array();
+		$font_folder_arr     = '';
 		foreach ( $data as $item ) {
-			if ( isset( $item['filePaths'] ) ) {
-				foreach ( $item['filePaths'] as $filePath ) {
-					$parts = explode( '/', $filePath );
-					if ( isset( $parts[2] ) ) {
-						$user_folder_arr[] = $parts[2];
-					}
+			foreach ( $item['filePaths'] as $filePath ) {
+				$parts = explode( '/', $filePath );
+				if ( isset( $parts[2] ) ) {
+					$user_folder_arr[] = $parts[2];
+				}
+			}
+
+			if ( isset( $item['fontFilePath'] ) ) {
+				$parts = explode( '/', $item['fontFilePath'] );
+				if ( isset( $parts[2] ) ) {
+					$font_folder_arr = $parts[2];
 				}
 			}
 		}
+
 		$user_folder_arr = array_unique( $user_folder_arr );
 
-		if ( isset( $user_folder_arr[0] ) ) {
+		if ( ! empty( $user_folder_arr ) || isset( $user_folder_arr[0] ) ) {
+
+			$old_folder = $user_folder_arr[0];
+			if ( count( $user_folder_arr ) > 0 && $old_folder !== $partner_business_id ) {
+				$show = true;
+			}
+		}
+
+		if ( $font_folder_arr && $old_folder !== $partner_business_id ) {
+			$show = true;
+		}
+
+		if ( $show ) {
 			add_meta_box(
 				'nova_update_dropbox_folder',
 				__( 'Update Dropbox Folder:' ),
@@ -145,6 +165,7 @@ class Nova_Quote {
 		$partner_business_id = get_field( 'business_id', 'user_' . $partner );
 		$data                = json_decode( $signage, true );
 		$user_folder_arr     = array();
+		$font_folder_arr     = '';
 		foreach ( $data as $item ) {
 			foreach ( $item['filePaths'] as $filePath ) {
 				$parts = explode( '/', $filePath );
@@ -152,19 +173,44 @@ class Nova_Quote {
 					$user_folder_arr[] = $parts[2];
 				}
 			}
+
+			if ( isset( $item['fontFilePath'] ) ) {
+				$parts = explode( '/', $item['fontFilePath'] );
+				if ( isset( $parts[2] ) ) {
+					$font_folder_arr = $parts[2];
+				}
+			}
 		}
+
 		$user_folder_arr = array_unique( $user_folder_arr );
-		if ( empty( $user_folder_arr ) || ! isset( $user_folder_arr[0] ) ) {
-			return;
-		}
-		$old_folder = $user_folder_arr[0];
-		$old_path   = '/NOVA-CRM/' . $old_folder . '/Q-' . $post->ID . '/FromClient';
-		$new_path   = '/NOVA-CRM/' . $partner_business_id . '/Q-' . $post->ID . '/FromClient';
-		if ( count( $user_folder_arr ) > 0 && $old_folder !== $partner_business_id ) {
-			?>
-<a class="button button-primary button-large" id="updateDropboxFolder" data-id="<?php echo $post->ID; ?>"
-    data-new="<?php echo $new_path; ?>" data-old="<?php echo $old_path; ?>">Update Dropbox Folder</a>
+
+		if ( ! empty( $user_folder_arr ) || isset( $user_folder_arr[0] ) ) {
+
+			$old_folder = $user_folder_arr[0];
+			$old_path   = '/NOVA-CRM/' . $old_folder . '/Q-' . $post->ID . '/FromClient';
+			$new_path   = '/NOVA-CRM/' . $partner_business_id . '/Q-' . $post->ID . '/FromClient';
+			if ( count( $user_folder_arr ) > 0 && $old_folder !== $partner_business_id ) {
+				?>
+<a class="button button-primary button-large mb-4 block" id="updateDropboxFolder" data-btn="updateDropbox"
+    data-id="<?php echo $post->ID; ?>" data-new="<?php echo $new_path; ?>" data-old="<?php echo $old_path; ?>"
+    style="margin-bottom: 10px;">Update
+    Dropbox Folder</a>
 <?php
+			}
+		}
+
+		if ( ! empty( $font_folder_arr ) || isset( $font_folder_arr ) ) {
+
+			$old_folder = $font_folder_arr;
+			$old_path   = '/NOVA-CRM/' . $old_folder . '/Q-' . $post->ID . '/Fonts';
+			$new_path   = '/NOVA-CRM/' . $partner_business_id . '/Q-' . $post->ID . '/Fonts';
+			if ( $font_folder_arr && $old_folder !== $partner_business_id ) {
+				?>
+<a class="button button-primary button-large block" id="updateDropboxFolderFont" data-btn="updateDropbox"
+    data-id="<?php echo $post->ID; ?>" data-new="<?php echo $new_path; ?>" data-old="<?php echo $old_path; ?>">Update
+    Dropbox Font Folder</a>
+<?php
+			}
 		}
 	}
 
@@ -1579,12 +1625,10 @@ h6 {
 		if ( ! wp_verify_nonce( $_POST['nonce'], 'quote_nonce' ) ) {
 			wp_send_json( 'Nonce Error' );
 		}
-		$id  = $_POST['post_id'];
-		$old = $_POST['old_path'];
-		$new = $_POST['new_path'];
-
-		// Get the 'signage' field data as a JSON string
-		$signage_json = get_field( 'signage', $id, false );  // Using false to get the raw value
+		$id           = $_POST['post_id'];
+		$old          = $_POST['old_path'];
+		$new          = $_POST['new_path'];
+		$signage_json = $_POST['signage'];
 
 		// Replace old path with new path in the JSON string
 		$new_signage_json = str_replace( $old, $new, $signage_json );
@@ -1593,7 +1637,7 @@ h6 {
 		update_field( 'signage', $new_signage_json, $id );
 
 		$status['code']    = 2;
-		$status['signage'] = $new_signage;
+		$status['signage'] = $new_signage_json;
 		$status['post']    = $_POST;
 
 		wp_send_json( $status );

@@ -7,48 +7,62 @@ const finalPriceInput = document.querySelector(
 const exchangeRate = 1.3;
 
 async function updateDropboxFolder() {
-	const updateDropboxFolderButton = document.getElementById(
-		'updateDropboxFolder'
+	const updateDropboxFolderButtons = document.querySelectorAll(
+		'a[data-btn="updateDropbox"]'
 	);
-	if (updateDropboxFolderButton) {
-		updateDropboxFolderButton.addEventListener('click', async (e) => {
-			// Added async here
+
+	updateDropboxFolderButtons.forEach((button) => {
+		button.addEventListener('click', async (e) => {
 			e.preventDefault();
-			updateDropboxFolderButton.disabled = true;
-			const oldPath = updateDropboxFolderButton.dataset.old;
-			const newPath = updateDropboxFolderButton.dataset.new;
-			const postID = updateDropboxFolderButton.dataset.id;
+
+			button.textContent = 'Please wait'; // Change text content of each button
+			// Disable all buttons and change text to "Please wait"
+			updateDropboxFolderButtons.forEach((btn) => {
+				btn.disabled = true;
+			});
+
+			const oldPath = button.dataset.old;
+			const newPath = button.dataset.new;
+			const postID = button.dataset.id;
 			console.log(oldPath, newPath);
 
-			const status = await renameDropboxFolder(oldPath, newPath); // Added await here
+			try {
+				const status = await renameDropboxFolder(oldPath, newPath);
 
-			if (status) {
-				const formData = new FormData();
-				formData.append('action', 'update_signage');
-				formData.append('nonce', QuoteAdmin.nonce);
-				formData.append('old_path', oldPath);
-				formData.append('new_path', newPath);
-				formData.append('post_id', postID);
+				if (status) {
+					const formData = new FormData();
+					formData.append('action', 'update_signage');
+					formData.append('nonce', QuoteAdmin.nonce);
+					formData.append('old_path', oldPath);
+					formData.append('new_path', newPath);
+					formData.append('post_id', postID);
+					formData.append('signage', QuoteAdmin.signage);
 
-				fetch(QuoteAdmin.ajax_url, {
-					method: 'POST',
-					credentials: 'same-origin',
-					headers: {
-						'Cache-Control': 'no-cache',
-					},
-					body: formData,
-				})
-					.then((response) => response.json())
-					.then((data) => {
-						console.log(data);
-						if (data.code == 2) {
-							location.reload();
-						}
-					})
-					.catch((error) => console.error('Error:', error));
+					const response = await fetch(QuoteAdmin.ajax_url, {
+						method: 'POST',
+						credentials: 'same-origin',
+						headers: {
+							'Cache-Control': 'no-cache',
+						},
+						body: formData,
+					});
+					const data = await response.json();
+					console.log(data);
+					if (data.code == 2) {
+						location.reload(); // Uncomment to reload the page if needed
+					}
+				}
+			} catch (error) {
+				console.error('Error:', error);
+			} finally {
+				// Re-enable all buttons and restore original text after operation
+				updateDropboxFolderButtons.forEach((btn) => {
+					btn.disabled = false;
+					btn.textContent = 'Update Dropbox'; // Change back to original text or relevant text
+				});
 			}
 		});
-	}
+	});
 }
 
 async function renameDropboxFolder(oldPath, newPath) {
@@ -328,7 +342,7 @@ function getSignageDetailFields(sign) {
 		{ label: 'FILE PATH', value: sign.filePath },
 		{ label: 'FONT FILE PATH', value: sign.fontFilePath },
 		{
-			label: 'View File',
+			label: 'VIEW CUSTOM FONT',
 			value: sign.fontFileName
 				? `<a href="${sign.fontFileUrl}" target="_blank">${sign.fontFileName}</a>`
 				: '',

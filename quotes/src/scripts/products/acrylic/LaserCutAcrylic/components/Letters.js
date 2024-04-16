@@ -525,6 +525,7 @@ export default function Letters({ item }) {
 					fontRef={fontRef}
 					openFont={openFont}
 					setOpenFont={setOpenFont}
+					setOpenColor={setOpenColor}
 					handleSelectFont={handleSelectFont}
 				/>
 
@@ -570,7 +571,10 @@ export default function Letters({ item }) {
 						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
 							color.name ? 'text-black' : 'text-[#dddddd]'
 						}`}
-						onClick={() => setOpenColor((prev) => !prev)}
+						onClick={() => {
+							setOpenColor((prev) => !prev);
+							setOpenFont(false);
+						}}
 					>
 						<span
 							className="rounded-full w-[18px] h-[18px] border mr-2"
