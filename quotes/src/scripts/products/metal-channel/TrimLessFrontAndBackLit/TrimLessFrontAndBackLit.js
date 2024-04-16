@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import Sidebar from '../../../Sidebar';
 import Signage from '../../../Signage';
 import { PlusIcon } from '../../../svg/Icons';
-import { SignageCount } from '../../../utils/QuoteFunctions';
+
 import Letters from './components/Letters';
 
 export const QuoteContext = createContext(null);
@@ -195,7 +195,7 @@ export default function TrimLessFrontAndBackLit() {
 					))}
 
 					<div className="flex gap-2">
-						{SignageCount(signage, 'letters') < 10 && (
+						{signage.length < 10 && (
 							<button
 								className="flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white"
 								onClick={() => addSignage('letters')}

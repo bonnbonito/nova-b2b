@@ -78,7 +78,7 @@ export default function Project({ item, index }) {
 					>
 						<CollapseIcon />
 					</div>
-					{SignageCount(signage, item.type) < 5 && (
+					{signage.length < 5 && (
 						<div
 							className="cursor-pointer"
 							onClick={() => duplicateSignage(item, index)}
