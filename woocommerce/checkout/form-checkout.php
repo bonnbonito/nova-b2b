@@ -36,7 +36,7 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 
 		<?php do_action( 'woocommerce_checkout_before_customer_details' ); ?>
 
-	<div class="grid grid-cols-1 md:grid-cols-2 gap-x-10" id="customer_details">
+	<div class="grid grid-cols-1 md:grid-cols-2 gap-x-10 mt-4" id="customer_details">
 		<div class="">
 			<?php do_action( 'woocommerce_checkout_billing' ); ?>
 		</div>

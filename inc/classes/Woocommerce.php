@@ -613,7 +613,7 @@ class Woocommerce {
 		$fields['shipping_pst'] = array(
 			'label'    => __( 'PST', 'woocommerce' ), // Change the label to something appropriate
 			'required' => false, // Not required by default
-			'class'    => array( 'form-row-wide', 'custom-field-bc' ), // Custom class for JavaScript
+			'class'    => array( 'form-row-wide', 'custom-field-bc', 'hide-if-not-canada' ), // Custom class for JavaScript
 			'priority' => 105, // Adjust the priority to position it right after the state field
 		);
 

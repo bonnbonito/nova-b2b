@@ -176,6 +176,44 @@ document.addEventListener('DOMContentLoaded', () => {
 			document.querySelector(showing)?.classList.remove('hidden');
 			document.querySelector(hide)?.classList.add('hidden');
 		});
-	})
+	});
+
+});
+
+jQuery(document).ready(function($) {
+	const togglePSTField = () => {
+		const countryField = document.getElementById('shipping_country');
+		const stateField = document.getElementById('shipping_state');
+		const shippingPST = document.getElementById('shipping_pst');
+		const shippingPSTField = document.getElementById('shipping_pst_field');
+		const pstField = document.querySelector('.hide-if-not-canada');
+
+
+		const country = countryField ? countryField.value : '';
+		const state = stateField ? stateField.value : '';
+		if (country === 'CA') {
+			pstField.style.display = 'block';
+			if (state === 'BC') {
+				shippingPST.required = true;
+				shippingPSTField.querySelector('label').innerHTML =
+					'PST<abbr class="required" title="required">*</abbr>';
+				if (shippingPST.value === '') {
+					shippingPSTField.classList.add('woocommerce-invalid');
+				} else {
+					shippingPSTField.classList.remove('woocommerce-invalid');
+				}
+			} else {
+				shippingPST.required = false;
+				shippingPSTField.classList.remove('woocommerce-invalid');
+				shippingPSTField.querySelector('label').innerHTML = 'PST (Optional)';
+			}
+		} else {
+			pstField.style.display = 'none';
+			shippingPST.required = false;
+		}
+	};
+	$(document.body).on('updated_checkout', function() {
+		togglePSTField();
+	});
 });
 </script>
