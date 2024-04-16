@@ -20,7 +20,7 @@ $final_price = $price_with_shipping ? ( get_woocommerce_currency() === 'USD' ? $
 
 ?>
 <div id="quote-<?php the_ID(); ?>" class="quote-row rounded border p-4 mb-4 text-xs uppercase relative pr-8">
-	<div class="block flex-wrap gap-4 lg:grid lg:grid-cols-[180px_1fr_375px] tracking-[1px]">
+	<div class="block flex-wrap gap-4 lg:grid lg:grid-cols-[180px_1fr_375px] tracking-[1px] items-center">
 		<div class="flex flex-col gap-1 mb-1 lg:mb-0">
 			<div class="block"><span class="font-title text-sm">QUOTE ID:</span>
 				<?php echo 'Q-' . str_pad( get_the_ID(), 4, '0', STR_PAD_LEFT ); ?> <div
