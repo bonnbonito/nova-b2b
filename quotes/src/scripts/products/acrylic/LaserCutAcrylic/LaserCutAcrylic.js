@@ -88,6 +88,8 @@ export default function LaserCutAcrylic() {
 		fileUrls: [],
 		files: [],
 		sets: 1,
+		color: { name: '', color: '' },
+		customColor: '',
 		product: NovaQuote.product,
 	};
 

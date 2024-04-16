@@ -1,6 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
+import useOutsideClick from '../../../../utils/ClickOutside';
 import convert_json from '../../../../utils/ConvertJson';
 import { getLogoPricingTablebyThickness } from '../../../../utils/Pricing';
 import {
@@ -10,6 +11,7 @@ import {
 	thicknessOptions,
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
+import { colorOptions } from '../ColorOptions';
 import { QuoteContext } from '../LaserCutAcrylic';
 
 const NovaSingleOptions = NovaQuote.single_quote_options;
@@ -38,6 +40,12 @@ export default function Logo({ item }) {
 	const [files, setFiles] = useState(item.files);
 
 	const [sets, setSets] = useState(item.sets);
+
+	const [color, setColor] = useState(item.color);
+	const [openColor, setOpenColor] = useState(false);
+	const [customColor, setCustomColor] = useState(item.customColor);
+
+	const colorRef = useRef(null);
 
 	const [selectedFinishing, setSelectedFinishing] = useState(item.finishing);
 	const finishingOptions = NovaSingleOptions.finishing_options;
@@ -142,6 +150,8 @@ export default function Logo({ item }) {
 					filePaths: filePaths,
 					fileUrls: fileUrls,
 					sets: sets,
+					color: color,
+					customColor: customColor,
 				};
 			} else {
 				return sign;
@@ -167,6 +177,8 @@ export default function Logo({ item }) {
 		files,
 		sets,
 		filePaths,
+		color,
+		customColor,
 	]);
 
 	const logoPricingObject = NovaQuote.logo_pricing_tables;
@@ -199,6 +211,13 @@ export default function Logo({ item }) {
 				let total = (computed * multiplier).toFixed(2);
 				total *= selectedFinishing === 'Gloss' ? 1.1 : 1;
 
+				if (color?.name === 'Clear') {
+					total *= 0.9;
+				}
+				if (color?.name === 'Frosted Clear') {
+					total *= 0.95;
+				}
+
 				total *= sets;
 
 				setUsdPrice(parseFloat(total).toFixed(2));
@@ -211,7 +230,15 @@ export default function Logo({ item }) {
 			setUsdPrice(0);
 			setCadPrice(0);
 		}
-	}, [width, height, selectedThickness, waterproof, selectedFinishing, sets]);
+	}, [
+		width,
+		height,
+		selectedThickness,
+		waterproof,
+		selectedFinishing,
+		sets,
+		color,
+	]);
 
 	const checkAndAddMissingFields = () => {
 		const missingFields = [];
@@ -222,6 +249,10 @@ export default function Logo({ item }) {
 		if (!waterproof) missingFields.push('Select Waterproof');
 		if (!selectedMounting) missingFields.push('Select Mounting');
 		if (!selectedFinishing) missingFields.push('Select Finishing');
+		if (!color.name) missingFields.push('Select Color');
+		if (color?.name === 'Custom Color' && !customColor) {
+			missingFields.push('Add the Pantone color code of your custom color.');
+		}
 		if (!sets) missingFields.push('Select Quantity');
 		if (!fileUrls || fileUrls.length === 0)
 			missingFields.push('Upload a PDF/AI File');
@@ -276,6 +307,15 @@ export default function Logo({ item }) {
 		sets,
 	]);
 
+	useOutsideClick([colorRef], () => {
+		if (!openColor) return;
+		setOpenColor(false);
+	});
+
+	useEffect(() => {
+		color?.name != 'Custom Color' && setCustomColor('');
+	}, [color]);
+
 	return (
 		<>
 			<div className="quote-grid mb-6">
@@ -306,6 +346,57 @@ export default function Logo({ item }) {
 					onChange={(e) => setHeight(e.target.value)}
 					options={maxWidthOptions}
 				/>
+
+				<div className="px-[1px] relative" ref={colorRef}>
+					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+						Color
+					</label>
+					<div
+						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
+							color.name ? 'text-black' : 'text-[#dddddd]'
+						}`}
+						onClick={() => {
+							setOpenColor((prev) => !prev);
+						}}
+					>
+						<span
+							className="rounded-full w-[18px] h-[18px] border mr-2"
+							style={{
+								background:
+									color.name == 'Custom Color'
+										? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
+										: color.color,
+							}}
+						></span>
+						{color.name === '' ? 'CHOOSE OPTION' : color.name}
+					</div>
+					{openColor && (
+						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
+							{colorOptions.map((color) => {
+								return (
+									<div
+										className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
+										onClick={() => {
+											setColor(color);
+											setOpenColor(false);
+										}}
+									>
+										<span
+											className="w-[18px] h-[18px] inline-block rounded-full border"
+											style={{
+												background:
+													color.name == 'Custom Color'
+														? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
+														: color.color,
+											}}
+										></span>
+										{color.name}
+									</div>
+								);
+							})}
+						</div>
+					)}
+				</div>
 
 				<Dropdown
 					title="Environment"
@@ -358,6 +449,20 @@ export default function Logo({ item }) {
 			</div>
 
 			<div className="quote-grid">
+				{color?.name == 'Custom Color' && (
+					<div className="px-[1px] col-span-4">
+						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+							Custom Color
+						</label>
+						<input
+							className="w-full py-4 px-2 border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400"
+							type="text"
+							value={customColor}
+							onChange={(e) => setCustomColor(e.target.value)}
+							placeholder="ADD THE PANTONE COLOR CODE"
+						/>
+					</div>
+				)}
 				<div className="px-[1px] col-span-4">
 					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
 						COMMENTS

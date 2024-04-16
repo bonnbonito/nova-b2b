@@ -2930,6 +2930,11 @@ function LaserCutAcrylic() {
     fileUrls: [],
     files: [],
     sets: 1,
+    color: {
+      name: '',
+      color: ''
+    },
+    customColor: '',
     product: NovaQuote.product
   };
   function addSignage(type) {
@@ -3578,10 +3583,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _Dropdown__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../Dropdown */ "./src/scripts/Dropdown.js");
 /* harmony import */ var _UploadFiles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../UploadFiles */ "./src/scripts/UploadFiles.js");
-/* harmony import */ var _utils_ConvertJson__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../utils/ConvertJson */ "./src/scripts/utils/ConvertJson.js");
-/* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
-/* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
-/* harmony import */ var _LaserCutAcrylic__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../LaserCutAcrylic */ "./src/scripts/products/acrylic/LaserCutAcrylic/LaserCutAcrylic.js");
+/* harmony import */ var _utils_ClickOutside__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../utils/ClickOutside */ "./src/scripts/utils/ClickOutside.js");
+/* harmony import */ var _utils_ConvertJson__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../utils/ConvertJson */ "./src/scripts/utils/ConvertJson.js");
+/* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
+/* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
+/* harmony import */ var _ColorOptions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../ColorOptions */ "./src/scripts/products/acrylic/LaserCutAcrylic/ColorOptions.js");
+/* harmony import */ var _LaserCutAcrylic__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../LaserCutAcrylic */ "./src/scripts/products/acrylic/LaserCutAcrylic/LaserCutAcrylic.js");
+
+
 
 
 
@@ -3602,7 +3611,7 @@ function Logo({
     tempFolder,
     isLoading,
     setIsLoading
-  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_LaserCutAcrylic__WEBPACK_IMPORTED_MODULE_6__.QuoteContext);
+  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_LaserCutAcrylic__WEBPACK_IMPORTED_MODULE_8__.QuoteContext);
   const [selectedMounting, setSelectedMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.mounting);
   const [selectedThickness, setSelectedThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.thickness);
   const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.width);
@@ -3615,6 +3624,10 @@ function Logo({
   const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.filePaths);
   const [files, setFiles] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.files);
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.sets);
+  const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.color);
+  const [openColor, setOpenColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const [customColor, setCustomColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.customColor);
+  const colorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const [selectedFinishing, setSelectedFinishing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.finishing);
   const finishingOptions = NovaSingleOptions.finishing_options;
   const [maxWidthOptions, setMaxWidthOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(Array.from({
@@ -3628,13 +3641,13 @@ function Logo({
   }));
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.comments);
   const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.waterproof);
-  const [mountingOptions, setMountingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.mountingDefaultOptions);
+  const [mountingOptions, setMountingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.mountingDefaultOptions);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (!selectedThickness || selectedThickness.value === undefined) return;
     const {
       newMountingOptions,
       updatedSelectedMounting
-    } = (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.calculateMountingOptions)(selectedThickness, selectedMounting, waterproof);
+    } = (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.calculateMountingOptions)(selectedThickness, selectedMounting, waterproof);
     setSelectedMounting(updatedSelectedMounting); // Update the selected mounting if needed
     setMountingOptions(newMountingOptions);
     setMaxWidthOptions(() => Array.from({
@@ -3652,7 +3665,7 @@ function Logo({
   }
   const handleOnChangeThickness = e => {
     const target = e.target.value;
-    const selected = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.thicknessOptions.filter(option => option.value === target);
+    const selected = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.thicknessOptions.filter(option => option.value === target);
     setSelectedThickness(() => selected[0]);
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
@@ -3692,7 +3705,9 @@ function Logo({
           fileNames: fileNames,
           filePaths: filePaths,
           fileUrls: fileUrls,
-          sets: sets
+          sets: sets,
+          color: color,
+          customColor: customColor
         };
       } else {
         return sign;
@@ -3702,13 +3717,13 @@ function Logo({
   }
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-  }, [comments, selectedThickness, selectedMounting, waterproof, width, height, usdPrice, cadPrice, fileUrls, fileNames, selectedFinishing, files, sets, filePaths]);
+  }, [comments, selectedThickness, selectedMounting, waterproof, width, height, usdPrice, cadPrice, fileUrls, fileNames, selectedFinishing, files, sets, filePaths, color, customColor]);
   const logoPricingObject = NovaQuote.logo_pricing_tables;
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (width && height && selectedThickness && waterproof && logoPricingObject !== null) {
-      const logoPricing = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_4__.getLogoPricingTablebyThickness)(`${selectedThickness.value}mm`, logoPricingObject);
+      const logoPricing = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_5__.getLogoPricingTablebyThickness)(`${selectedThickness.value}mm`, logoPricingObject);
       if (logoPricing !== undefined) {
-        const logoPricingTable = logoPricing !== undefined ? (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_3__["default"])(logoPricing) : [];
+        const logoPricingTable = logoPricing !== undefined ? (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_4__["default"])(logoPricing) : [];
         const computed = logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
         let multiplier = 0;
         if (waterproof) {
@@ -3716,6 +3731,12 @@ function Logo({
         }
         let total = (computed * multiplier).toFixed(2);
         total *= selectedFinishing === 'Gloss' ? 1.1 : 1;
+        if (color?.name === 'Clear') {
+          total *= 0.9;
+        }
+        if (color?.name === 'Frosted Clear') {
+          total *= 0.95;
+        }
         total *= sets;
         setUsdPrice(parseFloat(total).toFixed(2));
         setCadPrice((total * parseFloat(exchangeRate)).toFixed(2));
@@ -3727,7 +3748,7 @@ function Logo({
       setUsdPrice(0);
       setCadPrice(0);
     }
-  }, [width, height, selectedThickness, waterproof, selectedFinishing, sets]);
+  }, [width, height, selectedThickness, waterproof, selectedFinishing, sets, color]);
   const checkAndAddMissingFields = () => {
     const missingFields = [];
     if (!selectedThickness) missingFields.push('Select Acrylic Thickness');
@@ -3736,6 +3757,10 @@ function Logo({
     if (!waterproof) missingFields.push('Select Waterproof');
     if (!selectedMounting) missingFields.push('Select Mounting');
     if (!selectedFinishing) missingFields.push('Select Finishing');
+    if (!color.name) missingFields.push('Select Color');
+    if (color?.name === 'Custom Color' && !customColor) {
+      missingFields.push('Add the Pantone color code of your custom color.');
+    }
     if (!sets) missingFields.push('Select Quantity');
     if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
     if (missingFields.length > 0) {
@@ -3767,13 +3792,20 @@ function Logo({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
   }, [width, height, selectedThickness, selectedMounting, waterproof, fileUrls, fileNames, filePaths, files, selectedFinishing, sets]);
+  (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_3__["default"])([colorRef], () => {
+    if (!openColor) return;
+    setOpenColor(false);
+  });
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    color?.name != 'Custom Color' && setCustomColor('');
+  }, [color]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Thickness",
     value: item.thickness?.value,
     onChange: handleOnChangeThickness,
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.thicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.thicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: thickness.value,
       selected: thickness === item.thickness
     }, thickness.thickness))
@@ -3787,10 +3819,40 @@ function Logo({
     value: height,
     onChange: e => setHeight(e.target.value),
     options: maxWidthOptions
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "px-[1px] relative",
+    ref: colorRef
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
+  }, "Color"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: `flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${color.name ? 'text-black' : 'text-[#dddddd]'}`,
+    onClick: () => {
+      setOpenColor(prev => !prev);
+    }
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "rounded-full w-[18px] h-[18px] border mr-2",
+    style: {
+      background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
+    }
+  }), color.name === '' ? 'CHOOSE OPTION' : color.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+  }, _ColorOptions__WEBPACK_IMPORTED_MODULE_7__.colorOptions.map(color => {
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
+      onClick: () => {
+        setColor(color);
+        setOpenColor(false);
+      }
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: "w-[18px] h-[18px] inline-block rounded-full border",
+      style: {
+        background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
+      }
+    }), color.name);
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Environment",
     onChange: e => setWaterproof(e.target.value),
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
       selected: option.option == item.waterproof
     }, option.option)),
@@ -3814,11 +3876,21 @@ function Logo({
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.setOptions,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.setOptions,
     value: sets
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, color?.name == 'Custom Color' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "px-[1px] col-span-4"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
+  }, "Custom Color"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    className: "w-full py-4 px-2 border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400",
+    type: "text",
+    value: customColor,
+    onChange: e => setCustomColor(e.target.value),
+    placeholder: "ADD THE PANTONE COLOR CODE"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "px-[1px] col-span-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
