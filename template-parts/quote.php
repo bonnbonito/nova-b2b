@@ -20,26 +20,26 @@ $final_price = $price_with_shipping ? ( get_woocommerce_currency() === 'USD' ? $
 
 ?>
 <div id="quote-<?php the_ID(); ?>" class="quote-row rounded border p-4 mb-4 text-xs uppercase relative pr-8">
-	<div class="block flex-wrap gap-4 md:grid md:grid-cols-[200px_1fr_2fr]">
-		<div class="basis-[200px] grow">
+	<div class="block flex-wrap gap-4 lg:grid lg:grid-cols-[180px_1fr_375px] tracking-[1px]">
+		<div class="flex flex-col gap-1 mb-1 lg:mb-0">
 			<div class="block"><span class="font-title text-sm">QUOTE ID:</span>
 				<?php echo 'Q-' . str_pad( get_the_ID(), 4, '0', STR_PAD_LEFT ); ?> <div
-					class="text-[16px] self-center font-title ml-auto float-right block md:hidden md-hidden">
+					class="text-[16px] self-center font-title ml-auto float-right block lg:hidden">
 					<?php echo get_woocommerce_currency_symbol() . number_format( (float) $final_price, 2 ); ?>
 				</div>
 			</div>
 			<div><span class="font-title text-sm">DATE:</span> <?php echo get_the_date(); ?></div>
 
 		</div>
-		<div class="grow-[2] mb-4 md:mb-0">
+		<div class="flex flex-col gap-1">
 			<div class="block"><span class="font-title text-sm">NAME:</span>
 				<?php echo get_field( 'frontend_title' ); ?>
 			</div>
 			<div><span class="font-title text-sm">PRODUCT:</span>
 				<?php echo ( get_field( 'product' ) ? get_field( 'product' )->post_title : 'CUSTOM PROJECT' ); ?></div>
 		</div>
-		<div class="flex grow-[2] gap-2 justify-end font-title items-center">
-			<div class="text-[16px] self-center hidden md-block">
+		<div class="flex grow-[2] gap-2 justify-end font-title items-center text-center">
+			<div class="text-[16px] self-center hidden lg:block">
 				<?php echo get_woocommerce_currency_symbol() . number_format( (float) $final_price, 2 ); ?>
 			</div>
 			<?php if ( get_field( 'quote_status' )['value'] == 'draft' ) : ?>
@@ -112,8 +112,8 @@ $final_price = $price_with_shipping ? ( get_woocommerce_currency() === 'USD' ? $
 			?>
 		</div>
 	</div>
-	<a class="cursor-pointer absolute top-4 md:top-7 right-3" data-type="delete" data-id="<?php echo get_the_ID(); ?>"
-		title="Delete Q-<?php echo get_the_ID(); ?>">
+	<a class="cursor-pointer absolute top-4 lg:top-[50%] lg:-translate-y-[50%] right-3" data-type="delete"
+		data-id="<?php echo get_the_ID(); ?>" title="Delete Q-<?php echo get_the_ID(); ?>">
 		<svg width=" 15px" height="15px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 			<path
 				d="M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M18 6V16.2C18 17.8802 18 18.7202 17.673 19.362C17.3854 19.9265 16.9265 20.3854 16.362 20.673C15.7202 21 14.8802 21 13.2 21H10.8C9.11984 21 8.27976 21 7.63803 20.673C7.07354 20.3854 6.6146 19.9265 6.32698 19.362C6 18.7202 6 17.8802 6 16.2V6M14 10V17M10 10V17"
