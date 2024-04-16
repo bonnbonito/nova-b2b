@@ -84,7 +84,7 @@ $customer = new WC_Customer( $user_id );
 		<?php
 		$shipping_pst = get_user_meta( $user_id, 'shipping_pst', true );
 
-		if ( $shipping_pst ) :
+		if ( $shipping_pst && $shipping_country == 'CA' ) :
 			?>
 		<div class="grid grid-cols-[180px_1fr] items-center py-1 gap-10">
 			<h6 class="uppercase tracking-[1.6px] mb-0">PST:</h6>
