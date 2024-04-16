@@ -93,6 +93,19 @@ class Woocommerce {
 		add_filter( 'woocommerce_order_actions', array( $this, 'remove_send_invoice' ), 10, 2 );
 		add_filter( 'woocommerce_admin_order_actions', array( $this, 'remove_recalculate' ), 10, 2 );
 		add_filter( 'wcumcs_custom_item_price_final', array( $this, 'change_to_custom_price' ), 9999999, 4 );
+		add_filter( 'woocommerce_checkout_fields', array( $this, 'require_pst_on_bc' ) );
+	}
+
+	public function require_pst_on_bc( $fields ) {
+
+		$shipping_country = WC()->customer->get_shipping_country();
+		$shipping_state   = WC()->customer->get_shipping_state();
+
+		if ( 'CA' === $shipping_country && 'BC' === $shipping_state ) {
+			$fields['shipping']['shipping_pst']['required'] = true;
+		}
+
+		return $fields;
 	}
 
 
