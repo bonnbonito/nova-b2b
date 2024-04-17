@@ -9,6 +9,8 @@ import convert_json from '../../../../utils/ConvertJson';
 import { getLetterPricingTableByTitle } from '../../../../utils/Pricing';
 import {
 	setOptions,
+	spacerStandoffDefaultOptions,
+	studLengthOptions,
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
 import {
@@ -17,15 +19,11 @@ import {
 	finishingOptions,
 	ledLightColors,
 	mountingDefaultOptions,
-	spacerStandoffDefaultOptions,
-	studLengthOptions,
 } from '../../metalChannelOptions';
 
 import { metalFinishOptions } from '../../../metal/metalOptions';
 
 import { QuoteContext } from '../TrimLessBackLit';
-
-const NovaOptions = NovaQuote.quote_options;
 
 const exchangeRate = 1.3;
 
@@ -235,49 +233,6 @@ export default function Letters({ item }) {
 		setSpacerStandoffDistance(e.target.value);
 	};
 
-	const handleonChangeStudLength = (e) => {
-		const target = e.target.value;
-		setStudLength(() => target);
-
-		if (target === '1.5"') {
-			setSpacerStandoffOptions(() => [
-				{
-					value: '0.5"',
-				},
-				{
-					value: '1"',
-				},
-			]);
-			if (spacerStandoffDistance !== '1"') {
-				setSpacerStandoffDistance('');
-			}
-		} else if (target === '3.2"' || target === '4"') {
-			setSpacerStandoffOptions(() => [
-				{
-					value: '0.5"',
-				},
-				{
-					value: '1"',
-				},
-				{
-					value: '1.5"',
-				},
-				{
-					value: '2"',
-				},
-			]);
-			if (spacerStandoffDistance === '3"' || spacerStandoffDistance === '4"') {
-				setSpacerStandoffDistance('');
-			}
-		} else {
-			setSpacerStandoffOptions(() => spacerStandoffDefaultOptions);
-		}
-
-		if (target === '') {
-			setSpacerStandoffDistance('');
-		}
-	};
-
 	const handleOnChangeDepth = (e) => {
 		const target = e.target.value;
 		const selected = depthOptions.filter((option) => option.value === target);
@@ -301,6 +256,34 @@ export default function Letters({ item }) {
 
 	const handleOnChangeLetterHeight = (e) => {
 		setSelectedLetterHeight(e.target.value);
+	};
+
+	const handleonChangeStudLength = (e) => {
+		const target = e.target.value;
+		setStudLength(target); // Directly set the value without a callback
+
+		if (target === '1.5"') {
+			setSpacerStandoffOptions([{ value: '0.5"' }, { value: '1"' }]);
+			if (!['0.5"', '1"'].includes(spacerStandoffDistance)) {
+				setSpacerStandoffDistance(''); // Reset if not one of the valid options
+			}
+		} else if (['3.2"', '4"'].includes(target)) {
+			setSpacerStandoffOptions([
+				{ value: '0.5"' },
+				{ value: '1"' },
+				{ value: '1.5"' },
+				{ value: '2"' },
+			]);
+			if (['3"', '4"'].includes(spacerStandoffDistance)) {
+				setSpacerStandoffDistance(''); // Reset if the distance is invalid for these options
+			}
+		} else {
+			setSpacerStandoffOptions(spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
+		}
+
+		if (target === '') {
+			setSpacerStandoffDistance(''); // Always reset if the target is empty
+		}
 	};
 
 	useEffect(() => {
@@ -508,6 +491,16 @@ export default function Letters({ item }) {
 					totalLetterPrice += letterPrice;
 				});
 
+				console.log(totalLetterPrice);
+
+				if (mounting === 'Stud with spacer') {
+					let spacer =
+						totalLetterPrice * 0.03 > 35 ? 35 : totalLetterPrice * 0.03;
+					spacer = parseFloat(spacer.toFixed(2));
+
+					totalLetterPrice += spacer;
+				}
+
 				totalLetterPrice *= sets;
 
 				setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
@@ -530,6 +523,7 @@ export default function Letters({ item }) {
 		acrylicReveal,
 		metalFinish,
 		sets,
+		mounting,
 	]);
 
 	if (selectedFinishing === 'Painted') {

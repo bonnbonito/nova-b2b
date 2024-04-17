@@ -102,6 +102,12 @@ const mountingDefaultOptions = [
 	{
 		mounting_option: 'Pad - Combination All',
 	},
+	{
+		mounting_option: 'Stud Mount',
+	},
+	{
+		mounting_option: 'Stud with spacer',
+	},
 ];
 
 const metalInstallationOptions = [
@@ -110,6 +116,12 @@ const metalInstallationOptions = [
 	},
 	{
 		option: 'Flush Stud',
+	},
+	{
+		option: 'Stud Mount',
+	},
+	{
+		option: 'Stud with spacer',
 	},
 ];
 
@@ -166,6 +178,42 @@ const setOptions = Array.from(
 	}
 );
 
+const spacerStandoffDefaultOptions = [
+	{
+		value: '0.5"',
+	},
+	{
+		value: '1"',
+	},
+	{
+		value: '1.5"',
+	},
+	{
+		value: '2"',
+	},
+	{
+		value: '3"',
+	},
+	{
+		value: '4"',
+	},
+];
+
+const studLengthOptions = [
+	{
+		value: '1.5"',
+	},
+	{
+		value: '3.2"',
+	},
+	{
+		value: '4"',
+	},
+	{
+		value: '6"',
+	},
+];
+
 export {
 	calculateMountingOptions,
 	defaultFinishOptions,
@@ -175,6 +223,8 @@ export {
 	mountingDefaultOptions,
 	piecesOptions,
 	setOptions,
+	spacerStandoffDefaultOptions,
+	studLengthOptions,
 	thicknessOptions,
 	waterProofOptions,
 };

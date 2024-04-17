@@ -51,7 +51,10 @@ export default function LaserCutAluminum() {
 					finishing: '',
 					customFont: '',
 					customColor: '',
+					studLength: '',
+					spacerStandoffDistance: '',
 					sets: 1,
+					mounting: '',
 					product: NovaQuote.product,
 				},
 			]);
@@ -87,6 +90,9 @@ export default function LaserCutAluminum() {
 		product: NovaQuote.product,
 		customFont: '',
 		customColor: '',
+		studLength: '',
+		spacerStandoffDistance: '',
+		mounting: '',
 		sets: 1,
 	};
 

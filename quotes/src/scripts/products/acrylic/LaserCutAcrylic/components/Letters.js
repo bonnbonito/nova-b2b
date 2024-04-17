@@ -8,6 +8,8 @@ import convert_json from '../../../../utils/ConvertJson';
 import {
 	mountingDefaultOptions,
 	setOptions,
+	spacerStandoffDefaultOptions,
+	studLengthOptions,
 	thicknessOptions,
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
@@ -77,7 +79,16 @@ export default function Letters({ item }) {
 	const [lettersHeight, setLettersHeight] = useState(
 		NovaOptions.letters_height
 	);
+
 	const [selectedMounting, setSelectedMounting] = useState(item.mounting);
+	const [studLength, setStudLength] = useState(item.studLength);
+	const [spacerStandoffOptions, setSpacerStandoffOptions] = useState(
+		spacerStandoffDefaultOptions
+	);
+
+	const [spacerStandoffDistance, setSpacerStandoffDistance] = useState(
+		item.spacerStandoffDistance
+	);
 
 	const [sets, setSets] = useState(item.sets);
 
@@ -181,6 +192,8 @@ export default function Letters({ item }) {
 					customFont: customFont,
 					customColor: customColor,
 					sets: sets,
+					studLength: studLength,
+					spacerStandoffDistance: spacerStandoffDistance,
 				};
 			} else {
 				return sign;
@@ -199,7 +212,15 @@ export default function Letters({ item }) {
 		setSets(e.target.value);
 	};
 
-	const handleonChangeMount = (e) => setSelectedMounting(e.target.value);
+	const handleOnChangeMount = (e) => {
+		const target = e.target.value;
+		setSelectedMounting(target);
+
+		if (target !== 'Stud with spacer') {
+			setStudLength('');
+			setSpacerStandoffDistance('');
+		}
+	};
 
 	const handleOnChangeWaterproof = (e) => setWaterproof(e.target.value);
 
@@ -227,6 +248,38 @@ export default function Letters({ item }) {
 
 	const handleChangePieces = (e) => {
 		setPieces(e.target.value);
+	};
+
+	const handleonChangeSpacerDistance = (e) => {
+		setSpacerStandoffDistance(e.target.value);
+	};
+
+	const handleonChangeStudLength = (e) => {
+		const target = e.target.value;
+		setStudLength(target); // Directly set the value without a callback
+
+		if (target === '1.5"') {
+			setSpacerStandoffOptions([{ value: '0.5"' }, { value: '1"' }]);
+			if (!['0.5"', '1"'].includes(spacerStandoffDistance)) {
+				setSpacerStandoffDistance(''); // Reset if not one of the valid options
+			}
+		} else if (['3.2"', '4"'].includes(target)) {
+			setSpacerStandoffOptions([
+				{ value: '0.5"' },
+				{ value: '1"' },
+				{ value: '1.5"' },
+				{ value: '2"' },
+			]);
+			if (['3"', '4"'].includes(spacerStandoffDistance)) {
+				setSpacerStandoffDistance(''); // Reset if the distance is invalid for these options
+			}
+		} else {
+			setSpacerStandoffOptions(spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
+		}
+
+		if (target === '') {
+			setSpacerStandoffDistance(''); // Always reset if the target is empty
+		}
 	};
 
 	useEffect(() => {
@@ -276,6 +329,14 @@ export default function Letters({ item }) {
 				totalLetterPrice += letterPrice;
 			});
 
+			if (selectedMounting === 'Stud with spacer') {
+				let spacer =
+					totalLetterPrice * 0.03 > 35 ? 35 : totalLetterPrice * 0.03;
+				spacer = parseFloat(spacer.toFixed(2));
+
+				totalLetterPrice += spacer;
+			}
+
 			totalLetterPrice *= sets;
 
 			setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
@@ -293,6 +354,7 @@ export default function Letters({ item }) {
 		lettersHeight,
 		color,
 		sets,
+		selectedMounting,
 	]);
 
 	useEffect(() => {
@@ -374,6 +436,13 @@ export default function Letters({ item }) {
 		if (!selectedFinishing) missingFields.push('Select Finishing');
 		if (!waterproof) missingFields.push('Select Waterproof');
 		if (!selectedMounting) missingFields.push('Select Mounting');
+
+		if (selectedMounting === 'Stud with spacer') {
+			if (!studLength) missingFields.push('Select Stud Length');
+
+			if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+		}
+
 		if (!sets) missingFields.push('Select Quantity');
 
 		if (missingFields.length > 0) {
@@ -452,6 +521,8 @@ export default function Letters({ item }) {
 		customFont,
 		customColor,
 		sets,
+		studLength,
+		spacerStandoffDistance,
 	]);
 
 	useEffect(() => {
@@ -645,7 +716,7 @@ export default function Letters({ item }) {
 
 				<Dropdown
 					title="Mounting Option"
-					onChange={handleonChangeMount}
+					onChange={handleOnChangeMount}
 					options={mountingOptions.map((option) => (
 						<option
 							value={option.mounting_option}
@@ -657,6 +728,37 @@ export default function Letters({ item }) {
 					value={item.mounting}
 				/>
 
+				{selectedMounting === 'Stud with spacer' && (
+					<>
+						<Dropdown
+							title="Stud Length"
+							onChange={handleonChangeStudLength}
+							options={studLengthOptions.map((option) => (
+								<option
+									value={option.value}
+									selected={option.value == item.studLength}
+								>
+									{option.value}
+								</option>
+							))}
+							value={item.studLength}
+						/>
+						<Dropdown
+							title="SPACER DISTANCE"
+							onChange={handleonChangeSpacerDistance}
+							options={spacerStandoffOptions.map((option) => (
+								<option
+									value={option.value}
+									selected={option.value == item.spacerStandoffDistance}
+								>
+									{option.value}
+								</option>
+							))}
+							value={item.spacerStandoffDistance}
+						/>
+					</>
+				)}
+
 				<Dropdown
 					title="Quantity"
 					onChange={handleOnChangeSets}
@@ -664,6 +766,13 @@ export default function Letters({ item }) {
 					value={sets}
 				/>
 			</div>
+
+			{mounting === 'Stud with spacer' && (
+				<div className="text-xs text-[#9F9F9F] mb-4">
+					*Note: The spacer will be black (default) or match the painted sign's
+					color.
+				</div>
+			)}
 
 			<div className="quote-grid">
 				{color?.name == 'Custom Color' && (

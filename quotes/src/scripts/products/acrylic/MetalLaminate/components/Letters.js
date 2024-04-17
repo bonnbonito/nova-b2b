@@ -9,10 +9,11 @@ import {
 	metalFinishColors,
 } from '../../../../utils/ColorOptions';
 import convert_json from '../../../../utils/ConvertJson';
-import { getLogoPricingTablebyThickness } from '../../../../utils/Pricing';
 import {
 	mountingDefaultOptions,
 	setOptions,
+	spacerStandoffDefaultOptions,
+	studLengthOptions,
 	thicknessOptions,
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
@@ -70,14 +71,65 @@ export default function Letters({ item }) {
 	);
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice);
-	const [mountingOptions, setMountingOptions] = useState(
-		mountingDefaultOptions
-	);
 
 	const [lettersHeight, setLettersHeight] = useState(
 		NovaOptions.letters_height
 	);
+
+	const [mountingOptions, setMountingOptions] = useState(
+		mountingDefaultOptions
+	);
 	const [selectedMounting, setSelectedMounting] = useState(item.mounting);
+
+	const [studLength, setStudLength] = useState(item.studLength);
+	const [spacerStandoffOptions, setSpacerStandoffOptions] = useState(
+		spacerStandoffDefaultOptions
+	);
+	const [spacerStandoffDistance, setSpacerStandoffDistance] = useState(
+		item.spacerStandoffDistance
+	);
+
+	const handleonChangeSpacerDistance = (e) => {
+		setSpacerStandoffDistance(e.target.value);
+	};
+
+	const handleOnChangeMount = (e) => {
+		const target = e.target.value;
+		setSelectedMounting(target);
+
+		if (target !== 'Stud with spacer') {
+			setStudLength('');
+			setSpacerStandoffDistance('');
+		}
+	};
+
+	const handleonChangeStudLength = (e) => {
+		const target = e.target.value;
+		setStudLength(target); // Directly set the value without a callback
+
+		if (target === '1.5"') {
+			setSpacerStandoffOptions([{ value: '0.5"' }, { value: '1"' }]);
+			if (!['0.5"', '1"'].includes(spacerStandoffDistance)) {
+				setSpacerStandoffDistance(''); // Reset if not one of the valid options
+			}
+		} else if (['3.2"', '4"'].includes(target)) {
+			setSpacerStandoffOptions([
+				{ value: '0.5"' },
+				{ value: '1"' },
+				{ value: '1.5"' },
+				{ value: '2"' },
+			]);
+			if (['3"', '4"'].includes(spacerStandoffDistance)) {
+				setSpacerStandoffDistance(''); // Reset if the distance is invalid for these options
+			}
+		} else {
+			setSpacerStandoffOptions(spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
+		}
+
+		if (target === '') {
+			setSpacerStandoffDistance(''); // Always reset if the target is empty
+		}
+	};
 
 	const [sets, setSets] = useState(item.sets);
 	const handleOnChangeSets = (e) => {
@@ -170,6 +222,8 @@ export default function Letters({ item }) {
 					customFont: customFont,
 					customColor: customColor,
 					sets: sets,
+					studLength: studLength,
+					spacerStandoffDistance: spacerStandoffDistance,
 				};
 			} else {
 				return sign;
@@ -183,8 +237,6 @@ export default function Letters({ item }) {
 	const handleComments = (e) => setComments(e.target.value);
 
 	const handleSelectFont = (value) => setFont(value);
-
-	const handleonChangeMount = (e) => setSelectedMounting(e.target.value);
 
 	const handleOnChangeWaterproof = (e) => setWaterproof(e.target.value);
 
@@ -242,6 +294,14 @@ export default function Letters({ item }) {
 				totalLetterPrice += letterPrice;
 			});
 
+			if (selectedMounting === 'Stud with spacer') {
+				let spacer =
+					totalLetterPrice * 0.03 > 35 ? 35 : totalLetterPrice * 0.03;
+				spacer = parseFloat(spacer.toFixed(2));
+
+				totalLetterPrice += spacer;
+			}
+
 			totalLetterPrice *= sets;
 
 			setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
@@ -258,6 +318,7 @@ export default function Letters({ item }) {
 		lettersHeight,
 		acrylicBase,
 		sets,
+		selectedMounting,
 	]);
 
 	useEffect(() => {
@@ -329,7 +390,6 @@ export default function Letters({ item }) {
 		comments,
 		font,
 		selectedThickness,
-		selectedMounting,
 		waterproof,
 		acrylicBase,
 		usdPrice,
@@ -347,6 +407,9 @@ export default function Letters({ item }) {
 		customFont,
 		customColor,
 		sets,
+		selectedMounting,
+		studLength,
+		spacerStandoffDistance,
 	]);
 
 	const checkAndAddMissingFields = () => {
@@ -366,6 +429,11 @@ export default function Letters({ item }) {
 		}
 		if (!waterproof) missingFields.push('Select Waterproof');
 		if (!selectedMounting) missingFields.push('Select Mounting');
+		if (selectedMounting === 'Stud with spacer') {
+			if (!studLength) missingFields.push('Select Stud Length');
+
+			if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+		}
 		if (!sets) missingFields.push('Select Quantity');
 		setMissing((prevMissing) => {
 			const existingIndex = prevMissing.findIndex(
@@ -403,6 +471,8 @@ export default function Letters({ item }) {
 		font,
 		selectedThickness,
 		selectedMounting,
+		studLength,
+		spacerStandoffDistance,
 		waterproof,
 		selectedLetterHeight,
 		metalFinish,
@@ -485,6 +555,10 @@ export default function Letters({ item }) {
 					openFont={openFont}
 					setOpenFont={setOpenFont}
 					handleSelectFont={handleSelectFont}
+					setOpenColor={() => {
+						setOpenColor(false);
+						setOpenAcrylicColor(false);
+					}}
 				/>
 
 				{font == 'Custom font' && (
@@ -529,7 +603,11 @@ export default function Letters({ item }) {
 						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
 							metalFinish.name ? 'text-black' : 'text-[#dddddd]'
 						}`}
-						onClick={() => setOpenColor((prev) => !prev)}
+						onClick={() => {
+							setOpenColor((prev) => !prev);
+							setOpenFont(false);
+							setOpenAcrylicColor(false);
+						}}
 					>
 						<span
 							className="rounded-full w-[18px] h-[18px] border mr-2"
@@ -576,6 +654,8 @@ export default function Letters({ item }) {
 						onClick={() => {
 							console.log('Click');
 							setOpenAcrylicColor((prev) => !prev);
+							setOpenColor(false);
+							setOpenFont(false);
 						}}
 					>
 						<span
@@ -628,7 +708,7 @@ export default function Letters({ item }) {
 
 				<Dropdown
 					title="Mounting Options"
-					onChange={handleonChangeMount}
+					onChange={handleOnChangeMount}
 					options={mountingOptions.map((option) => (
 						<option
 							value={option.mounting_option}
@@ -640,6 +720,37 @@ export default function Letters({ item }) {
 					value={item.mounting}
 				/>
 
+				{selectedMounting === 'Stud with spacer' && (
+					<>
+						<Dropdown
+							title="Stud Length"
+							onChange={handleonChangeStudLength}
+							options={studLengthOptions.map((option) => (
+								<option
+									value={option.value}
+									selected={option.value == item.studLength}
+								>
+									{option.value}
+								</option>
+							))}
+							value={item.studLength}
+						/>
+						<Dropdown
+							title="SPACER DISTANCE"
+							onChange={handleonChangeSpacerDistance}
+							options={spacerStandoffOptions.map((option) => (
+								<option
+									value={option.value}
+									selected={option.value == item.spacerStandoffDistance}
+								>
+									{option.value}
+								</option>
+							))}
+							value={item.spacerStandoffDistance}
+						/>
+					</>
+				)}
+
 				<Dropdown
 					title="Quantity"
 					onChange={handleOnChangeSets}
@@ -647,6 +758,13 @@ export default function Letters({ item }) {
 					value={sets}
 				/>
 			</div>
+
+			{mounting === 'Stud with spacer' && (
+				<div className="text-xs text-[#9F9F9F] mb-4">
+					*Note: The spacer will be black (default) or match the painted sign's
+					color.
+				</div>
+			)}
 
 			<div className="quote-grid">
 				{acrylicBase?.name == 'Custom Color' && (

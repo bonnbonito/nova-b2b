@@ -171,7 +171,7 @@ export default function Letters({ item }) {
 
 	const handleSelectFont = (value) => setFont(value);
 
-	const handleonChangeMount = (e) => setSelectedMounting(e.target.value);
+	const handleOnChangeMount = (e) => setSelectedMounting(e.target.value);
 
 	const handleOnChangeWaterproof = (e) => setWaterproof(e.target.value);
 
@@ -609,7 +609,7 @@ export default function Letters({ item }) {
 
 				<Dropdown
 					title="Mounting Option"
-					onChange={handleonChangeMount}
+					onChange={handleOnChangeMount}
 					options={mountingOptions.map((option) => (
 						<option
 							value={option.mounting_option}

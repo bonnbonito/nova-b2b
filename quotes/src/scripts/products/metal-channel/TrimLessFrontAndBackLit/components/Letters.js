@@ -12,14 +12,14 @@ import {
 import convert_json from '../../../../utils/ConvertJson';
 import {
 	setOptions,
+	spacerStandoffDefaultOptions,
+	studLengthOptions,
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
 import {
 	frontBackdepthOptions,
 	ledLightColors,
 	mountingDefaultOptions,
-	spacerStandoffDefaultOptions,
-	studLengthOptions,
 } from '../../metalChannelOptions';
 
 import { QuoteContext } from '../TrimLessFrontAndBackLit';
@@ -229,44 +229,29 @@ export default function Letters({ item }) {
 
 	const handleonChangeStudLength = (e) => {
 		const target = e.target.value;
-		setStudLength(() => target);
+		setStudLength(target); // Directly set the value without a callback
 
 		if (target === '1.5"') {
-			setSpacerStandoffOptions(() => [
-				{
-					value: '0.5"',
-				},
-				{
-					value: '1"',
-				},
-			]);
-			if (spacerStandoffDistance !== '1"') {
-				setSpacerStandoffDistance('');
+			setSpacerStandoffOptions([{ value: '0.5"' }, { value: '1"' }]);
+			if (!['0.5"', '1"'].includes(spacerStandoffDistance)) {
+				setSpacerStandoffDistance(''); // Reset if not one of the valid options
 			}
-		} else if (target === '3.2"' || target === '4"') {
-			setSpacerStandoffOptions(() => [
-				{
-					value: '0.5"',
-				},
-				{
-					value: '1"',
-				},
-				{
-					value: '1.5"',
-				},
-				{
-					value: '2"',
-				},
+		} else if (['3.2"', '4"'].includes(target)) {
+			setSpacerStandoffOptions([
+				{ value: '0.5"' },
+				{ value: '1"' },
+				{ value: '1.5"' },
+				{ value: '2"' },
 			]);
-			if (spacerStandoffDistance === '3"' || spacerStandoffDistance === '4"') {
-				setSpacerStandoffDistance('');
+			if (['3"', '4"'].includes(spacerStandoffDistance)) {
+				setSpacerStandoffDistance(''); // Reset if the distance is invalid for these options
 			}
 		} else {
-			setSpacerStandoffOptions(() => spacerStandoffDefaultOptions);
+			setSpacerStandoffOptions(spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
 		}
 
 		if (target === '') {
-			setSpacerStandoffDistance('');
+			setSpacerStandoffDistance(''); // Always reset if the target is empty
 		}
 	};
 
@@ -340,6 +325,14 @@ export default function Letters({ item }) {
 					totalLetterPrice += letterPrice;
 				});
 
+				if (mounting === 'Stud with spacer') {
+					let spacer =
+						totalLetterPrice * 0.03 > 35 ? 35 : totalLetterPrice * 0.03;
+					spacer = parseFloat(spacer.toFixed(2));
+
+					totalLetterPrice += spacer;
+				}
+
 				totalLetterPrice *= sets;
 
 				setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
@@ -355,6 +348,7 @@ export default function Letters({ item }) {
 		waterproof,
 		lettersHeight,
 		vinylWhite,
+		mounting,
 		sets,
 	]);
 

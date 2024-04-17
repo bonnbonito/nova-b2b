@@ -141,6 +141,12 @@ const metalInstallationOptions = [
 	{
 		option: 'Flush Stud',
 	},
+	{
+		option: 'Stud Mount',
+	},
+	{
+		option: 'Stud with spacer',
+	},
 ];
 
 const fabricatedLogoInstallationOptions = [
@@ -158,6 +164,9 @@ const fabricatedMetalInstallationOptions = [
 	},
 	{
 		option: 'PVC Backing',
+	},
+	{
+		option: 'Stud with spacer',
 	},
 ];
 

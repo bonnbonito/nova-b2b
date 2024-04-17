@@ -9,6 +9,8 @@ import {
 	calculateMountingOptions,
 	mountingDefaultOptions,
 	setOptions,
+	spacerStandoffDefaultOptions,
+	studLengthOptions,
 	thicknessOptions,
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
@@ -64,6 +66,56 @@ export default function Logo({ item }) {
 	const [mountingOptions, setMountingOptions] = useState(
 		mountingDefaultOptions
 	);
+
+	const [studLength, setStudLength] = useState(item.studLength);
+	const [spacerStandoffOptions, setSpacerStandoffOptions] = useState(
+		spacerStandoffDefaultOptions
+	);
+	const [spacerStandoffDistance, setSpacerStandoffDistance] = useState(
+		item.spacerStandoffDistance
+	);
+
+	const handleonChangeSpacerDistance = (e) => {
+		setSpacerStandoffDistance(e.target.value);
+	};
+
+	const handleOnChangeMount = (e) => {
+		const target = e.target.value;
+		setSelectedMounting(target);
+
+		if (target !== 'Stud with spacer') {
+			setStudLength('');
+			setSpacerStandoffDistance('');
+		}
+	};
+
+	const handleonChangeStudLength = (e) => {
+		const target = e.target.value;
+		setStudLength(target); // Directly set the value without a callback
+
+		if (target === '1.5"') {
+			setSpacerStandoffOptions([{ value: '0.5"' }, { value: '1"' }]);
+			if (!['0.5"', '1"'].includes(spacerStandoffDistance)) {
+				setSpacerStandoffDistance(''); // Reset if not one of the valid options
+			}
+		} else if (['3.2"', '4"'].includes(target)) {
+			setSpacerStandoffOptions([
+				{ value: '0.5"' },
+				{ value: '1"' },
+				{ value: '1.5"' },
+				{ value: '2"' },
+			]);
+			if (['3"', '4"'].includes(spacerStandoffDistance)) {
+				setSpacerStandoffDistance(''); // Reset if the distance is invalid for these options
+			}
+		} else {
+			setSpacerStandoffOptions(spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
+		}
+
+		if (target === '') {
+			setSpacerStandoffDistance(''); // Always reset if the target is empty
+		}
+	};
 
 	const [sets, setSets] = useState(item.sets);
 	const handleOnChangeSets = (e) => {
@@ -172,6 +224,8 @@ export default function Logo({ item }) {
 					customColor: customColor,
 					printPreference: printPreference,
 					sets: sets,
+					studLength: studLength,
+					spacerStandoffDistance: spacerStandoffDistance,
 				};
 			} else {
 				return sign;
@@ -194,6 +248,13 @@ export default function Logo({ item }) {
 		if (!baseColor) missingFields.push('Select Base Color');
 		if (!waterproof) missingFields.push('Select Environment');
 		if (!selectedMounting) missingFields.push('Select Mounting Option');
+
+		if (selectedMounting === 'Stud with spacer') {
+			if (!studLength) missingFields.push('Select Stud Length');
+
+			if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+		}
+
 		if (!selectedFinishing) missingFields.push('Select Finishing Option');
 
 		if (!fileUrls || fileUrls.length === 0)
@@ -254,6 +315,8 @@ export default function Logo({ item }) {
 		printPreference,
 		customColor,
 		sets,
+		studLength,
+		spacerStandoffDistance,
 	]);
 
 	useEffect(() => {
@@ -276,6 +339,8 @@ export default function Logo({ item }) {
 		printPreference,
 		baseColor,
 		sets,
+		studLength,
+		spacerStandoffDistance,
 	]);
 
 	useEffect(() => {
@@ -302,15 +367,22 @@ export default function Logo({ item }) {
 					multiplier = waterproof === 'Indoor' ? 1 : 1.1;
 				}
 
-				let total = (computed * multiplier).toFixed(2);
+				let total = parseFloat((computed * multiplier).toFixed(2));
 				total *= selectedFinishing === 'Gloss' ? 1.1 : 1;
 				total *= baseColor === 'Custom Color' ? UV_PRICE : 1;
 
 				total *= 1.2;
 
+				if (selectedMounting === 'Stud with spacer') {
+					let spacer = total * 0.03 > 35 ? 35 : total * 0.03;
+					spacer = parseFloat(spacer.toFixed(2));
+
+					total += spacer;
+				}
+
 				total *= sets;
 
-				setUsdPrice(parseFloat(total).toFixed(2));
+				setUsdPrice(parseFloat(total.toFixed(2)));
 				setCadPrice((total * parseFloat(exchangeRate)).toFixed(2));
 			} else {
 				setUsdPrice(0);
@@ -327,6 +399,7 @@ export default function Logo({ item }) {
 		waterproof,
 		selectedFinishing,
 		baseColor,
+		selectedMounting,
 		sets,
 	]);
 
@@ -405,7 +478,7 @@ export default function Logo({ item }) {
 
 				<Dropdown
 					title="Mounting Options"
-					onChange={(e) => setSelectedMounting(e.target.value)}
+					onChange={handleOnChangeMount}
 					options={mountingOptions.map((option) => (
 						<option
 							value={option.mounting_option}
@@ -416,6 +489,37 @@ export default function Logo({ item }) {
 					))}
 					value={selectedMounting}
 				/>
+
+				{selectedMounting === 'Stud with spacer' && (
+					<>
+						<Dropdown
+							title="Stud Length"
+							onChange={handleonChangeStudLength}
+							options={studLengthOptions.map((option) => (
+								<option
+									value={option.value}
+									selected={option.value == item.studLength}
+								>
+									{option.value}
+								</option>
+							))}
+							value={item.studLength}
+						/>
+						<Dropdown
+							title="SPACER DISTANCE"
+							onChange={handleonChangeSpacerDistance}
+							options={spacerStandoffOptions.map((option) => (
+								<option
+									value={option.value}
+									selected={option.value == item.spacerStandoffDistance}
+								>
+									{option.value}
+								</option>
+							))}
+							value={item.spacerStandoffDistance}
+						/>
+					</>
+				)}
 
 				<Dropdown
 					title="Finishing Options"
@@ -438,6 +542,13 @@ export default function Logo({ item }) {
 					value={sets}
 				/>
 			</div>
+
+			{mounting === 'Stud with spacer' && (
+				<div className="text-xs text-[#9F9F9F] mb-4">
+					*Note: The spacer will be black (default) or match the painted sign's
+					color.
+				</div>
+			)}
 
 			<div className="quote-grid">
 				{baseColor === 'Custom Color' && (

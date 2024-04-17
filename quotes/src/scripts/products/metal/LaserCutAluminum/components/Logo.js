@@ -10,6 +10,8 @@ import {
 	metalInstallationOptions,
 	metalThicknessOptions,
 	setOptions,
+	spacerStandoffDefaultOptions,
+	studLengthOptions,
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
 import { QuoteContext } from '../LaserCutAluminum';
@@ -56,6 +58,46 @@ export default function Logo({ item }) {
 	const [comments, setComments] = useState('');
 	const [waterproof, setWaterproof] = useState(item.waterproof);
 	const [installation, setInstallation] = useState(item.installation);
+
+	const [studLength, setStudLength] = useState(item.studLength);
+	const [spacerStandoffOptions, setSpacerStandoffOptions] = useState(
+		spacerStandoffDefaultOptions
+	);
+	const [spacerStandoffDistance, setSpacerStandoffDistance] = useState(
+		item.spacerStandoffDistance
+	);
+
+	const handleonChangeSpacerDistance = (e) => {
+		setSpacerStandoffDistance(e.target.value);
+	};
+
+	const handleonChangeStudLength = (e) => {
+		const target = e.target.value;
+		setStudLength(target); // Directly set the value without a callback
+
+		if (target === '1.5"') {
+			setSpacerStandoffOptions([{ value: '0.5"' }, { value: '1"' }]);
+			if (!['0.5"', '1"'].includes(spacerStandoffDistance)) {
+				setSpacerStandoffDistance(''); // Reset if not one of the valid options
+			}
+		} else if (['3.2"', '4"'].includes(target)) {
+			setSpacerStandoffOptions([
+				{ value: '0.5"' },
+				{ value: '1"' },
+				{ value: '1.5"' },
+				{ value: '2"' },
+			]);
+			if (['3"', '4"'].includes(spacerStandoffDistance)) {
+				setSpacerStandoffDistance(''); // Reset if the distance is invalid for these options
+			}
+		} else {
+			setSpacerStandoffOptions(spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
+		}
+
+		if (target === '') {
+			setSpacerStandoffDistance(''); // Always reset if the target is empty
+		}
+	};
 
 	const colorRef = useRef(null);
 
@@ -109,6 +151,8 @@ export default function Logo({ item }) {
 					fileUrls: fileUrls,
 					customColor: customColor,
 					sets: sets,
+					studLength: studLength,
+					spacerStandoffDistance: spacerStandoffDistance,
 				};
 			} else {
 				return sign;
@@ -142,6 +186,8 @@ export default function Logo({ item }) {
 		color,
 		customColor,
 		sets,
+		studLength,
+		spacerStandoffDistance,
 	]);
 
 	const checkAndAddMissingFields = () => {
@@ -163,6 +209,11 @@ export default function Logo({ item }) {
 			missingFields.push('Add the Pantone color code of your custom color.');
 		}
 		if (!installation) missingFields.push('Select Installation');
+		if (installation === 'Stud with spacer') {
+			if (!studLength) missingFields.push('Select Stud Length');
+
+			if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+		}
 		if (!sets) missingFields.push('Select Quantity');
 		if (!fileUrls || fileUrls.length === 0)
 			missingFields.push('Upload a PDF/AI File');
@@ -228,11 +279,20 @@ export default function Logo({ item }) {
 					multiplier = waterproof === 'Indoor' ? 1 : 1.05;
 				}
 
-				let total = (computed * multiplier).toFixed(2);
+				let total = parseFloat((computed * multiplier).toFixed(2));
+
+				if (installation === 'Stud with spacer') {
+					let spacer = total * 0.03 > 35 ? 35 : total * 0.03;
+					spacer = parseFloat(spacer.toFixed(2));
+
+					console.log(spacer, total);
+
+					total += spacer;
+				}
 
 				total *= sets;
 
-				setUsdPrice(parseFloat(total).toFixed(2));
+				setUsdPrice(parseFloat(total.toFixed(2)));
 				setCadPrice((total * parseFloat(exchangeRate)).toFixed(2));
 			} else {
 				setUsdPrice(0);
@@ -242,7 +302,15 @@ export default function Logo({ item }) {
 			setUsdPrice(0);
 			setCadPrice(0);
 		}
-	}, [width, height, selectedThickness, waterproof, selectedFinishing, sets]);
+	}, [
+		width,
+		height,
+		selectedThickness,
+		waterproof,
+		selectedFinishing,
+		sets,
+		installation,
+	]);
 
 	useOutsideClick([colorRef], () => {
 		if (!openColor) return;
@@ -252,6 +320,13 @@ export default function Logo({ item }) {
 	useEffect(() => {
 		color?.name != 'Custom Color' && setCustomColor('');
 	}, [color]);
+
+	useEffect(() => {
+		if (installation === 'Stud with spacer') {
+			setStudLength('');
+			setSpacerStandoffDistance('');
+		}
+	}, [installation]);
 
 	return (
 		<>
@@ -377,6 +452,37 @@ export default function Logo({ item }) {
 					value={item.installation}
 				/>
 
+				{installation === 'Stud with spacer' && (
+					<>
+						<Dropdown
+							title="Stud Length"
+							onChange={handleonChangeStudLength}
+							options={studLengthOptions.map((option) => (
+								<option
+									value={option.value}
+									selected={option.value == item.studLength}
+								>
+									{option.value}
+								</option>
+							))}
+							value={item.studLength}
+						/>
+						<Dropdown
+							title="SPACER DISTANCE"
+							onChange={handleonChangeSpacerDistance}
+							options={spacerStandoffOptions.map((option) => (
+								<option
+									value={option.value}
+									selected={option.value == item.spacerStandoffDistance}
+								>
+									{option.value}
+								</option>
+							))}
+							value={item.spacerStandoffDistance}
+						/>
+					</>
+				)}
+
 				<Dropdown
 					title="Quantity"
 					onChange={handleOnChangeSets}
@@ -384,6 +490,13 @@ export default function Logo({ item }) {
 					value={sets}
 				/>
 			</div>
+
+			{installation === 'Stud with spacer' && (
+				<div className="text-xs text-[#9F9F9F] mb-4">
+					*Note: The spacer will be black (default) or match the painted sign's
+					color.
+				</div>
+			)}
 
 			<div className="quote-grid">
 				{color?.name == 'Custom Color' && (

@@ -49,6 +49,9 @@ export default function FabricatedStainless() {
 					finishing: '',
 					stainlessSteelPolished: '',
 					stainLessMetalFinish: '',
+					studLength: '',
+					spacerStandoffDistance: '',
+					mounting: '',
 					metal: '',
 					sets: 1,
 					product: NovaQuote.product,
@@ -88,7 +91,10 @@ export default function FabricatedStainless() {
 		metal: '',
 		stainLessMetalFinish: '',
 		stainlessSteelPolished: '',
+		studLength: '',
+		spacerStandoffDistance: '',
 		sets: 1,
+		mounting: '',
 		product: NovaQuote.product,
 	};
 

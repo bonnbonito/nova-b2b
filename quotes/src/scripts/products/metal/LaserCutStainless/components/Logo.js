@@ -7,6 +7,8 @@ import convert_json from '../../../../utils/ConvertJson';
 import { getLogoPricingTablebyThickness } from '../../../../utils/Pricing';
 import {
 	setOptions,
+	spacerStandoffDefaultOptions,
+	studLengthOptions,
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
 import {
@@ -81,6 +83,46 @@ export default function Logo({ item }) {
 		setComments(e.target.value);
 	}
 
+	const [studLength, setStudLength] = useState(item.studLength);
+	const [spacerStandoffOptions, setSpacerStandoffOptions] = useState(
+		spacerStandoffDefaultOptions
+	);
+	const [spacerStandoffDistance, setSpacerStandoffDistance] = useState(
+		item.spacerStandoffDistance
+	);
+
+	const handleonChangeSpacerDistance = (e) => {
+		setSpacerStandoffDistance(e.target.value);
+	};
+
+	const handleonChangeStudLength = (e) => {
+		const target = e.target.value;
+		setStudLength(target); // Directly set the value without a callback
+
+		if (target === '1.5"') {
+			setSpacerStandoffOptions([{ value: '0.5"' }, { value: '1"' }]);
+			if (!['0.5"', '1"'].includes(spacerStandoffDistance)) {
+				setSpacerStandoffDistance(''); // Reset if not one of the valid options
+			}
+		} else if (['3.2"', '4"'].includes(target)) {
+			setSpacerStandoffOptions([
+				{ value: '0.5"' },
+				{ value: '1"' },
+				{ value: '1.5"' },
+				{ value: '2"' },
+			]);
+			if (['3"', '4"'].includes(spacerStandoffDistance)) {
+				setSpacerStandoffDistance(''); // Reset if the distance is invalid for these options
+			}
+		} else {
+			setSpacerStandoffOptions(spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
+		}
+
+		if (target === '') {
+			setSpacerStandoffDistance(''); // Always reset if the target is empty
+		}
+	};
+
 	const handleOnChangeWaterproof = (e) => setWaterproof(e.target.value);
 
 	const handelMetalFinishChange = (e) => {
@@ -142,6 +184,8 @@ export default function Logo({ item }) {
 					stainlessSteelPolished: stainlessSteelPolished,
 					stainLessMetalFinish: stainLessMetalFinish,
 					sets: sets,
+					studLength: studLength,
+					spacerStandoffDistance: spacerStandoffDistance,
 				};
 			} else {
 				return sign;
@@ -182,6 +226,11 @@ export default function Logo({ item }) {
 
 		if (!waterproof) missingFields.push('Select Waterproof');
 		if (!installation) missingFields.push('Select Installation');
+		if (installation === 'Stud with spacer') {
+			if (!studLength) missingFields.push('Select Stud Length');
+
+			if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+		}
 
 		if (!sets) missingFields.push('Select Quantity');
 
@@ -241,6 +290,8 @@ export default function Logo({ item }) {
 		color,
 		metal,
 		sets,
+		studLength,
+		spacerStandoffDistance,
 	]);
 
 	const logoPricingObject = NovaQuote.logo_pricing_tables;
@@ -271,10 +322,10 @@ export default function Logo({ item }) {
 					multiplier = parseFloat(multiplier).toFixed(2);
 				}
 
-				let total = (computed * multiplier).toFixed(2);
+				let total = parseFloat((computed * multiplier).toFixed(2));
 
 				total *= metal === '316 Stainless Steel' ? 1.3 : 1;
-				total = parseFloat(total).toFixed(2);
+				total = parseFloat(total.toFixed(2));
 
 				if (stainlessSteelPolished) {
 					if ('Standard (Face)' === stainlessSteelPolished) {
@@ -284,7 +335,7 @@ export default function Logo({ item }) {
 					if ('Premium (Face & Side)' === stainlessSteelPolished) {
 						total *= 1.7;
 					}
-					total = parseFloat(total).toFixed(2);
+					total = parseFloat(total.toFixed(2));
 				}
 
 				if (
@@ -295,11 +346,18 @@ export default function Logo({ item }) {
 					total *= 1.2;
 				}
 
-				total = parseFloat(total).toFixed(2);
+				total = parseFloat(total.toFixed(2));
+
+				if (installation === 'Stud with spacer') {
+					let spacer = total * 0.03 > 35 ? 35 : total * 0.03;
+					spacer = parseFloat(spacer.toFixed(2));
+
+					total += spacer;
+				}
 
 				total *= sets;
 
-				setUsdPrice(parseFloat(total).toFixed(2));
+				setUsdPrice(parseFloat(total.toFixed(2)));
 				setCadPrice((total * parseFloat(exchangeRate)).toFixed(2));
 			} else {
 				setUsdPrice(0);
@@ -319,12 +377,20 @@ export default function Logo({ item }) {
 		stainLessMetalFinish,
 		stainlessSteelPolished,
 		sets,
+		installation,
 	]);
 
 	useOutsideClick([colorRef], () => {
 		if (!openColor) return;
 		setOpenColor(false);
 	});
+
+	useEffect(() => {
+		if (installation === 'Stud with spacer') {
+			setStudLength('');
+			setSpacerStandoffDistance('');
+		}
+	}, [installation]);
 
 	return (
 		<>
@@ -492,6 +558,37 @@ export default function Logo({ item }) {
 					value={item.installation}
 				/>
 
+				{installation === 'Stud with spacer' && (
+					<>
+						<Dropdown
+							title="Stud Length"
+							onChange={handleonChangeStudLength}
+							options={studLengthOptions.map((option) => (
+								<option
+									value={option.value}
+									selected={option.value == item.studLength}
+								>
+									{option.value}
+								</option>
+							))}
+							value={item.studLength}
+						/>
+						<Dropdown
+							title="SPACER DISTANCE"
+							onChange={handleonChangeSpacerDistance}
+							options={spacerStandoffOptions.map((option) => (
+								<option
+									value={option.value}
+									selected={option.value == item.spacerStandoffDistance}
+								>
+									{option.value}
+								</option>
+							))}
+							value={item.spacerStandoffDistance}
+						/>
+					</>
+				)}
+
 				<Dropdown
 					title="Quantity"
 					onChange={handleOnChangeSets}
@@ -499,6 +596,13 @@ export default function Logo({ item }) {
 					value={sets}
 				/>
 			</div>
+
+			{installation === 'Stud with spacer' && (
+				<div className="text-xs text-[#9F9F9F] mb-4">
+					*Note: The spacer will be black (default) or match the painted sign's
+					color.
+				</div>
+			)}
 
 			<div className="quote-grid">
 				<div className="px-[1px] col-span-4">

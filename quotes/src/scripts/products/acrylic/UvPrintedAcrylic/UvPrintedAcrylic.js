@@ -45,6 +45,8 @@ export default function UvPrintedAcrylic() {
 					printPreference: '',
 					baseColor: 'Black',
 					sets: 1,
+					studLength: '',
+					spacerStandoffDistance: '',
 					product: NovaQuote.product,
 				},
 			]);
@@ -80,6 +82,8 @@ export default function UvPrintedAcrylic() {
 		baseColor: 'Black',
 		printPreference: '',
 		sets: 1,
+		studLength: '',
+		spacerStandoffDistance: '',
 		product: NovaQuote.product,
 	};
 

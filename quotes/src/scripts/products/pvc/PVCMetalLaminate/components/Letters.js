@@ -450,6 +450,7 @@ export default function Letters({ item }) {
 					openFont={openFont}
 					setOpenFont={setOpenFont}
 					handleSelectFont={handleSelectFont}
+					setOpenColor={setOpenColor}
 				/>
 
 				{font == 'Custom font' && (

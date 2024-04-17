@@ -10,7 +10,10 @@ import {
 	metalFinishOptions,
 	metalInstallationOptions,
 	metalThicknessOptions,
+	mountingDefaultOptions,
 	setOptions,
+	spacerStandoffDefaultOptions,
+	studLengthOptions,
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
 import { QuoteContext } from '../LaserCutAluminum';
@@ -71,6 +74,53 @@ export default function Letters({ item }) {
 		NovaOptions.letters_height
 	);
 	const [installation, setInstallation] = useState(item.installation);
+
+	const [studLength, setStudLength] = useState(item.studLength);
+	const [spacerStandoffOptions, setSpacerStandoffOptions] = useState(
+		spacerStandoffDefaultOptions
+	);
+	const [spacerStandoffDistance, setSpacerStandoffDistance] = useState(
+		item.spacerStandoffDistance
+	);
+
+	const handleonChangeSpacerDistance = (e) => {
+		setSpacerStandoffDistance(e.target.value);
+	};
+
+	useEffect(() => {
+		if (installation === 'Stud with spacer') {
+			setStudLength('');
+			setSpacerStandoffDistance('');
+		}
+	}, [installation]);
+
+	const handleonChangeStudLength = (e) => {
+		const target = e.target.value;
+		setStudLength(target); // Directly set the value without a callback
+
+		if (target === '1.5"') {
+			setSpacerStandoffOptions([{ value: '0.5"' }, { value: '1"' }]);
+			if (!['0.5"', '1"'].includes(spacerStandoffDistance)) {
+				setSpacerStandoffDistance(''); // Reset if not one of the valid options
+			}
+		} else if (['3.2"', '4"'].includes(target)) {
+			setSpacerStandoffOptions([
+				{ value: '0.5"' },
+				{ value: '1"' },
+				{ value: '1.5"' },
+				{ value: '2"' },
+			]);
+			if (['3"', '4"'].includes(spacerStandoffDistance)) {
+				setSpacerStandoffDistance(''); // Reset if the distance is invalid for these options
+			}
+		} else {
+			setSpacerStandoffOptions(spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
+		}
+
+		if (target === '') {
+			setSpacerStandoffDistance(''); // Always reset if the target is empty
+		}
+	};
 
 	const [sets, setSets] = useState(item.sets);
 	const handleOnChangeSets = (e) => {
@@ -161,6 +211,8 @@ export default function Letters({ item }) {
 					customFont: customFont,
 					customColor: customColor,
 					sets: sets,
+					studLength: studLength,
+					spacerStandoffDistance: spacerStandoffDistance,
 				};
 			} else {
 				return sign;
@@ -245,6 +297,14 @@ export default function Letters({ item }) {
 				totalLetterPrice += letterPrice;
 			});
 
+			if (installation === 'Stud with spacer') {
+				let spacer =
+					totalLetterPrice * 0.03 > 35 ? 35 : totalLetterPrice * 0.03;
+				spacer = parseFloat(spacer.toFixed(2));
+
+				totalLetterPrice += spacer;
+			}
+
 			totalLetterPrice *= sets;
 
 			setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
@@ -261,6 +321,7 @@ export default function Letters({ item }) {
 		waterproof,
 		lettersHeight,
 		sets,
+		installation,
 	]);
 
 	useEffect(() => {
@@ -314,6 +375,8 @@ export default function Letters({ item }) {
 		customFont,
 		sets,
 		customColor,
+		studLength,
+		spacerStandoffDistance,
 	]);
 
 	const checkAndAddMissingFields = () => {
@@ -339,6 +402,12 @@ export default function Letters({ item }) {
 		}
 		if (!waterproof) missingFields.push('Select Waterproof');
 		if (!installation) missingFields.push('Select Installation');
+		if (installation === 'Stud with spacer') {
+			if (!studLength) missingFields.push('Select Stud Length');
+
+			if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+		}
+
 		if (!sets) missingFields.push('Select Quantity');
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
@@ -609,6 +678,37 @@ export default function Letters({ item }) {
 					value={item.installation}
 				/>
 
+				{installation === 'Stud with spacer' && (
+					<>
+						<Dropdown
+							title="Stud Length"
+							onChange={handleonChangeStudLength}
+							options={studLengthOptions.map((option) => (
+								<option
+									value={option.value}
+									selected={option.value == item.studLength}
+								>
+									{option.value}
+								</option>
+							))}
+							value={item.studLength}
+						/>
+						<Dropdown
+							title="SPACER DISTANCE"
+							onChange={handleonChangeSpacerDistance}
+							options={spacerStandoffOptions.map((option) => (
+								<option
+									value={option.value}
+									selected={option.value == item.spacerStandoffDistance}
+								>
+									{option.value}
+								</option>
+							))}
+							value={item.spacerStandoffDistance}
+						/>
+					</>
+				)}
+
 				<Dropdown
 					title="Quantity"
 					onChange={handleOnChangeSets}
@@ -616,6 +716,13 @@ export default function Letters({ item }) {
 					value={sets}
 				/>
 			</div>
+
+			{installation === 'Stud with spacer' && (
+				<div className="text-xs text-[#9F9F9F] mb-4">
+					*Note: The spacer will be black (default) or match the painted sign's
+					color.
+				</div>
+			)}
 
 			<div className="quote-grid">
 				{color?.name == 'Custom Color' && (

@@ -7,48 +7,12 @@ const mountingDefaultOptions = [
 	},
 ];
 
-const studLengthOptions = [
-	{
-		value: '1.5"',
-	},
-	{
-		value: '3.2"',
-	},
-	{
-		value: '4"',
-	},
-	{
-		value: '6"',
-	},
-];
-
 const finishingOptions = [
 	{
 		value: 'Painted',
 	},
 	{
 		value: 'Metal',
-	},
-];
-
-const spacerStandoffDefaultOptions = [
-	{
-		value: '0.5"',
-	},
-	{
-		value: '1"',
-	},
-	{
-		value: '1.5"',
-	},
-	{
-		value: '2"',
-	},
-	{
-		value: '3"',
-	},
-	{
-		value: '4"',
 	},
 ];
 
@@ -95,6 +59,4 @@ export {
 	frontBackdepthOptions,
 	ledLightColors,
 	mountingDefaultOptions,
-	spacerStandoffDefaultOptions,
-	studLengthOptions,
 };

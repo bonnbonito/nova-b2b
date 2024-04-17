@@ -163,12 +163,12 @@ export default function Logo({ item }) {
 					multiplier = waterproof === 'Indoor' ? 1 : 1.03;
 				}
 
-				let total = (computed * multiplier).toFixed(2);
+				let total = parseFloat((computed * multiplier).toFixed(2));
 
 				total *= selectedFinishing === 'Gloss' ? 1.03 : 1;
 				total *= installation === 'Double-sided tape' ? 1.01 : 1;
 
-				setUsdPrice(parseFloat(total).toFixed(2));
+				setUsdPrice(parseFloat(total.toFixed(2)));
 				setCadPrice((total * parseFloat(exchangeRate)).toFixed(2));
 			} else {
 				setUsdPrice(0);

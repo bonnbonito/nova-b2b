@@ -59,6 +59,8 @@ export default function MetalLaminate() {
 					customFont: '',
 					customColor: '',
 					sets: 1,
+					studLength: '',
+					spacerStandoffDistance: '',
 					product: NovaQuote.product,
 				},
 			]);
@@ -97,6 +99,8 @@ export default function MetalLaminate() {
 		acrylicBase: { name: 'Black', color: '#000000' },
 		customColor: '',
 		sets: 1,
+		studLength: '',
+		spacerStandoffDistance: '',
 		product: NovaQuote.product,
 	};
 

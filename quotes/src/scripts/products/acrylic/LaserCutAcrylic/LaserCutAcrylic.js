@@ -49,6 +49,8 @@ export default function LaserCutAcrylic() {
 					customFont: '',
 					customColor: '',
 					finishing: 'Matte',
+					studLength: '',
+					spacerStandoffDistance: '',
 					product: NovaQuote.product,
 				},
 			]);
@@ -88,6 +90,8 @@ export default function LaserCutAcrylic() {
 		fileUrls: [],
 		files: [],
 		sets: 1,
+		studLength: '',
+		spacerStandoffDistance: '',
 		color: { name: '', color: '' },
 		customColor: '',
 		product: NovaQuote.product,

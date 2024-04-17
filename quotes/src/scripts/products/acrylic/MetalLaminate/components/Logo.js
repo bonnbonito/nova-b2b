@@ -7,6 +7,8 @@ import {
 	calculateMountingOptions,
 	mountingDefaultOptions,
 	setOptions,
+	spacerStandoffDefaultOptions,
+	studLengthOptions,
 	thicknessOptions,
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
@@ -68,6 +70,56 @@ export default function Logo({ item }) {
 	const [mountingOptions, setMountingOptions] = useState(
 		mountingDefaultOptions
 	);
+
+	const [studLength, setStudLength] = useState(item.studLength);
+	const [spacerStandoffOptions, setSpacerStandoffOptions] = useState(
+		spacerStandoffDefaultOptions
+	);
+	const [spacerStandoffDistance, setSpacerStandoffDistance] = useState(
+		item.spacerStandoffDistance
+	);
+
+	const handleonChangeSpacerDistance = (e) => {
+		setSpacerStandoffDistance(e.target.value);
+	};
+
+	const handleOnChangeMount = (e) => {
+		const target = e.target.value;
+		setSelectedMounting(target);
+
+		if (target !== 'Stud with spacer') {
+			setStudLength('');
+			setSpacerStandoffDistance('');
+		}
+	};
+
+	const handleonChangeStudLength = (e) => {
+		const target = e.target.value;
+		setStudLength(target); // Directly set the value without a callback
+
+		if (target === '1.5"') {
+			setSpacerStandoffOptions([{ value: '0.5"' }, { value: '1"' }]);
+			if (!['0.5"', '1"'].includes(spacerStandoffDistance)) {
+				setSpacerStandoffDistance(''); // Reset if not one of the valid options
+			}
+		} else if (['3.2"', '4"'].includes(target)) {
+			setSpacerStandoffOptions([
+				{ value: '0.5"' },
+				{ value: '1"' },
+				{ value: '1.5"' },
+				{ value: '2"' },
+			]);
+			if (['3"', '4"'].includes(spacerStandoffDistance)) {
+				setSpacerStandoffDistance(''); // Reset if the distance is invalid for these options
+			}
+		} else {
+			setSpacerStandoffOptions(spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
+		}
+
+		if (target === '') {
+			setSpacerStandoffDistance(''); // Always reset if the target is empty
+		}
+	};
 
 	const [sets, setSets] = useState(item.sets);
 	const handleOnChangeSets = (e) => {
@@ -155,6 +207,8 @@ export default function Logo({ item }) {
 					acrylicBase: acrylicBase,
 					customColor: customColor,
 					sets: sets,
+					studLength: studLength,
+					spacerStandoffDistance: spacerStandoffDistance,
 				};
 			} else {
 				return sign;
@@ -186,6 +240,8 @@ export default function Logo({ item }) {
 		acrylicBase,
 		customColor,
 		sets,
+		studLength,
+		spacerStandoffDistance,
 	]);
 
 	useEffect(() => {
@@ -216,9 +272,16 @@ export default function Logo({ item }) {
 				let total = (computed * multiplier * METAL_ACRYLIC_PRICING).toFixed(2);
 				total *= acrylicBase?.name === 'Black' ? 1 : 1.1;
 
+				if (selectedMounting === 'Stud with spacer') {
+					let spacer = total * 0.03 > 35 ? 35 : total * 0.03;
+					spacer = parseFloat(spacer.toFixed(2));
+
+					total += spacer;
+				}
+
 				total *= sets;
 
-				setUsdPrice(parseFloat(total).toFixed(2));
+				setUsdPrice(parseFloat(total.toFixed(2)));
 				setCadPrice((total * parseFloat(exchangeRate)).toFixed(2));
 			} else {
 				setUsdPrice(0);
@@ -228,7 +291,15 @@ export default function Logo({ item }) {
 			setUsdPrice(0);
 			setCadPrice(0);
 		}
-	}, [width, height, selectedThickness, waterproof, acrylicBase, sets]);
+	}, [
+		width,
+		height,
+		selectedThickness,
+		waterproof,
+		acrylicBase,
+		sets,
+		selectedMounting,
+	]);
 
 	const checkAndAddMissingFields = () => {
 		const missingFields = [];
@@ -243,6 +314,11 @@ export default function Logo({ item }) {
 		}
 		if (!waterproof) missingFields.push('Select Waterproof');
 		if (!selectedMounting) missingFields.push('Select Mounting');
+		if (selectedMounting === 'Stud with spacer') {
+			if (!studLength) missingFields.push('Select Stud Length');
+
+			if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+		}
 		if (!sets) missingFields.push('Select Quantity');
 		if (!fileUrls || fileUrls.length === 0)
 			missingFields.push('Upload a PDF/AI File');
@@ -292,6 +368,8 @@ export default function Logo({ item }) {
 		files,
 		customColor,
 		sets,
+		studLength,
+		spacerStandoffDistance,
 	]);
 
 	return (
@@ -352,6 +430,37 @@ export default function Logo({ item }) {
 					))}
 					value={selectedMounting}
 				/>
+
+				{selectedMounting === 'Stud with spacer' && (
+					<>
+						<Dropdown
+							title="Stud Length"
+							onChange={handleonChangeStudLength}
+							options={studLengthOptions.map((option) => (
+								<option
+									value={option.value}
+									selected={option.value == item.studLength}
+								>
+									{option.value}
+								</option>
+							))}
+							value={item.studLength}
+						/>
+						<Dropdown
+							title="SPACER DISTANCE"
+							onChange={handleonChangeSpacerDistance}
+							options={spacerStandoffOptions.map((option) => (
+								<option
+									value={option.value}
+									selected={option.value == item.spacerStandoffDistance}
+								>
+									{option.value}
+								</option>
+							))}
+							value={item.spacerStandoffDistance}
+						/>
+					</>
+				)}
 
 				<Dropdown
 					title="Metal Laminate"
@@ -418,6 +527,13 @@ export default function Logo({ item }) {
 					value={sets}
 				/>
 			</div>
+
+			{mounting === 'Stud with spacer' && (
+				<div className="text-xs text-[#9F9F9F] mb-4">
+					*Note: The spacer will be black (default) or match the painted sign's
+					color.
+				</div>
+			)}
 
 			<div className="quote-grid">
 				{acrylicBase?.name == 'Custom Color' && (

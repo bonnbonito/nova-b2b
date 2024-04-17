@@ -80,6 +80,8 @@ export default function LayeredAcrylic() {
 		files: [],
 		layers: '',
 		sets: 1,
+		studLength: '',
+		spacerStandoffDistance: '',
 		product: NovaQuote.product,
 	};
 
@@ -102,6 +104,8 @@ export default function LayeredAcrylic() {
 					thickness_options: '',
 					color: { name: '', color: '' },
 					letterHeight: '',
+					studLength: '',
+					spacerStandoffDistance: '',
 				};
 			} else {
 				args = {
