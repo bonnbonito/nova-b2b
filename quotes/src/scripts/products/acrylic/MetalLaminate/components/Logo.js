@@ -528,7 +528,7 @@ export default function Logo({ item }) {
 				/>
 			</div>
 
-			{mounting === 'Stud with spacer' && (
+			{selectedMounting === 'Stud with spacer' && (
 				<div className="text-xs text-[#9F9F9F] mb-4">
 					*Note: The spacer will be black (default) or match the painted sign's
 					color.
