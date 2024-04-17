@@ -511,7 +511,7 @@ class Nova_Quote {
 	}
 
 	public function to_admin_customer_rep_emails() {
-		if ( get_field( 'testing_mode', true ) ) {
+		if ( get_field( 'testing_mode', 'option' ) ) {
 			return array( 'bonn.j@hineon.com' );
 		}
 
