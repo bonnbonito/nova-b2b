@@ -236,7 +236,7 @@ export default function PricesView({ item }) {
 						<div className="text-left text-xs font-title">CUSTOM FONT</div>
 						<div className="text-left text-[14px] break-words">
 							<a href={item.fontFileUrl} target="_blank">
-								asdf{item.fontFileName}
+								{item.fontFileName}
 							</a>
 						</div>
 					</div>

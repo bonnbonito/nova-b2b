@@ -235,7 +235,7 @@ export default function QuoteView() {
 						</div>
 
 						<div className="flex justify-between gap-4">
-							<h5>ESTIMATED SHIPPING:</h5>{' '}
+							<h5>PACKAGING &amp; SHIPPING:</h5>{' '}
 							<h5>
 								{estimatedShipping > 0
 									? `${currency}$${Number(
