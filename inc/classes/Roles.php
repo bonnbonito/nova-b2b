@@ -550,6 +550,11 @@ jQuery(document).ready(function($) {
 	}
 
 	public function get_admin_and_customer_rep_emails() {
+
+		if ( get_field( 'testing_mode', 'option' ) ) {
+			return array( 'bonn.j@hineon.com' );
+		}
+
 		$user_emails = array();
 
 		// Get users with the 'administrator' role
