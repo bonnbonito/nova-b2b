@@ -320,6 +320,9 @@ export default function Logo({ item }) {
 			if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
 		}
 		if (!sets) missingFields.push('Select Quantity');
+
+		if (!comments) missingFields.push('Add Comments');
+
 		if (!fileUrls || fileUrls.length === 0)
 			missingFields.push('Upload a PDF/AI File');
 
@@ -356,6 +359,7 @@ export default function Logo({ item }) {
 		checkAndAddMissingFields();
 	}, [
 		selectedThickness,
+		comments,
 		selectedMounting,
 		waterproof,
 		acrylicBase,

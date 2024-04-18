@@ -80,13 +80,16 @@
 
 .woocommerce .quantity-change .quantity .qty {
     border: 0;
-    width: 35px;
     font-family: var(--global-heading-font-family);
     font-weight: 14px;
 }
 
 .cursor-pointer svg {
     pointer-events: none;
+}
+
+.cursor-pointer.increase {
+    user-select: none;
 }
 
 .nova-woo-cart-form-wrap {

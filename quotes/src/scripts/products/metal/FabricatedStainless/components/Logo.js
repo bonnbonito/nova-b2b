@@ -43,6 +43,7 @@ export default function Logo({ item }) {
 	const [files, setFiles] = useState(item.files);
 	const [color, setColor] = useState(item.color);
 	const [openColor, setOpenColor] = useState(false);
+	const [customColor, setCustomColor] = useState(item.customColor);
 	const [selectedFinishing, setSelectedFinishing] = useState(item.finishing);
 
 	const [metal, setMetal] = useState(item.metal);
@@ -163,6 +164,7 @@ export default function Logo({ item }) {
 					thickness: selectedThickness,
 					waterproof: waterproof,
 					color: color,
+					customColor: customColor,
 					installation: installation,
 					width: width,
 					height: height,
@@ -203,6 +205,10 @@ export default function Logo({ item }) {
 		if (!selectedFinishing) missingFields.push('Select Finish Option');
 		if (selectedFinishing === 'Painted Finish') {
 			if (!color.name) missingFields.push('Select Color');
+
+			if (color?.name === 'Custom Color' && !customColor) {
+				missingFields.push('Add the Pantone color code of your custom color.');
+			}
 		}
 		if (selectedFinishing === 'Metal Finish') {
 			if (!stainLessMetalFinish)
@@ -218,6 +224,8 @@ export default function Logo({ item }) {
 		}
 
 		if (!sets) missingFields.push('Select Quantity');
+
+		if (!comments) missingFields.push('Add Comments');
 
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
@@ -272,6 +280,7 @@ export default function Logo({ item }) {
 		filePaths,
 		installation,
 		color,
+		customColor,
 		metal,
 		sets,
 		studLength,
@@ -361,7 +370,7 @@ export default function Logo({ item }) {
 	});
 
 	useEffect(() => {
-		if (installation === 'Stud with spacer') {
+		if (installation !== 'Stud with spacer') {
 			setStudLength('');
 			setSpacerStandoffDistance('');
 		}
@@ -564,6 +573,20 @@ export default function Logo({ item }) {
 			)}
 
 			<div className="quote-grid">
+				{color?.name == 'Custom Color' && (
+					<div className="px-[1px] col-span-4">
+						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+							Custom Color
+						</label>
+						<input
+							className="w-full py-4 px-2 border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400"
+							type="text"
+							value={customColor}
+							onChange={(e) => setCustomColor(e.target.value)}
+							placeholder="ADD THE PANTONE COLOR CODE"
+						/>
+					</div>
+				)}
 				<div className="px-[1px] col-span-4">
 					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
 						COMMENTS

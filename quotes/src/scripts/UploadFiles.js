@@ -25,7 +25,14 @@ export default function UploadFiles({
 	};
 
 	const handleChange = async (event) => {
-		const files = Array.from(event.target.files).slice(0, 5);
+		const totalAllowedUploads = maxFiles - (fileNames?.length || 0); // Calculate how many more files can be uploaded
+		if (totalAllowedUploads <= 0) {
+			alert(`You have reached the maximum upload limit of ${maxFiles} files.`);
+			event.target.value = ''; // Reset the file input
+			return;
+		}
+
+		const files = Array.from(event.target.files).slice(0, totalAllowedUploads); // Only take as many files as can still be uploaded
 		if (files.length > 0) {
 			for (const file of files) {
 				await handleFileUpload(

@@ -41,6 +41,9 @@ export default function PVCUv() {
 					fileUrls: [],
 					files: [],
 					finishing: 'Matte',
+					studLength: '',
+					spacerStandoffDistance: '',
+					sets: 1,
 					product: NovaQuote.product,
 				},
 			]);
@@ -80,6 +83,9 @@ export default function PVCUv() {
 		fileNames: [],
 		fileUrls: [],
 		files: [],
+		studLength: '',
+		spacerStandoffDistance: '',
+		sets: 1,
 		product: NovaQuote.product,
 	};
 

@@ -56,6 +56,7 @@ class Nova_Quote {
 		add_action( 'save_post', array( $this, 'regenerate_pdf' ), 10, 3 );
 		add_action( 'quote_to_processing', array( $this, 'for_quotation_email' ) );
 		add_action( 'quote_to_payment', array( $this, 'for_payment_email' ) );
+		add_action( 'quote_to_payment', array( $this, 'for_payment_admin_email' ) );
 		add_action( 'quote_to_payment', array( $this, 'create_nova_quote_product' ) );
 		add_action( 'wp', array( $this, 'single_quote_redirect' ) );
 		add_action( 'nova_product_instant_quote', array( $this, 'nova_product_instant_quote' ) );
@@ -442,9 +443,10 @@ class Nova_Quote {
 		$to         = $user_info->user_email;
 		$first_name = $user_info->first_name;
 
-		$subject  = 'NOVA Signage - Mockup for Review - Quote ID: Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
+		$subject = 'NOVA Signage - Your Quoted Order - QUOTE ID: Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
+
 		$message  = '<p>Hello ' . $first_name . ',</p>';
-		$message .= '<p>Please review the quotation for Quote ID: Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '.  below. Kindly proceed to checkout if everything looks good.</p>';
+		$message .= '<p>Please review the quotation for QUOTE ID: Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '.  below. Kindly proceed to checkout if everything looks good.</p>';
 		$message .= '<p><a href="' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '">' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '</a></p>';
 		$message .= "<p>Don't hesitate to contact us if you have any questions or concerns.</p>";
 
@@ -456,11 +458,27 @@ class Nova_Quote {
 		$role_instance = \NOVA_B2B\Inc\Classes\Roles::get_instance();
 
 		$role_instance->send_email( $to, $subject, $message, $headers, array() );
+	}
+
+	public function for_payment_admin_email( $post_id ) {
+
+		$user_id       = get_field( 'partner', $post_id );
+		$user_info     = get_userdata( $user_id );
+		$business_id   = get_field( 'business_id', 'user_' . $user_id );
+		$company       = get_field( 'business_name', 'user_' . $user_id );
+		$edit_post_url = admin_url( 'post.php?post=' . $post_id . '&action=edit' );
+
+		$to         = $user_info->user_email;
+		$first_name = $user_info->first_name;
+
+		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
+
+		$role_instance = \NOVA_B2B\Inc\Classes\Roles::get_instance();
 
 		$to_admin       = $this->to_admin_customer_rep_emails();
-		$admin_subject  = 'NOVA - Quote Sent: Quote ID: Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . ' - ' . $first_name . ' ' . $business_id . ' from ' . $company;
+		$admin_subject  = 'NOVA - Quote Sent: QUOTE ID: Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . ' - ' . $first_name . ' ' . $business_id . ' from ' . $company;
 		$admin_message  = '<p>Hello,</p>';
-		$admin_message .= 'You sent a quotation to ' . $first_name . ' with Business ID: ' . $business_id . ' from ' . $company . ' for Quote ID : Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '.';
+		$admin_message .= 'You sent a quotation to ' . $first_name . ' with Business ID: ' . $business_id . ' from ' . $company . ' for QUOTE ID : Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '.';
 		$admin_message .= '<p>You may review the quotation you sent here:</p>';
 		$admin_message .= '<a href="' . $edit_post_url . '">' . $edit_post_url . '</a>';
 
@@ -478,9 +496,9 @@ class Nova_Quote {
 		$to         = $user_info->user_email;
 		$first_name = $user_info->first_name;
 
-		$subject  = 'NOVA Signage -  Mockup Submitted for Quotation (Quote ID:  Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . ') ';
+		$subject  = 'NOVA Signage -  Mockup Submitted for Quotation (QUOTE ID:  Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . ') ';
 		$message  = '<p>Hello ' . $first_name . '.</p>';
-		$message .= '<p>We got your quote request for Quote ID: Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '.</p>';
+		$message .= '<p>We got your quote request for QUOTE ID: Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '.</p>';
 		$message .= '<p>Our team is reviewing your mockup.</p>';
 		$message .= '<p>Should we require additional information or clarification on your design specifications, we will reach out to you within the next 24 business hours.</p>';
 		$message .= '<p>Please review your order details:<br><a href="' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '">' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '</a></p>';
@@ -500,10 +518,10 @@ class Nova_Quote {
 
 		$admin_subject = 'NOVA - Quote Request Received: QUOTE ID Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . ' - ' . $first_name . ' ' . $business_id . ' from ' . $company;
 
-		// $admin_subject = 'NOVA Signage - You Received a Quotation Request - Quote ID: Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '.';
+		// $admin_subject = 'NOVA Signage - You Received a Quotation Request - QUOTE ID: Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '.';
 
 		$to_admin_message  = '<p>Hello,</p>';
-		$to_admin_message .= '<p>' . $first_name . ' with Business ID: <strong>' . $business_id . '</strong> from ' . $company . ' sent a quotation request for their Quote ID: Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '.</p>';
+		$to_admin_message .= '<p>' . $first_name . ' with Business ID: <strong>' . $business_id . '</strong> from ' . $company . ' sent a quotation request for their QUOTE ID: Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '.</p>';
 		$to_admin_message .= '<p>You may review the mockup details here:<br></p>';
 		$to_admin_message .= '<a href="' . $edit_post_url . '">' . $edit_post_url . '</a>';
 

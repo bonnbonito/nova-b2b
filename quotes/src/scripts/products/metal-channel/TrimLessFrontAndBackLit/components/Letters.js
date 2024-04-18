@@ -527,7 +527,7 @@ export default function Letters({ item }) {
 							margin: '0',
 							whiteSpace: 'nowrap',
 							overflow: 'hidden',
-							fontFamily: font,
+							fontFamily: font === 'Custom font' ? '' : font,
 							color: color.color,
 							textShadow: '0px 0px 1px rgba(0, 0, 0, 1)',
 						}}

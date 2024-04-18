@@ -88,7 +88,7 @@ export default function Letters({ item }) {
 	};
 
 	useEffect(() => {
-		if (installation === 'Stud with spacer') {
+		if (installation !== 'Stud with spacer') {
 			setStudLength('');
 			setSpacerStandoffDistance('');
 		}

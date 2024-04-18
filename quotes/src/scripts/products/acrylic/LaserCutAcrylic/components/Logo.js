@@ -338,6 +338,9 @@ export default function Logo({ item }) {
 			missingFields.push('Add the Pantone color code of your custom color.');
 		}
 		if (!sets) missingFields.push('Select Quantity');
+
+		if (!comments) missingFields.push('Add Comments');
+
 		if (!fileUrls || fileUrls.length === 0)
 			missingFields.push('Upload a PDF/AI File');
 
@@ -381,6 +384,7 @@ export default function Logo({ item }) {
 		width,
 		height,
 		selectedThickness,
+		comments,
 		selectedMounting,
 		waterproof,
 		fileUrls,

@@ -318,6 +318,7 @@ export default function Logo({ item }) {
 		}
 		if (!selectedFinishing) missingFields.push('Select Finishing Option');
 		if (!sets) missingFields.push('Select Quantity');
+		if (!comments) missingFields.push('Add Comments');
 
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
@@ -359,6 +360,7 @@ export default function Logo({ item }) {
 		checkAndAddMissingFields();
 	}, [
 		fileUrls,
+		comments,
 		width,
 		height,
 		layers,

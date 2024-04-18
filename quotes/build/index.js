@@ -469,14 +469,14 @@ function FontsDropdown({
       setOpenColor(false);
     },
     style: {
-      fontFamily: font
+      fontFamily: font === 'Custom font' ? '' : font
     }
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "truncate"
   }, font === '' ? 'CHOOSE OPTION' : font)), openFont && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
+    className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm font-title",
     onClick: handleCustomFontSelection
   }, "- Custom Font"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: ""
@@ -1980,7 +1980,13 @@ function UploadFiles({
     fileRef.current.click();
   };
   const handleChange = async event => {
-    const files = Array.from(event.target.files).slice(0, 5);
+    const totalAllowedUploads = maxFiles - (fileNames?.length || 0); // Calculate how many more files can be uploaded
+    if (totalAllowedUploads <= 0) {
+      alert(`You have reached the maximum upload limit of ${maxFiles} files.`);
+      event.target.value = ''; // Reset the file input
+      return;
+    }
+    const files = Array.from(event.target.files).slice(0, totalAllowedUploads); // Only take as many files as can still be uploaded
     if (files.length > 0) {
       for (const file of files) {
         await handleFileUpload(file, setFileUrls, setFileNames, setFilePaths, tempFolder);
@@ -3449,7 +3455,7 @@ function Letters({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [letters, font, color, selectedThickness, selectedMounting, waterproof, selectedLetterHeight, fileUrls, fontFileUrl, selectedFinishing, customColor, sets]);
+  }, [letters, font, color, selectedThickness, selectedMounting, waterproof, selectedLetterHeight, fileUrls, fontFileUrl, selectedFinishing, customColor, sets, studLength, spacerStandoffDistance]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
   }, [letters, comments, font, selectedThickness, selectedMounting, waterproof, color, usdPrice, cadPrice, selectedLetterHeight, fileUrls, fileNames, filePaths, files, fontFileUrl, fontFileName, fontFilePath, fontFile, selectedFinishing, customFont, customColor, sets, studLength, spacerStandoffDistance]);
@@ -3485,7 +3491,7 @@ function Letters({
       margin: '0',
       whiteSpace: 'nowrap',
       overflow: 'hidden',
-      fontFamily: font,
+      fontFamily: font === 'Custom font' ? '' : font,
       color: color.color,
       textShadow: '0px 0px 1px rgba(0, 0, 0, 1)'
     }
@@ -3914,6 +3920,7 @@ function Logo({
       missingFields.push('Add the Pantone color code of your custom color.');
     }
     if (!sets) missingFields.push('Select Quantity');
+    if (!comments) missingFields.push('Add Comments');
     if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
@@ -3943,7 +3950,7 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [width, height, selectedThickness, selectedMounting, waterproof, fileUrls, fileNames, filePaths, files, selectedFinishing, sets, studLength, spacerStandoffDistance]);
+  }, [width, height, selectedThickness, comments, selectedMounting, waterproof, fileUrls, fileNames, filePaths, files, selectedFinishing, sets, studLength, spacerStandoffDistance]);
   (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_3__["default"])([colorRef], () => {
     if (!openColor) return;
     setOpenColor(false);
@@ -4536,6 +4543,7 @@ function Logo({
     }
     if (!selectedFinishing) missingFields.push('Select Finishing Option');
     if (!sets) missingFields.push('Select Quantity');
+    if (!comments) missingFields.push('Add Comments');
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
         const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
@@ -4565,7 +4573,7 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [fileUrls, width, height, layers, selectedMounting, selectedThickness, description, waterproof, selectedFinishing, sets, studLength, spacerStandoffDistance]);
+  }, [fileUrls, comments, width, height, layers, selectedMounting, selectedThickness, description, waterproof, selectedFinishing, sets, studLength, spacerStandoffDistance]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -5736,6 +5744,7 @@ function Logo({
       if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
     }
     if (!sets) missingFields.push('Select Quantity');
+    if (!comments) missingFields.push('Add Comments');
     if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
     setMissing(prevMissing => {
       const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
@@ -5759,7 +5768,7 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [selectedThickness, selectedMounting, waterproof, acrylicBase, width, height, metalLaminate, fileUrls, fileNames, filePaths, files, customColor, sets, studLength, spacerStandoffDistance]);
+  }, [selectedThickness, comments, selectedMounting, waterproof, acrylicBase, width, height, metalLaminate, fileUrls, fileNames, filePaths, files, customColor, sets, studLength, spacerStandoffDistance]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -8230,7 +8239,7 @@ function Letters({
       margin: '0',
       whiteSpace: 'nowrap',
       overflow: 'hidden',
-      fontFamily: font,
+      fontFamily: font === 'Custom font' ? '' : font,
       color: color.color,
       textShadow: '0px 0px 1px rgba(0, 0, 0, 1)'
     }
@@ -9040,7 +9049,7 @@ function Letters({
       margin: '0',
       whiteSpace: 'nowrap',
       overflow: 'hidden',
-      fontFamily: font,
+      fontFamily: font === 'Custom font' ? '' : font,
       color: color.color,
       textShadow: '0px 0px 1px rgba(0, 0, 0, 1)'
     }
@@ -9827,7 +9836,7 @@ function Letters({
     }
   }, [selectedLetterHeight, selectedThickness, selectedFinishing, letters, waterproof, lettersHeight, metal, stainLessMetalFinish, installation, sets]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (installation === 'Stud with spacer') {
+    if (installation !== 'Stud with spacer') {
       setStudLength('');
       setSpacerStandoffDistance('');
     }
@@ -9936,7 +9945,7 @@ function Letters({
       margin: '0',
       whiteSpace: 'nowrap',
       overflow: 'hidden',
-      fontFamily: font,
+      fontFamily: font === 'Custom font' ? '' : font,
       color: color.color,
       textShadow: '0px 0px 1px rgba(0, 0, 0, 1)'
     }
@@ -10169,6 +10178,7 @@ function Logo({
   const [files, setFiles] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.files);
   const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.color);
   const [openColor, setOpenColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const [customColor, setCustomColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.customColor);
   const [selectedFinishing, setSelectedFinishing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.finishing);
   const [metal, setMetal] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.metal);
   const [stainLessMetalFinish, setStainLessMetalFinish] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.stainLessMetalFinish);
@@ -10275,6 +10285,7 @@ function Logo({
           thickness: selectedThickness,
           waterproof: waterproof,
           color: color,
+          customColor: customColor,
           installation: installation,
           width: width,
           height: height,
@@ -10310,6 +10321,9 @@ function Logo({
     if (!selectedFinishing) missingFields.push('Select Finish Option');
     if (selectedFinishing === 'Painted Finish') {
       if (!color.name) missingFields.push('Select Color');
+      if (color?.name === 'Custom Color' && !customColor) {
+        missingFields.push('Add the Pantone color code of your custom color.');
+      }
     }
     if (selectedFinishing === 'Metal Finish') {
       if (!stainLessMetalFinish) missingFields.push('Select Metal Finish Option');
@@ -10321,6 +10335,7 @@ function Logo({
       if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
     }
     if (!sets) missingFields.push('Select Quantity');
+    if (!comments) missingFields.push('Add Comments');
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
         const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
@@ -10350,7 +10365,7 @@ function Logo({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
-  }, [comments, selectedThickness, selectedMounting, waterproof, width, height, usdPrice, cadPrice, fileUrls, fileNames, selectedFinishing, stainLessMetalFinish, files, filePaths, installation, color, metal, sets, studLength, spacerStandoffDistance]);
+  }, [comments, selectedThickness, selectedMounting, waterproof, width, height, usdPrice, cadPrice, fileUrls, fileNames, selectedFinishing, stainLessMetalFinish, files, filePaths, installation, color, customColor, metal, sets, studLength, spacerStandoffDistance]);
   const logoPricingObject = NovaQuote.logo_pricing_tables;
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (width && height && selectedThickness && waterproof && logoPricingObject !== null) {
@@ -10394,7 +10409,7 @@ function Logo({
     setOpenColor(false);
   });
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (installation === 'Stud with spacer') {
+    if (installation !== 'Stud with spacer') {
       setStudLength('');
       setSpacerStandoffDistance('');
     }
@@ -10512,7 +10527,17 @@ function Logo({
     className: "text-xs text-[#9F9F9F] mb-4"
   }, "*Note: The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, color?.name == 'Custom Color' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "px-[1px] col-span-4"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
+  }, "Custom Color"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    className: "w-full py-4 px-2 border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400",
+    type: "text",
+    value: customColor,
+    onChange: e => setCustomColor(e.target.value),
+    placeholder: "ADD THE PANTONE COLOR CODE"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "px-[1px] col-span-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
@@ -10849,7 +10874,7 @@ function Letters({
     setSpacerStandoffDistance(e.target.value);
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (installation === 'Stud with spacer') {
+    if (installation !== 'Stud with spacer') {
       setStudLength('');
       setSpacerStandoffDistance('');
     }
@@ -11511,6 +11536,7 @@ function Logo({
     }
     if (!sets) missingFields.push('Select Quantity');
     if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    if (!comments) missingFields.push('Add Comments');
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
         const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
@@ -11575,7 +11601,7 @@ function Logo({
     color?.name != 'Custom Color' && setCustomColor('');
   }, [color]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (installation === 'Stud with spacer') {
+    if (installation !== 'Stud with spacer') {
       setStudLength('');
       setSpacerStandoffDistance('');
     }
@@ -12263,7 +12289,7 @@ function Letters({
     adjustFontSize();
   }, [letters]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (installation === 'Stud with spacer') {
+    if (installation !== 'Stud with spacer') {
       setStudLength('');
       setSpacerStandoffDistance('');
     }
@@ -12368,7 +12394,7 @@ function Letters({
       margin: '0',
       whiteSpace: 'nowrap',
       overflow: 'hidden',
-      fontFamily: font,
+      fontFamily: font === 'Custom font' ? '' : font,
       color: color.color,
       textShadow: '0px 0px 1px rgba(0, 0, 0, 1)'
     }
@@ -12612,6 +12638,7 @@ function Logo({
   const [files, setFiles] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.files);
   const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.color);
   const [openColor, setOpenColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const [customColor, setCustomColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.customColor);
   const [selectedFinishing, setSelectedFinishing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.finishing);
   const [metal, setMetal] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.metal);
   const [stainLessMetalFinish, setStainLessMetalFinish] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.stainLessMetalFinish);
@@ -12722,6 +12749,7 @@ function Logo({
           thickness: selectedThickness,
           waterproof: waterproof,
           color: color,
+          customColor: customColor,
           installation: installation,
           width: width,
           height: height,
@@ -12758,6 +12786,9 @@ function Logo({
     if (!selectedFinishing) missingFields.push('Select Finish Option');
     if (selectedFinishing === 'Painted Finish') {
       if (!color.name) missingFields.push('Select Color');
+      if (color?.name === 'Custom Color' && !customColor) {
+        missingFields.push('Add the Pantone color code of your custom color.');
+      }
     }
     if (selectedFinishing === 'Metal Finish') {
       if (!stainLessMetalFinish) missingFields.push('Select Metal Finish Option');
@@ -12772,6 +12803,7 @@ function Logo({
       if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
     }
     if (!sets) missingFields.push('Select Quantity');
+    if (!comments) missingFields.push('Add Comments');
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
         const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
@@ -12801,7 +12833,7 @@ function Logo({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
-  }, [comments, selectedThickness, selectedMounting, waterproof, width, height, usdPrice, cadPrice, fileUrls, fileNames, selectedFinishing, stainLessMetalFinish, stainlessSteelPolished, files, filePaths, installation, color, metal, sets, studLength, spacerStandoffDistance]);
+  }, [comments, selectedThickness, selectedMounting, waterproof, width, height, usdPrice, cadPrice, fileUrls, fileNames, selectedFinishing, stainLessMetalFinish, stainlessSteelPolished, files, filePaths, installation, color, customColor, metal, sets, studLength, spacerStandoffDistance]);
   const logoPricingObject = NovaQuote.logo_pricing_tables;
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (width && height && selectedThickness && waterproof && logoPricingObject !== null) {
@@ -12852,7 +12884,7 @@ function Logo({
     setOpenColor(false);
   });
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (installation === 'Stud with spacer') {
+    if (installation !== 'Stud with spacer') {
       setStudLength('');
       setSpacerStandoffDistance('');
     }
@@ -12978,7 +13010,17 @@ function Logo({
     className: "text-xs text-[#9F9F9F] mb-4"
   }, "*Note: The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, color?.name == 'Custom Color' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "px-[1px] col-span-4"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
+  }, "Custom Color"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    className: "w-full py-4 px-2 border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400",
+    type: "text",
+    value: customColor,
+    onChange: e => setCustomColor(e.target.value),
+    placeholder: "ADD THE PANTONE COLOR CODE"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "px-[1px] col-span-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
@@ -13202,8 +13244,11 @@ function PVCPainted() {
         fileNames: [],
         fileUrls: [],
         files: [],
+        sets: 1,
         customFont: '',
         customColor: '',
+        studLength: '',
+        spacerStandoffDistance: '',
         finishing: 'Matte',
         product: NovaQuote.product
       }]);
@@ -13244,6 +13289,9 @@ function PVCPainted() {
     fileNames: [],
     fileUrls: [],
     files: [],
+    studLength: '',
+    spacerStandoffDistance: '',
+    sets: 1,
     product: NovaQuote.product
   };
   function addSignage(type) {
@@ -13265,7 +13313,8 @@ function PVCPainted() {
           filePaths: [],
           fileNames: [],
           fileUrls: [],
-          files: []
+          files: [],
+          sets: 1
         };
       } else {
         args = {
@@ -13429,8 +13478,53 @@ function Letters({
   const [selectedFinishing, setSelectedFinishing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.finishing);
   const [customFont, setCustomFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.customFont);
   const [installation, setInstallation] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.installation);
+  const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.studLength);
+  const [spacerStandoffOptions, setSpacerStandoffOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.spacerStandoffDefaultOptions);
+  const [spacerStandoffDistance, setSpacerStandoffDistance] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.spacerStandoffDistance);
+  const handleonChangeSpacerDistance = e => {
+    setSpacerStandoffDistance(e.target.value);
+  };
+  const handleonChangeStudLength = e => {
+    const target = e.target.value;
+    setStudLength(target); // Directly set the value without a callback
+
+    if (target === '1.5"') {
+      setSpacerStandoffOptions([{
+        value: '0.5"'
+      }, {
+        value: '1"'
+      }]);
+      if (!['0.5"', '1"'].includes(spacerStandoffDistance)) {
+        setSpacerStandoffDistance(''); // Reset if not one of the valid options
+      }
+    } else if (['3.2"', '4"'].includes(target)) {
+      setSpacerStandoffOptions([{
+        value: '0.5"'
+      }, {
+        value: '1"'
+      }, {
+        value: '1.5"'
+      }, {
+        value: '2"'
+      }]);
+      if (['3"', '4"'].includes(spacerStandoffDistance)) {
+        setSpacerStandoffDistance(''); // Reset if the distance is invalid for these options
+      }
+    } else {
+      setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
+    }
+
+    if (target === '') {
+      setSpacerStandoffDistance(''); // Always reset if the target is empty
+    }
+  };
+
   const [customColor, setCustomColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.customColor);
   const [selectedLetterHeight, setSelectedLetterHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.letterHeight);
+  const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.sets);
+  const handleOnChangeSets = e => {
+    setSets(e.target.value);
+  };
   const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.usdPrice);
   const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.cadPrice);
   const [installationSelections, setInstallationSelections] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_pvcOptions__WEBPACK_IMPORTED_MODULE_9__.installationOptions);
@@ -13518,7 +13612,10 @@ function Letters({
           finishing: selectedFinishing,
           customFont: customFont,
           customColor: customColor,
-          installation: installation
+          installation: installation,
+          sets: sets,
+          studLength: studLength,
+          spacerStandoffDistance: spacerStandoffDistance
         };
       } else {
         return sign;
@@ -13576,13 +13673,19 @@ function Letters({
         letterPrice *= installation === 'Double-sided tape' ? 1.01 : 1;
         totalLetterPrice += letterPrice;
       });
+      if (installation === 'Stud with spacer') {
+        let spacer = totalLetterPrice * 0.03 > 35 ? 35 : totalLetterPrice * 0.03;
+        spacer = parseFloat(spacer.toFixed(2));
+        totalLetterPrice += spacer;
+      }
+      totalLetterPrice *= sets;
       setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
       setCadPrice((totalLetterPrice * parseFloat(exchangeRate)).toFixed(2));
     } else {
       setUsdPrice(0);
       setCadPrice(0);
     }
-  }, [selectedLetterHeight, selectedThickness, selectedFinishing, letters, waterproof, lettersHeight, installation]);
+  }, [selectedLetterHeight, selectedThickness, selectedFinishing, letters, waterproof, lettersHeight, installation, sets]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     setLetterHeightOptions(() => Array.from({
       length: parseInt(lettersHeight.max) - parseInt(lettersHeight.min) + 1
@@ -13614,6 +13717,11 @@ function Letters({
     if (!selectedFinishing) missingFields.push('Select Finishing');
     if (!waterproof) missingFields.push('Select Waterproof');
     if (!installation) missingFields.push('Select Installation');
+    if (installation === 'Stud with spacer') {
+      if (!studLength) missingFields.push('Select Stud Length');
+      if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+    }
+    if (!sets) missingFields.push('Select Quantity');
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
         const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
@@ -13642,10 +13750,10 @@ function Letters({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [letters, font, color, selectedThickness, waterproof, selectedLetterHeight, fileUrls, fontFileUrl, selectedFinishing, customColor, installation]);
+  }, [letters, font, color, selectedThickness, waterproof, selectedLetterHeight, fileUrls, fontFileUrl, selectedFinishing, customColor, installation, sets, studLength, spacerStandoffDistance]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-  }, [letters, comments, font, selectedThickness, waterproof, color, usdPrice, cadPrice, selectedLetterHeight, fileUrls, fileNames, filePaths, files, fontFileUrl, fontFileName, fontFilePath, fontFile, selectedFinishing, customFont, customColor, installation]);
+  }, [letters, comments, font, selectedThickness, waterproof, color, usdPrice, cadPrice, selectedLetterHeight, fileUrls, fileNames, filePaths, files, fontFileUrl, fontFileName, fontFilePath, fontFile, selectedFinishing, customFont, customColor, installation, sets, studLength, spacerStandoffDistance]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const newHeightOptions = letterPricing?.filter(item => {
       const value = item[selectedThickness?.thickness];
@@ -13667,6 +13775,12 @@ function Letters({
     color?.name != 'Custom Color' && setCustomColor('');
     font != 'Custom font' && setFontFileUrl('');
   }, [color, font]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (installation !== 'Stud with spacer') {
+      setStudLength('');
+      setSpacerStandoffDistance('');
+    }
+  }, [installation]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -13678,7 +13792,7 @@ function Letters({
       margin: '0',
       whiteSpace: 'nowrap',
       overflow: 'hidden',
-      fontFamily: font,
+      fontFamily: font === 'Custom font' ? '' : font,
       color: color.color,
       textShadow: '0px 0px 1px rgba(0, 0, 0, 1)'
     }
@@ -13777,7 +13891,30 @@ function Letters({
       selected: option.value === installation
     }, option.value)),
     value: item.installation
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }), installation === 'Stud with spacer' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Stud Length",
+    onChange: handleonChangeStudLength,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.value,
+      selected: option.value == item.studLength
+    }, option.value)),
+    value: item.studLength
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "SPACER DISTANCE",
+    onChange: handleonChangeSpacerDistance,
+    options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.value,
+      selected: option.value == item.spacerStandoffDistance
+    }, option.value)),
+    value: item.spacerStandoffDistance
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Quantity",
+    onChange: handleOnChangeSets,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.setOptions,
+    value: sets
+  })), installation === 'Stud with spacer' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-xs text-[#9F9F9F] mb-4"
+  }, "*Note: The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid"
   }, color?.name == 'Custom Color' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "px-[1px] col-span-4"
@@ -13872,6 +14009,47 @@ function Logo({
   const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.color);
   const [customColor, setCustomColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.customColor);
   const [installation, setInstallation] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.installation);
+  const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.studLength);
+  const [spacerStandoffOptions, setSpacerStandoffOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.spacerStandoffDefaultOptions);
+  const [spacerStandoffDistance, setSpacerStandoffDistance] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.spacerStandoffDistance);
+  const handleonChangeSpacerDistance = e => {
+    setSpacerStandoffDistance(e.target.value);
+  };
+  const handleonChangeStudLength = e => {
+    const target = e.target.value;
+    setStudLength(target); // Directly set the value without a callback
+
+    if (target === '1.5"') {
+      setSpacerStandoffOptions([{
+        value: '0.5"'
+      }, {
+        value: '1"'
+      }]);
+      if (!['0.5"', '1"'].includes(spacerStandoffDistance)) {
+        setSpacerStandoffDistance(''); // Reset if not one of the valid options
+      }
+    } else if (['3.2"', '4"'].includes(target)) {
+      setSpacerStandoffOptions([{
+        value: '0.5"'
+      }, {
+        value: '1"'
+      }, {
+        value: '1.5"'
+      }, {
+        value: '2"'
+      }]);
+      if (['3"', '4"'].includes(spacerStandoffDistance)) {
+        setSpacerStandoffDistance(''); // Reset if the distance is invalid for these options
+      }
+    } else {
+      setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
+    }
+
+    if (target === '') {
+      setSpacerStandoffDistance(''); // Always reset if the target is empty
+    }
+  };
+
   const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.fileNames);
   const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.fileUrls);
   const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.filePaths);
@@ -13892,6 +14070,10 @@ function Logo({
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.waterproof);
   const handleOnChangeInstallation = e => setInstallation(e.target.value);
+  const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.sets);
+  const handleOnChangeSets = e => {
+    setSets(e.target.value);
+  };
   function handleComments(e) {
     setComments(e.target.value);
   }
@@ -13935,7 +14117,10 @@ function Logo({
           filePaths: filePaths,
           fileUrls: fileUrls,
           color: color,
-          customColor: customColor
+          customColor: customColor,
+          sets: sets,
+          studLength: studLength,
+          spacerStandoffDistance: spacerStandoffDistance
         };
       } else {
         return sign;
@@ -13948,7 +14133,7 @@ function Logo({
   }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-  }, [comments, selectedThickness, waterproof, width, height, installation, usdPrice, cadPrice, fileUrls, fileNames, selectedFinishing, files, filePaths, color, customColor]);
+  }, [comments, selectedThickness, waterproof, width, height, installation, usdPrice, cadPrice, fileUrls, fileNames, selectedFinishing, files, filePaths, color, customColor, sets, studLength, spacerStandoffDistance]);
   const logoPricingObject = NovaQuote.logo_pricing_tables;
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (width && height && selectedThickness && waterproof && logoPricingObject !== null) {
@@ -13963,6 +14148,12 @@ function Logo({
         let total = parseFloat((computed * multiplier).toFixed(2));
         total *= selectedFinishing === 'Gloss' ? 1.03 : 1;
         total *= installation === 'Double-sided tape' ? 1.01 : 1;
+        if (installation === 'Stud with spacer') {
+          let spacer = total * 0.03 > 35 ? 35 : total * 0.03;
+          spacer = parseFloat(spacer.toFixed(2));
+          total += spacer;
+        }
+        total *= sets;
         setUsdPrice(parseFloat(total.toFixed(2)));
         setCadPrice((total * parseFloat(exchangeRate)).toFixed(2));
       } else {
@@ -13973,16 +14164,26 @@ function Logo({
       setUsdPrice(0);
       setCadPrice(0);
     }
-  }, [width, height, selectedThickness, waterproof, selectedFinishing, installation]);
+  }, [width, height, selectedThickness, waterproof, selectedFinishing, installation, sets]);
   const checkAndAddMissingFields = () => {
     const missingFields = [];
     if (!selectedThickness) missingFields.push('Select Acrylic Thickness');
     if (!width) missingFields.push('Select Logo Width');
     if (!height) missingFields.push('Select Logo Height');
+    if (!color.name) missingFields.push('Select Color');
+    if (color?.name === 'Custom Color' && !customColor) {
+      missingFields.push('Add the Pantone color code of your custom color.');
+    }
     if (!waterproof) missingFields.push('Select Waterproof');
     if (!installation) missingFields.push('Select Installation');
+    if (installation === 'Stud with spacer') {
+      if (!studLength) missingFields.push('Select Stud Length');
+      if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+    }
     if (!selectedFinishing) missingFields.push('Select Finishing');
     if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    if (!sets) missingFields.push('Select Quantity');
+    if (!comments) missingFields.push('Add Comments');
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
         const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
@@ -14012,7 +14213,7 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [width, height, selectedThickness, installation, waterproof, fileUrls, fileNames, files, filePaths, selectedFinishing]);
+  }, [width, comments, height, selectedThickness, installation, waterproof, fileUrls, fileNames, files, filePaths, selectedFinishing, color, customColor, sets, studLength, spacerStandoffDistance]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if ('Outdoor' === waterproof) {
       if ('Double-sided tape' === installation) {
@@ -14031,6 +14232,12 @@ function Logo({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     color?.name != 'Custom Color' && setCustomColor('');
   }, [color]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (installation !== 'Stud with spacer') {
+      setStudLength('');
+      setSpacerStandoffDistance('');
+    }
+  }, [installation]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -14103,7 +14310,30 @@ function Logo({
       selected: option.value === installation
     }, option.value)),
     value: item.installation
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }), installation === 'Stud with spacer' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Stud Length",
+    onChange: handleonChangeStudLength,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.value,
+      selected: option.value == item.studLength
+    }, option.value)),
+    value: item.studLength
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "SPACER DISTANCE",
+    onChange: handleonChangeSpacerDistance,
+    options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.value,
+      selected: option.value == item.spacerStandoffDistance
+    }, option.value)),
+    value: item.spacerStandoffDistance
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Quantity",
+    onChange: handleOnChangeSets,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.setOptions,
+    value: sets
+  })), installation === 'Stud with spacer' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-xs text-[#9F9F9F] mb-4"
+  }, "*Note: The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid"
   }, color?.name == 'Custom Color' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "px-[1px] col-span-4"
@@ -14200,6 +14430,9 @@ function PVCUv() {
         fileUrls: [],
         files: [],
         finishing: 'Matte',
+        studLength: '',
+        spacerStandoffDistance: '',
+        sets: 1,
         product: NovaQuote.product
       }]);
     }
@@ -14238,6 +14471,9 @@ function PVCUv() {
     fileNames: [],
     fileUrls: [],
     files: [],
+    studLength: '',
+    spacerStandoffDistance: '',
+    sets: 1,
     product: NovaQuote.product
   };
   function addSignage(type) {
@@ -14380,6 +14616,51 @@ function Logo({
   const [pvcBaseColor, setPvcBaseColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.pvcBaseColor);
   const [customColor, setCustomColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.customColor);
   const [installation, setInstallation] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.installation);
+  const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.sets);
+  const handleOnChangeSets = e => {
+    setSets(e.target.value);
+  };
+  const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.studLength);
+  const [spacerStandoffOptions, setSpacerStandoffOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.spacerStandoffDefaultOptions);
+  const [spacerStandoffDistance, setSpacerStandoffDistance] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.spacerStandoffDistance);
+  const handleonChangeSpacerDistance = e => {
+    setSpacerStandoffDistance(e.target.value);
+  };
+  const handleonChangeStudLength = e => {
+    const target = e.target.value;
+    setStudLength(target); // Directly set the value without a callback
+
+    if (target === '1.5"') {
+      setSpacerStandoffOptions([{
+        value: '0.5"'
+      }, {
+        value: '1"'
+      }]);
+      if (!['0.5"', '1"'].includes(spacerStandoffDistance)) {
+        setSpacerStandoffDistance(''); // Reset if not one of the valid options
+      }
+    } else if (['3.2"', '4"'].includes(target)) {
+      setSpacerStandoffOptions([{
+        value: '0.5"'
+      }, {
+        value: '1"'
+      }, {
+        value: '1.5"'
+      }, {
+        value: '2"'
+      }]);
+      if (['3"', '4"'].includes(spacerStandoffDistance)) {
+        setSpacerStandoffDistance(''); // Reset if the distance is invalid for these options
+      }
+    } else {
+      setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
+    }
+
+    if (target === '') {
+      setSpacerStandoffDistance(''); // Always reset if the target is empty
+    }
+  };
+
   const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.fileNames);
   const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.fileUrls);
   const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.filePaths);
@@ -14443,7 +14724,10 @@ function Logo({
           filePaths: filePaths,
           fileUrls: fileUrls,
           pvcBaseColor: pvcBaseColor,
-          customColor: customColor
+          customColor: customColor,
+          sets: sets,
+          studLength: studLength,
+          spacerStandoffDistance: spacerStandoffDistance
         };
       } else {
         return sign;
@@ -14456,7 +14740,7 @@ function Logo({
   }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-  }, [comments, selectedThickness, waterproof, width, height, installation, usdPrice, cadPrice, fileUrls, fileNames, selectedFinishing, files, filePaths, pvcBaseColor, customColor]);
+  }, [comments, selectedThickness, waterproof, width, height, installation, usdPrice, cadPrice, fileUrls, fileNames, selectedFinishing, files, filePaths, pvcBaseColor, customColor, sets, studLength, spacerStandoffDistance]);
   const logoPricingObject = NovaQuote.logo_pricing_tables;
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (width && height && selectedThickness && waterproof && logoPricingObject !== null) {
@@ -14472,6 +14756,12 @@ function Logo({
         total *= selectedFinishing === 'Gloss' ? 1.03 : 1;
         total *= installation === 'Double-sided tape' ? 1.01 : 1;
         total *= pvcBaseColor?.name === 'Black' ? 1.2 : 1.1;
+        if (installation === 'Stud with spacer') {
+          let spacer = total * 0.03 > 35 ? 35 : total * 0.03;
+          spacer = parseFloat(spacer.toFixed(2));
+          total += spacer;
+        }
+        total *= sets;
         setUsdPrice(parseFloat(total.toFixed(2)));
         setCadPrice((total * parseFloat(exchangeRate)).toFixed(2));
       } else {
@@ -14482,7 +14772,7 @@ function Logo({
       setUsdPrice(0);
       setCadPrice(0);
     }
-  }, [width, height, selectedThickness, waterproof, selectedFinishing, installation, pvcBaseColor]);
+  }, [width, height, selectedThickness, waterproof, selectedFinishing, installation, pvcBaseColor, installation, sets]);
   const checkAndAddMissingFields = () => {
     const missingFields = [];
     if (!selectedThickness) missingFields.push('Select Acrylic Thickness');
@@ -14490,8 +14780,14 @@ function Logo({
     if (!height) missingFields.push('Select Logo Height');
     if (!waterproof) missingFields.push('Select Waterproof');
     if (!installation) missingFields.push('Select Installation');
+    if (installation === 'Stud with spacer') {
+      if (!studLength) missingFields.push('Select Stud Length');
+      if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+    }
     if (!selectedFinishing) missingFields.push('Select Finishing');
     if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    if (!sets) missingFields.push('Select Quantity');
+    if (!comments) missingFields.push('Add Comments');
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
         const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
@@ -14521,7 +14817,7 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [width, height, selectedThickness, installation, waterproof, fileUrls, fileNames, files, filePaths, selectedFinishing]);
+  }, [width, comments, height, selectedThickness, installation, waterproof, fileUrls, fileNames, files, filePaths, selectedFinishing, sets, studLength, spacerStandoffDistance]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if ('Outdoor' === waterproof) {
       if ('Double-sided tape' === installation) {
@@ -14540,6 +14836,12 @@ function Logo({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     pvcBaseColor?.name != 'Custom Color' && setCustomColor('');
   }, [pvcBaseColor]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (installation !== 'Stud with spacer') {
+      setStudLength('');
+      setSpacerStandoffDistance('');
+    }
+  }, [installation]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -14612,7 +14914,30 @@ function Logo({
       selected: option.value === installation
     }, option.value)),
     value: item.installation
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }), installation === 'Stud with spacer' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Stud Length",
+    onChange: handleonChangeStudLength,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.value,
+      selected: option.value == item.studLength
+    }, option.value)),
+    value: item.studLength
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "SPACER DISTANCE",
+    onChange: handleonChangeSpacerDistance,
+    options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.value,
+      selected: option.value == item.spacerStandoffDistance
+    }, option.value)),
+    value: item.spacerStandoffDistance
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Quantity",
+    onChange: handleOnChangeSets,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.setOptions,
+    value: sets
+  })), installation === 'Stud with spacer' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-xs text-[#9F9F9F] mb-4"
+  }, "*Note: The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid"
   }, pvcBaseColor?.name == 'Custom Color' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "px-[1px] col-span-4"
@@ -14676,6 +15001,10 @@ const installationOptions = [{
   value: 'Flush stud'
 }, {
   value: 'Pad - Combination All'
+}, {
+  value: 'Stud Mount'
+}, {
+  value: 'Stud with spacer'
 }];
 const thicknessOptions = [{
   thickness: '1/2"',

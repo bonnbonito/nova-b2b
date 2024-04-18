@@ -218,6 +218,8 @@ export default function Logo({ item }) {
 		if (!fileUrls || fileUrls.length === 0)
 			missingFields.push('Upload a PDF/AI File');
 
+		if (!comments) missingFields.push('Add Comments');
+
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
 				const existingIndex = prevMissing.findIndex(
@@ -322,7 +324,7 @@ export default function Logo({ item }) {
 	}, [color]);
 
 	useEffect(() => {
-		if (installation === 'Stud with spacer') {
+		if (installation !== 'Stud with spacer') {
 			setStudLength('');
 			setSpacerStandoffDistance('');
 		}

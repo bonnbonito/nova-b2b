@@ -31,7 +31,7 @@ export default function FontsDropdown({
 					setOpenColor(false);
 				}}
 				style={{
-					fontFamily: font,
+					fontFamily: font === 'Custom font' ? '' : font,
 				}}
 			>
 				<div className="truncate">{font === '' ? 'CHOOSE OPTION' : font}</div>
@@ -40,7 +40,7 @@ export default function FontsDropdown({
 				<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
 					{/* Custom Font Option */}
 					<div
-						className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
+						className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm font-title"
 						onClick={handleCustomFontSelection}
 					>
 						- Custom Font

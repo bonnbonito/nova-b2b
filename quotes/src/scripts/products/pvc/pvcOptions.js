@@ -20,6 +20,12 @@ export const installationOptions = [
 	{
 		value: 'Pad - Combination All',
 	},
+	{
+		value: 'Stud Mount',
+	},
+	{
+		value: 'Stud with spacer',
+	},
 ];
 
 export const thicknessOptions = [

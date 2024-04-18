@@ -44,8 +44,11 @@ export default function PVCPainted() {
 					fileNames: [],
 					fileUrls: [],
 					files: [],
+					sets: 1,
 					customFont: '',
 					customColor: '',
+					studLength: '',
+					spacerStandoffDistance: '',
 					finishing: 'Matte',
 					product: NovaQuote.product,
 				},
@@ -87,6 +90,9 @@ export default function PVCPainted() {
 		fileNames: [],
 		fileUrls: [],
 		files: [],
+		studLength: '',
+		spacerStandoffDistance: '',
+		sets: 1,
 		product: NovaQuote.product,
 	};
 
@@ -110,6 +116,7 @@ export default function PVCPainted() {
 					fileNames: [],
 					fileUrls: [],
 					files: [],
+					sets: 1,
 				};
 			} else {
 				args = {
