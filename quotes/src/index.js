@@ -14,6 +14,7 @@ import TrimLessFrontLit from './scripts/products/metal-channel/TrimLessFrontLit/
 import FabricatedStainless from './scripts/products/metal/FabricatedStainless/FabricatedStainless';
 import LaserCutAluminum from './scripts/products/metal/LaserCutAluminum/LaserCutAluminum';
 import LaserCutStainless from './scripts/products/metal/LaserCutStainless/LaserCutStainless';
+import PVCMetalLaminate from './scripts/products/pvc/PVCMetalLaminate/PVCMetalLaminate';
 import PVCPainted from './scripts/products/pvc/PVCPainted/PVCPainted';
 import PVCUv from './scripts/products/pvc/PVCUv/PVCUv';
 
@@ -21,6 +22,13 @@ if (document.querySelector('#laserCutAcrylic')) {
 	ReactDOM.render(
 		<LaserCutAcrylic />,
 		document.querySelector('#laserCutAcrylic')
+	);
+}
+
+if (document.querySelector('#pvcMetalLaminate')) {
+	ReactDOM.render(
+		<PVCMetalLaminate />,
+		document.querySelector('#pvcMetalLaminate')
 	);
 }
 

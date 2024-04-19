@@ -140,7 +140,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 								$max_quantity = 1;
 							} else {
 								$min_quantity = 0;
-								$max_quantity = $_product->get_max_purchase_quantity();
+								$max_quantity = 100;
 							}
 
 							$product_quantity = woocommerce_quantity_input(

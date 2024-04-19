@@ -280,6 +280,11 @@ export default function Logo({ item }) {
 		if (!waterproof) missingFields.push('Select Waterproof');
 		if (!installation) missingFields.push('Select Installation');
 
+		if (!pvcBaseColor.name) missingFields.push('Select PVC Base Color');
+		if (pvcBaseColor?.name === 'Custom Color' && !customColor) {
+			missingFields.push('Add the Pantone color code of your custom color.');
+		}
+
 		if (installation === 'Stud with spacer') {
 			if (!studLength) missingFields.push('Select Stud Length');
 

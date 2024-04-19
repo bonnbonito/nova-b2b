@@ -166,7 +166,7 @@ const piecesOptions = ['30 pieces or fewer'];
 
 const setOptions = Array.from(
 	{
-		length: 30,
+		length: 100,
 	},
 	(_, index) => {
 		const val = 1 + index;

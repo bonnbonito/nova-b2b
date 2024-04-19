@@ -94,6 +94,22 @@ class Woocommerce {
 		add_filter( 'woocommerce_admin_order_actions', array( $this, 'remove_recalculate' ), 10, 2 );
 		add_filter( 'wcumcs_custom_item_price_final', array( $this, 'change_to_custom_price' ), 9999999, 4 );
 		add_filter( 'woocommerce_checkout_fields', array( $this, 'require_pst_on_bc' ) );
+		add_filter( 'woocommerce_quantity_input_args', array( $this, 'quantity_input_args' ), 40, 2 );
+		add_filter( 'woocommerce_before_cart_contents', array( $this, 'change_max_value' ) );
+	}
+
+	public function change_max_value() {
+		add_filter( 'woocommerce_quantity_input_max', array( $this, 'quantity_input_max' ) );
+	}
+
+	public function quantity_input_args( $args, $product ) {
+		$args['max_value'] = 100;
+		return $args;
+	}
+
+	public function quantity_input_max( $max ) {
+		$max = 100;
+		return $max;
 	}
 
 	public function require_pst_on_bc( $fields ) {
@@ -1306,8 +1322,13 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 			if ( isset( $object->thickness ) && ! empty( $object->thickness ) ) {
 				$html .= '<strong>Thickness: </strong>' . htmlspecialchars( $object->thickness->thickness ) . '<br>';
 			}
+
 			if ( isset( $object->color->name ) && ! empty( $object->color->name ) ) {
 				$html .= '<strong>Color: </strong>' . htmlspecialchars( $object->color->name ) . '<br>';
+			}
+
+			if ( isset( $object->pvcBaseColor->name ) && ! empty( $object->pvcBaseColor->name ) ) {
+				$html .= '<strong>Color: </strong>' . htmlspecialchars( $object->pvcBaseColor->name ) . '<br>';
 			}
 
 			if ( isset( $object->customColor ) && ! empty( $object->customColor ) ) {
@@ -1879,6 +1900,11 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		<?php
 	}
 
+	function camelcase_to_regular( $input ) {
+		$result = strtolower( preg_replace( '/(?<!^)[A-Z]/', ' $0', $input ) );
+		return ucwords( $result );
+	}
+
 
 	public function show_project_details( $projects ) {
 		foreach ( $projects as $project ) {
@@ -1897,8 +1923,12 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 					continue;
 				}
 
-				$formattedKey = strtoupper( str_replace( '_', ' ', $key ) );
-				echo "<div class='grid grid-cols-2 py-[2px]'><div class='text-left text-xs font-title'>{$formattedKey}: </div><div class='text-left text-[10px] uppercase'>{$value}</div></div>";
+				if ( ! is_admin() && ( $key === 'id' || $key === 'usdPrice' || $key === 'cadPrice' || $key === 'product' ) ) {
+					continue;
+				}
+
+				$formattedKey = $this->camelcase_to_regular( $key );
+				echo "<div class='grid grid-cols-2 py-[2px]'><div class='text-left text-xs font-title uppercase'>{$formattedKey}: </div><div class='text-left text-[10px] uppercase'>{$value}</div></div>";
 			}
 
 			// Handle file URLs and names

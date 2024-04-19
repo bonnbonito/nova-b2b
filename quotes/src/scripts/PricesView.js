@@ -140,19 +140,13 @@ export default function PricesView({ item }) {
 					</>
 				)}
 
-				{item.type === 'letters' && (
-					<>
-						{item.letterHeight && (
-							<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
-								<div className="text-left text-xs font-title">
-									LETTER HEIGHT
-								</div>
-								<div className="text-left text-[14px] break-words">
-									{item.letterHeight}"
-								</div>
-							</div>
-						)}
-					</>
+				{item.letterHeight && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">LETTER HEIGHT</div>
+						<div className="text-left text-[14px] break-words">
+							{item.letterHeight}"
+						</div>
+					</div>
 				)}
 
 				{item.metal && (
@@ -196,6 +190,13 @@ export default function PricesView({ item }) {
 					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
 						<div className="text-left text-xs font-title">METAL FINISHING</div>
 						<div className="text-left text-[14px]">{item.metalFinishing}</div>
+					</div>
+				)}
+
+				{item.metalLaminate && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">METAL LAMINATE</div>
+						<div className="text-left text-[14px]">{item.metalLaminate}</div>
 					</div>
 				)}
 

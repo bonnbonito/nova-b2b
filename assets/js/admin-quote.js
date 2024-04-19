@@ -327,6 +327,7 @@ function getSignageDetailFields(sign) {
 					: sign.acrylicBase,
 		},
 		{ label: 'METAL FINISHING', value: sign.metalFinishing },
+		{ label: 'METAL LAMINATE', value: sign.metalLaminate },
 		{ label: 'STEEL POLISHED', value: sign.stainlessSteelPolished },
 		{ label: 'STUD LENGTH', value: sign.studLength },
 		{ label: 'SPACER STANDOFF DISTANCE', value: sign.spacerStandoffDistance },

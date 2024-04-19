@@ -27,22 +27,22 @@ echo wc_get_stock_html( $product ); // WPCS: XSS ok.
 
 if ( $product->is_in_stock() ) : ?>
 
-<?php do_action( 'woocommerce_before_add_to_cart_form' ); ?>
+	<?php do_action( 'woocommerce_before_add_to_cart_form' ); ?>
 
 <form class="cart"
-    action="<?php echo esc_url( apply_filters( 'woocommerce_add_to_cart_form_action', $product->get_permalink() ) ); ?>"
-    method="post" enctype='multipart/form-data'>
-    <?php do_action( 'woocommerce_before_add_to_cart_button' ); ?>
-    <div class="text-sm font-title tracking-[1.4px] mb-1">QUANTITY</div>
-    <div class="quantity-change">
-        <div class="cursor-pointer decrease">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="0.5" y="0.5" width="19" height="19" rx="4.5" stroke="#5E5E5E" />
-                <path d="M7.40449 9.13351H13.0045L12.8645 10.7435H7.26449L7.40449 9.13351Z" fill="black" />
-            </svg>
-        </div>
+	action="<?php echo esc_url( apply_filters( 'woocommerce_add_to_cart_form_action', $product->get_permalink() ) ); ?>"
+	method="post" enctype='multipart/form-data'>
+	<?php do_action( 'woocommerce_before_add_to_cart_button' ); ?>
+	<div class="text-sm font-title tracking-[1.4px] mb-1">QUANTITY</div>
+	<div class="quantity-change">
+		<div class="cursor-pointer decrease">
+			<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<rect x="0.5" y="0.5" width="19" height="19" rx="4.5" stroke="#5E5E5E" />
+				<path d="M7.40449 9.13351H13.0045L12.8645 10.7435H7.26449L7.40449 9.13351Z" fill="black" />
+			</svg>
+		</div>
 
-        <?php
+		<?php
 			do_action( 'woocommerce_before_add_to_cart_quantity' );
 
 			woocommerce_quantity_input(
@@ -56,32 +56,32 @@ if ( $product->is_in_stock() ) : ?>
 			do_action( 'woocommerce_after_add_to_cart_quantity' );
 		?>
 
-        <div class="cursor-pointer increase">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="0.5" y="0.5" width="19" height="19" rx="4.5" stroke="#5E5E5E" />
-                <path
-                    d="M9.41849 10.7375H6.07449L6.23449 9.53751H9.41849V6.36951L10.6185 6.20951V9.53751H13.9145L13.7545 10.7375H10.6185V13.8895L9.41849 14.0495V10.7375Z"
-                    fill="black" />
-            </svg>
+		<div class="cursor-pointer increase">
+			<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<rect x="0.5" y="0.5" width="19" height="19" rx="4.5" stroke="#5E5E5E" />
+				<path
+					d="M9.41849 10.7375H6.07449L6.23449 9.53751H9.41849V6.36951L10.6185 6.20951V9.53751H13.9145L13.7545 10.7375H10.6185V13.8895L9.41849 14.0495V10.7375Z"
+					fill="black" />
+			</svg>
 
-        </div>
-    </div>
+		</div>
+	</div>
 
-    <hr class="mt-2">
+	<hr class="mt-2">
 
-    <h4 class="py-4 flex justify-between gap-4 pb-14 border-b">
-        <span>TOTAL: </span>
-        <span id="watchPrice"><?php echo $product->get_price_html(); ?></span>
-    </h4>
+	<h4 class="py-4 flex justify-between gap-4 pb-14 border-b">
+		<span>TOTAL: </span>
+		<span id="watchPrice"><?php echo $product->get_price_html(); ?></span>
+	</h4>
 
 
 
-    <button type="submit" name="add-to-cart" value="<?php echo esc_attr( $product->get_id() ); ?>"
-        class="font-title single_add_to_cart_button button alt<?php echo esc_attr( wc_wp_theme_get_element_class_name( 'button' ) ? ' ' . wc_wp_theme_get_element_class_name( 'button' ) : '' ); ?>"><?php echo esc_html( $product->single_add_to_cart_text() ); ?></button>
+	<button type="submit" name="add-to-cart" value="<?php echo esc_attr( $product->get_id() ); ?>"
+		class="font-title single_add_to_cart_button button alt<?php echo esc_attr( wc_wp_theme_get_element_class_name( 'button' ) ? ' ' . wc_wp_theme_get_element_class_name( 'button' ) : '' ); ?>"><?php echo esc_html( $product->single_add_to_cart_text() ); ?></button>
 
-    <?php do_action( 'woocommerce_after_add_to_cart_button' ); ?>
+	<?php do_action( 'woocommerce_after_add_to_cart_button' ); ?>
 </form>
 
-<?php do_action( 'woocommerce_after_add_to_cart_form' ); ?>
+	<?php do_action( 'woocommerce_after_add_to_cart_form' ); ?>
 
 <?php endif; ?>

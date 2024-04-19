@@ -1,9 +1,19 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
+import useOutsideClick from '../../../../utils/ClickOutside';
+import {
+	colorOptions,
+	metalFinishColors,
+} from '../../../../utils/ColorOptions';
 import convert_json from '../../../../utils/ConvertJson';
 import { getLogoPricingTablebyThickness } from '../../../../utils/Pricing';
-import { waterProofOptions } from '../../../../utils/SignageOptions';
+import {
+	setOptions,
+	spacerStandoffDefaultOptions,
+	studLengthOptions,
+	waterProofOptions,
+} from '../../../../utils/SignageOptions';
 
 import {
 	finishingOptions,
@@ -11,7 +21,7 @@ import {
 	thicknessOptions,
 } from '../../pvcOptions';
 
-import { QuoteContext } from '../PVCPainted';
+import { QuoteContext } from '../PVCMetalLaminate';
 
 const exchangeRate = 1.3;
 
@@ -29,13 +39,64 @@ export default function Logo({ item }) {
 	const [maxWidthHeight, setMaxWidthHeight] = useState(36);
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice);
-	const [isLoading, setIsLoading] = useState(false);
+	const [fileName, setFileName] = useState(item.fileName);
+	const [openColor, setOpenColor] = useState(false);
+	const [pvcBaseColor, setPvcBaseColor] = useState(item.pvcBaseColor);
+	const [customColor, setCustomColor] = useState(item.customColor);
 	const [installation, setInstallation] = useState(item.installation);
+
+	const [studLength, setStudLength] = useState(item.studLength);
+	const [spacerStandoffOptions, setSpacerStandoffOptions] = useState(
+		spacerStandoffDefaultOptions
+	);
+	const [spacerStandoffDistance, setSpacerStandoffDistance] = useState(
+		item.spacerStandoffDistance
+	);
+
+	const handleonChangeSpacerDistance = (e) => {
+		setSpacerStandoffDistance(e.target.value);
+	};
+
+	const handleonChangeStudLength = (e) => {
+		const target = e.target.value;
+		setStudLength(target); // Directly set the value without a callback
+
+		if (target === '1.5"') {
+			setSpacerStandoffOptions([{ value: '0.5"' }, { value: '1"' }]);
+			if (!['0.5"', '1"'].includes(spacerStandoffDistance)) {
+				setSpacerStandoffDistance(''); // Reset if not one of the valid options
+			}
+		} else if (['3.2"', '4"'].includes(target)) {
+			setSpacerStandoffOptions([
+				{ value: '0.5"' },
+				{ value: '1"' },
+				{ value: '1.5"' },
+				{ value: '2"' },
+			]);
+			if (['3"', '4"'].includes(spacerStandoffDistance)) {
+				setSpacerStandoffDistance(''); // Reset if the distance is invalid for these options
+			}
+		} else {
+			setSpacerStandoffOptions(spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
+		}
+
+		if (target === '') {
+			setSpacerStandoffDistance(''); // Always reset if the target is empty
+		}
+	};
+
+	const [metalLaminate, setMetalLaminate] = useState(item.metalLaminate);
+	const handleChangeMetalLaminate = (e) => {
+		setMetalLaminate(e.target.value);
+	};
+
 	const [fileNames, setFileNames] = useState(item.fileNames);
 	const [fileUrls, setFileUrls] = useState(item.fileUrls);
 	const [filePaths, setFilePaths] = useState(item.filePaths);
 	const [files, setFiles] = useState(item.files);
 	const [selectedFinishing, setSelectedFinishing] = useState(item.finishing);
+	const [installationSelections, setInstallationSelections] =
+		useState(installationOptions);
 
 	const [maxWidthOptions, setMaxWidthOptions] = useState(
 		Array.from(
@@ -53,11 +114,19 @@ export default function Logo({ item }) {
 		)
 	);
 
+	const colorRef = useRef(null);
+
 	const [height, setHeight] = useState(item.height);
 	const [comments, setComments] = useState('');
 	const [waterproof, setWaterproof] = useState(item.waterproof);
 
 	const handleOnChangeInstallation = (e) => setInstallation(e.target.value);
+
+	const [sets, setSets] = useState(item.sets);
+
+	const handleOnChangeSets = (e) => {
+		setSets(e.target.value);
+	};
 
 	function handleComments(e) {
 		setComments(e.target.value);
@@ -107,6 +176,12 @@ export default function Logo({ item }) {
 					fileNames: fileNames,
 					filePaths: filePaths,
 					fileUrls: fileUrls,
+					customColor: customColor,
+					sets: sets,
+					studLength: studLength,
+					spacerStandoffDistance: spacerStandoffDistance,
+					pvcBaseColor: pvcBaseColor,
+					metalLaminate: metalLaminate,
 				};
 			} else {
 				return sign;
@@ -135,6 +210,12 @@ export default function Logo({ item }) {
 		selectedFinishing,
 		files,
 		filePaths,
+		customColor,
+		sets,
+		studLength,
+		spacerStandoffDistance,
+		metalLaminate,
+		pvcBaseColor,
 	]);
 
 	const logoPricingObject = NovaQuote.logo_pricing_tables;
@@ -167,6 +248,18 @@ export default function Logo({ item }) {
 
 				total *= selectedFinishing === 'Gloss' ? 1.03 : 1;
 				total *= installation === 'Double-sided tape' ? 1.01 : 1;
+				total *= pvcBaseColor?.name !== 'Black' ? 1.1 : 1;
+
+				if (installation === 'Stud with spacer') {
+					let spacer = total * 0.03 > 35 ? 35 : total * 0.03;
+					spacer = parseFloat(spacer.toFixed(2));
+
+					total += spacer;
+				}
+
+				total *= 1.45; //PVC Metal Laminate pricing
+
+				total *= sets;
 
 				setUsdPrice(parseFloat(total.toFixed(2)));
 				setCadPrice((total * parseFloat(exchangeRate)).toFixed(2));
@@ -185,6 +278,8 @@ export default function Logo({ item }) {
 		waterproof,
 		selectedFinishing,
 		installation,
+		pvcBaseColor,
+		sets,
 	]);
 
 	const checkAndAddMissingFields = () => {
@@ -193,11 +288,28 @@ export default function Logo({ item }) {
 		if (!selectedThickness) missingFields.push('Select Acrylic Thickness');
 		if (!width) missingFields.push('Select Logo Width');
 		if (!height) missingFields.push('Select Logo Height');
+
+		if (!pvcBaseColor.name) missingFields.push('Select Color');
+		if (pvcBaseColor?.name === 'Custom Color' && !customColor) {
+			missingFields.push('Add the Pantone color code of your custom color.');
+		}
+
 		if (!waterproof) missingFields.push('Select Waterproof');
 		if (!installation) missingFields.push('Select Installation');
+
+		if (installation === 'Stud with spacer') {
+			if (!studLength) missingFields.push('Select Stud Length');
+
+			if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+		}
+
 		if (!selectedFinishing) missingFields.push('Select Finishing');
 		if (!fileUrls || fileUrls.length === 0)
 			missingFields.push('Upload a PDF/AI File');
+
+		if (!sets) missingFields.push('Select Quantity');
+
+		if (!comments) missingFields.push('Add Comments');
 
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
@@ -239,6 +351,7 @@ export default function Logo({ item }) {
 		checkAndAddMissingFields();
 	}, [
 		width,
+		comments,
 		height,
 		selectedThickness,
 		installation,
@@ -248,7 +361,43 @@ export default function Logo({ item }) {
 		files,
 		filePaths,
 		selectedFinishing,
+		pvcBaseColor,
+		customColor,
+		sets,
+		studLength,
+		spacerStandoffDistance,
 	]);
+
+	useEffect(() => {
+		if ('Outdoor' === waterproof) {
+			if ('Double-sided tape' === installation) {
+				setInstallation('');
+			}
+			let newOptions = installationOptions.filter(
+				(option) => option.value !== 'Double-sided tape'
+			);
+
+			setInstallationSelections(newOptions);
+		} else {
+			setInstallationSelections(installationOptions);
+		}
+	}, [waterproof]);
+
+	useOutsideClick([colorRef], () => {
+		if (!openColor) return;
+		setOpenColor(false);
+	});
+
+	useEffect(() => {
+		pvcBaseColor?.name != 'Custom Color' && setCustomColor('');
+	}, [pvcBaseColor]);
+
+	useEffect(() => {
+		if (installation !== 'Stud with spacer') {
+			setStudLength('');
+			setSpacerStandoffDistance('');
+		}
+	}, [installation]);
 
 	return (
 		<>
@@ -282,6 +431,69 @@ export default function Logo({ item }) {
 				/>
 
 				<Dropdown
+					title="Metal Laminate"
+					onChange={handleChangeMetalLaminate}
+					options={metalFinishColors.map((laminate) => (
+						<option
+							value={laminate.name}
+							selected={laminate.name === item.metalLaminate}
+						>
+							{laminate.name}
+						</option>
+					))}
+					value={metalLaminate}
+				/>
+
+				<div className="px-[1px] relative" ref={colorRef}>
+					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+						PVC BASE COLOR
+					</label>
+					<div
+						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
+							pvcBaseColor.name ? 'text-black' : 'text-[#dddddd]'
+						}`}
+						onClick={() => setOpenColor((prev) => !prev)}
+					>
+						<span
+							className="rounded-full w-[18px] h-[18px] border mr-2"
+							style={{
+								background:
+									pvcBaseColor.name == 'Custom Color'
+										? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
+										: pvcBaseColor.color,
+							}}
+						></span>
+						{pvcBaseColor.name === '' ? 'CHOOSE OPTION' : pvcBaseColor.name}
+					</div>
+					{openColor && (
+						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
+							{colorOptions.map((color) => {
+								return (
+									<div
+										className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
+										onClick={() => {
+											setPvcBaseColor(color);
+											setOpenColor(false);
+										}}
+									>
+										<span
+											className="w-[18px] h-[18px] inline-block rounded-full border"
+											style={{
+												background:
+													color.name == 'Custom Color'
+														? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
+														: color.color,
+											}}
+										></span>
+										{color.name}
+									</div>
+								);
+							})}
+						</div>
+					)}
+				</div>
+
+				<Dropdown
 					title="Environment"
 					onChange={(e) => setWaterproof(e.target.value)}
 					options={waterProofOptions.map((option) => (
@@ -312,7 +524,7 @@ export default function Logo({ item }) {
 				<Dropdown
 					title="Installation"
 					onChange={handleOnChangeInstallation}
-					options={installationOptions.map((option) => (
+					options={installationSelections.map((option) => (
 						<option
 							value={option.value}
 							selected={option.value === installation}
@@ -322,9 +534,68 @@ export default function Logo({ item }) {
 					))}
 					value={item.installation}
 				/>
+
+				{installation === 'Stud with spacer' && (
+					<>
+						<Dropdown
+							title="Stud Length"
+							onChange={handleonChangeStudLength}
+							options={studLengthOptions.map((option) => (
+								<option
+									value={option.value}
+									selected={option.value == item.studLength}
+								>
+									{option.value}
+								</option>
+							))}
+							value={item.studLength}
+						/>
+						<Dropdown
+							title="SPACER DISTANCE"
+							onChange={handleonChangeSpacerDistance}
+							options={spacerStandoffOptions.map((option) => (
+								<option
+									value={option.value}
+									selected={option.value == item.spacerStandoffDistance}
+								>
+									{option.value}
+								</option>
+							))}
+							value={item.spacerStandoffDistance}
+						/>
+					</>
+				)}
+
+				<Dropdown
+					title="Quantity"
+					onChange={handleOnChangeSets}
+					options={setOptions}
+					value={sets}
+				/>
 			</div>
 
+			{installation === 'Stud with spacer' && (
+				<div className="text-xs text-[#9F9F9F] mb-4">
+					*Note: The spacer will be black (default) or match the painted sign's
+					color.
+				</div>
+			)}
+
 			<div className="quote-grid">
+				{pvcBaseColor?.name == 'Custom Color' && (
+					<div className="px-[1px] col-span-4">
+						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+							Custom Color
+						</label>
+						<input
+							className="w-full py-4 px-2 border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400"
+							type="text"
+							value={customColor}
+							onChange={(e) => setCustomColor(e.target.value)}
+							placeholder="ADD THE PANTONE COLOR CODE"
+						/>
+					</div>
+				)}
 				<div className="px-[1px] col-span-4">
 					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
 						COMMENTS

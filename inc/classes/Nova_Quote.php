@@ -1340,6 +1340,10 @@ h6 {
 			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">METAL OPTION: </strong></td><td><font face="lato">' . $projectArray['metal'] . '</font></td></tr>';
 		}
 
+		if ( isset( $projectArray['metalLaminate'] ) && ! empty( $projectArray['metalLaminate'] ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">METAL LAMINATE: </strong></td><td><font face="lato">' . $projectArray['metalLaminate'] . '</font></td></tr>';
+		}
+
 		if ( isset( $projectArray['stainLessMetalFinish'] ) && ! empty( $projectArray['stainLessMetalFinish'] ) ) {
 			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">METAL FINISH: </strong></td><td><font face="lato">' . $projectArray['stainLessMetalFinish'] . '</font></td></tr>';
 		}
@@ -1833,6 +1837,7 @@ h6 {
 				'parent_id'                  => $this->get_parent_id(),
 				'logo_pricing_tables'        => $this->get_logo_pricing_tables(),
 				'fonts'                      => $this->get_fonts(),
+				'no_lowercase'               => $this->no_lowercase(),
 				'upload_rest'                => esc_url_raw( rest_url( '/nova/v1/upload-quote-file' ) ),
 				'logged_in'                  => is_user_logged_in(),
 				'user_role'                  => $this->get_current_user_role_slugs(),
@@ -1937,6 +1942,18 @@ h6 {
 	public function get_quote_options() {
 		$parent_id = wp_get_post_parent_id( get_the_ID() );
 		return get_field( 'signage_quote_options', $parent_id );
+	}
+
+	public function no_lowercase() {
+		$fonts = array(
+			'Versa',
+			'Trajan Bold',
+			'Heavitas',
+			'Chateau de Garage',
+			'Bebas Neue',
+		);
+
+		return $fonts;
 	}
 
 	public function get_fonts() {

@@ -456,6 +456,7 @@ export default function Letters({ item }) {
 
 				let totalLetterPrice = 0;
 				const lettersArray = letters.trim().split('');
+				const noLowerCase = NovaQuote.no_lowercase.includes(font);
 
 				lettersArray.forEach((letter) => {
 					let letterPrice = baseLetterPrice;
@@ -465,7 +466,7 @@ export default function Letters({ item }) {
 						letterPrice = 0;
 					} else if (letter.match(/[a-z]/)) {
 						// Check for lowercase letter
-						letterPrice *= lowerCasePricing; // 80% of the base price
+						letterPrice *= noLowerCase ? 1 : lowerCasePricing; // 80% of the base price
 					} else if (letter.match(/[A-Z]/)) {
 						// Check for uppercase letter
 						// Uppercase letters use 100% of base price, so no change needed

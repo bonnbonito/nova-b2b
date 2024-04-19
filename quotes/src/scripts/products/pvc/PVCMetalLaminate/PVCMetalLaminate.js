@@ -9,7 +9,7 @@ import Logo from './components/Logo';
 
 export const QuoteContext = createContext(null);
 
-export default function PVCPainted() {
+export default function PVCMetalLaminate() {
 	const [signage, setSignage] = useState([]);
 	const [missing, setMissing] = useState([]);
 	const [tempFolder, setTempFolder] = useState('');
@@ -18,6 +18,8 @@ export default function PVCPainted() {
 		window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id;
 	const localStorageQuote = localStorage.getItem(storage);
 	const savedStorage = JSON.parse(localStorageQuote);
+
+	const [isLoading, setIsLoading] = useState(false);
 
 	function setDefaultSignage() {
 		if (savedStorage?.length > 0) {
@@ -34,7 +36,8 @@ export default function PVCPainted() {
 					installation: '',
 					waterproof: '',
 					thickness: '',
-					color: { name: '', color: '' },
+					metalLaminate: '',
+					pvcBaseColor: { name: 'Black', color: '#000000' },
 					letterHeight: '',
 					usdPrice: 0,
 					cadPrice: 0,
@@ -42,8 +45,11 @@ export default function PVCPainted() {
 					fileNames: [],
 					fileUrls: [],
 					files: [],
+					sets: 1,
 					customFont: '',
 					customColor: '',
+					studLength: '',
+					spacerStandoffDistance: '',
 					finishing: 'Matte',
 					product: NovaQuote.product,
 				},
@@ -79,10 +85,16 @@ export default function PVCPainted() {
 		finishing: 'Matte',
 		usdPrice: 0,
 		cadPrice: 0,
+		pvcBaseColor: { name: 'Black', color: '#000000' },
+		metalLaminate: '',
+		customColor: '',
 		filePaths: [],
 		fileNames: [],
 		fileUrls: [],
 		files: [],
+		studLength: '',
+		spacerStandoffDistance: '',
+		sets: 1,
 		product: NovaQuote.product,
 	};
 
@@ -99,7 +111,6 @@ export default function PVCPainted() {
 					letters: '',
 					font: '',
 					thickness_options: '',
-					color: { name: '', color: '' },
 					letterHeight: '',
 					customFont: '',
 					customColor: '',
@@ -107,6 +118,7 @@ export default function PVCPainted() {
 					fileNames: [],
 					fileUrls: [],
 					files: [],
+					sets: 1,
 				};
 			} else {
 				args = {
