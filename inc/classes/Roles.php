@@ -39,6 +39,7 @@ class Roles {
 		add_action( 'pre_get_users', array( $this, 'sort_by_business_id_column' ) );
 		add_action( 'set_user_role', array( $this, 'notify_user_approved_partner' ), 10, 3 );
 		add_action( 'set_user_role', array( $this, 'generate_partner_business_id' ), 10, 3 );
+		add_action( 'set_user_role', array( $this, 'update_role_business_id' ), 10, 3 );
 		add_action( 'set_user_role', array( $this, 'log_role_change' ), 10, 3 );
 		add_action( 'admin_footer', array( $this, 'move_row_actions_js' ) );
 		add_action( 'pre_get_users', array( $this, 'sort_users_by_user_id' ) );
@@ -180,6 +181,17 @@ jQuery(document).ready(function($) {
 	}
 
 
+	public function update_role_business_id( $user_id, $new_role, $old_roles ) {
+		if ( $new_role == 'temporary' ) {
+			update_field( 'business_id', 'TEMPORARY-' . $user_id, 'user_' . $user_id );
+		}
+
+		if ( $new_role == 'pending' ) {
+			update_field( 'business_id', 'PENDING-' . $user_id, 'user_' . $user_id );
+		}
+	}
+
+
 
 
 	public function log_role_change( $user_id, $new_role, $old_roles ) {
@@ -201,7 +213,8 @@ jQuery(document).ready(function($) {
 
 	public function generate_partner_business_id( $user_id, $role, $old_roles ) {
 		if ( $role == 'partner' ) {
-			$this->update_business_id_user( $user_id );
+			$user = get_user_by( 'id', $user_id );
+			$this->process_business_id_user( $user );
 		}
 	}
 
@@ -296,6 +309,7 @@ jQuery(document).ready(function($) {
 	}
 
 	public function user_activation( $user_id ) {
+
 		delete_user_meta( $user_id, 'account_activation_key' );
 		$user = new WP_User( $user_id );
 		$user->set_role( 'pending' );
@@ -316,8 +330,6 @@ jQuery(document).ready(function($) {
 		$this->send_email( $emails, $subject, $message, $headers, array() );
 
 		$this->send_user_pending_email( $user_id );
-
-		$this->update_business_id_user( $user_id );
 	}
 
 	public function send_user_pending_email( $user_id ) {
@@ -517,17 +529,7 @@ jQuery(document).ready(function($) {
 			)
 		);
 
-		$business_group = strtoupper( $country . $state );
-
-		$business_id = strtoupper( $country . $state . '-' . substr( $businessType, 0, 1 ) );
-
-		$business_type_table = 'type_' . $businessType;
-
-		$business_type_id = $this->insert_business_type( $business_type_table, $business_group, $user_id );
-
-		$business_id = $business_id . str_pad( $business_type_id, 3, '0', STR_PAD_LEFT );
-
-		update_field( 'business_id', $business_id, 'user_' . $user_id );
+		update_field( 'business_id', 'TEMPORARY-' . $user_id, 'user_' . $user_id );
 		update_field( 'business_name', $businessName, 'user_ ' . $user_id );
 		update_field( 'business_phone', $businessPhone, 'user_ ' . $user_id );
 		update_field( 'business_type', $businessType, 'user_ ' . $user_id );
@@ -931,6 +933,7 @@ jQuery(document).ready(function($) {
 			return $business_id;
 		} else {
 			update_field( 'business_id', '', 'user_' . $user_id );
+			return false;
 		}
 	}
 
