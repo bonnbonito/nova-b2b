@@ -863,6 +863,8 @@ jQuery(document).ready(function($) {
 		// Check if the business ID is already used
 		if ( ! empty( $existing_users ) ) {
 			// Generate a new business type ID
+			print_r( $existing_users );
+			die();
 			$business_type_id = $this->insert_business_type( $business_type_table, $business_group, $user_id );
 			// Create a new business ID based on the new business type ID
 			$new_business_id = $business_id_start . str_pad( $business_type_id, 3, '0', STR_PAD_LEFT );
@@ -874,6 +876,17 @@ jQuery(document).ready(function($) {
 			return $business_id;
 		}
 	}
+
+	private function containsKeywords( $string, $keywords ) {
+		$lowerString = strtolower( $string ); // Convert string to lower case once
+		foreach ( $keywords as $keyword ) {
+			if ( strpos( $lowerString, $keyword ) !== false ) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 
 
 	private function process_business_id_user( $user ) {
@@ -896,10 +909,12 @@ jQuery(document).ready(function($) {
 			}
 		}
 
-		// Check for 'test' in the user's details
-		if ( strpos( strtolower( $first_name ), 'test' ) !== false ||
-		strpos( strtolower( $last_name ), 'test' ) !== false ||
-		strpos( strtolower( $email ), 'test' ) !== false ) {
+		$keywords = array( 'test', 'demo' );
+
+		// Check if any of the user's details contain the keywords
+		if ( $this->containsKeywords( $first_name, $keywords ) ||
+			$this->containsKeywords( $last_name, $keywords ) ||
+			$this->containsKeywords( $email, $keywords ) ) {
 			update_field( 'business_id', 'TEST USER', 'user_' . $user_id );
 			return 'TEST USER';
 		}
@@ -917,17 +932,17 @@ jQuery(document).ready(function($) {
 			$business_type_id    = $this->insert_business_type( $business_type_table, $business_group, $user_id );
 			$business_id         = $business_id_start . str_pad( $business_type_id, 3, '0', STR_PAD_LEFT );
 
-			$existing_user = get_users(
-				array(
-					'meta_key'   => 'business_id',
-					'meta_value' => $business_id,
-					'exclude'    => array( $user_id ),
-				)
-			);
+			// $existing_user = get_users(
+			// array(
+			// 'meta_key'   => 'business_id',
+			// 'meta_value' => $business_id,
+			// 'exclude'    => array( $user_id ),
+			// )
+			// );
 
-			if ( ! empty( $existing_user ) ) {
-				$business_id = $this->handle_business_id_conflict( $business_id, $user_id, $business_type_table, $business_group, $business_id_start );
-			}
+			// if ( ! empty( $existing_user ) ) {
+			// $business_id = $this->handle_business_id_conflict( $business_id, $user_id, $business_type_table, $business_group, $business_id_start );
+			// }
 
 			update_field( 'business_id', $business_id, 'user_' . $user_id );
 			return $business_id;
