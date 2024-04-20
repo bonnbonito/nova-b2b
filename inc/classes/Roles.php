@@ -43,9 +43,78 @@ class Roles {
 		add_action( 'set_user_role', array( $this, 'log_role_change' ), 10, 3 );
 		add_action( 'admin_footer', array( $this, 'move_row_actions_js' ) );
 		add_action( 'pre_get_users', array( $this, 'sort_users_by_user_id' ) );
+		// add_filter( 'user_search_columns', array( $this, 'custom_user_search_columns' ), 10, 2 );
 		// add_action( 'manage_users_columns', array( $this, 'show_user_id' ), 10, 3 );
 		// add_action( 'added_user_meta', array( $this, 'user_send_activate' ), 10, 4 );
+		add_action( 'pre_user_query', array( $this, 'custom_user_search_business_id' ) );
 	}
+
+	public function custom_user_search_business_id( $user_query ) {
+		global $wpdb;
+
+		$search = '';
+		if ( isset( $user_query->query_vars['search'] ) ) {
+			$search = trim( $user_query->query_vars['search'] );
+		}
+
+		if ( $search ) {
+			$search     = trim( $search, '*' );
+			$the_search = '%' . $search . '%';
+
+			$search_meta = $wpdb->prepare(
+				"
+        ID IN ( SELECT user_id FROM {$wpdb->usermeta}
+        WHERE ( ( meta_key='business_id' OR meta_key='first_name' OR meta_key='last_name' )
+            AND {$wpdb->usermeta}.meta_value LIKE '%s' )
+        )",
+				$the_search
+			);
+
+			$user_query->query_where = str_replace(
+				'WHERE 1=1 AND (',
+				'WHERE 1=1 AND (' . $search_meta . ' OR ',
+				$user_query->query_where
+			);
+		}
+	}
+
+
+
+	public function custom_user_search_columns( $search, &$wp_user_query ) {
+		if ( ! empty( $search ) ) {
+			global $wpdb;
+
+			// Remove the leading and trailing slashes added by WordPress
+			$search = trim( $search, '"' );
+
+			// Modify the SQL query to search the business_id meta key
+			$search = $wpdb->prepare(
+				"(
+                {$wpdb->users}.user_login LIKE %s OR
+                {$wpdb->users}.user_email LIKE %s OR
+                {$wpdb->users}.user_nicename LIKE %s OR
+                {$wpdb->usermeta}.meta_value LIKE %s
+            )",
+				'%' . $wpdb->esc_like( $search ) . '%',
+				'%' . $wpdb->esc_like( $search ) . '%',
+				'%' . $wpdb->esc_like( $search ) . '%',
+				'%' . $wpdb->esc_like( $search ) . '%'
+			);
+
+			// Join to the usermeta table to include the business_id in the search
+			add_filter(
+				'get_search_query_join',
+				function ( $join ) use ( $wpdb ) {
+					$join .= " LEFT JOIN {$wpdb->usermeta} ON {$wpdb->users}.ID = {$wpdb->usermeta}.user_id AND {$wpdb->usermeta}.meta_key = 'business_id'";
+					return $join;
+				}
+			);
+		}
+
+		return $search;
+	}
+
+
 
 	public function states_by_country() {
 		$states = array(
