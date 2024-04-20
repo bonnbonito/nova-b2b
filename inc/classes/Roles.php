@@ -36,13 +36,13 @@ class Roles {
 		add_action( 'manage_users_custom_column', array( $this, 'business_id_user_column' ), 10, 3 );
 		add_filter( 'manage_users_sortable_columns', array( $this, 'make_business_id_column_sortable' ) );
 		add_filter( 'manage_users_sortable_columns', array( $this, 'user_id_column_sortable' ) );
-		add_action( 'pre_get_users', array( $this, 'sort_by_business_id_column' ) );
+		// add_action( 'pre_get_users', array( $this, 'sort_by_business_id_column' ) );
 		add_action( 'set_user_role', array( $this, 'notify_user_approved_partner' ), 10, 3 );
 		add_action( 'set_user_role', array( $this, 'generate_partner_business_id' ), 10, 3 );
 		add_action( 'set_user_role', array( $this, 'update_role_business_id' ), 10, 3 );
 		add_action( 'set_user_role', array( $this, 'log_role_change' ), 10, 3 );
 		add_action( 'admin_footer', array( $this, 'move_row_actions_js' ) );
-		add_action( 'pre_get_users', array( $this, 'sort_users_by_user_id' ) );
+		// add_action( 'pre_get_users', array( $this, 'sort_users_by_user_id' ) );
 		// add_filter( 'user_search_columns', array( $this, 'custom_user_search_columns' ), 10, 2 );
 		// add_action( 'manage_users_columns', array( $this, 'show_user_id' ), 10, 3 );
 		// add_action( 'added_user_meta', array( $this, 'user_send_activate' ), 10, 4 );
