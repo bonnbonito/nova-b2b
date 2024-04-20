@@ -38,6 +38,7 @@ class Roles {
 		add_filter( 'manage_users_sortable_columns', array( $this, 'user_id_column_sortable' ) );
 		add_action( 'pre_get_users', array( $this, 'sort_by_business_id_column' ) );
 		add_action( 'set_user_role', array( $this, 'notify_user_approved_partner' ), 10, 3 );
+		add_action( 'set_user_role', array( $this, 'generate_partner_business_id' ), 10, 3 );
 		add_action( 'set_user_role', array( $this, 'log_role_change' ), 10, 3 );
 		add_action( 'admin_footer', array( $this, 'move_row_actions_js' ) );
 		add_action( 'pre_get_users', array( $this, 'sort_users_by_user_id' ) );
@@ -196,6 +197,12 @@ jQuery(document).ready(function($) {
 
 		// Write the log entry to file
 		file_put_contents( $log_file, $log_entry, FILE_APPEND );
+	}
+
+	public function generate_partner_business_id( $user_id, $role, $old_roles ) {
+		if ( $role == 'partner' ) {
+			$this->update_business_id_user( $user_id );
+		}
 	}
 
 	public function notify_user_approved_partner( $user_id, $role, $old_roles ) {
@@ -739,6 +746,7 @@ jQuery(document).ready(function($) {
 
 	public function insert_business_type( $type, $group, $user_id ) {
 		global $wpdb;
+
 		$sanitized_type = str_replace( '-', '_', $type );
 		$table_name     = $wpdb->prefix . $sanitized_type;
 		$current_time   = current_time( 'mysql' );
@@ -797,13 +805,12 @@ jQuery(document).ready(function($) {
 		$user = get_user_by( 'id', $user_id );
 
 		if ( in_array( 'administrator', (array) $user->roles ) || in_array( 'customer-rep', (array) $user->roles ) ) {
-					update_field( 'business_id', 'NOVA', 'user_' . $user->ID );
+					update_field( 'business_id', 'NOVA', 'user_' . $user_id );
 		} else {
-			$user_id = $user->ID;
 
-			$billing_country = get_user_meta( $user->ID, 'billing_country', true );
-			$state           = get_field( 'state', 'user_' . $user->ID );
-			$businessType    = get_field( 'business_type', 'user_' . $user->ID );
+			$billing_country = get_user_meta( $user_id, 'billing_country', true );
+			$state           = get_field( 'state', 'user_' . $user_id );
+			$businessType    = get_field( 'business_type', 'user_' . $user_id );
 
 			if ( ! $billing_country ) {
 				$country = $this->country_by_state( $state );
@@ -814,46 +821,118 @@ jQuery(document).ready(function($) {
 			if ( isset( $country ) && ! empty( $country ) && isset( $state ) && ! empty( $state ) && isset( $businessType ) && ! empty( $businessType ) ) {
 
 				$business_group      = strtoupper( $country . $state );
-				$business_id         = strtoupper( $country . $state . '-' . substr( $businessType, 0, 1 ) );
+				$business_id_start   = strtoupper( $country . $state . '-' . substr( $businessType, 0, 1 ) );
 				$business_type_table = 'type_' . $businessType;
 				$business_type_id    = $this->insert_business_type( $business_type_table, $business_group, $user_id );
-				$business_id         = $business_id . str_pad( $business_type_id, 3, '0', STR_PAD_LEFT );
+				$business_id         = $business_id_start . str_pad( $business_type_id, 3, '0', STR_PAD_LEFT );
 
-				update_field( 'business_id', $business_id, 'user_' . $user_id );
+				$existing_user = get_users(
+					array(
+						'meta_key'   => 'business_id',
+						'meta_value' => $business_id,
+						'exclude'    => array( $user_id ),  // Exclude the current user from the search
+					)
+				);
 
+				if ( ! empty( $existing_user ) ) {
+					// Handle conflict or regenerate business ID
+					$business_id = $this->handle_business_id_conflict( $business_id, $user_id, $business_type_table, $business_group, $business_id_start );
+				} else {
+					update_field( 'business_id', $business_id, 'user_' . $user_id );
+				}
 			} else {
 				update_field( 'business_id', 'NOVA', 'user_' . $user_id );
 			}
 		}
 	}
 
-	private function process_business_id_user( $user ) {
-		if ( in_array( 'administrator', (array) $user->roles ) || in_array( 'customer-rep', (array) $user->roles ) ) {
-			update_field( 'business_id', 'NOVA', 'user_' . $user->ID );
+	public function handle_business_id_conflict( $business_id, $user_id, $business_type_table, $business_group, $business_id_start ) {
+		// Fetch users that may already have this business ID
+		$existing_users = get_users(
+			array(
+				'meta_key'   => 'business_id',
+				'meta_value' => $business_id,
+				'exclude'    => array( $user_id ),  // Exclude the current user from the search
+			)
+		);
+
+		// Check if the business ID is already used
+		if ( ! empty( $existing_users ) ) {
+			// Generate a new business type ID
+			$business_type_id = $this->insert_business_type( $business_type_table, $business_group, $user_id );
+			// Create a new business ID based on the new business type ID
+			$new_business_id = $business_id_start . str_pad( $business_type_id, 3, '0', STR_PAD_LEFT );
+
+			// Recursive call to ensure this new business ID is also not in conflict
+			return $this->handle_business_id_conflict( $new_business_id, $user_id, $business_type_table, $business_group, $business_id_start );
 		} else {
-			$user_id         = $user->ID;
-			$billing_country = get_user_meta( $user->ID, 'billing_country', true );
-			$state           = get_field( 'state', 'user_' . $user->ID );
-			$businessType    = get_field( 'business_type', 'user_' . $user->ID );
-
-			if ( ! $billing_country ) {
-				$country = $this->country_by_state( $state );
-			} else {
-				$country = $billing_country;
-			}
-
-			if ( isset( $country ) && ! empty( $country ) && isset( $state ) && ! empty( $state ) && isset( $businessType ) && ! empty( $businessType ) ) {
-				$business_group      = strtoupper( $country . $state );
-				$business_id         = strtoupper( $country . $state . '-' . substr( $businessType, 0, 1 ) );
-				$business_type_table = 'type_' . $businessType;
-				$business_type_id    = $this->insert_business_type( $business_type_table, $business_group, $user_id );
-				$business_id         = $business_id . str_pad( $business_type_id, 3, '0', STR_PAD_LEFT );
-				update_field( 'business_id', $business_id, 'user_' . $user_id );
-			} else {
-				update_field( 'business_id', '', 'user_' . $user_id );
-			}
+			// If no conflict, update the business ID field and return the confirmed business ID
+			return $business_id;
 		}
 	}
+
+
+	private function process_business_id_user( $user ) {
+		$user_id    = $user->ID;
+		$first_name = get_user_meta( $user_id, 'first_name', true );
+		$last_name  = get_user_meta( $user_id, 'last_name', true );
+		$email      = get_user_meta( $user_id, 'user_email', true );
+
+		// Early exit for specific roles
+		$role_based_ids = array(
+			'administrator' => 'NOVA',
+			'customer-rep'  => 'CUSTOMER REP',
+			'temporary'     => 'TEMPORARY-' . $user_id,
+			'pending'       => 'PENDING-' . $user_id,
+		);
+		foreach ( $role_based_ids as $role => $id ) {
+			if ( in_array( $role, (array) $user->roles ) ) {
+				update_field( 'business_id', $id, 'user_' . $user_id );
+				return $id;
+			}
+		}
+
+		// Check for 'test' in the user's details
+		if ( strpos( strtolower( $first_name ), 'test' ) !== false ||
+		strpos( strtolower( $last_name ), 'test' ) !== false ||
+		strpos( strtolower( $email ), 'test' ) !== false ) {
+			update_field( 'business_id', 'TEST USER', 'user_' . $user_id );
+			return 'TEST USER';
+		}
+
+		// Process business ID creation
+		$billing_country = get_user_meta( $user_id, 'billing_country', true );
+		$state           = get_field( 'state', 'user_' . $user_id );
+		$country         = $billing_country ?: $this->country_by_state( $state );
+		$businessType    = get_field( 'business_type', 'user_' . $user_id );
+
+		if ( $country && $state && $businessType ) {
+			$business_group      = strtoupper( $country . $state );
+			$business_id_start   = strtoupper( $country . $state . '-' . substr( $businessType, 0, 1 ) );
+			$business_type_table = 'type_' . $businessType;
+			$business_type_id    = $this->insert_business_type( $business_type_table, $business_group, $user_id );
+			$business_id         = $business_id_start . str_pad( $business_type_id, 3, '0', STR_PAD_LEFT );
+
+			$existing_user = get_users(
+				array(
+					'meta_key'   => 'business_id',
+					'meta_value' => $business_id,
+					'exclude'    => array( $user_id ),
+				)
+			);
+
+			if ( ! empty( $existing_user ) ) {
+				$business_id = $this->handle_business_id_conflict( $business_id, $user_id, $business_type_table, $business_group, $business_id_start );
+			}
+
+			update_field( 'business_id', $business_id, 'user_' . $user_id );
+			return $business_id;
+		} else {
+			update_field( 'business_id', '', 'user_' . $user_id );
+		}
+	}
+
+
 
 	public function regenerate_business_id() {
 		$batch_size = 20; // Process 100 users per batch
@@ -863,6 +942,7 @@ jQuery(document).ready(function($) {
 
 		while ( $processed ) {
 			// Fetch a batch of users
+			echo 'Starting ... <br>';
 			$users = get_users(
 				array(
 					'number'  => $batch_size,
@@ -881,14 +961,26 @@ jQuery(document).ready(function($) {
 			// Process each user in the current batch
 			foreach ( $users as $user ) {
 				// Your existing user processing code goes here
-				// $this->process_business_id_user( $user );
-				$business_id = get_field( 'business_id', $user->ID );
-				if ( $business_id ) {
-					update_field( 'old_business_id', $business_id, $user->ID );
-				}
-				echo 'Updating user ' . $user->ID . '<br>';
-				echo 'Business ID ' . get_field( 'business_id', 'user_' . $user->ID ) . '<br>';
-				echo '--------------------------------<br>';
+
+				$business_id = $this->process_business_id_user( $user );
+				$user_id     = $user->ID;
+				// $business_id = get_field( 'business_id', $user->ID );
+				// if ( $business_id ) {
+				// update_field( 'old_business_id', $business_id, $user->ID );
+				// }
+				$billing_country = get_user_meta( $user_id, 'billing_country', true );
+
+				$country = $billing_country ? $billing_country : $this->country_by_state( $state );
+
+				$state        = get_field( 'state', 'user_' . $user_id );
+				$businessType = get_field( 'business_type', 'user_' . $user_id );
+				echo 'Country: ' . $country . '<br>';
+				echo 'State: ' . $state . '<br>';
+				echo 'Type: ' . $businessType . '<br>';
+				echo 'Updating user ' . $user_id . '<br>';
+				echo 'Business ID ' . get_field( 'business_id', 'user_' . $user_id ) . '<br>';
+				echo 'Saved business id : ' . $business_id;
+				echo '<br>--------------------------------<br>';
 			}
 
 			// Increment the page number for the next batch
