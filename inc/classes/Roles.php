@@ -316,6 +316,8 @@ jQuery(document).ready(function($) {
 		$this->send_email( $emails, $subject, $message, $headers, array() );
 
 		$this->send_user_pending_email( $user_id );
+
+		$this->update_business_id_user( $user_id );
 	}
 
 	public function send_user_pending_email( $user_id ) {
