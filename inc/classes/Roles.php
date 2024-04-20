@@ -54,22 +54,28 @@ class Roles {
 
 		$search = '';
 		if ( isset( $user_query->query_vars['search'] ) ) {
-			$search = trim( $user_query->query_vars['search'] );
+			// Remove the leading and trailing slashes added by WordPress
+			$search = trim( $user_query->query_vars['search'], '*' );
 		}
 
 		if ( $search ) {
-			$search     = trim( $search, '*' );
-			$the_search = '%' . $search . '%';
+			$like_keyword = '%' . $wpdb->esc_like( $search ) . '%';
 
+			// Prepare the query to search by user_login and meta_keys for business_id, first_name, and last_name
 			$search_meta = $wpdb->prepare(
-				"
-        ID IN ( SELECT user_id FROM {$wpdb->usermeta}
-        WHERE ( ( meta_key='business_id' OR meta_key='first_name' OR meta_key='last_name' )
-            AND {$wpdb->usermeta}.meta_value LIKE '%s' )
-        )",
-				$the_search
+				"( {$wpdb->users}.user_login LIKE %s OR
+              ID IN (
+                  SELECT user_id FROM {$wpdb->usermeta}
+                  WHERE ( meta_key = 'business_id' OR
+                          meta_key = 'first_name' OR
+                          meta_key = 'last_name' )
+                  AND meta_value LIKE %s )
+             )",
+				$like_keyword, // For user_login
+				$like_keyword  // For meta values
 			);
 
+			// Integrate the custom search into the existing WHERE clause
 			$user_query->query_where = str_replace(
 				'WHERE 1=1 AND (',
 				'WHERE 1=1 AND (' . $search_meta . ' OR ',
