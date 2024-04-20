@@ -86,6 +86,18 @@ function novaRegistration() {
 	const postInput = pstField.querySelector('input');
 	const taxField = document.getElementById('taxField');
 	const taxFieldInput = taxField.querySelector('input');
+	const referralField = document.getElementById('referralField');
+	const referredBy = document.getElementById('referredBy');
+	const referral = document.getElementById('referral');
+
+	referral.addEventListener('change', (e) => {
+		if (referral.checked) {
+			referralField.style.display = 'flex';
+		} else {
+			referralField.style.display = 'none';
+			referredBy.value = '';
+		}
+	});
 
 	country.addEventListener('change', (e) => {
 		while (state.options.length > 0) {

@@ -206,27 +206,6 @@
                     <label for="youtube" class="ms-3 text-sm font-medium text-nova-gray">Youtube</label>
                 </div>
                 <div class="flex items-center mb-4 w-full sm:w-1/4">
-                    <input id="amazon" type="checkbox" value="amazon" name="hear[]"
-                        class="w-5 h-5 text-nova-primary border-nova-light focus:ring-nova-primary ">
-                    <label for="amazon" class="ms-3 text-sm font-medium text-nova-gray">Amazon</label>
-                </div>
-                <div class="flex items-center mb-4 w-full sm:w-1/4">
-                    <input id="repeat-customer" type="checkbox" value="repeat-customer" name="hear[]"
-                        class="w-5 h-5 text-nova-primary border-nova-light focus:ring-nova-primary ">
-                    <label for="repeat-customer" class="ms-3 text-sm font-medium text-nova-gray">Repeat
-                        Customer</label>
-                </div>
-                <div class="flex items-center mb-4 w-full sm:w-1/4">
-                    <input id="facebook" type="checkbox" value="facebook" name="hear[]"
-                        class="w-5 h-5 text-nova-primary border-nova-light focus:ring-nova-primary ">
-                    <label for="facebook" class="ms-3 text-sm font-medium text-nova-gray">Facebook</label>
-                </div>
-                <div class="flex items-center mb-4 w-full sm:w-1/4">
-                    <input id="referral" type="checkbox" value="referral" name="hear[]"
-                        class="w-5 h-5 text-nova-primary border-nova-light focus:ring-nova-primary ">
-                    <label for="referral" class="ms-3 text-sm font-medium text-nova-gray">Referral</label>
-                </div>
-                <div class="flex items-center mb-4 w-full sm:w-1/4">
                     <input id="newsletter" type="checkbox" value="newsletter" name="hear[]"
                         class="w-5 h-5 text-nova-primary border-nova-light focus:ring-nova-primary ">
                     <label for="newsletter" class="ms-3 text-sm font-medium text-nova-gray">Email/Newsletter</label>
@@ -236,6 +215,22 @@
                         class="w-5 h-5 text-nova-primary border-nova-light focus:ring-nova-primary ">
                     <label for="other" class="ms-3 text-sm font-medium text-nova-gray">Other</label>
                 </div>
+                <div class="flex items-center mb-4 w-full sm:w-1/4">
+                    <input id="referral" type="checkbox" value="referral" name="hear[]"
+                        class="w-5 h-5 text-nova-primary border-nova-light focus:ring-nova-primary ">
+                    <label for="referral" class="ms-3 text-sm font-medium text-nova-gray">Referral</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="md:flex md:gap-x-20 md:gap-y-10 mb-14 flex-wrap hidden" id="referralField" style="display: none;">
+            <div class="form-field md:w-1/2 mb-9 md:mb-0">
+                <label class="block mb-2 font-title uppercase" for="referredBy">
+                    Referred by:
+                </label>
+                <input
+                    class="appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
+                    id="referredBy" name="referredBy" type="text" placeholder="Name">
             </div>
 
         </div>

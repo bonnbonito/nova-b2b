@@ -45,6 +45,98 @@ class Roles {
 		// add_action( 'added_user_meta', array( $this, 'user_send_activate' ), 10, 4 );
 	}
 
+	public function states_by_country() {
+		$states = array(
+			'US' => array(
+				'AL' => 'Alabama',
+				'AK' => 'Alaska',
+				'AS' => 'American Samoa',
+				'AZ' => 'Arizona',
+				'AR' => 'Arkansas',
+				'CA' => 'California',
+				'CO' => 'Colorado',
+				'CT' => 'Connecticut',
+				'DE' => 'Delaware',
+				'DC' => 'District Of Columbia',
+				'FM' => 'Federated States Of Micronesia',
+				'FL' => 'Florida',
+				'GA' => 'Georgia',
+				'GU' => 'Guam',
+				'HI' => 'Hawaii',
+				'ID' => 'Idaho',
+				'IL' => 'Illinois',
+				'IN' => 'Indiana',
+				'IA' => 'Iowa',
+				'KS' => 'Kansas',
+				'KY' => 'Kentucky',
+				'LA' => 'Louisiana',
+				'ME' => 'Maine',
+				'MH' => 'Marshall Islands',
+				'MD' => 'Maryland',
+				'MA' => 'Massachusetts',
+				'MI' => 'Michigan',
+				'MN' => 'Minnesota',
+				'MS' => 'Mississippi',
+				'MO' => 'Missouri',
+				'MT' => 'Montana',
+				'NE' => 'Nebraska',
+				'NV' => 'Nevada',
+				'NH' => 'New Hampshire',
+				'NJ' => 'New Jersey',
+				'NM' => 'New Mexico',
+				'NY' => 'New York',
+				'NC' => 'North Carolina',
+				'ND' => 'North Dakota',
+				'MP' => 'Northern Mariana Islands',
+				'OH' => 'Ohio',
+				'OK' => 'Oklahoma',
+				'OR' => 'Oregon',
+				'PW' => 'Palau',
+				'PA' => 'Pennsylvania',
+				'PR' => 'Puerto Rico',
+				'RI' => 'Rhode Island',
+				'SC' => 'South Carolina',
+				'SD' => 'South Dakota',
+				'TN' => 'Tennessee',
+				'TX' => 'Texas',
+				'UT' => 'Utah',
+				'VT' => 'Vermont',
+				'VI' => 'Virgin Islands',
+				'VA' => 'Virginia',
+				'WA' => 'Washington',
+				'WV' => 'West Virginia',
+				'WI' => 'Wisconsin',
+				'WY' => 'Wyoming',
+			),
+			'CA' => array(
+				'AB' => 'Alberta',
+				'BC' => 'British Columbia',
+				'MB' => 'Manitoba',
+				'NB' => 'New Brunswick',
+				'NL' => 'Newfoundland and Labrador',
+				'NS' => 'Nova Scotia',
+				'NT' => 'Northwest Territories',
+				'NU' => 'Nunavut',
+				'ON' => 'Ontario',
+				'PE' => 'Prince Edward Island',
+				'QC' => 'Québec',
+				'SK' => 'Saskatchewan',
+				'YT' => 'Yukon',
+			),
+		);
+		return $states;
+	}
+
+	public function country_by_state( $stateCode ) {
+		$states = $this->states_by_country();
+		foreach ( $states as $country => $regions ) {
+			if ( array_key_exists( $stateCode, $regions ) ) {
+				return $country;
+			}
+		}
+		return null;
+	}
+
 	public function sort_users_by_user_id( $query ) {
 		if ( isset( $query->query_vars['orderby'] ) && 'user_id' == $query->query_vars['orderby'] ) {
 			$query->query_vars['orderby'] = 'ID'; // WordPress user query recognizes 'ID' for sorting by user ID
@@ -415,11 +507,13 @@ jQuery(document).ready(function($) {
 			)
 		);
 
+		$business_group = strtoupper( $country . $state );
+
 		$business_id = strtoupper( $country . $state . '-' . substr( $businessType, 0, 1 ) );
 
 		$business_type_table = 'type_' . $businessType;
 
-		$business_type_id = $this->insert_business_type( $business_type_table, $user_id );
+		$business_type_id = $this->insert_business_type( $business_type_table, $business_group, $user_id );
 
 		$business_id = $business_id . str_pad( $business_type_id, 3, '0', STR_PAD_LEFT );
 
@@ -631,6 +725,7 @@ jQuery(document).ready(function($) {
 			$sql = "CREATE TABLE $table_name (
 				id mediumint(9) NOT NULL AUTO_INCREMENT,
 				time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+				user_group tinytext NOT NULL,
 				user_id mediumint(9) NOT NULL,
 				PRIMARY KEY  (id)
 			) $charset_collate;";
@@ -640,26 +735,165 @@ jQuery(document).ready(function($) {
 		}
 	}
 
-	public function insert_business_type( $type, $user_id ) {
+	public function insert_business_type( $type, $group, $user_id ) {
 		global $wpdb;
 		$sanitized_type = str_replace( '-', '_', $type );
 		$table_name     = $wpdb->prefix . $sanitized_type;
 		$current_time   = current_time( 'mysql' );
 
 		$data = array(
-			'time'    => $current_time,
-			'user_id' => $user_id,
+			'time'       => $current_time,
+			'user_group' => $group,
+			'user_id'    => $user_id,
 		);
 
-		$format = array( '%s', '%d' );
+		$format = array( '%s', '%s', '%d' );
 
 		$success = $wpdb->insert( $table_name, $data, $format );
 
 		if ( false === $success ) {
 			return new WP_Error( 'db_insert_error', 'Failed to insert business type data into database', $wpdb->last_error );
 		} else {
-			return $wpdb->insert_id;
+
+			$query = $wpdb->prepare( "SELECT COUNT(*) FROM `$table_name` WHERE user_group = %s", $group );
+			$count = $wpdb->get_var( $query );
+			return $count;
+
 		}
+	}
+
+	public function clear_table() {
+		global $wpdb; // Make sure $wpdb is accessible
+		$tables = array(
+			'type_sign-shops',
+			'type_printing-shops',
+			'type_display',
+			'type_graphics',
+			'type_marketing-agencies',
+			'type_others',
+		);
+		$error  = false;
+
+		foreach ( $tables as $table ) {
+			$sanitized_table_name = str_replace( '-', '_', $table );
+			$table_name           = $wpdb->prefix . $sanitized_table_name;
+			$sql                  = "TRUNCATE TABLE `$table_name`";
+			$wpdb->query( $sql );
+
+			if ( $wpdb->last_error ) {
+				echo "Error truncating table $table_name: " . $wpdb->last_error . '<br>';
+				$error = true;
+			} else {
+				echo "Table $table_name has been cleared successfully.<br>";
+			}
+		}
+
+		return ! $error; // Return true if no errors occurred
+	}
+
+	public function update_business_id_user( $user_id ) {
+		$user = get_user_by( 'id', $user_id );
+
+		if ( in_array( 'administrator', (array) $user->roles ) || in_array( 'customer-rep', (array) $user->roles ) ) {
+					update_field( 'business_id', 'NOVA', 'user_' . $user->ID );
+		} else {
+			$user_id = $user->ID;
+
+			$billing_country = get_user_meta( $user->ID, 'billing_country', true );
+			$state           = get_field( 'state', 'user_' . $user->ID );
+			$businessType    = get_field( 'business_type', 'user_' . $user->ID );
+
+			if ( ! $billing_country ) {
+				$country = $this->country_by_state( $state );
+			} else {
+				$country = $billing_country;
+			}
+
+			if ( isset( $country ) && ! empty( $country ) && isset( $state ) && ! empty( $state ) && isset( $businessType ) && ! empty( $businessType ) ) {
+
+				$business_group      = strtoupper( $country . $state );
+				$business_id         = strtoupper( $country . $state . '-' . substr( $businessType, 0, 1 ) );
+				$business_type_table = 'type_' . $businessType;
+				$business_type_id    = $this->insert_business_type( $business_type_table, $business_group, $user_id );
+				$business_id         = $business_id . str_pad( $business_type_id, 3, '0', STR_PAD_LEFT );
+
+				update_field( 'business_id', $business_id, 'user_' . $user_id );
+
+			} else {
+				update_field( 'business_id', 'NOVA', 'user_' . $user_id );
+			}
+		}
+	}
+
+	private function process_business_id_user( $user ) {
+		if ( in_array( 'administrator', (array) $user->roles ) || in_array( 'customer-rep', (array) $user->roles ) ) {
+			update_field( 'business_id', 'NOVA', 'user_' . $user->ID );
+		} else {
+			$user_id         = $user->ID;
+			$billing_country = get_user_meta( $user->ID, 'billing_country', true );
+			$state           = get_field( 'state', 'user_' . $user->ID );
+			$businessType    = get_field( 'business_type', 'user_' . $user->ID );
+
+			if ( ! $billing_country ) {
+				$country = $this->country_by_state( $state );
+			} else {
+				$country = $billing_country;
+			}
+
+			if ( isset( $country ) && ! empty( $country ) && isset( $state ) && ! empty( $state ) && isset( $businessType ) && ! empty( $businessType ) ) {
+				$business_group      = strtoupper( $country . $state );
+				$business_id         = strtoupper( $country . $state . '-' . substr( $businessType, 0, 1 ) );
+				$business_type_table = 'type_' . $businessType;
+				$business_type_id    = $this->insert_business_type( $business_type_table, $business_group, $user_id );
+				$business_id         = $business_id . str_pad( $business_type_id, 3, '0', STR_PAD_LEFT );
+				update_field( 'business_id', $business_id, 'user_' . $user_id );
+			} else {
+				update_field( 'business_id', '', 'user_' . $user_id );
+			}
+		}
+	}
+
+	public function regenerate_business_id() {
+		$batch_size = 20; // Process 100 users per batch
+		$page       = 0;
+		$processed  = true;
+		$this->clear_table();
+
+		while ( $processed ) {
+			// Fetch a batch of users
+			$users = get_users(
+				array(
+					'number'  => $batch_size,
+					'offset'  => $page * $batch_size,
+					'orderby' => 'ID',  // Sort by user ID
+					'order'   => 'ASC',    // Ascending order
+				)
+			);
+
+			// If no users are returned, we are done
+			if ( empty( $users ) ) {
+				$processed = false;
+				continue;
+			}
+
+			// Process each user in the current batch
+			foreach ( $users as $user ) {
+				// Your existing user processing code goes here
+				// $this->process_business_id_user( $user );
+				$business_id = get_field( 'business_id', $user->ID );
+				if ( $business_id ) {
+					update_field( 'old_business_id', $business_id, $user->ID );
+				}
+				echo 'Updating user ' . $user->ID . '<br>';
+				echo 'Business ID ' . get_field( 'business_id', 'user_' . $user->ID ) . '<br>';
+				echo '--------------------------------<br>';
+			}
+
+			// Increment the page number for the next batch
+			++$page;
+			echo 'Next batch ...<br>';
+		}
+		echo 'Done processing';
 	}
 }
 
