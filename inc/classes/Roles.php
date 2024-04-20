@@ -432,6 +432,7 @@ jQuery(document).ready(function($) {
 		$country         = isset( $_POST['country'] ) ? sanitize_text_field( $_POST['country'] ) : '';
 		$promotions      = isset( $_POST['promotions'] ) ? sanitize_text_field( $_POST['promotions'] ) : '';
 		$privacy         = isset( $_POST['privacy'] ) ? sanitize_text_field( $_POST['privacy'] ) : '';
+		$referral        = isset( $_POST['referredBy'] ) ? sanitize_text_field( $_POST['referredBy'] ) : '';
 
 		if ( username_exists( $username ) || email_exists( $businessEmail ) ) {
 			wp_send_json(
@@ -531,6 +532,7 @@ jQuery(document).ready(function($) {
 		update_field( 'zip', $zip, 'user_ ' . $user_id );
 		update_field( 'country', $country, 'user_ ' . $user_id );
 		update_field( 'pst', $pst, 'user_ ' . $user_id );
+		update_field( 'referral', $referral, 'user_ ' . $user_id );
 		update_field( 'how_did_you_hear_about_us', $_POST['hear'], 'user_ ' . $user_id );
 		update_field( 'promotions', isset( $_POST['promotions'] ) && $_POST['promotions'] === 'yes' ? 1 : 0, 'user_ ' . $user_id );
 		update_field( 'privacy', $_POST['privacy'] === 'yes' ? 1 : 0, 'user_ ' . $user_id );

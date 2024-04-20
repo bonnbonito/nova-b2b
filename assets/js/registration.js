@@ -159,7 +159,7 @@ function novaRegistration() {
 
 		formData.append('nonce', NovaSignUp.nonce);
 
-		console.log(formData);
+		//console.log(formData);
 
 		fetch(NovaSignUp.ajax_url, {
 			method: 'POST',
@@ -171,7 +171,6 @@ function novaRegistration() {
 		})
 			.then((response) => response.json())
 			.then((data) => {
-				console.log(data);
 				if (data.code == 2) {
 					let formData = new FormData();
 					formData.append('action', 'send_activation');
