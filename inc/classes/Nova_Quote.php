@@ -1519,8 +1519,11 @@ h6 {
 				);
 			}
 
+			$current_user = wp_get_current_user();
+
 			update_field( 'frontend_title', $_POST['title'], $post_id );
 			update_field( 'partner', get_current_user_id(), $post_id );
+			update_field( 'partner_email', $current_user->user_email, $post_id );
 			update_field( 'signage', $_POST['signage'], $post_id );
 			update_field( 'final_price', $_POST['total'], $post_id );
 			update_field( 'product', $_POST['product'], $post_id );

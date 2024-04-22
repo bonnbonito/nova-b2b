@@ -234,10 +234,11 @@ class Admin {
 	}
 
 	public function custom_acf_user_display( $text, $user, $field, $post_id ) {
-		$business_id = get_field( 'business_id', 'user_' . $user->ID );
-		$name        = $user->first_name . ' ' . $user->last_name;
+		$business_id   = get_field( 'business_id', 'user_' . $user->ID );
+		$business_name = get_field( 'business_name', 'user_' . $user->ID ) ? ' - ' . get_field( 'business_name', 'user_' . $user->ID ) : '';
+		$name          = $user->first_name . ' ' . $user->last_name;
 		if ( $business_id ) {
-			return $business_id . ' - ' . $name;
+			return $business_id . ' - ' . $name . ' ' . $business_name;
 		}
 		return $name;
 	}

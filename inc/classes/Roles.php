@@ -36,7 +36,7 @@ class Roles {
 		add_action( 'manage_users_custom_column', array( $this, 'business_id_user_column' ), 10, 3 );
 		add_filter( 'manage_users_sortable_columns', array( $this, 'make_business_id_column_sortable' ) );
 		add_filter( 'manage_users_sortable_columns', array( $this, 'user_id_column_sortable' ) );
-		// add_action( 'pre_get_users', array( $this, 'sort_by_business_id_column' ) );
+		add_action( 'pre_get_users', array( $this, 'sort_by_business_id_column' ) );
 		add_action( 'set_user_role', array( $this, 'notify_user_approved_partner' ), 13, 3 );
 		// add_action( 'set_user_role', array( $this, 'generate_partner_business_id' ), 12, 3 );
 		add_action( 'set_user_role', array( $this, 'update_role_business_id' ), 11, 3 );
@@ -345,8 +345,8 @@ jQuery(document).ready(function($) {
 		$orderby = $query->get( 'orderby' );
 
 		if ( 'business_id' == $orderby ) {
-			$query->set( 'meta_key', 'business_id' ); // replace with your actual meta key
-			$query->set( 'orderby', 'meta_value' ); // or 'meta_value_num' if the values are numeric
+			// $query->set( 'meta_key', 'business_id' ); // replace with your actual meta key
+			$query->set( 'orderby', 'id' ); // or 'meta_value_num' if the values are numeric
 		}
 	}
 
@@ -885,7 +885,7 @@ jQuery(document).ready(function($) {
 		$user = get_user_by( 'id', $user_id );
 
 		if ( in_array( 'administrator', (array) $user->roles ) || in_array( 'customer-rep', (array) $user->roles ) ) {
-					update_field( 'business_id', 'NOVA', 'user_' . $user_id );
+					update_field( 'business_id', 'NOVA-' . $user_id, 'user_' . $user_id );
 		} else {
 
 			$billing_country = get_user_meta( $user_id, 'billing_country', true );
@@ -921,7 +921,7 @@ jQuery(document).ready(function($) {
 					update_field( 'business_id', $business_id, 'user_' . $user_id );
 				}
 			} else {
-				update_field( 'business_id', 'NOVA', 'user_' . $user_id );
+				update_field( 'business_id', '' . $user_id, 'user_' . $user_id );
 			}
 		}
 	}
@@ -973,8 +973,8 @@ jQuery(document).ready(function($) {
 
 		// Early exit for specific roles
 		$role_based_ids = array(
-			'administrator' => 'NOVA',
-			'customer-rep'  => 'CUSTOMER REP',
+			'administrator' => 'NOVA-' . $user_id,
+			'customer-rep'  => 'CUSTOMER REP-' . $user_id,
 			'temporary'     => 'TEMPORARY-' . $user_id,
 			'pending'       => 'PENDING-' . $user_id,
 		);
@@ -991,8 +991,8 @@ jQuery(document).ready(function($) {
 		if ( $this->containsKeywords( $first_name, $keywords ) ||
 			$this->containsKeywords( $last_name, $keywords ) ||
 			$this->containsKeywords( $email, $keywords ) ) {
-			update_field( 'business_id', 'TEST USER', 'user_' . $user_id );
-			return 'TEST USER';
+			update_field( 'business_id', 'TEST USER-' . $user_id, 'user_' . $user_id );
+			return 'TEST USER-' . $user_id;
 		}
 
 		// Process business ID creation
