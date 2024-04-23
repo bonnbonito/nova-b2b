@@ -203,7 +203,19 @@ export default function Letters({ item }) {
 
 	const handleSelectFont = (value) => setFont(value);
 
-	const handleOnChangeMounting = (e) => setMounting(() => e.target.value);
+	const handleOnChangeMounting = (e) => {
+		const target = e.target.value;
+		setMounting(target);
+
+		if (target === 'Stud with spacer' || target === 'Stud Mount') {
+			if (target === 'Stud Mount') {
+				setSpacerStandoffDistance('');
+			}
+		} else {
+			setStudLength('');
+			setSpacerStandoffDistance('');
+		}
+	};
 
 	const handleOnChangeWaterproof = (e) => setWaterproof(e.target.value);
 
@@ -331,6 +343,10 @@ export default function Letters({ item }) {
 			if (!studLength) missingFields.push('Select Stud Length');
 
 			if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+		}
+
+		if (mounting === 'Stud Mount') {
+			if (!studLength) missingFields.push('Select Stud Length');
 		}
 
 		if (!ledLightColor) missingFields.push('Select LED Light Color');
@@ -782,11 +798,30 @@ export default function Letters({ item }) {
 					</>
 				)}
 
+				{mounting === 'Stud Mount' && (
+					<>
+						<Dropdown
+							title="Stud Length"
+							onChange={handleonChangeStudLength}
+							options={studLengthOptions.map((option) => (
+								<option
+									value={option.value}
+									selected={option.value == item.studLength}
+								>
+									{option.value}
+								</option>
+							))}
+							value={item.studLength}
+						/>
+					</>
+				)}
+
 				<Dropdown
 					title="Quantity"
 					onChange={handleOnChangeSets}
 					options={setOptions}
 					value={sets}
+					onlyValue={true}
 				/>
 			</div>
 

@@ -160,7 +160,19 @@ export default function Logo({ item }) {
 		setSelectedFinishing(e.target.value);
 	};
 
-	const handleOnChangeInstallation = (e) => setInstallation(e.target.value);
+	const handleOnChangeInstallation = (e) => {
+		const target = e.target.value;
+		setInstallation(target);
+
+		if (target === 'Stud with spacer' || target === 'Stud Mount') {
+			if (target === 'Stud Mount') {
+				setSpacerStandoffDistance('');
+			}
+		} else {
+			setStudLength('');
+			setSpacerStandoffDistance('');
+		}
+	};
 
 	function updateSignage() {
 		const updatedSignage = signage.map((sign) => {
@@ -235,6 +247,10 @@ export default function Logo({ item }) {
 			if (!studLength) missingFields.push('Select Stud Length');
 
 			if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+		}
+
+		if (installation === 'Stud Mount') {
+			if (!studLength) missingFields.push('Select Stud Length');
 		}
 
 		if (!sets) missingFields.push('Select Quantity');
@@ -392,13 +408,6 @@ export default function Logo({ item }) {
 		if (!openColor) return;
 		setOpenColor(false);
 	});
-
-	useEffect(() => {
-		if (installation !== 'Stud with spacer') {
-			setStudLength('');
-			setSpacerStandoffDistance('');
-		}
-	}, [installation]);
 
 	return (
 		<>
@@ -597,11 +606,30 @@ export default function Logo({ item }) {
 					</>
 				)}
 
+				{installation === 'Stud Mount' && (
+					<>
+						<Dropdown
+							title="Stud Length"
+							onChange={handleonChangeStudLength}
+							options={studLengthOptions.map((option) => (
+								<option
+									value={option.value}
+									selected={option.value == item.studLength}
+								>
+									{option.value}
+								</option>
+							))}
+							value={item.studLength}
+						/>
+					</>
+				)}
+
 				<Dropdown
 					title="Quantity"
 					onChange={handleOnChangeSets}
 					options={setOptions}
 					value={sets}
+					onlyValue={true}
 				/>
 			</div>
 

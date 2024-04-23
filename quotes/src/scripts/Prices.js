@@ -195,9 +195,11 @@ export default function Prices({ item }) {
 			{item.vinylWhite?.name && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
-						3M 360 VINYL
+						3M VINYL
 					</div>
-					<div className="text-left text-sm">{item.vinylWhite?.name}</div>
+					<div className="text-left text-sm">
+						{item.vinylWhite?.name} - [{item.vinylWhite?.code}]
+					</div>
 				</div>
 			)}
 			{item.frontAcrylicCover && (

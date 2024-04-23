@@ -64,11 +64,24 @@ class Nova_Quote {
 		add_filter( 'query_vars', array( $this, 'custom_query_vars' ) );
 		add_action( 'admin_notices', array( $this, 'show_dropbox_oauth_errors' ) );
 		add_action( 'kadence_single_before_inner_content', array( $this, 'show_product_dropdown' ) );
+		add_action( 'add_meta_boxes', array( $this, 'nova_mockup_update_email' ), 10, 2 );
 		add_action( 'add_meta_boxes', array( $this, 'nova_quote_add_admin_meta_box' ), 10, 2 );
 		add_action( 'add_meta_boxes', array( $this, 'nova_quote_admin_changed' ), 10, 2 );
 		add_action( 'add_meta_boxes', array( $this, 'update_dropbox_folder' ), 10, 2 );
 		add_action( 'add_meta_boxes', array( $this, 'generated_product_id' ), 10, 2 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'dequeue_lightbox_on_mockups_view' ), 100 );
+		add_action( 'admin_init', array( $this, 'process_send_mockup_email' ) );
+	}
+
+	public function process_send_mockup_email() {
+
+		if ( isset( $_POST['send_mockup_update_email'], $_POST['post_id'] ) && check_admin_referer( 'send_mockup_email_action', 'send_mockup_email_nonce' ) ) {
+			$post_id = intval( $_POST['post_id'] );
+
+			if ( $post_id ) {
+				$this->for_mockup_update_email( $post_id );
+			}
+		}
 	}
 
 	public function show_partner_email( $post_id ) {
@@ -259,13 +272,49 @@ class Nova_Quote {
 		}
 	}
 
+	public function nova_mockup_update_email( $post_type, $post ) {
+		if ( $post_type !== 'nova_quote' ) {
+			return;
+		}
+
+		if ( get_field( 'quote_status', $post->ID )['value'] === 'draft' ) {
+			return;
+		}
+		add_meta_box(
+			'nova_admin_mockup_update_email',
+			__( 'Send Update Email', 'nova-b2b' ),
+			array( $this, 'nova_admin_mockup_update_email_callback' ),
+			'nova_quote',
+			'side',
+			'high'
+		);
+	}
+
+	public function nova_admin_mockup_update_email_callback( $post ) {
+		?>
+<form action="" method="post">
+		<?php wp_nonce_field( 'send_mockup_email_action', 'send_mockup_email_nonce' ); ?>
+	<input type="hidden" name="post_id" value="<?php echo $post->ID; ?>">
+	<input id="sendMockup" type="submit" name="send_mockup_update_email" class="button button-primary"
+		value="<?php esc_attr_e( 'Send Mockup Email', 'nova-b2b' ); ?>">
+</form>
+<script>
+const sendMockup = document.getElementById('sendMockup');
+sendMockup.addEventListener('click', e => {
+	sendMockup.value = "Sending...";
+	sendMockup.attr.disabled = true;
+})
+</script>
+		<?php
+	}
+
 	public function nova_quote_add_admin_meta_box( $post_type, $post ) {
 		if ( $post_type !== 'nova_quote' ) {
 			return;
 		}
 		add_meta_box(
 			'nova_admin_view_quote',
-			__( 'View Details', 'textdomain' ),
+			__( 'View Details', 'nova-b2b' ),
 			array( $this, 'nova_admin_view_quote_callback' ),
 			'nova_quote',
 			'side',
@@ -458,6 +507,43 @@ class Nova_Quote {
 		$role_instance = \NOVA_B2B\Inc\Classes\Roles::get_instance();
 
 		$role_instance->send_email( $to, $subject, $message, $headers, array() );
+	}
+
+	public function for_mockup_update_email( $post_id ) {
+
+		$user_id       = get_field( 'partner', $post_id );
+		$user_info     = get_userdata( $user_id );
+		$business_id   = get_field( 'business_id', 'user_' . $user_id );
+		$company       = get_field( 'business_name', 'user_' . $user_id );
+		$edit_post_url = admin_url( 'post.php?post=' . $post_id . '&action=edit' );
+
+		$to         = $user_info->user_email;
+		$first_name = $user_info->first_name;
+
+		$subject = 'NOVA Signage - Mockup for Review - QUOTE ID: Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
+
+		$message  = '<p>Hello ' . $first_name . ',</p>';
+		$message .= '<p>Your custom signage mockup with QUOTE ID: Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . ' is ready for review. Click the link below to check it out:</p>';
+		$message .= '<p><a href="' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '">' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '</a></p>';
+		$message .= "<p>You may now add it to your cart if you're satisfied. Let us know if you need any adjustments.</p>";
+
+		$message .= '<p>Thank you,<br>';
+		$message .= 'NOVA Signage Team</p>';
+
+		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
+
+		$role_instance = \NOVA_B2B\Inc\Classes\Roles::get_instance();
+
+		$sent = $role_instance->send_email( $to, $subject, $message, $headers, array() );
+
+		if ( $sent ) {
+			add_action(
+				'admin_notices',
+				function () use ( $to ) {
+						echo '<div class="notice notice-success is-dismissible"><p>Email successfully sent to ' . esc_html( $to ) . '.</p></div>';
+				}
+			);
+		}
 	}
 
 	public function for_payment_admin_email( $post_id ) {
@@ -1333,7 +1419,7 @@ h6 {
 		}
 
 		if ( isset( $projectArray['letterHeight'] ) && ! empty( $projectArray['letterHeight'] ) ) {
-			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">Letter Height: </strong></td><td><font face="lato">' . $projectArray['letterHeight'] . '"</font></td></tr>';
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">LETTER HEIGHT: </strong></td><td><font face="lato">' . $projectArray['letterHeight'] . '"</font></td></tr>';
 		}
 
 		if ( isset( $projectArray['metal'] ) && ! empty( $projectArray['metal'] ) ) {
@@ -1437,7 +1523,7 @@ h6 {
 		}
 
 		if ( isset( $projectArray['vinylWhite'] ) && ! empty( $projectArray['vinylWhite'] ) && isset( $projectArray['vinylWhite']->name ) ) {
-			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">ACRYLIC COVER: </strong></td><td><font face="lato">' . $projectArray['vinylWhite']->name . '</font></td></tr>';
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">3M VINYL: </strong></td><td><font face="lato">' . $projectArray['vinylWhite']->name . ' - [' . $projectArray['vinylWhite']->code . ']</font></td></tr>';
 		}
 
 		if ( isset( $projectArray['pieces'] ) && ! empty( $projectArray['pieces'] ) ) {

@@ -87,13 +87,6 @@ export default function Letters({ item }) {
 		setSpacerStandoffDistance(e.target.value);
 	};
 
-	useEffect(() => {
-		if (installation !== 'Stud with spacer') {
-			setStudLength('');
-			setSpacerStandoffDistance('');
-		}
-	}, [installation]);
-
 	const handleonChangeStudLength = (e) => {
 		const target = e.target.value;
 		setStudLength(target); // Directly set the value without a callback
@@ -227,7 +220,19 @@ export default function Letters({ item }) {
 
 	const handleSelectFont = (value) => setFont(value);
 
-	const handleOnChangeInstallation = (e) => setInstallation(e.target.value);
+	const handleOnChangeInstallation = (e) => {
+		const target = e.target.value;
+		setInstallation(target);
+
+		if (target === 'Stud with spacer' || target === 'Stud Mount') {
+			if (target === 'Stud Mount') {
+				setSpacerStandoffDistance('');
+			}
+		} else {
+			setStudLength('');
+			setSpacerStandoffDistance('');
+		}
+	};
 
 	const handleOnChangeWaterproof = (e) => setWaterproof(e.target.value);
 
@@ -407,6 +412,10 @@ export default function Letters({ item }) {
 			if (!studLength) missingFields.push('Select Stud Length');
 
 			if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+		}
+
+		if (installation === 'Stud Mount') {
+			if (!studLength) missingFields.push('Select Stud Length');
 		}
 
 		if (!sets) missingFields.push('Select Quantity');
@@ -710,11 +719,30 @@ export default function Letters({ item }) {
 					</>
 				)}
 
+				{installation === 'Stud Mount' && (
+					<>
+						<Dropdown
+							title="Stud Length"
+							onChange={handleonChangeStudLength}
+							options={studLengthOptions.map((option) => (
+								<option
+									value={option.value}
+									selected={option.value == item.studLength}
+								>
+									{option.value}
+								</option>
+							))}
+							value={item.studLength}
+						/>
+					</>
+				)}
+
 				<Dropdown
 					title="Quantity"
 					onChange={handleOnChangeSets}
 					options={setOptions}
 					value={sets}
+					onlyValue={true}
 				/>
 			</div>
 

@@ -91,12 +91,6 @@ const mountingDefaultOptions = [
 		mounting_option: 'Double-sided tape',
 	},
 	{
-		mounting_option: 'Flush stud',
-	},
-	{
-		mounting_option: 'Stud with Block',
-	},
-	{
 		mounting_option: 'Pad',
 	},
 	{
@@ -113,9 +107,6 @@ const mountingDefaultOptions = [
 const metalInstallationOptions = [
 	{
 		option: 'Plain',
-	},
-	{
-		option: 'Flush Stud',
 	},
 	{
 		option: 'Stud Mount',

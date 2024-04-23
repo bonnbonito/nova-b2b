@@ -305,7 +305,10 @@ function getSignageDetailFields(sign) {
 		{ label: 'ENVIRONMENT', value: sign.waterproof },
 		{ label: 'COLOR', value: sign.color?.name },
 		{ label: 'ACRYLIC COVER', value: sign.acrylicCover?.name },
-		{ label: '3M 360 VINYL', value: sign.vinylWhite?.name },
+		{
+			label: '3M VINYL',
+			value: sign.vinylWhite?.name + '-[' + sign.vinylWhite?.code + ']',
+		},
 		{ label: 'FRONT ACRYLIC COVER', value: sign.frontAcrylicCover },
 		{ label: 'LED LIGHT COLOR', value: sign.ledLightColor },
 		{ label: 'BASE COLOR', value: sign.baseColor },

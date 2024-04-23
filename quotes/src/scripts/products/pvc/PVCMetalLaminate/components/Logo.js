@@ -120,7 +120,19 @@ export default function Logo({ item }) {
 	const [comments, setComments] = useState('');
 	const [waterproof, setWaterproof] = useState(item.waterproof);
 
-	const handleOnChangeInstallation = (e) => setInstallation(e.target.value);
+	const handleOnChangeInstallation = (e) => {
+		const target = e.target.value;
+		setInstallation(target);
+
+		if (target === 'Stud with spacer' || target === 'Stud Mount') {
+			if (target === 'Stud Mount') {
+				setSpacerStandoffDistance('');
+			}
+		} else {
+			setStudLength('');
+			setSpacerStandoffDistance('');
+		}
+	};
 
 	const [sets, setSets] = useState(item.sets);
 
@@ -392,13 +404,6 @@ export default function Logo({ item }) {
 		pvcBaseColor?.name != 'Custom Color' && setCustomColor('');
 	}, [pvcBaseColor]);
 
-	useEffect(() => {
-		if (installation !== 'Stud with spacer') {
-			setStudLength('');
-			setSpacerStandoffDistance('');
-		}
-	}, [installation]);
-
 	return (
 		<>
 			<div className="quote-grid mb-6">
@@ -566,11 +571,30 @@ export default function Logo({ item }) {
 					</>
 				)}
 
+				{installation === 'Stud Mount' && (
+					<>
+						<Dropdown
+							title="Stud Length"
+							onChange={handleonChangeStudLength}
+							options={studLengthOptions.map((option) => (
+								<option
+									value={option.value}
+									selected={option.value == item.studLength}
+								>
+									{option.value}
+								</option>
+							))}
+							value={item.studLength}
+						/>
+					</>
+				)}
+
 				<Dropdown
 					title="Quantity"
 					onChange={handleOnChangeSets}
 					options={setOptions}
 					value={sets}
+					onlyValue={true}
 				/>
 			</div>
 

@@ -216,7 +216,11 @@ export default function Letters({ item }) {
 		const target = e.target.value;
 		setSelectedMounting(target);
 
-		if (target !== 'Stud with spacer') {
+		if (target === 'Stud with spacer' || target === 'Stud Mount') {
+			if (target === 'Stud Mount') {
+				setSpacerStandoffDistance('');
+			}
+		} else {
 			setStudLength('');
 			setSpacerStandoffDistance('');
 		}
@@ -437,6 +441,10 @@ export default function Letters({ item }) {
 		if (!selectedFinishing) missingFields.push('Select Finishing');
 		if (!waterproof) missingFields.push('Select Waterproof');
 		if (!selectedMounting) missingFields.push('Select Mounting');
+
+		if (selectedMounting === 'Stud Mount') {
+			if (!studLength) missingFields.push('Select Stud Length');
+		}
 
 		if (selectedMounting === 'Stud with spacer') {
 			if (!studLength) missingFields.push('Select Stud Length');
@@ -762,11 +770,30 @@ export default function Letters({ item }) {
 					</>
 				)}
 
+				{selectedMounting === 'Stud Mount' && (
+					<>
+						<Dropdown
+							title="Stud Length"
+							onChange={handleonChangeStudLength}
+							options={studLengthOptions.map((option) => (
+								<option
+									value={option.value}
+									selected={option.value == item.studLength}
+								>
+									{option.value}
+								</option>
+							))}
+							value={item.studLength}
+						/>
+					</>
+				)}
+
 				<Dropdown
 					title="Quantity"
 					onChange={handleOnChangeSets}
 					options={setOptions}
 					value={sets}
+					onlyValue={true}
 				/>
 			</div>
 

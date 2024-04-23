@@ -83,7 +83,11 @@ export default function Logo({ item }) {
 		const target = e.target.value;
 		setSelectedMounting(target);
 
-		if (target !== 'Stud with spacer') {
+		if (target === 'Stud with spacer' || target === 'Stud Mount') {
+			if (target === 'Stud Mount') {
+				setSpacerStandoffDistance('');
+			}
+		} else {
 			setStudLength('');
 			setSpacerStandoffDistance('');
 		}
@@ -253,6 +257,10 @@ export default function Logo({ item }) {
 			if (!studLength) missingFields.push('Select Stud Length');
 
 			if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+		}
+
+		if (selectedMounting === 'Stud Mount') {
+			if (!studLength) missingFields.push('Select Stud Length');
 		}
 
 		if (!selectedFinishing) missingFields.push('Select Finishing Option');
@@ -521,6 +529,24 @@ export default function Logo({ item }) {
 					</>
 				)}
 
+				{selectedMounting === 'Stud Mount' && (
+					<>
+						<Dropdown
+							title="Stud Length"
+							onChange={handleonChangeStudLength}
+							options={studLengthOptions.map((option) => (
+								<option
+									value={option.value}
+									selected={option.value == item.studLength}
+								>
+									{option.value}
+								</option>
+							))}
+							value={item.studLength}
+						/>
+					</>
+				)}
+
 				<Dropdown
 					title="Finishing Options"
 					onChange={handleChangeFinishing}
@@ -540,6 +566,7 @@ export default function Logo({ item }) {
 					onChange={handleOnChangeSets}
 					options={setOptions}
 					value={sets}
+					onlyValue={true}
 				/>
 			</div>
 

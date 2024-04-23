@@ -139,9 +139,6 @@ const metalFinishColors = [
 
 const metalInstallationOptions = [
 	{
-		option: 'Flush Stud',
-	},
-	{
 		option: 'Stud Mount',
 	},
 	{
@@ -160,10 +157,10 @@ const fabricatedLogoInstallationOptions = [
 
 const fabricatedMetalInstallationOptions = [
 	{
-		option: 'Stud Mount',
+		option: 'PVC Backing',
 	},
 	{
-		option: 'PVC Backing',
+		option: 'Stud Mount',
 	},
 	{
 		option: 'Stud with spacer',

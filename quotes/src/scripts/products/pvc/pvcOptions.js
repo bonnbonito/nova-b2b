@@ -15,9 +15,6 @@ export const installationOptions = [
 		value: 'Double-sided tape',
 	},
 	{
-		value: 'Flush stud',
-	},
-	{
 		value: 'Pad - Combination All',
 	},
 	{

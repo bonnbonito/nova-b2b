@@ -270,8 +270,10 @@ export default function PricesView({ item }) {
 
 				{item.vinylWhite?.name && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
-						<div className="text-left text-xs font-title">3M 360 VINYL</div>
-						<div className="text-left text-[14px]">{item.vinylWhite?.name}</div>
+						<div className="text-left text-xs font-title">3M VINYL</div>
+						<div className="text-left text-[14px]">
+							{item.vinylWhite?.name} - [{item.vinylWhite?.code}]
+						</div>
 					</div>
 				)}
 

@@ -210,7 +210,19 @@ export default function Letters({ item }) {
 
 	const handleSelectFont = (value) => setFont(value);
 
-	const handleOnChangeMounting = (e) => setMounting(() => e.target.value);
+	const handleOnChangeMounting = (e) => {
+		const target = e.target.value;
+		setMounting(target);
+
+		if (target === 'Stud with spacer' || target === 'Stud Mount') {
+			if (target === 'Stud Mount') {
+				setSpacerStandoffDistance('');
+			}
+		} else {
+			setStudLength('');
+			setSpacerStandoffDistance('');
+		}
+	};
 
 	const handleOnChangeWaterproof = (e) => setWaterproof(e.target.value);
 
@@ -223,7 +235,7 @@ export default function Letters({ item }) {
 	const handleOnChangeWhite = (e) => {
 		const target = e.target.value;
 		setFrontAcrylicCover(target);
-		if (target !== 'White with 3M 3630 Vinyl') {
+		if (target !== '3M Vinyl') {
 			setVinylWhite({
 				name: '',
 				color: '',
@@ -401,11 +413,15 @@ export default function Letters({ item }) {
 			if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
 		}
 
+		if (mounting === 'Stud Mount') {
+			if (!studLength) missingFields.push('Select Stud Length');
+		}
+
 		if (!ledLightColor) missingFields.push('Select LED Light Color');
 
 		if (!frontAcrylicCover) missingFields.push('Select Front Acrylic Cover');
 
-		if (frontAcrylicCover === 'White with 3M 3630 Vinyl') {
+		if (frontAcrylicCover === '3M Vinyl') {
 			if (!vinylWhite?.name) missingFields.push('Select 3M 3630 Vinyl');
 		}
 
@@ -675,10 +691,10 @@ export default function Letters({ item }) {
 					value={item.frontAcrylicCover}
 				/>
 
-				{frontAcrylicCover === 'White with 3M 3630 Vinyl' && (
+				{frontAcrylicCover === '3M Vinyl' && (
 					<div className="px-[1px] relative" ref={acrylicColorRef}>
 						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-							3M 36360 Vinyl
+							3M VINYL
 						</label>
 						<div
 							className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
@@ -770,11 +786,30 @@ export default function Letters({ item }) {
 					</>
 				)}
 
+				{mounting === 'Stud Mount' && (
+					<>
+						<Dropdown
+							title="Stud Length"
+							onChange={handleonChangeStudLength}
+							options={studLengthOptions.map((option) => (
+								<option
+									value={option.value}
+									selected={option.value == item.studLength}
+								>
+									{option.value}
+								</option>
+							))}
+							value={item.studLength}
+						/>
+					</>
+				)}
+
 				<Dropdown
 					title="Quantity"
 					onChange={handleOnChangeSets}
 					options={setOptions}
 					value={sets}
+					onlyValue={true}
 				/>
 			</div>
 
