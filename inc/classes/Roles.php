@@ -305,8 +305,8 @@ jQuery(document).ready(function($) {
 			$message  = '<p style="margin-top: 20px;">Hello  ' . $first_name . ',</p>';
 			$message .= '<p>Welcome to NOVA Signage! Your application to become a Business Partner has been approved.</p>';
 			$message .= '<p>You may now <a href="' . home_url( '/my-account/' ) . '">login</a> to see our products, get instant quotes, or start a custom sign project';
-			$message .= '<p><a href="' . home_url( '/' ) . '">[EXPLORE OUR PRODUCTS]</a><br>';
-			$message .= '<a href="' . home_url( '/custom-project' ) . '">[START A CUSTOM PROJECT]</a></p>';
+			$message .= '<p><a href="' . home_url( '/' ) . '" style="padding: 10px 16px; display: inline-block; text-decoration: none; border-style: solid; background-color: #d33; color: #fff; font-size: 16px; font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif; font-weight: 400; background: #d33; padding-top: 10px; padding-bottom: 10px; padding-left: 8px; padding-right: 8px; border-width: 0px; border-radius: 4px; border-color: #dedede;">EXPLORE OUR PRODUCTS</a><br>';
+			$message .= '<a href="' . home_url( '/custom-project' ) . '" style="padding: 10px 16px; display: inline-block; text-decoration: none; border-style: solid; background-color: #d33; color: #fff; font-size: 16px; font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif; font-weight: 400; background: #d33; padding-top: 10px; padding-bottom: 10px; padding-left: 8px; padding-right: 8px; border-width: 0px; border-radius: 4px; border-color: #dedede;">START A CUSTOM PROJECT</a></p>';
 			$message .= '<p>If you have any questions, our team is here to assist you.</p>';
 			$message .= '<p>Happy exploring,<br>';
 			$message .= 'NOVA Signage Team</p>';
