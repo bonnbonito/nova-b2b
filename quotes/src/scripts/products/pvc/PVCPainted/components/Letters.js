@@ -264,7 +264,8 @@ export default function Letters({ item }) {
 			(option) => option.value === target
 		);
 		setSelectedThickness(() => selected[0]);
-		if (parseInt(target) === 40) {
+
+		if (parseInt(target) === 40 && parseInt(selectedLetterHeight) === 4) {
 			setSelectedLetterHeight('');
 		}
 	};

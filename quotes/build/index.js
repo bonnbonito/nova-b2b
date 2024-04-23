@@ -13932,7 +13932,7 @@ function Letters({
     const target = e.target.value;
     const selected = _pvcOptions__WEBPACK_IMPORTED_MODULE_9__.thicknessOptions.filter(option => option.value === target);
     setSelectedThickness(() => selected[0]);
-    if (parseInt(target) === 40) {
+    if (parseInt(target) === 40 && parseInt(selectedLetterHeight) === 4) {
       setSelectedLetterHeight('');
     }
   };
@@ -15175,7 +15175,7 @@ function Letters({
     const target = e.target.value;
     const selected = _pvcOptions__WEBPACK_IMPORTED_MODULE_9__.thicknessOptions.filter(option => option.value === target);
     setSelectedThickness(() => selected[0]);
-    if (parseInt(target) === 40) {
+    if (parseInt(target) === 40 && parseInt(selectedLetterHeight) === 4) {
       setSelectedLetterHeight('');
     }
   };
