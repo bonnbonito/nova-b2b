@@ -269,8 +269,6 @@ export default function Logo({ item }) {
 					total += spacer;
 				}
 
-				total *= 1.45; //PVC Metal Laminate pricing
-
 				total *= sets;
 
 				setUsdPrice(parseFloat(total.toFixed(2)));

@@ -14484,8 +14484,6 @@ function Logo({
           spacer = parseFloat(spacer.toFixed(2));
           total += spacer;
         }
-        total *= 1.45; //PVC Metal Laminate pricing
-
         total *= sets;
         setUsdPrice(parseFloat(total.toFixed(2)));
         setCadPrice((total * parseFloat(exchangeRate)).toFixed(2));
