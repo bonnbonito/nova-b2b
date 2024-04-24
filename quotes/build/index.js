@@ -10703,7 +10703,7 @@ function Logo({
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Installation Option",
     onChange: handleOnChangeInstallation,
-    options: _metalOptions__WEBPACK_IMPORTED_MODULE_8__.fabricatedLogoInstallationOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _metalOptions__WEBPACK_IMPORTED_MODULE_8__.fabricatedMetalInstallationOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
       selected: option.option === installation
     }, option.option)),

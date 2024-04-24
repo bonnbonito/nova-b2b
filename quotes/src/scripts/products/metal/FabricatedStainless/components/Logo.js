@@ -12,7 +12,7 @@ import {
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
 import {
-	fabricatedLogoInstallationOptions,
+	fabricatedMetalInstallationOptions,
 	fabricatedThicknessOptions,
 	finishOptions,
 	metalFinishOptions,
@@ -524,7 +524,7 @@ export default function Logo({ item }) {
 				<Dropdown
 					title="Installation Option"
 					onChange={handleOnChangeInstallation}
-					options={fabricatedLogoInstallationOptions.map((option) => (
+					options={fabricatedMetalInstallationOptions.map((option) => (
 						<option
 							value={option.option}
 							selected={option.option === installation}

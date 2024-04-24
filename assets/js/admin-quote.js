@@ -314,7 +314,8 @@ function getSignageDetailFields(sign) {
 		{
 			label: '3M VINYL',
 			value: sign.vinylWhite?.name
-				? sign.vinylWhite?.name + '-[' + sign.vinylWhite?.code + ']'
+				? sign.vinylWhite?.name +
+				  (sign.vinylWhite?.code ? '-[' + sign.vinylWhite?.code + ']' : '')
 				: '',
 		},
 		{
