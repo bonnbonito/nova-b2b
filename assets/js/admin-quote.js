@@ -292,29 +292,46 @@ function getSignageDetailFields(sign) {
 		{ label: 'CAD PRICE', value: sign.cadPrice ? sign.cadPrice : '0' },
 		{ label: 'TYPE', value: sign.type },
 		{ label: 'LINE TEXT', value: sign.letters },
-		{ label: 'LAYERS', value: sign.layers },
+		{ label: 'LAYERS', value: sign.layers ? sign.layers : '' },
 		{
 			label: 'Letter Height',
 			value: sign.letterHeight ? sign.letterHeight + '"' : '',
 		},
-		{ label: 'THICKNESS', value: sign.thickness?.thickness },
-		{ label: 'METAL DEPTH', value: sign.depth?.depth },
+		{
+			label: 'THICKNESS',
+			value: sign.thickness?.thickness ? sign.thickness.thickness : '',
+		},
+		{ label: 'METAL DEPTH', value: sign.depth?.depth ? sign.depth.depth : '' },
 		{ label: 'WIDTH', value: sign.width ? sign.width + '"' : '' },
 		{ label: 'HEIGHT', value: sign.height ? sign.height + '"' : '' },
-		{ label: 'MOUNTING', value: sign.mounting },
-		{ label: 'ENVIRONMENT', value: sign.waterproof },
-		{ label: 'COLOR', value: sign.color?.name },
-		{ label: 'ACRYLIC COVER', value: sign.acrylicCover?.name },
+		{ label: 'MOUNTING', value: sign.mounting ? sign.mounting : '' },
+		{ label: 'ENVIRONMENT', value: sign.waterproof ? sign.waterproof : '' },
+		{ label: 'COLOR', value: sign.color?.name ? sign.color.name : '' },
+		{
+			label: 'ACRYLIC COVER',
+			value: sign.acrylicCover?.name ? sign.acrylicCover.name : '',
+		},
 		{
 			label: '3M VINYL',
-			value: sign.vinylWhite?.name + '-[' + sign.vinylWhite?.code + ']',
+			value: sign.vinylWhite?.name
+				? sign.vinylWhite?.name + '-[' + sign.vinylWhite?.code + ']'
+				: '',
 		},
-		{ label: 'FRONT ACRYLIC COVER', value: sign.frontAcrylicCover },
-		{ label: 'LED LIGHT COLOR', value: sign.ledLightColor },
-		{ label: 'BASE COLOR', value: sign.baseColor },
-		{ label: 'PVC BASE COLOR', value: sign.pvcBaseColor?.name },
-		{ label: 'CUSTOM COLOR', value: sign.customColor },
-		{ label: 'METAL', value: sign.metal },
+		{
+			label: 'FRONT ACRYLIC COVER',
+			value: sign.frontAcrylicCover ? sign.frontAcrylicCover : '',
+		},
+		{
+			label: 'LED LIGHT COLOR',
+			value: sign.ledLightColor ? sign.ledLightColor : '',
+		},
+		{ label: 'BASE COLOR', value: sign.baseColor ? sign.baseColor : '' },
+		{
+			label: 'PVC BASE COLOR',
+			value: sign.pvcBaseColor?.name ? sign.pvcBaseColor?.name : '',
+		},
+		{ label: 'CUSTOM COLOR', value: sign.customColor ? sign.customColor : '' },
+		{ label: 'METAL', value: sign.metal ? sign.metal : '' },
 		{
 			label: 'METAL FINISH',
 			value:
@@ -329,22 +346,46 @@ function getSignageDetailFields(sign) {
 					? sign.acrylicBase.name
 					: sign.acrylicBase,
 		},
-		{ label: 'METAL FINISHING', value: sign.metalFinishing },
-		{ label: 'METAL LAMINATE', value: sign.metalLaminate },
-		{ label: 'STEEL POLISHED', value: sign.stainlessSteelPolished },
-		{ label: 'STUD LENGTH', value: sign.studLength },
-		{ label: 'SPACER STANDOFF DISTANCE', value: sign.spacerStandoffDistance },
-		{ label: 'PRINT PREFERENCE', value: sign.printPreference },
-		{ label: 'FINISHING', value: sign.finishing },
-		{ label: 'INSTALLATION', value: sign.installation },
-		{ label: 'ACRYLIC REVEAL', value: sign.acrylicReveal },
-		{ label: 'FONT', value: sign.font },
-		{ label: 'PIECES/CUTOUTS', value: sign.pieces },
-		{ label: 'QUANTITY', value: sign.sets },
-		{ label: 'COMMENTS', value: sign.comments },
-		{ label: 'DESCRIPTION', value: sign.description },
-		{ label: 'FILE PATH', value: sign.filePath },
-		{ label: 'FONT FILE PATH', value: sign.fontFilePath },
+		{
+			label: 'METAL FINISHING',
+			value: sign.metalFinishing ? sign.metalFinishing : '',
+		},
+		{
+			label: 'METAL LAMINATE',
+			value: sign.metalLaminate ? sign.metalLaminate : '',
+		},
+		{
+			label: 'STEEL POLISHED',
+			value: sign.stainlessSteelPolished ? sign.stainlessSteelPolished : '',
+		},
+		{ label: 'STUD LENGTH', value: sign.studLength ? sign.studLength : '' },
+		{
+			label: 'SPACER STANDOFF DISTANCE',
+			value: sign.spacerStandoffDistance ? sign.spacerStandoffDistance : '',
+		},
+		{
+			label: 'PRINT PREFERENCE',
+			value: sign.printPreference ? sign.printPreference : '',
+		},
+		{ label: 'FINISHING', value: sign.finishing ? sign.finishing : '' },
+		{
+			label: 'INSTALLATION',
+			value: sign.installation ? sign.installation : '',
+		},
+		{
+			label: 'ACRYLIC REVEAL',
+			value: sign.acrylicReveal ? sign.acrylicReveal : '',
+		},
+		{ label: 'FONT', value: sign.font ? sign.font : '' },
+		{ label: 'PIECES/CUTOUTS', value: sign.pieces ? sign.pieces : '' },
+		{ label: 'QUANTITY', value: sign.sets ? sign.sets : '' },
+		{ label: 'COMMENTS', value: sign.comments ? sign.comments : '' },
+		{ label: 'DESCRIPTION', value: sign.description ? sign.description : '' },
+		{ label: 'FILE PATH', value: sign.filePath ? sign.filePath : '' },
+		{
+			label: 'FONT FILE PATH',
+			value: sign.fontFilePath ? sign.fontFilePath : '',
+		},
 		{
 			label: 'VIEW CUSTOM FONT',
 			value: sign.fontFileName
