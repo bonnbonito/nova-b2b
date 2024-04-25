@@ -356,7 +356,7 @@ function getSignageDetailFields(sign) {
 			value: sign.metalLaminate ? sign.metalLaminate : '',
 		},
 		{
-			label: 'STEEL POLISHED',
+			label: 'STEEL POLISH',
 			value: sign.stainlessSteelPolished ? sign.stainlessSteelPolished : '',
 		},
 		{ label: 'STUD LENGTH', value: sign.studLength ? sign.studLength : '' },

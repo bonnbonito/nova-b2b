@@ -38,8 +38,7 @@ class Roles {
 		add_filter( 'manage_users_sortable_columns', array( $this, 'user_id_column_sortable' ) );
 		add_action( 'pre_get_users', array( $this, 'sort_by_business_id_column' ) );
 		add_action( 'set_user_role', array( $this, 'notify_user_approved_partner' ), 13, 3 );
-		// add_action( 'set_user_role', array( $this, 'generate_partner_business_id' ), 12, 3 );
-		add_action( 'set_user_role', array( $this, 'update_role_business_id' ), 11, 3 );
+		add_action( 'set_user_role', array( $this, 'update_role_business_id' ), 40, 3 );
 		add_action( 'set_user_role', array( $this, 'log_role_change' ), 10, 3 );
 		add_action( 'admin_footer', array( $this, 'move_row_actions_js' ) );
 		add_action( 'pre_get_users', array( $this, 'sort_users_by_user_id' ) );
@@ -47,6 +46,7 @@ class Roles {
 		// add_action( 'manage_users_columns', array( $this, 'show_user_id' ), 10, 3 );
 		// add_action( 'added_user_meta', array( $this, 'user_send_activate' ), 10, 4 );
 		add_action( 'pre_user_query', array( $this, 'custom_user_search_business_id' ) );
+		add_action( 'profile_update', array( $this, 'update_role_business_id_on_profile_update' ), 10, 2 );
 	}
 
 	public function custom_user_search_business_id( $user_query ) {
@@ -257,6 +257,32 @@ jQuery(document).ready(function($) {
 
 
 	public function update_role_business_id( $user_id, $new_role, $old_roles ) {
+		switch ( $new_role ) {
+			case 'partner':
+				$business_id = $this->generate_partner_business_id( $user_id );
+				if ( $business_id ) {
+					update_field( 'business_id', $business_id, 'user_' . $user_id );
+				}
+				break;
+
+			case 'temporary':
+				update_field( 'business_id', 'TEMPORARY-' . $user_id, 'user_' . $user_id );
+				break;
+
+			case 'pending':
+				update_field( 'business_id', 'PENDING-' . $user_id, 'user_' . $user_id );
+				break;
+
+			default:
+				break;
+		}
+	}
+
+	public function update_role_business_id_on_profile_update( $user_id, $old_user_data ) {
+		$old_roles = $old_user_data->roles;
+		$user      = get_userdata( $user_id );
+		$new_role  = $user->roles ? $user->roles[0] : '';
+
 		if ( $new_role == 'temporary' ) {
 			update_field( 'business_id', 'TEMPORARY-' . $user_id, 'user_' . $user_id );
 		}
@@ -265,11 +291,12 @@ jQuery(document).ready(function($) {
 			update_field( 'business_id', 'PENDING-' . $user_id, 'user_' . $user_id );
 		}
 
-		if ( $new_role == 'partner' ) {
-			$user = get_user_by( 'id', $user_id );
-			$this->process_business_id_user( $user );
+		if ( in_array( 'pending', $old_roles ) && $new_role == 'partner' ) {
+			$business_id = $this->generate_partner_business_id( $user_id );
+			update_field( 'business_id', $business_id, 'user_' . $user_id );
 		}
 	}
+
 
 
 
@@ -289,9 +316,6 @@ jQuery(document).ready(function($) {
 
 		// Write the log entry to file
 		file_put_contents( $log_file, $log_entry, FILE_APPEND );
-	}
-
-	public function generate_partner_business_id( $user_id, $role, $old_roles ) {
 	}
 
 	public function notify_user_approved_partner( $user_id, $role, $old_roles ) {
@@ -827,30 +851,43 @@ jQuery(document).ready(function($) {
 	public function insert_business_type( $type, $group, $user_id ) {
 		global $wpdb;
 
+		// Sanitize the type and prepare the table name
 		$sanitized_type = str_replace( '-', '_', $type );
 		$table_name     = $wpdb->prefix . $sanitized_type;
 		$current_time   = current_time( 'mysql' );
 
-		$data = array(
+		// Prepare data and format arrays
+		$data   = array(
 			'time'       => $current_time,
 			'user_group' => $group,
 			'user_id'    => $user_id,
 		);
-
 		$format = array( '%s', '%s', '%d' );
 
-		$success = $wpdb->insert( $table_name, $data, $format );
+		// Check if the entry already exists
+		$query  = $wpdb->prepare( "SELECT COUNT(*) FROM `$table_name` WHERE user_group = %s AND user_id = %d", $group, $user_id );
+		$exists = $wpdb->get_var( $query );
 
-		if ( false === $success ) {
-			return new WP_Error( 'db_insert_error', 'Failed to insert business type data into database', $wpdb->last_error );
-		} else {
+		if ( $exists > 0 ) {
 
 			$query = $wpdb->prepare( "SELECT COUNT(*) FROM `$table_name` WHERE user_group = %s", $group );
 			$count = $wpdb->get_var( $query );
 			return $count;
 
+		} else {
+			// Insert the new record if it does not exist
+			$success = $wpdb->insert( $table_name, $data, $format );
+			if ( false === $success ) {
+				return new WP_Error( 'db_insert_error', 'Failed to insert business type data into database', $wpdb->last_error );
+			} else {
+				// After successful insertion, return the count of similar entries
+				$query = $wpdb->prepare( "SELECT COUNT(*) FROM `$table_name` WHERE user_group = %s", $group );
+				$count = $wpdb->get_var( $query );
+				return $count;
+			}
 		}
 	}
+
 
 	public function clear_table() {
 		global $wpdb; // Make sure $wpdb is accessible
@@ -881,6 +918,26 @@ jQuery(document).ready(function($) {
 		return ! $error; // Return true if no errors occurred
 	}
 
+	public function generate_partner_business_id( $user_id ) {
+		$state        = get_field( 'state', 'user_' . $user_id );
+		$businessType = get_field( 'business_type', 'user_' . $user_id );
+		$country      = get_field( 'country', 'user_' . $user_id );
+
+		if ( ! $state || ! $businessType || ! $country ) {
+			return;
+		}
+
+		$business_group      = strtoupper( $country . $state );
+		$business_id_start   = strtoupper( $country . $state . '-' . substr( $businessType, 0, 1 ) );
+		$business_type_table = 'type_' . $businessType;
+		$business_type_id    = $this->insert_business_type( $business_type_table, $business_group, $user_id );
+		if ( $business_type_id ) {
+			$business_id = $business_id_start . str_pad( $business_type_id, 3, '0', STR_PAD_LEFT );
+			return $business_id;
+		}
+		return;
+	}
+
 	public function update_business_id_user( $user_id ) {
 		$user = get_user_by( 'id', $user_id );
 
@@ -888,15 +945,9 @@ jQuery(document).ready(function($) {
 					update_field( 'business_id', 'NOVA-' . $user_id, 'user_' . $user_id );
 		} else {
 
-			$billing_country = get_user_meta( $user_id, 'billing_country', true );
-			$state           = get_field( 'state', 'user_' . $user_id );
-			$businessType    = get_field( 'business_type', 'user_' . $user_id );
-
-			if ( ! $billing_country ) {
-				$country = $this->country_by_state( $state );
-			} else {
-				$country = $billing_country;
-			}
+			$state        = get_field( 'state', 'user_' . $user_id );
+			$businessType = get_field( 'business_type', 'user_' . $user_id );
+			$country      = get_field( 'country', 'user_' . $user_id );
 
 			if ( isset( $country ) && ! empty( $country ) && isset( $state ) && ! empty( $state ) && isset( $businessType ) && ! empty( $businessType ) ) {
 
@@ -906,20 +957,7 @@ jQuery(document).ready(function($) {
 				$business_type_id    = $this->insert_business_type( $business_type_table, $business_group, $user_id );
 				$business_id         = $business_id_start . str_pad( $business_type_id, 3, '0', STR_PAD_LEFT );
 
-				$existing_user = get_users(
-					array(
-						'meta_key'   => 'business_id',
-						'meta_value' => $business_id,
-						'exclude'    => array( $user_id ),  // Exclude the current user from the search
-					)
-				);
-
-				if ( ! empty( $existing_user ) ) {
-					// Handle conflict or regenerate business ID
-					$business_id = $this->handle_business_id_conflict( $business_id, $user_id, $business_type_table, $business_group, $business_id_start );
-				} else {
-					update_field( 'business_id', $business_id, 'user_' . $user_id );
-				}
+				update_field( 'business_id', $business_id, 'user_' . $user_id );
 			} else {
 				update_field( 'business_id', '' . $user_id, 'user_' . $user_id );
 			}
@@ -996,10 +1034,9 @@ jQuery(document).ready(function($) {
 		}
 
 		// Process business ID creation
-		$billing_country = get_user_meta( $user_id, 'billing_country', true );
-		$state           = get_field( 'state', 'user_' . $user_id );
-		$country         = $billing_country ?: $this->country_by_state( $state );
-		$businessType    = get_field( 'business_type', 'user_' . $user_id );
+		$state        = get_field( 'state', 'user_' . $user_id );
+		$country      = get_field( 'country', 'user_' . $user_id );
+		$businessType = get_field( 'business_type', 'user_' . $user_id );
 
 		if ( $country && $state && $businessType ) {
 			$business_group      = strtoupper( $country . $state );
@@ -1021,10 +1058,8 @@ jQuery(document).ready(function($) {
 			// }
 
 			update_field( 'business_id', $business_id, 'user_' . $user_id );
-			return $business_id;
 		} else {
 			update_field( 'business_id', '', 'user_' . $user_id );
-			return false;
 		}
 	}
 
@@ -1064,9 +1099,8 @@ jQuery(document).ready(function($) {
 				// if ( $business_id ) {
 				// update_field( 'old_business_id', $business_id, $user->ID );
 				// }
-				$billing_country = get_user_meta( $user_id, 'billing_country', true );
 
-				$country = $billing_country ? $billing_country : $this->country_by_state( $state );
+				$country = get_field( 'country', 'user_' . $user->ID );
 
 				$state        = get_field( 'state', 'user_' . $user_id );
 				$businessType = get_field( 'business_type', 'user_' . $user_id );

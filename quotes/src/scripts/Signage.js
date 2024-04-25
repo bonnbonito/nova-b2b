@@ -3,7 +3,6 @@ import { Tooltip } from 'react-tooltip';
 import { v4 as uuidv4 } from 'uuid'; // Make sure to import uuid
 import EditableText from './EditableText';
 import { ClearIcon, CollapseIcon, DuplicateIcon, TrashIcon } from './svg/Icons';
-import { SignageCount } from './utils/QuoteFunctions';
 
 export default function Signage({
 	item,
@@ -113,6 +112,7 @@ export default function Signage({
 				/>
 
 				<div className="flex gap-6">
+					<Tooltip id={item.id} />
 					<div
 						className="cursor-pointer"
 						onClick={clearStorage}
@@ -148,7 +148,6 @@ export default function Signage({
 							data-tooltip-content="Delete"
 						>
 							<TrashIcon />
-							<Tooltip id={item.id} />
 						</div>
 					)}
 				</div>

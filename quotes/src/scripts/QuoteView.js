@@ -1,4 +1,3 @@
-import html2pdf from 'html2pdf.js/dist/html2pdf.min';
 import { useEffect, useRef, useState } from 'react';
 import { DeleteQuote } from './DeleteQuote';
 import PricesView from './PricesView';
@@ -17,6 +16,7 @@ export default function QuoteView() {
 	const quoteRef = useRef(null);
 	const [isLoading, setIsLoading] = useState(false);
 	const [isDownloading, setIsDownloading] = useState(false);
+	const [isHovered, setIsHovered] = useState(false);
 
 	useEffect(() => {
 		if (!NovaAccount || Object.keys(NovaAccount).length === 0) {
@@ -235,7 +235,25 @@ export default function QuoteView() {
 						</div>
 
 						<div className="flex justify-between gap-4">
-							<h5>PACKAGING &amp; SHIPPING:</h5>{' '}
+							<h5 className="flex gap-2">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 24 24"
+									strokeWidth={1.5}
+									stroke="currentColor"
+									className="w-6 h-6"
+									onMouseEnter={() => setIsHovered(true)}
+									onMouseLeave={() => setIsHovered(false)}
+								>
+									<path
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z"
+									/>
+								</svg>
+								PACKAGING &amp; SHIPPING:
+							</h5>{' '}
 							<h5>
 								{estimatedShipping > 0
 									? `${currency}$${Number(
@@ -243,6 +261,12 @@ export default function QuoteView() {
 									  ).toLocaleString()}`
 									: 'TBD'}
 							</h5>
+						</div>
+						<div
+							className={`text-sm ${isHovered ? 'opacity-100' : 'opacity-0'}`}
+						>
+							The shipping cost depends on the address in your account. You can
+							change the shipping type and shipping address during checkout.
 						</div>
 
 						{taxRate && (

@@ -91,10 +91,10 @@ function ModalSave({
       <p class="font-bold mb-4">QUOTE REQUEST RECEIVED.</p>
 	  <p class="font-bold mb-0">Process:</p>
 	  <ol class="mb-4">
-		<li>Our sales team will check this order to provide you with the final pricing.</li>
-		<li>We will notify you via email after 1 business day. You may also check the MOCKUPS under PROCESSING for updates.</li>
-		<li>After you receive the final quotation, add the product to the cart and then proceed to CART.</li>
-		<li>You can add the order quantity on the CART page before proceeding to CHECKOUT.</li>
+		<li>We'll review your order before finalizing the price.</li>
+		<li>Expect an email from us within 1 business day. You can also check the MOCKUPS under PROCESSING.</li>
+		<li>Once you get the final quote, add the product to your cart and proceed to CART page</li>
+		<li>Once you're satisfied with your cart, proceed to CHECKOUT for payment.</li>
 	  </ol>
 	  <p class="font-bold mb-0">What's next?</p>
 	  <p>Click <strong>Back to Mockup</strong> to view all your sign mockups.<br>
@@ -123,7 +123,7 @@ function ModalSave({
       <p class="font-bold mb-4">PROJECT IS SAVED AS A DRAFT</p>
 	  <p class="mb-4">You can edit your saved draft anytime before submitting a quote. Access your saved draft in <strong>MOCKUPS</strong> under <strong>DRAFTS</strong>.</p>
 	  <p class="font-bold mb-0">What's next?</p>
-	  <p>Click <strong>Back to Mockup</strong> to continue editing the project.<br>
+	  <p>Click <strong>Back to Mockup</strong> to view all your sign mockups.<br>
 	  Click <strong>Create New Mockup</strong> to create a new signage.<br>
 	  Click <strong>Proceed to Portal</strong> to go to the dashboard.</p>
 
@@ -334,14 +334,14 @@ function ModalSave({
 								<div className="gap-2 block justify-center sm:flex">
 									{action === 'draft' || action === 'update' ? (
 										<a
-											href={`${NovaQuote.quote_url}?qid=${quoteID}&qedit=1`}
+											href={`${NovaQuote.mockup_account_url}`}
 											className="block mb-4 text-center text-sm px-3 py-2 text-white no-underline bg-nova-primary rounded hover:bg-nova-secondary"
 										>
 											Back to Mockup
 										</a>
 									) : (
 										<a
-											href={`${NovaQuote.mockup_account_url}?qid=${quoteID}&qedit=1`}
+											href={`${NovaQuote.mockup_account_url}`}
 											className="block mb-4 text-center text-sm px-3 py-2 text-white no-underline bg-nova-primary rounded hover:bg-nova-secondary"
 										>
 											Back to Mockups
@@ -354,7 +354,7 @@ function ModalSave({
 										Create New Mockup
 									</a>
 									<a
-										href={NovaQuote.mockup_account_url}
+										href={NovaQuote.dashboard_url}
 										className="block mb-4 text-center text-sm px-3 py-2 text-white no-underline bg-nova-primary rounded hover:bg-nova-secondary"
 									>
 										Proceed to Portal

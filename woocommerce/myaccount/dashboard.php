@@ -62,7 +62,7 @@ $allowed_html = array(
 			about the status and progress of your projects.
 		</p>
 	</a>
-	<a href="#" class="border border-[#D2D2D2] p-4 rounded-md">
+	<a href="#" class="border border-[#D2D2D2] p-4 rounded-md hidden">
 		<h4 class="flex gap-3 items-center"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
 				viewBox="0 0 18 18" fill="none">
 				<path

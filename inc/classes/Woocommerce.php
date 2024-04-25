@@ -82,7 +82,7 @@ class Woocommerce {
 		add_action( 'wp_ajax_nopriv_update_checkout_total', array( $this, 'handle_ajax_update_checkout_total' ) );
 		add_filter( 'woocommerce_cart_get_total', array( $this, 'custom_modify_cart_total' ), 10, 1 );
 		add_action( 'woocommerce_checkout_order_processed', array( $this, 'create_adjusted_duplicate_order' ), 10, 3 );
-		add_action( 'woocommerce_get_order_item_totals', array( $this, 'deposit_insert_order_total_row' ), 10, 2 );
+		add_action( 'woocommerce_get_order_item_totals', array( $this, 'deposit_insert_order_total_row' ), 90, 2 );
 		add_action( 'add_meta_boxes', array( $this, 'add_custom_meta_box_to_orders' ) );
 		add_action( 'woocommerce_admin_order_totals_after_tax', array( $this, 'add_deposit_row' ) );
 		add_action( 'wp_ajax_populate_signage', array( $this, 'populate_signage' ) );
@@ -96,6 +96,35 @@ class Woocommerce {
 		add_filter( 'woocommerce_checkout_fields', array( $this, 'require_pst_on_bc' ) );
 		add_filter( 'woocommerce_quantity_input_args', array( $this, 'quantity_input_args' ), 40, 2 );
 		add_filter( 'woocommerce_before_cart_contents', array( $this, 'change_max_value' ) );
+		add_filter( 'woocommerce_order_get_total', array( $this, 'custom_order_total_based_on_meta' ), 10, 2 );
+		// add_action( 'woocommerce_email_order_details', array( $this, 'add_deposit_total_to_emails' ), 20, 4 );
+	}
+
+	public function add_deposit_total_to_emails( $order, $sent_to_admin, $plain_text, $email ) {
+		$deposit_total = get_post_meta( $order->get_id(), '_deposit_total', true );
+		if ( ! empty( $deposit_total ) ) {
+			$label             = __( 'Deposit', 'text-domain' ); // Customize your label here
+			$formatted_deposit = wc_price( $deposit_total );
+
+			if ( $plain_text ) {
+				echo "\n" . $label . ': ' . strip_tags( $formatted_deposit ) . "\n";
+			} else {
+				echo '<table cellspacing="0" cellpadding="6" style="width: 100%; margin-bottom: 40px;" border="1"><tr><th scope="row" style="text-align:left; border: 1px solid #eee;">' . esc_html( $label ) . ':</th><td style="text-align:left; border: 1px solid #eee;">' . wp_kses_post( $formatted_deposit ) . '</td></tr></table>';
+			}
+		}
+	}
+
+
+	public function custom_order_total_based_on_meta( $total, $order ) {
+		// Check if the order has the required meta keys.
+		$has_adjusted_id = get_post_meta( $order->get_id(), '_adjusted_duplicate_order_id', true );
+		$deposit_total   = get_post_meta( $order->get_id(), '_deposit_total', true );
+
+		if ( ! empty( $has_adjusted_id ) && ! empty( $deposit_total ) ) {
+			return (float) $deposit_total;
+		}
+
+		return $total;
 	}
 
 	public function change_max_value() {
@@ -333,6 +362,8 @@ class Woocommerce {
 
 	public function deposit_insert_order_total_row( $total_rows, $order ) {
 		// Check if the order has the '_deposit_total' meta key
+		$payment_order            = get_post_meta( $order->ID, '_adjusted_duplicate_order_id', true );
+		$pending_payment          = get_post_meta( $order->ID, '_pending_payment', true );
 		$deposit_total            = get_post_meta( $order->get_id(), '_deposit_total', true );
 		$from_order               = get_post_meta( $order->get_id(), '_from_order_id', true );
 		$original_total           = get_post_meta( $order->get_id(), '_original_total', true );
@@ -341,53 +372,68 @@ class Woocommerce {
 		$original_tax_names       = get_post_meta( $order->get_id(), '_original_tax_names', true );
 		$original_tax             = get_post_meta( $order->get_id(), '_original_tax', true );
 
-		// If '_from_order_id' meta key doesn't exist, return the original total rows
-		if ( empty( $from_order ) ) {
-			return $total_rows;
-		}
+		if ( $from_order || $payment_order ) {
 
-		// Initialize a new array for the modified total rows
-		$new_total_rows = array();
+			// Initialize a new array for the modified total rows
+			$new_total_rows = array();
 
-		foreach ( $total_rows as $total_key => $total ) {
-			// Insert your custom row before the 'order_total'
+			foreach ( $total_rows as $total_key => $total ) {
+				$new_total_rows[ $total_key ] = $total;
 
-			$new_total_rows['deposit_total'] = array(
-				'label' => __( 'Deposit:', 'woocommerce' ),
-				'value' => wc_price( -$deposit_total ),
-			);
-			$new_total_rows[ $total_key ]    = $total;
-		}
+				// Check if the current key is 'payment_method', then insert the deposit total
+				if ( $total_key === 'payment_method' ) {
+					$new_total_rows['deposit_total'] = array(
+						'label' => __( 'Paid:', 'woocommerce' ),
+						'value' => wc_price( -$deposit_total, array( 'currency' => $order->get_currency() ) ),
+					);
+				}
+			}
 
-		if ( $from_order && isset( $new_total_rows['cart_subtotal'] ) ) {
-			unset( $new_total_rows['cart_subtotal'] );
-			unset( $new_total_rows['shipping'] );
-
-			if ( $original_shipping && $original_shipping_method ) {
-				$overall_total_row['original_shipping'] = array(
-					'label' => __( 'Shipping(' . $original_shipping_method . '):', 'woocommerce' ),
-					'value' => wc_price( $original_shipping ),
+			if ( $payment_order && $pending_payment ) {
+				unset( $new_total_rows['order_total'] );
+				$new_total_rows['pending_payment'] = array(
+					'label' => __( 'Pending Payment:', 'woocommerce' ),
+					'value' => wc_price( $pending_payment, array( 'currency' => $order->get_currency() ) ),
 				);
 			}
 
-			if ( $original_tax_names && $original_tax ) {
-				$overall_total_row['original_tax'] = array(
-					'label' => $original_tax_names,
-					'value' => wc_price( $original_tax ),
+			if ( $from_order && isset( $new_total_rows['cart_subtotal'] ) ) {
+				unset( $new_total_rows['cart_subtotal'] );
+				unset( $new_total_rows['shipping'] );
+
+				if ( $original_shipping && $original_shipping_method ) {
+					$overall_total_row['original_shipping'] = array(
+						'label' => __( 'Shipping(' . $original_shipping_method . '):', 'woocommerce' ),
+						'value' => wc_price( $original_shipping, array( 'currency' => $order->get_currency() ) ),
+					);
+				}
+
+				if ( $original_tax_names && $original_tax ) {
+					$overall_total_row['original_tax'] = array(
+						'label' => $original_tax_names,
+						'value' => wc_price( $original_tax, array( 'currency' => $order->get_currency() ) ),
+					);
+				}
+
+				$overall_total_row['overall_total'] = array(
+					'label' => __( 'Overall Total (+shipping):', 'woocommerce' ),
+					'value' => wc_price( $original_total, array( 'currency' => $order->get_currency() ) ),
 				);
+
+				$overall_total_row['deposit_total'] = array(
+					'label' => __( 'Paid:', 'woocommerce' ),
+					'value' => wc_price( -$deposit_total, array( 'currency' => $order->get_currency() ) ),
+				);
+
+				// Prepend the custom row to the beginning of the total rows array
+				$new_total_rows = array_merge( $overall_total_row, $new_total_rows );
+
 			}
 
-			$overall_total_row['overall_total'] = array(
-				'label' => __( 'Overall Total (+shipping):', 'woocommerce' ),
-				'value' => wc_price( $original_total ),
-			);
-
-			// Prepend the custom row to the beginning of the total rows array
-			$new_total_rows = array_merge( $overall_total_row, $new_total_rows );
-
+			return $new_total_rows;
 		}
 
-		return $new_total_rows;
+		return $total_rows;
 	}
 
 
@@ -1376,7 +1422,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 			}
 
 			if ( isset( $object->stainlessSteelPolished ) && ! empty( $object->stainlessSteelPolished ) ) {
-				$html .= '<strong>Steel Polished: </strong>' . htmlspecialchars( $object->stainlessSteelPolished ) . '<br>';
+				$html .= '<strong>Steel Polish: </strong>' . htmlspecialchars( $object->stainlessSteelPolished ) . '<br>';
 			}
 
 			if ( isset( $object->mounting ) && ! empty( $object->mounting ) ) {

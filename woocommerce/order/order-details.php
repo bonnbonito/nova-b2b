@@ -92,21 +92,8 @@ if ( $show_downloads ) {
 						<?php
 					}
 
-
-
-
-
-					if ( $payment_select && 0 !== $payment_select ) :
+					if ( $order->get_customer_note() ) :
 						?>
-
-					<tr class="order-detail detail-order_total pending-payment">
-						<th scope="row">Pending payment</th>
-						<td class="text-right"><?php echo wc_price( $pending_payment ); ?></td>
-					</tr>
-
-					<?php endif; ?>
-
-					<?php if ( $order->get_customer_note() ) : ?>
 					<tr>
 						<th><?php esc_html_e( 'Note:', 'woocommerce' ); ?></th>
 						<td><?php echo wp_kses_post( nl2br( wptexturize( $order->get_customer_note() ) ) ); ?></td>

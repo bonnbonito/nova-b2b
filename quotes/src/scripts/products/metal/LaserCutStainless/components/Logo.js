@@ -482,7 +482,7 @@ export default function Logo({ item }) {
 
 				{stainLessMetalFinish === 'Stainless Steel Polished' && (
 					<Dropdown
-						title="Steel Polished"
+						title="Steel Polish"
 						onChange={(e) => setStainlessSteelPolished(e.target.value)}
 						options={stainlessSteelPolishedOptions.map((steelPolished) => (
 							<option
