@@ -103,7 +103,7 @@ export default function PricesView({ item }) {
 
 				{item.metal && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
-						<div className="text-left text-xs font-title">METAL OPTION</div>
+						<div className="text-left text-xs font-title">METAL</div>
 						<div className="text-left text-[14px]">{item.metal}</div>
 					</div>
 				)}
@@ -113,6 +113,15 @@ export default function PricesView({ item }) {
 						<div className="text-left text-xs font-title">METAL THICKNESS</div>
 						<div className="text-left text-[14px] uppercase">
 							{item.metalThickness.thickness}
+						</div>
+					</div>
+				)}
+
+				{item.metalDepth?.thickness && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">METAL DEPTH</div>
+						<div className="text-left text-[14px] uppercase">
+							{item.metalDepth.thickness}
 						</div>
 					</div>
 				)}
@@ -205,6 +214,13 @@ export default function PricesView({ item }) {
 					</div>
 				)}
 
+				{typeof item.metalFinish !== 'object' && item.metalFinish && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">FINISHING</div>
+						<div className="text-left text-[14px]">{item.metalFinish}</div>
+					</div>
+				)}
+
 				{item.color?.name && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
 						<div className="text-left text-xs font-title">COLOR</div>
@@ -232,6 +248,15 @@ export default function PricesView({ item }) {
 					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
 						<div className="text-left text-xs font-title">FINISHING</div>
 						<div className="text-left text-[14px]">{item.finishing}</div>
+					</div>
+				)}
+
+				{item.stainLessMetalFinish && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">METAL FINISH</div>
+						<div className="text-left text-[14px]">
+							{item.stainLessMetalFinish}
+						</div>
 					</div>
 				)}
 
@@ -287,26 +312,10 @@ export default function PricesView({ item }) {
 					</div>
 				)}
 
-				{item.stainLessMetalFinish && (
-					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
-						<div className="text-left text-xs font-title">METAL FINISH</div>
-						<div className="text-left text-[14px]">
-							{item.stainLessMetalFinish}
-						</div>
-					</div>
-				)}
-
 				{item.metalFinishing && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
 						<div className="text-left text-xs font-title">METAL FINISHING</div>
 						<div className="text-left text-[14px]">{item.metalFinishing}</div>
-					</div>
-				)}
-
-				{typeof item.metalFinish !== 'object' && item.metalFinish && (
-					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
-						<div className="text-left text-xs font-title">METAL FINISH</div>
-						<div className="text-left text-[14px]">{item.metalFinish}</div>
 					</div>
 				)}
 
@@ -394,7 +403,7 @@ export default function PricesView({ item }) {
 					</div>
 				)}
 
-				{item.comments && (
+				{item.comments && item.comments.trim() && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
 						<div className="text-left text-xs font-title">COMMENTS</div>
 						<div className="text-left text-[14px] break-words">

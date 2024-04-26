@@ -63,7 +63,9 @@ export default function Letters({ item }) {
 	const [color, setColor] = useState(item.color);
 	const [openColor, setOpenColor] = useState(false);
 	const [waterproof, setWaterproof] = useState(item.waterproof);
-	const [selectedThickness, setSelectedThickness] = useState(item.thickness);
+	const [selectedThickness, setSelectedThickness] = useState(
+		item.metalThickness
+	);
 	const [fileNames, setFileNames] = useState(item.fileNames);
 	const [fileUrls, setFileUrls] = useState(item.fileUrls);
 	const [filePaths, setFilePaths] = useState(item.filePaths);
@@ -75,7 +77,7 @@ export default function Letters({ item }) {
 	const [fontFile, setFontFile] = useState(item.fontFile);
 
 	const [letterHeightOptions, setLetterHeightOptions] = useState([]);
-	const [selectedFinishing, setSelectedFinishing] = useState(item.finishing);
+	const [selectedFinishing, setSelectedFinishing] = useState(item.metalFinish);
 	const [customFont, setCustomFont] = useState(item.customFont);
 	const [customColor, setCustomColor] = useState(item.customColor);
 
@@ -88,7 +90,7 @@ export default function Letters({ item }) {
 	const [lettersHeight, setLettersHeight] = useState(
 		NovaOptions.letters_height
 	);
-	const [installation, setInstallation] = useState(item.installation);
+	const [mounting, setMounting] = useState(item.mounting);
 
 	const [studLength, setStudLength] = useState(item.studLength);
 	const [spacerStandoffOptions, setSpacerStandoffOptions] = useState(
@@ -200,8 +202,8 @@ export default function Letters({ item }) {
 					letters: letters,
 					comments: comments,
 					font: font,
-					thickness: selectedThickness,
-					installation: installation,
+					metalThickness: selectedThickness,
+					mounting: mounting,
 					waterproof: waterproof,
 					color: color,
 					letterHeight: selectedLetterHeight,
@@ -215,7 +217,7 @@ export default function Letters({ item }) {
 					fontFileName: fontFileName,
 					fontFilePath: fontFilePath,
 					fontFileUrl: fontFileUrl,
-					finishing: selectedFinishing,
+					metalFinish: selectedFinishing,
 					stainlessSteelPolished: stainlessSteelPolished,
 					metal: metal,
 					stainLessMetalFinish: stainLessMetalFinish,
@@ -239,7 +241,7 @@ export default function Letters({ item }) {
 
 	const handleOnChangeInstallation = (e) => {
 		const target = e.target.value;
-		setInstallation(target);
+		setMounting(target);
 
 		if (target === 'Stud with spacer' || target === 'Stud Mount') {
 			if (target === 'Stud Mount') {
@@ -358,7 +360,7 @@ export default function Letters({ item }) {
 					totalLetterPrice += letterPrice;
 				});
 
-				if (installation === 'Stud with spacer') {
+				if (mounting === 'Stud with spacer') {
 					let spacer =
 						totalLetterPrice * 0.03 > 35 ? 35 : totalLetterPrice * 0.03;
 					spacer = parseFloat(spacer.toFixed(2));
@@ -386,7 +388,7 @@ export default function Letters({ item }) {
 		stainLessMetalFinish,
 		stainlessSteelPolished,
 		sets,
-		installation,
+		mounting,
 		font,
 	]);
 
@@ -449,15 +451,15 @@ export default function Letters({ item }) {
 		}
 
 		if (!waterproof) missingFields.push('Select Waterproof');
-		if (!installation) missingFields.push('Select Installation');
+		if (!mounting) missingFields.push('Select Installation');
 
-		if (installation === 'Stud with spacer') {
+		if (mounting === 'Stud with spacer') {
 			if (!studLength) missingFields.push('Select Stud Length');
 
 			if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
 		}
 
-		if (installation === 'Stud Mount') {
+		if (mounting === 'Stud Mount') {
 			if (!studLength) missingFields.push('Select Stud Length');
 		}
 
@@ -507,7 +509,7 @@ export default function Letters({ item }) {
 		comments,
 		font,
 		selectedThickness,
-		installation,
+		mounting,
 		waterproof,
 		color,
 		usdPrice,
@@ -669,7 +671,7 @@ export default function Letters({ item }) {
 							{finishing.option}
 						</option>
 					))}
-					value={item.finishing}
+					value={item.metalFinish}
 				/>
 
 				{selectedFinishing === 'Metal Finish' && (
@@ -773,20 +775,17 @@ export default function Letters({ item }) {
 				/>
 
 				<Dropdown
-					title="Installation Option"
+					title="Mounting Options"
 					onChange={handleOnChangeInstallation}
 					options={metalInstallationOptions.map((option) => (
-						<option
-							value={option.option}
-							selected={option.option === installation}
-						>
+						<option value={option.option} selected={option.option === mounting}>
 							{option.option}
 						</option>
 					))}
-					value={item.installation}
+					value={item.mounting}
 				/>
 
-				{installation === 'Stud with spacer' && (
+				{mounting === 'Stud with spacer' && (
 					<>
 						<Dropdown
 							title="Stud Length"
@@ -817,7 +816,7 @@ export default function Letters({ item }) {
 					</>
 				)}
 
-				{installation === 'Stud Mount' && (
+				{mounting === 'Stud Mount' && (
 					<>
 						<Dropdown
 							title="Stud Length"
@@ -844,7 +843,7 @@ export default function Letters({ item }) {
 				/>
 			</div>
 
-			{installation === 'Stud with spacer' && (
+			{mounting === 'Stud with spacer' && (
 				<div className="text-xs text-[#9F9F9F] mb-4">
 					*Note: The spacer will be black (default) or match the painted sign's
 					color.

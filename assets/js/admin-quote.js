@@ -317,6 +317,20 @@ function getSignageDetailFields(sign) {
 				: '',
 		},
 
+		{ label: 'METAL', value: sign.metal ? sign.metal : '' },
+
+		{
+			label: 'METAL DEPTH',
+			value: sign.metalDepth?.thickness ? sign.metalDepth.thickness : '',
+		},
+
+		{
+			label: 'METAL THICKNESS',
+			value: sign.metalThickness?.thickness
+				? sign.metalThickness.thickness
+				: '',
+		},
+
 		{ label: 'LOGO WIDTH', value: sign.width ? sign.width + '"' : '' },
 		{ label: 'LOGO HEIGHT', value: sign.height ? sign.height + '"' : '' },
 
@@ -328,16 +342,26 @@ function getSignageDetailFields(sign) {
 		},
 
 		{
-			label: 'PRINT PREFERENCE',
-			value: sign.printPreference ? sign.printPreference : '',
-		},
-
-		{
-			label: 'METAL FINISH',
+			label: 'FINISHING',
 			value:
 				typeof sign.metalFinish === 'object' && sign.metalFinish !== null
 					? sign.metalFinish.name
 					: sign.metalFinish,
+		},
+
+		{
+			label: 'METAL FINISH',
+			value: sign.stainLessMetalFinish ? sign.stainLessMetalFinish : '',
+		},
+
+		{
+			label: 'STEEL POLISH',
+			value: sign.stainlessSteelPolished ? sign.stainlessSteelPolished : '',
+		},
+
+		{
+			label: 'PRINT PREFERENCE',
+			value: sign.printPreference ? sign.printPreference : '',
 		},
 
 		{
@@ -395,17 +419,11 @@ function getSignageDetailFields(sign) {
 			value: sign.pvcBaseColor?.name ? sign.pvcBaseColor?.name : '',
 		},
 
-		{ label: 'METAL', value: sign.metal ? sign.metal : '' },
-
 		{
 			label: 'METAL FINISHING',
 			value: sign.metalFinishing ? sign.metalFinishing : '',
 		},
 
-		{
-			label: 'STEEL POLISH',
-			value: sign.stainlessSteelPolished ? sign.stainlessSteelPolished : '',
-		},
 		{ label: 'STUD LENGTH', value: sign.studLength ? sign.studLength : '' },
 		{
 			label: 'STANDOFF SPACE',

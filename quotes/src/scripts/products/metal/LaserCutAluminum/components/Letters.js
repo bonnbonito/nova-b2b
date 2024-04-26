@@ -410,7 +410,7 @@ export default function Letters({ item }) {
 			missingFields.push('Add the Pantone color code of your custom color.');
 		}
 		if (!waterproof) missingFields.push('Select Waterproof');
-		if (!mounting) missingFields.push('Select Installation');
+		if (!mounting) missingFields.push('Select Mounting');
 		if (mounting === 'Stud with spacer') {
 			if (!studLength) missingFields.push('Select Stud Length');
 

@@ -33,7 +33,7 @@ export default function Logo({ item }) {
 		setIsLoading,
 	} = useContext(QuoteContext);
 	const [selectedMounting, setSelectedMounting] = useState(item.mounting);
-	const [selectedThickness, setSelectedThickness] = useState(item.thickness);
+	const [selectedThickness, setSelectedThickness] = useState(item.metalDepth);
 	const [width, setWidth] = useState(item.width);
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice);
@@ -44,7 +44,7 @@ export default function Logo({ item }) {
 	const [color, setColor] = useState(item.color);
 	const [openColor, setOpenColor] = useState(false);
 	const [customColor, setCustomColor] = useState(item.customColor);
-	const [selectedFinishing, setSelectedFinishing] = useState(item.finishing);
+	const [selectedFinishing, setSelectedFinishing] = useState(item.metalFinish);
 
 	const [metal, setMetal] = useState(item.metal);
 	const [stainLessMetalFinish, setStainLessMetalFinish] = useState(
@@ -67,7 +67,7 @@ export default function Logo({ item }) {
 	const [height, setHeight] = useState(item.height);
 	const [comments, setComments] = useState('');
 	const [waterproof, setWaterproof] = useState(item.waterproof);
-	const [installation, setInstallation] = useState(item.installation);
+	const [mounting, setMounting] = useState(item.mounting);
 
 	const [studLength, setStudLength] = useState(item.studLength);
 	const [spacerStandoffOptions, setSpacerStandoffOptions] = useState(
@@ -155,7 +155,7 @@ export default function Logo({ item }) {
 
 	const handleOnChangeInstallation = (e) => {
 		const target = e.target.value;
-		setInstallation(target);
+		setMounting(target);
 
 		if (target === 'Stud with spacer' || target === 'Stud Mount') {
 			if (target === 'Stud Mount') {
@@ -173,16 +173,16 @@ export default function Logo({ item }) {
 				return {
 					...sign,
 					comments: comments,
-					thickness: selectedThickness,
+					metalDepth: selectedThickness,
 					waterproof: waterproof,
 					color: color,
 					customColor: customColor,
-					installation: installation,
+					mounting: mounting,
 					width: width,
 					height: height,
 					usdPrice: usdPrice,
 					cadPrice: cadPrice,
-					finishing: selectedFinishing,
+					metalFinish: selectedFinishing,
 					files: files,
 					metal: metal,
 					fileNames: fileNames,
@@ -228,14 +228,14 @@ export default function Logo({ item }) {
 		}
 
 		if (!waterproof) missingFields.push('Select Waterproof');
-		if (!installation) missingFields.push('Select Installation');
-		if (installation === 'Stud with spacer') {
+		if (!mounting) missingFields.push('Select Mounting');
+		if (mounting === 'Stud with spacer') {
 			if (!studLength) missingFields.push('Select Stud Length');
 
-			if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
+			if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
 		}
 
-		if (installation === 'Stud Mount') {
+		if (mounting === 'Stud Mount') {
 			if (!studLength) missingFields.push('Select Stud Length');
 		}
 
@@ -294,7 +294,7 @@ export default function Logo({ item }) {
 		stainLessMetalFinish,
 		files,
 		filePaths,
-		installation,
+		mounting,
 		color,
 		customColor,
 		metal,
@@ -349,7 +349,7 @@ export default function Logo({ item }) {
 
 				total = parseFloat(total.toFixed(2));
 
-				if (installation === 'Stud with spacer') {
+				if (mounting === 'Stud with spacer') {
 					let spacer = total * 0.03 > 35 ? 35 : total * 0.03;
 					spacer = parseFloat(spacer.toFixed(2));
 
@@ -376,7 +376,7 @@ export default function Logo({ item }) {
 		selectedFinishing,
 		metal,
 		stainLessMetalFinish,
-		installation,
+		mounting,
 		sets,
 	]);
 
@@ -437,7 +437,7 @@ export default function Logo({ item }) {
 							{finishing.option}
 						</option>
 					))}
-					value={item.finishing}
+					value={item.metalFinish}
 				/>
 
 				{selectedFinishing === 'Metal Finish' && (
@@ -522,20 +522,17 @@ export default function Logo({ item }) {
 				/>
 
 				<Dropdown
-					title="Installation Option"
+					title="Mounting Options"
 					onChange={handleOnChangeInstallation}
 					options={fabricatedMetalInstallationOptions.map((option) => (
-						<option
-							value={option.option}
-							selected={option.option === installation}
-						>
+						<option value={option.option} selected={option.option === mounting}>
 							{option.option}
 						</option>
 					))}
-					value={item.installation}
+					value={item.mounting}
 				/>
 
-				{installation === 'Stud with spacer' && (
+				{mounting === 'Stud with spacer' && (
 					<>
 						<Dropdown
 							title="Stud Length"
@@ -566,7 +563,7 @@ export default function Logo({ item }) {
 					</>
 				)}
 
-				{installation === 'Stud Mount' && (
+				{mounting === 'Stud Mount' && (
 					<>
 						<Dropdown
 							title="Stud Length"
@@ -593,7 +590,7 @@ export default function Logo({ item }) {
 				/>
 			</div>
 
-			{installation === 'Stud with spacer' && (
+			{mounting === 'Stud with spacer' && (
 				<div className="text-xs text-[#9F9F9F] mb-4">
 					*Note: The spacer will be black (default) or match the painted sign's
 					color.

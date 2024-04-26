@@ -48,7 +48,7 @@ export default function Prices({ item }) {
 			{item.metal && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
-						METAL OPTION
+						METAL
 					</div>
 					<div className="text-left text-sm">{item.metal}</div>
 				</div>
@@ -61,6 +61,17 @@ export default function Prices({ item }) {
 					</div>
 					<div className="text-left text-sm uppercase">
 						{item.thickness.thickness}
+					</div>
+				</div>
+			)}
+
+			{item.metalDepth && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						METAL DEPTH
+					</div>
+					<div className="text-left text-sm uppercase">
+						{item.metalDepth.thickness}
 					</div>
 				</div>
 			)}
@@ -115,6 +126,33 @@ export default function Prices({ item }) {
 				</div>
 			)}
 
+			{item.metalFinish && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						FINISHING
+					</div>
+					<div className="text-left text-sm">{item.metalFinish}</div>
+				</div>
+			)}
+
+			{item.stainLessMetalFinish && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						METAL FINISH
+					</div>
+					<div className="text-left text-sm">{item.stainLessMetalFinish}</div>
+				</div>
+			)}
+
+			{item.stainlessSteelPolished && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						STEEL POLISH
+					</div>
+					<div className="text-left text-sm">{item.stainlessSteelPolished}</div>
+				</div>
+			)}
+
 			{item.layers && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
@@ -133,14 +171,6 @@ export default function Prices({ item }) {
 				</div>
 			)}
 
-			{item.metalFinish?.name && (
-				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
-					<div className="text-left font-title md:tracking-[1.4px] text-sm">
-						METAL FINISH
-					</div>
-					<div className="text-left text-sm">{item.metalFinish?.name}</div>
-				</div>
-			)}
 			{item.acrylicBase?.name && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
@@ -258,14 +288,6 @@ export default function Prices({ item }) {
 					<div className="text-left text-sm">{item.acrylicReveal}</div>
 				</div>
 			)}
-			{item.stainlessSteelPolished && (
-				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
-					<div className="text-left font-title md:tracking-[1.4px] text-sm">
-						STEEL POLISH
-					</div>
-					<div className="text-left text-sm">{item.stainlessSteelPolished}</div>
-				</div>
-			)}
 
 			{item.pvcBaseColor?.name && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
@@ -310,14 +332,6 @@ export default function Prices({ item }) {
 				</div>
 			)}
 
-			{item.stainLessMetalFinish && (
-				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
-					<div className="text-left font-title md:tracking-[1.4px] text-sm">
-						METAL FINISH
-					</div>
-					<div className="text-left text-sm">{item.stainLessMetalFinish}</div>
-				</div>
-			)}
 			{item.studLength && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
@@ -332,15 +346,6 @@ export default function Prices({ item }) {
 						STANDOFF SPACE
 					</div>
 					<div className="text-left text-sm">{item.spacerStandoffDistance}</div>
-				</div>
-			)}
-
-			{typeof item.metalFinish !== 'object' && item.metalFinish && (
-				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
-					<div className="text-left font-title md:tracking-[1.4px] text-sm">
-						METAL FINISH
-					</div>
-					<div className="text-left text-sm">{item.metalFinish}</div>
 				</div>
 			)}
 
@@ -368,7 +373,7 @@ export default function Prices({ item }) {
 					<div className="text-left text-sm">{item.sets}</div>
 				</div>
 			)}
-			{item.comments && (
+			{item.comments && item.comments.trim() && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
 						COMMENTS
