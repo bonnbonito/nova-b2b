@@ -383,6 +383,7 @@ export default function Letters({ item }) {
 		stainLessMetalFinish,
 		installation,
 		sets,
+		font,
 	]);
 
 	useEffect(() => {

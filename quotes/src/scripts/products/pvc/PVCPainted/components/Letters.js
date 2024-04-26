@@ -345,6 +345,7 @@ export default function Letters({ item }) {
 		waterproof,
 		lettersHeight,
 		installation,
+		font,
 		sets,
 	]);
 

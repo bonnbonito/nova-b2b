@@ -361,6 +361,7 @@ export default function Letters({ item }) {
 		lettersHeight,
 		color,
 		sets,
+		font,
 		selectedMounting,
 	]);
 

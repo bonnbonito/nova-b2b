@@ -45,6 +45,15 @@ export default function Prices({ item }) {
 				</div>
 			)}
 
+			{item.metal && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						METAL OPTION
+					</div>
+					<div className="text-left text-sm">{item.metal}</div>
+				</div>
+			)}
+
 			{item.thickness && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
@@ -63,6 +72,17 @@ export default function Prices({ item }) {
 					</div>
 					<div className="text-left text-sm uppercase">
 						{item.acrylicThickness.thickness}
+					</div>
+				</div>
+			)}
+
+			{item.metalThickness && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						METAL THICKNESS
+					</div>
+					<div className="text-left text-sm uppercase">
+						{item.metalThickness.thickness}
 					</div>
 				</div>
 			)}
@@ -177,6 +197,24 @@ export default function Prices({ item }) {
 				</div>
 			)}
 
+			{item.metalColor?.name && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						COLOR
+					</div>
+					<div className="text-left text-sm">{item.metalColor?.name}</div>
+				</div>
+			)}
+
+			{item.metalCustomColor && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						CUSTOM COLOR
+					</div>
+					<div className="text-left text-sm">{item.metalCustomColor}</div>
+				</div>
+			)}
+
 			{item.waterproof && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
@@ -192,15 +230,6 @@ export default function Prices({ item }) {
 						METAL DEPTH
 					</div>
 					<div className="text-left text-sm uppercase">{item.depth.depth}</div>
-				</div>
-			)}
-
-			{item.metal && (
-				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
-					<div className="text-left font-title md:tracking-[1.4px] text-sm">
-						METAL OPTION
-					</div>
-					<div className="text-left text-sm">{item.metal}</div>
 				</div>
 			)}
 

@@ -101,6 +101,22 @@ export default function PricesView({ item }) {
 					</div>
 				)}
 
+				{item.metal && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">METAL OPTION</div>
+						<div className="text-left text-[14px]">{item.metal}</div>
+					</div>
+				)}
+
+				{item.metalThickness?.thickness && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">METAL THICKNESS</div>
+						<div className="text-left text-[14px] uppercase">
+							{item.metalThickness.thickness}
+						</div>
+					</div>
+				)}
+
 				{item.thickness?.thickness && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
 						<div className="text-left text-xs font-title">THICKNESS</div>
@@ -219,6 +235,20 @@ export default function PricesView({ item }) {
 					</div>
 				)}
 
+				{item.metalColor?.name && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">COLOR</div>
+						<div className="text-left text-[14px]">{item.metalColor?.name}</div>
+					</div>
+				)}
+
+				{item.metalCustomColor && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">CUSTOM COLOR</div>
+						<div className="text-left text-[14px]">{item.metalCustomColor}</div>
+					</div>
+				)}
+
 				{item.waterproof && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
 						<div className="text-left text-xs font-title">ENVIRONMENT</div>
@@ -254,13 +284,6 @@ export default function PricesView({ item }) {
 						<div className="text-left text-[14px] uppercase">
 							{item.depth.depth}
 						</div>
-					</div>
-				)}
-
-				{item.metal && (
-					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
-						<div className="text-left text-xs font-title">METAL OPTION</div>
-						<div className="text-left text-[14px]">{item.metal}</div>
 					</div>
 				)}
 

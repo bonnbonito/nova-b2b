@@ -327,6 +327,7 @@ export default function Letters({ item }) {
 		lettersHeight,
 		acrylicBase,
 		sets,
+		font,
 		selectedMounting,
 	]);
 

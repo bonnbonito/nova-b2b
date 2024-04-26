@@ -357,6 +357,14 @@ function getSignageDetailFields(sign) {
 		{ label: 'CUSTOM COLOR', value: sign.customColor ? sign.customColor : '' },
 
 		{ label: 'FINISHING', value: sign.finishing ? sign.finishing : '' },
+		{
+			label: 'COLOR',
+			value: sign.metalColor?.name ? sign.metalColor.name : '',
+		},
+		{
+			label: 'CUSTOM COLOR',
+			value: sign.metalCustomColor ? sign.metalCustomColor : '',
+		},
 		{ label: 'ENVIRONMENT', value: sign.waterproof ? sign.waterproof : '' },
 		{ label: 'MOUNTING', value: sign.mounting ? sign.mounting : '' },
 
@@ -400,7 +408,7 @@ function getSignageDetailFields(sign) {
 		},
 		{ label: 'STUD LENGTH', value: sign.studLength ? sign.studLength : '' },
 		{
-			label: 'SPACER STANDOFF DISTANCE',
+			label: 'STANDOFF SPACE',
 			value: sign.spacerStandoffDistance ? sign.spacerStandoffDistance : '',
 		},
 

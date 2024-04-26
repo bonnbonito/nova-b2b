@@ -540,6 +540,7 @@ export default function Letters({ item }) {
 		acrylicReveal,
 		metalFinish,
 		sets,
+		font,
 		mounting,
 	]);
 

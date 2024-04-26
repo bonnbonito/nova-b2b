@@ -28,7 +28,9 @@ export default function Logo({ item }) {
 		setIsLoading,
 	} = useContext(QuoteContext);
 	const [selectedMounting, setSelectedMounting] = useState(item.mounting);
-	const [selectedThickness, setSelectedThickness] = useState(item.thickness);
+	const [selectedThickness, setSelectedThickness] = useState(
+		item.metalThickness
+	);
 	const [width, setWidth] = useState(item.width);
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice);
@@ -36,10 +38,10 @@ export default function Logo({ item }) {
 	const [fileUrls, setFileUrls] = useState(item.fileUrls);
 	const [filePaths, setFilePaths] = useState(item.filePaths);
 	const [files, setFiles] = useState(item.files);
-	const [color, setColor] = useState(item.color);
+	const [color, setColor] = useState(item.metalColor);
 	const [openColor, setOpenColor] = useState(false);
 	const [selectedFinishing, setSelectedFinishing] = useState(item.finishing);
-	const [customColor, setCustomColor] = useState(item.customColor);
+	const [customColor, setCustomColor] = useState(item.metalCustomColor);
 
 	const maxWidthHeightOptions = Array.from(
 		{
@@ -57,7 +59,7 @@ export default function Logo({ item }) {
 	const [height, setHeight] = useState(item.height);
 	const [comments, setComments] = useState('');
 	const [waterproof, setWaterproof] = useState(item.waterproof);
-	const [installation, setInstallation] = useState(item.installation);
+	const [mounting, setMounting] = useState(item.mounting);
 
 	const [studLength, setStudLength] = useState(item.studLength);
 	const [spacerStandoffOptions, setSpacerStandoffOptions] = useState(
@@ -130,7 +132,7 @@ export default function Logo({ item }) {
 
 	const handleOnChangeInstallation = (e) => {
 		const target = e.target.value;
-		setInstallation(target);
+		setMounting(target);
 
 		if (target === 'Stud with spacer' || target === 'Stud Mount') {
 			if (target === 'Stud Mount') {
@@ -148,10 +150,10 @@ export default function Logo({ item }) {
 				return {
 					...sign,
 					comments: comments,
-					thickness: selectedThickness,
+					metalThickness: selectedThickness,
 					waterproof: waterproof,
-					color: color,
-					installation: installation,
+					metalColor: color,
+					mounting: mounting,
 					width: width,
 					height: height,
 					usdPrice: usdPrice,
@@ -161,7 +163,7 @@ export default function Logo({ item }) {
 					fileNames: fileNames,
 					filePaths: filePaths,
 					fileUrls: fileUrls,
-					customColor: customColor,
+					metalCustomColor: customColor,
 					sets: sets,
 					studLength: studLength,
 					spacerStandoffDistance: spacerStandoffDistance,
@@ -194,7 +196,7 @@ export default function Logo({ item }) {
 		selectedFinishing,
 		files,
 		filePaths,
-		installation,
+		mounting,
 		color,
 		customColor,
 		sets,
@@ -220,13 +222,13 @@ export default function Logo({ item }) {
 		) {
 			missingFields.push('Add the Pantone color code of your custom color.');
 		}
-		if (!installation) missingFields.push('Select Installation');
-		if (installation === 'Stud with spacer') {
+		if (!mounting) missingFields.push('Select Installation');
+		if (mounting === 'Stud with spacer') {
 			if (!studLength) missingFields.push('Select Stud Length');
 
 			if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
 		}
-		if (installation === 'Stud Mount') {
+		if (mounting === 'Stud Mount') {
 			if (!studLength) missingFields.push('Select Stud Length');
 		}
 		if (!sets) missingFields.push('Select Quantity');
@@ -298,7 +300,7 @@ export default function Logo({ item }) {
 
 				let total = parseFloat((computed * multiplier).toFixed(2));
 
-				if (installation === 'Stud with spacer') {
+				if (mounting === 'Stud with spacer') {
 					let spacer = total * 0.03 > 35 ? 35 : total * 0.03;
 					spacer = parseFloat(spacer.toFixed(2));
 
@@ -326,7 +328,7 @@ export default function Logo({ item }) {
 		waterproof,
 		selectedFinishing,
 		sets,
-		installation,
+		mounting,
 	]);
 
 	useOutsideClick([colorRef], () => {
@@ -342,13 +344,13 @@ export default function Logo({ item }) {
 		<>
 			<div className="quote-grid mb-6">
 				<Dropdown
-					title="Thickness"
-					value={item.thickness?.value}
+					title="Metal Thickness"
+					value={item.metalThickness?.value}
 					onChange={handleOnChangeThickness}
 					options={metalThicknessOptions.map((thickness) => (
 						<option
 							value={thickness.value}
-							selected={thickness === item.thickness}
+							selected={thickness === selectedThickness}
 						>
 							{thickness.thickness}
 						</option>
@@ -449,20 +451,17 @@ export default function Logo({ item }) {
 				)}
 
 				<Dropdown
-					title="Installation Option"
+					title="Mounting Options"
 					onChange={handleOnChangeInstallation}
 					options={metalInstallationOptions.map((option) => (
-						<option
-							value={option.option}
-							selected={option.option === installation}
-						>
+						<option value={option.option} selected={option.option === mounting}>
 							{option.option}
 						</option>
 					))}
-					value={item.installation}
+					value={item.mounting}
 				/>
 
-				{installation === 'Stud with spacer' && (
+				{mounting === 'Stud with spacer' && (
 					<>
 						<Dropdown
 							title="Stud Length"
@@ -493,7 +492,7 @@ export default function Logo({ item }) {
 					</>
 				)}
 
-				{installation === 'Stud Mount' && (
+				{mounting === 'Stud Mount' && (
 					<>
 						<Dropdown
 							title="Stud Length"
@@ -520,7 +519,7 @@ export default function Logo({ item }) {
 				/>
 			</div>
 
-			{installation === 'Stud with spacer' && (
+			{mounting === 'Stud with spacer' && (
 				<div className="text-xs text-[#9F9F9F] mb-4">
 					*Note: The spacer will be black (default) or match the painted sign's
 					color.

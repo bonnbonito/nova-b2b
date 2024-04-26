@@ -1415,11 +1415,11 @@ h6 {
 		}
 
 		if ( isset( $projectArray['width'] ) && ! empty( $projectArray['width'] ) ) {
-			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">WIDTH: </strong></td><td><font face="lato">' . $projectArray['width'] . '"</font></td></tr>';
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">LOGO WIDTH: </strong></td><td><font face="lato">' . $projectArray['width'] . '"</font></td></tr>';
 		}
 
 		if ( isset( $projectArray['height'] ) && ! empty( $projectArray['height'] ) ) {
-			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">HEIGHT: </strong></td><td><font face="lato">' . $projectArray['height'] . '"</font></td></tr>';
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">LOGO HEIGHT: </strong></td><td><font face="lato">' . $projectArray['height'] . '"</font></td></tr>';
 		}
 
 		if ( isset( $projectArray['layers'] ) && ! empty( $projectArray['layers'] ) ) {
@@ -1460,6 +1460,14 @@ h6 {
 
 		if ( isset( $projectArray['finishing'] ) && ! empty( $projectArray['finishing'] ) ) {
 			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">FINISHING: </strong></td><td><font face="lato">' . $projectArray['finishing'] . '</font></td></tr>';
+		}
+
+		if ( isset( $projectArray['metalColor'] ) && is_object( $projectArray['metalColor'] ) && ! empty( $projectArray['metalColor']->name ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">COLOR: </strong></td><td><font face="lato">' . $projectArray['metalColor']->name . '</font></td></tr>';
+		}
+
+		if ( isset( $projectArray['metalCustomColor'] ) && ! empty( $projectArray['metalCustomColor'] ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">CUSTOM COLOR: </strong></td><td><font face="lato">' . $projectArray['metalCustomColor'] . '</font></td></tr>';
 		}
 
 		if ( isset( $projectArray['waterproof'] ) && ! empty( $projectArray['waterproof'] ) ) {

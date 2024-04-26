@@ -33,10 +33,9 @@ export default function LaserCutAluminum() {
 					letters: '',
 					comments: '',
 					font: '',
-					installation: '',
 					waterproof: '',
-					thickness: '',
-					color: { name: '', color: '' },
+					metalThickness: '',
+					metalColor: { name: '', color: '' },
 					letterHeight: '',
 					usdPrice: 0,
 					cadPrice: 0,
@@ -50,7 +49,7 @@ export default function LaserCutAluminum() {
 					file: '',
 					finishing: '',
 					customFont: '',
-					customColor: '',
+					metalCustomColor: '',
 					studLength: '',
 					spacerStandoffDistance: '',
 					sets: 1,
@@ -77,8 +76,8 @@ export default function LaserCutAluminum() {
 	const defaultArgs = {
 		id: uuidv4(),
 		comments: '',
-		installation: '',
-		thickness: '',
+		mounting: '',
+		metalThickness: '',
 		waterproof: '',
 		finishing: '',
 		usdPrice: 0,
@@ -89,10 +88,9 @@ export default function LaserCutAluminum() {
 		files: [],
 		product: NovaQuote.product,
 		customFont: '',
-		customColor: '',
+		metalCustomColor: '',
 		studLength: '',
 		spacerStandoffDistance: '',
-		mounting: '',
 		sets: 1,
 	};
 
@@ -113,14 +111,14 @@ export default function LaserCutAluminum() {
 					fileUrls: [],
 					files: [],
 					thickness_options: '',
-					color: { name: '', color: '' },
+					metalColor: { name: '', color: '' },
 					letterHeight: '',
 				};
 			} else {
 				args = {
 					type: type,
 					title: `${type} ${count + 1}`,
-					color: { name: 'Custom Color', color: '' },
+					metalColor: { name: 'Custom Color', color: '' },
 					width: '',
 					height: '',
 				};

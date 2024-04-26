@@ -364,6 +364,7 @@ export default function Letters({ item }) {
 		vinylWhite,
 		sets,
 		mounting,
+		font,
 	]);
 
 	useEffect(() => {
