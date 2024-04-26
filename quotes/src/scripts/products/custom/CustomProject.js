@@ -14,7 +14,7 @@ export default function CustomProject() {
 	const [tempFolder, setTempFolder] = useState('');
 	const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
 	const storage =
-		window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id;
+		window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id + 'x';
 	const localStorageQuote = localStorage.getItem(storage);
 	const savedStorage = JSON.parse(localStorageQuote);
 
@@ -82,9 +82,9 @@ export default function CustomProject() {
 		});
 	}
 
-	useEffect(() => {
+	/* useEffect(() => {
 		localStorage.setItem(storage + '-x', JSON.stringify(signage));
-	}, [signage]);
+	}, [signage]); */
 
 	useEffect(() => {
 		if (NovaQuote.is_editting.length === 0) {

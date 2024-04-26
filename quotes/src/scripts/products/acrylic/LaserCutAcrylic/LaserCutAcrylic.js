@@ -19,7 +19,7 @@ export default function LaserCutAcrylic() {
 	const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
 
 	const storage =
-		window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id;
+		window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id + 'x';
 
 	const localStorageQuote = localStorage.getItem(storage);
 
@@ -140,9 +140,9 @@ export default function LaserCutAcrylic() {
 		});
 	}
 
-	useEffect(() => {
+	/* useEffect(() => {
 		localStorage.setItem(storage + '-x', JSON.stringify(signage));
-	}, [signage]);
+	}, [signage]); */
 
 	useEffect(() => {
 		if (NovaQuote.is_editting.length === 0) {

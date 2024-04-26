@@ -2900,7 +2900,7 @@ function LaserCutAcrylic() {
   const [tempFolder, setTempFolder] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
-  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id;
+  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id + 'x';
   const localStorageQuote = localStorage.getItem(storage);
   const savedStorage = JSON.parse(localStorageQuote);
   function setDefaultSignage() {
@@ -3020,9 +3020,11 @@ function LaserCutAcrylic() {
       return [...prevSignage, newSignage];
     });
   }
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    localStorage.setItem(storage + '-x', JSON.stringify(signage));
-  }, [signage]);
+
+  /* useEffect(() => {
+  	localStorage.setItem(storage + '-x', JSON.stringify(signage));
+  }, [signage]); */
+
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting.length === 0) {
       const savedStorageFolder = JSON.parse(localStorage.getItem(window.location.href + NovaQuote.user_id + '-folder'));
@@ -4191,7 +4193,7 @@ function LayeredAcrylic() {
   const [missing, setMissing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const [tempFolder, setTempFolder] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
-  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id;
+  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id + 'x';
   const localStorageQuote = localStorage.getItem(storage);
   const savedStorage = JSON.parse(localStorageQuote);
   const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
@@ -4295,9 +4297,11 @@ function LayeredAcrylic() {
       return [...prevSignage, newSignage];
     });
   }
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    localStorage.setItem(storage + '-x', JSON.stringify(signage));
-  }, [signage]);
+
+  /* useEffect(() => {
+  	localStorage.setItem(storage + '-x', JSON.stringify(signage));
+  }, [signage]); */
+
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting.length === 0) {
       const savedStorageFolder = JSON.parse(localStorage.getItem(window.location.href + NovaQuote.user_id + '-folder'));
@@ -4795,7 +4799,7 @@ function MetalLaminate() {
   const [missing, setMissing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const [tempFolder, setTempFolder] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
-  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id;
+  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id + 'x';
   const localStorageQuote = localStorage.getItem(storage);
   const savedStorage = JSON.parse(localStorageQuote);
   const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
@@ -4906,9 +4910,11 @@ function MetalLaminate() {
       return [...prevSignage, newSignage];
     });
   }
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    localStorage.setItem(storage + '-x', JSON.stringify(signage));
-  }, [signage]);
+
+  /* useEffect(() => {
+  	localStorage.setItem(storage + '-x', JSON.stringify(signage));
+  }, [signage]); */
+
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting.length === 0) {
       const savedStorageFolder = JSON.parse(localStorage.getItem(window.location.href + NovaQuote.user_id + '-folder'));
@@ -6012,7 +6018,7 @@ function UvPrintedAcrylic() {
   const [missing, setMissing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const [tempFolder, setTempFolder] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
-  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id;
+  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id + 'x';
   const localStorageQuote = localStorage.getItem(storage);
   const savedStorage = JSON.parse(localStorageQuote);
   const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
@@ -6118,9 +6124,11 @@ function UvPrintedAcrylic() {
       return [...prevSignage, newSignage];
     });
   }
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    localStorage.setItem(storage + '-x', JSON.stringify(signage));
-  }, [signage]);
+
+  /* useEffect(() => {
+  	localStorage.setItem(storage + '-x', JSON.stringify(signage));
+  }, [signage]); */
+
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting.length === 0) {
       const savedStorageFolder = JSON.parse(localStorage.getItem(window.location.href + NovaQuote.user_id + '-folder'));
@@ -6648,7 +6656,7 @@ function CustomProject() {
   const [missing, setMissing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const [tempFolder, setTempFolder] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
-  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id;
+  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id + 'x';
   const localStorageQuote = localStorage.getItem(storage);
   const savedStorage = JSON.parse(localStorageQuote);
   const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
@@ -6707,9 +6715,11 @@ function CustomProject() {
       return [...prevSignage, newSignage];
     });
   }
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    localStorage.setItem(storage + '-x', JSON.stringify(signage));
-  }, [signage]);
+
+  /* useEffect(() => {
+  	localStorage.setItem(storage + '-x', JSON.stringify(signage));
+  }, [signage]); */
+
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting.length === 0) {
       const savedStorageFolder = JSON.parse(localStorage.getItem(window.location.href + NovaQuote.user_id + '-folder'));
@@ -6918,7 +6928,7 @@ function TrimLessBackLit() {
   const [missing, setMissing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const [tempFolder, setTempFolder] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
-  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id;
+  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id + 'x';
   const localStorageQuote = localStorage.getItem(storage);
   const savedStorage = JSON.parse(localStorageQuote);
   const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
@@ -7034,9 +7044,11 @@ function TrimLessBackLit() {
       return [...prevSignage, newSignage];
     });
   }
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    localStorage.setItem(storage + '-x', JSON.stringify(signage));
-  }, [signage]);
+
+  /* useEffect(() => {
+  	localStorage.setItem(storage + '-x', JSON.stringify(signage));
+  }, [signage]); */
+
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting.length === 0) {
       const savedStorageFolder = JSON.parse(localStorage.getItem(window.location.href + NovaQuote.user_id + '-folder'));
@@ -7769,7 +7781,7 @@ function TrimLessFrontAndBackLit() {
   const [missing, setMissing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const [tempFolder, setTempFolder] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
-  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id;
+  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id + 'x';
   const localStorageQuote = localStorage.getItem(storage);
   const savedStorage = JSON.parse(localStorageQuote);
   const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
@@ -7897,9 +7909,11 @@ function TrimLessFrontAndBackLit() {
       return [...prevSignage, newSignage];
     });
   }
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    localStorage.setItem(storage + '-x', JSON.stringify(signage));
-  }, [signage]);
+
+  /* useEffect(() => {
+  	localStorage.setItem(storage + '-x', JSON.stringify(signage));
+  }, [signage]); */
+
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting.length === 0) {
       const savedStorageFolder = JSON.parse(localStorage.getItem(window.location.href + NovaQuote.user_id + '-folder'));
@@ -8623,7 +8637,7 @@ function TrimLessFrontLit() {
   const [missing, setMissing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const [tempFolder, setTempFolder] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
-  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id;
+  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id + 'x';
   const localStorageQuote = localStorage.getItem(storage);
   const savedStorage = JSON.parse(localStorageQuote);
   const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
@@ -8747,9 +8761,11 @@ function TrimLessFrontLit() {
       return [...prevSignage, newSignage];
     });
   }
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    localStorage.setItem(storage + '-x', JSON.stringify(signage));
-  }, [signage]);
+
+  /* useEffect(() => {
+  	localStorage.setItem(storage + '-x', JSON.stringify(signage));
+  }, [signage]); */
+
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting.length === 0) {
       const savedStorageFolder = JSON.parse(localStorage.getItem(window.location.href + NovaQuote.user_id + '-folder'));
@@ -9510,7 +9526,7 @@ function FabricatedStainless() {
   const [missing, setMissing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const [tempFolder, setTempFolder] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
-  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id;
+  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id + 'x';
   const localStorageQuote = localStorage.getItem(storage);
   const savedStorage = JSON.parse(localStorageQuote);
   const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
@@ -9625,9 +9641,11 @@ function FabricatedStainless() {
       return [...prevSignage, newSignage];
     });
   }
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    localStorage.setItem(storage + '-x', JSON.stringify(signage));
-  }, [signage]);
+
+  /* useEffect(() => {
+  	localStorage.setItem(storage + '-x', JSON.stringify(signage));
+  }, [signage]); */
+
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting.length === 0) {
       const savedStorageFolder = JSON.parse(localStorage.getItem(window.location.href + NovaQuote.user_id + '-folder'));
@@ -10802,7 +10820,7 @@ function LaserCutAluminum() {
   const [missing, setMissing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const [tempFolder, setTempFolder] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
-  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id;
+  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id + 'x';
   const localStorageQuote = localStorage.getItem(storage);
   const savedStorage = JSON.parse(localStorageQuote);
   const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
@@ -10923,9 +10941,11 @@ function LaserCutAluminum() {
       return [...prevSignage, newSignage];
     });
   }
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    localStorage.setItem(storage + '-x', JSON.stringify(signage));
-  }, [signage]);
+
+  /* useEffect(() => {
+  	localStorage.setItem(storage + '-x', JSON.stringify(signage));
+  }, [signage]); */
+
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting.length === 0) {
       const savedStorageFolder = JSON.parse(localStorage.getItem(window.location.href + NovaQuote.user_id + '-folder'));
@@ -12013,7 +12033,7 @@ function FabricatedStainless() {
   const [missing, setMissing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const [tempFolder, setTempFolder] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
-  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id;
+  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id + 'x';
   const localStorageQuote = localStorage.getItem(storage);
   const savedStorage = JSON.parse(localStorageQuote);
   const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
@@ -12128,9 +12148,11 @@ function FabricatedStainless() {
       return [...prevSignage, newSignage];
     });
   }
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    localStorage.setItem(storage + '-x', JSON.stringify(signage));
-  }, [signage]);
+
+  /* useEffect(() => {
+  	localStorage.setItem(storage + '-x', JSON.stringify(signage));
+  }, [signage]); */
+
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting.length === 0) {
       const savedStorageFolder = JSON.parse(localStorage.getItem(window.location.href + NovaQuote.user_id + '-folder'));
@@ -13487,7 +13509,7 @@ function PVCMetalLaminate() {
   const [missing, setMissing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const [tempFolder, setTempFolder] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
-  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id;
+  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id + 'x';
   const localStorageQuote = localStorage.getItem(storage);
   const savedStorage = JSON.parse(localStorageQuote);
   const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
@@ -13607,9 +13629,11 @@ function PVCMetalLaminate() {
       return [...prevSignage, newSignage];
     });
   }
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    localStorage.setItem(storage + '-x', JSON.stringify(signage));
-  }, [signage]);
+
+  /* useEffect(() => {
+  	localStorage.setItem(storage + '-x', JSON.stringify(signage));
+  }, [signage]); */
+
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting.length === 0) {
       const savedStorageFolder = JSON.parse(localStorage.getItem(window.location.href + NovaQuote.user_id + '-folder'));
@@ -14737,7 +14761,7 @@ function PVCPainted() {
   const [missing, setMissing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const [tempFolder, setTempFolder] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
-  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id;
+  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id + 'x';
   const localStorageQuote = localStorage.getItem(storage);
   const savedStorage = JSON.parse(localStorageQuote);
   const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
@@ -14855,9 +14879,11 @@ function PVCPainted() {
       return [...prevSignage, newSignage];
     });
   }
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    localStorage.setItem(storage + '-x', JSON.stringify(signage));
-  }, [signage]);
+
+  /* useEffect(() => {
+  	localStorage.setItem(storage + '-x', JSON.stringify(signage));
+  }, [signage]); */
+
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting.length === 0) {
       const savedStorageFolder = JSON.parse(localStorage.getItem(window.location.href + NovaQuote.user_id + '-folder'));
@@ -15954,7 +15980,7 @@ function PVCUv() {
   const [missing, setMissing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const [tempFolder, setTempFolder] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
-  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id;
+  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id + 'x';
   const localStorageQuote = localStorage.getItem(storage);
   const savedStorage = JSON.parse(localStorageQuote);
   const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
@@ -16047,9 +16073,11 @@ function PVCUv() {
       return [...prevSignage, newSignage];
     });
   }
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    localStorage.setItem(storage + '-x', JSON.stringify(signage));
-  }, [signage]);
+
+  /* useEffect(() => {
+  	localStorage.setItem(storage + '-x', JSON.stringify(signage));
+  }, [signage]); */
+
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting.length === 0) {
       const savedStorageFolder = JSON.parse(localStorage.getItem(window.location.href + NovaQuote.user_id + '-folder'));
