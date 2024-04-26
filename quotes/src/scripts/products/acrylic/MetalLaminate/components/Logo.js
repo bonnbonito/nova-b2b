@@ -32,7 +32,9 @@ export default function Logo({ item }) {
 		setIsLoading,
 	} = useContext(QuoteContext);
 	const [selectedMounting, setSelectedMounting] = useState(item.mounting);
-	const [selectedThickness, setSelectedThickness] = useState(item.thickness);
+	const [selectedThickness, setSelectedThickness] = useState(
+		item.acrylicThickness
+	);
 	const [width, setWidth] = useState(item.width);
 	const [maxWidthHeight, setMaxWidthHeight] = useState(23);
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice);
@@ -167,7 +169,7 @@ export default function Logo({ item }) {
 	};
 
 	useEffect(() => {
-		if (parseInt(selectedThickness.value) > 3) {
+		if (parseInt(selectedThickness?.value) > 3) {
 			setMaxWidthHeight(42);
 		} else {
 			setMaxWidthHeight(23);
@@ -192,7 +194,7 @@ export default function Logo({ item }) {
 				return {
 					...sign,
 					comments: comments,
-					thickness: selectedThickness,
+					acrylicThickness: selectedThickness,
 					mounting: selectedMounting,
 					waterproof: waterproof,
 					width: width,
@@ -383,13 +385,13 @@ export default function Logo({ item }) {
 		<>
 			<div className="quote-grid mb-6">
 				<Dropdown
-					title="Thickness"
-					value={item.thickness?.value}
+					title="Acrylic Thickness"
+					value={item.acrylicThickness?.value}
 					onChange={handleOnChangeThickness}
 					options={thicknessOptions.map((thickness) => (
 						<option
 							value={thickness.value}
-							selected={thickness === item.thickness}
+							selected={thickness === item.acrylicThickness}
 						>
 							{thickness.thickness}
 						</option>
@@ -409,6 +411,64 @@ export default function Logo({ item }) {
 					onChange={(e) => setHeight(e.target.value)}
 					options={maxWidthOptions}
 				/>
+
+				<Dropdown
+					title="Metal Laminate"
+					onChange={handleChangeMetalLaminate}
+					options={metalFinishColors.map((laminate) => (
+						<option
+							value={laminate.name}
+							selected={laminate.name === item.metalLaminate}
+						>
+							{laminate.name}
+						</option>
+					))}
+					value={metalLaminate}
+				/>
+
+				<div className="px-[1px] relative" ref={acrylicRef}>
+					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+						Acrylic Base
+					</label>
+					<div
+						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
+							acrylicBase.name ? 'text-black' : 'text-[#dddddd]'
+						}`}
+						onClick={() => setOpenAcrylicColor((prev) => !prev)}
+					>
+						<span
+							className="rounded-full w-[18px] h-[18px] border mr-2"
+							style={{ backgroundColor: acrylicBase.color }}
+						></span>
+						{acrylicBase.name === '' ? 'CHOOSE OPTION' : acrylicBase.name}
+					</div>
+					{openAcrylicColor && (
+						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
+							{colorOptions.map((color) => {
+								return (
+									<div
+										className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
+										onClick={() => {
+											setAcrylicBase(color);
+											setOpenAcrylicColor(false);
+										}}
+									>
+										<span
+											className="w-[18px] h-[18px] inline-block rounded-full border"
+											style={{
+												background:
+													color.name == 'Custom Color'
+														? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
+														: color.color,
+											}}
+										></span>
+										{color.name}
+									</div>
+								);
+							})}
+						</div>
+					)}
+				</div>
 
 				<Dropdown
 					title="Environment"
@@ -486,64 +546,6 @@ export default function Logo({ item }) {
 						/>
 					</>
 				)}
-
-				<Dropdown
-					title="Metal Laminate"
-					onChange={handleChangeMetalLaminate}
-					options={metalFinishColors.map((laminate) => (
-						<option
-							value={laminate.name}
-							selected={laminate.name === item.metalLaminate}
-						>
-							{laminate.name}
-						</option>
-					))}
-					value={metalLaminate}
-				/>
-
-				<div className="px-[1px] relative" ref={acrylicRef}>
-					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-						Acrylic Base
-					</label>
-					<div
-						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-							acrylicBase.name ? 'text-black' : 'text-[#dddddd]'
-						}`}
-						onClick={() => setOpenAcrylicColor((prev) => !prev)}
-					>
-						<span
-							className="rounded-full w-[18px] h-[18px] border mr-2"
-							style={{ backgroundColor: acrylicBase.color }}
-						></span>
-						{acrylicBase.name === '' ? 'CHOOSE OPTION' : acrylicBase.name}
-					</div>
-					{openAcrylicColor && (
-						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
-							{colorOptions.map((color) => {
-								return (
-									<div
-										className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
-										onClick={() => {
-											setAcrylicBase(color);
-											setOpenAcrylicColor(false);
-										}}
-									>
-										<span
-											className="w-[18px] h-[18px] inline-block rounded-full border"
-											style={{
-												background:
-													color.name == 'Custom Color'
-														? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-														: color.color,
-											}}
-										></span>
-										{color.name}
-									</div>
-								);
-							})}
-						</div>
-					)}
-				</div>
 
 				<Dropdown
 					title="Quantity"

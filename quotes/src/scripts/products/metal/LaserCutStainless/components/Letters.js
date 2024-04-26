@@ -428,7 +428,7 @@ export default function Letters({ item }) {
 		if (!selectedThickness) missingFields.push('Select Metal Thickness');
 		if (!selectedLetterHeight) missingFields.push('Select Letter Height');
 
-		if (!selectedFinishing) missingFields.push('Select Finish Option');
+		if (!selectedFinishing) missingFields.push('Select Finishing Options');
 		if (selectedFinishing === 'Painted Finish') {
 			if (!color.name) missingFields.push('Select Color');
 
@@ -438,7 +438,7 @@ export default function Letters({ item }) {
 		}
 		if (selectedFinishing === 'Metal Finish') {
 			if (!stainLessMetalFinish)
-				missingFields.push('Select Metal Finish Option');
+				missingFields.push('Select Metal Finishing Options');
 		}
 
 		if (
@@ -659,7 +659,7 @@ export default function Letters({ item }) {
 				/>
 
 				<Dropdown
-					title="Finish Option"
+					title="Finishing Options"
 					onChange={handleChangeFinishing}
 					options={finishOptions.map((finishing) => (
 						<option

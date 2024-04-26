@@ -384,7 +384,7 @@ export default function Logo({ item }) {
 				/>
 
 				<Dropdown
-					title="Finish Option"
+					title="Finishing Options"
 					onChange={handleChangeFinishing}
 					options={metalFinishOptions.map((finishing) => (
 						<option

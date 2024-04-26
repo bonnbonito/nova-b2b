@@ -644,7 +644,7 @@ export default function Letters({ item }) {
 				</div>
 
 				<Dropdown
-					title="Finish Option"
+					title="Finishing Options"
 					onChange={handleChangeFinishing}
 					options={finishingOptions.map((finishing) => (
 						<option

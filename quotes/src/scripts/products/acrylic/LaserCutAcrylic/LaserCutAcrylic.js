@@ -17,9 +17,12 @@ export default function LaserCutAcrylic() {
 	const [isLoading, setIsLoading] = useState(false);
 
 	const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
+
 	const storage =
 		window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id;
+
 	const localStorageQuote = localStorage.getItem(storage);
+
 	const savedStorage = JSON.parse(localStorageQuote);
 
 	function setDefaultSignage() {
@@ -36,7 +39,7 @@ export default function LaserCutAcrylic() {
 					font: '',
 					mounting: '',
 					waterproof: '',
-					thickness: '',
+					acrylicThickness: '',
 					color: { name: '', color: '' },
 					letterHeight: '',
 					usdPrice: 0,
@@ -80,7 +83,7 @@ export default function LaserCutAcrylic() {
 		id: uuidv4(),
 		comments: '',
 		mounting: '',
-		thickness: '',
+		acrylicThickness: '',
 		waterproof: '',
 		finishing: 'Matte',
 		usdPrice: 0,
@@ -138,7 +141,7 @@ export default function LaserCutAcrylic() {
 	}
 
 	useEffect(() => {
-		localStorage.setItem(storage, JSON.stringify(signage));
+		localStorage.setItem(storage + '-x', JSON.stringify(signage));
 	}, [signage]);
 
 	useEffect(() => {

@@ -13,14 +13,38 @@ export default function Prices({ item }) {
 					</span>
 				)}
 			</div>
-			{item.layers && (
+
+			{item.letters && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
-						LAYERS
+						LINE TEXT
 					</div>
-					<div className="text-left text-sm uppercase">{item.layers}</div>
+					<div className="text-left text-sm break-words">{item.letters}</div>
 				</div>
 			)}
+
+			{item.font && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						FONT
+					</div>
+					<div className="text-left text-sm break-words">{item.font}</div>
+				</div>
+			)}
+
+			{item.fontFileUrl && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						CUSTOM FONT
+					</div>
+					<div className="text-left text-sm break-words">
+						<a href={item.fontFileUrl} target="_blank">
+							{item.fontFileName}
+						</a>
+					</div>
+				</div>
+			)}
+
 			{item.thickness && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
@@ -31,14 +55,29 @@ export default function Prices({ item }) {
 					</div>
 				</div>
 			)}
-			{item.depth?.depth && (
+
+			{item.acrylicThickness && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
-						METAL DEPTH
+						ACRYLIC THICKNESS
 					</div>
-					<div className="text-left text-sm uppercase">{item.depth.depth}</div>
+					<div className="text-left text-sm uppercase">
+						{item.acrylicThickness.thickness}
+					</div>
 				</div>
 			)}
+
+			{item.letterHeight && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						LETTER HEIGHT
+					</div>
+					<div className="text-left text-sm break-words">
+						{item.letterHeight}"
+					</div>
+				</div>
+			)}
+
 			{item.width && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
@@ -55,6 +94,42 @@ export default function Prices({ item }) {
 					<div className="text-left text-sm break-words">{item.height}"</div>
 				</div>
 			)}
+
+			{item.layers && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						LAYERS
+					</div>
+					<div className="text-left text-sm uppercase">{item.layers}</div>
+				</div>
+			)}
+
+			{item.metalLaminate && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						METAL LAMINATE
+					</div>
+					<div className="text-left text-sm">{item.metalLaminate}</div>
+				</div>
+			)}
+
+			{item.metalFinish?.name && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						METAL FINISH
+					</div>
+					<div className="text-left text-sm">{item.metalFinish?.name}</div>
+				</div>
+			)}
+			{item.acrylicBase?.name && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						ACRYLIC BASE
+					</div>
+					<div className="text-left text-sm">{item.acrylicBase.name}</div>
+				</div>
+			)}
+
 			{item.printPreference && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
@@ -65,6 +140,16 @@ export default function Prices({ item }) {
 					</div>
 				</div>
 			)}
+
+			{item.color?.name && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						COLOR
+					</div>
+					<div className="text-left text-sm">{item.color?.name}</div>
+				</div>
+			)}
+
 			{item.baseColor && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
@@ -73,40 +158,16 @@ export default function Prices({ item }) {
 					<div className="text-left text-sm break-words">{item.baseColor}</div>
 				</div>
 			)}
-			{item.letterHeight && (
+
+			{item.customColor && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
-						LETTER HEIGHT
+						CUSTOM COLOR
 					</div>
-					<div className="text-left text-sm break-words">
-						{item.letterHeight}"
-					</div>
+					<div className="text-left text-sm">{item.customColor}</div>
 				</div>
 			)}
-			{item.metal && (
-				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
-					<div className="text-left font-title md:tracking-[1.4px] text-sm">
-						METAL OPTION
-					</div>
-					<div className="text-left text-sm">{item.metal}</div>
-				</div>
-			)}
-			{item.mounting && (
-				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
-					<div className="text-left font-title md:tracking-[1.4px] text-sm">
-						MOUNTING
-					</div>
-					<div className="text-left text-sm">{item.mounting}</div>
-				</div>
-			)}
-			{item.waterproof && (
-				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
-					<div className="text-left font-title md:tracking-[1.4px] text-sm">
-						WATERPROOF
-					</div>
-					<div className="text-left text-sm">{item.waterproof}</div>
-				</div>
-			)}
+
 			{item.finishing && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
@@ -115,6 +176,43 @@ export default function Prices({ item }) {
 					<div className="text-left text-sm">{item.finishing}</div>
 				</div>
 			)}
+
+			{item.waterproof && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						ENVIRONMENT
+					</div>
+					<div className="text-left text-sm">{item.waterproof}</div>
+				</div>
+			)}
+
+			{item.depth?.depth && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						METAL DEPTH
+					</div>
+					<div className="text-left text-sm uppercase">{item.depth.depth}</div>
+				</div>
+			)}
+
+			{item.metal && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						METAL OPTION
+					</div>
+					<div className="text-left text-sm">{item.metal}</div>
+				</div>
+			)}
+
+			{item.mounting && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						MOUNTING
+					</div>
+					<div className="text-left text-sm">{item.mounting}</div>
+				</div>
+			)}
+
 			{item.metalFinishing && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
@@ -139,43 +237,7 @@ export default function Prices({ item }) {
 					<div className="text-left text-sm">{item.stainlessSteelPolished}</div>
 				</div>
 			)}
-			{item.font && (
-				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
-					<div className="text-left font-title md:tracking-[1.4px] text-sm">
-						FONT
-					</div>
-					<div className="text-left text-sm break-words">{item.font}</div>
-				</div>
-			)}
-			{item.fontFileUrl && (
-				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
-					<div className="text-left font-title md:tracking-[1.4px] text-sm">
-						CUSTOM FONT
-					</div>
-					<div className="text-left text-sm break-words">
-						<a href={item.fontFileUrl} target="_blank">
-							{item.fontFileName}
-						</a>
-					</div>
-				</div>
-			)}
 
-			{item.letters && (
-				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
-					<div className="text-left font-title md:tracking-[1.4px] text-sm">
-						LINE TEXT
-					</div>
-					<div className="text-left text-sm break-words">{item.letters}</div>
-				</div>
-			)}
-			{item.color?.name && (
-				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
-					<div className="text-left font-title md:tracking-[1.4px] text-sm">
-						COLOR
-					</div>
-					<div className="text-left text-sm">{item.color?.name}</div>
-				</div>
-			)}
 			{item.pvcBaseColor?.name && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
@@ -218,14 +280,7 @@ export default function Prices({ item }) {
 					<div className="text-left text-sm">{item.ledLightColor}</div>
 				</div>
 			)}
-			{item.customColor && (
-				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
-					<div className="text-left font-title md:tracking-[1.4px] text-sm">
-						CUSTOM COLOR
-					</div>
-					<div className="text-left text-sm">{item.customColor}</div>
-				</div>
-			)}
+
 			{item.stainLessMetalFinish && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
@@ -245,19 +300,12 @@ export default function Prices({ item }) {
 			{item.spacerStandoffDistance && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
-						SPACER STANDOFF DISTANCE
+						STANDOFF SPACE
 					</div>
 					<div className="text-left text-sm">{item.spacerStandoffDistance}</div>
 				</div>
 			)}
-			{item.metalFinish?.name && (
-				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
-					<div className="text-left font-title md:tracking-[1.4px] text-sm">
-						METAL FINISH
-					</div>
-					<div className="text-left text-sm">{item.metalFinish?.name}</div>
-				</div>
-			)}
+
 			{typeof item.metalFinish !== 'object' && item.metalFinish && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
@@ -266,22 +314,7 @@ export default function Prices({ item }) {
 					<div className="text-left text-sm">{item.metalFinish}</div>
 				</div>
 			)}
-			{item.metalLaminate && (
-				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
-					<div className="text-left font-title md:tracking-[1.4px] text-sm">
-						METAL LAMINATE
-					</div>
-					<div className="text-left text-sm">{item.metalLaminate}</div>
-				</div>
-			)}
-			{item.acrylicBase?.name && (
-				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
-					<div className="text-left font-title md:tracking-[1.4px] text-sm">
-						ACRYLIC BASE
-					</div>
-					<div className="text-left text-sm">{item.acrylicBase.name}</div>
-				</div>
-			)}
+
 			{item.installation && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">

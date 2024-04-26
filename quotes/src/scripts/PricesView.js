@@ -74,11 +74,29 @@ export default function PricesView({ item }) {
 					</span>
 				</div>
 
-				{item.layers && (
+				{item.letters && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
-						<div className="text-left text-xs font-title">LAYERS</div>
+						<div className="text-left text-xs font-title">LINE TEXT</div>
 						<div className="text-left text-[14px] break-words">
-							{item.layers}
+							{item.letters}
+						</div>
+					</div>
+				)}
+
+				{item.font && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">FONT</div>
+						<div className="text-left text-[14px] break-words">{item.font}</div>
+					</div>
+				)}
+
+				{item.fontFileUrl && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">CUSTOM FONT</div>
+						<div className="text-left text-[14px] break-words">
+							<a href={item.fontFileUrl} target="_blank">
+								{item.fontFileName}
+							</a>
 						</div>
 					</div>
 				)}
@@ -92,52 +110,42 @@ export default function PricesView({ item }) {
 					</div>
 				)}
 
-				{item.depth?.depth && (
+				{item.acrylicThickness?.thickness && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
-						<div className="text-left text-xs font-title">METAL DEPTH</div>
+						<div className="text-left text-xs font-title">
+							ACRYLIC THICKNESS
+						</div>
 						<div className="text-left text-[14px] uppercase">
-							{item.depth.depth}
+							{item.acrylicThickness.thickness}
 						</div>
 					</div>
 				)}
 
-				{item.type === 'logo' && (
-					<>
-						{item.width && (
-							<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
-								<div className="text-left text-xs font-title">LOGO WIDTH</div>
-								<div className="text-left text-[14px] break-words">
-									{item.width}"
-								</div>
-							</div>
-						)}
-						{item.height && (
-							<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
-								<div className="text-left text-xs font-title">LOGO HEIGHT</div>
-								<div className="text-left text-[14px] break-words">
-									{item.height}"
-								</div>
-							</div>
-						)}
-						{item.printPreference && (
-							<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
-								<div className="text-left text-xs font-title">
-									PRINT PREFERENCE
-								</div>
-								<div className="text-left text-[14px] break-words">
-									{item.printPreference}
-								</div>
-							</div>
-						)}
-						{item.baseColor && (
-							<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
-								<div className="text-left text-xs font-title">BASE COLOR</div>
-								<div className="text-left text-[14px] break-words">
-									{item.baseColor}
-								</div>
-							</div>
-						)}
-					</>
+				{item.width && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">LOGO WIDTH</div>
+						<div className="text-left text-[14px] break-words">
+							{item.width}"
+						</div>
+					</div>
+				)}
+
+				{item.height && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">LOGO HEIGHT</div>
+						<div className="text-left text-[14px] break-words">
+							{item.height}"
+						</div>
+					</div>
+				)}
+
+				{item.layers && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">LAYERS</div>
+						<div className="text-left text-[14px] break-words">
+							{item.layers}
+						</div>
+					</div>
 				)}
 
 				{item.letterHeight && (
@@ -145,6 +153,106 @@ export default function PricesView({ item }) {
 						<div className="text-left text-xs font-title">LETTER HEIGHT</div>
 						<div className="text-left text-[14px] break-words">
 							{item.letterHeight}"
+						</div>
+					</div>
+				)}
+
+				{item.printPreference && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">PRINT PREFERENCE</div>
+						<div className="text-left text-[14px] break-words">
+							{item.printPreference}
+						</div>
+					</div>
+				)}
+
+				{item.metalLaminate && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">METAL LAMINATE</div>
+						<div className="text-left text-[14px]">{item.metalLaminate}</div>
+					</div>
+				)}
+
+				{item.metalFinish?.name && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">METAL FINISH</div>
+						<div className="text-left text-[14px]">
+							{item.metalFinish?.name}
+						</div>
+					</div>
+				)}
+
+				{item.acrylicBase?.name && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">ACRYLIC BASE</div>
+						<div className="text-left text-[14px]">{item.acrylicBase.name}</div>
+					</div>
+				)}
+
+				{item.color?.name && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">COLOR</div>
+						<div className="text-left text-[14px]">{item.color?.name}</div>
+					</div>
+				)}
+
+				{item.baseColor && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">BASE COLOR</div>
+						<div className="text-left text-[14px] break-words">
+							{item.baseColor}
+						</div>
+					</div>
+				)}
+
+				{item.customColor && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">CUSTOM COLOR</div>
+						<div className="text-left text-[14px]">{item.customColor}</div>
+					</div>
+				)}
+
+				{item.finishing && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">FINISHING</div>
+						<div className="text-left text-[14px]">{item.finishing}</div>
+					</div>
+				)}
+
+				{item.waterproof && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">ENVIRONMENT</div>
+						<div className="text-left text-[14px]">{item.waterproof}</div>
+					</div>
+				)}
+
+				{item.mounting && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">MOUNTING</div>
+						<div className="text-left text-[14px]">{item.mounting}</div>
+					</div>
+				)}
+				{item.studLength && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">STUD LENGTH</div>
+						<div className="text-left text-[14px]">{item.studLength}</div>
+					</div>
+				)}
+
+				{item.spacerStandoffDistance && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">STANDOFF SPACE</div>
+						<div className="text-left text-[14px]">
+							{item.spacerStandoffDistance}
+						</div>
+					</div>
+				)}
+
+				{item.depth?.depth && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">METAL DEPTH</div>
+						<div className="text-left text-[14px] uppercase">
+							{item.depth.depth}
 						</div>
 					</div>
 				)}
@@ -165,38 +273,10 @@ export default function PricesView({ item }) {
 					</div>
 				)}
 
-				{item.mounting && (
-					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
-						<div className="text-left text-xs font-title">MOUNTING</div>
-						<div className="text-left text-[14px]">{item.mounting}</div>
-					</div>
-				)}
-
-				{item.waterproof && (
-					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
-						<div className="text-left text-xs font-title">WATERPROOF</div>
-						<div className="text-left text-[14px]">{item.waterproof}</div>
-					</div>
-				)}
-
-				{item.finishing && (
-					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
-						<div className="text-left text-xs font-title">FINISHING</div>
-						<div className="text-left text-[14px]">{item.finishing}</div>
-					</div>
-				)}
-
 				{item.metalFinishing && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
 						<div className="text-left text-xs font-title">METAL FINISHING</div>
 						<div className="text-left text-[14px]">{item.metalFinishing}</div>
-					</div>
-				)}
-
-				{item.metalLaminate && (
-					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
-						<div className="text-left text-xs font-title">METAL LAMINATE</div>
-						<div className="text-left text-[14px]">{item.metalLaminate}</div>
 					</div>
 				)}
 
@@ -222,31 +302,6 @@ export default function PricesView({ item }) {
 						<div className="text-left text-[14px]">
 							{item.stainlessSteelPolished}
 						</div>
-					</div>
-				)}
-
-				{item.font && (
-					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
-						<div className="text-left text-xs font-title">FONT</div>
-						<div className="text-left text-[14px] break-words">{item.font}</div>
-					</div>
-				)}
-
-				{item.fontFileUrl && (
-					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
-						<div className="text-left text-xs font-title">CUSTOM FONT</div>
-						<div className="text-left text-[14px] break-words">
-							<a href={item.fontFileUrl} target="_blank">
-								{item.fontFileName}
-							</a>
-						</div>
-					</div>
-				)}
-
-				{item.color?.name && (
-					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
-						<div className="text-left text-xs font-title">COLOR</div>
-						<div className="text-left text-[14px]">{item.color?.name}</div>
 					</div>
 				)}
 
@@ -288,60 +343,10 @@ export default function PricesView({ item }) {
 					</div>
 				)}
 
-				{item.customColor && (
-					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
-						<div className="text-left text-xs font-title">CUSTOM COLOR</div>
-						<div className="text-left text-[14px]">{item.customColor}</div>
-					</div>
-				)}
-
 				{item.ledLightColor && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
 						<div className="text-left text-xs font-title">LED LIGHT COLOR</div>
 						<div className="text-left text-[14px]">{item.ledLightColor}</div>
-					</div>
-				)}
-
-				{item.letters && (
-					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
-						<div className="text-left text-xs font-title">LINE TEXT</div>
-						<div className="text-left text-[14px] break-words">
-							{item.letters}
-						</div>
-					</div>
-				)}
-
-				{item.metalFinish?.name && (
-					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
-						<div className="text-left text-xs font-title">METAL FINISH</div>
-						<div className="text-left text-[14px]">
-							{item.metalFinish?.name}
-						</div>
-					</div>
-				)}
-
-				{item.acrylicBase?.name && (
-					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
-						<div className="text-left text-xs font-title">ACRYLIC BASE</div>
-						<div className="text-left text-[14px]">{item.acrylicBase.name}</div>
-					</div>
-				)}
-
-				{item.studLength && (
-					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
-						<div className="text-left text-xs font-title">STUD LENGTH</div>
-						<div className="text-left text-[14px]">{item.studLength}</div>
-					</div>
-				)}
-
-				{item.spacerStandoffDistance && (
-					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
-						<div className="text-left text-xs font-title">
-							SPACER STANDOFF DISTANCE
-						</div>
-						<div className="text-left text-[14px]">
-							{item.spacerStandoffDistance}
-						</div>
 					</div>
 				)}
 

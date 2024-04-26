@@ -46,9 +46,9 @@ export default function MetalLaminate() {
 					font: '',
 					mounting: '',
 					waterproof: '',
-					thickness: '',
+					acrylicThickness: '',
 					acrylicBase: { name: 'Black', color: '#000000' },
-					metalFinish: { name: '', color: '' },
+					metalLaminate: '',
 					letterHeight: '',
 					usdPrice: 0,
 					cadPrice: 0,
@@ -84,7 +84,7 @@ export default function MetalLaminate() {
 		id: uuidv4(),
 		comments: '',
 		mounting: '',
-		thickness: '',
+		acrylicThickness: '',
 		waterproof: '',
 		usdPrice: 0,
 		cadPrice: 0,
@@ -96,6 +96,7 @@ export default function MetalLaminate() {
 		fontFileName: '',
 		fontFileUrl: '',
 		fontFile: '',
+		metalLaminate: '',
 		acrylicBase: { name: 'Black', color: '#000000' },
 		customColor: '',
 		sets: 1,
@@ -116,7 +117,6 @@ export default function MetalLaminate() {
 					title: `${type} ${count + 1}`,
 					letters: '',
 					font: '',
-					metalFinish: { name: '', color: '' },
 					thickness_options: '',
 					customFont: '',
 					letterHeight: '',
@@ -127,7 +127,6 @@ export default function MetalLaminate() {
 					title: `${type} ${count + 1}`,
 					width: '',
 					height: '',
-					metalLaminate: '',
 				};
 			}
 			const newSignage = {
@@ -141,7 +140,7 @@ export default function MetalLaminate() {
 	}
 
 	useEffect(() => {
-		localStorage.setItem(storage, JSON.stringify(signage));
+		localStorage.setItem(storage + '-x', JSON.stringify(signage));
 	}, [signage]);
 
 	useEffect(() => {

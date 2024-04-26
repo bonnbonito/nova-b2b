@@ -33,7 +33,7 @@ export default function LayeredAcrylic() {
 					title: 'LOGO 1',
 					comments: '',
 					mounting: '',
-					thickness: '',
+					acrylicThickness: '',
 					waterproof: '',
 					finishing: 'Matte',
 					usdPrice: 0,
@@ -68,7 +68,7 @@ export default function LayeredAcrylic() {
 	const defaultArgs = {
 		id: uuidv4(),
 		mounting: '',
-		thickness: '',
+		acrylicThickness: '',
 		waterproof: '',
 		finishing: 'Matte',
 		description: '',
@@ -100,7 +100,7 @@ export default function LayeredAcrylic() {
 					font: '',
 					mounting: '',
 					waterproof: '',
-					thickness: '',
+					acrylicThickness: '',
 					thickness_options: '',
 					color: { name: '', color: '' },
 					letterHeight: '',
@@ -126,7 +126,7 @@ export default function LayeredAcrylic() {
 	}
 
 	useEffect(() => {
-		localStorage.setItem(storage, JSON.stringify(signage));
+		localStorage.setItem(storage + '-x', JSON.stringify(signage));
 	}, [signage]);
 
 	useEffect(() => {

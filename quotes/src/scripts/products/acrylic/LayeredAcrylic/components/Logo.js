@@ -29,7 +29,9 @@ export default function Logo({ item }) {
 		setIsLoading,
 	} = useContext(QuoteContext);
 	const [selectedMounting, setSelectedMounting] = useState(item.mounting);
-	const [selectedThickness, setSelectedThickness] = useState(item.thickness);
+	const [selectedThickness, setSelectedThickness] = useState(
+		item.acrylicThickness
+	);
 	const [width, setWidth] = useState(item.width);
 	const [maxWidthHeight, setMaxWidthHeight] = useState(23);
 
@@ -133,7 +135,7 @@ export default function Logo({ item }) {
 	const logoPricingObject = NovaQuote.logo_pricing_tables;
 
 	useEffect(() => {
-		if (!selectedThickness || selectedThickness.value === undefined) return;
+		if (!selectedThickness || selectedThickness?.value === undefined) return;
 
 		const { newMountingOptions, updatedSelectedMounting } =
 			calculateMountingOptions(selectedThickness, selectedMounting, waterproof);
@@ -167,7 +169,7 @@ export default function Logo({ item }) {
 	};
 
 	useEffect(() => {
-		if (parseInt(selectedThickness.value) > 3) {
+		if (parseInt(selectedThickness?.value) > 3) {
 			setMaxWidthHeight(42);
 		} else {
 			setMaxWidthHeight(23);
@@ -196,7 +198,7 @@ export default function Logo({ item }) {
 				return {
 					...sign,
 					comments: comments,
-					thickness: selectedThickness,
+					acrylicThickness: selectedThickness,
 					mounting: selectedMounting,
 					waterproof: waterproof,
 					width: width,
@@ -327,7 +329,6 @@ export default function Logo({ item }) {
 
 		if (!selectedFinishing) missingFields.push('Select Finishing Option');
 		if (!sets) missingFields.push('Select Quantity');
-		if (!comments) missingFields.push('Add Comments');
 
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
@@ -413,12 +414,12 @@ export default function Logo({ item }) {
 			<div className="quote-grid mb-6">
 				<Dropdown
 					title="Acrylic Thickness"
-					value={item.thickness?.value}
+					value={item.acrylicThickness?.value}
 					onChange={handleOnChangeThickness}
 					options={thicknessOptions.map((thickness) => (
 						<option
 							value={thickness.value}
-							selected={thickness === item.thickness}
+							selected={thickness === item.acrylicThickness}
 						>
 							{thickness.thickness}
 						</option>
@@ -448,6 +449,20 @@ export default function Logo({ item }) {
 							{layer}
 						</option>
 					))}
+				/>
+
+				<Dropdown
+					title="Finishing Options"
+					onChange={handleChangeFinishing}
+					options={finishingOptions.map((finishing) => (
+						<option
+							value={finishing.name}
+							selected={finishing.name === item.finishing}
+						>
+							{finishing.name}
+						</option>
+					))}
+					value={selectedFinishing}
 				/>
 
 				<Dropdown
@@ -527,19 +542,6 @@ export default function Logo({ item }) {
 					</>
 				)}
 
-				<Dropdown
-					title="Finishing Options"
-					onChange={handleChangeFinishing}
-					options={finishingOptions.map((finishing) => (
-						<option
-							value={finishing.name}
-							selected={finishing.name === item.finishing}
-						>
-							{finishing.name}
-						</option>
-					))}
-					value={selectedFinishing}
-				/>
 				<Dropdown
 					title="Quantity"
 					onChange={handleOnChangeSets}

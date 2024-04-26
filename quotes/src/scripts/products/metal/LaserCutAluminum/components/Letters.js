@@ -395,7 +395,7 @@ export default function Letters({ item }) {
 		}
 		if (!selectedLetterHeight) missingFields.push('Select Letter Height');
 		if (!selectedThickness) missingFields.push('Select Acrylic Thickness');
-		if (!selectedFinishing) missingFields.push('Select Finish Option');
+		if (!selectedFinishing) missingFields.push('Select Finishing Options');
 		if (selectedFinishing === 'Painted') {
 			if (!color.name) missingFields.push('Select Color');
 		}
@@ -593,7 +593,7 @@ export default function Letters({ item }) {
 				/>
 
 				<Dropdown
-					title="Finish Option"
+					title="Finishing Options"
 					onChange={handleChangeFinishing}
 					options={metalFinishOptions.map((finishing) => (
 						<option

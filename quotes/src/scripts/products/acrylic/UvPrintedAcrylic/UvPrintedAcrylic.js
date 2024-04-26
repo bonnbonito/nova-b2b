@@ -31,7 +31,7 @@ export default function UvPrintedAcrylic() {
 					title: 'LOGO 1',
 					comments: '',
 					mounting: '',
-					thickness: '',
+					acrylicThickness: '',
 					waterproof: '',
 					finishing: 'Matte',
 					usdPrice: 0,
@@ -70,7 +70,7 @@ export default function UvPrintedAcrylic() {
 		id: uuidv4(),
 		comments: '',
 		mounting: '',
-		thickness: '',
+		acrylicThickness: '',
 		waterproof: '',
 		finishing: 'Matte',
 		usdPrice: 0,
@@ -102,7 +102,7 @@ export default function UvPrintedAcrylic() {
 					font: '',
 					mounting: '',
 					waterproof: '',
-					thickness: '',
+					acrylicThickness: '',
 					thickness_options: '',
 					color: { name: '', color: '' },
 					letterHeight: '',
@@ -126,7 +126,7 @@ export default function UvPrintedAcrylic() {
 	}
 
 	useEffect(() => {
-		localStorage.setItem(storage, JSON.stringify(signage));
+		localStorage.setItem(storage + '-x', JSON.stringify(signage));
 	}, [signage]);
 
 	useEffect(() => {

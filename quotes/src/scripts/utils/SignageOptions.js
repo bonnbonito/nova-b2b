@@ -76,10 +76,10 @@ const metalFinishOptions = [
 
 const waterProofOptions = [
 	{
-		option: 'Indoor',
+		option: 'Indoor (Not Waterproof)',
 	},
 	{
-		option: 'Outdoor',
+		option: 'Outdoor (Waterproof)',
 	},
 ];
 
@@ -101,6 +101,27 @@ const mountingDefaultOptions = [
 	},
 	{
 		mounting_option: 'Stud with spacer',
+	},
+];
+
+const installationDefaultOptions = [
+	{
+		option: 'Plain',
+	},
+	{
+		option: 'Double-sided tape',
+	},
+	{
+		option: 'Pad',
+	},
+	{
+		option: 'Pad - Combination All',
+	},
+	{
+		option: 'Stud Mount',
+	},
+	{
+		option: 'Stud with spacer',
 	},
 ];
 
@@ -208,6 +229,7 @@ const studLengthOptions = [
 export {
 	calculateMountingOptions,
 	defaultFinishOptions,
+	installationDefaultOptions,
 	metalFinishOptions,
 	metalInstallationOptions,
 	metalThicknessOptions,

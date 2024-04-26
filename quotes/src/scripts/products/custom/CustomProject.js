@@ -83,7 +83,7 @@ export default function CustomProject() {
 	}
 
 	useEffect(() => {
-		localStorage.setItem(storage, JSON.stringify(signage));
+		localStorage.setItem(storage + '-x', JSON.stringify(signage));
 	}, [signage]);
 
 	useEffect(() => {

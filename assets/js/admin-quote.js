@@ -292,21 +292,76 @@ function getSignageDetailFields(sign) {
 		{ label: 'CAD PRICE', value: sign.cadPrice ? sign.cadPrice : '0' },
 		{ label: 'TYPE', value: sign.type },
 		{ label: 'LINE TEXT', value: sign.letters },
-		{ label: 'LAYERS', value: sign.layers ? sign.layers : '' },
+
+		{ label: 'FONT', value: sign.font ? sign.font : '' },
 		{
-			label: 'Letter Height',
-			value: sign.letterHeight ? sign.letterHeight + '"' : '',
+			label: 'VIEW CUSTOM FONT',
+			value: sign.fontFileName
+				? `<a href="${sign.fontFileUrl}" target="_blank">${sign.fontFileName}</a>`
+				: '',
 		},
+		{ label: 'FILE PATH', value: sign.filePath ? sign.filePath : '' },
+		{
+			label: 'FONT FILE PATH',
+			value: sign.fontFilePath ? sign.fontFilePath : '',
+		},
+
 		{
 			label: 'THICKNESS',
 			value: sign.thickness?.thickness ? sign.thickness.thickness : '',
 		},
-		{ label: 'METAL DEPTH', value: sign.depth?.depth ? sign.depth.depth : '' },
-		{ label: 'WIDTH', value: sign.width ? sign.width + '"' : '' },
-		{ label: 'HEIGHT', value: sign.height ? sign.height + '"' : '' },
-		{ label: 'MOUNTING', value: sign.mounting ? sign.mounting : '' },
-		{ label: 'ENVIRONMENT', value: sign.waterproof ? sign.waterproof : '' },
+		{
+			label: 'ACRYLIC THICKNESS',
+			value: sign.acrylicThickness?.thickness
+				? sign.acrylicThickness.thickness
+				: '',
+		},
+
+		{ label: 'LOGO WIDTH', value: sign.width ? sign.width + '"' : '' },
+		{ label: 'LOGO HEIGHT', value: sign.height ? sign.height + '"' : '' },
+
+		{ label: 'LAYERS', value: sign.layers ? sign.layers : '' },
+
+		{
+			label: 'LETTER HEIGHT',
+			value: sign.letterHeight ? sign.letterHeight + '"' : '',
+		},
+
+		{
+			label: 'PRINT PREFERENCE',
+			value: sign.printPreference ? sign.printPreference : '',
+		},
+
+		{
+			label: 'METAL FINISH',
+			value:
+				typeof sign.metalFinish === 'object' && sign.metalFinish !== null
+					? sign.metalFinish.name
+					: sign.metalFinish,
+		},
+
+		{
+			label: 'METAL LAMINATE',
+			value: sign.metalLaminate ? sign.metalLaminate : '',
+		},
+
+		{
+			label: 'ACRYLIC BASE',
+			value:
+				typeof sign.acrylicBase === 'object' && sign.acrylicBase !== null
+					? sign.acrylicBase.name
+					: sign.acrylicBase,
+		},
+		{ label: 'BASE COLOR', value: sign.baseColor ? sign.baseColor : '' },
 		{ label: 'COLOR', value: sign.color?.name ? sign.color.name : '' },
+		{ label: 'CUSTOM COLOR', value: sign.customColor ? sign.customColor : '' },
+
+		{ label: 'FINISHING', value: sign.finishing ? sign.finishing : '' },
+		{ label: 'ENVIRONMENT', value: sign.waterproof ? sign.waterproof : '' },
+		{ label: 'MOUNTING', value: sign.mounting ? sign.mounting : '' },
+
+		{ label: 'METAL DEPTH', value: sign.depth?.depth ? sign.depth.depth : '' },
+
 		{
 			label: 'ACRYLIC COVER',
 			value: sign.acrylicCover?.name ? sign.acrylicCover.name : '',
@@ -326,35 +381,19 @@ function getSignageDetailFields(sign) {
 			label: 'LED LIGHT COLOR',
 			value: sign.ledLightColor ? sign.ledLightColor : '',
 		},
-		{ label: 'BASE COLOR', value: sign.baseColor ? sign.baseColor : '' },
+
 		{
 			label: 'PVC BASE COLOR',
 			value: sign.pvcBaseColor?.name ? sign.pvcBaseColor?.name : '',
 		},
-		{ label: 'CUSTOM COLOR', value: sign.customColor ? sign.customColor : '' },
+
 		{ label: 'METAL', value: sign.metal ? sign.metal : '' },
-		{
-			label: 'METAL FINISH',
-			value:
-				typeof sign.metalFinish === 'object' && sign.metalFinish !== null
-					? sign.metalFinish.name
-					: sign.metalFinish,
-		},
-		{
-			label: 'ACRYLIC BASE',
-			value:
-				typeof sign.acrylicBase === 'object' && sign.acrylicBase !== null
-					? sign.acrylicBase.name
-					: sign.acrylicBase,
-		},
+
 		{
 			label: 'METAL FINISHING',
 			value: sign.metalFinishing ? sign.metalFinishing : '',
 		},
-		{
-			label: 'METAL LAMINATE',
-			value: sign.metalLaminate ? sign.metalLaminate : '',
-		},
+
 		{
 			label: 'STEEL POLISH',
 			value: sign.stainlessSteelPolished ? sign.stainlessSteelPolished : '',
@@ -364,11 +403,7 @@ function getSignageDetailFields(sign) {
 			label: 'SPACER STANDOFF DISTANCE',
 			value: sign.spacerStandoffDistance ? sign.spacerStandoffDistance : '',
 		},
-		{
-			label: 'PRINT PREFERENCE',
-			value: sign.printPreference ? sign.printPreference : '',
-		},
-		{ label: 'FINISHING', value: sign.finishing ? sign.finishing : '' },
+
 		{
 			label: 'INSTALLATION',
 			value: sign.installation ? sign.installation : '',
@@ -377,22 +412,12 @@ function getSignageDetailFields(sign) {
 			label: 'ACRYLIC REVEAL',
 			value: sign.acrylicReveal ? sign.acrylicReveal : '',
 		},
-		{ label: 'FONT', value: sign.font ? sign.font : '' },
+
 		{ label: 'PIECES/CUTOUTS', value: sign.pieces ? sign.pieces : '' },
 		{ label: 'QUANTITY', value: sign.sets ? sign.sets : '' },
 		{ label: 'COMMENTS', value: sign.comments ? sign.comments : '' },
 		{ label: 'DESCRIPTION', value: sign.description ? sign.description : '' },
-		{ label: 'FILE PATH', value: sign.filePath ? sign.filePath : '' },
-		{
-			label: 'FONT FILE PATH',
-			value: sign.fontFilePath ? sign.fontFilePath : '',
-		},
-		{
-			label: 'VIEW CUSTOM FONT',
-			value: sign.fontFileName
-				? `<a href="${sign.fontFileUrl}" target="_blank">${sign.fontFileName}</a>`
-				: '',
-		},
+
 		{
 			label: 'File Paths',
 			value:

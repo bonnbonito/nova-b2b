@@ -46,7 +46,9 @@ export default function Letters({ item }) {
 	const [color, setColor] = useState(item.color);
 	const [openColor, setOpenColor] = useState(false);
 	const [waterproof, setWaterproof] = useState(item.waterproof);
-	const [selectedThickness, setSelectedThickness] = useState(item.thickness);
+	const [selectedThickness, setSelectedThickness] = useState(
+		item.acrylicThickness
+	);
 	const [fileNames, setFileNames] = useState(item.fileNames);
 	const [fileUrls, setFileUrls] = useState(item.fileUrls);
 	const [filePaths, setFilePaths] = useState(item.filePaths);
@@ -173,7 +175,7 @@ export default function Letters({ item }) {
 					letters: letters,
 					comments: comments,
 					font: font,
-					thickness: selectedThickness,
+					acrylicThickness: selectedThickness,
 					mounting: selectedMounting,
 					waterproof: waterproof,
 					color: color,
@@ -698,7 +700,7 @@ export default function Letters({ item }) {
 				</div>
 
 				<Dropdown
-					title="Finish Option"
+					title="Finishing Options"
 					onChange={handleChangeFinishing}
 					options={finishingOptions.map((finishing) => (
 						<option
@@ -726,7 +728,7 @@ export default function Letters({ item }) {
 				/>
 
 				<Dropdown
-					title="Mounting Option"
+					title="Mounting Options"
 					onChange={handleOnChangeMount}
 					options={mountingOptions.map((option) => (
 						<option

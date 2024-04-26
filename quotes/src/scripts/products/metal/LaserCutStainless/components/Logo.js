@@ -222,7 +222,7 @@ export default function Logo({ item }) {
 		if (!fileUrls || fileUrls.length === 0)
 			missingFields.push('Upload a PDF/AI File');
 
-		if (!selectedFinishing) missingFields.push('Select Finish Option');
+		if (!selectedFinishing) missingFields.push('Select Finishing Options');
 		if (selectedFinishing === 'Painted Finish') {
 			if (!color.name) missingFields.push('Select Color');
 			if (color?.name === 'Custom Color' && !customColor) {
@@ -231,7 +231,7 @@ export default function Logo({ item }) {
 		}
 		if (selectedFinishing === 'Metal Finish') {
 			if (!stainLessMetalFinish)
-				missingFields.push('Select Metal Finish Option');
+				missingFields.push('Select Metal Finishing Options');
 		}
 
 		if (
@@ -451,7 +451,7 @@ export default function Logo({ item }) {
 				/>
 
 				<Dropdown
-					title="Finish Option"
+					title="Finishing Options"
 					onChange={handleChangeFinishing}
 					options={finishOptions.map((finishing) => (
 						<option
