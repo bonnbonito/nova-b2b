@@ -98,6 +98,93 @@ class Woocommerce {
 		add_filter( 'woocommerce_before_cart_contents', array( $this, 'change_max_value' ) );
 		add_filter( 'woocommerce_order_get_total', array( $this, 'custom_order_total_based_on_meta' ), 10, 2 );
 		// add_action( 'woocommerce_email_order_details', array( $this, 'add_deposit_total_to_emails' ), 20, 4 );
+		add_action( 'woocommerce_new_customer_note', array( $this, 'save_tracking_details_to_order_meta' ) );
+		add_filter( 'woocommerce_get_order_item_totals', array( $this, 'add_tracking_and_carrier_to_email_table' ), 20, 3 );
+		add_filter( 'woocommerce_shipstation_export_order', array( $this, 'shipstation_not_export_order' ), 10, 2 );
+	}
+
+	public function shipstation_not_export_order( $export, $order_id ) {
+		$from_order_id = get_post_meta( $order_id, '_from_order_id', true );
+		if ( ! empty( $from_order_id ) ) {
+			return false;
+		}
+		return $export;
+	}
+
+	public function add_tracking_and_carrier_to_email( $order, $sent_to_admin, $plain_text, $email ) {
+		if ( $email->id !== 'customer_completed_order' ) {
+			return;
+		}
+
+		$order_id        = $order->get_id();
+		$carrier         = get_post_meta( $order_id, '_shipping_carrier', true );
+		$tracking_number = get_post_meta( $order_id, '_tracking_number', true );
+
+		if ( $carrier || $tracking_number ) {
+			echo '<h2>' . __( 'Shipping Details', 'woocommerce' ) . '</h2>';
+			if ( $carrier ) {
+				echo '<p><strong>' . __( 'Carrier:', 'woocommerce' ) . '</strong> ' . esc_html( $carrier ) . '</p>';
+			}
+			if ( $tracking_number ) {
+				echo '<p><strong>' . __( 'Tracking Number:', 'woocommerce' ) . '</strong> ' . esc_html( $tracking_number ) . '</p>';
+			}
+		}
+	}
+
+	public function add_tracking_and_carrier_to_email_table( $total_rows, $order, $tax_display ) {
+		$order_id        = $order->get_id();
+		$carrier         = get_post_meta( $order_id, '_shipping_carrier', true );
+		$tracking_number = get_post_meta( $order_id, '_tracking_number', true );
+
+		$new_rows = array();
+
+		foreach ( $total_rows as $key => $total ) {
+			$new_rows[ $key ] = $total;
+
+			if ( 'shipping' === $key ) {
+				if ( $carrier ) {
+					$new_rows['carrier'] = array(
+						'label' => __( 'Carrier:', 'woocommerce' ),
+						'value' => $carrier,
+					);
+				}
+				if ( $tracking_number ) {
+					$new_rows['tracking_number'] = array(
+						'label' => __( 'Tracking Number:', 'woocommerce' ),
+						'value' => $tracking_number,
+					);
+				}
+			}
+		}
+		return $new_rows;
+	}
+
+	public function extractDetails( $str ) {
+		// Get the string after "via" and before "on"
+		preg_match( '/via (.*?) on/', $str, $matches1 );
+
+		// Get the string after "tracking number", but exclude trailing period
+		preg_match( '/tracking number (.*?)\.$/', $str, $matches2 );
+
+		return array(
+			'carrier'         => isset( $matches1[1] ) ? $matches1[1] : null,
+			'tracking_number' => isset( $matches2[1] ) ? $matches2[1] : null,
+		);
+	}
+
+	public function save_tracking_details_to_order_meta( $args ) {
+		$order_id     = $args['order_id'];
+		$note_content = $args['customer_note'];
+
+		$details = $this->extractDetails( $note_content );
+
+		if ( ! empty( $details['carrier'] ) ) {
+			update_post_meta( $order_id, '_shipping_carrier', $details['carrier'] );
+		}
+
+		if ( ! empty( $details['tracking_number'] ) ) {
+			update_post_meta( $order_id, '_tracking_number', $details['tracking_number'] );
+		}
 	}
 
 	public function add_deposit_total_to_emails( $order, $sent_to_admin, $plain_text, $email ) {

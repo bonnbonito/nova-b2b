@@ -44,6 +44,7 @@ class Nova_Quote {
 		add_filter( 'acf/prepare_field/name=partner', array( $this, 'acf_diable_field' ) );
 		add_filter( 'acf/prepare_field/name=projects', array( $this, 'acf_diable_field' ) );
 		add_filter( 'acf/prepare_field/name=partner_email', array( $this, 'acf_diable_field' ) );
+		add_filter( 'acf/prepare_field/name=frontend_title', array( $this, 'acf_diable_field' ) );
 		add_filter( 'acf/prepare_field/name=dropbox_token_access', array( $this, 'acf_diable_field' ) );
 		add_action( 'template_redirect', array( $this, 'redirect_if_loggedin' ) );
 		if ( function_exists( 'acf_add_options_page' ) ) {
@@ -485,18 +486,26 @@ sendMockup.addEventListener('click', e => {
 
 		$user_id       = get_field( 'partner', $post_id );
 		$user_info     = get_userdata( $user_id );
+		$project_name  = get_field( 'frontend_title', $post_id );
 		$business_id   = get_field( 'business_id', 'user_' . $user_id );
+		$currency      = 'USD';
+		$filename      = $business_id . '-INV-Q-' . $post_id . '-' . $currency . '.pdf';
 		$company       = get_field( 'business_name', 'user_' . $user_id );
 		$edit_post_url = admin_url( 'post.php?post=' . $post_id . '&action=edit' );
+		$file_link     = content_url( '/customer_invoices/' . $filename );
+		$file_path     = WP_CONTENT_DIR . '/customer_invoices/' . $filename;
 
 		$to         = $user_info->user_email;
 		$first_name = $user_info->first_name;
 
-		$subject = 'NOVA Signage - Your Quoted Order - QUOTE ID: Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
+		$subject = 'NOVA Signage - Quotes Updated: ' . $project_name . ' - #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
 
 		$message  = '<p>Hello ' . $first_name . ',</p>';
 		$message .= '<p>Please review the quotation for QUOTE ID: Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '.  below. Kindly proceed to checkout if everything looks good.</p>';
 		$message .= '<p><a href="' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '">' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '</a></p>';
+		if ( file_exists( $file_path ) ) {
+			$message .= '<p><a href="' . esc_url( $file_link ) . '">Read the quote details here</a></p>';
+		}
 		$message .= "<p>Don't hesitate to contact us if you have any questions or concerns.</p>";
 
 		$message .= '<p>Thank you,<br>';
@@ -513,18 +522,27 @@ sendMockup.addEventListener('click', e => {
 
 		$user_id       = get_field( 'partner', $post_id );
 		$user_info     = get_userdata( $user_id );
+		$project_name  = get_field( 'frontend_title', $post_id );
 		$business_id   = get_field( 'business_id', 'user_' . $user_id );
+		$currency      = 'USD';
+		$filename      = $business_id . '-INV-Q-' . $post_id . '-' . $currency . '.pdf';
 		$company       = get_field( 'business_name', 'user_' . $user_id );
 		$edit_post_url = admin_url( 'post.php?post=' . $post_id . '&action=edit' );
+		$file_link     = content_url( '/customer_invoices/' . $filename );
+		$file_path     = WP_CONTENT_DIR . '/customer_invoices/' . $filename;
 
 		$to         = $user_info->user_email;
 		$first_name = $user_info->first_name;
 
-		$subject = 'NOVA Signage - Mockup for Review - QUOTE ID: Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
+		$subject = 'NOVA Signage - Mockup for Review: ' . $project_name . ' - #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
 
 		$message  = '<p>Hello ' . $first_name . ',</p>';
-		$message .= '<p>Your custom signage mockup with QUOTE ID: Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . ' is ready for review. Click the link below to check it out:</p>';
+		$message .= '<p>Your custom signage mockup: ' . $project_name . ' - QUOTE ID: Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . ' has been  revised and is now ready for review. Click the link below to check it out:</p>';
 		$message .= '<p><a href="' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '">' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '</a></p>';
+		if ( file_exists( $file_path ) ) {
+			$message .= '<p><a href="' . esc_url( $file_link ) . '">Read the quote details here</a></p>';
+		}
+
 		$message .= "<p>You may now add it to your cart if you're satisfied. Let us know if you need any adjustments.</p>";
 
 		$message .= '<p>Thank you,<br>';
