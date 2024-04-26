@@ -3465,7 +3465,7 @@ function Letters({
     }
     if (selectedMounting === 'Stud with spacer') {
       if (!studLength) missingFields.push('Select Stud Length');
-      if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+      if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
     }
     if (!sets) missingFields.push('Select Quantity');
     if (missingFields.length > 0) {
@@ -3642,7 +3642,7 @@ function Letters({
     }, option.value)),
     value: item.studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "SPACER DISTANCE",
+    title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
@@ -3966,7 +3966,7 @@ function Logo({
     if (!selectedMounting) missingFields.push('Select Mounting');
     if (selectedMounting === 'Stud with spacer') {
       if (!studLength) missingFields.push('Select Stud Length');
-      if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+      if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
     }
     if (selectedMounting === 'Stud Mount') {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -4098,7 +4098,7 @@ function Logo({
     }, option.value)),
     value: item.studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "SPACER DISTANCE",
+    title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
@@ -4611,7 +4611,7 @@ function Logo({
     if (!selectedMounting) missingFields.push('Select Mounting');
     if (selectedMounting === 'Stud with spacer') {
       if (!studLength) missingFields.push('Select Stud Length');
-      if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+      if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
     }
     if (selectedMounting === 'Stud Mount') {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -4729,7 +4729,7 @@ function Logo({
     }, option.value)),
     value: item.studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "SPACER DISTANCE",
+    title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
@@ -5328,7 +5328,7 @@ function Letters({
     if (!selectedMounting) missingFields.push('Select Mounting');
     if (selectedMounting === 'Stud with spacer') {
       if (!studLength) missingFields.push('Select Stud Length');
-      if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+      if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
     }
     if (selectedMounting === 'Stud Mount') {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -5502,7 +5502,7 @@ function Letters({
     }, option.value)),
     value: item.studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "SPACER DISTANCE",
+    title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
@@ -5813,7 +5813,7 @@ function Logo({
     if (!selectedMounting) missingFields.push('Select Mounting');
     if (selectedMounting === 'Stud with spacer') {
       if (!studLength) missingFields.push('Select Stud Length');
-      if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+      if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
     }
     if (selectedMounting === 'Stud Mount') {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -5925,7 +5925,7 @@ function Logo({
     }, option.value)),
     value: item.studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "SPACER DISTANCE",
+    title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
@@ -6419,7 +6419,7 @@ function Logo({
     if (!selectedMounting) missingFields.push('Select Mounting Option');
     if (selectedMounting === 'Stud with spacer') {
       if (!studLength) missingFields.push('Select Stud Length');
-      if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+      if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
     }
     if (selectedMounting === 'Stud Mount') {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -6561,7 +6561,7 @@ function Logo({
     }, option.value)),
     value: item.studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "SPACER DISTANCE",
+    title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
@@ -7406,7 +7406,7 @@ function Letters({
     if (!mounting) missingFields.push('Select Mounting');
     if (mounting === 'Stud with spacer') {
       if (!studLength) missingFields.push('Select Stud Length');
-      if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+      if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
     }
     if (mounting === 'Stud Mount') {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -7686,7 +7686,7 @@ function Letters({
     }, option.value)),
     value: item.studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "SPACER DISTANCE",
+    title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
@@ -8305,7 +8305,7 @@ function Letters({
     if (!mounting) missingFields.push('Select Mounting');
     if (mounting === 'Stud with spacer') {
       if (!studLength) missingFields.push('Select Stud Length');
-      if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+      if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
     }
     if (mounting === 'Stud Mount') {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -8542,7 +8542,7 @@ function Letters({
     }, option.value)),
     value: item.studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "SPACER DISTANCE",
+    title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
@@ -9153,7 +9153,7 @@ function Letters({
     if (!mounting) missingFields.push('Select Mounting');
     if (mounting === 'Stud with spacer') {
       if (!studLength) missingFields.push('Select Stud Length');
-      if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+      if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
     }
     if (mounting === 'Stud Mount') {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -9380,7 +9380,7 @@ function Letters({
     }, option.value)),
     value: item.studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "SPACER DISTANCE",
+    title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
@@ -10074,7 +10074,7 @@ function Letters({
     if (!installation) missingFields.push('Select Installation');
     if (installation === 'Stud with spacer') {
       if (!studLength) missingFields.push('Select Stud Length');
-      if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+      if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
     }
     if (installation === 'Stud Mount') {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -10549,7 +10549,7 @@ function Logo({
     if (!installation) missingFields.push('Select Installation');
     if (installation === 'Stud with spacer') {
       if (!studLength) missingFields.push('Select Stud Length');
-      if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+      if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
     }
     if (installation === 'Stud Mount') {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -10725,7 +10725,7 @@ function Logo({
     }, option.value)),
     value: item.studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "SPACER DISTANCE",
+    title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
@@ -11339,7 +11339,7 @@ function Letters({
     if (!installation) missingFields.push('Select Installation');
     if (installation === 'Stud with spacer') {
       if (!studLength) missingFields.push('Select Stud Length');
-      if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+      if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
     }
     if (installation === 'Stud Mount') {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -11524,7 +11524,7 @@ function Letters({
     }, option.value)),
     value: item.studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "SPACER DISTANCE",
+    title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
@@ -11786,7 +11786,7 @@ function Logo({
     if (!installation) missingFields.push('Select Installation');
     if (installation === 'Stud with spacer') {
       if (!studLength) missingFields.push('Select Stud Length');
-      if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+      if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
     }
     if (installation === 'Stud Mount') {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -11938,7 +11938,7 @@ function Logo({
     }, option.value)),
     value: item.studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "SPACER DISTANCE",
+    title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
@@ -12588,7 +12588,7 @@ function Letters({
     if (!installation) missingFields.push('Select Installation');
     if (installation === 'Stud with spacer') {
       if (!studLength) missingFields.push('Select Stud Length');
-      if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+      if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
     }
     if (installation === 'Stud Mount') {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -12798,7 +12798,7 @@ function Letters({
     }, option.value)),
     value: item.studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "SPACER DISTANCE",
+    title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
@@ -13090,7 +13090,7 @@ function Logo({
     if (!installation) missingFields.push('Select Installation');
     if (installation === 'Stud with spacer') {
       if (!studLength) missingFields.push('Select Stud Length');
-      if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+      if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
     }
     if (installation === 'Stud Mount') {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -13281,7 +13281,7 @@ function Logo({
     }, option.value)),
     value: item.studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "SPACER DISTANCE",
+    title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
@@ -14036,7 +14036,7 @@ function Letters({
     if (!installation) missingFields.push('Select Installation');
     if (installation === 'Stud with spacer') {
       if (!studLength) missingFields.push('Select Stud Length');
-      if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+      if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
     }
     if (!sets) missingFields.push('Select Quantity');
     if (missingFields.length > 0) {
@@ -14219,7 +14219,7 @@ function Letters({
     }, option.value)),
     value: item.studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "SPACER DISTANCE",
+    title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
@@ -14523,7 +14523,7 @@ function Logo({
     if (!installation) missingFields.push('Select Installation');
     if (installation === 'Stud with spacer') {
       if (!studLength) missingFields.push('Select Stud Length');
-      if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+      if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
     }
     if (!selectedFinishing) missingFields.push('Select Finishing');
     if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
@@ -14666,7 +14666,7 @@ function Logo({
     }, option.value)),
     value: item.studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "SPACER DISTANCE",
+    title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
@@ -15279,7 +15279,7 @@ function Letters({
     if (!installation) missingFields.push('Select Installation');
     if (installation === 'Stud with spacer') {
       if (!studLength) missingFields.push('Select Stud Length');
-      if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+      if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
     }
     if (!sets) missingFields.push('Select Quantity');
     if (missingFields.length > 0) {
@@ -15454,7 +15454,7 @@ function Letters({
     }, option.value)),
     value: item.studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "SPACER DISTANCE",
+    title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
@@ -15752,7 +15752,7 @@ function Logo({
     if (!installation) missingFields.push('Select Installation');
     if (installation === 'Stud with spacer') {
       if (!studLength) missingFields.push('Select Stud Length');
-      if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+      if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
     }
     if (!selectedFinishing) missingFields.push('Select Finishing');
     if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
@@ -15887,7 +15887,7 @@ function Logo({
     }, option.value)),
     value: item.studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "SPACER DISTANCE",
+    title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
@@ -16376,7 +16376,7 @@ function Logo({
     }
     if (installation === 'Stud with spacer') {
       if (!studLength) missingFields.push('Select Stud Length');
-      if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+      if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
     }
     if (!selectedFinishing) missingFields.push('Select Finishing');
     if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
@@ -16511,7 +16511,7 @@ function Logo({
     }, option.value)),
     value: item.studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "SPACER DISTANCE",
+    title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,

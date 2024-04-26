@@ -411,7 +411,7 @@ export default function Letters({ item }) {
 		if (installation === 'Stud with spacer') {
 			if (!studLength) missingFields.push('Select Stud Length');
 
-			if (!spacerStandoffDistance) missingFields.push('Select Spacer Distance');
+			if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
 		}
 
 		if (installation === 'Stud Mount') {
@@ -704,7 +704,7 @@ export default function Letters({ item }) {
 							value={item.studLength}
 						/>
 						<Dropdown
-							title="SPACER DISTANCE"
+							title="STANDOFF SPACE"
 							onChange={handleonChangeSpacerDistance}
 							options={spacerStandoffOptions.map((option) => (
 								<option
