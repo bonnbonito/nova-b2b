@@ -368,7 +368,7 @@ export default function Logo({ item }) {
 	]);
 
 	useEffect(() => {
-		if ('Outdoor' === waterproof) {
+		if ('Outdoor (Waterproof)' === waterproof) {
 			if ('Double-sided tape' === installation) {
 				setInstallation('');
 			}

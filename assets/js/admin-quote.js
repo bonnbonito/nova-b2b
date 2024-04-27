@@ -387,6 +387,11 @@ function getSignageDetailFields(sign) {
 		},
 
 		{
+			label: 'PVC BASE COLOR',
+			value: sign.pvcBaseColor?.name ? sign.pvcBaseColor?.name : '',
+		},
+
+		{
 			label: 'ACRYLIC BASE',
 			value:
 				typeof sign.acrylicBase === 'object' && sign.acrylicBase !== null
@@ -445,11 +450,6 @@ function getSignageDetailFields(sign) {
 		{
 			label: 'ACRYLIC COVER',
 			value: sign.acrylicCover?.name ? sign.acrylicCover.name : '',
-		},
-
-		{
-			label: 'PVC BASE COLOR',
-			value: sign.pvcBaseColor?.name ? sign.pvcBaseColor?.name : '',
 		},
 
 		{

@@ -207,6 +207,15 @@ export default function Prices({ item }) {
 				</div>
 			)}
 
+			{item.pvcBaseColor?.name && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						PVC BASE COLOR
+					</div>
+					<div className="text-left text-sm">{item.pvcBaseColor?.name}</div>
+				</div>
+			)}
+
 			{item.acrylicBase?.name && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
@@ -352,15 +361,6 @@ export default function Prices({ item }) {
 						METAL FINISHING
 					</div>
 					<div className="text-left text-sm">{item.metalFinishing}</div>
-				</div>
-			)}
-
-			{item.pvcBaseColor?.name && (
-				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
-					<div className="text-left font-title md:tracking-[1.4px] text-sm">
-						PVC BASE COLOR
-					</div>
-					<div className="text-left text-sm">{item.pvcBaseColor?.name}</div>
 				</div>
 			)}
 

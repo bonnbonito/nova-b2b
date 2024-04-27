@@ -33,7 +33,7 @@ export default function PVCPainted() {
 					letters: '',
 					comments: '',
 					font: '',
-					installation: '',
+					mounting: '',
 					waterproof: '',
 					thickness: '',
 					color: { name: '', color: '' },
@@ -78,7 +78,7 @@ export default function PVCPainted() {
 	const defaultArgs = {
 		id: uuidv4(),
 		comments: '',
-		installation: '',
+		mounting: '',
 		thickness: '',
 		waterproof: '',
 		finishing: 'Matte',

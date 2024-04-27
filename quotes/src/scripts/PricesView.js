@@ -234,6 +234,15 @@ export default function PricesView({ item }) {
 					</div>
 				)}
 
+				{item.pvcBaseColor?.name && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">PVC BASE COLOR</div>
+						<div className="text-left text-[14px]">
+							{item.pvcBaseColor?.name}
+						</div>
+					</div>
+				)}
+
 				{item.metalFinish?.name && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
 						<div className="text-left text-xs font-title">METAL FINISH</div>
@@ -396,15 +405,6 @@ export default function PricesView({ item }) {
 						</div>
 						<div className="text-left text-[14px]">
 							{item.stainlessSteelPolished}
-						</div>
-					</div>
-				)}
-
-				{item.pvcBaseColor?.name && (
-					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
-						<div className="text-left text-xs font-title">PVC BASE COLOR</div>
-						<div className="text-left text-[14px]">
-							{item.pvcBaseColor?.name}
 						</div>
 					</div>
 				)}

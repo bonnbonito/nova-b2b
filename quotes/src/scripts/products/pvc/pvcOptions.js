@@ -25,6 +25,24 @@ export const installationOptions = [
 	},
 ];
 
+export const mountingOptions = [
+	{
+		value: 'Plain',
+	},
+	{
+		value: 'Double-sided tape',
+	},
+	{
+		value: 'Pad - Combination All',
+	},
+	{
+		value: 'Stud Mount',
+	},
+	{
+		value: 'Stud with spacer',
+	},
+];
+
 export const thicknessOptions = [
 	{
 		thickness: '1/2"',

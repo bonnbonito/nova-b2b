@@ -52,7 +52,7 @@ export default function Letters({ item }) {
 	const [font, setFont] = useState(item.font);
 	const [openFont, setOpenFont] = useState(false);
 
-	const [color, setColor] = useState(item.color);
+	const [color, setColor] = useState(item.returnColor);
 	const [openColor, setOpenColor] = useState(false);
 	const [waterproof, setWaterproof] = useState(item.waterproof);
 
@@ -176,7 +176,7 @@ export default function Letters({ item }) {
 					depth: depth,
 					font: font,
 					waterproof: waterproof,
-					color: color,
+					returnColor: color,
 					letterHeight: selectedLetterHeight,
 					usdPrice: usdPrice,
 					cadPrice: cadPrice,
@@ -406,6 +406,11 @@ export default function Letters({ item }) {
 		if (!depth) missingFields.push('Select Metal Depth');
 		if (!selectedLetterHeight) missingFields.push('Select Letter Height');
 
+		if (!color.name) missingFields.push('Select Color');
+		if (color?.name === 'Custom Color' && !customColor) {
+			missingFields.push('Add the Pantone color code of your custom color.');
+		}
+
 		if (!waterproof) missingFields.push('Select Environment');
 
 		if (!mounting) missingFields.push('Select Mounting');
@@ -425,7 +430,7 @@ export default function Letters({ item }) {
 		if (!frontAcrylicCover) missingFields.push('Select Front Acrylic Cover');
 
 		if (frontAcrylicCover === '3M Vinyl') {
-			if (!vinylWhite?.name) missingFields.push('Select 3M 3630 Vinyl');
+			if (!vinylWhite?.name) missingFields.push('Select 3M Vinyl');
 		}
 
 		if (missingFields.length > 0) {

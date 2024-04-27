@@ -33,7 +33,7 @@ export default function PVCMetalLaminate() {
 					letters: '',
 					comments: '',
 					font: '',
-					installation: '',
+					mounting: '',
 					waterproof: '',
 					thickness: '',
 					metalLaminate: '',
@@ -79,7 +79,7 @@ export default function PVCMetalLaminate() {
 	const defaultArgs = {
 		id: uuidv4(),
 		comments: '',
-		installation: '',
+		mounting: '',
 		thickness: '',
 		waterproof: '',
 		finishing: 'Matte',

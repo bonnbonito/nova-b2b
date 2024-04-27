@@ -18,7 +18,7 @@ import {
 
 import {
 	finishingOptions,
-	installationOptions,
+	mountingOptions,
 	thicknessOptions,
 } from '../../pvcOptions';
 
@@ -66,7 +66,7 @@ export default function Letters({ item }) {
 	const [letterHeightOptions, setLetterHeightOptions] = useState([]);
 	const [selectedFinishing, setSelectedFinishing] = useState(item.finishing);
 	const [customFont, setCustomFont] = useState(item.customFont);
-	const [installation, setInstallation] = useState(item.installation);
+	const [mounting, setMounting] = useState(item.mounting);
 
 	const [studLength, setStudLength] = useState(item.studLength);
 	const [spacerStandoffOptions, setSpacerStandoffOptions] = useState(
@@ -127,8 +127,7 @@ export default function Letters({ item }) {
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice);
 
-	const [installationSelections, setInstallationSelections] =
-		useState(installationOptions);
+	const [mountingSelections, setMountingSelections] = useState(mountingOptions);
 
 	const [lettersHeight, setLettersHeight] = useState({
 		min: 4,
@@ -156,17 +155,17 @@ export default function Letters({ item }) {
 	}, []);
 
 	useEffect(() => {
-		if ('Outdoor' === waterproof) {
-			if ('Double-sided tape' === installation) {
-				setInstallation('');
+		if ('Outdoor (Waterproof)' === waterproof) {
+			if ('Double-sided tape' === mounting) {
+				setMounting('');
 			}
-			let newOptions = installationOptions.filter(
+			let newOptions = mountingOptions.filter(
 				(option) => option.value !== 'Double-sided tape'
 			);
 
-			setInstallationSelections(newOptions);
+			setMountingSelections(newOptions);
 		} else {
-			setInstallationSelections(installationOptions);
+			setMountingSelections(mountingOptions);
 		}
 	}, [waterproof]);
 
@@ -232,7 +231,7 @@ export default function Letters({ item }) {
 					finishing: selectedFinishing,
 					customFont: customFont,
 					customColor: customColor,
-					installation: installation,
+					mounting: mounting,
 					sets: sets,
 					studLength: studLength,
 					spacerStandoffDistance: spacerStandoffDistance,
@@ -251,9 +250,9 @@ export default function Letters({ item }) {
 
 	const handleSelectFont = (value) => setFont(value);
 
-	const handleOnChangeInstallation = (e) => {
+	const handleOnChangeMounting = (e) => {
 		const target = e.target.value;
-		setInstallation(target);
+		setMounting(target);
 
 		if (target === 'Stud with spacer' || target === 'Stud Mount') {
 			if (target === 'Stud Mount') {
@@ -325,13 +324,13 @@ export default function Letters({ item }) {
 				// Adjusting for waterproof and finishing
 				letterPrice *= waterproof === 'Indoor' ? 1 : 1.03;
 				letterPrice *= selectedFinishing === 'Gloss' ? 1.03 : 1;
-				letterPrice *= installation === 'Double-sided tape' ? 1.01 : 1;
+				letterPrice *= mounting === 'Double-sided tape' ? 1.01 : 1;
 				letterPrice *= pvcBaseColor?.name !== 'Black' ? 1.1 : 1;
 
 				totalLetterPrice += letterPrice;
 			});
 
-			if (installation === 'Stud with spacer') {
+			if (mounting === 'Stud with spacer') {
 				let spacer =
 					totalLetterPrice * 0.03 > 35 ? 35 : totalLetterPrice * 0.03;
 				spacer = parseFloat(spacer.toFixed(2));
@@ -354,7 +353,7 @@ export default function Letters({ item }) {
 		letters,
 		waterproof,
 		lettersHeight,
-		installation,
+		mounting,
 		font,
 		sets,
 		pvcBaseColor,
@@ -406,9 +405,9 @@ export default function Letters({ item }) {
 
 		if (!selectedFinishing) missingFields.push('Select Finishing');
 		if (!waterproof) missingFields.push('Select Waterproof');
-		if (!installation) missingFields.push('Select Installation');
+		if (!mounting) missingFields.push('Select Mounting');
 
-		if (installation === 'Stud with spacer') {
+		if (mounting === 'Stud with spacer') {
 			if (!studLength) missingFields.push('Select Stud Length');
 
 			if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
@@ -463,7 +462,7 @@ export default function Letters({ item }) {
 		fontFileUrl,
 		selectedFinishing,
 		customColor,
-		installation,
+		mounting,
 		sets,
 		studLength,
 		spacerStandoffDistance,
@@ -493,7 +492,7 @@ export default function Letters({ item }) {
 		selectedFinishing,
 		customFont,
 		customColor,
-		installation,
+		mounting,
 		sets,
 		studLength,
 		spacerStandoffDistance,
@@ -703,21 +702,21 @@ export default function Letters({ item }) {
 				/>
 
 				<Dropdown
-					title="Installation"
-					onChange={handleOnChangeInstallation}
-					options={installationSelections.map((option) => (
+					title="MOUNTING OPTIONS"
+					onChange={handleOnChangeMounting}
+					options={mountingSelections.map((option) => (
 						<option
 							key={option.value}
 							value={option.value}
-							selected={option.value === installation}
+							selected={option.value === mounting}
 						>
 							{option.value}
 						</option>
 					))}
-					value={item.installation}
+					value={item.mounting}
 				/>
 
-				{installation === 'Stud with spacer' && (
+				{mounting === 'Stud with spacer' && (
 					<>
 						<Dropdown
 							title="Stud Length"
@@ -748,7 +747,7 @@ export default function Letters({ item }) {
 					</>
 				)}
 
-				{installation === 'Stud Mount' && (
+				{mounting === 'Stud Mount' && (
 					<>
 						<Dropdown
 							title="Stud Length"
@@ -775,7 +774,7 @@ export default function Letters({ item }) {
 				/>
 			</div>
 
-			{installation === 'Stud with spacer' && (
+			{mounting === 'Stud with spacer' && (
 				<div className="text-xs text-[#9F9F9F] mb-4">
 					*Note: The spacer will be black (default) or match the painted sign's
 					color.

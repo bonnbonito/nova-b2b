@@ -337,6 +337,20 @@ export default function Letters({ item }) {
 		if (!depth) missingFields.push('Select Metal Depth');
 		if (!selectedLetterHeight) missingFields.push('Select Letter Height');
 
+		if (!selectedFinishing) missingFields.push('Select Finishing');
+
+		if (selectedFinishing === 'Painted') {
+			if (!color.name) missingFields.push('Select Face & Return Color');
+
+			if (color?.name === 'Custom Color' && !customColor) {
+				missingFields.push('Add the Pantone color code of your custom color.');
+			}
+		}
+
+		if (selectedFinishing === 'Metal') {
+			if (!metalFinish) missingFields.push('Select Metal Finish');
+		}
+
 		if (!waterproof) missingFields.push('Select Environment');
 
 		if (!mounting) missingFields.push('Select Mounting');
