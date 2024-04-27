@@ -234,6 +234,19 @@ export default function QuoteView() {
 							</h5>
 						</div>
 
+						{taxRate && (
+							<div className="flex justify-between gap-4">
+								<h5>{taxRate.tax_rate_name}</h5>{' '}
+								<h5>
+									{taxCompute > 0
+										? `${currency}$${Number(
+												taxCompute.toFixed(2)
+										  ).toLocaleString()}`
+										: 'TBD'}
+								</h5>
+							</div>
+						)}
+
 						<div className="flex justify-between gap-4">
 							<h5 className="flex gap-2">
 								<svg
@@ -242,9 +255,8 @@ export default function QuoteView() {
 									viewBox="0 0 24 24"
 									strokeWidth={1.5}
 									stroke="currentColor"
-									className="w-6 h-6"
-									onMouseEnter={() => setIsHovered(true)}
-									onMouseLeave={() => setIsHovered(false)}
+									className="w-6 h-6 cursor-pointer select-none"
+									onClick={() => setIsHovered((prev) => !prev)}
 								>
 									<path
 										strokeLinecap="round"
@@ -263,24 +275,13 @@ export default function QuoteView() {
 							</h5>
 						</div>
 						<div
-							className={`text-sm ${isHovered ? 'opacity-100' : 'opacity-0'}`}
+							className={`text-sm mb-2 ${
+								isHovered ? 'opacity-100' : 'opacity-0'
+							}`}
 						>
 							The shipping cost depends on the address in your account. You can
 							change the shipping type and shipping address during checkout.
 						</div>
-
-						{taxRate && (
-							<div className="flex justify-between gap-4">
-								<h5>{taxRate.tax_rate_name}</h5>{' '}
-								<h5>
-									{taxCompute > 0
-										? `${currency}$${Number(
-												taxCompute.toFixed(2)
-										  ).toLocaleString()}`
-										: 'TBD'}
-								</h5>
-							</div>
-						)}
 
 						<div className="flex justify-between gap-4 border-b pb-14 mt-8">
 							<h4>ESTIMATED TOTAL:</h4>{' '}

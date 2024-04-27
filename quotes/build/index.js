@@ -1699,7 +1699,9 @@ function QuoteView() {
     }
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex justify-between gap-4"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, `${NovaAccount?.quote_status?.value === 'ready' ? 'SUBTOTAL' : 'ESTIMATED SUBTOTAL'}`, ":"), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, finalPrice > 0 ? `${currency}$${Number(finalPrice.toFixed(2)).toLocaleString()}` : 'TBD')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, `${NovaAccount?.quote_status?.value === 'ready' ? 'SUBTOTAL' : 'ESTIMATED SUBTOTAL'}`, ":"), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, finalPrice > 0 ? `${currency}$${Number(finalPrice.toFixed(2)).toLocaleString()}` : 'TBD')), taxRate && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex justify-between gap-4"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, taxRate.tax_rate_name), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, taxCompute > 0 ? `${currency}$${Number(taxCompute.toFixed(2)).toLocaleString()}` : 'TBD')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex justify-between gap-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
     className: "flex gap-2"
@@ -1709,18 +1711,15 @@ function QuoteView() {
     viewBox: "0 0 24 24",
     strokeWidth: 1.5,
     stroke: "currentColor",
-    className: "w-6 h-6",
-    onMouseEnter: () => setIsHovered(true),
-    onMouseLeave: () => setIsHovered(false)
+    className: "w-6 h-6 cursor-pointer select-none",
+    onClick: () => setIsHovered(prev => !prev)
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
     strokeLinecap: "round",
     strokeLinejoin: "round",
     d: "M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z"
   })), "PACKAGING & SHIPPING:"), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, estimatedShipping > 0 ? `${currency}$${Number(estimatedShipping.toFixed(2)).toLocaleString()}` : 'TBD')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: `text-sm ${isHovered ? 'opacity-100' : 'opacity-0'}`
-  }, "The shipping cost depends on the address in your account. You can change the shipping type and shipping address during checkout."), taxRate && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "flex justify-between gap-4"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, taxRate.tax_rate_name), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, taxCompute > 0 ? `${currency}$${Number(taxCompute.toFixed(2)).toLocaleString()}` : 'TBD')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: `text-sm mb-2 ${isHovered ? 'opacity-100' : 'opacity-0'}`
+  }, "The shipping cost depends on the address in your account. You can change the shipping type and shipping address during checkout."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex justify-between gap-4 border-b pb-14 mt-8"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, "ESTIMATED TOTAL:"), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, estimatedTotal > 0 ? `${currency}$${Number(parseFloat(estimatedTotal).toFixed(2)).toLocaleString()}` : 'TBD')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
     className: "mt-4 text-[10px] text-[#5E5E5E]"
