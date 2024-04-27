@@ -324,6 +324,8 @@ function getSignageDetailFields(sign) {
 			value: sign.metalDepth?.thickness ? sign.metalDepth.thickness : '',
 		},
 
+		{ label: 'METAL DEPTH', value: sign.depth?.depth ? sign.depth.depth : '' },
+
 		{
 			label: 'METAL THICKNESS',
 			value: sign.metalThickness?.thickness
@@ -347,6 +349,21 @@ function getSignageDetailFields(sign) {
 				typeof sign.metalFinish === 'object' && sign.metalFinish !== null
 					? sign.metalFinish.name
 					: sign.metalFinish,
+		},
+
+		{
+			label: 'FINISHING',
+			value: sign.backLitFinishing ? sign.backLitFinishing : '',
+		},
+
+		{
+			label: 'METAL FINISH',
+			value: sign.backLitMetalFinish ? sign.backLitMetalFinish : '',
+		},
+
+		{
+			label: 'FACE & RETURN COLOR',
+			value: sign.faceReturnColor?.name ? sign.faceReturnColor.name : '',
 		},
 
 		{
@@ -378,9 +395,14 @@ function getSignageDetailFields(sign) {
 		},
 		{ label: 'BASE COLOR', value: sign.baseColor ? sign.baseColor : '' },
 		{ label: 'COLOR', value: sign.color?.name ? sign.color.name : '' },
+		{
+			label: 'RETURN COLOR',
+			value: sign.returnColor?.name ? sign.returnColor.name : '',
+		},
 		{ label: 'CUSTOM COLOR', value: sign.customColor ? sign.customColor : '' },
 
 		{ label: 'FINISHING', value: sign.finishing ? sign.finishing : '' },
+
 		{
 			label: 'COLOR',
 			value: sign.metalColor?.name ? sign.metalColor.name : '',
@@ -389,14 +411,14 @@ function getSignageDetailFields(sign) {
 			label: 'CUSTOM COLOR',
 			value: sign.metalCustomColor ? sign.metalCustomColor : '',
 		},
-		{ label: 'ENVIRONMENT', value: sign.waterproof ? sign.waterproof : '' },
-		{ label: 'MOUNTING', value: sign.mounting ? sign.mounting : '' },
-
-		{ label: 'METAL DEPTH', value: sign.depth?.depth ? sign.depth.depth : '' },
 
 		{
-			label: 'ACRYLIC COVER',
-			value: sign.acrylicCover?.name ? sign.acrylicCover.name : '',
+			label: 'LED LIGHT COLOR',
+			value: sign.ledLightColor ? sign.ledLightColor : '',
+		},
+		{
+			label: 'FRONT ACRYLIC COVER',
+			value: sign.frontAcrylicCover ? sign.frontAcrylicCover : '',
 		},
 		{
 			label: '3M VINYL',
@@ -405,13 +427,24 @@ function getSignageDetailFields(sign) {
 				  (sign.vinylWhite?.code ? '-[' + sign.vinylWhite?.code + ']' : '')
 				: '',
 		},
+
 		{
-			label: 'FRONT ACRYLIC COVER',
-			value: sign.frontAcrylicCover ? sign.frontAcrylicCover : '',
+			label: 'ACRYLIC REVEAL',
+			value: sign.acrylicReveal ? sign.acrylicReveal : '',
 		},
+
+		{ label: 'ENVIRONMENT', value: sign.waterproof ? sign.waterproof : '' },
+
+		{ label: 'MOUNTING', value: sign.mounting ? sign.mounting : '' },
+		{ label: 'STUD LENGTH', value: sign.studLength ? sign.studLength : '' },
 		{
-			label: 'LED LIGHT COLOR',
-			value: sign.ledLightColor ? sign.ledLightColor : '',
+			label: 'STANDOFF SPACE',
+			value: sign.spacerStandoffDistance ? sign.spacerStandoffDistance : '',
+		},
+
+		{
+			label: 'ACRYLIC COVER',
+			value: sign.acrylicCover?.name ? sign.acrylicCover.name : '',
 		},
 
 		{
@@ -424,19 +457,9 @@ function getSignageDetailFields(sign) {
 			value: sign.metalFinishing ? sign.metalFinishing : '',
 		},
 
-		{ label: 'STUD LENGTH', value: sign.studLength ? sign.studLength : '' },
-		{
-			label: 'STANDOFF SPACE',
-			value: sign.spacerStandoffDistance ? sign.spacerStandoffDistance : '',
-		},
-
 		{
 			label: 'INSTALLATION',
 			value: sign.installation ? sign.installation : '',
-		},
-		{
-			label: 'ACRYLIC REVEAL',
-			value: sign.acrylicReveal ? sign.acrylicReveal : '',
 		},
 
 		{ label: 'PIECES/CUTOUTS', value: sign.pieces ? sign.pieces : '' },

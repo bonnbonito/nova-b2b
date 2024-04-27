@@ -51,6 +51,7 @@ export default function TrimLessFrontLit() {
 					fileNames: [],
 					fileUrls: [],
 					files: [],
+					sets: 1,
 					product: NovaQuote.product,
 				},
 			]);
@@ -100,6 +101,7 @@ export default function TrimLessFrontLit() {
 		fontFileName: '',
 		fontFileUrl: '',
 		fontFile: '',
+		sets: 1,
 		product: NovaQuote.product,
 	};
 

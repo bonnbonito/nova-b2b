@@ -146,6 +146,15 @@ export default function PricesView({ item }) {
 					</div>
 				)}
 
+				{item.depth?.depth && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">METAL DEPTH</div>
+						<div className="text-left text-[14px] uppercase">
+							{item.depth.depth}
+						</div>
+					</div>
+				)}
+
 				{item.width && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
 						<div className="text-left text-xs font-title">LOGO WIDTH</div>
@@ -178,6 +187,33 @@ export default function PricesView({ item }) {
 						<div className="text-left text-xs font-title">LETTER HEIGHT</div>
 						<div className="text-left text-[14px] break-words">
 							{item.letterHeight}"
+						</div>
+					</div>
+				)}
+
+				{item.backLitFinishing && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">FINISHING</div>
+						<div className="text-left text-[14px]">{item.backLitFinishing}</div>
+					</div>
+				)}
+
+				{item.backLitMetalFinish && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">METAL FINISH</div>
+						<div className="text-left text-[14px]">
+							{item.backLitMetalFinish}
+						</div>
+					</div>
+				)}
+
+				{item.faceReturnColor?.name && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">
+							FACE & RETURN COLOR
+						</div>
+						<div className="text-left text-[14px]">
+							{item.faceReturnColor?.name}
 						</div>
 					</div>
 				)}
@@ -228,6 +264,15 @@ export default function PricesView({ item }) {
 					</div>
 				)}
 
+				{item.returnColor?.name && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">RETURN COLOR</div>
+						<div className="text-left text-[14px]">
+							{item.returnColor?.name}
+						</div>
+					</div>
+				)}
+
 				{item.baseColor && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
 						<div className="text-left text-xs font-title">BASE COLOR</div>
@@ -241,6 +286,40 @@ export default function PricesView({ item }) {
 					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
 						<div className="text-left text-xs font-title">CUSTOM COLOR</div>
 						<div className="text-left text-[14px]">{item.customColor}</div>
+					</div>
+				)}
+
+				{item.ledLightColor && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">LED LIGHT COLOR</div>
+						<div className="text-left text-[14px]">{item.ledLightColor}</div>
+					</div>
+				)}
+
+				{item.acrylicReveal && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">ACRYLIC REVEAL</div>
+						<div className="text-left text-[14px]">{item.acrylicReveal}</div>
+					</div>
+				)}
+
+				{item.frontAcrylicCover && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">
+							FRONT ACRYLIC COVER
+						</div>
+						<div className="text-left text-[14px]">
+							{item.frontAcrylicCover}
+						</div>
+					</div>
+				)}
+
+				{item.vinylWhite?.name && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">3M VINYL</div>
+						<div className="text-left text-[14px]">
+							{item.vinylWhite?.name} - [{item.vinylWhite?.code}]
+						</div>
 					</div>
 				)}
 
@@ -303,26 +382,10 @@ export default function PricesView({ item }) {
 					</div>
 				)}
 
-				{item.depth?.depth && (
-					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
-						<div className="text-left text-xs font-title">METAL DEPTH</div>
-						<div className="text-left text-[14px] uppercase">
-							{item.depth.depth}
-						</div>
-					</div>
-				)}
-
 				{item.metalFinishing && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
 						<div className="text-left text-xs font-title">METAL FINISHING</div>
 						<div className="text-left text-[14px]">{item.metalFinishing}</div>
-					</div>
-				)}
-
-				{item.acrylicReveal && (
-					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
-						<div className="text-left text-xs font-title">ACRYLIC REVEAL</div>
-						<div className="text-left text-[14px]">{item.acrylicReveal}</div>
 					</div>
 				)}
 
@@ -352,33 +415,6 @@ export default function PricesView({ item }) {
 						<div className="text-left text-[14px]">
 							{item.acrylicCover?.name}
 						</div>
-					</div>
-				)}
-
-				{item.vinylWhite?.name && (
-					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
-						<div className="text-left text-xs font-title">3M VINYL</div>
-						<div className="text-left text-[14px]">
-							{item.vinylWhite?.name} - [{item.vinylWhite?.code}]
-						</div>
-					</div>
-				)}
-
-				{item.frontAcrylicCover && (
-					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
-						<div className="text-left text-xs font-title">
-							FRONT ACRYLIC COVER
-						</div>
-						<div className="text-left text-[14px]">
-							{item.frontAcrylicCover}
-						</div>
-					</div>
-				)}
-
-				{item.ledLightColor && (
-					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
-						<div className="text-left text-xs font-title">LED LIGHT COLOR</div>
-						<div className="text-left text-[14px]">{item.ledLightColor}</div>
 					</div>
 				)}
 

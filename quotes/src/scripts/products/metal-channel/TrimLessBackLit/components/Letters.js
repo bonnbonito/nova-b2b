@@ -50,7 +50,7 @@ export default function Letters({ item }) {
 	const [font, setFont] = useState(item.font);
 	const [openFont, setOpenFont] = useState(false);
 
-	const [color, setColor] = useState(item.color);
+	const [color, setColor] = useState(item.faceReturnColor);
 	const [openColor, setOpenColor] = useState(false);
 	const [waterproof, setWaterproof] = useState(item.waterproof);
 
@@ -72,9 +72,11 @@ export default function Letters({ item }) {
 	const [letterHeightOptions, setLetterHeightOptions] = useState([]);
 	const [customColor, setCustomColor] = useState(item.customColor);
 
-	const [selectedFinishing, setSelectedFinishing] = useState(item.finishing);
+	const [selectedFinishing, setSelectedFinishing] = useState(
+		item.backLitFinishing
+	);
 
-	const [metalFinish, setMetalFinish] = useState(item.metalFinish);
+	const [metalFinish, setMetalFinish] = useState(item.backLitMetalFinish);
 
 	const [selectedLetterHeight, setSelectedLetterHeight] = useState(
 		item.letterHeight
@@ -168,7 +170,7 @@ export default function Letters({ item }) {
 					depth: depth,
 					font: font,
 					waterproof: waterproof,
-					color: color,
+					faceReturnColor: color,
 					letterHeight: selectedLetterHeight,
 					usdPrice: usdPrice,
 					cadPrice: cadPrice,
@@ -184,9 +186,9 @@ export default function Letters({ item }) {
 					ledLightColor: ledLightColor,
 					mounting: mounting,
 					studLength: studLength,
-					finishing: selectedFinishing,
+					backLitFinishing: selectedFinishing,
 					spacerStandoffDistance: spacerStandoffDistance,
-					metalFinish: metalFinish,
+					backLitMetalFinish: metalFinish,
 					acrylicReveal: acrylicReveal,
 					sets: sets,
 				};
@@ -230,9 +232,9 @@ export default function Letters({ item }) {
 		const target = e.target.value;
 		if (target === 'Metal') {
 			setColor({ name: '', color: '' });
-			setMetalFinish('');
 		} else {
 			setColor({ name: 'Black', color: '#000000' });
+			setMetalFinish('');
 		}
 		setSelectedFinishing(e.target.value);
 	};
@@ -643,12 +645,12 @@ export default function Letters({ item }) {
 					options={finishingOptions.map((finishing) => (
 						<option
 							value={finishing.value}
-							selected={finishing.value === item.finishing}
+							selected={finishing.value === item.backLitFinishing}
 						>
 							{finishing.value}
 						</option>
 					))}
-					value={item.finishing}
+					value={item.backLitFinishing}
 				/>
 
 				{selectedFinishing === 'Metal' && (
@@ -663,7 +665,7 @@ export default function Letters({ item }) {
 								{finish.option}
 							</option>
 						))}
-						value={item.metalFinish}
+						value={item.backLitMetalFinish}
 					/>
 				)}
 
@@ -719,17 +721,14 @@ export default function Letters({ item }) {
 				)}
 
 				<Dropdown
-					title="Environment"
-					onChange={handleOnChangeWaterproof}
-					options={waterProofOptions.map((option) => (
-						<option
-							value={option.option}
-							selected={option.option == item.waterproof}
-						>
-							{option.option}
+					title="LED Light Color"
+					onChange={handleOnChangeLedLight}
+					options={ledLightColors.map((color) => (
+						<option value={color} selected={color == item.ledLightColor}>
+							{color}
 						</option>
 					))}
-					value={item.waterproof}
+					value={item.ledLightColor}
 				/>
 
 				<Dropdown
@@ -744,14 +743,17 @@ export default function Letters({ item }) {
 				/>
 
 				<Dropdown
-					title="LED Light Color"
-					onChange={handleOnChangeLedLight}
-					options={ledLightColors.map((color) => (
-						<option value={color} selected={color == item.ledLightColor}>
-							{color}
+					title="Environment"
+					onChange={handleOnChangeWaterproof}
+					options={waterProofOptions.map((option) => (
+						<option
+							value={option.option}
+							selected={option.option == item.waterproof}
+						>
+							{option.option}
 						</option>
 					))}
-					value={item.ledLightColor}
+					value={item.waterproof}
 				/>
 
 				<Dropdown

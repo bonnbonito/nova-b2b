@@ -49,7 +49,7 @@ export default function Letters({ item }) {
 	const [font, setFont] = useState(item.font);
 	const [openFont, setOpenFont] = useState(false);
 
-	const [color, setColor] = useState(item.color);
+	const [color, setColor] = useState(item.returnColor);
 	const [openColor, setOpenColor] = useState(false);
 	const [waterproof, setWaterproof] = useState(item.waterproof);
 
@@ -172,7 +172,7 @@ export default function Letters({ item }) {
 					depth: depth,
 					font: font,
 					waterproof: waterproof,
-					color: color,
+					returnColor: color,
 					letterHeight: selectedLetterHeight,
 					usdPrice: usdPrice,
 					cadPrice: cadPrice,
@@ -677,20 +677,6 @@ export default function Letters({ item }) {
 				/>
 
 				<Dropdown
-					title="Environment"
-					onChange={handleOnChangeWaterproof}
-					options={waterProofOptions.map((option) => (
-						<option
-							value={option.option}
-							selected={option.option == item.waterproof}
-						>
-							{option.option}
-						</option>
-					))}
-					value={item.waterproof}
-				/>
-
-				<Dropdown
 					title="Front Acrylic Cover"
 					onChange={handleOnChangeWhite}
 					options={whiteOptions.map((option) => (
@@ -753,6 +739,20 @@ export default function Letters({ item }) {
 						)}
 					</div>
 				)}
+
+				<Dropdown
+					title="Environment"
+					onChange={handleOnChangeWaterproof}
+					options={waterProofOptions.map((option) => (
+						<option
+							value={option.option}
+							selected={option.option == item.waterproof}
+						>
+							{option.option}
+						</option>
+					))}
+					value={item.waterproof}
+				/>
 
 				<Dropdown
 					title="Mounting"

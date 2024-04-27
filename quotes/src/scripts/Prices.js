@@ -98,6 +98,15 @@ export default function Prices({ item }) {
 				</div>
 			)}
 
+			{item.depth?.depth && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						METAL DEPTH
+					</div>
+					<div className="text-left text-sm uppercase">{item.depth.depth}</div>
+				</div>
+			)}
+
 			{item.letterHeight && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
@@ -106,6 +115,33 @@ export default function Prices({ item }) {
 					<div className="text-left text-sm break-words">
 						{item.letterHeight}"
 					</div>
+				</div>
+			)}
+
+			{item.backLitFinishing && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						FINISHING
+					</div>
+					<div className="text-left text-sm">{item.backLitFinishing}</div>
+				</div>
+			)}
+
+			{item.backLitMetalFinish && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						METAL FINISH
+					</div>
+					<div className="text-left text-sm">{item.backLitMetalFinish}</div>
+				</div>
+			)}
+
+			{item.faceReturnColor?.name && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						FACE & RETURN COLOR
+					</div>
+					<div className="text-left text-sm">{item.faceReturnColor?.name}</div>
 				</div>
 			)}
 
@@ -200,6 +236,15 @@ export default function Prices({ item }) {
 				</div>
 			)}
 
+			{item.returnColor?.name && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						RETURN COLOR
+					</div>
+					<div className="text-left text-sm">{item.returnColor?.name}</div>
+				</div>
+			)}
+
 			{item.baseColor && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
@@ -245,21 +290,50 @@ export default function Prices({ item }) {
 				</div>
 			)}
 
+			{item.ledLightColor && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						LED LIGHT COLOR
+					</div>
+					<div className="text-left text-sm">{item.ledLightColor}</div>
+				</div>
+			)}
+
+			{item.acrylicReveal && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						ACRYLIC REVEAL
+					</div>
+					<div className="text-left text-sm">{item.acrylicReveal}</div>
+				</div>
+			)}
+
+			{item.frontAcrylicCover && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						FRONT ACRYLIC COVER
+					</div>
+					<div className="text-left text-sm">{item.frontAcrylicCover}</div>
+				</div>
+			)}
+
+			{item.vinylWhite?.name && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						3M VINYL
+					</div>
+					<div className="text-left text-sm">
+						{item.vinylWhite?.name} - [{item.vinylWhite?.code}]
+					</div>
+				</div>
+			)}
+
 			{item.waterproof && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
 						ENVIRONMENT
 					</div>
 					<div className="text-left text-sm">{item.waterproof}</div>
-				</div>
-			)}
-
-			{item.depth?.depth && (
-				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
-					<div className="text-left font-title md:tracking-[1.4px] text-sm">
-						METAL DEPTH
-					</div>
-					<div className="text-left text-sm uppercase">{item.depth.depth}</div>
 				</div>
 			)}
 
@@ -280,14 +354,6 @@ export default function Prices({ item }) {
 					<div className="text-left text-sm">{item.metalFinishing}</div>
 				</div>
 			)}
-			{item.acrylicReveal && (
-				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
-					<div className="text-left font-title md:tracking-[1.4px] text-sm">
-						ACRYLIC REVEAL
-					</div>
-					<div className="text-left text-sm">{item.acrylicReveal}</div>
-				</div>
-			)}
 
 			{item.pvcBaseColor?.name && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
@@ -297,38 +363,13 @@ export default function Prices({ item }) {
 					<div className="text-left text-sm">{item.pvcBaseColor?.name}</div>
 				</div>
 			)}
+
 			{item.acrylicCover?.name && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
 						ACRYLIC COVER
 					</div>
 					<div className="text-left text-sm">{item.acrylicCover?.name}</div>
-				</div>
-			)}
-			{item.vinylWhite?.name && (
-				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
-					<div className="text-left font-title md:tracking-[1.4px] text-sm">
-						3M VINYL
-					</div>
-					<div className="text-left text-sm">
-						{item.vinylWhite?.name} - [{item.vinylWhite?.code}]
-					</div>
-				</div>
-			)}
-			{item.frontAcrylicCover && (
-				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
-					<div className="text-left font-title md:tracking-[1.4px] text-sm">
-						FRONT ACRYLIC COVER
-					</div>
-					<div className="text-left text-sm">{item.frontAcrylicCover}</div>
-				</div>
-			)}
-			{item.ledLightColor && (
-				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
-					<div className="text-left font-title md:tracking-[1.4px] text-sm">
-						LED LIGHT COLOR
-					</div>
-					<div className="text-left text-sm">{item.ledLightColor}</div>
 				</div>
 			)}
 

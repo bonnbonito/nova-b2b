@@ -896,13 +896,37 @@ function Prices({
     className: "text-left font-title md:tracking-[1.4px] text-sm"
   }, "METAL THICKNESS"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-sm uppercase"
-  }, item.metalThickness.thickness)), item.letterHeight && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.metalThickness.thickness)), item.depth?.depth && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left font-title md:tracking-[1.4px] text-sm"
+  }, "METAL DEPTH"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-sm uppercase"
+  }, item.depth.depth)), item.letterHeight && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left font-title md:tracking-[1.4px] text-sm"
   }, "LETTER HEIGHT"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-sm break-words"
-  }, item.letterHeight, "\"")), item.width && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.letterHeight, "\"")), item.backLitFinishing && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left font-title md:tracking-[1.4px] text-sm"
+  }, "FINISHING"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-sm"
+  }, item.backLitFinishing)), item.backLitMetalFinish && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left font-title md:tracking-[1.4px] text-sm"
+  }, "METAL FINISH"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-sm"
+  }, item.backLitMetalFinish)), item.faceReturnColor?.name && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left font-title md:tracking-[1.4px] text-sm"
+  }, "FACE & RETURN COLOR"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-sm"
+  }, item.faceReturnColor?.name)), item.width && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left font-title md:tracking-[1.4px] text-sm"
@@ -962,7 +986,13 @@ function Prices({
     className: "text-left font-title md:tracking-[1.4px] text-sm"
   }, "COLOR"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-sm"
-  }, item.color?.name)), item.baseColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.color?.name)), item.returnColor?.name && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left font-title md:tracking-[1.4px] text-sm"
+  }, "RETURN COLOR"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-sm"
+  }, item.returnColor?.name)), item.baseColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left font-title md:tracking-[1.4px] text-sm"
@@ -992,19 +1022,37 @@ function Prices({
     className: "text-left font-title md:tracking-[1.4px] text-sm"
   }, "CUSTOM COLOR"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-sm"
-  }, item.metalCustomColor)), item.waterproof && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.metalCustomColor)), item.ledLightColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left font-title md:tracking-[1.4px] text-sm"
+  }, "LED LIGHT COLOR"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-sm"
+  }, item.ledLightColor)), item.acrylicReveal && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left font-title md:tracking-[1.4px] text-sm"
+  }, "ACRYLIC REVEAL"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-sm"
+  }, item.acrylicReveal)), item.frontAcrylicCover && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left font-title md:tracking-[1.4px] text-sm"
+  }, "FRONT ACRYLIC COVER"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-sm"
+  }, item.frontAcrylicCover)), item.vinylWhite?.name && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left font-title md:tracking-[1.4px] text-sm"
+  }, "3M VINYL"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-sm"
+  }, item.vinylWhite?.name, " - [", item.vinylWhite?.code, "]")), item.waterproof && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left font-title md:tracking-[1.4px] text-sm"
   }, "ENVIRONMENT"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-sm"
-  }, item.waterproof)), item.depth?.depth && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "text-left font-title md:tracking-[1.4px] text-sm"
-  }, "METAL DEPTH"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "text-left text-sm uppercase"
-  }, item.depth.depth)), item.mounting && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.waterproof)), item.mounting && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left font-title md:tracking-[1.4px] text-sm"
@@ -1016,13 +1064,7 @@ function Prices({
     className: "text-left font-title md:tracking-[1.4px] text-sm"
   }, "METAL FINISHING"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-sm"
-  }, item.metalFinishing)), item.acrylicReveal && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "text-left font-title md:tracking-[1.4px] text-sm"
-  }, "ACRYLIC REVEAL"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "text-left text-sm"
-  }, item.acrylicReveal)), item.pvcBaseColor?.name && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.metalFinishing)), item.pvcBaseColor?.name && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left font-title md:tracking-[1.4px] text-sm"
@@ -1034,25 +1076,7 @@ function Prices({
     className: "text-left font-title md:tracking-[1.4px] text-sm"
   }, "ACRYLIC COVER"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-sm"
-  }, item.acrylicCover?.name)), item.vinylWhite?.name && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "text-left font-title md:tracking-[1.4px] text-sm"
-  }, "3M VINYL"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "text-left text-sm"
-  }, item.vinylWhite?.name, " - [", item.vinylWhite?.code, "]")), item.frontAcrylicCover && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "text-left font-title md:tracking-[1.4px] text-sm"
-  }, "FRONT ACRYLIC COVER"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "text-left text-sm"
-  }, item.frontAcrylicCover)), item.ledLightColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "text-left font-title md:tracking-[1.4px] text-sm"
-  }, "LED LIGHT COLOR"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "text-left text-sm"
-  }, item.ledLightColor)), item.studLength && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.acrylicCover?.name)), item.studLength && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left font-title md:tracking-[1.4px] text-sm"
@@ -1236,7 +1260,13 @@ function PricesView({
     className: "text-left text-xs font-title"
   }, "ACRYLIC THICKNESS"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-[14px] uppercase"
-  }, item.acrylicThickness.thickness)), item.width && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.acrylicThickness.thickness)), item.depth?.depth && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-[160px_1fr] py-[2px] items-center gap-5"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-xs font-title"
+  }, "METAL DEPTH"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-[14px] uppercase"
+  }, item.depth.depth)), item.width && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-[160px_1fr] py-[2px] items-center gap-5"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
@@ -1260,7 +1290,25 @@ function PricesView({
     className: "text-left text-xs font-title"
   }, "LETTER HEIGHT"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-[14px] break-words"
-  }, item.letterHeight, "\"")), item.printPreference && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.letterHeight, "\"")), item.backLitFinishing && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-[160px_1fr] py-[2px] items-center gap-5"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-xs font-title"
+  }, "FINISHING"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-[14px]"
+  }, item.backLitFinishing)), item.backLitMetalFinish && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-[160px_1fr] py-[2px] items-center gap-5"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-xs font-title"
+  }, "METAL FINISH"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-[14px]"
+  }, item.backLitMetalFinish)), item.faceReturnColor?.name && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-[160px_1fr] py-[2px] items-center gap-5"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-xs font-title"
+  }, "FACE & RETURN COLOR"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-[14px]"
+  }, item.faceReturnColor?.name)), item.printPreference && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-[160px_1fr] py-[2px] items-center gap-5"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
@@ -1296,7 +1344,13 @@ function PricesView({
     className: "text-left text-xs font-title"
   }, "COLOR"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-[14px]"
-  }, item.color?.name)), item.baseColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.color?.name)), item.returnColor?.name && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-[160px_1fr] py-[2px] items-center gap-5"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-xs font-title"
+  }, "RETURN COLOR"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-[14px]"
+  }, item.returnColor?.name)), item.baseColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-[160px_1fr] py-[2px] items-center gap-5"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
@@ -1308,7 +1362,31 @@ function PricesView({
     className: "text-left text-xs font-title"
   }, "CUSTOM COLOR"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-[14px]"
-  }, item.customColor)), item.finishing && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.customColor)), item.ledLightColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-[160px_1fr] py-[2px] items-center gap-5"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-xs font-title"
+  }, "LED LIGHT COLOR"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-[14px]"
+  }, item.ledLightColor)), item.acrylicReveal && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-[160px_1fr] py-[2px] items-center gap-5"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-xs font-title"
+  }, "ACRYLIC REVEAL"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-[14px]"
+  }, item.acrylicReveal)), item.frontAcrylicCover && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-[160px_1fr] py-[2px] items-center gap-5"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-xs font-title"
+  }, "FRONT ACRYLIC COVER"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-[14px]"
+  }, item.frontAcrylicCover)), item.vinylWhite?.name && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-[160px_1fr] py-[2px] items-center gap-5"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-xs font-title"
+  }, "3M VINYL"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-[14px]"
+  }, item.vinylWhite?.name, " - [", item.vinylWhite?.code, "]")), item.finishing && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-[160px_1fr] py-[2px] items-center gap-5"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
@@ -1356,25 +1434,13 @@ function PricesView({
     className: "text-left text-xs font-title"
   }, "STANDOFF SPACE"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-[14px]"
-  }, item.spacerStandoffDistance)), item.depth?.depth && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "grid grid-cols-[160px_1fr] py-[2px] items-center gap-5"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "text-left text-xs font-title"
-  }, "METAL DEPTH"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "text-left text-[14px] uppercase"
-  }, item.depth.depth)), item.metalFinishing && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.spacerStandoffDistance)), item.metalFinishing && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-[160px_1fr] py-[2px] items-center gap-5"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
   }, "METAL FINISHING"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-[14px]"
-  }, item.metalFinishing)), item.acrylicReveal && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "grid grid-cols-[160px_1fr] py-[2px] items-center gap-5"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "text-left text-xs font-title"
-  }, "ACRYLIC REVEAL"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "text-left text-[14px]"
-  }, item.acrylicReveal)), item.stainlessSteelPolished && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.metalFinishing)), item.stainlessSteelPolished && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-[160px_1fr] py-[2px] items-center gap-5"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
@@ -1392,25 +1458,7 @@ function PricesView({
     className: "text-left text-xs font-title"
   }, "ACRYLIC COVER"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-[14px]"
-  }, item.acrylicCover?.name)), item.vinylWhite?.name && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "grid grid-cols-[160px_1fr] py-[2px] items-center gap-5"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "text-left text-xs font-title"
-  }, "3M VINYL"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "text-left text-[14px]"
-  }, item.vinylWhite?.name, " - [", item.vinylWhite?.code, "]")), item.frontAcrylicCover && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "grid grid-cols-[160px_1fr] py-[2px] items-center gap-5"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "text-left text-xs font-title"
-  }, "FRONT ACRYLIC COVER"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "text-left text-[14px]"
-  }, item.frontAcrylicCover)), item.ledLightColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "grid grid-cols-[160px_1fr] py-[2px] items-center gap-5"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "text-left text-xs font-title"
-  }, "LED LIGHT COLOR"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "text-left text-[14px]"
-  }, item.ledLightColor)), item.installation && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.acrylicCover?.name)), item.installation && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-[160px_1fr] py-[2px] items-center gap-5"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
@@ -6989,7 +7037,7 @@ function TrimLessBackLit() {
         customFont: '',
         waterproof: '',
         thickness: '',
-        finishing: '',
+        backLitFinishing: '',
         mounting: '',
         studLength: '',
         spacerStandoffDistance: '',
@@ -7005,7 +7053,7 @@ function TrimLessBackLit() {
         fontFilePath: '',
         fontFileName: '',
         fontFileUrl: '',
-        metalFinish: '',
+        backLitMetalFinish: '',
         fontFile: '',
         acrylicReveal: '0',
         sets: 1,
@@ -7036,12 +7084,16 @@ function TrimLessBackLit() {
     customFont: '',
     waterproof: '',
     thickness: '',
-    finishing: '',
+    backLitFinishing: '',
     mounting: '',
     studLength: '',
+    faceReturnColor: {
+      name: '',
+      color: ''
+    },
     spacerStandoffDistance: '',
     customColor: '',
-    metalFinish: '',
+    backLitMetalFinish: '',
     letterHeight: '',
     ledLightColor: '6500K White',
     usdPrice: 0,
@@ -7210,7 +7262,7 @@ function Letters({
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.comments);
   const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.font);
   const [openFont, setOpenFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.color);
+  const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.faceReturnColor);
   const [openColor, setOpenColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.waterproof);
   const [letterPricing, setLetterPricing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
@@ -7226,8 +7278,8 @@ function Letters({
   const [fontFile, setFontFile] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.fontFile);
   const [letterHeightOptions, setLetterHeightOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const [customColor, setCustomColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.customColor);
-  const [selectedFinishing, setSelectedFinishing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.finishing);
-  const [metalFinish, setMetalFinish] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.metalFinish);
+  const [selectedFinishing, setSelectedFinishing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.backLitFinishing);
+  const [metalFinish, setMetalFinish] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.backLitMetalFinish);
   const [selectedLetterHeight, setSelectedLetterHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.letterHeight);
   const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.usdPrice);
   const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.cadPrice);
@@ -7297,7 +7349,7 @@ function Letters({
           depth: depth,
           font: font,
           waterproof: waterproof,
-          color: color,
+          faceReturnColor: color,
           letterHeight: selectedLetterHeight,
           usdPrice: usdPrice,
           cadPrice: cadPrice,
@@ -7313,9 +7365,9 @@ function Letters({
           ledLightColor: ledLightColor,
           mounting: mounting,
           studLength: studLength,
-          finishing: selectedFinishing,
+          backLitFinishing: selectedFinishing,
           spacerStandoffDistance: spacerStandoffDistance,
-          metalFinish: metalFinish,
+          backLitMetalFinish: metalFinish,
           acrylicReveal: acrylicReveal,
           sets: sets
         };
@@ -7353,12 +7405,12 @@ function Letters({
         name: '',
         color: ''
       });
-      setMetalFinish('');
     } else {
       setColor({
         name: 'Black',
         color: '#000000'
       });
+      setMetalFinish('');
     }
     setSelectedFinishing(e.target.value);
   };
@@ -7648,9 +7700,9 @@ function Letters({
     onChange: handleChangeFinishing,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_10__.finishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: finishing.value,
-      selected: finishing.value === item.finishing
+      selected: finishing.value === item.backLitFinishing
     }, finishing.value)),
-    value: item.finishing
+    value: item.backLitFinishing
   }), selectedFinishing === 'Metal' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Metal Finish",
     onChange: handelMetalFinishChange,
@@ -7658,7 +7710,7 @@ function Letters({
       value: finish.option,
       selected: finish.option === metalFinish
     }, finish.option)),
-    value: item.metalFinish
+    value: item.backLitMetalFinish
   }), selectedFinishing === 'Painted' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "px-[1px] relative",
     ref: colorRef
@@ -7688,13 +7740,13 @@ function Letters({
       }
     }), color.name);
   }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "Environment",
-    onChange: handleOnChangeWaterproof,
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      value: option.option,
-      selected: option.option == item.waterproof
-    }, option.option)),
-    value: item.waterproof
+    title: "LED Light Color",
+    onChange: handleOnChangeLedLight,
+    options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_10__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: color,
+      selected: color == item.ledLightColor
+    }, color)),
+    value: item.ledLightColor
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Acrylic Reveal",
     onChange: handleOnChangeAcrylicReveal,
@@ -7704,13 +7756,13 @@ function Letters({
     }, option)),
     value: item.acrylicReveal
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "LED Light Color",
-    onChange: handleOnChangeLedLight,
-    options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_10__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      value: color,
-      selected: color == item.ledLightColor
-    }, color)),
-    value: item.ledLightColor
+    title: "Environment",
+    onChange: handleOnChangeWaterproof,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.option,
+      selected: option.option == item.waterproof
+    }, option.option)),
+    value: item.waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Mounting",
     onChange: handleOnChangeMounting,
@@ -7853,7 +7905,7 @@ function TrimLessFrontAndBackLit() {
         mounting: '',
         studLength: '',
         spacerStandoffDistance: '',
-        color: {
+        returnColor: {
           name: 'Black',
           color: '#000000'
         },
@@ -7903,7 +7955,7 @@ function TrimLessFrontAndBackLit() {
     mounting: '',
     studLength: '',
     spacerStandoffDistance: '',
-    color: {
+    returnColor: {
       name: 'Black',
       color: '#000000'
     },
@@ -8071,7 +8123,7 @@ function Letters({
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.comments);
   const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.font);
   const [openFont, setOpenFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.color);
+  const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.returnColor);
   const [openColor, setOpenColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.waterproof);
   const [depth, setDepth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.depth);
@@ -8159,7 +8211,7 @@ function Letters({
           depth: depth,
           font: font,
           waterproof: waterproof,
-          color: color,
+          returnColor: color,
           letterHeight: selectedLetterHeight,
           usdPrice: usdPrice,
           cadPrice: cadPrice,
@@ -8520,14 +8572,6 @@ function Letters({
     }, color)),
     value: item.ledLightColor
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "Environment",
-    onChange: handleOnChangeWaterproof,
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      value: option.option,
-      selected: option.option == item.waterproof
-    }, option.option)),
-    value: item.waterproof
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Front Acrylic Cover",
     onChange: handleOnChangeWhite,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_6__.whiteOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -8568,6 +8612,14 @@ function Letters({
       }
     }), color.name);
   }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Environment",
+    onChange: handleOnChangeWaterproof,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.option,
+      selected: option.option == item.waterproof
+    }, option.option)),
+    value: item.waterproof
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Mounting",
     onChange: handleOnChangeMounting,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_9__.mountingDefaultOptions.map(mounting => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -8720,6 +8772,7 @@ function TrimLessFrontLit() {
         fileNames: [],
         fileUrls: [],
         files: [],
+        sets: 1,
         product: NovaQuote.product
       }]);
     }
@@ -8773,6 +8826,7 @@ function TrimLessFrontLit() {
     fontFileName: '',
     fontFileUrl: '',
     fontFile: '',
+    sets: 1,
     product: NovaQuote.product
   };
   function addSignage(type) {
@@ -9159,6 +9213,7 @@ function Letters({
           totalLetterPrice += spacer;
         }
         totalLetterPrice *= sets;
+        console.log(sets);
         setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
         setCadPrice((totalLetterPrice * parseFloat(exchangeRate)).toFixed(2));
       } else {
@@ -9358,14 +9413,6 @@ function Letters({
     }, color)),
     value: item.ledLightColor
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "Environment",
-    onChange: handleOnChangeWaterproof,
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      value: option.option,
-      selected: option.option == item.waterproof
-    }, option.option)),
-    value: item.waterproof
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Front Acrylic Cover",
     onChange: handleOnChangeWhite,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_6__.whiteOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -9406,6 +9453,14 @@ function Letters({
       }
     }), color.name);
   }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Environment",
+    onChange: handleOnChangeWaterproof,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.option,
+      selected: option.option == item.waterproof
+    }, option.option)),
+    value: item.waterproof
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Mounting",
     onChange: handleOnChangeMounting,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_9__.mountingDefaultOptions.map(mounting => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {

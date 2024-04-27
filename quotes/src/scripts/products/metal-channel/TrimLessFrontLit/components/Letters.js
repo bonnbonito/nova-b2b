@@ -349,6 +349,8 @@ export default function Letters({ item }) {
 
 				totalLetterPrice *= sets;
 
+				console.log(sets);
+
 				setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
 				setCadPrice((totalLetterPrice * parseFloat(exchangeRate)).toFixed(2));
 			} else {
@@ -665,20 +667,6 @@ export default function Letters({ item }) {
 				/>
 
 				<Dropdown
-					title="Environment"
-					onChange={handleOnChangeWaterproof}
-					options={waterProofOptions.map((option) => (
-						<option
-							value={option.option}
-							selected={option.option == item.waterproof}
-						>
-							{option.option}
-						</option>
-					))}
-					value={item.waterproof}
-				/>
-
-				<Dropdown
 					title="Front Acrylic Cover"
 					onChange={handleOnChangeWhite}
 					options={whiteOptions.map((option) => (
@@ -741,6 +729,20 @@ export default function Letters({ item }) {
 						)}
 					</div>
 				)}
+
+				<Dropdown
+					title="Environment"
+					onChange={handleOnChangeWaterproof}
+					options={waterProofOptions.map((option) => (
+						<option
+							value={option.option}
+							selected={option.option == item.waterproof}
+						>
+							{option.option}
+						</option>
+					))}
+					value={item.waterproof}
+				/>
 
 				<Dropdown
 					title="Mounting"
