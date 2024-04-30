@@ -42,7 +42,20 @@ export default function Signage({
 	}
 
 	function duplicateSignage(item, index) {
-		const duplicated = { ...item, id: uuidv4() };
+		const duplicated = {
+			...item,
+			id: uuidv4() + '-' + 'asdfadsf',
+			filePaths: [],
+			fileNames: [],
+			fileUrls: [],
+			files: [],
+			fontFile: '',
+			fontFileName: '',
+			fontFilePath: '',
+			fontFileUrl: '',
+		};
+
+		console.log(`Duplicate`, duplicated);
 
 		setSignage((current) => {
 			const updated = [

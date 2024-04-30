@@ -1972,8 +1972,17 @@ function Signage({
   function duplicateSignage(item, index) {
     const duplicated = {
       ...item,
-      id: (0,uuid__WEBPACK_IMPORTED_MODULE_4__["default"])()
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_4__["default"])() + '-' + 'asdfadsf',
+      filePaths: [],
+      fileNames: [],
+      fileUrls: [],
+      files: [],
+      fontFile: '',
+      fontFileName: '',
+      fontFilePath: '',
+      fontFileUrl: ''
     };
+    console.log(`Duplicate`, duplicated);
     setSignage(current => {
       const updated = [...current.slice(0, index + 1), duplicated, ...current.slice(index + 1)];
       return recountSignageTitles(updated);
