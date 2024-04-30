@@ -11408,7 +11408,7 @@ function Letters({
         }
 
         // Adjusting for waterproof and finishing
-        letterPrice *= waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.05;
+        letterPrice *= waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.02;
         letterPrice *= selectedFinishing === 'Gloss' ? 1.1 : 1;
         totalLetterPrice += letterPrice;
       });
@@ -11953,7 +11953,7 @@ function Logo({
         const computed = logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
         let multiplier = 0;
         if (waterproof) {
-          multiplier = waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.05;
+          multiplier = waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.02;
         }
         let total = parseFloat((computed * multiplier).toFixed(2));
         if (mounting === 'Stud with spacer') {
@@ -12639,7 +12639,7 @@ function Letters({
           }
 
           // Adjusting for waterproof and finishing
-          letterPrice *= waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.05;
+          letterPrice *= waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.02;
           letterPrice *= metal === '316 Stainless Steel' ? 1.3 : 1;
           if (stainlessSteelPolished) {
             if ('Standard (Face)' === stainlessSteelPolished) {
@@ -13258,7 +13258,7 @@ function Logo({
         const computed = logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
         let multiplier = 1;
         if (waterproof) {
-          multiplier = waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.05;
+          multiplier = waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.02;
           multiplier = parseFloat(multiplier).toFixed(2);
         }
         let total = parseFloat((computed * multiplier).toFixed(2));

@@ -344,7 +344,7 @@ export default function Logo({ item }) {
 
 				let multiplier = 1;
 				if (waterproof) {
-					multiplier = waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.05;
+					multiplier = waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.02;
 					multiplier = parseFloat(multiplier).toFixed(2);
 				}
 
