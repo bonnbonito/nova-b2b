@@ -511,7 +511,7 @@ export default function Letters({ item }) {
 					}
 
 					// Adjusting for waterproof and finishing
-					letterPrice *= waterproof === 'Indoor' ? 1 : 1.03;
+					letterPrice *= waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.03;
 
 					if (metalFinish && metalFinish.includes('Polished')) {
 						letterPrice *= 1.3;

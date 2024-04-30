@@ -330,7 +330,7 @@ export default function Letters({ item }) {
 					}
 
 					// Adjusting for waterproof and finishing
-					letterPrice *= waterproof === 'Indoor' ? 1 : 1.1;
+					letterPrice *= waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.1;
 
 					letterPrice *= metal === '316 Stainless Steel' ? 1.3 : 1;
 

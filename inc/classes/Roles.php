@@ -4,6 +4,8 @@ namespace NOVA_B2B\Inc\Classes;
 use WP_User;
 use WP_Error;
 use WC;
+use function get_field;
+use function update_field;
 
 class Roles {
 	/**

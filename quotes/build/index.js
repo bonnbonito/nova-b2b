@@ -3478,7 +3478,7 @@ function Letters({
         }
 
         // Adjusting for waterproof and finishing
-        letterPrice *= waterproof === 'Indoor' ? 1 : 1.1;
+        letterPrice *= waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.1;
         letterPrice *= selectedFinishing === 'Gloss' ? 1.1 : 1;
         if (color?.name === 'Clear') {
           letterPrice *= 0.9;
@@ -4028,7 +4028,7 @@ function Logo({
         const computed = logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
         let multiplier = 0;
         if (waterproof) {
-          multiplier = waterproof === 'Indoor' ? 1 : 1.1;
+          multiplier = waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.1;
         }
         let total = parseFloat((computed * multiplier).toFixed(2));
         total *= selectedFinishing === 'Gloss' ? 1.1 : 1;
@@ -4676,7 +4676,7 @@ function Logo({
         const computed = logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
         let multiplier = 0;
         if (waterproof) {
-          multiplier = waterproof === 'Indoor' ? 1 : 1.1;
+          multiplier = waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.1;
         }
         let total = (computed * multiplier * _LayeredAcrylic__WEBPACK_IMPORTED_MODULE_6__.ASSEMBLY_FEES).toFixed(2);
         total *= selectedFinishing === 'Gloss' ? 1.1 : 1;
@@ -5346,7 +5346,7 @@ function Letters({
         }
 
         // Adjusting for waterproof and finishing
-        letterPrice *= waterproof === 'Indoor' ? 1 : 1.1;
+        letterPrice *= waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.1;
         letterPrice *= _MetalLaminate__WEBPACK_IMPORTED_MODULE_9__.METAL_ACRYLIC_PRICING;
         letterPrice *= acrylicBase?.name === 'Black' ? 1 : 1.1;
         totalLetterPrice += letterPrice;
@@ -5876,7 +5876,7 @@ function Logo({
         const computed = logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
         let multiplier = 0;
         if (waterproof) {
-          multiplier = waterproof === 'Indoor' ? 1 : 1.1;
+          multiplier = waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.1;
         }
         let total = (computed * multiplier * _MetalLaminate__WEBPACK_IMPORTED_MODULE_6__.METAL_ACRYLIC_PRICING).toFixed(2);
         total *= acrylicBase?.name === 'Black' ? 1 : 1.1;
@@ -6567,7 +6567,7 @@ function Logo({
         const computed = logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
         let multiplier = 0;
         if (waterproof) {
-          multiplier = waterproof === 'Indoor' ? 1 : 1.1;
+          multiplier = waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.1;
         }
         let total = parseFloat((computed * multiplier).toFixed(2));
         total *= selectedFinishing === 'Gloss' ? 1.1 : 1;
@@ -7613,7 +7613,7 @@ function Letters({
           }
 
           // Adjusting for waterproof and finishing
-          letterPrice *= waterproof === 'Indoor' ? 1 : 1.03;
+          letterPrice *= waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.03;
           if (metalFinish && metalFinish.includes('Polished')) {
             letterPrice *= 1.3;
           }
@@ -8371,7 +8371,7 @@ function Letters({
           }
 
           // Adjusting for waterproof and finishing
-          letterPrice *= waterproof === 'Indoor' ? 1 : 1.03;
+          letterPrice *= waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.03;
           letterPrice *= vinylWhite?.name ? 1.1 : 1;
           totalLetterPrice += letterPrice;
         });
@@ -9225,7 +9225,7 @@ function Letters({
           }
 
           // Adjusting for waterproof and finishing
-          letterPrice *= waterproof === 'Indoor' ? 1 : 1.03;
+          letterPrice *= waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.03;
           letterPrice *= vinylWhite?.name ? 1.1 : 1;
           totalLetterPrice += letterPrice;
         });
@@ -10127,7 +10127,7 @@ function Letters({
           }
 
           // Adjusting for waterproof and finishing
-          letterPrice *= waterproof === 'Indoor' ? 1 : 1.1;
+          letterPrice *= waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.1;
           letterPrice *= metal === '316 Stainless Steel' ? 1.3 : 1;
           if (stainLessMetalFinish && stainLessMetalFinish.includes('Polished')) {
             letterPrice *= 1.1;
@@ -10722,7 +10722,7 @@ function Logo({
         console.log(logoPricingTable[width - 3][height]);
         let multiplier = 1;
         if (waterproof) {
-          multiplier = waterproof === 'Indoor' ? 1 : 1.05;
+          multiplier = waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.05;
         }
         let total = parseFloat((computed * multiplier).toFixed(2));
         total *= metal === '316 Stainless Steel' ? 1.3 : 1;
@@ -11408,7 +11408,7 @@ function Letters({
         }
 
         // Adjusting for waterproof and finishing
-        letterPrice *= waterproof === 'Indoor' ? 1 : 1.05;
+        letterPrice *= waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.05;
         letterPrice *= selectedFinishing === 'Gloss' ? 1.1 : 1;
         totalLetterPrice += letterPrice;
       });
@@ -11953,7 +11953,7 @@ function Logo({
         const computed = logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
         let multiplier = 0;
         if (waterproof) {
-          multiplier = waterproof === 'Indoor' ? 1 : 1.05;
+          multiplier = waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.05;
         }
         let total = parseFloat((computed * multiplier).toFixed(2));
         if (mounting === 'Stud with spacer') {
@@ -12639,7 +12639,7 @@ function Letters({
           }
 
           // Adjusting for waterproof and finishing
-          letterPrice *= waterproof === 'Indoor' ? 1 : 1.05;
+          letterPrice *= waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.05;
           letterPrice *= metal === '316 Stainless Steel' ? 1.3 : 1;
           if (stainlessSteelPolished) {
             if ('Standard (Face)' === stainlessSteelPolished) {
@@ -13258,7 +13258,7 @@ function Logo({
         const computed = logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
         let multiplier = 1;
         if (waterproof) {
-          multiplier = waterproof === 'Indoor' ? 1 : 1.05;
+          multiplier = waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.05;
           multiplier = parseFloat(multiplier).toFixed(2);
         }
         let total = parseFloat((computed * multiplier).toFixed(2));
@@ -14105,7 +14105,7 @@ function Letters({
         }
 
         // Adjusting for waterproof and finishing
-        letterPrice *= waterproof === 'Indoor' ? 1 : 1.03;
+        letterPrice *= waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.03;
         letterPrice *= selectedFinishing === 'Gloss' ? 1.03 : 1;
         letterPrice *= mounting === 'Double-sided tape' ? 1.01 : 1;
         letterPrice *= pvcBaseColor?.name !== 'Black' ? 1.1 : 1;
@@ -14609,7 +14609,7 @@ function Logo({
         const computed = logoPricingTable.length > 0 ? logoPricingTable[width - 4][height] : 0;
         let multiplier = 0;
         if (waterproof) {
-          multiplier = waterproof === 'Indoor' ? 1 : 1.03;
+          multiplier = waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.03;
         }
         let total = parseFloat((computed * multiplier).toFixed(2));
         total *= selectedFinishing === 'Gloss' ? 1.03 : 1;
@@ -15350,7 +15350,7 @@ function Letters({
         }
 
         // Adjusting for waterproof and finishing
-        letterPrice *= waterproof === 'Indoor' ? 1 : 1.03;
+        letterPrice *= waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.03;
         letterPrice *= selectedFinishing === 'Gloss' ? 1.03 : 1;
         letterPrice *= mounting === 'Double-sided tape' ? 1.01 : 1;
         totalLetterPrice += letterPrice;
@@ -15839,7 +15839,7 @@ function Logo({
         const computed = logoPricingTable.length > 0 ? logoPricingTable[width - 4][height] : 0;
         let multiplier = 0;
         if (waterproof) {
-          multiplier = waterproof === 'Indoor' ? 1 : 1.03;
+          multiplier = waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.03;
         }
         let total = parseFloat((computed * multiplier).toFixed(2));
         total *= selectedFinishing === 'Gloss' ? 1.03 : 1;
@@ -16462,7 +16462,7 @@ function Logo({
         const computed = logoPricingTable.length > 0 ? logoPricingTable[width - 4][height] : 0;
         let multiplier = 0;
         if (waterproof) {
-          multiplier = waterproof === 'Indoor' ? 1 : 1.03;
+          multiplier = waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.03;
         }
         let total = parseFloat((computed * multiplier).toFixed(2));
         total *= selectedFinishing === 'Gloss' ? 1.03 : 1;

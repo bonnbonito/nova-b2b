@@ -322,7 +322,7 @@ export default function Letters({ item }) {
 				}
 
 				// Adjusting for waterproof and finishing
-				letterPrice *= waterproof === 'Indoor' ? 1 : 1.03;
+				letterPrice *= waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.03;
 				letterPrice *= selectedFinishing === 'Gloss' ? 1.03 : 1;
 				letterPrice *= mounting === 'Double-sided tape' ? 1.01 : 1;
 				letterPrice *= pvcBaseColor?.name !== 'Black' ? 1.1 : 1;

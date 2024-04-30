@@ -296,7 +296,7 @@ export default function Letters({ item }) {
 				}
 
 				// Adjusting for waterproof and finishing
-				letterPrice *= waterproof === 'Indoor' ? 1 : 1.1;
+				letterPrice *= waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.1;
 				letterPrice *= METAL_ACRYLIC_PRICING;
 				letterPrice *= acrylicBase?.name === 'Black' ? 1 : 1.1;
 
