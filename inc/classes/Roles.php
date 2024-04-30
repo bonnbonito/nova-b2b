@@ -767,7 +767,10 @@ jQuery(document).ready(function($) {
 		// Get users with the 'administrator' role
 		$admin_users = get_users( array( 'role' => 'administrator' ) );
 		foreach ( $admin_users as $user ) {
-			$user_emails[] = $user->user_email;
+			$notifications = get_field( 'email_notifications', 'user_' . $user->ID );
+			if ( $notifications ) {
+				$user_emails[] = $user->user_email;
+			}
 		}
 
 		// Get users with the 'customer-rep' role
@@ -776,8 +779,12 @@ jQuery(document).ready(function($) {
 			$user_emails[] = $user->user_email;
 		}
 
+		// Remove duplicate email addresses
+		$user_emails = array_unique( $user_emails );
+
 		return $user_emails;
 	}
+
 
 
 
