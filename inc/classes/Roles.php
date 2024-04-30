@@ -291,7 +291,7 @@ jQuery(document).ready(function($) {
 			update_field( 'business_id', 'PENDING-' . $user_id, 'user_' . $user_id );
 		}
 
-		if ( in_array( 'pending', $old_roles ) && $new_role == 'partner' ) {
+		if ( ( in_array( 'pending', $old_roles ) || in_array( 'temporary', $old_roles ) ) && $new_role == 'partner' ) {
 			$business_id = $this->generate_partner_business_id( $user_id );
 			update_field( 'business_id', $business_id, 'user_' . $user_id );
 		}
