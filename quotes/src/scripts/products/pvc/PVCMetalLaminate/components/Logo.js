@@ -496,20 +496,6 @@ export default function Logo({ item }) {
 				</div>
 
 				<Dropdown
-					title="Environment"
-					onChange={(e) => setWaterproof(e.target.value)}
-					options={waterProofOptions.map((option) => (
-						<option
-							value={option.option}
-							selected={option.option == item.waterproof}
-						>
-							{option.option}
-						</option>
-					))}
-					value={waterproof}
-				/>
-
-				<Dropdown
 					title="Finishing Options"
 					onChange={handleChangeFinishing}
 					options={finishingOptions.map((finishing) => (
@@ -521,6 +507,20 @@ export default function Logo({ item }) {
 						</option>
 					))}
 					value={selectedFinishing}
+				/>
+
+				<Dropdown
+					title="Environment"
+					onChange={(e) => setWaterproof(e.target.value)}
+					options={waterProofOptions.map((option) => (
+						<option
+							value={option.option}
+							selected={option.option == item.waterproof}
+						>
+							{option.option}
+						</option>
+					))}
+					value={waterproof}
 				/>
 
 				<Dropdown

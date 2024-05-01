@@ -30,7 +30,7 @@ export default function PVCUv() {
 					type: 'logo',
 					title: 'LOGO 1',
 					comments: '',
-					installation: '',
+					mounting: '',
 					waterproof: '',
 					thickness: '',
 					pvcBaseColor: { name: 'Black', color: '#000000' },
@@ -72,7 +72,7 @@ export default function PVCUv() {
 	const defaultArgs = {
 		id: uuidv4(),
 		comments: '',
-		installation: '',
+		mounting: '',
 		thickness: '',
 		waterproof: '',
 		finishing: 'Matte',

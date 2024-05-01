@@ -4709,7 +4709,7 @@ function Logo({
     if (!selectedMounting) missingFields.push('Select Mounting');
     if (selectedMounting === 'Stud with spacer') {
       if (!studLength) missingFields.push('Select Stud Length');
-      if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
+      if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (selectedMounting === 'Stud Mount') {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -5426,7 +5426,7 @@ function Letters({
     if (!selectedMounting) missingFields.push('Select Mounting');
     if (selectedMounting === 'Stud with spacer') {
       if (!studLength) missingFields.push('Select Stud Length');
-      if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
+      if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (selectedMounting === 'Stud Mount') {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -5911,7 +5911,7 @@ function Logo({
     if (!selectedMounting) missingFields.push('Select Mounting');
     if (selectedMounting === 'Stud with spacer') {
       if (!studLength) missingFields.push('Select Stud Length');
-      if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
+      if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (selectedMounting === 'Stud Mount') {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -6517,7 +6517,7 @@ function Logo({
     if (!selectedMounting) missingFields.push('Select Mounting Option');
     if (selectedMounting === 'Stud with spacer') {
       if (!studLength) missingFields.push('Select Stud Length');
-      if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
+      if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (selectedMounting === 'Stud Mount') {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -7518,7 +7518,7 @@ function Letters({
     if (!mounting) missingFields.push('Select Mounting');
     if (mounting === 'Stud with spacer') {
       if (!studLength) missingFields.push('Select Stud Length');
-      if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
+      if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (mounting === 'Stud Mount') {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -8421,7 +8421,7 @@ function Letters({
     if (!mounting) missingFields.push('Select Mounting');
     if (mounting === 'Stud with spacer') {
       if (!studLength) missingFields.push('Select Stud Length');
-      if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
+      if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (mounting === 'Stud Mount') {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -9276,7 +9276,7 @@ function Letters({
     if (!mounting) missingFields.push('Select Mounting');
     if (mounting === 'Stud with spacer') {
       if (!studLength) missingFields.push('Select Stud Length');
-      if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
+      if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (mounting === 'Stud Mount') {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -10193,7 +10193,7 @@ function Letters({
     if (!mounting) missingFields.push('Select Mounting');
     if (mounting === 'Stud with spacer') {
       if (!studLength) missingFields.push('Select Stud Length');
-      if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
+      if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (mounting === 'Stud Mount') {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -14158,7 +14158,7 @@ function Letters({
     if (!mounting) missingFields.push('Select Mounting');
     if (mounting === 'Stud with spacer') {
       if (!studLength) missingFields.push('Select Stud Length');
-      if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
+      if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (!sets) missingFields.push('Select Quantity');
     if (missingFields.length > 0) {
@@ -14756,14 +14756,6 @@ function Logo({
       }
     }), color.name);
   }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "Environment",
-    onChange: e => setWaterproof(e.target.value),
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      value: option.option,
-      selected: option.option == item.waterproof
-    }, option.option)),
-    value: waterproof
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Finishing Options",
     onChange: handleChangeFinishing,
     options: _pvcOptions__WEBPACK_IMPORTED_MODULE_8__.finishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -14771,6 +14763,14 @@ function Logo({
       selected: finishing.name === item.finishing
     }, finishing.name)),
     value: selectedFinishing
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Environment",
+    onChange: e => setWaterproof(e.target.value),
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.option,
+      selected: option.option == item.waterproof
+    }, option.option)),
+    value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Mounting Options",
     onChange: handleOnChangeMounting,
@@ -15401,7 +15401,7 @@ function Letters({
     if (!mounting) missingFields.push('Select Mounting');
     if (mounting === 'Stud with spacer') {
       if (!studLength) missingFields.push('Select Stud Length');
-      if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
+      if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (!sets) missingFields.push('Select Quantity');
     if (missingFields.length > 0) {
@@ -15874,7 +15874,7 @@ function Logo({
     if (!mounting) missingFields.push('Select Mounting');
     if (mounting === 'Stud with spacer') {
       if (!studLength) missingFields.push('Select Stud Length');
-      if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
+      if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (!selectedFinishing) missingFields.push('Select Finishing');
     if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
@@ -16115,7 +16115,7 @@ function PVCUv() {
         type: 'logo',
         title: 'LOGO 1',
         comments: '',
-        installation: '',
+        mounting: '',
         waterproof: '',
         thickness: '',
         pvcBaseColor: {
@@ -16156,7 +16156,7 @@ function PVCUv() {
   const defaultArgs = {
     id: (0,uuid__WEBPACK_IMPORTED_MODULE_5__["default"])(),
     comments: '',
-    installation: '',
+    mounting: '',
     thickness: '',
     waterproof: '',
     finishing: 'Matte',
@@ -16498,7 +16498,7 @@ function Logo({
     }
     if (installation === 'Stud with spacer') {
       if (!studLength) missingFields.push('Select Stud Length');
-      if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
+      if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (!selectedFinishing) missingFields.push('Select Finishing');
     if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
@@ -16601,14 +16601,6 @@ function Logo({
       }
     }), color.name);
   }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "Environment",
-    onChange: e => setWaterproof(e.target.value),
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      value: option.option,
-      selected: option.option == item.waterproof
-    }, option.option)),
-    value: waterproof
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Finishing Options",
     onChange: handleChangeFinishing,
     options: _pvcOptions__WEBPACK_IMPORTED_MODULE_8__.finishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -16616,6 +16608,14 @@ function Logo({
       selected: finishing.name === item.finishing
     }, finishing.name)),
     value: selectedFinishing
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Environment",
+    onChange: e => setWaterproof(e.target.value),
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.option,
+      selected: option.option == item.waterproof
+    }, option.option)),
+    value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Installation",
     onChange: handleOnChangeInstallation,

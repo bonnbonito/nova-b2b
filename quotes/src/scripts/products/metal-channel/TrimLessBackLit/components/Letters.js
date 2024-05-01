@@ -358,7 +358,7 @@ export default function Letters({ item }) {
 		if (mounting === 'Stud with spacer') {
 			if (!studLength) missingFields.push('Select Stud Length');
 
-			if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
+			if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
 		}
 
 		if (mounting === 'Stud Mount') {

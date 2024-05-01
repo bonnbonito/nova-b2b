@@ -5,6 +5,7 @@ namespace NOVA_B2B\Inc\Classes;
 use WP_Query;
 use Kadence\Theme;
 use WC;
+use WC_Tax;
 use WC_Order_Item_Shipping;
 use function is_cart;
 
@@ -102,7 +103,74 @@ class Woocommerce {
 		add_action( 'woocommerce_shipstation_shipnotify', array( $this, 'save_tracking_details' ), 10, 2 );
 		add_filter( 'woocommerce_get_order_item_totals', array( $this, 'add_tracking_and_carrier_to_email_table' ), 20, 3 );
 		add_filter( 'woocommerce_shipstation_export_order', array( $this, 'shipstation_not_export_order' ), 10, 2 );
+		// add_filter( 'woocommerce_currency', array( $this, 'change_currency_based_on_shipping_country' ), 99999999 );
+		add_action( 'init', array( $this, 'set_currency_cookie_based_on_billing_country' ), 999 );
+		add_action( 'option_wcumcs_available_currencies', array( $this, 'list_of_currencies' ), 10, 2 );
 	}
+
+	public function list_of_currencies( $values, $option ) {
+		if ( ! is_user_logged_in() || current_user_can( 'administrator' ) ) {
+			return $values;
+		}
+
+		// Decode the JSON string into an associative array
+		$values_array = json_decode( $values, true );
+
+		if ( json_last_error() !== JSON_ERROR_NONE ) {
+			// Error handling if JSON is not valid
+			error_log( 'JSON decode error in list_of_currencies: ' . json_last_error_msg() );
+			return $values; // Return the original string if there's an error
+		}
+
+		$user_id         = get_current_user_id();
+		$billing_country = get_user_meta( $user_id, 'billing_country', true );
+
+		if ( $billing_country === 'CA' ) {
+			if ( isset( $values_array['USD'] ) ) {
+				unset( $values_array['USD'] );
+			}
+		} elseif ( isset( $values_array['CAD'] ) ) {
+				unset( $values_array['CAD'] );
+		}
+
+		// Encode the modified array back to JSON
+		$modified_values = json_encode( $values_array );
+		if ( json_last_error() !== JSON_ERROR_NONE ) {
+			// Error handling if JSON encode fails
+			error_log( 'JSON encode error in list_of_currencies: ' . json_last_error_msg() );
+			return $values; // Return the original string if there's an error
+		}
+
+		return $modified_values;
+	}
+
+
+	public function set_currency_cookie_based_on_billing_country() {
+		if ( ! is_user_logged_in() || current_user_can( 'administrator' ) ) {
+			return;
+		}
+
+		$user_id = get_current_user_id();
+
+		$billing_country = get_user_meta( $user_id, 'billing_country', true );
+		$new_currency    = $billing_country === 'CA' ? 'CAD' : 'USD';
+		wc_setcookie( 'wcumcs_user_currency_session', $new_currency, 0 );
+	}
+
+	public function change_currency_based_on_shipping_country( $currency ) {
+		if ( is_user_logged_in() ) {
+			$user = wp_get_current_user();
+
+			$shipping_country = get_user_meta( $user->ID, 'shipping_country', true );
+
+			if ( $shipping_country == 'CA' ) {
+				$currency = 'CAD';
+			}
+		}
+
+		return $currency;
+	}
+
 
 	public function save_tracking_details( $order, $array ) {
 		$order_id = $order->get_id();
@@ -792,12 +860,7 @@ class Woocommerce {
 	}
 
 	public function currency_symbol( $currency_symbol, $currency ) {
-		if ( $currency == 'USD' ) {
-			$currency_symbol = 'USD' . $currency_symbol;
-		}
-		if ( $currency === 'CAD' ) {
-			$currency_symbol = 'CAD' . $currency_symbol;
-		}
+		$currency_symbol = $currency . $currency_symbol;
 		return $currency_symbol;
 	}
 
