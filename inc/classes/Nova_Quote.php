@@ -511,7 +511,10 @@ sendMockup.addEventListener('click', e => {
 		$message .= '<p>Thank you,<br>';
 		$message .= 'NOVA Signage Team</p>';
 
-		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
+		$headers   = array();
+		$headers[] = 'Content-Type: text/html; charset=UTF-8';
+		$headers[] = 'From: NOVA Signage <quotes@novasignage.com>';
+		$headers[] = 'Reply-To: NOVA Signage <quotes@novasignage.com>';
 
 		$role_instance = \NOVA_B2B\Inc\Classes\Roles::get_instance();
 
@@ -549,7 +552,10 @@ sendMockup.addEventListener('click', e => {
 		$message .= '<p>Thank you,<br>';
 		$message .= 'NOVA Signage Team</p>';
 
-		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
+		$headers   = array();
+		$headers[] = 'Content-Type: text/html; charset=UTF-8';
+		$headers[] = 'From: NOVA Signage <quotes@novasignage.com>';
+		$headers[] = 'Reply-To: NOVA Signage <quotes@novasignage.com>';
 
 		$role_instance = \NOVA_B2B\Inc\Classes\Roles::get_instance();
 
