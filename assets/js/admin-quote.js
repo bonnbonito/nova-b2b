@@ -291,7 +291,7 @@ function getSignageDetailFields(sign) {
 	return [
 		{ label: 'CAD PRICE', value: sign.cadPrice ? sign.cadPrice : '0' },
 		{ label: 'TYPE', value: sign.type },
-		{ label: 'LINE TEXT', value: sign.letters },
+		{ label: 'TEXT', value: sign.letters },
 
 		{ label: 'FONT', value: sign.font ? sign.font : '' },
 		{

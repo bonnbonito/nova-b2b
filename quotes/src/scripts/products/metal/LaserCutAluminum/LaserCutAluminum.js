@@ -118,7 +118,7 @@ export default function LaserCutAluminum() {
 				args = {
 					type: type,
 					title: `${type} ${count + 1}`,
-					metalColor: { name: 'Custom Color', color: '' },
+					metalColor: { name: '', color: '' },
 					width: '',
 					height: '',
 				};

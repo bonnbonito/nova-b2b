@@ -362,7 +362,7 @@ export default function Letters({ item }) {
 
 				if (mounting === 'Stud with spacer') {
 					let spacer =
-						totalLetterPrice * 0.03 > 35 ? 35 : totalLetterPrice * 0.03;
+						totalLetterPrice * 0.02 > 25 ? 25 : totalLetterPrice * 0.02;
 					spacer = parseFloat(spacer.toFixed(2));
 
 					totalLetterPrice += spacer;
@@ -456,7 +456,7 @@ export default function Letters({ item }) {
 		if (mounting === 'Stud with spacer') {
 			if (!studLength) missingFields.push('Select Stud Length');
 
-			if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
+			if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
 		}
 
 		if (mounting === 'Stud Mount') {
@@ -593,7 +593,7 @@ export default function Letters({ item }) {
 			</div>
 			<div className="py-4">
 				<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-					Letters
+					Text
 				</label>
 				<input
 					className="w-full py-4 px-2 color-black border-gray-200 text-sm font-bold rounded-md h-14 placeholder:text-slate-400 "

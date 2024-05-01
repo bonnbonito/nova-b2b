@@ -262,7 +262,7 @@ export default function Logo({ item }) {
 				total *= pvcBaseColor?.name !== 'Black' ? 1.1 : 1;
 
 				if (mounting === 'Stud with spacer') {
-					let spacer = total * 0.03 > 35 ? 35 : total * 0.03;
+					let spacer = total * 0.02 > 25 ? 25 : total * 0.02;
 					spacer = parseFloat(spacer.toFixed(2));
 
 					total += spacer;
@@ -309,7 +309,7 @@ export default function Logo({ item }) {
 		if (mounting === 'Stud with spacer') {
 			if (!studLength) missingFields.push('Select Stud Length');
 
-			if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
+			if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
 		}
 
 		if (!selectedFinishing) missingFields.push('Select Finishing');

@@ -47,7 +47,7 @@ function display_quote_details() {
 function displaySignage(sign) {
 	const details = [
 		{ label: 'TYPE', value: sign.type },
-		{ label: 'LINE TEXT', value: sign.letters },
+		{ label: 'TEXT', value: sign.letters },
 		{
 			label: 'Letter Height',
 			value: sign.letterHeight ? sign.letterHeight + '"' : '',
@@ -110,7 +110,7 @@ function displayLetters(sign) {
 		{ label: 'COLOR', value: sign.color?.name },
 		{ label: 'FINISHING', value: sign.finishing },
 		{ label: 'FONT', value: sign.font },
-		{ label: 'LINE TEXT', value: sign.letters },
+		{ label: 'TEXT', value: sign.letters },
 		{ label: 'COMMENTS', value: sign.comments },
 		{ label: 'DESCRIPTION', value: sign.description },
 		{ label: 'FILE PATH', value: sign.filePath },

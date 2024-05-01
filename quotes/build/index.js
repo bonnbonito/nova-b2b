@@ -849,7 +849,7 @@ function Prices({
     className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left font-title md:tracking-[1.4px] text-sm"
-  }, "LINE TEXT"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "TEXT"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-sm break-words"
   }, item.letters)), item.font && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
@@ -1213,7 +1213,7 @@ function PricesView({
     className: "grid grid-cols-[160px_1fr] py-[2px] items-center gap-5"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
-  }, "LINE TEXT"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "TEXT"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-[14px] break-words"
   }, item.letters)), item.font && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-[160px_1fr] py-[2px] items-center gap-5"
@@ -3489,7 +3489,7 @@ function Letters({
         totalLetterPrice += letterPrice;
       });
       if (selectedMounting === 'Stud with spacer') {
-        let spacer = totalLetterPrice * 0.03 > 35 ? 35 : totalLetterPrice * 0.03;
+        let spacer = totalLetterPrice * 0.02 > 25 ? 25 : totalLetterPrice * 0.02;
         spacer = parseFloat(spacer.toFixed(2));
         totalLetterPrice += spacer;
       }
@@ -3563,7 +3563,7 @@ function Letters({
     }
     if (selectedMounting === 'Stud with spacer') {
       if (!studLength) missingFields.push('Select Stud Length');
-      if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
+      if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (!sets) missingFields.push('Select Quantity');
     if (missingFields.length > 0) {
@@ -3638,7 +3638,7 @@ function Letters({
     className: "py-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
-  }, "Letters"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+  }, "Text"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     className: "w-full py-4 px-2 color-black border-gray-200 text-sm font-bold rounded-md h-14 placeholder:text-slate-400 ",
     type: "text",
     onChange: handleOnChangeLetters,
@@ -4039,7 +4039,7 @@ function Logo({
           total *= 0.95;
         }
         if (selectedMounting === 'Stud with spacer') {
-          let spacer = total * 0.03 > 35 ? 35 : total * 0.03;
+          let spacer = total * 0.02 > 25 ? 25 : total * 0.02;
           spacer = parseFloat(spacer.toFixed(2));
           total += spacer;
         }
@@ -4064,7 +4064,7 @@ function Logo({
     if (!selectedMounting) missingFields.push('Select Mounting');
     if (selectedMounting === 'Stud with spacer') {
       if (!studLength) missingFields.push('Select Stud Length');
-      if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
+      if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (selectedMounting === 'Stud Mount') {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -5352,7 +5352,7 @@ function Letters({
         totalLetterPrice += letterPrice;
       });
       if (selectedMounting === 'Stud with spacer') {
-        let spacer = totalLetterPrice * 0.03 > 35 ? 35 : totalLetterPrice * 0.03;
+        let spacer = totalLetterPrice * 0.02 > 25 ? 25 : totalLetterPrice * 0.02;
         spacer = parseFloat(spacer.toFixed(2));
         totalLetterPrice += spacer;
       }
@@ -5495,7 +5495,7 @@ function Letters({
     className: "py-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
-  }, "Letters"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+  }, "Text"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     className: "w-full py-4 px-2 color-black border-gray-200 text-sm font-bold rounded-md h-14 placeholder:text-slate-400 ",
     type: "text",
     onChange: handleOnChangeLetters,
@@ -5881,7 +5881,7 @@ function Logo({
         let total = (computed * multiplier * _MetalLaminate__WEBPACK_IMPORTED_MODULE_6__.METAL_ACRYLIC_PRICING).toFixed(2);
         total *= acrylicBase?.name === 'Black' ? 1 : 1.1;
         if (selectedMounting === 'Stud with spacer') {
-          let spacer = total * 0.03 > 35 ? 35 : total * 0.03;
+          let spacer = total * 0.02 > 25 ? 25 : total * 0.02;
           spacer = parseFloat(spacer.toFixed(2));
           total += spacer;
         }
@@ -7624,7 +7624,7 @@ function Letters({
         });
         console.log(totalLetterPrice);
         if (mounting === 'Stud with spacer') {
-          let spacer = totalLetterPrice * 0.03 > 35 ? 35 : totalLetterPrice * 0.03;
+          let spacer = totalLetterPrice * 0.02 > 25 ? 25 : totalLetterPrice * 0.02;
           spacer = parseFloat(spacer.toFixed(2));
           totalLetterPrice += spacer;
         }
@@ -7675,7 +7675,7 @@ function Letters({
     className: "py-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
-  }, "Letters"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+  }, "Text"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     className: "w-full py-4 px-2 color-black border-gray-200 text-sm font-bold rounded-md h-14 placeholder:text-slate-400 ",
     type: "text",
     onChange: handleOnChangeLetters,
@@ -8376,7 +8376,7 @@ function Letters({
           totalLetterPrice += letterPrice;
         });
         if (mounting === 'Stud with spacer') {
-          let spacer = totalLetterPrice * 0.03 > 35 ? 35 : totalLetterPrice * 0.03;
+          let spacer = totalLetterPrice * 0.02 > 25 ? 25 : totalLetterPrice * 0.02;
           spacer = parseFloat(spacer.toFixed(2));
           totalLetterPrice += spacer;
         }
@@ -8512,7 +8512,7 @@ function Letters({
     className: "py-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
-  }, "Letters"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+  }, "Text"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     className: "w-full py-4 px-2 color-black border-gray-200 text-sm font-bold rounded-md h-14 placeholder:text-slate-400 ",
     type: "text",
     onChange: handleOnChangeLetters,
@@ -9230,7 +9230,7 @@ function Letters({
           totalLetterPrice += letterPrice;
         });
         if (mounting === 'Stud with spacer') {
-          let spacer = totalLetterPrice * 0.03 > 35 ? 35 : totalLetterPrice * 0.03;
+          let spacer = totalLetterPrice * 0.02 > 25 ? 25 : totalLetterPrice * 0.02;
           spacer = parseFloat(spacer.toFixed(2));
           totalLetterPrice += spacer;
         }
@@ -9357,7 +9357,7 @@ function Letters({
     className: "py-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
-  }, "Letters"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+  }, "Text"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     className: "w-full py-4 px-2 color-black border-gray-200 text-sm font-bold rounded-md h-14 placeholder:text-slate-400 ",
     type: "text",
     onChange: handleOnChangeLetters,
@@ -10141,7 +10141,7 @@ function Letters({
           totalLetterPrice += parseFloat(letterPrice.toFixed(2));
         });
         if (mounting === 'Stud with spacer') {
-          let spacer = totalLetterPrice * 0.03 > 35 ? 35 : totalLetterPrice * 0.03;
+          let spacer = totalLetterPrice * 0.02 > 25 ? 25 : totalLetterPrice * 0.02;
           spacer = parseFloat(spacer.toFixed(2));
           totalLetterPrice += spacer;
         }
@@ -10276,7 +10276,7 @@ function Letters({
     className: "py-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
-  }, "Letters"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+  }, "Text"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     className: "w-full py-4 px-2 color-black border-gray-200 text-sm font-bold rounded-md h-14 placeholder:text-slate-400 ",
     type: "text",
     onChange: handleOnChangeLetters,
@@ -10734,7 +10734,7 @@ function Logo({
         }
         total = parseFloat(total.toFixed(2));
         if (mounting === 'Stud with spacer') {
-          let spacer = total * 0.03 > 35 ? 35 : total * 0.03;
+          let spacer = total * 0.02 > 25 ? 25 : total * 0.02;
           spacer = parseFloat(spacer.toFixed(2));
           total += spacer;
         }
@@ -11049,7 +11049,7 @@ function LaserCutAluminum() {
           type: type,
           title: `${type} ${count + 1}`,
           metalColor: {
-            name: 'Custom Color',
+            name: '',
             color: ''
           },
           width: '',
@@ -11413,7 +11413,7 @@ function Letters({
         totalLetterPrice += letterPrice;
       });
       if (mounting === 'Stud with spacer') {
-        let spacer = totalLetterPrice * 0.03 > 35 ? 35 : totalLetterPrice * 0.03;
+        let spacer = totalLetterPrice * 0.02 > 25 ? 25 : totalLetterPrice * 0.02;
         spacer = parseFloat(spacer.toFixed(2));
         totalLetterPrice += spacer;
       }
@@ -11463,7 +11463,7 @@ function Letters({
     if (!mounting) missingFields.push('Select Mounting');
     if (mounting === 'Stud with spacer') {
       if (!studLength) missingFields.push('Select Stud Length');
-      if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
+      if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (mounting === 'Stud Mount') {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -11498,7 +11498,7 @@ function Letters({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [letters, font, color, selectedThickness, mounting, waterproof, selectedLetterHeight, fileUrls, fileNames, files, filePaths, fontFileUrl, selectedFinishing, customFont, customColor, sets]);
+  }, [letters, font, color, selectedThickness, mounting, waterproof, selectedLetterHeight, fileUrls, fileNames, files, filePaths, fontFileUrl, selectedFinishing, studLength, spacerStandoffDistance, customFont, customColor, sets]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const newHeightOptions = letterPricing?.filter(item => {
       const value = item[selectedThickness?.value];
@@ -11546,7 +11546,7 @@ function Letters({
     className: "py-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
-  }, "Letters"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+  }, "Text"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     className: "w-full py-4 px-2 color-black border-gray-200 text-sm font-bold rounded-md h-14 placeholder:text-slate-400 ",
     type: "text",
     onChange: handleOnChangeLetters,
@@ -11910,7 +11910,7 @@ function Logo({
     if (!mounting) missingFields.push('Select Mounting');
     if (mounting === 'Stud with spacer') {
       if (!studLength) missingFields.push('Select Stud Length');
-      if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
+      if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (mounting === 'Stud Mount') {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -11957,7 +11957,7 @@ function Logo({
         }
         let total = parseFloat((computed * multiplier).toFixed(2));
         if (mounting === 'Stud with spacer') {
-          let spacer = total * 0.03 > 35 ? 35 : total * 0.03;
+          let spacer = total * 0.02 > 25 ? 25 : total * 0.02;
           spacer = parseFloat(spacer.toFixed(2));
           console.log(spacer, total);
           total += spacer;
@@ -12087,7 +12087,7 @@ function Logo({
     className: "text-xs text-[#9F9F9F] mb-4"
   }, "*Note: The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid"
-  }, color?.name == 'Custom Color' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, selectedFinishing === 'Painted' && color?.name == 'Custom Color' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "px-[1px] col-span-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
@@ -12655,7 +12655,7 @@ function Letters({
           totalLetterPrice += letterPrice;
         });
         if (mounting === 'Stud with spacer') {
-          let spacer = totalLetterPrice * 0.03 > 35 ? 35 : totalLetterPrice * 0.03;
+          let spacer = totalLetterPrice * 0.02 > 25 ? 25 : totalLetterPrice * 0.02;
           spacer = parseFloat(spacer.toFixed(2));
           totalLetterPrice += spacer;
         }
@@ -12710,7 +12710,7 @@ function Letters({
     if (!mounting) missingFields.push('Select Installation');
     if (mounting === 'Stud with spacer') {
       if (!studLength) missingFields.push('Select Stud Length');
-      if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
+      if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (mounting === 'Stud Mount') {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -12794,7 +12794,7 @@ function Letters({
     className: "py-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
-  }, "Letters"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+  }, "Text"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     className: "w-full py-4 px-2 color-black border-gray-200 text-sm font-bold rounded-md h-14 placeholder:text-slate-400 ",
     type: "text",
     onChange: handleOnChangeLetters,
@@ -13212,7 +13212,7 @@ function Logo({
     if (!mounting) missingFields.push('Select Installation');
     if (mounting === 'Stud with spacer') {
       if (!studLength) missingFields.push('Select Stud Length');
-      if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
+      if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (mounting === 'Stud Mount') {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -13278,7 +13278,7 @@ function Logo({
         }
         total = parseFloat(total.toFixed(2));
         if (mounting === 'Stud with spacer') {
-          let spacer = total * 0.03 > 35 ? 35 : total * 0.03;
+          let spacer = total * 0.02 > 25 ? 25 : total * 0.02;
           spacer = parseFloat(spacer.toFixed(2));
           total += spacer;
         }
@@ -14112,7 +14112,7 @@ function Letters({
         totalLetterPrice += letterPrice;
       });
       if (mounting === 'Stud with spacer') {
-        let spacer = totalLetterPrice * 0.03 > 35 ? 35 : totalLetterPrice * 0.03;
+        let spacer = totalLetterPrice * 0.02 > 25 ? 25 : totalLetterPrice * 0.02;
         spacer = parseFloat(spacer.toFixed(2));
         totalLetterPrice += spacer;
       }
@@ -14233,7 +14233,7 @@ function Letters({
     className: "py-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
-  }, "Letters"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+  }, "Text"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     className: "w-full py-4 px-2 color-black border-gray-200 text-sm font-bold rounded-md h-14 placeholder:text-slate-400 ",
     type: "text",
     onChange: handleOnChangeLetters,
@@ -14616,7 +14616,7 @@ function Logo({
         total *= mounting === 'Double-sided tape' ? 1.01 : 1;
         total *= pvcBaseColor?.name !== 'Black' ? 1.1 : 1;
         if (mounting === 'Stud with spacer') {
-          let spacer = total * 0.03 > 35 ? 35 : total * 0.03;
+          let spacer = total * 0.02 > 25 ? 25 : total * 0.02;
           spacer = parseFloat(spacer.toFixed(2));
           total += spacer;
         }
@@ -14645,7 +14645,7 @@ function Logo({
     if (!mounting) missingFields.push('Select Mounting');
     if (mounting === 'Stud with spacer') {
       if (!studLength) missingFields.push('Select Stud Length');
-      if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
+      if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (!selectedFinishing) missingFields.push('Select Finishing');
     if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
@@ -15356,7 +15356,7 @@ function Letters({
         totalLetterPrice += letterPrice;
       });
       if (mounting === 'Stud with spacer') {
-        let spacer = totalLetterPrice * 0.03 > 35 ? 35 : totalLetterPrice * 0.03;
+        let spacer = totalLetterPrice * 0.02 > 25 ? 25 : totalLetterPrice * 0.02;
         spacer = parseFloat(spacer.toFixed(2));
         totalLetterPrice += spacer;
       }
@@ -15476,7 +15476,7 @@ function Letters({
     className: "py-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
-  }, "Letters"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+  }, "Text"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     className: "w-full py-4 px-2 color-black border-gray-200 text-sm font-bold rounded-md h-14 placeholder:text-slate-400 ",
     type: "text",
     onChange: handleOnChangeLetters,
@@ -15845,7 +15845,7 @@ function Logo({
         total *= selectedFinishing === 'Gloss' ? 1.03 : 1;
         total *= mounting === 'Double-sided tape' ? 1.01 : 1;
         if (mounting === 'Stud with spacer') {
-          let spacer = total * 0.03 > 35 ? 35 : total * 0.03;
+          let spacer = total * 0.02 > 25 ? 25 : total * 0.02;
           spacer = parseFloat(spacer.toFixed(2));
           total += spacer;
         }
@@ -16469,7 +16469,7 @@ function Logo({
         total *= installation === 'Double-sided tape' ? 1.01 : 1;
         total *= pvcBaseColor?.name === 'Black' ? 1.2 : 1.1;
         if (installation === 'Stud with spacer') {
-          let spacer = total * 0.03 > 35 ? 35 : total * 0.03;
+          let spacer = total * 0.02 > 25 ? 25 : total * 0.02;
           spacer = parseFloat(spacer.toFixed(2));
           total += spacer;
         }

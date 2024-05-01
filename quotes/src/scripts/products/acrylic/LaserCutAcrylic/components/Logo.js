@@ -296,7 +296,7 @@ export default function Logo({ item }) {
 				}
 
 				if (selectedMounting === 'Stud with spacer') {
-					let spacer = total * 0.03 > 35 ? 35 : total * 0.03;
+					let spacer = total * 0.02 > 25 ? 25 : total * 0.02;
 					spacer = parseFloat(spacer.toFixed(2));
 
 					total += spacer;
@@ -336,7 +336,7 @@ export default function Logo({ item }) {
 		if (selectedMounting === 'Stud with spacer') {
 			if (!studLength) missingFields.push('Select Stud Length');
 
-			if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
+			if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
 		}
 		if (selectedMounting === 'Stud Mount') {
 			if (!studLength) missingFields.push('Select Stud Length');

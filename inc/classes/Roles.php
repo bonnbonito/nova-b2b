@@ -416,7 +416,7 @@ jQuery(document).ready(function($) {
 		$user = new WP_User( $user_id );
 		$user->set_role( 'pending' );
 		$first_name    = $user->get( 'first_name' );
-		$company       = get_field( 'business_name', 'user_' . $user_id );
+		$company       = get_field( 'business_name', 'user_' . $user_id ) ? get_field( 'business_name', 'user_' . $user_id ) : 'None';
 		$user_edit_url = admin_url( 'user-edit.php?user_id=' . $user_id );
 
 		$subject  = 'NOVA - Pending Partner Status for ' . $first_name . ' from ' . $company . ' -  ' . get_field( 'business_id', 'user_' . $user_id );

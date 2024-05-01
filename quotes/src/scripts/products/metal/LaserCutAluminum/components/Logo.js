@@ -223,14 +223,16 @@ export default function Logo({ item }) {
 			missingFields.push('Add the Pantone color code of your custom color.');
 		}
 		if (!mounting) missingFields.push('Select Mounting');
+
 		if (mounting === 'Stud with spacer') {
 			if (!studLength) missingFields.push('Select Stud Length');
 
-			if (!spacerStandoffDistance) missingFields.push('Select STANDOFF SPACE');
+			if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
 		}
 		if (mounting === 'Stud Mount') {
 			if (!studLength) missingFields.push('Select Stud Length');
 		}
+
 		if (!sets) missingFields.push('Select Quantity');
 		if (!fileUrls || fileUrls.length === 0)
 			missingFields.push('Upload a PDF/AI File');
@@ -301,7 +303,7 @@ export default function Logo({ item }) {
 				let total = parseFloat((computed * multiplier).toFixed(2));
 
 				if (mounting === 'Stud with spacer') {
-					let spacer = total * 0.03 > 35 ? 35 : total * 0.03;
+					let spacer = total * 0.02 > 25 ? 25 : total * 0.02;
 					spacer = parseFloat(spacer.toFixed(2));
 
 					console.log(spacer, total);
@@ -527,7 +529,7 @@ export default function Logo({ item }) {
 			)}
 
 			<div className="quote-grid">
-				{color?.name == 'Custom Color' && (
+				{selectedFinishing === 'Painted' && color?.name == 'Custom Color' && (
 					<div className="px-[1px] col-span-4">
 						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
 							Custom Color

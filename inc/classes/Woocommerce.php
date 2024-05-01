@@ -1461,7 +1461,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 			$html .= '<p>';
 
 			if ( isset( $object->letters ) && ! empty( $object->letters ) ) {
-				$html .= '<strong>LINE TEXT: </strong>' . htmlspecialchars( $object->letters ) . '<br>';
+				$html .= '<strong>TEXT: </strong>' . htmlspecialchars( $object->letters ) . '<br>';
 			}
 
 			if ( isset( $object->font ) && ! empty( $object->font ) ) {
@@ -1477,11 +1477,11 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 			}
 
 			if ( isset( $object->acrylicThickness ) && ! empty( $object->acrylicThickness ) && $object->acrylicThickness ) {
-				$html .= '<strong>ACRYLIC THICKNESS: </strong>' . htmlspecialchars( $object->acrylicThickness->thickness ) . '<br>';
+				$html .= '<strong>ACRYLIC THICKNESS: </strong>' . htmlspecialchars( $object->acrylicThickness->thickness ) . '"<br>';
 			}
 
 			if ( isset( $object->thickness ) && ! empty( $object->thickness ) && $object->thickness ) {
-				$html .= '<strong>THICKNESS: </strong>' . htmlspecialchars( $object->thickness->thickness ) . '<br>';
+				$html .= '<strong>THICKNESS: </strong>' . htmlspecialchars( $object->thickness->thickness ) . '"<br>';
 			}
 
 			if ( isset( $object->metal ) && ! empty( $object->metal ) ) {
@@ -1489,15 +1489,15 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 			}
 
 			if ( isset( $object->metalThickness ) && ! empty( $object->metalThickness ) && $object->metalThickness ) {
-				$html .= '<strong>METAL THICKNESS: </strong>' . htmlspecialchars( $object->metalThickness->thickness ) . '<br>';
+				$html .= '<strong>METAL THICKNESS: </strong>' . htmlspecialchars( $object->metalThickness->thickness ) . '"<br>';
 			}
 
 			if ( isset( $object->metalDepth ) && ! empty( $object->metalDepth ) && $object->metalDepth ) {
-				$html .= '<strong>METAL DEPTH: </strong>' . htmlspecialchars( $object->metalDepth->thickness ) . '<br>';
+				$html .= '<strong>METAL DEPTH: </strong>' . htmlspecialchars( $object->metalDepth->thickness ) . '"<br>';
 			}
 
 			if ( isset( $object->depth ) && ! empty( $object->depth ) && $object->depth ) {
-				$html .= '<strong>METAL DEPTH: </strong>' . htmlspecialchars( $object->depth->depth ) . '<br>';
+				$html .= '<strong>METAL DEPTH: </strong>' . htmlspecialchars( $object->depth->depth ) . '"<br>';
 			}
 
 			if ( isset( $object->width ) && ! empty( $object->width ) ) {
@@ -2148,7 +2148,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		$projectArray = get_object_vars( $project );
 
 		if ( isset( $projectArray['letters'] ) && ! empty( $projectArray['letters'] ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">LINE TEXT:</div><div class="text-left text-[10px] uppercase">' . $projectArray['letters'] . '</div></div>';
+			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">TEXT:</div><div class="text-left text-[10px] uppercase">' . $projectArray['letters'] . '</div></div>';
 		}
 
 		if ( isset( $projectArray['font'] ) && ! empty( $projectArray['font'] ) ) {
