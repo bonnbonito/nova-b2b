@@ -14,7 +14,7 @@ import {
 
 import {
 	finishingOptions,
-	installationOptions,
+	mountingOptions,
 	thicknessOptions,
 } from '../../pvcOptions';
 
@@ -40,7 +40,7 @@ export default function Logo({ item }) {
 	const [openColor, setOpenColor] = useState(false);
 	const [pvcBaseColor, setPvcBaseColor] = useState(item.pvcBaseColor);
 	const [customColor, setCustomColor] = useState(item.customColor);
-	const [installation, setInstallation] = useState(item.installation);
+	const [mounting, setmounting] = useState(item.mounting);
 
 	const [sets, setSets] = useState(item.sets);
 	const handleOnChangeSets = (e) => {
@@ -93,8 +93,7 @@ export default function Logo({ item }) {
 	const [filePaths, setFilePaths] = useState(item.filePaths);
 	const [files, setFiles] = useState(item.files);
 	const [selectedFinishing, setSelectedFinishing] = useState(item.finishing);
-	const [installationSelections, setInstallationSelections] =
-		useState(installationOptions);
+	const [mountingSelections, setmountingSelections] = useState(mountingOptions);
 
 	const [maxWidthOptions, setMaxWidthOptions] = useState(
 		Array.from(
@@ -118,9 +117,9 @@ export default function Logo({ item }) {
 	const [comments, setComments] = useState('');
 	const [waterproof, setWaterproof] = useState(item.waterproof);
 
-	const handleOnChangeInstallation = (e) => {
+	const handleOnChangemounting = (e) => {
 		const target = e.target.value;
-		setInstallation(target);
+		setmounting(target);
 
 		if (target === 'Stud with spacer' || target === 'Stud Mount') {
 			if (target === 'Stud Mount') {
@@ -169,7 +168,7 @@ export default function Logo({ item }) {
 					...sign,
 					comments: comments,
 					thickness: selectedThickness,
-					installation: installation,
+					mounting: mounting,
 					waterproof: waterproof,
 					width: width,
 					height: height,
@@ -205,7 +204,7 @@ export default function Logo({ item }) {
 		waterproof,
 		width,
 		height,
-		installation,
+		mounting,
 		usdPrice,
 		cadPrice,
 		fileUrls,
@@ -249,10 +248,10 @@ export default function Logo({ item }) {
 				let total = parseFloat((computed * multiplier).toFixed(2));
 
 				total *= selectedFinishing === 'Gloss' ? 1.03 : 1;
-				total *= installation === 'Double-sided tape' ? 1.01 : 1;
+				total *= mounting === 'Double-sided tape' ? 1.01 : 1;
 				total *= pvcBaseColor?.name === 'Black' ? 1.2 : 1.1;
 
-				if (installation === 'Stud with spacer') {
+				if (mounting === 'Stud with spacer') {
 					let spacer = total * 0.02 > 25 ? 25 : total * 0.02;
 					spacer = parseFloat(spacer.toFixed(2));
 
@@ -277,9 +276,9 @@ export default function Logo({ item }) {
 		selectedThickness,
 		waterproof,
 		selectedFinishing,
-		installation,
+		mounting,
 		pvcBaseColor,
-		installation,
+		mounting,
 		sets,
 	]);
 
@@ -290,14 +289,14 @@ export default function Logo({ item }) {
 		if (!width) missingFields.push('Select Logo Width');
 		if (!height) missingFields.push('Select Logo Height');
 		if (!waterproof) missingFields.push('Select Waterproof');
-		if (!installation) missingFields.push('Select Installation');
+		if (!mounting) missingFields.push('Select mounting');
 
 		if (!pvcBaseColor.name) missingFields.push('Select PVC Base Color');
 		if (pvcBaseColor?.name === 'Custom Color' && !customColor) {
 			missingFields.push('Add the Pantone color code of your custom color.');
 		}
 
-		if (installation === 'Stud with spacer') {
+		if (mounting === 'Stud with spacer') {
 			if (!studLength) missingFields.push('Select Stud Length');
 
 			if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
@@ -309,8 +308,6 @@ export default function Logo({ item }) {
 			missingFields.push('Upload a PDF/AI File');
 
 		if (!sets) missingFields.push('Select Quantity');
-
-		if (!comments) missingFields.push('Add Comments');
 
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
@@ -355,7 +352,7 @@ export default function Logo({ item }) {
 		comments,
 		height,
 		selectedThickness,
-		installation,
+		mounting,
 		waterproof,
 		fileUrls,
 		fileNames,
@@ -369,16 +366,16 @@ export default function Logo({ item }) {
 
 	useEffect(() => {
 		if ('Outdoor (Waterproof)' === waterproof) {
-			if ('Double-sided tape' === installation) {
-				setInstallation('');
+			if ('Double-sided tape' === mounting) {
+				setmounting('');
 			}
-			let newOptions = installationOptions.filter(
+			let newOptions = mountingOptions.filter(
 				(option) => option.value !== 'Double-sided tape'
 			);
 
-			setInstallationSelections(newOptions);
+			setmountingSelections(newOptions);
 		} else {
-			setInstallationSelections(installationOptions);
+			setmountingSelections(mountingOptions);
 		}
 	}, [waterproof]);
 
@@ -500,20 +497,17 @@ export default function Logo({ item }) {
 				/>
 
 				<Dropdown
-					title="Installation"
-					onChange={handleOnChangeInstallation}
-					options={installationSelections.map((option) => (
-						<option
-							value={option.value}
-							selected={option.value === installation}
-						>
+					title="mounting"
+					onChange={handleOnChangemounting}
+					options={mountingSelections.map((option) => (
+						<option value={option.value} selected={option.value === mounting}>
 							{option.value}
 						</option>
 					))}
-					value={item.installation}
+					value={item.mounting}
 				/>
 
-				{installation === 'Stud with spacer' && (
+				{mounting === 'Stud with spacer' && (
 					<>
 						<Dropdown
 							title="Stud Length"
@@ -544,7 +538,7 @@ export default function Logo({ item }) {
 					</>
 				)}
 
-				{installation === 'Stud Mount' && (
+				{mounting === 'Stud Mount' && (
 					<>
 						<Dropdown
 							title="Stud Length"
@@ -571,7 +565,7 @@ export default function Logo({ item }) {
 				/>
 			</div>
 
-			{installation === 'Stud with spacer' && (
+			{mounting === 'Stud with spacer' && (
 				<div className="text-xs text-[#9F9F9F] mb-4">
 					*Note: The spacer will be black (default) or match the painted sign's
 					color.

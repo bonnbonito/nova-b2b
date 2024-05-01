@@ -130,7 +130,7 @@ class Woocommerce {
 				unset( $values_array['USD'] );
 			}
 		} elseif ( isset( $values_array['CAD'] ) ) {
-				unset( $values_array['CAD'] );
+			unset( $values_array['CAD'] );
 		}
 
 		// Encode the modified array back to JSON

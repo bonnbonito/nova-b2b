@@ -348,8 +348,6 @@ export default function Logo({ item }) {
 		}
 		if (!sets) missingFields.push('Select Quantity');
 
-		if (!comments) missingFields.push('Add Comments');
-
 		if (!fileUrls || fileUrls.length === 0)
 			missingFields.push('Upload a PDF/AI File');
 

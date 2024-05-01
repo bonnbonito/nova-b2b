@@ -318,8 +318,6 @@ export default function Logo({ item }) {
 
 		if (!sets) missingFields.push('Select Quantity');
 
-		if (!comments) missingFields.push('Add Comments');
-
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
 				const existingIndex = prevMissing.findIndex(
