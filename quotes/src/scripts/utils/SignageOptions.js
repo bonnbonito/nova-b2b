@@ -161,7 +161,7 @@ const calculateMountingOptions = (
 		}
 	}
 
-	if (waterproof === 'Outdoor') {
+	if (waterproof === 'Outdoor (Waterproof)') {
 		newMountingOptions = newMountingOptions.filter(
 			(option) => option.mounting_option !== 'Double-sided tape'
 		);

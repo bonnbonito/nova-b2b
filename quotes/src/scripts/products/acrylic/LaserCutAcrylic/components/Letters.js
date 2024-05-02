@@ -387,7 +387,7 @@ export default function Letters({ item }) {
 			);
 		}
 
-		if (waterproof === 'Outdoor') {
+		if (waterproof === 'Outdoor (Waterproof)') {
 			if (selectedMounting === 'Double-sided tape') {
 				setSelectedMounting('');
 			}

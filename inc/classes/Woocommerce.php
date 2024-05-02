@@ -1513,8 +1513,6 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		$html .= '<h6 style="font-size: 100%; margin-top: 0; margin-bottom: 0;">Project Name: <strong>' . $nova_title . '</strong></h6>';
 		$html .= '<h6 style="font-size: 100%; margin-top: 0; margin-bottom: 20px;">Product: <strong>' . $product_line . '</strong></h6>';
 
-		print_r( $array );
-
 		foreach ( $array as $object ) {
 
 			$html .= '<div style="padding: 10px; border: 1pxz solid #d2d2d2 !important;">';
@@ -1558,11 +1556,11 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 			}
 
 			if ( isset( $object->metalDepth ) && ! empty( $object->metalDepth ) && $object->metalDepth ) {
-				$html .= '<strong>METAL DEPTH: </strong>' . htmlspecialchars( $object->metalDepth->thickness ) . '"<br>';
+				$html .= '<strong>METAL DEPTH: </strong>' . htmlspecialchars( $object->metalDepth->thickness ) . '<br>';
 			}
 
 			if ( isset( $object->depth ) && ! empty( $object->depth ) && $object->depth ) {
-				$html .= '<strong>METAL DEPTH: </strong>' . htmlspecialchars( $object->depth->depth ) . '"<br>';
+				$html .= '<strong>METAL DEPTH: </strong>' . htmlspecialchars( $object->depth->depth ) . '<br>';
 			}
 
 			if ( isset( $object->width ) && ! empty( $object->width ) ) {

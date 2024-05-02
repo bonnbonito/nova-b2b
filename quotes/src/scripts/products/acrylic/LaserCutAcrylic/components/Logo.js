@@ -156,7 +156,7 @@ export default function Logo({ item }) {
 	}, [selectedThickness, selectedMounting, waterproof, maxWidthHeight]);
 
 	useEffect(() => {
-		if (waterproof === 'Outdoor') {
+		if (waterproof === 'Outdoor (Waterproof)') {
 			let newMountingOptions = mountingDefaultOptions.filter(
 				(option) => option.mounting_option !== 'Double-sided tape'
 			);
