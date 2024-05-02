@@ -305,7 +305,7 @@ export default function Letters({ item }) {
 
 			if (selectedMounting === 'Stud with spacer') {
 				let spacer =
-					totalLetterPrice * 0.02 > 25 ? 25 : totalLetterPrice * 0.02;
+					totalLetterPrice * 1.02 > 25 ? 25 : totalLetterPrice * 1.02;
 				spacer = parseFloat(spacer.toFixed(2));
 
 				totalLetterPrice += spacer;

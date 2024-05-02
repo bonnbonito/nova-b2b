@@ -275,7 +275,7 @@ export default function Logo({ item }) {
 				total *= acrylicBase?.name === 'Black' ? 1 : 1.1;
 
 				if (selectedMounting === 'Stud with spacer') {
-					let spacer = total * 0.02 > 25 ? 25 : total * 0.02;
+					let spacer = total * 1.02 > 25 ? 25 : total * 1.02;
 					spacer = parseFloat(spacer.toFixed(2));
 
 					total += spacer;

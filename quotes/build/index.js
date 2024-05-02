@@ -6923,7 +6923,7 @@
 							});
 							if (selectedMounting === 'Stud with spacer') {
 								let spacer =
-									totalLetterPrice * 0.02 > 25 ? 25 : totalLetterPrice * 0.02;
+									totalLetterPrice * 1.02 > 25 ? 25 : totalLetterPrice * 1.02;
 								spacer = parseFloat(spacer.toFixed(2));
 								totalLetterPrice += spacer;
 							}
@@ -7940,7 +7940,7 @@
 									total *= 0.95;
 								}
 								if (selectedMounting === 'Stud with spacer') {
-									let spacer = total * 0.02 > 25 ? 25 : total * 0.02;
+									let spacer = total * 1.02 > 25 ? 25 : total * 1.02;
 									spacer = parseFloat(spacer.toFixed(2));
 									total += spacer;
 								}
@@ -10095,7 +10095,7 @@
 							});
 							if (selectedMounting === 'Stud with spacer') {
 								let spacer =
-									totalLetterPrice * 0.02 > 25 ? 25 : totalLetterPrice * 0.02;
+									totalLetterPrice * 1.02 > 25 ? 25 : totalLetterPrice * 1.02;
 								spacer = parseFloat(spacer.toFixed(2));
 								totalLetterPrice += spacer;
 							}
@@ -11088,7 +11088,7 @@
 								).toFixed(2);
 								total *= acrylicBase?.name === 'Black' ? 1 : 1.1;
 								if (selectedMounting === 'Stud with spacer') {
-									let spacer = total * 0.02 > 25 ? 25 : total * 0.02;
+									let spacer = total * 1.02 > 25 ? 25 : total * 1.02;
 									spacer = parseFloat(spacer.toFixed(2));
 									total += spacer;
 								}
@@ -13876,7 +13876,7 @@
 								console.log(totalLetterPrice);
 								if (mounting === 'Stud with spacer') {
 									let spacer =
-										totalLetterPrice * 0.02 > 25 ? 25 : totalLetterPrice * 0.02;
+										totalLetterPrice * 1.02 > 25 ? 25 : totalLetterPrice * 1.02;
 									spacer = parseFloat(spacer.toFixed(2));
 									totalLetterPrice += spacer;
 								}
@@ -15113,7 +15113,7 @@
 								});
 								if (mounting === 'Stud with spacer') {
 									let spacer =
-										totalLetterPrice * 0.02 > 25 ? 25 : totalLetterPrice * 0.02;
+										totalLetterPrice * 1.02 > 25 ? 25 : totalLetterPrice * 1.02;
 									spacer = parseFloat(spacer.toFixed(2));
 									totalLetterPrice += spacer;
 								}
@@ -16536,7 +16536,7 @@
 								});
 								if (mounting === 'Stud with spacer') {
 									let spacer =
-										totalLetterPrice * 0.02 > 25 ? 25 : totalLetterPrice * 0.02;
+										totalLetterPrice * 1.02 > 25 ? 25 : totalLetterPrice * 1.02;
 									spacer = parseFloat(spacer.toFixed(2));
 									totalLetterPrice += spacer;
 								}
@@ -18068,7 +18068,7 @@
 								});
 								if (mounting === 'Stud with spacer') {
 									let spacer =
-										totalLetterPrice * 0.02 > 25 ? 25 : totalLetterPrice * 0.02;
+										totalLetterPrice * 1.02 > 25 ? 25 : totalLetterPrice * 1.02;
 									spacer = parseFloat(spacer.toFixed(2));
 									totalLetterPrice += spacer;
 								}
@@ -19147,7 +19147,7 @@
 								}
 								total = parseFloat(total.toFixed(2));
 								if (mounting === 'Stud with spacer') {
-									let spacer = total * 0.02 > 25 ? 25 : total * 0.02;
+									let spacer = total * 1.02 > 25 ? 25 : total * 1.02;
 									spacer = parseFloat(spacer.toFixed(2));
 									total += spacer;
 								}
@@ -20272,7 +20272,7 @@
 							});
 							if (mounting === 'Stud with spacer') {
 								let spacer =
-									totalLetterPrice * 0.02 > 25 ? 25 : totalLetterPrice * 0.02;
+									totalLetterPrice * 1.02 > 25 ? 25 : totalLetterPrice * 1.02;
 								spacer = parseFloat(spacer.toFixed(2));
 								totalLetterPrice += spacer;
 							}
@@ -21284,7 +21284,7 @@
 								}
 								let total = parseFloat((computed * multiplier).toFixed(2));
 								if (mounting === 'Stud with spacer') {
-									let spacer = total * 0.02 > 25 ? 25 : total * 0.02;
+									let spacer = total * 1.02 > 25 ? 25 : total * 1.02;
 									spacer = parseFloat(spacer.toFixed(2));
 									console.log(spacer, total);
 									total += spacer;
@@ -22418,7 +22418,7 @@
 								});
 								if (mounting === 'Stud with spacer') {
 									let spacer =
-										totalLetterPrice * 0.02 > 25 ? 25 : totalLetterPrice * 0.02;
+										totalLetterPrice * 1.02 > 25 ? 25 : totalLetterPrice * 1.02;
 									spacer = parseFloat(spacer.toFixed(2));
 									totalLetterPrice += spacer;
 								}
@@ -23555,7 +23555,7 @@
 								}
 								total = parseFloat(total.toFixed(2));
 								if (mounting === 'Stud with spacer') {
-									let spacer = total * 0.02 > 25 ? 25 : total * 0.02;
+									let spacer = total * 1.02 > 25 ? 25 : total * 1.02;
 									spacer = parseFloat(spacer.toFixed(2));
 									total += spacer;
 								}
@@ -24926,7 +24926,7 @@
 							});
 							if (mounting === 'Stud with spacer') {
 								let spacer =
-									totalLetterPrice * 0.02 > 25 ? 25 : totalLetterPrice * 0.02;
+									totalLetterPrice * 1.02 > 25 ? 25 : totalLetterPrice * 1.02;
 								spacer = parseFloat(spacer.toFixed(2));
 								totalLetterPrice += spacer;
 							}
@@ -25893,7 +25893,7 @@
 								total *= mounting === 'Double-sided tape' ? 1.01 : 1;
 								total *= pvcBaseColor?.name !== 'Black' ? 1.1 : 1;
 								if (mounting === 'Stud with spacer') {
-									let spacer = total * 0.02 > 25 ? 25 : total * 0.02;
+									let spacer = total * 1.02 > 25 ? 25 : total * 1.02;
 									spacer = parseFloat(spacer.toFixed(2));
 									total += spacer;
 								}
@@ -27105,7 +27105,7 @@
 							});
 							if (mounting === 'Stud with spacer') {
 								let spacer =
-									totalLetterPrice * 0.02 > 25 ? 25 : totalLetterPrice * 0.02;
+									totalLetterPrice * 1.02 > 25 ? 25 : totalLetterPrice * 1.02;
 								spacer = parseFloat(spacer.toFixed(2));
 								totalLetterPrice += spacer;
 							}
@@ -28040,7 +28040,7 @@
 								total *= selectedFinishing === 'Gloss' ? 1.03 : 1;
 								total *= mounting === 'Double-sided tape' ? 1.01 : 1;
 								if (mounting === 'Stud with spacer') {
-									let spacer = total * 0.02 > 25 ? 25 : total * 0.02;
+									let spacer = total * 1.02 > 25 ? 25 : total * 1.02;
 									spacer = parseFloat(spacer.toFixed(2));
 									total += spacer;
 								}
@@ -29111,7 +29111,7 @@
 								total *= mounting === 'Double-sided tape' ? 1.01 : 1;
 								total *= pvcBaseColor?.name === 'Black' ? 1.2 : 1.1;
 								if (mounting === 'Stud with spacer') {
-									let spacer = total * 0.02 > 25 ? 25 : total * 0.02;
+									let spacer = total * 1.02 > 25 ? 25 : total * 1.02;
 									spacer = parseFloat(spacer.toFixed(2));
 									total += spacer;
 								}

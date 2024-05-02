@@ -301,7 +301,7 @@ export default function Logo({ item }) {
 				let total = parseFloat((computed * multiplier).toFixed(2));
 
 				if (mounting === 'Stud with spacer') {
-					let spacer = total * 0.02 > 25 ? 25 : total * 0.02;
+					let spacer = total * 1.02 > 25 ? 25 : total * 1.02;
 					spacer = parseFloat(spacer.toFixed(2));
 
 					console.log(spacer, total);
