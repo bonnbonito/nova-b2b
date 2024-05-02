@@ -34,10 +34,12 @@ class Roles {
 		add_action( 'admin_menu', array( $this, 'add_pending_users_count_bubble' ) );
 		add_filter( 'wp_authenticate_user', array( $this, 'custom_role_login_check' ), 10, 2 );
 		add_action( 'nova_activated', array( $this, 'user_activation' ), 10, 1 );
-		add_filter( 'manage_users_columns', array( $this, 'add_business_id_column' ) );
+		add_filter( 'manage_users_columns', array( $this, 'add_business_id_column' ), 20, 1 );
+		add_filter( 'manage_users_columns', array( $this, 'add_registration_date_column' ) );
 		add_action( 'manage_users_custom_column', array( $this, 'business_id_user_column' ), 10, 3 );
 		add_filter( 'manage_users_sortable_columns', array( $this, 'make_business_id_column_sortable' ) );
 		add_filter( 'manage_users_sortable_columns', array( $this, 'user_id_column_sortable' ) );
+		add_filter( 'manage_users_custom_column', array( $this, 'show_registration_date_column_content' ), 11, 3 );
 		add_action( 'pre_get_users', array( $this, 'sort_by_business_id_column' ) );
 		add_action( 'set_user_role', array( $this, 'notify_user_approved_partner' ), 13, 3 );
 		add_action( 'set_user_role', array( $this, 'update_role_business_id' ), 40, 3 );
@@ -49,6 +51,45 @@ class Roles {
 		// add_action( 'added_user_meta', array( $this, 'user_send_activate' ), 10, 4 );
 		add_action( 'pre_user_query', array( $this, 'custom_user_search_business_id' ) );
 		add_action( 'profile_update', array( $this, 'update_role_business_id_on_profile_update' ), 10, 2 );
+		add_action( 'show_user_profile', array( $this, 'add_registration_date_to_profile' ), 0 );
+		add_action( 'edit_user_profile', array( $this, 'add_registration_date_to_profile' ), 0 );
+	}
+
+	public function add_registration_date_to_profile( $user ) {
+		?>
+<h3>Registration Information</h3>
+<table class="form-table" id="registration-info">
+	<tr>
+		<th><label for="registration_date">Registration Date</label></th>
+		<td>
+			<?php echo date( 'M d, Y', strtotime( $user->user_registered ) ); ?>
+		</td>
+	</tr>
+</table>
+<script type="text/javascript">
+		document.addEventListener('DOMContentLoaded', function () {
+			var regInfo = document.getElementById('registration-info').closest('table');
+			var personalOptions = document.querySelector('.user-rich-editing-wrap').closest('table');
+			if (regInfo && personalOptions) {
+				personalOptions.parentNode.insertBefore(regInfo, personalOptions);
+			}
+		});
+	</script>
+		<?php
+	}
+
+	public function show_registration_date_column_content( $value, $column_name, $user_id ) {
+		if ( 'registration_date' == $column_name ) {
+			$user  = get_userdata( $user_id );
+			$value = $user->user_registered;
+			return date( 'M d, Y', strtotime( $value ) );
+		}
+		return $value;
+	}
+
+	public function add_registration_date_column( $columns ) {
+		$columns['registration_date'] = 'Registration Date';
+		return $columns;
 	}
 
 	public function custom_user_search_business_id( $user_query ) {
@@ -228,22 +269,22 @@ class Roles {
 			?>
 <script type="text/javascript">
 jQuery(document).ready(function($) {
-    // Move the row actions from their original location to the 'user_id' column
-    $('#the-list tr').each(function() {
-        var $this = $(this);
-        var rowActions = $this.find('.row-actions').clone(); // Clone the row actions
-        $this.find('.row-actions').remove(); // Remove the original row actions
+	// Move the row actions from their original location to the 'user_id' column
+	$('#the-list tr').each(function() {
+		var $this = $(this);
+		var rowActions = $this.find('.row-actions').clone(); // Clone the row actions
+		$this.find('.row-actions').remove(); // Remove the original row actions
 
-        // Check if the 'user_id' column exists and append the cloned row actions
-        var userIDCell = $this.find('td.business_id');
-        if (userIDCell.length) {
-            userIDCell.append(rowActions);
-        }
-    });
+		// Check if the 'user_id' column exists and append the cloned row actions
+		var userIDCell = $this.find('td.business_id');
+		if (userIDCell.length) {
+			userIDCell.append(rowActions);
+		}
+	});
 });
 </script>
 
-<?php
+			<?php
 		}
 	}
 
