@@ -92,14 +92,13 @@ function ModalSave({
 	  <p class="font-bold mb-0">Process:</p>
 	  <ol class="mb-4">
 		<li>We'll review your order before finalizing the price.</li>
-		<li>Expect an email from us within 1 business day. You can also check the MOCKUPS under PROCESSING.</li>
-		<li>Once you get the final quote, add the product to your cart and proceed to CART page</li>
-		<li>Once you're satisfied with your cart, proceed to CHECKOUT for payment.</li>
+		<li>For updates, please check your email or visit QUOTED (in MOCKUPS) within 1 business day.</li>
+		<li>After getting a quote, add the product to your cart and go to the CART page.</li>
+		<li>Next, proceed to CHECKOUT to pay.</li>
 	  </ol>
 	  <p class="font-bold mb-0">What's next?</p>
-	  <p>Click <strong>Back to Mockup</strong> to view all your sign mockups.<br>
-	  Click <strong>Create New Mockup</strong> to create a new signage.<br>
-	  Click <strong>Proceed to Portal</strong> to go to the dashboard.</p>
+	  <strong>Go to Mockups:</strong> View all your sign mockups.<br>
+	  <strong>Create New Mockup:</strong> Create a new design.</p>
     </div>
   `;
 	};
@@ -110,9 +109,9 @@ function ModalSave({
       <p class="font-bold mb-4">UPDATED ORDER QUOTE DRAFT</p>
 	  <p class="mb-4">You can still edit this project before sending it to us for the final quotation. Find your saved draft in the <strong>MOCKUPS</strong> section under <strong>DRAFTS</strong>.</p>
 	  <p class="font-bold mb-0">What's next?</p>
-	  <p>Click <strong>Back to Mockup</strong> to continue editing the project.<br>
-	  Click <strong>Create New Mockup</strong> to create a new signage.<br>
-	  Click <strong>Proceed to Portal</strong> to go to the dashboard.</p>
+	  <p><strong>Go to Mockups:</strong> View all your sign mockups.<br>
+	  <strong>Create New Mockup:</strong> Create a new design.<br>
+	  <strong>Continue Editing:</strong> Edit current mockup.</p>
     </div>
   `;
 	};
@@ -121,11 +120,11 @@ function ModalSave({
 		return `
     <div class="mb-4">
       <p class="font-bold mb-4">PROJECT IS SAVED AS A DRAFT</p>
-	  <p class="mb-4">You can edit your saved draft anytime before submitting a quote. Access your saved draft in <strong>MOCKUPS</strong> under <strong>DRAFTS</strong>.</p>
+	  <p class="mb-4">You can edit your saved draft anytime before submitting a quote. Access your saved work in <strong><a href="${NovaQuote.mockup_drafts_url}">DRAFTS</a></strong> (in MOCKUPS).</p>
 	  <p class="font-bold mb-0">What's next?</p>
-	  <p>Click <strong>Back to Mockup</strong> to view all your sign mockups.<br>
-	  Click <strong>Create New Mockup</strong> to create a new signage.<br>
-	  Click <strong>Proceed to Portal</strong> to go to the dashboard.</p>
+	  <p><strong>Go to Mockups:</strong> View all your sign mockups.<br>
+	  <strong>Create New Mockup:</strong> Create a new design.<br>
+	  <strong>Continue Editing:</strong> Edit current mockup.</p>
 
     </div>
   `;
@@ -338,14 +337,14 @@ function ModalSave({
 											href={`${NovaQuote.mockup_account_url}`}
 											className="block mb-4 text-center text-sm px-3 py-2 text-white no-underline bg-nova-primary rounded hover:bg-nova-secondary"
 										>
-											Back to Mockup
+											Go to Mockups
 										</a>
 									) : (
 										<a
 											href={`${NovaQuote.mockup_account_url}`}
 											className="block mb-4 text-center text-sm px-3 py-2 text-white no-underline bg-nova-primary rounded hover:bg-nova-secondary"
 										>
-											Back to Mockups
+											Go to Mockups
 										</a>
 									)}
 									<a
@@ -354,12 +353,15 @@ function ModalSave({
 									>
 										Create New Mockup
 									</a>
-									<a
-										href={NovaQuote.dashboard_url}
-										className="block mb-4 text-center text-sm px-3 py-2 text-white no-underline bg-nova-primary rounded hover:bg-nova-secondary"
-									>
-										Proceed to Portal
-									</a>
+									{action === 'draft' ||
+										(action === 'update' && (
+											<a
+												href={NovaQuote.quote_url + '?qedit=1&qid=' + quoteID}
+												className="block mb-4 text-center text-sm px-3 py-2 text-white no-underline bg-nova-primary rounded hover:bg-nova-secondary"
+											>
+												Continue Editing
+											</a>
+										))}
 								</div>
 							</Dialog.Description>
 						</Dialog.Content>
