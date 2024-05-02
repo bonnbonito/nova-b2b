@@ -1070,13 +1070,7 @@ function Prices({
     className: "text-left font-title md:tracking-[1.4px] text-sm"
   }, "METAL FINISHING"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-sm"
-  }, item.metalFinishing)), item.acrylicCover?.name && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "text-left font-title md:tracking-[1.4px] text-sm"
-  }, "ACRYLIC COVER"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "text-left text-sm"
-  }, item.acrylicCover?.name)), item.studLength && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.metalFinishing)), item.studLength && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left font-title md:tracking-[1.4px] text-sm"
@@ -1452,13 +1446,7 @@ function PricesView({
     className: "text-left text-xs font-title"
   }, "STAINLESS STEEL POLISH"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-[14px]"
-  }, item.stainlessSteelPolished)), item.acrylicCover?.name && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "grid grid-cols-[160px_1fr] py-[2px] items-center gap-5"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "text-left text-xs font-title"
-  }, "ACRYLIC COVER"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "text-left text-[14px]"
-  }, item.acrylicCover?.name)), item.installation && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.stainlessSteelPolished)), item.installation && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-[160px_1fr] py-[2px] items-center gap-5"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"

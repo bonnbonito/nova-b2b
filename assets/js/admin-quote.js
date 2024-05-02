@@ -448,11 +448,6 @@ function getSignageDetailFields(sign) {
 		},
 
 		{
-			label: 'ACRYLIC COVER',
-			value: sign.acrylicCover?.name ? sign.acrylicCover.name : '',
-		},
-
-		{
 			label: 'METAL FINISHING',
 			value: sign.metalFinishing ? sign.metalFinishing : '',
 		},

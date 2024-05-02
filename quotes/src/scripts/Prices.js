@@ -364,15 +364,6 @@ export default function Prices({ item }) {
 				</div>
 			)}
 
-			{item.acrylicCover?.name && (
-				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
-					<div className="text-left font-title md:tracking-[1.4px] text-sm">
-						ACRYLIC COVER
-					</div>
-					<div className="text-left text-sm">{item.acrylicCover?.name}</div>
-				</div>
-			)}
-
 			{item.studLength && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
