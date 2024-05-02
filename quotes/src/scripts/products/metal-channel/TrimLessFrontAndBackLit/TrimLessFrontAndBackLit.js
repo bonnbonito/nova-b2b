@@ -116,12 +116,12 @@ export default function TrimLessFrontAndBackLit() {
 			if (type === 'letters') {
 				args = {
 					type: type,
-					title: `${type} ${count + 1}`,
+					title: `${type} ${count + 1}`.toUpperCase(),
 				};
 			} else {
 				args = {
 					type: type,
-					title: `${type} ${count + 1}`,
+					title: `${type} ${count + 1}`.toUpperCase(),
 					width: '',
 					height: '',
 				};

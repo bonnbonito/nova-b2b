@@ -94,7 +94,7 @@ export default function LayeredAcrylic() {
 			if (type === 'letters') {
 				args = {
 					type: type,
-					title: `${type} ${count + 1}`,
+					title: `${type} ${count + 1}`.toUpperCase(),
 					letters: '',
 					comments: '',
 					font: '',
@@ -110,7 +110,7 @@ export default function LayeredAcrylic() {
 			} else {
 				args = {
 					type: type,
-					title: `${type} ${count + 1}`,
+					title: `${type} ${count + 1}`.toUpperCase(),
 					width: '',
 					height: '',
 				};

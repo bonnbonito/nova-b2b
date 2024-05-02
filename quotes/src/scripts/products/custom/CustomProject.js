@@ -71,7 +71,7 @@ export default function CustomProject() {
 			const count = prevSignage.filter((sign) => sign.type === type).length;
 			let args;
 			args = {
-				title: `${type} ${count + 1}`,
+				title: `${type} ${count + 1}`.toUpperCase(),
 			};
 			const newSignage = {
 				...defaultArgs,

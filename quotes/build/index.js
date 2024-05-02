@@ -3073,7 +3073,7 @@ function LaserCutAcrylic() {
       if (type === 'letters') {
         args = {
           type: type,
-          title: `${type} ${count + 1}`,
+          title: `${type} ${count + 1}`.toUpperCase(),
           letters: '',
           font: '',
           thickness_options: '',
@@ -3092,7 +3092,7 @@ function LaserCutAcrylic() {
       } else {
         args = {
           type: type,
-          title: `${type} ${count + 1}`,
+          title: `${type} ${count + 1}`.toUpperCase(),
           width: '',
           height: ''
         };
@@ -4349,7 +4349,7 @@ function LayeredAcrylic() {
       if (type === 'letters') {
         args = {
           type: type,
-          title: `${type} ${count + 1}`,
+          title: `${type} ${count + 1}`.toUpperCase(),
           letters: '',
           comments: '',
           font: '',
@@ -4368,7 +4368,7 @@ function LayeredAcrylic() {
       } else {
         args = {
           type: type,
-          title: `${type} ${count + 1}`,
+          title: `${type} ${count + 1}`.toUpperCase(),
           width: '',
           height: ''
         };
@@ -4971,7 +4971,7 @@ function MetalLaminate() {
       if (type === 'letters') {
         args = {
           type: type,
-          title: `${type} ${count + 1}`,
+          title: `${type} ${count + 1}`.toUpperCase(),
           letters: '',
           font: '',
           thickness_options: '',
@@ -4981,7 +4981,7 @@ function MetalLaminate() {
       } else {
         args = {
           type: type,
-          title: `${type} ${count + 1}`,
+          title: `${type} ${count + 1}`.toUpperCase(),
           width: '',
           height: ''
         };
@@ -6177,7 +6177,7 @@ function UvPrintedAcrylic() {
       if (type === 'letters') {
         args = {
           type: type,
-          title: `${type} ${count + 1}`,
+          title: `${type} ${count + 1}`.toUpperCase(),
           letters: '',
           comments: '',
           font: '',
@@ -6194,7 +6194,7 @@ function UvPrintedAcrylic() {
       } else {
         args = {
           type: type,
-          title: `${type} ${count + 1}`,
+          title: `${type} ${count + 1}`.toUpperCase(),
           width: '',
           height: ''
         };
@@ -6790,7 +6790,7 @@ function CustomProject() {
       const count = prevSignage.filter(sign => sign.type === type).length;
       let args;
       args = {
-        title: `${type} ${count + 1}`
+        title: `${type} ${count + 1}`.toUpperCase()
       };
       const newSignage = {
         ...defaultArgs,
@@ -7113,12 +7113,12 @@ function TrimLessBackLit() {
       if (type === 'letters') {
         args = {
           type: type,
-          title: `${type} ${count + 1}`
+          title: `${type} ${count + 1}`.toUpperCase()
         };
       } else {
         args = {
           type: type,
-          title: `${type} ${count + 1}`,
+          title: `${type} ${count + 1}`.toUpperCase(),
           width: '',
           height: ''
         };
@@ -7988,12 +7988,12 @@ function TrimLessFrontAndBackLit() {
       if (type === 'letters') {
         args = {
           type: type,
-          title: `${type} ${count + 1}`
+          title: `${type} ${count + 1}`.toUpperCase()
         };
       } else {
         args = {
           type: type,
-          title: `${type} ${count + 1}`,
+          title: `${type} ${count + 1}`.toUpperCase(),
           width: '',
           height: ''
         };
@@ -8846,12 +8846,12 @@ function TrimLessFrontLit() {
       if (type === 'letters') {
         args = {
           type: type,
-          title: `${type} ${count + 1}`
+          title: `${type} ${count + 1}`.toUpperCase()
         };
       } else {
         args = {
           type: type,
-          title: `${type} ${count + 1}`,
+          title: `${type} ${count + 1}`.toUpperCase(),
           width: '',
           height: ''
         };
@@ -9722,7 +9722,7 @@ function FabricatedStainless() {
       if (type === 'letters') {
         args = {
           type: type,
-          title: `${type} ${count + 1}`,
+          title: `${type} ${count + 1}`.toUpperCase(),
           letters: '',
           font: '',
           thickness_options: '',
@@ -9732,7 +9732,7 @@ function FabricatedStainless() {
       } else {
         args = {
           type: type,
-          title: `${type} ${count + 1}`,
+          title: `${type} ${count + 1}`.toUpperCase(),
           width: '',
           height: ''
         };
@@ -11015,7 +11015,7 @@ function LaserCutAluminum() {
       if (type === 'letters') {
         args = {
           type: type,
-          title: `${type} ${count + 1}`,
+          title: `${type} ${count + 1}`.toUpperCase(),
           letters: '',
           font: '',
           filePaths: [],
@@ -11032,7 +11032,7 @@ function LaserCutAluminum() {
       } else {
         args = {
           type: type,
-          title: `${type} ${count + 1}`,
+          title: `${type} ${count + 1}`.toUpperCase(),
           metalColor: {
             name: '',
             color: ''
@@ -12230,7 +12230,7 @@ function FabricatedStainless() {
       if (type === 'letters') {
         args = {
           type: type,
-          title: `${type} ${count + 1}`,
+          title: `${type} ${count + 1}`.toUpperCase(),
           letters: '',
           font: '',
           thickness_options: '',
@@ -12240,7 +12240,7 @@ function FabricatedStainless() {
       } else {
         args = {
           type: type,
-          title: `${type} ${count + 1}`,
+          title: `${type} ${count + 1}`.toUpperCase(),
           width: '',
           height: ''
         };
@@ -13704,7 +13704,7 @@ function PVCMetalLaminate() {
       if (type === 'letters') {
         args = {
           type: type,
-          title: `${type} ${count + 1}`,
+          title: `${type} ${count + 1}`.toUpperCase(),
           letters: '',
           font: '',
           thickness_options: '',
@@ -13720,7 +13720,7 @@ function PVCMetalLaminate() {
       } else {
         args = {
           type: type,
-          title: `${type} ${count + 1}`,
+          title: `${type} ${count + 1}`.toUpperCase(),
           width: '',
           height: ''
         };
@@ -14953,7 +14953,7 @@ function PVCPainted() {
       if (type === 'letters') {
         args = {
           type: type,
-          title: `${type} ${count + 1}`,
+          title: `${type} ${count + 1}`.toUpperCase(),
           letters: '',
           font: '',
           thickness_options: '',
@@ -14969,7 +14969,7 @@ function PVCPainted() {
       } else {
         args = {
           type: type,
-          title: `${type} ${count + 1}`,
+          title: `${type} ${count + 1}`.toUpperCase(),
           width: '',
           height: ''
         };
@@ -16163,7 +16163,7 @@ function PVCUv() {
       let args;
       args = {
         type: type,
-        title: `${type} ${count + 1}`,
+        title: `${type} ${count + 1}`.toUpperCase(),
         width: '',
         height: ''
       };

@@ -96,7 +96,7 @@ export default function UvPrintedAcrylic() {
 			if (type === 'letters') {
 				args = {
 					type: type,
-					title: `${type} ${count + 1}`,
+					title: `${type} ${count + 1}`.toUpperCase(),
 					letters: '',
 					comments: '',
 					font: '',
@@ -110,7 +110,7 @@ export default function UvPrintedAcrylic() {
 			} else {
 				args = {
 					type: type,
-					title: `${type} ${count + 1}`,
+					title: `${type} ${count + 1}`.toUpperCase(),
 					width: '',
 					height: '',
 				};

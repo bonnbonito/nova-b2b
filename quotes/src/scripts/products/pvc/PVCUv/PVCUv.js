@@ -96,7 +96,7 @@ export default function PVCUv() {
 			let args;
 			args = {
 				type: type,
-				title: `${type} ${count + 1}`,
+				title: `${type} ${count + 1}`.toUpperCase(),
 				width: '',
 				height: '',
 			};

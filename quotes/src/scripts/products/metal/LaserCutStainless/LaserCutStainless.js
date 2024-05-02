@@ -105,7 +105,7 @@ export default function FabricatedStainless() {
 			if (type === 'letters') {
 				args = {
 					type: type,
-					title: `${type} ${count + 1}`,
+					title: `${type} ${count + 1}`.toUpperCase(),
 					letters: '',
 					font: '',
 					thickness_options: '',
@@ -115,7 +115,7 @@ export default function FabricatedStainless() {
 			} else {
 				args = {
 					type: type,
-					title: `${type} ${count + 1}`,
+					title: `${type} ${count + 1}`.toUpperCase(),
 					width: '',
 					height: '',
 				};

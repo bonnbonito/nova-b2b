@@ -103,7 +103,7 @@ export default function LaserCutAluminum() {
 			if (type === 'letters') {
 				args = {
 					type: type,
-					title: `${type} ${count + 1}`,
+					title: `${type} ${count + 1}`.toUpperCase(),
 					letters: '',
 					font: '',
 					filePaths: [],
@@ -117,7 +117,7 @@ export default function LaserCutAluminum() {
 			} else {
 				args = {
 					type: type,
-					title: `${type} ${count + 1}`,
+					title: `${type} ${count + 1}`.toUpperCase(),
 					metalColor: { name: '', color: '' },
 					width: '',
 					height: '',
