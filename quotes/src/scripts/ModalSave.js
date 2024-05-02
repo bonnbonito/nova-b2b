@@ -143,6 +143,7 @@ function ModalSave({
 			formData.append('title', title);
 			formData.append('product', NovaQuote.product);
 			formData.append('action', 'save_quote');
+			formData.append('user_id', NovaQuote.user_id);
 			formData.append('signage', JSON.stringify(signage));
 			formData.append('total', totalUsdPrice.toFixed(2));
 			formData.append('quote_status', 'draft');

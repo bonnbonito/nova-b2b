@@ -83,6 +83,14 @@ class Nova_Quote {
 				$this->for_mockup_update_email( $post_id );
 			}
 		}
+
+		if ( isset( $_POST['send_mockup_draft_email'], $_POST['post_id'] ) && check_admin_referer( 'send_mockup_email_action', 'send_mockup_email_nonce' ) ) {
+			$post_id = intval( $_POST['post_id'] );
+
+			if ( $post_id ) {
+				$this->for_mockup_draft_email( $post_id );
+			}
+		}
 	}
 
 	public function show_partner_email( $post_id ) {
@@ -279,16 +287,43 @@ class Nova_Quote {
 		}
 
 		if ( get_field( 'quote_status', $post->ID )['value'] === 'draft' ) {
-			return;
+			add_meta_box(
+				'nova_admin_mockup_draft_email',
+				__( 'Send Draft Email', 'nova-b2b' ),
+				array( $this, 'nova_admin_mockup_draft_email_callback' ),
+				'nova_quote',
+				'side',
+				'high'
+			);
+
+		} else {
+			add_meta_box(
+				'nova_admin_mockup_update_email',
+				__( 'Send Update Email', 'nova-b2b' ),
+				array( $this, 'nova_admin_mockup_update_email_callback' ),
+				'nova_quote',
+				'side',
+				'high'
+			);
 		}
-		add_meta_box(
-			'nova_admin_mockup_update_email',
-			__( 'Send Update Email', 'nova-b2b' ),
-			array( $this, 'nova_admin_mockup_update_email_callback' ),
-			'nova_quote',
-			'side',
-			'high'
-		);
+	}
+
+	public function nova_admin_mockup_draft_email_callback( $post ) {
+		?>
+<form action="" method="post">
+		<?php wp_nonce_field( 'send_mockup_email_action', 'send_mockup_email_nonce' ); ?>
+	<input type="hidden" name="post_id" value="<?php echo $post->ID; ?>">
+	<input id="sendDraft" type="submit" name="send_mockup_draft_email" class="button button-primary"
+		value="<?php esc_attr_e( 'Send Draft Email', 'nova-b2b' ); ?>">
+</form>
+<script>
+const sendDraft = document.getElementById('sendDraft');
+sendDraft.addEventListener('click', e => {
+	sendDraft.value = "Sending...";
+	sendDraft.attr.disabled = true;
+})
+</script>
+		<?php
 	}
 
 	public function nova_admin_mockup_update_email_callback( $post ) {
@@ -325,10 +360,19 @@ sendMockup.addEventListener('click', e => {
 
 	public function nova_admin_view_quote_callback() {
 		$details = home_url( '/my-account/mockups/view/?qid=' . get_the_ID() );
+
+		$product_id   = get_field( 'product' );
+		$edit_url     = get_permalink( $product_id ) . '?qedit=1&qid=' . get_the_ID();
+		$quote_status = get_field( 'quote_status' );
 		?>
 
 <a href="<?php echo esc_url( $details ); ?>" target="_blank" class="button button-primary button-large">View Details</a>
-		<?php
+		<?php if ( $product_id && $quote_status['value'] != 'ready' ) : ?>
+<br>
+<a style="margin-top: 10px;" href="<?php echo esc_url( $edit_url ); ?>" target="_blank"
+	class="button button-primary button-large">Edit Quote</a>
+			<?php
+	endif;
 	}
 
 
@@ -498,15 +542,24 @@ sendMockup.addEventListener('click', e => {
 		$to         = $user_info->user_email;
 		$first_name = $user_info->first_name;
 
-		$subject = 'NOVA Signage - Quotes Updated: ' . $project_name . ' - #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
+		$subject = 'Quote Status Updated: (' . $project_name . ') - #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
 
 		$message  = '<p>Hello ' . $first_name . ',</p>';
-		$message .= '<p>Please review the quotation for QUOTE ID: Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '.  below. Kindly proceed to checkout if everything looks good.</p>';
-		$message .= '<p><a href="' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '">' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '</a></p>';
+		$message .= '<p>Your request has been quoted. Please review the quotation for:</p>';
+
+		$message .= '<ul>';
+		$message .= '<li><strong>Project:</strong> ' . $project_name . '</li>';
+		$message .= '<li><strong>Quote ID:</strong> Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '</li>';
+		$message .= '</ul><br><br>';
+
+		$message .= '<p>Kindly click the link to the website and proceed to checkout if everything looks good.<br>';
+		$message .= '<a href="' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '">' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '</a></p>';
+
 		if ( file_exists( $file_path ) ) {
-			$message .= '<p><a href="' . esc_url( $file_link ) . '">Read the quote details here</a></p>';
+			$message .= '<p>Access the PDF copy of your quote here:<br><a href="' . esc_url( $file_link ) . '">' . esc_url( $file_link ) . '</a></p>';
 		}
-		$message .= "<p>Don't hesitate to contact us if you have any questions or concerns.</p>";
+
+		$message .= '<p>Let us know if you have any questions or concerns.</p>';
 
 		$message .= '<p>Thank you,<br>';
 		$message .= 'NOVA Signage Team</p>';
@@ -542,17 +595,80 @@ sendMockup.addEventListener('click', e => {
 		$to         = $user_info->user_email;
 		$first_name = $user_info->first_name;
 
-		$subject = 'NOVA Signage - Mockup for Review: ' . $project_name . ' - #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
+		$subject = 'Revised Quote: (' . $project_name . ') - #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
 
-		$message  = '<p>Hello ' . $first_name . ',</p>';
-		$message .= '<p>Your custom sign mockup: ' . $project_name . ' - Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . ' has been revised and is now available for your review. Click the link below for more details:</p>';
+		$message  = '<p>Dear ' . $first_name . ',</p>';
+		$message .= '<p>Your custom sign mockup has been revised and is now available for your review:</p>';
+
+		$message .= '<ul>';
+		$message .= '<li><strong>Project:</strong> ' . $project_name . '</li>';
+		$message .= '<li><strong>Quote ID:</strong> Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '</li>';
+		$message .= '</ul>';
+
+		$message .= '<p>Please check the <strong>NOTES</strong> section if there are any remarks. Click the link for more details:</p>';
 
 		$message .= '<p><a href="' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '">' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '</a></p>';
-		if ( file_exists( $file_path ) ) {
-			$message .= '<p><a href="' . esc_url( $file_link ) . '">Read the quote details here</a></p>';
-		}
 
-		$message .= "<p>You may now add it to your cart if you're satisfied. Let us know if you need any adjustments.</p>";
+		$message .= '<p>You may now add this project to your cart.</p>';
+
+		$message .= '<p>Let us know if you need any adjustments.</p>';
+
+		$message .= '<p>Thank you,<br>';
+		$message .= 'NOVA Signage Team</p>';
+
+		$headers   = array();
+		$headers[] = 'Content-Type: text/html; charset=UTF-8';
+		$headers[] = 'From: NOVA Signage <quotes@novasignage.com>';
+		$headers[] = 'Reply-To: NOVA Signage <quotes@novasignage.com>';
+
+		$role_instance = \NOVA_B2B\Inc\Classes\Roles::get_instance();
+
+		$sent = $role_instance->send_email( $to, $subject, $message, $headers, array() );
+
+		if ( $sent ) {
+			add_action(
+				'admin_notices',
+				function () use ( $to ) {
+						echo '<div class="notice notice-success is-dismissible"><p>Email successfully sent to ' . esc_html( $to ) . '.</p></div>';
+				}
+			);
+		}
+	}
+
+
+	public function for_mockup_draft_email( $post_id ) {
+
+		$user_id       = get_field( 'partner', $post_id );
+		$user_info     = get_userdata( $user_id );
+		$project_name  = get_field( 'frontend_title', $post_id );
+		$business_id   = get_field( 'business_id', 'user_' . $user_id );
+		$currency      = 'USD';
+		$filename      = $business_id . '-INV-Q-' . $post_id . '-' . $currency . '.pdf';
+		$company       = get_field( 'business_name', 'user_' . $user_id ) ? get_field( 'business_name', 'user_' . $user_id ) : 'None';
+		$edit_post_url = admin_url( 'post.php?post=' . $post_id . '&action=edit' );
+		$file_link     = content_url( '/customer_invoices/' . $filename );
+		$file_path     = WP_CONTENT_DIR . '/customer_invoices/' . $filename;
+
+		$to         = $user_info->user_email;
+		$first_name = $user_info->first_name;
+
+		$subject = 'Revised Draft: (' . $project_name . ') - #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
+
+		$message  = '<p>Dear ' . $first_name . ',</p>';
+		$message .= '<p>Your custom sign draft has been updated by our team.</p>';
+
+		$message .= '<ul>';
+		$message .= '<li><strong>Project:</strong> ' . $project_name . '</li>';
+		$message .= '<li><strong>Quote ID:</strong> Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '</li>';
+		$message .= '</ul>';
+
+		$message .= '<p>You can use this link to finalize your project and submit it for a quote:</p>';
+
+		$message .= '<p><a href="' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '">' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '</a></p>';
+
+		$message .= '<p>You may now add this project to your cart.</p>';
+
+		$message .= '<p>Let us know if you need any adjustments.</p>';
 
 		$message .= '<p>Thank you,<br>';
 		$message .= 'NOVA Signage Team</p>';
@@ -590,10 +706,20 @@ sendMockup.addEventListener('click', e => {
 
 		$role_instance = \NOVA_B2B\Inc\Classes\Roles::get_instance();
 
-		$to_admin       = $this->to_admin_customer_rep_emails();
-		$admin_subject  = 'NOVA - Quote Sent: QUOTE ID: Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . ' - ' . $first_name . ' ' . $business_id . ' from ' . $company;
-		$admin_message  = '<p>Hello,</p>';
-		$admin_message .= 'You sent a quotation to ' . $first_name . ' with Business ID: ' . $business_id . ' from ' . $company . ' for QUOTE ID : Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '.';
+		$to_admin      = $this->to_admin_customer_rep_emails();
+		$admin_subject = 'NOVA - Quote Sent To: QUOTE ID: Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . ' - ' . $first_name . ' ' . $business_id . ' from ' . $company;
+
+		$admin_subject = 'NOVA - Quote Sent To: ' . $first_name . ' from ' . $company . ' ' . $business_id . ' - Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
+
+		$admin_message = '<p>Hello,</p>';
+
+		$admin_message .= '<p>You sent a quotation to:</p>';
+		$admin_message .= '<ul>';
+		$admin_message .= '<li><strong>Customer:</strong> ' . $first_name . ' - ' . $business_id . '</li>';
+		$admin_message .= '<li><strong>Company:</strong> ' . $company . '</li>';
+		$admin_message .= '<li><strong>Quote ID:</strong> #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '</li>';
+		$admin_message .= '</ul><br>';
+
 		$admin_message .= '<p>You may review the quotation you sent here:</p>';
 		$admin_message .= '<a href="' . $edit_post_url . '">' . $edit_post_url . '</a>';
 
@@ -632,14 +758,20 @@ sendMockup.addEventListener('click', e => {
 
 		$to_admin = $this->to_admin_customer_rep_emails();
 
-		$admin_subject = 'NOVA - Quote Request Received: QUOTE ID Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . ' - ' . $first_name . ' ' . $business_id . ' from ' . $company;
+		$admin_subject = 'NOVA - Quote Request From: ' . $first_name . ' from ' . $company . ' ' . $business_id . ' - #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
 
-		// $admin_subject = 'NOVA Signage - You Received a Quotation Request - QUOTE ID: Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '.';
+		$to_admin_message = '<p>Hello,</p>';
 
-		$to_admin_message  = '<p>Hello,</p>';
-		$to_admin_message .= '<p>' . $first_name . ' with Business ID: <strong>' . $business_id . '</strong> from ' . $company . ' sent a quotation request for their QUOTE ID: Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '.</p>';
-		$to_admin_message .= '<p>You may review the mockup details here:<br></p>';
-		$to_admin_message .= '<a href="' . $edit_post_url . '">' . $edit_post_url . '</a>';
+		$to_admin_message .= '<p>Client sent a quotation request:</p>';
+
+		$to_admin_message .= '<ul>';
+		$to_admin_message .= '<li><strong>Customer:</strong> ' . $first_name . ' - ' . $business_id . '</li>';
+		$to_admin_message .= '<li><strong>Company:</strong> ' . $company . '</li>';
+		$to_admin_message .= '<li><strong>Quote ID:</strong> #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '</li>';
+		$to_admin_message .= '</ul><br>';
+
+		$to_admin_message .= '<p>You may review the quotation you sent here:<br>';
+		$to_admin_message .= '<a href="' . $edit_post_url . '">' . $edit_post_url . '</a></p>';
 
 		$role_instance->send_email( $to_admin, $admin_subject, $to_admin_message, $headers, array() );
 	}
@@ -881,7 +1013,7 @@ sendMockup.addEventListener('click', e => {
 
 		update_field( 'quote_status', 'processing', $_POST['quote'] );
 
-		$this->for_quotation_email( $_POST['quote'] );
+		// $this->for_quotation_email( $_POST['quote'] );
 
 		$status['code'] = 2;
 		wp_send_json( $status );
@@ -1583,10 +1715,6 @@ h6 {
 			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">INSTALLATION: </strong></td><td><font face="lato">' . $projectArray['installation'] . '</font></td></tr>';
 		}
 
-		if ( isset( $projectArray['acrylicCover'] ) && ! empty( $projectArray['acrylicCover'] ) && isset( $projectArray['acrylicCover']->name ) ) {
-			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">ACRYLIC COVER: </strong></td><td><font face="lato">' . $projectArray['acrylicCover']->name . '</font></td></tr>';
-		}
-
 		if ( isset( $projectArray['pieces'] ) && ! empty( $projectArray['pieces'] ) ) {
 			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">PIECES/CUTOUTS: </strong></td><td><font face="lato">' . $projectArray['pieces'] . '</font></td></tr>';
 		}
@@ -1666,11 +1794,12 @@ h6 {
 				);
 			}
 
-			$current_user = wp_get_current_user();
+			$user_id = $_POST['user_id'];
+			$user    = get_userdata( $user_id );
 
 			update_field( 'frontend_title', $_POST['title'], $post_id );
-			update_field( 'partner', get_current_user_id(), $post_id );
-			update_field( 'partner_email', $current_user->user_email, $post_id );
+			update_field( 'partner', $user_id, $post_id );
+			update_field( 'partner_email', $user->user_email, $post_id );
 			update_field( 'signage', $_POST['signage'], $post_id );
 			update_field( 'final_price', $_POST['total'], $post_id );
 			update_field( 'product', $_POST['product'], $post_id );
@@ -1991,7 +2120,7 @@ h6 {
 				'upload_rest'                => esc_url_raw( rest_url( '/nova/v1/upload-quote-file' ) ),
 				'logged_in'                  => is_user_logged_in(),
 				'user_role'                  => $this->get_current_user_role_slugs(),
-				'user_id'                    => get_current_user_id(),
+				'user_id'                    => $this->get_partner_id(),
 				'product'                    => get_the_ID(),
 				'quote_url'                  => get_permalink( get_the_ID() ),
 				'mockup_account_url'         => esc_url_raw( home_url( '/my-account/mockups/all' ) ),
@@ -2021,6 +2150,16 @@ h6 {
 			wp_enqueue_script( 'nova-quote' );
 			wp_enqueue_style( 'nova-quote' );
 		}
+	}
+
+	public function get_partner_id() {
+		if ( $this->is_editting() ) {
+
+			return get_field( 'partner', $_GET['qid'] );
+
+		}
+
+		return get_current_user_id();
 	}
 
 	public function get_current_user_role_slugs() {

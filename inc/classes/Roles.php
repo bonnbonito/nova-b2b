@@ -67,14 +67,14 @@ class Roles {
 	</tr>
 </table>
 <script type="text/javascript">
-		document.addEventListener('DOMContentLoaded', function () {
-			var regInfo = document.getElementById('registration-info').closest('table');
-			var personalOptions = document.querySelector('.user-rich-editing-wrap').closest('table');
-			if (regInfo && personalOptions) {
-				personalOptions.parentNode.insertBefore(regInfo, personalOptions);
-			}
-		});
-	</script>
+document.addEventListener('DOMContentLoaded', function() {
+	var regInfo = document.getElementById('registration-info').closest('table');
+	var personalOptions = document.querySelector('.user-rich-editing-wrap').closest('table');
+	if (regInfo && personalOptions) {
+		personalOptions.parentNode.insertBefore(regInfo, personalOptions);
+	}
+});
+</script>
 		<?php
 	}
 
@@ -368,13 +368,13 @@ jQuery(document).ready(function($) {
 			$to         = $user_info->user_email;
 			$first_name = $user_info->first_name;
 
-			$subject  = 'Welcome to NOVA Signage, ' . $first_name . '! - Your Business Partner Status is Approved';
+			$subject  = 'Welcome to NOVA Signage, ' . $first_name . '!';
 			$message  = '<p style="margin-top: 20px;">Hello  ' . $first_name . ',</p>';
-			$message .= '<p>Welcome to NOVA Signage! Your application to become a Business Partner has been approved.</p>';
-			$message .= '<p>You may now <a href="' . home_url( '/my-account/' ) . '">login</a> to see our products, get instant quotes, or start a custom sign project';
+			$message .= '<p>Welcome to NOVA Signage! Your Business Partner application has been approved.</p>';
+			$message .= '<p>You may now <a href="' . home_url( '/my-account/' ) . '">login</a> to see our products, get instant quotes, or start a custom sign project.';
 			$message .= '<p><a href="' . home_url( '/' ) . '" style="padding: 10px 16px; display: inline-block; text-decoration: none; border-style: solid; background-color: #d33; color: #fff; font-size: 16px; font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif; font-weight: 400; background: #d33; padding-top: 10px; padding-bottom: 10px; padding-left: 8px; padding-right: 8px; border-width: 0px; border-radius: 4px; border-color: #dedede;">EXPLORE OUR PRODUCTS</a><br>';
 			$message .= '<a href="' . home_url( '/custom-project' ) . '" style="padding: 10px 16px; display: inline-block; text-decoration: none; border-style: solid; background-color: #d33; color: #fff; font-size: 16px; font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif; font-weight: 400; background: #d33; padding-top: 10px; padding-bottom: 10px; padding-left: 8px; padding-right: 8px; border-width: 0px; border-radius: 4px; border-color: #dedede;">START A CUSTOM PROJECT</a></p>';
-			$message .= '<p>If you have any questions, our team is here to assist you.</p>';
+			$message .= '<p>If you have any questions, feel free to ask our team.</p>';
 			$message .= '<p>Happy exploring,<br>';
 			$message .= 'NOVA Signage Team</p>';
 
@@ -459,12 +459,18 @@ jQuery(document).ready(function($) {
 		$first_name    = $user->get( 'first_name' );
 		$company       = get_field( 'business_name', 'user_' . $user_id ) ? get_field( 'business_name', 'user_' . $user_id ) : 'None';
 		$user_edit_url = admin_url( 'user-edit.php?user_id=' . $user_id );
+		$business_id   = get_field( 'business_id', 'user_' . $user_id );
 
-		$subject  = 'NOVA - Pending Partner Status for ' . $first_name . ' from ' . $company . ' -  ' . get_field( 'business_id', 'user_' . $user_id );
+		$subject  = 'NOVA - Pending Partner Status: ' . $first_name . ' from ' . $company . ' -  ' . $business_id;
 		$message  = '<p>Hello,</p>';
-		$message .= '<p style="margin-top: 20px;">' . $first_name . ' with Business ID ' . get_field( 'business_id', 'user_' . $user_id ) . ' submitted a business partner application. </p>';
-		$message .= '<p>Please <strong>APPROVE</strong> or <strong>DENY</strong> their Business Partner Status here:</p>';
-		$message .= '<a href="' . esc_url( $user_edit_url ) . '">Click Here</a>';
+		$message .= '<p>You have a business partner application to approve:</p>';
+		$message .= '<ul>';
+		$message .= '<li><strong>Customer:</strong> - ' . $business_id . '</li>';
+		$message .= '<li><strong>Company:</strong> - ' . $company . '</li>';
+		$message .= '</ul><br>';
+		$message .= '<p style="margin-top: 20px;">' . $first_name . ' with Business ID ' . $business_id . ' submitted a business partner application. </p>';
+		$message .= '<p>Please <strong>APPROVE</strong> or <strong>DENY</strong> their Business Partner Status here:<br>';
+		$message .= '<a href="' . esc_url( $user_edit_url ) . '">Click Here</a></p>';
 
 		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
@@ -480,7 +486,7 @@ jQuery(document).ready(function($) {
 		$first_name = get_user_meta( $user_id, 'first_name', true );
 		$user_email = $user->user_email;
 
-		$subject = 'Business Partner Pending Approval: Please Await Confirmation';
+		$subject = 'Your NOVA Business Partner Status is under review';
 
 		$message  = '<p style="margin-top: 20px;">Hello  ' . $first_name . ',</p>';
 		$message .= '<p>Your Business Partner account will be reviewed within 24 business hours. Please wait for the approval email.</p>';
@@ -719,7 +725,7 @@ jQuery(document).ready(function($) {
 		$firstName      = $user_data->first_name;
 		$activation_key = get_user_meta( $user_id, 'account_activation_key', true );
 
-		$subject = 'Activate Your NOVA Signage Account';
+		$subject = 'Activate your NOVA Signage account';
 
 		$message = '<p style="margin-top: 20px;">Hello ' . $firstName . ',</p><p><a href="' . home_url( '/activate' ) . '?pu=' . $user_id . '&key=' . $activation_key . '">PLEASE CLICK TO VERIFY YOUR ACCOUNT.</a></p><p>Thank you,<br>NOVA Signage Team</p>';
 
