@@ -207,10 +207,10 @@ class Nova_Quote {
 			if ( count( $user_folder_arr ) > 0 && $old_folder !== $partner_business_id ) {
 				?>
 <a class="button button-primary button-large mb-4 block" id="updateDropboxFolder" data-btn="updateDropbox"
-    data-id="<?php echo $post->ID; ?>" data-new="<?php echo $new_path; ?>" data-old="<?php echo $old_path; ?>"
-    style="margin-bottom: 10px;">Update
-    Dropbox Folder</a>
-<?php
+	data-id="<?php echo $post->ID; ?>" data-new="<?php echo $new_path; ?>" data-old="<?php echo $old_path; ?>"
+	style="margin-bottom: 10px;">Update
+	Dropbox Folder</a>
+				<?php
 			}
 		}
 
@@ -222,9 +222,9 @@ class Nova_Quote {
 			if ( $font_folder_arr && $old_folder !== $partner_business_id ) {
 				?>
 <a class="button button-primary button-large block" id="updateDropboxFolderFont" data-btn="updateDropbox"
-    data-id="<?php echo $post->ID; ?>" data-new="<?php echo $new_path; ?>" data-old="<?php echo $old_path; ?>">Update
-    Dropbox Font Folder</a>
-<?php
+	data-id="<?php echo $post->ID; ?>" data-new="<?php echo $new_path; ?>" data-old="<?php echo $old_path; ?>">Update
+	Dropbox Font Folder</a>
+				<?php
 			}
 		}
 	}
@@ -294,19 +294,19 @@ class Nova_Quote {
 	public function nova_admin_mockup_update_email_callback( $post ) {
 		?>
 <form action="" method="post">
-    <?php wp_nonce_field( 'send_mockup_email_action', 'send_mockup_email_nonce' ); ?>
-    <input type="hidden" name="post_id" value="<?php echo $post->ID; ?>">
-    <input id="sendMockup" type="submit" name="send_mockup_update_email" class="button button-primary"
-        value="<?php esc_attr_e( 'Send Mockup Email', 'nova-b2b' ); ?>">
+		<?php wp_nonce_field( 'send_mockup_email_action', 'send_mockup_email_nonce' ); ?>
+	<input type="hidden" name="post_id" value="<?php echo $post->ID; ?>">
+	<input id="sendMockup" type="submit" name="send_mockup_update_email" class="button button-primary"
+		value="<?php esc_attr_e( 'Send Mockup Email', 'nova-b2b' ); ?>">
 </form>
 <script>
 const sendMockup = document.getElementById('sendMockup');
 sendMockup.addEventListener('click', e => {
-    sendMockup.value = "Sending...";
-    sendMockup.attr.disabled = true;
+	sendMockup.value = "Sending...";
+	sendMockup.attr.disabled = true;
 })
 </script>
-<?php
+		<?php
 	}
 
 	public function nova_quote_add_admin_meta_box( $post_type, $post ) {
@@ -328,7 +328,7 @@ sendMockup.addEventListener('click', e => {
 		?>
 
 <a href="<?php echo esc_url( $details ); ?>" target="_blank" class="button button-primary button-large">View Details</a>
-<?php
+		<?php
 	}
 
 
@@ -350,17 +350,17 @@ sendMockup.addEventListener('click', e => {
 
 	public function nova_product_instant_quote() {
 		?>
-<?php if ( ! is_user_logged_in() ) : ?>
-<?php echo do_shortcode( '[kadence_element id=" 202"]' ); ?>
-<?php
+		<?php if ( ! is_user_logged_in() ) : ?>
+			<?php echo do_shortcode( '[kadence_element id=" 202"]' ); ?>
+			<?php
 		elseif ( get_field( 'quote_div_id' ) ) :
 			?>
 <div id="<?php echo get_field( 'quote_div_id' ); ?>"></div>
-<?php
+			<?php
 				else :
 					?>
 <div id="customProject"></div>
-<?php
+					<?php
 
 				endif;
 	}
@@ -401,7 +401,7 @@ sendMockup.addEventListener('click', e => {
 		?>
 <p>Product: <?php echo $product_name; ?></p>
 <strong>Projects</strong>
-<?php
+		<?php
 			echo '<ul>';
 		foreach ( $signage as $project ) {
 			$projectArray = get_object_vars( $project );
@@ -511,14 +511,19 @@ sendMockup.addEventListener('click', e => {
 		$message .= '<p>Thank you,<br>';
 		$message .= 'NOVA Signage Team</p>';
 
+		$role_instance = \NOVA_B2B\Inc\Classes\Roles::get_instance();
+
 		$headers   = array();
 		$headers[] = 'Content-Type: text/html; charset=UTF-8';
 		$headers[] = 'From: NOVA Signage <quotes@novasignage.com>';
 		$headers[] = 'Reply-To: NOVA Signage <quotes@novasignage.com>';
 
-		$role_instance = \NOVA_B2B\Inc\Classes\Roles::get_instance();
-
 		$role_instance->send_email( $to, $subject, $message, $headers, array() );
+	}
+
+	public function quote_from_address( $email, $b, $from_email ) {
+		$email = 'quotes@novasignage.com';
+		return $email;
 	}
 
 	public function for_mockup_update_email( $post_id ) {
@@ -718,16 +723,6 @@ sendMockup.addEventListener('click', e => {
 
 		$newjson = json_decode( get_field( 'signage', $post_id ) );
 		update_field( 'signage', $newjson, $product_id );
-
-		echo '<pre>';
-		print_r( $post_id );
-		print_r( json_decode( get_field( 'signage', $post_id ) ) );
-		echo '</pre>';
-
-		echo '<pre>';
-		print_r( $product_id );
-		print_r( get_field( 'signage', $product_id ) );
-		echo '</pre>';
 	}
 
 	public function for_quotation_email_action( $post_id ) {
@@ -1082,153 +1077,153 @@ sendMockup.addEventListener('click', e => {
 <style>
 h4,
 h6 {
-    margin-bottom: 0pt;
-    margin-top: 0px;
+	margin-bottom: 0pt;
+	margin-top: 0px;
 }
 </style>
 <table>
-    <tr>
-        <td>
-            <h4 style="font-size: 14pt; margin: 0;">QUOTE ID: Q-<?php echo str_pad( $post_id, 4, '0', STR_PAD_LEFT ); ?>
-            </h4>
-            <p style="padding-bottom: 0; margin-bottom: 0;">INITIAL QUOTE REQUESTED ON: <font face="lato">
-                    <?php echo get_the_date( 'F j, Y', $post_id ); ?></font>
-            </p>
-            <p style="padding-bottom: 0; margin-bottom: 0;">LAST QUOTE SAVED: <font face="lato">
-                    <?php echo get_the_modified_date( 'F j, Y', $post_id ); ?></font>
-            </p>
-            <p style="padding-bottom: 0; margin-bottom: 0;">QUOTE NAME: <font face="lato">
-                    <?php echo get_field( 'frontend_title', $post_id ); ?></font>
-            </p>
-            <p style="padding-bottom: 0; margin-bottom: 0;">BUSINESS ID: <font face="lato">
-                    <?php echo get_field( 'business_id', 'user_' . $user_id ); ?></font>
-            </p>
-            <p style="padding-bottom: 0; margin-bottom: 0;">COMPANY NAME: <font face="lato">
-                    <?php echo ( get_field( 'business_name', 'user_' . $user_id ) ? get_field( 'business_name', 'user_' . $user_id ) : 'None' ); ?>
-                </font>
-            </p>
-            <p style="padding-bottom: 0; margin-bottom: 0;">MATERIAL: <font face="lato">
-                    <?php echo $instance->get_material_name( $product_id ); ?></font>
-            </p>
-            <p style="padding-bottom: 0; margin-bottom: 40px;">PRODUCT: <font face="lato">
-                    <?php echo $product_name; ?></font>
-            </p>
-        </td>
-    </tr>
+	<tr>
+		<td>
+			<h4 style="font-size: 14pt; margin: 0;">QUOTE ID: Q-<?php echo str_pad( $post_id, 4, '0', STR_PAD_LEFT ); ?>
+			</h4>
+			<p style="padding-bottom: 0; margin-bottom: 0;">INITIAL QUOTE REQUESTED ON: <font face="lato">
+					<?php echo get_the_date( 'F j, Y', $post_id ); ?></font>
+			</p>
+			<p style="padding-bottom: 0; margin-bottom: 0;">LAST QUOTE SAVED: <font face="lato">
+					<?php echo get_the_modified_date( 'F j, Y', $post_id ); ?></font>
+			</p>
+			<p style="padding-bottom: 0; margin-bottom: 0;">QUOTE NAME: <font face="lato">
+					<?php echo get_field( 'frontend_title', $post_id ); ?></font>
+			</p>
+			<p style="padding-bottom: 0; margin-bottom: 0;">BUSINESS ID: <font face="lato">
+					<?php echo get_field( 'business_id', 'user_' . $user_id ); ?></font>
+			</p>
+			<p style="padding-bottom: 0; margin-bottom: 0;">COMPANY NAME: <font face="lato">
+					<?php echo ( get_field( 'business_name', 'user_' . $user_id ) ? get_field( 'business_name', 'user_' . $user_id ) : 'None' ); ?>
+				</font>
+			</p>
+			<p style="padding-bottom: 0; margin-bottom: 0;">MATERIAL: <font face="lato">
+					<?php echo $instance->get_material_name( $product_id ); ?></font>
+			</p>
+			<p style="padding-bottom: 0; margin-bottom: 40px;">PRODUCT: <font face="lato">
+					<?php echo $product_name; ?></font>
+			</p>
+		</td>
+	</tr>
 
-    <tr>
-        <td cellpadding="10"></td>
-    </tr>
+	<tr>
+		<td cellpadding="10"></td>
+	</tr>
 
-    <tr>
-        <td style="padding-top: 20px; padding-bottom: 20px;">
-            <?php
+	<tr>
+		<td style="padding-top: 20px; padding-bottom: 20px;">
+			<?php
 			foreach ( $signage as $project ) {
 				$projectArray = get_object_vars( $project );
 				$price        = $projectArray['cadPrice'];
 
 				?>
-            <table style="margin-top: 40pt;">
-                <tr style="font-size: 17px; font-weight: bold;">
-                    <td><?php echo $projectArray['title']; ?></td>
-                    <td style="text-align: right;">CAD$ <?php echo $price; ?></td>
-                </tr>
-                <?php
+			<table style="margin-top: 40pt;">
+				<tr style="font-size: 17px; font-weight: bold;">
+					<td><?php echo $projectArray['title']; ?></td>
+					<td style="text-align: right;">CAD$ <?php echo $price; ?></td>
+				</tr>
+				<?php
 				if ( isset( $projectArray['letters'] ) ) {
 					$color = isset( $projectArray['color'] ) ? ' color: ' . $projectArray['color']->color : '';
 					$face  = $projectArray['font'] ? strtolower( str_replace( array( 'regular', ' ', 'bold' ), array( '', '_', 'b' ), $projectArray['font'] ) ) : '';
 					$style = $color . $face;
 					?>
-                <tr>
-                    <td colspan="2">
-                        <div style="padding: 100px; border-radius: 8px; border: 1px solid #ddd;">
-                            <h1 style="text-align: center;">
-                                <font size="22" face="<?php echo $face; ?>"
-                                    <?php echo ( isset( $projectArray['color'] ) && $projectArray['color']->color ? ' color="' . $projectArray['color']->color . '" ' : '' ); ?>>
-                                    <?php echo $projectArray['letters']; ?>
-                                </font>
-                            </h1>
-                        </div>
-                    </td>
-                </tr>
-                <?php } ?>
-                <tr>
-                    <td colspan="2" style="padding:40px;"></td>
-                </tr>
-            </table>
+				<tr>
+					<td colspan="2">
+						<div style="padding: 100px; border-radius: 8px; border: 1px solid #ddd;">
+							<h1 style="text-align: center;">
+								<font size="22" face="<?php echo $face; ?>"
+									<?php echo ( isset( $projectArray['color'] ) && $projectArray['color']->color ? ' color="' . $projectArray['color']->color . '" ' : '' ); ?>>
+									<?php echo $projectArray['letters']; ?>
+								</font>
+							</h1>
+						</div>
+					</td>
+				</tr>
+				<?php } ?>
+				<tr>
+					<td colspan="2" style="padding:40px;"></td>
+				</tr>
+			</table>
 
-            <?php
+				<?php
 				$this->output_project_item( $project );
 			}
 
 			?>
-        </td>
-    </tr>
-    <?php if ( $note ) : ?>
-    <tr>
-        <td style="font-size:110%;">NOTE:</td>
-    </tr>
-    <tr>
-        <td>
-            <?php echo str_replace( '"', '&quot;', $note ); ?>
-        </td>
-    </tr>
-    <?php endif; ?>
-    <tr>
-        <td></td>
-    </tr>
-    <tr>
-        <td style="padding-top: 20px; border-top: 1px solid #ddd;">
-            <table>
-                <tr>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>
-                        <h5 style="font-size: 13pt">ESTIMATED SUBTOTAL:</h5>
-                    </td>
-                    <td style="text-align: right;">
-                        <h5 style="font-size: 13pt">CAD$
-                            <?php echo $final_price; ?></h5>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <h5 style="font-size: 13pt">PACKAGING &amp; SHIPPING:</h5>
-                    </td>
-                    <td style="text-align: right;">
-                        <h5 style="font-size: 13pt">CAD$
-                            <?php echo $estimatedShipping; ?></h5>
-                    </td>
-                </tr>
-                <?php if ( $tax ) { ?>
-                <tr>
-                    <td>
-                        <h5 style="font-size: 13pt"><?php echo $tax_rate_name; ?>:</h5>
-                    </td>
-                    <td style="text-align: right;">
-                        <h5 style="font-size: 13pt">CAD$
-                            <?php echo $tax_compute; ?></h5>
-                    </td>
-                </tr>
-                <?php } ?>
-                <tr>
-                    <td style="padding-top: 20px; padding-bottom: 20px;">
-                        <h4 style="font-size: 14pt;">ESTIMATED TOTAL:
-                        </h4>
-                    </td>
-                    <td style="padding-top: 20px; padding-bottom: 20px; text-align: right;">
-                        <h4 style="font-size: 14pt;">CAD$
-                            <?php echo $estimate_total; ?></h4>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
+		</td>
+	</tr>
+		<?php if ( $note ) : ?>
+	<tr>
+		<td style="font-size:110%;">NOTE:</td>
+	</tr>
+	<tr>
+		<td>
+			<?php echo str_replace( '"', '&quot;', $note ); ?>
+		</td>
+	</tr>
+	<?php endif; ?>
+	<tr>
+		<td></td>
+	</tr>
+	<tr>
+		<td style="padding-top: 20px; border-top: 1px solid #ddd;">
+			<table>
+				<tr>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>
+						<h5 style="font-size: 13pt">ESTIMATED SUBTOTAL:</h5>
+					</td>
+					<td style="text-align: right;">
+						<h5 style="font-size: 13pt">CAD$
+							<?php echo $final_price; ?></h5>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<h5 style="font-size: 13pt">PACKAGING &amp; SHIPPING:</h5>
+					</td>
+					<td style="text-align: right;">
+						<h5 style="font-size: 13pt">CAD$
+							<?php echo $estimatedShipping; ?></h5>
+					</td>
+				</tr>
+				<?php if ( $tax ) { ?>
+				<tr>
+					<td>
+						<h5 style="font-size: 13pt"><?php echo $tax_rate_name; ?>:</h5>
+					</td>
+					<td style="text-align: right;">
+						<h5 style="font-size: 13pt">CAD$
+							<?php echo $tax_compute; ?></h5>
+					</td>
+				</tr>
+				<?php } ?>
+				<tr>
+					<td style="padding-top: 20px; padding-bottom: 20px;">
+						<h4 style="font-size: 14pt;">ESTIMATED TOTAL:
+						</h4>
+					</td>
+					<td style="padding-top: 20px; padding-bottom: 20px; text-align: right;">
+						<h4 style="font-size: 14pt;">CAD$
+							<?php echo $estimate_total; ?></h4>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
 </table>
 
-<?php
+		<?php
 		return ob_get_clean();
 	}
 
@@ -1264,155 +1259,155 @@ h6 {
 <style>
 h4,
 h6 {
-    margin-bottom: 0pt;
-    margin-top: 0px;
+	margin-bottom: 0pt;
+	margin-top: 0px;
 }
 </style>
 <table>
-    <tr>
-        <td>
-            <h4 style="font-size: 14pt; margin: 0;">QUOTE ID: Q-<?php echo str_pad( $post_id, 4, '0', STR_PAD_LEFT ); ?>
-            </h4>
-            <p style="padding-bottom: 0; margin-bottom: 0;">INITIAL QUOTE REQUESTED ON: <font face="lato">
-                    <?php echo get_the_date( 'F j, Y', $post_id ); ?></font>
-            </p>
-            <p style="padding-bottom: 0; margin-bottom: 0;">LAST QUOTE SAVED: <font face="lato">
-                    <?php echo get_the_modified_date( 'F j, Y', $post_id ); ?></font>
-            </p>
-            <p style="padding-bottom: 0; margin-bottom: 0;">QUOTE NAME: <font face="lato">
-                    <?php echo get_field( 'frontend_title', $post_id ); ?></font>
-            </p>
-            <p style="padding-bottom: 0; margin-bottom: 0;">BUSINESS ID: <font face="lato">
-                    <?php echo get_field( 'business_id', 'user_' . $user_id ); ?></font>
-            </p>
-            <p style="padding-bottom: 0; margin-bottom: 0;">COMPANY NAME: <font face="lato">
-                    <?php echo ( get_field( 'business_name', 'user_' . $user_id ) ? get_field( 'business_name', 'user_' . $user_id ) : 'None' ); ?>
-                </font>
-            </p>
-            <p style="padding-bottom: 0; margin-bottom: 0;">MATERIAL: <font face="lato">
-                    <?php echo $instance->get_material_name( $product_id ); ?></font>
-            </p>
-            <p style="padding-bottom: 0; margin-bottom: 40px;">PRODUCT: <font face="lato">
-                    <?php echo $product_name; ?></font>
-            </p>
-        </td>
-    </tr>
+	<tr>
+		<td>
+			<h4 style="font-size: 14pt; margin: 0;">QUOTE ID: Q-<?php echo str_pad( $post_id, 4, '0', STR_PAD_LEFT ); ?>
+			</h4>
+			<p style="padding-bottom: 0; margin-bottom: 0;">INITIAL QUOTE REQUESTED ON: <font face="lato">
+					<?php echo get_the_date( 'F j, Y', $post_id ); ?></font>
+			</p>
+			<p style="padding-bottom: 0; margin-bottom: 0;">LAST QUOTE SAVED: <font face="lato">
+					<?php echo get_the_modified_date( 'F j, Y', $post_id ); ?></font>
+			</p>
+			<p style="padding-bottom: 0; margin-bottom: 0;">QUOTE NAME: <font face="lato">
+					<?php echo get_field( 'frontend_title', $post_id ); ?></font>
+			</p>
+			<p style="padding-bottom: 0; margin-bottom: 0;">BUSINESS ID: <font face="lato">
+					<?php echo get_field( 'business_id', 'user_' . $user_id ); ?></font>
+			</p>
+			<p style="padding-bottom: 0; margin-bottom: 0;">COMPANY NAME: <font face="lato">
+					<?php echo ( get_field( 'business_name', 'user_' . $user_id ) ? get_field( 'business_name', 'user_' . $user_id ) : 'None' ); ?>
+				</font>
+			</p>
+			<p style="padding-bottom: 0; margin-bottom: 0;">MATERIAL: <font face="lato">
+					<?php echo $instance->get_material_name( $product_id ); ?></font>
+			</p>
+			<p style="padding-bottom: 0; margin-bottom: 40px;">PRODUCT: <font face="lato">
+					<?php echo $product_name; ?></font>
+			</p>
+		</td>
+	</tr>
 
-    <tr>
-        <td cellpadding="10"></td>
-    </tr>
+	<tr>
+		<td cellpadding="10"></td>
+	</tr>
 
-    <tr>
-        <td style="padding-top: 20px; padding-bottom: 20px;">
-            <?php
+	<tr>
+		<td style="padding-top: 20px; padding-bottom: 20px;">
+			<?php
 			foreach ( $signage as $project ) {
 				$projectArray = get_object_vars( $project );
 				$price        = $projectArray['usdPrice'];
 
 				?>
-            <table style="margin-top: 40pt;">
-                <tr style="font-size: 17px; font-weight: bold;">
-                    <td><?php echo $projectArray['title']; ?></td>
-                    <td style="text-align: right;">USD$ <?php echo $price; ?></td>
-                </tr>
-                <?php
+			<table style="margin-top: 40pt;">
+				<tr style="font-size: 17px; font-weight: bold;">
+					<td><?php echo $projectArray['title']; ?></td>
+					<td style="text-align: right;">USD$ <?php echo $price; ?></td>
+				</tr>
+				<?php
 				if ( isset( $projectArray['letters'] ) ) {
 					$color = isset( $projectArray['color'] ) ? ' color: ' . $projectArray['color']->color : '';
 					$face  = $projectArray['font'] ? strtolower( str_replace( array( 'regular', ' ', 'bold' ), array( '', '_', 'b' ), $projectArray['font'] ) ) : '';
 					$style = $color . $face;
 					?>
-                <tr>
-                    <td colspan="2">
-                        <div style="padding: 100px; border-radius: 8px; border: 1px solid #ddd;">
-                            <h1 style="text-align: center;">
-                                <font size="22" face="<?php echo $face; ?>"
-                                    <?php echo ( isset( $projectArray['color'] ) && $projectArray['color']->color ? ' color="' . $projectArray['color']->color . '" ' : '' ); ?>>
-                                    <?php echo $projectArray['letters']; ?>
-                                </font>
-                            </h1>
-                        </div>
-                    </td>
-                </tr>
-                <?php } ?>
-                <tr>
-                    <td colspan="2" style="padding:40px;"></td>
-                </tr>
-            </table>
+				<tr>
+					<td colspan="2">
+						<div style="padding: 100px; border-radius: 8px; border: 1px solid #ddd;">
+							<h1 style="text-align: center;">
+								<font size="22" face="<?php echo $face; ?>"
+									<?php echo ( isset( $projectArray['color'] ) && $projectArray['color']->color ? ' color="' . $projectArray['color']->color . '" ' : '' ); ?>>
+									<?php echo $projectArray['letters']; ?>
+								</font>
+							</h1>
+						</div>
+					</td>
+				</tr>
+				<?php } ?>
+				<tr>
+					<td colspan="2" style="padding:40px;"></td>
+				</tr>
+			</table>
 
-            <?php
+				<?php
 
 				$this->output_project_item( $project );
 
 			}
 
 			?>
-        </td>
-    </tr>
-    <?php if ( $note ) : ?>
-    <tr>
-        <td style="font-size:110%;">NOTE:</td>
-    </tr>
-    <tr>
-        <td>
-            <?php echo str_replace( '"', '&quot;', $note ); ?>
-        </td>
-    </tr>
-    <?php endif; ?>
-    <tr>
-        <td></td>
-    </tr>
-    <tr>
-        <td style="padding-top: 20px; border-top: 1px solid #ddd;">
-            <table>
-                <tr>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>
-                        <h5 style="font-size: 13pt">ESTIMATED SUBTOTAL:</h5>
-                    </td>
-                    <td style="text-align: right;">
-                        <h5 style="font-size: 13pt">USD$
-                            <?php echo $final_price; ?></h5>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <h5 style="font-size: 13pt">PACKAGING &amp; SHIPPING:</h5>
-                    </td>
-                    <td style="text-align: right;">
-                        <h5 style="font-size: 13pt">USD$
-                            <?php echo $estimatedShipping; ?></h5>
-                    </td>
-                </tr>
-                <?php if ( $tax ) { ?>
-                <tr>
-                    <td>
-                        <h5 style="font-size: 13pt"><?php echo $tax_rate_name; ?>:</h5>
-                    </td>
-                    <td style="text-align: right;">
-                        <h5 style="font-size: 13pt">USD$
-                            <?php echo $tax_compute; ?></h5>
-                    </td>
-                </tr>
-                <?php } ?>
-                <tr>
-                    <td style="padding-top: 20px; padding-bottom: 20px;">
-                        <h4 style="font-size: 14pt;">ESTIMATED TOTAL:
-                        </h4>
-                    </td>
-                    <td style="padding-top: 20px; padding-bottom: 20px; text-align: right;">
-                        <h4 style="font-size: 14pt;">USD$
-                            <?php echo $estimate_total; ?></h4>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
+		</td>
+	</tr>
+		<?php if ( $note ) : ?>
+	<tr>
+		<td style="font-size:110%;">NOTE:</td>
+	</tr>
+	<tr>
+		<td>
+			<?php echo str_replace( '"', '&quot;', $note ); ?>
+		</td>
+	</tr>
+	<?php endif; ?>
+	<tr>
+		<td></td>
+	</tr>
+	<tr>
+		<td style="padding-top: 20px; border-top: 1px solid #ddd;">
+			<table>
+				<tr>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>
+						<h5 style="font-size: 13pt">ESTIMATED SUBTOTAL:</h5>
+					</td>
+					<td style="text-align: right;">
+						<h5 style="font-size: 13pt">USD$
+							<?php echo $final_price; ?></h5>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<h5 style="font-size: 13pt">PACKAGING &amp; SHIPPING:</h5>
+					</td>
+					<td style="text-align: right;">
+						<h5 style="font-size: 13pt">USD$
+							<?php echo $estimatedShipping; ?></h5>
+					</td>
+				</tr>
+				<?php if ( $tax ) { ?>
+				<tr>
+					<td>
+						<h5 style="font-size: 13pt"><?php echo $tax_rate_name; ?>:</h5>
+					</td>
+					<td style="text-align: right;">
+						<h5 style="font-size: 13pt">USD$
+							<?php echo $tax_compute; ?></h5>
+					</td>
+				</tr>
+				<?php } ?>
+				<tr>
+					<td style="padding-top: 20px; padding-bottom: 20px;">
+						<h4 style="font-size: 14pt;">ESTIMATED TOTAL:
+						</h4>
+					</td>
+					<td style="padding-top: 20px; padding-bottom: 20px; text-align: right;">
+						<h4 style="font-size: 14pt;">USD$
+							<?php echo $estimate_total; ?></h4>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
 </table>
 
-<?php
+		<?php
 		return ob_get_clean();
 	}
 

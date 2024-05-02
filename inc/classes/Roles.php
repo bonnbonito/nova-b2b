@@ -228,22 +228,22 @@ class Roles {
 			?>
 <script type="text/javascript">
 jQuery(document).ready(function($) {
-	// Move the row actions from their original location to the 'user_id' column
-	$('#the-list tr').each(function() {
-		var $this = $(this);
-		var rowActions = $this.find('.row-actions').clone(); // Clone the row actions
-		$this.find('.row-actions').remove(); // Remove the original row actions
+    // Move the row actions from their original location to the 'user_id' column
+    $('#the-list tr').each(function() {
+        var $this = $(this);
+        var rowActions = $this.find('.row-actions').clone(); // Clone the row actions
+        $this.find('.row-actions').remove(); // Remove the original row actions
 
-		// Check if the 'user_id' column exists and append the cloned row actions
-		var userIDCell = $this.find('td.business_id');
-		if (userIDCell.length) {
-			userIDCell.append(rowActions);
-		}
-	});
+        // Check if the 'user_id' column exists and append the cloned row actions
+        var userIDCell = $this.find('td.business_id');
+        if (userIDCell.length) {
+            userIDCell.append(rowActions);
+        }
+    });
 });
 </script>
 
-			<?php
+<?php
 		}
 	}
 
@@ -747,10 +747,9 @@ jQuery(document).ready(function($) {
 		wp_send_json( $status );
 	}
 
-	public function send_email( $to, $subject, $content, $headers = array( 'Content-Type: text/html; charset=UTF-8' ), $attachments = array() ) {
+	public function send_email( $to, $subject, $content, $headers = array(), $attachments = array() ) {
 		// Get the WooCommerce emailer instance
 		$mailer = WC()->mailer();
-
 		// Wrap the content with WooCommerce email template
 		$wrapped_content = $mailer->wrap_message( $subject, $content );
 
