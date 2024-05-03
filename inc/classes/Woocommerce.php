@@ -150,12 +150,18 @@ class Woocommerce {
 			return;
 		}
 
-		$user_id = get_current_user_id();
-
+		$user_id         = get_current_user_id();
 		$billing_country = get_user_meta( $user_id, 'billing_country', true );
-		$new_currency    = $billing_country === 'CA' ? 'CAD' : 'USD';
-		wc_setcookie( 'wcumcs_user_currency_session', $new_currency, 0 );
+
+		$new_currency = $billing_country === 'CA' ? 'CAD' : 'USD';
+
+		// Check if the cookie exists and if its value matches the new currency
+		if ( ! isset( $_COOKIE['wcumcs_user_currency_session'] ) || $_COOKIE['wcumcs_user_currency_session'] !== $new_currency ) {
+			// Set or update the cookie if it does not exist or if the value is different
+			wc_setcookie( 'wcumcs_user_currency_session', $new_currency, 0 );
+		}
 	}
+
 
 	public function change_currency_based_on_shipping_country( $currency ) {
 		if ( is_user_logged_in() ) {
