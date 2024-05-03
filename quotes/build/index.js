@@ -3474,7 +3474,8 @@ function Letters({
         totalLetterPrice += letterPrice;
       });
       if (selectedMounting === 'Stud with spacer') {
-        let spacer = totalLetterPrice * 1.02 > 25 ? 25 : totalLetterPrice * 1.02;
+        let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
+        let spacer = totalLetterPrice * 1.02 > maxVal ? maxVal : totalLetterPrice * 1.02;
         spacer = parseFloat(spacer.toFixed(2));
         totalLetterPrice += spacer;
       }
@@ -4024,7 +4025,8 @@ function Logo({
           total *= 0.95;
         }
         if (selectedMounting === 'Stud with spacer') {
-          let spacer = total * 1.02 > 25 ? 25 : total * 1.02;
+          let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
+          let spacer = total * 1.02 > maxVal ? maxVal : total * 1.02;
           spacer = parseFloat(spacer.toFixed(2));
           total += spacer;
         }
@@ -4665,7 +4667,8 @@ function Logo({
         let total = (computed * multiplier * _LayeredAcrylic__WEBPACK_IMPORTED_MODULE_6__.ASSEMBLY_FEES).toFixed(2);
         total *= selectedFinishing === 'Gloss' ? 1.1 : 1;
         if (selectedMounting === 'Stud with spacer') {
-          let spacer = total * 0.03 > 35 ? 35 : total * 0.03;
+          let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
+          let spacer = total * 1.02 > maxVal ? maxVal : total * 1.02;
           spacer = parseFloat(spacer.toFixed(2));
           total += spacer;
         }
@@ -5336,7 +5339,8 @@ function Letters({
         totalLetterPrice += letterPrice;
       });
       if (selectedMounting === 'Stud with spacer') {
-        let spacer = totalLetterPrice * 1.02 > 25 ? 25 : totalLetterPrice * 1.02;
+        let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
+        let spacer = totalLetterPrice * 1.02 > maxVal ? maxVal : totalLetterPrice * 1.02;
         spacer = parseFloat(spacer.toFixed(2));
         totalLetterPrice += spacer;
       }
@@ -5865,7 +5869,8 @@ function Logo({
         let total = (computed * multiplier * _MetalLaminate__WEBPACK_IMPORTED_MODULE_6__.METAL_ACRYLIC_PRICING).toFixed(2);
         total *= acrylicBase?.name === 'Black' ? 1 : 1.1;
         if (selectedMounting === 'Stud with spacer') {
-          let spacer = total * 1.02 > 25 ? 25 : total * 1.02;
+          let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
+          let spacer = total * 1.02 > maxVal ? maxVal : total * 1.02;
           spacer = parseFloat(spacer.toFixed(2));
           total += spacer;
         }
@@ -6557,7 +6562,8 @@ function Logo({
         total *= baseColor === 'Custom Color' ? UV_PRICE : 1;
         total *= 1.2;
         if (selectedMounting === 'Stud with spacer') {
-          let spacer = total * 0.03 > 35 ? 35 : total * 0.03;
+          let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
+          let spacer = total * 1.02 > maxVal ? maxVal : total * 1.02;
           spacer = parseFloat(spacer.toFixed(2));
           total += spacer;
         }
@@ -7607,7 +7613,8 @@ function Letters({
         });
         console.log(totalLetterPrice);
         if (mounting === 'Stud with spacer') {
-          let spacer = totalLetterPrice * 1.02 > 25 ? 25 : totalLetterPrice * 1.02;
+          let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
+          let spacer = totalLetterPrice * 1.02 > maxVal ? maxVal : totalLetterPrice * 1.02;
           spacer = parseFloat(spacer.toFixed(2));
           totalLetterPrice += spacer;
         }
@@ -8359,7 +8366,8 @@ function Letters({
           totalLetterPrice += letterPrice;
         });
         if (mounting === 'Stud with spacer') {
-          let spacer = totalLetterPrice * 1.02 > 25 ? 25 : totalLetterPrice * 1.02;
+          let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
+          let spacer = totalLetterPrice * 1.02 > maxVal ? maxVal : totalLetterPrice * 1.02;
           spacer = parseFloat(spacer.toFixed(2));
           totalLetterPrice += spacer;
         }
@@ -9213,7 +9221,8 @@ function Letters({
           totalLetterPrice += letterPrice;
         });
         if (mounting === 'Stud with spacer') {
-          let spacer = totalLetterPrice * 1.02 > 25 ? 25 : totalLetterPrice * 1.02;
+          let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
+          let spacer = totalLetterPrice * 1.02 > maxVal ? maxVal : totalLetterPrice * 1.02;
           spacer = parseFloat(spacer.toFixed(2));
           totalLetterPrice += spacer;
         }
@@ -10124,7 +10133,8 @@ function Letters({
           totalLetterPrice += parseFloat(letterPrice.toFixed(2));
         });
         if (mounting === 'Stud with spacer') {
-          let spacer = totalLetterPrice * 1.02 > 25 ? 25 : totalLetterPrice * 1.02;
+          let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
+          let spacer = totalLetterPrice * 1.02 > maxVal ? maxVal : totalLetterPrice * 1.02;
           spacer = parseFloat(spacer.toFixed(2));
           totalLetterPrice += spacer;
         }
@@ -10716,7 +10726,8 @@ function Logo({
         }
         total = parseFloat(total.toFixed(2));
         if (mounting === 'Stud with spacer') {
-          let spacer = total * 1.02 > 25 ? 25 : total * 1.02;
+          let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
+          let spacer = total * 1.02 > maxVal ? maxVal : total * 1.02;
           spacer = parseFloat(spacer.toFixed(2));
           total += spacer;
         }
@@ -11395,7 +11406,8 @@ function Letters({
         totalLetterPrice += letterPrice;
       });
       if (mounting === 'Stud with spacer') {
-        let spacer = totalLetterPrice * 1.02 > 25 ? 25 : totalLetterPrice * 1.02;
+        let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
+        let spacer = totalLetterPrice * 1.02 > maxVal ? maxVal : totalLetterPrice * 1.02;
         spacer = parseFloat(spacer.toFixed(2));
         totalLetterPrice += spacer;
       }
@@ -11938,9 +11950,9 @@ function Logo({
         }
         let total = parseFloat((computed * multiplier).toFixed(2));
         if (mounting === 'Stud with spacer') {
-          let spacer = total * 1.02 > 25 ? 25 : total * 1.02;
+          let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
+          let spacer = total * 1.02 > maxVal ? maxVal : total * 1.02;
           spacer = parseFloat(spacer.toFixed(2));
-          console.log(spacer, total);
           total += spacer;
         }
         total *= sets;
@@ -12636,7 +12648,8 @@ function Letters({
           totalLetterPrice += letterPrice;
         });
         if (mounting === 'Stud with spacer') {
-          let spacer = totalLetterPrice * 1.02 > 25 ? 25 : totalLetterPrice * 1.02;
+          let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
+          let spacer = totalLetterPrice * 1.02 > maxVal ? maxVal : totalLetterPrice * 1.02;
           spacer = parseFloat(spacer.toFixed(2));
           totalLetterPrice += spacer;
         }
@@ -13258,7 +13271,8 @@ function Logo({
         }
         total = parseFloat(total.toFixed(2));
         if (mounting === 'Stud with spacer') {
-          let spacer = total * 1.02 > 25 ? 25 : total * 1.02;
+          let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
+          let spacer = total * 1.02 > maxVal ? maxVal : total * 1.02;
           spacer = parseFloat(spacer.toFixed(2));
           total += spacer;
         }
@@ -14092,7 +14106,8 @@ function Letters({
         totalLetterPrice += letterPrice;
       });
       if (mounting === 'Stud with spacer') {
-        let spacer = totalLetterPrice * 1.02 > 25 ? 25 : totalLetterPrice * 1.02;
+        let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
+        let spacer = totalLetterPrice * 1.02 > maxVal ? maxVal : totalLetterPrice * 1.02;
         spacer = parseFloat(spacer.toFixed(2));
         totalLetterPrice += spacer;
       }
@@ -14596,7 +14611,8 @@ function Logo({
         total *= mounting === 'Double-sided tape' ? 1.01 : 1;
         total *= pvcBaseColor?.name !== 'Black' ? 1.1 : 1;
         if (mounting === 'Stud with spacer') {
-          let spacer = total * 1.02 > 25 ? 25 : total * 1.02;
+          let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
+          let spacer = total * 1.02 > maxVal ? maxVal : total * 1.02;
           spacer = parseFloat(spacer.toFixed(2));
           total += spacer;
         }
@@ -15335,7 +15351,8 @@ function Letters({
         totalLetterPrice += letterPrice;
       });
       if (mounting === 'Stud with spacer') {
-        let spacer = totalLetterPrice * 1.02 > 25 ? 25 : totalLetterPrice * 1.02;
+        let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
+        let spacer = totalLetterPrice * 1.02 > maxVal ? maxVal : totalLetterPrice * 1.02;
         spacer = parseFloat(spacer.toFixed(2));
         totalLetterPrice += spacer;
       }
@@ -15824,7 +15841,8 @@ function Logo({
         total *= selectedFinishing === 'Gloss' ? 1.03 : 1;
         total *= mounting === 'Double-sided tape' ? 1.01 : 1;
         if (mounting === 'Stud with spacer') {
-          let spacer = total * 1.02 > 25 ? 25 : total * 1.02;
+          let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
+          let spacer = total * 1.02 > maxVal ? maxVal : total * 1.02;
           spacer = parseFloat(spacer.toFixed(2));
           total += spacer;
         }
@@ -16447,7 +16465,8 @@ function Logo({
         total *= mounting === 'Double-sided tape' ? 1.01 : 1;
         total *= pvcBaseColor?.name === 'Black' ? 1.2 : 1.1;
         if (mounting === 'Stud with spacer') {
-          let spacer = total * 1.02 > 25 ? 25 : total * 1.02;
+          let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
+          let spacer = total * 1.02 > maxVal ? maxVal : total * 1.02;
           spacer = parseFloat(spacer.toFixed(2));
           total += spacer;
         }

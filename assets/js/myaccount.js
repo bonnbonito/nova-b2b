@@ -112,6 +112,12 @@ function process(btn, action) {
 			if (data.code == 2) {
 				if (action === 'to_checkout') {
 					btn.innerHTML = `Added to Cart`;
+					btn.classList.remove(
+						'bg-green-600',
+						'hover:bg-green-400',
+						'cursor-pointer'
+					);
+					btn.classList.add('bg-gray-400', 'cursor-not-allowed');
 					let event = new Event('added_to_cart');
 					document.body.dispatchEvent(event);
 					alert('Added to cart');

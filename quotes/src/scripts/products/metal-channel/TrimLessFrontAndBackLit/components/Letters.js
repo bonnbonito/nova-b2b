@@ -339,8 +339,10 @@ export default function Letters({ item }) {
 				});
 
 				if (mounting === 'Stud with spacer') {
+					let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
+
 					let spacer =
-						totalLetterPrice * 1.02 > 25 ? 25 : totalLetterPrice * 1.02;
+						totalLetterPrice * 1.02 > maxVal ? maxVal : totalLetterPrice * 1.02;
 					spacer = parseFloat(spacer.toFixed(2));
 
 					totalLetterPrice += spacer;

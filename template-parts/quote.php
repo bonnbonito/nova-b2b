@@ -94,7 +94,9 @@ $final_price = $price_with_shipping ? ( get_woocommerce_currency() === 'USD' ? $
 
 				if ( in_array( $cart_product_id, array_column( WC()->cart->get_cart(), 'product_id' ) ) ) {
 					?>
-			<span class="p-2 border rounded bg-gray-400 text-white text-[10px] tracking-[1px]">ALREADY IN CART<span>
+			<span
+				class="p-2 border rounded bg-gray-400 text-white text-[10px] tracking-[1px] cursor-not-allowed">ALREADY
+				IN CART<span>
 					<?php
 				} elseif ( $final_price > 0 ) {
 					?>

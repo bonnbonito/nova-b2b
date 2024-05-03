@@ -251,7 +251,9 @@ export default function Logo({ item }) {
 				total *= mounting === 'Double-sided tape' ? 1.01 : 1;
 
 				if (mounting === 'Stud with spacer') {
-					let spacer = total * 1.02 > 25 ? 25 : total * 1.02;
+					let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
+					let spacer = total * 1.02 > maxVal ? maxVal : total * 1.02;
+
 					spacer = parseFloat(spacer.toFixed(2));
 
 					total += spacer;
