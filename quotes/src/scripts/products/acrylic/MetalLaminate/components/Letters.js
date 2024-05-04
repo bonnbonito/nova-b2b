@@ -90,6 +90,8 @@ export default function Letters({ item }) {
 		item.spacerStandoffDistance
 	);
 
+	const [color, setColor] = useState('#000000');
+
 	const handleonChangeSpacerDistance = (e) => {
 		setSpacerStandoffDistance(e.target.value);
 	};
@@ -200,7 +202,12 @@ export default function Letters({ item }) {
 	};
 
 	const handleChangeMetalLaminate = (e) => {
-		setMetalLaminate(e.target.value);
+		const selectedLaminate = metalFinishColors.find(
+			(laminate) => laminate.name === e.target.value
+		);
+		// Assuming setMetalLaminate and setColor are state setter functions
+		setMetalLaminate(selectedLaminate.name);
+		setColor(selectedLaminate.color);
 	};
 
 	function updateSignage() {
@@ -540,8 +547,8 @@ export default function Letters({ item }) {
 							whiteSpace: 'nowrap',
 							overflow: 'hidden',
 							fontFamily: font,
-							color: '#000000',
-							textShadow: '0px 0px 1px rgba(0, 0, 0, 1)',
+							color: color,
+							textShadow: `-1px 1px 3px ${acrylicBase.color}, 0 0 1px #000000`,
 						}}
 					>
 						{letters ? letters : 'PREVIEW'}

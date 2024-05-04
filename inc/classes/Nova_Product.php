@@ -26,6 +26,32 @@ class Nova_Product {
 		// add_filter( 'the_title', array( $this, 'modify_acrylic_post_title' ), 10, 2 );
 		add_action( 'nova_signange_after_title', array( $this, 'signage_nav_tabs' ) );
 		add_action( 'nova_product_installation', array( $this, 'nova_product_installation' ) );
+		add_filter( 'document_title', array( $this, 'custom_wp_title' ), 10, 1 );
+	}
+
+	public function custom_wp_title( $title ) {
+		if ( function_exists( 'is_wc_endpoint_url' ) ) {
+			if ( is_wc_endpoint_url( 'lost-password' ) ) {
+				$title = 'LOST PASSWORD | ' . $title;
+			}
+		}
+
+		$tab = get_query_var( 'pagetab' );
+		if ( $tab ) {
+			switch ( $tab ) {
+				case 'tech-specs':
+					$title = 'Tech Specs | ' . $title;
+					break;
+				case 'overview':
+					$title = 'Overview | ' . $title;
+					break;
+				case 'installation':
+					$title = 'Installation | ' . $title;
+					break;
+			}
+		}
+
+		return $title;
 	}
 
 	public function nova_product_installation() {

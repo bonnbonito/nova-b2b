@@ -58,6 +58,8 @@ export default function Letters({ item }) {
 	const [filePaths, setFilePaths] = useState(item.filePaths);
 	const [files, setFiles] = useState(item.files);
 
+	const [color, setColor] = useState('#000000');
+
 	const [fontFileName, setFontFileName] = useState(item.fontFileName);
 	const [fontFileUrl, setFontFileUrl] = useState(item.fontFileUrl);
 	const [fontFilePath, setFontFilePath] = useState(item.fontFilePath);
@@ -116,7 +118,12 @@ export default function Letters({ item }) {
 
 	const [metalLaminate, setMetalLaminate] = useState(item.metalLaminate);
 	const handleChangeMetalLaminate = (e) => {
-		setMetalLaminate(e.target.value);
+		const selectedLaminate = metalFinishColors.find(
+			(laminate) => laminate.name === e.target.value
+		);
+		// Assuming setMetalLaminate and setColor are state setter functions
+		setMetalLaminate(selectedLaminate.name);
+		setColor(selectedLaminate.color);
 	};
 
 	const [sets, setSets] = useState(item.sets);
@@ -547,7 +554,7 @@ export default function Letters({ item }) {
 							whiteSpace: 'nowrap',
 							overflow: 'hidden',
 							fontFamily: font === 'Custom font' ? '' : font,
-							color: `#000000`,
+							color: color,
 							textShadow: `-1px 1px 3px ${pvcBaseColor.color}, 0 0 1px #000000`,
 						}}
 					>

@@ -377,6 +377,7 @@ jQuery(document).ready(function($) {
 			$message .= '<p>If you have any questions, feel free to ask our team.</p>';
 			$message .= '<p>Happy exploring,<br>';
 			$message .= 'NOVA Signage Team</p>';
+			$message .= "<br><br><p><em>This is a generated email. You don't need to reply.</em></p>";
 
 			$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
@@ -492,6 +493,7 @@ jQuery(document).ready(function($) {
 		$message .= '<p>Your Business Partner account will be reviewed within 24 business hours. Please wait for the approval email.</p>';
 		$message .= '<p>Thank you,<br>';
 		$message .= 'NOVA Signage Team</p>';
+		$message .= "<br><br><p><em>This is a generated email. You don't need to reply.</em></p>";
 
 		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
@@ -786,6 +788,7 @@ jQuery(document).ready(function($) {
 		$message .= home_url() . '/activate?pu=' . $user_id . '&key=' . $activation_key . "</a>\n\n";
 		$message .= '<p>Thank you,<br>';
 		$message .= 'NOVA Signage Team</p>';
+		$message .= "<br><br><p><em>This is a generated email. You don't need to reply.</em></p>";
 
 		$this->send_email( $businessEmail, $subject, $message, array(), array() );
 

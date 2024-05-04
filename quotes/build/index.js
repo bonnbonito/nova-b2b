@@ -5160,6 +5160,7 @@ function Letters({
   const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.studLength);
   const [spacerStandoffOptions, setSpacerStandoffOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.spacerStandoffDefaultOptions);
   const [spacerStandoffDistance, setSpacerStandoffDistance] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.spacerStandoffDistance);
+  const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('#000000');
   const handleonChangeSpacerDistance = e => {
     setSpacerStandoffDistance(e.target.value);
   };
@@ -5260,7 +5261,10 @@ function Letters({
     }
   };
   const handleChangeMetalLaminate = e => {
-    setMetalLaminate(e.target.value);
+    const selectedLaminate = _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_6__.metalFinishColors.find(laminate => laminate.name === e.target.value);
+    // Assuming setMetalLaminate and setColor are state setter functions
+    setMetalLaminate(selectedLaminate.name);
+    setColor(selectedLaminate.color);
   };
   function updateSignage() {
     const updatedSignage = signage.map(sign => {
@@ -5486,8 +5490,8 @@ function Letters({
       whiteSpace: 'nowrap',
       overflow: 'hidden',
       fontFamily: font,
-      color: '#000000',
-      textShadow: '0px 0px 1px rgba(0, 0, 0, 1)'
+      color: color,
+      textShadow: `-1px 1px 3px ${acrylicBase.color}, 0 0 1px #000000`
     }
   }, letters ? letters : 'PREVIEW'))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "py-4"
@@ -13894,6 +13898,7 @@ function Letters({
   const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.fileUrls);
   const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.filePaths);
   const [files, setFiles] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.files);
+  const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('#000000');
   const [fontFileName, setFontFileName] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.fontFileName);
   const [fontFileUrl, setFontFileUrl] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.fontFileUrl);
   const [fontFilePath, setFontFilePath] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.fontFilePath);
@@ -13947,7 +13952,10 @@ function Letters({
   const [selectedLetterHeight, setSelectedLetterHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.letterHeight);
   const [metalLaminate, setMetalLaminate] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.metalLaminate);
   const handleChangeMetalLaminate = e => {
-    setMetalLaminate(e.target.value);
+    const selectedLaminate = _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_6__.metalFinishColors.find(laminate => laminate.name === e.target.value);
+    // Assuming setMetalLaminate and setColor are state setter functions
+    setMetalLaminate(selectedLaminate.name);
+    setColor(selectedLaminate.color);
   };
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.sets);
   const handleOnChangeSets = e => {
@@ -14231,7 +14239,7 @@ function Letters({
       whiteSpace: 'nowrap',
       overflow: 'hidden',
       fontFamily: font === 'Custom font' ? '' : font,
-      color: `#000000`,
+      color: color,
       textShadow: `-1px 1px 3px ${pvcBaseColor.color}, 0 0 1px #000000`
     }
   }, letters ? letters : 'PREVIEW'))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
