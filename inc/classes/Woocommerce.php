@@ -1216,6 +1216,9 @@ class Woocommerce {
 	}
 
 	public function woocommerce_thankyou_order_received_text( $text, $order ) {
+		if ( ! $order ) {
+			return;
+		}
 		$from_order_id = $order->get_meta( '_from_order_id' );
 		if ( ! empty( $from_order_id ) ) {
 			// Change the thank you text
@@ -2448,19 +2451,20 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 			echo ob_get_clean();
 	}
 
-	public function show_details( $signage, $quoteID ) {
+	public function show_details( $signage, $quoteID, $subtotal ) {
 		ob_start();
 		?>
 <div id="quote-<?php echo $quoteID; ?>" style="display:none;max-width:550px; width: 100%;">
 	<div class="pb-8 mb-8 border-b-nova-light border-b">
 		<h4 class="text-[16px]">QUOTE ID: Q-<?php echo str_pad( $quoteID, 4, '0', STR_PAD_LEFT ); ?></h4>
-		<h4 class="text-[16px]">PRODUCT:
+		<h4 class="text-[16px] uppercase">PRODUCT:
 			<?php echo ( get_field( 'product', $quoteID ) ? get_field( 'product', $quoteID )->post_title : 'CUSTOM PROJECT' ); ?>
 		</h4>
 		<?php
 		$this->show_project_details( $signage );
 		?>
 	</div>
+	<h6 class="uppercase flex">Subtotal: <span class="ml-auto"><?php echo $subtotal; ?></span></h6>
 </div>
 		<?php
 			echo ob_get_clean();

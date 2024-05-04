@@ -80,7 +80,7 @@ $woo_instance = \NOVA_B2B\Inc\Classes\Woocommerce::get_instance();
 						<?php echo $cart_item['product']; ?>
 					</div>
 				</div>
-					<?php $woo_instance->show_details( $cart_item['signage'], $quoteID ); ?>
+					<?php $woo_instance->show_details( $cart_item['signage'], $quoteID, apply_filters( 'woocommerce_cart_item_subtotal', WC()->cart->get_product_subtotal( $_product, $cart_item['quantity'] ), $cart_item, $cart_item_key ) ); ?>
 				<?php } ?>
 				<h6 class="mt-0 text-right">SUBTOTAL:&nbsp;
 					<?php echo apply_filters( 'woocommerce_cart_item_subtotal', WC()->cart->get_product_subtotal( $_product, $cart_item['quantity'] ), $cart_item, $cart_item_key ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>

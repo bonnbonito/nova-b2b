@@ -179,7 +179,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 						?>
 				</div>
 
-						<?php $woo_instance->show_details( $cart_item['signage'], $quoteID ); ?>
+						<?php $woo_instance->show_details( $cart_item['signage'], $quoteID, apply_filters( 'woocommerce_cart_item_price', WC()->cart->get_product_price( $_product ), $cart_item, $cart_item_key ) ); ?>
 
 			</div>
 
