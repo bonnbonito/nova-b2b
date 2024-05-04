@@ -3,8 +3,8 @@ module.exports = {
 	content: [
 		'./*.php',
 		'./template-parts/**/*.php',
-		'./assets/**/*.{php,css,js}',
 		'./inc/**/*.php',
+		'./assets/**/*.{php,css,js}',
 		'./woocommerce/**/*.php',
 		'./woocommerce/*.php',
 		'./quotes/build/*.{php,js}',

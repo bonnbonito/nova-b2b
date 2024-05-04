@@ -7,6 +7,7 @@ export const DeleteQuote = () => {
 	const [error, setError] = useState(false);
 	const [open, setOpen] = useState(false);
 	const [label, setLabel] = useState("Yes I'm Sure");
+	const [isDeleted, setIsDeleted] = useState(false);
 
 	const handleDeleteQuote = async (event) => {
 		event.preventDefault(); // Prevent default form submission
@@ -18,17 +19,21 @@ export const DeleteQuote = () => {
 			formData.append('nonce', NovaQuote.nonce);
 			formData.append('quote_id', NovaQuote.current_quote_id);
 			formData.append('action', 'delete_quote');
+			formData.append('role', NovaQuote.user_role[0]);
 
-			const status = await processQuote(formData);
-			console.log(status);
-			if (status === 'success') {
+			const data = await processQuote(formData);
+
+			if (data.status === 'success') {
 				setLabel('Deleted');
+				setIsDeleted(true);
 				window.location.replace(NovaQuote.mockup_account_url);
 			} else {
 				alert('Error');
 			}
+			console.log(data);
 		} catch (err) {
 			// Handle errors
+			console.log(err);
 			setError('Failed to delete quote. Please try again.');
 		} finally {
 			setIsLoading(false);
@@ -64,26 +69,34 @@ export const DeleteQuote = () => {
 									clip-rule="evenodd"
 								></path>
 							</svg>
-							<p class="mb-4 text-gray-500 text-center">
-								Are you sure you want to delete this quote?
-							</p>
-							<div class="flex justify-center items-center space-x-4">
-								<Dialog.Close asChild>
-									<button
-										type="button"
-										class="py-2 px-3 border border-solid text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10"
-									>
-										No, cancel
-									</button>
-								</Dialog.Close>
-								<button
-									onClick={handleDeleteQuote}
-									disabled={isLoading}
-									class="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900"
-								>
-									{label}
-								</button>
-							</div>
+							{isDeleted ? (
+								<>
+									<p class="mb-4 text-gray-500 text-center">Deleted</p>
+								</>
+							) : (
+								<>
+									<p class="mb-4 text-gray-500 text-center">
+										Are you sure you want to delete this quote?
+									</p>
+									<div class="flex justify-center items-center space-x-4">
+										<Dialog.Close asChild>
+											<button
+												type="button"
+												class="py-2 px-3 border border-solid text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10"
+											>
+												No, cancel
+											</button>
+										</Dialog.Close>
+										<button
+											onClick={handleDeleteQuote}
+											disabled={isLoading}
+											class="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900"
+										>
+											{label}
+										</button>
+									</div>
+								</>
+							)}
 						</Dialog.Description>
 						<Dialog.Close asChild>
 							<div

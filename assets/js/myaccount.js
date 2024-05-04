@@ -1,5 +1,4 @@
 function novaMyAccount() {
-	console.log('novaMyAccount');
 	const quotationBtns = document.querySelectorAll('a[data-type="quotation"]');
 	const checkoutBtns = document.querySelectorAll('a[data-type="checkout"]');
 	const deleteBtns = document.querySelectorAll('a[data-type="delete"]');
@@ -50,8 +49,6 @@ function deleteQuote(btn) {
 	})
 		.then((response) => response.json())
 		.then((data) => {
-			console.log(data);
-
 			if (data.code == 2) {
 				location.reload(true);
 				parentElement.style.opacity = '0';
@@ -70,7 +67,6 @@ function deleteQuote(btn) {
 
 function process(btn, action) {
 	const quoteID = btn.dataset.id;
-	console.log(quoteID);
 
 	btn.setAttribute('disabled', '');
 	btn.classList.add(
@@ -107,10 +103,10 @@ function process(btn, action) {
 	})
 		.then((response) => response.json())
 		.then((data) => {
-			console.log(data);
-
 			if (data.code == 2) {
 				if (action === 'to_checkout') {
+					const cartTotal = document.querySelector('.header-cart-total');
+					cartTotal.innerText = parseInt(cartTotal.innerText) + 1;
 					btn.innerHTML = `Added to Cart`;
 					btn.classList.remove(
 						'bg-green-600',
@@ -118,8 +114,6 @@ function process(btn, action) {
 						'cursor-pointer'
 					);
 					btn.classList.add('bg-gray-400', 'cursor-not-allowed');
-					let event = new Event('added_to_cart');
-					document.body.dispatchEvent(event);
 					alert('Added to cart');
 				} else {
 					location.reload(true);

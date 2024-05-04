@@ -205,6 +205,7 @@ const DeleteQuote = () => {
   const [error, setError] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [open, setOpen] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [label, setLabel] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("Yes I'm Sure");
+  const [isDeleted, setIsDeleted] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const handleDeleteQuote = async event => {
     event.preventDefault(); // Prevent default form submission
     setIsLoading(true);
@@ -215,16 +216,19 @@ const DeleteQuote = () => {
       formData.append('nonce', NovaQuote.nonce);
       formData.append('quote_id', NovaQuote.current_quote_id);
       formData.append('action', 'delete_quote');
-      const status = await (0,_utils_QuoteFunctions__WEBPACK_IMPORTED_MODULE_2__.processQuote)(formData);
-      console.log(status);
-      if (status === 'success') {
+      formData.append('role', NovaQuote.user_role[0]);
+      const data = await (0,_utils_QuoteFunctions__WEBPACK_IMPORTED_MODULE_2__.processQuote)(formData);
+      if (data.status === 'success') {
         setLabel('Deleted');
+        setIsDeleted(true);
         window.location.replace(NovaQuote.mockup_account_url);
       } else {
         alert('Error');
       }
+      console.log(data);
     } catch (err) {
       // Handle errors
+      console.log(err);
       setError('Failed to delete quote. Please try again.');
     } finally {
       setIsLoading(false);
@@ -256,7 +260,9 @@ const DeleteQuote = () => {
     "fill-rule": "evenodd",
     d: "M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z",
     "clip-rule": "evenodd"
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+  })), isDeleted ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    class: "mb-4 text-gray-500 text-center"
+  }, "Deleted")) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
     class: "mb-4 text-gray-500 text-center"
   }, "Are you sure you want to delete this quote?"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     class: "flex justify-center items-center space-x-4"
@@ -269,7 +275,7 @@ const DeleteQuote = () => {
     onClick: handleDeleteQuote,
     disabled: isLoading,
     class: "py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900"
-  }, label))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_3__.Close, {
+  }, label)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_3__.Close, {
     asChild: true
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-nova-gray absolute top-[10px] right-[10px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center focus:shadow-[0_0_0_2px] focus:outline-none border cursor-pointer",
@@ -1529,11 +1535,11 @@ function QuoteView() {
   const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [isDownloading, setIsDownloading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [isHovered, setIsHovered] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const [addedToCart, setAddedToCart] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(NovaQuote.is_added_to_cart);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (!NovaAccount || Object.keys(NovaAccount).length === 0) {
       window.location.href = NovaQuote.mockup_account_url;
     }
-    console.log(signage);
   }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     console.log('Attempting to preload fonts...');
@@ -1563,6 +1569,7 @@ function QuoteView() {
     }
   }
   const addToCart = () => {
+    if (addedToCart) return;
     setIsLoading(true);
     const formData = new FormData();
     formData.append('action', 'to_checkout');
@@ -1583,8 +1590,11 @@ function QuoteView() {
     }).then(response => response.json()).then(data => {
       console.log(data);
       if (data.code == 2) {
+        const cartTotal = document.querySelector('.header-cart-total');
+        cartTotal.innerText = parseInt(cartTotal.innerText) + 1;
+        setAddedToCart(true);
         let event = new Event('added_to_cart');
-        document.body.dispatchEvent(event);
+        //document.body.dispatchEvent(event);
         setIsLoading(false);
         alert('Added to cart');
       } else {
@@ -1709,12 +1719,12 @@ function QuoteView() {
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, "ESTIMATED TOTAL:"), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, estimatedTotal > 0 ? `${currency}$${Number(parseFloat(estimatedTotal).toFixed(2)).toLocaleString()}` : 'TBD')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
     className: "mt-4 text-[10px] text-[#5E5E5E]"
   }, "Freight charges may vary based on factors such as shipping destination, package size, and delivery speed.\xA0")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, NovaAccount?.quote_status.value === 'ready' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "rounded mb-3 px-4 py-3 border border-nova-light font-title text-white bg-nova-primary text-xs inline-block hover:text-white hover:bg-nova-secondary w-full text-center cursor-pointer uppercase",
+    className: `rounded mb-3 px-4 py-3 border border-nova-light font-title text-white  text-xs inline-block hover:text-white  w-full text-center uppercase ${addedToCart ? 'bg-gray-400 cursor-not-allowed' : 'bg-nova-primary hover:bg-nova-secondary cursor-pointer'}`,
     disabled: isLoading,
     onClick: addToCart
   }, isLoading ? 'Adding To Cart...' : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "tracking-[1.6px]"
-  }, "ADD TO CART")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_DeleteQuote__WEBPACK_IMPORTED_MODULE_1__.DeleteQuote, null))));
+  }, addedToCart ? 'ADDED TO CART' : 'ADD TO CART')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_DeleteQuote__WEBPACK_IMPORTED_MODULE_1__.DeleteQuote, null))));
 }
 
 /***/ }),

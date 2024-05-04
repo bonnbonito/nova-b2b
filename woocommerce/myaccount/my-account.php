@@ -26,7 +26,7 @@ defined( 'ABSPATH' ) || exit;
 <div class="nova-account-wrapper grid grid-cols-1 md:grid-cols-[200px_1fr] gap-8">
 	<?php do_action( 'nova_account_navigation' ); ?>
 
-	<div class="nova-MyAccount-content w-full">
+	<div class="nova-MyAccount-content w-full overflow-x-hidden">
 		<?php
 		/**
 		 * My Account content.

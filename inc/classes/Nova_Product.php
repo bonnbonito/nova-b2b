@@ -117,28 +117,33 @@ class Nova_Product {
 		<!-- <h6><a class="button active" href="#">Sample Board</a></h6> -->
 	</div>
 
-	<div id="productNavMobile" class="product-nav-tabs-mobile" onclick="toggleShowClass()">
-		<h6 id="current"><span id="text"><?php echo $tab_title; ?></span> <svg xmlns="http://www.w3.org/2000/svg"
-				width="13" height="7" viewBox="0 0 13 7" fill="none">
+	<div id="productNavMobile" class="product-nav-tabs-mobile">
+
+		<h6 id="current" data-click="toggleMobileNav"><span id="text"><?php echo $tab_title; ?></span> <svg
+				xmlns="http://www.w3.org/2000/svg" width="13" height="7" viewBox="0 0 13 7" fill="none">
 				<path d="M11 2L6.66667 6L2 2" stroke="black" stroke-width="1.5" stroke-linecap="square"
 					stroke-linejoin="round" />
 			</svg>
 		</h6>
-			<?php if ( $tab !== 'overview' ) : ?>
-		<h6 data-menu="overview" class="py-1"><a class="text-button block <?php echo ( ! $tab ? 'selected' : '' ); ?>"
-				href="<?php echo untrailingslashit( get_permalink() ); ?>/overview">Overview</a></a></h6>
-		<?php endif; ?>
-			<?php if ( $tab !== 'tech-specs' ) : ?>
-		<h6 data-menu="specs" class="py-1"><a
-				class="text-button block <?php echo ( $tab === 'tech-specs' ? 'selected' : '' ); ?>"
-				href="<?php echo untrailingslashit( get_permalink() ); ?>/tech-specs">Tech Specs</a></a></h6>
-		<?php endif; ?>
-			<?php if ( $tab !== 'installation' ) : ?>
-		<h6 data-menu="installation" class="py-1"><a
-				class="text-button block <?php echo ( $tab === 'installation' ? 'active' : '' ); ?>"
-				href="<?php echo untrailingslashit( get_permalink() ); ?>/installation">Installation</a></a></h6>
-		<?php endif; ?>
-		<h6 data-menu="sample" style="display: none;">Sample Board</a></h6>
+
+		<div id="innerMobileNav" class="mt-1 hidden">
+			<a class="text-button block overflow-hidden"
+				href="<?php echo untrailingslashit( get_permalink() ); ?>/overview">
+				<h6 class="py-1">- Overview</h6>
+			</a>
+
+			<a class="text-button block overflow-hidden"
+				href="<?php echo untrailingslashit( get_permalink() ); ?>/tech-specs">
+				<h6 class="py-1 ">- Tech Specs</h6>
+			</a>
+
+			<a class="text-button block overflow-hidden"
+				href="<?php echo untrailingslashit( get_permalink() ); ?>/installation">
+				<h6 class="py-1">- Installation</h6>
+			</a>
+			<h6 data-menu="sample" style="display: none;">- Sample Board</a></h6>
+		</div>
+
 
 	</div>
 
@@ -147,12 +152,18 @@ class Nova_Product {
 </div>
 
 <script>
-const productNavMobile = document.getElementById('productNavMobile');
+document.addEventListener("DOMContentLoaded", (event) => {
+	const productNavMobile = document.getElementById('productNavMobile');
+	const toggleMobileNav = document.querySelector('h6[data-click="toggleMobileNav"]');
+	const innerMobileNav = document.getElementById('innerMobileNav');
+	toggleMobileNav.addEventListener('click', e => {
+		e.preventDefault();
+		if (innerMobileNav) {
+			innerMobileNav.classList.toggle('hidden');
+		}
 
-function toggleShowClass() {
-	let element = document.getElementById('productNavMobile');
-	element.classList.toggle('show');
-}
+	});
+});
 </script>
 
 			<?php

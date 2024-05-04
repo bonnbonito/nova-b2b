@@ -1546,7 +1546,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 			}
 
 			if ( isset( $object->acrylicThickness ) && ! empty( $object->acrylicThickness ) && $object->acrylicThickness ) {
-				$html .= '<strong>ACRYLIC THICKNESS: </strong>' . htmlspecialchars( $object->acrylicThickness->thickness ) . '"<br>';
+				$html .= '<strong>ACRYLIC THICKNESS: </strong>' . htmlspecialchars( $object->acrylicThickness->thickness ) . '<br>';
 			}
 
 			if ( isset( $object->thickness ) && ! empty( $object->thickness ) && $object->thickness ) {
@@ -1582,7 +1582,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 			}
 
 			if ( isset( $object->letterHeight ) && ! empty( $object->letterHeight ) ) {
-				$html .= '<strong>LETTER HEIGHT: </strong>' . htmlspecialchars( $object->letterHeight ) . '<br>';
+				$html .= '<strong>LETTER HEIGHT: </strong>' . htmlspecialchars( $object->letterHeight ) . '"<br>';
 			}
 
 			if ( isset( $object->backLitFinishing ) && ! empty( $object->backLitFinishing ) ) {
@@ -2070,7 +2070,8 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		$archived   = $this->get_all_mockups_quantity( 'archived' );
 
 		?>
-<div class="border-b font-title uppercase flex gap-6 md:gap-11 mb-8">
+<div
+	class="border-b font-title uppercase flex gap-6 md:gap-11 mb-8 whitespace-nowrap overflow-x-auto overflow-y-hidden">
 	<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/all' ) ); ?>"
 		class="py-4 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/all'] ) ? 'border-black' : 'border-transparent' ); ?> mb-[-4px] text-black">ALL
 		Mockups <span>(<?php echo $all; ?>)</span></a>

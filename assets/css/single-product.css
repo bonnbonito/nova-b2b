@@ -185,7 +185,11 @@ p.faq-question.active svg line:first-child {
     text-transform: uppercase;
     margin-right: 2em;
     letter-spacing: 1px;
-    height: 35px;
+    height: auto;
+}
+
+#innerMobileNav .hide {
+    display: none;
 }
 
 .product-nav-tabs-mobile.show {

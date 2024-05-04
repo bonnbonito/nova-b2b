@@ -3,6 +3,7 @@ namespace NOVA_B2B\Inc\Classes;
 
 use TCPDF;
 use WP_Query;
+use WC;
 
 class Nova_Quote {
 	/**
@@ -979,10 +980,22 @@ sendMockup.addEventListener('click', e => {
 		}
 		$post_id = $_POST['quote_id'];
 
-		/**delete custom post type with $post_ID */
+		$product_id = get_post_meta( $post_id, 'nova_product_generated_id', true );
+
 		if ( wp_delete_post( $post_id ) ) {
 			$status['status'] = 'success';
 			$status['code']   = '2';
+
+			if ( $product_id ) {
+				$status['product_id'] = $product_id;
+				$cart                 = WC()->cart;
+				foreach ( $cart->get_cart() as $cart_item_key => $cart_item ) {
+					if ( $cart_item['product_id'] == $product_id ) {
+						$cart->remove_cart_item( $cart_item_key );
+						break;
+					}
+				}
+			}
 		} else {
 			$status['error']  = 'Deletion failed';
 			$status['status'] = 'error';
@@ -2146,6 +2159,7 @@ h6 {
 				'small_punctuations_pricing' => $this->small_punctuations_pricing(),
 				'lowercase_pricing'          => $this->lowercase_pricing(),
 				'quote_div_id'               => get_field( 'quote_div_id' ),
+				'is_added_to_cart'           => $this->is_added_to_cart(),
 			)
 		);
 
@@ -2153,6 +2167,15 @@ h6 {
 			wp_enqueue_script( 'nova-quote' );
 			wp_enqueue_style( 'nova-quote' );
 		}
+	}
+
+	public function is_added_to_cart() {
+		if ( ! isset( $_GET['qid'] ) ) {
+			return false;
+		}
+		$generated_id = get_post_meta( $_GET['qid'], 'nova_product_generated_id', true ) ? get_post_meta( $_GET['qid'], 'nova_product_generated_id', true ) : 0;
+
+		return in_array( $generated_id, array_column( WC()->cart->get_cart(), 'product_id' ) );
 	}
 
 	public function get_partner_id() {

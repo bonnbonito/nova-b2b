@@ -362,6 +362,12 @@ ul#payment-select li input {
     grid-gap: 40px;
 }
 
+@media (max-width: 767px) {
+    #payment ul.wc_payment_methods {
+        grid-template-columns: 1fr;
+    }
+}
+
 #payment ul.wc_payment_methods::before {
     display: none !important;
 }

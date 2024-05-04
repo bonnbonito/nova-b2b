@@ -17,12 +17,12 @@ export default function QuoteView() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [isDownloading, setIsDownloading] = useState(false);
 	const [isHovered, setIsHovered] = useState(false);
+	const [addedToCart, setAddedToCart] = useState(NovaQuote.is_added_to_cart);
 
 	useEffect(() => {
 		if (!NovaAccount || Object.keys(NovaAccount).length === 0) {
 			window.location.href = NovaQuote.mockup_account_url;
 		}
-		console.log(signage);
 	}, []);
 
 	useEffect(() => {
@@ -54,6 +54,7 @@ export default function QuoteView() {
 	}
 
 	const addToCart = () => {
+		if (addedToCart) return;
 		setIsLoading(true);
 
 		const formData = new FormData();
@@ -84,8 +85,13 @@ export default function QuoteView() {
 				console.log(data);
 
 				if (data.code == 2) {
+					const cartTotal = document.querySelector('.header-cart-total');
+					cartTotal.innerText = parseInt(cartTotal.innerText) + 1;
+
+					setAddedToCart(true);
+
 					let event = new Event('added_to_cart');
-					document.body.dispatchEvent(event);
+					//document.body.dispatchEvent(event);
 					setIsLoading(false);
 					alert('Added to cart');
 				} else {
@@ -302,14 +308,20 @@ export default function QuoteView() {
 					<div>
 						{NovaAccount?.quote_status.value === 'ready' && (
 							<div
-								className="rounded mb-3 px-4 py-3 border border-nova-light font-title text-white bg-nova-primary text-xs inline-block hover:text-white hover:bg-nova-secondary w-full text-center cursor-pointer uppercase"
+								className={`rounded mb-3 px-4 py-3 border border-nova-light font-title text-white  text-xs inline-block hover:text-white  w-full text-center uppercase ${
+									addedToCart
+										? 'bg-gray-400 cursor-not-allowed'
+										: 'bg-nova-primary hover:bg-nova-secondary cursor-pointer'
+								}`}
 								disabled={isLoading}
 								onClick={addToCart}
 							>
 								{isLoading ? (
 									'Adding To Cart...'
 								) : (
-									<span className="tracking-[1.6px]">ADD TO CART</span>
+									<span className="tracking-[1.6px]">
+										{addedToCart ? 'ADDED TO CART' : 'ADD TO CART'}
+									</span>
 								)}
 							</div>
 						)}

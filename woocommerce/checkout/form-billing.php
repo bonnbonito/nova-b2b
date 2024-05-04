@@ -21,7 +21,7 @@ defined( 'ABSPATH' ) || exit;
 $user_id  = get_current_user_id();
 $customer = new WC_Customer( $user_id );
 ?>
-<div id="checkoutBillingShow" class="block">
+<div id="checkoutBillingShow" class="block mb-8 md:mb-0">
 	<h4 class="woocommerce-column__title uppercase tracking-[2.4px] mb-4 md:mb-9 flex gap-4">
 		<?php esc_html_e( 'Billing details', 'woocommerce' ); ?>
 
