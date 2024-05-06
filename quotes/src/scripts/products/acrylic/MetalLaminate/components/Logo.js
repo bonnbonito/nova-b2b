@@ -385,12 +385,12 @@ export default function Logo({ item }) {
 			<div className="quote-grid mb-6">
 				<Dropdown
 					title="Acrylic Thickness"
-					value={item.acrylicThickness?.value}
+					value={selectedThickness?.value}
 					onChange={handleOnChangeThickness}
 					options={thicknessOptions.map((thickness) => (
 						<option
 							value={thickness.value}
-							selected={thickness === item.acrylicThickness}
+							selected={thickness === selectedThickness}
 						>
 							{thickness.thickness}
 						</option>
@@ -417,7 +417,7 @@ export default function Logo({ item }) {
 					options={metalFinishColors.map((laminate) => (
 						<option
 							value={laminate.name}
-							selected={laminate.name === item.metalLaminate}
+							selected={laminate.name === metalLaminate}
 						>
 							{laminate.name}
 						</option>
@@ -431,7 +431,7 @@ export default function Logo({ item }) {
 					</label>
 					<div
 						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-							acrylicBase.name ? 'text-black' : 'text-[#dddddd]'
+							acrylicBase?.name ? 'text-black' : 'text-[#dddddd]'
 						}`}
 						onClick={() => setOpenAcrylicColor((prev) => !prev)}
 					>
@@ -439,7 +439,7 @@ export default function Logo({ item }) {
 							className="rounded-full w-[18px] h-[18px] border mr-2"
 							style={{ backgroundColor: acrylicBase.color }}
 						></span>
-						{acrylicBase.name === '' ? 'CHOOSE OPTION' : acrylicBase.name}
+						{acrylicBase?.name === '' ? 'CHOOSE OPTION' : acrylicBase?.name}
 					</div>
 					{openAcrylicColor && (
 						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
@@ -475,7 +475,7 @@ export default function Logo({ item }) {
 					options={waterProofOptions.map((option) => (
 						<option
 							value={option.option}
-							selected={option.option == item.waterproof}
+							selected={option.option == waterproof}
 						>
 							{option.option}
 						</option>
@@ -505,12 +505,12 @@ export default function Logo({ item }) {
 							options={studLengthOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.studLength}
+									selected={option.value == studLength}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.studLength}
+							value={studLength}
 						/>
 						<Dropdown
 							title="STANDOFF SPACE"
@@ -518,12 +518,12 @@ export default function Logo({ item }) {
 							options={spacerStandoffOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.spacerStandoffDistance}
+									selected={option.value == spacerStandoffDistance}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.spacerStandoffDistance}
+							value={spacerStandoffDistance}
 						/>
 					</>
 				)}
@@ -536,12 +536,12 @@ export default function Logo({ item }) {
 							options={studLengthOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.studLength}
+									selected={option.value == studLength}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.studLength}
+							value={studLength}
 						/>
 					</>
 				)}

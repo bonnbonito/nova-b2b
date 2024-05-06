@@ -4,7 +4,7 @@ import Sidebar from '../../../Sidebar';
 import Signage from '../../../Signage';
 import { PlusIcon } from '../../../svg/Icons';
 
-import Letters from './components/Letters';
+import { Letters } from './components/Letters';
 import Logo from './components/Logo';
 
 export const QuoteContext = createContext(null);

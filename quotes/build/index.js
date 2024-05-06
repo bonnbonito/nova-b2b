@@ -794,16 +794,16 @@ function ModalSave({
     }
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "gap-2 block justify-center sm:flex"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+  }, (action === 'draft' || action === 'update') && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+    href: NovaQuote.quote_url + '?qedit=1&qid=' + quoteID,
+    className: "block mb-4 text-center text-sm px-3 py-2 text-white no-underline bg-nova-primary rounded hover:bg-nova-secondary"
+  }, "Continue Editing"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
     href: `${NovaQuote.mockup_account_url}`,
     className: "block mb-4 text-center text-sm px-3 py-2 text-white no-underline bg-nova-primary rounded hover:bg-nova-secondary"
   }, "Go to Mockups"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
     href: NovaQuote.quote_url,
     className: "block mb-4 text-center text-sm px-3 py-2 text-white no-underline bg-nova-primary rounded hover:bg-nova-secondary"
-  }, "Create New Mockup"), (action === 'draft' || action === 'update') && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
-    href: NovaQuote.quote_url + '?qedit=1&qid=' + quoteID,
-    className: "block mb-4 text-center text-sm px-3 py-2 text-white no-underline bg-nova-primary rounded hover:bg-nova-secondary"
-  }, "Continue Editing")))) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_4__.Content, {
+  }, "Create New Mockup")))) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_4__.Content, {
     className: "data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[550px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none z-[51] overflow-auto"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_4__.Description, {
     className: "mt-[10px] mb-5 text-[15px] leading-normal"
@@ -5049,7 +5049,7 @@ function MetalLaminate() {
     storage: storage,
     isLoading: isLoading,
     setIsLoading: setIsLoading
-  }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_4__["default"], {
+  }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_4__.Letters, {
     key: item.id,
     item: item
   }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_5__["default"], {
@@ -5090,7 +5090,7 @@ function MetalLaminate() {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ Letters)
+/* harmony export */   Letters: () => (/* binding */ Letters)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
@@ -5120,9 +5120,9 @@ const lowerCasePricing = parseFloat(NovaQuote.lowercase_pricing ? NovaQuote.lowe
 const smallPunctuations = parseFloat(NovaQuote.small_punctuations_pricing ? NovaQuote.small_punctuations_pricing : 1);
 //const AcrylicLetterPricing = JSON.parse(NovaOptions.letter_x_logo_pricing);
 
-function Letters({
+const Letters = ({
   item
-}) {
+}) => {
   const {
     signage,
     setSignage,
@@ -5267,6 +5267,7 @@ function Letters({
     setColor(selectedLaminate.color);
   };
   function updateSignage() {
+    console.log('updateSignage');
     const updatedSignage = signage.map(sign => {
       if (sign.id === item.id) {
         return {
@@ -5301,6 +5302,7 @@ function Letters({
       }
     });
     setSignage(() => updatedSignage);
+    console.log(updatedSignage);
   }
   const handleOnChangeLetters = e => setLetters(() => e.target.value);
   const handleComments = e => setComments(e.target.value);
@@ -5321,51 +5323,40 @@ function Letters({
     setSelectedLetterHeight(e.target.value);
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (letterPricing.length > 0 && selectedLetterHeight && selectedThickness) {
-      const pricingDetail = letterPricing[selectedLetterHeight - 1];
-      const baseLetterPrice = pricingDetail[selectedThickness.value];
-      let totalLetterPrice = 0;
-      const lettersArray = letters.trim().split('');
-      const noLowerCase = NovaQuote.no_lowercase.includes(font);
-      lettersArray.forEach(letter => {
-        let letterPrice = baseLetterPrice;
-        if (letter === ' ') {
-          // If the character is a space, set the price to 0 and skip further checks
-          letterPrice = 0;
-        } else if (letter.match(/[a-z]/)) {
-          // Check for lowercase letter
-          letterPrice *= noLowerCase ? 1 : lowerCasePricing; // 80% of the base price
-        } else if (letter.match(/[A-Z]/)) {
-          // Check for uppercase letter
-          // Uppercase letters use 100% of base price, so no change needed
-        } else if (letter.match(/[`~"*,.\-']/)) {
-          // Check for small punctuation marks
-          letterPrice *= smallPunctuations; // 30% of the base price
-        } else if (letter.match(/[^a-zA-Z]/)) {
-          // Check for symbol (not a letter or small punctuation)
-          // Symbols use 100% of base price, so no change needed
-        }
-
-        // Adjusting for waterproof and finishing
-        letterPrice *= waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.1;
-        letterPrice *= _MetalLaminate__WEBPACK_IMPORTED_MODULE_9__.METAL_ACRYLIC_PRICING;
-        letterPrice *= acrylicBase?.name === 'Black' ? 1 : 1.1;
-        totalLetterPrice += letterPrice;
-      });
-      if (selectedMounting === 'Stud with spacer') {
-        let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
-        let spacer = totalLetterPrice * 1.02 > maxVal ? maxVal : totalLetterPrice * 1.02;
-        spacer = parseFloat(spacer.toFixed(2));
-        totalLetterPrice += spacer;
-      }
-      totalLetterPrice *= sets;
-      setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
-      setCadPrice((totalLetterPrice * parseFloat(exchangeRate)).toFixed(2));
-    } else {
+    if (letterPricing.length === 0 || !selectedLetterHeight || !selectedThickness || !letters) {
       setUsdPrice(0);
       setCadPrice(0);
+      return;
     }
-  }, [selectedLetterHeight, selectedThickness, letters, waterproof, lettersHeight, acrylicBase, sets, font, selectedMounting]);
+    const pricingDetail = letterPricing[selectedLetterHeight - 1];
+    const baseLetterPrice = pricingDetail[selectedThickness.value];
+    const noLowerCase = NovaQuote.no_lowercase.includes(font);
+    const totalLetterPrice = letters.trim().split('').reduce((total, letter) => {
+      let letterPrice = baseLetterPrice;
+      if (letter === ' ') {
+        letterPrice = 0;
+      } else if (letter.match(/[a-z]/)) {
+        letterPrice *= noLowerCase ? 1 : lowerCasePricing;
+      } else if (letter.match(/[`~"*,.\-']/)) {
+        letterPrice *= smallPunctuations;
+      }
+      letterPrice *= waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.1;
+      letterPrice *= _MetalLaminate__WEBPACK_IMPORTED_MODULE_9__.METAL_ACRYLIC_PRICING;
+      letterPrice *= acrylicBase?.name === 'Black' ? 1 : 1.1;
+      return total + letterPrice;
+    }, 0);
+    let adjustedPrice = totalLetterPrice;
+    if (selectedMounting === 'Stud with spacer') {
+      const maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
+      const spacer = totalLetterPrice * 1.02 > maxVal ? maxVal : totalLetterPrice * 1.02;
+      adjustedPrice += parseFloat(spacer.toFixed(2));
+    }
+    const finalPrice = adjustedPrice * sets;
+    setUsdPrice(finalPrice.toFixed(2));
+    setCadPrice((finalPrice * parseFloat(exchangeRate)).toFixed(2));
+  }, [selectedLetterHeight, selectedThickness, letters, waterproof, lettersHeight, acrylicBase, sets, font, selectedMounting, letterPricing // Assuming letterPricing is not expected to change frequently
+  ]);
+
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     // Log to ensure we're getting the expected value
 
@@ -5491,7 +5482,7 @@ function Letters({
       overflow: 'hidden',
       fontFamily: font,
       color: color,
-      textShadow: `-1px 1px 3px ${acrylicBase.color}, 0 0 1px #000000`
+      textShadow: `-1px 1px 3px ${acrylicBase?.name ? acrylicBase?.color : '#000000'}, 0 0 1px #000000`
     }
   }, letters ? letters : 'PREVIEW'))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "py-4"
@@ -5507,7 +5498,7 @@ function Letters({
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_FontsDropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    font: item.font,
+    font: font,
     fontRef: fontRef,
     openFont: openFont,
     setOpenFont: setOpenFont,
@@ -5536,7 +5527,7 @@ function Letters({
     title: "Letter Height",
     onChange: handleOnChangeLetterHeight,
     options: letterHeightOptions,
-    value: item.letterHeight
+    value: selectedLetterHeight
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Metal Laminate",
     onChange: handleChangeMetalLaminate,
@@ -5551,7 +5542,7 @@ function Letters({
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
   }, "Acrylic Base"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: `flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${acrylicBase.name ? 'text-black' : 'text-[#dddddd]'}`,
+    className: `flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${acrylicBase?.name ? 'text-black' : 'text-[#dddddd]'}`,
     onClick: () => {
       console.log('Click');
       setOpenAcrylicColor(prev => !prev);
@@ -5560,9 +5551,9 @@ function Letters({
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "rounded-full w-[18px] h-[18px] border mr-2",
     style: {
-      background: acrylicBase.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : acrylicBase.color
+      background: acrylicBase?.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : acrylicBase?.color
     }
-  }), acrylicBase.name === '' ? 'CHOOSE OPTION' : acrylicBase.name), openAcrylicColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }), acrylicBase?.name === '' ? 'CHOOSE OPTION' : acrylicBase?.name), openAcrylicColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
   }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_6__.colorOptions.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -5582,9 +5573,9 @@ function Letters({
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
-      selected: option.option == item.waterproof
+      selected: option.option == waterproof
     }, option.option)),
-    value: item.waterproof
+    value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Mounting Options",
     onChange: handleOnChangeMount,
@@ -5592,31 +5583,31 @@ function Letters({
       value: option.mounting_option,
       selected: option.mounting_option === selectedMounting
     }, option.mounting_option)),
-    value: item.mounting
+    value: selectedMounting
   }), selectedMounting === 'Stud with spacer' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == item.studLength
+      selected: option.value == studLength
     }, option.value)),
-    value: item.studLength
+    value: studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == item.spacerStandoffDistance
+      selected: option.value == spacerStandoffDistance
     }, option.value)),
-    value: item.spacerStandoffDistance
+    value: spacerStandoffDistance
   })), selectedMounting === 'Stud Mount' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == item.studLength
+      selected: option.value == studLength
     }, option.value)),
-    value: item.studLength
+    value: studLength
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,
@@ -5661,7 +5652,7 @@ function Letters({
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-xs text-[#9F9F9F] pt-4"
   }, "We size the letters in proportion to your chosen font. Some uppercase/lowercase letters may appear shorter or taller than your selected height on the form to maintain visual harmony."));
-}
+};
 
 /***/ }),
 
@@ -5948,11 +5939,11 @@ function Logo({
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Acrylic Thickness",
-    value: item.acrylicThickness?.value,
+    value: selectedThickness?.value,
     onChange: handleOnChangeThickness,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.thicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: thickness.value,
-      selected: thickness === item.acrylicThickness
+      selected: thickness === selectedThickness
     }, thickness.thickness))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Logo Width",
@@ -5969,7 +5960,7 @@ function Logo({
     onChange: handleChangeMetalLaminate,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.metalFinishColors.map(laminate => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: laminate.name,
-      selected: laminate.name === item.metalLaminate
+      selected: laminate.name === metalLaminate
     }, laminate.name)),
     value: metalLaminate
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -5978,14 +5969,14 @@ function Logo({
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
   }, "Acrylic Base"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: `flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${acrylicBase.name ? 'text-black' : 'text-[#dddddd]'}`,
+    className: `flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${acrylicBase?.name ? 'text-black' : 'text-[#dddddd]'}`,
     onClick: () => setOpenAcrylicColor(prev => !prev)
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "rounded-full w-[18px] h-[18px] border mr-2",
     style: {
       backgroundColor: acrylicBase.color
     }
-  }), acrylicBase.name === '' ? 'CHOOSE OPTION' : acrylicBase.name), openAcrylicColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }), acrylicBase?.name === '' ? 'CHOOSE OPTION' : acrylicBase?.name), openAcrylicColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
   }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.colorOptions.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -6005,7 +5996,7 @@ function Logo({
     onChange: e => setWaterproof(e.target.value),
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
-      selected: option.option == item.waterproof
+      selected: option.option == waterproof
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -6021,25 +6012,25 @@ function Logo({
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == item.studLength
+      selected: option.value == studLength
     }, option.value)),
-    value: item.studLength
+    value: studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == item.spacerStandoffDistance
+      selected: option.value == spacerStandoffDistance
     }, option.value)),
-    value: item.spacerStandoffDistance
+    value: spacerStandoffDistance
   })), selectedMounting === 'Stud Mount' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == item.studLength
+      selected: option.value == studLength
     }, option.value)),
-    value: item.studLength
+    value: studLength
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,

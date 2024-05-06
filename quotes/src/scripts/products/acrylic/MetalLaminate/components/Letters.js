@@ -32,7 +32,7 @@ const smallPunctuations = parseFloat(
 );
 //const AcrylicLetterPricing = JSON.parse(NovaOptions.letter_x_logo_pricing);
 
-export default function Letters({ item }) {
+export const Letters = ({ item }) => {
 	const {
 		signage,
 		setSignage,
@@ -211,6 +211,7 @@ export default function Letters({ item }) {
 	};
 
 	function updateSignage() {
+		console.log('updateSignage');
 		const updatedSignage = signage.map((sign) => {
 			if (sign.id === item.id) {
 				return {
@@ -245,6 +246,7 @@ export default function Letters({ item }) {
 			}
 		});
 		setSignage(() => updatedSignage);
+		console.log(updatedSignage);
 	}
 
 	const handleOnChangeLetters = (e) => setLetters(() => e.target.value);
@@ -274,60 +276,54 @@ export default function Letters({ item }) {
 	};
 
 	useEffect(() => {
-		if (letterPricing.length > 0 && selectedLetterHeight && selectedThickness) {
-			const pricingDetail = letterPricing[selectedLetterHeight - 1];
-			const baseLetterPrice = pricingDetail[selectedThickness.value];
+		if (
+			letterPricing.length === 0 ||
+			!selectedLetterHeight ||
+			!selectedThickness ||
+			!letters
+		) {
+			setUsdPrice(0);
+			setCadPrice(0);
+			return;
+		}
 
-			let totalLetterPrice = 0;
-			const lettersArray = letters.trim().split('');
-			const noLowerCase = NovaQuote.no_lowercase.includes(font);
+		const pricingDetail = letterPricing[selectedLetterHeight - 1];
+		const baseLetterPrice = pricingDetail[selectedThickness.value];
+		const noLowerCase = NovaQuote.no_lowercase.includes(font);
 
-			lettersArray.forEach((letter) => {
+		const totalLetterPrice = letters
+			.trim()
+			.split('')
+			.reduce((total, letter) => {
 				let letterPrice = baseLetterPrice;
 
 				if (letter === ' ') {
-					// If the character is a space, set the price to 0 and skip further checks
 					letterPrice = 0;
 				} else if (letter.match(/[a-z]/)) {
-					// Check for lowercase letter
-					letterPrice *= noLowerCase ? 1 : lowerCasePricing; // 80% of the base price
-				} else if (letter.match(/[A-Z]/)) {
-					// Check for uppercase letter
-					// Uppercase letters use 100% of base price, so no change needed
+					letterPrice *= noLowerCase ? 1 : lowerCasePricing;
 				} else if (letter.match(/[`~"*,.\-']/)) {
-					// Check for small punctuation marks
-					letterPrice *= smallPunctuations; // 30% of the base price
-				} else if (letter.match(/[^a-zA-Z]/)) {
-					// Check for symbol (not a letter or small punctuation)
-					// Symbols use 100% of base price, so no change needed
+					letterPrice *= smallPunctuations;
 				}
 
-				// Adjusting for waterproof and finishing
 				letterPrice *= waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.1;
 				letterPrice *= METAL_ACRYLIC_PRICING;
 				letterPrice *= acrylicBase?.name === 'Black' ? 1 : 1.1;
 
-				totalLetterPrice += letterPrice;
-			});
+				return total + letterPrice;
+			}, 0);
 
-			if (selectedMounting === 'Stud with spacer') {
-				let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
+		let adjustedPrice = totalLetterPrice;
 
-				let spacer =
-					totalLetterPrice * 1.02 > maxVal ? maxVal : totalLetterPrice * 1.02;
-				spacer = parseFloat(spacer.toFixed(2));
-
-				totalLetterPrice += spacer;
-			}
-
-			totalLetterPrice *= sets;
-
-			setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
-			setCadPrice((totalLetterPrice * parseFloat(exchangeRate)).toFixed(2));
-		} else {
-			setUsdPrice(0);
-			setCadPrice(0);
+		if (selectedMounting === 'Stud with spacer') {
+			const maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
+			const spacer =
+				totalLetterPrice * 1.02 > maxVal ? maxVal : totalLetterPrice * 1.02;
+			adjustedPrice += parseFloat(spacer.toFixed(2));
 		}
+
+		const finalPrice = adjustedPrice * sets;
+		setUsdPrice(finalPrice.toFixed(2));
+		setCadPrice((finalPrice * parseFloat(exchangeRate)).toFixed(2));
 	}, [
 		selectedLetterHeight,
 		selectedThickness,
@@ -338,6 +334,7 @@ export default function Letters({ item }) {
 		sets,
 		font,
 		selectedMounting,
+		letterPricing, // Assuming letterPricing is not expected to change frequently
 	]);
 
 	useEffect(() => {
@@ -548,7 +545,9 @@ export default function Letters({ item }) {
 							overflow: 'hidden',
 							fontFamily: font,
 							color: color,
-							textShadow: `-1px 1px 3px ${acrylicBase.color}, 0 0 1px #000000`,
+							textShadow: `-1px 1px 3px ${
+								acrylicBase?.name ? acrylicBase?.color : '#000000'
+							}, 0 0 1px #000000`,
 						}}
 					>
 						{letters ? letters : 'PREVIEW'}
@@ -571,7 +570,7 @@ export default function Letters({ item }) {
 
 			<div className="quote-grid mb-6">
 				<FontsDropdown
-					font={item.font}
+					font={font}
 					fontRef={fontRef}
 					openFont={openFont}
 					setOpenFont={setOpenFont}
@@ -612,7 +611,7 @@ export default function Letters({ item }) {
 					title="Letter Height"
 					onChange={handleOnChangeLetterHeight}
 					options={letterHeightOptions}
-					value={item.letterHeight}
+					value={selectedLetterHeight}
 				/>
 
 				<Dropdown
@@ -635,7 +634,7 @@ export default function Letters({ item }) {
 					</label>
 					<div
 						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-							acrylicBase.name ? 'text-black' : 'text-[#dddddd]'
+							acrylicBase?.name ? 'text-black' : 'text-[#dddddd]'
 						}`}
 						onClick={() => {
 							console.log('Click');
@@ -647,12 +646,12 @@ export default function Letters({ item }) {
 							className="rounded-full w-[18px] h-[18px] border mr-2"
 							style={{
 								background:
-									acrylicBase.name == 'Custom Color'
+									acrylicBase?.name == 'Custom Color'
 										? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-										: acrylicBase.color,
+										: acrylicBase?.color,
 							}}
 						></span>
-						{acrylicBase.name === '' ? 'CHOOSE OPTION' : acrylicBase.name}
+						{acrylicBase?.name === '' ? 'CHOOSE OPTION' : acrylicBase?.name}
 					</div>
 					{openAcrylicColor && (
 						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
@@ -688,12 +687,12 @@ export default function Letters({ item }) {
 					options={waterProofOptions.map((option) => (
 						<option
 							value={option.option}
-							selected={option.option == item.waterproof}
+							selected={option.option == waterproof}
 						>
 							{option.option}
 						</option>
 					))}
-					value={item.waterproof}
+					value={waterproof}
 				/>
 
 				<Dropdown
@@ -707,7 +706,7 @@ export default function Letters({ item }) {
 							{option.mounting_option}
 						</option>
 					))}
-					value={item.mounting}
+					value={selectedMounting}
 				/>
 
 				{selectedMounting === 'Stud with spacer' && (
@@ -718,12 +717,12 @@ export default function Letters({ item }) {
 							options={studLengthOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.studLength}
+									selected={option.value == studLength}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.studLength}
+							value={studLength}
 						/>
 						<Dropdown
 							title="STANDOFF SPACE"
@@ -731,12 +730,12 @@ export default function Letters({ item }) {
 							options={spacerStandoffOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.spacerStandoffDistance}
+									selected={option.value == spacerStandoffDistance}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.spacerStandoffDistance}
+							value={spacerStandoffDistance}
 						/>
 					</>
 				)}
@@ -749,12 +748,12 @@ export default function Letters({ item }) {
 							options={studLengthOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.studLength}
+									selected={option.value == studLength}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.studLength}
+							value={studLength}
 						/>
 					</>
 				)}
@@ -825,4 +824,4 @@ export default function Letters({ item }) {
 			</div>
 		</>
 	);
-}
+};

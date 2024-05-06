@@ -332,6 +332,14 @@ function ModalSave({
 									></div>
 								)}
 								<div className="gap-2 block justify-center sm:flex">
+									{(action === 'draft' || action === 'update') && (
+										<a
+											href={NovaQuote.quote_url + '?qedit=1&qid=' + quoteID}
+											className="block mb-4 text-center text-sm px-3 py-2 text-white no-underline bg-nova-primary rounded hover:bg-nova-secondary"
+										>
+											Continue Editing
+										</a>
+									)}
 									<a
 										href={`${NovaQuote.mockup_account_url}`}
 										className="block mb-4 text-center text-sm px-3 py-2 text-white no-underline bg-nova-primary rounded hover:bg-nova-secondary"
@@ -344,14 +352,6 @@ function ModalSave({
 									>
 										Create New Mockup
 									</a>
-									{(action === 'draft' || action === 'update') && (
-										<a
-											href={NovaQuote.quote_url + '?qedit=1&qid=' + quoteID}
-											className="block mb-4 text-center text-sm px-3 py-2 text-white no-underline bg-nova-primary rounded hover:bg-nova-secondary"
-										>
-											Continue Editing
-										</a>
-									)}
 								</div>
 							</Dialog.Description>
 						</Dialog.Content>
