@@ -341,16 +341,16 @@ function ModalSave({
 										</a>
 									)}
 									<a
-										href={`${NovaQuote.mockup_account_url}`}
-										className="block mb-4 text-center text-sm px-3 py-2 text-white no-underline bg-nova-primary rounded hover:bg-nova-secondary"
-									>
-										Go to Mockups
-									</a>
-									<a
 										href={NovaQuote.quote_url}
 										className="block mb-4 text-center text-sm px-3 py-2 text-white no-underline bg-nova-primary rounded hover:bg-nova-secondary"
 									>
 										Create New Mockup
+									</a>
+									<a
+										href={`${NovaQuote.mockup_account_url}`}
+										className="block mb-4 text-center text-sm px-3 py-2 text-white no-underline bg-nova-primary rounded hover:bg-nova-secondary"
+									>
+										Go to Mockups
 									</a>
 								</div>
 							</Dialog.Description>

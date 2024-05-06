@@ -798,12 +798,12 @@ function ModalSave({
     href: NovaQuote.quote_url + '?qedit=1&qid=' + quoteID,
     className: "block mb-4 text-center text-sm px-3 py-2 text-white no-underline bg-nova-primary rounded hover:bg-nova-secondary"
   }, "Continue Editing"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
-    href: `${NovaQuote.mockup_account_url}`,
-    className: "block mb-4 text-center text-sm px-3 py-2 text-white no-underline bg-nova-primary rounded hover:bg-nova-secondary"
-  }, "Go to Mockups"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
     href: NovaQuote.quote_url,
     className: "block mb-4 text-center text-sm px-3 py-2 text-white no-underline bg-nova-primary rounded hover:bg-nova-secondary"
-  }, "Create New Mockup")))) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_4__.Content, {
+  }, "Create New Mockup"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+    href: `${NovaQuote.mockup_account_url}`,
+    className: "block mb-4 text-center text-sm px-3 py-2 text-white no-underline bg-nova-primary rounded hover:bg-nova-secondary"
+  }, "Go to Mockups")))) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_4__.Content, {
     className: "data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[550px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none z-[51] overflow-auto"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_4__.Description, {
     className: "mt-[10px] mb-5 text-[15px] leading-normal"
