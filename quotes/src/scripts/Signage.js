@@ -44,7 +44,7 @@ export default function Signage({
 	function duplicateSignage(item, index) {
 		const duplicated = {
 			...item,
-			id: uuidv4() + '-' + 'asdfadsf',
+			id: uuidv4(),
 			filePaths: [],
 			fileNames: [],
 			fileUrls: [],

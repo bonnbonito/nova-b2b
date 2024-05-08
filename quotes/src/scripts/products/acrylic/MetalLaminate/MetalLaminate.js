@@ -27,44 +27,38 @@ export default function MetalLaminate() {
 	const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
 	const storage =
 		window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id + 'x';
-	const localStorageQuote = localStorage.getItem(storage);
-	const savedStorage = JSON.parse(localStorageQuote);
 
 	const [isLoading, setIsLoading] = useState(false);
 
 	function setDefaultSignage() {
-		if (savedStorage?.length > 0) {
-			setSignage(savedStorage);
-		} else {
-			setSignage([
-				{
-					id: uuidv4(),
-					type: 'letters',
-					title: 'LETTERS 1',
-					letters: '',
-					comments: '',
-					font: '',
-					mounting: '',
-					waterproof: '',
-					acrylicThickness: '',
-					acrylicBase: { name: 'Black', color: '#000000' },
-					metalLaminate: '',
-					letterHeight: '',
-					usdPrice: 0,
-					cadPrice: 0,
-					filePaths: [],
-					fileNames: [],
-					fileUrls: [],
-					files: [],
-					customFont: '',
-					customColor: '',
-					sets: 1,
-					studLength: '',
-					spacerStandoffDistance: '',
-					product: NovaQuote.product,
-				},
-			]);
-		}
+		setSignage([
+			{
+				id: uuidv4(),
+				type: 'letters',
+				title: 'LETTERS 1',
+				letters: '',
+				comments: '',
+				font: '',
+				mounting: '',
+				waterproof: '',
+				acrylicThickness: '',
+				acrylicBase: { name: 'Black', color: '#000000' },
+				metalLaminate: '',
+				letterHeight: '',
+				usdPrice: 0,
+				cadPrice: 0,
+				filePaths: [],
+				fileNames: [],
+				fileUrls: [],
+				files: [],
+				customFont: '',
+				customColor: '',
+				sets: 1,
+				studLength: '',
+				spacerStandoffDistance: '',
+				product: NovaQuote.product,
+			},
+		]);
 	}
 
 	useEffect(() => {

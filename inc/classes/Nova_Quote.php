@@ -2200,7 +2200,10 @@ h6 {
 
 	public function get_parent_id() {
 		global $post;
-		return $post->post_parent != 0 ? $post->post_parent : $post->ID;
+		if ( is_object( $post ) && isset( $post->post_parent, $post->ID ) ) {
+			return $post->post_parent != 0 ? $post->post_parent : $post->ID;
+		}
+		return null;
 	}
 
 	public function get_letter_pricing_table() {

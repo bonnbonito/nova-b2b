@@ -1967,7 +1967,7 @@ function Signage({
   function duplicateSignage(item, index) {
     const duplicated = {
       ...item,
-      id: (0,uuid__WEBPACK_IMPORTED_MODULE_4__["default"])() + '-' + 'asdfadsf',
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_4__["default"])(),
       filePaths: [],
       fileNames: [],
       fileUrls: [],
@@ -4895,43 +4895,37 @@ function MetalLaminate() {
   const [tempFolder, setTempFolder] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
   const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id + 'x';
-  const localStorageQuote = localStorage.getItem(storage);
-  const savedStorage = JSON.parse(localStorageQuote);
   const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   function setDefaultSignage() {
-    if (savedStorage?.length > 0) {
-      setSignage(savedStorage);
-    } else {
-      setSignage([{
-        id: (0,uuid__WEBPACK_IMPORTED_MODULE_6__["default"])(),
-        type: 'letters',
-        title: 'LETTERS 1',
-        letters: '',
-        comments: '',
-        font: '',
-        mounting: '',
-        waterproof: '',
-        acrylicThickness: '',
-        acrylicBase: {
-          name: 'Black',
-          color: '#000000'
-        },
-        metalLaminate: '',
-        letterHeight: '',
-        usdPrice: 0,
-        cadPrice: 0,
-        filePaths: [],
-        fileNames: [],
-        fileUrls: [],
-        files: [],
-        customFont: '',
-        customColor: '',
-        sets: 1,
-        studLength: '',
-        spacerStandoffDistance: '',
-        product: NovaQuote.product
-      }]);
-    }
+    setSignage([{
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_6__["default"])(),
+      type: 'letters',
+      title: 'LETTERS 1',
+      letters: '',
+      comments: '',
+      font: '',
+      mounting: '',
+      waterproof: '',
+      acrylicThickness: '',
+      acrylicBase: {
+        name: 'Black',
+        color: '#000000'
+      },
+      metalLaminate: '',
+      letterHeight: '',
+      usdPrice: 0,
+      cadPrice: 0,
+      filePaths: [],
+      fileNames: [],
+      fileUrls: [],
+      files: [],
+      customFont: '',
+      customColor: '',
+      sets: 1,
+      studLength: '',
+      spacerStandoffDistance: '',
+      product: NovaQuote.product
+    }]);
   }
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting === '1') {
