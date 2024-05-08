@@ -477,6 +477,9 @@ jQuery(document).ready(function($) {
 
 		$emails = $this->get_admin_and_customer_rep_emails();
 
+		/*** add Yat */
+		$emails[] = 'yat@novasignage.com';
+
 		$this->send_email( $emails, $subject, $message, $headers, array() );
 
 		$this->send_user_pending_email( $user_id );
