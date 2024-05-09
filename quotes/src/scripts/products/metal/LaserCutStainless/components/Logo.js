@@ -33,7 +33,6 @@ export default function Logo({ item }) {
 		isLoading,
 		setIsLoading,
 	} = useContext(QuoteContext);
-	const [selectedMounting, setSelectedMounting] = useState(item.mounting);
 	const [selectedThickness, setSelectedThickness] = useState(
 		item.metalThickness
 	);
@@ -73,7 +72,11 @@ export default function Logo({ item }) {
 	const [height, setHeight] = useState(item.height);
 	const [comments, setComments] = useState('');
 	const [waterproof, setWaterproof] = useState(item.waterproof);
-	const [mounting, setInstallation] = useState(item.mounting);
+	const [mounting, setMounting] = useState(item.mounting);
+
+	const [metalMountingOptions, setMetalMountingOptions] = useState(
+		metalInstallationOptions
+	);
 
 	const [sets, setSets] = useState(item.sets);
 	const handleOnChangeSets = (e) => {
@@ -296,7 +299,7 @@ export default function Logo({ item }) {
 	}, [
 		comments,
 		selectedThickness,
-		selectedMounting,
+		mounting,
 		waterproof,
 		width,
 		height,
@@ -411,6 +414,25 @@ export default function Logo({ item }) {
 		setOpenColor(false);
 	});
 
+	useEffect(() => {
+		let newMountingOptions = metalInstallationOptions;
+		if (selectedThickness?.value === '4') {
+			if (mounting === 'Stud with spacer' || mounting === 'Stud Mount') {
+				setMounting('');
+				setStudLength('');
+				setSpacerStandoffDistance('');
+			}
+			newMountingOptions = metalInstallationOptions.filter(
+				(option) =>
+					option.option !== 'Stud Mount' && option.option !== 'Stud with spacer'
+			);
+		} else {
+			newMountingOptions = metalInstallationOptions;
+		}
+
+		setMetalMountingOptions(newMountingOptions);
+	}, [selectedThickness, mounting, setMetalMountingOptions]);
+
 	return (
 		<>
 			<div className="quote-grid mb-6">
@@ -422,7 +444,7 @@ export default function Logo({ item }) {
 							{metal.option}
 						</option>
 					))}
-					value={item.metal}
+					value={metal}
 				/>
 				<Dropdown
 					title="Metal Thickness"
@@ -463,7 +485,7 @@ export default function Logo({ item }) {
 							{finishing.option}
 						</option>
 					))}
-					value={item.metalFinish}
+					value={selectedFinishing}
 				/>
 
 				{selectedFinishing === 'Metal Finish' && (
@@ -478,7 +500,7 @@ export default function Logo({ item }) {
 								{metalFinish.option}
 							</option>
 						))}
-						value={item.stainLessMetalFinish}
+						value={stainLessMetalFinish}
 					/>
 				)}
 
@@ -555,23 +577,23 @@ export default function Logo({ item }) {
 					options={waterProofOptions.map((option) => (
 						<option
 							value={option.option}
-							selected={option.option == item.waterproof}
+							selected={option.option == waterproof}
 						>
 							{option.option}
 						</option>
 					))}
-					value={item.waterproof}
+					value={waterproof}
 				/>
 
 				<Dropdown
 					title="Mounting Options"
 					onChange={handleOnChangeInstallation}
-					options={metalInstallationOptions.map((option) => (
+					options={metalMountingOptions.map((option) => (
 						<option value={option.option} selected={option.option === mounting}>
 							{option.option}
 						</option>
 					))}
-					value={item.mounting}
+					value={mounting}
 				/>
 
 				{mounting === 'Stud with spacer' && (
@@ -582,12 +604,12 @@ export default function Logo({ item }) {
 							options={studLengthOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.studLength}
+									selected={option.value == studLength}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.studLength}
+							value={studLength}
 						/>
 						<Dropdown
 							title="STANDOFF SPACE"
@@ -595,12 +617,12 @@ export default function Logo({ item }) {
 							options={spacerStandoffOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.spacerStandoffDistance}
+									selected={option.value == spacerStandoffDistance}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.spacerStandoffDistance}
+							value={spacerStandoffDistance}
 						/>
 					</>
 				)}
@@ -613,12 +635,12 @@ export default function Logo({ item }) {
 							options={studLengthOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.studLength}
+									selected={option.value == studLength}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.studLength}
+							value={studLength}
 						/>
 					</>
 				)}

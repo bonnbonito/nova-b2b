@@ -236,11 +236,23 @@ export default function Letters({ item }) {
 			(option) => option.value === target
 		);
 		setSelectedThickness(() => selected[0]);
-		if (parseInt(target) === 3 && parseInt(selectedLetterHeight) > 24) {
-			setSelectedLetterHeight('');
-		}
+
 		if (parseInt(target) > 11 && parseInt(selectedLetterHeight) === 1) {
 			setSelectedLetterHeight('');
+		}
+
+		if (parseInt(target) === 3) {
+			if (parseInt(selectedLetterHeight) > 24) {
+				setSelectedLetterHeight('');
+			}
+			if (
+				selectedMounting === 'Stud Mount' ||
+				selectedMounting === 'Stud with spacer'
+			) {
+				setSelectedMounting('');
+				setStudLength('');
+				setSpacerStandoffDistance('');
+			}
 		}
 	};
 
@@ -368,24 +380,13 @@ export default function Letters({ item }) {
 	]);
 
 	useEffect(() => {
-		// Log to ensure we're getting the expected value
+		let newMountingOptions = mountingDefaultOptions;
 
-		let newMountingOptions;
 		if (selectedThickness?.value === '3') {
-			if (selectedMounting === 'Flush stud') {
-				setSelectedMounting('');
-			}
-
-			newMountingOptions = mountingDefaultOptions.filter(
-				(option) => option.mounting_option !== 'Flush stud'
-			);
-		} else {
-			if (selectedMounting === 'Stud with Block') {
-				setSelectedMounting('');
-			}
-			// Exclude 'Stud with Block' option
-			newMountingOptions = mountingDefaultOptions.filter(
-				(option) => option.mounting_option !== 'Stud with Block'
+			newMountingOptions = newMountingOptions.filter(
+				(option) =>
+					option.mounting_option !== 'Stud Mount' &&
+					option.mounting_option !== 'Stud with spacer'
 			);
 		}
 
@@ -399,9 +400,8 @@ export default function Letters({ item }) {
 			);
 		}
 
-		// Update the state
 		setMountingOptions(newMountingOptions);
-	}, [selectedThickness, waterproof]);
+	}, [selectedThickness, waterproof, setSelectedMounting, setMountingOptions]);
 
 	useEffect(() => {
 		setLetterHeightOptions(() =>
@@ -647,7 +647,7 @@ export default function Letters({ item }) {
 					title="Letter Height"
 					onChange={handleOnChangeLetterHeight}
 					options={letterHeightOptions}
-					value={item.letterHeight}
+					value={selectedLetterHeight}
 				/>
 
 				<div className="px-[1px] relative" ref={colorRef}>
@@ -708,12 +708,12 @@ export default function Letters({ item }) {
 					options={finishingOptions.map((finishing) => (
 						<option
 							value={finishing.name}
-							selected={finishing.name === item.finishing}
+							selected={finishing.name === selectedFinishing}
 						>
 							{finishing.name}
 						</option>
 					))}
-					value={item.finishing}
+					value={selectedFinishing}
 				/>
 
 				<Dropdown
@@ -722,12 +722,12 @@ export default function Letters({ item }) {
 					options={waterProofOptions.map((option) => (
 						<option
 							value={option.option}
-							selected={option.option == item.waterproof}
+							selected={option.option == waterproof}
 						>
 							{option.option}
 						</option>
 					))}
-					value={item.waterproof}
+					value={waterproof}
 				/>
 
 				<Dropdown
@@ -741,7 +741,7 @@ export default function Letters({ item }) {
 							{option.mounting_option}
 						</option>
 					))}
-					value={item.mounting}
+					value={selectedMounting}
 				/>
 
 				{selectedMounting === 'Stud with spacer' && (
@@ -752,12 +752,12 @@ export default function Letters({ item }) {
 							options={studLengthOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.studLength}
+									selected={option.value == studLength}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.studLength}
+							value={studLength}
 						/>
 						<Dropdown
 							title="STANDOFF SPACE"
@@ -765,12 +765,12 @@ export default function Letters({ item }) {
 							options={spacerStandoffOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.spacerStandoffDistance}
+									selected={option.value == spacerStandoffDistance}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.spacerStandoffDistance}
+							value={spacerStandoffDistance}
 						/>
 					</>
 				)}
@@ -783,12 +783,12 @@ export default function Letters({ item }) {
 							options={studLengthOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.studLength}
+									selected={option.value == studLength}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.studLength}
+							value={studLength}
 						/>
 					</>
 				)}

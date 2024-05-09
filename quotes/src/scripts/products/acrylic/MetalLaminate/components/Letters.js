@@ -338,24 +338,13 @@ export const Letters = ({ item }) => {
 	]);
 
 	useEffect(() => {
-		// Log to ensure we're getting the expected value
+		let newMountingOptions = mountingDefaultOptions;
 
-		let newMountingOptions;
 		if (selectedThickness?.value === '3') {
-			if (selectedMounting === 'Flush stud') {
-				setSelectedMounting('');
-			}
-
-			newMountingOptions = mountingDefaultOptions.filter(
-				(option) => option.mounting_option !== 'Flush stud'
-			);
-		} else {
-			if (selectedMounting === 'Stud with Block') {
-				setSelectedMounting('');
-			}
-			// Exclude 'Stud with Block' option
-			newMountingOptions = mountingDefaultOptions.filter(
-				(option) => option.mounting_option !== 'Stud with Block'
+			newMountingOptions = newMountingOptions.filter(
+				(option) =>
+					option.mounting_option !== 'Stud Mount' &&
+					option.mounting_option !== 'Stud with spacer'
 			);
 		}
 
@@ -369,9 +358,8 @@ export const Letters = ({ item }) => {
 			);
 		}
 
-		// Update the state
 		setMountingOptions(newMountingOptions);
-	}, [selectedThickness, waterproof]);
+	}, [selectedThickness, waterproof, setSelectedMounting, setMountingOptions]);
 
 	useEffect(() => {
 		setLetterHeightOptions(() =>

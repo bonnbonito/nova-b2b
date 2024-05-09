@@ -64,6 +64,9 @@ export default function Letters({ item }) {
 	const [selectedFinishing, setSelectedFinishing] = useState(item.finishing);
 	const [customFont, setCustomFont] = useState(item.customFont);
 	const [customColor, setCustomColor] = useState(item.metalCustomColor);
+	const [metalMountingOptions, setMetalMountingOptions] = useState(
+		metalInstallationOptions
+	);
 
 	const [selectedLetterHeight, setSelectedLetterHeight] = useState(
 		item.letterHeight
@@ -521,6 +524,26 @@ export default function Letters({ item }) {
 		font != 'Custom font' && setFontFileUrl('');
 	}, [color, font]);
 
+	useEffect(() => {
+		let newMountingOptions = metalMountingOptions;
+
+		if (selectedThickness?.value === '3') {
+			if (mounting === 'Stud with spacer' || mounting === 'Stud Mount') {
+				setMounting('');
+				setStudLength('');
+				setSpacerStandoffDistance('');
+			}
+			newMountingOptions = newMountingOptions.filter(
+				(option) =>
+					option.option !== 'Stud Mount' && option.option !== 'Stud with spacer'
+			);
+		} else {
+			newMountingOptions = metalInstallationOptions;
+		}
+
+		setMetalMountingOptions(newMountingOptions);
+	}, [selectedThickness, mounting, setMetalMountingOptions]);
+
 	return (
 		<>
 			<div className="mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md">
@@ -557,7 +580,7 @@ export default function Letters({ item }) {
 
 			<div className="quote-grid mb-6">
 				<FontsDropdown
-					font={item.font}
+					font={font}
 					fontRef={fontRef}
 					openFont={openFont}
 					setOpenColor={setOpenColor}
@@ -596,7 +619,7 @@ export default function Letters({ item }) {
 					title="Letter Height"
 					onChange={handleOnChangeLetterHeight}
 					options={letterHeightOptions}
-					value={item.letterHeight}
+					value={selectedLetterHeight}
 				/>
 
 				<Dropdown
@@ -605,12 +628,12 @@ export default function Letters({ item }) {
 					options={metalFinishOptions.map((finishing) => (
 						<option
 							value={finishing.option}
-							selected={finishing.option === item.finishing}
+							selected={finishing.option === selectedFinishing}
 						>
 							{finishing.option}
 						</option>
 					))}
-					value={item.finishing}
+					value={selectedFinishing}
 				/>
 
 				{selectedFinishing === 'Painted' && (
@@ -673,23 +696,23 @@ export default function Letters({ item }) {
 					options={waterProofOptions.map((option) => (
 						<option
 							value={option.option}
-							selected={option.option == item.waterproof}
+							selected={option.option == waterproof}
 						>
 							{option.option}
 						</option>
 					))}
-					value={item.waterproof}
+					value={waterproof}
 				/>
 
 				<Dropdown
 					title="Mounting Options"
 					onChange={handleOnChangeInstallation}
-					options={metalInstallationOptions.map((option) => (
+					options={metalMountingOptions.map((option) => (
 						<option value={option.option} selected={option.option === mounting}>
 							{option.option}
 						</option>
 					))}
-					value={item.mounting}
+					value={mounting}
 				/>
 
 				{mounting === 'Stud with spacer' && (
@@ -700,12 +723,12 @@ export default function Letters({ item }) {
 							options={studLengthOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.studLength}
+									selected={option.value == studLength}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.studLength}
+							value={studLength}
 						/>
 						<Dropdown
 							title="STANDOFF SPACE"
@@ -713,12 +736,12 @@ export default function Letters({ item }) {
 							options={spacerStandoffOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.spacerStandoffDistance}
+									selected={option.value == spacerStandoffDistance}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.spacerStandoffDistance}
+							value={spacerStandoffDistance}
 						/>
 					</>
 				)}
@@ -731,12 +754,12 @@ export default function Letters({ item }) {
 							options={studLengthOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.studLength}
+									selected={option.value == studLength}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.studLength}
+							value={studLength}
 						/>
 					</>
 				)}

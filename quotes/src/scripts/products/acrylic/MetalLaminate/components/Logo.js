@@ -84,15 +84,6 @@ export default function Logo({ item }) {
 	const handleOnChangeMount = (e) => {
 		const target = e.target.value;
 		setSelectedMounting(target);
-
-		if (target === 'Stud with spacer' || target === 'Stud Mount') {
-			if (target === 'Stud Mount') {
-				setSpacerStandoffDistance('');
-			}
-		} else {
-			setStudLength('');
-			setSpacerStandoffDistance('');
-		}
 	};
 
 	const handleonChangeStudLength = (e) => {
@@ -131,12 +122,35 @@ export default function Logo({ item }) {
 	const logoPricingObject = NovaQuote.logo_pricing_tables;
 
 	useEffect(() => {
-		if (!selectedThickness || selectedThickness.value === undefined) return;
+		let newMountingOptions = mountingDefaultOptions;
 
-		const { newMountingOptions, updatedSelectedMounting } =
-			calculateMountingOptions(selectedThickness, selectedMounting, waterproof);
+		if (selectedThickness?.value === '3') {
+			if (
+				selectedMounting === 'Stud Mounth' ||
+				selectedMounting === 'Stud with spacer'
+			) {
+				setSelectedMounting('');
+				setStudLength('');
+				setSpacerStandoffDistance('');
+			}
 
-		setSelectedMounting(updatedSelectedMounting); // Update the selected mounting if needed
+			newMountingOptions = newMountingOptions.filter(
+				(option) =>
+					option.mounting_option !== 'Stud Mount' &&
+					option.mounting_option !== 'Stud with spacer'
+			);
+		}
+
+		if (waterproof === 'Outdoor (Waterproof)') {
+			if (selectedMounting === 'Double-sided tape') {
+				setSelectedMounting('');
+			}
+
+			newMountingOptions = newMountingOptions.filter(
+				(option) => option.mounting_option !== 'Double-sided tape'
+			);
+		}
+
 		setMountingOptions(newMountingOptions);
 
 		setMaxWidthOptions(() =>
@@ -154,7 +168,14 @@ export default function Logo({ item }) {
 				}
 			)
 		);
-	}, [selectedThickness, selectedMounting, waterproof, maxWidthHeight]);
+	}, [
+		selectedThickness,
+		selectedMounting,
+		waterproof,
+		maxWidthHeight,
+		setSelectedMounting,
+		setMountingOptions,
+	]);
 
 	function handleComments(e) {
 		setComments(e.target.value);

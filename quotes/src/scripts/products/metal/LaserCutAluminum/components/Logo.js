@@ -69,6 +69,10 @@ export default function Logo({ item }) {
 		item.spacerStandoffDistance
 	);
 
+	const [metalMountingOptions, setMetalMountingOptions] = useState(
+		metalInstallationOptions
+	);
+
 	const handleonChangeSpacerDistance = (e) => {
 		setSpacerStandoffDistance(e.target.value);
 	};
@@ -339,6 +343,26 @@ export default function Logo({ item }) {
 		color?.name != 'Custom Color' && setCustomColor('');
 	}, [color]);
 
+	useEffect(() => {
+		let newMountingOptions = metalMountingOptions;
+
+		if (selectedThickness?.value === '3') {
+			if (mounting === 'Stud with spacer' || mounting === 'Stud Mount') {
+				setMounting('');
+				setStudLength('');
+				setSpacerStandoffDistance('');
+			}
+			newMountingOptions = newMountingOptions.filter(
+				(option) =>
+					option.option !== 'Stud Mount' && option.option !== 'Stud with spacer'
+			);
+		} else {
+			newMountingOptions = metalInstallationOptions;
+		}
+
+		setMetalMountingOptions(newMountingOptions);
+	}, [selectedThickness, mounting, setMetalMountingOptions]);
+
 	return (
 		<>
 			<div className="quote-grid mb-6">
@@ -376,7 +400,7 @@ export default function Logo({ item }) {
 					options={waterProofOptions.map((option) => (
 						<option
 							value={option.option}
-							selected={option.option == item.waterproof}
+							selected={option.option == waterproof}
 						>
 							{option.option}
 						</option>
@@ -390,12 +414,12 @@ export default function Logo({ item }) {
 					options={metalFinishOptions.map((finishing) => (
 						<option
 							value={finishing.option}
-							selected={finishing.option === item.finishing}
+							selected={finishing.option === selectedFinishing}
 						>
 							{finishing.option}
 						</option>
 					))}
-					value={item.finishing}
+					value={selectedFinishing}
 				/>
 
 				{selectedFinishing === 'Painted' && (
@@ -452,7 +476,7 @@ export default function Logo({ item }) {
 				<Dropdown
 					title="Mounting Options"
 					onChange={handleOnChangeInstallation}
-					options={metalInstallationOptions.map((option) => (
+					options={metalMountingOptions.map((option) => (
 						<option value={option.option} selected={option.option === mounting}>
 							{option.option}
 						</option>
@@ -468,12 +492,12 @@ export default function Logo({ item }) {
 							options={studLengthOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.studLength}
+									selected={option.value == studLength}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.studLength}
+							value={studLength}
 						/>
 						<Dropdown
 							title="STANDOFF SPACE"
@@ -481,12 +505,12 @@ export default function Logo({ item }) {
 							options={spacerStandoffOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.spacerStandoffDistance}
+									selected={option.value == spacerStandoffDistance}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.spacerStandoffDistance}
+							value={spacerStandoffDistance}
 						/>
 					</>
 				)}
@@ -499,12 +523,12 @@ export default function Logo({ item }) {
 							options={studLengthOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.studLength}
+									selected={option.value == studLength}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.studLength}
+							value={studLength}
 						/>
 					</>
 				)}

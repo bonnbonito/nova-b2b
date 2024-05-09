@@ -391,11 +391,11 @@ export default function Logo({ item }) {
 					title="Metal Option"
 					onChange={(e) => setMetal(e.target.value)}
 					options={metalOptions.map((metal) => (
-						<option value={metal.option} selected={metal.option === item.metal}>
+						<option value={metal.option} selected={metal.option === metal}>
 							{metal.option}
 						</option>
 					))}
-					value={item.metal}
+					value={metal}
 				/>
 				<Dropdown
 					title="Metal Depth"
@@ -436,7 +436,7 @@ export default function Logo({ item }) {
 							{finishing.option}
 						</option>
 					))}
-					value={item.metalFinish}
+					value={selectedFinishing}
 				/>
 
 				{selectedFinishing === 'Metal Finish' && (
@@ -451,7 +451,7 @@ export default function Logo({ item }) {
 								{metalFinish.option}
 							</option>
 						))}
-						value={item.stainLessMetalFinish}
+						value={stainLessMetalFinish}
 					/>
 				)}
 
@@ -512,12 +512,12 @@ export default function Logo({ item }) {
 					options={waterProofOptions.map((option) => (
 						<option
 							value={option.option}
-							selected={option.option == item.waterproof}
+							selected={option.option == waterproof}
 						>
 							{option.option}
 						</option>
 					))}
-					value={item.waterproof}
+					value={waterproof}
 				/>
 
 				<Dropdown
@@ -528,7 +528,7 @@ export default function Logo({ item }) {
 							{option.option}
 						</option>
 					))}
-					value={item.mounting}
+					value={mounting}
 				/>
 
 				{mounting === 'Stud with spacer' && (
@@ -539,12 +539,12 @@ export default function Logo({ item }) {
 							options={studLengthOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.studLength}
+									selected={option.value == studLength}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.studLength}
+							value={studLength}
 						/>
 						<Dropdown
 							title="STANDOFF SPACE"
@@ -552,12 +552,12 @@ export default function Logo({ item }) {
 							options={spacerStandoffOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.spacerStandoffDistance}
+									selected={option.value == spacerStandoffDistance}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.spacerStandoffDistance}
+							value={spacerStandoffDistance}
 						/>
 					</>
 				)}
@@ -570,12 +570,12 @@ export default function Logo({ item }) {
 							options={studLengthOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.studLength}
+									selected={option.value == studLength}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.studLength}
+							value={studLength}
 						/>
 					</>
 				)}

@@ -3392,11 +3392,18 @@ function Letters({
     const target = e.target.value;
     const selected = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.thicknessOptions.filter(option => option.value === target);
     setSelectedThickness(() => selected[0]);
-    if (parseInt(target) === 3 && parseInt(selectedLetterHeight) > 24) {
-      setSelectedLetterHeight('');
-    }
     if (parseInt(target) > 11 && parseInt(selectedLetterHeight) === 1) {
       setSelectedLetterHeight('');
+    }
+    if (parseInt(target) === 3) {
+      if (parseInt(selectedLetterHeight) > 24) {
+        setSelectedLetterHeight('');
+      }
+      if (selectedMounting === 'Stud Mount' || selectedMounting === 'Stud with spacer') {
+        setSelectedMounting('');
+        setStudLength('');
+        setSpacerStandoffDistance('');
+      }
     }
   };
   const handleOnChangeLetterHeight = e => {
@@ -3498,20 +3505,9 @@ function Letters({
     }
   }, [selectedLetterHeight, selectedThickness, selectedFinishing, letters, waterproof, lettersHeight, color, sets, font, selectedMounting]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    // Log to ensure we're getting the expected value
-
-    let newMountingOptions;
+    let newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.mountingDefaultOptions;
     if (selectedThickness?.value === '3') {
-      if (selectedMounting === 'Flush stud') {
-        setSelectedMounting('');
-      }
-      newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.mountingDefaultOptions.filter(option => option.mounting_option !== 'Flush stud');
-    } else {
-      if (selectedMounting === 'Stud with Block') {
-        setSelectedMounting('');
-      }
-      // Exclude 'Stud with Block' option
-      newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.mountingDefaultOptions.filter(option => option.mounting_option !== 'Stud with Block');
+      newMountingOptions = newMountingOptions.filter(option => option.mounting_option !== 'Stud Mount' && option.mounting_option !== 'Stud with spacer');
     }
     if (waterproof === 'Outdoor (Waterproof)') {
       if (selectedMounting === 'Double-sided tape') {
@@ -3519,10 +3515,8 @@ function Letters({
       }
       newMountingOptions = newMountingOptions.filter(option => option.mounting_option !== 'Double-sided tape');
     }
-
-    // Update the state
     setMountingOptions(newMountingOptions);
-  }, [selectedThickness, waterproof]);
+  }, [selectedThickness, waterproof, setSelectedMounting, setMountingOptions]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     setLetterHeightOptions(() => Array.from({
       length: parseInt(lettersHeight.max) - parseInt(lettersHeight.min) + 1
@@ -3671,7 +3665,7 @@ function Letters({
     title: "Letter Height",
     onChange: handleOnChangeLetterHeight,
     options: letterHeightOptions,
-    value: item.letterHeight
+    value: selectedLetterHeight
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "px-[1px] relative",
     ref: colorRef
@@ -3708,17 +3702,17 @@ function Letters({
     onChange: handleChangeFinishing,
     options: finishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: finishing.name,
-      selected: finishing.name === item.finishing
+      selected: finishing.name === selectedFinishing
     }, finishing.name)),
-    value: item.finishing
+    value: selectedFinishing
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
-      selected: option.option == item.waterproof
+      selected: option.option == waterproof
     }, option.option)),
-    value: item.waterproof
+    value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Mounting Options",
     onChange: handleOnChangeMount,
@@ -3726,31 +3720,31 @@ function Letters({
       value: option.mounting_option,
       selected: option.mounting_option === selectedMounting
     }, option.mounting_option)),
-    value: item.mounting
+    value: selectedMounting
   }), selectedMounting === 'Stud with spacer' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == item.studLength
+      selected: option.value == studLength
     }, option.value)),
-    value: item.studLength
+    value: studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == item.spacerStandoffDistance
+      selected: option.value == spacerStandoffDistance
     }, option.value)),
-    value: item.spacerStandoffDistance
+    value: spacerStandoffDistance
   })), selectedMounting === 'Stud Mount' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == item.studLength
+      selected: option.value == studLength
     }, option.value)),
-    value: item.studLength
+    value: studLength
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,
@@ -3927,12 +3921,21 @@ function Logo({
     }
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (!selectedThickness || selectedThickness.value === undefined) return;
-    const {
-      newMountingOptions,
-      updatedSelectedMounting
-    } = (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.calculateMountingOptions)(selectedThickness, selectedMounting, waterproof);
-    setSelectedMounting(updatedSelectedMounting); // Update the selected mounting if needed
+    let newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.mountingDefaultOptions;
+    if (selectedThickness?.value === '3') {
+      if (selectedMounting === 'Stud Mounth' || selectedMounting === 'Stud with spacer') {
+        setSelectedMounting('');
+        setStudLength('');
+        setSpacerStandoffDistance('');
+      }
+      newMountingOptions = newMountingOptions.filter(option => option.mounting_option !== 'Stud Mount' && option.mounting_option !== 'Stud with spacer');
+    }
+    if (waterproof === 'Outdoor (Waterproof)') {
+      if (selectedMounting === 'Double-sided tape') {
+        setSelectedMounting('');
+      }
+      newMountingOptions = newMountingOptions.filter(option => option.mounting_option !== 'Double-sided tape');
+    }
     setMountingOptions(newMountingOptions);
     setMaxWidthOptions(() => Array.from({
       length: parseInt(maxWidthHeight) + 1
@@ -3943,18 +3946,7 @@ function Logo({
         value: val
       }, val, "\"");
     }));
-  }, [selectedThickness, selectedMounting, waterproof, maxWidthHeight]);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (waterproof === 'Outdoor (Waterproof)') {
-      let newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.mountingDefaultOptions.filter(option => option.mounting_option !== 'Double-sided tape');
-      if (selectedMounting === 'Double-sided tape') {
-        setSelectedMounting('');
-      }
-      setMountingOptions(newMountingOptions);
-    } else {
-      setMountingOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.mountingDefaultOptions);
-    }
-  }, [waterproof, selectedMounting]);
+  }, [selectedThickness, selectedMounting, waterproof, maxWidthHeight, setSelectedMounting, setMountingOptions]);
   function handleComments(e) {
     setComments(e.target.value);
   }
@@ -3962,6 +3954,13 @@ function Logo({
     const target = e.target.value;
     const selected = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.thicknessOptions.filter(option => option.value === target);
     setSelectedThickness(() => selected[0]);
+    if (parseInt(target) === 3) {
+      if (selectedMounting === 'Stud Mount' || selectedMounting === 'Stud with spacer') {
+        setSelectedMounting('');
+        setStudLength('');
+        setSpacerStandoffDistance('');
+      }
+    }
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (parseInt(selectedThickness?.value) > 3) {
@@ -4113,11 +4112,11 @@ function Logo({
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Acrylic Thickness",
-    value: item.acrylicThickness?.value,
+    value: selectedThickness?.value,
     onChange: handleOnChangeThickness,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.thicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: thickness.value,
-      selected: thickness === item.acrylicThickness
+      selected: thickness === selectedThickness
     }, thickness.thickness))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Logo Width",
@@ -4164,7 +4163,7 @@ function Logo({
     onChange: handleChangeFinishing,
     options: finishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: finishing.name,
-      selected: finishing.name === item.finishing
+      selected: finishing.name === selectedFinishing
     }, finishing.name)),
     value: selectedFinishing
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -4172,7 +4171,7 @@ function Logo({
     onChange: e => setWaterproof(e.target.value),
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
-      selected: option.option == item.waterproof
+      selected: option.option == waterproof
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -4188,25 +4187,25 @@ function Logo({
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == item.studLength
+      selected: option.value == studLength
     }, option.value)),
-    value: item.studLength
+    value: studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == item.spacerStandoffDistance
+      selected: option.value == spacerStandoffDistance
     }, option.value)),
-    value: item.spacerStandoffDistance
+    value: spacerStandoffDistance
   })), selectedMounting === 'Stud Mount' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == item.studLength
+      selected: option.value == studLength
     }, option.value)),
-    value: item.studLength
+    value: studLength
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,
@@ -4587,12 +4586,21 @@ function Logo({
   const handleOnChangeDescription = e => setDescription(e.target.value);
   const logoPricingObject = NovaQuote.logo_pricing_tables;
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (!selectedThickness || selectedThickness?.value === undefined) return;
-    const {
-      newMountingOptions,
-      updatedSelectedMounting
-    } = (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.calculateMountingOptions)(selectedThickness, selectedMounting, waterproof);
-    setSelectedMounting(updatedSelectedMounting); // Update the selected mounting if needed
+    let newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.mountingDefaultOptions;
+    if (selectedThickness?.value === '3') {
+      if (selectedMounting === 'Stud Mounth' || selectedMounting === 'Stud with spacer') {
+        setSelectedMounting('');
+        setStudLength('');
+        setSpacerStandoffDistance('');
+      }
+      newMountingOptions = newMountingOptions.filter(option => option.mounting_option !== 'Stud Mount' && option.mounting_option !== 'Stud with spacer');
+    }
+    if (waterproof === 'Outdoor (Waterproof)') {
+      if (selectedMounting === 'Double-sided tape') {
+        setSelectedMounting('');
+      }
+      newMountingOptions = newMountingOptions.filter(option => option.mounting_option !== 'Double-sided tape');
+    }
     setMountingOptions(newMountingOptions);
     setMaxWidthOptions(() => Array.from({
       length: parseInt(maxWidthHeight) + 1
@@ -4603,7 +4611,7 @@ function Logo({
         value: val
       }, val, "\"");
     }));
-  }, [selectedThickness, selectedMounting, waterproof, maxWidthHeight]);
+  }, [selectedThickness, selectedMounting, waterproof, maxWidthHeight, setSelectedMounting, setMountingOptions]);
   const handleOnChangeThickness = e => {
     const target = e.target.value;
     const selected = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.thicknessOptions.filter(option => option.value === target);
@@ -4767,11 +4775,11 @@ function Logo({
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Acrylic Thickness",
-    value: item.acrylicThickness?.value,
+    value: selectedThickness?.value,
     onChange: handleOnChangeThickness,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.thicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: thickness.value,
-      selected: thickness === item.acrylicThickness
+      selected: thickness === selectedThickness
     }, thickness.thickness))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Logo Width",
@@ -4789,14 +4797,14 @@ function Logo({
     onChange: e => setLayers(e.target.value),
     options: layersOptions.map(layer => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: layer,
-      selected: layer == item.layers
+      selected: layer == layers
     }, layer))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Finishing Options",
     onChange: handleChangeFinishing,
     options: finishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: finishing.name,
-      selected: finishing.name === item.finishing
+      selected: finishing.name === selectedFinishing
     }, finishing.name)),
     value: selectedFinishing
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -4804,7 +4812,7 @@ function Logo({
     onChange: e => setWaterproof(e.target.value),
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
-      selected: option.option == item.waterproof
+      selected: option.option == waterproof
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -4820,25 +4828,25 @@ function Logo({
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == item.studLength
+      selected: option.value == studLength
     }, option.value)),
-    value: item.studLength
+    value: studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == item.spacerStandoffDistance
+      selected: option.value == spacerStandoffDistance
     }, option.value)),
-    value: item.spacerStandoffDistance
+    value: spacerStandoffDistance
   })), selectedMounting === 'Stud Mount' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == item.studLength
+      selected: option.value == studLength
     }, option.value)),
-    value: item.studLength
+    value: studLength
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,
@@ -5352,20 +5360,9 @@ const Letters = ({
   ]);
 
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    // Log to ensure we're getting the expected value
-
-    let newMountingOptions;
+    let newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.mountingDefaultOptions;
     if (selectedThickness?.value === '3') {
-      if (selectedMounting === 'Flush stud') {
-        setSelectedMounting('');
-      }
-      newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.mountingDefaultOptions.filter(option => option.mounting_option !== 'Flush stud');
-    } else {
-      if (selectedMounting === 'Stud with Block') {
-        setSelectedMounting('');
-      }
-      // Exclude 'Stud with Block' option
-      newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.mountingDefaultOptions.filter(option => option.mounting_option !== 'Stud with Block');
+      newMountingOptions = newMountingOptions.filter(option => option.mounting_option !== 'Stud Mount' && option.mounting_option !== 'Stud with spacer');
     }
     if (waterproof === 'Outdoor (Waterproof)') {
       if (selectedMounting === 'Double-sided tape') {
@@ -5373,10 +5370,8 @@ const Letters = ({
       }
       newMountingOptions = newMountingOptions.filter(option => option.mounting_option !== 'Double-sided tape');
     }
-
-    // Update the state
     setMountingOptions(newMountingOptions);
-  }, [selectedThickness, waterproof]);
+  }, [selectedThickness, waterproof, setSelectedMounting, setMountingOptions]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     setLetterHeightOptions(() => Array.from({
       length: parseInt(lettersHeight.max) - parseInt(lettersHeight.min) + 1
@@ -5727,14 +5722,6 @@ function Logo({
   const handleOnChangeMount = e => {
     const target = e.target.value;
     setSelectedMounting(target);
-    if (target === 'Stud with spacer' || target === 'Stud Mount') {
-      if (target === 'Stud Mount') {
-        setSpacerStandoffDistance('');
-      }
-    } else {
-      setStudLength('');
-      setSpacerStandoffDistance('');
-    }
   };
   const handleonChangeStudLength = e => {
     const target = e.target.value;
@@ -5777,12 +5764,21 @@ function Logo({
   };
   const logoPricingObject = NovaQuote.logo_pricing_tables;
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (!selectedThickness || selectedThickness.value === undefined) return;
-    const {
-      newMountingOptions,
-      updatedSelectedMounting
-    } = (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.calculateMountingOptions)(selectedThickness, selectedMounting, waterproof);
-    setSelectedMounting(updatedSelectedMounting); // Update the selected mounting if needed
+    let newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.mountingDefaultOptions;
+    if (selectedThickness?.value === '3') {
+      if (selectedMounting === 'Stud Mounth' || selectedMounting === 'Stud with spacer') {
+        setSelectedMounting('');
+        setStudLength('');
+        setSpacerStandoffDistance('');
+      }
+      newMountingOptions = newMountingOptions.filter(option => option.mounting_option !== 'Stud Mount' && option.mounting_option !== 'Stud with spacer');
+    }
+    if (waterproof === 'Outdoor (Waterproof)') {
+      if (selectedMounting === 'Double-sided tape') {
+        setSelectedMounting('');
+      }
+      newMountingOptions = newMountingOptions.filter(option => option.mounting_option !== 'Double-sided tape');
+    }
     setMountingOptions(newMountingOptions);
     setMaxWidthOptions(() => Array.from({
       length: parseInt(maxWidthHeight) + 1
@@ -5793,7 +5789,7 @@ function Logo({
         value: val
       }, val, "\"");
     }));
-  }, [selectedThickness, selectedMounting, waterproof, maxWidthHeight]);
+  }, [selectedThickness, selectedMounting, waterproof, maxWidthHeight, setSelectedMounting, setMountingOptions]);
   function handleComments(e) {
     setComments(e.target.value);
   }
@@ -6405,12 +6401,21 @@ function Logo({
   };
   const logoPricingObject = NovaQuote.logo_pricing_tables;
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (!selectedThickness || selectedThickness.value === undefined) return;
-    const {
-      newMountingOptions,
-      updatedSelectedMounting
-    } = (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.calculateMountingOptions)(selectedThickness, selectedMounting, waterproof);
-    setSelectedMounting(updatedSelectedMounting); // Update the selected mounting if needed
+    let newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.mountingDefaultOptions;
+    if (selectedThickness?.value === '3') {
+      if (selectedMounting === 'Stud Mounth' || selectedMounting === 'Stud with spacer') {
+        setSelectedMounting('');
+        setStudLength('');
+        setSpacerStandoffDistance('');
+      }
+      newMountingOptions = newMountingOptions.filter(option => option.mounting_option !== 'Stud Mount' && option.mounting_option !== 'Stud with spacer');
+    }
+    if (waterproof === 'Outdoor (Waterproof)') {
+      if (selectedMounting === 'Double-sided tape') {
+        setSelectedMounting('');
+      }
+      newMountingOptions = newMountingOptions.filter(option => option.mounting_option !== 'Double-sided tape');
+    }
     setMountingOptions(newMountingOptions);
     setMaxWidthOptions(() => Array.from({
       length: parseInt(maxWidthHeight) + 1
@@ -6421,7 +6426,7 @@ function Logo({
         value: val
       }, val, "\"");
     }));
-  }, [selectedThickness, selectedMounting, waterproof, maxWidthHeight]);
+  }, [selectedThickness, selectedMounting, waterproof, maxWidthHeight, setSelectedMounting, setMountingOptions]);
   function handleComments(e) {
     setComments(e.target.value);
   }
@@ -6582,11 +6587,11 @@ function Logo({
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Acrylic Thickness",
-    value: item.acrylicThickness?.value,
+    value: selectedThickness?.value,
     onChange: handleOnChangeThickness,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.thicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: thickness.value,
-      selected: thickness === item.acrylicThickness
+      selected: thickness === selectedThickness
     }, thickness.thickness))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Logo Width",
@@ -6604,7 +6609,7 @@ function Logo({
     onChange: e => setPrintPreference(e.target.value),
     options: printOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
-      selected: option.option == item.printPreference
+      selected: option.option == printPreference
     }, option.option))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Base Color",
@@ -6612,14 +6617,14 @@ function Logo({
     onChange: e => setBaseColor(e.target.value),
     options: baseColorOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
-      selected: option.option == item.baseColor
+      selected: option.option == baseColor
     }, option.option))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Finishing Options",
     onChange: handleChangeFinishing,
     options: finishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: finishing.name,
-      selected: finishing.name === item.finishing
+      selected: finishing.name === selectedFinishing
     }, finishing.name)),
     value: selectedFinishing
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -6627,7 +6632,7 @@ function Logo({
     onChange: e => setWaterproof(e.target.value),
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
-      selected: option.option == item.waterproof
+      selected: option.option == waterproof
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -6643,25 +6648,25 @@ function Logo({
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == item.studLength
+      selected: option.value == studLength
     }, option.value)),
-    value: item.studLength
+    value: studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == item.spacerStandoffDistance
+      selected: option.value == spacerStandoffDistance
     }, option.value)),
-    value: item.spacerStandoffDistance
+    value: spacerStandoffDistance
   })), selectedMounting === 'Stud Mount' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == item.studLength
+      selected: option.value == studLength
     }, option.value)),
-    value: item.studLength
+    value: studLength
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,
@@ -10278,7 +10283,7 @@ function Letters({
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_FontsDropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    font: item.font,
+    font: font,
     fontRef: fontRef,
     openFont: openFont,
     setOpenFont: setOpenFont,
@@ -10298,9 +10303,9 @@ function Letters({
     onChange: e => setMetal(e.target.value),
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_9__.metalOptions.map(metal => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: metal.option,
-      selected: metal.option === item.metal
+      selected: metal.option === metal
     }, metal.option)),
-    value: item.metal
+    value: metal
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Metal Depth",
     value: selectedThickness?.value,
@@ -10313,7 +10318,7 @@ function Letters({
     title: "Letter Height",
     onChange: handleOnChangeLetterHeight,
     options: letterHeightOptions,
-    value: item.letterHeight
+    value: selectedLetterHeight
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Finishing Options",
     onChange: handleChangeFinishing,
@@ -10321,7 +10326,7 @@ function Letters({
       value: finishing.option,
       selected: finishing.option === selectedFinishing
     }, finishing.option)),
-    value: item.metalFinish
+    value: selectedFinishing
   }), selectedFinishing === 'Metal Finish' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Metal Finish",
     onChange: handelMetalFinishChange,
@@ -10329,7 +10334,7 @@ function Letters({
       value: metalFinish.option,
       selected: metalFinish.option === stainLessMetalFinish
     }, metalFinish.option)),
-    value: item.stainLessMetalFinish
+    value: stainLessMetalFinish
   }), selectedFinishing === 'Painted Finish' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "px-[1px] relative",
     ref: colorRef
@@ -10363,9 +10368,9 @@ function Letters({
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
-      selected: option.option == item.waterproof
+      selected: option.option == waterproof
     }, option.option)),
-    value: item.waterproof
+    value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Mounting Options",
     onChange: handleOnChangeInstallation,
@@ -10373,31 +10378,31 @@ function Letters({
       value: option.option,
       selected: option.option === mounting
     }, option.option)),
-    value: item.mounting
+    value: mounting
   }), mounting === 'Stud with spacer' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == item.studLength
+      selected: option.value == studLength
     }, option.value)),
-    value: item.studLength
+    value: studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "SPACER DISTANCE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == item.spacerStandoffDistance
+      selected: option.value == spacerStandoffDistance
     }, option.value)),
-    value: item.spacerStandoffDistance
+    value: spacerStandoffDistance
   })), mounting === 'Stud Mount' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == item.studLength
+      selected: option.value == studLength
     }, option.value)),
-    value: item.studLength
+    value: studLength
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,
@@ -10753,9 +10758,9 @@ function Logo({
     onChange: e => setMetal(e.target.value),
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_8__.metalOptions.map(metal => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: metal.option,
-      selected: metal.option === item.metal
+      selected: metal.option === metal
     }, metal.option)),
-    value: item.metal
+    value: metal
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Metal Depth",
     value: selectedThickness?.value,
@@ -10781,7 +10786,7 @@ function Logo({
       value: finishing.option,
       selected: finishing.option === selectedFinishing
     }, finishing.option)),
-    value: item.metalFinish
+    value: selectedFinishing
   }), selectedFinishing === 'Metal Finish' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Metal Finish",
     onChange: handelMetalFinishChange,
@@ -10789,7 +10794,7 @@ function Logo({
       value: metalFinish.option,
       selected: metalFinish.option === stainLessMetalFinish
     }, metalFinish.option)),
-    value: item.stainLessMetalFinish
+    value: stainLessMetalFinish
   }), selectedFinishing === 'Painted Finish' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "px-[1px] relative",
     ref: colorRef
@@ -10823,9 +10828,9 @@ function Logo({
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
-      selected: option.option == item.waterproof
+      selected: option.option == waterproof
     }, option.option)),
-    value: item.waterproof
+    value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Mounting Options",
     onChange: handleOnChangeInstallation,
@@ -10833,31 +10838,31 @@ function Logo({
       value: option.option,
       selected: option.option === mounting
     }, option.option)),
-    value: item.mounting
+    value: mounting
   }), mounting === 'Stud with spacer' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == item.studLength
+      selected: option.value == studLength
     }, option.value)),
-    value: item.studLength
+    value: studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == item.spacerStandoffDistance
+      selected: option.value == spacerStandoffDistance
     }, option.value)),
-    value: item.spacerStandoffDistance
+    value: spacerStandoffDistance
   })), mounting === 'Stud Mount' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == item.studLength
+      selected: option.value == studLength
     }, option.value)),
-    value: item.studLength
+    value: studLength
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,
@@ -11203,6 +11208,7 @@ function Letters({
   const [selectedFinishing, setSelectedFinishing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.finishing);
   const [customFont, setCustomFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.customFont);
   const [customColor, setCustomColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.metalCustomColor);
+  const [metalMountingOptions, setMetalMountingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.metalInstallationOptions);
   const [selectedLetterHeight, setSelectedLetterHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.letterHeight);
   const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.usdPrice);
   const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.cadPrice);
@@ -11520,6 +11526,20 @@ function Letters({
     color?.name != 'Custom Color' && setCustomColor('');
     font != 'Custom font' && setFontFileUrl('');
   }, [color, font]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    let newMountingOptions = metalMountingOptions;
+    if (selectedThickness?.value === '3') {
+      if (mounting === 'Stud with spacer' || mounting === 'Stud Mount') {
+        setMounting('');
+        setStudLength('');
+        setSpacerStandoffDistance('');
+      }
+      newMountingOptions = newMountingOptions.filter(option => option.option !== 'Stud Mount' && option.option !== 'Stud with spacer');
+    } else {
+      newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.metalInstallationOptions;
+    }
+    setMetalMountingOptions(newMountingOptions);
+  }, [selectedThickness, mounting, setMetalMountingOptions]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -11549,7 +11569,7 @@ function Letters({
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_FontsDropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    font: item.font,
+    font: font,
     fontRef: fontRef,
     openFont: openFont,
     setOpenColor: setOpenColor,
@@ -11576,15 +11596,15 @@ function Letters({
     title: "Letter Height",
     onChange: handleOnChangeLetterHeight,
     options: letterHeightOptions,
-    value: item.letterHeight
+    value: selectedLetterHeight
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Finishing Options",
     onChange: handleChangeFinishing,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.metalFinishOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: finishing.option,
-      selected: finishing.option === item.finishing
+      selected: finishing.option === selectedFinishing
     }, finishing.option)),
-    value: item.finishing
+    value: selectedFinishing
   }), selectedFinishing === 'Painted' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "px-[1px] relative",
     ref: colorRef
@@ -11621,41 +11641,41 @@ function Letters({
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
-      selected: option.option == item.waterproof
+      selected: option.option == waterproof
     }, option.option)),
-    value: item.waterproof
+    value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Mounting Options",
     onChange: handleOnChangeInstallation,
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.metalInstallationOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: metalMountingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
       selected: option.option === mounting
     }, option.option)),
-    value: item.mounting
+    value: mounting
   }), mounting === 'Stud with spacer' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == item.studLength
+      selected: option.value == studLength
     }, option.value)),
-    value: item.studLength
+    value: studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == item.spacerStandoffDistance
+      selected: option.value == spacerStandoffDistance
     }, option.value)),
-    value: item.spacerStandoffDistance
+    value: spacerStandoffDistance
   })), mounting === 'Stud Mount' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == item.studLength
+      selected: option.value == studLength
     }, option.value)),
-    value: item.studLength
+    value: studLength
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,
@@ -11776,6 +11796,7 @@ function Logo({
   const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.studLength);
   const [spacerStandoffOptions, setSpacerStandoffOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.spacerStandoffDefaultOptions);
   const [spacerStandoffDistance, setSpacerStandoffDistance] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.spacerStandoffDistance);
+  const [metalMountingOptions, setMetalMountingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.metalInstallationOptions);
   const handleonChangeSpacerDistance = e => {
     setSpacerStandoffDistance(e.target.value);
   };
@@ -11973,6 +11994,20 @@ function Logo({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     color?.name != 'Custom Color' && setCustomColor('');
   }, [color]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    let newMountingOptions = metalMountingOptions;
+    if (selectedThickness?.value === '3') {
+      if (mounting === 'Stud with spacer' || mounting === 'Stud Mount') {
+        setMounting('');
+        setStudLength('');
+        setSpacerStandoffDistance('');
+      }
+      newMountingOptions = newMountingOptions.filter(option => option.option !== 'Stud Mount' && option.option !== 'Stud with spacer');
+    } else {
+      newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.metalInstallationOptions;
+    }
+    setMetalMountingOptions(newMountingOptions);
+  }, [selectedThickness, mounting, setMetalMountingOptions]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -11998,7 +12033,7 @@ function Logo({
     onChange: e => setWaterproof(e.target.value),
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
-      selected: option.option == item.waterproof
+      selected: option.option == waterproof
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -12006,9 +12041,9 @@ function Logo({
     onChange: handleChangeFinishing,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.metalFinishOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: finishing.option,
-      selected: finishing.option === item.finishing
+      selected: finishing.option === selectedFinishing
     }, finishing.option)),
-    value: item.finishing
+    value: selectedFinishing
   }), selectedFinishing === 'Painted' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "px-[1px] relative",
     ref: colorRef
@@ -12040,7 +12075,7 @@ function Logo({
   }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Mounting Options",
     onChange: handleOnChangeInstallation,
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.metalInstallationOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: metalMountingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
       selected: option.option === mounting
     }, option.option)),
@@ -12050,25 +12085,25 @@ function Logo({
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == item.studLength
+      selected: option.value == studLength
     }, option.value)),
-    value: item.studLength
+    value: studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == item.spacerStandoffDistance
+      selected: option.value == spacerStandoffDistance
     }, option.value)),
-    value: item.spacerStandoffDistance
+    value: spacerStandoffDistance
   })), mounting === 'Stud Mount' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == item.studLength
+      selected: option.value == studLength
     }, option.value)),
-    value: item.studLength
+    value: studLength
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,
@@ -12421,6 +12456,7 @@ function Letters({
   const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.studLength);
   const [spacerStandoffOptions, setSpacerStandoffOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.spacerStandoffDefaultOptions);
   const [spacerStandoffDistance, setSpacerStandoffDistance] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.spacerStandoffDistance);
+  const [metalMountingOptions, setMetalMountingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_metalOptions__WEBPACK_IMPORTED_MODULE_9__.metalInstallationOptions);
   const handleonChangeSpacerDistance = e => {
     setSpacerStandoffDistance(e.target.value);
   };
@@ -12768,6 +12804,20 @@ function Letters({
     color?.name != 'Custom Color' && setCustomColor('');
     font != 'Custom font' && setFontFileUrl('');
   }, [color, font]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    let newMountingOptions = _metalOptions__WEBPACK_IMPORTED_MODULE_9__.metalInstallationOptions;
+    if (selectedThickness?.value === '4') {
+      if (mounting === 'Stud with spacer' || mounting === 'Stud Mount') {
+        setMounting('');
+        setStudLength('');
+        setSpacerStandoffDistance('');
+      }
+      newMountingOptions = _metalOptions__WEBPACK_IMPORTED_MODULE_9__.metalInstallationOptions.filter(option => option.option !== 'Stud Mount' && option.option !== 'Stud with spacer');
+    } else {
+      newMountingOptions = _metalOptions__WEBPACK_IMPORTED_MODULE_9__.metalInstallationOptions;
+    }
+    setMetalMountingOptions(newMountingOptions);
+  }, [selectedThickness, mounting, setMetalMountingOptions]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -12817,9 +12867,9 @@ function Letters({
     onChange: e => setMetal(e.target.value),
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_9__.metalOptions.map(metal => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: metal.option,
-      selected: metal.option === item.metal
+      selected: metal.option === metal
     }, metal.option)),
-    value: item.metal
+    value: metal
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Metal Thickness",
     value: selectedThickness?.value,
@@ -12832,7 +12882,7 @@ function Letters({
     title: "Letter Height",
     onChange: handleOnChangeLetterHeight,
     options: letterHeightOptions,
-    value: item.letterHeight
+    value: selectedLetterHeight
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Finishing Options",
     onChange: handleChangeFinishing,
@@ -12840,7 +12890,7 @@ function Letters({
       value: finishing.option,
       selected: finishing.option === selectedFinishing
     }, finishing.option)),
-    value: item.metalFinish
+    value: selectedFinishing
   }), selectedFinishing === 'Metal Finish' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Metal Finish",
     onChange: handelMetalFinishChange,
@@ -12848,15 +12898,15 @@ function Letters({
       value: metalFinish.option,
       selected: metalFinish.option === stainLessMetalFinish
     }, metalFinish.option)),
-    value: item.stainLessMetalFinish
+    value: stainLessMetalFinish
   }), stainLessMetalFinish === 'Stainless Steel Polished' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Steel Polish",
     onChange: e => setStainlessSteelPolished(e.target.value),
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_9__.stainlessSteelPolishedOptions.map(steelPolished => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: steelPolished.option,
-      selected: steelPolished.option === item.stainlessSteelPolished
+      selected: steelPolished.option === stainlessSteelPolished
     }, steelPolished.option)),
-    value: item.stainlessSteelPolished
+    value: stainlessSteelPolished
   }), selectedFinishing === 'Painted Finish' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "px-[1px] relative",
     ref: colorRef
@@ -12893,41 +12943,41 @@ function Letters({
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
-      selected: option.option == item.waterproof
+      selected: option.option == waterproof
     }, option.option)),
-    value: item.waterproof
+    value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Mounting Options",
     onChange: handleOnChangeInstallation,
-    options: _metalOptions__WEBPACK_IMPORTED_MODULE_9__.metalInstallationOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: metalMountingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
       selected: option.option === mounting
     }, option.option)),
-    value: item.mounting
+    value: mounting
   }), mounting === 'Stud with spacer' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == item.studLength
+      selected: option.value == studLength
     }, option.value)),
-    value: item.studLength
+    value: studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == item.spacerStandoffDistance
+      selected: option.value == spacerStandoffDistance
     }, option.value)),
-    value: item.spacerStandoffDistance
+    value: spacerStandoffDistance
   })), mounting === 'Stud Mount' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == item.studLength
+      selected: option.value == studLength
     }, option.value)),
-    value: item.studLength
+    value: studLength
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,
@@ -13021,7 +13071,6 @@ function Logo({
     isLoading,
     setIsLoading
   } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_LaserCutStainless__WEBPACK_IMPORTED_MODULE_9__.QuoteContext);
-  const [selectedMounting, setSelectedMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.mounting);
   const [selectedThickness, setSelectedThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.metalThickness);
   const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.width);
   const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.usdPrice);
@@ -13049,7 +13098,8 @@ function Logo({
   const [height, setHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.height);
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.waterproof);
-  const [mounting, setInstallation] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.mounting);
+  const [mounting, setMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.mounting);
+  const [metalMountingOptions, setMetalMountingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_metalOptions__WEBPACK_IMPORTED_MODULE_8__.metalInstallationOptions);
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.sets);
   const handleOnChangeSets = e => {
     setSets(e.target.value);
@@ -13240,7 +13290,7 @@ function Logo({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
-  }, [comments, selectedThickness, selectedMounting, waterproof, width, height, usdPrice, cadPrice, fileUrls, fileNames, selectedFinishing, stainLessMetalFinish, stainlessSteelPolished, files, filePaths, mounting, color, customColor, metal, sets, studLength, spacerStandoffDistance]);
+  }, [comments, selectedThickness, mounting, waterproof, width, height, usdPrice, cadPrice, fileUrls, fileNames, selectedFinishing, stainLessMetalFinish, stainlessSteelPolished, files, filePaths, mounting, color, customColor, metal, sets, studLength, spacerStandoffDistance]);
   const logoPricingObject = NovaQuote.logo_pricing_tables;
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (width && height && selectedThickness && waterproof && logoPricingObject !== null) {
@@ -13291,6 +13341,20 @@ function Logo({
     if (!openColor) return;
     setOpenColor(false);
   });
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    let newMountingOptions = _metalOptions__WEBPACK_IMPORTED_MODULE_8__.metalInstallationOptions;
+    if (selectedThickness?.value === '4') {
+      if (mounting === 'Stud with spacer' || mounting === 'Stud Mount') {
+        setMounting('');
+        setStudLength('');
+        setSpacerStandoffDistance('');
+      }
+      newMountingOptions = _metalOptions__WEBPACK_IMPORTED_MODULE_8__.metalInstallationOptions.filter(option => option.option !== 'Stud Mount' && option.option !== 'Stud with spacer');
+    } else {
+      newMountingOptions = _metalOptions__WEBPACK_IMPORTED_MODULE_8__.metalInstallationOptions;
+    }
+    setMetalMountingOptions(newMountingOptions);
+  }, [selectedThickness, mounting, setMetalMountingOptions]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -13300,7 +13364,7 @@ function Logo({
       value: metal.option,
       selected: metal.option === item.metal
     }, metal.option)),
-    value: item.metal
+    value: metal
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Metal Thickness",
     value: selectedThickness?.value,
@@ -13326,7 +13390,7 @@ function Logo({
       value: finishing.option,
       selected: finishing.option === selectedFinishing
     }, finishing.option)),
-    value: item.metalFinish
+    value: selectedFinishing
   }), selectedFinishing === 'Metal Finish' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Metal Finish",
     onChange: handelMetalFinishChange,
@@ -13334,7 +13398,7 @@ function Logo({
       value: metalFinish.option,
       selected: metalFinish.option === stainLessMetalFinish
     }, metalFinish.option)),
-    value: item.stainLessMetalFinish
+    value: stainLessMetalFinish
   }), stainLessMetalFinish === 'Stainless Steel Polished' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Steel Polish",
     onChange: e => setStainlessSteelPolished(e.target.value),
@@ -13376,41 +13440,41 @@ function Logo({
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
-      selected: option.option == item.waterproof
+      selected: option.option == waterproof
     }, option.option)),
-    value: item.waterproof
+    value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Mounting Options",
     onChange: handleOnChangeInstallation,
-    options: _metalOptions__WEBPACK_IMPORTED_MODULE_8__.metalInstallationOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: metalMountingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
       selected: option.option === mounting
     }, option.option)),
-    value: item.mounting
+    value: mounting
   }), mounting === 'Stud with spacer' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == item.studLength
+      selected: option.value == studLength
     }, option.value)),
-    value: item.studLength
+    value: studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == item.spacerStandoffDistance
+      selected: option.value == spacerStandoffDistance
     }, option.value)),
-    value: item.spacerStandoffDistance
+    value: spacerStandoffDistance
   })), mounting === 'Stud Mount' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == item.studLength
+      selected: option.value == studLength
     }, option.value)),
-    value: item.studLength
+    value: studLength
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,
@@ -13570,6 +13634,8 @@ const metalFinishColors = [{
   color: '#771B0C'
 }];
 const metalInstallationOptions = [{
+  option: 'Plain'
+}, {
   option: 'Stud Mount'
 }, {
   option: 'Stud with spacer'
@@ -17519,25 +17585,17 @@ const metalInstallationOptions = [{
 }, {
   option: 'Stud with spacer'
 }];
-const calculateMountingOptions = (selectedThickness, selectedMounting, waterproof) => {
-  let newMountingOptions;
+const calculateMountingOptions = (selectedThickness, setSelectedMounting, selectedMounting, waterproof) => {
+  let newMountingOptions = mountingDefaultOptions;
   let updatedSelectedMounting = selectedMounting;
   if (selectedThickness && selectedThickness.value === '3') {
-    newMountingOptions = mountingDefaultOptions.filter(option => option.mounting_option !== 'Flush stud');
-    if (updatedSelectedMounting === 'Flush stud') {
-      updatedSelectedMounting = '';
-    }
-  } else {
-    newMountingOptions = mountingDefaultOptions.filter(option => option.mounting_option !== 'Stud with Block');
-    if (updatedSelectedMounting === 'Stud with Block') {
-      updatedSelectedMounting = '';
-    }
+    newMountingOptions = newMountingOptions.filter(option => option.mounting_option !== 'Stud Mount' && option.mounting_option !== 'Stud with spacer');
   }
   if (waterproof === 'Outdoor (Waterproof)') {
     newMountingOptions = newMountingOptions.filter(option => option.mounting_option !== 'Double-sided tape');
     if (updatedSelectedMounting === 'Double-sided tape') {
-      var _mountingDefaultOptio;
-      updatedSelectedMounting = (_mountingDefaultOptio = mountingDefaultOptions[0]?.mounting_option) !== null && _mountingDefaultOptio !== void 0 ? _mountingDefaultOptio : '';
+      var _newMountingOptions$;
+      updatedSelectedMounting = (_newMountingOptions$ = newMountingOptions[0]?.mounting_option) !== null && _newMountingOptions$ !== void 0 ? _newMountingOptions$ : '';
     }
   }
   return {

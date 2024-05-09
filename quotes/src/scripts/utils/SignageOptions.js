@@ -139,26 +139,19 @@ const metalInstallationOptions = [
 
 const calculateMountingOptions = (
 	selectedThickness,
+	setSelectedMounting,
 	selectedMounting,
 	waterproof
 ) => {
-	let newMountingOptions;
+	let newMountingOptions = mountingDefaultOptions;
 	let updatedSelectedMounting = selectedMounting;
 
 	if (selectedThickness && selectedThickness.value === '3') {
-		newMountingOptions = mountingDefaultOptions.filter(
-			(option) => option.mounting_option !== 'Flush stud'
+		newMountingOptions = newMountingOptions.filter(
+			(option) =>
+				option.mounting_option !== 'Stud Mount' &&
+				option.mounting_option !== 'Stud with spacer'
 		);
-		if (updatedSelectedMounting === 'Flush stud') {
-			updatedSelectedMounting = '';
-		}
-	} else {
-		newMountingOptions = mountingDefaultOptions.filter(
-			(option) => option.mounting_option !== 'Stud with Block'
-		);
-		if (updatedSelectedMounting === 'Stud with Block') {
-			updatedSelectedMounting = '';
-		}
 	}
 
 	if (waterproof === 'Outdoor (Waterproof)') {
@@ -166,8 +159,7 @@ const calculateMountingOptions = (
 			(option) => option.mounting_option !== 'Double-sided tape'
 		);
 		if (updatedSelectedMounting === 'Double-sided tape') {
-			updatedSelectedMounting =
-				mountingDefaultOptions[0]?.mounting_option ?? '';
+			updatedSelectedMounting = newMountingOptions[0]?.mounting_option ?? '';
 		}
 	}
 

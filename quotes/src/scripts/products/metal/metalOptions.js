@@ -139,6 +139,9 @@ const metalFinishColors = [
 
 const metalInstallationOptions = [
 	{
+		option: 'Plain',
+	},
+	{
 		option: 'Stud Mount',
 	},
 	{

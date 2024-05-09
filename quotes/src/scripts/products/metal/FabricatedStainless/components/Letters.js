@@ -593,7 +593,7 @@ export default function Letters({ item }) {
 
 			<div className="quote-grid mb-6">
 				<FontsDropdown
-					font={item.font}
+					font={font}
 					fontRef={fontRef}
 					openFont={openFont}
 					setOpenFont={setOpenFont}
@@ -618,11 +618,11 @@ export default function Letters({ item }) {
 					title="Metal Option"
 					onChange={(e) => setMetal(e.target.value)}
 					options={metalOptions.map((metal) => (
-						<option value={metal.option} selected={metal.option === item.metal}>
+						<option value={metal.option} selected={metal.option === metal}>
 							{metal.option}
 						</option>
 					))}
-					value={item.metal}
+					value={metal}
 				/>
 
 				<Dropdown
@@ -643,7 +643,7 @@ export default function Letters({ item }) {
 					title="Letter Height"
 					onChange={handleOnChangeLetterHeight}
 					options={letterHeightOptions}
-					value={item.letterHeight}
+					value={selectedLetterHeight}
 				/>
 
 				<Dropdown
@@ -657,7 +657,7 @@ export default function Letters({ item }) {
 							{finishing.option}
 						</option>
 					))}
-					value={item.metalFinish}
+					value={selectedFinishing}
 				/>
 
 				{selectedFinishing === 'Metal Finish' && (
@@ -672,7 +672,7 @@ export default function Letters({ item }) {
 								{metalFinish.option}
 							</option>
 						))}
-						value={item.stainLessMetalFinish}
+						value={stainLessMetalFinish}
 					/>
 				)}
 
@@ -733,12 +733,12 @@ export default function Letters({ item }) {
 					options={waterProofOptions.map((option) => (
 						<option
 							value={option.option}
-							selected={option.option == item.waterproof}
+							selected={option.option == waterproof}
 						>
 							{option.option}
 						</option>
 					))}
-					value={item.waterproof}
+					value={waterproof}
 				/>
 
 				<Dropdown
@@ -749,7 +749,7 @@ export default function Letters({ item }) {
 							{option.option}
 						</option>
 					))}
-					value={item.mounting}
+					value={mounting}
 				/>
 
 				{mounting === 'Stud with spacer' && (
@@ -760,12 +760,12 @@ export default function Letters({ item }) {
 							options={studLengthOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.studLength}
+									selected={option.value == studLength}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.studLength}
+							value={studLength}
 						/>
 						<Dropdown
 							title="SPACER DISTANCE"
@@ -773,12 +773,12 @@ export default function Letters({ item }) {
 							options={spacerStandoffOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.spacerStandoffDistance}
+									selected={option.value == spacerStandoffDistance}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.spacerStandoffDistance}
+							value={spacerStandoffDistance}
 						/>
 					</>
 				)}
@@ -791,12 +791,12 @@ export default function Letters({ item }) {
 							options={studLengthOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.studLength}
+									selected={option.value == studLength}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.studLength}
+							value={studLength}
 						/>
 					</>
 				)}

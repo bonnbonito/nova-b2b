@@ -130,12 +130,34 @@ export default function Logo({ item }) {
 	};
 
 	useEffect(() => {
-		if (!selectedThickness || selectedThickness.value === undefined) return;
+		let newMountingOptions = mountingDefaultOptions;
 
-		const { newMountingOptions, updatedSelectedMounting } =
-			calculateMountingOptions(selectedThickness, selectedMounting, waterproof);
+		if (selectedThickness?.value === '3') {
+			if (
+				selectedMounting === 'Stud Mounth' ||
+				selectedMounting === 'Stud with spacer'
+			) {
+				setSelectedMounting('');
+				setStudLength('');
+				setSpacerStandoffDistance('');
+			}
+			newMountingOptions = newMountingOptions.filter(
+				(option) =>
+					option.mounting_option !== 'Stud Mount' &&
+					option.mounting_option !== 'Stud with spacer'
+			);
+		}
 
-		setSelectedMounting(updatedSelectedMounting); // Update the selected mounting if needed
+		if (waterproof === 'Outdoor (Waterproof)') {
+			if (selectedMounting === 'Double-sided tape') {
+				setSelectedMounting('');
+			}
+
+			newMountingOptions = newMountingOptions.filter(
+				(option) => option.mounting_option !== 'Double-sided tape'
+			);
+		}
+
 		setMountingOptions(newMountingOptions);
 
 		setMaxWidthOptions(() =>
@@ -153,22 +175,14 @@ export default function Logo({ item }) {
 				}
 			)
 		);
-	}, [selectedThickness, selectedMounting, waterproof, maxWidthHeight]);
-
-	useEffect(() => {
-		if (waterproof === 'Outdoor (Waterproof)') {
-			let newMountingOptions = mountingDefaultOptions.filter(
-				(option) => option.mounting_option !== 'Double-sided tape'
-			);
-			if (selectedMounting === 'Double-sided tape') {
-				setSelectedMounting('');
-			}
-
-			setMountingOptions(newMountingOptions);
-		} else {
-			setMountingOptions(mountingDefaultOptions);
-		}
-	}, [waterproof, selectedMounting]);
+	}, [
+		selectedThickness,
+		selectedMounting,
+		waterproof,
+		maxWidthHeight,
+		setSelectedMounting,
+		setMountingOptions,
+	]);
 
 	function handleComments(e) {
 		setComments(e.target.value);
@@ -180,6 +194,17 @@ export default function Logo({ item }) {
 			(option) => option.value === target
 		);
 		setSelectedThickness(() => selected[0]);
+
+		if (parseInt(target) === 3) {
+			if (
+				selectedMounting === 'Stud Mount' ||
+				selectedMounting === 'Stud with spacer'
+			) {
+				setSelectedMounting('');
+				setStudLength('');
+				setSpacerStandoffDistance('');
+			}
+		}
 	};
 
 	useEffect(() => {
@@ -419,12 +444,12 @@ export default function Logo({ item }) {
 			<div className="quote-grid mb-6">
 				<Dropdown
 					title="Acrylic Thickness"
-					value={item.acrylicThickness?.value}
+					value={selectedThickness?.value}
 					onChange={handleOnChangeThickness}
 					options={thicknessOptions.map((thickness) => (
 						<option
 							value={thickness.value}
-							selected={thickness === item.acrylicThickness}
+							selected={thickness === selectedThickness}
 						>
 							{thickness.thickness}
 						</option>
@@ -502,7 +527,7 @@ export default function Logo({ item }) {
 					options={finishingOptions.map((finishing) => (
 						<option
 							value={finishing.name}
-							selected={finishing.name === item.finishing}
+							selected={finishing.name === selectedFinishing}
 						>
 							{finishing.name}
 						</option>
@@ -516,7 +541,7 @@ export default function Logo({ item }) {
 					options={waterProofOptions.map((option) => (
 						<option
 							value={option.option}
-							selected={option.option == item.waterproof}
+							selected={option.option == waterproof}
 						>
 							{option.option}
 						</option>
@@ -546,12 +571,12 @@ export default function Logo({ item }) {
 							options={studLengthOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.studLength}
+									selected={option.value == studLength}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.studLength}
+							value={studLength}
 						/>
 						<Dropdown
 							title="STANDOFF SPACE"
@@ -559,12 +584,12 @@ export default function Logo({ item }) {
 							options={spacerStandoffOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.spacerStandoffDistance}
+									selected={option.value == spacerStandoffDistance}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.spacerStandoffDistance}
+							value={spacerStandoffDistance}
 						/>
 					</>
 				)}
@@ -577,12 +602,12 @@ export default function Logo({ item }) {
 							options={studLengthOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.studLength}
+									selected={option.value == studLength}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.studLength}
+							value={studLength}
 						/>
 					</>
 				)}
