@@ -35,11 +35,11 @@ class Roles {
 		add_filter( 'wp_authenticate_user', array( $this, 'custom_role_login_check' ), 10, 2 );
 		add_action( 'nova_activated', array( $this, 'user_activation' ), 10, 1 );
 		add_filter( 'manage_users_columns', array( $this, 'add_business_id_column' ), 20, 1 );
-		add_filter( 'manage_users_columns', array( $this, 'add_registration_date_column' ) );
+		add_filter( 'manage_users_columns', array( $this, 'add_registration_business_name_column' ) );
 		add_action( 'manage_users_custom_column', array( $this, 'business_id_user_column' ), 10, 3 );
 		add_filter( 'manage_users_sortable_columns', array( $this, 'make_business_id_column_sortable' ) );
 		add_filter( 'manage_users_sortable_columns', array( $this, 'user_id_column_sortable' ) );
-		add_filter( 'manage_users_custom_column', array( $this, 'show_registration_date_column_content' ), 11, 3 );
+		add_filter( 'manage_users_custom_column', array( $this, 'show_registration_date_business_name_column_content' ), 11, 3 );
 		add_action( 'pre_get_users', array( $this, 'sort_by_business_id_column' ) );
 		add_action( 'set_user_role', array( $this, 'notify_user_approved_partner' ), 13, 3 );
 		add_action( 'set_user_role', array( $this, 'update_role_business_id' ), 40, 3 );
@@ -78,16 +78,20 @@ document.addEventListener('DOMContentLoaded', function() {
 		<?php
 	}
 
-	public function show_registration_date_column_content( $value, $column_name, $user_id ) {
+	public function show_registration_date_business_name_column_content( $value, $column_name, $user_id ) {
 		if ( 'registration_date' == $column_name ) {
 			$user  = get_userdata( $user_id );
 			$value = $user->user_registered;
 			return date( 'M d, Y', strtotime( $value ) );
 		}
+		if ( 'business_name' == $column_name ) {
+			return get_field( 'business_name', 'user_' . $user_id );
+		}
 		return $value;
 	}
 
-	public function add_registration_date_column( $columns ) {
+	public function add_registration_business_name_column( $columns ) {
+		$columns['business_name']     = 'Business Name';
 		$columns['registration_date'] = 'Registration Date';
 		return $columns;
 	}
@@ -100,7 +104,6 @@ document.addEventListener('DOMContentLoaded', function() {
 			// Remove the leading and trailing slashes added by WordPress
 			$search = trim( $user_query->query_vars['search'], '*' );
 		}
-
 		if ( $search ) {
 			$like_keyword = '%' . $wpdb->esc_like( $search ) . '%';
 
@@ -111,7 +114,11 @@ document.addEventListener('DOMContentLoaded', function() {
                   SELECT user_id FROM {$wpdb->usermeta}
                   WHERE ( meta_key = 'business_id' OR
                           meta_key = 'first_name' OR
-                          meta_key = 'last_name' )
+						  meta_key = 'last_name' OR
+						  meta_key = 'business_name' OR
+						  meta_key = 'employee_email1' OR
+						  meta_key = 'employee_email2' OR
+                          meta_key = 'employee_email3' )
                   AND meta_value LIKE %s )
              )",
 				$like_keyword, // For user_login
@@ -440,6 +447,7 @@ jQuery(document).ready(function($) {
 			// Return the user ID as a clickable link
 			return "<strong><a href='{$user_edit_link}'>{$user_id}</a></strong>";
 		}
+
 		return $value;
 	}
 

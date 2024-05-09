@@ -43,6 +43,7 @@ class Admin {
 		add_action( 'admin_init', array( $this, 'export_quotes_to_csv_check' ) );
 	}
 
+
 	public function export_users_menu() {
 		add_management_page(
 			'Export Partners',
@@ -200,6 +201,26 @@ class Admin {
 					'value'   => $search_term,
 					'compare' => 'LIKE',
 				),
+				array(
+					'key'     => 'business_name',
+					'value'   => $search_term,
+					'compare' => 'LIKE',
+				),
+				array(
+					'key'     => 'employee_email1',
+					'value'   => $search_term,
+					'compare' => 'LIKE',
+				),
+				array(
+					'key'     => 'employee_email2',
+					'value'   => $search_term,
+					'compare' => 'LIKE',
+				),
+				array(
+					'key'     => 'employee_email3',
+					'value'   => $search_term,
+					'compare' => 'LIKE',
+				),
 			);
 
 			unset( $args['search'] );
@@ -211,6 +232,9 @@ class Admin {
 	public function modify_acf_user_query( $args, $field, $post_id ) {
 		if ( isset( $field['business_id'] ) && $field['business_id'] ) {
 			$args['business_id'] = true;
+		}
+		if ( isset( $field['business_name'] ) && $field['business_name'] ) {
+			$args['business_name'] = true;
 		}
 		return $args;
 	}
