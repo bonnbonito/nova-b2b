@@ -176,9 +176,10 @@ export default function UploadFont({
 
 		const dropboxArgs = {
 			path: `/NOVA-CRM/${NovaQuote.business_id}/${tempFolder}/Fonts/${file.name}`,
-			mode: 'overwrite',
-			autorename: false,
+			mode: 'add',
+			autorename: true,
 			mute: false,
+			strict_conflict: true,
 		};
 
 		try {

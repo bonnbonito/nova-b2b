@@ -59,23 +59,23 @@ class Roles {
 		?>
 <h3>Registration Information</h3>
 <table class="form-table" id="registration-info">
-	<tr>
-		<th><label for="registration_date">Registration Date</label></th>
-		<td>
-			<?php echo date( 'M d, Y', strtotime( $user->user_registered ) ); ?>
-		</td>
-	</tr>
+    <tr>
+        <th><label for="registration_date">Registration Date</label></th>
+        <td>
+            <?php echo date( 'M d, Y', strtotime( $user->user_registered ) ); ?>
+        </td>
+    </tr>
 </table>
 <script type="text/javascript">
 document.addEventListener('DOMContentLoaded', function() {
-	var regInfo = document.getElementById('registration-info').closest('table');
-	var personalOptions = document.querySelector('.user-rich-editing-wrap').closest('table');
-	if (regInfo && personalOptions) {
-		personalOptions.parentNode.insertBefore(regInfo, personalOptions);
-	}
+    var regInfo = document.getElementById('registration-info').closest('table');
+    var personalOptions = document.querySelector('.user-rich-editing-wrap').closest('table');
+    if (regInfo && personalOptions) {
+        personalOptions.parentNode.insertBefore(regInfo, personalOptions);
+    }
 });
 </script>
-		<?php
+<?php
 	}
 
 	public function show_registration_date_business_name_column_content( $value, $column_name, $user_id ) {
@@ -116,9 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
                           meta_key = 'first_name' OR
 						  meta_key = 'last_name' OR
 						  meta_key = 'business_name' OR
-						  meta_key = 'employee_email1' OR
-						  meta_key = 'employee_email2' OR
-                          meta_key = 'employee_email3' )
+						  meta_key = 'employee_emails' )
                   AND meta_value LIKE %s )
              )",
 				$like_keyword, // For user_login
@@ -276,22 +274,22 @@ document.addEventListener('DOMContentLoaded', function() {
 			?>
 <script type="text/javascript">
 jQuery(document).ready(function($) {
-	// Move the row actions from their original location to the 'user_id' column
-	$('#the-list tr').each(function() {
-		var $this = $(this);
-		var rowActions = $this.find('.row-actions').clone(); // Clone the row actions
-		$this.find('.row-actions').remove(); // Remove the original row actions
+    // Move the row actions from their original location to the 'user_id' column
+    $('#the-list tr').each(function() {
+        var $this = $(this);
+        var rowActions = $this.find('.row-actions').clone(); // Clone the row actions
+        $this.find('.row-actions').remove(); // Remove the original row actions
 
-		// Check if the 'user_id' column exists and append the cloned row actions
-		var userIDCell = $this.find('td.business_id');
-		if (userIDCell.length) {
-			userIDCell.append(rowActions);
-		}
-	});
+        // Check if the 'user_id' column exists and append the cloned row actions
+        var userIDCell = $this.find('td.business_id');
+        if (userIDCell.length) {
+            userIDCell.append(rowActions);
+        }
+    });
 });
 </script>
 
-			<?php
+<?php
 		}
 	}
 

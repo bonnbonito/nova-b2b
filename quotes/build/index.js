@@ -2476,9 +2476,10 @@ function UploadFont({
     await checkAndCreateFolder(token);
     const dropboxArgs = {
       path: `/NOVA-CRM/${NovaQuote.business_id}/${tempFolder}/Fonts/${file.name}`,
-      mode: 'overwrite',
-      autorename: false,
-      mute: false
+      mode: 'add',
+      autorename: true,
+      mute: false,
+      strict_conflict: true
     };
     try {
       const uploadResponse = await fetch('https://content.dropboxapi.com/2/files/upload', {

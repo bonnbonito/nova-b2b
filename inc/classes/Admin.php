@@ -207,17 +207,7 @@ class Admin {
 					'compare' => 'LIKE',
 				),
 				array(
-					'key'     => 'employee_email1',
-					'value'   => $search_term,
-					'compare' => 'LIKE',
-				),
-				array(
-					'key'     => 'employee_email2',
-					'value'   => $search_term,
-					'compare' => 'LIKE',
-				),
-				array(
-					'key'     => 'employee_email3',
+					'key'     => 'employee_emails',
 					'value'   => $search_term,
 					'compare' => 'LIKE',
 				),
