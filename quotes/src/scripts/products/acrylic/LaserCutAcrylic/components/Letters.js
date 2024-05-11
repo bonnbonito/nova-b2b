@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Dropdown from '../../../../Dropdown';
 import FontsDropdown from '../../../../FontsDropdown';
 import UploadFiles from '../../../../UploadFiles';
@@ -13,8 +13,10 @@ import {
 	thicknessOptions,
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
+
 import { colorOptions } from '../ColorOptions';
-import { QuoteContext } from '../LaserCutAcrylic';
+
+import { useAppContext } from '../../../../AppProvider';
 
 const NovaOptions = NovaQuote.quote_options;
 const NovaSingleOptions = NovaQuote.single_quote_options;
@@ -31,14 +33,9 @@ const smallPunctuations = parseFloat(
 //const AcrylicLetterPricing = JSON.parse(NovaOptions.letter_x_logo_pricing);
 
 export default function Letters({ item }) {
-	const {
-		signage,
-		setSignage,
-		setMissing,
-		tempFolder,
-		isLoading,
-		setIsLoading,
-	} = useContext(QuoteContext);
+	const { signage, setSignage, setMissing, tempFolder, isLoading } =
+		useAppContext();
+
 	const [letters, setLetters] = useState(item.letters);
 	const [comments, setComments] = useState(item.comments);
 	const [font, setFont] = useState(item.font);
@@ -625,7 +622,6 @@ export default function Letters({ item }) {
 						isLoading={isLoading}
 						setFontFileUrl={setFontFileUrl}
 						setFontFileName={setFontFileName}
-						tempFolder={tempFolder}
 					/>
 				)}
 
@@ -846,9 +842,6 @@ export default function Letters({ item }) {
 					fileNames={fileNames}
 					setFileUrls={setFileUrls}
 					setFileNames={setFileNames}
-					tempFolder={tempFolder}
-					isLoading={isLoading}
-					setIsLoading={setIsLoading}
 				/>
 			</div>
 

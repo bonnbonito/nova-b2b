@@ -157,6 +157,12 @@ function ModalSave({
 				formData.append('editing', 'edit');
 			}
 
+			if (action === 'update-processing-admin') {
+				formData.append('quote_status', 'processing');
+				formData.append('quote_id', NovaQuote.current_quote_id);
+				formData.append('editing', 'edit');
+			}
+
 			const status = await processQuote(formData);
 			if (status.status === 'success') {
 				localStorage.removeItem(storage);
@@ -326,13 +332,16 @@ function ModalSave({
 										dangerouslySetInnerHTML={{ __html: saveDraftMessageHtml() }}
 									></div>
 								)}
-								{action === 'update' && (
+								{(action === 'update' ||
+									action === 'update-processing-admin') && (
 									<div
 										dangerouslySetInnerHTML={{ __html: updateMessageHtml() }}
 									></div>
 								)}
 								<div className="gap-2 block justify-center sm:flex">
-									{(action === 'draft' || action === 'update') && (
+									{(action === 'draft' ||
+										action === 'update' ||
+										action === 'update-processing-admin') && (
 										<a
 											href={NovaQuote.quote_url + '?qedit=1&qid=' + quoteID}
 											className="block mb-4 text-center text-sm px-3 py-2 text-white no-underline bg-nova-primary rounded hover:bg-nova-secondary"

@@ -5,7 +5,6 @@ import useOutsideClick from '../../../../utils/ClickOutside';
 import convert_json from '../../../../utils/ConvertJson';
 import { getLogoPricingTablebyThickness } from '../../../../utils/Pricing';
 import {
-	calculateMountingOptions,
 	mountingDefaultOptions,
 	setOptions,
 	spacerStandoffDefaultOptions,
@@ -14,20 +13,15 @@ import {
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
 import { colorOptions } from '../ColorOptions';
-import { QuoteContext } from '../LaserCutAcrylic';
+
+import { useAppContext } from '../../../../AppProvider';
 
 const NovaSingleOptions = NovaQuote.single_quote_options;
 const exchangeRate = 1.3;
 
 export default function Logo({ item }) {
-	const {
-		signage,
-		setSignage,
-		setMissing,
-		tempFolder,
-		isLoading,
-		setIsLoading,
-	} = useContext(QuoteContext);
+	const { signage, setSignage, setMissing } = useAppContext();
+
 	const [selectedMounting, setSelectedMounting] = useState(item.mounting);
 	const [studLength, setStudLength] = useState(item.studLength);
 	const [spacerStandoffOptions, setSpacerStandoffOptions] = useState(
@@ -663,9 +657,6 @@ export default function Logo({ item }) {
 					fileNames={fileNames}
 					setFileUrls={setFileUrls}
 					setFileNames={setFileNames}
-					tempFolder={tempFolder}
-					isLoading={isLoading}
-					setIsLoading={setIsLoading}
 				/>
 			</div>
 		</>

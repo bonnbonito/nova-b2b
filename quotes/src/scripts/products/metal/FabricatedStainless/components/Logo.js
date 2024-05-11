@@ -31,7 +31,7 @@ export default function Logo({ item }) {
 		tempFolder,
 		isLoading,
 		setIsLoading,
-	} = useContext(QuoteContext);
+	} = useAppContext();
 	const [selectedMounting, setSelectedMounting] = useState(item.mounting);
 	const [selectedThickness, setSelectedThickness] = useState(item.metalDepth);
 	const [width, setWidth] = useState(item.width);
@@ -631,9 +631,6 @@ export default function Logo({ item }) {
 					fileNames={fileNames}
 					setFileUrls={setFileUrls}
 					setFileNames={setFileNames}
-					tempFolder={tempFolder}
-					isLoading={isLoading}
-					setIsLoading={setIsLoading}
 				/>
 			</div>
 		</>

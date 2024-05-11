@@ -1,18 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Tooltip } from 'react-tooltip';
 import { v4 as uuidv4 } from 'uuid'; // Make sure to import uuid
+import { useAppContext } from './AppProvider';
 import EditableText from './EditableText';
 import { ClearIcon, CollapseIcon, DuplicateIcon, TrashIcon } from './svg/Icons';
 
-export default function Signage({
-	item,
-	index,
-	signage,
-	setSignage,
-	children,
-	setMissing,
-	storage,
-}) {
+export default function Signage({ item, index, children }) {
+	const { signage, setSignage, setMissing, storage } = useAppContext();
+
 	const [open, setOpen] = useState(true);
 	const [itemTitle, setItemTitle] = useState(item.title);
 	const [loading, setLoading] = useState(false);

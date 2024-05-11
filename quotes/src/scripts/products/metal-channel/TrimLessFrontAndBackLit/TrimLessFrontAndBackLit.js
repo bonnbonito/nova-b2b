@@ -9,16 +9,8 @@ import Letters from './components/Letters';
 export const QuoteContext = createContext(null);
 
 export default function TrimLessFrontAndBackLit() {
-	const [signage, setSignage] = useState([]);
-	const [missing, setMissing] = useState([]);
-	const [tempFolder, setTempFolder] = useState('');
-	const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
-	const storage =
-		window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id + 'x';
-	const localStorageQuote = localStorage.getItem(storage);
-	const savedStorage = JSON.parse(localStorageQuote);
-
-	const [isLoading, setIsLoading] = useState(false);
+	const { signage, setSignage, setTempFolder, tempFolderName } =
+		useAppContext();
 
 	function setDefaultSignage() {
 		if (savedStorage?.length > 0) {
@@ -116,12 +108,12 @@ export default function TrimLessFrontAndBackLit() {
 			if (type === 'letters') {
 				args = {
 					type: type,
-					title: `${type} ${count + 1}`.toUpperCase(),
+					title: `${type} ${count + 1}`,
 				};
 			} else {
 				args = {
 					type: type,
-					title: `${type} ${count + 1}`.toUpperCase(),
+					title: `${type} ${count + 1}`,
 					width: '',
 					height: '',
 				};
@@ -142,21 +134,7 @@ export default function TrimLessFrontAndBackLit() {
 
 	useEffect(() => {
 		if (NovaQuote.is_editting.length === 0) {
-			const savedStorageFolder = JSON.parse(
-				localStorage.getItem(
-					window.location.href + NovaQuote.user_id + '-folder'
-				)
-			);
-
-			if (savedStorageFolder?.length > 0) {
-				setTempFolder(savedStorageFolder);
-			} else {
-				localStorage.setItem(
-					window.location.href + NovaQuote.user_id + '-folder',
-					JSON.stringify(tempFolderName)
-				);
-				setTempFolder(tempFolderName);
-			}
+			setTempFolder(tempFolderName);
 		} else {
 			setTempFolder(`Q-${NovaQuote.current_quote_id}`);
 		}
@@ -178,18 +156,7 @@ export default function TrimLessFrontAndBackLit() {
 			<div className="md:flex gap-6">
 				<div className="md:w-3/4 w-full flex flex-col">
 					{signage.map((item, index) => (
-						<Signage
-							index={index}
-							id={item.id}
-							item={item}
-							signage={signage}
-							setSignage={setSignage}
-							addSignage={addSignage}
-							setMissing={setMissing}
-							storage={storage}
-							isLoading={isLoading}
-							setIsLoading={setIsLoading}
-						>
+						<Signage index={index} id={item.id} item={item}>
 							<Letters key={item.id} item={item} />
 						</Signage>
 					))}

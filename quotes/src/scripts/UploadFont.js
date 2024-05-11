@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { useAppContext } from './AppProvider';
 
 export default function UploadFont({
 	setFontFilePath,
@@ -7,10 +8,11 @@ export default function UploadFont({
 	setFontFile,
 	fontFileUrl,
 	setFontFileName,
-	tempFolder,
 }) {
 	const fileRef = useRef(null);
-	const [isLoading, setIsLoading] = useState(false);
+
+	const { tempFolder, isLoading, setIsLoading } = useAppContext();
+
 	const [accessToken, setAccessToken] = useState('');
 
 	const handleButtonClick = () => {
@@ -75,6 +77,8 @@ export default function UploadFont({
 
 	const checkAndCreateFolder = async (accessToken) => {
 		const folderPath = `/NOVA-CRM/${NovaQuote.business_id}/${tempFolder}/Fonts`;
+
+		console.log(folderPath);
 
 		try {
 			// Check if the folder exists

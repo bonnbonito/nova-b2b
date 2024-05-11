@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { useAppContext } from './AppProvider';
 
 export default function UploadFiles({
 	setFilePaths,
@@ -7,10 +8,9 @@ export default function UploadFiles({
 	fileUrls,
 	setFileNames,
 	fileNames,
-	tempFolder,
-	isLoading,
-	setIsLoading,
 }) {
+	const { tempFolder, isLoading, setIsLoading } = useAppContext();
+
 	const fileRef = useRef(null);
 	const [accessToken, setAccessToken] = useState('');
 	const maxFiles = 5;

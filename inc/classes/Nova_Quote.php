@@ -4,6 +4,7 @@ namespace NOVA_B2B\Inc\Classes;
 use TCPDF;
 use WP_Query;
 use WC;
+use WP_REST_Request;
 
 class Nova_Quote {
 	/**
@@ -27,6 +28,7 @@ class Nova_Quote {
 	public function __construct() {
 		add_action( 'wp_enqueue_scripts', array( $this, 'quotes_nova_scripts' ) );
 		add_action( 'rest_api_init', array( $this, 'nova_rest_quote_file' ) );
+		add_action( 'rest_api_init', array( $this, 'nova_rest_pricing_tables' ) );
 
 		add_action( 'wp_ajax_signage_pricing_table', array( $this, 'signage_pricing_table' ) );
 		// add_filter( 'acf/init', array( $this, 'afc_load_popular_fonts' ), 10, 3 );
@@ -400,7 +402,7 @@ sendMockup.addEventListener('click', e => {
 			<?php
 		elseif ( get_field( 'quote_div_id' ) ) :
 			?>
-<div id="<?php echo get_field( 'quote_div_id' ); ?>"></div>
+<div id="QuoteApp"></div>
 			<?php
 				else :
 					?>
@@ -2070,6 +2072,49 @@ h6 {
 		wp_send_json( $status );
 	}
 
+	public function nova_rest_pricing_tables() {
+		register_rest_route(
+			'nova/v1',
+			'/pricingletters/(?P<id>\d+)',
+			array(
+				'methods'  => 'GET',
+				'callback' => array( $this, 'handle_pricing_letter_table' ),
+			)
+		);
+		register_rest_route(
+			'nova/v1',
+			'/pricinglogos/(?P<id>\d+)',
+			array(
+				'methods'  => 'GET',
+				'callback' => array( $this, 'handle_pricing_logo_table' ),
+			)
+		);
+	}
+
+	public function handle_pricing_logo_table( \WP_REST_Request $request ) {
+		$id = $request['id'];
+
+		$table = get_field( 'logo_pricing_tables', $id );
+
+		if ( ! $table ) {
+			$parent_id = wp_get_post_parent_id( $id );
+			$table     = get_field( 'logo_pricing_tables', $parent_id );
+		}
+
+		return $table;
+	}
+
+	public function handle_pricing_letter_table( \WP_REST_Request $request ) {
+		$id = $request['id'];
+
+		if ( ( get_field( 'letter_pricing_table', $id ) && get_field( 'letter_pricing_table', $id )['pricing_table'] === '' ) || get_field( 'letter_pricing_table', $id ) === null ) {
+			$parent_id = wp_get_post_parent_id( $id );
+			return get_field( 'letter_pricing_table', $parent_id );
+		}
+
+		return get_field( 'letter_pricing_table', $id );
+	}
+
 	public function nova_rest_quote_file() {
 		register_rest_route(
 			'nova/v1',
@@ -2143,7 +2188,7 @@ h6 {
 				'dashboard_url'              => esc_url_raw( home_url( '/my-account/' ) ),
 				'is_editting'                => $this->is_editting(),
 				'signage'                    => $this->get_signage(),
-				'not_author_but_admin'       => $this->not_author_but_admin(),
+				'is_admin'                   => $this->is_admin(),
 				'nova_quote_product'         => get_field( 'nova_quote_product', 'option' ),
 				'current_quote_id'           => isset( $_GET['qid'] ) ? $_GET['qid'] : null,
 				'current_quote_title'        => isset( $_GET['qid'] ) ? get_field( 'frontend_title', $_GET['qid'] ) : null,
@@ -2160,6 +2205,7 @@ h6 {
 				'lowercase_pricing'          => $this->lowercase_pricing(),
 				'quote_div_id'               => get_field( 'quote_div_id' ),
 				'is_added_to_cart'           => $this->is_added_to_cart(),
+				'product_lines_accordion'    => get_field( 'product_lines_accordion', 'option' ),
 			)
 		);
 
@@ -2325,9 +2371,9 @@ h6 {
 		return false;
 	}
 
-	public function not_author_but_admin() {
+	public function is_admin() {
 		$user = wp_get_current_user();
-		if ( ( in_array( 'administrator', (array) $user->roles ) || in_array( 'customer_rep', (array) $user->roles ) ) && ( isset( $_GET['qid'] ) && get_field( 'partner', $_GET['qid'] ) !== get_current_user_id() ) ) {
+		if ( ( in_array( 'administrator', (array) $user->roles ) || in_array( 'customer_rep', (array) $user->roles ) ) && ( isset( $_GET['qid'] ) ) ) {
 			return 'yes';
 		}
 		return 'no';

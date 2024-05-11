@@ -4,7 +4,6 @@ import UploadFiles from '../../../../UploadFiles';
 import convert_json from '../../../../utils/ConvertJson';
 import { getLogoPricingTablebyThickness } from '../../../../utils/Pricing';
 import {
-	calculateMountingOptions,
 	defaultFinishOptions,
 	mountingDefaultOptions,
 	setOptions,
@@ -13,21 +12,17 @@ import {
 	thicknessOptions,
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
-import { ASSEMBLY_FEES, QuoteContext } from '../LayeredAcrylic';
+
+import { ASSEMBLY_FEES } from '../LayeredAcrylic';
+
+import { useAppContext } from '../../../../AppProvider';
 
 const exchangeRate = 1.3;
 const NovaSingleOptions = NovaQuote.single_quote_options;
 
 export default function Logo({ item }) {
-	const {
-		signage,
-		setSignage,
-		missing,
-		setMissing,
-		tempFolder,
-		isLoading,
-		setIsLoading,
-	} = useContext(QuoteContext);
+	const { signage, setSignage, setMissing } = useAppContext();
+
 	const [selectedMounting, setSelectedMounting] = useState(item.mounting);
 	const [selectedThickness, setSelectedThickness] = useState(
 		item.acrylicThickness
@@ -437,9 +432,6 @@ export default function Logo({ item }) {
 					fileNames={fileNames}
 					setFileUrls={setFileUrls}
 					setFileNames={setFileNames}
-					tempFolder={tempFolder}
-					isLoading={isLoading}
-					setIsLoading={setIsLoading}
 				/>
 			</div>
 			<div className="quote-grid mb-6">

@@ -13,7 +13,9 @@ import {
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
 
-import { METAL_ACRYLIC_PRICING, QuoteContext } from '../MetalLaminate';
+import { METAL_ACRYLIC_PRICING } from '../MetalLaminate';
+
+import { useAppContext } from '../../../../AppProvider';
 
 import {
 	colorOptions,
@@ -23,14 +25,8 @@ import {
 const exchangeRate = 1.3;
 
 export default function Logo({ item }) {
-	const {
-		signage,
-		setSignage,
-		setMissing,
-		tempFolder,
-		isLoading,
-		setIsLoading,
-	} = useContext(QuoteContext);
+	const { signage, setSignage, setMissing } = useAppContext();
+
 	const [selectedMounting, setSelectedMounting] = useState(item.mounting);
 	const [selectedThickness, setSelectedThickness] = useState(
 		item.acrylicThickness
@@ -618,9 +614,6 @@ export default function Logo({ item }) {
 					fileNames={fileNames}
 					setFileUrls={setFileUrls}
 					setFileNames={setFileNames}
-					tempFolder={tempFolder}
-					isLoading={isLoading}
-					setIsLoading={setIsLoading}
 				/>
 			</div>
 		</>

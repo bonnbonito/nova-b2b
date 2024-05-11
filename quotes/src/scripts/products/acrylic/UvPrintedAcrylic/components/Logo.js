@@ -6,7 +6,6 @@ import { getLogoPricingTablebyThickness } from '../../../../utils/Pricing';
 import { QuoteContext } from '../UvPrintedAcrylic';
 
 import {
-	calculateMountingOptions,
 	mountingDefaultOptions,
 	setOptions,
 	spacerStandoffDefaultOptions,
@@ -15,20 +14,16 @@ import {
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
 
+import { useAppContext } from '../../../../AppProvider';
+
 const NovaSingleOptions = NovaQuote.single_quote_options;
 const exchangeRate = 1.3;
 
 const UV_PRICE = 1.05;
 
 export default function Logo({ item }) {
-	const {
-		signage,
-		setSignage,
-		setMissing,
-		tempFolder,
-		isLoading,
-		setIsLoading,
-	} = useContext(QuoteContext);
+	const { signage, setSignage, setMissing } = useAppContext();
+
 	const [selectedMounting, setSelectedMounting] = useState(item.mounting);
 	const [selectedThickness, setSelectedThickness] = useState(
 		item.acrylicThickness
@@ -213,10 +208,6 @@ export default function Logo({ item }) {
 
 	const handleChangeFinishing = (e) => {
 		setSelectedFinishing(e.target.value);
-	};
-
-	const handleChangePieces = (e) => {
-		setPieces(e.target.value);
 	};
 
 	const printOptions = [
@@ -642,9 +633,6 @@ export default function Logo({ item }) {
 					fileNames={fileNames}
 					setFileUrls={setFileUrls}
 					setFileNames={setFileNames}
-					tempFolder={tempFolder}
-					isLoading={isLoading}
-					setIsLoading={setIsLoading}
 				/>
 			</div>
 		</>

@@ -17,7 +17,9 @@ import {
 	thicknessOptions,
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
-import { METAL_ACRYLIC_PRICING, QuoteContext } from '../MetalLaminate';
+import { METAL_ACRYLIC_PRICING } from '../MetalLaminate';
+
+import { useAppContext } from '../../../../AppProvider';
 
 const NovaOptions = NovaQuote.quote_options;
 const exchangeRate = 1.3;
@@ -33,14 +35,9 @@ const smallPunctuations = parseFloat(
 //const AcrylicLetterPricing = JSON.parse(NovaOptions.letter_x_logo_pricing);
 
 export const Letters = ({ item }) => {
-	const {
-		signage,
-		setSignage,
-		setMissing,
-		tempFolder,
-		isLoading,
-		setIsLoading,
-	} = useContext(QuoteContext);
+	const { signage, setSignage, setMissing, tempFolder, isLoading } =
+		useAppContext();
+
 	const [letters, setLetters] = useState(item.letters);
 	const [comments, setComments] = useState(item.comments);
 	const [font, setFont] = useState(item.font);
@@ -246,7 +243,6 @@ export const Letters = ({ item }) => {
 			}
 		});
 		setSignage(() => updatedSignage);
-		console.log(updatedSignage);
 	}
 
 	const handleOnChangeLetters = (e) => setLetters(() => e.target.value);
@@ -577,7 +573,6 @@ export const Letters = ({ item }) => {
 						isLoading={isLoading}
 						setFontFileUrl={setFontFileUrl}
 						setFontFileName={setFontFileName}
-						tempFolder={tempFolder}
 					/>
 				)}
 
@@ -799,9 +794,6 @@ export const Letters = ({ item }) => {
 					fileNames={fileNames}
 					setFileUrls={setFileUrls}
 					setFileNames={setFileNames}
-					tempFolder={tempFolder}
-					isLoading={isLoading}
-					setIsLoading={setIsLoading}
 				/>
 			</div>
 

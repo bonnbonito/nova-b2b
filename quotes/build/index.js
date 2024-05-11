@@ -180,6 +180,51 @@ var suppressOthers = function (originalTarget, parentNode, markerName) {
 
 /***/ }),
 
+/***/ "./src/scripts/AppProvider.js":
+/*!************************************!*\
+  !*** ./src/scripts/AppProvider.js ***!
+  \************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   AppProvider: () => (/* binding */ AppProvider),
+/* harmony export */   useAppContext: () => (/* binding */ useAppContext)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+const AppContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)();
+function useAppContext() {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(AppContext);
+}
+function AppProvider({
+  children
+}) {
+  const [signage, setSignage] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  const [missing, setMissing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  const [tempFolder, setTempFolder] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
+  const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(AppContext.Provider, {
+    value: {
+      signage,
+      setSignage,
+      missing,
+      setMissing,
+      tempFolder,
+      tempFolderName,
+      isLoading,
+      setTempFolder,
+      setIsLoading
+    }
+  }, children);
+}
+
+/***/ }),
+
 /***/ "./src/scripts/DeleteQuote.js":
 /*!************************************!*\
   !*** ./src/scripts/DeleteQuote.js ***!
@@ -673,6 +718,11 @@ function ModalSave({
         formData.append('quote_id', NovaQuote.current_quote_id);
         formData.append('editing', 'edit');
       }
+      if (action === 'update-processing-admin') {
+        formData.append('quote_status', 'processing');
+        formData.append('quote_id', NovaQuote.current_quote_id);
+        formData.append('editing', 'edit');
+      }
       const status = await (0,_utils_QuoteFunctions__WEBPACK_IMPORTED_MODULE_2__.processQuote)(formData);
       if (status.status === 'success') {
         localStorage.removeItem(storage);
@@ -788,13 +838,13 @@ function ModalSave({
     dangerouslySetInnerHTML: {
       __html: saveDraftMessageHtml()
     }
-  }), action === 'update' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }), (action === 'update' || action === 'update-processing-admin') && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     dangerouslySetInnerHTML: {
       __html: updateMessageHtml()
     }
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "gap-2 block justify-center sm:flex"
-  }, (action === 'draft' || action === 'update') && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+  }, (action === 'draft' || action === 'update' || action === 'update-processing-admin') && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
     href: NovaQuote.quote_url + '?qedit=1&qid=' + quoteID,
     className: "block mb-4 text-center text-sm px-3 py-2 text-white no-underline bg-nova-primary rounded hover:bg-nova-secondary"
   }, "Continue Editing"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
@@ -1742,21 +1792,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _ModalSave__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ModalSave */ "./src/scripts/ModalSave.js");
-/* harmony import */ var _Prices__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Prices */ "./src/scripts/Prices.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AppProvider */ "./src/scripts/AppProvider.js");
+/* harmony import */ var _ModalSave__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ModalSave */ "./src/scripts/ModalSave.js");
+/* harmony import */ var _Prices__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Prices */ "./src/scripts/Prices.js");
+
 
 
 
 
 const currency = wcumcs_vars_data.currency;
-function Sidebar({
-  signage,
-  required,
-  tempFolder,
-  storage,
-  isLoading,
-  setIsLoading
-}) {
+function Sidebar() {
+  const {
+    signage,
+    missing,
+    tempFolder,
+    storage,
+    isLoading,
+    setIsLoading
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
   const taxRateObj = NovaMyAccount.tax_rate;
   //const tax = taxRateObj ? parseFloat(taxRateObj.tax_rate / 100) : 0;
   const tax = 0;
@@ -1778,7 +1831,7 @@ function Sidebar({
     className: "rounded-md border border-gray-200 p-4 sticky top-36"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "w-full max-h-[calc(100vh-300px)] overflow-y-auto"
-  }, signage.map(item => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Prices__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }, signage.map(item => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Prices__WEBPACK_IMPORTED_MODULE_3__["default"], {
     id: item.id,
     item: item
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("hr", {
@@ -1799,47 +1852,57 @@ function Sidebar({
     className: "text-2xl"
   }, currency, "$", Number(estimateTotalPrice.toFixed(2)).toLocaleString())), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-[11px] mb-5"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", null, tax === 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Tax not included"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The final quote will be ready in 24 business hours."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Extra freight charges may apply for connected fonts."))), signage.length > 0 && NovaQuote.quote_status?.value !== 'processing' && NovaQuote.quote_status?.value !== 'ready' && NovaQuote.quote_status?.value !== 'archived' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, NovaQuote.is_editting === '1' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, NovaQuote.user_role[0] !== 'pending' && NovaQuote.not_author_but_admin === 'no' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", null, tax === 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Tax not included"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The final quote will be ready in 24 business hours."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Extra freight charges may apply for connected fonts."))), signage.length > 0 && NovaQuote.quote_status?.value !== 'processing' && NovaQuote.quote_status?.value !== 'ready' && NovaQuote.quote_status?.value !== 'archived' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, NovaQuote.is_editting === '1' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, NovaQuote.user_role[0] !== 'pending' && NovaQuote.is_admin === 'no' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_2__["default"], {
     signage: signage,
     tempFolder: tempFolder,
     storage: storage,
     isLoading: isLoading,
     setIsLoading: setIsLoading,
-    required: required,
+    required: missing,
     action: "update-processing",
     label: "Submit Quote",
     btnClass: "mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
-  }) : '', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }) : '', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_2__["default"], {
     signage: signage,
     tempFolder: tempFolder,
     storage: storage,
     isLoading: isLoading,
     setIsLoading: setIsLoading,
-    required: required,
+    required: missing,
     action: "update",
     label: "Update Quote",
     btnClass: "mb-5 font-title border border-nova-light rounded-md text-nova-gray w-full text-center bg-white text-sm h-[49px] hover:bg-nova-light hover:text-white shadow-[0_0_0_1px_rgba(0,0,0,0.3)]"
-  })) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, NovaQuote.user_role[0] !== 'pending' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  })) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, NovaQuote.user_role[0] !== 'pending' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_2__["default"], {
     signage: signage,
     tempFolder: tempFolder,
     storage: storage,
     isLoading: isLoading,
     setIsLoading: setIsLoading,
-    required: required,
+    required: missing,
     action: "processing",
     label: "Submit Quote",
     btnClass: "mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
-  }) : '', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }) : '', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_2__["default"], {
     signage: signage,
     tempFolder: tempFolder,
     storage: storage,
     isLoading: isLoading,
     setIsLoading: setIsLoading,
-    required: required,
+    required: missing,
     action: "draft",
     label: "Save to Draft",
     btnClass: "mb-5 font-title border border-nova-light rounded-md text-nova-gray w-full text-center bg-white text-sm h-[49px] hover:bg-nova-light hover:text-white shadow-[0_0_0_1px_rgba(0,0,0,0.3)]"
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }))), signage.length > 0 && NovaQuote.quote_status?.value === 'processing' && NovaQuote.is_admin === 'yes' && NovaQuote.is_editting === '1' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    signage: signage,
+    tempFolder: tempFolder,
+    storage: storage,
+    isLoading: isLoading,
+    setIsLoading: setIsLoading,
+    required: missing,
+    action: "update-processing-admin",
+    label: "Update Quote",
+    btnClass: "mb-5 font-title border border-nova-light rounded-md text-nova-gray w-full text-center bg-white text-sm h-[49px] hover:bg-nova-light hover:text-white shadow-[0_0_0_1px_rgba(0,0,0,0.3)]"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-sm mb-4"
   }, "Quote & Draft Validity: 30 days")));
 }
@@ -1923,24 +1986,28 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_tooltip__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-tooltip */ "./node_modules/react-tooltip/dist/react-tooltip.min.mjs");
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
-/* harmony import */ var _EditableText__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./EditableText */ "./src/scripts/EditableText.js");
-/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./svg/Icons */ "./src/scripts/svg/Icons.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AppProvider */ "./src/scripts/AppProvider.js");
+/* harmony import */ var _EditableText__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./EditableText */ "./src/scripts/EditableText.js");
+/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./svg/Icons */ "./src/scripts/svg/Icons.js");
 
 
 
  // Make sure to import uuid
 
 
+
 function Signage({
   item,
   index,
-  signage,
-  setSignage,
-  children,
-  setMissing,
-  storage
+  children
 }) {
+  const {
+    signage,
+    setSignage,
+    setMissing,
+    storage
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_2__.useAppContext)();
   const [open, setOpen] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(true);
   const [itemTitle, setItemTitle] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.title);
   const [loading, setLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
@@ -1967,7 +2034,7 @@ function Signage({
   function duplicateSignage(item, index) {
     const duplicated = {
       ...item,
-      id: (0,uuid__WEBPACK_IMPORTED_MODULE_4__["default"])(),
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_5__["default"])(),
       filePaths: [],
       fileNames: [],
       fileUrls: [],
@@ -2027,7 +2094,7 @@ function Signage({
     className: "rounded-md border border-gray-200 p-4 mb-8"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: `flex justify-between ${open ? 'mb-4' : 'mb-0'}`
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_EditableText__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_EditableText__WEBPACK_IMPORTED_MODULE_3__["default"], {
     id: item.id,
     text: item.title,
     onChange: handleOnChangeTitle
@@ -2040,24 +2107,24 @@ function Signage({
     onClick: clearStorage,
     "data-tooltip-id": `${item.id}`,
     "data-tooltip-content": "Create from scratch"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.ClearIcon, {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.ClearIcon, {
     loading: loading
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "cursor-pointer",
     onClick: () => setOpen(!open),
     "data-tooltip-id": `${item.id}`,
     "data-tooltip-content": open ? 'Collapse' : 'Expand'
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.CollapseIcon, null)), signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.CollapseIcon, null)), signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "cursor-pointer",
     onClick: () => duplicateSignage(item, index),
     "data-tooltip-id": `${item.id}`,
     "data-tooltip-content": "Duplicate"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.DuplicateIcon, null)), signage.length > 1 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.DuplicateIcon, null)), signage.length > 1 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "cursor-pointer",
     onClick: () => removeSignage(item),
     "data-tooltip-id": item.id,
     "data-tooltip-content": "Delete"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.TrashIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.TrashIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: `signage-content ${open ? 'open' : ''}`
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: item.type === 'letters' ? 'overflow-hidden' : ''
@@ -2079,6 +2146,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AppProvider */ "./src/scripts/AppProvider.js");
+
 
 
 function UploadFiles({
@@ -2087,11 +2156,13 @@ function UploadFiles({
   setFileUrls,
   fileUrls,
   setFileNames,
-  fileNames,
-  tempFolder,
-  isLoading,
-  setIsLoading
+  fileNames
 }) {
+  const {
+    tempFolder,
+    isLoading,
+    setIsLoading
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
   const fileRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const [accessToken, setAccessToken] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const maxFiles = 5;
@@ -2337,6 +2408,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AppProvider */ "./src/scripts/AppProvider.js");
+
 
 
 function UploadFont({
@@ -2345,11 +2418,14 @@ function UploadFont({
   setFontFileUrl,
   setFontFile,
   fontFileUrl,
-  setFontFileName,
-  tempFolder
+  setFontFileName
 }) {
   const fileRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const {
+    tempFolder,
+    isLoading,
+    setIsLoading
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
   const [accessToken, setAccessToken] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const handleButtonClick = () => {
     fileRef.current.click();
@@ -2400,6 +2476,7 @@ function UploadFont({
 
   const checkAndCreateFolder = async accessToken => {
     const folderPath = `/NOVA-CRM/${NovaQuote.business_id}/${tempFolder}/Fonts`;
+    console.log(folderPath);
     try {
       // Check if the folder exists
       let response = await fetch('https://api.dropboxapi.com/2/files/get_metadata', {
@@ -2968,17 +3045,17 @@ const translucentGraphicFilms = [{
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   QuoteContext: () => (/* binding */ QuoteContext),
 /* harmony export */   "default": () => (/* binding */ LaserCutAcrylic)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
 /* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
 /* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
 /* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
-/* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/acrylic/LaserCutAcrylic/components/Letters.js");
-/* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/acrylic/LaserCutAcrylic/components/Logo.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.js");
+/* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/acrylic/LaserCutAcrylic/components/Letters.js");
+/* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/acrylic/LaserCutAcrylic/components/Logo.js");
 
 
 
@@ -2987,70 +3064,57 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const QuoteContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)(null);
+
 function LaserCutAcrylic() {
-  const [signage, setSignage] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [missing, setMissing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [tempFolder, setTempFolder] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
-  const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
-  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id + 'x';
-  const localStorageQuote = localStorage.getItem(storage);
-  const savedStorage = JSON.parse(localStorageQuote);
+  const {
+    signage,
+    setSignage,
+    setTempFolder,
+    tempFolderName
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_4__.useAppContext)();
   function setDefaultSignage() {
-    if (savedStorage?.length > 0) {
-      setSignage(savedStorage);
-    } else {
-      setSignage([{
-        id: (0,uuid__WEBPACK_IMPORTED_MODULE_6__["default"])(),
-        type: 'letters',
-        title: 'LETTERS 1',
-        letters: '',
-        comments: '',
-        font: '',
-        mounting: '',
-        waterproof: '',
-        acrylicThickness: '',
-        color: {
-          name: '',
-          color: ''
-        },
-        letterHeight: '',
-        usdPrice: 0,
-        cadPrice: 0,
-        filePaths: [],
-        fileNames: [],
-        fileUrls: [],
-        files: [],
-        sets: 1,
-        customFont: '',
-        customColor: '',
-        finishing: 'Matte',
-        studLength: '',
-        spacerStandoffDistance: '',
-        product: NovaQuote.product
-      }]);
-    }
+    setSignage([{
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
+      type: 'letters',
+      title: 'LETTERS 1',
+      letters: '',
+      comments: '',
+      font: '',
+      mounting: '',
+      waterproof: '',
+      acrylicThickness: '',
+      color: {
+        name: '',
+        color: ''
+      },
+      letterHeight: '',
+      usdPrice: 0,
+      cadPrice: 0,
+      filePaths: [],
+      fileNames: [],
+      fileUrls: [],
+      files: [],
+      sets: 1,
+      customFont: '',
+      customColor: '',
+      finishing: 'Matte',
+      studLength: '',
+      spacerStandoffDistance: '',
+      product: NovaQuote.product
+    }]);
   }
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting === '1') {
       const currentSignage = JSON.parse(NovaQuote.signage);
       if (currentSignage) {
-        const savedStorage = JSON.parse(localStorage.getItem(storage));
-        if (savedStorage?.length > 0) {
-          setSignage(savedStorage);
-        } else {
-          setSignage(currentSignage);
-        }
-      } else {
-        //window.location.href = window.location.pathname;
+        setSignage(currentSignage);
       }
     } else {
       setDefaultSignage();
     }
   }, []);
   const defaultArgs = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_6__["default"])(),
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
     comments: '',
     mounting: '',
     acrylicThickness: '',
@@ -3081,7 +3145,7 @@ function LaserCutAcrylic() {
       if (type === 'letters') {
         args = {
           type: type,
-          title: `${type} ${count + 1}`.toUpperCase(),
+          title: `LETTERS ${count + 1}`,
           letters: '',
           font: '',
           thickness_options: '',
@@ -3100,7 +3164,7 @@ function LaserCutAcrylic() {
       } else {
         args = {
           type: type,
-          title: `${type} ${count + 1}`.toUpperCase(),
+          title: `LOGO ${count + 1}`,
           width: '',
           height: ''
         };
@@ -3121,47 +3185,23 @@ function LaserCutAcrylic() {
 
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting.length === 0) {
-      const savedStorageFolder = JSON.parse(localStorage.getItem(window.location.href + NovaQuote.user_id + '-folder'));
-      if (savedStorageFolder?.length > 0) {
-        setTempFolder(savedStorageFolder);
-      } else {
-        localStorage.setItem(window.location.href + NovaQuote.user_id + '-folder', JSON.stringify(tempFolderName));
-        setTempFolder(tempFolderName);
-      }
+      setTempFolder(tempFolderName);
     } else {
       setTempFolder(`Q-${NovaQuote.current_quote_id}`);
     }
   }, []);
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(QuoteContext.Provider, {
-    value: {
-      signage,
-      setSignage,
-      addSignage,
-      missing,
-      setMissing,
-      tempFolder,
-      isLoading,
-      setIsLoading
-    }
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:flex gap-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full"
   }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
     index: index,
     id: item.id,
-    item: item,
-    signage: signage,
-    setSignage: setSignage,
-    addSignage: addSignage,
-    setMissing: setMissing,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading,
-    storage: storage
-  }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    item: item
+  }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_5__["default"], {
     key: item.id,
     item: item
-  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_5__["default"], {
+  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_6__["default"], {
     key: item.id,
     item: item
   }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -3178,14 +3218,7 @@ function LaserCutAcrylic() {
     style: {
       border: '1px solid #d2d2d2d2'
     }
-  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    signage: signage,
-    required: missing,
-    tempFolder: tempFolder,
-    storage: storage,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading
-  })));
+  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_1__["default"], null));
 }
 
 /***/ }),
@@ -3211,7 +3244,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_ConvertJson__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../utils/ConvertJson */ "./src/scripts/utils/ConvertJson.js");
 /* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
 /* harmony import */ var _ColorOptions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../ColorOptions */ "./src/scripts/products/acrylic/LaserCutAcrylic/ColorOptions.js");
-/* harmony import */ var _LaserCutAcrylic__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../LaserCutAcrylic */ "./src/scripts/products/acrylic/LaserCutAcrylic/LaserCutAcrylic.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.js");
 
 
 
@@ -3238,9 +3271,8 @@ function Letters({
     setSignage,
     setMissing,
     tempFolder,
-    isLoading,
-    setIsLoading
-  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_LaserCutAcrylic__WEBPACK_IMPORTED_MODULE_9__.QuoteContext);
+    isLoading
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_9__.useAppContext)();
   const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.letters);
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.comments);
   const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.font);
@@ -3652,8 +3684,7 @@ function Letters({
     fontFileUrl: fontFileUrl,
     isLoading: isLoading,
     setFontFileUrl: setFontFileUrl,
-    setFontFileName: setFontFileName,
-    tempFolder: tempFolder
+    setFontFileName: setFontFileName
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Acrylic Thickness",
     value: selectedThickness?.value,
@@ -3783,10 +3814,7 @@ function Letters({
     fileUrls: fileUrls,
     fileNames: fileNames,
     setFileUrls: setFileUrls,
-    setFileNames: setFileNames,
-    tempFolder: tempFolder,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading
+    setFileNames: setFileNames
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-xs text-[#9F9F9F] pt-4"
   }, "We size the letters in proportion to your chosen font. Some uppercase/lowercase letters may appear shorter or taller than your selected height on the form to maintain visual harmony."));
@@ -3814,7 +3842,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
 /* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
 /* harmony import */ var _ColorOptions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../ColorOptions */ "./src/scripts/products/acrylic/LaserCutAcrylic/ColorOptions.js");
-/* harmony import */ var _LaserCutAcrylic__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../LaserCutAcrylic */ "./src/scripts/products/acrylic/LaserCutAcrylic/LaserCutAcrylic.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.js");
 
 
 
@@ -3833,11 +3861,8 @@ function Logo({
   const {
     signage,
     setSignage,
-    setMissing,
-    tempFolder,
-    isLoading,
-    setIsLoading
-  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_LaserCutAcrylic__WEBPACK_IMPORTED_MODULE_8__.QuoteContext);
+    setMissing
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_8__.useAppContext)();
   const [selectedMounting, setSelectedMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.mounting);
   const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.studLength);
   const [spacerStandoffOptions, setSpacerStandoffOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.spacerStandoffDefaultOptions);
@@ -4244,10 +4269,7 @@ function Logo({
     fileUrls: fileUrls,
     fileNames: fileNames,
     setFileUrls: setFileUrls,
-    setFileNames: setFileNames,
-    tempFolder: tempFolder,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading
+    setFileNames: setFileNames
   })));
 }
 
@@ -4263,16 +4285,16 @@ function Logo({
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   ASSEMBLY_FEES: () => (/* binding */ ASSEMBLY_FEES),
-/* harmony export */   QuoteContext: () => (/* binding */ QuoteContext),
 /* harmony export */   "default": () => (/* binding */ LayeredAcrylic)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
 /* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
 /* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
 /* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
 /* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/acrylic/LayeredAcrylic/components/Logo.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.js");
 
 
 
@@ -4280,43 +4302,37 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const QuoteContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)(null);
+
 const ASSEMBLY_FEES = 1.1;
 function LayeredAcrylic() {
-  const [signage, setSignage] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [missing, setMissing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [tempFolder, setTempFolder] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
-  const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
-  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id + 'x';
-  const localStorageQuote = localStorage.getItem(storage);
-  const savedStorage = JSON.parse(localStorageQuote);
-  const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const {
+    signage,
+    setSignage,
+    setTempFolder,
+    tempFolderName
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_5__.useAppContext)();
   function setDefaultSignage() {
-    if (savedStorage?.length > 0) {
-      setSignage(savedStorage);
-    } else {
-      setSignage([{
-        id: (0,uuid__WEBPACK_IMPORTED_MODULE_5__["default"])(),
-        type: 'logo',
-        title: 'LOGO 1',
-        comments: '',
-        mounting: '',
-        acrylicThickness: '',
-        waterproof: '',
-        finishing: 'Matte',
-        usdPrice: 0,
-        cadPrice: 0,
-        filePaths: [],
-        fileNames: [],
-        fileUrls: [],
-        files: [],
-        width: '',
-        height: '',
-        layers: '',
-        sets: 1,
-        product: NovaQuote.product
-      }]);
-    }
+    setSignage([{
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_6__["default"])(),
+      type: 'logo',
+      title: 'LOGO 1',
+      comments: '',
+      mounting: '',
+      acrylicThickness: '',
+      waterproof: '',
+      finishing: 'Matte',
+      usdPrice: 0,
+      cadPrice: 0,
+      filePaths: [],
+      fileNames: [],
+      fileUrls: [],
+      files: [],
+      width: '',
+      height: '',
+      layers: '',
+      sets: 1,
+      product: NovaQuote.product
+    }]);
   }
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting === '1') {
@@ -4331,7 +4347,7 @@ function LayeredAcrylic() {
     }
   }, []);
   const defaultArgs = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_5__["default"])(),
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_6__["default"])(),
     mounting: '',
     acrylicThickness: '',
     waterproof: '',
@@ -4358,7 +4374,7 @@ function LayeredAcrylic() {
       if (type === 'letters') {
         args = {
           type: type,
-          title: `${type} ${count + 1}`.toUpperCase(),
+          title: `LETTERS ${count + 1}`,
           letters: '',
           comments: '',
           font: '',
@@ -4377,7 +4393,7 @@ function LayeredAcrylic() {
       } else {
         args = {
           type: type,
-          title: `${type} ${count + 1}`.toUpperCase(),
+          title: `LOGO ${count + 1}`,
           width: '',
           height: ''
         };
@@ -4398,43 +4414,19 @@ function LayeredAcrylic() {
 
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting.length === 0) {
-      const savedStorageFolder = JSON.parse(localStorage.getItem(window.location.href + NovaQuote.user_id + '-folder'));
-      if (savedStorageFolder?.length > 0) {
-        setTempFolder(savedStorageFolder);
-      } else {
-        localStorage.setItem(window.location.href + NovaQuote.user_id + '-folder', JSON.stringify(tempFolderName));
-        setTempFolder(tempFolderName);
-      }
+      setTempFolder(tempFolderName);
     } else {
       setTempFolder(`Q-${NovaQuote.current_quote_id}`);
     }
   }, []);
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(QuoteContext.Provider, {
-    value: {
-      signage,
-      setSignage,
-      addSignage,
-      missing,
-      setMissing,
-      tempFolder,
-      isLoading,
-      setIsLoading
-    }
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:flex gap-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full"
   }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
     index: index,
     id: item.id,
-    item: item,
-    signage: signage,
-    setSignage: setSignage,
-    addSignage: addSignage,
-    setMissing: setMissing,
-    storage: storage,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading
+    item: item
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_4__["default"], {
     key: item.id,
     item: item
@@ -4446,14 +4438,7 @@ function LayeredAcrylic() {
     style: {
       border: '1px solid #d2d2d2d2'
     }
-  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    signage: signage,
-    required: missing,
-    tempFolder: tempFolder,
-    storage: storage,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading
-  })));
+  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_1__["default"], null));
 }
 
 /***/ }),
@@ -4477,6 +4462,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
 /* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
 /* harmony import */ var _LayeredAcrylic__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../LayeredAcrylic */ "./src/scripts/products/acrylic/LayeredAcrylic/LayeredAcrylic.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.js");
+
 
 
 
@@ -4493,12 +4480,8 @@ function Logo({
   const {
     signage,
     setSignage,
-    missing,
-    setMissing,
-    tempFolder,
-    isLoading,
-    setIsLoading
-  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_LayeredAcrylic__WEBPACK_IMPORTED_MODULE_6__.QuoteContext);
+    setMissing
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_7__.useAppContext)();
   const [selectedMounting, setSelectedMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.mounting);
   const [selectedThickness, setSelectedThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.acrylicThickness);
   const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.width);
@@ -4768,10 +4751,7 @@ function Logo({
     fileUrls: fileUrls,
     fileNames: fileNames,
     setFileUrls: setFileUrls,
-    setFileNames: setFileNames,
-    tempFolder: tempFolder,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading
+    setFileNames: setFileNames
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -4871,18 +4851,18 @@ function Logo({
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   METAL_ACRYLIC_PRICING: () => (/* binding */ METAL_ACRYLIC_PRICING),
-/* harmony export */   QuoteContext: () => (/* binding */ QuoteContext),
 /* harmony export */   acrylicBaseOptions: () => (/* binding */ acrylicBaseOptions),
 /* harmony export */   "default": () => (/* binding */ MetalLaminate)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
 /* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
 /* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
 /* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
 /* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/acrylic/MetalLaminate/components/Letters.js");
 /* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/acrylic/MetalLaminate/components/Logo.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.js");
 
 
 
@@ -4891,7 +4871,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const QuoteContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)(null);
+
 const acrylicBaseOptions = [{
   option: 'Black'
 }, {
@@ -4899,15 +4879,15 @@ const acrylicBaseOptions = [{
 }];
 const METAL_ACRYLIC_PRICING = 1.3;
 function MetalLaminate() {
-  const [signage, setSignage] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [missing, setMissing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [tempFolder, setTempFolder] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
-  const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
-  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id + 'x';
-  const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const {
+    signage,
+    setSignage,
+    setTempFolder,
+    tempFolderName
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_6__.useAppContext)();
   function setDefaultSignage() {
     setSignage([{
-      id: (0,uuid__WEBPACK_IMPORTED_MODULE_6__["default"])(),
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
       type: 'letters',
       title: 'LETTERS 1',
       letters: '',
@@ -4949,7 +4929,7 @@ function MetalLaminate() {
     }
   }, []);
   const defaultArgs = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_6__["default"])(),
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
     comments: '',
     mounting: '',
     acrylicThickness: '',
@@ -4984,7 +4964,7 @@ function MetalLaminate() {
       if (type === 'letters') {
         args = {
           type: type,
-          title: `${type} ${count + 1}`.toUpperCase(),
+          title: `LETTERS ${count + 1}`,
           letters: '',
           font: '',
           thickness_options: '',
@@ -4994,7 +4974,7 @@ function MetalLaminate() {
       } else {
         args = {
           type: type,
-          title: `${type} ${count + 1}`.toUpperCase(),
+          title: `LOGO ${count + 1}`,
           width: '',
           height: ''
         };
@@ -5015,43 +4995,19 @@ function MetalLaminate() {
 
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting.length === 0) {
-      const savedStorageFolder = JSON.parse(localStorage.getItem(window.location.href + NovaQuote.user_id + '-folder'));
-      if (savedStorageFolder?.length > 0) {
-        setTempFolder(savedStorageFolder);
-      } else {
-        localStorage.setItem(window.location.href + NovaQuote.user_id + '-folder', JSON.stringify(tempFolderName));
-        setTempFolder(tempFolderName);
-      }
+      setTempFolder(tempFolderName);
     } else {
       setTempFolder(`Q-${NovaQuote.current_quote_id}`);
     }
   }, []);
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(QuoteContext.Provider, {
-    value: {
-      signage,
-      setSignage,
-      addSignage,
-      missing,
-      setMissing,
-      tempFolder,
-      isLoading,
-      setIsLoading
-    }
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:flex gap-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full"
   }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
     index: index,
     id: item.id,
-    item: item,
-    signage: signage,
-    setSignage: setSignage,
-    addSignage: addSignage,
-    setMissing: setMissing,
-    storage: storage,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading
+    item: item
   }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_4__.Letters, {
     key: item.id,
     item: item
@@ -5072,14 +5028,7 @@ function MetalLaminate() {
     style: {
       border: '1px solid #d2d2d2d2'
     }
-  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    signage: signage,
-    required: missing,
-    tempFolder: tempFolder,
-    storage: storage,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading
-  })));
+  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_1__["default"], null));
 }
 
 /***/ }),
@@ -5106,6 +5055,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_ConvertJson__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../utils/ConvertJson */ "./src/scripts/utils/ConvertJson.js");
 /* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
 /* harmony import */ var _MetalLaminate__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../MetalLaminate */ "./src/scripts/products/acrylic/MetalLaminate/MetalLaminate.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.js");
+
 
 
 
@@ -5131,9 +5082,8 @@ const Letters = ({
     setSignage,
     setMissing,
     tempFolder,
-    isLoading,
-    setIsLoading
-  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_MetalLaminate__WEBPACK_IMPORTED_MODULE_9__.QuoteContext);
+    isLoading
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_10__.useAppContext)();
   const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.letters);
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.comments);
   const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.font);
@@ -5305,7 +5255,6 @@ const Letters = ({
       }
     });
     setSignage(() => updatedSignage);
-    console.log(updatedSignage);
   }
   const handleOnChangeLetters = e => setLetters(() => e.target.value);
   const handleComments = e => setComments(e.target.value);
@@ -5503,8 +5452,7 @@ const Letters = ({
     fontFileUrl: fontFileUrl,
     isLoading: isLoading,
     setFontFileUrl: setFontFileUrl,
-    setFontFileName: setFontFileName,
-    tempFolder: tempFolder
+    setFontFileName: setFontFileName
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Acrylic Thickness",
     value: selectedThickness?.value,
@@ -5635,10 +5583,7 @@ const Letters = ({
     fileUrls: fileUrls,
     fileNames: fileNames,
     setFileUrls: setFileUrls,
-    setFileNames: setFileNames,
-    tempFolder: tempFolder,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading
+    setFileNames: setFileNames
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-xs text-[#9F9F9F] pt-4"
   }, "We size the letters in proportion to your chosen font. Some uppercase/lowercase letters may appear shorter or taller than your selected height on the form to maintain visual harmony."));
@@ -5665,7 +5610,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
 /* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
 /* harmony import */ var _MetalLaminate__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../MetalLaminate */ "./src/scripts/products/acrylic/MetalLaminate/MetalLaminate.js");
-/* harmony import */ var _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../utils/ColorOptions */ "./src/scripts/utils/ColorOptions.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.js");
+/* harmony import */ var _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../utils/ColorOptions */ "./src/scripts/utils/ColorOptions.js");
+
 
 
 
@@ -5682,11 +5629,8 @@ function Logo({
   const {
     signage,
     setSignage,
-    setMissing,
-    tempFolder,
-    isLoading,
-    setIsLoading
-  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_MetalLaminate__WEBPACK_IMPORTED_MODULE_6__.QuoteContext);
+    setMissing
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_7__.useAppContext)();
   const [selectedMounting, setSelectedMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.mounting);
   const [selectedThickness, setSelectedThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.acrylicThickness);
   const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.width);
@@ -5949,7 +5893,7 @@ function Logo({
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Metal Laminate",
     onChange: handleChangeMetalLaminate,
-    options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.metalFinishColors.map(laminate => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_8__.metalFinishColors.map(laminate => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: laminate.name,
       selected: laminate.name === metalLaminate
     }, laminate.name)),
@@ -5969,7 +5913,7 @@ function Logo({
     }
   }), acrylicBase?.name === '' ? 'CHOOSE OPTION' : acrylicBase?.name), openAcrylicColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
-  }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.colorOptions.map(color => {
+  }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_8__.colorOptions.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
       onClick: () => {
@@ -6059,10 +6003,7 @@ function Logo({
     fileUrls: fileUrls,
     fileNames: fileNames,
     setFileUrls: setFileUrls,
-    setFileNames: setFileNames,
-    tempFolder: tempFolder,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading
+    setFileNames: setFileNames
   })));
 }
 
@@ -6077,16 +6018,16 @@ function Logo({
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   QuoteContext: () => (/* binding */ QuoteContext),
 /* harmony export */   "default": () => (/* binding */ UvPrintedAcrylic)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
 /* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
 /* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
 /* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
 /* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/acrylic/UvPrintedAcrylic/components/Logo.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.js");
 
 
 
@@ -6094,45 +6035,39 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const QuoteContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)(null);
+
 function UvPrintedAcrylic() {
-  const [signage, setSignage] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [missing, setMissing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [tempFolder, setTempFolder] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
-  const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
-  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id + 'x';
-  const localStorageQuote = localStorage.getItem(storage);
-  const savedStorage = JSON.parse(localStorageQuote);
-  const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const {
+    signage,
+    setSignage,
+    setTempFolder,
+    tempFolderName
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_5__.useAppContext)();
   function setDefaultSignage() {
-    if (savedStorage?.length > 0) {
-      setSignage(savedStorage);
-    } else {
-      setSignage([{
-        id: (0,uuid__WEBPACK_IMPORTED_MODULE_5__["default"])(),
-        type: 'logo',
-        title: 'LOGO 1',
-        comments: '',
-        mounting: '',
-        acrylicThickness: '',
-        waterproof: '',
-        finishing: 'Matte',
-        usdPrice: 0,
-        cadPrice: 0,
-        filePaths: [],
-        fileNames: [],
-        fileUrls: [],
-        files: [],
-        width: '',
-        height: '',
-        printPreference: '',
-        baseColor: 'Black',
-        sets: 1,
-        studLength: '',
-        spacerStandoffDistance: '',
-        product: NovaQuote.product
-      }]);
-    }
+    setSignage([{
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_6__["default"])(),
+      type: 'logo',
+      title: 'LOGO 1',
+      comments: '',
+      mounting: '',
+      acrylicThickness: '',
+      waterproof: '',
+      finishing: 'Matte',
+      usdPrice: 0,
+      cadPrice: 0,
+      filePaths: [],
+      fileNames: [],
+      fileUrls: [],
+      files: [],
+      width: '',
+      height: '',
+      printPreference: '',
+      baseColor: 'Black',
+      sets: 1,
+      studLength: '',
+      spacerStandoffDistance: '',
+      product: NovaQuote.product
+    }]);
   }
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting === '1') {
@@ -6147,7 +6082,7 @@ function UvPrintedAcrylic() {
     }
   }, []);
   const defaultArgs = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_5__["default"])(),
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_6__["default"])(),
     comments: '',
     mounting: '',
     acrylicThickness: '',
@@ -6171,32 +6106,12 @@ function UvPrintedAcrylic() {
       // Count how many signages of this type already exist
       const count = prevSignage.filter(sign => sign.type === type).length;
       let args;
-      // Create new signage with incremented title number
-      if (type === 'letters') {
-        args = {
-          type: type,
-          title: `${type} ${count + 1}`.toUpperCase(),
-          letters: '',
-          comments: '',
-          font: '',
-          mounting: '',
-          waterproof: '',
-          acrylicThickness: '',
-          thickness_options: '',
-          color: {
-            name: '',
-            color: ''
-          },
-          letterHeight: ''
-        };
-      } else {
-        args = {
-          type: type,
-          title: `${type} ${count + 1}`.toUpperCase(),
-          width: '',
-          height: ''
-        };
-      }
+      args = {
+        type: type,
+        title: `LOGO ${count + 1}`,
+        width: '',
+        height: ''
+      };
       const newSignage = {
         ...defaultArgs,
         ...args
@@ -6213,43 +6128,19 @@ function UvPrintedAcrylic() {
 
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting.length === 0) {
-      const savedStorageFolder = JSON.parse(localStorage.getItem(window.location.href + NovaQuote.user_id + '-folder'));
-      if (savedStorageFolder?.length > 0) {
-        setTempFolder(savedStorageFolder);
-      } else {
-        localStorage.setItem(window.location.href + NovaQuote.user_id + '-folder', JSON.stringify(tempFolderName));
-        setTempFolder(tempFolderName);
-      }
+      setTempFolder(tempFolderName);
     } else {
       setTempFolder(`Q-${NovaQuote.current_quote_id}`);
     }
   }, []);
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(QuoteContext.Provider, {
-    value: {
-      signage,
-      setSignage,
-      addSignage,
-      missing,
-      setMissing,
-      tempFolder,
-      isLoading,
-      setIsLoading
-    }
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:flex gap-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full"
   }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
     index: index,
     id: item.id,
-    item: item,
-    signage: signage,
-    setSignage: setSignage,
-    addSignage: addSignage,
-    setMissing: setMissing,
-    storage: storage,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading
+    item: item
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_4__["default"], {
     key: item.id,
     item: item
@@ -6261,14 +6152,7 @@ function UvPrintedAcrylic() {
     style: {
       border: '1px solid #d2d2d2d2'
     }
-  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    signage: signage,
-    required: missing,
-    tempFolder: tempFolder,
-    storage: storage,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading
-  })));
+  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_1__["default"], null));
 }
 
 /***/ }),
@@ -6292,6 +6176,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
 /* harmony import */ var _UvPrintedAcrylic__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../UvPrintedAcrylic */ "./src/scripts/products/acrylic/UvPrintedAcrylic/UvPrintedAcrylic.js");
 /* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.js");
+
 
 
 
@@ -6309,11 +6195,8 @@ function Logo({
   const {
     signage,
     setSignage,
-    setMissing,
-    tempFolder,
-    isLoading,
-    setIsLoading
-  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_UvPrintedAcrylic__WEBPACK_IMPORTED_MODULE_5__.QuoteContext);
+    setMissing
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_7__.useAppContext)();
   const [selectedMounting, setSelectedMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.mounting);
   const [selectedThickness, setSelectedThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.acrylicThickness);
   const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.width);
@@ -6451,9 +6334,6 @@ function Logo({
   }, [selectedThickness]);
   const handleChangeFinishing = e => {
     setSelectedFinishing(e.target.value);
-  };
-  const handleChangePieces = e => {
-    setPieces(e.target.value);
   };
   const printOptions = [{
     option: 'Print on top'
@@ -6705,11 +6585,192 @@ function Logo({
     fileUrls: fileUrls,
     fileNames: fileNames,
     setFileUrls: setFileUrls,
-    setFileNames: setFileNames,
+    setFileNames: setFileNames
+  })));
+}
+
+/***/ }),
+
+/***/ "./src/scripts/products/combine/CombineQuotes.js":
+/*!*******************************************************!*\
+  !*** ./src/scripts/products/combine/CombineQuotes.js ***!
+  \*******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   QuoteContext: () => (/* binding */ QuoteContext),
+/* harmony export */   "default": () => (/* binding */ CombineQuotes)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../Sidebar */ "./src/scripts/Sidebar.js");
+/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Signage */ "./src/scripts/Signage.js");
+/* harmony import */ var _components_AccordionItem__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/AccordionItem */ "./src/scripts/products/combine/components/AccordionItem.js");
+
+
+
+
+
+
+const QuoteContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)(null);
+function CombineQuotes() {
+  const productLines = NovaQuote.product_lines_accordion;
+  const [signage, setSignage] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  const [missing, setMissing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  const [tempFolder, setTempFolder] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
+  const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
+  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id + 'x';
+  const localStorageQuote = localStorage.getItem(storage);
+  const savedStorage = JSON.parse(localStorageQuote);
+  function setDefaultSignage() {
+    if (savedStorage?.length > 0) {
+      setSignage(savedStorage);
+    } else {
+      setSignage([]);
+    }
+  }
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (NovaQuote.is_editting === '1') {
+      const currentSignage = JSON.parse(NovaQuote.signage);
+      if (currentSignage) {
+        setSignage(currentSignage);
+      }
+    } else {
+      setDefaultSignage();
+    }
+  }, []);
+  const defaultArgs = {
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_4__["default"])(),
+    comments: '',
+    product: NovaQuote.product
+  };
+  function addSignage(type) {
+    setSignage(prevSignage => {
+      const count = prevSignage.filter(sign => sign.type === type).length;
+      let args;
+      args = {
+        type: type,
+        title: `${type} ${count + 1}`
+      };
+      const newSignage = {
+        ...defaultArgs,
+        ...args
+      };
+
+      // Append the new signage to the array
+      return [...prevSignage, newSignage];
+    });
+  }
+
+  /* useEffect(() => {
+  	localStorage.setItem(storage + '-x', JSON.stringify(signage));
+  }, [signage]); */
+
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (NovaQuote.is_editting.length === 0) {
+      setTempFolder(tempFolderName);
+    } else {
+      setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+    }
+  }, []);
+  const accordion = productLines.map(group => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "border-gray-200 p-4 cursor-pointer rounded-md border mb-2"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_AccordionItem__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    group: group,
+    addSignage: addSignage
+  })));
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(QuoteContext.Provider, {
+    value: {
+      signage,
+      setSignage,
+      addSignage,
+      missing,
+      setMissing,
+      tempFolder,
+      isLoading,
+      setIsLoading
+    }
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:flex gap-6"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:w-3/4 w-full"
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    index: index,
+    id: item.id,
+    item: item,
+    signage: signage,
+    setSignage: setSignage,
+    addSignage: addSignage,
+    setMissing: setMissing,
+    isLoading: isLoading,
+    setIsLoading: setIsLoading,
+    storage: storage
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, item.type))), signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "gap-2"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "font-title text-3xl"
+  }, "PRODUCT LINES"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: " border-gray-200 p-4 cursor-pointer rounded-md border"
+  }, accordion))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    signage: signage,
+    required: missing,
     tempFolder: tempFolder,
+    storage: storage,
     isLoading: isLoading,
     setIsLoading: setIsLoading
   })));
+}
+
+/***/ }),
+
+/***/ "./src/scripts/products/combine/components/AccordionItem.js":
+/*!******************************************************************!*\
+  !*** ./src/scripts/products/combine/components/AccordionItem.js ***!
+  \******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ AccordionItem)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
+
+
+
+function AccordionItem({
+  group,
+  addSignage
+}) {
+  const [open, setOpen] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "font-title uppercase text-lg select-none",
+    onClick: () => setOpen(prev => !prev)
+  }, group.product_line.post_title), open && group.products.map(productLine => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: " border-gray-200 p-4 cursor-pointer rounded-md border mb-2 bg-gray-50"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "font-title uppercase mb-2"
+  }, productLine.product.post_title), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    class: "flex gap-2"
+  }, productLine.letters && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
+    onClick: () => addSignage('letters'),
+    style: {
+      border: '1px solid #d2d2d2d2'
+    }
+  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null)), productLine.logo && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
+    onClick: () => addSignage('logo'),
+    style: {
+      border: '1px solid #d2d2d2d2'
+    }
+  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null))))));
 }
 
 /***/ }),
@@ -6728,13 +6789,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
 /* harmony import */ var _SidebarNoPrice__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../SidebarNoPrice */ "./src/scripts/SidebarNoPrice.js");
 /* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Signage */ "./src/scripts/Signage.js");
 /* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../svg/Icons */ "./src/scripts/svg/Icons.js");
-/* harmony import */ var _utils_QuoteFunctions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../utils/QuoteFunctions */ "./src/scripts/utils/QuoteFunctions.js");
-/* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/custom/components/Logo.js");
-
+/* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/custom/components/Logo.js");
 
 
 
@@ -6754,7 +6813,7 @@ function CustomProject() {
   const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   function setDefaultSignage() {
     setSignage([{
-      id: (0,uuid__WEBPACK_IMPORTED_MODULE_6__["default"])(),
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_5__["default"])(),
       type: 'custom',
       title: 'CUSTOM PROJECT',
       description: '',
@@ -6781,7 +6840,7 @@ function CustomProject() {
     }
   }, []);
   const defaultArgs = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_6__["default"])(),
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_5__["default"])(),
     type: 'custom',
     title: 'CUSTOM PROJECT',
     description: '',
@@ -6798,7 +6857,7 @@ function CustomProject() {
       const count = prevSignage.filter(sign => sign.type === type).length;
       let args;
       args = {
-        title: `${type} ${count + 1}`.toUpperCase()
+        title: `${type} ${count + 1}`
       };
       const newSignage = {
         ...defaultArgs,
@@ -6814,13 +6873,7 @@ function CustomProject() {
 
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting.length === 0) {
-      const savedStorageFolder = JSON.parse(localStorage.getItem(window.location.href + NovaQuote.user_id + '-folder'));
-      if (savedStorageFolder?.length > 0) {
-        setTempFolder(savedStorageFolder);
-      } else {
-        localStorage.setItem(window.location.href + NovaQuote.user_id + '-folder', JSON.stringify(tempFolderName));
-        setTempFolder(tempFolderName);
-      }
+      setTempFolder(tempFolderName);
     } else {
       setTempFolder(`Q-${NovaQuote.current_quote_id}`);
     }
@@ -6852,7 +6905,7 @@ function CustomProject() {
     isLoading: isLoading,
     setIsLoading: setIsLoading,
     storage: storage
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_5__["default"], {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_4__["default"], {
     key: item.id,
     item: item
   }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -6905,7 +6958,7 @@ function Logo({
     tempFolder,
     isLoading,
     setIsLoading
-  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_CustomProject__WEBPACK_IMPORTED_MODULE_2__.QuoteContext);
+  } = useAppContext();
   const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.fileNames);
   const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.fileUrls);
   const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.filePaths);
@@ -6979,10 +7032,7 @@ function Logo({
     fileUrls: fileUrls,
     fileNames: fileNames,
     setFileUrls: setFileUrls,
-    setFileNames: setFileNames,
-    tempFolder: tempFolder,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading
+    setFileNames: setFileNames
   })));
 }
 
@@ -7016,14 +7066,12 @@ __webpack_require__.r(__webpack_exports__);
 
 const QuoteContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)(null);
 function TrimLessBackLit() {
-  const [signage, setSignage] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [missing, setMissing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [tempFolder, setTempFolder] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
-  const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
-  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id + 'x';
-  const localStorageQuote = localStorage.getItem(storage);
-  const savedStorage = JSON.parse(localStorageQuote);
-  const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const {
+    signage,
+    setSignage,
+    setTempFolder,
+    tempFolderName
+  } = useAppContext();
   function setDefaultSignage() {
     if (savedStorage?.length > 0) {
       setSignage(savedStorage);
@@ -7121,12 +7169,12 @@ function TrimLessBackLit() {
       if (type === 'letters') {
         args = {
           type: type,
-          title: `${type} ${count + 1}`.toUpperCase()
+          title: `${type} ${count + 1}`
         };
       } else {
         args = {
           type: type,
-          title: `${type} ${count + 1}`.toUpperCase(),
+          title: `${type} ${count + 1}`,
           width: '',
           height: ''
         };
@@ -7147,13 +7195,7 @@ function TrimLessBackLit() {
 
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting.length === 0) {
-      const savedStorageFolder = JSON.parse(localStorage.getItem(window.location.href + NovaQuote.user_id + '-folder'));
-      if (savedStorageFolder?.length > 0) {
-        setTempFolder(savedStorageFolder);
-      } else {
-        localStorage.setItem(window.location.href + NovaQuote.user_id + '-folder', JSON.stringify(tempFolderName));
-        setTempFolder(tempFolderName);
-      }
+      setTempFolder(tempFolderName);
     } else {
       setTempFolder(`Q-${NovaQuote.current_quote_id}`);
     }
@@ -7176,14 +7218,7 @@ function TrimLessBackLit() {
   }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
     index: index,
     id: item.id,
-    item: item,
-    signage: signage,
-    setSignage: setSignage,
-    addSignage: addSignage,
-    setMissing: setMissing,
-    storage: storage,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading
+    item: item
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_4__["default"], {
     key: item.id,
     item: item
@@ -7259,7 +7294,7 @@ function Letters({
     tempFolder,
     isLoading,
     setIsLoading
-  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_TrimLessBackLit__WEBPACK_IMPORTED_MODULE_12__.QuoteContext);
+  } = useAppContext();
   const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.letters);
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.comments);
   const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.font);
@@ -7693,8 +7728,7 @@ function Letters({
     fontFileUrl: fontFileUrl,
     isLoading: isLoading,
     setFontFileUrl: setFontFileUrl,
-    setFontFileName: setFontFileName,
-    tempFolder: tempFolder
+    setFontFileName: setFontFileName
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Metal Depth",
     value: depth?.value,
@@ -7845,10 +7879,7 @@ function Letters({
     fileUrls: fileUrls,
     fileNames: fileNames,
     setFileUrls: setFileUrls,
-    setFileNames: setFileNames,
-    tempFolder: tempFolder,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading
+    setFileNames: setFileNames
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-xs text-[#9F9F9F] pt-4"
   }, "We size the letters in proportion to your chosen font. Some uppercase/lowercase letters may appear shorter or taller than your selected height on the form to maintain visual harmony."));
@@ -7884,14 +7915,12 @@ __webpack_require__.r(__webpack_exports__);
 
 const QuoteContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)(null);
 function TrimLessFrontAndBackLit() {
-  const [signage, setSignage] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [missing, setMissing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [tempFolder, setTempFolder] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
-  const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
-  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id + 'x';
-  const localStorageQuote = localStorage.getItem(storage);
-  const savedStorage = JSON.parse(localStorageQuote);
-  const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const {
+    signage,
+    setSignage,
+    setTempFolder,
+    tempFolderName
+  } = useAppContext();
   function setDefaultSignage() {
     if (savedStorage?.length > 0) {
       console.log('loading saved');
@@ -7997,12 +8026,12 @@ function TrimLessFrontAndBackLit() {
       if (type === 'letters') {
         args = {
           type: type,
-          title: `${type} ${count + 1}`.toUpperCase()
+          title: `${type} ${count + 1}`
         };
       } else {
         args = {
           type: type,
-          title: `${type} ${count + 1}`.toUpperCase(),
+          title: `${type} ${count + 1}`,
           width: '',
           height: ''
         };
@@ -8023,13 +8052,7 @@ function TrimLessFrontAndBackLit() {
 
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting.length === 0) {
-      const savedStorageFolder = JSON.parse(localStorage.getItem(window.location.href + NovaQuote.user_id + '-folder'));
-      if (savedStorageFolder?.length > 0) {
-        setTempFolder(savedStorageFolder);
-      } else {
-        localStorage.setItem(window.location.href + NovaQuote.user_id + '-folder', JSON.stringify(tempFolderName));
-        setTempFolder(tempFolderName);
-      }
+      setTempFolder(tempFolderName);
     } else {
       setTempFolder(`Q-${NovaQuote.current_quote_id}`);
     }
@@ -8052,14 +8075,7 @@ function TrimLessFrontAndBackLit() {
   }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
     index: index,
     id: item.id,
-    item: item,
-    signage: signage,
-    setSignage: setSignage,
-    addSignage: addSignage,
-    setMissing: setMissing,
-    storage: storage,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading
+    item: item
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_4__["default"], {
     key: item.id,
     item: item
@@ -8131,7 +8147,7 @@ function Letters({
     tempFolder,
     isLoading,
     setIsLoading
-  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_TrimLessFrontAndBackLit__WEBPACK_IMPORTED_MODULE_10__.QuoteContext);
+  } = useAppContext();
   const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.letters);
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.comments);
   const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.font);
@@ -8534,8 +8550,7 @@ function Letters({
     fontFileUrl: fontFileUrl,
     isLoading: isLoading,
     setFontFileUrl: setFontFileUrl,
-    setFontFileName: setFontFileName,
-    tempFolder: tempFolder
+    setFontFileName: setFontFileName
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Metal Depth",
     value: depth?.value,
@@ -8706,10 +8721,7 @@ function Letters({
     fileUrls: fileUrls,
     fileNames: fileNames,
     setFileUrls: setFileUrls,
-    setFileNames: setFileNames,
-    tempFolder: tempFolder,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading
+    setFileNames: setFileNames
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-xs text-[#9F9F9F] pt-4"
   }, "We size the letters in proportion to your chosen font. Some uppercase/lowercase letters may appear shorter or taller than your selected height on the form to maintain visual harmony."));
@@ -8745,14 +8757,12 @@ __webpack_require__.r(__webpack_exports__);
 
 const QuoteContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)(null);
 function TrimLessFrontLit() {
-  const [signage, setSignage] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [missing, setMissing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [tempFolder, setTempFolder] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
-  const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
-  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id + 'x';
-  const localStorageQuote = localStorage.getItem(storage);
-  const savedStorage = JSON.parse(localStorageQuote);
-  const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const {
+    signage,
+    setSignage,
+    setTempFolder,
+    tempFolderName
+  } = useAppContext();
   function setDefaultSignage() {
     if (savedStorage?.length > 0) {
       setSignage(savedStorage);
@@ -8856,12 +8866,12 @@ function TrimLessFrontLit() {
       if (type === 'letters') {
         args = {
           type: type,
-          title: `${type} ${count + 1}`.toUpperCase()
+          title: `${type} ${count + 1}`
         };
       } else {
         args = {
           type: type,
-          title: `${type} ${count + 1}`.toUpperCase(),
+          title: `${type} ${count + 1}`,
           width: '',
           height: ''
         };
@@ -8882,13 +8892,7 @@ function TrimLessFrontLit() {
 
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting.length === 0) {
-      const savedStorageFolder = JSON.parse(localStorage.getItem(window.location.href + NovaQuote.user_id + '-folder'));
-      if (savedStorageFolder?.length > 0) {
-        setTempFolder(savedStorageFolder);
-      } else {
-        localStorage.setItem(window.location.href + NovaQuote.user_id + '-folder', JSON.stringify(tempFolderName));
-        setTempFolder(tempFolderName);
-      }
+      setTempFolder(tempFolderName);
     } else {
       setTempFolder(`Q-${NovaQuote.current_quote_id}`);
     }
@@ -8911,14 +8915,7 @@ function TrimLessFrontLit() {
   }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
     index: index,
     id: item.id,
-    item: item,
-    signage: signage,
-    setSignage: setSignage,
-    addSignage: addSignage,
-    setMissing: setMissing,
-    storage: storage,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading
+    item: item
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_4__["default"], {
     key: item.id,
     item: item
@@ -8991,7 +8988,7 @@ function Letters({
     tempFolder,
     isLoading,
     setIsLoading
-  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_TrimLessFrontLit__WEBPACK_IMPORTED_MODULE_10__.QuoteContext);
+  } = useAppContext();
   const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.letters);
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.comments);
   const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.font);
@@ -9380,8 +9377,7 @@ function Letters({
     fontFileUrl: fontFileUrl,
     isLoading: isLoading,
     setFontFileUrl: setFontFileUrl,
-    setFontFileName: setFontFileName,
-    tempFolder: tempFolder
+    setFontFileName: setFontFileName
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Metal Depth",
     value: depth?.value,
@@ -9552,10 +9548,7 @@ function Letters({
     fileUrls: fileUrls,
     fileNames: fileNames,
     setFileUrls: setFileUrls,
-    setFileNames: setFileNames,
-    tempFolder: tempFolder,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading
+    setFileNames: setFileNames
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-xs text-[#9F9F9F] pt-4"
   }, "We size the letters in proportion to your chosen font. Some uppercase/lowercase letters may appear shorter or taller than your selected height on the form to maintain visual harmony."));
@@ -9642,14 +9635,12 @@ __webpack_require__.r(__webpack_exports__);
 
 const QuoteContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)(null);
 function FabricatedStainless() {
-  const [signage, setSignage] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [missing, setMissing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [tempFolder, setTempFolder] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
-  const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
-  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id + 'x';
-  const localStorageQuote = localStorage.getItem(storage);
-  const savedStorage = JSON.parse(localStorageQuote);
-  const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const {
+    signage,
+    setSignage,
+    setTempFolder,
+    tempFolderName
+  } = useAppContext();
   function setDefaultSignage() {
     if (savedStorage?.length > 0) {
       setSignage(savedStorage);
@@ -9733,7 +9724,7 @@ function FabricatedStainless() {
       if (type === 'letters') {
         args = {
           type: type,
-          title: `${type} ${count + 1}`.toUpperCase(),
+          title: `${type} ${count + 1}`,
           letters: '',
           font: '',
           thickness_options: '',
@@ -9743,7 +9734,7 @@ function FabricatedStainless() {
       } else {
         args = {
           type: type,
-          title: `${type} ${count + 1}`.toUpperCase(),
+          title: `${type} ${count + 1}`,
           width: '',
           height: ''
         };
@@ -9764,13 +9755,7 @@ function FabricatedStainless() {
 
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting.length === 0) {
-      const savedStorageFolder = JSON.parse(localStorage.getItem(window.location.href + NovaQuote.user_id + '-folder'));
-      if (savedStorageFolder?.length > 0) {
-        setTempFolder(savedStorageFolder);
-      } else {
-        localStorage.setItem(window.location.href + NovaQuote.user_id + '-folder', JSON.stringify(tempFolderName));
-        setTempFolder(tempFolderName);
-      }
+      setTempFolder(tempFolderName);
     } else {
       setTempFolder(`Q-${NovaQuote.current_quote_id}`);
     }
@@ -9793,14 +9778,7 @@ function FabricatedStainless() {
   }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
     index: index,
     id: item.id,
-    item: item,
-    signage: signage,
-    setSignage: setSignage,
-    addSignage: addSignage,
-    setMissing: setMissing,
-    storage: storage,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading
+    item: item
   }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_4__["default"], {
     key: item.id,
     item: item
@@ -9883,7 +9861,7 @@ function Letters({
     tempFolder,
     isLoading,
     setIsLoading
-  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_FabricatedStainless__WEBPACK_IMPORTED_MODULE_10__.QuoteContext);
+  } = useAppContext();
   const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.letters);
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.comments);
   const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.font);
@@ -10297,8 +10275,7 @@ function Letters({
     fontFileUrl: fontFileUrl,
     isLoading: isLoading,
     setFontFileUrl: setFontFileUrl,
-    setFontFileName: setFontFileName,
-    tempFolder: tempFolder
+    setFontFileName: setFontFileName
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Metal Option",
     onChange: e => setMetal(e.target.value),
@@ -10441,10 +10418,7 @@ function Letters({
     fileUrls: fileUrls,
     fileNames: fileNames,
     setFileUrls: setFileUrls,
-    setFileNames: setFileNames,
-    tempFolder: tempFolder,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading
+    setFileNames: setFileNames
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-xs text-[#9F9F9F] pt-4"
   }, "We size the letters in proportion to your chosen font. Some uppercase/lowercase letters may appear shorter or taller than your selected height on the form to maintain visual harmony."));
@@ -10496,7 +10470,7 @@ function Logo({
     tempFolder,
     isLoading,
     setIsLoading
-  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_FabricatedStainless__WEBPACK_IMPORTED_MODULE_9__.QuoteContext);
+  } = useAppContext();
   const [selectedMounting, setSelectedMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.mounting);
   const [selectedThickness, setSelectedThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.metalDepth);
   const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.width);
@@ -10901,10 +10875,7 @@ function Logo({
     fileUrls: fileUrls,
     fileNames: fileNames,
     setFileUrls: setFileUrls,
-    setFileNames: setFileNames,
-    tempFolder: tempFolder,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading
+    setFileNames: setFileNames
   })));
 }
 
@@ -10940,14 +10911,12 @@ __webpack_require__.r(__webpack_exports__);
 
 const QuoteContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)(null);
 function LaserCutAluminum() {
-  const [signage, setSignage] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [missing, setMissing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [tempFolder, setTempFolder] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
-  const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
-  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id + 'x';
-  const localStorageQuote = localStorage.getItem(storage);
-  const savedStorage = JSON.parse(localStorageQuote);
-  const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const {
+    signage,
+    setSignage,
+    setTempFolder,
+    tempFolderName
+  } = useAppContext();
   function setDefaultSignage() {
     if (savedStorage?.length > 0) {
       setSignage(savedStorage);
@@ -11028,7 +10997,7 @@ function LaserCutAluminum() {
       if (type === 'letters') {
         args = {
           type: type,
-          title: `${type} ${count + 1}`.toUpperCase(),
+          title: `${type} ${count + 1}`,
           letters: '',
           font: '',
           filePaths: [],
@@ -11045,7 +11014,7 @@ function LaserCutAluminum() {
       } else {
         args = {
           type: type,
-          title: `${type} ${count + 1}`.toUpperCase(),
+          title: `${type} ${count + 1}`,
           metalColor: {
             name: '',
             color: ''
@@ -11070,13 +11039,7 @@ function LaserCutAluminum() {
 
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting.length === 0) {
-      const savedStorageFolder = JSON.parse(localStorage.getItem(window.location.href + NovaQuote.user_id + '-folder'));
-      if (savedStorageFolder?.length > 0) {
-        setTempFolder(savedStorageFolder);
-      } else {
-        localStorage.setItem(window.location.href + NovaQuote.user_id + '-folder', JSON.stringify(tempFolderName));
-        setTempFolder(tempFolderName);
-      }
+      setTempFolder(tempFolderName);
     } else {
       setTempFolder(`Q-${NovaQuote.current_quote_id}`);
     }
@@ -11099,14 +11062,7 @@ function LaserCutAluminum() {
   }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
     index: index,
     id: item.id,
-    item: item,
-    signage: signage,
-    setSignage: setSignage,
-    addSignage: addSignage,
-    setMissing: setMissing,
-    storage: storage,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading
+    item: item
   }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_4__["default"], {
     key: item.id,
     item: item
@@ -11188,7 +11144,7 @@ function Letters({
     tempFolder,
     isLoading,
     setIsLoading
-  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_LaserCutAluminum__WEBPACK_IMPORTED_MODULE_9__.QuoteContext);
+  } = useAppContext();
   const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.letters);
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.comments);
   const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.font);
@@ -11583,8 +11539,7 @@ function Letters({
     fontFileUrl: fontFileUrl,
     isLoading: isLoading,
     setFontFileUrl: setFontFileUrl,
-    setFontFileName: setFontFileName,
-    tempFolder: tempFolder
+    setFontFileName: setFontFileName
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Metal Thickness",
     value: selectedThickness?.value,
@@ -11714,10 +11669,7 @@ function Letters({
     fileUrls: fileUrls,
     fileNames: fileNames,
     setFileUrls: setFileUrls,
-    setFileNames: setFileNames,
-    tempFolder: tempFolder,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading
+    setFileNames: setFileNames
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-xs text-[#9F9F9F] pt-4"
   }, "We size the letters in proportion to your chosen font. Some uppercase/lowercase letters may appear shorter or taller than your selected height on the form to maintain visual harmony."));
@@ -11767,7 +11719,7 @@ function Logo({
     tempFolder,
     isLoading,
     setIsLoading
-  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_LaserCutAluminum__WEBPACK_IMPORTED_MODULE_8__.QuoteContext);
+  } = useAppContext();
   const [selectedMounting, setSelectedMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.mounting);
   const [selectedThickness, setSelectedThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.metalThickness);
   const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.width);
@@ -12142,10 +12094,7 @@ function Logo({
     fileUrls: fileUrls,
     fileNames: fileNames,
     setFileUrls: setFileUrls,
-    setFileNames: setFileNames,
-    tempFolder: tempFolder,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading
+    setFileNames: setFileNames
   })));
 }
 
@@ -12181,14 +12130,12 @@ __webpack_require__.r(__webpack_exports__);
 
 const QuoteContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)(null);
 function FabricatedStainless() {
-  const [signage, setSignage] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [missing, setMissing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [tempFolder, setTempFolder] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
-  const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
-  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id + 'x';
-  const localStorageQuote = localStorage.getItem(storage);
-  const savedStorage = JSON.parse(localStorageQuote);
-  const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const {
+    signage,
+    setSignage,
+    setTempFolder,
+    tempFolderName
+  } = useAppContext();
   function setDefaultSignage() {
     if (savedStorage?.length > 0) {
       setSignage(savedStorage);
@@ -12274,7 +12221,7 @@ function FabricatedStainless() {
       if (type === 'letters') {
         args = {
           type: type,
-          title: `${type} ${count + 1}`.toUpperCase(),
+          title: `${type} ${count + 1}`,
           letters: '',
           font: '',
           thickness_options: '',
@@ -12284,7 +12231,7 @@ function FabricatedStainless() {
       } else {
         args = {
           type: type,
-          title: `${type} ${count + 1}`.toUpperCase(),
+          title: `${type} ${count + 1}`,
           width: '',
           height: ''
         };
@@ -12305,13 +12252,7 @@ function FabricatedStainless() {
 
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting.length === 0) {
-      const savedStorageFolder = JSON.parse(localStorage.getItem(window.location.href + NovaQuote.user_id + '-folder'));
-      if (savedStorageFolder?.length > 0) {
-        setTempFolder(savedStorageFolder);
-      } else {
-        localStorage.setItem(window.location.href + NovaQuote.user_id + '-folder', JSON.stringify(tempFolderName));
-        setTempFolder(tempFolderName);
-      }
+      setTempFolder(tempFolderName);
     } else {
       setTempFolder(`Q-${NovaQuote.current_quote_id}`);
     }
@@ -12334,14 +12275,7 @@ function FabricatedStainless() {
   }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
     index: index,
     id: item.id,
-    item: item,
-    signage: signage,
-    setSignage: setSignage,
-    addSignage: addSignage,
-    setMissing: setMissing,
-    storage: storage,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading
+    item: item
   }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_4__["default"], {
     key: item.id,
     item: item
@@ -12425,7 +12359,7 @@ function Letters({
     tempFolder,
     isLoading,
     setIsLoading
-  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_LaserCutStainless__WEBPACK_IMPORTED_MODULE_10__.QuoteContext);
+  } = useAppContext();
   const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.letters);
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.comments);
   const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.font);
@@ -12861,8 +12795,7 @@ function Letters({
     fontFileUrl: fontFileUrl,
     isLoading: isLoading,
     setFontFileUrl: setFontFileUrl,
-    setFontFileName: setFontFileName,
-    tempFolder: tempFolder
+    setFontFileName: setFontFileName
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Metal Option",
     onChange: e => setMetal(e.target.value),
@@ -13016,10 +12949,7 @@ function Letters({
     fileUrls: fileUrls,
     fileNames: fileNames,
     setFileUrls: setFileUrls,
-    setFileNames: setFileNames,
-    tempFolder: tempFolder,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading
+    setFileNames: setFileNames
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-xs text-[#9F9F9F] pt-4"
   }, "We size the letters in proportion to your chosen font. Some uppercase/lowercase letters may appear shorter or taller than your selected height on the form to maintain visual harmony."));
@@ -13071,7 +13001,7 @@ function Logo({
     tempFolder,
     isLoading,
     setIsLoading
-  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_LaserCutStainless__WEBPACK_IMPORTED_MODULE_9__.QuoteContext);
+  } = useAppContext();
   const [selectedThickness, setSelectedThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.metalThickness);
   const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.width);
   const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.usdPrice);
@@ -13513,10 +13443,7 @@ function Logo({
     fileUrls: fileUrls,
     fileNames: fileNames,
     setFileUrls: setFileUrls,
-    setFileNames: setFileNames,
-    tempFolder: tempFolder,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading
+    setFileNames: setFileNames
   })));
 }
 
@@ -13687,14 +13614,12 @@ __webpack_require__.r(__webpack_exports__);
 
 const QuoteContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)(null);
 function PVCMetalLaminate() {
-  const [signage, setSignage] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [missing, setMissing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [tempFolder, setTempFolder] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
-  const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
-  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id + 'x';
-  const localStorageQuote = localStorage.getItem(storage);
-  const savedStorage = JSON.parse(localStorageQuote);
-  const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const {
+    signage,
+    setSignage,
+    setTempFolder,
+    tempFolderName
+  } = useAppContext();
   function setDefaultSignage() {
     if (savedStorage?.length > 0) {
       setSignage(savedStorage);
@@ -13735,14 +13660,7 @@ function PVCMetalLaminate() {
     if (NovaQuote.is_editting === '1') {
       const currentSignage = JSON.parse(NovaQuote.signage);
       if (currentSignage) {
-        const savedStorage = JSON.parse(localStorage.getItem(storage));
-        if (savedStorage?.length > 0) {
-          setSignage(savedStorage);
-        } else {
-          setSignage(currentSignage);
-        }
-      } else {
-        //window.location.href = window.location.pathname;
+        setSignage(currentSignage);
       }
     } else {
       setDefaultSignage();
@@ -13781,7 +13699,7 @@ function PVCMetalLaminate() {
       if (type === 'letters') {
         args = {
           type: type,
-          title: `${type} ${count + 1}`.toUpperCase(),
+          title: `${type} ${count + 1}`,
           letters: '',
           font: '',
           thickness_options: '',
@@ -13797,7 +13715,7 @@ function PVCMetalLaminate() {
       } else {
         args = {
           type: type,
-          title: `${type} ${count + 1}`.toUpperCase(),
+          title: `${type} ${count + 1}`,
           width: '',
           height: ''
         };
@@ -13818,13 +13736,7 @@ function PVCMetalLaminate() {
 
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting.length === 0) {
-      const savedStorageFolder = JSON.parse(localStorage.getItem(window.location.href + NovaQuote.user_id + '-folder'));
-      if (savedStorageFolder?.length > 0) {
-        setTempFolder(savedStorageFolder);
-      } else {
-        localStorage.setItem(window.location.href + NovaQuote.user_id + '-folder', JSON.stringify(tempFolderName));
-        setTempFolder(tempFolderName);
-      }
+      setTempFolder(tempFolderName);
     } else {
       setTempFolder(`Q-${NovaQuote.current_quote_id}`);
     }
@@ -13847,14 +13759,7 @@ function PVCMetalLaminate() {
   }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
     index: index,
     id: item.id,
-    item: item,
-    signage: signage,
-    setSignage: setSignage,
-    addSignage: addSignage,
-    setMissing: setMissing,
-    storage: storage,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading
+    item: item
   }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_4__["default"], {
     key: item.id,
     item: item
@@ -13937,7 +13842,7 @@ function Letters({
     tempFolder,
     isLoading,
     setIsLoading
-  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_PVCMetalLaminate__WEBPACK_IMPORTED_MODULE_10__.QuoteContext);
+  } = useAppContext();
   const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.letters);
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.comments);
   const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.font);
@@ -14321,8 +14226,7 @@ function Letters({
     fontFileUrl: fontFileUrl,
     isLoading: isLoading,
     setFontFileUrl: setFontFileUrl,
-    setFontFileName: setFontFileName,
-    tempFolder: tempFolder
+    setFontFileName: setFontFileName
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Thickness",
     value: selectedThickness?.value,
@@ -14458,10 +14362,7 @@ function Letters({
     fileUrls: fileUrls,
     fileNames: fileNames,
     setFileUrls: setFileUrls,
-    setFileNames: setFileNames,
-    tempFolder: tempFolder,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading
+    setFileNames: setFileNames
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-xs text-[#9F9F9F] pt-4"
   }, "We size the letters in proportion to your chosen font. Some uppercase/lowercase letters may appear shorter or taller than your selected height on the form to maintain visual harmony."));
@@ -14513,7 +14414,7 @@ function Logo({
     tempFolder,
     isLoading,
     setIsLoading
-  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_PVCMetalLaminate__WEBPACK_IMPORTED_MODULE_9__.QuoteContext);
+  } = useAppContext();
   const [selectedThickness, setSelectedThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.thickness);
   const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.width);
   const [maxWidthHeight, setMaxWidthHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(36);
@@ -14905,10 +14806,7 @@ function Logo({
     fileUrls: fileUrls,
     fileNames: fileNames,
     setFileUrls: setFileUrls,
-    setFileNames: setFileNames,
-    tempFolder: tempFolder,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading
+    setFileNames: setFileNames
   })));
 }
 
@@ -14944,14 +14842,12 @@ __webpack_require__.r(__webpack_exports__);
 
 const QuoteContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)(null);
 function PVCPainted() {
-  const [signage, setSignage] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [missing, setMissing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [tempFolder, setTempFolder] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
-  const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
-  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id + 'x';
-  const localStorageQuote = localStorage.getItem(storage);
-  const savedStorage = JSON.parse(localStorageQuote);
-  const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const {
+    signage,
+    setSignage,
+    setTempFolder,
+    tempFolderName
+  } = useAppContext();
   function setDefaultSignage() {
     if (savedStorage?.length > 0) {
       setSignage(savedStorage);
@@ -14991,14 +14887,7 @@ function PVCPainted() {
     if (NovaQuote.is_editting === '1') {
       const currentSignage = JSON.parse(NovaQuote.signage);
       if (currentSignage) {
-        const savedStorage = JSON.parse(localStorage.getItem(storage));
-        if (savedStorage?.length > 0) {
-          setSignage(savedStorage);
-        } else {
-          setSignage(currentSignage);
-        }
-      } else {
-        //window.location.href = window.location.pathname;
+        setSignage(currentSignage);
       }
     } else {
       setDefaultSignage();
@@ -15036,7 +14925,7 @@ function PVCPainted() {
       if (type === 'letters') {
         args = {
           type: type,
-          title: `${type} ${count + 1}`.toUpperCase(),
+          title: `${type} ${count + 1}`,
           letters: '',
           font: '',
           thickness_options: '',
@@ -15052,7 +14941,7 @@ function PVCPainted() {
       } else {
         args = {
           type: type,
-          title: `${type} ${count + 1}`.toUpperCase(),
+          title: `${type} ${count + 1}`,
           width: '',
           height: ''
         };
@@ -15073,13 +14962,7 @@ function PVCPainted() {
 
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting.length === 0) {
-      const savedStorageFolder = JSON.parse(localStorage.getItem(window.location.href + NovaQuote.user_id + '-folder'));
-      if (savedStorageFolder?.length > 0) {
-        setTempFolder(savedStorageFolder);
-      } else {
-        localStorage.setItem(window.location.href + NovaQuote.user_id + '-folder', JSON.stringify(tempFolderName));
-        setTempFolder(tempFolderName);
-      }
+      setTempFolder(tempFolderName);
     } else {
       setTempFolder(`Q-${NovaQuote.current_quote_id}`);
     }
@@ -15102,14 +14985,7 @@ function PVCPainted() {
   }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
     index: index,
     id: item.id,
-    item: item,
-    signage: signage,
-    setSignage: setSignage,
-    addSignage: addSignage,
-    setMissing: setMissing,
-    storage: storage,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading
+    item: item
   }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_4__["default"], {
     key: item.id,
     item: item
@@ -15192,7 +15068,7 @@ function Letters({
     tempFolder,
     isLoading,
     setIsLoading
-  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_PVCPainted__WEBPACK_IMPORTED_MODULE_10__.QuoteContext);
+  } = useAppContext();
   const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.letters);
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.comments);
   const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.font);
@@ -15565,8 +15441,7 @@ function Letters({
     fontFileUrl: fontFileUrl,
     isLoading: isLoading,
     setFontFileUrl: setFontFileUrl,
-    setFontFileName: setFontFileName,
-    tempFolder: tempFolder
+    setFontFileName: setFontFileName
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Thickness",
     value: selectedThickness?.value,
@@ -15694,10 +15569,7 @@ function Letters({
     fileUrls: fileUrls,
     fileNames: fileNames,
     setFileUrls: setFileUrls,
-    setFileNames: setFileNames,
-    tempFolder: tempFolder,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading
+    setFileNames: setFileNames
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-xs text-[#9F9F9F] pt-4"
   }, "We size the letters in proportion to your chosen font. Some uppercase/lowercase letters may appear shorter or taller than your selected height on the form to maintain visual harmony."));
@@ -15749,7 +15621,7 @@ function Logo({
     tempFolder,
     isLoading,
     setIsLoading
-  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_PVCPainted__WEBPACK_IMPORTED_MODULE_9__.QuoteContext);
+  } = useAppContext();
   const [selectedThickness, setSelectedThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.thickness);
   const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.width);
   const [maxWidthHeight, setMaxWidthHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(36);
@@ -16127,10 +15999,7 @@ function Logo({
     fileUrls: fileUrls,
     fileNames: fileNames,
     setFileUrls: setFileUrls,
-    setFileNames: setFileNames,
-    tempFolder: tempFolder,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading
+    setFileNames: setFileNames
   })));
 }
 
@@ -16164,14 +16033,12 @@ __webpack_require__.r(__webpack_exports__);
 
 const QuoteContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)(null);
 function PVCUv() {
-  const [signage, setSignage] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [missing, setMissing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [tempFolder, setTempFolder] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
-  const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
-  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id + 'x';
-  const localStorageQuote = localStorage.getItem(storage);
-  const savedStorage = JSON.parse(localStorageQuote);
-  const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const {
+    signage,
+    setSignage,
+    setTempFolder,
+    tempFolderName
+  } = useAppContext();
   function setDefaultSignage() {
     if (savedStorage?.length > 0) {
       setSignage(savedStorage);
@@ -16206,14 +16073,7 @@ function PVCUv() {
     if (NovaQuote.is_editting === '1') {
       const currentSignage = JSON.parse(NovaQuote.signage);
       if (currentSignage) {
-        const savedStorage = JSON.parse(localStorage.getItem(storage));
-        if (savedStorage?.length > 0) {
-          setSignage(savedStorage);
-        } else {
-          setSignage(currentSignage);
-        }
-      } else {
-        //window.location.href = window.location.pathname;
+        setSignage(currentSignage);
       }
     } else {
       setDefaultSignage();
@@ -16248,7 +16108,7 @@ function PVCUv() {
       let args;
       args = {
         type: type,
-        title: `${type} ${count + 1}`.toUpperCase(),
+        title: `${type} ${count + 1}`,
         width: '',
         height: ''
       };
@@ -16268,13 +16128,7 @@ function PVCUv() {
 
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting.length === 0) {
-      const savedStorageFolder = JSON.parse(localStorage.getItem(window.location.href + NovaQuote.user_id + '-folder'));
-      if (savedStorageFolder?.length > 0) {
-        setTempFolder(savedStorageFolder);
-      } else {
-        localStorage.setItem(window.location.href + NovaQuote.user_id + '-folder', JSON.stringify(tempFolderName));
-        setTempFolder(tempFolderName);
-      }
+      setTempFolder(tempFolderName);
     } else {
       setTempFolder(`Q-${NovaQuote.current_quote_id}`);
     }
@@ -16297,14 +16151,7 @@ function PVCUv() {
   }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
     index: index,
     id: item.id,
-    item: item,
-    signage: signage,
-    setSignage: setSignage,
-    addSignage: addSignage,
-    setMissing: setMissing,
-    storage: storage,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading
+    item: item
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_4__["default"], {
     key: item.id,
     item: item
@@ -16372,7 +16219,7 @@ function Logo({
     tempFolder,
     isLoading,
     setIsLoading
-  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_PVCUv__WEBPACK_IMPORTED_MODULE_9__.QuoteContext);
+  } = useAppContext();
   const [selectedThickness, setSelectedThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.thickness);
   const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.width);
   const [maxWidthHeight, setMaxWidthHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(36);
@@ -16751,10 +16598,7 @@ function Logo({
     fileUrls: fileUrls,
     fileNames: fileNames,
     setFileUrls: setFileUrls,
-    setFileNames: setFileNames,
-    tempFolder: tempFolder,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading
+    setFileNames: setFileNames
   })));
 }
 
@@ -23654,21 +23498,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var react_tooltip_dist_react_tooltip_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-tooltip/dist/react-tooltip.css */ "./node_modules/react-tooltip/dist/react-tooltip.min.css");
 /* harmony import */ var _index_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./index.css */ "./src/index.css");
-/* harmony import */ var _scripts_QuoteView__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./scripts/QuoteView */ "./src/scripts/QuoteView.js");
-/* harmony import */ var _scripts_products_acrylic_LaserCutAcrylic_LaserCutAcrylic__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./scripts/products/acrylic/LaserCutAcrylic/LaserCutAcrylic */ "./src/scripts/products/acrylic/LaserCutAcrylic/LaserCutAcrylic.js");
-/* harmony import */ var _scripts_products_acrylic_LayeredAcrylic_LayeredAcrylic__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./scripts/products/acrylic/LayeredAcrylic/LayeredAcrylic */ "./src/scripts/products/acrylic/LayeredAcrylic/LayeredAcrylic.js");
-/* harmony import */ var _scripts_products_acrylic_MetalLaminate_MetalLaminate__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./scripts/products/acrylic/MetalLaminate/MetalLaminate */ "./src/scripts/products/acrylic/MetalLaminate/MetalLaminate.js");
-/* harmony import */ var _scripts_products_acrylic_UvPrintedAcrylic_UvPrintedAcrylic__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./scripts/products/acrylic/UvPrintedAcrylic/UvPrintedAcrylic */ "./src/scripts/products/acrylic/UvPrintedAcrylic/UvPrintedAcrylic.js");
-/* harmony import */ var _scripts_products_custom_CustomProject__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./scripts/products/custom/CustomProject */ "./src/scripts/products/custom/CustomProject.js");
-/* harmony import */ var _scripts_products_metal_channel_TrimLessBackLit_TrimLessBackLit__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./scripts/products/metal-channel/TrimLessBackLit/TrimLessBackLit */ "./src/scripts/products/metal-channel/TrimLessBackLit/TrimLessBackLit.js");
-/* harmony import */ var _scripts_products_metal_channel_TrimLessFrontAndBackLit_TrimLessFrontAndBackLit__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./scripts/products/metal-channel/TrimLessFrontAndBackLit/TrimLessFrontAndBackLit */ "./src/scripts/products/metal-channel/TrimLessFrontAndBackLit/TrimLessFrontAndBackLit.js");
-/* harmony import */ var _scripts_products_metal_channel_TrimLessFrontLit_TrimLessFrontLit__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./scripts/products/metal-channel/TrimLessFrontLit/TrimLessFrontLit */ "./src/scripts/products/metal-channel/TrimLessFrontLit/TrimLessFrontLit.js");
-/* harmony import */ var _scripts_products_metal_FabricatedStainless_FabricatedStainless__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./scripts/products/metal/FabricatedStainless/FabricatedStainless */ "./src/scripts/products/metal/FabricatedStainless/FabricatedStainless.js");
-/* harmony import */ var _scripts_products_metal_LaserCutAluminum_LaserCutAluminum__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./scripts/products/metal/LaserCutAluminum/LaserCutAluminum */ "./src/scripts/products/metal/LaserCutAluminum/LaserCutAluminum.js");
-/* harmony import */ var _scripts_products_metal_LaserCutStainless_LaserCutStainless__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./scripts/products/metal/LaserCutStainless/LaserCutStainless */ "./src/scripts/products/metal/LaserCutStainless/LaserCutStainless.js");
-/* harmony import */ var _scripts_products_pvc_PVCMetalLaminate_PVCMetalLaminate__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./scripts/products/pvc/PVCMetalLaminate/PVCMetalLaminate */ "./src/scripts/products/pvc/PVCMetalLaminate/PVCMetalLaminate.js");
-/* harmony import */ var _scripts_products_pvc_PVCPainted_PVCPainted__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./scripts/products/pvc/PVCPainted/PVCPainted */ "./src/scripts/products/pvc/PVCPainted/PVCPainted.js");
-/* harmony import */ var _scripts_products_pvc_PVCUv_PVCUv__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./scripts/products/pvc/PVCUv/PVCUv */ "./src/scripts/products/pvc/PVCUv/PVCUv.js");
+/* harmony import */ var _scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./scripts/AppProvider */ "./src/scripts/AppProvider.js");
+/* harmony import */ var _scripts_QuoteView__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./scripts/QuoteView */ "./src/scripts/QuoteView.js");
+/* harmony import */ var _scripts_products_acrylic_LaserCutAcrylic_LaserCutAcrylic__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./scripts/products/acrylic/LaserCutAcrylic/LaserCutAcrylic */ "./src/scripts/products/acrylic/LaserCutAcrylic/LaserCutAcrylic.js");
+/* harmony import */ var _scripts_products_acrylic_LayeredAcrylic_LayeredAcrylic__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./scripts/products/acrylic/LayeredAcrylic/LayeredAcrylic */ "./src/scripts/products/acrylic/LayeredAcrylic/LayeredAcrylic.js");
+/* harmony import */ var _scripts_products_acrylic_MetalLaminate_MetalLaminate__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./scripts/products/acrylic/MetalLaminate/MetalLaminate */ "./src/scripts/products/acrylic/MetalLaminate/MetalLaminate.js");
+/* harmony import */ var _scripts_products_acrylic_UvPrintedAcrylic_UvPrintedAcrylic__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./scripts/products/acrylic/UvPrintedAcrylic/UvPrintedAcrylic */ "./src/scripts/products/acrylic/UvPrintedAcrylic/UvPrintedAcrylic.js");
+/* harmony import */ var _scripts_products_combine_CombineQuotes__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./scripts/products/combine/CombineQuotes */ "./src/scripts/products/combine/CombineQuotes.js");
+/* harmony import */ var _scripts_products_custom_CustomProject__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./scripts/products/custom/CustomProject */ "./src/scripts/products/custom/CustomProject.js");
+/* harmony import */ var _scripts_products_metal_channel_TrimLessBackLit_TrimLessBackLit__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./scripts/products/metal-channel/TrimLessBackLit/TrimLessBackLit */ "./src/scripts/products/metal-channel/TrimLessBackLit/TrimLessBackLit.js");
+/* harmony import */ var _scripts_products_metal_channel_TrimLessFrontAndBackLit_TrimLessFrontAndBackLit__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./scripts/products/metal-channel/TrimLessFrontAndBackLit/TrimLessFrontAndBackLit */ "./src/scripts/products/metal-channel/TrimLessFrontAndBackLit/TrimLessFrontAndBackLit.js");
+/* harmony import */ var _scripts_products_metal_channel_TrimLessFrontLit_TrimLessFrontLit__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./scripts/products/metal-channel/TrimLessFrontLit/TrimLessFrontLit */ "./src/scripts/products/metal-channel/TrimLessFrontLit/TrimLessFrontLit.js");
+/* harmony import */ var _scripts_products_metal_FabricatedStainless_FabricatedStainless__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./scripts/products/metal/FabricatedStainless/FabricatedStainless */ "./src/scripts/products/metal/FabricatedStainless/FabricatedStainless.js");
+/* harmony import */ var _scripts_products_metal_LaserCutAluminum_LaserCutAluminum__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./scripts/products/metal/LaserCutAluminum/LaserCutAluminum */ "./src/scripts/products/metal/LaserCutAluminum/LaserCutAluminum.js");
+/* harmony import */ var _scripts_products_metal_LaserCutStainless_LaserCutStainless__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./scripts/products/metal/LaserCutStainless/LaserCutStainless */ "./src/scripts/products/metal/LaserCutStainless/LaserCutStainless.js");
+/* harmony import */ var _scripts_products_pvc_PVCMetalLaminate_PVCMetalLaminate__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./scripts/products/pvc/PVCMetalLaminate/PVCMetalLaminate */ "./src/scripts/products/pvc/PVCMetalLaminate/PVCMetalLaminate.js");
+/* harmony import */ var _scripts_products_pvc_PVCPainted_PVCPainted__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./scripts/products/pvc/PVCPainted/PVCPainted */ "./src/scripts/products/pvc/PVCPainted/PVCPainted.js");
+/* harmony import */ var _scripts_products_pvc_PVCUv_PVCUv__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./scripts/products/pvc/PVCUv/PVCUv */ "./src/scripts/products/pvc/PVCUv/PVCUv.js");
 
 
 
@@ -23689,50 +23535,64 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-if (document.querySelector('#laserCutAcrylic')) {
-  react_dom__WEBPACK_IMPORTED_MODULE_1___default().render((0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_LaserCutAcrylic_LaserCutAcrylic__WEBPACK_IMPORTED_MODULE_5__["default"], null), document.querySelector('#laserCutAcrylic'));
+
+
+if (document.getElementById('QuoteApp')) {
+  react_dom__WEBPACK_IMPORTED_MODULE_1___default().render((0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(QuoteApp, null), document.querySelector('#QuoteApp'));
 }
-if (document.querySelector('#pvcMetalLaminate')) {
-  react_dom__WEBPACK_IMPORTED_MODULE_1___default().render((0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_pvc_PVCMetalLaminate_PVCMetalLaminate__WEBPACK_IMPORTED_MODULE_16__["default"], null), document.querySelector('#pvcMetalLaminate'));
-}
-if (document.querySelector('#pvcPainted')) {
-  react_dom__WEBPACK_IMPORTED_MODULE_1___default().render((0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_pvc_PVCPainted_PVCPainted__WEBPACK_IMPORTED_MODULE_17__["default"], null), document.querySelector('#pvcPainted'));
-}
-if (document.querySelector('#pvcUv')) {
-  react_dom__WEBPACK_IMPORTED_MODULE_1___default().render((0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_pvc_PVCUv_PVCUv__WEBPACK_IMPORTED_MODULE_18__["default"], null), document.querySelector('#pvcUv'));
-}
-if (document.querySelector('#layeredAcrylic')) {
-  react_dom__WEBPACK_IMPORTED_MODULE_1___default().render((0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_LayeredAcrylic_LayeredAcrylic__WEBPACK_IMPORTED_MODULE_6__["default"], null), document.querySelector('#layeredAcrylic'));
-}
-if (document.querySelector('#laserCutAluminum')) {
-  react_dom__WEBPACK_IMPORTED_MODULE_1___default().render((0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_LaserCutAluminum_LaserCutAluminum__WEBPACK_IMPORTED_MODULE_14__["default"], null), document.querySelector('#laserCutAluminum'));
-}
-if (document.querySelector('#uvPrintedAcrylic')) {
-  react_dom__WEBPACK_IMPORTED_MODULE_1___default().render((0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_UvPrintedAcrylic_UvPrintedAcrylic__WEBPACK_IMPORTED_MODULE_8__["default"], null), document.querySelector('#uvPrintedAcrylic'));
-}
-if (document.querySelector('#metalLaminateAcrylic')) {
-  react_dom__WEBPACK_IMPORTED_MODULE_1___default().render((0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_MetalLaminate_MetalLaminate__WEBPACK_IMPORTED_MODULE_7__["default"], null), document.querySelector('#metalLaminateAcrylic'));
-}
-if (document.querySelector('#laserCutStainless')) {
-  react_dom__WEBPACK_IMPORTED_MODULE_1___default().render((0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_LaserCutStainless_LaserCutStainless__WEBPACK_IMPORTED_MODULE_15__["default"], null), document.querySelector('#laserCutStainless'));
-}
-if (document.querySelector('#metalChannelTrimlessFrontLit')) {
-  react_dom__WEBPACK_IMPORTED_MODULE_1___default().render((0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_channel_TrimLessFrontLit_TrimLessFrontLit__WEBPACK_IMPORTED_MODULE_12__["default"], null), document.querySelector('#metalChannelTrimlessFrontLit'));
-}
-if (document.querySelector('#metalChannelTrimlessFrontAndBackLit')) {
-  react_dom__WEBPACK_IMPORTED_MODULE_1___default().render((0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_channel_TrimLessFrontAndBackLit_TrimLessFrontAndBackLit__WEBPACK_IMPORTED_MODULE_11__["default"], null), document.querySelector('#metalChannelTrimlessFrontAndBackLit'));
-}
-if (document.querySelector('#metalChannelTrimlessBackLit')) {
-  react_dom__WEBPACK_IMPORTED_MODULE_1___default().render((0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_channel_TrimLessBackLit_TrimLessBackLit__WEBPACK_IMPORTED_MODULE_10__["default"], null), document.querySelector('#metalChannelTrimlessBackLit'));
-}
-if (document.querySelector('#metalFabricatedStainless')) {
-  react_dom__WEBPACK_IMPORTED_MODULE_1___default().render((0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_FabricatedStainless_FabricatedStainless__WEBPACK_IMPORTED_MODULE_13__["default"], null), document.querySelector('#metalFabricatedStainless'));
-}
-if (document.querySelector('#quoteView')) {
-  react_dom__WEBPACK_IMPORTED_MODULE_1___default().render((0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_QuoteView__WEBPACK_IMPORTED_MODULE_4__["default"], null), document.querySelector('#quoteView'));
-}
-if (document.querySelector('#customProject')) {
-  react_dom__WEBPACK_IMPORTED_MODULE_1___default().render((0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_custom_CustomProject__WEBPACK_IMPORTED_MODULE_9__["default"], null), document.querySelector('#customProject'));
+function QuoteApp() {
+  let component;
+  switch (NovaQuote.quote_div_id) {
+    case 'combineQuotes':
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_combine_CombineQuotes__WEBPACK_IMPORTED_MODULE_10__["default"], null);
+      break;
+    case 'laserCutAcrylic':
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_LaserCutAcrylic_LaserCutAcrylic__WEBPACK_IMPORTED_MODULE_6__["default"], null);
+      break;
+    case 'quoteView':
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_QuoteView__WEBPACK_IMPORTED_MODULE_5__["default"], null);
+      break;
+    case 'pvcMetalLaminate':
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_pvc_PVCMetalLaminate_PVCMetalLaminate__WEBPACK_IMPORTED_MODULE_18__["default"], null);
+      break;
+    case 'pvcPainted':
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_pvc_PVCPainted_PVCPainted__WEBPACK_IMPORTED_MODULE_19__["default"], null);
+      break;
+    case 'pvcUv':
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_pvc_PVCUv_PVCUv__WEBPACK_IMPORTED_MODULE_20__["default"], null);
+      break;
+    case 'layeredAcrylic':
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_LayeredAcrylic_LayeredAcrylic__WEBPACK_IMPORTED_MODULE_7__["default"], null);
+      break;
+    case 'laserCutAluminum':
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_LaserCutAluminum_LaserCutAluminum__WEBPACK_IMPORTED_MODULE_16__["default"], null);
+      break;
+    case 'uvPrintedAcrylic':
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_UvPrintedAcrylic_UvPrintedAcrylic__WEBPACK_IMPORTED_MODULE_9__["default"], null);
+      break;
+    case 'metalLaminateAcrylic':
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_MetalLaminate_MetalLaminate__WEBPACK_IMPORTED_MODULE_8__["default"], null);
+      break;
+    case 'metalChannelTrimlessFrontLit':
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_channel_TrimLessFrontLit_TrimLessFrontLit__WEBPACK_IMPORTED_MODULE_14__["default"], null);
+      break;
+    case 'laserCutStainless':
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_LaserCutStainless_LaserCutStainless__WEBPACK_IMPORTED_MODULE_17__["default"], null);
+      break;
+    case 'metalChannelTrimlessFrontAndBackLit':
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_channel_TrimLessFrontAndBackLit_TrimLessFrontAndBackLit__WEBPACK_IMPORTED_MODULE_13__["default"], null);
+      break;
+    case 'metalChannelTrimlessBackLit':
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_channel_TrimLessBackLit_TrimLessBackLit__WEBPACK_IMPORTED_MODULE_12__["default"], null);
+      break;
+    case 'metalFabricatedStainless':
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_FabricatedStainless_FabricatedStainless__WEBPACK_IMPORTED_MODULE_15__["default"], null);
+      break;
+    default:
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_custom_CustomProject__WEBPACK_IMPORTED_MODULE_11__["default"], null);
+      break;
+  }
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, component);
 }
 })();
 

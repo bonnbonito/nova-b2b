@@ -1,12 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import 'react-tooltip/dist/react-tooltip.css';
+
 import './index.css';
+import { AppProvider } from './scripts/AppProvider';
 import QuoteView from './scripts/QuoteView';
 import LaserCutAcrylic from './scripts/products/acrylic/LaserCutAcrylic/LaserCutAcrylic';
 import LayeredAcrylic from './scripts/products/acrylic/LayeredAcrylic/LayeredAcrylic';
 import MetalLaminate from './scripts/products/acrylic/MetalLaminate/MetalLaminate';
 import UvPrintedAcrylic from './scripts/products/acrylic/UvPrintedAcrylic/UvPrintedAcrylic';
+import CombineQuotes from './scripts/products/combine/CombineQuotes';
 import CustomProject from './scripts/products/custom/CustomProject';
 import TrimLessBackLit from './scripts/products/metal-channel/TrimLessBackLit/TrimLessBackLit';
 import TrimLessFrontAndBackLit from './scripts/products/metal-channel/TrimLessFrontAndBackLit/TrimLessFrontAndBackLit';
@@ -18,95 +21,61 @@ import PVCMetalLaminate from './scripts/products/pvc/PVCMetalLaminate/PVCMetalLa
 import PVCPainted from './scripts/products/pvc/PVCPainted/PVCPainted';
 import PVCUv from './scripts/products/pvc/PVCUv/PVCUv';
 
-if (document.querySelector('#laserCutAcrylic')) {
-	ReactDOM.render(
-		<LaserCutAcrylic />,
-		document.querySelector('#laserCutAcrylic')
-	);
+if (document.getElementById('QuoteApp')) {
+	ReactDOM.render(<QuoteApp />, document.querySelector('#QuoteApp'));
 }
 
-if (document.querySelector('#pvcMetalLaminate')) {
-	ReactDOM.render(
-		<PVCMetalLaminate />,
-		document.querySelector('#pvcMetalLaminate')
-	);
-}
-
-if (document.querySelector('#pvcPainted')) {
-	ReactDOM.render(<PVCPainted />, document.querySelector('#pvcPainted'));
-}
-
-if (document.querySelector('#pvcUv')) {
-	ReactDOM.render(<PVCUv />, document.querySelector('#pvcUv'));
-}
-
-if (document.querySelector('#layeredAcrylic')) {
-	ReactDOM.render(
-		<LayeredAcrylic />,
-		document.querySelector('#layeredAcrylic')
-	);
-}
-
-if (document.querySelector('#laserCutAluminum')) {
-	ReactDOM.render(
-		<LaserCutAluminum />,
-		document.querySelector('#laserCutAluminum')
-	);
-}
-
-if (document.querySelector('#uvPrintedAcrylic')) {
-	ReactDOM.render(
-		<UvPrintedAcrylic />,
-		document.querySelector('#uvPrintedAcrylic')
-	);
-}
-
-if (document.querySelector('#metalLaminateAcrylic')) {
-	ReactDOM.render(
-		<MetalLaminate />,
-		document.querySelector('#metalLaminateAcrylic')
-	);
-}
-
-if (document.querySelector('#laserCutStainless')) {
-	ReactDOM.render(
-		<LaserCutStainless />,
-		document.querySelector('#laserCutStainless')
-	);
-}
-
-if (document.querySelector('#metalChannelTrimlessFrontLit')) {
-	ReactDOM.render(
-		<TrimLessFrontLit />,
-		document.querySelector('#metalChannelTrimlessFrontLit')
-	);
-}
-
-if (document.querySelector('#metalChannelTrimlessFrontAndBackLit')) {
-	ReactDOM.render(
-		<TrimLessFrontAndBackLit />,
-		document.querySelector('#metalChannelTrimlessFrontAndBackLit')
-	);
-}
-
-if (document.querySelector('#metalChannelTrimlessBackLit')) {
-	ReactDOM.render(
-		<TrimLessBackLit />,
-		document.querySelector('#metalChannelTrimlessBackLit')
-	);
-}
-
-if (document.querySelector('#metalFabricatedStainless')) {
-	ReactDOM.render(
-		<FabricatedStainless />,
-		document.querySelector('#metalFabricatedStainless')
-	);
-}
-
-if (document.querySelector('#quoteView')) {
-	ReactDOM.render(<QuoteView />, document.querySelector('#quoteView'));
-}
-
-if (document.querySelector('#customProject')) {
-	ReactDOM.render(<CustomProject />, document.querySelector('#customProject'));
+function QuoteApp() {
+	let component;
+	switch (NovaQuote.quote_div_id) {
+		case 'combineQuotes':
+			component = <CombineQuotes />;
+			break;
+		case 'laserCutAcrylic':
+			component = <LaserCutAcrylic />;
+			break;
+		case 'quoteView':
+			component = <QuoteView />;
+			break;
+		case 'pvcMetalLaminate':
+			component = <PVCMetalLaminate />;
+			break;
+		case 'pvcPainted':
+			component = <PVCPainted />;
+			break;
+		case 'pvcUv':
+			component = <PVCUv />;
+			break;
+		case 'layeredAcrylic':
+			component = <LayeredAcrylic />;
+			break;
+		case 'laserCutAluminum':
+			component = <LaserCutAluminum />;
+			break;
+		case 'uvPrintedAcrylic':
+			component = <UvPrintedAcrylic />;
+			break;
+		case 'metalLaminateAcrylic':
+			component = <MetalLaminate />;
+			break;
+		case 'metalChannelTrimlessFrontLit':
+			component = <TrimLessFrontLit />;
+			break;
+		case 'laserCutStainless':
+			component = <LaserCutStainless />;
+			break;
+		case 'metalChannelTrimlessFrontAndBackLit':
+			component = <TrimLessFrontAndBackLit />;
+			break;
+		case 'metalChannelTrimlessBackLit':
+			component = <TrimLessBackLit />;
+			break;
+		case 'metalFabricatedStainless':
+			component = <FabricatedStainless />;
+			break;
+		default:
+			component = <CustomProject />;
+			break;
+	}
+	return <AppProvider>{component}</AppProvider>;
 }

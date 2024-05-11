@@ -41,7 +41,7 @@ export default function Letters({ item }) {
 		tempFolder,
 		isLoading,
 		setIsLoading,
-	} = useContext(QuoteContext);
+	} = useAppContext();
 	const [letters, setLetters] = useState(item.letters);
 	const [comments, setComments] = useState(item.comments);
 	const [font, setFont] = useState(item.font);
@@ -571,7 +571,6 @@ export default function Letters({ item }) {
 						isLoading={isLoading}
 						setFontFileUrl={setFontFileUrl}
 						setFontFileName={setFontFileName}
-						tempFolder={tempFolder}
 					/>
 				)}
 
@@ -790,9 +789,6 @@ export default function Letters({ item }) {
 					fileNames={fileNames}
 					setFileUrls={setFileUrls}
 					setFileNames={setFileNames}
-					tempFolder={tempFolder}
-					isLoading={isLoading}
-					setIsLoading={setIsLoading}
 				/>
 			</div>
 

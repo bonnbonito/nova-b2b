@@ -1,17 +1,14 @@
 import React from 'react';
+import { useAppContext } from './AppProvider';
 import ModalSave from './ModalSave';
 import Prices from './Prices';
 
 const currency = wcumcs_vars_data.currency;
 
-export default function Sidebar({
-	signage,
-	required,
-	tempFolder,
-	storage,
-	isLoading,
-	setIsLoading,
-}) {
+export default function Sidebar() {
+	const { signage, missing, tempFolder, storage, isLoading, setIsLoading } =
+		useAppContext();
+
 	const taxRateObj = NovaMyAccount.tax_rate;
 	//const tax = taxRateObj ? parseFloat(taxRateObj.tax_rate / 100) : 0;
 	const tax = 0;
@@ -105,14 +102,14 @@ export default function Sidebar({
 							{NovaQuote.is_editting === '1' ? (
 								<>
 									{NovaQuote.user_role[0] !== 'pending' &&
-									NovaQuote.not_author_but_admin === 'no' ? (
+									NovaQuote.is_admin === 'no' ? (
 										<ModalSave
 											signage={signage}
 											tempFolder={tempFolder}
 											storage={storage}
 											isLoading={isLoading}
 											setIsLoading={setIsLoading}
-											required={required}
+											required={missing}
 											action="update-processing"
 											label="Submit Quote"
 											btnClass="mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
@@ -127,7 +124,7 @@ export default function Sidebar({
 										storage={storage}
 										isLoading={isLoading}
 										setIsLoading={setIsLoading}
-										required={required}
+										required={missing}
 										action="update"
 										label="Update Quote"
 										btnClass="mb-5 font-title border border-nova-light rounded-md text-nova-gray w-full text-center bg-white text-sm h-[49px] hover:bg-nova-light hover:text-white shadow-[0_0_0_1px_rgba(0,0,0,0.3)]"
@@ -142,7 +139,7 @@ export default function Sidebar({
 											storage={storage}
 											isLoading={isLoading}
 											setIsLoading={setIsLoading}
-											required={required}
+											required={missing}
 											action="processing"
 											label="Submit Quote"
 											btnClass="mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
@@ -157,7 +154,7 @@ export default function Sidebar({
 										storage={storage}
 										isLoading={isLoading}
 										setIsLoading={setIsLoading}
-										required={required}
+										required={missing}
 										action="draft"
 										label="Save to Draft"
 										btnClass="mb-5 font-title border border-nova-light rounded-md text-nova-gray w-full text-center bg-white text-sm h-[49px] hover:bg-nova-light hover:text-white shadow-[0_0_0_1px_rgba(0,0,0,0.3)]"
@@ -165,6 +162,23 @@ export default function Sidebar({
 								</>
 							)}
 						</>
+					)}
+
+				{signage.length > 0 &&
+					NovaQuote.quote_status?.value === 'processing' &&
+					NovaQuote.is_admin === 'yes' &&
+					NovaQuote.is_editting === '1' && (
+						<ModalSave
+							signage={signage}
+							tempFolder={tempFolder}
+							storage={storage}
+							isLoading={isLoading}
+							setIsLoading={setIsLoading}
+							required={missing}
+							action="update-processing-admin"
+							label="Update Quote"
+							btnClass="mb-5 font-title border border-nova-light rounded-md text-nova-gray w-full text-center bg-white text-sm h-[49px] hover:bg-nova-light hover:text-white shadow-[0_0_0_1px_rgba(0,0,0,0.3)]"
+						/>
 					)}
 
 				<div className="text-sm mb-4">Quote & Draft Validity: 30 days</div>

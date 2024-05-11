@@ -11,7 +11,7 @@ export default function Logo({ item }) {
 		tempFolder,
 		isLoading,
 		setIsLoading,
-	} = useContext(QuoteContext);
+	} = useAppContext();
 	const [fileNames, setFileNames] = useState(item.fileNames);
 	const [fileUrls, setFileUrls] = useState(item.fileUrls);
 	const [filePaths, setFilePaths] = useState(item.filePaths);
@@ -107,9 +107,6 @@ export default function Logo({ item }) {
 					fileNames={fileNames}
 					setFileUrls={setFileUrls}
 					setFileNames={setFileNames}
-					tempFolder={tempFolder}
-					isLoading={isLoading}
-					setIsLoading={setIsLoading}
 				/>
 			</div>
 		</>

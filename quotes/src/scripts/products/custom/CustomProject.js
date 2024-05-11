@@ -3,7 +3,6 @@ import { v4 as uuidv4 } from 'uuid';
 import SidebarNoPrice from '../../SidebarNoPrice';
 import Signage from '../../Signage';
 import { PlusIcon } from '../../svg/Icons';
-import { SignageCount } from '../../utils/QuoteFunctions';
 import Logo from './components/Logo';
 
 export const QuoteContext = createContext(null);
@@ -71,7 +70,7 @@ export default function CustomProject() {
 			const count = prevSignage.filter((sign) => sign.type === type).length;
 			let args;
 			args = {
-				title: `${type} ${count + 1}`.toUpperCase(),
+				title: `${type} ${count + 1}`,
 			};
 			const newSignage = {
 				...defaultArgs,
@@ -88,21 +87,7 @@ export default function CustomProject() {
 
 	useEffect(() => {
 		if (NovaQuote.is_editting.length === 0) {
-			const savedStorageFolder = JSON.parse(
-				localStorage.getItem(
-					window.location.href + NovaQuote.user_id + '-folder'
-				)
-			);
-
-			if (savedStorageFolder?.length > 0) {
-				setTempFolder(savedStorageFolder);
-			} else {
-				localStorage.setItem(
-					window.location.href + NovaQuote.user_id + '-folder',
-					JSON.stringify(tempFolderName)
-				);
-				setTempFolder(tempFolderName);
-			}
+			setTempFolder(tempFolderName);
 		} else {
 			setTempFolder(`Q-${NovaQuote.current_quote_id}`);
 		}

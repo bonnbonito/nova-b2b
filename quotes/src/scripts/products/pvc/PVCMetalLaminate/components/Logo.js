@@ -33,7 +33,7 @@ export default function Logo({ item }) {
 		tempFolder,
 		isLoading,
 		setIsLoading,
-	} = useContext(QuoteContext);
+	} = useAppContext();
 	const [selectedThickness, setSelectedThickness] = useState(item.thickness);
 	const [width, setWidth] = useState(item.width);
 	const [maxWidthHeight, setMaxWidthHeight] = useState(36);
@@ -634,9 +634,6 @@ export default function Logo({ item }) {
 					fileNames={fileNames}
 					setFileUrls={setFileUrls}
 					setFileNames={setFileNames}
-					tempFolder={tempFolder}
-					isLoading={isLoading}
-					setIsLoading={setIsLoading}
 				/>
 			</div>
 		</>
