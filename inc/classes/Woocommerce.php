@@ -1532,6 +1532,10 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 
 			$html .= '<p>';
 
+			if ( isset( $object->productLine ) && ! empty( $object->productLine ) ) {
+				$html .= '<strong>PRODUCT LINE: </strong>' . htmlspecialchars( $object->productLine ) . '<br>';
+			}
+
 			if ( isset( $object->letters ) && ! empty( $object->letters ) ) {
 				$html .= '<strong>TEXT: </strong>' . htmlspecialchars( $object->letters ) . '<br>';
 			}
@@ -2215,6 +2219,10 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 
 	public function quote_details( $project ) {
 		$projectArray = get_object_vars( $project );
+
+		if ( isset( $projectArray['productLine'] ) && ! empty( $projectArray['productLine'] ) ) {
+			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">PRODUCT LINE:</div><div class="text-left text-[10px] uppercase">' . $projectArray['productLine'] . '</div></div>';
+		}
 
 		if ( isset( $projectArray['letters'] ) && ! empty( $projectArray['letters'] ) ) {
 			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">TEXT:</div><div class="text-left text-[10px] uppercase">' . $projectArray['letters'] . '</div></div>';

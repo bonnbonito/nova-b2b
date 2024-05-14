@@ -83,6 +83,15 @@ export default function PricesView({ item }) {
 					</div>
 				)}
 
+				{item.productLine && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">PRODUCT LINE</div>
+						<div className="text-left text-[14px] break-words">
+							{item.productLine}
+						</div>
+					</div>
+				)}
+
 				{item.font && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
 						<div className="text-left text-xs font-title">FONT</div>

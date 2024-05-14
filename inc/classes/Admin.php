@@ -41,6 +41,20 @@ class Admin {
 		add_action( 'admin_init', array( $this, 'export_users_to_csv_check' ) );
 		add_action( 'admin_menu', array( $this, 'export_quotes_menu' ) );
 		add_action( 'admin_init', array( $this, 'export_quotes_to_csv_check' ) );
+		add_action( 'wp_dashboard_setup', array( $this, 'remove_all_dashboard_widgets' ), 20 );
+	}
+
+	public function remove_all_dashboard_widgets() {
+		global $wp_meta_boxes;
+
+		// Loop through all sections and remove each widget
+		foreach ( $wp_meta_boxes['dashboard'] as $context => $sections ) {
+			foreach ( $sections as $priority => $widgets ) {
+				foreach ( $widgets as $widget_id => $widget ) {
+					unset( $wp_meta_boxes['dashboard'][ $context ][ $priority ][ $widget_id ] );
+				}
+			}
+		}
 	}
 
 

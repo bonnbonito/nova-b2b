@@ -910,7 +910,13 @@ function Prices({
     className: `block ${borderTop}`
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex justify-between py-2 font-title uppercase md:tracking-[1.6px] text-lg"
-  }, item.title, price > 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, currency, "$", Number(price).toLocaleString())), item.letters && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.title, price > 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, currency, "$", Number(price).toLocaleString())), item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left font-title md:tracking-[1.4px] text-sm"
+  }, "PRODUCT LINE:"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-sm break-words"
+  }, item.productLine)), item.letters && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left font-title md:tracking-[1.4px] text-sm"
@@ -1274,7 +1280,13 @@ function PricesView({
     className: "text-left text-xs font-title"
   }, "TEXT"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-[14px] break-words"
-  }, item.letters)), item.font && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.letters)), item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-[160px_1fr] py-[2px] items-center gap-5"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-xs font-title"
+  }, "PRODUCT LINE"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-[14px] break-words"
+  }, item.productLine)), item.font && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-[160px_1fr] py-[2px] items-center gap-5"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
@@ -1957,9 +1969,10 @@ function SidebarNoPrice({
     className: "rounded-md border border-gray-200 p-4 sticky top-36"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "w-full max-h-[calc(100vh-300px)] overflow-y-auto pr-5"
-  }, signage.map(item => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Prices__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Prices__WEBPACK_IMPORTED_MODULE_2__["default"], {
     id: item.id,
-    item: item
+    item: item,
+    borderTop: index > 0 && 'border-t mt-2'
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("hr", {
     className: "mt-5"
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -3225,10 +3238,12 @@ function LaserCutAcrylic() {
     item: item
   }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_5__["default"], {
     key: item.id,
-    item: item
+    item: item,
+    productId: item.product
   }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_6__["default"], {
     key: item.id,
-    item: item
+    item: item,
+    productId: item.product
   }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-2"
   }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
@@ -3283,54 +3298,65 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const NovaOptions = NovaQuote.quote_options;
-const NovaSingleOptions = NovaQuote.single_quote_options;
 function Letters({
   item
 }) {
+  var _item$letters, _item$comments, _item$font, _item$color, _item$waterproof, _item$acrylicThicknes, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fileName, _item$fileUrl, _item$filePath, _item$file, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$finishing, _item$customFont, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
   const {
     signage,
     setSignage,
     setMissing
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_9__.useAppContext)();
-  const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.letters);
-  const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.comments);
-  const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.font);
+  const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letters = item.letters) !== null && _item$letters !== void 0 ? _item$letters : '');
+  const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
+  const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$font = item.font) !== null && _item$font !== void 0 ? _item$font : '');
   const [openFont, setOpenFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.color);
+  const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$color = item.color) !== null && _item$color !== void 0 ? _item$color : {});
   const [openColor, setOpenColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.waterproof);
-  const [selectedThickness, setSelectedThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.acrylicThickness);
-  const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.fileNames);
-  const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.fileUrls);
-  const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.filePaths);
-  const [files, setFiles] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.files);
-  const [fileName, setFileName] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.fileName);
-  const [fileUrl, setFileUrl] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.fileUrl);
-  const [filePath, setFilePath] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.filePath);
-  const [file, setFile] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.file);
-  const [fontFileName, setFontFileName] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.fontFileName);
-  const [fontFileUrl, setFontFileUrl] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.fontFileUrl);
-  const [fontFilePath, setFontFilePath] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.fontFilePath);
-  const [fontFile, setFontFile] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.fontFile);
+  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : '');
+  const [selectedThickness, setSelectedThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicThicknes = item.acrylicThickness) !== null && _item$acrylicThicknes !== void 0 ? _item$acrylicThicknes : '');
+  const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileNames = item.fileNames) !== null && _item$fileNames !== void 0 ? _item$fileNames : []);
+  const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrls = item.fileUrls) !== null && _item$fileUrls !== void 0 ? _item$fileUrls : []);
+  const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$filePaths = item.filePaths) !== null && _item$filePaths !== void 0 ? _item$filePaths : []);
+  const [files, setFiles] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$files = item.files) !== null && _item$files !== void 0 ? _item$files : []);
+  const [fileName, setFileName] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileName = item.fileName) !== null && _item$fileName !== void 0 ? _item$fileName : '');
+  const [fileUrl, setFileUrl] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrl = item.fileUrl) !== null && _item$fileUrl !== void 0 ? _item$fileUrl : '');
+  const [filePath, setFilePath] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$filePath = item.filePath) !== null && _item$filePath !== void 0 ? _item$filePath : '');
+  const [file, setFile] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$file = item.file) !== null && _item$file !== void 0 ? _item$file : '');
+  const [fontFileName, setFontFileName] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fontFileName = item.fontFileName) !== null && _item$fontFileName !== void 0 ? _item$fontFileName : '');
+  const [fontFileUrl, setFontFileUrl] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fontFileUrl = item.fontFileUrl) !== null && _item$fontFileUrl !== void 0 ? _item$fontFileUrl : '');
+  const [fontFilePath, setFontFilePath] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fontFilePath = item.fontFilePath) !== null && _item$fontFilePath !== void 0 ? _item$fontFilePath : '');
+  const [fontFile, setFontFile] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fontFile = item.fontFile) !== null && _item$fontFile !== void 0 ? _item$fontFile : '');
   const [letterHeightOptions, setLetterHeightOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [selectedFinishing, setSelectedFinishing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.finishing);
-  const [customFont, setCustomFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.customFont);
-  const [customColor, setCustomColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.customColor);
-  const [selectedLetterHeight, setSelectedLetterHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.letterHeight);
-  const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.usdPrice);
-  const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.cadPrice);
+  const [selectedFinishing, setSelectedFinishing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$finishing = item.finishing) !== null && _item$finishing !== void 0 ? _item$finishing : '');
+  const [customFont, setCustomFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$customFont = item.customFont) !== null && _item$customFont !== void 0 ? _item$customFont : '');
+  const [customColor, setCustomColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$customColor = item.customColor) !== null && _item$customColor !== void 0 ? _item$customColor : '');
+  const [selectedLetterHeight, setSelectedLetterHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letterHeight = item.letterHeight) !== null && _item$letterHeight !== void 0 ? _item$letterHeight : '');
+  const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdPrice = item.usdPrice) !== null && _item$usdPrice !== void 0 ? _item$usdPrice : 0);
+  const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadPrice = item.cadPrice) !== null && _item$cadPrice !== void 0 ? _item$cadPrice : 0);
   const [mountingOptions, setMountingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.mountingDefaultOptions);
-  const [lettersHeight, setLettersHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(NovaOptions.letters_height);
-  const [selectedMounting, setSelectedMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.mounting);
-  const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.studLength);
+  const [lettersHeight, setLettersHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
+  const [selectedMounting, setSelectedMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
+  const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$studLength = item.studLength) !== null && _item$studLength !== void 0 ? _item$studLength : '');
   const [spacerStandoffOptions, setSpacerStandoffOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.spacerStandoffDefaultOptions);
-  const [spacerStandoffDistance, setSpacerStandoffDistance] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.spacerStandoffDistance);
-  const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.sets);
+  const [spacerStandoffDistance, setSpacerStandoffDistance] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$spacerStandoffD = item.spacerStandoffDistance) !== null && _item$spacerStandoffD !== void 0 ? _item$spacerStandoffD : '');
+  const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
   const colorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const fontRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  const finishingOptions = NovaSingleOptions.finishing_options;
-  const letterPricing = NovaQuote.letter_pricing_table?.pricing_table.length > 0 ? (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_6__["default"])(NovaQuote.letter_pricing_table.pricing_table) : [];
+  const [letterPricing, setLetterPricing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    async function fetchLetterPricing() {
+      try {
+        const response = await fetch(NovaQuote.letters_picing_api + item.product);
+        const data = await response.json();
+        const pricing = (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_6__["default"])(data?.pricing_table);
+        setLetterPricing(pricing);
+      } catch (error) {
+        console.error('Error fetching letter pricing:', error);
+      }
+    }
+    fetchLetterPricing();
+  }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     console.log('Attempting to preload fonts...');
     async function preloadFonts() {
@@ -3546,7 +3572,7 @@ function Letters({
       setUsdPrice(0);
       setCadPrice(0);
     }
-  }, [selectedLetterHeight, selectedThickness, selectedFinishing, letters, waterproof, color, sets, font, selectedMounting]);
+  }, [selectedLetterHeight, selectedThickness, selectedFinishing, letters, waterproof, color, sets, font, selectedMounting, letterPricing]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     let newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.mountingDefaultOptions;
     if (selectedThickness?.value === '3') {
@@ -3652,7 +3678,11 @@ function Letters({
     color?.name != 'Custom Color' && setCustomColor('');
     font != 'Custom font' && setFontFileUrl('');
   }, [color, font]);
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    clasName: "py-4 my-4"
+  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title"
+  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "w-full self-center"
@@ -3741,7 +3771,7 @@ function Letters({
   }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Finishing Options",
     onChange: handleChangeFinishing,
-    options: finishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.finishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: finishing.name,
       selected: finishing.name === selectedFinishing
     }, finishing.name)),
@@ -5115,7 +5145,10 @@ const Letters = ({
   const [selectedLetterHeight, setSelectedLetterHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.letterHeight);
   const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.usdPrice);
   const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.cadPrice);
-  const [lettersHeight, setLettersHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(NovaOptions.letters_height);
+  const [lettersHeight, setLettersHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
+    min: '1',
+    max: '43'
+  });
   const [mountingOptions, setMountingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.mountingDefaultOptions);
   const [selectedMounting, setSelectedMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.mounting);
   const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.studLength);
@@ -6591,6 +6624,68 @@ function Logo({
 
 /***/ }),
 
+/***/ "./src/scripts/products/combine/CombineQuoteContext.js":
+/*!*************************************************************!*\
+  !*** ./src/scripts/products/combine/CombineQuoteContext.js ***!
+  \*************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   CombineQuoteProvider: () => (/* binding */ CombineQuoteProvider),
+/* harmony export */   useCombineQuote: () => (/* binding */ useCombineQuote)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../AppProvider */ "./src/scripts/AppProvider.tsx");
+
+
+
+
+const CombineQuote = (0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)();
+function useCombineQuote() {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(CombineQuote);
+}
+function CombineQuoteProvider({
+  children
+}) {
+  const {
+    setSignage
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
+  function addSignage(productLine, productId, type) {
+    const defaultArgs = {
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_2__["default"])(),
+      productLine,
+      product: productId,
+      usdPrice: 0,
+      cadPrice: 0,
+      comments: ''
+    };
+    setSignage(prevSignage => {
+      const count = prevSignage.filter(sign => sign.type === type).length;
+      let args;
+      args = {
+        type: type,
+        title: `${type === 'letters' ? 'LETTERS' : 'LOGO'} ${count + 1}`
+      };
+      const newSignage = {
+        ...defaultArgs,
+        ...args
+      };
+
+      // Append the new signage to the array
+      return [...prevSignage, newSignage];
+    });
+  }
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(CombineQuote.Provider, {
+    value: addSignage
+  }, children);
+}
+
+/***/ }),
+
 /***/ "./src/scripts/products/combine/CombineQuotes.js":
 /*!*******************************************************!*\
   !*** ./src/scripts/products/combine/CombineQuotes.js ***!
@@ -6604,11 +6699,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
 /* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../Sidebar */ "./src/scripts/Sidebar.js");
 /* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Signage */ "./src/scripts/Signage.js");
-/* harmony import */ var _components_AccordionItem__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/AccordionItem */ "./src/scripts/products/combine/components/AccordionItem.js");
+/* harmony import */ var _components_AccordionGroup__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/AccordionGroup */ "./src/scripts/products/combine/components/AccordionGroup.js");
 /* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _CombineQuoteContext__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./CombineQuoteContext */ "./src/scripts/products/combine/CombineQuoteContext.js");
+/* harmony import */ var _acrylic_LaserCutAcrylic_components_Letters__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../acrylic/LaserCutAcrylic/components/Letters */ "./src/scripts/products/acrylic/LaserCutAcrylic/components/Letters.js");
 
 
 
@@ -6616,22 +6712,17 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+const productLines = NovaQuote.product_lines_accordion;
 function CombineQuotes() {
-  const productLines = NovaQuote.product_lines_accordion;
-  const [signage, setSignage] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [missing, setMissing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [tempFolder, setTempFolder] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
-  const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
-  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id + 'x';
-  const localStorageQuote = localStorage.getItem(storage);
-  const savedStorage = JSON.parse(localStorageQuote);
+  const {
+    signage,
+    setSignage,
+    setTempFolder,
+    tempFolderName
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_4__.useAppContext)();
   function setDefaultSignage() {
-    if (savedStorage?.length > 0) {
-      setSignage(savedStorage);
-    } else {
-      setSignage([]);
-    }
+    setSignage([]);
   }
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting === '1') {
@@ -6643,28 +6734,6 @@ function CombineQuotes() {
       setDefaultSignage();
     }
   }, []);
-  const defaultArgs = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_5__["default"])(),
-    comments: '',
-    product: NovaQuote.product
-  };
-  function addSignage(type) {
-    setSignage(prevSignage => {
-      const count = prevSignage.filter(sign => sign.type === type).length;
-      let args;
-      args = {
-        type: type,
-        title: `${type} ${count + 1}`
-      };
-      const newSignage = {
-        ...defaultArgs,
-        ...args
-      };
-
-      // Append the new signage to the array
-      return [...prevSignage, newSignage];
-    });
-  }
 
   /* useEffect(() => {
   	localStorage.setItem(storage + '-x', JSON.stringify(signage));
@@ -6677,52 +6746,57 @@ function CombineQuotes() {
       setTempFolder(`Q-${NovaQuote.current_quote_id}`);
     }
   }, []);
-  const accordion = productLines.map(group => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "border-gray-200 p-4 cursor-pointer rounded-md border mb-2"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_AccordionItem__WEBPACK_IMPORTED_MODULE_3__["default"], {
-    group: group,
-    addSignage: addSignage
-  })));
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(QuoteContext.Provider, {
-    value: {
-      signage,
-      setSignage,
-      addSignage,
-      missing,
-      setMissing,
-      tempFolder,
-      isLoading,
-      setIsLoading
-    }
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_CombineQuoteContext__WEBPACK_IMPORTED_MODULE_5__.CombineQuoteProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:flex gap-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full"
   }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
     index: index,
     id: item.id,
-    item: item,
-    signage: signage,
-    setSignage: setSignage,
-    addSignage: addSignage,
-    setMissing: setMissing,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading,
-    storage: storage
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, item.type))), signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    item: item
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_acrylic_LaserCutAcrylic_components_Letters__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    item: item
+  }))), signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "gap-2"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "font-title text-3xl"
   }, "PRODUCT LINES"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: " border-gray-200 p-4 cursor-pointer rounded-md border"
-  }, accordion))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    signage: signage,
-    required: missing,
-    tempFolder: tempFolder,
-    storage: storage,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading
-  })));
+    className: " border-gray-200 p-4 rounded-md border"
+  }, productLines.map(productLine => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_AccordionGroup__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    group: productLine.product_line,
+    products: productLine.products
+  }))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_1__["default"], null)));
+}
+
+/***/ }),
+
+/***/ "./src/scripts/products/combine/components/AccordionGroup.js":
+/*!*******************************************************************!*\
+  !*** ./src/scripts/products/combine/components/AccordionGroup.js ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ AccordionGroup)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _AccordionItem__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AccordionItem */ "./src/scripts/products/combine/components/AccordionItem.js");
+
+
+
+function AccordionGroup({
+  group,
+  products
+}) {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: `border-gray-200 rounded-md border mb-2`
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AccordionItem__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: group.post_title,
+    products: products
+  }));
 }
 
 /***/ }),
@@ -6741,32 +6815,35 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
+/* harmony import */ var _CombineQuoteContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../CombineQuoteContext */ "./src/scripts/products/combine/CombineQuoteContext.js");
+
 
 
 
 function AccordionItem({
-  group,
-  addSignage
+  title,
+  products
 }) {
   const [open, setOpen] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const addSignage = (0,_CombineQuoteContext__WEBPACK_IMPORTED_MODULE_2__.useCombineQuote)();
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "font-title uppercase text-lg select-none",
+    className: "p-4 font-title uppercase text-lg select-none cursor-pointer",
     onClick: () => setOpen(prev => !prev)
-  }, group.product_line.post_title), open && group.products.map(productLine => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: " border-gray-200 p-4 cursor-pointer rounded-md border mb-2 bg-gray-50"
+  }, title), products.map(product => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: `border-gray-200 p-4 mx-4 cursor-pointer rounded-md border mb-2 bg-gray-50 ${open ? 'block' : 'hidden'}`
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "font-title uppercase mb-2"
-  }, productLine.product.post_title), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, product.product.post_title), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     class: "flex gap-2"
-  }, productLine.letters && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+  }, product.letters && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
-    onClick: () => addSignage('letters'),
+    onClick: () => addSignage(product.product.post_title, product.product.ID, 'letters'),
     style: {
       border: '1px solid #d2d2d2d2'
     }
-  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null)), productLine.logo && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null)), product.logo && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
-    onClick: () => addSignage('logo'),
+    onClick: () => addSignage(product.product.post_title, product.product.ID, 'logo'),
     style: {
       border: '1px solid #d2d2d2d2'
     }
@@ -17071,6 +17148,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   calculateMountingOptions: () => (/* binding */ calculateMountingOptions),
 /* harmony export */   defaultFinishOptions: () => (/* binding */ defaultFinishOptions),
+/* harmony export */   finishingOptions: () => (/* binding */ finishingOptions),
 /* harmony export */   installationDefaultOptions: () => (/* binding */ installationDefaultOptions),
 /* harmony export */   metalFinishOptions: () => (/* binding */ metalFinishOptions),
 /* harmony export */   metalInstallationOptions: () => (/* binding */ metalInstallationOptions),
@@ -17088,6 +17166,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _defaults__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./defaults */ "./src/scripts/utils/defaults.js");
 
 
+const finishingOptions = [{
+  name: 'Matte'
+}, {
+  name: _defaults__WEBPACK_IMPORTED_MODULE_1__.GLOSS_FINISH
+}];
 const defaultFinishOptions = [{
   name: 'Matte'
 }, {

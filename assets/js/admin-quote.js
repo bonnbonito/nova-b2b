@@ -4,6 +4,7 @@ const cadPrice = document.getElementById('cadPrice');
 const finalPriceInput = document.querySelector(
 	'[data-name="final_price"] input'
 );
+const EXCHANGE_RATE = 1.3;
 
 async function updateDropboxFolder() {
 	const updateDropboxFolderButtons = document.querySelectorAll(
@@ -141,7 +142,7 @@ async function renameDropboxFolder(oldPath, newPath) {
 
 function displayQuoteDetails() {
 	// Initialize and display the CAD price based on the USD price
-	updateCADPriceFromUSD(exchangeRate);
+	updateCADPriceFromUSD(EXCHANGE_RATE);
 
 	// Calculate and display the total USD price for all signage items
 	displayTotalUsdPrice(signage);
@@ -177,7 +178,7 @@ function displayTotalUsdPrice(signage) {
 		0
 	);
 	const priceDisplay = totalUsdPrice ? `$${totalUsdPrice.toFixed(2)}` : 'TBD';
-	const cadPriceDisplay = convertToCAD(totalUsdPrice, exchangeRate).toFixed(2);
+	const cadPriceDisplay = convertToCAD(totalUsdPrice, EXCHANGE_RATE).toFixed(2);
 
 	const totalPriceElement = document.createElement('div');
 	totalPriceElement.className = 'total-signage-price';
@@ -208,7 +209,7 @@ function displaySignageItem(sign) {
 
 					console.log(newPrice);
 
-					const newCadPrice = convertToCAD(newPrice, exchangeRate).toFixed(2);
+					const newCadPrice = convertToCAD(newPrice, EXCHANGE_RATE).toFixed(2);
 
 					console.log(newCadPrice);
 
@@ -232,7 +233,7 @@ function displaySignageItem(sign) {
 						: 'TBD';
 
 					const cadPriceDisplay = totalUsdPrice
-						? `$${convertToCAD(totalUsdPrice, exchangeRate).toFixed(2)}`
+						? `$${convertToCAD(totalUsdPrice, EXCHANGE_RATE).toFixed(2)}`
 						: 'TBD';
 
 					document.getElementById('totalComputed').textContent = priceDisplay;
@@ -245,7 +246,7 @@ function displaySignageItem(sign) {
 					signageInput.value = JSON.stringify(signage);
 					cadPrice.textContent = convertToCAD(
 						totalUsdPrice,
-						exchangeRate
+						EXCHANGE_RATE
 					).toFixed(2);
 				}
 			}
@@ -289,6 +290,7 @@ function getSignageItemHTML(sign) {
 function getSignageDetailFields(sign) {
 	return [
 		{ label: 'CAD PRICE', value: sign.cadPrice ? sign.cadPrice : '0' },
+		{ label: 'PRODUCT LINE', value: sign.productLine ? sign.productLine : '' },
 		{ label: 'TYPE', value: sign.type },
 		{ label: 'TEXT', value: sign.letters },
 

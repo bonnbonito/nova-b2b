@@ -46,9 +46,6 @@ class Roles {
 		add_action( 'set_user_role', array( $this, 'log_role_change' ), 10, 3 );
 		add_action( 'admin_footer', array( $this, 'move_row_actions_js' ) );
 		add_action( 'pre_get_users', array( $this, 'sort_users_by_user_id' ) );
-		// add_filter( 'user_search_columns', array( $this, 'custom_user_search_columns' ), 10, 2 );
-		// add_action( 'manage_users_columns', array( $this, 'show_user_id' ), 10, 3 );
-		// add_action( 'added_user_meta', array( $this, 'user_send_activate' ), 10, 4 );
 		add_action( 'pre_user_query', array( $this, 'custom_user_search_business_id' ) );
 		add_action( 'profile_update', array( $this, 'update_role_business_id_on_profile_update' ), 10, 2 );
 		add_action( 'show_user_profile', array( $this, 'add_registration_date_to_profile' ), 0 );
@@ -59,23 +56,23 @@ class Roles {
 		?>
 <h3>Registration Information</h3>
 <table class="form-table" id="registration-info">
-    <tr>
-        <th><label for="registration_date">Registration Date</label></th>
-        <td>
-            <?php echo date( 'M d, Y', strtotime( $user->user_registered ) ); ?>
-        </td>
-    </tr>
+	<tr>
+		<th><label for="registration_date">Registration Date</label></th>
+		<td>
+			<?php echo date( 'M d, Y', strtotime( $user->user_registered ) ); ?>
+		</td>
+	</tr>
 </table>
 <script type="text/javascript">
 document.addEventListener('DOMContentLoaded', function() {
-    var regInfo = document.getElementById('registration-info').closest('table');
-    var personalOptions = document.querySelector('.user-rich-editing-wrap').closest('table');
-    if (regInfo && personalOptions) {
-        personalOptions.parentNode.insertBefore(regInfo, personalOptions);
-    }
+	var regInfo = document.getElementById('registration-info').closest('table');
+	var personalOptions = document.querySelector('.user-rich-editing-wrap').closest('table');
+	if (regInfo && personalOptions) {
+		personalOptions.parentNode.insertBefore(regInfo, personalOptions);
+	}
 });
 </script>
-<?php
+		<?php
 	}
 
 	public function show_registration_date_business_name_column_content( $value, $column_name, $user_id ) {
@@ -133,41 +130,6 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 	}
 
-
-
-	public function custom_user_search_columns( $search, &$wp_user_query ) {
-		if ( ! empty( $search ) ) {
-			global $wpdb;
-
-			// Remove the leading and trailing slashes added by WordPress
-			$search = trim( $search, '"' );
-
-			// Modify the SQL query to search the business_id meta key
-			$search = $wpdb->prepare(
-				"(
-                {$wpdb->users}.user_login LIKE %s OR
-                {$wpdb->users}.user_email LIKE %s OR
-                {$wpdb->users}.user_nicename LIKE %s OR
-                {$wpdb->usermeta}.meta_value LIKE %s
-            )",
-				'%' . $wpdb->esc_like( $search ) . '%',
-				'%' . $wpdb->esc_like( $search ) . '%',
-				'%' . $wpdb->esc_like( $search ) . '%',
-				'%' . $wpdb->esc_like( $search ) . '%'
-			);
-
-			// Join to the usermeta table to include the business_id in the search
-			add_filter(
-				'get_search_query_join',
-				function ( $join ) use ( $wpdb ) {
-					$join .= " LEFT JOIN {$wpdb->usermeta} ON {$wpdb->users}.ID = {$wpdb->usermeta}.user_id AND {$wpdb->usermeta}.meta_key = 'business_id'";
-					return $join;
-				}
-			);
-		}
-
-		return $search;
-	}
 
 
 
@@ -275,34 +237,25 @@ document.addEventListener('DOMContentLoaded', function() {
 			?>
 <script type="text/javascript">
 jQuery(document).ready(function($) {
-    // Move the row actions from their original location to the 'user_id' column
-    $('#the-list tr').each(function() {
-        var $this = $(this);
-        var rowActions = $this.find('.row-actions').clone(); // Clone the row actions
-        $this.find('.row-actions').remove(); // Remove the original row actions
+	// Move the row actions from their original location to the 'user_id' column
+	$('#the-list tr').each(function() {
+		var $this = $(this);
+		var rowActions = $this.find('.row-actions').clone(); // Clone the row actions
+		$this.find('.row-actions').remove(); // Remove the original row actions
 
-        // Check if the 'user_id' column exists and append the cloned row actions
-        var userIDCell = $this.find('td.business_id');
-        if (userIDCell.length) {
-            userIDCell.append(rowActions);
-        }
-    });
+		// Check if the 'user_id' column exists and append the cloned row actions
+		var userIDCell = $this.find('td.business_id');
+		if (userIDCell.length) {
+			userIDCell.append(rowActions);
+		}
+	});
 });
 </script>
 
-<?php
+			<?php
 		}
 	}
 
-	public function show_user_id( $value, $column_name, $user_id ) {
-		if ( 'user_id' == $column_name ) {
-			// Create a link to the user's profile page in the WordPress admin
-			$user_edit_link = esc_url( admin_url( "user-edit.php?user_id={$user_id}" ) );
-			// Return the user ID as a clickable link
-			return "<strong><a href='{$user_edit_link}'>{$user_id}</a></strong>";
-		}
-		return $value;
-	}
 
 
 	public function update_role_business_id( $user_id, $new_role, $old_roles ) {
@@ -744,35 +697,6 @@ jQuery(document).ready(function($) {
 		$this->send_email( $user_email, $subject, $message );
 	}
 
-	public function user_send_activate( $meta_id, $user_id, $meta_key, $_meta_value ) {
-		if ( 'account_activation_key' === $meta_key ) {
-
-			$business_id    = get_field( 'business_id', 'user_' . $user_id );
-			$user_data      = get_userdata( $user_id );
-			$user_email     = $user_data->user_email;
-			$firstName      = $user_data->first_name;
-			$activation_key = get_user_meta( $user_id, 'account_activation_key', true );
-
-			$subject = 'NOVA Signage: Activate Your Account';
-
-			$message = '<p style="margin-top: 20px;">Hello ' . $firstName . ',</p>' .
-			'<p>Thank you for submitting your application as a NOVA Business Partner. Your <b>Business ID</b> number is: ' . $business_id . '</p>' .
-			'<p>Please click the link below to activate your account:</p>' .
-			'<p><a href="' . home_url() . '/activate?pu=' . $user_id . '&key=' . $activation_key . '">' .
-			home_url() . '/activate?pu=' . $user_id . '&key=' . $activation_key . '</a></p>' .
-			'<p>Thank you,<br>' .
-			'NOVA Signage Team</p>';
-
-			$mailer = WC()->mailer();
-
-			// Wrap the content with WooCommerce email template
-			$wrapped_content = $mailer->wrap_message( $subject, $message );
-
-			// Send the email using WooCommerce's mailer
-			$mailer->send( $user_email, $subject, $wrapped_content, '', '' );
-
-		}
-	}
 
 	public function send_activation() {
 

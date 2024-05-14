@@ -135,9 +135,9 @@ export default function LaserCutAcrylic() {
 				{signage.map((item, index) => (
 					<Signage index={index} id={item.id} item={item}>
 						{item.type === 'letters' ? (
-							<Letters key={item.id} item={item} />
+							<Letters key={item.id} item={item} productId={item.product} />
 						) : (
-							<Logo key={item.id} item={item} />
+							<Logo key={item.id} item={item} productId={item.product} />
 						)}
 					</Signage>
 				))}

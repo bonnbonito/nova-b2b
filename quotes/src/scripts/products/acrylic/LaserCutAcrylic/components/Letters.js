@@ -6,6 +6,7 @@ import UploadFont from '../../../../UploadFont';
 import useOutsideClick from '../../../../utils/ClickOutside';
 import convert_json from '../../../../utils/ConvertJson';
 import {
+	finishingOptions,
 	mountingDefaultOptions,
 	setOptions,
 	spacerStandoffDefaultOptions,
@@ -28,75 +29,84 @@ import {
 	STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
 
-const NovaOptions = NovaQuote.quote_options;
-const NovaSingleOptions = NovaQuote.single_quote_options;
-
 export default function Letters({ item }) {
 	const { signage, setSignage, setMissing } = useAppContext();
-
-	const [letters, setLetters] = useState(item.letters);
-	const [comments, setComments] = useState(item.comments);
-	const [font, setFont] = useState(item.font);
+	const [letters, setLetters] = useState(item.letters ?? '');
+	const [comments, setComments] = useState(item.comments ?? '');
+	const [font, setFont] = useState(item.font ?? '');
 	const [openFont, setOpenFont] = useState(false);
-	const [color, setColor] = useState(item.color);
+	const [color, setColor] = useState(item.color ?? {});
 	const [openColor, setOpenColor] = useState(false);
-	const [waterproof, setWaterproof] = useState(item.waterproof);
+	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
 	const [selectedThickness, setSelectedThickness] = useState(
-		item.acrylicThickness
+		item.acrylicThickness ?? ''
 	);
-	const [fileNames, setFileNames] = useState(item.fileNames);
-	const [fileUrls, setFileUrls] = useState(item.fileUrls);
-	const [filePaths, setFilePaths] = useState(item.filePaths);
-	const [files, setFiles] = useState(item.files);
+	const [fileNames, setFileNames] = useState(item.fileNames ?? []);
+	const [fileUrls, setFileUrls] = useState(item.fileUrls ?? []);
+	const [filePaths, setFilePaths] = useState(item.filePaths ?? []);
+	const [files, setFiles] = useState(item.files ?? []);
 
-	const [fileName, setFileName] = useState(item.fileName);
-	const [fileUrl, setFileUrl] = useState(item.fileUrl);
-	const [filePath, setFilePath] = useState(item.filePath);
-	const [file, setFile] = useState(item.file);
+	const [fileName, setFileName] = useState(item.fileName ?? '');
+	const [fileUrl, setFileUrl] = useState(item.fileUrl ?? '');
+	const [filePath, setFilePath] = useState(item.filePath ?? '');
+	const [file, setFile] = useState(item.file ?? '');
 
-	const [fontFileName, setFontFileName] = useState(item.fontFileName);
-	const [fontFileUrl, setFontFileUrl] = useState(item.fontFileUrl);
-	const [fontFilePath, setFontFilePath] = useState(item.fontFilePath);
-	const [fontFile, setFontFile] = useState(item.fontFile);
+	const [fontFileName, setFontFileName] = useState(item.fontFileName ?? '');
+	const [fontFileUrl, setFontFileUrl] = useState(item.fontFileUrl ?? '');
+	const [fontFilePath, setFontFilePath] = useState(item.fontFilePath ?? '');
+	const [fontFile, setFontFile] = useState(item.fontFile ?? '');
 
 	const [letterHeightOptions, setLetterHeightOptions] = useState([]);
-	const [selectedFinishing, setSelectedFinishing] = useState(item.finishing);
-	const [customFont, setCustomFont] = useState(item.customFont);
-	const [customColor, setCustomColor] = useState(item.customColor);
+	const [selectedFinishing, setSelectedFinishing] = useState(
+		item.finishing ?? ''
+	);
+	const [customFont, setCustomFont] = useState(item.customFont ?? '');
+	const [customColor, setCustomColor] = useState(item.customColor ?? '');
 
 	const [selectedLetterHeight, setSelectedLetterHeight] = useState(
-		item.letterHeight
+		item.letterHeight ?? ''
 	);
-	const [usdPrice, setUsdPrice] = useState(item.usdPrice);
-	const [cadPrice, setCadPrice] = useState(item.cadPrice);
+	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
+	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
 	const [mountingOptions, setMountingOptions] = useState(
 		mountingDefaultOptions
 	);
 
-	const [lettersHeight, setLettersHeight] = useState(
-		NovaOptions.letters_height
-	);
+	const [lettersHeight, setLettersHeight] = useState('');
 
-	const [selectedMounting, setSelectedMounting] = useState(item.mounting);
-	const [studLength, setStudLength] = useState(item.studLength);
+	const [selectedMounting, setSelectedMounting] = useState(item.mounting ?? '');
+	const [studLength, setStudLength] = useState(item.studLength ?? '');
 	const [spacerStandoffOptions, setSpacerStandoffOptions] = useState(
 		spacerStandoffDefaultOptions
 	);
 
 	const [spacerStandoffDistance, setSpacerStandoffDistance] = useState(
-		item.spacerStandoffDistance
+		item.spacerStandoffDistance ?? ''
 	);
 
-	const [sets, setSets] = useState(item.sets);
+	const [sets, setSets] = useState(item.sets ?? 1);
 
 	const colorRef = useRef(null);
 	const fontRef = useRef(null);
 
-	const finishingOptions = NovaSingleOptions.finishing_options;
-	const letterPricing =
-		NovaQuote.letter_pricing_table?.pricing_table.length > 0
-			? convert_json(NovaQuote.letter_pricing_table.pricing_table)
-			: [];
+	const [letterPricing, setLetterPricing] = useState([]);
+
+	useEffect(() => {
+		async function fetchLetterPricing() {
+			try {
+				const response = await fetch(
+					NovaQuote.letters_picing_api + item.product
+				);
+				const data = await response.json();
+				const pricing = convert_json(data?.pricing_table);
+				setLetterPricing(pricing);
+			} catch (error) {
+				console.error('Error fetching letter pricing:', error);
+			}
+		}
+
+		fetchLetterPricing();
+	}, []);
 
 	useEffect(() => {
 		console.log('Attempting to preload fonts...');
@@ -373,6 +383,7 @@ export default function Letters({ item }) {
 		sets,
 		font,
 		selectedMounting,
+		letterPricing,
 	]);
 
 	useEffect(() => {
@@ -570,6 +581,11 @@ export default function Letters({ item }) {
 
 	return (
 		<>
+			{item.productLine && (
+				<div clasName="py-4 my-4">
+					PRODUCT LINE: <span className="font-title">{item.productLine}</span>
+				</div>
+			)}
 			<div className="mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md">
 				<div className="w-full self-center">
 					<div
@@ -588,6 +604,7 @@ export default function Letters({ item }) {
 					</div>
 				</div>
 			</div>
+
 			<div className="py-4">
 				<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
 					Text

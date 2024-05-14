@@ -5,6 +5,8 @@ import {
 	STUD_WITH_SPACER,
 } from './defaults';
 
+const finishingOptions = [{ name: 'Matte' }, { name: GLOSS_FINISH }];
+
 const defaultFinishOptions = [
 	{
 		name: 'Matte',
@@ -228,6 +230,7 @@ const studLengthOptions = [
 export {
 	calculateMountingOptions,
 	defaultFinishOptions,
+	finishingOptions,
 	installationDefaultOptions,
 	metalFinishOptions,
 	metalInstallationOptions,

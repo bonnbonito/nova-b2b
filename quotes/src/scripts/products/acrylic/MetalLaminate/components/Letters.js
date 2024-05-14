@@ -76,9 +76,7 @@ export const Letters = ({ item }) => {
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice);
 
-	const [lettersHeight, setLettersHeight] = useState(
-		NovaOptions.letters_height
-	);
+	const [lettersHeight, setLettersHeight] = useState({ min: '1', max: '43' });
 
 	const [mountingOptions, setMountingOptions] = useState(
 		mountingDefaultOptions

@@ -1566,6 +1566,10 @@ h6 {
 			echo '<tr style="font-size: 14px; text-transform: uppercase; padding-top: 40px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">Title: </strong></td><td><font face="lato">' . $projectArray['title'] . '</font></td></tr>';
 		}
 
+		if ( isset( $projectArray['productLine'] ) && ! empty( $projectArray['productLine'] ) ) {
+			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">PRODUCT LINE: </strong></td><td><font face="lato">' . $projectArray['productLine'] . '</font></td></tr>';
+		}
+
 		if ( isset( $projectArray['letters'] ) && ! empty( $projectArray['letters'] ) ) {
 			echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">TEXT: </strong></td><td><font face="lato">' . $projectArray['letters'] . '</font></td></tr>';
 		}
@@ -2206,6 +2210,7 @@ h6 {
 				'quote_div_id'               => get_field( 'quote_div_id' ),
 				'is_added_to_cart'           => $this->is_added_to_cart(),
 				'product_lines_accordion'    => get_field( 'product_lines_accordion', 'option' ),
+				'letters_picing_api'         => rest_url() . 'nova/v1/pricingletters/',
 			)
 		);
 
