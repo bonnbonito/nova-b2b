@@ -4,7 +4,6 @@ const cadPrice = document.getElementById('cadPrice');
 const finalPriceInput = document.querySelector(
 	'[data-name="final_price"] input'
 );
-const exchangeRate = 1.3;
 
 async function updateDropboxFolder() {
 	const updateDropboxFolderButtons = document.querySelectorAll(

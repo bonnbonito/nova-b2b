@@ -15,10 +15,16 @@ import {
 	studLengthOptions,
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
-import { QuoteContext } from '../LaserCutAluminum';
+
+import {
+	INDOOR_NOT_WATERPROOF,
+	STUD_MOUNT,
+	STUD_WITH_SPACER,
+} from '../../../../utils/defaults';
+
+import { useAppContext } from '../../../../AppProvider';
 
 const NovaOptions = NovaQuote.quote_options;
-const exchangeRate = 1.3;
 
 const lowerCasePricing = parseFloat(
 	NovaQuote.lowercase_pricing ? NovaQuote.lowercase_pricing : 1
@@ -31,14 +37,7 @@ const smallPunctuations = parseFloat(
 //const AcrylicLetterPricing = JSON.parse(NovaOptions.letter_x_logo_pricing);
 
 export default function Letters({ item }) {
-	const {
-		signage,
-		setSignage,
-		setMissing,
-		tempFolder,
-		isLoading,
-		setIsLoading,
-	} = useAppContext();
+	const { signage, setSignage, setMissing } = useAppContext();
 	const [letters, setLetters] = useState(item.letters);
 	const [comments, setComments] = useState(item.comments);
 	const [font, setFont] = useState(item.font);
@@ -186,30 +185,30 @@ export default function Letters({ item }) {
 			if (sign.id === item.id) {
 				return {
 					...sign,
-					letters: letters,
-					comments: comments,
-					font: font,
+					letters,
+					comments,
+					font,
 					metalThickness: selectedThickness,
-					mounting: mounting,
-					waterproof: waterproof,
+					mounting,
+					waterproof,
 					metalColor: color,
 					letterHeight: selectedLetterHeight,
-					usdPrice: usdPrice,
-					cadPrice: cadPrice,
-					files: files,
-					fileNames: fileNames,
-					filePaths: filePaths,
-					fileUrls: fileUrls,
-					fontFile: fontFile,
-					fontFileName: fontFileName,
-					fontFilePath: fontFilePath,
-					fontFileUrl: fontFileUrl,
+					usdPrice,
+					cadPrice,
+					files,
+					fileNames,
+					filePaths,
+					fileUrls,
+					fontFile,
+					fontFileName,
+					fontFilePath,
+					fontFileUrl,
 					finishing: selectedFinishing,
-					customFont: customFont,
+					customFont,
 					metalCustomColor: customColor,
-					sets: sets,
-					studLength: studLength,
-					spacerStandoffDistance: spacerStandoffDistance,
+					sets,
+					studLength,
+					spacerStandoffDistance,
 				};
 			} else {
 				return sign;
@@ -228,8 +227,8 @@ export default function Letters({ item }) {
 		const target = e.target.value;
 		setMounting(target);
 
-		if (target === 'Stud with spacer' || target === 'Stud Mount') {
-			if (target === 'Stud Mount') {
+		if (target === STUD_WITH_SPACER || target === STUD_MOUNT) {
+			if (target === STUD_MOUNT) {
 				setSpacerStandoffDistance('');
 			}
 		} else {
@@ -301,13 +300,12 @@ export default function Letters({ item }) {
 				}
 
 				// Adjusting for waterproof and finishing
-				letterPrice *= waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.02;
-				letterPrice *= selectedFinishing === 'Gloss' ? 1.1 : 1;
+				letterPrice *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.02;
 
 				totalLetterPrice += letterPrice;
 			});
 
-			if (mounting === 'Stud with spacer') {
+			if (mounting === STUD_WITH_SPACER) {
 				let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
 
 				let spacer =
@@ -320,7 +318,7 @@ export default function Letters({ item }) {
 			totalLetterPrice *= sets;
 
 			setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
-			setCadPrice((totalLetterPrice * parseFloat(exchangeRate)).toFixed(2));
+			setCadPrice((totalLetterPrice * parseFloat(EXCHANGE_RATE)).toFixed(2));
 		} else {
 			setUsdPrice(0);
 			setCadPrice(0);
@@ -416,13 +414,13 @@ export default function Letters({ item }) {
 		if (!waterproof) missingFields.push('Select Waterproof');
 		if (!mounting) missingFields.push('Select Mounting');
 
-		if (mounting === 'Stud with spacer') {
+		if (mounting === STUD_WITH_SPACER) {
 			if (!studLength) missingFields.push('Select Stud Length');
 
 			if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
 		}
 
-		if (mounting === 'Stud Mount') {
+		if (mounting === STUD_MOUNT) {
 			if (!studLength) missingFields.push('Select Stud Length');
 		}
 
@@ -528,14 +526,14 @@ export default function Letters({ item }) {
 		let newMountingOptions = metalMountingOptions;
 
 		if (selectedThickness?.value === '3') {
-			if (mounting === 'Stud with spacer' || mounting === 'Stud Mount') {
+			if (mounting === STUD_WITH_SPACER || mounting === STUD_MOUNT) {
 				setMounting('');
 				setStudLength('');
 				setSpacerStandoffDistance('');
 			}
 			newMountingOptions = newMountingOptions.filter(
 				(option) =>
-					option.option !== 'Stud Mount' && option.option !== 'Stud with spacer'
+					option.option !== STUD_MOUNT && option.option !== STUD_WITH_SPACER
 			);
 		} else {
 			newMountingOptions = metalInstallationOptions;
@@ -555,7 +553,7 @@ export default function Letters({ item }) {
 							margin: '0',
 							whiteSpace: 'nowrap',
 							overflow: 'hidden',
-							fontFamily: font,
+							fontFamily: font === 'Custom font' ? '' : font,
 							color: color?.color,
 							textShadow: '0px 0px 1px rgba(0, 0, 0, 1)',
 						}}
@@ -594,7 +592,6 @@ export default function Letters({ item }) {
 						setFontFile={setFontFile}
 						fontFilePath={fontFilePath}
 						fontFileUrl={fontFileUrl}
-						isLoading={isLoading}
 						setFontFileUrl={setFontFileUrl}
 						setFontFileName={setFontFileName}
 					/>
@@ -714,7 +711,7 @@ export default function Letters({ item }) {
 					value={mounting}
 				/>
 
-				{mounting === 'Stud with spacer' && (
+				{mounting === STUD_WITH_SPACER && (
 					<>
 						<Dropdown
 							title="Stud Length"
@@ -745,7 +742,7 @@ export default function Letters({ item }) {
 					</>
 				)}
 
-				{mounting === 'Stud Mount' && (
+				{mounting === STUD_MOUNT && (
 					<>
 						<Dropdown
 							title="Stud Length"
@@ -772,7 +769,7 @@ export default function Letters({ item }) {
 				/>
 			</div>
 
-			{mounting === 'Stud with spacer' && (
+			{mounting === STUD_WITH_SPACER && (
 				<div className="text-xs text-[#9F9F9F] mb-4">
 					*Note: The spacer will be black (default) or match the painted sign's
 					color.

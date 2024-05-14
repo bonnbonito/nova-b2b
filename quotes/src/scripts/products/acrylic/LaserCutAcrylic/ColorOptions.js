@@ -1,10 +1,12 @@
+import { CLEAR_COLOR, FROSTED_CLEAR_COLOR } from '../../../utils/defaults';
+
 const colorOptions = [
 	{
-		name: 'Clear',
+		name: CLEAR_COLOR,
 		color: '',
 	},
 	{
-		name: 'Frosted Clear',
+		name: FROSTED_CLEAR_COLOR,
 		color: '',
 	},
 	{

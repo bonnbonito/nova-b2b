@@ -1,6 +1,6 @@
 function display_quote_details() {
 	const signage = JSON.parse(QuoteAdmin.signage);
-	const exchangeRate = 1.3;
+
 	const cadPrice = document.getElementById('cadPrice');
 	const finalPrice = document.querySelector('#finalPrice input');
 

@@ -23,17 +23,8 @@ import {
 
 import { QuoteContext } from '../PVCMetalLaminate';
 
-const exchangeRate = 1.3;
-
 export default function Logo({ item }) {
-	const {
-		signage,
-		setSignage,
-		setMissing,
-		tempFolder,
-		isLoading,
-		setIsLoading,
-	} = useAppContext();
+	const { signage, setSignage, setMissing } = useAppContext();
 	const [selectedThickness, setSelectedThickness] = useState(item.thickness);
 	const [width, setWidth] = useState(item.width);
 	const [maxWidthHeight, setMaxWidthHeight] = useState(36);
@@ -116,15 +107,15 @@ export default function Logo({ item }) {
 	const colorRef = useRef(null);
 
 	const [height, setHeight] = useState(item.height);
-	const [comments, setComments] = useState('');
+	const [comments, setComments] = useState(item.comments);
 	const [waterproof, setWaterproof] = useState(item.waterproof);
 
 	const handleOnChangeMounting = (e) => {
 		const target = e.target.value;
 		setMounting(target);
 
-		if (target === 'Stud with spacer' || target === 'Stud Mount') {
-			if (target === 'Stud Mount') {
+		if (target === STUD_WITH_SPACER || target === STUD_MOUNT) {
+			if (target === STUD_MOUNT) {
 				setSpacerStandoffDistance('');
 			}
 		} else {
@@ -174,25 +165,25 @@ export default function Logo({ item }) {
 			if (sign.id === item.id) {
 				return {
 					...sign,
-					comments: comments,
+					comments,
 					thickness: selectedThickness,
-					mounting: mounting,
-					waterproof: waterproof,
-					width: width,
-					height: height,
-					usdPrice: usdPrice,
-					cadPrice: cadPrice,
+					mounting,
+					waterproof,
+					width,
+					height,
+					usdPrice,
+					cadPrice,
 					finishing: selectedFinishing,
-					files: files,
-					fileNames: fileNames,
-					filePaths: filePaths,
-					fileUrls: fileUrls,
-					customColor: customColor,
-					sets: sets,
-					studLength: studLength,
-					spacerStandoffDistance: spacerStandoffDistance,
-					pvcBaseColor: pvcBaseColor,
-					metalLaminate: metalLaminate,
+					files,
+					fileNames,
+					filePaths,
+					fileUrls,
+					customColor,
+					sets,
+					studLength,
+					spacerStandoffDistance,
+					pvcBaseColor,
+					metalLaminate,
 				};
 			} else {
 				return sign;
@@ -200,10 +191,6 @@ export default function Logo({ item }) {
 		});
 		setSignage(() => updatedSignage);
 	}
-
-	useEffect(() => {
-		setComments(item.comments);
-	}, []);
 
 	useEffect(() => {
 		updateSignage();
@@ -257,11 +244,11 @@ export default function Logo({ item }) {
 
 				let total = parseFloat((computed * multiplier).toFixed(2));
 
-				total *= selectedFinishing === 'Gloss' ? 1.03 : 1;
+				total *= selectedFinishing === GLOSS_FINISH ? 1.03 : 1;
 				total *= mounting === 'Double-sided tape' ? 1.01 : 1;
 				total *= pvcBaseColor?.name !== 'Black' ? 1.1 : 1;
 
-				if (mounting === 'Stud with spacer') {
+				if (mounting === STUD_WITH_SPACER) {
 					let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
 					let spacer = total * 1.02 > maxVal ? maxVal : total * 1.02;
 
@@ -273,7 +260,7 @@ export default function Logo({ item }) {
 				total *= sets;
 
 				setUsdPrice(parseFloat(total.toFixed(2)));
-				setCadPrice((total * parseFloat(exchangeRate)).toFixed(2));
+				setCadPrice((total * parseFloat(EXCHANGE_RATE)).toFixed(2));
 			} else {
 				setUsdPrice(0);
 				setCadPrice(0);
@@ -308,7 +295,7 @@ export default function Logo({ item }) {
 		if (!waterproof) missingFields.push('Select Waterproof');
 		if (!mounting) missingFields.push('Select Mounting');
 
-		if (mounting === 'Stud with spacer') {
+		if (mounting === STUD_WITH_SPACER) {
 			if (!studLength) missingFields.push('Select Stud Length');
 
 			if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
@@ -534,7 +521,7 @@ export default function Logo({ item }) {
 					value={item.mounting}
 				/>
 
-				{mounting === 'Stud with spacer' && (
+				{mounting === STUD_WITH_SPACER && (
 					<>
 						<Dropdown
 							title="Stud Length"
@@ -565,7 +552,7 @@ export default function Logo({ item }) {
 					</>
 				)}
 
-				{mounting === 'Stud Mount' && (
+				{mounting === STUD_MOUNT && (
 					<>
 						<Dropdown
 							title="Stud Length"
@@ -592,7 +579,7 @@ export default function Logo({ item }) {
 				/>
 			</div>
 
-			{mounting === 'Stud with spacer' && (
+			{mounting === STUD_WITH_SPACER && (
 				<div className="text-xs text-[#9F9F9F] mb-4">
 					*Note: The spacer will be black (default) or match the painted sign's
 					color.

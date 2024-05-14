@@ -26,11 +26,11 @@ export default function Logo({ item }) {
 			if (sign.id === item.id) {
 				return {
 					...sign,
-					files: files,
-					fileNames: fileNames,
-					filePaths: filePaths,
-					fileUrls: fileUrls,
-					description: description,
+					files,
+					fileNames,
+					filePaths,
+					fileUrls,
+					description,
 				};
 			} else {
 				return sign;

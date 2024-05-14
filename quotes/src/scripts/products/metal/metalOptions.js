@@ -1,3 +1,5 @@
+import { STUD_MOUNT, STUD_WITH_SPACER } from '../../utils/defaults';
+
 const metalOptions = [
 	{
 		option: '304 Stainless Steel',
@@ -142,10 +144,10 @@ const metalInstallationOptions = [
 		option: 'Plain',
 	},
 	{
-		option: 'Stud Mount',
+		option: STUD_MOUNT,
 	},
 	{
-		option: 'Stud with spacer',
+		option: STUD_WITH_SPACER,
 	},
 ];
 
@@ -154,7 +156,7 @@ const fabricatedLogoInstallationOptions = [
 		option: 'Plain Mount',
 	},
 	{
-		option: 'Stud Mount',
+		option: STUD_MOUNT,
 	},
 ];
 
@@ -163,10 +165,10 @@ const fabricatedMetalInstallationOptions = [
 		option: 'PVC Backing',
 	},
 	{
-		option: 'Stud Mount',
+		option: STUD_MOUNT,
 	},
 	{
-		option: 'Stud with spacer',
+		option: STUD_WITH_SPACER,
 	},
 ];
 

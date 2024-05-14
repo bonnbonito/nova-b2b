@@ -23,11 +23,14 @@ import {
 	mountingDefaultOptions,
 } from '../../metalChannelOptions';
 
-import { QuoteContext } from '../TrimLessFrontLit';
+import {
+	EXCHANGE_RATE,
+	INDOOR_NOT_WATERPROOF,
+	STUD_MOUNT,
+	STUD_WITH_SPACER,
+} from '../../../../utils/defaults';
 
-const NovaOptions = NovaQuote.quote_options;
-
-const exchangeRate = 1.3;
+import { useAppContext } from '../../../../AppProvider';
 
 const lowerCasePricing = parseFloat(
 	NovaQuote.lowercase_pricing ? NovaQuote.lowercase_pricing : 1
@@ -39,14 +42,7 @@ const smallPunctuations = parseFloat(
 );
 
 export default function Letters({ item }) {
-	const {
-		signage,
-		setSignage,
-		setMissing,
-		tempFolder,
-		isLoading,
-		setIsLoading,
-	} = useAppContext();
+	const { signage, setSignage, setMissing } = useAppContext();
 	const [letters, setLetters] = useState(item.letters);
 	const [comments, setComments] = useState(item.comments);
 	const [font, setFont] = useState(item.font);
@@ -171,31 +167,31 @@ export default function Letters({ item }) {
 			if (sign.id === item.id) {
 				return {
 					...sign,
-					letters: letters,
-					comments: comments,
-					depth: depth,
-					font: font,
-					waterproof: waterproof,
+					letters,
+					comments,
+					depth,
+					font,
+					waterproof,
 					returnColor: color,
 					letterHeight: selectedLetterHeight,
-					usdPrice: usdPrice,
-					cadPrice: cadPrice,
-					files: files,
-					fileNames: fileNames,
-					filePaths: filePaths,
-					fileUrls: fileUrls,
-					fontFile: fontFile,
-					fontFileName: fontFileName,
-					fontFilePath: fontFilePath,
-					fontFileUrl: fontFileUrl,
-					customColor: customColor,
-					ledLightColor: ledLightColor,
-					frontAcrylicCover: frontAcrylicCover,
-					vinylWhite: vinylWhite,
-					mounting: mounting,
-					studLength: studLength,
-					spacerStandoffDistance: spacerStandoffDistance,
-					sets: sets,
+					usdPrice,
+					cadPrice,
+					files,
+					fileNames,
+					filePaths,
+					fileUrls,
+					fontFile,
+					fontFileName,
+					fontFilePath,
+					fontFileUrl,
+					customColor,
+					ledLightColor,
+					frontAcrylicCover,
+					vinylWhite,
+					mounting,
+					studLength,
+					spacerStandoffDistance,
+					sets,
 				};
 			} else {
 				return sign;
@@ -214,8 +210,8 @@ export default function Letters({ item }) {
 		const target = e.target.value;
 		setMounting(target);
 
-		if (target === 'Stud with spacer' || target === 'Stud Mount') {
-			if (target === 'Stud Mount') {
+		if (target === STUD_WITH_SPACER || target === STUD_MOUNT) {
+			if (target === STUD_MOUNT) {
 				setSpacerStandoffDistance('');
 			}
 		} else {
@@ -332,14 +328,14 @@ export default function Letters({ item }) {
 					}
 
 					// Adjusting for waterproof and finishing
-					letterPrice *= waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.03;
+					letterPrice *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.03;
 
 					letterPrice *= vinylWhite?.name ? 1.1 : 1;
 
 					totalLetterPrice += letterPrice;
 				});
 
-				if (mounting === 'Stud with spacer') {
+				if (mounting === STUD_WITH_SPACER) {
 					let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
 
 					let spacer =
@@ -354,7 +350,7 @@ export default function Letters({ item }) {
 				console.log(sets);
 
 				setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
-				setCadPrice((totalLetterPrice * parseFloat(exchangeRate)).toFixed(2));
+				setCadPrice((totalLetterPrice * parseFloat(EXCHANGE_RATE)).toFixed(2));
 			} else {
 				setUsdPrice(0);
 				setCadPrice(0);
@@ -417,13 +413,13 @@ export default function Letters({ item }) {
 
 		if (!mounting) missingFields.push('Select Mounting');
 
-		if (mounting === 'Stud with spacer') {
+		if (mounting === STUD_WITH_SPACER) {
 			if (!studLength) missingFields.push('Select Stud Length');
 
 			if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
 		}
 
-		if (mounting === 'Stud Mount') {
+		if (mounting === STUD_MOUNT) {
 			if (!studLength) missingFields.push('Select Stud Length');
 		}
 
@@ -566,7 +562,7 @@ export default function Letters({ item }) {
 
 			<div className="quote-grid mb-6">
 				<FontsDropdown
-					font={item.font}
+					font={font}
 					fontRef={fontRef}
 					openFont={openFont}
 					setOpenFont={setOpenFont}
@@ -583,7 +579,6 @@ export default function Letters({ item }) {
 						setFontFile={setFontFile}
 						fontFilePath={fontFilePath}
 						fontFileUrl={fontFileUrl}
-						isLoading={isLoading}
 						setFontFileUrl={setFontFileUrl}
 						setFontFileName={setFontFileName}
 					/>
@@ -604,7 +599,7 @@ export default function Letters({ item }) {
 					title="Letter Height"
 					onChange={handleOnChangeLetterHeight}
 					options={letterHeightOptions}
-					value={item.letterHeight}
+					value={selectedLetterHeight}
 				/>
 
 				<div className="px-[1px] relative" ref={colorRef}>
@@ -664,11 +659,11 @@ export default function Letters({ item }) {
 					title="LED Light Color"
 					onChange={handleOnChangeLedLight}
 					options={ledLightColors.map((color) => (
-						<option value={color} selected={color == item.ledLightColor}>
+						<option value={color} selected={color == ledLightColor}>
 							{color}
 						</option>
 					))}
-					value={item.ledLightColor}
+					value={ledLightColor}
 				/>
 
 				<Dropdown
@@ -677,12 +672,12 @@ export default function Letters({ item }) {
 					options={whiteOptions.map((option) => (
 						<option
 							value={option.option}
-							selected={option == item.frontAcrylicCover}
+							selected={option == frontAcrylicCover}
 						>
 							{option.option}
 						</option>
 					))}
-					value={item.frontAcrylicCover}
+					value={frontAcrylicCover}
 				/>
 
 				{frontAcrylicCover === '3M Vinyl' && (
@@ -741,12 +736,12 @@ export default function Letters({ item }) {
 					options={waterProofOptions.map((option) => (
 						<option
 							value={option.option}
-							selected={option.option == item.waterproof}
+							selected={option.option == waterproof}
 						>
 							{option.option}
 						</option>
 					))}
-					value={item.waterproof}
+					value={waterproof}
 				/>
 
 				<Dropdown
@@ -755,15 +750,15 @@ export default function Letters({ item }) {
 					options={mountingDefaultOptions.map((mounting) => (
 						<option
 							value={mounting.value}
-							selected={mounting.value == item.mounting}
+							selected={mounting.value == mounting}
 						>
 							{mounting.value}
 						</option>
 					))}
-					value={item.mounting}
+					value={mounting}
 				/>
 
-				{mounting === 'Stud with spacer' && (
+				{mounting === STUD_WITH_SPACER && (
 					<>
 						<Dropdown
 							title="Stud Length"
@@ -771,12 +766,12 @@ export default function Letters({ item }) {
 							options={studLengthOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.studLength}
+									selected={option.value == studLength}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.studLength}
+							value={studLength}
 						/>
 						<Dropdown
 							title="STANDOFF SPACE"
@@ -784,17 +779,17 @@ export default function Letters({ item }) {
 							options={spacerStandoffOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.spacerStandoffDistance}
+									selected={option.value == spacerStandoffDistance}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.spacerStandoffDistance}
+							value={spacerStandoffDistance}
 						/>
 					</>
 				)}
 
-				{mounting === 'Stud Mount' && (
+				{mounting === STUD_MOUNT && (
 					<>
 						<Dropdown
 							title="Stud Length"
@@ -802,12 +797,12 @@ export default function Letters({ item }) {
 							options={studLengthOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.studLength}
+									selected={option.value == studLength}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.studLength}
+							value={studLength}
 						/>
 					</>
 				)}
@@ -821,7 +816,7 @@ export default function Letters({ item }) {
 				/>
 			</div>
 
-			{mounting === 'Stud with spacer' && (
+			{mounting === STUD_WITH_SPACER && (
 				<div className="text-xs text-[#9F9F9F] mb-4">
 					*Note: The spacer will be black (default) or match the painted sign's
 					color.

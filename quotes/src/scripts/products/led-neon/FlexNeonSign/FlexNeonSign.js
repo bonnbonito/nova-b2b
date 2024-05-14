@@ -7,7 +7,7 @@ import { PlusIcon } from '../../../svg/Icons';
 import Letters from './components/Letters';
 import Logo from './components/Logo';
 
-export const QuoteContext = createContext(null);
+import { useAppContext } from '../../../AppProvider';
 
 export default function PVCMetalLaminate() {
 	const { signage, setSignage, setTempFolder, tempFolderName } =

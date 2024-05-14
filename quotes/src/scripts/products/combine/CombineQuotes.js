@@ -4,7 +4,7 @@ import Sidebar from '../../Sidebar';
 import Signage from '../../Signage';
 import AccordionItem from './components/AccordionItem';
 
-export const QuoteContext = createContext(null);
+import { useAppContext } from '../../AppProvider';
 
 export default function CombineQuotes() {
 	const productLines = NovaQuote.product_lines_accordion;

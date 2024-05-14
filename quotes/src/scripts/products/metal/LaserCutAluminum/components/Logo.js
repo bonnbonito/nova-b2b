@@ -14,19 +14,17 @@ import {
 	studLengthOptions,
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
-import { QuoteContext } from '../LaserCutAluminum';
 
-const exchangeRate = 1.3;
+import {
+	INDOOR_NOT_WATERPROOF,
+	STUD_MOUNT,
+	STUD_WITH_SPACER,
+} from '../../../../utils/defaults';
+
+import { useAppContext } from '../../../../AppProvider';
 
 export default function Logo({ item }) {
-	const {
-		signage,
-		setSignage,
-		setMissing,
-		tempFolder,
-		isLoading,
-		setIsLoading,
-	} = useAppContext();
+	const { signage, setSignage, setMissing } = useAppContext();
 	const [selectedMounting, setSelectedMounting] = useState(item.mounting);
 	const [selectedThickness, setSelectedThickness] = useState(
 		item.metalThickness
@@ -57,7 +55,7 @@ export default function Logo({ item }) {
 		}
 	);
 	const [height, setHeight] = useState(item.height);
-	const [comments, setComments] = useState('');
+	const [comments, setComments] = useState(item.comments);
 	const [waterproof, setWaterproof] = useState(item.waterproof);
 	const [mounting, setMounting] = useState(item.mounting);
 
@@ -138,8 +136,8 @@ export default function Logo({ item }) {
 		const target = e.target.value;
 		setMounting(target);
 
-		if (target === 'Stud with spacer' || target === 'Stud Mount') {
-			if (target === 'Stud Mount') {
+		if (target === STUD_WITH_SPACER || target === STUD_MOUNT) {
+			if (target === STUD_MOUNT) {
 				setSpacerStandoffDistance('');
 			}
 		} else {
@@ -153,24 +151,24 @@ export default function Logo({ item }) {
 			if (sign.id === item.id) {
 				return {
 					...sign,
-					comments: comments,
+					comments,
 					metalThickness: selectedThickness,
-					waterproof: waterproof,
+					waterproof,
 					metalColor: color,
-					mounting: mounting,
-					width: width,
-					height: height,
-					usdPrice: usdPrice,
-					cadPrice: cadPrice,
+					mounting,
+					width,
+					height,
+					usdPrice,
+					cadPrice,
 					finishing: selectedFinishing,
-					files: files,
-					fileNames: fileNames,
-					filePaths: filePaths,
-					fileUrls: fileUrls,
+					files,
+					fileNames,
+					filePaths,
+					fileUrls,
 					metalCustomColor: customColor,
-					sets: sets,
-					studLength: studLength,
-					spacerStandoffDistance: spacerStandoffDistance,
+					sets,
+					studLength,
+					spacerStandoffDistance,
 				};
 			} else {
 				return sign;
@@ -178,10 +176,6 @@ export default function Logo({ item }) {
 		});
 		setSignage(() => updatedSignage);
 	}
-
-	useEffect(() => {
-		setComments(item.comments);
-	}, []);
 
 	useEffect(() => {
 		updateSignage();
@@ -228,12 +222,12 @@ export default function Logo({ item }) {
 		}
 		if (!mounting) missingFields.push('Select Mounting');
 
-		if (mounting === 'Stud with spacer') {
+		if (mounting === STUD_WITH_SPACER) {
 			if (!studLength) missingFields.push('Select Stud Length');
 
 			if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
 		}
-		if (mounting === 'Stud Mount') {
+		if (mounting === STUD_MOUNT) {
 			if (!studLength) missingFields.push('Select Stud Length');
 		}
 
@@ -299,12 +293,12 @@ export default function Logo({ item }) {
 
 				let multiplier = 0;
 				if (waterproof) {
-					multiplier = waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.02;
+					multiplier = waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.02;
 				}
 
 				let total = parseFloat((computed * multiplier).toFixed(2));
 
-				if (mounting === 'Stud with spacer') {
+				if (mounting === STUD_WITH_SPACER) {
 					let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
 					let spacer = total * 1.02 > maxVal ? maxVal : total * 1.02;
 					spacer = parseFloat(spacer.toFixed(2));
@@ -315,7 +309,7 @@ export default function Logo({ item }) {
 				total *= sets;
 
 				setUsdPrice(parseFloat(total.toFixed(2)));
-				setCadPrice((total * parseFloat(exchangeRate)).toFixed(2));
+				setCadPrice((total * parseFloat(EXCHANGE_RATE)).toFixed(2));
 			} else {
 				setUsdPrice(0);
 				setCadPrice(0);
@@ -347,14 +341,14 @@ export default function Logo({ item }) {
 		let newMountingOptions = metalMountingOptions;
 
 		if (selectedThickness?.value === '3') {
-			if (mounting === 'Stud with spacer' || mounting === 'Stud Mount') {
+			if (mounting === STUD_WITH_SPACER || mounting === STUD_MOUNT) {
 				setMounting('');
 				setStudLength('');
 				setSpacerStandoffDistance('');
 			}
 			newMountingOptions = newMountingOptions.filter(
 				(option) =>
-					option.option !== 'Stud Mount' && option.option !== 'Stud with spacer'
+					option.option !== STUD_MOUNT && option.option !== STUD_WITH_SPACER
 			);
 		} else {
 			newMountingOptions = metalInstallationOptions;
@@ -484,7 +478,7 @@ export default function Logo({ item }) {
 					value={item.mounting}
 				/>
 
-				{mounting === 'Stud with spacer' && (
+				{mounting === STUD_WITH_SPACER && (
 					<>
 						<Dropdown
 							title="Stud Length"
@@ -515,7 +509,7 @@ export default function Logo({ item }) {
 					</>
 				)}
 
-				{mounting === 'Stud Mount' && (
+				{mounting === STUD_MOUNT && (
 					<>
 						<Dropdown
 							title="Stud Length"
@@ -542,7 +536,7 @@ export default function Logo({ item }) {
 				/>
 			</div>
 
-			{mounting === 'Stud with spacer' && (
+			{mounting === STUD_WITH_SPACER && (
 				<div className="text-xs text-[#9F9F9F] mb-4">
 					*Note: The spacer will be black (default) or match the painted sign's
 					color.

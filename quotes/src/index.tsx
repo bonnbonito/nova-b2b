@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import 'react-tooltip/dist/react-tooltip.css';
 
 import './index.css';
@@ -21,61 +21,135 @@ import PVCMetalLaminate from './scripts/products/pvc/PVCMetalLaminate/PVCMetalLa
 import PVCPainted from './scripts/products/pvc/PVCPainted/PVCPainted';
 import PVCUv from './scripts/products/pvc/PVCUv/PVCUv';
 
-if (document.getElementById('QuoteApp')) {
-	ReactDOM.render(<QuoteApp />, document.querySelector('#QuoteApp'));
+declare global {
+	interface Window {
+		NovaQuote: {
+			quote_div_id: string;
+		};
+	}
 }
 
-function QuoteApp() {
-	let component;
-	switch (NovaQuote.quote_div_id) {
+const rootElement = document.getElementById('QuoteApp');
+const quoteView = document.getElementById('quoteView');
+
+if (rootElement) {
+	const root = ReactDOM.createRoot(rootElement);
+	root.render(<QuoteApp />);
+}
+
+if (quoteView) {
+	const root = ReactDOM.createRoot(quoteView);
+	root.render(<QuoteView />);
+}
+
+function QuoteApp(): JSX.Element {
+	let component: JSX.Element;
+	switch (window.NovaQuote.quote_div_id) {
 		case 'combineQuotes':
-			component = <CombineQuotes />;
+			component = (
+				<AppProvider>
+					<CombineQuotes />
+				</AppProvider>
+			);
 			break;
 		case 'laserCutAcrylic':
-			component = <LaserCutAcrylic />;
-			break;
-		case 'quoteView':
-			component = <QuoteView />;
+			component = (
+				<AppProvider>
+					<LaserCutAcrylic />
+				</AppProvider>
+			);
 			break;
 		case 'pvcMetalLaminate':
-			component = <PVCMetalLaminate />;
+			component = (
+				<AppProvider>
+					<PVCMetalLaminate />
+				</AppProvider>
+			);
 			break;
 		case 'pvcPainted':
-			component = <PVCPainted />;
+			component = (
+				<AppProvider>
+					<PVCPainted />
+				</AppProvider>
+			);
 			break;
 		case 'pvcUv':
-			component = <PVCUv />;
+			component = (
+				<AppProvider>
+					<PVCUv />
+				</AppProvider>
+			);
 			break;
 		case 'layeredAcrylic':
-			component = <LayeredAcrylic />;
+			component = (
+				<AppProvider>
+					<LayeredAcrylic />
+				</AppProvider>
+			);
 			break;
 		case 'laserCutAluminum':
-			component = <LaserCutAluminum />;
+			component = (
+				<AppProvider>
+					<LaserCutAluminum />
+				</AppProvider>
+			);
 			break;
 		case 'uvPrintedAcrylic':
-			component = <UvPrintedAcrylic />;
+			component = (
+				<AppProvider>
+					<UvPrintedAcrylic />
+				</AppProvider>
+			);
 			break;
 		case 'metalLaminateAcrylic':
-			component = <MetalLaminate />;
+			component = (
+				<AppProvider>
+					<MetalLaminate />
+				</AppProvider>
+			);
 			break;
 		case 'metalChannelTrimlessFrontLit':
-			component = <TrimLessFrontLit />;
+			component = (
+				<AppProvider>
+					<TrimLessFrontLit />
+				</AppProvider>
+			);
 			break;
 		case 'laserCutStainless':
-			component = <LaserCutStainless />;
+			component = (
+				<AppProvider>
+					<LaserCutStainless />
+				</AppProvider>
+			);
 			break;
 		case 'metalChannelTrimlessFrontAndBackLit':
-			component = <TrimLessFrontAndBackLit />;
+			component = (
+				<AppProvider>
+					<TrimLessFrontAndBackLit />
+				</AppProvider>
+			);
 			break;
 		case 'metalChannelTrimlessBackLit':
-			component = <TrimLessBackLit />;
+			component = (
+				<AppProvider>
+					<TrimLessBackLit />
+				</AppProvider>
+			);
 			break;
 		case 'metalFabricatedStainless':
-			component = <FabricatedStainless />;
+			component = (
+				<AppProvider>
+					<FabricatedStainless />
+				</AppProvider>
+			);
 			break;
 		default:
-			component = <CustomProject />;
+			component = (
+				<AppProvider>
+					<CustomProject />
+				</AppProvider>
+			);
 			break;
 	}
-	return <AppProvider>{component}</AppProvider>;
+	return component;
 }

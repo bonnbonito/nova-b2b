@@ -5,7 +5,7 @@ import Signage from '../../Signage';
 import { PlusIcon } from '../../svg/Icons';
 import Logo from './components/Logo';
 
-export const QuoteContext = createContext(null);
+import { useAppContext } from '../../AppProvider';
 
 export default function CustomProject() {
 	const [signage, setSignage] = useState([]);

@@ -50,11 +50,11 @@ export default function ProjectWrap({ item, index }) {
 			if (project.id === item.id) {
 				return {
 					...project,
-					files: files,
+					files,
 					filePath: filePath,
 					fileName: fileName,
 					fileUrl: fileUrl,
-					description: description,
+					description,
 					custom_id: custom_id,
 				};
 			} else {

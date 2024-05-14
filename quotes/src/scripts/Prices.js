@@ -1,11 +1,11 @@
 import React from 'react';
 
-export default function Prices({ item }) {
+export default function Prices({ item, borderTop }) {
 	const currency = wcumcs_vars_data.currency;
 	const price = currency === 'USD' ? item.usdPrice : item.cadPrice;
 	return (
-		<div className="block">
-			<div className="flex justify-between py-2 font-title uppercase md:tracking-[1.6px]">
+		<div className={`block ${borderTop}`}>
+			<div className="flex justify-between py-2 font-title uppercase md:tracking-[1.6px] text-lg">
 				{item.title}
 				{price > 0 && (
 					<span>

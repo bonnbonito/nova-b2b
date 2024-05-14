@@ -2,6 +2,7 @@ import React from 'react';
 import { useAppContext } from './AppProvider';
 import ModalSave from './ModalSave';
 import Prices from './Prices';
+import { EXCHANGE_RATE } from './utils/defaults';
 
 const currency = wcumcs_vars_data.currency;
 
@@ -25,9 +26,8 @@ export default function Sidebar() {
 	);
 
 	const totalPrice = currency === 'USD' ? totalUsdPrice : totalCadPrice;
-	const exchangeRate = 1.3;
 
-	const flatRate = currency === 'USD' ? 14.75 : 14.75 * exchangeRate;
+	const flatRate = currency === 'USD' ? 14.75 : 14.75 * EXCHANGE_RATE;
 
 	const standardRate = totalPrice > 0 ? parseFloat(totalPrice * 0.075) : 0;
 
@@ -42,9 +42,13 @@ export default function Sidebar() {
 	return (
 		<div className="md:w-1/4 w-full mt-8 md:mt-0">
 			<div className="rounded-md border border-gray-200 p-4 sticky top-36">
-				<div className="w-full max-h-[calc(100vh-300px)] overflow-y-auto">
-					{signage.map((item) => (
-						<Prices id={item.id} item={item}></Prices>
+				<div className="w-full max-h-[calc(100vh-300px)] overflow-y-auto pr-5">
+					{signage.map((item, index) => (
+						<Prices
+							id={item.id}
+							item={item}
+							borderTop={index > 0 && 'border-t mt-2'}
+						></Prices>
 					))}
 
 					<hr className="mt-5" />

@@ -1,9 +1,15 @@
+import {
+	GLOSS_FINISH,
+	STUD_MOUNT,
+	STUD_WITH_SPACER,
+} from '../../utils/defaults';
+
 export const finishingOptions = [
 	{
 		name: 'Matte',
 	},
 	{
-		name: 'Gloss',
+		name: GLOSS_FINISH,
 	},
 ];
 
@@ -18,10 +24,10 @@ export const installationOptions = [
 		value: 'Pad - Combination All',
 	},
 	{
-		value: 'Stud Mount',
+		value: STUD_MOUNT,
 	},
 	{
-		value: 'Stud with spacer',
+		value: STUD_WITH_SPACER,
 	},
 ];
 
@@ -36,10 +42,10 @@ export const mountingOptions = [
 		value: 'Pad - Combination All',
 	},
 	{
-		value: 'Stud Mount',
+		value: STUD_MOUNT,
 	},
 	{
-		value: 'Stud with spacer',
+		value: STUD_WITH_SPACER,
 	},
 ];
 

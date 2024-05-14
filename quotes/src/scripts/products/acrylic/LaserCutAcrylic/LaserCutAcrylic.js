@@ -46,9 +46,10 @@ export default function LaserCutAcrylic() {
 	useEffect(() => {
 		if (NovaQuote.is_editting === '1') {
 			const currentSignage = JSON.parse(NovaQuote.signage);
-
 			if (currentSignage) {
 				setSignage(currentSignage);
+			} else {
+				window.location.href = window.location.pathname;
 			}
 		} else {
 			setDefaultSignage();

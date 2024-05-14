@@ -1,9 +1,16 @@
+import {
+	GLOSS_FINISH,
+	INDOOR_NOT_WATERPROOF,
+	STUD_MOUNT,
+	STUD_WITH_SPACER,
+} from './defaults';
+
 const defaultFinishOptions = [
 	{
 		name: 'Matte',
 	},
 	{
-		name: 'Gloss',
+		name: GLOSS_FINISH,
 	},
 ];
 
@@ -76,7 +83,7 @@ const metalFinishOptions = [
 
 const waterProofOptions = [
 	{
-		option: 'Indoor (Not Waterproof)',
+		option: INDOOR_NOT_WATERPROOF,
 	},
 	{
 		option: 'Outdoor (Waterproof)',
@@ -97,10 +104,10 @@ const mountingDefaultOptions = [
 		mounting_option: 'Pad - Combination All',
 	},
 	{
-		mounting_option: 'Stud Mount',
+		mounting_option: STUD_MOUNT,
 	},
 	{
-		mounting_option: 'Stud with spacer',
+		mounting_option: STUD_WITH_SPACER,
 	},
 ];
 
@@ -118,10 +125,10 @@ const installationDefaultOptions = [
 		option: 'Pad - Combination All',
 	},
 	{
-		option: 'Stud Mount',
+		option: STUD_MOUNT,
 	},
 	{
-		option: 'Stud with spacer',
+		option: STUD_WITH_SPACER,
 	},
 ];
 
@@ -130,10 +137,10 @@ const metalInstallationOptions = [
 		option: 'Plain',
 	},
 	{
-		option: 'Stud Mount',
+		option: STUD_MOUNT,
 	},
 	{
-		option: 'Stud with spacer',
+		option: STUD_WITH_SPACER,
 	},
 ];
 
@@ -149,8 +156,8 @@ const calculateMountingOptions = (
 	if (selectedThickness && selectedThickness.value === '3') {
 		newMountingOptions = newMountingOptions.filter(
 			(option) =>
-				option.mounting_option !== 'Stud Mount' &&
-				option.mounting_option !== 'Stud with spacer'
+				option.mounting_option !== STUD_MOUNT &&
+				option.mounting_option !== STUD_WITH_SPACER
 		);
 	}
 

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { DeleteQuote } from './DeleteQuote';
 import PricesView from './PricesView';
+import { EXCHANGE_RATE } from './utils/defaults';
 
 const decodeHTML = (html) => {
 	let txt = document.createElement('textarea');
@@ -105,11 +106,11 @@ export default function QuoteView() {
 	const quotePrice = NovaAccount?.final_price
 		? parseFloat(NovaAccount.final_price)
 		: 0;
-	const exchangeRate = 1.3;
-	const finalPrice =
-		currency === 'USD' ? quotePrice : quotePrice * exchangeRate;
 
-	const flatRate = currency === 'USD' ? 14.75 : 14.75 * exchangeRate;
+	const finalPrice =
+		currency === 'USD' ? quotePrice : quotePrice * EXCHANGE_RATE;
+
+	const flatRate = currency === 'USD' ? 14.75 : 14.75 * EXCHANGE_RATE;
 
 	const standardRate = parseFloat((finalPrice * 0.075).toFixed(2));
 

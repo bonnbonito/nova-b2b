@@ -3,7 +3,6 @@ import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
 import convert_json from '../../../../utils/ConvertJson';
 import { getLogoPricingTablebyThickness } from '../../../../utils/Pricing';
-import { QuoteContext } from '../UvPrintedAcrylic';
 
 import {
 	mountingDefaultOptions,
@@ -14,10 +13,17 @@ import {
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
 
+import {
+	EXCHANGE_RATE,
+	GLOSS_FINISH,
+	INDOOR_NOT_WATERPROOF,
+	STUD_MOUNT,
+	STUD_WITH_SPACER,
+} from '../../../../utils/defaults';
+
 import { useAppContext } from '../../../../AppProvider';
 
 const NovaSingleOptions = NovaQuote.single_quote_options;
-const exchangeRate = 1.3;
 
 const UV_PRICE = 1.05;
 
@@ -58,7 +64,7 @@ export default function Logo({ item }) {
 		)
 	);
 	const [height, setHeight] = useState(item.height);
-	const [comments, setComments] = useState('');
+	const [comments, setComments] = useState(item.comments);
 	const [waterproof, setWaterproof] = useState(item.waterproof);
 	const [mountingOptions, setMountingOptions] = useState(
 		mountingDefaultOptions
@@ -80,8 +86,8 @@ export default function Logo({ item }) {
 		const target = e.target.value;
 		setSelectedMounting(target);
 
-		if (target === 'Stud with spacer' || target === 'Stud Mount') {
-			if (target === 'Stud Mount') {
+		if (target === STUD_WITH_SPACER || target === STUD_MOUNT) {
+			if (target === STUD_MOUNT) {
 				setSpacerStandoffDistance('');
 			}
 		} else {
@@ -130,8 +136,8 @@ export default function Logo({ item }) {
 
 		if (selectedThickness?.value === '3') {
 			if (
-				selectedMounting === 'Stud Mounth' ||
-				selectedMounting === 'Stud with spacer'
+				selectedMounting === STUD_MOUNT ||
+				selectedMounting === STUD_WITH_SPACER
 			) {
 				setSelectedMounting('');
 				setStudLength('');
@@ -139,8 +145,8 @@ export default function Logo({ item }) {
 			}
 			newMountingOptions = newMountingOptions.filter(
 				(option) =>
-					option.mounting_option !== 'Stud Mount' &&
-					option.mounting_option !== 'Stud with spacer'
+					option.mounting_option !== STUD_MOUNT &&
+					option.mounting_option !== STUD_WITH_SPACER
 			);
 		}
 
@@ -233,25 +239,25 @@ export default function Logo({ item }) {
 			if (sign.id === item.id) {
 				return {
 					...sign,
-					comments: comments,
+					comments,
 					acrylicThickness: selectedThickness,
 					mounting: selectedMounting,
-					waterproof: waterproof,
-					width: width,
-					height: height,
-					usdPrice: usdPrice,
-					cadPrice: cadPrice,
+					waterproof,
+					width,
+					height,
+					usdPrice,
+					cadPrice,
 					finishing: selectedFinishing,
-					files: files,
-					fileNames: fileNames,
-					filePaths: filePaths,
-					fileUrls: fileUrls,
-					baseColor: baseColor,
-					customColor: customColor,
-					printPreference: printPreference,
-					sets: sets,
-					studLength: studLength,
-					spacerStandoffDistance: spacerStandoffDistance,
+					files,
+					fileNames,
+					filePaths,
+					fileUrls,
+					baseColor,
+					customColor,
+					printPreference,
+					sets,
+					studLength,
+					spacerStandoffDistance,
 				};
 			} else {
 				return sign;
@@ -259,10 +265,6 @@ export default function Logo({ item }) {
 		});
 		setSignage(() => updatedSignage);
 	}
-
-	useEffect(() => {
-		setComments(item.comments);
-	}, []);
 
 	const checkAndAddMissingFields = () => {
 		const missingFields = [];
@@ -275,13 +277,13 @@ export default function Logo({ item }) {
 		if (!waterproof) missingFields.push('Select Environment');
 		if (!selectedMounting) missingFields.push('Select Mounting Option');
 
-		if (selectedMounting === 'Stud with spacer') {
+		if (selectedMounting === STUD_WITH_SPACER) {
 			if (!studLength) missingFields.push('Select Stud Length');
 
 			if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
 		}
 
-		if (selectedMounting === 'Stud Mount') {
+		if (selectedMounting === STUD_MOUNT) {
 			if (!studLength) missingFields.push('Select Stud Length');
 		}
 
@@ -394,16 +396,16 @@ export default function Logo({ item }) {
 
 				let multiplier = 0;
 				if (waterproof) {
-					multiplier = waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.1;
+					multiplier = waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.1;
 				}
 
 				let total = parseFloat((computed * multiplier).toFixed(2));
-				total *= selectedFinishing === 'Gloss' ? 1.1 : 1;
+				total *= selectedFinishing === GLOSS_FINISH ? 1.1 : 1;
 				total *= baseColor === 'Custom Color' ? UV_PRICE : 1;
 
 				total *= 1.2;
 
-				if (selectedMounting === 'Stud with spacer') {
+				if (selectedMounting === STUD_WITH_SPACER) {
 					let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
 					let spacer = total * 1.02 > maxVal ? maxVal : total * 1.02;
 					spacer = parseFloat(spacer.toFixed(2));
@@ -414,7 +416,7 @@ export default function Logo({ item }) {
 				total *= sets;
 
 				setUsdPrice(parseFloat(total.toFixed(2)));
-				setCadPrice((total * parseFloat(exchangeRate)).toFixed(2));
+				setCadPrice((total * parseFloat(EXCHANGE_RATE)).toFixed(2));
 			} else {
 				setUsdPrice(0);
 				setCadPrice(0);
@@ -532,7 +534,7 @@ export default function Logo({ item }) {
 					value={selectedMounting}
 				/>
 
-				{selectedMounting === 'Stud with spacer' && (
+				{selectedMounting === STUD_WITH_SPACER && (
 					<>
 						<Dropdown
 							title="Stud Length"
@@ -563,7 +565,7 @@ export default function Logo({ item }) {
 					</>
 				)}
 
-				{selectedMounting === 'Stud Mount' && (
+				{selectedMounting === STUD_MOUNT && (
 					<>
 						<Dropdown
 							title="Stud Length"
@@ -590,7 +592,7 @@ export default function Logo({ item }) {
 				/>
 			</div>
 
-			{selectedMounting === 'Stud with spacer' && (
+			{selectedMounting === STUD_WITH_SPACER && (
 				<div className="text-xs text-[#9F9F9F] mb-4">
 					*Note: The spacer will be black (default) or match the painted sign's
 					color.

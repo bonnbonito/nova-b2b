@@ -1,9 +1,11 @@
+import { STUD_MOUNT, STUD_WITH_SPACER } from '../../utils/defaults';
+
 const mountingDefaultOptions = [
 	{
-		value: 'Stud Mount',
+		value: STUD_MOUNT,
 	},
 	{
-		value: 'Stud with spacer',
+		value: STUD_WITH_SPACER,
 	},
 ];
 

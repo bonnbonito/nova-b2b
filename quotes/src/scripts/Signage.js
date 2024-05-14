@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Tooltip } from 'react-tooltip';
 import { v4 as uuidv4 } from 'uuid'; // Make sure to import uuid
 import { useAppContext } from './AppProvider';
 import EditableText from './EditableText';
 import { ClearIcon, CollapseIcon, DuplicateIcon, TrashIcon } from './svg/Icons';
+import { debounce } from './utils/helpers';
 
 export default function Signage({ item, index, children }) {
 	const { signage, setSignage, setMissing, storage } = useAppContext();
@@ -36,30 +37,37 @@ export default function Signage({ item, index, children }) {
 		});
 	}
 
+	const debounceDuplicateSignage = useCallback(
+		debounce((item, index) => {
+			const duplicated = {
+				...item,
+				id: uuidv4(),
+				filePaths: [],
+				fileNames: [],
+				fileUrls: [],
+				files: [],
+				fontFile: '',
+				fontFileName: '',
+				fontFilePath: '',
+				fontFileUrl: '',
+			};
+
+			console.log(`Duplicate`, duplicated);
+
+			setSignage((current) => {
+				const updated = [
+					...current.slice(0, index + 1),
+					duplicated,
+					...current.slice(index + 1),
+				];
+				return updated;
+			});
+		}, 300),
+		[]
+	); // 300ms is the debounce delay
+
 	function duplicateSignage(item, index) {
-		const duplicated = {
-			...item,
-			id: uuidv4(),
-			filePaths: [],
-			fileNames: [],
-			fileUrls: [],
-			files: [],
-			fontFile: '',
-			fontFileName: '',
-			fontFilePath: '',
-			fontFileUrl: '',
-		};
-
-		console.log(`Duplicate`, duplicated);
-
-		setSignage((current) => {
-			const updated = [
-				...current.slice(0, index + 1),
-				duplicated,
-				...current.slice(index + 1),
-			];
-			return recountSignageTitles(updated);
-		});
+		debounceDuplicateSignage(item, index);
 	}
 
 	function updateSignage() {
@@ -130,7 +138,7 @@ export default function Signage({ item, index, children }) {
 						<ClearIcon loading={loading} />
 					</div>
 					<div
-						className="cursor-pointer"
+						className="cursor-pointer select-none"
 						onClick={() => setOpen(!open)}
 						data-tooltip-id={`${item.id}`}
 						data-tooltip-content={open ? 'Collapse' : 'Expand'}
@@ -139,7 +147,7 @@ export default function Signage({ item, index, children }) {
 					</div>
 					{signage.length < 10 && (
 						<div
-							className="cursor-pointer"
+							className="cursor-pointer select-none"
 							onClick={() => duplicateSignage(item, index)}
 							data-tooltip-id={`${item.id}`}
 							data-tooltip-content="Duplicate"

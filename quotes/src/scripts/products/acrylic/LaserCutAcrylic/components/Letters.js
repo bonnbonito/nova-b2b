@@ -18,23 +18,21 @@ import { colorOptions } from '../ColorOptions';
 
 import { useAppContext } from '../../../../AppProvider';
 
+import {
+	CLEAR_COLOR,
+	EXCHANGE_RATE,
+	FROSTED_CLEAR_COLOR,
+	GLOSS_FINISH,
+	INDOOR_NOT_WATERPROOF,
+	STUD_MOUNT,
+	STUD_WITH_SPACER,
+} from '../../../../utils/defaults';
+
 const NovaOptions = NovaQuote.quote_options;
 const NovaSingleOptions = NovaQuote.single_quote_options;
-const exchangeRate = 1.3;
-
-const lowerCasePricing = parseFloat(
-	NovaQuote.lowercase_pricing ? NovaQuote.lowercase_pricing : 1
-);
-const smallPunctuations = parseFloat(
-	NovaQuote.small_punctuations_pricing
-		? NovaQuote.small_punctuations_pricing
-		: 1
-);
-//const AcrylicLetterPricing = JSON.parse(NovaOptions.letter_x_logo_pricing);
 
 export default function Letters({ item }) {
-	const { signage, setSignage, setMissing, tempFolder, isLoading } =
-		useAppContext();
+	const { signage, setSignage, setMissing } = useAppContext();
 
 	const [letters, setLetters] = useState(item.letters);
 	const [comments, setComments] = useState(item.comments);
@@ -165,40 +163,42 @@ export default function Letters({ item }) {
 	};
 
 	function updateSignage() {
-		const updatedSignage = signage.map((sign) => {
-			if (sign.id === item.id) {
-				return {
-					...sign,
-					letters: letters,
-					comments: comments,
-					font: font,
-					acrylicThickness: selectedThickness,
-					mounting: selectedMounting,
-					waterproof: waterproof,
-					color: color,
-					letterHeight: selectedLetterHeight,
-					usdPrice: usdPrice,
-					cadPrice: cadPrice,
-					files: files,
-					fileNames: fileNames,
-					filePaths: filePaths,
-					fileUrls: fileUrls,
-					fontFile: fontFile,
-					fontFileName: fontFileName,
-					fontFilePath: fontFilePath,
-					fontFileUrl: fontFileUrl,
-					finishing: selectedFinishing,
-					customFont: customFont,
-					customColor: customColor,
-					sets: sets,
-					studLength: studLength,
-					spacerStandoffDistance: spacerStandoffDistance,
-				};
-			} else {
-				return sign;
-			}
-		});
-		setSignage(() => updatedSignage);
+		// Only proceed if the item to update exists in the signage array
+		if (!signage.some((sign) => sign.id === item.id)) return;
+
+		// Consolidate updated properties into a single object
+		const updateDetails = {
+			letters,
+			comments,
+			font,
+			acrylicThickness: selectedThickness,
+			mounting: selectedMounting,
+			waterproof,
+			color,
+			letterHeight: selectedLetterHeight,
+			usdPrice,
+			cadPrice,
+			files,
+			fileNames,
+			filePaths,
+			fileUrls,
+			fontFile,
+			fontFileName,
+			fontFilePath,
+			fontFileUrl,
+			finishing: selectedFinishing,
+			customFont,
+			customColor,
+			sets,
+			studLength,
+			spacerStandoffDistance,
+		};
+
+		setSignage((prevSignage) =>
+			prevSignage.map((sign) =>
+				sign.id === item.id ? { ...sign, ...updateDetails } : sign
+			)
+		);
 	}
 
 	const handleOnChangeLetters = (e) => setLetters(() => e.target.value);
@@ -215,8 +215,8 @@ export default function Letters({ item }) {
 		const target = e.target.value;
 		setSelectedMounting(target);
 
-		if (target === 'Stud with spacer' || target === 'Stud Mount') {
-			if (target === 'Stud Mount') {
+		if (target === STUD_WITH_SPACER || target === STUD_MOUNT) {
+			if (target === STUD_MOUNT) {
 				setSpacerStandoffDistance('');
 			}
 		} else {
@@ -243,8 +243,8 @@ export default function Letters({ item }) {
 				setSelectedLetterHeight('');
 			}
 			if (
-				selectedMounting === 'Stud Mount' ||
-				selectedMounting === 'Stud with spacer'
+				selectedMounting === STUD_MOUNT ||
+				selectedMounting === STUD_WITH_SPACER
 			) {
 				setSelectedMounting('');
 				setStudLength('');
@@ -297,68 +297,68 @@ export default function Letters({ item }) {
 		}
 	};
 
+	// Helper function to determine letter price adjustments
+	function calculateLetterPrice(
+		letter,
+		baseLetterPrice,
+		noLowerCase,
+		waterproof,
+		selectedFinishing,
+		color
+	) {
+		let letterPrice = baseLetterPrice;
+
+		// Pricing adjustments based on character type
+		if (letter === ' ') return 0;
+		if (letter.match(/[a-z]/)) letterPrice *= noLowerCase ? 1 : 0.8;
+		if (letter.match(/[`~"*,.\-']/)) letterPrice *= 0.3;
+
+		// Waterproof and finishing adjustments
+		letterPrice *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.1;
+		letterPrice *= selectedFinishing === GLOSS_FINISH ? 1.1 : 1;
+
+		// Color adjustments
+		if (color?.name === CLEAR_COLOR) letterPrice *= 0.9;
+		if (color?.name === FROSTED_CLEAR_COLOR) letterPrice *= 0.95;
+
+		return letterPrice;
+	}
+
 	useEffect(() => {
 		if (
 			letterPricing.length > 0 &&
 			selectedLetterHeight &&
 			selectedThickness &&
-			waterproof
+			waterproof &&
+			letters.trim().length > 0
 		) {
 			const pricingDetail = letterPricing[selectedLetterHeight - 1];
 			const baseLetterPrice = pricingDetail[selectedThickness.value];
-
 			let totalLetterPrice = 0;
 			const lettersArray = letters.trim().split('');
 			const noLowerCase = NovaQuote.no_lowercase.includes(font);
 
 			lettersArray.forEach((letter) => {
-				let letterPrice = baseLetterPrice;
-
-				if (letter === ' ') {
-					// If the character is a space, set the price to 0 and skip further checks
-					letterPrice = 0;
-				} else if (letter.match(/[a-z]/)) {
-					// Check for lowercase letter
-					letterPrice *= noLowerCase ? 1 : lowerCasePricing; // 80% of the base price
-				} else if (letter.match(/[A-Z]/)) {
-					// Check for uppercase letter
-					// Uppercase letters use 100% of base price, so no change needed
-				} else if (letter.match(/[`~"*,.\-']/)) {
-					// Check for small punctuation marks
-					letterPrice *= smallPunctuations; // 30% of the base price
-				} else if (letter.match(/[^a-zA-Z]/)) {
-					// Check for symbol (not a letter or small punctuation)
-					// Symbols use 100% of base price, so no change needed
-				}
-
-				// Adjusting for waterproof and finishing
-				letterPrice *= waterproof === 'Indoor (Not Waterproof)' ? 1 : 1.1;
-				letterPrice *= selectedFinishing === 'Gloss' ? 1.1 : 1;
-
-				if (color?.name === 'Clear') {
-					letterPrice *= 0.9;
-				}
-				if (color?.name === 'Frosted Clear') {
-					letterPrice *= 0.95;
-				}
-
-				totalLetterPrice += letterPrice;
+				totalLetterPrice += calculateLetterPrice(
+					letter,
+					baseLetterPrice,
+					noLowerCase,
+					waterproof,
+					selectedFinishing,
+					color
+				);
 			});
 
-			if (selectedMounting === 'Stud with spacer') {
-				let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
-
-				let spacer =
-					totalLetterPrice * 1.02 > maxVal ? maxVal : totalLetterPrice * 1.02;
-				spacer = parseFloat(spacer.toFixed(2));
-
-				totalLetterPrice += spacer;
+			if (selectedMounting === STUD_WITH_SPACER) {
+				const maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 32.5;
+				const spacer = Math.min(maxVal, totalLetterPrice * 1.02);
+				totalLetterPrice += parseFloat(spacer.toFixed(2));
 			}
 
 			totalLetterPrice *= sets;
 
 			setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
-			setCadPrice((totalLetterPrice * parseFloat(exchangeRate)).toFixed(2));
+			setCadPrice((totalLetterPrice * parseFloat(EXCHANGE_RATE)).toFixed(2));
 		} else {
 			setUsdPrice(0);
 			setCadPrice(0);
@@ -369,7 +369,6 @@ export default function Letters({ item }) {
 		selectedFinishing,
 		letters,
 		waterproof,
-		lettersHeight,
 		color,
 		sets,
 		font,
@@ -382,8 +381,8 @@ export default function Letters({ item }) {
 		if (selectedThickness?.value === '3') {
 			newMountingOptions = newMountingOptions.filter(
 				(option) =>
-					option.mounting_option !== 'Stud Mount' &&
-					option.mounting_option !== 'Stud with spacer'
+					option.mounting_option !== STUD_MOUNT &&
+					option.mounting_option !== STUD_WITH_SPACER
 			);
 		}
 
@@ -444,11 +443,11 @@ export default function Letters({ item }) {
 		if (!waterproof) missingFields.push('Select Waterproof');
 		if (!selectedMounting) missingFields.push('Select Mounting');
 
-		if (selectedMounting === 'Stud Mount') {
+		if (selectedMounting === STUD_MOUNT) {
 			if (!studLength) missingFields.push('Select Stud Length');
 		}
 
-		if (selectedMounting === 'Stud with spacer') {
+		if (selectedMounting === STUD_WITH_SPACER) {
 			if (!studLength) missingFields.push('Select Stud Length');
 
 			if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
@@ -619,7 +618,6 @@ export default function Letters({ item }) {
 						setFontFile={setFontFile}
 						fontFilePath={fontFilePath}
 						fontFileUrl={fontFileUrl}
-						isLoading={isLoading}
 						setFontFileUrl={setFontFileUrl}
 						setFontFileName={setFontFileName}
 					/>
@@ -740,7 +738,7 @@ export default function Letters({ item }) {
 					value={selectedMounting}
 				/>
 
-				{selectedMounting === 'Stud with spacer' && (
+				{selectedMounting === STUD_WITH_SPACER && (
 					<>
 						<Dropdown
 							title="Stud Length"
@@ -771,7 +769,7 @@ export default function Letters({ item }) {
 					</>
 				)}
 
-				{selectedMounting === 'Stud Mount' && (
+				{selectedMounting === STUD_MOUNT && (
 					<>
 						<Dropdown
 							title="Stud Length"
@@ -798,7 +796,7 @@ export default function Letters({ item }) {
 				/>
 			</div>
 
-			{selectedMounting === 'Stud with spacer' && (
+			{selectedMounting === STUD_WITH_SPACER && (
 				<div className="text-xs text-[#9F9F9F] mb-4">
 					*Note: The spacer will be black (default) or match the painted sign's
 					color.
