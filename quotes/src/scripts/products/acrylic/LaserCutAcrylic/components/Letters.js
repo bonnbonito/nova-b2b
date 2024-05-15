@@ -15,6 +15,8 @@ import {
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
 
+import { spacerPricing } from '../../../../utils/Pricing';
+
 import { colorOptions } from '../ColorOptions';
 
 import { useAppContext } from '../../../../AppProvider';
@@ -95,7 +97,7 @@ export default function Letters({ item }) {
 		async function fetchLetterPricing() {
 			try {
 				const response = await fetch(
-					NovaQuote.letters_picing_api + item.product
+					NovaQuote.letters_pricing_api + item.product
 				);
 				const data = await response.json();
 				const pricing = convert_json(data?.pricing_table);
@@ -360,8 +362,7 @@ export default function Letters({ item }) {
 			});
 
 			if (selectedMounting === STUD_WITH_SPACER) {
-				const maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 32.5;
-				const spacer = Math.min(maxVal, totalLetterPrice * 1.02);
+				const spacer = spacerPricing(totalLetterPrice);
 				totalLetterPrice += parseFloat(spacer.toFixed(2));
 			}
 

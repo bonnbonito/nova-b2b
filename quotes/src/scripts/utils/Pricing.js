@@ -13,3 +13,11 @@ export function getLetterPricingTableByTitle(title, letterPricingObject) {
 
 	return table ? table.letter_pricing.letter_pricing_table : undefined;
 }
+
+export function spacerPricing(total) {
+	let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
+	let spacer = total * 1.02 > maxVal ? maxVal : total * 1.02;
+	spacer = parseFloat(spacer.toFixed(2));
+
+	return spacer;
+}

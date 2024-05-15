@@ -143,10 +143,24 @@ export default function Letters({ item }) {
 	const colorRef = useRef(null);
 	const fontRef = useRef(null);
 
-	const letterPricing =
-		NovaQuote.letter_pricing_table?.pricing_table.length > 0
-			? convert_json(NovaQuote.letter_pricing_table.pricing_table)
-			: [];
+	const [letterPricing, setLetterPricing] = useState([]);
+
+	useEffect(() => {
+		async function fetchLetterPricing() {
+			try {
+				const response = await fetch(
+					NovaQuote.letters_pricing_api + item.product
+				);
+				const data = await response.json();
+				const pricing = convert_json(data?.pricing_table);
+				setLetterPricing(pricing);
+			} catch (error) {
+				console.error('Error fetching letter pricing:', error);
+			}
+		}
+
+		fetchLetterPricing();
+	}, []);
 
 	useEffect(() => {
 		console.log('Attempting to preload fonts...');

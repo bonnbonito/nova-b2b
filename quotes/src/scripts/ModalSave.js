@@ -1,20 +1,16 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import React, { useEffect, useRef, useState } from 'react';
+import { useAppContext } from './AppProvider';
 import { CloseIcon, LoadingIcon } from './svg/Icons';
 import { processQuote } from './utils/QuoteFunctions';
 import { checkAndCreateFolder, renameFolder } from './utils/uploadFunctions';
 
-function ModalSave({
-	signage,
-	action,
-	btnClass,
-	label,
-	required,
-	tempFolder,
-	storage,
-	isLoading,
-	setIsLoading,
-}) {
+function ModalSave({ action, btnClass, label }) {
+	const { signage, tempFolder, missing, isLoading, setIsLoading } =
+		useAppContext();
+
+	const required = missing;
+
 	const [submitted, setSubmitted] = useState(false);
 	const [submitting, setSubmitting] = useState(false);
 	const [open, setOpen] = useState(false);
@@ -165,11 +161,6 @@ function ModalSave({
 
 			const status = await processQuote(formData);
 			if (status.status === 'success') {
-				localStorage.removeItem(storage);
-				localStorage.removeItem(
-					window.location.href + NovaQuote.user_id + '-folder'
-				);
-
 				if (NovaQuote.is_editting.length === 0) {
 					console.log('renaming...');
 

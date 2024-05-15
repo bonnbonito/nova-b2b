@@ -31,6 +31,7 @@ declare global {
 
 const rootElement = document.getElementById('QuoteApp');
 const quoteView = document.getElementById('quoteView');
+const customProject = document.getElementById('customProject');
 
 if (rootElement) {
 	const root = ReactDOM.createRoot(rootElement);
@@ -40,6 +41,19 @@ if (rootElement) {
 if (quoteView) {
 	const root = ReactDOM.createRoot(quoteView);
 	root.render(<QuoteView />);
+}
+
+if (customProject) {
+	const root = ReactDOM.createRoot(customProject);
+	root.render(<CustomTempProject />);
+}
+
+function CustomTempProject(): JSX.Element {
+	return (
+		<AppProvider>
+			<CustomProject />
+		</AppProvider>
+	);
 }
 
 function QuoteApp(): JSX.Element {

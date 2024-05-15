@@ -7,7 +7,10 @@ import {
 	metalFinishColors,
 } from '../../../../utils/ColorOptions';
 import convert_json from '../../../../utils/ConvertJson';
-import { getLogoPricingTablebyThickness } from '../../../../utils/Pricing';
+import {
+	getLogoPricingTablebyThickness,
+	spacerPricing,
+} from '../../../../utils/Pricing';
 import {
 	setOptions,
 	spacerStandoffDefaultOptions,
@@ -224,8 +227,21 @@ export default function Logo({ item }) {
 		pvcBaseColor,
 	]);
 
-	const logoPricingObject = NovaQuote.logo_pricing_tables;
+	const [logoPricingObject, setlogoPricingObject] = useState([]);
 
+	useEffect(() => {
+		async function fetchLogoPricing() {
+			try {
+				const response = await fetch(NovaQuote.logo_pricing_api + item.product);
+				const data = await response.json();
+				setlogoPricingObject(data);
+			} catch (error) {
+				console.error('Error fetching logo pricing:', error);
+			}
+		}
+
+		fetchLogoPricing();
+	}, []);
 	useEffect(() => {
 		if (
 			width &&
@@ -257,8 +273,7 @@ export default function Logo({ item }) {
 				total *= pvcBaseColor?.name !== 'Black' ? 1.1 : 1;
 
 				if (mounting === STUD_WITH_SPACER) {
-					let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
-					let spacer = total * 1.02 > maxVal ? maxVal : total * 1.02;
+					let spacer = spacerPricing(total);
 
 					spacer = parseFloat(spacer.toFixed(2));
 

@@ -586,10 +586,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @radix-ui/react-dialog */ "./node_modules/@radix-ui/react-dialog/dist/index.mjs");
-/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./svg/Icons */ "./src/scripts/svg/Icons.js");
-/* harmony import */ var _utils_QuoteFunctions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./utils/QuoteFunctions */ "./src/scripts/utils/QuoteFunctions.js");
-/* harmony import */ var _utils_uploadFunctions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./utils/uploadFunctions */ "./src/scripts/utils/uploadFunctions.js");
+/* harmony import */ var _radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @radix-ui/react-dialog */ "./node_modules/@radix-ui/react-dialog/dist/index.mjs");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./svg/Icons */ "./src/scripts/svg/Icons.js");
+/* harmony import */ var _utils_QuoteFunctions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./utils/QuoteFunctions */ "./src/scripts/utils/QuoteFunctions.js");
+/* harmony import */ var _utils_uploadFunctions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./utils/uploadFunctions */ "./src/scripts/utils/uploadFunctions.js");
+
 
 
 
@@ -597,16 +599,18 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function ModalSave({
-  signage,
   action,
   btnClass,
-  label,
-  required,
-  tempFolder,
-  storage,
-  isLoading,
-  setIsLoading
+  label
 }) {
+  const {
+    signage,
+    tempFolder,
+    missing,
+    isLoading,
+    setIsLoading
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
+  const required = missing;
   const [submitted, setSubmitted] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [submitting, setSubmitting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [open, setOpen] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
@@ -653,7 +657,7 @@ function ModalSave({
   }, [signage]);
   const loadingStatus = () => {
     if (isLoading) {
-      return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.LoadingIcon, {
+      return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_2__.LoadingIcon, {
         text: "Saving..."
       });
     } else {
@@ -734,16 +738,14 @@ function ModalSave({
         formData.append('quote_id', NovaQuote.current_quote_id);
         formData.append('editing', 'edit');
       }
-      const status = await (0,_utils_QuoteFunctions__WEBPACK_IMPORTED_MODULE_2__.processQuote)(formData);
+      const status = await (0,_utils_QuoteFunctions__WEBPACK_IMPORTED_MODULE_3__.processQuote)(formData);
       if (status.status === 'success') {
-        localStorage.removeItem(storage);
-        localStorage.removeItem(window.location.href + NovaQuote.user_id + '-folder');
         if (NovaQuote.is_editting.length === 0) {
           console.log('renaming...');
           const folderPath = `/NOVA-CRM/${NovaQuote.business_id}/${tempFolder}`;
           const newPath = `/NOVA-CRM/${NovaQuote.business_id}/Q-${status.generated_id}`;
           try {
-            const rename = await (0,_utils_uploadFunctions__WEBPACK_IMPORTED_MODULE_3__.renameFolder)(folderPath, newPath);
+            const rename = await (0,_utils_uploadFunctions__WEBPACK_IMPORTED_MODULE_4__.renameFolder)(folderPath, newPath);
             if (rename) {
               console.log('updating quote field...');
               const prevSignage = JSON.stringify(signage);
@@ -753,7 +755,7 @@ function ModalSave({
               newData.append('updated', updatedSignage);
               newData.append('quote_id', status.generated_id); // Make sure to use newData here
               newData.append('action', 'update_dropbox_path');
-              const updating = await (0,_utils_QuoteFunctions__WEBPACK_IMPORTED_MODULE_2__.processQuote)(newData);
+              const updating = await (0,_utils_QuoteFunctions__WEBPACK_IMPORTED_MODULE_3__.processQuote)(newData);
               if (updating.status === 'success') {
                 console.log('Quote updated successfully');
               } else {
@@ -770,7 +772,7 @@ function ModalSave({
         }
         try {
           const projectFolder = `/NOVA-CRM/${NovaQuote.business_id}/Q-${status.generated_id}/FromClient`;
-          const createFolder = await (0,_utils_uploadFunctions__WEBPACK_IMPORTED_MODULE_3__.checkAndCreateFolder)(projectFolder);
+          const createFolder = await (0,_utils_uploadFunctions__WEBPACK_IMPORTED_MODULE_4__.checkAndCreateFolder)(projectFolder);
           if (createFolder) {
             console.log('Folder created');
           }
@@ -794,22 +796,22 @@ function ModalSave({
       setIsLoading(false);
     }
   };
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_4__.Root, {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_5__.Root, {
     open: submitting ? true : open,
     onOpenChange: setOpen
   }, isLoading ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: btnClass
-  }, isLoading ? 'Please wait...' : label) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_4__.Trigger, {
+  }, isLoading ? 'Please wait...' : label) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_5__.Trigger, {
     asChild: true
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: btnClass
-  }, isLoading ? 'Please wait...' : label)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_4__.Portal, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_4__.Overlay, {
+  }, isLoading ? 'Please wait...' : label)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_5__.Portal, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_5__.Overlay, {
     className: "bg-black/50 data-[state=open]:animate-overlayShow fixed inset-0 z-[50]"
-  }), !error ? !submitted ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_4__.Content, {
+  }), !error ? !submitted ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_5__.Content, {
     className: "data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[550px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none z-[51] overflow-auto"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_4__.Title, {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_5__.Title, {
     className: "m-0 font-title uppercase font-medium text-2xl"
-  }, action === 'processing' || action === 'update-processing' ? 'Submit Your Quote Request' : 'Save Your Draft'), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_4__.Description, {
+  }, action === 'processing' || action === 'update-processing' ? 'Submit Your Quote Request' : 'Save Your Draft'), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_5__.Description, {
     className: "mt-[10px] mb-5 text-[15px] leading-normal"
   }, "Please add a PROJECT NAME."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", {
     ref: formRef,
@@ -832,14 +834,14 @@ function ModalSave({
   }, title.length > 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "block h-[35px] items-center justify-center rounded-[4px] px-[15px] font-medium leading-none focus:shadow-[0_0_0_2px] focus:outline-none background-nova-primary text-white font-title uppercase border bg-black",
     disabled: isLoading
-  }, loadingStatus()))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_4__.Close, {
+  }, loadingStatus()))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_5__.Close, {
     asChild: true
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-nova-gray absolute top-[10px] right-[10px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center focus:shadow-[0_0_0_2px] focus:outline-none border cursor-pointer",
     "aria-label": "Close"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.CloseIcon, null)))) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_4__.Content, {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_2__.CloseIcon, null)))) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_5__.Content, {
     className: "data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[550px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none z-[51] overflow-auto"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_4__.Description, {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_5__.Description, {
     className: "mt-[10px] mb-5 text-[15px] leading-normal"
   }, (action === 'processing' || action === 'update-processing') && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     dangerouslySetInnerHTML: {
@@ -864,9 +866,9 @@ function ModalSave({
   }, "Create New Mockup"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
     href: `${NovaQuote.mockup_account_url}`,
     className: "block mb-4 text-center text-sm px-3 py-2 text-white no-underline bg-nova-primary rounded hover:bg-nova-secondary"
-  }, "Go to Mockups")))) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_4__.Content, {
+  }, "Go to Mockups")))) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_5__.Content, {
     className: "data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[550px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none z-[51] overflow-auto"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_4__.Description, {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_5__.Description, {
     className: "mt-[10px] mb-5 text-[15px] leading-normal"
   }, error.type === 'missing' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
     className: "font-title mb-4 uppercase"
@@ -874,12 +876,12 @@ function ModalSave({
     dangerouslySetInnerHTML: {
       __html: error.message
     }
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_4__.Close, {
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_5__.Close, {
     asChild: true
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-nova-gray absolute top-[10px] right-[10px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center focus:shadow-[0_0_0_2px] focus:outline-none border cursor-pointer",
     "aria-label": "Close"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.CloseIcon, null))))));
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_2__.CloseIcon, null))))));
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ModalSave);
 
@@ -1830,12 +1832,7 @@ __webpack_require__.r(__webpack_exports__);
 const currency = wcumcs_vars_data.currency;
 function Sidebar() {
   const {
-    signage,
-    missing,
-    tempFolder,
-    storage,
-    isLoading,
-    setIsLoading
+    signage
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
   const taxRateObj = NovaMyAccount.tax_rate;
   //const tax = taxRateObj ? parseFloat(taxRateObj.tax_rate / 100) : 0;
@@ -1880,52 +1877,22 @@ function Sidebar() {
   }, currency, "$", Number(estimateTotalPrice.toFixed(2)).toLocaleString())), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-[11px] mb-5"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", null, tax === 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Tax not included"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The final quote will be ready in 24 business hours."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Extra freight charges may apply for connected fonts."))), signage.length > 0 && NovaQuote.quote_status?.value !== 'processing' && NovaQuote.quote_status?.value !== 'ready' && NovaQuote.quote_status?.value !== 'archived' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, NovaQuote.is_editting === '1' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, NovaQuote.user_role[0] !== 'pending' && NovaQuote.is_admin === 'no' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    signage: signage,
-    tempFolder: tempFolder,
-    storage: storage,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading,
-    required: missing,
     action: "update-processing",
     label: "Submit Quote",
     btnClass: "mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
   }) : '', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    signage: signage,
-    tempFolder: tempFolder,
-    storage: storage,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading,
-    required: missing,
     action: "update",
     label: "Update Quote",
     btnClass: "mb-5 font-title border border-nova-light rounded-md text-nova-gray w-full text-center bg-white text-sm h-[49px] hover:bg-nova-light hover:text-white shadow-[0_0_0_1px_rgba(0,0,0,0.3)]"
   })) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, NovaQuote.user_role[0] !== 'pending' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    signage: signage,
-    tempFolder: tempFolder,
-    storage: storage,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading,
-    required: missing,
     action: "processing",
     label: "Submit Quote",
     btnClass: "mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
   }) : '', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    signage: signage,
-    tempFolder: tempFolder,
-    storage: storage,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading,
-    required: missing,
     action: "draft",
     label: "Save to Draft",
     btnClass: "mb-5 font-title border border-nova-light rounded-md text-nova-gray w-full text-center bg-white text-sm h-[49px] hover:bg-nova-light hover:text-white shadow-[0_0_0_1px_rgba(0,0,0,0.3)]"
   }))), signage.length > 0 && NovaQuote.quote_status?.value === 'processing' && NovaQuote.is_admin === 'yes' && NovaQuote.is_editting === '1' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    signage: signage,
-    tempFolder: tempFolder,
-    storage: storage,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading,
-    required: missing,
     action: "update-processing-admin",
     label: "Update Quote",
     btnClass: "mb-5 font-title border border-nova-light rounded-md text-nova-gray w-full text-center bg-white text-sm h-[49px] hover:bg-nova-light hover:text-white shadow-[0_0_0_1px_rgba(0,0,0,0.3)]"
@@ -1949,27 +1916,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _ModalSave__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ModalSave */ "./src/scripts/ModalSave.js");
-/* harmony import */ var _Prices__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Prices */ "./src/scripts/Prices.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _ModalSave__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ModalSave */ "./src/scripts/ModalSave.js");
+/* harmony import */ var _Prices__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Prices */ "./src/scripts/Prices.js");
 
 
 
 
-function SidebarNoPrice({
-  signage,
-  required,
-  tempFolder,
-  storage,
-  isLoading,
-  setIsLoading
-}) {
+
+function SidebarNoPrice() {
+  const {
+    signage
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-1/4 w-full mt-8 md:mt-0"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "rounded-md border border-gray-200 p-4 sticky top-36"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "w-full max-h-[calc(100vh-300px)] overflow-y-auto pr-5"
-  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Prices__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Prices__WEBPACK_IMPORTED_MODULE_3__["default"], {
     id: item.id,
     item: item,
     borderTop: index > 0 && 'border-t mt-2'
@@ -1985,13 +1950,7 @@ function SidebarNoPrice({
     className: "text-2xl"
   }, "TOTAL:"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", {
     className: "text-2xl"
-  }, "TBD")), signage.length > 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    signage: signage,
-    required: required,
-    tempFolder: tempFolder,
-    storage: storage,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading,
+  }, "TBD")), signage.length > 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_2__["default"], {
     action: "processing",
     label: "Request Quote",
     btnClass: "mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
@@ -3283,9 +3242,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../utils/ClickOutside */ "./src/scripts/utils/ClickOutside.js");
 /* harmony import */ var _utils_ConvertJson__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../utils/ConvertJson */ "./src/scripts/utils/ConvertJson.js");
 /* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
-/* harmony import */ var _ColorOptions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../ColorOptions */ "./src/scripts/products/acrylic/LaserCutAcrylic/ColorOptions.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
-/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
+/* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
+/* harmony import */ var _ColorOptions__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../ColorOptions */ "./src/scripts/products/acrylic/LaserCutAcrylic/ColorOptions.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
+
 
 
 
@@ -3306,7 +3267,7 @@ function Letters({
     signage,
     setSignage,
     setMissing
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_9__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_10__.useAppContext)();
   const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letters = item.letters) !== null && _item$letters !== void 0 ? _item$letters : '');
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
   const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$font = item.font) !== null && _item$font !== void 0 ? _item$font : '');
@@ -3347,7 +3308,7 @@ function Letters({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     async function fetchLetterPricing() {
       try {
-        const response = await fetch(NovaQuote.letters_picing_api + item.product);
+        const response = await fetch(NovaQuote.letters_pricing_api + item.product);
         const data = await response.json();
         const pricing = (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_6__["default"])(data?.pricing_table);
         setLetterPricing(pricing);
@@ -3457,8 +3418,8 @@ function Letters({
   const handleOnChangeMount = e => {
     const target = e.target.value;
     setSelectedMounting(target);
-    if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER || target === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT) {
-      if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT) {
+    if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER || target === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT) {
+      if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT) {
         setSpacerStandoffDistance('');
       }
     } else {
@@ -3478,7 +3439,7 @@ function Letters({
       if (parseInt(selectedLetterHeight) > 24) {
         setSelectedLetterHeight('');
       }
-      if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER) {
+      if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER) {
         setSelectedMounting('');
         setStudLength('');
         setSpacerStandoffDistance('');
@@ -3542,12 +3503,12 @@ function Letters({
     if (letter.match(/[`~"*,.\-']/)) letterPrice *= 0.3;
 
     // Waterproof and finishing adjustments
-    letterPrice *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
-    letterPrice *= selectedFinishing === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.GLOSS_FINISH ? 1.1 : 1;
+    letterPrice *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
+    letterPrice *= selectedFinishing === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.GLOSS_FINISH ? 1.1 : 1;
 
     // Color adjustments
-    if (color?.name === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.CLEAR_COLOR) letterPrice *= 0.9;
-    if (color?.name === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.FROSTED_CLEAR_COLOR) letterPrice *= 0.95;
+    if (color?.name === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.CLEAR_COLOR) letterPrice *= 0.9;
+    if (color?.name === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.FROSTED_CLEAR_COLOR) letterPrice *= 0.95;
     return letterPrice;
   }
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
@@ -3560,14 +3521,13 @@ function Letters({
       lettersArray.forEach(letter => {
         totalLetterPrice += calculateLetterPrice(letter, baseLetterPrice, noLowerCase, waterproof, selectedFinishing, color);
       });
-      if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER) {
-        const maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 32.5;
-        const spacer = Math.min(maxVal, totalLetterPrice * 1.02);
+      if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER) {
+        const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_8__.spacerPricing)(totalLetterPrice);
         totalLetterPrice += parseFloat(spacer.toFixed(2));
       }
       totalLetterPrice *= sets;
       setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
-      setCadPrice((totalLetterPrice * parseFloat(_utils_defaults__WEBPACK_IMPORTED_MODULE_10__.EXCHANGE_RATE)).toFixed(2));
+      setCadPrice((totalLetterPrice * parseFloat(_utils_defaults__WEBPACK_IMPORTED_MODULE_11__.EXCHANGE_RATE)).toFixed(2));
     } else {
       setUsdPrice(0);
       setCadPrice(0);
@@ -3576,7 +3536,7 @@ function Letters({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     let newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.mountingDefaultOptions;
     if (selectedThickness?.value === '3') {
-      newMountingOptions = newMountingOptions.filter(option => option.mounting_option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT && option.mounting_option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER);
+      newMountingOptions = newMountingOptions.filter(option => option.mounting_option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT && option.mounting_option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER);
     }
     if (waterproof === 'Outdoor (Waterproof)') {
       if (selectedMounting === 'Double-sided tape') {
@@ -3617,10 +3577,10 @@ function Letters({
     if (!selectedFinishing) missingFields.push('Select Finishing');
     if (!waterproof) missingFields.push('Select Waterproof');
     if (!selectedMounting) missingFields.push('Select Mounting');
-    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT) {
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT) {
       if (!studLength) missingFields.push('Select Stud Length');
     }
-    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER) {
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER) {
       if (!studLength) missingFields.push('Select Stud Length');
       if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
@@ -3755,7 +3715,7 @@ function Letters({
     }
   }), color.name === '' ? 'CHOOSE OPTION' : color.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
-  }, _ColorOptions__WEBPACK_IMPORTED_MODULE_8__.colorOptions.map(color => {
+  }, _ColorOptions__WEBPACK_IMPORTED_MODULE_9__.colorOptions.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
       onClick: () => {
@@ -3792,7 +3752,7 @@ function Letters({
       selected: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: selectedMounting
-  }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -3808,7 +3768,7 @@ function Letters({
       selected: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
-  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -3822,7 +3782,7 @@ function Letters({
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.setOptions,
     value: sets,
     onlyValue: true
-  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-xs text-[#9F9F9F] mb-4"
   }, "*Note: The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid"
@@ -4081,7 +4041,19 @@ function Logo({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
   }, [comments, selectedThickness, selectedMounting, waterproof, width, height, usdPrice, cadPrice, fileUrls, fileNames, selectedFinishing, files, sets, filePaths, color, customColor, studLength, spacerStandoffDistance]);
-  const logoPricingObject = NovaQuote.logo_pricing_tables;
+  const [logoPricingObject, setlogoPricingObject] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    async function fetchLogoPricing() {
+      try {
+        const response = await fetch(NovaQuote.logo_pricing_api + item.product);
+        const data = await response.json();
+        setlogoPricingObject(data);
+      } catch (error) {
+        console.error('Error fetching logo pricing:', error);
+      }
+    }
+    fetchLogoPricing();
+  }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (width && height && selectedThickness && waterproof && logoPricingObject !== null) {
       const logoPricing = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_5__.getLogoPricingTablebyThickness)(`${selectedThickness.value}mm`, logoPricingObject);
@@ -4101,9 +4073,7 @@ function Logo({
           total *= 0.95;
         }
         if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
-          let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
-          let spacer = total * 1.02 > maxVal ? maxVal : total * 1.02;
-          spacer = parseFloat(spacer.toFixed(2));
+          const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_5__.spacerPricing)(total);
           total += spacer;
         }
         total *= sets;
@@ -4610,7 +4580,20 @@ function Logo({
     setSets(e.target.value);
   };
   const handleOnChangeDescription = e => setDescription(e.target.value);
-  const logoPricingObject = NovaQuote.logo_pricing_tables;
+  const [logoPricingObject, setlogoPricingObject] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    async function fetchLogoPricing() {
+      try {
+        const response = await fetch(NovaQuote.logo_pricing_api + item.product);
+        const data = await response.json();
+        setlogoPricingObject(data);
+        console.log('fetched', data);
+      } catch (error) {
+        console.error('Error fetching logo pricing:', error);
+      }
+    }
+    fetchLogoPricing();
+  }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     let newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.mountingDefaultOptions;
     if (selectedThickness?.value === '3') {
@@ -4708,9 +4691,7 @@ function Logo({
         let total = (computed * multiplier * _LayeredAcrylic__WEBPACK_IMPORTED_MODULE_6__.ASSEMBLY_FEES).toFixed(2);
         total *= selectedFinishing === _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.GLOSS_FINISH ? 1.1 : 1;
         if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.STUD_WITH_SPACER) {
-          let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
-          let spacer = total * 1.02 > maxVal ? maxVal : total * 1.02;
-          spacer = parseFloat(spacer.toFixed(2));
+          const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_4__.spacerPricing)(total);
           total += spacer;
         }
         total *= sets;
@@ -5211,7 +5192,20 @@ const Letters = ({
   };
   const acrylicRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const fontRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  const letterPricing = NovaQuote.letter_pricing_table?.pricing_table.length > 0 ? (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_7__["default"])(NovaQuote.letter_pricing_table.pricing_table) : [];
+  const [letterPricing, setLetterPricing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    async function fetchLetterPricing() {
+      try {
+        const response = await fetch(NovaQuote.letters_pricing_api + item.product);
+        const data = await response.json();
+        const pricing = (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_7__["default"])(data?.pricing_table);
+        setLetterPricing(pricing);
+      } catch (error) {
+        console.error('Error fetching letter pricing:', error);
+      }
+    }
+    fetchLetterPricing();
+  }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     console.log('Attempting to preload fonts...');
     async function preloadFonts() {
@@ -5747,7 +5741,19 @@ function Logo({
   const handleOnChangeSets = e => {
     setSets(e.target.value);
   };
-  const logoPricingObject = NovaQuote.logo_pricing_tables;
+  const [logoPricingObject, setlogoPricingObject] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    async function fetchLogoPricing() {
+      try {
+        const response = await fetch(NovaQuote.logo_pricing_api + item.product);
+        const data = await response.json();
+        setlogoPricingObject(data);
+      } catch (error) {
+        console.error('Error fetching logo pricing:', error);
+      }
+    }
+    fetchLogoPricing();
+  }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     let newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.mountingDefaultOptions;
     if (selectedThickness?.value === '3') {
@@ -5846,8 +5852,7 @@ function Logo({
         let total = (computed * multiplier * _MetalLaminate__WEBPACK_IMPORTED_MODULE_6__.METAL_ACRYLIC_PRICING).toFixed(2);
         total *= acrylicBase?.name === 'Black' ? 1 : 1.1;
         if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.STUD_WITH_SPACER) {
-          let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
-          let spacer = total * 1.02 > maxVal ? maxVal : total * 1.02;
+          let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_4__.spacerPricing)(total);
           spacer = parseFloat(spacer.toFixed(2));
           total += spacer;
         }
@@ -6319,7 +6324,19 @@ function Logo({
   const handleOnChangeSets = e => {
     setSets(e.target.value);
   };
-  const logoPricingObject = NovaQuote.logo_pricing_tables;
+  const [logoPricingObject, setlogoPricingObject] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    async function fetchLogoPricing() {
+      try {
+        const response = await fetch(NovaQuote.logo_pricing_api + item.product);
+        const data = await response.json();
+        setlogoPricingObject(data);
+      } catch (error) {
+        console.error('Error fetching logo pricing:', error);
+      }
+    }
+    fetchLogoPricing();
+  }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     let newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.mountingDefaultOptions;
     if (selectedThickness?.value === '3') {
@@ -6480,8 +6497,7 @@ function Logo({
         total *= baseColor === 'Custom Color' ? UV_PRICE : 1;
         total *= 1.2;
         if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.STUD_WITH_SPACER) {
-          let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
-          let spacer = total * 1.02 > maxVal ? maxVal : total * 1.02;
+          let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_4__.spacerPricing)(total);
           spacer = parseFloat(spacer.toFixed(2));
           total += spacer;
         }
@@ -6880,14 +6896,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function CustomProject() {
-  const [signage, setSignage] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [missing, setMissing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [tempFolder, setTempFolder] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
-  const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
-  const storage = window.location.href + NovaQuote.user_id + NovaQuote.quote_div_id + 'x';
-  const localStorageQuote = localStorage.getItem(storage);
-  const savedStorage = JSON.parse(localStorageQuote);
-  const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const {
+    signage,
+    setSignage,
+    setTempFolder,
+    tempFolderName
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_5__.useAppContext)();
   function setDefaultSignage() {
     setSignage([{
       id: (0,uuid__WEBPACK_IMPORTED_MODULE_6__["default"])(),
@@ -6955,33 +6969,14 @@ function CustomProject() {
       setTempFolder(`Q-${NovaQuote.current_quote_id}`);
     }
   }, []);
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(QuoteContext.Provider, {
-    value: {
-      signage,
-      setSignage,
-      addSignage,
-      missing,
-      setMissing,
-      tempFolder,
-      isLoading,
-      setIsLoading
-    }
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:flex gap-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full"
   }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
     index: index,
     id: item.id,
-    item: item,
-    missing: missing,
-    setMissing: setMissing,
-    signage: signage,
-    setSignage: setSignage,
-    addSignage: addSignage,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading,
-    storage: storage
+    item: item
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_4__["default"], {
     key: item.id,
     item: item
@@ -6993,14 +6988,7 @@ function CustomProject() {
     style: {
       border: '1px solid #d2d2d2d2'
     }
-  }, "ADD PROJECT", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_SidebarNoPrice__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    signage: signage,
-    required: missing,
-    tempFolder: tempFolder,
-    storage: storage,
-    isLoading: isLoading,
-    setIsLoading: setIsLoading
-  })));
+  }, "ADD PROJECT", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_SidebarNoPrice__WEBPACK_IMPORTED_MODULE_1__["default"], null));
 }
 
 /***/ }),
@@ -7018,8 +7006,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _UploadFiles__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../UploadFiles */ "./src/scripts/UploadFiles.js");
-/* harmony import */ var _CustomProject__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../CustomProject */ "./src/scripts/products/custom/CustomProject.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _UploadFiles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../UploadFiles */ "./src/scripts/UploadFiles.js");
 
 
 
@@ -7030,12 +7018,8 @@ function Logo({
   const {
     signage,
     setSignage,
-    missing,
-    setMissing,
-    tempFolder,
-    isLoading,
-    setIsLoading
-  } = useAppContext();
+    setMissing
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
   const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.fileNames);
   const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.fileUrls);
   const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.filePaths);
@@ -7102,7 +7086,7 @@ function Logo({
   }, "DESCRIPTION"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("textarea", {
     className: "h-[160px] rounded-md text-sm",
     onChange: handleOnChangeDescription
-  }, description)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }, description)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_2__["default"], {
     setFilePaths: setFilePaths,
     setFiles: setFiles,
     filePaths: filePaths,
@@ -8214,7 +8198,20 @@ function Letters({
   const colorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const fontRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const acrylicColorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  const letterPricing = NovaQuote.letter_pricing_table?.pricing_table.length > 0 ? (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_7__["default"])(NovaQuote.letter_pricing_table.pricing_table) : [];
+  const [letterPricing, setLetterPricing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    async function fetchLetterPricing() {
+      try {
+        const response = await fetch(NovaQuote.letters_pricing_api + item.product);
+        const data = await response.json();
+        const pricing = (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_7__["default"])(data?.pricing_table);
+        setLetterPricing(pricing);
+      } catch (error) {
+        console.error('Error fetching letter pricing:', error);
+      }
+    }
+    fetchLetterPricing();
+  }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     console.log('Attempting to preload fonts...');
     async function preloadFonts() {
@@ -9029,7 +9026,20 @@ function Letters({
   const colorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const fontRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const acrylicColorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  const letterPricing = NovaQuote.letter_pricing_table?.pricing_table.length > 0 ? (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_7__["default"])(NovaQuote.letter_pricing_table.pricing_table) : [];
+  const [letterPricing, setLetterPricing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    async function fetchLetterPricing() {
+      try {
+        const response = await fetch(NovaQuote.letters_pricing_api + item.product);
+        const data = await response.json();
+        const pricing = (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_7__["default"])(data?.pricing_table);
+        setLetterPricing(pricing);
+      } catch (error) {
+        console.error('Error fetching letter pricing:', error);
+      }
+    }
+    fetchLetterPricing();
+  }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     console.log('Attempting to preload fonts...');
     async function preloadFonts() {
@@ -9913,7 +9923,20 @@ function Letters({
   };
   const colorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const fontRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  const letterPricing = NovaQuote.letter_pricing_table?.pricing_table.length > 0 ? (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_7__["default"])(NovaQuote.letter_pricing_table.pricing_table) : [];
+  const [letterPricing, setLetterPricing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    async function fetchLetterPricing() {
+      try {
+        const response = await fetch(NovaQuote.letters_pricing_api + item.product);
+        const data = await response.json();
+        const pricing = (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_7__["default"])(data?.pricing_table);
+        setLetterPricing(pricing);
+      } catch (error) {
+        console.error('Error fetching letter pricing:', error);
+      }
+    }
+    fetchLetterPricing();
+  }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     console.log('Attempting to preload fonts...');
     async function preloadFonts() {
@@ -10097,7 +10120,7 @@ function Letters({
         }
         totalLetterPrice *= sets;
         setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
-        setCadPrice((totalLetterPrice * parseFloat(EXCHANGE_RATE)).toFixed(2));
+        setCadPrice((totalLetterPrice * parseFloat(_utils_defaults__WEBPACK_IMPORTED_MODULE_10__.EXCHANGE_RATE)).toFixed(2));
       } else {
         setUsdPrice(0);
         setCadPrice(0);
@@ -10650,7 +10673,19 @@ function Logo({
     updateSignage();
     checkAndAddMissingFields();
   }, [comments, selectedThickness, selectedMounting, waterproof, width, height, usdPrice, cadPrice, fileUrls, fileNames, selectedFinishing, stainLessMetalFinish, files, filePaths, mounting, color, customColor, metal, sets, studLength, spacerStandoffDistance]);
-  const logoPricingObject = NovaQuote.logo_pricing_tables;
+  const [logoPricingObject, setlogoPricingObject] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    async function fetchLogoPricing() {
+      try {
+        const response = await fetch(NovaQuote.logo_pricing_api + item.product);
+        const data = await response.json();
+        setlogoPricingObject(data);
+      } catch (error) {
+        console.error('Error fetching logo pricing:', error);
+      }
+    }
+    fetchLogoPricing();
+  }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (width && height && selectedThickness && waterproof && logoPricingObject !== null) {
       const logoPricing = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.getLogoPricingTablebyThickness)(`${selectedThickness.value}`, logoPricingObject);
@@ -10671,14 +10706,13 @@ function Logo({
         }
         total = parseFloat(total.toFixed(2));
         if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
-          let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
-          let spacer = total * 1.02 > maxVal ? maxVal : total * 1.02;
+          let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.spacerPricing)(total);
           spacer = parseFloat(spacer.toFixed(2));
           total += spacer;
         }
         total *= sets;
         setUsdPrice(parseFloat(total.toFixed(2)));
-        setCadPrice((total * parseFloat(EXCHANGE_RATE)).toFixed(2));
+        setCadPrice((total * parseFloat(_utils_defaults__WEBPACK_IMPORTED_MODULE_9__.EXCHANGE_RATE)).toFixed(2));
       } else {
         setUsdPrice(0);
         setCadPrice(0);
@@ -11160,7 +11194,20 @@ function Letters({
   };
   const colorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const fontRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  const letterPricing = NovaQuote.letter_pricing_table?.pricing_table.length > 0 ? (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_7__["default"])(NovaQuote.letter_pricing_table.pricing_table) : [];
+  const [letterPricing, setLetterPricing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    async function fetchLetterPricing() {
+      try {
+        const response = await fetch(NovaQuote.letters_pricing_api + item.product);
+        const data = await response.json();
+        const pricing = (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_7__["default"])(data?.pricing_table);
+        setLetterPricing(pricing);
+      } catch (error) {
+        console.error('Error fetching letter pricing:', error);
+      }
+    }
+    fetchLetterPricing();
+  }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     console.log('Attempting to preload fonts...');
     async function preloadFonts() {
@@ -11316,7 +11363,7 @@ function Letters({
       }
       totalLetterPrice *= sets;
       setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
-      setCadPrice((totalLetterPrice * parseFloat(EXCHANGE_RATE)).toFixed(2));
+      setCadPrice((totalLetterPrice * parseFloat(_utils_defaults__WEBPACK_IMPORTED_MODULE_9__.EXCHANGE_RATE)).toFixed(2));
     } else {
       setUsdPrice(0);
       setCadPrice(0);
@@ -11727,7 +11774,19 @@ function Logo({
   };
 
   const colorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  const logoPricingObject = NovaQuote.logo_pricing_tables;
+  const [logoPricingObject, setlogoPricingObject] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    async function fetchLogoPricing() {
+      try {
+        const response = await fetch(NovaQuote.logo_pricing_api + item.product);
+        const data = await response.json();
+        setlogoPricingObject(data);
+      } catch (error) {
+        console.error('Error fetching logo pricing:', error);
+      }
+    }
+    fetchLogoPricing();
+  }, []);
   function handleComments(e) {
     setComments(e.target.value);
   }
@@ -11858,14 +11917,13 @@ function Logo({
         }
         let total = parseFloat((computed * multiplier).toFixed(2));
         if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.STUD_WITH_SPACER) {
-          let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
-          let spacer = total * 1.02 > maxVal ? maxVal : total * 1.02;
+          let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.spacerPricing)(total);
           spacer = parseFloat(spacer.toFixed(2));
           total += spacer;
         }
         total *= sets;
         setUsdPrice(parseFloat(total.toFixed(2)));
-        setCadPrice((total * parseFloat(EXCHANGE_RATE)).toFixed(2));
+        setCadPrice((total * parseFloat(_utils_defaults__WEBPACK_IMPORTED_MODULE_8__.EXCHANGE_RATE)).toFixed(2));
       } else {
         setUsdPrice(0);
         setCadPrice(0);
@@ -12347,7 +12405,20 @@ function Letters({
   };
   const colorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const fontRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  const letterPricing = NovaQuote.letter_pricing_table?.pricing_table.length > 0 ? (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_7__["default"])(NovaQuote.letter_pricing_table.pricing_table) : [];
+  const [letterPricing, setLetterPricing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    async function fetchLetterPricing() {
+      try {
+        const response = await fetch(NovaQuote.letters_pricing_api + item.product);
+        const data = await response.json();
+        const pricing = (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_7__["default"])(data?.pricing_table);
+        setLetterPricing(pricing);
+      } catch (error) {
+        console.error('Error fetching letter pricing:', error);
+      }
+    }
+    fetchLetterPricing();
+  }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     console.log('Attempting to preload fonts...');
     async function preloadFonts() {
@@ -12536,7 +12607,7 @@ function Letters({
         }
         totalLetterPrice *= sets;
         setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
-        setCadPrice((totalLetterPrice * parseFloat(EXCHANGE_RATE)).toFixed(2));
+        setCadPrice((totalLetterPrice * parseFloat(_utils_defaults__WEBPACK_IMPORTED_MODULE_10__.EXCHANGE_RATE)).toFixed(2));
       } else {
         setUsdPrice(0);
         setCadPrice(0);
@@ -13024,7 +13095,7 @@ function Logo({
   };
   const handleOnChangeInstallation = e => {
     const target = e.target.value;
-    setInstallation(target);
+    setMounting(target);
     if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER || target === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_MOUNT) {
       if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_MOUNT) {
         setSpacerStandoffDistance('');
@@ -13127,7 +13198,19 @@ function Logo({
     updateSignage();
     checkAndAddMissingFields();
   }, [comments, selectedThickness, mounting, waterproof, width, height, usdPrice, cadPrice, fileUrls, fileNames, selectedFinishing, stainLessMetalFinish, stainlessSteelPolished, files, filePaths, mounting, color, customColor, metal, sets, studLength, spacerStandoffDistance]);
-  const logoPricingObject = NovaQuote.logo_pricing_tables;
+  const [logoPricingObject, setlogoPricingObject] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    async function fetchLogoPricing() {
+      try {
+        const response = await fetch(NovaQuote.logo_pricing_api + item.product);
+        const data = await response.json();
+        setlogoPricingObject(data);
+      } catch (error) {
+        console.error('Error fetching logo pricing:', error);
+      }
+    }
+    fetchLogoPricing();
+  }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (width && height && selectedThickness && waterproof && logoPricingObject !== null) {
       const logoPricing = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.getLogoPricingTablebyThickness)(`${selectedThickness.value}mm`, logoPricingObject);
@@ -13156,14 +13239,13 @@ function Logo({
         }
         total = parseFloat(total.toFixed(2));
         if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
-          let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
-          let spacer = total * 1.02 > maxVal ? maxVal : total * 1.02;
+          let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.spacerPricing)(total);
           spacer = parseFloat(spacer.toFixed(2));
           total += spacer;
         }
         total *= sets;
         setUsdPrice(parseFloat(total.toFixed(2)));
-        setCadPrice((total * parseFloat(EXCHANGE_RATE)).toFixed(2));
+        setCadPrice((total * parseFloat(_utils_defaults__WEBPACK_IMPORTED_MODULE_9__.EXCHANGE_RATE)).toFixed(2));
       } else {
         setUsdPrice(0);
         setCadPrice(0);
@@ -13810,7 +13892,20 @@ function Letters({
   });
   const colorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const fontRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  const letterPricing = NovaQuote.letter_pricing_table?.pricing_table.length > 0 ? (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_7__["default"])(NovaQuote.letter_pricing_table.pricing_table) : [];
+  const [letterPricing, setLetterPricing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    async function fetchLetterPricing() {
+      try {
+        const response = await fetch(NovaQuote.letters_pricing_api + item.product);
+        const data = await response.json();
+        const pricing = (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_7__["default"])(data?.pricing_table);
+        setLetterPricing(pricing);
+      } catch (error) {
+        console.error('Error fetching letter pricing:', error);
+      }
+    }
+    fetchLetterPricing();
+  }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     console.log('Attempting to preload fonts...');
     async function preloadFonts() {
@@ -14443,7 +14538,19 @@ function Logo({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
   }, [comments, selectedThickness, waterproof, width, height, mounting, usdPrice, cadPrice, fileUrls, fileNames, selectedFinishing, files, filePaths, customColor, sets, studLength, spacerStandoffDistance, metalLaminate, pvcBaseColor]);
-  const logoPricingObject = NovaQuote.logo_pricing_tables;
+  const [logoPricingObject, setlogoPricingObject] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    async function fetchLogoPricing() {
+      try {
+        const response = await fetch(NovaQuote.logo_pricing_api + item.product);
+        const data = await response.json();
+        setlogoPricingObject(data);
+      } catch (error) {
+        console.error('Error fetching logo pricing:', error);
+      }
+    }
+    fetchLogoPricing();
+  }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (width && height && selectedThickness && waterproof && logoPricingObject !== null) {
       const logoPricing = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.getLogoPricingTablebyThickness)(`${selectedThickness.value}`, logoPricingObject);
@@ -14459,8 +14566,7 @@ function Logo({
         total *= mounting === 'Double-sided tape' ? 1.01 : 1;
         total *= pvcBaseColor?.name !== 'Black' ? 1.1 : 1;
         if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
-          let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
-          let spacer = total * 1.02 > maxVal ? maxVal : total * 1.02;
+          let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.spacerPricing)(total);
           spacer = parseFloat(spacer.toFixed(2));
           total += spacer;
         }
@@ -14998,7 +15104,20 @@ function Letters({
   });
   const colorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const fontRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  const letterPricing = NovaQuote.letter_pricing_table?.pricing_table.length > 0 ? (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_7__["default"])(NovaQuote.letter_pricing_table.pricing_table) : [];
+  const [letterPricing, setLetterPricing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    async function fetchLetterPricing() {
+      try {
+        const response = await fetch(NovaQuote.letters_pricing_api + item.product);
+        const data = await response.json();
+        const pricing = (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_7__["default"])(data?.pricing_table);
+        setLetterPricing(pricing);
+      } catch (error) {
+        console.error('Error fetching letter pricing:', error);
+      }
+    }
+    fetchLetterPricing();
+  }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     console.log('Attempting to preload fonts...');
     async function preloadFonts() {
@@ -15615,7 +15734,19 @@ function Logo({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
   }, [comments, selectedThickness, waterproof, width, height, mounting, usdPrice, cadPrice, fileUrls, fileNames, selectedFinishing, files, filePaths, color, customColor, sets, studLength, spacerStandoffDistance]);
-  const logoPricingObject = NovaQuote.logo_pricing_tables;
+  const [logoPricingObject, setlogoPricingObject] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    async function fetchLogoPricing() {
+      try {
+        const response = await fetch(NovaQuote.logo_pricing_api + item.product);
+        const data = await response.json();
+        setlogoPricingObject(data);
+      } catch (error) {
+        console.error('Error fetching logo pricing:', error);
+      }
+    }
+    fetchLogoPricing();
+  }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (width && height && selectedThickness && waterproof && logoPricingObject !== null) {
       const logoPricing = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.getLogoPricingTablebyThickness)(`${selectedThickness.value}`, logoPricingObject);
@@ -15630,8 +15761,7 @@ function Logo({
         total *= selectedFinishing === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.GLOSS_FINISH ? 1.03 : 1;
         total *= mounting === 'Double-sided tape' ? 1.01 : 1;
         if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
-          let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
-          let spacer = total * 1.02 > maxVal ? maxVal : total * 1.02;
+          let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.spacerPricing)(total);
           spacer = parseFloat(spacer.toFixed(2));
           total += spacer;
         }
@@ -16186,7 +16316,19 @@ function Logo({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
   }, [comments, selectedThickness, waterproof, width, height, mounting, usdPrice, cadPrice, fileUrls, fileNames, selectedFinishing, files, filePaths, pvcBaseColor, customColor, sets, studLength, spacerStandoffDistance]);
-  const logoPricingObject = NovaQuote.logo_pricing_tables;
+  const [logoPricingObject, setlogoPricingObject] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    async function fetchLogoPricing() {
+      try {
+        const response = await fetch(NovaQuote.logo_pricing_api + item.product);
+        const data = await response.json();
+        setlogoPricingObject(data);
+      } catch (error) {
+        console.error('Error fetching logo pricing:', error);
+      }
+    }
+    fetchLogoPricing();
+  }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (width && height && selectedThickness && waterproof && logoPricingObject !== null) {
       const logoPricing = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.getLogoPricingTablebyThickness)(`${selectedThickness.value}`, logoPricingObject);
@@ -16202,8 +16344,7 @@ function Logo({
         total *= mounting === 'Double-sided tape' ? 1.01 : 1;
         total *= pvcBaseColor?.name === 'Black' ? 1.2 : 1.1;
         if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
-          let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
-          let spacer = total * 1.02 > maxVal ? maxVal : total * 1.02;
+          let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.spacerPricing)(total);
           spacer = parseFloat(spacer.toFixed(2));
           total += spacer;
         }
@@ -17088,7 +17229,8 @@ const fontDefaultOptions = {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   getLetterPricingTableByTitle: () => (/* binding */ getLetterPricingTableByTitle),
-/* harmony export */   getLogoPricingTablebyThickness: () => (/* binding */ getLogoPricingTablebyThickness)
+/* harmony export */   getLogoPricingTablebyThickness: () => (/* binding */ getLogoPricingTablebyThickness),
+/* harmony export */   spacerPricing: () => (/* binding */ spacerPricing)
 /* harmony export */ });
 function getLogoPricingTablebyThickness(thickness, logoPricingObject) {
   const table = logoPricingObject?.find(element => element.logo_pricing.logo_size === thickness);
@@ -17097,6 +17239,12 @@ function getLogoPricingTablebyThickness(thickness, logoPricingObject) {
 function getLetterPricingTableByTitle(title, letterPricingObject) {
   const table = letterPricingObject?.find(element => element.letter_pricing.title === title);
   return table ? table.letter_pricing.letter_pricing_table : undefined;
+}
+function spacerPricing(total) {
+  let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
+  let spacer = total * 1.02 > maxVal ? maxVal : total * 1.02;
+  spacer = parseFloat(spacer.toFixed(2));
+  return spacer;
 }
 
 /***/ }),
@@ -23453,6 +23601,7 @@ __webpack_require__.r(__webpack_exports__);
 
 const rootElement = document.getElementById('QuoteApp');
 const quoteView = document.getElementById('quoteView');
+const customProject = document.getElementById('customProject');
 if (rootElement) {
   const root = react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot(rootElement);
   root.render((0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(QuoteApp, null));
@@ -23460,6 +23609,13 @@ if (rootElement) {
 if (quoteView) {
   const root = react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot(quoteView);
   root.render((0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_QuoteView__WEBPACK_IMPORTED_MODULE_5__["default"], null));
+}
+if (customProject) {
+  const root = react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot(customProject);
+  root.render((0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(CustomTempProject, null));
+}
+function CustomTempProject() {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_custom_CustomProject__WEBPACK_IMPORTED_MODULE_11__["default"], null));
 }
 function QuoteApp() {
   let component;

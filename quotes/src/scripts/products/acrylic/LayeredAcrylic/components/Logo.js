@@ -2,7 +2,10 @@ import React, { useContext, useEffect, useState } from 'react';
 import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
 import convert_json from '../../../../utils/ConvertJson';
-import { getLogoPricingTablebyThickness } from '../../../../utils/Pricing';
+import {
+	getLogoPricingTablebyThickness,
+	spacerPricing,
+} from '../../../../utils/Pricing';
 import {
 	defaultFinishOptions,
 	mountingDefaultOptions,
@@ -134,7 +137,22 @@ export default function Logo({ item }) {
 
 	const handleOnChangeDescription = (e) => setDescription(e.target.value);
 
-	const logoPricingObject = NovaQuote.logo_pricing_tables;
+	const [logoPricingObject, setlogoPricingObject] = useState([]);
+
+	useEffect(() => {
+		async function fetchLogoPricing() {
+			try {
+				const response = await fetch(NovaQuote.logo_pricing_api + item.product);
+				const data = await response.json();
+				setlogoPricingObject(data);
+				console.log('fetched', data);
+			} catch (error) {
+				console.error('Error fetching logo pricing:', error);
+			}
+		}
+
+		fetchLogoPricing();
+	}, []);
 
 	useEffect(() => {
 		let newMountingOptions = mountingDefaultOptions;
@@ -305,9 +323,7 @@ export default function Logo({ item }) {
 				total *= selectedFinishing === GLOSS_FINISH ? 1.1 : 1;
 
 				if (selectedMounting === STUD_WITH_SPACER) {
-					let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
-					let spacer = total * 1.02 > maxVal ? maxVal : total * 1.02;
-					spacer = parseFloat(spacer.toFixed(2));
+					const spacer = spacerPricing(total);
 
 					total += spacer;
 				}

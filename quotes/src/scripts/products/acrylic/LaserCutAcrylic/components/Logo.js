@@ -3,7 +3,10 @@ import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
 import useOutsideClick from '../../../../utils/ClickOutside';
 import convert_json from '../../../../utils/ConvertJson';
-import { getLogoPricingTablebyThickness } from '../../../../utils/Pricing';
+import {
+	getLogoPricingTablebyThickness,
+	spacerPricing,
+} from '../../../../utils/Pricing';
 import {
 	mountingDefaultOptions,
 	setOptions,
@@ -287,7 +290,21 @@ export default function Logo({ item }) {
 		spacerStandoffDistance,
 	]);
 
-	const logoPricingObject = NovaQuote.logo_pricing_tables;
+	const [logoPricingObject, setlogoPricingObject] = useState([]);
+
+	useEffect(() => {
+		async function fetchLogoPricing() {
+			try {
+				const response = await fetch(NovaQuote.logo_pricing_api + item.product);
+				const data = await response.json();
+				setlogoPricingObject(data);
+			} catch (error) {
+				console.error('Error fetching logo pricing:', error);
+			}
+		}
+
+		fetchLogoPricing();
+	}, []);
 
 	useEffect(() => {
 		if (
@@ -325,9 +342,7 @@ export default function Logo({ item }) {
 				}
 
 				if (selectedMounting === STUD_WITH_SPACER) {
-					let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
-					let spacer = total * 1.02 > maxVal ? maxVal : total * 1.02;
-					spacer = parseFloat(spacer.toFixed(2));
+					const spacer = spacerPricing(total);
 
 					total += spacer;
 				}

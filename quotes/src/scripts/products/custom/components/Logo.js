@@ -1,17 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useAppContext } from '../../../AppProvider';
 import UploadFiles from '../../../UploadFiles';
-import { QuoteContext } from '../CustomProject';
 
 export default function Logo({ item }) {
-	const {
-		signage,
-		setSignage,
-		missing,
-		setMissing,
-		tempFolder,
-		isLoading,
-		setIsLoading,
-	} = useAppContext();
+	const { signage, setSignage, setMissing } = useAppContext();
 	const [fileNames, setFileNames] = useState(item.fileNames);
 	const [fileUrls, setFileUrls] = useState(item.fileUrls);
 	const [filePaths, setFilePaths] = useState(item.filePaths);
