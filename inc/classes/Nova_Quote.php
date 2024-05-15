@@ -75,6 +75,14 @@ class Nova_Quote {
 		add_action( 'add_meta_boxes', array( $this, 'generated_product_id' ), 10, 2 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'dequeue_lightbox_on_mockups_view' ), 100 );
 		add_action( 'admin_init', array( $this, 'process_send_mockup_email' ) );
+		add_action( 'template_redirect', array( $this, 'custom_quote_redirect' ) );
+	}
+
+	public function custom_quote_redirect() {
+		if ( ! current_user_can( 'administrator' ) ) {
+			wp_redirect( home_url() );
+			exit;
+		}
 	}
 
 	public function process_send_mockup_email() {

@@ -243,6 +243,10 @@ export default function CombineQuotes() {
 		<CombineQuoteProvider>
 			<div className="md:flex gap-6">
 				<div className="md:w-3/4 w-full">
+					<div className="border-gray-200 p-4 rounded-md border">
+						<div className="font-title text-lg mb-4">Select Partner:</div>
+					</div>
+
 					{signage.map((item, index) => (
 						<Signage index={index} id={item.id} item={item}>
 							{showComponent(item)}
