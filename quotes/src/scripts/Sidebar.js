@@ -7,7 +7,7 @@ import { EXCHANGE_RATE } from './utils/defaults';
 const currency = wcumcs_vars_data.currency;
 
 export default function Sidebar() {
-	const { signage } = useAppContext();
+	const { signage, partner } = useAppContext();
 
 	const taxRateObj = NovaMyAccount.tax_rate;
 	//const tax = taxRateObj ? parseFloat(taxRateObj.tax_rate / 100) : 0;

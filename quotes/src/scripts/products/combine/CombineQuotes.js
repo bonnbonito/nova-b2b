@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
+import Select from 'react-select';
 import Sidebar from '../../Sidebar';
 import Signage from '../../Signage';
 import AccordionGroup from './components/AccordionGroup';
 
 import { useAppContext } from '../../AppProvider';
 import { CombineQuoteProvider } from './CombineQuoteContext';
+
 /*Acrlic */
 import { Letters as AcrylicLetters } from '../acrylic/LaserCutAcrylic/components/Letters';
 import { Logo as AcrylicLogo } from '../acrylic/LaserCutAcrylic/components/Logo';
@@ -32,9 +34,18 @@ import { Logo as PVCPaintedLogo } from '../pvc/PVCPainted/components/Logo';
 import { Logo as PVCUv } from '../pvc/PVCUv/components/Logo';
 
 const productLines = NovaQuote.product_lines_accordion;
+
+const partners = NovaQuote.show_all_partners;
+
 export default function CombineQuotes() {
-	const { signage, setSignage, setTempFolder, tempFolderName } =
-		useAppContext();
+	const {
+		signage,
+		setSignage,
+		setTempFolder,
+		tempFolderName,
+		setPartner,
+		partner,
+	} = useAppContext();
 
 	function setDefaultSignage() {
 		setSignage([]);
@@ -239,12 +250,26 @@ export default function CombineQuotes() {
 		return output;
 	};
 
+	useEffect(() => {
+		console.log(partner);
+	}, [partner]);
+
 	return (
 		<CombineQuoteProvider>
 			<div className="md:flex gap-6">
 				<div className="md:w-3/4 w-full">
-					<div className="border-gray-200 p-4 rounded-md border">
+					<div className="border-gray-200 p-4 rounded-md border mb-4">
 						<div className="font-title text-lg mb-4">Select Partner:</div>
+						<Select
+							className="basic-single"
+							classNamePrefix="select"
+							isSearchable={true}
+							options={partners}
+							onChange={(e) => {
+								setPartner(() => e.value);
+							}}
+							name="partners"
+						/>
 					</div>
 
 					{signage.map((item, index) => (

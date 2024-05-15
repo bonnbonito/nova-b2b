@@ -41,7 +41,8 @@ export default function AccordionItem({ title, products, isOpen }) {
 										product.product.post_title,
 										product.product.ID,
 										'letters',
-										product.component
+										product.component,
+										title
 									)
 								}
 								style={{ border: '1px solid #d2d2d2d2' }}
@@ -59,7 +60,8 @@ export default function AccordionItem({ title, products, isOpen }) {
 										product.product.post_title,
 										product.product.ID,
 										'logo',
-										product.component
+										product.component,
+										title
 									)
 								}
 								style={{ border: '1px solid #d2d2d2d2' }}

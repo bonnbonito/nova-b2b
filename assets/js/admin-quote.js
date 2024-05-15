@@ -290,6 +290,7 @@ function getSignageItemHTML(sign) {
 function getSignageDetailFields(sign) {
 	return [
 		{ label: 'CAD PRICE', value: sign.cadPrice ? sign.cadPrice : '0' },
+		{ label: 'MATERIAL', value: sign.material ? sign.material : '' },
 		{ label: 'PRODUCT LINE', value: sign.productLine ? sign.productLine : '' },
 		{ label: 'TYPE', value: sign.type },
 		{ label: 'TEXT', value: sign.letters },

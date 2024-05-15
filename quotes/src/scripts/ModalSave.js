@@ -6,7 +6,7 @@ import { processQuote } from './utils/QuoteFunctions';
 import { checkAndCreateFolder, renameFolder } from './utils/uploadFunctions';
 
 function ModalSave({ action, btnClass, label }) {
-	const { signage, tempFolder, missing, isLoading, setIsLoading } =
+	const { signage, tempFolder, missing, isLoading, setIsLoading, partner } =
 		useAppContext();
 
 	const required = missing;
@@ -128,6 +128,7 @@ function ModalSave({ action, btnClass, label }) {
 
 	const handleFormSubmit = async (event) => {
 		event.preventDefault(); // Prevent default form submission
+		console.log(partner);
 		setIsLoading(true);
 		setSubmitting(true);
 
@@ -138,11 +139,12 @@ function ModalSave({ action, btnClass, label }) {
 			formData.append('title', title);
 			formData.append('product', NovaQuote.product);
 			formData.append('action', 'save_quote');
-			formData.append('user_id', NovaQuote.user_id);
+			formData.append('user_id', partner ?? NovaQuote.user_id);
 			formData.append('signage', JSON.stringify(signage));
 			formData.append('total', totalUsdPrice.toFixed(2));
 			formData.append('quote_status', 'draft');
 			formData.append('currency', wcumcs_vars_data.currency);
+			formData.append('partner', partner ?? 0);
 
 			if (action === 'update-processing' || action === 'processing') {
 				formData.append('quote_status', 'processing');

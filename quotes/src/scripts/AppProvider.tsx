@@ -8,6 +8,8 @@ interface AppContextType {
 	tempFolder: string;
 	tempFolderName: string;
 	isLoading: boolean;
+	partner: string;
+	setPartner: (partner: string) => void;
 	setTempFolder: (tempFolder: string) => void;
 	setIsLoading: (isLoading: boolean) => void;
 }
@@ -23,6 +25,8 @@ const AppContext = createContext<AppContextType>({
 	isLoading: false,
 	setTempFolder: () => {},
 	setIsLoading: () => {},
+	setPartner: () => '',
+	partner: '',
 });
 
 export function useAppContext() {
@@ -34,6 +38,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 	const [missing, setMissing] = useState<any[]>([]);
 	const [tempFolder, setTempFolder] = useState<string>('');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [partner, setPartner] = useState<string>('');
 
 	const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
 
@@ -49,6 +54,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 				isLoading,
 				setTempFolder,
 				setIsLoading,
+				setPartner,
+				partner,
 			}}
 		>
 			{children}
