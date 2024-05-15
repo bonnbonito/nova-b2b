@@ -31,31 +31,31 @@ import {
 
 import { useAppContext } from '../../../../AppProvider';
 
-export default function Logo({ item }) {
+export function Logo({ item }) {
 	const { signage, setSignage, setMissing } = useAppContext();
 	const [selectedThickness, setSelectedThickness] = useState(item.thickness);
-	const [width, setWidth] = useState(item.width);
+	const [width, setWidth] = useState(item.width ?? '');
 	const [maxWidthHeight, setMaxWidthHeight] = useState(36);
-	const [usdPrice, setUsdPrice] = useState(item.usdPrice);
-	const [cadPrice, setCadPrice] = useState(item.cadPrice);
+	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
+	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
 	const [fileName, setFileName] = useState(item.fileName);
 	const [openColor, setOpenColor] = useState(false);
 	const [pvcBaseColor, setPvcBaseColor] = useState(item.pvcBaseColor);
-	const [customColor, setCustomColor] = useState(item.customColor);
-	const [mounting, setmounting] = useState(item.mounting);
+	const [customColor, setCustomColor] = useState(item.customColor ?? '');
+	const [mounting, setmounting] = useState(item.mounting ?? '');
 
-	const [sets, setSets] = useState(item.sets);
+	const [sets, setSets] = useState(item.sets ?? 1);
 	const handleOnChangeSets = (e) => {
 		setSets(e.target.value);
 	};
 
-	const [studLength, setStudLength] = useState(item.studLength);
+	const [studLength, setStudLength] = useState(item.studLength ?? '');
 
 	const [spacerStandoffOptions, setSpacerStandoffOptions] = useState(
 		spacerStandoffDefaultOptions
 	);
 	const [spacerStandoffDistance, setSpacerStandoffDistance] = useState(
-		item.spacerStandoffDistance
+		item.spacerStandoffDistance ?? ''
 	);
 
 	const handleonChangeSpacerDistance = (e) => {
@@ -90,11 +90,13 @@ export default function Logo({ item }) {
 		}
 	};
 
-	const [fileNames, setFileNames] = useState(item.fileNames);
-	const [fileUrls, setFileUrls] = useState(item.fileUrls);
-	const [filePaths, setFilePaths] = useState(item.filePaths);
-	const [files, setFiles] = useState(item.files);
-	const [selectedFinishing, setSelectedFinishing] = useState(item.finishing);
+	const [fileNames, setFileNames] = useState(item.fileNames ?? []);
+	const [fileUrls, setFileUrls] = useState(item.fileUrls ?? []);
+	const [filePaths, setFilePaths] = useState(item.filePaths ?? []);
+	const [files, setFiles] = useState(item.files ?? []);
+	const [selectedFinishing, setSelectedFinishing] = useState(
+		item.finishing ?? ''
+	);
 	const [mountingSelections, setmountingSelections] = useState(mountingOptions);
 
 	const [maxWidthOptions, setMaxWidthOptions] = useState(
@@ -115,9 +117,9 @@ export default function Logo({ item }) {
 
 	const colorRef = useRef(null);
 
-	const [height, setHeight] = useState(item.height);
-	const [comments, setComments] = useState(item.comments);
-	const [waterproof, setWaterproof] = useState(item.waterproof);
+	const [height, setHeight] = useState(item.height ?? '');
+	const [comments, setComments] = useState(item.comments ?? '');
+	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
 
 	const handleOnChangemounting = (e) => {
 		const target = e.target.value;
@@ -146,7 +148,7 @@ export default function Logo({ item }) {
 	};
 
 	useEffect(() => {
-		if (parseInt(selectedThickness.value) > 3) {
+		if (parseInt(selectedThickness?.value) > 3) {
 			setMaxWidthHeight(42);
 		} else {
 			setMaxWidthHeight(23);
@@ -241,7 +243,7 @@ export default function Logo({ item }) {
 			logoPricingObject !== null
 		) {
 			const logoPricing = getLogoPricingTablebyThickness(
-				`${selectedThickness.value}`,
+				`${selectedThickness?.value}`,
 				logoPricingObject
 			);
 
@@ -303,7 +305,7 @@ export default function Logo({ item }) {
 		if (!waterproof) missingFields.push('Select Waterproof');
 		if (!mounting) missingFields.push('Select mounting');
 
-		if (!pvcBaseColor.name) missingFields.push('Select PVC Base Color');
+		if (!pvcBaseColor?.name) missingFields.push('Select PVC Base Color');
 		if (pvcBaseColor?.name === 'Custom Color' && !customColor) {
 			missingFields.push('Add the Pantone color code of your custom color.');
 		}
@@ -402,6 +404,11 @@ export default function Logo({ item }) {
 
 	return (
 		<>
+			{item.productLine && (
+				<div className="py-4 mb-4">
+					PRODUCT LINE: <span className="font-title">{item.productLine}</span>
+				</div>
+			)}
 			<div className="quote-grid mb-6">
 				<Dropdown
 					title="Thickness"
@@ -437,7 +444,7 @@ export default function Logo({ item }) {
 					</label>
 					<div
 						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-							pvcBaseColor.name ? 'text-black' : 'text-[#dddddd]'
+							pvcBaseColor?.name ? 'text-black' : 'text-[#dddddd]'
 						}`}
 						onClick={() => setOpenColor((prev) => !prev)}
 					>
@@ -445,12 +452,12 @@ export default function Logo({ item }) {
 							className="rounded-full w-[18px] h-[18px] border mr-2"
 							style={{
 								background:
-									pvcBaseColor.name == 'Custom Color'
+									pvcBaseColor?.name == 'Custom Color'
 										? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-										: pvcBaseColor.color,
+										: pvcBaseColor?.color,
 							}}
 						></span>
-						{pvcBaseColor.name === '' ? 'CHOOSE OPTION' : pvcBaseColor.name}
+						{pvcBaseColor?.name === '' ? 'CHOOSE OPTION' : pvcBaseColor?.name}
 					</div>
 					{openColor && (
 						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">

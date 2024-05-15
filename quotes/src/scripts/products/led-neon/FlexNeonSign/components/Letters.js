@@ -34,37 +34,39 @@ const smallPunctuations = parseFloat(
 );
 //const AcrylicLetterPricing = JSON.parse(NovaOptions.letter_x_logo_pricing);
 
-export default function Letters({ item }) {
+export function Letters({ item }) {
 	const { signage, setSignage, setMissing } = useAppContext();
-	const [letters, setLetters] = useState(item.letters);
-	const [comments, setComments] = useState(item.comments);
-	const [font, setFont] = useState(item.font);
+	const [letters, setLetters] = useState(item.letters ?? '');
+	const [comments, setComments] = useState(item.comments ?? '');
+	const [font, setFont] = useState(item.font ?? '');
 	const [openFont, setOpenFont] = useState(false);
 	const [pvcBaseColor, setPvcBaseColor] = useState(item.pvcBaseColor);
 	const [openColor, setOpenColor] = useState(false);
-	const [waterproof, setWaterproof] = useState(item.waterproof);
+	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
 	const [selectedThickness, setSelectedThickness] = useState(item.thickness);
-	const [fileNames, setFileNames] = useState(item.fileNames);
-	const [fileUrls, setFileUrls] = useState(item.fileUrls);
-	const [filePaths, setFilePaths] = useState(item.filePaths);
-	const [files, setFiles] = useState(item.files);
+	const [fileNames, setFileNames] = useState(item.fileNames ?? []);
+	const [fileUrls, setFileUrls] = useState(item.fileUrls ?? []);
+	const [filePaths, setFilePaths] = useState(item.filePaths ?? []);
+	const [files, setFiles] = useState(item.files ?? []);
 
-	const [fontFileName, setFontFileName] = useState(item.fontFileName);
-	const [fontFileUrl, setFontFileUrl] = useState(item.fontFileUrl);
-	const [fontFilePath, setFontFilePath] = useState(item.fontFilePath);
-	const [fontFile, setFontFile] = useState(item.fontFile);
+	const [fontFileName, setFontFileName] = useState(item.fontFileName ?? '');
+	const [fontFileUrl, setFontFileUrl] = useState(item.fontFileUrl ?? '');
+	const [fontFilePath, setFontFilePath] = useState(item.fontFilePath ?? '');
+	const [fontFile, setFontFile] = useState(item.fontFile ?? '');
 
 	const [letterHeightOptions, setLetterHeightOptions] = useState([]);
-	const [selectedFinishing, setSelectedFinishing] = useState(item.finishing);
+	const [selectedFinishing, setSelectedFinishing] = useState(
+		item.finishing ?? ''
+	);
 	const [customFont, setCustomFont] = useState(item.customFont);
-	const [mounting, setMounting] = useState(item.mounting);
+	const [mounting, setMounting] = useState(item.mounting ?? '');
 
-	const [studLength, setStudLength] = useState(item.studLength);
+	const [studLength, setStudLength] = useState(item.studLength ?? '');
 	const [spacerStandoffOptions, setSpacerStandoffOptions] = useState(
 		spacerStandoffDefaultOptions
 	);
 	const [spacerStandoffDistance, setSpacerStandoffDistance] = useState(
-		item.spacerStandoffDistance
+		item.spacerStandoffDistance ?? ''
 	);
 
 	const handleonChangeSpacerDistance = (e) => {
@@ -99,24 +101,24 @@ export default function Letters({ item }) {
 		}
 	};
 
-	const [customColor, setCustomColor] = useState(item.customColor);
+	const [customColor, setCustomColor] = useState(item.customColor ?? '');
 
 	const [selectedLetterHeight, setSelectedLetterHeight] = useState(
-		item.letterHeight
+		item.letterHeight ?? ''
 	);
 
-	const [metalLaminate, setMetalLaminate] = useState(item.metalLaminate);
+	const [metalLaminate, setMetalLaminate] = useState(item.metalLaminate ?? '');
 	const handleChangeMetalLaminate = (e) => {
 		setMetalLaminate(e.target.value);
 	};
 
-	const [sets, setSets] = useState(item.sets);
+	const [sets, setSets] = useState(item.sets ?? 1);
 	const handleOnChangeSets = (e) => {
 		setSets(e.target.value);
 	};
 
-	const [usdPrice, setUsdPrice] = useState(item.usdPrice);
-	const [cadPrice, setCadPrice] = useState(item.cadPrice);
+	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
+	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
 
 	const [mountingSelections, setMountingSelections] = useState(mountingOptions);
 
@@ -405,7 +407,7 @@ export default function Letters({ item }) {
 
 		if (!metalLaminate) missingFields.push('Select Metal Laminate');
 
-		if (!pvcBaseColor.name) missingFields.push('Select PVC Base Color');
+		if (!pvcBaseColor?.name) missingFields.push('Select PVC Base Color');
 		if (pvcBaseColor?.name === 'Custom Color' && !customColor) {
 			missingFields.push('Add the Pantone color code of your custom color.');
 		}
@@ -552,7 +554,7 @@ export default function Letters({ item }) {
 							overflow: 'hidden',
 							fontFamily: font === 'Custom font' ? '' : font,
 							color: `#000000`,
-							textShadow: `-1px 1px 3px ${pvcBaseColor.color}, 0 0 1px #000000`,
+							textShadow: `-1px 1px 3px ${pvcBaseColor?.color}, 0 0 1px #000000`,
 						}}
 					>
 						{letters ? letters : 'PREVIEW'}
@@ -637,7 +639,7 @@ export default function Letters({ item }) {
 					</label>
 					<div
 						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-							pvcBaseColor.name ? 'text-black' : 'text-[#dddddd]'
+							pvcBaseColor?.name ? 'text-black' : 'text-[#dddddd]'
 						}`}
 						onClick={() => setOpenColor((prev) => !prev)}
 					>
@@ -645,12 +647,12 @@ export default function Letters({ item }) {
 							className="rounded-full w-[18px] h-[18px] border mr-2"
 							style={{
 								background:
-									pvcBaseColor.name == 'Custom Color'
+									pvcBaseColor?.name == 'Custom Color'
 										? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-										: pvcBaseColor.color,
+										: pvcBaseColor?.color,
 							}}
 						></span>
-						{pvcBaseColor.name === '' ? 'CHOOSE OPTION' : pvcBaseColor.name}
+						{pvcBaseColor?.name === '' ? 'CHOOSE OPTION' : pvcBaseColor?.name}
 					</div>
 					{openColor && (
 						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">

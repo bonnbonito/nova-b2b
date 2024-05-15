@@ -1,17 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { PlusIcon } from '../../../svg/Icons';
 
 import { useCombineQuote } from '../CombineQuoteContext';
 
-export default function AccordionItem({ title, products }) {
+export default function AccordionItem({ title, products, isOpen }) {
 	const [open, setOpen] = useState(false);
 
 	const addSignage = useCombineQuote();
 
+	useEffect(() => {
+		isOpen(open);
+	}, [open]);
+
 	return (
-		<>
+		<div className={open ?? 'bg-slate-50'}>
 			<div
-				className="p-4 font-title uppercase text-lg select-none cursor-pointer"
+				className={`p-4 font-title uppercase text-lg select-none cursor-pointer bg-white hover:bg-slate-50 ${
+					open && 'bg-slate-50'
+				}`}
 				onClick={() => setOpen((prev) => !prev)}
 			>
 				{title}
@@ -19,7 +25,7 @@ export default function AccordionItem({ title, products }) {
 
 			{products.map((product) => (
 				<div
-					className={`border-gray-200 p-4 mx-4 cursor-pointer rounded-md border mb-2 bg-gray-50 ${
+					className={`border-gray-200 p-4 mx-4 cursor-pointer rounded-md border mb-2 bg-slate-200 ${
 						open ? 'block' : 'hidden'
 					}`}
 				>
@@ -34,7 +40,8 @@ export default function AccordionItem({ title, products }) {
 									addSignage(
 										product.product.post_title,
 										product.product.ID,
-										'letters'
+										'letters',
+										product.component
 									)
 								}
 								style={{ border: '1px solid #d2d2d2d2' }}
@@ -51,7 +58,8 @@ export default function AccordionItem({ title, products }) {
 									addSignage(
 										product.product.post_title,
 										product.product.ID,
-										'logo'
+										'logo',
+										product.component
 									)
 								}
 								style={{ border: '1px solid #d2d2d2d2' }}
@@ -63,6 +71,6 @@ export default function AccordionItem({ title, products }) {
 					</div>
 				</div>
 			))}
-		</>
+		</div>
 	);
 }

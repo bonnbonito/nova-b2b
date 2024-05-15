@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import SidebarNoPrice from '../../SidebarNoPrice';
 import Signage from '../../Signage';
 import { PlusIcon } from '../../svg/Icons';
-import Logo from './components/Logo';
+import { Logo } from './components/Logo';
 
 import { useAppContext } from '../../AppProvider';
 

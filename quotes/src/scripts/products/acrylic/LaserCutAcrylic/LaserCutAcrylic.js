@@ -5,8 +5,8 @@ import Signage from '../../../Signage';
 import { PlusIcon } from '../../../svg/Icons';
 
 import { useAppContext } from '../../../AppProvider';
-import Letters from './components/Letters';
-import Logo from './components/Logo';
+import { Letters } from './components/Letters';
+import { Logo } from './components/Logo';
 
 export default function LaserCutAcrylic() {
 	const { signage, setSignage, setTempFolder, tempFolderName } =

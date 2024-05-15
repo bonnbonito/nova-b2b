@@ -41,34 +41,34 @@ const smallPunctuations = parseFloat(
 		: 1
 );
 
-export default function Letters({ item }) {
+export function Letters({ item }) {
 	const { signage, setSignage, setMissing } = useAppContext();
-	const [letters, setLetters] = useState(item.letters);
-	const [comments, setComments] = useState(item.comments);
-	const [font, setFont] = useState(item.font);
+	const [letters, setLetters] = useState(item.letters ?? '');
+	const [comments, setComments] = useState(item.comments ?? '');
+	const [font, setFont] = useState(item.font ?? '');
 	const [openFont, setOpenFont] = useState(false);
 
 	const [color, setColor] = useState(item.faceReturnColor);
 	const [openColor, setOpenColor] = useState(false);
-	const [waterproof, setWaterproof] = useState(item.waterproof);
+	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
 
 	const [letterPricing, setLetterPricing] = useState([]);
 
 	const [depth, setDepth] = useState(item.depth);
 	const [acrylicReveal, setAcrylicReveal] = useState(item.acrylicReveal);
 
-	const [fileNames, setFileNames] = useState(item.fileNames);
-	const [fileUrls, setFileUrls] = useState(item.fileUrls);
-	const [filePaths, setFilePaths] = useState(item.filePaths);
-	const [files, setFiles] = useState(item.files);
+	const [fileNames, setFileNames] = useState(item.fileNames ?? []);
+	const [fileUrls, setFileUrls] = useState(item.fileUrls ?? []);
+	const [filePaths, setFilePaths] = useState(item.filePaths ?? []);
+	const [files, setFiles] = useState(item.files ?? []);
 
-	const [fontFileName, setFontFileName] = useState(item.fontFileName);
-	const [fontFileUrl, setFontFileUrl] = useState(item.fontFileUrl);
-	const [fontFilePath, setFontFilePath] = useState(item.fontFilePath);
-	const [fontFile, setFontFile] = useState(item.fontFile);
+	const [fontFileName, setFontFileName] = useState(item.fontFileName ?? '');
+	const [fontFileUrl, setFontFileUrl] = useState(item.fontFileUrl ?? '');
+	const [fontFilePath, setFontFilePath] = useState(item.fontFilePath ?? '');
+	const [fontFile, setFontFile] = useState(item.fontFile ?? '');
 
 	const [letterHeightOptions, setLetterHeightOptions] = useState([]);
-	const [customColor, setCustomColor] = useState(item.customColor);
+	const [customColor, setCustomColor] = useState(item.customColor ?? '');
 
 	const [selectedFinishing, setSelectedFinishing] = useState(
 		item.backLitFinishing
@@ -77,31 +77,50 @@ export default function Letters({ item }) {
 	const [metalFinish, setMetalFinish] = useState(item.backLitMetalFinish);
 
 	const [selectedLetterHeight, setSelectedLetterHeight] = useState(
-		item.letterHeight
+		item.letterHeight ?? ''
 	);
-	const [usdPrice, setUsdPrice] = useState(item.usdPrice);
-	const [cadPrice, setCadPrice] = useState(item.cadPrice);
+
+	const [letterPricingTables, setLetterPricingTables] = useState('');
+
+	useEffect(() => {
+		async function fetchLetterPricing() {
+			try {
+				const response = await fetch(
+					NovaQuote.letters_multi_pricing_api + item.product
+				);
+				const data = await response.json();
+				setLetterPricingTables(data);
+			} catch (error) {
+				console.error('Error fetching letter pricing:', error);
+			}
+		}
+
+		fetchLetterPricing();
+	}, []);
+
+	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
+	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
 
 	const [lettersHeight, setLettersHeight] = useState({
 		min: 5,
 		max: 40,
 	});
 
-	const [studLength, setStudLength] = useState(item.studLength);
+	const [studLength, setStudLength] = useState(item.studLength ?? '');
 
 	const [spacerStandoffOptions, setSpacerStandoffOptions] = useState(
 		spacerStandoffDefaultOptions
 	);
 
 	const [spacerStandoffDistance, setSpacerStandoffDistance] = useState(
-		item.spacerStandoffDistance
+		item.spacerStandoffDistance ?? ''
 	);
 
-	const [mounting, setMounting] = useState(item.mounting);
+	const [mounting, setMounting] = useState(item.mounting ?? '');
 
 	const [ledLightColor, setLedLightColor] = useState(item.ledLightColor);
 
-	const [sets, setSets] = useState(item.sets);
+	const [sets, setSets] = useState(item.sets ?? 1);
 	const handleOnChangeSets = (e) => {
 		setSets(e.target.value);
 	};
@@ -367,6 +386,10 @@ export default function Letters({ item }) {
 
 		if (!sets) missingFields.push('Select Quantity');
 
+		if (!acrylicReveal) {
+			missingFields.push('Select Acrylic Reveal');
+		}
+
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
 				const existingIndex = prevMissing.findIndex(
@@ -436,10 +459,7 @@ export default function Letters({ item }) {
 	useEffect(() => {
 		if (depth?.value) {
 			const table = convert_json(
-				getLetterPricingTableByTitle(
-					depth?.depth,
-					NovaQuote.letter_pricing_tables
-				)
+				getLetterPricingTableByTitle(depth?.depth, letterPricingTables)
 			);
 			setLetterPricing(() => table);
 
@@ -580,6 +600,11 @@ export default function Letters({ item }) {
 
 	return (
 		<>
+			{item.productLine && (
+				<div clasName="py-4 my-4">
+					PRODUCT LINE: <span className="font-title">{item.productLine}</span>
+				</div>
+			)}
 			<div className="mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md">
 				<div className="w-full self-center">
 					<div
@@ -657,12 +682,12 @@ export default function Letters({ item }) {
 					options={finishingOptions.map((finishing) => (
 						<option
 							value={finishing.value}
-							selected={finishing.value === item.backLitFinishing}
+							selected={finishing.value === selectedFinishing}
 						>
 							{finishing.value}
 						</option>
 					))}
-					value={item.backLitFinishing}
+					value={selectedFinishing}
 				/>
 
 				{selectedFinishing === 'Metal' && (
@@ -677,7 +702,7 @@ export default function Letters({ item }) {
 								{finish.option}
 							</option>
 						))}
-						value={item.backLitMetalFinish}
+						value={metalFinish}
 					/>
 				)}
 
@@ -736,22 +761,22 @@ export default function Letters({ item }) {
 					title="LED Light Color"
 					onChange={handleOnChangeLedLight}
 					options={ledLightColors.map((color) => (
-						<option value={color} selected={color == item.ledLightColor}>
+						<option value={color} selected={color == ledLightColor}>
 							{color}
 						</option>
 					))}
-					value={item.ledLightColor}
+					value={ledLightColor}
 				/>
 
 				<Dropdown
 					title="Acrylic Reveal"
 					onChange={handleOnChangeAcrylicReveal}
 					options={acrylicRevealOptions.map((option) => (
-						<option value={option} selected={option == item.acrylicReveal}>
+						<option value={option} selected={option == acrylicReveal}>
 							{option}
 						</option>
 					))}
-					value={item.acrylicReveal}
+					value={acrylicReveal}
 				/>
 
 				<Dropdown
@@ -760,12 +785,12 @@ export default function Letters({ item }) {
 					options={waterProofOptions.map((option) => (
 						<option
 							value={option.option}
-							selected={option.option == item.waterproof}
+							selected={option.option == waterproof}
 						>
 							{option.option}
 						</option>
 					))}
-					value={item.waterproof}
+					value={waterproof}
 				/>
 
 				<Dropdown
@@ -774,12 +799,12 @@ export default function Letters({ item }) {
 					options={mountingDefaultOptions.map((mounting) => (
 						<option
 							value={mounting.value}
-							selected={mounting.value == item.mounting}
+							selected={mounting.value == mounting}
 						>
 							{mounting.value}
 						</option>
 					))}
-					value={item.mounting}
+					value={mounting}
 				/>
 
 				{mounting === STUD_WITH_SPACER && (
@@ -790,12 +815,12 @@ export default function Letters({ item }) {
 							options={studLengthOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.studLength}
+									selected={option.value == studLength}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.studLength}
+							value={studLength}
 						/>
 						<Dropdown
 							title="STANDOFF SPACE"
@@ -803,12 +828,12 @@ export default function Letters({ item }) {
 							options={spacerStandoffOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.spacerStandoffDistance}
+									selected={option.value == spacerStandoffDistance}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.spacerStandoffDistance}
+							value={spacerStandoffDistance}
 						/>
 					</>
 				)}
@@ -821,12 +846,12 @@ export default function Letters({ item }) {
 							options={studLengthOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.studLength}
+									selected={option.value == studLength}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.studLength}
+							value={studLength}
 						/>
 					</>
 				)}

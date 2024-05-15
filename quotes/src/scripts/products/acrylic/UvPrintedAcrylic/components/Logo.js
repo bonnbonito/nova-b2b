@@ -8,6 +8,7 @@ import {
 } from '../../../../utils/Pricing';
 
 import {
+	finishingOptions,
 	mountingDefaultOptions,
 	setOptions,
 	spacerStandoffDefaultOptions,
@@ -30,27 +31,28 @@ const NovaSingleOptions = NovaQuote.single_quote_options;
 
 const UV_PRICE = 1.05;
 
-export default function Logo({ item }) {
+export function Logo({ item }) {
 	const { signage, setSignage, setMissing } = useAppContext();
 
-	const [selectedMounting, setSelectedMounting] = useState(item.mounting);
+	const [selectedMounting, setSelectedMounting] = useState(item.mounting ?? '');
 	const [selectedThickness, setSelectedThickness] = useState(
-		item.acrylicThickness
+		item.acrylicThickness ?? ''
 	);
-	const [width, setWidth] = useState(item.width);
+	const [width, setWidth] = useState(item.width ?? '');
 	const [maxWidthHeight, setMaxWidthHeight] = useState(23);
-	const [usdPrice, setUsdPrice] = useState(item.usdPrice);
-	const [cadPrice, setCadPrice] = useState(item.cadPrice);
-	const [fileNames, setFileNames] = useState(item.fileNames);
-	const [fileUrls, setFileUrls] = useState(item.fileUrls);
-	const [filePaths, setFilePaths] = useState(item.filePaths);
-	const [files, setFiles] = useState(item.files);
-	const [pieces, setPieces] = useState(item.pieces);
-	const [customColor, setCustomColor] = useState(item.customColor);
+	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
+	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
+	const [fileNames, setFileNames] = useState(item.fileNames ?? []);
+	const [fileUrls, setFileUrls] = useState(item.fileUrls ?? []);
+	const [filePaths, setFilePaths] = useState(item.filePaths ?? []);
+	const [files, setFiles] = useState(item.files ?? []);
+	const [pieces, setPieces] = useState(item.pieces ?? '');
+	const [customColor, setCustomColor] = useState(item.customColor ?? '');
 	const [baseColor, setBaseColor] = useState(item.baseColor);
-	const [selectedFinishing, setSelectedFinishing] = useState(item.finishing);
+	const [selectedFinishing, setSelectedFinishing] = useState(
+		item.finishing ?? ''
+	);
 	const [printPreference, setPrintPreference] = useState(item.printPreference);
-	const finishingOptions = NovaSingleOptions.finishing_options;
 	const [maxWidthOptions, setMaxWidthOptions] = useState(
 		Array.from(
 			{
@@ -66,19 +68,19 @@ export default function Logo({ item }) {
 			}
 		)
 	);
-	const [height, setHeight] = useState(item.height);
-	const [comments, setComments] = useState(item.comments);
-	const [waterproof, setWaterproof] = useState(item.waterproof);
+	const [height, setHeight] = useState(item.height ?? '');
+	const [comments, setComments] = useState(item.comments ?? '');
+	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
 	const [mountingOptions, setMountingOptions] = useState(
 		mountingDefaultOptions
 	);
 
-	const [studLength, setStudLength] = useState(item.studLength);
+	const [studLength, setStudLength] = useState(item.studLength ?? '');
 	const [spacerStandoffOptions, setSpacerStandoffOptions] = useState(
 		spacerStandoffDefaultOptions
 	);
 	const [spacerStandoffDistance, setSpacerStandoffDistance] = useState(
-		item.spacerStandoffDistance
+		item.spacerStandoffDistance ?? ''
 	);
 
 	const handleonChangeSpacerDistance = (e) => {
@@ -127,7 +129,7 @@ export default function Logo({ item }) {
 		}
 	};
 
-	const [sets, setSets] = useState(item.sets);
+	const [sets, setSets] = useState(item.sets ?? 1);
 	const handleOnChangeSets = (e) => {
 		setSets(e.target.value);
 	};
@@ -453,6 +455,11 @@ export default function Logo({ item }) {
 
 	return (
 		<>
+			{item.productLine && (
+				<div className="py-4 mb-4">
+					PRODUCT LINE: <span className="font-title">{item.productLine}</span>
+				</div>
+			)}
 			<div className="quote-grid mb-6">
 				<Dropdown
 					title="Acrylic Thickness"

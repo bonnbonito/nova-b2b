@@ -11,13 +11,15 @@ export function useCombineQuote() {
 export function CombineQuoteProvider({ children }) {
 	const { setSignage } = useAppContext();
 
-	function addSignage(productLine, productId, type) {
+	function addSignage(productLine, productId, type, component) {
+		console.log(component);
 		const defaultArgs = {
 			id: uuidv4(),
 			productLine,
 			product: productId,
 			usdPrice: 0,
 			cadPrice: 0,
+			component,
 			comments: '',
 		};
 

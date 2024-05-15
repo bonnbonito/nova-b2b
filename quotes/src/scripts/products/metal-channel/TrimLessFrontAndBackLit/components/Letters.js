@@ -40,37 +40,39 @@ const smallPunctuations = parseFloat(
 		: 1
 );
 
-export default function Letters({ item }) {
+export function Letters({ item }) {
 	const { signage, setSignage, setMissing } = useAppContext();
-	const [letters, setLetters] = useState(item.letters);
-	const [comments, setComments] = useState(item.comments);
-	const [font, setFont] = useState(item.font);
+	const [letters, setLetters] = useState(item.letters ?? '');
+	const [comments, setComments] = useState(item.comments ?? '');
+	const [font, setFont] = useState(item.font ?? '');
 	const [openFont, setOpenFont] = useState(false);
 
-	const [color, setColor] = useState(item.returnColor);
+	const [color, setColor] = useState(
+		item.returnColor ?? { name: 'Black', color: '#000000' }
+	);
 	const [openColor, setOpenColor] = useState(false);
-	const [waterproof, setWaterproof] = useState(item.waterproof);
+	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
 
 	const [depth, setDepth] = useState(item.depth);
 
-	const [fileNames, setFileNames] = useState(item.fileNames);
-	const [fileUrls, setFileUrls] = useState(item.fileUrls);
-	const [filePaths, setFilePaths] = useState(item.filePaths);
-	const [files, setFiles] = useState(item.files);
+	const [fileNames, setFileNames] = useState(item.fileNames ?? []);
+	const [fileUrls, setFileUrls] = useState(item.fileUrls ?? []);
+	const [filePaths, setFilePaths] = useState(item.filePaths ?? []);
+	const [files, setFiles] = useState(item.files ?? []);
 
-	const [fontFileName, setFontFileName] = useState(item.fontFileName);
-	const [fontFileUrl, setFontFileUrl] = useState(item.fontFileUrl);
-	const [fontFilePath, setFontFilePath] = useState(item.fontFilePath);
-	const [fontFile, setFontFile] = useState(item.fontFile);
+	const [fontFileName, setFontFileName] = useState(item.fontFileName ?? '');
+	const [fontFileUrl, setFontFileUrl] = useState(item.fontFileUrl ?? '');
+	const [fontFilePath, setFontFilePath] = useState(item.fontFilePath ?? '');
+	const [fontFile, setFontFile] = useState(item.fontFile ?? '');
 
 	const [letterHeightOptions, setLetterHeightOptions] = useState([]);
-	const [customColor, setCustomColor] = useState(item.customColor);
+	const [customColor, setCustomColor] = useState(item.customColor ?? '');
 
 	const [selectedLetterHeight, setSelectedLetterHeight] = useState(
-		item.letterHeight
+		item.letterHeight ?? ''
 	);
-	const [usdPrice, setUsdPrice] = useState(item.usdPrice);
-	const [cadPrice, setCadPrice] = useState(item.cadPrice);
+	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
+	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
 
 	const [lettersHeight, setLettersHeight] = useState({
 		min: 6,
@@ -78,26 +80,30 @@ export default function Letters({ item }) {
 	});
 
 	const [openAcrylicCover, setOpenAcrylicCover] = useState(false);
-	const [studLength, setStudLength] = useState(item.studLength);
+	const [studLength, setStudLength] = useState(item.studLength ?? '');
 
 	const [spacerStandoffOptions, setSpacerStandoffOptions] = useState(
 		spacerStandoffDefaultOptions
 	);
 
 	const [spacerStandoffDistance, setSpacerStandoffDistance] = useState(
-		item.spacerStandoffDistance
+		item.spacerStandoffDistance ?? ''
 	);
 
-	const [vinylWhite, setVinylWhite] = useState(item.vinylWhite);
+	const [vinylWhite, setVinylWhite] = useState(
+		item.vinylWhite ?? { name: '', color: '', code: '' }
+	);
 	const [frontAcrylicCover, setFrontAcrylicCover] = useState(
-		item.frontAcrylicCover
+		item.frontAcrylicCover ?? 'White'
 	);
 
-	const [mounting, setMounting] = useState(item.mounting);
+	const [mounting, setMounting] = useState(item.mounting ?? '');
 
-	const [ledLightColor, setLedLightColor] = useState(item.ledLightColor);
+	const [ledLightColor, setLedLightColor] = useState(
+		item.ledLightColor ?? '6500K White'
+	);
 
-	const [sets, setSets] = useState(item.sets);
+	const [sets, setSets] = useState(item.sets ?? 1);
 	const handleOnChangeSets = (e) => {
 		setSets(e.target.value);
 	};
@@ -417,7 +423,7 @@ export default function Letters({ item }) {
 		if (!depth) missingFields.push('Select Metal Depth');
 		if (!selectedLetterHeight) missingFields.push('Select Letter Height');
 
-		if (!color.name) missingFields.push('Select Color');
+		if (!color?.name) missingFields.push('Select Color');
 		if (color?.name === 'Custom Color' && !customColor) {
 			missingFields.push('Add the Pantone color code of your custom color.');
 		}
@@ -555,6 +561,11 @@ export default function Letters({ item }) {
 
 	return (
 		<>
+			{item.productLine && (
+				<div clasName="py-4 my-4">
+					PRODUCT LINE: <span className="font-title">{item.productLine}</span>
+				</div>
+			)}
 			<div className="mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md">
 				<div className="w-full self-center">
 					<div
@@ -565,7 +576,7 @@ export default function Letters({ item }) {
 							whiteSpace: 'nowrap',
 							overflow: 'hidden',
 							fontFamily: font === 'Custom font' ? '' : font,
-							color: color.color,
+							color: color?.color,
 							textShadow: '0px 0px 1px rgba(0, 0, 0, 1)',
 						}}
 					>
@@ -635,7 +646,7 @@ export default function Letters({ item }) {
 					</label>
 					<div
 						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-							color.name ? 'text-black' : 'text-[#dddddd]'
+							color?.name ? 'text-black' : 'text-[#dddddd]'
 						}`}
 						onClick={() => {
 							setOpenColor((prev) => !prev);
@@ -647,12 +658,12 @@ export default function Letters({ item }) {
 							className="rounded-full w-[18px] h-[18px] border mr-2"
 							style={{
 								background:
-									color.name == 'Custom Color'
+									color?.name == 'Custom Color'
 										? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-										: color.color,
+										: color?.color,
 							}}
 						></span>
-						{color.name === '' ? 'CHOOSE OPTION' : color.name}
+						{color?.name === '' ? 'CHOOSE OPTION' : color?.name}
 					</div>
 					{openColor && (
 						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
@@ -669,12 +680,12 @@ export default function Letters({ item }) {
 											className="w-[18px] h-[18px] inline-block rounded-full border"
 											style={{
 												background:
-													color.name == 'Custom Color'
+													color?.name == 'Custom Color'
 														? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-														: color.color,
+														: color?.color,
 											}}
 										></span>
-										{color.name}
+										{color?.name}
 									</div>
 								);
 							})}
@@ -743,12 +754,12 @@ export default function Letters({ item }) {
 												className="w-[18px] h-[18px] inline-block rounded-full border"
 												style={{
 													background:
-														color.name == 'Custom Color'
+														color?.name == 'Custom Color'
 															? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-															: color.color,
+															: color?.color,
 												}}
 											></span>
-											{color.name}
+											{color?.name}
 										</div>
 									);
 								})}
@@ -763,12 +774,12 @@ export default function Letters({ item }) {
 					options={waterProofOptions.map((option) => (
 						<option
 							value={option.option}
-							selected={option.option == item.waterproof}
+							selected={option.option == waterproof}
 						>
 							{option.option}
 						</option>
 					))}
-					value={item.waterproof}
+					value={waterproof}
 				/>
 
 				<Dropdown

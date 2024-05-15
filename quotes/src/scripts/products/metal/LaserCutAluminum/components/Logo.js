@@ -27,22 +27,24 @@ import {
 
 import { useAppContext } from '../../../../AppProvider';
 
-export default function Logo({ item }) {
+export function Logo({ item }) {
 	const { signage, setSignage, setMissing } = useAppContext();
-	const [selectedMounting, setSelectedMounting] = useState(item.mounting);
+	const [selectedMounting, setSelectedMounting] = useState(item.mounting ?? '');
 	const [selectedThickness, setSelectedThickness] = useState(
 		item.metalThickness
 	);
-	const [width, setWidth] = useState(item.width);
-	const [usdPrice, setUsdPrice] = useState(item.usdPrice);
-	const [cadPrice, setCadPrice] = useState(item.cadPrice);
-	const [fileNames, setFileNames] = useState(item.fileNames);
-	const [fileUrls, setFileUrls] = useState(item.fileUrls);
-	const [filePaths, setFilePaths] = useState(item.filePaths);
-	const [files, setFiles] = useState(item.files);
+	const [width, setWidth] = useState(item.width ?? '');
+	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
+	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
+	const [fileNames, setFileNames] = useState(item.fileNames ?? []);
+	const [fileUrls, setFileUrls] = useState(item.fileUrls ?? []);
+	const [filePaths, setFilePaths] = useState(item.filePaths ?? []);
+	const [files, setFiles] = useState(item.files ?? []);
 	const [color, setColor] = useState(item.metalColor);
 	const [openColor, setOpenColor] = useState(false);
-	const [selectedFinishing, setSelectedFinishing] = useState(item.finishing);
+	const [selectedFinishing, setSelectedFinishing] = useState(
+		item.finishing ?? ''
+	);
 	const [customColor, setCustomColor] = useState(item.metalCustomColor);
 
 	const maxWidthHeightOptions = Array.from(
@@ -58,17 +60,17 @@ export default function Logo({ item }) {
 			);
 		}
 	);
-	const [height, setHeight] = useState(item.height);
-	const [comments, setComments] = useState(item.comments);
-	const [waterproof, setWaterproof] = useState(item.waterproof);
-	const [mounting, setMounting] = useState(item.mounting);
+	const [height, setHeight] = useState(item.height ?? '');
+	const [comments, setComments] = useState(item.comments ?? '');
+	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
+	const [mounting, setMounting] = useState(item.mounting ?? '');
 
-	const [studLength, setStudLength] = useState(item.studLength);
+	const [studLength, setStudLength] = useState(item.studLength ?? '');
 	const [spacerStandoffOptions, setSpacerStandoffOptions] = useState(
 		spacerStandoffDefaultOptions
 	);
 	const [spacerStandoffDistance, setSpacerStandoffDistance] = useState(
-		item.spacerStandoffDistance
+		item.spacerStandoffDistance ?? ''
 	);
 
 	const [metalMountingOptions, setMetalMountingOptions] = useState(
@@ -144,7 +146,7 @@ export default function Logo({ item }) {
 		setSelectedFinishing(e.target.value);
 	};
 
-	const [sets, setSets] = useState(item.sets);
+	const [sets, setSets] = useState(item.sets ?? 1);
 	const handleOnChangeSets = (e) => {
 		setSets(e.target.value);
 	};
@@ -375,6 +377,11 @@ export default function Logo({ item }) {
 
 	return (
 		<>
+			{item.productLine && (
+				<div className="py-4 mb-4">
+					PRODUCT LINE: <span className="font-title">{item.productLine}</span>
+				</div>
+			)}
 			<div className="quote-grid mb-6">
 				<Dropdown
 					title="Metal Thickness"

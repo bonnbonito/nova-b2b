@@ -31,7 +31,7 @@ import {
 	STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
 
-export default function Letters({ item }) {
+export function Letters({ item }) {
 	const { signage, setSignage, setMissing } = useAppContext();
 	const [letters, setLetters] = useState(item.letters ?? '');
 	const [comments, setComments] = useState(item.comments ?? '');
@@ -74,7 +74,10 @@ export default function Letters({ item }) {
 		mountingDefaultOptions
 	);
 
-	const [lettersHeight, setLettersHeight] = useState('');
+	const [lettersHeight, setLettersHeight] = useState({
+		min: 2,
+		max: 43,
+	});
 
 	const [selectedMounting, setSelectedMounting] = useState(item.mounting ?? '');
 	const [studLength, setStudLength] = useState(item.studLength ?? '');

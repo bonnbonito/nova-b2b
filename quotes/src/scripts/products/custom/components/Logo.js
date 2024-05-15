@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useAppContext } from '../../../AppProvider';
 import UploadFiles from '../../../UploadFiles';
 
-export default function Logo({ item }) {
+export function Logo({ item }) {
 	const { signage, setSignage, setMissing } = useAppContext();
-	const [fileNames, setFileNames] = useState(item.fileNames);
-	const [fileUrls, setFileUrls] = useState(item.fileUrls);
-	const [filePaths, setFilePaths] = useState(item.filePaths);
-	const [files, setFiles] = useState(item.files);
+	const [fileNames, setFileNames] = useState(item.fileNames ?? []);
+	const [fileUrls, setFileUrls] = useState(item.fileUrls ?? []);
+	const [filePaths, setFilePaths] = useState(item.filePaths ?? []);
+	const [files, setFiles] = useState(item.files ?? []);
 
-	const [description, setDescription] = useState(item.description);
+	const [description, setDescription] = useState(item.description ?? '');
 
 	const handleOnChangeDescription = (e) => setDescription(e.target.value);
 

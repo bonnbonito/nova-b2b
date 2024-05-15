@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Dropdown from '../../../../Dropdown';
 import FontsDropdown from '../../../../FontsDropdown';
 import UploadFiles from '../../../../UploadFiles';
@@ -39,12 +39,12 @@ const smallPunctuations = parseFloat(
 		: 1
 );
 
-export default function Letters({ item }) {
+export function Letters({ item }) {
 	const { signage, setSignage, setMissing } = useAppContext();
 
-	const [letters, setLetters] = useState(item.letters);
-	const [comments, setComments] = useState(item.comments);
-	const [font, setFont] = useState(item.font);
+	const [letters, setLetters] = useState(item.letters ?? '');
+	const [comments, setComments] = useState(item.comments ?? '');
+	const [font, setFont] = useState(item.font ?? '');
 	const [openFont, setOpenFont] = useState(false);
 
 	const [metal, setMetal] = useState(item.metal);
@@ -52,42 +52,42 @@ export default function Letters({ item }) {
 		item.stainLessMetalFinish
 	);
 
-	const [color, setColor] = useState(item.color);
+	const [color, setColor] = useState(item.color ?? {});
 	const [openColor, setOpenColor] = useState(false);
-	const [waterproof, setWaterproof] = useState(item.waterproof);
+	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
 	const [selectedThickness, setSelectedThickness] = useState(item.metalDepth);
-	const [fileNames, setFileNames] = useState(item.fileNames);
-	const [fileUrls, setFileUrls] = useState(item.fileUrls);
-	const [filePaths, setFilePaths] = useState(item.filePaths);
-	const [files, setFiles] = useState(item.files);
+	const [fileNames, setFileNames] = useState(item.fileNames ?? []);
+	const [fileUrls, setFileUrls] = useState(item.fileUrls ?? []);
+	const [filePaths, setFilePaths] = useState(item.filePaths ?? []);
+	const [files, setFiles] = useState(item.files ?? []);
 
-	const [fontFileName, setFontFileName] = useState(item.fontFileName);
-	const [fontFileUrl, setFontFileUrl] = useState(item.fontFileUrl);
-	const [fontFilePath, setFontFilePath] = useState(item.fontFilePath);
-	const [fontFile, setFontFile] = useState(item.fontFile);
+	const [fontFileName, setFontFileName] = useState(item.fontFileName ?? '');
+	const [fontFileUrl, setFontFileUrl] = useState(item.fontFileUrl ?? '');
+	const [fontFilePath, setFontFilePath] = useState(item.fontFilePath ?? '');
+	const [fontFile, setFontFile] = useState(item.fontFile ?? '');
 
 	const [letterHeightOptions, setLetterHeightOptions] = useState([]);
 	const [selectedFinishing, setSelectedFinishing] = useState(item.metalFinish);
-	const [customColor, setCustomColor] = useState(item.customColor);
+	const [customColor, setCustomColor] = useState(item.customColor ?? '');
 
 	const [selectedLetterHeight, setSelectedLetterHeight] = useState(
-		item.letterHeight
+		item.letterHeight ?? ''
 	);
-	const [usdPrice, setUsdPrice] = useState(item.usdPrice);
-	const [cadPrice, setCadPrice] = useState(item.cadPrice);
+	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
+	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
 
 	const [lettersHeight, setLettersHeight] = useState({
 		min: 2,
 		max: 43,
 	});
-	const [mounting, setMounting] = useState(item.mounting);
+	const [mounting, setMounting] = useState(item.mounting ?? '');
 
-	const [studLength, setStudLength] = useState(item.studLength);
+	const [studLength, setStudLength] = useState(item.studLength ?? '');
 	const [spacerStandoffOptions, setSpacerStandoffOptions] = useState(
 		spacerStandoffDefaultOptions
 	);
 	const [spacerStandoffDistance, setSpacerStandoffDistance] = useState(
-		item.spacerStandoffDistance
+		item.spacerStandoffDistance ?? ''
 	);
 
 	const handleonChangeSpacerDistance = (e) => {
@@ -122,7 +122,7 @@ export default function Letters({ item }) {
 		}
 	};
 
-	const [sets, setSets] = useState(item.sets);
+	const [sets, setSets] = useState(item.sets ?? 1);
 	const handleOnChangeSets = (e) => {
 		setSets(e.target.value);
 	};
@@ -570,6 +570,11 @@ export default function Letters({ item }) {
 
 	return (
 		<>
+			{item.productLine && (
+				<div clasName="py-4 my-4">
+					PRODUCT LINE: <span className="font-title">{item.productLine}</span>
+				</div>
+			)}
 			<div className="mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md">
 				<div className="w-full self-center">
 					<div

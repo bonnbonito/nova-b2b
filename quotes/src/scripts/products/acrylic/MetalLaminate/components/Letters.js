@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Dropdown from '../../../../Dropdown';
 import FontsDropdown from '../../../../FontsDropdown';
 import UploadFiles from '../../../../UploadFiles';
@@ -29,8 +29,6 @@ import {
 
 import { useAppContext } from '../../../../AppProvider';
 
-const NovaOptions = NovaQuote.quote_options;
-
 const lowerCasePricing = parseFloat(
 	NovaQuote.lowercase_pricing ? NovaQuote.lowercase_pricing : 1
 );
@@ -44,51 +42,53 @@ const smallPunctuations = parseFloat(
 export const Letters = ({ item }) => {
 	const { signage, setSignage, setMissing } = useAppContext();
 
-	const [letters, setLetters] = useState(item.letters);
-	const [comments, setComments] = useState(item.comments);
-	const [font, setFont] = useState(item.font);
-	const [customFont, setCustomFont] = useState(item.customFont);
-	const [customColor, setCustomColor] = useState(item.customColor);
-	const [acrylicBase, setAcrylicBase] = useState(item.acrylicBase);
+	const [letters, setLetters] = useState(item.letters ?? '');
+	const [comments, setComments] = useState(item.comments ?? '');
+	const [font, setFont] = useState(item.font ?? '');
+	const [customFont, setCustomFont] = useState(item.customFont ?? '');
+	const [customColor, setCustomColor] = useState(item.customColor ?? '');
+	const [acrylicBase, setAcrylicBase] = useState(
+		item.acrylicBase ?? { name: 'Black', color: '#000000' }
+	);
 	const [openFont, setOpenFont] = useState(false);
 	const [openAcrylicColor, setOpenAcrylicColor] = useState(false);
-	const [waterproof, setWaterproof] = useState(item.waterproof);
+	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
 	const [selectedThickness, setSelectedThickness] = useState(
-		item.acrylicThickness
+		item.acrylicThickness ?? ''
 	);
 
-	const [fileNames, setFileNames] = useState(item.fileNames);
-	const [fileUrls, setFileUrls] = useState(item.fileUrls);
-	const [filePaths, setFilePaths] = useState(item.filePaths);
-	const [files, setFiles] = useState(item.files);
+	const [fileNames, setFileNames] = useState(item.fileNames ?? []);
+	const [fileUrls, setFileUrls] = useState(item.fileUrls ?? []);
+	const [filePaths, setFilePaths] = useState(item.filePaths ?? []);
+	const [files, setFiles] = useState(item.files ?? []);
 
-	const [fontFileName, setFontFileName] = useState(item.fontFileName);
-	const [fontFileUrl, setFontFileUrl] = useState(item.fontFileUrl);
-	const [fontFilePath, setFontFilePath] = useState(item.fontFilePath);
-	const [fontFile, setFontFile] = useState(item.fontFile);
+	const [fontFileName, setFontFileName] = useState(item.fontFileName ?? '');
+	const [fontFileUrl, setFontFileUrl] = useState(item.fontFileUrl ?? '');
+	const [fontFilePath, setFontFilePath] = useState(item.fontFilePath ?? '');
+	const [fontFile, setFontFile] = useState(item.fontFile ?? '');
 
-	const [letterHeightOptions, setLetterHeightOptions] = useState([]);
-	const [metalLaminate, setMetalLaminate] = useState(item.metalLaminate);
+	const [letterHeightOptions, setLetterHeightOptions] = useState('');
+	const [metalLaminate, setMetalLaminate] = useState(item.metalLaminate ?? '');
 
 	const [selectedLetterHeight, setSelectedLetterHeight] = useState(
-		item.letterHeight
+		item.letterHeight ?? ''
 	);
-	const [usdPrice, setUsdPrice] = useState(item.usdPrice);
-	const [cadPrice, setCadPrice] = useState(item.cadPrice);
+	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
+	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
 
 	const [lettersHeight, setLettersHeight] = useState({ min: '1', max: '43' });
 
 	const [mountingOptions, setMountingOptions] = useState(
 		mountingDefaultOptions
 	);
-	const [selectedMounting, setSelectedMounting] = useState(item.mounting);
+	const [selectedMounting, setSelectedMounting] = useState(item.mounting ?? '');
 
-	const [studLength, setStudLength] = useState(item.studLength);
+	const [studLength, setStudLength] = useState(item.studLength ?? '');
 	const [spacerStandoffOptions, setSpacerStandoffOptions] = useState(
 		spacerStandoffDefaultOptions
 	);
 	const [spacerStandoffDistance, setSpacerStandoffDistance] = useState(
-		item.spacerStandoffDistance
+		item.spacerStandoffDistance ?? ''
 	);
 
 	const [color, setColor] = useState('#000000');
@@ -139,7 +139,7 @@ export const Letters = ({ item }) => {
 		}
 	};
 
-	const [sets, setSets] = useState(item.sets);
+	const [sets, setSets] = useState(item.sets ?? 1);
 	const handleOnChangeSets = (e) => {
 		setSets(e.target.value);
 	};
@@ -536,6 +536,11 @@ export const Letters = ({ item }) => {
 
 	return (
 		<>
+			{item.productLine && (
+				<div clasName="py-4 my-4">
+					PRODUCT LINE: <span className="font-title">{item.productLine}</span>
+				</div>
+			)}
 			<div className="mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md">
 				<div className="w-full self-center">
 					<div
