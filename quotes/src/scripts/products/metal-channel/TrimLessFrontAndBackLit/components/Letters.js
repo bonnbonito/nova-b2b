@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Dropdown from '../../../../Dropdown';
 import FontsDropdown from '../../../../FontsDropdown';
 import UploadFiles from '../../../../UploadFiles';
@@ -28,6 +28,8 @@ import {
 	STUD_MOUNT,
 	STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
+
+import { spacerPricing } from '../../../../utils/Pricing';
 
 import { useAppContext } from '../../../../AppProvider';
 
@@ -357,10 +359,7 @@ export function Letters({ item }) {
 				});
 
 				if (mounting === STUD_WITH_SPACER) {
-					let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
-
-					let spacer =
-						totalLetterPrice * 1.02 > maxVal ? maxVal : totalLetterPrice * 1.02;
+					let spacer = spacerPricing(totalLetterPrice);
 					spacer = parseFloat(spacer.toFixed(2));
 
 					totalLetterPrice += spacer;

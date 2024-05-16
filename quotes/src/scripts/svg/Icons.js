@@ -58,7 +58,7 @@ export const DuplicateIcon = () => (
 	</svg>
 );
 
-export const PlusIcon = () => (
+export const PlusIcon = ({ open = true }) => (
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
 		width="14"
@@ -66,22 +66,23 @@ export const PlusIcon = () => (
 		viewBox="0 0 14 14"
 		fill="none"
 	>
-		<line
-			x1="7"
-			y1="1"
-			x2="7"
-			y2="13"
-			stroke="black"
-			stroke-width="2"
-			stroke-linecap="square"
-			stroke="currentColor"
-		/>
+		{open && (
+			<line
+				x1="7"
+				y1="1"
+				x2="7"
+				y2="13"
+				stroke-width="2"
+				stroke-linecap="square"
+				stroke="currentColor"
+			/>
+		)}
+
 		<line
 			x1="13"
 			y1="7"
 			x2="1"
 			y2="7"
-			stroke="black"
 			stroke-width="2"
 			stroke-linecap="square"
 			stroke="currentColor"

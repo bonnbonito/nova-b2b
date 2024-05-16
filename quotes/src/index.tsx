@@ -11,6 +11,7 @@ import MetalLaminate from './scripts/products/acrylic/MetalLaminate/MetalLaminat
 import UvPrintedAcrylic from './scripts/products/acrylic/UvPrintedAcrylic/UvPrintedAcrylic';
 import CombineQuotes from './scripts/products/combine/CombineQuotes';
 import CustomProject from './scripts/products/custom/CustomProject';
+import AluminumResinFrontBackLit from './scripts/products/metal-channel/AluminumResinFrontBackLit/AluminumResinFrontBackLit';
 import AluminumResinFrontLit from './scripts/products/metal-channel/AluminumResinFrontLit/AluminumResinFrontLit';
 import TrimLessBackLit from './scripts/products/metal-channel/TrimLessBackLit/TrimLessBackLit';
 import TrimLessFrontAndBackLit from './scripts/products/metal-channel/TrimLessFrontAndBackLit/TrimLessFrontAndBackLit';
@@ -64,6 +65,13 @@ function QuoteApp(): JSX.Element {
 			component = (
 				<AppProvider>
 					<CombineQuotes />
+				</AppProvider>
+			);
+			break;
+		case 'AluminumResinFrontBackLit':
+			component = (
+				<AppProvider>
+					<AluminumResinFrontBackLit />
 				</AppProvider>
 			);
 			break;

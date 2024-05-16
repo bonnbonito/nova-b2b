@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Dropdown from '../../../../Dropdown';
 import FontsDropdown from '../../../../FontsDropdown';
 import UploadFiles from '../../../../UploadFiles';
@@ -6,7 +6,8 @@ import UploadFont from '../../../../UploadFont';
 import useOutsideClick from '../../../../utils/ClickOutside';
 import {
 	colorOptions,
-	metalFinishColors,
+	translucentGraphicFilms,
+	whiteOptions,
 } from '../../../../utils/ColorOptions';
 import convert_json from '../../../../utils/ConvertJson';
 import {
@@ -15,14 +16,22 @@ import {
 	studLengthOptions,
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
+import {
+	aluminumResinDepthOptions,
+	ledLightColors,
+	mountingDefaultOptions,
+} from '../../metalChannelOptions';
 
 import {
-	finishingOptions,
-	mountingOptions,
-	thicknessOptions,
-} from '../../pvcOptions';
+	EXCHANGE_RATE,
+	INDOOR_NOT_WATERPROOF,
+	STUD_MOUNT,
+	STUD_WITH_SPACER,
+} from '../../../../utils/defaults';
 
-import { QuoteContext } from '../PVCMetalLaminate';
+import { spacerPricing } from '../../../../utils/Pricing';
+
+import { useAppContext } from '../../../../AppProvider';
 
 const lowerCasePricing = parseFloat(
 	NovaQuote.lowercase_pricing ? NovaQuote.lowercase_pricing : 1
@@ -32,7 +41,6 @@ const smallPunctuations = parseFloat(
 		? NovaQuote.small_punctuations_pricing
 		: 1
 );
-//const AcrylicLetterPricing = JSON.parse(NovaOptions.letter_x_logo_pricing);
 
 export function Letters({ item }) {
 	const { signage, setSignage, setMissing } = useAppContext();
@@ -40,10 +48,15 @@ export function Letters({ item }) {
 	const [comments, setComments] = useState(item.comments ?? '');
 	const [font, setFont] = useState(item.font ?? '');
 	const [openFont, setOpenFont] = useState(false);
-	const [pvcBaseColor, setPvcBaseColor] = useState(item.pvcBaseColor);
+
+	const [color, setColor] = useState(
+		item.returnColor ?? { name: 'Black', color: '#000000' }
+	);
 	const [openColor, setOpenColor] = useState(false);
 	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
-	const [selectedThickness, setSelectedThickness] = useState(item.thickness);
+
+	const [depth, setDepth] = useState(item.depth);
+
 	const [fileNames, setFileNames] = useState(item.fileNames ?? []);
 	const [fileUrls, setFileUrls] = useState(item.fileUrls ?? []);
 	const [filePaths, setFilePaths] = useState(item.filePaths ?? []);
@@ -55,80 +68,57 @@ export function Letters({ item }) {
 	const [fontFile, setFontFile] = useState(item.fontFile ?? '');
 
 	const [letterHeightOptions, setLetterHeightOptions] = useState([]);
-	const [selectedFinishing, setSelectedFinishing] = useState(
-		item.finishing ?? ''
-	);
-	const [customFont, setCustomFont] = useState(item.customFont);
-	const [mounting, setMounting] = useState(item.mounting ?? '');
-
-	const [studLength, setStudLength] = useState(item.studLength ?? '');
-	const [spacerStandoffOptions, setSpacerStandoffOptions] = useState(
-		spacerStandoffDefaultOptions
-	);
-	const [spacerStandoffDistance, setSpacerStandoffDistance] = useState(
-		item.spacerStandoffDistance ?? ''
-	);
-
-	const handleonChangeSpacerDistance = (e) => {
-		setSpacerStandoffDistance(e.target.value);
-	};
-
-	const handleonChangeStudLength = (e) => {
-		const target = e.target.value;
-		setStudLength(target); // Directly set the value without a callback
-
-		if (target === '1.5"') {
-			setSpacerStandoffOptions([{ value: '0.5"' }, { value: '1"' }]);
-			if (!['0.5"', '1"'].includes(spacerStandoffDistance)) {
-				setSpacerStandoffDistance(''); // Reset if not one of the valid options
-			}
-		} else if (['3.2"', '4"'].includes(target)) {
-			setSpacerStandoffOptions([
-				{ value: '0.5"' },
-				{ value: '1"' },
-				{ value: '1.5"' },
-				{ value: '2"' },
-			]);
-			if (['3"', '4"'].includes(spacerStandoffDistance)) {
-				setSpacerStandoffDistance(''); // Reset if the distance is invalid for these options
-			}
-		} else {
-			setSpacerStandoffOptions(spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
-		}
-
-		if (target === '') {
-			setSpacerStandoffDistance(''); // Always reset if the target is empty
-		}
-	};
-
 	const [customColor, setCustomColor] = useState(item.customColor ?? '');
 
 	const [selectedLetterHeight, setSelectedLetterHeight] = useState(
 		item.letterHeight ?? ''
 	);
+	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
+	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
 
-	const [metalLaminate, setMetalLaminate] = useState(item.metalLaminate ?? '');
-	const handleChangeMetalLaminate = (e) => {
-		setMetalLaminate(e.target.value);
-	};
+	const [acrylicReveal, setAcrylicReveal] = useState(
+		item.acrylicReveal ?? '1/5"'
+	);
+
+	const [lettersHeight, setLettersHeight] = useState({
+		min: 5,
+		max: 40,
+	});
+
+	const [openAcrylicCover, setOpenAcrylicCover] = useState(false);
+	const [studLength, setStudLength] = useState(item.studLength ?? '');
+
+	const [spacerStandoffOptions, setSpacerStandoffOptions] = useState(
+		spacerStandoffDefaultOptions
+	);
+
+	const [spacerStandoffDistance, setSpacerStandoffDistance] = useState(
+		item.spacerStandoffDistance ?? ''
+	);
+
+	const [vinylWhite, setVinylWhite] = useState(
+		item.vinylWhite ?? { name: '', color: '', code: '' }
+	);
+	const [frontAcrylicCover, setFrontAcrylicCover] = useState(
+		item.frontAcrylicCover ?? 'White'
+	);
+
+	const [mounting, setMounting] = useState(item.mounting ?? '');
+
+	const [ledLightColor, setLedLightColor] = useState(
+		item.ledLightColor ?? '6500K White'
+	);
 
 	const [sets, setSets] = useState(item.sets ?? 1);
 	const handleOnChangeSets = (e) => {
 		setSets(e.target.value);
 	};
 
-	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
-	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
-
-	const [mountingSelections, setMountingSelections] = useState(mountingOptions);
-
-	const [lettersHeight, setLettersHeight] = useState({
-		min: 4,
-		max: 39,
-	});
+	const [depthOptions, setDepthOptions] = useState(aluminumResinDepthOptions);
 
 	const colorRef = useRef(null);
 	const fontRef = useRef(null);
+	const acrylicColorRef = useRef(null);
 
 	const [letterPricing, setLetterPricing] = useState([]);
 
@@ -160,21 +150,6 @@ export function Letters({ item }) {
 		}
 		preloadFonts();
 	}, []);
-
-	useEffect(() => {
-		if ('Outdoor (Waterproof)' === waterproof) {
-			if ('Double-sided tape' === mounting) {
-				setMounting('');
-			}
-			let newOptions = mountingOptions.filter(
-				(option) => option.value !== 'Double-sided tape'
-			);
-
-			setMountingSelections(newOptions);
-		} else {
-			setMountingSelections(mountingOptions);
-		}
-	}, [waterproof]);
 
 	const loadingFonts = async () => {
 		const loadPromises = NovaQuote.fonts.map((font) => loadFont(font));
@@ -220,10 +195,10 @@ export function Letters({ item }) {
 					...sign,
 					letters,
 					comments,
+					depth,
 					font,
-					thickness: selectedThickness,
 					waterproof,
-					pvcBaseColor,
+					returnColor: color,
 					letterHeight: selectedLetterHeight,
 					usdPrice,
 					cadPrice,
@@ -235,14 +210,14 @@ export function Letters({ item }) {
 					fontFileName,
 					fontFilePath,
 					fontFileUrl,
-					finishing: selectedFinishing,
-					customFont,
 					customColor,
+					ledLightColor,
 					mounting,
-					sets,
 					studLength,
 					spacerStandoffDistance,
-					metalLaminate,
+					frontAcrylicCover,
+					vinylWhite,
+					sets,
 				};
 			} else {
 				return sign;
@@ -271,100 +246,121 @@ export function Letters({ item }) {
 		}
 	};
 
-	const handleOnChangeWaterproof = (e) => setWaterproof(e.target.value);
-
-	const handleOnChangeThickness = (e) => {
+	const handleOnChangeWaterproof = (e) => {
 		const target = e.target.value;
-		const selected = thicknessOptions.filter(
-			(option) => option.value === target
-		);
-		setSelectedThickness(() => selected[0]);
+		setWaterproof(() => target);
+	};
 
-		if (parseInt(target) === 40 && parseInt(selectedLetterHeight) === 4) {
-			setSelectedLetterHeight('');
+	useEffect(() => {
+		if (!waterproof) return;
+
+		if (waterproof !== INDOOR_NOT_WATERPROOF) {
+			if (parseInt(depth?.value) === 3) {
+				setDepth('');
+			}
+
+			if (parseInt(selectedLetterHeight) === 5) {
+				setSelectedLetterHeight('');
+			}
+
+			const newDepthOptions = [
+				{
+					depth: '2"',
+					value: '5',
+				},
+				{
+					depth: '3.2"',
+					value: '8',
+				},
+			];
+
+			setDepthOptions((prev) => {
+				if (JSON.stringify(prev) !== JSON.stringify(newDepthOptions)) {
+					return newDepthOptions;
+				}
+				return prev;
+			});
+
+			if (lettersHeight.min === 5) {
+				setLettersHeight((prev) => ({ ...prev, min: 6 }));
+			}
+		} else {
+			setDepthOptions((prev) => {
+				if (
+					JSON.stringify(prev) !== JSON.stringify(aluminumResinDepthOptions)
+				) {
+					return aluminumResinDepthOptions;
+				}
+				return prev;
+			});
+
+			if (lettersHeight.min === 6 && depth?.depth === '3.5') {
+				setLettersHeight((prev) => ({ ...prev, min: 5 }));
+			}
 		}
+	}, [
+		waterproof,
+		lettersHeight,
+		depth,
+		selectedLetterHeight,
+		letterHeightOptions,
+	]);
+
+	const handleOnChangeLedLight = (e) => setLedLightColor(e.target.value);
+
+	const handleOnChangeWhite = (e) => {
+		const target = e.target.value;
+		setFrontAcrylicCover(target);
+		if (target !== '3M Vinyl') {
+			setVinylWhite({
+				name: '',
+				color: '',
+			});
+		}
+	};
+
+	const handleonChangeSpacerDistance = (e) => {
+		setSpacerStandoffDistance(e.target.value);
+	};
+
+	const handleonChangeStudLength = (e) => {
+		const target = e.target.value;
+		setStudLength(target); // Directly set the value without a callback
+
+		if (target === '1.5"') {
+			setSpacerStandoffOptions([{ value: '0.5"' }, { value: '1"' }]);
+			if (!['0.5"', '1"'].includes(spacerStandoffDistance)) {
+				setSpacerStandoffDistance(''); // Reset if not one of the valid options
+			}
+		} else if (['3.2"', '4"'].includes(target)) {
+			setSpacerStandoffOptions([
+				{ value: '0.5"' },
+				{ value: '1"' },
+				{ value: '1.5"' },
+				{ value: '2"' },
+			]);
+			if (['3"', '4"'].includes(spacerStandoffDistance)) {
+				setSpacerStandoffDistance(''); // Reset if the distance is invalid for these options
+			}
+		} else {
+			setSpacerStandoffOptions(spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
+		}
+
+		if (target === '') {
+			setSpacerStandoffDistance(''); // Always reset if the target is empty
+		}
+	};
+
+	const handleOnChangeDepth = (e) => {
+		const target = e.target.value;
+		const selected = depthOptions.filter((option) => option.value === target);
+
+		setDepth(() => selected[0]);
 	};
 
 	const handleOnChangeLetterHeight = (e) => {
 		setSelectedLetterHeight(e.target.value);
 	};
-
-	const handleChangeFinishing = (e) => {
-		setSelectedFinishing(e.target.value);
-	};
-
-	useEffect(() => {
-		if (
-			letterPricing.length > 0 &&
-			selectedLetterHeight &&
-			selectedThickness &&
-			waterproof
-		) {
-			const pricingDetail = letterPricing[selectedLetterHeight - 4];
-
-			const baseLetterPrice = pricingDetail[selectedThickness.thickness];
-
-			let totalLetterPrice = 0;
-			const lettersArray = letters.trim().split('');
-			const noLowerCase = NovaQuote.no_lowercase.includes(font);
-
-			lettersArray.forEach((letter) => {
-				let letterPrice = baseLetterPrice;
-
-				if (letter === ' ') {
-					// If the character is a space, set the price to 0 and skip further checks
-					letterPrice = 0;
-				} else if (letter.match(/[a-z]/)) {
-					// Check for lowercase letter
-					letterPrice *= noLowerCase ? 1 : lowerCasePricing; // 80% of the base price
-				} else if (letter.match(/[A-Z]/)) {
-					// Check for uppercase letter
-					// Uppercase letters use 100% of base price, so no change needed
-				} else if (letter.match(/[`~"*,.\-']/)) {
-					// Check for small punctuation marks
-					letterPrice *= smallPunctuations; // 30% of the base price
-				} else if (letter.match(/[^a-zA-Z]/)) {
-					// Check for symbol (not a letter or small punctuation)
-					// Symbols use 100% of base price, so no change needed
-				}
-
-				// Adjusting for waterproof and finishing
-				letterPrice *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.03;
-				letterPrice *= selectedFinishing === GLOSS_FINISH ? 1.03 : 1;
-				letterPrice *= mounting === 'Double-sided tape' ? 1.01 : 1;
-				letterPrice *= pvcBaseColor?.name !== 'Black' ? 1.1 : 1;
-
-				totalLetterPrice += letterPrice;
-			});
-
-			if (mounting === STUD_WITH_SPACER) {
-				let spacer =
-					totalLetterPrice * 1.02 > maxVal ? maxVal : totalLetterPrice * 1.02;
-				spacer = parseFloat(spacer.toFixed(2));
-
-				totalLetterPrice += spacer;
-			}
-
-			totalLetterPrice *= sets;
-
-			setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
-			setCadPrice((totalLetterPrice * parseFloat(EXCHANGE_RATE)).toFixed(2));
-		} else {
-			setUsdPrice(0);
-			setCadPrice(0);
-		}
-	}, [
-		selectedLetterHeight,
-		selectedThickness,
-		selectedFinishing,
-		letters,
-		waterproof,
-		lettersHeight,
-		mounting,
-		font,
-		sets,
-		pvcBaseColor,
-	]);
 
 	useEffect(() => {
 		setLetterHeightOptions(() =>
@@ -386,7 +382,7 @@ export function Letters({ item }) {
 				}
 			)
 		);
-	}, [lettersHeight, letterHeightOptions]);
+	}, [lettersHeight]);
 
 	useEffect(() => {
 		adjustFontSize();
@@ -395,29 +391,37 @@ export function Letters({ item }) {
 	const checkAndAddMissingFields = () => {
 		const missingFields = [];
 
-		if (!letters) missingFields.push('Add your Line Text');
+		if (!letters) missingFields.push('Add Line Text');
 		if (!font) missingFields.push('Select Font');
 		if (font == 'Custom font' && !fontFileUrl) {
 			missingFields.push('Upload your custom font.');
 		}
+		if (!depth) missingFields.push('Select Metal Depth');
 		if (!selectedLetterHeight) missingFields.push('Select Letter Height');
-		if (!selectedThickness) missingFields.push('Select Thickness');
 
-		if (!metalLaminate) missingFields.push('Select Metal Laminate');
-
-		if (!pvcBaseColor?.name) missingFields.push('Select PVC Base Color');
-		if (pvcBaseColor?.name === 'Custom Color' && !customColor) {
+		if (!color?.name) missingFields.push('Select Color');
+		if (color?.name === 'Custom Color' && !customColor) {
 			missingFields.push('Add the Pantone color code of your custom color.');
 		}
 
-		if (!selectedFinishing) missingFields.push('Select Finishing');
-		if (!waterproof) missingFields.push('Select Waterproof');
+		if (!waterproof) missingFields.push('Select Environment');
+
 		if (!mounting) missingFields.push('Select Mounting');
 
 		if (mounting === STUD_WITH_SPACER) {
 			if (!studLength) missingFields.push('Select Stud Length');
 
 			if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
+		}
+
+		if (mounting === STUD_MOUNT) {
+			if (!studLength) missingFields.push('Select Stud Length');
+		}
+		if (!ledLightColor) missingFields.push('Select LED Light Color');
+		if (!frontAcrylicCover) missingFields.push('Select Front Acrylic Cover');
+
+		if (frontAcrylicCover === '3M Vinyl') {
+			if (!vinylWhite?.name) missingFields.push('Select 3M 3630 Vinyl');
 		}
 
 		if (!sets) missingFields.push('Select Quantity');
@@ -457,90 +461,161 @@ export function Letters({ item }) {
 	};
 
 	useEffect(() => {
+		updateSignage();
 		checkAndAddMissingFields();
 	}, [
 		letters,
-		font,
-		pvcBaseColor,
-		selectedThickness,
-		waterproof,
-		selectedLetterHeight,
-		fileUrls,
-		fontFileUrl,
-		selectedFinishing,
-		customColor,
-		mounting,
-		sets,
-		studLength,
-		spacerStandoffDistance,
-		metalLaminate,
-	]);
-
-	useEffect(() => {
-		updateSignage();
-	}, [
-		letters,
+		depth,
 		comments,
 		font,
-		selectedThickness,
 		waterproof,
-		pvcBaseColor,
+		color,
+		frontAcrylicCover,
 		usdPrice,
 		cadPrice,
 		selectedLetterHeight,
+		ledLightColor,
 		fileUrls,
 		fileNames,
-		filePaths,
 		files,
+		filePaths,
+		customColor,
 		fontFileUrl,
 		fontFileName,
 		fontFilePath,
 		fontFile,
-		selectedFinishing,
-		customFont,
-		customColor,
 		mounting,
-		sets,
 		studLength,
 		spacerStandoffDistance,
-		metalLaminate,
+		frontAcrylicCover,
+		vinylWhite,
+		sets,
 	]);
 
 	useEffect(() => {
-		const newHeightOptions = letterPricing?.filter((item) => {
-			const value = item[selectedThickness?.thickness];
-			return (
-				value !== '' &&
-				value !== null &&
-				value !== undefined &&
-				value !== false &&
-				value !== 0 &&
-				value !== '0' &&
-				!isNaN(value)
-			);
-		});
+		if (depth?.value) {
+			const newHeightOptions = letterPricing?.filter((item) => {
+				const value = item[depth?.value];
+				return (
+					value !== '' &&
+					value !== null &&
+					value !== undefined &&
+					value !== false &&
+					!isNaN(value)
+				);
+			});
 
-		if (newHeightOptions.length > 0) {
-			setLettersHeight(() => ({
-				min: newHeightOptions[0].Height,
-				max: newHeightOptions[newHeightOptions.length - 1].Height,
-			}));
+			if (newHeightOptions.length > 0) {
+				if (parseInt(selectedLetterHeight) < newHeightOptions[0].Depth) {
+					setSelectedLetterHeight('');
+				}
+
+				setLettersHeight(() => ({
+					min: newHeightOptions[0].Depth,
+					max: newHeightOptions[newHeightOptions.length - 1].Depth,
+				}));
+			}
 		}
-	}, [selectedThickness]);
+	}, [depth]);
 
-	useOutsideClick([colorRef, fontRef], () => {
-		if (!openColor && !openFont) return;
+	useOutsideClick([colorRef, fontRef, acrylicColorRef], () => {
+		if (!openColor && !openFont && !openAcrylicCover) return;
 		setOpenColor(false);
 		setOpenFont(false);
+		setOpenAcrylicCover(false);
 	});
 
+	if (true) {
+		useOutsideClick([colorRef, fontRef], () => {
+			if (!openColor && !openFont) return;
+			setOpenColor(false);
+			setOpenFont(false);
+		});
+	} else {
+	}
+
 	useEffect(() => {
-		pvcBaseColor?.name != 'Custom Color' && setCustomColor('');
+		if (letterPricing.length > 0 && selectedLetterHeight && depth) {
+			const pricingDetail = letterPricing[selectedLetterHeight - 5];
+			const baseLetterPrice = pricingDetail[depth.value];
+
+			let totalLetterPrice = 0;
+			const lettersArray = letters.trim().split('');
+			const noLowerCase = NovaQuote.no_lowercase.includes(font);
+
+			if (
+				lettersArray.length > 0 &&
+				selectedLetterHeight &&
+				waterproof &&
+				depth
+			) {
+				lettersArray.forEach((letter) => {
+					let letterPrice = baseLetterPrice;
+
+					if (letter === ' ') {
+						// If the character is a space, set the price to 0 and skip further checks
+						letterPrice = 0;
+					} else if (letter.match(/[a-z]/)) {
+						// Check for lowercase letter
+						letterPrice *= noLowerCase ? 1 : lowerCasePricing; // 80% of the base price
+					} else if (letter.match(/[A-Z]/)) {
+						// Check for uppercase letter
+						// Uppercase letters use 100% of base price, so no change needed
+					} else if (letter.match(/[`~"*,.\-']/)) {
+						// Check for small punctuation marks
+						letterPrice *= smallPunctuations; // 30% of the base price
+					} else if (letter.match(/[^a-zA-Z]/)) {
+						// Check for symbol (not a letter or small punctuation)
+						// Symbols use 100% of base price, so no change needed
+					}
+
+					// Adjusting for waterproof and finishing
+					letterPrice *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.02;
+
+					letterPrice *= vinylWhite?.name ? 1.1 : 1;
+
+					totalLetterPrice += letterPrice;
+				});
+
+				if (mounting === STUD_WITH_SPACER) {
+					let spacer = spacerPricing(totalLetterPrice);
+					spacer = parseFloat(spacer.toFixed(2));
+
+					totalLetterPrice += spacer;
+				}
+
+				totalLetterPrice *= sets;
+
+				setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
+				setCadPrice((totalLetterPrice * parseFloat(EXCHANGE_RATE)).toFixed(2));
+			} else {
+				setUsdPrice(0);
+				setCadPrice(0);
+			}
+		}
+	}, [
+		selectedLetterHeight,
+		letters,
+		waterproof,
+		lettersHeight,
+		vinylWhite,
+		mounting,
+		sets,
+		font,
+	]);
+
+	useEffect(() => {
+		color?.name != 'Custom Color' && setCustomColor('');
 		font != 'Custom font' && setFontFileUrl('');
-	}, [pvcBaseColor, font]);
+	}, [color, font]);
 
 	return (
 		<>
+			{item.productLine && (
+				<div clasName="py-4 my-4">
+					PRODUCT LINE: <span className="font-title">{item.productLine}</span>
+				</div>
+			)}
 			<div className="mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md">
 				<div className="w-full self-center">
 					<div
@@ -551,8 +626,8 @@ export function Letters({ item }) {
 							whiteSpace: 'nowrap',
 							overflow: 'hidden',
 							fontFamily: font === 'Custom font' ? '' : font,
-							color: `#000000`,
-							textShadow: `-1px 1px 3px ${pvcBaseColor?.color}, 0 0 1px #000000`,
+							color: color?.color,
+							textShadow: '0px 0px 1px rgba(0, 0, 0, 1)',
 						}}
 					>
 						{letters ? letters : 'PREVIEW'}
@@ -575,12 +650,15 @@ export function Letters({ item }) {
 
 			<div className="quote-grid mb-6">
 				<FontsDropdown
-					font={item.font}
+					font={font}
 					fontRef={fontRef}
 					openFont={openFont}
 					setOpenFont={setOpenFont}
 					handleSelectFont={handleSelectFont}
-					setOpenColor={setOpenColor}
+					setOpenColor={() => {
+						setOpenColor(false);
+						setOpenAcrylicCover(false);
+					}}
 				/>
 
 				{font == 'Custom font' && (
@@ -589,23 +667,32 @@ export function Letters({ item }) {
 						setFontFile={setFontFile}
 						fontFilePath={fontFilePath}
 						fontFileUrl={fontFileUrl}
-						isLoading={isLoading}
 						setFontFileUrl={setFontFileUrl}
 						setFontFileName={setFontFileName}
-						tempFolder={tempFolder}
 					/>
 				)}
 
 				<Dropdown
-					title="Thickness"
-					value={selectedThickness?.value}
-					onChange={handleOnChangeThickness}
-					options={thicknessOptions.map((thickness) => (
+					title="Environment"
+					onChange={handleOnChangeWaterproof}
+					options={waterProofOptions.map((option) => (
 						<option
-							value={thickness.value}
-							selected={thickness === selectedThickness}
+							value={option.option}
+							selected={option.option == waterproof}
 						>
-							{thickness.thickness}
+							{option.option}
+						</option>
+					))}
+					value={waterproof}
+				/>
+
+				<Dropdown
+					title="Metal Depth"
+					value={depth?.value}
+					onChange={handleOnChangeDepth}
+					options={depthOptions.map((thickness) => (
+						<option value={thickness.value} selected={thickness === depth}>
+							{thickness.depth}
 						</option>
 					))}
 				/>
@@ -614,43 +701,33 @@ export function Letters({ item }) {
 					title="Letter Height"
 					onChange={handleOnChangeLetterHeight}
 					options={letterHeightOptions}
-					value={item.letterHeight}
-				/>
-
-				<Dropdown
-					title="Metal Laminate"
-					onChange={handleChangeMetalLaminate}
-					options={metalFinishColors.map((laminate) => (
-						<option
-							value={laminate.name}
-							selected={laminate.name === item.metalLaminate}
-						>
-							{laminate.name}
-						</option>
-					))}
-					value={metalLaminate}
+					value={selectedLetterHeight}
 				/>
 
 				<div className="px-[1px] relative" ref={colorRef}>
 					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-						PVC BASE COLOR
+						Return Color
 					</label>
 					<div
 						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-							pvcBaseColor?.name ? 'text-black' : 'text-[#dddddd]'
+							color?.name ? 'text-black' : 'text-[#dddddd]'
 						}`}
-						onClick={() => setOpenColor((prev) => !prev)}
+						onClick={() => {
+							setOpenColor((prev) => !prev);
+							setOpenFont(false);
+							setOpenAcrylicCover(false);
+						}}
 					>
 						<span
 							className="rounded-full w-[18px] h-[18px] border mr-2"
 							style={{
 								background:
-									pvcBaseColor?.name == 'Custom Color'
+									color?.name == 'Custom Color'
 										? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-										: pvcBaseColor?.color,
+										: color?.color,
 							}}
 						></span>
-						{pvcBaseColor?.name === '' ? 'CHOOSE OPTION' : pvcBaseColor?.name}
+						{color?.name === '' ? 'CHOOSE OPTION' : color?.name}
 					</div>
 					{openColor && (
 						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
@@ -659,7 +736,7 @@ export function Letters({ item }) {
 									<div
 										className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
 										onClick={() => {
-											setPvcBaseColor(color);
+											setColor(color);
 											setOpenColor(false);
 										}}
 									>
@@ -667,12 +744,12 @@ export function Letters({ item }) {
 											className="w-[18px] h-[18px] inline-block rounded-full border"
 											style={{
 												background:
-													color.name == 'Custom Color'
+													color?.name == 'Custom Color'
 														? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-														: color.color,
+														: color?.color,
 											}}
 										></span>
-										{color.name}
+										{color?.name}
 									</div>
 								);
 							})}
@@ -681,46 +758,99 @@ export function Letters({ item }) {
 				</div>
 
 				<Dropdown
-					title="Finishing Options"
-					onChange={handleChangeFinishing}
-					options={finishingOptions.map((finishing) => (
-						<option
-							value={finishing.name}
-							selected={finishing.name === item.finishing}
-						>
-							{finishing.name}
+					title="LED Light Color"
+					onChange={handleOnChangeLedLight}
+					options={ledLightColors.map((color) => (
+						<option value={color} selected={color == ledLightColor}>
+							{color}
 						</option>
 					))}
-					value={item.finishing}
+					value={ledLightColor}
 				/>
 
 				<Dropdown
-					title="Environment"
-					onChange={handleOnChangeWaterproof}
-					options={waterProofOptions.map((option) => (
+					title="Acrylic Reveal"
+					options={<option value={acrylicReveal}>{acrylicReveal}</option>}
+					value={acrylicReveal}
+					onlyValue={true}
+				/>
+
+				<Dropdown
+					title="Front Acrylic Cover"
+					onChange={handleOnChangeWhite}
+					options={whiteOptions.map((option) => (
 						<option
 							value={option.option}
-							selected={option.option == item.waterproof}
+							selected={option == frontAcrylicCover}
 						>
 							{option.option}
 						</option>
 					))}
-					value={item.waterproof}
+					value={frontAcrylicCover}
 				/>
 
-				<Dropdown
-					title="MOUNTING OPTIONS"
-					onChange={handleOnChangeMounting}
-					options={mountingSelections.map((option) => (
-						<option
-							key={option.value}
-							value={option.value}
-							selected={option.value === mounting}
+				{frontAcrylicCover === '3M Vinyl' && (
+					<div className="px-[1px] relative" ref={acrylicColorRef}>
+						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+							3M VINYL
+						</label>
+						<div
+							className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
+								vinylWhite.name ? 'text-black' : 'text-[#dddddd]'
+							}`}
+							onClick={() => {
+								setOpenAcrylicCover((prev) => !prev);
+								setOpenColor(false);
+								setOpenFont(false);
+							}}
 						>
-							{option.value}
+							<span
+								className="rounded-full w-[18px] h-[18px] border mr-2"
+								style={{ backgroundColor: vinylWhite.color }}
+							></span>
+							{vinylWhite.name === '' ? 'CHOOSE OPTION' : vinylWhite.name}
+						</div>
+						{openAcrylicCover && (
+							<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
+								{translucentGraphicFilms.map((color) => {
+									return (
+										<div
+											className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
+											onClick={() => {
+												setVinylWhite(color);
+												setOpenAcrylicCover(false);
+											}}
+										>
+											<span
+												className="w-[18px] h-[18px] inline-block rounded-full border"
+												style={{
+													background:
+														color?.name == 'Custom Color'
+															? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
+															: color?.color,
+												}}
+											></span>
+											{color?.name}
+										</div>
+									);
+								})}
+							</div>
+						)}
+					</div>
+				)}
+
+				<Dropdown
+					title="Mounting"
+					onChange={handleOnChangeMounting}
+					options={mountingDefaultOptions.map((mounting) => (
+						<option
+							value={mounting.value}
+							selected={mounting.value == mounting}
+						>
+							{mounting.value}
 						</option>
 					))}
-					value={item.mounting}
+					value={mounting}
 				/>
 
 				{mounting === STUD_WITH_SPACER && (
@@ -731,12 +861,12 @@ export function Letters({ item }) {
 							options={studLengthOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.studLength}
+									selected={option.value == studLength}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.studLength}
+							value={studLength}
 						/>
 						<Dropdown
 							title="STANDOFF SPACE"
@@ -744,12 +874,12 @@ export function Letters({ item }) {
 							options={spacerStandoffOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.spacerStandoffDistance}
+									selected={option.value == spacerStandoffDistance}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.spacerStandoffDistance}
+							value={spacerStandoffDistance}
 						/>
 					</>
 				)}
@@ -762,12 +892,12 @@ export function Letters({ item }) {
 							options={studLengthOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.studLength}
+									selected={option.value == studLength}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.studLength}
+							value={studLength}
 						/>
 					</>
 				)}
@@ -789,7 +919,7 @@ export function Letters({ item }) {
 			)}
 
 			<div className="quote-grid">
-				{pvcBaseColor?.name == 'Custom Color' && (
+				{color?.name == 'Custom Color' && (
 					<div className="px-[1px] col-span-4">
 						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
 							Custom Color

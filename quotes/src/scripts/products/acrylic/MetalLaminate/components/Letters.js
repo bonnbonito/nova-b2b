@@ -27,6 +27,8 @@ import {
 	STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
 
+import { spacerPricing } from '../../../../utils/Pricing';
+
 import { useAppContext } from '../../../../AppProvider';
 
 const lowerCasePricing = parseFloat(
@@ -276,9 +278,21 @@ export const Letters = ({ item }) => {
 			(option) => option.value === target
 		);
 		setSelectedThickness(() => selected[0]);
-		if (parseInt(target) === 3 && parseInt(selectedLetterHeight) > 24) {
-			setSelectedLetterHeight('');
+
+		if (parseInt(target) === 3) {
+			if (parseInt(selectedLetterHeight) > 24) {
+				setSelectedLetterHeight('');
+			}
+			if (
+				selectedMounting === STUD_MOUNT ||
+				selectedMounting === STUD_WITH_SPACER
+			) {
+				setSelectedMounting('');
+				setStudLength('');
+				setSpacerStandoffDistance('');
+			}
 		}
+
 		if (parseInt(target) > 11 && parseInt(selectedLetterHeight) === 1) {
 			setSelectedLetterHeight('');
 		}
@@ -329,9 +343,9 @@ export const Letters = ({ item }) => {
 		let adjustedPrice = totalLetterPrice;
 
 		if (selectedMounting === STUD_WITH_SPACER) {
-			const maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
-			const spacer =
-				totalLetterPrice * 1.02 > maxVal ? maxVal : totalLetterPrice * 1.02;
+			let spacer = spacerPricing(adjustedPrice);
+			spacer = parseFloat(spacer.toFixed(2));
+
 			adjustedPrice += parseFloat(spacer.toFixed(2));
 		}
 

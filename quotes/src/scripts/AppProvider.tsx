@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
 interface AppContextType {
 	signage: any[];
@@ -8,7 +8,7 @@ interface AppContextType {
 	tempFolder: string;
 	tempFolderName: string;
 	isLoading: boolean;
-	partner: string;
+	partner: number;
 	setPartner: (partner: string) => void;
 	setTempFolder: (tempFolder: string) => void;
 	setIsLoading: (isLoading: boolean) => void;
@@ -26,7 +26,7 @@ const AppContext = createContext<AppContextType>({
 	setTempFolder: () => {},
 	setIsLoading: () => {},
 	setPartner: () => '',
-	partner: '',
+	partner: NovaQuote.user_id,
 });
 
 export function useAppContext() {
@@ -38,7 +38,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 	const [missing, setMissing] = useState<any[]>([]);
 	const [tempFolder, setTempFolder] = useState<string>('');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const [partner, setPartner] = useState<string>('');
+	const [partner, setPartner] = useState<number>(NovaQuote.user_id);
 
 	const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
 

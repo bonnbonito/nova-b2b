@@ -6,7 +6,7 @@ import { EXCHANGE_RATE } from './utils/defaults';
 
 const currency = wcumcs_vars_data.currency;
 
-export default function Sidebar() {
+export default function SidebarAdmin() {
 	const { signage, partner } = useAppContext();
 	const [canSaveToDraft, setCanSaveToDraft] = useState(true);
 
@@ -94,14 +94,6 @@ export default function Sidebar() {
 					</h4>
 				</div>
 
-				<div className="text-[11px] mb-5">
-					<ul>
-						{tax === 0 && <li>Tax not included</li>}
-						<li>The final quote will be ready in 24 business hours.</li>
-						<li>Extra freight charges may apply for connected fonts.</li>
-					</ul>
-				</div>
-
 				{signage.length > 0 &&
 					NovaQuote.quote_status?.value !== 'processing' &&
 					NovaQuote.quote_status?.value !== 'ready' &&
@@ -160,8 +152,6 @@ export default function Sidebar() {
 							btnClass="mb-5 font-title border border-nova-light rounded-md text-nova-gray w-full text-center bg-white text-sm h-[49px] hover:bg-nova-light hover:text-white shadow-[0_0_0_1px_rgba(0,0,0,0.3)]"
 						/>
 					)}
-
-				<div className="text-sm mb-4">Quote & Draft Validity: 30 days</div>
 			</div>
 		</div>
 	);

@@ -12,7 +12,6 @@ export function CombineQuoteProvider({ children }) {
 	const { setSignage } = useAppContext();
 
 	function addSignage(productLine, productId, type, component, material) {
-		console.log(component);
 		const defaultArgs = {
 			id: uuidv4(),
 			productLine,

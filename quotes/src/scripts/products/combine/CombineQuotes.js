@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import Select from 'react-select';
-import Sidebar from '../../Sidebar';
+import SidebarAdmin from '../../SidebarAdmin';
 import Signage from '../../Signage';
 import AccordionGroup from './components/AccordionGroup';
 
@@ -22,6 +22,8 @@ import { Logo as MetalAluminumLogo } from '../metal/LaserCutAluminum/components/
 import { Letters as MetalStainlessLetters } from '../metal/LaserCutStainless/components/Letters';
 import { Logo as MetalStainlessLogo } from '../metal/LaserCutStainless/components/Logo';
 /*MetalChannel */
+import { Letters as AluminumResinFrontBackLit } from '../metal-channel/AluminumResinFrontBackLit/components/Letters';
+import { Letters as AluminumResinFrontLit } from '../metal-channel/AluminumResinFrontLit/components/Letters';
 import { Letters as TrimLessBackLit } from '../metal-channel/TrimLessBackLit/components/Letters';
 import { Letters as TrimLessFrontAndBackLit } from '../metal-channel/TrimLessFrontAndBackLit/components/Letters';
 import { Letters as TrimLessFrontLit } from '../metal-channel/TrimLessFrontLit/components/Letters';
@@ -78,6 +80,24 @@ export default function CombineQuotes() {
 	const showComponent = (item) => {
 		let output;
 		switch (item.component) {
+			case 'AluminumResinFrontBackLit':
+				output = (
+					<AluminumResinFrontBackLit
+						key={item.id}
+						item={item}
+						productId={item.product}
+					/>
+				);
+				break;
+			case 'AluminumResinFrontLit':
+				output = (
+					<AluminumResinFrontLit
+						key={item.id}
+						item={item}
+						productId={item.product}
+					/>
+				);
+				break;
 			case 'PVCUv':
 				output = <PVCUv key={item.id} item={item} productId={item.product} />;
 				break;
@@ -250,10 +270,6 @@ export default function CombineQuotes() {
 		return output;
 	};
 
-	useEffect(() => {
-		console.log(partner);
-	}, [partner]);
-
 	return (
 		<CombineQuoteProvider>
 			<div className="md:flex gap-6">
@@ -264,9 +280,10 @@ export default function CombineQuotes() {
 							className="basic-single"
 							classNamePrefix="select"
 							isSearchable={true}
+							isClearable={true}
 							options={partners}
 							onChange={(e) => {
-								setPartner(() => e.value);
+								setPartner(() => e?.value ?? NovaQuote.user_id);
 							}}
 							name="partners"
 						/>
@@ -292,7 +309,7 @@ export default function CombineQuotes() {
 						</div>
 					)}
 				</div>
-				<Sidebar />
+				<SidebarAdmin />
 			</div>
 		</CombineQuoteProvider>
 	);

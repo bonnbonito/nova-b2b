@@ -2401,7 +2401,7 @@ const AppContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)({
   setTempFolder: () => {},
   setIsLoading: () => {},
   setPartner: () => '',
-  partner: ''
+  partner: NovaQuote.user_id
 });
 function useAppContext() {
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(AppContext);
@@ -2413,7 +2413,7 @@ function AppProvider({
   const [missing, setMissing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const [tempFolder, setTempFolder] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [partner, setPartner] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
+  const [partner, setPartner] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(NovaQuote.user_id);
   const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(AppContext.Provider, {
     value: {
@@ -2926,7 +2926,7 @@ function ModalSave({
       formData.append('total', totalUsdPrice.toFixed(2));
       formData.append('quote_status', 'draft');
       formData.append('currency', wcumcs_vars_data.currency);
-      formData.append('partner', partner !== null && partner !== void 0 ? partner : 0);
+      formData.append('partner', partner !== null && partner !== void 0 ? partner : NovaQuote.user_id);
       if (action === 'update-processing' || action === 'processing') {
         formData.append('quote_status', 'processing');
       }
@@ -4048,6 +4048,10 @@ function Sidebar() {
     signage,
     partner
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
+  const [canSaveToDraft, setCanSaveToDraft] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(true);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    setCanSaveToDraft(() => parseInt(partner) === parseInt(NovaQuote.user_id));
+  }, [partner]);
   const taxRateObj = NovaMyAccount.tax_rate;
   //const tax = taxRateObj ? parseFloat(taxRateObj.tax_rate / 100) : 0;
   const tax = 0;
@@ -4102,7 +4106,7 @@ function Sidebar() {
     action: "processing",
     label: "Submit Quote",
     btnClass: "mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
-  }) : '', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }) : '', canSaveToDraft && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_2__["default"], {
     action: "draft",
     label: "Save to Draft",
     btnClass: "mb-5 font-title border border-nova-light rounded-md text-nova-gray w-full text-center bg-white text-sm h-[49px] hover:bg-nova-light hover:text-white shadow-[0_0_0_1px_rgba(0,0,0,0.3)]"
@@ -4113,6 +4117,104 @@ function Sidebar() {
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-sm mb-4"
   }, "Quote & Draft Validity: 30 days")));
+}
+
+/***/ }),
+
+/***/ "./src/scripts/SidebarAdmin.js":
+/*!*************************************!*\
+  !*** ./src/scripts/SidebarAdmin.js ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ SidebarAdmin)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _ModalSave__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ModalSave */ "./src/scripts/ModalSave.js");
+/* harmony import */ var _Prices__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Prices */ "./src/scripts/Prices.js");
+/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./utils/defaults */ "./src/scripts/utils/defaults.js");
+
+
+
+
+
+
+const currency = wcumcs_vars_data.currency;
+function SidebarAdmin() {
+  const {
+    signage,
+    partner
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
+  const [canSaveToDraft, setCanSaveToDraft] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(true);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    setCanSaveToDraft(() => parseInt(partner) === parseInt(NovaQuote.user_id));
+  }, [partner]);
+  const taxRateObj = NovaMyAccount.tax_rate;
+  //const tax = taxRateObj ? parseFloat(taxRateObj.tax_rate / 100) : 0;
+  const tax = 0;
+  const taxRateName = taxRateObj ? taxRateObj.tax_rate_name : 'Tax';
+  const totalUsdPrice = signage.reduce((acc, item) => acc + parseFloat(item.usdPrice), 0);
+  const totalCadPrice = signage.reduce((acc, item) => acc + parseFloat(item.cadPrice), 0);
+  const totalPrice = currency === 'USD' ? totalUsdPrice : totalCadPrice;
+  const flatRate = currency === 'USD' ? 14.75 : 14.75 * _utils_defaults__WEBPACK_IMPORTED_MODULE_4__.EXCHANGE_RATE;
+  const standardRate = totalPrice > 0 ? parseFloat(totalPrice * 0.075) : 0;
+  const estimatedShipping = totalPrice > 0 ? parseFloat(Math.max(flatRate, standardRate)) : 0;
+
+  //const taxCompute = parseFloat(totalPrice * tax);
+  const taxCompute = 0;
+  const estimateTotalPrice = totalPrice + estimatedShipping + taxCompute;
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:w-1/4 w-full mt-8 md:mt-0"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "rounded-md border border-gray-200 p-4 sticky top-36"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "w-full max-h-[calc(100vh-300px)] overflow-y-auto pr-5"
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Prices__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    id: item.id,
+    item: item,
+    borderTop: index > 0 && 'border-t mt-2'
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("hr", {
+    className: "mt-5"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "block mb-2"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex justify-between pt-2 font-title uppercase md:tracking-[1.6px]"
+  }, "SUBTOTAL", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, currency, "$", Number(totalPrice.toFixed(2)).toLocaleString())), Number(totalPrice) > 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex justify-between font-title uppercase md:tracking-[1.6px]"
+  }, "SHIPPING", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, currency, "$", Number(estimatedShipping.toFixed(2)).toLocaleString())), tax > 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex justify-between font-title uppercase md:tracking-[1.6px]"
+  }, taxRateName, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, currency, "$", Number(taxCompute.toFixed(2)).toLocaleString()))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("hr", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex justify-between mt-5 mb-3"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", {
+    className: "text-2xl"
+  }, "TOTAL:"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", {
+    className: "text-2xl"
+  }, currency, "$", Number(estimateTotalPrice.toFixed(2)).toLocaleString())), signage.length > 0 && NovaQuote.quote_status?.value !== 'processing' && NovaQuote.quote_status?.value !== 'ready' && NovaQuote.quote_status?.value !== 'archived' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, NovaQuote.is_editting === '1' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, NovaQuote.user_role[0] !== 'pending' && NovaQuote.is_admin === 'no' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    action: "update-processing",
+    label: "Submit Quote",
+    btnClass: "mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
+  }) : '', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    action: "update",
+    label: "Update Quote",
+    btnClass: "mb-5 font-title border border-nova-light rounded-md text-nova-gray w-full text-center bg-white text-sm h-[49px] hover:bg-nova-light hover:text-white shadow-[0_0_0_1px_rgba(0,0,0,0.3)]"
+  })) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, NovaQuote.user_role[0] !== 'pending' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    action: "processing",
+    label: "Submit Quote",
+    btnClass: "mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
+  }) : '', canSaveToDraft && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    action: "draft",
+    label: "Save to Draft",
+    btnClass: "mb-5 font-title border border-nova-light rounded-md text-nova-gray w-full text-center bg-white text-sm h-[49px] hover:bg-nova-light hover:text-white shadow-[0_0_0_1px_rgba(0,0,0,0.3)]"
+  }))), signage.length > 0 && NovaQuote.quote_status?.value === 'processing' && NovaQuote.is_admin === 'yes' && NovaQuote.is_editting === '1' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    action: "update-processing-admin",
+    label: "Update Quote",
+    btnClass: "mb-5 font-title border border-nova-light rounded-md text-nova-gray w-full text-center bg-white text-sm h-[49px] hover:bg-nova-light hover:text-white shadow-[0_0_0_1px_rgba(0,0,0,0.3)]"
+  })));
 }
 
 /***/ }),
@@ -5486,7 +5588,10 @@ function Letters({
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
   const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$font = item.font) !== null && _item$font !== void 0 ? _item$font : '');
   const [openFont, setOpenFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$color = item.color) !== null && _item$color !== void 0 ? _item$color : {});
+  const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$color = item.color) !== null && _item$color !== void 0 ? _item$color : {
+    name: '',
+    color: ''
+  });
   const [openColor, setOpenColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : '');
   const [selectedThickness, setSelectedThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicThicknes = item.acrylicThickness) !== null && _item$acrylicThicknes !== void 0 ? _item$acrylicThicknes : '');
@@ -7301,7 +7406,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
 /* harmony import */ var _MetalLaminate__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../MetalLaminate */ "./src/scripts/products/acrylic/MetalLaminate/MetalLaminate.js");
 /* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+
 
 
 
@@ -7327,7 +7434,7 @@ const Letters = ({
     signage,
     setSignage,
     setMissing
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_11__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_12__.useAppContext)();
   const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letters = item.letters) !== null && _item$letters !== void 0 ? _item$letters : '');
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
   const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$font = item.font) !== null && _item$font !== void 0 ? _item$font : '');
@@ -7526,8 +7633,15 @@ const Letters = ({
     const target = e.target.value;
     const selected = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.thicknessOptions.filter(option => option.value === target);
     setSelectedThickness(() => selected[0]);
-    if (parseInt(target) === 3 && parseInt(selectedLetterHeight) > 24) {
-      setSelectedLetterHeight('');
+    if (parseInt(target) === 3) {
+      if (parseInt(selectedLetterHeight) > 24) {
+        setSelectedLetterHeight('');
+      }
+      if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER) {
+        setSelectedMounting('');
+        setStudLength('');
+        setSpacerStandoffDistance('');
+      }
     }
     if (parseInt(target) > 11 && parseInt(selectedLetterHeight) === 1) {
       setSelectedLetterHeight('');
@@ -7561,8 +7675,8 @@ const Letters = ({
     }, 0);
     let adjustedPrice = totalLetterPrice;
     if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER) {
-      const maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
-      const spacer = totalLetterPrice * 1.02 > maxVal ? maxVal : totalLetterPrice * 1.02;
+      let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_11__.spacerPricing)(adjustedPrice);
+      spacer = parseFloat(spacer.toFixed(2));
       adjustedPrice += parseFloat(spacer.toFixed(2));
     }
     const finalPrice = adjustedPrice * sets;
@@ -8915,7 +9029,6 @@ function CombineQuoteProvider({
     setSignage
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
   function addSignage(productLine, productId, type, component, material) {
-    console.log(component);
     const defaultArgs = {
       id: (0,uuid__WEBPACK_IMPORTED_MODULE_2__["default"])(),
       productLine,
@@ -8962,8 +9075,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_select__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! react-select */ "./node_modules/react-select/dist/react-select.esm.js");
-/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../Sidebar */ "./src/scripts/Sidebar.js");
+/* harmony import */ var react_select__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! react-select */ "./node_modules/react-select/dist/react-select.esm.js");
+/* harmony import */ var _SidebarAdmin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../SidebarAdmin */ "./src/scripts/SidebarAdmin.js");
 /* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Signage */ "./src/scripts/Signage.js");
 /* harmony import */ var _components_AccordionGroup__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/AccordionGroup */ "./src/scripts/products/combine/components/AccordionGroup.js");
 /* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../AppProvider */ "./src/scripts/AppProvider.tsx");
@@ -8980,14 +9093,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _metal_LaserCutAluminum_components_Logo__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../metal/LaserCutAluminum/components/Logo */ "./src/scripts/products/metal/LaserCutAluminum/components/Logo.js");
 /* harmony import */ var _metal_LaserCutStainless_components_Letters__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../metal/LaserCutStainless/components/Letters */ "./src/scripts/products/metal/LaserCutStainless/components/Letters.js");
 /* harmony import */ var _metal_LaserCutStainless_components_Logo__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../metal/LaserCutStainless/components/Logo */ "./src/scripts/products/metal/LaserCutStainless/components/Logo.js");
-/* harmony import */ var _metal_channel_TrimLessBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../metal-channel/TrimLessBackLit/components/Letters */ "./src/scripts/products/metal-channel/TrimLessBackLit/components/Letters.js");
-/* harmony import */ var _metal_channel_TrimLessFrontAndBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../metal-channel/TrimLessFrontAndBackLit/components/Letters */ "./src/scripts/products/metal-channel/TrimLessFrontAndBackLit/components/Letters.js");
-/* harmony import */ var _metal_channel_TrimLessFrontLit_components_Letters__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ../metal-channel/TrimLessFrontLit/components/Letters */ "./src/scripts/products/metal-channel/TrimLessFrontLit/components/Letters.js");
-/* harmony import */ var _pvc_PVCMetalLaminate_components_Letters__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ../pvc/PVCMetalLaminate/components/Letters */ "./src/scripts/products/pvc/PVCMetalLaminate/components/Letters.js");
-/* harmony import */ var _pvc_PVCMetalLaminate_components_Logo__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ../pvc/PVCMetalLaminate/components/Logo */ "./src/scripts/products/pvc/PVCMetalLaminate/components/Logo.js");
-/* harmony import */ var _pvc_PVCPainted_components_Letters__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ../pvc/PVCPainted/components/Letters */ "./src/scripts/products/pvc/PVCPainted/components/Letters.js");
-/* harmony import */ var _pvc_PVCPainted_components_Logo__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ../pvc/PVCPainted/components/Logo */ "./src/scripts/products/pvc/PVCPainted/components/Logo.js");
-/* harmony import */ var _pvc_PVCUv_components_Logo__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ../pvc/PVCUv/components/Logo */ "./src/scripts/products/pvc/PVCUv/components/Logo.js");
+/* harmony import */ var _metal_channel_AluminumResinFrontBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../metal-channel/AluminumResinFrontBackLit/components/Letters */ "./src/scripts/products/metal-channel/AluminumResinFrontBackLit/components/Letters.js");
+/* harmony import */ var _metal_channel_AluminumResinFrontLit_components_Letters__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../metal-channel/AluminumResinFrontLit/components/Letters */ "./src/scripts/products/metal-channel/AluminumResinFrontLit/components/Letters.js");
+/* harmony import */ var _metal_channel_TrimLessBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ../metal-channel/TrimLessBackLit/components/Letters */ "./src/scripts/products/metal-channel/TrimLessBackLit/components/Letters.js");
+/* harmony import */ var _metal_channel_TrimLessFrontAndBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ../metal-channel/TrimLessFrontAndBackLit/components/Letters */ "./src/scripts/products/metal-channel/TrimLessFrontAndBackLit/components/Letters.js");
+/* harmony import */ var _metal_channel_TrimLessFrontLit_components_Letters__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ../metal-channel/TrimLessFrontLit/components/Letters */ "./src/scripts/products/metal-channel/TrimLessFrontLit/components/Letters.js");
+/* harmony import */ var _pvc_PVCMetalLaminate_components_Letters__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ../pvc/PVCMetalLaminate/components/Letters */ "./src/scripts/products/pvc/PVCMetalLaminate/components/Letters.js");
+/* harmony import */ var _pvc_PVCMetalLaminate_components_Logo__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ../pvc/PVCMetalLaminate/components/Logo */ "./src/scripts/products/pvc/PVCMetalLaminate/components/Logo.js");
+/* harmony import */ var _pvc_PVCPainted_components_Letters__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ../pvc/PVCPainted/components/Letters */ "./src/scripts/products/pvc/PVCPainted/components/Letters.js");
+/* harmony import */ var _pvc_PVCPainted_components_Logo__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ../pvc/PVCPainted/components/Logo */ "./src/scripts/products/pvc/PVCPainted/components/Logo.js");
+/* harmony import */ var _pvc_PVCUv_components_Logo__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ../pvc/PVCUv/components/Logo */ "./src/scripts/products/pvc/PVCUv/components/Logo.js");
 
 
 
@@ -9012,6 +9127,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /*MetalChannel */
+
+
 
 
 
@@ -9061,8 +9178,22 @@ function CombineQuotes() {
   const showComponent = item => {
     let output;
     switch (item.component) {
+      case 'AluminumResinFrontBackLit':
+        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_AluminumResinFrontBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_18__.Letters, {
+          key: item.id,
+          item: item,
+          productId: item.product
+        });
+        break;
+      case 'AluminumResinFrontLit':
+        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_AluminumResinFrontLit_components_Letters__WEBPACK_IMPORTED_MODULE_19__.Letters, {
+          key: item.id,
+          item: item,
+          productId: item.product
+        });
+        break;
       case 'PVCUv':
-        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_pvc_PVCUv_components_Logo__WEBPACK_IMPORTED_MODULE_25__.Logo, {
+        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_pvc_PVCUv_components_Logo__WEBPACK_IMPORTED_MODULE_27__.Logo, {
           key: item.id,
           item: item,
           productId: item.product
@@ -9070,13 +9201,13 @@ function CombineQuotes() {
         break;
       case 'PVCMetalLaminate':
         if (item.type === 'letters') {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_pvc_PVCMetalLaminate_components_Letters__WEBPACK_IMPORTED_MODULE_21__.Letters, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_pvc_PVCMetalLaminate_components_Letters__WEBPACK_IMPORTED_MODULE_23__.Letters, {
             key: item.id,
             item: item,
             productId: item.product
           });
         } else {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_pvc_PVCMetalLaminate_components_Logo__WEBPACK_IMPORTED_MODULE_22__.Logo, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_pvc_PVCMetalLaminate_components_Logo__WEBPACK_IMPORTED_MODULE_24__.Logo, {
             key: item.id,
             item: item,
             productId: item.product
@@ -9085,13 +9216,13 @@ function CombineQuotes() {
         break;
       case 'PVCPainted':
         if (item.type === 'letters') {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_pvc_PVCPainted_components_Letters__WEBPACK_IMPORTED_MODULE_23__.Letters, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_pvc_PVCPainted_components_Letters__WEBPACK_IMPORTED_MODULE_25__.Letters, {
             key: item.id,
             item: item,
             productId: item.product
           });
         } else {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_pvc_PVCPainted_components_Logo__WEBPACK_IMPORTED_MODULE_24__.Logo, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_pvc_PVCPainted_components_Logo__WEBPACK_IMPORTED_MODULE_26__.Logo, {
             key: item.id,
             item: item,
             productId: item.product
@@ -9099,21 +9230,21 @@ function CombineQuotes() {
         }
         break;
       case 'TrimLessFrontAndBackLit':
-        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_TrimLessFrontAndBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_19__.Letters, {
+        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_TrimLessFrontAndBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_21__.Letters, {
           key: item.id,
           item: item,
           productId: item.product
         });
         break;
       case 'TrimLessFrontLit':
-        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_TrimLessFrontLit_components_Letters__WEBPACK_IMPORTED_MODULE_20__.Letters, {
+        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_TrimLessFrontLit_components_Letters__WEBPACK_IMPORTED_MODULE_22__.Letters, {
           key: item.id,
           item: item,
           productId: item.product
         });
         break;
       case 'TrimLessBackLit':
-        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_TrimLessBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_18__.Letters, {
+        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_TrimLessBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_20__.Letters, {
           key: item.id,
           item: item,
           productId: item.product
@@ -9213,9 +9344,6 @@ function CombineQuotes() {
     }
     return output;
   };
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    console.log(partner);
-  }, [partner]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_CombineQuoteContext__WEBPACK_IMPORTED_MODULE_5__.CombineQuoteProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:flex gap-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -9224,13 +9352,17 @@ function CombineQuotes() {
     className: "border-gray-200 p-4 rounded-md border mb-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "font-title text-lg mb-4"
-  }, "Select Partner:"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_select__WEBPACK_IMPORTED_MODULE_26__["default"], {
+  }, "Select Partner:"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_select__WEBPACK_IMPORTED_MODULE_28__["default"], {
     className: "basic-single",
     classNamePrefix: "select",
     isSearchable: true,
+    isClearable: true,
     options: partners,
     onChange: e => {
-      setPartner(() => e.value);
+      setPartner(() => {
+        var _e$value;
+        return (_e$value = e?.value) !== null && _e$value !== void 0 ? _e$value : NovaQuote.user_id;
+      });
     },
     name: "partners"
   })), signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -9246,7 +9378,7 @@ function CombineQuotes() {
   }, productLines.map(productLine => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_AccordionGroup__WEBPACK_IMPORTED_MODULE_3__["default"], {
     group: productLine.product_line,
     products: productLine.products
-  }))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_1__["default"], null)));
+  }))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_SidebarAdmin__WEBPACK_IMPORTED_MODULE_1__["default"], null)));
 }
 
 /***/ }),
@@ -9319,9 +9451,11 @@ function AccordionItem({
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: open !== null && open !== void 0 ? open : 'bg-slate-50'
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: `p-4 font-title uppercase text-lg select-none cursor-pointer bg-white hover:bg-slate-50 ${open && 'bg-slate-50'}`,
+    className: `p-4 font-title uppercase text-lg select-none cursor-pointer bg-white hover:bg-slate-50 flex justify-between items-center ${open && 'bg-slate-50'}`,
     onClick: () => setOpen(prev => !prev)
-  }, title), products.map(product => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, title, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, {
+    open: !open
+  })), products.map(product => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: `border-gray-200 p-4 mx-4 cursor-pointer rounded-md border mb-2 bg-slate-200 ${open ? 'block' : 'hidden'}`
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "font-title uppercase mb-2"
@@ -9576,6 +9710,893 @@ function Logo({
 
 /***/ }),
 
+/***/ "./src/scripts/products/metal-channel/AluminumResinFrontBackLit/AluminumResinFrontBackLit.js":
+/*!***************************************************************************************************!*\
+  !*** ./src/scripts/products/metal-channel/AluminumResinFrontBackLit/AluminumResinFrontBackLit.js ***!
+  \***************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ TrimLessFrontAndBackLit)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
+/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
+/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
+/* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/metal-channel/AluminumResinFrontBackLit/components/Letters.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+
+
+
+
+
+
+
+
+function TrimLessFrontAndBackLit() {
+  const {
+    signage,
+    setSignage,
+    setTempFolder,
+    tempFolderName
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_5__.useAppContext)();
+  function setDefaultSignage() {
+    setSignage([{
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_6__["default"])(),
+      type: 'letters',
+      title: 'LETTERS 1',
+      depth: '',
+      letters: '',
+      comments: '',
+      font: '',
+      customFont: '',
+      waterproof: '',
+      thickness: '',
+      vinylWhite: {
+        name: '',
+        color: '',
+        code: ''
+      },
+      frontAcrylicCover: 'White',
+      acrylicReveal: '1/5"',
+      mounting: '',
+      studLength: '',
+      spacerStandoffDistance: '',
+      returnColor: {
+        name: 'Black',
+        color: '#000000'
+      },
+      customColor: '',
+      letterHeight: '',
+      ledLightColor: '6500K White',
+      usdPrice: 0,
+      cadPrice: 0,
+      filePaths: [],
+      fileNames: [],
+      fileUrls: [],
+      files: [],
+      sets: 1,
+      product: NovaQuote.product
+    }]);
+  }
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (NovaQuote.is_editting === '1') {
+      const currentSignage = JSON.parse(NovaQuote.signage);
+      if (currentSignage) {
+        setSignage(currentSignage);
+      } else {
+        window.location.href = window.location.pathname;
+      }
+    } else {
+      setDefaultSignage();
+    }
+  }, []);
+  const defaultArgs = {
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_6__["default"])(),
+    type: 'letters',
+    title: 'LETTERS 1',
+    depth: '',
+    letters: '',
+    comments: '',
+    font: '',
+    customFont: '',
+    waterproof: '',
+    thickness: '',
+    frontAcrylicCover: 'White',
+    vinylWhite: {
+      name: '',
+      color: '',
+      code: ''
+    },
+    mounting: '',
+    studLength: '',
+    spacerStandoffDistance: '',
+    returnColor: {
+      name: 'Black',
+      color: '#000000'
+    },
+    customColor: '',
+    letterHeight: '',
+    ledLightColor: '6500K White',
+    acrylicReveal: '1/5"',
+    usdPrice: 0,
+    cadPrice: 0,
+    filePaths: [],
+    fileNames: [],
+    fileUrls: [],
+    files: [],
+    fontFilePath: '',
+    fontFileName: '',
+    fontFileUrl: '',
+    fontFile: '',
+    sets: 1,
+    product: NovaQuote.product
+  };
+  function addSignage(type) {
+    setSignage(prevSignage => {
+      // Count how many signages of this type already exist
+      const count = prevSignage.filter(sign => sign.type === type).length;
+      let args;
+      // Create new signage with incremented title number
+      if (type === 'letters') {
+        args = {
+          type: type,
+          title: `LETTERS ${count + 1}`
+        };
+      } else {
+        args = {
+          type: type,
+          title: `LOGO ${count + 1}`,
+          width: '',
+          height: ''
+        };
+      }
+      const newSignage = {
+        ...defaultArgs,
+        ...args
+      };
+
+      // Append the new signage to the array
+      return [...prevSignage, newSignage];
+    });
+  }
+
+  /* useEffect(() => {
+  	localStorage.setItem(storage + '-x', JSON.stringify(signage));
+  }, [signage]); */
+
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (NovaQuote.is_editting.length === 0) {
+      setTempFolder(tempFolderName);
+    } else {
+      setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+    }
+  }, []);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:flex gap-6"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:w-3/4 w-full flex flex-col"
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    index: index,
+    id: item.id,
+    item: item
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_4__.Letters, {
+    key: item.id,
+    item: item
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex gap-2"
+  }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
+    onClick: () => addSignage('letters'),
+    style: {
+      border: '1px solid #d2d2d2d2'
+    }
+  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_1__["default"], null));
+}
+
+/***/ }),
+
+/***/ "./src/scripts/products/metal-channel/AluminumResinFrontBackLit/components/Letters.js":
+/*!********************************************************************************************!*\
+  !*** ./src/scripts/products/metal-channel/AluminumResinFrontBackLit/components/Letters.js ***!
+  \********************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Letters: () => (/* binding */ Letters)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Dropdown__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../Dropdown */ "./src/scripts/Dropdown.js");
+/* harmony import */ var _FontsDropdown__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../FontsDropdown */ "./src/scripts/FontsDropdown.js");
+/* harmony import */ var _UploadFiles__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../UploadFiles */ "./src/scripts/UploadFiles.js");
+/* harmony import */ var _UploadFont__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../UploadFont */ "./src/scripts/UploadFont.js");
+/* harmony import */ var _utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../utils/ClickOutside */ "./src/scripts/utils/ClickOutside.js");
+/* harmony import */ var _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../utils/ColorOptions */ "./src/scripts/utils/ColorOptions.js");
+/* harmony import */ var _utils_ConvertJson__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../utils/ConvertJson */ "./src/scripts/utils/ConvertJson.js");
+/* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
+/* harmony import */ var _metalChannelOptions__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../metalChannelOptions */ "./src/scripts/products/metal-channel/metalChannelOptions.js");
+/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
+/* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const lowerCasePricing = parseFloat(NovaQuote.lowercase_pricing ? NovaQuote.lowercase_pricing : 1);
+const smallPunctuations = parseFloat(NovaQuote.small_punctuations_pricing ? NovaQuote.small_punctuations_pricing : 1);
+function Letters({
+  item
+}) {
+  var _item$letters, _item$comments, _item$font, _item$returnColor, _item$waterproof, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$acrylicReveal, _item$studLength, _item$spacerStandoffD, _item$vinylWhite, _item$frontAcrylicCov, _item$mounting, _item$ledLightColor, _item$sets;
+  const {
+    signage,
+    setSignage,
+    setMissing
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_12__.useAppContext)();
+  const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letters = item.letters) !== null && _item$letters !== void 0 ? _item$letters : '');
+  const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
+  const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$font = item.font) !== null && _item$font !== void 0 ? _item$font : '');
+  const [openFont, setOpenFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$returnColor = item.returnColor) !== null && _item$returnColor !== void 0 ? _item$returnColor : {
+    name: 'Black',
+    color: '#000000'
+  });
+  const [openColor, setOpenColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : '');
+  const [depth, setDepth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.depth);
+  const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileNames = item.fileNames) !== null && _item$fileNames !== void 0 ? _item$fileNames : []);
+  const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrls = item.fileUrls) !== null && _item$fileUrls !== void 0 ? _item$fileUrls : []);
+  const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$filePaths = item.filePaths) !== null && _item$filePaths !== void 0 ? _item$filePaths : []);
+  const [files, setFiles] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$files = item.files) !== null && _item$files !== void 0 ? _item$files : []);
+  const [fontFileName, setFontFileName] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fontFileName = item.fontFileName) !== null && _item$fontFileName !== void 0 ? _item$fontFileName : '');
+  const [fontFileUrl, setFontFileUrl] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fontFileUrl = item.fontFileUrl) !== null && _item$fontFileUrl !== void 0 ? _item$fontFileUrl : '');
+  const [fontFilePath, setFontFilePath] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fontFilePath = item.fontFilePath) !== null && _item$fontFilePath !== void 0 ? _item$fontFilePath : '');
+  const [fontFile, setFontFile] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fontFile = item.fontFile) !== null && _item$fontFile !== void 0 ? _item$fontFile : '');
+  const [letterHeightOptions, setLetterHeightOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  const [customColor, setCustomColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$customColor = item.customColor) !== null && _item$customColor !== void 0 ? _item$customColor : '');
+  const [selectedLetterHeight, setSelectedLetterHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letterHeight = item.letterHeight) !== null && _item$letterHeight !== void 0 ? _item$letterHeight : '');
+  const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdPrice = item.usdPrice) !== null && _item$usdPrice !== void 0 ? _item$usdPrice : 0);
+  const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadPrice = item.cadPrice) !== null && _item$cadPrice !== void 0 ? _item$cadPrice : 0);
+  const [acrylicReveal, setAcrylicReveal] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicReveal = item.acrylicReveal) !== null && _item$acrylicReveal !== void 0 ? _item$acrylicReveal : '1/5"');
+  const [lettersHeight, setLettersHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
+    min: 5,
+    max: 40
+  });
+  const [openAcrylicCover, setOpenAcrylicCover] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$studLength = item.studLength) !== null && _item$studLength !== void 0 ? _item$studLength : '');
+  const [spacerStandoffOptions, setSpacerStandoffOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.spacerStandoffDefaultOptions);
+  const [spacerStandoffDistance, setSpacerStandoffDistance] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$spacerStandoffD = item.spacerStandoffDistance) !== null && _item$spacerStandoffD !== void 0 ? _item$spacerStandoffD : '');
+  const [vinylWhite, setVinylWhite] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$vinylWhite = item.vinylWhite) !== null && _item$vinylWhite !== void 0 ? _item$vinylWhite : {
+    name: '',
+    color: '',
+    code: ''
+  });
+  const [frontAcrylicCover, setFrontAcrylicCover] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$frontAcrylicCov = item.frontAcrylicCover) !== null && _item$frontAcrylicCov !== void 0 ? _item$frontAcrylicCov : 'White');
+  const [mounting, setMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
+  const [ledLightColor, setLedLightColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$ledLightColor = item.ledLightColor) !== null && _item$ledLightColor !== void 0 ? _item$ledLightColor : '6500K White');
+  const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
+  const handleOnChangeSets = e => {
+    setSets(e.target.value);
+  };
+  const [depthOptions, setDepthOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_metalChannelOptions__WEBPACK_IMPORTED_MODULE_9__.aluminumResinDepthOptions);
+  const colorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const fontRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const acrylicColorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const [letterPricing, setLetterPricing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    async function fetchLetterPricing() {
+      try {
+        const response = await fetch(NovaQuote.letters_pricing_api + item.product);
+        const data = await response.json();
+        const pricing = (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_7__["default"])(data?.pricing_table);
+        setLetterPricing(pricing);
+      } catch (error) {
+        console.error('Error fetching letter pricing:', error);
+      }
+    }
+    fetchLetterPricing();
+  }, []);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    console.log('Attempting to preload fonts...');
+    async function preloadFonts() {
+      try {
+        await loadingFonts();
+      } catch (error) {
+        console.error('Error loading fonts:', error);
+      }
+    }
+    preloadFonts();
+  }, []);
+  const loadingFonts = async () => {
+    const loadPromises = NovaQuote.fonts.map(font => loadFont(font));
+    await Promise.all(loadPromises);
+  };
+  async function loadFont({
+    name,
+    src
+  }) {
+    const fontFace = new FontFace(name, `url(${src})`);
+    try {
+      await fontFace.load();
+      document.fonts.add(fontFace);
+    } catch (e) {
+      console.error(`Font ${name} failed to load`);
+    }
+  }
+  const headlineRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const adjustFontSize = () => {
+    const container = headlineRef.current.parentNode;
+    const headline = headlineRef.current;
+
+    // Reset the font-size to the maximum desired font-size
+    headline.style.fontSize = '96px';
+
+    // Check if the headline is wider than its container
+    while (headline.scrollWidth > container.offsetWidth && parseFloat(window.getComputedStyle(headline).fontSize) > 0) {
+      // Reduce the font-size by 1px until it fits
+      headline.style.fontSize = `${parseFloat(window.getComputedStyle(headline).fontSize) - 1}px`;
+    }
+  };
+  function updateSignage() {
+    const updatedSignage = signage.map(sign => {
+      if (sign.id === item.id) {
+        return {
+          ...sign,
+          letters,
+          comments,
+          depth,
+          font,
+          waterproof,
+          returnColor: color,
+          letterHeight: selectedLetterHeight,
+          usdPrice,
+          cadPrice,
+          files,
+          fileNames,
+          filePaths,
+          fileUrls,
+          fontFile,
+          fontFileName,
+          fontFilePath,
+          fontFileUrl,
+          customColor,
+          ledLightColor,
+          mounting,
+          studLength,
+          spacerStandoffDistance,
+          frontAcrylicCover,
+          vinylWhite,
+          sets
+        };
+      } else {
+        return sign;
+      }
+    });
+    setSignage(() => updatedSignage);
+  }
+  const handleOnChangeLetters = e => setLetters(() => e.target.value);
+  const handleComments = e => setComments(e.target.value);
+  const handleSelectFont = value => setFont(value);
+  const handleOnChangeMounting = e => {
+    const target = e.target.value;
+    setMounting(target);
+    if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER || target === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT) {
+      if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT) {
+        setSpacerStandoffDistance('');
+      }
+    } else {
+      setStudLength('');
+      setSpacerStandoffDistance('');
+    }
+  };
+  const handleOnChangeWaterproof = e => {
+    const target = e.target.value;
+    setWaterproof(() => target);
+  };
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (!waterproof) return;
+    if (waterproof !== _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.INDOOR_NOT_WATERPROOF) {
+      if (parseInt(depth?.value) === 3) {
+        setDepth('');
+      }
+      if (parseInt(selectedLetterHeight) === 5) {
+        setSelectedLetterHeight('');
+      }
+      const newDepthOptions = [{
+        depth: '2"',
+        value: '5'
+      }, {
+        depth: '3.2"',
+        value: '8'
+      }];
+      setDepthOptions(prev => {
+        if (JSON.stringify(prev) !== JSON.stringify(newDepthOptions)) {
+          return newDepthOptions;
+        }
+        return prev;
+      });
+      if (lettersHeight.min === 5) {
+        setLettersHeight(prev => ({
+          ...prev,
+          min: 6
+        }));
+      }
+    } else {
+      setDepthOptions(prev => {
+        if (JSON.stringify(prev) !== JSON.stringify(_metalChannelOptions__WEBPACK_IMPORTED_MODULE_9__.aluminumResinDepthOptions)) {
+          return _metalChannelOptions__WEBPACK_IMPORTED_MODULE_9__.aluminumResinDepthOptions;
+        }
+        return prev;
+      });
+      if (lettersHeight.min === 6 && depth?.depth === '3.5') {
+        setLettersHeight(prev => ({
+          ...prev,
+          min: 5
+        }));
+      }
+    }
+  }, [waterproof, lettersHeight, depth, selectedLetterHeight, letterHeightOptions]);
+  const handleOnChangeLedLight = e => setLedLightColor(e.target.value);
+  const handleOnChangeWhite = e => {
+    const target = e.target.value;
+    setFrontAcrylicCover(target);
+    if (target !== '3M Vinyl') {
+      setVinylWhite({
+        name: '',
+        color: ''
+      });
+    }
+  };
+  const handleonChangeSpacerDistance = e => {
+    setSpacerStandoffDistance(e.target.value);
+  };
+  const handleonChangeStudLength = e => {
+    const target = e.target.value;
+    setStudLength(target); // Directly set the value without a callback
+
+    if (target === '1.5"') {
+      setSpacerStandoffOptions([{
+        value: '0.5"'
+      }, {
+        value: '1"'
+      }]);
+      if (!['0.5"', '1"'].includes(spacerStandoffDistance)) {
+        setSpacerStandoffDistance(''); // Reset if not one of the valid options
+      }
+    } else if (['3.2"', '4"'].includes(target)) {
+      setSpacerStandoffOptions([{
+        value: '0.5"'
+      }, {
+        value: '1"'
+      }, {
+        value: '1.5"'
+      }, {
+        value: '2"'
+      }]);
+      if (['3"', '4"'].includes(spacerStandoffDistance)) {
+        setSpacerStandoffDistance(''); // Reset if the distance is invalid for these options
+      }
+    } else {
+      setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
+    }
+
+    if (target === '') {
+      setSpacerStandoffDistance(''); // Always reset if the target is empty
+    }
+  };
+
+  const handleOnChangeDepth = e => {
+    const target = e.target.value;
+    const selected = depthOptions.filter(option => option.value === target);
+    setDepth(() => selected[0]);
+  };
+  const handleOnChangeLetterHeight = e => {
+    setSelectedLetterHeight(e.target.value);
+  };
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    setLetterHeightOptions(() => Array.from({
+      length: parseInt(lettersHeight.max) - parseInt(lettersHeight.min) + 1
+    }, (_, index) => {
+      const val = parseInt(lettersHeight.min) + index;
+      return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+        key: index,
+        value: val,
+        selected: val === selectedLetterHeight
+      }, val, "\"");
+    }));
+  }, [lettersHeight]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    adjustFontSize();
+  }, [letters]);
+  const checkAndAddMissingFields = () => {
+    const missingFields = [];
+    if (!letters) missingFields.push('Add Line Text');
+    if (!font) missingFields.push('Select Font');
+    if (font == 'Custom font' && !fontFileUrl) {
+      missingFields.push('Upload your custom font.');
+    }
+    if (!depth) missingFields.push('Select Metal Depth');
+    if (!selectedLetterHeight) missingFields.push('Select Letter Height');
+    if (!color?.name) missingFields.push('Select Color');
+    if (color?.name === 'Custom Color' && !customColor) {
+      missingFields.push('Add the Pantone color code of your custom color.');
+    }
+    if (!waterproof) missingFields.push('Select Environment');
+    if (!mounting) missingFields.push('Select Mounting');
+    if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER) {
+      if (!studLength) missingFields.push('Select Stud Length');
+      if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
+    }
+    if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT) {
+      if (!studLength) missingFields.push('Select Stud Length');
+    }
+    if (!ledLightColor) missingFields.push('Select LED Light Color');
+    if (!frontAcrylicCover) missingFields.push('Select Front Acrylic Cover');
+    if (frontAcrylicCover === '3M Vinyl') {
+      if (!vinylWhite?.name) missingFields.push('Select 3M 3630 Vinyl');
+    }
+    if (!sets) missingFields.push('Select Quantity');
+    if (missingFields.length > 0) {
+      setMissing(prevMissing => {
+        const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
+        if (existingIndex !== -1) {
+          const updatedMissing = [...prevMissing];
+          updatedMissing[existingIndex] = {
+            ...updatedMissing[existingIndex],
+            missingFields: missingFields
+          };
+          return updatedMissing;
+        } else if (missingFields.length > 0) {
+          return [...prevMissing, {
+            id: item.id,
+            title: item.title,
+            missingFields: missingFields
+          }];
+        }
+        return prevMissing;
+      });
+    } else {
+      setMissing(current => {
+        const updatedMissing = current.filter(sign => sign.id !== item.id);
+        return updatedMissing;
+      });
+    }
+  };
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    updateSignage();
+    checkAndAddMissingFields();
+  }, [letters, depth, comments, font, waterproof, color, frontAcrylicCover, usdPrice, cadPrice, selectedLetterHeight, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, fontFileUrl, fontFileName, fontFilePath, fontFile, mounting, studLength, spacerStandoffDistance, frontAcrylicCover, vinylWhite, sets]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (depth?.value) {
+      const newHeightOptions = letterPricing?.filter(item => {
+        const value = item[depth?.value];
+        return value !== '' && value !== null && value !== undefined && value !== false && !isNaN(value);
+      });
+      if (newHeightOptions.length > 0) {
+        if (parseInt(selectedLetterHeight) < newHeightOptions[0].Depth) {
+          setSelectedLetterHeight('');
+        }
+        setLettersHeight(() => ({
+          min: newHeightOptions[0].Depth,
+          max: newHeightOptions[newHeightOptions.length - 1].Depth
+        }));
+      }
+    }
+  }, [depth]);
+  (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__["default"])([colorRef, fontRef, acrylicColorRef], () => {
+    if (!openColor && !openFont && !openAcrylicCover) return;
+    setOpenColor(false);
+    setOpenFont(false);
+    setOpenAcrylicCover(false);
+  });
+  if (true) {
+    (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__["default"])([colorRef, fontRef], () => {
+      if (!openColor && !openFont) return;
+      setOpenColor(false);
+      setOpenFont(false);
+    });
+  } else {}
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (letterPricing.length > 0 && selectedLetterHeight && depth) {
+      const pricingDetail = letterPricing[selectedLetterHeight - 5];
+      const baseLetterPrice = pricingDetail[depth.value];
+      let totalLetterPrice = 0;
+      const lettersArray = letters.trim().split('');
+      const noLowerCase = NovaQuote.no_lowercase.includes(font);
+      if (lettersArray.length > 0 && selectedLetterHeight && waterproof && depth) {
+        lettersArray.forEach(letter => {
+          let letterPrice = baseLetterPrice;
+          if (letter === ' ') {
+            // If the character is a space, set the price to 0 and skip further checks
+            letterPrice = 0;
+          } else if (letter.match(/[a-z]/)) {
+            // Check for lowercase letter
+            letterPrice *= noLowerCase ? 1 : lowerCasePricing; // 80% of the base price
+          } else if (letter.match(/[A-Z]/)) {
+            // Check for uppercase letter
+            // Uppercase letters use 100% of base price, so no change needed
+          } else if (letter.match(/[`~"*,.\-']/)) {
+            // Check for small punctuation marks
+            letterPrice *= smallPunctuations; // 30% of the base price
+          } else if (letter.match(/[^a-zA-Z]/)) {
+            // Check for symbol (not a letter or small punctuation)
+            // Symbols use 100% of base price, so no change needed
+          }
+
+          // Adjusting for waterproof and finishing
+          letterPrice *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.INDOOR_NOT_WATERPROOF ? 1 : 1.02;
+          letterPrice *= vinylWhite?.name ? 1.1 : 1;
+          totalLetterPrice += letterPrice;
+        });
+        if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER) {
+          let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_11__.spacerPricing)(totalLetterPrice);
+          spacer = parseFloat(spacer.toFixed(2));
+          totalLetterPrice += spacer;
+        }
+        totalLetterPrice *= sets;
+        setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
+        setCadPrice((totalLetterPrice * parseFloat(_utils_defaults__WEBPACK_IMPORTED_MODULE_10__.EXCHANGE_RATE)).toFixed(2));
+      } else {
+        setUsdPrice(0);
+        setCadPrice(0);
+      }
+    }
+  }, [selectedLetterHeight, letters, waterproof, lettersHeight, vinylWhite, mounting, sets, font]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    color?.name != 'Custom Color' && setCustomColor('');
+    font != 'Custom font' && setFontFileUrl('');
+  }, [color, font]);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    clasName: "py-4 my-4"
+  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title"
+  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "w-full self-center"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "self-center text-center",
+    ref: headlineRef,
+    style: {
+      margin: '0',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      fontFamily: font === 'Custom font' ? '' : font,
+      color: color?.color,
+      textShadow: '0px 0px 1px rgba(0, 0, 0, 1)'
+    }
+  }, letters ? letters : 'PREVIEW'))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "py-4"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
+  }, "Text"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    className: "w-full py-4 px-2 color-black border-gray-200 text-sm font-bold rounded-md h-14 placeholder:text-slate-400 ",
+    type: "text",
+    onChange: handleOnChangeLetters,
+    maxLength: 100,
+    value: letters,
+    placeholder: "YOUR TEXT HERE"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "quote-grid mb-6"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_FontsDropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    font: font,
+    fontRef: fontRef,
+    openFont: openFont,
+    setOpenFont: setOpenFont,
+    handleSelectFont: handleSelectFont,
+    setOpenColor: () => {
+      setOpenColor(false);
+      setOpenAcrylicCover(false);
+    }
+  }), font == 'Custom font' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFont__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    setFontFilePath: setFontFilePath,
+    setFontFile: setFontFile,
+    fontFilePath: fontFilePath,
+    fontFileUrl: fontFileUrl,
+    setFontFileUrl: setFontFileUrl,
+    setFontFileName: setFontFileName
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Environment",
+    onChange: handleOnChangeWaterproof,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.option,
+      selected: option.option == waterproof
+    }, option.option)),
+    value: waterproof
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Metal Depth",
+    value: depth?.value,
+    onChange: handleOnChangeDepth,
+    options: depthOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: thickness.value,
+      selected: thickness === depth
+    }, thickness.depth))
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Letter Height",
+    onChange: handleOnChangeLetterHeight,
+    options: letterHeightOptions,
+    value: selectedLetterHeight
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "px-[1px] relative",
+    ref: colorRef
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
+  }, "Return Color"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: `flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${color?.name ? 'text-black' : 'text-[#dddddd]'}`,
+    onClick: () => {
+      setOpenColor(prev => !prev);
+      setOpenFont(false);
+      setOpenAcrylicCover(false);
+    }
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "rounded-full w-[18px] h-[18px] border mr-2",
+    style: {
+      background: color?.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color?.color
+    }
+  }), color?.name === '' ? 'CHOOSE OPTION' : color?.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+  }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_6__.colorOptions.map(color => {
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
+      onClick: () => {
+        setColor(color);
+        setOpenColor(false);
+      }
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: "w-[18px] h-[18px] inline-block rounded-full border",
+      style: {
+        background: color?.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color?.color
+      }
+    }), color?.name);
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "LED Light Color",
+    onChange: handleOnChangeLedLight,
+    options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_9__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: color,
+      selected: color == ledLightColor
+    }, color)),
+    value: ledLightColor
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Acrylic Reveal",
+    options: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: acrylicReveal
+    }, acrylicReveal),
+    value: acrylicReveal,
+    onlyValue: true
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Front Acrylic Cover",
+    onChange: handleOnChangeWhite,
+    options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_6__.whiteOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.option,
+      selected: option == frontAcrylicCover
+    }, option.option)),
+    value: frontAcrylicCover
+  }), frontAcrylicCover === '3M Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "px-[1px] relative",
+    ref: acrylicColorRef
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
+  }, "3M VINYL"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: `flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${vinylWhite.name ? 'text-black' : 'text-[#dddddd]'}`,
+    onClick: () => {
+      setOpenAcrylicCover(prev => !prev);
+      setOpenColor(false);
+      setOpenFont(false);
+    }
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "rounded-full w-[18px] h-[18px] border mr-2",
+    style: {
+      backgroundColor: vinylWhite.color
+    }
+  }), vinylWhite.name === '' ? 'CHOOSE OPTION' : vinylWhite.name), openAcrylicCover && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+  }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_6__.translucentGraphicFilms.map(color => {
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
+      onClick: () => {
+        setVinylWhite(color);
+        setOpenAcrylicCover(false);
+      }
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: "w-[18px] h-[18px] inline-block rounded-full border",
+      style: {
+        background: color?.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color?.color
+      }
+    }), color?.name);
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Mounting",
+    onChange: handleOnChangeMounting,
+    options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_9__.mountingDefaultOptions.map(mounting => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: mounting.value,
+      selected: mounting.value == mounting
+    }, mounting.value)),
+    value: mounting
+  }), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Stud Length",
+    onChange: handleonChangeStudLength,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.value,
+      selected: option.value == studLength
+    }, option.value)),
+    value: studLength
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "STANDOFF SPACE",
+    onChange: handleonChangeSpacerDistance,
+    options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.value,
+      selected: option.value == spacerStandoffDistance
+    }, option.value)),
+    value: spacerStandoffDistance
+  })), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Stud Length",
+    onChange: handleonChangeStudLength,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.value,
+      selected: option.value == studLength
+    }, option.value)),
+    value: studLength
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Quantity",
+    onChange: handleOnChangeSets,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.setOptions,
+    value: sets,
+    onlyValue: true
+  })), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-xs text-[#9F9F9F] mb-4"
+  }, "*Note: The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "quote-grid"
+  }, color?.name == 'Custom Color' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "px-[1px] col-span-4"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
+  }, "Custom Color"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    className: "w-full py-4 px-2 border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400",
+    type: "text",
+    value: customColor,
+    onChange: e => setCustomColor(e.target.value),
+    placeholder: "ADD THE PANTONE COLOR CODE"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "px-[1px] col-span-4"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
+  }, "COMMENTS"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("textarea", {
+    className: "w-full py-4 px-2 border-gray-200 color-black text-sm font-bold rounded-md placeholder:text-slate-400",
+    value: comments,
+    onChange: handleComments,
+    placeholder: "ADD COMMENTS",
+    rows: 4
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    setFilePaths: setFilePaths,
+    setFiles: setFiles,
+    filePaths: filePaths,
+    fileUrls: fileUrls,
+    fileNames: fileNames,
+    setFileUrls: setFileUrls,
+    setFileNames: setFileNames
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-xs text-[#9F9F9F] pt-4"
+  }, "We size the letters in proportion to your chosen font. Some uppercase/lowercase letters may appear shorter or taller than your selected height on the form to maintain visual harmony."));
+}
+
+/***/ }),
+
 /***/ "./src/scripts/products/metal-channel/AluminumResinFrontLit/AluminumResinFrontLit.js":
 /*!*******************************************************************************************!*\
   !*** ./src/scripts/products/metal-channel/AluminumResinFrontLit/AluminumResinFrontLit.js ***!
@@ -9787,7 +10808,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
 /* harmony import */ var _metalChannelOptions__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../metalChannelOptions */ "./src/scripts/products/metal-channel/metalChannelOptions.js");
 /* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+
 
 
 
@@ -9811,7 +10834,7 @@ function Letters({
     signage,
     setSignage,
     setMissing
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_11__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_12__.useAppContext)();
   const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letters = item.letters) !== null && _item$letters !== void 0 ? _item$letters : '');
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
   const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$font = item.font) !== null && _item$font !== void 0 ? _item$font : '');
@@ -9837,7 +10860,7 @@ function Letters({
   const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdPrice = item.usdPrice) !== null && _item$usdPrice !== void 0 ? _item$usdPrice : 0);
   const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadPrice = item.cadPrice) !== null && _item$cadPrice !== void 0 ? _item$cadPrice : 0);
   const [lettersHeight, setLettersHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
-    min: 6,
+    min: 5,
     max: 40
   });
   const [openAcrylicCover, setOpenAcrylicCover] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
@@ -9856,6 +10879,7 @@ function Letters({
   const handleOnChangeSets = e => {
     setSets(e.target.value);
   };
+  const [depthOptions, setDepthOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_metalChannelOptions__WEBPACK_IMPORTED_MODULE_9__.aluminumResinDepthOptions);
   const colorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const fontRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const acrylicColorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
@@ -9966,7 +10990,53 @@ function Letters({
       setSpacerStandoffDistance('');
     }
   };
-  const handleOnChangeWaterproof = e => setWaterproof(e.target.value);
+  const handleOnChangeWaterproof = e => {
+    const target = e.target.value;
+    setWaterproof(() => target);
+  };
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (!waterproof) return;
+    if (waterproof !== _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.INDOOR_NOT_WATERPROOF) {
+      if (parseInt(depth?.value) === 3) {
+        setDepth('');
+      }
+      if (parseInt(selectedLetterHeight) === 5) {
+        setSelectedLetterHeight('');
+      }
+      const newDepthOptions = [{
+        depth: '2"',
+        value: '5'
+      }, {
+        depth: '3.2"',
+        value: '8'
+      }];
+      setDepthOptions(prev => {
+        if (JSON.stringify(prev) !== JSON.stringify(newDepthOptions)) {
+          return newDepthOptions;
+        }
+        return prev;
+      });
+      if (lettersHeight.min === 5) {
+        setLettersHeight(prev => ({
+          ...prev,
+          min: 6
+        }));
+      }
+    } else {
+      setDepthOptions(prev => {
+        if (JSON.stringify(prev) !== JSON.stringify(_metalChannelOptions__WEBPACK_IMPORTED_MODULE_9__.aluminumResinDepthOptions)) {
+          return _metalChannelOptions__WEBPACK_IMPORTED_MODULE_9__.aluminumResinDepthOptions;
+        }
+        return prev;
+      });
+      if (lettersHeight.min === 6 && depth?.depth === '3.5') {
+        setLettersHeight(prev => ({
+          ...prev,
+          min: 5
+        }));
+      }
+    }
+  }, [waterproof, lettersHeight, depth, selectedLetterHeight, letterHeightOptions]);
   const handleOnChangeLedLight = e => setLedLightColor(e.target.value);
   const handleOnChangeWhite = e => {
     const target = e.target.value;
@@ -10018,73 +11088,12 @@ function Letters({
 
   const handleOnChangeDepth = e => {
     const target = e.target.value;
-    const selected = _metalChannelOptions__WEBPACK_IMPORTED_MODULE_9__.frontBackdepthOptions.filter(option => option.value === target);
+    const selected = depthOptions.filter(option => option.value === target);
     setDepth(() => selected[0]);
-    if (parseFloat(target) > 5) {
-      if (parseInt(selectedLetterHeight) < 15) {
-        setSelectedLetterHeight('');
-      }
-      setLettersHeight(() => ({
-        min: 12,
-        max: 40
-      }));
-    } else {
-      setLettersHeight(() => ({
-        min: 6,
-        max: 40
-      }));
-    }
   };
   const handleOnChangeLetterHeight = e => {
     setSelectedLetterHeight(e.target.value);
   };
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (letterPricing.length > 0 && selectedLetterHeight && depth) {
-      const pricingDetail = letterPricing[selectedLetterHeight - 6];
-      const baseLetterPrice = pricingDetail[depth.depth];
-      let totalLetterPrice = 0;
-      const lettersArray = letters.trim().split('');
-      const noLowerCase = NovaQuote.no_lowercase.includes(font);
-      if (lettersArray.length > 0 && selectedLetterHeight && waterproof && depth) {
-        lettersArray.forEach(letter => {
-          let letterPrice = baseLetterPrice;
-          if (letter === ' ') {
-            // If the character is a space, set the price to 0 and skip further checks
-            letterPrice = 0;
-          } else if (letter.match(/[a-z]/)) {
-            // Check for lowercase letter
-            letterPrice *= noLowerCase ? 1 : lowerCasePricing; // 80% of the base price
-          } else if (letter.match(/[A-Z]/)) {
-            // Check for uppercase letter
-            // Uppercase letters use 100% of base price, so no change needed
-          } else if (letter.match(/[`~"*,.\-']/)) {
-            // Check for small punctuation marks
-            letterPrice *= smallPunctuations; // 30% of the base price
-          } else if (letter.match(/[^a-zA-Z]/)) {
-            // Check for symbol (not a letter or small punctuation)
-            // Symbols use 100% of base price, so no change needed
-          }
-
-          // Adjusting for waterproof and finishing
-          letterPrice *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.INDOOR_NOT_WATERPROOF ? 1 : 1.03;
-          letterPrice *= vinylWhite?.name ? 1.1 : 1;
-          totalLetterPrice += letterPrice;
-        });
-        if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER) {
-          let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
-          let spacer = totalLetterPrice * 1.02 > maxVal ? maxVal : totalLetterPrice * 1.02;
-          spacer = parseFloat(spacer.toFixed(2));
-          totalLetterPrice += spacer;
-        }
-        totalLetterPrice *= sets;
-        setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
-        setCadPrice((totalLetterPrice * parseFloat(_utils_defaults__WEBPACK_IMPORTED_MODULE_10__.EXCHANGE_RATE)).toFixed(2));
-      } else {
-        setUsdPrice(0);
-        setCadPrice(0);
-      }
-    }
-  }, [selectedLetterHeight, letters, waterproof, lettersHeight, vinylWhite, mounting, sets, font]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     setLetterHeightOptions(() => Array.from({
       length: parseInt(lettersHeight.max) - parseInt(lettersHeight.min) + 1
@@ -10096,7 +11105,7 @@ function Letters({
         selected: val === selectedLetterHeight
       }, val, "\"");
     }));
-  }, [depth, lettersHeight, letterHeightOptions]);
+  }, [lettersHeight]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     adjustFontSize();
   }, [letters]);
@@ -10161,10 +11170,13 @@ function Letters({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (depth?.value) {
       const newHeightOptions = letterPricing?.filter(item => {
-        const value = item[depth?.depth];
+        const value = item[depth?.value];
         return value !== '' && value !== null && value !== undefined && value !== false && !isNaN(value);
       });
       if (newHeightOptions.length > 0) {
+        if (parseInt(selectedLetterHeight) < newHeightOptions[0].Depth) {
+          setSelectedLetterHeight('');
+        }
         setLettersHeight(() => ({
           min: newHeightOptions[0].Depth,
           max: newHeightOptions[newHeightOptions.length - 1].Depth
@@ -10185,6 +11197,52 @@ function Letters({
       setOpenFont(false);
     });
   } else {}
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (letterPricing.length > 0 && selectedLetterHeight && depth) {
+      const pricingDetail = letterPricing[selectedLetterHeight - 5];
+      const baseLetterPrice = pricingDetail[depth.value];
+      let totalLetterPrice = 0;
+      const lettersArray = letters.trim().split('');
+      const noLowerCase = NovaQuote.no_lowercase.includes(font);
+      if (lettersArray.length > 0 && selectedLetterHeight && waterproof && depth) {
+        lettersArray.forEach(letter => {
+          let letterPrice = baseLetterPrice;
+          if (letter === ' ') {
+            // If the character is a space, set the price to 0 and skip further checks
+            letterPrice = 0;
+          } else if (letter.match(/[a-z]/)) {
+            // Check for lowercase letter
+            letterPrice *= noLowerCase ? 1 : lowerCasePricing; // 80% of the base price
+          } else if (letter.match(/[A-Z]/)) {
+            // Check for uppercase letter
+            // Uppercase letters use 100% of base price, so no change needed
+          } else if (letter.match(/[`~"*,.\-']/)) {
+            // Check for small punctuation marks
+            letterPrice *= smallPunctuations; // 30% of the base price
+          } else if (letter.match(/[^a-zA-Z]/)) {
+            // Check for symbol (not a letter or small punctuation)
+            // Symbols use 100% of base price, so no change needed
+          }
+
+          // Adjusting for waterproof and finishing
+          letterPrice *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.INDOOR_NOT_WATERPROOF ? 1 : 1.02;
+          letterPrice *= vinylWhite?.name ? 1.1 : 1;
+          totalLetterPrice += letterPrice;
+        });
+        if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER) {
+          let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_11__.spacerPricing)(totalLetterPrice);
+          spacer = parseFloat(spacer.toFixed(2));
+          totalLetterPrice += spacer;
+        }
+        totalLetterPrice *= sets;
+        setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
+        setCadPrice((totalLetterPrice * parseFloat(_utils_defaults__WEBPACK_IMPORTED_MODULE_10__.EXCHANGE_RATE)).toFixed(2));
+      } else {
+        setUsdPrice(0);
+        setCadPrice(0);
+      }
+    }
+  }, [selectedLetterHeight, letters, waterproof, lettersHeight, vinylWhite, mounting, sets, font]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     color?.name != 'Custom Color' && setCustomColor('');
     font != 'Custom font' && setFontFileUrl('');
@@ -10250,7 +11308,7 @@ function Letters({
     title: "Metal Depth",
     value: depth?.value,
     onChange: handleOnChangeDepth,
-    options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_9__.frontBackdepthOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: depthOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: thickness.value,
       selected: thickness === depth
     }, thickness.depth))
@@ -10624,6 +11682,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _metal_metalOptions__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../metal/metalOptions */ "./src/scripts/products/metal/metalOptions.js");
 /* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
 /* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+
 
 
 
@@ -11022,10 +12081,8 @@ function Letters({
           }
           totalLetterPrice += letterPrice;
         });
-        console.log(totalLetterPrice);
         if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER) {
-          let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
-          let spacer = totalLetterPrice * 1.02 > maxVal ? maxVal : totalLetterPrice * 1.02;
+          let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_8__.spacerPricing)(totalLetterPrice);
           spacer = parseFloat(spacer.toFixed(2));
           totalLetterPrice += spacer;
         }
@@ -11472,7 +12529,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
 /* harmony import */ var _metalChannelOptions__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../metalChannelOptions */ "./src/scripts/products/metal-channel/metalChannelOptions.js");
 /* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+
 
 
 
@@ -11496,7 +12555,7 @@ function Letters({
     signage,
     setSignage,
     setMissing
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_11__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_12__.useAppContext)();
   const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letters = item.letters) !== null && _item$letters !== void 0 ? _item$letters : '');
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
   const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$font = item.font) !== null && _item$font !== void 0 ? _item$font : '');
@@ -11756,8 +12815,7 @@ function Letters({
           totalLetterPrice += letterPrice;
         });
         if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER) {
-          let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
-          let spacer = totalLetterPrice * 1.02 > maxVal ? maxVal : totalLetterPrice * 1.02;
+          let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_11__.spacerPricing)(totalLetterPrice);
           spacer = parseFloat(spacer.toFixed(2));
           totalLetterPrice += spacer;
         }
@@ -12312,7 +13370,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
 /* harmony import */ var _metalChannelOptions__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../metalChannelOptions */ "./src/scripts/products/metal-channel/metalChannelOptions.js");
 /* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+
 
 
 
@@ -12336,7 +13396,7 @@ function Letters({
     signage,
     setSignage,
     setMissing
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_11__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_12__.useAppContext)();
   const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letters = item.letters) !== null && _item$letters !== void 0 ? _item$letters : '');
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
   const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$font = item.font) !== null && _item$font !== void 0 ? _item$font : '');
@@ -12591,8 +13651,7 @@ function Letters({
           totalLetterPrice += letterPrice;
         });
         if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER) {
-          let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
-          let spacer = totalLetterPrice * 1.02 > maxVal ? maxVal : totalLetterPrice * 1.02;
+          let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_11__.spacerPricing)(totalLetterPrice);
           spacer = parseFloat(spacer.toFixed(2));
           totalLetterPrice += spacer;
         }
@@ -12937,6 +13996,7 @@ function Letters({
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   acrylicRevealOptions: () => (/* binding */ acrylicRevealOptions),
+/* harmony export */   aluminumResinDepthOptions: () => (/* binding */ aluminumResinDepthOptions),
 /* harmony export */   depthOptions: () => (/* binding */ depthOptions),
 /* harmony export */   finishingOptions: () => (/* binding */ finishingOptions),
 /* harmony export */   frontBackdepthOptions: () => (/* binding */ frontBackdepthOptions),
@@ -12966,6 +14026,16 @@ const depthOptions = [{
   value: '8'
 }];
 const frontBackdepthOptions = [{
+  depth: '2"',
+  value: '5'
+}, {
+  depth: '3.2"',
+  value: '8'
+}];
+const aluminumResinDepthOptions = [{
+  depth: '1.4"',
+  value: '3.5'
+}, {
   depth: '2"',
   value: '5'
 }, {
@@ -13185,7 +14255,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
 /* harmony import */ var _metalOptions__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../metalOptions */ "./src/scripts/products/metal/metalOptions.js");
 /* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+
 
 
 
@@ -13209,7 +14281,7 @@ function Letters({
     signage,
     setSignage,
     setMissing
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_11__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_12__.useAppContext)();
   const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letters = item.letters) !== null && _item$letters !== void 0 ? _item$letters : '');
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
   const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$font = item.font) !== null && _item$font !== void 0 ? _item$font : '');
@@ -13476,8 +14548,7 @@ function Letters({
           totalLetterPrice += parseFloat(letterPrice.toFixed(2));
         });
         if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER) {
-          let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
-          let spacer = totalLetterPrice * 1.02 > maxVal ? maxVal : totalLetterPrice * 1.02;
+          let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_11__.spacerPricing)(totalLetterPrice);
           spacer = parseFloat(spacer.toFixed(2));
           totalLetterPrice += spacer;
         }
@@ -14467,7 +15538,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_ConvertJson__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../utils/ConvertJson */ "./src/scripts/utils/ConvertJson.js");
 /* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
 /* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+
 
 
 
@@ -14492,7 +15565,7 @@ function Letters({
     signage,
     setSignage,
     setMissing
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_10__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_11__.useAppContext)();
   const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letters = item.letters) !== null && _item$letters !== void 0 ? _item$letters : '');
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
   const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$font = item.font) !== null && _item$font !== void 0 ? _item$font : '');
@@ -14731,8 +15804,7 @@ function Letters({
         totalLetterPrice += letterPrice;
       });
       if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
-        let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
-        let spacer = totalLetterPrice * 1.02 > maxVal ? maxVal : totalLetterPrice * 1.02;
+        let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_10__.spacerPricing)(totalLetterPrice);
         spacer = parseFloat(spacer.toFixed(2));
         totalLetterPrice += spacer;
       }
@@ -15686,7 +16758,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
 /* harmony import */ var _metalOptions__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../metalOptions */ "./src/scripts/products/metal/metalOptions.js");
 /* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
 
 
 
@@ -15700,7 +16773,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const NovaOptions = NovaQuote.quote_options;
+
 const lowerCasePricing = parseFloat(NovaQuote.lowercase_pricing ? NovaQuote.lowercase_pricing : 1);
 const smallPunctuations = parseFloat(NovaQuote.small_punctuations_pricing ? NovaQuote.small_punctuations_pricing : 1);
 //const AcrylicLetterPricing = JSON.parse(NovaOptions.letter_x_logo_pricing);
@@ -15713,7 +16786,7 @@ function Letters({
     signage,
     setSignage,
     setMissing
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_11__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_12__.useAppContext)();
   const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letters = item.letters) !== null && _item$letters !== void 0 ? _item$letters : '');
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
   const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$font = item.font) !== null && _item$font !== void 0 ? _item$font : '');
@@ -15988,8 +17061,7 @@ function Letters({
           totalLetterPrice += letterPrice;
         });
         if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER) {
-          let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
-          let spacer = totalLetterPrice * 1.02 > maxVal ? maxVal : totalLetterPrice * 1.02;
+          let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_11__.spacerPricing)(totalLetterPrice);
           spacer = parseFloat(spacer.toFixed(2));
           totalLetterPrice += spacer;
         }
@@ -17179,7 +18251,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
 /* harmony import */ var _pvcOptions__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../pvcOptions */ "./src/scripts/products/pvc/pvcOptions.js");
 /* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+
 
 
 
@@ -17205,7 +18279,7 @@ function Letters({
     signage,
     setSignage,
     setMissing
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_11__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_12__.useAppContext)();
   const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letters = item.letters) !== null && _item$letters !== void 0 ? _item$letters : '');
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
   const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$font = item.font) !== null && _item$font !== void 0 ? _item$font : '');
@@ -17457,8 +18531,7 @@ function Letters({
         totalLetterPrice += letterPrice;
       });
       if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER) {
-        let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
-        let spacer = totalLetterPrice * 1.02 > maxVal ? maxVal : totalLetterPrice * 1.02;
+        let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_11__.spacerPricing)(totalLetterPrice);
         spacer = parseFloat(spacer.toFixed(2));
         totalLetterPrice += spacer;
       }
@@ -18409,7 +19482,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
 /* harmony import */ var _pvcOptions__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../pvcOptions */ "./src/scripts/products/pvc/pvcOptions.js");
 /* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+
 
 
 
@@ -18435,7 +19510,7 @@ function Letters({
     signage,
     setSignage,
     setMissing
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_11__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_12__.useAppContext)();
   const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letters = item.letters) !== null && _item$letters !== void 0 ? _item$letters : '');
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
   const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$font = item.font) !== null && _item$font !== void 0 ? _item$font : '');
@@ -18677,8 +19752,7 @@ function Letters({
         totalLetterPrice += letterPrice;
       });
       if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER) {
-        let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
-        let spacer = totalLetterPrice * 1.02 > maxVal ? maxVal : totalLetterPrice * 1.02;
+        let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_11__.spacerPricing)(totalLetterPrice);
         spacer = parseFloat(spacer.toFixed(2));
         totalLetterPrice += spacer;
       }
@@ -20122,18 +21196,19 @@ const DuplicateIcon = () => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)
   d: "M2.82353 11.2V0H12V11.2H2.82353ZM4.23529 9.8H10.5882V1.4H4.23529V9.8ZM0 14V2.8H1.41176V12.6H9.17647V14H0Z",
   fill: "black"
 }));
-const PlusIcon = () => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+const PlusIcon = ({
+  open = true
+}) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
   xmlns: "http://www.w3.org/2000/svg",
   width: "14",
   height: "14",
   viewBox: "0 0 14 14",
   fill: "none"
-}, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("line", {
+}, open && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("line", {
   x1: "7",
   y1: "1",
   x2: "7",
   y2: "13",
-  stroke: "black",
   "stroke-width": "2",
   "stroke-linecap": "square",
   stroke: "currentColor"
@@ -20142,7 +21217,6 @@ const PlusIcon = () => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg
   y1: "7",
   x2: "1",
   y2: "7",
-  stroke: "black",
   "stroke-width": "2",
   "stroke-linecap": "square",
   stroke: "currentColor"
@@ -33458,16 +34532,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _scripts_products_acrylic_UvPrintedAcrylic_UvPrintedAcrylic__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./scripts/products/acrylic/UvPrintedAcrylic/UvPrintedAcrylic */ "./src/scripts/products/acrylic/UvPrintedAcrylic/UvPrintedAcrylic.js");
 /* harmony import */ var _scripts_products_combine_CombineQuotes__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./scripts/products/combine/CombineQuotes */ "./src/scripts/products/combine/CombineQuotes.js");
 /* harmony import */ var _scripts_products_custom_CustomProject__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./scripts/products/custom/CustomProject */ "./src/scripts/products/custom/CustomProject.js");
-/* harmony import */ var _scripts_products_metal_channel_AluminumResinFrontLit_AluminumResinFrontLit__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./scripts/products/metal-channel/AluminumResinFrontLit/AluminumResinFrontLit */ "./src/scripts/products/metal-channel/AluminumResinFrontLit/AluminumResinFrontLit.js");
-/* harmony import */ var _scripts_products_metal_channel_TrimLessBackLit_TrimLessBackLit__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./scripts/products/metal-channel/TrimLessBackLit/TrimLessBackLit */ "./src/scripts/products/metal-channel/TrimLessBackLit/TrimLessBackLit.js");
-/* harmony import */ var _scripts_products_metal_channel_TrimLessFrontAndBackLit_TrimLessFrontAndBackLit__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./scripts/products/metal-channel/TrimLessFrontAndBackLit/TrimLessFrontAndBackLit */ "./src/scripts/products/metal-channel/TrimLessFrontAndBackLit/TrimLessFrontAndBackLit.js");
-/* harmony import */ var _scripts_products_metal_channel_TrimLessFrontLit_TrimLessFrontLit__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./scripts/products/metal-channel/TrimLessFrontLit/TrimLessFrontLit */ "./src/scripts/products/metal-channel/TrimLessFrontLit/TrimLessFrontLit.js");
-/* harmony import */ var _scripts_products_metal_FabricatedStainless_FabricatedStainless__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./scripts/products/metal/FabricatedStainless/FabricatedStainless */ "./src/scripts/products/metal/FabricatedStainless/FabricatedStainless.js");
-/* harmony import */ var _scripts_products_metal_LaserCutAluminum_LaserCutAluminum__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./scripts/products/metal/LaserCutAluminum/LaserCutAluminum */ "./src/scripts/products/metal/LaserCutAluminum/LaserCutAluminum.js");
-/* harmony import */ var _scripts_products_metal_LaserCutStainless_LaserCutStainless__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./scripts/products/metal/LaserCutStainless/LaserCutStainless */ "./src/scripts/products/metal/LaserCutStainless/LaserCutStainless.js");
-/* harmony import */ var _scripts_products_pvc_PVCMetalLaminate_PVCMetalLaminate__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./scripts/products/pvc/PVCMetalLaminate/PVCMetalLaminate */ "./src/scripts/products/pvc/PVCMetalLaminate/PVCMetalLaminate.js");
-/* harmony import */ var _scripts_products_pvc_PVCPainted_PVCPainted__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./scripts/products/pvc/PVCPainted/PVCPainted */ "./src/scripts/products/pvc/PVCPainted/PVCPainted.js");
-/* harmony import */ var _scripts_products_pvc_PVCUv_PVCUv__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./scripts/products/pvc/PVCUv/PVCUv */ "./src/scripts/products/pvc/PVCUv/PVCUv.js");
+/* harmony import */ var _scripts_products_metal_channel_AluminumResinFrontBackLit_AluminumResinFrontBackLit__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./scripts/products/metal-channel/AluminumResinFrontBackLit/AluminumResinFrontBackLit */ "./src/scripts/products/metal-channel/AluminumResinFrontBackLit/AluminumResinFrontBackLit.js");
+/* harmony import */ var _scripts_products_metal_channel_AluminumResinFrontLit_AluminumResinFrontLit__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./scripts/products/metal-channel/AluminumResinFrontLit/AluminumResinFrontLit */ "./src/scripts/products/metal-channel/AluminumResinFrontLit/AluminumResinFrontLit.js");
+/* harmony import */ var _scripts_products_metal_channel_TrimLessBackLit_TrimLessBackLit__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./scripts/products/metal-channel/TrimLessBackLit/TrimLessBackLit */ "./src/scripts/products/metal-channel/TrimLessBackLit/TrimLessBackLit.js");
+/* harmony import */ var _scripts_products_metal_channel_TrimLessFrontAndBackLit_TrimLessFrontAndBackLit__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./scripts/products/metal-channel/TrimLessFrontAndBackLit/TrimLessFrontAndBackLit */ "./src/scripts/products/metal-channel/TrimLessFrontAndBackLit/TrimLessFrontAndBackLit.js");
+/* harmony import */ var _scripts_products_metal_channel_TrimLessFrontLit_TrimLessFrontLit__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./scripts/products/metal-channel/TrimLessFrontLit/TrimLessFrontLit */ "./src/scripts/products/metal-channel/TrimLessFrontLit/TrimLessFrontLit.js");
+/* harmony import */ var _scripts_products_metal_FabricatedStainless_FabricatedStainless__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./scripts/products/metal/FabricatedStainless/FabricatedStainless */ "./src/scripts/products/metal/FabricatedStainless/FabricatedStainless.js");
+/* harmony import */ var _scripts_products_metal_LaserCutAluminum_LaserCutAluminum__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./scripts/products/metal/LaserCutAluminum/LaserCutAluminum */ "./src/scripts/products/metal/LaserCutAluminum/LaserCutAluminum.js");
+/* harmony import */ var _scripts_products_metal_LaserCutStainless_LaserCutStainless__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./scripts/products/metal/LaserCutStainless/LaserCutStainless */ "./src/scripts/products/metal/LaserCutStainless/LaserCutStainless.js");
+/* harmony import */ var _scripts_products_pvc_PVCMetalLaminate_PVCMetalLaminate__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./scripts/products/pvc/PVCMetalLaminate/PVCMetalLaminate */ "./src/scripts/products/pvc/PVCMetalLaminate/PVCMetalLaminate.js");
+/* harmony import */ var _scripts_products_pvc_PVCPainted_PVCPainted__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./scripts/products/pvc/PVCPainted/PVCPainted */ "./src/scripts/products/pvc/PVCPainted/PVCPainted.js");
+/* harmony import */ var _scripts_products_pvc_PVCUv_PVCUv__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./scripts/products/pvc/PVCUv/PVCUv */ "./src/scripts/products/pvc/PVCUv/PVCUv.js");
+
 
 
 
@@ -33515,26 +34591,29 @@ function QuoteApp() {
     case 'combineQuotes':
       component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_combine_CombineQuotes__WEBPACK_IMPORTED_MODULE_10__["default"], null));
       break;
+    case 'AluminumResinFrontBackLit':
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_channel_AluminumResinFrontBackLit_AluminumResinFrontBackLit__WEBPACK_IMPORTED_MODULE_12__["default"], null));
+      break;
     case 'AluminumResinFrontLit':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_channel_AluminumResinFrontLit_AluminumResinFrontLit__WEBPACK_IMPORTED_MODULE_12__["default"], null));
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_channel_AluminumResinFrontLit_AluminumResinFrontLit__WEBPACK_IMPORTED_MODULE_13__["default"], null));
       break;
     case 'laserCutAcrylic':
       component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_LaserCutAcrylic_LaserCutAcrylic__WEBPACK_IMPORTED_MODULE_6__["default"], null));
       break;
     case 'pvcMetalLaminate':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_pvc_PVCMetalLaminate_PVCMetalLaminate__WEBPACK_IMPORTED_MODULE_19__["default"], null));
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_pvc_PVCMetalLaminate_PVCMetalLaminate__WEBPACK_IMPORTED_MODULE_20__["default"], null));
       break;
     case 'pvcPainted':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_pvc_PVCPainted_PVCPainted__WEBPACK_IMPORTED_MODULE_20__["default"], null));
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_pvc_PVCPainted_PVCPainted__WEBPACK_IMPORTED_MODULE_21__["default"], null));
       break;
     case 'pvcUv':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_pvc_PVCUv_PVCUv__WEBPACK_IMPORTED_MODULE_21__["default"], null));
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_pvc_PVCUv_PVCUv__WEBPACK_IMPORTED_MODULE_22__["default"], null));
       break;
     case 'layeredAcrylic':
       component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_LayeredAcrylic_LayeredAcrylic__WEBPACK_IMPORTED_MODULE_7__["default"], null));
       break;
     case 'laserCutAluminum':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_LaserCutAluminum_LaserCutAluminum__WEBPACK_IMPORTED_MODULE_17__["default"], null));
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_LaserCutAluminum_LaserCutAluminum__WEBPACK_IMPORTED_MODULE_18__["default"], null));
       break;
     case 'uvPrintedAcrylic':
       component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_UvPrintedAcrylic_UvPrintedAcrylic__WEBPACK_IMPORTED_MODULE_9__["default"], null));
@@ -33543,19 +34622,19 @@ function QuoteApp() {
       component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_MetalLaminate_MetalLaminate__WEBPACK_IMPORTED_MODULE_8__["default"], null));
       break;
     case 'metalChannelTrimlessFrontLit':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_channel_TrimLessFrontLit_TrimLessFrontLit__WEBPACK_IMPORTED_MODULE_15__["default"], null));
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_channel_TrimLessFrontLit_TrimLessFrontLit__WEBPACK_IMPORTED_MODULE_16__["default"], null));
       break;
     case 'laserCutStainless':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_LaserCutStainless_LaserCutStainless__WEBPACK_IMPORTED_MODULE_18__["default"], null));
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_LaserCutStainless_LaserCutStainless__WEBPACK_IMPORTED_MODULE_19__["default"], null));
       break;
     case 'metalChannelTrimlessFrontAndBackLit':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_channel_TrimLessFrontAndBackLit_TrimLessFrontAndBackLit__WEBPACK_IMPORTED_MODULE_14__["default"], null));
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_channel_TrimLessFrontAndBackLit_TrimLessFrontAndBackLit__WEBPACK_IMPORTED_MODULE_15__["default"], null));
       break;
     case 'metalChannelTrimlessBackLit':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_channel_TrimLessBackLit_TrimLessBackLit__WEBPACK_IMPORTED_MODULE_13__["default"], null));
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_channel_TrimLessBackLit_TrimLessBackLit__WEBPACK_IMPORTED_MODULE_14__["default"], null));
       break;
     case 'metalFabricatedStainless':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_FabricatedStainless_FabricatedStainless__WEBPACK_IMPORTED_MODULE_16__["default"], null));
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_FabricatedStainless_FabricatedStainless__WEBPACK_IMPORTED_MODULE_17__["default"], null));
       break;
     default:
       component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_custom_CustomProject__WEBPACK_IMPORTED_MODULE_11__["default"], null));

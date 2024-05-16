@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Dropdown from '../../../../Dropdown';
 import FontsDropdown from '../../../../FontsDropdown';
 import UploadFiles from '../../../../UploadFiles';
@@ -17,7 +17,7 @@ import {
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
 import {
-	frontBackdepthOptions,
+	aluminumResinDepthOptions,
 	ledLightColors,
 	mountingDefaultOptions,
 } from '../../metalChannelOptions';
@@ -28,6 +28,8 @@ import {
 	STUD_MOUNT,
 	STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
+
+import { spacerPricing } from '../../../../utils/Pricing';
 
 import { useAppContext } from '../../../../AppProvider';
 
@@ -75,7 +77,7 @@ export function Letters({ item }) {
 	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
 
 	const [lettersHeight, setLettersHeight] = useState({
-		min: 6,
+		min: 5,
 		max: 40,
 	});
 
@@ -107,6 +109,8 @@ export function Letters({ item }) {
 	const handleOnChangeSets = (e) => {
 		setSets(e.target.value);
 	};
+
+	const [depthOptions, setDepthOptions] = useState(aluminumResinDepthOptions);
 
 	const colorRef = useRef(null);
 	const fontRef = useRef(null);
@@ -238,7 +242,65 @@ export function Letters({ item }) {
 		}
 	};
 
-	const handleOnChangeWaterproof = (e) => setWaterproof(e.target.value);
+	const handleOnChangeWaterproof = (e) => {
+		const target = e.target.value;
+		setWaterproof(() => target);
+	};
+
+	useEffect(() => {
+		if (!waterproof) return;
+
+		if (waterproof !== INDOOR_NOT_WATERPROOF) {
+			if (parseInt(depth?.value) === 3) {
+				setDepth('');
+			}
+
+			if (parseInt(selectedLetterHeight) === 5) {
+				setSelectedLetterHeight('');
+			}
+
+			const newDepthOptions = [
+				{
+					depth: '2"',
+					value: '5',
+				},
+				{
+					depth: '3.2"',
+					value: '8',
+				},
+			];
+
+			setDepthOptions((prev) => {
+				if (JSON.stringify(prev) !== JSON.stringify(newDepthOptions)) {
+					return newDepthOptions;
+				}
+				return prev;
+			});
+
+			if (lettersHeight.min === 5) {
+				setLettersHeight((prev) => ({ ...prev, min: 6 }));
+			}
+		} else {
+			setDepthOptions((prev) => {
+				if (
+					JSON.stringify(prev) !== JSON.stringify(aluminumResinDepthOptions)
+				) {
+					return aluminumResinDepthOptions;
+				}
+				return prev;
+			});
+
+			if (lettersHeight.min === 6 && depth?.depth === '3.5') {
+				setLettersHeight((prev) => ({ ...prev, min: 5 }));
+			}
+		}
+	}, [
+		waterproof,
+		lettersHeight,
+		depth,
+		selectedLetterHeight,
+		letterHeightOptions,
+	]);
 
 	const handleOnChangeLedLight = (e) => setLedLightColor(e.target.value);
 
@@ -287,104 +349,14 @@ export function Letters({ item }) {
 
 	const handleOnChangeDepth = (e) => {
 		const target = e.target.value;
-		const selected = frontBackdepthOptions.filter(
-			(option) => option.value === target
-		);
+		const selected = depthOptions.filter((option) => option.value === target);
 
 		setDepth(() => selected[0]);
-
-		if (parseFloat(target) > 5) {
-			if (parseInt(selectedLetterHeight) < 15) {
-				setSelectedLetterHeight('');
-			}
-			setLettersHeight(() => ({
-				min: 12,
-				max: 40,
-			}));
-		} else {
-			setLettersHeight(() => ({
-				min: 6,
-				max: 40,
-			}));
-		}
 	};
 
 	const handleOnChangeLetterHeight = (e) => {
 		setSelectedLetterHeight(e.target.value);
 	};
-
-	useEffect(() => {
-		if (letterPricing.length > 0 && selectedLetterHeight && depth) {
-			const pricingDetail = letterPricing[selectedLetterHeight - 6];
-			const baseLetterPrice = pricingDetail[depth.depth];
-
-			let totalLetterPrice = 0;
-			const lettersArray = letters.trim().split('');
-			const noLowerCase = NovaQuote.no_lowercase.includes(font);
-
-			if (
-				lettersArray.length > 0 &&
-				selectedLetterHeight &&
-				waterproof &&
-				depth
-			) {
-				lettersArray.forEach((letter) => {
-					let letterPrice = baseLetterPrice;
-
-					if (letter === ' ') {
-						// If the character is a space, set the price to 0 and skip further checks
-						letterPrice = 0;
-					} else if (letter.match(/[a-z]/)) {
-						// Check for lowercase letter
-						letterPrice *= noLowerCase ? 1 : lowerCasePricing; // 80% of the base price
-					} else if (letter.match(/[A-Z]/)) {
-						// Check for uppercase letter
-						// Uppercase letters use 100% of base price, so no change needed
-					} else if (letter.match(/[`~"*,.\-']/)) {
-						// Check for small punctuation marks
-						letterPrice *= smallPunctuations; // 30% of the base price
-					} else if (letter.match(/[^a-zA-Z]/)) {
-						// Check for symbol (not a letter or small punctuation)
-						// Symbols use 100% of base price, so no change needed
-					}
-
-					// Adjusting for waterproof and finishing
-					letterPrice *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.03;
-
-					letterPrice *= vinylWhite?.name ? 1.1 : 1;
-
-					totalLetterPrice += letterPrice;
-				});
-
-				if (mounting === STUD_WITH_SPACER) {
-					let maxVal = wcumcs_vars_data.currency === 'USD' ? 25 : 25 * 1.3;
-
-					let spacer =
-						totalLetterPrice * 1.02 > maxVal ? maxVal : totalLetterPrice * 1.02;
-					spacer = parseFloat(spacer.toFixed(2));
-
-					totalLetterPrice += spacer;
-				}
-
-				totalLetterPrice *= sets;
-
-				setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
-				setCadPrice((totalLetterPrice * parseFloat(EXCHANGE_RATE)).toFixed(2));
-			} else {
-				setUsdPrice(0);
-				setCadPrice(0);
-			}
-		}
-	}, [
-		selectedLetterHeight,
-		letters,
-		waterproof,
-		lettersHeight,
-		vinylWhite,
-		mounting,
-		sets,
-		font,
-	]);
 
 	useEffect(() => {
 		setLetterHeightOptions(() =>
@@ -406,7 +378,7 @@ export function Letters({ item }) {
 				}
 			)
 		);
-	}, [depth, lettersHeight, letterHeightOptions]);
+	}, [lettersHeight]);
 
 	useEffect(() => {
 		adjustFontSize();
@@ -519,7 +491,7 @@ export function Letters({ item }) {
 	useEffect(() => {
 		if (depth?.value) {
 			const newHeightOptions = letterPricing?.filter((item) => {
-				const value = item[depth?.depth];
+				const value = item[depth?.value];
 				return (
 					value !== '' &&
 					value !== null &&
@@ -530,6 +502,10 @@ export function Letters({ item }) {
 			});
 
 			if (newHeightOptions.length > 0) {
+				if (parseInt(selectedLetterHeight) < newHeightOptions[0].Depth) {
+					setSelectedLetterHeight('');
+				}
+
 				setLettersHeight(() => ({
 					min: newHeightOptions[0].Depth,
 					max: newHeightOptions[newHeightOptions.length - 1].Depth,
@@ -553,6 +529,76 @@ export function Letters({ item }) {
 		});
 	} else {
 	}
+
+	useEffect(() => {
+		if (letterPricing.length > 0 && selectedLetterHeight && depth) {
+			const pricingDetail = letterPricing[selectedLetterHeight - 5];
+			const baseLetterPrice = pricingDetail[depth.value];
+
+			let totalLetterPrice = 0;
+			const lettersArray = letters.trim().split('');
+			const noLowerCase = NovaQuote.no_lowercase.includes(font);
+
+			if (
+				lettersArray.length > 0 &&
+				selectedLetterHeight &&
+				waterproof &&
+				depth
+			) {
+				lettersArray.forEach((letter) => {
+					let letterPrice = baseLetterPrice;
+
+					if (letter === ' ') {
+						// If the character is a space, set the price to 0 and skip further checks
+						letterPrice = 0;
+					} else if (letter.match(/[a-z]/)) {
+						// Check for lowercase letter
+						letterPrice *= noLowerCase ? 1 : lowerCasePricing; // 80% of the base price
+					} else if (letter.match(/[A-Z]/)) {
+						// Check for uppercase letter
+						// Uppercase letters use 100% of base price, so no change needed
+					} else if (letter.match(/[`~"*,.\-']/)) {
+						// Check for small punctuation marks
+						letterPrice *= smallPunctuations; // 30% of the base price
+					} else if (letter.match(/[^a-zA-Z]/)) {
+						// Check for symbol (not a letter or small punctuation)
+						// Symbols use 100% of base price, so no change needed
+					}
+
+					// Adjusting for waterproof and finishing
+					letterPrice *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.02;
+
+					letterPrice *= vinylWhite?.name ? 1.1 : 1;
+
+					totalLetterPrice += letterPrice;
+				});
+
+				if (mounting === STUD_WITH_SPACER) {
+					let spacer = spacerPricing(totalLetterPrice);
+					spacer = parseFloat(spacer.toFixed(2));
+
+					totalLetterPrice += spacer;
+				}
+
+				totalLetterPrice *= sets;
+
+				setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
+				setCadPrice((totalLetterPrice * parseFloat(EXCHANGE_RATE)).toFixed(2));
+			} else {
+				setUsdPrice(0);
+				setCadPrice(0);
+			}
+		}
+	}, [
+		selectedLetterHeight,
+		letters,
+		waterproof,
+		lettersHeight,
+		vinylWhite,
+		mounting,
+		sets,
+		font,
+	]);
 
 	useEffect(() => {
 		color?.name != 'Custom Color' && setCustomColor('');
@@ -640,7 +686,7 @@ export function Letters({ item }) {
 					title="Metal Depth"
 					value={depth?.value}
 					onChange={handleOnChangeDepth}
-					options={frontBackdepthOptions.map((thickness) => (
+					options={depthOptions.map((thickness) => (
 						<option value={thickness.value} selected={thickness === depth}>
 							{thickness.depth}
 						</option>

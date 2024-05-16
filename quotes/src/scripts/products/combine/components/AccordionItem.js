@@ -15,12 +15,14 @@ export default function AccordionItem({ title, products, isOpen }) {
 	return (
 		<div className={open ?? 'bg-slate-50'}>
 			<div
-				className={`p-4 font-title uppercase text-lg select-none cursor-pointer bg-white hover:bg-slate-50 ${
+				className={`p-4 font-title uppercase text-lg select-none cursor-pointer bg-white hover:bg-slate-50 flex justify-between items-center ${
 					open && 'bg-slate-50'
 				}`}
 				onClick={() => setOpen((prev) => !prev)}
 			>
 				{title}
+
+				<PlusIcon open={!open} />
 			</div>
 
 			{products.map((product) => (

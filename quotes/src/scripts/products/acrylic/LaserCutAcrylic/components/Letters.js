@@ -37,7 +37,7 @@ export function Letters({ item }) {
 	const [comments, setComments] = useState(item.comments ?? '');
 	const [font, setFont] = useState(item.font ?? '');
 	const [openFont, setOpenFont] = useState(false);
-	const [color, setColor] = useState(item.color ?? {});
+	const [color, setColor] = useState(item.color ?? { name: '', color: '' });
 	const [openColor, setOpenColor] = useState(false);
 	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
 	const [selectedThickness, setSelectedThickness] = useState(

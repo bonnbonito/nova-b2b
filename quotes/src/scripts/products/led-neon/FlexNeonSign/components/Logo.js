@@ -268,7 +268,6 @@ export function Logo({ item }) {
 
 				if (mounting === STUD_WITH_SPACER) {
 					let spacer = spacerPricing(total);
-
 					spacer = parseFloat(spacer.toFixed(2));
 
 					total += spacer;
