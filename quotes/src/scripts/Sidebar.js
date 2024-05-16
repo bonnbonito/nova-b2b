@@ -90,7 +90,11 @@ export default function Sidebar() {
 				<div className="flex justify-between mt-5 mb-3">
 					<h4 className="text-2xl">TOTAL:</h4>
 					<h4 className="text-2xl">
-						{currency}${Number(estimateTotalPrice.toFixed(2)).toLocaleString()}
+						{estimateTotalPrice == 0
+							? 'TBD'
+							: `${currency}${Number(
+									estimateTotalPrice.toFixed(2)
+							  ).toLocaleString()}`}
 					</h4>
 				</div>
 
