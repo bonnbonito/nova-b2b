@@ -14,32 +14,39 @@ export default function FlexNeonSigns() {
 		useAppContext();
 
 	function setDefaultSignage() {
-		setSignage([
-			{
-				id: uuidv4(),
-				type: 'NEON SIGN',
-				title: 'NEON SIGN 1',
-				neonSignWidth: '',
-				neonSignHeight: '',
-				neonUsed: '',
-				acrylicBackingOption: 'Frosted Clear Backing',
-				remoteControl: 'No',
-				neonSignColor: '',
-				wireExitLocation: 'Bottom Right',
-				neonColor: '',
-				waterproof: '',
-				comments: '',
-				mounting: 'Standard Nails',
-				usdPrice: 0,
-				cadPrice: 0,
-				filePaths: [],
-				fileNames: [],
-				fileUrls: [],
-				files: [],
-				sets: 1,
-				product: NovaQuote.product,
-			},
-		]);
+		if (savedStorage?.length > 0) {
+			setSignage(savedStorage);
+		} else {
+			setSignage([
+				{
+					id: uuidv4(),
+					type: 'letters',
+					title: 'LETTERS 1',
+					letters: '',
+					comments: '',
+					font: '',
+					mounting: '',
+					waterproof: '',
+					thickness: '',
+					metalLaminate: '',
+					pvcBaseColor: { name: 'Black', color: '#000000' },
+					letterHeight: '',
+					usdPrice: 0,
+					cadPrice: 0,
+					filePaths: [],
+					fileNames: [],
+					fileUrls: [],
+					files: [],
+					sets: 1,
+					customFont: '',
+					customColor: '',
+					studLength: '',
+					spacerStandoffDistance: '',
+					finishing: 'Matte',
+					product: NovaQuote.product,
+				},
+			]);
+		}
 	}
 
 	useEffect(() => {

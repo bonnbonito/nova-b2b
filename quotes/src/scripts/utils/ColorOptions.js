@@ -185,6 +185,18 @@ const whiteOptions = [
 	},
 ];
 
+const whiteOptionsResin = [
+	{
+		option: 'White',
+	},
+	{
+		option: '3M Vinyl',
+	},
+	{
+		option: 'UV Printed',
+	},
+];
+
 const translucentGraphicFilms = [
 	{
 		name: 'Ivory',
@@ -473,4 +485,5 @@ export {
 	metalFinishColors,
 	translucentGraphicFilms,
 	whiteOptions,
+	whiteOptionsResin,
 };

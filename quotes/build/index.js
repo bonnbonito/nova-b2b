@@ -3332,7 +3332,31 @@ function Prices({
     className: "text-left font-title md:tracking-[1.4px] text-sm"
   }, "3M VINYL"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-sm"
-  }, item.vinylWhite?.name, " - [", item.vinylWhite?.code, "]")), item.waterproof && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.vinylWhite?.name, " - [", item.vinylWhite?.code, "]")), item.neonSignWidth && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left font-title md:tracking-[1.4px] text-sm"
+  }, "NEON SIGN WIDTH"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-sm"
+  }, item.neonSignWidth)), item.neonSignHeight && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left font-title md:tracking-[1.4px] text-sm"
+  }, "NEON SIGN HEIGHT"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-sm"
+  }, item.neonSignHeight)), item.neonUsed && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left font-title md:tracking-[1.4px] text-sm"
+  }, "NEON USED(ft)"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-sm"
+  }, item.neonUsed)), item.acrylicBackingOption && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left font-title md:tracking-[1.4px] text-sm"
+  }, "ACRYLIC BACKING OPTION"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-sm"
+  }, item.acrylicBackingOption)), item.waterproof && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left font-title md:tracking-[1.4px] text-sm"
@@ -3344,7 +3368,25 @@ function Prices({
     className: "text-left font-title md:tracking-[1.4px] text-sm"
   }, "MOUNTING"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-sm"
-  }, item.mounting)), item.metalFinishing && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.mounting)), item.remoteControl && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left font-title md:tracking-[1.4px] text-sm"
+  }, "REMOTE CONTROL"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "tetext-left text-sm"
+  }, item.remoteControl)), item.wireExitLocation && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left font-title md:tracking-[1.4px] text-sm"
+  }, "WIRE EXIT LOCATION"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "tetext-left text-sm"
+  }, item.wireExitLocation)), item.neonSignColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left font-title md:tracking-[1.4px] text-sm"
+  }, "COLOR"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "tetext-left text-sm"
+  }, item.neonSignColor)), item.metalFinishing && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-2 gap-4 py-[2px] mb-1"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left font-title md:tracking-[1.4px] text-sm"
@@ -3702,7 +3744,31 @@ function PricesView({
     className: "text-left text-xs font-title"
   }, "CUSTOM COLOR"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-[14px]"
-  }, item.metalCustomColor)), item.waterproof && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.metalCustomColor)), item.neonSignWidth && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-[160px_1fr] py-[2px] items-center gap-5"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-xs font-title"
+  }, "NEON SIGN WIDTH"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-[14px]"
+  }, item.neonSignWidth)), item.neonSignHeight && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-[160px_1fr] py-[2px] items-center gap-5"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-xs font-title"
+  }, "NEON SIGN HEIGHT"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-[14px]"
+  }, item.neonSignHeight)), item.neonUsed && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-[160px_1fr] py-[2px] items-center gap-5"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-xs font-title"
+  }, "NEON USED(ft)"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-[14px]"
+  }, item.neonUsed)), item.acrylicBackingOption && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-[160px_1fr] py-[2px] items-center gap-5"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-xs font-title"
+  }, "ACRYLIC BACKING OPTION"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-[14px]"
+  }, item.acrylicBackingOption)), item.waterproof && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-[160px_1fr] py-[2px] items-center gap-5"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
@@ -3714,7 +3780,25 @@ function PricesView({
     className: "text-left text-xs font-title"
   }, "MOUNTING"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-[14px]"
-  }, item.mounting)), item.studLength && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, item.mounting)), item.remoteControl && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-[160px_1fr] py-[2px] items-center gap-5"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-xs font-title"
+  }, "REMOTE CONTROL"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-[14px]"
+  }, item.remoteControl)), item.wireExitLocation && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-[160px_1fr] py-[2px] items-center gap-5"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-xs font-title"
+  }, "WIRE EXIT LOCATION"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-[14px]"
+  }, item.wireExitLocation)), item.neonSignColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-[160px_1fr] py-[2px] items-center gap-5"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-xs font-title"
+  }, "COLOR"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-left text-[14px]"
+  }, item.neonSignColor)), item.studLength && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "grid grid-cols-[160px_1fr] py-[2px] items-center gap-5"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-left text-xs font-title"
@@ -9354,6 +9438,9 @@ function CombineQuotes() {
     className: "font-title text-lg mb-4"
   }, "Select Partner:"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_select__WEBPACK_IMPORTED_MODULE_28__["default"], {
     className: "basic-single",
+    classNames: {
+      indicatorSeparator: () => 'hidden'
+    },
     classNamePrefix: "select",
     isSearchable: true,
     isClearable: true,
@@ -10496,7 +10583,7 @@ function Letters({
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Front Acrylic Cover",
     onChange: handleOnChangeWhite,
-    options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_6__.whiteOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_6__.whiteOptionsResin.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
       selected: option == frontAcrylicCover
     }, option.option)),
@@ -22227,7 +22314,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   colorOptions: () => (/* binding */ colorOptions),
 /* harmony export */   metalFinishColors: () => (/* binding */ metalFinishColors),
 /* harmony export */   translucentGraphicFilms: () => (/* binding */ translucentGraphicFilms),
-/* harmony export */   whiteOptions: () => (/* binding */ whiteOptions)
+/* harmony export */   whiteOptions: () => (/* binding */ whiteOptions),
+/* harmony export */   whiteOptionsResin: () => (/* binding */ whiteOptionsResin)
 /* harmony export */ });
 const colorOptions = [{
   name: 'Custom Color',
@@ -22364,6 +22452,13 @@ const whiteOptions = [{
   option: 'White'
 }, {
   option: '3M Vinyl'
+}];
+const whiteOptionsResin = [{
+  option: 'White'
+}, {
+  option: '3M Vinyl'
+}, {
+  option: 'UV Printed'
 }];
 const translucentGraphicFilms = [{
   name: 'Ivory',
@@ -22666,7 +22761,7 @@ function getLetterPricingTableByTitle(title, letterPricingObject) {
 }
 function spacerPricing(total) {
   let maxVal = 25;
-  let spacer = total * 1.02 > maxVal ? maxVal : total * 1.02;
+  let spacer = total * 0.02 > maxVal ? maxVal : total * 0.02;
   spacer = parseFloat(spacer.toFixed(2));
   return spacer;
 }

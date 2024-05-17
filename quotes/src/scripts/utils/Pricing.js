@@ -17,7 +17,7 @@ export function getLetterPricingTableByTitle(title, letterPricingObject) {
 export function spacerPricing(total) {
 	let maxVal = 25;
 
-	let spacer = total * 1.02 > maxVal ? maxVal : total * 1.02;
+	let spacer = total * 0.02 > maxVal ? maxVal : total * 0.02;
 	spacer = parseFloat(spacer.toFixed(2));
 
 	return spacer;

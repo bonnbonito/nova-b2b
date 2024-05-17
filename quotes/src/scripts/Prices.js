@@ -357,6 +357,41 @@ export default function Prices({ item, borderTop }) {
 				</div>
 			)}
 
+			{item.neonSignWidth && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						NEON SIGN WIDTH
+					</div>
+					<div className="text-left text-sm">{item.neonSignWidth}</div>
+				</div>
+			)}
+			{item.neonSignHeight && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						NEON SIGN HEIGHT
+					</div>
+					<div className="text-left text-sm">{item.neonSignHeight}</div>
+				</div>
+			)}
+
+			{item.neonUsed && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						NEON USED(ft)
+					</div>
+					<div className="text-left text-sm">{item.neonUsed}</div>
+				</div>
+			)}
+
+			{item.acrylicBackingOption && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						ACRYLIC BACKING OPTION
+					</div>
+					<div className="text-left text-sm">{item.acrylicBackingOption}</div>
+				</div>
+			)}
+
 			{item.waterproof && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">
@@ -372,6 +407,33 @@ export default function Prices({ item, borderTop }) {
 						MOUNTING
 					</div>
 					<div className="text-left text-sm">{item.mounting}</div>
+				</div>
+			)}
+
+			{item.remoteControl && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						REMOTE CONTROL
+					</div>
+					<div className="tetext-left text-sm">{item.remoteControl}</div>
+				</div>
+			)}
+
+			{item.wireExitLocation && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						WIRE EXIT LOCATION
+					</div>
+					<div className="tetext-left text-sm">{item.wireExitLocation}</div>
+				</div>
+			)}
+
+			{item.neonSignColor && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						COLOR
+					</div>
+					<div className="tetext-left text-sm">{item.neonSignColor}</div>
 				</div>
 			)}
 

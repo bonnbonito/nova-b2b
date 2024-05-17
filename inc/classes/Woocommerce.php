@@ -1686,12 +1686,35 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 				$html .= '<strong>CUSTOM COLOR: </strong>' . htmlspecialchars( $object->metalCustomColor ) . '<br>';
 			}
 
+			if ( isset( $object->neonSignWidth ) && ! empty( $object->neonSignWidth ) ) {
+				$html .= '<strong>NEON SIGN WIDTH: </strong>' . htmlspecialchars( $object->neonSignWidth ) . '<br>';
+			}
+			if ( isset( $object->neonSignHeight ) && ! empty( $object->neonSignHeight ) ) {
+				$html .= '<strong>NEON SIGN HEIGHT: </strong>' . htmlspecialchars( $object->neonSignHeight ) . '<br>';
+			}
+			if ( isset( $object->neonUsed ) && ! empty( $object->neonUsed ) ) {
+				$html .= '<strong>NEON USED(ft): </strong>' . htmlspecialchars( $object->neonUsed ) . '<br>';
+			}
+			if ( isset( $object->acrylicBackingOption ) && ! empty( $object->acrylicBackingOption ) ) {
+				$html .= '<strong>ACRYLIC BACKING OPTION: </strong>' . htmlspecialchars( $object->acrylicBackingOption ) . '<br>';
+			}
+
 			if ( isset( $object->waterproof ) && ! empty( $object->waterproof ) ) {
 				$html .= '<strong>ENVIRONMENT: </strong>' . htmlspecialchars( $object->waterproof ) . '<br>';
 			}
 
 			if ( isset( $object->mounting ) && ! empty( $object->mounting ) ) {
 				$html .= '<strong>MOUNTING: </strong>' . htmlspecialchars( $object->mounting ) . '<br>';
+			}
+
+			if ( isset( $object->remoteControl ) && ! empty( $object->remoteControl ) ) {
+				$html .= '<strong>REMOTE CONTROL: </strong>' . htmlspecialchars( $object->remoteControl ) . '<br>';
+			}
+			if ( isset( $object->wireExitLocation ) && ! empty( $object->wireExitLocation ) ) {
+				$html .= '<strong>WIRE EXIT LOCATION: </strong>' . htmlspecialchars( $object->wireExitLocation ) . '<br>';
+			}
+			if ( isset( $object->neonSignColor ) && ! empty( $object->neonSignColor ) ) {
+				$html .= '<strong>COLOR: </strong>' . htmlspecialchars( $object->neonSignColor ) . '<br>';
 			}
 
 			if ( isset( $object->studLength ) && ! empty( $object->studLength ) ) {

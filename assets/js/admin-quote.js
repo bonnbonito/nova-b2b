@@ -440,9 +440,34 @@ function getSignageDetailFields(sign) {
 			value: sign.acrylicReveal ? sign.acrylicReveal : '',
 		},
 
+		{
+			label: 'NEON SIGN WIDTH',
+			value: sign.neonSignWidth ? sign.neonSignWidth : '',
+		},
+		{
+			label: 'NEON SIGN HEIGHT',
+			value: sign.neonSignHeight ? sign.neonSignHeight : '',
+		},
+		{ label: 'NEON USED(ft)', value: sign.neonUsed ? sign.neonUsed : '' },
+		{
+			label: 'ACRYLIC BACKING OPTION',
+			value: sign.acrylicBackingOption ? sign.acrylicBackingOption : '',
+		},
+
 		{ label: 'ENVIRONMENT', value: sign.waterproof ? sign.waterproof : '' },
 
 		{ label: 'MOUNTING', value: sign.mounting ? sign.mounting : '' },
+
+		{
+			label: 'REMOTE CONTROL',
+			value: sign.remoteControl ? sign.remoteControl : '',
+		},
+		{
+			label: 'WIRE EXIT LOCATION',
+			value: sign.wireExitLocation ? sign.wireExitLocation : '',
+		},
+		{ label: 'COLOR', value: sign.neonSignColor ? sign.neonSignColor : '' },
+
 		{ label: 'STUD LENGTH', value: sign.studLength ? sign.studLength : '' },
 		{
 			label: 'STANDOFF SPACE',

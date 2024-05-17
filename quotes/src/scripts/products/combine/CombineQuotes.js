@@ -278,6 +278,9 @@ export default function CombineQuotes() {
 						<div className="font-title text-lg mb-4">Select Partner:</div>
 						<Select
 							className="basic-single"
+							classNames={{
+								indicatorSeparator: () => 'hidden',
+							}}
 							classNamePrefix="select"
 							isSearchable={true}
 							isClearable={true}

@@ -380,6 +380,36 @@ export default function PricesView({ item }) {
 					</div>
 				)}
 
+				{item.neonSignWidth && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">NEON SIGN WIDTH</div>
+						<div className="text-left text-[14px]">{item.neonSignWidth}</div>
+					</div>
+				)}
+				{item.neonSignHeight && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">NEON SIGN HEIGHT</div>
+						<div className="text-left text-[14px]">{item.neonSignHeight}</div>
+					</div>
+				)}
+				{item.neonUsed && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">NEON USED(ft)</div>
+						<div className="text-left text-[14px]">{item.neonUsed}</div>
+					</div>
+				)}
+
+				{item.acrylicBackingOption && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">
+							ACRYLIC BACKING OPTION
+						</div>
+						<div className="text-left text-[14px]">
+							{item.acrylicBackingOption}
+						</div>
+					</div>
+				)}
+
 				{item.waterproof && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
 						<div className="text-left text-xs font-title">ENVIRONMENT</div>
@@ -393,6 +423,30 @@ export default function PricesView({ item }) {
 						<div className="text-left text-[14px]">{item.mounting}</div>
 					</div>
 				)}
+
+				{item.remoteControl && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">REMOTE CONTROL</div>
+						<div className="text-left text-[14px]">{item.remoteControl}</div>
+					</div>
+				)}
+
+				{item.wireExitLocation && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">
+							WIRE EXIT LOCATION
+						</div>
+						<div className="text-left text-[14px]">{item.wireExitLocation}</div>
+					</div>
+				)}
+
+				{item.neonSignColor && (
+					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
+						<div className="text-left text-xs font-title">COLOR</div>
+						<div className="text-left text-[14px]">{item.neonSignColor}</div>
+					</div>
+				)}
+
 				{item.studLength && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
 						<div className="text-left text-xs font-title">STUD LENGTH</div>
