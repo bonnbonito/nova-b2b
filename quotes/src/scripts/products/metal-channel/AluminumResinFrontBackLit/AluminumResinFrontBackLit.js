@@ -111,8 +111,7 @@ export default function TrimLessFrontAndBackLit() {
 				args = {
 					type: type,
 					title: `LOGO ${count + 1}`,
-					width: '',
-					height: '',
+					frontAcrylicCover: 'UV Printed',
 				};
 			}
 			const newSignage = {

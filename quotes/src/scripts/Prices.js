@@ -7,10 +7,12 @@ export default function Prices({ item, borderTop }) {
 		<div className={`block ${borderTop}`}>
 			<div className="flex justify-between py-2 font-title uppercase md:tracking-[1.6px] text-lg">
 				{item.title}
-				{price > 0 && (
+				{price > 0 ? (
 					<span>
 						{currency}${Number(price).toLocaleString()}
 					</span>
+				) : (
+					<span>TBD</span>
 				)}
 			</div>
 

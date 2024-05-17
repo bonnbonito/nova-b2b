@@ -7,7 +7,7 @@ import useOutsideClick from '../../../../utils/ClickOutside';
 import {
 	colorOptions,
 	translucentGraphicFilms,
-	whiteOptionsResin,
+	whiteOptions,
 } from '../../../../utils/ColorOptions';
 import convert_json from '../../../../utils/ConvertJson';
 import {
@@ -778,7 +778,7 @@ export function Letters({ item }) {
 				<Dropdown
 					title="Front Acrylic Cover"
 					onChange={handleOnChangeWhite}
-					options={whiteOptionsResin.map((option) => (
+					options={whiteOptions.map((option) => (
 						<option
 							value={option.option}
 							selected={option == frontAcrylicCover}

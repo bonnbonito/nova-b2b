@@ -1,15 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Dropdown from '../../../../Dropdown';
-import FontsDropdown from '../../../../FontsDropdown';
 import UploadFiles from '../../../../UploadFiles';
-import UploadFont from '../../../../UploadFont';
 import useOutsideClick from '../../../../utils/ClickOutside';
-import {
-	colorOptions,
-	translucentGraphicFilms,
-	whiteOptions,
-} from '../../../../utils/ColorOptions';
-import convert_json from '../../../../utils/ConvertJson';
+import { colorOptions } from '../../../../utils/ColorOptions';
 import {
 	setOptions,
 	spacerStandoffDefaultOptions,
@@ -68,11 +61,8 @@ export function Logo({ item }) {
 		item.spacerStandoffDistance ?? ''
 	);
 
-	const [vinylWhite, setVinylWhite] = useState(
-		item.vinylWhite ?? { name: '', color: '', code: '' }
-	);
 	const [frontAcrylicCover, setFrontAcrylicCover] = useState(
-		item.frontAcrylicCover ?? 'White'
+		item.frontAcrylicCover ?? 'UV Printed'
 	);
 
 	const [mounting, setMounting] = useState(item.mounting ?? '');
@@ -89,7 +79,6 @@ export function Logo({ item }) {
 	const [depthOptions, setDepthOptions] = useState(aluminumResinDepthOptions);
 
 	const colorRef = useRef(null);
-	const acrylicColorRef = useRef(null);
 
 	function updateSignage() {
 		const updatedSignage = signage.map((sign) => {
@@ -112,7 +101,6 @@ export function Logo({ item }) {
 					studLength,
 					spacerStandoffDistance,
 					frontAcrylicCover,
-					vinylWhite,
 					sets,
 				};
 			} else {
@@ -258,10 +246,6 @@ export function Logo({ item }) {
 		if (!ledLightColor) missingFields.push('Select LED Light Color');
 		if (!frontAcrylicCover) missingFields.push('Select Front Acrylic Cover');
 
-		if (frontAcrylicCover === '3M Vinyl') {
-			if (!vinylWhite?.name) missingFields.push('Select 3M 3630 Vinyl');
-		}
-
 		if (!sets) missingFields.push('Select Quantity');
 
 		if (missingFields.length > 0) {
@@ -318,24 +302,13 @@ export function Logo({ item }) {
 		mounting,
 		studLength,
 		spacerStandoffDistance,
-		frontAcrylicCover,
-		vinylWhite,
 		sets,
 	]);
 
-	useOutsideClick([colorRef, acrylicColorRef], () => {
-		if (!openColor && !openAcrylicCover) return;
+	useOutsideClick([colorRef], () => {
+		if (!openColor) return;
 		setOpenColor(false);
-		setOpenAcrylicCover(false);
 	});
-
-	if (true) {
-		useOutsideClick([colorRef], () => {
-			if (!openColor) return;
-			setOpenColor(false);
-		});
-	} else {
-	}
 
 	useEffect(() => {
 		color?.name != 'Custom Color' && setCustomColor('');
@@ -447,66 +420,10 @@ export function Logo({ item }) {
 
 				<Dropdown
 					title="Front Acrylic Cover"
-					onChange={handleOnChangeWhite}
-					options={whiteOptions.map((option) => (
-						<option
-							value={option.option}
-							selected={option == frontAcrylicCover}
-						>
-							{option.option}
-						</option>
-					))}
+					options={<option value="UV Printed">{frontAcrylicCover}</option>}
 					value={frontAcrylicCover}
+					onlyValue={true}
 				/>
-
-				{frontAcrylicCover === '3M Vinyl' && (
-					<div className="px-[1px] relative" ref={acrylicColorRef}>
-						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-							3M VINYL
-						</label>
-						<div
-							className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-								vinylWhite.name ? 'text-black' : 'text-[#dddddd]'
-							}`}
-							onClick={() => {
-								setOpenAcrylicCover((prev) => !prev);
-								setOpenColor(false);
-							}}
-						>
-							<span
-								className="rounded-full w-[18px] h-[18px] border mr-2"
-								style={{ backgroundColor: vinylWhite.color }}
-							></span>
-							{vinylWhite.name === '' ? 'CHOOSE OPTION' : vinylWhite.name}
-						</div>
-						{openAcrylicCover && (
-							<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
-								{translucentGraphicFilms.map((color) => {
-									return (
-										<div
-											className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
-											onClick={() => {
-												setVinylWhite(color);
-												setOpenAcrylicCover(false);
-											}}
-										>
-											<span
-												className="w-[18px] h-[18px] inline-block rounded-full border"
-												style={{
-													background:
-														color?.name == 'Custom Color'
-															? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-															: color?.color,
-												}}
-											></span>
-											{color?.name}
-										</div>
-									);
-								})}
-							</div>
-						)}
-					</div>
-				)}
 
 				<Dropdown
 					title="Mounting"

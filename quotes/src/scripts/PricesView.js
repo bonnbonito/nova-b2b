@@ -69,8 +69,9 @@ export default function PricesView({ item }) {
 				<div className="flex justify-between py-2 font-title uppercase">
 					{item.title}{' '}
 					<span>
-						{price > 0 &&
-							`${currency}$${parseFloat(price).toFixed(2).toLocaleString()}`}
+						{price > 0
+							? `${currency}$${parseFloat(price).toFixed(2).toLocaleString()}`
+							: `TBD`}
 					</span>
 				</div>
 
@@ -392,6 +393,7 @@ export default function PricesView({ item }) {
 						<div className="text-left text-[14px]">{item.neonSignHeight}</div>
 					</div>
 				)}
+
 				{item.neonUsed && (
 					<div className="grid grid-cols-[160px_1fr] py-[2px] items-center gap-5">
 						<div className="text-left text-xs font-title">NEON USED(ft)</div>
