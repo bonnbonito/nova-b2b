@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import Sidebar from '../../../Sidebar';
 import Signage from '../../../Signage';
@@ -8,6 +8,8 @@ import { Letters } from './components/Letters';
 import { Logo } from './components/Logo';
 
 import { useAppContext } from '../../../AppProvider';
+
+import convert_json from '../../../utils/ConvertJson';
 
 export const acrylicBaseOptions = [
 	{
@@ -23,6 +25,27 @@ export const METAL_ACRYLIC_PRICING = 1.3;
 export default function MetalLaminate() {
 	const { signage, setSignage, setTempFolder, tempFolderName } =
 		useAppContext();
+
+	const [letterPricing, setLetterPricing] = useState([]);
+
+	useEffect(() => {
+		async function fetchLetterPricing() {
+			console.log('Fetching letterpricing');
+			try {
+				const response = await fetch(
+					NovaQuote.letters_pricing_api + NovaQuote.product
+				);
+				const data = await response.json();
+				const pricing = convert_json(data?.pricing_table);
+
+				setLetterPricing(pricing);
+			} catch (error) {
+				console.error('Error fetching letter pricing:', error);
+			}
+		}
+
+		fetchLetterPricing();
+	}, []);
 
 	function setDefaultSignage() {
 		setSignage([
@@ -127,6 +150,34 @@ export default function MetalLaminate() {
 		});
 	}
 
+	useEffect(() => {
+		console.log('Attempting to preload fonts...');
+		async function preloadFonts() {
+			try {
+				await loadingFonts();
+			} catch (error) {
+				console.error('Error loading fonts:', error);
+			}
+		}
+		preloadFonts();
+	}, []);
+
+	const loadingFonts = async () => {
+		const loadPromises = NovaQuote.fonts.map((font) => loadFont(font));
+		await Promise.all(loadPromises);
+	};
+
+	async function loadFont({ name, src }) {
+		const fontFace = new FontFace(name, `url(${src})`);
+
+		try {
+			await fontFace.load();
+			document.fonts.add(fontFace);
+		} catch (e) {
+			console.error(`Font ${name} failed to load`);
+		}
+	}
+
 	/* useEffect(() => {
 		localStorage.setItem(storage + '-x', JSON.stringify(signage));
 	}, [signage]); */
@@ -142,15 +193,47 @@ export default function MetalLaminate() {
 	return (
 		<div className="md:flex gap-6">
 			<div className="md:w-3/4 w-full">
-				{signage.map((item, index) => (
-					<Signage index={index} id={item.id} item={item}>
-						{item.type === 'letters' ? (
-							<Letters key={item.id} item={item} />
-						) : (
-							<Logo key={item.id} item={item} />
-						)}
-					</Signage>
-				))}
+				{letterPricing.length === 0 ? (
+					<div className="rounded-md border border-gray-200 py-20 mb-8 justify-center items-center flex">
+						<div className="flex justify-center items-center gap-2">
+							<svg
+								className="animate-spin -ml-1 mr-3 h-6 w-6 text-gray-600"
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 24 24"
+							>
+								<circle
+									class="opacity-25"
+									cx="12"
+									cy="12"
+									r="10"
+									stroke="currentColor"
+									stroke-width="4"
+								></circle>
+								<path
+									class="opacity-75"
+									fill="currentColor"
+									d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+								></path>
+							</svg>{' '}
+							Loading...
+						</div>
+					</div>
+				) : (
+					signage.map((item, index) => (
+						<Signage index={index} id={item.id} item={item}>
+							{item.type === 'letters' ? (
+								<Letters
+									key={item.id}
+									item={item}
+									letterPricing={letterPricing}
+								/>
+							) : (
+								<Logo key={item.id} item={item} />
+							)}
+						</Signage>
+					))
+				)}
 
 				<div className="flex gap-2">
 					{signage.length < 10 && (

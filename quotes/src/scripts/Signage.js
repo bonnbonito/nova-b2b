@@ -1,33 +1,24 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { memo, useCallback, useEffect, useState } from 'react';
 import { Tooltip } from 'react-tooltip';
-import { v4 as uuidv4 } from 'uuid'; // Make sure to import uuid
+import { v4 as uuidv4 } from 'uuid';
 import { useAppContext } from './AppProvider';
 import EditableText from './EditableText';
 import { ClearIcon, CollapseIcon, DuplicateIcon, TrashIcon } from './svg/Icons';
 import { debounce } from './utils/helpers';
 
-export default function Signage({ item, index, children }) {
-	const { signage, setSignage, setMissing, storage } = useAppContext();
+const Signage = ({ item, children }) => {
+	const { signage, setSignage, setMissing, storage, updateSignageItem } =
+		useAppContext();
 
 	const [open, setOpen] = useState(true);
-	const [itemTitle, setItemTitle] = useState(item.title);
 	const [loading, setLoading] = useState(false);
 
-	function recountSignageTitles(updatedSignage) {
-		const count = {}; // Object to keep track of the count of each type
-		return updatedSignage.map((sign) => {
-			const currentCount = (count[sign.type] || 0) + 1;
-			count[sign.type] = currentCount;
-			return { ...sign };
-		});
-	}
-
-	function removeSignage(itemToRemove) {
+	const removeSignage = (itemToRemove) => {
 		setSignage((currentSignage) => {
 			const updatedSignage = currentSignage.filter(
 				(sign) => sign.id !== itemToRemove.id
 			);
-			return recountSignageTitles(updatedSignage);
+			return updatedSignage;
 		});
 		setMissing((current) => {
 			const updatedMissing = current.filter(
@@ -35,10 +26,10 @@ export default function Signage({ item, index, children }) {
 			);
 			return updatedMissing;
 		});
-	}
+	};
 
 	const debounceDuplicateSignage = useCallback(
-		debounce((item, index) => {
+		debounce((item) => {
 			const duplicated = {
 				...item,
 				id: uuidv4(),
@@ -52,71 +43,34 @@ export default function Signage({ item, index, children }) {
 				fontFileUrl: '',
 			};
 
-			console.log(`Duplicate`, duplicated);
-
 			setSignage((current) => {
-				const updated = [
-					...current.slice(0, index + 1),
-					duplicated,
-					...current.slice(index + 1),
-				];
-				return updated;
+				return [...current, duplicated];
 			});
-		}, 300),
-		[]
-	); // 300ms is the debounce delay
+		}, 600),
+		[signage]
+	);
 
-	function duplicateSignage(item, index) {
-		debounceDuplicateSignage(item, index);
-	}
+	const duplicateSignage = useCallback((item) => {
+		debounceDuplicateSignage(item);
+	}, []);
 
-	function updateSignage() {
-		const updatedSignage = signage.map((sign) => {
-			if (sign.id === item.id) {
-				return {
-					...sign,
-					title: itemTitle,
-				};
-			} else {
-				return sign;
-			}
-		});
-		setSignage(() => updatedSignage);
-	}
+	const clearStorage = useCallback(
+		(e) => {
+			e.preventDefault();
+			setLoading(true);
+			localStorage.removeItem(storage);
+			window.location.href = window.location.pathname;
+		},
+		[storage]
+	);
 
-	const clearStorage = (e) => {
-		e.preventDefault();
-		setLoading(true);
-		localStorage.removeItem(storage);
-		window.location.href = window.location.pathname;
+	const handleOnChangeTitle = (value) => {
+		updateSignageItem(item.id, 'title', value);
 	};
 
-	const updateMissingTitle = () => {
-		setMissing((prevMissing) => {
-			const existingIndex = prevMissing.findIndex(
-				(entry) => entry.id === item.id
-			);
-
-			if (existingIndex !== -1) {
-				const updatedMissing = [...prevMissing];
-				updatedMissing[existingIndex] = {
-					...updatedMissing[existingIndex],
-					title: itemTitle,
-				};
-				return updatedMissing;
-			}
-			return prevMissing;
-		});
-	};
-
-	useEffect(() => {
-		updateSignage();
-		updateMissingTitle();
-	}, [itemTitle]);
-
-	function handleOnChangeTitle(value) {
-		return setItemTitle(value);
-	}
+	const handleToggleOpen = useCallback(() => {
+		setOpen((prev) => !prev);
+	}, []);
 
 	return (
 		<div className="rounded-md border border-gray-200 p-4 mb-8">
@@ -139,7 +93,7 @@ export default function Signage({ item, index, children }) {
 					</div>
 					<div
 						className="cursor-pointer select-none"
-						onClick={() => setOpen(!open)}
+						onClick={handleToggleOpen}
 						data-tooltip-id={`${item.id}`}
 						data-tooltip-content={open ? 'Collapse' : 'Expand'}
 					>
@@ -148,7 +102,7 @@ export default function Signage({ item, index, children }) {
 					{signage.length < 10 && (
 						<div
 							className="cursor-pointer select-none"
-							onClick={() => duplicateSignage(item, index)}
+							onClick={() => duplicateSignage(item)}
 							data-tooltip-id={`${item.id}`}
 							data-tooltip-content="Duplicate"
 						>
@@ -169,10 +123,14 @@ export default function Signage({ item, index, children }) {
 				</div>
 			</div>
 			<div className={`signage-content ${open ? 'open' : ''}`}>
-				<div className={item.type === 'letters' ? 'overflow-hidden' : ''}>
+				<div
+					className={(!open || item.type === 'letters') && 'overflow-hidden'}
+				>
 					{children}
 				</div>
 			</div>
 		</div>
 	);
-}
+};
+
+export default memo(Signage);

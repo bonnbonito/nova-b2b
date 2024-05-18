@@ -430,6 +430,15 @@ export default function Prices({ item, borderTop }) {
 				</div>
 			)}
 
+			{item.neonColor && (
+				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
+					<div className="text-left font-title md:tracking-[1.4px] text-sm">
+						NEON COLOR
+					</div>
+					<div className="tetext-left text-sm">{item.neonColor}</div>
+				</div>
+			)}
+
 			{item.neonSignColor && (
 				<div className="grid grid-cols-2 gap-4 py-[2px] mb-1">
 					<div className="text-left font-title md:tracking-[1.4px] text-sm">

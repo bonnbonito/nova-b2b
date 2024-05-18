@@ -12,6 +12,7 @@ export default function Sidebar() {
 
 	useEffect(() => {
 		setCanSaveToDraft(() => parseInt(partner) === parseInt(NovaQuote.user_id));
+		console.log(parseInt(partner), NovaQuote.user_id);
 	}, [partner]);
 
 	const taxRateObj = NovaMyAccount.tax_rate;
@@ -92,7 +93,7 @@ export default function Sidebar() {
 					<h4 className="text-2xl">
 						{estimateTotalPrice == 0
 							? 'TBD'
-							: `${currency}${Number(
+							: `${currency}$${Number(
 									estimateTotalPrice.toFixed(2)
 							  ).toLocaleString()}`}
 					</h4>

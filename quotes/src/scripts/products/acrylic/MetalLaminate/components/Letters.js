@@ -41,8 +41,31 @@ const smallPunctuations = parseFloat(
 );
 //const AcrylicLetterPricing = JSON.parse(NovaOptions.letter_x_logo_pricing);
 
-export const Letters = ({ item }) => {
+export const Letters = ({ item, letterPricing, hasPrice = false }) => {
 	const { signage, setSignage, setMissing } = useAppContext();
+
+	const [getLetterPricing, setGetLetterPricing] = useState([]);
+
+	useEffect(() => {
+		if (!hasPrice) {
+			async function fetchLetterPricing() {
+				try {
+					const response = await fetch(
+						NovaQuote.letters_pricing_api + item.product
+					);
+					const data = await response.json();
+					const pricing = convert_json(data?.pricing_table);
+					setGetLetterPricing(pricing);
+				} catch (error) {
+					console.error('Error fetching letter pricing:', error);
+				}
+			}
+
+			fetchLetterPricing();
+		} else {
+			setGetLetterPricing(letterPricing);
+		}
+	}, []);
 
 	const [letters, setLetters] = useState(item.letters ?? '');
 	const [comments, setComments] = useState(item.comments ?? '');
@@ -149,53 +172,6 @@ export const Letters = ({ item }) => {
 	const acrylicRef = useRef(null);
 	const fontRef = useRef(null);
 
-	const [letterPricing, setLetterPricing] = useState([]);
-
-	useEffect(() => {
-		async function fetchLetterPricing() {
-			try {
-				const response = await fetch(
-					NovaQuote.letters_pricing_api + item.product
-				);
-				const data = await response.json();
-				const pricing = convert_json(data?.pricing_table);
-				setLetterPricing(pricing);
-			} catch (error) {
-				console.error('Error fetching letter pricing:', error);
-			}
-		}
-
-		fetchLetterPricing();
-	}, []);
-
-	useEffect(() => {
-		console.log('Attempting to preload fonts...');
-		async function preloadFonts() {
-			try {
-				await loadingFonts();
-			} catch (error) {
-				console.error('Error loading fonts:', error);
-			}
-		}
-		preloadFonts();
-	}, []);
-
-	const loadingFonts = async () => {
-		const loadPromises = NovaQuote.fonts.map((font) => loadFont(font));
-		await Promise.all(loadPromises);
-	};
-
-	async function loadFont({ name, src }) {
-		const fontFace = new FontFace(name, `url(${src})`);
-
-		try {
-			await fontFace.load();
-			document.fonts.add(fontFace);
-		} catch (e) {
-			console.error(`Font ${name} failed to load`);
-		}
-	}
-
 	const headlineRef = useRef(null);
 
 	const adjustFontSize = () => {
@@ -227,7 +203,6 @@ export const Letters = ({ item }) => {
 	};
 
 	function updateSignage() {
-		console.log('updateSignage');
 		const updatedSignage = signage.map((sign) => {
 			if (sign.id === item.id) {
 				return {
@@ -304,7 +279,7 @@ export const Letters = ({ item }) => {
 
 	useEffect(() => {
 		if (
-			letterPricing.length === 0 ||
+			getLetterPricing.length === 0 ||
 			!selectedLetterHeight ||
 			!selectedThickness ||
 			!waterproof ||
@@ -315,7 +290,7 @@ export const Letters = ({ item }) => {
 			return;
 		}
 
-		const pricingDetail = letterPricing[selectedLetterHeight - 1];
+		const pricingDetail = getLetterPricing[selectedLetterHeight - 1];
 		const baseLetterPrice = pricingDetail[selectedThickness.value];
 		const noLowerCase = NovaQuote.no_lowercase.includes(font);
 
@@ -362,7 +337,7 @@ export const Letters = ({ item }) => {
 		sets,
 		font,
 		selectedMounting,
-		letterPricing, // Assuming letterPricing is not expected to change frequently
+		getLetterPricing, // Assuming getLetterPricing is not expected to change frequently
 	]);
 
 	useEffect(() => {
@@ -518,7 +493,7 @@ export const Letters = ({ item }) => {
 	]);
 
 	useEffect(() => {
-		const newHeightOptions = letterPricing?.filter((item) => {
+		const newHeightOptions = getLetterPricing?.filter((item) => {
 			const value = item[selectedThickness?.value];
 			return (
 				value !== '' &&

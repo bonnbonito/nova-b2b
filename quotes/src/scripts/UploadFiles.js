@@ -1,11 +1,10 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { useAppContext } from './AppProvider';
 
 export default function UploadFiles({
 	setFilePaths,
 	filePaths,
 	setFileUrls,
-	fileUrls,
 	setFileNames,
 	fileNames,
 }) {
@@ -16,7 +15,6 @@ export default function UploadFiles({
 	const maxFiles = 5;
 
 	const handleButtonClick = () => {
-		console.log(fileNames);
 		if (fileNames?.length >= maxFiles) {
 			alert(`You can upload a maximum of ${maxFiles} files.`);
 			return;
@@ -35,13 +33,7 @@ export default function UploadFiles({
 		const files = Array.from(event.target.files).slice(0, totalAllowedUploads); // Only take as many files as can still be uploaded
 		if (files.length > 0) {
 			for (const file of files) {
-				await handleFileUpload(
-					file,
-					setFileUrls,
-					setFileNames,
-					setFilePaths,
-					tempFolder
-				);
+				await handleFileUpload(file);
 			}
 			event.target.value = ''; // Reset the file input after processing
 		} else {
@@ -49,7 +41,8 @@ export default function UploadFiles({
 		}
 	};
 
-	const getRefreshToken = async () => {
+	const getAccessToken = useCallback(async () => {
+		if (accessToken) return accessToken;
 		const clientId = NovaQuote.dropbox_app_key;
 		const clientSecret = NovaQuote.dropbox_secret;
 		const refreshToken = NovaQuote.dropbox_refresh_token;
@@ -76,58 +69,62 @@ export default function UploadFiles({
 			}
 
 			const data = await response.json();
+			setAccessToken(data.access_token);
 			return data.access_token;
 		} catch (error) {
 			console.error('Error:', error);
 			return null;
 		}
-	};
+	}, [accessToken]);
 
-	const checkAndCreateFolder = async (accessToken) => {
-		const folderPath = `/NOVA-CRM/${NovaQuote.business_id}/${tempFolder}/FromClient`;
+	const checkAndCreateFolder = useCallback(
+		async (accessToken) => {
+			const folderPath = `/NOVA-CRM/${NovaQuote.business_id}/${tempFolder}/FromClient`;
 
-		try {
-			let response = await fetch(
-				'https://api.dropboxapi.com/2/files/get_metadata',
-				{
-					method: 'POST',
-					headers: {
-						Authorization: `Bearer ${accessToken}`,
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify({ path: folderPath }),
-				}
-			);
-
-			if (response.ok) {
-				return;
-			}
-
-			response = await fetch(
-				'https://api.dropboxapi.com/2/files/create_folder_v2',
-				{
-					method: 'POST',
-					headers: {
-						Authorization: `Bearer ${accessToken}`,
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify({ path: folderPath }),
-				}
-			);
-
-			const data = await response.json();
-
-			if (!response.ok) {
-				throw new Error(
-					data.error_summary || 'Unknown error during folder creation'
+			try {
+				let response = await fetch(
+					'https://api.dropboxapi.com/2/files/get_metadata',
+					{
+						method: 'POST',
+						headers: {
+							Authorization: `Bearer ${accessToken}`,
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({ path: folderPath }),
+					}
 				);
-			}
-		} catch (error) {
-			console.error('Error:', error);
-		}
-	};
 
-	const checkForExistingSharedLink = async (token, filePath) => {
+				if (response.ok) {
+					return;
+				}
+
+				response = await fetch(
+					'https://api.dropboxapi.com/2/files/create_folder_v2',
+					{
+						method: 'POST',
+						headers: {
+							Authorization: `Bearer ${accessToken}`,
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({ path: folderPath }),
+					}
+				);
+
+				const data = await response.json();
+
+				if (!response.ok) {
+					throw new Error(
+						data.error_summary || 'Unknown error during folder creation'
+					);
+				}
+			} catch (error) {
+				console.error('Error:', error);
+			}
+		},
+		[tempFolder]
+	);
+
+	const checkForExistingSharedLink = useCallback(async (token, filePath) => {
 		const response = await fetch(
 			'https://api.dropboxapi.com/2/sharing/list_shared_links',
 			{
@@ -151,103 +148,110 @@ export default function UploadFiles({
 		}
 
 		return null;
-	};
+	}, []);
 
-	const handleFileUpload = async (
-		file,
-		setFileUrls,
-		setFileNames,
-		setFilePaths,
-		tempFolder
-	) => {
-		setIsLoading(true);
-		const token = await getRefreshToken();
+	const handleFileUpload = useCallback(
+		async (file) => {
+			setIsLoading(true);
+			const token = await getAccessToken();
 
-		if (!token) {
-			console.error('Failed to obtain access token');
-			setIsLoading(false);
-			return;
-		}
+			if (!token) {
+				console.error('Failed to obtain access token');
+				setIsLoading(false);
+				return;
+			}
 
-		setAccessToken(token);
-		await checkAndCreateFolder(token);
+			await checkAndCreateFolder(token);
 
-		const dropboxArgs = {
-			path: `/NOVA-CRM/${NovaQuote.business_id}/${tempFolder}/FromClient/${file.name}`,
-			mode: 'overwrite',
-			autorename: false,
-			mute: false,
-		};
+			const dropboxArgs = {
+				path: `/NOVA-CRM/${NovaQuote.business_id}/${tempFolder}/FromClient/${file.name}`,
+				mode: 'overwrite',
+				autorename: false,
+				mute: false,
+			};
 
-		try {
-			const uploadResponse = await fetch(
-				'https://content.dropboxapi.com/2/files/upload',
-				{
-					method: 'POST',
-					headers: {
-						Authorization: `Bearer ${token}`,
-						'Dropbox-API-Arg': JSON.stringify(dropboxArgs),
-						'Content-Type': 'application/octet-stream',
-					},
-					body: file,
-				}
-			);
-
-			const uploadData = await uploadResponse.json();
-			if (!uploadResponse.ok) throw new Error(uploadData.error_summary);
-
-			setFilePaths((prev) =>
-				Array.isArray(prev)
-					? [...prev, uploadData.path_display]
-					: [uploadData.path_display]
-			);
-
-			const existingLink = await checkForExistingSharedLink(
-				token,
-				uploadData.path_display
-			);
-
-			if (existingLink) {
-				setFileUrls((prev) =>
-					Array.isArray(prev) ? [...prev, existingLink.url] : [existingLink.url]
-				);
-			} else {
-				const sharedLinkResponse = await fetch(
-					'https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings',
+			try {
+				const uploadResponse = await fetch(
+					'https://content.dropboxapi.com/2/files/upload',
 					{
 						method: 'POST',
 						headers: {
 							Authorization: `Bearer ${token}`,
-							'Content-Type': 'application/json',
+							'Dropbox-API-Arg': JSON.stringify(dropboxArgs),
+							'Content-Type': 'application/octet-stream',
 						},
-						body: JSON.stringify({
-							path: uploadData.path_display,
-							settings: {},
-						}),
+						body: file,
 					}
 				);
 
-				const sharedLinkData = await sharedLinkResponse.json();
-				setFileUrls((prev) =>
-					Array.isArray(prev)
-						? [...prev, sharedLinkData.url]
-						: [sharedLinkData.url]
-				);
-			}
+				const uploadData = await uploadResponse.json();
+				if (!uploadResponse.ok) throw new Error(uploadData.error_summary);
 
-			setFileNames((prev) =>
-				Array.isArray(prev) ? [...prev, uploadData.name] : [uploadData.name]
-			);
-		} catch (error) {
-			console.error('Error:', error);
-		} finally {
-			setIsLoading(false);
-		}
-	};
+				setFilePaths((prev) =>
+					Array.isArray(prev)
+						? [...prev, uploadData.path_display]
+						: [uploadData.path_display]
+				);
+
+				const existingLink = await checkForExistingSharedLink(
+					token,
+					uploadData.path_display
+				);
+
+				if (existingLink) {
+					setFileUrls((prev) =>
+						Array.isArray(prev)
+							? [...prev, existingLink.url]
+							: [existingLink.url]
+					);
+				} else {
+					const sharedLinkResponse = await fetch(
+						'https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings',
+						{
+							method: 'POST',
+							headers: {
+								Authorization: `Bearer ${token}`,
+								'Content-Type': 'application/json',
+							},
+							body: JSON.stringify({
+								path: uploadData.path_display,
+								settings: {},
+							}),
+						}
+					);
+
+					const sharedLinkData = await sharedLinkResponse.json();
+					setFileUrls((prev) =>
+						Array.isArray(prev)
+							? [...prev, sharedLinkData.url]
+							: [sharedLinkData.url]
+					);
+				}
+
+				setFileNames((prev) =>
+					Array.isArray(prev) ? [...prev, uploadData.name] : [uploadData.name]
+				);
+			} catch (error) {
+				console.error('Error:', error);
+			} finally {
+				setIsLoading(false);
+			}
+		},
+		[
+			checkAndCreateFolder,
+			checkForExistingSharedLink,
+			getAccessToken,
+			setFileNames,
+			setFilePaths,
+			setFileUrls,
+			setIsLoading,
+			tempFolder,
+		]
+	);
 
 	const handleRemoveFile = async (index) => {
 		setIsLoading(true);
-		let currentAccessToken = accessToken || (await getRefreshToken());
+		const currentAccessToken = accessToken || (await getAccessToken());
 
 		if (!currentAccessToken) {
 			console.error('Failed to obtain access token');
@@ -273,9 +277,9 @@ export default function UploadFiles({
 			const data = await response.json();
 
 			if (response.ok) {
-				setFileUrls(fileUrls.filter((_, i) => i !== index));
-				setFilePaths(filePaths.filter((_, i) => i !== index));
-				setFileNames(fileNames.filter((_, i) => i !== index));
+				setFileUrls((prev) => prev.filter((_, i) => i !== index));
+				setFilePaths((prev) => prev.filter((_, i) => i !== index));
+				setFileNames((prev) => prev.filter((_, i) => i !== index));
 			} else {
 				throw new Error(
 					data.error_summary || 'Unknown error during file deletion'
@@ -322,6 +326,7 @@ export default function UploadFiles({
 								<button
 									onClick={() => handleRemoveFile(index)}
 									className="text-xs"
+									disabled={isLoading}
 								>
 									Remove
 								</button>

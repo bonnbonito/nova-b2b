@@ -146,35 +146,6 @@ const metalInstallationOptions = [
 	},
 ];
 
-const calculateMountingOptions = (
-	selectedThickness,
-	setSelectedMounting,
-	selectedMounting,
-	waterproof
-) => {
-	let newMountingOptions = mountingDefaultOptions;
-	let updatedSelectedMounting = selectedMounting;
-
-	if (selectedThickness && selectedThickness.value === '3') {
-		newMountingOptions = newMountingOptions.filter(
-			(option) =>
-				option.mounting_option !== STUD_MOUNT &&
-				option.mounting_option !== STUD_WITH_SPACER
-		);
-	}
-
-	if (waterproof === 'Outdoor (Waterproof)') {
-		newMountingOptions = newMountingOptions.filter(
-			(option) => option.mounting_option !== 'Double-sided tape'
-		);
-		if (updatedSelectedMounting === 'Double-sided tape') {
-			updatedSelectedMounting = newMountingOptions[0]?.mounting_option ?? '';
-		}
-	}
-
-	return { newMountingOptions, updatedSelectedMounting };
-};
-
 const piecesOptions = ['30 pieces or fewer'];
 
 const setOptions = Array.from(
@@ -227,8 +198,13 @@ const studLengthOptions = [
 	},
 ];
 
+const arrayRange = (start, stop, step) =>
+	Array.from({ length: (stop - start) / step + 1 }, (value, index) => (
+		<option value={`${start + index * step}"`}>{start + index * step}"</option>
+	));
+
 export {
-	calculateMountingOptions,
+	arrayRange,
 	defaultFinishOptions,
 	finishingOptions,
 	installationDefaultOptions,

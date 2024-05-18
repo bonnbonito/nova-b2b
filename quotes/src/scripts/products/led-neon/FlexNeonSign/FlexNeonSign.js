@@ -1,45 +1,42 @@
-import React, { createContext, useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { useAppContext } from '../../../AppProvider';
 import Sidebar from '../../../Sidebar';
 import Signage from '../../../Signage';
 import { PlusIcon } from '../../../svg/Icons';
+import { NeonSign } from './components/NeonSign';
 
-import { Letters } from './components/Letters';
-import { Logo } from './components/Logo';
-
-import { useAppContext } from '../../../AppProvider';
-
-export default function FlexNeonSigns() {
+export default function FlexNeonSign() {
 	const { signage, setSignage, setTempFolder, tempFolderName } =
 		useAppContext();
 
+	const defaultSignage = {
+		id: uuidv4(),
+		type: 'NEON SIGN',
+		title: 'NEON SIGN 1',
+		neonSignWidth: '',
+		neonSignHeight: '',
+		neonUsed: '',
+		acrylicBackingOption: 'Frosted Clear Backing',
+		remoteControl: 'No',
+		neonSignColor: '',
+		wireExitLocation: 'Bottom Right',
+		neonColor: '',
+		waterproof: '',
+		comments: '',
+		mounting: 'Standard Nails',
+		usdPrice: 0,
+		cadPrice: 0,
+		filePaths: [],
+		fileNames: [],
+		fileUrls: [],
+		files: [],
+		sets: 1,
+		product: NovaQuote.product,
+	};
+
 	function setDefaultSignage() {
-		setSignage([
-			{
-				id: uuidv4(),
-				type: 'NEON SIGN',
-				title: 'NEON SIGN 1',
-				neonSignWidth: '',
-				neonSignHeight: '',
-				neonUsed: '',
-				acrylicBackingOption: 'Frosted Clear Backing',
-				remoteControl: 'No',
-				neonSignColor: '',
-				wireExitLocation: 'Bottom Right',
-				neonColor: '',
-				waterproof: '',
-				comments: '',
-				mounting: 'Standard Nails',
-				usdPrice: 0,
-				cadPrice: 0,
-				filePaths: [],
-				fileNames: [],
-				fileUrls: [],
-				files: [],
-				sets: 1,
-				product: NovaQuote.product,
-			},
-		]);
+		setSignage([defaultSignage]);
 	}
 
 	useEffect(() => {
@@ -54,71 +51,21 @@ export default function FlexNeonSigns() {
 		}
 	}, []);
 
-	const defaultArgs = {
-		id: uuidv4(),
-		comments: '',
-		mounting: '',
-		thickness: '',
-		waterproof: '',
-		finishing: 'Matte',
-		usdPrice: 0,
-		cadPrice: 0,
-		pvcBaseColor: { name: 'Black', color: '#000000' },
-		metalLaminate: '',
-		customColor: '',
-		filePaths: [],
-		fileNames: [],
-		fileUrls: [],
-		files: [],
-		studLength: '',
-		spacerStandoffDistance: '',
-		sets: 1,
-		product: NovaQuote.product,
-	};
-
 	function addSignage(type) {
 		setSignage((prevSignage) => {
-			// Count how many signages of this type already exist
 			const count = prevSignage.filter((sign) => sign.type === type).length;
-			let args;
-			// Create new signage with incremented title number
-			if (type === 'letters') {
-				args = {
-					type: type,
-					title: `${type} ${count + 1}`,
-					letters: '',
-					font: '',
-					thickness_options: '',
-					letterHeight: '',
-					customFont: '',
-					customColor: '',
-					filePaths: [],
-					fileNames: [],
-					fileUrls: [],
-					files: [],
-					sets: 1,
-				};
-			} else {
-				args = {
-					type: type,
-					title: `${type} ${count + 1}`,
-					width: '',
-					height: '',
-				};
-			}
+			let args = {
+				type: 'NEON SIGN',
+				title: `NEON SIGN ${count + 1}`,
+			};
 			const newSignage = {
-				...defaultArgs,
+				...defaultSignage,
 				...args,
 			};
 
-			// Append the new signage to the array
 			return [...prevSignage, newSignage];
 		});
 	}
-
-	/* useEffect(() => {
-		localStorage.setItem(storage + '-x', JSON.stringify(signage));
-	}, [signage]); */
 
 	useEffect(() => {
 		if (NovaQuote.is_editting.length === 0) {
@@ -126,66 +73,32 @@ export default function FlexNeonSigns() {
 		} else {
 			setTempFolder(`Q-${NovaQuote.current_quote_id}`);
 		}
+		// Only run once, no need to add dependencies if they don't change
 	}, []);
 
 	return (
-		<QuoteContext.Provider
-			value={{
-				signage,
-				setSignage,
-				addSignage,
-				missing,
-				setMissing,
-				tempFolder,
-				isLoading,
-				setIsLoading,
-			}}
-		>
-			<div className="md:flex gap-6">
-				<div className="md:w-3/4 w-full">
-					{signage.map((item, index) => (
-						<Signage index={index} id={item.id} item={item}>
-							{item.type === 'letters' ? (
-								<Letters key={item.id} item={item} />
-							) : (
-								<Logo key={item.id} item={item} />
-							)}
-						</Signage>
-					))}
+		<div className="md:flex gap-6">
+			<div className="md:w-3/4 w-full">
+				{signage.map((item, index) => (
+					<Signage index={index} id={item.id} item={item}>
+						<NeonSign key={item.id} item={item} productId={item.product} />
+					</Signage>
+				))}
 
-					<div className="flex gap-2">
-						{signage.length < 10 && (
-							<button
-								className="flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white"
-								onClick={() => addSignage('letters')}
-								style={{ border: '1px solid #d2d2d2d2' }}
-							>
-								ADD LETTERS
-								<PlusIcon />
-							</button>
-						)}
-
-						{signage.length < 10 && (
-							<button
-								className="flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white"
-								onClick={() => addSignage('logo')}
-								style={{ border: '1px solid #d2d2d2d2' }}
-							>
-								ADD LOGO
-								<PlusIcon />
-							</button>
-						)}
-					</div>
+				<div className="flex gap-2">
+					{signage.length < 10 && (
+						<button
+							className="flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white"
+							onClick={() => addSignage('NEON SIGN')}
+							style={{ border: '1px solid #d2d2d2d2' }}
+						>
+							ADD NEON SIGN
+							<PlusIcon />
+						</button>
+					)}
 				</div>
-				<Sidebar
-					signage={signage}
-					required={missing}
-					tempFolder={tempFolder}
-					storage={storage}
-					isLoading={isLoading}
-					setIsLoading={setIsLoading}
-				/>
 			</div>
-		</QuoteContext.Provider>
+			<Sidebar />
+		</div>
 	);
 }

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 
 interface AppContextType {
 	signage: any[];
@@ -9,9 +9,10 @@ interface AppContextType {
 	tempFolderName: string;
 	isLoading: boolean;
 	partner: number;
-	setPartner: (partner: string) => void;
+	setPartner: (partner: number) => void;
 	setTempFolder: (tempFolder: string) => void;
 	setIsLoading: (isLoading: boolean) => void;
+	updateSignageItem: (id: string, key: string, value: any) => void;
 }
 
 // Create the context with a default value
@@ -25,8 +26,9 @@ const AppContext = createContext<AppContextType>({
 	isLoading: false,
 	setTempFolder: () => {},
 	setIsLoading: () => {},
-	setPartner: () => '',
-	partner: NovaQuote.user_id,
+	setPartner: () => parseInt(NovaQuote.user_id),
+	partner: parseInt(NovaQuote.user_id),
+	updateSignageItem: () => {},
 });
 
 export function useAppContext() {
@@ -38,9 +40,17 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 	const [missing, setMissing] = useState<any[]>([]);
 	const [tempFolder, setTempFolder] = useState<string>('');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const [partner, setPartner] = useState<number>(NovaQuote.user_id);
+	const [partner, setPartner] = useState<number>(parseInt(NovaQuote.user_id));
 
 	const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
+
+	const updateSignageItem = (id: string, key: string, value: any) => {
+		setSignage((prevSignage) =>
+			prevSignage.map((signage) =>
+				signage.id === id ? { ...signage, [key]: value } : signage
+			)
+		);
+	};
 
 	return (
 		<AppContext.Provider
@@ -56,6 +66,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 				setIsLoading,
 				setPartner,
 				partner,
+				updateSignageItem,
 			}}
 		>
 			{children}
