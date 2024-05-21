@@ -6,7 +6,7 @@ import Signage from '../../../Signage';
 import { PlusIcon } from '../../../svg/Icons';
 import { NeonSign } from './components/NeonSign';
 
-export default function FlexNeonSign() {
+export default function RigidNeonSignWithBacking() {
 	const { signage, setSignage, setTempFolder, tempFolderName } =
 		useAppContext();
 
@@ -16,10 +16,14 @@ export default function FlexNeonSign() {
 		title: 'NEON SIGN 1',
 		neonSignWidth: '',
 		neonSignHeight: '',
-		neonUsed: '',
-		acrylicBackingOption: 'Frosted Clear Backing',
+		neonThickness: '',
+		neonLength: '',
+		rigidBacking: 'Frosted Clear PC',
+		paintedPCColor: '',
+		paintedPCFinish: '',
 		remoteControl: 'No',
 		wireExitLocation: 'Bottom Right',
+		wireType: '6ft Clear DC5521 female',
 		neonColor: '',
 		waterproof: '',
 		comments: '',

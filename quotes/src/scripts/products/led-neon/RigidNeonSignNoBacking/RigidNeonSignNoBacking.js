@@ -6,7 +6,7 @@ import Signage from '../../../Signage';
 import { PlusIcon } from '../../../svg/Icons';
 import { NeonSign } from './components/NeonSign';
 
-export default function FlexNeonSign() {
+export default function RigidNeonSignNoBacking() {
 	const { signage, setSignage, setTempFolder, tempFolderName } =
 		useAppContext();
 
@@ -16,14 +16,16 @@ export default function FlexNeonSign() {
 		title: 'NEON SIGN 1',
 		neonSignWidth: '',
 		neonSignHeight: '',
-		neonUsed: '',
-		acrylicBackingOption: 'Frosted Clear Backing',
+		neonThickness: '',
+		neonLength8mm: '',
+		neonLength10mm: '',
+		neonLength14mm: '',
+		neonLength20mm: '',
 		remoteControl: 'No',
-		wireExitLocation: 'Bottom Right',
 		neonColor: '',
 		waterproof: '',
 		comments: '',
-		mounting: 'Standard Nails',
+		mounting: 'M4 Stud 1.5"',
 		usdPrice: 0,
 		cadPrice: 0,
 		filePaths: [],

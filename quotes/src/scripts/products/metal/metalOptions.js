@@ -15,7 +15,7 @@ const metalThicknessOptions = [
 		value: '4',
 	},
 	{
-		thickness: '7/32"',
+		thickness: '1/4"',
 		value: '6',
 	},
 	{

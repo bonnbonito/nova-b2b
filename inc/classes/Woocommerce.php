@@ -1524,6 +1524,9 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 
 	public function generate_html_table_from_array( $array, $product, $nova_title, $product_line ) {
 
+		$instance   = \NOVA_B2B\Inc\Classes\Nova_Quote::get_instance();
+		$attributes = $instance->allAttributes();
+
 		$html  = '<h6 style="font-size: 100%; margin-top: 10px;margin-bottom: 0;">Quote ID: <strong>Q-' . str_pad( $product, 4, '0', STR_PAD_LEFT ) . '</strong></h6>';
 		$html .= '<h6 style="font-size: 100%; margin-top: 0; margin-bottom: 0;">Project Name: <strong>' . $nova_title . '</strong></h6>';
 		$html .= '<h6 style="font-size: 100%; margin-top: 0; margin-bottom: 20px;">Product: <strong>' . $product_line . '</strong></h6>';
@@ -1532,237 +1535,44 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 
 			$html .= '<div style="padding: 10px; border: 1pxz solid #d2d2d2 !important;">';
 
-			// Each property of the object gets its own row
-
 			$html .= '<p style="font-size: 125%; margin-bottom: 8px;">' . htmlspecialchars( $object->title ) . '</p>';
 
 			$html .= '<p>';
 
-			if ( isset( $object->material ) && ! empty( $object->material ) ) {
-				$html .= '<strong>MATERIAL: </strong>' . htmlspecialchars( $object->material ) . '<br>';
-			}
-
-			if ( isset( $object->productLine ) && ! empty( $object->productLine ) ) {
-				$html .= '<strong>PRODUCT LINE: </strong>' . htmlspecialchars( $object->productLine ) . '<br>';
-			}
-
-			if ( isset( $object->letters ) && ! empty( $object->letters ) ) {
-				$html .= '<strong>TEXT: </strong>' . htmlspecialchars( $object->letters ) . '<br>';
-			}
-
-			if ( isset( $object->font ) && ! empty( $object->font ) ) {
-				$html .= '<strong>FONT: </strong>' . htmlspecialchars( $object->font ) . '<br>';
-			}
-
-			if ( isset( $object->customFont ) && ! empty( $object->customFont ) ) {
-				$html .= '<strong>CUSTOM FONT: </strong>' . htmlspecialchars( $object->customFont ) . '<br>';
-			}
-
-			if ( isset( $object->fontFileUrl ) && ! empty( $object->fontFileUrl ) && isset( $object->fontFileName ) && ! empty( $object->fontFileName ) ) {
-				$html .= '<strong>FONT FILE: </strong><a href="' . htmlspecialchars( $object->fontFileUrl ) . '" target="_blank">' . htmlspecialchars( $object->fontFileName ) . '</a><br>';
-			}
-
-			if ( isset( $object->acrylicThickness ) && ! empty( $object->acrylicThickness ) && $object->acrylicThickness ) {
-				$html .= '<strong>ACRYLIC THICKNESS: </strong>' . htmlspecialchars( $object->acrylicThickness->thickness ) . '<br>';
-			}
-
-			if ( isset( $object->thickness ) && ! empty( $object->thickness ) && $object->thickness ) {
-				$html .= '<strong>THICKNESS: </strong>' . htmlspecialchars( $object->thickness->thickness ) . '"<br>';
-			}
-
-			if ( isset( $object->metal ) && ! empty( $object->metal ) ) {
-				$html .= '<strong>METAL: </strong>' . htmlspecialchars( $object->metal ) . '<br>';
-			}
-
-			if ( isset( $object->metalThickness ) && ! empty( $object->metalThickness ) && $object->metalThickness ) {
-				$html .= '<strong>METAL THICKNESS: </strong>' . htmlspecialchars( $object->metalThickness->thickness ) . '"<br>';
-			}
-
-			if ( isset( $object->metalDepth ) && ! empty( $object->metalDepth ) && $object->metalDepth ) {
-				$html .= '<strong>METAL DEPTH: </strong>' . htmlspecialchars( $object->metalDepth->thickness ) . '<br>';
-			}
-
-			if ( isset( $object->depth ) && ! empty( $object->depth ) && $object->depth ) {
-				$html .= '<strong>METAL DEPTH: </strong>' . htmlspecialchars( $object->depth->depth ) . '<br>';
-			}
-
-			if ( isset( $object->width ) && ! empty( $object->width ) ) {
-				$html .= '<strong>LOGO WIDTH: </strong>' . htmlspecialchars( $object->width ) . '<br>';
-			}
-
-			if ( isset( $object->height ) && ! empty( $object->height ) ) {
-				$html .= '<strong>LOGO HEIGHT: </strong>' . htmlspecialchars( $object->height ) . '<br>';
-			}
-
-			if ( isset( $object->layers ) && ! empty( $object->layers ) ) {
-				$html .= '<strong>Layers: </strong>' . htmlspecialchars( $object->layers ) . '<br>';
-			}
-
-			if ( isset( $object->letterHeight ) && ! empty( $object->letterHeight ) ) {
-				$html .= '<strong>LETTER HEIGHT: </strong>' . htmlspecialchars( $object->letterHeight ) . '"<br>';
-			}
-
-			if ( isset( $object->backLitFinishing ) && ! empty( $object->backLitFinishing ) ) {
-				$html .= '<strong>FINISHING: </strong>' . htmlspecialchars( $object->backLitFinishing ) . '<br>';
-			}
-
-			if ( isset( $object->backLitMetalFinish ) && ! empty( $object->backLitMetalFinish ) ) {
-				$html .= '<strong>METAL FINISH: </strong>' . htmlspecialchars( $object->backLitMetalFinish ) . '<br>';
-			}
-
-			if ( isset( $object->faceReturnColor ) && is_object( $object->faceReturnColor ) && ! empty( $object->faceReturnColor->name ) ) {
-				$html .= '<strong>FACE & RETURN COLOR: </strong>' . htmlspecialchars( $object->faceReturnColor->name ) . '<br>';
-			}
-
-			if ( isset( $object->printPreference ) && ! empty( $object->printPreference ) ) {
-				$html .= '<strong>PRINT PREFERENCE: </strong>' . htmlspecialchars( $object->printPreference ) . '<br>';
-			}
-
-			if ( isset( $object->metalFinish ) && ! empty( $object->metalFinish ) && ! is_object( $object->metalFinish ) ) {
-				$html .= '<strong>FINISHING: </strong>' . htmlspecialchars( $object->metalFinish ) . '<br>';
-			}
-
-			if ( isset( $object->stainLessMetalFinish ) && ! empty( $object->stainLessMetalFinish ) ) {
-				$html .= '<strong>METAL FINISH: </strong>' . htmlspecialchars( $object->stainLessMetalFinish ) . '<br>';
-			}
-
-			if ( isset( $object->stainlessSteelPolished ) && ! empty( $object->stainlessSteelPolished ) ) {
-				$html .= '<strong>STEEL POLISH: </strong>' . htmlspecialchars( $object->stainlessSteelPolished ) . '<br>';
-			}
-
-			if ( isset( $object->metalLaminate ) && ! empty( $object->metalLaminate ) ) {
-				$html .= '<strong>METAL LAMINATE: </strong>' . htmlspecialchars( $object->metalLaminate ) . '<br>';
-			}
-
-			if ( isset( $object->pvcBaseColor ) && is_object( $object->pvcBaseColor ) && ! empty( $object->pvcBaseColor->name ) ) {
-				$html .= '<strong>PVC BASE COLOR: </strong>' . htmlspecialchars( $object->pvcBaseColor->name ) . '<br>';
-			}
-
-			if ( isset( $object->acrylicBase ) && ! empty( $object->acrylicBase ) && isset( $object->acrylicBase->name ) ) {
-				$html .= '<strong>ACRYLIC BASE: </strong>' . htmlspecialchars( $object->acrylicBase->name ) . '<br>';
-			}
-
-			if ( isset( $object->color ) && is_object( $object->color ) && ! empty( $object->color->name ) ) {
-				$html .= '<strong>COLOR: </strong>' . htmlspecialchars( $object->color->name ) . '<br>';
-			}
-
-			if ( isset( $object->returnColor ) && is_object( $object->returnColor ) && ! empty( $object->returnColor->name ) ) {
-				$html .= '<strong>RETURN COLOR: </strong>' . htmlspecialchars( $object->returnColor->name ) . '<br>';
-			}
-
-			if ( isset( $object->baseColor ) && ! empty( $object->baseColor ) ) {
-				$html .= '<strong>BASE COLOR: </strong>' . htmlspecialchars( $object->baseColor ) . '<br>';
-			}
-
-			if ( isset( $object->customColor ) && ! empty( $object->customColor ) ) {
-				$html .= '<strong>CUSTOM COLOR: </strong>' . htmlspecialchars( $object->customColor ) . '<br>';
-			}
-
-			if ( isset( $object->ledLightColor ) && ! empty( $object->ledLightColor ) ) {
-				$html .= '<strong>LED LIGHT COLOR: </strong>' . htmlspecialchars( $object->ledLightColor ) . '<br>';
-			}
-
-			if ( isset( $object->frontAcrylicCover ) && ! empty( $object->frontAcrylicCover ) ) {
-				$html .= '<strong>FRONT ACRYLIC COVER: </strong>' . htmlspecialchars( $object->frontAcrylicCover ) . '<br>';
-			}
-
-			if ( isset( $object->vinylWhite ) && is_object( $object->vinylWhite ) && ! empty( $object->vinylWhite->name ) && isset( $object->vinylWhite->name ) && isset( $object->vinylWhite->code ) ) {
-				$html .= '<strong>3M VINYL: </strong>' . htmlspecialchars( $object->vinylWhite->name ) . ' - [' . htmlspecialchars( $object->vinylWhite->code ) . ']<br>';
-			}
-
-			if ( isset( $object->acrylicReveal ) && ! empty( $object->acrylicReveal ) ) {
-				$html .= '<strong>ACRYLIC REVEAL: </strong>' . htmlspecialchars( $object->acrylicReveal ) . '<br>';
-			}
-
-			if ( isset( $object->finishing ) && ! empty( $object->finishing ) ) {
-				$html .= '<strong>FINISHING: </strong>' . htmlspecialchars( $object->finishing ) . '<br>';
-			}
-
-			if ( isset( $object->metalColor ) && is_object( $object->metalColor ) && ! empty( $object->metalColor->name ) ) {
-				$html .= '<strong>COLOR: </strong>' . htmlspecialchars( $object->metalColor->name ) . '<br>';
-			}
-
-			if ( isset( $object->metalCustomColor ) && ! empty( $object->metalCustomColor ) ) {
-				$html .= '<strong>CUSTOM COLOR: </strong>' . htmlspecialchars( $object->metalCustomColor ) . '<br>';
-			}
-
-			if ( isset( $object->neonSignWidth ) && ! empty( $object->neonSignWidth ) ) {
-				$html .= '<strong>NEON SIGN WIDTH: </strong>' . htmlspecialchars( $object->neonSignWidth ) . '<br>';
-			}
-			if ( isset( $object->neonSignHeight ) && ! empty( $object->neonSignHeight ) ) {
-				$html .= '<strong>NEON SIGN HEIGHT: </strong>' . htmlspecialchars( $object->neonSignHeight ) . '<br>';
-			}
-			if ( isset( $object->neonUsed ) && ! empty( $object->neonUsed ) ) {
-				$html .= '<strong>NEON USED(ft): </strong>' . htmlspecialchars( $object->neonUsed ) . '<br>';
-			}
-			if ( isset( $object->acrylicBackingOption ) && ! empty( $object->acrylicBackingOption ) ) {
-				$html .= '<strong>ACRYLIC BACKING OPTION: </strong>' . htmlspecialchars( $object->acrylicBackingOption ) . '<br>';
-			}
-
-			if ( isset( $object->waterproof ) && ! empty( $object->waterproof ) ) {
-				$html .= '<strong>ENVIRONMENT: </strong>' . htmlspecialchars( $object->waterproof ) . '<br>';
-			}
-
-			if ( isset( $object->mounting ) && ! empty( $object->mounting ) ) {
-				$html .= '<strong>MOUNTING: </strong>' . htmlspecialchars( $object->mounting ) . '<br>';
-			}
-
-			if ( isset( $object->remoteControl ) && ! empty( $object->remoteControl ) ) {
-				$html .= '<strong>REMOTE CONTROL: </strong>' . htmlspecialchars( $object->remoteControl ) . '<br>';
-			}
-			if ( isset( $object->wireExitLocation ) && ! empty( $object->wireExitLocation ) ) {
-				$html .= '<strong>WIRE EXIT LOCATION: </strong>' . htmlspecialchars( $object->wireExitLocation ) . '<br>';
-			}
-			if ( isset( $object->neonSignColor ) && ! empty( $object->neonSignColor ) ) {
-				$html .= '<strong>COLOR: </strong>' . htmlspecialchars( $object->neonSignColor ) . '<br>';
-			}
-
-			if ( isset( $object->studLength ) && ! empty( $object->studLength ) ) {
-				$html .= '<strong>STUD LENGTH: </strong>' . htmlspecialchars( $object->studLength ) . '<br>';
-			}
-
-			if ( isset( $object->spacerStandoffDistance ) && ! empty( $object->spacerStandoffDistance ) ) {
-				$html .= '<strong>STANDOFF SPACE: </strong>' . htmlspecialchars( $object->spacerStandoffDistance ) . '<br>';
-			}
-
-			if ( isset( $object->metalFinishing ) && ! empty( $object->metalFinishing ) ) {
-				$html .= '<strong>METAL FINISHING: </strong>' . htmlspecialchars( $object->metalFinishing ) . '<br>';
-			}
-
-			if ( isset( $object->installation ) && ! empty( $object->installation ) ) {
-				$html .= '<strong>INSTALLATION: </strong>' . htmlspecialchars( $object->installation ) . '<br>';
-			}
-
-			if ( isset( $object->pieces ) && ! empty( $object->pieces ) ) {
-				$html .= '<strong>PIECES/CUTOUTS: </strong>' . htmlspecialchars( $object->pieces ) . '<br>';
-			}
-
-			if ( isset( $object->sets ) && ! empty( $object->sets ) ) {
-				$html .= '<strong>QUANTITY: </strong>' . htmlspecialchars( $object->sets ) . '<br>';
-			}
-
-			if ( isset( $object->comments ) && ! empty( trim( $object->comments ) ) ) {
-				$html .= '<strong>COMMENTS: </strong>' . htmlspecialchars( $object->comments ) . '<br>';
-			}
-
-			if ( isset( $object->description ) && ! empty( $object->description ) ) {
-				$html .= '<strong>DESCRIPTION: </strong>' . htmlspecialchars( $object->description ) . '<br>';
-			}
-
-			if ( isset( $object->fileUrl ) && ! empty( $object->fileUrl ) && isset( $object->fileName ) && ! empty( $object->fileName ) ) {
-				$html .= '<strong>FILE: </strong><a href="' . htmlspecialchars( $object->fileUrl ) . '" target="_blank">' . htmlspecialchars( $object->fileName ) . '</a><br>';
-			}
-
-			if ( isset( $object->fileUrls ) && ! empty( $object->fileUrls ) && isset( $object->fileNames ) && ! empty( $object->fileNames ) ) {
-				$filesHtml = '';
-				foreach ( $object->fileUrls as $index => $fileUrl ) {
-					// Get the corresponding file name or use the URL as the name if not available
-					$fileName   = $object->fileNames[ $index ] ?? $fileUrl;
-					$filesHtml .= '<a href="' . htmlspecialchars( $fileUrl, ENT_QUOTES, 'UTF-8' ) . '" target="_blank">' . htmlspecialchars( $fileName, ENT_QUOTES, 'UTF-8' ) . '</a><br>';
+			foreach ( $attributes as $key => $attr ) {
+				if ( isset( $object->$key ) && ! empty( $object->$key ) ) {
+					if ( is_array( $attr ) ) {
+						if ( $attr['isLink'] ?? false && isset( $object->fontFileUrl, $object->fontFileName ) && ! empty( $object->fontFileUrl ) && ! empty( $object->fontFileName ) ) {
+							$html .= '<strong>' . $attr['label'] . ': </strong><a href="' . htmlspecialchars( $object->fontFileUrl ) . '" target="_blank">' . htmlspecialchars( $object->fontFileName ) . '</a><br>';
+						} elseif ( $attr['isVinyl'] ?? false && isset( $object->vinylWhite->name, $object->vinylWhite->code ) && ! empty( $object->vinylWhite->name ) && ! empty( $object->vinylWhite->code ) ) {
+							$html .= '<strong>' . $attr['label'] . ': </strong>' . htmlspecialchars( $object->vinylWhite->name ) . ' - [' . htmlspecialchars( $object->vinylWhite->code ) . ']<br>';
+						} elseif ( $attr['isFile'] ?? false && isset( $object->fileUrl, $object->fileName ) && ! empty( $object->fileUrl ) && ! empty( $object->fileName ) ) {
+							$html .= '<strong>' . $attr['label'] . ': </strong><a href="' . htmlspecialchars( $object->fileUrl ) . '" target="_blank">' . htmlspecialchars( $object->fileName ) . '</a><br>';
+						} elseif ( $attr['isFiles'] ?? false && isset( $object->fileUrls, $object->fileNames ) && ! empty( $object->fileUrls ) && ! empty( $object->fileNames ) ) {
+							$filesHtml = '';
+							foreach ( $object->fileUrls as $index => $fileUrl ) {
+								$fileName   = $object->fileNames[ $index ] ?? $fileUrl;
+								$filesHtml .= '<a href="' . htmlspecialchars( $fileUrl, ENT_QUOTES, 'UTF-8' ) . '" target="_blank">' . htmlspecialchars( $fileName, ENT_QUOTES, 'UTF-8' ) . '</a><br>';
+							}
+							$html .= '<strong>' . $attr['label'] . ': </strong>' . $filesHtml . '<br>';
+						}
+					} else {
+						$value = $object->$key;
+						if ( is_object( $value ) ) {
+							if ( isset( $value->thickness ) ) {
+								$value = $value->thickness;
+							} elseif ( isset( $value->depth ) ) {
+								$value = $value->depth;
+							} elseif ( isset( $value->name ) ) {
+								$value = $value->name;
+							}
+						}
+						$html .= '<strong>' . $attr . ': </strong>' . htmlspecialchars( $value ) . ( $key === 'letterHeight' ? '"' : '' ) . '<br>';
+					}
 				}
-
-				$html .= '<strong>FILES: </strong>' . $filesHtml . '<br>';
 			}
+
+			$html .= '</p>';
 
 			$html .= '</div>';
 
@@ -2253,207 +2063,43 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 	public function quote_details( $project ) {
 		$projectArray = get_object_vars( $project );
 
-		if ( isset( $projectArray['material'] ) && ! empty( $projectArray['material'] ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">MATERIAL:</div><div class="text-left text-[10px] uppercase">' . $projectArray['material'] . '</div></div>';
-		}
+		$instance   = \NOVA_B2B\Inc\Classes\Nova_Quote::get_instance();
+		$attributes = $instance->allAttributes();
 
-		if ( isset( $projectArray['productLine'] ) && ! empty( $projectArray['productLine'] ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">PRODUCT LINE:</div><div class="text-left text-[10px] uppercase">' . $projectArray['productLine'] . '</div></div>';
-		}
-
-		if ( isset( $projectArray['letters'] ) && ! empty( $projectArray['letters'] ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">TEXT:</div><div class="text-left text-[10px] uppercase">' . $projectArray['letters'] . '</div></div>';
-		}
-
-		if ( isset( $projectArray['font'] ) && ! empty( $projectArray['font'] ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">FONT:</div><div class="text-left text-[10px] uppercase">' . $projectArray['font'] . '</div></div>';
-		}
-
-		if ( isset( $projectArray['customFont'] ) && ! empty( $projectArray['customFont'] ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">CUSTOM FONT:</div><div class="text-left text-[10px] uppercase">' . $projectArray['customFont'] . '</div></div>';
-		}
-
-		if ( isset( $projectArray['fontFileUrl'] ) && ! empty( $projectArray['fontFileUrl'] ) && isset( $projectArray['fontFileName'] ) && ! empty( $projectArray['fontFileName'] ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">FONT FILE:</div><div class="text-left text-[10px] uppercase"><a href="' . $projectArray['fontFileUrl'] . '" target="_blank">' . $projectArray['fontFileName'] . '</a></div></div>';
-		}
-
-		if ( isset( $projectArray['acrylicThickness'] ) && ! empty( $projectArray['acrylicThickness'] ) && $projectArray['acrylicThickness'] ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">ACRYLIC THICKNESS:</div><div class="text-left text-[10px] uppercase">' . $projectArray['acrylicThickness']->thickness . '</div></div>';
-		}
-
-		if ( isset( $projectArray['thickness'] ) && ! empty( $projectArray['thickness'] ) && $projectArray['thickness'] ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">THICKNESS:</div><div class="text-left text-[10px] uppercase">' . $projectArray['thickness']->thickness . '</div></div>';
-		}
-
-		if ( isset( $projectArray['metal'] ) && ! empty( $projectArray['metal'] ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">METAL:</div><div class="text-left text-[10px] uppercase">' . $projectArray['metal'] . '</div></div>';
-		}
-
-		if ( isset( $projectArray['metalThickness'] ) && ! empty( $projectArray['metalThickness'] ) && $projectArray['metalThickness'] ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">METAL THICKNESS:</div><div class="text-left text-[10px] uppercase">' . $projectArray['metalThickness']->thickness . '</div></div>';
-		}
-
-		if ( isset( $projectArray['metalDepth'] ) && ! empty( $projectArray['metalDepth'] ) && $projectArray['metalDepth'] ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">METAL DEPTH:</div><div class="text-left text-[10px] uppercase">' . $projectArray['metalDepth']->thickness . '</div></div>';
-		}
-
-		if ( isset( $projectArray['depth'] ) && ! empty( $projectArray['depth'] ) && $projectArray['depth'] ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">METAL DEPTH:</div><div class="text-left text-[10px] uppercase">' . $projectArray['depth']->depth . '</div></div>';
-		}
-
-		if ( isset( $projectArray['width'] ) && ! empty( $projectArray['width'] ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">LOGO WIDTH:</div><div class="text-left text-[10px] uppercase">' . $projectArray['width'] . '"</div></div>';
-		}
-
-		if ( isset( $projectArray['height'] ) && ! empty( $projectArray['height'] ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">LOGO HEIGHT:</div><div class="text-left text-[10px] uppercase">' . $projectArray['height'] . '"</div></div>';
-		}
-
-		if ( isset( $projectArray['layers'] ) && ! empty( $projectArray['layers'] ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">Layers:</div><div class="text-left text-[10px] uppercase">' . $projectArray['layers'] . '</div></div>';
-		}
-
-		if ( isset( $projectArray['letterHeight'] ) && ! empty( $projectArray['letterHeight'] ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">LETTER HEIGHT:</div><div class="text-left text-[10px] uppercase">' . $projectArray['letterHeight'] . '"</div></div>';
-		}
-
-		if ( isset( $projectArray['backLitFinishing'] ) && ! empty( $projectArray['backLitFinishing'] ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">FINISHING:</div><div class="text-left text-[10px] uppercase">' . $projectArray['backLitFinishing'] . '</div></div>';
-		}
-
-		if ( isset( $projectArray['backLitMetalFinish'] ) && ! empty( $projectArray['backLitMetalFinish'] ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">METAL FINISH:</div><div class="text-left text-[10px] uppercase">' . $projectArray['backLitMetalFinish'] . '</div></div>';
-		}
-
-		if ( isset( $projectArray['faceReturnColor'] ) && is_object( $projectArray['faceReturnColor'] ) && ! empty( $projectArray['faceReturnColor']->name ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">FACE & RETURN COLOR:</div><div class="text-left text-[10px] uppercase">' . $projectArray['faceReturnColor']->name . '</div></div>';
-		}
-
-		if ( isset( $projectArray['printPreference'] ) && ! empty( $projectArray['printPreference'] ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">PRINT PREFERENCE:</div><div class="text-left text-[10px] uppercase">' . $projectArray['printPreference'] . '</div></div>';
-		}
-
-		if ( isset( $projectArray['metalFinish'] ) && ! empty( $projectArray['metalFinish'] ) && ! is_object( $projectArray['metalFinish'] ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">FINISHING:</div><div class="text-left text-[10px] uppercase">' . $projectArray['metalFinish'] . '</div></div>';
-		}
-
-		if ( isset( $projectArray['stainLessMetalFinish'] ) && ! empty( $projectArray['stainLessMetalFinish'] ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">METAL FINISH:</div><div class="text-left text-[10px] uppercase">' . $projectArray['stainLessMetalFinish'] . '</div></div>';
-		}
-
-		if ( isset( $projectArray['stainlessSteelPolished'] ) && ! empty( $projectArray['stainlessSteelPolished'] ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">STEEL POLISH:</div><div class="text-left text-[10px] uppercase">' . $projectArray['stainlessSteelPolished'] . '</div></div>';
-		}
-
-		if ( isset( $projectArray['metalLaminate'] ) && ! empty( $projectArray['metalLaminate'] ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">METAL LAMINATE:</div><div class="text-left text-[10px] uppercase">' . $projectArray['metalLaminate'] . '</div></div>';
-		}
-
-		if ( isset( $projectArray['pvcBaseColor'] ) && is_object( $projectArray['pvcBaseColor'] ) && ! empty( $projectArray['pvcBaseColor']->name ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">PVC BASE COLOR:</div><div class="text-left text-[10px] uppercase">' . $projectArray['pvcBaseColor']->name . '</div></div>';
-		}
-
-		if ( isset( $projectArray['acrylicBase'] ) && ! empty( $projectArray['acrylicBase'] ) && isset( $projectArray['acrylicBase']->name ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">ACRYLIC BASE:</div><div class="text-left text-[10px] uppercase">' . $projectArray['acrylicBase']->name . '</div></div>';
-		}
-
-		if ( isset( $projectArray['color'] ) && is_object( $projectArray['color'] ) && ! empty( $projectArray['color']->name ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">COLOR:</div><div class="text-left text-[10px] uppercase">' . $projectArray['color']->name . '</div></div>';
-		}
-
-		if ( isset( $projectArray['returnColor'] ) && is_object( $projectArray['returnColor'] ) && ! empty( $projectArray['returnColor']->name ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">RETURN COLOR:</div><div class="text-left text-[10px] uppercase">' . $projectArray['returnColor']->name . '</div></div>';
-		}
-
-		if ( isset( $projectArray['baseColor'] ) && ! empty( $projectArray['baseColor'] ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">BASE COLOR:</div><div class="text-left text-[10px] uppercase">' . $projectArray['baseColor'] . '</div></div>';
-		}
-
-		if ( isset( $projectArray['customColor'] ) && ! empty( $projectArray['customColor'] ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">CUSTOM COLOR:</div><div class="text-left text-[10px] uppercase">' . $projectArray['customColor'] . '</div></div>';
-		}
-
-		if ( isset( $projectArray['ledLightColor'] ) && ! empty( $projectArray['ledLightColor'] ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">LED LIGHT COLOR:</div><div class="text-left text-[10px] uppercase">' . $projectArray['ledLightColor'] . '</div></div>';
-		}
-
-		if ( isset( $projectArray['frontAcrylicCover'] ) && ! empty( $projectArray['frontAcrylicCover'] ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">FRONT ACRYLIC COVER:</div><div class="text-left text-[10px] uppercase">' . $projectArray['frontAcrylicCover'] . '</div></div>';
-		}
-
-		if ( isset( $projectArray['vinylWhite'] ) && is_object( $projectArray['vinylWhite'] ) && ! empty( $projectArray['vinylWhite']->name ) && isset( $projectArray['vinylWhite']->name ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">3M VINYL:</div><div class="text-left text-[10px] uppercase">' . $projectArray['vinylWhite']->name . ' - [' . $projectArray['vinylWhite']->code . ']</div></div>';
-		}
-
-		if ( isset( $projectArray['acrylicReveal'] ) && ! empty( $projectArray['acrylicReveal'] ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">ACRYLIC REVEAL:</div><div class="text-left text-[10px] uppercase">' . $projectArray['acrylicReveal'] . '</div></div>';
-		}
-
-		if ( isset( $projectArray['finishing'] ) && ! empty( $projectArray['finishing'] ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">FINISHING:</div><div class="text-left text-[10px] uppercase">' . $projectArray['finishing'] . '</div></div>';
-		}
-
-		if ( isset( $projectArray['metalColor'] ) && is_object( $projectArray['metalColor'] ) && ! empty( $projectArray['metalColor']->name ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">COLOR:</div><div class="text-left text-[10px] uppercase">' . $projectArray['metalColor']->name . '</div></div>';
-		}
-
-		if ( isset( $projectArray['metalCustomColor'] ) && ! empty( $projectArray['metalCustomColor'] ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">CUSTOM COLOR:</div><div class="text-left text-[10px] uppercase">' . $projectArray['metalCustomColor'] . '</div></div>';
-		}
-
-		if ( isset( $projectArray['waterproof'] ) && ! empty( $projectArray['waterproof'] ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">ENVIRONMENT:</div><div class="text-left text-[10px] uppercase">' . $projectArray['waterproof'] . '</div></div>';
-		}
-
-		if ( isset( $projectArray['mounting'] ) && ! empty( $projectArray['mounting'] ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">MOUNTING:</div><div class="text-left text-[10px] uppercase">' . $projectArray['mounting'] . '</div></div>';
-		}
-
-		if ( isset( $projectArray['studLength'] ) && ! empty( $projectArray['studLength'] ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">STUD LENGTH:</div><div class="text-left text-[10px] uppercase">' . $projectArray['studLength'] . '</div></div>';
-		}
-
-		if ( isset( $projectArray['spacerStandoffDistance'] ) && ! empty( $projectArray['spacerStandoffDistance'] ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">STANDOFF SPACE:</div><div class="text-left text-[10px] uppercase">' . $projectArray['spacerStandoffDistance'] . '</div></div>';
-		}
-
-		if ( isset( $projectArray['metalFinishing'] ) && ! empty( $projectArray['metalFinishing'] ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">METAL FINISHING:</div><div class="text-left text-[10px] uppercase">' . $projectArray['metalFinishing'] . '</div></div>';
-		}
-
-		if ( isset( $projectArray['installation'] ) && ! empty( $projectArray['installation'] ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">INSTALLATION:</div><div class="text-left text-[10px] uppercase">' . $projectArray['installation'] . '</div></div>';
-		}
-
-		if ( isset( $projectArray['pieces'] ) && ! empty( $projectArray['pieces'] ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">PIECES/CUTOUTS:</div><div class="text-left text-[10px] uppercase">' . $projectArray['pieces'] . '</div></div>';
-		}
-
-		if ( isset( $projectArray['sets'] ) && ! empty( $projectArray['sets'] ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">QUANTITY:</div><div class="text-left text-[10px] uppercase">' . $projectArray['sets'] . '</div></div>';
-		}
-
-		if ( isset( $projectArray['comments'] ) && ! empty( trim( $projectArray['comments'] ) ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">COMMENTS:</div><div class="text-left text-[10px] uppercase">' . $projectArray['comments'] . '</div></div>';
-		}
-
-		if ( isset( $projectArray['description'] ) && ! empty( $projectArray['description'] ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">DESCRIPTION:</div><div class="text-left text-[10px] uppercase">' . $projectArray['description'] . '</div></div>';
-		}
-
-		if ( isset( $projectArray['fileUrl'] ) && ! empty( $projectArray['fileUrl'] ) && isset( $projectArray['fileName'] ) && ! empty( $projectArray['fileName'] ) ) {
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">FILE:</div><div class="text-left text-[10px] uppercase"><a href="' . $projectArray['fileUrl'] . '" target="_blank">' . $projectArray['fileName'] . '</a></div></div>';
-		}
-
-		if ( isset( $projectArray['fileUrls'] ) && ! empty( $projectArray['fileUrls'] ) && isset( $projectArray['fileNames'] ) && ! empty( $projectArray['fileNames'] ) ) {
-			$filesHtml = '';
-			foreach ( $projectArray['fileUrls'] as $index => $fileUrl ) {
-				// Get the corresponding file name or use the URL as the name if not available
-				$fileName   = $projectArray['fileNames'][ $index ] ?? $fileUrl;
-				$filesHtml .= '<a href="' . htmlspecialchars( $fileUrl, ENT_QUOTES, 'UTF-8' ) . '" target="_blank">' . htmlspecialchars( $fileName, ENT_QUOTES, 'UTF-8' ) . '</a><br>';
+		foreach ( $attributes as $key => $attr ) {
+			if ( $key === 'title' ) {
+				continue;
 			}
-
-			echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">FILES:</div><div class="text-left text-[10px] uppercase">' . $filesHtml . '</div></div>';
+			if ( isset( $projectArray[ $key ] ) && ! empty( $projectArray[ $key ] ) ) {
+				if ( is_array( $attr ) ) {
+					if ( $attr['isLink'] ?? false && isset( $projectArray['fontFileUrl'], $projectArray['fontFileName'] ) && ! empty( $projectArray['fontFileUrl'] ) && ! empty( $projectArray['fontFileName'] ) ) {
+						echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">' . $attr['label'] . ':</div><div class="text-left text-[10px] uppercase"><a href="' . htmlspecialchars( $projectArray['fontFileUrl'] ) . '" target="_blank">' . htmlspecialchars( $projectArray['fontFileName'] ) . '</a></div></div>';
+					} elseif ( $attr['isVinyl'] ?? false && isset( $projectArray['vinylWhite']->name, $projectArray['vinylWhite']->code ) && ! empty( $projectArray['vinylWhite']->name ) && ! empty( $projectArray['vinylWhite']->code ) ) {
+						echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">' . $attr['label'] . ':</div><div class="text-left text-[10px] uppercase">' . htmlspecialchars( $projectArray['vinylWhite']->name ) . ' - [' . htmlspecialchars( $projectArray['vinylWhite']->code ) . ']</div></div>';
+					} elseif ( $attr['isFile'] ?? false && isset( $projectArray['fileUrl'], $projectArray['fileName'] ) && ! empty( $projectArray['fileUrl'] ) && ! empty( $projectArray['fileName'] ) ) {
+						echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">' . $attr['label'] . ':</div><div class="text-left text-[10px] uppercase"><a href="' . htmlspecialchars( $projectArray['fileUrl'] ) . '" target="_blank">' . htmlspecialchars( $projectArray['fileName'] ) . '</a></div></div>';
+					} elseif ( $attr['isFiles'] ?? false && isset( $projectArray['fileUrls'], $projectArray['fileNames'] ) && ! empty( $projectArray['fileUrls'] ) && ! empty( $projectArray['fileNames'] ) ) {
+						$filesHtml = '';
+						foreach ( $projectArray['fileUrls'] as $index => $fileUrl ) {
+							$fileName   = $projectArray['fileNames'][ $index ] ?? $fileUrl;
+							$filesHtml .= '<a href="' . htmlspecialchars( $fileUrl, ENT_QUOTES, 'UTF-8' ) . '" target="_blank">' . htmlspecialchars( $fileName, ENT_QUOTES, 'UTF-8' ) . '</a><br>';
+						}
+						echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">' . $attr['label'] . ':</div><div class="text-left text-[10px] uppercase">' . $filesHtml . '</div></div>';
+					}
+				} else {
+					$value = $projectArray[ $key ];
+					if ( is_object( $value ) ) {
+						if ( isset( $value->thickness ) ) {
+							$value = $value->thickness;
+						} elseif ( isset( $value->depth ) ) {
+							$value = $value->depth;
+						} elseif ( isset( $value->name ) ) {
+							$value = $value->name;
+						}
+					}
+					echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">' . $attr . ':</div><div class="text-left text-[10px] uppercase">' . htmlspecialchars( $value ) . ( $key === 'letterHeight' ? '"' : '' ) . '</div></div>';
+				}
+			}
 		}
 	}
 

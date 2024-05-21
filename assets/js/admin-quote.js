@@ -450,8 +450,44 @@ function getSignageDetailFields(sign) {
 		},
 		{ label: 'NEON USED(ft)', value: sign.neonUsed ? sign.neonUsed : '' },
 		{
+			label: 'NEON THICKNESS',
+			value: sign.neonThickness ? sign.neonThickness : '',
+		},
+		{
+			label: 'NEON LENGTH(ft)',
+			value: sign.neonLength ? sign.neonLength : '',
+		},
+		{
+			label: '8mm NEON LENGTH',
+			value: sign.neonLength8mm ? sign.neonLength8mm : '',
+		},
+		{
+			label: '10mm NEON LENGTH',
+			value: sign.neonLength10mm ? sign.neonLength10mm : '',
+		},
+		{
+			label: '14mm NEON LENGTH',
+			value: sign.neonLength14mm ? sign.neonLength14mm : '',
+		},
+		{
+			label: '20mm NEON LENGTH',
+			value: sign.neonLength20mm ? sign.neonLength20mm : '',
+		},
+		{
 			label: 'ACRYLIC BACKING OPTION',
 			value: sign.acrylicBackingOption ? sign.acrylicBackingOption : '',
+		},
+		{
+			label: 'BACKING OPTION',
+			value: sign.rigidBacking ? sign.rigidBacking : '',
+		},
+		{
+			label: 'PAINTED PC COLOR',
+			value: sign.paintedPCColor ? sign.paintedPCColor : '',
+		},
+		{
+			label: 'PAINTED PC FINISH',
+			value: sign.paintedPCFinish ? sign.paintedPCFinish : '',
 		},
 
 		{ label: 'ENVIRONMENT', value: sign.waterproof ? sign.waterproof : '' },
@@ -466,7 +502,11 @@ function getSignageDetailFields(sign) {
 			label: 'WIRE EXIT LOCATION',
 			value: sign.wireExitLocation ? sign.wireExitLocation : '',
 		},
-		{ label: 'COLOR', value: sign.neonSignColor ? sign.neonSignColor : '' },
+		{
+			label: 'WIRE TYPE',
+			value: sign.wireType ? sign.wireType : '',
+		},
+		{ label: 'COLOR', value: sign.neonColor ? sign.neonColor : '' },
 
 		{ label: 'STUD LENGTH', value: sign.studLength ? sign.studLength : '' },
 		{

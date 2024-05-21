@@ -12,6 +12,8 @@ import UvPrintedAcrylic from './scripts/products/acrylic/UvPrintedAcrylic/UvPrin
 import CombineQuotes from './scripts/products/combine/CombineQuotes';
 import CustomProject from './scripts/products/custom/CustomProject';
 import FlexNeonSign from './scripts/products/led-neon/FlexNeonSign/FlexNeonSign';
+import RigidNeonSignNoBacking from './scripts/products/led-neon/RigidNeonSignNoBacking/RigidNeonSignNoBacking';
+import RigidNeonSignWithBacking from './scripts/products/led-neon/RigidNeonSignWithBacking/RigidNeonSignWithBacking';
 import AluminumResinFrontBackLit from './scripts/products/metal-channel/AluminumResinFrontBackLit/AluminumResinFrontBackLit';
 import AluminumResinFrontLit from './scripts/products/metal-channel/AluminumResinFrontLit/AluminumResinFrontLit';
 import TrimLessBackLit from './scripts/products/metal-channel/TrimLessBackLit/TrimLessBackLit';
@@ -66,6 +68,20 @@ function QuoteApp(): JSX.Element {
 			component = (
 				<AppProvider>
 					<CombineQuotes />
+				</AppProvider>
+			);
+			break;
+		case 'RigidNeonSignNoBacking':
+			component = (
+				<AppProvider>
+					<RigidNeonSignNoBacking />
+				</AppProvider>
+			);
+			break;
+		case 'RigidNeonSignWithBacking':
+			component = (
+				<AppProvider>
+					<RigidNeonSignWithBacking />
 				</AppProvider>
 			);
 			break;

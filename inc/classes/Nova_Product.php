@@ -29,6 +29,8 @@ class Nova_Product {
 		add_filter( 'document_title', array( $this, 'custom_wp_title' ), 10, 1 );
 	}
 
+
+
 	public function custom_wp_title( $title ) {
 		if ( function_exists( 'is_wc_endpoint_url' ) ) {
 			if ( is_wc_endpoint_url( 'lost-password' ) ) {

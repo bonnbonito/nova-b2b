@@ -2,13 +2,16 @@ import { INDOOR_NOT_WATERPROOF } from '../../utils/defaults';
 
 export const acrylicBackingOptions = [
 	{
+		option: 'Black Backing',
+	},
+	{
 		option: 'Frosted Clear Backing',
 	},
 	{
-		option: 'Matte Black Backing',
+		option: 'Clear Backing',
 	},
 	{
-		option: 'UV Printed',
+		option: 'UV Printed Backing',
 	},
 ];
 
