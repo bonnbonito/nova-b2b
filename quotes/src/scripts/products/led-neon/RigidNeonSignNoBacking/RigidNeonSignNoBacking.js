@@ -23,6 +23,8 @@ export default function RigidNeonSignNoBacking() {
 		neonLength20mm: '',
 		remoteControl: 'No',
 		neonColor: '',
+		color: { name: 'White', color: '#ffffff' },
+		customColor: '',
 		waterproof: '',
 		comments: '',
 		mounting: 'M4 Stud',

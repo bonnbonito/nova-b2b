@@ -46,9 +46,8 @@ export function Logo({ item }) {
 	const [fileUrls, setFileUrls] = useState(item.fileUrls ?? []);
 	const [filePaths, setFilePaths] = useState(item.filePaths ?? []);
 	const [files, setFiles] = useState(item.files ?? []);
-	const [pieces, setPieces] = useState(item.pieces ?? '');
 	const [customColor, setCustomColor] = useState(item.customColor ?? '');
-	const [baseColor, setBaseColor] = useState(item.baseColor);
+	const [baseColor, setBaseColor] = useState(item.baseColor ?? '');
 	const [selectedFinishing, setSelectedFinishing] = useState(
 		item.finishing ?? ''
 	);

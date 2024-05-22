@@ -75,7 +75,7 @@ export const wireExitLocationOptions = [
 	},
 ];
 
-export const colorOptions = [
+export const neonColorOptions = [
 	{
 		name: 'White',
 		color: '#ffffff',

@@ -1641,7 +1641,7 @@ h6 {
 			'remoteControl'          => 'REMOTE CONTROL',
 			'wireExitLocation'       => 'WIRE EXIT LOCATION',
 			'wireType'               => 'WIRE TYPE',
-			'neonColor'              => 'COLOR',
+			'neonColor'              => 'NEON COLOR',
 			'metalFinishing'         => 'METAL FINISHING',
 			'studLength'             => 'STUD LENGTH',
 			'spacerStandoffDistance' => 'STANDOFF SPACE',

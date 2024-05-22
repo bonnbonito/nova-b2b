@@ -58,7 +58,7 @@ export const allAttributes = (item) => [
 	{ key: item.remoteControl, label: 'REMOTE CONTROL' },
 	{ key: item.wireExitLocation, label: 'WIRE EXIT LOCATION' },
 	{ key: item.wireType, label: 'WIRE TYPE' },
-	{ key: item.neonColor, label: 'COLOR' },
+	{ key: item.neonColor, label: 'NEON COLOR' },
 	{ key: item.metalFinishing, label: 'METAL FINISHING' },
 	{ key: item.studLength, label: 'STUD LENGTH' },
 	{ key: item.spacerStandoffDistance, label: 'STANDOFF SPACE' },

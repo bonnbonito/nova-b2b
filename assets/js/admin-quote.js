@@ -510,7 +510,7 @@ function getSignageDetailFields(sign) {
 			label: 'WIRE TYPE',
 			value: sign.wireType ? sign.wireType : '',
 		},
-		{ label: 'COLOR', value: sign.neonColor ? sign.neonColor : '' },
+		{ label: 'NEON COLOR', value: sign.neonColor ? sign.neonColor : '' },
 
 		{ label: 'STUD LENGTH', value: sign.studLength ? sign.studLength : '' },
 		{

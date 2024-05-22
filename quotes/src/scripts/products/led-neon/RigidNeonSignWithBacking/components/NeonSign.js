@@ -34,7 +34,7 @@ export const NeonSign = ({ item }) => {
 	const [fileUrls, setFileUrls] = useState(item.fileUrls ?? []);
 	const [filePaths, setFilePaths] = useState(item.filePaths ?? []);
 	const [files, setFiles] = useState(item.files ?? []);
-	const [color, setColor] = useState(item.neonColor ?? '');
+	const [neonColor, setNeonColor] = useState(item.neonColor ?? '');
 	const [openColor, setOpenColor] = useState(false);
 	const [width, setWidth] = useState(item.neonSignWidth ?? '');
 	const [height, setHeight] = useState(item.neonSignHeight ?? '');
@@ -105,6 +105,7 @@ export const NeonSign = ({ item }) => {
 					...sign,
 					waterproof,
 					neonColor: color?.name,
+					color,
 					mounting,
 					fileNames,
 					filePaths,
@@ -152,7 +153,14 @@ export const NeonSign = ({ item }) => {
 		if (!mounting) missingFields.push('Select Mounting');
 		if (!remoteControl) missingFields.push('Select Remote Control');
 		if (!wireExitLocation) missingFields.push('Select Wire Exit Location');
-		if (!color) missingFields.push('Select Color');
+
+		if (!neonColor?.name) missingFields.push('Select Neon Color');
+
+		if (!color.name) missingFields.push('Select Color');
+
+		if (color?.name === 'Custom Color' && !customColor) {
+			missingFields.push('Add the Pantone color code of your custom color.');
+		}
 
 		if (!waterproof) missingFields.push('Select Environment');
 
@@ -183,12 +191,13 @@ export const NeonSign = ({ item }) => {
 	}, [
 		fileUrls,
 		color,
+		customColor,
+		neonColor,
 		waterproof,
 		mounting,
 		sets,
 		width,
 		height,
-		neonUsed,
 		neonUsed,
 		acrylicBackingOption,
 		remoteControl,
@@ -393,7 +402,7 @@ export const NeonSign = ({ item }) => {
 
 				<div className="px-[1px] relative" ref={colorRef}>
 					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-						Color
+						Neon Color
 					</label>
 					<div
 						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${

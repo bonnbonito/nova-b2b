@@ -22,7 +22,18 @@ import {
 	M4_STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
 
-import { colorOptions, remoteControlOptions } from '../../neonSignOptions';
+import { neonColorOptions, remoteControlOptions } from '../../neonSignOptions';
+
+const colorOptions = [
+	{
+		name: 'White',
+		color: '#ffffff',
+	},
+	{
+		name: 'Custom Color',
+		color: '',
+	},
+];
 
 const waterProofOptions = [
 	{
@@ -51,9 +62,12 @@ export const NeonSign = ({ item }) => {
 	const [filePaths, setFilePaths] = useState(item.filePaths ?? []);
 	const [rcOptions, setRcOptions] = useState(remoteControlOptions);
 	const [files, setFiles] = useState(item.files ?? []);
-	const [color, setColor] = useState(item.neonColor ?? '');
+	const [neonColor, setNeonColor] = useState(item.neonColor ?? '');
+	const [color, setColor] = useState(item.color ?? '');
+	const [openNeonColor, setOpenNeonColor] = useState(false);
 	const [openColor, setOpenColor] = useState(false);
 	const [width, setWidth] = useState(item.neonSignWidth ?? '');
+	const [customColor, setCustomColor] = useState(item.customColor ?? '');
 	const [neonLength8mm, setNeonLength8mm] = useState(item.neonLength8mm ?? '');
 	const [rigidStandOffSpace, setRigidStandOffSpace] = useState(
 		item.rigidStandOffSpace ?? ''
@@ -86,18 +100,19 @@ export const NeonSign = ({ item }) => {
 	const [mounting, setMounting] = useState(item.mounting ?? '');
 	const [sets, setSets] = useState(item.sets ?? 1);
 
+	const neonColorRef = useRef(null);
 	const colorRef = useRef(null);
 
 	const colorSelections = useMemo(
 		() => (
 			<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
-				{colorOptions.map((color) => (
+				{neonColorOptions.map((color) => (
 					<div
 						key={color.id} // Assuming each color has a unique 'id'
 						className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
 						onClick={() => {
-							setColor(color);
-							setOpenColor(false);
+							setNeonColor(color);
+							setOpenNeonColor(false);
 						}}
 					>
 						<span
@@ -114,7 +129,7 @@ export const NeonSign = ({ item }) => {
 				))}
 			</div>
 		),
-		[colorOptions]
+		[neonColorOptions]
 	);
 
 	const updateSignage = useCallback(() => {
@@ -123,7 +138,8 @@ export const NeonSign = ({ item }) => {
 				return {
 					...sign,
 					waterproof,
-					neonColor: color?.name,
+					neonColor: neonColor?.name,
+					color: color,
 					mounting,
 					fileNames,
 					filePaths,
@@ -137,6 +153,7 @@ export const NeonSign = ({ item }) => {
 					neonLength14mm,
 					neonLength20mm,
 					remoteControl,
+					customColor,
 					neonSignWidth: width,
 					neonSignHeight: height,
 					rigidStandOffSpace,
@@ -147,6 +164,8 @@ export const NeonSign = ({ item }) => {
 		setSignage(updatedSignage);
 	}, [
 		waterproof,
+		neonColor,
+		customColor,
 		color,
 		mounting,
 		fileNames,
@@ -192,6 +211,12 @@ export const NeonSign = ({ item }) => {
 		if (!remoteControl) missingFields.push('Select Remote Control');
 		if (!color) missingFields.push('Select Color');
 
+		if (color?.name === 'Custom Color' && !customColor) {
+			missingFields.push('Add the Pantone color code of your custom color.');
+		}
+
+		if (!neonColor) missingFields.push('Select Neon Color');
+
 		if (!waterproof) missingFields.push('Select Environment');
 
 		if (!fileUrls || fileUrls.length === 0)
@@ -221,6 +246,8 @@ export const NeonSign = ({ item }) => {
 	}, [
 		fileUrls,
 		color,
+		neonColor,
+		customColor,
 		waterproof,
 		mounting,
 		sets,
@@ -344,8 +371,9 @@ export const NeonSign = ({ item }) => {
 		}
 	};
 
-	useOutsideClick([colorRef], () => {
-		if (!openColor) return;
+	useOutsideClick([neonColorRef, colorRef], () => {
+		if (!openNeonColor && !openColor) return;
+		setOpenNeonColor(false);
 		setOpenColor(false);
 	});
 
@@ -470,6 +498,7 @@ export const NeonSign = ({ item }) => {
 						}`}
 						onClick={() => {
 							setOpenColor((prev) => !prev);
+							setOpenNeonColor(false);
 						}}
 					>
 						<span
@@ -483,7 +512,59 @@ export const NeonSign = ({ item }) => {
 						></span>
 						{color.name === '' ? 'CHOOSE OPTION' : color.name}
 					</div>
-					{openColor && colorSelections}
+					{openColor && (
+						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
+							{colorOptions.map((color) => {
+								return (
+									<div
+										className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
+										onClick={() => {
+											setColor(color);
+											setOpenColor(false);
+										}}
+									>
+										<span
+											className="w-[18px] h-[18px] inline-block rounded-full border"
+											style={{
+												background:
+													color.name == 'Custom Color'
+														? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
+														: color.color,
+											}}
+										></span>
+										{color.name}
+									</div>
+								);
+							})}
+						</div>
+					)}
+				</div>
+
+				<div className="px-[1px] relative" ref={neonColorRef}>
+					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+						Neon Color
+					</label>
+					<div
+						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
+							neonColor.name ? 'text-black' : 'text-[#dddddd]'
+						}`}
+						onClick={() => {
+							setOpenNeonColor((prev) => !prev);
+							setOpenColor(false);
+						}}
+					>
+						<span
+							className="rounded-full w-[18px] h-[18px] border mr-2"
+							style={{
+								background:
+									neonColor.name == 'Custom Color'
+										? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
+										: neonColor.color,
+							}}
+						></span>
+						{neonColor.name === '' ? 'CHOOSE OPTION' : neonColor.name}
+					</div>
+					{openNeonColor && colorSelections}
 				</div>
 
 				<Dropdown
@@ -495,6 +576,20 @@ export const NeonSign = ({ item }) => {
 				/>
 			</div>
 			<div className="quote-grid">
+				{color?.name == 'Custom Color' && (
+					<div className="px-[1px] col-span-4">
+						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+							Custom Color
+						</label>
+						<input
+							className="w-full py-4 px-2 border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400"
+							type="text"
+							value={customColor}
+							onChange={(e) => setCustomColor(e.target.value)}
+							placeholder="ADD THE PANTONE COLOR CODE"
+						/>
+					</div>
+				)}
 				<div className="px-[1px] col-span-4">
 					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
 						COMMENTS
