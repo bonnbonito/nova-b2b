@@ -19,7 +19,6 @@ import {
 
 import {
 	acrylicBackingOptions,
-	colorOptions,
 	neonSignsMountingOptions,
 	remoteControlOptions,
 	waterProofOptions,

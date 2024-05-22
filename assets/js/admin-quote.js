@@ -338,6 +338,44 @@ function getSignageDetailFields(sign) {
 		{ label: 'LOGO WIDTH', value: sign.width ? sign.width + '"' : '' },
 		{ label: 'LOGO HEIGHT', value: sign.height ? sign.height + '"' : '' },
 
+		{
+			label: 'NEON SIGN WIDTH',
+			value: sign.neonSignWidth ? sign.neonSignWidth : '',
+		},
+		{
+			label: 'NEON SIGN HEIGHT',
+			value: sign.neonSignHeight ? sign.neonSignHeight : '',
+		},
+		{ label: 'NEON USED(ft)', value: sign.neonUsed ? sign.neonUsed : '' },
+		{
+			label: 'NEON THICKNESS',
+			value: sign.neonThickness ? sign.neonThickness : '',
+		},
+		{
+			label: 'NEON LENGTH(ft)',
+			value: sign.neonLength ? sign.neonLength : '',
+		},
+		{
+			label: 'ENVIRONMENT',
+			value: sign.rigidWaterproof ? sign.rigidWaterproof : '',
+		},
+		{
+			label: '8mm NEON LENGTH',
+			value: sign.neonLength8mm ? sign.neonLength8mm : '',
+		},
+		{
+			label: '10mm NEON LENGTH',
+			value: sign.neonLength10mm ? sign.neonLength10mm : '',
+		},
+		{
+			label: '14mm NEON LENGTH',
+			value: sign.neonLength14mm ? sign.neonLength14mm : '',
+		},
+		{
+			label: '20mm NEON LENGTH',
+			value: sign.neonLength20mm ? sign.neonLength20mm : '',
+		},
+
 		{ label: 'LAYERS', value: sign.layers ? sign.layers : '' },
 
 		{
@@ -440,39 +478,6 @@ function getSignageDetailFields(sign) {
 			value: sign.acrylicReveal ? sign.acrylicReveal : '',
 		},
 
-		{
-			label: 'NEON SIGN WIDTH',
-			value: sign.neonSignWidth ? sign.neonSignWidth : '',
-		},
-		{
-			label: 'NEON SIGN HEIGHT',
-			value: sign.neonSignHeight ? sign.neonSignHeight : '',
-		},
-		{ label: 'NEON USED(ft)', value: sign.neonUsed ? sign.neonUsed : '' },
-		{
-			label: 'NEON THICKNESS',
-			value: sign.neonThickness ? sign.neonThickness : '',
-		},
-		{
-			label: 'NEON LENGTH(ft)',
-			value: sign.neonLength ? sign.neonLength : '',
-		},
-		{
-			label: '8mm NEON LENGTH',
-			value: sign.neonLength8mm ? sign.neonLength8mm : '',
-		},
-		{
-			label: '10mm NEON LENGTH',
-			value: sign.neonLength10mm ? sign.neonLength10mm : '',
-		},
-		{
-			label: '14mm NEON LENGTH',
-			value: sign.neonLength14mm ? sign.neonLength14mm : '',
-		},
-		{
-			label: '20mm NEON LENGTH',
-			value: sign.neonLength20mm ? sign.neonLength20mm : '',
-		},
 		{
 			label: 'ACRYLIC BACKING OPTION',
 			value: sign.acrylicBackingOption ? sign.acrylicBackingOption : '',

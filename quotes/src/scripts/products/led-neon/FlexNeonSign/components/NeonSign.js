@@ -19,7 +19,7 @@ import {
 
 import {
 	acrylicBackingOptions,
-	colorOptions,
+	neonColorOptions,
 	neonSignsMountingOptions,
 	remoteControlOptions,
 	waterProofOptions,
@@ -72,7 +72,7 @@ export const NeonSign = ({ item }) => {
 	const colorSelections = useMemo(
 		() => (
 			<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
-				{colorOptions.map((color) => (
+				{neonColorOptions.map((color) => (
 					<div
 						key={color.id} // Assuming each color has a unique 'id'
 						className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
@@ -95,7 +95,7 @@ export const NeonSign = ({ item }) => {
 				))}
 			</div>
 		),
-		[colorOptions]
+		[neonColorOptions]
 	);
 
 	const updateSignage = useCallback(() => {
@@ -244,6 +244,8 @@ export const NeonSign = ({ item }) => {
 
 		tempTotal += remotePrice;
 
+		tempTotal *= parseInt(sets);
+
 		return tempTotal.toFixed(2);
 	};
 
@@ -261,6 +263,7 @@ export const NeonSign = ({ item }) => {
 		acrylicBackingOption,
 		mounting,
 		remoteControl,
+		sets,
 	]);
 
 	const handleOnChangeSets = (e) => {

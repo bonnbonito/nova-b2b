@@ -126,6 +126,17 @@ export const neonColorOptions = [
 	},
 ];
 
+export const baseColorOptions = [
+	{
+		name: 'White',
+		color: '#ffffff',
+	},
+	{
+		name: 'Custom Color',
+		color: '',
+	},
+];
+
 export const waterProofOptions = [
 	{
 		option: INDOOR_NOT_WATERPROOF,

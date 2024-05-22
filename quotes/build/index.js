@@ -9411,7 +9411,7 @@ const NeonSign = ({
   const colorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const colorSelections = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
-  }, _neonSignOptions__WEBPACK_IMPORTED_MODULE_7__.colorOptions.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, _neonSignOptions__WEBPACK_IMPORTED_MODULE_7__.neonColorOptions.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     key: color.id // Assuming each color has a unique 'id'
     ,
     className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
@@ -9424,7 +9424,7 @@ const NeonSign = ({
     style: {
       background: color.name === 'Custom Color' ? `conic-gradient(from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
     }
-  }), color.name))), [_neonSignOptions__WEBPACK_IMPORTED_MODULE_7__.colorOptions]);
+  }), color.name))), [_neonSignOptions__WEBPACK_IMPORTED_MODULE_7__.neonColorOptions]);
   const updateSignage = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(() => {
     const updatedSignage = signage.map(sign => {
       if (sign.id === item.id) {
@@ -9517,6 +9517,7 @@ const NeonSign = ({
       remotePrice = 7;
     }
     tempTotal += remotePrice;
+    tempTotal *= parseInt(sets);
     return tempTotal.toFixed(2);
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
@@ -9525,7 +9526,7 @@ const NeonSign = ({
       setUsdPrice(total);
       setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.EXCHANGE_RATE).toFixed(2));
     }
-  }, [width, height, neonUsed, waterproof, acrylicBackingOption, mounting, remoteControl]);
+  }, [width, height, neonUsed, waterproof, acrylicBackingOption, mounting, remoteControl, sets]);
   const handleOnChangeSets = e => {
     const value = e.target.value;
     setSets(value);
@@ -9710,12 +9711,9 @@ function RigidNeonSignNoBacking() {
     neonLength20mm: '',
     remoteControl: 'No',
     neonColor: '',
-    color: {
-      name: 'White',
-      color: '#ffffff'
-    },
+    baseColor: 'White',
     customColor: '',
-    waterproof: '',
+    rigidWaterproof: '',
     comments: '',
     mounting: 'M4 Stud',
     usdPrice: 0,
@@ -9817,13 +9815,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const colorOptions = [{
-  name: 'White',
-  color: '#ffffff'
-}, {
-  name: 'Custom Color',
-  color: ''
-}];
 const waterProofOptions = [{
   option: _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.INDOOR_NOT_WATERPROOF
 }, {
@@ -9837,7 +9828,7 @@ const rigidNoBackingMountingOptions = [{
 const NeonSign = ({
   item
 }) => {
-  var _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$neonColor, _item$color, _item$neonSignWidth, _item$customColor, _item$neonLength8mm, _item$rigidStandOffSp, _item$neonLength10mm, _item$neonLength14mm, _item$neonLength20mm, _item$neonSignHeight, _item$usdPrice, _item$cadPrice, _item$remoteControl, _item$waterproof, _item$mounting, _item$sets;
+  var _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$neonColor, _item$baseColor, _item$neonSignWidth, _item$customColor, _item$neonLength8mm, _item$rigidStandOffSp, _item$neonLength10mm, _item$neonLength14mm, _item$neonLength20mm, _item$neonSignHeight, _item$usdPrice, _item$cadPrice, _item$remoteControl, _item$rigidWaterproof, _item$mounting, _item$sets;
   const {
     signage,
     setSignage,
@@ -9850,7 +9841,7 @@ const NeonSign = ({
   const [rcOptions, setRcOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_neonSignOptions__WEBPACK_IMPORTED_MODULE_7__.remoteControlOptions);
   const [files, setFiles] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$files = item.files) !== null && _item$files !== void 0 ? _item$files : []);
   const [neonColor, setNeonColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$neonColor = item.neonColor) !== null && _item$neonColor !== void 0 ? _item$neonColor : '');
-  const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$color = item.color) !== null && _item$color !== void 0 ? _item$color : '');
+  const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$baseColor = item.baseColor) !== null && _item$baseColor !== void 0 ? _item$baseColor : '');
   const [openNeonColor, setOpenNeonColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [openColor, setOpenColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$neonSignWidth = item.neonSignWidth) !== null && _item$neonSignWidth !== void 0 ? _item$neonSignWidth : '');
@@ -9870,7 +9861,7 @@ const NeonSign = ({
   const neonLength = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
     return (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.arrayRange)(2, 100, 2);
   }, []);
-  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : '');
+  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$rigidWaterproof = item.rigidWaterproof) !== null && _item$rigidWaterproof !== void 0 ? _item$rigidWaterproof : '');
   const [mounting, setMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
   const neonColorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
@@ -9896,9 +9887,9 @@ const NeonSign = ({
       if (sign.id === item.id) {
         return {
           ...sign,
-          waterproof,
+          rigidWaterproof: waterproof,
           neonColor: neonColor?.name,
-          color: color,
+          baseColor: color?.name,
           mounting,
           fileNames,
           filePaths,
@@ -9986,6 +9977,7 @@ const NeonSign = ({
       remotePrice = 16;
     }
     tempTotal += remotePrice;
+    tempTotal *= parseInt(sets);
     return tempTotal.toFixed(2);
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
@@ -9994,7 +9986,7 @@ const NeonSign = ({
       setUsdPrice(total);
       setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.EXCHANGE_RATE).toFixed(2));
     }
-  }, [width, height, waterproof, mounting, remoteControl, neonLength8mm, neonLength10mm, neonLength14mm, neonLength20mm, color, rigidStandOffSpace]);
+  }, [width, height, waterproof, mounting, remoteControl, neonLength8mm, neonLength10mm, neonLength14mm, neonLength20mm, color, rigidStandOffSpace, sets]);
   const handleOnChangeSets = e => {
     const value = e.target.value;
     setSets(value);
@@ -10005,6 +9997,12 @@ const NeonSign = ({
   const handleOnChangeWaterproof = e => {
     const target = e.target.value;
     if (target !== _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.INDOOR_NOT_WATERPROOF) {
+      if (neonLength8mm) {
+        setNeonLength8mm('');
+      }
+      if (neonLength10mm) {
+        setNeonLength10mm('');
+      }
       setRcOptions([{
         option: 'N/A'
       }]);
@@ -10053,6 +10051,15 @@ const NeonSign = ({
     onChange: e => setHeight(e.target.value),
     options: neonSignsWidthHeight
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Environment",
+    onChange: handleOnChangeWaterproof,
+    options: waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
+      value: option.option,
+      selected: option.option === waterproof
+    }, option.option)),
+    value: waterproof
+  }), waterproof !== 'Outdoor (Not Waterproof)' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "8mm Neon Length",
     value: neonLength8mm,
     onChange: e => setNeonLength8mm(e.target.value),
@@ -10062,7 +10069,7 @@ const NeonSign = ({
     value: neonLength10mm,
     onChange: e => setNeonLength10mm(e.target.value),
     options: neonLength
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "14mm Neon Length",
     value: neonLength14mm,
     onChange: e => setNeonLength14mm(e.target.value),
@@ -10072,15 +10079,6 @@ const NeonSign = ({
     value: neonLength20mm,
     onChange: e => setNeonLength20mm(e.target.value),
     options: neonLength
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Environment",
-    onChange: handleOnChangeWaterproof,
-    options: waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      key: option.option,
-      value: option.option,
-      selected: option.option === waterproof
-    }, option.option)),
-    value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting Options",
     onChange: handleOnChangeMounting,
@@ -10115,7 +10113,7 @@ const NeonSign = ({
     ref: colorRef
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
-  }, "Color"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "Base Color"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: `flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${color.name ? 'text-black' : 'text-[#dddddd]'}`,
     onClick: () => {
       setOpenColor(prev => !prev);
@@ -10128,7 +10126,7 @@ const NeonSign = ({
     }
   }), color.name === '' ? 'CHOOSE OPTION' : color.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
-  }, colorOptions.map(color => {
+  }, _neonSignOptions__WEBPACK_IMPORTED_MODULE_7__.baseColorOptions.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
       onClick: () => {
@@ -10389,7 +10387,7 @@ const NeonSign = ({
   const colorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const colorSelections = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
-  }, _neonSignOptions__WEBPACK_IMPORTED_MODULE_7__.colorOptions.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, colorOptions.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     key: color.id // Assuming each color has a unique 'id'
     ,
     className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
@@ -10402,7 +10400,7 @@ const NeonSign = ({
     style: {
       background: color.name === 'Custom Color' ? `conic-gradient(from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
     }
-  }), color.name))), [_neonSignOptions__WEBPACK_IMPORTED_MODULE_7__.colorOptions]);
+  }), color.name))), [colorOptions]);
   const updateSignage = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(() => {
     const updatedSignage = signage.map(sign => {
       if (sign.id === item.id) {
@@ -10656,6 +10654,7 @@ const NeonSign = ({
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   acrylicBackingOptions: () => (/* binding */ acrylicBackingOptions),
+/* harmony export */   baseColorOptions: () => (/* binding */ baseColorOptions),
 /* harmony export */   neonColorOptions: () => (/* binding */ neonColorOptions),
 /* harmony export */   neonSignsMountingOptions: () => (/* binding */ neonSignsMountingOptions),
 /* harmony export */   remoteControlOptions: () => (/* binding */ remoteControlOptions),
@@ -10746,6 +10745,13 @@ const neonColorOptions = [{
 }, {
   name: 'Green',
   color: '#008000'
+}];
+const baseColorOptions = [{
+  name: 'White',
+  color: '#ffffff'
+}, {
+  name: 'Custom Color',
+  color: ''
 }];
 const waterProofOptions = [{
   option: _utils_defaults__WEBPACK_IMPORTED_MODULE_0__.INDOOR_NOT_WATERPROOF
@@ -23873,6 +23879,36 @@ const allAttributes = item => [{
   key: item.height,
   label: 'LOGO HEIGHT'
 }, {
+  key: item.neonSignWidth,
+  label: 'NEON SIGN WIDTH'
+}, {
+  key: item.neonSignHeight,
+  label: 'NEON SIGN HEIGHT'
+}, {
+  key: item.neonUsed,
+  label: 'NEON USED(ft)'
+}, {
+  key: item.neonThickness,
+  label: 'NEON THICKNESS'
+}, {
+  key: item.neonLength,
+  label: 'NEON LENGTH(ft)'
+}, {
+  key: item.rigidWaterproof,
+  label: 'ENVIRONMENT'
+}, {
+  key: item.neonLength8mm,
+  label: '8mm NEON LENGTH'
+}, {
+  key: item.neonLength10mm,
+  label: '10mm NEON LENGTH'
+}, {
+  key: item.neonLength14mm,
+  label: '14mm NEON LENGTH'
+}, {
+  key: item.neonLength20mm,
+  label: '20mm NEON LENGTH'
+}, {
   key: item.metalFinish,
   label: 'FINISHING'
 }, {
@@ -23930,33 +23966,6 @@ const allAttributes = item => [{
   key: item.vinylWhite?.name,
   label: '3M VINYL',
   isVinyl: true
-}, {
-  key: item.neonSignWidth,
-  label: 'NEON SIGN WIDTH'
-}, {
-  key: item.neonSignHeight,
-  label: 'NEON SIGN HEIGHT'
-}, {
-  key: item.neonUsed,
-  label: 'NEON USED(ft)'
-}, {
-  key: item.neonThickness,
-  label: 'NEON THICKNESS'
-}, {
-  key: item.neonLength,
-  label: 'NEON LENGTH(ft)'
-}, {
-  key: item.neonLength8mm,
-  label: '8mm NEON LENGTH'
-}, {
-  key: item.neonLength10mm,
-  label: '10mm NEON LENGTH'
-}, {
-  key: item.neonLength14mm,
-  label: '14mm NEON LENGTH'
-}, {
-  key: item.neonLength20mm,
-  label: '20mm NEON LENGTH'
 }, {
   key: item.acrylicBackingOption,
   label: 'ACRYLIC BACKING OPTION'

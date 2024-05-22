@@ -22,18 +22,11 @@ import {
 	M4_STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
 
-import { neonColorOptions, remoteControlOptions } from '../../neonSignOptions';
-
-const colorOptions = [
-	{
-		name: 'White',
-		color: '#ffffff',
-	},
-	{
-		name: 'Custom Color',
-		color: '',
-	},
-];
+import {
+	baseColorOptions,
+	neonColorOptions,
+	remoteControlOptions,
+} from '../../neonSignOptions';
 
 const waterProofOptions = [
 	{
@@ -63,7 +56,7 @@ export const NeonSign = ({ item }) => {
 	const [rcOptions, setRcOptions] = useState(remoteControlOptions);
 	const [files, setFiles] = useState(item.files ?? []);
 	const [neonColor, setNeonColor] = useState(item.neonColor ?? '');
-	const [color, setColor] = useState(item.color ?? '');
+	const [color, setColor] = useState(item.baseColor ?? '');
 	const [openNeonColor, setOpenNeonColor] = useState(false);
 	const [openColor, setOpenColor] = useState(false);
 	const [width, setWidth] = useState(item.neonSignWidth ?? '');
@@ -96,7 +89,7 @@ export const NeonSign = ({ item }) => {
 		return arrayRange(2, 100, 2);
 	}, []);
 
-	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
+	const [waterproof, setWaterproof] = useState(item.rigidWaterproof ?? '');
 	const [mounting, setMounting] = useState(item.mounting ?? '');
 	const [sets, setSets] = useState(item.sets ?? 1);
 
@@ -137,9 +130,9 @@ export const NeonSign = ({ item }) => {
 			if (sign.id === item.id) {
 				return {
 					...sign,
-					waterproof,
+					rigidWaterproof: waterproof,
 					neonColor: neonColor?.name,
-					color: color,
+					baseColor: color?.name,
 					mounting,
 					fileNames,
 					filePaths,
@@ -303,6 +296,8 @@ export const NeonSign = ({ item }) => {
 
 		tempTotal += remotePrice;
 
+		tempTotal *= parseInt(sets);
+
 		return tempTotal.toFixed(2);
 	};
 
@@ -324,6 +319,7 @@ export const NeonSign = ({ item }) => {
 		neonLength20mm,
 		color,
 		rigidStandOffSpace,
+		sets,
 	]);
 
 	const handleOnChangeSets = (e) => {
@@ -339,6 +335,14 @@ export const NeonSign = ({ item }) => {
 		const target = e.target.value;
 
 		if (target !== INDOOR_NOT_WATERPROOF) {
+			if (neonLength8mm) {
+				setNeonLength8mm('');
+			}
+
+			if (neonLength10mm) {
+				setNeonLength10mm('');
+			}
+
 			setRcOptions([
 				{
 					option: 'N/A',
@@ -384,6 +388,7 @@ export const NeonSign = ({ item }) => {
 					PRODUCT LINE: <span className="font-title">{item.productLine}</span>
 				</div>
 			)}
+
 			<div className="quote-grid mb-6">
 				<Dropdown
 					title="Neon Sign Width"
@@ -400,31 +405,6 @@ export const NeonSign = ({ item }) => {
 				/>
 
 				<Dropdown
-					title="8mm Neon Length"
-					value={neonLength8mm}
-					onChange={(e) => setNeonLength8mm(e.target.value)}
-					options={neonLength}
-				/>
-				<Dropdown
-					title="10mm Neon Length"
-					value={neonLength10mm}
-					onChange={(e) => setNeonLength10mm(e.target.value)}
-					options={neonLength}
-				/>
-				<Dropdown
-					title="14mm Neon Length"
-					value={neonLength14mm}
-					onChange={(e) => setNeonLength14mm(e.target.value)}
-					options={neonLength}
-				/>
-				<Dropdown
-					title="20mm Neon Length"
-					value={neonLength20mm}
-					onChange={(e) => setNeonLength20mm(e.target.value)}
-					options={neonLength}
-				/>
-
-				<Dropdown
 					title="Environment"
 					onChange={handleOnChangeWaterproof}
 					options={waterProofOptions.map((option) => (
@@ -437,6 +417,36 @@ export const NeonSign = ({ item }) => {
 						</option>
 					))}
 					value={waterproof}
+				/>
+
+				{waterproof !== 'Outdoor (Not Waterproof)' && (
+					<>
+						<Dropdown
+							title="8mm Neon Length"
+							value={neonLength8mm}
+							onChange={(e) => setNeonLength8mm(e.target.value)}
+							options={neonLength}
+						/>
+						<Dropdown
+							title="10mm Neon Length"
+							value={neonLength10mm}
+							onChange={(e) => setNeonLength10mm(e.target.value)}
+							options={neonLength}
+						/>
+					</>
+				)}
+
+				<Dropdown
+					title="14mm Neon Length"
+					value={neonLength14mm}
+					onChange={(e) => setNeonLength14mm(e.target.value)}
+					options={neonLength}
+				/>
+				<Dropdown
+					title="20mm Neon Length"
+					value={neonLength20mm}
+					onChange={(e) => setNeonLength20mm(e.target.value)}
+					options={neonLength}
 				/>
 
 				<Dropdown
@@ -490,7 +500,7 @@ export const NeonSign = ({ item }) => {
 
 				<div className="px-[1px] relative" ref={colorRef}>
 					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-						Color
+						Base Color
 					</label>
 					<div
 						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
@@ -514,7 +524,7 @@ export const NeonSign = ({ item }) => {
 					</div>
 					{openColor && (
 						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
-							{colorOptions.map((color) => {
+							{baseColorOptions.map((color) => {
 								return (
 									<div
 										className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
