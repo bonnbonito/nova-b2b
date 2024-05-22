@@ -1637,6 +1637,7 @@ h6 {
 			'paintedPCFinish'        => 'PAINTED PC FINISH',
 			'waterproof'             => 'ENVIRONMENT',
 			'mounting'               => 'MOUNTING',
+			'rigidStandOffSpace'     => 'STANDOFF SPACE',
 			'remoteControl'          => 'REMOTE CONTROL',
 			'wireExitLocation'       => 'WIRE EXIT LOCATION',
 			'wireType'               => 'WIRE TYPE',

@@ -493,6 +493,10 @@ function getSignageDetailFields(sign) {
 		{ label: 'ENVIRONMENT', value: sign.waterproof ? sign.waterproof : '' },
 
 		{ label: 'MOUNTING', value: sign.mounting ? sign.mounting : '' },
+		{
+			label: 'STANDOFF SPACE',
+			value: sign.rigidStandOffSpace ? sign.rigidStandOffSpace : '',
+		},
 
 		{
 			label: 'REMOTE CONTROL',

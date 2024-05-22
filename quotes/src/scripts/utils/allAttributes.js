@@ -54,6 +54,7 @@ export const allAttributes = (item) => [
 	{ key: item.paintedPCFinish, label: 'PAINTED PC FINISH' },
 	{ key: item.waterproof, label: 'ENVIRONMENT' },
 	{ key: item.mounting, label: 'MOUNTING' },
+	{ key: item.rigidStandOffSpace, label: 'STANDOFF SPACE' },
 	{ key: item.remoteControl, label: 'REMOTE CONTROL' },
 	{ key: item.wireExitLocation, label: 'WIRE EXIT LOCATION' },
 	{ key: item.wireType, label: 'WIRE TYPE' },

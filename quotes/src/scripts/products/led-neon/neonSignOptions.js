@@ -27,6 +27,30 @@ export const neonSignsMountingOptions = [
 	},
 ];
 
+export const rigidNoBackingMountingOptions = [
+	{
+		option: 'M4 Stud 1.5"',
+	},
+	{
+		option: 'M4 Stud with Standoff Space - 0.5"',
+	},
+	{
+		option: 'M4 Stud with Standoff Space - 1"',
+	},
+	{
+		option: 'M4 Stud with Standoff Space - 1.5"',
+	},
+	{
+		option: 'M4 Stud with Standoff Space - 2"',
+	},
+	{
+		option: 'M4 Stud with Standoff Space - 3"',
+	},
+	{
+		option: 'M4 Stud with Standoff Space - 4"',
+	},
+];
+
 export const remoteControlOptions = [
 	{
 		option: 'Yes',

@@ -90,6 +90,7 @@ export function Letters({ item }) {
 				const response = await fetch(
 					NovaQuote.letters_multi_pricing_api + item.product
 				);
+				console.log('pricing', response);
 				const data = await response.json();
 				setLetterPricingTables(data);
 			} catch (error) {
@@ -459,7 +460,7 @@ export function Letters({ item }) {
 	]);
 
 	useEffect(() => {
-		if (depth?.value) {
+		if (depth?.value && letterPricingTables) {
 			const table = convert_json(
 				getLetterPricingTableByTitle(depth?.depth, letterPricingTables)
 			);
@@ -575,6 +576,7 @@ export function Letters({ item }) {
 		sets,
 		font,
 		mounting,
+		letterPricingTables,
 	]);
 
 	if (selectedFinishing === 'Painted') {

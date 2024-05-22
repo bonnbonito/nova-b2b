@@ -5,3 +5,4 @@ export const FROSTED_CLEAR_COLOR = 'Frosted Clear';
 export const STUD_WITH_SPACER = 'Stud with spacer';
 export const STUD_MOUNT = 'Stud Mount';
 export const EXCHANGE_RATE = 1.3;
+export const M4_STUD_WITH_SPACER = 'M4 Stud with Spacer';

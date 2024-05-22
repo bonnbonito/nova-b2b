@@ -10,21 +10,37 @@ import { useAppContext } from '../../../../AppProvider';
 import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
 import useOutsideClick from '../../../../utils/ClickOutside';
-import { arrayRange, setOptions } from '../../../../utils/SignageOptions';
+import {
+	arrayRange,
+	setOptions,
+	spacerStandoffDefaultOptions,
+} from '../../../../utils/SignageOptions';
 
 import {
 	EXCHANGE_RATE,
 	INDOOR_NOT_WATERPROOF,
+	M4_STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
 
-import {
-	acrylicBackingOptions,
-	colorOptions,
-	neonSignsMountingOptions,
-	remoteControlOptions,
-	waterProofOptions,
-	wireExitLocationOptions,
-} from '../../neonSignOptions';
+import { colorOptions, remoteControlOptions } from '../../neonSignOptions';
+
+const waterProofOptions = [
+	{
+		option: INDOOR_NOT_WATERPROOF,
+	},
+	{
+		option: 'Outdoor (Not Waterproof)',
+	},
+];
+
+const rigidNoBackingMountingOptions = [
+	{
+		option: 'M4 Stud',
+	},
+	{
+		option: M4_STUD_WITH_SPACER,
+	},
+];
 
 export const NeonSign = ({ item }) => {
 	const { signage, setSignage, setMissing, updateSignageItem } =
@@ -33,34 +49,37 @@ export const NeonSign = ({ item }) => {
 	const [fileNames, setFileNames] = useState(item.fileNames ?? []);
 	const [fileUrls, setFileUrls] = useState(item.fileUrls ?? []);
 	const [filePaths, setFilePaths] = useState(item.filePaths ?? []);
+	const [rcOptions, setRcOptions] = useState(remoteControlOptions);
 	const [files, setFiles] = useState(item.files ?? []);
 	const [color, setColor] = useState(item.neonColor ?? '');
 	const [openColor, setOpenColor] = useState(false);
 	const [width, setWidth] = useState(item.neonSignWidth ?? '');
+	const [neonLength8mm, setNeonLength8mm] = useState(item.neonLength8mm ?? '');
+	const [rigidStandOffSpace, setRigidStandOffSpace] = useState(
+		item.rigidStandOffSpace ?? ''
+	);
+	const [neonLength10mm, setNeonLength10mm] = useState(
+		item.neonLength10mm ?? ''
+	);
+	const [neonLength14mm, setNeonLength14mm] = useState(
+		item.neonLength14mm ?? ''
+	);
+	const [neonLength20mm, setNeonLength20mm] = useState(
+		item.neonLength20mm ?? ''
+	);
 	const [height, setHeight] = useState(item.neonSignHeight ?? '');
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
-	const [neonUsed, setNeonUsed] = useState(item.neonUsed ?? '');
 	const [remoteControl, setRemoteControl] = useState(
 		item.remoteControl ?? 'No'
 	);
-	const [wireExitLocation, setWireExitLocation] = useState(
-		item.wireExitLocation ?? 'Bottom Right'
-	);
-	const [acrylicBackingOption, setAcrylicBackingOption] = useState(
-		item.acrylicBackingOption ?? ''
-	);
-
-	const acrylicBackingSelections = acrylicBackingOptions.map((item) => (
-		<option value={item.option}>{item.option}</option>
-	));
 
 	const neonSignsWidthHeight = useMemo(() => {
-		return arrayRange(5, 40, 1);
+		return arrayRange(5, 95, 1);
 	}, []);
 
-	const neonUsedOptions = useMemo(() => {
-		return arrayRange(10, 60, 2);
+	const neonLength = useMemo(() => {
+		return arrayRange(2, 100, 2);
 	}, []);
 
 	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
@@ -113,11 +132,14 @@ export const NeonSign = ({ item }) => {
 					sets,
 					usdPrice,
 					cadPrice,
-					neonUsed,
+					neonLength8mm,
+					neonLength10mm,
+					neonLength14mm,
+					neonLength20mm,
+					remoteControl,
 					neonSignWidth: width,
 					neonSignHeight: height,
-					acrylicBackingOption,
-					wireExitLocation,
+					rigidStandOffSpace,
 				};
 			}
 			return sign;
@@ -134,10 +156,12 @@ export const NeonSign = ({ item }) => {
 		sets,
 		width,
 		height,
-		neonUsed,
-		acrylicBackingOption,
 		remoteControl,
-		wireExitLocation,
+		neonLength8mm,
+		neonLength14mm,
+		neonLength10mm,
+		neonLength20mm,
+		rigidStandOffSpace,
 		usdPrice,
 		cadPrice,
 	]);
@@ -147,11 +171,20 @@ export const NeonSign = ({ item }) => {
 
 		if (!width) missingFields.push('Select Neon Sign Width');
 		if (!height) missingFields.push('Select Neon Sign Height');
-		if (!neonUsed) missingFields.push('Select Neon Used(ft)');
-		if (!acrylicBackingOption) missingFields.push('Acrylic Backing Option');
+
+		if (
+			!neonLength8mm &&
+			!neonLength14mm &&
+			!neonLength10mm &&
+			!neonLength20mm
+		) {
+			missingFields.push(
+				'Set one of 8mm Neon Length, 10mm Neon Length, 14mm Neon Length, 20mm Neon Length'
+			);
+		}
+
 		if (!mounting) missingFields.push('Select Mounting');
 		if (!remoteControl) missingFields.push('Select Remote Control');
-		if (!wireExitLocation) missingFields.push('Select Wire Exit Location');
 		if (!color) missingFields.push('Select Color');
 
 		if (!waterproof) missingFields.push('Select Waterproof');
@@ -188,11 +221,12 @@ export const NeonSign = ({ item }) => {
 		sets,
 		width,
 		height,
-		neonUsed,
-		neonUsed,
-		acrylicBackingOption,
 		remoteControl,
-		wireExitLocation,
+		neonLength8mm,
+		neonLength10mm,
+		neonLength14mm,
+		neonLength20mm,
+		rigidStandOffSpace,
 	]);
 
 	useEffect(() => {
@@ -201,45 +235,38 @@ export const NeonSign = ({ item }) => {
 	}, [updateSignage, checkAndAddMissingFields]);
 
 	const computePricing = () => {
-		if (!width || !height || !neonUsed || !waterproof || !acrylicBackingOption)
-			return 0;
+		if (!width || !height) return 0;
+
+		const L1 = neonLength8mm ? parseInt(neonLength8mm) : 0;
+		const L2 = neonLength10mm ? parseInt(neonLength10mm) : 0;
+		const L3 = neonLength14mm ? parseInt(neonLength14mm) : 0;
+		const L4 = neonLength20mm ? parseInt(neonLength20mm) : 0;
+
 		let tempTotal =
-			(parseInt(width) + 3) * (parseInt(height) + 3) * 0.11 +
-			parseInt(neonUsed) * 6.9 +
-			25;
+			L1 * 15 +
+			L2 * 13 +
+			L3 * 15 +
+			L4 * 25 +
+			parseInt(width) * parseInt(height) * 0.2 +
+			10;
 
-		tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.15;
-
-		let additional = 0;
-
-		if (acrylicBackingOption === 'UV Printed') {
-			additional = parseInt(width) * parseInt(height) * 0.25;
-			tempTotal += additional;
-		}
-		if (acrylicBackingOption === 'Frosted Clear Backing') {
-			additional = parseInt(width) * parseInt(height) * 0.1;
-			tempTotal += additional;
-		}
-		if (acrylicBackingOption === 'Matte Black Backing') {
-			additional = parseInt(width) * parseInt(height) * 0.17;
-			tempTotal += additional;
+		if (waterproof) {
+			tempTotal *=
+				waterproof === INDOOR_NOT_WATERPROOF || waterproof === 'N/A' ? 1 : 1.35;
 		}
 
-		let mountingPrice = 0;
-
-		if (mounting === 'Advertising Nails(1.5")') {
-			mountingPrice = 8;
-		}
-		if (mounting === 'Hanging Chain') {
-			mountingPrice = 10;
+		if (mounting === M4_STUD_WITH_SPACER) {
+			tempTotal *= 1.05;
 		}
 
-		tempTotal += mountingPrice;
+		if (color?.name && color?.name !== 'White') {
+			tempTotal *= 1.1;
+		}
 
 		let remotePrice = 0;
 
 		if (remoteControl === 'Yes') {
-			remotePrice = 7;
+			remotePrice = 16;
 		}
 
 		tempTotal += remotePrice;
@@ -256,11 +283,15 @@ export const NeonSign = ({ item }) => {
 	}, [
 		width,
 		height,
-		neonUsed,
 		waterproof,
-		acrylicBackingOption,
 		mounting,
 		remoteControl,
+		neonLength8mm,
+		neonLength10mm,
+		neonLength14mm,
+		neonLength20mm,
+		color,
+		rigidStandOffSpace,
 	]);
 
 	const handleOnChangeSets = (e) => {
@@ -268,26 +299,44 @@ export const NeonSign = ({ item }) => {
 		setSets(value);
 	};
 
-	const handleOnChangeRemote = (e) => {
-		const value = e.target.value;
-		setRemoteControl(value);
-	};
-
-	const handleOnChangeWireExitLocation = (e) => {
-		const value = e.target.value;
-		setWireExitLocation(value);
-	};
-
 	const handleComments = (e) => {
 		updateSignageItem(item.id, 'comments', e.target.value);
 	};
 
 	const handleOnChangeWaterproof = (e) => {
-		setWaterproof(e.target.value);
+		const target = e.target.value;
+
+		if (target !== INDOOR_NOT_WATERPROOF) {
+			setRcOptions([
+				{
+					option: 'N/A',
+				},
+			]);
+			setRemoteControl('N/A');
+		} else {
+			if (remoteControl === 'N/A') {
+				setRemoteControl('No');
+			}
+			setRcOptions(remoteControlOptions);
+		}
+		setWaterproof(target);
+	};
+
+	const handleOnChangeRemote = (e) => {
+		const value = e.target.value;
+		setRemoteControl(value);
+	};
+
+	const handleOnSpacer = (e) => {
+		setRigidStandOffSpace(e.target.value);
 	};
 
 	const handleOnChangeMounting = (e) => {
-		setMounting(e.target.value);
+		const target = e.target.value;
+		setMounting(target);
+		if (target === M4_STUD_WITH_SPACER) {
+			setRigidStandOffSpace('1.5"');
+		}
 	};
 
 	useOutsideClick([colorRef], () => {
@@ -309,23 +358,37 @@ export const NeonSign = ({ item }) => {
 					onChange={(e) => setWidth(e.target.value)}
 					options={neonSignsWidthHeight}
 				/>
+
 				<Dropdown
 					title="Neon Sign Height"
 					value={height}
 					onChange={(e) => setHeight(e.target.value)}
 					options={neonSignsWidthHeight}
 				/>
+
 				<Dropdown
-					title="Neon Used(ft)"
-					value={neonUsed}
-					onChange={(e) => setNeonUsed(e.target.value)}
-					options={neonUsedOptions}
+					title="8mm Neon Length"
+					value={neonLength8mm}
+					onChange={(e) => setNeonLength8mm(e.target.value)}
+					options={neonLength}
 				/>
 				<Dropdown
-					title="Acrylic Backing"
-					value={acrylicBackingOption}
-					onChange={(e) => setAcrylicBackingOption(e.target.value)}
-					options={acrylicBackingSelections}
+					title="10mm Neon Length"
+					value={neonLength10mm}
+					onChange={(e) => setNeonLength10mm(e.target.value)}
+					options={neonLength}
+				/>
+				<Dropdown
+					title="14mm Neon Length"
+					value={neonLength14mm}
+					onChange={(e) => setNeonLength14mm(e.target.value)}
+					options={neonLength}
+				/>
+				<Dropdown
+					title="20mm Neon Length"
+					value={neonLength20mm}
+					onChange={(e) => setNeonLength20mm(e.target.value)}
+					options={neonLength}
 				/>
 
 				<Dropdown
@@ -346,7 +409,7 @@ export const NeonSign = ({ item }) => {
 				<Dropdown
 					title="Mounting Options"
 					onChange={handleOnChangeMounting}
-					options={neonSignsMountingOptions.map((option) => (
+					options={rigidNoBackingMountingOptions.map((option) => (
 						<option
 							key={option.option}
 							value={option.option}
@@ -359,10 +422,27 @@ export const NeonSign = ({ item }) => {
 					onlyValue={true}
 				/>
 
+				{mounting === M4_STUD_WITH_SPACER && (
+					<Dropdown
+						title="Standoff Space"
+						onChange={handleOnSpacer}
+						options={spacerStandoffDefaultOptions.map((option) => (
+							<option
+								key={option.value}
+								value={option.value}
+								selected={option.value === rigidStandOffSpace}
+							>
+								{option.value}
+							</option>
+						))}
+						value={rigidStandOffSpace}
+					/>
+				)}
+
 				<Dropdown
 					title="Remote Control"
 					onChange={handleOnChangeRemote}
-					options={remoteControlOptions.map((option) => (
+					options={rcOptions.map((option) => (
 						<option
 							key={option.option}
 							value={option.option}
@@ -372,22 +452,6 @@ export const NeonSign = ({ item }) => {
 						</option>
 					))}
 					value={remoteControl}
-					onlyValue={true}
-				/>
-
-				<Dropdown
-					title="Wire Exit Location"
-					onChange={handleOnChangeWireExitLocation}
-					options={wireExitLocationOptions.map((option) => (
-						<option
-							key={option.option}
-							value={option.option}
-							selected={option.option === wireExitLocation}
-						>
-							{option.option}
-						</option>
-					))}
-					value={wireExitLocation}
 					onlyValue={true}
 				/>
 

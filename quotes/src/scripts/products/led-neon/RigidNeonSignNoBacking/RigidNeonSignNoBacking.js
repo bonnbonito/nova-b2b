@@ -25,7 +25,7 @@ export default function RigidNeonSignNoBacking() {
 		neonColor: '',
 		waterproof: '',
 		comments: '',
-		mounting: 'M4 Stud 1.5"',
+		mounting: 'M4 Stud',
 		usdPrice: 0,
 		cadPrice: 0,
 		filePaths: [],
