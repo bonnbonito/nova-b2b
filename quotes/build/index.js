@@ -3346,7 +3346,7 @@ function QuoteView() {
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h6", {
     className: "m-0 text-nova-primary"
   }, "STATUS:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "text-sm font-normal font-thin"
+    className: "text-sm"
   }, NovaAccount?.quote_status?.label))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "mb-10 block"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", {
@@ -5367,7 +5367,7 @@ function Letters({
       missingFields.push('Add the Pantone color code of your custom color.');
     }
     if (!selectedFinishing) missingFields.push('Select Finishing');
-    if (!waterproof) missingFields.push('Select Waterproof');
+    if (!waterproof) missingFields.push('Select Environment');
     if (!selectedMounting) missingFields.push('Select Mounting');
     if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT) {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -5885,7 +5885,7 @@ function Logo({
     if (!selectedThickness) missingFields.push('Select Acrylic Thickness');
     if (!width) missingFields.push('Select Logo Width');
     if (!height) missingFields.push('Select Logo Height');
-    if (!waterproof) missingFields.push('Select Waterproof');
+    if (!waterproof) missingFields.push('Select Environment');
     if (!selectedMounting) missingFields.push('Select Mounting');
     if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -7243,7 +7243,7 @@ const Letters = ({
     if (acrylicBase?.name === 'Custom Color' && !customColor) {
       missingFields.push('Add the Pantone color code of your custom color.');
     }
-    if (!waterproof) missingFields.push('Select Waterproof');
+    if (!waterproof) missingFields.push('Select Environment');
     if (!selectedMounting) missingFields.push('Select Mounting');
     if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER) {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -7741,7 +7741,7 @@ function Logo({
     if (acrylicBase?.name === 'Custom Color' && !customColor) {
       missingFields.push('Add the Pantone color code of your custom color.');
     }
-    if (!waterproof) missingFields.push('Select Waterproof');
+    if (!waterproof) missingFields.push('Select Environment');
     if (!selectedMounting) missingFields.push('Select Mounting');
     if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.STUD_WITH_SPACER) {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -9462,7 +9462,7 @@ const NeonSign = ({
     if (!remoteControl) missingFields.push('Select Remote Control');
     if (!wireExitLocation) missingFields.push('Select Wire Exit Location');
     if (!color) missingFields.push('Select Color');
-    if (!waterproof) missingFields.push('Select Waterproof');
+    if (!waterproof) missingFields.push('Select Environment');
     if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
     if (!sets) missingFields.push('Select Quantity');
     setMissing(prevMissing => {
@@ -9913,9 +9913,12 @@ const NeonSign = ({
       missingFields.push('Set one of 8mm Neon Length, 10mm Neon Length, 14mm Neon Length, 20mm Neon Length');
     }
     if (!mounting) missingFields.push('Select Mounting');
+    if (mounting && mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.M4_STUD_WITH_SPACER) {
+      if (!rigidStandOffSpace) missingFields.push('Select Standoff Space');
+    }
     if (!remoteControl) missingFields.push('Select Remote Control');
     if (!color) missingFields.push('Select Color');
-    if (!waterproof) missingFields.push('Select Waterproof');
+    if (!waterproof) missingFields.push('Select Environment');
     if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
     if (!sets) missingFields.push('Select Quantity');
     setMissing(prevMissing => {
@@ -10372,7 +10375,7 @@ const NeonSign = ({
     if (!remoteControl) missingFields.push('Select Remote Control');
     if (!wireExitLocation) missingFields.push('Select Wire Exit Location');
     if (!color) missingFields.push('Select Color');
-    if (!waterproof) missingFields.push('Select Waterproof');
+    if (!waterproof) missingFields.push('Select Environment');
     if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
     if (!sets) missingFields.push('Select Quantity');
     setMissing(prevMissing => {
@@ -16380,7 +16383,7 @@ function Letters({
     if (selectedFinishing === 'Metal Finish') {
       if (!stainLessMetalFinish) missingFields.push('Select Metal Finishing Options');
     }
-    if (!waterproof) missingFields.push('Select Waterproof');
+    if (!waterproof) missingFields.push('Select Environment');
     if (!mounting) missingFields.push('Select Mounting');
     if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER) {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -16856,7 +16859,7 @@ function Logo({
     if (selectedFinishing === 'Metal Finish') {
       if (!stainLessMetalFinish) missingFields.push('Select Metal Finishing Options');
     }
-    if (!waterproof) missingFields.push('Select Waterproof');
+    if (!waterproof) missingFields.push('Select Environment');
     if (!mounting) missingFields.push('Select Mounting');
     if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -17634,7 +17637,7 @@ function Letters({
     if (selectedFinishing === 'Painted' && color?.name === 'Custom Color' && !customColor) {
       missingFields.push('Add the Pantone color code of your custom color.');
     }
-    if (!waterproof) missingFields.push('Select Waterproof');
+    if (!waterproof) missingFields.push('Select Environment');
     if (!mounting) missingFields.push('Select Mounting');
     if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -18096,7 +18099,7 @@ function Logo({
     if (!selectedThickness) missingFields.push('Select Acrylic Thickness');
     if (!width) missingFields.push('Select Logo Width');
     if (!height) missingFields.push('Select Logo Height');
-    if (!waterproof) missingFields.push('Select Waterproof');
+    if (!waterproof) missingFields.push('Select Environment');
     if (!selectedFinishing) missingFields.push('Select Finishing');
     if (selectedFinishing === 'Painted') {
       if (!color.name) missingFields.push('Select Color');
@@ -18896,7 +18899,7 @@ function Letters({
     if (stainLessMetalFinish && stainLessMetalFinish === 'Stainless Steel Polished') {
       if (!stainlessSteelPolished) missingFields.push('Select Steel Polished');
     }
-    if (!waterproof) missingFields.push('Select Waterproof');
+    if (!waterproof) missingFields.push('Select Environment');
     if (!mounting) missingFields.push('Select Installation');
     if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER) {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -19407,7 +19410,7 @@ function Logo({
     if (stainLessMetalFinish && stainLessMetalFinish === 'Stainless Steel Polished') {
       if (!stainlessSteelPolished) missingFields.push('Select Steel Polished');
     }
-    if (!waterproof) missingFields.push('Select Waterproof');
+    if (!waterproof) missingFields.push('Select Environment');
     if (!mounting) missingFields.push('Select Installation');
     if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -20357,7 +20360,7 @@ function Letters({
       missingFields.push('Add the Pantone color code of your custom color.');
     }
     if (!selectedFinishing) missingFields.push('Select Finishing');
-    if (!waterproof) missingFields.push('Select Waterproof');
+    if (!waterproof) missingFields.push('Select Environment');
     if (!mounting) missingFields.push('Select Mounting');
     if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER) {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -20851,7 +20854,7 @@ function Logo({
     if (pvcBaseColor?.name === 'Custom Color' && !customColor) {
       missingFields.push('Add the Pantone color code of your custom color.');
     }
-    if (!waterproof) missingFields.push('Select Waterproof');
+    if (!waterproof) missingFields.push('Select Environment');
     if (!mounting) missingFields.push('Select Mounting');
     if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -21577,7 +21580,7 @@ function Letters({
       missingFields.push('Add the Pantone color code of your custom color.');
     }
     if (!selectedFinishing) missingFields.push('Select Finishing');
-    if (!waterproof) missingFields.push('Select Waterproof');
+    if (!waterproof) missingFields.push('Select Environment');
     if (!mounting) missingFields.push('Select Mounting');
     if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER) {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -22057,7 +22060,7 @@ function Logo({
     if (color?.name === 'Custom Color' && !customColor) {
       missingFields.push('Add the Pantone color code of your custom color.');
     }
-    if (!waterproof) missingFields.push('Select Waterproof');
+    if (!waterproof) missingFields.push('Select Environment');
     if (!mounting) missingFields.push('Select Mounting');
     if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -22641,7 +22644,7 @@ function Logo({
     if (!selectedThickness) missingFields.push('Select Acrylic Thickness');
     if (!width) missingFields.push('Select Logo Width');
     if (!height) missingFields.push('Select Logo Height');
-    if (!waterproof) missingFields.push('Select Waterproof');
+    if (!waterproof) missingFields.push('Select Environment');
     if (!mounting) missingFields.push('Select mounting');
     if (!pvcBaseColor?.name) missingFields.push('Select PVC Base Color');
     if (pvcBaseColor?.name === 'Custom Color' && !customColor) {

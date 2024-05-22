@@ -406,7 +406,7 @@ export function Letters({ item }) {
 		}
 
 		if (!selectedFinishing) missingFields.push('Select Finishing');
-		if (!waterproof) missingFields.push('Select Waterproof');
+		if (!waterproof) missingFields.push('Select Environment');
 		if (!mounting) missingFields.push('Select Mounting');
 
 		if (mounting === STUD_WITH_SPACER) {

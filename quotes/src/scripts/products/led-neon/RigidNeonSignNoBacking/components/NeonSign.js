@@ -184,10 +184,15 @@ export const NeonSign = ({ item }) => {
 		}
 
 		if (!mounting) missingFields.push('Select Mounting');
+
+		if (mounting && mounting === M4_STUD_WITH_SPACER) {
+			if (!rigidStandOffSpace) missingFields.push('Select Standoff Space');
+		}
+
 		if (!remoteControl) missingFields.push('Select Remote Control');
 		if (!color) missingFields.push('Select Color');
 
-		if (!waterproof) missingFields.push('Select Waterproof');
+		if (!waterproof) missingFields.push('Select Environment');
 
 		if (!fileUrls || fileUrls.length === 0)
 			missingFields.push('Upload a PDF/AI File');

@@ -159,7 +159,7 @@ export default function QuoteView() {
 						<div className="flex gap-2 items-center mb-4 ">
 							<h6 className="m-0 text-nova-primary">
 								STATUS:{' '}
-								<span className="text-sm font-normal font-thin">
+								<span className="text-sm">
 									{NovaAccount?.quote_status?.label}
 								</span>
 							</h6>

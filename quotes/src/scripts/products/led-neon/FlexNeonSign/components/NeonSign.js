@@ -154,7 +154,7 @@ export const NeonSign = ({ item }) => {
 		if (!wireExitLocation) missingFields.push('Select Wire Exit Location');
 		if (!color) missingFields.push('Select Color');
 
-		if (!waterproof) missingFields.push('Select Waterproof');
+		if (!waterproof) missingFields.push('Select Environment');
 
 		if (!fileUrls || fileUrls.length === 0)
 			missingFields.push('Upload a PDF/AI File');

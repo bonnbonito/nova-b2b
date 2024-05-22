@@ -463,7 +463,7 @@ export function Letters({ item }) {
 			if (!stainlessSteelPolished) missingFields.push('Select Steel Polished');
 		}
 
-		if (!waterproof) missingFields.push('Select Waterproof');
+		if (!waterproof) missingFields.push('Select Environment');
 		if (!mounting) missingFields.push('Select Installation');
 
 		if (mounting === STUD_WITH_SPACER) {

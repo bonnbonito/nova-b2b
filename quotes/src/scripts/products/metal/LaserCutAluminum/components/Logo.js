@@ -227,7 +227,7 @@ export function Logo({ item }) {
 		if (!selectedThickness) missingFields.push('Select Acrylic Thickness');
 		if (!width) missingFields.push('Select Logo Width');
 		if (!height) missingFields.push('Select Logo Height');
-		if (!waterproof) missingFields.push('Select Waterproof');
+		if (!waterproof) missingFields.push('Select Environment');
 		if (!selectedFinishing) missingFields.push('Select Finishing');
 		if (selectedFinishing === 'Painted') {
 			if (!color.name) missingFields.push('Select Color');

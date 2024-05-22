@@ -380,7 +380,7 @@ export function Logo({ item }) {
 		if (!selectedThickness) missingFields.push('Select Acrylic Thickness');
 		if (!width) missingFields.push('Select Logo Width');
 		if (!height) missingFields.push('Select Logo Height');
-		if (!waterproof) missingFields.push('Select Waterproof');
+		if (!waterproof) missingFields.push('Select Environment');
 		if (!selectedMounting) missingFields.push('Select Mounting');
 		if (selectedMounting === STUD_WITH_SPACER) {
 			if (!studLength) missingFields.push('Select Stud Length');

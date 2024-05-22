@@ -427,7 +427,7 @@ export function Letters({ item }) {
 			missingFields.push('Add the Pantone color code of your custom color.');
 		}
 		if (!selectedFinishing) missingFields.push('Select Finishing');
-		if (!waterproof) missingFields.push('Select Waterproof');
+		if (!waterproof) missingFields.push('Select Environment');
 		if (!selectedMounting) missingFields.push('Select Mounting');
 
 		if (selectedMounting === STUD_MOUNT) {

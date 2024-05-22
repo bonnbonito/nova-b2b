@@ -302,7 +302,7 @@ export function Logo({ item }) {
 		if (!selectedThickness) missingFields.push('Select Acrylic Thickness');
 		if (!width) missingFields.push('Select Logo Width');
 		if (!height) missingFields.push('Select Logo Height');
-		if (!waterproof) missingFields.push('Select Waterproof');
+		if (!waterproof) missingFields.push('Select Environment');
 		if (!mounting) missingFields.push('Select mounting');
 
 		if (!pvcBaseColor?.name) missingFields.push('Select PVC Base Color');

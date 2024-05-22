@@ -449,7 +449,7 @@ export function Letters({ item }) {
 				missingFields.push('Select Metal Finishing Options');
 		}
 
-		if (!waterproof) missingFields.push('Select Waterproof');
+		if (!waterproof) missingFields.push('Select Environment');
 		if (!mounting) missingFields.push('Select Mounting');
 
 		if (mounting === STUD_WITH_SPACER) {

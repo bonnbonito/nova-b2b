@@ -349,7 +349,7 @@ export function Logo({ item }) {
 		if (acrylicBase?.name === 'Custom Color' && !customColor) {
 			missingFields.push('Add the Pantone color code of your custom color.');
 		}
-		if (!waterproof) missingFields.push('Select Waterproof');
+		if (!waterproof) missingFields.push('Select Environment');
 		if (!selectedMounting) missingFields.push('Select Mounting');
 		if (selectedMounting === STUD_WITH_SPACER) {
 			if (!studLength) missingFields.push('Select Stud Length');
