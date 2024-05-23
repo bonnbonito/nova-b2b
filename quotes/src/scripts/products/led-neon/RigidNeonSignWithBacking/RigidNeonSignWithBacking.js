@@ -4,6 +4,7 @@ import { useAppContext } from '../../../AppProvider';
 import Sidebar from '../../../Sidebar';
 import Signage from '../../../Signage';
 import { PlusIcon } from '../../../svg/Icons';
+import { INDOOR_NOT_WATERPROOF } from '../../../utils/defaults';
 import { NeonSign } from './components/NeonSign';
 
 export default function RigidNeonSignWithBacking() {
@@ -12,22 +13,26 @@ export default function RigidNeonSignWithBacking() {
 
 	const defaultSignage = {
 		id: uuidv4(),
-		type: 'NEON SIGN',
-		title: 'NEON SIGN 1',
+		type: 'SIGN',
+		title: 'SIGN 1',
 		neonSignWidth: '',
 		neonSignHeight: '',
 		neonThickness: '',
-		neonLength: '',
+		neonLength8mm: '',
+		neonLength10mm: '',
+		neonLength14mm: '',
+		neonLength20mm: '',
 		rigidBacking: 'Frosted Clear PC',
 		paintedPCColor: '',
 		paintedPCFinish: '',
 		remoteControl: 'No',
-		wireExitLocation: 'Bottom Right',
-		wireType: '6ft Clear DC5521 female',
 		neonColor: '',
-		waterproof: '',
+		customColor: '',
+		waterproof: INDOOR_NOT_WATERPROOF,
 		comments: '',
+		wireExitLocation: 'Bottom Right',
 		mounting: 'Standard Nails',
+		wireType: '6ft Clear DC5521 female',
 		usdPrice: 0,
 		cadPrice: 0,
 		filePaths: [],
@@ -58,8 +63,8 @@ export default function RigidNeonSignWithBacking() {
 		setSignage((prevSignage) => {
 			const count = prevSignage.filter((sign) => sign.type === type).length;
 			let args = {
-				type: 'NEON SIGN',
-				title: `NEON SIGN ${count + 1}`,
+				type: 'SIGN',
+				title: `SIGN ${count + 1}`,
 			};
 			const newSignage = {
 				...defaultSignage,
@@ -92,7 +97,7 @@ export default function RigidNeonSignWithBacking() {
 					{signage.length < 10 && (
 						<button
 							className="flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white"
-							onClick={() => addSignage('NEON SIGN')}
+							onClick={() => addSignage('SIGN')}
 							style={{ border: '1px solid #d2d2d2d2' }}
 						>
 							ADD NEON SIGN

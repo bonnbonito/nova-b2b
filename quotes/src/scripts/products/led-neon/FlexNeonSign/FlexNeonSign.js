@@ -12,8 +12,8 @@ export default function FlexNeonSign() {
 
 	const defaultSignage = {
 		id: uuidv4(),
-		type: 'NEON SIGN',
-		title: 'NEON SIGN 1',
+		type: 'SIGN',
+		title: 'SIGN 1',
 		neonSignWidth: '',
 		neonSignHeight: '',
 		neonUsed: '',
@@ -54,8 +54,8 @@ export default function FlexNeonSign() {
 		setSignage((prevSignage) => {
 			const count = prevSignage.filter((sign) => sign.type === type).length;
 			let args = {
-				type: 'NEON SIGN',
-				title: `NEON SIGN ${count + 1}`,
+				type: 'SIGN',
+				title: `SIGN ${count + 1}`,
 			};
 			const newSignage = {
 				...defaultSignage,
@@ -88,7 +88,7 @@ export default function FlexNeonSign() {
 					{signage.length < 10 && (
 						<button
 							className="flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white"
-							onClick={() => addSignage('NEON SIGN')}
+							onClick={() => addSignage('SIGN')}
 							style={{ border: '1px solid #d2d2d2d2' }}
 						>
 							ADD NEON SIGN

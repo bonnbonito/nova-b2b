@@ -27,6 +27,21 @@ export const neonSignsMountingOptions = [
 	},
 ];
 
+export const rigidBackingOptions = [
+	{
+		option: 'Frosted Clear PC',
+	},
+	{
+		option: 'Black PC',
+	},
+	{
+		option: 'UV Printed on PC',
+	},
+	{
+		option: 'Painted PC',
+	},
+];
+
 export const rigidNoBackingMountingOptions = [
 	{
 		option: 'M4 Stud 1.5"',

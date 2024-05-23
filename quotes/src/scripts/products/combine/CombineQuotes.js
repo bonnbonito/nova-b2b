@@ -39,18 +39,20 @@ const productLines = NovaQuote.product_lines_accordion;
 
 const partners = NovaQuote.show_all_partners;
 
+const storage = window.location.href + NovaQuote.user_id + 'customquote';
+const localStorageQuote = localStorage.getItem(storage);
+const savedStorage = JSON.parse(localStorageQuote);
+
 export default function CombineQuotes() {
-	const {
-		signage,
-		setSignage,
-		setTempFolder,
-		tempFolderName,
-		setPartner,
-		partner,
-	} = useAppContext();
+	const { signage, setSignage, setTempFolder, tempFolderName, setPartner } =
+		useAppContext();
 
 	function setDefaultSignage() {
-		setSignage([]);
+		if (savedStorage?.length > 0) {
+			setSignage(savedStorage);
+		} else {
+			setSignage([]);
+		}
 	}
 
 	useEffect(() => {
@@ -65,9 +67,9 @@ export default function CombineQuotes() {
 		}
 	}, []);
 
-	/* useEffect(() => {
-		localStorage.setItem(storage + '-x', JSON.stringify(signage));
-	}, [signage]); */
+	useEffect(() => {
+		localStorage.setItem(storage, JSON.stringify(signage));
+	}, [signage]);
 
 	useEffect(() => {
 		if (NovaQuote.is_editting.length === 0) {
@@ -293,7 +295,7 @@ export default function CombineQuotes() {
 					</div>
 
 					{signage.map((item, index) => (
-						<Signage index={index} id={item.id} item={item}>
+						<Signage index={index} id={item.id} item={item} storage={storage}>
 							{showComponent(item)}
 						</Signage>
 					))}
@@ -312,7 +314,7 @@ export default function CombineQuotes() {
 						</div>
 					)}
 				</div>
-				<SidebarAdmin />
+				<SidebarAdmin storage={storage} />
 			</div>
 		</CombineQuoteProvider>
 	);

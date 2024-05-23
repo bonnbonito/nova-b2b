@@ -10,6 +10,7 @@ import { useAppContext } from '../../../../AppProvider';
 import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
 import useOutsideClick from '../../../../utils/ClickOutside';
+import { colorOptions } from '../../../../utils/ColorOptions';
 import { arrayRange, setOptions } from '../../../../utils/SignageOptions';
 
 import {
@@ -18,12 +19,35 @@ import {
 } from '../../../../utils/defaults';
 
 import {
-	acrylicBackingOptions,
+	neonColorOptions,
 	neonSignsMountingOptions,
 	remoteControlOptions,
-	waterProofOptions,
+	rigidBackingOptions,
 	wireExitLocationOptions,
 } from '../../neonSignOptions';
+
+const waterProofOptions = [
+	{
+		option: INDOOR_NOT_WATERPROOF,
+	},
+];
+
+const pcFinishOptions = [
+	{
+		option: 'Matte',
+	},
+	{
+		option: 'Glossy',
+	},
+];
+const wireTypeOptions = [
+	{
+		option: '6ft Clear DC5521 female',
+	},
+	{
+		option: '6ft Open Wires',
+	},
+];
 
 export const NeonSign = ({ item }) => {
 	const { signage, setSignage, setMissing, updateSignageItem } =
@@ -32,52 +56,66 @@ export const NeonSign = ({ item }) => {
 	const [fileNames, setFileNames] = useState(item.fileNames ?? []);
 	const [fileUrls, setFileUrls] = useState(item.fileUrls ?? []);
 	const [filePaths, setFilePaths] = useState(item.filePaths ?? []);
+	const [rcOptions, setRcOptions] = useState(remoteControlOptions);
 	const [files, setFiles] = useState(item.files ?? []);
 	const [neonColor, setNeonColor] = useState(item.neonColor ?? '');
+	const [color, setColor] = useState(item.paintedPCColor ?? '');
+	const [openNeonColor, setOpenNeonColor] = useState(false);
 	const [openColor, setOpenColor] = useState(false);
 	const [width, setWidth] = useState(item.neonSignWidth ?? '');
-	const [height, setHeight] = useState(item.neonSignHeight ?? '');
-	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
-	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
-	const [neonUsed, setNeonUsed] = useState(item.neonUsed ?? '');
-	const [remoteControl, setRemoteControl] = useState(
-		item.remoteControl ?? 'No'
+	const [finish, setFinish] = useState(item.paintedPCFinish ?? '');
+	const [customColor, setCustomColor] = useState(item.customColor ?? '');
+	const [neonLength8mm, setNeonLength8mm] = useState(item.neonLength8mm ?? '');
+	const [rigidBacking, setRigidBacking] = useState(
+		item.rigidBacking ?? 'Frosted Clear PC'
 	);
 	const [wireExitLocation, setWireExitLocation] = useState(
 		item.wireExitLocation ?? 'Bottom Right'
 	);
-	const [acrylicBackingOption, setAcrylicBackingOption] = useState(
-		item.acrylicBackingOption ?? ''
+	const [wireType, setWireType] = useState(
+		item.wireType ?? '6ft Clear DC5521 female'
+	);
+	const [neonLength10mm, setNeonLength10mm] = useState(
+		item.neonLength10mm ?? ''
+	);
+	const [neonLength14mm, setNeonLength14mm] = useState(
+		item.neonLength14mm ?? ''
+	);
+	const [neonLength20mm, setNeonLength20mm] = useState(
+		item.neonLength20mm ?? ''
+	);
+	const [height, setHeight] = useState(item.neonSignHeight ?? '');
+	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
+	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
+	const [remoteControl, setRemoteControl] = useState(
+		item.remoteControl ?? 'No'
 	);
 
-	const acrylicBackingSelections = acrylicBackingOptions.map((item) => (
-		<option value={item.option}>{item.option}</option>
-	));
-
 	const neonSignsWidthHeight = useMemo(() => {
-		return arrayRange(5, 40, 1);
+		return arrayRange(5, 42, 1);
 	}, []);
 
-	const neonUsedOptions = useMemo(() => {
-		return arrayRange(10, 60, 2);
+	const neonLength = useMemo(() => {
+		return arrayRange(2, 100, 2);
 	}, []);
 
 	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
 	const [mounting, setMounting] = useState(item.mounting ?? '');
 	const [sets, setSets] = useState(item.sets ?? 1);
 
+	const neonColorRef = useRef(null);
 	const colorRef = useRef(null);
 
 	const colorSelections = useMemo(
 		() => (
 			<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
-				{colorOptions.map((color) => (
+				{neonColorOptions.map((color) => (
 					<div
 						key={color.id} // Assuming each color has a unique 'id'
 						className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
 						onClick={() => {
-							setColor(color);
-							setOpenColor(false);
+							setNeonColor(color);
+							setOpenNeonColor(false);
 						}}
 					>
 						<span
@@ -94,7 +132,7 @@ export const NeonSign = ({ item }) => {
 				))}
 			</div>
 		),
-		[colorOptions]
+		[neonColorOptions]
 	);
 
 	const updateSignage = useCallback(() => {
@@ -103,8 +141,12 @@ export const NeonSign = ({ item }) => {
 				return {
 					...sign,
 					waterproof,
-					neonColor: color?.name,
-					color,
+					neonColor: neonColor?.name,
+					paintedPCColor: color?.name,
+					paintedPCFinish: finish,
+					wireType,
+					wireExitLocation,
+					rigidBacking,
 					mounting,
 					fileNames,
 					filePaths,
@@ -113,11 +155,14 @@ export const NeonSign = ({ item }) => {
 					sets,
 					usdPrice,
 					cadPrice,
-					neonUsed,
+					neonLength8mm,
+					neonLength10mm,
+					neonLength14mm,
+					neonLength20mm,
+					remoteControl,
+					customColor,
 					neonSignWidth: width,
 					neonSignHeight: height,
-					acrylicBackingOption,
-					wireExitLocation,
 				};
 			}
 			return sign;
@@ -125,8 +170,12 @@ export const NeonSign = ({ item }) => {
 		setSignage(updatedSignage);
 	}, [
 		waterproof,
+		neonColor,
+		customColor,
+		rigidBacking,
 		color,
 		mounting,
+		finish,
 		fileNames,
 		filePaths,
 		fileUrls,
@@ -134,9 +183,12 @@ export const NeonSign = ({ item }) => {
 		sets,
 		width,
 		height,
-		neonUsed,
-		acrylicBackingOption,
 		remoteControl,
+		neonLength8mm,
+		neonLength14mm,
+		neonLength10mm,
+		neonLength20mm,
+		wireType,
 		wireExitLocation,
 		usdPrice,
 		cadPrice,
@@ -147,19 +199,33 @@ export const NeonSign = ({ item }) => {
 
 		if (!width) missingFields.push('Select Neon Sign Width');
 		if (!height) missingFields.push('Select Neon Sign Height');
-		if (!neonUsed) missingFields.push('Select Neon Used(ft)');
-		if (!acrylicBackingOption) missingFields.push('Acrylic Backing Option');
+
+		if (
+			!neonLength8mm &&
+			!neonLength14mm &&
+			!neonLength10mm &&
+			!neonLength20mm
+		) {
+			missingFields.push(
+				'Set one of 8mm Neon Length, 10mm Neon Length, 14mm Neon Length, 20mm Neon Length'
+			);
+		}
+
 		if (!mounting) missingFields.push('Select Mounting');
+
 		if (!remoteControl) missingFields.push('Select Remote Control');
-		if (!wireExitLocation) missingFields.push('Select Wire Exit Location');
 
-		if (!neonColor?.name) missingFields.push('Select Neon Color');
+		if (!color?.name) missingFields.push('Select Painted PC Color');
 
-		if (!color.name) missingFields.push('Select Color');
+		if (!finish) missingFields.push('Select Painted PC Finish');
 
 		if (color?.name === 'Custom Color' && !customColor) {
 			missingFields.push('Add the Pantone color code of your custom color.');
 		}
+
+		if (!wireType) missingFields.push('Select WireType');
+
+		if (!neonColor) missingFields.push('Select Neon Color');
 
 		if (!waterproof) missingFields.push('Select Environment');
 
@@ -190,16 +256,21 @@ export const NeonSign = ({ item }) => {
 	}, [
 		fileUrls,
 		color,
-		customColor,
 		neonColor,
+		customColor,
 		waterproof,
 		mounting,
+		finish,
 		sets,
 		width,
 		height,
-		neonUsed,
-		acrylicBackingOption,
+		rigidBacking,
 		remoteControl,
+		neonLength8mm,
+		neonLength10mm,
+		neonLength14mm,
+		neonLength20mm,
+		wireType,
 		wireExitLocation,
 	]);
 
@@ -209,29 +280,44 @@ export const NeonSign = ({ item }) => {
 	}, [updateSignage, checkAndAddMissingFields]);
 
 	const computePricing = () => {
-		if (!width || !height || !neonUsed || !waterproof || !acrylicBackingOption)
-			return 0;
+		if (!width || !height) return 0;
+
+		const L1 = neonLength8mm ? parseInt(neonLength8mm) : 0;
+		const L2 = neonLength10mm ? parseInt(neonLength10mm) : 0;
+		const L3 = neonLength14mm ? parseInt(neonLength14mm) : 0;
+		const L4 = neonLength20mm ? parseInt(neonLength20mm) : 0;
+
 		let tempTotal =
-			(parseInt(width) + 3) * (parseInt(height) + 3) * 0.11 +
-			parseInt(neonUsed) * 6.9 +
-			25;
+			L1 * 15 +
+			L2 * 13 +
+			L3 * 15 +
+			L4 * 25 +
+			parseInt(width) * parseInt(height) * 0.6 +
+			45;
 
-		tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.15;
+		if (color?.name && color?.name !== 'White') {
+			tempTotal *= 1.1;
+		}
 
-		let additional = 0;
+		let rigidBackingPrice = 0;
 
-		if (acrylicBackingOption === 'UV Printed') {
-			additional = parseInt(width) * parseInt(height) * 0.25;
-			tempTotal += additional;
+		if (rigidBacking === 'Frosted Clear PC') {
+			rigidBackingPrice = parseInt(width) * parseInt(height) * 0.17;
 		}
-		if (acrylicBackingOption === 'Frosted Clear Backing') {
-			additional = parseInt(width) * parseInt(height) * 0.1;
-			tempTotal += additional;
+
+		if (rigidBacking === 'Black PC') {
+			rigidBackingPrice = parseInt(width) * parseInt(height) * 0.17;
 		}
-		if (acrylicBackingOption === 'Matte Black Backing') {
-			additional = parseInt(width) * parseInt(height) * 0.17;
-			tempTotal += additional;
+
+		if (rigidBacking === 'UV Printed on PC') {
+			rigidBackingPrice = parseInt(width) * parseInt(height) * 0.21;
 		}
+
+		if (rigidBacking === 'Painted PC') {
+			rigidBackingPrice = parseInt(width) * parseInt(height) * 0.2;
+		}
+
+		tempTotal += rigidBackingPrice;
 
 		let mountingPrice = 0;
 
@@ -247,10 +333,12 @@ export const NeonSign = ({ item }) => {
 		let remotePrice = 0;
 
 		if (remoteControl === 'Yes') {
-			remotePrice = 7;
+			remotePrice = 16;
 		}
 
 		tempTotal += remotePrice;
+
+		tempTotal *= parseInt(sets);
 
 		return tempTotal.toFixed(2);
 	};
@@ -264,16 +352,51 @@ export const NeonSign = ({ item }) => {
 	}, [
 		width,
 		height,
-		neonUsed,
-		waterproof,
-		acrylicBackingOption,
 		mounting,
 		remoteControl,
+		neonLength8mm,
+		neonLength10mm,
+		neonLength14mm,
+		neonLength20mm,
+		rigidBacking,
+		color,
+		sets,
 	]);
 
 	const handleOnChangeSets = (e) => {
 		const value = e.target.value;
 		setSets(value);
+	};
+
+	const handleComments = (e) => {
+		updateSignageItem(item.id, 'comments', e.target.value);
+	};
+
+	const handleOnChangeWaterproof = (e) => {
+		const target = e.target.value;
+
+		if (target !== INDOOR_NOT_WATERPROOF) {
+			if (neonLength8mm) {
+				setNeonLength8mm('');
+			}
+
+			if (neonLength10mm) {
+				setNeonLength10mm('');
+			}
+
+			setRcOptions([
+				{
+					option: 'N/A',
+				},
+			]);
+			setRemoteControl('N/A');
+		} else {
+			if (remoteControl === 'N/A') {
+				setRemoteControl('No');
+			}
+			setRcOptions(remoteControlOptions);
+		}
+		setWaterproof(target);
 	};
 
 	const handleOnChangeRemote = (e) => {
@@ -286,20 +409,29 @@ export const NeonSign = ({ item }) => {
 		setWireExitLocation(value);
 	};
 
-	const handleComments = (e) => {
-		updateSignageItem(item.id, 'comments', e.target.value);
-	};
-
-	const handleOnChangeWaterproof = (e) => {
-		setWaterproof(e.target.value);
+	const handleOnChangeWireType = (e) => {
+		const value = e.target.value;
+		setWireType(value);
 	};
 
 	const handleOnChangeMounting = (e) => {
-		setMounting(e.target.value);
+		const target = e.target.value;
+		setMounting(target);
 	};
 
-	useOutsideClick([colorRef], () => {
-		if (!openColor) return;
+	const handleOnChangeBacking = (e) => {
+		const target = e.target.value;
+		setRigidBacking(target);
+	};
+
+	const handleOnFinish = (e) => {
+		const target = e.target.value;
+		setFinish(target);
+	};
+
+	useOutsideClick([neonColorRef, colorRef], () => {
+		if (!openNeonColor && !openColor) return;
+		setOpenNeonColor(false);
 		setOpenColor(false);
 	});
 
@@ -310,6 +442,7 @@ export const NeonSign = ({ item }) => {
 					PRODUCT LINE: <span className="font-title">{item.productLine}</span>
 				</div>
 			)}
+
 			<div className="quote-grid mb-6">
 				<Dropdown
 					title="Neon Sign Width"
@@ -317,38 +450,121 @@ export const NeonSign = ({ item }) => {
 					onChange={(e) => setWidth(e.target.value)}
 					options={neonSignsWidthHeight}
 				/>
+
 				<Dropdown
 					title="Neon Sign Height"
 					value={height}
 					onChange={(e) => setHeight(e.target.value)}
 					options={neonSignsWidthHeight}
 				/>
+
 				<Dropdown
-					title="Neon Used(ft)"
-					value={neonUsed}
-					onChange={(e) => setNeonUsed(e.target.value)}
-					options={neonUsedOptions}
+					title="8mm Neon Length"
+					value={neonLength8mm}
+					onChange={(e) => setNeonLength8mm(e.target.value)}
+					options={neonLength}
 				/>
 				<Dropdown
-					title="Acrylic Backing"
-					value={acrylicBackingOption}
-					onChange={(e) => setAcrylicBackingOption(e.target.value)}
-					options={acrylicBackingSelections}
+					title="10mm Neon Length"
+					value={neonLength10mm}
+					onChange={(e) => setNeonLength10mm(e.target.value)}
+					options={neonLength}
 				/>
 
 				<Dropdown
-					title="Environment"
-					onChange={handleOnChangeWaterproof}
-					options={waterProofOptions.map((option) => (
+					title="14mm Neon Length"
+					value={neonLength14mm}
+					onChange={(e) => setNeonLength14mm(e.target.value)}
+					options={neonLength}
+				/>
+				<Dropdown
+					title="20mm Neon Length"
+					value={neonLength20mm}
+					onChange={(e) => setNeonLength20mm(e.target.value)}
+					options={neonLength}
+				/>
+
+				<div className="px-[1px] relative" ref={colorRef}>
+					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+						Painted PC Color
+					</label>
+					<div
+						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
+							color.name ? 'text-black' : 'text-[#dddddd]'
+						}`}
+						onClick={() => {
+							setOpenColor((prev) => !prev);
+							setOpenNeonColor(false);
+						}}
+					>
+						<span
+							className="rounded-full w-[18px] h-[18px] border mr-2"
+							style={{
+								background:
+									color.name == 'Custom Color'
+										? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
+										: color.color,
+							}}
+						></span>
+						{color.name === '' ? 'CHOOSE OPTION' : color.name}
+					</div>
+					{openColor && (
+						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
+							{colorOptions.map((color) => {
+								return (
+									<div
+										className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
+										onClick={() => {
+											setColor(color);
+											setOpenColor(false);
+										}}
+									>
+										<span
+											className="w-[18px] h-[18px] inline-block rounded-full border"
+											style={{
+												background:
+													color.name == 'Custom Color'
+														? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
+														: color.color,
+											}}
+										></span>
+										{color.name}
+									</div>
+								);
+							})}
+						</div>
+					)}
+				</div>
+
+				<Dropdown
+					title="Painted PC Finish"
+					onChange={handleOnFinish}
+					options={pcFinishOptions.map((option) => (
 						<option
 							key={option.option}
 							value={option.option}
-							selected={option.option === waterproof}
+							selected={option.option === finish}
 						>
 							{option.option}
 						</option>
 					))}
-					value={waterproof}
+					value={finish}
+				/>
+
+				<Dropdown
+					title="Backing Options"
+					onChange={handleOnChangeBacking}
+					options={rigidBackingOptions.map((option) => (
+						<option
+							key={option.option}
+							value={option.option}
+							selected={option.option === rigidBacking}
+						>
+							{option.option}
+						</option>
+					))}
+					value={rigidBacking}
+					onlyValue={true}
 				/>
 
 				<Dropdown
@@ -370,7 +586,7 @@ export const NeonSign = ({ item }) => {
 				<Dropdown
 					title="Remote Control"
 					onChange={handleOnChangeRemote}
-					options={remoteControlOptions.map((option) => (
+					options={rcOptions.map((option) => (
 						<option
 							key={option.option}
 							value={option.option}
@@ -399,31 +615,64 @@ export const NeonSign = ({ item }) => {
 					onlyValue={true}
 				/>
 
-				<div className="px-[1px] relative" ref={colorRef}>
+				<Dropdown
+					title="Wire Type"
+					onChange={handleOnChangeWireType}
+					options={wireTypeOptions.map((option) => (
+						<option
+							key={option.option}
+							value={option.option}
+							selected={option.option === wireType}
+						>
+							{option.option}
+						</option>
+					))}
+					value={wireType}
+					onlyValue={true}
+				/>
+
+				<div className="px-[1px] relative" ref={neonColorRef}>
 					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
 						Neon Color
 					</label>
 					<div
 						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-							color.name ? 'text-black' : 'text-[#dddddd]'
+							neonColor.name ? 'text-black' : 'text-[#dddddd]'
 						}`}
 						onClick={() => {
-							setOpenColor((prev) => !prev);
+							setOpenNeonColor((prev) => !prev);
+							setOpenColor(false);
 						}}
 					>
 						<span
 							className="rounded-full w-[18px] h-[18px] border mr-2"
 							style={{
 								background:
-									color.name == 'Custom Color'
+									neonColor.name == 'Custom Color'
 										? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-										: color.color,
+										: neonColor.color,
 							}}
 						></span>
-						{color.name === '' ? 'CHOOSE OPTION' : color.name}
+						{neonColor.name === '' ? 'CHOOSE OPTION' : neonColor.name}
 					</div>
-					{openColor && colorSelections}
+					{openNeonColor && colorSelections}
 				</div>
+
+				<Dropdown
+					title="Environment"
+					onChange={handleOnChangeWaterproof}
+					options={waterProofOptions.map((option) => (
+						<option
+							key={option.option}
+							value={option.option}
+							selected={option.option === waterproof}
+						>
+							{option.option}
+						</option>
+					))}
+					value={waterproof}
+					onlyValue={true}
+				/>
 
 				<Dropdown
 					title="Quantity"
@@ -434,6 +683,20 @@ export const NeonSign = ({ item }) => {
 				/>
 			</div>
 			<div className="quote-grid">
+				{color?.name == 'Custom Color' && (
+					<div className="px-[1px] col-span-4">
+						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+							Custom Color
+						</label>
+						<input
+							className="w-full py-4 px-2 border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400"
+							type="text"
+							value={customColor}
+							onChange={(e) => setCustomColor(e.target.value)}
+							placeholder="ADD THE PANTONE COLOR CODE"
+						/>
+					</div>
+				)}
 				<div className="px-[1px] col-span-4">
 					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
 						COMMENTS

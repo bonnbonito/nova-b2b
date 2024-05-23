@@ -5,7 +5,7 @@ import { CloseIcon, LoadingIcon } from './svg/Icons';
 import { processQuote } from './utils/QuoteFunctions';
 import { checkAndCreateFolder, renameFolder } from './utils/uploadFunctions';
 
-function ModalSave({ action, btnClass, label }) {
+function ModalSave({ action, btnClass, label, storage }) {
 	const { signage, tempFolder, missing, isLoading, setIsLoading, partner } =
 		useAppContext();
 
@@ -232,6 +232,9 @@ function ModalSave({ action, btnClass, label }) {
 			console.log(err);
 		} finally {
 			setIsLoading(false);
+			if (storage) {
+				localStorage.removeItem(storage);
+			}
 		}
 	};
 

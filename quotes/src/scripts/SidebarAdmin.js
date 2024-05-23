@@ -6,7 +6,7 @@ import { EXCHANGE_RATE } from './utils/defaults';
 
 const currency = wcumcs_vars_data.currency;
 
-export default function SidebarAdmin() {
+export default function SidebarAdmin({ storage }) {
 	const { signage, partner } = useAppContext();
 	const [canSaveToDraft, setCanSaveToDraft] = useState(true);
 
@@ -107,6 +107,7 @@ export default function SidebarAdmin() {
 											action="update-processing"
 											label="Submit Quote"
 											btnClass="mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
+											storage={storage}
 										/>
 									) : (
 										''
@@ -116,6 +117,7 @@ export default function SidebarAdmin() {
 										action="update"
 										label="Update Quote"
 										btnClass="mb-5 font-title border border-nova-light rounded-md text-nova-gray w-full text-center bg-white text-sm h-[49px] hover:bg-nova-light hover:text-white shadow-[0_0_0_1px_rgba(0,0,0,0.3)]"
+										storage={storage}
 									/>
 								</>
 							) : (
@@ -125,6 +127,7 @@ export default function SidebarAdmin() {
 											action="processing"
 											label="Submit Quote"
 											btnClass="mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
+											storage={storage}
 										/>
 									) : (
 										''
@@ -135,6 +138,7 @@ export default function SidebarAdmin() {
 											action="draft"
 											label="Save to Draft"
 											btnClass="mb-5 font-title border border-nova-light rounded-md text-nova-gray w-full text-center bg-white text-sm h-[49px] hover:bg-nova-light hover:text-white shadow-[0_0_0_1px_rgba(0,0,0,0.3)]"
+											storage={storage}
 										/>
 									)}
 								</>

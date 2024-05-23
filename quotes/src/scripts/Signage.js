@@ -6,8 +6,8 @@ import EditableText from './EditableText';
 import { ClearIcon, CollapseIcon, DuplicateIcon, TrashIcon } from './svg/Icons';
 import { debounce } from './utils/helpers';
 
-const Signage = ({ item, children }) => {
-	const { signage, setSignage, setMissing, storage, updateSignageItem } =
+const Signage = ({ item, children, storage }) => {
+	const { signage, setSignage, setMissing, updateSignageItem } =
 		useAppContext();
 
 	const [open, setOpen] = useState(true);
