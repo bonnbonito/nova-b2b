@@ -179,9 +179,15 @@ class Pending_Payment {
 	}
 
 	public function pending_payment_order_email_content( $body_text, $order, $sent_to_admin, $plain_text, $email ) {
-		$pending_id = $order->get_meta( '_pending_id' );
-		if ( $pending_id ) {
-			$body_text = 'We have received your recent payment for Order #NV' . $order->get_id() . '. Thank you very much.';
+		$pending_id    = $order->get_meta( '_pending_id' );
+		$from_order_id = $order->get_meta( '_from_order_id' );
+
+		if ( $pending_id && $from_order_id ) {
+			$body_text  = '<p>Hello {customer_first_name},</p>';
+			$body_text .= '<p>We have received your recent payment for Order #NV' . $from_order_id . '.</p>';
+			$body_text .= '<p>Thank you very much.</p>';
+
+			$body_text = str_replace( '{customer_first_name}', $order->get_billing_first_name(), $body_text );
 		}
 		return $body_text;
 	}

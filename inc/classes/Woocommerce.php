@@ -106,6 +106,47 @@ class Woocommerce {
 		// add_filter( 'woocommerce_currency', array( $this, 'change_currency_based_on_shipping_country' ), 99999999 );
 		add_action( 'init', array( $this, 'set_currency_cookie_based_on_billing_country' ), 999 );
 		add_action( 'option_wcumcs_available_currencies', array( $this, 'list_of_currencies' ), 10, 2 );
+		add_filter( 'kadence_woomail_order_body_text', array( $this, 'order_completed_email_with_pending_payment' ), 20, 5 );
+		add_filter( 'woocommerce_email_heading_customer_completed_order', array( $this, 'change_order_email_headings' ), 20, 2 );
+	}
+
+	public function change_order_email_headings( $heading, $order ) {
+
+		$adjusted_duplicate_order_id = $order->get_meta( '_adjusted_duplicate_order_id' );
+
+		$from_order_id = $order->get_meta( '_from_order_id' );
+
+		if ( $adjusted_duplicate_order_id ) {
+			// Custom heading for orders with the meta key
+			$heading = 'Your order is ready for delivery - #{order_number}';
+			$heading = str_replace( '{order_number}', $order->get_order_number(), $heading );
+		}
+
+		if ( $from_order_id ) {
+
+		}
+
+		return $heading;
+	}
+
+	public function order_completed_email_with_pending_payment( $body_text, $order, $sent_to_admin, $plain_text, $email ) {
+		$adjusted_duplicate_order_id = $order->get_meta( '_adjusted_duplicate_order_id' );
+		$from_order_id               = $order->get_meta( '_from_order_id' );
+
+		if ( $email->id == 'customer_completed_order' ) {
+
+			if ( $adjusted_duplicate_order_id ) {
+				$body_text  = '<p>Hello {customer_first_name},</p>';
+				$body_text .= '<p>Order #{order_number} is now prepared and ready for delivery. You can track the delivery status using the provided tracking information.</p>';
+
+			}
+
+			$body_text = str_replace( '{order_number}', $order->get_order_number(), $body_text );
+			$body_text = str_replace( '{customer_first_name}', $order->get_billing_first_name(), $body_text );
+
+		}
+
+		return $body_text;
 	}
 
 	public function list_of_currencies( $values, $option ) {
@@ -394,14 +435,15 @@ class Woocommerce {
 
 	public function add_deposit_row( $order_id ) {
 
+		$order                           = wc_get_order( $order_id );
 		$deposit_total                   = get_post_meta( $order_id, '_deposit_total', true );
+		$payment_select                  = get_post_meta( $order_id, '_payment_select', true );
 		$has_adjusted_duplicate_order_id = get_post_meta( $order_id, '_adjusted_duplicate_order_id', true );
 		$pending_payment                 = get_post_meta( $order_id, '_pending_payment', true );
 		$original_total                  = get_post_meta( $order_id, '_original_total', true );
 		$from_order                      = get_post_meta( $order_id, '_from_order_id', true );
 		$original_tax_names              = get_post_meta( $order_id, '_original_tax_names', true );
 		$original_tax                    = get_post_meta( $order_id, '_original_tax', true );
-		$order                           = wc_get_order( $order_id );
 		$original_shipping               = get_post_meta( $order_id, '_original_shipping', true );
 		$original_shipping_method        = get_post_meta( $order_id, '_original_shipping_method', true );
 
@@ -453,6 +495,19 @@ class Woocommerce {
 
 			<?php
 			endif;
+
+		if ( $payment_select ) {
+			?>
+<tr>
+	<td class="label"><?php echo 'Payment Type'; ?>:</td>
+	<td width="1%"></td>
+	<td class="total">
+		<strong><?php echo get_the_title( $payment_select ); ?></strong>
+	</td>
+</tr>
+			<?php
+		}
+
 		if ( $deposit_total ) :
 
 			if ( empty( $has_adjusted_duplicate_order_id ) ) :
@@ -547,6 +602,7 @@ class Woocommerce {
 		// Check if the order has the '_deposit_total' meta key
 		$payment_order            = get_post_meta( $order->get_id(), '_adjusted_duplicate_order_id', true );
 		$pending_payment          = get_post_meta( $order->get_id(), '_pending_payment', true );
+		$payment_select           = get_post_meta( $order->get_id(), '_payment_select', true );
 		$deposit_total            = get_post_meta( $order->get_id(), '_deposit_total', true );
 		$from_order               = get_post_meta( $order->get_id(), '_from_order_id', true );
 		$original_total           = get_post_meta( $order->get_id(), '_original_total', true );
@@ -564,7 +620,15 @@ class Woocommerce {
 				$new_total_rows[ $total_key ] = $total;
 
 				// Check if the current key is 'payment_method', then insert the deposit total
-				if ( $total_key === 'payment_method' ) {
+				if ( $total_key === 'shipping' ) {
+
+					if ( $payment_select ) {
+						$new_total_rows['payment_select'] = array(
+							'label' => __( 'Payment Type:', 'woocommerce' ),
+							'value' => get_the_title( $payment_select ),
+						);
+					}
+
 					$new_total_rows['deposit_total'] = array(
 						'label' => __( 'Paid:', 'woocommerce' ),
 						'value' => wc_price( -$deposit_total, array( 'currency' => $order->get_currency() ) ),
@@ -583,6 +647,13 @@ class Woocommerce {
 			if ( $from_order && isset( $new_total_rows['cart_subtotal'] ) ) {
 				unset( $new_total_rows['cart_subtotal'] );
 				unset( $new_total_rows['shipping'] );
+
+				if ( $payment_select ) {
+					$overall_total_row['payment_select'] = array(
+						'label' => __( 'Payment Type:', 'woocommerce' ),
+						'value' => get_the_title( $payment_select ),
+					);
+				}
 
 				if ( $original_shipping && $original_shipping_method ) {
 					$overall_total_row['original_shipping'] = array(
@@ -604,7 +675,7 @@ class Woocommerce {
 				);
 
 				$overall_total_row['deposit_total'] = array(
-					'label' => __( 'Paid:', 'woocommerce' ),
+					'label' => __( 'Deposit:', 'woocommerce' ),
 					'value' => wc_price( -$deposit_total, array( 'currency' => $order->get_currency() ) ),
 				);
 
@@ -715,6 +786,7 @@ class Woocommerce {
 
 			// Optionally, link the new order with the original by storing the new order ID in the original order's meta
 			update_post_meta( $order_id, '_adjusted_duplicate_order_id', $new_order_id );
+			update_post_meta( $new_order_id, '_payment_select', $payment_select );
 			update_post_meta( $new_order_id, '_from_order_id', $order_id );
 			update_post_meta( $new_order_id, '_deposit_total', $deposit_total );
 			update_post_meta( $new_order_id, '_pending_payment', $pending_payment );
