@@ -1622,6 +1622,8 @@ h6 {
 			'returnColor'            => 'RETURN COLOR',
 			'baseColor'              => 'BASE COLOR',
 			'customColor'            => 'CUSTOM COLOR',
+			'baseCustomColor'        => 'BASE CUSTOM COLOR',
+			'pcCustomColor'          => 'PC CUSTOM COLOR',
 			'ledLightColor'          => 'LED LIGHT COLOR',
 			'frontAcrylicCover'      => 'FRONT ACRYLIC COVER',
 			'vinylWhite'             => array(

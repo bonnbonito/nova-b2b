@@ -445,6 +445,10 @@ function getSignageDetailFields(sign) {
 			value: sign.returnColor?.name ? sign.returnColor.name : '',
 		},
 		{ label: 'CUSTOM COLOR', value: sign.customColor ? sign.customColor : '' },
+		{
+			label: 'BASE CUSTOM COLOR',
+			value: sign.baseCustomColor ? sign.baseCustomColor : '',
+		},
 
 		{ label: 'FINISHING', value: sign.finishing ? sign.finishing : '' },
 
@@ -489,6 +493,10 @@ function getSignageDetailFields(sign) {
 		{
 			label: 'PAINTED PC COLOR',
 			value: sign.paintedPCColor ? sign.paintedPCColor : '',
+		},
+		{
+			label: 'PC CUSTOM COLOR',
+			value: sign.pcCustomColor ? sign.pcCustomColor : '',
 		},
 		{
 			label: 'PAINTED PC FINISH',

@@ -100,44 +100,32 @@ export const neonColorOptions = [
 		color: '#fffacd',
 	},
 	{
-		name: 'Lemon Yellow',
-		color: '#fff44f',
-	},
-	{
-		name: 'Yellow',
-		color: '#ffff00',
-	},
-	{
-		name: 'Orange',
-		color: '#ffa500',
-	},
-	{
-		name: 'Deep Pink',
-		color: '#ff1493',
+		name: 'Red',
+		color: '#ff0000',
 	},
 	{
 		name: 'Pink',
 		color: '#ffc0cb',
 	},
 	{
-		name: 'Red',
-		color: '#ff0000',
+		name: 'Green',
+		color: '#008000',
 	},
 	{
-		name: 'Cyan',
+		name: 'Cyan Blue',
 		color: '#00ffff',
+	},
+	{
+		name: 'Yellow',
+		color: '#ffff00',
 	},
 	{
 		name: 'Blue',
 		color: '#0000ff',
 	},
 	{
-		name: 'Purple',
-		color: '#800080',
-	},
-	{
-		name: 'Green',
-		color: '#008000',
+		name: 'Orange',
+		color: '#ffa500',
 	},
 ];
 

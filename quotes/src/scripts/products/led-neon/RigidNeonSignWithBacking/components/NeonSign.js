@@ -19,6 +19,7 @@ import {
 } from '../../../../utils/defaults';
 
 import {
+	baseColorOptions,
 	neonColorOptions,
 	neonSignsMountingOptions,
 	remoteControlOptions,
@@ -60,11 +61,16 @@ export const NeonSign = ({ item }) => {
 	const [files, setFiles] = useState(item.files ?? []);
 	const [neonColor, setNeonColor] = useState(item.neonColor ?? '');
 	const [color, setColor] = useState(item.paintedPCColor ?? '');
+	const [baseColor, setBaseColor] = useState(item.baseColor ?? 'White');
 	const [openNeonColor, setOpenNeonColor] = useState(false);
 	const [openColor, setOpenColor] = useState(false);
+	const [openBaseColor, setOpenBaseColor] = useState(false);
 	const [width, setWidth] = useState(item.neonSignWidth ?? '');
 	const [finish, setFinish] = useState(item.paintedPCFinish ?? '');
 	const [customColor, setCustomColor] = useState(item.customColor ?? '');
+	const [baseCustomColor, setBaseCustomColor] = useState(
+		item.baseCustomColor ?? ''
+	);
 	const [neonLength8mm, setNeonLength8mm] = useState(item.neonLength8mm ?? '');
 	const [rigidBacking, setRigidBacking] = useState(
 		item.rigidBacking ?? 'Frosted Clear PC'
@@ -105,6 +111,7 @@ export const NeonSign = ({ item }) => {
 
 	const neonColorRef = useRef(null);
 	const colorRef = useRef(null);
+	const baseColorRef = useRef(null);
 
 	const colorSelections = useMemo(
 		() => (
@@ -116,6 +123,8 @@ export const NeonSign = ({ item }) => {
 						onClick={() => {
 							setNeonColor(color);
 							setOpenNeonColor(false);
+							setOpenBaseColor(false);
+							setOpenColor(false);
 						}}
 					>
 						<span
@@ -161,6 +170,8 @@ export const NeonSign = ({ item }) => {
 					neonLength20mm,
 					remoteControl,
 					customColor,
+					baseColor,
+					baseCustomColor,
 					neonSignWidth: width,
 					neonSignHeight: height,
 				};
@@ -172,6 +183,8 @@ export const NeonSign = ({ item }) => {
 		waterproof,
 		neonColor,
 		customColor,
+		baseColor,
+		baseCustomColor,
 		rigidBacking,
 		color,
 		mounting,
@@ -215,12 +228,20 @@ export const NeonSign = ({ item }) => {
 
 		if (!remoteControl) missingFields.push('Select Remote Control');
 
-		if (!color?.name) missingFields.push('Select Painted PC Color');
+		if (rigidBacking === 'Painted PC') {
+			if (!color?.name) missingFields.push('Select Painted PC Color');
 
-		if (!finish) missingFields.push('Select Painted PC Finish');
+			if (!finish) missingFields.push('Select Painted PC Finish');
 
-		if (color?.name === 'Custom Color' && !customColor) {
-			missingFields.push('Add the Pantone color code of your custom color.');
+			if (color?.name === 'Custom Color' && !customColor) {
+				missingFields.push('Add the Pantone color code of your custom color.');
+			}
+		}
+
+		if (baseColor === 'Custom Color' && !customColor) {
+			missingFields.push(
+				'Add the Pantone color code of your base custom color.'
+			);
 		}
 
 		if (!wireType) missingFields.push('Select WireType');
@@ -259,6 +280,8 @@ export const NeonSign = ({ item }) => {
 		neonColor,
 		customColor,
 		waterproof,
+		baseColor,
+		baseCustomColor,
 		mounting,
 		finish,
 		sets,
@@ -295,7 +318,7 @@ export const NeonSign = ({ item }) => {
 			parseInt(width) * parseInt(height) * 0.6 +
 			45;
 
-		if (color?.name && color?.name !== 'White') {
+		if (baseColor && baseColor !== 'White') {
 			tempTotal *= 1.1;
 		}
 
@@ -359,7 +382,7 @@ export const NeonSign = ({ item }) => {
 		neonLength14mm,
 		neonLength20mm,
 		rigidBacking,
-		color,
+		baseColor,
 		sets,
 	]);
 
@@ -421,6 +444,10 @@ export const NeonSign = ({ item }) => {
 
 	const handleOnChangeBacking = (e) => {
 		const target = e.target.value;
+		if (target !== 'Painted PC') {
+			setColor('');
+			setFinish('');
+		}
 		setRigidBacking(target);
 	};
 
@@ -429,10 +456,11 @@ export const NeonSign = ({ item }) => {
 		setFinish(target);
 	};
 
-	useOutsideClick([neonColorRef, colorRef], () => {
-		if (!openNeonColor && !openColor) return;
+	useOutsideClick([neonColorRef, colorRef, baseColorRef], () => {
+		if (!openNeonColor && !openColor && !openBaseColor) return;
 		setOpenNeonColor(false);
 		setOpenColor(false);
+		setOpenBaseColor(false);
 	});
 
 	return (
@@ -484,39 +512,129 @@ export const NeonSign = ({ item }) => {
 					options={neonLength}
 				/>
 
-				<div className="px-[1px] relative" ref={colorRef}>
+				<Dropdown
+					title="Backing Options"
+					onChange={handleOnChangeBacking}
+					options={rigidBackingOptions.map((option) => (
+						<option
+							key={option.option}
+							value={option.option}
+							selected={option.option === rigidBacking}
+						>
+							{option.option}
+						</option>
+					))}
+					value={rigidBacking}
+					onlyValue={true}
+				/>
+
+				{rigidBacking === 'Painted PC' && (
+					<>
+						<div className="px-[1px] relative" ref={colorRef}>
+							<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+								Painted PC Color
+							</label>
+							<div
+								className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
+									color.name ? 'text-black' : 'text-[#dddddd]'
+								}`}
+								onClick={() => {
+									setOpenColor((prev) => !prev);
+									setOpenNeonColor(false);
+								}}
+							>
+								<span
+									className="rounded-full w-[18px] h-[18px] border mr-2"
+									style={{
+										background:
+											color.name == 'Custom Color'
+												? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
+												: color.color,
+									}}
+								></span>
+								{color.name === '' ? 'CHOOSE OPTION' : color.name}
+							</div>
+							{openColor && (
+								<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
+									{colorOptions.map((color) => {
+										return (
+											<div
+												className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
+												onClick={() => {
+													setColor(color);
+													setOpenColor(false);
+												}}
+											>
+												<span
+													className="w-[18px] h-[18px] inline-block rounded-full border"
+													style={{
+														background:
+															color.name == 'Custom Color'
+																? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
+																: color.color,
+													}}
+												></span>
+												{color.name}
+											</div>
+										);
+									})}
+								</div>
+							)}
+						</div>
+
+						<Dropdown
+							title="Painted PC Finish"
+							onChange={handleOnFinish}
+							options={pcFinishOptions.map((option) => (
+								<option
+									key={option.option}
+									value={option.option}
+									selected={option.option === finish}
+								>
+									{option.option}
+								</option>
+							))}
+							value={finish}
+						/>
+					</>
+				)}
+
+				<div className="px-[1px] relative" ref={baseColorRef}>
 					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-						Painted PC Color
+						Base Color
 					</label>
 					<div
 						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-							color.name ? 'text-black' : 'text-[#dddddd]'
+							baseColor ? 'text-black' : 'text-[#dddddd]'
 						}`}
 						onClick={() => {
-							setOpenColor((prev) => !prev);
+							setOpenBaseColor((prev) => !prev);
 							setOpenNeonColor(false);
+							setOpenColor(false);
 						}}
 					>
 						<span
 							className="rounded-full w-[18px] h-[18px] border mr-2"
 							style={{
 								background:
-									color.name == 'Custom Color'
+									baseColor == 'Custom Color'
 										? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-										: color.color,
+										: baseColor.color,
 							}}
 						></span>
-						{color.name === '' ? 'CHOOSE OPTION' : color.name}
+						{baseColor === '' ? 'CHOOSE OPTION' : baseColor}
 					</div>
-					{openColor && (
+					{openBaseColor && (
 						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
-							{colorOptions.map((color) => {
+							{baseColorOptions.map((color) => {
 								return (
 									<div
 										className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
 										onClick={() => {
-											setColor(color);
+											setBaseColor(color.name);
 											setOpenColor(false);
+											setOpenNeonColor(false);
+											setOpenBaseColor(false);
 										}}
 									>
 										<span
@@ -535,37 +653,6 @@ export const NeonSign = ({ item }) => {
 						</div>
 					)}
 				</div>
-
-				<Dropdown
-					title="Painted PC Finish"
-					onChange={handleOnFinish}
-					options={pcFinishOptions.map((option) => (
-						<option
-							key={option.option}
-							value={option.option}
-							selected={option.option === finish}
-						>
-							{option.option}
-						</option>
-					))}
-					value={finish}
-				/>
-
-				<Dropdown
-					title="Backing Options"
-					onChange={handleOnChangeBacking}
-					options={rigidBackingOptions.map((option) => (
-						<option
-							key={option.option}
-							value={option.option}
-							selected={option.option === rigidBacking}
-						>
-							{option.option}
-						</option>
-					))}
-					value={rigidBacking}
-					onlyValue={true}
-				/>
 
 				<Dropdown
 					title="Mounting Options"
@@ -693,6 +780,20 @@ export const NeonSign = ({ item }) => {
 							type="text"
 							value={customColor}
 							onChange={(e) => setCustomColor(e.target.value)}
+							placeholder="ADD THE PANTONE COLOR CODE"
+						/>
+					</div>
+				)}
+				{baseColor == 'Custom Color' && (
+					<div className="px-[1px] col-span-4">
+						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+							Base Custom Color
+						</label>
+						<input
+							className="w-full py-4 px-2 border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400"
+							type="text"
+							value={baseCustomColor}
+							onChange={(e) => setBaseCustomColor(e.target.value)}
 							placeholder="ADD THE PANTONE COLOR CODE"
 						/>
 					</div>
