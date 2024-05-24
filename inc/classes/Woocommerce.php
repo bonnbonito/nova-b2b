@@ -588,8 +588,6 @@ class Woocommerce {
 		$original_total = get_post_meta( $post->ID, '_original_total', true );
 		$order_edit_url = admin_url( 'post.php?post=' . $order_id . '&action=edit' );
 
-		print_r( get_post_meta( $post->ID ) );
-
 		?>
 <a href="<?php echo esc_url( $order_edit_url ); ?>" class="button button-primary">View Order</a>
 

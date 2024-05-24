@@ -1657,7 +1657,7 @@ h6 {
 				'label'  => 'FILE',
 				'isFile' => true,
 			),
-			'files'                  => array(
+			'fileNames'              => array(
 				'label'   => 'FILES',
 				'isFiles' => true,
 			),

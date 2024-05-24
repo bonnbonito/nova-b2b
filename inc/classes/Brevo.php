@@ -30,18 +30,12 @@ class Brevo {
 		add_action( 'nova_user_partner_approved', array( $this, 'add_to_brevo_list' ) );
 	}
 
-	public function check_user_info() {
-		$all_meta_for_user = get_userdata( get_current_user_id() );
-		$meta              = get_user_meta( get_current_user_id() );
-		echo '<pre>';
-		print_r( $all_meta_for_user->user_email );
-		echo '</pre>';
-		echo '<pre>';
-		print_r( $meta );
-		echo '</pre>';
-	}
-
 	public function add_to_brevo_list( $user ) {
+
+		if ( ! $this->brevo_api ) {
+			return;
+		}
+
 		$user_id    = $user->ID;
 		$user       = get_userdata( $user_id );
 		$user_meta  = get_user_meta( $user_id );
