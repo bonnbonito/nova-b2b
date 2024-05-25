@@ -2,16 +2,16 @@ import { INDOOR_NOT_WATERPROOF } from '../../utils/defaults';
 
 export const acrylicBackingOptions = [
 	{
-		option: 'Black Backing',
+		option: 'Black PVC',
 	},
 	{
-		option: 'Frosted Clear Backing',
+		option: 'Frosted Clear Acrylic',
 	},
 	{
-		option: 'Clear Backing',
+		option: 'Clear Acrylic',
 	},
 	{
-		option: 'UV Printed Backing',
+		option: 'UV Printed Acrylic',
 	},
 ];
 
@@ -93,39 +93,39 @@ export const wireExitLocationOptions = [
 export const neonColorOptions = [
 	{
 		name: 'White',
-		color: '#ffffff',
+		color: '#FFFFFF',
 	},
 	{
 		name: 'Warm White',
-		color: '#fffacd',
+		color: '#FFFACD',
+	},
+	{
+		name: 'Lemon Yellow',
+		color: '#FFFF00',
+	},
+	{
+		name: 'Orange',
+		color: '#FFA500',
 	},
 	{
 		name: 'Red',
-		color: '#ff0000',
+		color: '#FF0000',
 	},
 	{
 		name: 'Pink',
-		color: '#ffc0cb',
+		color: '#FFC0CB',
+	},
+	{
+		name: 'Blue',
+		color: '#0000FF',
+	},
+	{
+		name: 'Cyan Blue',
+		color: '#00FFFF',
 	},
 	{
 		name: 'Green',
 		color: '#008000',
-	},
-	{
-		name: 'Cyan Blue',
-		color: '#00ffff',
-	},
-	{
-		name: 'Yellow',
-		color: '#ffff00',
-	},
-	{
-		name: 'Blue',
-		color: '#0000ff',
-	},
-	{
-		name: 'Orange',
-		color: '#ffa500',
 	},
 ];
 

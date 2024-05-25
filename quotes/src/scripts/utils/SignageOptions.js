@@ -198,9 +198,12 @@ const studLengthOptions = [
 	},
 ];
 
-const arrayRange = (start, stop, step) =>
+const arrayRange = (start, stop, step, inches = true) =>
 	Array.from({ length: (stop - start) / step + 1 }, (value, index) => (
-		<option value={`${start + index * step}"`}>{start + index * step}"</option>
+		<option value={`${start + index * step}${inches ? '"' : "'"}`}>
+			{start + index * step}
+			{inches ? '"' : "'"}
+		</option>
 	));
 
 export {

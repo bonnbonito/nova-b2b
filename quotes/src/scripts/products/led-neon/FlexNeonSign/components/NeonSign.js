@@ -11,6 +11,7 @@ import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
 import useOutsideClick from '../../../../utils/ClickOutside';
 import { arrayRange, setOptions } from '../../../../utils/SignageOptions';
+import { NeonColors } from '../../components/NeonColors';
 
 import {
 	EXCHANGE_RATE,
@@ -19,7 +20,6 @@ import {
 
 import {
 	acrylicBackingOptions,
-	neonColorOptions,
 	neonSignsMountingOptions,
 	remoteControlOptions,
 	waterProofOptions,
@@ -40,7 +40,7 @@ export const NeonSign = ({ item }) => {
 	const [height, setHeight] = useState(item.neonSignHeight ?? '');
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
-	const [neonUsed, setNeonUsed] = useState(item.neonUsed ?? '');
+	const [neonLength, setNeonLength] = useState(item.neonLength ?? '');
 	const [remoteControl, setRemoteControl] = useState(
 		item.remoteControl ?? 'No'
 	);
@@ -59,8 +59,8 @@ export const NeonSign = ({ item }) => {
 		return arrayRange(5, 40, 1);
 	}, []);
 
-	const neonUsedOptions = useMemo(() => {
-		return arrayRange(10, 60, 2);
+	const neonLengthOptions = useMemo(() => {
+		return arrayRange(10, 60, 2, false);
 	}, []);
 
 	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
@@ -69,42 +69,13 @@ export const NeonSign = ({ item }) => {
 
 	const colorRef = useRef(null);
 
-	const colorSelections = useMemo(
-		() => (
-			<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
-				{neonColorOptions.map((color) => (
-					<div
-						key={color.id} // Assuming each color has a unique 'id'
-						className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
-						onClick={() => {
-							setColor(color);
-							setOpenColor(false);
-						}}
-					>
-						<span
-							className="w-[18px] h-[18px] inline-block rounded-full border"
-							style={{
-								background:
-									color.name === 'Custom Color'
-										? `conic-gradient(from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-										: color.color,
-							}}
-						></span>
-						{color.name}
-					</div>
-				))}
-			</div>
-		),
-		[neonColorOptions]
-	);
-
 	const updateSignage = useCallback(() => {
 		const updatedSignage = signage.map((sign) => {
 			if (sign.id === item.id) {
 				return {
 					...sign,
 					waterproof,
-					neonColor: color?.name,
+					neonColor: color,
 					mounting,
 					fileNames,
 					filePaths,
@@ -113,7 +84,7 @@ export const NeonSign = ({ item }) => {
 					sets,
 					usdPrice,
 					cadPrice,
-					neonUsed,
+					neonLength,
 					neonSignWidth: width,
 					neonSignHeight: height,
 					acrylicBackingOption,
@@ -134,7 +105,7 @@ export const NeonSign = ({ item }) => {
 		sets,
 		width,
 		height,
-		neonUsed,
+		neonLength,
 		acrylicBackingOption,
 		remoteControl,
 		wireExitLocation,
@@ -147,7 +118,7 @@ export const NeonSign = ({ item }) => {
 
 		if (!width) missingFields.push('Select Neon Sign Width');
 		if (!height) missingFields.push('Select Neon Sign Height');
-		if (!neonUsed) missingFields.push('Select Neon Used(ft)');
+		if (!neonLength) missingFields.push('Select Neon Used(ft)');
 		if (!acrylicBackingOption) missingFields.push('Acrylic Backing Option');
 		if (!mounting) missingFields.push('Select Mounting');
 		if (!remoteControl) missingFields.push('Select Remote Control');
@@ -188,8 +159,7 @@ export const NeonSign = ({ item }) => {
 		sets,
 		width,
 		height,
-		neonUsed,
-		neonUsed,
+		neonLength,
 		acrylicBackingOption,
 		remoteControl,
 		wireExitLocation,
@@ -201,26 +171,32 @@ export const NeonSign = ({ item }) => {
 	}, [updateSignage, checkAndAddMissingFields]);
 
 	const computePricing = () => {
-		if (!width || !height || !neonUsed || !waterproof || !acrylicBackingOption)
+		if (
+			!width ||
+			!height ||
+			!neonLength ||
+			!waterproof ||
+			!acrylicBackingOption
+		)
 			return 0;
 		let tempTotal =
 			(parseInt(width) + 3) * (parseInt(height) + 3) * 0.11 +
-			parseInt(neonUsed) * 6.9 +
+			parseInt(neonLength) * 6.9 +
 			25;
 
 		tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.15;
 
 		let additional = 0;
 
-		if (acrylicBackingOption === 'UV Printed Backing') {
+		if (acrylicBackingOption === 'UV Printed Acrylic') {
 			additional = parseInt(width) * parseInt(height) * 0.25;
 			tempTotal += additional;
 		}
-		if (acrylicBackingOption === 'Frosted Clear Backing') {
+		if (acrylicBackingOption === 'Frosted Clear Acrylic') {
 			additional = parseInt(width) * parseInt(height) * 0.1;
 			tempTotal += additional;
 		}
-		if (acrylicBackingOption === 'Clear Backing') {
+		if (acrylicBackingOption === 'Clear Acrylic') {
 			additional = parseInt(width) * parseInt(height) * 0.17;
 			tempTotal += additional;
 		}
@@ -258,7 +234,7 @@ export const NeonSign = ({ item }) => {
 	}, [
 		width,
 		height,
-		neonUsed,
+		neonLength,
 		waterproof,
 		acrylicBackingOption,
 		mounting,
@@ -319,13 +295,13 @@ export const NeonSign = ({ item }) => {
 					options={neonSignsWidthHeight}
 				/>
 				<Dropdown
-					title="Neon Used(ft)"
-					value={neonUsed}
-					onChange={(e) => setNeonUsed(e.target.value)}
-					options={neonUsedOptions}
+					title="Neon Length(ft)"
+					value={neonLength}
+					onChange={(e) => setNeonLength(e.target.value)}
+					options={neonLengthOptions}
 				/>
 				<Dropdown
-					title="Acrylic Backing"
+					title="Backing"
 					value={acrylicBackingOption}
 					onChange={(e) => setAcrylicBackingOption(e.target.value)}
 					options={acrylicBackingSelections}
@@ -394,31 +370,13 @@ export const NeonSign = ({ item }) => {
 					onlyValue={true}
 				/>
 
-				<div className="px-[1px] relative" ref={colorRef}>
-					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-						Color
-					</label>
-					<div
-						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-							color.name ? 'text-black' : 'text-[#dddddd]'
-						}`}
-						onClick={() => {
-							setOpenColor((prev) => !prev);
-						}}
-					>
-						<span
-							className="rounded-full w-[18px] h-[18px] border mr-2"
-							style={{
-								background:
-									color.name == 'Custom Color'
-										? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-										: color.color,
-							}}
-						></span>
-						{color.name === '' ? 'CHOOSE OPTION' : color.name}
-					</div>
-					{openColor && colorSelections}
-				</div>
+				<NeonColors
+					colorRef={colorRef}
+					color={color}
+					setOpenColor={setOpenColor}
+					setColor={setColor}
+					openColor={openColor}
+				/>
 
 				<Dropdown
 					title="Quantity"
