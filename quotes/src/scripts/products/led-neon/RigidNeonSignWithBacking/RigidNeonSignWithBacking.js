@@ -27,8 +27,6 @@ export default function RigidNeonSignWithBacking() {
 		paintedPCFinish: '',
 		remoteControl: 'No',
 		neonColor: '',
-		baseColor: 'White',
-		baseCustomColor: '',
 		pcCustomColor: '',
 		waterproof: INDOOR_NOT_WATERPROOF,
 		comments: '',

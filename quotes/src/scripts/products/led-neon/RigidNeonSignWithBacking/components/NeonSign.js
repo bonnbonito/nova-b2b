@@ -12,6 +12,7 @@ import UploadFiles from '../../../../UploadFiles';
 import useOutsideClick from '../../../../utils/ClickOutside';
 import { colorOptions } from '../../../../utils/ColorOptions';
 import { arrayRange, setOptions } from '../../../../utils/SignageOptions';
+import { NeonColors } from '../../components/NeonColors';
 
 import {
 	EXCHANGE_RATE,
@@ -19,8 +20,6 @@ import {
 } from '../../../../utils/defaults';
 
 import {
-	baseColorOptions,
-	neonColorOptions,
 	neonSignsMountingOptions,
 	remoteControlOptions,
 	rigidBackingOptions,
@@ -61,16 +60,11 @@ export const NeonSign = ({ item }) => {
 	const [files, setFiles] = useState(item.files ?? []);
 	const [neonColor, setNeonColor] = useState(item.neonColor ?? '');
 	const [color, setColor] = useState(item.paintedPCColor ?? '');
-	const [baseColor, setBaseColor] = useState(item.baseColor ?? 'White');
 	const [openNeonColor, setOpenNeonColor] = useState(false);
 	const [openColor, setOpenColor] = useState(false);
-	const [openBaseColor, setOpenBaseColor] = useState(false);
 	const [width, setWidth] = useState(item.neonSignWidth ?? '');
 	const [finish, setFinish] = useState(item.paintedPCFinish ?? '');
 	const [customColor, setCustomColor] = useState(item.customColor ?? '');
-	const [baseCustomColor, setBaseCustomColor] = useState(
-		item.baseCustomColor ?? ''
-	);
 	const [neonLength8mm, setNeonLength8mm] = useState(item.neonLength8mm ?? '');
 	const [rigidBacking, setRigidBacking] = useState(
 		item.rigidBacking ?? 'Frosted Clear PC'
@@ -102,7 +96,7 @@ export const NeonSign = ({ item }) => {
 	}, []);
 
 	const neonLength = useMemo(() => {
-		return arrayRange(2, 100, 2);
+		return arrayRange(2, 100, 2, false);
 	}, []);
 
 	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
@@ -111,38 +105,10 @@ export const NeonSign = ({ item }) => {
 
 	const neonColorRef = useRef(null);
 	const colorRef = useRef(null);
-	const baseColorRef = useRef(null);
 
-	const colorSelections = useMemo(
-		() => (
-			<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
-				{neonColorOptions.map((color) => (
-					<div
-						key={color.id} // Assuming each color has a unique 'id'
-						className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
-						onClick={() => {
-							setNeonColor(color);
-							setOpenNeonColor(false);
-							setOpenBaseColor(false);
-							setOpenColor(false);
-						}}
-					>
-						<span
-							className="w-[18px] h-[18px] inline-block rounded-full border"
-							style={{
-								background:
-									color.name === 'Custom Color'
-										? `conic-gradient(from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-										: color.color,
-							}}
-						></span>
-						{color.name}
-					</div>
-				))}
-			</div>
-		),
-		[neonColorOptions]
-	);
+	const handledSelectedColors = (selectedColors) => {
+		setNeonColor(selectedColors.map((option) => option.name).join(', '));
+	};
 
 	const updateSignage = useCallback(() => {
 		const updatedSignage = signage.map((sign) => {
@@ -150,7 +116,7 @@ export const NeonSign = ({ item }) => {
 				return {
 					...sign,
 					waterproof,
-					neonColor: neonColor?.name,
+					neonColor: neonColor,
 					paintedPCColor: color?.name,
 					paintedPCFinish: finish,
 					wireType,
@@ -170,8 +136,6 @@ export const NeonSign = ({ item }) => {
 					neonLength20mm,
 					remoteControl,
 					customColor,
-					baseColor,
-					baseCustomColor,
 					neonSignWidth: width,
 					neonSignHeight: height,
 				};
@@ -183,8 +147,6 @@ export const NeonSign = ({ item }) => {
 		waterproof,
 		neonColor,
 		customColor,
-		baseColor,
-		baseCustomColor,
 		rigidBacking,
 		color,
 		mounting,
@@ -238,15 +200,9 @@ export const NeonSign = ({ item }) => {
 			}
 		}
 
-		if (baseColor === 'Custom Color' && !customColor) {
-			missingFields.push(
-				'Add the Pantone color code of your base custom color.'
-			);
-		}
-
 		if (!wireType) missingFields.push('Select WireType');
 
-		if (!neonColor) missingFields.push('Select Neon Color');
+		if (!neonColor) missingFields.push('Select Neon Colors');
 
 		if (!waterproof) missingFields.push('Select Environment');
 
@@ -280,8 +236,6 @@ export const NeonSign = ({ item }) => {
 		neonColor,
 		customColor,
 		waterproof,
-		baseColor,
-		baseCustomColor,
 		mounting,
 		finish,
 		sets,
@@ -317,10 +271,6 @@ export const NeonSign = ({ item }) => {
 			L4 * 25 +
 			parseInt(width) * parseInt(height) * 0.6 +
 			45;
-
-		if (baseColor && baseColor !== 'White') {
-			tempTotal *= 1.1;
-		}
 
 		let rigidBackingPrice = 0;
 
@@ -382,7 +332,6 @@ export const NeonSign = ({ item }) => {
 		neonLength14mm,
 		neonLength20mm,
 		rigidBacking,
-		baseColor,
 		sets,
 	]);
 
@@ -456,11 +405,10 @@ export const NeonSign = ({ item }) => {
 		setFinish(target);
 	};
 
-	useOutsideClick([neonColorRef, colorRef, baseColorRef], () => {
-		if (!openNeonColor && !openColor && !openBaseColor) return;
+	useOutsideClick([neonColorRef, colorRef], () => {
+		if (!openNeonColor && !openColor) return;
 		setOpenNeonColor(false);
 		setOpenColor(false);
-		setOpenBaseColor(false);
 	});
 
 	return (
@@ -599,60 +547,21 @@ export const NeonSign = ({ item }) => {
 					</>
 				)}
 
-				<div className="px-[1px] relative" ref={baseColorRef}>
-					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-						Base Color
-					</label>
-					<div
-						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-							baseColor ? 'text-black' : 'text-[#dddddd]'
-						}`}
-						onClick={() => {
-							setOpenBaseColor((prev) => !prev);
-							setOpenNeonColor(false);
-							setOpenColor(false);
-						}}
-					>
-						<span
-							className="rounded-full w-[18px] h-[18px] border mr-2"
-							style={{
-								background:
-									baseColor == 'Custom Color'
-										? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-										: baseColor.color,
-							}}
-						></span>
-						{baseColor === '' ? 'CHOOSE OPTION' : baseColor}
-					</div>
-					{openBaseColor && (
-						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
-							{baseColorOptions.map((color) => {
-								return (
-									<div
-										className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
-										onClick={() => {
-											setBaseColor(color.name);
-											setOpenColor(false);
-											setOpenNeonColor(false);
-											setOpenBaseColor(false);
-										}}
-									>
-										<span
-											className="w-[18px] h-[18px] inline-block rounded-full border"
-											style={{
-												background:
-													color.name == 'Custom Color'
-														? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-														: color.color,
-											}}
-										></span>
-										{color.name}
-									</div>
-								);
-							})}
-						</div>
-					)}
-				</div>
+				<Dropdown
+					title="Environment"
+					onChange={handleOnChangeWaterproof}
+					options={waterProofOptions.map((option) => (
+						<option
+							key={option.option}
+							value={option.option}
+							selected={option.option === waterproof}
+						>
+							{option.option}
+						</option>
+					))}
+					value={waterproof}
+					onlyValue={true}
+				/>
 
 				<Dropdown
 					title="Mounting Options"
@@ -718,47 +627,16 @@ export const NeonSign = ({ item }) => {
 					onlyValue={true}
 				/>
 
-				<div className="px-[1px] relative" ref={neonColorRef}>
-					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-						Neon Color
-					</label>
-					<div
-						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-							neonColor.name ? 'text-black' : 'text-[#dddddd]'
-						}`}
-						onClick={() => {
-							setOpenNeonColor((prev) => !prev);
-							setOpenColor(false);
-						}}
-					>
-						<span
-							className="rounded-full w-[18px] h-[18px] border mr-2"
-							style={{
-								background:
-									neonColor.name == 'Custom Color'
-										? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-										: neonColor.color,
-							}}
-						></span>
-						{neonColor.name === '' ? 'CHOOSE OPTION' : neonColor.name}
-					</div>
-					{openNeonColor && colorSelections}
-				</div>
-
-				<Dropdown
-					title="Environment"
-					onChange={handleOnChangeWaterproof}
-					options={waterProofOptions.map((option) => (
-						<option
-							key={option.option}
-							value={option.option}
-							selected={option.option === waterproof}
-						>
-							{option.option}
-						</option>
-					))}
-					value={waterproof}
-					onlyValue={true}
+				<NeonColors
+					colorRef={neonColorRef}
+					color={neonColor}
+					toggle={() => {
+						setOpenNeonColor((prev) => !prev);
+						setOpenColor(false);
+					}}
+					openColor={openNeonColor}
+					setToogle={setOpenNeonColor}
+					getSelectedColors={handledSelectedColors}
 				/>
 
 				<Dropdown
@@ -784,20 +662,7 @@ export const NeonSign = ({ item }) => {
 						/>
 					</div>
 				)}
-				{baseColor == 'Custom Color' && (
-					<div className="px-[1px] col-span-4">
-						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-							Base Custom Color
-						</label>
-						<input
-							className="w-full py-4 px-2 border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400"
-							type="text"
-							value={baseCustomColor}
-							onChange={(e) => setBaseCustomColor(e.target.value)}
-							placeholder="ADD THE PANTONE COLOR CODE"
-						/>
-					</div>
-				)}
+
 				<div className="px-[1px] col-span-4">
 					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
 						COMMENTS

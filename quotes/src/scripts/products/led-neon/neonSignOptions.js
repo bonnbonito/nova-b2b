@@ -148,3 +148,18 @@ export const waterProofOptions = [
 		option: 'Outdoor Events(Temporary)',
 	},
 ];
+
+export const ledSpacerStandoffDefaultOptions = [
+	{
+		value: '1.5"',
+	},
+	{
+		value: '3.2"',
+	},
+	{
+		value: '4"',
+	},
+	{
+		value: '6"',
+	},
+];

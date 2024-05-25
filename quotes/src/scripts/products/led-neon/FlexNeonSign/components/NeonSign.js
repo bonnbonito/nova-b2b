@@ -252,6 +252,10 @@ export const NeonSign = ({ item }) => {
 		setRemoteControl(value);
 	};
 
+	const handledSelectedColors = (selectedColors) => {
+		setColor(selectedColors.map((option) => option.name).join(', '));
+	};
+
 	const handleOnChangeWireExitLocation = (e) => {
 		const value = e.target.value;
 		setWireExitLocation(value);
@@ -268,11 +272,6 @@ export const NeonSign = ({ item }) => {
 	const handleOnChangeMounting = (e) => {
 		setMounting(e.target.value);
 	};
-
-	useOutsideClick([colorRef], () => {
-		if (!openColor) return;
-		setOpenColor(false);
-	});
 
 	return (
 		<>
@@ -373,9 +372,12 @@ export const NeonSign = ({ item }) => {
 				<NeonColors
 					colorRef={colorRef}
 					color={color}
-					setOpenColor={setOpenColor}
-					setColor={setColor}
+					toggle={() => {
+						setOpenColor((prev) => !prev);
+					}}
 					openColor={openColor}
+					setToogle={setOpenColor}
+					getSelectedColors={handledSelectedColors}
 				/>
 
 				<Dropdown

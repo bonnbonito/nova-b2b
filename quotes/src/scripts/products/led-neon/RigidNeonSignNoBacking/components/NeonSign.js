@@ -15,6 +15,7 @@ import {
 	setOptions,
 	spacerStandoffDefaultOptions,
 } from '../../../../utils/SignageOptions';
+import { NeonColors } from '../../components/NeonColors';
 
 import {
 	EXCHANGE_RATE,
@@ -23,8 +24,7 @@ import {
 } from '../../../../utils/defaults';
 
 import {
-	baseColorOptions,
-	neonColorOptions,
+	ledSpacerStandoffDefaultOptions,
 	remoteControlOptions,
 } from '../../neonSignOptions';
 
@@ -43,6 +43,15 @@ const rigidNoBackingMountingOptions = [
 	},
 	{
 		option: M4_STUD_WITH_SPACER,
+	},
+];
+
+const wireTypeOptions = [
+	{
+		option: '6ft open wires',
+	},
+	{
+		option: '10ft open wires',
 	},
 ];
 
@@ -81,49 +90,72 @@ export const NeonSign = ({ item }) => {
 		item.remoteControl ?? 'No'
 	);
 
+	const [wireType, setWireType] = useState(item.wireType ?? '');
+
 	const neonSignsWidthHeight = useMemo(() => {
 		return arrayRange(5, 95, 1);
 	}, []);
 
 	const neonLength = useMemo(() => {
-		return arrayRange(2, 100, 2);
+		return arrayRange(2, 100, 2, false);
 	}, []);
 
 	const [waterproof, setWaterproof] = useState(item.rigidWaterproof ?? '');
 	const [mounting, setMounting] = useState(item.mounting ?? '');
 	const [sets, setSets] = useState(item.sets ?? 1);
 
+	const [spacerStandoffOptions, setSpacerStandoffOptions] = useState([
+		{ value: '0.5"' },
+		{ value: '1"' },
+	]);
+
+	const [spacerStandoffDistance, setSpacerStandoffDistance] = useState(
+		item.spacerStandoffDistance ?? ''
+	);
+
 	const neonColorRef = useRef(null);
 	const colorRef = useRef(null);
 
-	const colorSelections = useMemo(
-		() => (
-			<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
-				{neonColorOptions.map((color) => (
-					<div
-						key={color.id} // Assuming each color has a unique 'id'
-						className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
-						onClick={() => {
-							setNeonColor(color);
-							setOpenNeonColor(false);
-						}}
-					>
-						<span
-							className="w-[18px] h-[18px] inline-block rounded-full border"
-							style={{
-								background:
-									color.name === 'Custom Color'
-										? `conic-gradient(from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-										: color.color,
-							}}
-						></span>
-						{color.name}
-					</div>
-				))}
-			</div>
-		),
-		[neonColorOptions]
-	);
+	const handledSelectedColors = (selectedColors) => {
+		setNeonColor(selectedColors.map((option) => option.name).join(', '));
+	};
+
+	const handleOnChangeWireType = (e) => {
+		const value = e.target.value;
+		setWireType(value);
+	};
+
+	const handleonChangeSpacerDistance = (e) => {
+		setSpacerStandoffDistance(e.target.value);
+	};
+
+	const handleOnChangeStudLength = (e) => {
+		const target = e.target.value;
+		setRigidStandOffSpace(target); // Directly set the value without a callback
+
+		if (target === '1.5"') {
+			setSpacerStandoffOptions([{ value: '0.5"' }, { value: '1"' }]);
+			if (!['0.5"', '1"'].includes(spacerStandoffDistance)) {
+				setSpacerStandoffDistance(''); // Reset if not one of the valid options
+			}
+		} else if (['3.2"', '4"'].includes(target)) {
+			setSpacerStandoffOptions([
+				{ value: '0.5"' },
+				{ value: '1"' },
+				{ value: '1.5"' },
+				{ value: '2"' },
+			]);
+			if (['3"', '4"'].includes(spacerStandoffDistance)) {
+				setSpacerStandoffDistance(''); // Reset if the distance is invalid for these options
+			}
+		} else {
+			setSpacerStandoffOptions(spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
+		}
+
+		if (target === '') {
+			setSpacerStandoffDistance(''); // Always reset if the target is empty
+		}
+	};
 
 	const updateSignage = useCallback(() => {
 		const updatedSignage = signage.map((sign) => {
@@ -131,9 +163,10 @@ export const NeonSign = ({ item }) => {
 				return {
 					...sign,
 					rigidWaterproof: waterproof,
-					neonColor: neonColor?.name,
+					neonColor: neonColor,
 					baseColor: color?.name,
 					mounting,
+					spacerStandoffDistance,
 					fileNames,
 					filePaths,
 					fileUrls,
@@ -149,6 +182,7 @@ export const NeonSign = ({ item }) => {
 					customColor,
 					neonSignWidth: width,
 					neonSignHeight: height,
+					wireType,
 					rigidStandOffSpace,
 				};
 			}
@@ -174,8 +208,10 @@ export const NeonSign = ({ item }) => {
 		neonLength10mm,
 		neonLength20mm,
 		rigidStandOffSpace,
+		spacerStandoffDistance,
 		usdPrice,
 		cadPrice,
+		wireType,
 	]);
 
 	const checkAndAddMissingFields = useCallback(() => {
@@ -208,9 +244,11 @@ export const NeonSign = ({ item }) => {
 			missingFields.push('Add the Pantone color code of your custom color.');
 		}
 
-		if (!neonColor) missingFields.push('Select Neon Color');
+		if (!neonColor) missingFields.push('Select Neon Colors');
 
 		if (!waterproof) missingFields.push('Select Environment');
+
+		if (!wireType) missingFields.push('Select Wire Type');
 
 		if (!fileUrls || fileUrls.length === 0)
 			missingFields.push('Upload a PDF/AI File');
@@ -252,6 +290,7 @@ export const NeonSign = ({ item }) => {
 		neonLength14mm,
 		neonLength20mm,
 		rigidStandOffSpace,
+		wireType,
 	]);
 
 	useEffect(() => {
@@ -356,6 +395,10 @@ export const NeonSign = ({ item }) => {
 			setRcOptions(remoteControlOptions);
 		}
 		setWaterproof(target);
+
+		setWireType(
+			target === INDOOR_NOT_WATERPROOF ? '6ft open wires' : '10ft open wires'
+		);
 	};
 
 	const handleOnChangeRemote = (e) => {
@@ -466,20 +509,36 @@ export const NeonSign = ({ item }) => {
 				/>
 
 				{mounting === M4_STUD_WITH_SPACER && (
-					<Dropdown
-						title="Standoff Space"
-						onChange={handleOnSpacer}
-						options={spacerStandoffDefaultOptions.map((option) => (
-							<option
-								key={option.value}
-								value={option.value}
-								selected={option.value === rigidStandOffSpace}
-							>
-								{option.value}
-							</option>
-						))}
-						value={rigidStandOffSpace}
-					/>
+					<>
+						<Dropdown
+							title="M4 Stud Length"
+							onChange={handleOnChangeStudLength}
+							options={ledSpacerStandoffDefaultOptions.map((option) => (
+								<option
+									key={option.value}
+									value={option.value}
+									selected={option.value === rigidStandOffSpace}
+								>
+									{option.value}
+								</option>
+							))}
+							value={rigidStandOffSpace}
+						/>
+
+						<Dropdown
+							title="STANDOFF SPACE"
+							onChange={handleonChangeSpacerDistance}
+							options={spacerStandoffOptions.map((option) => (
+								<option
+									value={option.value}
+									selected={option.value == spacerStandoffDistance}
+								>
+									{option.value}
+								</option>
+							))}
+							value={spacerStandoffDistance}
+						/>
+					</>
 				)}
 
 				<Dropdown
@@ -498,84 +557,32 @@ export const NeonSign = ({ item }) => {
 					onlyValue={true}
 				/>
 
-				<div className="px-[1px] relative" ref={colorRef}>
-					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-						Base Color
-					</label>
-					<div
-						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-							color.name ? 'text-black' : 'text-[#dddddd]'
-						}`}
-						onClick={() => {
-							setOpenColor((prev) => !prev);
-							setOpenNeonColor(false);
-						}}
-					>
-						<span
-							className="rounded-full w-[18px] h-[18px] border mr-2"
-							style={{
-								background:
-									color.name == 'Custom Color'
-										? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-										: color.color,
-							}}
-						></span>
-						{color.name === '' ? 'CHOOSE OPTION' : color.name}
-					</div>
-					{openColor && (
-						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
-							{baseColorOptions.map((color) => {
-								return (
-									<div
-										className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
-										onClick={() => {
-											setColor(color);
-											setOpenColor(false);
-										}}
-									>
-										<span
-											className="w-[18px] h-[18px] inline-block rounded-full border"
-											style={{
-												background:
-													color.name == 'Custom Color'
-														? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-														: color.color,
-											}}
-										></span>
-										{color.name}
-									</div>
-								);
-							})}
-						</div>
-					)}
-				</div>
+				<NeonColors
+					colorRef={neonColorRef}
+					color={neonColor}
+					toggle={() => {
+						setOpenNeonColor((prev) => !prev);
+						setOpenColor(false);
+					}}
+					openColor={openNeonColor}
+					setToogle={setOpenNeonColor}
+					getSelectedColors={handledSelectedColors}
+				/>
 
-				<div className="px-[1px] relative" ref={neonColorRef}>
-					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-						Neon Color
-					</label>
-					<div
-						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-							neonColor.name ? 'text-black' : 'text-[#dddddd]'
-						}`}
-						onClick={() => {
-							setOpenNeonColor((prev) => !prev);
-							setOpenColor(false);
-						}}
-					>
-						<span
-							className="rounded-full w-[18px] h-[18px] border mr-2"
-							style={{
-								background:
-									neonColor.name == 'Custom Color'
-										? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-										: neonColor.color,
-							}}
-						></span>
-						{neonColor.name === '' ? 'CHOOSE OPTION' : neonColor.name}
-					</div>
-					{openNeonColor && colorSelections}
-				</div>
+				<Dropdown
+					title="Wire Type"
+					onChange={handleOnChangeWireType}
+					options={wireTypeOptions.map((option) => (
+						<option
+							key={option.option}
+							value={option.option}
+							selected={option.option === wireType}
+						>
+							{option.option}
+						</option>
+					))}
+					value={wireType}
+				/>
 
 				<Dropdown
 					title="Quantity"

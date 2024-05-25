@@ -14,7 +14,7 @@ export default function Dropdown({
 			</label>
 			<select
 				style={style}
-				className={`border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] ${selectClass}`}
+				className={`cursor-pointer border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] ${selectClass}`}
 				onChange={onChange}
 				value={value}
 			>

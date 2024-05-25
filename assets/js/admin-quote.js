@@ -507,23 +507,9 @@ function getSignageDetailFields(sign) {
 
 		{ label: 'MOUNTING', value: sign.mounting ? sign.mounting : '' },
 		{
-			label: 'STANDOFF SPACE',
+			label: 'M4 STUD LENGTH',
 			value: sign.rigidStandOffSpace ? sign.rigidStandOffSpace : '',
 		},
-
-		{
-			label: 'REMOTE CONTROL',
-			value: sign.remoteControl ? sign.remoteControl : '',
-		},
-		{
-			label: 'WIRE EXIT LOCATION',
-			value: sign.wireExitLocation ? sign.wireExitLocation : '',
-		},
-		{
-			label: 'WIRE TYPE',
-			value: sign.wireType ? sign.wireType : '',
-		},
-		{ label: 'NEON COLOR', value: sign.neonColor ? sign.neonColor : '' },
 
 		{ label: 'STUD LENGTH', value: sign.studLength ? sign.studLength : '' },
 		{
@@ -534,6 +520,20 @@ function getSignageDetailFields(sign) {
 		{
 			label: 'METAL FINISHING',
 			value: sign.metalFinishing ? sign.metalFinishing : '',
+		},
+
+		{
+			label: 'REMOTE CONTROL',
+			value: sign.remoteControl ? sign.remoteControl : '',
+		},
+		{
+			label: 'WIRE EXIT LOCATION',
+			value: sign.wireExitLocation ? sign.wireExitLocation : '',
+		},
+		{ label: 'NEON COLORS', value: sign.neonColor ? sign.neonColor : '' },
+		{
+			label: 'WIRE TYPE',
+			value: sign.wireType ? sign.wireType : '',
 		},
 
 		{
