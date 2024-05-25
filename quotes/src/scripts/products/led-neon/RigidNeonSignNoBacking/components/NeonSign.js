@@ -65,11 +65,8 @@ export const NeonSign = ({ item }) => {
 	const [rcOptions, setRcOptions] = useState(remoteControlOptions);
 	const [files, setFiles] = useState(item.files ?? []);
 	const [neonColor, setNeonColor] = useState(item.neonColor ?? '');
-	const [color, setColor] = useState(item.baseColor ?? '');
 	const [openNeonColor, setOpenNeonColor] = useState(false);
-	const [openColor, setOpenColor] = useState(false);
 	const [width, setWidth] = useState(item.neonSignWidth ?? '');
-	const [customColor, setCustomColor] = useState(item.customColor ?? '');
 	const [neonLength8mm, setNeonLength8mm] = useState(item.neonLength8mm ?? '');
 	const [rigidStandOffSpace, setRigidStandOffSpace] = useState(
 		item.rigidStandOffSpace ?? ''
@@ -114,7 +111,6 @@ export const NeonSign = ({ item }) => {
 	);
 
 	const neonColorRef = useRef(null);
-	const colorRef = useRef(null);
 
 	const handledSelectedColors = (selectedColors) => {
 		setNeonColor(selectedColors.map((option) => option.name).join(', '));
@@ -164,7 +160,6 @@ export const NeonSign = ({ item }) => {
 					...sign,
 					rigidWaterproof: waterproof,
 					neonColor: neonColor,
-					baseColor: color?.name,
 					mounting,
 					spacerStandoffDistance,
 					fileNames,
@@ -179,7 +174,6 @@ export const NeonSign = ({ item }) => {
 					neonLength14mm,
 					neonLength20mm,
 					remoteControl,
-					customColor,
 					neonSignWidth: width,
 					neonSignHeight: height,
 					wireType,
@@ -192,8 +186,6 @@ export const NeonSign = ({ item }) => {
 	}, [
 		waterproof,
 		neonColor,
-		customColor,
-		color,
 		mounting,
 		fileNames,
 		filePaths,
@@ -238,11 +230,6 @@ export const NeonSign = ({ item }) => {
 		}
 
 		if (!remoteControl) missingFields.push('Select Remote Control');
-		if (!color) missingFields.push('Select Color');
-
-		if (color?.name === 'Custom Color' && !customColor) {
-			missingFields.push('Add the Pantone color code of your custom color.');
-		}
 
 		if (!neonColor) missingFields.push('Select Neon Colors');
 
@@ -276,9 +263,7 @@ export const NeonSign = ({ item }) => {
 		});
 	}, [
 		fileUrls,
-		color,
 		neonColor,
-		customColor,
 		waterproof,
 		mounting,
 		sets,
@@ -323,10 +308,6 @@ export const NeonSign = ({ item }) => {
 			tempTotal *= 1.05;
 		}
 
-		if (color?.name && color?.name !== 'White') {
-			tempTotal *= 1.1;
-		}
-
 		let remotePrice = 0;
 
 		if (remoteControl === 'Yes') {
@@ -356,7 +337,6 @@ export const NeonSign = ({ item }) => {
 		neonLength10mm,
 		neonLength14mm,
 		neonLength20mm,
-		color,
 		rigidStandOffSpace,
 		sets,
 	]);
@@ -417,12 +397,6 @@ export const NeonSign = ({ item }) => {
 			setRigidStandOffSpace('1.5"');
 		}
 	};
-
-	useOutsideClick([neonColorRef, colorRef], () => {
-		if (!openNeonColor && !openColor) return;
-		setOpenNeonColor(false);
-		setOpenColor(false);
-	});
 
 	return (
 		<>
@@ -562,7 +536,6 @@ export const NeonSign = ({ item }) => {
 					color={neonColor}
 					toggle={() => {
 						setOpenNeonColor((prev) => !prev);
-						setOpenColor(false);
 					}}
 					openColor={openNeonColor}
 					setToogle={setOpenNeonColor}
@@ -593,20 +566,6 @@ export const NeonSign = ({ item }) => {
 				/>
 			</div>
 			<div className="quote-grid">
-				{color?.name == 'Custom Color' && (
-					<div className="px-[1px] col-span-4">
-						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-							Custom Color
-						</label>
-						<input
-							className="w-full py-4 px-2 border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400"
-							type="text"
-							value={customColor}
-							onChange={(e) => setCustomColor(e.target.value)}
-							placeholder="ADD THE PANTONE COLOR CODE"
-						/>
-					</div>
-				)}
 				<div className="px-[1px] col-span-4">
 					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
 						COMMENTS

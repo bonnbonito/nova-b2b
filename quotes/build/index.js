@@ -9832,7 +9832,7 @@ const wireTypeOptions = [{
 const NeonSign = ({
   item
 }) => {
-  var _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$neonColor, _item$baseColor, _item$neonSignWidth, _item$customColor, _item$neonLength8mm, _item$rigidStandOffSp, _item$neonLength10mm, _item$neonLength14mm, _item$neonLength20mm, _item$neonSignHeight, _item$usdPrice, _item$cadPrice, _item$remoteControl, _item$wireType, _item$rigidWaterproof, _item$mounting, _item$sets, _item$spacerStandoffD;
+  var _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$neonColor, _item$neonSignWidth, _item$neonLength8mm, _item$rigidStandOffSp, _item$neonLength10mm, _item$neonLength14mm, _item$neonLength20mm, _item$neonSignHeight, _item$usdPrice, _item$cadPrice, _item$remoteControl, _item$wireType, _item$rigidWaterproof, _item$mounting, _item$sets, _item$spacerStandoffD;
   const {
     signage,
     setSignage,
@@ -9845,11 +9845,8 @@ const NeonSign = ({
   const [rcOptions, setRcOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_neonSignOptions__WEBPACK_IMPORTED_MODULE_8__.remoteControlOptions);
   const [files, setFiles] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$files = item.files) !== null && _item$files !== void 0 ? _item$files : []);
   const [neonColor, setNeonColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$neonColor = item.neonColor) !== null && _item$neonColor !== void 0 ? _item$neonColor : '');
-  const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$baseColor = item.baseColor) !== null && _item$baseColor !== void 0 ? _item$baseColor : '');
   const [openNeonColor, setOpenNeonColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [openColor, setOpenColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$neonSignWidth = item.neonSignWidth) !== null && _item$neonSignWidth !== void 0 ? _item$neonSignWidth : '');
-  const [customColor, setCustomColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$customColor = item.customColor) !== null && _item$customColor !== void 0 ? _item$customColor : '');
   const [neonLength8mm, setNeonLength8mm] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$neonLength8mm = item.neonLength8mm) !== null && _item$neonLength8mm !== void 0 ? _item$neonLength8mm : '');
   const [rigidStandOffSpace, setRigidStandOffSpace] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$rigidStandOffSp = item.rigidStandOffSpace) !== null && _item$rigidStandOffSp !== void 0 ? _item$rigidStandOffSp : '');
   const [neonLength10mm, setNeonLength10mm] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$neonLength10mm = item.neonLength10mm) !== null && _item$neonLength10mm !== void 0 ? _item$neonLength10mm : '');
@@ -9876,7 +9873,6 @@ const NeonSign = ({
   }]);
   const [spacerStandoffDistance, setSpacerStandoffDistance] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$spacerStandoffD = item.spacerStandoffDistance) !== null && _item$spacerStandoffD !== void 0 ? _item$spacerStandoffD : '');
   const neonColorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  const colorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const handledSelectedColors = selectedColors => {
     setNeonColor(selectedColors.map(option => option.name).join(', '));
   };
@@ -9929,7 +9925,6 @@ const NeonSign = ({
           ...sign,
           rigidWaterproof: waterproof,
           neonColor: neonColor,
-          baseColor: color?.name,
           mounting,
           spacerStandoffDistance,
           fileNames,
@@ -9944,7 +9939,6 @@ const NeonSign = ({
           neonLength14mm,
           neonLength20mm,
           remoteControl,
-          customColor,
           neonSignWidth: width,
           neonSignHeight: height,
           wireType,
@@ -9954,7 +9948,7 @@ const NeonSign = ({
       return sign;
     });
     setSignage(updatedSignage);
-  }, [waterproof, neonColor, customColor, color, mounting, fileNames, filePaths, fileUrls, files, sets, width, height, remoteControl, neonLength8mm, neonLength14mm, neonLength10mm, neonLength20mm, rigidStandOffSpace, spacerStandoffDistance, usdPrice, cadPrice, wireType]);
+  }, [waterproof, neonColor, mounting, fileNames, filePaths, fileUrls, files, sets, width, height, remoteControl, neonLength8mm, neonLength14mm, neonLength10mm, neonLength20mm, rigidStandOffSpace, spacerStandoffDistance, usdPrice, cadPrice, wireType]);
   const checkAndAddMissingFields = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(() => {
     const missingFields = [];
     if (!width) missingFields.push('Select Neon Sign Width');
@@ -9967,10 +9961,6 @@ const NeonSign = ({
       if (!rigidStandOffSpace) missingFields.push('Select Standoff Space');
     }
     if (!remoteControl) missingFields.push('Select Remote Control');
-    if (!color) missingFields.push('Select Color');
-    if (color?.name === 'Custom Color' && !customColor) {
-      missingFields.push('Add the Pantone color code of your custom color.');
-    }
     if (!neonColor) missingFields.push('Select Neon Colors');
     if (!waterproof) missingFields.push('Select Environment');
     if (!wireType) missingFields.push('Select Wire Type');
@@ -9994,7 +9984,7 @@ const NeonSign = ({
       }
       return prevMissing;
     });
-  }, [fileUrls, color, neonColor, customColor, waterproof, mounting, sets, width, height, remoteControl, neonLength8mm, neonLength10mm, neonLength14mm, neonLength20mm, rigidStandOffSpace, wireType]);
+  }, [fileUrls, neonColor, waterproof, mounting, sets, width, height, remoteControl, neonLength8mm, neonLength10mm, neonLength14mm, neonLength20mm, rigidStandOffSpace, wireType]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
@@ -10012,9 +10002,6 @@ const NeonSign = ({
     if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.M4_STUD_WITH_SPACER) {
       tempTotal *= 1.05;
     }
-    if (color?.name && color?.name !== 'White') {
-      tempTotal *= 1.1;
-    }
     let remotePrice = 0;
     if (remoteControl === 'Yes') {
       remotePrice = 16;
@@ -10029,7 +10016,7 @@ const NeonSign = ({
       setUsdPrice(total);
       setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.EXCHANGE_RATE).toFixed(2));
     }
-  }, [width, height, waterproof, mounting, remoteControl, neonLength8mm, neonLength10mm, neonLength14mm, neonLength20mm, color, rigidStandOffSpace, sets]);
+  }, [width, height, waterproof, mounting, remoteControl, neonLength8mm, neonLength10mm, neonLength14mm, neonLength20mm, rigidStandOffSpace, sets]);
   const handleOnChangeSets = e => {
     const value = e.target.value;
     setSets(value);
@@ -10073,11 +10060,6 @@ const NeonSign = ({
       setRigidStandOffSpace('1.5"');
     }
   };
-  (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_4__["default"])([neonColorRef, colorRef], () => {
-    if (!openNeonColor && !openColor) return;
-    setOpenNeonColor(false);
-    setOpenColor(false);
-  });
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "py-4 mb-4"
   }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
@@ -10165,7 +10147,6 @@ const NeonSign = ({
     color: neonColor,
     toggle: () => {
       setOpenNeonColor(prev => !prev);
-      setOpenColor(false);
     },
     openColor: openNeonColor,
     setToogle: setOpenNeonColor,
@@ -10187,17 +10168,7 @@ const NeonSign = ({
     onlyValue: true
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid"
-  }, color?.name == 'Custom Color' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "px-[1px] col-span-4"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
-  }, "Custom Color"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    className: "w-full py-4 px-2 border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400",
-    type: "text",
-    value: customColor,
-    onChange: e => setCustomColor(e.target.value),
-    placeholder: "ADD THE PANTONE COLOR CODE"
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "px-[1px] col-span-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
