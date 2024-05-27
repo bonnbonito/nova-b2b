@@ -9824,15 +9824,10 @@ const rigidNoBackingMountingOptions = [{
 }, {
   option: _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.M4_STUD_WITH_SPACER
 }];
-const wireTypeOptions = [{
-  option: '6ft open wires'
-}, {
-  option: '10ft open wires'
-}];
 const NeonSign = ({
   item
 }) => {
-  var _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$neonColor, _item$neonSignWidth, _item$neonLength8mm, _item$rigidStandOffSp, _item$neonLength10mm, _item$neonLength14mm, _item$neonLength20mm, _item$neonSignHeight, _item$usdPrice, _item$cadPrice, _item$remoteControl, _item$wireType, _item$rigidWaterproof, _item$mounting, _item$sets, _item$spacerStandoffD;
+  var _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$neonColor, _item$neonSignWidth, _item$neonLength8mm, _item$rigidM4StudLeng, _item$neonLength10mm, _item$neonLength14mm, _item$neonLength20mm, _item$neonSignHeight, _item$usdPrice, _item$cadPrice, _item$remoteControl, _item$wireType, _item$rigidWaterproof, _item$mounting, _item$sets, _item$spacerStandoffD;
   const {
     signage,
     setSignage,
@@ -9848,7 +9843,7 @@ const NeonSign = ({
   const [openNeonColor, setOpenNeonColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$neonSignWidth = item.neonSignWidth) !== null && _item$neonSignWidth !== void 0 ? _item$neonSignWidth : '');
   const [neonLength8mm, setNeonLength8mm] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$neonLength8mm = item.neonLength8mm) !== null && _item$neonLength8mm !== void 0 ? _item$neonLength8mm : '');
-  const [rigidStandOffSpace, setRigidStandOffSpace] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$rigidStandOffSp = item.rigidStandOffSpace) !== null && _item$rigidStandOffSp !== void 0 ? _item$rigidStandOffSp : '');
+  const [rigidM4StudLength, setRigidM4StudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$rigidM4StudLeng = item.rigidM4StudLength) !== null && _item$rigidM4StudLeng !== void 0 ? _item$rigidM4StudLeng : '1.5"');
   const [neonLength10mm, setNeonLength10mm] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$neonLength10mm = item.neonLength10mm) !== null && _item$neonLength10mm !== void 0 ? _item$neonLength10mm : '');
   const [neonLength14mm, setNeonLength14mm] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$neonLength14mm = item.neonLength14mm) !== null && _item$neonLength14mm !== void 0 ? _item$neonLength14mm : '');
   const [neonLength20mm, setNeonLength20mm] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$neonLength20mm = item.neonLength20mm) !== null && _item$neonLength20mm !== void 0 ? _item$neonLength20mm : '');
@@ -9856,6 +9851,11 @@ const NeonSign = ({
   const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdPrice = item.usdPrice) !== null && _item$usdPrice !== void 0 ? _item$usdPrice : 0);
   const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadPrice = item.cadPrice) !== null && _item$cadPrice !== void 0 ? _item$cadPrice : 0);
   const [remoteControl, setRemoteControl] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$remoteControl = item.remoteControl) !== null && _item$remoteControl !== void 0 ? _item$remoteControl : 'No');
+  const [wireTypeOptions, setWireTypeOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
+    option: '6ft open wires'
+  }, {
+    option: '10ft open wires'
+  }]);
   const [wireType, setWireType] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$wireType = item.wireType) !== null && _item$wireType !== void 0 ? _item$wireType : '');
   const neonSignsWidthHeight = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
     return (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.arrayRange)(5, 95, 1);
@@ -9885,8 +9885,7 @@ const NeonSign = ({
   };
   const handleOnChangeStudLength = e => {
     const target = e.target.value;
-    setRigidStandOffSpace(target); // Directly set the value without a callback
-
+    setRigidM4StudLength(target);
     if (target === '1.5"') {
       setSpacerStandoffOptions([{
         value: '0.5"'
@@ -9942,13 +9941,13 @@ const NeonSign = ({
           neonSignWidth: width,
           neonSignHeight: height,
           wireType,
-          rigidStandOffSpace
+          rigidM4StudLength
         };
       }
       return sign;
     });
     setSignage(updatedSignage);
-  }, [waterproof, neonColor, mounting, fileNames, filePaths, fileUrls, files, sets, width, height, remoteControl, neonLength8mm, neonLength14mm, neonLength10mm, neonLength20mm, rigidStandOffSpace, spacerStandoffDistance, usdPrice, cadPrice, wireType]);
+  }, [waterproof, neonColor, mounting, fileNames, filePaths, fileUrls, files, sets, width, height, remoteControl, neonLength8mm, neonLength14mm, neonLength10mm, neonLength20mm, rigidM4StudLength, spacerStandoffDistance, usdPrice, cadPrice, wireType]);
   const checkAndAddMissingFields = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(() => {
     const missingFields = [];
     if (!width) missingFields.push('Select Neon Sign Width');
@@ -9958,7 +9957,8 @@ const NeonSign = ({
     }
     if (!mounting) missingFields.push('Select Mounting');
     if (mounting && mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.M4_STUD_WITH_SPACER) {
-      if (!rigidStandOffSpace) missingFields.push('Select Standoff Space');
+      if (!rigidM4StudLength) missingFields.push('Select M4 Stud Length');
+      if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (!remoteControl) missingFields.push('Select Remote Control');
     if (!neonColor) missingFields.push('Select Neon Colors');
@@ -9984,7 +9984,7 @@ const NeonSign = ({
       }
       return prevMissing;
     });
-  }, [fileUrls, neonColor, waterproof, mounting, sets, width, height, remoteControl, neonLength8mm, neonLength10mm, neonLength14mm, neonLength20mm, rigidStandOffSpace, wireType]);
+  }, [fileUrls, neonColor, waterproof, mounting, sets, width, height, remoteControl, neonLength8mm, neonLength10mm, neonLength14mm, neonLength20mm, rigidM4StudLength, spacerStandoffDistance, wireType]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
@@ -10016,7 +10016,7 @@ const NeonSign = ({
       setUsdPrice(total);
       setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.EXCHANGE_RATE).toFixed(2));
     }
-  }, [width, height, waterproof, mounting, remoteControl, neonLength8mm, neonLength10mm, neonLength14mm, neonLength20mm, rigidStandOffSpace, sets]);
+  }, [width, height, waterproof, mounting, remoteControl, neonLength8mm, neonLength10mm, neonLength14mm, neonLength20mm, rigidM4StudLength, sets]);
   const handleOnChangeSets = e => {
     const value = e.target.value;
     setSets(value);
@@ -10045,20 +10045,22 @@ const NeonSign = ({
     }
     setWaterproof(target);
     setWireType(target === _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.INDOOR_NOT_WATERPROOF ? '6ft open wires' : '10ft open wires');
+    setWireTypeOptions(target === _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.INDOOR_NOT_WATERPROOF ? [{
+      option: '6ft open wires'
+    }] : [{
+      option: '10ft open wires'
+    }]);
   };
   const handleOnChangeRemote = e => {
     const value = e.target.value;
     setRemoteControl(value);
   };
   const handleOnSpacer = e => {
-    setRigidStandOffSpace(e.target.value);
+    setRigidM4StudLength(e.target.value);
   };
   const handleOnChangeMounting = e => {
     const target = e.target.value;
     setMounting(target);
-    if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.M4_STUD_WITH_SPACER) {
-      setRigidStandOffSpace('1.5"');
-    }
   };
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "py-4 mb-4"
@@ -10115,16 +10117,16 @@ const NeonSign = ({
     }, option.option)),
     value: mounting,
     onlyValue: true
-  }), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.M4_STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "M4 Stud Length",
     onChange: handleOnChangeStudLength,
     options: _neonSignOptions__WEBPACK_IMPORTED_MODULE_8__.ledSpacerStandoffDefaultOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: option.value,
       value: option.value,
-      selected: option.value === rigidStandOffSpace
+      selected: option.value === rigidM4StudLength
     }, option.value)),
-    value: rigidStandOffSpace
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    value: rigidM4StudLength
+  }), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.M4_STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -10132,7 +10134,7 @@ const NeonSign = ({
       selected: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Remote Control",
     onChange: handleOnChangeRemote,
     options: rcOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -10144,7 +10146,7 @@ const NeonSign = ({
     onlyValue: true
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_NeonColors__WEBPACK_IMPORTED_MODULE_6__.NeonColors, {
     colorRef: neonColorRef,
-    color: neonColor,
+    colors: neonColor,
     toggle: () => {
       setOpenNeonColor(prev => !prev);
     },
@@ -10805,7 +10807,7 @@ __webpack_require__.r(__webpack_exports__);
 
 const NeonColors = ({
   colorRef,
-  color,
+  colors,
   toggle,
   openColor,
   getSelectedColors,
@@ -10824,6 +10826,11 @@ const NeonColors = ({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     getSelectedColors(selectedColors);
   }, [selectedColors]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (colors) {
+      setSelectedColors(() => colors.split(', '));
+    }
+  }, []);
   const colorSelections = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
   }, _neonSignOptions__WEBPACK_IMPORTED_MODULE_2__.neonColorOptions.map(colorOption => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
@@ -10849,7 +10856,7 @@ const NeonColors = ({
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
   }, "Neon Colors"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: `flex items-center text-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${color.length > 0 ? 'text-black' : 'text-[#dddddd]'}`,
+    className: `flex items-center text-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${colors.length > 0 ? 'text-black' : 'text-[#dddddd]'}`,
     onClick: toggle
   }, selectedColors.length, " selected"), openColor && colorSelections);
 };
@@ -24214,7 +24221,7 @@ const allAttributes = item => [{
   key: item.mounting,
   label: 'MOUNTING'
 }, {
-  key: item.rigidStandOffSpace,
+  key: item.rigidM4StudLength,
   label: 'M4 STUD LENGTH'
 }, {
   key: item.metalFinishing,

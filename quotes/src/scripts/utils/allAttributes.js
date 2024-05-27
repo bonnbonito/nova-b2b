@@ -57,7 +57,7 @@ export const allAttributes = (item) => [
 	{ key: item.paintedPCFinish, label: 'PAINTED PC FINISH' },
 	{ key: item.waterproof, label: 'ENVIRONMENT' },
 	{ key: item.mounting, label: 'MOUNTING' },
-	{ key: item.rigidStandOffSpace, label: 'M4 STUD LENGTH' },
+	{ key: item.rigidM4StudLength, label: 'M4 STUD LENGTH' },
 	{ key: item.metalFinishing, label: 'METAL FINISHING' },
 	{ key: item.studLength, label: 'STUD LENGTH' },
 	{ key: item.spacerStandoffDistance, label: 'STANDOFF SPACE' },

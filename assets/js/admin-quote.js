@@ -508,7 +508,7 @@ function getSignageDetailFields(sign) {
 		{ label: 'MOUNTING', value: sign.mounting ? sign.mounting : '' },
 		{
 			label: 'M4 STUD LENGTH',
-			value: sign.rigidStandOffSpace ? sign.rigidStandOffSpace : '',
+			value: sign.rigidM4StudLength ? sign.rigidM4StudLength : '',
 		},
 
 		{ label: 'STUD LENGTH', value: sign.studLength ? sign.studLength : '' },

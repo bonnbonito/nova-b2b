@@ -46,15 +46,6 @@ const rigidNoBackingMountingOptions = [
 	},
 ];
 
-const wireTypeOptions = [
-	{
-		option: '6ft open wires',
-	},
-	{
-		option: '10ft open wires',
-	},
-];
-
 export const NeonSign = ({ item }) => {
 	const { signage, setSignage, setMissing, updateSignageItem } =
 		useAppContext();
@@ -68,8 +59,8 @@ export const NeonSign = ({ item }) => {
 	const [openNeonColor, setOpenNeonColor] = useState(false);
 	const [width, setWidth] = useState(item.neonSignWidth ?? '');
 	const [neonLength8mm, setNeonLength8mm] = useState(item.neonLength8mm ?? '');
-	const [rigidStandOffSpace, setRigidStandOffSpace] = useState(
-		item.rigidStandOffSpace ?? ''
+	const [rigidM4StudLength, setRigidM4StudLength] = useState(
+		item.rigidM4StudLength ?? '1.5"'
 	);
 	const [neonLength10mm, setNeonLength10mm] = useState(
 		item.neonLength10mm ?? ''
@@ -86,6 +77,15 @@ export const NeonSign = ({ item }) => {
 	const [remoteControl, setRemoteControl] = useState(
 		item.remoteControl ?? 'No'
 	);
+
+	const [wireTypeOptions, setWireTypeOptions] = useState([
+		{
+			option: '6ft open wires',
+		},
+		{
+			option: '10ft open wires',
+		},
+	]);
 
 	const [wireType, setWireType] = useState(item.wireType ?? '');
 
@@ -127,7 +127,7 @@ export const NeonSign = ({ item }) => {
 
 	const handleOnChangeStudLength = (e) => {
 		const target = e.target.value;
-		setRigidStandOffSpace(target); // Directly set the value without a callback
+		setRigidM4StudLength(target);
 
 		if (target === '1.5"') {
 			setSpacerStandoffOptions([{ value: '0.5"' }, { value: '1"' }]);
@@ -177,7 +177,7 @@ export const NeonSign = ({ item }) => {
 					neonSignWidth: width,
 					neonSignHeight: height,
 					wireType,
-					rigidStandOffSpace,
+					rigidM4StudLength,
 				};
 			}
 			return sign;
@@ -199,7 +199,7 @@ export const NeonSign = ({ item }) => {
 		neonLength14mm,
 		neonLength10mm,
 		neonLength20mm,
-		rigidStandOffSpace,
+		rigidM4StudLength,
 		spacerStandoffDistance,
 		usdPrice,
 		cadPrice,
@@ -226,7 +226,8 @@ export const NeonSign = ({ item }) => {
 		if (!mounting) missingFields.push('Select Mounting');
 
 		if (mounting && mounting === M4_STUD_WITH_SPACER) {
-			if (!rigidStandOffSpace) missingFields.push('Select Standoff Space');
+			if (!rigidM4StudLength) missingFields.push('Select M4 Stud Length');
+			if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
 		}
 
 		if (!remoteControl) missingFields.push('Select Remote Control');
@@ -274,7 +275,8 @@ export const NeonSign = ({ item }) => {
 		neonLength10mm,
 		neonLength14mm,
 		neonLength20mm,
-		rigidStandOffSpace,
+		rigidM4StudLength,
+		spacerStandoffDistance,
 		wireType,
 	]);
 
@@ -337,7 +339,7 @@ export const NeonSign = ({ item }) => {
 		neonLength10mm,
 		neonLength14mm,
 		neonLength20mm,
-		rigidStandOffSpace,
+		rigidM4StudLength,
 		sets,
 	]);
 
@@ -379,6 +381,19 @@ export const NeonSign = ({ item }) => {
 		setWireType(
 			target === INDOOR_NOT_WATERPROOF ? '6ft open wires' : '10ft open wires'
 		);
+		setWireTypeOptions(
+			target === INDOOR_NOT_WATERPROOF
+				? [
+						{
+							option: '6ft open wires',
+						},
+				  ]
+				: [
+						{
+							option: '10ft open wires',
+						},
+				  ]
+		);
 	};
 
 	const handleOnChangeRemote = (e) => {
@@ -387,15 +402,12 @@ export const NeonSign = ({ item }) => {
 	};
 
 	const handleOnSpacer = (e) => {
-		setRigidStandOffSpace(e.target.value);
+		setRigidM4StudLength(e.target.value);
 	};
 
 	const handleOnChangeMounting = (e) => {
 		const target = e.target.value;
 		setMounting(target);
-		if (target === M4_STUD_WITH_SPACER) {
-			setRigidStandOffSpace('1.5"');
-		}
 	};
 
 	return (
@@ -482,37 +494,35 @@ export const NeonSign = ({ item }) => {
 					onlyValue={true}
 				/>
 
-				{mounting === M4_STUD_WITH_SPACER && (
-					<>
-						<Dropdown
-							title="M4 Stud Length"
-							onChange={handleOnChangeStudLength}
-							options={ledSpacerStandoffDefaultOptions.map((option) => (
-								<option
-									key={option.value}
-									value={option.value}
-									selected={option.value === rigidStandOffSpace}
-								>
-									{option.value}
-								</option>
-							))}
-							value={rigidStandOffSpace}
-						/>
+				<Dropdown
+					title="M4 Stud Length"
+					onChange={handleOnChangeStudLength}
+					options={ledSpacerStandoffDefaultOptions.map((option) => (
+						<option
+							key={option.value}
+							value={option.value}
+							selected={option.value === rigidM4StudLength}
+						>
+							{option.value}
+						</option>
+					))}
+					value={rigidM4StudLength}
+				/>
 
-						<Dropdown
-							title="STANDOFF SPACE"
-							onChange={handleonChangeSpacerDistance}
-							options={spacerStandoffOptions.map((option) => (
-								<option
-									value={option.value}
-									selected={option.value == spacerStandoffDistance}
-								>
-									{option.value}
-								</option>
-							))}
-							value={spacerStandoffDistance}
-						/>
-					</>
+				{mounting === M4_STUD_WITH_SPACER && (
+					<Dropdown
+						title="STANDOFF SPACE"
+						onChange={handleonChangeSpacerDistance}
+						options={spacerStandoffOptions.map((option) => (
+							<option
+								value={option.value}
+								selected={option.value == spacerStandoffDistance}
+							>
+								{option.value}
+							</option>
+						))}
+						value={spacerStandoffDistance}
+					/>
 				)}
 
 				<Dropdown
@@ -533,7 +543,7 @@ export const NeonSign = ({ item }) => {
 
 				<NeonColors
 					colorRef={neonColorRef}
-					color={neonColor}
+					colors={neonColor}
 					toggle={() => {
 						setOpenNeonColor((prev) => !prev);
 					}}

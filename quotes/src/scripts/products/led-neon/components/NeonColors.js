@@ -4,7 +4,7 @@ import { neonColorOptions } from '../neonSignOptions';
 
 export const NeonColors = ({
 	colorRef,
-	color,
+	colors,
 	toggle,
 	openColor,
 	getSelectedColors,
@@ -25,6 +25,12 @@ export const NeonColors = ({
 	useEffect(() => {
 		getSelectedColors(selectedColors);
 	}, [selectedColors]);
+
+	useEffect(() => {
+		if (colors) {
+			setSelectedColors(() => colors.split(', '));
+		}
+	}, []);
 
 	const colorSelections = useMemo(
 		() => (
@@ -68,7 +74,7 @@ export const NeonColors = ({
 			</label>
 			<div
 				className={`flex items-center text-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-					color.length > 0 ? 'text-black' : 'text-[#dddddd]'
+					colors.length > 0 ? 'text-black' : 'text-[#dddddd]'
 				}`}
 				onClick={toggle}
 			>
