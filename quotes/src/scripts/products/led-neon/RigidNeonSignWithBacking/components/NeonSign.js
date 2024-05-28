@@ -105,7 +105,7 @@ export const NeonSign = ({ item }) => {
 	}, []);
 
 	const neonLength = useMemo(() => {
-		return arrayRange(2, 100, 2, false);
+		return arrayRange(1, 100, 1, false);
 	}, []);
 
 	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');

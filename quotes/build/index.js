@@ -11662,7 +11662,9 @@ function RigidNeonSignWithBacking() {
     key: item.id,
     item: item,
     productId: item.product
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    className: "text-sm"
+  }, "** The neon height and width refer to the neon graphics. The 4mm PC backing has a 1.5\" margin on all sides. **"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-2"
   }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
@@ -11764,7 +11766,7 @@ const NeonSign = ({
     return (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.arrayRange)(5, 46, 1);
   }, []);
   const neonLength = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
-    return (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.arrayRange)(2, 100, 2, false);
+    return (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.arrayRange)(1, 100, 1, false);
   }, []);
   const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : '');
   const [mounting, setMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
