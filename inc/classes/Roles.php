@@ -50,6 +50,98 @@ class Roles {
 		add_action( 'profile_update', array( $this, 'update_role_business_id_on_profile_update' ), 10, 2 );
 		add_action( 'show_user_profile', array( $this, 'add_registration_date_to_profile' ), 0 );
 		add_action( 'edit_user_profile', array( $this, 'add_registration_date_to_profile' ), 0 );
+		add_action( 'edit_user_profile', array( $this, 'add_activate_button' ), 0 );
+		add_action( 'wp_ajax_send_activation_email', array( $this, 'handle_send_activation_email' ) );
+		add_action( 'admin_notices', array( $this, 'display_send_activation_email_notice' ) );
+	}
+
+	public function display_send_activation_email_notice() {
+		// Check if the transient is set
+		if ( $message = get_transient( 'send_activation_email_notice' ) ) {
+			?>
+<div class="notice notice-success is-dismissible">
+	<p><?php echo esc_html( $message ); ?></p>
+</div>
+			<?php
+			// Delete the transient
+			delete_transient( 'send_activation_email_notice' );
+		}
+	}
+
+	public function handle_send_activation_email() {
+		check_ajax_referer( 'send_activation_email_nonce', 'nonce' );
+
+		if ( isset( $_POST['user_id'] ) ) {
+			$user_id = intval( $_POST['user_id'] );
+			$user    = get_userdata( $user_id );
+
+			// Check if the user has the 'temporary' role
+			if ( in_array( 'temporary', (array) $user->roles ) ) {
+				$this->send_user_activate_email( $user_id );
+				wp_send_json_success( 'Activation email sent.' );
+			} else {
+				wp_send_json_error( 'User does not have the required role.' );
+			}
+		} else {
+			wp_send_json_error( 'User ID not provided.' );
+		}
+	}
+
+	public function add_activate_button( $user ) {
+		// Check if the user has the 'temporary' role
+		if ( in_array( 'temporary', (array) $user->roles ) ) {
+			?>
+<h2>Account Activation</h2>
+<table class="form-table">
+	<tr>
+		<th>
+			<label for="send_activation_email">Send Activation Email</label>
+		</th>
+		<td>
+			<button id="send_activation_email_button" class="button button-primary"
+				data-user-id="<?php echo esc_attr( $user->ID ); ?>">Send Activation Email</button>
+			<span id="activation_email_status"></span>
+		</td>
+	</tr>
+</table>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', function() {
+	var sendEmailButton = document.getElementById('send_activation_email_button');
+	var statusSpan = document.getElementById('activation_email_status');
+
+	sendEmailButton.addEventListener('click', function() {
+		var userId = sendEmailButton.getAttribute('data-user-id');
+		statusSpan.textContent = 'Sending...';
+
+		fetch(ajaxurl, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				body: new URLSearchParams({
+					action: 'send_activation_email',
+					user_id: userId,
+					nonce: '<?php echo wp_create_nonce( 'send_activation_email_nonce' ); ?>',
+				})
+			})
+			.then(response => response.json())
+			.then(data => {
+				if (data.success) {
+					statusSpan.textContent = 'Activation email sent.';
+					sendEmailButton.style.display = 'none';
+				} else {
+					statusSpan.textContent = 'Failed to send activation email.';
+				}
+			})
+			.catch(error => {
+				statusSpan.textContent = 'An error occurred.';
+				console.error('Error:', error);
+			});
+	});
+});
+</script>
+			<?php
+		}
 	}
 
 	public function add_registration_date_to_profile( $user ) {
@@ -643,7 +735,9 @@ jQuery(document).ready(function($) {
 			)
 		);
 
-		update_field( 'business_id', 'TEMPORARY-' . $user_id, 'user_' . $user_id );
+		$business_id = 'TEMPORARY-' . $user_id;
+
+		update_field( 'business_id', $business_id, 'user_' . $user_id );
 		update_field( 'business_name', $businessName, 'user_ ' . $user_id );
 		update_field( 'business_phone', $businessPhone, 'user_ ' . $user_id );
 		update_field( 'business_type', $businessType, 'user_ ' . $user_id );
