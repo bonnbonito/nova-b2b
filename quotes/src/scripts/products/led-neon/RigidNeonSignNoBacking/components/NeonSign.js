@@ -9,7 +9,6 @@ import React, {
 import { useAppContext } from '../../../../AppProvider';
 import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
-import useOutsideClick from '../../../../utils/ClickOutside';
 import {
 	arrayRange,
 	setOptions,
@@ -90,7 +89,7 @@ export const NeonSign = ({ item }) => {
 	const [wireType, setWireType] = useState(item.wireType ?? '');
 
 	const neonSignsWidthHeight = useMemo(() => {
-		return arrayRange(5, 95, 1);
+		return arrayRange(3, 200, 1);
 	}, []);
 
 	const neonLength = useMemo(() => {
@@ -298,16 +297,14 @@ export const NeonSign = ({ item }) => {
 			L2 * 13 +
 			L3 * 15 +
 			L4 * 25 +
-			parseInt(width) * parseInt(height) * 0.2 +
+			(parseInt(width) + 1) * (parseInt(height) + 1) * 0.075 +
 			10;
+
+		tempTotal = tempTotal > 79 ? tempTotal : 79;
 
 		if (waterproof) {
 			tempTotal *=
-				waterproof === INDOOR_NOT_WATERPROOF || waterproof === 'N/A' ? 1 : 1.35;
-		}
-
-		if (mounting === M4_STUD_WITH_SPACER) {
-			tempTotal *= 1.05;
+				waterproof === INDOOR_NOT_WATERPROOF || waterproof === 'N/A' ? 1 : 1.3;
 		}
 
 		let remotePrice = 0;

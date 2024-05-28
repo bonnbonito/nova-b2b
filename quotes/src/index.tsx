@@ -5,6 +5,7 @@ import 'react-tooltip/dist/react-tooltip.css';
 import './index.css';
 import { AppProvider } from './scripts/AppProvider';
 import QuoteView from './scripts/QuoteView';
+import AcrylicFrontLit from './scripts/products/acrylic-channel/AcrylicFrontLit/AcrylicFrontLit';
 import LaserCutAcrylic from './scripts/products/acrylic/LaserCutAcrylic/LaserCutAcrylic';
 import LayeredAcrylic from './scripts/products/acrylic/LayeredAcrylic/LayeredAcrylic';
 import MetalLaminate from './scripts/products/acrylic/MetalLaminate/MetalLaminate';
@@ -68,6 +69,13 @@ function QuoteApp(): JSX.Element {
 			component = (
 				<AppProvider>
 					<CombineQuotes />
+				</AppProvider>
+			);
+			break;
+		case 'AcrylicFrontLit':
+			component = (
+				<AppProvider>
+					<AcrylicFrontLit />
 				</AppProvider>
 			);
 			break;

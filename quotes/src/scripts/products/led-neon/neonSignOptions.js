@@ -35,7 +35,10 @@ export const rigidBackingOptions = [
 		option: 'Black PC',
 	},
 	{
-		option: 'UV Printed on PC',
+		option: 'Clear Acrylic',
+	},
+	{
+		option: 'UV Printed PC',
 	},
 	{
 		option: 'Painted PC',

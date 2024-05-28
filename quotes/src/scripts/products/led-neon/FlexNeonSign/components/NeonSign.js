@@ -55,12 +55,16 @@ export const NeonSign = ({ item }) => {
 		<option value={item.option}>{item.option}</option>
 	));
 
-	const neonSignsWidthHeight = useMemo(() => {
-		return arrayRange(5, 40, 1);
+	const neonSignsWidth = useMemo(() => {
+		return arrayRange(5, 92, 1);
+	}, []);
+
+	const neonSignsHeight = useMemo(() => {
+		return arrayRange(5, 46, 1);
 	}, []);
 
 	const neonLengthOptions = useMemo(() => {
-		return arrayRange(10, 60, 2, false);
+		return arrayRange(2, 100, 2, false);
 	}, []);
 
 	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
@@ -180,24 +184,30 @@ export const NeonSign = ({ item }) => {
 		)
 			return 0;
 		let tempTotal =
-			(parseInt(width) + 3) * (parseInt(height) + 3) * 0.11 +
+			(parseInt(width) + 3) * (parseInt(height) + 3) * 0.1 +
 			parseInt(neonLength) * 6.9 +
-			25;
+			10;
+
+		/* minimum price */
+		tempTotal = tempTotal > 59 ? tempTotal : 59;
+
+		/*oversize surcharge*/
+		tempTotal += parseInt(width) > 41 || parseInt(height) > 41 ? 150 : 0;
 
 		tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.15;
 
 		let additional = 0;
 
 		if (acrylicBackingOption === 'UV Printed Acrylic') {
-			additional = parseInt(width) * parseInt(height) * 0.25;
+			additional = parseInt(width) * parseInt(height) * 0.05;
 			tempTotal += additional;
 		}
 		if (acrylicBackingOption === 'Frosted Clear Acrylic') {
-			additional = parseInt(width) * parseInt(height) * 0.1;
+			additional = parseInt(width) * parseInt(height) * 0.05;
 			tempTotal += additional;
 		}
 		if (acrylicBackingOption === 'Clear Acrylic') {
-			additional = parseInt(width) * parseInt(height) * 0.17;
+			additional = parseInt(width) * parseInt(height) * 0.07;
 			tempTotal += additional;
 		}
 
@@ -285,13 +295,13 @@ export const NeonSign = ({ item }) => {
 					title="Neon Sign Width"
 					value={width}
 					onChange={(e) => setWidth(e.target.value)}
-					options={neonSignsWidthHeight}
+					options={neonSignsWidth}
 				/>
 				<Dropdown
 					title="Neon Sign Height"
 					value={height}
 					onChange={(e) => setHeight(e.target.value)}
-					options={neonSignsWidthHeight}
+					options={neonSignsHeight}
 				/>
 				<Dropdown
 					title="Neon Length(ft)"
@@ -371,7 +381,7 @@ export const NeonSign = ({ item }) => {
 
 				<NeonColors
 					colorRef={colorRef}
-					color={color}
+					colors={color}
 					toggle={() => {
 						setOpenColor((prev) => !prev);
 					}}

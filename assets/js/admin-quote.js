@@ -256,7 +256,7 @@ function displaySignageItem(sign) {
 }
 
 function getSignageItemHTML(sign) {
-	const detailFields = getSignageDetailFields(sign);
+	const detailFields = allAttributes(sign);
 	const htmlDetails = detailFields
 		.map((field) => {
 			// Check if the current field is "CAD PRICE" to conditionally add the data-id attribute
@@ -287,7 +287,7 @@ function getSignageItemHTML(sign) {
 	return `${titleSection}${previewHtml}${htmlDetails}`;
 }
 
-function getSignageDetailFields(sign) {
+function allAttributes(sign) {
 	return [
 		{ label: 'CAD PRICE', value: sign.cadPrice ? sign.cadPrice : '0' },
 		{ label: 'MATERIAL', value: sign.material ? sign.material : '' },
@@ -320,6 +320,10 @@ function getSignageDetailFields(sign) {
 		},
 
 		{ label: 'METAL', value: sign.metal ? sign.metal : '' },
+		{
+			label: 'ACRYLIC THICKNESS',
+			value: sign.acrylicChannelThickness ? sign.acrylicChannelThickness : '',
+		},
 
 		{
 			label: 'METAL DEPTH',
@@ -381,6 +385,11 @@ function getSignageDetailFields(sign) {
 		{
 			label: 'LETTER HEIGHT',
 			value: sign.letterHeight ? sign.letterHeight + '"' : '',
+		},
+
+		{
+			label: 'ACRYLIC FRONT',
+			value: sign.acrylicFront ? sign.acrylicFront : '',
 		},
 
 		{
@@ -459,6 +468,10 @@ function getSignageDetailFields(sign) {
 		{
 			label: 'CUSTOM COLOR',
 			value: sign.metalCustomColor ? sign.metalCustomColor : '',
+		},
+		{
+			label: 'RETURN PAINT COLOR',
+			value: sign.returnPaintColor ? sign.returnPaintColor : '',
 		},
 
 		{

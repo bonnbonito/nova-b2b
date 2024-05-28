@@ -23,14 +23,12 @@ export const NeonColors = ({
 	};
 
 	useEffect(() => {
-		getSelectedColors(selectedColors);
-	}, [selectedColors]);
+		console.log(colors.length);
+	}, [colors]);
 
 	useEffect(() => {
-		if (colors) {
-			setSelectedColors(() => colors.split(', '));
-		}
-	}, []);
+		getSelectedColors(selectedColors);
+	}, [selectedColors]);
 
 	const colorSelections = useMemo(
 		() => (
@@ -74,7 +72,7 @@ export const NeonColors = ({
 			</label>
 			<div
 				className={`flex items-center text-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-					colors.length > 0 ? 'text-black' : 'text-[#dddddd]'
+					selectedColors.length > 0 ? 'text-black' : 'text-[#dddddd]'
 				}`}
 				onClick={toggle}
 			>

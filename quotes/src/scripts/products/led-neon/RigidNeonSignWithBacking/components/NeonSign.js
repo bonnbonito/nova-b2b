@@ -86,13 +86,22 @@ export const NeonSign = ({ item }) => {
 	);
 	const [height, setHeight] = useState(item.neonSignHeight ?? '');
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
+	const [usdSinglePrice, setUsdSinglePrice] = useState(
+		item.usdSinglePrice ?? 0
+	);
+	const [cadSinglePrice, setCadSinglePrice] = useState(
+		item.usdSinglePrice ?? 0
+	);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
 	const [remoteControl, setRemoteControl] = useState(
 		item.remoteControl ?? 'No'
 	);
 
-	const neonSignsWidthHeight = useMemo(() => {
-		return arrayRange(5, 42, 1);
+	const neonSignsWidth = useMemo(() => {
+		return arrayRange(5, 92, 1);
+	}, []);
+	const neonSignsHeight = useMemo(() => {
+		return arrayRange(5, 46, 1);
 	}, []);
 
 	const neonLength = useMemo(() => {
@@ -256,8 +265,12 @@ export const NeonSign = ({ item }) => {
 		checkAndAddMissingFields();
 	}, [updateSignage, checkAndAddMissingFields]);
 
-	const computePricing = () => {
-		if (!width || !height) return 0;
+	const computePricing = useCallback(() => {
+		if (!width || !height)
+			return {
+				singlePrice: 0,
+				total: 0,
+			};
 
 		const L1 = neonLength8mm ? parseInt(neonLength8mm) : 0;
 		const L2 = neonLength10mm ? parseInt(neonLength10mm) : 0;
@@ -269,58 +282,80 @@ export const NeonSign = ({ item }) => {
 			L2 * 13 +
 			L3 * 15 +
 			L4 * 25 +
-			parseInt(width) * parseInt(height) * 0.6 +
-			45;
+			(parseInt(width) + 2) * (parseInt(height) + 2) * 0.15 +
+			25;
+
+		// Minimum price
+		tempTotal = tempTotal > 89 ? tempTotal : 89;
+
+		// Oversize surcharge
+		tempTotal += parseInt(width) > 41 || parseInt(height) > 41 ? 150 : 0;
 
 		let rigidBackingPrice = 0;
 
-		if (rigidBacking === 'Frosted Clear PC') {
-			rigidBackingPrice = parseInt(width) * parseInt(height) * 0.17;
-		}
-
-		if (rigidBacking === 'Black PC') {
-			rigidBackingPrice = parseInt(width) * parseInt(height) * 0.17;
-		}
-
-		if (rigidBacking === 'UV Printed on PC') {
-			rigidBackingPrice = parseInt(width) * parseInt(height) * 0.21;
-		}
-
-		if (rigidBacking === 'Painted PC') {
-			rigidBackingPrice = parseInt(width) * parseInt(height) * 0.2;
+		switch (rigidBacking) {
+			case 'Black PC':
+				rigidBackingPrice = parseInt(width) * parseInt(height) * 0.02;
+				break;
+			case 'Clear Acrylic':
+				rigidBackingPrice = parseInt(width) * parseInt(height) * 0.03;
+				break;
+			case 'UV Printed PC':
+				rigidBackingPrice = parseInt(width) * parseInt(height) * 0.015;
+				break;
+			case 'Painted PC':
+				rigidBackingPrice = parseInt(width) * parseInt(height) * 0.03;
+				break;
+			default:
+				rigidBackingPrice = 0;
 		}
 
 		tempTotal += rigidBackingPrice;
 
 		let mountingPrice = 0;
-
-		if (mounting === 'Advertising Nails(1.5")') {
-			mountingPrice = 8;
-		}
-		if (mounting === 'Hanging Chain') {
-			mountingPrice = 10;
+		switch (mounting) {
+			case 'Advertising Nails(1.5")':
+				mountingPrice = 8;
+				break;
+			case 'Hanging Chain':
+				mountingPrice = 10;
+				break;
+			default:
+				mountingPrice = 0;
 		}
 
 		tempTotal += mountingPrice;
 
-		let remotePrice = 0;
-
-		if (remoteControl === 'Yes') {
-			remotePrice = 16;
-		}
+		let remotePrice = remoteControl === 'Yes' ? 16 : 0;
 
 		tempTotal += remotePrice;
 
-		tempTotal *= parseInt(sets);
+		const total = tempTotal * parseInt(sets);
 
-		return tempTotal.toFixed(2);
-	};
+		return {
+			singlePrice: tempTotal,
+			total: total.toFixed(2),
+		};
+	}, [
+		width,
+		height,
+		neonLength8mm,
+		neonLength10mm,
+		neonLength14mm,
+		neonLength20mm,
+		rigidBacking,
+		mounting,
+		remoteControl,
+		sets,
+	]);
 
 	useEffect(() => {
-		const total = computePricing();
+		const { singlePrice, total } = computePricing();
 		if (total !== undefined || total !== 0) {
 			setUsdPrice(total);
 			setCadPrice((total * EXCHANGE_RATE).toFixed(2));
+			setUsdSinglePrice(singlePrice);
+			setUsdSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
 		}
 	}, [
 		width,
@@ -424,14 +459,14 @@ export const NeonSign = ({ item }) => {
 					title="Neon Sign Width"
 					value={width}
 					onChange={(e) => setWidth(e.target.value)}
-					options={neonSignsWidthHeight}
+					options={neonSignsWidth}
 				/>
 
 				<Dropdown
 					title="Neon Sign Height"
 					value={height}
 					onChange={(e) => setHeight(e.target.value)}
-					options={neonSignsWidthHeight}
+					options={neonSignsHeight}
 				/>
 
 				<Dropdown
@@ -629,7 +664,7 @@ export const NeonSign = ({ item }) => {
 
 				<NeonColors
 					colorRef={neonColorRef}
-					color={neonColor}
+					colors={neonColor}
 					toggle={() => {
 						setOpenNeonColor((prev) => !prev);
 						setOpenColor(false);

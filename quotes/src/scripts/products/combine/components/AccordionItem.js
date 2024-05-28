@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { PlusIcon } from '../../../svg/Icons';
+import { AddSignage } from './AddSignage';
 
 import { useCombineQuote } from '../CombineQuoteContext';
 
@@ -36,41 +37,39 @@ export default function AccordionItem({ title, products, isOpen }) {
 					</div>
 					<div class="flex gap-2">
 						{product.letters && (
-							<button
-								className="flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white"
-								onClick={() =>
-									addSignage(
-										product.product.post_title,
-										product.product.ID,
-										'letters',
-										product.component,
-										title
-									)
-								}
-								style={{ border: '1px solid #d2d2d2d2' }}
+							<AddSignage
+								addSignage={addSignage}
+								product={product}
+								title={title}
+								type="letters"
 							>
 								ADD LETTERS
 								<PlusIcon />
-							</button>
+							</AddSignage>
 						)}
 
 						{product.logo && (
-							<button
-								className="flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white"
-								onClick={() =>
-									addSignage(
-										product.product.post_title,
-										product.product.ID,
-										'logo',
-										product.component,
-										title
-									)
-								}
-								style={{ border: '1px solid #d2d2d2d2' }}
+							<AddSignage
+								addSignage={addSignage}
+								product={product}
+								title={title}
+								type="logo"
 							>
 								ADD LOGO
 								<PlusIcon />
-							</button>
+							</AddSignage>
+						)}
+
+						{product.sign && (
+							<AddSignage
+								addSignage={addSignage}
+								product={product}
+								title={title}
+								type="SIGN"
+							>
+								ADD SIGN
+								<PlusIcon />
+							</AddSignage>
 						)}
 					</div>
 				</div>

@@ -4499,6 +4499,1293 @@ function UploadFont({
 
 /***/ }),
 
+/***/ "./src/scripts/products/acrylic-channel/AcrylicFrontLit/AcrylicFrontLit.js":
+/*!*********************************************************************************!*\
+  !*** ./src/scripts/products/acrylic-channel/AcrylicFrontLit/AcrylicFrontLit.js ***!
+  \*********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ AcrylicFrontLit)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
+/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
+/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
+/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../utils/defaults */ "./src/scripts/utils/defaults.js");
+/* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/acrylic-channel/AcrylicFrontLit/components/Letters.js");
+/* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/acrylic-channel/AcrylicFrontLit/components/Logo.js");
+
+
+
+
+
+
+
+
+
+
+function AcrylicFrontLit() {
+  const {
+    signage,
+    setSignage,
+    setTempFolder,
+    tempFolderName
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
+  function setDefaultSignage() {
+    setSignage([{
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
+      type: 'letters',
+      title: 'LETTERS 1',
+      letters: '',
+      font: '',
+      comments: '',
+      waterproof: '',
+      acrylicChannelThickness: '1.2"',
+      acrylicFront: 'White',
+      returnPaintColor: 'Black',
+      vinylWhite: {
+        name: '',
+        color: '',
+        code: ''
+      },
+      ledLightColor: '6500K White',
+      letterHeight: '',
+      usdPrice: 0,
+      cadPrice: 0,
+      filePaths: [],
+      fileNames: [],
+      fileUrls: [],
+      files: [],
+      sets: 1,
+      customColor: '',
+      mounting: '',
+      studLength: '',
+      spacerStandoffDistance: '',
+      product: NovaQuote.product
+    }]);
+  }
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    console.log('Attempting to preload fonts...');
+    async function preloadFonts() {
+      try {
+        await loadingFonts();
+      } catch (error) {
+        console.error('Error loading fonts:', error);
+      }
+    }
+    preloadFonts();
+  }, []);
+  const loadingFonts = async () => {
+    const loadPromises = NovaQuote.fonts.map(font => loadFont(font));
+    await Promise.all(loadPromises);
+  };
+  async function loadFont({
+    name,
+    src
+  }) {
+    const fontFace = new FontFace(name, `url(${src})`);
+    try {
+      await fontFace.load();
+      document.fonts.add(fontFace);
+    } catch (e) {
+      console.error(`Font ${name} failed to load`);
+    }
+  }
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (NovaQuote.is_editting === '1') {
+      const currentSignage = JSON.parse(NovaQuote.signage);
+      if (currentSignage) {
+        setSignage(currentSignage);
+      } else {
+        window.location.href = window.location.pathname;
+      }
+    } else {
+      setDefaultSignage();
+    }
+  }, []);
+  const defaultArgs = {
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
+    comments: '',
+    mounting: '',
+    acrylicChannelThickness: '1.2"',
+    acrylicFront: 'White',
+    returnPaintColor: 'Black',
+    vinylWhite: {
+      name: '',
+      color: '',
+      code: ''
+    },
+    ledLightColor: '6500K White',
+    waterproof: _utils_defaults__WEBPACK_IMPORTED_MODULE_5__.INDOOR_NOT_WATERPROOF,
+    product: NovaQuote.product
+  };
+  function addSignage(type) {
+    setSignage(prevSignage => {
+      // Count how many signages of this type already exist
+      const count = prevSignage.filter(sign => sign.type === type).length;
+      let args;
+      // Create new signage with incremented title number
+      if (type === 'letters') {
+        args = {
+          type: type,
+          title: `LETTERS ${count + 1}`,
+          letters: '',
+          font: '',
+          color: {
+            name: '',
+            color: ''
+          },
+          letterHeight: '',
+          customColor: '',
+          filePaths: [],
+          fileNames: [],
+          fileUrls: [],
+          files: []
+        };
+      } else {
+        args = {
+          type: type,
+          title: `LOGO ${count + 1}`,
+          width: '',
+          height: ''
+        };
+      }
+      const newSignage = {
+        ...defaultArgs,
+        ...args
+      };
+
+      // Append the new signage to the array
+      return [...prevSignage, newSignage];
+    });
+  }
+
+  /* useEffect(() => {
+  	localStorage.setItem(storage + '-x', JSON.stringify(signage));
+  }, [signage]); */
+
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (NovaQuote.is_editting.length === 0) {
+      setTempFolder(tempFolderName);
+    } else {
+      setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+    }
+  }, []);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:flex gap-6"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:w-3/4 w-full"
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    index: index,
+    id: item.id,
+    item: item
+  }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_6__.Letters, {
+    key: item.id,
+    item: item,
+    productId: item.product
+  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_7__.Logo, {
+    key: item.id,
+    item: item,
+    productId: item.product
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex gap-2"
+  }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
+    onClick: () => addSignage('letters'),
+    style: {
+      border: '1px solid #d2d2d2d2'
+    }
+  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)), signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
+    onClick: () => addSignage('logo'),
+    style: {
+      border: '1px solid #d2d2d2d2'
+    }
+  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], null));
+}
+
+/***/ }),
+
+/***/ "./src/scripts/products/acrylic-channel/AcrylicFrontLit/components/Letters.js":
+/*!************************************************************************************!*\
+  !*** ./src/scripts/products/acrylic-channel/AcrylicFrontLit/components/Letters.js ***!
+  \************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Letters: () => (/* binding */ Letters)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Dropdown__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../Dropdown */ "./src/scripts/Dropdown.js");
+/* harmony import */ var _FontsDropdown__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../FontsDropdown */ "./src/scripts/FontsDropdown.js");
+/* harmony import */ var _UploadFiles__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../UploadFiles */ "./src/scripts/UploadFiles.js");
+/* harmony import */ var _UploadFont__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../UploadFont */ "./src/scripts/UploadFont.js");
+/* harmony import */ var _utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../utils/ClickOutside */ "./src/scripts/utils/ClickOutside.js");
+/* harmony import */ var _utils_ConvertJson__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../utils/ConvertJson */ "./src/scripts/utils/ConvertJson.js");
+/* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
+/* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
+/* harmony import */ var _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../../utils/ColorOptions */ "./src/scripts/utils/ColorOptions.js");
+/* harmony import */ var _options__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../options */ "./src/scripts/products/acrylic-channel/AcrylicFrontLit/options.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function Letters({
+  item
+}) {
+  var _item$letters, _item$comments, _item$font, _item$color, _item$waterproof, _item$acrylicChannelT, _item$acrylicFront, _item$vinylWhite, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fileName, _item$fileUrl, _item$filePath, _item$file, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$finishing, _item$customFont, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
+  const {
+    signage,
+    setSignage,
+    setMissing
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_11__.useAppContext)();
+  const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letters = item.letters) !== null && _item$letters !== void 0 ? _item$letters : '');
+  const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
+  const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$font = item.font) !== null && _item$font !== void 0 ? _item$font : '');
+  const [openFont, setOpenFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$color = item.color) !== null && _item$color !== void 0 ? _item$color : {
+    name: '',
+    color: ''
+  });
+  const [openColor, setOpenColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : '');
+  const [acrylicChannelThickness, setAcrylicChannelThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicChannelT = item.acrylicChannelThickness) !== null && _item$acrylicChannelT !== void 0 ? _item$acrylicChannelT : '1.2"');
+  const [acrylicFront, setAcrylicFront] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicFront = item.acrylicFront) !== null && _item$acrylicFront !== void 0 ? _item$acrylicFront : 'White');
+  const [openAcrylicCover, setOpenAcrylicCover] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const [vinylWhite, setVinylWhite] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$vinylWhite = item.vinylWhite) !== null && _item$vinylWhite !== void 0 ? _item$vinylWhite : {
+    name: '',
+    color: '',
+    code: ''
+  });
+  const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileNames = item.fileNames) !== null && _item$fileNames !== void 0 ? _item$fileNames : []);
+  const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrls = item.fileUrls) !== null && _item$fileUrls !== void 0 ? _item$fileUrls : []);
+  const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$filePaths = item.filePaths) !== null && _item$filePaths !== void 0 ? _item$filePaths : []);
+  const [files, setFiles] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$files = item.files) !== null && _item$files !== void 0 ? _item$files : []);
+  const [fileName, setFileName] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileName = item.fileName) !== null && _item$fileName !== void 0 ? _item$fileName : '');
+  const [fileUrl, setFileUrl] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrl = item.fileUrl) !== null && _item$fileUrl !== void 0 ? _item$fileUrl : '');
+  const [filePath, setFilePath] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$filePath = item.filePath) !== null && _item$filePath !== void 0 ? _item$filePath : '');
+  const [file, setFile] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$file = item.file) !== null && _item$file !== void 0 ? _item$file : '');
+  const [fontFileName, setFontFileName] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fontFileName = item.fontFileName) !== null && _item$fontFileName !== void 0 ? _item$fontFileName : '');
+  const [fontFileUrl, setFontFileUrl] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fontFileUrl = item.fontFileUrl) !== null && _item$fontFileUrl !== void 0 ? _item$fontFileUrl : '');
+  const [fontFilePath, setFontFilePath] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fontFilePath = item.fontFilePath) !== null && _item$fontFilePath !== void 0 ? _item$fontFilePath : '');
+  const [fontFile, setFontFile] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fontFile = item.fontFile) !== null && _item$fontFile !== void 0 ? _item$fontFile : '');
+  const [letterHeightOptions, setLetterHeightOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  const [selectedFinishing, setSelectedFinishing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$finishing = item.finishing) !== null && _item$finishing !== void 0 ? _item$finishing : '');
+  const [customFont, setCustomFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$customFont = item.customFont) !== null && _item$customFont !== void 0 ? _item$customFont : '');
+  const [customColor, setCustomColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$customColor = item.customColor) !== null && _item$customColor !== void 0 ? _item$customColor : '');
+  const [selectedLetterHeight, setSelectedLetterHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letterHeight = item.letterHeight) !== null && _item$letterHeight !== void 0 ? _item$letterHeight : '');
+  const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdPrice = item.usdPrice) !== null && _item$usdPrice !== void 0 ? _item$usdPrice : 0);
+  const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadPrice = item.cadPrice) !== null && _item$cadPrice !== void 0 ? _item$cadPrice : 0);
+  const [mountingOptions, setMountingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.mountingDefaultOptions);
+  const [lettersHeight, setLettersHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
+    min: 2,
+    max: 43
+  });
+  const [selectedMounting, setSelectedMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
+  const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$studLength = item.studLength) !== null && _item$studLength !== void 0 ? _item$studLength : '');
+  const [spacerStandoffOptions, setSpacerStandoffOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.spacerStandoffDefaultOptions);
+  const [spacerStandoffDistance, setSpacerStandoffDistance] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$spacerStandoffD = item.spacerStandoffDistance) !== null && _item$spacerStandoffD !== void 0 ? _item$spacerStandoffD : '');
+  const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
+  const colorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const fontRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const acrylicColorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const [letterPricing, setLetterPricing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    async function fetchLetterPricing() {
+      try {
+        const response = await fetch(NovaQuote.letters_pricing_api + item.product);
+        const data = await response.json();
+        const pricing = (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_6__["default"])(data?.pricing_table);
+        setLetterPricing(pricing);
+      } catch (error) {
+        console.error('Error fetching letter pricing:', error);
+      }
+    }
+    fetchLetterPricing();
+  }, []);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (file) {
+      setFiles([file]);
+    }
+    if (fileName) {
+      setFileNames([fileName]);
+    }
+    if (filePath) {
+      setFilePaths([filePath]);
+    }
+    if (fileUrl) {
+      setFileUrls([fileUrl]);
+    }
+  }, [file, fileName, filePath, fileUrl]);
+  const headlineRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const adjustFontSize = () => {
+    const container = headlineRef.current.parentNode;
+    const headline = headlineRef.current;
+
+    // Reset the font-size to the maximum desired font-size
+    headline.style.fontSize = '96px';
+
+    // Check if the headline is wider than its container
+    while (headline.scrollWidth > container.offsetWidth && parseFloat(window.getComputedStyle(headline).fontSize) > 0) {
+      // Reduce the font-size by 1px until it fits
+      headline.style.fontSize = `${parseFloat(window.getComputedStyle(headline).fontSize) - 1}px`;
+    }
+  };
+  function updateSignage() {
+    // Only proceed if the item to update exists in the signage array
+    if (!signage.some(sign => sign.id === item.id)) return;
+
+    // Consolidate updated properties into a single object
+    const updateDetails = {
+      letters,
+      comments,
+      font,
+      acrylicChannelThickness,
+      mounting: selectedMounting,
+      waterproof,
+      color,
+      letterHeight: selectedLetterHeight,
+      usdPrice,
+      cadPrice,
+      files,
+      fileNames,
+      filePaths,
+      fileUrls,
+      fontFile,
+      fontFileName,
+      fontFilePath,
+      fontFileUrl,
+      vinylWhite,
+      customFont,
+      customColor,
+      sets,
+      studLength,
+      spacerStandoffDistance,
+      acrylicFront
+    };
+    setSignage(prevSignage => prevSignage.map(sign => sign.id === item.id ? {
+      ...sign,
+      ...updateDetails
+    } : sign));
+  }
+  const handleOnChangeLetters = e => setLetters(() => e.target.value);
+  const handleComments = e => setComments(e.target.value);
+  const handleSelectFont = value => setFont(value);
+  const handleOnChangeSets = e => {
+    setSets(e.target.value);
+  };
+  const handleOnChangeMount = e => {
+    const target = e.target.value;
+    setSelectedMounting(target);
+    if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER || target === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_MOUNT) {
+      if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_MOUNT) {
+        setSpacerStandoffDistance('');
+      }
+    } else {
+      setStudLength('');
+      setSpacerStandoffDistance('');
+    }
+  };
+  const handleOnChangeWaterproof = e => setWaterproof(e.target.value);
+  const handleOnChangeThickness = e => {
+    const target = e.target.value;
+    setAcrylicChannelThickness(() => target);
+  };
+  const handleOnChangeLetterHeight = e => {
+    setSelectedLetterHeight(e.target.value);
+  };
+  const handleChangeFinishing = e => {
+    setSelectedFinishing(e.target.value);
+  };
+  const handleChangePieces = e => {
+    setPieces(e.target.value);
+  };
+  const handleOnChangeWhite = e => {
+    const target = e.target.value;
+    setAcrylicFront(target);
+    if (target !== '3M Vinyl') {
+      setVinylWhite({
+        name: '',
+        color: ''
+      });
+    }
+  };
+  const handleonChangeSpacerDistance = e => {
+    setSpacerStandoffDistance(e.target.value);
+  };
+  const handleonChangeStudLength = e => {
+    const target = e.target.value;
+    setStudLength(target); // Directly set the value without a callback
+
+    if (target === '1.5"') {
+      setSpacerStandoffOptions([{
+        value: '0.5"'
+      }, {
+        value: '1"'
+      }]);
+      if (!['0.5"', '1"'].includes(spacerStandoffDistance)) {
+        setSpacerStandoffDistance(''); // Reset if not one of the valid options
+      }
+    } else if (['3.2"', '4"'].includes(target)) {
+      setSpacerStandoffOptions([{
+        value: '0.5"'
+      }, {
+        value: '1"'
+      }, {
+        value: '1.5"'
+      }, {
+        value: '2"'
+      }]);
+      if (['3"', '4"'].includes(spacerStandoffDistance)) {
+        setSpacerStandoffDistance(''); // Reset if the distance is invalid for these options
+      }
+    } else {
+      setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
+    }
+
+    if (target === '') {
+      setSpacerStandoffDistance(''); // Always reset if the target is empty
+    }
+  };
+
+  // Helper function to determine letter price adjustments
+  function calculateLetterPrice(letter, baseLetterPrice, noLowerCase, waterproof, selectedFinishing, color) {
+    let letterPrice = baseLetterPrice;
+
+    // Pricing adjustments based on character type
+    if (letter === ' ') return 0;
+    if (letter.match(/[a-z]/)) letterPrice *= noLowerCase ? 1 : 0.8;
+    if (letter.match(/[`~"*,.\-']/)) letterPrice *= 0.3;
+
+    // Waterproof and finishing adjustments
+    letterPrice *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
+    letterPrice *= selectedFinishing === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.GLOSS_FINISH ? 1.1 : 1;
+
+    // Color adjustments
+    if (color?.name === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.CLEAR_COLOR) letterPrice *= 0.9;
+    if (color?.name === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.FROSTED_CLEAR_COLOR) letterPrice *= 0.95;
+    return letterPrice;
+  }
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    setLetterHeightOptions(() => Array.from({
+      length: parseInt(lettersHeight.max) - parseInt(lettersHeight.min) + 1
+    }, (_, index) => {
+      const val = parseInt(lettersHeight.min) + index;
+      return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+        key: index,
+        value: val,
+        selected: val === selectedLetterHeight
+      }, val, "\"");
+    }));
+  }, [lettersHeight, letterHeightOptions]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    adjustFontSize();
+  }, [letters]);
+  const checkAndAddMissingFields = () => {
+    const missingFields = [];
+    if (!letters) missingFields.push('Add your Line Text');
+    if (!font) missingFields.push('Select Font');
+    if (font == 'Custom font' && !fontFileUrl) {
+      missingFields.push('Upload your custom font.');
+    }
+    if (!selectedLetterHeight) missingFields.push('Select Letter Height');
+    if (!acrylicChannelThickness) missingFields.push('Select Acrylic Thickness');
+    if (!color.name) missingFields.push('Select Color');
+    if (color?.name === 'Custom Color' && !customColor) {
+      missingFields.push('Add the Pantone color code of your custom color.');
+    }
+    if (!selectedFinishing) missingFields.push('Select Finishing');
+    if (!waterproof) missingFields.push('Select Environment');
+    if (!selectedMounting) missingFields.push('Select Mounting');
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_MOUNT) {
+      if (!studLength) missingFields.push('Select Stud Length');
+    }
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER) {
+      if (!studLength) missingFields.push('Select Stud Length');
+      if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
+    }
+    if (!acrylicFront) missingFields.push('Select Acrylic Front');
+    if (!sets) missingFields.push('Select Quantity');
+    if (missingFields.length > 0) {
+      setMissing(prevMissing => {
+        const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
+        if (existingIndex !== -1) {
+          const updatedMissing = [...prevMissing];
+          updatedMissing[existingIndex] = {
+            ...updatedMissing[existingIndex],
+            missingFields: missingFields
+          };
+          return updatedMissing;
+        } else if (missingFields.length > 0) {
+          return [...prevMissing, {
+            id: item.id,
+            title: item.title,
+            missingFields: missingFields
+          }];
+        }
+        return prevMissing;
+      });
+    } else {
+      setMissing(current => {
+        const updatedMissing = current.filter(sign => sign.id !== item.id);
+        return updatedMissing;
+      });
+    }
+  };
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    checkAndAddMissingFields();
+  }, [letters, font, color, acrylicChannelThickness, selectedMounting, waterproof, selectedLetterHeight, fileUrls, fontFileUrl, selectedFinishing, customColor, sets, studLength, spacerStandoffDistance]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    updateSignage();
+  }, [letters, comments, font, acrylicChannelThickness, selectedMounting, waterproof, color, usdPrice, cadPrice, selectedLetterHeight, fileUrls, fileNames, filePaths, files, fontFileUrl, fontFileName, fontFilePath, fontFile, selectedFinishing, customFont, customColor, sets, studLength, spacerStandoffDistance, acrylicFront, vinylWhite]);
+  (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__["default"])([colorRef, fontRef], () => {
+    if (!openColor && !openFont) return;
+    setOpenColor(false);
+    setOpenFont(false);
+  });
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    color?.name != 'Custom Color' && setCustomColor('');
+    font != 'Custom font' && setFontFileUrl('');
+  }, [color, font]);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    clasName: "py-4 my-4"
+  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title"
+  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "w-full self-center"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "self-center text-center",
+    ref: headlineRef,
+    style: {
+      margin: '0',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      fontFamily: font === 'Custom font' ? '' : font,
+      color: color.color,
+      textShadow: '0px 0px 1px rgba(0, 0, 0, 1)'
+    }
+  }, letters ? letters : 'PREVIEW'))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "py-4"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
+  }, "Text"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    className: "w-full py-4 px-2 color-black border-gray-200 text-sm font-bold rounded-md h-14 placeholder:text-slate-400 ",
+    type: "text",
+    onChange: handleOnChangeLetters,
+    maxLength: 100,
+    value: letters,
+    placeholder: "YOUR TEXT HERE"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "quote-grid mb-6"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_FontsDropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    font: item.font,
+    fontRef: fontRef,
+    openFont: openFont,
+    setOpenFont: setOpenFont,
+    setOpenColor: setOpenColor,
+    handleSelectFont: handleSelectFont
+  }), font == 'Custom font' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFont__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    setFontFilePath: setFontFilePath,
+    setFontFile: setFontFile,
+    fontFilePath: fontFilePath,
+    fontFileUrl: fontFileUrl,
+    setFontFileUrl: setFontFileUrl,
+    setFontFileName: setFontFileName
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Acrylic Thickness",
+    value: acrylicChannelThickness,
+    onChange: handleOnChangeThickness,
+    options: _options__WEBPACK_IMPORTED_MODULE_10__.acrylicChannelThicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: thickness.value,
+      selected: thickness.value === acrylicChannelThickness
+    }, thickness.value)),
+    onlyValue: true
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Letter Height",
+    onChange: handleOnChangeLetterHeight,
+    options: letterHeightOptions,
+    value: selectedLetterHeight
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Acrylic Front",
+    onChange: handleOnChangeWhite,
+    options: _options__WEBPACK_IMPORTED_MODULE_10__.acrylicFrontOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.option,
+      selected: option == acrylicFront
+    }, option.option)),
+    value: acrylicFront
+  }), acrylicFront === '3M Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "px-[1px] relative",
+    ref: acrylicColorRef
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
+  }, "3M VINYL"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: `flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${vinylWhite.name ? 'text-black' : 'text-[#dddddd]'}`,
+    onClick: () => {
+      setOpenAcrylicCover(prev => !prev);
+      setOpenColor(false);
+      setOpenFont(false);
+    }
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "rounded-full w-[18px] h-[18px] border mr-2",
+    style: {
+      backgroundColor: vinylWhite.color
+    }
+  }), vinylWhite.name === '' ? 'CHOOSE OPTION' : vinylWhite.name), openAcrylicCover && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+  }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_9__.translucentGraphicFilms.map(color => {
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
+      onClick: () => {
+        setVinylWhite(color);
+        setOpenAcrylicCover(false);
+      }
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: "w-[18px] h-[18px] inline-block rounded-full border",
+      style: {
+        background: color?.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color?.color
+      }
+    }), color?.name);
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "px-[1px] relative",
+    ref: colorRef
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
+  }, "Color"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: `flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${color.name ? 'text-black' : 'text-[#dddddd]'}`,
+    onClick: () => {
+      setOpenColor(prev => !prev);
+      setOpenFont(false);
+    }
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "rounded-full w-[18px] h-[18px] border mr-2",
+    style: {
+      background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
+    }
+  }), color.name === '' ? 'CHOOSE OPTION' : color.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+  }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_9__.colorOptions.map(color => {
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
+      onClick: () => {
+        setColor(color);
+        setOpenColor(false);
+      }
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: "w-[18px] h-[18px] inline-block rounded-full border",
+      style: {
+        background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
+      }
+    }), color.name);
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Finishing Options",
+    onChange: handleChangeFinishing,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.finishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: finishing.name,
+      selected: finishing.name === selectedFinishing
+    }, finishing.name)),
+    value: selectedFinishing
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Environment",
+    onChange: handleOnChangeWaterproof,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.option,
+      selected: option.option == waterproof
+    }, option.option)),
+    value: waterproof
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Mounting Options",
+    onChange: handleOnChangeMount,
+    options: mountingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.mounting_option,
+      selected: option.mounting_option === selectedMounting
+    }, option.mounting_option)),
+    value: selectedMounting
+  }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Stud Length",
+    onChange: handleonChangeStudLength,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.value,
+      selected: option.value == studLength
+    }, option.value)),
+    value: studLength
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "STANDOFF SPACE",
+    onChange: handleonChangeSpacerDistance,
+    options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.value,
+      selected: option.value == spacerStandoffDistance
+    }, option.value)),
+    value: spacerStandoffDistance
+  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_MOUNT && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Stud Length",
+    onChange: handleonChangeStudLength,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.value,
+      selected: option.value == studLength
+    }, option.value)),
+    value: studLength
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Quantity",
+    onChange: handleOnChangeSets,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.setOptions,
+    value: sets,
+    onlyValue: true
+  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-xs text-[#9F9F9F] mb-4"
+  }, "*Note: The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "quote-grid"
+  }, color?.name == 'Custom Color' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "px-[1px] col-span-4"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
+  }, "Custom Color"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    className: "w-full py-4 px-2 border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400",
+    type: "text",
+    value: customColor,
+    onChange: e => setCustomColor(e.target.value),
+    placeholder: "ADD THE PANTONE COLOR CODE"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "px-[1px] col-span-4"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
+  }, "COMMENTS"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("textarea", {
+    className: "w-full py-4 px-2 border-gray-200 color-black text-sm font-bold rounded-md placeholder:text-slate-400",
+    value: comments,
+    onChange: handleComments,
+    placeholder: "ADD COMMENTS",
+    rows: 4
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    setFilePaths: setFilePaths,
+    setFiles: setFiles,
+    filePaths: filePaths,
+    fileUrls: fileUrls,
+    fileNames: fileNames,
+    setFileUrls: setFileUrls,
+    setFileNames: setFileNames
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-xs text-[#9F9F9F] pt-4"
+  }, "We size the letters in proportion to your chosen font. Some uppercase/lowercase letters may appear shorter or taller than your selected height on the form to maintain visual harmony."));
+}
+
+/***/ }),
+
+/***/ "./src/scripts/products/acrylic-channel/AcrylicFrontLit/components/Logo.js":
+/*!*********************************************************************************!*\
+  !*** ./src/scripts/products/acrylic-channel/AcrylicFrontLit/components/Logo.js ***!
+  \*********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Logo: () => (/* binding */ Logo)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Dropdown__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../Dropdown */ "./src/scripts/Dropdown.js");
+/* harmony import */ var _UploadFiles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../UploadFiles */ "./src/scripts/UploadFiles.js");
+/* harmony import */ var _utils_ClickOutside__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../utils/ClickOutside */ "./src/scripts/utils/ClickOutside.js");
+/* harmony import */ var _utils_ConvertJson__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../utils/ConvertJson */ "./src/scripts/utils/ConvertJson.js");
+/* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
+/* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
+/* harmony import */ var _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../utils/ColorOptions */ "./src/scripts/utils/ColorOptions.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
+
+
+
+
+
+
+
+
+
+
+
+const NovaSingleOptions = NovaQuote.single_quote_options;
+function Logo({
+  item
+}) {
+  var _item$mounting, _item$studLength, _item$spacerStandoffD, _item$acrylicThicknes, _item$width, _item$height, _item$usdPrice, _item$cadPrice, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$sets, _item$color, _item$customColor, _item$finishing, _item$comments, _item$waterproof;
+  const {
+    signage,
+    setSignage,
+    setMissing
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_8__.useAppContext)();
+  const [selectedMounting, setSelectedMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
+  const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$studLength = item.studLength) !== null && _item$studLength !== void 0 ? _item$studLength : '');
+  const [spacerStandoffOptions, setSpacerStandoffOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.spacerStandoffDefaultOptions);
+  const [spacerStandoffDistance, setSpacerStandoffDistance] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$spacerStandoffD = item.spacerStandoffDistance) !== null && _item$spacerStandoffD !== void 0 ? _item$spacerStandoffD : '');
+  const handleonChangeSpacerDistance = e => {
+    setSpacerStandoffDistance(e.target.value);
+  };
+  const handleonChangeStudLength = e => {
+    const target = e.target.value;
+    setStudLength(target); // Directly set the value without a callback
+
+    if (target === '1.5"') {
+      setSpacerStandoffOptions([{
+        value: '0.5"'
+      }, {
+        value: '1"'
+      }]);
+      if (!['0.5"', '1"'].includes(spacerStandoffDistance)) {
+        setSpacerStandoffDistance(''); // Reset if not one of the valid options
+      }
+    } else if (['3.2"', '4"'].includes(target)) {
+      setSpacerStandoffOptions([{
+        value: '0.5"'
+      }, {
+        value: '1"'
+      }, {
+        value: '1.5"'
+      }, {
+        value: '2"'
+      }]);
+      if (['3"', '4"'].includes(spacerStandoffDistance)) {
+        setSpacerStandoffDistance(''); // Reset if the distance is invalid for these options
+      }
+    } else {
+      setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
+    }
+
+    if (target === '') {
+      setSpacerStandoffDistance(''); // Always reset if the target is empty
+    }
+  };
+
+  const [selectedThickness, setSelectedThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicThicknes = item.acrylicThickness) !== null && _item$acrylicThicknes !== void 0 ? _item$acrylicThicknes : '');
+  const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$width = item.width) !== null && _item$width !== void 0 ? _item$width : '');
+  const [height, setHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$height = item.height) !== null && _item$height !== void 0 ? _item$height : '');
+  const [maxWidthHeight, setMaxWidthHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(43);
+  const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdPrice = item.usdPrice) !== null && _item$usdPrice !== void 0 ? _item$usdPrice : 0);
+  const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadPrice = item.cadPrice) !== null && _item$cadPrice !== void 0 ? _item$cadPrice : 0);
+  const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileNames = item.fileNames) !== null && _item$fileNames !== void 0 ? _item$fileNames : []);
+  const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrls = item.fileUrls) !== null && _item$fileUrls !== void 0 ? _item$fileUrls : []);
+  const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$filePaths = item.filePaths) !== null && _item$filePaths !== void 0 ? _item$filePaths : []);
+  const [files, setFiles] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$files = item.files) !== null && _item$files !== void 0 ? _item$files : []);
+  const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
+  const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$color = item.color) !== null && _item$color !== void 0 ? _item$color : {});
+  const [openColor, setOpenColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const [customColor, setCustomColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$customColor = item.customColor) !== null && _item$customColor !== void 0 ? _item$customColor : '');
+  const colorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const [selectedFinishing, setSelectedFinishing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$finishing = item.finishing) !== null && _item$finishing !== void 0 ? _item$finishing : '');
+  const [maxWidthOptions, setMaxWidthOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(Array.from({
+    length: maxWidthHeight
+  }, (_, index) => {
+    const val = 1 + index;
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: index,
+      value: val
+    }, val, "\"");
+  }));
+  const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
+  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : '');
+  const [mountingOptions, setMountingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.mountingDefaultOptions);
+  const handleOnChangeMount = e => {
+    const target = e.target.value;
+    setSelectedMounting(target);
+    if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER || target === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_MOUNT) {
+      if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_MOUNT) {
+        setSpacerStandoffDistance('');
+      }
+    } else {
+      setStudLength('');
+      setSpacerStandoffDistance('');
+    }
+  };
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    let newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.mountingDefaultOptions;
+    if (selectedThickness?.value === '3') {
+      if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_MOUNT || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
+        setSelectedMounting('');
+        setStudLength('');
+        setSpacerStandoffDistance('');
+      }
+      newMountingOptions = newMountingOptions.filter(option => option.mounting_option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_MOUNT && option.mounting_option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER);
+    }
+    if (waterproof === 'Outdoor (Waterproof)') {
+      if (selectedMounting === 'Double-sided tape') {
+        setSelectedMounting('');
+      }
+      newMountingOptions = newMountingOptions.filter(option => option.mounting_option !== 'Double-sided tape');
+    }
+    setMountingOptions(newMountingOptions);
+    setMaxWidthOptions(() => Array.from({
+      length: parseInt(maxWidthHeight) + 1
+    }, (_, index) => {
+      const val = 1 + index;
+      return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+        key: index,
+        value: val
+      }, val, "\"");
+    }));
+  }, [selectedThickness, selectedMounting, waterproof, maxWidthHeight, setSelectedMounting, setMountingOptions]);
+  function handleComments(e) {
+    setComments(e.target.value);
+  }
+  const handleOnChangeThickness = e => {
+    const target = e.target.value;
+    const selected = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.thicknessOptions.filter(option => option.value === target);
+    setSelectedThickness(() => selected[0]);
+    if (parseInt(target) === 3) {
+      if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_MOUNT || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
+        setSelectedMounting('');
+        setStudLength('');
+        setSpacerStandoffDistance('');
+      }
+    }
+  };
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (parseInt(selectedThickness?.value) > 3) {
+      setMaxWidthHeight(42);
+    } else {
+      setMaxWidthHeight(23);
+      if (height > 25) {
+        setHeight('');
+      }
+      if (width > 25) {
+        setWidth('');
+      }
+    }
+  }, [selectedThickness]);
+  const handleChangeFinishing = e => {
+    setSelectedFinishing(e.target.value);
+  };
+  const handleOnChangeSets = e => {
+    setSets(e.target.value);
+  };
+  function updateSignage() {
+    if (!signage.some(sign => sign.id === item.id)) return;
+    const updatedSignage = signage.map(sign => {
+      if (sign.id === item.id) {
+        return {
+          ...sign,
+          comments,
+          acrylicThickness: selectedThickness,
+          mounting: selectedMounting,
+          waterproof,
+          width,
+          height,
+          usdPrice,
+          cadPrice,
+          finishing: selectedFinishing,
+          files,
+          fileNames,
+          filePaths,
+          fileUrls,
+          sets,
+          color,
+          customColor,
+          studLength,
+          spacerStandoffDistance
+        };
+      } else {
+        return sign;
+      }
+    });
+    setSignage(() => updatedSignage);
+  }
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    updateSignage();
+  }, [comments, selectedThickness, selectedMounting, waterproof, width, height, usdPrice, cadPrice, fileUrls, fileNames, selectedFinishing, files, sets, filePaths, color, customColor, studLength, spacerStandoffDistance]);
+  const [logoPricingObject, setlogoPricingObject] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    async function fetchLogoPricing() {
+      try {
+        const response = await fetch(NovaQuote.logo_pricing_api + item.product);
+        const data = await response.json();
+        setlogoPricingObject(data);
+      } catch (error) {
+        console.error('Error fetching logo pricing:', error);
+      }
+    }
+    fetchLogoPricing();
+  }, []);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (width && height && selectedThickness && waterproof && logoPricingObject !== null) {
+      const logoPricing = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_5__.getLogoPricingTablebyThickness)(`${selectedThickness.value}mm`, logoPricingObject);
+      if (logoPricing !== undefined) {
+        const logoPricingTable = logoPricing !== undefined ? (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_4__["default"])(logoPricing) : [];
+        const computed = logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
+        let multiplier = 0;
+        if (waterproof) {
+          multiplier = waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
+        }
+        let total = parseFloat((computed * multiplier).toFixed(2));
+        total *= selectedFinishing === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.GLOSS_FINISH ? 1.1 : 1;
+        if (color?.name === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.CLEAR_COLOR) {
+          total *= 0.9;
+        }
+        if (color?.name === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.FROSTED_CLEAR_COLOR) {
+          total *= 0.95;
+        }
+        if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
+          const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_5__.spacerPricing)(total);
+          total += spacer;
+        }
+        total *= sets;
+        setUsdPrice(parseFloat(total.toFixed(2)));
+        setCadPrice((total * parseFloat(_utils_defaults__WEBPACK_IMPORTED_MODULE_9__.EXCHANGE_RATE)).toFixed(2));
+      } else {
+        setUsdPrice(0);
+        setCadPrice(0);
+      }
+    } else {
+      setUsdPrice(0);
+      setCadPrice(0);
+    }
+  }, [width, height, selectedThickness, waterproof, selectedFinishing, sets, color, selectedMounting]);
+  const checkAndAddMissingFields = () => {
+    const missingFields = [];
+    if (!selectedThickness) missingFields.push('Select Acrylic Thickness');
+    if (!width) missingFields.push('Select Logo Width');
+    if (!height) missingFields.push('Select Logo Height');
+    if (!waterproof) missingFields.push('Select Environment');
+    if (!selectedMounting) missingFields.push('Select Mounting');
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
+      if (!studLength) missingFields.push('Select Stud Length');
+      if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
+    }
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_MOUNT) {
+      if (!studLength) missingFields.push('Select Stud Length');
+    }
+    if (!selectedFinishing) missingFields.push('Select Finishing');
+    if (!color.name) missingFields.push('Select Color');
+    if (color?.name === 'Custom Color' && !customColor) {
+      missingFields.push('Add the Pantone color code of your custom color.');
+    }
+    if (!sets) missingFields.push('Select Quantity');
+    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    if (missingFields.length > 0) {
+      setMissing(prevMissing => {
+        const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
+        if (existingIndex !== -1) {
+          const updatedMissing = [...prevMissing];
+          updatedMissing[existingIndex] = {
+            ...updatedMissing[existingIndex],
+            missingFields: missingFields
+          };
+          return updatedMissing;
+        } else if (missingFields.length > 0) {
+          return [...prevMissing, {
+            id: item.id,
+            title: item.title,
+            missingFields: missingFields
+          }];
+        }
+        return prevMissing;
+      });
+    } else {
+      setMissing(current => {
+        const updatedMissing = current.filter(sign => sign.id !== item.id);
+        return updatedMissing;
+      });
+    }
+  };
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    checkAndAddMissingFields();
+  }, [width, height, selectedThickness, comments, selectedMounting, waterproof, fileUrls, fileNames, filePaths, files, selectedFinishing, sets, studLength, spacerStandoffDistance]);
+  (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_3__["default"])([colorRef], () => {
+    if (!openColor) return;
+    setOpenColor(false);
+  });
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    color?.name != 'Custom Color' && setCustomColor('');
+  }, [color]);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "py-4 mb-4"
+  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title"
+  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "quote-grid mb-6"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Acrylic Thickness",
+    value: selectedThickness?.value,
+    onChange: handleOnChangeThickness,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.thicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: thickness.value,
+      selected: thickness === selectedThickness
+    }, thickness.thickness))
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Logo Width",
+    value: width,
+    onChange: e => setWidth(e.target.value),
+    options: maxWidthOptions
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Logo Height",
+    value: height,
+    onChange: e => setHeight(e.target.value),
+    options: maxWidthOptions
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "px-[1px] relative",
+    ref: colorRef
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
+  }, "Color"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: `flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${color.name ? 'text-black' : 'text-[#dddddd]'}`,
+    onClick: () => {
+      setOpenColor(prev => !prev);
+    }
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "rounded-full w-[18px] h-[18px] border mr-2",
+    style: {
+      background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
+    }
+  }), color.name === '' ? 'CHOOSE OPTION' : color.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+  }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.colorOptions.map(color => {
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
+      onClick: () => {
+        setColor(color);
+        setOpenColor(false);
+      }
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: "w-[18px] h-[18px] inline-block rounded-full border",
+      style: {
+        background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
+      }
+    }), color.name);
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Finishing Options",
+    onChange: handleChangeFinishing,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.finishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: finishing.name,
+      selected: finishing.name === selectedFinishing
+    }, finishing.name)),
+    value: selectedFinishing
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Environment",
+    onChange: e => setWaterproof(e.target.value),
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.option,
+      selected: option.option == waterproof
+    }, option.option)),
+    value: waterproof
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Mounting Options",
+    onChange: handleOnChangeMount,
+    options: mountingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.mounting_option,
+      selected: option.mounting_option === selectedMounting
+    }, option.mounting_option)),
+    value: selectedMounting
+  }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Stud Length",
+    onChange: handleonChangeStudLength,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.value,
+      selected: option.value == studLength
+    }, option.value)),
+    value: studLength
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "STANDOFF SPACE",
+    onChange: handleonChangeSpacerDistance,
+    options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.value,
+      selected: option.value == spacerStandoffDistance
+    }, option.value)),
+    value: spacerStandoffDistance
+  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_MOUNT && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Stud Length",
+    onChange: handleonChangeStudLength,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.value,
+      selected: option.value == studLength
+    }, option.value)),
+    value: studLength
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Quantity",
+    onChange: handleOnChangeSets,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.setOptions,
+    value: sets,
+    onlyValue: true
+  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-xs text-[#9F9F9F] mb-4"
+  }, "*Note: The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "quote-grid"
+  }, color?.name == 'Custom Color' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "px-[1px] col-span-4"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
+  }, "Custom Color"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    className: "w-full py-4 px-2 border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400",
+    type: "text",
+    value: customColor,
+    onChange: e => setCustomColor(e.target.value),
+    placeholder: "ADD THE PANTONE COLOR CODE"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "px-[1px] col-span-4"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
+  }, "COMMENTS"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("textarea", {
+    className: "w-full py-4 px-2 border-gray-200 color-black text-sm font-bold rounded-md placeholder:text-slate-400",
+    value: comments,
+    onChange: handleComments,
+    placeholder: "ADD COMMENTS",
+    rows: 4
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    setFilePaths: setFilePaths,
+    setFiles: setFiles,
+    filePaths: filePaths,
+    fileUrls: fileUrls,
+    fileNames: fileNames,
+    setFileUrls: setFileUrls,
+    setFileNames: setFileNames
+  })));
+}
+
+/***/ }),
+
+/***/ "./src/scripts/products/acrylic-channel/AcrylicFrontLit/options.js":
+/*!*************************************************************************!*\
+  !*** ./src/scripts/products/acrylic-channel/AcrylicFrontLit/options.js ***!
+  \*************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   acrylicChannelThicknessOptions: () => (/* binding */ acrylicChannelThicknessOptions),
+/* harmony export */   acrylicFrontOptions: () => (/* binding */ acrylicFrontOptions)
+/* harmony export */ });
+const acrylicChannelThicknessOptions = [{
+  value: '1.2"'
+}];
+const acrylicFrontOptions = [{
+  option: 'White'
+}, {
+  option: '3M Vinyl'
+}, {
+  option: 'UV Printed'
+}];
+
+/***/ }),
+
 /***/ "./src/scripts/products/acrylic/LaserCutAcrylic/ColorOptions.js":
 /*!**********************************************************************!*\
   !*** ./src/scripts/products/acrylic/LaserCutAcrylic/ColorOptions.js ***!
@@ -8597,7 +9884,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_select__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! react-select */ "./node_modules/react-select/dist/react-select.esm.js");
+/* harmony import */ var react_select__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! react-select */ "./node_modules/react-select/dist/react-select.esm.js");
 /* harmony import */ var _SidebarAdmin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../SidebarAdmin */ "./src/scripts/SidebarAdmin.js");
 /* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Signage */ "./src/scripts/Signage.js");
 /* harmony import */ var _components_AccordionGroup__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/AccordionGroup */ "./src/scripts/products/combine/components/AccordionGroup.js");
@@ -8625,6 +9912,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _pvc_PVCPainted_components_Letters__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ../pvc/PVCPainted/components/Letters */ "./src/scripts/products/pvc/PVCPainted/components/Letters.js");
 /* harmony import */ var _pvc_PVCPainted_components_Logo__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ../pvc/PVCPainted/components/Logo */ "./src/scripts/products/pvc/PVCPainted/components/Logo.js");
 /* harmony import */ var _pvc_PVCUv_components_Logo__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ../pvc/PVCUv/components/Logo */ "./src/scripts/products/pvc/PVCUv/components/Logo.js");
+/* harmony import */ var _led_neon_FlexNeonSign_components_NeonSign__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ../led-neon/FlexNeonSign/components/NeonSign */ "./src/scripts/products/led-neon/FlexNeonSign/components/NeonSign.js");
+/* harmony import */ var _led_neon_RigidNeonSignNoBacking_components_NeonSign__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ../led-neon/RigidNeonSignNoBacking/components/NeonSign */ "./src/scripts/products/led-neon/RigidNeonSignNoBacking/components/NeonSign.js");
+/* harmony import */ var _led_neon_RigidNeonSignWithBacking_components_NeonSign__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ../led-neon/RigidNeonSignWithBacking/components/NeonSign */ "./src/scripts/products/led-neon/RigidNeonSignWithBacking/components/NeonSign.js");
 
 
 
@@ -8658,6 +9948,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+/*LED */
 
 
 
@@ -8704,6 +9997,27 @@ function CombineQuotes() {
   const showComponent = item => {
     let output;
     switch (item.component) {
+      case 'RigidNeonSignNoBacking':
+        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_led_neon_RigidNeonSignNoBacking_components_NeonSign__WEBPACK_IMPORTED_MODULE_29__.NeonSign, {
+          key: item.id,
+          item: item,
+          productId: item.product
+        });
+        break;
+      case 'RigidNeonSignWithBacking':
+        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_led_neon_RigidNeonSignWithBacking_components_NeonSign__WEBPACK_IMPORTED_MODULE_30__.NeonSign, {
+          key: item.id,
+          item: item,
+          productId: item.product
+        });
+        break;
+      case 'FlexNeonSign':
+        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_led_neon_FlexNeonSign_components_NeonSign__WEBPACK_IMPORTED_MODULE_28__.NeonSign, {
+          key: item.id,
+          item: item,
+          productId: item.product
+        });
+        break;
       case 'AluminumResinFrontBackLit':
         output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_AluminumResinFrontBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_18__.Letters, {
           key: item.id,
@@ -8878,7 +10192,7 @@ function CombineQuotes() {
     className: "border-gray-200 p-4 rounded-md border mb-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "font-title text-lg mb-4"
-  }, "Select Partner:"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_select__WEBPACK_IMPORTED_MODULE_28__["default"], {
+  }, "Select Partner:"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_select__WEBPACK_IMPORTED_MODULE_31__["default"], {
     className: "basic-single",
     classNames: {
       indicatorSeparator: () => 'hidden'
@@ -8965,7 +10279,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
-/* harmony import */ var _CombineQuoteContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../CombineQuoteContext */ "./src/scripts/products/combine/CombineQuoteContext.js");
+/* harmony import */ var _AddSignage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AddSignage */ "./src/scripts/products/combine/components/AddSignage.js");
+/* harmony import */ var _CombineQuoteContext__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../CombineQuoteContext */ "./src/scripts/products/combine/CombineQuoteContext.js");
+
 
 
 
@@ -8976,7 +10292,7 @@ function AccordionItem({
   isOpen
 }) {
   const [open, setOpen] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const addSignage = (0,_CombineQuoteContext__WEBPACK_IMPORTED_MODULE_2__.useCombineQuote)();
+  const addSignage = (0,_CombineQuoteContext__WEBPACK_IMPORTED_MODULE_3__.useCombineQuote)();
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     isOpen(open);
   }, [open]);
@@ -8993,20 +10309,53 @@ function AccordionItem({
     className: "font-title uppercase mb-2"
   }, product.product.post_title), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     class: "flex gap-2"
-  }, product.letters && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
-    className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
-    onClick: () => addSignage(product.product.post_title, product.product.ID, 'letters', product.component, title),
-    style: {
-      border: '1px solid #d2d2d2d2'
-    }
-  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null)), product.logo && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
-    className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
-    onClick: () => addSignage(product.product.post_title, product.product.ID, 'logo', product.component, title),
-    style: {
-      border: '1px solid #d2d2d2d2'
-    }
-  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null))))));
+  }, product.letters && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AddSignage__WEBPACK_IMPORTED_MODULE_2__.AddSignage, {
+    addSignage: addSignage,
+    product: product,
+    title: title,
+    type: "letters"
+  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null)), product.logo && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AddSignage__WEBPACK_IMPORTED_MODULE_2__.AddSignage, {
+    addSignage: addSignage,
+    product: product,
+    title: title,
+    type: "logo"
+  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null)), product.sign && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AddSignage__WEBPACK_IMPORTED_MODULE_2__.AddSignage, {
+    addSignage: addSignage,
+    product: product,
+    title: title,
+    type: "SIGN"
+  }, "ADD SIGN", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null))))));
 }
+
+/***/ }),
+
+/***/ "./src/scripts/products/combine/components/AddSignage.js":
+/*!***************************************************************!*\
+  !*** ./src/scripts/products/combine/components/AddSignage.js ***!
+  \***************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   AddSignage: () => (/* binding */ AddSignage)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+const AddSignage = ({
+  addSignage,
+  product,
+  type,
+  title,
+  children
+}) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+  className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
+  onClick: () => addSignage(product.product.post_title, product.product.ID, type, product.component, title),
+  style: {
+    border: '1px solid #d2d2d2d2'
+  }
+}, children);
 
 /***/ }),
 
@@ -9418,11 +10767,14 @@ const NeonSign = ({
   const acrylicBackingSelections = _neonSignOptions__WEBPACK_IMPORTED_MODULE_8__.acrylicBackingOptions.map(item => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
     value: item.option
   }, item.option));
-  const neonSignsWidthHeight = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
-    return (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.arrayRange)(5, 40, 1);
+  const neonSignsWidth = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
+    return (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.arrayRange)(5, 92, 1);
+  }, []);
+  const neonSignsHeight = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
+    return (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.arrayRange)(5, 46, 1);
   }, []);
   const neonLengthOptions = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
-    return (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.arrayRange)(10, 60, 2, false);
+    return (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.arrayRange)(2, 100, 2, false);
   }, []);
   const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : '');
   const [mounting, setMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
@@ -9492,19 +10844,25 @@ const NeonSign = ({
   }, [updateSignage, checkAndAddMissingFields]);
   const computePricing = () => {
     if (!width || !height || !neonLength || !waterproof || !acrylicBackingOption) return 0;
-    let tempTotal = (parseInt(width) + 3) * (parseInt(height) + 3) * 0.11 + parseInt(neonLength) * 6.9 + 25;
+    let tempTotal = (parseInt(width) + 3) * (parseInt(height) + 3) * 0.1 + parseInt(neonLength) * 6.9 + 10;
+
+    /* minimum price */
+    tempTotal = tempTotal > 59 ? tempTotal : 59;
+
+    /*oversize surcharge*/
+    tempTotal += parseInt(width) > 41 || parseInt(height) > 41 ? 150 : 0;
     tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.INDOOR_NOT_WATERPROOF ? 1 : 1.15;
     let additional = 0;
     if (acrylicBackingOption === 'UV Printed Acrylic') {
-      additional = parseInt(width) * parseInt(height) * 0.25;
+      additional = parseInt(width) * parseInt(height) * 0.05;
       tempTotal += additional;
     }
     if (acrylicBackingOption === 'Frosted Clear Acrylic') {
-      additional = parseInt(width) * parseInt(height) * 0.1;
+      additional = parseInt(width) * parseInt(height) * 0.05;
       tempTotal += additional;
     }
     if (acrylicBackingOption === 'Clear Acrylic') {
-      additional = parseInt(width) * parseInt(height) * 0.17;
+      additional = parseInt(width) * parseInt(height) * 0.07;
       tempTotal += additional;
     }
     let mountingPrice = 0;
@@ -9564,12 +10922,12 @@ const NeonSign = ({
     title: "Neon Sign Width",
     value: width,
     onChange: e => setWidth(e.target.value),
-    options: neonSignsWidthHeight
+    options: neonSignsWidth
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Neon Sign Height",
     value: height,
     onChange: e => setHeight(e.target.value),
-    options: neonSignsWidthHeight
+    options: neonSignsHeight
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Neon Length(ft)",
     value: neonLength,
@@ -9621,7 +10979,7 @@ const NeonSign = ({
     onlyValue: true
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_NeonColors__WEBPACK_IMPORTED_MODULE_6__.NeonColors, {
     colorRef: colorRef,
-    color: color,
+    colors: color,
     toggle: () => {
       setOpenColor(prev => !prev);
     },
@@ -9799,12 +11157,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
 /* harmony import */ var _Dropdown__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../Dropdown */ "./src/scripts/Dropdown.js");
 /* harmony import */ var _UploadFiles__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../UploadFiles */ "./src/scripts/UploadFiles.js");
-/* harmony import */ var _utils_ClickOutside__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../utils/ClickOutside */ "./src/scripts/utils/ClickOutside.js");
-/* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
-/* harmony import */ var _components_NeonColors__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../components/NeonColors */ "./src/scripts/products/led-neon/components/NeonColors.js");
-/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
-/* harmony import */ var _neonSignOptions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../neonSignOptions */ "./src/scripts/products/led-neon/neonSignOptions.js");
-
+/* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
+/* harmony import */ var _components_NeonColors__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../components/NeonColors */ "./src/scripts/products/led-neon/components/NeonColors.js");
+/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
+/* harmony import */ var _neonSignOptions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../neonSignOptions */ "./src/scripts/products/led-neon/neonSignOptions.js");
 
 
 
@@ -9815,14 +11171,14 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const waterProofOptions = [{
-  option: _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.INDOOR_NOT_WATERPROOF
+  option: _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.INDOOR_NOT_WATERPROOF
 }, {
   option: 'Outdoor (Not Waterproof)'
 }];
 const rigidNoBackingMountingOptions = [{
   option: 'M4 Stud'
 }, {
-  option: _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.M4_STUD_WITH_SPACER
+  option: _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.M4_STUD_WITH_SPACER
 }];
 const NeonSign = ({
   item
@@ -9837,7 +11193,7 @@ const NeonSign = ({
   const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileNames = item.fileNames) !== null && _item$fileNames !== void 0 ? _item$fileNames : []);
   const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrls = item.fileUrls) !== null && _item$fileUrls !== void 0 ? _item$fileUrls : []);
   const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$filePaths = item.filePaths) !== null && _item$filePaths !== void 0 ? _item$filePaths : []);
-  const [rcOptions, setRcOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_neonSignOptions__WEBPACK_IMPORTED_MODULE_8__.remoteControlOptions);
+  const [rcOptions, setRcOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_neonSignOptions__WEBPACK_IMPORTED_MODULE_7__.remoteControlOptions);
   const [files, setFiles] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$files = item.files) !== null && _item$files !== void 0 ? _item$files : []);
   const [neonColor, setNeonColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$neonColor = item.neonColor) !== null && _item$neonColor !== void 0 ? _item$neonColor : '');
   const [openNeonColor, setOpenNeonColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
@@ -9858,10 +11214,10 @@ const NeonSign = ({
   }]);
   const [wireType, setWireType] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$wireType = item.wireType) !== null && _item$wireType !== void 0 ? _item$wireType : '');
   const neonSignsWidthHeight = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
-    return (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.arrayRange)(5, 95, 1);
+    return (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_4__.arrayRange)(3, 200, 1);
   }, []);
   const neonLength = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
-    return (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.arrayRange)(2, 100, 2, false);
+    return (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_4__.arrayRange)(2, 100, 2, false);
   }, []);
   const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$rigidWaterproof = item.rigidWaterproof) !== null && _item$rigidWaterproof !== void 0 ? _item$rigidWaterproof : '');
   const [mounting, setMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
@@ -9909,7 +11265,7 @@ const NeonSign = ({
         setSpacerStandoffDistance(''); // Reset if the distance is invalid for these options
       }
     } else {
-      setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
+      setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_4__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
     }
 
     if (target === '') {
@@ -9956,7 +11312,7 @@ const NeonSign = ({
       missingFields.push('Set one of 8mm Neon Length, 10mm Neon Length, 14mm Neon Length, 20mm Neon Length');
     }
     if (!mounting) missingFields.push('Select Mounting');
-    if (mounting && mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.M4_STUD_WITH_SPACER) {
+    if (mounting && mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.M4_STUD_WITH_SPACER) {
       if (!rigidM4StudLength) missingFields.push('Select M4 Stud Length');
       if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
@@ -9995,12 +11351,10 @@ const NeonSign = ({
     const L2 = neonLength10mm ? parseInt(neonLength10mm) : 0;
     const L3 = neonLength14mm ? parseInt(neonLength14mm) : 0;
     const L4 = neonLength20mm ? parseInt(neonLength20mm) : 0;
-    let tempTotal = L1 * 15 + L2 * 13 + L3 * 15 + L4 * 25 + parseInt(width) * parseInt(height) * 0.2 + 10;
+    let tempTotal = L1 * 15 + L2 * 13 + L3 * 15 + L4 * 25 + (parseInt(width) + 1) * (parseInt(height) + 1) * 0.075 + 10;
+    tempTotal = tempTotal > 79 ? tempTotal : 79;
     if (waterproof) {
-      tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.INDOOR_NOT_WATERPROOF || waterproof === 'N/A' ? 1 : 1.35;
-    }
-    if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.M4_STUD_WITH_SPACER) {
-      tempTotal *= 1.05;
+      tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.INDOOR_NOT_WATERPROOF || waterproof === 'N/A' ? 1 : 1.3;
     }
     let remotePrice = 0;
     if (remoteControl === 'Yes') {
@@ -10014,7 +11368,7 @@ const NeonSign = ({
     const total = computePricing();
     if (total !== undefined || total !== 0) {
       setUsdPrice(total);
-      setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.EXCHANGE_RATE).toFixed(2));
+      setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.EXCHANGE_RATE).toFixed(2));
     }
   }, [width, height, waterproof, mounting, remoteControl, neonLength8mm, neonLength10mm, neonLength14mm, neonLength20mm, rigidM4StudLength, sets]);
   const handleOnChangeSets = e => {
@@ -10026,7 +11380,7 @@ const NeonSign = ({
   };
   const handleOnChangeWaterproof = e => {
     const target = e.target.value;
-    if (target !== _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.INDOOR_NOT_WATERPROOF) {
+    if (target !== _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.INDOOR_NOT_WATERPROOF) {
       if (neonLength8mm) {
         setNeonLength8mm('');
       }
@@ -10041,11 +11395,11 @@ const NeonSign = ({
       if (remoteControl === 'N/A') {
         setRemoteControl('No');
       }
-      setRcOptions(_neonSignOptions__WEBPACK_IMPORTED_MODULE_8__.remoteControlOptions);
+      setRcOptions(_neonSignOptions__WEBPACK_IMPORTED_MODULE_7__.remoteControlOptions);
     }
     setWaterproof(target);
-    setWireType(target === _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.INDOOR_NOT_WATERPROOF ? '6ft open wires' : '10ft open wires');
-    setWireTypeOptions(target === _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.INDOOR_NOT_WATERPROOF ? [{
+    setWireType(target === _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.INDOOR_NOT_WATERPROOF ? '6ft open wires' : '10ft open wires');
+    setWireTypeOptions(target === _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.INDOOR_NOT_WATERPROOF ? [{
       option: '6ft open wires'
     }] : [{
       option: '10ft open wires'
@@ -10120,13 +11474,13 @@ const NeonSign = ({
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "M4 Stud Length",
     onChange: handleOnChangeStudLength,
-    options: _neonSignOptions__WEBPACK_IMPORTED_MODULE_8__.ledSpacerStandoffDefaultOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _neonSignOptions__WEBPACK_IMPORTED_MODULE_7__.ledSpacerStandoffDefaultOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: option.value,
       value: option.value,
       selected: option.value === rigidM4StudLength
     }, option.value)),
     value: rigidM4StudLength
-  }), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.M4_STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.M4_STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -10144,7 +11498,7 @@ const NeonSign = ({
     }, option.option)),
     value: remoteControl,
     onlyValue: true
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_NeonColors__WEBPACK_IMPORTED_MODULE_6__.NeonColors, {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_NeonColors__WEBPACK_IMPORTED_MODULE_5__.NeonColors, {
     colorRef: neonColorRef,
     colors: neonColor,
     toggle: () => {
@@ -10165,7 +11519,7 @@ const NeonSign = ({
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.setOptions,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_4__.setOptions,
     value: sets,
     onlyValue: true
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -10371,7 +11725,7 @@ const wireTypeOptions = [{
 const NeonSign = ({
   item
 }) => {
-  var _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$neonColor, _item$paintedPCColor, _item$neonSignWidth, _item$paintedPCFinish, _item$customColor, _item$neonLength8mm, _item$rigidBacking, _item$wireExitLocatio, _item$wireType, _item$neonLength10mm, _item$neonLength14mm, _item$neonLength20mm, _item$neonSignHeight, _item$usdPrice, _item$cadPrice, _item$remoteControl, _item$waterproof, _item$mounting, _item$sets;
+  var _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$neonColor, _item$paintedPCColor, _item$neonSignWidth, _item$paintedPCFinish, _item$customColor, _item$neonLength8mm, _item$rigidBacking, _item$wireExitLocatio, _item$wireType, _item$neonLength10mm, _item$neonLength14mm, _item$neonLength20mm, _item$neonSignHeight, _item$usdPrice, _item$usdSinglePrice, _item$usdSinglePrice2, _item$cadPrice, _item$remoteControl, _item$waterproof, _item$mounting, _item$sets;
   const {
     signage,
     setSignage,
@@ -10399,10 +11753,15 @@ const NeonSign = ({
   const [neonLength20mm, setNeonLength20mm] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$neonLength20mm = item.neonLength20mm) !== null && _item$neonLength20mm !== void 0 ? _item$neonLength20mm : '');
   const [height, setHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$neonSignHeight = item.neonSignHeight) !== null && _item$neonSignHeight !== void 0 ? _item$neonSignHeight : '');
   const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdPrice = item.usdPrice) !== null && _item$usdPrice !== void 0 ? _item$usdPrice : 0);
+  const [usdSinglePrice, setUsdSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdSinglePrice = item.usdSinglePrice) !== null && _item$usdSinglePrice !== void 0 ? _item$usdSinglePrice : 0);
+  const [cadSinglePrice, setCadSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdSinglePrice2 = item.usdSinglePrice) !== null && _item$usdSinglePrice2 !== void 0 ? _item$usdSinglePrice2 : 0);
   const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadPrice = item.cadPrice) !== null && _item$cadPrice !== void 0 ? _item$cadPrice : 0);
   const [remoteControl, setRemoteControl] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$remoteControl = item.remoteControl) !== null && _item$remoteControl !== void 0 ? _item$remoteControl : 'No');
-  const neonSignsWidthHeight = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
-    return (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.arrayRange)(5, 42, 1);
+  const neonSignsWidth = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
+    return (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.arrayRange)(5, 92, 1);
+  }, []);
+  const neonSignsHeight = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
+    return (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.arrayRange)(5, 46, 1);
   }, []);
   const neonLength = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
     return (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.arrayRange)(2, 100, 2, false);
@@ -10493,48 +11852,70 @@ const NeonSign = ({
     updateSignage();
     checkAndAddMissingFields();
   }, [updateSignage, checkAndAddMissingFields]);
-  const computePricing = () => {
-    if (!width || !height) return 0;
+  const computePricing = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(() => {
+    if (!width || !height) return {
+      singlePrice: 0,
+      total: 0
+    };
     const L1 = neonLength8mm ? parseInt(neonLength8mm) : 0;
     const L2 = neonLength10mm ? parseInt(neonLength10mm) : 0;
     const L3 = neonLength14mm ? parseInt(neonLength14mm) : 0;
     const L4 = neonLength20mm ? parseInt(neonLength20mm) : 0;
-    let tempTotal = L1 * 15 + L2 * 13 + L3 * 15 + L4 * 25 + parseInt(width) * parseInt(height) * 0.6 + 45;
+    let tempTotal = L1 * 15 + L2 * 13 + L3 * 15 + L4 * 25 + (parseInt(width) + 2) * (parseInt(height) + 2) * 0.15 + 25;
+
+    // Minimum price
+    tempTotal = tempTotal > 89 ? tempTotal : 89;
+
+    // Oversize surcharge
+    tempTotal += parseInt(width) > 41 || parseInt(height) > 41 ? 150 : 0;
     let rigidBackingPrice = 0;
-    if (rigidBacking === 'Frosted Clear PC') {
-      rigidBackingPrice = parseInt(width) * parseInt(height) * 0.17;
-    }
-    if (rigidBacking === 'Black PC') {
-      rigidBackingPrice = parseInt(width) * parseInt(height) * 0.17;
-    }
-    if (rigidBacking === 'UV Printed on PC') {
-      rigidBackingPrice = parseInt(width) * parseInt(height) * 0.21;
-    }
-    if (rigidBacking === 'Painted PC') {
-      rigidBackingPrice = parseInt(width) * parseInt(height) * 0.2;
+    switch (rigidBacking) {
+      case 'Black PC':
+        rigidBackingPrice = parseInt(width) * parseInt(height) * 0.02;
+        break;
+      case 'Clear Acrylic':
+        rigidBackingPrice = parseInt(width) * parseInt(height) * 0.03;
+        break;
+      case 'UV Printed PC':
+        rigidBackingPrice = parseInt(width) * parseInt(height) * 0.015;
+        break;
+      case 'Painted PC':
+        rigidBackingPrice = parseInt(width) * parseInt(height) * 0.03;
+        break;
+      default:
+        rigidBackingPrice = 0;
     }
     tempTotal += rigidBackingPrice;
     let mountingPrice = 0;
-    if (mounting === 'Advertising Nails(1.5")') {
-      mountingPrice = 8;
-    }
-    if (mounting === 'Hanging Chain') {
-      mountingPrice = 10;
+    switch (mounting) {
+      case 'Advertising Nails(1.5")':
+        mountingPrice = 8;
+        break;
+      case 'Hanging Chain':
+        mountingPrice = 10;
+        break;
+      default:
+        mountingPrice = 0;
     }
     tempTotal += mountingPrice;
-    let remotePrice = 0;
-    if (remoteControl === 'Yes') {
-      remotePrice = 16;
-    }
+    let remotePrice = remoteControl === 'Yes' ? 16 : 0;
     tempTotal += remotePrice;
-    tempTotal *= parseInt(sets);
-    return tempTotal.toFixed(2);
-  };
+    const total = tempTotal * parseInt(sets);
+    return {
+      singlePrice: tempTotal,
+      total: total.toFixed(2)
+    };
+  }, [width, height, neonLength8mm, neonLength10mm, neonLength14mm, neonLength20mm, rigidBacking, mounting, remoteControl, sets]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    const total = computePricing();
+    const {
+      singlePrice,
+      total
+    } = computePricing();
     if (total !== undefined || total !== 0) {
       setUsdPrice(total);
       setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.EXCHANGE_RATE).toFixed(2));
+      setUsdSinglePrice(singlePrice);
+      setUsdSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.EXCHANGE_RATE).toFixed(2));
     }
   }, [width, height, mounting, remoteControl, neonLength8mm, neonLength10mm, neonLength14mm, neonLength20mm, rigidBacking, sets]);
   const handleOnChangeSets = e => {
@@ -10608,12 +11989,12 @@ const NeonSign = ({
     title: "Neon Sign Width",
     value: width,
     onChange: e => setWidth(e.target.value),
-    options: neonSignsWidthHeight
+    options: neonSignsWidth
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Neon Sign Height",
     value: height,
     onChange: e => setHeight(e.target.value),
-    options: neonSignsWidthHeight
+    options: neonSignsHeight
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "8mm Neon Length",
     value: neonLength8mm,
@@ -10736,7 +12117,7 @@ const NeonSign = ({
     onlyValue: true
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_NeonColors__WEBPACK_IMPORTED_MODULE_7__.NeonColors, {
     colorRef: neonColorRef,
-    color: neonColor,
+    colors: neonColor,
     toggle: () => {
       setOpenNeonColor(prev => !prev);
       setOpenColor(false);
@@ -10824,13 +12205,11 @@ const NeonColors = ({
     });
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    console.log(colors.length);
+  }, [colors]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     getSelectedColors(selectedColors);
   }, [selectedColors]);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (colors) {
-      setSelectedColors(() => colors.split(', '));
-    }
-  }, []);
   const colorSelections = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
   }, _neonSignOptions__WEBPACK_IMPORTED_MODULE_2__.neonColorOptions.map(colorOption => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
@@ -10856,7 +12235,7 @@ const NeonColors = ({
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
   }, "Neon Colors"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: `flex items-center text-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${colors.length > 0 ? 'text-black' : 'text-[#dddddd]'}`,
+    className: `flex items-center text-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${selectedColors.length > 0 ? 'text-black' : 'text-[#dddddd]'}`,
     onClick: toggle
   }, selectedColors.length, " selected"), openColor && colorSelections);
 };
@@ -10906,7 +12285,9 @@ const rigidBackingOptions = [{
 }, {
   option: 'Black PC'
 }, {
-  option: 'UV Printed on PC'
+  option: 'Clear Acrylic'
+}, {
+  option: 'UV Printed PC'
 }, {
   option: 'Painted PC'
 }];
@@ -24085,6 +25466,9 @@ const allAttributes = item => [{
   key: item.acrylicThickness?.thickness,
   label: 'ACRYLIC THICKNESS'
 }, {
+  key: item.acrylicChannelThickness,
+  label: 'ACRYLIC THICKNESS'
+}, {
   key: item.metalThickness?.thickness,
   label: 'METAL THICKNESS'
 }, {
@@ -24093,6 +25477,9 @@ const allAttributes = item => [{
 }, {
   key: item.letterHeight,
   label: 'LETTER HEIGHT'
+}, {
+  key: item.acrylicFront,
+  label: 'ACRYLIC FRONT'
 }, {
   key: item.backLitFinishing,
   label: 'FINISHING'
@@ -24180,6 +25567,9 @@ const allAttributes = item => [{
 }, {
   key: item.metalCustomColor,
   label: 'CUSTOM COLOR'
+}, {
+  key: item.returnPaintColor,
+  label: 'RETURN PAINT COLOR'
 }, {
   key: item.ledLightColor,
   label: 'LED LIGHT COLOR'
@@ -36841,26 +38231,28 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _index_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./index.css */ "./src/index.css");
 /* harmony import */ var _scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./scripts/AppProvider */ "./src/scripts/AppProvider.tsx");
 /* harmony import */ var _scripts_QuoteView__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./scripts/QuoteView */ "./src/scripts/QuoteView.js");
-/* harmony import */ var _scripts_products_acrylic_LaserCutAcrylic_LaserCutAcrylic__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./scripts/products/acrylic/LaserCutAcrylic/LaserCutAcrylic */ "./src/scripts/products/acrylic/LaserCutAcrylic/LaserCutAcrylic.js");
-/* harmony import */ var _scripts_products_acrylic_LayeredAcrylic_LayeredAcrylic__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./scripts/products/acrylic/LayeredAcrylic/LayeredAcrylic */ "./src/scripts/products/acrylic/LayeredAcrylic/LayeredAcrylic.js");
-/* harmony import */ var _scripts_products_acrylic_MetalLaminate_MetalLaminate__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./scripts/products/acrylic/MetalLaminate/MetalLaminate */ "./src/scripts/products/acrylic/MetalLaminate/MetalLaminate.js");
-/* harmony import */ var _scripts_products_acrylic_UvPrintedAcrylic_UvPrintedAcrylic__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./scripts/products/acrylic/UvPrintedAcrylic/UvPrintedAcrylic */ "./src/scripts/products/acrylic/UvPrintedAcrylic/UvPrintedAcrylic.js");
-/* harmony import */ var _scripts_products_combine_CombineQuotes__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./scripts/products/combine/CombineQuotes */ "./src/scripts/products/combine/CombineQuotes.js");
-/* harmony import */ var _scripts_products_custom_CustomProject__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./scripts/products/custom/CustomProject */ "./src/scripts/products/custom/CustomProject.js");
-/* harmony import */ var _scripts_products_led_neon_FlexNeonSign_FlexNeonSign__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./scripts/products/led-neon/FlexNeonSign/FlexNeonSign */ "./src/scripts/products/led-neon/FlexNeonSign/FlexNeonSign.js");
-/* harmony import */ var _scripts_products_led_neon_RigidNeonSignNoBacking_RigidNeonSignNoBacking__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./scripts/products/led-neon/RigidNeonSignNoBacking/RigidNeonSignNoBacking */ "./src/scripts/products/led-neon/RigidNeonSignNoBacking/RigidNeonSignNoBacking.js");
-/* harmony import */ var _scripts_products_led_neon_RigidNeonSignWithBacking_RigidNeonSignWithBacking__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./scripts/products/led-neon/RigidNeonSignWithBacking/RigidNeonSignWithBacking */ "./src/scripts/products/led-neon/RigidNeonSignWithBacking/RigidNeonSignWithBacking.js");
-/* harmony import */ var _scripts_products_metal_channel_AluminumResinFrontBackLit_AluminumResinFrontBackLit__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./scripts/products/metal-channel/AluminumResinFrontBackLit/AluminumResinFrontBackLit */ "./src/scripts/products/metal-channel/AluminumResinFrontBackLit/AluminumResinFrontBackLit.js");
-/* harmony import */ var _scripts_products_metal_channel_AluminumResinFrontLit_AluminumResinFrontLit__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./scripts/products/metal-channel/AluminumResinFrontLit/AluminumResinFrontLit */ "./src/scripts/products/metal-channel/AluminumResinFrontLit/AluminumResinFrontLit.js");
-/* harmony import */ var _scripts_products_metal_channel_TrimLessBackLit_TrimLessBackLit__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./scripts/products/metal-channel/TrimLessBackLit/TrimLessBackLit */ "./src/scripts/products/metal-channel/TrimLessBackLit/TrimLessBackLit.js");
-/* harmony import */ var _scripts_products_metal_channel_TrimLessFrontAndBackLit_TrimLessFrontAndBackLit__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./scripts/products/metal-channel/TrimLessFrontAndBackLit/TrimLessFrontAndBackLit */ "./src/scripts/products/metal-channel/TrimLessFrontAndBackLit/TrimLessFrontAndBackLit.js");
-/* harmony import */ var _scripts_products_metal_channel_TrimLessFrontLit_TrimLessFrontLit__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./scripts/products/metal-channel/TrimLessFrontLit/TrimLessFrontLit */ "./src/scripts/products/metal-channel/TrimLessFrontLit/TrimLessFrontLit.js");
-/* harmony import */ var _scripts_products_metal_FabricatedStainless_FabricatedStainless__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./scripts/products/metal/FabricatedStainless/FabricatedStainless */ "./src/scripts/products/metal/FabricatedStainless/FabricatedStainless.js");
-/* harmony import */ var _scripts_products_metal_LaserCutAluminum_LaserCutAluminum__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./scripts/products/metal/LaserCutAluminum/LaserCutAluminum */ "./src/scripts/products/metal/LaserCutAluminum/LaserCutAluminum.js");
-/* harmony import */ var _scripts_products_metal_LaserCutStainless_LaserCutStainless__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./scripts/products/metal/LaserCutStainless/LaserCutStainless */ "./src/scripts/products/metal/LaserCutStainless/LaserCutStainless.js");
-/* harmony import */ var _scripts_products_pvc_PVCMetalLaminate_PVCMetalLaminate__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./scripts/products/pvc/PVCMetalLaminate/PVCMetalLaminate */ "./src/scripts/products/pvc/PVCMetalLaminate/PVCMetalLaminate.js");
-/* harmony import */ var _scripts_products_pvc_PVCPainted_PVCPainted__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./scripts/products/pvc/PVCPainted/PVCPainted */ "./src/scripts/products/pvc/PVCPainted/PVCPainted.js");
-/* harmony import */ var _scripts_products_pvc_PVCUv_PVCUv__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./scripts/products/pvc/PVCUv/PVCUv */ "./src/scripts/products/pvc/PVCUv/PVCUv.js");
+/* harmony import */ var _scripts_products_acrylic_channel_AcrylicFrontLit_AcrylicFrontLit__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./scripts/products/acrylic-channel/AcrylicFrontLit/AcrylicFrontLit */ "./src/scripts/products/acrylic-channel/AcrylicFrontLit/AcrylicFrontLit.js");
+/* harmony import */ var _scripts_products_acrylic_LaserCutAcrylic_LaserCutAcrylic__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./scripts/products/acrylic/LaserCutAcrylic/LaserCutAcrylic */ "./src/scripts/products/acrylic/LaserCutAcrylic/LaserCutAcrylic.js");
+/* harmony import */ var _scripts_products_acrylic_LayeredAcrylic_LayeredAcrylic__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./scripts/products/acrylic/LayeredAcrylic/LayeredAcrylic */ "./src/scripts/products/acrylic/LayeredAcrylic/LayeredAcrylic.js");
+/* harmony import */ var _scripts_products_acrylic_MetalLaminate_MetalLaminate__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./scripts/products/acrylic/MetalLaminate/MetalLaminate */ "./src/scripts/products/acrylic/MetalLaminate/MetalLaminate.js");
+/* harmony import */ var _scripts_products_acrylic_UvPrintedAcrylic_UvPrintedAcrylic__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./scripts/products/acrylic/UvPrintedAcrylic/UvPrintedAcrylic */ "./src/scripts/products/acrylic/UvPrintedAcrylic/UvPrintedAcrylic.js");
+/* harmony import */ var _scripts_products_combine_CombineQuotes__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./scripts/products/combine/CombineQuotes */ "./src/scripts/products/combine/CombineQuotes.js");
+/* harmony import */ var _scripts_products_custom_CustomProject__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./scripts/products/custom/CustomProject */ "./src/scripts/products/custom/CustomProject.js");
+/* harmony import */ var _scripts_products_led_neon_FlexNeonSign_FlexNeonSign__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./scripts/products/led-neon/FlexNeonSign/FlexNeonSign */ "./src/scripts/products/led-neon/FlexNeonSign/FlexNeonSign.js");
+/* harmony import */ var _scripts_products_led_neon_RigidNeonSignNoBacking_RigidNeonSignNoBacking__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./scripts/products/led-neon/RigidNeonSignNoBacking/RigidNeonSignNoBacking */ "./src/scripts/products/led-neon/RigidNeonSignNoBacking/RigidNeonSignNoBacking.js");
+/* harmony import */ var _scripts_products_led_neon_RigidNeonSignWithBacking_RigidNeonSignWithBacking__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./scripts/products/led-neon/RigidNeonSignWithBacking/RigidNeonSignWithBacking */ "./src/scripts/products/led-neon/RigidNeonSignWithBacking/RigidNeonSignWithBacking.js");
+/* harmony import */ var _scripts_products_metal_channel_AluminumResinFrontBackLit_AluminumResinFrontBackLit__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./scripts/products/metal-channel/AluminumResinFrontBackLit/AluminumResinFrontBackLit */ "./src/scripts/products/metal-channel/AluminumResinFrontBackLit/AluminumResinFrontBackLit.js");
+/* harmony import */ var _scripts_products_metal_channel_AluminumResinFrontLit_AluminumResinFrontLit__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./scripts/products/metal-channel/AluminumResinFrontLit/AluminumResinFrontLit */ "./src/scripts/products/metal-channel/AluminumResinFrontLit/AluminumResinFrontLit.js");
+/* harmony import */ var _scripts_products_metal_channel_TrimLessBackLit_TrimLessBackLit__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./scripts/products/metal-channel/TrimLessBackLit/TrimLessBackLit */ "./src/scripts/products/metal-channel/TrimLessBackLit/TrimLessBackLit.js");
+/* harmony import */ var _scripts_products_metal_channel_TrimLessFrontAndBackLit_TrimLessFrontAndBackLit__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./scripts/products/metal-channel/TrimLessFrontAndBackLit/TrimLessFrontAndBackLit */ "./src/scripts/products/metal-channel/TrimLessFrontAndBackLit/TrimLessFrontAndBackLit.js");
+/* harmony import */ var _scripts_products_metal_channel_TrimLessFrontLit_TrimLessFrontLit__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./scripts/products/metal-channel/TrimLessFrontLit/TrimLessFrontLit */ "./src/scripts/products/metal-channel/TrimLessFrontLit/TrimLessFrontLit.js");
+/* harmony import */ var _scripts_products_metal_FabricatedStainless_FabricatedStainless__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./scripts/products/metal/FabricatedStainless/FabricatedStainless */ "./src/scripts/products/metal/FabricatedStainless/FabricatedStainless.js");
+/* harmony import */ var _scripts_products_metal_LaserCutAluminum_LaserCutAluminum__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./scripts/products/metal/LaserCutAluminum/LaserCutAluminum */ "./src/scripts/products/metal/LaserCutAluminum/LaserCutAluminum.js");
+/* harmony import */ var _scripts_products_metal_LaserCutStainless_LaserCutStainless__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./scripts/products/metal/LaserCutStainless/LaserCutStainless */ "./src/scripts/products/metal/LaserCutStainless/LaserCutStainless.js");
+/* harmony import */ var _scripts_products_pvc_PVCMetalLaminate_PVCMetalLaminate__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./scripts/products/pvc/PVCMetalLaminate/PVCMetalLaminate */ "./src/scripts/products/pvc/PVCMetalLaminate/PVCMetalLaminate.js");
+/* harmony import */ var _scripts_products_pvc_PVCPainted_PVCPainted__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./scripts/products/pvc/PVCPainted/PVCPainted */ "./src/scripts/products/pvc/PVCPainted/PVCPainted.js");
+/* harmony import */ var _scripts_products_pvc_PVCUv_PVCUv__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./scripts/products/pvc/PVCUv/PVCUv */ "./src/scripts/products/pvc/PVCUv/PVCUv.js");
+
 
 
 
@@ -36904,70 +38296,73 @@ if (customProject) {
   root.render((0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(CustomTempProject, null));
 }
 function CustomTempProject() {
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_custom_CustomProject__WEBPACK_IMPORTED_MODULE_11__["default"], null));
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_custom_CustomProject__WEBPACK_IMPORTED_MODULE_12__["default"], null));
 }
 function QuoteApp() {
   let component;
   switch (window.NovaQuote.quote_div_id) {
     case 'combineQuotes':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_combine_CombineQuotes__WEBPACK_IMPORTED_MODULE_10__["default"], null));
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_combine_CombineQuotes__WEBPACK_IMPORTED_MODULE_11__["default"], null));
+      break;
+    case 'AcrylicFrontLit':
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_channel_AcrylicFrontLit_AcrylicFrontLit__WEBPACK_IMPORTED_MODULE_6__["default"], null));
       break;
     case 'RigidNeonSignNoBacking':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_led_neon_RigidNeonSignNoBacking_RigidNeonSignNoBacking__WEBPACK_IMPORTED_MODULE_13__["default"], null));
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_led_neon_RigidNeonSignNoBacking_RigidNeonSignNoBacking__WEBPACK_IMPORTED_MODULE_14__["default"], null));
       break;
     case 'RigidNeonSignWithBacking':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_led_neon_RigidNeonSignWithBacking_RigidNeonSignWithBacking__WEBPACK_IMPORTED_MODULE_14__["default"], null));
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_led_neon_RigidNeonSignWithBacking_RigidNeonSignWithBacking__WEBPACK_IMPORTED_MODULE_15__["default"], null));
       break;
     case 'FlexNeonSign':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_led_neon_FlexNeonSign_FlexNeonSign__WEBPACK_IMPORTED_MODULE_12__["default"], null));
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_led_neon_FlexNeonSign_FlexNeonSign__WEBPACK_IMPORTED_MODULE_13__["default"], null));
       break;
     case 'AluminumResinFrontBackLit':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_channel_AluminumResinFrontBackLit_AluminumResinFrontBackLit__WEBPACK_IMPORTED_MODULE_15__["default"], null));
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_channel_AluminumResinFrontBackLit_AluminumResinFrontBackLit__WEBPACK_IMPORTED_MODULE_16__["default"], null));
       break;
     case 'AluminumResinFrontLit':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_channel_AluminumResinFrontLit_AluminumResinFrontLit__WEBPACK_IMPORTED_MODULE_16__["default"], null));
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_channel_AluminumResinFrontLit_AluminumResinFrontLit__WEBPACK_IMPORTED_MODULE_17__["default"], null));
       break;
     case 'laserCutAcrylic':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_LaserCutAcrylic_LaserCutAcrylic__WEBPACK_IMPORTED_MODULE_6__["default"], null));
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_LaserCutAcrylic_LaserCutAcrylic__WEBPACK_IMPORTED_MODULE_7__["default"], null));
       break;
     case 'pvcMetalLaminate':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_pvc_PVCMetalLaminate_PVCMetalLaminate__WEBPACK_IMPORTED_MODULE_23__["default"], null));
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_pvc_PVCMetalLaminate_PVCMetalLaminate__WEBPACK_IMPORTED_MODULE_24__["default"], null));
       break;
     case 'pvcPainted':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_pvc_PVCPainted_PVCPainted__WEBPACK_IMPORTED_MODULE_24__["default"], null));
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_pvc_PVCPainted_PVCPainted__WEBPACK_IMPORTED_MODULE_25__["default"], null));
       break;
     case 'pvcUv':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_pvc_PVCUv_PVCUv__WEBPACK_IMPORTED_MODULE_25__["default"], null));
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_pvc_PVCUv_PVCUv__WEBPACK_IMPORTED_MODULE_26__["default"], null));
       break;
     case 'layeredAcrylic':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_LayeredAcrylic_LayeredAcrylic__WEBPACK_IMPORTED_MODULE_7__["default"], null));
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_LayeredAcrylic_LayeredAcrylic__WEBPACK_IMPORTED_MODULE_8__["default"], null));
       break;
     case 'laserCutAluminum':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_LaserCutAluminum_LaserCutAluminum__WEBPACK_IMPORTED_MODULE_21__["default"], null));
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_LaserCutAluminum_LaserCutAluminum__WEBPACK_IMPORTED_MODULE_22__["default"], null));
       break;
     case 'uvPrintedAcrylic':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_UvPrintedAcrylic_UvPrintedAcrylic__WEBPACK_IMPORTED_MODULE_9__["default"], null));
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_UvPrintedAcrylic_UvPrintedAcrylic__WEBPACK_IMPORTED_MODULE_10__["default"], null));
       break;
     case 'metalLaminateAcrylic':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_MetalLaminate_MetalLaminate__WEBPACK_IMPORTED_MODULE_8__["default"], null));
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_MetalLaminate_MetalLaminate__WEBPACK_IMPORTED_MODULE_9__["default"], null));
       break;
     case 'metalChannelTrimlessFrontLit':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_channel_TrimLessFrontLit_TrimLessFrontLit__WEBPACK_IMPORTED_MODULE_19__["default"], null));
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_channel_TrimLessFrontLit_TrimLessFrontLit__WEBPACK_IMPORTED_MODULE_20__["default"], null));
       break;
     case 'laserCutStainless':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_LaserCutStainless_LaserCutStainless__WEBPACK_IMPORTED_MODULE_22__["default"], null));
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_LaserCutStainless_LaserCutStainless__WEBPACK_IMPORTED_MODULE_23__["default"], null));
       break;
     case 'metalChannelTrimlessFrontAndBackLit':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_channel_TrimLessFrontAndBackLit_TrimLessFrontAndBackLit__WEBPACK_IMPORTED_MODULE_18__["default"], null));
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_channel_TrimLessFrontAndBackLit_TrimLessFrontAndBackLit__WEBPACK_IMPORTED_MODULE_19__["default"], null));
       break;
     case 'metalChannelTrimlessBackLit':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_channel_TrimLessBackLit_TrimLessBackLit__WEBPACK_IMPORTED_MODULE_17__["default"], null));
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_channel_TrimLessBackLit_TrimLessBackLit__WEBPACK_IMPORTED_MODULE_18__["default"], null));
       break;
     case 'metalFabricatedStainless':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_FabricatedStainless_FabricatedStainless__WEBPACK_IMPORTED_MODULE_20__["default"], null));
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_FabricatedStainless_FabricatedStainless__WEBPACK_IMPORTED_MODULE_21__["default"], null));
       break;
     default:
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_custom_CustomProject__WEBPACK_IMPORTED_MODULE_11__["default"], null));
+      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_custom_CustomProject__WEBPACK_IMPORTED_MODULE_12__["default"], null));
       break;
   }
   return component;

@@ -28,12 +28,15 @@ import { Letters as TrimLessBackLit } from '../metal-channel/TrimLessBackLit/com
 import { Letters as TrimLessFrontAndBackLit } from '../metal-channel/TrimLessFrontAndBackLit/components/Letters';
 import { Letters as TrimLessFrontLit } from '../metal-channel/TrimLessFrontLit/components/Letters';
 /*PVC Foam */
-
 import { Letters as PVCMetalLaminateLetters } from '../pvc/PVCMetalLaminate/components/Letters';
 import { Logo as PVCMetalLaminateLogo } from '../pvc/PVCMetalLaminate/components/Logo';
 import { Letters as PVCPaintedLetters } from '../pvc/PVCPainted/components/Letters';
 import { Logo as PVCPaintedLogo } from '../pvc/PVCPainted/components/Logo';
 import { Logo as PVCUv } from '../pvc/PVCUv/components/Logo';
+/*LED */
+import { NeonSign as FlexNeonSign } from '../led-neon/FlexNeonSign/components/NeonSign';
+import { NeonSign as RigidNeonSignNoBacking } from '../led-neon/RigidNeonSignNoBacking/components/NeonSign';
+import { NeonSign as RigidNeonSignWithBacking } from '../led-neon/RigidNeonSignWithBacking/components/NeonSign';
 
 const productLines = NovaQuote.product_lines_accordion;
 
@@ -82,6 +85,29 @@ export default function CombineQuotes() {
 	const showComponent = (item) => {
 		let output;
 		switch (item.component) {
+			case 'RigidNeonSignNoBacking':
+				output = (
+					<RigidNeonSignNoBacking
+						key={item.id}
+						item={item}
+						productId={item.product}
+					/>
+				);
+				break;
+			case 'RigidNeonSignWithBacking':
+				output = (
+					<RigidNeonSignWithBacking
+						key={item.id}
+						item={item}
+						productId={item.product}
+					/>
+				);
+				break;
+			case 'FlexNeonSign':
+				output = (
+					<FlexNeonSign key={item.id} item={item} productId={item.product} />
+				);
+				break;
 			case 'AluminumResinFrontBackLit':
 				output = (
 					<AluminumResinFrontBackLit
