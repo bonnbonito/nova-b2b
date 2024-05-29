@@ -84,6 +84,11 @@ export default function FlexNeonSign() {
 					</Signage>
 				))}
 
+				<p className="text-sm">
+					** The neon height and width refer to the neon graphics. The 4mm PC
+					backing has a 1.5" margin on all sides. **
+				</p>
+
 				<div className="flex gap-2">
 					{signage.length < 10 && (
 						<button

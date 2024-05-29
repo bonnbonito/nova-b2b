@@ -519,7 +519,7 @@ export const NeonSign = ({ item }) => {
 					value={waterproof}
 				/>
 
-				{waterproof !== 'Outdoor (Not Waterproof)' && (
+				{waterproof !== 'Outdoor (Waterproof)' && (
 					<>
 						<Dropdown
 							title="8mm Neon Length"
