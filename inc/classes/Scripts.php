@@ -284,6 +284,10 @@ class Scripts {
 		return get_field( 'logo_pricing_tables', get_the_ID() );
 	}
 
+	public function get_quantity_discount_table() {
+		return get_field( 'multiple_quantity_discount', get_the_ID() );
+	}
+
 
 	public function get_quote_options() {
 		return get_field( 'signage_quote_options', get_the_ID() );
@@ -317,6 +321,7 @@ class Scripts {
 
 		wp_register_script( 'admin-letter-pricing', get_stylesheet_directory_uri() . '/assets/js/admin-letter-pricing.js', array(), $theme->Version, true );
 		wp_register_script( 'admin-logo-pricing', get_stylesheet_directory_uri() . '/assets/js/admin-logo-pricing.js', array(), $theme->Version, true );
+		wp_register_script( 'admin-quantity-discount', get_stylesheet_directory_uri() . '/assets/js/admin-quantity-discount.js', array(), $theme->Version, true );
 
 		wp_localize_script(
 			'dropbox-api',
@@ -335,13 +340,14 @@ class Scripts {
 			'admin-signage',
 			'AdminSignage',
 			array(
-				'ajax_url'              => admin_url( 'admin-ajax.php' ),
-				'nonce'                 => wp_create_nonce( 'nova_admin_nonce' ),
-				'ID'                    => isset( $_GET['post'] ) ? $_GET['post'] : 0,
-				'quote_options'         => $this->get_quote_options(),
-				'letter_pricing_table'  => $this->get_letter_pricing_table(),
-				'letter_pricing_tables' => $this->get_letter_pricing_tables(),
-				'logo_pricing_tables'   => $this->get_logo_pricing_tables(),
+				'ajax_url'                   => admin_url( 'admin-ajax.php' ),
+				'nonce'                      => wp_create_nonce( 'nova_admin_nonce' ),
+				'ID'                         => isset( $_GET['post'] ) ? $_GET['post'] : 0,
+				'quote_options'              => $this->get_quote_options(),
+				'letter_pricing_table'       => $this->get_letter_pricing_table(),
+				'letter_pricing_tables'      => $this->get_letter_pricing_tables(),
+				'logo_pricing_tables'        => $this->get_logo_pricing_tables(),
+				'multiple_quantity_discount' => $this->get_quantity_discount_table(),
 			)
 		);
 
@@ -409,6 +415,11 @@ class Scripts {
 			if ( get_field( 'logo_pricing_tables' ) ) {
 
 				wp_enqueue_script( 'admin-logo-pricing' );
+			}
+
+			if ( get_field( 'multiple_quantity_discount' ) ) {
+
+				wp_enqueue_script( 'admin-quantity-discount' );
 			}
 		}
 

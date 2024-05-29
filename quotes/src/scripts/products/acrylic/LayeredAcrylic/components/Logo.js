@@ -488,7 +488,7 @@ export function Logo({ item }) {
 				/>
 
 				<Dropdown
-					title="Number or Layers"
+					title="Number of Layers"
 					value={layers}
 					onChange={(e) => setLayers(e.target.value)}
 					options={layersOptions.map((layer) => (

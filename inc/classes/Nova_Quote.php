@@ -1648,8 +1648,8 @@ h6 {
 			'spacerStandoffDistance'  => 'STANDOFF SPACE',
 			'remoteControl'           => 'REMOTE CONTROL',
 			'wireExitLocation'        => 'WIRE EXIT LOCATION',
-			'neonColor'               => 'NEON COLORS',
 			'wireType'                => 'WIRE TYPE',
+			'neonColor'               => 'NEON COLORS',
 			'metalFinishing'          => 'METAL FINISHING',
 			'installation'            => 'INSTALLATION',
 			'pieces'                  => 'PIECES',
@@ -2052,6 +2052,23 @@ h6 {
 				'callback' => array( $this, 'handle_pricing_logo_table' ),
 			)
 		);
+
+		register_rest_route(
+			'nova/v1',
+			'/quantity-discount/(?P<id>\d+)',
+			array(
+				'methods'  => 'GET',
+				'callback' => array( $this, 'handle_multiple_quantity_discount_table' ),
+			)
+		);
+	}
+
+	public function handle_multiple_quantity_discount_table( \WP_REST_Request $request ) {
+		$id = $request['id'];
+
+		$table = get_field( 'multiple_quantity_discount', $id );
+
+		return $table;
 	}
 
 	public function handle_pricing_logo_table( \WP_REST_Request $request ) {
@@ -2179,6 +2196,7 @@ h6 {
 				'letters_pricing_api'        => rest_url() . 'nova/v1/pricingletters/',
 				'letters_multi_pricing_api'  => rest_url() . 'nova/v1/multipricingletters/',
 				'logo_pricing_api'           => rest_url() . 'nova/v1/pricinglogos/',
+				'quantity_discount_api'      => rest_url() . 'nova/v1/quantity-discount/',
 				'show_all_partners'          => $this->show_all_partners(),
 
 			)

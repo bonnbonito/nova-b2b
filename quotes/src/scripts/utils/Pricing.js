@@ -22,3 +22,11 @@ export function spacerPricing(total) {
 
 	return spacer;
 }
+
+export const quantityDiscount = (sets, quantityDiscountTable) => {
+	if (!quantityDiscountTable) return 1;
+	const discount = quantityDiscountTable.find(
+		(item) => item.Quantity === sets.toString()
+	);
+	return discount?.Discount ?? 1;
+};

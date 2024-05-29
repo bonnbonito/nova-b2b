@@ -35,10 +35,10 @@ export const rigidBackingOptions = [
 		option: 'Black PC',
 	},
 	{
-		option: 'Clear Acrylic',
+		option: 'Clear Backing',
 	},
 	{
-		option: 'UV Printed PC',
+		option: 'UV Printed on PC',
 	},
 	{
 		option: 'Painted PC',
@@ -103,14 +103,6 @@ export const neonColorOptions = [
 		color: '#FFFACD',
 	},
 	{
-		name: 'Lemon Yellow',
-		color: '#FFFF00',
-	},
-	{
-		name: 'Orange',
-		color: '#FFA500',
-	},
-	{
 		name: 'Red',
 		color: '#FF0000',
 	},
@@ -119,16 +111,24 @@ export const neonColorOptions = [
 		color: '#FFC0CB',
 	},
 	{
-		name: 'Blue',
-		color: '#0000FF',
+		name: 'Green',
+		color: '#008000',
 	},
 	{
 		name: 'Cyan Blue',
 		color: '#00FFFF',
 	},
 	{
-		name: 'Green',
-		color: '#008000',
+		name: 'Yellow',
+		color: '#FFFF00',
+	},
+	{
+		name: 'Blue',
+		color: '#0000FF',
+	},
+	{
+		name: 'Orange',
+		color: '#FFA500',
 	},
 ];
 

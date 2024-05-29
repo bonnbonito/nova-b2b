@@ -11,7 +11,8 @@ import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
 import useOutsideClick from '../../../../utils/ClickOutside';
 import { colorOptions } from '../../../../utils/ColorOptions';
-import { arrayRange, setOptions } from '../../../../utils/SignageOptions';
+import { quantityDiscount } from '../../../../utils/Pricing';
+import { arrayRange } from '../../../../utils/SignageOptions';
 import { NeonColors } from '../../components/NeonColors';
 
 import {
@@ -111,6 +112,44 @@ export const NeonSign = ({ item }) => {
 	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
 	const [mounting, setMounting] = useState(item.mounting ?? '');
 	const [sets, setSets] = useState(item.sets ?? 1);
+	const [setOptions, setSetOptions] = useState([<option value="1">1</option>]);
+
+	const [quantityDiscountTable, setQuantityDiscountTable] = useState([]);
+
+	useEffect(() => {
+		async function fetchQuantityDiscountPricing() {
+			try {
+				const response = await fetch(
+					NovaQuote.quantity_discount_api + item.product
+				);
+				const data = await response.json();
+				const tableJson = data.pricing_table
+					? convertJson(data.pricing_table)
+					: [];
+				if (tableJson) setQuantityDiscountTable(tableJson);
+
+				setSetOptions(
+					Array.from(
+						{
+							length: 100,
+						},
+						(_, index) => {
+							const val = 1 + index;
+							return (
+								<option key={index} value={val}>
+									{val}
+								</option>
+							);
+						}
+					)
+				);
+			} catch (error) {
+				console.error('Error fetching logo pricing:', error);
+			}
+		}
+
+		fetchQuantityDiscountPricing();
+	}, []);
 
 	const neonColorRef = useRef(null);
 	const colorRef = useRef(null);
@@ -139,6 +178,8 @@ export const NeonSign = ({ item }) => {
 					sets,
 					usdPrice,
 					cadPrice,
+					cadSinglePrice,
+					usdSinglePrice,
 					neonLength8mm,
 					neonLength10mm,
 					neonLength14mm,
@@ -176,6 +217,8 @@ export const NeonSign = ({ item }) => {
 		wireExitLocation,
 		usdPrice,
 		cadPrice,
+		cadSinglePrice,
+		usdSinglePrice,
 	]);
 
 	const checkAndAddMissingFields = useCallback(() => {
@@ -297,10 +340,10 @@ export const NeonSign = ({ item }) => {
 			case 'Black PC':
 				rigidBackingPrice = parseInt(width) * parseInt(height) * 0.02;
 				break;
-			case 'Clear Acrylic':
+			case 'Clear Backing':
 				rigidBackingPrice = parseInt(width) * parseInt(height) * 0.03;
 				break;
-			case 'UV Printed PC':
+			case 'UV Printed on PC':
 				rigidBackingPrice = parseInt(width) * parseInt(height) * 0.015;
 				break;
 			case 'Painted PC':
@@ -330,7 +373,11 @@ export const NeonSign = ({ item }) => {
 
 		tempTotal += remotePrice;
 
-		const total = tempTotal * parseInt(sets);
+		let total = tempTotal * parseInt(sets);
+
+		const discount = quantityDiscount(sets, quantityDiscountTable);
+
+		total *= discount;
 
 		return {
 			singlePrice: tempTotal,
@@ -347,15 +394,16 @@ export const NeonSign = ({ item }) => {
 		mounting,
 		remoteControl,
 		sets,
+		quantityDiscountTable,
 	]);
 
 	useEffect(() => {
 		const { singlePrice, total } = computePricing();
-		if (total !== undefined || total !== 0) {
+		if (total && singlePrice) {
 			setUsdPrice(total);
 			setCadPrice((total * EXCHANGE_RATE).toFixed(2));
 			setUsdSinglePrice(singlePrice);
-			setUsdSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
+			setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
 		}
 	}, [
 		width,
@@ -583,22 +631,6 @@ export const NeonSign = ({ item }) => {
 				)}
 
 				<Dropdown
-					title="Environment"
-					onChange={handleOnChangeWaterproof}
-					options={waterProofOptions.map((option) => (
-						<option
-							key={option.option}
-							value={option.option}
-							selected={option.option === waterproof}
-						>
-							{option.option}
-						</option>
-					))}
-					value={waterproof}
-					onlyValue={true}
-				/>
-
-				<Dropdown
 					title="Mounting Options"
 					onChange={handleOnChangeMounting}
 					options={neonSignsMountingOptions.map((option) => (
@@ -672,6 +704,22 @@ export const NeonSign = ({ item }) => {
 					openColor={openNeonColor}
 					setToogle={setOpenNeonColor}
 					getSelectedColors={handledSelectedColors}
+				/>
+
+				<Dropdown
+					title="Environment"
+					onChange={handleOnChangeWaterproof}
+					options={waterProofOptions.map((option) => (
+						<option
+							key={option.option}
+							value={option.option}
+							selected={option.option === waterproof}
+						>
+							{option.option}
+						</option>
+					))}
+					value={waterproof}
+					onlyValue={true}
 				/>
 
 				<Dropdown

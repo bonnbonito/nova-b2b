@@ -543,11 +543,11 @@ function allAttributes(sign) {
 			label: 'WIRE EXIT LOCATION',
 			value: sign.wireExitLocation ? sign.wireExitLocation : '',
 		},
-		{ label: 'NEON COLORS', value: sign.neonColor ? sign.neonColor : '' },
 		{
 			label: 'WIRE TYPE',
 			value: sign.wireType ? sign.wireType : '',
 		},
+		{ label: 'NEON COLORS', value: sign.neonColor ? sign.neonColor : '' },
 
 		{
 			label: 'INSTALLATION',

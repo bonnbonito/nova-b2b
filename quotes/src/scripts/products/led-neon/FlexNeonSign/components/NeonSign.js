@@ -9,8 +9,9 @@ import React, {
 import { useAppContext } from '../../../../AppProvider';
 import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
-import useOutsideClick from '../../../../utils/ClickOutside';
-import { arrayRange, setOptions } from '../../../../utils/SignageOptions';
+import { convertJson } from '../../../../utils/ConvertJson';
+import { quantityDiscount } from '../../../../utils/Pricing';
+import { arrayRange } from '../../../../utils/SignageOptions';
 import { NeonColors } from '../../components/NeonColors';
 
 import {
@@ -40,6 +41,14 @@ export const NeonSign = ({ item }) => {
 	const [height, setHeight] = useState(item.neonSignHeight ?? '');
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
+	const [usdDiscount, setUsdDiscount] = useState(item.usdDiscount ?? 0);
+	const [cadDiscount, setCadDiscount] = useState(item.cadDiscount ?? 0);
+	const [usdSinglePrice, setUsdSinglePrice] = useState(
+		item.usdSinglePrice ?? 0
+	);
+	const [cadSinglePrice, setCadSinglePrice] = useState(
+		item.usdSinglePrice ?? 0
+	);
 	const [neonLength, setNeonLength] = useState(item.neonLength ?? '');
 	const [remoteControl, setRemoteControl] = useState(
 		item.remoteControl ?? 'No'
@@ -71,6 +80,45 @@ export const NeonSign = ({ item }) => {
 	const [mounting, setMounting] = useState(item.mounting ?? '');
 	const [sets, setSets] = useState(item.sets ?? 1);
 
+	const [setOptions, setSetOptions] = useState([<option value="1">1</option>]);
+
+	const [quantityDiscountTable, setQuantityDiscountTable] = useState([]);
+
+	useEffect(() => {
+		async function fetchQuantityDiscountPricing() {
+			try {
+				const response = await fetch(
+					NovaQuote.quantity_discount_api + item.product
+				);
+				const data = await response.json();
+				const tableJson = data.pricing_table
+					? convertJson(data.pricing_table)
+					: [];
+				setQuantityDiscountTable(tableJson);
+			} catch (error) {
+				console.error('Error fetching discount table pricing:', error);
+			} finally {
+				setSetOptions(
+					Array.from(
+						{
+							length: 100,
+						},
+						(_, index) => {
+							const val = 1 + index;
+							return (
+								<option key={index} value={val}>
+									{val}
+								</option>
+							);
+						}
+					)
+				);
+			}
+		}
+
+		fetchQuantityDiscountPricing();
+	}, []);
+
 	const colorRef = useRef(null);
 
 	const updateSignage = useCallback(() => {
@@ -88,6 +136,10 @@ export const NeonSign = ({ item }) => {
 					sets,
 					usdPrice,
 					cadPrice,
+					cadSinglePrice,
+					usdSinglePrice,
+					usdDiscount,
+					cadDiscount,
 					neonLength,
 					neonSignWidth: width,
 					neonSignHeight: height,
@@ -115,6 +167,10 @@ export const NeonSign = ({ item }) => {
 		wireExitLocation,
 		usdPrice,
 		cadPrice,
+		cadSinglePrice,
+		usdSinglePrice,
+		usdDiscount,
+		cadDiscount,
 	]);
 
 	const checkAndAddMissingFields = useCallback(() => {
@@ -230,16 +286,34 @@ export const NeonSign = ({ item }) => {
 
 		tempTotal += remotePrice;
 
-		tempTotal *= parseInt(sets);
+		let total = tempTotal * parseInt(sets);
 
-		return tempTotal.toFixed(2);
+		const discount = quantityDiscount(sets, quantityDiscountTable);
+
+		console.log(discount);
+
+		let totalWithDiscount = total * discount;
+
+		let discountPrice = total - totalWithDiscount;
+
+		return {
+			singlePrice: tempTotal ?? 0,
+			total: totalWithDiscount?.toFixed(2) ?? 0,
+			totalWithoutDiscount: total,
+			discount: discountPrice,
+		};
 	};
 
 	useEffect(() => {
-		const total = computePricing();
-		if (total !== undefined || total !== 0) {
+		const { singlePrice, total, discount } = computePricing();
+		if (total && singlePrice) {
+			console.log('pricing');
 			setUsdPrice(total);
 			setCadPrice((total * EXCHANGE_RATE).toFixed(2));
+			setUsdSinglePrice(singlePrice);
+			setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
+			setUsdDiscount(discount.toFixed(2));
+			setCadDiscount((discount * EXCHANGE_RATE).toFixed(2));
 		}
 	}, [
 		width,
@@ -250,6 +324,7 @@ export const NeonSign = ({ item }) => {
 		mounting,
 		remoteControl,
 		sets,
+		quantityDiscountTable,
 	]);
 
 	const handleOnChangeSets = (e) => {

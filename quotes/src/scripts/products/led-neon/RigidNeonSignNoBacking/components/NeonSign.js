@@ -9,9 +9,10 @@ import React, {
 import { useAppContext } from '../../../../AppProvider';
 import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
+import { convertJson } from '../../../../utils/ConvertJson';
+import { quantityDiscount } from '../../../../utils/Pricing';
 import {
 	arrayRange,
-	setOptions,
 	spacerStandoffDefaultOptions,
 } from '../../../../utils/SignageOptions';
 import { NeonColors } from '../../components/NeonColors';
@@ -32,11 +33,14 @@ const waterProofOptions = [
 		option: INDOOR_NOT_WATERPROOF,
 	},
 	{
-		option: 'Outdoor (Not Waterproof)',
+		option: 'Outdoor (Waterproof)',
 	},
 ];
 
 const rigidNoBackingMountingOptions = [
+	{
+		option: 'Plastic Nails',
+	},
 	{
 		option: 'M4 Stud',
 	},
@@ -59,7 +63,7 @@ export const NeonSign = ({ item }) => {
 	const [width, setWidth] = useState(item.neonSignWidth ?? '');
 	const [neonLength8mm, setNeonLength8mm] = useState(item.neonLength8mm ?? '');
 	const [rigidM4StudLength, setRigidM4StudLength] = useState(
-		item.rigidM4StudLength ?? '1.5"'
+		item.rigidM4StudLength ?? ''
 	);
 	const [neonLength10mm, setNeonLength10mm] = useState(
 		item.neonLength10mm ?? ''
@@ -73,6 +77,12 @@ export const NeonSign = ({ item }) => {
 	const [height, setHeight] = useState(item.neonSignHeight ?? '');
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
+	const [usdSinglePrice, setUsdSinglePrice] = useState(
+		item.usdSinglePrice ?? 0
+	);
+	const [cadSinglePrice, setCadSinglePrice] = useState(
+		item.usdSinglePrice ?? 0
+	);
 	const [remoteControl, setRemoteControl] = useState(
 		item.remoteControl ?? 'No'
 	);
@@ -93,12 +103,13 @@ export const NeonSign = ({ item }) => {
 	}, []);
 
 	const neonLength = useMemo(() => {
-		return arrayRange(2, 100, 2, false);
+		return arrayRange(1, 100, 1, false);
 	}, []);
 
 	const [waterproof, setWaterproof] = useState(item.rigidWaterproof ?? '');
 	const [mounting, setMounting] = useState(item.mounting ?? '');
 	const [sets, setSets] = useState(item.sets ?? 1);
+	const [setOptions, setSetOptions] = useState([<option value="1">1</option>]);
 
 	const [spacerStandoffOptions, setSpacerStandoffOptions] = useState([
 		{ value: '0.5"' },
@@ -108,6 +119,43 @@ export const NeonSign = ({ item }) => {
 	const [spacerStandoffDistance, setSpacerStandoffDistance] = useState(
 		item.spacerStandoffDistance ?? ''
 	);
+
+	const [quantityDiscountTable, setQuantityDiscountTable] = useState([]);
+
+	useEffect(() => {
+		async function fetchQuantityDiscountPricing() {
+			try {
+				const response = await fetch(
+					NovaQuote.quantity_discount_api + item.product
+				);
+				const data = await response.json();
+				const tableJson = data.pricing_table
+					? convertJson(data.pricing_table)
+					: [];
+				setQuantityDiscountTable(tableJson);
+
+				setSetOptions(
+					Array.from(
+						{
+							length: 100,
+						},
+						(_, index) => {
+							const val = 1 + index;
+							return (
+								<option key={index} value={val}>
+									{val}
+								</option>
+							);
+						}
+					)
+				);
+			} catch (error) {
+				console.error('Error fetching logo pricing:', error);
+			}
+		}
+
+		fetchQuantityDiscountPricing();
+	}, []);
 
 	const neonColorRef = useRef(null);
 
@@ -168,6 +216,8 @@ export const NeonSign = ({ item }) => {
 					sets,
 					usdPrice,
 					cadPrice,
+					cadSinglePrice,
+					usdSinglePrice,
 					neonLength8mm,
 					neonLength10mm,
 					neonLength14mm,
@@ -202,6 +252,8 @@ export const NeonSign = ({ item }) => {
 		spacerStandoffDistance,
 		usdPrice,
 		cadPrice,
+		cadSinglePrice,
+		usdSinglePrice,
 		wireType,
 	]);
 
@@ -224,7 +276,7 @@ export const NeonSign = ({ item }) => {
 
 		if (!mounting) missingFields.push('Select Mounting');
 
-		if (mounting && mounting === M4_STUD_WITH_SPACER) {
+		if (mounting && mounting !== 'Plastic Nails') {
 			if (!rigidM4StudLength) missingFields.push('Select M4 Stud Length');
 			if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
 		}
@@ -315,16 +367,25 @@ export const NeonSign = ({ item }) => {
 
 		tempTotal += remotePrice;
 
-		tempTotal *= parseInt(sets);
+		let total = tempTotal * parseInt(sets);
 
-		return tempTotal.toFixed(2);
+		const discount = quantityDiscount(sets, quantityDiscountTable);
+
+		total *= discount;
+
+		return {
+			singlePrice: tempTotal,
+			total: total.toFixed(2),
+		};
 	};
 
 	useEffect(() => {
-		const total = computePricing();
-		if (total !== undefined || total !== 0) {
+		const { singlePrice, total } = computePricing();
+		if (total && singlePrice) {
 			setUsdPrice(total);
 			setCadPrice((total * EXCHANGE_RATE).toFixed(2));
+			setUsdSinglePrice(singlePrice);
+			setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
 		}
 	}, [
 		width,
@@ -338,6 +399,7 @@ export const NeonSign = ({ item }) => {
 		neonLength20mm,
 		rigidM4StudLength,
 		sets,
+		quantityDiscountTable,
 	]);
 
 	const handleOnChangeSets = (e) => {
@@ -404,6 +466,13 @@ export const NeonSign = ({ item }) => {
 
 	const handleOnChangeMounting = (e) => {
 		const target = e.target.value;
+		if (target === 'Plastic Nails') {
+			setRigidM4StudLength('');
+			setSpacerStandoffDistance('');
+		}
+		if (target !== 'Plastic Nails' && !rigidM4StudLength) {
+			setRigidM4StudLength('1.5"');
+		}
 		setMounting(target);
 	};
 
@@ -488,23 +557,24 @@ export const NeonSign = ({ item }) => {
 						</option>
 					))}
 					value={mounting}
-					onlyValue={true}
 				/>
 
-				<Dropdown
-					title="M4 Stud Length"
-					onChange={handleOnChangeStudLength}
-					options={ledSpacerStandoffDefaultOptions.map((option) => (
-						<option
-							key={option.value}
-							value={option.value}
-							selected={option.value === rigidM4StudLength}
-						>
-							{option.value}
-						</option>
-					))}
-					value={rigidM4StudLength}
-				/>
+				{(mounting === 'M4 Stud' || mounting === M4_STUD_WITH_SPACER) && (
+					<Dropdown
+						title="M4 Stud Length"
+						onChange={handleOnChangeStudLength}
+						options={ledSpacerStandoffDefaultOptions.map((option) => (
+							<option
+								key={option.value}
+								value={option.value}
+								selected={option.value === rigidM4StudLength}
+							>
+								{option.value}
+							</option>
+						))}
+						value={rigidM4StudLength}
+					/>
+				)}
 
 				{mounting === M4_STUD_WITH_SPACER && (
 					<Dropdown

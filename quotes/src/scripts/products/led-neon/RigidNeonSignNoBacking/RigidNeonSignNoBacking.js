@@ -26,7 +26,7 @@ export default function RigidNeonSignNoBacking() {
 		customColor: '',
 		rigidWaterproof: '',
 		comments: '',
-		mounting: 'M4 Stud',
+		mounting: '',
 		wireType: '',
 		spacerStandoffDistance: '',
 		usdPrice: 0,

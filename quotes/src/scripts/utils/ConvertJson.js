@@ -17,3 +17,20 @@ export default function convert_json(tableString) {
 		return obj;
 	});
 }
+
+export function convertJson(tableString) {
+	const rows = tableString.trim().split('\n');
+	const headers = ['Quantity', 'Discount'];
+
+	return rows.map((row) => {
+		const values = row.split('\t');
+		return headers.reduce((acc, header, index) => {
+			const rawValue = values[index];
+			acc[header] = rawValue
+				? (index !== 0 ? parseFloat(rawValue.replace(/,/g, '')) : rawValue) ||
+				  rawValue
+				: null;
+			return acc;
+		}, {});
+	});
+}
