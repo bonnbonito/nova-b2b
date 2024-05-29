@@ -259,11 +259,11 @@ export const NeonSign = ({ item }) => {
 			tempTotal += additional;
 		}
 		if (acrylicBackingOption === 'Frosted Clear Acrylic') {
-			additional = parseInt(width) * parseInt(height) * 0.05;
+			additional = parseInt(width) * parseInt(height) * 0.035;
 			tempTotal += additional;
 		}
 		if (acrylicBackingOption === 'Clear Acrylic') {
-			additional = parseInt(width) * parseInt(height) * 0.07;
+			additional = parseInt(width) * parseInt(height) * 0.04;
 			tempTotal += additional;
 		}
 

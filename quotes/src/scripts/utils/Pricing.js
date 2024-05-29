@@ -14,10 +14,8 @@ export function getLetterPricingTableByTitle(title, letterPricingObject) {
 	return table ? table.letter_pricing.letter_pricing_table : undefined;
 }
 
-export function spacerPricing(total) {
-	let maxVal = 25;
-
-	let spacer = total * 0.02 > maxVal ? maxVal : total * 0.02;
+export function spacerPricing(total, maxVal = 25, percent = 0.02) {
+	let spacer = total * percent > maxVal ? maxVal : total * percent;
 	spacer = parseFloat(spacer.toFixed(2));
 
 	return spacer;

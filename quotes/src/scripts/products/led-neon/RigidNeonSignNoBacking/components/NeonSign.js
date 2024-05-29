@@ -10,7 +10,7 @@ import { useAppContext } from '../../../../AppProvider';
 import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
 import { convertJson } from '../../../../utils/ConvertJson';
-import { quantityDiscount } from '../../../../utils/Pricing';
+import { quantityDiscount, spacerPricing } from '../../../../utils/Pricing';
 import {
 	arrayRange,
 	spacerStandoffDefaultOptions,
@@ -366,6 +366,11 @@ export const NeonSign = ({ item }) => {
 		}
 
 		tempTotal += remotePrice;
+
+		if (mounting === M4_STUD_WITH_SPACER) {
+			const spacer = spacerPricing(tempTotal);
+			tempTotal += parseFloat(spacer.toFixed(2));
+		}
 
 		let total = tempTotal * parseInt(sets);
 

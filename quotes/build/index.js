@@ -10902,11 +10902,11 @@ const NeonSign = ({
       tempTotal += additional;
     }
     if (acrylicBackingOption === 'Frosted Clear Acrylic') {
-      additional = parseInt(width) * parseInt(height) * 0.05;
+      additional = parseInt(width) * parseInt(height) * 0.035;
       tempTotal += additional;
     }
     if (acrylicBackingOption === 'Clear Acrylic') {
-      additional = parseInt(width) * parseInt(height) * 0.07;
+      additional = parseInt(width) * parseInt(height) * 0.04;
       tempTotal += additional;
     }
     let mountingPrice = 0;
@@ -11459,6 +11459,10 @@ const NeonSign = ({
       remotePrice = 16;
     }
     tempTotal += remotePrice;
+    if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.M4_STUD_WITH_SPACER) {
+      const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_5__.spacerPricing)(tempTotal);
+      tempTotal += parseFloat(spacer.toFixed(2));
+    }
     let total = tempTotal * parseInt(sets);
     const discount = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_5__.quantityDiscount)(sets, quantityDiscountTable);
     total *= discount;
@@ -25381,9 +25385,8 @@ function getLetterPricingTableByTitle(title, letterPricingObject) {
   const table = letterPricingObject?.find(element => element.letter_pricing.title === title);
   return table ? table.letter_pricing.letter_pricing_table : undefined;
 }
-function spacerPricing(total) {
-  let maxVal = 25;
-  let spacer = total * 0.02 > maxVal ? maxVal : total * 0.02;
+function spacerPricing(total, maxVal = 25, percent = 0.02) {
+  let spacer = total * percent > maxVal ? maxVal : total * percent;
   spacer = parseFloat(spacer.toFixed(2));
   return spacer;
 }
