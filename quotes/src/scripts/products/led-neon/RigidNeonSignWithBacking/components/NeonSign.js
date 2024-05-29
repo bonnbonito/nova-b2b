@@ -11,6 +11,7 @@ import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
 import useOutsideClick from '../../../../utils/ClickOutside';
 import { colorOptions } from '../../../../utils/ColorOptions';
+import { convertJson } from '../../../../utils/ConvertJson';
 import { quantityDiscount } from '../../../../utils/Pricing';
 import { arrayRange } from '../../../../utils/SignageOptions';
 import { NeonColors } from '../../components/NeonColors';
