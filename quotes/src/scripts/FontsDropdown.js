@@ -1,5 +1,4 @@
-import React, { useRef, useState } from 'react';
-import useOutsideClick from './utils/ClickOutside';
+import React from 'react';
 import { fontDefaultOptions } from './utils/FontOptions';
 
 export default function FontsDropdown({

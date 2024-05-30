@@ -2710,9 +2710,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _utils_ClickOutside__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./utils/ClickOutside */ "./src/scripts/utils/ClickOutside.js");
-/* harmony import */ var _utils_FontOptions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./utils/FontOptions */ "./src/scripts/utils/FontOptions.js");
-
+/* harmony import */ var _utils_FontOptions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./utils/FontOptions */ "./src/scripts/utils/FontOptions.js");
 
 
 
@@ -2755,7 +2753,7 @@ function FontsDropdown({
     className: ""
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
     class: "p-2 pb-0"
-  }, "Popular Fonts"), _utils_FontOptions__WEBPACK_IMPORTED_MODULE_2__.fontDefaultOptions.popular_fonts.split(',').map(popularfont => {
+  }, "Popular Fonts"), _utils_FontOptions__WEBPACK_IMPORTED_MODULE_1__.fontDefaultOptions.popular_fonts.split(',').map(popularfont => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: `p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm ${popularfont === font && 'bg-slate-200'}`,
       style: {
@@ -2768,7 +2766,7 @@ function FontsDropdown({
     }, "- ", popularfont);
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
     class: "p-2 pb-0"
-  }, "Fonts"), _utils_FontOptions__WEBPACK_IMPORTED_MODULE_2__.fontDefaultOptions.fonts.split(',').map(regFont => {
+  }, "Fonts"), _utils_FontOptions__WEBPACK_IMPORTED_MODULE_1__.fontDefaultOptions.fonts.split(',').map(regFont => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: `p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm ${regFont === font && 'bg-slate-200'}`,
       style: {

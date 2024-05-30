@@ -24,7 +24,7 @@ module.exports = {
 		ignoreInitial: true,
 	},
 	server: false,
-	proxy: 'novasignage.test',
+	proxy: 'nova.test',
 	port: 3000,
 	middleware: false,
 	serveStatic: [],
