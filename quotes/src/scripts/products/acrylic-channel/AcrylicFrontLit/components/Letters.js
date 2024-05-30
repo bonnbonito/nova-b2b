@@ -4,17 +4,16 @@ import FontsDropdown from '../../../../FontsDropdown';
 import UploadFiles from '../../../../UploadFiles';
 import UploadFont from '../../../../UploadFont';
 import useOutsideClick from '../../../../utils/ClickOutside';
-import convert_json from '../../../../utils/ConvertJson';
+import convertJson from '../../../../utils/ConvertJson';
 import {
-	finishingOptions,
-	mountingDefaultOptions,
 	setOptions,
 	spacerStandoffDefaultOptions,
 	studLengthOptions,
-	waterProofOptions,
 } from '../../../../utils/SignageOptions';
 
 import { spacerPricing } from '../../../../utils/Pricing';
+
+import { ledLightColors } from '../../../metal-channel/metalChannelOptions';
 
 import {
 	colorOptions,
@@ -29,14 +28,31 @@ import {
 import { useAppContext } from '../../../../AppProvider';
 
 import {
-	CLEAR_COLOR,
 	EXCHANGE_RATE,
-	FROSTED_CLEAR_COLOR,
-	GLOSS_FINISH,
 	INDOOR_NOT_WATERPROOF,
 	STUD_MOUNT,
 	STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
+
+const waterProofOptions = [
+	{
+		option: INDOOR_NOT_WATERPROOF,
+	},
+];
+
+const mountingDefaultOptions = [
+	{
+		mounting_option: STUD_MOUNT,
+	},
+	{
+		mounting_option: STUD_WITH_SPACER,
+	},
+];
+
+const lettersHeight = {
+	min: 2,
+	max: 43,
+};
 
 export function Letters({ item }) {
 	const { signage, setSignage, setMissing } = useAppContext();
@@ -44,18 +60,24 @@ export function Letters({ item }) {
 	const [comments, setComments] = useState(item.comments ?? '');
 	const [font, setFont] = useState(item.font ?? '');
 	const [openFont, setOpenFont] = useState(false);
-	const [color, setColor] = useState(item.color ?? { name: '', color: '' });
+	const [color, setColor] = useState(item.acrylicReturnPaintColor ?? 'Black');
 	const [openColor, setOpenColor] = useState(false);
 	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
 	const [acrylicChannelThickness, setAcrylicChannelThickness] = useState(
 		item.acrylicChannelThickness ?? '1.2"'
 	);
 
+	const [ledLightColor, setLedLightColor] = useState(
+		item.ledLightColor ?? '6500K White'
+	);
+
+	const handleOnChangeLedLight = (e) => setLedLightColor(e.target.value);
+
 	const [acrylicFront, setAcrylicFront] = useState(
 		item.acrylicFront ?? 'White'
 	);
 
-	const [openAcrylicCover, setOpenAcrylicCover] = useState(false);
+	const [openVinylWhite, setOpenVinylWhite] = useState(false);
 
 	const [vinylWhite, setVinylWhite] = useState(
 		item.vinylWhite ?? { name: '', color: '', code: '' }
@@ -66,21 +88,13 @@ export function Letters({ item }) {
 	const [filePaths, setFilePaths] = useState(item.filePaths ?? []);
 	const [files, setFiles] = useState(item.files ?? []);
 
-	const [fileName, setFileName] = useState(item.fileName ?? '');
-	const [fileUrl, setFileUrl] = useState(item.fileUrl ?? '');
-	const [filePath, setFilePath] = useState(item.filePath ?? '');
-	const [file, setFile] = useState(item.file ?? '');
-
 	const [fontFileName, setFontFileName] = useState(item.fontFileName ?? '');
 	const [fontFileUrl, setFontFileUrl] = useState(item.fontFileUrl ?? '');
 	const [fontFilePath, setFontFilePath] = useState(item.fontFilePath ?? '');
 	const [fontFile, setFontFile] = useState(item.fontFile ?? '');
 
 	const [letterHeightOptions, setLetterHeightOptions] = useState([]);
-	const [selectedFinishing, setSelectedFinishing] = useState(
-		item.finishing ?? ''
-	);
-	const [customFont, setCustomFont] = useState(item.customFont ?? '');
+
 	const [customColor, setCustomColor] = useState(item.customColor ?? '');
 
 	const [selectedLetterHeight, setSelectedLetterHeight] = useState(
@@ -88,14 +102,14 @@ export function Letters({ item }) {
 	);
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
-	const [mountingOptions, setMountingOptions] = useState(
-		mountingDefaultOptions
+	const [usdDiscount, setUsdDiscount] = useState(item.usdDiscount ?? 0);
+	const [cadDiscount, setCadDiscount] = useState(item.cadDiscount ?? 0);
+	const [usdSinglePrice, setUsdSinglePrice] = useState(
+		item.usdSinglePrice ?? 0
 	);
-
-	const [lettersHeight, setLettersHeight] = useState({
-		min: 2,
-		max: 43,
-	});
+	const [cadSinglePrice, setCadSinglePrice] = useState(
+		item.usdSinglePrice ?? 0
+	);
 
 	const [selectedMounting, setSelectedMounting] = useState(item.mounting ?? '');
 	const [studLength, setStudLength] = useState(item.studLength ?? '');
@@ -111,7 +125,7 @@ export function Letters({ item }) {
 
 	const colorRef = useRef(null);
 	const fontRef = useRef(null);
-	const acrylicColorRef = useRef(null);
+	const vinyl3MRef = useRef(null);
 
 	const [letterPricing, setLetterPricing] = useState([]);
 
@@ -122,7 +136,7 @@ export function Letters({ item }) {
 					NovaQuote.letters_pricing_api + item.product
 				);
 				const data = await response.json();
-				const pricing = convert_json(data?.pricing_table);
+				const pricing = convertJson(data?.pricing_table);
 				setLetterPricing(pricing);
 			} catch (error) {
 				console.error('Error fetching letter pricing:', error);
@@ -131,21 +145,6 @@ export function Letters({ item }) {
 
 		fetchLetterPricing();
 	}, []);
-
-	useEffect(() => {
-		if (file) {
-			setFiles([file]);
-		}
-		if (fileName) {
-			setFileNames([fileName]);
-		}
-		if (filePath) {
-			setFilePaths([filePath]);
-		}
-		if (fileUrl) {
-			setFileUrls([fileUrl]);
-		}
-	}, [file, fileName, filePath, fileUrl]);
 
 	const headlineRef = useRef(null);
 
@@ -180,8 +179,9 @@ export function Letters({ item }) {
 			acrylicChannelThickness,
 			mounting: selectedMounting,
 			waterproof,
-			color,
+			acrylicReturnPaintColor: color,
 			letterHeight: selectedLetterHeight,
+			ledLightColor,
 			usdPrice,
 			cadPrice,
 			files,
@@ -193,12 +193,13 @@ export function Letters({ item }) {
 			fontFilePath,
 			fontFileUrl,
 			vinylWhite,
-			customFont,
 			customColor,
 			sets,
 			studLength,
 			spacerStandoffDistance,
 			acrylicFront,
+			usdSinglePrice,
+			cadSinglePrice,
 		};
 
 		setSignage((prevSignage) =>
@@ -241,10 +242,6 @@ export function Letters({ item }) {
 
 	const handleOnChangeLetterHeight = (e) => {
 		setSelectedLetterHeight(e.target.value);
-	};
-
-	const handleChangeFinishing = (e) => {
-		setSelectedFinishing(e.target.value);
 	};
 
 	const handleChangePieces = (e) => {
@@ -295,31 +292,90 @@ export function Letters({ item }) {
 	};
 
 	// Helper function to determine letter price adjustments
-	function calculateLetterPrice(
-		letter,
-		baseLetterPrice,
-		noLowerCase,
-		waterproof,
-		selectedFinishing,
-		color
-	) {
+	function calculateLetterPrice(letter, baseLetterPrice, noLowerCase) {
 		let letterPrice = baseLetterPrice;
 
-		// Pricing adjustments based on character type
 		if (letter === ' ') return 0;
 		if (letter.match(/[a-z]/)) letterPrice *= noLowerCase ? 1 : 0.8;
 		if (letter.match(/[`~"*,.\-']/)) letterPrice *= 0.3;
 
-		// Waterproof and finishing adjustments
-		letterPrice *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.1;
-		letterPrice *= selectedFinishing === GLOSS_FINISH ? 1.1 : 1;
-
-		// Color adjustments
-		if (color?.name === CLEAR_COLOR) letterPrice *= 0.9;
-		if (color?.name === FROSTED_CLEAR_COLOR) letterPrice *= 0.95;
-
 		return letterPrice;
 	}
+
+	const computePricing = () => {
+		if (
+			letterPricing.length > 0 &&
+			selectedLetterHeight &&
+			letters.trim().length > 0
+		) {
+			const pricingDetail = letterPricing.find(
+				(item) => parseInt(item.Height) === parseInt(selectedLetterHeight)
+			);
+
+			const baseLetterPrice = parseFloat(pricingDetail?.Frontlit);
+
+			let tempTotal = 0;
+			const lettersArray = letters.trim().split('');
+			const noLowerCase = NovaQuote.no_lowercase.includes(font);
+
+			lettersArray.forEach((letter) => {
+				tempTotal += calculateLetterPrice(letter, baseLetterPrice, noLowerCase);
+			});
+
+			if (acrylicFront === '3M Vinyl') {
+				tempTotal *= 1.1;
+			}
+
+			if (acrylicFront === 'UV Printed') {
+				tempTotal *= 1.15;
+			}
+
+			if (selectedMounting === STUD_WITH_SPACER) {
+				const spacer = spacerPricing(tempTotal);
+				tempTotal += parseFloat(spacer.toFixed(2));
+			}
+
+			/* minimum price */
+			tempTotal = tempTotal > 50 ? tempTotal : 50;
+
+			let total = tempTotal * parseInt(sets);
+
+			const discount = 1;
+
+			let totalWithDiscount = total * discount;
+
+			let discountPrice = total - totalWithDiscount;
+
+			return {
+				singlePrice: tempTotal ?? 0,
+				total: totalWithDiscount?.toFixed(2) ?? 0,
+				totalWithoutDiscount: total,
+				discount: discountPrice,
+			};
+		} else {
+			return 0;
+		}
+	};
+
+	useEffect(() => {
+		const { singlePrice, total, discount } = computePricing();
+		if (total && singlePrice) {
+			setUsdPrice(total);
+			setCadPrice((total * EXCHANGE_RATE).toFixed(2));
+			setUsdSinglePrice(singlePrice);
+			setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
+			setUsdDiscount(discount.toFixed(2));
+			setCadDiscount((discount * EXCHANGE_RATE).toFixed(2));
+		}
+	}, [
+		selectedLetterHeight,
+		letters,
+		sets,
+		font,
+		selectedMounting,
+		letterPricing,
+		acrylicFront,
+	]);
 
 	useEffect(() => {
 		setLetterHeightOptions(() =>
@@ -358,11 +414,10 @@ export function Letters({ item }) {
 		if (!selectedLetterHeight) missingFields.push('Select Letter Height');
 		if (!acrylicChannelThickness)
 			missingFields.push('Select Acrylic Thickness');
-		if (!color.name) missingFields.push('Select Color');
-		if (color?.name === 'Custom Color' && !customColor) {
+		if (!color) missingFields.push('Select Return Paint Color');
+		if (color === 'Custom Color' && !customColor) {
 			missingFields.push('Add the Pantone color code of your custom color.');
 		}
-		if (!selectedFinishing) missingFields.push('Select Finishing');
 		if (!waterproof) missingFields.push('Select Environment');
 		if (!selectedMounting) missingFields.push('Select Mounting');
 
@@ -425,7 +480,6 @@ export function Letters({ item }) {
 		selectedLetterHeight,
 		fileUrls,
 		fontFileUrl,
-		selectedFinishing,
 		customColor,
 		sets,
 		studLength,
@@ -453,21 +507,31 @@ export function Letters({ item }) {
 		fontFileName,
 		fontFilePath,
 		fontFile,
-		selectedFinishing,
-		customFont,
 		customColor,
 		sets,
 		studLength,
 		spacerStandoffDistance,
 		acrylicFront,
 		vinylWhite,
+		ledLightColor,
+		usdSinglePrice,
+		cadSinglePrice,
 	]);
 
-	useOutsideClick([colorRef, fontRef], () => {
-		if (!openColor && !openFont) return;
-		setOpenColor(false);
-		setOpenFont(false);
-	});
+	if (acrylicFront === '3M Vinyl') {
+		useOutsideClick([colorRef, fontRef, vinyl3MRef], () => {
+			if (!openColor && !openFont && !openVinylWhite) return;
+			setOpenColor(false);
+			setOpenFont(false);
+			setOpenVinylWhite(false);
+		});
+	} else {
+		useOutsideClick([colorRef, fontRef], () => {
+			if (!openColor && !openFont) return;
+			setOpenColor(false);
+			setOpenFont(false);
+		});
+	}
 
 	useEffect(() => {
 		color?.name != 'Custom Color' && setCustomColor('');
@@ -521,6 +585,10 @@ export function Letters({ item }) {
 					openFont={openFont}
 					setOpenFont={setOpenFont}
 					setOpenColor={setOpenColor}
+					close={() => {
+						setOpenColor(false);
+						setOpenVinylWhite(false);
+					}}
 					handleSelectFont={handleSelectFont}
 				/>
 
@@ -569,7 +637,7 @@ export function Letters({ item }) {
 				/>
 
 				{acrylicFront === '3M Vinyl' && (
-					<div className="px-[1px] relative" ref={acrylicColorRef}>
+					<div className="px-[1px] relative" ref={vinyl3MRef}>
 						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
 							3M VINYL
 						</label>
@@ -578,18 +646,23 @@ export function Letters({ item }) {
 								vinylWhite.name ? 'text-black' : 'text-[#dddddd]'
 							}`}
 							onClick={() => {
-								setOpenAcrylicCover((prev) => !prev);
+								setOpenVinylWhite((prev) => !prev);
 								setOpenColor(false);
 								setOpenFont(false);
 							}}
 						>
 							<span
 								className="rounded-full w-[18px] h-[18px] border mr-2"
-								style={{ backgroundColor: vinylWhite.color }}
+								style={{
+									background:
+										vinylWhite?.name == 'Custom Color'
+											? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
+											: vinylWhite?.color,
+								}}
 							></span>
 							{vinylWhite.name === '' ? 'CHOOSE OPTION' : vinylWhite.name}
 						</div>
-						{openAcrylicCover && (
+						{openVinylWhite && (
 							<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
 								{translucentGraphicFilms.map((color) => {
 									return (
@@ -597,7 +670,7 @@ export function Letters({ item }) {
 											className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
 											onClick={() => {
 												setVinylWhite(color);
-												setOpenAcrylicCover(false);
+												setOpenVinylWhite(false);
 											}}
 										>
 											<span
@@ -620,27 +693,29 @@ export function Letters({ item }) {
 
 				<div className="px-[1px] relative" ref={colorRef}>
 					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-						Color
+						Return Paint Color
 					</label>
 					<div
 						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-							color.name ? 'text-black' : 'text-[#dddddd]'
+							color ? 'text-black' : 'text-[#dddddd]'
 						}`}
 						onClick={() => {
 							setOpenColor((prev) => !prev);
 							setOpenFont(false);
+							setOpenVinylWhite(false);
 						}}
 					>
 						<span
 							className="rounded-full w-[18px] h-[18px] border mr-2"
 							style={{
 								background:
-									color.name == 'Custom Color'
+									color == 'Custom Color'
 										? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-										: color.color,
+										: colorOptions.find((option) => option.name === color)
+												.color,
 							}}
 						></span>
-						{color.name === '' ? 'CHOOSE OPTION' : color.name}
+						{color === '' ? 'CHOOSE OPTION' : color}
 					</div>
 					{openColor && (
 						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
@@ -649,7 +724,7 @@ export function Letters({ item }) {
 									<div
 										className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
 										onClick={() => {
-											setColor(color);
+											setColor(color.name);
 											setOpenColor(false);
 										}}
 									>
@@ -671,17 +746,14 @@ export function Letters({ item }) {
 				</div>
 
 				<Dropdown
-					title="Finishing Options"
-					onChange={handleChangeFinishing}
-					options={finishingOptions.map((finishing) => (
-						<option
-							value={finishing.name}
-							selected={finishing.name === selectedFinishing}
-						>
-							{finishing.name}
+					title="LED Light Color"
+					onChange={handleOnChangeLedLight}
+					options={ledLightColors.map((color) => (
+						<option value={color} selected={color == ledLightColor}>
+							{color}
 						</option>
 					))}
-					value={selectedFinishing}
+					value={ledLightColor}
 				/>
 
 				<Dropdown
@@ -701,7 +773,7 @@ export function Letters({ item }) {
 				<Dropdown
 					title="Mounting Options"
 					onChange={handleOnChangeMount}
-					options={mountingOptions.map((option) => (
+					options={mountingDefaultOptions.map((option) => (
 						<option
 							value={option.mounting_option}
 							selected={option.mounting_option === selectedMounting}
@@ -778,7 +850,7 @@ export function Letters({ item }) {
 			)}
 
 			<div className="quote-grid">
-				{color?.name == 'Custom Color' && (
+				{color == 'Custom Color' && (
 					<div className="px-[1px] col-span-4">
 						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
 							Custom Color

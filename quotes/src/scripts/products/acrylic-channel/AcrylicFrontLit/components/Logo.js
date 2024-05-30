@@ -1,49 +1,201 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
 import useOutsideClick from '../../../../utils/ClickOutside';
-import convert_json from '../../../../utils/ConvertJson';
+import convertJson from '../../../../utils/ConvertJson';
 import {
-	getLogoPricingTablebyThickness,
-	spacerPricing,
-} from '../../../../utils/Pricing';
-import {
-	finishingOptions,
-	mountingDefaultOptions,
 	setOptions,
 	spacerStandoffDefaultOptions,
 	studLengthOptions,
-	thicknessOptions,
-	waterProofOptions,
 } from '../../../../utils/SignageOptions';
 
-import { colorOptions } from '../../../../utils/ColorOptions';
+import { spacerPricing } from '../../../../utils/Pricing';
+
+import { ledLightColors } from '../../../metal-channel/metalChannelOptions';
+
+import {
+	colorOptions,
+	translucentGraphicFilms,
+} from '../../../../utils/ColorOptions';
+
+import {
+	acrylicChannelThicknessOptions,
+	acrylicFrontOptions,
+} from '../options';
 
 import { useAppContext } from '../../../../AppProvider';
 
 import {
-	CLEAR_COLOR,
 	EXCHANGE_RATE,
-	FROSTED_CLEAR_COLOR,
-	GLOSS_FINISH,
 	INDOOR_NOT_WATERPROOF,
 	STUD_MOUNT,
 	STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
 
-const NovaSingleOptions = NovaQuote.single_quote_options;
+const waterProofOptions = [
+	{
+		option: INDOOR_NOT_WATERPROOF,
+	},
+];
+
+const mountingDefaultOptions = [
+	{
+		mounting_option: STUD_MOUNT,
+	},
+	{
+		mounting_option: STUD_WITH_SPACER,
+	},
+];
+
+const maxWidthOptions = Array.from(
+	{
+		length: 43,
+	},
+	(_, index) => {
+		const val = 1 + index;
+		return (
+			<option key={index} value={val}>
+				{val}"
+			</option>
+		);
+	}
+);
 
 export function Logo({ item }) {
 	const { signage, setSignage, setMissing } = useAppContext();
+	const [width, setWidth] = useState(item.width ?? '');
+	const [height, setHeight] = useState(item.height ?? '');
+	const [comments, setComments] = useState(item.comments ?? '');
+	const [color, setColor] = useState(item.acrylicReturnPaintColor ?? 'Black');
+	const [openColor, setOpenColor] = useState(false);
+	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
+	const [acrylicChannelThickness, setAcrylicChannelThickness] = useState(
+		item.acrylicChannelThickness ?? '1.2"'
+	);
+
+	const [ledLightColor, setLedLightColor] = useState(
+		item.ledLightColor ?? '6500K White'
+	);
+
+	const handleOnChangeLedLight = (e) => setLedLightColor(e.target.value);
+
+	const [acrylicFront, setAcrylicFront] = useState(
+		item.acrylicFront ?? 'White'
+	);
+
+	const [openVinylWhite, setOpenVinylWhite] = useState(false);
+
+	const [vinylWhite, setVinylWhite] = useState(
+		item.vinylWhite ?? { name: '', color: '', code: '' }
+	);
+
+	const [fileNames, setFileNames] = useState(item.fileNames ?? []);
+	const [fileUrls, setFileUrls] = useState(item.fileUrls ?? []);
+	const [filePaths, setFilePaths] = useState(item.filePaths ?? []);
+	const [files, setFiles] = useState(item.files ?? []);
+
+	const [customColor, setCustomColor] = useState(item.customColor ?? '');
+
+	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
+	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
+	const [usdDiscount, setUsdDiscount] = useState(item.usdDiscount ?? 0);
+	const [cadDiscount, setCadDiscount] = useState(item.cadDiscount ?? 0);
+	const [usdSinglePrice, setUsdSinglePrice] = useState(
+		item.usdSinglePrice ?? 0
+	);
+	const [cadSinglePrice, setCadSinglePrice] = useState(
+		item.usdSinglePrice ?? 0
+	);
 
 	const [selectedMounting, setSelectedMounting] = useState(item.mounting ?? '');
 	const [studLength, setStudLength] = useState(item.studLength ?? '');
 	const [spacerStandoffOptions, setSpacerStandoffOptions] = useState(
 		spacerStandoffDefaultOptions
 	);
+
 	const [spacerStandoffDistance, setSpacerStandoffDistance] = useState(
 		item.spacerStandoffDistance ?? ''
 	);
+
+	const [sets, setSets] = useState(item.sets ?? 1);
+
+	const colorRef = useRef(null);
+	const vinyl3MRef = useRef(null);
+
+	function updateSignage() {
+		// Only proceed if the item to update exists in the signage array
+		if (!signage.some((sign) => sign.id === item.id)) return;
+
+		// Consolidate updated properties into a single object
+		const updateDetails = {
+			comments,
+			width,
+			height,
+			acrylicChannelThickness,
+			mounting: selectedMounting,
+			waterproof,
+			acrylicReturnPaintColor: color,
+			ledLightColor,
+			usdPrice,
+			cadPrice,
+			files,
+			fileNames,
+			filePaths,
+			fileUrls,
+			vinylWhite,
+			customColor,
+			sets,
+			studLength,
+			spacerStandoffDistance,
+			acrylicFront,
+			usdSinglePrice,
+			cadSinglePrice,
+		};
+
+		setSignage((prevSignage) =>
+			prevSignage.map((sign) =>
+				sign.id === item.id ? { ...sign, ...updateDetails } : sign
+			)
+		);
+	}
+
+	const handleComments = (e) => setComments(e.target.value);
+
+	const handleOnChangeSets = (e) => {
+		setSets(e.target.value);
+	};
+
+	const handleOnChangeMount = (e) => {
+		const target = e.target.value;
+		setSelectedMounting(target);
+
+		if (target === STUD_WITH_SPACER || target === STUD_MOUNT) {
+			if (target === STUD_MOUNT) {
+				setSpacerStandoffDistance('');
+			}
+		} else {
+			setStudLength('');
+			setSpacerStandoffDistance('');
+		}
+	};
+
+	const handleOnChangeWaterproof = (e) => setWaterproof(e.target.value);
+
+	const handleOnChangeThickness = (e) => {
+		const target = e.target.value;
+		setAcrylicChannelThickness(() => target);
+	};
+
+	const handleOnChangeWhite = (e) => {
+		const target = e.target.value;
+		setAcrylicFront(target);
+		if (target !== '3M Vinyl') {
+			setVinylWhite({
+				name: '',
+				color: '',
+			});
+		}
+	};
 
 	const handleonChangeSpacerDistance = (e) => {
 		setSpacerStandoffDistance(e.target.value);
@@ -77,328 +229,32 @@ export function Logo({ item }) {
 		}
 	};
 
-	const [selectedThickness, setSelectedThickness] = useState(
-		item.acrylicThickness ?? ''
-	);
-
-	const [width, setWidth] = useState(item.width ?? '');
-	const [height, setHeight] = useState(item.height ?? '');
-	const [maxWidthHeight, setMaxWidthHeight] = useState(43);
-	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
-	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
-
-	const [fileNames, setFileNames] = useState(item.fileNames ?? []);
-	const [fileUrls, setFileUrls] = useState(item.fileUrls ?? []);
-	const [filePaths, setFilePaths] = useState(item.filePaths ?? []);
-	const [files, setFiles] = useState(item.files ?? []);
-
-	const [sets, setSets] = useState(item.sets ?? 1);
-
-	const [color, setColor] = useState(item.color ?? {});
-	const [openColor, setOpenColor] = useState(false);
-	const [customColor, setCustomColor] = useState(item.customColor ?? '');
-
-	const colorRef = useRef(null);
-
-	const [selectedFinishing, setSelectedFinishing] = useState(
-		item.finishing ?? ''
-	);
-	const [maxWidthOptions, setMaxWidthOptions] = useState(
-		Array.from(
-			{
-				length: maxWidthHeight,
-			},
-			(_, index) => {
-				const val = 1 + index;
-				return (
-					<option key={index} value={val}>
-						{val}"
-					</option>
-				);
-			}
-		)
-	);
-
-	const [comments, setComments] = useState(item.comments ?? '');
-	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
-	const [mountingOptions, setMountingOptions] = useState(
-		mountingDefaultOptions
-	);
-
-	const handleOnChangeMount = (e) => {
-		const target = e.target.value;
-		setSelectedMounting(target);
-
-		if (target === STUD_WITH_SPACER || target === STUD_MOUNT) {
-			if (target === STUD_MOUNT) {
-				setSpacerStandoffDistance('');
-			}
-		} else {
-			setStudLength('');
-			setSpacerStandoffDistance('');
-		}
-	};
-
-	useEffect(() => {
-		let newMountingOptions = mountingDefaultOptions;
-
-		if (selectedThickness?.value === '3') {
-			if (
-				selectedMounting === STUD_MOUNT ||
-				selectedMounting === STUD_WITH_SPACER
-			) {
-				setSelectedMounting('');
-				setStudLength('');
-				setSpacerStandoffDistance('');
-			}
-			newMountingOptions = newMountingOptions.filter(
-				(option) =>
-					option.mounting_option !== STUD_MOUNT &&
-					option.mounting_option !== STUD_WITH_SPACER
-			);
-		}
-
-		if (waterproof === 'Outdoor (Waterproof)') {
-			if (selectedMounting === 'Double-sided tape') {
-				setSelectedMounting('');
-			}
-
-			newMountingOptions = newMountingOptions.filter(
-				(option) => option.mounting_option !== 'Double-sided tape'
-			);
-		}
-
-		setMountingOptions(newMountingOptions);
-
-		setMaxWidthOptions(() =>
-			Array.from(
-				{
-					length: parseInt(maxWidthHeight) + 1,
-				},
-				(_, index) => {
-					const val = 1 + index;
-					return (
-						<option key={index} value={val}>
-							{val}"
-						</option>
-					);
-				}
-			)
-		);
-	}, [
-		selectedThickness,
-		selectedMounting,
-		waterproof,
-		maxWidthHeight,
-		setSelectedMounting,
-		setMountingOptions,
-	]);
-
-	function handleComments(e) {
-		setComments(e.target.value);
-	}
-
-	const handleOnChangeThickness = (e) => {
-		const target = e.target.value;
-		const selected = thicknessOptions.filter(
-			(option) => option.value === target
-		);
-		setSelectedThickness(() => selected[0]);
-
-		if (parseInt(target) === 3) {
-			if (
-				selectedMounting === STUD_MOUNT ||
-				selectedMounting === STUD_WITH_SPACER
-			) {
-				setSelectedMounting('');
-				setStudLength('');
-				setSpacerStandoffDistance('');
-			}
-		}
-	};
-
-	useEffect(() => {
-		if (parseInt(selectedThickness?.value) > 3) {
-			setMaxWidthHeight(42);
-		} else {
-			setMaxWidthHeight(23);
-			if (height > 25) {
-				setHeight('');
-			}
-			if (width > 25) {
-				setWidth('');
-			}
-		}
-	}, [selectedThickness]);
-
-	const handleChangeFinishing = (e) => {
-		setSelectedFinishing(e.target.value);
-	};
-
-	const handleOnChangeSets = (e) => {
-		setSets(e.target.value);
-	};
-
-	function updateSignage() {
-		if (!signage.some((sign) => sign.id === item.id)) return;
-		const updatedSignage = signage.map((sign) => {
-			if (sign.id === item.id) {
-				return {
-					...sign,
-					comments,
-					acrylicThickness: selectedThickness,
-					mounting: selectedMounting,
-					waterproof,
-					width,
-					height,
-					usdPrice,
-					cadPrice,
-					finishing: selectedFinishing,
-					files,
-					fileNames,
-					filePaths,
-					fileUrls,
-					sets,
-					color,
-					customColor,
-					studLength,
-					spacerStandoffDistance,
-				};
-			} else {
-				return sign;
-			}
-		});
-		setSignage(() => updatedSignage);
-	}
-
-	useEffect(() => {
-		updateSignage();
-	}, [
-		comments,
-		selectedThickness,
-		selectedMounting,
-		waterproof,
-		width,
-		height,
-		usdPrice,
-		cadPrice,
-		fileUrls,
-		fileNames,
-		selectedFinishing,
-		files,
-		sets,
-		filePaths,
-		color,
-		customColor,
-		studLength,
-		spacerStandoffDistance,
-	]);
-
-	const [logoPricingObject, setlogoPricingObject] = useState([]);
-
-	useEffect(() => {
-		async function fetchLogoPricing() {
-			try {
-				const response = await fetch(NovaQuote.logo_pricing_api + item.product);
-				const data = await response.json();
-				setlogoPricingObject(data);
-			} catch (error) {
-				console.error('Error fetching logo pricing:', error);
-			}
-		}
-
-		fetchLogoPricing();
-	}, []);
-
-	useEffect(() => {
-		if (
-			width &&
-			height &&
-			selectedThickness &&
-			waterproof &&
-			logoPricingObject !== null
-		) {
-			const logoPricing = getLogoPricingTablebyThickness(
-				`${selectedThickness.value}mm`,
-				logoPricingObject
-			);
-
-			if (logoPricing !== undefined) {
-				const logoPricingTable =
-					logoPricing !== undefined ? convert_json(logoPricing) : [];
-
-				const computed =
-					logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
-
-				let multiplier = 0;
-				if (waterproof) {
-					multiplier = waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.1;
-				}
-
-				let total = parseFloat((computed * multiplier).toFixed(2));
-				total *= selectedFinishing === GLOSS_FINISH ? 1.1 : 1;
-
-				if (color?.name === CLEAR_COLOR) {
-					total *= 0.9;
-				}
-				if (color?.name === FROSTED_CLEAR_COLOR) {
-					total *= 0.95;
-				}
-
-				if (selectedMounting === STUD_WITH_SPACER) {
-					const spacer = spacerPricing(total);
-
-					total += spacer;
-				}
-
-				total *= sets;
-
-				setUsdPrice(parseFloat(total.toFixed(2)));
-				setCadPrice((total * parseFloat(EXCHANGE_RATE)).toFixed(2));
-			} else {
-				setUsdPrice(0);
-				setCadPrice(0);
-			}
-		} else {
-			setUsdPrice(0);
-			setCadPrice(0);
-		}
-	}, [
-		width,
-		height,
-		selectedThickness,
-		waterproof,
-		selectedFinishing,
-		sets,
-		color,
-		selectedMounting,
-	]);
-
 	const checkAndAddMissingFields = () => {
 		const missingFields = [];
 
-		if (!selectedThickness) missingFields.push('Select Acrylic Thickness');
+		if (!acrylicChannelThickness)
+			missingFields.push('Select Acrylic Thickness');
 		if (!width) missingFields.push('Select Logo Width');
 		if (!height) missingFields.push('Select Logo Height');
+		if (!color) missingFields.push('Select Return Paint Color');
+		if (color === 'Custom Color' && !customColor) {
+			missingFields.push('Add the Pantone color code of your custom color.');
+		}
 		if (!waterproof) missingFields.push('Select Environment');
 		if (!selectedMounting) missingFields.push('Select Mounting');
+
+		if (selectedMounting === STUD_MOUNT) {
+			if (!studLength) missingFields.push('Select Stud Length');
+		}
+
 		if (selectedMounting === STUD_WITH_SPACER) {
 			if (!studLength) missingFields.push('Select Stud Length');
 
 			if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
 		}
-		if (selectedMounting === STUD_MOUNT) {
-			if (!studLength) missingFields.push('Select Stud Length');
-		}
-		if (!selectedFinishing) missingFields.push('Select Finishing');
-		if (!color.name) missingFields.push('Select Color');
-		if (color?.name === 'Custom Color' && !customColor) {
-			missingFields.push('Add the Pantone color code of your custom color.');
-		}
-		if (!sets) missingFields.push('Select Quantity');
 
-		if (!fileUrls || fileUrls.length === 0)
-			missingFields.push('Upload a PDF/AI File');
+		if (!acrylicFront) missingFields.push('Select Acrylic Front');
+		if (!sets) missingFields.push('Select Quantity');
 
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
@@ -437,51 +293,136 @@ export function Logo({ item }) {
 	useEffect(() => {
 		checkAndAddMissingFields();
 	}, [
+		color,
 		width,
 		height,
-		selectedThickness,
-		comments,
+		acrylicChannelThickness,
 		selectedMounting,
 		waterproof,
 		fileUrls,
-		fileNames,
-		filePaths,
-		files,
-		selectedFinishing,
+		customColor,
 		sets,
 		studLength,
 		spacerStandoffDistance,
 	]);
 
-	useOutsideClick([colorRef], () => {
-		if (!openColor) return;
-		setOpenColor(false);
-	});
+	useEffect(() => {
+		updateSignage();
+	}, [
+		comments,
+		width,
+		height,
+		acrylicChannelThickness,
+		selectedMounting,
+		waterproof,
+		color,
+		usdPrice,
+		cadPrice,
+		fileUrls,
+		fileNames,
+		filePaths,
+		files,
+		customColor,
+		sets,
+		studLength,
+		spacerStandoffDistance,
+		acrylicFront,
+		vinylWhite,
+		ledLightColor,
+		usdSinglePrice,
+		cadSinglePrice,
+	]);
+
+	if (acrylicFront === '3M Vinyl') {
+		useOutsideClick([colorRef, vinyl3MRef], () => {
+			if (!openColor && !openVinylWhite) return;
+			setOpenColor(false);
+			setOpenVinylWhite(false);
+		});
+	} else {
+		useOutsideClick([colorRef], () => {
+			if (!openColor) return;
+			setOpenColor(false);
+		});
+	}
 
 	useEffect(() => {
 		color?.name != 'Custom Color' && setCustomColor('');
 	}, [color]);
 
+	const computePricing = () => {
+		if (!width || !height) return 0;
+
+		const perInch = 0.2;
+
+		let tempTotal = parseInt(width) * parseInt(height) * perInch;
+
+		if (acrylicFront === '3M Vinyl') {
+			tempTotal *= 1.1;
+		}
+
+		if (acrylicFront === 'UV Printed') {
+			tempTotal *= 1.15;
+		}
+
+		if (selectedMounting === STUD_WITH_SPACER) {
+			const spacer = spacerPricing(tempTotal);
+			tempTotal += parseFloat(spacer.toFixed(2));
+		}
+
+		/* minimum price */
+		tempTotal = tempTotal > 50 ? tempTotal : 50;
+
+		let total = tempTotal * parseInt(sets);
+
+		const discount = 1;
+
+		let totalWithDiscount = total * discount;
+
+		let discountPrice = total - totalWithDiscount;
+
+		return {
+			singlePrice: tempTotal ?? 0,
+			total: totalWithDiscount?.toFixed(2) ?? 0,
+			totalWithoutDiscount: total,
+			discount: discountPrice,
+		};
+	};
+
+	useEffect(() => {
+		const { singlePrice, total, discount } = computePricing();
+		if (total && singlePrice) {
+			setUsdPrice(total);
+			setCadPrice((total * EXCHANGE_RATE).toFixed(2));
+			setUsdSinglePrice(singlePrice);
+			setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
+			setUsdDiscount(discount.toFixed(2));
+			setCadDiscount((discount * EXCHANGE_RATE).toFixed(2));
+		}
+	}, [width, height, acrylicFront, selectedMounting, sets]);
+
 	return (
 		<>
 			{item.productLine && (
-				<div className="py-4 mb-4">
+				<div clasName="py-4 my-4">
 					PRODUCT LINE: <span className="font-title">{item.productLine}</span>
 				</div>
 			)}
+
 			<div className="quote-grid mb-6">
 				<Dropdown
 					title="Acrylic Thickness"
-					value={selectedThickness?.value}
+					value={acrylicChannelThickness}
 					onChange={handleOnChangeThickness}
-					options={thicknessOptions.map((thickness) => (
+					options={acrylicChannelThicknessOptions.map((thickness) => (
 						<option
 							value={thickness.value}
-							selected={thickness === selectedThickness}
+							selected={thickness.value === acrylicChannelThickness}
 						>
-							{thickness.thickness}
+							{thickness.value}
 						</option>
 					))}
+					onlyValue={true}
 				/>
 
 				<Dropdown
@@ -498,28 +439,95 @@ export function Logo({ item }) {
 					options={maxWidthOptions}
 				/>
 
+				<Dropdown
+					title="Acrylic Front"
+					onChange={handleOnChangeWhite}
+					options={acrylicFrontOptions.map((option) => (
+						<option value={option.option} selected={option == acrylicFront}>
+							{option.option}
+						</option>
+					))}
+					value={acrylicFront}
+				/>
+
+				{acrylicFront === '3M Vinyl' && (
+					<div className="px-[1px] relative" ref={vinyl3MRef}>
+						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+							3M VINYL
+						</label>
+						<div
+							className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
+								vinylWhite.name ? 'text-black' : 'text-[#dddddd]'
+							}`}
+							onClick={() => {
+								setOpenVinylWhite((prev) => !prev);
+								setOpenColor(false);
+							}}
+						>
+							<span
+								className="rounded-full w-[18px] h-[18px] border mr-2"
+								style={{
+									background:
+										vinylWhite?.name == 'Custom Color'
+											? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
+											: vinylWhite?.color,
+								}}
+							></span>
+							{vinylWhite.name === '' ? 'CHOOSE OPTION' : vinylWhite.name}
+						</div>
+						{openVinylWhite && (
+							<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
+								{translucentGraphicFilms.map((color) => {
+									return (
+										<div
+											className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
+											onClick={() => {
+												setVinylWhite(color);
+												setOpenVinylWhite(false);
+											}}
+										>
+											<span
+												className="w-[18px] h-[18px] inline-block rounded-full border"
+												style={{
+													background:
+														color?.name == 'Custom Color'
+															? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
+															: color?.color,
+												}}
+											></span>
+											{color?.name}
+										</div>
+									);
+								})}
+							</div>
+						)}
+					</div>
+				)}
+
 				<div className="px-[1px] relative" ref={colorRef}>
 					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-						Color
+						Return Paint Color
 					</label>
 					<div
 						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-							color.name ? 'text-black' : 'text-[#dddddd]'
+							color ? 'text-black' : 'text-[#dddddd]'
 						}`}
 						onClick={() => {
 							setOpenColor((prev) => !prev);
+							setOpenVinylWhite(false);
 						}}
 					>
 						<span
 							className="rounded-full w-[18px] h-[18px] border mr-2"
 							style={{
 								background:
-									color.name == 'Custom Color'
+									color == 'Custom Color'
 										? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-										: color.color,
+										: colorOptions.find((option) => option.name === color)
+												.color,
 							}}
 						></span>
-						{color.name === '' ? 'CHOOSE OPTION' : color.name}
+						{color === '' ? 'CHOOSE OPTION' : color}
 					</div>
 					{openColor && (
 						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
@@ -528,7 +536,7 @@ export function Logo({ item }) {
 									<div
 										className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
 										onClick={() => {
-											setColor(color);
+											setColor(color.name);
 											setOpenColor(false);
 										}}
 									>
@@ -550,22 +558,19 @@ export function Logo({ item }) {
 				</div>
 
 				<Dropdown
-					title="Finishing Options"
-					onChange={handleChangeFinishing}
-					options={finishingOptions.map((finishing) => (
-						<option
-							value={finishing.name}
-							selected={finishing.name === selectedFinishing}
-						>
-							{finishing.name}
+					title="LED Light Color"
+					onChange={handleOnChangeLedLight}
+					options={ledLightColors.map((color) => (
+						<option value={color} selected={color == ledLightColor}>
+							{color}
 						</option>
 					))}
-					value={selectedFinishing}
+					value={ledLightColor}
 				/>
 
 				<Dropdown
 					title="Environment"
-					onChange={(e) => setWaterproof(e.target.value)}
+					onChange={handleOnChangeWaterproof}
 					options={waterProofOptions.map((option) => (
 						<option
 							value={option.option}
@@ -580,7 +585,7 @@ export function Logo({ item }) {
 				<Dropdown
 					title="Mounting Options"
 					onChange={handleOnChangeMount}
-					options={mountingOptions.map((option) => (
+					options={mountingDefaultOptions.map((option) => (
 						<option
 							value={option.mounting_option}
 							selected={option.mounting_option === selectedMounting}
@@ -657,7 +662,7 @@ export function Logo({ item }) {
 			)}
 
 			<div className="quote-grid">
-				{color?.name == 'Custom Color' && (
+				{color == 'Custom Color' && (
 					<div className="px-[1px] col-span-4">
 						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
 							Custom Color
@@ -671,6 +676,7 @@ export function Logo({ item }) {
 						/>
 					</div>
 				)}
+
 				<div className="px-[1px] col-span-4">
 					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
 						COMMENTS
@@ -683,6 +689,7 @@ export function Logo({ item }) {
 						rows={4}
 					/>
 				</div>
+
 				<UploadFiles
 					setFilePaths={setFilePaths}
 					setFiles={setFiles}
@@ -692,6 +699,12 @@ export function Logo({ item }) {
 					setFileUrls={setFileUrls}
 					setFileNames={setFileNames}
 				/>
+			</div>
+
+			<div className="text-xs text-[#9F9F9F] pt-4">
+				We size the letters in proportion to your chosen font. Some
+				uppercase/lowercase letters may appear shorter or taller than your
+				selected height on the form to maintain visual harmony.
 			</div>
 		</>
 	);

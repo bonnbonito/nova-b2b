@@ -598,9 +598,11 @@ export function Letters({ item }) {
 					font={font}
 					fontRef={fontRef}
 					openFont={openFont}
-					setOpenColor={setOpenColor}
 					setOpenFont={setOpenFont}
 					handleSelectFont={handleSelectFont}
+					close={() => {
+						setOpenColor(false);
+					}}
 				/>
 
 				{font == 'Custom font' && (

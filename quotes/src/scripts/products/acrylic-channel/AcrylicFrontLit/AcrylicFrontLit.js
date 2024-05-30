@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useAppContext } from '../../../AppProvider';
 import Sidebar from '../../../Sidebar';
@@ -8,11 +8,11 @@ import { INDOOR_NOT_WATERPROOF } from '../../../utils/defaults';
 import { Letters } from './components/Letters';
 import { Logo } from './components/Logo';
 
-export default function AcrylicFrontLit() {
+const AcrylicFrontLit = () => {
 	const { signage, setSignage, setTempFolder, tempFolderName } =
 		useAppContext();
 
-	function setDefaultSignage() {
+	const setDefaultSignage = useCallback(() => {
 		setSignage([
 			{
 				id: uuidv4(),
@@ -24,7 +24,7 @@ export default function AcrylicFrontLit() {
 				waterproof: '',
 				acrylicChannelThickness: '1.2"',
 				acrylicFront: 'White',
-				returnPaintColor: 'Black',
+				acrylicReturnPaintColor: 'Black',
 				vinylWhite: { name: '', color: '', code: '' },
 				ledLightColor: '6500K White',
 				letterHeight: '',
@@ -42,35 +42,22 @@ export default function AcrylicFrontLit() {
 				product: NovaQuote.product,
 			},
 		]);
-	}
-
-	useEffect(() => {
-		console.log('Attempting to preload fonts...');
-		async function preloadFonts() {
-			try {
-				await loadingFonts();
-			} catch (error) {
-				console.error('Error loading fonts:', error);
-			}
-		}
-		preloadFonts();
 	}, []);
 
-	const loadingFonts = async () => {
-		const loadPromises = NovaQuote.fonts.map((font) => loadFont(font));
-		await Promise.all(loadPromises);
-	};
-
-	async function loadFont({ name, src }) {
+	const loadFont = useCallback(async ({ name, src }) => {
 		const fontFace = new FontFace(name, `url(${src})`);
-
 		try {
 			await fontFace.load();
 			document.fonts.add(fontFace);
 		} catch (e) {
 			console.error(`Font ${name} failed to load`);
 		}
-	}
+	}, []);
+
+	const preloadFonts = useCallback(async () => {
+		const loadPromises = NovaQuote.fonts.map((font) => loadFont(font));
+		await Promise.all(loadPromises);
+	}, [loadFont]);
 
 	useEffect(() => {
 		if (NovaQuote.is_editting === '1') {
@@ -83,6 +70,15 @@ export default function AcrylicFrontLit() {
 		} else {
 			setDefaultSignage();
 		}
+
+		if (NovaQuote.is_editting.length === 0) {
+			setTempFolder(() => tempFolderName);
+		} else {
+			setTempFolder(() => `Q-${NovaQuote.current_quote_id}`);
+		}
+
+		console.log('Attempting to preload fonts...');
+		preloadFonts();
 	}, []);
 
 	const defaultArgs = {
@@ -91,68 +87,51 @@ export default function AcrylicFrontLit() {
 		mounting: '',
 		acrylicChannelThickness: '1.2"',
 		acrylicFront: 'White',
-		returnPaintColor: 'Black',
+		acrylicReturnPaintColor: 'Black',
 		vinylWhite: { name: '', color: '', code: '' },
 		ledLightColor: '6500K White',
 		waterproof: INDOOR_NOT_WATERPROOF,
 		product: NovaQuote.product,
 	};
 
-	function addSignage(type) {
-		setSignage((prevSignage) => {
-			// Count how many signages of this type already exist
-			const count = prevSignage.filter((sign) => sign.type === type).length;
-			let args;
-			// Create new signage with incremented title number
-			if (type === 'letters') {
-				args = {
-					type: type,
-					title: `LETTERS ${count + 1}`,
-					letters: '',
-					font: '',
-					color: { name: '', color: '' },
-					letterHeight: '',
-					customColor: '',
-					filePaths: [],
-					fileNames: [],
-					fileUrls: [],
-					files: [],
-				};
-			} else {
-				args = {
-					type: type,
-					title: `LOGO ${count + 1}`,
-					width: '',
-					height: '',
-				};
-			}
-			const newSignage = {
-				...defaultArgs,
-				...args,
-			};
-
-			// Append the new signage to the array
-			return [...prevSignage, newSignage];
-		});
-	}
-
-	/* useEffect(() => {
-		localStorage.setItem(storage + '-x', JSON.stringify(signage));
-	}, [signage]); */
-
-	useEffect(() => {
-		if (NovaQuote.is_editting.length === 0) {
-			setTempFolder(tempFolderName);
-		} else {
-			setTempFolder(`Q-${NovaQuote.current_quote_id}`);
-		}
-	}, []);
+	const addSignage = useCallback(
+		(type) => {
+			setSignage((prevSignage) => {
+				const count = prevSignage.filter((sign) => sign.type === type).length;
+				let args;
+				if (type === 'letters') {
+					args = {
+						type: type,
+						title: `LETTERS ${count + 1}`,
+						letters: '',
+						font: '',
+						letterHeight: '',
+						customColor: '',
+						filePaths: [],
+						fileNames: [],
+						fileUrls: [],
+						files: [],
+					};
+				} else {
+					args = {
+						type: type,
+						title: `LOGO ${count + 1}`,
+						width: '',
+						height: '',
+					};
+				}
+				const newSignage = { ...defaultArgs, ...args };
+				return [...prevSignage, newSignage];
+			});
+		},
+		[signage]
+	);
 
 	return (
 		<div className="md:flex gap-6">
 			<div className="md:w-3/4 w-full">
 				{signage.map((item, index) => (
-					<Signage index={index} id={item.id} item={item}>
+					<Signage key={item.id} index={index} id={item.id} item={item}>
 						{item.type === 'letters' ? (
 							<Letters key={item.id} item={item} productId={item.product} />
 						) : (
@@ -188,4 +167,6 @@ export default function AcrylicFrontLit() {
 			<Sidebar />
 		</div>
 	);
-}
+};
+
+export default AcrylicFrontLit;

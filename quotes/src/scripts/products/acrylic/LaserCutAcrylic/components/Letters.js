@@ -601,8 +601,10 @@ export function Letters({ item }) {
 					fontRef={fontRef}
 					openFont={openFont}
 					setOpenFont={setOpenFont}
-					setOpenColor={setOpenColor}
 					handleSelectFont={handleSelectFont}
+					close={() => {
+						setOpenColor(false);
+					}}
 				/>
 
 				{font == 'Custom font' && (

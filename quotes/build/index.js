@@ -2271,21 +2271,26 @@ var applyAttributeToOthers = function (originalTarget, parentNode, markerName, c
                 deep(node);
             }
             else {
-                var attr = node.getAttribute(controlAttribute);
-                var alreadyHidden = attr !== null && attr !== 'false';
-                var counterValue = (counterMap.get(node) || 0) + 1;
-                var markerValue = (markerCounter.get(node) || 0) + 1;
-                counterMap.set(node, counterValue);
-                markerCounter.set(node, markerValue);
-                hiddenNodes.push(node);
-                if (counterValue === 1 && alreadyHidden) {
-                    uncontrolledNodes.set(node, true);
+                try {
+                    var attr = node.getAttribute(controlAttribute);
+                    var alreadyHidden = attr !== null && attr !== 'false';
+                    var counterValue = (counterMap.get(node) || 0) + 1;
+                    var markerValue = (markerCounter.get(node) || 0) + 1;
+                    counterMap.set(node, counterValue);
+                    markerCounter.set(node, markerValue);
+                    hiddenNodes.push(node);
+                    if (counterValue === 1 && alreadyHidden) {
+                        uncontrolledNodes.set(node, true);
+                    }
+                    if (markerValue === 1) {
+                        node.setAttribute(markerName, 'true');
+                    }
+                    if (!alreadyHidden) {
+                        node.setAttribute(controlAttribute, 'true');
+                    }
                 }
-                if (markerValue === 1) {
-                    node.setAttribute(markerName, 'true');
-                }
-                if (!alreadyHidden) {
-                    node.setAttribute(controlAttribute, 'true');
+                catch (e) {
+                    console.error('aria-hidden: cannot operate on ', node, e);
                 }
             }
         });
@@ -2717,7 +2722,7 @@ function FontsDropdown({
   fontRef,
   openFont,
   setOpenFont,
-  setOpenColor
+  close
 }) {
   const handleCustomFontSelection = () => {
     // TODO: Add your logic here for custom font selection
@@ -2734,7 +2739,7 @@ function FontsDropdown({
     className: `flex px-2 items-center select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${font ? 'text-black' : 'text-[#dddddd]'}`,
     onClick: () => {
       setOpenFont(prev => !prev);
-      setOpenColor(false);
+      close();
     },
     style: {
       fontFamily: font === 'Custom font' ? '' : font
@@ -3109,34 +3114,46 @@ function ModalSave({
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ Prices)
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _RenderSignageDetails__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./RenderSignageDetails */ "./src/scripts/RenderSignageDetails.js");
+/* harmony import */ var _utils_TooltipText__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./utils/TooltipText */ "./src/scripts/utils/TooltipText.js");
 
 
 
-function Prices({
+
+const Prices = (0,react__WEBPACK_IMPORTED_MODULE_0__.memo)(function Prices({
   item,
   borderTop
 }) {
   const currency = wcumcs_vars_data.currency;
   const price = currency === 'USD' ? item.usdPrice : item.cadPrice;
-  const singlePrice = item.usdSinglePrice && currency === 'USD' ? item.usdSinglePrice : item.cadSinglePrice;
+  const singlePrice = currency === 'USD' ? item.usdSinglePrice : item.cadSinglePrice;
+  const outputPrice = price > 0 ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, currency, "$", Number(singlePrice !== null && singlePrice !== void 0 ? singlePrice : price).toLocaleString(), singlePrice && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "text-xs lowercase"
+  }, "/each")) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, "TBD");
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: `block ${borderTop}`
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "flex justify-between py-2 font-title uppercase md:tracking-[1.6px]"
-  }, item.title, price > 0 ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, currency, "$", singlePrice ? Number(singlePrice.toFixed(2)).toLocaleString() : Number(price).toLocaleString(), singlePrice && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "text-xs lowercase"
-  }, "/each")) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, "TBD")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_RenderSignageDetails__WEBPACK_IMPORTED_MODULE_1__.RenderSignageDetails, {
+    className: "flex justify-between py-2 font-title uppercase md:tracking-[1.6px] text-lg gap-2"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_TooltipText__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    text: item.title
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-ellipsis overflow-hidden text-nowrap"
+  }, item.title)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_TooltipText__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    text: outputPrice
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-ellipsis overflow-hidden text-nowrap"
+  }, outputPrice))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_RenderSignageDetails__WEBPACK_IMPORTED_MODULE_1__.RenderSignageDetails, {
     item: item,
     classContainer: "grid grid-cols-2 gap-4 py-[2px] mb-1",
     classLabel: "text-left font-title md:tracking-[1.4px] text-sm",
     classValue: "text-left text-sm break-words"
   }));
-}
+});
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Prices);
 
 /***/ }),
 
@@ -3530,7 +3547,7 @@ const RenderSignageDetails = ({
       className: classLabel
     }, signage.label), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: classValue
-    }, signage.key, `${signage.label === 'LETTER HEIGHT' ? '"' : ''}`));
+    }, signage.key, `${signage.label === 'LETTER HEIGHT' || signage.label === 'LOGO HEIGHT' || signage.label === 'LOGO WIDTH' ? '"' : ''}`));
   });
 };
 
@@ -3566,6 +3583,7 @@ function Sidebar() {
     partner
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
   const [canSaveToDraft, setCanSaveToDraft] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(true);
+  const memoizedSignage = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => signage, [signage]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     setCanSaveToDraft(() => parseInt(partner) === parseInt(NovaQuote.user_id));
     console.log(parseInt(partner), NovaQuote.user_id);
@@ -3593,8 +3611,8 @@ function Sidebar() {
     className: "rounded-md border border-gray-200 p-4 sticky top-36"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "w-full max-h-[calc(100vh-300px)] overflow-y-auto pr-5"
-  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Prices__WEBPACK_IMPORTED_MODULE_3__["default"], {
-    id: item.id,
+  }, memoizedSignage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Prices__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    key: item.id,
     item: item,
     borderTop: index > 0 && 'border-t mt-2'
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("hr", {
@@ -4268,7 +4286,6 @@ function UploadFont({
     const today = new Date();
     return today.toISOString().split('T')[0]; // Returns 'YYYY-MM-DD'
   }
-
   const checkAndCreateFolder = async accessToken => {
     const folderPath = `/NOVA-CRM/${NovaQuote.business_id}/${tempFolder}/Fonts`;
     console.log(folderPath);
@@ -4322,7 +4339,6 @@ function UploadFont({
         direct_only: true
       }) // `direct_only: true` to get direct links only
     });
-
     const data = await response.json();
     if (!response.ok) {
       throw new Error(data.error_summary);
@@ -4332,10 +4348,8 @@ function UploadFont({
     if (data.links && data.links.length > 0) {
       return data.links[0]; // Return the first shared link if available
     }
-
     return null; // Return null if no shared links exist
   };
-
   const handleFileUpload = async (file, setFontFileUrl, setFontFileName, setFontFilePath, tempFolder) => {
     setIsLoading(true);
     const token = await getRefreshToken();
@@ -4393,7 +4407,6 @@ function UploadFont({
         const sharedLinkData = await sharedLinkResponse.json();
         setFontFileUrl(sharedLinkData.url); // Use the newly created shared link
       }
-
       setFontFileName(uploadData.name);
     } catch (error) {
       console.error('Error:', error.message);
@@ -4427,7 +4440,6 @@ function UploadFont({
           path: fontFilePath // Assuming fontFileUrl contains the path of the file in Dropbox
         })
       });
-
       const data = await response.json();
       if (response.ok) {
         console.log('File removed:', data);
@@ -4514,7 +4526,7 @@ function UploadFont({
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ AcrylicFrontLit)
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
@@ -4536,14 +4548,14 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function AcrylicFrontLit() {
+const AcrylicFrontLit = () => {
   const {
     signage,
     setSignage,
     setTempFolder,
     tempFolderName
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
-  function setDefaultSignage() {
+  const setDefaultSignage = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(() => {
     setSignage([{
       id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
       type: 'letters',
@@ -4554,7 +4566,7 @@ function AcrylicFrontLit() {
       waterproof: '',
       acrylicChannelThickness: '1.2"',
       acrylicFront: 'White',
-      returnPaintColor: 'Black',
+      acrylicReturnPaintColor: 'Black',
       vinylWhite: {
         name: '',
         color: '',
@@ -4575,26 +4587,11 @@ function AcrylicFrontLit() {
       spacerStandoffDistance: '',
       product: NovaQuote.product
     }]);
-  }
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    console.log('Attempting to preload fonts...');
-    async function preloadFonts() {
-      try {
-        await loadingFonts();
-      } catch (error) {
-        console.error('Error loading fonts:', error);
-      }
-    }
-    preloadFonts();
   }, []);
-  const loadingFonts = async () => {
-    const loadPromises = NovaQuote.fonts.map(font => loadFont(font));
-    await Promise.all(loadPromises);
-  };
-  async function loadFont({
+  const loadFont = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(async ({
     name,
     src
-  }) {
+  }) => {
     const fontFace = new FontFace(name, `url(${src})`);
     try {
       await fontFace.load();
@@ -4602,7 +4599,11 @@ function AcrylicFrontLit() {
     } catch (e) {
       console.error(`Font ${name} failed to load`);
     }
-  }
+  }, []);
+  const preloadFonts = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(async () => {
+    const loadPromises = NovaQuote.fonts.map(font => loadFont(font));
+    await Promise.all(loadPromises);
+  }, [loadFont]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting === '1') {
       const currentSignage = JSON.parse(NovaQuote.signage);
@@ -4614,6 +4615,13 @@ function AcrylicFrontLit() {
     } else {
       setDefaultSignage();
     }
+    if (NovaQuote.is_editting.length === 0) {
+      setTempFolder(() => tempFolderName);
+    } else {
+      setTempFolder(() => `Q-${NovaQuote.current_quote_id}`);
+    }
+    console.log('Attempting to preload fonts...');
+    preloadFonts();
   }, []);
   const defaultArgs = {
     id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
@@ -4621,7 +4629,7 @@ function AcrylicFrontLit() {
     mounting: '',
     acrylicChannelThickness: '1.2"',
     acrylicFront: 'White',
-    returnPaintColor: 'Black',
+    acrylicReturnPaintColor: 'Black',
     vinylWhite: {
       name: '',
       color: '',
@@ -4631,22 +4639,16 @@ function AcrylicFrontLit() {
     waterproof: _utils_defaults__WEBPACK_IMPORTED_MODULE_5__.INDOOR_NOT_WATERPROOF,
     product: NovaQuote.product
   };
-  function addSignage(type) {
+  const addSignage = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(type => {
     setSignage(prevSignage => {
-      // Count how many signages of this type already exist
       const count = prevSignage.filter(sign => sign.type === type).length;
       let args;
-      // Create new signage with incremented title number
       if (type === 'letters') {
         args = {
           type: type,
           title: `LETTERS ${count + 1}`,
           letters: '',
           font: '',
-          color: {
-            name: '',
-            color: ''
-          },
           letterHeight: '',
           customColor: '',
           filePaths: [],
@@ -4666,28 +4668,15 @@ function AcrylicFrontLit() {
         ...defaultArgs,
         ...args
       };
-
-      // Append the new signage to the array
       return [...prevSignage, newSignage];
     });
-  }
-
-  /* useEffect(() => {
-  	localStorage.setItem(storage + '-x', JSON.stringify(signage));
-  }, [signage]); */
-
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (NovaQuote.is_editting.length === 0) {
-      setTempFolder(tempFolderName);
-    } else {
-      setTempFolder(`Q-${NovaQuote.current_quote_id}`);
-    }
-  }, []);
+  }, [signage]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:flex gap-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full"
   }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    key: item.id,
     index: index,
     id: item.id,
     item: item
@@ -4714,7 +4703,8 @@ function AcrylicFrontLit() {
       border: '1px solid #d2d2d2d2'
     }
   }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], null));
-}
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (AcrylicFrontLit);
 
 /***/ }),
 
@@ -4739,10 +4729,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_ConvertJson__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../utils/ConvertJson */ "./src/scripts/utils/ConvertJson.js");
 /* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
 /* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
-/* harmony import */ var _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../../utils/ColorOptions */ "./src/scripts/utils/ColorOptions.js");
-/* harmony import */ var _options__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../options */ "./src/scripts/products/acrylic-channel/AcrylicFrontLit/options.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
-/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
+/* harmony import */ var _metal_channel_metalChannelOptions__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../metal-channel/metalChannelOptions */ "./src/scripts/products/metal-channel/metalChannelOptions.js");
+/* harmony import */ var _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../utils/ColorOptions */ "./src/scripts/utils/ColorOptions.js");
+/* harmony import */ var _options__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../options */ "./src/scripts/products/acrylic-channel/AcrylicFrontLit/options.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
 
 
 
@@ -4757,28 +4748,40 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+const waterProofOptions = [{
+  option: _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF
+}];
+const mountingDefaultOptions = [{
+  mounting_option: _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_MOUNT
+}, {
+  mounting_option: _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER
+}];
+const lettersHeight = {
+  min: 2,
+  max: 43
+};
 function Letters({
   item
 }) {
-  var _item$letters, _item$comments, _item$font, _item$color, _item$waterproof, _item$acrylicChannelT, _item$acrylicFront, _item$vinylWhite, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fileName, _item$fileUrl, _item$filePath, _item$file, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$finishing, _item$customFont, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
+  var _item$letters, _item$comments, _item$font, _item$acrylicReturnPa, _item$waterproof, _item$acrylicChannelT, _item$ledLightColor, _item$acrylicFront, _item$vinylWhite, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdDiscount, _item$cadDiscount, _item$usdSinglePrice, _item$usdSinglePrice2, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
   const {
     signage,
     setSignage,
     setMissing
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_11__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_12__.useAppContext)();
   const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letters = item.letters) !== null && _item$letters !== void 0 ? _item$letters : '');
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
   const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$font = item.font) !== null && _item$font !== void 0 ? _item$font : '');
   const [openFont, setOpenFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$color = item.color) !== null && _item$color !== void 0 ? _item$color : {
-    name: '',
-    color: ''
-  });
+  const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicReturnPa = item.acrylicReturnPaintColor) !== null && _item$acrylicReturnPa !== void 0 ? _item$acrylicReturnPa : 'Black');
   const [openColor, setOpenColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : '');
   const [acrylicChannelThickness, setAcrylicChannelThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicChannelT = item.acrylicChannelThickness) !== null && _item$acrylicChannelT !== void 0 ? _item$acrylicChannelT : '1.2"');
+  const [ledLightColor, setLedLightColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$ledLightColor = item.ledLightColor) !== null && _item$ledLightColor !== void 0 ? _item$ledLightColor : '6500K White');
+  const handleOnChangeLedLight = e => setLedLightColor(e.target.value);
   const [acrylicFront, setAcrylicFront] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicFront = item.acrylicFront) !== null && _item$acrylicFront !== void 0 ? _item$acrylicFront : 'White');
-  const [openAcrylicCover, setOpenAcrylicCover] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const [openVinylWhite, setOpenVinylWhite] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [vinylWhite, setVinylWhite] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$vinylWhite = item.vinylWhite) !== null && _item$vinylWhite !== void 0 ? _item$vinylWhite : {
     name: '',
     color: '',
@@ -4788,26 +4791,19 @@ function Letters({
   const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrls = item.fileUrls) !== null && _item$fileUrls !== void 0 ? _item$fileUrls : []);
   const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$filePaths = item.filePaths) !== null && _item$filePaths !== void 0 ? _item$filePaths : []);
   const [files, setFiles] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$files = item.files) !== null && _item$files !== void 0 ? _item$files : []);
-  const [fileName, setFileName] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileName = item.fileName) !== null && _item$fileName !== void 0 ? _item$fileName : '');
-  const [fileUrl, setFileUrl] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrl = item.fileUrl) !== null && _item$fileUrl !== void 0 ? _item$fileUrl : '');
-  const [filePath, setFilePath] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$filePath = item.filePath) !== null && _item$filePath !== void 0 ? _item$filePath : '');
-  const [file, setFile] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$file = item.file) !== null && _item$file !== void 0 ? _item$file : '');
   const [fontFileName, setFontFileName] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fontFileName = item.fontFileName) !== null && _item$fontFileName !== void 0 ? _item$fontFileName : '');
   const [fontFileUrl, setFontFileUrl] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fontFileUrl = item.fontFileUrl) !== null && _item$fontFileUrl !== void 0 ? _item$fontFileUrl : '');
   const [fontFilePath, setFontFilePath] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fontFilePath = item.fontFilePath) !== null && _item$fontFilePath !== void 0 ? _item$fontFilePath : '');
   const [fontFile, setFontFile] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fontFile = item.fontFile) !== null && _item$fontFile !== void 0 ? _item$fontFile : '');
   const [letterHeightOptions, setLetterHeightOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [selectedFinishing, setSelectedFinishing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$finishing = item.finishing) !== null && _item$finishing !== void 0 ? _item$finishing : '');
-  const [customFont, setCustomFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$customFont = item.customFont) !== null && _item$customFont !== void 0 ? _item$customFont : '');
   const [customColor, setCustomColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$customColor = item.customColor) !== null && _item$customColor !== void 0 ? _item$customColor : '');
   const [selectedLetterHeight, setSelectedLetterHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letterHeight = item.letterHeight) !== null && _item$letterHeight !== void 0 ? _item$letterHeight : '');
   const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdPrice = item.usdPrice) !== null && _item$usdPrice !== void 0 ? _item$usdPrice : 0);
   const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadPrice = item.cadPrice) !== null && _item$cadPrice !== void 0 ? _item$cadPrice : 0);
-  const [mountingOptions, setMountingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.mountingDefaultOptions);
-  const [lettersHeight, setLettersHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
-    min: 2,
-    max: 43
-  });
+  const [usdDiscount, setUsdDiscount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdDiscount = item.usdDiscount) !== null && _item$usdDiscount !== void 0 ? _item$usdDiscount : 0);
+  const [cadDiscount, setCadDiscount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadDiscount = item.cadDiscount) !== null && _item$cadDiscount !== void 0 ? _item$cadDiscount : 0);
+  const [usdSinglePrice, setUsdSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdSinglePrice = item.usdSinglePrice) !== null && _item$usdSinglePrice !== void 0 ? _item$usdSinglePrice : 0);
+  const [cadSinglePrice, setCadSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdSinglePrice2 = item.usdSinglePrice) !== null && _item$usdSinglePrice2 !== void 0 ? _item$usdSinglePrice2 : 0);
   const [selectedMounting, setSelectedMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
   const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$studLength = item.studLength) !== null && _item$studLength !== void 0 ? _item$studLength : '');
   const [spacerStandoffOptions, setSpacerStandoffOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.spacerStandoffDefaultOptions);
@@ -4815,7 +4811,7 @@ function Letters({
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
   const colorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const fontRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  const acrylicColorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const vinyl3MRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const [letterPricing, setLetterPricing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     async function fetchLetterPricing() {
@@ -4830,20 +4826,6 @@ function Letters({
     }
     fetchLetterPricing();
   }, []);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (file) {
-      setFiles([file]);
-    }
-    if (fileName) {
-      setFileNames([fileName]);
-    }
-    if (filePath) {
-      setFilePaths([filePath]);
-    }
-    if (fileUrl) {
-      setFileUrls([fileUrl]);
-    }
-  }, [file, fileName, filePath, fileUrl]);
   const headlineRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const adjustFontSize = () => {
     const container = headlineRef.current.parentNode;
@@ -4870,8 +4852,9 @@ function Letters({
       acrylicChannelThickness,
       mounting: selectedMounting,
       waterproof,
-      color,
+      acrylicReturnPaintColor: color,
       letterHeight: selectedLetterHeight,
+      ledLightColor,
       usdPrice,
       cadPrice,
       files,
@@ -4883,12 +4866,13 @@ function Letters({
       fontFilePath,
       fontFileUrl,
       vinylWhite,
-      customFont,
       customColor,
       sets,
       studLength,
       spacerStandoffDistance,
-      acrylicFront
+      acrylicFront,
+      usdSinglePrice,
+      cadSinglePrice
     };
     setSignage(prevSignage => prevSignage.map(sign => sign.id === item.id ? {
       ...sign,
@@ -4904,8 +4888,8 @@ function Letters({
   const handleOnChangeMount = e => {
     const target = e.target.value;
     setSelectedMounting(target);
-    if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER || target === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_MOUNT) {
-      if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_MOUNT) {
+    if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER || target === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_MOUNT) {
+      if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_MOUNT) {
         setSpacerStandoffDistance('');
       }
     } else {
@@ -4920,9 +4904,6 @@ function Letters({
   };
   const handleOnChangeLetterHeight = e => {
     setSelectedLetterHeight(e.target.value);
-  };
-  const handleChangeFinishing = e => {
-    setSelectedFinishing(e.target.value);
   };
   const handleChangePieces = e => {
     setPieces(e.target.value);
@@ -4969,30 +4950,72 @@ function Letters({
     } else {
       setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
     }
-
     if (target === '') {
       setSpacerStandoffDistance(''); // Always reset if the target is empty
     }
   };
 
   // Helper function to determine letter price adjustments
-  function calculateLetterPrice(letter, baseLetterPrice, noLowerCase, waterproof, selectedFinishing, color) {
+  function calculateLetterPrice(letter, baseLetterPrice, noLowerCase) {
     let letterPrice = baseLetterPrice;
-
-    // Pricing adjustments based on character type
     if (letter === ' ') return 0;
     if (letter.match(/[a-z]/)) letterPrice *= noLowerCase ? 1 : 0.8;
     if (letter.match(/[`~"*,.\-']/)) letterPrice *= 0.3;
-
-    // Waterproof and finishing adjustments
-    letterPrice *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
-    letterPrice *= selectedFinishing === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.GLOSS_FINISH ? 1.1 : 1;
-
-    // Color adjustments
-    if (color?.name === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.CLEAR_COLOR) letterPrice *= 0.9;
-    if (color?.name === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.FROSTED_CLEAR_COLOR) letterPrice *= 0.95;
     return letterPrice;
   }
+  const computePricing = () => {
+    if (letterPricing.length > 0 && selectedLetterHeight && letters.trim().length > 0) {
+      var _tempTotal, _totalWithDiscount$to;
+      const pricingDetail = letterPricing.find(item => parseInt(item.Height) === parseInt(selectedLetterHeight));
+      const baseLetterPrice = parseFloat(pricingDetail?.Frontlit);
+      let tempTotal = 0;
+      const lettersArray = letters.trim().split('');
+      const noLowerCase = NovaQuote.no_lowercase.includes(font);
+      lettersArray.forEach(letter => {
+        tempTotal += calculateLetterPrice(letter, baseLetterPrice, noLowerCase);
+      });
+      if (acrylicFront === '3M Vinyl') {
+        tempTotal *= 1.1;
+      }
+      if (acrylicFront === 'UV Printed') {
+        tempTotal *= 1.15;
+      }
+      if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER) {
+        const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_8__.spacerPricing)(tempTotal);
+        tempTotal += parseFloat(spacer.toFixed(2));
+      }
+
+      /* minimum price */
+      tempTotal = tempTotal > 50 ? tempTotal : 50;
+      let total = tempTotal * parseInt(sets);
+      const discount = 1;
+      let totalWithDiscount = total * discount;
+      let discountPrice = total - totalWithDiscount;
+      return {
+        singlePrice: (_tempTotal = tempTotal) !== null && _tempTotal !== void 0 ? _tempTotal : 0,
+        total: (_totalWithDiscount$to = totalWithDiscount?.toFixed(2)) !== null && _totalWithDiscount$to !== void 0 ? _totalWithDiscount$to : 0,
+        totalWithoutDiscount: total,
+        discount: discountPrice
+      };
+    } else {
+      return 0;
+    }
+  };
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    const {
+      singlePrice,
+      total,
+      discount
+    } = computePricing();
+    if (total && singlePrice) {
+      setUsdPrice(total);
+      setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.EXCHANGE_RATE).toFixed(2));
+      setUsdSinglePrice(singlePrice);
+      setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.EXCHANGE_RATE).toFixed(2));
+      setUsdDiscount(discount.toFixed(2));
+      setCadDiscount((discount * _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.EXCHANGE_RATE).toFixed(2));
+    }
+  }, [selectedLetterHeight, letters, sets, font, selectedMounting, letterPricing, acrylicFront]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     setLetterHeightOptions(() => Array.from({
       length: parseInt(lettersHeight.max) - parseInt(lettersHeight.min) + 1
@@ -5017,17 +5040,16 @@ function Letters({
     }
     if (!selectedLetterHeight) missingFields.push('Select Letter Height');
     if (!acrylicChannelThickness) missingFields.push('Select Acrylic Thickness');
-    if (!color.name) missingFields.push('Select Color');
-    if (color?.name === 'Custom Color' && !customColor) {
+    if (!color) missingFields.push('Select Return Paint Color');
+    if (color === 'Custom Color' && !customColor) {
       missingFields.push('Add the Pantone color code of your custom color.');
     }
-    if (!selectedFinishing) missingFields.push('Select Finishing');
     if (!waterproof) missingFields.push('Select Environment');
     if (!selectedMounting) missingFields.push('Select Mounting');
-    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_MOUNT) {
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_MOUNT) {
       if (!studLength) missingFields.push('Select Stud Length');
     }
-    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER) {
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER) {
       if (!studLength) missingFields.push('Select Stud Length');
       if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
@@ -5061,15 +5083,24 @@ function Letters({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [letters, font, color, acrylicChannelThickness, selectedMounting, waterproof, selectedLetterHeight, fileUrls, fontFileUrl, selectedFinishing, customColor, sets, studLength, spacerStandoffDistance]);
+  }, [letters, font, color, acrylicChannelThickness, selectedMounting, waterproof, selectedLetterHeight, fileUrls, fontFileUrl, customColor, sets, studLength, spacerStandoffDistance]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-  }, [letters, comments, font, acrylicChannelThickness, selectedMounting, waterproof, color, usdPrice, cadPrice, selectedLetterHeight, fileUrls, fileNames, filePaths, files, fontFileUrl, fontFileName, fontFilePath, fontFile, selectedFinishing, customFont, customColor, sets, studLength, spacerStandoffDistance, acrylicFront, vinylWhite]);
-  (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__["default"])([colorRef, fontRef], () => {
-    if (!openColor && !openFont) return;
-    setOpenColor(false);
-    setOpenFont(false);
-  });
+  }, [letters, comments, font, acrylicChannelThickness, selectedMounting, waterproof, color, usdPrice, cadPrice, selectedLetterHeight, fileUrls, fileNames, filePaths, files, fontFileUrl, fontFileName, fontFilePath, fontFile, customColor, sets, studLength, spacerStandoffDistance, acrylicFront, vinylWhite, ledLightColor, usdSinglePrice, cadSinglePrice]);
+  if (acrylicFront === '3M Vinyl') {
+    (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__["default"])([colorRef, fontRef, vinyl3MRef], () => {
+      if (!openColor && !openFont && !openVinylWhite) return;
+      setOpenColor(false);
+      setOpenFont(false);
+      setOpenVinylWhite(false);
+    });
+  } else {
+    (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__["default"])([colorRef, fontRef], () => {
+      if (!openColor && !openFont) return;
+      setOpenColor(false);
+      setOpenFont(false);
+    });
+  }
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     color?.name != 'Custom Color' && setCustomColor('');
     font != 'Custom font' && setFontFileUrl('');
@@ -5112,6 +5143,10 @@ function Letters({
     openFont: openFont,
     setOpenFont: setOpenFont,
     setOpenColor: setOpenColor,
+    close: () => {
+      setOpenColor(false);
+      setOpenVinylWhite(false);
+    },
     handleSelectFont: handleSelectFont
   }), font == 'Custom font' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFont__WEBPACK_IMPORTED_MODULE_4__["default"], {
     setFontFilePath: setFontFilePath,
@@ -5124,7 +5159,7 @@ function Letters({
     title: "Acrylic Thickness",
     value: acrylicChannelThickness,
     onChange: handleOnChangeThickness,
-    options: _options__WEBPACK_IMPORTED_MODULE_10__.acrylicChannelThicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _options__WEBPACK_IMPORTED_MODULE_11__.acrylicChannelThicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: thickness.value,
       selected: thickness.value === acrylicChannelThickness
     }, thickness.value)),
@@ -5137,36 +5172,36 @@ function Letters({
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Acrylic Front",
     onChange: handleOnChangeWhite,
-    options: _options__WEBPACK_IMPORTED_MODULE_10__.acrylicFrontOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _options__WEBPACK_IMPORTED_MODULE_11__.acrylicFrontOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
       selected: option == acrylicFront
     }, option.option)),
     value: acrylicFront
   }), acrylicFront === '3M Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "px-[1px] relative",
-    ref: acrylicColorRef
+    ref: vinyl3MRef
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
   }, "3M VINYL"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: `flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${vinylWhite.name ? 'text-black' : 'text-[#dddddd]'}`,
     onClick: () => {
-      setOpenAcrylicCover(prev => !prev);
+      setOpenVinylWhite(prev => !prev);
       setOpenColor(false);
       setOpenFont(false);
     }
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "rounded-full w-[18px] h-[18px] border mr-2",
     style: {
-      backgroundColor: vinylWhite.color
+      background: vinylWhite?.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : vinylWhite?.color
     }
-  }), vinylWhite.name === '' ? 'CHOOSE OPTION' : vinylWhite.name), openAcrylicCover && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }), vinylWhite.name === '' ? 'CHOOSE OPTION' : vinylWhite.name), openVinylWhite && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
-  }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_9__.translucentGraphicFilms.map(color => {
+  }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_10__.translucentGraphicFilms.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
       onClick: () => {
         setVinylWhite(color);
-        setOpenAcrylicCover(false);
+        setOpenVinylWhite(false);
       }
     }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
       className: "w-[18px] h-[18px] inline-block rounded-full border",
@@ -5179,24 +5214,25 @@ function Letters({
     ref: colorRef
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
-  }, "Color"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: `flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${color.name ? 'text-black' : 'text-[#dddddd]'}`,
+  }, "Return Paint Color"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: `flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${color ? 'text-black' : 'text-[#dddddd]'}`,
     onClick: () => {
       setOpenColor(prev => !prev);
       setOpenFont(false);
+      setOpenVinylWhite(false);
     }
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "rounded-full w-[18px] h-[18px] border mr-2",
     style: {
-      background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
+      background: color == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_10__.colorOptions.find(option => option.name === color).color
     }
-  }), color.name === '' ? 'CHOOSE OPTION' : color.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }), color === '' ? 'CHOOSE OPTION' : color), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
-  }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_9__.colorOptions.map(color => {
+  }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_10__.colorOptions.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
       onClick: () => {
-        setColor(color);
+        setColor(color.name);
         setOpenColor(false);
       }
     }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
@@ -5206,17 +5242,17 @@ function Letters({
       }
     }), color.name);
   }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "Finishing Options",
-    onChange: handleChangeFinishing,
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.finishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      value: finishing.name,
-      selected: finishing.name === selectedFinishing
-    }, finishing.name)),
-    value: selectedFinishing
+    title: "LED Light Color",
+    onChange: handleOnChangeLedLight,
+    options: _metal_channel_metalChannelOptions__WEBPACK_IMPORTED_MODULE_9__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: color,
+      selected: color == ledLightColor
+    }, color)),
+    value: ledLightColor
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Environment",
     onChange: handleOnChangeWaterproof,
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
       selected: option.option == waterproof
     }, option.option)),
@@ -5224,12 +5260,12 @@ function Letters({
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Mounting Options",
     onChange: handleOnChangeMount,
-    options: mountingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: mountingDefaultOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.mounting_option,
       selected: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: selectedMounting
-  }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -5245,7 +5281,7 @@ function Letters({
       selected: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
-  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_MOUNT && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_MOUNT && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -5259,11 +5295,11 @@ function Letters({
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.setOptions,
     value: sets,
     onlyValue: true
-  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-xs text-[#9F9F9F] mb-4"
   }, "*Note: The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid"
-  }, color?.name == 'Custom Color' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, color == 'Custom Color' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "px-[1px] col-span-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
@@ -5315,11 +5351,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UploadFiles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../UploadFiles */ "./src/scripts/UploadFiles.js");
 /* harmony import */ var _utils_ClickOutside__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../utils/ClickOutside */ "./src/scripts/utils/ClickOutside.js");
 /* harmony import */ var _utils_ConvertJson__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../utils/ConvertJson */ "./src/scripts/utils/ConvertJson.js");
-/* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
-/* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
-/* harmony import */ var _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../utils/ColorOptions */ "./src/scripts/utils/ColorOptions.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
-/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
+/* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
+/* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
+/* harmony import */ var _metal_channel_metalChannelOptions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../metal-channel/metalChannelOptions */ "./src/scripts/products/metal-channel/metalChannelOptions.js");
+/* harmony import */ var _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../utils/ColorOptions */ "./src/scripts/utils/ColorOptions.js");
+/* harmony import */ var _options__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../options */ "./src/scripts/products/acrylic-channel/AcrylicFrontLit/options.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
 
 
 
@@ -5331,20 +5369,133 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const NovaSingleOptions = NovaQuote.single_quote_options;
+
+
+const waterProofOptions = [{
+  option: _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.INDOOR_NOT_WATERPROOF
+}];
+const mountingDefaultOptions = [{
+  mounting_option: _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT
+}, {
+  mounting_option: _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER
+}];
+const maxWidthOptions = Array.from({
+  length: 43
+}, (_, index) => {
+  const val = 1 + index;
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    key: index,
+    value: val
+  }, val, "\"");
+});
 function Logo({
   item
 }) {
-  var _item$mounting, _item$studLength, _item$spacerStandoffD, _item$acrylicThicknes, _item$width, _item$height, _item$usdPrice, _item$cadPrice, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$sets, _item$color, _item$customColor, _item$finishing, _item$comments, _item$waterproof;
+  var _item$width, _item$height, _item$comments, _item$acrylicReturnPa, _item$waterproof, _item$acrylicChannelT, _item$ledLightColor, _item$acrylicFront, _item$vinylWhite, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$usdPrice, _item$cadPrice, _item$usdDiscount, _item$cadDiscount, _item$usdSinglePrice, _item$usdSinglePrice2, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
   const {
     signage,
     setSignage,
     setMissing
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_8__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_10__.useAppContext)();
+  const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$width = item.width) !== null && _item$width !== void 0 ? _item$width : '');
+  const [height, setHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$height = item.height) !== null && _item$height !== void 0 ? _item$height : '');
+  const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
+  const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicReturnPa = item.acrylicReturnPaintColor) !== null && _item$acrylicReturnPa !== void 0 ? _item$acrylicReturnPa : 'Black');
+  const [openColor, setOpenColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : '');
+  const [acrylicChannelThickness, setAcrylicChannelThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicChannelT = item.acrylicChannelThickness) !== null && _item$acrylicChannelT !== void 0 ? _item$acrylicChannelT : '1.2"');
+  const [ledLightColor, setLedLightColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$ledLightColor = item.ledLightColor) !== null && _item$ledLightColor !== void 0 ? _item$ledLightColor : '6500K White');
+  const handleOnChangeLedLight = e => setLedLightColor(e.target.value);
+  const [acrylicFront, setAcrylicFront] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicFront = item.acrylicFront) !== null && _item$acrylicFront !== void 0 ? _item$acrylicFront : 'White');
+  const [openVinylWhite, setOpenVinylWhite] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const [vinylWhite, setVinylWhite] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$vinylWhite = item.vinylWhite) !== null && _item$vinylWhite !== void 0 ? _item$vinylWhite : {
+    name: '',
+    color: '',
+    code: ''
+  });
+  const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileNames = item.fileNames) !== null && _item$fileNames !== void 0 ? _item$fileNames : []);
+  const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrls = item.fileUrls) !== null && _item$fileUrls !== void 0 ? _item$fileUrls : []);
+  const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$filePaths = item.filePaths) !== null && _item$filePaths !== void 0 ? _item$filePaths : []);
+  const [files, setFiles] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$files = item.files) !== null && _item$files !== void 0 ? _item$files : []);
+  const [customColor, setCustomColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$customColor = item.customColor) !== null && _item$customColor !== void 0 ? _item$customColor : '');
+  const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdPrice = item.usdPrice) !== null && _item$usdPrice !== void 0 ? _item$usdPrice : 0);
+  const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadPrice = item.cadPrice) !== null && _item$cadPrice !== void 0 ? _item$cadPrice : 0);
+  const [usdDiscount, setUsdDiscount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdDiscount = item.usdDiscount) !== null && _item$usdDiscount !== void 0 ? _item$usdDiscount : 0);
+  const [cadDiscount, setCadDiscount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadDiscount = item.cadDiscount) !== null && _item$cadDiscount !== void 0 ? _item$cadDiscount : 0);
+  const [usdSinglePrice, setUsdSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdSinglePrice = item.usdSinglePrice) !== null && _item$usdSinglePrice !== void 0 ? _item$usdSinglePrice : 0);
+  const [cadSinglePrice, setCadSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdSinglePrice2 = item.usdSinglePrice) !== null && _item$usdSinglePrice2 !== void 0 ? _item$usdSinglePrice2 : 0);
   const [selectedMounting, setSelectedMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
   const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$studLength = item.studLength) !== null && _item$studLength !== void 0 ? _item$studLength : '');
-  const [spacerStandoffOptions, setSpacerStandoffOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.spacerStandoffDefaultOptions);
+  const [spacerStandoffOptions, setSpacerStandoffOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.spacerStandoffDefaultOptions);
   const [spacerStandoffDistance, setSpacerStandoffDistance] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$spacerStandoffD = item.spacerStandoffDistance) !== null && _item$spacerStandoffD !== void 0 ? _item$spacerStandoffD : '');
+  const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
+  const colorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const vinyl3MRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  function updateSignage() {
+    // Only proceed if the item to update exists in the signage array
+    if (!signage.some(sign => sign.id === item.id)) return;
+
+    // Consolidate updated properties into a single object
+    const updateDetails = {
+      comments,
+      width,
+      height,
+      acrylicChannelThickness,
+      mounting: selectedMounting,
+      waterproof,
+      acrylicReturnPaintColor: color,
+      ledLightColor,
+      usdPrice,
+      cadPrice,
+      files,
+      fileNames,
+      filePaths,
+      fileUrls,
+      vinylWhite,
+      customColor,
+      sets,
+      studLength,
+      spacerStandoffDistance,
+      acrylicFront,
+      usdSinglePrice,
+      cadSinglePrice
+    };
+    setSignage(prevSignage => prevSignage.map(sign => sign.id === item.id ? {
+      ...sign,
+      ...updateDetails
+    } : sign));
+  }
+  const handleComments = e => setComments(e.target.value);
+  const handleOnChangeSets = e => {
+    setSets(e.target.value);
+  };
+  const handleOnChangeMount = e => {
+    const target = e.target.value;
+    setSelectedMounting(target);
+    if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER || target === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT) {
+      if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT) {
+        setSpacerStandoffDistance('');
+      }
+    } else {
+      setStudLength('');
+      setSpacerStandoffDistance('');
+    }
+  };
+  const handleOnChangeWaterproof = e => setWaterproof(e.target.value);
+  const handleOnChangeThickness = e => {
+    const target = e.target.value;
+    setAcrylicChannelThickness(() => target);
+  };
+  const handleOnChangeWhite = e => {
+    const target = e.target.value;
+    setAcrylicFront(target);
+    if (target !== '3M Vinyl') {
+      setVinylWhite({
+        name: '',
+        color: ''
+      });
+    }
+  };
   const handleonChangeSpacerDistance = e => {
     setSpacerStandoffDistance(e.target.value);
   };
@@ -5375,217 +5526,32 @@ function Logo({
         setSpacerStandoffDistance(''); // Reset if the distance is invalid for these options
       }
     } else {
-      setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
+      setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
     }
-
     if (target === '') {
       setSpacerStandoffDistance(''); // Always reset if the target is empty
     }
   };
-
-  const [selectedThickness, setSelectedThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicThicknes = item.acrylicThickness) !== null && _item$acrylicThicknes !== void 0 ? _item$acrylicThicknes : '');
-  const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$width = item.width) !== null && _item$width !== void 0 ? _item$width : '');
-  const [height, setHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$height = item.height) !== null && _item$height !== void 0 ? _item$height : '');
-  const [maxWidthHeight, setMaxWidthHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(43);
-  const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdPrice = item.usdPrice) !== null && _item$usdPrice !== void 0 ? _item$usdPrice : 0);
-  const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadPrice = item.cadPrice) !== null && _item$cadPrice !== void 0 ? _item$cadPrice : 0);
-  const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileNames = item.fileNames) !== null && _item$fileNames !== void 0 ? _item$fileNames : []);
-  const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrls = item.fileUrls) !== null && _item$fileUrls !== void 0 ? _item$fileUrls : []);
-  const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$filePaths = item.filePaths) !== null && _item$filePaths !== void 0 ? _item$filePaths : []);
-  const [files, setFiles] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$files = item.files) !== null && _item$files !== void 0 ? _item$files : []);
-  const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
-  const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$color = item.color) !== null && _item$color !== void 0 ? _item$color : {});
-  const [openColor, setOpenColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [customColor, setCustomColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$customColor = item.customColor) !== null && _item$customColor !== void 0 ? _item$customColor : '');
-  const colorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  const [selectedFinishing, setSelectedFinishing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$finishing = item.finishing) !== null && _item$finishing !== void 0 ? _item$finishing : '');
-  const [maxWidthOptions, setMaxWidthOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(Array.from({
-    length: maxWidthHeight
-  }, (_, index) => {
-    const val = 1 + index;
-    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      key: index,
-      value: val
-    }, val, "\"");
-  }));
-  const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
-  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : '');
-  const [mountingOptions, setMountingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.mountingDefaultOptions);
-  const handleOnChangeMount = e => {
-    const target = e.target.value;
-    setSelectedMounting(target);
-    if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER || target === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_MOUNT) {
-      if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_MOUNT) {
-        setSpacerStandoffDistance('');
-      }
-    } else {
-      setStudLength('');
-      setSpacerStandoffDistance('');
-    }
-  };
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    let newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.mountingDefaultOptions;
-    if (selectedThickness?.value === '3') {
-      if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_MOUNT || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
-        setSelectedMounting('');
-        setStudLength('');
-        setSpacerStandoffDistance('');
-      }
-      newMountingOptions = newMountingOptions.filter(option => option.mounting_option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_MOUNT && option.mounting_option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER);
-    }
-    if (waterproof === 'Outdoor (Waterproof)') {
-      if (selectedMounting === 'Double-sided tape') {
-        setSelectedMounting('');
-      }
-      newMountingOptions = newMountingOptions.filter(option => option.mounting_option !== 'Double-sided tape');
-    }
-    setMountingOptions(newMountingOptions);
-    setMaxWidthOptions(() => Array.from({
-      length: parseInt(maxWidthHeight) + 1
-    }, (_, index) => {
-      const val = 1 + index;
-      return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-        key: index,
-        value: val
-      }, val, "\"");
-    }));
-  }, [selectedThickness, selectedMounting, waterproof, maxWidthHeight, setSelectedMounting, setMountingOptions]);
-  function handleComments(e) {
-    setComments(e.target.value);
-  }
-  const handleOnChangeThickness = e => {
-    const target = e.target.value;
-    const selected = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.thicknessOptions.filter(option => option.value === target);
-    setSelectedThickness(() => selected[0]);
-    if (parseInt(target) === 3) {
-      if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_MOUNT || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
-        setSelectedMounting('');
-        setStudLength('');
-        setSpacerStandoffDistance('');
-      }
-    }
-  };
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (parseInt(selectedThickness?.value) > 3) {
-      setMaxWidthHeight(42);
-    } else {
-      setMaxWidthHeight(23);
-      if (height > 25) {
-        setHeight('');
-      }
-      if (width > 25) {
-        setWidth('');
-      }
-    }
-  }, [selectedThickness]);
-  const handleChangeFinishing = e => {
-    setSelectedFinishing(e.target.value);
-  };
-  const handleOnChangeSets = e => {
-    setSets(e.target.value);
-  };
-  function updateSignage() {
-    if (!signage.some(sign => sign.id === item.id)) return;
-    const updatedSignage = signage.map(sign => {
-      if (sign.id === item.id) {
-        return {
-          ...sign,
-          comments,
-          acrylicThickness: selectedThickness,
-          mounting: selectedMounting,
-          waterproof,
-          width,
-          height,
-          usdPrice,
-          cadPrice,
-          finishing: selectedFinishing,
-          files,
-          fileNames,
-          filePaths,
-          fileUrls,
-          sets,
-          color,
-          customColor,
-          studLength,
-          spacerStandoffDistance
-        };
-      } else {
-        return sign;
-      }
-    });
-    setSignage(() => updatedSignage);
-  }
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    updateSignage();
-  }, [comments, selectedThickness, selectedMounting, waterproof, width, height, usdPrice, cadPrice, fileUrls, fileNames, selectedFinishing, files, sets, filePaths, color, customColor, studLength, spacerStandoffDistance]);
-  const [logoPricingObject, setlogoPricingObject] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    async function fetchLogoPricing() {
-      try {
-        const response = await fetch(NovaQuote.logo_pricing_api + item.product);
-        const data = await response.json();
-        setlogoPricingObject(data);
-      } catch (error) {
-        console.error('Error fetching logo pricing:', error);
-      }
-    }
-    fetchLogoPricing();
-  }, []);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (width && height && selectedThickness && waterproof && logoPricingObject !== null) {
-      const logoPricing = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_5__.getLogoPricingTablebyThickness)(`${selectedThickness.value}mm`, logoPricingObject);
-      if (logoPricing !== undefined) {
-        const logoPricingTable = logoPricing !== undefined ? (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_4__["default"])(logoPricing) : [];
-        const computed = logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
-        let multiplier = 0;
-        if (waterproof) {
-          multiplier = waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
-        }
-        let total = parseFloat((computed * multiplier).toFixed(2));
-        total *= selectedFinishing === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.GLOSS_FINISH ? 1.1 : 1;
-        if (color?.name === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.CLEAR_COLOR) {
-          total *= 0.9;
-        }
-        if (color?.name === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.FROSTED_CLEAR_COLOR) {
-          total *= 0.95;
-        }
-        if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
-          const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_5__.spacerPricing)(total);
-          total += spacer;
-        }
-        total *= sets;
-        setUsdPrice(parseFloat(total.toFixed(2)));
-        setCadPrice((total * parseFloat(_utils_defaults__WEBPACK_IMPORTED_MODULE_9__.EXCHANGE_RATE)).toFixed(2));
-      } else {
-        setUsdPrice(0);
-        setCadPrice(0);
-      }
-    } else {
-      setUsdPrice(0);
-      setCadPrice(0);
-    }
-  }, [width, height, selectedThickness, waterproof, selectedFinishing, sets, color, selectedMounting]);
   const checkAndAddMissingFields = () => {
     const missingFields = [];
-    if (!selectedThickness) missingFields.push('Select Acrylic Thickness');
+    if (!acrylicChannelThickness) missingFields.push('Select Acrylic Thickness');
     if (!width) missingFields.push('Select Logo Width');
     if (!height) missingFields.push('Select Logo Height');
+    if (!color) missingFields.push('Select Return Paint Color');
+    if (color === 'Custom Color' && !customColor) {
+      missingFields.push('Add the Pantone color code of your custom color.');
+    }
     if (!waterproof) missingFields.push('Select Environment');
     if (!selectedMounting) missingFields.push('Select Mounting');
-    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT) {
+      if (!studLength) missingFields.push('Select Stud Length');
+    }
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER) {
       if (!studLength) missingFields.push('Select Stud Length');
       if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
-    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_MOUNT) {
-      if (!studLength) missingFields.push('Select Stud Length');
-    }
-    if (!selectedFinishing) missingFields.push('Select Finishing');
-    if (!color.name) missingFields.push('Select Color');
-    if (color?.name === 'Custom Color' && !customColor) {
-      missingFields.push('Add the Pantone color code of your custom color.');
-    }
+    if (!acrylicFront) missingFields.push('Select Acrylic Front');
     if (!sets) missingFields.push('Select Quantity');
-    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
         const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
@@ -5614,28 +5580,84 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [width, height, selectedThickness, comments, selectedMounting, waterproof, fileUrls, fileNames, filePaths, files, selectedFinishing, sets, studLength, spacerStandoffDistance]);
-  (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_3__["default"])([colorRef], () => {
-    if (!openColor) return;
-    setOpenColor(false);
-  });
+  }, [color, width, height, acrylicChannelThickness, selectedMounting, waterproof, fileUrls, customColor, sets, studLength, spacerStandoffDistance]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    updateSignage();
+  }, [comments, width, height, acrylicChannelThickness, selectedMounting, waterproof, color, usdPrice, cadPrice, fileUrls, fileNames, filePaths, files, customColor, sets, studLength, spacerStandoffDistance, acrylicFront, vinylWhite, ledLightColor, usdSinglePrice, cadSinglePrice]);
+  if (acrylicFront === '3M Vinyl') {
+    (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_3__["default"])([colorRef, vinyl3MRef], () => {
+      if (!openColor && !openVinylWhite) return;
+      setOpenColor(false);
+      setOpenVinylWhite(false);
+    });
+  } else {
+    (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_3__["default"])([colorRef], () => {
+      if (!openColor) return;
+      setOpenColor(false);
+    });
+  }
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     color?.name != 'Custom Color' && setCustomColor('');
   }, [color]);
+  const computePricing = () => {
+    var _tempTotal, _totalWithDiscount$to;
+    if (!width || !height) return 0;
+    const perInch = 0.2;
+    let tempTotal = parseInt(width) * parseInt(height) * perInch;
+    if (acrylicFront === '3M Vinyl') {
+      tempTotal *= 1.1;
+    }
+    if (acrylicFront === 'UV Printed') {
+      tempTotal *= 1.15;
+    }
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER) {
+      const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.spacerPricing)(tempTotal);
+      tempTotal += parseFloat(spacer.toFixed(2));
+    }
+
+    /* minimum price */
+    tempTotal = tempTotal > 50 ? tempTotal : 50;
+    let total = tempTotal * parseInt(sets);
+    const discount = 1;
+    let totalWithDiscount = total * discount;
+    let discountPrice = total - totalWithDiscount;
+    return {
+      singlePrice: (_tempTotal = tempTotal) !== null && _tempTotal !== void 0 ? _tempTotal : 0,
+      total: (_totalWithDiscount$to = totalWithDiscount?.toFixed(2)) !== null && _totalWithDiscount$to !== void 0 ? _totalWithDiscount$to : 0,
+      totalWithoutDiscount: total,
+      discount: discountPrice
+    };
+  };
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    const {
+      singlePrice,
+      total,
+      discount
+    } = computePricing();
+    if (total && singlePrice) {
+      setUsdPrice(total);
+      setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.EXCHANGE_RATE).toFixed(2));
+      setUsdSinglePrice(singlePrice);
+      setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.EXCHANGE_RATE).toFixed(2));
+      setUsdDiscount(discount.toFixed(2));
+      setCadDiscount((discount * _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.EXCHANGE_RATE).toFixed(2));
+    }
+  }, [width, height, acrylicFront, selectedMounting, sets]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "py-4 mb-4"
+    clasName: "py-4 my-4"
   }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "font-title"
   }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Acrylic Thickness",
-    value: selectedThickness?.value,
+    value: acrylicChannelThickness,
     onChange: handleOnChangeThickness,
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.thicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _options__WEBPACK_IMPORTED_MODULE_9__.acrylicChannelThicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: thickness.value,
-      selected: thickness === selectedThickness
-    }, thickness.thickness))
+      selected: thickness.value === acrylicChannelThickness
+    }, thickness.value)),
+    onlyValue: true
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Logo Width",
     value: width,
@@ -5646,28 +5668,68 @@ function Logo({
     value: height,
     onChange: e => setHeight(e.target.value),
     options: maxWidthOptions
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Acrylic Front",
+    onChange: handleOnChangeWhite,
+    options: _options__WEBPACK_IMPORTED_MODULE_9__.acrylicFrontOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.option,
+      selected: option == acrylicFront
+    }, option.option)),
+    value: acrylicFront
+  }), acrylicFront === '3M Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "px-[1px] relative",
-    ref: colorRef
+    ref: vinyl3MRef
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
-  }, "Color"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: `flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${color.name ? 'text-black' : 'text-[#dddddd]'}`,
+  }, "3M VINYL"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: `flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${vinylWhite.name ? 'text-black' : 'text-[#dddddd]'}`,
     onClick: () => {
-      setOpenColor(prev => !prev);
+      setOpenVinylWhite(prev => !prev);
+      setOpenColor(false);
     }
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "rounded-full w-[18px] h-[18px] border mr-2",
     style: {
-      background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
+      background: vinylWhite?.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : vinylWhite?.color
     }
-  }), color.name === '' ? 'CHOOSE OPTION' : color.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }), vinylWhite.name === '' ? 'CHOOSE OPTION' : vinylWhite.name), openVinylWhite && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
-  }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.colorOptions.map(color => {
+  }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_8__.translucentGraphicFilms.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
       onClick: () => {
-        setColor(color);
+        setVinylWhite(color);
+        setOpenVinylWhite(false);
+      }
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: "w-[18px] h-[18px] inline-block rounded-full border",
+      style: {
+        background: color?.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color?.color
+      }
+    }), color?.name);
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "px-[1px] relative",
+    ref: colorRef
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
+  }, "Return Paint Color"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: `flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${color ? 'text-black' : 'text-[#dddddd]'}`,
+    onClick: () => {
+      setOpenColor(prev => !prev);
+      setOpenVinylWhite(false);
+    }
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "rounded-full w-[18px] h-[18px] border mr-2",
+    style: {
+      background: color == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_8__.colorOptions.find(option => option.name === color).color
+    }
+  }), color === '' ? 'CHOOSE OPTION' : color), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+  }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_8__.colorOptions.map(color => {
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
+      onClick: () => {
+        setColor(color.name);
         setOpenColor(false);
       }
     }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
@@ -5677,17 +5739,17 @@ function Logo({
       }
     }), color.name);
   }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "Finishing Options",
-    onChange: handleChangeFinishing,
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.finishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      value: finishing.name,
-      selected: finishing.name === selectedFinishing
-    }, finishing.name)),
-    value: selectedFinishing
+    title: "LED Light Color",
+    onChange: handleOnChangeLedLight,
+    options: _metal_channel_metalChannelOptions__WEBPACK_IMPORTED_MODULE_7__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: color,
+      selected: color == ledLightColor
+    }, color)),
+    value: ledLightColor
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Environment",
-    onChange: e => setWaterproof(e.target.value),
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    onChange: handleOnChangeWaterproof,
+    options: waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
       selected: option.option == waterproof
     }, option.option)),
@@ -5695,15 +5757,15 @@ function Logo({
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Mounting Options",
     onChange: handleOnChangeMount,
-    options: mountingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: mountingDefaultOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.mounting_option,
       selected: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: selectedMounting
-  }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
       selected: option.value == studLength
     }, option.value)),
@@ -5716,10 +5778,10 @@ function Logo({
       selected: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
-  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_MOUNT && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
       selected: option.value == studLength
     }, option.value)),
@@ -5727,14 +5789,14 @@ function Logo({
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.setOptions,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.setOptions,
     value: sets,
     onlyValue: true
-  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-xs text-[#9F9F9F] mb-4"
   }, "*Note: The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid"
-  }, color?.name == 'Custom Color' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, color == 'Custom Color' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "px-[1px] col-span-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
@@ -5762,7 +5824,9 @@ function Logo({
     fileNames: fileNames,
     setFileUrls: setFileUrls,
     setFileNames: setFileNames
-  })));
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-xs text-[#9F9F9F] pt-4"
+  }, "We size the letters in proportion to your chosen font. Some uppercase/lowercase letters may appear shorter or taller than your selected height on the form to maintain visual harmony."));
 }
 
 /***/ }),
@@ -6582,7 +6646,6 @@ function Letters({
     } else {
       setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
     }
-
     if (target === '') {
       setSpacerStandoffDistance(''); // Always reset if the target is empty
     }
@@ -6770,8 +6833,10 @@ function Letters({
     fontRef: fontRef,
     openFont: openFont,
     setOpenFont: setOpenFont,
-    setOpenColor: setOpenColor,
-    handleSelectFont: handleSelectFont
+    handleSelectFont: handleSelectFont,
+    close: () => {
+      setOpenColor(false);
+    }
   }), font == 'Custom font' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFont__WEBPACK_IMPORTED_MODULE_4__["default"], {
     setFontFilePath: setFontFilePath,
     setFontFile: setFontFile,
@@ -6995,12 +7060,10 @@ function Logo({
     } else {
       setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
     }
-
     if (target === '') {
       setSpacerStandoffDistance(''); // Always reset if the target is empty
     }
   };
-
   const [selectedThickness, setSelectedThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicThicknes = item.acrylicThickness) !== null && _item$acrylicThicknes !== void 0 ? _item$acrylicThicknes : '');
   const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$width = item.width) !== null && _item$width !== void 0 ? _item$width : '');
   const [height, setHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$height = item.height) !== null && _item$height !== void 0 ? _item$height : '');
@@ -7668,12 +7731,10 @@ function Logo({
     } else {
       setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
     }
-
     if (target === '') {
       setSpacerStandoffDistance(''); // Always reset if the target is empty
     }
   };
-
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
   const handleOnChangeSets = e => {
     setSets(e.target.value);
@@ -8373,12 +8434,10 @@ const Letters = ({
     } else {
       setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
     }
-
     if (target === '') {
       setSpacerStandoffDistance(''); // Always reset if the target is empty
     }
   };
-
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
   const handleOnChangeSets = e => {
     setSets(e.target.value);
@@ -8500,7 +8559,6 @@ const Letters = ({
     setCadPrice((finalPrice * parseFloat(_utils_defaults__WEBPACK_IMPORTED_MODULE_10__.EXCHANGE_RATE)).toFixed(2));
   }, [selectedLetterHeight, selectedThickness, letters, waterproof, lettersHeight, acrylicBase, sets, font, selectedMounting, getLetterPricing // Assuming getLetterPricing is not expected to change frequently
   ]);
-
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     let newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.mountingDefaultOptions;
     if (selectedThickness?.value === '3') {
@@ -8638,7 +8696,7 @@ const Letters = ({
     openFont: openFont,
     setOpenFont: setOpenFont,
     handleSelectFont: handleSelectFont,
-    setOpenColor: () => {
+    close: () => {
       setOpenAcrylicColor(false);
     }
   }), font == 'Custom font' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFont__WEBPACK_IMPORTED_MODULE_4__["default"], {
@@ -8897,12 +8955,10 @@ function Logo({
     } else {
       setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
     }
-
     if (target === '') {
       setSpacerStandoffDistance(''); // Always reset if the target is empty
     }
   };
-
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
   const handleOnChangeSets = e => {
     setSets(e.target.value);
@@ -9483,12 +9539,10 @@ function Logo({
     } else {
       setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
     }
-
     if (target === '') {
       setSpacerStandoffDistance(''); // Always reset if the target is empty
     }
   };
-
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
   const handleOnChangeSets = e => {
     setSets(e.target.value);
@@ -10943,7 +10997,6 @@ const NeonSign = ({
       discount
     } = computePricing();
     if (total && singlePrice) {
-      console.log('pricing');
       setUsdPrice(total);
       setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.EXCHANGE_RATE).toFixed(2));
       setUsdSinglePrice(singlePrice);
@@ -11367,12 +11420,10 @@ const NeonSign = ({
     } else {
       setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
     }
-
     if (target === '') {
       setSpacerStandoffDistance(''); // Always reset if the target is empty
     }
   };
-
   const updateSignage = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(() => {
     const updatedSignage = signage.map(sign => {
       if (sign.id === item.id) {
@@ -12363,9 +12414,6 @@ const NeonColors = ({
     });
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    console.log(colors.length);
-  }, [colors]);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     getSelectedColors(selectedColors);
   }, [selectedColors]);
   const colorSelections = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -13028,12 +13076,10 @@ function Letters({
     } else {
       setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
     }
-
     if (target === '') {
       setSpacerStandoffDistance(''); // Always reset if the target is empty
     }
   };
-
   const handleOnChangeDepth = e => {
     const target = e.target.value;
     const selected = depthOptions.filter(option => option.value === target);
@@ -13132,19 +13178,20 @@ function Letters({
       }
     }
   }, [depth]);
-  (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__["default"])([colorRef, fontRef, acrylicColorRef], () => {
-    if (!openColor && !openFont && !openAcrylicCover) return;
-    setOpenColor(false);
-    setOpenFont(false);
-    setOpenAcrylicCover(false);
-  });
-  if (true) {
+  if (frontAcrylicCover === '3M Vinyl') {
+    (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__["default"])([colorRef, fontRef, acrylicColorRef], () => {
+      if (!openColor && !openFont && !openAcrylicCover) return;
+      setOpenColor(false);
+      setOpenFont(false);
+      setOpenAcrylicCover(false);
+    });
+  } else {
     (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__["default"])([colorRef, fontRef], () => {
       if (!openColor && !openFont) return;
       setOpenColor(false);
       setOpenFont(false);
     });
-  } else {}
+  }
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (letterPricing.length > 0 && selectedLetterHeight && depth) {
       const pricingDetail = letterPricing[selectedLetterHeight - 5];
@@ -13233,7 +13280,7 @@ function Letters({
     openFont: openFont,
     setOpenFont: setOpenFont,
     handleSelectFont: handleSelectFont,
-    setOpenColor: () => {
+    close: () => {
       setOpenColor(false);
       setOpenAcrylicCover(false);
     }
@@ -13615,12 +13662,10 @@ function Logo({
     } else {
       setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
     }
-
     if (target === '') {
       setSpacerStandoffDistance(''); // Always reset if the target is empty
     }
   };
-
   const handleOnChangeDepth = e => {
     const target = e.target.value;
     const selected = depthOptions.filter(option => option.value === target);
@@ -14327,12 +14372,10 @@ function Letters({
     } else {
       setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
     }
-
     if (target === '') {
       setSpacerStandoffDistance(''); // Always reset if the target is empty
     }
   };
-
   const handleOnChangeDepth = e => {
     const target = e.target.value;
     const selected = depthOptions.filter(option => option.value === target);
@@ -14431,19 +14474,20 @@ function Letters({
       }
     }
   }, [depth]);
-  (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__["default"])([colorRef, fontRef, acrylicColorRef], () => {
-    if (!openColor && !openFont && !openAcrylicCover) return;
-    setOpenColor(false);
-    setOpenFont(false);
-    setOpenAcrylicCover(false);
-  });
-  if (true) {
+  if (frontAcrylicCover === '3M Vinyl') {
+    (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__["default"])([colorRef, fontRef, acrylicColorRef], () => {
+      if (!openColor && !openFont && !openAcrylicCover) return;
+      setOpenColor(false);
+      setOpenFont(false);
+      setOpenAcrylicCover(false);
+    });
+  } else {
     (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__["default"])([colorRef, fontRef], () => {
       if (!openColor && !openFont) return;
       setOpenColor(false);
       setOpenFont(false);
     });
-  } else {}
+  }
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (letterPricing.length > 0 && selectedLetterHeight && depth) {
       const pricingDetail = letterPricing[selectedLetterHeight - 5];
@@ -14532,7 +14576,7 @@ function Letters({
     openFont: openFont,
     setOpenFont: setOpenFont,
     handleSelectFont: handleSelectFont,
-    setOpenColor: () => {
+    close: () => {
       setOpenColor(false);
       setOpenAcrylicCover(false);
     }
@@ -14895,12 +14939,10 @@ function Logo({
     } else {
       setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
     }
-
     if (target === '') {
       setSpacerStandoffDistance(''); // Always reset if the target is empty
     }
   };
-
   const handleOnChangeDepth = e => {
     const target = e.target.value;
     const selected = depthOptions.filter(option => option.value === target);
@@ -15561,12 +15603,10 @@ function Letters({
     } else {
       setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
     }
-
     if (target === '') {
       setSpacerStandoffDistance(''); // Always reset if the target is empty
     }
   };
-
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     setLetterHeightOptions(() => Array.from({
       length: parseInt(lettersHeight.max) - parseInt(lettersHeight.min) + 1
@@ -15783,7 +15823,7 @@ function Letters({
     openFont: openFont,
     setOpenFont: setOpenFont,
     handleSelectFont: handleSelectFont,
-    setOpenColor: setOpenColor
+    close: () => setOpenColor(false)
   }), font == 'Custom font' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFont__WEBPACK_IMPORTED_MODULE_4__["default"], {
     setFontFilePath: setFontFilePath,
     setFontFile: setFontFile,
@@ -15827,7 +15867,10 @@ function Letters({
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
   }, "Face & Return Color"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: `flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${color.name ? 'text-black' : 'text-[#dddddd]'}`,
-    onClick: () => setOpenColor(prev => !prev)
+    onClick: () => {
+      setOpenColor(prev => !prev);
+      setOpenFont(false);
+    }
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "rounded-full w-[18px] h-[18px] border mr-2",
     style: {
@@ -16385,12 +16428,10 @@ function Letters({
     } else {
       setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
     }
-
     if (target === '') {
       setSpacerStandoffDistance(''); // Always reset if the target is empty
     }
   };
-
   const handleOnChangeDepth = e => {
     const target = e.target.value;
     const selected = _metalChannelOptions__WEBPACK_IMPORTED_MODULE_9__.frontBackdepthOptions.filter(option => option.value === target);
@@ -16546,19 +16587,20 @@ function Letters({
       }
     }
   }, [depth]);
-  (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__["default"])([colorRef, fontRef, acrylicColorRef], () => {
-    if (!openColor && !openFont && !openAcrylicCover) return;
-    setOpenColor(false);
-    setOpenFont(false);
-    setOpenAcrylicCover(false);
-  });
-  if (true) {
+  if (frontAcrylicCover === '3M Vinyl') {
+    (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__["default"])([colorRef, fontRef, acrylicColorRef], () => {
+      if (!openColor && !openFont && !openAcrylicCover) return;
+      setOpenColor(false);
+      setOpenFont(false);
+      setOpenAcrylicCover(false);
+    });
+  } else {
     (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__["default"])([colorRef, fontRef], () => {
       if (!openColor && !openFont) return;
       setOpenColor(false);
       setOpenFont(false);
     });
-  } else {}
+  }
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     color?.name != 'Custom Color' && setCustomColor('');
     font != 'Custom font' && setFontFileUrl('');
@@ -16601,7 +16643,7 @@ function Letters({
     openFont: openFont,
     setOpenFont: setOpenFont,
     handleSelectFont: handleSelectFont,
-    setOpenColor: () => {
+    close: () => {
       setOpenColor(false);
       setOpenAcrylicCover(false);
     }
@@ -17226,12 +17268,10 @@ function Letters({
     } else {
       setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
     }
-
     if (target === '') {
       setSpacerStandoffDistance(''); // Always reset if the target is empty
     }
   };
-
   const handleOnChangeDepth = e => {
     const target = e.target.value;
     const selected = _metalChannelOptions__WEBPACK_IMPORTED_MODULE_9__.depthOptions.filter(option => option.value === target);
@@ -17380,12 +17420,20 @@ function Letters({
       }));
     }
   }, [depth]);
-  (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__["default"])([colorRef, fontRef, acrylicColorRef], () => {
-    if (!openColor && !openFont && !openAcrylicCover) return;
-    setOpenColor(false);
-    setOpenFont(false);
-    setOpenAcrylicCover(false);
-  });
+  if (frontAcrylicCover === '3M Vinyl') {
+    (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__["default"])([colorRef, fontRef, acrylicColorRef], () => {
+      if (!openColor && !openFont && !openAcrylicCover) return;
+      setOpenColor(false);
+      setOpenFont(false);
+      setOpenAcrylicCover(false);
+    });
+  } else {
+    (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__["default"])([colorRef, fontRef], () => {
+      if (!openColor && !openFont) return;
+      setOpenColor(false);
+      setOpenFont(false);
+    });
+  }
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     color?.name != 'Custom Color' && setCustomColor('');
     font != 'Custom font' && setFontFileUrl('');
@@ -17428,7 +17476,7 @@ function Letters({
     openFont: openFont,
     setOpenFont: setOpenFont,
     handleSelectFont: handleSelectFont,
-    setOpenColor: () => {
+    close: () => {
       setOpenColor(false);
       setOpenAcrylicCover(false);
     }
@@ -17977,12 +18025,10 @@ function Letters({
     } else {
       setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
     }
-
     if (target === '') {
       setSpacerStandoffDistance(''); // Always reset if the target is empty
     }
   };
-
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
   const handleOnChangeSets = e => {
     setSets(e.target.value);
@@ -18333,7 +18379,7 @@ function Letters({
     openFont: openFont,
     setOpenFont: setOpenFont,
     handleSelectFont: handleSelectFont,
-    setOpenColor: setOpenColor
+    close: () => setOpenColor(false)
   }), font == 'Custom font' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFont__WEBPACK_IMPORTED_MODULE_4__["default"], {
     setFontFilePath: setFontFilePath,
     setFontFile: setFontFile,
@@ -18385,7 +18431,10 @@ function Letters({
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
   }, "Painted Color"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: `flex px-2 items-center select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${color.name ? 'text-black' : 'text-[#dddddd]'}`,
-    onClick: () => setOpenColor(prev => !prev)
+    onClick: () => {
+      setOpenColor(prev => !prev);
+      setOpenFont(false);
+    }
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "rounded-full w-[18px] h-[18px] border mr-2",
     style: {
@@ -18399,6 +18448,7 @@ function Letters({
       onClick: () => {
         setColor(color);
         setOpenColor(false);
+        setOpenFont(false);
       }
     }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
       className: "w-[18px] h-[18px] inline-block rounded-full border",
@@ -18598,12 +18648,10 @@ function Logo({
     } else {
       setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
     }
-
     if (target === '') {
       setSpacerStandoffDistance(''); // Always reset if the target is empty
     }
   };
-
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
   const handleOnChangeSets = e => {
     setSets(e.target.value);
@@ -19261,12 +19309,10 @@ function Letters({
     } else {
       setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
     }
-
     if (target === '') {
       setSpacerStandoffDistance(''); // Always reset if the target is empty
     }
   };
-
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
   const handleOnChangeSets = e => {
     setSets(e.target.value);
@@ -19599,9 +19645,11 @@ function Letters({
     font: font,
     fontRef: fontRef,
     openFont: openFont,
-    setOpenColor: setOpenColor,
     setOpenFont: setOpenFont,
-    handleSelectFont: handleSelectFont
+    handleSelectFont: handleSelectFont,
+    close: () => {
+      setOpenColor(false);
+    }
   }), font == 'Custom font' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFont__WEBPACK_IMPORTED_MODULE_4__["default"], {
     setFontFilePath: setFontFilePath,
     setFontFile: setFontFile,
@@ -19850,12 +19898,10 @@ function Logo({
     } else {
       setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
     }
-
     if (target === '') {
       setSpacerStandoffDistance(''); // Always reset if the target is empty
     }
   };
-
   const colorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const [logoPricingObject, setlogoPricingObject] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
@@ -20485,12 +20531,10 @@ function Letters({
     } else {
       setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
     }
-
     if (target === '') {
       setSpacerStandoffDistance(''); // Always reset if the target is empty
     }
   };
-
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
   const handleOnChangeSets = e => {
     setSets(e.target.value);
@@ -20864,7 +20908,7 @@ function Letters({
     openFont: openFont,
     setOpenFont: setOpenFont,
     handleSelectFont: handleSelectFont,
-    setOpenColor: setOpenColor
+    close: () => setOpenColor(false)
   }), font == 'Custom font' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFont__WEBPACK_IMPORTED_MODULE_4__["default"], {
     setFontFilePath: setFontFilePath,
     setFontFile: setFontFile,
@@ -21149,12 +21193,10 @@ function Logo({
     } else {
       setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
     }
-
     if (target === '') {
       setSpacerStandoffDistance(''); // Always reset if the target is empty
     }
   };
-
   const handleOnChangeWaterproof = e => setWaterproof(e.target.value);
   const handelMetalFinishChange = e => {
     const value = e.target.value;
@@ -21967,12 +22009,10 @@ function Letters({
     } else {
       setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
     }
-
     if (target === '') {
       setSpacerStandoffDistance(''); // Always reset if the target is empty
     }
   };
-
   const [customColor, setCustomColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$customColor = item.customColor) !== null && _item$customColor !== void 0 ? _item$customColor : '');
   const [selectedLetterHeight, setSelectedLetterHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letterHeight = item.letterHeight) !== null && _item$letterHeight !== void 0 ? _item$letterHeight : '');
   const [metalLaminate, setMetalLaminate] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$metalLaminate = item.metalLaminate) !== null && _item$metalLaminate !== void 0 ? _item$metalLaminate : '');
@@ -22302,7 +22342,7 @@ function Letters({
     openFont: openFont,
     setOpenFont: setOpenFont,
     handleSelectFont: handleSelectFont,
-    setOpenColor: setOpenColor
+    close: () => setOpenColor(false)
   }), font == 'Custom font' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFont__WEBPACK_IMPORTED_MODULE_4__["default"], {
     setFontFilePath: setFontFilePath,
     setFontFile: setFontFile,
@@ -22338,7 +22378,10 @@ function Letters({
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
   }, "PVC BASE COLOR"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: `flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${pvcBaseColor?.name ? 'text-black' : 'text-[#dddddd]'}`,
-    onClick: () => setOpenColor(prev => !prev)
+    onClick: () => {
+      setOpenColor(prev => !prev);
+      setOpenFont(false);
+    }
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "rounded-full w-[18px] h-[18px] border mr-2",
     style: {
@@ -22542,12 +22585,10 @@ function Logo({
     } else {
       setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
     }
-
     if (target === '') {
       setSpacerStandoffDistance(''); // Always reset if the target is empty
     }
   };
-
   const [metalLaminate, setMetalLaminate] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$metalLaminate = item.metalLaminate) !== null && _item$metalLaminate !== void 0 ? _item$metalLaminate : '');
   const handleChangeMetalLaminate = e => {
     setMetalLaminate(e.target.value);
@@ -23197,12 +23238,10 @@ function Letters({
     } else {
       setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
     }
-
     if (target === '') {
       setSpacerStandoffDistance(''); // Always reset if the target is empty
     }
   };
-
   const [customColor, setCustomColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$customColor = item.customColor) !== null && _item$customColor !== void 0 ? _item$customColor : '');
   const [selectedLetterHeight, setSelectedLetterHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letterHeight = item.letterHeight) !== null && _item$letterHeight !== void 0 ? _item$letterHeight : '');
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
@@ -23522,7 +23561,7 @@ function Letters({
     openFont: openFont,
     setOpenFont: setOpenFont,
     handleSelectFont: handleSelectFont,
-    setOpenColor: setOpenColor
+    close: () => setOpenColor(false)
   }), font == 'Custom font' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFont__WEBPACK_IMPORTED_MODULE_4__["default"], {
     setFontFilePath: setFontFilePath,
     setFontFile: setFontFile,
@@ -23550,7 +23589,10 @@ function Letters({
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
   }, "Color"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: `flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${color.name ? 'text-black' : 'text-[#dddddd]'}`,
-    onClick: () => setOpenColor(prev => !prev)
+    onClick: () => {
+      setOpenColor(prev => !prev);
+      setOpenFont(false);
+    }
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "rounded-full w-[18px] h-[18px] border mr-2",
     style: {
@@ -23754,12 +23796,10 @@ function Logo({
     } else {
       setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
     }
-
     if (target === '') {
       setSpacerStandoffDistance(''); // Always reset if the target is empty
     }
   };
-
   const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileNames = item.fileNames) !== null && _item$fileNames !== void 0 ? _item$fileNames : []);
   const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrls = item.fileUrls) !== null && _item$fileUrls !== void 0 ? _item$fileUrls : []);
   const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$filePaths = item.filePaths) !== null && _item$filePaths !== void 0 ? _item$filePaths : []);
@@ -24345,12 +24385,10 @@ function Logo({
     } else {
       setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
     }
-
     if (target === '') {
       setSpacerStandoffDistance(''); // Always reset if the target is empty
     }
   };
-
   const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileNames = item.fileNames) !== null && _item$fileNames !== void 0 ? _item$fileNames : []);
   const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrls = item.fileUrls) !== null && _item$fileUrls !== void 0 ? _item$fileUrls : []);
   const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$filePaths = item.filePaths) !== null && _item$filePaths !== void 0 ? _item$filePaths : []);
@@ -25433,7 +25471,6 @@ const processQuote = async formData => {
     return 'error'; // Return 'error' in case of an exception
   }
 };
-
 const SignageCount = (signage, type) => signage.filter(sign => sign.type === type).length;
 
 
@@ -25603,6 +25640,40 @@ const arrayRange = (start, stop, step, inches = true) => Array.from({
 
 /***/ }),
 
+/***/ "./src/scripts/utils/TooltipText.js":
+/*!******************************************!*\
+  !*** ./src/scripts/utils/TooltipText.js ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _radix_ui_react_tooltip__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @radix-ui/react-tooltip */ "./node_modules/@radix-ui/react-tooltip/dist/index.mjs");
+
+
+
+const TooltipText = ({
+  text,
+  children
+}) => {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_tooltip__WEBPACK_IMPORTED_MODULE_1__.Provider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_tooltip__WEBPACK_IMPORTED_MODULE_1__.Root, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_tooltip__WEBPACK_IMPORTED_MODULE_1__.Trigger, {
+    asChild: true
+  }, children), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_tooltip__WEBPACK_IMPORTED_MODULE_1__.Portal, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_tooltip__WEBPACK_IMPORTED_MODULE_1__.Content, {
+    className: "data-[state=delayed-open]:data-[side=top]:animate-slideDownAndFade data-[state=delayed-open]:data-[side=right]:animate-slideLeftAndFade data-[state=delayed-open]:data-[side=left]:animate-slideRightAndFade data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade text-violet11 rounded-[4px] bg-white px-[15px] py-[10px] text-[15px] leading-none shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] will-change-[transform,opacity]",
+    sideOffset: 5
+  }, text, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_tooltip__WEBPACK_IMPORTED_MODULE_1__.Arrow, {
+    className: "fill-white"
+  })))));
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (TooltipText);
+
+/***/ }),
+
 /***/ "./src/scripts/utils/allAttributes.js":
 /*!********************************************!*\
   !*** ./src/scripts/utils/allAttributes.js ***!
@@ -25655,6 +25726,12 @@ const allAttributes = item => [{
   key: item.letterHeight,
   label: 'LETTER HEIGHT'
 }, {
+  key: item.width,
+  label: 'LOGO WIDTH'
+}, {
+  key: item.height,
+  label: 'LOGO HEIGHT'
+}, {
   key: item.acrylicFront,
   label: 'ACRYLIC FRONT'
 }, {
@@ -25666,12 +25743,6 @@ const allAttributes = item => [{
 }, {
   key: item.faceReturnColor?.name,
   label: 'FACE & RETURN COLOR'
-}, {
-  key: item.width,
-  label: 'LOGO WIDTH'
-}, {
-  key: item.height,
-  label: 'LOGO HEIGHT'
 }, {
   key: item.neonSignWidth,
   label: 'NEON SIGN WIDTH'
@@ -25748,9 +25819,6 @@ const allAttributes = item => [{
   key: item.returnPaintColor,
   label: 'RETURN PAINT COLOR'
 }, {
-  key: item.ledLightColor,
-  label: 'LED LIGHT COLOR'
-}, {
   key: item.acrylicReveal,
   label: 'ACRYLIC REVEAL'
 }, {
@@ -25760,6 +25828,12 @@ const allAttributes = item => [{
   key: item.vinylWhite?.name,
   label: '3M VINYL',
   isVinyl: true
+}, {
+  key: item.acrylicReturnPaintColor,
+  label: 'RETURN PAINT COLOR'
+}, {
+  key: item.ledLightColor,
+  label: 'LED LIGHT COLOR'
 }, {
   key: item.acrylicBackingOption,
   label: 'ACRYLIC BACKING OPTION'
@@ -25912,7 +25986,6 @@ const renameFolder = async (oldPath, newPath) => {
     console.error('Failed to get access token');
     return false; // indicate failure
   }
-
   const moveUrl = 'https://api.dropboxapi.com/2/files/move_v2';
   const moveParams = JSON.stringify({
     from_path: oldPath,
@@ -25941,7 +26014,6 @@ const renameFolder = async (oldPath, newPath) => {
     return false; // indicate failure
   }
 };
-
 const getRefreshToken = async () => {
   const clientId = NovaQuote.dropbox_app_key;
   const clientSecret = NovaQuote.dropbox_secret;
@@ -25979,7 +26051,6 @@ const checkAndCreateFolder = async folderPath => {
     console.error('Failed to get access token');
     return false; // indicate failure
   }
-
   try {
     let response = await fetch('https://api.dropboxapi.com/2/files/get_metadata', {
       method: 'POST',
@@ -26012,75 +26083,6 @@ const checkAndCreateFolder = async folderPath => {
     console.error('Error:', error);
   }
 };
-
-/***/ }),
-
-/***/ "./node_modules/classnames/index.js":
-/*!******************************************!*\
-  !*** ./node_modules/classnames/index.js ***!
-  \******************************************/
-/***/ ((module, exports) => {
-
-var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
-	Copyright (c) 2018 Jed Watson.
-	Licensed under the MIT License (MIT), see
-	http://jedwatson.github.io/classnames
-*/
-/* global define */
-
-(function () {
-	'use strict';
-
-	var hasOwn = {}.hasOwnProperty;
-	var nativeCodeString = '[native code]';
-
-	function classNames() {
-		var classes = [];
-
-		for (var i = 0; i < arguments.length; i++) {
-			var arg = arguments[i];
-			if (!arg) continue;
-
-			var argType = typeof arg;
-
-			if (argType === 'string' || argType === 'number') {
-				classes.push(arg);
-			} else if (Array.isArray(arg)) {
-				if (arg.length) {
-					var inner = classNames.apply(null, arg);
-					if (inner) {
-						classes.push(inner);
-					}
-				}
-			} else if (argType === 'object') {
-				if (arg.toString !== Object.prototype.toString && !arg.toString.toString().includes('[native code]')) {
-					classes.push(arg.toString());
-					continue;
-				}
-
-				for (var key in arg) {
-					if (hasOwn.call(arg, key) && arg[key]) {
-						classes.push(key);
-					}
-				}
-			}
-		}
-
-		return classes.join(' ');
-	}
-
-	if ( true && module.exports) {
-		classNames.default = classNames;
-		module.exports = classNames;
-	} else if (true) {
-		// register as 'classnames', consistent with npm package name
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = (function () {
-			return classNames;
-		}).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
-		__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	} else {}
-}());
-
 
 /***/ }),
 
@@ -26569,7 +26571,9 @@ if (false) {} else {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   RemoveScrollBar: () => (/* binding */ RemoveScrollBar)
+/* harmony export */   RemoveScrollBar: () => (/* binding */ RemoveScrollBar),
+/* harmony export */   lockAttribute: () => (/* binding */ lockAttribute),
+/* harmony export */   useLockAttribute: () => (/* binding */ useLockAttribute)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
@@ -26581,26 +26585,46 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var Style = (0,react_style_singleton__WEBPACK_IMPORTED_MODULE_1__.styleSingleton)();
+var lockAttribute = 'data-scroll-locked';
 // important tip - once we measure scrollBar width and remove them
 // we could not repeat this operation
 // thus we are using style-singleton - only the first "yet correct" style will be applied.
 var getStyles = function (_a, allowRelative, gapMode, important) {
     var left = _a.left, top = _a.top, right = _a.right, gap = _a.gap;
     if (gapMode === void 0) { gapMode = 'margin'; }
-    return "\n  .".concat(_constants__WEBPACK_IMPORTED_MODULE_2__.noScrollbarsClassName, " {\n   overflow: hidden ").concat(important, ";\n   padding-right: ").concat(gap, "px ").concat(important, ";\n  }\n  body {\n    overflow: hidden ").concat(important, ";\n    overscroll-behavior: contain;\n    ").concat([
+    return "\n  .".concat(_constants__WEBPACK_IMPORTED_MODULE_2__.noScrollbarsClassName, " {\n   overflow: hidden ").concat(important, ";\n   padding-right: ").concat(gap, "px ").concat(important, ";\n  }\n  body[").concat(lockAttribute, "] {\n    overflow: hidden ").concat(important, ";\n    overscroll-behavior: contain;\n    ").concat([
         allowRelative && "position: relative ".concat(important, ";"),
         gapMode === 'margin' &&
             "\n    padding-left: ".concat(left, "px;\n    padding-top: ").concat(top, "px;\n    padding-right: ").concat(right, "px;\n    margin-left:0;\n    margin-top:0;\n    margin-right: ").concat(gap, "px ").concat(important, ";\n    "),
         gapMode === 'padding' && "padding-right: ".concat(gap, "px ").concat(important, ";"),
     ]
         .filter(Boolean)
-        .join(''), "\n  }\n  \n  .").concat(_constants__WEBPACK_IMPORTED_MODULE_2__.zeroRightClassName, " {\n    right: ").concat(gap, "px ").concat(important, ";\n  }\n  \n  .").concat(_constants__WEBPACK_IMPORTED_MODULE_2__.fullWidthClassName, " {\n    margin-right: ").concat(gap, "px ").concat(important, ";\n  }\n  \n  .").concat(_constants__WEBPACK_IMPORTED_MODULE_2__.zeroRightClassName, " .").concat(_constants__WEBPACK_IMPORTED_MODULE_2__.zeroRightClassName, " {\n    right: 0 ").concat(important, ";\n  }\n  \n  .").concat(_constants__WEBPACK_IMPORTED_MODULE_2__.fullWidthClassName, " .").concat(_constants__WEBPACK_IMPORTED_MODULE_2__.fullWidthClassName, " {\n    margin-right: 0 ").concat(important, ";\n  }\n  \n  body {\n    ").concat(_constants__WEBPACK_IMPORTED_MODULE_2__.removedBarSizeVariable, ": ").concat(gap, "px;\n  }\n");
+        .join(''), "\n  }\n  \n  .").concat(_constants__WEBPACK_IMPORTED_MODULE_2__.zeroRightClassName, " {\n    right: ").concat(gap, "px ").concat(important, ";\n  }\n  \n  .").concat(_constants__WEBPACK_IMPORTED_MODULE_2__.fullWidthClassName, " {\n    margin-right: ").concat(gap, "px ").concat(important, ";\n  }\n  \n  .").concat(_constants__WEBPACK_IMPORTED_MODULE_2__.zeroRightClassName, " .").concat(_constants__WEBPACK_IMPORTED_MODULE_2__.zeroRightClassName, " {\n    right: 0 ").concat(important, ";\n  }\n  \n  .").concat(_constants__WEBPACK_IMPORTED_MODULE_2__.fullWidthClassName, " .").concat(_constants__WEBPACK_IMPORTED_MODULE_2__.fullWidthClassName, " {\n    margin-right: 0 ").concat(important, ";\n  }\n  \n  body[").concat(lockAttribute, "] {\n    ").concat(_constants__WEBPACK_IMPORTED_MODULE_2__.removedBarSizeVariable, ": ").concat(gap, "px;\n  }\n");
+};
+var getCurrentUseCounter = function () {
+    var counter = parseInt(document.body.getAttribute(lockAttribute) || '0', 10);
+    return isFinite(counter) ? counter : 0;
+};
+var useLockAttribute = function () {
+    react__WEBPACK_IMPORTED_MODULE_0__.useEffect(function () {
+        document.body.setAttribute(lockAttribute, (getCurrentUseCounter() + 1).toString());
+        return function () {
+            var newCounter = getCurrentUseCounter() - 1;
+            if (newCounter <= 0) {
+                document.body.removeAttribute(lockAttribute);
+            }
+            else {
+                document.body.setAttribute(lockAttribute, newCounter.toString());
+            }
+        };
+    }, []);
 };
 /**
  * Removes page scrollbar and blocks page scroll when mounted
  */
-var RemoveScrollBar = function (props) {
-    var noRelative = props.noRelative, noImportant = props.noImportant, _a = props.gapMode, gapMode = _a === void 0 ? 'margin' : _a;
+var RemoveScrollBar = function (_a) {
+    var noRelative = _a.noRelative, noImportant = _a.noImportant, _b = _a.gapMode, gapMode = _b === void 0 ? 'margin' : _b;
+    useLockAttribute();
     /*
      gap will be measured on every component mount
      however it will be used only by the "first" invocation
@@ -31691,10 +31715,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   useMergeRefs: () => (/* binding */ useMergeRefs)
 /* harmony export */ });
-/* harmony import */ var _assignRef__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./assignRef */ "./node_modules/use-callback-ref/dist/es2015/assignRef.js");
-/* harmony import */ var _useRef__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./useRef */ "./node_modules/use-callback-ref/dist/es2015/useRef.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _assignRef__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./assignRef */ "./node_modules/use-callback-ref/dist/es2015/assignRef.js");
+/* harmony import */ var _useRef__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./useRef */ "./node_modules/use-callback-ref/dist/es2015/useRef.js");
 
 
+
+var useIsomorphicLayoutEffect = typeof window !== 'undefined' ? react__WEBPACK_IMPORTED_MODULE_0__.useLayoutEffect : react__WEBPACK_IMPORTED_MODULE_0__.useEffect;
+var currentValues = new WeakMap();
 /**
  * Merges two or more refs together providing a single interface to set their value
  * @param {RefObject|Ref} refs
@@ -31710,7 +31739,30 @@ __webpack_require__.r(__webpack_exports__);
  * }
  */
 function useMergeRefs(refs, defaultValue) {
-    return (0,_useRef__WEBPACK_IMPORTED_MODULE_0__.useCallbackRef)(defaultValue || null, function (newValue) { return refs.forEach(function (ref) { return (0,_assignRef__WEBPACK_IMPORTED_MODULE_1__.assignRef)(ref, newValue); }); });
+    var callbackRef = (0,_useRef__WEBPACK_IMPORTED_MODULE_1__.useCallbackRef)(defaultValue || null, function (newValue) {
+        return refs.forEach(function (ref) { return (0,_assignRef__WEBPACK_IMPORTED_MODULE_2__.assignRef)(ref, newValue); });
+    });
+    // handle refs changes - added or removed
+    useIsomorphicLayoutEffect(function () {
+        var oldValue = currentValues.get(callbackRef);
+        if (oldValue) {
+            var prevRefs_1 = new Set(oldValue);
+            var nextRefs_1 = new Set(refs);
+            var current_1 = callbackRef.current;
+            prevRefs_1.forEach(function (ref) {
+                if (!nextRefs_1.has(ref)) {
+                    (0,_assignRef__WEBPACK_IMPORTED_MODULE_2__.assignRef)(ref, null);
+                }
+            });
+            nextRefs_1.forEach(function (ref) {
+                if (!prevRefs_1.has(ref)) {
+                    (0,_assignRef__WEBPACK_IMPORTED_MODULE_2__.assignRef)(ref, current_1);
+                }
+            });
+        }
+        currentValues.set(callbackRef, refs);
+    }, [refs]);
+    return callbackRef;
 }
 
 
@@ -32129,6 +32181,92 @@ module.exports = window["ReactDOM"];
 
 /***/ }),
 
+/***/ "./node_modules/classnames/index.js":
+/*!******************************************!*\
+  !*** ./node_modules/classnames/index.js ***!
+  \******************************************/
+/***/ ((module, exports) => {
+
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	Copyright (c) 2018 Jed Watson.
+	Licensed under the MIT License (MIT), see
+	http://jedwatson.github.io/classnames
+*/
+/* global define */
+
+(function () {
+	'use strict';
+
+	var hasOwn = {}.hasOwnProperty;
+
+	function classNames () {
+		var classes = '';
+
+		for (var i = 0; i < arguments.length; i++) {
+			var arg = arguments[i];
+			if (arg) {
+				classes = appendClass(classes, parseValue(arg));
+			}
+		}
+
+		return classes;
+	}
+
+	function parseValue (arg) {
+		if (typeof arg === 'string' || typeof arg === 'number') {
+			return arg;
+		}
+
+		if (typeof arg !== 'object') {
+			return '';
+		}
+
+		if (Array.isArray(arg)) {
+			return classNames.apply(null, arg);
+		}
+
+		if (arg.toString !== Object.prototype.toString && !arg.toString.toString().includes('[native code]')) {
+			return arg.toString();
+		}
+
+		var classes = '';
+
+		for (var key in arg) {
+			if (hasOwn.call(arg, key) && arg[key]) {
+				classes = appendClass(classes, key);
+			}
+		}
+
+		return classes;
+	}
+
+	function appendClass (value, newClass) {
+		if (!newClass) {
+			return value;
+		}
+	
+		if (value) {
+			return value + ' ' + newClass;
+		}
+	
+		return value + newClass;
+	}
+
+	if ( true && module.exports) {
+		classNames.default = classNames;
+		module.exports = classNames;
+	} else if (true) {
+		// register as 'classnames', consistent with npm package name
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = (function () {
+			return classNames;
+		}).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+		__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	} else {}
+}());
+
+
+/***/ }),
+
 /***/ "./node_modules/@babel/runtime/helpers/esm/arrayLikeToArray.js":
 /*!*********************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/esm/arrayLikeToArray.js ***!
@@ -32140,11 +32278,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ _arrayLikeToArray)
 /* harmony export */ });
-function _arrayLikeToArray(arr, len) {
-  if (len == null || len > arr.length) len = arr.length;
-  for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
-  return arr2;
+function _arrayLikeToArray(r, a) {
+  (null == a || a > r.length) && (a = r.length);
+  for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
+  return n;
 }
+
 
 /***/ }),
 
@@ -32159,9 +32298,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ _arrayWithHoles)
 /* harmony export */ });
-function _arrayWithHoles(arr) {
-  if (Array.isArray(arr)) return arr;
+function _arrayWithHoles(r) {
+  if (Array.isArray(r)) return r;
 }
+
 
 /***/ }),
 
@@ -32178,9 +32318,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _arrayLikeToArray_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./arrayLikeToArray.js */ "./node_modules/@babel/runtime/helpers/esm/arrayLikeToArray.js");
 
-function _arrayWithoutHoles(arr) {
-  if (Array.isArray(arr)) return (0,_arrayLikeToArray_js__WEBPACK_IMPORTED_MODULE_0__["default"])(arr);
+function _arrayWithoutHoles(r) {
+  if (Array.isArray(r)) return (0,_arrayLikeToArray_js__WEBPACK_IMPORTED_MODULE_0__["default"])(r);
 }
+
 
 /***/ }),
 
@@ -32195,12 +32336,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ _assertThisInitialized)
 /* harmony export */ });
-function _assertThisInitialized(self) {
-  if (self === void 0) {
-    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }
-  return self;
+function _assertThisInitialized(e) {
+  if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  return e;
 }
+
 
 /***/ }),
 
@@ -32215,11 +32355,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ _classCallCheck)
 /* harmony export */ });
-function _classCallCheck(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
+function _classCallCheck(a, n) {
+  if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
 }
+
 
 /***/ }),
 
@@ -32236,23 +32375,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _toPropertyKey_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./toPropertyKey.js */ "./node_modules/@babel/runtime/helpers/esm/toPropertyKey.js");
 
-function _defineProperties(target, props) {
-  for (var i = 0; i < props.length; i++) {
-    var descriptor = props[i];
-    descriptor.enumerable = descriptor.enumerable || false;
-    descriptor.configurable = true;
-    if ("value" in descriptor) descriptor.writable = true;
-    Object.defineProperty(target, (0,_toPropertyKey_js__WEBPACK_IMPORTED_MODULE_0__["default"])(descriptor.key), descriptor);
+function _defineProperties(e, r) {
+  for (var t = 0; t < r.length; t++) {
+    var o = r[t];
+    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, (0,_toPropertyKey_js__WEBPACK_IMPORTED_MODULE_0__["default"])(o.key), o);
   }
 }
-function _createClass(Constructor, protoProps, staticProps) {
-  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-  if (staticProps) _defineProperties(Constructor, staticProps);
-  Object.defineProperty(Constructor, "prototype", {
-    writable: false
-  });
-  return Constructor;
+function _createClass(e, r, t) {
+  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
+    writable: !1
+  }), e;
 }
+
 
 /***/ }),
 
@@ -32273,20 +32407,19 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function _createSuper(Derived) {
-  var hasNativeReflectConstruct = (0,_isNativeReflectConstruct_js__WEBPACK_IMPORTED_MODULE_1__["default"])();
-  return function _createSuperInternal() {
-    var Super = (0,_getPrototypeOf_js__WEBPACK_IMPORTED_MODULE_0__["default"])(Derived),
-      result;
-    if (hasNativeReflectConstruct) {
-      var NewTarget = (0,_getPrototypeOf_js__WEBPACK_IMPORTED_MODULE_0__["default"])(this).constructor;
-      result = Reflect.construct(Super, arguments, NewTarget);
-    } else {
-      result = Super.apply(this, arguments);
-    }
-    return (0,_possibleConstructorReturn_js__WEBPACK_IMPORTED_MODULE_2__["default"])(this, result);
+function _createSuper(t) {
+  var r = (0,_isNativeReflectConstruct_js__WEBPACK_IMPORTED_MODULE_1__["default"])();
+  return function () {
+    var e,
+      o = (0,_getPrototypeOf_js__WEBPACK_IMPORTED_MODULE_0__["default"])(t);
+    if (r) {
+      var s = (0,_getPrototypeOf_js__WEBPACK_IMPORTED_MODULE_0__["default"])(this).constructor;
+      e = Reflect.construct(o, arguments, s);
+    } else e = o.apply(this, arguments);
+    return (0,_possibleConstructorReturn_js__WEBPACK_IMPORTED_MODULE_2__["default"])(this, e);
   };
 }
+
 
 /***/ }),
 
@@ -32303,20 +32436,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _toPropertyKey_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./toPropertyKey.js */ "./node_modules/@babel/runtime/helpers/esm/toPropertyKey.js");
 
-function _defineProperty(obj, key, value) {
-  key = (0,_toPropertyKey_js__WEBPACK_IMPORTED_MODULE_0__["default"])(key);
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-  return obj;
+function _defineProperty(e, r, t) {
+  return (r = (0,_toPropertyKey_js__WEBPACK_IMPORTED_MODULE_0__["default"])(r)) in e ? Object.defineProperty(e, r, {
+    value: t,
+    enumerable: !0,
+    configurable: !0,
+    writable: !0
+  }) : e[r] = t, e;
 }
+
 
 /***/ }),
 
@@ -32332,19 +32460,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ _extends)
 /* harmony export */ });
 function _extends() {
-  _extends = Object.assign ? Object.assign.bind() : function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
+  return _extends = Object.assign ? Object.assign.bind() : function (n) {
+    for (var e = 1; e < arguments.length; e++) {
+      var t = arguments[e];
+      for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
     }
-    return target;
-  };
-  return _extends.apply(this, arguments);
+    return n;
+  }, _extends.apply(null, arguments);
 }
+
 
 /***/ }),
 
@@ -32359,12 +32483,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ _getPrototypeOf)
 /* harmony export */ });
-function _getPrototypeOf(o) {
-  _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {
-    return o.__proto__ || Object.getPrototypeOf(o);
-  };
-  return _getPrototypeOf(o);
+function _getPrototypeOf(t) {
+  return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) {
+    return t.__proto__ || Object.getPrototypeOf(t);
+  }, _getPrototypeOf(t);
 }
+
 
 /***/ }),
 
@@ -32381,22 +32505,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _setPrototypeOf_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./setPrototypeOf.js */ "./node_modules/@babel/runtime/helpers/esm/setPrototypeOf.js");
 
-function _inherits(subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function");
-  }
-  subClass.prototype = Object.create(superClass && superClass.prototype, {
+function _inherits(t, e) {
+  if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function");
+  t.prototype = Object.create(e && e.prototype, {
     constructor: {
-      value: subClass,
-      writable: true,
-      configurable: true
+      value: t,
+      writable: !0,
+      configurable: !0
     }
-  });
-  Object.defineProperty(subClass, "prototype", {
-    writable: false
-  });
-  if (superClass) (0,_setPrototypeOf_js__WEBPACK_IMPORTED_MODULE_0__["default"])(subClass, superClass);
+  }), Object.defineProperty(t, "prototype", {
+    writable: !1
+  }), e && (0,_setPrototypeOf_js__WEBPACK_IMPORTED_MODULE_0__["default"])(t, e);
 }
+
 
 /***/ }),
 
@@ -32412,16 +32533,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ _isNativeReflectConstruct)
 /* harmony export */ });
 function _isNativeReflectConstruct() {
-  if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-  if (Reflect.construct.sham) return false;
-  if (typeof Proxy === "function") return true;
   try {
-    Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-    return true;
-  } catch (e) {
-    return false;
-  }
+    var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+  } catch (t) {}
+  return (_isNativeReflectConstruct = function _isNativeReflectConstruct() {
+    return !!t;
+  })();
 }
+
 
 /***/ }),
 
@@ -32436,9 +32555,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ _iterableToArray)
 /* harmony export */ });
-function _iterableToArray(iter) {
-  if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
+function _iterableToArray(r) {
+  if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r);
 }
+
 
 /***/ }),
 
@@ -32481,6 +32601,7 @@ function _iterableToArrayLimit(r, l) {
   }
 }
 
+
 /***/ }),
 
 /***/ "./node_modules/@babel/runtime/helpers/esm/nonIterableRest.js":
@@ -32498,6 +32619,7 @@ function _nonIterableRest() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 
+
 /***/ }),
 
 /***/ "./node_modules/@babel/runtime/helpers/esm/nonIterableSpread.js":
@@ -32514,6 +32636,7 @@ __webpack_require__.r(__webpack_exports__);
 function _nonIterableSpread() {
   throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
+
 
 /***/ }),
 
@@ -32552,6 +32675,7 @@ function _objectSpread2(e) {
   return e;
 }
 
+
 /***/ }),
 
 /***/ "./node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js":
@@ -32567,21 +32691,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _objectWithoutPropertiesLoose_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./objectWithoutPropertiesLoose.js */ "./node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js");
 
-function _objectWithoutProperties(source, excluded) {
-  if (source == null) return {};
-  var target = (0,_objectWithoutPropertiesLoose_js__WEBPACK_IMPORTED_MODULE_0__["default"])(source, excluded);
-  var key, i;
+function _objectWithoutProperties(e, t) {
+  if (null == e) return {};
+  var o,
+    r,
+    i = (0,_objectWithoutPropertiesLoose_js__WEBPACK_IMPORTED_MODULE_0__["default"])(e, t);
   if (Object.getOwnPropertySymbols) {
-    var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
-    for (i = 0; i < sourceSymbolKeys.length; i++) {
-      key = sourceSymbolKeys[i];
-      if (excluded.indexOf(key) >= 0) continue;
-      if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
-      target[key] = source[key];
-    }
+    var n = Object.getOwnPropertySymbols(e);
+    for (r = 0; r < n.length; r++) o = n[r], t.indexOf(o) >= 0 || {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]);
   }
-  return target;
+  return i;
 }
+
 
 /***/ }),
 
@@ -32596,18 +32717,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ _objectWithoutPropertiesLoose)
 /* harmony export */ });
-function _objectWithoutPropertiesLoose(source, excluded) {
-  if (source == null) return {};
-  var target = {};
-  var sourceKeys = Object.keys(source);
-  var key, i;
-  for (i = 0; i < sourceKeys.length; i++) {
-    key = sourceKeys[i];
-    if (excluded.indexOf(key) >= 0) continue;
-    target[key] = source[key];
+function _objectWithoutPropertiesLoose(r, e) {
+  if (null == r) return {};
+  var t = {};
+  for (var n in r) if ({}.hasOwnProperty.call(r, n)) {
+    if (e.indexOf(n) >= 0) continue;
+    t[n] = r[n];
   }
-  return target;
+  return t;
 }
+
 
 /***/ }),
 
@@ -32626,14 +32745,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _assertThisInitialized_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./assertThisInitialized.js */ "./node_modules/@babel/runtime/helpers/esm/assertThisInitialized.js");
 
 
-function _possibleConstructorReturn(self, call) {
-  if (call && ((0,_typeof_js__WEBPACK_IMPORTED_MODULE_0__["default"])(call) === "object" || typeof call === "function")) {
-    return call;
-  } else if (call !== void 0) {
-    throw new TypeError("Derived constructors may only return object or undefined");
-  }
-  return (0,_assertThisInitialized_js__WEBPACK_IMPORTED_MODULE_1__["default"])(self);
+function _possibleConstructorReturn(t, e) {
+  if (e && ("object" == (0,_typeof_js__WEBPACK_IMPORTED_MODULE_0__["default"])(e) || "function" == typeof e)) return e;
+  if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined");
+  return (0,_assertThisInitialized_js__WEBPACK_IMPORTED_MODULE_1__["default"])(t);
 }
+
 
 /***/ }),
 
@@ -32648,13 +32765,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ _setPrototypeOf)
 /* harmony export */ });
-function _setPrototypeOf(o, p) {
-  _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {
-    o.__proto__ = p;
-    return o;
-  };
-  return _setPrototypeOf(o, p);
+function _setPrototypeOf(t, e) {
+  return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) {
+    return t.__proto__ = e, t;
+  }, _setPrototypeOf(t, e);
 }
+
 
 /***/ }),
 
@@ -32677,9 +32793,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function _slicedToArray(arr, i) {
-  return (0,_arrayWithHoles_js__WEBPACK_IMPORTED_MODULE_0__["default"])(arr) || (0,_iterableToArrayLimit_js__WEBPACK_IMPORTED_MODULE_1__["default"])(arr, i) || (0,_unsupportedIterableToArray_js__WEBPACK_IMPORTED_MODULE_2__["default"])(arr, i) || (0,_nonIterableRest_js__WEBPACK_IMPORTED_MODULE_3__["default"])();
+function _slicedToArray(r, e) {
+  return (0,_arrayWithHoles_js__WEBPACK_IMPORTED_MODULE_0__["default"])(r) || (0,_iterableToArrayLimit_js__WEBPACK_IMPORTED_MODULE_1__["default"])(r, e) || (0,_unsupportedIterableToArray_js__WEBPACK_IMPORTED_MODULE_2__["default"])(r, e) || (0,_nonIterableRest_js__WEBPACK_IMPORTED_MODULE_3__["default"])();
 }
+
 
 /***/ }),
 
@@ -32694,16 +32811,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ _taggedTemplateLiteral)
 /* harmony export */ });
-function _taggedTemplateLiteral(strings, raw) {
-  if (!raw) {
-    raw = strings.slice(0);
-  }
-  return Object.freeze(Object.defineProperties(strings, {
+function _taggedTemplateLiteral(e, t) {
+  return t || (t = e.slice(0)), Object.freeze(Object.defineProperties(e, {
     raw: {
-      value: Object.freeze(raw)
+      value: Object.freeze(t)
     }
   }));
 }
+
 
 /***/ }),
 
@@ -32726,9 +32841,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function _toConsumableArray(arr) {
-  return (0,_arrayWithoutHoles_js__WEBPACK_IMPORTED_MODULE_0__["default"])(arr) || (0,_iterableToArray_js__WEBPACK_IMPORTED_MODULE_1__["default"])(arr) || (0,_unsupportedIterableToArray_js__WEBPACK_IMPORTED_MODULE_2__["default"])(arr) || (0,_nonIterableSpread_js__WEBPACK_IMPORTED_MODULE_3__["default"])();
+function _toConsumableArray(r) {
+  return (0,_arrayWithoutHoles_js__WEBPACK_IMPORTED_MODULE_0__["default"])(r) || (0,_iterableToArray_js__WEBPACK_IMPORTED_MODULE_1__["default"])(r) || (0,_unsupportedIterableToArray_js__WEBPACK_IMPORTED_MODULE_2__["default"])(r) || (0,_nonIterableSpread_js__WEBPACK_IMPORTED_MODULE_3__["default"])();
 }
+
 
 /***/ }),
 
@@ -32741,20 +32857,21 @@ function _toConsumableArray(arr) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ _toPrimitive)
+/* harmony export */   "default": () => (/* binding */ toPrimitive)
 /* harmony export */ });
 /* harmony import */ var _typeof_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./typeof.js */ "./node_modules/@babel/runtime/helpers/esm/typeof.js");
 
-function _toPrimitive(input, hint) {
-  if ((0,_typeof_js__WEBPACK_IMPORTED_MODULE_0__["default"])(input) !== "object" || input === null) return input;
-  var prim = input[Symbol.toPrimitive];
-  if (prim !== undefined) {
-    var res = prim.call(input, hint || "default");
-    if ((0,_typeof_js__WEBPACK_IMPORTED_MODULE_0__["default"])(res) !== "object") return res;
+function toPrimitive(t, r) {
+  if ("object" != (0,_typeof_js__WEBPACK_IMPORTED_MODULE_0__["default"])(t) || !t) return t;
+  var e = t[Symbol.toPrimitive];
+  if (void 0 !== e) {
+    var i = e.call(t, r || "default");
+    if ("object" != (0,_typeof_js__WEBPACK_IMPORTED_MODULE_0__["default"])(i)) return i;
     throw new TypeError("@@toPrimitive must return a primitive value.");
   }
-  return (hint === "string" ? String : Number)(input);
+  return ("string" === r ? String : Number)(t);
 }
+
 
 /***/ }),
 
@@ -32767,16 +32884,17 @@ function _toPrimitive(input, hint) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ _toPropertyKey)
+/* harmony export */   "default": () => (/* binding */ toPropertyKey)
 /* harmony export */ });
 /* harmony import */ var _typeof_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./typeof.js */ "./node_modules/@babel/runtime/helpers/esm/typeof.js");
 /* harmony import */ var _toPrimitive_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./toPrimitive.js */ "./node_modules/@babel/runtime/helpers/esm/toPrimitive.js");
 
 
-function _toPropertyKey(arg) {
-  var key = (0,_toPrimitive_js__WEBPACK_IMPORTED_MODULE_1__["default"])(arg, "string");
-  return (0,_typeof_js__WEBPACK_IMPORTED_MODULE_0__["default"])(key) === "symbol" ? key : String(key);
+function toPropertyKey(t) {
+  var i = (0,_toPrimitive_js__WEBPACK_IMPORTED_MODULE_1__["default"])(t, "string");
+  return "symbol" == (0,_typeof_js__WEBPACK_IMPORTED_MODULE_0__["default"])(i) ? i : i + "";
 }
+
 
 /***/ }),
 
@@ -32801,6 +32919,7 @@ function _typeof(o) {
   }, _typeof(o);
 }
 
+
 /***/ }),
 
 /***/ "./node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js":
@@ -32816,14 +32935,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _arrayLikeToArray_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./arrayLikeToArray.js */ "./node_modules/@babel/runtime/helpers/esm/arrayLikeToArray.js");
 
-function _unsupportedIterableToArray(o, minLen) {
-  if (!o) return;
-  if (typeof o === "string") return (0,_arrayLikeToArray_js__WEBPACK_IMPORTED_MODULE_0__["default"])(o, minLen);
-  var n = Object.prototype.toString.call(o).slice(8, -1);
-  if (n === "Object" && o.constructor) n = o.constructor.name;
-  if (n === "Map" || n === "Set") return Array.from(o);
-  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return (0,_arrayLikeToArray_js__WEBPACK_IMPORTED_MODULE_0__["default"])(o, minLen);
+function _unsupportedIterableToArray(r, a) {
+  if (r) {
+    if ("string" == typeof r) return (0,_arrayLikeToArray_js__WEBPACK_IMPORTED_MODULE_0__["default"])(r, a);
+    var t = {}.toString.call(r).slice(8, -1);
+    return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? (0,_arrayLikeToArray_js__WEBPACK_IMPORTED_MODULE_0__["default"])(r, a) : void 0;
+  }
 }
+
 
 /***/ }),
 
@@ -32911,7 +33030,7 @@ function computeCoordsFromPlacement(_ref, placement, rtl) {
 
 /**
  * Computes the `x` and `y` coordinates that will place the floating element
- * next to a reference element when it is given a certain positioning strategy.
+ * next to a given reference element.
  *
  * This export does not have any `platform` interface logic. You will need to
  * write one for the platform you are using Floating UI with.
@@ -32989,7 +33108,6 @@ const computePosition = async (reference, floating, config) => {
         } = computeCoordsFromPlacement(rects, statefulPlacement, rtl));
       }
       i = -1;
-      continue;
     }
   }
   return {
@@ -33039,9 +33157,10 @@ async function detectOverflow(state, options) {
     strategy
   }));
   const rect = elementContext === 'floating' ? {
-    ...rects.floating,
     x,
-    y
+    y,
+    width: rects.floating.width,
+    height: rects.floating.height
   } : rects.reference;
   const offsetParent = await (platform.getOffsetParent == null ? void 0 : platform.getOffsetParent(elements.floating));
   const offsetScale = (await (platform.isElement == null ? void 0 : platform.isElement(offsetParent))) ? (await (platform.getScale == null ? void 0 : platform.getScale(offsetParent))) || {
@@ -33052,6 +33171,7 @@ async function detectOverflow(state, options) {
     y: 1
   };
   const elementClientRect = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_0__.rectToClientRect)(platform.convertOffsetParentRelativeRectToViewportRelativeRect ? await platform.convertOffsetParentRelativeRectToViewportRelativeRect({
+    elements,
     rect,
     offsetParent,
     strategy
@@ -33130,7 +33250,7 @@ const arrow = options => ({
     // to point to nothing for an aligned placement, adjust the offset of the
     // floating element itself. To ensure `shift()` continues to take action,
     // a single reset is performed when this is true.
-    const shouldAddOffset = !middlewareData.arrow && (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_0__.getAlignment)(placement) != null && center != offset && rects.reference[length] / 2 - (center < min$1 ? minPadding : maxPadding) - arrowDimensions[length] / 2 < 0;
+    const shouldAddOffset = !middlewareData.arrow && (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_0__.getAlignment)(placement) != null && center !== offset && rects.reference[length] / 2 - (center < min$1 ? minPadding : maxPadding) - arrowDimensions[length] / 2 < 0;
     const alignmentOffset = shouldAddOffset ? center < min$1 ? center - min$1 : center - max : 0;
     return {
       [axis]: coords[axis] + alignmentOffset,
@@ -33566,6 +33686,7 @@ const inline = function (options) {
 
 // For type backwards-compatibility, the `OffsetOptions` type was also
 // Derivable.
+
 async function convertValueToCoords(state, options) {
   const {
     placement,
@@ -33622,15 +33743,27 @@ const offset = function (options) {
     name: 'offset',
     options,
     async fn(state) {
+      var _middlewareData$offse, _middlewareData$arrow;
       const {
         x,
-        y
+        y,
+        placement,
+        middlewareData
       } = state;
       const diffCoords = await convertValueToCoords(state, options);
+
+      // If the placement is the same and the arrow caused an alignment offset
+      // then we don't need to change the positioning coordinates.
+      if (placement === ((_middlewareData$offse = middlewareData.offset) == null ? void 0 : _middlewareData$offse.placement) && (_middlewareData$arrow = middlewareData.arrow) != null && _middlewareData$arrow.alignmentOffset) {
+        return {};
+      }
       return {
         x: x + diffCoords.x,
         y: y + diffCoords.y,
-        data: diffCoords
+        data: {
+          ...diffCoords,
+          placement
+        }
       };
     }
   };
@@ -33819,16 +33952,16 @@ const size = function (options) {
         widthSide = side;
         heightSide = alignment === 'end' ? 'top' : 'bottom';
       }
-      const overflowAvailableHeight = height - overflow[heightSide];
-      const overflowAvailableWidth = width - overflow[widthSide];
+      const maximumClippingHeight = height - overflow.top - overflow.bottom;
+      const maximumClippingWidth = width - overflow.left - overflow.right;
+      const overflowAvailableHeight = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_0__.min)(height - overflow[heightSide], maximumClippingHeight);
+      const overflowAvailableWidth = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_0__.min)(width - overflow[widthSide], maximumClippingWidth);
       const noShift = !state.middlewareData.shift;
       let availableHeight = overflowAvailableHeight;
       let availableWidth = overflowAvailableWidth;
       if (isYAxis) {
-        const maximumClippingWidth = width - overflow.left - overflow.right;
         availableWidth = alignment || noShift ? (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_0__.min)(overflowAvailableWidth, maximumClippingWidth) : maximumClippingWidth;
       } else {
-        const maximumClippingHeight = height - overflow.top - overflow.bottom;
         availableHeight = alignment || noShift ? (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_0__.min)(overflowAvailableHeight, maximumClippingHeight) : maximumClippingHeight;
       }
       if (noShift && !alignment) {
@@ -33874,40 +34007,39 @@ const size = function (options) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   arrow: () => (/* reexport safe */ _floating_ui_core__WEBPACK_IMPORTED_MODULE_0__.arrow),
-/* harmony export */   autoPlacement: () => (/* reexport safe */ _floating_ui_core__WEBPACK_IMPORTED_MODULE_0__.autoPlacement),
+/* harmony export */   arrow: () => (/* binding */ arrow),
+/* harmony export */   autoPlacement: () => (/* binding */ autoPlacement),
 /* harmony export */   autoUpdate: () => (/* binding */ autoUpdate),
 /* harmony export */   computePosition: () => (/* binding */ computePosition),
-/* harmony export */   detectOverflow: () => (/* reexport safe */ _floating_ui_core__WEBPACK_IMPORTED_MODULE_0__.detectOverflow),
-/* harmony export */   flip: () => (/* reexport safe */ _floating_ui_core__WEBPACK_IMPORTED_MODULE_0__.flip),
-/* harmony export */   getOverflowAncestors: () => (/* reexport safe */ _floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getOverflowAncestors),
-/* harmony export */   hide: () => (/* reexport safe */ _floating_ui_core__WEBPACK_IMPORTED_MODULE_0__.hide),
-/* harmony export */   inline: () => (/* reexport safe */ _floating_ui_core__WEBPACK_IMPORTED_MODULE_0__.inline),
-/* harmony export */   limitShift: () => (/* reexport safe */ _floating_ui_core__WEBPACK_IMPORTED_MODULE_0__.limitShift),
-/* harmony export */   offset: () => (/* reexport safe */ _floating_ui_core__WEBPACK_IMPORTED_MODULE_0__.offset),
+/* harmony export */   detectOverflow: () => (/* binding */ detectOverflow),
+/* harmony export */   flip: () => (/* binding */ flip),
+/* harmony export */   getOverflowAncestors: () => (/* reexport safe */ _floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getOverflowAncestors),
+/* harmony export */   hide: () => (/* binding */ hide),
+/* harmony export */   inline: () => (/* binding */ inline),
+/* harmony export */   limitShift: () => (/* binding */ limitShift),
+/* harmony export */   offset: () => (/* binding */ offset),
 /* harmony export */   platform: () => (/* binding */ platform),
-/* harmony export */   shift: () => (/* reexport safe */ _floating_ui_core__WEBPACK_IMPORTED_MODULE_0__.shift),
-/* harmony export */   size: () => (/* reexport safe */ _floating_ui_core__WEBPACK_IMPORTED_MODULE_0__.size)
+/* harmony export */   shift: () => (/* binding */ shift),
+/* harmony export */   size: () => (/* binding */ size)
 /* harmony export */ });
-/* harmony import */ var _floating_ui_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @floating-ui/utils */ "./node_modules/@floating-ui/utils/dist/floating-ui.utils.mjs");
-/* harmony import */ var _floating_ui_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @floating-ui/core */ "./node_modules/@floating-ui/core/dist/floating-ui.core.mjs");
-/* harmony import */ var _floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @floating-ui/utils/dom */ "./node_modules/@floating-ui/utils/dom/dist/floating-ui.utils.dom.mjs");
-
+/* harmony import */ var _floating_ui_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @floating-ui/utils */ "./node_modules/@floating-ui/utils/dist/floating-ui.utils.mjs");
+/* harmony import */ var _floating_ui_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @floating-ui/core */ "./node_modules/@floating-ui/core/dist/floating-ui.core.mjs");
+/* harmony import */ var _floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @floating-ui/utils/dom */ "./node_modules/@floating-ui/utils/dist/floating-ui.utils.dom.mjs");
 
 
 
 
 
 function getCssDimensions(element) {
-  const css = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getComputedStyle)(element);
+  const css = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getComputedStyle)(element);
   // In testing environments, the `width` and `height` properties are empty
   // strings for SVG elements, returning NaN. Fallback to `0` in this case.
   let width = parseFloat(css.width) || 0;
   let height = parseFloat(css.height) || 0;
-  const hasOffset = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.isHTMLElement)(element);
+  const hasOffset = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.isHTMLElement)(element);
   const offsetWidth = hasOffset ? element.offsetWidth : width;
   const offsetHeight = hasOffset ? element.offsetHeight : height;
-  const shouldFallback = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_2__.round)(width) !== offsetWidth || (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_2__.round)(height) !== offsetHeight;
+  const shouldFallback = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_1__.round)(width) !== offsetWidth || (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_1__.round)(height) !== offsetHeight;
   if (shouldFallback) {
     width = offsetWidth;
     height = offsetHeight;
@@ -33920,13 +34052,13 @@ function getCssDimensions(element) {
 }
 
 function unwrapElement(element) {
-  return !(0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.isElement)(element) ? element.contextElement : element;
+  return !(0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.isElement)(element) ? element.contextElement : element;
 }
 
 function getScale(element) {
   const domElement = unwrapElement(element);
-  if (!(0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.isHTMLElement)(domElement)) {
-    return (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_2__.createCoords)(1);
+  if (!(0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.isHTMLElement)(domElement)) {
+    return (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_1__.createCoords)(1);
   }
   const rect = domElement.getBoundingClientRect();
   const {
@@ -33934,8 +34066,8 @@ function getScale(element) {
     height,
     $
   } = getCssDimensions(domElement);
-  let x = ($ ? (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_2__.round)(rect.width) : rect.width) / width;
-  let y = ($ ? (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_2__.round)(rect.height) : rect.height) / height;
+  let x = ($ ? (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_1__.round)(rect.width) : rect.width) / width;
+  let y = ($ ? (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_1__.round)(rect.height) : rect.height) / height;
 
   // 0, NaN, or Infinity should always fallback to 1.
 
@@ -33951,10 +34083,10 @@ function getScale(element) {
   };
 }
 
-const noOffsets = /*#__PURE__*/(0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_2__.createCoords)(0);
+const noOffsets = /*#__PURE__*/(0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_1__.createCoords)(0);
 function getVisualOffsets(element) {
-  const win = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getWindow)(element);
-  if (!(0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.isWebKit)() || !win.visualViewport) {
+  const win = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getWindow)(element);
+  if (!(0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.isWebKit)() || !win.visualViewport) {
     return noOffsets;
   }
   return {
@@ -33966,7 +34098,7 @@ function shouldAddVisualOffsets(element, isFixed, floatingOffsetParent) {
   if (isFixed === void 0) {
     isFixed = false;
   }
-  if (!floatingOffsetParent || isFixed && floatingOffsetParent !== (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getWindow)(element)) {
+  if (!floatingOffsetParent || isFixed && floatingOffsetParent !== (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getWindow)(element)) {
     return false;
   }
   return isFixed;
@@ -33981,29 +34113,30 @@ function getBoundingClientRect(element, includeScale, isFixedStrategy, offsetPar
   }
   const clientRect = element.getBoundingClientRect();
   const domElement = unwrapElement(element);
-  let scale = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_2__.createCoords)(1);
+  let scale = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_1__.createCoords)(1);
   if (includeScale) {
     if (offsetParent) {
-      if ((0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.isElement)(offsetParent)) {
+      if ((0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.isElement)(offsetParent)) {
         scale = getScale(offsetParent);
       }
     } else {
       scale = getScale(element);
     }
   }
-  const visualOffsets = shouldAddVisualOffsets(domElement, isFixedStrategy, offsetParent) ? getVisualOffsets(domElement) : (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_2__.createCoords)(0);
+  const visualOffsets = shouldAddVisualOffsets(domElement, isFixedStrategy, offsetParent) ? getVisualOffsets(domElement) : (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_1__.createCoords)(0);
   let x = (clientRect.left + visualOffsets.x) / scale.x;
   let y = (clientRect.top + visualOffsets.y) / scale.y;
   let width = clientRect.width / scale.x;
   let height = clientRect.height / scale.y;
   if (domElement) {
-    const win = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getWindow)(domElement);
-    const offsetWin = offsetParent && (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.isElement)(offsetParent) ? (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getWindow)(offsetParent) : offsetParent;
-    let currentIFrame = win.frameElement;
-    while (currentIFrame && offsetParent && offsetWin !== win) {
+    const win = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getWindow)(domElement);
+    const offsetWin = offsetParent && (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.isElement)(offsetParent) ? (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getWindow)(offsetParent) : offsetParent;
+    let currentWin = win;
+    let currentIFrame = currentWin.frameElement;
+    while (currentIFrame && offsetParent && offsetWin !== currentWin) {
       const iframeScale = getScale(currentIFrame);
       const iframeRect = currentIFrame.getBoundingClientRect();
-      const css = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getComputedStyle)(currentIFrame);
+      const css = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getComputedStyle)(currentIFrame);
       const left = iframeRect.left + (currentIFrame.clientLeft + parseFloat(css.paddingLeft)) * iframeScale.x;
       const top = iframeRect.top + (currentIFrame.clientTop + parseFloat(css.paddingTop)) * iframeScale.y;
       x *= iframeScale.x;
@@ -34012,10 +34145,11 @@ function getBoundingClientRect(element, includeScale, isFixedStrategy, offsetPar
       height *= iframeScale.y;
       x += left;
       y += top;
-      currentIFrame = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getWindow)(currentIFrame).frameElement;
+      currentWin = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getWindow)(currentIFrame);
+      currentIFrame = currentWin.frameElement;
     }
   }
-  return (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_2__.rectToClientRect)({
+  return (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_1__.rectToClientRect)({
     width,
     height,
     x,
@@ -34023,28 +34157,42 @@ function getBoundingClientRect(element, includeScale, isFixedStrategy, offsetPar
   });
 }
 
+const topLayerSelectors = [':popover-open', ':modal'];
+function isTopLayer(element) {
+  return topLayerSelectors.some(selector => {
+    try {
+      return element.matches(selector);
+    } catch (e) {
+      return false;
+    }
+  });
+}
+
 function convertOffsetParentRelativeRectToViewportRelativeRect(_ref) {
   let {
+    elements,
     rect,
     offsetParent,
     strategy
   } = _ref;
-  const isOffsetParentAnElement = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.isHTMLElement)(offsetParent);
-  const documentElement = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getDocumentElement)(offsetParent);
-  if (offsetParent === documentElement) {
+  const isFixed = strategy === 'fixed';
+  const documentElement = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getDocumentElement)(offsetParent);
+  const topLayer = elements ? isTopLayer(elements.floating) : false;
+  if (offsetParent === documentElement || topLayer && isFixed) {
     return rect;
   }
   let scroll = {
     scrollLeft: 0,
     scrollTop: 0
   };
-  let scale = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_2__.createCoords)(1);
-  const offsets = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_2__.createCoords)(0);
-  if (isOffsetParentAnElement || !isOffsetParentAnElement && strategy !== 'fixed') {
-    if ((0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getNodeName)(offsetParent) !== 'body' || (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.isOverflowElement)(documentElement)) {
-      scroll = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getNodeScroll)(offsetParent);
+  let scale = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_1__.createCoords)(1);
+  const offsets = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_1__.createCoords)(0);
+  const isOffsetParentAnElement = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.isHTMLElement)(offsetParent);
+  if (isOffsetParentAnElement || !isOffsetParentAnElement && !isFixed) {
+    if ((0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getNodeName)(offsetParent) !== 'body' || (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.isOverflowElement)(documentElement)) {
+      scroll = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getNodeScroll)(offsetParent);
     }
-    if ((0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.isHTMLElement)(offsetParent)) {
+    if ((0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.isHTMLElement)(offsetParent)) {
       const offsetRect = getBoundingClientRect(offsetParent);
       scale = getScale(offsetParent);
       offsets.x = offsetRect.x + offsetParent.clientLeft;
@@ -34066,21 +34214,21 @@ function getClientRects(element) {
 function getWindowScrollBarX(element) {
   // If <html> has a CSS width greater than the viewport, then this will be
   // incorrect for RTL.
-  return getBoundingClientRect((0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getDocumentElement)(element)).left + (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getNodeScroll)(element).scrollLeft;
+  return getBoundingClientRect((0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getDocumentElement)(element)).left + (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getNodeScroll)(element).scrollLeft;
 }
 
 // Gets the entire size of the scrollable document area, even extending outside
 // of the `<html>` and `<body>` rect bounds if horizontally scrollable.
 function getDocumentRect(element) {
-  const html = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getDocumentElement)(element);
-  const scroll = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getNodeScroll)(element);
+  const html = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getDocumentElement)(element);
+  const scroll = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getNodeScroll)(element);
   const body = element.ownerDocument.body;
-  const width = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_2__.max)(html.scrollWidth, html.clientWidth, body.scrollWidth, body.clientWidth);
-  const height = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_2__.max)(html.scrollHeight, html.clientHeight, body.scrollHeight, body.clientHeight);
+  const width = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_1__.max)(html.scrollWidth, html.clientWidth, body.scrollWidth, body.clientWidth);
+  const height = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_1__.max)(html.scrollHeight, html.clientHeight, body.scrollHeight, body.clientHeight);
   let x = -scroll.scrollLeft + getWindowScrollBarX(element);
   const y = -scroll.scrollTop;
-  if ((0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getComputedStyle)(body).direction === 'rtl') {
-    x += (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_2__.max)(html.clientWidth, body.clientWidth) - width;
+  if ((0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getComputedStyle)(body).direction === 'rtl') {
+    x += (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_1__.max)(html.clientWidth, body.clientWidth) - width;
   }
   return {
     width,
@@ -34091,8 +34239,8 @@ function getDocumentRect(element) {
 }
 
 function getViewportRect(element, strategy) {
-  const win = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getWindow)(element);
-  const html = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getDocumentElement)(element);
+  const win = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getWindow)(element);
+  const html = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getDocumentElement)(element);
   const visualViewport = win.visualViewport;
   let width = html.clientWidth;
   let height = html.clientHeight;
@@ -34101,7 +34249,7 @@ function getViewportRect(element, strategy) {
   if (visualViewport) {
     width = visualViewport.width;
     height = visualViewport.height;
-    const visualViewportBased = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.isWebKit)();
+    const visualViewportBased = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.isWebKit)();
     if (!visualViewportBased || visualViewportBased && strategy === 'fixed') {
       x = visualViewport.offsetLeft;
       y = visualViewport.offsetTop;
@@ -34120,7 +34268,7 @@ function getInnerBoundingClientRect(element, strategy) {
   const clientRect = getBoundingClientRect(element, true, strategy === 'fixed');
   const top = clientRect.top + element.clientTop;
   const left = clientRect.left + element.clientLeft;
-  const scale = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.isHTMLElement)(element) ? getScale(element) : (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_2__.createCoords)(1);
+  const scale = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.isHTMLElement)(element) ? getScale(element) : (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_1__.createCoords)(1);
   const width = element.clientWidth * scale.x;
   const height = element.clientHeight * scale.y;
   const x = left * scale.x;
@@ -34137,8 +34285,8 @@ function getClientRectFromClippingAncestor(element, clippingAncestor, strategy) 
   if (clippingAncestor === 'viewport') {
     rect = getViewportRect(element, strategy);
   } else if (clippingAncestor === 'document') {
-    rect = getDocumentRect((0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getDocumentElement)(element));
-  } else if ((0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.isElement)(clippingAncestor)) {
+    rect = getDocumentRect((0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getDocumentElement)(element));
+  } else if ((0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.isElement)(clippingAncestor)) {
     rect = getInnerBoundingClientRect(clippingAncestor, strategy);
   } else {
     const visualOffsets = getVisualOffsets(element);
@@ -34148,14 +34296,14 @@ function getClientRectFromClippingAncestor(element, clippingAncestor, strategy) 
       y: clippingAncestor.y - visualOffsets.y
     };
   }
-  return (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_2__.rectToClientRect)(rect);
+  return (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_1__.rectToClientRect)(rect);
 }
 function hasFixedPositionAncestor(element, stopNode) {
-  const parentNode = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getParentNode)(element);
-  if (parentNode === stopNode || !(0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.isElement)(parentNode) || (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.isLastTraversableNode)(parentNode)) {
+  const parentNode = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getParentNode)(element);
+  if (parentNode === stopNode || !(0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.isElement)(parentNode) || (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.isLastTraversableNode)(parentNode)) {
     return false;
   }
-  return (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getComputedStyle)(parentNode).position === 'fixed' || hasFixedPositionAncestor(parentNode, stopNode);
+  return (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getComputedStyle)(parentNode).position === 'fixed' || hasFixedPositionAncestor(parentNode, stopNode);
 }
 
 // A "clipping ancestor" is an `overflow` element with the characteristic of
@@ -34166,19 +34314,19 @@ function getClippingElementAncestors(element, cache) {
   if (cachedResult) {
     return cachedResult;
   }
-  let result = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getOverflowAncestors)(element, [], false).filter(el => (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.isElement)(el) && (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getNodeName)(el) !== 'body');
+  let result = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getOverflowAncestors)(element, [], false).filter(el => (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.isElement)(el) && (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getNodeName)(el) !== 'body');
   let currentContainingBlockComputedStyle = null;
-  const elementIsFixed = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getComputedStyle)(element).position === 'fixed';
-  let currentNode = elementIsFixed ? (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getParentNode)(element) : element;
+  const elementIsFixed = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getComputedStyle)(element).position === 'fixed';
+  let currentNode = elementIsFixed ? (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getParentNode)(element) : element;
 
   // https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block
-  while ((0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.isElement)(currentNode) && !(0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.isLastTraversableNode)(currentNode)) {
-    const computedStyle = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getComputedStyle)(currentNode);
-    const currentNodeIsContaining = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.isContainingBlock)(currentNode);
+  while ((0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.isElement)(currentNode) && !(0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.isLastTraversableNode)(currentNode)) {
+    const computedStyle = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getComputedStyle)(currentNode);
+    const currentNodeIsContaining = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.isContainingBlock)(currentNode);
     if (!currentNodeIsContaining && computedStyle.position === 'fixed') {
       currentContainingBlockComputedStyle = null;
     }
-    const shouldDropCurrentNode = elementIsFixed ? !currentNodeIsContaining && !currentContainingBlockComputedStyle : !currentNodeIsContaining && computedStyle.position === 'static' && !!currentContainingBlockComputedStyle && ['absolute', 'fixed'].includes(currentContainingBlockComputedStyle.position) || (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.isOverflowElement)(currentNode) && !currentNodeIsContaining && hasFixedPositionAncestor(element, currentNode);
+    const shouldDropCurrentNode = elementIsFixed ? !currentNodeIsContaining && !currentContainingBlockComputedStyle : !currentNodeIsContaining && computedStyle.position === 'static' && !!currentContainingBlockComputedStyle && ['absolute', 'fixed'].includes(currentContainingBlockComputedStyle.position) || (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.isOverflowElement)(currentNode) && !currentNodeIsContaining && hasFixedPositionAncestor(element, currentNode);
     if (shouldDropCurrentNode) {
       // Drop non-containing blocks.
       result = result.filter(ancestor => ancestor !== currentNode);
@@ -34186,7 +34334,7 @@ function getClippingElementAncestors(element, cache) {
       // Record last containing block for next iteration.
       currentContainingBlockComputedStyle = computedStyle;
     }
-    currentNode = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getParentNode)(currentNode);
+    currentNode = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getParentNode)(currentNode);
   }
   cache.set(element, result);
   return result;
@@ -34201,15 +34349,15 @@ function getClippingRect(_ref) {
     rootBoundary,
     strategy
   } = _ref;
-  const elementClippingAncestors = boundary === 'clippingAncestors' ? getClippingElementAncestors(element, this._c) : [].concat(boundary);
+  const elementClippingAncestors = boundary === 'clippingAncestors' ? isTopLayer(element) ? [] : getClippingElementAncestors(element, this._c) : [].concat(boundary);
   const clippingAncestors = [...elementClippingAncestors, rootBoundary];
   const firstClippingAncestor = clippingAncestors[0];
   const clippingRect = clippingAncestors.reduce((accRect, clippingAncestor) => {
     const rect = getClientRectFromClippingAncestor(element, clippingAncestor, strategy);
-    accRect.top = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_2__.max)(rect.top, accRect.top);
-    accRect.right = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_2__.min)(rect.right, accRect.right);
-    accRect.bottom = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_2__.min)(rect.bottom, accRect.bottom);
-    accRect.left = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_2__.max)(rect.left, accRect.left);
+    accRect.top = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_1__.max)(rect.top, accRect.top);
+    accRect.right = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_1__.min)(rect.right, accRect.right);
+    accRect.bottom = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_1__.min)(rect.bottom, accRect.bottom);
+    accRect.left = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_1__.max)(rect.left, accRect.left);
     return accRect;
   }, getClientRectFromClippingAncestor(element, firstClippingAncestor, strategy));
   return {
@@ -34221,22 +34369,29 @@ function getClippingRect(_ref) {
 }
 
 function getDimensions(element) {
-  return getCssDimensions(element);
+  const {
+    width,
+    height
+  } = getCssDimensions(element);
+  return {
+    width,
+    height
+  };
 }
 
 function getRectRelativeToOffsetParent(element, offsetParent, strategy) {
-  const isOffsetParentAnElement = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.isHTMLElement)(offsetParent);
-  const documentElement = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getDocumentElement)(offsetParent);
+  const isOffsetParentAnElement = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.isHTMLElement)(offsetParent);
+  const documentElement = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getDocumentElement)(offsetParent);
   const isFixed = strategy === 'fixed';
   const rect = getBoundingClientRect(element, true, isFixed, offsetParent);
   let scroll = {
     scrollLeft: 0,
     scrollTop: 0
   };
-  const offsets = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_2__.createCoords)(0);
+  const offsets = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_1__.createCoords)(0);
   if (isOffsetParentAnElement || !isOffsetParentAnElement && !isFixed) {
-    if ((0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getNodeName)(offsetParent) !== 'body' || (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.isOverflowElement)(documentElement)) {
-      scroll = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getNodeScroll)(offsetParent);
+    if ((0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getNodeName)(offsetParent) !== 'body' || (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.isOverflowElement)(documentElement)) {
+      scroll = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getNodeScroll)(offsetParent);
     }
     if (isOffsetParentAnElement) {
       const offsetRect = getBoundingClientRect(offsetParent, true, isFixed, offsetParent);
@@ -34246,16 +34401,22 @@ function getRectRelativeToOffsetParent(element, offsetParent, strategy) {
       offsets.x = getWindowScrollBarX(documentElement);
     }
   }
+  const x = rect.left + scroll.scrollLeft - offsets.x;
+  const y = rect.top + scroll.scrollTop - offsets.y;
   return {
-    x: rect.left + scroll.scrollLeft - offsets.x,
-    y: rect.top + scroll.scrollTop - offsets.y,
+    x,
+    y,
     width: rect.width,
     height: rect.height
   };
 }
 
+function isStaticPositioned(element) {
+  return (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getComputedStyle)(element).position === 'static';
+}
+
 function getTrueOffsetParent(element, polyfill) {
-  if (!(0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.isHTMLElement)(element) || (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getComputedStyle)(element).position === 'fixed') {
+  if (!(0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.isHTMLElement)(element) || (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getComputedStyle)(element).position === 'fixed') {
     return null;
   }
   if (polyfill) {
@@ -34267,52 +34428,59 @@ function getTrueOffsetParent(element, polyfill) {
 // Gets the closest ancestor positioned element. Handles some edge cases,
 // such as table ancestors and cross browser bugs.
 function getOffsetParent(element, polyfill) {
-  const window = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getWindow)(element);
-  if (!(0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.isHTMLElement)(element)) {
-    return window;
+  const win = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getWindow)(element);
+  if (isTopLayer(element)) {
+    return win;
+  }
+  if (!(0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.isHTMLElement)(element)) {
+    let svgOffsetParent = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getParentNode)(element);
+    while (svgOffsetParent && !(0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.isLastTraversableNode)(svgOffsetParent)) {
+      if ((0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.isElement)(svgOffsetParent) && !isStaticPositioned(svgOffsetParent)) {
+        return svgOffsetParent;
+      }
+      svgOffsetParent = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getParentNode)(svgOffsetParent);
+    }
+    return win;
   }
   let offsetParent = getTrueOffsetParent(element, polyfill);
-  while (offsetParent && (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.isTableElement)(offsetParent) && (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getComputedStyle)(offsetParent).position === 'static') {
+  while (offsetParent && (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.isTableElement)(offsetParent) && isStaticPositioned(offsetParent)) {
     offsetParent = getTrueOffsetParent(offsetParent, polyfill);
   }
-  if (offsetParent && ((0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getNodeName)(offsetParent) === 'html' || (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getNodeName)(offsetParent) === 'body' && (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getComputedStyle)(offsetParent).position === 'static' && !(0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.isContainingBlock)(offsetParent))) {
-    return window;
+  if (offsetParent && (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.isLastTraversableNode)(offsetParent) && isStaticPositioned(offsetParent) && !(0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.isContainingBlock)(offsetParent)) {
+    return win;
   }
-  return offsetParent || (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getContainingBlock)(element) || window;
+  return offsetParent || (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getContainingBlock)(element) || win;
 }
 
-const getElementRects = async function (_ref) {
-  let {
-    reference,
-    floating,
-    strategy
-  } = _ref;
+const getElementRects = async function (data) {
   const getOffsetParentFn = this.getOffsetParent || getOffsetParent;
   const getDimensionsFn = this.getDimensions;
+  const floatingDimensions = await getDimensionsFn(data.floating);
   return {
-    reference: getRectRelativeToOffsetParent(reference, await getOffsetParentFn(floating), strategy),
+    reference: getRectRelativeToOffsetParent(data.reference, await getOffsetParentFn(data.floating), data.strategy),
     floating: {
       x: 0,
       y: 0,
-      ...(await getDimensionsFn(floating))
+      width: floatingDimensions.width,
+      height: floatingDimensions.height
     }
   };
 };
 
 function isRTL(element) {
-  return (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getComputedStyle)(element).direction === 'rtl';
+  return (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getComputedStyle)(element).direction === 'rtl';
 }
 
 const platform = {
   convertOffsetParentRelativeRectToViewportRelativeRect,
-  getDocumentElement: _floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getDocumentElement,
+  getDocumentElement: _floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getDocumentElement,
   getClippingRect,
   getOffsetParent,
   getElementRects,
   getClientRects,
   getDimensions,
   getScale,
-  isElement: _floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.isElement,
+  isElement: _floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.isElement,
   isRTL
 };
 
@@ -34320,10 +34488,11 @@ const platform = {
 function observeMove(element, onMove) {
   let io = null;
   let timeoutId;
-  const root = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getDocumentElement)(element);
+  const root = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getDocumentElement)(element);
   function cleanup() {
+    var _io;
     clearTimeout(timeoutId);
-    io && io.disconnect();
+    (_io = io) == null || _io.disconnect();
     io = null;
   }
   function refresh(skip, threshold) {
@@ -34346,14 +34515,14 @@ function observeMove(element, onMove) {
     if (!width || !height) {
       return;
     }
-    const insetTop = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_2__.floor)(top);
-    const insetRight = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_2__.floor)(root.clientWidth - (left + width));
-    const insetBottom = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_2__.floor)(root.clientHeight - (top + height));
-    const insetLeft = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_2__.floor)(left);
+    const insetTop = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_1__.floor)(top);
+    const insetRight = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_1__.floor)(root.clientWidth - (left + width));
+    const insetBottom = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_1__.floor)(root.clientHeight - (top + height));
+    const insetLeft = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_1__.floor)(left);
     const rootMargin = -insetTop + "px " + -insetRight + "px " + -insetBottom + "px " + -insetLeft + "px";
     const options = {
       rootMargin,
-      threshold: (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_2__.max)(0, (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_2__.min)(1, threshold)) || 1
+      threshold: (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_1__.max)(0, (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_1__.min)(1, threshold)) || 1
     };
     let isFirstUpdate = true;
     function handleObserve(entries) {
@@ -34363,9 +34532,11 @@ function observeMove(element, onMove) {
           return refresh();
         }
         if (!ratio) {
+          // If the reference is clipped, the ratio is 0. Throttle the refresh
+          // to prevent an infinite loop of updates.
           timeoutId = setTimeout(() => {
             refresh(false, 1e-7);
-          }, 100);
+          }, 1000);
         } else {
           refresh(false, ratio);
         }
@@ -34410,7 +34581,7 @@ function autoUpdate(reference, floating, update, options) {
     animationFrame = false
   } = options;
   const referenceEl = unwrapElement(reference);
-  const ancestors = ancestorScroll || ancestorResize ? [...(referenceEl ? (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getOverflowAncestors)(referenceEl) : []), ...(0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_1__.getOverflowAncestors)(floating)] : [];
+  const ancestors = ancestorScroll || ancestorResize ? [...(referenceEl ? (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getOverflowAncestors)(referenceEl) : []), ...(0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getOverflowAncestors)(floating)] : [];
   ancestors.forEach(ancestor => {
     ancestorScroll && ancestor.addEventListener('scroll', update, {
       passive: true
@@ -34429,7 +34600,8 @@ function autoUpdate(reference, floating, update, options) {
         resizeObserver.unobserve(floating);
         cancelAnimationFrame(reobserveFrame);
         reobserveFrame = requestAnimationFrame(() => {
-          resizeObserver && resizeObserver.observe(floating);
+          var _resizeObserver;
+          (_resizeObserver = resizeObserver) == null || _resizeObserver.observe(floating);
         });
       }
       update();
@@ -34454,12 +34626,13 @@ function autoUpdate(reference, floating, update, options) {
   }
   update();
   return () => {
+    var _resizeObserver2;
     ancestors.forEach(ancestor => {
       ancestorScroll && ancestor.removeEventListener('scroll', update);
       ancestorResize && ancestor.removeEventListener('resize', update);
     });
-    cleanupIo && cleanupIo();
-    resizeObserver && resizeObserver.disconnect();
+    cleanupIo == null || cleanupIo();
+    (_resizeObserver2 = resizeObserver) == null || _resizeObserver2.disconnect();
     resizeObserver = null;
     if (animationFrame) {
       cancelAnimationFrame(frameId);
@@ -34468,9 +34641,84 @@ function autoUpdate(reference, floating, update, options) {
 }
 
 /**
+ * Resolves with an object of overflow side offsets that determine how much the
+ * element is overflowing a given clipping boundary on each side.
+ * - positive = overflowing the boundary by that number of pixels
+ * - negative = how many pixels left before it will overflow
+ * - 0 = lies flush with the boundary
+ * @see https://floating-ui.com/docs/detectOverflow
+ */
+const detectOverflow = _floating_ui_core__WEBPACK_IMPORTED_MODULE_2__.detectOverflow;
+
+/**
+ * Modifies the placement by translating the floating element along the
+ * specified axes.
+ * A number (shorthand for `mainAxis` or distance), or an axes configuration
+ * object may be passed.
+ * @see https://floating-ui.com/docs/offset
+ */
+const offset = _floating_ui_core__WEBPACK_IMPORTED_MODULE_2__.offset;
+
+/**
+ * Optimizes the visibility of the floating element by choosing the placement
+ * that has the most space available automatically, without needing to specify a
+ * preferred placement. Alternative to `flip`.
+ * @see https://floating-ui.com/docs/autoPlacement
+ */
+const autoPlacement = _floating_ui_core__WEBPACK_IMPORTED_MODULE_2__.autoPlacement;
+
+/**
+ * Optimizes the visibility of the floating element by shifting it in order to
+ * keep it in view when it will overflow the clipping boundary.
+ * @see https://floating-ui.com/docs/shift
+ */
+const shift = _floating_ui_core__WEBPACK_IMPORTED_MODULE_2__.shift;
+
+/**
+ * Optimizes the visibility of the floating element by flipping the `placement`
+ * in order to keep it in view when the preferred placement(s) will overflow the
+ * clipping boundary. Alternative to `autoPlacement`.
+ * @see https://floating-ui.com/docs/flip
+ */
+const flip = _floating_ui_core__WEBPACK_IMPORTED_MODULE_2__.flip;
+
+/**
+ * Provides data that allows you to change the size of the floating element —
+ * for instance, prevent it from overflowing the clipping boundary or match the
+ * width of the reference element.
+ * @see https://floating-ui.com/docs/size
+ */
+const size = _floating_ui_core__WEBPACK_IMPORTED_MODULE_2__.size;
+
+/**
+ * Provides data to hide the floating element in applicable situations, such as
+ * when it is not in the same clipping context as the reference element.
+ * @see https://floating-ui.com/docs/hide
+ */
+const hide = _floating_ui_core__WEBPACK_IMPORTED_MODULE_2__.hide;
+
+/**
+ * Provides data to position an inner element of the floating element so that it
+ * appears centered to the reference element.
+ * @see https://floating-ui.com/docs/arrow
+ */
+const arrow = _floating_ui_core__WEBPACK_IMPORTED_MODULE_2__.arrow;
+
+/**
+ * Provides improved positioning for inline reference elements that can span
+ * over multiple lines, such as hyperlinks or range selections.
+ * @see https://floating-ui.com/docs/inline
+ */
+const inline = _floating_ui_core__WEBPACK_IMPORTED_MODULE_2__.inline;
+
+/**
+ * Built-in `limiter` that will stop `shift()` at a certain point.
+ */
+const limitShift = _floating_ui_core__WEBPACK_IMPORTED_MODULE_2__.limitShift;
+
+/**
  * Computes the `x` and `y` coordinates that will place the floating element
- * next to a reference element when it is given a certain CSS positioning
- * strategy.
+ * next to a given reference element.
  */
 const computePosition = (reference, floating, options) => {
   // This caches the expensive `getClippingElementAncestors` function so that
@@ -34485,11 +34733,565 @@ const computePosition = (reference, floating, options) => {
     ...mergedOptions.platform,
     _c: cache
   };
-  return (0,_floating_ui_core__WEBPACK_IMPORTED_MODULE_0__.computePosition)(reference, floating, {
+  return (0,_floating_ui_core__WEBPACK_IMPORTED_MODULE_2__.computePosition)(reference, floating, {
     ...mergedOptions,
     platform: platformWithCache
   });
 };
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@floating-ui/react-dom/dist/floating-ui.react-dom.mjs":
+/*!****************************************************************************!*\
+  !*** ./node_modules/@floating-ui/react-dom/dist/floating-ui.react-dom.mjs ***!
+  \****************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   arrow: () => (/* binding */ arrow),
+/* harmony export */   autoPlacement: () => (/* binding */ autoPlacement),
+/* harmony export */   autoUpdate: () => (/* reexport safe */ _floating_ui_dom__WEBPACK_IMPORTED_MODULE_0__.autoUpdate),
+/* harmony export */   computePosition: () => (/* reexport safe */ _floating_ui_dom__WEBPACK_IMPORTED_MODULE_0__.computePosition),
+/* harmony export */   detectOverflow: () => (/* reexport safe */ _floating_ui_dom__WEBPACK_IMPORTED_MODULE_0__.detectOverflow),
+/* harmony export */   flip: () => (/* binding */ flip),
+/* harmony export */   getOverflowAncestors: () => (/* reexport safe */ _floating_ui_dom__WEBPACK_IMPORTED_MODULE_1__.getOverflowAncestors),
+/* harmony export */   hide: () => (/* binding */ hide),
+/* harmony export */   inline: () => (/* binding */ inline),
+/* harmony export */   limitShift: () => (/* binding */ limitShift),
+/* harmony export */   offset: () => (/* binding */ offset),
+/* harmony export */   platform: () => (/* reexport safe */ _floating_ui_dom__WEBPACK_IMPORTED_MODULE_0__.platform),
+/* harmony export */   shift: () => (/* binding */ shift),
+/* harmony export */   size: () => (/* binding */ size),
+/* harmony export */   useFloating: () => (/* binding */ useFloating)
+/* harmony export */ });
+/* harmony import */ var _floating_ui_dom__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @floating-ui/dom */ "./node_modules/@floating-ui/dom/dist/floating-ui.dom.mjs");
+/* harmony import */ var _floating_ui_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @floating-ui/dom */ "./node_modules/@floating-ui/utils/dist/floating-ui.utils.dom.mjs");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-dom */ "react-dom");
+
+
+
+
+
+
+var index = typeof document !== 'undefined' ? react__WEBPACK_IMPORTED_MODULE_2__.useLayoutEffect : react__WEBPACK_IMPORTED_MODULE_2__.useEffect;
+
+// Fork of `fast-deep-equal` that only does the comparisons we need and compares
+// functions
+function deepEqual(a, b) {
+  if (a === b) {
+    return true;
+  }
+  if (typeof a !== typeof b) {
+    return false;
+  }
+  if (typeof a === 'function' && a.toString() === b.toString()) {
+    return true;
+  }
+  let length;
+  let i;
+  let keys;
+  if (a && b && typeof a === 'object') {
+    if (Array.isArray(a)) {
+      length = a.length;
+      if (length !== b.length) return false;
+      for (i = length; i-- !== 0;) {
+        if (!deepEqual(a[i], b[i])) {
+          return false;
+        }
+      }
+      return true;
+    }
+    keys = Object.keys(a);
+    length = keys.length;
+    if (length !== Object.keys(b).length) {
+      return false;
+    }
+    for (i = length; i-- !== 0;) {
+      if (!{}.hasOwnProperty.call(b, keys[i])) {
+        return false;
+      }
+    }
+    for (i = length; i-- !== 0;) {
+      const key = keys[i];
+      if (key === '_owner' && a.$$typeof) {
+        continue;
+      }
+      if (!deepEqual(a[key], b[key])) {
+        return false;
+      }
+    }
+    return true;
+  }
+  return a !== a && b !== b;
+}
+
+function getDPR(element) {
+  if (typeof window === 'undefined') {
+    return 1;
+  }
+  const win = element.ownerDocument.defaultView || window;
+  return win.devicePixelRatio || 1;
+}
+
+function roundByDPR(element, value) {
+  const dpr = getDPR(element);
+  return Math.round(value * dpr) / dpr;
+}
+
+function useLatestRef(value) {
+  const ref = react__WEBPACK_IMPORTED_MODULE_2__.useRef(value);
+  index(() => {
+    ref.current = value;
+  });
+  return ref;
+}
+
+/**
+ * Provides data to position a floating element.
+ * @see https://floating-ui.com/docs/useFloating
+ */
+function useFloating(options) {
+  if (options === void 0) {
+    options = {};
+  }
+  const {
+    placement = 'bottom',
+    strategy = 'absolute',
+    middleware = [],
+    platform,
+    elements: {
+      reference: externalReference,
+      floating: externalFloating
+    } = {},
+    transform = true,
+    whileElementsMounted,
+    open
+  } = options;
+  const [data, setData] = react__WEBPACK_IMPORTED_MODULE_2__.useState({
+    x: 0,
+    y: 0,
+    strategy,
+    placement,
+    middlewareData: {},
+    isPositioned: false
+  });
+  const [latestMiddleware, setLatestMiddleware] = react__WEBPACK_IMPORTED_MODULE_2__.useState(middleware);
+  if (!deepEqual(latestMiddleware, middleware)) {
+    setLatestMiddleware(middleware);
+  }
+  const [_reference, _setReference] = react__WEBPACK_IMPORTED_MODULE_2__.useState(null);
+  const [_floating, _setFloating] = react__WEBPACK_IMPORTED_MODULE_2__.useState(null);
+  const setReference = react__WEBPACK_IMPORTED_MODULE_2__.useCallback(node => {
+    if (node !== referenceRef.current) {
+      referenceRef.current = node;
+      _setReference(node);
+    }
+  }, []);
+  const setFloating = react__WEBPACK_IMPORTED_MODULE_2__.useCallback(node => {
+    if (node !== floatingRef.current) {
+      floatingRef.current = node;
+      _setFloating(node);
+    }
+  }, []);
+  const referenceEl = externalReference || _reference;
+  const floatingEl = externalFloating || _floating;
+  const referenceRef = react__WEBPACK_IMPORTED_MODULE_2__.useRef(null);
+  const floatingRef = react__WEBPACK_IMPORTED_MODULE_2__.useRef(null);
+  const dataRef = react__WEBPACK_IMPORTED_MODULE_2__.useRef(data);
+  const hasWhileElementsMounted = whileElementsMounted != null;
+  const whileElementsMountedRef = useLatestRef(whileElementsMounted);
+  const platformRef = useLatestRef(platform);
+  const update = react__WEBPACK_IMPORTED_MODULE_2__.useCallback(() => {
+    if (!referenceRef.current || !floatingRef.current) {
+      return;
+    }
+    const config = {
+      placement,
+      strategy,
+      middleware: latestMiddleware
+    };
+    if (platformRef.current) {
+      config.platform = platformRef.current;
+    }
+    (0,_floating_ui_dom__WEBPACK_IMPORTED_MODULE_0__.computePosition)(referenceRef.current, floatingRef.current, config).then(data => {
+      const fullData = {
+        ...data,
+        isPositioned: true
+      };
+      if (isMountedRef.current && !deepEqual(dataRef.current, fullData)) {
+        dataRef.current = fullData;
+        react_dom__WEBPACK_IMPORTED_MODULE_3__.flushSync(() => {
+          setData(fullData);
+        });
+      }
+    });
+  }, [latestMiddleware, placement, strategy, platformRef]);
+  index(() => {
+    if (open === false && dataRef.current.isPositioned) {
+      dataRef.current.isPositioned = false;
+      setData(data => ({
+        ...data,
+        isPositioned: false
+      }));
+    }
+  }, [open]);
+  const isMountedRef = react__WEBPACK_IMPORTED_MODULE_2__.useRef(false);
+  index(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
+  index(() => {
+    if (referenceEl) referenceRef.current = referenceEl;
+    if (floatingEl) floatingRef.current = floatingEl;
+    if (referenceEl && floatingEl) {
+      if (whileElementsMountedRef.current) {
+        return whileElementsMountedRef.current(referenceEl, floatingEl, update);
+      }
+      update();
+    }
+  }, [referenceEl, floatingEl, update, whileElementsMountedRef, hasWhileElementsMounted]);
+  const refs = react__WEBPACK_IMPORTED_MODULE_2__.useMemo(() => ({
+    reference: referenceRef,
+    floating: floatingRef,
+    setReference,
+    setFloating
+  }), [setReference, setFloating]);
+  const elements = react__WEBPACK_IMPORTED_MODULE_2__.useMemo(() => ({
+    reference: referenceEl,
+    floating: floatingEl
+  }), [referenceEl, floatingEl]);
+  const floatingStyles = react__WEBPACK_IMPORTED_MODULE_2__.useMemo(() => {
+    const initialStyles = {
+      position: strategy,
+      left: 0,
+      top: 0
+    };
+    if (!elements.floating) {
+      return initialStyles;
+    }
+    const x = roundByDPR(elements.floating, data.x);
+    const y = roundByDPR(elements.floating, data.y);
+    if (transform) {
+      return {
+        ...initialStyles,
+        transform: "translate(" + x + "px, " + y + "px)",
+        ...(getDPR(elements.floating) >= 1.5 && {
+          willChange: 'transform'
+        })
+      };
+    }
+    return {
+      position: strategy,
+      left: x,
+      top: y
+    };
+  }, [strategy, transform, elements.floating, data.x, data.y]);
+  return react__WEBPACK_IMPORTED_MODULE_2__.useMemo(() => ({
+    ...data,
+    update,
+    refs,
+    elements,
+    floatingStyles
+  }), [data, update, refs, elements, floatingStyles]);
+}
+
+/**
+ * Provides data to position an inner element of the floating element so that it
+ * appears centered to the reference element.
+ * This wraps the core `arrow` middleware to allow React refs as the element.
+ * @see https://floating-ui.com/docs/arrow
+ */
+const arrow$1 = options => {
+  function isRef(value) {
+    return {}.hasOwnProperty.call(value, 'current');
+  }
+  return {
+    name: 'arrow',
+    options,
+    fn(state) {
+      const {
+        element,
+        padding
+      } = typeof options === 'function' ? options(state) : options;
+      if (element && isRef(element)) {
+        if (element.current != null) {
+          return (0,_floating_ui_dom__WEBPACK_IMPORTED_MODULE_0__.arrow)({
+            element: element.current,
+            padding
+          }).fn(state);
+        }
+        return {};
+      }
+      if (element) {
+        return (0,_floating_ui_dom__WEBPACK_IMPORTED_MODULE_0__.arrow)({
+          element,
+          padding
+        }).fn(state);
+      }
+      return {};
+    }
+  };
+};
+
+/**
+ * Modifies the placement by translating the floating element along the
+ * specified axes.
+ * A number (shorthand for `mainAxis` or distance), or an axes configuration
+ * object may be passed.
+ * @see https://floating-ui.com/docs/offset
+ */
+const offset = (options, deps) => ({
+  ...(0,_floating_ui_dom__WEBPACK_IMPORTED_MODULE_0__.offset)(options),
+  options: [options, deps]
+});
+
+/**
+ * Optimizes the visibility of the floating element by shifting it in order to
+ * keep it in view when it will overflow the clipping boundary.
+ * @see https://floating-ui.com/docs/shift
+ */
+const shift = (options, deps) => ({
+  ...(0,_floating_ui_dom__WEBPACK_IMPORTED_MODULE_0__.shift)(options),
+  options: [options, deps]
+});
+/**
+ * Built-in `limiter` that will stop `shift()` at a certain point.
+ */
+const limitShift = (options, deps) => ({
+  ...(0,_floating_ui_dom__WEBPACK_IMPORTED_MODULE_0__.limitShift)(options),
+  options: [options, deps]
+});
+
+/**
+ * Optimizes the visibility of the floating element by flipping the `placement`
+ * in order to keep it in view when the preferred placement(s) will overflow the
+ * clipping boundary. Alternative to `autoPlacement`.
+ * @see https://floating-ui.com/docs/flip
+ */
+const flip = (options, deps) => ({
+  ...(0,_floating_ui_dom__WEBPACK_IMPORTED_MODULE_0__.flip)(options),
+  options: [options, deps]
+});
+
+/**
+ * Provides data that allows you to change the size of the floating element —
+ * for instance, prevent it from overflowing the clipping boundary or match the
+ * width of the reference element.
+ * @see https://floating-ui.com/docs/size
+ */
+const size = (options, deps) => ({
+  ...(0,_floating_ui_dom__WEBPACK_IMPORTED_MODULE_0__.size)(options),
+  options: [options, deps]
+});
+
+/**
+ * Optimizes the visibility of the floating element by choosing the placement
+ * that has the most space available automatically, without needing to specify a
+ * preferred placement. Alternative to `flip`.
+ * @see https://floating-ui.com/docs/autoPlacement
+ */
+const autoPlacement = (options, deps) => ({
+  ...(0,_floating_ui_dom__WEBPACK_IMPORTED_MODULE_0__.autoPlacement)(options),
+  options: [options, deps]
+});
+
+/**
+ * Provides data to hide the floating element in applicable situations, such as
+ * when it is not in the same clipping context as the reference element.
+ * @see https://floating-ui.com/docs/hide
+ */
+const hide = (options, deps) => ({
+  ...(0,_floating_ui_dom__WEBPACK_IMPORTED_MODULE_0__.hide)(options),
+  options: [options, deps]
+});
+
+/**
+ * Provides improved positioning for inline reference elements that can span
+ * over multiple lines, such as hyperlinks or range selections.
+ * @see https://floating-ui.com/docs/inline
+ */
+const inline = (options, deps) => ({
+  ...(0,_floating_ui_dom__WEBPACK_IMPORTED_MODULE_0__.inline)(options),
+  options: [options, deps]
+});
+
+/**
+ * Provides data to position an inner element of the floating element so that it
+ * appears centered to the reference element.
+ * This wraps the core `arrow` middleware to allow React refs as the element.
+ * @see https://floating-ui.com/docs/arrow
+ */
+const arrow = (options, deps) => ({
+  ...arrow$1(options),
+  options: [options, deps]
+});
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@floating-ui/utils/dist/floating-ui.utils.dom.mjs":
+/*!************************************************************************!*\
+  !*** ./node_modules/@floating-ui/utils/dist/floating-ui.utils.dom.mjs ***!
+  \************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   getComputedStyle: () => (/* binding */ getComputedStyle),
+/* harmony export */   getContainingBlock: () => (/* binding */ getContainingBlock),
+/* harmony export */   getDocumentElement: () => (/* binding */ getDocumentElement),
+/* harmony export */   getNearestOverflowAncestor: () => (/* binding */ getNearestOverflowAncestor),
+/* harmony export */   getNodeName: () => (/* binding */ getNodeName),
+/* harmony export */   getNodeScroll: () => (/* binding */ getNodeScroll),
+/* harmony export */   getOverflowAncestors: () => (/* binding */ getOverflowAncestors),
+/* harmony export */   getParentNode: () => (/* binding */ getParentNode),
+/* harmony export */   getWindow: () => (/* binding */ getWindow),
+/* harmony export */   isContainingBlock: () => (/* binding */ isContainingBlock),
+/* harmony export */   isElement: () => (/* binding */ isElement),
+/* harmony export */   isHTMLElement: () => (/* binding */ isHTMLElement),
+/* harmony export */   isLastTraversableNode: () => (/* binding */ isLastTraversableNode),
+/* harmony export */   isNode: () => (/* binding */ isNode),
+/* harmony export */   isOverflowElement: () => (/* binding */ isOverflowElement),
+/* harmony export */   isShadowRoot: () => (/* binding */ isShadowRoot),
+/* harmony export */   isTableElement: () => (/* binding */ isTableElement),
+/* harmony export */   isWebKit: () => (/* binding */ isWebKit)
+/* harmony export */ });
+function getNodeName(node) {
+  if (isNode(node)) {
+    return (node.nodeName || '').toLowerCase();
+  }
+  // Mocked nodes in testing environments may not be instances of Node. By
+  // returning `#document` an infinite loop won't occur.
+  // https://github.com/floating-ui/floating-ui/issues/2317
+  return '#document';
+}
+function getWindow(node) {
+  var _node$ownerDocument;
+  return (node == null || (_node$ownerDocument = node.ownerDocument) == null ? void 0 : _node$ownerDocument.defaultView) || window;
+}
+function getDocumentElement(node) {
+  var _ref;
+  return (_ref = (isNode(node) ? node.ownerDocument : node.document) || window.document) == null ? void 0 : _ref.documentElement;
+}
+function isNode(value) {
+  return value instanceof Node || value instanceof getWindow(value).Node;
+}
+function isElement(value) {
+  return value instanceof Element || value instanceof getWindow(value).Element;
+}
+function isHTMLElement(value) {
+  return value instanceof HTMLElement || value instanceof getWindow(value).HTMLElement;
+}
+function isShadowRoot(value) {
+  // Browsers without `ShadowRoot` support.
+  if (typeof ShadowRoot === 'undefined') {
+    return false;
+  }
+  return value instanceof ShadowRoot || value instanceof getWindow(value).ShadowRoot;
+}
+function isOverflowElement(element) {
+  const {
+    overflow,
+    overflowX,
+    overflowY,
+    display
+  } = getComputedStyle(element);
+  return /auto|scroll|overlay|hidden|clip/.test(overflow + overflowY + overflowX) && !['inline', 'contents'].includes(display);
+}
+function isTableElement(element) {
+  return ['table', 'td', 'th'].includes(getNodeName(element));
+}
+function isContainingBlock(element) {
+  const webkit = isWebKit();
+  const css = getComputedStyle(element);
+
+  // https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block
+  return css.transform !== 'none' || css.perspective !== 'none' || (css.containerType ? css.containerType !== 'normal' : false) || !webkit && (css.backdropFilter ? css.backdropFilter !== 'none' : false) || !webkit && (css.filter ? css.filter !== 'none' : false) || ['transform', 'perspective', 'filter'].some(value => (css.willChange || '').includes(value)) || ['paint', 'layout', 'strict', 'content'].some(value => (css.contain || '').includes(value));
+}
+function getContainingBlock(element) {
+  let currentNode = getParentNode(element);
+  while (isHTMLElement(currentNode) && !isLastTraversableNode(currentNode)) {
+    if (isContainingBlock(currentNode)) {
+      return currentNode;
+    }
+    currentNode = getParentNode(currentNode);
+  }
+  return null;
+}
+function isWebKit() {
+  if (typeof CSS === 'undefined' || !CSS.supports) return false;
+  return CSS.supports('-webkit-backdrop-filter', 'none');
+}
+function isLastTraversableNode(node) {
+  return ['html', 'body', '#document'].includes(getNodeName(node));
+}
+function getComputedStyle(element) {
+  return getWindow(element).getComputedStyle(element);
+}
+function getNodeScroll(element) {
+  if (isElement(element)) {
+    return {
+      scrollLeft: element.scrollLeft,
+      scrollTop: element.scrollTop
+    };
+  }
+  return {
+    scrollLeft: element.pageXOffset,
+    scrollTop: element.pageYOffset
+  };
+}
+function getParentNode(node) {
+  if (getNodeName(node) === 'html') {
+    return node;
+  }
+  const result =
+  // Step into the shadow DOM of the parent of a slotted node.
+  node.assignedSlot ||
+  // DOM Element detected.
+  node.parentNode ||
+  // ShadowRoot detected.
+  isShadowRoot(node) && node.host ||
+  // Fallback.
+  getDocumentElement(node);
+  return isShadowRoot(result) ? result.host : result;
+}
+function getNearestOverflowAncestor(node) {
+  const parentNode = getParentNode(node);
+  if (isLastTraversableNode(parentNode)) {
+    return node.ownerDocument ? node.ownerDocument.body : node.body;
+  }
+  if (isHTMLElement(parentNode) && isOverflowElement(parentNode)) {
+    return parentNode;
+  }
+  return getNearestOverflowAncestor(parentNode);
+}
+function getOverflowAncestors(node, list, traverseIframes) {
+  var _node$ownerDocument2;
+  if (list === void 0) {
+    list = [];
+  }
+  if (traverseIframes === void 0) {
+    traverseIframes = true;
+  }
+  const scrollableAncestor = getNearestOverflowAncestor(node);
+  const isBody = scrollableAncestor === ((_node$ownerDocument2 = node.ownerDocument) == null ? void 0 : _node$ownerDocument2.body);
+  const win = getWindow(scrollableAncestor);
+  if (isBody) {
+    return list.concat(win, win.visualViewport || [], isOverflowElement(scrollableAncestor) ? scrollableAncestor : [], win.frameElement && traverseIframes ? getOverflowAncestors(win.frameElement) : []);
+  }
+  return list.concat(scrollableAncestor, getOverflowAncestors(scrollableAncestor, [], traverseIframes));
+}
 
 
 
@@ -34530,6 +35332,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   round: () => (/* binding */ round),
 /* harmony export */   sides: () => (/* binding */ sides)
 /* harmony export */ });
+/**
+ * Custom positioning reference element.
+ * @see https://floating-ui.com/docs/virtual-elements
+ */
+
 const sides = ['top', 'right', 'bottom', 'left'];
 const alignments = ['start', 'end'];
 const placements = /*#__PURE__*/sides.reduce((acc, side) => acc.concat(side, side + "-" + alignments[0], side + "-" + alignments[1]), []);
@@ -34644,173 +35451,22 @@ function getPaddingObject(padding) {
   };
 }
 function rectToClientRect(rect) {
-  return {
-    ...rect,
-    top: rect.y,
-    left: rect.x,
-    right: rect.x + rect.width,
-    bottom: rect.y + rect.height
-  };
-}
-
-
-
-
-/***/ }),
-
-/***/ "./node_modules/@floating-ui/utils/dom/dist/floating-ui.utils.dom.mjs":
-/*!****************************************************************************!*\
-  !*** ./node_modules/@floating-ui/utils/dom/dist/floating-ui.utils.dom.mjs ***!
-  \****************************************************************************/
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   getComputedStyle: () => (/* binding */ getComputedStyle),
-/* harmony export */   getContainingBlock: () => (/* binding */ getContainingBlock),
-/* harmony export */   getDocumentElement: () => (/* binding */ getDocumentElement),
-/* harmony export */   getNearestOverflowAncestor: () => (/* binding */ getNearestOverflowAncestor),
-/* harmony export */   getNodeName: () => (/* binding */ getNodeName),
-/* harmony export */   getNodeScroll: () => (/* binding */ getNodeScroll),
-/* harmony export */   getOverflowAncestors: () => (/* binding */ getOverflowAncestors),
-/* harmony export */   getParentNode: () => (/* binding */ getParentNode),
-/* harmony export */   getWindow: () => (/* binding */ getWindow),
-/* harmony export */   isContainingBlock: () => (/* binding */ isContainingBlock),
-/* harmony export */   isElement: () => (/* binding */ isElement),
-/* harmony export */   isHTMLElement: () => (/* binding */ isHTMLElement),
-/* harmony export */   isLastTraversableNode: () => (/* binding */ isLastTraversableNode),
-/* harmony export */   isNode: () => (/* binding */ isNode),
-/* harmony export */   isOverflowElement: () => (/* binding */ isOverflowElement),
-/* harmony export */   isShadowRoot: () => (/* binding */ isShadowRoot),
-/* harmony export */   isTableElement: () => (/* binding */ isTableElement),
-/* harmony export */   isWebKit: () => (/* binding */ isWebKit)
-/* harmony export */ });
-function getNodeName(node) {
-  if (isNode(node)) {
-    return (node.nodeName || '').toLowerCase();
-  }
-  // Mocked nodes in testing environments may not be instances of Node. By
-  // returning `#document` an infinite loop won't occur.
-  // https://github.com/floating-ui/floating-ui/issues/2317
-  return '#document';
-}
-function getWindow(node) {
-  var _node$ownerDocument;
-  return (node == null ? void 0 : (_node$ownerDocument = node.ownerDocument) == null ? void 0 : _node$ownerDocument.defaultView) || window;
-}
-function getDocumentElement(node) {
-  var _ref;
-  return (_ref = (isNode(node) ? node.ownerDocument : node.document) || window.document) == null ? void 0 : _ref.documentElement;
-}
-function isNode(value) {
-  return value instanceof Node || value instanceof getWindow(value).Node;
-}
-function isElement(value) {
-  return value instanceof Element || value instanceof getWindow(value).Element;
-}
-function isHTMLElement(value) {
-  return value instanceof HTMLElement || value instanceof getWindow(value).HTMLElement;
-}
-function isShadowRoot(value) {
-  // Browsers without `ShadowRoot` support.
-  if (typeof ShadowRoot === 'undefined') {
-    return false;
-  }
-  return value instanceof ShadowRoot || value instanceof getWindow(value).ShadowRoot;
-}
-function isOverflowElement(element) {
   const {
-    overflow,
-    overflowX,
-    overflowY,
-    display
-  } = getComputedStyle(element);
-  return /auto|scroll|overlay|hidden|clip/.test(overflow + overflowY + overflowX) && !['inline', 'contents'].includes(display);
-}
-function isTableElement(element) {
-  return ['table', 'td', 'th'].includes(getNodeName(element));
-}
-function isContainingBlock(element) {
-  const webkit = isWebKit();
-  const css = getComputedStyle(element);
-
-  // https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block
-  return css.transform !== 'none' || css.perspective !== 'none' || (css.containerType ? css.containerType !== 'normal' : false) || !webkit && (css.backdropFilter ? css.backdropFilter !== 'none' : false) || !webkit && (css.filter ? css.filter !== 'none' : false) || ['transform', 'perspective', 'filter'].some(value => (css.willChange || '').includes(value)) || ['paint', 'layout', 'strict', 'content'].some(value => (css.contain || '').includes(value));
-}
-function getContainingBlock(element) {
-  let currentNode = getParentNode(element);
-  while (isHTMLElement(currentNode) && !isLastTraversableNode(currentNode)) {
-    if (isContainingBlock(currentNode)) {
-      return currentNode;
-    } else {
-      currentNode = getParentNode(currentNode);
-    }
-  }
-  return null;
-}
-function isWebKit() {
-  if (typeof CSS === 'undefined' || !CSS.supports) return false;
-  return CSS.supports('-webkit-backdrop-filter', 'none');
-}
-function isLastTraversableNode(node) {
-  return ['html', 'body', '#document'].includes(getNodeName(node));
-}
-function getComputedStyle(element) {
-  return getWindow(element).getComputedStyle(element);
-}
-function getNodeScroll(element) {
-  if (isElement(element)) {
-    return {
-      scrollLeft: element.scrollLeft,
-      scrollTop: element.scrollTop
-    };
-  }
+    x,
+    y,
+    width,
+    height
+  } = rect;
   return {
-    scrollLeft: element.pageXOffset,
-    scrollTop: element.pageYOffset
+    width,
+    height,
+    top: y,
+    left: x,
+    right: x + width,
+    bottom: y + height,
+    x,
+    y
   };
-}
-function getParentNode(node) {
-  if (getNodeName(node) === 'html') {
-    return node;
-  }
-  const result =
-  // Step into the shadow DOM of the parent of a slotted node.
-  node.assignedSlot ||
-  // DOM Element detected.
-  node.parentNode ||
-  // ShadowRoot detected.
-  isShadowRoot(node) && node.host ||
-  // Fallback.
-  getDocumentElement(node);
-  return isShadowRoot(result) ? result.host : result;
-}
-function getNearestOverflowAncestor(node) {
-  const parentNode = getParentNode(node);
-  if (isLastTraversableNode(parentNode)) {
-    return node.ownerDocument ? node.ownerDocument.body : node.body;
-  }
-  if (isHTMLElement(parentNode) && isOverflowElement(parentNode)) {
-    return parentNode;
-  }
-  return getNearestOverflowAncestor(parentNode);
-}
-function getOverflowAncestors(node, list, traverseIframes) {
-  var _node$ownerDocument2;
-  if (list === void 0) {
-    list = [];
-  }
-  if (traverseIframes === void 0) {
-    traverseIframes = true;
-  }
-  const scrollableAncestor = getNearestOverflowAncestor(node);
-  const isBody = scrollableAncestor === ((_node$ownerDocument2 = node.ownerDocument) == null ? void 0 : _node$ownerDocument2.body);
-  const win = getWindow(scrollableAncestor);
-  if (isBody) {
-    return list.concat(win, win.visualViewport || [], isOverflowElement(scrollableAncestor) ? scrollableAncestor : [], win.frameElement && traverseIframes ? getOverflowAncestors(win.frameElement) : []);
-  }
-  return list.concat(scrollableAncestor, getOverflowAncestors(scrollableAncestor, [], traverseIframes));
 }
 
 
@@ -34835,6 +35491,57 @@ function $e42e1063c40fb3ef$export$b9ecd428b558ff10(originalEventHandler, ourEven
         if (checkForDefaultPrevented === false || !event.defaultPrevented) return ourEventHandler === null || ourEventHandler === void 0 ? void 0 : ourEventHandler(event);
     };
 }
+
+
+
+
+
+//# sourceMappingURL=index.mjs.map
+
+
+/***/ }),
+
+/***/ "./node_modules/@radix-ui/react-arrow/dist/index.mjs":
+/*!***********************************************************!*\
+  !*** ./node_modules/@radix-ui/react-arrow/dist/index.mjs ***!
+  \***********************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Arrow: () => (/* binding */ $7e8f5cd07187803e$export$21b07c8f274aebd5),
+/* harmony export */   Root: () => (/* binding */ $7e8f5cd07187803e$export$be92b6f5f03c0fe9)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/esm/extends */ "./node_modules/@babel/runtime/helpers/esm/extends.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var _radix_ui_react_primitive__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @radix-ui/react-primitive */ "./node_modules/@radix-ui/react-primitive/dist/index.mjs");
+
+
+
+
+
+
+
+/* -------------------------------------------------------------------------------------------------
+ * Arrow
+ * -----------------------------------------------------------------------------------------------*/ const $7e8f5cd07187803e$var$NAME = 'Arrow';
+const $7e8f5cd07187803e$export$21b07c8f274aebd5 = /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.forwardRef)((props, forwardedRef)=>{
+    const { children: children , width: width = 10 , height: height = 5 , ...arrowProps } = props;
+    return /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.createElement)(_radix_ui_react_primitive__WEBPACK_IMPORTED_MODULE_2__.Primitive.svg, (0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({}, arrowProps, {
+        ref: forwardedRef,
+        width: width,
+        height: height,
+        viewBox: "0 0 30 10",
+        preserveAspectRatio: "none"
+    }), props.asChild ? children : /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.createElement)("polygon", {
+        points: "0,0 30,0 15,10"
+    }));
+});
+/*#__PURE__*/ Object.assign($7e8f5cd07187803e$export$21b07c8f274aebd5, {
+    displayName: $7e8f5cd07187803e$var$NAME
+});
+/* -----------------------------------------------------------------------------------------------*/ const $7e8f5cd07187803e$export$be92b6f5f03c0fe9 = $7e8f5cd07187803e$export$21b07c8f274aebd5;
 
 
 
@@ -36171,6 +36878,366 @@ function $1746a345f3d73bb7$export$f680877a34711e37(deterministicId) {
 
 /***/ }),
 
+/***/ "./node_modules/@radix-ui/react-popper/dist/index.mjs":
+/*!************************************************************!*\
+  !*** ./node_modules/@radix-ui/react-popper/dist/index.mjs ***!
+  \************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ALIGN_OPTIONS: () => (/* binding */ $cf1ac5d9fe0e8206$export$3671ffab7b302fc9),
+/* harmony export */   Anchor: () => (/* binding */ $cf1ac5d9fe0e8206$export$b688253958b8dfe7),
+/* harmony export */   Arrow: () => (/* binding */ $cf1ac5d9fe0e8206$export$21b07c8f274aebd5),
+/* harmony export */   Content: () => (/* binding */ $cf1ac5d9fe0e8206$export$7c6e2c02157bb7d2),
+/* harmony export */   Popper: () => (/* binding */ $cf1ac5d9fe0e8206$export$badac9ada3a0bdf9),
+/* harmony export */   PopperAnchor: () => (/* binding */ $cf1ac5d9fe0e8206$export$ecd4e1ccab6ed6d),
+/* harmony export */   PopperArrow: () => (/* binding */ $cf1ac5d9fe0e8206$export$79d62cd4e10a3fd0),
+/* harmony export */   PopperContent: () => (/* binding */ $cf1ac5d9fe0e8206$export$bc4ae5855d3c4fc),
+/* harmony export */   Root: () => (/* binding */ $cf1ac5d9fe0e8206$export$be92b6f5f03c0fe9),
+/* harmony export */   SIDE_OPTIONS: () => (/* binding */ $cf1ac5d9fe0e8206$export$36f0086da09c4b9f),
+/* harmony export */   createPopperScope: () => (/* binding */ $cf1ac5d9fe0e8206$export$722aac194ae923)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/esm/extends */ "./node_modules/@babel/runtime/helpers/esm/extends.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @floating-ui/react-dom */ "./node_modules/@floating-ui/react-dom/dist/floating-ui.react-dom.mjs");
+/* harmony import */ var _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @floating-ui/react-dom */ "./node_modules/@floating-ui/dom/dist/floating-ui.dom.mjs");
+/* harmony import */ var _radix_ui_react_arrow__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @radix-ui/react-arrow */ "./node_modules/@radix-ui/react-arrow/dist/index.mjs");
+/* harmony import */ var _radix_ui_react_compose_refs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @radix-ui/react-compose-refs */ "./node_modules/@radix-ui/react-compose-refs/dist/index.mjs");
+/* harmony import */ var _radix_ui_react_context__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @radix-ui/react-context */ "./node_modules/@radix-ui/react-context/dist/index.mjs");
+/* harmony import */ var _radix_ui_react_primitive__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @radix-ui/react-primitive */ "./node_modules/@radix-ui/react-primitive/dist/index.mjs");
+/* harmony import */ var _radix_ui_react_use_callback_ref__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @radix-ui/react-use-callback-ref */ "./node_modules/@radix-ui/react-use-callback-ref/dist/index.mjs");
+/* harmony import */ var _radix_ui_react_use_layout_effect__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @radix-ui/react-use-layout-effect */ "./node_modules/@radix-ui/react-use-layout-effect/dist/index.mjs");
+/* harmony import */ var _radix_ui_react_use_size__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @radix-ui/react-use-size */ "./node_modules/@radix-ui/react-use-size/dist/index.mjs");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const $cf1ac5d9fe0e8206$export$36f0086da09c4b9f = [
+    'top',
+    'right',
+    'bottom',
+    'left'
+];
+const $cf1ac5d9fe0e8206$export$3671ffab7b302fc9 = [
+    'start',
+    'center',
+    'end'
+];
+/* -------------------------------------------------------------------------------------------------
+ * Popper
+ * -----------------------------------------------------------------------------------------------*/ const $cf1ac5d9fe0e8206$var$POPPER_NAME = 'Popper';
+const [$cf1ac5d9fe0e8206$var$createPopperContext, $cf1ac5d9fe0e8206$export$722aac194ae923] = (0,_radix_ui_react_context__WEBPACK_IMPORTED_MODULE_2__.createContextScope)($cf1ac5d9fe0e8206$var$POPPER_NAME);
+const [$cf1ac5d9fe0e8206$var$PopperProvider, $cf1ac5d9fe0e8206$var$usePopperContext] = $cf1ac5d9fe0e8206$var$createPopperContext($cf1ac5d9fe0e8206$var$POPPER_NAME);
+const $cf1ac5d9fe0e8206$export$badac9ada3a0bdf9 = (props)=>{
+    const { __scopePopper: __scopePopper , children: children  } = props;
+    const [anchor, setAnchor] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
+    return /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.createElement)($cf1ac5d9fe0e8206$var$PopperProvider, {
+        scope: __scopePopper,
+        anchor: anchor,
+        onAnchorChange: setAnchor
+    }, children);
+};
+/*#__PURE__*/ Object.assign($cf1ac5d9fe0e8206$export$badac9ada3a0bdf9, {
+    displayName: $cf1ac5d9fe0e8206$var$POPPER_NAME
+});
+/* -------------------------------------------------------------------------------------------------
+ * PopperAnchor
+ * -----------------------------------------------------------------------------------------------*/ const $cf1ac5d9fe0e8206$var$ANCHOR_NAME = 'PopperAnchor';
+const $cf1ac5d9fe0e8206$export$ecd4e1ccab6ed6d = /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.forwardRef)((props, forwardedRef)=>{
+    const { __scopePopper: __scopePopper , virtualRef: virtualRef , ...anchorProps } = props;
+    const context = $cf1ac5d9fe0e8206$var$usePopperContext($cf1ac5d9fe0e8206$var$ANCHOR_NAME, __scopePopper);
+    const ref = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
+    const composedRefs = (0,_radix_ui_react_compose_refs__WEBPACK_IMPORTED_MODULE_3__.useComposedRefs)(forwardedRef, ref);
+    (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(()=>{
+        // Consumer can anchor the popper to something that isn't
+        // a DOM node e.g. pointer position, so we override the
+        // `anchorRef` with their virtual ref in this case.
+        context.onAnchorChange((virtualRef === null || virtualRef === void 0 ? void 0 : virtualRef.current) || ref.current);
+    });
+    return virtualRef ? null : /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.createElement)(_radix_ui_react_primitive__WEBPACK_IMPORTED_MODULE_4__.Primitive.div, (0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({}, anchorProps, {
+        ref: composedRefs
+    }));
+});
+/*#__PURE__*/ Object.assign($cf1ac5d9fe0e8206$export$ecd4e1ccab6ed6d, {
+    displayName: $cf1ac5d9fe0e8206$var$ANCHOR_NAME
+});
+/* -------------------------------------------------------------------------------------------------
+ * PopperContent
+ * -----------------------------------------------------------------------------------------------*/ const $cf1ac5d9fe0e8206$var$CONTENT_NAME = 'PopperContent';
+const [$cf1ac5d9fe0e8206$var$PopperContentProvider, $cf1ac5d9fe0e8206$var$useContentContext] = $cf1ac5d9fe0e8206$var$createPopperContext($cf1ac5d9fe0e8206$var$CONTENT_NAME);
+const $cf1ac5d9fe0e8206$export$bc4ae5855d3c4fc = /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.forwardRef)((props, forwardedRef)=>{
+    var _arrowSize$width, _arrowSize$height, _middlewareData$arrow, _middlewareData$arrow2, _middlewareData$arrow3, _middlewareData$trans, _middlewareData$trans2, _middlewareData$hide;
+    const { __scopePopper: __scopePopper , side: side = 'bottom' , sideOffset: sideOffset = 0 , align: align = 'center' , alignOffset: alignOffset = 0 , arrowPadding: arrowPadding = 0 , avoidCollisions: avoidCollisions = true , collisionBoundary: collisionBoundary = [] , collisionPadding: collisionPaddingProp = 0 , sticky: sticky = 'partial' , hideWhenDetached: hideWhenDetached = false , updatePositionStrategy: updatePositionStrategy = 'optimized' , onPlaced: onPlaced , ...contentProps } = props;
+    const context = $cf1ac5d9fe0e8206$var$usePopperContext($cf1ac5d9fe0e8206$var$CONTENT_NAME, __scopePopper);
+    const [content, setContent] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
+    const composedRefs = (0,_radix_ui_react_compose_refs__WEBPACK_IMPORTED_MODULE_3__.useComposedRefs)(forwardedRef, (node)=>setContent(node)
+    );
+    const [arrow, setArrow] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
+    const arrowSize = (0,_radix_ui_react_use_size__WEBPACK_IMPORTED_MODULE_5__.useSize)(arrow);
+    const arrowWidth = (_arrowSize$width = arrowSize === null || arrowSize === void 0 ? void 0 : arrowSize.width) !== null && _arrowSize$width !== void 0 ? _arrowSize$width : 0;
+    const arrowHeight = (_arrowSize$height = arrowSize === null || arrowSize === void 0 ? void 0 : arrowSize.height) !== null && _arrowSize$height !== void 0 ? _arrowSize$height : 0;
+    const desiredPlacement = side + (align !== 'center' ? '-' + align : '');
+    const collisionPadding = typeof collisionPaddingProp === 'number' ? collisionPaddingProp : {
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0,
+        ...collisionPaddingProp
+    };
+    const boundary = Array.isArray(collisionBoundary) ? collisionBoundary : [
+        collisionBoundary
+    ];
+    const hasExplicitBoundaries = boundary.length > 0;
+    const detectOverflowOptions = {
+        padding: collisionPadding,
+        boundary: boundary.filter($cf1ac5d9fe0e8206$var$isNotNull),
+        // with `strategy: 'fixed'`, this is the only way to get it to respect boundaries
+        altBoundary: hasExplicitBoundaries
+    };
+    const { refs: refs , floatingStyles: floatingStyles , placement: placement , isPositioned: isPositioned , middlewareData: middlewareData  } = (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_6__.useFloating)({
+        // default to `fixed` strategy so users don't have to pick and we also avoid focus scroll issues
+        strategy: 'fixed',
+        placement: desiredPlacement,
+        whileElementsMounted: (...args)=>{
+            const cleanup = (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_7__.autoUpdate)(...args, {
+                animationFrame: updatePositionStrategy === 'always'
+            });
+            return cleanup;
+        },
+        elements: {
+            reference: context.anchor
+        },
+        middleware: [
+            (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_6__.offset)({
+                mainAxis: sideOffset + arrowHeight,
+                alignmentAxis: alignOffset
+            }),
+            avoidCollisions && (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_6__.shift)({
+                mainAxis: true,
+                crossAxis: false,
+                limiter: sticky === 'partial' ? (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_6__.limitShift)() : undefined,
+                ...detectOverflowOptions
+            }),
+            avoidCollisions && (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_6__.flip)({
+                ...detectOverflowOptions
+            }),
+            (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_6__.size)({
+                ...detectOverflowOptions,
+                apply: ({ elements: elements , rects: rects , availableWidth: availableWidth , availableHeight: availableHeight  })=>{
+                    const { width: anchorWidth , height: anchorHeight  } = rects.reference;
+                    const contentStyle = elements.floating.style;
+                    contentStyle.setProperty('--radix-popper-available-width', `${availableWidth}px`);
+                    contentStyle.setProperty('--radix-popper-available-height', `${availableHeight}px`);
+                    contentStyle.setProperty('--radix-popper-anchor-width', `${anchorWidth}px`);
+                    contentStyle.setProperty('--radix-popper-anchor-height', `${anchorHeight}px`);
+                }
+            }),
+            arrow && (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_6__.arrow)({
+                element: arrow,
+                padding: arrowPadding
+            }),
+            $cf1ac5d9fe0e8206$var$transformOrigin({
+                arrowWidth: arrowWidth,
+                arrowHeight: arrowHeight
+            }),
+            hideWhenDetached && (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_6__.hide)({
+                strategy: 'referenceHidden',
+                ...detectOverflowOptions
+            })
+        ]
+    });
+    const [placedSide, placedAlign] = $cf1ac5d9fe0e8206$var$getSideAndAlignFromPlacement(placement);
+    const handlePlaced = (0,_radix_ui_react_use_callback_ref__WEBPACK_IMPORTED_MODULE_8__.useCallbackRef)(onPlaced);
+    (0,_radix_ui_react_use_layout_effect__WEBPACK_IMPORTED_MODULE_9__.useLayoutEffect)(()=>{
+        if (isPositioned) handlePlaced === null || handlePlaced === void 0 || handlePlaced();
+    }, [
+        isPositioned,
+        handlePlaced
+    ]);
+    const arrowX = (_middlewareData$arrow = middlewareData.arrow) === null || _middlewareData$arrow === void 0 ? void 0 : _middlewareData$arrow.x;
+    const arrowY = (_middlewareData$arrow2 = middlewareData.arrow) === null || _middlewareData$arrow2 === void 0 ? void 0 : _middlewareData$arrow2.y;
+    const cannotCenterArrow = ((_middlewareData$arrow3 = middlewareData.arrow) === null || _middlewareData$arrow3 === void 0 ? void 0 : _middlewareData$arrow3.centerOffset) !== 0;
+    const [contentZIndex, setContentZIndex] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)();
+    (0,_radix_ui_react_use_layout_effect__WEBPACK_IMPORTED_MODULE_9__.useLayoutEffect)(()=>{
+        if (content) setContentZIndex(window.getComputedStyle(content).zIndex);
+    }, [
+        content
+    ]);
+    return /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", {
+        ref: refs.setFloating,
+        "data-radix-popper-content-wrapper": "",
+        style: {
+            ...floatingStyles,
+            transform: isPositioned ? floatingStyles.transform : 'translate(0, -200%)',
+            // keep off the page when measuring
+            minWidth: 'max-content',
+            zIndex: contentZIndex,
+            ['--radix-popper-transform-origin']: [
+                (_middlewareData$trans = middlewareData.transformOrigin) === null || _middlewareData$trans === void 0 ? void 0 : _middlewareData$trans.x,
+                (_middlewareData$trans2 = middlewareData.transformOrigin) === null || _middlewareData$trans2 === void 0 ? void 0 : _middlewareData$trans2.y
+            ].join(' ')
+        } // Floating UI interally calculates logical alignment based the `dir` attribute on
+        ,
+        dir: props.dir
+    }, /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.createElement)($cf1ac5d9fe0e8206$var$PopperContentProvider, {
+        scope: __scopePopper,
+        placedSide: placedSide,
+        onArrowChange: setArrow,
+        arrowX: arrowX,
+        arrowY: arrowY,
+        shouldHideArrow: cannotCenterArrow
+    }, /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.createElement)(_radix_ui_react_primitive__WEBPACK_IMPORTED_MODULE_4__.Primitive.div, (0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({
+        "data-side": placedSide,
+        "data-align": placedAlign
+    }, contentProps, {
+        ref: composedRefs,
+        style: {
+            ...contentProps.style,
+            // if the PopperContent hasn't been placed yet (not all measurements done)
+            // we prevent animations so that users's animation don't kick in too early referring wrong sides
+            animation: !isPositioned ? 'none' : undefined,
+            // hide the content if using the hide middleware and should be hidden
+            opacity: (_middlewareData$hide = middlewareData.hide) !== null && _middlewareData$hide !== void 0 && _middlewareData$hide.referenceHidden ? 0 : undefined
+        }
+    }))));
+});
+/*#__PURE__*/ Object.assign($cf1ac5d9fe0e8206$export$bc4ae5855d3c4fc, {
+    displayName: $cf1ac5d9fe0e8206$var$CONTENT_NAME
+});
+/* -------------------------------------------------------------------------------------------------
+ * PopperArrow
+ * -----------------------------------------------------------------------------------------------*/ const $cf1ac5d9fe0e8206$var$ARROW_NAME = 'PopperArrow';
+const $cf1ac5d9fe0e8206$var$OPPOSITE_SIDE = {
+    top: 'bottom',
+    right: 'left',
+    bottom: 'top',
+    left: 'right'
+};
+const $cf1ac5d9fe0e8206$export$79d62cd4e10a3fd0 = /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.forwardRef)(function $cf1ac5d9fe0e8206$export$79d62cd4e10a3fd0(props, forwardedRef) {
+    const { __scopePopper: __scopePopper , ...arrowProps } = props;
+    const contentContext = $cf1ac5d9fe0e8206$var$useContentContext($cf1ac5d9fe0e8206$var$ARROW_NAME, __scopePopper);
+    const baseSide = $cf1ac5d9fe0e8206$var$OPPOSITE_SIDE[contentContext.placedSide];
+    return(/*#__PURE__*/ // we have to use an extra wrapper because `ResizeObserver` (used by `useSize`)
+    // doesn't report size as we'd expect on SVG elements.
+    // it reports their bounding box which is effectively the largest path inside the SVG.
+    (0,react__WEBPACK_IMPORTED_MODULE_1__.createElement)("span", {
+        ref: contentContext.onArrowChange,
+        style: {
+            position: 'absolute',
+            left: contentContext.arrowX,
+            top: contentContext.arrowY,
+            [baseSide]: 0,
+            transformOrigin: {
+                top: '',
+                right: '0 0',
+                bottom: 'center 0',
+                left: '100% 0'
+            }[contentContext.placedSide],
+            transform: {
+                top: 'translateY(100%)',
+                right: 'translateY(50%) rotate(90deg) translateX(-50%)',
+                bottom: `rotate(180deg)`,
+                left: 'translateY(50%) rotate(-90deg) translateX(50%)'
+            }[contentContext.placedSide],
+            visibility: contentContext.shouldHideArrow ? 'hidden' : undefined
+        }
+    }, /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.createElement)(_radix_ui_react_arrow__WEBPACK_IMPORTED_MODULE_10__.Root, (0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({}, arrowProps, {
+        ref: forwardedRef,
+        style: {
+            ...arrowProps.style,
+            // ensures the element can be measured correctly (mostly for if SVG)
+            display: 'block'
+        }
+    }))));
+});
+/*#__PURE__*/ Object.assign($cf1ac5d9fe0e8206$export$79d62cd4e10a3fd0, {
+    displayName: $cf1ac5d9fe0e8206$var$ARROW_NAME
+});
+/* -----------------------------------------------------------------------------------------------*/ function $cf1ac5d9fe0e8206$var$isNotNull(value) {
+    return value !== null;
+}
+const $cf1ac5d9fe0e8206$var$transformOrigin = (options)=>({
+        name: 'transformOrigin',
+        options: options,
+        fn (data) {
+            var _middlewareData$arrow4, _middlewareData$arrow5, _middlewareData$arrow6, _middlewareData$arrow7, _middlewareData$arrow8;
+            const { placement: placement , rects: rects , middlewareData: middlewareData  } = data;
+            const cannotCenterArrow = ((_middlewareData$arrow4 = middlewareData.arrow) === null || _middlewareData$arrow4 === void 0 ? void 0 : _middlewareData$arrow4.centerOffset) !== 0;
+            const isArrowHidden = cannotCenterArrow;
+            const arrowWidth = isArrowHidden ? 0 : options.arrowWidth;
+            const arrowHeight = isArrowHidden ? 0 : options.arrowHeight;
+            const [placedSide, placedAlign] = $cf1ac5d9fe0e8206$var$getSideAndAlignFromPlacement(placement);
+            const noArrowAlign = {
+                start: '0%',
+                center: '50%',
+                end: '100%'
+            }[placedAlign];
+            const arrowXCenter = ((_middlewareData$arrow5 = (_middlewareData$arrow6 = middlewareData.arrow) === null || _middlewareData$arrow6 === void 0 ? void 0 : _middlewareData$arrow6.x) !== null && _middlewareData$arrow5 !== void 0 ? _middlewareData$arrow5 : 0) + arrowWidth / 2;
+            const arrowYCenter = ((_middlewareData$arrow7 = (_middlewareData$arrow8 = middlewareData.arrow) === null || _middlewareData$arrow8 === void 0 ? void 0 : _middlewareData$arrow8.y) !== null && _middlewareData$arrow7 !== void 0 ? _middlewareData$arrow7 : 0) + arrowHeight / 2;
+            let x = '';
+            let y = '';
+            if (placedSide === 'bottom') {
+                x = isArrowHidden ? noArrowAlign : `${arrowXCenter}px`;
+                y = `${-arrowHeight}px`;
+            } else if (placedSide === 'top') {
+                x = isArrowHidden ? noArrowAlign : `${arrowXCenter}px`;
+                y = `${rects.floating.height + arrowHeight}px`;
+            } else if (placedSide === 'right') {
+                x = `${-arrowHeight}px`;
+                y = isArrowHidden ? noArrowAlign : `${arrowYCenter}px`;
+            } else if (placedSide === 'left') {
+                x = `${rects.floating.width + arrowHeight}px`;
+                y = isArrowHidden ? noArrowAlign : `${arrowYCenter}px`;
+            }
+            return {
+                data: {
+                    x: x,
+                    y: y
+                }
+            };
+        }
+    })
+;
+function $cf1ac5d9fe0e8206$var$getSideAndAlignFromPlacement(placement) {
+    const [side, align = 'center'] = placement.split('-');
+    return [
+        side,
+        align
+    ];
+}
+const $cf1ac5d9fe0e8206$export$be92b6f5f03c0fe9 = $cf1ac5d9fe0e8206$export$badac9ada3a0bdf9;
+const $cf1ac5d9fe0e8206$export$b688253958b8dfe7 = $cf1ac5d9fe0e8206$export$ecd4e1ccab6ed6d;
+const $cf1ac5d9fe0e8206$export$7c6e2c02157bb7d2 = $cf1ac5d9fe0e8206$export$bc4ae5855d3c4fc;
+const $cf1ac5d9fe0e8206$export$21b07c8f274aebd5 = $cf1ac5d9fe0e8206$export$79d62cd4e10a3fd0;
+
+
+
+
+
+//# sourceMappingURL=index.mjs.map
+
+
+/***/ }),
+
 /***/ "./node_modules/@radix-ui/react-portal/dist/index.mjs":
 /*!************************************************************!*\
   !*** ./node_modules/@radix-ui/react-portal/dist/index.mjs ***!
@@ -36604,6 +37671,624 @@ const $5e63c961fc1ce211$export$be92b6f5f03c0fe9 = $5e63c961fc1ce211$export$8c6ed
 
 /***/ }),
 
+/***/ "./node_modules/@radix-ui/react-tooltip/dist/index.mjs":
+/*!*************************************************************!*\
+  !*** ./node_modules/@radix-ui/react-tooltip/dist/index.mjs ***!
+  \*************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Arrow: () => (/* binding */ $a093c7e1ec25a057$export$21b07c8f274aebd5),
+/* harmony export */   Content: () => (/* binding */ $a093c7e1ec25a057$export$7c6e2c02157bb7d2),
+/* harmony export */   Portal: () => (/* binding */ $a093c7e1ec25a057$export$602eac185826482c),
+/* harmony export */   Provider: () => (/* binding */ $a093c7e1ec25a057$export$2881499e37b75b9a),
+/* harmony export */   Root: () => (/* binding */ $a093c7e1ec25a057$export$be92b6f5f03c0fe9),
+/* harmony export */   Tooltip: () => (/* binding */ $a093c7e1ec25a057$export$28c660c63b792dea),
+/* harmony export */   TooltipArrow: () => (/* binding */ $a093c7e1ec25a057$export$c27ee0ad710f7559),
+/* harmony export */   TooltipContent: () => (/* binding */ $a093c7e1ec25a057$export$e9003e2be37ec060),
+/* harmony export */   TooltipPortal: () => (/* binding */ $a093c7e1ec25a057$export$7b36b8f925ab7497),
+/* harmony export */   TooltipProvider: () => (/* binding */ $a093c7e1ec25a057$export$f78649fb9ca566b8),
+/* harmony export */   TooltipTrigger: () => (/* binding */ $a093c7e1ec25a057$export$8c610744efcf8a1d),
+/* harmony export */   Trigger: () => (/* binding */ $a093c7e1ec25a057$export$41fb9f06171c75f4),
+/* harmony export */   createTooltipScope: () => (/* binding */ $a093c7e1ec25a057$export$1c540a2224f0d865)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/esm/extends */ "./node_modules/@babel/runtime/helpers/esm/extends.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var _radix_ui_primitive__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @radix-ui/primitive */ "./node_modules/@radix-ui/primitive/dist/index.mjs");
+/* harmony import */ var _radix_ui_react_compose_refs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @radix-ui/react-compose-refs */ "./node_modules/@radix-ui/react-compose-refs/dist/index.mjs");
+/* harmony import */ var _radix_ui_react_context__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @radix-ui/react-context */ "./node_modules/@radix-ui/react-context/dist/index.mjs");
+/* harmony import */ var _radix_ui_react_dismissable_layer__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @radix-ui/react-dismissable-layer */ "./node_modules/@radix-ui/react-dismissable-layer/dist/index.mjs");
+/* harmony import */ var _radix_ui_react_id__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @radix-ui/react-id */ "./node_modules/@radix-ui/react-id/dist/index.mjs");
+/* harmony import */ var _radix_ui_react_popper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @radix-ui/react-popper */ "./node_modules/@radix-ui/react-popper/dist/index.mjs");
+/* harmony import */ var _radix_ui_react_portal__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @radix-ui/react-portal */ "./node_modules/@radix-ui/react-portal/dist/index.mjs");
+/* harmony import */ var _radix_ui_react_presence__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @radix-ui/react-presence */ "./node_modules/@radix-ui/react-presence/dist/index.mjs");
+/* harmony import */ var _radix_ui_react_primitive__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @radix-ui/react-primitive */ "./node_modules/@radix-ui/react-primitive/dist/index.mjs");
+/* harmony import */ var _radix_ui_react_slot__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @radix-ui/react-slot */ "./node_modules/@radix-ui/react-slot/dist/index.mjs");
+/* harmony import */ var _radix_ui_react_use_controllable_state__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @radix-ui/react-use-controllable-state */ "./node_modules/@radix-ui/react-use-controllable-state/dist/index.mjs");
+/* harmony import */ var _radix_ui_react_visually_hidden__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @radix-ui/react-visually-hidden */ "./node_modules/@radix-ui/react-visually-hidden/dist/index.mjs");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const [$a093c7e1ec25a057$var$createTooltipContext, $a093c7e1ec25a057$export$1c540a2224f0d865] = (0,_radix_ui_react_context__WEBPACK_IMPORTED_MODULE_2__.createContextScope)('Tooltip', [
+    _radix_ui_react_popper__WEBPACK_IMPORTED_MODULE_3__.createPopperScope
+]);
+const $a093c7e1ec25a057$var$usePopperScope = (0,_radix_ui_react_popper__WEBPACK_IMPORTED_MODULE_3__.createPopperScope)();
+/* -------------------------------------------------------------------------------------------------
+ * TooltipProvider
+ * -----------------------------------------------------------------------------------------------*/ const $a093c7e1ec25a057$var$PROVIDER_NAME = 'TooltipProvider';
+const $a093c7e1ec25a057$var$DEFAULT_DELAY_DURATION = 700;
+const $a093c7e1ec25a057$var$TOOLTIP_OPEN = 'tooltip.open';
+const [$a093c7e1ec25a057$var$TooltipProviderContextProvider, $a093c7e1ec25a057$var$useTooltipProviderContext] = $a093c7e1ec25a057$var$createTooltipContext($a093c7e1ec25a057$var$PROVIDER_NAME);
+const $a093c7e1ec25a057$export$f78649fb9ca566b8 = (props)=>{
+    const { __scopeTooltip: __scopeTooltip , delayDuration: delayDuration = $a093c7e1ec25a057$var$DEFAULT_DELAY_DURATION , skipDelayDuration: skipDelayDuration = 300 , disableHoverableContent: disableHoverableContent = false , children: children  } = props;
+    const [isOpenDelayed, setIsOpenDelayed] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(true);
+    const isPointerInTransitRef = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(false);
+    const skipDelayTimerRef = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(0);
+    (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(()=>{
+        const skipDelayTimer = skipDelayTimerRef.current;
+        return ()=>window.clearTimeout(skipDelayTimer)
+        ;
+    }, []);
+    return /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.createElement)($a093c7e1ec25a057$var$TooltipProviderContextProvider, {
+        scope: __scopeTooltip,
+        isOpenDelayed: isOpenDelayed,
+        delayDuration: delayDuration,
+        onOpen: (0,react__WEBPACK_IMPORTED_MODULE_1__.useCallback)(()=>{
+            window.clearTimeout(skipDelayTimerRef.current);
+            setIsOpenDelayed(false);
+        }, []),
+        onClose: (0,react__WEBPACK_IMPORTED_MODULE_1__.useCallback)(()=>{
+            window.clearTimeout(skipDelayTimerRef.current);
+            skipDelayTimerRef.current = window.setTimeout(()=>setIsOpenDelayed(true)
+            , skipDelayDuration);
+        }, [
+            skipDelayDuration
+        ]),
+        isPointerInTransitRef: isPointerInTransitRef,
+        onPointerInTransitChange: (0,react__WEBPACK_IMPORTED_MODULE_1__.useCallback)((inTransit)=>{
+            isPointerInTransitRef.current = inTransit;
+        }, []),
+        disableHoverableContent: disableHoverableContent
+    }, children);
+};
+/*#__PURE__*/ Object.assign($a093c7e1ec25a057$export$f78649fb9ca566b8, {
+    displayName: $a093c7e1ec25a057$var$PROVIDER_NAME
+});
+/* -------------------------------------------------------------------------------------------------
+ * Tooltip
+ * -----------------------------------------------------------------------------------------------*/ const $a093c7e1ec25a057$var$TOOLTIP_NAME = 'Tooltip';
+const [$a093c7e1ec25a057$var$TooltipContextProvider, $a093c7e1ec25a057$var$useTooltipContext] = $a093c7e1ec25a057$var$createTooltipContext($a093c7e1ec25a057$var$TOOLTIP_NAME);
+const $a093c7e1ec25a057$export$28c660c63b792dea = (props)=>{
+    const { __scopeTooltip: __scopeTooltip , children: children , open: openProp , defaultOpen: defaultOpen = false , onOpenChange: onOpenChange , disableHoverableContent: disableHoverableContentProp , delayDuration: delayDurationProp  } = props;
+    const providerContext = $a093c7e1ec25a057$var$useTooltipProviderContext($a093c7e1ec25a057$var$TOOLTIP_NAME, props.__scopeTooltip);
+    const popperScope = $a093c7e1ec25a057$var$usePopperScope(__scopeTooltip);
+    const [trigger, setTrigger] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
+    const contentId = (0,_radix_ui_react_id__WEBPACK_IMPORTED_MODULE_4__.useId)();
+    const openTimerRef = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(0);
+    const disableHoverableContent = disableHoverableContentProp !== null && disableHoverableContentProp !== void 0 ? disableHoverableContentProp : providerContext.disableHoverableContent;
+    const delayDuration = delayDurationProp !== null && delayDurationProp !== void 0 ? delayDurationProp : providerContext.delayDuration;
+    const wasOpenDelayedRef = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(false);
+    const [open1 = false, setOpen] = (0,_radix_ui_react_use_controllable_state__WEBPACK_IMPORTED_MODULE_5__.useControllableState)({
+        prop: openProp,
+        defaultProp: defaultOpen,
+        onChange: (open)=>{
+            if (open) {
+                providerContext.onOpen(); // as `onChange` is called within a lifecycle method we
+                // avoid dispatching via `dispatchDiscreteCustomEvent`.
+                document.dispatchEvent(new CustomEvent($a093c7e1ec25a057$var$TOOLTIP_OPEN));
+            } else providerContext.onClose();
+            onOpenChange === null || onOpenChange === void 0 || onOpenChange(open);
+        }
+    });
+    const stateAttribute = (0,react__WEBPACK_IMPORTED_MODULE_1__.useMemo)(()=>{
+        return open1 ? wasOpenDelayedRef.current ? 'delayed-open' : 'instant-open' : 'closed';
+    }, [
+        open1
+    ]);
+    const handleOpen = (0,react__WEBPACK_IMPORTED_MODULE_1__.useCallback)(()=>{
+        window.clearTimeout(openTimerRef.current);
+        wasOpenDelayedRef.current = false;
+        setOpen(true);
+    }, [
+        setOpen
+    ]);
+    const handleClose = (0,react__WEBPACK_IMPORTED_MODULE_1__.useCallback)(()=>{
+        window.clearTimeout(openTimerRef.current);
+        setOpen(false);
+    }, [
+        setOpen
+    ]);
+    const handleDelayedOpen = (0,react__WEBPACK_IMPORTED_MODULE_1__.useCallback)(()=>{
+        window.clearTimeout(openTimerRef.current);
+        openTimerRef.current = window.setTimeout(()=>{
+            wasOpenDelayedRef.current = true;
+            setOpen(true);
+        }, delayDuration);
+    }, [
+        delayDuration,
+        setOpen
+    ]);
+    (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(()=>{
+        return ()=>window.clearTimeout(openTimerRef.current)
+        ;
+    }, []);
+    return /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.createElement)(_radix_ui_react_popper__WEBPACK_IMPORTED_MODULE_3__.Root, popperScope, /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.createElement)($a093c7e1ec25a057$var$TooltipContextProvider, {
+        scope: __scopeTooltip,
+        contentId: contentId,
+        open: open1,
+        stateAttribute: stateAttribute,
+        trigger: trigger,
+        onTriggerChange: setTrigger,
+        onTriggerEnter: (0,react__WEBPACK_IMPORTED_MODULE_1__.useCallback)(()=>{
+            if (providerContext.isOpenDelayed) handleDelayedOpen();
+            else handleOpen();
+        }, [
+            providerContext.isOpenDelayed,
+            handleDelayedOpen,
+            handleOpen
+        ]),
+        onTriggerLeave: (0,react__WEBPACK_IMPORTED_MODULE_1__.useCallback)(()=>{
+            if (disableHoverableContent) handleClose();
+            else // Clear the timer in case the pointer leaves the trigger before the tooltip is opened.
+            window.clearTimeout(openTimerRef.current);
+        }, [
+            handleClose,
+            disableHoverableContent
+        ]),
+        onOpen: handleOpen,
+        onClose: handleClose,
+        disableHoverableContent: disableHoverableContent
+    }, children));
+};
+/*#__PURE__*/ Object.assign($a093c7e1ec25a057$export$28c660c63b792dea, {
+    displayName: $a093c7e1ec25a057$var$TOOLTIP_NAME
+});
+/* -------------------------------------------------------------------------------------------------
+ * TooltipTrigger
+ * -----------------------------------------------------------------------------------------------*/ const $a093c7e1ec25a057$var$TRIGGER_NAME = 'TooltipTrigger';
+const $a093c7e1ec25a057$export$8c610744efcf8a1d = /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.forwardRef)((props, forwardedRef)=>{
+    const { __scopeTooltip: __scopeTooltip , ...triggerProps } = props;
+    const context = $a093c7e1ec25a057$var$useTooltipContext($a093c7e1ec25a057$var$TRIGGER_NAME, __scopeTooltip);
+    const providerContext = $a093c7e1ec25a057$var$useTooltipProviderContext($a093c7e1ec25a057$var$TRIGGER_NAME, __scopeTooltip);
+    const popperScope = $a093c7e1ec25a057$var$usePopperScope(__scopeTooltip);
+    const ref = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
+    const composedRefs = (0,_radix_ui_react_compose_refs__WEBPACK_IMPORTED_MODULE_6__.useComposedRefs)(forwardedRef, ref, context.onTriggerChange);
+    const isPointerDownRef = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(false);
+    const hasPointerMoveOpenedRef = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(false);
+    const handlePointerUp = (0,react__WEBPACK_IMPORTED_MODULE_1__.useCallback)(()=>isPointerDownRef.current = false
+    , []);
+    (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(()=>{
+        return ()=>document.removeEventListener('pointerup', handlePointerUp)
+        ;
+    }, [
+        handlePointerUp
+    ]);
+    return /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.createElement)(_radix_ui_react_popper__WEBPACK_IMPORTED_MODULE_3__.Anchor, (0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({
+        asChild: true
+    }, popperScope), /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.createElement)(_radix_ui_react_primitive__WEBPACK_IMPORTED_MODULE_7__.Primitive.button, (0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({
+        // We purposefully avoid adding `type=button` here because tooltip triggers are also
+        // commonly anchors and the anchor `type` attribute signifies MIME type.
+        "aria-describedby": context.open ? context.contentId : undefined,
+        "data-state": context.stateAttribute
+    }, triggerProps, {
+        ref: composedRefs,
+        onPointerMove: (0,_radix_ui_primitive__WEBPACK_IMPORTED_MODULE_8__.composeEventHandlers)(props.onPointerMove, (event)=>{
+            if (event.pointerType === 'touch') return;
+            if (!hasPointerMoveOpenedRef.current && !providerContext.isPointerInTransitRef.current) {
+                context.onTriggerEnter();
+                hasPointerMoveOpenedRef.current = true;
+            }
+        }),
+        onPointerLeave: (0,_radix_ui_primitive__WEBPACK_IMPORTED_MODULE_8__.composeEventHandlers)(props.onPointerLeave, ()=>{
+            context.onTriggerLeave();
+            hasPointerMoveOpenedRef.current = false;
+        }),
+        onPointerDown: (0,_radix_ui_primitive__WEBPACK_IMPORTED_MODULE_8__.composeEventHandlers)(props.onPointerDown, ()=>{
+            isPointerDownRef.current = true;
+            document.addEventListener('pointerup', handlePointerUp, {
+                once: true
+            });
+        }),
+        onFocus: (0,_radix_ui_primitive__WEBPACK_IMPORTED_MODULE_8__.composeEventHandlers)(props.onFocus, ()=>{
+            if (!isPointerDownRef.current) context.onOpen();
+        }),
+        onBlur: (0,_radix_ui_primitive__WEBPACK_IMPORTED_MODULE_8__.composeEventHandlers)(props.onBlur, context.onClose),
+        onClick: (0,_radix_ui_primitive__WEBPACK_IMPORTED_MODULE_8__.composeEventHandlers)(props.onClick, context.onClose)
+    })));
+});
+/*#__PURE__*/ Object.assign($a093c7e1ec25a057$export$8c610744efcf8a1d, {
+    displayName: $a093c7e1ec25a057$var$TRIGGER_NAME
+});
+/* -------------------------------------------------------------------------------------------------
+ * TooltipPortal
+ * -----------------------------------------------------------------------------------------------*/ const $a093c7e1ec25a057$var$PORTAL_NAME = 'TooltipPortal';
+const [$a093c7e1ec25a057$var$PortalProvider, $a093c7e1ec25a057$var$usePortalContext] = $a093c7e1ec25a057$var$createTooltipContext($a093c7e1ec25a057$var$PORTAL_NAME, {
+    forceMount: undefined
+});
+const $a093c7e1ec25a057$export$7b36b8f925ab7497 = (props)=>{
+    const { __scopeTooltip: __scopeTooltip , forceMount: forceMount , children: children , container: container  } = props;
+    const context = $a093c7e1ec25a057$var$useTooltipContext($a093c7e1ec25a057$var$PORTAL_NAME, __scopeTooltip);
+    return /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.createElement)($a093c7e1ec25a057$var$PortalProvider, {
+        scope: __scopeTooltip,
+        forceMount: forceMount
+    }, /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.createElement)(_radix_ui_react_presence__WEBPACK_IMPORTED_MODULE_9__.Presence, {
+        present: forceMount || context.open
+    }, /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.createElement)(_radix_ui_react_portal__WEBPACK_IMPORTED_MODULE_10__.Portal, {
+        asChild: true,
+        container: container
+    }, children)));
+};
+/*#__PURE__*/ Object.assign($a093c7e1ec25a057$export$7b36b8f925ab7497, {
+    displayName: $a093c7e1ec25a057$var$PORTAL_NAME
+});
+/* -------------------------------------------------------------------------------------------------
+ * TooltipContent
+ * -----------------------------------------------------------------------------------------------*/ const $a093c7e1ec25a057$var$CONTENT_NAME = 'TooltipContent';
+const $a093c7e1ec25a057$export$e9003e2be37ec060 = /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.forwardRef)((props, forwardedRef)=>{
+    const portalContext = $a093c7e1ec25a057$var$usePortalContext($a093c7e1ec25a057$var$CONTENT_NAME, props.__scopeTooltip);
+    const { forceMount: forceMount = portalContext.forceMount , side: side = 'top' , ...contentProps } = props;
+    const context = $a093c7e1ec25a057$var$useTooltipContext($a093c7e1ec25a057$var$CONTENT_NAME, props.__scopeTooltip);
+    return /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.createElement)(_radix_ui_react_presence__WEBPACK_IMPORTED_MODULE_9__.Presence, {
+        present: forceMount || context.open
+    }, context.disableHoverableContent ? /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.createElement)($a093c7e1ec25a057$var$TooltipContentImpl, (0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({
+        side: side
+    }, contentProps, {
+        ref: forwardedRef
+    })) : /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.createElement)($a093c7e1ec25a057$var$TooltipContentHoverable, (0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({
+        side: side
+    }, contentProps, {
+        ref: forwardedRef
+    })));
+});
+const $a093c7e1ec25a057$var$TooltipContentHoverable = /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.forwardRef)((props, forwardedRef)=>{
+    const context = $a093c7e1ec25a057$var$useTooltipContext($a093c7e1ec25a057$var$CONTENT_NAME, props.__scopeTooltip);
+    const providerContext = $a093c7e1ec25a057$var$useTooltipProviderContext($a093c7e1ec25a057$var$CONTENT_NAME, props.__scopeTooltip);
+    const ref = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
+    const composedRefs = (0,_radix_ui_react_compose_refs__WEBPACK_IMPORTED_MODULE_6__.useComposedRefs)(forwardedRef, ref);
+    const [pointerGraceArea, setPointerGraceArea] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
+    const { trigger: trigger , onClose: onClose  } = context;
+    const content = ref.current;
+    const { onPointerInTransitChange: onPointerInTransitChange  } = providerContext;
+    const handleRemoveGraceArea = (0,react__WEBPACK_IMPORTED_MODULE_1__.useCallback)(()=>{
+        setPointerGraceArea(null);
+        onPointerInTransitChange(false);
+    }, [
+        onPointerInTransitChange
+    ]);
+    const handleCreateGraceArea = (0,react__WEBPACK_IMPORTED_MODULE_1__.useCallback)((event, hoverTarget)=>{
+        const currentTarget = event.currentTarget;
+        const exitPoint = {
+            x: event.clientX,
+            y: event.clientY
+        };
+        const exitSide = $a093c7e1ec25a057$var$getExitSideFromRect(exitPoint, currentTarget.getBoundingClientRect());
+        const paddedExitPoints = $a093c7e1ec25a057$var$getPaddedExitPoints(exitPoint, exitSide);
+        const hoverTargetPoints = $a093c7e1ec25a057$var$getPointsFromRect(hoverTarget.getBoundingClientRect());
+        const graceArea = $a093c7e1ec25a057$var$getHull([
+            ...paddedExitPoints,
+            ...hoverTargetPoints
+        ]);
+        setPointerGraceArea(graceArea);
+        onPointerInTransitChange(true);
+    }, [
+        onPointerInTransitChange
+    ]);
+    (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(()=>{
+        return ()=>handleRemoveGraceArea()
+        ;
+    }, [
+        handleRemoveGraceArea
+    ]);
+    (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(()=>{
+        if (trigger && content) {
+            const handleTriggerLeave = (event)=>handleCreateGraceArea(event, content)
+            ;
+            const handleContentLeave = (event)=>handleCreateGraceArea(event, trigger)
+            ;
+            trigger.addEventListener('pointerleave', handleTriggerLeave);
+            content.addEventListener('pointerleave', handleContentLeave);
+            return ()=>{
+                trigger.removeEventListener('pointerleave', handleTriggerLeave);
+                content.removeEventListener('pointerleave', handleContentLeave);
+            };
+        }
+    }, [
+        trigger,
+        content,
+        handleCreateGraceArea,
+        handleRemoveGraceArea
+    ]);
+    (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(()=>{
+        if (pointerGraceArea) {
+            const handleTrackPointerGrace = (event)=>{
+                const target = event.target;
+                const pointerPosition = {
+                    x: event.clientX,
+                    y: event.clientY
+                };
+                const hasEnteredTarget = (trigger === null || trigger === void 0 ? void 0 : trigger.contains(target)) || (content === null || content === void 0 ? void 0 : content.contains(target));
+                const isPointerOutsideGraceArea = !$a093c7e1ec25a057$var$isPointInPolygon(pointerPosition, pointerGraceArea);
+                if (hasEnteredTarget) handleRemoveGraceArea();
+                else if (isPointerOutsideGraceArea) {
+                    handleRemoveGraceArea();
+                    onClose();
+                }
+            };
+            document.addEventListener('pointermove', handleTrackPointerGrace);
+            return ()=>document.removeEventListener('pointermove', handleTrackPointerGrace)
+            ;
+        }
+    }, [
+        trigger,
+        content,
+        pointerGraceArea,
+        onClose,
+        handleRemoveGraceArea
+    ]);
+    return /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.createElement)($a093c7e1ec25a057$var$TooltipContentImpl, (0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({}, props, {
+        ref: composedRefs
+    }));
+});
+const [$a093c7e1ec25a057$var$VisuallyHiddenContentContextProvider, $a093c7e1ec25a057$var$useVisuallyHiddenContentContext] = $a093c7e1ec25a057$var$createTooltipContext($a093c7e1ec25a057$var$TOOLTIP_NAME, {
+    isInside: false
+});
+const $a093c7e1ec25a057$var$TooltipContentImpl = /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.forwardRef)((props, forwardedRef)=>{
+    const { __scopeTooltip: __scopeTooltip , children: children , 'aria-label': ariaLabel , onEscapeKeyDown: onEscapeKeyDown , onPointerDownOutside: onPointerDownOutside , ...contentProps } = props;
+    const context = $a093c7e1ec25a057$var$useTooltipContext($a093c7e1ec25a057$var$CONTENT_NAME, __scopeTooltip);
+    const popperScope = $a093c7e1ec25a057$var$usePopperScope(__scopeTooltip);
+    const { onClose: onClose  } = context; // Close this tooltip if another one opens
+    (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(()=>{
+        document.addEventListener($a093c7e1ec25a057$var$TOOLTIP_OPEN, onClose);
+        return ()=>document.removeEventListener($a093c7e1ec25a057$var$TOOLTIP_OPEN, onClose)
+        ;
+    }, [
+        onClose
+    ]); // Close the tooltip if the trigger is scrolled
+    (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(()=>{
+        if (context.trigger) {
+            const handleScroll = (event)=>{
+                const target = event.target;
+                if (target !== null && target !== void 0 && target.contains(context.trigger)) onClose();
+            };
+            window.addEventListener('scroll', handleScroll, {
+                capture: true
+            });
+            return ()=>window.removeEventListener('scroll', handleScroll, {
+                    capture: true
+                })
+            ;
+        }
+    }, [
+        context.trigger,
+        onClose
+    ]);
+    return /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.createElement)(_radix_ui_react_dismissable_layer__WEBPACK_IMPORTED_MODULE_11__.DismissableLayer, {
+        asChild: true,
+        disableOutsidePointerEvents: false,
+        onEscapeKeyDown: onEscapeKeyDown,
+        onPointerDownOutside: onPointerDownOutside,
+        onFocusOutside: (event)=>event.preventDefault()
+        ,
+        onDismiss: onClose
+    }, /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.createElement)(_radix_ui_react_popper__WEBPACK_IMPORTED_MODULE_3__.Content, (0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({
+        "data-state": context.stateAttribute
+    }, popperScope, contentProps, {
+        ref: forwardedRef,
+        style: {
+            ...contentProps.style,
+            '--radix-tooltip-content-transform-origin': 'var(--radix-popper-transform-origin)',
+            '--radix-tooltip-content-available-width': 'var(--radix-popper-available-width)',
+            '--radix-tooltip-content-available-height': 'var(--radix-popper-available-height)',
+            '--radix-tooltip-trigger-width': 'var(--radix-popper-anchor-width)',
+            '--radix-tooltip-trigger-height': 'var(--radix-popper-anchor-height)'
+        }
+    }), /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.createElement)(_radix_ui_react_slot__WEBPACK_IMPORTED_MODULE_12__.Slottable, null, children), /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.createElement)($a093c7e1ec25a057$var$VisuallyHiddenContentContextProvider, {
+        scope: __scopeTooltip,
+        isInside: true
+    }, /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.createElement)(_radix_ui_react_visually_hidden__WEBPACK_IMPORTED_MODULE_13__.Root, {
+        id: context.contentId,
+        role: "tooltip"
+    }, ariaLabel || children))));
+});
+/*#__PURE__*/ Object.assign($a093c7e1ec25a057$export$e9003e2be37ec060, {
+    displayName: $a093c7e1ec25a057$var$CONTENT_NAME
+});
+/* -------------------------------------------------------------------------------------------------
+ * TooltipArrow
+ * -----------------------------------------------------------------------------------------------*/ const $a093c7e1ec25a057$var$ARROW_NAME = 'TooltipArrow';
+const $a093c7e1ec25a057$export$c27ee0ad710f7559 = /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.forwardRef)((props, forwardedRef)=>{
+    const { __scopeTooltip: __scopeTooltip , ...arrowProps } = props;
+    const popperScope = $a093c7e1ec25a057$var$usePopperScope(__scopeTooltip);
+    const visuallyHiddenContentContext = $a093c7e1ec25a057$var$useVisuallyHiddenContentContext($a093c7e1ec25a057$var$ARROW_NAME, __scopeTooltip); // if the arrow is inside the `VisuallyHidden`, we don't want to render it all to
+    // prevent issues in positioning the arrow due to the duplicate
+    return visuallyHiddenContentContext.isInside ? null : /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.createElement)(_radix_ui_react_popper__WEBPACK_IMPORTED_MODULE_3__.Arrow, (0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({}, popperScope, arrowProps, {
+        ref: forwardedRef
+    }));
+});
+/*#__PURE__*/ Object.assign($a093c7e1ec25a057$export$c27ee0ad710f7559, {
+    displayName: $a093c7e1ec25a057$var$ARROW_NAME
+});
+/* -----------------------------------------------------------------------------------------------*/ function $a093c7e1ec25a057$var$getExitSideFromRect(point, rect) {
+    const top = Math.abs(rect.top - point.y);
+    const bottom = Math.abs(rect.bottom - point.y);
+    const right = Math.abs(rect.right - point.x);
+    const left = Math.abs(rect.left - point.x);
+    switch(Math.min(top, bottom, right, left)){
+        case left:
+            return 'left';
+        case right:
+            return 'right';
+        case top:
+            return 'top';
+        case bottom:
+            return 'bottom';
+        default:
+            throw new Error('unreachable');
+    }
+}
+function $a093c7e1ec25a057$var$getPaddedExitPoints(exitPoint, exitSide, padding = 5) {
+    const paddedExitPoints = [];
+    switch(exitSide){
+        case 'top':
+            paddedExitPoints.push({
+                x: exitPoint.x - padding,
+                y: exitPoint.y + padding
+            }, {
+                x: exitPoint.x + padding,
+                y: exitPoint.y + padding
+            });
+            break;
+        case 'bottom':
+            paddedExitPoints.push({
+                x: exitPoint.x - padding,
+                y: exitPoint.y - padding
+            }, {
+                x: exitPoint.x + padding,
+                y: exitPoint.y - padding
+            });
+            break;
+        case 'left':
+            paddedExitPoints.push({
+                x: exitPoint.x + padding,
+                y: exitPoint.y - padding
+            }, {
+                x: exitPoint.x + padding,
+                y: exitPoint.y + padding
+            });
+            break;
+        case 'right':
+            paddedExitPoints.push({
+                x: exitPoint.x - padding,
+                y: exitPoint.y - padding
+            }, {
+                x: exitPoint.x - padding,
+                y: exitPoint.y + padding
+            });
+            break;
+    }
+    return paddedExitPoints;
+}
+function $a093c7e1ec25a057$var$getPointsFromRect(rect) {
+    const { top: top , right: right , bottom: bottom , left: left  } = rect;
+    return [
+        {
+            x: left,
+            y: top
+        },
+        {
+            x: right,
+            y: top
+        },
+        {
+            x: right,
+            y: bottom
+        },
+        {
+            x: left,
+            y: bottom
+        }
+    ];
+} // Determine if a point is inside of a polygon.
+// Based on https://github.com/substack/point-in-polygon
+function $a093c7e1ec25a057$var$isPointInPolygon(point, polygon) {
+    const { x: x , y: y  } = point;
+    let inside = false;
+    for(let i = 0, j = polygon.length - 1; i < polygon.length; j = i++){
+        const xi = polygon[i].x;
+        const yi = polygon[i].y;
+        const xj = polygon[j].x;
+        const yj = polygon[j].y; // prettier-ignore
+        const intersect = yi > y !== yj > y && x < (xj - xi) * (y - yi) / (yj - yi) + xi;
+        if (intersect) inside = !inside;
+    }
+    return inside;
+} // Returns a new array of points representing the convex hull of the given set of points.
+// https://www.nayuki.io/page/convex-hull-algorithm
+function $a093c7e1ec25a057$var$getHull(points) {
+    const newPoints = points.slice();
+    newPoints.sort((a, b)=>{
+        if (a.x < b.x) return -1;
+        else if (a.x > b.x) return 1;
+        else if (a.y < b.y) return -1;
+        else if (a.y > b.y) return 1;
+        else return 0;
+    });
+    return $a093c7e1ec25a057$var$getHullPresorted(newPoints);
+} // Returns the convex hull, assuming that each points[i] <= points[i + 1]. Runs in O(n) time.
+function $a093c7e1ec25a057$var$getHullPresorted(points) {
+    if (points.length <= 1) return points.slice();
+    const upperHull = [];
+    for(let i = 0; i < points.length; i++){
+        const p = points[i];
+        while(upperHull.length >= 2){
+            const q = upperHull[upperHull.length - 1];
+            const r = upperHull[upperHull.length - 2];
+            if ((q.x - r.x) * (p.y - r.y) >= (q.y - r.y) * (p.x - r.x)) upperHull.pop();
+            else break;
+        }
+        upperHull.push(p);
+    }
+    upperHull.pop();
+    const lowerHull = [];
+    for(let i1 = points.length - 1; i1 >= 0; i1--){
+        const p = points[i1];
+        while(lowerHull.length >= 2){
+            const q = lowerHull[lowerHull.length - 1];
+            const r = lowerHull[lowerHull.length - 2];
+            if ((q.x - r.x) * (p.y - r.y) >= (q.y - r.y) * (p.x - r.x)) lowerHull.pop();
+            else break;
+        }
+        lowerHull.push(p);
+    }
+    lowerHull.pop();
+    if (upperHull.length === 1 && lowerHull.length === 1 && upperHull[0].x === lowerHull[0].x && upperHull[0].y === lowerHull[0].y) return upperHull;
+    else return upperHull.concat(lowerHull);
+}
+const $a093c7e1ec25a057$export$2881499e37b75b9a = $a093c7e1ec25a057$export$f78649fb9ca566b8;
+const $a093c7e1ec25a057$export$be92b6f5f03c0fe9 = $a093c7e1ec25a057$export$28c660c63b792dea;
+const $a093c7e1ec25a057$export$41fb9f06171c75f4 = $a093c7e1ec25a057$export$8c610744efcf8a1d;
+const $a093c7e1ec25a057$export$602eac185826482c = $a093c7e1ec25a057$export$7b36b8f925ab7497;
+const $a093c7e1ec25a057$export$7c6e2c02157bb7d2 = $a093c7e1ec25a057$export$e9003e2be37ec060;
+const $a093c7e1ec25a057$export$21b07c8f274aebd5 = $a093c7e1ec25a057$export$c27ee0ad710f7559;
+
+
+
+
+
+//# sourceMappingURL=index.mjs.map
+
+
+/***/ }),
+
 /***/ "./node_modules/@radix-ui/react-use-callback-ref/dist/index.mjs":
 /*!**********************************************************************!*\
   !*** ./node_modules/@radix-ui/react-use-callback-ref/dist/index.mjs ***!
@@ -36789,6 +38474,138 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/@radix-ui/react-use-size/dist/index.mjs":
+/*!**************************************************************!*\
+  !*** ./node_modules/@radix-ui/react-use-size/dist/index.mjs ***!
+  \**************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   useSize: () => (/* binding */ $db6c3485150b8e66$export$1ab7ae714698c4b8)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var _radix_ui_react_use_layout_effect__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @radix-ui/react-use-layout-effect */ "./node_modules/@radix-ui/react-use-layout-effect/dist/index.mjs");
+
+
+
+
+
+function $db6c3485150b8e66$export$1ab7ae714698c4b8(element) {
+    const [size, setSize] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(undefined);
+    (0,_radix_ui_react_use_layout_effect__WEBPACK_IMPORTED_MODULE_1__.useLayoutEffect)(()=>{
+        if (element) {
+            // provide size as early as possible
+            setSize({
+                width: element.offsetWidth,
+                height: element.offsetHeight
+            });
+            const resizeObserver = new ResizeObserver((entries)=>{
+                if (!Array.isArray(entries)) return;
+                 // Since we only observe the one element, we don't need to loop over the
+                // array
+                if (!entries.length) return;
+                const entry = entries[0];
+                let width;
+                let height;
+                if ('borderBoxSize' in entry) {
+                    const borderSizeEntry = entry['borderBoxSize']; // iron out differences between browsers
+                    const borderSize = Array.isArray(borderSizeEntry) ? borderSizeEntry[0] : borderSizeEntry;
+                    width = borderSize['inlineSize'];
+                    height = borderSize['blockSize'];
+                } else {
+                    // for browsers that don't support `borderBoxSize`
+                    // we calculate it ourselves to get the correct border box.
+                    width = element.offsetWidth;
+                    height = element.offsetHeight;
+                }
+                setSize({
+                    width: width,
+                    height: height
+                });
+            });
+            resizeObserver.observe(element, {
+                box: 'border-box'
+            });
+            return ()=>resizeObserver.unobserve(element)
+            ;
+        } else // We only want to reset to `undefined` when the element becomes `null`,
+        // not if it changes to another element.
+        setSize(undefined);
+    }, [
+        element
+    ]);
+    return size;
+}
+
+
+
+
+
+//# sourceMappingURL=index.mjs.map
+
+
+/***/ }),
+
+/***/ "./node_modules/@radix-ui/react-visually-hidden/dist/index.mjs":
+/*!*********************************************************************!*\
+  !*** ./node_modules/@radix-ui/react-visually-hidden/dist/index.mjs ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Root: () => (/* binding */ $ea1ef594cf570d83$export$be92b6f5f03c0fe9),
+/* harmony export */   VisuallyHidden: () => (/* binding */ $ea1ef594cf570d83$export$439d29a4e110a164)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/esm/extends */ "./node_modules/@babel/runtime/helpers/esm/extends.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var _radix_ui_react_primitive__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @radix-ui/react-primitive */ "./node_modules/@radix-ui/react-primitive/dist/index.mjs");
+
+
+
+
+
+
+
+/* -------------------------------------------------------------------------------------------------
+ * VisuallyHidden
+ * -----------------------------------------------------------------------------------------------*/ const $ea1ef594cf570d83$var$NAME = 'VisuallyHidden';
+const $ea1ef594cf570d83$export$439d29a4e110a164 = /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.forwardRef)((props, forwardedRef)=>{
+    return /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.createElement)(_radix_ui_react_primitive__WEBPACK_IMPORTED_MODULE_2__.Primitive.span, (0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({}, props, {
+        ref: forwardedRef,
+        style: {
+            // See: https://github.com/twbs/bootstrap/blob/master/scss/mixins/_screen-reader.scss
+            position: 'absolute',
+            border: 0,
+            width: 1,
+            height: 1,
+            padding: 0,
+            margin: -1,
+            overflow: 'hidden',
+            clip: 'rect(0, 0, 0, 0)',
+            whiteSpace: 'nowrap',
+            wordWrap: 'normal',
+            ...props.style
+        }
+    }));
+});
+/*#__PURE__*/ Object.assign($ea1ef594cf570d83$export$439d29a4e110a164, {
+    displayName: $ea1ef594cf570d83$var$NAME
+});
+/* -----------------------------------------------------------------------------------------------*/ const $ea1ef594cf570d83$export$be92b6f5f03c0fe9 = $ea1ef594cf570d83$export$439d29a4e110a164;
+
+
+
+
+
+//# sourceMappingURL=index.mjs.map
+
+
+/***/ }),
+
 /***/ "./node_modules/react-tooltip/dist/react-tooltip.min.mjs":
 /*!***************************************************************!*\
   !*** ./node_modules/react-tooltip/dist/react-tooltip.min.mjs ***!
@@ -36798,14 +38615,13 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   Tooltip: () => (/* binding */ D),
-/* harmony export */   TooltipProvider: () => (/* binding */ T),
-/* harmony export */   TooltipWrapper: () => (/* binding */ L),
-/* harmony export */   removeStyle: () => (/* binding */ E)
+/* harmony export */   Tooltip: () => (/* binding */ H),
+/* harmony export */   TooltipProvider: () => (/* binding */ $),
+/* harmony export */   TooltipWrapper: () => (/* binding */ j),
+/* harmony export */   removeStyle: () => (/* binding */ g)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var _floating_ui_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @floating-ui/dom */ "./node_modules/@floating-ui/core/dist/floating-ui.core.mjs");
-/* harmony import */ var _floating_ui_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @floating-ui/dom */ "./node_modules/@floating-ui/dom/dist/floating-ui.dom.mjs");
+/* harmony import */ var _floating_ui_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @floating-ui/dom */ "./node_modules/@floating-ui/dom/dist/floating-ui.dom.mjs");
 /* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
 /*
 * React Tooltip
@@ -36813,7 +38629,7 @@ __webpack_require__.r(__webpack_exports__);
 * @copyright ReactTooltip Team
 * @license MIT
 */
-const h="react-tooltip-core-styles",w="react-tooltip-base-styles",b={core:!1,base:!1};function S({css:e,id:t=w,type:o="base",ref:l}){var r,n;if(!e||"undefined"==typeof document||b[o])return;if("core"===o&&"undefined"!=typeof process&&(null===(r=null===process||void 0===process?void 0:process.env)||void 0===r?void 0:r.REACT_TOOLTIP_DISABLE_CORE_STYLES))return;if("base"!==o&&"undefined"!=typeof process&&(null===(n=null===process||void 0===process?void 0:process.env)||void 0===n?void 0:n.REACT_TOOLTIP_DISABLE_BASE_STYLES))return;"core"===o&&(t=h),l||(l={});const{insertAt:c}=l;if(document.getElementById(t))return void console.warn(`[react-tooltip] Element with id '${t}' already exists. Call \`removeStyle()\` first`);const i=document.head||document.getElementsByTagName("head")[0],s=document.createElement("style");s.id=t,s.type="text/css","top"===c&&i.firstChild?i.insertBefore(s,i.firstChild):i.appendChild(s),s.styleSheet?s.styleSheet.cssText=e:s.appendChild(document.createTextNode(e)),b[o]=!0}function E({type:e="base",id:t=w}={}){if(!b[e])return;"core"===e&&(t=h);const o=document.getElementById(t);"style"===(null==o?void 0:o.tagName)?null==o||o.remove():console.warn(`[react-tooltip] Failed to remove 'style' element with id '${t}'. Call \`injectStyle()\` first`),b[e]=!1}const g=(e,t,o)=>{let l=null;return function(...r){const n=()=>{l=null,o||e.apply(this,r)};o&&!l&&(e.apply(this,r),l=setTimeout(n,t)),o||(l&&clearTimeout(l),l=setTimeout(n,t))}},_="DEFAULT_TOOLTIP_ID",A={anchorRefs:new Set,activeAnchor:{current:null},attach:()=>{},detach:()=>{},setActiveAnchor:()=>{}},O=(0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)({getTooltipData:()=>A}),T=({children:t})=>{const[n,c]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({[_]:new Set}),[i,s]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({[_]:{current:null}}),a=(e,...t)=>{c((o=>{var l;const r=null!==(l=o[e])&&void 0!==l?l:new Set;return t.forEach((e=>r.add(e))),{...o,[e]:new Set(r)}}))},d=(e,...t)=>{c((o=>{const l=o[e];return l?(t.forEach((e=>l.delete(e))),{...o}):o}))},u=(0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(((e=_)=>{var t,o;return{anchorRefs:null!==(t=n[e])&&void 0!==t?t:new Set,activeAnchor:null!==(o=i[e])&&void 0!==o?o:{current:null},attach:(...t)=>a(e,...t),detach:(...t)=>d(e,...t),setActiveAnchor:t=>((e,t)=>{s((o=>{var l;return(null===(l=o[e])||void 0===l?void 0:l.current)===t.current?o:{...o,[e]:t}}))})(e,t)}}),[n,i,a,d]),p=(0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)((()=>({getTooltipData:u})),[u]);return react__WEBPACK_IMPORTED_MODULE_0__.createElement(O.Provider,{value:p},t)};function k(e=_){return (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(O).getTooltipData(e)}const L=({tooltipId:t,children:o,className:l,place:r,content:n,html:s,variant:a,offset:d,wrapper:u,events:p,positionStrategy:v,delayShow:m,delayHide:f})=>{const{attach:h,detach:w}=k(t),b=(0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);return (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>(h(b),()=>{w(b)})),[]),react__WEBPACK_IMPORTED_MODULE_0__.createElement("span",{ref:b,className:classnames__WEBPACK_IMPORTED_MODULE_1__("react-tooltip-wrapper",l),"data-tooltip-place":r,"data-tooltip-content":n,"data-tooltip-html":s,"data-tooltip-variant":a,"data-tooltip-offset":d,"data-tooltip-wrapper":u,"data-tooltip-events":p,"data-tooltip-position-strategy":v,"data-tooltip-delay-show":m,"data-tooltip-delay-hide":f},o)},C="undefined"!=typeof window?react__WEBPACK_IMPORTED_MODULE_0__.useLayoutEffect:react__WEBPACK_IMPORTED_MODULE_0__.useEffect,R=e=>{if(!(e instanceof HTMLElement||e instanceof SVGElement))return!1;const t=getComputedStyle(e);return["overflow","overflow-x","overflow-y"].some((e=>{const o=t.getPropertyValue(e);return"auto"===o||"scroll"===o}))},x=e=>{if(!e)return null;let t=e.parentElement;for(;t;){if(R(t))return t;t=t.parentElement}return document.scrollingElement||document.documentElement},N=async({elementReference:e=null,tooltipReference:t=null,tooltipArrowReference:o=null,place:l="top",offset:r=10,strategy:n="absolute",middlewares:c=[(0,_floating_ui_dom__WEBPACK_IMPORTED_MODULE_2__.offset)(Number(r)),(0,_floating_ui_dom__WEBPACK_IMPORTED_MODULE_2__.flip)(),(0,_floating_ui_dom__WEBPACK_IMPORTED_MODULE_2__.shift)({padding:5})],border:i})=>{if(!e)return{tooltipStyles:{},tooltipArrowStyles:{},place:l};if(null===t)return{tooltipStyles:{},tooltipArrowStyles:{},place:l};const s=c;return o?(s.push((0,_floating_ui_dom__WEBPACK_IMPORTED_MODULE_2__.arrow)({element:o,padding:5})),(0,_floating_ui_dom__WEBPACK_IMPORTED_MODULE_3__.computePosition)(e,t,{placement:l,strategy:n,middleware:s}).then((({x:e,y:t,placement:o,middlewareData:l})=>{var r,n;const c={left:`${e}px`,top:`${t}px`,border:i},{x:s,y:a}=null!==(r=l.arrow)&&void 0!==r?r:{x:0,y:0},d=null!==(n={top:"bottom",right:"left",bottom:"top",left:"right"}[o.split("-")[0]])&&void 0!==n?n:"bottom",u=i&&{borderBottom:i,borderRight:i};let p=0;if(i){const e=`${i}`.match(/(\d+)px/);p=(null==e?void 0:e[1])?Number(e[1]):1}return{tooltipStyles:c,tooltipArrowStyles:{left:null!=s?`${s}px`:"",top:null!=a?`${a}px`:"",right:"",bottom:"",...u,[d]:`-${4+p}px`},place:o}}))):(0,_floating_ui_dom__WEBPACK_IMPORTED_MODULE_3__.computePosition)(e,t,{placement:"bottom",strategy:n,middleware:s}).then((({x:e,y:t,placement:o})=>({tooltipStyles:{left:`${e}px`,top:`${t}px`},tooltipArrowStyles:{},place:o})))};var $={tooltip:"core-styles-module_tooltip__3vRRp",fixed:"core-styles-module_fixed__pcSol",arrow:"core-styles-module_arrow__cvMwQ",noArrow:"core-styles-module_noArrow__xock6",clickable:"core-styles-module_clickable__ZuTTB",show:"core-styles-module_show__Nt9eE",closing:"core-styles-module_closing__sGnxF"},j={tooltip:"styles-module_tooltip__mnnfp",arrow:"styles-module_arrow__K0L3T",dark:"styles-module_dark__xNqje",light:"styles-module_light__Z6W-X",success:"styles-module_success__A2AKt",warning:"styles-module_warning__SCK0X",error:"styles-module_error__JvumD",info:"styles-module_info__BWdHW"};const I=({forwardRef:t,id:r,className:n,classNameArrow:s,variant:d="dark",anchorId:u,anchorSelect:p,place:v="top",offset:m=10,events:h=["hover"],openOnClick:w=!1,positionStrategy:b="absolute",middlewares:S,wrapper:E,delayShow:_=0,delayHide:A=0,float:O=!1,hidden:T=!1,noArrow:L=!1,clickable:R=!1,closeOnEsc:I=!1,closeOnScroll:B=!1,closeOnResize:z=!1,openEvents:D,closeEvents:q,globalCloseEvents:H,imperativeModeOnly:M,style:W,position:P,afterShow:F,afterHide:K,content:U,contentWrapperRef:X,isOpen:Y,setIsOpen:G,activeAnchor:V,setActiveAnchor:Z,border:J,opacity:Q,arrowColor:ee,role:te="tooltip"})=>{var oe;const le=(0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null),re=(0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null),ne=(0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null),ce=(0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null),[ie,se]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(v),[ae,de]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({}),[ue,pe]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({}),[ve,me]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(!1),[fe,ye]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(!1),[he,we]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),be=(0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(!1),Se=(0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null),{anchorRefs:Ee,setActiveAnchor:ge}=k(r),_e=(0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(!1),[Ae,Oe]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),Te=(0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(!1),ke=w||h.includes("click"),Le=ke||(null==D?void 0:D.click)||(null==D?void 0:D.dblclick)||(null==D?void 0:D.mousedown),Ce=D?{...D}:{mouseenter:!0,focus:!0,click:!1,dblclick:!1,mousedown:!1};!D&&ke&&Object.assign(Ce,{mouseenter:!1,focus:!1,click:!0});const Re=q?{...q}:{mouseleave:!0,blur:!0,click:!1,dblclick:!1,mouseup:!1};!q&&ke&&Object.assign(Re,{mouseleave:!1,blur:!1});const xe=H?{...H}:{escape:I||!1,scroll:B||!1,resize:z||!1,clickOutsideAnchor:Le||!1};M&&(Object.assign(Ce,{mouseenter:!1,focus:!1,click:!1,dblclick:!1,mousedown:!1}),Object.assign(Re,{mouseleave:!1,blur:!1,click:!1,dblclick:!1,mouseup:!1}),Object.assign(xe,{escape:!1,scroll:!1,resize:!1,clickOutsideAnchor:!1})),C((()=>(Te.current=!0,()=>{Te.current=!1})),[]);const Ne=e=>{Te.current&&(e&&ye(!0),setTimeout((()=>{Te.current&&(null==G||G(e),void 0===Y&&me(e))}),10))};(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{if(void 0===Y)return()=>null;Y&&ye(!0);const e=setTimeout((()=>{me(Y)}),10);return()=>{clearTimeout(e)}}),[Y]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{ve!==be.current&&(be.current=ve,ve&&(null==F||F()))}),[ve]);const $e=(e=_)=>{ne.current&&clearTimeout(ne.current),ne.current=setTimeout((()=>{Ne(!0)}),e)},je=(e=A)=>{ce.current&&clearTimeout(ce.current),ce.current=setTimeout((()=>{_e.current||Ne(!1)}),e)},Ie=e=>{var t;if(!e)return;const o=null!==(t=e.currentTarget)&&void 0!==t?t:e.target;if(!(null==o?void 0:o.isConnected))return Z(null),void ge({current:null});_?$e():Ne(!0),Z(o),ge({current:o}),ce.current&&clearTimeout(ce.current)},Be=()=>{R?je(A||100):A?je():Ne(!1),ne.current&&clearTimeout(ne.current)},ze=({x:e,y:t})=>{var o;const l={getBoundingClientRect:()=>({x:e,y:t,width:0,height:0,top:t,left:e,right:e,bottom:t})};N({place:null!==(o=null==he?void 0:he.place)&&void 0!==o?o:v,offset:m,elementReference:l,tooltipReference:le.current,tooltipArrowReference:re.current,strategy:b,middlewares:S,border:J}).then((e=>{Object.keys(e.tooltipStyles).length&&de(e.tooltipStyles),Object.keys(e.tooltipArrowStyles).length&&pe(e.tooltipArrowStyles),se(e.place)}))},De=e=>{if(!e)return;const t=e,o={x:t.clientX,y:t.clientY};ze(o),Se.current=o},qe=e=>{var t;if(!ve)return;const o=e.target;if(null===(t=le.current)||void 0===t?void 0:t.contains(o))return;[document.querySelector(`[id='${u}']`),...Ae].some((e=>null==e?void 0:e.contains(o)))||(Ne(!1),ne.current&&clearTimeout(ne.current))},He=g(Ie,50,!0),Me=g(Be,50,!0),We=(0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)((()=>{var e,t;const o=null!==(e=null==he?void 0:he.position)&&void 0!==e?e:P;o?ze(o):O?Se.current&&ze(Se.current):(null==V?void 0:V.isConnected)&&N({place:null!==(t=null==he?void 0:he.place)&&void 0!==t?t:v,offset:m,elementReference:V,tooltipReference:le.current,tooltipArrowReference:re.current,strategy:b,middlewares:S,border:J}).then((e=>{Te.current&&(Object.keys(e.tooltipStyles).length&&de(e.tooltipStyles),Object.keys(e.tooltipArrowStyles).length&&pe(e.tooltipArrowStyles),se(e.place))}))}),[ve,V,U,W,v,null==he?void 0:he.place,m,b,P,null==he?void 0:he.position,O]);(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{var e,t;const o=new Set(Ee);Ae.forEach((e=>{o.add({current:e})}));const l=document.querySelector(`[id='${u}']`);l&&o.add({current:l});const r=()=>{Ne(!1)},n=x(V),c=x(le.current);xe.scroll&&(window.addEventListener("scroll",r),null==n||n.addEventListener("scroll",r),null==c||c.addEventListener("scroll",r));let i=null;xe.resize?window.addEventListener("resize",r):V&&le.current&&(i=(0,_floating_ui_dom__WEBPACK_IMPORTED_MODULE_3__.autoUpdate)(V,le.current,We,{ancestorResize:!0,elementResize:!0,layoutShift:!0}));const s=e=>{"Escape"===e.key&&Ne(!1)};xe.escape&&window.addEventListener("keydown",s),xe.clickOutsideAnchor&&window.addEventListener("click",qe);const a=[],d=e=>{ve||Ie(e)},p=()=>{ve&&Be()},v=["mouseenter","mouseleave","focus","blur"],m=["click","dblclick","mousedown","mouseup"];Object.entries(Ce).forEach((([e,t])=>{t&&(v.includes(e)?a.push({event:e,listener:He}):m.includes(e)&&a.push({event:e,listener:d}))})),Object.entries(Re).forEach((([e,t])=>{t&&(v.includes(e)?a.push({event:e,listener:Me}):m.includes(e)&&a.push({event:e,listener:p}))})),O&&a.push({event:"mousemove",listener:De});const y=()=>{_e.current=!0},h=()=>{_e.current=!1,Be()};return R&&!Le&&(null===(e=le.current)||void 0===e||e.addEventListener("mouseenter",y),null===(t=le.current)||void 0===t||t.addEventListener("mouseleave",h)),a.forEach((({event:e,listener:t})=>{o.forEach((o=>{var l;null===(l=o.current)||void 0===l||l.addEventListener(e,t)}))})),()=>{var e,t;xe.scroll&&(window.removeEventListener("scroll",r),null==n||n.removeEventListener("scroll",r),null==c||c.removeEventListener("scroll",r)),xe.resize?window.removeEventListener("resize",r):null==i||i(),xe.clickOutsideAnchor&&window.removeEventListener("click",qe),xe.escape&&window.removeEventListener("keydown",s),R&&!Le&&(null===(e=le.current)||void 0===e||e.removeEventListener("mouseenter",y),null===(t=le.current)||void 0===t||t.removeEventListener("mouseleave",h)),a.forEach((({event:e,listener:t})=>{o.forEach((o=>{var l;null===(l=o.current)||void 0===l||l.removeEventListener(e,t)}))}))}}),[V,We,fe,Ee,Ae,D,q,H,ke]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{var e,t;let o=null!==(t=null!==(e=null==he?void 0:he.anchorSelect)&&void 0!==e?e:p)&&void 0!==t?t:"";!o&&r&&(o=`[data-tooltip-id='${r}']`);const l=new MutationObserver((e=>{const t=[],l=[];e.forEach((e=>{if("attributes"===e.type&&"data-tooltip-id"===e.attributeName){e.target.getAttribute("data-tooltip-id")===r&&t.push(e.target)}if("childList"===e.type){if(V){const t=[...e.removedNodes].filter((e=>1===e.nodeType));if(o)try{l.push(...t.filter((e=>e.matches(o)))),l.push(...t.flatMap((e=>[...e.querySelectorAll(o)])))}catch(e){}t.some((e=>{var t;return!!(null===(t=null==e?void 0:e.contains)||void 0===t?void 0:t.call(e,V))&&(ye(!1),Ne(!1),Z(null),ne.current&&clearTimeout(ne.current),ce.current&&clearTimeout(ce.current),!0)}))}if(o)try{const l=[...e.addedNodes].filter((e=>1===e.nodeType));t.push(...l.filter((e=>e.matches(o)))),t.push(...l.flatMap((e=>[...e.querySelectorAll(o)])))}catch(e){}}})),(t.length||l.length)&&Oe((e=>[...e.filter((e=>!l.includes(e))),...t]))}));return l.observe(document.body,{childList:!0,subtree:!0,attributes:!0,attributeFilter:["data-tooltip-id"]}),()=>{l.disconnect()}}),[r,p,null==he?void 0:he.anchorSelect,V]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{We()}),[We]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{if(!(null==X?void 0:X.current))return()=>null;const e=new ResizeObserver((()=>{We()}));return e.observe(X.current),()=>{e.disconnect()}}),[U,null==X?void 0:X.current]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{var e;const t=document.querySelector(`[id='${u}']`),o=[...Ae,t];V&&o.includes(V)||Z(null!==(e=Ae[0])&&void 0!==e?e:t)}),[u,Ae,V]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>()=>{ne.current&&clearTimeout(ne.current),ce.current&&clearTimeout(ce.current)}),[]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{var e;let t=null!==(e=null==he?void 0:he.anchorSelect)&&void 0!==e?e:p;if(!t&&r&&(t=`[data-tooltip-id='${r}']`),t)try{const e=Array.from(document.querySelectorAll(t));Oe(e)}catch(e){Oe([])}}),[r,p,null==he?void 0:he.anchorSelect]);const Pe=null!==(oe=null==he?void 0:he.content)&&void 0!==oe?oe:U,Fe=ve&&Object.keys(ae).length>0;return (0,react__WEBPACK_IMPORTED_MODULE_0__.useImperativeHandle)(t,(()=>({open:e=>{if(null==e?void 0:e.anchorSelect)try{document.querySelector(e.anchorSelect)}catch(t){return void console.warn(`[react-tooltip] "${e.anchorSelect}" is not a valid CSS selector`)}we(null!=e?e:null),(null==e?void 0:e.delay)?$e(e.delay):Ne(!0)},close:e=>{(null==e?void 0:e.delay)?je(e.delay):Ne(!1)},activeAnchor:V,place:ie,isOpen:Boolean(fe&&!T&&Pe&&Fe)}))),fe&&!T&&Pe?react__WEBPACK_IMPORTED_MODULE_0__.createElement(E,{id:r,role:te,className:classnames__WEBPACK_IMPORTED_MODULE_1__("react-tooltip",$.tooltip,j.tooltip,j[d],n,`react-tooltip__place-${ie}`,$[Fe?"show":"closing"],Fe?"react-tooltip__show":"react-tooltip__closing","fixed"===b&&$.fixed,R&&$.clickable),onTransitionEnd:e=>{ve||"opacity"!==e.propertyName||(ye(!1),we(null),null==K||K())},style:{...W,...ae,opacity:void 0!==Q&&Fe?Q:void 0},ref:le},Pe,react__WEBPACK_IMPORTED_MODULE_0__.createElement(E,{className:classnames__WEBPACK_IMPORTED_MODULE_1__("react-tooltip-arrow",$.arrow,j.arrow,s,L&&$.noArrow),style:{...ue,background:ee?`linear-gradient(to right bottom, transparent 50%, ${ee} 50%)`:void 0},ref:re})):null},B=({content:t})=>react__WEBPACK_IMPORTED_MODULE_0__.createElement("span",{dangerouslySetInnerHTML:{__html:t}}),z=(e,t)=>!("CSS"in window&&"supports"in window.CSS)||window.CSS.supports(e,t),D=react__WEBPACK_IMPORTED_MODULE_0__.forwardRef((({id:t,anchorId:l,anchorSelect:r,content:n,html:s,render:a,className:d,classNameArrow:u,variant:p="dark",place:v="top",offset:m=10,wrapper:f="div",children:y=null,events:h=["hover"],openOnClick:w=!1,positionStrategy:b="absolute",middlewares:S,delayShow:E=0,delayHide:g=0,float:_=!1,hidden:A=!1,noArrow:O=!1,clickable:T=!1,closeOnEsc:L=!1,closeOnScroll:C=!1,closeOnResize:R=!1,openEvents:x,closeEvents:N,globalCloseEvents:$,imperativeModeOnly:j=!1,style:D,position:q,isOpen:H,disableStyleInjection:M=!1,border:W,opacity:P,arrowColor:F,setIsOpen:K,afterShow:U,afterHide:X,role:Y="tooltip"},G)=>{const[V,Z]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(n),[J,Q]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(s),[ee,te]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(v),[oe,le]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(p),[re,ne]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(m),[ce,ie]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(E),[se,ae]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(g),[de,ue]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_),[pe,ve]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(A),[me,fe]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(f),[ye,he]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(h),[we,be]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(b),[Se,Ee]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),ge=(0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(M),{anchorRefs:_e,activeAnchor:Ae}=k(t),Oe=e=>null==e?void 0:e.getAttributeNames().reduce(((t,o)=>{var l;if(o.startsWith("data-tooltip-")){t[o.replace(/^data-tooltip-/,"")]=null!==(l=null==e?void 0:e.getAttribute(o))&&void 0!==l?l:null}return t}),{}),Te=e=>{const t={place:e=>{var t;te(null!==(t=e)&&void 0!==t?t:v)},content:e=>{Z(null!=e?e:n)},html:e=>{Q(null!=e?e:s)},variant:e=>{var t;le(null!==(t=e)&&void 0!==t?t:p)},offset:e=>{ne(null===e?m:Number(e))},wrapper:e=>{var t;fe(null!==(t=e)&&void 0!==t?t:f)},events:e=>{const t=null==e?void 0:e.split(" ");he(null!=t?t:h)},"position-strategy":e=>{var t;be(null!==(t=e)&&void 0!==t?t:b)},"delay-show":e=>{ie(null===e?E:Number(e))},"delay-hide":e=>{ae(null===e?g:Number(e))},float:e=>{ue(null===e?_:"true"===e)},hidden:e=>{ve(null===e?A:"true"===e)}};Object.values(t).forEach((e=>e(null))),Object.entries(e).forEach((([e,o])=>{var l;null===(l=t[e])||void 0===l||l.call(t,o)}))};(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{Z(n)}),[n]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{Q(s)}),[s]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{te(v)}),[v]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{le(p)}),[p]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{ne(m)}),[m]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{ie(E)}),[E]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{ae(g)}),[g]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{ue(_)}),[_]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{ve(A)}),[A]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{be(b)}),[b]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{ge.current!==M&&console.warn("[react-tooltip] Do not change `disableStyleInjection` dynamically.")}),[M]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{"undefined"!=typeof window&&window.dispatchEvent(new CustomEvent("react-tooltip-inject-styles",{detail:{disableCore:"core"===M,disableBase:M}}))}),[]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{var e;const o=new Set(_e);let n=r;if(!n&&t&&(n=`[data-tooltip-id='${t}']`),n)try{document.querySelectorAll(n).forEach((e=>{o.add({current:e})}))}catch(e){console.warn(`[react-tooltip] "${n}" is not a valid CSS selector`)}const c=document.querySelector(`[id='${l}']`);if(c&&o.add({current:c}),!o.size)return()=>null;const i=null!==(e=null!=Se?Se:c)&&void 0!==e?e:Ae.current,s=new MutationObserver((e=>{e.forEach((e=>{var t;if(!i||"attributes"!==e.type||!(null===(t=e.attributeName)||void 0===t?void 0:t.startsWith("data-tooltip-")))return;const o=Oe(i);Te(o)}))})),a={attributes:!0,childList:!1,subtree:!1};if(i){const e=Oe(i);Te(e),s.observe(i,a)}return()=>{s.disconnect()}}),[_e,Ae,Se,l,r]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{(null==D?void 0:D.border)&&console.warn("[react-tooltip] Do not set `style.border`. Use `border` prop instead."),W&&!z("border",`${W}`)&&console.warn(`[react-tooltip] "${W}" is not a valid \`border\`.`),(null==D?void 0:D.opacity)&&console.warn("[react-tooltip] Do not set `style.opacity`. Use `opacity` prop instead."),P&&!z("opacity",`${P}`)&&console.warn(`[react-tooltip] "${P}" is not a valid \`opacity\`.`)}),[]);let ke=y;const Le=(0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);if(a){const t=a({content:null!=V?V:null,activeAnchor:Se});ke=t?react__WEBPACK_IMPORTED_MODULE_0__.createElement("div",{ref:Le,className:"react-tooltip-content-wrapper"},t):null}else V&&(ke=V);J&&(ke=react__WEBPACK_IMPORTED_MODULE_0__.createElement(B,{content:J}));const Ce={forwardRef:G,id:t,anchorId:l,anchorSelect:r,className:d,classNameArrow:u,content:ke,contentWrapperRef:Le,place:ee,variant:oe,offset:re,wrapper:me,events:ye,openOnClick:w,positionStrategy:we,middlewares:S,delayShow:ce,delayHide:se,float:de,hidden:pe,noArrow:O,clickable:T,closeOnEsc:L,closeOnScroll:C,closeOnResize:R,openEvents:x,closeEvents:N,globalCloseEvents:$,imperativeModeOnly:j,style:D,position:q,isOpen:H,border:W,opacity:P,arrowColor:F,setIsOpen:K,afterShow:U,afterHide:X,activeAnchor:Se,setActiveAnchor:e=>Ee(e),role:Y};return react__WEBPACK_IMPORTED_MODULE_0__.createElement(I,{...Ce})}));"undefined"!=typeof window&&window.addEventListener("react-tooltip-inject-styles",(e=>{e.detail.disableCore||S({css:`:root{--rt-color-white:#fff;--rt-color-dark:#222;--rt-color-success:#8dc572;--rt-color-error:#be6464;--rt-color-warning:#f0ad4e;--rt-color-info:#337ab7;--rt-opacity:0.9;--rt-transition-show-delay:0.15s;--rt-transition-closing-delay:0.15s}.core-styles-module_tooltip__3vRRp{position:absolute;top:0;left:0;pointer-events:none;opacity:0;will-change:opacity}.core-styles-module_fixed__pcSol{position:fixed}.core-styles-module_arrow__cvMwQ{position:absolute;background:inherit}.core-styles-module_noArrow__xock6{display:none}.core-styles-module_clickable__ZuTTB{pointer-events:auto}.core-styles-module_show__Nt9eE{opacity:var(--rt-opacity);transition:opacity var(--rt-transition-show-delay)ease-out}.core-styles-module_closing__sGnxF{opacity:0;transition:opacity var(--rt-transition-closing-delay)ease-in}`,type:"core"}),e.detail.disableBase||S({css:`
+const h="react-tooltip-core-styles",w="react-tooltip-base-styles",b={core:!1,base:!1};function S({css:e,id:t=w,type:o="base",ref:r}){var l,n;if(!e||"undefined"==typeof document||b[o])return;if("core"===o&&"undefined"!=typeof process&&(null===(l=null===process||void 0===process?void 0:process.env)||void 0===l?void 0:l.REACT_TOOLTIP_DISABLE_CORE_STYLES))return;if("base"!==o&&"undefined"!=typeof process&&(null===(n=null===process||void 0===process?void 0:process.env)||void 0===n?void 0:n.REACT_TOOLTIP_DISABLE_BASE_STYLES))return;"core"===o&&(t=h),r||(r={});const{insertAt:c}=r;if(document.getElementById(t))return void console.warn(`[react-tooltip] Element with id '${t}' already exists. Call \`removeStyle()\` first`);const i=document.head||document.getElementsByTagName("head")[0],s=document.createElement("style");s.id=t,s.type="text/css","top"===c&&i.firstChild?i.insertBefore(s,i.firstChild):i.appendChild(s),s.styleSheet?s.styleSheet.cssText=e:s.appendChild(document.createTextNode(e)),b[o]=!0}function g({type:e="base",id:t=w}={}){if(!b[e])return;"core"===e&&(t=h);const o=document.getElementById(t);"style"===(null==o?void 0:o.tagName)?null==o||o.remove():console.warn(`[react-tooltip] Failed to remove 'style' element with id '${t}'. Call \`injectStyle()\` first`),b[e]=!1}const E=async({elementReference:e=null,tooltipReference:t=null,tooltipArrowReference:o=null,place:r="top",offset:l=10,strategy:n="absolute",middlewares:c=[(0,_floating_ui_dom__WEBPACK_IMPORTED_MODULE_2__.offset)(Number(l)),(0,_floating_ui_dom__WEBPACK_IMPORTED_MODULE_2__.flip)({fallbackAxisSideDirection:"start"}),(0,_floating_ui_dom__WEBPACK_IMPORTED_MODULE_2__.shift)({padding:5})],border:i})=>{if(!e)return{tooltipStyles:{},tooltipArrowStyles:{},place:r};if(null===t)return{tooltipStyles:{},tooltipArrowStyles:{},place:r};const s=c;return o?(s.push((0,_floating_ui_dom__WEBPACK_IMPORTED_MODULE_2__.arrow)({element:o,padding:5})),(0,_floating_ui_dom__WEBPACK_IMPORTED_MODULE_2__.computePosition)(e,t,{placement:r,strategy:n,middleware:s}).then((({x:e,y:t,placement:o,middlewareData:r})=>{var l,n;const c={left:`${e}px`,top:`${t}px`,border:i},{x:s,y:a}=null!==(l=r.arrow)&&void 0!==l?l:{x:0,y:0},u=null!==(n={top:"bottom",right:"left",bottom:"top",left:"right"}[o.split("-")[0]])&&void 0!==n?n:"bottom",d=i&&{borderBottom:i,borderRight:i};let p=0;if(i){const e=`${i}`.match(/(\d+)px/);p=(null==e?void 0:e[1])?Number(e[1]):1}return{tooltipStyles:c,tooltipArrowStyles:{left:null!=s?`${s}px`:"",top:null!=a?`${a}px`:"",right:"",bottom:"",...d,[u]:`-${4+p}px`},place:o}}))):(0,_floating_ui_dom__WEBPACK_IMPORTED_MODULE_2__.computePosition)(e,t,{placement:"bottom",strategy:n,middleware:s}).then((({x:e,y:t,placement:o})=>({tooltipStyles:{left:`${e}px`,top:`${t}px`},tooltipArrowStyles:{},place:o})))},A=(e,t)=>!("CSS"in window&&"supports"in window.CSS)||window.CSS.supports(e,t),_=(e,t,o)=>{let r=null;const l=function(...l){const n=()=>{r=null,o||e.apply(this,l)};o&&!r&&(e.apply(this,l),r=setTimeout(n,t)),o||(r&&clearTimeout(r),r=setTimeout(n,t))};return l.cancel=()=>{r&&(clearTimeout(r),r=null)},l},O=e=>null!==e&&!Array.isArray(e)&&"object"==typeof e,T=(e,t)=>{if(e===t)return!0;if(Array.isArray(e)&&Array.isArray(t))return e.length===t.length&&e.every(((e,o)=>T(e,t[o])));if(Array.isArray(e)!==Array.isArray(t))return!1;if(!O(e)||!O(t))return e===t;const o=Object.keys(e),r=Object.keys(t);return o.length===r.length&&o.every((o=>T(e[o],t[o])))},k=e=>{if(!(e instanceof HTMLElement||e instanceof SVGElement))return!1;const t=getComputedStyle(e);return["overflow","overflow-x","overflow-y"].some((e=>{const o=t.getPropertyValue(e);return"auto"===o||"scroll"===o}))},C=e=>{if(!e)return null;let t=e.parentElement;for(;t;){if(k(t))return t;t=t.parentElement}return document.scrollingElement||document.documentElement},L="undefined"!=typeof window?react__WEBPACK_IMPORTED_MODULE_0__.useLayoutEffect:react__WEBPACK_IMPORTED_MODULE_0__.useEffect,R="DEFAULT_TOOLTIP_ID",x={anchorRefs:new Set,activeAnchor:{current:null},attach:()=>{},detach:()=>{},setActiveAnchor:()=>{}},N=(0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)({getTooltipData:()=>x}),$=({children:t})=>{const[o,r]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({[R]:new Set}),[i,s]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({[R]:{current:null}}),a=(e,...t)=>{r((o=>{var r;const l=null!==(r=o[e])&&void 0!==r?r:new Set;return t.forEach((e=>l.add(e))),{...o,[e]:new Set(l)}}))},u=(e,...t)=>{r((o=>{const r=o[e];return r?(t.forEach((e=>r.delete(e))),{...o}):o}))},d=(0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(((e=R)=>{var t,r;return{anchorRefs:null!==(t=o[e])&&void 0!==t?t:new Set,activeAnchor:null!==(r=i[e])&&void 0!==r?r:{current:null},attach:(...t)=>a(e,...t),detach:(...t)=>u(e,...t),setActiveAnchor:t=>((e,t)=>{s((o=>{var r;return(null===(r=o[e])||void 0===r?void 0:r.current)===t.current?o:{...o,[e]:t}}))})(e,t)}}),[o,i,a,u]),p=(0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)((()=>({getTooltipData:d})),[d]);return react__WEBPACK_IMPORTED_MODULE_0__.createElement(N.Provider,{value:p},t)};function I(e=R){return (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(N).getTooltipData(e)}const j=({tooltipId:t,children:r,className:l,place:n,content:c,html:i,variant:a,offset:u,wrapper:d,events:p,positionStrategy:v,delayShow:m,delayHide:f})=>{const{attach:h,detach:w}=I(t),b=(0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);return (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>(h(b),()=>{w(b)})),[]),react__WEBPACK_IMPORTED_MODULE_0__.createElement("span",{ref:b,className:classnames__WEBPACK_IMPORTED_MODULE_1__("react-tooltip-wrapper",l),"data-tooltip-place":n,"data-tooltip-content":c,"data-tooltip-html":i,"data-tooltip-variant":a,"data-tooltip-offset":u,"data-tooltip-wrapper":d,"data-tooltip-events":p,"data-tooltip-position-strategy":v,"data-tooltip-delay-show":m,"data-tooltip-delay-hide":f},r)};var B={tooltip:"core-styles-module_tooltip__3vRRp",fixed:"core-styles-module_fixed__pcSol",arrow:"core-styles-module_arrow__cvMwQ",noArrow:"core-styles-module_noArrow__xock6",clickable:"core-styles-module_clickable__ZuTTB",show:"core-styles-module_show__Nt9eE",closing:"core-styles-module_closing__sGnxF"},z={tooltip:"styles-module_tooltip__mnnfp",arrow:"styles-module_arrow__K0L3T",dark:"styles-module_dark__xNqje",light:"styles-module_light__Z6W-X",success:"styles-module_success__A2AKt",warning:"styles-module_warning__SCK0X",error:"styles-module_error__JvumD",info:"styles-module_info__BWdHW"};const D=({forwardRef:t,id:r,className:c,classNameArrow:i,variant:u="dark",anchorId:d,anchorSelect:p,place:v="top",offset:m=10,events:h=["hover"],openOnClick:w=!1,positionStrategy:b="absolute",middlewares:S,wrapper:g,delayShow:A=0,delayHide:O=0,float:k=!1,hidden:R=!1,noArrow:x=!1,clickable:N=!1,closeOnEsc:$=!1,closeOnScroll:j=!1,closeOnResize:D=!1,openEvents:q,closeEvents:H,globalCloseEvents:M,imperativeModeOnly:W,style:P,position:V,afterShow:F,afterHide:K,content:U,contentWrapperRef:X,isOpen:Y,defaultIsOpen:G=!1,setIsOpen:Z,activeAnchor:J,setActiveAnchor:Q,border:ee,opacity:te,arrowColor:oe,role:re="tooltip"})=>{var le;const ne=(0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null),ce=(0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null),ie=(0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null),se=(0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null),ae=(0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null),[ue,de]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({tooltipStyles:{},tooltipArrowStyles:{},place:v}),[pe,ve]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(!1),[me,fe]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(!1),[ye,he]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),we=(0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(!1),be=(0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null),{anchorRefs:Se,setActiveAnchor:ge}=I(r),Ee=(0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(!1),[Ae,_e]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),Oe=(0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(!1),Te=w||h.includes("click"),ke=Te||(null==q?void 0:q.click)||(null==q?void 0:q.dblclick)||(null==q?void 0:q.mousedown),Ce=q?{...q}:{mouseenter:!0,focus:!0,click:!1,dblclick:!1,mousedown:!1};!q&&Te&&Object.assign(Ce,{mouseenter:!1,focus:!1,click:!0});const Le=H?{...H}:{mouseleave:!0,blur:!0,click:!1,dblclick:!1,mouseup:!1};!H&&Te&&Object.assign(Le,{mouseleave:!1,blur:!1});const Re=M?{...M}:{escape:$||!1,scroll:j||!1,resize:D||!1,clickOutsideAnchor:ke||!1};W&&(Object.assign(Ce,{mouseenter:!1,focus:!1,click:!1,dblclick:!1,mousedown:!1}),Object.assign(Le,{mouseleave:!1,blur:!1,click:!1,dblclick:!1,mouseup:!1}),Object.assign(Re,{escape:!1,scroll:!1,resize:!1,clickOutsideAnchor:!1})),L((()=>(Oe.current=!0,()=>{Oe.current=!1})),[]);const xe=e=>{Oe.current&&(e&&fe(!0),setTimeout((()=>{Oe.current&&(null==Z||Z(e),void 0===Y&&ve(e))}),10))};(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{if(void 0===Y)return()=>null;Y&&fe(!0);const e=setTimeout((()=>{ve(Y)}),10);return()=>{clearTimeout(e)}}),[Y]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{if(pe!==we.current)if(ae.current&&clearTimeout(ae.current),we.current=pe,pe)null==F||F();else{const e=(e=>{const t=e.match(/^([\d.]+)(ms|s)$/);if(!t)return 0;const[,o,r]=t;return Number(o)*("ms"===r?1:1e3)})(getComputedStyle(document.body).getPropertyValue("--rt-transition-show-delay"));ae.current=setTimeout((()=>{fe(!1),he(null),null==K||K()}),e+25)}}),[pe]);const Ne=e=>{de((t=>T(t,e)?t:e))},$e=(e=A)=>{ie.current&&clearTimeout(ie.current),me?xe(!0):ie.current=setTimeout((()=>{xe(!0)}),e)},Ie=(e=O)=>{se.current&&clearTimeout(se.current),se.current=setTimeout((()=>{Ee.current||xe(!1)}),e)},je=e=>{var t;if(!e)return;const o=null!==(t=e.currentTarget)&&void 0!==t?t:e.target;if(!(null==o?void 0:o.isConnected))return Q(null),void ge({current:null});A?$e():xe(!0),Q(o),ge({current:o}),se.current&&clearTimeout(se.current)},Be=()=>{N?Ie(O||100):O?Ie():xe(!1),ie.current&&clearTimeout(ie.current)},ze=({x:e,y:t})=>{var o;const r={getBoundingClientRect:()=>({x:e,y:t,width:0,height:0,top:t,left:e,right:e,bottom:t})};E({place:null!==(o=null==ye?void 0:ye.place)&&void 0!==o?o:v,offset:m,elementReference:r,tooltipReference:ne.current,tooltipArrowReference:ce.current,strategy:b,middlewares:S,border:ee}).then((e=>{Ne(e)}))},De=e=>{if(!e)return;const t=e,o={x:t.clientX,y:t.clientY};ze(o),be.current=o},qe=e=>{var t;if(!pe)return;const o=e.target;if(!o.isConnected)return;if(null===(t=ne.current)||void 0===t?void 0:t.contains(o))return;[document.querySelector(`[id='${d}']`),...Ae].some((e=>null==e?void 0:e.contains(o)))||(xe(!1),ie.current&&clearTimeout(ie.current))},He=_(je,50,!0),Me=_(Be,50,!0),We=e=>{Me.cancel(),He(e)},Pe=()=>{He.cancel(),Me()},Ve=(0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)((()=>{var e,t;const o=null!==(e=null==ye?void 0:ye.position)&&void 0!==e?e:V;o?ze(o):k?be.current&&ze(be.current):(null==J?void 0:J.isConnected)&&E({place:null!==(t=null==ye?void 0:ye.place)&&void 0!==t?t:v,offset:m,elementReference:J,tooltipReference:ne.current,tooltipArrowReference:ce.current,strategy:b,middlewares:S,border:ee}).then((e=>{Oe.current&&Ne(e)}))}),[pe,J,U,P,v,null==ye?void 0:ye.place,m,b,V,null==ye?void 0:ye.position,k]);(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{var e,t;const o=new Set(Se);Ae.forEach((e=>{o.add({current:e})}));const r=document.querySelector(`[id='${d}']`);r&&o.add({current:r});const l=()=>{xe(!1)},n=C(J),c=C(ne.current);Re.scroll&&(window.addEventListener("scroll",l),null==n||n.addEventListener("scroll",l),null==c||c.addEventListener("scroll",l));let i=null;Re.resize?window.addEventListener("resize",l):J&&ne.current&&(i=(0,_floating_ui_dom__WEBPACK_IMPORTED_MODULE_2__.autoUpdate)(J,ne.current,Ve,{ancestorResize:!0,elementResize:!0,layoutShift:!0}));const s=e=>{"Escape"===e.key&&xe(!1)};Re.escape&&window.addEventListener("keydown",s),Re.clickOutsideAnchor&&window.addEventListener("click",qe);const a=[],u=e=>{pe&&(null==e?void 0:e.target)===J||je(e)},p=e=>{pe&&(null==e?void 0:e.target)===J&&Be()},v=["mouseenter","mouseleave","focus","blur"],m=["click","dblclick","mousedown","mouseup"];Object.entries(Ce).forEach((([e,t])=>{t&&(v.includes(e)?a.push({event:e,listener:We}):m.includes(e)&&a.push({event:e,listener:u}))})),Object.entries(Le).forEach((([e,t])=>{t&&(v.includes(e)?a.push({event:e,listener:Pe}):m.includes(e)&&a.push({event:e,listener:p}))})),k&&a.push({event:"pointermove",listener:De});const y=()=>{Ee.current=!0},h=()=>{Ee.current=!1,Be()};return N&&!ke&&(null===(e=ne.current)||void 0===e||e.addEventListener("mouseenter",y),null===(t=ne.current)||void 0===t||t.addEventListener("mouseleave",h)),a.forEach((({event:e,listener:t})=>{o.forEach((o=>{var r;null===(r=o.current)||void 0===r||r.addEventListener(e,t)}))})),()=>{var e,t;Re.scroll&&(window.removeEventListener("scroll",l),null==n||n.removeEventListener("scroll",l),null==c||c.removeEventListener("scroll",l)),Re.resize?window.removeEventListener("resize",l):null==i||i(),Re.clickOutsideAnchor&&window.removeEventListener("click",qe),Re.escape&&window.removeEventListener("keydown",s),N&&!ke&&(null===(e=ne.current)||void 0===e||e.removeEventListener("mouseenter",y),null===(t=ne.current)||void 0===t||t.removeEventListener("mouseleave",h)),a.forEach((({event:e,listener:t})=>{o.forEach((o=>{var r;null===(r=o.current)||void 0===r||r.removeEventListener(e,t)}))}))}}),[J,Ve,me,Se,Ae,q,H,M,Te,A,O]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{var e,t;let o=null!==(t=null!==(e=null==ye?void 0:ye.anchorSelect)&&void 0!==e?e:p)&&void 0!==t?t:"";!o&&r&&(o=`[data-tooltip-id='${r.replace(/'/g,"\\'")}']`);const l=new MutationObserver((e=>{const t=[],l=[];e.forEach((e=>{if("attributes"===e.type&&"data-tooltip-id"===e.attributeName){e.target.getAttribute("data-tooltip-id")===r?t.push(e.target):e.oldValue===r&&l.push(e.target)}if("childList"===e.type){if(J){const t=[...e.removedNodes].filter((e=>1===e.nodeType));if(o)try{l.push(...t.filter((e=>e.matches(o)))),l.push(...t.flatMap((e=>[...e.querySelectorAll(o)])))}catch(e){}t.some((e=>{var t;return!!(null===(t=null==e?void 0:e.contains)||void 0===t?void 0:t.call(e,J))&&(fe(!1),xe(!1),Q(null),ie.current&&clearTimeout(ie.current),se.current&&clearTimeout(se.current),!0)}))}if(o)try{const r=[...e.addedNodes].filter((e=>1===e.nodeType));t.push(...r.filter((e=>e.matches(o)))),t.push(...r.flatMap((e=>[...e.querySelectorAll(o)])))}catch(e){}}})),(t.length||l.length)&&_e((e=>[...e.filter((e=>!l.includes(e))),...t]))}));return l.observe(document.body,{childList:!0,subtree:!0,attributes:!0,attributeFilter:["data-tooltip-id"],attributeOldValue:!0}),()=>{l.disconnect()}}),[r,p,null==ye?void 0:ye.anchorSelect,J]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{Ve()}),[Ve]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{if(!(null==X?void 0:X.current))return()=>null;const e=new ResizeObserver((()=>{setTimeout((()=>Ve()))}));return e.observe(X.current),()=>{e.disconnect()}}),[U,null==X?void 0:X.current]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{var e;const t=document.querySelector(`[id='${d}']`),o=[...Ae,t];J&&o.includes(J)||Q(null!==(e=Ae[0])&&void 0!==e?e:t)}),[d,Ae,J]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>(G&&xe(!0),()=>{ie.current&&clearTimeout(ie.current),se.current&&clearTimeout(se.current)})),[]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{var e;let t=null!==(e=null==ye?void 0:ye.anchorSelect)&&void 0!==e?e:p;if(!t&&r&&(t=`[data-tooltip-id='${r.replace(/'/g,"\\'")}']`),t)try{const e=Array.from(document.querySelectorAll(t));_e(e)}catch(e){_e([])}}),[r,p,null==ye?void 0:ye.anchorSelect]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{ie.current&&(clearTimeout(ie.current),$e(A))}),[A]);const Fe=null!==(le=null==ye?void 0:ye.content)&&void 0!==le?le:U,Ke=pe&&Object.keys(ue.tooltipStyles).length>0;return (0,react__WEBPACK_IMPORTED_MODULE_0__.useImperativeHandle)(t,(()=>({open:e=>{if(null==e?void 0:e.anchorSelect)try{document.querySelector(e.anchorSelect)}catch(t){return void console.warn(`[react-tooltip] "${e.anchorSelect}" is not a valid CSS selector`)}he(null!=e?e:null),(null==e?void 0:e.delay)?$e(e.delay):xe(!0)},close:e=>{(null==e?void 0:e.delay)?Ie(e.delay):xe(!1)},activeAnchor:J,place:ue.place,isOpen:Boolean(me&&!R&&Fe&&Ke)}))),me&&!R&&Fe?react__WEBPACK_IMPORTED_MODULE_0__.createElement(g,{id:r,role:re,className:classnames__WEBPACK_IMPORTED_MODULE_1__("react-tooltip",B.tooltip,z.tooltip,z[u],c,`react-tooltip__place-${ue.place}`,B[Ke?"show":"closing"],Ke?"react-tooltip__show":"react-tooltip__closing","fixed"===b&&B.fixed,N&&B.clickable),onTransitionEnd:e=>{ae.current&&clearTimeout(ae.current),pe||"opacity"!==e.propertyName||(fe(!1),he(null),null==K||K())},style:{...P,...ue.tooltipStyles,opacity:void 0!==te&&Ke?te:void 0},ref:ne},Fe,react__WEBPACK_IMPORTED_MODULE_0__.createElement(g,{className:classnames__WEBPACK_IMPORTED_MODULE_1__("react-tooltip-arrow",B.arrow,z.arrow,i,x&&B.noArrow),style:{...ue.tooltipArrowStyles,background:oe?`linear-gradient(to right bottom, transparent 50%, ${oe} 50%)`:void 0},ref:ce})):null},q=({content:t})=>react__WEBPACK_IMPORTED_MODULE_0__.createElement("span",{dangerouslySetInnerHTML:{__html:t}}),H=react__WEBPACK_IMPORTED_MODULE_0__.forwardRef((({id:t,anchorId:r,anchorSelect:n,content:c,html:i,render:a,className:u,classNameArrow:d,variant:p="dark",place:v="top",offset:m=10,wrapper:f="div",children:h=null,events:w=["hover"],openOnClick:b=!1,positionStrategy:S="absolute",middlewares:g,delayShow:E=0,delayHide:_=0,float:O=!1,hidden:T=!1,noArrow:k=!1,clickable:C=!1,closeOnEsc:L=!1,closeOnScroll:R=!1,closeOnResize:x=!1,openEvents:N,closeEvents:$,globalCloseEvents:j,imperativeModeOnly:B=!1,style:z,position:H,isOpen:M,defaultIsOpen:W=!1,disableStyleInjection:P=!1,border:V,opacity:F,arrowColor:K,setIsOpen:U,afterShow:X,afterHide:Y,role:G="tooltip"},Z)=>{const[J,Q]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(c),[ee,te]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(i),[oe,re]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(v),[le,ne]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(p),[ce,ie]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(m),[se,ae]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(E),[ue,de]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_),[pe,ve]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(O),[me,fe]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(T),[ye,he]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(f),[we,be]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(w),[Se,ge]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(S),[Ee,Ae]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),[_e,Oe]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),Te=(0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(P),{anchorRefs:ke,activeAnchor:Ce}=I(t),Le=e=>null==e?void 0:e.getAttributeNames().reduce(((t,o)=>{var r;if(o.startsWith("data-tooltip-")){t[o.replace(/^data-tooltip-/,"")]=null!==(r=null==e?void 0:e.getAttribute(o))&&void 0!==r?r:null}return t}),{}),Re=e=>{const t={place:e=>{var t;re(null!==(t=e)&&void 0!==t?t:v)},content:e=>{Q(null!=e?e:c)},html:e=>{te(null!=e?e:i)},variant:e=>{var t;ne(null!==(t=e)&&void 0!==t?t:p)},offset:e=>{ie(null===e?m:Number(e))},wrapper:e=>{var t;he(null!==(t=e)&&void 0!==t?t:f)},events:e=>{const t=null==e?void 0:e.split(" ");be(null!=t?t:w)},"position-strategy":e=>{var t;ge(null!==(t=e)&&void 0!==t?t:S)},"delay-show":e=>{ae(null===e?E:Number(e))},"delay-hide":e=>{de(null===e?_:Number(e))},float:e=>{ve(null===e?O:"true"===e)},hidden:e=>{fe(null===e?T:"true"===e)},"class-name":e=>{Ae(e)}};Object.values(t).forEach((e=>e(null))),Object.entries(e).forEach((([e,o])=>{var r;null===(r=t[e])||void 0===r||r.call(t,o)}))};(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{Q(c)}),[c]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{te(i)}),[i]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{re(v)}),[v]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{ne(p)}),[p]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{ie(m)}),[m]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{ae(E)}),[E]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{de(_)}),[_]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{ve(O)}),[O]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{fe(T)}),[T]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{ge(S)}),[S]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{Te.current!==P&&console.warn("[react-tooltip] Do not change `disableStyleInjection` dynamically.")}),[P]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{"undefined"!=typeof window&&window.dispatchEvent(new CustomEvent("react-tooltip-inject-styles",{detail:{disableCore:"core"===P,disableBase:P}}))}),[]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{var e;const o=new Set(ke);let l=n;if(!l&&t&&(l=`[data-tooltip-id='${t.replace(/'/g,"\\'")}']`),l)try{document.querySelectorAll(l).forEach((e=>{o.add({current:e})}))}catch(e){console.warn(`[react-tooltip] "${l}" is not a valid CSS selector`)}const c=document.querySelector(`[id='${r}']`);if(c&&o.add({current:c}),!o.size)return()=>null;const i=null!==(e=null!=_e?_e:c)&&void 0!==e?e:Ce.current,s=new MutationObserver((e=>{e.forEach((e=>{var t;if(!i||"attributes"!==e.type||!(null===(t=e.attributeName)||void 0===t?void 0:t.startsWith("data-tooltip-")))return;const o=Le(i);Re(o)}))})),a={attributes:!0,childList:!1,subtree:!1};if(i){const e=Le(i);Re(e),s.observe(i,a)}return()=>{s.disconnect()}}),[ke,Ce,_e,r,n]),(0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)((()=>{(null==z?void 0:z.border)&&console.warn("[react-tooltip] Do not set `style.border`. Use `border` prop instead."),V&&!A("border",`${V}`)&&console.warn(`[react-tooltip] "${V}" is not a valid \`border\`.`),(null==z?void 0:z.opacity)&&console.warn("[react-tooltip] Do not set `style.opacity`. Use `opacity` prop instead."),F&&!A("opacity",`${F}`)&&console.warn(`[react-tooltip] "${F}" is not a valid \`opacity\`.`)}),[]);let xe=h;const Ne=(0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);if(a){const t=a({content:(null==_e?void 0:_e.getAttribute("data-tooltip-content"))||J||null,activeAnchor:_e});xe=t?react__WEBPACK_IMPORTED_MODULE_0__.createElement("div",{ref:Ne,className:"react-tooltip-content-wrapper"},t):null}else J&&(xe=J);ee&&(xe=react__WEBPACK_IMPORTED_MODULE_0__.createElement(q,{content:ee}));const $e={forwardRef:Z,id:t,anchorId:r,anchorSelect:n,className:classnames__WEBPACK_IMPORTED_MODULE_1__(u,Ee),classNameArrow:d,content:xe,contentWrapperRef:Ne,place:oe,variant:le,offset:ce,wrapper:ye,events:we,openOnClick:b,positionStrategy:Se,middlewares:g,delayShow:se,delayHide:ue,float:pe,hidden:me,noArrow:k,clickable:C,closeOnEsc:L,closeOnScroll:R,closeOnResize:x,openEvents:N,closeEvents:$,globalCloseEvents:j,imperativeModeOnly:B,style:z,position:H,isOpen:M,defaultIsOpen:W,border:V,opacity:F,arrowColor:K,setIsOpen:U,afterShow:X,afterHide:Y,activeAnchor:_e,setActiveAnchor:e=>Oe(e),role:G};return react__WEBPACK_IMPORTED_MODULE_0__.createElement(D,{...$e})}));"undefined"!=typeof window&&window.addEventListener("react-tooltip-inject-styles",(e=>{e.detail.disableCore||S({css:`:root{--rt-color-white:#fff;--rt-color-dark:#222;--rt-color-success:#8dc572;--rt-color-error:#be6464;--rt-color-warning:#f0ad4e;--rt-color-info:#337ab7;--rt-opacity:0.9;--rt-transition-show-delay:0.15s;--rt-transition-closing-delay:0.15s}.core-styles-module_tooltip__3vRRp{position:absolute;top:0;left:0;pointer-events:none;opacity:0;will-change:opacity}.core-styles-module_fixed__pcSol{position:fixed}.core-styles-module_arrow__cvMwQ{position:absolute;background:inherit}.core-styles-module_noArrow__xock6{display:none}.core-styles-module_clickable__ZuTTB{pointer-events:auto}.core-styles-module_show__Nt9eE{opacity:var(--rt-opacity);transition:opacity var(--rt-transition-show-delay)ease-out}.core-styles-module_closing__sGnxF{opacity:0;transition:opacity var(--rt-transition-closing-delay)ease-in}`,type:"core"}),e.detail.disableBase||S({css:`
 .styles-module_tooltip__mnnfp{padding:8px 16px;border-radius:3px;font-size:90%;width:max-content}.styles-module_arrow__K0L3T{width:8px;height:8px}[class*='react-tooltip__place-top']>.styles-module_arrow__K0L3T{transform:rotate(45deg)}[class*='react-tooltip__place-right']>.styles-module_arrow__K0L3T{transform:rotate(135deg)}[class*='react-tooltip__place-bottom']>.styles-module_arrow__K0L3T{transform:rotate(225deg)}[class*='react-tooltip__place-left']>.styles-module_arrow__K0L3T{transform:rotate(315deg)}.styles-module_dark__xNqje{background:var(--rt-color-dark);color:var(--rt-color-white)}.styles-module_light__Z6W-X{background-color:var(--rt-color-white);color:var(--rt-color-dark)}.styles-module_success__A2AKt{background-color:var(--rt-color-success);color:var(--rt-color-white)}.styles-module_warning__SCK0X{background-color:var(--rt-color-warning);color:var(--rt-color-white)}.styles-module_error__JvumD{background-color:var(--rt-color-error);color:var(--rt-color-white)}.styles-module_info__BWdHW{background-color:var(--rt-color-info);color:var(--rt-color-white)}`,type:"base"})}));
 
 

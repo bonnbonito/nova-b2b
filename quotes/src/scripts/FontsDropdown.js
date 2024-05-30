@@ -8,7 +8,7 @@ export default function FontsDropdown({
 	fontRef,
 	openFont,
 	setOpenFont,
-	setOpenColor,
+	close,
 }) {
 	const handleCustomFontSelection = () => {
 		// TODO: Add your logic here for custom font selection
@@ -28,7 +28,7 @@ export default function FontsDropdown({
 				}`}
 				onClick={() => {
 					setOpenFont((prev) => !prev);
-					setOpenColor(false);
+					close();
 				}}
 				style={{
 					fontFamily: font === 'Custom font' ? '' : font,

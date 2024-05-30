@@ -16,5 +16,10 @@
     "npm-run-all": "^4.1.5",
     "tailwindcss": "^3.4.3",
     "tailwindcss-animate": "^1.0.7"
+  },
+  "dependencies": {
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^2.3.0"
   }
 }

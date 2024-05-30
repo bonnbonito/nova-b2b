@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useAppContext } from './AppProvider';
 import ModalSave from './ModalSave';
 import Prices from './Prices';
@@ -9,6 +9,8 @@ const currency = wcumcs_vars_data.currency;
 export default function Sidebar() {
 	const { signage, partner } = useAppContext();
 	const [canSaveToDraft, setCanSaveToDraft] = useState(true);
+
+	const memoizedSignage = useMemo(() => signage, [signage]);
 
 	useEffect(() => {
 		setCanSaveToDraft(() => parseInt(partner) === parseInt(NovaQuote.user_id));
@@ -61,12 +63,12 @@ export default function Sidebar() {
 		<div className="md:w-1/4 w-full mt-8 md:mt-0">
 			<div className="rounded-md border border-gray-200 p-4 sticky top-36">
 				<div className="w-full max-h-[calc(100vh-300px)] overflow-y-auto pr-5">
-					{signage.map((item, index) => (
+					{memoizedSignage.map((item, index) => (
 						<Prices
-							id={item.id}
+							key={item.id}
 							item={item}
 							borderTop={index > 0 && 'border-t mt-2'}
-						></Prices>
+						/>
 					))}
 
 					<hr className="mt-5" />

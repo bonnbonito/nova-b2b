@@ -475,10 +475,6 @@ function allAttributes(sign) {
 		},
 
 		{
-			label: 'LED LIGHT COLOR',
-			value: sign.ledLightColor ? sign.ledLightColor : '',
-		},
-		{
 			label: 'FRONT ACRYLIC COVER',
 			value: sign.frontAcrylicCover ? sign.frontAcrylicCover : '',
 		},
@@ -490,6 +486,14 @@ function allAttributes(sign) {
 				: '',
 		},
 
+		{
+			label: 'RETURN PAINT COLOR',
+			value: sign.acrylicReturnPaintColor ? sign.acrylicReturnPaintColor : '',
+		},
+		{
+			label: 'LED LIGHT COLOR',
+			value: sign.ledLightColor ? sign.ledLightColor : '',
+		},
 		{
 			label: 'ACRYLIC REVEAL',
 			value: sign.acrylicReveal ? sign.acrylicReveal : '',

@@ -571,7 +571,7 @@ export const Letters = ({ item, letterPricing, hasPrice = false }) => {
 					openFont={openFont}
 					setOpenFont={setOpenFont}
 					handleSelectFont={handleSelectFont}
-					setOpenColor={() => {
+					close={() => {
 						setOpenAcrylicColor(false);
 					}}
 				/>

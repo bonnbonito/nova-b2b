@@ -2,7 +2,7 @@ function displayQuantityDiscountTable() {
 	const quantityPricingTable = AdminSignage.multiple_quantity_discount;
 
 	if (quantityPricingTable && quantityPricingTable.pricing_table) {
-		const quantityPricingTableJson = convertJson(
+		const quantityPricingTableJson = convertJsonDiscount(
 			quantityPricingTable.pricing_table
 		);
 
@@ -16,7 +16,10 @@ function displayQuantityDiscountTable() {
 				return parseFloat(a) - parseFloat(b);
 			});
 
-			const discountTable = createTable(quantityPricingTableJson, headers);
+			const discountTable = createTableDiscount(
+				quantityPricingTableJson,
+				headers
+			);
 			const outputElement = document.getElementById('quatityTableDiscount');
 
 			if (outputElement) {
@@ -32,7 +35,7 @@ if (document.readyState === 'loading') {
 	displayQuantityDiscountTable();
 }
 
-function convertJson(tableString) {
+function convertJsonDiscount(tableString) {
 	const rows = tableString.trim().split('\n');
 	const headers = ['Quantity', 'Discount'];
 
@@ -49,7 +52,7 @@ function convertJson(tableString) {
 	});
 }
 
-function createTable(dataArray, headers) {
+function createTableDiscount(dataArray, headers) {
 	const table = document.createElement('table');
 	table.className = 'pricing-table';
 

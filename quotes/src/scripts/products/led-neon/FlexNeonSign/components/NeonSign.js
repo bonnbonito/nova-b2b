@@ -307,7 +307,6 @@ export const NeonSign = ({ item }) => {
 	useEffect(() => {
 		const { singlePrice, total, discount } = computePricing();
 		if (total && singlePrice) {
-			console.log('pricing');
 			setUsdPrice(total);
 			setCadPrice((total * EXCHANGE_RATE).toFixed(2));
 			setUsdSinglePrice(singlePrice);

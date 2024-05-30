@@ -69,7 +69,13 @@ export const RenderSignageDetails = ({
 				<div className={classLabel}>{signage.label}</div>
 				<div className={classValue}>
 					{signage.key}
-					{`${signage.label === 'LETTER HEIGHT' ? '"' : ''}`}
+					{`${
+						signage.label === 'LETTER HEIGHT' ||
+						signage.label === 'LOGO HEIGHT' ||
+						signage.label === 'LOGO WIDTH'
+							? '"'
+							: ''
+					}`}
 				</div>
 			</div>
 		);

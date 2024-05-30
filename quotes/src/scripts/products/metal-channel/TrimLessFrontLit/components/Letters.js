@@ -532,12 +532,20 @@ export function Letters({ item }) {
 		}
 	}, [depth]);
 
-	useOutsideClick([colorRef, fontRef, acrylicColorRef], () => {
-		if (!openColor && !openFont && !openAcrylicCover) return;
-		setOpenColor(false);
-		setOpenFont(false);
-		setOpenAcrylicCover(false);
-	});
+	if (frontAcrylicCover === '3M Vinyl') {
+		useOutsideClick([colorRef, fontRef, acrylicColorRef], () => {
+			if (!openColor && !openFont && !openAcrylicCover) return;
+			setOpenColor(false);
+			setOpenFont(false);
+			setOpenAcrylicCover(false);
+		});
+	} else {
+		useOutsideClick([colorRef, fontRef], () => {
+			if (!openColor && !openFont) return;
+			setOpenColor(false);
+			setOpenFont(false);
+		});
+	}
 
 	useEffect(() => {
 		color?.name != 'Custom Color' && setCustomColor('');
@@ -590,7 +598,7 @@ export function Letters({ item }) {
 					openFont={openFont}
 					setOpenFont={setOpenFont}
 					handleSelectFont={handleSelectFont}
-					setOpenColor={() => {
+					close={() => {
 						setOpenColor(false);
 						setOpenAcrylicCover(false);
 					}}

@@ -23,10 +23,6 @@ export const NeonColors = ({
 	};
 
 	useEffect(() => {
-		console.log(colors.length);
-	}, [colors]);
-
-	useEffect(() => {
 		getSelectedColors(selectedColors);
 	}, [selectedColors]);
 
