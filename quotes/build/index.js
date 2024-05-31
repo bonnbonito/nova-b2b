@@ -3132,7 +3132,7 @@ const Prices = (0,react__WEBPACK_IMPORTED_MODULE_0__.memo)(function Prices({
   const currency = wcumcs_vars_data.currency;
   const price = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => currency === 'USD' ? item.usdPrice : item.cadPrice, [currency, item]);
   const singlePrice = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => currency === 'USD' ? item.usdSinglePrice : item.cadSinglePrice, [currency, item]);
-  const outputPrice = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => price > 0 ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, currency, "$", Number(singlePrice !== null && singlePrice !== void 0 ? singlePrice : price).toLocaleString(), singlePrice && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+  const outputPrice = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => price > 0 ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, currency, "$", Number(singlePrice !== null && singlePrice !== void 0 ? singlePrice : price).toFixed(2).toLocaleString(), singlePrice && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "text-xs lowercase"
   }, "/each")) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, "TBD"), [price, singlePrice, currency]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -3598,9 +3598,6 @@ function Sidebar() {
   const tax = 0;
   const taxRateName = taxRateObj ? taxRateObj.tax_rate_name : 'Tax';
   const totalUsdPrice = signage.reduce((acc, item) => acc + parseFloat(item.usdPrice), 0);
-  const totalUsdDiscount = signage.reduce((acc, item) => acc + parseFloat(item.usdDiscount), 0);
-  const totalCadDiscount = signage.reduce((acc, item) => acc + parseFloat(item.cadDiscount), 0);
-  const totalDiscount = currency === 'USD' ? totalUsdDiscount : totalCadDiscount;
   const totalCadPrice = signage.reduce((acc, item) => acc + parseFloat(item.cadPrice), 0);
   const totalPrice = currency === 'USD' ? totalUsdPrice : totalCadPrice;
   const flatRate = currency === 'USD' ? 14.75 : 14.75 * _utils_defaults__WEBPACK_IMPORTED_MODULE_4__.EXCHANGE_RATE;
@@ -3610,6 +3607,7 @@ function Sidebar() {
   //const taxCompute = parseFloat(totalPrice * tax);
   const taxCompute = 0;
   const estimateTotalPrice = totalPrice + estimatedShipping + taxCompute;
+  console.log('total', totalUsdPrice, totalCadPrice);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-1/4 w-full mt-8 md:mt-0"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -5689,7 +5687,7 @@ function Logo({
   const computePricing = () => {
     var _tempTotal, _totalWithDiscount$to;
     if (!width || !height) return 0;
-    const perInch = 0.2;
+    const perInch = 0.7;
     let tempTotal = parseInt(width) * parseInt(height) * perInch;
     if (acrylicFront === '3M Vinyl') {
       tempTotal *= 1.1;

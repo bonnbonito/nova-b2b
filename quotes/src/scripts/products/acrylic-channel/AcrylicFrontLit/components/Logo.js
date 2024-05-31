@@ -353,7 +353,7 @@ export function Logo({ item }) {
 	const computePricing = () => {
 		if (!width || !height) return 0;
 
-		const perInch = 0.2;
+		const perInch = 0.7;
 
 		let tempTotal = parseInt(width) * parseInt(height) * perInch;
 

@@ -18,7 +18,10 @@ const Prices = memo(function Prices({ item, borderTop }) {
 		() =>
 			price > 0 ? (
 				<span>
-					{currency}${Number(singlePrice ?? price).toLocaleString()}
+					{currency}$
+					{Number(singlePrice ?? price)
+						.toFixed(2)
+						.toLocaleString()}
 					{singlePrice && <span className="text-xs lowercase">/each</span>}
 				</span>
 			) : (

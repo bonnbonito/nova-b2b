@@ -27,19 +27,6 @@ export default function Sidebar() {
 		0
 	);
 
-	const totalUsdDiscount = signage.reduce(
-		(acc, item) => acc + parseFloat(item.usdDiscount),
-		0
-	);
-
-	const totalCadDiscount = signage.reduce(
-		(acc, item) => acc + parseFloat(item.cadDiscount),
-		0
-	);
-
-	const totalDiscount =
-		currency === 'USD' ? totalUsdDiscount : totalCadDiscount;
-
 	const totalCadPrice = signage.reduce(
 		(acc, item) => acc + parseFloat(item.cadPrice),
 		0
@@ -58,6 +45,8 @@ export default function Sidebar() {
 	const taxCompute = 0;
 
 	const estimateTotalPrice = totalPrice + estimatedShipping + taxCompute;
+
+	console.log('total', totalUsdPrice, totalCadPrice);
 
 	return (
 		<div className="md:w-1/4 w-full mt-8 md:mt-0">
