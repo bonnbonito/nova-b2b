@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import Note from '../../../Note';
 import Sidebar from '../../../Sidebar';
 import Signage from '../../../Signage';
 import { PlusIcon } from '../../../svg/Icons';
@@ -234,6 +235,34 @@ export default function MetalLaminate() {
 						</Signage>
 					))
 				)}
+
+				<Note title="Note">
+					<ul className="text-sm">
+						<li>
+							The brushed finish is horizontal by default. Please let us know in
+							the comments section if you prefer a vertical finish.
+						</li>
+						<li>The minimum stroke for 3M double-sided tape is 10mm.</li>
+						<li>
+							For stud pins: The minimum stroke is 12mm (1/2”) and the minimum
+							acrylic thickness is 1/4" (6mm).
+						</li>
+						<li>
+							You can choose a thicker acrylic to accommodate the design. If you
+							choose thinner acrylic, take note that it cannot use stud pins and
+							the sign must be carefully glued to the installation surface.
+						</li>
+						<li>
+							Sharp, thin points are not ideal unless requested. Slim sections
+							will be cut for shipping as small lines may break easily. You can
+							glue them together upon receipt.
+						</li>
+						<li>
+							The spacer will be black (default) or match the painted sign's
+							color.
+						</li>
+					</ul>
+				</Note>
 
 				<div className="flex gap-2">
 					{signage.length < 10 && (

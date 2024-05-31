@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useAppContext } from '../../../AppProvider';
+import Note from '../../../Note';
 import Sidebar from '../../../Sidebar';
 import Signage from '../../../Signage';
 import { PlusIcon } from '../../../svg/Icons';
@@ -89,10 +90,16 @@ export default function RigidNeonSignNoBacking() {
 					</Signage>
 				))}
 
-				<p className="text-sm">
-					** The neon height and width refer to the neon graphics. The 4mm PC
-					backing has a 1.5" margin on all sides. **
-				</p>
+				<Note title="Note">
+					<ul className="text-sm">
+						<li>The spacer is white to match the neon base.</li>
+						<li>
+							By default, each neon section will have 1 wire exit per segment.
+							If you prefer all wire exits to be in one place, please let us
+							know.
+						</li>
+					</ul>
+				</Note>
 
 				<div className="flex gap-2">
 					{signage.length < 10 && (

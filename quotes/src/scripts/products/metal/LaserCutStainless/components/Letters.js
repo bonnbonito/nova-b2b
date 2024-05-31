@@ -307,9 +307,14 @@ export function Letters({ item }) {
 
 	const handelMetalFinishChange = (e) => {
 		const value = e.target.value;
-		if ('Stainless Steel Polished' !== value) {
+		if (
+			'Stainless Steel Polished' !== value &&
+			'Electroplated Gold Polished' !== value &&
+			'Electroplated Black Titanium Polished' !== value
+		) {
 			setStainlessSteelPolished('');
 		}
+
 		setStainLessMetalFinish(e.target.value);
 	};
 
@@ -725,7 +730,9 @@ export function Letters({ item }) {
 					/>
 				)}
 
-				{stainLessMetalFinish === 'Stainless Steel Polished' && (
+				{(stainLessMetalFinish === 'Stainless Steel Polished' ||
+					stainLessMetalFinish === 'Electroplated Gold Polished' ||
+					stainLessMetalFinish === 'Electroplated Black Titanium Polished') && (
 					<Dropdown
 						title="Steel Polish"
 						onChange={(e) => setStainlessSteelPolished(e.target.value)}

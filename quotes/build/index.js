@@ -3103,6 +3103,36 @@ function ModalSave({
 
 /***/ }),
 
+/***/ "./src/scripts/Note.js":
+/*!*****************************!*\
+  !*** ./src/scripts/Note.js ***!
+  \*****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+const Note = ({
+  title,
+  children
+}) => {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4 mb-8",
+    role: "alert"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    className: "font-bold mb-2"
+  }, title), children);
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Note);
+
+/***/ }),
+
 /***/ "./src/scripts/Prices.js":
 /*!*******************************!*\
   !*** ./src/scripts/Prices.js ***!
@@ -4612,14 +4642,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
 /* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
-/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
-/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
-/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
-/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../utils/defaults */ "./src/scripts/utils/defaults.js");
-/* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/acrylic-channel/AcrylicFrontLit/components/Letters.js");
-/* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/acrylic-channel/AcrylicFrontLit/components/Logo.js");
+/* harmony import */ var _Note__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Note */ "./src/scripts/Note.js");
+/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
+/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
+/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
+/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../utils/defaults */ "./src/scripts/utils/defaults.js");
+/* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/acrylic-channel/AcrylicFrontLit/components/Letters.js");
+/* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/acrylic-channel/AcrylicFrontLit/components/Logo.js");
+
 
 
 
@@ -4639,7 +4671,7 @@ const AcrylicFrontLit = () => {
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
   const setDefaultSignage = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(() => {
     setSignage([{
-      id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_9__["default"])(),
       type: 'letters',
       title: 'LETTERS 1',
       letters: '',
@@ -4706,7 +4738,7 @@ const AcrylicFrontLit = () => {
     preloadFonts();
   }, []);
   const defaultArgs = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_9__["default"])(),
     comments: '',
     mounting: '',
     acrylicChannelThickness: '1.2"',
@@ -4718,7 +4750,7 @@ const AcrylicFrontLit = () => {
       code: ''
     },
     ledLightColor: '6500K White',
-    waterproof: _utils_defaults__WEBPACK_IMPORTED_MODULE_5__.INDOOR_NOT_WATERPROOF,
+    waterproof: _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.INDOOR_NOT_WATERPROOF,
     product: NovaQuote.product
   };
   const addSignage = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(type => {
@@ -4757,20 +4789,24 @@ const AcrylicFrontLit = () => {
     className: "md:flex gap-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full"
-  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_4__["default"], {
     key: item.id,
     index: index,
     id: item.id,
     item: item
-  }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_6__.Letters, {
+  }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_7__.Letters, {
     key: item.id,
     item: item,
     productId: item.product
-  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_7__.Logo, {
+  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_8__.Logo, {
     key: item.id,
     item: item,
     productId: item.product
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Note__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Note"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+    className: "text-sm"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The default cut is straight, but for strokes ranging from 6mm to 15mm, it will be sloped"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "We can customize the colors that are not on the 3M Vinyl options through UV printing."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-2"
   }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
@@ -4778,13 +4814,13 @@ const AcrylicFrontLit = () => {
     style: {
       border: '1px solid #d2d2d2d2'
     }
-  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)), signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_5__.PlusIcon, null)), signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
     onClick: () => addSignage('logo'),
     style: {
       border: '1px solid #d2d2d2d2'
     }
-  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], null));
+  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_5__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_3__["default"], null));
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (AcrylicFrontLit);
 
@@ -6281,13 +6317,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
 /* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
-/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
-/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
-/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
-/* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/acrylic/LaserCutAcrylic/components/Letters.js");
-/* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/acrylic/LaserCutAcrylic/components/Logo.js");
+/* harmony import */ var _Note__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Note */ "./src/scripts/Note.js");
+/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
+/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
+/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
+/* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/acrylic/LaserCutAcrylic/components/Letters.js");
+/* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/acrylic/LaserCutAcrylic/components/Logo.js");
+
 
 
 
@@ -6306,7 +6344,7 @@ function LaserCutAcrylic() {
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
   function setDefaultSignage() {
     setSignage([{
-      id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
       type: 'letters',
       title: 'LETTERS 1',
       letters: '',
@@ -6375,7 +6413,7 @@ function LaserCutAcrylic() {
     }
   }, []);
   const defaultArgs = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
     comments: '',
     mounting: '',
     acrylicThickness: '',
@@ -6455,19 +6493,23 @@ function LaserCutAcrylic() {
     className: "md:flex gap-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full"
-  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_4__["default"], {
     index: index,
     id: item.id,
     item: item
-  }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_5__.Letters, {
+  }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_6__.Letters, {
     key: item.id,
     item: item,
     productId: item.product
-  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_6__.Logo, {
+  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_7__.Logo, {
     key: item.id,
     item: item,
     productId: item.product
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Note__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Note"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+    className: "text-sm"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The brushed finish is horizontal by default. Please let us know in the comments section if you prefer a vertical finish."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The minimum stroke for 3M double-sided tape is 10mm."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "For stud pins: The minimum stroke is 12mm (1/2\u201D) and the minimum acrylic thickness is 1/4\" (6mm)."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "You can choose a thicker acrylic to accommodate the design. If you choose thinner acrylic, take note that it cannot use stud pins and the sign must be carefully glued to the installation surface."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Sharp, thin points are not ideal unless requested. Slim sections will be cut for shipping as small lines may break easily. You can glue them together upon receipt."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-2"
   }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
@@ -6475,13 +6517,13 @@ function LaserCutAcrylic() {
     style: {
       border: '1px solid #d2d2d2d2'
     }
-  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)), signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_5__.PlusIcon, null)), signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
     onClick: () => addSignage('logo'),
     style: {
       border: '1px solid #d2d2d2d2'
     }
-  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], null));
+  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_5__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_3__["default"], null));
 }
 
 /***/ }),
@@ -8127,14 +8169,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
-/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
-/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
-/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
-/* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/acrylic/MetalLaminate/components/Letters.js");
-/* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/acrylic/MetalLaminate/components/Logo.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
-/* harmony import */ var _utils_ConvertJson__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../utils/ConvertJson */ "./src/scripts/utils/ConvertJson.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var _Note__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Note */ "./src/scripts/Note.js");
+/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
+/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
+/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
+/* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/acrylic/MetalLaminate/components/Letters.js");
+/* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/acrylic/MetalLaminate/components/Logo.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _utils_ConvertJson__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../utils/ConvertJson */ "./src/scripts/utils/ConvertJson.js");
+
 
 
 
@@ -8157,7 +8201,7 @@ function MetalLaminate() {
     setSignage,
     setTempFolder,
     tempFolderName
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_6__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_7__.useAppContext)();
   const [letterPricing, setLetterPricing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     async function fetchLetterPricing() {
@@ -8165,7 +8209,7 @@ function MetalLaminate() {
       try {
         const response = await fetch(NovaQuote.letters_pricing_api + NovaQuote.product);
         const data = await response.json();
-        const pricing = (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_7__["default"])(data?.pricing_table);
+        const pricing = (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_8__["default"])(data?.pricing_table);
         setLetterPricing(pricing);
       } catch (error) {
         console.error('Error fetching letter pricing:', error);
@@ -8175,7 +8219,7 @@ function MetalLaminate() {
   }, []);
   function setDefaultSignage() {
     setSignage([{
-      id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_9__["default"])(),
       type: 'letters',
       title: 'LETTERS 1',
       letters: '',
@@ -8217,7 +8261,7 @@ function MetalLaminate() {
     }
   }, []);
   const defaultArgs = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_9__["default"])(),
     comments: '',
     mounting: '',
     acrylicThickness: '',
@@ -8339,18 +8383,22 @@ function MetalLaminate() {
     class: "opacity-75",
     fill: "currentColor",
     d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-  })), ' ', "Loading...")) : signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  })), ' ', "Loading...")) : signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
     index: index,
     id: item.id,
     item: item
-  }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_4__.Letters, {
+  }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_5__.Letters, {
     key: item.id,
     item: item,
     letterPricing: letterPricing
-  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_5__.Logo, {
+  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_6__.Logo, {
     key: item.id,
     item: item
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Note__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Note"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+    className: "text-sm"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The brushed finish is horizontal by default. Please let us know in the comments section if you prefer a vertical finish."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The minimum stroke for 3M double-sided tape is 10mm."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "For stud pins: The minimum stroke is 12mm (1/2\u201D) and the minimum acrylic thickness is 1/4\" (6mm)."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "You can choose a thicker acrylic to accommodate the design. If you choose thinner acrylic, take note that it cannot use stud pins and the sign must be carefully glued to the installation surface."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Sharp, thin points are not ideal unless requested. Slim sections will be cut for shipping as small lines may break easily. You can glue them together upon receipt."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-2"
   }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
@@ -8358,13 +8406,13 @@ function MetalLaminate() {
     style: {
       border: '1px solid #d2d2d2d2'
     }
-  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.PlusIcon, null)), signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)), signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
     onClick: () => addSignage('logo'),
     style: {
       border: '1px solid #d2d2d2d2'
     }
-  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_1__["default"], null));
+  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], null));
 }
 
 /***/ }),
@@ -9379,12 +9427,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
-/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
-/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
-/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
-/* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/acrylic/UvPrintedAcrylic/components/Logo.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var _Note__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Note */ "./src/scripts/Note.js");
+/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
+/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
+/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
+/* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/acrylic/UvPrintedAcrylic/components/Logo.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+
 
 
 
@@ -9399,10 +9449,10 @@ function UvPrintedAcrylic() {
     setSignage,
     setTempFolder,
     tempFolderName
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_5__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_6__.useAppContext)();
   function setDefaultSignage() {
     setSignage([{
-      id: (0,uuid__WEBPACK_IMPORTED_MODULE_6__["default"])(),
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
       type: 'logo',
       title: 'LOGO 1',
       comments: '',
@@ -9439,7 +9489,7 @@ function UvPrintedAcrylic() {
     }
   }, []);
   const defaultArgs = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_6__["default"])(),
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
     comments: '',
     mounting: '',
     acrylicThickness: '',
@@ -9494,14 +9544,18 @@ function UvPrintedAcrylic() {
     className: "md:flex gap-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full"
-  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
     index: index,
     id: item.id,
     item: item
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_4__.Logo, {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_5__.Logo, {
     key: item.id,
     item: item
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Note__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Note"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+    className: "text-sm"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The minimum stroke for 3M double-sided tape is 10mm."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "For stud pins: The minimum stroke is 12mm (1/2\u201D) and the minimum acrylic thickness is 1/4\" (6mm)."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "You can choose a thicker acrylic to accommodate the design. If you choose thinner acrylic, take note that it cannot use stud pins and the sign must be carefully glued to the installation surface."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Sharp, thin points are not ideal unless requested. Slim sections will be cut for shipping as small lines may break easily. You can glue them together upon receipt."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-2"
   }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
@@ -9509,7 +9563,7 @@ function UvPrintedAcrylic() {
     style: {
       border: '1px solid #d2d2d2d2'
     }
-  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_1__["default"], null));
+  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], null));
 }
 
 /***/ }),
@@ -10755,12 +10809,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
 /* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
-/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
-/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
-/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
-/* harmony import */ var _components_NeonSign__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/NeonSign */ "./src/scripts/products/led-neon/FlexNeonSign/components/NeonSign.js");
+/* harmony import */ var _Note__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Note */ "./src/scripts/Note.js");
+/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
+/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
+/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
+/* harmony import */ var _components_NeonSign__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/NeonSign */ "./src/scripts/products/led-neon/FlexNeonSign/components/NeonSign.js");
+
 
 
 
@@ -10777,7 +10833,7 @@ function FlexNeonSign() {
     tempFolderName
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
   const defaultSignage = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_6__["default"])(),
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
     type: 'SIGN',
     title: 'SIGN 1',
     neonSignWidth: '',
@@ -10838,17 +10894,19 @@ function FlexNeonSign() {
     className: "md:flex gap-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full"
-  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_4__["default"], {
     index: index,
     id: item.id,
     item: item
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_NeonSign__WEBPACK_IMPORTED_MODULE_5__.NeonSign, {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_NeonSign__WEBPACK_IMPORTED_MODULE_6__.NeonSign, {
     key: item.id,
     item: item,
     productId: item.product
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Note__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Note"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
     className: "text-sm"
-  }, "** The neon height and width refer to the neon graphics. The 4mm PC backing has a 1.5\" margin on all sides. **"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The neon height and width refer to the size of the neon graphics. Please note that the backing has a 1.5\" margin on all sides. If the design exceeds the neon size limit (40\u201Dx 40\u201D), we will divide them into multiple pieces to fit within the required dimensions."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-2"
   }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
@@ -10856,7 +10914,7 @@ function FlexNeonSign() {
     style: {
       border: '1px solid #d2d2d2d2'
     }
-  }, "ADD NEON SIGN", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], null));
+  }, "ADD NEON SIGN", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_5__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_3__["default"], null));
 }
 
 /***/ }),
@@ -11241,12 +11299,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
 /* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
-/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
-/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
-/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
-/* harmony import */ var _components_NeonSign__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/NeonSign */ "./src/scripts/products/led-neon/RigidNeonSignNoBacking/components/NeonSign.js");
+/* harmony import */ var _Note__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Note */ "./src/scripts/Note.js");
+/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
+/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
+/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
+/* harmony import */ var _components_NeonSign__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/NeonSign */ "./src/scripts/products/led-neon/RigidNeonSignNoBacking/components/NeonSign.js");
+
 
 
 
@@ -11263,7 +11323,7 @@ function RigidNeonSignNoBacking() {
     tempFolderName
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
   const defaultSignage = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_6__["default"])(),
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
     type: 'SIGN',
     title: 'SIGN 1',
     neonSignWidth: '',
@@ -11329,17 +11389,19 @@ function RigidNeonSignNoBacking() {
     className: "md:flex gap-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full"
-  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_4__["default"], {
     index: index,
     id: item.id,
     item: item
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_NeonSign__WEBPACK_IMPORTED_MODULE_5__.NeonSign, {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_NeonSign__WEBPACK_IMPORTED_MODULE_6__.NeonSign, {
     key: item.id,
     item: item,
     productId: item.product
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Note__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Note"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
     className: "text-sm"
-  }, "** The neon height and width refer to the neon graphics. The 4mm PC backing has a 1.5\" margin on all sides. **"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer is white to match the neon base."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "By default, each neon section will have 1 wire exit per segment. If you prefer all wire exits to be in one place, please let us know."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-2"
   }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
@@ -11347,7 +11409,7 @@ function RigidNeonSignNoBacking() {
     style: {
       border: '1px solid #d2d2d2d2'
     }
-  }, "ADD NEON SIGN", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], null));
+  }, "ADD NEON SIGN", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_5__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_3__["default"], null));
 }
 
 /***/ }),
@@ -11828,13 +11890,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
 /* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
-/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
-/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
-/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
-/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../utils/defaults */ "./src/scripts/utils/defaults.js");
-/* harmony import */ var _components_NeonSign__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/NeonSign */ "./src/scripts/products/led-neon/RigidNeonSignWithBacking/components/NeonSign.js");
+/* harmony import */ var _Note__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Note */ "./src/scripts/Note.js");
+/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
+/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
+/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
+/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../utils/defaults */ "./src/scripts/utils/defaults.js");
+/* harmony import */ var _components_NeonSign__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/NeonSign */ "./src/scripts/products/led-neon/RigidNeonSignWithBacking/components/NeonSign.js");
+
 
 
 
@@ -11852,7 +11916,7 @@ function RigidNeonSignWithBacking() {
     tempFolderName
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
   const defaultSignage = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
     type: 'SIGN',
     title: 'SIGN 1',
     neonSignWidth: '',
@@ -11868,7 +11932,7 @@ function RigidNeonSignWithBacking() {
     remoteControl: 'No',
     neonColor: '',
     pcCustomColor: '',
-    waterproof: _utils_defaults__WEBPACK_IMPORTED_MODULE_5__.INDOOR_NOT_WATERPROOF,
+    waterproof: _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.INDOOR_NOT_WATERPROOF,
     comments: '',
     wireExitLocation: 'Bottom Right',
     mounting: 'Standard Nails',
@@ -11921,17 +11985,19 @@ function RigidNeonSignWithBacking() {
     className: "md:flex gap-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full"
-  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_4__["default"], {
     index: index,
     id: item.id,
     item: item
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_NeonSign__WEBPACK_IMPORTED_MODULE_6__.NeonSign, {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_NeonSign__WEBPACK_IMPORTED_MODULE_7__.NeonSign, {
     key: item.id,
     item: item,
     productId: item.product
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Note__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Note"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
     className: "text-sm"
-  }, "** The neon height and width refer to the neon graphics. The 4mm PC backing has a 1.5\" margin on all sides. **"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The neon height and width refer to the size of the neon graphics. Please note that the backing has a 2/3\" margin from neon edge to backing edge. If the design exceeds the continuous neon size limit (65 cm x 72 cm), we will divide them into multiple pieces to fit within the required dimensions."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-2"
   }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
@@ -11939,7 +12005,7 @@ function RigidNeonSignWithBacking() {
     style: {
       border: '1px solid #d2d2d2d2'
     }
-  }, "ADD NEON SIGN", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], null));
+  }, "ADD NEON SIGN", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_5__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_3__["default"], null));
 }
 
 /***/ }),
@@ -11987,8 +12053,6 @@ const waterProofOptions = [{
 }];
 const pcFinishOptions = [{
   option: 'Matte'
-}, {
-  option: 'Glossy'
 }];
 const wireTypeOptions = [{
   option: '6ft Clear DC5521 female'
@@ -12686,13 +12750,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
-/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
-/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
-/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
-/* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/metal-channel/AluminumResinFrontBackLit/components/Letters.js");
-/* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/metal-channel/AluminumResinFrontBackLit/components/Logo.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var _Note__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Note */ "./src/scripts/Note.js");
+/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
+/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
+/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
+/* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/metal-channel/AluminumResinFrontBackLit/components/Letters.js");
+/* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/metal-channel/AluminumResinFrontBackLit/components/Logo.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+
 
 
 
@@ -12708,10 +12774,10 @@ function TrimLessFrontAndBackLit() {
     setSignage,
     setTempFolder,
     tempFolderName
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_6__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_7__.useAppContext)();
   function setDefaultSignage() {
     setSignage([{
-      id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
       type: 'letters',
       title: 'LETTERS 1',
       depth: '',
@@ -12761,7 +12827,7 @@ function TrimLessFrontAndBackLit() {
     }
   }, []);
   const defaultArgs = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
     type: 'letters',
     title: 'LETTERS 1',
     depth: '',
@@ -12844,19 +12910,23 @@ function TrimLessFrontAndBackLit() {
     className: "md:flex gap-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full flex flex-col"
-  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
     index: index,
     id: item.id,
     item: item
-  }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_4__.Letters, {
+  }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_5__.Letters, {
     key: item.id,
     item: item,
     productId: item.product
-  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_5__.Logo, {
+  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_6__.Logo, {
     key: item.id,
     item: item,
     productId: item.product
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Note__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Note"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+    className: "text-sm"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-2"
   }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
@@ -12864,13 +12934,13 @@ function TrimLessFrontAndBackLit() {
     style: {
       border: '1px solid #d2d2d2d2'
     }
-  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.PlusIcon, null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
     onClick: () => addSignage('logo'),
     style: {
       border: '1px solid #d2d2d2d2'
     }
-  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.PlusIcon, null))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_1__["default"], null));
+  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], null));
 }
 
 /***/ }),
@@ -13987,13 +14057,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
-/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
-/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
-/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
-/* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/metal-channel/AluminumResinFrontLit/components/Letters.js");
-/* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/metal-channel/AluminumResinFrontLit/components/Logo.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var _Note__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Note */ "./src/scripts/Note.js");
+/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
+/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
+/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
+/* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/metal-channel/AluminumResinFrontLit/components/Letters.js");
+/* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/metal-channel/AluminumResinFrontLit/components/Logo.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+
 
 
 
@@ -14009,10 +14081,10 @@ function TrimLessFrontAndBackLit() {
     setSignage,
     setTempFolder,
     tempFolderName
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_6__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_7__.useAppContext)();
   function setDefaultSignage() {
     setSignage([{
-      id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
       type: 'letters',
       title: 'LETTERS 1',
       depth: '',
@@ -14061,7 +14133,7 @@ function TrimLessFrontAndBackLit() {
     }
   }, []);
   const defaultArgs = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
     type: 'letters',
     title: 'LETTERS 1',
     depth: '',
@@ -14143,19 +14215,23 @@ function TrimLessFrontAndBackLit() {
     className: "md:flex gap-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full flex flex-col"
-  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
     index: index,
     id: item.id,
     item: item
-  }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_4__.Letters, {
+  }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_5__.Letters, {
     key: item.id,
     item: item,
     productId: item.product
-  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_5__.Logo, {
+  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_6__.Logo, {
     key: item.id,
     item: item,
     productId: item.product
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Note__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Note"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+    className: "text-sm"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-2"
   }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
@@ -14163,13 +14239,13 @@ function TrimLessFrontAndBackLit() {
     style: {
       border: '1px solid #d2d2d2d2'
     }
-  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.PlusIcon, null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
     onClick: () => addSignage('logo'),
     style: {
       border: '1px solid #d2d2d2d2'
     }
-  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.PlusIcon, null))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_1__["default"], null));
+  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], null));
 }
 
 /***/ }),
@@ -15258,12 +15334,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
-/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
-/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
-/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
-/* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/metal-channel/TrimLessBackLit/components/Letters.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var _Note__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Note */ "./src/scripts/Note.js");
+/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
+/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
+/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
+/* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/metal-channel/TrimLessBackLit/components/Letters.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+
 
 
 
@@ -15278,10 +15356,10 @@ function TrimLessBackLit() {
     setSignage,
     setTempFolder,
     tempFolderName
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_5__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_6__.useAppContext)();
   function setDefaultSignage() {
     setSignage([{
-      id: (0,uuid__WEBPACK_IMPORTED_MODULE_6__["default"])(),
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
       type: 'letters',
       title: 'LETTERS 1',
       depth: '',
@@ -15327,7 +15405,7 @@ function TrimLessBackLit() {
     }
   }, []);
   const defaultArgs = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_6__["default"])(),
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
     type: 'letters',
     title: 'LETTERS 1',
     depth: '',
@@ -15407,14 +15485,18 @@ function TrimLessBackLit() {
     className: "md:flex gap-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full"
-  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
     index: index,
     id: item.id,
     item: item
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_4__.Letters, {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_5__.Letters, {
     key: item.id,
     item: item
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Note__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Note"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+    className: "text-sm"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The brushed finish is horizontal by default. Please let us know in the comments section if you prefer a vertical finish."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-2"
   }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
@@ -15422,7 +15504,7 @@ function TrimLessBackLit() {
     style: {
       border: '1px solid #d2d2d2d2'
     }
-  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_1__["default"], null));
+  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], null));
 }
 
 /***/ }),
@@ -16105,12 +16187,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
-/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
-/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
-/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
-/* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/metal-channel/TrimLessFrontAndBackLit/components/Letters.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var _Note__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Note */ "./src/scripts/Note.js");
+/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
+/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
+/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
+/* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/metal-channel/TrimLessFrontAndBackLit/components/Letters.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+
 
 
 
@@ -16125,10 +16209,10 @@ function TrimLessFrontAndBackLit() {
     setSignage,
     setTempFolder,
     tempFolderName
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_5__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_6__.useAppContext)();
   function setDefaultSignage() {
     setSignage([{
-      id: (0,uuid__WEBPACK_IMPORTED_MODULE_6__["default"])(),
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
       type: 'letters',
       title: 'LETTERS 1',
       depth: '',
@@ -16177,7 +16261,7 @@ function TrimLessFrontAndBackLit() {
     }
   }, []);
   const defaultArgs = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_6__["default"])(),
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
     type: 'letters',
     title: 'LETTERS 1',
     depth: '',
@@ -16260,14 +16344,18 @@ function TrimLessFrontAndBackLit() {
     className: "md:flex gap-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full flex flex-col"
-  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
     index: index,
     id: item.id,
     item: item
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_4__.Letters, {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_5__.Letters, {
     key: item.id,
     item: item
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Note__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Note"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+    className: "text-sm"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-2"
   }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
@@ -16275,7 +16363,7 @@ function TrimLessFrontAndBackLit() {
     style: {
       border: '1px solid #d2d2d2d2'
     }
-  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_1__["default"], null));
+  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], null));
 }
 
 /***/ }),
@@ -16946,12 +17034,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
-/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
-/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
-/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
-/* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/metal-channel/TrimLessFrontLit/components/Letters.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var _Note__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Note */ "./src/scripts/Note.js");
+/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
+/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
+/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
+/* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/metal-channel/TrimLessFrontLit/components/Letters.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+
 
 
 
@@ -16966,10 +17056,10 @@ function TrimLessFrontLit() {
     setSignage,
     setTempFolder,
     tempFolderName
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_5__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_6__.useAppContext)();
   function setDefaultSignage() {
     setSignage([{
-      id: (0,uuid__WEBPACK_IMPORTED_MODULE_6__["default"])(),
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
       type: 'letters',
       title: 'LETTERS 1',
       depth: '',
@@ -17018,7 +17108,7 @@ function TrimLessFrontLit() {
     }
   }, []);
   const defaultArgs = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_6__["default"])(),
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
     type: 'letters',
     title: 'LETTERS 1',
     depth: '',
@@ -17101,14 +17191,18 @@ function TrimLessFrontLit() {
     className: "md:flex gap-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full"
-  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
     index: index,
     id: item.id,
     item: item
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_4__.Letters, {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_5__.Letters, {
     key: item.id,
     item: item
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Note__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Note"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+    className: "text-sm"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-2"
   }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
@@ -17116,7 +17210,7 @@ function TrimLessFrontLit() {
     style: {
       border: '1px solid #d2d2d2d2'
     }
-  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_1__["default"], null));
+  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], null));
 }
 
 /***/ }),
@@ -17842,13 +17936,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
-/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
-/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
-/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
-/* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/metal/FabricatedStainless/components/Letters.js");
-/* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/metal/FabricatedStainless/components/Logo.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var _Note__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Note */ "./src/scripts/Note.js");
+/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
+/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
+/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
+/* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/metal/FabricatedStainless/components/Letters.js");
+/* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/metal/FabricatedStainless/components/Logo.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+
 
 
 
@@ -17864,10 +17960,10 @@ function FabricatedStainless() {
     setSignage,
     setTempFolder,
     tempFolderName
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_6__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_7__.useAppContext)();
   function setDefaultSignage() {
     setSignage([{
-      id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
       type: 'letters',
       title: 'LETTERS 1',
       letters: '',
@@ -17911,7 +18007,7 @@ function FabricatedStainless() {
     }
   }, []);
   const defaultArgs = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
     comments: '',
     mounting: '',
     metalDepth: '',
@@ -17984,17 +18080,21 @@ function FabricatedStainless() {
     className: "md:flex gap-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full"
-  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
     index: index,
     id: item.id,
     item: item
-  }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_4__.Letters, {
+  }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_5__.Letters, {
     key: item.id,
     item: item
-  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_5__.Logo, {
+  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_6__.Logo, {
     key: item.id,
     item: item
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Note__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Note"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+    className: "text-sm"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The brushed finish is horizontal by default. Please let us know in the comments section if you prefer a vertical finish."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-2"
   }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
@@ -18002,13 +18102,13 @@ function FabricatedStainless() {
     style: {
       border: '1px solid #d2d2d2d2'
     }
-  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.PlusIcon, null)), signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)), signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
     onClick: () => addSignage('logo'),
     style: {
       border: '1px solid #d2d2d2d2'
     }
-  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_1__["default"], null));
+  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], null));
 }
 
 /***/ }),
@@ -19120,13 +19220,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
-/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
-/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
-/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
-/* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/metal/LaserCutAluminum/components/Letters.js");
-/* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/metal/LaserCutAluminum/components/Logo.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var _Note__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Note */ "./src/scripts/Note.js");
+/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
+/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
+/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
+/* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/metal/LaserCutAluminum/components/Letters.js");
+/* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/metal/LaserCutAluminum/components/Logo.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+
 
 
 
@@ -19142,10 +19244,10 @@ function LaserCutAluminum() {
     setSignage,
     setTempFolder,
     tempFolderName
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_6__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_7__.useAppContext)();
   function setDefaultSignage() {
     setSignage([{
-      id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
       type: 'letters',
       title: 'LETTERS 1',
       letters: '',
@@ -19191,7 +19293,7 @@ function LaserCutAluminum() {
     }
   }, []);
   const defaultArgs = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
     comments: '',
     mounting: '',
     metalThickness: '',
@@ -19270,17 +19372,21 @@ function LaserCutAluminum() {
     className: "md:flex gap-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full"
-  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
     index: index,
     id: item.id,
     item: item
-  }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_4__.Letters, {
+  }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_5__.Letters, {
     key: item.id,
     item: item
-  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_5__.Logo, {
+  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_6__.Logo, {
     key: item.id,
     item: item
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Note__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Note"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+    className: "text-sm"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The brushed finish is horizontal by default. Please let us know in the comments section if you prefer a vertical finish."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-2"
   }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
@@ -19288,13 +19394,13 @@ function LaserCutAluminum() {
     style: {
       border: '1px solid #d2d2d2d2'
     }
-  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.PlusIcon, null)), signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)), signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
     onClick: () => addSignage('logo'),
     style: {
       border: '1px solid #d2d2d2d2'
     }
-  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_1__["default"], null));
+  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], null));
 }
 
 /***/ }),
@@ -20345,13 +20451,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
-/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
-/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
-/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
-/* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/metal/LaserCutStainless/components/Letters.js");
-/* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/metal/LaserCutStainless/components/Logo.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var _Note__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Note */ "./src/scripts/Note.js");
+/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
+/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
+/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
+/* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/metal/LaserCutStainless/components/Letters.js");
+/* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/metal/LaserCutStainless/components/Logo.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+
 
 
 
@@ -20367,10 +20475,10 @@ function FabricatedStainless() {
     setSignage,
     setTempFolder,
     tempFolderName
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_6__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_7__.useAppContext)();
   function setDefaultSignage() {
     setSignage([{
-      id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
       type: 'letters',
       title: 'LETTERS 1',
       letters: '',
@@ -20415,7 +20523,7 @@ function FabricatedStainless() {
     }
   }, []);
   const defaultArgs = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
     comments: '',
     mounting: '',
     metalThickness: '',
@@ -20489,17 +20597,21 @@ function FabricatedStainless() {
     className: "md:flex gap-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full"
-  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
     index: index,
     id: item.id,
     item: item
-  }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_4__.Letters, {
+  }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_5__.Letters, {
     key: item.id,
     item: item
-  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_5__.Logo, {
+  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_6__.Logo, {
     key: item.id,
     item: item
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Note__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Note"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+    className: "text-sm"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The brushed finish is horizontal by default. Please let us know in the comments section if you prefer a vertical finish."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-2"
   }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
@@ -20507,13 +20619,13 @@ function FabricatedStainless() {
     style: {
       border: '1px solid #d2d2d2d2'
     }
-  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.PlusIcon, null)), signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)), signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
     onClick: () => addSignage('logo'),
     style: {
       border: '1px solid #d2d2d2d2'
     }
-  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_1__["default"], null));
+  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], null));
 }
 
 /***/ }),
@@ -20793,7 +20905,7 @@ function Letters({
   };
   const handelMetalFinishChange = e => {
     const value = e.target.value;
-    if ('Stainless Steel Polished' !== value) {
+    if ('Stainless Steel Polished' !== value && 'Electroplated Gold Polished' !== value && 'Electroplated Black Titanium Polished' !== value) {
       setStainlessSteelPolished('');
     }
     setStainLessMetalFinish(e.target.value);
@@ -21059,7 +21171,7 @@ function Letters({
       selected: metalFinish.option === stainLessMetalFinish
     }, metalFinish.option)),
     value: stainLessMetalFinish
-  }), stainLessMetalFinish === 'Stainless Steel Polished' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }), (stainLessMetalFinish === 'Stainless Steel Polished' || stainLessMetalFinish === 'Electroplated Gold Polished' || stainLessMetalFinish === 'Electroplated Black Titanium Polished') && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Steel Polish",
     onChange: e => setStainlessSteelPolished(e.target.value),
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_9__.stainlessSteelPolishedOptions.map(steelPolished => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -21307,7 +21419,7 @@ function Logo({
   const handleOnChangeWaterproof = e => setWaterproof(e.target.value);
   const handelMetalFinishChange = e => {
     const value = e.target.value;
-    if ('Stainless Steel Polished' !== value) {
+    if ('Stainless Steel Polished' !== value && 'Electroplated Gold Polished' !== value && 'Electroplated Black Titanium Polished' !== value) {
       setStainlessSteelPolished('');
     }
     setStainLessMetalFinish(e.target.value);
@@ -21566,7 +21678,7 @@ function Logo({
       selected: metalFinish.option === stainLessMetalFinish
     }, metalFinish.option)),
     value: stainLessMetalFinish
-  }), stainLessMetalFinish === 'Stainless Steel Polished' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }), (stainLessMetalFinish === 'Stainless Steel Polished' || stainLessMetalFinish === 'Electroplated Gold Polished' || stainLessMetalFinish === 'Electroplated Black Titanium Polished') && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Steel Polish",
     onChange: e => setStainlessSteelPolished(e.target.value),
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_8__.stainlessSteelPolishedOptions.map(steelPolished => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -21836,13 +21948,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
-/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
-/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
-/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
-/* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/pvc/PVCMetalLaminate/components/Letters.js");
-/* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/pvc/PVCMetalLaminate/components/Logo.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var _Note__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Note */ "./src/scripts/Note.js");
+/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
+/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
+/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
+/* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/pvc/PVCMetalLaminate/components/Letters.js");
+/* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/pvc/PVCMetalLaminate/components/Logo.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+
 
 
 
@@ -21858,10 +21972,10 @@ function PVCMetalLaminate() {
     setSignage,
     setTempFolder,
     tempFolderName
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_6__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_7__.useAppContext)();
   function setDefaultSignage() {
     setSignage([{
-      id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
       type: 'letters',
       title: 'LETTERS 1',
       letters: '',
@@ -21902,7 +22016,7 @@ function PVCMetalLaminate() {
     }
   }, []);
   const defaultArgs = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
     comments: '',
     mounting: '',
     thickness: '',
@@ -21980,17 +22094,21 @@ function PVCMetalLaminate() {
     className: "md:flex gap-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full"
-  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
     index: index,
     id: item.id,
     item: item
-  }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_4__.Letters, {
+  }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_5__.Letters, {
     key: item.id,
     item: item
-  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_5__.Logo, {
+  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_6__.Logo, {
     key: item.id,
     item: item
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Note__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Note"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+    className: "text-sm"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The brushed finish is horizontal by default. Please let us know in the comments section if you prefer a vertical finish."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-2"
   }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
@@ -21998,13 +22116,13 @@ function PVCMetalLaminate() {
     style: {
       border: '1px solid #d2d2d2d2'
     }
-  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.PlusIcon, null)), signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)), signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
     onClick: () => addSignage('logo'),
     style: {
       border: '1px solid #d2d2d2d2'
     }
-  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_1__["default"], null));
+  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], null));
 }
 
 /***/ }),
@@ -23070,13 +23188,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
-/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
-/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
-/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
-/* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/pvc/PVCPainted/components/Letters.js");
-/* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/pvc/PVCPainted/components/Logo.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var _Note__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Note */ "./src/scripts/Note.js");
+/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
+/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
+/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
+/* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/pvc/PVCPainted/components/Letters.js");
+/* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/pvc/PVCPainted/components/Logo.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+
 
 
 
@@ -23092,10 +23212,10 @@ function PVCPainted() {
     setSignage,
     setTempFolder,
     tempFolderName
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_6__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_7__.useAppContext)();
   function setDefaultSignage() {
     setSignage([{
-      id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
       type: 'letters',
       title: 'LETTERS 1',
       letters: '',
@@ -23135,7 +23255,7 @@ function PVCPainted() {
     }
   }, []);
   const defaultArgs = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
     comments: '',
     mounting: '',
     thickness: '',
@@ -23212,17 +23332,21 @@ function PVCPainted() {
     className: "md:flex gap-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full"
-  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
     index: index,
     id: item.id,
     item: item
-  }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_4__.Letters, {
+  }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_5__.Letters, {
     key: item.id,
     item: item
-  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_5__.Logo, {
+  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_6__.Logo, {
     key: item.id,
     item: item
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Note__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Note"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+    className: "text-sm"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-2"
   }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
@@ -23230,13 +23354,13 @@ function PVCPainted() {
     style: {
       border: '1px solid #d2d2d2d2'
     }
-  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.PlusIcon, null)), signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)), signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
     onClick: () => addSignage('logo'),
     style: {
       border: '1px solid #d2d2d2d2'
     }
-  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_1__["default"], null));
+  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], null));
 }
 
 /***/ }),
@@ -24269,12 +24393,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
-/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
-/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
-/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
-/* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/pvc/PVCUv/components/Logo.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var _Note__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Note */ "./src/scripts/Note.js");
+/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
+/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
+/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
+/* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/pvc/PVCUv/components/Logo.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+
 
 
 
@@ -24289,10 +24415,10 @@ function PVCUv() {
     setSignage,
     setTempFolder,
     tempFolderName
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_5__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_6__.useAppContext)();
   function setDefaultSignage() {
     setSignage([{
-      id: (0,uuid__WEBPACK_IMPORTED_MODULE_6__["default"])(),
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
       type: 'logo',
       title: 'LOGO 1',
       comments: '',
@@ -24327,7 +24453,7 @@ function PVCUv() {
     }
   }, []);
   const defaultArgs = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_6__["default"])(),
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
     comments: '',
     mounting: '',
     thickness: '',
@@ -24384,14 +24510,18 @@ function PVCUv() {
     className: "md:flex gap-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full"
-  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
     index: index,
     id: item.id,
     item: item
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_4__.Logo, {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_5__.Logo, {
     key: item.id,
     item: item
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Note__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Note"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+    className: "text-sm"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-2"
   }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
@@ -24399,7 +24529,7 @@ function PVCUv() {
     style: {
       border: '1px solid #d2d2d2d2'
     }
-  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_1__["default"], null));
+  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], null));
 }
 
 /***/ }),

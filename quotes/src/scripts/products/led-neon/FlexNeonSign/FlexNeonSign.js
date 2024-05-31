@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useAppContext } from '../../../AppProvider';
+import Note from '../../../Note';
 import Sidebar from '../../../Sidebar';
 import Signage from '../../../Signage';
 import { PlusIcon } from '../../../svg/Icons';
@@ -83,10 +84,16 @@ export default function FlexNeonSign() {
 					</Signage>
 				))}
 
-				<p className="text-sm">
-					** The neon height and width refer to the neon graphics. The 4mm PC
-					backing has a 1.5" margin on all sides. **
-				</p>
+				<Note title="Note">
+					<ul className="text-sm">
+						<li>
+							The neon height and width refer to the size of the neon graphics.
+							Please note that the backing has a 1.5" margin on all sides. If
+							the design exceeds the neon size limit (40”x 40”), we will divide
+							them into multiple pieces to fit within the required dimensions.
+						</li>
+					</ul>
+				</Note>
 
 				<div className="flex gap-2">
 					{signage.length < 10 && (

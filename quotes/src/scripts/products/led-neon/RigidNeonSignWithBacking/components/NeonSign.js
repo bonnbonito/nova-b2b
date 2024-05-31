@@ -38,9 +38,6 @@ const pcFinishOptions = [
 	{
 		option: 'Matte',
 	},
-	{
-		option: 'Glossy',
-	},
 ];
 const wireTypeOptions = [
 	{

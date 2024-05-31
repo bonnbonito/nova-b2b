@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useAppContext } from '../../../AppProvider';
+import Note from '../../../Note';
 import Sidebar from '../../../Sidebar';
 import Signage from '../../../Signage';
 import { PlusIcon } from '../../../svg/Icons';
@@ -93,10 +94,17 @@ export default function RigidNeonSignWithBacking() {
 					</Signage>
 				))}
 
-				<p className="text-sm">
-					** The neon height and width refer to the neon graphics. The 4mm PC
-					backing has a 1.5" margin on all sides. **
-				</p>
+				<Note title="Note">
+					<ul className="text-sm">
+						<li>
+							The neon height and width refer to the size of the neon graphics.
+							Please note that the backing has a 2/3" margin from neon edge to
+							backing edge. If the design exceeds the continuous neon size limit
+							(65 cm x 72 cm), we will divide them into multiple pieces to fit
+							within the required dimensions.
+						</li>
+					</ul>
+				</Note>
 
 				<div className="flex gap-2">
 					{signage.length < 10 && (
