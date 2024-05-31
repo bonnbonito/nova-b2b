@@ -3591,7 +3591,6 @@ function Sidebar() {
   const memoizedSignage = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => signage, [signage]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     setCanSaveToDraft(() => parseInt(partner) === parseInt(NovaQuote.user_id));
-    console.log(parseInt(partner), NovaQuote.user_id);
   }, [partner]);
   const taxRateObj = NovaMyAccount.tax_rate;
   //const tax = taxRateObj ? parseFloat(taxRateObj.tax_rate / 100) : 0;
@@ -3607,7 +3606,6 @@ function Sidebar() {
   //const taxCompute = parseFloat(totalPrice * tax);
   const taxCompute = 0;
   const estimateTotalPrice = totalPrice + estimatedShipping + taxCompute;
-  console.log('total', totalUsdPrice, totalCadPrice);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-1/4 w-full mt-8 md:mt-0"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -10944,27 +10942,27 @@ const NeonSign = ({
     value: "1"
   }, "1")]);
   const [quantityDiscountTable, setQuantityDiscountTable] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    async function fetchQuantityDiscountPricing() {
-      try {
-        const response = await fetch(NovaQuote.quantity_discount_api + item.product);
-        const data = await response.json();
-        const tableJson = data.pricing_table ? (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_4__.convertJson)(data.pricing_table) : [];
-        setQuantityDiscountTable(tableJson);
-      } catch (error) {
-        console.error('Error fetching discount table pricing:', error);
-      } finally {
-        setSetOptions(Array.from({
-          length: 100
-        }, (_, index) => {
-          const val = 1 + index;
-          return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-            key: index,
-            value: val
-          }, val);
-        }));
-      }
+  async function fetchQuantityDiscountPricing() {
+    try {
+      const response = await fetch(NovaQuote.quantity_discount_api + item.product);
+      const data = await response.json();
+      const tableJson = data.pricing_table ? (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_4__.convertJson)(data.pricing_table) : [];
+      setQuantityDiscountTable(tableJson);
+    } catch (error) {
+      console.error('Error fetching discount table pricing:', error);
+    } finally {
+      setSetOptions(Array.from({
+        length: 100
+      }, (_, index) => {
+        const val = 1 + index;
+        return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+          key: index,
+          value: val
+        }, val);
+      }));
     }
+  }
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     fetchQuantityDiscountPricing();
   }, []);
   const colorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
@@ -11083,20 +11081,22 @@ const NeonSign = ({
     };
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    const {
-      singlePrice,
-      total,
-      discount
-    } = computePricing();
-    if (total && singlePrice) {
-      setUsdPrice(total);
-      setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.EXCHANGE_RATE).toFixed(2));
-      setUsdSinglePrice(singlePrice);
-      setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.EXCHANGE_RATE).toFixed(2));
-      setUsdDiscount(discount.toFixed(2));
-      setCadDiscount((discount * _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.EXCHANGE_RATE).toFixed(2));
+    if (quantityDiscountTable.length > 0) {
+      const {
+        singlePrice,
+        total,
+        discount
+      } = computePricing();
+      if (total && singlePrice) {
+        setUsdPrice(total);
+        setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.EXCHANGE_RATE).toFixed(2));
+        setUsdSinglePrice(singlePrice);
+        setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.EXCHANGE_RATE).toFixed(2));
+        setUsdDiscount(discount.toFixed(2));
+        setCadDiscount((discount * _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.EXCHANGE_RATE).toFixed(2));
+      }
     }
-  }, [width, height, neonLength, waterproof, acrylicBackingOption, mounting, remoteControl, sets, quantityDiscountTable]);
+  }, [width, height, neonLength, waterproof, acrylicBackingOption, mounting, remoteControl, sets]);
   const handleOnChangeSets = e => {
     const value = e.target.value;
     setSets(value);

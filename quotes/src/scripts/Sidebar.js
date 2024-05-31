@@ -14,7 +14,6 @@ export default function Sidebar() {
 
 	useEffect(() => {
 		setCanSaveToDraft(() => parseInt(partner) === parseInt(NovaQuote.user_id));
-		console.log(parseInt(partner), NovaQuote.user_id);
 	}, [partner]);
 
 	const taxRateObj = NovaMyAccount.tax_rate;
@@ -45,8 +44,6 @@ export default function Sidebar() {
 	const taxCompute = 0;
 
 	const estimateTotalPrice = totalPrice + estimatedShipping + taxCompute;
-
-	console.log('total', totalUsdPrice, totalCadPrice);
 
 	return (
 		<div className="md:w-1/4 w-full mt-8 md:mt-0">
