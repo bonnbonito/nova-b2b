@@ -798,6 +798,7 @@ export const Letters = ({ item, letterPricing, hasPrice = false }) => {
 				</div>
 
 				<UploadFiles
+					itemId={item.id}
 					setFilePaths={setFilePaths}
 					setFiles={setFiles}
 					filePaths={filePaths}

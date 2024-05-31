@@ -35,6 +35,7 @@ class Nova_Quote {
 		// add_filter( 'acf/init', array( $this, 'afc_load_popular_fonts' ), 10, 3 );
 		add_action( 'wp_ajax_upload_signage_file', array( $this, 'upload_signage_file' ) );
 		add_action( 'wp_ajax_save_quote', array( $this, 'save_quote' ) );
+		add_action( 'wp_ajax_update_quote', array( $this, 'update_quote' ) );
 		add_action( 'wp_ajax_update_dropbox_path', array( $this, 'update_dropbox_path' ) );
 		add_action( 'wp_ajax_remove_signage_file', array( $this, 'remove_signage_file' ) );
 		add_action( 'wp_ajax_quote_to_processing', array( $this, 'quote_to_processing' ) );
@@ -1713,6 +1714,24 @@ h6 {
 		echo '<tr><td></td></tr>';
 
 		echo '</table>';
+	}
+
+	public function update_quote() {
+		$status = array(
+			'code' => 1,
+		);
+		if ( ! wp_verify_nonce( $_POST['nonce'], 'quote_nonce' ) ) {
+			$status['status'] = 'error';
+			$status['error']  = 'Nonce error';
+			wp_send_json( $status );
+		}
+
+		$post_id = $_POST['quote_id'];
+
+		update_field( 'signage', $_POST['signage'], $post_id );
+		$status['status'] = 'success';
+
+		wp_send_json( $status );
 	}
 
 	public function save_quote() {

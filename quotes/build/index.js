@@ -3638,7 +3638,7 @@ function Sidebar() {
     className: "text-2xl"
   }, estimateTotalPrice == 0 ? 'TBD' : `${currency}$${Number(estimateTotalPrice.toFixed(2)).toLocaleString()}`)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-[11px] mb-5"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", null, tax === 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Tax not included"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The final quote will be ready in 24 business hours."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Extra freight charges may apply for connected fonts."))), signage.length > 0 && NovaQuote.quote_status?.value !== 'processing' && NovaQuote.quote_status?.value !== 'ready' && NovaQuote.quote_status?.value !== 'archived' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, NovaQuote.is_editting === '1' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, NovaQuote.user_role[0] !== 'pending' && NovaQuote.is_admin === 'no' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", null, tax === 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Tax not included"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The final quote will be ready in 24 business hours."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Extra freight charges may apply for connected fonts."))), signage.length > 0 && NovaQuote.quote_status?.value !== 'processing' && NovaQuote.quote_status?.value !== 'ready' && NovaQuote.quote_status?.value !== 'archived' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, NovaQuote.is_editting === '1' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, NovaQuote.user_role[0] !== 'pending' && (NovaQuote.is_admin === 'no' || canSaveToDraft) ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_2__["default"], {
     action: "update-processing",
     label: "Submit Quote",
     btnClass: "mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
@@ -3965,17 +3965,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _utils_QuoteFunctions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./utils/QuoteFunctions */ "./src/scripts/utils/QuoteFunctions.js");
+
 
 
 
 function UploadFiles({
+  itemId = null,
   setFilePaths,
   filePaths,
   setFileUrls,
+  fileUrls,
   setFileNames,
   fileNames
 }) {
   const {
+    signage,
     tempFolder,
     isLoading,
     setIsLoading
@@ -4122,8 +4127,10 @@ function UploadFiles({
       if (!uploadResponse.ok) throw new Error(uploadData.error_summary);
       setFilePaths(prev => Array.isArray(prev) ? [...prev, uploadData.path_display] : [uploadData.path_display]);
       const existingLink = await checkForExistingSharedLink(token, uploadData.path_display);
+      let dataLink = '';
       if (existingLink) {
         setFileUrls(prev => Array.isArray(prev) ? [...prev, existingLink.url] : [existingLink.url]);
+        dataLink = existingLink.url;
       } else {
         const sharedLinkResponse = await fetch('https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings', {
           method: 'POST',
@@ -4138,14 +4145,83 @@ function UploadFiles({
         });
         const sharedLinkData = await sharedLinkResponse.json();
         setFileUrls(prev => Array.isArray(prev) ? [...prev, sharedLinkData.url] : [sharedLinkData.url]);
+        dataLink = sharedLinkData.url;
       }
       setFileNames(prev => Array.isArray(prev) ? [...prev, uploadData.name] : [uploadData.name]);
+      if (parseInt(NovaQuote.is_editting) === 1 && itemId) {
+        await updateSignageAdd(uploadData.name, dataLink, uploadData.path_display);
+      }
     } catch (error) {
       console.error('Error:', error);
     } finally {
       setIsLoading(false);
     }
   }, [checkAndCreateFolder, checkForExistingSharedLink, getAccessToken, setFileNames, setFilePaths, setFileUrls, setIsLoading, tempFolder]);
+  const updateSignageAdd = async (dataName, dataUrls, dataPaths) => {
+    if (parseInt(NovaQuote.is_editting) === 1 && itemId) {
+      const newFileNames = Array.isArray(fileUrls) ? [...fileNames, dataName] : [dataName];
+      const newFileUrls = Array.isArray(fileUrls) ? [...fileUrls, dataUrls] : [dataUrls];
+      const newFilePaths = Array.isArray(filePaths) ? [...filePaths, dataPaths] : [dataPaths];
+      const updateDetails = {
+        fileNames: newFileNames,
+        filePaths: newFilePaths,
+        fileUrls: newFileUrls
+      };
+      const updatedSignage = signage.map(sign => sign.id === itemId ? {
+        ...sign,
+        ...updateDetails
+      } : sign);
+      try {
+        const formData = new FormData();
+        const newSignage = JSON.stringify(updatedSignage);
+        formData.append('nonce', NovaQuote.nonce);
+        formData.append('action', 'update_quote');
+        formData.append('signage', newSignage);
+        formData.append('quote_id', NovaQuote.current_quote_id);
+        const data = await (0,_utils_QuoteFunctions__WEBPACK_IMPORTED_MODULE_2__.processQuote)(formData);
+        if (data.status !== 'success') {
+          throw new Error('Error updating quote');
+        }
+        console.log('Quote updated successfully');
+      } catch (err) {
+        // Handle errors
+        console.log(err);
+      }
+    }
+  };
+  const updateSignageDelete = async index => {
+    if (parseInt(NovaQuote.is_editting) === 1 && itemId) {
+      const newFileUrls = fileUrls.filter((_, i) => i !== index);
+      const newFilePaths = filePaths.filter((_, i) => i !== index);
+      const newFileNames = fileNames.filter((_, i) => i !== index);
+      const updateDetails = {
+        fileNames: newFileNames,
+        filePaths: newFilePaths,
+        fileUrls: newFileUrls
+      };
+      const updatedSignage = signage.map(sign => sign.id === itemId ? {
+        ...sign,
+        ...updateDetails
+      } : sign);
+      try {
+        const formData = new FormData();
+        const newSignage = JSON.stringify(updatedSignage);
+        console.log(newSignage);
+        formData.append('nonce', NovaQuote.nonce);
+        formData.append('action', 'update_quote');
+        formData.append('signage', newSignage);
+        formData.append('quote_id', NovaQuote.current_quote_id);
+        const data = await (0,_utils_QuoteFunctions__WEBPACK_IMPORTED_MODULE_2__.processQuote)(formData);
+        if (data.status !== 'success') {
+          throw new Error('Error updating quote');
+        }
+        console.log('Quote updated successfully');
+      } catch (err) {
+        // Handle errors
+        console.log(err);
+      }
+    }
+  };
   const handleRemoveFile = async index => {
     setIsLoading(true);
     const currentAccessToken = accessToken || (await getAccessToken());
@@ -4171,11 +4247,16 @@ function UploadFiles({
         setFileUrls(prev => prev.filter((_, i) => i !== index));
         setFilePaths(prev => prev.filter((_, i) => i !== index));
         setFileNames(prev => prev.filter((_, i) => i !== index));
+        await updateSignageDelete(index);
       } else {
         throw new Error(data.error_summary || 'Unknown error during file deletion');
       }
     } catch (error) {
       console.error('Error:', error);
+      setFileUrls(prev => prev.filter((_, i) => i !== index));
+      setFilePaths(prev => prev.filter((_, i) => i !== index));
+      setFileNames(prev => prev.filter((_, i) => i !== index));
+      await updateSignageDelete(index);
     } finally {
       setIsLoading(false);
     }
@@ -5325,6 +5406,7 @@ function Letters({
     placeholder: "ADD COMMENTS",
     rows: 4
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    itemId: item.id,
     setFilePaths: setFilePaths,
     setFiles: setFiles,
     filePaths: filePaths,
@@ -5822,6 +5904,7 @@ function Logo({
     placeholder: "ADD COMMENTS",
     rows: 4
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    itemId: item.id,
     setFilePaths: setFilePaths,
     setFiles: setFiles,
     filePaths: filePaths,
@@ -6972,6 +7055,7 @@ function Letters({
     placeholder: "ADD COMMENTS",
     rows: 4
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    itemId: item.id,
     setFilePaths: setFilePaths,
     setFiles: setFiles,
     filePaths: filePaths,
@@ -7441,6 +7525,7 @@ function Logo({
     placeholder: "ADD COMMENTS",
     rows: 4
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    itemId: item.id,
     setFilePaths: setFilePaths,
     setFiles: setFiles,
     filePaths: filePaths,
@@ -7934,6 +8019,7 @@ function Logo({
     className: "h-[160px] rounded-md text-sm",
     onChange: handleOnChangeDescription
   }, description)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    itemId: item.id,
     setFilePaths: setFilePaths,
     setFiles: setFiles,
     filePaths: filePaths,
@@ -8835,6 +8921,7 @@ const Letters = ({
     placeholder: "ADD COMMENTS",
     rows: 4
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    itemId: item.id,
     setFilePaths: setFilePaths,
     setFiles: setFiles,
     filePaths: filePaths,
@@ -9270,6 +9357,7 @@ function Logo({
     placeholder: "ADD COMMENTS",
     rows: 4
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    itemId: item.id,
     setFilePaths: setFilePaths,
     setFiles: setFiles,
     filePaths: filePaths,
@@ -9860,6 +9948,7 @@ function Logo({
     placeholder: "ADD COMMENTS",
     rows: 4
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    itemId: item.id,
     setFilePaths: setFilePaths,
     setFiles: setFiles,
     filePaths: filePaths,
@@ -10644,6 +10733,7 @@ function Logo({
     className: "h-[160px] rounded-md text-sm",
     onChange: handleOnChangeDescription
   }, description)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    itemId: item.id,
     setFilePaths: setFilePaths,
     setFiles: setFiles,
     filePaths: filePaths,
@@ -10985,7 +11075,6 @@ const NeonSign = ({
     tempTotal += remotePrice;
     let total = tempTotal * parseInt(sets);
     const discount = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_5__.quantityDiscount)(sets, quantityDiscountTable);
-    console.log(discount);
     let totalWithDiscount = total * discount;
     let discountPrice = total - totalWithDiscount;
     return {
@@ -11019,7 +11108,7 @@ const NeonSign = ({
     setRemoteControl(value);
   };
   const handledSelectedColors = selectedColors => {
-    setColor(selectedColors.map(option => option.name).join(', '));
+    setColor(selectedColors.map(option => option).join(', '));
   };
   const handleOnChangeWireExitLocation = e => {
     const value = e.target.value;
@@ -11127,6 +11216,7 @@ const NeonSign = ({
     placeholder: "ADD COMMENTS",
     rows: 4
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    itemId: item.id,
     setFilePaths: setFilePaths,
     setFiles: setFiles,
     filePaths: filePaths,
@@ -11713,6 +11803,7 @@ const NeonSign = ({
     placeholder: "ADD COMMENTS",
     rows: 4
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    itemId: item.id,
     setFilePaths: setFilePaths,
     setFiles: setFiles,
     filePaths: filePaths,
@@ -12368,6 +12459,7 @@ const NeonSign = ({
     placeholder: "ADD COMMENTS",
     rows: 4
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    itemId: item.id,
     setFilePaths: setFilePaths,
     setFiles: setFiles,
     filePaths: filePaths,
@@ -12408,13 +12500,13 @@ const NeonColors = ({
   getSelectedColors,
   setToogle
 }) => {
-  const [selectedColors, setSelectedColors] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const handleColorChange = colorOption => {
+  const [selectedColors, setSelectedColors] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(() => colors ? colors.split(', ').map(color => color.trim()) : []);
+  const handleColorChange = colorName => {
     setSelectedColors(prevColors => {
-      if (prevColors.some(c => c.name === colorOption.name)) {
-        return prevColors.filter(c => c.name !== colorOption.name);
+      if (prevColors.includes(colorName)) {
+        return prevColors.filter(c => c !== colorName);
       } else {
-        return [...prevColors, colorOption];
+        return [...prevColors, colorName];
       }
     });
   };
@@ -12428,8 +12520,8 @@ const NeonColors = ({
     className: "has-[:checked]:ring-indigo-500 has-[:checked]:text-indigo-900 has-[:checked]:bg-indigo-50 p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm  select-none"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     type: "checkbox",
-    checked: selectedColors.some(c => c.name === colorOption.name),
-    onChange: () => handleColorChange(colorOption)
+    checked: selectedColors.includes(colorOption.name),
+    onChange: () => handleColorChange(colorOption.name)
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "w-[18px] h-[18px] inline-block rounded-full border",
     style: {
@@ -13467,6 +13559,7 @@ function Letters({
     placeholder: "ADD COMMENTS",
     rows: 4
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    itemId: item.id,
     setFilePaths: setFilePaths,
     setFiles: setFiles,
     filePaths: filePaths,
@@ -13870,6 +13963,7 @@ function Logo({
     placeholder: "ADD COMMENTS",
     rows: 4
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    itemId: item.id,
     setFilePaths: setFilePaths,
     setFiles: setFiles,
     filePaths: filePaths,
@@ -14756,6 +14850,7 @@ function Letters({
     placeholder: "ADD COMMENTS",
     rows: 4
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    itemId: item.id,
     setFilePaths: setFilePaths,
     setFiles: setFiles,
     filePaths: filePaths,
@@ -15139,6 +15234,7 @@ function Logo({
     placeholder: "ADD COMMENTS",
     rows: 4
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    itemId: item.id,
     setFilePaths: setFilePaths,
     setFiles: setFiles,
     filePaths: filePaths,
@@ -15983,6 +16079,7 @@ function Letters({
     placeholder: "ADD COMMENTS",
     rows: 4
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    itemId: item.id,
     setFilePaths: setFilePaths,
     setFiles: setFiles,
     filePaths: filePaths,
@@ -16823,6 +16920,7 @@ function Letters({
     placeholder: "ADD COMMENTS",
     rows: 4
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    itemId: item.id,
     setFilePaths: setFilePaths,
     setFiles: setFiles,
     filePaths: filePaths,
@@ -17656,6 +17754,7 @@ function Letters({
     placeholder: "ADD COMMENTS",
     rows: 4
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    itemId: item.id,
     setFilePaths: setFilePaths,
     setFiles: setFiles,
     filePaths: filePaths,
@@ -18532,6 +18631,7 @@ function Letters({
     placeholder: "ADD COMMENTS",
     rows: 4
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    itemId: item.id,
     setFilePaths: setFilePaths,
     setFiles: setFiles,
     filePaths: filePaths,
@@ -18996,6 +19096,7 @@ function Logo({
     placeholder: "ADD COMMENTS",
     rows: 4
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    itemId: item.id,
     setFilePaths: setFilePaths,
     setFiles: setFiles,
     filePaths: filePaths,
@@ -19785,6 +19886,7 @@ function Letters({
     placeholder: "ADD COMMENTS",
     rows: 4
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    itemId: item.id,
     setFilePaths: setFilePaths,
     setFiles: setFiles,
     filePaths: filePaths,
@@ -20219,6 +20321,7 @@ function Logo({
     placeholder: "ADD COMMENTS",
     rows: 4
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    itemId: item.id,
     setFilePaths: setFilePaths,
     setFiles: setFiles,
     filePaths: filePaths,
@@ -21068,6 +21171,7 @@ function Letters({
     placeholder: "ADD COMMENTS",
     rows: 4
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    itemId: item.id,
     setFilePaths: setFilePaths,
     setFiles: setFiles,
     filePaths: filePaths,
@@ -21571,6 +21675,7 @@ function Logo({
     placeholder: "ADD COMMENTS",
     rows: 4
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    itemId: item.id,
     setFilePaths: setFilePaths,
     setFiles: setFiles,
     filePaths: filePaths,
@@ -22487,6 +22592,7 @@ function Letters({
     placeholder: "ADD COMMENTS",
     rows: 4
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    itemId: item.id,
     setFilePaths: setFilePaths,
     setFiles: setFiles,
     filePaths: filePaths,
@@ -22940,6 +23046,7 @@ function Logo({
     placeholder: "ADD COMMENTS",
     rows: 4
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    itemId: item.id,
     setFilePaths: setFilePaths,
     setFiles: setFiles,
     filePaths: filePaths,
@@ -23698,6 +23805,7 @@ function Letters({
     placeholder: "ADD COMMENTS",
     rows: 4
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    itemId: item.id,
     setFilePaths: setFilePaths,
     setFiles: setFiles,
     filePaths: filePaths,
@@ -24137,6 +24245,7 @@ function Logo({
     placeholder: "ADD COMMENTS",
     rows: 4
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    itemId: item.id,
     setFilePaths: setFilePaths,
     setFiles: setFiles,
     filePaths: filePaths,
@@ -24723,6 +24832,7 @@ function Logo({
     placeholder: "ADD COMMENTS",
     rows: 4
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    itemId: item.id,
     setFilePaths: setFilePaths,
     setFiles: setFiles,
     filePaths: filePaths,

@@ -449,6 +449,7 @@ export function Logo({ item }) {
 					</textarea>
 				</div>
 				<UploadFiles
+					itemId={item.id}
 					setFilePaths={setFilePaths}
 					setFiles={setFiles}
 					filePaths={filePaths}

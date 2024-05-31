@@ -509,6 +509,7 @@ export function Logo({ item }) {
 				</div>
 
 				<UploadFiles
+					itemId={item.id}
 					setFilePaths={setFilePaths}
 					setFiles={setFiles}
 					filePaths={filePaths}

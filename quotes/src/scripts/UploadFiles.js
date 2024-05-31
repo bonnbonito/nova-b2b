@@ -1,14 +1,17 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useAppContext } from './AppProvider';
+import { processQuote } from './utils/QuoteFunctions';
 
 export default function UploadFiles({
+	itemId = null,
 	setFilePaths,
 	filePaths,
 	setFileUrls,
+	fileUrls,
 	setFileNames,
 	fileNames,
 }) {
-	const { tempFolder, isLoading, setIsLoading } = useAppContext();
+	const { signage, tempFolder, isLoading, setIsLoading } = useAppContext();
 
 	const fileRef = useRef(null);
 	const [accessToken, setAccessToken] = useState('');
@@ -198,12 +201,15 @@ export default function UploadFiles({
 					uploadData.path_display
 				);
 
+				let dataLink = '';
+
 				if (existingLink) {
 					setFileUrls((prev) =>
 						Array.isArray(prev)
 							? [...prev, existingLink.url]
 							: [existingLink.url]
 					);
+					dataLink = existingLink.url;
 				} else {
 					const sharedLinkResponse = await fetch(
 						'https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings',
@@ -226,11 +232,20 @@ export default function UploadFiles({
 							? [...prev, sharedLinkData.url]
 							: [sharedLinkData.url]
 					);
+					dataLink = sharedLinkData.url;
 				}
 
 				setFileNames((prev) =>
 					Array.isArray(prev) ? [...prev, uploadData.name] : [uploadData.name]
 				);
+
+				if (parseInt(NovaQuote.is_editting) === 1 && itemId) {
+					await updateSignageAdd(
+						uploadData.name,
+						dataLink,
+						uploadData.path_display
+					);
+				}
 			} catch (error) {
 				console.error('Error:', error);
 			} finally {
@@ -248,6 +263,89 @@ export default function UploadFiles({
 			tempFolder,
 		]
 	);
+
+	const updateSignageAdd = async (dataName, dataUrls, dataPaths) => {
+		if (parseInt(NovaQuote.is_editting) === 1 && itemId) {
+			const newFileNames = Array.isArray(fileUrls)
+				? [...fileNames, dataName]
+				: [dataName];
+			const newFileUrls = Array.isArray(fileUrls)
+				? [...fileUrls, dataUrls]
+				: [dataUrls];
+			const newFilePaths = Array.isArray(filePaths)
+				? [...filePaths, dataPaths]
+				: [dataPaths];
+
+			const updateDetails = {
+				fileNames: newFileNames,
+				filePaths: newFilePaths,
+				fileUrls: newFileUrls,
+			};
+
+			const updatedSignage = signage.map((sign) =>
+				sign.id === itemId ? { ...sign, ...updateDetails } : sign
+			);
+
+			try {
+				const formData = new FormData();
+				const newSignage = JSON.stringify(updatedSignage);
+				formData.append('nonce', NovaQuote.nonce);
+				formData.append('action', 'update_quote');
+				formData.append('signage', newSignage);
+				formData.append('quote_id', NovaQuote.current_quote_id);
+
+				const data = await processQuote(formData);
+
+				if (data.status !== 'success') {
+					throw new Error('Error updating quote');
+				}
+
+				console.log('Quote updated successfully');
+			} catch (err) {
+				// Handle errors
+				console.log(err);
+			}
+		}
+	};
+
+	const updateSignageDelete = async (index) => {
+		if (parseInt(NovaQuote.is_editting) === 1 && itemId) {
+			const newFileUrls = fileUrls.filter((_, i) => i !== index);
+			const newFilePaths = filePaths.filter((_, i) => i !== index);
+			const newFileNames = fileNames.filter((_, i) => i !== index);
+
+			const updateDetails = {
+				fileNames: newFileNames,
+				filePaths: newFilePaths,
+				fileUrls: newFileUrls,
+			};
+
+			const updatedSignage = signage.map((sign) =>
+				sign.id === itemId ? { ...sign, ...updateDetails } : sign
+			);
+
+			try {
+				const formData = new FormData();
+				const newSignage = JSON.stringify(updatedSignage);
+				console.log(newSignage);
+				formData.append('nonce', NovaQuote.nonce);
+				formData.append('action', 'update_quote');
+				formData.append('signage', newSignage);
+				formData.append('quote_id', NovaQuote.current_quote_id);
+
+				const data = await processQuote(formData);
+
+				if (data.status !== 'success') {
+					throw new Error('Error updating quote');
+				}
+
+				console.log('Quote updated successfully');
+			} catch (err) {
+				// Handle errors
+				console.log(err);
+			}
+		}
+	};
 
 	const handleRemoveFile = async (index) => {
 		setIsLoading(true);
@@ -280,6 +378,7 @@ export default function UploadFiles({
 				setFileUrls((prev) => prev.filter((_, i) => i !== index));
 				setFilePaths((prev) => prev.filter((_, i) => i !== index));
 				setFileNames((prev) => prev.filter((_, i) => i !== index));
+				await updateSignageDelete(index);
 			} else {
 				throw new Error(
 					data.error_summary || 'Unknown error during file deletion'
@@ -287,6 +386,10 @@ export default function UploadFiles({
 			}
 		} catch (error) {
 			console.error('Error:', error);
+			setFileUrls((prev) => prev.filter((_, i) => i !== index));
+			setFilePaths((prev) => prev.filter((_, i) => i !== index));
+			setFileNames((prev) => prev.filter((_, i) => i !== index));
+			await updateSignageDelete(index);
 		} finally {
 			setIsLoading(false);
 		}

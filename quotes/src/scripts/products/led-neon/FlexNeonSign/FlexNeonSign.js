@@ -41,7 +41,6 @@ export default function FlexNeonSign() {
 	useEffect(() => {
 		if (NovaQuote.is_editting === '1') {
 			const currentSignage = JSON.parse(NovaQuote.signage);
-
 			if (currentSignage) {
 				setSignage(currentSignage);
 			}

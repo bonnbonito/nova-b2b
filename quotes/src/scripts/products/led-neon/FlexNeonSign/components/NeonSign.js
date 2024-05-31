@@ -290,8 +290,6 @@ export const NeonSign = ({ item }) => {
 
 		const discount = quantityDiscount(sets, quantityDiscountTable);
 
-		console.log(discount);
-
 		let totalWithDiscount = total * discount;
 
 		let discountPrice = total - totalWithDiscount;
@@ -337,7 +335,7 @@ export const NeonSign = ({ item }) => {
 	};
 
 	const handledSelectedColors = (selectedColors) => {
-		setColor(selectedColors.map((option) => option.name).join(', '));
+		setColor(selectedColors.map((option) => option).join(', '));
 	};
 
 	const handleOnChangeWireExitLocation = (e) => {
@@ -486,6 +484,7 @@ export const NeonSign = ({ item }) => {
 					/>
 				</div>
 				<UploadFiles
+					itemId={item.id}
 					setFilePaths={setFilePaths}
 					setFiles={setFiles}
 					filePaths={filePaths}

@@ -130,7 +130,7 @@ export default function Sidebar() {
 							{NovaQuote.is_editting === '1' ? (
 								<>
 									{NovaQuote.user_role[0] !== 'pending' &&
-									NovaQuote.is_admin === 'no' ? (
+									(NovaQuote.is_admin === 'no' || canSaveToDraft) ? (
 										<ModalSave
 											action="update-processing"
 											label="Submit Quote"
