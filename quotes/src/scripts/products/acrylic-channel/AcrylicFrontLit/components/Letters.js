@@ -23,7 +23,7 @@ import {
 import {
 	acrylicChannelThicknessOptions,
 	acrylicFrontOptions,
-} from '../options';
+} from '../../options';
 
 import { useAppContext } from '../../../../AppProvider';
 
@@ -433,6 +433,9 @@ export function Letters({ item }) {
 
 		if (!acrylicFront) missingFields.push('Select Acrylic Front');
 		if (!sets) missingFields.push('Select Quantity');
+
+		if (!fileUrls || fileUrls.length === 0)
+			missingFields.push('Upload a PDF/AI File');
 
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {

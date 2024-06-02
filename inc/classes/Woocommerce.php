@@ -220,25 +220,46 @@ class Woocommerce {
 
 
 	public function save_tracking_details( $order, $array ) {
-		$order_id = $order->get_id();
+		$order_id         = $order->get_id();
+		$payment_order_id = get_post_meta( $order_id, '_adjusted_duplicate_order_id', true );
 
-		$tracking_number = $array['tracking_number'];
-		$carrier         = $array['carrier'];
-		$ship_date       = $array['ship_date'];
-		$shipping_xml    = $array['xml'];
+		$tracking_number = isset( $array['tracking_number'] ) ? $array['tracking_number'] : '';
+		$carrier         = isset( $array['carrier'] ) ? $array['carrier'] : '';
+		$ship_date       = isset( $array['ship_date'] ) ? $array['ship_date'] : '';
+		$shipping_xml    = isset( $array['xml'] ) ? $array['xml'] : '';
 
 		if ( $tracking_number ) {
-			update_post_meta( $order_id, '_shipping_carrier', $tracking_number );
+			update_post_meta( $order_id, '_tracking_number', sanitize_text_field( $tracking_number ) );
 		}
 
 		if ( $carrier ) {
-			update_post_meta( $order_id, '_tracking_number', $carrier );
+			update_post_meta( $order_id, '_shipping_carrier', sanitize_text_field( $carrier ) );
 		}
 
 		if ( $ship_date ) {
-			update_post_meta( $order_id, '_shipping_date', $ship_date );
+			update_post_meta( $order_id, '_shipping_date', sanitize_text_field( $ship_date ) );
+		}
+
+		if ( $payment_order_id ) {
+			update_post_meta( $payment_order_id, '_tracking_number', sanitize_text_field( $tracking_number ) );
+			update_post_meta( $payment_order_id, '_shipping_carrier', sanitize_text_field( $carrier ) );
+			update_post_meta( $payment_order_id, '_shipping_date', sanitize_text_field( $ship_date ) );
+
+			$payment_order = wc_get_order( $payment_order_id );
+
+			$order_note = sprintf(
+				__( 'Items shipped via %1$s on %2$s with tracking number %3$s (Shipstation).', 'woocommerce-shipstation-integration' ),
+				esc_html( $carrier ),
+				date_i18n( get_option( 'date_format' ), strtotime( $ship_date ) ),
+				esc_html( $tracking_number )
+			);
+
+			if ( $payment_order ) {
+				$payment_order->add_order_note( $order_note, 0 );
+			}
 		}
 	}
+
 
 	public function shipstation_not_export_order( $export, $order_id ) {
 		$from_order_id = get_post_meta( $order_id, '_from_order_id', true );

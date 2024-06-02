@@ -7,9 +7,8 @@ import Signage from '../../../Signage';
 import { PlusIcon } from '../../../svg/Icons';
 import { INDOOR_NOT_WATERPROOF } from '../../../utils/defaults';
 import { Letters } from './components/Letters';
-import { Logo } from './components/Logo';
 
-const AcrylicFrontLit = () => {
+const AcrylicBackLit = () => {
 	const { signage, setSignage, setTempFolder, tempFolderName } =
 		useAppContext();
 
@@ -22,12 +21,12 @@ const AcrylicFrontLit = () => {
 				letters: '',
 				font: '',
 				comments: '',
-				waterproof: '',
+				waterproof: INDOOR_NOT_WATERPROOF,
 				acrylicChannelThickness: '1.2" (30mm)',
-				acrylicFront: 'White',
-				acrylicReturnPaintColor: 'Black',
+				faceReturnColor: { name: 'Black', color: '#000000' },
 				vinylWhite: { name: '', color: '', code: '' },
 				ledLightColor: '6500K White',
+				backOption: 'Backlit',
 				letterHeight: '',
 				usdPrice: 0,
 				cadPrice: 0,
@@ -87,12 +86,12 @@ const AcrylicFrontLit = () => {
 		comments: '',
 		mounting: '',
 		acrylicChannelThickness: '1.2" (30mm)',
-		acrylicFront: 'White',
 		acrylicReturnPaintColor: 'Black',
-		vinylWhite: { name: '', color: '', code: '' },
+		faceReturnColor: { name: 'Black', color: '#000000' },
 		ledLightColor: '6500K White',
 		waterproof: INDOOR_NOT_WATERPROOF,
 		product: NovaQuote.product,
+		backOption: 'Backlit',
 	};
 
 	const addSignage = useCallback(
@@ -169,17 +168,6 @@ const AcrylicFrontLit = () => {
 							<PlusIcon />
 						</button>
 					)}
-
-					{signage.length < 10 && (
-						<button
-							className="flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white"
-							onClick={() => addSignage('logo')}
-							style={{ border: '1px solid #d2d2d2d2' }}
-						>
-							ADD LOGO
-							<PlusIcon />
-						</button>
-					)}
 				</div>
 			</div>
 			<Sidebar />
@@ -187,4 +175,4 @@ const AcrylicFrontLit = () => {
 	);
 };
 
-export default AcrylicFrontLit;
+export default AcrylicBackLit;

@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
 import useOutsideClick from '../../../../utils/ClickOutside';
-import convertJson from '../../../../utils/ConvertJson';
 import {
 	setOptions,
 	spacerStandoffDefaultOptions,
@@ -61,6 +60,12 @@ const maxWidthOptions = Array.from(
 	}
 );
 
+const backOptionOptions = [
+	{
+		option: 'Backlit',
+	},
+];
+
 export function Logo({ item }) {
 	const { signage, setSignage, setMissing } = useAppContext();
 	const [width, setWidth] = useState(item.width ?? '');
@@ -113,6 +118,10 @@ export function Logo({ item }) {
 		spacerStandoffDefaultOptions
 	);
 
+	const [backOption, setBackOption] = useState(item.backOption ?? 'Backlit');
+
+	const handleOnChangeBackOption = (e) => setBackOption(e.target.value);
+
 	const [spacerStandoffDistance, setSpacerStandoffDistance] = useState(
 		item.spacerStandoffDistance ?? ''
 	);
@@ -150,6 +159,7 @@ export function Logo({ item }) {
 			acrylicFront,
 			usdSinglePrice,
 			cadSinglePrice,
+			backOption,
 		};
 
 		setSignage((prevSignage) =>
@@ -256,6 +266,9 @@ export function Logo({ item }) {
 		if (!acrylicFront) missingFields.push('Select Acrylic Front');
 		if (!sets) missingFields.push('Select Quantity');
 
+		if (!fileUrls || fileUrls.length === 0)
+			missingFields.push('Upload a PDF/AI File');
+
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
 				const existingIndex = prevMissing.findIndex(
@@ -331,6 +344,7 @@ export function Logo({ item }) {
 		ledLightColor,
 		usdSinglePrice,
 		cadSinglePrice,
+		backOption,
 	]);
 
 	if (acrylicFront === '3M Vinyl') {
@@ -353,7 +367,7 @@ export function Logo({ item }) {
 	const computePricing = () => {
 		if (!width || !height) return 0;
 
-		const perInch = 0.2;
+		const perInch = 0.8;
 
 		let tempTotal = parseInt(width) * parseInt(height) * perInch;
 
@@ -580,6 +594,21 @@ export function Logo({ item }) {
 						</option>
 					))}
 					value={waterproof}
+				/>
+
+				<Dropdown
+					title="Back Option"
+					onChange={handleOnChangeBackOption}
+					options={backOptionOptions.map((option) => (
+						<option
+							value={option.option}
+							selected={option.option == backOption}
+						>
+							{option.option}
+						</option>
+					))}
+					value={backOption}
+					onlyValue={true}
 				/>
 
 				<Dropdown

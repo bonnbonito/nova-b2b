@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useAppContext } from '../../../AppProvider';
+import Note from '../../../Note';
 import Sidebar from '../../../Sidebar';
 import Signage from '../../../Signage';
 import { PlusIcon } from '../../../svg/Icons';
 import { INDOOR_NOT_WATERPROOF } from '../../../utils/defaults';
 import { Letters } from './components/Letters';
-import { Logo } from './components/Logo';
 
-const AcrylicFrontLit = () => {
+const AcrylicFrontSideLit = () => {
 	const { signage, setSignage, setTempFolder, tempFolderName } =
 		useAppContext();
 
@@ -22,12 +22,11 @@ const AcrylicFrontLit = () => {
 				font: '',
 				comments: '',
 				waterproof: '',
-				acrylicChannelThickness: '1.2"',
-				acrylicFront: 'White',
-				acrylicReturnPaintColor: 'Black',
-				vinylWhite: { name: '', color: '', code: '' },
+				acrylicChannelThickness: '1.2" (30mm)',
 				ledLightColor: '6500K White',
 				letterHeight: '',
+				acrylicReturn: 'White',
+				frontOption: 'White',
 				usdPrice: 0,
 				cadPrice: 0,
 				filePaths: [],
@@ -83,15 +82,12 @@ const AcrylicFrontLit = () => {
 
 	const defaultArgs = {
 		id: uuidv4(),
-		comments: '',
-		mounting: '',
-		acrylicChannelThickness: '1.2"',
-		acrylicFront: 'White',
-		acrylicReturnPaintColor: 'Black',
-		vinylWhite: { name: '', color: '', code: '' },
+		acrylicChannelThickness: '1.2" (30mm)',
+		acrylicReturn: 'White',
 		ledLightColor: '6500K White',
 		waterproof: INDOOR_NOT_WATERPROOF,
 		product: NovaQuote.product,
+		acrylicReturn: 'White',
 	};
 
 	const addSignage = useCallback(
@@ -132,13 +128,26 @@ const AcrylicFrontLit = () => {
 			<div className="md:w-3/4 w-full">
 				{signage.map((item, index) => (
 					<Signage key={item.id} index={index} id={item.id} item={item}>
-						{item.type === 'letters' ? (
-							<Letters key={item.id} item={item} productId={item.product} />
-						) : (
-							<Logo key={item.id} item={item} productId={item.product} />
-						)}
+						<Letters key={item.id} item={item} productId={item.product} />
 					</Signage>
 				))}
+
+				<Note title="Note">
+					<ul className="text-sm">
+						<li>
+							The default cut is straight, but for strokes ranging from 6mm to
+							15mm, it will be sloped
+						</li>
+						<li>
+							We can customize the colors that are not on the 3M Vinyl options
+							through UV printing.
+						</li>
+						<li>
+							The spacer will be black (default) or match the painted sign's
+							color.
+						</li>
+					</ul>
+				</Note>
 
 				<div className="flex gap-2">
 					{signage.length < 10 && (
@@ -151,17 +160,6 @@ const AcrylicFrontLit = () => {
 							<PlusIcon />
 						</button>
 					)}
-
-					{signage.length < 10 && (
-						<button
-							className="flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white"
-							onClick={() => addSignage('logo')}
-							style={{ border: '1px solid #d2d2d2d2' }}
-						>
-							ADD LOGO
-							<PlusIcon />
-						</button>
-					)}
 				</div>
 			</div>
 			<Sidebar />
@@ -169,4 +167,4 @@ const AcrylicFrontLit = () => {
 	);
 };
 
-export default AcrylicFrontLit;
+export default AcrylicFrontSideLit;

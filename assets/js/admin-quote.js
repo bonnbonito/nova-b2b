@@ -388,6 +388,14 @@ function allAttributes(sign) {
 		},
 
 		{
+			label: 'RETURN',
+			value: sign.acrylicReturn ? sign.acrylicReturn : '',
+		},
+		{
+			label: 'FRONT OPTION',
+			value: sign.frontOption ? sign.frontOption : '',
+		},
+		{
 			label: 'ACRYLIC FRONT',
 			value: sign.acrylicFront ? sign.acrylicFront : '',
 		},
@@ -521,6 +529,8 @@ function allAttributes(sign) {
 		},
 
 		{ label: 'ENVIRONMENT', value: sign.waterproof ? sign.waterproof : '' },
+
+		{ label: 'BACK OPTION', value: sign.backOption ? sign.backOption : '' },
 
 		{ label: 'MOUNTING', value: sign.mounting ? sign.mounting : '' },
 		{

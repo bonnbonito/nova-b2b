@@ -1,6 +1,6 @@
 export const acrylicChannelThicknessOptions = [
 	{
-		value: '1.2"',
+		value: '1.2" (30mm)',
 	},
 ];
 

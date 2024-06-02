@@ -49,6 +49,12 @@ const mountingDefaultOptions = [
 	},
 ];
 
+const backOptionOptions = [
+	{
+		option: 'Backlit',
+	},
+];
+
 const lettersHeight = {
 	min: 2,
 	max: 43,
@@ -110,6 +116,10 @@ export function Letters({ item }) {
 	const [cadSinglePrice, setCadSinglePrice] = useState(
 		item.usdSinglePrice ?? 0
 	);
+
+	const [backOption, setBackOption] = useState(item.backOption ?? 'Backlit');
+
+	const handleOnChangeBackOption = (e) => setBackOption(e.target.value);
 
 	const [selectedMounting, setSelectedMounting] = useState(item.mounting ?? '');
 	const [studLength, setStudLength] = useState(item.studLength ?? '');
@@ -200,6 +210,7 @@ export function Letters({ item }) {
 			acrylicFront,
 			usdSinglePrice,
 			cadSinglePrice,
+			backOption,
 		};
 
 		setSignage((prevSignage) =>
@@ -312,7 +323,7 @@ export function Letters({ item }) {
 				(item) => parseInt(item.Height) === parseInt(selectedLetterHeight)
 			);
 
-			const baseLetterPrice = parseFloat(pricingDetail?.Frontlit);
+			const baseLetterPrice = parseFloat(pricingDetail?.Value);
 
 			let tempTotal = 0;
 			const lettersArray = letters.trim().split('');
@@ -434,6 +445,9 @@ export function Letters({ item }) {
 		if (!acrylicFront) missingFields.push('Select Acrylic Front');
 		if (!sets) missingFields.push('Select Quantity');
 
+		if (!fileUrls || fileUrls.length === 0)
+			missingFields.push('Upload a PDF/AI File');
+
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
 				const existingIndex = prevMissing.findIndex(
@@ -516,6 +530,7 @@ export function Letters({ item }) {
 		ledLightColor,
 		usdSinglePrice,
 		cadSinglePrice,
+		backOption,
 	]);
 
 	if (acrylicFront === '3M Vinyl') {
@@ -768,6 +783,21 @@ export function Letters({ item }) {
 						</option>
 					))}
 					value={waterproof}
+				/>
+
+				<Dropdown
+					title="Back Option"
+					onChange={handleOnChangeBackOption}
+					options={backOptionOptions.map((option) => (
+						<option
+							value={option.option}
+							selected={option.option == backOption}
+						>
+							{option.option}
+						</option>
+					))}
+					value={backOption}
+					onlyValue={true}
 				/>
 
 				<Dropdown

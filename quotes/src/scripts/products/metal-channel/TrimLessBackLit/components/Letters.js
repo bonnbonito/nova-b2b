@@ -50,7 +50,9 @@ export function Letters({ item }) {
 	const [font, setFont] = useState(item.font ?? '');
 	const [openFont, setOpenFont] = useState(false);
 
-	const [color, setColor] = useState(item.faceReturnColor);
+	const [color, setColor] = useState(
+		item.faceReturnColor ?? { name: '', color: '' }
+	);
 	const [openColor, setOpenColor] = useState(false);
 	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
 

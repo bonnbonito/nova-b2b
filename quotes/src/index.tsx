@@ -5,7 +5,11 @@ import 'react-tooltip/dist/react-tooltip.css';
 import './index.css';
 import { AppProvider } from './scripts/AppProvider';
 import QuoteView from './scripts/QuoteView';
+import AcrylicBackLit from './scripts/products/acrylic-channel/AcrylicBackLit/AcrylicBackLit';
+import AcrylicFrontBackLit from './scripts/products/acrylic-channel/AcrylicFrontBackLit/AcrylicFrontBackLit';
 import AcrylicFrontLit from './scripts/products/acrylic-channel/AcrylicFrontLit/AcrylicFrontLit';
+import AcrylicFrontSideLit from './scripts/products/acrylic-channel/AcrylicFrontSideLit/AcrylicFrontSideLit';
+import AcrylicSideLit from './scripts/products/acrylic-channel/AcrylicSideLit/AcrylicSideLit';
 import LaserCutAcrylic from './scripts/products/acrylic/LaserCutAcrylic/LaserCutAcrylic';
 import LayeredAcrylic from './scripts/products/acrylic/LayeredAcrylic/LayeredAcrylic';
 import MetalLaminate from './scripts/products/acrylic/MetalLaminate/MetalLaminate';
@@ -69,6 +73,34 @@ function QuoteApp(): JSX.Element {
 			component = (
 				<AppProvider>
 					<CombineQuotes />
+				</AppProvider>
+			);
+			break;
+		case 'AcrylicFrontSideLit':
+			component = (
+				<AppProvider>
+					<AcrylicFrontSideLit />
+				</AppProvider>
+			);
+			break;
+		case 'AcrylicSideLit':
+			component = (
+				<AppProvider>
+					<AcrylicSideLit />
+				</AppProvider>
+			);
+			break;
+		case 'AcrylicFrontBackLit':
+			component = (
+				<AppProvider>
+					<AcrylicFrontBackLit />
+				</AppProvider>
+			);
+			break;
+		case 'AcrylicBackLit':
+			component = (
+				<AppProvider>
+					<AcrylicBackLit />
 				</AppProvider>
 			);
 			break;

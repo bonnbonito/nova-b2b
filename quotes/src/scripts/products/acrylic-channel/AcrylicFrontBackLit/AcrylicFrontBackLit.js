@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useAppContext } from '../../../AppProvider';
+import Note from '../../../Note';
 import Sidebar from '../../../Sidebar';
 import Signage from '../../../Signage';
 import { PlusIcon } from '../../../svg/Icons';
@@ -8,7 +9,7 @@ import { INDOOR_NOT_WATERPROOF } from '../../../utils/defaults';
 import { Letters } from './components/Letters';
 import { Logo } from './components/Logo';
 
-const AcrylicFrontLit = () => {
+const AcrylicFrontBackLit = () => {
 	const { signage, setSignage, setTempFolder, tempFolderName } =
 		useAppContext();
 
@@ -22,11 +23,12 @@ const AcrylicFrontLit = () => {
 				font: '',
 				comments: '',
 				waterproof: '',
-				acrylicChannelThickness: '1.2"',
+				acrylicChannelThickness: '1.2" (30mm)',
 				acrylicFront: 'White',
 				acrylicReturnPaintColor: 'Black',
 				vinylWhite: { name: '', color: '', code: '' },
 				ledLightColor: '6500K White',
+				backOption: 'Backlit',
 				letterHeight: '',
 				usdPrice: 0,
 				cadPrice: 0,
@@ -85,12 +87,13 @@ const AcrylicFrontLit = () => {
 		id: uuidv4(),
 		comments: '',
 		mounting: '',
-		acrylicChannelThickness: '1.2"',
+		acrylicChannelThickness: '1.2" (30mm)',
 		acrylicFront: 'White',
 		acrylicReturnPaintColor: 'Black',
 		vinylWhite: { name: '', color: '', code: '' },
 		ledLightColor: '6500K White',
 		waterproof: INDOOR_NOT_WATERPROOF,
+		backOption: 'Backlit',
 		product: NovaQuote.product,
 	};
 
@@ -140,6 +143,27 @@ const AcrylicFrontLit = () => {
 					</Signage>
 				))}
 
+				<Note title="Note">
+					<ul className="text-sm">
+						<li>
+							If you want different LED light colors for the front and back of
+							your sign, please mention it in the comments.
+						</li>
+						<li>
+							The default cut is straight, but for strokes ranging from 6mm to
+							15mm, it will be sloped
+						</li>
+						<li>
+							We can customize the colors that are not on the 3M Vinyl options
+							through UV printing.
+						</li>
+						<li>
+							The spacer will be black (default) or match the painted sign's
+							color.
+						</li>
+					</ul>
+				</Note>
+
 				<div className="flex gap-2">
 					{signage.length < 10 && (
 						<button
@@ -169,4 +193,4 @@ const AcrylicFrontLit = () => {
 	);
 };
 
-export default AcrylicFrontLit;
+export default AcrylicFrontBackLit;
