@@ -71,8 +71,9 @@ class Brevo {
 	}
 
 	public function add_to_brevo_list( $user ) {
+		$brevo_enabled = get_option( 'brevo_integration', 'option' );
 
-		if ( ! $this->brevo_api ) {
+		if ( ! $this->brevo_api && ! $brevo_enabled ) {
 			return;
 		}
 
