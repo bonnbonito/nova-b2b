@@ -3,6 +3,8 @@ namespace NOVA_B2B\Inc\Classes;
 
 require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
+use WC;
+
 class Pending_Payment {
 	/**
 	 * Instance of this class
@@ -243,14 +245,17 @@ class Pending_Payment {
 	}
 
 	public function send_payment_reminder_email_manual( $payment_id, $index ) {
-		$payment          = $this->get_data( $payment_id );
-		$payment_order_id = $payment->payment_order;
-		$payment_order    = '#NV' . $payment->payment_order;
-		$pending_total    = $payment->pending_total;
-		$currency         = $payment->currency;
-		$payment_date     = date( 'F d, Y', strtotime( $payment->payment_date ) );
+		$payment           = $this->get_data( $payment_id );
+		$payment_order_id  = $payment->payment_order;
+		$payment_order_id  = $payment->payment_order;
+		$payment_order     = '#NV' . $payment->payment_order;
+		$original_order_id = $payment->original_order;
+		$pending_total     = $payment->pending_total;
+		$currency          = $payment->currency;
+		$payment_date      = date( 'F d, Y', strtotime( $payment->payment_date ) );
 
-		$order = wc_get_order( $payment_order_id );
+		$order          = wc_get_order( $payment_order_id );
+		$original_order = wc_get_order( $original_order_id );
 
 		$customer = $this->get_billing_information_from_payment( $payment );
 
@@ -281,13 +286,22 @@ class Pending_Payment {
 			$message = $payment_emails[ $index - 1 ]['content'];
 
 			$subject = str_replace( '{customer_name}', $first_name, $subject );
-			$subject = str_replace( '{order_number}', $payment_order, $subject );
+			$subject = str_replace( '{deadline}', $payment_date, $subject );
+			$subject = str_replace( '{order_number}', $original_order->get_order_number(), $subject );
 
 			$message = str_replace( '{customer_name}', $first_name, $message );
+			$message = str_replace( '{order_number}', $original_order->get_order_number(), $message );
 			$message = str_replace( '{invoice_amount}', $currency . '$ ' . $pending_total, $message );
-			$message = str_replace( '{order_number}', $payment_order, $message );
+			$message = str_replace( '{pending_payment}', $currency . '$ ' . $pending_total, $message );
 			$message = str_replace( '{payment_link}', $payment_url, $message );
 			$message = str_replace( '{deadline}', $payment_date, $message );
+
+			ob_start();
+			add_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
+			do_action( 'woocommerce_email_order_details', $original_order, false, false, '' );
+			$order_details = ob_get_clean();
+
+			$message = str_replace( '{order_details}', $order_details, $message );
 
 			if ( $customer_email ) {
 				$headers = array( 'Content-Type: text/html; charset=UTF-8' );
@@ -295,7 +309,8 @@ class Pending_Payment {
 				$role_instance = \NOVA_B2B\Inc\Classes\Roles::get_instance();
 				$role_instance->send_email( $customer_email, $subject, $message, $headers, array() );
 				$key = 'payment_email_key_' . $index;
-				update_post_meta( $payment_order, $key, date( 'Y/m/d' ) );
+
+				update_post_meta( $payment_order_id, $key, date( 'Y/m/d' ) );
 
 			}
 		}
@@ -305,7 +320,7 @@ class Pending_Payment {
 
 		$payment_type        = $payment->payment_select;
 		$payment_order_id    = $payment->payment_order;
-		$payment_order       = '#NV' . $payment->payment_order;
+		$original_order_id   = $payment->original_order;
 		$deposit             = $payment->deposit;
 		$pending_total       = $payment->pending_total;
 		$original_total      = $payment->original_total;
@@ -314,15 +329,20 @@ class Pending_Payment {
 		$payment_date_object = new \DateTime( $payment->payment_date );
 		$today               = new \DateTime();
 
-		$customer = $this->get_billing_information_from_payment( $payment_order_id );
+		$customer       = $this->get_billing_information_from_payment( $payment_order_id );
+		$first_name     = $customer['first_name'];
+		$customer_email = $customer['email'];
 
-		$order = wc_get_order( $payment_order_id );
+		$order          = wc_get_order( $payment_order_id );
+		$original_order = wc_get_order( $original_order_id );
+
 		if ( ! $order ) {
 			return 'Order not found';
 		}
 		if ( ! $customer_email ) {
 			return 'No email';
 		}
+
 		$payment_url = $order->get_checkout_payment_url();
 
 		$first_name     = $customer['first_name'];
@@ -341,14 +361,24 @@ class Pending_Payment {
 
 						$subject = get_sub_field( 'subject' );
 						$subject = str_replace( '{customer_name}', $first_name, $subject );
-						$subject = str_replace( '{order_number}', $payment_order, $subject );
+						$subject = str_replace( '{deadline}', $payment_date, $subject );
+						$subject = str_replace( '{order_number}', $original_order->get_order_number(), $subject );
 
 						$message = get_sub_field( 'content' );
 						$message = str_replace( '{customer_name}', $first_name, $message );
 						$message = str_replace( '{invoice_amount}', $currency . '$ ' . $pending_total, $message );
-						$message = str_replace( '{order_number}', $payment_order, $message );
+						$message = str_replace( '{pending_payment}', $currency . '$ ' . $pending_total, $message );
 						$message = str_replace( '{payment_link}', $payment_url, $message );
 						$message = str_replace( '{deadline}', $payment_date, $message );
+						$message = str_replace( '{order_number}', $original_order->get_order_number(), $message );
+
+						// Get the order details
+						ob_start();
+						add_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
+						do_action( 'woocommerce_email_order_details', $original_order, false, false, '' );
+						$order_details = ob_get_clean();
+
+						$message = str_replace( '{order_details}', $order_details, $message );
 
 						if ( $customer_email ) {
 							$headers = array( 'Content-Type: text/html; charset=UTF-8' );
@@ -356,7 +386,7 @@ class Pending_Payment {
 							$role_instance = \NOVA_B2B\Inc\Classes\Roles::get_instance();
 							$role_instance->send_email( $customer_email, $subject, $message, $headers, array() );
 							$key = 'payment_email_key_' . get_row_index();
-							update_post_meta( $payment_order, $key, 'sent' );
+							update_post_meta( $payment_order_id, $key, 'sent' );
 						}
 					}
 				}
@@ -482,11 +512,15 @@ class Pending_Payment {
 						echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
 						echo '<input type="hidden" name="action" value="send_payment_reminder"/>';
 						echo '<input type="hidden" name="payment_id" value="' . esc_attr( $row['id'] ) . '"/>';
+						echo '<input type="hidden" name="original_order" value="' . esc_attr( $row['original_order'] ) . '"/>';
 						echo '<input type="hidden" name="index" value="' . get_row_index() . '"/>';
 						echo '<input type="hidden" name="order_id" value="' . absint( $row['payment_order'] ) . '"/>';
 						echo '<input type="hidden" name="email_key" value="' . esc_attr( $key ) . '"/>';
 						wp_nonce_field( 'send_reminder_action', 'send_reminder_nonce' );
 						echo '<input type="submit" class="button action" value="' . ( isset( $email_sent ) && ! empty( $email_sent ) ? 'Send Again' : 'Send' ) . '"/>';
+						if ( $email_sent ) {
+							echo ' Sent: ' . $email_sent;
+						}
 						echo '</form>';
 						echo '</li>';
 					}
@@ -556,6 +590,20 @@ class Pending_Payment {
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'nova_pendings';
 		$query      = $wpdb->prepare( "SELECT * FROM $table_name WHERE id = %d", $id );
+		return $wpdb->get_row( $query );
+	}
+
+	public function get_payment_id_from_original_order( $order_id ) {
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'nova_pendings';
+		$query      = $wpdb->prepare( "SELECT * FROM $table_name WHERE original_order = %d", $order_id );
+		return $wpdb->get_row( $query );
+	}
+
+	public function get_payment_date( $order_id ) {
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'nova_pendings';
+		$query      = $wpdb->prepare( "SELECT * FROM $table_name WHERE original_order = %d", $order_id );
 		return $wpdb->get_row( $query );
 	}
 
@@ -636,7 +684,35 @@ class Pending_Payment {
 
 			$this->check_pending_payments();
 
+			add_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
+
 		}
+	}
+
+	public function insert_payment_date( $total_rows, $order, $tax_display ) {
+
+		$order_id      = $order->get_id();
+		$pending_order = get_post_meta( $order_id, '_adjusted_duplicate_order_id', true );
+
+		if ( $pending_order ) {
+			$payment = $this->get_payment_date( $order_id );
+
+			if ( $payment && ! empty( $payment->payment_date ) ) {
+				$payment_date               = date( 'F d, Y', strtotime( $payment->payment_date ) );
+				$total_rows['payment_date'] = array(
+					'label' => __( 'Payment Date', 'woocommerce' ),
+					'value' => esc_html( $payment_date ),
+				);
+
+				// Reorder to make sure the payment date is the last item
+				$payment_date = $total_rows['payment_date'];
+				unset( $total_rows['payment_date'] );
+				$total_rows['payment_date'] = $payment_date;
+
+			}
+		}
+
+		return $total_rows;
 	}
 
 	public function handle_delete_order() {

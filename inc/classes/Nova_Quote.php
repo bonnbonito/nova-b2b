@@ -445,15 +445,16 @@ sendMockup.addEventListener('click', e => {
 		$status['quote']       = $signage;
 
 		$product_meta = array(
-			'usd_price'  => $final_price,
-			'signage'    => $signage,
-			'nova_quote' => true,
-			'nova_title' => $title,
-			'quote_id'   => $post_id,
-			'nova_note'  => $note,
-			'product'    => $product_name,
-			'product_id' => $product_id,
-			'note'       => $note,
+			'usd_price'    => $final_price,
+			'signage'      => $signage,
+			'nova_quote'   => true,
+			'nova_title'   => $title,
+			'quote_id'     => $post_id,
+			'nova_note'    => $note,
+			'product'      => $product_name,
+			'product_name' => $product_name,
+			'product_id'   => $product_id,
+			'note'         => $note,
 		);
 
 		ob_start();

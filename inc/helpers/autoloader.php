@@ -26,6 +26,7 @@ require NOVA_DIR_PATH . '/inc/classes/Scripts.php';
 require NOVA_DIR_PATH . '/inc/classes/Woocommerce.php';
 require NOVA_DIR_PATH . '/inc/classes/Nova_Product.php';
 require NOVA_DIR_PATH . '/inc/classes/Nova_Quote.php';
+require NOVA_DIR_PATH . '/inc/classes/NovaEmails.php';
 require NOVA_DIR_PATH . '/inc/classes/Shortcodes.php';
 require NOVA_DIR_PATH . '/inc/classes/Pending_Payment.php';
 require NOVA_DIR_PATH . '/inc/classes/Zoho.php';
