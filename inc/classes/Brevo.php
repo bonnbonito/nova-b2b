@@ -26,7 +26,7 @@ class Brevo {
 	 */
 	public function __construct() {
 		$this->brevo_api     = get_field( 'brevo_api', 'option' ) ?: '';
-		$this->brevo_list_id = 43;
+		$this->brevo_list_id = 45;
 		add_action( 'nova_user_partner_approved', array( $this, 'add_to_brevo_list' ) );
 	}
 
