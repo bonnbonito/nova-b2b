@@ -160,7 +160,7 @@ export const NeonSign = ({ item }) => {
 	const neonColorRef = useRef(null);
 
 	const handledSelectedColors = (selectedColors) => {
-		setNeonColor(selectedColors.map((option) => option.name).join(', '));
+		setNeonColor(selectedColors.map((option) => option).join(', '));
 	};
 
 	const handleOnChangeWireType = (e) => {

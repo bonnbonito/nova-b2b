@@ -15229,7 +15229,7 @@ const NeonSign = ({
   }, []);
   const neonColorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const handledSelectedColors = selectedColors => {
-    setNeonColor(selectedColors.map(option => option.name).join(', '));
+    setNeonColor(selectedColors.map(option => option).join(', '));
   };
   const handleOnChangeWireType = e => {
     const value = e.target.value;
@@ -15826,7 +15826,7 @@ const NeonSign = ({
   const neonColorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const colorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const handledSelectedColors = selectedColors => {
-    setNeonColor(selectedColors.map(option => option.name).join(', '));
+    setNeonColor(selectedColors.map(option => option).join(', '));
   };
   const updateSignage = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(() => {
     const updatedSignage = signage.map(sign => {

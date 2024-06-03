@@ -484,7 +484,8 @@ class Pending_Payment {
 			foreach ( $results as $row ) {
 
 				$class = '';
-				if ( strtotime( $row['payment_date'] ) < current_time( 'timestamp' ) ) {
+				$ago   = strtotime( $row['payment_date'] ) < current_time( 'timestamp' );
+				if ( $ago ) {
 					$class = ' over';
 				}
 
@@ -496,7 +497,7 @@ class Pending_Payment {
 				echo "<td><a href='{$order_edit_link}'>#{$row['payment_order']}</a></td>";
 				echo "<td>{$row['currency']}$ {$row['deposit']}</td>";
 				echo "<td>{$row['pending_total']}</td>";
-				echo '<td>' . date( 'F d, Y', strtotime( $row['payment_date'] ) ) . ' - <span class="' . $class . '" style="display: block; padding: 5px;">' . human_time_diff( current_time( 'timestamp' ), strtotime( $row['payment_date'] ) ) . '</span></td>';
+				echo '<td>' . date( 'F d, Y', strtotime( $row['payment_date'] ) ) . ' - <span class="' . $class . '" style="display: block; padding: 5px;">' . human_time_diff( current_time( 'timestamp' ), strtotime( $row['payment_date'] ) ) . ( $ago ? ' ago' : '' ) . '</span></td>';
 				echo '<td>' . get_the_title( $row['payment_select'] ) . '</td>';
 				echo "<td colspan='3'>";
 

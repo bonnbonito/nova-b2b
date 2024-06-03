@@ -153,7 +153,7 @@ export const NeonSign = ({ item }) => {
 	const colorRef = useRef(null);
 
 	const handledSelectedColors = (selectedColors) => {
-		setNeonColor(selectedColors.map((option) => option.name).join(', '));
+		setNeonColor(selectedColors.map((option) => option).join(', '));
 	};
 
 	const updateSignage = useCallback(() => {
