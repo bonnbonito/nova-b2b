@@ -13776,7 +13776,7 @@ function CombineQuoteProvider({
       let args;
       args = {
         type: type,
-        title: `${type === 'letters' ? 'LETTERS' : 'LOGO'} ${count + 1}`
+        title: `${type} ${count + 1}`
       };
       const newSignage = {
         ...defaultArgs,
@@ -14246,14 +14246,14 @@ function AccordionItem({
     addSignage: addSignage,
     product: product,
     title: title,
-    type: "letters"
+    type: "LETTERS"
   }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "ml-2"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null))), product.logo && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AddSignage__WEBPACK_IMPORTED_MODULE_2__.AddSignage, {
     addSignage: addSignage,
     product: product,
     title: title,
-    type: "logo"
+    type: "LOGO"
   }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "ml-2"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null))), product.sign && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AddSignage__WEBPACK_IMPORTED_MODULE_2__.AddSignage, {
@@ -14267,7 +14267,7 @@ function AccordionItem({
     addSignage: addSignage,
     product: product,
     title: title,
-    type: "custom"
+    type: "CUSTOM"
   }, "ADD CUSTOM PROJECT", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "ml-2"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null)))))));

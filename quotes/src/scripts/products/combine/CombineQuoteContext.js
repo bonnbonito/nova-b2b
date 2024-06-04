@@ -28,7 +28,7 @@ export function CombineQuoteProvider({ children }) {
 			let args;
 			args = {
 				type: type,
-				title: `${type === 'letters' ? 'LETTERS' : 'LOGO'} ${count + 1}`,
+				title: `${type} ${count + 1}`,
 			};
 			const newSignage = {
 				...defaultArgs,
