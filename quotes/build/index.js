@@ -6266,6 +6266,15 @@ const mountingDefaultOptions = [{
   mounting_option: _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER
 }];
 const maxWidthOptions = Array.from({
+  length: 86
+}, (_, index) => {
+  const val = 1 + index;
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    key: index,
+    value: val
+  }, val, "\"");
+});
+const maxHeightOptions = Array.from({
   length: 43
 }, (_, index) => {
   const val = 1 + index;
@@ -6508,6 +6517,11 @@ function Logo({
       tempTotal += parseFloat(spacer.toFixed(2));
     }
 
+    /* oversize surcharge */
+    if (parseInt(width) > 43) {
+      tempTotal += 150;
+    }
+
     /* minimum price */
     tempTotal = tempTotal > 50 ? tempTotal : 50;
     let total = tempTotal * parseInt(sets);
@@ -6560,7 +6574,7 @@ function Logo({
     title: "Logo Height",
     value: height,
     onChange: e => setHeight(e.target.value),
-    options: maxWidthOptions
+    options: maxHeightOptions
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Acrylic Front",
     onChange: handleOnChangeWhite,
@@ -7629,8 +7643,17 @@ const mountingDefaultOptions = [{
 }, {
   mounting_option: _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER
 }];
-const maxWidthOptions = Array.from({
+const maxHeightOptions = Array.from({
   length: 43
+}, (_, index) => {
+  const val = 1 + index;
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    key: index,
+    value: val
+  }, val, "\"");
+});
+const maxWidthOptions = Array.from({
+  length: 86
 }, (_, index) => {
   const val = 1 + index;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -7866,6 +7889,11 @@ function Logo({
       tempTotal += parseFloat(spacer.toFixed(2));
     }
 
+    /* oversize surcharge */
+    if (parseInt(width) > 43) {
+      tempTotal += 150;
+    }
+
     /* minimum price */
     tempTotal = tempTotal > 50 ? tempTotal : 50;
     let total = tempTotal * parseInt(sets);
@@ -7918,7 +7946,7 @@ function Logo({
     title: "Logo Height",
     value: height,
     onChange: e => setHeight(e.target.value),
-    options: maxWidthOptions
+    options: maxHeightOptions
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Acrylic Front",
     onChange: handleOnChangeWhite,
@@ -13779,7 +13807,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_select__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! react-select */ "./node_modules/react-select/dist/react-select.esm.js");
+/* harmony import */ var react_select__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! react-select */ "./node_modules/react-select/dist/react-select.esm.js");
 /* harmony import */ var _SidebarAdmin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../SidebarAdmin */ "./src/scripts/SidebarAdmin.js");
 /* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Signage */ "./src/scripts/Signage.js");
 /* harmony import */ var _components_AccordionGroup__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/AccordionGroup */ "./src/scripts/products/combine/components/AccordionGroup.js");
@@ -13810,6 +13838,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _led_neon_FlexNeonSign_components_NeonSign__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ../led-neon/FlexNeonSign/components/NeonSign */ "./src/scripts/products/led-neon/FlexNeonSign/components/NeonSign.js");
 /* harmony import */ var _led_neon_RigidNeonSignNoBacking_components_NeonSign__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ../led-neon/RigidNeonSignNoBacking/components/NeonSign */ "./src/scripts/products/led-neon/RigidNeonSignNoBacking/components/NeonSign.js");
 /* harmony import */ var _led_neon_RigidNeonSignWithBacking_components_NeonSign__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ../led-neon/RigidNeonSignWithBacking/components/NeonSign */ "./src/scripts/products/led-neon/RigidNeonSignWithBacking/components/NeonSign.js");
+/* harmony import */ var _custom_components_Logo__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ../custom/components/Logo */ "./src/scripts/products/custom/components/Logo.js");
 
 
 
@@ -13848,6 +13877,8 @@ __webpack_require__.r(__webpack_exports__);
 /*LED */
 
 
+
+/*CUSTOM PROJECT */
 
 const productLines = NovaQuote.product_lines_accordion;
 const partners = NovaQuote.show_all_partners;
@@ -13892,6 +13923,13 @@ function CombineQuotes() {
   const showComponent = item => {
     let output;
     switch (item.component) {
+      case 'CustomProject':
+        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_custom_components_Logo__WEBPACK_IMPORTED_MODULE_31__.Logo, {
+          key: item.id,
+          item: item,
+          productId: item.product
+        });
+        break;
       case 'RigidNeonSignNoBacking':
         output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_led_neon_RigidNeonSignNoBacking_components_NeonSign__WEBPACK_IMPORTED_MODULE_29__.NeonSign, {
           key: item.id,
@@ -14087,7 +14125,7 @@ function CombineQuotes() {
     className: "border-gray-200 p-4 rounded-md border mb-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "font-title text-lg mb-4"
-  }, "Select Partner:"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_select__WEBPACK_IMPORTED_MODULE_31__["default"], {
+  }, "Select Partner:"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_select__WEBPACK_IMPORTED_MODULE_32__["default"], {
     className: "basic-single",
     classNames: {
       indicatorSeparator: () => 'hidden'
@@ -14209,17 +14247,30 @@ function AccordionItem({
     product: product,
     title: title,
     type: "letters"
-  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null)), product.logo && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AddSignage__WEBPACK_IMPORTED_MODULE_2__.AddSignage, {
+  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "ml-2"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null))), product.logo && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AddSignage__WEBPACK_IMPORTED_MODULE_2__.AddSignage, {
     addSignage: addSignage,
     product: product,
     title: title,
     type: "logo"
-  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null)), product.sign && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AddSignage__WEBPACK_IMPORTED_MODULE_2__.AddSignage, {
+  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "ml-2"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null))), product.sign && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AddSignage__WEBPACK_IMPORTED_MODULE_2__.AddSignage, {
     addSignage: addSignage,
     product: product,
     title: title,
     type: "SIGN"
-  }, "ADD SIGN", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null))))));
+  }, "ADD SIGN", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "ml-2"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null))), product.custom && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AddSignage__WEBPACK_IMPORTED_MODULE_2__.AddSignage, {
+    addSignage: addSignage,
+    product: product,
+    title: title,
+    type: "custom"
+  }, "ADD CUSTOM PROJECT", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "ml-2"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null)))))));
 }
 
 /***/ }),
@@ -14245,7 +14296,7 @@ const AddSignage = ({
   title,
   children
 }) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
-  className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
+  className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer justify-between hover:bg-slate-600 font-title text-black hover:text-white",
   onClick: () => addSignage(product.product.post_title, product.product.ID, type, product.component, title),
   style: {
     border: '1px solid #d2d2d2d2'

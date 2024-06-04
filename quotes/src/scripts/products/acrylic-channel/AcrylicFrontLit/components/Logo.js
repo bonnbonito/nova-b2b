@@ -47,9 +47,23 @@ const mountingDefaultOptions = [
 	},
 ];
 
-const maxWidthOptions = Array.from(
+const maxHeightOptions = Array.from(
 	{
 		length: 43,
+	},
+	(_, index) => {
+		const val = 1 + index;
+		return (
+			<option key={index} value={val}>
+				{val}"
+			</option>
+		);
+	}
+);
+
+const maxWidthOptions = Array.from(
+	{
+		length: 86,
 	},
 	(_, index) => {
 		const val = 1 + index;
@@ -373,6 +387,11 @@ export function Logo({ item }) {
 			tempTotal += parseFloat(spacer.toFixed(2));
 		}
 
+		/* oversize surcharge */
+		if (parseInt(width) > 43) {
+			tempTotal += 150;
+		}
+
 		/* minimum price */
 		tempTotal = tempTotal > 50 ? tempTotal : 50;
 
@@ -439,7 +458,7 @@ export function Logo({ item }) {
 					title="Logo Height"
 					value={height}
 					onChange={(e) => setHeight(e.target.value)}
-					options={maxWidthOptions}
+					options={maxHeightOptions}
 				/>
 
 				<Dropdown
