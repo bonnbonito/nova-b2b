@@ -648,7 +648,7 @@ export const Letters = ({ item, letterPricing, hasPrice = false }) => {
 						{acrylicBase?.name === '' ? 'CHOOSE OPTION' : acrylicBase?.name}
 					</div>
 					{openAcrylicColor && (
-						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
+						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg">
 							{colorOptions.map((color) => {
 								return (
 									<div

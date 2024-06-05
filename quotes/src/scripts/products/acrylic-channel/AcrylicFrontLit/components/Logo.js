@@ -498,7 +498,7 @@ export function Logo({ item }) {
 							{vinylWhite.name === '' ? 'CHOOSE OPTION' : vinylWhite.name}
 						</div>
 						{openVinylWhite && (
-							<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
+							<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg">
 								{translucentGraphicFilms.map((color) => {
 									return (
 										<div
@@ -552,7 +552,7 @@ export function Logo({ item }) {
 						{color === '' ? 'CHOOSE OPTION' : color}
 					</div>
 					{openColor && (
-						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
+						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg">
 							{colorOptions.map((color) => {
 								return (
 									<div

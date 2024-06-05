@@ -2745,7 +2745,7 @@ function FontsDropdown({
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "truncate"
   }, font === '' ? 'CHOOSE OPTION' : font)), openFont && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm font-title",
     onClick: handleCustomFontSelection
@@ -5262,7 +5262,7 @@ function Letters({
       background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
     }
   }), color.name === '' ? 'CHOOSE OPTION' : color.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
   }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_10__.colorOptions.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
@@ -6073,7 +6073,7 @@ function Letters({
       background: vinylWhite?.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : vinylWhite?.color
     }
   }), vinylWhite.name === '' ? 'CHOOSE OPTION' : vinylWhite.name), openVinylWhite && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
   }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_10__.translucentGraphicFilms.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
@@ -6105,7 +6105,7 @@ function Letters({
       background: color == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_10__.colorOptions.find(option => option.name === color).color
     }
   }), color === '' ? 'CHOOSE OPTION' : color), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
   }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_10__.colorOptions.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
@@ -6600,7 +6600,7 @@ function Logo({
       background: vinylWhite?.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : vinylWhite?.color
     }
   }), vinylWhite.name === '' ? 'CHOOSE OPTION' : vinylWhite.name), openVinylWhite && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
   }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.translucentGraphicFilms.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
@@ -6631,7 +6631,7 @@ function Logo({
       background: color == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.colorOptions.find(option => option.name === color).color
     }
   }), color === '' ? 'CHOOSE OPTION' : color), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
   }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.colorOptions.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
@@ -6993,9 +6993,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
 /* harmony import */ var _metal_channel_metalChannelOptions__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../metal-channel/metalChannelOptions */ "./src/scripts/products/metal-channel/metalChannelOptions.js");
 /* harmony import */ var _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../utils/ColorOptions */ "./src/scripts/utils/ColorOptions.js");
-/* harmony import */ var _options__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../options */ "./src/scripts/products/acrylic-channel/options.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
-/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
+/* harmony import */ var _utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../utils/ColorsDropdown */ "./src/scripts/utils/ColorsDropdown.js");
+/* harmony import */ var _utils_VinylColors__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../../../utils/VinylColors */ "./src/scripts/utils/VinylColors.js");
+/* harmony import */ var _options__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../../options */ "./src/scripts/products/acrylic-channel/options.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
+
+
 
 
 
@@ -7012,12 +7016,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const waterProofOptions = [{
-  option: _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF
+  option: _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.INDOOR_NOT_WATERPROOF
 }];
 const mountingDefaultOptions = [{
-  mounting_option: _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_MOUNT
+  mounting_option: _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.STUD_MOUNT
 }, {
-  mounting_option: _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER
+  mounting_option: _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.STUD_WITH_SPACER
 }];
 const lettersHeight = {
   min: 2,
@@ -7031,7 +7035,7 @@ function Letters({
     signage,
     setSignage,
     setMissing
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_12__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_14__.useAppContext)();
   const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letters = item.letters) !== null && _item$letters !== void 0 ? _item$letters : '');
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
   const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$font = item.font) !== null && _item$font !== void 0 ? _item$font : '');
@@ -7150,8 +7154,8 @@ function Letters({
   const handleOnChangeMount = e => {
     const target = e.target.value;
     setSelectedMounting(target);
-    if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER || target === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_MOUNT) {
-      if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_MOUNT) {
+    if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.STUD_WITH_SPACER || target === _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.STUD_MOUNT) {
+      if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.STUD_MOUNT) {
         setSpacerStandoffDistance('');
       }
     } else {
@@ -7242,7 +7246,7 @@ function Letters({
       if (acrylicFront === 'UV Printed') {
         tempTotal *= 1.15;
       }
-      if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER) {
+      if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.STUD_WITH_SPACER) {
         const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_8__.spacerPricing)(tempTotal);
         tempTotal += parseFloat(spacer.toFixed(2));
       }
@@ -7271,11 +7275,11 @@ function Letters({
     } = computePricing();
     if (total && singlePrice) {
       setUsdPrice(total);
-      setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.EXCHANGE_RATE).toFixed(2));
+      setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.EXCHANGE_RATE).toFixed(2));
       setUsdSinglePrice(singlePrice);
-      setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.EXCHANGE_RATE).toFixed(2));
+      setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.EXCHANGE_RATE).toFixed(2));
       setUsdDiscount(discount.toFixed(2));
-      setCadDiscount((discount * _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.EXCHANGE_RATE).toFixed(2));
+      setCadDiscount((discount * _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.EXCHANGE_RATE).toFixed(2));
     }
   }, [selectedLetterHeight, letters, sets, font, selectedMounting, letterPricing, acrylicFront]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
@@ -7308,10 +7312,10 @@ function Letters({
     }
     if (!waterproof) missingFields.push('Select Environment');
     if (!selectedMounting) missingFields.push('Select Mounting');
-    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_MOUNT) {
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.STUD_MOUNT) {
       if (!studLength) missingFields.push('Select Stud Length');
     }
-    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER) {
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.STUD_WITH_SPACER) {
       if (!studLength) missingFields.push('Select Stud Length');
       if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
@@ -7350,20 +7354,18 @@ function Letters({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
   }, [letters, comments, font, acrylicChannelThickness, selectedMounting, waterproof, color, usdPrice, cadPrice, selectedLetterHeight, fileUrls, fileNames, filePaths, files, fontFileUrl, fontFileName, fontFilePath, fontFile, customColor, sets, studLength, spacerStandoffDistance, acrylicFront, vinylWhite, ledLightColor, usdSinglePrice, cadSinglePrice]);
-  if (acrylicFront === '3M Vinyl') {
-    (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__["default"])([colorRef, fontRef, vinyl3MRef], () => {
+  (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__["default"])([colorRef, fontRef, acrylicFront === '3M Vinyl' ? vinyl3MRef : null].filter(Boolean), () => {
+    if (acrylicFront === '3M Vinyl') {
       if (!openColor && !openFont && !openVinylWhite) return;
       setOpenColor(false);
       setOpenFont(false);
       setOpenVinylWhite(false);
-    });
-  } else {
-    (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__["default"])([colorRef, fontRef], () => {
+    } else {
       if (!openColor && !openFont) return;
       setOpenColor(false);
       setOpenFont(false);
-    });
-  }
+    }
+  });
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     color?.name != 'Custom Color' && setCustomColor('');
     font != 'Custom font' && setFontFileUrl('');
@@ -7422,7 +7424,7 @@ function Letters({
     title: "Acrylic Thickness",
     value: acrylicChannelThickness,
     onChange: handleOnChangeThickness,
-    options: _options__WEBPACK_IMPORTED_MODULE_11__.acrylicChannelThicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _options__WEBPACK_IMPORTED_MODULE_13__.acrylicChannelThicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: thickness.value,
       selected: thickness.value === acrylicChannelThickness
     }, thickness.value)),
@@ -7435,76 +7437,38 @@ function Letters({
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Acrylic Front",
     onChange: handleOnChangeWhite,
-    options: _options__WEBPACK_IMPORTED_MODULE_11__.acrylicFrontOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _options__WEBPACK_IMPORTED_MODULE_13__.acrylicFrontOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
       selected: option == acrylicFront
     }, option.option)),
     value: acrylicFront
-  }), acrylicFront === '3M Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "px-[1px] relative",
-    ref: vinyl3MRef
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
-  }, "3M VINYL"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: `flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${vinylWhite.name ? 'text-black' : 'text-[#dddddd]'}`,
-    onClick: () => {
+  }), acrylicFront === '3M Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_12__["default"], {
+    ref: vinyl3MRef,
+    vinylWhite: vinylWhite,
+    setVinylWhite: setVinylWhite,
+    openVinylWhite: openVinylWhite,
+    toggleVinyl: () => {
       setOpenVinylWhite(prev => !prev);
       setOpenColor(false);
       setOpenFont(false);
-    }
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "rounded-full w-[18px] h-[18px] border mr-2",
-    style: {
-      background: vinylWhite?.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : vinylWhite?.color
-    }
-  }), vinylWhite.name === '' ? 'CHOOSE OPTION' : vinylWhite.name), openVinylWhite && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
-  }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_10__.translucentGraphicFilms.map(color => {
-    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
-      onClick: () => {
-        setVinylWhite(color);
-        setOpenVinylWhite(false);
-      }
-    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-      className: "w-[18px] h-[18px] inline-block rounded-full border",
-      style: {
-        background: color?.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color?.color
-      }
-    }), color?.name);
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "px-[1px] relative",
-    ref: colorRef
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
-  }, "Return Paint Color"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: `flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${color ? 'text-black' : 'text-[#dddddd]'}`,
-    onClick: () => {
+    },
+    selectVinylColor: () => setOpenVinylWhite(false)
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_11__["default"], {
+    title: "Return Paint Color",
+    ref: colorRef,
+    color: color,
+    setColor: setColor,
+    openColor: openColor,
+    toggleColor: () => {
       setOpenColor(prev => !prev);
       setOpenFont(false);
       setOpenVinylWhite(false);
+    },
+    colorOptions: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_10__.colorOptions,
+    selectColor: () => {
+      setOpenColor(false);
     }
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "rounded-full w-[18px] h-[18px] border mr-2",
-    style: {
-      background: color == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_10__.colorOptions.find(option => option.name === color).color
-    }
-  }), color === '' ? 'CHOOSE OPTION' : color), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
-  }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_10__.colorOptions.map(color => {
-    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
-      onClick: () => {
-        setColor(color.name);
-        setOpenColor(false);
-      }
-    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-      className: "w-[18px] h-[18px] inline-block rounded-full border",
-      style: {
-        background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
-      }
-    }), color.name);
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
     options: _metal_channel_metalChannelOptions__WEBPACK_IMPORTED_MODULE_9__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -7528,7 +7492,7 @@ function Letters({
       selected: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: selectedMounting
-  }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -7544,7 +7508,7 @@ function Letters({
       selected: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
-  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_MOUNT && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.STUD_MOUNT && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -7558,7 +7522,7 @@ function Letters({
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.setOptions,
     value: sets,
     onlyValue: true
-  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-xs text-[#9F9F9F] mb-4"
   }, "*Note: The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid"
@@ -7972,7 +7936,7 @@ function Logo({
       background: vinylWhite?.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : vinylWhite?.color
     }
   }), vinylWhite.name === '' ? 'CHOOSE OPTION' : vinylWhite.name), openVinylWhite && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
   }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_8__.translucentGraphicFilms.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
@@ -8003,7 +7967,7 @@ function Logo({
       background: color == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_8__.colorOptions.find(option => option.name === color).color
     }
   }), color === '' ? 'CHOOSE OPTION' : color), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
   }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_8__.colorOptions.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
@@ -8773,7 +8737,7 @@ function Letters({
       backgroundColor: vinylWhite.color
     }
   }), vinylWhite.name === '' ? 'CHOOSE OPTION' : vinylWhite.name), openVinyl && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
   }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_10__.translucentGraphicFilms.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
@@ -9530,7 +9494,7 @@ function Letters({
       background: color == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : (_frontOptionOptions$f = frontOptionOptions.find(option => option.name === color)?.color) !== null && _frontOptionOptions$f !== void 0 ? _frontOptionOptions$f : '#fff'
     }
   }), color === '' ? 'CHOOSE OPTION' : color), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
   }, frontOptionOptions.map(c => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
@@ -10720,7 +10684,7 @@ function Letters({
       background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
     }
   }), color.name === '' ? 'CHOOSE OPTION' : color.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
   }, _ColorOptions__WEBPACK_IMPORTED_MODULE_9__.colorOptions.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
@@ -11189,7 +11153,7 @@ function Logo({
       background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
     }
   }), color.name === '' ? 'CHOOSE OPTION' : color.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
   }, _ColorOptions__WEBPACK_IMPORTED_MODULE_7__.colorOptions.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
@@ -12599,7 +12563,7 @@ const Letters = ({
       background: acrylicBase?.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : acrylicBase?.color
     }
   }), acrylicBase?.name === '' ? 'CHOOSE OPTION' : acrylicBase?.name), openAcrylicColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
   }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_6__.colorOptions.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
@@ -13035,7 +12999,7 @@ function Logo({
       backgroundColor: acrylicBase.color
     }
   }), acrylicBase?.name === '' ? 'CHOOSE OPTION' : acrylicBase?.name), openAcrylicColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
   }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_9__.colorOptions.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
@@ -14515,7 +14479,11 @@ function Logo({
     updateSignage();
     checkAndAddMissingFields();
   }, [fileUrls, fileNames, files, filePaths, description]);
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "py-4 mb-4"
+  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title"
+  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "px-[1px] col-span-4"
@@ -16151,7 +16119,7 @@ const NeonSign = ({
       background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
     }
   }), color.name === '' ? 'CHOOSE OPTION' : color.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
   }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_5__.colorOptions.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
@@ -16318,7 +16286,7 @@ const NeonColors = ({
     getSelectedColors(selectedColors);
   }, [selectedColors]);
   const colorSelections = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
   }, _neonSignOptions__WEBPACK_IMPORTED_MODULE_2__.neonColorOptions.map(colorOption => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     key: colorOption.name,
     className: "has-[:checked]:ring-indigo-500 has-[:checked]:text-indigo-900 has-[:checked]:bg-indigo-50 p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm  select-none"
@@ -17237,7 +17205,7 @@ function Letters({
       background: color?.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color?.color
     }
   }), color?.name === '' ? 'CHOOSE OPTION' : color?.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
   }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_6__.colorOptions.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
@@ -17292,7 +17260,7 @@ function Letters({
       backgroundColor: vinylWhite.color
     }
   }), vinylWhite.name === '' ? 'CHOOSE OPTION' : vinylWhite.name), openAcrylicCover && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
   }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_6__.translucentGraphicFilms.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
@@ -17674,7 +17642,7 @@ function Logo({
       background: color?.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color?.color
     }
   }), color?.name === '' ? 'CHOOSE OPTION' : color?.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
   }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_4__.colorOptions.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
@@ -18541,7 +18509,7 @@ function Letters({
       background: color?.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color?.color
     }
   }), color?.name === '' ? 'CHOOSE OPTION' : color?.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
   }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_6__.colorOptions.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
@@ -18589,7 +18557,7 @@ function Letters({
       backgroundColor: vinylWhite.color
     }
   }), vinylWhite.name === '' ? 'CHOOSE OPTION' : vinylWhite.name), openAcrylicCover && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
   }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_6__.translucentGraphicFilms.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
@@ -18958,7 +18926,7 @@ function Logo({
       background: color?.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color?.color
     }
   }), color?.name === '' ? 'CHOOSE OPTION' : color?.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
   }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_4__.colorOptions.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
@@ -19803,7 +19771,7 @@ function Letters({
       background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
     }
   }), color.name === '' ? 'CHOOSE OPTION' : color.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
   }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_6__.colorOptions.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
@@ -20618,7 +20586,7 @@ function Letters({
       background: color?.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color?.color
     }
   }), color?.name === '' ? 'CHOOSE OPTION' : color?.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
   }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_6__.colorOptions.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
@@ -20666,7 +20634,7 @@ function Letters({
       backgroundColor: vinylWhite.color
     }
   }), vinylWhite.name === '' ? 'CHOOSE OPTION' : vinylWhite.name), openAcrylicCover && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
   }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_6__.translucentGraphicFilms.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
@@ -21458,7 +21426,7 @@ function Letters({
       background: color?.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color?.color
     }
   }), color?.name === '' ? 'CHOOSE OPTION' : color?.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
   }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_6__.colorOptions.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
@@ -21506,7 +21474,7 @@ function Letters({
       backgroundColor: vinylWhite.color
     }
   }), vinylWhite.name === '' ? 'CHOOSE OPTION' : vinylWhite.name), openAcrylicCover && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
   }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_6__.translucentGraphicFilms.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
@@ -22388,7 +22356,7 @@ function Letters({
       background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
     }
   }), color.name === '' ? 'CHOOSE OPTION' : color.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
   }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_6__.colorOptions.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
@@ -22854,7 +22822,7 @@ function Logo({
       background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
     }
   }), color.name === '' ? 'CHOOSE OPTION' : color.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
   }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_4__.colorOptions.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
@@ -23650,7 +23618,7 @@ function Letters({
       background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
     }
   }), color.name === '' ? 'CHOOSE OPTION' : color.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
   }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_6__.colorOptions.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
@@ -24093,7 +24061,7 @@ function Logo({
       background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
     }
   }), color.name === '' ? 'CHOOSE OPTION' : color.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
   }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_4__.colorOptions.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
@@ -24941,7 +24909,7 @@ function Letters({
       background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
     }
   }), color.name === '' ? 'CHOOSE OPTION' : color.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
   }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_6__.colorOptions.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
@@ -25445,7 +25413,7 @@ function Logo({
       background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
     }
   }), color.name === '' ? 'CHOOSE OPTION' : color.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
   }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_4__.colorOptions.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
@@ -26359,7 +26327,7 @@ function Letters({
       background: pvcBaseColor?.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : pvcBaseColor?.color
     }
   }), pvcBaseColor?.name === '' ? 'CHOOSE OPTION' : pvcBaseColor?.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
   }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_6__.colorOptions.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
@@ -26814,7 +26782,7 @@ function Logo({
       background: pvcBaseColor?.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : pvcBaseColor?.color
     }
   }), pvcBaseColor?.name === '' ? 'CHOOSE OPTION' : pvcBaseColor?.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
   }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_4__.colorOptions.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
@@ -27578,7 +27546,7 @@ function Letters({
       background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
     }
   }), color.name === '' ? 'CHOOSE OPTION' : color.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
   }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_6__.colorOptions.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
@@ -28019,7 +27987,7 @@ function Logo({
       background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
     }
   }), color.name === '' ? 'CHOOSE OPTION' : color.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
   }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_4__.colorOptions.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
@@ -28612,7 +28580,7 @@ function Logo({
       background: pvcBaseColor?.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : pvcBaseColor?.color
     }
   }), pvcBaseColor?.name === '' ? 'CHOOSE OPTION' : pvcBaseColor?.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto"
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
   }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_4__.colorOptions.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
@@ -29331,6 +29299,64 @@ const translucentGraphicFilms = [{
 
 /***/ }),
 
+/***/ "./src/scripts/utils/ColorsDropdown.js":
+/*!*********************************************!*\
+  !*** ./src/scripts/utils/ColorsDropdown.js ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+const ColorsDropdown = react__WEBPACK_IMPORTED_MODULE_0___default().forwardRef(({
+  title,
+  color,
+  setColor,
+  toggleColor,
+  openColor,
+  colorOptions,
+  selectColor
+}, ref) => {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "px-[1px] relative",
+    ref: ref
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
+  }, title), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: `flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${color ? 'text-black' : 'text-[#dddddd]'}`,
+    onClick: toggleColor
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "rounded-full w-[18px] h-[18px] border mr-2",
+    style: {
+      background: color == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : colorOptions.find(option => option.name === color).color
+    }
+  }), color === '' ? 'CHOOSE OPTION' : color), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
+  }, colorOptions.map(color => {
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
+      onClick: () => {
+        setColor(color.name);
+        selectColor();
+      }
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: "w-[18px] h-[18px] inline-block rounded-full border",
+      style: {
+        background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
+      }
+    }), color.name);
+  })));
+});
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ColorsDropdown);
+
+/***/ }),
+
 /***/ "./src/scripts/utils/ConvertJson.js":
 /*!******************************************!*\
   !*** ./src/scripts/utils/ConvertJson.js ***!
@@ -29682,6 +29708,63 @@ TooltipText.propTypes = {
   children: (prop_types__WEBPACK_IMPORTED_MODULE_2___default().node).isRequired
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (TooltipText);
+
+/***/ }),
+
+/***/ "./src/scripts/utils/VinylColors.js":
+/*!******************************************!*\
+  !*** ./src/scripts/utils/VinylColors.js ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _ColorOptions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ColorOptions */ "./src/scripts/utils/ColorOptions.js");
+
+
+
+const VinylColors = react__WEBPACK_IMPORTED_MODULE_0___default().forwardRef(({
+  vinylWhite,
+  setVinylWhite,
+  openVinylWhite,
+  toggleVinyl,
+  selectVinylColor
+}, ref) => {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "px-[1px] relative",
+    ref: ref
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
+  }, "3M VINYL"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: `flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${vinylWhite.name ? 'text-black' : 'text-[#dddddd]'}`,
+    onClick: toggleVinyl
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "rounded-full w-[18px] h-[18px] border mr-2",
+    style: {
+      background: vinylWhite?.name === 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : vinylWhite?.color
+    }
+  }), vinylWhite.name === '' ? 'CHOOSE OPTION' : vinylWhite.name), openVinylWhite && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
+  }, _ColorOptions__WEBPACK_IMPORTED_MODULE_1__.translucentGraphicFilms.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    key: color.name,
+    className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
+    onClick: () => {
+      setVinylWhite(color);
+      selectVinylColor();
+    }
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "w-[18px] h-[18px] inline-block rounded-full border",
+    style: {
+      background: color?.name === 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color?.color
+    }
+  }), color?.name))));
+});
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (VinylColors);
 
 /***/ }),
 

@@ -642,7 +642,7 @@ export function Letters({ item }) {
 						{color === '' ? 'CHOOSE OPTION' : color}
 					</div>
 					{openColor && (
-						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
+						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg">
 							{frontOptionOptions.map((c) => {
 								return (
 									<div

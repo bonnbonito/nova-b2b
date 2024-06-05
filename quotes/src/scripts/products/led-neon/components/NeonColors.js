@@ -30,7 +30,7 @@ export const NeonColors = ({
 
 	const colorSelections = useMemo(
 		() => (
-			<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
+			<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg">
 				{neonColorOptions.map((colorOption) => (
 					<label
 						key={colorOption.name}
