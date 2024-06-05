@@ -432,7 +432,8 @@ jQuery(document).ready(function($) {
 
 			$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
-			$this->send_email( $to, $subject, $message, $headers, array() );
+			/** Disable welcome email */
+			// $this->send_email( $to, $subject, $message, $headers, array() );
 
 			do_action( 'nova_user_partner_approved', $user_info );
 
