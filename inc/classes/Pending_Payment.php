@@ -302,8 +302,8 @@ class Pending_Payment {
 
 			$message = str_replace( '{customer_name}', $first_name, $message );
 			$message = str_replace( '{order_number}', $original_order->get_order_number(), $message );
-			$message = str_replace( '{invoice_amount}', $currency . '$ ' . $pending_total, $message );
-			$message = str_replace( '{pending_payment}', $currency . '$ ' . $pending_total, $message );
+			$message = str_replace( '{invoice_amount}', $currency . '$ ' . round( floatval( $pending_total ), 2 ), $message );
+			$message = str_replace( '{pending_payment}', $currency . '$ ' . round( floatval( $pending_total ), 2 ), $message );
 			$message = str_replace( '{payment_link}', $payment_url, $message );
 			$message = str_replace( '{deadline}', $payment_date, $message );
 
@@ -383,8 +383,8 @@ class Pending_Payment {
 
 						$message = get_sub_field( 'content' );
 						$message = str_replace( '{customer_name}', $first_name, $message );
-						$message = str_replace( '{invoice_amount}', $currency . '$ ' . $pending_total, $message );
-						$message = str_replace( '{pending_payment}', $currency . '$ ' . $pending_total, $message );
+						$message = str_replace( '{invoice_amount}', $currency . '$ ' . round( floatval( $pending_total ), 2 ), $message );
+						$message = str_replace( '{pending_payment}', $currency . '$ ' . round( floatval( $pending_total ), 2 ), $message );
 						$message = str_replace( '{payment_link}', $payment_url, $message );
 						$message = str_replace( '{deadline}', $payment_date, $message );
 						$message = str_replace( '{order_number}', $original_order->get_order_number(), $message );
@@ -405,7 +405,7 @@ class Pending_Payment {
 							$role_instance->send_email( $customer_email, $subject, $message, $headers, array() );
 							$label = get_sub_field( 'email_label' );
 							if ( $label == 'Deadline email' ) {
-								$this->admin_notification_deadline_email( $original_order, $role_instance, $headers, $payment_date, $pending_total );
+								$this->admin_notification_deadline_email( $original_order, $role_instance, $headers, $first_name, $payment_date, $pending_total );
 							}
 
 							$key = 'payment_email_key_' . get_row_index();
@@ -909,7 +909,7 @@ class Pending_Payment {
 
 		$message = str_replace( '{order_number}', $order_number, $message );
 		$message = str_replace( '{deadline}', $payment_date, $message );
-		$message = str_replace( '{pending_payment}', $currency . '$' . $pending_total, $message );
+		$message = str_replace( '{pending_payment}', $currency . '$' . round( floatval( $pending_total ), 2 ), $message );
 		$message = str_replace( '{customer_name}', $first_name, $message );
 		$message = str_replace( '{company_name}', $business_name, $message );
 		$message = str_replace( '{business_id}', $business_id, $message );
