@@ -27,8 +27,6 @@ import {
 
 import { useAppContext } from '../../../../AppProvider';
 
-const NovaSingleOptions = NovaQuote.single_quote_options;
-
 const UV_PRICE = 1.05;
 
 export function Logo({ item }) {

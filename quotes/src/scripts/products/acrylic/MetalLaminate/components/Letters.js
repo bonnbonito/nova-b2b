@@ -8,6 +8,7 @@ import {
 	colorOptions,
 	metalFinishColors,
 } from '../../../../utils/ColorOptions';
+import ColorsDropdown from '../../../../utils/ColorsDropdown';
 import convert_json from '../../../../utils/ConvertJson';
 import {
 	mountingDefaultOptions,
@@ -622,58 +623,21 @@ export const Letters = ({ item, letterPricing, hasPrice = false }) => {
 					value={metalLaminate}
 				/>
 
-				<div className="px-[1px] relative" ref={acrylicRef}>
-					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-						Acrylic Base
-					</label>
-					<div
-						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-							acrylicBase?.name ? 'text-black' : 'text-[#dddddd]'
-						}`}
-						onClick={() => {
-							console.log('Click');
-							setOpenAcrylicColor((prev) => !prev);
-							setOpenFont(false);
-						}}
-					>
-						<span
-							className="rounded-full w-[18px] h-[18px] border mr-2"
-							style={{
-								background:
-									acrylicBase?.name == 'Custom Color'
-										? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-										: acrylicBase?.color,
-							}}
-						></span>
-						{acrylicBase?.name === '' ? 'CHOOSE OPTION' : acrylicBase?.name}
-					</div>
-					{openAcrylicColor && (
-						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg">
-							{colorOptions.map((color) => {
-								return (
-									<div
-										className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
-										onClick={() => {
-											setAcrylicBase(color);
-											setOpenAcrylicColor(false);
-										}}
-									>
-										<span
-											className="w-[18px] h-[18px] inline-block rounded-full border"
-											style={{
-												background:
-													color.name == 'Custom Color'
-														? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-														: color.color,
-											}}
-										></span>
-										{color.name}
-									</div>
-								);
-							})}
-						</div>
-					)}
-				</div>
+				<ColorsDropdown
+					ref={acrylicRef}
+					title="Acrylic Base"
+					colorName={acrylicBase.name}
+					toggleColor={() => {
+						setOpenAcrylicColor((prev) => !prev);
+						setOpenFont(false);
+					}}
+					openColor={openAcrylicColor}
+					colorOptions={colorOptions}
+					selectColor={(color) => {
+						setAcrylicBase(color);
+						setOpenAcrylicColor(false);
+					}}
+				/>
 
 				<Dropdown
 					title="Environment"

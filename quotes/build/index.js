@@ -7456,8 +7456,7 @@ function Letters({
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_11__["default"], {
     title: "Return Paint Color",
     ref: colorRef,
-    color: color,
-    setColor: setColor,
+    colorName: color,
     openColor: openColor,
     toggleColor: () => {
       setOpenColor(prev => !prev);
@@ -7465,7 +7464,8 @@ function Letters({
       setOpenVinylWhite(false);
     },
     colorOptions: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_10__.colorOptions,
-    selectColor: () => {
+    selectColor: color => {
+      setColor(color.name);
       setOpenColor(false);
     }
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -9673,126 +9673,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   metalFinishColors: () => (/* binding */ metalFinishColors),
 /* harmony export */   translucentGraphicFilms: () => (/* binding */ translucentGraphicFilms)
 /* harmony export */ });
-/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../utils/defaults */ "./src/scripts/utils/defaults.js");
+/* harmony import */ var _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../utils/ColorOptions */ "./src/scripts/utils/ColorOptions.js");
+/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../utils/defaults */ "./src/scripts/utils/defaults.js");
+
 
 const colorOptions = [{
-  name: _utils_defaults__WEBPACK_IMPORTED_MODULE_0__.CLEAR_COLOR,
+  name: _utils_defaults__WEBPACK_IMPORTED_MODULE_1__.CLEAR_COLOR,
   color: ''
 }, {
-  name: _utils_defaults__WEBPACK_IMPORTED_MODULE_0__.FROSTED_CLEAR_COLOR,
+  name: _utils_defaults__WEBPACK_IMPORTED_MODULE_1__.FROSTED_CLEAR_COLOR,
   color: ''
-}, {
-  name: 'Custom Color',
-  color: ''
-}, {
-  name: 'White',
-  color: '#ffffff'
-}, {
-  name: 'Black',
-  color: '#000000'
-}, {
-  name: 'Dove Grey',
-  color: '#6d6c6c'
-}, {
-  name: 'Grey',
-  color: '#808080'
-}, {
-  name: 'Desert Sand',
-  color: '#edc9af'
-}, {
-  name: 'Ivory',
-  color: '#fffff0'
-}, {
-  name: 'Lemon Yellow',
-  color: '#fffff0'
-}, {
-  name: 'Yellow',
-  color: '#ffff00'
-}, {
-  name: 'Citrus Yellow',
-  color: '#fef250'
-}, {
-  name: 'Sundance Yellow',
-  color: '#ffae00'
-}, {
-  name: 'Schoolbus Yellow',
-  color: '#e8a317'
-}, {
-  name: 'Orange',
-  color: '#ffa500'
-}, {
-  name: 'Red-Orange',
-  color: '#ff5349'
-}, {
-  name: 'Rampart Orange',
-  color: '#ef5e54'
-}, {
-  name: 'Red',
-  color: '#ff0000'
-}, {
-  name: 'Brick Red',
-  color: '#cb4154'
-}, {
-  name: 'Black Cherry',
-  color: '#5e0013'
-}, {
-  name: 'Maroon',
-  color: '#800000'
-}, {
-  name: 'Magenta',
-  color: '#ff00ff'
-}, {
-  name: 'Violet Toner',
-  color: '#3d4d97'
-}, {
-  name: 'Purple',
-  color: '#800080'
-}, {
-  name: 'Midnight Blue',
-  color: '#191970'
-}, {
-  name: 'Dark Blue',
-  color: '#00008b'
-}, {
-  name: 'Medium Blue',
-  color: '#0000cd'
-}, {
-  name: 'Blue',
-  color: '#0000ff'
-}, {
-  name: 'Light Blue',
-  color: '#add8e6'
-}, {
-  name: 'Marine Reef Blue',
-  color: '#305279'
-}, {
-  name: 'Teal',
-  color: '#008080'
-}, {
-  name: 'Safety Green',
-  color: '#c6d219'
-}, {
-  name: 'Spring Green',
-  color: '#00ff7f'
-}, {
-  name: 'Emerald Green',
-  color: '#50c878'
-}, {
-  name: 'Federal Green',
-  color: '#005d39'
-}, {
-  name: 'Light Green',
-  color: '#90ee90'
-}, {
-  name: 'Dark Green',
-  color: '#013220'
-}, {
-  name: 'Hunter Green',
-  color: '#355e3b'
-}, {
-  name: 'Brown',
-  color: '#964b00'
-}];
+}, ..._utils_ColorOptions__WEBPACK_IMPORTED_MODULE_0__.colorOptions];
 const metalFinishColors = [{
   name: 'Stainless Steel Brushed',
   color: '#caccce'
@@ -10234,8 +10125,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
 /* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
 /* harmony import */ var _ColorOptions__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../ColorOptions */ "./src/scripts/products/acrylic/LaserCutAcrylic/ColorOptions.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
-/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
+/* harmony import */ var _utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../utils/ColorsDropdown */ "./src/scripts/utils/ColorsDropdown.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
+
 
 
 
@@ -10257,7 +10150,7 @@ function Letters({
     signage,
     setSignage,
     setMissing
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_10__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_11__.useAppContext)();
   const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letters = item.letters) !== null && _item$letters !== void 0 ? _item$letters : '');
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
   const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$font = item.font) !== null && _item$font !== void 0 ? _item$font : '');
@@ -10387,8 +10280,8 @@ function Letters({
   const handleOnChangeMount = e => {
     const target = e.target.value;
     setSelectedMounting(target);
-    if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER || target === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT) {
-      if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT) {
+    if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER || target === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_MOUNT) {
+      if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_MOUNT) {
         setSpacerStandoffDistance('');
       }
     } else {
@@ -10408,7 +10301,7 @@ function Letters({
       if (parseInt(selectedLetterHeight) > 24) {
         setSelectedLetterHeight('');
       }
-      if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER) {
+      if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_MOUNT || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER) {
         setSelectedMounting('');
         setStudLength('');
         setSpacerStandoffDistance('');
@@ -10471,12 +10364,12 @@ function Letters({
     if (letter.match(/[`~"*,.\-']/)) letterPrice *= 0.3;
 
     // Waterproof and finishing adjustments
-    letterPrice *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
-    letterPrice *= selectedFinishing === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.GLOSS_FINISH ? 1.1 : 1;
+    letterPrice *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
+    letterPrice *= selectedFinishing === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.GLOSS_FINISH ? 1.1 : 1;
 
     // Color adjustments
-    if (color?.name === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.CLEAR_COLOR) letterPrice *= 0.9;
-    if (color?.name === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.FROSTED_CLEAR_COLOR) letterPrice *= 0.95;
+    if (color?.name === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.CLEAR_COLOR) letterPrice *= 0.9;
+    if (color?.name === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.FROSTED_CLEAR_COLOR) letterPrice *= 0.95;
     return letterPrice;
   }
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
@@ -10489,13 +10382,13 @@ function Letters({
       lettersArray.forEach(letter => {
         totalLetterPrice += calculateLetterPrice(letter, baseLetterPrice, noLowerCase, waterproof, selectedFinishing, color);
       });
-      if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER) {
+      if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER) {
         const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_8__.spacerPricing)(totalLetterPrice);
         totalLetterPrice += parseFloat(spacer.toFixed(2));
       }
       totalLetterPrice *= sets;
       setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
-      setCadPrice((totalLetterPrice * parseFloat(_utils_defaults__WEBPACK_IMPORTED_MODULE_11__.EXCHANGE_RATE)).toFixed(2));
+      setCadPrice((totalLetterPrice * parseFloat(_utils_defaults__WEBPACK_IMPORTED_MODULE_12__.EXCHANGE_RATE)).toFixed(2));
     } else {
       setUsdPrice(0);
       setCadPrice(0);
@@ -10504,7 +10397,7 @@ function Letters({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     let newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.mountingDefaultOptions;
     if (selectedThickness?.value === '3') {
-      newMountingOptions = newMountingOptions.filter(option => option.mounting_option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT && option.mounting_option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER);
+      newMountingOptions = newMountingOptions.filter(option => option.mounting_option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_MOUNT && option.mounting_option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER);
     }
     if (waterproof === 'Outdoor (Waterproof)') {
       if (selectedMounting === 'Double-sided tape') {
@@ -10545,10 +10438,10 @@ function Letters({
     if (!selectedFinishing) missingFields.push('Select Finishing');
     if (!waterproof) missingFields.push('Select Environment');
     if (!selectedMounting) missingFields.push('Select Mounting');
-    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT) {
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_MOUNT) {
       if (!studLength) missingFields.push('Select Stud Length');
     }
-    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER) {
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER) {
       if (!studLength) missingFields.push('Select Stud Length');
       if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
@@ -10667,38 +10560,22 @@ function Letters({
     onChange: handleOnChangeLetterHeight,
     options: letterHeightOptions,
     value: selectedLetterHeight
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "px-[1px] relative",
-    ref: colorRef
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
-  }, "Color"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: `flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${color.name ? 'text-black' : 'text-[#dddddd]'}`,
-    onClick: () => {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_10__["default"], {
+    ref: colorRef,
+    title: "Color",
+    colorName: color.name,
+    setColor: setColor,
+    openColor: openColor,
+    toggleColor: () => {
       setOpenColor(prev => !prev);
       setOpenFont(false);
+    },
+    colorOptions: _ColorOptions__WEBPACK_IMPORTED_MODULE_9__.colorOptions,
+    selectColor: color => {
+      setColor(color);
+      setOpenColor(false);
     }
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "rounded-full w-[18px] h-[18px] border mr-2",
-    style: {
-      background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
-    }
-  }), color.name === '' ? 'CHOOSE OPTION' : color.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
-  }, _ColorOptions__WEBPACK_IMPORTED_MODULE_9__.colorOptions.map(color => {
-    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
-      onClick: () => {
-        setColor(color);
-        setOpenColor(false);
-      }
-    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-      className: "w-[18px] h-[18px] inline-block rounded-full border",
-      style: {
-        background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
-      }
-    }), color.name);
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Finishing Options",
     onChange: handleChangeFinishing,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.finishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -10722,7 +10599,7 @@ function Letters({
       selected: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: selectedMounting
-  }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -10738,7 +10615,7 @@ function Letters({
       selected: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
-  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_MOUNT && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -10752,7 +10629,7 @@ function Letters({
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.setOptions,
     value: sets,
     onlyValue: true
-  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-xs text-[#9F9F9F] mb-4"
   }, "*Note: The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid"
@@ -10812,8 +10689,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
 /* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
 /* harmony import */ var _ColorOptions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../ColorOptions */ "./src/scripts/products/acrylic/LaserCutAcrylic/ColorOptions.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
-/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
+/* harmony import */ var _utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../utils/ColorsDropdown */ "./src/scripts/utils/ColorsDropdown.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
+
 
 
 
@@ -10833,7 +10712,7 @@ function Logo({
     signage,
     setSignage,
     setMissing
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_8__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_9__.useAppContext)();
   const [selectedMounting, setSelectedMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
   const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$studLength = item.studLength) !== null && _item$studLength !== void 0 ? _item$studLength : '');
   const [spacerStandoffOptions, setSpacerStandoffOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.spacerStandoffDefaultOptions);
@@ -10905,8 +10784,8 @@ function Logo({
   const handleOnChangeMount = e => {
     const target = e.target.value;
     setSelectedMounting(target);
-    if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER || target === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_MOUNT) {
-      if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_MOUNT) {
+    if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER || target === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT) {
+      if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT) {
         setSpacerStandoffDistance('');
       }
     } else {
@@ -10917,12 +10796,12 @@ function Logo({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     let newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.mountingDefaultOptions;
     if (selectedThickness?.value === '3') {
-      if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_MOUNT || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
+      if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER) {
         setSelectedMounting('');
         setStudLength('');
         setSpacerStandoffDistance('');
       }
-      newMountingOptions = newMountingOptions.filter(option => option.mounting_option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_MOUNT && option.mounting_option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER);
+      newMountingOptions = newMountingOptions.filter(option => option.mounting_option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT && option.mounting_option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER);
     }
     if (waterproof === 'Outdoor (Waterproof)') {
       if (selectedMounting === 'Double-sided tape') {
@@ -10949,7 +10828,7 @@ function Logo({
     const selected = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.thicknessOptions.filter(option => option.value === target);
     setSelectedThickness(() => selected[0]);
     if (parseInt(target) === 3) {
-      if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_MOUNT || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
+      if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER) {
         setSelectedMounting('');
         setStudLength('');
         setSpacerStandoffDistance('');
@@ -11030,23 +10909,23 @@ function Logo({
         const computed = logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
         let multiplier = 0;
         if (waterproof) {
-          multiplier = waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
+          multiplier = waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
         }
         let total = parseFloat((computed * multiplier).toFixed(2));
-        total *= selectedFinishing === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.GLOSS_FINISH ? 1.1 : 1;
-        if (color?.name === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.CLEAR_COLOR) {
+        total *= selectedFinishing === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.GLOSS_FINISH ? 1.1 : 1;
+        if (color?.name === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.CLEAR_COLOR) {
           total *= 0.9;
         }
-        if (color?.name === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.FROSTED_CLEAR_COLOR) {
+        if (color?.name === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.FROSTED_CLEAR_COLOR) {
           total *= 0.95;
         }
-        if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
+        if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER) {
           const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_5__.spacerPricing)(total);
           total += spacer;
         }
         total *= sets;
         setUsdPrice(parseFloat(total.toFixed(2)));
-        setCadPrice((total * parseFloat(_utils_defaults__WEBPACK_IMPORTED_MODULE_9__.EXCHANGE_RATE)).toFixed(2));
+        setCadPrice((total * parseFloat(_utils_defaults__WEBPACK_IMPORTED_MODULE_10__.EXCHANGE_RATE)).toFixed(2));
       } else {
         setUsdPrice(0);
         setCadPrice(0);
@@ -11063,11 +10942,11 @@ function Logo({
     if (!height) missingFields.push('Select Logo Height');
     if (!waterproof) missingFields.push('Select Environment');
     if (!selectedMounting) missingFields.push('Select Mounting');
-    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER) {
       if (!studLength) missingFields.push('Select Stud Length');
       if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
-    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_MOUNT) {
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT) {
       if (!studLength) missingFields.push('Select Stud Length');
     }
     if (!selectedFinishing) missingFields.push('Select Finishing');
@@ -11137,37 +11016,21 @@ function Logo({
     value: height,
     onChange: e => setHeight(e.target.value),
     options: maxWidthOptions
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "px-[1px] relative",
-    ref: colorRef
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
-  }, "Color"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: `flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${color.name ? 'text-black' : 'text-[#dddddd]'}`,
-    onClick: () => {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    ref: colorRef,
+    title: "Color",
+    colorName: color.name,
+    setColor: setColor,
+    openColor: openColor,
+    toggleColor: () => {
       setOpenColor(prev => !prev);
+    },
+    colorOptions: _ColorOptions__WEBPACK_IMPORTED_MODULE_7__.colorOptions,
+    selectColor: color => {
+      setColor(color);
+      setOpenColor(false);
     }
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "rounded-full w-[18px] h-[18px] border mr-2",
-    style: {
-      background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
-    }
-  }), color.name === '' ? 'CHOOSE OPTION' : color.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
-  }, _ColorOptions__WEBPACK_IMPORTED_MODULE_7__.colorOptions.map(color => {
-    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
-      onClick: () => {
-        setColor(color);
-        setOpenColor(false);
-      }
-    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-      className: "w-[18px] h-[18px] inline-block rounded-full border",
-      style: {
-        background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
-      }
-    }), color.name);
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Finishing Options",
     onChange: handleChangeFinishing,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.finishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -11191,7 +11054,7 @@ function Logo({
       selected: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: selectedMounting
-  }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -11207,7 +11070,7 @@ function Logo({
       selected: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
-  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_MOUNT && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -11221,7 +11084,7 @@ function Logo({
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.setOptions,
     value: sets,
     onlyValue: true
-  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-xs text-[#9F9F9F] mb-4"
   }, "*Note: The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid"
@@ -12119,12 +11982,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UploadFont__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../UploadFont */ "./src/scripts/UploadFont.js");
 /* harmony import */ var _utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../utils/ClickOutside */ "./src/scripts/utils/ClickOutside.js");
 /* harmony import */ var _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../utils/ColorOptions */ "./src/scripts/utils/ColorOptions.js");
-/* harmony import */ var _utils_ConvertJson__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../utils/ConvertJson */ "./src/scripts/utils/ConvertJson.js");
-/* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
-/* harmony import */ var _MetalLaminate__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../MetalLaminate */ "./src/scripts/products/acrylic/MetalLaminate/MetalLaminate.js");
-/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
-/* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../utils/ColorsDropdown */ "./src/scripts/utils/ColorsDropdown.js");
+/* harmony import */ var _utils_ConvertJson__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../utils/ConvertJson */ "./src/scripts/utils/ConvertJson.js");
+/* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
+/* harmony import */ var _MetalLaminate__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../MetalLaminate */ "./src/scripts/products/acrylic/MetalLaminate/MetalLaminate.js");
+/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
+/* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+
 
 
 
@@ -12153,7 +12018,7 @@ const Letters = ({
     signage,
     setSignage,
     setMissing
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_12__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_13__.useAppContext)();
   const [getLetterPricing, setGetLetterPricing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (!hasPrice) {
@@ -12161,7 +12026,7 @@ const Letters = ({
         try {
           const response = await fetch(NovaQuote.letters_pricing_api + item.product);
           const data = await response.json();
-          const pricing = (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_7__["default"])(data?.pricing_table);
+          const pricing = (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_8__["default"])(data?.pricing_table);
           setGetLetterPricing(pricing);
         } catch (error) {
           console.error('Error fetching letter pricing:', error);
@@ -12202,10 +12067,10 @@ const Letters = ({
     min: '1',
     max: '43'
   });
-  const [mountingOptions, setMountingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.mountingDefaultOptions);
+  const [mountingOptions, setMountingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.mountingDefaultOptions);
   const [selectedMounting, setSelectedMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
   const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$studLength = item.studLength) !== null && _item$studLength !== void 0 ? _item$studLength : '');
-  const [spacerStandoffOptions, setSpacerStandoffOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.spacerStandoffDefaultOptions);
+  const [spacerStandoffOptions, setSpacerStandoffOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.spacerStandoffDefaultOptions);
   const [spacerStandoffDistance, setSpacerStandoffDistance] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$spacerStandoffD = item.spacerStandoffDistance) !== null && _item$spacerStandoffD !== void 0 ? _item$spacerStandoffD : '');
   const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('#000000');
   const handleonChangeSpacerDistance = e => {
@@ -12214,8 +12079,8 @@ const Letters = ({
   const handleOnChangeMount = e => {
     const target = e.target.value;
     setSelectedMounting(target);
-    if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER || target === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT) {
-      if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT) {
+    if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER || target === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT) {
+      if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT) {
         setSpacerStandoffDistance('');
       }
     } else {
@@ -12250,7 +12115,7 @@ const Letters = ({
         setSpacerStandoffDistance(''); // Reset if the distance is invalid for these options
       }
     } else {
-      setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
+      setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
     }
     if (target === '') {
       setSpacerStandoffDistance(''); // Always reset if the target is empty
@@ -12324,13 +12189,13 @@ const Letters = ({
   const handleOnChangeWaterproof = e => setWaterproof(e.target.value);
   const handleOnChangeThickness = e => {
     const target = e.target.value;
-    const selected = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.thicknessOptions.filter(option => option.value === target);
+    const selected = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.thicknessOptions.filter(option => option.value === target);
     setSelectedThickness(() => selected[0]);
     if (parseInt(target) === 3) {
       if (parseInt(selectedLetterHeight) > 24) {
         setSelectedLetterHeight('');
       }
-      if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER) {
+      if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER) {
         setSelectedMounting('');
         setStudLength('');
         setSpacerStandoffDistance('');
@@ -12361,26 +12226,26 @@ const Letters = ({
       } else if (letter.match(/[`~"*,.\-']/)) {
         letterPrice *= smallPunctuations;
       }
-      letterPrice *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
-      letterPrice *= _MetalLaminate__WEBPACK_IMPORTED_MODULE_9__.METAL_ACRYLIC_PRICING;
+      letterPrice *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
+      letterPrice *= _MetalLaminate__WEBPACK_IMPORTED_MODULE_10__.METAL_ACRYLIC_PRICING;
       letterPrice *= acrylicBase?.name === 'Black' ? 1 : 1.1;
       return total + letterPrice;
     }, 0);
     let adjustedPrice = totalLetterPrice;
-    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER) {
-      let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_11__.spacerPricing)(adjustedPrice);
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER) {
+      let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_12__.spacerPricing)(adjustedPrice);
       spacer = parseFloat(spacer.toFixed(2));
       adjustedPrice += parseFloat(spacer.toFixed(2));
     }
     const finalPrice = adjustedPrice * sets;
     setUsdPrice(finalPrice.toFixed(2));
-    setCadPrice((finalPrice * parseFloat(_utils_defaults__WEBPACK_IMPORTED_MODULE_10__.EXCHANGE_RATE)).toFixed(2));
+    setCadPrice((finalPrice * parseFloat(_utils_defaults__WEBPACK_IMPORTED_MODULE_11__.EXCHANGE_RATE)).toFixed(2));
   }, [selectedLetterHeight, selectedThickness, letters, waterproof, lettersHeight, acrylicBase, sets, font, selectedMounting, getLetterPricing // Assuming getLetterPricing is not expected to change frequently
   ]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    let newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.mountingDefaultOptions;
+    let newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.mountingDefaultOptions;
     if (selectedThickness?.value === '3') {
-      newMountingOptions = newMountingOptions.filter(option => option.mounting_option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT && option.mounting_option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER);
+      newMountingOptions = newMountingOptions.filter(option => option.mounting_option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT && option.mounting_option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER);
     }
     if (waterproof === 'Outdoor (Waterproof)') {
       if (selectedMounting === 'Double-sided tape') {
@@ -12424,11 +12289,11 @@ const Letters = ({
     }
     if (!waterproof) missingFields.push('Select Environment');
     if (!selectedMounting) missingFields.push('Select Mounting');
-    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER) {
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER) {
       if (!studLength) missingFields.push('Select Stud Length');
       if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
-    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT) {
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT) {
       if (!studLength) missingFields.push('Select Stud Length');
     }
     if (!sets) missingFields.push('Select Quantity');
@@ -12528,7 +12393,7 @@ const Letters = ({
     title: "Acrylic Thickness",
     value: selectedThickness?.value,
     onChange: handleOnChangeThickness,
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.thicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.thicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: thickness.value,
       selected: thickness === selectedThickness
     }, thickness.thickness))
@@ -12545,42 +12410,24 @@ const Letters = ({
       selected: laminate.name === item.metalLaminate
     }, laminate.name)),
     value: metalLaminate
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "px-[1px] relative",
-    ref: acrylicRef
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
-  }, "Acrylic Base"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: `flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${acrylicBase?.name ? 'text-black' : 'text-[#dddddd]'}`,
-    onClick: () => {
-      console.log('Click');
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_7__["default"], {
+    ref: acrylicRef,
+    title: "Acrylic Base",
+    colorName: acrylicBase.name,
+    toggleColor: () => {
       setOpenAcrylicColor(prev => !prev);
       setOpenFont(false);
+    },
+    openColor: openAcrylicColor,
+    colorOptions: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_6__.colorOptions,
+    selectColor: color => {
+      setAcrylicBase(color);
+      setOpenAcrylicColor(false);
     }
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "rounded-full w-[18px] h-[18px] border mr-2",
-    style: {
-      background: acrylicBase?.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : acrylicBase?.color
-    }
-  }), acrylicBase?.name === '' ? 'CHOOSE OPTION' : acrylicBase?.name), openAcrylicColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
-  }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_6__.colorOptions.map(color => {
-    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
-      onClick: () => {
-        setAcrylicBase(color);
-        setOpenAcrylicColor(false);
-      }
-    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-      className: "w-[18px] h-[18px] inline-block rounded-full border",
-      style: {
-        background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
-      }
-    }), color.name);
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Environment",
     onChange: handleOnChangeWaterproof,
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
       selected: option.option == waterproof
     }, option.option)),
@@ -12593,10 +12440,10 @@ const Letters = ({
       selected: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: selectedMounting
-  }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
       selected: option.value == studLength
     }, option.value)),
@@ -12609,10 +12456,10 @@ const Letters = ({
       selected: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
-  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
       selected: option.value == studLength
     }, option.value)),
@@ -12620,10 +12467,10 @@ const Letters = ({
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.setOptions,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.setOptions,
     value: sets,
     onlyValue: true
-  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-xs text-[#9F9F9F] mb-4"
   }, "*Note: The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid"
@@ -12681,10 +12528,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_ConvertJson__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../utils/ConvertJson */ "./src/scripts/utils/ConvertJson.js");
 /* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
 /* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
-/* harmony import */ var _MetalLaminate__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../MetalLaminate */ "./src/scripts/products/acrylic/MetalLaminate/MetalLaminate.js");
-/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
-/* harmony import */ var _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../../utils/ColorOptions */ "./src/scripts/utils/ColorOptions.js");
+/* harmony import */ var _utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../utils/ColorsDropdown */ "./src/scripts/utils/ColorsDropdown.js");
+/* harmony import */ var _MetalLaminate__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../MetalLaminate */ "./src/scripts/products/acrylic/MetalLaminate/MetalLaminate.js");
+/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../utils/ColorOptions */ "./src/scripts/utils/ColorOptions.js");
+
 
 
 
@@ -12704,7 +12553,7 @@ function Logo({
     signage,
     setSignage,
     setMissing
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_8__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_9__.useAppContext)();
   const [selectedMounting, setSelectedMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
   const [selectedThickness, setSelectedThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicThicknes = item.acrylicThickness) !== null && _item$acrylicThicknes !== void 0 ? _item$acrylicThicknes : '');
   const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$width = item.width) !== null && _item$width !== void 0 ? _item$width : '');
@@ -12798,12 +12647,12 @@ function Logo({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     let newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.mountingDefaultOptions;
     if (selectedThickness?.value === '3') {
-      if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.STUD_MOUNT || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.STUD_WITH_SPACER) {
+      if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.STUD_MOUNT || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.STUD_WITH_SPACER) {
         setSelectedMounting('');
         setStudLength('');
         setSpacerStandoffDistance('');
       }
-      newMountingOptions = newMountingOptions.filter(option => option.mounting_option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.STUD_MOUNT && option.mounting_option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.STUD_WITH_SPACER);
+      newMountingOptions = newMountingOptions.filter(option => option.mounting_option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.STUD_MOUNT && option.mounting_option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.STUD_WITH_SPACER);
     }
     if (waterproof === 'Outdoor (Waterproof)') {
       if (selectedMounting === 'Double-sided tape') {
@@ -12888,18 +12737,18 @@ function Logo({
         const computed = logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
         let multiplier = 0;
         if (waterproof) {
-          multiplier = waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
+          multiplier = waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
         }
-        let total = (computed * multiplier * _MetalLaminate__WEBPACK_IMPORTED_MODULE_6__.METAL_ACRYLIC_PRICING).toFixed(2);
+        let total = (computed * multiplier * _MetalLaminate__WEBPACK_IMPORTED_MODULE_7__.METAL_ACRYLIC_PRICING).toFixed(2);
         total *= acrylicBase?.name === 'Black' ? 1 : 1.1;
-        if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.STUD_WITH_SPACER) {
+        if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.STUD_WITH_SPACER) {
           let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_4__.spacerPricing)(total);
           spacer = parseFloat(spacer.toFixed(2));
           total += spacer;
         }
         total *= sets;
         setUsdPrice(parseFloat(total).toFixed(2));
-        setCadPrice((total * parseFloat(_utils_defaults__WEBPACK_IMPORTED_MODULE_7__.EXCHANGE_RATE)).toFixed(2));
+        setCadPrice((total * parseFloat(_utils_defaults__WEBPACK_IMPORTED_MODULE_8__.EXCHANGE_RATE)).toFixed(2));
       } else {
         setUsdPrice(0);
         setCadPrice(0);
@@ -12921,11 +12770,11 @@ function Logo({
     }
     if (!waterproof) missingFields.push('Select Environment');
     if (!selectedMounting) missingFields.push('Select Mounting');
-    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.STUD_WITH_SPACER) {
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.STUD_WITH_SPACER) {
       if (!studLength) missingFields.push('Select Stud Length');
       if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
-    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.STUD_MOUNT) {
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.STUD_MOUNT) {
       if (!studLength) missingFields.push('Select Stud Length');
     }
     if (!sets) missingFields.push('Select Quantity');
@@ -12980,40 +12829,26 @@ function Logo({
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Metal Laminate",
     onChange: handleChangeMetalLaminate,
-    options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_9__.metalFinishColors.map(laminate => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_10__.metalFinishColors.map(laminate => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: laminate.name,
       selected: laminate.name === metalLaminate
     }, laminate.name)),
     value: metalLaminate
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "px-[1px] relative",
-    ref: acrylicRef
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
-  }, "Acrylic Base"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: `flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${acrylicBase?.name ? 'text-black' : 'text-[#dddddd]'}`,
-    onClick: () => setOpenAcrylicColor(prev => !prev)
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "rounded-full w-[18px] h-[18px] border mr-2",
-    style: {
-      backgroundColor: acrylicBase.color
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    ref: acrylicRef,
+    title: "Acrylic Base",
+    colorName: acrylicBase.name,
+    toggleColor: () => {
+      setOpenAcrylicColor(prev => !prev);
+      setOpenFont(false);
+    },
+    openColor: openAcrylicColor,
+    colorOptions: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_10__.colorOptions,
+    selectColor: color => {
+      setAcrylicBase(color);
+      setOpenAcrylicColor(false);
     }
-  }), acrylicBase?.name === '' ? 'CHOOSE OPTION' : acrylicBase?.name), openAcrylicColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
-  }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_9__.colorOptions.map(color => {
-    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
-      onClick: () => {
-        setAcrylicBase(color);
-        setOpenAcrylicColor(false);
-      }
-    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-      className: "w-[18px] h-[18px] inline-block rounded-full border",
-      style: {
-        background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
-      }
-    }), color.name);
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Environment",
     onChange: e => setWaterproof(e.target.value),
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -13029,7 +12864,7 @@ function Logo({
       selected: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: selectedMounting
-  }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -13045,7 +12880,7 @@ function Logo({
       selected: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
-  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.STUD_MOUNT && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.STUD_MOUNT && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -13059,7 +12894,7 @@ function Logo({
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.setOptions,
     value: sets,
     onlyValue: true
-  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-xs text-[#9F9F9F] mb-4"
   }, "*Note: The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid"
@@ -13280,7 +13115,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const NovaSingleOptions = NovaQuote.single_quote_options;
 const UV_PRICE = 1.05;
 function Logo({
   item
@@ -13739,7 +13573,7 @@ function CombineQuoteProvider({
       const count = prevSignage.filter(sign => sign.type === type).length;
       let args;
       args = {
-        type: type,
+        type: type.toLowerCase(),
         title: `${type} ${count + 1}`
       };
       const newSignage = {
@@ -28929,115 +28763,124 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 const colorOptions = [{
   name: 'Custom Color',
-  color: ''
-}, {
-  name: 'White',
-  color: '#ffffff'
+  color: '#fff'
 }, {
   name: 'Black',
   color: '#000000'
 }, {
-  name: 'Dove Grey',
-  color: '#6d6c6c'
+  name: 'White',
+  color: '#ffffff'
 }, {
-  name: 'Grey',
-  color: '#808080'
+  name: 'Pantone 428 C - Light Gray',
+  color: '#c1c6c8'
 }, {
-  name: 'Desert Sand',
-  color: '#edc9af'
+  name: 'Pantone 429 C - Gray',
+  color: '#A2AAAD'
 }, {
-  name: 'Ivory',
-  color: '#fffff0'
+  name: 'Pantone 431 C - Stone Gray',
+  color: '#5b6770'
 }, {
-  name: 'Lemon Yellow',
-  color: '#fffff0'
+  name: 'Pantone 7506 C - Sand',
+  color: '#efdbb2'
 }, {
-  name: 'Yellow',
-  color: '#ffff00'
+  name: 'Pantone 602 C - Canary Yellow',
+  color: '#f0e87b'
 }, {
-  name: 'Citrus Yellow',
-  color: '#fef250'
+  name: 'Pantone 102 C - Lemon Yellow',
+  color: '#fce300'
 }, {
-  name: 'Sundance Yellow',
-  color: '#ffae00'
+  name: 'Pantone 116 C - Yellow',
+  color: '#ffcd00'
 }, {
-  name: 'Schoolbus Yellow',
-  color: '#e8a317'
+  name: 'Pantone 137 C - Radiant Yellow',
+  color: '#ffa300'
 }, {
-  name: 'Orange',
-  color: '#ffa500'
+  name: 'Pantone 1505 C - Orange',
+  color: '#ff6900'
 }, {
-  name: 'Red-Orange',
-  color: '#ff5349'
+  name: 'Pantone 1655 C - Burnt Orange',
+  color: '#fc4c02'
 }, {
-  name: 'Rampart Orange',
-  color: '#ef5e54'
+  name: 'Pantone 1785 C - Salmon Pink',
+  color: '#f8485e'
 }, {
-  name: 'Red',
-  color: '#ff0000'
+  name: 'Pantone 185 C - Red',
+  color: '#e4002b'
 }, {
-  name: 'Brick Red',
-  color: '#cb4154'
+  name: 'Pantone 186 C - Brick Red',
+  color: '#c8102e'
 }, {
-  name: 'Black Cherry',
-  color: '#5e0013'
+  name: 'Pantone 201 C - Maroon',
+  color: '#9d2235'
 }, {
-  name: 'Maroon',
-  color: '#800000'
+  name: 'Pantone 209 C - Mauve',
+  color: '#6f263d'
 }, {
-  name: 'Magenta',
-  color: '#ff00ff'
+  name: 'Pantone 220 C - Deep Pink',
+  color: '#a50050'
 }, {
-  name: 'Violet Toner',
-  color: '#3d4d97'
+  name: 'Pantone 211 C - Perwinkle Pink',
+  color: '#f57eb6'
 }, {
-  name: 'Purple',
-  color: '#800080'
+  name: 'Pantone 2665 C - Purple',
+  color: '#7d55c7'
 }, {
-  name: 'Midnight Blue',
-  color: '#191970'
+  name: 'Pantone 277 C - Light Blue',
+  color: '#abcae9'
 }, {
-  name: 'Dark Blue',
-  color: '#00008b'
+  name: 'Pantone 300 C - Blue',
+  color: '#005eb8'
 }, {
-  name: 'Medium Blue',
-  color: '#0000cd'
+  name: 'Pantone 294 C - Peacock Blue',
+  color: '#002f6c'
 }, {
-  name: 'Blue',
-  color: '#0000ff'
+  name: 'Pantone 2756 C - Blue Violet',
+  color: '#151f6d'
 }, {
-  name: 'Light Blue',
-  color: '#add8e6'
+  name: 'Pantone 5395 C - Midnight Blue',
+  color: '#081f2c'
 }, {
-  name: 'Marine Reef Blue',
-  color: '#305279'
+  name: 'Pantone 320 C - Teal Blue',
+  color: '#009CA6'
 }, {
-  name: 'Teal',
-  color: '#008080'
+  name: 'Pantone 809 C - Safety Green',
+  color: '#e3e829'
 }, {
-  name: 'Safety Green',
-  color: '#c6d219'
+  name: 'Pantone 355 C - Sap Green',
+  color: '#009639'
 }, {
-  name: 'Spring Green',
-  color: '#00ff7f'
+  name: 'Pantone 349 C - Emerald Green',
+  color: '#046a38'
 }, {
-  name: 'Emerald Green',
-  color: '#50c878'
+  name: 'Pantone 3455 C - Hunter Green',
+  color: '#154734'
 }, {
-  name: 'Federal Green',
-  color: '#005d39'
+  name: 'Pantone 3308 C - Forest Green',
+  color: '#034638'
 }, {
-  name: 'Light Green',
-  color: '#90ee90'
+  name: 'Pantone 476 C - Brown',
+  color: '#4e3629'
 }, {
-  name: 'Dark Green',
-  color: '#013220'
+  name: 'Pantone 4715 C - Spice Brown',
+  color: '#956c58'
 }, {
-  name: 'Hunter Green',
-  color: '#355e3b'
+  name: 'Pantone 124 C - Brilliant Gold',
+  color: '#eaaa00'
 }, {
-  name: 'Brown',
-  color: '#964b00'
+  name: 'Pantone 465 C - Gold',
+  color: '#b9975b'
+}, {
+  name: 'Pantone 7407 C - Aztec Gold',
+  color: '#cba052'
+}, {
+  name: 'Pantone 2319 C - Bronze',
+  color: '#7f5f36'
+}, {
+  name: 'Pantone 209 C - Copper',
+  color: '#6f263d'
+}, {
+  name: 'Silver',
+  color: '#a6a9aa'
 }];
 const metalFinishColors = [{
   name: 'Stainless Steel Brushed',
@@ -29316,41 +29159,44 @@ __webpack_require__.r(__webpack_exports__);
 
 const ColorsDropdown = react__WEBPACK_IMPORTED_MODULE_0___default().forwardRef(({
   title,
-  color,
-  setColor,
+  colorName,
   toggleColor,
   openColor,
   colorOptions,
   selectColor
 }, ref) => {
+  const selectedColorOption = colorOptions.find(option => option.name === colorName);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "px-[1px] relative",
     ref: ref
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
   }, title), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: `flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${color ? 'text-black' : 'text-[#dddddd]'}`,
+    className: `flex flex-wrap items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${colorName ? 'text-black' : 'text-[#dddddd]'}`,
     onClick: toggleColor
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "rounded-full w-[18px] h-[18px] border mr-2",
     style: {
-      background: color == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : colorOptions.find(option => option.name === color).color
+      background: colorName == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : selectedColorOption ? selectedColorOption.color : '#fff'
     }
-  }), color === '' ? 'CHOOSE OPTION' : color), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "whitespace-nowrap text-ellipsis overflow-hidden flex-1 pr-5"
+  }, colorName === '' ? 'CHOOSE OPTION' : colorName)), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
   }, colorOptions.map(color => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
+      className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm flex-wrap",
       onClick: () => {
-        setColor(color.name);
-        selectColor();
+        selectColor(color);
       }
     }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
       className: "w-[18px] h-[18px] inline-block rounded-full border",
       style: {
         background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
       }
-    }), color.name);
+    }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: "flex-1"
+    }, color.name));
   })));
 });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ColorsDropdown);

@@ -18,6 +18,7 @@ import { ledLightColors } from '../../../metal-channel/metalChannelOptions';
 import { colorOptions } from '../../../../utils/ColorOptions';
 
 import ColorsDropdown from '../../../../utils/ColorsDropdown';
+
 import VinylColors from '../../../../utils/VinylColors';
 
 import {
@@ -660,8 +661,7 @@ export function Letters({ item }) {
 				<ColorsDropdown
 					title="Return Paint Color"
 					ref={colorRef}
-					color={color}
-					setColor={setColor}
+					colorName={color}
 					openColor={openColor}
 					toggleColor={() => {
 						setOpenColor((prev) => !prev);
@@ -669,7 +669,8 @@ export function Letters({ item }) {
 						setOpenVinylWhite(false);
 					}}
 					colorOptions={colorOptions}
-					selectColor={() => {
+					selectColor={(color) => {
+						setColor(color.name);
 						setOpenColor(false);
 					}}
 				/>

@@ -324,7 +324,7 @@ class Pending_Payment {
 				$label = $payment_emails[ $index - 1 ]['email_label'];
 
 				if ( $label == 'Deadline email' ) {
-					$this->admin_notification_deadline_email( $original_order, $role_instance, $headers, $payment_date, $pending_total );
+					$this->admin_notification_deadline_email( $original_order, $role_instance, $headers, $first_name, $payment_date, $pending_total );
 				}
 
 				update_post_meta( $payment_order_id, $key, date( 'Y/m/d' ) );
@@ -418,7 +418,7 @@ class Pending_Payment {
 		endif;
 	}
 
-	public function admin_notification_deadline_email( $order, $role_instance, $headers, $deadline, $pending_payment ) {
+	public function admin_notification_deadline_email( $order, $role_instance, $headers, $first_name, $deadline, $pending_payment ) {
 		ob_start();
 		?>
 <p>Hello,</p>
@@ -434,9 +434,9 @@ class Pending_Payment {
 <p>Here's the final invoice and their tracking information:</p>
 {order_details}
 		<?php
-		$message       = ob_get_clean();
-		$customer      = $this->get_billing_information_from_payment( $order->get_id() );
-		$first_name    = $customer['first_name'];
+		$message  = ob_get_clean();
+		$customer = $this->get_billing_information_from_payment( $order->get_id() );
+
 		$user_id       = $order->get_user_id() ? $order->get_user_id() : 0;
 		$business_id   = get_field( 'business_id', 'user_' . $user_id );
 		$business_name = get_field( 'business_name', 'user_' . $user_id );
@@ -485,8 +485,7 @@ class Pending_Payment {
 {order_details}
 		<?php
 		$message       = ob_get_clean();
-		$customer      = $this->get_billing_information_from_payment( $order->get_id() );
-		$first_name    = $customer['first_name'];
+		$first_name    = $order->get_billing_first_name();
 		$user_id       = $order->get_user_id() ? $order->get_user_id() : 0;
 		$business_id   = get_field( 'business_id', 'user_' . $user_id );
 		$business_name = get_field( 'business_name', 'user_' . $user_id );
