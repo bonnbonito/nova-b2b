@@ -18,6 +18,8 @@ import { ledLightColors } from '../../../metal-channel/metalChannelOptions';
 
 import { colorOptions } from '../../../../utils/ColorOptions';
 
+import ColorsDropdown from '../../../../utils/ColorsDropdown';
+
 import { acrylicChannelThicknessOptions } from '../options';
 
 import { useAppContext } from '../../../../AppProvider';
@@ -612,65 +614,20 @@ export function Letters({ item }) {
 					onlyValue={true}
 				/>
 
-				<div className="px-[1px] relative" ref={colorRef}>
-					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-						Front Option
-					</label>
-					<div
-						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-							color ? 'text-black' : 'text-[#dddddd]'
-						}`}
-						onClick={() => {
-							setOpenColor((prev) => !prev);
-							setOpenFont(false);
-						}}
-					>
-						{color !== 'Metal Laminate' && (
-							<span
-								className="rounded-full w-[18px] h-[18px] border mr-2"
-								style={{
-									background:
-										color == 'Custom Color'
-											? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-											: frontOptionOptions.find(
-													(option) => option.name === color
-											  )?.color ?? '#fff',
-								}}
-							></span>
-						)}
-
-						{color === '' ? 'CHOOSE OPTION' : color}
-					</div>
-					{openColor && (
-						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg">
-							{frontOptionOptions.map((c) => {
-								return (
-									<div
-										className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
-										onClick={() => {
-											setColor(c.name);
-											setOpenColor(false);
-										}}
-									>
-										{c.name !== 'Metal Laminate' && (
-											<span
-												className="w-[18px] h-[18px] inline-block rounded-full border"
-												style={{
-													background:
-														c.name == 'Custom Color'
-															? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-															: c.color,
-												}}
-											></span>
-										)}
-
-										{c.name}
-									</div>
-								);
-							})}
-						</div>
-					)}
-				</div>
+				<ColorsDropdown
+					title="Front Option"
+					ref={colorRef}
+					colorName={color}
+					openColor={openColor}
+					toggleColor={() => {
+						setOpenColor((prev) => !prev);
+					}}
+					colorOptions={frontOptionOptions}
+					selectColor={(color) => {
+						setColor(color.name);
+						setOpenColor(false);
+					}}
+				/>
 
 				{color === 'Metal Laminate' && (
 					<Dropdown

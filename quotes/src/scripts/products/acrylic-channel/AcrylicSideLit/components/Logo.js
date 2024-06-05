@@ -1,10 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Dropdown from '../../../../Dropdown';
-import FontsDropdown from '../../../../FontsDropdown';
 import UploadFiles from '../../../../UploadFiles';
-import UploadFont from '../../../../UploadFont';
 import useOutsideClick from '../../../../utils/ClickOutside';
-import convertJson from '../../../../utils/ConvertJson';
 import {
 	metalLaminateOptions,
 	setOptions,
@@ -19,6 +16,10 @@ import { ledLightColors } from '../../../metal-channel/metalChannelOptions';
 import { colorOptions } from '../../../../utils/ColorOptions';
 
 import { acrylicChannelThicknessOptions } from '../options';
+
+import ColorsDropdown from '../../../../utils/ColorsDropdown';
+
+import { maxHeightOptions, maxWidthOptions } from '../../options';
 
 import { useAppContext } from '../../../../AppProvider';
 
@@ -55,6 +56,8 @@ const frontOptionOptions = [
 export function Logo({ item }) {
 	const { signage, setSignage, setMissing } = useAppContext();
 	const [comments, setComments] = useState(item.comments ?? '');
+	const [width, setWidth] = useState(item.width ?? '');
+	const [height, setHeight] = useState(item.height ?? '');
 	const [color, setColor] = useState(item.frontOption ?? '');
 	const [openColor, setOpenColor] = useState(false);
 	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
@@ -133,6 +136,8 @@ export function Logo({ item }) {
 			usdSinglePrice,
 			cadSinglePrice,
 			metalLaminate,
+			width,
+			height,
 		};
 
 		setSignage((prevSignage) =>
@@ -169,10 +174,6 @@ export function Logo({ item }) {
 		setAcrylicChannelThickness(() => target);
 	};
 
-	const handleOnChangeLetterHeight = (e) => {
-		setSelectedLetterHeight(e.target.value);
-	};
-
 	const handleonChangeSpacerDistance = (e) => {
 		setSpacerStandoffDistance(e.target.value);
 	};
@@ -206,54 +207,43 @@ export function Logo({ item }) {
 	};
 
 	const computePricing = () => {
-		if (
-			letterPricing.length > 0 &&
-			selectedLetterHeight &&
-			letters.trim().length > 0
-		) {
-			const pricingDetail = letterPricing.find(
-				(item) => parseInt(item.Height) === parseInt(selectedLetterHeight)
-			);
+		if (!width || !height) return 0;
 
-			const baseLetterPrice = parseFloat(pricingDetail?.Value);
+		const perInch = 0.8;
 
-			let tempTotal = 0;
-			const lettersArray = letters.trim().split('');
-			const noLowerCase = NovaQuote.no_lowercase.includes(font);
+		let tempTotal = parseInt(width) * parseInt(height) * perInch;
 
-			lettersArray.forEach((letter) => {
-				tempTotal += calculateLetterPrice(letter, baseLetterPrice, noLowerCase);
-			});
-
-			if (color === 'Metal Laminate') {
-				tempTotal *= 1.15;
-			}
-
-			if (selectedMounting === STUD_WITH_SPACER) {
-				const spacer = spacerPricing(tempTotal);
-				tempTotal += parseFloat(spacer.toFixed(2));
-			}
-
-			/* minimum price */
-			tempTotal = tempTotal > 50 ? tempTotal : 50;
-
-			let total = tempTotal * parseInt(sets);
-
-			const discount = 1;
-
-			let totalWithDiscount = total * discount;
-
-			let discountPrice = total - totalWithDiscount;
-
-			return {
-				singlePrice: tempTotal ?? 0,
-				total: totalWithDiscount?.toFixed(2) ?? 0,
-				totalWithoutDiscount: total,
-				discount: discountPrice,
-			};
-		} else {
-			return 0;
+		if (color === 'Metal Laminate') {
+			tempTotal *= 1.15;
 		}
+
+		if (selectedMounting === STUD_WITH_SPACER) {
+			const spacer = spacerPricing(tempTotal);
+			tempTotal += parseFloat(spacer.toFixed(2));
+		}
+
+		/* oversize surcharge */
+		if (parseInt(width) > 43) {
+			tempTotal += 150;
+		}
+
+		/* minimum price */
+		tempTotal = tempTotal > 50 ? tempTotal : 50;
+
+		let total = tempTotal * parseInt(sets);
+
+		const discount = 1;
+
+		let totalWithDiscount = total * discount;
+
+		let discountPrice = total - totalWithDiscount;
+
+		return {
+			singlePrice: tempTotal ?? 0,
+			total: totalWithDiscount?.toFixed(2) ?? 0,
+			totalWithoutDiscount: total,
+			discount: discountPrice,
+		};
 	};
 
 	useEffect(() => {
@@ -266,51 +256,11 @@ export function Logo({ item }) {
 			setUsdDiscount(discount.toFixed(2));
 			setCadDiscount((discount * EXCHANGE_RATE).toFixed(2));
 		}
-	}, [
-		selectedLetterHeight,
-		letters,
-		sets,
-		font,
-		selectedMounting,
-		letterPricing,
-		color,
-	]);
-
-	useEffect(() => {
-		setLetterHeightOptions(() =>
-			Array.from(
-				{
-					length: parseInt(lettersHeight.max) - parseInt(lettersHeight.min) + 1,
-				},
-				(_, index) => {
-					const val = parseInt(lettersHeight.min) + index;
-					return (
-						<option
-							key={index}
-							value={val}
-							selected={val === selectedLetterHeight}
-						>
-							{val}"
-						</option>
-					);
-				}
-			)
-		);
-	}, [lettersHeight, letterHeightOptions]);
-
-	useEffect(() => {
-		adjustFontSize();
-	}, [letters]);
+	}, [width, height, selectedMounting, color, sets]);
 
 	const checkAndAddMissingFields = () => {
 		const missingFields = [];
 
-		if (!letters) missingFields.push('Add your Line Text');
-		if (!font) missingFields.push('Select Font');
-		if (font == 'Custom font' && !fontFileUrl) {
-			missingFields.push('Upload your custom font.');
-		}
-		if (!selectedLetterHeight) missingFields.push('Select Letter Height');
 		if (!acrylicChannelThickness)
 			missingFields.push('Select Acrylic Thickness');
 		if (!color) missingFields.push('Select Front Option');
@@ -376,15 +326,13 @@ export function Logo({ item }) {
 	useEffect(() => {
 		checkAndAddMissingFields();
 	}, [
-		letters,
-		font,
 		color,
+		width,
+		height,
 		acrylicChannelThickness,
 		selectedMounting,
 		waterproof,
-		selectedLetterHeight,
 		fileUrls,
-		fontFileUrl,
 		customColor,
 		sets,
 		studLength,
@@ -395,24 +343,17 @@ export function Logo({ item }) {
 	useEffect(() => {
 		updateSignage();
 	}, [
-		letters,
 		comments,
-		font,
 		acrylicChannelThickness,
 		selectedMounting,
 		waterproof,
 		color,
 		usdPrice,
 		cadPrice,
-		selectedLetterHeight,
 		fileUrls,
 		fileNames,
 		filePaths,
 		files,
-		fontFileUrl,
-		fontFileName,
-		fontFilePath,
-		fontFile,
 		customColor,
 		sets,
 		studLength,
@@ -421,18 +362,18 @@ export function Logo({ item }) {
 		usdSinglePrice,
 		cadSinglePrice,
 		metalLaminate,
+		width,
+		height,
 	]);
 
-	useOutsideClick([colorRef, fontRef], () => {
-		if (!openColor && !openFont) return;
+	useOutsideClick([colorRef], () => {
+		if (!openColor) return;
 		setOpenColor(false);
-		setOpenFont(false);
 	});
 
 	useEffect(() => {
 		color?.name != 'Custom Color' && setCustomColor('');
-		font != 'Custom font' && setFontFileUrl('');
-	}, [color, font]);
+	}, [color]);
 
 	return (
 		<>
@@ -441,63 +382,8 @@ export function Logo({ item }) {
 					PRODUCT LINE: <span className="font-title">{item.productLine}</span>
 				</div>
 			)}
-			<div className="mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md">
-				<div className="w-full self-center">
-					<div
-						className="self-center text-center"
-						ref={headlineRef}
-						style={{
-							margin: '0',
-							whiteSpace: 'nowrap',
-							overflow: 'hidden',
-							fontFamily: font === 'Custom font' ? '' : font,
-							color: color.color,
-							textShadow: '0px 0px 1px rgba(0, 0, 0, 1)',
-						}}
-					>
-						{letters ? letters : 'PREVIEW'}
-					</div>
-				</div>
-			</div>
-
-			<div className="py-4">
-				<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-					Text
-				</label>
-				<input
-					className="w-full py-4 px-2 color-black border-gray-200 text-sm font-bold rounded-md h-14 placeholder:text-slate-400 "
-					type="text"
-					onChange={handleOnChangeLetters}
-					maxLength={100}
-					value={letters}
-					placeholder="YOUR TEXT HERE"
-				/>
-			</div>
 
 			<div className="quote-grid mb-6">
-				<FontsDropdown
-					font={item.font}
-					fontRef={fontRef}
-					openFont={openFont}
-					setOpenFont={setOpenFont}
-					setOpenColor={setOpenColor}
-					close={() => {
-						setOpenColor(false);
-					}}
-					handleSelectFont={handleSelectFont}
-				/>
-
-				{font == 'Custom font' && (
-					<UploadFont
-						setFontFilePath={setFontFilePath}
-						setFontFile={setFontFile}
-						fontFilePath={fontFilePath}
-						fontFileUrl={fontFileUrl}
-						setFontFileUrl={setFontFileUrl}
-						setFontFileName={setFontFileName}
-					/>
-				)}
-
 				<Dropdown
 					title="Acrylic Thickness"
 					value={acrylicChannelThickness}
@@ -514,13 +400,6 @@ export function Logo({ item }) {
 				/>
 
 				<Dropdown
-					title="Letter Height"
-					onChange={handleOnChangeLetterHeight}
-					options={letterHeightOptions}
-					value={selectedLetterHeight}
-				/>
-
-				<Dropdown
 					title="Return"
 					options={
 						<option value="White" selected={true}>
@@ -531,65 +410,34 @@ export function Logo({ item }) {
 					onlyValue={true}
 				/>
 
-				<div className="px-[1px] relative" ref={colorRef}>
-					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-						Front Option
-					</label>
-					<div
-						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-							color ? 'text-black' : 'text-[#dddddd]'
-						}`}
-						onClick={() => {
-							setOpenColor((prev) => !prev);
-							setOpenFont(false);
-						}}
-					>
-						{color !== 'Metal Laminate' && (
-							<span
-								className="rounded-full w-[18px] h-[18px] border mr-2"
-								style={{
-									background:
-										color == 'Custom Color'
-											? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-											: frontOptionOptions.find(
-													(option) => option.name === color
-											  )?.color ?? '#fff',
-								}}
-							></span>
-						)}
+				<Dropdown
+					title="Logo Width"
+					value={width}
+					onChange={(e) => setWidth(e.target.value)}
+					options={maxWidthOptions}
+				/>
 
-						{color === '' ? 'CHOOSE OPTION' : color}
-					</div>
-					{openColor && (
-						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg">
-							{frontOptionOptions.map((c) => {
-								return (
-									<div
-										className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
-										onClick={() => {
-											setColor(c.name);
-											setOpenColor(false);
-										}}
-									>
-										{c.name !== 'Metal Laminate' && (
-											<span
-												className="w-[18px] h-[18px] inline-block rounded-full border"
-												style={{
-													background:
-														c.name == 'Custom Color'
-															? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-															: c.color,
-												}}
-											></span>
-										)}
+				<Dropdown
+					title="Logo Height"
+					value={height}
+					onChange={(e) => setHeight(e.target.value)}
+					options={maxHeightOptions}
+				/>
 
-										{c.name}
-									</div>
-								);
-							})}
-						</div>
-					)}
-				</div>
+				<ColorsDropdown
+					title="Front Option"
+					ref={colorRef}
+					colorName={color}
+					openColor={openColor}
+					toggleColor={() => {
+						setOpenColor((prev) => !prev);
+					}}
+					colorOptions={frontOptionOptions}
+					selectColor={(color) => {
+						setColor(color.name);
+						setOpenColor(false);
+					}}
+				/>
 
 				{color === 'Metal Laminate' && (
 					<Dropdown

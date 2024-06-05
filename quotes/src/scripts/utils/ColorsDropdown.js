@@ -18,17 +18,20 @@ const ColorsDropdown = React.forwardRef(
 					}`}
 					onClick={toggleColor}
 				>
-					<span
-						className="rounded-full w-[18px] h-[18px] border mr-2"
-						style={{
-							background:
-								colorName == 'Custom Color'
-									? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-									: selectedColorOption
-									? selectedColorOption.color
-									: '#fff',
-						}}
-					></span>
+					{selectedColorOption?.color && (
+						<span
+							className="rounded-full w-[18px] h-[18px] border mr-2"
+							style={{
+								background:
+									colorName == 'Custom Color'
+										? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
+										: selectedColorOption
+										? selectedColorOption.color
+										: '#fff',
+							}}
+						></span>
+					)}
+
 					<span className="whitespace-nowrap text-ellipsis overflow-hidden flex-1 pr-5">
 						{colorName === '' ? 'CHOOSE OPTION' : colorName}
 					</span>
@@ -43,15 +46,18 @@ const ColorsDropdown = React.forwardRef(
 										selectColor(color);
 									}}
 								>
-									<span
-										className="w-[18px] h-[18px] inline-block rounded-full border"
-										style={{
-											background:
-												color.name == 'Custom Color'
-													? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-													: color.color,
-										}}
-									></span>
+									{color?.color && (
+										<span
+											className="w-[18px] h-[18px] inline-block rounded-full border"
+											style={{
+												background:
+													color.name == 'Custom Color'
+														? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
+														: color.color,
+											}}
+										></span>
+									)}
+
 									<span className="flex-1">{color.name}</span>
 								</div>
 							);
