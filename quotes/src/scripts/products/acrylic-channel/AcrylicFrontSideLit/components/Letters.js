@@ -17,6 +17,8 @@ import { ledLightColors } from '../../../metal-channel/metalChannelOptions';
 
 import { translucentGraphicFilms } from '../../../../utils/ColorOptions';
 
+import VinylColors from '../../../../utils/VinylColors';
+
 import { acrylicChannelThicknessOptions } from '../options';
 
 import { useAppContext } from '../../../../AppProvider';
@@ -641,52 +643,22 @@ export function Letters({ item }) {
 				/>
 
 				{frontOption === '3M Vinyl' && (
-					<div className="px-[1px] relative" ref={vinylRef}>
-						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-							3M VINYL
-						</label>
-						<div
-							className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-								vinylWhite.name ? 'text-black' : 'text-[#dddddd]'
-							}`}
-							onClick={() => {
-								setOpenVinyl(true);
+					<>
+						<VinylColors
+							ref={vinylRef}
+							vinylWhite={vinylWhite}
+							setVinylWhite={setVinylWhite}
+							openVinylWhite={openVinyl}
+							toggleVinyl={() => {
+								setOpenVinyl((prev) => !prev);
 								setOpenFont(false);
 							}}
-						>
-							<span
-								className="rounded-full w-[18px] h-[18px] border mr-2"
-								style={{ backgroundColor: vinylWhite.color }}
-							></span>
-							{vinylWhite.name === '' ? 'CHOOSE OPTION' : vinylWhite.name}
-						</div>
-						{openVinyl && (
-							<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg">
-								{translucentGraphicFilms.map((color) => {
-									return (
-										<div
-											className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
-											onClick={() => {
-												setVinylWhite(color);
-												setOpenVinyl(false);
-											}}
-										>
-											<span
-												className="w-[18px] h-[18px] inline-block rounded-full border"
-												style={{
-													background:
-														color?.name == 'Custom Color'
-															? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-															: color?.color,
-												}}
-											></span>
-											{color?.name}
-										</div>
-									);
-								})}
-							</div>
-						)}
-					</div>
+							selectVinylColor={(color) => {
+								setVinylWhite(color);
+								setOpenVinyl(false);
+							}}
+						/>
+					</>
 				)}
 
 				<Dropdown

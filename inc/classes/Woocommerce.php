@@ -85,6 +85,7 @@ class Woocommerce {
 		add_action( 'woocommerce_checkout_order_processed', array( $this, 'create_adjusted_duplicate_order' ), 10, 3 );
 		add_filter( 'woocommerce_get_order_item_totals', array( $this, 'deposit_insert_order_total_row' ), 90, 2 );
 		add_action( 'add_meta_boxes', array( $this, 'add_custom_meta_box_to_orders' ) );
+		add_action( 'add_meta_boxes', array( $this, 'debug_order_meta' ) );
 		add_action( 'woocommerce_admin_order_totals_after_tax', array( $this, 'add_deposit_row' ) );
 		add_action( 'wp_ajax_populate_signage', array( $this, 'populate_signage' ) );
 		add_action( 'wp_ajax_nopriv_populate_signage', array( $this, 'populate_signage' ) );
@@ -620,6 +621,36 @@ class Woocommerce {
 				'default'                      // Priority
 			);
 		}
+	}
+	public function debug_order_meta() {
+		global $pagenow, $post;
+
+		// Ensure we are on the post edit screen
+		if ( 'post.php' !== $pagenow || 'shop_order' !== get_post_type() ) {
+			return;
+		}
+
+		// Ensure the global $post object is set and retrieve the current order ID
+		$order_id = isset( $post->ID ) ? $post->ID : false;
+
+		if ( ! $order_id ) {
+			return;
+		}
+
+		add_meta_box(
+			'nova_debug_order',          // Unique ID for the meta box
+			__( 'Order Meta', 'woocommerce' ), // Title of the meta box
+			array( $this, 'debug_order_meta_content' ), // Callback function to output the content
+			'shop_order',                  // Post type
+			'advanced',                    // Context (where on the screen)
+			'default'                      // Priority
+		);
+	}
+
+	public function debug_order_meta_content( $post ) {
+		echo '<pre>';
+		print_r( get_post_meta( $post->ID ) );
+		echo '</pre>';
 	}
 
 	public function pending_payment_order_content( $post ) {

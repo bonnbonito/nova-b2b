@@ -7,6 +7,7 @@ import Signage from '../../../Signage';
 import { PlusIcon } from '../../../svg/Icons';
 import { INDOOR_NOT_WATERPROOF } from '../../../utils/defaults';
 import { Letters } from './components/Letters';
+import { Logo } from './components/Logo';
 
 const AcrylicBackLit = () => {
 	const { signage, setSignage, setTempFolder, tempFolderName } =
@@ -86,7 +87,6 @@ const AcrylicBackLit = () => {
 		comments: '',
 		mounting: '',
 		acrylicChannelThickness: '1.2" (30mm)',
-		acrylicReturnPaintColor: 'Black',
 		faceReturnColor: { name: 'Black', color: '#000000' },
 		ledLightColor: '6500K White',
 		waterproof: INDOOR_NOT_WATERPROOF,
@@ -165,6 +165,17 @@ const AcrylicBackLit = () => {
 							style={{ border: '1px solid #d2d2d2d2' }}
 						>
 							ADD LETTERS
+							<PlusIcon />
+						</button>
+					)}
+
+					{signage.length < 10 && (
+						<button
+							className="flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white"
+							onClick={() => addSignage('logo')}
+							style={{ border: '1px solid #d2d2d2d2' }}
+						>
+							ADD LOGO
 							<PlusIcon />
 						</button>
 					)}

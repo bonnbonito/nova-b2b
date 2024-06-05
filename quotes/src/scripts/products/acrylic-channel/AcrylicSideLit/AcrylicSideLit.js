@@ -7,6 +7,7 @@ import Signage from '../../../Signage';
 import { PlusIcon } from '../../../svg/Icons';
 import { INDOOR_NOT_WATERPROOF } from '../../../utils/defaults';
 import { Letters } from './components/Letters';
+import { Logo } from './components/Logo';
 
 const AcrylicSideLit = () => {
 	const { signage, setSignage, setTempFolder, tempFolderName } =
@@ -128,7 +129,11 @@ const AcrylicSideLit = () => {
 			<div className="md:w-3/4 w-full">
 				{signage.map((item, index) => (
 					<Signage key={item.id} index={index} id={item.id} item={item}>
-						<Letters key={item.id} item={item} productId={item.product} />
+						{item.type === 'letters' ? (
+							<Letters key={item.id} item={item} productId={item.product} />
+						) : (
+							<Logo key={item.id} item={item} productId={item.product} />
+						)}
 					</Signage>
 				))}
 
@@ -157,6 +162,16 @@ const AcrylicSideLit = () => {
 							style={{ border: '1px solid #d2d2d2d2' }}
 						>
 							ADD LETTERS
+							<PlusIcon />
+						</button>
+					)}
+					{signage.length < 10 && (
+						<button
+							className="flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white"
+							onClick={() => addSignage('logo')}
+							style={{ border: '1px solid #d2d2d2d2' }}
+						>
+							ADD LOGO
 							<PlusIcon />
 						</button>
 					)}

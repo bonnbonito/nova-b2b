@@ -647,14 +647,16 @@ export function Letters({ item }) {
 					<VinylColors
 						ref={vinyl3MRef}
 						vinylWhite={vinylWhite}
-						setVinylWhite={setVinylWhite}
 						openVinylWhite={openVinylWhite}
 						toggleVinyl={() => {
 							setOpenVinylWhite((prev) => !prev);
 							setOpenColor(false);
 							setOpenFont(false);
 						}}
-						selectVinylColor={() => setOpenVinylWhite(false)}
+						selectVinylColor={(color) => {
+							setVinylWhite(color);
+							setOpenVinylWhite(false);
+						}}
 					/>
 				)}
 

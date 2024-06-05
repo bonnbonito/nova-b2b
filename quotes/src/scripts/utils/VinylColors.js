@@ -2,23 +2,14 @@ import React from 'react';
 import { translucentGraphicFilms } from './ColorOptions';
 
 const VinylColors = React.forwardRef(
-	(
-		{
-			vinylWhite,
-			setVinylWhite,
-			openVinylWhite,
-			toggleVinyl,
-			selectVinylColor,
-		},
-		ref
-	) => {
+	({ vinylWhite, openVinylWhite, toggleVinyl, selectVinylColor }, ref) => {
 		return (
 			<div className="px-[1px] relative" ref={ref}>
 				<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
 					3M VINYL
 				</label>
 				<div
-					className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
+					className={`flex flex-wrap items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
 						vinylWhite.name ? 'text-black' : 'text-[#dddddd]'
 					}`}
 					onClick={toggleVinyl}
@@ -32,7 +23,9 @@ const VinylColors = React.forwardRef(
 									: vinylWhite?.color,
 						}}
 					></span>
-					{vinylWhite.name === '' ? 'CHOOSE OPTION' : vinylWhite.name}
+					<span className="whitespace-nowrap text-ellipsis overflow-hidden flex-1 pr-5">
+						{vinylWhite.name === '' ? 'CHOOSE OPTION' : vinylWhite.name}
+					</span>
 				</div>
 				{openVinylWhite && (
 					<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg">
@@ -41,8 +34,7 @@ const VinylColors = React.forwardRef(
 								key={color.name}
 								className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
 								onClick={() => {
-									setVinylWhite(color);
-									selectVinylColor();
+									selectVinylColor(color);
 								}}
 							>
 								<span

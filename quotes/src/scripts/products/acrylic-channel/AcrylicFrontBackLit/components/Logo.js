@@ -17,6 +17,9 @@ import {
 	translucentGraphicFilms,
 } from '../../../../utils/ColorOptions';
 
+import ColorsDropdown from '../../../../utils/ColorsDropdown';
+import VinylColors from '../../../../utils/VinylColors';
+
 import {
 	acrylicChannelThicknessOptions,
 	acrylicFrontOptions,
@@ -484,111 +487,38 @@ export function Logo({ item }) {
 				/>
 
 				{acrylicFront === '3M Vinyl' && (
-					<div className="px-[1px] relative" ref={vinyl3MRef}>
-						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-							3M VINYL
-						</label>
-						<div
-							className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-								vinylWhite.name ? 'text-black' : 'text-[#dddddd]'
-							}`}
-							onClick={() => {
-								setOpenVinylWhite((prev) => !prev);
-								setOpenColor(false);
-							}}
-						>
-							<span
-								className="rounded-full w-[18px] h-[18px] border mr-2"
-								style={{
-									background:
-										vinylWhite?.name == 'Custom Color'
-											? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-											: vinylWhite?.color,
-								}}
-							></span>
-							{vinylWhite.name === '' ? 'CHOOSE OPTION' : vinylWhite.name}
-						</div>
-						{openVinylWhite && (
-							<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg">
-								{translucentGraphicFilms.map((color) => {
-									return (
-										<div
-											className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
-											onClick={() => {
-												setVinylWhite(color);
-												setOpenVinylWhite(false);
-											}}
-										>
-											<span
-												className="w-[18px] h-[18px] inline-block rounded-full border"
-												style={{
-													background:
-														color?.name == 'Custom Color'
-															? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-															: color?.color,
-												}}
-											></span>
-											{color?.name}
-										</div>
-									);
-								})}
-							</div>
-						)}
-					</div>
-				)}
-
-				<div className="px-[1px] relative" ref={colorRef}>
-					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-						Return Paint Color
-					</label>
-					<div
-						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-							color ? 'text-black' : 'text-[#dddddd]'
-						}`}
-						onClick={() => {
-							setOpenColor((prev) => !prev);
+					<VinylColors
+						ref={vinyl3MRef}
+						vinylWhite={vinylWhite}
+						openVinylWhite={openVinylWhite}
+						toggleVinyl={() => {
+							setOpenVinylWhite((prev) => !prev);
+							setOpenColor(false);
+							setOpenFont(false);
+						}}
+						selectVinylColor={(color) => {
+							setVinylWhite(color);
 							setOpenVinylWhite(false);
 						}}
-					>
-						<span
-							className="rounded-full w-[18px] h-[18px] border mr-2"
-							style={{
-								background:
-									color == 'Custom Color'
-										? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-										: colorOptions.find((option) => option.name === color)
-												.color,
-							}}
-						></span>
-						{color === '' ? 'CHOOSE OPTION' : color}
-					</div>
-					{openColor && (
-						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg">
-							{colorOptions.map((color) => {
-								return (
-									<div
-										className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
-										onClick={() => {
-											setColor(color.name);
-											setOpenColor(false);
-										}}
-									>
-										<span
-											className="w-[18px] h-[18px] inline-block rounded-full border"
-											style={{
-												background:
-													color.name == 'Custom Color'
-														? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-														: color.color,
-											}}
-										></span>
-										{color.name}
-									</div>
-								);
-							})}
-						</div>
-					)}
-				</div>
+					/>
+				)}
+
+				<ColorsDropdown
+					ref={colorRef}
+					title="Return Paint Color"
+					colorName={color}
+					toggleColor={() => {
+						setOpenColor((prev) => !prev);
+						setOpenFont(false);
+						setOpenVinylWhite(false);
+					}}
+					openColor={openColor}
+					colorOptions={colorOptions}
+					selectColor={(color) => {
+						setColor(color.name);
+						setOpenColor(false);
+					}}
+				/>
 
 				<Dropdown
 					title="LED Light Color"
