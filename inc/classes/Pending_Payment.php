@@ -424,14 +424,14 @@ class Pending_Payment {
 <p>Hello,</p>
 <p>An outstanding invoice for {order_number} is due today. We have sent a reminder to:</p>
 <ul>
-	<li>Deadline of payment: {deadline}</li>
-	<li>Unsettled Balance: {pending_payment}</li>
 	<li>Customer: {customer_name} - {business_id} </li>
 	<li>Company: {business_name}</li>
 	<li>Order ID: #{order_number}</li>
+	<li>Deadline of payment: {deadline}</li>
+	<li>Unpaid Balance: {pending_payment}</li>
 </ul>
 
-<p>Here's the final invoice and their tracking information:</p>
+<p>Order details:</p>
 {order_details}
 		<?php
 		$message  = ob_get_clean();
