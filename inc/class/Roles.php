@@ -1,5 +1,5 @@
 <?php
-namespace NOVA_B2B\Inc\Classes;
+namespace NOVA_B2B;
 
 use WP_User;
 use WP_Error;
@@ -1207,5 +1207,3 @@ jQuery(document).ready(function($) {
 		echo 'Done processing';
 	}
 }
-
-Roles::get_instance();

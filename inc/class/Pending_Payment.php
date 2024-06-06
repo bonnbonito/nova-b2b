@@ -1,5 +1,5 @@
 <?php
-namespace NOVA_B2B\Inc\Classes;
+namespace NOVA_B2B;
 
 require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
@@ -317,7 +317,7 @@ class Pending_Payment {
 			if ( $customer_email ) {
 				$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
-				$role_instance = \NOVA_B2B\Inc\Classes\Roles::get_instance();
+				$role_instance = \NOVA_B2B\Roles::get_instance();
 				$role_instance->send_email( $customer_email, $subject, $message, $headers, array() );
 				$key = 'payment_email_key_' . $index;
 
@@ -400,7 +400,7 @@ class Pending_Payment {
 						if ( $customer_email ) {
 							$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
-							$role_instance = \NOVA_B2B\Inc\Classes\Roles::get_instance();
+							$role_instance = \NOVA_B2B\Roles::get_instance();
 
 							$role_instance->send_email( $customer_email, $subject, $message, $headers, array() );
 							$label = get_sub_field( 'email_label' );
@@ -821,7 +821,7 @@ class Pending_Payment {
 			add_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
 
 			$headers       = array( 'Content-Type: text/html; charset=UTF-8' );
-			$role_instance = \NOVA_B2B\Inc\Classes\Roles::get_instance();
+			$role_instance = \NOVA_B2B\Roles::get_instance();
 
 			$this->admin_notification_shipped_email( $order, $role_instance, $headers );
 
@@ -874,7 +874,7 @@ class Pending_Payment {
 
 		$pending_id = $order->get_meta( '_pending_id' );
 
-		$role_instance = \NOVA_B2B\Inc\Classes\Roles::get_instance();
+		$role_instance = \NOVA_B2B\Roles::get_instance();
 		$headers       = array( 'Content-Type: text/html; charset=UTF-8' );
 
 		$payment       = $this->get_data( $pending_id );
@@ -930,10 +930,8 @@ class Pending_Payment {
 		$subject = str_replace( '{company_name}', $business_name, $subject );
 		$subject = str_replace( '{order_number}', $order_number, $subject );
 
-		$role_instance = \NOVA_B2B\Inc\Classes\Roles::get_instance();
+		$role_instance = \NOVA_B2B\Roles::get_instance();
 		$emails        = $role_instance->get_admin_and_customer_rep_emails();
 		$role_instance->send_email( $emails, $subject, $message, $headers, array() );
 	}
 }
-
-Pending_Payment::get_instance();

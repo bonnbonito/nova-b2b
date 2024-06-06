@@ -1,6 +1,6 @@
 <?php
 
-namespace NOVA_B2B\Inc\Classes;
+namespace NOVA_B2B;
 
 class NovaEmails {
 	/**
@@ -181,7 +181,7 @@ class NovaEmails {
 
 		if ( $payment_order_id && $payment_select && $key === 'customer_completed_order' ) {
 
-			$pending = \NOVA_B2B\Inc\Classes\Pending_Payment::get_instance();
+			$pending = \NOVA_B2B\Pending_Payment::get_instance();
 
 			$payment = $pending->get_payment_date( $order_id );
 
@@ -212,5 +212,3 @@ class NovaEmails {
 		return $body_text;
 	}
 }
-
-NovaEmails::get_instance();

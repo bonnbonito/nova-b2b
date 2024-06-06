@@ -1,6 +1,6 @@
 <?php
 
-namespace NOVA_B2B\Inc\Classes;
+namespace NOVA_B2B;
 
 class Admin {
 	/**
@@ -472,5 +472,3 @@ jQuery(document).ready(function($) {
 		}
 	}
 }
-
-Admin::get_instance();

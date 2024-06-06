@@ -9,6 +9,9 @@
 require get_stylesheet_directory() . '/bonn-update-checker/plugin-update-checker.php';
 
 
+$namespace = 'NOVA_B2B';
+
+
 use Bonn\PluginUpdateChecker\v5\PucFactory;
 
 $nova_update_checker = PucFactory::buildUpdateChecker(
@@ -31,6 +34,10 @@ if ( ! defined( 'NOVA_DIR_PATH' ) ) {
 	define( 'NOVA_DIR_PATH', untrailingslashit( get_stylesheet_directory() ) );
 }
 
+if ( ! defined( 'NOVA_CLASS_PATH' ) ) {
+	define( 'NOVA_CLASS_PATH', untrailingslashit( get_stylesheet_directory() . '/inc/class' ) );
+}
+
 if ( ! defined( 'NOVA_DIR_URI' ) ) {
 	define( 'NOVA_DIR_URI', untrailingslashit( get_stylesheet_directory_uri() ) );
 }
@@ -44,7 +51,7 @@ if ( ! defined( 'NOVA_SEARCH_RESULTS_POST_PER_PAGE' ) ) {
 }
 
 
-require_once NOVA_DIR_PATH . '/inc/helpers/autoloader.php';
+require NOVA_DIR_PATH . '/inc/autoloader.php';
 
 
 

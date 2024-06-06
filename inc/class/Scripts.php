@@ -1,5 +1,5 @@
 <?php
-namespace NOVA_B2B\Inc\Classes;
+namespace NOVA_B2B;
 
 use WC;
 class Scripts {
@@ -446,5 +446,3 @@ class Scripts {
 		}
 	}
 }
-
-Scripts::get_instance();

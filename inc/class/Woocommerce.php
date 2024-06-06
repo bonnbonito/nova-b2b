@@ -1,6 +1,6 @@
 <?php
 
-namespace NOVA_B2B\Inc\Classes;
+namespace NOVA_B2B;
 
 use WP_Query;
 use Kadence\Theme;
@@ -1677,7 +1677,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 
 	public function generate_html_table_from_array( $array, $product, $nova_title, $product_line ) {
 
-		$instance   = \NOVA_B2B\Inc\Classes\Nova_Quote::get_instance();
+		$instance   = \NOVA_B2B\Nova_Quote::get_instance();
 		$attributes = $instance->allAttributes();
 
 		$html  = '<h6 style="font-size: 100%; margin-top: 10px;margin-bottom: 0;">Quote ID: <strong>Q-' . str_pad( $product, 4, '0', STR_PAD_LEFT ) . '</strong></h6>';
@@ -2216,7 +2216,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 	public function quote_details( $project ) {
 		$projectArray = get_object_vars( $project );
 
-		$instance   = \NOVA_B2B\Inc\Classes\Nova_Quote::get_instance();
+		$instance   = \NOVA_B2B\Nova_Quote::get_instance();
 		$attributes = $instance->allAttributes();
 
 		foreach ( $attributes as $key => $attr ) {
@@ -2419,5 +2419,3 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		return false;
 	}
 }
-
-Woocommerce::get_instance();

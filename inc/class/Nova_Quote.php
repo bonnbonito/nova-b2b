@@ -1,10 +1,9 @@
 <?php
-namespace NOVA_B2B\Inc\Classes;
+namespace NOVA_B2B;
 
 use TCPDF;
 use WP_Query;
-use WC;
-use WP_REST_Request;
+
 
 class Nova_Quote {
 	/**
@@ -583,7 +582,7 @@ sendMockup.addEventListener('click', e => {
 		$message .= '<p>Thank you,<br>';
 		$message .= 'NOVA Signage Team</p>';
 
-		$role_instance = \NOVA_B2B\Inc\Classes\Roles::get_instance();
+		$role_instance = \NOVA_B2B\Roles::get_instance();
 
 		$headers   = array();
 		$headers[] = 'Content-Type: text/html; charset=UTF-8';
@@ -643,7 +642,7 @@ sendMockup.addEventListener('click', e => {
 		$headers[] = 'From: NOVA Signage <quotes@novasignage.com>';
 		$headers[] = 'Reply-To: NOVA Signage <quotes@novasignage.com>';
 
-		$role_instance = \NOVA_B2B\Inc\Classes\Roles::get_instance();
+		$role_instance = \NOVA_B2B\Roles::get_instance();
 
 		$sent = $role_instance->send_email( $to, $subject, $message, $headers, array() );
 
@@ -701,7 +700,7 @@ sendMockup.addEventListener('click', e => {
 		$headers[] = 'From: NOVA Signage <quotes@novasignage.com>';
 		$headers[] = 'Reply-To: NOVA Signage <quotes@novasignage.com>';
 
-		$role_instance = \NOVA_B2B\Inc\Classes\Roles::get_instance();
+		$role_instance = \NOVA_B2B\Roles::get_instance();
 
 		$sent = $role_instance->send_email( $to, $subject, $message, $headers, array() );
 
@@ -727,7 +726,7 @@ sendMockup.addEventListener('click', e => {
 
 		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
-		$role_instance = \NOVA_B2B\Inc\Classes\Roles::get_instance();
+		$role_instance = \NOVA_B2B\Roles::get_instance();
 
 		$to_admin      = $this->to_admin_customer_rep_emails();
 		$admin_subject = 'NOVA - Quote Sent To: QUOTE ID: Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . ' - ' . $first_name . ' ' . $business_id . ' from ' . $company;
@@ -773,7 +772,7 @@ sendMockup.addEventListener('click', e => {
 
 		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
-		$role_instance = \NOVA_B2B\Inc\Classes\Roles::get_instance();
+		$role_instance = \NOVA_B2B\Roles::get_instance();
 
 		/*
 		Remove send email to client */
@@ -1210,7 +1209,7 @@ sendMockup.addEventListener('click', e => {
 
 	public function html_invoice_cad( $post_id ) {
 		ob_start();
-		$instance = \NOVA_B2B\Inc\Classes\Scripts::get_instance();
+		$instance = \NOVA_B2B\Scripts::get_instance();
 		$user_id  = get_field( 'partner', $post_id );
 
 		$final_price = floatval( get_field( 'final_price', $post_id ) );
@@ -1396,7 +1395,7 @@ h6 {
 
 	public function html_invoice( $post_id ) {
 		ob_start();
-		$instance = \NOVA_B2B\Inc\Classes\Scripts::get_instance();
+		$instance = \NOVA_B2B\Scripts::get_instance();
 		$user_id  = get_field( 'partner', $post_id );
 
 		$final_price = floatval( get_field( 'final_price', $post_id ) );
@@ -2499,5 +2498,3 @@ h6 {
 		}
 	}
 }
-
-Nova_Quote::get_instance();

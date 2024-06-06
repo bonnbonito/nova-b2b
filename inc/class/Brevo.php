@@ -1,6 +1,6 @@
 <?php
 
-namespace NOVA_B2B\Inc\Classes;
+namespace NOVA_B2B;
 
 class Brevo {
 	/**
@@ -135,5 +135,3 @@ class Brevo {
 		}
 	}
 }
-
-Brevo::get_instance();
