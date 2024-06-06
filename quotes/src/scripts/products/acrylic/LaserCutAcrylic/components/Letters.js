@@ -45,6 +45,9 @@ export function Letters({ item }) {
 	const [selectedThickness, setSelectedThickness] = useState(
 		item.acrylicThickness ?? ''
 	);
+
+	const [waterProofSelections, setWaterProofSelections] =
+		useState(waterProofOptions);
 	const [fileNames, setFileNames] = useState(item.fileNames ?? []);
 	const [fileUrls, setFileUrls] = useState(item.fileUrls ?? []);
 	const [filePaths, setFilePaths] = useState(item.filePaths ?? []);
@@ -204,13 +207,19 @@ export function Letters({ item }) {
 		const target = e.target.value;
 		setSelectedMounting(target);
 
-		if (target === STUD_WITH_SPACER || target === STUD_MOUNT) {
-			if (target === STUD_MOUNT) {
-				setSpacerStandoffDistance('');
-			}
-		} else {
+		if (target === 'Plain' || target === 'Double-sided tape') {
 			setStudLength('');
 			setSpacerStandoffDistance('');
+		}
+
+		if (target === 'Double-sided tape') {
+			setWaterProofSelections(
+				waterProofOptions.filter(
+					(option) => option.option == INDOOR_NOT_WATERPROOF
+				)
+			);
+		} else {
+			setWaterProofSelections(waterProofOptions);
 		}
 	};
 
@@ -233,7 +242,9 @@ export function Letters({ item }) {
 			}
 			if (
 				selectedMounting === STUD_MOUNT ||
-				selectedMounting === STUD_WITH_SPACER
+				selectedMounting === STUD_WITH_SPACER ||
+				selectedMounting === 'Pad' ||
+				selectedMounting === 'Pad - Combination All'
 			) {
 				setSelectedMounting('');
 				setStudLength('');
@@ -338,7 +349,7 @@ export function Letters({ item }) {
 				);
 			});
 
-			if (selectedMounting === STUD_WITH_SPACER) {
+			if (studLength && spacerStandoffDistance) {
 				const spacer = spacerPricing(totalLetterPrice);
 				totalLetterPrice += parseFloat(spacer.toFixed(2));
 			}
@@ -360,7 +371,8 @@ export function Letters({ item }) {
 		color,
 		sets,
 		font,
-		selectedMounting,
+		studLength,
+		spacerStandoffDistance,
 		letterPricing,
 	]);
 
@@ -368,25 +380,31 @@ export function Letters({ item }) {
 		let newMountingOptions = mountingDefaultOptions;
 
 		if (selectedThickness?.value === '3') {
-			newMountingOptions = newMountingOptions.filter(
+			newMountingOptions = mountingDefaultOptions.filter(
 				(option) =>
 					option.mounting_option !== STUD_MOUNT &&
-					option.mounting_option !== STUD_WITH_SPACER
+					option.mounting_option !== STUD_WITH_SPACER &&
+					option.mounting_option !== 'Pad' &&
+					option.mounting_option !== 'Pad - Combination All'
 			);
+		} else {
+			newMountingOptions = mountingDefaultOptions;
 		}
 
-		if (waterproof === 'Outdoor (Waterproof)') {
-			if (selectedMounting === 'Double-sided tape') {
-				setSelectedMounting('');
-			}
+		if (waterproof) {
+			if (waterproof === 'Outdoor (Waterproof)') {
+				if (selectedMounting === 'Double-sided tape') {
+					setSelectedMounting('');
+				}
 
-			newMountingOptions = newMountingOptions.filter(
-				(option) => option.mounting_option !== 'Double-sided tape'
-			);
+				newMountingOptions = newMountingOptions.filter(
+					(option) => option.mounting_option !== 'Double-sided tape'
+				);
+			}
 		}
 
 		setMountingOptions(newMountingOptions);
-	}, [selectedThickness, waterproof, setSelectedMounting, setMountingOptions]);
+	}, [selectedThickness, waterproof, selectedMounting]);
 
 	useEffect(() => {
 		setLetterHeightOptions(() =>
@@ -432,11 +450,12 @@ export function Letters({ item }) {
 		if (!waterproof) missingFields.push('Select Environment');
 		if (!selectedMounting) missingFields.push('Select Mounting');
 
-		if (selectedMounting === STUD_MOUNT) {
-			if (!studLength) missingFields.push('Select Stud Length');
-		}
-
-		if (selectedMounting === STUD_WITH_SPACER) {
+		if (
+			selectedMounting === STUD_WITH_SPACER ||
+			selectedMounting === STUD_MOUNT ||
+			selectedMounting === 'Pad' ||
+			selectedMounting === 'Pad - Combination All'
+		) {
 			if (!studLength) missingFields.push('Select Stud Length');
 
 			if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
@@ -645,7 +664,6 @@ export function Letters({ item }) {
 					ref={colorRef}
 					title="Color"
 					colorName={color.name}
-					setColor={setColor}
 					openColor={openColor}
 					toggleColor={() => {
 						setOpenColor((prev) => !prev);
@@ -675,7 +693,7 @@ export function Letters({ item }) {
 				<Dropdown
 					title="Environment"
 					onChange={handleOnChangeWaterproof}
-					options={waterProofOptions.map((option) => (
+					options={waterProofSelections?.map((option) => (
 						<option
 							value={option.option}
 							selected={option.option == waterproof}
@@ -700,7 +718,10 @@ export function Letters({ item }) {
 					value={selectedMounting}
 				/>
 
-				{selectedMounting === STUD_WITH_SPACER && (
+				{(selectedMounting === STUD_WITH_SPACER ||
+					selectedMounting === 'Pad' ||
+					selectedMounting === 'Pad - Combination All' ||
+					selectedMounting === STUD_MOUNT) && (
 					<>
 						<Dropdown
 							title="Stud Length"
@@ -731,24 +752,6 @@ export function Letters({ item }) {
 					</>
 				)}
 
-				{selectedMounting === STUD_MOUNT && (
-					<>
-						<Dropdown
-							title="Stud Length"
-							onChange={handleonChangeStudLength}
-							options={studLengthOptions.map((option) => (
-								<option
-									value={option.value}
-									selected={option.value == studLength}
-								>
-									{option.value}
-								</option>
-							))}
-							value={studLength}
-						/>
-					</>
-				)}
-
 				<Dropdown
 					title="Quantity"
 					onChange={handleOnChangeSets}
@@ -758,7 +761,10 @@ export function Letters({ item }) {
 				/>
 			</div>
 
-			{selectedMounting === STUD_WITH_SPACER && (
+			{(selectedMounting === STUD_WITH_SPACER ||
+				selectedMounting === 'Pad' ||
+				selectedMounting === 'Pad - Combination All' ||
+				selectedMounting === STUD_MOUNT) && (
 				<div className="text-xs text-[#9F9F9F] mb-4">
 					*Note: The spacer will be black (default) or match the painted sign's
 					color.

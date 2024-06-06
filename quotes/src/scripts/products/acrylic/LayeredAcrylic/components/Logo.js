@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
 import convert_json from '../../../../utils/ConvertJson';
@@ -322,7 +322,7 @@ export function Logo({ item }) {
 				let total = (computed * multiplier * ASSEMBLY_FEES).toFixed(2);
 				total *= selectedFinishing === GLOSS_FINISH ? 1.1 : 1;
 
-				if (selectedMounting === STUD_WITH_SPACER) {
+				if (studLength && spacerStandoffDistance) {
 					const spacer = spacerPricing(total);
 
 					total += spacer;
@@ -347,7 +347,8 @@ export function Logo({ item }) {
 		waterproof,
 		selectedFinishing,
 		sets,
-		selectedMounting,
+		studLength,
+		spacerStandoffDistance,
 	]);
 
 	const checkAndAddMissingFields = () => {
@@ -599,7 +600,10 @@ export function Logo({ item }) {
 				/>
 			</div>
 
-			{selectedMounting === STUD_WITH_SPACER && (
+			{(selectedMounting === STUD_WITH_SPACER ||
+				selectedMounting === 'Pad' ||
+				selectedMounting === 'Pad - Combination All' ||
+				selectedMounting === STUD_MOUNT) && (
 				<div className="text-xs text-[#9F9F9F] mb-4">
 					*Note: The spacer will be black (default) or match the painted sign's
 					color.

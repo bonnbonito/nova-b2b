@@ -2,7 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
 import useOutsideClick from '../../../../utils/ClickOutside';
-import { colorOptions, whiteOptions } from '../../../../utils/ColorOptions';
+import { colorOptions } from '../../../../utils/ColorOptions';
+import ColorsDropdown from '../../../../utils/ColorsDropdown';
+
 import {
 	setOptions,
 	spacerStandoffDefaultOptions,
@@ -10,16 +12,25 @@ import {
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
 import {
-	aluminumResinDepthOptions,
+	acrylicRevealOptions,
+	depthOptions,
+	finishingOptions,
 	ledLightColors,
+	maxHeightOptions,
+	maxWidthOptions,
 	mountingDefaultOptions,
 } from '../../metalChannelOptions';
 
+import { metalFinishOptions } from '../../../metal/metalOptions';
+
 import {
+	EXCHANGE_RATE,
 	INDOOR_NOT_WATERPROOF,
 	STUD_MOUNT,
 	STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
+
+import { spacerPricing } from '../../../../utils/Pricing';
 
 import { useAppContext } from '../../../../AppProvider';
 
@@ -28,12 +39,17 @@ export function Logo({ item }) {
 	const [comments, setComments] = useState(item.comments ?? '');
 
 	const [color, setColor] = useState(
-		item.returnColor ?? { name: 'Black', color: '#000000' }
+		item.faceReturnColor ?? { name: '', color: '' }
 	);
+
+	const [width, setWidth] = useState(item.width ?? '');
+	const [height, setHeight] = useState(item.height ?? '');
+
 	const [openColor, setOpenColor] = useState(false);
 	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
 
-	const [depth, setDepth] = useState(item.depth);
+	const [depth, setDepth] = useState(item.depth ?? '');
+	const [acrylicReveal, setAcrylicReveal] = useState(item.acrylicReveal);
 
 	const [fileNames, setFileNames] = useState(item.fileNames ?? []);
 	const [fileUrls, setFileUrls] = useState(item.fileUrls ?? []);
@@ -42,8 +58,22 @@ export function Logo({ item }) {
 
 	const [customColor, setCustomColor] = useState(item.customColor ?? '');
 
+	const [selectedFinishing, setSelectedFinishing] = useState(
+		item.backLitFinishing
+	);
+
+	const [metalFinish, setMetalFinish] = useState(item.backLitMetalFinish);
+
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
+	const [usdDiscount, setUsdDiscount] = useState(item.usdDiscount ?? 0);
+	const [cadDiscount, setCadDiscount] = useState(item.cadDiscount ?? 0);
+	const [usdSinglePrice, setUsdSinglePrice] = useState(
+		item.usdSinglePrice ?? 0
+	);
+	const [cadSinglePrice, setCadSinglePrice] = useState(
+		item.usdSinglePrice ?? 0
+	);
 
 	const [studLength, setStudLength] = useState(item.studLength ?? '');
 
@@ -55,22 +85,14 @@ export function Logo({ item }) {
 		item.spacerStandoffDistance ?? ''
 	);
 
-	const [frontAcrylicCover, setFrontAcrylicCover] = useState(
-		item.frontAcrylicCover ?? 'UV Printed'
-	);
-
 	const [mounting, setMounting] = useState(item.mounting ?? '');
 
-	const [ledLightColor, setLedLightColor] = useState(
-		item.ledLightColor ?? '6500K White'
-	);
+	const [ledLightColor, setLedLightColor] = useState(item.ledLightColor);
 
 	const [sets, setSets] = useState(item.sets ?? 1);
 	const handleOnChangeSets = (e) => {
 		setSets(e.target.value);
 	};
-
-	const [depthOptions, setDepthOptions] = useState(aluminumResinDepthOptions);
 
 	const colorRef = useRef(null);
 
@@ -80,9 +102,11 @@ export function Logo({ item }) {
 				return {
 					...sign,
 					comments,
+					width,
+					height,
 					depth,
 					waterproof,
-					returnColor: color,
+					faceReturnColor: color,
 					usdPrice,
 					cadPrice,
 					files,
@@ -93,8 +117,10 @@ export function Logo({ item }) {
 					ledLightColor,
 					mounting,
 					studLength,
+					backLitFinishing: selectedFinishing,
 					spacerStandoffDistance,
-					frontAcrylicCover,
+					backLitMetalFinish: metalFinish,
+					acrylicReveal: acrylicReveal,
 					sets,
 				};
 			} else {
@@ -120,52 +146,40 @@ export function Logo({ item }) {
 		}
 	};
 
-	const handleOnChangeWaterproof = (e) => {
+	const handleOnChangeWaterproof = (e) => setWaterproof(e.target.value);
+
+	const handleOnChangeAcrylicReveal = (e) => {
 		const target = e.target.value;
-		setWaterproof(() => target);
+		console.log(target);
+		setAcrylicReveal(() => target);
 	};
-
-	useEffect(() => {
-		if (!waterproof) return;
-
-		if (waterproof !== INDOOR_NOT_WATERPROOF) {
-			if (parseInt(depth?.value) === 3) {
-				setDepth('');
-			}
-
-			const newDepthOptions = [
-				{
-					depth: '2"',
-					value: '5',
-				},
-				{
-					depth: '3.2"',
-					value: '8',
-				},
-			];
-
-			setDepthOptions((prev) => {
-				if (JSON.stringify(prev) !== JSON.stringify(newDepthOptions)) {
-					return newDepthOptions;
-				}
-				return prev;
-			});
-		} else {
-			setDepthOptions((prev) => {
-				if (
-					JSON.stringify(prev) !== JSON.stringify(aluminumResinDepthOptions)
-				) {
-					return aluminumResinDepthOptions;
-				}
-				return prev;
-			});
-		}
-	}, [waterproof, depth]);
 
 	const handleOnChangeLedLight = (e) => setLedLightColor(e.target.value);
 
+	const handleChangeFinishing = (e) => {
+		const target = e.target.value;
+		if (target === 'Metal') {
+			setColor({ name: '', color: '' });
+		} else {
+			setColor({ name: 'Black', color: '#000000' });
+			setMetalFinish('');
+		}
+		setSelectedFinishing(e.target.value);
+	};
+
+	const handelMetalFinishChange = (e) => {
+		setMetalFinish(e.target.value);
+	};
+
 	const handleonChangeSpacerDistance = (e) => {
 		setSpacerStandoffDistance(e.target.value);
+	};
+
+	const handleOnChangeDepth = (e) => {
+		const target = e.target.value;
+		const selected = depthOptions.filter((option) => option.value === target);
+
+		setDepth(() => selected[0]);
 	};
 
 	const handleonChangeStudLength = (e) => {
@@ -196,40 +210,45 @@ export function Logo({ item }) {
 		}
 	};
 
-	const handleOnChangeDepth = (e) => {
-		const target = e.target.value;
-		const selected = depthOptions.filter((option) => option.value === target);
-
-		setDepth(() => selected[0]);
-	};
-
 	const checkAndAddMissingFields = () => {
 		const missingFields = [];
 
 		if (!depth) missingFields.push('Select Metal Depth');
 
-		if (!color?.name) missingFields.push('Select Color');
-		if (color?.name === 'Custom Color' && !customColor) {
-			missingFields.push('Add the Pantone color code of your custom color.');
+		if (!width) missingFields.push('Select Logo Width');
+		if (!height) missingFields.push('Select Logo Height');
+
+		if (!selectedFinishing) missingFields.push('Select Finishing');
+
+		if (selectedFinishing === 'Painted') {
+			if (!color.name) missingFields.push('Select Face & Return Color');
+
+			if (color?.name === 'Custom Color' && !customColor) {
+				missingFields.push('Add the Pantone color code of your custom color.');
+			}
+		}
+
+		if (selectedFinishing === 'Metal') {
+			if (!metalFinish) missingFields.push('Select Metal Finish');
 		}
 
 		if (!waterproof) missingFields.push('Select Environment');
 
 		if (!mounting) missingFields.push('Select Mounting');
 
-		if (mounting === STUD_WITH_SPACER) {
+		if (mounting === STUD_WITH_SPACER || mounting === STUD_MOUNT) {
 			if (!studLength) missingFields.push('Select Stud Length');
 
 			if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
 		}
 
-		if (mounting === STUD_MOUNT) {
-			if (!studLength) missingFields.push('Select Stud Length');
-		}
 		if (!ledLightColor) missingFields.push('Select LED Light Color');
-		if (!frontAcrylicCover) missingFields.push('Select Front Acrylic Cover');
 
 		if (!sets) missingFields.push('Select Quantity');
+
+		if (!acrylicReveal) {
+			missingFields.push('Select Acrylic Reveal');
+		}
 
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
@@ -270,6 +289,8 @@ export function Logo({ item }) {
 		checkAndAddMissingFields();
 	}, [
 		depth,
+		width,
+		height,
 		comments,
 		waterproof,
 		color,
@@ -284,8 +305,137 @@ export function Logo({ item }) {
 		mounting,
 		studLength,
 		spacerStandoffDistance,
-		frontAcrylicCover,
+		selectedFinishing,
+		metalFinish,
+		acrylicReveal,
 		sets,
+	]);
+
+	const computePricing = () => {
+		if (!width || !height || !depth?.value) return 0;
+
+		let P = 0;
+		let S = 0;
+		const F = 35;
+		let X = parseInt(width);
+		let Y = parseInt(height);
+
+		switch (depth?.value) {
+			case '3.5':
+				switch (acrylicReveal) {
+					case '1/5"':
+						P = 0.25;
+						S = 0.13;
+						break;
+					case '2/5"':
+						P = 0.28;
+						S = 0.15;
+						break;
+					case '3/5"':
+						P = 0.31;
+						S = 0.16;
+						break;
+					default:
+						P = 0.22;
+						S = 0.12;
+				}
+				break;
+			case '5':
+				switch (acrylicReveal) {
+					case '1/5"':
+						P = 0.27;
+						S = 0.15;
+						break;
+					case '2/5"':
+						P = 0.3;
+						S = 0.17;
+						break;
+					case '3/5"':
+						P = 0.33;
+						S = 0.18;
+						break;
+					default:
+						P = 0.24;
+						S = 0.14;
+				}
+				break;
+			default:
+				switch (acrylicReveal) {
+					case '1/5"':
+						P = 0.28;
+						S = 0.2;
+						break;
+					case '2/5"':
+						P = 0.31;
+						S = 0.21;
+						break;
+					case '3/5"':
+						P = 0.35;
+						S = 0.23;
+						break;
+					default:
+						P = 0.25;
+						S = 0.18;
+				}
+		}
+
+		let tempTotal = X * Y * P + (X + 4) * (Y + 4) * S + F;
+		console.log(tempTotal);
+
+		/* Oversize surcharge */
+		if (X > 41 || Y > 41) {
+			console.log('surcharge');
+			tempTotal += 150;
+		}
+
+		if (waterproof && waterproof !== INDOOR_NOT_WATERPROOF) {
+			tempTotal *= 1.03;
+			console.log('waterproof', tempTotal);
+		}
+
+		if (studLength && spacerStandoffDistance) {
+			const spacer = spacerPricing(tempTotal);
+			tempTotal += parseFloat(spacer.toFixed(2));
+			console.log('spacer', tempTotal);
+		}
+
+		let total = tempTotal * parseInt(sets);
+
+		total = total.toFixed(1);
+
+		const discount = 1;
+
+		let totalWithDiscount = total * discount;
+
+		let discountPrice = total - totalWithDiscount;
+
+		return {
+			singlePrice: tempTotal ?? 0,
+			total: totalWithDiscount?.toFixed(2) ?? 0,
+			totalWithoutDiscount: total,
+			discount: discountPrice,
+		};
+	};
+
+	useEffect(() => {
+		const { singlePrice, total, discount } = computePricing();
+		if (total && singlePrice) {
+			setUsdPrice(total);
+			setCadPrice((total * EXCHANGE_RATE).toFixed(2));
+			setUsdSinglePrice(singlePrice);
+			setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
+			setUsdDiscount(discount.toFixed(2));
+			setCadDiscount((discount * EXCHANGE_RATE).toFixed(2));
+		}
+	}, [
+		depth,
+		width,
+		height,
+		waterproof,
+		studLength,
+		spacerStandoffDistance,
+		sets,
+		acrylicReveal,
 	]);
 
 	useOutsideClick([colorRef], () => {
@@ -307,20 +457,6 @@ export function Logo({ item }) {
 
 			<div className="quote-grid mb-6">
 				<Dropdown
-					title="Environment"
-					onChange={handleOnChangeWaterproof}
-					options={waterProofOptions.map((option) => (
-						<option
-							value={option.option}
-							selected={option.option == waterproof}
-						>
-							{option.option}
-						</option>
-					))}
-					value={waterproof}
-				/>
-
-				<Dropdown
 					title="Metal Depth"
 					value={depth?.value}
 					onChange={handleOnChangeDepth}
@@ -331,56 +467,69 @@ export function Logo({ item }) {
 					))}
 				/>
 
-				<div className="px-[1px] relative" ref={colorRef}>
-					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-						Return Color
-					</label>
-					<div
-						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-							color?.name ? 'text-black' : 'text-[#dddddd]'
-						}`}
-						onClick={() => {
-							setOpenColor((prev) => !prev);
-						}}
-					>
-						<span
-							className="rounded-full w-[18px] h-[18px] border mr-2"
-							style={{
-								background:
-									color?.name == 'Custom Color'
-										? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-										: color?.color,
+				<Dropdown
+					title="Logo Width"
+					value={width}
+					onChange={(e) => setWidth(e.target.value)}
+					options={maxWidthOptions}
+				/>
+
+				<Dropdown
+					title="Logo Height"
+					value={height}
+					onChange={(e) => setHeight(e.target.value)}
+					options={maxHeightOptions}
+				/>
+
+				<Dropdown
+					title="Finishing"
+					onChange={handleChangeFinishing}
+					options={finishingOptions.map((finishing) => (
+						<option
+							value={finishing.value}
+							selected={finishing.value === selectedFinishing}
+						>
+							{finishing.value}
+						</option>
+					))}
+					value={selectedFinishing}
+				/>
+
+				{selectedFinishing === 'Metal' && (
+					<Dropdown
+						title="Metal Finish"
+						onChange={handelMetalFinishChange}
+						options={metalFinishOptions.map((finish) => (
+							<option
+								value={finish.option}
+								selected={finish.option === metalFinish}
+							>
+								{finish.option}
+							</option>
+						))}
+						value={metalFinish}
+					/>
+				)}
+
+				{selectedFinishing === 'Painted' && (
+					<>
+						<ColorsDropdown
+							title="Face & Return Color"
+							ref={colorRef}
+							colorName={color?.name}
+							openColor={openColor}
+							toggleColor={() => {
+								setOpenColor((prev) => !prev);
+								setOpenFont(false);
 							}}
-						></span>
-						{color?.name === '' ? 'CHOOSE OPTION' : color?.name}
-					</div>
-					{openColor && (
-						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg">
-							{colorOptions.map((color) => {
-								return (
-									<div
-										className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
-										onClick={() => {
-											setColor(color);
-											setOpenColor(false);
-										}}
-									>
-										<span
-											className="w-[18px] h-[18px] inline-block rounded-full border"
-											style={{
-												background:
-													color?.name == 'Custom Color'
-														? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-														: color?.color,
-											}}
-										></span>
-										{color?.name}
-									</div>
-								);
-							})}
-						</div>
-					)}
-				</div>
+							colorOptions={colorOptions}
+							selectColor={(color) => {
+								setColor(color);
+								setOpenColor(false);
+							}}
+						/>
+					</>
+				)}
 
 				<Dropdown
 					title="LED Light Color"
@@ -394,10 +543,28 @@ export function Logo({ item }) {
 				/>
 
 				<Dropdown
-					title="Front Acrylic Cover"
-					options={<option value="UV Printed">{frontAcrylicCover}</option>}
-					value={frontAcrylicCover}
-					onlyValue={true}
+					title="Acrylic Reveal"
+					onChange={handleOnChangeAcrylicReveal}
+					options={acrylicRevealOptions.map((option) => (
+						<option value={option} selected={option == acrylicReveal}>
+							{option}
+						</option>
+					))}
+					value={acrylicReveal}
+				/>
+
+				<Dropdown
+					title="Environment"
+					onChange={handleOnChangeWaterproof}
+					options={waterProofOptions.map((option) => (
+						<option
+							value={option.option}
+							selected={option.option == waterproof}
+						>
+							{option.option}
+						</option>
+					))}
+					value={waterproof}
 				/>
 
 				<Dropdown
@@ -521,6 +688,12 @@ export function Logo({ item }) {
 					setFileUrls={setFileUrls}
 					setFileNames={setFileNames}
 				/>
+			</div>
+
+			<div className="text-xs text-[#9F9F9F] pt-4">
+				We size the letters in proportion to your chosen font. Some
+				uppercase/lowercase letters may appear shorter or taller than your
+				selected height on the form to maintain visual harmony.
 			</div>
 		</>
 	);

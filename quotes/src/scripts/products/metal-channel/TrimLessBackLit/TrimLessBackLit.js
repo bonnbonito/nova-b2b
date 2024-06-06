@@ -6,6 +6,7 @@ import Signage from '../../../Signage';
 import { PlusIcon } from '../../../svg/Icons';
 
 import { Letters } from './components/Letters';
+import { Logo } from './components/Logo';
 
 import { useAppContext } from '../../../AppProvider';
 
@@ -66,34 +67,9 @@ export default function TrimLessBackLit() {
 
 	const defaultArgs = {
 		id: uuidv4(),
-		type: 'letters',
-		title: 'LETTERS 1',
-		depth: '',
-		letters: '',
-		comments: '',
-		font: '',
-		customFont: '',
-		waterproof: '',
-		thickness: '',
-		backLitFinishing: '',
-		mounting: '',
-		studLength: '',
-		faceReturnColor: { name: '', color: '' },
-		spacerStandoffDistance: '',
-		customColor: '',
-		backLitMetalFinish: '',
-		letterHeight: '',
 		ledLightColor: '6500K White',
 		usdPrice: 0,
 		cadPrice: 0,
-		filePaths: [],
-		fileNames: [],
-		fileUrls: [],
-		files: [],
-		fontFilePath: '',
-		fontFileName: '',
-		fontFileUrl: '',
-		fontFile: '',
 		acrylicReveal: '0',
 		sets: 1,
 		product: NovaQuote.product,
@@ -140,12 +116,44 @@ export default function TrimLessBackLit() {
 		}
 	}, []);
 
+	useEffect(() => {
+		console.log('Attempting to preload fonts...');
+		async function preloadFonts() {
+			try {
+				await loadingFonts();
+			} catch (error) {
+				console.error('Error loading fonts:', error);
+			}
+		}
+		preloadFonts();
+	}, []);
+
+	const loadingFonts = async () => {
+		const loadPromises = NovaQuote.fonts.map((font) => loadFont(font));
+		await Promise.all(loadPromises);
+	};
+
+	async function loadFont({ name, src }) {
+		const fontFace = new FontFace(name, `url(${src})`);
+
+		try {
+			await fontFace.load();
+			document.fonts.add(fontFace);
+		} catch (e) {
+			console.error(`Font ${name} failed to load`);
+		}
+	}
+
 	return (
 		<div className="md:flex gap-6">
 			<div className="md:w-3/4 w-full">
 				{signage.map((item, index) => (
 					<Signage index={index} id={item.id} item={item}>
-						<Letters key={item.id} item={item} />
+						{item.type === 'letters' ? (
+							<Letters key={item.id} item={item} productId={item.product} />
+						) : (
+							<Logo key={item.id} item={item} productId={item.product} />
+						)}
 					</Signage>
 				))}
 
@@ -164,14 +172,24 @@ export default function TrimLessBackLit() {
 
 				<div className="flex gap-2">
 					{signage.length < 10 && (
-						<button
-							className="flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white"
-							onClick={() => addSignage('letters')}
-							style={{ border: '1px solid #d2d2d2d2' }}
-						>
-							ADD LETTERS
-							<PlusIcon />
-						</button>
+						<>
+							<button
+								className="flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white"
+								onClick={() => addSignage('letters')}
+								style={{ border: '1px solid #d2d2d2d2' }}
+							>
+								ADD LETTERS
+								<PlusIcon />
+							</button>
+							<button
+								className="flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white"
+								onClick={() => addSignage('logo')}
+								style={{ border: '1px solid #d2d2d2d2' }}
+							>
+								ADD LOGO
+								<PlusIcon />
+							</button>
+						</>
 					)}
 				</div>
 			</div>

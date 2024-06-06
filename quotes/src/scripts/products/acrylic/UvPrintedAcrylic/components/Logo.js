@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
 import convert_json from '../../../../utils/ConvertJson';
@@ -68,6 +68,10 @@ export function Logo({ item }) {
 	const [height, setHeight] = useState(item.height ?? '');
 	const [comments, setComments] = useState(item.comments ?? '');
 	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
+
+	const [waterProofSelections, setWaterProofSelections] =
+		useState(waterProofOptions);
+
 	const [mountingOptions, setMountingOptions] = useState(
 		mountingDefaultOptions
 	);
@@ -88,13 +92,19 @@ export function Logo({ item }) {
 		const target = e.target.value;
 		setSelectedMounting(target);
 
-		if (target === STUD_WITH_SPACER || target === STUD_MOUNT) {
-			if (target === STUD_MOUNT) {
-				setSpacerStandoffDistance('');
-			}
-		} else {
+		if (target === 'Plain' || target === 'Double-sided tape') {
 			setStudLength('');
 			setSpacerStandoffDistance('');
+		}
+
+		if (target === 'Double-sided tape') {
+			setWaterProofSelections(
+				waterProofOptions.filter(
+					(option) => option.option === INDOOR_NOT_WATERPROOF
+				)
+			);
+		} else {
+			setWaterProofSelections(waterProofOptions);
 		}
 	};
 
@@ -146,23 +156,20 @@ export function Logo({ item }) {
 
 		fetchLogoPricing();
 	}, []);
+
 	useEffect(() => {
 		let newMountingOptions = mountingDefaultOptions;
 
 		if (selectedThickness?.value === '3') {
-			if (
-				selectedMounting === STUD_MOUNT ||
-				selectedMounting === STUD_WITH_SPACER
-			) {
-				setSelectedMounting('');
-				setStudLength('');
-				setSpacerStandoffDistance('');
-			}
-			newMountingOptions = newMountingOptions.filter(
+			newMountingOptions = mountingDefaultOptions.filter(
 				(option) =>
 					option.mounting_option !== STUD_MOUNT &&
-					option.mounting_option !== STUD_WITH_SPACER
+					option.mounting_option !== STUD_WITH_SPACER &&
+					option.mounting_option !== 'Pad' &&
+					option.mounting_option !== 'Pad - Combination All'
 			);
+		} else {
+			newMountingOptions = mountingDefaultOptions;
 		}
 
 		if (waterproof === 'Outdoor (Waterproof)') {
@@ -192,14 +199,7 @@ export function Logo({ item }) {
 				}
 			)
 		);
-	}, [
-		selectedThickness,
-		selectedMounting,
-		waterproof,
-		maxWidthHeight,
-		setSelectedMounting,
-		setMountingOptions,
-	]);
+	}, [selectedThickness, selectedMounting, waterproof, maxWidthHeight]);
 
 	function handleComments(e) {
 		setComments(e.target.value);
@@ -211,6 +211,22 @@ export function Logo({ item }) {
 			(option) => option.value === target
 		);
 		setSelectedThickness(() => selected[0]);
+
+		if (parseInt(target) === 3) {
+			if (parseInt(selectedLetterHeight) > 24) {
+				setSelectedLetterHeight('');
+			}
+			if (
+				selectedMounting === STUD_MOUNT ||
+				selectedMounting === STUD_WITH_SPACER ||
+				selectedMounting === 'Pad' ||
+				selectedMounting === 'Pad - Combination All'
+			) {
+				setSelectedMounting('');
+				setStudLength('');
+				setSpacerStandoffDistance('');
+			}
+		}
 	};
 
 	useEffect(() => {
@@ -292,14 +308,15 @@ export function Logo({ item }) {
 		if (!waterproof) missingFields.push('Select Environment');
 		if (!selectedMounting) missingFields.push('Select Mounting Option');
 
-		if (selectedMounting === STUD_WITH_SPACER) {
+		if (
+			selectedMounting === STUD_WITH_SPACER ||
+			selectedMounting === STUD_MOUNT ||
+			selectedMounting === 'Pad' ||
+			selectedMounting === 'Pad - Combination All'
+		) {
 			if (!studLength) missingFields.push('Select Stud Length');
 
 			if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
-		}
-
-		if (selectedMounting === STUD_MOUNT) {
-			if (!studLength) missingFields.push('Select Stud Length');
 		}
 
 		if (!selectedFinishing) missingFields.push('Select Finishing Option');
@@ -528,7 +545,7 @@ export function Logo({ item }) {
 				<Dropdown
 					title="Environment"
 					onChange={(e) => setWaterproof(e.target.value)}
-					options={waterProofOptions.map((option) => (
+					options={waterProofSelections.map((option) => (
 						<option
 							value={option.option}
 							selected={option.option == waterproof}
@@ -553,7 +570,10 @@ export function Logo({ item }) {
 					value={selectedMounting}
 				/>
 
-				{selectedMounting === STUD_WITH_SPACER && (
+				{(selectedMounting === STUD_WITH_SPACER ||
+					selectedMounting === 'Pad' ||
+					selectedMounting === 'Pad - Combination All' ||
+					selectedMounting === STUD_MOUNT) && (
 					<>
 						<Dropdown
 							title="Stud Length"
@@ -584,24 +604,6 @@ export function Logo({ item }) {
 					</>
 				)}
 
-				{selectedMounting === STUD_MOUNT && (
-					<>
-						<Dropdown
-							title="Stud Length"
-							onChange={handleonChangeStudLength}
-							options={studLengthOptions.map((option) => (
-								<option
-									value={option.value}
-									selected={option.value == studLength}
-								>
-									{option.value}
-								</option>
-							))}
-							value={studLength}
-						/>
-					</>
-				)}
-
 				<Dropdown
 					title="Quantity"
 					onChange={handleOnChangeSets}
@@ -611,7 +613,10 @@ export function Logo({ item }) {
 				/>
 			</div>
 
-			{selectedMounting === STUD_WITH_SPACER && (
+			{(selectedMounting === STUD_WITH_SPACER ||
+				selectedMounting === 'Pad' ||
+				selectedMounting === 'Pad - Combination All' ||
+				selectedMounting === STUD_MOUNT) && (
 				<div className="text-xs text-[#9F9F9F] mb-4">
 					*Note: The spacer will be black (default) or match the painted sign's
 					color.

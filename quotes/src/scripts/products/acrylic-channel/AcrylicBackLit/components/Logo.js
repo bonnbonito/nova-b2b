@@ -236,7 +236,7 @@ export function Logo({ item }) {
 
 		let tempTotal = parseInt(width) * parseInt(height) * perInch;
 
-		if (selectedMounting === STUD_WITH_SPACER) {
+		if (studLength && spacerStandoffDistance) {
 			const spacer = spacerPricing(tempTotal);
 			tempTotal += parseFloat(spacer.toFixed(2));
 		}
@@ -275,7 +275,7 @@ export function Logo({ item }) {
 			setUsdDiscount(discount.toFixed(2));
 			setCadDiscount((discount * EXCHANGE_RATE).toFixed(2));
 		}
-	}, [width, height, selectedMounting, sets]);
+	}, [width, height, studLength, spacerStandoffDistance, sets]);
 
 	const checkAndAddMissingFields = () => {
 		const missingFields = [];
@@ -557,7 +557,10 @@ export function Logo({ item }) {
 				/>
 			</div>
 
-			{selectedMounting === STUD_WITH_SPACER && (
+			{(selectedMounting === STUD_WITH_SPACER ||
+				selectedMounting === 'Pad' ||
+				selectedMounting === 'Pad - Combination All' ||
+				selectedMounting === STUD_MOUNT) && (
 				<div className="text-xs text-[#9F9F9F] mb-4">
 					*Note: The spacer will be black (default) or match the painted sign's
 					color.

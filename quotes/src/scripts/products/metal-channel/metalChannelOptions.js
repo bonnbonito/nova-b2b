@@ -69,6 +69,34 @@ const ledLightColors = [
 
 const acrylicRevealOptions = ['0', '1/5"', '2/5"', '3/5"'];
 
+export const maxHeightOptions = Array.from(
+	{
+		length: 66,
+	},
+	(_, index) => {
+		const val = 5 + index;
+		return (
+			<option key={index} value={val}>
+				{val}"
+			</option>
+		);
+	}
+);
+
+export const maxWidthOptions = Array.from(
+	{
+		length: 106,
+	},
+	(_, index) => {
+		const val = 5 + index;
+		return (
+			<option key={index} value={val}>
+				{val}"
+			</option>
+		);
+	}
+);
+
 export {
 	acrylicRevealOptions,
 	aluminumResinDepthOptions,

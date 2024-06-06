@@ -79,6 +79,10 @@ export const Letters = ({ item, letterPricing, hasPrice = false }) => {
 	const [openFont, setOpenFont] = useState(false);
 	const [openAcrylicColor, setOpenAcrylicColor] = useState(false);
 	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
+
+	const [waterProofSelections, setWaterProofSelections] =
+		useState(waterProofOptions);
+
 	const [selectedThickness, setSelectedThickness] = useState(
 		item.acrylicThickness ?? ''
 	);
@@ -127,13 +131,19 @@ export const Letters = ({ item, letterPricing, hasPrice = false }) => {
 		const target = e.target.value;
 		setSelectedMounting(target);
 
-		if (target === STUD_WITH_SPACER || target === STUD_MOUNT) {
-			if (target === STUD_MOUNT) {
-				setSpacerStandoffDistance('');
-			}
-		} else {
+		if (target === 'Plain' || target === 'Double-sided tape') {
 			setStudLength('');
 			setSpacerStandoffDistance('');
+		}
+
+		if (target === 'Double-sided tape') {
+			setWaterProofSelections(
+				waterProofOptions.filter(
+					(option) => option.option == INDOOR_NOT_WATERPROOF
+				)
+			);
+		} else {
+			setWaterProofSelections(waterProofOptions);
 		}
 	};
 
@@ -255,22 +265,24 @@ export const Letters = ({ item, letterPricing, hasPrice = false }) => {
 		);
 		setSelectedThickness(() => selected[0]);
 
+		if (parseInt(target) > 11 && parseInt(selectedLetterHeight) === 1) {
+			setSelectedLetterHeight('');
+		}
+
 		if (parseInt(target) === 3) {
 			if (parseInt(selectedLetterHeight) > 24) {
 				setSelectedLetterHeight('');
 			}
 			if (
 				selectedMounting === STUD_MOUNT ||
-				selectedMounting === STUD_WITH_SPACER
+				selectedMounting === STUD_WITH_SPACER ||
+				selectedMounting === 'Pad' ||
+				selectedMounting === 'Pad - Combination All'
 			) {
 				setSelectedMounting('');
 				setStudLength('');
 				setSpacerStandoffDistance('');
 			}
-		}
-
-		if (parseInt(target) > 11 && parseInt(selectedLetterHeight) === 1) {
-			setSelectedLetterHeight('');
 		}
 	};
 
@@ -345,25 +357,32 @@ export const Letters = ({ item, letterPricing, hasPrice = false }) => {
 		let newMountingOptions = mountingDefaultOptions;
 
 		if (selectedThickness?.value === '3') {
-			newMountingOptions = newMountingOptions.filter(
+			newMountingOptions = mountingDefaultOptions.filter(
 				(option) =>
 					option.mounting_option !== STUD_MOUNT &&
-					option.mounting_option !== STUD_WITH_SPACER
+					option.mounting_option !== STUD_WITH_SPACER &&
+					option.mounting_option !== 'Pad' &&
+					option.mounting_option !== 'Pad - Combination All'
 			);
+		} else {
+			newMountingOptions = mountingDefaultOptions;
 		}
 
-		if (waterproof === 'Outdoor (Waterproof)') {
-			if (selectedMounting === 'Double-sided tape') {
-				setSelectedMounting('');
-			}
+		if (waterproof) {
+			if (waterproof === 'Outdoor (Waterproof)') {
+				if (selectedMounting === 'Double-sided tape') {
+					setSelectedMounting('');
+				}
 
-			newMountingOptions = newMountingOptions.filter(
-				(option) => option.mounting_option !== 'Double-sided tape'
-			);
+				newMountingOptions = newMountingOptions.filter(
+					(option) => option.mounting_option !== 'Double-sided tape'
+				);
+			} else {
+			}
 		}
 
 		setMountingOptions(newMountingOptions);
-	}, [selectedThickness, waterproof, setSelectedMounting, setMountingOptions]);
+	}, [selectedThickness, waterproof, selectedMounting]);
 
 	useEffect(() => {
 		setLetterHeightOptions(() =>
@@ -437,13 +456,15 @@ export const Letters = ({ item, letterPricing, hasPrice = false }) => {
 		}
 		if (!waterproof) missingFields.push('Select Environment');
 		if (!selectedMounting) missingFields.push('Select Mounting');
-		if (selectedMounting === STUD_WITH_SPACER) {
+		if (
+			selectedMounting === STUD_WITH_SPACER ||
+			selectedMounting === STUD_MOUNT ||
+			selectedMounting === 'Pad' ||
+			selectedMounting === 'Pad - Combination All'
+		) {
 			if (!studLength) missingFields.push('Select Stud Length');
 
 			if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
-		}
-		if (selectedMounting === STUD_MOUNT) {
-			if (!studLength) missingFields.push('Select Stud Length');
 		}
 		if (!sets) missingFields.push('Select Quantity');
 		setMissing((prevMissing) => {
@@ -642,7 +663,7 @@ export const Letters = ({ item, letterPricing, hasPrice = false }) => {
 				<Dropdown
 					title="Environment"
 					onChange={handleOnChangeWaterproof}
-					options={waterProofOptions.map((option) => (
+					options={waterProofSelections.map((option) => (
 						<option
 							value={option.option}
 							selected={option.option == waterproof}
@@ -667,7 +688,10 @@ export const Letters = ({ item, letterPricing, hasPrice = false }) => {
 					value={selectedMounting}
 				/>
 
-				{selectedMounting === STUD_WITH_SPACER && (
+				{(selectedMounting === STUD_WITH_SPACER ||
+					selectedMounting === 'Pad' ||
+					selectedMounting === 'Pad - Combination All' ||
+					selectedMounting === STUD_MOUNT) && (
 					<>
 						<Dropdown
 							title="Stud Length"
@@ -698,24 +722,6 @@ export const Letters = ({ item, letterPricing, hasPrice = false }) => {
 					</>
 				)}
 
-				{selectedMounting === STUD_MOUNT && (
-					<>
-						<Dropdown
-							title="Stud Length"
-							onChange={handleonChangeStudLength}
-							options={studLengthOptions.map((option) => (
-								<option
-									value={option.value}
-									selected={option.value == studLength}
-								>
-									{option.value}
-								</option>
-							))}
-							value={studLength}
-						/>
-					</>
-				)}
-
 				<Dropdown
 					title="Quantity"
 					onChange={handleOnChangeSets}
@@ -725,7 +731,10 @@ export const Letters = ({ item, letterPricing, hasPrice = false }) => {
 				/>
 			</div>
 
-			{selectedMounting === STUD_WITH_SPACER && (
+			{(selectedMounting === STUD_WITH_SPACER ||
+				selectedMounting === 'Pad' ||
+				selectedMounting === 'Pad - Combination All' ||
+				selectedMounting === STUD_MOUNT) && (
 				<div className="text-xs text-[#9F9F9F] mb-4">
 					*Note: The spacer will be black (default) or match the painted sign's
 					color.

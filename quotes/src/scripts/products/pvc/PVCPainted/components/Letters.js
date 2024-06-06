@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Dropdown from '../../../../Dropdown';
 import FontsDropdown from '../../../../FontsDropdown';
 import UploadFiles from '../../../../UploadFiles';
@@ -27,6 +27,8 @@ import {
 	STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
 
+import ColorsDropdown from '../../../../utils/ColorsDropdown';
+
 import { spacerPricing } from '../../../../utils/Pricing';
 
 import { useAppContext } from '../../../../AppProvider';
@@ -50,6 +52,8 @@ export function Letters({ item }) {
 	const [color, setColor] = useState(item.color ?? {});
 	const [openColor, setOpenColor] = useState(false);
 	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
+	const [waterProofSelections, setWaterProofSelections] =
+		useState(waterProofOptions);
 	const [selectedThickness, setSelectedThickness] = useState(item.thickness);
 	const [fileNames, setFileNames] = useState(item.fileNames ?? []);
 	const [fileUrls, setFileUrls] = useState(item.fileUrls ?? []);
@@ -262,13 +266,19 @@ export function Letters({ item }) {
 		const target = e.target.value;
 		setMounting(target);
 
-		if (target === STUD_WITH_SPACER || target === STUD_MOUNT) {
-			if (target === STUD_MOUNT) {
-				setSpacerStandoffDistance('');
-			}
-		} else {
+		if (target === 'Plain' || target === 'Double-sided tape') {
 			setStudLength('');
 			setSpacerStandoffDistance('');
+		}
+
+		if (target === 'Double-sided tape') {
+			setWaterProofSelections(
+				waterProofOptions.filter(
+					(option) => option.option === INDOOR_NOT_WATERPROOF
+				)
+			);
+		} else {
+			setWaterProofSelections(waterProofOptions);
 		}
 	};
 
@@ -409,7 +419,12 @@ export function Letters({ item }) {
 		if (!waterproof) missingFields.push('Select Environment');
 		if (!mounting) missingFields.push('Select Mounting');
 
-		if (mounting === STUD_WITH_SPACER) {
+		if (
+			mounting === STUD_WITH_SPACER ||
+			mounting === STUD_MOUNT ||
+			mounting === 'Pad' ||
+			mounting === 'Pad - Combination All'
+		) {
 			if (!studLength) missingFields.push('Select Stud Length');
 
 			if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
@@ -613,57 +628,20 @@ export function Letters({ item }) {
 					value={item.letterHeight}
 				/>
 
-				<div className="px-[1px] relative" ref={colorRef}>
-					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-						Color
-					</label>
-					<div
-						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-							color.name ? 'text-black' : 'text-[#dddddd]'
-						}`}
-						onClick={() => {
-							setOpenColor((prev) => !prev);
-							setOpenFont(false);
-						}}
-					>
-						<span
-							className="rounded-full w-[18px] h-[18px] border mr-2"
-							style={{
-								background:
-									color.name == 'Custom Color'
-										? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-										: color.color,
-							}}
-						></span>
-						{color.name === '' ? 'CHOOSE OPTION' : color.name}
-					</div>
-					{openColor && (
-						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg">
-							{colorOptions.map((color) => {
-								return (
-									<div
-										className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
-										onClick={() => {
-											setColor(color);
-											setOpenColor(false);
-										}}
-									>
-										<span
-											className="w-[18px] h-[18px] inline-block rounded-full border"
-											style={{
-												background:
-													color.name == 'Custom Color'
-														? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-														: color.color,
-											}}
-										></span>
-										{color.name}
-									</div>
-								);
-							})}
-						</div>
-					)}
-				</div>
+				<ColorsDropdown
+					ref={colorRef}
+					title="Color"
+					colorName={color.name}
+					openColor={openColor}
+					toggleColor={() => {
+						setOpenColor((prev) => !prev);
+					}}
+					colorOptions={colorOptions}
+					selectColor={(color) => {
+						setColor(color);
+						setOpenColor(false);
+					}}
+				/>
 
 				<Dropdown
 					title="Finishing Options"
@@ -682,7 +660,7 @@ export function Letters({ item }) {
 				<Dropdown
 					title="Environment"
 					onChange={handleOnChangeWaterproof}
-					options={waterProofOptions.map((option) => (
+					options={waterProofSelections.map((option) => (
 						<option
 							value={option.option}
 							selected={option.option == item.waterproof}
@@ -708,7 +686,10 @@ export function Letters({ item }) {
 					value={item.mounting}
 				/>
 
-				{mounting === STUD_WITH_SPACER && (
+				{(mounting === STUD_WITH_SPACER ||
+					mounting === 'Pad' ||
+					mounting === 'Pad - Combination All' ||
+					mounting === STUD_MOUNT) && (
 					<>
 						<Dropdown
 							title="Stud Length"
@@ -716,12 +697,12 @@ export function Letters({ item }) {
 							options={studLengthOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.studLength}
+									selected={option.value == studLength}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.studLength}
+							value={studLength}
 						/>
 						<Dropdown
 							title="STANDOFF SPACE"
@@ -729,30 +710,12 @@ export function Letters({ item }) {
 							options={spacerStandoffOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.spacerStandoffDistance}
+									selected={option.value == spacerStandoffDistance}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.spacerStandoffDistance}
-						/>
-					</>
-				)}
-
-				{mounting === STUD_MOUNT && (
-					<>
-						<Dropdown
-							title="Stud Length"
-							onChange={handleonChangeStudLength}
-							options={studLengthOptions.map((option) => (
-								<option
-									value={option.value}
-									selected={option.value == item.studLength}
-								>
-									{option.value}
-								</option>
-							))}
-							value={item.studLength}
+							value={spacerStandoffDistance}
 						/>
 					</>
 				)}
@@ -766,7 +729,10 @@ export function Letters({ item }) {
 				/>
 			</div>
 
-			{mounting === STUD_WITH_SPACER && (
+			{(mounting === STUD_WITH_SPACER ||
+				mounting === 'Pad' ||
+				mounting === 'Pad - Combination All' ||
+				mounting === STUD_MOUNT) && (
 				<div className="text-xs text-[#9F9F9F] mb-4">
 					*Note: The spacer will be black (default) or match the painted sign's
 					color.

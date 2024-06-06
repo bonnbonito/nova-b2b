@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
 import useOutsideClick from '../../../../utils/ClickOutside';
@@ -675,7 +675,10 @@ export function Logo({ item }) {
 				/>
 			</div>
 
-			{mounting === STUD_WITH_SPACER && (
+			{(mounting === STUD_WITH_SPACER ||
+				mounting === 'Pad' ||
+				mounting === 'Pad - Combination All' ||
+				mounting === STUD_MOUNT) && (
 				<div className="text-xs text-[#9F9F9F] mb-4">
 					*Note: The spacer will be black (default) or match the painted sign's
 					color.

@@ -312,7 +312,7 @@ export function Letters({ item }) {
 				tempTotal += calculateLetterPrice(letter, baseLetterPrice, noLowerCase);
 			});
 
-			if (selectedMounting === STUD_WITH_SPACER) {
+			if (studLength && spacerStandoffDistance) {
 				const spacer = spacerPricing(tempTotal);
 				tempTotal += parseFloat(spacer.toFixed(2));
 			}
@@ -362,7 +362,8 @@ export function Letters({ item }) {
 		letters,
 		sets,
 		font,
-		selectedMounting,
+		studLength,
+		spacerStandoffDistance,
 		letterPricing,
 		frontOption,
 	]);
@@ -758,7 +759,10 @@ export function Letters({ item }) {
 				/>
 			</div>
 
-			{selectedMounting === STUD_WITH_SPACER && (
+			{(selectedMounting === STUD_WITH_SPACER ||
+				selectedMounting === 'Pad' ||
+				selectedMounting === 'Pad - Combination All' ||
+				selectedMounting === STUD_MOUNT) && (
 				<div className="text-xs text-[#9F9F9F] mb-4">
 					*Note: The spacer will be black (default) or match the painted sign's
 					color.

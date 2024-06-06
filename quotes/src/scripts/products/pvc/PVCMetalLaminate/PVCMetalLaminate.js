@@ -148,13 +148,15 @@ export default function PVCMetalLaminate() {
 				<Note title="Note">
 					<ul className="text-sm">
 						<li>
-							The brushed finish is horizontal by default. Please let us know in
-							the comments section if you prefer a vertical finish.
+							The brushed finish is horizontal by default. Please let us know if
+							you prefer a vertical finish.
 						</li>
 						<li>
 							The spacer will be black (default) or match the painted sign's
 							color.
 						</li>
+						<li>The minimum stroke for 3M double-sided tape is 10mm.</li>
+						<li>For stud pins: The minimum stroke is 12mm (1/2").</li>
 					</ul>
 				</Note>
 
