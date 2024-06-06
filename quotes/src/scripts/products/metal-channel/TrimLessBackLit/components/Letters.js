@@ -89,31 +89,20 @@ export function Letters({ item }) {
 	const [letterPricingTables, setLetterPricingTables] = useState('');
 
 	useEffect(() => {
-		const fetchLetterPricing = async () => {
+		async function fetchLetterPricing() {
 			try {
-				const cachedData = localStorage.getItem(
-					`letterPricing_${item.product}`
+				const response = await fetch(
+					NovaQuote.letters_multi_pricing_api + item.product
 				);
-				if (cachedData) {
-					setLetterPricingTables(JSON.parse(cachedData));
-				} else {
-					const response = await fetch(
-						NovaQuote.letters_multi_pricing_api + item.product
-					);
-					const data = await response.json();
-					localStorage.setItem(
-						`letterPricing_${item.product}`,
-						JSON.stringify(data)
-					);
-					setLetterPricingTables(data);
-				}
+				const data = await response.json();
+				setLetterPricingTables(data);
 			} catch (error) {
 				console.error('Error fetching letter pricing:', error);
 			}
-		};
+		}
 
 		fetchLetterPricing();
-	}, [item.product]);
+	}, []);
 
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
@@ -467,10 +456,13 @@ export function Letters({ item }) {
 				}));
 			}
 		}
-	}, [depth, selectedLetterHeight]);
+	}, [depth, selectedLetterHeight, letterPricingTables]);
 
 	useEffect(() => {
+		if (!letterPricingTables || !letterPricing || !selectedLetterHeight) return;
+
 		if (
+			letterPricingTables &&
 			letterPricing &&
 			selectedLetterHeight &&
 			depth &&
@@ -563,6 +555,7 @@ export function Letters({ item }) {
 		font,
 		mounting,
 		letterPricingTables,
+		item.product,
 	]);
 
 	if (selectedFinishing === 'Painted') {

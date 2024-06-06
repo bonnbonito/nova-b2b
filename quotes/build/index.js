@@ -20349,23 +20349,17 @@ function Letters({
   const [selectedLetterHeight, setSelectedLetterHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letterHeight = item.letterHeight) !== null && _item$letterHeight !== void 0 ? _item$letterHeight : '');
   const [letterPricingTables, setLetterPricingTables] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    const fetchLetterPricing = async () => {
+    async function fetchLetterPricing() {
       try {
-        const cachedData = localStorage.getItem(`letterPricing_${item.product}`);
-        if (cachedData) {
-          setLetterPricingTables(JSON.parse(cachedData));
-        } else {
-          const response = await fetch(NovaQuote.letters_multi_pricing_api + item.product);
-          const data = await response.json();
-          localStorage.setItem(`letterPricing_${item.product}`, JSON.stringify(data));
-          setLetterPricingTables(data);
-        }
+        const response = await fetch(NovaQuote.letters_multi_pricing_api + item.product);
+        const data = await response.json();
+        setLetterPricingTables(data);
       } catch (error) {
         console.error('Error fetching letter pricing:', error);
       }
-    };
+    }
     fetchLetterPricing();
-  }, [item.product]);
+  }, []);
   const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdPrice = item.usdPrice) !== null && _item$usdPrice !== void 0 ? _item$usdPrice : 0);
   const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadPrice = item.cadPrice) !== null && _item$cadPrice !== void 0 ? _item$cadPrice : 0);
   const [lettersHeight, setLettersHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
@@ -20625,9 +20619,10 @@ function Letters({
         }));
       }
     }
-  }, [depth, selectedLetterHeight]);
+  }, [depth, selectedLetterHeight, letterPricingTables]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (letterPricing && selectedLetterHeight && depth && waterproof && acrylicReveal) {
+    if (!letterPricingTables || !letterPricing || !selectedLetterHeight) return;
+    if (letterPricingTables && letterPricing && selectedLetterHeight && depth && waterproof && acrylicReveal) {
       const pricingDetail = letterPricing[selectedLetterHeight - 5];
       if (pricingDetail) {
         let mm = 0;
@@ -20689,7 +20684,7 @@ function Letters({
       setUsdPrice(0);
       setCadPrice(0);
     }
-  }, [selectedLetterHeight, letters, waterproof, lettersHeight, letterPricing, depth, acrylicReveal, metalFinish, sets, font, mounting, letterPricingTables]);
+  }, [selectedLetterHeight, letters, waterproof, lettersHeight, letterPricing, depth, acrylicReveal, metalFinish, sets, font, mounting, letterPricingTables, item.product]);
   if (selectedFinishing === 'Painted') {
     (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__["default"])([colorRef, fontRef], () => {
       if (!openColor && !openFont) return;
