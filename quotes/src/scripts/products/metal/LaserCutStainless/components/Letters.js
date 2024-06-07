@@ -827,53 +827,36 @@ export function Letters({ item }) {
 					value={mounting}
 				/>
 
-				{mounting === STUD_WITH_SPACER && (
-					<>
-						<Dropdown
-							title="Stud Length"
-							onChange={handleonChangeStudLength}
-							options={studLengthOptions.map((option) => (
-								<option
-									value={option.value}
-									selected={option.value == studLength}
-								>
-									{option.value}
-								</option>
-							))}
-							value={studLength}
-						/>
-						<Dropdown
-							title="STANDOFF SPACE"
-							onChange={handleonChangeSpacerDistance}
-							options={spacerStandoffOptions.map((option) => (
-								<option
-									value={option.value}
-									selected={option.value == spacerStandoffDistance}
-								>
-									{option.value}
-								</option>
-							))}
-							value={spacerStandoffDistance}
-						/>
-					</>
+				{(mounting === STUD_WITH_SPACER || mounting === STUD_MOUNT) && (
+					<Dropdown
+						title="Stud Length"
+						onChange={handleonChangeStudLength}
+						options={studLengthOptions.map((option) => (
+							<option
+								value={option.value}
+								selected={option.value == studLength}
+							>
+								{option.value}
+							</option>
+						))}
+						value={studLength}
+					/>
 				)}
 
-				{mounting === STUD_MOUNT && (
-					<>
-						<Dropdown
-							title="Stud Length"
-							onChange={handleonChangeStudLength}
-							options={studLengthOptions.map((option) => (
-								<option
-									value={option.value}
-									selected={option.value == studLength}
-								>
-									{option.value}
-								</option>
-							))}
-							value={studLength}
-						/>
-					</>
+				{mounting === STUD_WITH_SPACER && (
+					<Dropdown
+						title="STANDOFF SPACE"
+						onChange={handleonChangeSpacerDistance}
+						options={spacerStandoffOptions.map((option) => (
+							<option
+								value={option.value}
+								selected={option.value == spacerStandoffDistance}
+							>
+								{option.value}
+							</option>
+						))}
+						value={spacerStandoffDistance}
+					/>
 				)}
 
 				<Dropdown
