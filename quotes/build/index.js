@@ -23274,6 +23274,8 @@ function Letters({
     if (!mounting) missingFields.push('Select Mounting');
     if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER || mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT || mounting === 'Pad' || mounting === 'Pad - Combination All') {
       if (!studLength) missingFields.push('Select Stud Length');
+    }
+    if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER) {
       if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (!sets) missingFields.push('Select Quantity');
@@ -23749,6 +23751,8 @@ function Logo({
     if (!mounting) missingFields.push('Select Mounting');
     if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER || mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT || mounting === 'Pad' || mounting === 'Pad - Combination All') {
       if (!studLength) missingFields.push('Select Stud Length');
+    }
+    if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER) {
       if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (!selectedFinishing) missingFields.push('Select Finishing');
@@ -25503,6 +25507,8 @@ function Logo({
     }
     if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER || mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT || mounting === 'Pad' || mounting === 'Pad - Combination All') {
       if (!studLength) missingFields.push('Select Stud Length');
+    }
+    if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER) {
       if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (!selectedFinishing) missingFields.push('Select Finishing');
@@ -25625,7 +25631,7 @@ function Logo({
       selected: option.value == studLength
     }, option.value)),
     value: studLength
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  })), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {

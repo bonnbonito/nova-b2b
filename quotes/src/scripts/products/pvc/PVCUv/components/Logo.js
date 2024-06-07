@@ -327,7 +327,8 @@ export function Logo({ item }) {
 			mounting === 'Pad - Combination All'
 		) {
 			if (!studLength) missingFields.push('Select Stud Length');
-
+		}
+		if (mounting === STUD_WITH_SPACER) {
 			if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
 		}
 
@@ -525,6 +526,10 @@ export function Logo({ item }) {
 							))}
 							value={studLength}
 						/>
+					</>
+				)}
+				{mounting === STUD_WITH_SPACER && (
+					<>
 						<Dropdown
 							title="STANDOFF SPACE"
 							onChange={handleonChangeSpacerDistance}

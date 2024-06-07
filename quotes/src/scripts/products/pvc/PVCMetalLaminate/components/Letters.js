@@ -448,7 +448,8 @@ export function Letters({ item }) {
 			mounting === 'Pad - Combination All'
 		) {
 			if (!studLength) missingFields.push('Select Stud Length');
-
+		}
+		if (mounting === STUD_WITH_SPACER) {
 			if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
 		}
 

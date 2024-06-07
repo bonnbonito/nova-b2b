@@ -28,7 +28,7 @@ add_filter(
 	}
 );
 
-$nova_update_checker->setBranch( 'main' );
+$nova_update_checker->setBranch( 'new-b2b' );
 
 if ( ! defined( 'NOVA_DIR_PATH' ) ) {
 	define( 'NOVA_DIR_PATH', untrailingslashit( get_stylesheet_directory() ) );
