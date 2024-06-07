@@ -41,10 +41,12 @@ export default function AccordionItem({ title, products, isOpen }) {
 								addSignage={addSignage}
 								product={product}
 								title={title}
-								type="letters"
+								type="LETTERS"
 							>
 								ADD LETTERS
-								<PlusIcon />
+								<div className="ml-2">
+									<PlusIcon />
+								</div>
 							</AddSignage>
 						)}
 
@@ -53,10 +55,12 @@ export default function AccordionItem({ title, products, isOpen }) {
 								addSignage={addSignage}
 								product={product}
 								title={title}
-								type="logo"
+								type="LOGO"
 							>
 								ADD LOGO
-								<PlusIcon />
+								<div className="ml-2">
+									<PlusIcon />
+								</div>
 							</AddSignage>
 						)}
 
@@ -68,7 +72,23 @@ export default function AccordionItem({ title, products, isOpen }) {
 								type="SIGN"
 							>
 								ADD SIGN
-								<PlusIcon />
+								<div className="ml-2">
+									<PlusIcon />
+								</div>
+							</AddSignage>
+						)}
+
+						{product.custom && (
+							<AddSignage
+								addSignage={addSignage}
+								product={product}
+								title={title}
+								type="CUSTOM"
+							>
+								ADD CUSTOM PROJECT
+								<div className="ml-2">
+									<PlusIcon />
+								</div>
 							</AddSignage>
 						)}
 					</div>

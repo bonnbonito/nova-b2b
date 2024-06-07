@@ -198,6 +198,27 @@ const studLengthOptions = [
 	},
 ];
 
+const metalLaminateOptions = [
+	{
+		option: 'Stainless Steel Brushed',
+	},
+	{
+		option: 'Stainless Steel Polished',
+	},
+	{
+		option: 'Black Titanium Brushed',
+	},
+	{
+		option: 'Black Titanium Polished',
+	},
+	{
+		option: 'Gold Brushed',
+	},
+	{
+		option: 'Gold Polished',
+	},
+];
+
 const arrayRange = (start, stop, step, inches = true) =>
 	Array.from({ length: (stop - start) / step + 1 }, (value, index) => (
 		<option value={`${start + index * step}${inches ? '"' : "'"}`}>
@@ -213,6 +234,7 @@ export {
 	installationDefaultOptions,
 	metalFinishOptions,
 	metalInstallationOptions,
+	metalLaminateOptions,
 	metalThicknessOptions,
 	mountingDefaultOptions,
 	piecesOptions,

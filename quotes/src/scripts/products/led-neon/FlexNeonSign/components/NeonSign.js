@@ -84,38 +84,38 @@ export const NeonSign = ({ item }) => {
 
 	const [quantityDiscountTable, setQuantityDiscountTable] = useState([]);
 
-	useEffect(() => {
-		async function fetchQuantityDiscountPricing() {
-			try {
-				const response = await fetch(
-					NovaQuote.quantity_discount_api + item.product
-				);
-				const data = await response.json();
-				const tableJson = data.pricing_table
-					? convertJson(data.pricing_table)
-					: [];
-				setQuantityDiscountTable(tableJson);
-			} catch (error) {
-				console.error('Error fetching discount table pricing:', error);
-			} finally {
-				setSetOptions(
-					Array.from(
-						{
-							length: 100,
-						},
-						(_, index) => {
-							const val = 1 + index;
-							return (
-								<option key={index} value={val}>
-									{val}
-								</option>
-							);
-						}
-					)
-				);
-			}
+	async function fetchQuantityDiscountPricing() {
+		try {
+			const response = await fetch(
+				NovaQuote.quantity_discount_api + item.product
+			);
+			const data = await response.json();
+			const tableJson = data.pricing_table
+				? convertJson(data.pricing_table)
+				: [];
+			setQuantityDiscountTable(tableJson);
+		} catch (error) {
+			console.error('Error fetching discount table pricing:', error);
+		} finally {
+			setSetOptions(
+				Array.from(
+					{
+						length: 100,
+					},
+					(_, index) => {
+						const val = 1 + index;
+						return (
+							<option key={index} value={val}>
+								{val}
+							</option>
+						);
+					}
+				)
+			);
 		}
+	}
 
+	useEffect(() => {
 		fetchQuantityDiscountPricing();
 	}, []);
 
@@ -290,8 +290,6 @@ export const NeonSign = ({ item }) => {
 
 		const discount = quantityDiscount(sets, quantityDiscountTable);
 
-		console.log(discount);
-
 		let totalWithDiscount = total * discount;
 
 		let discountPrice = total - totalWithDiscount;
@@ -305,14 +303,16 @@ export const NeonSign = ({ item }) => {
 	};
 
 	useEffect(() => {
-		const { singlePrice, total, discount } = computePricing();
-		if (total && singlePrice) {
-			setUsdPrice(total);
-			setCadPrice((total * EXCHANGE_RATE).toFixed(2));
-			setUsdSinglePrice(singlePrice);
-			setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
-			setUsdDiscount(discount.toFixed(2));
-			setCadDiscount((discount * EXCHANGE_RATE).toFixed(2));
+		if (quantityDiscountTable.length > 0) {
+			const { singlePrice, total, discount } = computePricing();
+			if (total && singlePrice) {
+				setUsdPrice(total);
+				setCadPrice((total * EXCHANGE_RATE).toFixed(2));
+				setUsdSinglePrice(singlePrice);
+				setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
+				setUsdDiscount(discount.toFixed(2));
+				setCadDiscount((discount * EXCHANGE_RATE).toFixed(2));
+			}
 		}
 	}, [
 		width,
@@ -323,7 +323,6 @@ export const NeonSign = ({ item }) => {
 		mounting,
 		remoteControl,
 		sets,
-		quantityDiscountTable,
 	]);
 
 	const handleOnChangeSets = (e) => {
@@ -337,7 +336,7 @@ export const NeonSign = ({ item }) => {
 	};
 
 	const handledSelectedColors = (selectedColors) => {
-		setColor(selectedColors.map((option) => option.name).join(', '));
+		setColor(selectedColors.map((option) => option).join(', '));
 	};
 
 	const handleOnChangeWireExitLocation = (e) => {
@@ -486,6 +485,7 @@ export const NeonSign = ({ item }) => {
 					/>
 				</div>
 				<UploadFiles
+					itemId={item.id}
 					setFilePaths={setFilePaths}
 					setFiles={setFiles}
 					filePaths={filePaths}

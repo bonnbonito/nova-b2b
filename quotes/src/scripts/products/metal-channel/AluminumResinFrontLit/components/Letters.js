@@ -725,7 +725,7 @@ export function Letters({ item }) {
 						{color?.name === '' ? 'CHOOSE OPTION' : color?.name}
 					</div>
 					{openColor && (
-						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
+						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg">
 							{colorOptions.map((color) => {
 								return (
 									<div
@@ -799,7 +799,7 @@ export function Letters({ item }) {
 							{vinylWhite.name === '' ? 'CHOOSE OPTION' : vinylWhite.name}
 						</div>
 						{openAcrylicCover && (
-							<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
+							<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg">
 								{translucentGraphicFilms.map((color) => {
 									return (
 										<div
@@ -936,6 +936,7 @@ export function Letters({ item }) {
 				</div>
 
 				<UploadFiles
+					itemId={item.id}
 					setFilePaths={setFilePaths}
 					setFiles={setFiles}
 					filePaths={filePaths}

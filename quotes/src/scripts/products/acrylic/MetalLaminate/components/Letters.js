@@ -8,6 +8,7 @@ import {
 	colorOptions,
 	metalFinishColors,
 } from '../../../../utils/ColorOptions';
+import ColorsDropdown from '../../../../utils/ColorsDropdown';
 import convert_json from '../../../../utils/ConvertJson';
 import {
 	mountingDefaultOptions,
@@ -78,6 +79,10 @@ export const Letters = ({ item, letterPricing, hasPrice = false }) => {
 	const [openFont, setOpenFont] = useState(false);
 	const [openAcrylicColor, setOpenAcrylicColor] = useState(false);
 	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
+
+	const [waterProofSelections, setWaterProofSelections] =
+		useState(waterProofOptions);
+
 	const [selectedThickness, setSelectedThickness] = useState(
 		item.acrylicThickness ?? ''
 	);
@@ -126,13 +131,21 @@ export const Letters = ({ item, letterPricing, hasPrice = false }) => {
 		const target = e.target.value;
 		setSelectedMounting(target);
 
-		if (target === STUD_WITH_SPACER || target === STUD_MOUNT) {
-			if (target === STUD_MOUNT) {
-				setSpacerStandoffDistance('');
-			}
-		} else {
+		if (target === 'Plain' || target === 'Double-sided tape') {
 			setStudLength('');
+		}
+		if (target !== STUD_WITH_SPACER) {
 			setSpacerStandoffDistance('');
+		}
+
+		if (target === 'Double-sided tape') {
+			setWaterProofSelections(
+				waterProofOptions.filter(
+					(option) => option.option == INDOOR_NOT_WATERPROOF
+				)
+			);
+		} else {
+			setWaterProofSelections(waterProofOptions);
 		}
 	};
 
@@ -254,22 +267,24 @@ export const Letters = ({ item, letterPricing, hasPrice = false }) => {
 		);
 		setSelectedThickness(() => selected[0]);
 
+		if (parseInt(target) > 11 && parseInt(selectedLetterHeight) === 1) {
+			setSelectedLetterHeight('');
+		}
+
 		if (parseInt(target) === 3) {
 			if (parseInt(selectedLetterHeight) > 24) {
 				setSelectedLetterHeight('');
 			}
 			if (
 				selectedMounting === STUD_MOUNT ||
-				selectedMounting === STUD_WITH_SPACER
+				selectedMounting === STUD_WITH_SPACER ||
+				selectedMounting === 'Pad' ||
+				selectedMounting === 'Pad - Combination All'
 			) {
 				setSelectedMounting('');
 				setStudLength('');
 				setSpacerStandoffDistance('');
 			}
-		}
-
-		if (parseInt(target) > 11 && parseInt(selectedLetterHeight) === 1) {
-			setSelectedLetterHeight('');
 		}
 	};
 
@@ -344,25 +359,32 @@ export const Letters = ({ item, letterPricing, hasPrice = false }) => {
 		let newMountingOptions = mountingDefaultOptions;
 
 		if (selectedThickness?.value === '3') {
-			newMountingOptions = newMountingOptions.filter(
+			newMountingOptions = mountingDefaultOptions.filter(
 				(option) =>
 					option.mounting_option !== STUD_MOUNT &&
-					option.mounting_option !== STUD_WITH_SPACER
+					option.mounting_option !== STUD_WITH_SPACER &&
+					option.mounting_option !== 'Pad' &&
+					option.mounting_option !== 'Pad - Combination All'
 			);
+		} else {
+			newMountingOptions = mountingDefaultOptions;
 		}
 
-		if (waterproof === 'Outdoor (Waterproof)') {
-			if (selectedMounting === 'Double-sided tape') {
-				setSelectedMounting('');
-			}
+		if (waterproof) {
+			if (waterproof === 'Outdoor (Waterproof)') {
+				if (selectedMounting === 'Double-sided tape') {
+					setSelectedMounting('');
+				}
 
-			newMountingOptions = newMountingOptions.filter(
-				(option) => option.mounting_option !== 'Double-sided tape'
-			);
+				newMountingOptions = newMountingOptions.filter(
+					(option) => option.mounting_option !== 'Double-sided tape'
+				);
+			} else {
+			}
 		}
 
 		setMountingOptions(newMountingOptions);
-	}, [selectedThickness, waterproof, setSelectedMounting, setMountingOptions]);
+	}, [selectedThickness, waterproof, selectedMounting]);
 
 	useEffect(() => {
 		setLetterHeightOptions(() =>
@@ -436,13 +458,16 @@ export const Letters = ({ item, letterPricing, hasPrice = false }) => {
 		}
 		if (!waterproof) missingFields.push('Select Environment');
 		if (!selectedMounting) missingFields.push('Select Mounting');
-		if (selectedMounting === STUD_WITH_SPACER) {
+		if (
+			selectedMounting === STUD_WITH_SPACER ||
+			selectedMounting === STUD_MOUNT ||
+			selectedMounting === 'Pad' ||
+			selectedMounting === 'Pad - Combination All'
+		) {
 			if (!studLength) missingFields.push('Select Stud Length');
-
-			if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
 		}
-		if (selectedMounting === STUD_MOUNT) {
-			if (!studLength) missingFields.push('Select Stud Length');
+		if (selectedMounting === STUD_WITH_SPACER) {
+			if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
 		}
 		if (!sets) missingFields.push('Select Quantity');
 		setMissing((prevMissing) => {
@@ -622,63 +647,26 @@ export const Letters = ({ item, letterPricing, hasPrice = false }) => {
 					value={metalLaminate}
 				/>
 
-				<div className="px-[1px] relative" ref={acrylicRef}>
-					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-						Acrylic Base
-					</label>
-					<div
-						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-							acrylicBase?.name ? 'text-black' : 'text-[#dddddd]'
-						}`}
-						onClick={() => {
-							console.log('Click');
-							setOpenAcrylicColor((prev) => !prev);
-							setOpenFont(false);
-						}}
-					>
-						<span
-							className="rounded-full w-[18px] h-[18px] border mr-2"
-							style={{
-								background:
-									acrylicBase?.name == 'Custom Color'
-										? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-										: acrylicBase?.color,
-							}}
-						></span>
-						{acrylicBase?.name === '' ? 'CHOOSE OPTION' : acrylicBase?.name}
-					</div>
-					{openAcrylicColor && (
-						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
-							{colorOptions.map((color) => {
-								return (
-									<div
-										className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
-										onClick={() => {
-											setAcrylicBase(color);
-											setOpenAcrylicColor(false);
-										}}
-									>
-										<span
-											className="w-[18px] h-[18px] inline-block rounded-full border"
-											style={{
-												background:
-													color.name == 'Custom Color'
-														? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-														: color.color,
-											}}
-										></span>
-										{color.name}
-									</div>
-								);
-							})}
-						</div>
-					)}
-				</div>
+				<ColorsDropdown
+					ref={acrylicRef}
+					title="Acrylic Base"
+					colorName={acrylicBase.name}
+					toggleColor={() => {
+						setOpenAcrylicColor((prev) => !prev);
+						setOpenFont(false);
+					}}
+					openColor={openAcrylicColor}
+					colorOptions={colorOptions}
+					selectColor={(color) => {
+						setAcrylicBase(color);
+						setOpenAcrylicColor(false);
+					}}
+				/>
 
 				<Dropdown
 					title="Environment"
 					onChange={handleOnChangeWaterproof}
-					options={waterProofOptions.map((option) => (
+					options={waterProofSelections.map((option) => (
 						<option
 							value={option.option}
 							selected={option.option == waterproof}
@@ -703,7 +691,10 @@ export const Letters = ({ item, letterPricing, hasPrice = false }) => {
 					value={selectedMounting}
 				/>
 
-				{selectedMounting === STUD_WITH_SPACER && (
+				{(selectedMounting === STUD_WITH_SPACER ||
+					selectedMounting === 'Pad' ||
+					selectedMounting === 'Pad - Combination All' ||
+					selectedMounting === STUD_MOUNT) && (
 					<>
 						<Dropdown
 							title="Stud Length"
@@ -718,6 +709,10 @@ export const Letters = ({ item, letterPricing, hasPrice = false }) => {
 							))}
 							value={studLength}
 						/>
+					</>
+				)}
+				{selectedMounting === STUD_WITH_SPACER && (
+					<>
 						<Dropdown
 							title="STANDOFF SPACE"
 							onChange={handleonChangeSpacerDistance}
@@ -730,24 +725,6 @@ export const Letters = ({ item, letterPricing, hasPrice = false }) => {
 								</option>
 							))}
 							value={spacerStandoffDistance}
-						/>
-					</>
-				)}
-
-				{selectedMounting === STUD_MOUNT && (
-					<>
-						<Dropdown
-							title="Stud Length"
-							onChange={handleonChangeStudLength}
-							options={studLengthOptions.map((option) => (
-								<option
-									value={option.value}
-									selected={option.value == studLength}
-								>
-									{option.value}
-								</option>
-							))}
-							value={studLength}
 						/>
 					</>
 				)}
@@ -798,6 +775,7 @@ export const Letters = ({ item, letterPricing, hasPrice = false }) => {
 				</div>
 
 				<UploadFiles
+					itemId={item.id}
 					setFilePaths={setFilePaths}
 					setFiles={setFiles}
 					filePaths={filePaths}

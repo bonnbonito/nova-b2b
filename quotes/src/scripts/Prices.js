@@ -1,22 +1,34 @@
-import React, { memo } from 'react';
+import PropTypes from 'prop-types';
+import React, { memo, useMemo } from 'react';
 import { RenderSignageDetails } from './RenderSignageDetails';
 import TooltipText from './utils/TooltipText';
 
 const Prices = memo(function Prices({ item, borderTop }) {
 	const currency = wcumcs_vars_data.currency;
-	const price = currency === 'USD' ? item.usdPrice : item.cadPrice;
-	const singlePrice =
-		currency === 'USD' ? item.usdSinglePrice : item.cadSinglePrice;
+	const price = useMemo(
+		() => (currency === 'USD' ? item.usdPrice : item.cadPrice),
+		[currency, item]
+	);
+	const singlePrice = useMemo(
+		() => (currency === 'USD' ? item.usdSinglePrice : item.cadSinglePrice),
+		[currency, item]
+	);
 
-	const outputPrice =
-		price > 0 ? (
-			<span>
-				{currency}${Number(singlePrice ?? price).toLocaleString()}
-				{singlePrice && <span className="text-xs lowercase">/each</span>}
-			</span>
-		) : (
-			<span>TBD</span>
-		);
+	const outputPrice = useMemo(
+		() =>
+			price > 0 ? (
+				<span>
+					{currency}$
+					{Number(singlePrice ?? price)
+						.toFixed(2)
+						.toLocaleString()}
+					{singlePrice && <span className="text-xs lowercase">/each</span>}
+				</span>
+			) : (
+				<span>TBD</span>
+			),
+		[price, singlePrice, currency]
+	);
 
 	return (
 		<div className={`block ${borderTop}`}>
@@ -43,5 +55,10 @@ const Prices = memo(function Prices({ item, borderTop }) {
 		</div>
 	);
 });
+
+Prices.propTypes = {
+	item: PropTypes.object.isRequired,
+	borderTop: PropTypes.string,
+};
 
 export default Prices;

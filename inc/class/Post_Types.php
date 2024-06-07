@@ -1,6 +1,6 @@
 <?php
 
-namespace NOVA_B2B\Inc\Classes;
+namespace NOVA_B2B;
 
 class Post_Types {
 	/**
@@ -24,5 +24,3 @@ class Post_Types {
 	public function __construct() {
 	}
 }
-
-Post_Types::get_instance();

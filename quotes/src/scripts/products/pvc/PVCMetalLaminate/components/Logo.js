@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
 import useOutsideClick from '../../../../utils/ClickOutside';
@@ -6,6 +6,7 @@ import {
 	colorOptions,
 	metalFinishColors,
 } from '../../../../utils/ColorOptions';
+import ColorsDropdown from '../../../../utils/ColorsDropdown';
 import convert_json from '../../../../utils/ConvertJson';
 import {
 	getLogoPricingTablebyThickness,
@@ -41,7 +42,6 @@ export function Logo({ item }) {
 	const [maxWidthHeight, setMaxWidthHeight] = useState(36);
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
-	const [fileName, setFileName] = useState(item.fileName);
 	const [openColor, setOpenColor] = useState(false);
 	const [pvcBaseColor, setPvcBaseColor] = useState(item.pvcBaseColor);
 	const [customColor, setCustomColor] = useState(item.customColor ?? '');
@@ -122,18 +122,28 @@ export function Logo({ item }) {
 	const [height, setHeight] = useState(item.height ?? '');
 	const [comments, setComments] = useState(item.comments ?? '');
 	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
+	const [waterProofSelections, setWaterProofSelections] =
+		useState(waterProofOptions);
 
 	const handleOnChangeMounting = (e) => {
 		const target = e.target.value;
 		setMounting(target);
 
-		if (target === STUD_WITH_SPACER || target === STUD_MOUNT) {
-			if (target === STUD_MOUNT) {
-				setSpacerStandoffDistance('');
-			}
-		} else {
+		if (target === 'Plain' || target === 'Double-sided tape') {
 			setStudLength('');
+		}
+		if (target !== STUD_WITH_SPACER) {
 			setSpacerStandoffDistance('');
+		}
+
+		if (target === 'Double-sided tape') {
+			setWaterProofSelections(
+				waterProofOptions.filter(
+					(option) => option.option === INDOOR_NOT_WATERPROOF
+				)
+			);
+		} else {
+			setWaterProofSelections(waterProofOptions);
 		}
 	};
 
@@ -320,7 +330,12 @@ export function Logo({ item }) {
 		if (!waterproof) missingFields.push('Select Environment');
 		if (!mounting) missingFields.push('Select Mounting');
 
-		if (mounting === STUD_WITH_SPACER) {
+		if (
+			mounting === STUD_WITH_SPACER ||
+			mounting === STUD_MOUNT ||
+			mounting === 'Pad' ||
+			mounting === 'Pad - Combination All'
+		) {
 			if (!studLength) missingFields.push('Select Stud Length');
 
 			if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
@@ -463,54 +478,20 @@ export function Logo({ item }) {
 					value={metalLaminate}
 				/>
 
-				<div className="px-[1px] relative" ref={colorRef}>
-					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-						PVC BASE COLOR
-					</label>
-					<div
-						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-							pvcBaseColor?.name ? 'text-black' : 'text-[#dddddd]'
-						}`}
-						onClick={() => setOpenColor((prev) => !prev)}
-					>
-						<span
-							className="rounded-full w-[18px] h-[18px] border mr-2"
-							style={{
-								background:
-									pvcBaseColor?.name == 'Custom Color'
-										? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-										: pvcBaseColor?.color,
-							}}
-						></span>
-						{pvcBaseColor?.name === '' ? 'CHOOSE OPTION' : pvcBaseColor?.name}
-					</div>
-					{openColor && (
-						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
-							{colorOptions.map((color) => {
-								return (
-									<div
-										className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
-										onClick={() => {
-											setPvcBaseColor(color);
-											setOpenColor(false);
-										}}
-									>
-										<span
-											className="w-[18px] h-[18px] inline-block rounded-full border"
-											style={{
-												background:
-													color.name == 'Custom Color'
-														? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-														: color.color,
-											}}
-										></span>
-										{color.name}
-									</div>
-								);
-							})}
-						</div>
-					)}
-				</div>
+				<ColorsDropdown
+					ref={colorRef}
+					title="PVC BASE COLOR"
+					colorName={pvcBaseColor?.name}
+					openColor={openColor}
+					toggleColor={() => {
+						setOpenColor((prev) => !prev);
+					}}
+					colorOptions={colorOptions}
+					selectColor={(color) => {
+						setPvcBaseColor(color);
+						setOpenColor(false);
+					}}
+				/>
 
 				<Dropdown
 					title="Finishing Options"
@@ -529,7 +510,7 @@ export function Logo({ item }) {
 				<Dropdown
 					title="Environment"
 					onChange={(e) => setWaterproof(e.target.value)}
-					options={waterProofOptions.map((option) => (
+					options={waterProofSelections.map((option) => (
 						<option
 							value={option.option}
 							selected={option.option == item.waterproof}
@@ -551,7 +532,10 @@ export function Logo({ item }) {
 					value={item.mounting}
 				/>
 
-				{mounting === STUD_WITH_SPACER && (
+				{(mounting === STUD_WITH_SPACER ||
+					mounting === 'Pad' ||
+					mounting === 'Pad - Combination All' ||
+					mounting === STUD_MOUNT) && (
 					<>
 						<Dropdown
 							title="Stud Length"
@@ -559,12 +543,12 @@ export function Logo({ item }) {
 							options={studLengthOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.studLength}
+									selected={option.value == studLength}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.studLength}
+							value={studLength}
 						/>
 						<Dropdown
 							title="STANDOFF SPACE"
@@ -572,30 +556,12 @@ export function Logo({ item }) {
 							options={spacerStandoffOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == item.spacerStandoffDistance}
+									selected={option.value == spacerStandoffDistance}
 								>
 									{option.value}
 								</option>
 							))}
-							value={item.spacerStandoffDistance}
-						/>
-					</>
-				)}
-
-				{mounting === STUD_MOUNT && (
-					<>
-						<Dropdown
-							title="Stud Length"
-							onChange={handleonChangeStudLength}
-							options={studLengthOptions.map((option) => (
-								<option
-									value={option.value}
-									selected={option.value == item.studLength}
-								>
-									{option.value}
-								</option>
-							))}
-							value={item.studLength}
+							value={spacerStandoffDistance}
 						/>
 					</>
 				)}
@@ -644,6 +610,7 @@ export function Logo({ item }) {
 					/>
 				</div>
 				<UploadFiles
+					itemId={item.id}
 					setFilePaths={setFilePaths}
 					setFiles={setFiles}
 					filePaths={filePaths}

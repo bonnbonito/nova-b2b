@@ -1,9 +1,10 @@
 import * as Tooltip from '@radix-ui/react-tooltip';
+import PropTypes from 'prop-types';
 import React from 'react';
 
 const TooltipText = ({ text, children }) => {
 	return (
-		<Tooltip.Provider>
+		<Tooltip.Provider delayDuration={0}>
 			<Tooltip.Root>
 				<Tooltip.Trigger asChild>{children}</Tooltip.Trigger>
 				<Tooltip.Portal>
@@ -18,6 +19,11 @@ const TooltipText = ({ text, children }) => {
 			</Tooltip.Root>
 		</Tooltip.Provider>
 	);
+};
+
+TooltipText.propTypes = {
+	text: PropTypes.string.isRequired,
+	children: PropTypes.node.isRequired,
 };
 
 export default TooltipText;

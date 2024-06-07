@@ -1,11 +1,13 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Dropdown from '../../../../Dropdown';
 import FontsDropdown from '../../../../FontsDropdown';
 import UploadFiles from '../../../../UploadFiles';
 import UploadFont from '../../../../UploadFont';
 import useOutsideClick from '../../../../utils/ClickOutside';
 import { colorOptions } from '../../../../utils/ColorOptions';
+import ColorsDropdown from '../../../../utils/ColorsDropdown';
 import convert_json from '../../../../utils/ConvertJson';
+
 import { getLetterPricingTableByTitle } from '../../../../utils/Pricing';
 import {
 	setOptions,
@@ -50,13 +52,15 @@ export function Letters({ item }) {
 	const [font, setFont] = useState(item.font ?? '');
 	const [openFont, setOpenFont] = useState(false);
 
-	const [color, setColor] = useState(item.faceReturnColor);
+	const [color, setColor] = useState(
+		item.faceReturnColor ?? { name: '', color: '' }
+	);
 	const [openColor, setOpenColor] = useState(false);
 	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
 
 	const [letterPricing, setLetterPricing] = useState([]);
 
-	const [depth, setDepth] = useState(item.depth);
+	const [depth, setDepth] = useState(item.depth ?? '');
 	const [acrylicReveal, setAcrylicReveal] = useState(item.acrylicReveal);
 
 	const [fileNames, setFileNames] = useState(item.fileNames ?? []);
@@ -90,7 +94,6 @@ export function Letters({ item }) {
 				const response = await fetch(
 					NovaQuote.letters_multi_pricing_api + item.product
 				);
-				console.log('pricing', response);
 				const data = await response.json();
 				setLetterPricingTables(data);
 			} catch (error) {
@@ -130,34 +133,6 @@ export function Letters({ item }) {
 
 	const colorRef = useRef(null);
 	const fontRef = useRef(null);
-
-	useEffect(() => {
-		console.log('Attempting to preload fonts...');
-		async function preloadFonts() {
-			try {
-				await loadingFonts();
-			} catch (error) {
-				console.error('Error loading fonts:', error);
-			}
-		}
-		preloadFonts();
-	}, []);
-
-	const loadingFonts = async () => {
-		const loadPromises = NovaQuote.fonts.map((font) => loadFont(font));
-		await Promise.all(loadPromises);
-	};
-
-	async function loadFont({ name, src }) {
-		const fontFace = new FontFace(name, `url(${src})`);
-
-		try {
-			await fontFace.load();
-			document.fonts.add(fontFace);
-		} catch (e) {
-			console.error(`Font ${name} failed to load`);
-		}
-	}
 
 	const headlineRef = useRef(null);
 
@@ -481,10 +456,13 @@ export function Letters({ item }) {
 				}));
 			}
 		}
-	}, [depth, selectedLetterHeight]);
+	}, [depth, selectedLetterHeight, letterPricingTables]);
 
 	useEffect(() => {
+		if (!letterPricingTables || !letterPricing || !selectedLetterHeight) return;
+
 		if (
+			letterPricingTables &&
 			letterPricing &&
 			selectedLetterHeight &&
 			depth &&
@@ -577,6 +555,7 @@ export function Letters({ item }) {
 		font,
 		mounting,
 		letterPricingTables,
+		item.product,
 	]);
 
 	if (selectedFinishing === 'Painted') {
@@ -706,57 +685,23 @@ export function Letters({ item }) {
 				)}
 
 				{selectedFinishing === 'Painted' && (
-					<div className="px-[1px] relative" ref={colorRef}>
-						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-							Face & Return Color
-						</label>
-						<div
-							className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-								color.name ? 'text-black' : 'text-[#dddddd]'
-							}`}
-							onClick={() => {
+					<>
+						<ColorsDropdown
+							title="Face & Return Color"
+							ref={colorRef}
+							colorName={color?.name}
+							openColor={openColor}
+							toggleColor={() => {
 								setOpenColor((prev) => !prev);
 								setOpenFont(false);
 							}}
-						>
-							<span
-								className="rounded-full w-[18px] h-[18px] border mr-2"
-								style={{
-									background:
-										color.name == 'Custom Color'
-											? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-											: color.color,
-								}}
-							></span>
-							{color.name === '' ? 'CHOOSE OPTION' : color.name}
-						</div>
-						{openColor && (
-							<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
-								{colorOptions.map((color) => {
-									return (
-										<div
-											className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
-											onClick={() => {
-												setColor(color);
-												setOpenColor(false);
-											}}
-										>
-											<span
-												className="w-[18px] h-[18px] inline-block rounded-full border"
-												style={{
-													background:
-														color.name == 'Custom Color'
-															? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-															: color.color,
-												}}
-											></span>
-											{color.name}
-										</div>
-									);
-								})}
-							</div>
-						)}
-					</div>
+							colorOptions={colorOptions}
+							selectColor={(color) => {
+								setColor(color);
+								setOpenColor(false);
+							}}
+						/>
+					</>
 				)}
 
 				<Dropdown
@@ -904,6 +849,7 @@ export function Letters({ item }) {
 				</div>
 
 				<UploadFiles
+					itemId={item.id}
 					setFilePaths={setFilePaths}
 					setFiles={setFiles}
 					filePaths={filePaths}

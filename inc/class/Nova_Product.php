@@ -1,6 +1,6 @@
 <?php
 
-namespace NOVA_B2B\Inc\Classes;
+namespace NOVA_B2B;
 
 use WP_Query;
 
@@ -315,7 +315,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 	public function create_product_type() {
 		if ( ! class_exists( 'WC_Product_Nova_Quote' ) ) {
-			require NOVA_DIR_PATH . '/inc/classes/WC_Product_Nova_Quote.php';
+			require NOVA_CLASS_PATH . '/WC_Product_Nova_Quote.php';
 		}
 	}
 
@@ -378,6 +378,3 @@ document.addEventListener("DOMContentLoaded", (event) => {
 		);
 	}
 }
-
-// Initialize the singleton instance
-Nova_Product::get_instance();

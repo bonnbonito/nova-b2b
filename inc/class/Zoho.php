@@ -1,6 +1,6 @@
 <?php
 
-namespace NOVA_B2B\Inc\Classes;
+namespace NOVA_B2B;
 
 class Zoho {
 	/**
@@ -744,5 +744,3 @@ generateZohoId.addEventListener("click", e => {
 		file_put_contents( $log_file, $log_message, FILE_APPEND );
 	}
 }
-
-Zoho::get_instance();

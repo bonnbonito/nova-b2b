@@ -1,6 +1,6 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import React, { useState } from 'react';
-import { CloseIcon, LoadingIcon } from './svg/Icons';
+import { CloseIcon } from './svg/Icons';
 import { processQuote } from './utils/QuoteFunctions';
 
 export const DeleteQuote = () => {

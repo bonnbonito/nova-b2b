@@ -10,14 +10,16 @@ export const NeonColors = ({
 	getSelectedColors,
 	setToogle,
 }) => {
-	const [selectedColors, setSelectedColors] = useState([]);
+	const [selectedColors, setSelectedColors] = useState(() =>
+		colors ? colors.split(', ').map((color) => color.trim()) : []
+	);
 
-	const handleColorChange = (colorOption) => {
+	const handleColorChange = (colorName) => {
 		setSelectedColors((prevColors) => {
-			if (prevColors.some((c) => c.name === colorOption.name)) {
-				return prevColors.filter((c) => c.name !== colorOption.name);
+			if (prevColors.includes(colorName)) {
+				return prevColors.filter((c) => c !== colorName);
 			} else {
-				return [...prevColors, colorOption];
+				return [...prevColors, colorName];
 			}
 		});
 	};
@@ -28,7 +30,7 @@ export const NeonColors = ({
 
 	const colorSelections = useMemo(
 		() => (
-			<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
+			<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg">
 				{neonColorOptions.map((colorOption) => (
 					<label
 						key={colorOption.name}
@@ -36,8 +38,8 @@ export const NeonColors = ({
 					>
 						<input
 							type="checkbox"
-							checked={selectedColors.some((c) => c.name === colorOption.name)}
-							onChange={() => handleColorChange(colorOption)}
+							checked={selectedColors.includes(colorOption.name)}
+							onChange={() => handleColorChange(colorOption.name)}
 						/>
 						<span
 							className="w-[18px] h-[18px] inline-block rounded-full border"

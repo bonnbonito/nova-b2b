@@ -1,6 +1,6 @@
 <?php
 
-namespace NOVA_B2B\Inc\Classes;
+namespace NOVA_B2B;
 
 class Brevo {
 	/**
@@ -26,7 +26,7 @@ class Brevo {
 	 */
 	public function __construct() {
 		$this->brevo_api     = get_field( 'brevo_api', 'option' ) ?: '';
-		$this->brevo_list_id = 43;
+		$this->brevo_list_id = 45;
 		add_action( 'nova_user_partner_approved', array( $this, 'add_to_brevo_list' ) );
 	}
 
@@ -71,8 +71,9 @@ class Brevo {
 	}
 
 	public function add_to_brevo_list( $user ) {
+		$brevo_enabled = get_option( 'brevo_integration', 'option' );
 
-		if ( ! $this->brevo_api ) {
+		if ( ! $this->brevo_api && ! $brevo_enabled ) {
 			return;
 		}
 
@@ -134,5 +135,3 @@ class Brevo {
 		}
 	}
 }
-
-Brevo::get_instance();

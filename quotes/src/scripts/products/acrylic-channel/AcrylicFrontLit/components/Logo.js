@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
 import useOutsideClick from '../../../../utils/ClickOutside';
-import convertJson from '../../../../utils/ConvertJson';
 import {
 	setOptions,
 	spacerStandoffDefaultOptions,
@@ -13,15 +12,16 @@ import { spacerPricing } from '../../../../utils/Pricing';
 
 import { ledLightColors } from '../../../metal-channel/metalChannelOptions';
 
-import {
-	colorOptions,
-	translucentGraphicFilms,
-} from '../../../../utils/ColorOptions';
+import { colorOptions } from '../../../../utils/ColorOptions';
+
+import ColorsDropdown from '../../../../utils/ColorsDropdown';
+
+import VinylColors from '../../../../utils/VinylColors';
 
 import {
 	acrylicChannelThicknessOptions,
 	acrylicFrontOptions,
-} from '../options';
+} from '../../options';
 
 import { useAppContext } from '../../../../AppProvider';
 
@@ -47,9 +47,23 @@ const mountingDefaultOptions = [
 	},
 ];
 
-const maxWidthOptions = Array.from(
+const maxHeightOptions = Array.from(
 	{
 		length: 43,
+	},
+	(_, index) => {
+		const val = 1 + index;
+		return (
+			<option key={index} value={val}>
+				{val}"
+			</option>
+		);
+	}
+);
+
+const maxWidthOptions = Array.from(
+	{
+		length: 86,
 	},
 	(_, index) => {
 		const val = 1 + index;
@@ -256,6 +270,9 @@ export function Logo({ item }) {
 		if (!acrylicFront) missingFields.push('Select Acrylic Front');
 		if (!sets) missingFields.push('Select Quantity');
 
+		if (!fileUrls || fileUrls.length === 0)
+			missingFields.push('Upload a PDF/AI File');
+
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
 				const existingIndex = prevMissing.findIndex(
@@ -353,7 +370,7 @@ export function Logo({ item }) {
 	const computePricing = () => {
 		if (!width || !height) return 0;
 
-		const perInch = 0.2;
+		const perInch = 0.7;
 
 		let tempTotal = parseInt(width) * parseInt(height) * perInch;
 
@@ -365,9 +382,14 @@ export function Logo({ item }) {
 			tempTotal *= 1.15;
 		}
 
-		if (selectedMounting === STUD_WITH_SPACER) {
+		if (spacerStandoffDistance) {
 			const spacer = spacerPricing(tempTotal);
 			tempTotal += parseFloat(spacer.toFixed(2));
+		}
+
+		/* oversize surcharge */
+		if (parseInt(width) > 43) {
+			tempTotal += 150;
 		}
 
 		/* minimum price */
@@ -399,7 +421,7 @@ export function Logo({ item }) {
 			setUsdDiscount(discount.toFixed(2));
 			setCadDiscount((discount * EXCHANGE_RATE).toFixed(2));
 		}
-	}, [width, height, acrylicFront, selectedMounting, sets]);
+	}, [width, height, acrylicFront, spacerStandoffDistance, sets]);
 
 	return (
 		<>
@@ -436,7 +458,7 @@ export function Logo({ item }) {
 					title="Logo Height"
 					value={height}
 					onChange={(e) => setHeight(e.target.value)}
-					options={maxWidthOptions}
+					options={maxHeightOptions}
 				/>
 
 				<Dropdown
@@ -451,111 +473,36 @@ export function Logo({ item }) {
 				/>
 
 				{acrylicFront === '3M Vinyl' && (
-					<div className="px-[1px] relative" ref={vinyl3MRef}>
-						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-							3M VINYL
-						</label>
-						<div
-							className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-								vinylWhite.name ? 'text-black' : 'text-[#dddddd]'
-							}`}
-							onClick={() => {
-								setOpenVinylWhite((prev) => !prev);
-								setOpenColor(false);
-							}}
-						>
-							<span
-								className="rounded-full w-[18px] h-[18px] border mr-2"
-								style={{
-									background:
-										vinylWhite?.name == 'Custom Color'
-											? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-											: vinylWhite?.color,
-								}}
-							></span>
-							{vinylWhite.name === '' ? 'CHOOSE OPTION' : vinylWhite.name}
-						</div>
-						{openVinylWhite && (
-							<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
-								{translucentGraphicFilms.map((color) => {
-									return (
-										<div
-											className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
-											onClick={() => {
-												setVinylWhite(color);
-												setOpenVinylWhite(false);
-											}}
-										>
-											<span
-												className="w-[18px] h-[18px] inline-block rounded-full border"
-												style={{
-													background:
-														color?.name == 'Custom Color'
-															? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-															: color?.color,
-												}}
-											></span>
-											{color?.name}
-										</div>
-									);
-								})}
-							</div>
-						)}
-					</div>
-				)}
-
-				<div className="px-[1px] relative" ref={colorRef}>
-					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-						Return Paint Color
-					</label>
-					<div
-						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-							color ? 'text-black' : 'text-[#dddddd]'
-						}`}
-						onClick={() => {
-							setOpenColor((prev) => !prev);
+					<VinylColors
+						ref={vinyl3MRef}
+						vinylWhite={vinylWhite}
+						openVinylWhite={openVinylWhite}
+						toggleVinyl={() => {
+							setOpenVinylWhite((prev) => !prev);
+							setOpenColor(false);
+						}}
+						selectVinylColor={(color) => {
+							setVinylWhite(color);
 							setOpenVinylWhite(false);
 						}}
-					>
-						<span
-							className="rounded-full w-[18px] h-[18px] border mr-2"
-							style={{
-								background:
-									color == 'Custom Color'
-										? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-										: colorOptions.find((option) => option.name === color)
-												.color,
-							}}
-						></span>
-						{color === '' ? 'CHOOSE OPTION' : color}
-					</div>
-					{openColor && (
-						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
-							{colorOptions.map((color) => {
-								return (
-									<div
-										className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
-										onClick={() => {
-											setColor(color.name);
-											setOpenColor(false);
-										}}
-									>
-										<span
-											className="w-[18px] h-[18px] inline-block rounded-full border"
-											style={{
-												background:
-													color.name == 'Custom Color'
-														? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-														: color.color,
-											}}
-										></span>
-										{color.name}
-									</div>
-								);
-							})}
-						</div>
-					)}
-				</div>
+					/>
+				)}
+
+				<ColorsDropdown
+					title="Return Paint Color"
+					ref={colorRef}
+					colorName={color}
+					openColor={openColor}
+					toggleColor={() => {
+						setOpenColor((prev) => !prev);
+						setOpenVinylWhite(false);
+					}}
+					colorOptions={colorOptions}
+					selectColor={(color) => {
+						setColor(color.name);
+						setOpenColor(false);
+					}}
+				/>
 
 				<Dropdown
 					title="LED Light Color"
@@ -596,7 +543,8 @@ export function Logo({ item }) {
 					value={selectedMounting}
 				/>
 
-				{selectedMounting === STUD_WITH_SPACER && (
+				{(selectedMounting === STUD_WITH_SPACER ||
+					selectedMounting === STUD_MOUNT) && (
 					<>
 						<Dropdown
 							title="Stud Length"
@@ -691,6 +639,7 @@ export function Logo({ item }) {
 				</div>
 
 				<UploadFiles
+					itemId={item.id}
 					setFilePaths={setFilePaths}
 					setFiles={setFiles}
 					filePaths={filePaths}

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import Note from '../../../Note';
 import Sidebar from '../../../Sidebar';
 import Signage from '../../../Signage';
 import { PlusIcon } from '../../../svg/Icons';
@@ -141,6 +142,17 @@ export default function PVCPainted() {
 						)}
 					</Signage>
 				))}
+
+				<Note title="Note">
+					<ul className="text-sm">
+						<li>
+							The spacer will be black (default) or match the painted sign's
+							color.
+						</li>
+						<li>The minimum stroke for 3M double-sided tape is 10mm.</li>
+						<li>For stud pins: The minimum stroke is 12mm (1/2”).</li>
+					</ul>
+				</Note>
 
 				<div className="flex gap-2">
 					{signage.length < 10 && (

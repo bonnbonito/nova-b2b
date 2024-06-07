@@ -1,5 +1,5 @@
 <?php
-namespace NOVA_B2B\Inc\Classes;
+namespace NOVA_B2B;
 
 use WP_User;
 use WP_Error;
@@ -432,7 +432,8 @@ jQuery(document).ready(function($) {
 
 			$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
-			$this->send_email( $to, $subject, $message, $headers, array() );
+			/** Disable welcome email */
+			// $this->send_email( $to, $subject, $message, $headers, array() );
 
 			do_action( 'nova_user_partner_approved', $user_info );
 
@@ -1206,5 +1207,3 @@ jQuery(document).ready(function($) {
 		echo 'Done processing';
 	}
 }
-
-Roles::get_instance();

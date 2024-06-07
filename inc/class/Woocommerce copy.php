@@ -1,6 +1,6 @@
 <?php
 
-namespace NOVA_B2B\Inc\Classes;
+namespace NOVA_B2B;
 
 use WP_Query;
 use Kadence\Theme;
@@ -108,6 +108,40 @@ class Woocommerce {
 		add_action( 'option_wcumcs_available_currencies', array( $this, 'list_of_currencies' ), 10, 2 );
 		add_filter( 'kadence_woomail_order_body_text', array( $this, 'order_completed_email_with_pending_payment' ), 20, 5 );
 		add_filter( 'woocommerce_email_heading_customer_completed_order', array( $this, 'change_order_email_headings' ), 20, 2 );
+		add_filter( 'woocommerce_order_after_calculate_totals', array( $this, 'modify_order_total' ), 20, 2 );
+
+		add_filter( 'user_has_cap', array( $this, 'order_pay_without_login' ), 9999, 3 );
+		add_filter( 'woocommerce_order_email_verification_required', '__return_false', 9999 );
+		add_filter( 'woocommerce_order_received_verify_known_shoppers', '__return_false', 9999 );
+	}
+
+	function order_pay_without_login( $allcaps, $caps, $args ) {
+		if ( isset( $caps[0], $_GET['key'] ) ) {
+			if ( $caps[0] == 'pay_for_order' ) {
+				$order_id = isset( $args[2] ) ? $args[2] : null;
+				$order    = wc_get_order( $order_id );
+				if ( $order ) {
+						$allcaps['pay_for_order'] = true;
+				}
+			}
+		}
+		return $allcaps;
+	}
+
+	public function modify_order_total( $and_taxes, $order ) {
+		$order_id      = $order->get_id();
+		$deposit_total = get_post_meta( $order_id, '_deposit_total', true );
+		$payment_order = get_post_meta( $order_id, '_from_order_id', true );
+
+		if ( $deposit_total && $payment_order ) {
+			$deposit = floatval( $deposit_total );
+			$total   = $order->get_total();
+
+			if ( $total > 0 && $total >= $deposit ) {
+				$total -= $deposit;
+				$order->set_total( $total );
+			}
+		}
 	}
 
 	public function change_order_email_headings( $heading, $order ) {
@@ -450,62 +484,62 @@ class Woocommerce {
 		if ( $original_tax_names && $original_tax && $from_order ) {
 			?>
 <tr>
-	<td class="label"><?php echo 'Shipping (' . $original_shipping_method . ')'; ?>:</td>
-	<td width="1%"></td>
-	<td class="total">
-			<?php
+    <td class="label"><?php echo 'Shipping (' . $original_shipping_method . ')'; ?>:</td>
+    <td width="1%"></td>
+    <td class="total">
+        <?php
 			if ( ! empty( $original_shipping ) ) {
 				echo wc_price( $original_shipping, array( 'currency' => $order->get_currency() ) );
 			}
 			?>
-	</td>
+    </td>
 </tr>
-			<?php
+<?php
 		}
 
 		if ( $original_tax_names && $original_tax && $from_order ) {
 			?>
 <tr>
-	<td class="label"><?php echo $original_tax_names; ?>:</td>
-	<td width="1%"></td>
-	<td class="total">
-			<?php
+    <td class="label"><?php echo $original_tax_names; ?>:</td>
+    <td width="1%"></td>
+    <td class="total">
+        <?php
 			if ( ! empty( $original_tax ) ) {
 				echo wc_price( $original_tax, array( 'currency' => $order->get_currency() ) );
 			}
 			?>
-	</td>
+    </td>
 </tr>
-			<?php
+<?php
 		}
 
 		if ( $original_total && $from_order && $from_order ) :
 			?>
 <tr>
-	<td class="label"><?php esc_html_e( 'Overall Total (+shipping & tax)', 'woocommerce' ); ?>:</td>
-	<td width="1%"></td>
-	<td class="total">
-			<?php
+    <td class="label"><?php esc_html_e( 'Overall Total (+shipping & tax)', 'woocommerce' ); ?>:</td>
+    <td width="1%"></td>
+    <td class="total">
+        <?php
 			if ( ! empty( $original_total ) ) {
 				echo wc_price( $original_total, array( 'currency' => $order->get_currency() ) );
 			}
 			?>
-	</td>
+    </td>
 </tr>
 
-			<?php
+<?php
 			endif;
 
 		if ( $payment_select ) {
 			?>
 <tr>
-	<td class="label"><?php echo 'Payment Type'; ?>:</td>
-	<td width="1%"></td>
-	<td class="total">
-		<strong><?php echo get_the_title( $payment_select ); ?></strong>
-	</td>
+    <td class="label"><?php echo 'Payment Type'; ?>:</td>
+    <td width="1%"></td>
+    <td class="total">
+        <strong><?php echo get_the_title( $payment_select ); ?></strong>
+    </td>
 </tr>
-			<?php
+<?php
 		}
 
 		if ( $deposit_total ) :
@@ -513,20 +547,20 @@ class Woocommerce {
 			if ( empty( $has_adjusted_duplicate_order_id ) ) :
 				?>
 <tr>
-	<td class="label"><?php esc_html_e( 'Deposit', 'woocommerce' ); ?>:</td>
-	<td width="1%"></td>
-	<td class="total">
-				<?php
+    <td class="label"><?php esc_html_e( 'Deposit', 'woocommerce' ); ?>:</td>
+    <td width="1%"></td>
+    <td class="total">
+        <?php
 				if ( ! empty( $deposit_total ) ) {
 					echo '-' . wc_price( $deposit_total, array( 'currency' => $order->get_currency() ) );
 				} else {
 					echo wc_price( 0, array( 'currency' => $order->get_currency() ) );
 				}
 				?>
-	</td>
+    </td>
 </tr>
 
-				<?php
+<?php
 				endif;
 
 	endif;
@@ -534,20 +568,20 @@ class Woocommerce {
 		if ( $pending_payment && $has_adjusted_duplicate_order_id ) {
 			?>
 <tr>
-	<td class="label"><?php esc_html_e( 'Pending Payment', 'woocommerce' ); ?>:</td>
-	<td width="1%"></td>
-	<td class="total">
-			<?php
+    <td class="label"><?php esc_html_e( 'Pending Payment', 'woocommerce' ); ?>:</td>
+    <td width="1%"></td>
+    <td class="total">
+        <?php
 			if ( ! empty( $pending_payment ) ) {
 				echo wc_price( $pending_payment, array( 'currency' => $order->get_currency() ) );
 			} else {
 				echo wc_price( 0, array( 'currency' => $order->get_currency() ) );
 			}
 			?>
-	</td>
+    </td>
 </tr>
 
-			<?php
+<?php
 		}
 	}
 
@@ -593,7 +627,7 @@ class Woocommerce {
 
 <p>Original Total: <?php echo $original_total; ?></p>
 
-		<?php
+<?php
 	}
 
 	public function deposit_insert_order_total_row( $total_rows, $order ) {
@@ -628,7 +662,7 @@ class Woocommerce {
 					}
 
 					$new_total_rows['deposit_total'] = array(
-						'label' => __( 'Paid:', 'woocommerce' ),
+						'label' => __( 'Deposit:', 'woocommerce' ),
 						'value' => wc_price( -$deposit_total, array( 'currency' => $order->get_currency() ) ),
 					);
 				}
@@ -1014,73 +1048,73 @@ class Woocommerce {
 		$signage_query = new WP_Query( $product_cat_list );
 		?>
 <div class="md:flex md:gap-10 p-dropdown-wrap mb-24 mt-10 relative">
-	<div class="p-dropdown cursor-pointer mb-4 md:mb-0">
-		<div id="productCat" class="p-dropdown-current overflow-hidden grow">
-			<div class="p-drowpdown-wrap grow h-[55px] p-[10px] dropdown-trigger" data-open="productCat-list">
-				<div id="productCatCurrent" class="flex grow gap-2 items-center">
-					<div class="selectedWrap flex items-center gap-3">
-						<?php if ( $this->get_parent_ID() ) : ?>
-							<?php $this->output_current_signage( $this->get_parent_ID() ); ?>
-						<?php else : ?>
-						<div class="text-[#D2D2D2]">SELECT OPTION</div>
-						<?php endif; ?>
-					</div>
-					<svg xmlns="http://www.w3.org/2000/svg" width="15" height="8" viewBox="0 0 15 8" fill="none"
-						class="ml-auto">
-						<path d="M13.3516 2L7.8861 6.54054L2.00021 2" stroke="black" stroke-width="2"
-							stroke-linecap="square" stroke-linejoin="round" />
-					</svg>
-				</div>
-			</div>
-		</div>
-		<?php if ( $signage_query->have_posts() ) { ?>
-		<div id="productCat-list" class="hidden">
-			<?php if ( $custom ) : ?>
-			<a class="product-cat-item text-black" data-signage="<?php echo $custom->ID; ?>"
-				href="<?php echo esc_url( get_the_permalink( $custom->ID ) ); ?>">
-				<?php echo get_the_post_thumbnail( $custom->ID, array( 35, 35 ) ); ?>
-				<?php echo get_the_title( $custom->ID ); ?>
-			</a>
-			<?php endif; ?>
+    <div class="p-dropdown cursor-pointer mb-4 md:mb-0">
+        <div id="productCat" class="p-dropdown-current overflow-hidden grow">
+            <div class="p-drowpdown-wrap grow h-[55px] p-[10px] dropdown-trigger" data-open="productCat-list">
+                <div id="productCatCurrent" class="flex grow gap-2 items-center">
+                    <div class="selectedWrap flex items-center gap-3">
+                        <?php if ( $this->get_parent_ID() ) : ?>
+                        <?php $this->output_current_signage( $this->get_parent_ID() ); ?>
+                        <?php else : ?>
+                        <div class="text-[#D2D2D2]">SELECT OPTION</div>
+                        <?php endif; ?>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="8" viewBox="0 0 15 8" fill="none"
+                        class="ml-auto">
+                        <path d="M13.3516 2L7.8861 6.54054L2.00021 2" stroke="black" stroke-width="2"
+                            stroke-linecap="square" stroke-linejoin="round" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <?php if ( $signage_query->have_posts() ) { ?>
+        <div id="productCat-list" class="hidden shadow-lg">
+            <?php if ( $custom ) : ?>
+            <a class="product-cat-item text-black" data-signage="<?php echo $custom->ID; ?>"
+                href="<?php echo esc_url( get_the_permalink( $custom->ID ) ); ?>">
+                <?php echo get_the_post_thumbnail( $custom->ID, array( 35, 35 ) ); ?>
+                <?php echo get_the_title( $custom->ID ); ?>
+            </a>
+            <?php endif; ?>
 
-			<?php
+            <?php
 			while ( $signage_query->have_posts() ) {
 				$signage_query->the_post();
 				?>
-			<a class="product-cat-item text-black" data-signage="<?php echo get_the_ID(); ?>"
-				href="<?php echo esc_url( get_permalink() ); ?>">
-				<?php the_post_thumbnail( array( 35, 35 ) ); ?>
-				<?php the_title(); ?>
-			</a>
+            <a class="product-cat-item text-black" data-signage="<?php echo get_the_ID(); ?>"
+                href="<?php echo esc_url( get_permalink() ); ?>">
+                <?php the_post_thumbnail( array( 35, 35 ) ); ?>
+                <?php the_title(); ?>
+            </a>
 
-				<?php
+            <?php
 			}
 				wp_reset_postdata();
 			?>
-		</div>
-		<?php } ?>
-	</div>
+        </div>
+        <?php } ?>
+    </div>
 
-	<div class="p-dropdown cursor-pointer">
-		<div id="novaProduct" class="p-dropdown-current overflow-hidden grow">
-			<div class="p-drowpdown-wrap grow h-[55px] p-[10px] dropdown-trigger" data-open="novaProduct-list">
-				<div id="novaProductCurrent" class="flex grow gap-2 items-center">
-					<div class="selectedWrap flex items-center gap-3">
-						<?php if ( $this->get_signage_ID() ) : ?>
-							<?php $this->output_current_signage( $this->get_signage_ID() ); ?>
-						<?php else : ?>
-						<span class="text-[#D2D2D2]">SELECT OPTION</span>
-						<?php endif; ?>
-					</div>
-					<svg xmlns="http://www.w3.org/2000/svg" width="15" height="8" viewBox="0 0 15 8" fill="none"
-						class="ml-auto">
-						<path d="M13.3516 2L7.8861 6.54054L2.00021 2" stroke="black" stroke-width="2"
-							stroke-linecap="square" stroke-linejoin="round" />
-					</svg>
-				</div>
-			</div>
-		</div>
-		<?php
+    <div class="p-dropdown cursor-pointer">
+        <div id="novaProduct" class="p-dropdown-current overflow-hidden grow">
+            <div class="p-drowpdown-wrap grow h-[55px] p-[10px] dropdown-trigger" data-open="novaProduct-list">
+                <div id="novaProductCurrent" class="flex grow gap-2 items-center">
+                    <div class="selectedWrap flex items-center gap-3">
+                        <?php if ( $this->get_signage_ID() ) : ?>
+                        <?php $this->output_current_signage( $this->get_signage_ID() ); ?>
+                        <?php else : ?>
+                        <span class="text-[#D2D2D2]">SELECT OPTION</span>
+                        <?php endif; ?>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="8" viewBox="0 0 15 8" fill="none"
+                        class="ml-auto">
+                        <path d="M13.3516 2L7.8861 6.54054L2.00021 2" stroke="black" stroke-width="2"
+                            stroke-linecap="square" stroke-linejoin="round" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <?php
 		$nova_query = new WP_Query(
 			array(
 				'post_type'      => 'signage',
@@ -1092,101 +1126,101 @@ class Woocommerce {
 			)
 		);
 		?>
-		<?php if ( $nova_query->have_posts() ) { ?>
-		<div id="novaProduct-list" class="hidden">
+        <?php if ( $nova_query->have_posts() ) { ?>
+        <div id="novaProduct-list" class="hidden shadow-lg">
 
-			<?php
+            <?php
 			while ( $nova_query->have_posts() ) {
 				$nova_query->the_post();
 				?>
-			<a class="product-cat-item text-black" href="<?php echo esc_url( get_permalink() ); ?>overview">
-				<?php the_post_thumbnail( array( 35, 35 ) ); ?>
-				<?php the_title(); ?>
-			</a>
+            <a class="product-cat-item text-black" href="<?php echo esc_url( get_permalink() ); ?>overview">
+                <?php the_post_thumbnail( array( 35, 35 ) ); ?>
+                <?php the_title(); ?>
+            </a>
 
-				<?php
+            <?php
 			}
 				wp_reset_postdata();
 			?>
-		</div>
-		<?php } ?>
-	</div>
+        </div>
+        <?php } ?>
+    </div>
 
-	<script>
-	document.addEventListener("DOMContentLoaded", (event) => {
-		const triggers = document.querySelectorAll('.dropdown-trigger');
-		const productCatList = document.getElementById('productCat-list');
-		const novaProductCurrent = document.getElementById('novaProductCurrent');
-		const novaProductList = document.getElementById('novaProduct-list');
-
-
-
-		productCatList.querySelectorAll('.product-cat-item').forEach(item => {
-			item.addEventListener("click", () => {
-				const parentId = item.dataset.signage;
-				const selectWrap = novaProductCurrent.querySelector('.selectedWrap');
-				const currentWrap = productCatCurrent.querySelector('.selectedWrap');
-				const content = item.innerHTML;
-				currentWrap.innerHTML = content;
-
-				selectWrap.innerHTML =
-					'<span class="text-[#D2D2D2]">LOADING...</span>';
-
-				novaProductList.innerHTML = '';
-
-				const data = new FormData();
-				data.append('action', 'populate_signage');
-				data.append('parent_id', parentId);
-				data.append('nonce', NovaMyAccount.nonce);
+    <script>
+    document.addEventListener("DOMContentLoaded", (event) => {
+        const triggers = document.querySelectorAll('.dropdown-trigger');
+        const productCatList = document.getElementById('productCat-list');
+        const novaProductCurrent = document.getElementById('novaProductCurrent');
+        const novaProductList = document.getElementById('novaProduct-list');
 
 
-				productCatList.classList.add('hidden');
-				novaProductList.classList.add('hidden');
 
-				fetch(NovaMyAccount.ajax_url, {
-						method: 'POST',
-						credentials: 'same-origin',
-						headers: {
-							'Cache-Control': 'no-cache',
-						},
-						body: data,
-					})
-					.then((response) => response.json())
-					.then((data) => {
-						selectWrap.innerHTML =
-							'<span class="text-[#D2D2D2]">SELECT OPTION</span>';
+        productCatList.querySelectorAll('.product-cat-item').forEach(item => {
+            item.addEventListener("click", () => {
+                const parentId = item.dataset.signage;
+                const selectWrap = novaProductCurrent.querySelector('.selectedWrap');
+                const currentWrap = productCatCurrent.querySelector('.selectedWrap');
+                const content = item.innerHTML;
+                currentWrap.innerHTML = content;
+
+                selectWrap.innerHTML =
+                    '<span class="text-[#D2D2D2]">LOADING...</span>';
+
+                novaProductList.innerHTML = '';
+
+                const data = new FormData();
+                data.append('action', 'populate_signage');
+                data.append('parent_id', parentId);
+                data.append('nonce', NovaMyAccount.nonce);
 
 
-						novaProductList.innerHTML = data['html'];
-					})
-					.catch((error) => console.error('Error:', error))
+                productCatList.classList.add('hidden');
+                novaProductList.classList.add('hidden');
 
-			});
-		});
+                fetch(NovaMyAccount.ajax_url, {
+                        method: 'POST',
+                        credentials: 'same-origin',
+                        headers: {
+                            'Cache-Control': 'no-cache',
+                        },
+                        body: data,
+                    })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        selectWrap.innerHTML =
+                            '<span class="text-[#D2D2D2]">SELECT OPTION</span>';
 
-		triggers.forEach(trigger => {
-			trigger.addEventListener('click', e => {
-				e.preventDefault();
-				const open = trigger.dataset.open;
-				const dropdown = document.getElementById(open);
-				dropdown.classList.toggle('hidden');
 
-				document.addEventListener('click', function closeDropdown(event) {
-					const dropdownWrap = document.querySelector('.p-dropdown-wrap');
+                        novaProductList.innerHTML = data['html'];
+                    })
+                    .catch((error) => console.error('Error:', error))
 
-					if ((!dropdown.contains(event.target) && !dropdownWrap.contains(
-							event.target)) && event.target !== trigger) {
-						dropdown.classList.add('hidden');
-						document.removeEventListener('click', closeDropdown);
-					}
-				});
-			});
-		});
-	});
-	</script>
+            });
+        });
+
+        triggers.forEach(trigger => {
+            trigger.addEventListener('click', e => {
+                e.preventDefault();
+                const open = trigger.dataset.open;
+                const dropdown = document.getElementById(open);
+                dropdown.classList.toggle('hidden');
+
+                document.addEventListener('click', function closeDropdown(event) {
+                    const dropdownWrap = document.querySelector('.p-dropdown-wrap');
+
+                    if ((!dropdown.contains(event.target) && !dropdownWrap.contains(
+                            event.target)) && event.target !== trigger) {
+                        dropdown.classList.add('hidden');
+                        document.removeEventListener('click', closeDropdown);
+                    }
+                });
+            });
+        });
+    });
+    </script>
 
 </div>
-		<?php
+<?php
 			return ob_get_clean();
 	}
 
@@ -1214,10 +1248,10 @@ class Woocommerce {
 			$nova_query->the_post();
 			?>
 <a class="product-cat-item text-black" href="<?php echo esc_url( get_permalink() ); ?>overview">
-			<?php the_post_thumbnail( array( 35, 35 ) ); ?>
-			<?php the_title(); ?>
+    <?php the_post_thumbnail( array( 35, 35 ) ); ?>
+    <?php the_title(); ?>
 </a>
-			<?php
+<?php
 		}
 		wp_reset_postdata();
 
@@ -1243,24 +1277,24 @@ class Woocommerce {
 				the_row();
 				?>
 <div class="md:flex gap-20 items-center mb-10 md:mb-20">
-				<?php
+    <?php
 				$image = get_sub_field( 'image' );
 				?>
-	<div class="md:w-1/3 mb-5 md:mb-0">
-		<h3 class="uppercase"><?php echo get_sub_field( 'title' ); ?></h3>
-		<p class="text-[16px] mb-4"><?php echo get_sub_field( 'content' ); ?></p>
-				<?php if ( get_sub_field( 'link' ) ) : ?>
-		<a href="<?php echo esc_url( get_sub_field( 'link' )['url'] ); ?>"
-			class="text-nova-secondary lowercase underline text-[16px]"><?php echo get_sub_field( 'link' )['title']; ?></a>
-		<?php endif; ?>
-	</div>
-	<div class="md:w-2/3">
-		<a href="<?php echo esc_url( $image['url'] ); ?>"><img class="w-full h-full object-cover aspect-[4/3]"
-				src="<?php echo esc_url( $image['url'] ); ?>" alt="<?php echo esc_attr( $image['alt'] ); ?>" /></a>
-	</div>
+    <div class="md:w-1/3 mb-5 md:mb-0">
+        <h3 class="uppercase"><?php echo get_sub_field( 'title' ); ?></h3>
+        <p class="text-[16px] mb-4"><?php echo get_sub_field( 'content' ); ?></p>
+        <?php if ( get_sub_field( 'link' ) ) : ?>
+        <a href="<?php echo esc_url( get_sub_field( 'link' )['url'] ); ?>"
+            class="text-nova-secondary lowercase underline text-[16px]"><?php echo get_sub_field( 'link' )['title']; ?></a>
+        <?php endif; ?>
+    </div>
+    <div class="md:w-2/3">
+        <a href="<?php echo esc_url( $image['url'] ); ?>"><img class="w-full h-full object-cover aspect-[4/3]"
+                src="<?php echo esc_url( $image['url'] ); ?>" alt="<?php echo esc_attr( $image['alt'] ); ?>" /></a>
+    </div>
 </div>
 
-				<?php
+<?php
 			endwhile;
 	endif;
 		return ob_get_clean();
@@ -1271,22 +1305,22 @@ class Woocommerce {
 		if ( have_rows( 'features' ) ) :
 			?>
 <div class="md:flex justify-between product-features-icons gap-12">
-			<?php
+    <?php
 			while ( have_rows( 'features' ) ) :
 				the_row();
 				$image = get_sub_field( 'icon' );
 				?>
-	<div class="text-center md:mb-0 mb-[40px] flex-1">
-		<div class="img-wrap h-[55px]">
-			<img class="mx-auto" src="<?php echo esc_url( $image['url'] ); ?>"
-				alt="<?php echo esc_attr( $image['alt'] ); ?>" />
-		</div>
-		<h5 class="uppercase tracking-[1.8px] mt-9"><?php echo get_sub_field( 'name' ); ?></h5>
-	</div>
-	<?php endwhile; ?>
+    <div class="text-center md:mb-0 mb-[40px] flex-1">
+        <div class="img-wrap h-[55px]">
+            <img class="mx-auto" src="<?php echo esc_url( $image['url'] ); ?>"
+                alt="<?php echo esc_attr( $image['alt'] ); ?>" />
+        </div>
+        <h5 class="uppercase tracking-[1.8px] mt-9"><?php echo get_sub_field( 'name' ); ?></h5>
+    </div>
+    <?php endwhile; ?>
 </div>
 
-			<?php
+<?php
 			endif;
 		return ob_get_clean();
 	}
@@ -1320,54 +1354,54 @@ class Woocommerce {
 		?>
 <script>
 function initializeQuantityButtons() {
-	const cartForm = document.querySelector('form.woocommerce-cart-form');
-	const updateCartButton = document.querySelector('button[name="update_cart"]');
-	const quantityChanges = document.querySelectorAll('.quantity-change');
+    const cartForm = document.querySelector('form.woocommerce-cart-form');
+    const updateCartButton = document.querySelector('button[name="update_cart"]');
+    const quantityChanges = document.querySelectorAll('.quantity-change');
 
-	quantityChanges.forEach(q => {
-		const decrease = q.querySelector('.decrease');
-		const increase = q.querySelector('.increase');
-		const input = q.querySelector('input.qty');
+    quantityChanges.forEach(q => {
+        const decrease = q.querySelector('.decrease');
+        const increase = q.querySelector('.increase');
+        const input = q.querySelector('input.qty');
 
-		// Remove existing event listeners
-		increase.removeEventListener('click', increaseClickListener);
-		decrease.removeEventListener('click', decreaseClickListener);
+        // Remove existing event listeners
+        increase.removeEventListener('click', increaseClickListener);
+        decrease.removeEventListener('click', decreaseClickListener);
 
-		// Add new event listeners
-		increase.addEventListener('click', increaseClickListener);
-		decrease.addEventListener('click', decreaseClickListener);
+        // Add new event listeners
+        increase.addEventListener('click', increaseClickListener);
+        decrease.addEventListener('click', decreaseClickListener);
 
-		function increaseClickListener(e) {
-			increaseHandler(e, input);
-		}
+        function increaseClickListener(e) {
+            increaseHandler(e, input);
+        }
 
-		function decreaseClickListener(e) {
-			decreaseHandler(e, input);
-		}
-	});
+        function decreaseClickListener(e) {
+            decreaseHandler(e, input);
+        }
+    });
 
-	function increaseHandler(e, input) {
-		e.preventDefault();
-		let currentValue = parseInt(input.value, 10);
-		input.value = currentValue + 1;
-		updateCartButton.disabled = false;
-	}
+    function increaseHandler(e, input) {
+        e.preventDefault();
+        let currentValue = parseInt(input.value, 10);
+        input.value = currentValue + 1;
+        updateCartButton.disabled = false;
+    }
 
-	function decreaseHandler(e, input) {
-		e.preventDefault();
-		let currentValue = parseInt(input.value, 10);
-		if (currentValue > 1) {
-			input.value = currentValue - 1;
-			updateCartButton.disabled = false;
-		}
-	}
+    function decreaseHandler(e, input) {
+        e.preventDefault();
+        let currentValue = parseInt(input.value, 10);
+        if (currentValue > 1) {
+            input.value = currentValue - 1;
+            updateCartButton.disabled = false;
+        }
+    }
 }
 
 
 document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 jQuery(document.body).on('updated_cart_totals', initializeQuantityButtons);
 </script>
-		<?php
+<?php
 	}
 
 	public function update_single_quantity_script() {
@@ -1375,74 +1409,74 @@ jQuery(document.body).on('updated_cart_totals', initializeQuantityButtons);
 		?>
 <script>
 function initializeQuantityButtons() {
-	const quantityChanges = document.querySelectorAll('.quantity-change');
-	const currentPrice = '<?php echo $product->get_price(); ?>';
-	const currencySymbol = '<?php echo get_woocommerce_currency_symbol(); ?>';
+    const quantityChanges = document.querySelectorAll('.quantity-change');
+    const currentPrice = '<?php echo $product->get_price(); ?>';
+    const currencySymbol = '<?php echo get_woocommerce_currency_symbol(); ?>';
 
-	function computePrice(qty) {
+    function computePrice(qty) {
 
-		let computeprice = qty * parseFloat(currentPrice);
-		console.log(computeprice);
-		computeprice = computeprice.toLocaleString('en-US', {
-			minimumFractionDigits: 2,
-			maximumFractionDigits: 2
-		});
+        let computeprice = qty * parseFloat(currentPrice);
+        console.log(computeprice);
+        computeprice = computeprice.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
 
-		document.getElementById("watchPrice").innerHTML = currencySymbol + computeprice;
+        document.getElementById("watchPrice").innerHTML = currencySymbol + computeprice;
 
-	}
-
-
-	quantityChanges.forEach(q => {
-		const decrease = q.querySelector('.decrease');
-		const increase = q.querySelector('.increase');
-		const input = q.querySelector('input.qty');
-
-		// Remove existing event listeners
-		increase.removeEventListener('click', increaseClickListener);
-		decrease.removeEventListener('click', decreaseClickListener);
-
-		// Add new event listeners
-		increase.addEventListener('click', increaseClickListener);
-		decrease.addEventListener('click', decreaseClickListener);
+    }
 
 
+    quantityChanges.forEach(q => {
+        const decrease = q.querySelector('.decrease');
+        const increase = q.querySelector('.increase');
+        const input = q.querySelector('input.qty');
 
-		function increaseClickListener(e) {
-			increaseHandler(e, input);
-		}
+        // Remove existing event listeners
+        increase.removeEventListener('click', increaseClickListener);
+        decrease.removeEventListener('click', decreaseClickListener);
 
-		function decreaseClickListener(e) {
-			decreaseHandler(e, input);
-		}
-	});
-
-	function increaseHandler(e, input) {
-		e.preventDefault();
-		let currentValue = parseInt(input.value, 10);
-		input.value = currentValue + 1;
-
-		console.log(input.value);
-
-		computePrice(input.value);
+        // Add new event listeners
+        increase.addEventListener('click', increaseClickListener);
+        decrease.addEventListener('click', decreaseClickListener);
 
 
-	}
 
-	function decreaseHandler(e, input) {
-		e.preventDefault();
-		let currentValue = parseInt(input.value, 10);
-		if (currentValue > 1) {
-			input.value = currentValue - 1;
-			computePrice(input.value)
-		}
-		console.log(input.value);
-	}
+        function increaseClickListener(e) {
+            increaseHandler(e, input);
+        }
+
+        function decreaseClickListener(e) {
+            decreaseHandler(e, input);
+        }
+    });
+
+    function increaseHandler(e, input) {
+        e.preventDefault();
+        let currentValue = parseInt(input.value, 10);
+        input.value = currentValue + 1;
+
+        console.log(input.value);
+
+        computePrice(input.value);
+
+
+    }
+
+    function decreaseHandler(e, input) {
+        e.preventDefault();
+        let currentValue = parseInt(input.value, 10);
+        if (currentValue > 1) {
+            input.value = currentValue - 1;
+            computePrice(input.value)
+        }
+        console.log(input.value);
+    }
 }
 
 document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 </script>
-		<?php
+<?php
 	}
 
 	public function edit_cart_summary_title() {
@@ -1594,7 +1628,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 
 	public function generate_html_table_from_array( $array, $product, $nova_title, $product_line ) {
 
-		$instance   = \NOVA_B2B\Inc\Classes\Nova_Quote::get_instance();
+		$instance   = \NOVA_B2B\Nova_Quote::get_instance();
 		$attributes = $instance->allAttributes();
 
 		$html  = '<h6 style="font-size: 100%; margin-top: 10px;margin-bottom: 0;">Quote ID: <strong>Q-' . str_pad( $product, 4, '0', STR_PAD_LEFT ) . '</strong></h6>';
@@ -1605,26 +1639,29 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 
 			$html .= '<div style="padding: 10px; border: 1pxz solid #d2d2d2 !important;">';
 
-			$html .= '<p style="font-size: 125%; margin-bottom: 8px;">' . htmlspecialchars( $object->title ) . '</p>';
-
-			$html .= '<p>';
+			$html .= '<table style="border: 1px solid black; padding: 10px; border-collapse: collapse; max-width: 400px; width: 100%; font-size: 80%; margin-bottom: 20px;">
+    <tbody>';
 
 			foreach ( $attributes as $key => $attr ) {
 				if ( isset( $object->$key ) && ! empty( $object->$key ) ) {
+
 					if ( is_array( $attr ) ) {
+
 						if ( $attr['isLink'] ?? false && isset( $object->fontFileUrl, $object->fontFileName ) && ! empty( $object->fontFileUrl ) && ! empty( $object->fontFileName ) ) {
-							$html .= '<strong>' . $attr['label'] . ': </strong><a href="' . htmlspecialchars( $object->fontFileUrl ) . '" target="_blank">' . htmlspecialchars( $object->fontFileName ) . '</a><br>';
-						} elseif ( $attr['isVinyl'] ?? false && isset( $object->vinylWhite->name, $object->vinylWhite->code ) && ! empty( $object->vinylWhite->name ) && ! empty( $object->vinylWhite->code ) ) {
-							$html .= '<strong>' . $attr['label'] . ': </strong>' . htmlspecialchars( $object->vinylWhite->name ) . ' - [' . htmlspecialchars( $object->vinylWhite->code ) . ']<br>';
+							$html .= '<tr><td style="border: 1px solid black; padding: 10px;"><strong>' . $attr['label'] . ':</strong></td><td style="border: 1px solid black; padding: 10px;"><a href="' . htmlspecialchars( $object->fontFileUrl ) . '" target="_blank">' . htmlspecialchars( $object->fontFileName ) . '</a></td></tr>';
+						} elseif ( $attr['isVinyl'] && isset( $object->vinylWhite->code ) && ! empty( $object->vinylWhite->name ) && ! empty( $object->vinylWhite->code ) ) {
+							if ( ( isset( $object->acrylicFront ) && $object->acrylicFront === '3M Vinyl' ) || ( isset( $object->frontOption ) && $object->frontOption === '3M Vinyl' ) || ( isset( $object->frontAcrylicCover ) && $object->frontAcrylicCover === '3M Vinyl' ) ) {
+								$html .= '<tr><td style="border: 1px solid black; padding: 10px;"><strong>' . $attr['label'] . ':</strong></td><td style="border: 1px solid black; padding: 10px;">' . htmlspecialchars( $object->vinylWhite->name ) . ' - [' . htmlspecialchars( $object->vinylWhite->code ) . ']</td></tr>';
+							}
 						} elseif ( $attr['isFile'] ?? false && isset( $object->fileUrl, $object->fileName ) && ! empty( $object->fileUrl ) && ! empty( $object->fileName ) ) {
-							$html .= '<strong>' . $attr['label'] . ': </strong><a href="' . htmlspecialchars( $object->fileUrl ) . '" target="_blank">' . htmlspecialchars( $object->fileName ) . '</a><br>';
+							$html .= '<tr><td style="border: 1px solid black; padding: 10px;"><strong>' . $attr['label'] . ':</strong></td><td style="border: 1px solid black; padding: 10px;"><a href="' . htmlspecialchars( $object->fileUrl ) . '" target="_blank">' . htmlspecialchars( $object->fileName ) . '</a></td></tr>';
 						} elseif ( $attr['isFiles'] ?? false && isset( $object->fileUrls, $object->fileNames ) && ! empty( $object->fileUrls ) && ! empty( $object->fileNames ) ) {
 							$filesHtml = '';
 							foreach ( $object->fileUrls as $index => $fileUrl ) {
 								$fileName   = $object->fileNames[ $index ] ?? $fileUrl;
 								$filesHtml .= '<a href="' . htmlspecialchars( $fileUrl, ENT_QUOTES, 'UTF-8' ) . '" target="_blank">' . htmlspecialchars( $fileName, ENT_QUOTES, 'UTF-8' ) . '</a><br>';
 							}
-							$html .= '<strong>' . $attr['label'] . ': </strong>' . $filesHtml . '<br>';
+							$html .= '<tr><td style="border: 1px solid black; padding: 10px;"><strong>' . $attr['label'] . ':</strong></td><td style="border: 1px solid black; padding: 10px;">' . $filesHtml . '</td></tr>';
 						}
 					} else {
 						$value = $object->$key;
@@ -1637,12 +1674,12 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 								$value = $value->name;
 							}
 						}
-						$html .= '<strong>' . $attr . ': </strong>' . htmlspecialchars( $value ) . ( $key === 'letterHeight' ? '"' : '' ) . '<br>';
+						$html .= '<tr><td style="border: 1px solid black; padding: 10px;"><strong>' . $attr . ':</strong></td><td style="border: 1px solid black; padding: 10px;">' . htmlspecialchars( $value ) . ( $key === 'letterHeight' ? '"' : '' ) . '</td></tr>';
 					}
 				}
 			}
 
-			$html .= '</p>';
+			$html .= '</tbody></table>';
 
 			$html .= '</div>';
 
@@ -1721,7 +1758,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		}
 		?>
 <h2 class="pb-4 mb-4 uppercase mt-0"><?php echo $endpoint_title; ?></h2>
-		<?php
+<?php
 	}
 
 	public function nova_account_navigation() {
@@ -1991,24 +2028,24 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 
 		?>
 <div
-	class="border-b font-title uppercase flex gap-6 md:gap-11 mb-8 whitespace-nowrap overflow-x-auto overflow-y-hidden">
-	<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/all' ) ); ?>"
-		class="py-4 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/all'] ) ? 'border-black' : 'border-transparent' ); ?> mb-[-4px] text-black">ALL
-		Mockups <span>(<?php echo $all; ?>)</span></a>
-	<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/drafts' ) ); ?>"
-		class="py-4 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/drafts'] ) ? 'border-black' : 'border-transparent' ); ?> mb-[-4px] text-black">Drafts
-		<span>(<?php echo $drafts; ?>)</a>
-	<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/processing' ) ); ?>"
-		class="py-4 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/processing'] ) ? 'border-black' : 'border-transparent' ); ?> mb-[-4px] text-black">Processing
-		<span>(<?php echo $processing; ?>)</a>
-	<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/payments' ) ); ?>"
-		class="py-4 py-4 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/payments'] ) ? 'border-black' : 'border-transparent' ); ?> mb-[-4px] text-black">Quoted
-		<span>(<?php echo $quoted; ?>)</a>
-	<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/archived' ) ); ?>"
-		class="py-4 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/archived'] ) ? 'border-black' : 'border-transparent' ); ?> mb-[-4px] text-black">Archived
-		<span>(<?php echo $archived; ?>)</span></a>
+    class="border-b font-title uppercase flex gap-6 md:gap-11 mb-8 whitespace-nowrap overflow-x-auto overflow-y-hidden">
+    <a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/all' ) ); ?>"
+        class="py-4 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/all'] ) ? 'border-black' : 'border-transparent' ); ?> mb-[-4px] text-black">ALL
+        Mockups <span>(<?php echo $all; ?>)</span></a>
+    <a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/drafts' ) ); ?>"
+        class="py-4 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/drafts'] ) ? 'border-black' : 'border-transparent' ); ?> mb-[-4px] text-black">Drafts
+        <span>(<?php echo $drafts; ?>)</a>
+    <a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/processing' ) ); ?>"
+        class="py-4 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/processing'] ) ? 'border-black' : 'border-transparent' ); ?> mb-[-4px] text-black">Processing
+        <span>(<?php echo $processing; ?>)</a>
+    <a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/payments' ) ); ?>"
+        class="py-4 py-4 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/payments'] ) ? 'border-black' : 'border-transparent' ); ?> mb-[-4px] text-black">Quoted
+        <span>(<?php echo $quoted; ?>)</a>
+    <a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/archived' ) ); ?>"
+        class="py-4 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/archived'] ) ? 'border-black' : 'border-transparent' ); ?> mb-[-4px] text-black">Archived
+        <span>(<?php echo $archived; ?>)</span></a>
 </div>
-		<?php
+<?php
 	}
 
 	public function add_mockups_link_my_account( $items ) {
@@ -2032,39 +2069,39 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		if ( have_rows( 'tech_specs_group' ) ) :
 			?>
 <div class="nova_product_specs_group">
-			<?php
+    <?php
 			while ( have_rows( 'tech_specs_group' ) ) :
 				the_row();
 				?>
-	<h2><?php echo get_sub_field( 'title' ); ?></h2>
-				<?php
+    <h2><?php echo get_sub_field( 'title' ); ?></h2>
+    <?php
 				if ( have_rows( 'specs' ) ) :
 					?>
-	<div class="spec-group">
-					<?php
+    <div class="spec-group">
+        <?php
 					while ( have_rows( 'specs' ) ) :
 						the_row();
 						?>
-		<div class="spec-item">
-			<div class="spec-label">
-						<?php echo get_sub_field( 'name' ); ?>
-			</div>
-			<div class="spec-value">
-						<?php echo get_sub_field( 'value' ); ?>
-			</div>
-		</div>
+        <div class="spec-item">
+            <div class="spec-label">
+                <?php echo get_sub_field( 'name' ); ?>
+            </div>
+            <div class="spec-value">
+                <?php echo get_sub_field( 'value' ); ?>
+            </div>
+        </div>
 
-						<?php
+        <?php
 						endwhile;
 					?>
-	</div>
-					<?php
+    </div>
+    <?php
 			endif;
 				?>
 
-	<?php endwhile; ?>
+    <?php endwhile; ?>
 </div>
-			<?php
+<?php
 			endif;
 	}
 
@@ -2072,36 +2109,36 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		if ( have_rows( 'faqs' ) ) {
 			?>
 <div id="faqItems" class="has-faq accordion">
-	<h2 class="uppercase text-center mb-10">Frequently asked Questions</h2>
-			<?php
+    <h2 class="uppercase text-center mb-10">Frequently asked Questions</h2>
+    <?php
 			while ( have_rows( 'faqs' ) ) {
 				the_row();
 				?>
-	<div class="faq-item visible">
-		<p class="faq-question"><?php echo get_sub_field( 'question' ); ?> <svg width="14" height="14"
-				viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-				<line x1="7" y1="1" x2="7" y2="13" stroke="black" stroke-width="2" stroke-linecap="round">
-				</line>
-				<line x1="13" y1="7" x2="1" y2="7" stroke="black" stroke-width="2" stroke-linecap="round">
-				</line>
-			</svg></p>
-		<div class="expander">
-			<div class="expander-content">
-				<div class="content-wrapper">
-					<?php if ( get_sub_field( 'answer' ) ) : ?>
-					<div class="post-content-container" style="padding-top: 2em;">
-						<?php echo get_sub_field( 'answer' ); ?>
-					</div>
-					<?php endif; ?>
-				</div>
-			</div>
-		</div>
-	</div>
-				<?php
+    <div class="faq-item visible">
+        <p class="faq-question"><?php echo get_sub_field( 'question' ); ?> <svg width="14" height="14"
+                viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <line x1="7" y1="1" x2="7" y2="13" stroke="black" stroke-width="2" stroke-linecap="round">
+                </line>
+                <line x1="13" y1="7" x2="1" y2="7" stroke="black" stroke-width="2" stroke-linecap="round">
+                </line>
+            </svg></p>
+        <div class="expander">
+            <div class="expander-content">
+                <div class="content-wrapper">
+                    <?php if ( get_sub_field( 'answer' ) ) : ?>
+                    <div class="post-content-container" style="padding-top: 2em;">
+                        <?php echo get_sub_field( 'answer' ); ?>
+                    </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php
 			}
 			?>
 </div>
-			<?php
+<?php
 		}
 	}
 
@@ -2109,20 +2146,20 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		$current_user = wp_get_current_user();
 		?>
 <div class="kadence-account-avatar">
-	<div class="kadence-customer-image">
-		<a class="kt-link-to-gravatar" href="https://gravatar.com/" target="_blank" rel="no"
-			title="<?php echo esc_attr__( 'Update Profile Photo', 'kadence' ); ?>">
-			<?php echo get_avatar( $current_user->ID, 40, null, null, array( 'class' => array( 'rounded-full' ) ) ); ?>
-		</a>
-	</div>
+    <div class="kadence-customer-image">
+        <a class="kt-link-to-gravatar" href="https://gravatar.com/" target="_blank" rel="no"
+            title="<?php echo esc_attr__( 'Update Profile Photo', 'kadence' ); ?>">
+            <?php echo get_avatar( $current_user->ID, 40, null, null, array( 'class' => array( 'rounded-full' ) ) ); ?>
+        </a>
+    </div>
 </div>
 <div class="kadence-customer-name">
-	<h5 class="uppercase mt-2 mb-0 block"><?php echo esc_html( $current_user->display_name ); ?></h5>
-	<div class="block text-[14px] text-black uppercase"><span class="font-title text-[12px]">BUSINESS ID:</span>
-		<?php echo get_field( 'business_id', 'user_' . get_current_user_id() ); ?></div>
-	<a href="<?php echo wp_logout_url( '/' ); ?>" class="text-black text-[10px]">LOG OUT</a>
+    <h5 class="uppercase mt-2 mb-0 block"><?php echo esc_html( $current_user->display_name ); ?></h5>
+    <div class="block text-[14px] text-black uppercase"><span class="font-title text-[12px]">BUSINESS ID:</span>
+        <?php echo get_field( 'business_id', 'user_' . get_current_user_id() ); ?></div>
+    <a href="<?php echo wp_logout_url( '/' ); ?>" class="text-black text-[10px]">LOG OUT</a>
 </div>
-		<?php
+<?php
 	}
 
 	function camelcase_to_regular( $input ) {
@@ -2133,7 +2170,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 	public function quote_details( $project ) {
 		$projectArray = get_object_vars( $project );
 
-		$instance   = \NOVA_B2B\Inc\Classes\Nova_Quote::get_instance();
+		$instance   = \NOVA_B2B\Nova_Quote::get_instance();
 		$attributes = $instance->allAttributes();
 
 		foreach ( $attributes as $key => $attr ) {
@@ -2145,7 +2182,9 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 					if ( $attr['isLink'] ?? false && isset( $projectArray['fontFileUrl'], $projectArray['fontFileName'] ) && ! empty( $projectArray['fontFileUrl'] ) && ! empty( $projectArray['fontFileName'] ) ) {
 						echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">' . $attr['label'] . ':</div><div class="text-left text-[10px] uppercase"><a href="' . htmlspecialchars( $projectArray['fontFileUrl'] ) . '" target="_blank">' . htmlspecialchars( $projectArray['fontFileName'] ) . '</a></div></div>';
 					} elseif ( $attr['isVinyl'] ?? false && isset( $projectArray['vinylWhite']->name, $projectArray['vinylWhite']->code ) && ! empty( $projectArray['vinylWhite']->name ) && ! empty( $projectArray['vinylWhite']->code ) ) {
-						echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">' . $attr['label'] . ':</div><div class="text-left text-[10px] uppercase">' . htmlspecialchars( $projectArray['vinylWhite']->name ) . ' - [' . htmlspecialchars( $projectArray['vinylWhite']->code ) . ']</div></div>';
+						if ( ( isset( $projectArray['acrylicFront'] ) && $projectArray['acrylicFront'] === '3M Vinyl' ) || ( isset( $projectArray['frontOption'] ) && $projectArray['frontOption'] === '3M Vinyl' ) || ( isset( $projectArray['frontAcrylicCover'] ) && $object->frontAcrylicCover === '3M Vinyl' ) ) {
+							echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">' . $attr['label'] . ':</div><div class="text-left text-[10px] uppercase">' . htmlspecialchars( $projectArray['vinylWhite']->name ) . ' - [' . htmlspecialchars( $projectArray['vinylWhite']->code ) . ']</div></div>';
+						}
 					} elseif ( $attr['isFile'] ?? false && isset( $projectArray['fileUrl'], $projectArray['fileName'] ) && ! empty( $projectArray['fileUrl'] ) && ! empty( $projectArray['fileName'] ) ) {
 						echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">' . $attr['label'] . ':</div><div class="text-left text-[10px] uppercase"><a href="' . htmlspecialchars( $projectArray['fileUrl'] ) . '" target="_blank">' . htmlspecialchars( $projectArray['fileName'] ) . '</a></div></div>';
 					} elseif ( $attr['isFiles'] ?? false && isset( $projectArray['fileUrls'], $projectArray['fileNames'] ) && ! empty( $projectArray['fileUrls'] ) && ! empty( $projectArray['fileNames'] ) ) {
@@ -2197,18 +2236,18 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		ob_start();
 		?>
 <div id="quote-<?php echo $quoteID; ?>" style="display:none;max-width:550px; width: 100%;">
-	<div class="pb-8 mb-8 border-b-nova-light border-b">
-		<h4 class="text-[16px]">QUOTE ID: Q-<?php echo str_pad( $quoteID, 4, '0', STR_PAD_LEFT ); ?></h4>
-		<h4 class="text-[16px]">PRODUCT:
-			<?php echo $product_line; ?>
-		</h4>
-		<?php
+    <div class="pb-8 mb-8 border-b-nova-light border-b">
+        <h4 class="text-[16px]">QUOTE ID: Q-<?php echo str_pad( $quoteID, 4, '0', STR_PAD_LEFT ); ?></h4>
+        <h4 class="text-[16px]">PRODUCT:
+            <?php echo $product_line; ?>
+        </h4>
+        <?php
 		$this->show_project_details( $signage );
 		?>
-	</div>
-	<h6 class="uppercase flex">Subtotal: <span class="ml-auto"><?php echo $subtotal; ?></span></h6>
+    </div>
+    <h6 class="uppercase flex">Subtotal: <span class="ml-auto"><?php echo $subtotal; ?></span></h6>
 </div>
-		<?php
+<?php
 			echo ob_get_clean();
 	}
 
@@ -2216,18 +2255,18 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		ob_start();
 		?>
 <div id="quote-<?php echo $quoteID; ?>" style="display:none;max-width:550px; width: 100%;">
-	<div class="pb-8 mb-8 border-b-nova-light border-b">
-		<h4 class="text-[16px]">QUOTE ID: Q-<?php echo str_pad( $quoteID, 4, '0', STR_PAD_LEFT ); ?></h4>
-		<h4 class="text-[16px] uppercase">PRODUCT:
-			<?php echo ( get_field( 'product', $quoteID ) ? get_field( 'product', $quoteID )->post_title : 'CUSTOM PROJECT' ); ?>
-		</h4>
-		<?php
+    <div class="pb-8 mb-8 border-b-nova-light border-b">
+        <h4 class="text-[16px]">QUOTE ID: Q-<?php echo str_pad( $quoteID, 4, '0', STR_PAD_LEFT ); ?></h4>
+        <h4 class="text-[16px] uppercase">PRODUCT:
+            <?php echo ( get_field( 'product', $quoteID ) ? get_field( 'product', $quoteID )->post_title : 'CUSTOM PROJECT' ); ?>
+        </h4>
+        <?php
 		$this->show_project_details( $signage );
 		?>
-	</div>
-	<h6 class="uppercase flex">Subtotal: <span class="ml-auto"><?php echo $subtotal; ?></span></h6>
+    </div>
+    <h6 class="uppercase flex">Subtotal: <span class="ml-auto"><?php echo $subtotal; ?></span></h6>
 </div>
-		<?php
+<?php
 			echo ob_get_clean();
 	}
 

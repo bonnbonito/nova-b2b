@@ -37,6 +37,8 @@ import { Logo as PVCUv } from '../pvc/PVCUv/components/Logo';
 import { NeonSign as FlexNeonSign } from '../led-neon/FlexNeonSign/components/NeonSign';
 import { NeonSign as RigidNeonSignNoBacking } from '../led-neon/RigidNeonSignNoBacking/components/NeonSign';
 import { NeonSign as RigidNeonSignWithBacking } from '../led-neon/RigidNeonSignWithBacking/components/NeonSign';
+/*CUSTOM PROJECT */
+import { Logo as CustomProject } from '../custom/components/Logo';
 
 const productLines = NovaQuote.product_lines_accordion;
 
@@ -85,6 +87,11 @@ export default function CombineQuotes() {
 	const showComponent = (item) => {
 		let output;
 		switch (item.component) {
+			case 'CustomProject':
+				output = (
+					<CustomProject key={item.id} item={item} productId={item.product} />
+				);
+				break;
 			case 'RigidNeonSignNoBacking':
 				output = (
 					<RigidNeonSignNoBacking

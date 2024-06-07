@@ -14,7 +14,6 @@ export default function Sidebar() {
 
 	useEffect(() => {
 		setCanSaveToDraft(() => parseInt(partner) === parseInt(NovaQuote.user_id));
-		console.log(parseInt(partner), NovaQuote.user_id);
 	}, [partner]);
 
 	const taxRateObj = NovaMyAccount.tax_rate;
@@ -26,19 +25,6 @@ export default function Sidebar() {
 		(acc, item) => acc + parseFloat(item.usdPrice),
 		0
 	);
-
-	const totalUsdDiscount = signage.reduce(
-		(acc, item) => acc + parseFloat(item.usdDiscount),
-		0
-	);
-
-	const totalCadDiscount = signage.reduce(
-		(acc, item) => acc + parseFloat(item.cadDiscount),
-		0
-	);
-
-	const totalDiscount =
-		currency === 'USD' ? totalUsdDiscount : totalCadDiscount;
 
 	const totalCadPrice = signage.reduce(
 		(acc, item) => acc + parseFloat(item.cadPrice),
@@ -130,7 +116,7 @@ export default function Sidebar() {
 							{NovaQuote.is_editting === '1' ? (
 								<>
 									{NovaQuote.user_role[0] !== 'pending' &&
-									NovaQuote.is_admin === 'no' ? (
+									(NovaQuote.is_admin === 'no' || canSaveToDraft) ? (
 										<ModalSave
 											action="update-processing"
 											label="Submit Quote"

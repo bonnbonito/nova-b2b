@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useAppContext } from '../../../AppProvider';
+import Note from '../../../Note';
 import Sidebar from '../../../Sidebar';
 import Signage from '../../../Signage';
 import { PlusIcon } from '../../../svg/Icons';
@@ -22,7 +23,7 @@ const AcrylicFrontLit = () => {
 				font: '',
 				comments: '',
 				waterproof: '',
-				acrylicChannelThickness: '1.2"',
+				acrylicChannelThickness: '1.2" (30mm)',
 				acrylicFront: 'White',
 				acrylicReturnPaintColor: 'Black',
 				vinylWhite: { name: '', color: '', code: '' },
@@ -85,7 +86,7 @@ const AcrylicFrontLit = () => {
 		id: uuidv4(),
 		comments: '',
 		mounting: '',
-		acrylicChannelThickness: '1.2"',
+		acrylicChannelThickness: '1.2" (30mm)',
 		acrylicFront: 'White',
 		acrylicReturnPaintColor: 'Black',
 		vinylWhite: { name: '', color: '', code: '' },
@@ -139,6 +140,23 @@ const AcrylicFrontLit = () => {
 						)}
 					</Signage>
 				))}
+
+				<Note title="Note">
+					<ul className="text-sm">
+						<li>
+							The default cut is straight, but for strokes ranging from 6mm to
+							15mm, it will be sloped
+						</li>
+						<li>
+							We can customize the colors that are not on the 3M Vinyl options
+							through UV printing.
+						</li>
+						<li>
+							The spacer will be black (default) or match the painted sign's
+							color.
+						</li>
+					</ul>
+				</Note>
 
 				<div className="flex gap-2">
 					{signage.length < 10 && (

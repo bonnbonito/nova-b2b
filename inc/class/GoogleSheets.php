@@ -1,6 +1,6 @@
 <?php
 
-namespace NOVA_B2B\Inc\Classes;
+namespace NOVA_B2B;
 
 class GoogleSheets {
 	/**
@@ -114,5 +114,3 @@ googleToken.addEventListener('click', e => {
 		}
 	}
 }
-
-GoogleSheets::get_instance();

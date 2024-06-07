@@ -79,6 +79,11 @@ export function Logo({ item }) {
 
 	return (
 		<>
+			{item.productLine && (
+				<div className="py-4 mb-4">
+					PRODUCT LINE: <span className="font-title">{item.productLine}</span>
+				</div>
+			)}
 			<div className="quote-grid">
 				<div className="px-[1px] col-span-4">
 					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
@@ -92,6 +97,7 @@ export function Logo({ item }) {
 					</textarea>
 				</div>
 				<UploadFiles
+					itemId={item.id}
 					setFilePaths={setFilePaths}
 					setFiles={setFiles}
 					filePaths={filePaths}

@@ -27,8 +27,8 @@ export function CombineQuoteProvider({ children }) {
 			const count = prevSignage.filter((sign) => sign.type === type).length;
 			let args;
 			args = {
-				type: type,
-				title: `${type === 'letters' ? 'LETTERS' : 'LOGO'} ${count + 1}`,
+				type: type.toLowerCase(),
+				title: `${type} ${count + 1}`,
 			};
 			const newSignage = {
 				...defaultArgs,

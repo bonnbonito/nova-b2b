@@ -15,15 +15,16 @@ import { spacerPricing } from '../../../../utils/Pricing';
 
 import { ledLightColors } from '../../../metal-channel/metalChannelOptions';
 
-import {
-	colorOptions,
-	translucentGraphicFilms,
-} from '../../../../utils/ColorOptions';
+import { colorOptions } from '../../../../utils/ColorOptions';
+
+import ColorsDropdown from '../../../../utils/ColorsDropdown';
+
+import VinylColors from '../../../../utils/VinylColors';
 
 import {
 	acrylicChannelThicknessOptions,
 	acrylicFrontOptions,
-} from '../options';
+} from '../../options';
 
 import { useAppContext } from '../../../../AppProvider';
 
@@ -330,7 +331,7 @@ export function Letters({ item }) {
 				tempTotal *= 1.15;
 			}
 
-			if (selectedMounting === STUD_WITH_SPACER) {
+			if (spacerStandoffDistance) {
 				const spacer = spacerPricing(tempTotal);
 				tempTotal += parseFloat(spacer.toFixed(2));
 			}
@@ -372,7 +373,7 @@ export function Letters({ item }) {
 		letters,
 		sets,
 		font,
-		selectedMounting,
+		spacerStandoffDistance,
 		letterPricing,
 		acrylicFront,
 	]);
@@ -433,6 +434,9 @@ export function Letters({ item }) {
 
 		if (!acrylicFront) missingFields.push('Select Acrylic Front');
 		if (!sets) missingFields.push('Select Quantity');
+
+		if (!fileUrls || fileUrls.length === 0)
+			missingFields.push('Upload a PDF/AI File');
 
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
@@ -518,20 +522,23 @@ export function Letters({ item }) {
 		cadSinglePrice,
 	]);
 
-	if (acrylicFront === '3M Vinyl') {
-		useOutsideClick([colorRef, fontRef, vinyl3MRef], () => {
-			if (!openColor && !openFont && !openVinylWhite) return;
-			setOpenColor(false);
-			setOpenFont(false);
-			setOpenVinylWhite(false);
-		});
-	} else {
-		useOutsideClick([colorRef, fontRef], () => {
-			if (!openColor && !openFont) return;
-			setOpenColor(false);
-			setOpenFont(false);
-		});
-	}
+	useOutsideClick(
+		[colorRef, fontRef, acrylicFront === '3M Vinyl' ? vinyl3MRef : null].filter(
+			Boolean
+		),
+		() => {
+			if (acrylicFront === '3M Vinyl') {
+				if (!openColor && !openFont && !openVinylWhite) return;
+				setOpenColor(false);
+				setOpenFont(false);
+				setOpenVinylWhite(false);
+			} else {
+				if (!openColor && !openFont) return;
+				setOpenColor(false);
+				setOpenFont(false);
+			}
+		}
+	);
 
 	useEffect(() => {
 		color?.name != 'Custom Color' && setCustomColor('');
@@ -637,113 +644,38 @@ export function Letters({ item }) {
 				/>
 
 				{acrylicFront === '3M Vinyl' && (
-					<div className="px-[1px] relative" ref={vinyl3MRef}>
-						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-							3M VINYL
-						</label>
-						<div
-							className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-								vinylWhite.name ? 'text-black' : 'text-[#dddddd]'
-							}`}
-							onClick={() => {
-								setOpenVinylWhite((prev) => !prev);
-								setOpenColor(false);
-								setOpenFont(false);
-							}}
-						>
-							<span
-								className="rounded-full w-[18px] h-[18px] border mr-2"
-								style={{
-									background:
-										vinylWhite?.name == 'Custom Color'
-											? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-											: vinylWhite?.color,
-								}}
-							></span>
-							{vinylWhite.name === '' ? 'CHOOSE OPTION' : vinylWhite.name}
-						</div>
-						{openVinylWhite && (
-							<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
-								{translucentGraphicFilms.map((color) => {
-									return (
-										<div
-											className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
-											onClick={() => {
-												setVinylWhite(color);
-												setOpenVinylWhite(false);
-											}}
-										>
-											<span
-												className="w-[18px] h-[18px] inline-block rounded-full border"
-												style={{
-													background:
-														color?.name == 'Custom Color'
-															? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-															: color?.color,
-												}}
-											></span>
-											{color?.name}
-										</div>
-									);
-								})}
-							</div>
-						)}
-					</div>
-				)}
-
-				<div className="px-[1px] relative" ref={colorRef}>
-					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-						Return Paint Color
-					</label>
-					<div
-						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-							color ? 'text-black' : 'text-[#dddddd]'
-						}`}
-						onClick={() => {
-							setOpenColor((prev) => !prev);
+					<VinylColors
+						ref={vinyl3MRef}
+						vinylWhite={vinylWhite}
+						openVinylWhite={openVinylWhite}
+						toggleVinyl={() => {
+							setOpenVinylWhite((prev) => !prev);
+							setOpenColor(false);
 							setOpenFont(false);
+						}}
+						selectVinylColor={(color) => {
+							setVinylWhite(color);
 							setOpenVinylWhite(false);
 						}}
-					>
-						<span
-							className="rounded-full w-[18px] h-[18px] border mr-2"
-							style={{
-								background:
-									color == 'Custom Color'
-										? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-										: colorOptions.find((option) => option.name === color)
-												.color,
-							}}
-						></span>
-						{color === '' ? 'CHOOSE OPTION' : color}
-					</div>
-					{openColor && (
-						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
-							{colorOptions.map((color) => {
-								return (
-									<div
-										className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
-										onClick={() => {
-											setColor(color.name);
-											setOpenColor(false);
-										}}
-									>
-										<span
-											className="w-[18px] h-[18px] inline-block rounded-full border"
-											style={{
-												background:
-													color.name == 'Custom Color'
-														? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-														: color.color,
-											}}
-										></span>
-										{color.name}
-									</div>
-								);
-							})}
-						</div>
-					)}
-				</div>
+					/>
+				)}
+
+				<ColorsDropdown
+					title="Return Paint Color"
+					ref={colorRef}
+					colorName={color}
+					openColor={openColor}
+					toggleColor={() => {
+						setOpenColor((prev) => !prev);
+						setOpenFont(false);
+						setOpenVinylWhite(false);
+					}}
+					colorOptions={colorOptions}
+					selectColor={(color) => {
+						setColor(color.name);
+						setOpenColor(false);
+					}}
+				/>
 
 				<Dropdown
 					title="LED Light Color"
@@ -784,7 +716,8 @@ export function Letters({ item }) {
 					value={selectedMounting}
 				/>
 
-				{selectedMounting === STUD_WITH_SPACER && (
+				{(selectedMounting === STUD_WITH_SPACER ||
+					selectedMounting === STUD_MOUNT) && (
 					<>
 						<Dropdown
 							title="Stud Length"
@@ -879,6 +812,7 @@ export function Letters({ item }) {
 				</div>
 
 				<UploadFiles
+					itemId={item.id}
 					setFilePaths={setFilePaths}
 					setFiles={setFiles}
 					filePaths={filePaths}

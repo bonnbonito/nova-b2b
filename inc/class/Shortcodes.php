@@ -1,5 +1,5 @@
 <?php
-namespace NOVA_B2B\Inc\Classes;
+namespace NOVA_B2B;
 
 class Shortcodes {
 	/**
@@ -137,5 +137,3 @@ class Shortcodes {
 		return ob_get_clean();
 	}
 }
-
-Shortcodes::get_instance();

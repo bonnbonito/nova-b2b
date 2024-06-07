@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
 import convert_json from '../../../../utils/ConvertJson';
@@ -322,7 +322,7 @@ export function Logo({ item }) {
 				let total = (computed * multiplier * ASSEMBLY_FEES).toFixed(2);
 				total *= selectedFinishing === GLOSS_FINISH ? 1.1 : 1;
 
-				if (selectedMounting === STUD_WITH_SPACER) {
+				if (spacerStandoffDistance) {
 					const spacer = spacerPricing(total);
 
 					total += spacer;
@@ -347,7 +347,7 @@ export function Logo({ item }) {
 		waterproof,
 		selectedFinishing,
 		sets,
-		selectedMounting,
+		spacerStandoffDistance,
 	]);
 
 	const checkAndAddMissingFields = () => {
@@ -449,6 +449,7 @@ export function Logo({ item }) {
 					</textarea>
 				</div>
 				<UploadFiles
+					itemId={item.id}
 					setFilePaths={setFilePaths}
 					setFiles={setFiles}
 					filePaths={filePaths}
@@ -540,7 +541,8 @@ export function Logo({ item }) {
 					value={selectedMounting}
 				/>
 
-				{selectedMounting === STUD_WITH_SPACER && (
+				{(selectedMounting === STUD_WITH_SPACER ||
+					selectedMounting === STUD_MOUNT) && (
 					<>
 						<Dropdown
 							title="Stud Length"
@@ -567,24 +569,6 @@ export function Logo({ item }) {
 								</option>
 							))}
 							value={spacerStandoffDistance}
-						/>
-					</>
-				)}
-
-				{selectedMounting === STUD_MOUNT && (
-					<>
-						<Dropdown
-							title="Stud Length"
-							onChange={handleonChangeStudLength}
-							options={studLengthOptions.map((option) => (
-								<option
-									value={option.value}
-									selected={option.value == studLength}
-								>
-									{option.value}
-								</option>
-							))}
-							value={studLength}
 						/>
 					</>
 				)}

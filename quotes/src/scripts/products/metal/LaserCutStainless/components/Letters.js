@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Dropdown from '../../../../Dropdown';
 import FontsDropdown from '../../../../FontsDropdown';
 import UploadFiles from '../../../../UploadFiles';
@@ -307,9 +307,14 @@ export function Letters({ item }) {
 
 	const handelMetalFinishChange = (e) => {
 		const value = e.target.value;
-		if ('Stainless Steel Polished' !== value) {
+		if (
+			'Stainless Steel Polished' !== value &&
+			'Electroplated Gold Polished' !== value &&
+			'Electroplated Black Titanium Polished' !== value
+		) {
 			setStainlessSteelPolished('');
 		}
+
 		setStainLessMetalFinish(e.target.value);
 	};
 
@@ -725,7 +730,9 @@ export function Letters({ item }) {
 					/>
 				)}
 
-				{stainLessMetalFinish === 'Stainless Steel Polished' && (
+				{(stainLessMetalFinish === 'Stainless Steel Polished' ||
+					stainLessMetalFinish === 'Electroplated Gold Polished' ||
+					stainLessMetalFinish === 'Electroplated Black Titanium Polished') && (
 					<Dropdown
 						title="Steel Polish"
 						onChange={(e) => setStainlessSteelPolished(e.target.value)}
@@ -767,7 +774,7 @@ export function Letters({ item }) {
 							{color.name === '' ? 'CHOOSE OPTION' : color.name}
 						</div>
 						{openColor && (
-							<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto">
+							<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg">
 								{colorOptions.map((color) => {
 									return (
 										<div
@@ -915,6 +922,7 @@ export function Letters({ item }) {
 				</div>
 
 				<UploadFiles
+					itemId={item.id}
 					setFilePaths={setFilePaths}
 					setFiles={setFiles}
 					filePaths={filePaths}
