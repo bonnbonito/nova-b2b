@@ -192,13 +192,22 @@ class Pending_Payment {
 	}
 
 	public function pending_payment_order_email_content( $body_text, $order, $sent_to_admin, $plain_text, $email ) {
-		$pending_id    = $order->get_meta( '_pending_id' );
-		$from_order_id = $order->get_meta( '_from_order_id' );
+		$pending_id     = $order->get_meta( '_pending_id' );
+		$from_order_id  = $order->get_meta( '_from_order_id' );
+		$original_order = wc_get_order( $from_order_id );
 
 		if ( $pending_id && $from_order_id ) {
 			$body_text  = '<p>Hello {customer_first_name},</p>';
 			$body_text .= '<p>We have received your recent payment for Order #NV' . $from_order_id . '.</p>';
 			$body_text .= '<p>Thank you very much.</p>';
+
+			ob_start();
+			add_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
+			do_action( 'woocommerce_email_order_details', $original_order, false, false, '' );
+			remove_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
+			$order_details = ob_get_clean();
+
+			$body_text = str_replace( '{order_details}', $order_details, $body_text );
 
 			$body_text = str_replace( '{customer_first_name}', $order->get_billing_first_name(), $body_text );
 		}
@@ -310,6 +319,7 @@ class Pending_Payment {
 			ob_start();
 			add_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
 			do_action( 'woocommerce_email_order_details', $original_order, false, false, '' );
+			remove_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
 			$order_details = ob_get_clean();
 
 			$message = str_replace( '{order_details}', $order_details, $message );
@@ -317,8 +327,10 @@ class Pending_Payment {
 			if ( $customer_email ) {
 				$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
+				$attachments = $this->attach_invoice( $order );
+
 				$role_instance = \NOVA_B2B\Roles::get_instance();
-				$role_instance->send_email( $customer_email, $subject, $message, $headers, array() );
+				$role_instance->send_email( $customer_email, $subject, $message, $headers, $attachments );
 				$key = 'payment_email_key_' . $index;
 
 				$label = $payment_emails[ $index - 1 ]['email_label'];
@@ -331,6 +343,33 @@ class Pending_Payment {
 
 			}
 		}
+	}
+
+	public function attach_invoice( $order ) {
+		$nova_email = \NOVA_B2B\NovaEmails::get_instance();
+
+		$nova_quote = \NOVA_B2B\Nova_Quote::get_instance();
+
+		$content = $nova_email->order_invoice_content( $order );
+
+		$nova_quote->generate_invoice_pdf(
+			$order->get_user_id(),
+			$order->get_order_number(),
+			$content
+		);
+
+		$order_number = $order->get_order_number();
+		$business_id  = get_field( 'business_id', 'user_' . $order->get_user_id() );
+
+		$filename = $business_id . '-' . $order_number . '.pdf';
+
+		$file        = WP_CONTENT_DIR . '/uploads/order_invoices/' . $filename;
+		$attachments = array();
+
+		if ( file_exists( $file ) ) {
+			$attachments[] = $file;
+		}
+		return $attachments;
 	}
 
 	public function send_payment_reminder_email( $payment ) {
@@ -393,6 +432,8 @@ class Pending_Payment {
 						ob_start();
 						add_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
 						do_action( 'woocommerce_email_order_details', $original_order, false, false, '' );
+						remove_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
+
 						$order_details = ob_get_clean();
 
 						$message = str_replace( '{order_details}', $order_details, $message );
@@ -402,7 +443,9 @@ class Pending_Payment {
 
 							$role_instance = \NOVA_B2B\Roles::get_instance();
 
-							$role_instance->send_email( $customer_email, $subject, $message, $headers, array() );
+							$attachments = $this->attach_invoice( $order );
+
+							$role_instance->send_email( $customer_email, $subject, $message, $headers, $attachments );
 							$label = get_sub_field( 'email_label' );
 							if ( $label == 'Deadline email' ) {
 								$this->admin_notification_deadline_email( $original_order, $role_instance, $headers, $first_name, $payment_date, $pending_total );
@@ -447,6 +490,8 @@ class Pending_Payment {
 		ob_start();
 		add_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
 		do_action( 'woocommerce_email_order_details', $order, false, false, '' );
+		remove_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
+
 		$order_details = ob_get_clean();
 
 		$message = str_replace( '{order_details}', $order_details, $message );
@@ -495,6 +540,7 @@ class Pending_Payment {
 		ob_start();
 		add_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
 		do_action( 'woocommerce_email_order_details', $order, false, false, '' );
+		remove_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
 		$order_details = ob_get_clean();
 
 		$message = str_replace( '{order_details}', $order_details, $message );
@@ -868,7 +914,7 @@ class Pending_Payment {
 	public function admin_notification_paid_full( $order_id ) {
 		$order = wc_get_order( $order_id );
 
-		if ( get_post_meta( $order_id, '_adjusted_duplicate_order_id', true ) && ! get_post_meta( $order_id, '_from_order_id', true ) ) {
+		if ( ! get_post_meta( $order_id, '_from_order_id', true ) ) {
 			return;
 		}
 
@@ -876,13 +922,13 @@ class Pending_Payment {
 
 		$role_instance = \NOVA_B2B\Roles::get_instance();
 		$headers       = array( 'Content-Type: text/html; charset=UTF-8' );
-
+		$user_id       = $order->get_customer_id();
+		$customer      = get_userdata( $order->get_customer_id() );
 		$payment       = $this->get_data( $pending_id );
 		$payment_date  = date( 'F d, Y', strtotime( $payment->payment_date ) );
 		$pending_total = $payment->pending_total;
 		$currency      = $payment->currency;
-		$customer      = $this->get_billing_information_from_payment( $order_id );
-		$first_name    = $customer['first_name'];
+		$first_name    = $customer->first_name;
 		$user_id       = $order->get_user_id() ? $order->get_user_id() : 0;
 		$business_id   = get_field( 'business_id', 'user_' . $user_id );
 		$business_name = get_field( 'business_name', 'user_' . $user_id );
@@ -919,6 +965,7 @@ class Pending_Payment {
 		ob_start();
 		add_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
 		do_action( 'woocommerce_email_order_details', $order, false, false, '' );
+		remove_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
 		$order_details = ob_get_clean();
 
 		$message = str_replace( '{order_details}', $order_details, $message );

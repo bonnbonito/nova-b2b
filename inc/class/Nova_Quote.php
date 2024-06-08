@@ -1247,7 +1247,7 @@ h6 {
     margin-top: 0px;
 }
 </style>
-<table>
+<table style="margin-bottom: 20px;">
     <tr>
         <td>
             <h4 style="font-size: 14pt; margin: 0;">QUOTE ID: Q-<?php echo str_pad( $post_id, 4, '0', STR_PAD_LEFT ); ?>
@@ -1289,13 +1289,13 @@ h6 {
 				$price        = $projectArray['cadPrice'];
 
 				?>
-            <table style="margin-top: 40pt;">
+            <table style="margin-top: 40px; margin-bottom: 20px;">
                 <tr style="font-size: 17px; font-weight: bold;">
                     <td><?php echo $projectArray['title']; ?></td>
                     <td style="text-align: right;">CAD$ <?php echo $price; ?></td>
                 </tr>
                 <?php
-				if ( isset( $projectArray['letters'] ) ) {
+				if ( isset( $projectArray['letters'] ) && ! empty( $projectArray['letters'] ) ) {
 					$color = isset( $projectArray['color'] ) ? ' color: ' . $projectArray['color']->color : '';
 					$face  = $projectArray['font'] ? strtolower( str_replace( array( 'regular', ' ', 'bold' ), array( '', '_', 'b' ), $projectArray['font'] ) ) : '';
 					$style = $color . $face;
@@ -1477,7 +1477,7 @@ h6 {
                     <td style="text-align: right;">USD$ <?php echo $price; ?></td>
                 </tr>
                 <?php
-				if ( isset( $projectArray['letters'] ) ) {
+				if ( isset( $projectArray['letters'] ) && ! empty( $projectArray['letters'] ) ) {
 					$color = isset( $projectArray['color'] ) ? ' color: ' . $projectArray['color']->color : '';
 					$face  = $projectArray['font'] ? strtolower( str_replace( array( 'regular', ' ', 'bold' ), array( '', '_', 'b' ), $projectArray['font'] ) ) : '';
 					$style = $color . $face;
@@ -1673,29 +1673,29 @@ h6 {
 	}
 
 	public function output_project_item( $project ) {
-		echo '<table>';
+		echo '<table style="padding: 10px; border-collapse: collapse; width: 100%; font-size: 90%; margin-bottom: 20px;">';
 		$projectArray = get_object_vars( $project );
 
 		$attributes = $this->allAttributes();
 
 		foreach ( $attributes as $key => $attr ) {
-			if ( isset( $projectArray[ $key ] ) && ! empty( $projectArray[ $key ] ) && isset( $projectArray[ $key ] ) ) {
+			if ( isset( $projectArray[ $key ] ) && ! empty( $projectArray[ $key ] ) ) {
 				if ( is_array( $attr ) ) {
 					if ( $attr['isLink'] ?? false && isset( $projectArray['fontFileUrl'], $projectArray['fontFileName'] ) ) {
-						echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">' . $attr['label'] . ': </strong></td><td><font face="lato"><a href="' . $projectArray['fontFileUrl'] . '" target="_blank">' . $projectArray['fontFileName'] . '</a></font></td></tr>';
+						echo '<tr style="font-size: 14px;"><td style="width: 160px; padding: 8px; border: 1px solid #000;"><strong style="text-transform: uppercase;">' . $attr['label'] . ': </strong></td><td style="width: 160px; padding: 8px; border: 1px solid #000;"><font face="lato"><a href="' . $projectArray['fontFileUrl'] . '" target="_blank">' . $projectArray['fontFileName'] . '</a></font></td></tr>';
 					} elseif ( $attr['isVinyl'] ?? false && isset( $projectArray['vinylWhite']->name, $projectArray['vinylWhite']->code ) && ! empty( $projectArray['vinylWhite']->name ) && ! empty( $projectArray['vinylWhite']->code ) ) {
 						if ( ( isset( $projectArray['acrylicFront'] ) && $projectArray['acrylicFront'] === '3M Vinyl' ) || ( isset( $projectArray['frontOption'] ) && $projectArray['frontOption'] === '3M Vinyl' ) || ( isset( $projectArray['frontAcrylicCover'] ) && $projectArray['frontAcrylicCover'] === '3M Vinyl' ) ) {
-							echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">' . $attr['label'] . ': </strong></td><td><font face="lato">' . $projectArray['vinylWhite']->name . ' - [' . $projectArray['vinylWhite']->code . ']</font></td></tr>';
+							echo '<tr style="font-size: 14px;"><td style="width: 160px; padding: 8px; border: 1px solid #000;"><strong style="text-transform: uppercase;">' . $attr['label'] . ': </strong></td><td style="width: 160px; padding: 8px; border: 1px solid #000;"><font face="lato">' . $projectArray['vinylWhite']->name . ' - [' . $projectArray['vinylWhite']->code . ']</font></td></tr>';
 						}
 					} elseif ( $attr['isFile'] ?? false && isset( $projectArray['fileUrl'], $projectArray['fileName'] ) ) {
-						echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">' . $attr['label'] . ': </strong></td><td><font face="lato"><a href="' . $projectArray['fileUrl'] . '" target="_blank">' . $projectArray['fileName'] . '</a></font></td></tr>';
+						echo '<tr style="font-size: 14px;"><td style="width: 160px; padding: 8px; border: 1px solid #000;"><strong style="text-transform: uppercase;">' . $attr['label'] . ': </strong></td><td style="width: 160px; padding: 8px; border: 1px solid #000;"><font face="lato"><a href="' . $projectArray['fileUrl'] . '" target="_blank">' . $projectArray['fileName'] . '</a></font></td></tr>';
 					} elseif ( $attr['isFiles'] ?? false && isset( $projectArray['fileUrls'], $projectArray['fileNames'] ) ) {
 						$filesHtml = '';
 						foreach ( $projectArray['fileUrls'] as $index => $fileUrl ) {
 							$fileName   = $projectArray['fileNames'][ $index ] ?? $fileUrl;
 							$filesHtml .= '<a href="' . htmlspecialchars( $fileUrl, ENT_QUOTES, 'UTF-8' ) . '" target="_blank">' . htmlspecialchars( $fileName, ENT_QUOTES, 'UTF-8' ) . '</a><br>';
 						}
-						echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">' . $attr['label'] . ': </strong></td><td><font face="lato">' . $filesHtml . '</font></td></tr>';
+						echo '<tr style="font-size: 14px;"><td style="width: 160px; padding: 8px; border: 1px solid #000;"><strong style="text-transform: uppercase;">' . $attr['label'] . ': </strong></td><td style="width: 160px; padding: 8px; border: 1px solid #000;"><font face="lato">' . $filesHtml . '</font></td></tr>';
 					}
 				} else {
 					$value = $projectArray[ $key ];
@@ -1708,13 +1708,14 @@ h6 {
 							$value = $value->name;
 						}
 					}
-					echo '<tr style="font-size: 14px;"><td style="width: 160px;"><strong style="text-transform: uppercase;">' . $attr . ': </strong></td><td><font face="lato">' . $value . ( $key === 'letterHeight' ? '"' : '' ) . '</font></td></tr>';
+					if ( isset( $value ) && ! empty( $value ) ) {
+						echo '<tr style="font-size: 14px;"><td style="width: 160px; padding: 8px; border: 1px solid #000;"><strong style="text-transform: uppercase;">' . $attr . ': </strong></td><td style="width: 160px; padding: 8px; border: 1px solid #000;"><font face="lato">' . $value . ( $key === 'letterHeight' ? '"' : '' ) . '</font></td></tr>';
+					}
 				}
 			}
 		}
 
-		echo '<tr><td></td></tr>';
-		echo '<tr><td></td></tr>';
+		echo '<tr><td colspan="2" style="padding: 10px;"></td></tr>';
 
 		echo '</table>';
 	}
@@ -1821,6 +1822,72 @@ h6 {
 
 
 
+	public function generate_invoice_pdf( $user_id, $order_number, $html ) {
+		require_once get_stylesheet_directory() . '/tcpdf/tcpdf.php';
+
+		$business_id = get_field( 'business_id', 'user_' . $user_id ) ? get_field( 'business_id', 'user_' . $user_id ) : 'NONE';
+
+		$pdf = new TCPDF( PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false );
+
+		$filename = $business_id . '-' . $order_number . '.pdf';
+
+		// set document information
+		$pdf->SetCreator( PDF_CREATOR );
+		$pdf->SetAuthor( 'NOVA Signage' );
+		$pdf->SetTitle( 'Order Invoice - ' . $order_number );
+		$pdf->SetSubject( '' );
+		$pdf->SetKeywords( '' );
+
+		// remove default header/footer
+		$pdf->setPrintHeader( false );
+		$pdf->setPrintFooter( false );
+
+		// set default monospaced font
+		$pdf->SetDefaultMonospacedFont( PDF_FONT_MONOSPACED );
+
+		// set margins
+		$pdf->SetMargins( PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT );
+		$pdf->SetHeaderMargin( PDF_MARGIN_HEADER );
+		$pdf->SetFooterMargin( PDF_MARGIN_FOOTER );
+
+		// set auto page breaks
+		$pdf->SetAutoPageBreak( true, PDF_MARGIN_BOTTOM );
+
+		// set image scale factor
+		$pdf->setImageScale( PDF_IMAGE_SCALE_RATIO );
+
+		// set some language-dependent strings (optional)
+		// if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
+		// require_once(dirname(__FILE__).'/lang/eng.php');
+		// $pdf->setLanguageArray($l);
+		// }
+
+		// ---------------------------------------------------------
+
+		// set default font subsetting mode
+		$pdf->setFontSubsetting( true );
+
+		// setfont
+		$pdf->SetFont( 'secularone', '', 10, '', true );
+
+		$pdf->SetMargins( 10, 10, 10, true );
+
+		// Add a page
+		// This method has several options, check the source code documentation for more information.
+		$pdf->AddPage();
+
+		$pdf->writeHTML( $html, true, false, true, false, '' );
+
+		$file = $_SERVER['DOCUMENT_ROOT'] . 'wp-content/uploads/order_invoices/' . $filename;
+
+		if ( file_exists( $file ) ) {
+			unlink( $file );
+		}
+
+		$pdf->Output( $file, 'F' );
+
+	}
+
 	public function generate_pdf( $post_id, $html, $currency = 'USD' ) {
 		require_once get_stylesheet_directory() . '/tcpdf/tcpdf.php';
 
@@ -1882,7 +1949,23 @@ h6 {
 		$pdf->Output( $_SERVER['DOCUMENT_ROOT'] . 'wp-content/customer_invoices/' . $filename, 'F' );
 	}
 
-	function create_customer_invoice_folder( $business_id, $quote_id ) {
+	public function create_order_invoice_folder() {
+		$upload_dir = wp_upload_dir();
+		$base_dir   = $upload_dir['basedir'] . '/order_invoices';
+
+		if ( file_exists( $base_dir ) ) {
+			return true;
+		}
+
+		if ( ! wp_mkdir_p( $base_dir ) ) {
+			return new WP_Error( 'base_directory_creation_failed', __( 'Failed to create base directory for order invoices.', 'nova-b2b' ) );
+		}
+
+		return true;
+	}
+
+
+	public function create_customer_invoice_folder( $business_id ) {
 		// Get the WordPress uploads directory.
 		$upload_dir = wp_upload_dir();
 		$base_dir   = $upload_dir['basedir'] . '/customer_invoices';

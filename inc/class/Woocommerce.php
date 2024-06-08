@@ -107,7 +107,7 @@ class Woocommerce {
 		// add_filter( 'woocommerce_currency', array( $this, 'change_currency_based_on_shipping_country' ), 99999999 );
 		add_action( 'init', array( $this, 'set_currency_cookie_based_on_billing_country' ), 999 );
 		add_action( 'option_wcumcs_available_currencies', array( $this, 'list_of_currencies' ), 10, 2 );
-		add_filter( 'kadence_woomail_order_body_text', array( $this, 'order_completed_email_with_pending_payment' ), 20, 5 );
+		// add_filter( 'kadence_woomail_order_body_text', array( $this, 'order_completed_email_with_pending_payment' ), 20, 5 );
 		add_filter( 'woocommerce_email_heading_customer_completed_order', array( $this, 'change_order_email_headings' ), 20, 2 );
 		add_filter( 'woocommerce_order_after_calculate_totals', array( $this, 'modify_order_total' ), 20, 2 );
 		// add_filter( 'woocommerce_before_save_order_items', array( $this, 'modify_order_total' ), 99 );
@@ -888,6 +888,8 @@ class Woocommerce {
 
 			// Create the adjusted duplicate order
 			$new_order_id = $this->create_duplicate_order_with_adjustment( $order, $payment_select, $total, $shipping, $shipping_method, $tax, $pending_payment );
+			// Create Invoice
+			$this->create_order_invoice( $order_id, $payment_select, );
 
 			// Optionally, link the new order with the original by storing the new order ID in the original order's meta
 			update_post_meta( $order_id, '_adjusted_duplicate_order_id', $new_order_id );
@@ -1710,9 +1712,9 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 
 		foreach ( $array as $object ) {
 
-			$html .= '<div style="padding: 10px; border: 1pxz solid #d2d2d2 !important;">';
+			$html .= '<div style="padding: 10px;">';
 
-			$html .= '<table style="border: 1px solid black; border-collapse: collapse; max-width: 400px; width: 100%; font-size: 80%; margin-bottom: 20px;">
+			$html .= '<table style="padding: 4px; border-collapse: collapse; max-width: 400px; width: 100%; font-size: 80%; margin-bottom: 20px;">
     <tbody>';
 
 			foreach ( $attributes as $key => $attr ) {
@@ -1721,20 +1723,20 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 
 					if ( is_array( $attr ) ) {
 						if ( $attr['isLink'] ?? false && isset( $object->fontFileUrl, $object->fontFileName ) && ! empty( $object->fontFileUrl ) && ! empty( $object->fontFileName ) ) {
-							$html .= '<td style="border: 1px solid black;"><strong>' . $attr['label'] . ':</strong></td><td style="border: 1px solid black;"><a href="' . htmlspecialchars( $object->fontFileUrl ) . '" target="_blank">' . htmlspecialchars( $object->fontFileName ) . '</a></td>';
+							$html .= '<td style="border: 1px solid #dddddd; padding: 10px;"><strong>' . $attr['label'] . ':</strong></td><td style="border: 1px solid #dddddd; padding: 10px;"><a href="' . htmlspecialchars( $object->fontFileUrl ) . '" target="_blank">' . htmlspecialchars( $object->fontFileName ) . '</a></td>';
 						} elseif ( $attr['isVinyl'] ?? false && isset( $object->vinylWhite->code ) && ! empty( $object->vinylWhite->name ) && ! empty( $object->vinylWhite->code ) ) {
 							if ( ( isset( $object->acrylicFront ) && $object->acrylicFront === '3M Vinyl' ) || ( isset( $object->frontOption ) && $object->frontOption === '3M Vinyl' ) || ( isset( $object->frontAcrylicCover ) && $object->frontAcrylicCover === '3M Vinyl' ) ) {
-								$html .= '<td style="border: 1px solid black;"><strong>' . $attr['label'] . ':</strong></td><td style="border: 1px solid black;">' . htmlspecialchars( $object->vinylWhite->name ) . ' - [' . htmlspecialchars( $object->vinylWhite->code ) . ']</td>';
+								$html .= '<td style="border: 1px solid #dddddd; padding: 10px;"><strong>' . $attr['label'] . ':</strong></td><td style="border: 1px solid #dddddd; padding: 10px;">' . htmlspecialchars( $object->vinylWhite->name ) . ' - [' . htmlspecialchars( $object->vinylWhite->code ) . ']</td>';
 							}
 						} elseif ( $attr['isFile'] ?? false && isset( $object->fileUrl, $object->fileName ) && ! empty( $object->fileUrl ) && ! empty( $object->fileName ) ) {
-							$html .= '<td style="border: 1px solid black;"><strong>' . $attr['label'] . ':</strong></td><td style="border: 1px solid black;"><a href="' . htmlspecialchars( $object->fileUrl ) . '" target="_blank">' . htmlspecialchars( $object->fileName ) . '</a></td>';
+							$html .= '<td style="border: 1px solid #dddddd; padding: 10px;"><strong>' . $attr['label'] . ':</strong></td><td style="border: 1px solid #dddddd; padding: 10px;"><a href="' . htmlspecialchars( $object->fileUrl ) . '" target="_blank">' . htmlspecialchars( $object->fileName ) . '</a></td>';
 						} elseif ( $attr['isFiles'] ?? false && isset( $object->fileUrls, $object->fileNames ) && ! empty( $object->fileUrls ) && ! empty( $object->fileNames ) ) {
 							$filesHtml = '';
 							foreach ( $object->fileUrls as $index => $fileUrl ) {
 								$fileName   = $object->fileNames[ $index ] ?? $fileUrl;
 								$filesHtml .= '<a href="' . htmlspecialchars( $fileUrl, ENT_QUOTES, 'UTF-8' ) . '" target="_blank">' . htmlspecialchars( $fileName, ENT_QUOTES, 'UTF-8' ) . '</a><br>';
 							}
-							$html .= '<td style="border: 1px solid black;"><strong>' . $attr['label'] . ':</strong></td><td style="border: 1px solid black;">' . $filesHtml . '</td>';
+							$html .= '<td style="border: 1px solid #dddddd; padding: 10px;"><strong>' . $attr['label'] . ':</strong></td><td style="border: 1px solid #dddddd; padding: 10px;">' . $filesHtml . '</td>';
 						}
 					} else {
 						$value = $object->$key;
@@ -1747,7 +1749,9 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 								$value = $value->name;
 							}
 						}
-						$html .= '<td style="border: 1px solid black;"><strong>' . $attr . ':</strong></td><td style="border: 1px solid black;">' . htmlspecialchars( $value ) . ( $key === 'letterHeight' ? '"' : '' ) . '</td>';
+						if ( isset( $value ) && ! empty( $value ) ) {
+							$html .= '<td style="border: 1px solid #dddddd; padding: 10px;"><strong>' . $attr . ':</strong></td><td style="border: 1px solid #dddddd; padding: 10px;">' . htmlspecialchars( $value ) . ( $key === 'letterHeight' ? '"' : '' ) . '</td>';
+						}
 					}
 
 					$html .= '</tr>';
@@ -2281,7 +2285,9 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 							$value = $value->name;
 						}
 					}
-					echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">' . $attr . ':</div><div class="text-left text-[10px] uppercase">' . htmlspecialchars( $value ) . ( $key === 'letterHeight' ? '"' : '' ) . '</div></div>';
+					if ( isset( $value ) && ! empty( $value ) ) {
+						echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">' . $attr . ':</div><div class="text-left text-[10px] uppercase">' . htmlspecialchars( $value ) . ( $key === 'letterHeight' ? '"' : '' ) . '</div></div>';
+					}
 				}
 			}
 		}
