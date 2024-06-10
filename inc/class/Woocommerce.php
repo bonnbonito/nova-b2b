@@ -3,11 +3,10 @@
 namespace NOVA_B2B;
 
 use WP_Query;
-use Kadence\Theme;
-use WC;
-use WC_Tax;
+use function WC;
 use WC_Order_Item_Shipping;
 use function is_cart;
+use Kadence\Theme;
 
 class Woocommerce {
 	/**
@@ -889,7 +888,7 @@ class Woocommerce {
 			// Create the adjusted duplicate order
 			$new_order_id = $this->create_duplicate_order_with_adjustment( $order, $payment_select, $total, $shipping, $shipping_method, $tax, $pending_payment );
 			// Create Invoice
-			$this->create_order_invoice( $order_id, $payment_select, );
+			// $this->create_order_invoice( $order_id, $payment_select, );
 
 			// Optionally, link the new order with the original by storing the new order ID in the original order's meta
 			update_post_meta( $order_id, '_adjusted_duplicate_order_id', $new_order_id );
@@ -1708,35 +1707,36 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 
 		$html  = '<h6 style="font-size: 100%; margin-top: 10px;margin-bottom: 0;">Quote ID: <strong>Q-' . str_pad( $product, 4, '0', STR_PAD_LEFT ) . '</strong></h6>';
 		$html .= '<h6 style="font-size: 100%; margin-top: 0; margin-bottom: 0;">Project Name: <strong>' . $nova_title . '</strong></h6>';
-		$html .= '<h6 style="font-size: 100%; margin-top: 0; margin-bottom: 20px;">Product: <strong>' . $product_line . '</strong></h6>';
+		$html .= '<h6 style="font-size: 100%; margin-top: 0; margin-bottom: 0;">Product: <strong>' . $product_line . '</strong></h6>';
 
 		foreach ( $array as $object ) {
 
-			$html .= '<div style="padding: 10px;">';
+			$html .= '<div style="display: block;">';
+			$html .= '<p style="margin-top:20px; font-size: 18px; margin-bottom: 5px;">' . $object->title . '</p>';
 
 			$html .= '<table style="padding: 4px; border-collapse: collapse; max-width: 400px; width: 100%; font-size: 80%; margin-bottom: 20px;">
     <tbody>';
 
 			foreach ( $attributes as $key => $attr ) {
+
 				if ( isset( $object->$key ) && ! empty( $object->$key ) ) {
-					$html .= '<tr>';
 
 					if ( is_array( $attr ) ) {
 						if ( $attr['isLink'] ?? false && isset( $object->fontFileUrl, $object->fontFileName ) && ! empty( $object->fontFileUrl ) && ! empty( $object->fontFileName ) ) {
-							$html .= '<td style="border: 1px solid #dddddd; padding: 10px;"><strong>' . $attr['label'] . ':</strong></td><td style="border: 1px solid #dddddd; padding: 10px;"><a href="' . htmlspecialchars( $object->fontFileUrl ) . '" target="_blank">' . htmlspecialchars( $object->fontFileName ) . '</a></td>';
+							$html .= '<tr><td style="border: 1px solid #dddddd; padding: 10px;"><strong>' . $attr['label'] . ':</strong></td><td style="border: 1px solid #dddddd; padding: 10px;"><a href="' . htmlspecialchars( $object->fontFileUrl ) . '" target="_blank">' . htmlspecialchars( $object->fontFileName ) . '</a></td></tr>';
 						} elseif ( $attr['isVinyl'] ?? false && isset( $object->vinylWhite->code ) && ! empty( $object->vinylWhite->name ) && ! empty( $object->vinylWhite->code ) ) {
 							if ( ( isset( $object->acrylicFront ) && $object->acrylicFront === '3M Vinyl' ) || ( isset( $object->frontOption ) && $object->frontOption === '3M Vinyl' ) || ( isset( $object->frontAcrylicCover ) && $object->frontAcrylicCover === '3M Vinyl' ) ) {
-								$html .= '<td style="border: 1px solid #dddddd; padding: 10px;"><strong>' . $attr['label'] . ':</strong></td><td style="border: 1px solid #dddddd; padding: 10px;">' . htmlspecialchars( $object->vinylWhite->name ) . ' - [' . htmlspecialchars( $object->vinylWhite->code ) . ']</td>';
+								$html .= '<tr><td style="border: 1px solid #dddddd; padding: 10px;"><strong>' . $attr['label'] . ':</strong></td><td style="border: 1px solid #dddddd; padding: 10px;">' . htmlspecialchars( $object->vinylWhite->name ) . ' - [' . htmlspecialchars( $object->vinylWhite->code ) . ']</td></tr>';
 							}
 						} elseif ( $attr['isFile'] ?? false && isset( $object->fileUrl, $object->fileName ) && ! empty( $object->fileUrl ) && ! empty( $object->fileName ) ) {
-							$html .= '<td style="border: 1px solid #dddddd; padding: 10px;"><strong>' . $attr['label'] . ':</strong></td><td style="border: 1px solid #dddddd; padding: 10px;"><a href="' . htmlspecialchars( $object->fileUrl ) . '" target="_blank">' . htmlspecialchars( $object->fileName ) . '</a></td>';
+							$html .= '<tr><td style="border: 1px solid #dddddd; padding: 10px;"><strong>' . $attr['label'] . ':</strong></td><td style="border: 1px solid #dddddd; padding: 10px;"><a href="' . htmlspecialchars( $object->fileUrl ) . '" target="_blank">' . htmlspecialchars( $object->fileName ) . '</a></td></tr>';
 						} elseif ( $attr['isFiles'] ?? false && isset( $object->fileUrls, $object->fileNames ) && ! empty( $object->fileUrls ) && ! empty( $object->fileNames ) ) {
 							$filesHtml = '';
 							foreach ( $object->fileUrls as $index => $fileUrl ) {
 								$fileName   = $object->fileNames[ $index ] ?? $fileUrl;
 								$filesHtml .= '<a href="' . htmlspecialchars( $fileUrl, ENT_QUOTES, 'UTF-8' ) . '" target="_blank">' . htmlspecialchars( $fileName, ENT_QUOTES, 'UTF-8' ) . '</a><br>';
 							}
-							$html .= '<td style="border: 1px solid #dddddd; padding: 10px;"><strong>' . $attr['label'] . ':</strong></td><td style="border: 1px solid #dddddd; padding: 10px;">' . $filesHtml . '</td>';
+							$html .= '<tr><td style="border: 1px solid #dddddd; padding: 10px;"><strong>' . $attr['label'] . ':</strong></td><td style="border: 1px solid #dddddd; padding: 10px;">' . $filesHtml . '</td></tr>';
 						}
 					} else {
 						$value = $object->$key;
@@ -1750,11 +1750,9 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 							}
 						}
 						if ( isset( $value ) && ! empty( $value ) ) {
-							$html .= '<td style="border: 1px solid #dddddd; padding: 10px;"><strong>' . $attr . ':</strong></td><td style="border: 1px solid #dddddd; padding: 10px;">' . htmlspecialchars( $value ) . ( $key === 'letterHeight' ? '"' : '' ) . '</td>';
+							$html .= '<tr><td style="border: 1px solid #dddddd; padding: 10px;"><strong>' . $attr . ':</strong></td><td style="border: 1px solid #dddddd; padding: 10px;">' . htmlspecialchars( $value ) . ( $key === 'letterHeight' ? '"' : '' ) . '</td></tr>';
 						}
 					}
-
-					$html .= '</tr>';
 				}
 			}
 
@@ -2118,7 +2116,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		class="py-4 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/processing'] ) ? 'border-black' : 'border-transparent' ); ?> mb-[-4px] text-black">Processing
 		<span>(<?php echo $processing; ?>)</a>
 	<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/payments' ) ); ?>"
-		class="py-4 py-4 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/payments'] ) ? 'border-black' : 'border-transparent' ); ?> mb-[-4px] text-black">Quoted
+		class="py-4 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/payments'] ) ? 'border-black' : 'border-transparent' ); ?> mb-[-4px] text-black">Quoted
 		<span>(<?php echo $quoted; ?>)</a>
 	<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/archived' ) ); ?>"
 		class="py-4 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/archived'] ) ? 'border-black' : 'border-transparent' ); ?> mb-[-4px] text-black">Archived

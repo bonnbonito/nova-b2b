@@ -521,7 +521,6 @@ export function Logo({ item }) {
 							openColor={openColor}
 							toggleColor={() => {
 								setOpenColor((prev) => !prev);
-								setOpenFont(false);
 							}}
 							colorOptions={colorOptions}
 							selectColor={(color) => {

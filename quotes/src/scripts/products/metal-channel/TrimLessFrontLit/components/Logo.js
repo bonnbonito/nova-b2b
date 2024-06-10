@@ -2,7 +2,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
 import useOutsideClick from '../../../../utils/ClickOutside';
-import { colorOptions, whiteOptions } from '../../../../utils/ColorOptions';
+import {
+	colorOptions,
+	whiteOptionsResin,
+} from '../../../../utils/ColorOptions';
 import ColorsDropdown from '../../../../utils/ColorsDropdown';
 import VinylColors from '../../../../utils/VinylColors';
 
@@ -342,7 +345,10 @@ export function Logo({ item }) {
 			tempTotal += 150;
 		}
 
-		if (frontAcrylicCover === '3M Vinyl') {
+		if (
+			frontAcrylicCover === '3M Vinyl' ||
+			frontAcrylicCover === 'UV Printed'
+		) {
 			tempTotal *= 1.1;
 			console.log('front', tempTotal);
 		}
@@ -434,13 +440,12 @@ export function Logo({ item }) {
 				/>
 
 				<ColorsDropdown
-					title="Return Color"
 					ref={colorRef}
-					colorName={color?.name}
+					title="Return Color"
+					colorName={color.name}
 					openColor={openColor}
 					toggleColor={() => {
 						setOpenColor((prev) => !prev);
-						setOpenFont(false);
 						setOpenAcrylicCover(false);
 					}}
 					colorOptions={colorOptions}
@@ -451,20 +456,9 @@ export function Logo({ item }) {
 				/>
 
 				<Dropdown
-					title="LED Light Color"
-					onChange={handleOnChangeLedLight}
-					options={ledLightColors.map((color) => (
-						<option value={color} selected={color == ledLightColor}>
-							{color}
-						</option>
-					))}
-					value={ledLightColor}
-				/>
-
-				<Dropdown
 					title="Front Acrylic Cover"
 					onChange={handleOnChangeWhite}
-					options={whiteOptions.map((option) => (
+					options={whiteOptionsResin.map((option) => (
 						<option
 							value={option.option}
 							selected={option == frontAcrylicCover}
@@ -480,11 +474,11 @@ export function Logo({ item }) {
 						<VinylColors
 							ref={acrylicColorRef}
 							vinylWhite={vinylWhite}
+							setVinylWhite={setVinylWhite}
 							openVinylWhite={openAcrylicCover}
 							toggleVinyl={() => {
 								setOpenAcrylicCover((prev) => !prev);
 								setOpenColor(false);
-								setOpenFont(false);
 							}}
 							selectVinylColor={(color) => {
 								setVinylWhite(color);
@@ -493,6 +487,17 @@ export function Logo({ item }) {
 						/>
 					</>
 				)}
+
+				<Dropdown
+					title="LED Light Color"
+					onChange={handleOnChangeLedLight}
+					options={ledLightColors.map((color) => (
+						<option value={color} selected={color == ledLightColor}>
+							{color}
+						</option>
+					))}
+					value={ledLightColor}
+				/>
 
 				<Dropdown
 					title="Environment"
@@ -537,6 +542,7 @@ export function Logo({ item }) {
 						value={studLength}
 					/>
 				)}
+
 				{mounting === STUD_WITH_SPACER && (
 					<Dropdown
 						title="STANDOFF SPACE"

@@ -2,7 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
 import useOutsideClick from '../../../../utils/ClickOutside';
-import { colorOptions, whiteOptions } from '../../../../utils/ColorOptions';
+import { colorOptions } from '../../../../utils/ColorOptions';
+import ColorsDropdown from '../../../../utils/ColorsDropdown';
+
 import {
 	setOptions,
 	spacerStandoffDefaultOptions,
@@ -12,20 +14,32 @@ import {
 import {
 	aluminumResinDepthOptions,
 	ledLightColors,
+	maxHeightOptions,
+	maxWidthOptions,
 	mountingDefaultOptions,
 } from '../../metalChannelOptions';
 
 import {
+	EXCHANGE_RATE,
 	INDOOR_NOT_WATERPROOF,
 	STUD_MOUNT,
 	STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
+
+const frontAcrylicOptions = [
+	{
+		option: 'UV Printed',
+	},
+];
 
 import { useAppContext } from '../../../../AppProvider';
 
 export function Logo({ item }) {
 	const { signage, setSignage, setMissing } = useAppContext();
 	const [comments, setComments] = useState(item.comments ?? '');
+
+	const [width, setWidth] = useState(item.width ?? '');
+	const [height, setHeight] = useState(item.height ?? '');
 
 	const [color, setColor] = useState(
 		item.returnColor ?? { name: 'Black', color: '#000000' }
@@ -44,6 +58,14 @@ export function Logo({ item }) {
 
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
+	const [usdDiscount, setUsdDiscount] = useState(item.usdDiscount ?? 0);
+	const [cadDiscount, setCadDiscount] = useState(item.cadDiscount ?? 0);
+	const [usdSinglePrice, setUsdSinglePrice] = useState(
+		item.usdSinglePrice ?? 0
+	);
+	const [cadSinglePrice, setCadSinglePrice] = useState(
+		item.usdSinglePrice ?? 0
+	);
 
 	const [studLength, setStudLength] = useState(item.studLength ?? '');
 
@@ -56,8 +78,13 @@ export function Logo({ item }) {
 	);
 
 	const [frontAcrylicCover, setFrontAcrylicCover] = useState(
-		item.frontAcrylicCover ?? 'UV Printed'
+		item.frontAcrylicCover ?? ''
 	);
+
+	const handleOnChangeWhite = (e) => {
+		const target = e.target.value;
+		setFrontAcrylicCover(target);
+	};
 
 	const [mounting, setMounting] = useState(item.mounting ?? '');
 
@@ -96,6 +123,8 @@ export function Logo({ item }) {
 					spacerStandoffDistance,
 					frontAcrylicCover,
 					sets,
+					width,
+					height,
 				};
 			} else {
 				return sign;
@@ -208,6 +237,9 @@ export function Logo({ item }) {
 
 		if (!depth) missingFields.push('Select Metal Depth');
 
+		if (!width) missingFields.push('Select Logo Width');
+		if (!height) missingFields.push('Select Logo Height');
+
 		if (!color?.name) missingFields.push('Select Color');
 		if (color?.name === 'Custom Color' && !customColor) {
 			missingFields.push('Add the Pantone color code of your custom color.');
@@ -265,6 +297,94 @@ export function Logo({ item }) {
 		}
 	};
 
+	const computePricing = () => {
+		if (!width || !height || !depth?.value) return 0;
+
+		let P = 0;
+		let S = 0;
+		const F = 30;
+		let X = parseInt(width);
+		let Y = parseInt(height);
+
+		switch (depth?.value) {
+			case '3.5':
+				console.log(depth);
+				P = 0.19;
+				S = 0.11;
+				break;
+			case '5':
+				console.log(depth);
+				P = 0.2;
+				S = 0.13;
+				break;
+			default:
+				console.log(depth);
+				P = 0.22;
+				S = 0.17;
+		}
+
+		let tempTotal = X * Y * P + (X + 4) * (Y + 4) * S + F;
+		console.log(tempTotal);
+
+		/* Oversize surcharge */
+		if (X > 41 || Y > 41) {
+			console.log('surcharge');
+			tempTotal += 150;
+		}
+
+		if (frontAcrylicCover === 'UV Printed') {
+			tempTotal *= 1.1;
+			console.log('front', tempTotal);
+		}
+
+		if (waterproof && waterproof !== INDOOR_NOT_WATERPROOF) {
+			tempTotal *= 1.03;
+			console.log('waterproof', tempTotal);
+		}
+
+		if (spacerStandoffDistance) {
+			const spacer = spacerPricing(tempTotal);
+			tempTotal += parseFloat(spacer.toFixed(2));
+		}
+
+		let total = tempTotal * parseInt(sets);
+
+		total = total.toFixed(1);
+
+		const discount = 1;
+
+		let totalWithDiscount = total * discount;
+
+		let discountPrice = total - totalWithDiscount;
+
+		return {
+			singlePrice: tempTotal ?? 0,
+			total: totalWithDiscount?.toFixed(2) ?? 0,
+			totalWithoutDiscount: total,
+			discount: discountPrice,
+		};
+	};
+
+	useEffect(() => {
+		const { singlePrice, total, discount } = computePricing();
+		if (total && singlePrice) {
+			setUsdPrice(total);
+			setCadPrice((total * EXCHANGE_RATE).toFixed(2));
+			setUsdSinglePrice(singlePrice);
+			setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
+			setUsdDiscount(discount.toFixed(2));
+			setCadDiscount((discount * EXCHANGE_RATE).toFixed(2));
+		}
+	}, [
+		depth,
+		width,
+		height,
+		waterproof,
+		spacerStandoffDistance,
+		frontAcrylicCover,
+		sets,
+	]);
+
 	useEffect(() => {
 		updateSignage();
 		checkAndAddMissingFields();
@@ -286,6 +406,8 @@ export function Logo({ item }) {
 		spacerStandoffDistance,
 		frontAcrylicCover,
 		sets,
+		width,
+		height,
 	]);
 
 	useOutsideClick([colorRef], () => {
@@ -307,20 +429,6 @@ export function Logo({ item }) {
 
 			<div className="quote-grid mb-6">
 				<Dropdown
-					title="Environment"
-					onChange={handleOnChangeWaterproof}
-					options={waterProofOptions.map((option) => (
-						<option
-							value={option.option}
-							selected={option.option == waterproof}
-						>
-							{option.option}
-						</option>
-					))}
-					value={waterproof}
-				/>
-
-				<Dropdown
 					title="Metal Depth"
 					value={depth?.value}
 					onChange={handleOnChangeDepth}
@@ -331,56 +439,48 @@ export function Logo({ item }) {
 					))}
 				/>
 
-				<div className="px-[1px] relative" ref={colorRef}>
-					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-						Return Color
-					</label>
-					<div
-						className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-							color?.name ? 'text-black' : 'text-[#dddddd]'
-						}`}
-						onClick={() => {
-							setOpenColor((prev) => !prev);
-						}}
-					>
-						<span
-							className="rounded-full w-[18px] h-[18px] border mr-2"
-							style={{
-								background:
-									color?.name == 'Custom Color'
-										? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-										: color?.color,
-							}}
-						></span>
-						{color?.name === '' ? 'CHOOSE OPTION' : color?.name}
-					</div>
-					{openColor && (
-						<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg">
-							{colorOptions.map((color) => {
-								return (
-									<div
-										className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
-										onClick={() => {
-											setColor(color);
-											setOpenColor(false);
-										}}
-									>
-										<span
-											className="w-[18px] h-[18px] inline-block rounded-full border"
-											style={{
-												background:
-													color?.name == 'Custom Color'
-														? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-														: color?.color,
-											}}
-										></span>
-										{color?.name}
-									</div>
-								);
-							})}
-						</div>
-					)}
-				</div>
+				<Dropdown
+					title="Logo Width"
+					value={width}
+					onChange={(e) => setWidth(e.target.value)}
+					options={maxWidthOptions}
+				/>
+
+				<Dropdown
+					title="Logo Height"
+					value={height}
+					onChange={(e) => setHeight(e.target.value)}
+					options={maxHeightOptions}
+				/>
+
+				<ColorsDropdown
+					ref={colorRef}
+					title="Return Color"
+					colorName={color.name}
+					openColor={openColor}
+					toggleColor={() => {
+						setOpenColor((prev) => !prev);
+					}}
+					colorOptions={colorOptions}
+					selectColor={(color) => {
+						setColor(color);
+						setOpenColor(false);
+					}}
+				/>
+
+				<Dropdown
+					title="Front Acrylic Cover"
+					onChange={handleOnChangeWhite}
+					options={frontAcrylicOptions.map((option) => (
+						<option
+							value={option.option}
+							selected={option == frontAcrylicCover}
+						>
+							{option.option}
+						</option>
+					))}
+					value={frontAcrylicCover}
+				/>
 
 				<Dropdown
 					title="LED Light Color"
@@ -394,10 +494,17 @@ export function Logo({ item }) {
 				/>
 
 				<Dropdown
-					title="Front Acrylic Cover"
-					options={<option value="UV Printed">{frontAcrylicCover}</option>}
-					value={frontAcrylicCover}
-					onlyValue={true}
+					title="Environment"
+					onChange={handleOnChangeWaterproof}
+					options={waterProofOptions.map((option) => (
+						<option
+							value={option.option}
+							selected={option.option == waterproof}
+						>
+							{option.option}
+						</option>
+					))}
+					value={waterproof}
 				/>
 
 				<Dropdown

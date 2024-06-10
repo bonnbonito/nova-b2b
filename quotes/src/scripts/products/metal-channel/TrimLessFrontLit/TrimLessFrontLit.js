@@ -35,7 +35,7 @@ export default function TrimLessFrontLit() {
 				returnColor: { name: 'Black', color: '#000000' },
 				customColor: '',
 				letterHeight: '',
-				ledLightColor: '',
+				ledLightColor: '6500K White',
 				usdPrice: 0,
 				cadPrice: 0,
 				filePaths: [],

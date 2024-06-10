@@ -44,6 +44,10 @@ class NovaEmails {
 			if ( in_array( $email_id, array( 'customer_processing_order', 'customer_completed_order' ) ) ) {
 				// Add the custom attachment
 
+				if ( $email_id === 'customer_completed_order' && $order->get_meta( '_from_order_id' ) ) {
+					return $attachments;
+				}
+
 				$content    = $this->order_invoice_content( $order );
 				$nova_quote = \NOVA_B2B\Nova_Quote::get_instance();
 

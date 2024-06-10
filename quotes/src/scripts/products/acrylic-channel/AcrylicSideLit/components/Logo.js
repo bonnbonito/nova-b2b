@@ -263,6 +263,8 @@ export function Logo({ item }) {
 
 		if (!acrylicChannelThickness)
 			missingFields.push('Select Acrylic Thickness');
+		if (!width) missingFields.push('Select Logo Width');
+		if (!height) missingFields.push('Select Logo Height');
 		if (!color) missingFields.push('Select Front Option');
 		if (color === 'Custom Color' && !customColor) {
 			missingFields.push('Add the Pantone color code of your custom color.');

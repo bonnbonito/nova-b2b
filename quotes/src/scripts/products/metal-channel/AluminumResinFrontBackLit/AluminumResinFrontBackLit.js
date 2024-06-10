@@ -73,7 +73,7 @@ export default function TrimLessFrontAndBackLit() {
 		customFont: '',
 		waterproof: '',
 		thickness: '',
-		frontAcrylicCover: 'White',
+		frontAcrylicCover: '',
 		vinylWhite: { name: '', color: '', code: '' },
 		mounting: '',
 		studLength: '',
@@ -107,12 +107,13 @@ export default function TrimLessFrontAndBackLit() {
 				args = {
 					type: type,
 					title: `LETTERS ${count + 1}`,
+					frontAcrylicCover: 'White',
 				};
 			} else {
 				args = {
 					type: type,
 					title: `LOGO ${count + 1}`,
-					frontAcrylicCover: 'UV Printed',
+					frontAcrylicCover: '',
 				};
 			}
 			const newSignage = {

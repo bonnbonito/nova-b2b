@@ -2,6 +2,8 @@
 
 namespace NOVA_B2B;
 
+use WP_Roles;
+
 class Admin {
 	/**
 	 * Instance of this class
