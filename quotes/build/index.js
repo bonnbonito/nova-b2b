@@ -18584,6 +18584,7 @@ function Logo({
     if (!ledLightColor) missingFields.push('Select LED Light Color');
     if (!frontAcrylicCover) missingFields.push('Select Front Acrylic Cover');
     if (!sets) missingFields.push('Select Quantity');
+    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
         const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
@@ -19898,6 +19899,7 @@ function Logo({
     if (!ledLightColor) missingFields.push('Select LED Light Color');
     if (!frontAcrylicCover) missingFields.push('Select Front Acrylic Cover');
     if (!sets) missingFields.push('Select Quantity');
+    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
         const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
@@ -21174,6 +21176,7 @@ function Logo({
     if (!acrylicReveal) {
       missingFields.push('Select Acrylic Reveal');
     }
+    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
         const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
@@ -22488,6 +22491,7 @@ function Logo({
     if (frontAcrylicCover === '3M Vinyl') {
       if (!vinylWhite?.name) missingFields.push('Select 3M Vinyl');
     }
+    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
         const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
@@ -23765,6 +23769,7 @@ function Logo({
     if (frontAcrylicCover === '3M Vinyl') {
       if (!vinylWhite?.name) missingFields.push('Select 3M Vinyl');
     }
+    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
         const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);

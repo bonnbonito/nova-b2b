@@ -236,6 +236,9 @@ export function Logo({ item }) {
 			if (!vinylWhite?.name) missingFields.push('Select 3M Vinyl');
 		}
 
+		if (!fileUrls || fileUrls.length === 0)
+			missingFields.push('Upload a PDF/AI File');
+
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
 				const existingIndex = prevMissing.findIndex(
