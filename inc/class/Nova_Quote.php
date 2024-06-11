@@ -1250,8 +1250,18 @@ h6 {
 </style>
 <table style="margin-bottom: 20px;">
 	<tr>
+		<td style="margin-top: 0; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #000;">
+			<img src="<?php echo get_stylesheet_directory() . '/assets/img/nova-logo.png'; ?>" alt="Nova Signage"
+				style="margin-top: 0;" />
+		</td>
+	</tr>
+	<tr>
+		<td style="padding: 30px;"></td>
+	</tr>
+	<tr>
 		<td>
-			<h4 style="font-size: 14pt; margin: 0;">QUOTE ID: Q-<?php echo str_pad( $post_id, 4, '0', STR_PAD_LEFT ); ?>
+			<h4 style="font-size: 14pt; margin-bottom: 0;">QUOTE ID:
+				Q-<?php echo str_pad( $post_id, 4, '0', STR_PAD_LEFT ); ?>
 			</h4>
 			<p style="padding-bottom: 0; margin-bottom: 0;">INITIAL QUOTE REQUESTED ON: <font face="lato">
 					<?php echo get_the_date( 'F j, Y', $post_id ); ?></font>
@@ -1297,7 +1307,12 @@ h6 {
 				</tr>
 				<?php
 				if ( isset( $projectArray['letters'] ) && ! empty( $projectArray['letters'] ) ) {
-					$color = isset( $projectArray['color'] ) ? ' color: ' . $projectArray['color']->color : '';
+					$color = '#000000';
+					if ( isset( $projectArray['vinylWhite']->color ) && ! empty( $projectArray['vinylWhite']->color ) ) {
+						$color = 'color: ' . $projectArray['vinylWhite']->color;
+					} elseif ( isset( $projectArray['color']->color ) && ! empty( $projectArray['color']->color ) ) {
+						$color = 'color: ' . $projectArray['color']->color;
+					}
 					$face  = $projectArray['font'] ? strtolower( str_replace( array( 'regular', ' ', 'bold' ), array( '', '_', 'b' ), $projectArray['font'] ) ) : '';
 					$style = $color . $face;
 					?>
@@ -1431,6 +1446,15 @@ h6 {
 }
 </style>
 <table>
+	<tr>
+		<td style="margin-top: 0; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #000;">
+			<img src="<?php echo get_stylesheet_directory() . '/assets/img/nova-logo.png'; ?>" alt="Nova Signage"
+				style="margin-top: 0;" />
+		</td>
+	</tr>
+	<tr>
+		<td style="padding: 30px;"></td>
+	</tr>
 	<tr>
 		<td>
 			<h4 style="font-size: 14pt; margin: 0;">QUOTE ID: Q-<?php echo str_pad( $post_id, 4, '0', STR_PAD_LEFT ); ?>
@@ -1841,14 +1865,14 @@ h6 {
 
 		// remove default header/footer
 		$pdf->setPrintHeader( false );
-		$pdf->setPrintFooter( false );
+		$pdf->setFooterData( array( 0, 0, 0 ), array( 0, 0, 0 ) );
 
 		// set default monospaced font
 		$pdf->SetDefaultMonospacedFont( PDF_FONT_MONOSPACED );
 
 		// set margins
-		$pdf->SetMargins( PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT );
-		$pdf->SetHeaderMargin( PDF_MARGIN_HEADER );
+		$pdf->SetMargins( PDF_MARGIN_LEFT, 0, PDF_MARGIN_RIGHT );
+		$pdf->SetHeaderMargin( 0 );
 		$pdf->SetFooterMargin( PDF_MARGIN_FOOTER );
 
 		// set auto page breaks
@@ -1908,14 +1932,14 @@ h6 {
 
 		// remove default header/footer
 		$pdf->setPrintHeader( false );
-		$pdf->setPrintFooter( false );
+		$pdf->setFooterData( array( 0, 0, 0 ), array( 0, 0, 0 ) );
 
 		// set default monospaced font
 		$pdf->SetDefaultMonospacedFont( PDF_FONT_MONOSPACED );
 
 		// set margins
-		$pdf->SetMargins( PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT );
-		$pdf->SetHeaderMargin( PDF_MARGIN_HEADER );
+		$pdf->SetMargins( PDF_MARGIN_LEFT, 0, PDF_MARGIN_RIGHT );
+		$pdf->SetHeaderMargin( 0 );
 		$pdf->SetFooterMargin( PDF_MARGIN_FOOTER );
 
 		// set auto page breaks

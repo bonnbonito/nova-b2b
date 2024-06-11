@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { useAppContext } from './AppProvider';
 import { processQuote } from './utils/QuoteFunctions';
 

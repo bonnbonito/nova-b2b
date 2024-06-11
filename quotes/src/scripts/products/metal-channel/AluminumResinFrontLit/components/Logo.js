@@ -2,9 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
 import useOutsideClick from '../../../../utils/ClickOutside';
-import { colorOptions } from '../../../../utils/ColorOptions';
+import {
+	colorOptions,
+	whiteOptionsResin,
+} from '../../../../utils/ColorOptions';
 import ColorsDropdown from '../../../../utils/ColorsDropdown';
+import VinylColors from '../../../../utils/VinylColors';
 
+import { spacerPricing } from '../../../../utils/Pricing';
 import {
 	setOptions,
 	spacerStandoffDefaultOptions,
@@ -25,12 +30,6 @@ import {
 	STUD_MOUNT,
 	STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
-
-const frontAcrylicOptions = [
-	{
-		option: 'UV Printed',
-	},
-];
 
 import { useAppContext } from '../../../../AppProvider';
 
@@ -55,6 +54,9 @@ export function Logo({ item }) {
 	const [files, setFiles] = useState(item.files ?? []);
 
 	const [customColor, setCustomColor] = useState(item.customColor ?? '');
+	const [vinylWhite, setVinylWhite] = useState(
+		item.vinylWhite ?? { name: '', color: '', code: '' }
+	);
 
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
@@ -64,10 +66,11 @@ export function Logo({ item }) {
 		item.usdSinglePrice ?? 0
 	);
 	const [cadSinglePrice, setCadSinglePrice] = useState(
-		item.usdSinglePrice ?? 0
+		item.cadSinglePrice ?? 0
 	);
 
 	const [studLength, setStudLength] = useState(item.studLength ?? '');
+	const [openAcrylicCover, setOpenAcrylicCover] = useState(false);
 
 	const [spacerStandoffOptions, setSpacerStandoffOptions] = useState(
 		spacerStandoffDefaultOptions
@@ -84,6 +87,12 @@ export function Logo({ item }) {
 	const handleOnChangeWhite = (e) => {
 		const target = e.target.value;
 		setFrontAcrylicCover(target);
+		if (target !== '3M Vinyl') {
+			setVinylWhite({
+				name: '',
+				color: '',
+			});
+		}
 	};
 
 	const [mounting, setMounting] = useState(item.mounting ?? '');
@@ -100,6 +109,7 @@ export function Logo({ item }) {
 	const [depthOptions, setDepthOptions] = useState(aluminumResinDepthOptions);
 
 	const colorRef = useRef(null);
+	const acrylicColorRef = useRef(null);
 
 	function updateSignage() {
 		const updatedSignage = signage.map((sign) => {
@@ -125,6 +135,9 @@ export function Logo({ item }) {
 					sets,
 					width,
 					height,
+					usdSinglePrice,
+					cadSinglePrice,
+					vinylWhite,
 				};
 			} else {
 				return sign;
@@ -245,6 +258,10 @@ export function Logo({ item }) {
 			missingFields.push('Add the Pantone color code of your custom color.');
 		}
 
+		if (frontAcrylicCover === '3M Vinyl') {
+			if (!vinylWhite?.name) missingFields.push('Select 3M 3630 Vinyl');
+		}
+
 		if (!waterproof) missingFields.push('Select Environment');
 
 		if (!mounting) missingFields.push('Select Mounting');
@@ -311,38 +328,34 @@ export function Logo({ item }) {
 
 		switch (depth?.value) {
 			case '3.5':
-				console.log(depth);
 				P = 0.19;
 				S = 0.11;
 				break;
 			case '5':
-				console.log(depth);
 				P = 0.2;
 				S = 0.13;
 				break;
 			default:
-				console.log(depth);
 				P = 0.22;
 				S = 0.17;
 		}
 
 		let tempTotal = X * Y * P + (X + 4) * (Y + 4) * S + F;
-		console.log(tempTotal);
 
 		/* Oversize surcharge */
 		if (X > 41 || Y > 41) {
-			console.log('surcharge');
 			tempTotal += 150;
 		}
 
-		if (frontAcrylicCover === 'UV Printed') {
+		if (
+			frontAcrylicCover === 'UV Printed' ||
+			frontAcrylicCover === '3M Vinyl'
+		) {
 			tempTotal *= 1.1;
-			console.log('front', tempTotal);
 		}
 
 		if (waterproof && waterproof !== INDOOR_NOT_WATERPROOF) {
 			tempTotal *= 1.03;
-			console.log('waterproof', tempTotal);
 		}
 
 		if (spacerStandoffDistance) {
@@ -377,6 +390,13 @@ export function Logo({ item }) {
 			setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
 			setUsdDiscount(discount.toFixed(2));
 			setCadDiscount((discount * EXCHANGE_RATE).toFixed(2));
+		} else {
+			setUsdPrice(0);
+			setCadPrice(0);
+			setUsdSinglePrice(0);
+			setCadSinglePrice(0);
+			setUsdDiscount(0);
+			setCadDiscount(0);
 		}
 	}, [
 		depth,
@@ -411,12 +431,23 @@ export function Logo({ item }) {
 		sets,
 		width,
 		height,
+		usdSinglePrice,
+		cadSinglePrice,
+		vinylWhite,
 	]);
 
-	useOutsideClick([colorRef], () => {
-		if (!openColor) return;
-		setOpenColor(false);
-	});
+	if (frontAcrylicCover === '3M Vinyl') {
+		useOutsideClick([colorRef, acrylicColorRef], () => {
+			if (!openColor && !openAcrylicCover) return;
+			setOpenColor(false);
+			setOpenAcrylicCover(false);
+		});
+	} else {
+		useOutsideClick([colorRef], () => {
+			if (!openColor) return;
+			setOpenColor(false);
+		});
+	}
 
 	useEffect(() => {
 		color?.name != 'Custom Color' && setCustomColor('');
@@ -474,7 +505,7 @@ export function Logo({ item }) {
 				<Dropdown
 					title="Front Acrylic Cover"
 					onChange={handleOnChangeWhite}
-					options={frontAcrylicOptions.map((option) => (
+					options={whiteOptionsResin.map((option) => (
 						<option
 							value={option.option}
 							selected={option == frontAcrylicCover}
@@ -484,6 +515,25 @@ export function Logo({ item }) {
 					))}
 					value={frontAcrylicCover}
 				/>
+
+				{frontAcrylicCover === '3M Vinyl' && (
+					<>
+						<VinylColors
+							ref={acrylicColorRef}
+							vinylWhite={vinylWhite}
+							setVinylWhite={setVinylWhite}
+							openVinylWhite={openAcrylicCover}
+							toggleVinyl={() => {
+								setOpenAcrylicCover((prev) => !prev);
+								setOpenColor(false);
+							}}
+							selectVinylColor={(color) => {
+								setVinylWhite(color);
+								setOpenAcrylicCover(false);
+							}}
+						/>
+					</>
+				)}
 
 				<Dropdown
 					title="LED Light Color"

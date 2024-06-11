@@ -659,6 +659,7 @@ export function Letters({ item }) {
 
 				{font == 'Custom font' && (
 					<UploadFont
+						itemId={item.id}
 						setFontFilePath={setFontFilePath}
 						setFontFile={setFontFile}
 						fontFilePath={fontFilePath}

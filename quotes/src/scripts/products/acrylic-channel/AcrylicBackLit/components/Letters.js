@@ -103,7 +103,7 @@ export function Letters({ item }) {
 		item.usdSinglePrice ?? 0
 	);
 	const [cadSinglePrice, setCadSinglePrice] = useState(
-		item.usdSinglePrice ?? 0
+		item.cadSinglePrice ?? 0
 	);
 
 	const [selectedMounting, setSelectedMounting] = useState(item.mounting ?? '');
@@ -202,7 +202,10 @@ export function Letters({ item }) {
 		);
 	}
 
-	const handleOnChangeLetters = (e) => setLetters(() => e.target.value);
+	const handleOnChangeLetters = (e) => {
+		console.log(e.target.value);
+		setLetters(() => e.target.value);
+	};
 
 	const handleComments = (e) => setComments(e.target.value);
 
@@ -328,12 +331,17 @@ export function Letters({ item }) {
 	};
 
 	useEffect(() => {
-		const { singlePrice, total, discount } = computePricing();
+		const { singlePrice, total } = computePricing();
 		if (total && singlePrice) {
 			setUsdPrice(total);
 			setCadPrice((total * EXCHANGE_RATE).toFixed(2));
 			setUsdSinglePrice(singlePrice);
 			setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
+		} else {
+			setUsdPrice(0);
+			setCadPrice(0);
+			setUsdSinglePrice(0);
+			setCadSinglePrice(0);
 		}
 	}, [
 		selectedLetterHeight,
@@ -552,6 +560,7 @@ export function Letters({ item }) {
 
 				{font == 'Custom font' && (
 					<UploadFont
+						itemId={item.id}
 						setFontFilePath={setFontFilePath}
 						setFontFile={setFontFile}
 						fontFilePath={fontFilePath}

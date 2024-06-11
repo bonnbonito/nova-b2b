@@ -75,8 +75,15 @@ export function Letters({ item }) {
 	const [selectedLetterHeight, setSelectedLetterHeight] = useState(
 		item.letterHeight ?? ''
 	);
+
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
+	const [usdSinglePrice, setUsdSinglePrice] = useState(
+		item.usdSinglePrice ?? 0
+	);
+	const [cadSinglePrice, setCadSinglePrice] = useState(
+		item.cadSinglePrice ?? 0
+	);
 
 	const [lettersHeight, setLettersHeight] = useState({
 		min: 5,
@@ -215,6 +222,8 @@ export function Letters({ item }) {
 					studLength,
 					spacerStandoffDistance,
 					sets,
+					usdSinglePrice,
+					cadSinglePrice,
 				};
 			} else {
 				return sign;
@@ -223,7 +232,9 @@ export function Letters({ item }) {
 		setSignage(() => updatedSignage);
 	}
 
-	const handleOnChangeLetters = (e) => setLetters(() => e.target.value);
+	const handleOnChangeLetters = (e) => {
+		setLetters(() => e.target.value);
+	};
 
 	const handleComments = (e) => setComments(e.target.value);
 
@@ -315,76 +326,84 @@ export function Letters({ item }) {
 		setSelectedLetterHeight(e.target.value);
 	};
 
-	useEffect(() => {
-		if (letterPricing.length > 0 && selectedLetterHeight && depth) {
+	function calculateLetterPrice(letter, baseLetterPrice, noLowerCase) {
+		let letterPrice = baseLetterPrice;
+
+		if (letter === ' ') return 0;
+		if (letter.match(/[a-z]/)) letterPrice *= noLowerCase ? 1 : 0.8;
+		if (letter.match(/[`~"*,.\-']/)) letterPrice *= 0.3;
+
+		return letterPrice;
+	}
+
+	const computePricing = () => {
+		if (
+			letterPricing.length > 0 &&
+			selectedLetterHeight &&
+			depth &&
+			letters.trim().length > 0
+		) {
 			const pricingDetail = letterPricing[selectedLetterHeight - 5];
 			const baseLetterPrice = pricingDetail[depth.value];
 
-			let totalLetterPrice = 0;
+			let tempTotal = 0;
 			const lettersArray = letters.trim().split('');
 			const noLowerCase = NovaQuote.no_lowercase.includes(font);
 
-			if (
-				lettersArray.length > 0 &&
-				selectedLetterHeight &&
-				waterproof &&
-				depth
-			) {
-				lettersArray.forEach((letter) => {
-					let letterPrice = baseLetterPrice;
+			lettersArray.forEach((letter) => {
+				tempTotal += calculateLetterPrice(letter, baseLetterPrice, noLowerCase);
+			});
 
-					if (letter === ' ') {
-						// If the character is a space, set the price to 0 and skip further checks
-						letterPrice = 0;
-					} else if (letter.match(/[a-z]/)) {
-						// Check for lowercase letter
-						letterPrice *= noLowerCase ? 1 : lowerCasePricing; // 80% of the base price
-					} else if (letter.match(/[A-Z]/)) {
-						// Check for uppercase letter
-						// Uppercase letters use 100% of base price, so no change needed
-					} else if (letter.match(/[`~"*,.\-']/)) {
-						// Check for small punctuation marks
-						letterPrice *= smallPunctuations; // 30% of the base price
-					} else if (letter.match(/[^a-zA-Z]/)) {
-						// Check for symbol (not a letter or small punctuation)
-						// Symbols use 100% of base price, so no change needed
-					}
-
-					// Adjusting for waterproof and finishing
-					letterPrice *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.03;
-
-					letterPrice *= vinylWhite?.name ? 1.1 : 1;
-
-					totalLetterPrice += letterPrice;
-				});
-
-				if (mounting === STUD_WITH_SPACER) {
-					let spacer = spacerPricing(totalLetterPrice);
-					spacer = parseFloat(spacer.toFixed(2));
-
-					totalLetterPrice += spacer;
-				}
-
-				totalLetterPrice *= sets;
-
-				console.log(sets);
-
-				setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
-				setCadPrice((totalLetterPrice * parseFloat(EXCHANGE_RATE)).toFixed(2));
-			} else {
-				setUsdPrice(0);
-				setCadPrice(0);
+			if (frontAcrylicCover === '3M Vinyl') {
+				tempTotal *= 1.1;
 			}
+
+			if (waterproof && waterproof !== INDOOR_NOT_WATERPROOF) {
+				tempTotal *= 1.03;
+			}
+
+			if (spacerStandoffDistance) {
+				const spacer = spacerPricing(tempTotal);
+				tempTotal += parseFloat(spacer.toFixed(2));
+			}
+
+			let total = tempTotal * parseInt(sets);
+
+			return {
+				singlePrice: tempTotal ?? 0,
+				total: total?.toFixed(2) ?? 0,
+			};
+		} else {
+			return 0;
+		}
+	};
+
+	useEffect(() => {
+		const { singlePrice, total } = computePricing();
+		if (total && singlePrice) {
+			setUsdPrice(total);
+			setCadPrice((total * EXCHANGE_RATE).toFixed(2));
+			setUsdSinglePrice(singlePrice);
+			setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
+		} else {
+			setUsdPrice(0);
+			setCadPrice(0);
+			setUsdSinglePrice(0);
+			setCadSinglePrice(0);
 		}
 	}, [
 		selectedLetterHeight,
 		letters,
 		waterproof,
 		lettersHeight,
-		vinylWhite,
+		frontAcrylicCover,
 		sets,
 		mounting,
 		font,
+		usdPrice,
+		cadPrice,
+		usdSinglePrice,
+		cadSinglePrice,
 	]);
 
 	useEffect(() => {
@@ -513,6 +532,8 @@ export function Letters({ item }) {
 		mounting,
 		studLength,
 		spacerStandoffDistance,
+		usdSinglePrice,
+		cadSinglePrice,
 	]);
 
 	useEffect(() => {
@@ -572,7 +593,7 @@ export function Letters({ item }) {
 							whiteSpace: 'nowrap',
 							overflow: 'hidden',
 							fontFamily: font === 'Custom font' ? '' : font,
-							color: color?.color ?? '#000000',
+							color: item.vinylWhite?.color ?? '#000000',
 							textShadow: '0px 0px 1px rgba(0, 0, 0, 1)',
 						}}
 					>
@@ -609,6 +630,7 @@ export function Letters({ item }) {
 
 				{font == 'Custom font' && (
 					<UploadFont
+						itemId={item.id}
 						setFontFilePath={setFontFilePath}
 						setFontFile={setFontFile}
 						fontFilePath={fontFilePath}

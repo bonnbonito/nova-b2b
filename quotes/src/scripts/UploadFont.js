@@ -1,7 +1,9 @@
 import React, { useRef, useState } from 'react';
 import { useAppContext } from './AppProvider';
+import { processQuote } from './utils/QuoteFunctions';
 
 export default function UploadFont({
+	itemId,
 	setFontFilePath,
 	fontFilePath,
 	setFontFileUrl,
@@ -11,7 +13,7 @@ export default function UploadFont({
 }) {
 	const fileRef = useRef(null);
 
-	const { tempFolder, isLoading, setIsLoading } = useAppContext();
+	const { signage, tempFolder, isLoading, setIsLoading } = useAppContext();
 
 	const [accessToken, setAccessToken] = useState('');
 
@@ -207,6 +209,8 @@ export default function UploadFont({
 
 			setFontFilePath(uploadData.path_display);
 
+			let dataLink = '';
+
 			// Check for existing shared links
 			const existingLink = await checkForExistingSharedLink(
 				token,
@@ -216,6 +220,7 @@ export default function UploadFont({
 			if (existingLink) {
 				console.log('Existing shared link found:', existingLink.url);
 				setFontFileUrl(existingLink.url); // Use the existing shared link
+				dataLink = existingLink.url;
 			} else {
 				// Create a new shared link if none exist
 				const sharedLinkResponse = await fetch(
@@ -242,9 +247,18 @@ export default function UploadFont({
 
 				const sharedLinkData = await sharedLinkResponse.json();
 				setFontFileUrl(sharedLinkData.url); // Use the newly created shared link
+				dataLink = sharedLinkData.url;
 			}
 
 			setFontFileName(uploadData.name);
+
+			if (parseInt(NovaQuote.is_editting) === 1 && itemId) {
+				await updateSignageAdd(
+					uploadData.name,
+					dataLink,
+					uploadData.path_display
+				);
+			}
 		} catch (error) {
 			console.error('Error:', error.message);
 		} finally {
@@ -293,6 +307,7 @@ export default function UploadFont({
 				setFontFileUrl('');
 				setFontFilePath('');
 				setFontFileName('');
+				await updateSignageDelete();
 			} else {
 				throw new Error(
 					data.error_summary || 'Unknown error during file deletion'
@@ -300,11 +315,85 @@ export default function UploadFont({
 			}
 		} catch (error) {
 			console.error('Error:', error);
+			setFontFileUrl('');
+			setFontFilePath('');
+			setFontFileName('');
+			await updateSignageDelete();
 		} finally {
 			if (fileRef.current) {
 				fileRef.current.value = '';
 			}
 			setIsLoading(false);
+		}
+	};
+
+	const updateSignageAdd = async (fontFileName, fontFilePath, fontFileUrl) => {
+		if (parseInt(NovaQuote.is_editting) === 1 && itemId) {
+			const updateDetails = {
+				fontFileName,
+				fontFilePath,
+				fontFileUrl,
+			};
+
+			const updatedSignage = signage.map((sign) =>
+				sign.id === itemId ? { ...sign, ...updateDetails } : sign
+			);
+
+			try {
+				const formData = new FormData();
+				const newSignage = JSON.stringify(updatedSignage);
+				formData.append('nonce', NovaQuote.nonce);
+				formData.append('action', 'update_quote');
+				formData.append('signage', newSignage);
+				formData.append('quote_id', NovaQuote.current_quote_id);
+
+				const data = await processQuote(formData);
+
+				if (data.status !== 'success') {
+					throw new Error('Error updating quote');
+				}
+
+				console.log('Quote updated successfully');
+			} catch (err) {
+				// Handle errors
+				console.log(err);
+			}
+		}
+	};
+
+	const updateSignageDelete = async () => {
+		if (parseInt(NovaQuote.is_editting) === 1 && itemId) {
+			const updateDetails = {
+				fontFile: '',
+				fontFileName: '',
+				fontFilePath: '',
+				fontFileUrl: '',
+			};
+
+			const updatedSignage = signage.map((sign) =>
+				sign.id === itemId ? { ...sign, ...updateDetails } : sign
+			);
+
+			try {
+				const formData = new FormData();
+				const newSignage = JSON.stringify(updatedSignage);
+				console.log(newSignage);
+				formData.append('nonce', NovaQuote.nonce);
+				formData.append('action', 'update_quote');
+				formData.append('signage', newSignage);
+				formData.append('quote_id', NovaQuote.current_quote_id);
+
+				const data = await processQuote(formData);
+
+				if (data.status !== 'success') {
+					throw new Error('Error updating quote');
+				}
+
+				console.log('Quote updated successfully');
+			} catch (err) {
+				// Handle errors
+				console.log(err);
+			}
 		}
 	};
 

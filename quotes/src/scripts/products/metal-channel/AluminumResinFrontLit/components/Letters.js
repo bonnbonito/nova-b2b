@@ -4,7 +4,10 @@ import FontsDropdown from '../../../../FontsDropdown';
 import UploadFiles from '../../../../UploadFiles';
 import UploadFont from '../../../../UploadFont';
 import useOutsideClick from '../../../../utils/ClickOutside';
-import { colorOptions, whiteOptions } from '../../../../utils/ColorOptions';
+import {
+	colorOptions,
+	whiteOptionsResin,
+} from '../../../../utils/ColorOptions';
 import ColorsDropdown from '../../../../utils/ColorsDropdown';
 import VinylColors from '../../../../utils/VinylColors';
 
@@ -74,6 +77,12 @@ export function Letters({ item }) {
 	);
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
+	const [usdSinglePrice, setUsdSinglePrice] = useState(
+		item.usdSinglePrice ?? 0
+	);
+	const [cadSinglePrice, setCadSinglePrice] = useState(
+		item.cadSinglePrice ?? 0
+	);
 
 	const [lettersHeight, setLettersHeight] = useState({
 		min: 5,
@@ -197,6 +206,8 @@ export function Letters({ item }) {
 					letterHeight: selectedLetterHeight,
 					usdPrice,
 					cadPrice,
+					usdSinglePrice,
+					cadSinglePrice,
 					files,
 					fileNames,
 					filePaths,
@@ -485,6 +496,8 @@ export function Letters({ item }) {
 		frontAcrylicCover,
 		vinylWhite,
 		sets,
+		usdSinglePrice,
+		cadSinglePrice,
 	]);
 
 	useEffect(() => {
@@ -620,7 +633,7 @@ export function Letters({ item }) {
 							whiteSpace: 'nowrap',
 							overflow: 'hidden',
 							fontFamily: font === 'Custom font' ? '' : font,
-							color: color?.color,
+							color: item.vinylWhite?.color ?? '#000000',
 							textShadow: '0px 0px 1px rgba(0, 0, 0, 1)',
 						}}
 					>
@@ -657,6 +670,7 @@ export function Letters({ item }) {
 
 				{font == 'Custom font' && (
 					<UploadFont
+						itemId={item.id}
 						setFontFilePath={setFontFilePath}
 						setFontFile={setFontFile}
 						fontFilePath={fontFilePath}
@@ -704,7 +718,7 @@ export function Letters({ item }) {
 				<Dropdown
 					title="Front Acrylic Cover"
 					onChange={handleOnChangeWhite}
-					options={whiteOptions.map((option) => (
+					options={whiteOptionsResin.map((option) => (
 						<option
 							value={option.option}
 							selected={option == frontAcrylicCover}

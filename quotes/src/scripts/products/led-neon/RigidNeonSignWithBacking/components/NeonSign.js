@@ -89,7 +89,7 @@ export const NeonSign = ({ item }) => {
 		item.usdSinglePrice ?? 0
 	);
 	const [cadSinglePrice, setCadSinglePrice] = useState(
-		item.usdSinglePrice ?? 0
+		item.cadSinglePrice ?? 0
 	);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
 	const [remoteControl, setRemoteControl] = useState(
@@ -402,6 +402,11 @@ export const NeonSign = ({ item }) => {
 			setCadPrice((total * EXCHANGE_RATE).toFixed(2));
 			setUsdSinglePrice(singlePrice);
 			setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
+		} else {
+			setUsdPrice(0);
+			setCadPrice(0);
+			setUsdSinglePrice(0);
+			setCadSinglePrice(0);
 		}
 	}, [
 		width,

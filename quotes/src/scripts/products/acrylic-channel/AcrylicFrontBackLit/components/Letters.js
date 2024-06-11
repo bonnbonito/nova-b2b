@@ -114,7 +114,7 @@ export function Letters({ item }) {
 		item.usdSinglePrice ?? 0
 	);
 	const [cadSinglePrice, setCadSinglePrice] = useState(
-		item.usdSinglePrice ?? 0
+		item.cadSinglePrice ?? 0
 	);
 
 	const [backOption, setBackOption] = useState(item.backOption ?? 'Backlit');
@@ -377,6 +377,13 @@ export function Letters({ item }) {
 			setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
 			setUsdDiscount(discount.toFixed(2));
 			setCadDiscount((discount * EXCHANGE_RATE).toFixed(2));
+		} else {
+			setUsdPrice(0);
+			setCadPrice(0);
+			setUsdSinglePrice(0);
+			setCadSinglePrice(0);
+			setUsdDiscount(0);
+			setCadDiscount(0);
 		}
 	}, [
 		selectedLetterHeight,
@@ -570,7 +577,7 @@ export function Letters({ item }) {
 							whiteSpace: 'nowrap',
 							overflow: 'hidden',
 							fontFamily: font === 'Custom font' ? '' : font,
-							color: color.color,
+							color: item.vinylWhite?.color ?? '#000000',
 							textShadow: '0px 0px 1px rgba(0, 0, 0, 1)',
 						}}
 					>
@@ -609,6 +616,7 @@ export function Letters({ item }) {
 
 				{font == 'Custom font' && (
 					<UploadFont
+						itemId={item.id}
 						setFontFilePath={setFontFilePath}
 						setFontFile={setFontFile}
 						fontFilePath={fontFilePath}

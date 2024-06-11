@@ -342,7 +342,13 @@ class NovaEmails {
 			$payment_order = wc_get_order( $payment_order_id );
 		}
 
-		$content  = '<p>Hi, {customer_name}!</p>';
+		$content  = '<table>';
+		$content .= '<tr><td style="margin-top: 0; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #000;">';
+		$content .= '<img src="' . get_stylesheet_directory() . '/assets/img/nova-logo.png' . '" alt="Nova Signage">';
+		$content .= '</td></tr>';
+		$content .= '</table>';
+
+		$content .= '<p>Hi, {customer_name}!</p>';
 		$content .= 'Here are the details of your order:';
 		$content .= '{order_details}';
 		$content .= '&nbsp;';

@@ -603,6 +603,7 @@ export const Letters = ({ item, letterPricing, hasPrice = false }) => {
 
 				{font == 'Custom font' && (
 					<UploadFont
+						itemId={item.id}
 						setFontFilePath={setFontFilePath}
 						setFontFile={setFontFile}
 						fontFilePath={fontFilePath}
