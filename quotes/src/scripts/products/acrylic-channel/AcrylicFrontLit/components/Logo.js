@@ -550,8 +550,7 @@ export function Logo({ item }) {
 					value={selectedMounting}
 				/>
 
-				{(selectedMounting === STUD_WITH_SPACER ||
-					selectedMounting === STUD_MOUNT) && (
+				{selectedMounting === STUD_WITH_SPACER && (
 					<>
 						<Dropdown
 							title="Stud Length"
@@ -567,7 +566,7 @@ export function Logo({ item }) {
 							value={studLength}
 						/>
 						<Dropdown
-							title="STANDOFF SPACE"
+							title="SPACER DISTANCE"
 							onChange={handleonChangeSpacerDistance}
 							options={spacerStandoffOptions.map((option) => (
 								<option

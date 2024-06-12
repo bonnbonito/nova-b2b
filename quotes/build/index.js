@@ -4135,9 +4135,10 @@ function UploadFiles({
     await checkAndCreateFolder(token);
     const dropboxArgs = {
       path: `/NOVA-CRM/${NovaQuote.business_id}/${tempFolder}/FromClient/${file.name}`,
-      mode: 'overwrite',
-      autorename: false,
-      mute: false
+      mode: 'add',
+      autorename: true,
+      mute: false,
+      strict_conflict: true
     };
     try {
       const uploadResponse = await fetch('https://content.dropboxapi.com/2/files/upload', {
@@ -5384,7 +5385,7 @@ function Letters({
       selected: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: selectedMounting
-  }), (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_WITH_SPACER || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -5393,7 +5394,7 @@ function Letters({
     }, option.value)),
     value: studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "STANDOFF SPACE",
+    title: "SPACER DISTANCE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
@@ -5831,7 +5832,7 @@ function Logo({
       selected: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: selectedMounting
-  }), (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_4__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -5840,14 +5841,14 @@ function Logo({
     }, option.value)),
     value: studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "STANDOFF SPACE",
+    title: "SPACER DISTANCE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
       selected: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
-  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  })), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_4__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -6649,7 +6650,7 @@ function Letters({
       selected: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: selectedMounting
-  }), (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.STUD_WITH_SPACER || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -6658,7 +6659,7 @@ function Letters({
     }, option.value)),
     value: studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "STANDOFF SPACE",
+    title: "SPACER DISTANCE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
@@ -7152,7 +7153,7 @@ function Logo({
       selected: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: selectedMounting
-  }), (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_4__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -7161,7 +7162,7 @@ function Logo({
     }, option.value)),
     value: studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "STANDOFF SPACE",
+    title: "SPACER DISTANCE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
@@ -7976,7 +7977,7 @@ function Letters({
       selected: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: selectedMounting
-  }), (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.STUD_WITH_SPACER || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -7985,7 +7986,7 @@ function Letters({
     }, option.value)),
     value: studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "STANDOFF SPACE",
+    title: "SPACER DISTANCE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
@@ -8462,7 +8463,7 @@ function Logo({
       selected: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: selectedMounting
-  }), (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_4__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -8471,7 +8472,7 @@ function Logo({
     }, option.value)),
     value: studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "STANDOFF SPACE",
+    title: "SPACER DISTANCE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
@@ -9236,7 +9237,7 @@ function Letters({
       selected: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: selectedMounting
-  }), (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_WITH_SPACER || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -9245,7 +9246,7 @@ function Letters({
     }, option.value)),
     value: studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "STANDOFF SPACE",
+    title: "SPACER DISTANCE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
@@ -9675,7 +9676,7 @@ function Logo({
       selected: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: selectedMounting
-  }), (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_4__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -9684,14 +9685,14 @@ function Logo({
     }, option.value)),
     value: studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "STANDOFF SPACE",
+    title: "SPACER DISTANCE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
       selected: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
-  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  })), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_4__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -10444,7 +10445,7 @@ function Letters({
       selected: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: selectedMounting
-  }), (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_WITH_SPACER || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -10453,7 +10454,7 @@ function Letters({
     }, option.value)),
     value: studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "STANDOFF SPACE",
+    title: "SPACER DISTANCE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
@@ -10886,7 +10887,7 @@ function Logo({
       selected: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: selectedMounting
-  }), (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_4__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -10895,7 +10896,7 @@ function Logo({
     }, option.value)),
     value: studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "STANDOFF SPACE",
+    title: "SPACER DISTANCE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
@@ -13103,21 +13104,6 @@ function MetalLaminate() {
     setTempFolder,
     tempFolderName
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_7__.useAppContext)();
-  const [letterPricing, setLetterPricing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    async function fetchLetterPricing() {
-      console.log('Fetching letterpricing');
-      try {
-        const response = await fetch(NovaQuote.letters_pricing_api + NovaQuote.product);
-        const data = await response.json();
-        const pricing = (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_8__["default"])(data?.pricing_table);
-        setLetterPricing(pricing);
-      } catch (error) {
-        console.error('Error fetching letter pricing:', error);
-      }
-    }
-    fetchLetterPricing();
-  }, []);
   function setDefaultSignage() {
     setSignage([{
       id: (0,uuid__WEBPACK_IMPORTED_MODULE_9__["default"])(),
@@ -13264,37 +13250,18 @@ function MetalLaminate() {
     className: "md:flex gap-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full"
-  }, letterPricing.length === 0 ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "rounded-md border border-gray-200 py-20 mb-8 justify-center items-center flex"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "flex justify-center items-center gap-2"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
-    className: "animate-spin -ml-1 mr-3 h-6 w-6 text-gray-600",
-    xmlns: "http://www.w3.org/2000/svg",
-    fill: "none",
-    viewBox: "0 0 24 24"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("circle", {
-    class: "opacity-25",
-    cx: "12",
-    cy: "12",
-    r: "10",
-    stroke: "currentColor",
-    "stroke-width": "4"
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
-    class: "opacity-75",
-    fill: "currentColor",
-    d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-  })), ' ', "Loading...")) : signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
     index: index,
     id: item.id,
     item: item
   }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_5__.Letters, {
     key: item.id,
     item: item,
-    letterPricing: letterPricing
+    productId: item.product
   }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_6__.Logo, {
     key: item.id,
-    item: item
+    item: item,
+    productId: item.product
   }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Note__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Note"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
@@ -13364,9 +13331,7 @@ const smallPunctuations = parseFloat(NovaQuote.small_punctuations_pricing ? Nova
 //const AcrylicLetterPricing = JSON.parse(NovaOptions.letter_x_logo_pricing);
 
 const Letters = ({
-  item,
-  letterPricing,
-  hasPrice = false
+  item
 }) => {
   var _item$letters, _item$comments, _item$font, _item$customFont, _item$customColor, _item$acrylicBase, _item$waterproof, _item$acrylicThicknes, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$metalLaminate, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
   const {
@@ -13374,24 +13339,7 @@ const Letters = ({
     setSignage,
     setMissing
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_13__.useAppContext)();
-  const [getLetterPricing, setGetLetterPricing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (!hasPrice) {
-      async function fetchLetterPricing() {
-        try {
-          const response = await fetch(NovaQuote.letters_pricing_api + item.product);
-          const data = await response.json();
-          const pricing = (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_8__["default"])(data?.pricing_table);
-          setGetLetterPricing(pricing);
-        } catch (error) {
-          console.error('Error fetching letter pricing:', error);
-        }
-      }
-      fetchLetterPricing();
-    } else {
-      setGetLetterPricing(letterPricing);
-    }
-  }, []);
+  const [letterPricing, setLetterPricing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letters = item.letters) !== null && _item$letters !== void 0 ? _item$letters : '');
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
   const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$font = item.font) !== null && _item$font !== void 0 ? _item$font : '');
@@ -13568,12 +13516,25 @@ const Letters = ({
     setSelectedLetterHeight(e.target.value);
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (getLetterPricing.length === 0 || !selectedLetterHeight || !selectedThickness || !waterproof || !letters) {
+    async function fetchLetterPricing() {
+      try {
+        const response = await fetch(NovaQuote.letters_pricing_api + item.product);
+        const data = await response.json();
+        const pricing = (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_8__["default"])(data?.pricing_table);
+        setLetterPricing(pricing);
+      } catch (error) {
+        console.error('Error fetching letter pricing:', error);
+      }
+    }
+    fetchLetterPricing();
+  }, []);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (letterPricing.length === 0 || !selectedLetterHeight || !selectedThickness || !waterproof || !letters) {
       setUsdPrice(0);
       setCadPrice(0);
       return;
     }
-    const pricingDetail = getLetterPricing[selectedLetterHeight - 1];
+    const pricingDetail = letterPricing[selectedLetterHeight - 1];
     const baseLetterPrice = pricingDetail[selectedThickness.value];
     const noLowerCase = NovaQuote.no_lowercase.includes(font);
     const totalLetterPrice = letters.trim().split('').reduce((total, letter) => {
@@ -13599,8 +13560,7 @@ const Letters = ({
     const finalPrice = adjustedPrice * sets;
     setUsdPrice(finalPrice.toFixed(2));
     setCadPrice((finalPrice * parseFloat(_utils_defaults__WEBPACK_IMPORTED_MODULE_11__.EXCHANGE_RATE)).toFixed(2));
-  }, [selectedLetterHeight, selectedThickness, letters, waterproof, lettersHeight, acrylicBase, sets, font, selectedMounting, getLetterPricing // Assuming getLetterPricing is not expected to change frequently
-  ]);
+  }, [selectedLetterHeight, selectedThickness, letters, waterproof, lettersHeight, acrylicBase, sets, font, selectedMounting, letterPricing]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     let newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.mountingDefaultOptions;
     if (selectedThickness?.value === '3') {
@@ -13683,7 +13643,7 @@ const Letters = ({
     checkAndAddMissingFields();
   }, [letters, font, selectedThickness, selectedMounting, studLength, spacerStandoffDistance, waterproof, selectedLetterHeight, metalLaminate, acrylicBase, customColor, fontFileUrl, sets]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    const newHeightOptions = getLetterPricing?.filter(item => {
+    const newHeightOptions = letterPricing?.filter(item => {
       const value = item[selectedThickness?.value];
       return value !== '' && value !== null && value !== undefined && value !== false && !isNaN(value);
     });
@@ -29111,7 +29071,7 @@ function Letters({
     }, option.option)),
     value: item.waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "MOUNTING OPTIONS",
+    title: "MOUNTING",
     onChange: handleOnChangeMounting,
     options: mountingSelections.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: option.value,
@@ -29127,7 +29087,7 @@ function Letters({
       selected: option.value == studLength
     }, option.value)),
     value: studLength
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  })), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -29550,7 +29510,7 @@ function Logo({
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "Mounting Options",
+    title: "Mounting",
     onChange: handleOnChangeMounting,
     options: mountingSelections.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
@@ -29565,7 +29525,7 @@ function Logo({
       selected: option.value == studLength
     }, option.value)),
     value: studLength
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  })), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {

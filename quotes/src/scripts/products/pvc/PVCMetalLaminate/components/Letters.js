@@ -712,7 +712,7 @@ export function Letters({ item }) {
 				/>
 
 				<Dropdown
-					title="MOUNTING OPTIONS"
+					title="MOUNTING"
 					onChange={handleOnChangeMounting}
 					options={mountingSelections.map((option) => (
 						<option
@@ -744,6 +744,10 @@ export function Letters({ item }) {
 							))}
 							value={studLength}
 						/>
+					</>
+				)}
+				{mounting === STUD_WITH_SPACER && (
+					<>
 						<Dropdown
 							title="STANDOFF SPACE"
 							onChange={handleonChangeSpacerDistance}

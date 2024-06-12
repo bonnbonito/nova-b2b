@@ -570,11 +570,8 @@ class Pending_Payment {
 	public function check_pending_payments() {
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'nova_pendings';
-		// $one_week_ahead = date( 'Y-m-d', strtotime( '+1 week' ) );
 
-		// $query = $wpdb->prepare( "SELECT * FROM {$table_name} WHERE payment_date <= %s AND payment_status = %s", $one_week_ahead, 'Pending' );
-
-		$query = $wpdb->prepare( "SELECT * FROM {$table_name} payment_status = %s", 'Pending' );
+		$query = $wpdb->prepare( "SELECT * FROM {$table_name} WHERE payment_status = %s", 'Pending' );
 
 		$pending_payments = $wpdb->get_results( $query );
 

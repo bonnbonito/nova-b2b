@@ -168,9 +168,10 @@ export default function UploadFiles({
 
 			const dropboxArgs = {
 				path: `/NOVA-CRM/${NovaQuote.business_id}/${tempFolder}/FromClient/${file.name}`,
-				mode: 'overwrite',
-				autorename: false,
+				mode: 'add',
+				autorename: true,
 				mute: false,
+				strict_conflict: true,
 			};
 
 			try {

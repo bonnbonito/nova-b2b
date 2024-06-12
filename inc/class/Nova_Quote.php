@@ -151,7 +151,7 @@ class Nova_Quote {
 		$signage             = get_field( 'signage', $post->ID );
 		$partner             = get_field( 'partner', $post->ID );
 		$partner_business_id = get_field( 'business_id', 'user_' . $partner );
-		$data                = json_decode( $signage, true );
+		$data                = $signage ? json_decode( $signage, true ) : null;
 		$show                = false;
 		$user_folder_arr     = array();
 		$font_folder_arr     = '';
@@ -201,7 +201,7 @@ class Nova_Quote {
 		$signage             = get_field( 'signage', $post->ID );
 		$partner             = get_field( 'partner', $post->ID );
 		$partner_business_id = get_field( 'business_id', 'user_' . $partner );
-		$data                = json_decode( $signage, true );
+		$data                = $signage ? json_decode( $signage, true ) : null;
 		$user_folder_arr     = array();
 		$font_folder_arr     = '';
 		foreach ( $data as $item ) {
@@ -437,7 +437,7 @@ sendMockup.addEventListener('click', e => {
 		$final_price  = get_field( 'final_price', $post_id );
 		$product_id   = get_field( 'product', $post_id )->ID;
 		$product_name = get_field( 'product', $post_id )->post_title;
-		$signage      = json_decode( get_field( 'signage', $post_id ) );
+		$signage      = get_field( 'signage', $post_id ) ? json_decode( get_field( 'signage', $post_id ) ) : null;
 		$note         = get_field( 'note', $post_id );
 
 		$status['final_price'] = get_field( 'final_price', $post_id );
@@ -876,8 +876,10 @@ sendMockup.addEventListener('click', e => {
 			return;
 		}
 
-		$newjson = json_decode( get_field( 'signage', $post_id ) );
-		update_field( 'signage', $newjson, $product_id );
+		$newjson = get_field( 'signage', $post_id ) ? json_decode( get_field( 'signage', $post_id ) ) : null;
+		if ( $newjson ) {
+			update_field( 'signage', $newjson, $product_id );
+		}
 	}
 
 	public function for_quotation_email_action( $post_id ) {
@@ -968,7 +970,7 @@ sendMockup.addEventListener('click', e => {
 		}
 
 		$body = wp_remote_retrieve_body( $response );
-		$data = json_decode( $body, true );
+		$data = $body ? json_decode( $body, true ) : null;
 
 		return array(
 			'access_token'  => $data['access_token'] ?? null,
@@ -1104,7 +1106,7 @@ sendMockup.addEventListener('click', e => {
 		$product_id   = $_POST['nova_product'];
 		$product_line = $_POST['product_line'];
 		$product_name = $_POST['product'];
-		$signage      = json_decode( get_field( 'signage', $post_id ) );
+		$signage      = get_field( 'signage', $post_id ) ? json_decode( get_field( 'signage', $post_id ) ) : null;
 		$note         = get_field( 'note', $post_id );
 
 		$status['final_price'] = get_field( 'final_price', $post_id );
@@ -1219,7 +1221,7 @@ sendMockup.addEventListener('click', e => {
 
 		$product_id   = get_field( 'product', $post_id )->ID;
 		$product_name = get_field( 'product', $post_id )->post_title;
-		$signage      = json_decode( get_field( 'signage', $post_id ) );
+		$signage      = get_field( 'signage', $post_id ) ? json_decode( get_field( 'signage', $post_id ) ) : null;
 		$note         = get_field( 'note', $post_id );
 
 		$flat_rate     = 14.75 * 1.3;
@@ -1418,7 +1420,7 @@ h6 {
 
 		$product_id   = get_field( 'product', $post_id )->ID;
 		$product_name = get_field( 'product', $post_id )->post_title;
-		$signage      = json_decode( get_field( 'signage', $post_id ) );
+		$signage      = get_field( 'signage', $post_id ) ? json_decode( get_field( 'signage', $post_id ) ) : null;
 		$note         = get_field( 'note', $post_id );
 
 		$flat_rate     = 14.75;
@@ -2160,8 +2162,9 @@ h6 {
 			'nova/v1',
 			'/pricingletters/(?P<id>\d+)',
 			array(
-				'methods'  => 'GET',
-				'callback' => array( $this, 'handle_pricing_letter_table' ),
+				'methods'             => 'GET',
+				'callback'            => array( $this, 'handle_pricing_letter_table' ),
+				'permission_callback' => '__return_true',
 			)
 		);
 
@@ -2169,8 +2172,9 @@ h6 {
 			'nova/v1',
 			'/multipricingletters/(?P<id>\d+)',
 			array(
-				'methods'  => 'GET',
-				'callback' => array( $this, 'handle_multipricing_letter_tables' ),
+				'methods'             => 'GET',
+				'callback'            => array( $this, 'handle_multipricing_letter_tables' ),
+				'permission_callback' => '__return_true',
 			)
 		);
 
@@ -2178,8 +2182,9 @@ h6 {
 			'nova/v1',
 			'/pricinglogos/(?P<id>\d+)',
 			array(
-				'methods'  => 'GET',
-				'callback' => array( $this, 'handle_pricing_logo_table' ),
+				'methods'             => 'GET',
+				'callback'            => array( $this, 'handle_pricing_logo_table' ),
+				'permission_callback' => '__return_true',
 			)
 		);
 
@@ -2187,8 +2192,9 @@ h6 {
 			'nova/v1',
 			'/quantity-discount/(?P<id>\d+)',
 			array(
-				'methods'  => 'GET',
-				'callback' => array( $this, 'handle_multiple_quantity_discount_table' ),
+				'methods'             => 'GET',
+				'callback'            => array( $this, 'handle_multiple_quantity_discount_table' ),
+				'permission_callback' => '__return_true',
 			)
 		);
 	}
@@ -2239,7 +2245,7 @@ h6 {
 			array(
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'handle_quote_file_upload' ),
-				'permission_callback' => function (){},
+				'permission_callback' => '__return_true',
 			)
 		);
 	}

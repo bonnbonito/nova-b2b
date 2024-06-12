@@ -42,31 +42,10 @@ const smallPunctuations = parseFloat(
 );
 //const AcrylicLetterPricing = JSON.parse(NovaOptions.letter_x_logo_pricing);
 
-export const Letters = ({ item, letterPricing, hasPrice = false }) => {
+export const Letters = ({ item }) => {
 	const { signage, setSignage, setMissing } = useAppContext();
 
-	const [getLetterPricing, setGetLetterPricing] = useState([]);
-
-	useEffect(() => {
-		if (!hasPrice) {
-			async function fetchLetterPricing() {
-				try {
-					const response = await fetch(
-						NovaQuote.letters_pricing_api + item.product
-					);
-					const data = await response.json();
-					const pricing = convert_json(data?.pricing_table);
-					setGetLetterPricing(pricing);
-				} catch (error) {
-					console.error('Error fetching letter pricing:', error);
-				}
-			}
-
-			fetchLetterPricing();
-		} else {
-			setGetLetterPricing(letterPricing);
-		}
-	}, []);
+	const [letterPricing, setLetterPricing] = useState([]);
 
 	const [letters, setLetters] = useState(item.letters ?? '');
 	const [comments, setComments] = useState(item.comments ?? '');
@@ -293,8 +272,25 @@ export const Letters = ({ item, letterPricing, hasPrice = false }) => {
 	};
 
 	useEffect(() => {
+		async function fetchLetterPricing() {
+			try {
+				const response = await fetch(
+					NovaQuote.letters_pricing_api + item.product
+				);
+				const data = await response.json();
+				const pricing = convert_json(data?.pricing_table);
+				setLetterPricing(pricing);
+			} catch (error) {
+				console.error('Error fetching letter pricing:', error);
+			}
+		}
+
+		fetchLetterPricing();
+	}, []);
+
+	useEffect(() => {
 		if (
-			getLetterPricing.length === 0 ||
+			letterPricing.length === 0 ||
 			!selectedLetterHeight ||
 			!selectedThickness ||
 			!waterproof ||
@@ -305,7 +301,7 @@ export const Letters = ({ item, letterPricing, hasPrice = false }) => {
 			return;
 		}
 
-		const pricingDetail = getLetterPricing[selectedLetterHeight - 1];
+		const pricingDetail = letterPricing[selectedLetterHeight - 1];
 		const baseLetterPrice = pricingDetail[selectedThickness.value];
 		const noLowerCase = NovaQuote.no_lowercase.includes(font);
 
@@ -352,7 +348,7 @@ export const Letters = ({ item, letterPricing, hasPrice = false }) => {
 		sets,
 		font,
 		selectedMounting,
-		getLetterPricing, // Assuming getLetterPricing is not expected to change frequently
+		letterPricing,
 	]);
 
 	useEffect(() => {
@@ -518,7 +514,7 @@ export const Letters = ({ item, letterPricing, hasPrice = false }) => {
 	]);
 
 	useEffect(() => {
-		const newHeightOptions = getLetterPricing?.filter((item) => {
+		const newHeightOptions = letterPricing?.filter((item) => {
 			const value = item[selectedThickness?.value];
 			return (
 				value !== '' &&
