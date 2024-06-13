@@ -1672,6 +1672,8 @@ h6 {
 			'rigidBacking'            => 'BACKING OPTION',
 			'paintedPCColor'          => 'PAINTED PC COLOR',
 			'paintedPCFinish'         => 'PAINTED PC FINISH',
+			'lightboxType'            => 'LIGHT BOX TYPE',
+			'uvPrintedCover'          => 'UV PRINTED COVER',
 			'waterproof'              => 'ENVIRONMENT',
 			'backOption'              => 'BACK OPTION',
 			'mounting'                => 'MOUNTING',

@@ -323,14 +323,14 @@ export function Logo({ item }) {
 		spacerStandoffDistance,
 	]);
 
-	const [logoPricingObject, setlogoPricingObject] = useState([]);
+	const [logoPricingObject, setLogoPricingObject] = useState([]);
 
 	useEffect(() => {
 		async function fetchLogoPricing() {
 			try {
 				const response = await fetch(NovaQuote.logo_pricing_api + item.product);
 				const data = await response.json();
-				setlogoPricingObject(data);
+				setLogoPricingObject(data);
 			} catch (error) {
 				console.error('Error fetching logo pricing:', error);
 			}

@@ -37,15 +37,6 @@ import { spacerPricing } from '../../../../utils/Pricing';
 
 import { useAppContext } from '../../../../AppProvider';
 
-const lowerCasePricing = parseFloat(
-	NovaQuote.lowercase_pricing ? NovaQuote.lowercase_pricing : 1
-);
-const smallPunctuations = parseFloat(
-	NovaQuote.small_punctuations_pricing
-		? NovaQuote.small_punctuations_pricing
-		: 1
-);
-
 export function Letters({ item }) {
 	const { signage, setSignage, setMissing } = useAppContext();
 	const [letters, setLetters] = useState(item.letters ?? '');

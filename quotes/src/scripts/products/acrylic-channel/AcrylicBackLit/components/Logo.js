@@ -506,7 +506,7 @@ export function Logo({ item }) {
 					value={selectedMounting}
 				/>
 
-				{mounting === STUD_WITH_SPACER && (
+				{selectedMounting === STUD_WITH_SPACER && (
 					<>
 						<Dropdown
 							title="Stud Length"
@@ -537,7 +537,7 @@ export function Logo({ item }) {
 					</>
 				)}
 
-				{mounting === STUD_MOUNT && (
+				{selectedMounting === STUD_MOUNT && (
 					<>
 						<Dropdown
 							title="Stud Length"

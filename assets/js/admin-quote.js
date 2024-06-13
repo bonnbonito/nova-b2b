@@ -520,6 +520,15 @@ function allAttributes(sign) {
 			value: sign.paintedPCFinish ? sign.paintedPCFinish : '',
 		},
 
+		{
+			label: 'LIGHT BOX TYPE',
+			value: sign.lightboxType ? sign.lightboxType : '',
+		},
+		{
+			label: 'UV PRINTED COVER',
+			value: sign.uvPrintedCover ? sign.uvPrintedCover : '',
+		},
+
 		{ label: 'ENVIRONMENT', value: sign.waterproof ? sign.waterproof : '' },
 
 		{ label: 'MOUNTING', value: sign.mounting ? sign.mounting : '' },

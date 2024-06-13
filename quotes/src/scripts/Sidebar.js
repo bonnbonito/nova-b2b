@@ -12,10 +12,6 @@ export default function Sidebar() {
 
 	const memoizedSignage = useMemo(() => signage, [signage]);
 
-	useEffect(() => {
-		setCanSaveToDraft(() => parseInt(partner) === parseInt(NovaQuote.user_id));
-	}, [partner]);
-
 	const taxRateObj = NovaMyAccount.tax_rate;
 	//const tax = taxRateObj ? parseFloat(taxRateObj.tax_rate / 100) : 0;
 	const tax = 0;
@@ -44,6 +40,10 @@ export default function Sidebar() {
 	const taxCompute = 0;
 
 	const estimateTotalPrice = totalPrice + estimatedShipping + taxCompute;
+
+	useEffect(() => {
+		setCanSaveToDraft(() => parseInt(partner) === parseInt(NovaQuote.user_id));
+	}, [partner]);
 
 	return (
 		<div className="md:w-1/4 w-full mt-8 md:mt-0">

@@ -87,8 +87,15 @@ export function Logo({ item }) {
 	const [width, setWidth] = useState(item.width ?? '');
 	const [height, setHeight] = useState(item.height ?? '');
 	const [maxWidthHeight, setMaxWidthHeight] = useState(43);
+
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
+	const [usdSinglePrice, setUsdSinglePrice] = useState(
+		item.usdSinglePrice ?? 0
+	);
+	const [cadSinglePrice, setCadSinglePrice] = useState(
+		item.cadSinglePrice ?? 0
+	);
 
 	const [fileNames, setFileNames] = useState(item.fileNames ?? []);
 	const [fileUrls, setFileUrls] = useState(item.fileUrls ?? []);
@@ -106,6 +113,9 @@ export function Logo({ item }) {
 	const [selectedFinishing, setSelectedFinishing] = useState(
 		item.finishing ?? ''
 	);
+
+	const [logoPricingObject, setLogoPricingObject] = useState([]);
+
 	const [maxWidthOptions, setMaxWidthOptions] = useState(
 		Array.from(
 			{
@@ -206,9 +216,6 @@ export function Logo({ item }) {
 		setSelectedThickness(() => selected[0]);
 
 		if (parseInt(target) === 3) {
-			if (parseInt(selectedLetterHeight) > 24) {
-				setSelectedLetterHeight('');
-			}
 			if (
 				selectedMounting === STUD_MOUNT ||
 				selectedMounting === STUD_WITH_SPACER ||
@@ -268,6 +275,8 @@ export function Logo({ item }) {
 					customColor,
 					studLength,
 					spacerStandoffDistance,
+					usdSinglePrice,
+					cadSinglePrice,
 				};
 			} else {
 				return sign;
@@ -297,16 +306,17 @@ export function Logo({ item }) {
 		customColor,
 		studLength,
 		spacerStandoffDistance,
+		usdSinglePrice,
+		cadSinglePrice,
 	]);
-
-	const [logoPricingObject, setlogoPricingObject] = useState([]);
 
 	useEffect(() => {
 		async function fetchLogoPricing() {
 			try {
 				const response = await fetch(NovaQuote.logo_pricing_api + item.product);
 				const data = await response.json();
-				setlogoPricingObject(data);
+				console.log(data);
+				setLogoPricingObject(data);
 			} catch (error) {
 				console.error('Error fetching logo pricing:', error);
 			}
@@ -315,7 +325,7 @@ export function Logo({ item }) {
 		fetchLogoPricing();
 	}, []);
 
-	useEffect(() => {
+	function computePricing() {
 		if (
 			width &&
 			height &&
@@ -332,41 +342,61 @@ export function Logo({ item }) {
 				const logoPricingTable =
 					logoPricing !== undefined ? convert_json(logoPricing) : [];
 
-				const computed =
+				let tempTotal = 0;
+				const baseLogoPricing =
 					logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
 
-				let multiplier = 0;
-				if (waterproof) {
-					multiplier = waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.1;
+				if (baseLogoPricing) {
+					tempTotal += baseLogoPricing;
 				}
 
-				let total = parseFloat((computed * multiplier).toFixed(2));
-				total *= selectedFinishing === GLOSS_FINISH ? 1.1 : 1;
+				if (waterproof) {
+					tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.1;
+				}
+
+				if (selectedFinishing) {
+					tempTotal *= selectedFinishing === GLOSS_FINISH ? 1.1 : 1;
+				}
 
 				if (color?.name === CLEAR_COLOR) {
-					total *= 0.9;
+					tempTotal *= 0.9;
 				}
 				if (color?.name === FROSTED_CLEAR_COLOR) {
-					total *= 0.95;
+					tempTotal *= 0.95;
 				}
 
-				if (spacerStandoffDistance) {
-					const spacer = spacerPricing(total);
-
-					total += spacer;
+				if (selectedMounting === STUD_WITH_SPACER) {
+					const spacer = spacerPricing(tempTotal);
+					tempTotal += spacer;
 				}
 
-				total *= sets;
+				const total = tempTotal * sets;
 
-				setUsdPrice(parseFloat(total.toFixed(2)));
-				setCadPrice((total * parseFloat(EXCHANGE_RATE)).toFixed(2));
-			} else {
-				setUsdPrice(0);
-				setCadPrice(0);
+				return {
+					singlePrice: tempTotal.toFixed(2) ?? 0,
+					total: total ?? 0,
+				};
 			}
+		} else {
+			return {
+				singlePrice: 0,
+				total: 0,
+			};
+		}
+	}
+
+	useEffect(() => {
+		const { singlePrice, total } = computePricing();
+		if (total && singlePrice) {
+			setUsdPrice(total);
+			setCadPrice((total * EXCHANGE_RATE).toFixed(2));
+			setUsdSinglePrice(singlePrice);
+			setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
 		} else {
 			setUsdPrice(0);
 			setCadPrice(0);
+			setUsdSinglePrice(0);
+			setCadSinglePrice(0);
 		}
 	}, [
 		width,
@@ -376,7 +406,7 @@ export function Logo({ item }) {
 		selectedFinishing,
 		sets,
 		color,
-		spacerStandoffDistance,
+		selectedMounting,
 	]);
 
 	const checkAndAddMissingFields = () => {

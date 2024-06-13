@@ -15,7 +15,7 @@ import {
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
 
-import { spacerPricing } from '../../../../utils/Pricing';
+import { calculateLetterPrice, spacerPricing } from '../../../../utils/Pricing';
 
 import { colorOptions } from '../ColorOptions';
 
@@ -67,7 +67,6 @@ export function Letters({ item }) {
 	const [selectedFinishing, setSelectedFinishing] = useState(
 		item.finishing ?? ''
 	);
-	const [customFont, setCustomFont] = useState(item.customFont ?? '');
 	const [customColor, setCustomColor] = useState(item.customColor ?? '');
 
 	const [selectedLetterHeight, setSelectedLetterHeight] = useState(
@@ -75,6 +74,12 @@ export function Letters({ item }) {
 	);
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
+	const [usdSinglePrice, setUsdSinglePrice] = useState(
+		item.usdSinglePrice ?? 0
+	);
+	const [cadSinglePrice, setCadSinglePrice] = useState(
+		item.cadSinglePrice ?? 0
+	);
 	const [mountingOptions, setMountingOptions] = useState(
 		mountingDefaultOptions
 	);
@@ -179,11 +184,12 @@ export function Letters({ item }) {
 			fontFilePath,
 			fontFileUrl,
 			finishing: selectedFinishing,
-			customFont,
 			customColor,
 			sets,
 			studLength,
 			spacerStandoffDistance,
+			usdSinglePrice,
+			cadSinglePrice,
 		};
 
 		setSignage((prevSignage) =>
@@ -263,10 +269,6 @@ export function Letters({ item }) {
 		setSelectedFinishing(e.target.value);
 	};
 
-	const handleChangePieces = (e) => {
-		setPieces(e.target.value);
-	};
-
 	const handleonChangeSpacerDistance = (e) => {
 		setSpacerStandoffDistance(e.target.value);
 	};
@@ -299,34 +301,7 @@ export function Letters({ item }) {
 		}
 	};
 
-	// Helper function to determine letter price adjustments
-	function calculateLetterPrice(
-		letter,
-		baseLetterPrice,
-		noLowerCase,
-		waterproof,
-		selectedFinishing,
-		color
-	) {
-		let letterPrice = baseLetterPrice;
-
-		// Pricing adjustments based on character type
-		if (letter === ' ') return 0;
-		if (letter.match(/[a-z]/)) letterPrice *= noLowerCase ? 1 : 0.8;
-		if (letter.match(/[`~"*,.\-']/)) letterPrice *= 0.3;
-
-		// Waterproof and finishing adjustments
-		letterPrice *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.1;
-		letterPrice *= selectedFinishing === GLOSS_FINISH ? 1.1 : 1;
-
-		// Color adjustments
-		if (color?.name === CLEAR_COLOR) letterPrice *= 0.9;
-		if (color?.name === FROSTED_CLEAR_COLOR) letterPrice *= 0.95;
-
-		return letterPrice;
-	}
-
-	useEffect(() => {
+	const computePricing = () => {
 		if (
 			letterPricing.length > 0 &&
 			selectedLetterHeight &&
@@ -336,12 +311,12 @@ export function Letters({ item }) {
 		) {
 			const pricingDetail = letterPricing[selectedLetterHeight - 1];
 			const baseLetterPrice = pricingDetail[selectedThickness.value];
-			let totalLetterPrice = 0;
+			let tempTotal = 0;
 			const lettersArray = letters.trim().split('');
 			const noLowerCase = NovaQuote.no_lowercase.includes(font);
 
 			lettersArray.forEach((letter) => {
-				totalLetterPrice += calculateLetterPrice(
+				tempTotal += calculateLetterPrice(
 					letter,
 					baseLetterPrice,
 					noLowerCase,
@@ -351,18 +326,50 @@ export function Letters({ item }) {
 				);
 			});
 
-			if (spacerStandoffDistance) {
-				const spacer = spacerPricing(totalLetterPrice);
-				totalLetterPrice += parseFloat(spacer.toFixed(2));
+			if (waterproof) {
+				tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.1;
 			}
 
-			totalLetterPrice *= sets;
+			if (selectedFinishing) {
+				tempTotal *= selectedFinishing === GLOSS_FINISH ? 1.1 : 1;
+			}
 
-			setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
-			setCadPrice((totalLetterPrice * parseFloat(EXCHANGE_RATE)).toFixed(2));
+			if (color?.name) {
+				if (color?.name === CLEAR_COLOR) tempTotal *= 0.9;
+				if (color?.name === FROSTED_CLEAR_COLOR) tempTotal *= 0.95;
+			}
+
+			if (selectedMounting === STUD_WITH_SPACER) {
+				const spacer = spacerPricing(tempTotal);
+				tempTotal += parseFloat(spacer.toFixed(2));
+			}
+
+			const total = tempTotal * sets;
+
+			return {
+				singlePrice: tempTotal.toFixed(2) ?? 0,
+				total: total?.toFixed(2) ?? 0,
+			};
+		} else {
+			return {
+				singlePrice: 0,
+				total: 0,
+			};
+		}
+	};
+
+	useEffect(() => {
+		const { singlePrice, total } = computePricing();
+		if (total && singlePrice) {
+			setUsdPrice(total);
+			setCadPrice((total * EXCHANGE_RATE).toFixed(2));
+			setUsdSinglePrice(singlePrice);
+			setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
 		} else {
 			setUsdPrice(0);
 			setCadPrice(0);
+			setUsdSinglePrice(0);
+			setCadSinglePrice(0);
 		}
 	}, [
 		selectedLetterHeight,
@@ -373,7 +380,7 @@ export function Letters({ item }) {
 		color,
 		sets,
 		font,
-		spacerStandoffDistance,
+		selectedMounting,
 		letterPricing,
 	]);
 
@@ -541,7 +548,6 @@ export function Letters({ item }) {
 		fontFilePath,
 		fontFile,
 		selectedFinishing,
-		customFont,
 		customColor,
 		sets,
 		studLength,

@@ -28,3 +28,13 @@ export const quantityDiscount = (sets, quantityDiscountTable) => {
 	);
 	return discount?.Discount ?? 1;
 };
+
+export const calculateLetterPrice = (letter, baseLetterPrice, noLowerCase) => {
+	let letterPrice = baseLetterPrice;
+
+	if (letter === ' ') return 0;
+	if (letter.match(/[a-z]/)) letterPrice *= noLowerCase ? 1 : 0.8;
+	if (letter.match(/[`~"*,.\-']/)) letterPrice *= 0.3;
+
+	return letterPrice;
+};

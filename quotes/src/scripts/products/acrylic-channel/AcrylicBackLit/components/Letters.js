@@ -11,7 +11,7 @@ import {
 	studLengthOptions,
 } from '../../../../utils/SignageOptions';
 
-import { spacerPricing } from '../../../../utils/Pricing';
+import { calculateLetterPrice, spacerPricing } from '../../../../utils/Pricing';
 
 import { ledLightColors } from '../../../metal-channel/metalChannelOptions';
 
@@ -203,7 +203,6 @@ export function Letters({ item }) {
 	}
 
 	const handleOnChangeLetters = (e) => {
-		console.log(e.target.value);
 		setLetters(() => e.target.value);
 	};
 
@@ -274,17 +273,6 @@ export function Letters({ item }) {
 		}
 	};
 
-	// Helper function to determine letter price adjustments
-	function calculateLetterPrice(letter, baseLetterPrice, noLowerCase) {
-		let letterPrice = baseLetterPrice;
-
-		if (letter === ' ') return 0;
-		if (letter.match(/[a-z]/)) letterPrice *= noLowerCase ? 1 : 0.8;
-		if (letter.match(/[`~"*,.\-']/)) letterPrice *= 0.3;
-
-		return letterPrice;
-	}
-
 	const computePricing = () => {
 		if (
 			letterPricing.length > 0 &&
@@ -295,6 +283,7 @@ export function Letters({ item }) {
 				(item) => parseInt(item.Height) === parseInt(selectedLetterHeight)
 			);
 
+			console.log(letterPricing);
 			const baseLetterPrice = parseFloat(pricingDetail?.BackLit);
 
 			let tempTotal = 0;
@@ -326,7 +315,10 @@ export function Letters({ item }) {
 				total: totalWithDiscount?.toFixed(2) ?? 0,
 			};
 		} else {
-			return 0;
+			return {
+				singlePrice: 0,
+				total: 0,
+			};
 		}
 	};
 

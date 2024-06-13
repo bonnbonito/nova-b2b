@@ -61,6 +61,8 @@ export const allAttributes = (item) => [
 	{ key: item.baseColor, label: 'BASE COLOR' },
 	{ key: item.baseCustomColor, label: 'BASE CUSTOM COLOR' },
 	{ key: item.paintedPCFinish, label: 'PAINTED PC FINISH' },
+	{ key: item.lightboxType, label: 'LIGHT BOX TYPE' },
+	{ key: item.uvPrintedCover, label: 'UV PRINTED COVER' },
 	{ key: item.waterproof, label: 'ENVIRONMENT' },
 	{ key: item.backOption, label: 'BACK OPTION' },
 	{ key: item.mounting, label: 'MOUNTING' },

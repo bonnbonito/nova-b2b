@@ -404,6 +404,7 @@ export function Letters({ item }) {
 		cadPrice,
 		usdSinglePrice,
 		cadSinglePrice,
+		spacerStandoffDistance,
 	]);
 
 	useEffect(() => {
