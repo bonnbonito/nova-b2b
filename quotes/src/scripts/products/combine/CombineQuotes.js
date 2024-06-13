@@ -23,10 +23,15 @@ import { Letters as MetalStainlessLetters } from '../metal/LaserCutStainless/com
 import { Logo as MetalStainlessLogo } from '../metal/LaserCutStainless/components/Logo';
 /*MetalChannel */
 import { Letters as AluminumResinFrontBackLit } from '../metal-channel/AluminumResinFrontBackLit/components/Letters';
+import { Logo as AluminumResinFrontBackLitLogo } from '../metal-channel/AluminumResinFrontBackLit/components/Logo';
 import { Letters as AluminumResinFrontLit } from '../metal-channel/AluminumResinFrontLit/components/Letters';
+import { Logo as AluminumResinFrontLitLogo } from '../metal-channel/AluminumResinFrontLit/components/Logo';
 import { Letters as TrimLessBackLit } from '../metal-channel/TrimLessBackLit/components/Letters';
+import { Logo as TrimLessBackLitLogo } from '../metal-channel/TrimLessBackLit/components/Logo';
 import { Letters as TrimLessFrontAndBackLit } from '../metal-channel/TrimLessFrontAndBackLit/components/Letters';
+import { Logo as TrimLessFrontAndBackLitLogo } from '../metal-channel/TrimLessFrontAndBackLit/components/Logo';
 import { Letters as TrimLessFrontLit } from '../metal-channel/TrimLessFrontLit/components/Letters';
+import { Logo as TrimLessFrontLitLogo } from '../metal-channel/TrimLessFrontLit/components/Logo';
 /*PVC Foam */
 import { Letters as PVCMetalLaminateLetters } from '../pvc/PVCMetalLaminate/components/Letters';
 import { Logo as PVCMetalLaminateLogo } from '../pvc/PVCMetalLaminate/components/Logo';
@@ -116,22 +121,42 @@ export default function CombineQuotes() {
 				);
 				break;
 			case 'AluminumResinFrontBackLit':
-				output = (
-					<AluminumResinFrontBackLit
-						key={item.id}
-						item={item}
-						productId={item.product}
-					/>
-				);
+				if (item.type === 'letters') {
+					output = (
+						<AluminumResinFrontBackLit
+							key={item.id}
+							item={item}
+							productId={item.product}
+						/>
+					);
+				} else {
+					output = (
+						<AluminumResinFrontBackLitLogo
+							key={item.id}
+							item={item}
+							productId={item.product}
+						/>
+					);
+				}
 				break;
 			case 'AluminumResinFrontLit':
-				output = (
-					<AluminumResinFrontLit
-						key={item.id}
-						item={item}
-						productId={item.product}
-					/>
-				);
+				if (item.type === 'letters') {
+					output = (
+						<AluminumResinFrontLit
+							key={item.id}
+							item={item}
+							productId={item.product}
+						/>
+					);
+				} else {
+					output = (
+						<AluminumResinFrontLitLogo
+							key={item.id}
+							item={item}
+							productId={item.product}
+						/>
+					);
+				}
 				break;
 			case 'PVCUv':
 				output = <PVCUv key={item.id} item={item} productId={item.product} />;
@@ -175,27 +200,61 @@ export default function CombineQuotes() {
 				}
 				break;
 			case 'TrimLessFrontAndBackLit':
-				output = (
-					<TrimLessFrontAndBackLit
-						key={item.id}
-						item={item}
-						productId={item.product}
-					/>
-				);
+				if (item.type === 'letters') {
+					output = (
+						<TrimLessFrontAndBackLit
+							key={item.id}
+							item={item}
+							productId={item.product}
+						/>
+					);
+				} else {
+					output = (
+						<TrimLessFrontAndBackLitLogo
+							key={item.id}
+							item={item}
+							productId={item.product}
+						/>
+					);
+				}
 				break;
 			case 'TrimLessFrontLit':
-				output = (
-					<TrimLessFrontLit
-						key={item.id}
-						item={item}
-						productId={item.product}
-					/>
-				);
+				if (item.type === 'letters') {
+					output = (
+						<TrimLessFrontLit
+							key={item.id}
+							item={item}
+							productId={item.product}
+						/>
+					);
+				} else {
+					output = (
+						<TrimLessFrontLitLogo
+							key={item.id}
+							item={item}
+							productId={item.product}
+						/>
+					);
+				}
 				break;
 			case 'TrimLessBackLit':
-				output = (
-					<TrimLessBackLit key={item.id} item={item} productId={item.product} />
-				);
+				if (item.type === 'letters') {
+					output = (
+						<TrimLessBackLit
+							key={item.id}
+							item={item}
+							productId={item.product}
+						/>
+					);
+				} else {
+					output = (
+						<TrimLessBackLitLogo
+							key={item.id}
+							item={item}
+							productId={item.product}
+						/>
+					);
+				}
 				break;
 			case 'MetalFabricated':
 				if (item.type === 'letters') {

@@ -14998,7 +14998,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_select__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! react-select */ "./node_modules/react-select/dist/react-select.esm.js");
+/* harmony import */ var react_select__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! react-select */ "./node_modules/react-select/dist/react-select.esm.js");
 /* harmony import */ var _SidebarAdmin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../SidebarAdmin */ "./src/scripts/SidebarAdmin.js");
 /* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Signage */ "./src/scripts/Signage.js");
 /* harmony import */ var _components_AccordionGroup__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/AccordionGroup */ "./src/scripts/products/combine/components/AccordionGroup.js");
@@ -15017,19 +15017,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _metal_LaserCutStainless_components_Letters__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../metal/LaserCutStainless/components/Letters */ "./src/scripts/products/metal/LaserCutStainless/components/Letters.js");
 /* harmony import */ var _metal_LaserCutStainless_components_Logo__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../metal/LaserCutStainless/components/Logo */ "./src/scripts/products/metal/LaserCutStainless/components/Logo.js");
 /* harmony import */ var _metal_channel_AluminumResinFrontBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../metal-channel/AluminumResinFrontBackLit/components/Letters */ "./src/scripts/products/metal-channel/AluminumResinFrontBackLit/components/Letters.js");
-/* harmony import */ var _metal_channel_AluminumResinFrontLit_components_Letters__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../metal-channel/AluminumResinFrontLit/components/Letters */ "./src/scripts/products/metal-channel/AluminumResinFrontLit/components/Letters.js");
-/* harmony import */ var _metal_channel_TrimLessBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ../metal-channel/TrimLessBackLit/components/Letters */ "./src/scripts/products/metal-channel/TrimLessBackLit/components/Letters.js");
-/* harmony import */ var _metal_channel_TrimLessFrontAndBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ../metal-channel/TrimLessFrontAndBackLit/components/Letters */ "./src/scripts/products/metal-channel/TrimLessFrontAndBackLit/components/Letters.js");
-/* harmony import */ var _metal_channel_TrimLessFrontLit_components_Letters__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ../metal-channel/TrimLessFrontLit/components/Letters */ "./src/scripts/products/metal-channel/TrimLessFrontLit/components/Letters.js");
-/* harmony import */ var _pvc_PVCMetalLaminate_components_Letters__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ../pvc/PVCMetalLaminate/components/Letters */ "./src/scripts/products/pvc/PVCMetalLaminate/components/Letters.js");
-/* harmony import */ var _pvc_PVCMetalLaminate_components_Logo__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ../pvc/PVCMetalLaminate/components/Logo */ "./src/scripts/products/pvc/PVCMetalLaminate/components/Logo.js");
-/* harmony import */ var _pvc_PVCPainted_components_Letters__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ../pvc/PVCPainted/components/Letters */ "./src/scripts/products/pvc/PVCPainted/components/Letters.js");
-/* harmony import */ var _pvc_PVCPainted_components_Logo__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ../pvc/PVCPainted/components/Logo */ "./src/scripts/products/pvc/PVCPainted/components/Logo.js");
-/* harmony import */ var _pvc_PVCUv_components_Logo__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ../pvc/PVCUv/components/Logo */ "./src/scripts/products/pvc/PVCUv/components/Logo.js");
-/* harmony import */ var _led_neon_FlexNeonSign_components_NeonSign__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ../led-neon/FlexNeonSign/components/NeonSign */ "./src/scripts/products/led-neon/FlexNeonSign/components/NeonSign.js");
-/* harmony import */ var _led_neon_RigidNeonSignNoBacking_components_NeonSign__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ../led-neon/RigidNeonSignNoBacking/components/NeonSign */ "./src/scripts/products/led-neon/RigidNeonSignNoBacking/components/NeonSign.js");
-/* harmony import */ var _led_neon_RigidNeonSignWithBacking_components_NeonSign__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ../led-neon/RigidNeonSignWithBacking/components/NeonSign */ "./src/scripts/products/led-neon/RigidNeonSignWithBacking/components/NeonSign.js");
-/* harmony import */ var _custom_components_Logo__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ../custom/components/Logo */ "./src/scripts/products/custom/components/Logo.js");
+/* harmony import */ var _metal_channel_AluminumResinFrontBackLit_components_Logo__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../metal-channel/AluminumResinFrontBackLit/components/Logo */ "./src/scripts/products/metal-channel/AluminumResinFrontBackLit/components/Logo.js");
+/* harmony import */ var _metal_channel_AluminumResinFrontLit_components_Letters__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ../metal-channel/AluminumResinFrontLit/components/Letters */ "./src/scripts/products/metal-channel/AluminumResinFrontLit/components/Letters.js");
+/* harmony import */ var _metal_channel_AluminumResinFrontLit_components_Logo__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ../metal-channel/AluminumResinFrontLit/components/Logo */ "./src/scripts/products/metal-channel/AluminumResinFrontLit/components/Logo.js");
+/* harmony import */ var _metal_channel_TrimLessBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ../metal-channel/TrimLessBackLit/components/Letters */ "./src/scripts/products/metal-channel/TrimLessBackLit/components/Letters.js");
+/* harmony import */ var _metal_channel_TrimLessBackLit_components_Logo__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ../metal-channel/TrimLessBackLit/components/Logo */ "./src/scripts/products/metal-channel/TrimLessBackLit/components/Logo.js");
+/* harmony import */ var _metal_channel_TrimLessFrontAndBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ../metal-channel/TrimLessFrontAndBackLit/components/Letters */ "./src/scripts/products/metal-channel/TrimLessFrontAndBackLit/components/Letters.js");
+/* harmony import */ var _metal_channel_TrimLessFrontAndBackLit_components_Logo__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ../metal-channel/TrimLessFrontAndBackLit/components/Logo */ "./src/scripts/products/metal-channel/TrimLessFrontAndBackLit/components/Logo.js");
+/* harmony import */ var _metal_channel_TrimLessFrontLit_components_Letters__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ../metal-channel/TrimLessFrontLit/components/Letters */ "./src/scripts/products/metal-channel/TrimLessFrontLit/components/Letters.js");
+/* harmony import */ var _metal_channel_TrimLessFrontLit_components_Logo__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ../metal-channel/TrimLessFrontLit/components/Logo */ "./src/scripts/products/metal-channel/TrimLessFrontLit/components/Logo.js");
+/* harmony import */ var _pvc_PVCMetalLaminate_components_Letters__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ../pvc/PVCMetalLaminate/components/Letters */ "./src/scripts/products/pvc/PVCMetalLaminate/components/Letters.js");
+/* harmony import */ var _pvc_PVCMetalLaminate_components_Logo__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ../pvc/PVCMetalLaminate/components/Logo */ "./src/scripts/products/pvc/PVCMetalLaminate/components/Logo.js");
+/* harmony import */ var _pvc_PVCPainted_components_Letters__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ../pvc/PVCPainted/components/Letters */ "./src/scripts/products/pvc/PVCPainted/components/Letters.js");
+/* harmony import */ var _pvc_PVCPainted_components_Logo__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ../pvc/PVCPainted/components/Logo */ "./src/scripts/products/pvc/PVCPainted/components/Logo.js");
+/* harmony import */ var _pvc_PVCUv_components_Logo__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ../pvc/PVCUv/components/Logo */ "./src/scripts/products/pvc/PVCUv/components/Logo.js");
+/* harmony import */ var _led_neon_FlexNeonSign_components_NeonSign__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ../led-neon/FlexNeonSign/components/NeonSign */ "./src/scripts/products/led-neon/FlexNeonSign/components/NeonSign.js");
+/* harmony import */ var _led_neon_RigidNeonSignNoBacking_components_NeonSign__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ../led-neon/RigidNeonSignNoBacking/components/NeonSign */ "./src/scripts/products/led-neon/RigidNeonSignNoBacking/components/NeonSign.js");
+/* harmony import */ var _led_neon_RigidNeonSignWithBacking_components_NeonSign__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ../led-neon/RigidNeonSignWithBacking/components/NeonSign */ "./src/scripts/products/led-neon/RigidNeonSignWithBacking/components/NeonSign.js");
+/* harmony import */ var _custom_components_Logo__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! ../custom/components/Logo */ "./src/scripts/products/custom/components/Logo.js");
 
 
 
@@ -15054,6 +15059,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /*MetalChannel */
+
+
+
+
+
 
 
 
@@ -15115,49 +15125,65 @@ function CombineQuotes() {
     let output;
     switch (item.component) {
       case 'CustomProject':
-        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_custom_components_Logo__WEBPACK_IMPORTED_MODULE_31__.Logo, {
+        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_custom_components_Logo__WEBPACK_IMPORTED_MODULE_36__.Logo, {
           key: item.id,
           item: item,
           productId: item.product
         });
         break;
       case 'RigidNeonSignNoBacking':
-        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_led_neon_RigidNeonSignNoBacking_components_NeonSign__WEBPACK_IMPORTED_MODULE_29__.NeonSign, {
+        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_led_neon_RigidNeonSignNoBacking_components_NeonSign__WEBPACK_IMPORTED_MODULE_34__.NeonSign, {
           key: item.id,
           item: item,
           productId: item.product
         });
         break;
       case 'RigidNeonSignWithBacking':
-        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_led_neon_RigidNeonSignWithBacking_components_NeonSign__WEBPACK_IMPORTED_MODULE_30__.NeonSign, {
+        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_led_neon_RigidNeonSignWithBacking_components_NeonSign__WEBPACK_IMPORTED_MODULE_35__.NeonSign, {
           key: item.id,
           item: item,
           productId: item.product
         });
         break;
       case 'FlexNeonSign':
-        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_led_neon_FlexNeonSign_components_NeonSign__WEBPACK_IMPORTED_MODULE_28__.NeonSign, {
+        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_led_neon_FlexNeonSign_components_NeonSign__WEBPACK_IMPORTED_MODULE_33__.NeonSign, {
           key: item.id,
           item: item,
           productId: item.product
         });
         break;
       case 'AluminumResinFrontBackLit':
-        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_AluminumResinFrontBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_18__.Letters, {
-          key: item.id,
-          item: item,
-          productId: item.product
-        });
+        if (item.type === 'letters') {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_AluminumResinFrontBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_18__.Letters, {
+            key: item.id,
+            item: item,
+            productId: item.product
+          });
+        } else {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_AluminumResinFrontBackLit_components_Logo__WEBPACK_IMPORTED_MODULE_19__.Logo, {
+            key: item.id,
+            item: item,
+            productId: item.product
+          });
+        }
         break;
       case 'AluminumResinFrontLit':
-        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_AluminumResinFrontLit_components_Letters__WEBPACK_IMPORTED_MODULE_19__.Letters, {
-          key: item.id,
-          item: item,
-          productId: item.product
-        });
+        if (item.type === 'letters') {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_AluminumResinFrontLit_components_Letters__WEBPACK_IMPORTED_MODULE_20__.Letters, {
+            key: item.id,
+            item: item,
+            productId: item.product
+          });
+        } else {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_AluminumResinFrontLit_components_Logo__WEBPACK_IMPORTED_MODULE_21__.Logo, {
+            key: item.id,
+            item: item,
+            productId: item.product
+          });
+        }
         break;
       case 'PVCUv':
-        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_pvc_PVCUv_components_Logo__WEBPACK_IMPORTED_MODULE_27__.Logo, {
+        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_pvc_PVCUv_components_Logo__WEBPACK_IMPORTED_MODULE_32__.Logo, {
           key: item.id,
           item: item,
           productId: item.product
@@ -15165,13 +15191,13 @@ function CombineQuotes() {
         break;
       case 'PVCMetalLaminate':
         if (item.type === 'letters') {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_pvc_PVCMetalLaminate_components_Letters__WEBPACK_IMPORTED_MODULE_23__.Letters, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_pvc_PVCMetalLaminate_components_Letters__WEBPACK_IMPORTED_MODULE_28__.Letters, {
             key: item.id,
             item: item,
             productId: item.product
           });
         } else {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_pvc_PVCMetalLaminate_components_Logo__WEBPACK_IMPORTED_MODULE_24__.Logo, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_pvc_PVCMetalLaminate_components_Logo__WEBPACK_IMPORTED_MODULE_29__.Logo, {
             key: item.id,
             item: item,
             productId: item.product
@@ -15180,13 +15206,13 @@ function CombineQuotes() {
         break;
       case 'PVCPainted':
         if (item.type === 'letters') {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_pvc_PVCPainted_components_Letters__WEBPACK_IMPORTED_MODULE_25__.Letters, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_pvc_PVCPainted_components_Letters__WEBPACK_IMPORTED_MODULE_30__.Letters, {
             key: item.id,
             item: item,
             productId: item.product
           });
         } else {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_pvc_PVCPainted_components_Logo__WEBPACK_IMPORTED_MODULE_26__.Logo, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_pvc_PVCPainted_components_Logo__WEBPACK_IMPORTED_MODULE_31__.Logo, {
             key: item.id,
             item: item,
             productId: item.product
@@ -15194,25 +15220,49 @@ function CombineQuotes() {
         }
         break;
       case 'TrimLessFrontAndBackLit':
-        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_TrimLessFrontAndBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_21__.Letters, {
-          key: item.id,
-          item: item,
-          productId: item.product
-        });
+        if (item.type === 'letters') {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_TrimLessFrontAndBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_24__.Letters, {
+            key: item.id,
+            item: item,
+            productId: item.product
+          });
+        } else {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_TrimLessFrontAndBackLit_components_Logo__WEBPACK_IMPORTED_MODULE_25__.Logo, {
+            key: item.id,
+            item: item,
+            productId: item.product
+          });
+        }
         break;
       case 'TrimLessFrontLit':
-        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_TrimLessFrontLit_components_Letters__WEBPACK_IMPORTED_MODULE_22__.Letters, {
-          key: item.id,
-          item: item,
-          productId: item.product
-        });
+        if (item.type === 'letters') {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_TrimLessFrontLit_components_Letters__WEBPACK_IMPORTED_MODULE_26__.Letters, {
+            key: item.id,
+            item: item,
+            productId: item.product
+          });
+        } else {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_TrimLessFrontLit_components_Logo__WEBPACK_IMPORTED_MODULE_27__.Logo, {
+            key: item.id,
+            item: item,
+            productId: item.product
+          });
+        }
         break;
       case 'TrimLessBackLit':
-        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_TrimLessBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_20__.Letters, {
-          key: item.id,
-          item: item,
-          productId: item.product
-        });
+        if (item.type === 'letters') {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_TrimLessBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_22__.Letters, {
+            key: item.id,
+            item: item,
+            productId: item.product
+          });
+        } else {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_TrimLessBackLit_components_Logo__WEBPACK_IMPORTED_MODULE_23__.Logo, {
+            key: item.id,
+            item: item,
+            productId: item.product
+          });
+        }
         break;
       case 'MetalFabricated':
         if (item.type === 'letters') {
@@ -15316,7 +15366,7 @@ function CombineQuotes() {
     className: "border-gray-200 p-4 rounded-md border mb-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "font-title text-lg mb-4"
-  }, "Select Partner:"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_select__WEBPACK_IMPORTED_MODULE_32__["default"], {
+  }, "Select Partner:"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_select__WEBPACK_IMPORTED_MODULE_37__["default"], {
     className: "basic-single",
     classNames: {
       indicatorSeparator: () => 'hidden'
