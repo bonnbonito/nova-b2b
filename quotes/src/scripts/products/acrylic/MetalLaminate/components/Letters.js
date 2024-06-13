@@ -28,19 +28,9 @@ import {
 	STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
 
-import { spacerPricing } from '../../../../utils/Pricing';
+import { calculateLetterPrice, spacerPricing } from '../../../../utils/Pricing';
 
 import { useAppContext } from '../../../../AppProvider';
-
-const lowerCasePricing = parseFloat(
-	NovaQuote.lowercase_pricing ? NovaQuote.lowercase_pricing : 1
-);
-const smallPunctuations = parseFloat(
-	NovaQuote.small_punctuations_pricing
-		? NovaQuote.small_punctuations_pricing
-		: 1
-);
-//const AcrylicLetterPricing = JSON.parse(NovaOptions.letter_x_logo_pricing);
 
 export const Letters = ({ item }) => {
 	const { signage, setSignage, setMissing } = useAppContext();
@@ -82,8 +72,15 @@ export const Letters = ({ item }) => {
 	const [selectedLetterHeight, setSelectedLetterHeight] = useState(
 		item.letterHeight ?? ''
 	);
+
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
+	const [usdSinglePrice, setUsdSinglePrice] = useState(
+		item.usdSinglePrice ?? 0
+	);
+	const [cadSinglePrice, setCadSinglePrice] = useState(
+		item.cadSinglePrice ?? 0
+	);
 
 	const [lettersHeight, setLettersHeight] = useState({ min: '1', max: '43' });
 
@@ -209,6 +206,8 @@ export const Letters = ({ item }) => {
 					letterHeight: selectedLetterHeight,
 					usdPrice,
 					cadPrice,
+					usdSinglePrice,
+					cadSinglePrice,
 					files,
 					fileNames,
 					filePaths,
@@ -289,69 +288,6 @@ export const Letters = ({ item }) => {
 	}, []);
 
 	useEffect(() => {
-		if (
-			letterPricing.length === 0 ||
-			!selectedLetterHeight ||
-			!selectedThickness ||
-			!waterproof ||
-			!letters
-		) {
-			setUsdPrice(0);
-			setCadPrice(0);
-			return;
-		}
-
-		const pricingDetail = letterPricing[selectedLetterHeight - 1];
-		const baseLetterPrice = pricingDetail[selectedThickness.value];
-		const noLowerCase = NovaQuote.no_lowercase.includes(font);
-
-		const totalLetterPrice = letters
-			.trim()
-			.split('')
-			.reduce((total, letter) => {
-				let letterPrice = baseLetterPrice;
-
-				if (letter === ' ') {
-					letterPrice = 0;
-				} else if (letter.match(/[a-z]/)) {
-					letterPrice *= noLowerCase ? 1 : lowerCasePricing;
-				} else if (letter.match(/[`~"*,.\-']/)) {
-					letterPrice *= smallPunctuations;
-				}
-
-				letterPrice *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.1;
-				letterPrice *= METAL_ACRYLIC_PRICING;
-				letterPrice *= acrylicBase?.name === 'Black' ? 1 : 1.1;
-
-				return total + letterPrice;
-			}, 0);
-
-		let adjustedPrice = totalLetterPrice;
-
-		if (selectedMounting === STUD_WITH_SPACER) {
-			let spacer = spacerPricing(adjustedPrice);
-			spacer = parseFloat(spacer.toFixed(2));
-
-			adjustedPrice += parseFloat(spacer.toFixed(2));
-		}
-
-		const finalPrice = adjustedPrice * sets;
-		setUsdPrice(finalPrice.toFixed(2));
-		setCadPrice((finalPrice * parseFloat(EXCHANGE_RATE)).toFixed(2));
-	}, [
-		selectedLetterHeight,
-		selectedThickness,
-		letters,
-		waterproof,
-		lettersHeight,
-		acrylicBase,
-		sets,
-		font,
-		selectedMounting,
-		letterPricing,
-	]);
-
-	useEffect(() => {
 		let newMountingOptions = mountingDefaultOptions;
 
 		if (selectedThickness?.value === '3') {
@@ -407,35 +343,6 @@ export const Letters = ({ item }) => {
 	useEffect(() => {
 		adjustFontSize();
 	}, [letters]);
-
-	useEffect(() => {
-		updateSignage();
-	}, [
-		letters,
-		comments,
-		font,
-		selectedThickness,
-		waterproof,
-		acrylicBase,
-		usdPrice,
-		cadPrice,
-		selectedLetterHeight,
-		fileUrls,
-		fileNames,
-		files,
-		filePaths,
-		fontFileUrl,
-		fontFileName,
-		fontFilePath,
-		fontFile,
-		metalLaminate,
-		customFont,
-		customColor,
-		sets,
-		selectedMounting,
-		studLength,
-		spacerStandoffDistance,
-	]);
 
 	const checkAndAddMissingFields = () => {
 		const missingFields = [];
@@ -496,24 +403,6 @@ export const Letters = ({ item }) => {
 	};
 
 	useEffect(() => {
-		checkAndAddMissingFields();
-	}, [
-		letters,
-		font,
-		selectedThickness,
-		selectedMounting,
-		studLength,
-		spacerStandoffDistance,
-		waterproof,
-		selectedLetterHeight,
-		metalLaminate,
-		acrylicBase,
-		customColor,
-		fontFileUrl,
-		sets,
-	]);
-
-	useEffect(() => {
 		const newHeightOptions = letterPricing?.filter((item) => {
 			const value = item[selectedThickness?.value];
 			return (
@@ -543,6 +432,106 @@ export const Letters = ({ item }) => {
 		font != 'Custom font' && setFontFileUrl('');
 		acrylicBase?.name != 'Custom Color' && setCustomColor('');
 	}, [font, acrylicBase]);
+
+	const computePricing = () => {
+		if (
+			letterPricing.length > 0 &&
+			selectedLetterHeight &&
+			selectedThickness &&
+			waterproof &&
+			letters.trim().length > 0
+		) {
+			const pricingDetail = letterPricing[selectedLetterHeight - 1];
+			const baseLetterPrice = pricingDetail[selectedThickness.value];
+			const noLowerCase = NovaQuote.no_lowercase.includes(font);
+			const lettersArray = letters.trim().split('');
+			let tempTotal = 0;
+
+			lettersArray.forEach((letter) => {
+				tempTotal += calculateLetterPrice(letter, baseLetterPrice, noLowerCase);
+			});
+
+			tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.1;
+			tempTotal *= acrylicBase?.name === 'Black' ? 1 : 1.1;
+			tempTotal *= METAL_ACRYLIC_PRICING;
+
+			if (selectedMounting === STUD_WITH_SPACER) {
+				let spacer = spacerPricing(tempTotal);
+				spacer = parseFloat(spacer.toFixed(2));
+				tempTotal += parseFloat(spacer.toFixed(2));
+			}
+
+			const total = tempTotal * sets;
+
+			return {
+				singlePrice: tempTotal.toFixed(2) ?? 0,
+				total: total?.toFixed(2) ?? 0,
+			};
+		} else {
+			return {
+				singlePrice: 0,
+				total: 0,
+			};
+		}
+	};
+
+	useEffect(() => {
+		const { singlePrice, total } = computePricing();
+		if (total && singlePrice) {
+			setUsdPrice(total);
+			setCadPrice((total * EXCHANGE_RATE).toFixed(2));
+			setUsdSinglePrice(singlePrice);
+			setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
+		} else {
+			setUsdPrice(0);
+			setCadPrice(0);
+			setUsdSinglePrice(0);
+			setCadSinglePrice(0);
+		}
+	}, [
+		selectedLetterHeight,
+		selectedThickness,
+		letters,
+		waterproof,
+		lettersHeight,
+		acrylicBase,
+		sets,
+		font,
+		selectedMounting,
+		letterPricing,
+	]);
+
+	useEffect(() => {
+		updateSignage();
+		checkAndAddMissingFields();
+	}, [
+		letters,
+		comments,
+		font,
+		selectedThickness,
+		waterproof,
+		acrylicBase,
+		usdPrice,
+		cadPrice,
+		usdSinglePrice,
+		cadSinglePrice,
+		selectedLetterHeight,
+		fileUrls,
+		fileNames,
+		files,
+		filePaths,
+		fontFileUrl,
+		fontFileName,
+		fontFilePath,
+		fontFile,
+		metalLaminate,
+		customFont,
+		customColor,
+		sets,
+		selectedMounting,
+		studLength,
+		spacerStandoffDistance,
+	]);
 
 	return (
 		<>
