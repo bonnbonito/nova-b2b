@@ -21204,6 +21204,11 @@ function Letters({
           singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
           total: (_total$toFixed = total?.toFixed(2)) !== null && _total$toFixed !== void 0 ? _total$toFixed : 0
         };
+      } else {
+        return {
+          singlePrice: 0,
+          total: 0
+        };
       }
     } else {
       return {
@@ -22392,13 +22397,6 @@ function Letters({
   const handleOnChangeLetterHeight = e => {
     setSelectedLetterHeight(e.target.value);
   };
-  function calculateLetterPrice(letter, baseLetterPrice, noLowerCase) {
-    let letterPrice = baseLetterPrice;
-    if (letter === ' ') return 0;
-    if (letter.match(/[a-z]/)) letterPrice *= noLowerCase ? 1 : 0.8;
-    if (letter.match(/[`~"*,.\-']/)) letterPrice *= 0.3;
-    return letterPrice;
-  }
   const computePricing = () => {
     if (letterPricing.length > 0 && selectedLetterHeight && letters.trim().length > 0) {
       var _tempTotal$toFixed, _total$toFixed;
@@ -22408,7 +22406,7 @@ function Letters({
       const lettersArray = letters.trim().split('');
       const noLowerCase = NovaQuote.no_lowercase.includes(font);
       lettersArray.forEach(letter => {
-        tempTotal += calculateLetterPrice(letter, baseLetterPrice, noLowerCase);
+        tempTotal += (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_13__.calculateLetterPrice)(letter, baseLetterPrice, noLowerCase);
       });
       if (frontAcrylicCover === '3M Vinyl') {
         tempTotal *= 1.1;

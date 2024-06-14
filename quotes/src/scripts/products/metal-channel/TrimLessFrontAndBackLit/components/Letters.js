@@ -33,7 +33,7 @@ import {
 	STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
 
-import { spacerPricing } from '../../../../utils/Pricing';
+import { calculateLetterPrice, spacerPricing } from '../../../../utils/Pricing';
 
 import { useAppContext } from '../../../../AppProvider';
 
@@ -289,16 +289,6 @@ export function Letters({ item }) {
 	const handleOnChangeLetterHeight = (e) => {
 		setSelectedLetterHeight(e.target.value);
 	};
-
-	function calculateLetterPrice(letter, baseLetterPrice, noLowerCase) {
-		let letterPrice = baseLetterPrice;
-
-		if (letter === ' ') return 0;
-		if (letter.match(/[a-z]/)) letterPrice *= noLowerCase ? 1 : 0.8;
-		if (letter.match(/[`~"*,.\-']/)) letterPrice *= 0.3;
-
-		return letterPrice;
-	}
 
 	const computePricing = () => {
 		if (

@@ -529,6 +529,11 @@ export function Letters({ item }) {
 					singlePrice: tempTotal.toFixed(2) ?? 0,
 					total: total?.toFixed(2) ?? 0,
 				};
+			} else {
+				return {
+					singlePrice: 0,
+					total: 0,
+				};
 			}
 		} else {
 			return {
