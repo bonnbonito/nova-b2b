@@ -331,7 +331,7 @@ export function Letters({ item }) {
 				tempTotal *= 1.15;
 			}
 
-			if (spacerStandoffDistance) {
+			if (selectedMounting === STUD_WITH_SPACER) {
 				const spacer = spacerPricing(tempTotal);
 				tempTotal += parseFloat(spacer.toFixed(2));
 			}
@@ -380,7 +380,7 @@ export function Letters({ item }) {
 		letters,
 		sets,
 		font,
-		spacerStandoffDistance,
+		selectedMounting,
 		letterPricing,
 		acrylicFront,
 	]);
@@ -440,6 +440,10 @@ export function Letters({ item }) {
 		}
 
 		if (!acrylicFront) missingFields.push('Select Acrylic Front');
+		if (acrylicFront === '3M Vinyl') {
+			if (!vinylWhite?.name) missingFields.push('Select 3M Vinyl');
+		}
+
 		if (!sets) missingFields.push('Select Quantity');
 
 		if (!fileUrls || fileUrls.length === 0)
@@ -495,6 +499,8 @@ export function Letters({ item }) {
 		sets,
 		studLength,
 		spacerStandoffDistance,
+		acrylicFront,
+		vinylWhite,
 	]);
 
 	useEffect(() => {

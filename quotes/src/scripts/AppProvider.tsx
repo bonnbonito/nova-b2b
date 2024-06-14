@@ -52,6 +52,34 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 		);
 	};
 
+	useEffect(() => {
+		console.log('Attempting to preload fonts...');
+		async function preloadFonts() {
+			try {
+				await loadingFonts();
+			} catch (error) {
+				console.error('Error loading fonts:', error);
+			}
+		}
+		preloadFonts();
+	}, []);
+
+	const loadingFonts = async () => {
+		const loadPromises = NovaQuote.fonts.map((font) => loadFont(font));
+		await Promise.all(loadPromises);
+	};
+
+	async function loadFont({ name, src }) {
+		const fontFace = new FontFace(name, `url(${src})`);
+
+		try {
+			await fontFace.load();
+			document.fonts.add(fontFace);
+		} catch (e) {
+			console.error(`Font ${name} failed to load`);
+		}
+	}
+
 	return (
 		<AppContext.Provider
 			value={{

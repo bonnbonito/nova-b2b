@@ -278,6 +278,11 @@ export function Logo({ item }) {
 		}
 
 		if (!acrylicFront) missingFields.push('Select Acrylic Front');
+
+		if (acrylicFront === '3M Vinyl') {
+			if (!vinylWhite?.name) missingFields.push('Select 3M Vinyl');
+		}
+
 		if (!sets) missingFields.push('Select Quantity');
 
 		if (!fileUrls || fileUrls.length === 0)
@@ -331,6 +336,8 @@ export function Logo({ item }) {
 		sets,
 		studLength,
 		spacerStandoffDistance,
+		vinylWhite,
+		acrylicFront,
 	]);
 
 	useEffect(() => {
@@ -393,7 +400,7 @@ export function Logo({ item }) {
 			tempTotal *= 1.15;
 		}
 
-		if (spacerStandoffDistance) {
+		if (selectedMounting === STUD_WITH_SPACER) {
 			const spacer = spacerPricing(tempTotal);
 			tempTotal += parseFloat(spacer.toFixed(2));
 		}
@@ -406,40 +413,28 @@ export function Logo({ item }) {
 		/* minimum price */
 		tempTotal = tempTotal > 50 ? tempTotal : 50;
 
-		let total = tempTotal * parseInt(sets);
-
-		const discount = 1;
-
-		let totalWithDiscount = total * discount;
-
-		let discountPrice = total - totalWithDiscount;
+		const total = tempTotal * parseInt(sets);
 
 		return {
-			singlePrice: tempTotal ?? 0,
-			total: totalWithDiscount?.toFixed(2) ?? 0,
-			totalWithoutDiscount: total,
-			discount: discountPrice,
+			singlePrice: tempTotal.toFixed(2) ?? 0,
+			total: total.toFixed(2) ?? 0,
 		};
 	};
 
 	useEffect(() => {
-		const { singlePrice, total, discount } = computePricing();
+		const { singlePrice, total } = computePricing();
 		if (total && singlePrice) {
 			setUsdPrice(total);
 			setCadPrice((total * EXCHANGE_RATE).toFixed(2));
 			setUsdSinglePrice(singlePrice);
 			setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
-			setUsdDiscount(discount.toFixed(2));
-			setCadDiscount((discount * EXCHANGE_RATE).toFixed(2));
 		} else {
 			setUsdPrice(0);
 			setCadPrice(0);
 			setUsdSinglePrice(0);
 			setCadSinglePrice(0);
-			setUsdDiscount(0);
-			setCadDiscount(0);
 		}
-	}, [width, height, acrylicFront, spacerStandoffDistance, sets]);
+	}, [width, height, acrylicFront, selectedMounting, sets]);
 
 	return (
 		<>

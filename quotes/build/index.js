@@ -2427,6 +2427,33 @@ function AppProvider({
       [key]: value
     } : signage));
   };
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    console.log('Attempting to preload fonts...');
+    async function preloadFonts() {
+      try {
+        await loadingFonts();
+      } catch (error) {
+        console.error('Error loading fonts:', error);
+      }
+    }
+    preloadFonts();
+  }, []);
+  const loadingFonts = async () => {
+    const loadPromises = NovaQuote.fonts.map(font => loadFont(font));
+    await Promise.all(loadPromises);
+  };
+  async function loadFont({
+    name,
+    src
+  }) {
+    const fontFace = new FontFace(name, `url(${src})`);
+    try {
+      await fontFace.load();
+      document.fonts.add(fontFace);
+    } catch (e) {
+      console.error(`Font ${name} failed to load`);
+    }
+  }
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(AppContext.Provider, {
     value: {
       signage,
@@ -3313,33 +3340,6 @@ function QuoteView() {
       window.location.href = NovaQuote.mockup_account_url;
     }
   }, []);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    console.log('Attempting to preload fonts...');
-    async function preloadFonts() {
-      try {
-        await loadingFonts();
-      } catch (error) {
-        console.error('Error loading fonts:', error);
-      }
-    }
-    preloadFonts();
-  }, []);
-  const loadingFonts = async () => {
-    const loadPromises = NovaQuote.fonts.map(font => loadFont(font));
-    await Promise.all(loadPromises);
-  };
-  async function loadFont({
-    name,
-    src
-  }) {
-    const fontFace = new FontFace(name, `url(${src})`);
-    try {
-      await fontFace.load();
-      document.fonts.add(fontFace);
-    } catch (e) {
-      console.error(`Font ${name} failed to load`);
-    }
-  }
   const addToCart = () => {
     if (addedToCart) return;
     setIsLoading(true);
@@ -4781,22 +4781,6 @@ const AcrylicBackLit = () => {
       product: NovaQuote.product
     }]);
   }, []);
-  const loadFont = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(async ({
-    name,
-    src
-  }) => {
-    const fontFace = new FontFace(name, `url(${src})`);
-    try {
-      await fontFace.load();
-      document.fonts.add(fontFace);
-    } catch (e) {
-      console.error(`Font ${name} failed to load`);
-    }
-  }, []);
-  const preloadFonts = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(async () => {
-    const loadPromises = NovaQuote.fonts.map(font => loadFont(font));
-    await Promise.all(loadPromises);
-  }, [loadFont]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting === '1') {
       const currentSignage = JSON.parse(NovaQuote.signage);
@@ -4813,8 +4797,6 @@ const AcrylicBackLit = () => {
     } else {
       setTempFolder(() => `Q-${NovaQuote.current_quote_id}`);
     }
-    console.log('Attempting to preload fonts...');
-    preloadFonts();
   }, []);
   const defaultArgs = {
     id: (0,uuid__WEBPACK_IMPORTED_MODULE_9__["default"])(),
@@ -5139,7 +5121,7 @@ function Letters({
   };
   const computePricing = () => {
     if (letterPricing.length > 0 && selectedLetterHeight && letters.trim().length > 0) {
-      var _tempTotal, _totalWithDiscount$to;
+      var _tempTotal$toFixed, _total$toFixed;
       const pricingDetail = letterPricing.find(item => parseInt(item.Height) === parseInt(selectedLetterHeight));
       console.log(letterPricing);
       const baseLetterPrice = parseFloat(pricingDetail?.BackLit);
@@ -5149,7 +5131,7 @@ function Letters({
       lettersArray.forEach(letter => {
         tempTotal += (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_8__.calculateLetterPrice)(letter, baseLetterPrice, noLowerCase);
       });
-      if (spacerStandoffDistance) {
+      if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_WITH_SPACER) {
         const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_8__.spacerPricing)(tempTotal);
         tempTotal += parseFloat(spacer.toFixed(2));
       }
@@ -5157,12 +5139,9 @@ function Letters({
       /* minimum price */
       tempTotal = tempTotal > 50 ? tempTotal : 50;
       let total = tempTotal * parseInt(sets);
-      const discount = 1;
-      let totalWithDiscount = total * discount;
-      let discountPrice = total - totalWithDiscount;
       return {
-        singlePrice: (_tempTotal = tempTotal) !== null && _tempTotal !== void 0 ? _tempTotal : 0,
-        total: (_totalWithDiscount$to = totalWithDiscount?.toFixed(2)) !== null && _totalWithDiscount$to !== void 0 ? _totalWithDiscount$to : 0
+        singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
+        total: (_total$toFixed = total?.toFixed(2)) !== null && _total$toFixed !== void 0 ? _total$toFixed : 0
       };
     } else {
       return {
@@ -5187,7 +5166,7 @@ function Letters({
       setUsdSinglePrice(0);
       setCadSinglePrice(0);
     }
-  }, [selectedLetterHeight, letters, sets, font, spacerStandoffDistance, letterPricing]);
+  }, [selectedLetterHeight, letters, sets, font, selectedMounting, letterPricing]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     setLetterHeightOptions(() => Array.from({
       length: parseInt(lettersHeight.max) - parseInt(lettersHeight.min) + 1
@@ -5646,11 +5625,11 @@ function Logo({
     }
   };
   const computePricing = () => {
-    var _tempTotal, _totalWithDiscount$to;
+    var _tempTotal$toFixed, _total$toFixed;
     if (!width || !height) return 0;
     const perInch = 0.7;
     let tempTotal = parseInt(width) * parseInt(height) * perInch;
-    if (spacerStandoffDistance) {
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER) {
       const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_5__.spacerPricing)(tempTotal);
       tempTotal += parseFloat(spacer.toFixed(2));
     }
@@ -5662,39 +5641,29 @@ function Logo({
 
     /* minimum price */
     tempTotal = tempTotal > 50 ? tempTotal : 50;
-    let total = tempTotal * parseInt(sets);
-    const discount = 1;
-    let totalWithDiscount = total * discount;
-    let discountPrice = total - totalWithDiscount;
+    const total = tempTotal * parseInt(sets);
     return {
-      singlePrice: (_tempTotal = tempTotal) !== null && _tempTotal !== void 0 ? _tempTotal : 0,
-      total: (_totalWithDiscount$to = totalWithDiscount?.toFixed(2)) !== null && _totalWithDiscount$to !== void 0 ? _totalWithDiscount$to : 0,
-      totalWithoutDiscount: total,
-      discount: discountPrice
+      singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
+      total: (_total$toFixed = total?.toFixed(2)) !== null && _total$toFixed !== void 0 ? _total$toFixed : 0
     };
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const {
       singlePrice,
-      total,
-      discount
+      total
     } = computePricing();
     if (total && singlePrice) {
       setUsdPrice(total);
       setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.EXCHANGE_RATE).toFixed(2));
       setUsdSinglePrice(singlePrice);
       setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.EXCHANGE_RATE).toFixed(2));
-      setUsdDiscount(discount.toFixed(2));
-      setCadDiscount((discount * _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.EXCHANGE_RATE).toFixed(2));
     } else {
       setUsdPrice(0);
       setCadPrice(0);
       setUsdSinglePrice(0);
       setCadSinglePrice(0);
-      setUsdDiscount(0);
-      setCadDiscount(0);
     }
-  }, [width, height, spacerStandoffDistance, sets]);
+  }, [width, height, selectedMounting, sets]);
   const checkAndAddMissingFields = () => {
     const missingFields = [];
     if (!acrylicChannelThickness) missingFields.push('Select Acrylic Thickness');
@@ -5970,22 +5939,6 @@ const AcrylicFrontBackLit = () => {
       product: NovaQuote.product
     }]);
   }, []);
-  const loadFont = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(async ({
-    name,
-    src
-  }) => {
-    const fontFace = new FontFace(name, `url(${src})`);
-    try {
-      await fontFace.load();
-      document.fonts.add(fontFace);
-    } catch (e) {
-      console.error(`Font ${name} failed to load`);
-    }
-  }, []);
-  const preloadFonts = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(async () => {
-    const loadPromises = NovaQuote.fonts.map(font => loadFont(font));
-    await Promise.all(loadPromises);
-  }, [loadFont]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting === '1') {
       const currentSignage = JSON.parse(NovaQuote.signage);
@@ -6002,8 +5955,6 @@ const AcrylicFrontBackLit = () => {
     } else {
       setTempFolder(() => `Q-${NovaQuote.current_quote_id}`);
     }
-    console.log('Attempting to preload fonts...');
-    preloadFonts();
   }, []);
   const defaultArgs = {
     id: (0,uuid__WEBPACK_IMPORTED_MODULE_9__["default"])(),
@@ -6158,7 +6109,7 @@ const lettersHeight = {
 function Letters({
   item
 }) {
-  var _item$letters, _item$comments, _item$font, _item$acrylicReturnPa, _item$waterproof, _item$acrylicChannelT, _item$ledLightColor, _item$acrylicFront, _item$vinylWhite, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdDiscount, _item$cadDiscount, _item$usdSinglePrice, _item$cadSinglePrice, _item$backOption, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets, _item$vinylWhite$colo;
+  var _item$letters, _item$comments, _item$font, _item$acrylicReturnPa, _item$waterproof, _item$acrylicChannelT, _item$ledLightColor, _item$acrylicFront, _item$vinylWhite, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$backOption, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets, _item$vinylWhite$colo;
   const {
     signage,
     setSignage,
@@ -6194,8 +6145,6 @@ function Letters({
   const [selectedLetterHeight, setSelectedLetterHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letterHeight = item.letterHeight) !== null && _item$letterHeight !== void 0 ? _item$letterHeight : '');
   const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdPrice = item.usdPrice) !== null && _item$usdPrice !== void 0 ? _item$usdPrice : 0);
   const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadPrice = item.cadPrice) !== null && _item$cadPrice !== void 0 ? _item$cadPrice : 0);
-  const [usdDiscount, setUsdDiscount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdDiscount = item.usdDiscount) !== null && _item$usdDiscount !== void 0 ? _item$usdDiscount : 0);
-  const [cadDiscount, setCadDiscount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadDiscount = item.cadDiscount) !== null && _item$cadDiscount !== void 0 ? _item$cadDiscount : 0);
   const [usdSinglePrice, setUsdSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdSinglePrice = item.usdSinglePrice) !== null && _item$usdSinglePrice !== void 0 ? _item$usdSinglePrice : 0);
   const [cadSinglePrice, setCadSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadSinglePrice = item.cadSinglePrice) !== null && _item$cadSinglePrice !== void 0 ? _item$cadSinglePrice : 0);
   const [backOption, setBackOption] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$backOption = item.backOption) !== null && _item$backOption !== void 0 ? _item$backOption : 'Backlit');
@@ -6302,9 +6251,6 @@ function Letters({
   const handleOnChangeLetterHeight = e => {
     setSelectedLetterHeight(e.target.value);
   };
-  const handleChangePieces = e => {
-    setPieces(e.target.value);
-  };
   const handleOnChangeWhite = e => {
     const target = e.target.value;
     setAcrylicFront(target);
@@ -6362,7 +6308,7 @@ function Letters({
   }
   const computePricing = () => {
     if (letterPricing.length > 0 && selectedLetterHeight && letters.trim().length > 0) {
-      var _tempTotal, _totalWithDiscount$to;
+      var _tempTotal, _total$toFixed;
       const pricingDetail = letterPricing.find(item => parseInt(item.Height) === parseInt(selectedLetterHeight));
       const baseLetterPrice = parseFloat(pricingDetail?.Value);
       let tempTotal = 0;
@@ -6377,22 +6323,17 @@ function Letters({
       if (acrylicFront === 'UV Printed') {
         tempTotal *= 1.15;
       }
-      if (spacerStandoffDistance) {
+      if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.STUD_WITH_SPACER) {
         const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_8__.spacerPricing)(tempTotal);
         tempTotal += parseFloat(spacer.toFixed(2));
       }
 
       /* minimum price */
       tempTotal = tempTotal > 50 ? tempTotal : 50;
-      let total = tempTotal * parseInt(sets);
-      const discount = 1;
-      let totalWithDiscount = total * discount;
-      let discountPrice = total - totalWithDiscount;
+      const total = tempTotal * parseInt(sets);
       return {
         singlePrice: (_tempTotal = tempTotal) !== null && _tempTotal !== void 0 ? _tempTotal : 0,
-        total: (_totalWithDiscount$to = totalWithDiscount?.toFixed(2)) !== null && _totalWithDiscount$to !== void 0 ? _totalWithDiscount$to : 0,
-        totalWithoutDiscount: total,
-        discount: discountPrice
+        total: (_total$toFixed = total.toFixed(2)) !== null && _total$toFixed !== void 0 ? _total$toFixed : 0
       };
     } else {
       return 0;
@@ -6401,25 +6342,20 @@ function Letters({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const {
       singlePrice,
-      total,
-      discount
+      total
     } = computePricing();
     if (total && singlePrice) {
       setUsdPrice(total);
       setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.EXCHANGE_RATE).toFixed(2));
       setUsdSinglePrice(singlePrice);
       setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.EXCHANGE_RATE).toFixed(2));
-      setUsdDiscount(discount.toFixed(2));
-      setCadDiscount((discount * _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.EXCHANGE_RATE).toFixed(2));
     } else {
       setUsdPrice(0);
       setCadPrice(0);
       setUsdSinglePrice(0);
       setCadSinglePrice(0);
-      setUsdDiscount(0);
-      setCadDiscount(0);
     }
-  }, [selectedLetterHeight, letters, sets, font, spacerStandoffDistance, letterPricing, acrylicFront]);
+  }, [selectedLetterHeight, letters, sets, font, selectedMounting, letterPricing, acrylicFront]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     setLetterHeightOptions(() => Array.from({
       length: parseInt(lettersHeight.max) - parseInt(lettersHeight.min) + 1
@@ -6458,6 +6394,9 @@ function Letters({
       if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (!acrylicFront) missingFields.push('Select Acrylic Front');
+    if (acrylicFront === '3M Vinyl') {
+      if (!vinylWhite?.name) missingFields.push('Select 3M Vinyl');
+    }
     if (!sets) missingFields.push('Select Quantity');
     if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
     if (missingFields.length > 0) {
@@ -6488,7 +6427,7 @@ function Letters({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [letters, font, color, acrylicChannelThickness, selectedMounting, waterproof, selectedLetterHeight, fileUrls, fontFileUrl, customColor, sets, studLength, spacerStandoffDistance]);
+  }, [letters, font, color, acrylicChannelThickness, selectedMounting, waterproof, selectedLetterHeight, fileUrls, fontFileUrl, customColor, sets, studLength, spacerStandoffDistance, vinylWhite, acrylicFront]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
   }, [letters, comments, font, acrylicChannelThickness, selectedMounting, waterproof, color, usdPrice, cadPrice, selectedLetterHeight, fileUrls, fileNames, filePaths, files, fontFileUrl, fontFileName, fontFilePath, fontFile, customColor, sets, studLength, spacerStandoffDistance, acrylicFront, vinylWhite, ledLightColor, usdSinglePrice, cadSinglePrice, backOption]);
@@ -6948,6 +6887,9 @@ function Logo({
       if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (!acrylicFront) missingFields.push('Select Acrylic Front');
+    if (acrylicFront === '3M Vinyl') {
+      if (!vinylWhite?.name) missingFields.push('Select 3M Vinyl');
+    }
     if (!sets) missingFields.push('Select Quantity');
     if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
     if (missingFields.length > 0) {
@@ -6978,7 +6920,7 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [color, width, height, acrylicChannelThickness, selectedMounting, waterproof, fileUrls, customColor, sets, studLength, spacerStandoffDistance]);
+  }, [color, width, height, acrylicChannelThickness, selectedMounting, waterproof, fileUrls, customColor, sets, studLength, spacerStandoffDistance, vinylWhite, acrylicFront]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
   }, [comments, width, height, acrylicChannelThickness, selectedMounting, waterproof, color, usdPrice, cadPrice, fileUrls, fileNames, filePaths, files, customColor, sets, studLength, spacerStandoffDistance, acrylicFront, vinylWhite, ledLightColor, usdSinglePrice, cadSinglePrice, backOption]);
@@ -6998,7 +6940,7 @@ function Logo({
     color?.name != 'Custom Color' && setCustomColor('');
   }, [color]);
   const computePricing = () => {
-    var _tempTotal, _totalWithDiscount$to;
+    var _tempTotal$toFixed, _total$toFixed;
     if (!width || !height) return 0;
     const perInch = 0.8;
     let tempTotal = parseInt(width) * parseInt(height) * perInch;
@@ -7008,7 +6950,7 @@ function Logo({
     if (acrylicFront === 'UV Printed') {
       tempTotal *= 1.15;
     }
-    if (spacerStandoffDistance) {
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER) {
       const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_5__.spacerPricing)(tempTotal);
       tempTotal += parseFloat(spacer.toFixed(2));
     }
@@ -7020,39 +6962,29 @@ function Logo({
 
     /* minimum price */
     tempTotal = tempTotal > 50 ? tempTotal : 50;
-    let total = tempTotal * parseInt(sets);
-    const discount = 1;
-    let totalWithDiscount = total * discount;
-    let discountPrice = total - totalWithDiscount;
+    const total = tempTotal * parseInt(sets);
     return {
-      singlePrice: (_tempTotal = tempTotal) !== null && _tempTotal !== void 0 ? _tempTotal : 0,
-      total: (_totalWithDiscount$to = totalWithDiscount?.toFixed(2)) !== null && _totalWithDiscount$to !== void 0 ? _totalWithDiscount$to : 0,
-      totalWithoutDiscount: total,
-      discount: discountPrice
+      singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
+      total: (_total$toFixed = total.toFixed(2)) !== null && _total$toFixed !== void 0 ? _total$toFixed : 0
     };
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const {
       singlePrice,
-      total,
-      discount
+      total
     } = computePricing();
     if (total && singlePrice) {
       setUsdPrice(total);
       setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.EXCHANGE_RATE).toFixed(2));
       setUsdSinglePrice(singlePrice);
       setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.EXCHANGE_RATE).toFixed(2));
-      setUsdDiscount(discount.toFixed(2));
-      setCadDiscount((discount * _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.EXCHANGE_RATE).toFixed(2));
     } else {
       setUsdPrice(0);
       setCadPrice(0);
       setUsdSinglePrice(0);
       setCadSinglePrice(0);
-      setUsdDiscount(0);
-      setCadDiscount(0);
     }
-  }, [width, height, acrylicFront, spacerStandoffDistance, sets]);
+  }, [width, height, acrylicFront, selectedMounting, sets]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     clasName: "py-4 my-4"
   }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
@@ -7315,22 +7247,6 @@ const AcrylicFrontLit = () => {
       product: NovaQuote.product
     }]);
   }, []);
-  const loadFont = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(async ({
-    name,
-    src
-  }) => {
-    const fontFace = new FontFace(name, `url(${src})`);
-    try {
-      await fontFace.load();
-      document.fonts.add(fontFace);
-    } catch (e) {
-      console.error(`Font ${name} failed to load`);
-    }
-  }, []);
-  const preloadFonts = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(async () => {
-    const loadPromises = NovaQuote.fonts.map(font => loadFont(font));
-    await Promise.all(loadPromises);
-  }, [loadFont]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting === '1') {
       const currentSignage = JSON.parse(NovaQuote.signage);
@@ -7347,8 +7263,6 @@ const AcrylicFrontLit = () => {
     } else {
       setTempFolder(() => `Q-${NovaQuote.current_quote_id}`);
     }
-    console.log('Attempting to preload fonts...');
-    preloadFonts();
   }, []);
   const defaultArgs = {
     id: (0,uuid__WEBPACK_IMPORTED_MODULE_9__["default"])(),
@@ -7715,7 +7629,7 @@ function Letters({
       if (acrylicFront === 'UV Printed') {
         tempTotal *= 1.15;
       }
-      if (spacerStandoffDistance) {
+      if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.STUD_WITH_SPACER) {
         const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_8__.spacerPricing)(tempTotal);
         tempTotal += parseFloat(spacer.toFixed(2));
       }
@@ -7757,7 +7671,7 @@ function Letters({
       setUsdDiscount(0);
       setCadDiscount(0);
     }
-  }, [selectedLetterHeight, letters, sets, font, spacerStandoffDistance, letterPricing, acrylicFront]);
+  }, [selectedLetterHeight, letters, sets, font, selectedMounting, letterPricing, acrylicFront]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     setLetterHeightOptions(() => Array.from({
       length: parseInt(lettersHeight.max) - parseInt(lettersHeight.min) + 1
@@ -7796,6 +7710,9 @@ function Letters({
       if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (!acrylicFront) missingFields.push('Select Acrylic Front');
+    if (acrylicFront === '3M Vinyl') {
+      if (!vinylWhite?.name) missingFields.push('Select 3M Vinyl');
+    }
     if (!sets) missingFields.push('Select Quantity');
     if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
     if (missingFields.length > 0) {
@@ -7826,7 +7743,7 @@ function Letters({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [letters, font, color, acrylicChannelThickness, selectedMounting, waterproof, selectedLetterHeight, fileUrls, fontFileUrl, customColor, sets, studLength, spacerStandoffDistance]);
+  }, [letters, font, color, acrylicChannelThickness, selectedMounting, waterproof, selectedLetterHeight, fileUrls, fontFileUrl, customColor, sets, studLength, spacerStandoffDistance, acrylicFront, vinylWhite]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
   }, [letters, comments, font, acrylicChannelThickness, selectedMounting, waterproof, color, usdPrice, cadPrice, selectedLetterHeight, fileUrls, fileNames, filePaths, files, fontFileUrl, fontFileName, fontFilePath, fontFile, customColor, sets, studLength, spacerStandoffDistance, acrylicFront, vinylWhite, ledLightColor, usdSinglePrice, cadSinglePrice]);
@@ -8269,6 +8186,9 @@ function Logo({
       if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (!acrylicFront) missingFields.push('Select Acrylic Front');
+    if (acrylicFront === '3M Vinyl') {
+      if (!vinylWhite?.name) missingFields.push('Select 3M Vinyl');
+    }
     if (!sets) missingFields.push('Select Quantity');
     if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
     if (missingFields.length > 0) {
@@ -8299,7 +8219,7 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [color, width, height, acrylicChannelThickness, selectedMounting, waterproof, fileUrls, customColor, sets, studLength, spacerStandoffDistance]);
+  }, [color, width, height, acrylicChannelThickness, selectedMounting, waterproof, fileUrls, customColor, sets, studLength, spacerStandoffDistance, acrylicFront, vinylWhite]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
   }, [comments, width, height, acrylicChannelThickness, selectedMounting, waterproof, color, usdPrice, cadPrice, fileUrls, fileNames, filePaths, files, customColor, sets, studLength, spacerStandoffDistance, acrylicFront, vinylWhite, ledLightColor, usdSinglePrice, cadSinglePrice]);
@@ -8319,7 +8239,7 @@ function Logo({
     color?.name != 'Custom Color' && setCustomColor('');
   }, [color]);
   const computePricing = () => {
-    var _tempTotal, _totalWithDiscount$to;
+    var _tempTotal$toFixed, _total$toFixed;
     if (!width || !height) return 0;
     const perInch = 0.7;
     let tempTotal = parseInt(width) * parseInt(height) * perInch;
@@ -8329,7 +8249,7 @@ function Logo({
     if (acrylicFront === 'UV Printed') {
       tempTotal *= 1.15;
     }
-    if (spacerStandoffDistance) {
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER) {
       const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_5__.spacerPricing)(tempTotal);
       tempTotal += parseFloat(spacer.toFixed(2));
     }
@@ -8341,39 +8261,29 @@ function Logo({
 
     /* minimum price */
     tempTotal = tempTotal > 50 ? tempTotal : 50;
-    let total = tempTotal * parseInt(sets);
-    const discount = 1;
-    let totalWithDiscount = total * discount;
-    let discountPrice = total - totalWithDiscount;
+    const total = tempTotal * parseInt(sets);
     return {
-      singlePrice: (_tempTotal = tempTotal) !== null && _tempTotal !== void 0 ? _tempTotal : 0,
-      total: (_totalWithDiscount$to = totalWithDiscount?.toFixed(2)) !== null && _totalWithDiscount$to !== void 0 ? _totalWithDiscount$to : 0,
-      totalWithoutDiscount: total,
-      discount: discountPrice
+      singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
+      total: (_total$toFixed = total?.toFixed(2)) !== null && _total$toFixed !== void 0 ? _total$toFixed : 0
     };
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const {
       singlePrice,
-      total,
-      discount
+      total
     } = computePricing();
     if (total && singlePrice) {
       setUsdPrice(total);
       setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.EXCHANGE_RATE).toFixed(2));
       setUsdSinglePrice(singlePrice);
       setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.EXCHANGE_RATE).toFixed(2));
-      setUsdDiscount(discount.toFixed(2));
-      setCadDiscount((discount * _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.EXCHANGE_RATE).toFixed(2));
     } else {
       setUsdPrice(0);
       setCadPrice(0);
       setUsdSinglePrice(0);
       setCadSinglePrice(0);
-      setUsdDiscount(0);
-      setCadDiscount(0);
     }
-  }, [width, height, acrylicFront, spacerStandoffDistance, sets]);
+  }, [width, height, acrylicFront, selectedMounting, sets]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     clasName: "py-4 my-4"
   }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
@@ -8595,22 +8505,6 @@ const AcrylicFrontSideLit = () => {
       product: NovaQuote.product
     }]);
   }, []);
-  const loadFont = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(async ({
-    name,
-    src
-  }) => {
-    const fontFace = new FontFace(name, `url(${src})`);
-    try {
-      await fontFace.load();
-      document.fonts.add(fontFace);
-    } catch (e) {
-      console.error(`Font ${name} failed to load`);
-    }
-  }, []);
-  const preloadFonts = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(async () => {
-    const loadPromises = NovaQuote.fonts.map(font => loadFont(font));
-    await Promise.all(loadPromises);
-  }, [loadFont]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting === '1') {
       const currentSignage = JSON.parse(NovaQuote.signage);
@@ -8627,8 +8521,6 @@ const AcrylicFrontSideLit = () => {
     } else {
       setTempFolder(() => `Q-${NovaQuote.current_quote_id}`);
     }
-    console.log('Attempting to preload fonts...');
-    preloadFonts();
   }, []);
   const defaultArgs = {
     id: (0,uuid__WEBPACK_IMPORTED_MODULE_9__["default"])(),
@@ -8777,7 +8669,7 @@ const lettersHeight = {
 function Letters({
   item
 }) {
-  var _item$letters, _item$comments, _item$font, _item$frontOption, _item$waterproof, _item$acrylicReturn, _item$vinylWhite, _item$acrylicChannelT, _item$ledLightColor, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdDiscount, _item$cadDiscount, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets, _item$vinylWhite$colo;
+  var _item$letters, _item$comments, _item$font, _item$frontOption, _item$waterproof, _item$acrylicReturn, _item$vinylWhite, _item$acrylicChannelT, _item$ledLightColor, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets, _item$vinylWhite$colo;
   const {
     signage,
     setSignage,
@@ -8812,8 +8704,6 @@ function Letters({
   const [selectedLetterHeight, setSelectedLetterHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letterHeight = item.letterHeight) !== null && _item$letterHeight !== void 0 ? _item$letterHeight : '');
   const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdPrice = item.usdPrice) !== null && _item$usdPrice !== void 0 ? _item$usdPrice : 0);
   const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadPrice = item.cadPrice) !== null && _item$cadPrice !== void 0 ? _item$cadPrice : 0);
-  const [usdDiscount, setUsdDiscount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdDiscount = item.usdDiscount) !== null && _item$usdDiscount !== void 0 ? _item$usdDiscount : 0);
-  const [cadDiscount, setCadDiscount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadDiscount = item.cadDiscount) !== null && _item$cadDiscount !== void 0 ? _item$cadDiscount : 0);
   const [usdSinglePrice, setUsdSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdSinglePrice = item.usdSinglePrice) !== null && _item$usdSinglePrice !== void 0 ? _item$usdSinglePrice : 0);
   const [cadSinglePrice, setCadSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadSinglePrice = item.cadSinglePrice) !== null && _item$cadSinglePrice !== void 0 ? _item$cadSinglePrice : 0);
   const [selectedMounting, setSelectedMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
@@ -8962,7 +8852,7 @@ function Letters({
   }
   const computePricing = () => {
     if (letterPricing.length > 0 && selectedLetterHeight && letters.trim().length > 0) {
-      var _tempTotal, _totalWithDiscount$to;
+      var _tempTotal$toFixed, _total$toFixed;
       const pricingDetail = letterPricing.find(item => parseInt(item.Height) === parseInt(selectedLetterHeight));
       const baseLetterPrice = parseFloat(pricingDetail?.Value);
       let tempTotal = 0;
@@ -8971,7 +8861,7 @@ function Letters({
       lettersArray.forEach(letter => {
         tempTotal += calculateLetterPrice(letter, baseLetterPrice, noLowerCase);
       });
-      if (spacerStandoffDistance) {
+      if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_WITH_SPACER) {
         const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_8__.spacerPricing)(tempTotal);
         tempTotal += parseFloat(spacer.toFixed(2));
       }
@@ -8984,15 +8874,10 @@ function Letters({
 
       /* minimum price */
       tempTotal = tempTotal > 50 ? tempTotal : 50;
-      let total = tempTotal * parseInt(sets);
-      const discount = 1;
-      let totalWithDiscount = total * discount;
-      let discountPrice = total - totalWithDiscount;
+      const total = tempTotal * parseInt(sets);
       return {
-        singlePrice: (_tempTotal = tempTotal) !== null && _tempTotal !== void 0 ? _tempTotal : 0,
-        total: (_totalWithDiscount$to = totalWithDiscount?.toFixed(2)) !== null && _totalWithDiscount$to !== void 0 ? _totalWithDiscount$to : 0,
-        totalWithoutDiscount: total,
-        discount: discountPrice
+        singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
+        total: (_total$toFixed = total?.toFixed(2)) !== null && _total$toFixed !== void 0 ? _total$toFixed : 0
       };
     } else {
       return 0;
@@ -9001,25 +8886,20 @@ function Letters({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const {
       singlePrice,
-      total,
-      discount
+      total
     } = computePricing();
     if (total && singlePrice) {
       setUsdPrice(total);
       setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.EXCHANGE_RATE).toFixed(2));
       setUsdSinglePrice(singlePrice);
       setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.EXCHANGE_RATE).toFixed(2));
-      setUsdDiscount(discount.toFixed(2));
-      setCadDiscount((discount * _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.EXCHANGE_RATE).toFixed(2));
     } else {
       setUsdPrice(0);
       setCadPrice(0);
       setUsdSinglePrice(0);
       setCadSinglePrice(0);
-      setUsdDiscount(0);
-      setCadDiscount(0);
     }
-  }, [selectedLetterHeight, letters, sets, font, spacerStandoffDistance, letterPricing, frontOption]);
+  }, [selectedLetterHeight, letters, sets, font, selectedMounting, letterPricing, frontOption]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     setLetterHeightOptions(() => Array.from({
       length: parseInt(lettersHeight.max) - parseInt(lettersHeight.min) + 1
@@ -9087,7 +8967,7 @@ function Letters({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [letters, font, acrylicChannelThickness, selectedMounting, waterproof, selectedLetterHeight, fileUrls, fontFileUrl, sets, studLength, spacerStandoffDistance]);
+  }, [letters, font, acrylicChannelThickness, selectedMounting, waterproof, selectedLetterHeight, fileUrls, fontFileUrl, sets, studLength, spacerStandoffDistance, frontOption, vinylWhite]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
   }, [letters, comments, font, acrylicChannelThickness, selectedMounting, waterproof, usdPrice, cadPrice, selectedLetterHeight, fileUrls, fileNames, filePaths, files, fontFileUrl, fontFileName, fontFilePath, fontFile, sets, studLength, spacerStandoffDistance, ledLightColor, usdSinglePrice, cadSinglePrice, vinylWhite, frontOption]);
@@ -9474,7 +9354,7 @@ function Logo({
     }
   };
   const computePricing = () => {
-    var _tempTotal, _totalWithDiscount$to;
+    var _tempTotal$toFixed, _total$toFixed;
     if (!width || !height) return 0;
     const perInch = 0.8;
     let tempTotal = parseInt(width) * parseInt(height) * perInch;
@@ -9484,7 +9364,7 @@ function Logo({
     if (frontOption === 'UV Printed') {
       tempTotal *= 1.15;
     }
-    if (spacerStandoffDistance) {
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER) {
       const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_5__.spacerPricing)(tempTotal);
       tempTotal += parseFloat(spacer.toFixed(2));
     }
@@ -9496,39 +9376,29 @@ function Logo({
 
     /* minimum price */
     tempTotal = tempTotal > 50 ? tempTotal : 50;
-    let total = tempTotal * parseInt(sets);
-    const discount = 1;
-    let totalWithDiscount = total * discount;
-    let discountPrice = total - totalWithDiscount;
+    const total = tempTotal * parseInt(sets);
     return {
-      singlePrice: (_tempTotal = tempTotal) !== null && _tempTotal !== void 0 ? _tempTotal : 0,
-      total: (_totalWithDiscount$to = totalWithDiscount?.toFixed(2)) !== null && _totalWithDiscount$to !== void 0 ? _totalWithDiscount$to : 0,
-      totalWithoutDiscount: total,
-      discount: discountPrice
+      singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
+      total: (_total$toFixed = total?.toFixed(2)) !== null && _total$toFixed !== void 0 ? _total$toFixed : 0
     };
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const {
       singlePrice,
-      total,
-      discount
+      total
     } = computePricing();
     if (total && singlePrice) {
       setUsdPrice(total);
       setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.EXCHANGE_RATE).toFixed(2));
       setUsdSinglePrice(singlePrice);
       setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.EXCHANGE_RATE).toFixed(2));
-      setUsdDiscount(discount.toFixed(2));
-      setCadDiscount((discount * _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.EXCHANGE_RATE).toFixed(2));
     } else {
       setUsdPrice(0);
       setCadPrice(0);
       setUsdSinglePrice(0);
       setCadSinglePrice(0);
-      setUsdDiscount(0);
-      setCadDiscount(0);
     }
-  }, [width, height, frontOption, spacerStandoffDistance, sets]);
+  }, [width, height, frontOption, selectedMounting, sets]);
   const checkAndAddMissingFields = () => {
     const missingFields = [];
     if (!acrylicChannelThickness) missingFields.push('Select Acrylic Thickness');
@@ -9577,7 +9447,7 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [acrylicChannelThickness, selectedMounting, waterproof, fileUrls, sets, studLength, spacerStandoffDistance, width, height]);
+  }, [acrylicChannelThickness, selectedMounting, waterproof, fileUrls, sets, studLength, spacerStandoffDistance, width, height, vinylWhite, frontOption]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
   }, [comments, acrylicChannelThickness, selectedMounting, waterproof, usdPrice, cadPrice, fileUrls, fileNames, filePaths, files, sets, studLength, spacerStandoffDistance, ledLightColor, usdSinglePrice, cadSinglePrice, vinylWhite, frontOption, width, height]);
@@ -9823,22 +9693,6 @@ const AcrylicSideLit = () => {
       product: NovaQuote.product
     }]);
   }, []);
-  const loadFont = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(async ({
-    name,
-    src
-  }) => {
-    const fontFace = new FontFace(name, `url(${src})`);
-    try {
-      await fontFace.load();
-      document.fonts.add(fontFace);
-    } catch (e) {
-      console.error(`Font ${name} failed to load`);
-    }
-  }, []);
-  const preloadFonts = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(async () => {
-    const loadPromises = NovaQuote.fonts.map(font => loadFont(font));
-    await Promise.all(loadPromises);
-  }, [loadFont]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting === '1') {
       const currentSignage = JSON.parse(NovaQuote.signage);
@@ -9855,8 +9709,6 @@ const AcrylicSideLit = () => {
     } else {
       setTempFolder(() => `Q-${NovaQuote.current_quote_id}`);
     }
-    console.log('Attempting to preload fonts...');
-    preloadFonts();
   }, []);
   const defaultArgs = {
     id: (0,uuid__WEBPACK_IMPORTED_MODULE_9__["default"])(),
@@ -10002,7 +9854,7 @@ const lettersHeight = {
 function Letters({
   item
 }) {
-  var _item$letters, _item$comments, _item$font, _item$frontOption, _item$waterproof, _item$acrylicReturn, _item$acrylicChannelT, _item$ledLightColor, _item$metalLaminate, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdDiscount, _item$cadDiscount, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
+  var _item$letters, _item$comments, _item$font, _item$frontOption, _item$waterproof, _item$acrylicReturn, _item$acrylicChannelT, _item$ledLightColor, _item$metalLaminate, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
   const {
     signage,
     setSignage,
@@ -10034,8 +9886,6 @@ function Letters({
   const [selectedLetterHeight, setSelectedLetterHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letterHeight = item.letterHeight) !== null && _item$letterHeight !== void 0 ? _item$letterHeight : '');
   const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdPrice = item.usdPrice) !== null && _item$usdPrice !== void 0 ? _item$usdPrice : 0);
   const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadPrice = item.cadPrice) !== null && _item$cadPrice !== void 0 ? _item$cadPrice : 0);
-  const [usdDiscount, setUsdDiscount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdDiscount = item.usdDiscount) !== null && _item$usdDiscount !== void 0 ? _item$usdDiscount : 0);
-  const [cadDiscount, setCadDiscount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadDiscount = item.cadDiscount) !== null && _item$cadDiscount !== void 0 ? _item$cadDiscount : 0);
   const [usdSinglePrice, setUsdSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdSinglePrice = item.usdSinglePrice) !== null && _item$usdSinglePrice !== void 0 ? _item$usdSinglePrice : 0);
   const [cadSinglePrice, setCadSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadSinglePrice = item.cadSinglePrice) !== null && _item$cadSinglePrice !== void 0 ? _item$cadSinglePrice : 0);
   const [selectedMounting, setSelectedMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
@@ -10184,7 +10034,7 @@ function Letters({
   }
   const computePricing = () => {
     if (letterPricing.length > 0 && selectedLetterHeight && letters.trim().length > 0) {
-      var _tempTotal, _totalWithDiscount$to;
+      var _tempTotal$toFixed, _total$toFixed;
       const pricingDetail = letterPricing.find(item => parseInt(item.Height) === parseInt(selectedLetterHeight));
       const baseLetterPrice = parseFloat(pricingDetail?.Value);
       let tempTotal = 0;
@@ -10196,49 +10046,42 @@ function Letters({
       if (color === 'Metal Laminate') {
         tempTotal *= 1.15;
       }
-      if (spacerStandoffDistance) {
+      if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_WITH_SPACER) {
         const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_8__.spacerPricing)(tempTotal);
         tempTotal += parseFloat(spacer.toFixed(2));
       }
 
       /* minimum price */
       tempTotal = tempTotal > 50 ? tempTotal : 50;
-      let total = tempTotal * parseInt(sets);
-      const discount = 1;
-      let totalWithDiscount = total * discount;
-      let discountPrice = total - totalWithDiscount;
+      const total = tempTotal * parseInt(sets);
       return {
-        singlePrice: (_tempTotal = tempTotal) !== null && _tempTotal !== void 0 ? _tempTotal : 0,
-        total: (_totalWithDiscount$to = totalWithDiscount?.toFixed(2)) !== null && _totalWithDiscount$to !== void 0 ? _totalWithDiscount$to : 0,
-        totalWithoutDiscount: total,
-        discount: discountPrice
+        singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
+        total: (_total$toFixed = total?.toFixed(2)) !== null && _total$toFixed !== void 0 ? _total$toFixed : 0
       };
     } else {
-      return 0;
+      return {
+        singlePrice: 0,
+        total: 0
+      };
     }
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const {
       singlePrice,
-      total,
-      discount
+      total
     } = computePricing();
     if (total && singlePrice) {
       setUsdPrice(total);
       setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.EXCHANGE_RATE).toFixed(2));
       setUsdSinglePrice(singlePrice);
       setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.EXCHANGE_RATE).toFixed(2));
-      setUsdDiscount(discount.toFixed(2));
-      setCadDiscount((discount * _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.EXCHANGE_RATE).toFixed(2));
     } else {
       setUsdPrice(0);
       setCadPrice(0);
       setUsdSinglePrice(0);
       setCadSinglePrice(0);
-      setUsdDiscount(0);
-      setCadDiscount(0);
     }
-  }, [selectedLetterHeight, letters, sets, font, spacerStandoffDistance, letterPricing, color]);
+  }, [selectedLetterHeight, letters, sets, font, selectedMounting, letterPricing, color]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     setLetterHeightOptions(() => Array.from({
       length: parseInt(lettersHeight.max) - parseInt(lettersHeight.min) + 1
@@ -10563,7 +10406,7 @@ const frontOptionOptions = [{
 function Logo({
   item
 }) {
-  var _item$comments, _item$width, _item$height, _item$frontOption, _item$waterproof, _item$acrylicReturn, _item$acrylicChannelT, _item$ledLightColor, _item$metalLaminate, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$usdPrice, _item$cadPrice, _item$usdDiscount, _item$cadDiscount, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
+  var _item$comments, _item$width, _item$height, _item$frontOption, _item$waterproof, _item$acrylicReturn, _item$acrylicChannelT, _item$ledLightColor, _item$metalLaminate, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
   const {
     signage,
     setSignage,
@@ -10588,8 +10431,6 @@ function Logo({
   const [customColor, setCustomColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$customColor = item.customColor) !== null && _item$customColor !== void 0 ? _item$customColor : '');
   const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdPrice = item.usdPrice) !== null && _item$usdPrice !== void 0 ? _item$usdPrice : 0);
   const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadPrice = item.cadPrice) !== null && _item$cadPrice !== void 0 ? _item$cadPrice : 0);
-  const [usdDiscount, setUsdDiscount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdDiscount = item.usdDiscount) !== null && _item$usdDiscount !== void 0 ? _item$usdDiscount : 0);
-  const [cadDiscount, setCadDiscount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadDiscount = item.cadDiscount) !== null && _item$cadDiscount !== void 0 ? _item$cadDiscount : 0);
   const [usdSinglePrice, setUsdSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdSinglePrice = item.usdSinglePrice) !== null && _item$usdSinglePrice !== void 0 ? _item$usdSinglePrice : 0);
   const [cadSinglePrice, setCadSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadSinglePrice = item.cadSinglePrice) !== null && _item$cadSinglePrice !== void 0 ? _item$cadSinglePrice : 0);
   const [selectedMounting, setSelectedMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
@@ -10689,14 +10530,17 @@ function Logo({
     }
   };
   const computePricing = () => {
-    var _tempTotal, _totalWithDiscount$to;
-    if (!width || !height) return 0;
+    var _tempTotal$toFixed, _total$toFixed;
+    if (!width || !height) return {
+      singlePrice: 0,
+      total: 0
+    };
     const perInch = 0.8;
     let tempTotal = parseInt(width) * parseInt(height) * perInch;
     if (color === 'Metal Laminate') {
       tempTotal *= 1.15;
     }
-    if (spacerStandoffDistance) {
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER) {
       const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_5__.spacerPricing)(tempTotal);
       tempTotal += parseFloat(spacer.toFixed(2));
     }
@@ -10708,39 +10552,29 @@ function Logo({
 
     /* minimum price */
     tempTotal = tempTotal > 50 ? tempTotal : 50;
-    let total = tempTotal * parseInt(sets);
-    const discount = 1;
-    let totalWithDiscount = total * discount;
-    let discountPrice = total - totalWithDiscount;
+    const total = tempTotal * parseInt(sets);
     return {
-      singlePrice: (_tempTotal = tempTotal) !== null && _tempTotal !== void 0 ? _tempTotal : 0,
-      total: (_totalWithDiscount$to = totalWithDiscount?.toFixed(2)) !== null && _totalWithDiscount$to !== void 0 ? _totalWithDiscount$to : 0,
-      totalWithoutDiscount: total,
-      discount: discountPrice
+      singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
+      total: (_total$toFixed = total?.toFixed(2)) !== null && _total$toFixed !== void 0 ? _total$toFixed : 0
     };
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const {
       singlePrice,
-      total,
-      discount
+      total
     } = computePricing();
     if (total && singlePrice) {
       setUsdPrice(total);
       setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.EXCHANGE_RATE).toFixed(2));
       setUsdSinglePrice(singlePrice);
       setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.EXCHANGE_RATE).toFixed(2));
-      setUsdDiscount(discount.toFixed(2));
-      setCadDiscount((discount * _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.EXCHANGE_RATE).toFixed(2));
     } else {
       setUsdPrice(0);
       setCadPrice(0);
       setUsdSinglePrice(0);
       setCadSinglePrice(0);
-      setUsdDiscount(0);
-      setCadDiscount(0);
     }
-  }, [width, height, spacerStandoffDistance, color, sets]);
+  }, [width, height, selectedMounting, color, sets]);
   const checkAndAddMissingFields = () => {
     const missingFields = [];
     if (!acrylicChannelThickness) missingFields.push('Select Acrylic Thickness');
@@ -11311,33 +11145,6 @@ function LaserCutAcrylic() {
       spacerStandoffDistance: '',
       product: NovaQuote.product
     }]);
-  }
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    console.log('Attempting to preload fonts...');
-    async function preloadFonts() {
-      try {
-        await loadingFonts();
-      } catch (error) {
-        console.error('Error loading fonts:', error);
-      }
-    }
-    preloadFonts();
-  }, []);
-  const loadingFonts = async () => {
-    const loadPromises = NovaQuote.fonts.map(font => loadFont(font));
-    await Promise.all(loadPromises);
-  };
-  async function loadFont({
-    name,
-    src
-  }) {
-    const fontFace = new FontFace(name, `url(${src})`);
-    try {
-      await fontFace.load();
-      document.fonts.add(fontFace);
-    } catch (e) {
-      console.error(`Font ${name} failed to load`);
-    }
   }
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting === '1') {
@@ -13235,33 +13042,6 @@ function MetalLaminate() {
       return [...prevSignage, newSignage];
     });
   }
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    console.log('Attempting to preload fonts...');
-    async function preloadFonts() {
-      try {
-        await loadingFonts();
-      } catch (error) {
-        console.error('Error loading fonts:', error);
-      }
-    }
-    preloadFonts();
-  }, []);
-  const loadingFonts = async () => {
-    const loadPromises = NovaQuote.fonts.map(font => loadFont(font));
-    await Promise.all(loadPromises);
-  };
-  async function loadFont({
-    name,
-    src
-  }) {
-    const fontFace = new FontFace(name, `url(${src})`);
-    try {
-      await fontFace.load();
-      document.fonts.add(fontFace);
-    } catch (e) {
-      console.error(`Font ${name} failed to load`);
-    }
-  }
 
   /* useEffect(() => {
   	localStorage.setItem(storage + '-x', JSON.stringify(signage));
@@ -14509,7 +14289,7 @@ const UV_PRICE = 1.05;
 function Logo({
   item
 }) {
-  var _item$mounting, _item$acrylicThicknes, _item$width, _item$usdPrice, _item$cadPrice, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$baseColor, _item$finishing, _item$height, _item$comments, _item$waterproof, _item$studLength, _item$spacerStandoffD, _item$sets;
+  var _item$mounting, _item$acrylicThicknes, _item$width, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$baseColor, _item$finishing, _item$height, _item$comments, _item$waterproof, _item$studLength, _item$spacerStandoffD, _item$sets;
   const {
     signage,
     setSignage,
@@ -14521,6 +14301,8 @@ function Logo({
   const [maxWidthHeight, setMaxWidthHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(23);
   const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdPrice = item.usdPrice) !== null && _item$usdPrice !== void 0 ? _item$usdPrice : 0);
   const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadPrice = item.cadPrice) !== null && _item$cadPrice !== void 0 ? _item$cadPrice : 0);
+  const [usdSinglePrice, setUsdSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdSinglePrice = item.usdSinglePrice) !== null && _item$usdSinglePrice !== void 0 ? _item$usdSinglePrice : 0);
+  const [cadSinglePrice, setCadSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadSinglePrice = item.cadSinglePrice) !== null && _item$cadSinglePrice !== void 0 ? _item$cadSinglePrice : 0);
   const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileNames = item.fileNames) !== null && _item$fileNames !== void 0 ? _item$fileNames : []);
   const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrls = item.fileUrls) !== null && _item$fileUrls !== void 0 ? _item$fileUrls : []);
   const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$filePaths = item.filePaths) !== null && _item$filePaths !== void 0 ? _item$filePaths : []);
@@ -14695,6 +14477,8 @@ function Logo({
           height,
           usdPrice,
           cadPrice,
+          usdSinglePrice,
+          cadSinglePrice,
           finishing: selectedFinishing,
           files,
           fileNames,
@@ -14764,36 +14548,57 @@ function Logo({
   }, [selectedThickness, selectedMounting, waterproof, width, height, fileUrls, fileNames, selectedFinishing, files, filePaths, baseColor, printPreference, customColor, sets, studLength, spacerStandoffDistance]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-  }, [comments, selectedThickness, selectedMounting, waterproof, width, height, usdPrice, cadPrice, fileUrls, fileNames, customColor, selectedFinishing, files, filePaths, printPreference, baseColor, sets, studLength, spacerStandoffDistance]);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+  }, [comments, selectedThickness, selectedMounting, waterproof, width, height, usdPrice, cadPrice, usdSinglePrice, cadSinglePrice, fileUrls, fileNames, customColor, selectedFinishing, files, filePaths, printPreference, baseColor, sets, studLength, spacerStandoffDistance]);
+  function computePricing() {
     if (width && height && selectedThickness && waterproof && logoPricingObject !== null) {
       const logoPricing = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_4__.getLogoPricingTablebyThickness)(`${selectedThickness.value}mm`, logoPricingObject);
       if (logoPricing !== undefined) {
+        var _tempTotal$toFixed, _total$toFixed;
         const logoPricingTable = logoPricing !== undefined ? (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_3__["default"])(logoPricing) : [];
+        let tempTotal = 0;
         const computed = logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
-        let multiplier = 0;
+        if (computed) {
+          tempTotal += computed;
+        }
         if (waterproof) {
-          multiplier = waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
+          tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
         }
-        let total = parseFloat((computed * multiplier).toFixed(2));
-        total *= selectedFinishing === _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.GLOSS_FINISH ? 1.1 : 1;
-        total *= baseColor === 'Custom Color' ? UV_PRICE : 1;
-        total *= 1.2;
+        if (selectedFinishing) tempTotal *= selectedFinishing === _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.GLOSS_FINISH ? 1.1 : 1;
+        if (baseColor) tempTotal *= baseColor === 'Custom Color' ? UV_PRICE : 1;
+        tempTotal *= 1.2;
         if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.STUD_WITH_SPACER) {
-          let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_4__.spacerPricing)(total);
+          let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_4__.spacerPricing)(tempTotal);
           spacer = parseFloat(spacer.toFixed(2));
-          total += spacer;
+          tempTotal += spacer;
         }
-        total *= sets;
-        setUsdPrice(parseFloat(total.toFixed(2)));
-        setCadPrice((total * parseFloat(_utils_defaults__WEBPACK_IMPORTED_MODULE_6__.EXCHANGE_RATE)).toFixed(2));
-      } else {
-        setUsdPrice(0);
-        setCadPrice(0);
+        const total = tempTotal * sets;
+        return {
+          singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
+          total: (_total$toFixed = total.toFixed(2)) !== null && _total$toFixed !== void 0 ? _total$toFixed : 0
+        };
       }
+    } else {
+      return {
+        singlePrice: 0,
+        total: 0
+      };
+    }
+  }
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    const {
+      singlePrice,
+      total
+    } = computePricing();
+    if (total && singlePrice) {
+      setUsdPrice(total);
+      setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.EXCHANGE_RATE).toFixed(2));
+      setUsdSinglePrice(singlePrice);
+      setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.EXCHANGE_RATE).toFixed(2));
     } else {
       setUsdPrice(0);
       setCadPrice(0);
+      setUsdSinglePrice(0);
+      setCadSinglePrice(0);
     }
   }, [width, height, selectedThickness, waterproof, selectedFinishing, baseColor, selectedMounting, sets]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -18436,33 +18241,6 @@ function Letters({
     }
     fetchLetterPricing();
   }, []);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    console.log('Attempting to preload fonts...');
-    async function preloadFonts() {
-      try {
-        await loadingFonts();
-      } catch (error) {
-        console.error('Error loading fonts:', error);
-      }
-    }
-    preloadFonts();
-  }, []);
-  const loadingFonts = async () => {
-    const loadPromises = NovaQuote.fonts.map(font => loadFont(font));
-    await Promise.all(loadPromises);
-  };
-  async function loadFont({
-    name,
-    src
-  }) {
-    const fontFace = new FontFace(name, `url(${src})`);
-    try {
-      await fontFace.load();
-      document.fonts.add(fontFace);
-    } catch (e) {
-      console.error(`Font ${name} failed to load`);
-    }
-  }
   const headlineRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const adjustFontSize = () => {
     const container = headlineRef.current.parentNode;
@@ -18783,6 +18561,53 @@ function Letters({
       }
     }
   }, [selectedLetterHeight, letters, waterproof, lettersHeight, vinylWhite, mounting, sets, font]);
+  const computePricing = () => {
+    if (letterPricing.length > 0 && selectedLetterHeight && depth) {
+      var _tempTotal$toFixed, _total$toFixed;
+      const pricingDetail = letterPricing[selectedLetterHeight - 5];
+      const baseLetterPrice = pricingDetail[depth.value];
+      let tempTotal = 0;
+      const lettersArray = letters.trim().split('');
+      const noLowerCase = NovaQuote.no_lowercase.includes(font);
+      lettersArray.forEach(letter => {
+        tempTotal += (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_13__.calculateLetterPrice)(letter, baseLetterPrice, noLowerCase);
+      });
+      if (waterproof) tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.INDOOR_NOT_WATERPROOF ? 1 : 1.02;
+      if (frontAcrylicCover === '3M Vinyl') tempTotal *= 1.1;
+      if (mounting && mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER) {
+        let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_13__.spacerPricing)(tempTotal);
+        spacer = parseFloat(spacer.toFixed(2));
+        tempTotal += spacer;
+      }
+      const total = tempTotal * parseInt(sets);
+      return {
+        singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
+        total: (_total$toFixed = total?.toFixed(2)) !== null && _total$toFixed !== void 0 ? _total$toFixed : 0
+      };
+    } else {
+      return {
+        singlePrice: 0,
+        total: 0
+      };
+    }
+  };
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    const {
+      singlePrice,
+      total
+    } = computePricing();
+    if (total && singlePrice) {
+      setUsdPrice(total);
+      setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.EXCHANGE_RATE).toFixed(2));
+      setUsdSinglePrice(singlePrice);
+      setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.EXCHANGE_RATE).toFixed(2));
+    } else {
+      setUsdPrice(0);
+      setCadPrice(0);
+      setUsdSinglePrice(0);
+      setCadSinglePrice(0);
+    }
+  }, [selectedLetterHeight, letters, waterproof, lettersHeight, frontAcrylicCover, mounting, sets, font]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     color?.name != 'Custom Color' && setCustomColor('');
     font != 'Custom font' && setFontFileUrl('');
@@ -19020,7 +18845,7 @@ __webpack_require__.r(__webpack_exports__);
 function Logo({
   item
 }) {
-  var _item$comments, _item$width, _item$height, _item$returnColor, _item$vinylWhite, _item$waterproof, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$usdPrice, _item$cadPrice, _item$usdDiscount, _item$cadDiscount, _item$usdSinglePrice, _item$cadSinglePrice, _item$studLength, _item$spacerStandoffD, _item$frontAcrylicCov, _item$mounting, _item$ledLightColor, _item$sets, _item$acrylicReveal;
+  var _item$comments, _item$width, _item$height, _item$returnColor, _item$vinylWhite, _item$waterproof, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$studLength, _item$spacerStandoffD, _item$frontAcrylicCov, _item$mounting, _item$ledLightColor, _item$sets, _item$acrylicReveal;
   const {
     signage,
     setSignage,
@@ -19048,8 +18873,6 @@ function Logo({
   const [customColor, setCustomColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$customColor = item.customColor) !== null && _item$customColor !== void 0 ? _item$customColor : '');
   const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdPrice = item.usdPrice) !== null && _item$usdPrice !== void 0 ? _item$usdPrice : 0);
   const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadPrice = item.cadPrice) !== null && _item$cadPrice !== void 0 ? _item$cadPrice : 0);
-  const [usdDiscount, setUsdDiscount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdDiscount = item.usdDiscount) !== null && _item$usdDiscount !== void 0 ? _item$usdDiscount : 0);
-  const [cadDiscount, setCadDiscount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadDiscount = item.cadDiscount) !== null && _item$cadDiscount !== void 0 ? _item$cadDiscount : 0);
   const [usdSinglePrice, setUsdSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdSinglePrice = item.usdSinglePrice) !== null && _item$usdSinglePrice !== void 0 ? _item$usdSinglePrice : 0);
   const [cadSinglePrice, setCadSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadSinglePrice = item.cadSinglePrice) !== null && _item$cadSinglePrice !== void 0 ? _item$cadSinglePrice : 0);
   const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$studLength = item.studLength) !== null && _item$studLength !== void 0 ? _item$studLength : '');
@@ -19250,8 +19073,13 @@ function Logo({
     }
   };
   const computePricing = () => {
-    var _tempTotal, _totalWithDiscount$to;
-    if (!width || !height || !depth?.value) return 0;
+    var _tempTotal$toFixed, _total$toFixed;
+    if (!width || !height || !depth?.value) {
+      return {
+        singlePrice: 0,
+        total: 0
+      };
+    }
     let P = 0;
     let S = 0;
     const F = 30;
@@ -19282,44 +19110,33 @@ function Logo({
     if (waterproof && waterproof !== _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.INDOOR_NOT_WATERPROOF) {
       tempTotal *= 1.03;
     }
-    if (spacerStandoffDistance) {
+    if (mounting && mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER) {
       const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_7__.spacerPricing)(tempTotal);
       tempTotal += parseFloat(spacer.toFixed(2));
     }
-    let total = tempTotal * parseInt(sets);
-    total = total.toFixed(1);
-    const discount = 1;
-    let totalWithDiscount = total * discount;
-    let discountPrice = total - totalWithDiscount;
+    const total = tempTotal * parseInt(sets);
     return {
-      singlePrice: (_tempTotal = tempTotal) !== null && _tempTotal !== void 0 ? _tempTotal : 0,
-      total: (_totalWithDiscount$to = totalWithDiscount?.toFixed(2)) !== null && _totalWithDiscount$to !== void 0 ? _totalWithDiscount$to : 0,
-      totalWithoutDiscount: total,
-      discount: discountPrice
+      singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
+      total: (_total$toFixed = total.toFixed(2)) !== null && _total$toFixed !== void 0 ? _total$toFixed : 0
     };
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const {
       singlePrice,
-      total,
-      discount
+      total
     } = computePricing();
     if (total && singlePrice) {
       setUsdPrice(total);
       setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.EXCHANGE_RATE).toFixed(2));
       setUsdSinglePrice(singlePrice);
       setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.EXCHANGE_RATE).toFixed(2));
-      setUsdDiscount(discount.toFixed(2));
-      setCadDiscount((discount * _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.EXCHANGE_RATE).toFixed(2));
     } else {
       setUsdPrice(0);
       setCadPrice(0);
       setUsdSinglePrice(0);
       setCadSinglePrice(0);
-      setUsdDiscount(0);
-      setCadDiscount(0);
     }
-  }, [depth, width, height, waterproof, spacerStandoffDistance, frontAcrylicCover, sets]);
+  }, [depth, width, height, waterproof, mounting, frontAcrylicCover, sets]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
@@ -19737,8 +19554,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const lowerCasePricing = parseFloat(NovaQuote.lowercase_pricing ? NovaQuote.lowercase_pricing : 1);
-const smallPunctuations = parseFloat(NovaQuote.small_punctuations_pricing ? NovaQuote.small_punctuations_pricing : 1);
 function Letters({
   item
 }) {
@@ -19812,33 +19627,6 @@ function Letters({
     }
     fetchLetterPricing();
   }, []);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    console.log('Attempting to preload fonts...');
-    async function preloadFonts() {
-      try {
-        await loadingFonts();
-      } catch (error) {
-        console.error('Error loading fonts:', error);
-      }
-    }
-    preloadFonts();
-  }, []);
-  const loadingFonts = async () => {
-    const loadPromises = NovaQuote.fonts.map(font => loadFont(font));
-    await Promise.all(loadPromises);
-  };
-  async function loadFont({
-    name,
-    src
-  }) {
-    const fontFace = new FontFace(name, `url(${src})`);
-    try {
-      await fontFace.load();
-      document.fonts.add(fontFace);
-    } catch (e) {
-      console.error(`Font ${name} failed to load`);
-    }
-  }
   const headlineRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const adjustFontSize = () => {
     const container = headlineRef.current.parentNode;
@@ -20113,52 +19901,53 @@ function Letters({
       setOpenFont(false);
     });
   }
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+  const computePricing = () => {
     if (letterPricing.length > 0 && selectedLetterHeight && depth) {
+      var _tempTotal$toFixed, _total$toFixed;
       const pricingDetail = letterPricing[selectedLetterHeight - 5];
       const baseLetterPrice = pricingDetail[depth.value];
-      let totalLetterPrice = 0;
+      let tempTotal = 0;
       const lettersArray = letters.trim().split('');
       const noLowerCase = NovaQuote.no_lowercase.includes(font);
-      if (lettersArray.length > 0 && selectedLetterHeight && waterproof && depth) {
-        lettersArray.forEach(letter => {
-          let letterPrice = baseLetterPrice;
-          if (letter === ' ') {
-            // If the character is a space, set the price to 0 and skip further checks
-            letterPrice = 0;
-          } else if (letter.match(/[a-z]/)) {
-            // Check for lowercase letter
-            letterPrice *= noLowerCase ? 1 : lowerCasePricing; // 80% of the base price
-          } else if (letter.match(/[A-Z]/)) {
-            // Check for uppercase letter
-            // Uppercase letters use 100% of base price, so no change needed
-          } else if (letter.match(/[`~"*,.\-']/)) {
-            // Check for small punctuation marks
-            letterPrice *= smallPunctuations; // 30% of the base price
-          } else if (letter.match(/[^a-zA-Z]/)) {
-            // Check for symbol (not a letter or small punctuation)
-            // Symbols use 100% of base price, so no change needed
-          }
-
-          // Adjusting for waterproof and finishing
-          letterPrice *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.INDOOR_NOT_WATERPROOF ? 1 : 1.02;
-          letterPrice *= vinylWhite?.name ? 1.1 : 1;
-          totalLetterPrice += letterPrice;
-        });
-        if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER) {
-          let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_13__.spacerPricing)(totalLetterPrice);
-          spacer = parseFloat(spacer.toFixed(2));
-          totalLetterPrice += spacer;
-        }
-        totalLetterPrice *= sets;
-        setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
-        setCadPrice((totalLetterPrice * parseFloat(_utils_defaults__WEBPACK_IMPORTED_MODULE_12__.EXCHANGE_RATE)).toFixed(2));
-      } else {
-        setUsdPrice(0);
-        setCadPrice(0);
+      lettersArray.forEach(letter => {
+        tempTotal += (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_13__.calculateLetterPrice)(letter, baseLetterPrice, noLowerCase);
+      });
+      if (waterproof) tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.INDOOR_NOT_WATERPROOF ? 1 : 1.02;
+      if (frontAcrylicCover === '3M Vinyl') tempTotal *= 1.1;
+      if (mounting && mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER) {
+        let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_13__.spacerPricing)(tempTotal);
+        spacer = parseFloat(spacer.toFixed(2));
+        tempTotal += spacer;
       }
+      const total = tempTotal * parseInt(sets);
+      return {
+        singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
+        total: (_total$toFixed = total?.toFixed(2)) !== null && _total$toFixed !== void 0 ? _total$toFixed : 0
+      };
+    } else {
+      return {
+        singlePrice: 0,
+        total: 0
+      };
     }
-  }, [selectedLetterHeight, letters, waterproof, lettersHeight, vinylWhite, mounting, sets, font]);
+  };
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    const {
+      singlePrice,
+      total
+    } = computePricing();
+    if (total && singlePrice) {
+      setUsdPrice(total);
+      setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.EXCHANGE_RATE).toFixed(2));
+      setUsdSinglePrice(singlePrice);
+      setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.EXCHANGE_RATE).toFixed(2));
+    } else {
+      setUsdPrice(0);
+      setCadPrice(0);
+      setUsdSinglePrice(0);
+      setCadSinglePrice(0);
+    }
+  }, [selectedLetterHeight, letters, waterproof, lettersHeight, frontAcrylicCover, mounting, sets, font]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     color?.name != 'Custom Color' && setCustomColor('');
     font != 'Custom font' && setFontFileUrl('');
@@ -20618,8 +20407,13 @@ function Logo({
     }
   };
   const computePricing = () => {
-    var _tempTotal, _totalWithDiscount$to;
-    if (!width || !height || !depth?.value) return 0;
+    var _tempTotal$toFixed, _total$toFixed;
+    if (!width || !height || !depth?.value) {
+      return {
+        singlePrice: 0,
+        total: 0
+      };
+    }
     let P = 0;
     let S = 0;
     const F = 30;
@@ -20650,44 +20444,33 @@ function Logo({
     if (waterproof && waterproof !== _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.INDOOR_NOT_WATERPROOF) {
       tempTotal *= 1.03;
     }
-    if (spacerStandoffDistance) {
+    if (mounting && mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER) {
       const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_7__.spacerPricing)(tempTotal);
       tempTotal += parseFloat(spacer.toFixed(2));
     }
-    let total = tempTotal * parseInt(sets);
-    total = total.toFixed(1);
-    const discount = 1;
-    let totalWithDiscount = total * discount;
-    let discountPrice = total - totalWithDiscount;
+    const total = tempTotal * parseInt(sets);
     return {
-      singlePrice: (_tempTotal = tempTotal) !== null && _tempTotal !== void 0 ? _tempTotal : 0,
-      total: (_totalWithDiscount$to = totalWithDiscount?.toFixed(2)) !== null && _totalWithDiscount$to !== void 0 ? _totalWithDiscount$to : 0,
-      totalWithoutDiscount: total,
-      discount: discountPrice
+      singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
+      total: (_total$toFixed = total.toFixed(2)) !== null && _total$toFixed !== void 0 ? _total$toFixed : 0
     };
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const {
       singlePrice,
-      total,
-      discount
+      total
     } = computePricing();
     if (total && singlePrice) {
       setUsdPrice(total);
       setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.EXCHANGE_RATE).toFixed(2));
       setUsdSinglePrice(singlePrice);
       setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.EXCHANGE_RATE).toFixed(2));
-      setUsdDiscount(discount.toFixed(2));
-      setCadDiscount((discount * _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.EXCHANGE_RATE).toFixed(2));
     } else {
       setUsdPrice(0);
       setCadPrice(0);
       setUsdSinglePrice(0);
       setCadSinglePrice(0);
-      setUsdDiscount(0);
-      setCadDiscount(0);
     }
-  }, [depth, width, height, waterproof, spacerStandoffDistance, frontAcrylicCover, sets]);
+  }, [depth, width, height, waterproof, mounting, frontAcrylicCover, sets]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
@@ -20983,33 +20766,6 @@ function TrimLessBackLit() {
       setTempFolder(`Q-${NovaQuote.current_quote_id}`);
     }
   }, []);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    console.log('Attempting to preload fonts...');
-    async function preloadFonts() {
-      try {
-        await loadingFonts();
-      } catch (error) {
-        console.error('Error loading fonts:', error);
-      }
-    }
-    preloadFonts();
-  }, []);
-  const loadingFonts = async () => {
-    const loadPromises = NovaQuote.fonts.map(font => loadFont(font));
-    await Promise.all(loadPromises);
-  };
-  async function loadFont({
-    name,
-    src
-  }) {
-    const fontFace = new FontFace(name, `url(${src})`);
-    try {
-      await fontFace.load();
-      document.fonts.add(fontFace);
-    } catch (e) {
-      console.error(`Font ${name} failed to load`);
-    }
-  }
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:flex gap-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -21098,7 +20854,7 @@ const smallPunctuations = parseFloat(NovaQuote.small_punctuations_pricing ? Nova
 function Letters({
   item
 }) {
-  var _item$letters, _item$comments, _item$font, _item$faceReturnColor, _item$waterproof, _item$depth, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$studLength, _item$spacerStandoffD, _item$mounting, _item$sets;
+  var _item$letters, _item$comments, _item$font, _item$faceReturnColor, _item$waterproof, _item$depth, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$studLength, _item$spacerStandoffD, _item$mounting, _item$sets;
   const {
     signage,
     setSignage,
@@ -21145,6 +20901,8 @@ function Letters({
   }, []);
   const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdPrice = item.usdPrice) !== null && _item$usdPrice !== void 0 ? _item$usdPrice : 0);
   const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadPrice = item.cadPrice) !== null && _item$cadPrice !== void 0 ? _item$cadPrice : 0);
+  const [usdSinglePrice, setUsdSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdSinglePrice = item.usdSinglePrice) !== null && _item$usdSinglePrice !== void 0 ? _item$usdSinglePrice : 0);
+  const [cadSinglePrice, setCadSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadSinglePrice = item.cadSinglePrice) !== null && _item$cadSinglePrice !== void 0 ? _item$cadSinglePrice : 0);
   const [lettersHeight, setLettersHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
     min: 5,
     max: 40
@@ -21188,6 +20946,8 @@ function Letters({
           letterHeight: selectedLetterHeight,
           usdPrice,
           cadPrice,
+          usdSinglePrice,
+          cadSinglePrice,
           files,
           fileNames,
           filePaths,
@@ -21382,7 +21142,7 @@ function Letters({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
-  }, [letters, depth, comments, font, waterproof, color, usdPrice, cadPrice, selectedLetterHeight, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, fontFileUrl, fontFileName, fontFilePath, fontFile, mounting, studLength, spacerStandoffDistance, selectedFinishing, metalFinish, acrylicReveal, sets]);
+  }, [letters, depth, comments, font, waterproof, color, usdPrice, cadPrice, usdSinglePrice, cadSinglePrice, selectedLetterHeight, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, fontFileUrl, fontFileName, fontFilePath, fontFile, mounting, studLength, spacerStandoffDistance, selectedFinishing, metalFinish, acrylicReveal, sets]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (depth?.value && letterPricingTables) {
       const table = (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_8__["default"])((0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_9__.getLetterPricingTableByTitle)(depth?.depth, letterPricingTables));
@@ -21403,11 +21163,11 @@ function Letters({
       }
     }
   }, [depth, selectedLetterHeight, letterPricingTables]);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (!letterPricingTables || !letterPricing || !selectedLetterHeight) return;
+  const computePricing = () => {
     if (letterPricingTables && letterPricing && selectedLetterHeight && depth && waterproof && acrylicReveal) {
       const pricingDetail = letterPricing[selectedLetterHeight - 5];
       if (pricingDetail) {
+        var _tempTotal$toFixed, _total$toFixed;
         let mm = 0;
         if (acrylicReveal == '1/5"') {
           mm = '5mm';
@@ -21419,55 +21179,56 @@ function Letters({
           mm = 0;
         }
         const baseLetterPrice = pricingDetail[mm];
-        let totalLetterPrice = 0;
+        let tempTotal = 0;
         const lettersArray = letters.trim().split('');
         const noLowerCase = NovaQuote.no_lowercase.includes(font);
         lettersArray.forEach(letter => {
-          let letterPrice = baseLetterPrice;
-          if (letter === ' ') {
-            // If the character is a space, set the price to 0 and skip further checks
-            letterPrice = 0;
-          } else if (letter.match(/[a-z]/)) {
-            // Check for lowercase letter
-            letterPrice *= noLowerCase ? 1 : lowerCasePricing; // 80% of the base price
-          } else if (letter.match(/[A-Z]/)) {
-            // Check for uppercase letter
-            // Uppercase letters use 100% of base price, so no change needed
-          } else if (letter.match(/[`~"*,.\-']/)) {
-            // Check for small punctuation marks
-            letterPrice *= smallPunctuations; // 30% of the base price
-          } else if (letter.match(/[^a-zA-Z]/)) {
-            // Check for symbol (not a letter or small punctuation)
-            // Symbols use 100% of base price, so no change needed
-          }
-
-          // Adjusting for waterproof and finishing
-          letterPrice *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF ? 1 : 1.03;
-          if (metalFinish && metalFinish.includes('Polished')) {
-            letterPrice *= 1.3;
-          }
-          if (metalFinish && metalFinish.includes('Electroplated')) {
-            letterPrice *= 1.2;
-          }
-          totalLetterPrice += letterPrice;
+          tempTotal += (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_9__.calculateLetterPrice)(letter, baseLetterPrice, noLowerCase);
         });
-        if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER) {
-          let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_9__.spacerPricing)(totalLetterPrice);
-          spacer = parseFloat(spacer.toFixed(2));
-          totalLetterPrice += spacer;
+        if (waterproof) {
+          tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF ? 1 : 1.03;
         }
-        totalLetterPrice *= sets;
-        setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
-        setCadPrice((totalLetterPrice * parseFloat(_utils_defaults__WEBPACK_IMPORTED_MODULE_13__.EXCHANGE_RATE)).toFixed(2));
-      } else {
-        setUsdPrice(0);
-        setCadPrice(0);
+        if (metalFinish && metalFinish.includes('Polished')) {
+          tempTotal *= 1.3;
+        }
+        if (metalFinish && metalFinish.includes('Electroplated')) {
+          tempTotal *= 1.2;
+        }
+        if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER) {
+          let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_9__.spacerPricing)(tempTotal);
+          spacer = parseFloat(spacer.toFixed(2));
+          tempTotal += spacer;
+        }
+        const total = tempTotal * parseInt(sets);
+        return {
+          singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
+          total: (_total$toFixed = total?.toFixed(2)) !== null && _total$toFixed !== void 0 ? _total$toFixed : 0
+        };
       }
+    } else {
+      return {
+        singlePrice: 0,
+        total: 0
+      };
+    }
+  };
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    const {
+      singlePrice,
+      total
+    } = computePricing();
+    if (total && singlePrice) {
+      setUsdPrice(total);
+      setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.EXCHANGE_RATE).toFixed(2));
+      setUsdSinglePrice(singlePrice);
+      setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.EXCHANGE_RATE).toFixed(2));
     } else {
       setUsdPrice(0);
       setCadPrice(0);
+      setUsdSinglePrice(0);
+      setCadSinglePrice(0);
     }
-  }, [selectedLetterHeight, letters, waterproof, lettersHeight, letterPricing, depth, acrylicReveal, metalFinish, sets, font, mounting, letterPricingTables, item.product]);
+  }, [selectedLetterHeight, letters, waterproof, lettersHeight, letterPricing, depth, acrylicReveal, metalFinish, sets, font, mounting, letterPricingTables]);
   if (selectedFinishing === 'Painted') {
     (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_5__["default"])([colorRef, fontRef], () => {
       if (!openColor && !openFont) return;
@@ -21708,7 +21469,7 @@ __webpack_require__.r(__webpack_exports__);
 function Logo({
   item
 }) {
-  var _item$comments, _item$faceReturnColor, _item$width, _item$height, _item$waterproof, _item$depth, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$usdPrice, _item$cadPrice, _item$usdDiscount, _item$cadDiscount, _item$usdSinglePrice, _item$cadSinglePrice, _item$studLength, _item$spacerStandoffD, _item$mounting, _item$sets;
+  var _item$comments, _item$faceReturnColor, _item$width, _item$height, _item$waterproof, _item$depth, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$studLength, _item$spacerStandoffD, _item$mounting, _item$sets;
   const {
     signage,
     setSignage,
@@ -21734,8 +21495,6 @@ function Logo({
   const [metalFinish, setMetalFinish] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.backLitMetalFinish);
   const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdPrice = item.usdPrice) !== null && _item$usdPrice !== void 0 ? _item$usdPrice : 0);
   const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadPrice = item.cadPrice) !== null && _item$cadPrice !== void 0 ? _item$cadPrice : 0);
-  const [usdDiscount, setUsdDiscount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdDiscount = item.usdDiscount) !== null && _item$usdDiscount !== void 0 ? _item$usdDiscount : 0);
-  const [cadDiscount, setCadDiscount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadDiscount = item.cadDiscount) !== null && _item$cadDiscount !== void 0 ? _item$cadDiscount : 0);
   const [usdSinglePrice, setUsdSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdSinglePrice = item.usdSinglePrice) !== null && _item$usdSinglePrice !== void 0 ? _item$usdSinglePrice : 0);
   const [cadSinglePrice, setCadSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadSinglePrice = item.cadSinglePrice) !== null && _item$cadSinglePrice !== void 0 ? _item$cadSinglePrice : 0);
   const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$studLength = item.studLength) !== null && _item$studLength !== void 0 ? _item$studLength : '');
@@ -21773,7 +21532,9 @@ function Logo({
           spacerStandoffDistance,
           backLitMetalFinish: metalFinish,
           acrylicReveal: acrylicReveal,
-          sets
+          sets,
+          usdSinglePrice,
+          cadSinglePrice
         };
       } else {
         return sign;
@@ -21919,9 +21680,9 @@ function Logo({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
-  }, [depth, width, height, comments, waterproof, color, usdPrice, cadPrice, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, mounting, studLength, spacerStandoffDistance, selectedFinishing, metalFinish, acrylicReveal, sets]);
+  }, [depth, width, height, comments, waterproof, color, usdPrice, cadPrice, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, mounting, studLength, spacerStandoffDistance, selectedFinishing, metalFinish, acrylicReveal, sets, usdSinglePrice, cadSinglePrice]);
   const computePricing = () => {
-    var _tempTotal, _totalWithDiscount$to;
+    var _tempTotal$toFixed, _total$toFixed;
     if (!width || !height || !depth?.value) return 0;
     let P = 0;
     let S = 0;
@@ -21998,45 +21759,33 @@ function Logo({
       tempTotal *= 1.03;
       console.log('waterproof', tempTotal);
     }
-    if (spacerStandoffDistance) {
+    if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
       const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_10__.spacerPricing)(tempTotal);
       tempTotal += parseFloat(spacer.toFixed(2));
-      console.log('spacer', tempTotal);
     }
-    let total = tempTotal * parseInt(sets);
-    total = total.toFixed(1);
-    const discount = 1;
-    let totalWithDiscount = total * discount;
-    let discountPrice = total - totalWithDiscount;
+    const total = tempTotal * parseInt(sets);
     return {
-      singlePrice: (_tempTotal = tempTotal) !== null && _tempTotal !== void 0 ? _tempTotal : 0,
-      total: (_totalWithDiscount$to = totalWithDiscount?.toFixed(2)) !== null && _totalWithDiscount$to !== void 0 ? _totalWithDiscount$to : 0,
-      totalWithoutDiscount: total,
-      discount: discountPrice
+      singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
+      total: (_total$toFixed = total.toFixed(2)) !== null && _total$toFixed !== void 0 ? _total$toFixed : 0
     };
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const {
       singlePrice,
-      total,
-      discount
+      total
     } = computePricing();
     if (total && singlePrice) {
       setUsdPrice(total);
       setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.EXCHANGE_RATE).toFixed(2));
       setUsdSinglePrice(singlePrice);
       setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.EXCHANGE_RATE).toFixed(2));
-      setUsdDiscount(discount.toFixed(2));
-      setCadDiscount((discount * _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.EXCHANGE_RATE).toFixed(2));
     } else {
       setUsdPrice(0);
       setCadPrice(0);
       setUsdSinglePrice(0);
       setCadSinglePrice(0);
-      setUsdDiscount(0);
-      setCadDiscount(0);
     }
-  }, [depth, width, height, waterproof, spacerStandoffDistance, sets, acrylicReveal]);
+  }, [depth, width, height, waterproof, mounting, sets, acrylicReveal]);
   (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_3__["default"])([colorRef], () => {
     if (!openColor) return;
     setOpenColor(false);
@@ -22505,33 +22254,6 @@ function Letters({
     }
     fetchLetterPricing();
   }, []);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    console.log('Attempting to preload fonts...');
-    async function preloadFonts() {
-      try {
-        await loadingFonts();
-      } catch (error) {
-        console.error('Error loading fonts:', error);
-      }
-    }
-    preloadFonts();
-  }, []);
-  const loadingFonts = async () => {
-    const loadPromises = NovaQuote.fonts.map(font => loadFont(font));
-    await Promise.all(loadPromises);
-  };
-  async function loadFont({
-    name,
-    src
-  }) {
-    const fontFace = new FontFace(name, `url(${src})`);
-    try {
-      await fontFace.load();
-      document.fonts.add(fontFace);
-    } catch (e) {
-      console.error(`Font ${name} failed to load`);
-    }
-  }
   const headlineRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const adjustFontSize = () => {
     const container = headlineRef.current.parentNode;
@@ -22679,7 +22401,7 @@ function Letters({
   }
   const computePricing = () => {
     if (letterPricing.length > 0 && selectedLetterHeight && letters.trim().length > 0) {
-      var _tempTotal, _total$toFixed;
+      var _tempTotal$toFixed, _total$toFixed;
       const pricingDetail = letterPricing[selectedLetterHeight - 6];
       const baseLetterPrice = pricingDetail[depth.depth];
       let tempTotal = 0;
@@ -22694,18 +22416,20 @@ function Letters({
       if (waterproof && waterproof !== _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.INDOOR_NOT_WATERPROOF) {
         tempTotal *= 1.03;
       }
-      if (spacerStandoffDistance) {
+      if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER) {
         const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_13__.spacerPricing)(tempTotal);
         tempTotal += parseFloat(spacer.toFixed(2));
       }
-      console.log(tempTotal);
-      let total = tempTotal * parseInt(sets);
+      const total = tempTotal * parseInt(sets);
       return {
-        singlePrice: (_tempTotal = tempTotal) !== null && _tempTotal !== void 0 ? _tempTotal : 0,
+        singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
         total: (_total$toFixed = total?.toFixed(2)) !== null && _total$toFixed !== void 0 ? _total$toFixed : 0
       };
     } else {
-      return 0;
+      return {
+        singlePrice: 0,
+        total: 0
+      };
     }
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
@@ -22724,7 +22448,7 @@ function Letters({
       setUsdSinglePrice(0);
       setCadSinglePrice(0);
     }
-  }, [selectedLetterHeight, letters, waterproof, lettersHeight, frontAcrylicCover, sets, font]);
+  }, [selectedLetterHeight, letters, waterproof, lettersHeight, frontAcrylicCover, sets, font, mounting]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     setLetterHeightOptions(() => Array.from({
       length: parseInt(lettersHeight.max) - parseInt(lettersHeight.min) + 1
@@ -23267,7 +22991,7 @@ function Logo({
     });
   }
   const computePricing = () => {
-    var _tempTotal, _totalWithDiscount$to;
+    var _tempTotal$toFixed, _total$toFixed;
     if (!width || !height || !depth?.value) return 0;
     let P = 0;
     let S = 0;
@@ -23301,44 +23025,33 @@ function Logo({
       tempTotal *= 1.03;
       console.log('waterproof', tempTotal);
     }
-    if (spacerStandoffDistance) {
+    if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
       const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_10__.spacerPricing)(tempTotal);
       tempTotal += parseFloat(spacer.toFixed(2));
     }
-    let total = tempTotal * parseInt(sets);
-    total = total.toFixed(1);
-    const discount = 1;
-    let totalWithDiscount = total * discount;
-    let discountPrice = total - totalWithDiscount;
+    const total = tempTotal * parseInt(sets);
     return {
-      singlePrice: (_tempTotal = tempTotal) !== null && _tempTotal !== void 0 ? _tempTotal : 0,
-      total: (_totalWithDiscount$to = totalWithDiscount?.toFixed(2)) !== null && _totalWithDiscount$to !== void 0 ? _totalWithDiscount$to : 0,
-      totalWithoutDiscount: total,
-      discount: discountPrice
+      singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
+      total: (_total$toFixed = total.toFixed(2)) !== null && _total$toFixed !== void 0 ? _total$toFixed : 0
     };
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const {
       singlePrice,
-      total,
-      discount
+      total
     } = computePricing();
     if (total && singlePrice) {
       setUsdPrice(total);
       setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.EXCHANGE_RATE).toFixed(2));
       setUsdSinglePrice(singlePrice);
       setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.EXCHANGE_RATE).toFixed(2));
-      setUsdDiscount(discount.toFixed(2));
-      setCadDiscount((discount * _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.EXCHANGE_RATE).toFixed(2));
     } else {
       setUsdPrice(0);
       setCadPrice(0);
       setUsdSinglePrice(0);
       setCadSinglePrice(0);
-      setUsdDiscount(0);
-      setCadDiscount(0);
     }
-  }, [depth, width, height, waterproof, spacerStandoffDistance, frontAcrylicCover, sets]);
+  }, [depth, width, height, waterproof, mounting, frontAcrylicCover, sets]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     color?.name != 'Custom Color' && setCustomColor('');
   }, [color]);
@@ -23811,33 +23524,6 @@ function Letters({
     }
     fetchLetterPricing();
   }, []);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    console.log('Attempting to preload fonts...');
-    async function preloadFonts() {
-      try {
-        await loadingFonts();
-      } catch (error) {
-        console.error('Error loading fonts:', error);
-      }
-    }
-    preloadFonts();
-  }, []);
-  const loadingFonts = async () => {
-    const loadPromises = NovaQuote.fonts.map(font => loadFont(font));
-    await Promise.all(loadPromises);
-  };
-  async function loadFont({
-    name,
-    src
-  }) {
-    const fontFace = new FontFace(name, `url(${src})`);
-    try {
-      await fontFace.load();
-      document.fonts.add(fontFace);
-    } catch (e) {
-      console.error(`Font ${name} failed to load`);
-    }
-  }
   const headlineRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const adjustFontSize = () => {
     const container = headlineRef.current.parentNode;
@@ -23997,11 +23683,11 @@ function Letters({
       if (waterproof && waterproof !== _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.INDOOR_NOT_WATERPROOF) {
         tempTotal *= 1.03;
       }
-      if (spacerStandoffDistance) {
+      if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER) {
         const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_13__.spacerPricing)(tempTotal);
         tempTotal += parseFloat(spacer.toFixed(2));
       }
-      let total = tempTotal * parseInt(sets);
+      const total = tempTotal * parseInt(sets);
       return {
         singlePrice: (_tempTotal = tempTotal) !== null && _tempTotal !== void 0 ? _tempTotal : 0,
         total: (_total$toFixed = total?.toFixed(2)) !== null && _total$toFixed !== void 0 ? _total$toFixed : 0
@@ -24026,7 +23712,7 @@ function Letters({
       setUsdSinglePrice(0);
       setCadSinglePrice(0);
     }
-  }, [selectedLetterHeight, letters, waterproof, lettersHeight, frontAcrylicCover, sets, mounting, font, usdPrice, cadPrice, usdSinglePrice, cadSinglePrice, spacerStandoffDistance]);
+  }, [selectedLetterHeight, letters, waterproof, lettersHeight, frontAcrylicCover, sets, mounting, font, usdPrice, cadPrice, usdSinglePrice, cadSinglePrice]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     setLetterHeightOptions(() => Array.from({
       length: parseInt(lettersHeight.max) - parseInt(lettersHeight.min) + 1
@@ -24355,7 +24041,7 @@ __webpack_require__.r(__webpack_exports__);
 function Logo({
   item
 }) {
-  var _item$comments, _item$width, _item$height, _item$returnColor, _item$waterproof, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$usdPrice, _item$cadPrice, _item$usdDiscount, _item$cadDiscount, _item$usdSinglePrice, _item$cadSinglePrice, _item$studLength, _item$spacerStandoffD, _item$sets, _item$vinylWhite, _item$frontAcrylicCov, _item$mounting;
+  var _item$comments, _item$width, _item$height, _item$returnColor, _item$waterproof, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$studLength, _item$spacerStandoffD, _item$sets, _item$vinylWhite, _item$frontAcrylicCov, _item$mounting;
   const {
     signage,
     setSignage,
@@ -24378,8 +24064,6 @@ function Logo({
   const [customColor, setCustomColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$customColor = item.customColor) !== null && _item$customColor !== void 0 ? _item$customColor : '');
   const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdPrice = item.usdPrice) !== null && _item$usdPrice !== void 0 ? _item$usdPrice : 0);
   const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadPrice = item.cadPrice) !== null && _item$cadPrice !== void 0 ? _item$cadPrice : 0);
-  const [usdDiscount, setUsdDiscount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdDiscount = item.usdDiscount) !== null && _item$usdDiscount !== void 0 ? _item$usdDiscount : 0);
-  const [cadDiscount, setCadDiscount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadDiscount = item.cadDiscount) !== null && _item$cadDiscount !== void 0 ? _item$cadDiscount : 0);
   const [usdSinglePrice, setUsdSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdSinglePrice = item.usdSinglePrice) !== null && _item$usdSinglePrice !== void 0 ? _item$usdSinglePrice : 0);
   const [cadSinglePrice, setCadSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadSinglePrice = item.cadSinglePrice) !== null && _item$cadSinglePrice !== void 0 ? _item$cadSinglePrice : 0);
   const [openAcrylicCover, setOpenAcrylicCover] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
@@ -24566,7 +24250,7 @@ function Logo({
     });
   }
   const computePricing = () => {
-    var _tempTotal, _totalWithDiscount$to;
+    var _tempTotal$toFixed, _total$toFixed;
     if (!width || !height || !depth?.value) return 0;
     let P = 0;
     let S = 0;
@@ -24605,44 +24289,33 @@ function Logo({
       tempTotal *= 1.03;
       console.log('waterproof', tempTotal);
     }
-    if (spacerStandoffDistance) {
+    if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
       const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_10__.spacerPricing)(tempTotal);
       tempTotal += parseFloat(spacer.toFixed(2));
     }
-    let total = tempTotal * parseInt(sets);
-    total = total.toFixed(1);
-    const discount = 1;
-    let totalWithDiscount = total * discount;
-    let discountPrice = total - totalWithDiscount;
+    const total = tempTotal * parseInt(sets);
     return {
-      singlePrice: (_tempTotal = tempTotal) !== null && _tempTotal !== void 0 ? _tempTotal : 0,
-      total: (_totalWithDiscount$to = totalWithDiscount?.toFixed(2)) !== null && _totalWithDiscount$to !== void 0 ? _totalWithDiscount$to : 0,
-      totalWithoutDiscount: total,
-      discount: discountPrice
+      singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
+      total: (_total$toFixed = total?.toFixed(2)) !== null && _total$toFixed !== void 0 ? _total$toFixed : 0
     };
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const {
       singlePrice,
-      total,
-      discount
+      total
     } = computePricing();
     if (total && singlePrice) {
       setUsdPrice(total);
       setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.EXCHANGE_RATE).toFixed(2));
       setUsdSinglePrice(singlePrice);
       setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.EXCHANGE_RATE).toFixed(2));
-      setUsdDiscount(discount.toFixed(2));
-      setCadDiscount((discount * _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.EXCHANGE_RATE).toFixed(2));
     } else {
       setUsdPrice(0);
       setCadPrice(0);
       setUsdSinglePrice(0);
       setCadSinglePrice(0);
-      setUsdDiscount(0);
-      setCadDiscount(0);
     }
-  }, [depth, width, height, waterproof, spacerStandoffDistance, frontAcrylicCover, sets]);
+  }, [depth, width, height, waterproof, mounting, frontAcrylicCover, sets]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     color?.name != 'Custom Color' && setCustomColor('');
   }, [color]);
@@ -25089,8 +24762,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
 /* harmony import */ var _metalOptions__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../metalOptions */ "./src/scripts/products/metal/metalOptions.js");
 /* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
-/* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../utils/ColorsDropdown */ "./src/scripts/utils/ColorsDropdown.js");
+/* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
 
 
 
@@ -25105,17 +24779,16 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const lowerCasePricing = parseFloat(NovaQuote.lowercase_pricing ? NovaQuote.lowercase_pricing : 1);
-const smallPunctuations = parseFloat(NovaQuote.small_punctuations_pricing ? NovaQuote.small_punctuations_pricing : 1);
+
 function Letters({
   item
 }) {
-  var _item$letters, _item$comments, _item$font, _item$color, _item$waterproof, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
+  var _item$letters, _item$comments, _item$font, _item$color, _item$waterproof, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
   const {
     signage,
     setSignage,
     setMissing
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_12__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_13__.useAppContext)();
   const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letters = item.letters) !== null && _item$letters !== void 0 ? _item$letters : '');
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
   const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$font = item.font) !== null && _item$font !== void 0 ? _item$font : '');
@@ -25140,6 +24813,8 @@ function Letters({
   const [selectedLetterHeight, setSelectedLetterHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letterHeight = item.letterHeight) !== null && _item$letterHeight !== void 0 ? _item$letterHeight : '');
   const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdPrice = item.usdPrice) !== null && _item$usdPrice !== void 0 ? _item$usdPrice : 0);
   const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadPrice = item.cadPrice) !== null && _item$cadPrice !== void 0 ? _item$cadPrice : 0);
+  const [usdSinglePrice, setUsdSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdSinglePrice = item.usdSinglePrice) !== null && _item$usdSinglePrice !== void 0 ? _item$usdSinglePrice : 0);
+  const [cadSinglePrice, setCadSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadSinglePrice = item.cadSinglePrice) !== null && _item$cadSinglePrice !== void 0 ? _item$cadSinglePrice : 0);
   const [lettersHeight, setLettersHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
     min: 2,
     max: 43
@@ -25204,33 +24879,6 @@ function Letters({
     }
     fetchLetterPricing();
   }, []);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    console.log('Attempting to preload fonts...');
-    async function preloadFonts() {
-      try {
-        await loadingFonts();
-      } catch (error) {
-        console.error('Error loading fonts:', error);
-      }
-    }
-    preloadFonts();
-  }, []);
-  const loadingFonts = async () => {
-    const loadPromises = NovaQuote.fonts.map(font => loadFont(font));
-    await Promise.all(loadPromises);
-  };
-  async function loadFont({
-    name,
-    src
-  }) {
-    const fontFace = new FontFace(name, `url(${src})`);
-    try {
-      await fontFace.load();
-      document.fonts.add(fontFace);
-    } catch (e) {
-      console.error(`Font ${name} failed to load`);
-    }
-  }
   const headlineRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const adjustFontSize = () => {
     const container = headlineRef.current.parentNode;
@@ -25274,7 +24922,9 @@ function Letters({
           customColor,
           sets,
           studLength,
-          spacerStandoffDistance
+          spacerStandoffDistance,
+          usdSinglePrice,
+          cadSinglePrice
         };
       } else {
         return sign;
@@ -25338,59 +24988,60 @@ function Letters({
   const handelMetalFinishChange = e => {
     setStainLessMetalFinish(e.target.value);
   };
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+  const computePricing = () => {
     if (letterPricing.length > 0 && selectedLetterHeight && selectedThickness) {
+      var _tempTotal$toFixed, _total$toFixed;
       const pricingDetail = letterPricing[selectedLetterHeight - 2];
       const baseLetterPrice = pricingDetail[selectedThickness.value];
-      let totalLetterPrice = 0;
+      let tempTotal = 0;
       const lettersArray = letters.trim().split('');
       const noLowerCase = NovaQuote.no_lowercase.includes(font);
-      if (lettersArray.length > 0 && selectedLetterHeight && waterproof && selectedThickness) {
-        lettersArray.forEach(letter => {
-          let letterPrice = baseLetterPrice;
-          if (letter === ' ') {
-            // If the character is a space, set the price to 0 and skip further checks
-            letterPrice = 0;
-          } else if (letter.match(/[a-z]/)) {
-            // Check for lowercase letter
-            letterPrice *= noLowerCase ? 1 : lowerCasePricing; // 80% of the base price
-          } else if (letter.match(/[A-Z]/)) {
-            // Check for uppercase letter
-            // Uppercase letters use 100% of base price, so no change needed
-          } else if (letter.match(/[`~"*,.\-']/)) {
-            // Check for small punctuation marks
-            letterPrice *= smallPunctuations; // 30% of the base price
-          } else if (letter.match(/[^a-zA-Z]/)) {
-            // Check for symbol (not a letter or small punctuation)
-            // Symbols use 100% of base price, so no change needed
-          }
-
-          // Adjusting for waterproof and finishing
-          letterPrice *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
-          letterPrice *= metal === '316 Stainless Steel' ? 1.3 : 1;
-          if (stainLessMetalFinish && stainLessMetalFinish.includes('Polished')) {
-            letterPrice *= 1.1;
-          }
-          if (stainLessMetalFinish && stainLessMetalFinish.includes('Electroplated')) {
-            letterPrice *= 1.2;
-          }
-          if (mounting === 'PVC Backing') {
-            letterPrice *= 1.05;
-          }
-          totalLetterPrice += parseFloat(letterPrice.toFixed(2));
-        });
-        if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER) {
-          let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_11__.spacerPricing)(totalLetterPrice);
-          spacer = parseFloat(spacer.toFixed(2));
-          totalLetterPrice += spacer;
-        }
-        totalLetterPrice *= sets;
-        setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
-        setCadPrice((totalLetterPrice * parseFloat(_utils_defaults__WEBPACK_IMPORTED_MODULE_10__.EXCHANGE_RATE)).toFixed(2));
-      } else {
-        setUsdPrice(0);
-        setCadPrice(0);
+      lettersArray.forEach(letter => {
+        tempTotal += (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_12__.calculateLetterPrice)(letter, baseLetterPrice, noLowerCase);
+      });
+      if (waterproof) tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
+      if (metal) tempTotal *= metal === '316 Stainless Steel' ? 1.3 : 1;
+      if (stainLessMetalFinish && stainLessMetalFinish.includes('Polished')) {
+        tempTotal *= 1.1;
       }
+      if (stainLessMetalFinish && stainLessMetalFinish.includes('Electroplated')) {
+        tempTotal *= 1.2;
+      }
+      if (mounting === 'PVC Backing') {
+        tempTotal *= 1.05;
+      }
+      if (mounting && mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER) {
+        let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_12__.spacerPricing)(tempTotal);
+        spacer = parseFloat(spacer.toFixed(2));
+        tempTotal += spacer;
+      }
+      const total = tempTotal * parseInt(sets);
+      return {
+        singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
+        total: (_total$toFixed = total?.toFixed(2)) !== null && _total$toFixed !== void 0 ? _total$toFixed : 0
+      };
+    } else {
+      return {
+        singlePrice: 0,
+        total: 0
+      };
+    }
+  };
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    const {
+      singlePrice,
+      total
+    } = computePricing();
+    if (total && singlePrice) {
+      setUsdPrice(total);
+      setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.EXCHANGE_RATE).toFixed(2));
+      setUsdSinglePrice(singlePrice);
+      setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.EXCHANGE_RATE).toFixed(2));
+    } else {
+      setUsdPrice(0);
+      setCadPrice(0);
+      setUsdSinglePrice(0);
+      setCadSinglePrice(0);
     }
   }, [selectedLetterHeight, selectedThickness, selectedFinishing, letters, waterproof, lettersHeight, metal, stainLessMetalFinish, mounting, sets, font]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
@@ -25467,7 +25118,7 @@ function Letters({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
-  }, [letters, comments, font, selectedThickness, mounting, waterproof, color, usdPrice, cadPrice, selectedLetterHeight, fileUrls, fileNames, files, filePaths, metal, selectedFinishing, stainLessMetalFinish, customColor, fontFileUrl, fontFileName, fontFilePath, fontFile, sets, studLength, spacerStandoffDistance]);
+  }, [letters, comments, font, selectedThickness, mounting, waterproof, color, usdPrice, cadPrice, selectedLetterHeight, fileUrls, fileNames, files, filePaths, metal, selectedFinishing, stainLessMetalFinish, customColor, fontFileUrl, fontFileName, fontFilePath, fontFile, sets, studLength, spacerStandoffDistance, usdSinglePrice, cadSinglePrice]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const newHeightOptions = letterPricing?.filter(item => {
       const value = item[selectedThickness?.value];
@@ -25580,39 +25231,21 @@ function Letters({
       selected: metalFinish.option === stainLessMetalFinish
     }, metalFinish.option)),
     value: stainLessMetalFinish
-  }), selectedFinishing === 'Painted Finish' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "px-[1px] relative",
-    ref: colorRef
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
-  }, "Painted Color"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: `flex px-2 items-center select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${color.name ? 'text-black' : 'text-[#dddddd]'}`,
-    onClick: () => {
-      setOpenColor(prev => !prev);
+  }), selectedFinishing === 'Painted Finish' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_11__["default"], {
+    ref: colorRef,
+    title: "Painted Color",
+    colorName: color.name,
+    openColor: openColor,
+    toggleColor: () => {
       setOpenFont(false);
+      setOpenColor(prev => !prev);
+    },
+    colorOptions: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_6__.colorOptions,
+    selectColor: color => {
+      setColor(color);
+      setOpenColor(false);
     }
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "rounded-full w-[18px] h-[18px] border mr-2",
-    style: {
-      background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
-    }
-  }), color.name === '' ? 'CHOOSE OPTION' : color.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
-  }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_6__.colorOptions.map(color => {
-    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
-      onClick: () => {
-        setColor(color);
-        setOpenColor(false);
-        setOpenFont(false);
-      }
-    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-      className: "w-[18px] h-[18px] inline-block rounded-full border",
-      style: {
-        background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
-      }
-    }), color.name);
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -25736,7 +25369,7 @@ __webpack_require__.r(__webpack_exports__);
 function Logo({
   item
 }) {
-  var _item$mounting, _item$width, _item$usdPrice, _item$cadPrice, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$color, _item$customColor, _item$height, _item$comments, _item$waterproof, _item$mounting2, _item$studLength, _item$spacerStandoffD, _item$sets;
+  var _item$mounting, _item$width, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$color, _item$customColor, _item$height, _item$comments, _item$waterproof, _item$mounting2, _item$studLength, _item$spacerStandoffD, _item$sets;
   const {
     signage,
     setSignage,
@@ -25747,6 +25380,8 @@ function Logo({
   const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$width = item.width) !== null && _item$width !== void 0 ? _item$width : '');
   const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdPrice = item.usdPrice) !== null && _item$usdPrice !== void 0 ? _item$usdPrice : 0);
   const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadPrice = item.cadPrice) !== null && _item$cadPrice !== void 0 ? _item$cadPrice : 0);
+  const [usdSinglePrice, setUsdSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdSinglePrice = item.usdSinglePrice) !== null && _item$usdSinglePrice !== void 0 ? _item$usdSinglePrice : 0);
+  const [cadSinglePrice, setCadSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadSinglePrice = item.cadSinglePrice) !== null && _item$cadSinglePrice !== void 0 ? _item$cadSinglePrice : 0);
   const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileNames = item.fileNames) !== null && _item$fileNames !== void 0 ? _item$fileNames : []);
   const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrls = item.fileUrls) !== null && _item$fileUrls !== void 0 ? _item$fileUrls : []);
   const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$filePaths = item.filePaths) !== null && _item$filePaths !== void 0 ? _item$filePaths : []);
@@ -25883,7 +25518,9 @@ function Logo({
           stainLessMetalFinish,
           sets,
           studLength,
-          spacerStandoffDistance
+          spacerStandoffDistance,
+          usdSinglePrice,
+          cadSinglePrice
         };
       } else {
         return sign;
@@ -25947,7 +25584,7 @@ function Logo({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
-  }, [comments, selectedThickness, selectedMounting, waterproof, width, height, usdPrice, cadPrice, fileUrls, fileNames, selectedFinishing, stainLessMetalFinish, files, filePaths, mounting, color, customColor, metal, sets, studLength, spacerStandoffDistance]);
+  }, [comments, selectedThickness, selectedMounting, waterproof, width, height, usdPrice, cadPrice, fileUrls, fileNames, selectedFinishing, stainLessMetalFinish, files, filePaths, mounting, color, customColor, metal, sets, studLength, spacerStandoffDistance, usdSinglePrice, cadSinglePrice]);
   const [logoPricingObject, setLogoPricingObject] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     async function fetchLogoPricing() {
@@ -25961,42 +25598,66 @@ function Logo({
     }
     fetchLogoPricing();
   }, []);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+  const computePricing = () => {
     if (width && height && selectedThickness && waterproof && logoPricingObject !== null) {
       const logoPricing = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.getLogoPricingTablebyThickness)(`${selectedThickness.value}`, logoPricingObject);
       if (logoPricing !== undefined) {
+        var _tempTotal$toFixed, _total$toFixed;
+        let tempTotal = 0;
         const logoPricingTable = logoPricing !== undefined ? (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_5__["default"])(logoPricing) : [];
         const computed = logoPricingTable.length > 0 ? logoPricingTable[width - 3][height] : 0;
-        let multiplier = 1;
-        if (waterproof) {
-          multiplier = waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.INDOOR_NOT_WATERPROOF ? 1 : 1.05;
-        }
-        let total = parseFloat((computed * multiplier).toFixed(2));
-        total *= metal === '316 Stainless Steel' ? 1.3 : 1;
+        tempTotal += computed;
+        if (waterproof) tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
+        if (metal) tempTotal *= metal === '316 Stainless Steel' ? 1.3 : 1;
         if (stainLessMetalFinish && stainLessMetalFinish.includes('Polished')) {
-          total *= 1.1;
+          tempTotal *= 1.1;
         }
         if (stainLessMetalFinish && stainLessMetalFinish.includes('Electroplated')) {
-          total *= 1.2;
+          tempTotal *= 1.2;
         }
-        total = parseFloat(total.toFixed(2));
-        if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
-          let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.spacerPricing)(total);
+        if (mounting === 'PVC Backing') {
+          tempTotal *= 1.05;
+        }
+        if (mounting && mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
+          let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.spacerPricing)(tempTotal);
           spacer = parseFloat(spacer.toFixed(2));
-          total += spacer;
+          tempTotal += spacer;
         }
-        total *= sets;
-        setUsdPrice(parseFloat(total.toFixed(2)));
-        setCadPrice((total * parseFloat(_utils_defaults__WEBPACK_IMPORTED_MODULE_9__.EXCHANGE_RATE)).toFixed(2));
+        const total = tempTotal * parseInt(sets);
+        return {
+          singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
+          total: (_total$toFixed = total?.toFixed(2)) !== null && _total$toFixed !== void 0 ? _total$toFixed : 0
+        };
       } else {
-        setUsdPrice(0);
-        setCadPrice(0);
+        return {
+          singlePrice: 0,
+          total: 0
+        };
       }
+    } else {
+      return {
+        singlePrice: 0,
+        total: 0
+      };
+    }
+  };
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    const {
+      singlePrice,
+      total
+    } = computePricing();
+    if (total && singlePrice) {
+      setUsdPrice(total);
+      setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.EXCHANGE_RATE).toFixed(2));
+      setUsdSinglePrice(singlePrice);
+      setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.EXCHANGE_RATE).toFixed(2));
     } else {
       setUsdPrice(0);
       setCadPrice(0);
+      setUsdSinglePrice(0);
+      setCadSinglePrice(0);
     }
-  }, [width, height, selectedThickness, waterproof, selectedFinishing, metal, stainLessMetalFinish, mounting, sets]);
+  }, [width, height, selectedThickness, waterproof, selectedFinishing, metal, stainLessMetalFinish, mounting, sets, logoPricingObject]);
   (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_3__["default"])([colorRef], () => {
     if (!openColor) return;
     setOpenColor(false);
@@ -26373,8 +26034,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_ConvertJson__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../utils/ConvertJson */ "./src/scripts/utils/ConvertJson.js");
 /* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
 /* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
-/* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../utils/ColorsDropdown */ "./src/scripts/utils/ColorsDropdown.js");
+/* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
 
 
 
@@ -26388,19 +26050,16 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const lowerCasePricing = parseFloat(NovaQuote.lowercase_pricing ? NovaQuote.lowercase_pricing : 1);
-const smallPunctuations = parseFloat(NovaQuote.small_punctuations_pricing ? NovaQuote.small_punctuations_pricing : 1);
-//const AcrylicLetterPricing = JSON.parse(NovaOptions.letter_x_logo_pricing);
 
 function Letters({
   item
 }) {
-  var _item$letters, _item$comments, _item$font, _item$waterproof, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$finishing, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
+  var _item$letters, _item$comments, _item$font, _item$waterproof, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$finishing, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
   const {
     signage,
     setSignage,
     setMissing
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_11__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_12__.useAppContext)();
   const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letters = item.letters) !== null && _item$letters !== void 0 ? _item$letters : '');
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
   const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$font = item.font) !== null && _item$font !== void 0 ? _item$font : '');
@@ -26425,6 +26084,8 @@ function Letters({
   const [selectedLetterHeight, setSelectedLetterHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letterHeight = item.letterHeight) !== null && _item$letterHeight !== void 0 ? _item$letterHeight : '');
   const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdPrice = item.usdPrice) !== null && _item$usdPrice !== void 0 ? _item$usdPrice : 0);
   const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadPrice = item.cadPrice) !== null && _item$cadPrice !== void 0 ? _item$cadPrice : 0);
+  const [usdSinglePrice, setUsdSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdSinglePrice = item.usdSinglePrice) !== null && _item$usdSinglePrice !== void 0 ? _item$usdSinglePrice : 0);
+  const [cadSinglePrice, setCadSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadSinglePrice = item.cadSinglePrice) !== null && _item$cadSinglePrice !== void 0 ? _item$cadSinglePrice : 0);
   const [lettersHeight, setLettersHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
     min: '1',
     max: '43'
@@ -26489,33 +26150,6 @@ function Letters({
     }
     fetchLetterPricing();
   }, []);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    console.log('Attempting to preload fonts...');
-    async function preloadFonts() {
-      try {
-        await loadingFonts();
-      } catch (error) {
-        console.error('Error loading fonts:', error);
-      }
-    }
-    preloadFonts();
-  }, []);
-  const loadingFonts = async () => {
-    const loadPromises = NovaQuote.fonts.map(font => loadFont(font));
-    await Promise.all(loadPromises);
-  };
-  async function loadFont({
-    name,
-    src
-  }) {
-    const fontFace = new FontFace(name, `url(${src})`);
-    try {
-      await fontFace.load();
-      document.fonts.add(fontFace);
-    } catch (e) {
-      console.error(`Font ${name} failed to load`);
-    }
-  }
   const headlineRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const adjustFontSize = () => {
     const container = headlineRef.current.parentNode;
@@ -26558,7 +26192,9 @@ function Letters({
           metalCustomColor: customColor,
           sets,
           studLength,
-          spacerStandoffDistance
+          spacerStandoffDistance,
+          usdSinglePrice,
+          cadSinglePrice
         };
       } else {
         return sign;
@@ -26606,47 +26242,50 @@ function Letters({
     }
     setSelectedFinishing(e.target.value);
   };
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+  const computePricing = () => {
     if (letterPricing.length > 0 && selectedLetterHeight && selectedThickness && waterproof) {
+      var _tempTotal$toFixed, _total$toFixed;
       const pricingDetail = letterPricing[selectedLetterHeight - 1];
       const baseLetterPrice = pricingDetail[selectedThickness.value];
-      let totalLetterPrice = 0;
+      let tempTotal = 0;
       const lettersArray = letters.trim().split('');
       const noLowerCase = NovaQuote.no_lowercase.includes(font);
       lettersArray.forEach(letter => {
-        let letterPrice = baseLetterPrice;
-        if (letter === ' ') {
-          // If the character is a space, set the price to 0 and skip further checks
-          letterPrice = 0;
-        } else if (letter.match(/[a-z]/)) {
-          // Check for lowercase letter
-          letterPrice *= noLowerCase ? 1 : lowerCasePricing; // 80% of the base price
-        } else if (letter.match(/[A-Z]/)) {
-          // Check for uppercase letter
-          // Uppercase letters use 100% of base price, so no change needed
-        } else if (letter.match(/[`~"*,.\-']/)) {
-          // Check for small punctuation marks
-          letterPrice *= smallPunctuations; // 30% of the base price
-        } else if (letter.match(/[^a-zA-Z]/)) {
-          // Check for symbol (not a letter or small punctuation)
-          // Symbols use 100% of base price, so no change needed
-        }
-
-        // Adjusting for waterproof and finishing
-        letterPrice *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.INDOOR_NOT_WATERPROOF ? 1 : 1.02;
-        totalLetterPrice += letterPrice;
+        tempTotal += (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_11__.calculateLetterPrice)(letter, baseLetterPrice, noLowerCase);
       });
-      if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
-        let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_10__.spacerPricing)(totalLetterPrice);
+      if (waterproof) tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.INDOOR_NOT_WATERPROOF ? 1 : 1.02;
+      if (mounting && mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
+        let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_11__.spacerPricing)(tempTotal);
         spacer = parseFloat(spacer.toFixed(2));
-        totalLetterPrice += spacer;
+        tempTotal += spacer;
       }
-      totalLetterPrice *= sets;
-      setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
-      setCadPrice((totalLetterPrice * parseFloat(_utils_defaults__WEBPACK_IMPORTED_MODULE_9__.EXCHANGE_RATE)).toFixed(2));
+      const total = tempTotal * parseInt(sets);
+      return {
+        singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
+        total: (_total$toFixed = total?.toFixed(2)) !== null && _total$toFixed !== void 0 ? _total$toFixed : 0
+      };
+    } else {
+      return {
+        singlePrice: 0,
+        total: 0
+      };
+    }
+  };
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    const {
+      singlePrice,
+      total
+    } = computePricing();
+    if (total && singlePrice) {
+      setUsdPrice(total);
+      setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.EXCHANGE_RATE).toFixed(2));
+      setUsdSinglePrice(singlePrice);
+      setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.EXCHANGE_RATE).toFixed(2));
     } else {
       setUsdPrice(0);
       setCadPrice(0);
+      setUsdSinglePrice(0);
+      setCadSinglePrice(0);
     }
   }, [selectedLetterHeight, selectedThickness, selectedFinishing, letters, waterproof, lettersHeight, sets, font, mounting]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
@@ -26666,7 +26305,7 @@ function Letters({
   }, [letters]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-  }, [letters, comments, font, selectedThickness, mounting, waterproof, color, usdPrice, cadPrice, selectedLetterHeight, fileUrls, fileNames, files, filePaths, fontFileUrl, fontFileName, fontFilePath, fontFile, selectedFinishing, customFont, sets, customColor, studLength, spacerStandoffDistance]);
+  }, [letters, comments, font, selectedThickness, mounting, waterproof, color, usdPrice, cadPrice, selectedLetterHeight, fileUrls, fileNames, files, filePaths, fontFileUrl, fontFileName, fontFilePath, fontFile, selectedFinishing, customFont, sets, customColor, studLength, spacerStandoffDistance, usdSinglePrice, cadSinglePrice]);
   const checkAndAddMissingFields = () => {
     const missingFields = [];
     if (!letters) missingFields.push('Add Line Text');
@@ -26835,38 +26474,21 @@ function Letters({
       selected: finishing.option === selectedFinishing
     }, finishing.option)),
     value: selectedFinishing
-  }), selectedFinishing === 'Painted' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "px-[1px] relative",
-    ref: colorRef
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
-  }, "Color"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: `flex px-2 items-center select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${color.name ? 'text-black' : 'text-[#dddddd]'}`,
-    onClick: () => {
+  }), selectedFinishing === 'Painted' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_10__["default"], {
+    ref: colorRef,
+    title: "Color",
+    colorName: color.name,
+    openColor: openColor,
+    toggleColor: () => {
       setOpenFont(false);
       setOpenColor(prev => !prev);
+    },
+    colorOptions: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_6__.colorOptions,
+    selectColor: color => {
+      setColor(color);
+      setOpenColor(false);
     }
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "rounded-full w-[18px] h-[18px] border mr-2",
-    style: {
-      background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
-    }
-  }), color.name === '' ? 'CHOOSE OPTION' : color.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
-  }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_6__.colorOptions.map(color => {
-    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
-      onClick: () => {
-        setColor(color);
-        setOpenColor(false);
-      }
-    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-      className: "w-[18px] h-[18px] inline-block rounded-full border",
-      style: {
-        background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
-      }
-    }), color.name);
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -26965,7 +26587,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
 /* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
 /* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../../utils/ColorsDropdown */ "./src/scripts/utils/ColorsDropdown.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+
 
 
 
@@ -26980,17 +26604,19 @@ __webpack_require__.r(__webpack_exports__);
 function Logo({
   item
 }) {
-  var _item$mounting, _item$width, _item$usdPrice, _item$cadPrice, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$finishing, _item$height, _item$comments, _item$waterproof, _item$mounting2, _item$studLength, _item$spacerStandoffD, _item$sets;
+  var _item$mounting, _item$width, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$finishing, _item$height, _item$comments, _item$waterproof, _item$mounting2, _item$studLength, _item$spacerStandoffD, _item$sets;
   const {
     signage,
     setSignage,
     setMissing
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_9__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_10__.useAppContext)();
   const [selectedMounting, setSelectedMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
   const [selectedThickness, setSelectedThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.metalThickness);
   const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$width = item.width) !== null && _item$width !== void 0 ? _item$width : '');
   const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdPrice = item.usdPrice) !== null && _item$usdPrice !== void 0 ? _item$usdPrice : 0);
   const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadPrice = item.cadPrice) !== null && _item$cadPrice !== void 0 ? _item$cadPrice : 0);
+  const [usdSinglePrice, setUsdSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdSinglePrice = item.usdSinglePrice) !== null && _item$usdSinglePrice !== void 0 ? _item$usdSinglePrice : 0);
+  const [cadSinglePrice, setCadSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadSinglePrice = item.cadSinglePrice) !== null && _item$cadSinglePrice !== void 0 ? _item$cadSinglePrice : 0);
   const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileNames = item.fileNames) !== null && _item$fileNames !== void 0 ? _item$fileNames : []);
   const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrls = item.fileUrls) !== null && _item$fileUrls !== void 0 ? _item$fileUrls : []);
   const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$filePaths = item.filePaths) !== null && _item$filePaths !== void 0 ? _item$filePaths : []);
@@ -27122,7 +26748,9 @@ function Logo({
           metalCustomColor: customColor,
           sets,
           studLength,
-          spacerStandoffDistance
+          spacerStandoffDistance,
+          usdSinglePrice,
+          cadSinglePrice
         };
       } else {
         return sign;
@@ -27133,7 +26761,7 @@ function Logo({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
-  }, [comments, selectedThickness, selectedMounting, waterproof, width, height, usdPrice, cadPrice, fileUrls, fileNames, selectedFinishing, files, filePaths, mounting, color, customColor, sets, studLength, spacerStandoffDistance]);
+  }, [comments, selectedThickness, selectedMounting, waterproof, width, height, usdPrice, cadPrice, fileUrls, fileNames, selectedFinishing, files, filePaths, mounting, color, customColor, sets, studLength, spacerStandoffDistance, usdSinglePrice, cadSinglePrice]);
   const checkAndAddMissingFields = () => {
     const missingFields = [];
     if (!selectedThickness) missingFields.push('Select Acrylic Thickness');
@@ -27184,32 +26812,56 @@ function Logo({
       });
     }
   };
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+  const computePricing = () => {
     if (width && height && selectedThickness && waterproof && logoPricingObject !== null) {
       const logoPricing = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.getLogoPricingTablebyThickness)(`${selectedThickness.value}mm`, logoPricingObject);
       if (logoPricing !== undefined) {
+        var _tempTotal$toFixed, _total$toFixed;
         const logoPricingTable = logoPricing !== undefined ? (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_5__["default"])(logoPricing) : [];
+        let tempTotal = 0;
         const computed = logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
-        let multiplier = 0;
+        tempTotal += computed;
         if (waterproof) {
-          multiplier = waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.INDOOR_NOT_WATERPROOF ? 1 : 1.02;
+          tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.INDOOR_NOT_WATERPROOF ? 1 : 1.02;
         }
-        let total = parseFloat((computed * multiplier).toFixed(2));
         if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.STUD_WITH_SPACER) {
-          let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.spacerPricing)(total);
+          let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.spacerPricing)(tempTotal);
           spacer = parseFloat(spacer.toFixed(2));
-          total += spacer;
+          tempTotal += spacer;
         }
-        total *= sets;
-        setUsdPrice(parseFloat(total.toFixed(2)));
-        setCadPrice((total * parseFloat(_utils_defaults__WEBPACK_IMPORTED_MODULE_8__.EXCHANGE_RATE)).toFixed(2));
+        const total = tempTotal * sets;
+        return {
+          singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
+          total: (_total$toFixed = total?.toFixed(2)) !== null && _total$toFixed !== void 0 ? _total$toFixed : 0
+        };
       } else {
-        setUsdPrice(0);
-        setCadPrice(0);
+        return {
+          singlePrice: 0,
+          total: 0
+        };
       }
+    } else {
+      return {
+        singlePrice: 0,
+        total: 0
+      };
+    }
+  };
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    const {
+      singlePrice,
+      total
+    } = computePricing();
+    if (total && singlePrice) {
+      setUsdPrice(total);
+      setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.EXCHANGE_RATE).toFixed(2));
+      setUsdSinglePrice(singlePrice);
+      setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.EXCHANGE_RATE).toFixed(2));
     } else {
       setUsdPrice(0);
       setCadPrice(0);
+      setUsdSinglePrice(0);
+      setCadSinglePrice(0);
     }
   }, [width, height, selectedThickness, waterproof, selectedFinishing, sets, mounting]);
   (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_3__["default"])([colorRef], () => {
@@ -27273,35 +26925,21 @@ function Logo({
       selected: finishing.option === selectedFinishing
     }, finishing.option)),
     value: selectedFinishing
-  }), selectedFinishing === 'Painted' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "px-[1px] relative",
-    ref: colorRef
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
-  }, "Color"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: `flex px-2 items-center select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${color.name ? 'text-black' : 'text-[#dddddd]'}`,
-    onClick: () => setOpenColor(prev => !prev)
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "rounded-full w-[18px] h-[18px] border mr-2",
-    style: {
-      background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
+  }), selectedFinishing === 'Painted' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_9__["default"], {
+    ref: colorRef,
+    title: "Color",
+    colorName: color.name,
+    openColor: openColor,
+    toggleColor: () => {
+      setOpenFont(false);
+      setOpenColor(prev => !prev);
+    },
+    colorOptions: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_4__.colorOptions,
+    selectColor: color => {
+      setColor(color);
+      setOpenColor(false);
     }
-  }), color.name === '' ? 'CHOOSE OPTION' : color.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
-  }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_4__.colorOptions.map(color => {
-    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
-      onClick: () => {
-        setColor(color);
-        setOpenColor(false);
-      }
-    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-      className: "w-[18px] h-[18px] inline-block rounded-full border",
-      style: {
-        background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
-      }
-    }), color.name);
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Mounting Options",
     onChange: handleOnChangeInstallation,
     options: metalMountingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -27583,9 +27221,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_ConvertJson__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../utils/ConvertJson */ "./src/scripts/utils/ConvertJson.js");
 /* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
 /* harmony import */ var _metalOptions__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../metalOptions */ "./src/scripts/products/metal/metalOptions.js");
-/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
-/* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../utils/ColorsDropdown */ "./src/scripts/utils/ColorsDropdown.js");
+/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
+/* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
 
 
 
@@ -27600,19 +27239,16 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const lowerCasePricing = parseFloat(NovaQuote.lowercase_pricing ? NovaQuote.lowercase_pricing : 1);
-const smallPunctuations = parseFloat(NovaQuote.small_punctuations_pricing ? NovaQuote.small_punctuations_pricing : 1);
-//const AcrylicLetterPricing = JSON.parse(NovaOptions.letter_x_logo_pricing);
 
 function Letters({
   item
 }) {
-  var _item$letters, _item$comments, _item$font, _item$color, _item$waterproof, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
+  var _item$letters, _item$comments, _item$font, _item$color, _item$waterproof, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
   const {
     signage,
     setSignage,
     setMissing
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_12__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_13__.useAppContext)();
   const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letters = item.letters) !== null && _item$letters !== void 0 ? _item$letters : '');
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
   const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$font = item.font) !== null && _item$font !== void 0 ? _item$font : '');
@@ -27639,6 +27275,8 @@ function Letters({
   const [selectedLetterHeight, setSelectedLetterHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letterHeight = item.letterHeight) !== null && _item$letterHeight !== void 0 ? _item$letterHeight : '');
   const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdPrice = item.usdPrice) !== null && _item$usdPrice !== void 0 ? _item$usdPrice : 0);
   const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadPrice = item.cadPrice) !== null && _item$cadPrice !== void 0 ? _item$cadPrice : 0);
+  const [usdSinglePrice, setUsdSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdSinglePrice = item.usdSinglePrice) !== null && _item$usdSinglePrice !== void 0 ? _item$usdSinglePrice : 0);
+  const [cadSinglePrice, setCadSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadSinglePrice = item.cadSinglePrice) !== null && _item$cadSinglePrice !== void 0 ? _item$cadSinglePrice : 0);
   const [lettersHeight, setLettersHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
     min: '1',
     max: '43'
@@ -27704,33 +27342,6 @@ function Letters({
     }
     fetchLetterPricing();
   }, []);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    console.log('Attempting to preload fonts...');
-    async function preloadFonts() {
-      try {
-        await loadingFonts();
-      } catch (error) {
-        console.error('Error loading fonts:', error);
-      }
-    }
-    preloadFonts();
-  }, []);
-  const loadingFonts = async () => {
-    const loadPromises = NovaQuote.fonts.map(font => loadFont(font));
-    await Promise.all(loadPromises);
-  };
-  async function loadFont({
-    name,
-    src
-  }) {
-    const fontFace = new FontFace(name, `url(${src})`);
-    try {
-      await fontFace.load();
-      document.fonts.add(fontFace);
-    } catch (e) {
-      console.error(`Font ${name} failed to load`);
-    }
-  }
   const headlineRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const adjustFontSize = () => {
     const container = headlineRef.current.parentNode;
@@ -27775,7 +27386,9 @@ function Letters({
           customColor,
           sets,
           studLength,
-          spacerStandoffDistance
+          spacerStandoffDistance,
+          usdSinglePrice,
+          cadSinglePrice
         };
       } else {
         return sign;
@@ -27789,8 +27402,8 @@ function Letters({
   const handleOnChangeInstallation = e => {
     const target = e.target.value;
     setMounting(target);
-    if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER || target === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT) {
-      if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT) {
+    if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER || target === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT) {
+      if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT) {
         setSpacerStandoffDistance('');
       }
     } else {
@@ -27841,61 +27454,62 @@ function Letters({
     }
     setStainLessMetalFinish(e.target.value);
   };
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+  const computePricing = () => {
     if (letterPricing.length > 0 && selectedLetterHeight && selectedThickness) {
+      var _tempTotal$toFixed, _total$toFixed;
       const pricingDetail = letterPricing[selectedLetterHeight - 1];
       const baseLetterPrice = pricingDetail[selectedThickness.value];
-      let totalLetterPrice = 0;
+      let tempTotal = 0;
       const lettersArray = letters.trim().split('');
       const noLowerCase = NovaQuote.no_lowercase.includes(font);
-      if (lettersArray.length > 0 && selectedLetterHeight && waterproof && selectedThickness) {
-        lettersArray.forEach(letter => {
-          let letterPrice = baseLetterPrice;
-          if (letter === ' ') {
-            // If the character is a space, set the price to 0 and skip further checks
-            letterPrice = 0;
-          } else if (letter.match(/[a-z]/)) {
-            // Check for lowercase letter
-            letterPrice *= noLowerCase ? 1 : lowerCasePricing; // 80% of the base price
-          } else if (letter.match(/[A-Z]/)) {
-            // Check for uppercase letter
-            // Uppercase letters use 100% of base price, so no change needed
-          } else if (letter.match(/[`~"*,.\-']/)) {
-            // Check for small punctuation marks
-            letterPrice *= smallPunctuations; // 30% of the base price
-          } else if (letter.match(/[^a-zA-Z]/)) {
-            // Check for symbol (not a letter or small punctuation)
-            // Symbols use 100% of base price, so no change needed
-          }
-
-          // Adjusting for waterproof and finishing
-          letterPrice *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.INDOOR_NOT_WATERPROOF ? 1 : 1.02;
-          letterPrice *= metal === '316 Stainless Steel' ? 1.3 : 1;
-          if (stainlessSteelPolished) {
-            if ('Standard (Face)' === stainlessSteelPolished) {
-              letterPrice *= 1.3;
-            }
-            if ('Premium (Face & Side)' === stainlessSteelPolished) {
-              letterPrice *= 1.7;
-            }
-          }
-          if (stainLessMetalFinish && stainLessMetalFinish !== 'Stainless Steel Brushed' && stainLessMetalFinish !== 'Stainless Steel Polished') {
-            letterPrice *= 1.2;
-          }
-          totalLetterPrice += letterPrice;
-        });
-        if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER) {
-          let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_11__.spacerPricing)(totalLetterPrice);
-          spacer = parseFloat(spacer.toFixed(2));
-          totalLetterPrice += spacer;
+      lettersArray.forEach(letter => {
+        tempTotal += (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_12__.calculateLetterPrice)(letter, baseLetterPrice, noLowerCase);
+      });
+      if (waterproof) tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.INDOOR_NOT_WATERPROOF ? 1 : 1.02;
+      if (metal) tempTotal *= metal === '316 Stainless Steel' ? 1.3 : 1;
+      if (stainlessSteelPolished) {
+        if ('Standard (Face)' === stainlessSteelPolished) {
+          tempTotal *= 1.3;
         }
-        totalLetterPrice *= sets;
-        setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
-        setCadPrice((totalLetterPrice * parseFloat(_utils_defaults__WEBPACK_IMPORTED_MODULE_10__.EXCHANGE_RATE)).toFixed(2));
-      } else {
-        setUsdPrice(0);
-        setCadPrice(0);
+        if ('Premium (Face & Side)' === stainlessSteelPolished) {
+          tempTotal *= 1.7;
+        }
       }
+      if (stainLessMetalFinish && stainLessMetalFinish !== 'Stainless Steel Brushed' && stainLessMetalFinish !== 'Stainless Steel Polished') {
+        tempTotal *= 1.2;
+      }
+      if (mounting && mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER) {
+        let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_12__.spacerPricing)(tempTotal);
+        spacer = parseFloat(spacer.toFixed(2));
+        tempTotal += spacer;
+      }
+      const total = tempTotal * parseInt(sets);
+      return {
+        singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
+        total: (_total$toFixed = total?.toFixed(2)) !== null && _total$toFixed !== void 0 ? _total$toFixed : 0
+      };
+    } else {
+      return {
+        singlePrice: 0,
+        total: 0
+      };
+    }
+  };
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    const {
+      singlePrice,
+      total
+    } = computePricing();
+    if (total && singlePrice) {
+      setUsdPrice(total);
+      setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.EXCHANGE_RATE).toFixed(2));
+      setUsdSinglePrice(singlePrice);
+      setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.EXCHANGE_RATE).toFixed(2));
+    } else {
+      setUsdPrice(0);
+      setCadPrice(0);
+      setUsdSinglePrice(0);
+      setCadSinglePrice(0);
     }
   }, [selectedLetterHeight, selectedThickness, selectedFinishing, letters, waterproof, lettersHeight, metal, stainLessMetalFinish, stainlessSteelPolished, sets, mounting, font]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
@@ -27938,11 +27552,11 @@ function Letters({
     }
     if (!waterproof) missingFields.push('Select Environment');
     if (!mounting) missingFields.push('Select Installation');
-    if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER) {
+    if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER) {
       if (!studLength) missingFields.push('Select Stud Length');
       if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
-    if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT) {
+    if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT) {
       if (!studLength) missingFields.push('Select Stud Length');
     }
     if (!sets) missingFields.push('Select Quantity');
@@ -27976,7 +27590,7 @@ function Letters({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
-  }, [letters, comments, font, selectedThickness, mounting, waterproof, color, usdPrice, cadPrice, selectedLetterHeight, fileUrls, fileNames, files, filePaths, metal, selectedFinishing, stainLessMetalFinish, stainlessSteelPolished, customColor, fontFileUrl, fontFileName, fontFilePath, fontFile, sets, studLength, spacerStandoffDistance]);
+  }, [letters, comments, font, selectedThickness, mounting, waterproof, color, usdPrice, cadPrice, selectedLetterHeight, fileUrls, fileNames, files, filePaths, metal, selectedFinishing, stainLessMetalFinish, stainlessSteelPolished, customColor, fontFileUrl, fontFileName, fontFilePath, fontFile, sets, studLength, spacerStandoffDistance, usdSinglePrice, cadSinglePrice]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const newHeightOptions = letterPricing?.filter(item => {
       const value = item[selectedThickness?.value];
@@ -28008,12 +27622,12 @@ function Letters({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     let newMountingOptions = _metalOptions__WEBPACK_IMPORTED_MODULE_9__.metalInstallationOptions;
     if (selectedThickness?.value === '4') {
-      if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER || mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT) {
+      if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER || mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT) {
         setMounting('');
         setStudLength('');
         setSpacerStandoffDistance('');
       }
-      newMountingOptions = _metalOptions__WEBPACK_IMPORTED_MODULE_9__.metalInstallationOptions.filter(option => option.option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT && option.option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER);
+      newMountingOptions = _metalOptions__WEBPACK_IMPORTED_MODULE_9__.metalInstallationOptions.filter(option => option.option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT && option.option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER);
     } else {
       newMountingOptions = _metalOptions__WEBPACK_IMPORTED_MODULE_9__.metalInstallationOptions;
     }
@@ -28111,38 +27725,21 @@ function Letters({
       selected: steelPolished.option === stainlessSteelPolished
     }, steelPolished.option)),
     value: stainlessSteelPolished
-  }), selectedFinishing === 'Painted Finish' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "px-[1px] relative",
-    ref: colorRef
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
-  }, "Painted Color"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: `flex px-2 items-center select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${color.name ? 'text-black' : 'text-[#dddddd]'}`,
-    onClick: () => {
+  }), selectedFinishing === 'Painted Finish' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_10__["default"], {
+    ref: colorRef,
+    title: "Painted Color",
+    colorName: color.name,
+    openColor: openColor,
+    toggleColor: () => {
       setOpenFont(false);
       setOpenColor(prev => !prev);
+    },
+    colorOptions: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_6__.colorOptions,
+    selectColor: color => {
+      setColor(color);
+      setOpenColor(false);
     }
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "rounded-full w-[18px] h-[18px] border mr-2",
-    style: {
-      background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
-    }
-  }), color.name === '' ? 'CHOOSE OPTION' : color.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
-  }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_6__.colorOptions.map(color => {
-    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
-      onClick: () => {
-        setColor(color);
-        setOpenColor(false);
-      }
-    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-      className: "w-[18px] h-[18px] inline-block rounded-full border",
-      style: {
-        background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
-      }
-    }), color.name);
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -28158,7 +27755,7 @@ function Letters({
       selected: option.option === mounting
     }, option.option)),
     value: mounting
-  }), (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER || mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }), (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER || mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -28166,7 +27763,7 @@ function Letters({
       selected: option.value == studLength
     }, option.value)),
     value: studLength
-  }), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -28180,7 +27777,7 @@ function Letters({
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.setOptions,
     value: sets,
     onlyValue: true
-  })), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  })), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-xs text-[#9F9F9F] mb-4"
   }, "*Note: The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid"
@@ -28242,7 +27839,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
 /* harmony import */ var _metalOptions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../metalOptions */ "./src/scripts/products/metal/metalOptions.js");
 /* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../utils/ColorsDropdown */ "./src/scripts/utils/ColorsDropdown.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+
 
 
 
@@ -28258,16 +27857,18 @@ __webpack_require__.r(__webpack_exports__);
 function Logo({
   item
 }) {
-  var _item$width, _item$usdPrice, _item$cadPrice, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$color, _item$customColor, _item$height, _item$comments, _item$waterproof, _item$mounting, _item$sets, _item$studLength, _item$spacerStandoffD;
+  var _item$width, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$color, _item$customColor, _item$height, _item$comments, _item$waterproof, _item$mounting, _item$sets, _item$studLength, _item$spacerStandoffD;
   const {
     signage,
     setSignage,
     setMissing
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_10__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_11__.useAppContext)();
   const [selectedThickness, setSelectedThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.metalThickness);
   const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$width = item.width) !== null && _item$width !== void 0 ? _item$width : '');
   const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdPrice = item.usdPrice) !== null && _item$usdPrice !== void 0 ? _item$usdPrice : 0);
   const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadPrice = item.cadPrice) !== null && _item$cadPrice !== void 0 ? _item$cadPrice : 0);
+  const [usdSinglePrice, setUsdSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdSinglePrice = item.usdSinglePrice) !== null && _item$usdSinglePrice !== void 0 ? _item$usdSinglePrice : 0);
+  const [cadSinglePrice, setCadSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadSinglePrice = item.cadSinglePrice) !== null && _item$cadSinglePrice !== void 0 ? _item$cadSinglePrice : 0);
   const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileNames = item.fileNames) !== null && _item$fileNames !== void 0 ? _item$fileNames : []);
   const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrls = item.fileUrls) !== null && _item$fileUrls !== void 0 ? _item$fileUrls : []);
   const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$filePaths = item.filePaths) !== null && _item$filePaths !== void 0 ? _item$filePaths : []);
@@ -28411,7 +28012,9 @@ function Logo({
           stainLessMetalFinish,
           sets,
           studLength,
-          spacerStandoffDistance
+          spacerStandoffDistance,
+          usdSinglePrice,
+          cadSinglePrice
         };
       } else {
         return sign;
@@ -28478,7 +28081,7 @@ function Logo({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
-  }, [comments, selectedThickness, mounting, waterproof, width, height, usdPrice, cadPrice, fileUrls, fileNames, selectedFinishing, stainLessMetalFinish, stainlessSteelPolished, files, filePaths, mounting, color, customColor, metal, sets, studLength, spacerStandoffDistance]);
+  }, [comments, selectedThickness, mounting, waterproof, width, height, usdPrice, cadPrice, fileUrls, fileNames, selectedFinishing, stainLessMetalFinish, stainlessSteelPolished, files, filePaths, mounting, color, customColor, metal, sets, studLength, spacerStandoffDistance, usdSinglePrice, cadSinglePrice]);
   const [logoPricingObject, setLogoPricingObject] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     async function fetchLogoPricing() {
@@ -28492,48 +28095,68 @@ function Logo({
     }
     fetchLogoPricing();
   }, []);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+  const computePricing = () => {
     if (width && height && selectedThickness && waterproof && logoPricingObject !== null) {
       const logoPricing = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.getLogoPricingTablebyThickness)(`${selectedThickness.value}mm`, logoPricingObject);
       if (logoPricing !== undefined) {
+        var _tempTotal$toFixed, _total$toFixed;
         const logoPricingTable = logoPricing !== undefined ? (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_5__["default"])(logoPricing) : [];
+        let tempTotal = 0;
         const computed = logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
-        let multiplier = 1;
+        tempTotal += computed;
         if (waterproof) {
-          multiplier = waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.INDOOR_NOT_WATERPROOF ? 1 : 1.02;
-          multiplier = parseFloat(multiplier).toFixed(2);
+          tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.INDOOR_NOT_WATERPROOF ? 1 : 1.02;
         }
-        let total = parseFloat((computed * multiplier).toFixed(2));
-        total *= metal === '316 Stainless Steel' ? 1.3 : 1;
-        total = parseFloat(total.toFixed(2));
+        if (metal) tempTotal *= metal === '316 Stainless Steel' ? 1.3 : 1;
         if (stainlessSteelPolished) {
           if ('Standard (Face)' === stainlessSteelPolished) {
-            total *= 1.3;
+            tempTotal *= 1.3;
           }
           if ('Premium (Face & Side)' === stainlessSteelPolished) {
-            total *= 1.7;
+            tempTotal *= 1.7;
           }
-          total = parseFloat(total.toFixed(2));
         }
         if (stainLessMetalFinish && stainLessMetalFinish !== 'Stainless Steel Brushed' && stainLessMetalFinish !== 'Stainless Steel Polished') {
-          total *= 1.2;
+          tempTotal *= 1.2;
         }
-        total = parseFloat(total.toFixed(2));
         if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
-          let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.spacerPricing)(total);
+          let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.spacerPricing)(tempTotal);
           spacer = parseFloat(spacer.toFixed(2));
-          total += spacer;
+          tempTotal += spacer;
         }
-        total *= sets;
-        setUsdPrice(parseFloat(total.toFixed(2)));
-        setCadPrice((total * parseFloat(_utils_defaults__WEBPACK_IMPORTED_MODULE_9__.EXCHANGE_RATE)).toFixed(2));
+        const total = tempTotal * sets;
+        return {
+          singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
+          total: (_total$toFixed = total?.toFixed(2)) !== null && _total$toFixed !== void 0 ? _total$toFixed : 0
+        };
       } else {
-        setUsdPrice(0);
-        setCadPrice(0);
+        return {
+          singlePrice: 0,
+          total: 0
+        };
       }
+    } else {
+      return {
+        singlePrice: 0,
+        total: 0
+      };
+    }
+  };
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    const {
+      singlePrice,
+      total
+    } = computePricing();
+    if (total && singlePrice) {
+      setUsdPrice(total);
+      setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.EXCHANGE_RATE).toFixed(2));
+      setUsdSinglePrice(singlePrice);
+      setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.EXCHANGE_RATE).toFixed(2));
     } else {
       setUsdPrice(0);
       setCadPrice(0);
+      setUsdSinglePrice(0);
+      setCadSinglePrice(0);
     }
   }, [width, height, selectedThickness, waterproof, selectedFinishing, metal, stainLessMetalFinish, stainlessSteelPolished, sets, mounting]);
   (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_3__["default"])([colorRef], () => {
@@ -28610,35 +28233,20 @@ function Logo({
       selected: steelPolished.option === item.stainlessSteelPolished
     }, steelPolished.option)),
     value: item.stainlessSteelPolished
-  }), selectedFinishing === 'Painted Finish' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "px-[1px] relative",
-    ref: colorRef
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
-  }, "Painted Color"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: `flex px-2 items-center select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${color.name ? 'text-black' : 'text-[#dddddd]'}`,
-    onClick: () => setOpenColor(prev => !prev)
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "rounded-full w-[18px] h-[18px] border mr-2",
-    style: {
-      background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
+  }), selectedFinishing === 'Painted Finish' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_10__["default"], {
+    ref: colorRef,
+    title: "Painted Color",
+    colorName: color.name,
+    openColor: openColor,
+    toggleColor: () => {
+      setOpenColor(prev => !prev);
+    },
+    colorOptions: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_4__.colorOptions,
+    selectColor: color => {
+      setColor(color);
+      setOpenColor(false);
     }
-  }), color.name === '' ? 'CHOOSE OPTION' : color.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
-  }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_4__.colorOptions.map(color => {
-    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
-      onClick: () => {
-        setColor(color);
-        setOpenColor(false);
-      }
-    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-      className: "w-[18px] h-[18px] inline-block rounded-full border",
-      style: {
-        background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
-      }
-    }), color.name);
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -29194,33 +28802,6 @@ function Letters({
     }
     fetchLetterPricing();
   }, []);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    console.log('Attempting to preload fonts...');
-    async function preloadFonts() {
-      try {
-        await loadingFonts();
-      } catch (error) {
-        console.error('Error loading fonts:', error);
-      }
-    }
-    preloadFonts();
-  }, []);
-  const loadingFonts = async () => {
-    const loadPromises = NovaQuote.fonts.map(font => loadFont(font));
-    await Promise.all(loadPromises);
-  };
-  async function loadFont({
-    name,
-    src
-  }) {
-    const fontFace = new FontFace(name, `url(${src})`);
-    try {
-      await fontFace.load();
-      document.fonts.add(fontFace);
-    } catch (e) {
-      console.error(`Font ${name} failed to load`);
-    }
-  }
   const headlineRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const adjustFontSize = () => {
     const container = headlineRef.current.parentNode;
@@ -30392,17 +29973,6 @@ function Letters({
     fetchLetterPricing();
   }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    console.log('Attempting to preload fonts...');
-    async function preloadFonts() {
-      try {
-        await loadingFonts();
-      } catch (error) {
-        console.error('Error loading fonts:', error);
-      }
-    }
-    preloadFonts();
-  }, []);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if ('Outdoor (Waterproof)' === waterproof) {
       if ('Double-sided tape' === mounting) {
         setMounting('');
@@ -30413,22 +29983,6 @@ function Letters({
       setMountingSelections(_pvcOptions__WEBPACK_IMPORTED_MODULE_9__.mountingOptions);
     }
   }, [waterproof]);
-  const loadingFonts = async () => {
-    const loadPromises = NovaQuote.fonts.map(font => loadFont(font));
-    await Promise.all(loadPromises);
-  };
-  async function loadFont({
-    name,
-    src
-  }) {
-    const fontFace = new FontFace(name, `url(${src})`);
-    try {
-      await fontFace.load();
-      document.fonts.add(fontFace);
-    } catch (e) {
-      console.error(`Font ${name} failed to load`);
-    }
-  }
   const headlineRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const adjustFontSize = () => {
     const container = headlineRef.current.parentNode;

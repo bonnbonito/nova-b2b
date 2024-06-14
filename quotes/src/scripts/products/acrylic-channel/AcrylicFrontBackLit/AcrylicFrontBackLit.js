@@ -46,21 +46,6 @@ const AcrylicFrontBackLit = () => {
 		]);
 	}, []);
 
-	const loadFont = useCallback(async ({ name, src }) => {
-		const fontFace = new FontFace(name, `url(${src})`);
-		try {
-			await fontFace.load();
-			document.fonts.add(fontFace);
-		} catch (e) {
-			console.error(`Font ${name} failed to load`);
-		}
-	}, []);
-
-	const preloadFonts = useCallback(async () => {
-		const loadPromises = NovaQuote.fonts.map((font) => loadFont(font));
-		await Promise.all(loadPromises);
-	}, [loadFont]);
-
 	useEffect(() => {
 		if (NovaQuote.is_editting === '1') {
 			const currentSignage = JSON.parse(NovaQuote.signage);
@@ -78,9 +63,6 @@ const AcrylicFrontBackLit = () => {
 		} else {
 			setTempFolder(() => `Q-${NovaQuote.current_quote_id}`);
 		}
-
-		console.log('Attempting to preload fonts...');
-		preloadFonts();
 	}, []);
 
 	const defaultArgs = {

@@ -30,6 +30,8 @@ import {
 	STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
 
+import ColorsDropdown from '../../../../utils/ColorsDropdown';
+
 import { useAppContext } from '../../../../AppProvider';
 
 export function Logo({ item }) {
@@ -38,8 +40,16 @@ export function Logo({ item }) {
 		item.metalThickness
 	);
 	const [width, setWidth] = useState(item.width ?? '');
+
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
+	const [usdSinglePrice, setUsdSinglePrice] = useState(
+		item.usdSinglePrice ?? 0
+	);
+	const [cadSinglePrice, setCadSinglePrice] = useState(
+		item.cadSinglePrice ?? 0
+	);
+
 	const [fileNames, setFileNames] = useState(item.fileNames ?? []);
 	const [fileUrls, setFileUrls] = useState(item.fileUrls ?? []);
 	const [filePaths, setFilePaths] = useState(item.filePaths ?? []);
@@ -211,6 +221,8 @@ export function Logo({ item }) {
 					sets,
 					studLength,
 					spacerStandoffDistance,
+					usdSinglePrice,
+					cadSinglePrice,
 				};
 			} else {
 				return sign;
@@ -321,6 +333,8 @@ export function Logo({ item }) {
 		sets,
 		studLength,
 		spacerStandoffDistance,
+		usdSinglePrice,
+		cadSinglePrice,
 	]);
 
 	const [logoPricingObject, setLogoPricingObject] = useState([]);
@@ -338,7 +352,8 @@ export function Logo({ item }) {
 
 		fetchLogoPricing();
 	}, []);
-	useEffect(() => {
+
+	const computePricing = () => {
 		if (
 			width &&
 			height &&
@@ -355,29 +370,26 @@ export function Logo({ item }) {
 				const logoPricingTable =
 					logoPricing !== undefined ? convert_json(logoPricing) : [];
 
+				let tempTotal = 0;
 				const computed =
 					logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
 
-				let multiplier = 1;
+				tempTotal += computed;
+
 				if (waterproof) {
-					multiplier = waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.02;
-					multiplier = parseFloat(multiplier).toFixed(2);
+					tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.02;
 				}
 
-				let total = parseFloat((computed * multiplier).toFixed(2));
-
-				total *= metal === '316 Stainless Steel' ? 1.3 : 1;
-				total = parseFloat(total.toFixed(2));
+				if (metal) tempTotal *= metal === '316 Stainless Steel' ? 1.3 : 1;
 
 				if (stainlessSteelPolished) {
 					if ('Standard (Face)' === stainlessSteelPolished) {
-						total *= 1.3;
+						tempTotal *= 1.3;
 					}
 
 					if ('Premium (Face & Side)' === stainlessSteelPolished) {
-						total *= 1.7;
+						tempTotal *= 1.7;
 					}
-					total = parseFloat(total.toFixed(2));
 				}
 
 				if (
@@ -385,30 +397,47 @@ export function Logo({ item }) {
 					stainLessMetalFinish !== 'Stainless Steel Brushed' &&
 					stainLessMetalFinish !== 'Stainless Steel Polished'
 				) {
-					total *= 1.2;
+					tempTotal *= 1.2;
 				}
-
-				total = parseFloat(total.toFixed(2));
 
 				if (mounting === STUD_WITH_SPACER) {
-					let spacer = spacerPricing(total);
-
+					let spacer = spacerPricing(tempTotal);
 					spacer = parseFloat(spacer.toFixed(2));
-
-					total += spacer;
+					tempTotal += spacer;
 				}
 
-				total *= sets;
+				const total = tempTotal * sets;
 
-				setUsdPrice(parseFloat(total.toFixed(2)));
-				setCadPrice((total * parseFloat(EXCHANGE_RATE)).toFixed(2));
+				return {
+					singlePrice: tempTotal.toFixed(2) ?? 0,
+					total: total?.toFixed(2) ?? 0,
+				};
 			} else {
-				setUsdPrice(0);
-				setCadPrice(0);
+				return {
+					singlePrice: 0,
+					total: 0,
+				};
 			}
+		} else {
+			return {
+				singlePrice: 0,
+				total: 0,
+			};
+		}
+	};
+
+	useEffect(() => {
+		const { singlePrice, total } = computePricing();
+		if (total && singlePrice) {
+			setUsdPrice(total);
+			setCadPrice((total * EXCHANGE_RATE).toFixed(2));
+			setUsdSinglePrice(singlePrice);
+			setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
 		} else {
 			setUsdPrice(0);
 			setCadPrice(0);
+			setUsdSinglePrice(0);
+			setCadSinglePrice(0);
 		}
 	}, [
 		width,
@@ -542,54 +571,20 @@ export function Logo({ item }) {
 				)}
 
 				{selectedFinishing === 'Painted Finish' && (
-					<div className="px-[1px] relative" ref={colorRef}>
-						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-							Painted Color
-						</label>
-						<div
-							className={`flex px-2 items-center select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-								color.name ? 'text-black' : 'text-[#dddddd]'
-							}`}
-							onClick={() => setOpenColor((prev) => !prev)}
-						>
-							<span
-								className="rounded-full w-[18px] h-[18px] border mr-2"
-								style={{
-									background:
-										color.name == 'Custom Color'
-											? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-											: color.color,
-								}}
-							></span>
-							{color.name === '' ? 'CHOOSE OPTION' : color.name}
-						</div>
-						{openColor && (
-							<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg">
-								{colorOptions.map((color) => {
-									return (
-										<div
-											className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
-											onClick={() => {
-												setColor(color);
-												setOpenColor(false);
-											}}
-										>
-											<span
-												className="w-[18px] h-[18px] inline-block rounded-full border"
-												style={{
-													background:
-														color.name == 'Custom Color'
-															? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-															: color.color,
-												}}
-											></span>
-											{color.name}
-										</div>
-									);
-								})}
-							</div>
-						)}
-					</div>
+					<ColorsDropdown
+						ref={colorRef}
+						title="Painted Color"
+						colorName={color.name}
+						openColor={openColor}
+						toggleColor={() => {
+							setOpenColor((prev) => !prev);
+						}}
+						colorOptions={colorOptions}
+						selectColor={(color) => {
+							setColor(color);
+							setOpenColor(false);
+						}}
+					/>
 				)}
 
 				<Dropdown

@@ -23,19 +23,11 @@ import {
 	STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
 
-import { spacerPricing } from '../../../../utils/Pricing';
+import ColorsDropdown from '../../../../utils/ColorsDropdown';
+
+import { calculateLetterPrice, spacerPricing } from '../../../../utils/Pricing';
 
 import { useAppContext } from '../../../../AppProvider';
-
-const lowerCasePricing = parseFloat(
-	NovaQuote.lowercase_pricing ? NovaQuote.lowercase_pricing : 1
-);
-const smallPunctuations = parseFloat(
-	NovaQuote.small_punctuations_pricing
-		? NovaQuote.small_punctuations_pricing
-		: 1
-);
-//const AcrylicLetterPricing = JSON.parse(NovaOptions.letter_x_logo_pricing);
 
 export function Letters({ item }) {
 	const { signage, setSignage, setMissing } = useAppContext();
@@ -73,8 +65,15 @@ export function Letters({ item }) {
 	const [selectedLetterHeight, setSelectedLetterHeight] = useState(
 		item.letterHeight ?? ''
 	);
+
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
+	const [usdSinglePrice, setUsdSinglePrice] = useState(
+		item.usdSinglePrice ?? 0
+	);
+	const [cadSinglePrice, setCadSinglePrice] = useState(
+		item.cadSinglePrice ?? 0
+	);
 
 	const [lettersHeight, setLettersHeight] = useState({ min: '1', max: '43' });
 	const [mounting, setMounting] = useState(item.mounting ?? '');
@@ -146,34 +145,6 @@ export function Letters({ item }) {
 		fetchLetterPricing();
 	}, []);
 
-	useEffect(() => {
-		console.log('Attempting to preload fonts...');
-		async function preloadFonts() {
-			try {
-				await loadingFonts();
-			} catch (error) {
-				console.error('Error loading fonts:', error);
-			}
-		}
-		preloadFonts();
-	}, []);
-
-	const loadingFonts = async () => {
-		const loadPromises = NovaQuote.fonts.map((font) => loadFont(font));
-		await Promise.all(loadPromises);
-	};
-
-	async function loadFont({ name, src }) {
-		const fontFace = new FontFace(name, `url(${src})`);
-
-		try {
-			await fontFace.load();
-			document.fonts.add(fontFace);
-		} catch (e) {
-			console.error(`Font ${name} failed to load`);
-		}
-	}
-
 	const headlineRef = useRef(null);
 
 	const adjustFontSize = () => {
@@ -224,6 +195,8 @@ export function Letters({ item }) {
 					sets,
 					studLength,
 					spacerStandoffDistance,
+					usdSinglePrice,
+					cadSinglePrice,
 				};
 			} else {
 				return sign;
@@ -280,7 +253,7 @@ export function Letters({ item }) {
 		setSelectedFinishing(e.target.value);
 	};
 
-	useEffect(() => {
+	const computePricing = () => {
 		if (
 			letterPricing.length > 0 &&
 			selectedLetterHeight &&
@@ -290,50 +263,50 @@ export function Letters({ item }) {
 			const pricingDetail = letterPricing[selectedLetterHeight - 1];
 			const baseLetterPrice = pricingDetail[selectedThickness.value];
 
-			let totalLetterPrice = 0;
+			let tempTotal = 0;
 			const lettersArray = letters.trim().split('');
 			const noLowerCase = NovaQuote.no_lowercase.includes(font);
 
 			lettersArray.forEach((letter) => {
-				let letterPrice = baseLetterPrice;
-
-				if (letter === ' ') {
-					// If the character is a space, set the price to 0 and skip further checks
-					letterPrice = 0;
-				} else if (letter.match(/[a-z]/)) {
-					// Check for lowercase letter
-					letterPrice *= noLowerCase ? 1 : lowerCasePricing; // 80% of the base price
-				} else if (letter.match(/[A-Z]/)) {
-					// Check for uppercase letter
-					// Uppercase letters use 100% of base price, so no change needed
-				} else if (letter.match(/[`~"*,.\-']/)) {
-					// Check for small punctuation marks
-					letterPrice *= smallPunctuations; // 30% of the base price
-				} else if (letter.match(/[^a-zA-Z]/)) {
-					// Check for symbol (not a letter or small punctuation)
-					// Symbols use 100% of base price, so no change needed
-				}
-
-				// Adjusting for waterproof and finishing
-				letterPrice *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.02;
-
-				totalLetterPrice += letterPrice;
+				tempTotal += calculateLetterPrice(letter, baseLetterPrice, noLowerCase);
 			});
 
-			if (mounting === STUD_WITH_SPACER) {
-				let spacer = spacerPricing(totalLetterPrice);
+			if (waterproof)
+				tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.02;
+
+			if (mounting && mounting === STUD_WITH_SPACER) {
+				let spacer = spacerPricing(tempTotal);
 				spacer = parseFloat(spacer.toFixed(2));
 
-				totalLetterPrice += spacer;
+				tempTotal += spacer;
 			}
 
-			totalLetterPrice *= sets;
+			const total = tempTotal * parseInt(sets);
 
-			setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
-			setCadPrice((totalLetterPrice * parseFloat(EXCHANGE_RATE)).toFixed(2));
+			return {
+				singlePrice: tempTotal.toFixed(2) ?? 0,
+				total: total?.toFixed(2) ?? 0,
+			};
+		} else {
+			return {
+				singlePrice: 0,
+				total: 0,
+			};
+		}
+	};
+
+	useEffect(() => {
+		const { singlePrice, total } = computePricing();
+		if (total && singlePrice) {
+			setUsdPrice(total);
+			setCadPrice((total * EXCHANGE_RATE).toFixed(2));
+			setUsdSinglePrice(singlePrice);
+			setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
 		} else {
 			setUsdPrice(0);
 			setCadPrice(0);
+			setUsdSinglePrice(0);
+			setCadSinglePrice(0);
 		}
 	}, [
 		selectedLetterHeight,
@@ -400,6 +373,8 @@ export function Letters({ item }) {
 		customColor,
 		studLength,
 		spacerStandoffDistance,
+		usdSinglePrice,
+		cadSinglePrice,
 	]);
 
 	const checkAndAddMissingFields = () => {
@@ -653,57 +628,23 @@ export function Letters({ item }) {
 				/>
 
 				{selectedFinishing === 'Painted' && (
-					<div className="px-[1px] relative" ref={colorRef}>
-						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-							Color
-						</label>
-						<div
-							className={`flex px-2 items-center select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-								color.name ? 'text-black' : 'text-[#dddddd]'
-							}`}
-							onClick={() => {
+					<>
+						<ColorsDropdown
+							ref={colorRef}
+							title="Color"
+							colorName={color.name}
+							openColor={openColor}
+							toggleColor={() => {
 								setOpenFont(false);
 								setOpenColor((prev) => !prev);
 							}}
-						>
-							<span
-								className="rounded-full w-[18px] h-[18px] border mr-2"
-								style={{
-									background:
-										color.name == 'Custom Color'
-											? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-											: color.color,
-								}}
-							></span>
-							{color.name === '' ? 'CHOOSE OPTION' : color.name}
-						</div>
-						{openColor && (
-							<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg">
-								{colorOptions.map((color) => {
-									return (
-										<div
-											className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
-											onClick={() => {
-												setColor(color);
-												setOpenColor(false);
-											}}
-										>
-											<span
-												className="w-[18px] h-[18px] inline-block rounded-full border"
-												style={{
-													background:
-														color.name == 'Custom Color'
-															? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-															: color.color,
-												}}
-											></span>
-											{color.name}
-										</div>
-									);
-								})}
-							</div>
-						)}
-					</div>
+							colorOptions={colorOptions}
+							selectColor={(color) => {
+								setColor(color);
+								setOpenColor(false);
+							}}
+						/>
+					</>
 				)}
 
 				<Dropdown

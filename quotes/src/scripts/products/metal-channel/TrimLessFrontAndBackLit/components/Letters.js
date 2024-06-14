@@ -134,34 +134,6 @@ export function Letters({ item }) {
 		fetchLetterPricing();
 	}, []);
 
-	useEffect(() => {
-		console.log('Attempting to preload fonts...');
-		async function preloadFonts() {
-			try {
-				await loadingFonts();
-			} catch (error) {
-				console.error('Error loading fonts:', error);
-			}
-		}
-		preloadFonts();
-	}, []);
-
-	const loadingFonts = async () => {
-		const loadPromises = NovaQuote.fonts.map((font) => loadFont(font));
-		await Promise.all(loadPromises);
-	};
-
-	async function loadFont({ name, src }) {
-		const fontFace = new FontFace(name, `url(${src})`);
-
-		try {
-			await fontFace.load();
-			document.fonts.add(fontFace);
-		} catch (e) {
-			console.error(`Font ${name} failed to load`);
-		}
-	}
-
 	const headlineRef = useRef(null);
 
 	const adjustFontSize = () => {
@@ -353,21 +325,22 @@ export function Letters({ item }) {
 				tempTotal *= 1.03;
 			}
 
-			if (spacerStandoffDistance) {
+			if (mounting === STUD_WITH_SPACER) {
 				const spacer = spacerPricing(tempTotal);
 				tempTotal += parseFloat(spacer.toFixed(2));
 			}
 
-			console.log(tempTotal);
-
-			let total = tempTotal * parseInt(sets);
+			const total = tempTotal * parseInt(sets);
 
 			return {
-				singlePrice: tempTotal ?? 0,
+				singlePrice: tempTotal.toFixed(2) ?? 0,
 				total: total?.toFixed(2) ?? 0,
 			};
 		} else {
-			return 0;
+			return {
+				singlePrice: 0,
+				total: 0,
+			};
 		}
 	};
 
@@ -392,6 +365,7 @@ export function Letters({ item }) {
 		frontAcrylicCover,
 		sets,
 		font,
+		mounting,
 	]);
 
 	useEffect(() => {

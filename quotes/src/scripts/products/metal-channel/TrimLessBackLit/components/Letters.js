@@ -32,7 +32,7 @@ import {
 	STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
 
-import { spacerPricing } from '../../../../utils/Pricing';
+import { calculateLetterPrice, spacerPricing } from '../../../../utils/Pricing';
 
 import { useAppContext } from '../../../../AppProvider';
 
@@ -106,6 +106,12 @@ export function Letters({ item }) {
 
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
+	const [usdSinglePrice, setUsdSinglePrice] = useState(
+		item.usdSinglePrice ?? 0
+	);
+	const [cadSinglePrice, setCadSinglePrice] = useState(
+		item.cadSinglePrice ?? 0
+	);
 
 	const [lettersHeight, setLettersHeight] = useState({
 		min: 5,
@@ -169,6 +175,8 @@ export function Letters({ item }) {
 					letterHeight: selectedLetterHeight,
 					usdPrice,
 					cadPrice,
+					usdSinglePrice,
+					cadSinglePrice,
 					files,
 					fileNames,
 					filePaths,
@@ -414,6 +422,8 @@ export function Letters({ item }) {
 		color,
 		usdPrice,
 		cadPrice,
+		usdSinglePrice,
+		cadSinglePrice,
 		selectedLetterHeight,
 		ledLightColor,
 		fileUrls,
@@ -458,9 +468,7 @@ export function Letters({ item }) {
 		}
 	}, [depth, selectedLetterHeight, letterPricingTables]);
 
-	useEffect(() => {
-		if (!letterPricingTables || !letterPricing || !selectedLetterHeight) return;
-
+	const computePricing = () => {
 		if (
 			letterPricingTables &&
 			letterPricing &&
@@ -485,62 +493,63 @@ export function Letters({ item }) {
 
 				const baseLetterPrice = pricingDetail[mm];
 
-				let totalLetterPrice = 0;
+				let tempTotal = 0;
 				const lettersArray = letters.trim().split('');
 				const noLowerCase = NovaQuote.no_lowercase.includes(font);
 
 				lettersArray.forEach((letter) => {
-					let letterPrice = baseLetterPrice;
-
-					if (letter === ' ') {
-						// If the character is a space, set the price to 0 and skip further checks
-						letterPrice = 0;
-					} else if (letter.match(/[a-z]/)) {
-						// Check for lowercase letter
-						letterPrice *= noLowerCase ? 1 : lowerCasePricing; // 80% of the base price
-					} else if (letter.match(/[A-Z]/)) {
-						// Check for uppercase letter
-						// Uppercase letters use 100% of base price, so no change needed
-					} else if (letter.match(/[`~"*,.\-']/)) {
-						// Check for small punctuation marks
-						letterPrice *= smallPunctuations; // 30% of the base price
-					} else if (letter.match(/[^a-zA-Z]/)) {
-						// Check for symbol (not a letter or small punctuation)
-						// Symbols use 100% of base price, so no change needed
-					}
-
-					// Adjusting for waterproof and finishing
-					letterPrice *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.03;
-
-					if (metalFinish && metalFinish.includes('Polished')) {
-						letterPrice *= 1.3;
-					}
-
-					if (metalFinish && metalFinish.includes('Electroplated')) {
-						letterPrice *= 1.2;
-					}
-
-					totalLetterPrice += letterPrice;
+					tempTotal += calculateLetterPrice(
+						letter,
+						baseLetterPrice,
+						noLowerCase
+					);
 				});
 
-				if (mounting === STUD_WITH_SPACER) {
-					let spacer = spacerPricing(totalLetterPrice);
-					spacer = parseFloat(spacer.toFixed(2));
-
-					totalLetterPrice += spacer;
+				if (waterproof) {
+					tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.03;
 				}
 
-				totalLetterPrice *= sets;
+				if (metalFinish && metalFinish.includes('Polished')) {
+					tempTotal *= 1.3;
+				}
 
-				setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
-				setCadPrice((totalLetterPrice * parseFloat(EXCHANGE_RATE)).toFixed(2));
-			} else {
-				setUsdPrice(0);
-				setCadPrice(0);
+				if (metalFinish && metalFinish.includes('Electroplated')) {
+					tempTotal *= 1.2;
+				}
+
+				if (mounting === STUD_WITH_SPACER) {
+					let spacer = spacerPricing(tempTotal);
+					spacer = parseFloat(spacer.toFixed(2));
+					tempTotal += spacer;
+				}
+
+				const total = tempTotal * parseInt(sets);
+
+				return {
+					singlePrice: tempTotal.toFixed(2) ?? 0,
+					total: total?.toFixed(2) ?? 0,
+				};
 			}
+		} else {
+			return {
+				singlePrice: 0,
+				total: 0,
+			};
+		}
+	};
+
+	useEffect(() => {
+		const { singlePrice, total } = computePricing();
+		if (total && singlePrice) {
+			setUsdPrice(total);
+			setCadPrice((total * EXCHANGE_RATE).toFixed(2));
+			setUsdSinglePrice(singlePrice);
+			setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
 		} else {
 			setUsdPrice(0);
 			setCadPrice(0);
+			setUsdSinglePrice(0);
+			setCadSinglePrice(0);
 		}
 	}, [
 		selectedLetterHeight,
@@ -555,7 +564,6 @@ export function Letters({ item }) {
 		font,
 		mounting,
 		letterPricingTables,
-		item.product,
 	]);
 
 	if (selectedFinishing === 'Painted') {

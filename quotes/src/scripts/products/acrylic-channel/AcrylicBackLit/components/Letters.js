@@ -294,7 +294,7 @@ export function Letters({ item }) {
 				tempTotal += calculateLetterPrice(letter, baseLetterPrice, noLowerCase);
 			});
 
-			if (spacerStandoffDistance) {
+			if (selectedMounting === STUD_WITH_SPACER) {
 				const spacer = spacerPricing(tempTotal);
 				tempTotal += parseFloat(spacer.toFixed(2));
 			}
@@ -304,15 +304,9 @@ export function Letters({ item }) {
 
 			let total = tempTotal * parseInt(sets);
 
-			const discount = 1;
-
-			let totalWithDiscount = total * discount;
-
-			let discountPrice = total - totalWithDiscount;
-
 			return {
-				singlePrice: tempTotal ?? 0,
-				total: totalWithDiscount?.toFixed(2) ?? 0,
+				singlePrice: tempTotal.toFixed(2) ?? 0,
+				total: total?.toFixed(2) ?? 0,
 			};
 		} else {
 			return {
@@ -340,7 +334,7 @@ export function Letters({ item }) {
 		letters,
 		sets,
 		font,
-		spacerStandoffDistance,
+		selectedMounting,
 		letterPricing,
 	]);
 

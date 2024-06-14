@@ -358,55 +358,33 @@ export function Logo({ item }) {
 			console.log('waterproof', tempTotal);
 		}
 
-		if (spacerStandoffDistance) {
+		if (mounting === STUD_WITH_SPACER) {
 			const spacer = spacerPricing(tempTotal);
 			tempTotal += parseFloat(spacer.toFixed(2));
 		}
 
-		let total = tempTotal * parseInt(sets);
-
-		total = total.toFixed(1);
-
-		const discount = 1;
-
-		let totalWithDiscount = total * discount;
-
-		let discountPrice = total - totalWithDiscount;
+		const total = tempTotal * parseInt(sets);
 
 		return {
-			singlePrice: tempTotal ?? 0,
-			total: totalWithDiscount?.toFixed(2) ?? 0,
-			totalWithoutDiscount: total,
-			discount: discountPrice,
+			singlePrice: tempTotal.toFixed(2) ?? 0,
+			total: total.toFixed(2) ?? 0,
 		};
 	};
 
 	useEffect(() => {
-		const { singlePrice, total, discount } = computePricing();
+		const { singlePrice, total } = computePricing();
 		if (total && singlePrice) {
 			setUsdPrice(total);
 			setCadPrice((total * EXCHANGE_RATE).toFixed(2));
 			setUsdSinglePrice(singlePrice);
 			setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
-			setUsdDiscount(discount.toFixed(2));
-			setCadDiscount((discount * EXCHANGE_RATE).toFixed(2));
 		} else {
 			setUsdPrice(0);
 			setCadPrice(0);
 			setUsdSinglePrice(0);
 			setCadSinglePrice(0);
-			setUsdDiscount(0);
-			setCadDiscount(0);
 		}
-	}, [
-		depth,
-		width,
-		height,
-		waterproof,
-		spacerStandoffDistance,
-		frontAcrylicCover,
-		sets,
-	]);
+	}, [depth, width, height, waterproof, mounting, frontAcrylicCover, sets]);
 
 	useEffect(() => {
 		color?.name != 'Custom Color' && setCustomColor('');

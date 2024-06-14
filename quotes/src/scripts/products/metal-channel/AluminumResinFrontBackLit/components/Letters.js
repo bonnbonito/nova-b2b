@@ -31,7 +31,7 @@ import {
 	STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
 
-import { spacerPricing } from '../../../../utils/Pricing';
+import { calculateLetterPrice, spacerPricing } from '../../../../utils/Pricing';
 
 import { useAppContext } from '../../../../AppProvider';
 
@@ -146,34 +146,6 @@ export function Letters({ item }) {
 
 		fetchLetterPricing();
 	}, []);
-
-	useEffect(() => {
-		console.log('Attempting to preload fonts...');
-		async function preloadFonts() {
-			try {
-				await loadingFonts();
-			} catch (error) {
-				console.error('Error loading fonts:', error);
-			}
-		}
-		preloadFonts();
-	}, []);
-
-	const loadingFonts = async () => {
-		const loadPromises = NovaQuote.fonts.map((font) => loadFont(font));
-		await Promise.all(loadPromises);
-	};
-
-	async function loadFont({ name, src }) {
-		const fontFace = new FontFace(name, `url(${src})`);
-
-		try {
-			await fontFace.load();
-			document.fonts.add(fontFace);
-		} catch (e) {
-			console.error(`Font ${name} failed to load`);
-		}
-	}
 
 	const headlineRef = useRef(null);
 
@@ -609,6 +581,68 @@ export function Letters({ item }) {
 		waterproof,
 		lettersHeight,
 		vinylWhite,
+		mounting,
+		sets,
+		font,
+	]);
+
+	const computePricing = () => {
+		if (letterPricing.length > 0 && selectedLetterHeight && depth) {
+			const pricingDetail = letterPricing[selectedLetterHeight - 5];
+			const baseLetterPrice = pricingDetail[depth.value];
+
+			let tempTotal = 0;
+			const lettersArray = letters.trim().split('');
+			const noLowerCase = NovaQuote.no_lowercase.includes(font);
+
+			lettersArray.forEach((letter) => {
+				tempTotal += calculateLetterPrice(letter, baseLetterPrice, noLowerCase);
+			});
+
+			if (waterproof)
+				tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.02;
+
+			if (frontAcrylicCover === '3M Vinyl') tempTotal *= 1.1;
+
+			if (mounting && mounting === STUD_WITH_SPACER) {
+				let spacer = spacerPricing(tempTotal);
+				spacer = parseFloat(spacer.toFixed(2));
+				tempTotal += spacer;
+			}
+
+			const total = tempTotal * parseInt(sets);
+
+			return {
+				singlePrice: tempTotal.toFixed(2) ?? 0,
+				total: total?.toFixed(2) ?? 0,
+			};
+		} else {
+			return {
+				singlePrice: 0,
+				total: 0,
+			};
+		}
+	};
+
+	useEffect(() => {
+		const { singlePrice, total } = computePricing();
+		if (total && singlePrice) {
+			setUsdPrice(total);
+			setCadPrice((total * EXCHANGE_RATE).toFixed(2));
+			setUsdSinglePrice(singlePrice);
+			setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
+		} else {
+			setUsdPrice(0);
+			setCadPrice(0);
+			setUsdSinglePrice(0);
+			setCadSinglePrice(0);
+		}
+	}, [
+		selectedLetterHeight,
+		letters,
+		waterproof,
+		lettersHeight,
+		frontAcrylicCover,
 		mounting,
 		sets,
 		font,
