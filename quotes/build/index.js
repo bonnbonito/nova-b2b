@@ -5205,7 +5205,6 @@ function Letters({
       if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (!sets) missingFields.push('Select Quantity');
-    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
         const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
@@ -6398,7 +6397,6 @@ function Letters({
       if (!vinylWhite?.name) missingFields.push('Select 3M Vinyl');
     }
     if (!sets) missingFields.push('Select Quantity');
-    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
         const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
@@ -7714,7 +7712,6 @@ function Letters({
       if (!vinylWhite?.name) missingFields.push('Select 3M Vinyl');
     }
     if (!sets) missingFields.push('Select Quantity');
-    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
         const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
@@ -8938,7 +8935,6 @@ function Letters({
       if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (!sets) missingFields.push('Select Quantity');
-    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
         const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
@@ -10123,7 +10119,6 @@ function Letters({
       if (!metalLaminate) missingFields.push('Select Metal Laminate');
     }
     if (!sets) missingFields.push('Select Quantity');
-    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
         const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);

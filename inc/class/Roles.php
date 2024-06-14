@@ -53,6 +53,13 @@ class Roles {
 		add_action( 'edit_user_profile', array( $this, 'add_activate_button' ), 0 );
 		add_action( 'wp_ajax_send_activation_email', array( $this, 'handle_send_activation_email' ) );
 		add_action( 'admin_notices', array( $this, 'display_send_activation_email_notice' ) );
+		add_action( 'kadence_header', array( $this, 'remove_multicurrency' ) );
+	}
+
+	public function remove_multicurrency() {
+		if ( ! is_user_logged_in() ) {
+			remove_action( 'kadence_header_html', 'Kadence\header_html' );
+		}
 	}
 
 	public function display_send_activation_email_notice() {

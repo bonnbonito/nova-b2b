@@ -446,9 +446,6 @@ export function Letters({ item }) {
 
 		if (!sets) missingFields.push('Select Quantity');
 
-		if (!fileUrls || fileUrls.length === 0)
-			missingFields.push('Upload a PDF/AI File');
-
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
 				const existingIndex = prevMissing.findIndex(
