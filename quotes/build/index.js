@@ -12272,7 +12272,6 @@ function Logo({
       try {
         const response = await fetch(NovaQuote.logo_pricing_api + item.product);
         const data = await response.json();
-        console.log(data);
         setLogoPricingObject(data);
       } catch (error) {
         console.error('Error fetching logo pricing:', error);
@@ -15860,6 +15859,7 @@ function FlexNeonSign() {
       const count = prevSignage.filter(sign => sign.type === type).length;
       let args = {
         type: 'SIGN',
+        mounting: 'Standard Nails',
         title: `SIGN ${count + 1}`
       };
       const newSignage = {
@@ -15981,7 +15981,7 @@ const NeonSign = ({
     return (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.arrayRange)(2, 100, 1, false);
   }, []);
   const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : '');
-  const [mounting, setMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
+  const [mounting, setMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : 'Standard Nails');
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
   const [setOptions, setSetOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([(0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
     value: "1"
@@ -17028,12 +17028,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UploadFiles__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../UploadFiles */ "./src/scripts/UploadFiles.js");
 /* harmony import */ var _utils_ClickOutside__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../utils/ClickOutside */ "./src/scripts/utils/ClickOutside.js");
 /* harmony import */ var _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../utils/ColorOptions */ "./src/scripts/utils/ColorOptions.js");
-/* harmony import */ var _utils_ConvertJson__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../utils/ConvertJson */ "./src/scripts/utils/ConvertJson.js");
-/* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
-/* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
-/* harmony import */ var _components_NeonColors__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../components/NeonColors */ "./src/scripts/products/led-neon/components/NeonColors.js");
-/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
-/* harmony import */ var _neonSignOptions__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../neonSignOptions */ "./src/scripts/products/led-neon/neonSignOptions.js");
+/* harmony import */ var _utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../utils/ColorsDropdown */ "./src/scripts/utils/ColorsDropdown.js");
+/* harmony import */ var _utils_ConvertJson__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../utils/ConvertJson */ "./src/scripts/utils/ConvertJson.js");
+/* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
+/* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
+/* harmony import */ var _components_NeonColors__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../components/NeonColors */ "./src/scripts/products/led-neon/components/NeonColors.js");
+/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
+/* harmony import */ var _neonSignOptions__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../neonSignOptions */ "./src/scripts/products/led-neon/neonSignOptions.js");
+
 
 
 
@@ -17048,7 +17050,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const waterProofOptions = [{
-  option: _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.INDOOR_NOT_WATERPROOF
+  option: _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.INDOOR_NOT_WATERPROOF
 }];
 const pcFinishOptions = [{
   option: 'Matte'
@@ -17061,7 +17063,7 @@ const wireTypeOptions = [{
 const NeonSign = ({
   item
 }) => {
-  var _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$neonColor, _item$paintedPCColor, _item$neonSignWidth, _item$paintedPCFinish, _item$customColor, _item$neonLength8mm, _item$rigidBacking, _item$wireExitLocatio, _item$wireType, _item$neonLength10mm, _item$neonLength14mm, _item$neonLength20mm, _item$neonSignHeight, _item$usdPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$cadPrice, _item$remoteControl, _item$waterproof, _item$mounting, _item$sets;
+  var _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$neonColor, _item$paintedPCColor, _item$neonSignWidth, _item$paintedPCFinish, _item$customColor, _item$neonLength8mm, _item$rigidBacking, _item$wireExitLocatio, _item$wireType, _item$neonLength10mm, _item$neonLength14mm, _item$neonLength20mm, _item$neonSignHeight, _item$usdPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$cadPrice, _item$remoteControl, _item$waterproof, _item$mounting, _item$sets, _color$name;
   const {
     signage,
     setSignage,
@@ -17071,7 +17073,7 @@ const NeonSign = ({
   const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileNames = item.fileNames) !== null && _item$fileNames !== void 0 ? _item$fileNames : []);
   const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrls = item.fileUrls) !== null && _item$fileUrls !== void 0 ? _item$fileUrls : []);
   const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$filePaths = item.filePaths) !== null && _item$filePaths !== void 0 ? _item$filePaths : []);
-  const [rcOptions, setRcOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_neonSignOptions__WEBPACK_IMPORTED_MODULE_11__.remoteControlOptions);
+  const [rcOptions, setRcOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_neonSignOptions__WEBPACK_IMPORTED_MODULE_12__.remoteControlOptions);
   const [files, setFiles] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$files = item.files) !== null && _item$files !== void 0 ? _item$files : []);
   const [neonColor, setNeonColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$neonColor = item.neonColor) !== null && _item$neonColor !== void 0 ? _item$neonColor : '');
   const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$paintedPCColor = item.paintedPCColor) !== null && _item$paintedPCColor !== void 0 ? _item$paintedPCColor : '');
@@ -17094,13 +17096,13 @@ const NeonSign = ({
   const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadPrice = item.cadPrice) !== null && _item$cadPrice !== void 0 ? _item$cadPrice : 0);
   const [remoteControl, setRemoteControl] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$remoteControl = item.remoteControl) !== null && _item$remoteControl !== void 0 ? _item$remoteControl : 'No');
   const neonSignsWidth = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
-    return (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.arrayRange)(5, 92, 1);
+    return (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.arrayRange)(5, 92, 1);
   }, []);
   const neonSignsHeight = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
-    return (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.arrayRange)(5, 46, 1);
+    return (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.arrayRange)(5, 46, 1);
   }, []);
   const neonLength = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
-    return (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.arrayRange)(1, 100, 1, false);
+    return (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.arrayRange)(1, 100, 1, false);
   }, []);
   const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : '');
   const [mounting, setMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
@@ -17112,9 +17114,10 @@ const NeonSign = ({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     async function fetchQuantityDiscountPricing() {
       try {
+        console.log(NovaQuote.quantity_discount_api + item.product);
         const response = await fetch(NovaQuote.quantity_discount_api + item.product);
         const data = await response.json();
-        const tableJson = data.pricing_table ? (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_6__.convertJson)(data.pricing_table) : [];
+        const tableJson = data.pricing_table ? (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_7__.convertJson)(data.pricing_table) : [];
         if (tableJson) setQuantityDiscountTable(tableJson);
         setSetOptions(Array.from({
           length: 100
@@ -17265,7 +17268,7 @@ const NeonSign = ({
     let remotePrice = remoteControl === 'Yes' ? 16 : 0;
     tempTotal += remotePrice;
     let total = tempTotal * parseInt(sets);
-    const discount = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_7__.quantityDiscount)(sets, quantityDiscountTable);
+    const discount = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_8__.quantityDiscount)(sets, quantityDiscountTable);
     total *= discount;
     return {
       singlePrice: tempTotal,
@@ -17279,9 +17282,9 @@ const NeonSign = ({
     } = computePricing();
     if (total && singlePrice) {
       setUsdPrice(total);
-      setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.EXCHANGE_RATE).toFixed(2));
+      setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.EXCHANGE_RATE).toFixed(2));
       setUsdSinglePrice(singlePrice);
-      setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.EXCHANGE_RATE).toFixed(2));
+      setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.EXCHANGE_RATE).toFixed(2));
     } else {
       setUsdPrice(0);
       setCadPrice(0);
@@ -17298,7 +17301,7 @@ const NeonSign = ({
   };
   const handleOnChangeWaterproof = e => {
     const target = e.target.value;
-    if (target !== _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.INDOOR_NOT_WATERPROOF) {
+    if (target !== _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.INDOOR_NOT_WATERPROOF) {
       if (neonLength8mm) {
         setNeonLength8mm('');
       }
@@ -17313,7 +17316,7 @@ const NeonSign = ({
       if (remoteControl === 'N/A') {
         setRemoteControl('No');
       }
-      setRcOptions(_neonSignOptions__WEBPACK_IMPORTED_MODULE_11__.remoteControlOptions);
+      setRcOptions(_neonSignOptions__WEBPACK_IMPORTED_MODULE_12__.remoteControlOptions);
     }
     setWaterproof(target);
   };
@@ -17389,45 +17392,28 @@ const NeonSign = ({
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Backing Options",
     onChange: handleOnChangeBacking,
-    options: _neonSignOptions__WEBPACK_IMPORTED_MODULE_11__.rigidBackingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _neonSignOptions__WEBPACK_IMPORTED_MODULE_12__.rigidBackingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: option.option,
       value: option.option,
       selected: option.option === rigidBacking
     }, option.option)),
     value: rigidBacking,
     onlyValue: true
-  }), rigidBacking === 'Painted PC' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "px-[1px] relative",
-    ref: colorRef
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
-  }, "Painted PC Color"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: `flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${color.name ? 'text-black' : 'text-[#dddddd]'}`,
-    onClick: () => {
+  }), rigidBacking === 'Painted PC' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    ref: colorRef,
+    title: "Painted PC Color",
+    colorName: (_color$name = color?.name) !== null && _color$name !== void 0 ? _color$name : '',
+    openColor: openColor,
+    toggleColor: () => {
       setOpenColor(prev => !prev);
       setOpenNeonColor(false);
+    },
+    colorOptions: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_5__.colorOptions,
+    selectColor: color => {
+      setColor(color);
+      setOpenColor(false);
     }
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "rounded-full w-[18px] h-[18px] border mr-2",
-    style: {
-      background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
-    }
-  }), color.name === '' ? 'CHOOSE OPTION' : color.name), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
-  }, _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_5__.colorOptions.map(color => {
-    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm",
-      onClick: () => {
-        setColor(color);
-        setOpenColor(false);
-      }
-    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-      className: "w-[18px] h-[18px] inline-block rounded-full border",
-      style: {
-        background: color.name == 'Custom Color' ? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)` : color.color
-      }
-    }), color.name);
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Painted PC Finish",
     onChange: handleOnFinish,
     options: pcFinishOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -17439,13 +17425,12 @@ const NeonSign = ({
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting Options",
     onChange: handleOnChangeMounting,
-    options: _neonSignOptions__WEBPACK_IMPORTED_MODULE_11__.neonSignsMountingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _neonSignOptions__WEBPACK_IMPORTED_MODULE_12__.neonSignsMountingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: option.option,
       value: option.option,
       selected: option.option === mounting
     }, option.option)),
-    value: mounting,
-    onlyValue: true
+    value: mounting
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Remote Control",
     onChange: handleOnChangeRemote,
@@ -17459,7 +17444,7 @@ const NeonSign = ({
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Wire Exit Location",
     onChange: handleOnChangeWireExitLocation,
-    options: _neonSignOptions__WEBPACK_IMPORTED_MODULE_11__.wireExitLocationOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _neonSignOptions__WEBPACK_IMPORTED_MODULE_12__.wireExitLocationOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: option.option,
       value: option.option,
       selected: option.option === wireExitLocation
@@ -17476,7 +17461,7 @@ const NeonSign = ({
     }, option.option)),
     value: wireType,
     onlyValue: true
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_NeonColors__WEBPACK_IMPORTED_MODULE_9__.NeonColors, {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_NeonColors__WEBPACK_IMPORTED_MODULE_10__.NeonColors, {
     colorRef: neonColorRef,
     colors: neonColor,
     toggle: () => {
@@ -17494,8 +17479,7 @@ const NeonSign = ({
       value: option.option,
       selected: option.option === waterproof
     }, option.option)),
-    value: waterproof,
-    onlyValue: true
+    value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,

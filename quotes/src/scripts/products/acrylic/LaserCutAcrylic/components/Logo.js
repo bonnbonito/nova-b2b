@@ -315,7 +315,6 @@ export function Logo({ item }) {
 			try {
 				const response = await fetch(NovaQuote.logo_pricing_api + item.product);
 				const data = await response.json();
-				console.log(data);
 				setLogoPricingObject(data);
 			} catch (error) {
 				console.error('Error fetching logo pricing:', error);

@@ -11,6 +11,7 @@ import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
 import useOutsideClick from '../../../../utils/ClickOutside';
 import { colorOptions } from '../../../../utils/ColorOptions';
+import ColorsDropdown from '../../../../utils/ColorsDropdown';
 import { convertJson } from '../../../../utils/ConvertJson';
 import { quantityDiscount } from '../../../../utils/Pricing';
 import { arrayRange } from '../../../../utils/SignageOptions';
@@ -117,6 +118,7 @@ export const NeonSign = ({ item }) => {
 	useEffect(() => {
 		async function fetchQuantityDiscountPricing() {
 			try {
+				console.log(NovaQuote.quantity_discount_api + item.product);
 				const response = await fetch(
 					NovaQuote.quantity_discount_api + item.product
 				);
@@ -564,57 +566,21 @@ export const NeonSign = ({ item }) => {
 
 				{rigidBacking === 'Painted PC' && (
 					<>
-						<div className="px-[1px] relative" ref={colorRef}>
-							<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-								Painted PC Color
-							</label>
-							<div
-								className={`flex items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-									color.name ? 'text-black' : 'text-[#dddddd]'
-								}`}
-								onClick={() => {
-									setOpenColor((prev) => !prev);
-									setOpenNeonColor(false);
-								}}
-							>
-								<span
-									className="rounded-full w-[18px] h-[18px] border mr-2"
-									style={{
-										background:
-											color.name == 'Custom Color'
-												? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-												: color.color,
-									}}
-								></span>
-								{color.name === '' ? 'CHOOSE OPTION' : color.name}
-							</div>
-							{openColor && (
-								<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg">
-									{colorOptions.map((color) => {
-										return (
-											<div
-												className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
-												onClick={() => {
-													setColor(color);
-													setOpenColor(false);
-												}}
-											>
-												<span
-													className="w-[18px] h-[18px] inline-block rounded-full border"
-													style={{
-														background:
-															color.name == 'Custom Color'
-																? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-																: color.color,
-													}}
-												></span>
-												{color.name}
-											</div>
-										);
-									})}
-								</div>
-							)}
-						</div>
+						<ColorsDropdown
+							ref={colorRef}
+							title="Painted PC Color"
+							colorName={color?.name ?? ''}
+							openColor={openColor}
+							toggleColor={() => {
+								setOpenColor((prev) => !prev);
+								setOpenNeonColor(false);
+							}}
+							colorOptions={colorOptions}
+							selectColor={(color) => {
+								setColor(color);
+								setOpenColor(false);
+							}}
+						/>
 
 						<Dropdown
 							title="Painted PC Finish"
@@ -646,7 +612,6 @@ export const NeonSign = ({ item }) => {
 						</option>
 					))}
 					value={mounting}
-					onlyValue={true}
 				/>
 
 				<Dropdown
@@ -722,7 +687,6 @@ export const NeonSign = ({ item }) => {
 						</option>
 					))}
 					value={waterproof}
-					onlyValue={true}
 				/>
 
 				<Dropdown

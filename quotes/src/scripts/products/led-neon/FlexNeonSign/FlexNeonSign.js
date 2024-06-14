@@ -55,6 +55,7 @@ export default function FlexNeonSign() {
 			const count = prevSignage.filter((sign) => sign.type === type).length;
 			let args = {
 				type: 'SIGN',
+				mounting: 'Standard Nails',
 				title: `SIGN ${count + 1}`,
 			};
 			const newSignage = {
