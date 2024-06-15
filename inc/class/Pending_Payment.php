@@ -286,7 +286,6 @@ class Pending_Payment {
 
 		if ( ! $order ) {
 			return 'Order not found';
-			die();
 
 		}
 		if ( ! $customer_email ) {
@@ -295,7 +294,6 @@ class Pending_Payment {
 
 		if ( ! $index ) {
 			return 'No index';
-			die();
 		}
 
 		$payment_emails = get_field( 'payment_emails', $payment->payment_select );

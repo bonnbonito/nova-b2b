@@ -123,7 +123,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 							</strong>
 						</div>
 					</div>
-						<?php if ( $_product->is_sold_individually() ) : ?>
+						<?php if ( ! $_product->is_sold_individually() ) : ?>
 					<div class="quantity-change">
 						<div class="cursor-pointer decrease">
 							<svg width="20" height="20" viewBox="0 0 20 20" fill="none"
@@ -197,21 +197,21 @@ do_action( 'woocommerce_before_cart' ); ?>
 
 				<div class="product-remove absolute right-[6px] top-5">
 						<?php
-								echo apply_filters( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-									'woocommerce_cart_item_remove_link',
-									sprintf(
-										'<a href="%s" class="remove" aria-label="%s" data-product_id="%s" data-product_sku="%s"><svg width="11" height="13" viewBox="0 0 11 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+							echo apply_filters( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+								'woocommerce_cart_item_remove_link',
+								sprintf(
+									'<a href="%s" class="remove" aria-label="%s" data-product_id="%s" data-product_sku="%s"><svg width="11" height="13" viewBox="0 0 11 13" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M0.6875 13V2.16667H0V0.722222H3.4375V0H7.5625V0.722222H11V2.16667H10.3125V13H0.6875ZM2.0625 11.5556H8.9375V2.16667H2.0625V11.5556ZM3.4375 10.1111H4.8125V3.61111H3.4375V10.1111ZM6.1875 10.1111H7.5625V3.61111H6.1875V10.1111Z" fill="black"/>
 </svg>
 </a>',
-										esc_url( wc_get_cart_remove_url( $cart_item_key ) ),
-										/* translators: %s is the product name */
-										esc_attr( sprintf( __( 'Remove %s from cart', 'woocommerce' ), wp_strip_all_tags( $product_name ) ) ),
-										esc_attr( $product_id ),
-										esc_attr( $_product->get_sku() )
-									),
-									$cart_item_key
-								);
+									esc_url( wc_get_cart_remove_url( $cart_item_key ) ),
+									/* translators: %s is the product name */
+									esc_attr( sprintf( __( 'Remove %s from cart', 'woocommerce' ), wp_strip_all_tags( $product_name ) ) ),
+									esc_attr( $product_id ),
+									esc_attr( $_product->get_sku() )
+								),
+								$cart_item_key
+							);
 						?>
 				</div>
 
@@ -262,7 +262,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 
 				<div class="product-price hidden" data-title="<?php esc_attr_e( 'Price', 'woocommerce' ); ?>">
 						<?php
-								echo apply_filters( 'woocommerce_cart_item_price', WC()->cart->get_product_price( $_product ), $cart_item, $cart_item_key ); // PHPCS: XSS ok.
+							echo apply_filters( 'woocommerce_cart_item_price', WC()->cart->get_product_price( $_product ), $cart_item, $cart_item_key ); // PHPCS: XSS ok.
 						?>
 				</div>
 
@@ -277,7 +277,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 							</strong>
 						</div>
 					</div>
-
+						<?php if ( ! $_product->is_sold_individually() ) : ?>
 					<div class="quantity-change">
 						<div class="cursor-pointer decrease">
 							<svg width="20" height="20" viewBox="0 0 20 20" fill="none"
@@ -323,6 +323,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 
 						</div>
 					</div>
+					<?php endif; ?>
 
 				</div>
 			</div>

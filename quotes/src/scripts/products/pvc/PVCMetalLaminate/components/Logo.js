@@ -40,8 +40,16 @@ export function Logo({ item }) {
 	const [selectedThickness, setSelectedThickness] = useState(item.thickness);
 	const [width, setWidth] = useState(item.width ?? '');
 	const [maxWidthHeight, setMaxWidthHeight] = useState(36);
+
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
+	const [usdSinglePrice, setUsdSinglePrice] = useState(
+		item.usdSinglePrice ?? 0
+	);
+	const [cadSinglePrice, setCadSinglePrice] = useState(
+		item.cadSinglePrice ?? 0
+	);
+
 	const [openColor, setOpenColor] = useState(false);
 	const [pvcBaseColor, setPvcBaseColor] = useState(item.pvcBaseColor);
 	const [customColor, setCustomColor] = useState(item.customColor ?? '');
@@ -207,6 +215,8 @@ export function Logo({ item }) {
 					spacerStandoffDistance,
 					pvcBaseColor,
 					metalLaminate,
+					usdSinglePrice,
+					cadSinglePrice,
 				};
 			} else {
 				return sign;
@@ -237,6 +247,8 @@ export function Logo({ item }) {
 		spacerStandoffDistance,
 		metalLaminate,
 		pvcBaseColor,
+		usdSinglePrice,
+		cadSinglePrice,
 	]);
 
 	const [logoPricingObject, setLogoPricingObject] = useState([]);
@@ -254,7 +266,8 @@ export function Logo({ item }) {
 
 		fetchLogoPricing();
 	}, []);
-	useEffect(() => {
+
+	const computePricing = () => {
 		if (
 			width &&
 			height &&
@@ -273,36 +286,63 @@ export function Logo({ item }) {
 				const computed =
 					logoPricingTable.length > 0 ? logoPricingTable[width - 4][height] : 0;
 
-				let multiplier = 0;
+				let tempTotal = 0;
+
+				tempTotal += computed;
+
 				if (waterproof) {
-					multiplier = waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.03;
+					tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.03;
 				}
 
-				let total = parseFloat((computed * multiplier).toFixed(2));
+				if (selectedFinishing) {
+					tempTotal *= selectedFinishing === GLOSS_FINISH ? 1.03 : 1;
+				}
 
-				total *= selectedFinishing === GLOSS_FINISH ? 1.03 : 1;
-				total *= mounting === 'Double-sided tape' ? 1.01 : 1;
-				total *= pvcBaseColor?.name !== 'Black' ? 1.1 : 1;
+				if (pvcBaseColor) {
+					tempTotal *= pvcBaseColor?.name !== 'Black' ? 1.1 : 1;
+				}
+
+				if (mounting) {
+					tempTotal *= mounting === 'Double-sided tape' ? 1.01 : 1;
+				}
 
 				if (mounting === STUD_WITH_SPACER) {
-					let spacer = spacerPricing(total);
-
-					spacer = parseFloat(spacer.toFixed(2));
-
-					total += spacer;
+					const spacer = spacerPricing(tempTotal);
+					tempTotal += parseFloat(spacer.toFixed(2));
 				}
 
-				total *= sets;
+				const total = tempTotal * parseInt(sets);
 
-				setUsdPrice(parseFloat(total.toFixed(2)));
-				setCadPrice((total * parseFloat(EXCHANGE_RATE)).toFixed(2));
+				return {
+					singlePrice: tempTotal.toFixed(2) ?? 0,
+					total: total?.toFixed(2) ?? 0,
+				};
 			} else {
-				setUsdPrice(0);
-				setCadPrice(0);
+				return {
+					singlePrice: 0,
+					total: 0,
+				};
 			}
+		} else {
+			return {
+				singlePrice: 0,
+				total: 0,
+			};
+		}
+	};
+
+	useEffect(() => {
+		const { singlePrice, total } = computePricing();
+		if (total && singlePrice) {
+			setUsdPrice(total);
+			setCadPrice((total * EXCHANGE_RATE).toFixed(2));
+			setUsdSinglePrice(singlePrice);
+			setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
 		} else {
 			setUsdPrice(0);
 			setCadPrice(0);
+			setUsdSinglePrice(0);
+			setCadSinglePrice(0);
 		}
 	}, [
 		width,

@@ -207,7 +207,11 @@ export function Logo({ item }) {
 	};
 
 	const computePricing = () => {
-		if (!width || !height) return 0;
+		if (!width || !height)
+			return {
+				singlePrice: 0,
+				total: 0,
+			};
 
 		const perInch = 0.8;
 

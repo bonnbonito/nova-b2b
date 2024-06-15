@@ -97,6 +97,7 @@ export function Letters({ item }) {
 	const [selectedLetterHeight, setSelectedLetterHeight] = useState(
 		item.letterHeight ?? ''
 	);
+
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
 	const [usdSinglePrice, setUsdSinglePrice] = useState(
