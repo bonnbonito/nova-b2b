@@ -19,7 +19,7 @@ import { acrylicChannelThicknessOptions } from '../options';
 
 import ColorsDropdown from '../../../../utils/ColorsDropdown';
 
-import { maxHeightOptions, maxWidthOptions } from '../../options';
+import { maxHeightOptions, maxWidthOptions, sideOptions } from '../../options';
 
 import { useAppContext } from '../../../../AppProvider';
 
@@ -58,7 +58,10 @@ export function Logo({ item }) {
 	const [comments, setComments] = useState(item.comments ?? '');
 	const [width, setWidth] = useState(item.width ?? '');
 	const [height, setHeight] = useState(item.height ?? '');
-	const [color, setColor] = useState(item.frontOption ?? '');
+
+	const [color, setColor] = useState(item.paintColor ?? '');
+	const [frontOption, setFrontOption] = useState(item.frontOption ?? '');
+
 	const [openColor, setOpenColor] = useState(false);
 	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
 	const [acrylicReturn, setAcrylicReturn] = useState(
@@ -119,7 +122,8 @@ export function Logo({ item }) {
 			acrylicChannelThickness,
 			mounting: selectedMounting,
 			waterproof,
-			frontOption: color,
+			frontOption,
+			paintColor: color,
 			ledLightColor,
 			usdPrice,
 			cadPrice,
@@ -215,7 +219,7 @@ export function Logo({ item }) {
 
 		let tempTotal = parseInt(width) * parseInt(height) * perInch;
 
-		if (color === 'Metal Laminate') {
+		if (frontOption === 'Metal Laminate') {
 			tempTotal *= 1.15;
 		}
 
@@ -253,7 +257,7 @@ export function Logo({ item }) {
 			setUsdSinglePrice(0);
 			setCadSinglePrice(0);
 		}
-	}, [width, height, selectedMounting, color, sets]);
+	}, [width, height, selectedMounting, frontOption, sets]);
 
 	const checkAndAddMissingFields = () => {
 		const missingFields = [];
@@ -262,7 +266,17 @@ export function Logo({ item }) {
 			missingFields.push('Select Acrylic Thickness');
 		if (!width) missingFields.push('Select Logo Width');
 		if (!height) missingFields.push('Select Logo Height');
-		if (!color) missingFields.push('Select Front Option');
+
+		if (!frontOption) missingFields.push('Select Front Option');
+
+		if (frontOption === 'Metal Laminate') {
+			if (!metalLaminate) missingFields.push('Select Metal Laminate');
+		}
+
+		if (frontOption === 'Painted') {
+			if (!color) missingFields.push('Select Paint Color');
+		}
+
 		if (color === 'Custom Color' && !customColor) {
 			missingFields.push('Add the Pantone color code of your custom color.');
 		}
@@ -337,6 +351,7 @@ export function Logo({ item }) {
 		studLength,
 		spacerStandoffDistance,
 		metalLaminate,
+		frontOption,
 	]);
 
 	useEffect(() => {
@@ -362,6 +377,7 @@ export function Logo({ item }) {
 		cadSinglePrice,
 		metalLaminate,
 		width,
+		frontOption,
 		height,
 	]);
 
@@ -373,6 +389,15 @@ export function Logo({ item }) {
 	useEffect(() => {
 		color?.name != 'Custom Color' && setCustomColor('');
 	}, [color]);
+
+	useEffect(() => {
+		if (frontOption !== 'Metal Laminate') {
+			setMetalLaminate('');
+		}
+		if (frontOption !== 'Painted') {
+			setColor('');
+		}
+	}, [frontOption]);
 
 	return (
 		<>
@@ -423,22 +448,38 @@ export function Logo({ item }) {
 					options={maxHeightOptions}
 				/>
 
-				<ColorsDropdown
+				<Dropdown
 					title="Front Option"
-					ref={colorRef}
-					colorName={color}
-					openColor={openColor}
-					toggleColor={() => {
-						setOpenColor((prev) => !prev);
-					}}
-					colorOptions={frontOptionOptions}
-					selectColor={(color) => {
-						setColor(color.name);
-						setOpenColor(false);
-					}}
+					onChange={(e) => setFrontOption(e.target.value)}
+					options={sideOptions.map((option) => (
+						<option
+							value={option.option}
+							selected={option.option === frontOption}
+						>
+							{option.option}
+						</option>
+					))}
+					value={frontOption}
 				/>
 
-				{color === 'Metal Laminate' && (
+				{frontOption === 'Painted' && (
+					<ColorsDropdown
+						title="Paint Color Options"
+						ref={colorRef}
+						colorName={color}
+						openColor={openColor}
+						toggleColor={() => {
+							setOpenColor((prev) => !prev);
+						}}
+						colorOptions={colorOptions}
+						selectColor={(color) => {
+							setColor(color.name);
+							setOpenColor(false);
+						}}
+					/>
+				)}
+
+				{frontOption === 'Metal Laminate' && (
 					<Dropdown
 						title="METAL LAMINATE"
 						onChange={handleOnChangeMetalLaminate}

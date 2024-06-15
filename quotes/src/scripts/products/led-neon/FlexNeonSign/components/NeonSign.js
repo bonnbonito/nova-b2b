@@ -42,7 +42,13 @@ export const NeonSign = ({ item }) => {
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
 	const [usdDiscount, setUsdDiscount] = useState(item.usdDiscount ?? 0);
+	const [usdTotalNoDiscount, setUsdTotalNoDiscount] = useState(
+		item.usdTotalNoDiscount ?? ''
+	);
 	const [cadDiscount, setCadDiscount] = useState(item.cadDiscount ?? 0);
+	const [cadTotalNoDiscount, setCadTotalNoDiscount] = useState(
+		item.cadTotalNoDiscount ?? ''
+	);
 	const [usdSinglePrice, setUsdSinglePrice] = useState(
 		item.usdSinglePrice ?? 0
 	);
@@ -139,6 +145,8 @@ export const NeonSign = ({ item }) => {
 					cadSinglePrice,
 					usdSinglePrice,
 					usdDiscount,
+					usdTotalNoDiscount,
+					cadTotalNoDiscount,
 					cadDiscount,
 					neonLength,
 					neonSignWidth: width,
@@ -304,7 +312,8 @@ export const NeonSign = ({ item }) => {
 
 	useEffect(() => {
 		if (quantityDiscountTable.length > 0) {
-			const { singlePrice, total, discount } = computePricing();
+			const { singlePrice, total, totalWithoutDiscount, discount } =
+				computePricing();
 			if (total && singlePrice) {
 				setUsdPrice(total);
 				setCadPrice((total * EXCHANGE_RATE).toFixed(2));
@@ -312,13 +321,19 @@ export const NeonSign = ({ item }) => {
 				setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
 				setUsdDiscount(discount.toFixed(2));
 				setCadDiscount((discount * EXCHANGE_RATE).toFixed(2));
+				setCadTotalNoDiscount(
+					(totalWithoutDiscount * EXCHANGE_RATE).toFixed(2)
+				);
+				setUsdTotalNoDiscount(totalWithoutDiscount.toFixed(2));
 			} else {
 				setUsdPrice(0);
 				setCadPrice(0);
 				setUsdSinglePrice(0);
 				setCadSinglePrice(0);
-				setUsdDiscount(0);
-				setCadDiscount(0);
+				setUsdDiscount('');
+				setCadDiscount('');
+				setCadTotalNoDiscount('');
+				setUsdTotalNoDiscount('');
 			}
 		}
 	}, [

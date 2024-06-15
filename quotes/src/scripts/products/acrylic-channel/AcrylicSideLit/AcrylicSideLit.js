@@ -133,6 +133,7 @@ const AcrylicSideLit = () => {
 							The spacer will be black (default) or match the painted sign's
 							color.
 						</li>
+						<li>The minimum stroke is greater than or equal to 6mm (1/4”). </li>
 					</ul>
 				</Note>
 

@@ -308,21 +308,11 @@ function allAttributes(sign) {
 			value: sign.fontFilePath ? sign.fontFilePath : '',
 		},
 
+		{ label: 'METAL', value: sign.metal ? sign.metal : '' },
+
 		{
 			label: 'THICKNESS',
 			value: sign.thickness?.thickness ? sign.thickness.thickness : '',
-		},
-		{
-			label: 'ACRYLIC THICKNESS',
-			value: sign.acrylicThickness?.thickness
-				? sign.acrylicThickness.thickness
-				: '',
-		},
-
-		{ label: 'METAL', value: sign.metal ? sign.metal : '' },
-		{
-			label: 'ACRYLIC THICKNESS',
-			value: sign.acrylicChannelThickness ? sign.acrylicChannelThickness : '',
 		},
 
 		{
@@ -330,7 +320,17 @@ function allAttributes(sign) {
 			value: sign.metalDepth?.thickness ? sign.metalDepth.thickness : '',
 		},
 
-		{ label: 'METAL DEPTH', value: sign.depth?.depth ? sign.depth.depth : '' },
+		{
+			label: 'ACRYLIC THICKNESS',
+			value: sign.acrylicThickness?.thickness
+				? sign.acrylicThickness.thickness
+				: '',
+		},
+
+		{
+			label: 'ACRYLIC THICKNESS',
+			value: sign.acrylicChannelThickness ? sign.acrylicChannelThickness : '',
+		},
 
 		{
 			label: 'METAL THICKNESS',
@@ -339,8 +339,50 @@ function allAttributes(sign) {
 				: '',
 		},
 
+		{ label: 'METAL DEPTH', value: sign.depth?.depth ? sign.depth.depth : '' },
+
+		{
+			label: 'LETTER HEIGHT',
+			value: sign.letterHeight ? sign.letterHeight + '"' : '',
+		},
+
+		{
+			label: 'RETURN',
+			value: sign.acrylicReturn ? sign.acrylicReturn + '"' : '',
+		},
+
 		{ label: 'LOGO WIDTH', value: sign.width ? sign.width + '"' : '' },
 		{ label: 'LOGO HEIGHT', value: sign.height ? sign.height + '"' : '' },
+
+		{
+			label: 'FRONT OPTION',
+			value: sign.frontOption ? sign.frontOption + '"' : '',
+		},
+
+		{
+			label: 'PAINT COLOR',
+			value: sign.paintColor ? sign.paintColor + '"' : '',
+		},
+
+		{
+			label: 'ACRYLIC FRONT',
+			value: sign.acrylicFront ? sign.acrylicFront : '',
+		},
+
+		{
+			label: 'FINISHING',
+			value: sign.backLitFinishing ? sign.backLitFinishing : '',
+		},
+
+		{
+			label: 'METAL FINISH',
+			value: sign.backLitMetalFinish ? sign.backLitMetalFinish : '',
+		},
+
+		{
+			label: 'FACE & RETURN COLOR',
+			value: sign.faceReturnColor?.name ? sign.faceReturnColor.name : '',
+		},
 
 		{
 			label: 'NEON SIGN WIDTH',
@@ -384,40 +426,7 @@ function allAttributes(sign) {
 			value: sign.neonLength20mm ? sign.neonLength20mm : '',
 		},
 
-		{ label: 'LAYERS', value: sign.layers ? sign.layers : '' },
-
-		{
-			label: 'LETTER HEIGHT',
-			value: sign.letterHeight ? sign.letterHeight + '"' : '',
-		},
-
-		{
-			label: 'ACRYLIC FRONT',
-			value: sign.acrylicFront ? sign.acrylicFront : '',
-		},
-
-		{
-			label: 'FINISHING',
-			value:
-				typeof sign.metalFinish === 'object' && sign.metalFinish !== null
-					? sign.metalFinish.name
-					: sign.metalFinish,
-		},
-
-		{
-			label: 'FINISHING',
-			value: sign.backLitFinishing ? sign.backLitFinishing : '',
-		},
-
-		{
-			label: 'METAL FINISH',
-			value: sign.backLitMetalFinish ? sign.backLitMetalFinish : '',
-		},
-
-		{
-			label: 'FACE & RETURN COLOR',
-			value: sign.faceReturnColor?.name ? sign.faceReturnColor.name : '',
-		},
+		{ label: 'FINISHING', value: sign.metalFinish ? sign.metalFinish : '' },
 
 		{
 			label: 'METAL FINISH',
@@ -429,10 +438,7 @@ function allAttributes(sign) {
 			value: sign.stainlessSteelPolished ? sign.stainlessSteelPolished : '',
 		},
 
-		{
-			label: 'PRINT PREFERENCE',
-			value: sign.printPreference ? sign.printPreference : '',
-		},
+		{ label: 'LAYERS', value: sign.layers ? sign.layers : '' },
 
 		{
 			label: 'METAL LAMINATE',
@@ -451,17 +457,20 @@ function allAttributes(sign) {
 					? sign.acrylicBase.name
 					: sign.acrylicBase,
 		},
-		{ label: 'BASE COLOR', value: sign.baseColor ? sign.baseColor : '' },
+
+		{
+			label: 'PRINT PREFERENCE',
+			value: sign.printPreference ? sign.printPreference : '',
+		},
+
 		{ label: 'COLOR', value: sign.color?.name ? sign.color.name : '' },
+
 		{
 			label: 'RETURN COLOR',
 			value: sign.returnColor?.name ? sign.returnColor.name : '',
 		},
+
 		{ label: 'CUSTOM COLOR', value: sign.customColor ? sign.customColor : '' },
-		{
-			label: 'BASE CUSTOM COLOR',
-			value: sign.baseCustomColor ? sign.baseCustomColor : '',
-		},
 
 		{ label: 'FINISHING', value: sign.finishing ? sign.finishing : '' },
 
@@ -469,19 +478,27 @@ function allAttributes(sign) {
 			label: 'COLOR',
 			value: sign.metalColor?.name ? sign.metalColor.name : '',
 		},
+
 		{
 			label: 'CUSTOM COLOR',
 			value: sign.metalCustomColor ? sign.metalCustomColor : '',
 		},
+
 		{
 			label: 'RETURN PAINT COLOR',
 			value: sign.returnPaintColor ? sign.returnPaintColor : '',
 		},
 
 		{
+			label: 'ACRYLIC REVEAL',
+			value: sign.acrylicReveal ? sign.acrylicReveal : '',
+		},
+
+		{
 			label: 'FRONT ACRYLIC COVER',
 			value: sign.frontAcrylicCover ? sign.frontAcrylicCover : '',
 		},
+
 		{
 			label: '3M VINYL',
 			value: sign.vinylWhite?.name
@@ -494,31 +511,39 @@ function allAttributes(sign) {
 			label: 'RETURN PAINT COLOR',
 			value: sign.acrylicReturnPaintColor ? sign.acrylicReturnPaintColor : '',
 		},
+
 		{
 			label: 'LED LIGHT COLOR',
 			value: sign.ledLightColor ? sign.ledLightColor : '',
-		},
-		{
-			label: 'ACRYLIC REVEAL',
-			value: sign.acrylicReveal ? sign.acrylicReveal : '',
 		},
 
 		{
 			label: 'BACKING',
 			value: sign.acrylicBackingOption ? sign.acrylicBackingOption : '',
 		},
+
 		{
 			label: 'BACKING',
 			value: sign.rigidBacking ? sign.rigidBacking : '',
 		},
+
 		{
 			label: 'PAINTED PC COLOR',
 			value: sign.paintedPCColor ? sign.paintedPCColor : '',
 		},
+
 		{
 			label: 'PC CUSTOM COLOR',
 			value: sign.pcCustomColor ? sign.pcCustomColor : '',
 		},
+
+		{ label: 'BASE COLOR', value: sign.baseColor ? sign.baseColor : '' },
+
+		{
+			label: 'BASE CUSTOM COLOR',
+			value: sign.baseCustomColor ? sign.baseCustomColor : '',
+		},
+
 		{
 			label: 'PAINTED PC FINISH',
 			value: sign.paintedPCFinish ? sign.paintedPCFinish : '',
@@ -535,21 +560,24 @@ function allAttributes(sign) {
 
 		{ label: 'ENVIRONMENT', value: sign.waterproof ? sign.waterproof : '' },
 
+		{ label: 'BACK OPTION', value: sign.backOption ? sign.backOption : '' },
+
 		{ label: 'MOUNTING', value: sign.mounting ? sign.mounting : '' },
+
 		{
 			label: 'M4 STUD LENGTH',
 			value: sign.rigidM4StudLength ? sign.rigidM4StudLength : '',
+		},
+
+		{
+			label: 'METAL FINISHING',
+			value: sign.metalFinishing ? sign.metalFinishing : '',
 		},
 
 		{ label: 'STUD LENGTH', value: sign.studLength ? sign.studLength : '' },
 		{
 			label: 'STANDOFF SPACE',
 			value: sign.spacerStandoffDistance ? sign.spacerStandoffDistance : '',
-		},
-
-		{
-			label: 'METAL FINISHING',
-			value: sign.metalFinishing ? sign.metalFinishing : '',
 		},
 
 		{
@@ -571,6 +599,7 @@ function allAttributes(sign) {
 		},
 
 		{ label: 'PIECES/CUTOUTS', value: sign.pieces ? sign.pieces : '' },
+
 		{ label: 'QUANTITY', value: sign.sets ? sign.sets : '' },
 		{ label: 'COMMENTS', value: sign.comments ? sign.comments : '' },
 		{ label: 'DESCRIPTION', value: sign.description ? sign.description : '' },

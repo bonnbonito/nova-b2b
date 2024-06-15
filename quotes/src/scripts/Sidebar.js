@@ -22,12 +22,38 @@ export default function Sidebar() {
 		0
 	);
 
+	const totalUsdDiscount = signage.reduce(
+		(acc, item) => acc + parseFloat(item.usdDiscount),
+		0
+	);
+
+	const totalNoDiscountUSD = signage.reduce(
+		(acc, item) => acc + parseFloat(item.usdTotalNoDiscount),
+		0
+	);
+
+	const totalNoDiscountCAD = signage.reduce(
+		(acc, item) => acc + parseFloat(item.cadTotalNoDiscount),
+		0
+	);
+
+	const totalCadDiscount = signage.reduce(
+		(acc, item) => acc + parseFloat(item.cadDiscount),
+		0
+	);
+
 	const totalCadPrice = signage.reduce(
 		(acc, item) => acc + parseFloat(item.cadPrice),
 		0
 	);
 
 	const totalPrice = currency === 'USD' ? totalUsdPrice : totalCadPrice;
+
+	const totalNoDiscount =
+		currency === 'USD' ? totalNoDiscountUSD : totalNoDiscountCAD;
+
+	const totalDiscount =
+		currency === 'USD' ? totalUsdDiscount : totalCadDiscount;
 
 	const flatRate = currency === 'USD' ? 14.75 : 14.75 * EXCHANGE_RATE;
 
@@ -64,9 +90,22 @@ export default function Sidebar() {
 					<div className="flex justify-between pt-2 font-title uppercase md:tracking-[1.6px]">
 						SUBTOTAL
 						<span>
-							{currency}${Number(totalPrice.toFixed(2)).toLocaleString()}
+							{currency}$
+							{Number(totalNoDiscount) > 0
+								? Number(totalNoDiscount.toFixed(2)).toLocaleString()
+								: Number(totalPrice.toFixed(2)).toLocaleString()}
 						</span>
 					</div>
+
+					{Number(totalDiscount) > 0 && (
+						<div className="flex justify-between font-title uppercase md:tracking-[1.6px] text-nova-primary">
+							DISCOUNT
+							<span>
+								-{currency}${Number(totalDiscount.toFixed(2)).toLocaleString()}
+							</span>
+						</div>
+					)}
+
 					{Number(totalPrice) > 0 && (
 						<div className="flex justify-between font-title uppercase md:tracking-[1.6px]">
 							SHIPPING

@@ -85,14 +85,24 @@ export const NeonSign = ({ item }) => {
 		item.neonLength20mm ?? ''
 	);
 	const [height, setHeight] = useState(item.neonSignHeight ?? '');
+
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
+	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
+	const [usdDiscount, setUsdDiscount] = useState(item.usdDiscount ?? 0);
+	const [usdTotalNoDiscount, setUsdTotalNoDiscount] = useState(
+		item.usdTotalNoDiscount ?? ''
+	);
+	const [cadDiscount, setCadDiscount] = useState(item.cadDiscount ?? 0);
+	const [cadTotalNoDiscount, setCadTotalNoDiscount] = useState(
+		item.cadTotalNoDiscount ?? ''
+	);
 	const [usdSinglePrice, setUsdSinglePrice] = useState(
 		item.usdSinglePrice ?? 0
 	);
 	const [cadSinglePrice, setCadSinglePrice] = useState(
 		item.cadSinglePrice ?? 0
 	);
-	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
+
 	const [remoteControl, setRemoteControl] = useState(
 		item.remoteControl ?? 'No'
 	);
@@ -180,6 +190,10 @@ export const NeonSign = ({ item }) => {
 					cadPrice,
 					cadSinglePrice,
 					usdSinglePrice,
+					usdDiscount,
+					usdTotalNoDiscount,
+					cadTotalNoDiscount,
+					cadDiscount,
 					neonLength8mm,
 					neonLength10mm,
 					neonLength14mm,
@@ -219,6 +233,10 @@ export const NeonSign = ({ item }) => {
 		cadPrice,
 		cadSinglePrice,
 		usdSinglePrice,
+		usdDiscount,
+		usdTotalNoDiscount,
+		cadTotalNoDiscount,
+		cadDiscount,
 	]);
 
 	const checkAndAddMissingFields = useCallback(() => {
@@ -377,11 +395,15 @@ export const NeonSign = ({ item }) => {
 
 		const discount = quantityDiscount(sets, quantityDiscountTable);
 
-		total *= discount;
+		let totalWithDiscount = total * discount;
+
+		let discountPrice = total - totalWithDiscount;
 
 		return {
-			singlePrice: tempTotal,
-			total: total.toFixed(2),
+			singlePrice: tempTotal ?? 0,
+			total: totalWithDiscount?.toFixed(2) ?? 0,
+			totalWithoutDiscount: total,
+			discount: discountPrice,
 		};
 	}, [
 		width,
@@ -398,17 +420,26 @@ export const NeonSign = ({ item }) => {
 	]);
 
 	useEffect(() => {
-		const { singlePrice, total } = computePricing();
+		const { singlePrice, total, totalWithoutDiscount, discount } =
+			computePricing();
 		if (total && singlePrice) {
 			setUsdPrice(total);
 			setCadPrice((total * EXCHANGE_RATE).toFixed(2));
 			setUsdSinglePrice(singlePrice);
 			setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
+			setUsdDiscount(discount.toFixed(2));
+			setCadDiscount((discount * EXCHANGE_RATE).toFixed(2));
+			setCadTotalNoDiscount((totalWithoutDiscount * EXCHANGE_RATE).toFixed(2));
+			setUsdTotalNoDiscount(totalWithoutDiscount.toFixed(2));
 		} else {
 			setUsdPrice(0);
 			setCadPrice(0);
 			setUsdSinglePrice(0);
 			setCadSinglePrice(0);
+			setUsdDiscount('');
+			setCadDiscount('');
+			setCadTotalNoDiscount('');
+			setUsdTotalNoDiscount('');
 		}
 	}, [
 		width,

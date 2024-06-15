@@ -12,7 +12,7 @@ import {
 	studLengthOptions,
 } from '../../../../utils/SignageOptions';
 
-import { spacerPricing } from '../../../../utils/Pricing';
+import { calculateLetterPrice, spacerPricing } from '../../../../utils/Pricing';
 
 import { ledLightColors } from '../../../metal-channel/metalChannelOptions';
 
@@ -21,6 +21,8 @@ import { colorOptions } from '../../../../utils/ColorOptions';
 import ColorsDropdown from '../../../../utils/ColorsDropdown';
 
 import { acrylicChannelThicknessOptions } from '../options';
+
+import { sideOptions } from '../../options';
 
 import { useAppContext } from '../../../../AppProvider';
 
@@ -46,14 +48,6 @@ const mountingDefaultOptions = [
 	},
 ];
 
-const frontOptionOptions = [
-	{
-		name: 'Metal Laminate',
-		color: '',
-	},
-	...colorOptions,
-];
-
 const lettersHeight = {
 	min: 2,
 	max: 43,
@@ -65,7 +59,8 @@ export function Letters({ item }) {
 	const [comments, setComments] = useState(item.comments ?? '');
 	const [font, setFont] = useState(item.font ?? '');
 	const [openFont, setOpenFont] = useState(false);
-	const [color, setColor] = useState(item.frontOption ?? '');
+	const [color, setColor] = useState(item.paintColor ?? '');
+	const [frontOption, setFrontOption] = useState(item.frontOption ?? '');
 	const [openColor, setOpenColor] = useState(false);
 	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
 	const [acrylicReturn, setAcrylicReturn] = useState(
@@ -180,7 +175,8 @@ export function Letters({ item }) {
 			acrylicChannelThickness,
 			mounting: selectedMounting,
 			waterproof,
-			frontOption: color,
+			frontOption,
+			paintColor: color,
 			letterHeight: selectedLetterHeight,
 			ledLightColor,
 			usdPrice,
@@ -276,17 +272,6 @@ export function Letters({ item }) {
 		}
 	};
 
-	// Helper function to determine letter price adjustments
-	function calculateLetterPrice(letter, baseLetterPrice, noLowerCase) {
-		let letterPrice = baseLetterPrice;
-
-		if (letter === ' ') return 0;
-		if (letter.match(/[a-z]/)) letterPrice *= noLowerCase ? 1 : 0.8;
-		if (letter.match(/[`~"*,.\-']/)) letterPrice *= 0.3;
-
-		return letterPrice;
-	}
-
 	const computePricing = () => {
 		if (
 			letterPricing.length > 0 &&
@@ -307,7 +292,7 @@ export function Letters({ item }) {
 				tempTotal += calculateLetterPrice(letter, baseLetterPrice, noLowerCase);
 			});
 
-			if (color === 'Metal Laminate') {
+			if (frontOption === 'Metal Laminate') {
 				tempTotal *= 1.15;
 			}
 
@@ -353,7 +338,7 @@ export function Letters({ item }) {
 		font,
 		selectedMounting,
 		letterPricing,
-		color,
+		frontOption,
 	]);
 
 	useEffect(() => {
@@ -393,7 +378,17 @@ export function Letters({ item }) {
 		if (!selectedLetterHeight) missingFields.push('Select Letter Height');
 		if (!acrylicChannelThickness)
 			missingFields.push('Select Acrylic Thickness');
-		if (!color) missingFields.push('Select Front Option');
+
+		if (!frontOption) missingFields.push('Select Front Option');
+
+		if (frontOption === 'Metal Laminate') {
+			if (!metalLaminate) missingFields.push('Select Metal Laminate');
+		}
+
+		if (frontOption === 'Painted') {
+			if (!color) missingFields.push('Select Paint Color');
+		}
+
 		if (color === 'Custom Color' && !customColor) {
 			missingFields.push('Add the Pantone color code of your custom color.');
 		}
@@ -408,10 +403,6 @@ export function Letters({ item }) {
 			if (!studLength) missingFields.push('Select Stud Length');
 
 			if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
-		}
-
-		if (color && color === 'Metal Laminate') {
-			if (!metalLaminate) missingFields.push('Select Metal Laminate');
 		}
 
 		if (!sets) missingFields.push('Select Quantity');
@@ -467,6 +458,7 @@ export function Letters({ item }) {
 		studLength,
 		spacerStandoffDistance,
 		metalLaminate,
+		frontOption,
 	]);
 
 	useEffect(() => {
@@ -479,6 +471,7 @@ export function Letters({ item }) {
 		selectedMounting,
 		waterproof,
 		color,
+		frontOption,
 		usdPrice,
 		cadPrice,
 		selectedLetterHeight,
@@ -500,16 +493,32 @@ export function Letters({ item }) {
 		metalLaminate,
 	]);
 
-	useOutsideClick([colorRef, fontRef], () => {
-		if (!openColor && !openFont) return;
-		setOpenColor(false);
-		setOpenFont(false);
-	});
+	if (frontOption === 'Painted') {
+		useOutsideClick([colorRef, fontRef], () => {
+			if (!openColor && !openFont) return;
+			setOpenColor(false);
+			setOpenFont(false);
+		});
+	} else {
+		useOutsideClick([fontRef], () => {
+			if (!openFont) return;
+			setOpenFont(false);
+		});
+	}
 
 	useEffect(() => {
 		color?.name != 'Custom Color' && setCustomColor('');
 		font != 'Custom font' && setFontFileUrl('');
 	}, [color, font]);
+
+	useEffect(() => {
+		if (frontOption !== 'Metal Laminate') {
+			setMetalLaminate('');
+		}
+		if (frontOption !== 'Painted') {
+			setColor('');
+		}
+	}, [frontOption]);
 
 	return (
 		<>
@@ -609,22 +618,39 @@ export function Letters({ item }) {
 					onlyValue={true}
 				/>
 
-				<ColorsDropdown
+				<Dropdown
 					title="Front Option"
-					ref={colorRef}
-					colorName={color}
-					openColor={openColor}
-					toggleColor={() => {
-						setOpenColor((prev) => !prev);
-					}}
-					colorOptions={frontOptionOptions}
-					selectColor={(color) => {
-						setColor(color.name);
-						setOpenColor(false);
-					}}
+					onChange={(e) => setFrontOption(e.target.value)}
+					options={sideOptions.map((option) => (
+						<option
+							value={option.option}
+							selected={option.option === frontOption}
+						>
+							{option.option}
+						</option>
+					))}
+					value={frontOption}
 				/>
 
-				{color === 'Metal Laminate' && (
+				{frontOption === 'Painted' && (
+					<ColorsDropdown
+						title="Paint Color Options"
+						ref={colorRef}
+						colorName={color}
+						openColor={openColor}
+						toggleColor={() => {
+							setOpenColor((prev) => !prev);
+							setOpenFont(false);
+						}}
+						colorOptions={colorOptions}
+						selectColor={(color) => {
+							setColor(color.name);
+							setOpenColor(false);
+						}}
+					/>
+				)}
+
+				{frontOption === 'Metal Laminate' && (
 					<Dropdown
 						title="METAL LAMINATE"
 						onChange={handleOnChangeMetalLaminate}

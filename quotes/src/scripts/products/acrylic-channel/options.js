@@ -16,6 +16,18 @@ export const acrylicFrontOptions = [
 	},
 ];
 
+export const sideOptions = [
+	{
+		option: 'Metal Laminate',
+	},
+	{
+		option: 'Painted',
+	},
+	{
+		option: 'UV Printed',
+	},
+];
+
 export const maxHeightOptions = Array.from(
 	{
 		length: 43,
