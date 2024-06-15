@@ -93,6 +93,11 @@ export default function FlexNeonSign() {
 							the design exceeds the neon size limit (40”x 40”), we will divide
 							them into multiple pieces to fit within the required dimensions.
 						</li>
+						<li>
+							Please note that the price of the neon sign is NOT yet final. Our
+							designers will provide a finalized design and accurate quote for
+							your approval.
+						</li>
 					</ul>
 				</Note>
 

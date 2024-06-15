@@ -278,6 +278,9 @@ export const NeonSign = ({ item }) => {
 
 		if (mounting && mounting !== 'Plastic Nails') {
 			if (!rigidM4StudLength) missingFields.push('Select M4 Stud Length');
+		}
+
+		if (mounting === M4_STUD_WITH_SPACER) {
 			if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
 		}
 
@@ -524,6 +527,17 @@ export const NeonSign = ({ item }) => {
 					value={waterproof}
 				/>
 
+				<NeonColors
+					colorRef={neonColorRef}
+					colors={neonColor}
+					toggle={() => {
+						setOpenNeonColor((prev) => !prev);
+					}}
+					openColor={openNeonColor}
+					setToogle={setOpenNeonColor}
+					getSelectedColors={handledSelectedColors}
+				/>
+
 				{waterproof !== 'Outdoor (Waterproof)' && (
 					<>
 						<Dropdown
@@ -616,17 +630,6 @@ export const NeonSign = ({ item }) => {
 					))}
 					value={remoteControl}
 					onlyValue={true}
-				/>
-
-				<NeonColors
-					colorRef={neonColorRef}
-					colors={neonColor}
-					toggle={() => {
-						setOpenNeonColor((prev) => !prev);
-					}}
-					openColor={openNeonColor}
-					setToogle={setOpenNeonColor}
-					getSelectedColors={handledSelectedColors}
 				/>
 
 				<Dropdown

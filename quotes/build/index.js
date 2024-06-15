@@ -15693,7 +15693,7 @@ function FlexNeonSign() {
     title: "Note"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
     className: "text-sm"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The neon height and width refer to the size of the neon graphics. Please note that the backing has a 1.5\" margin on all sides. If the design exceeds the neon size limit (40\u201Dx 40\u201D), we will divide them into multiple pieces to fit within the required dimensions."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The neon height and width refer to the size of the neon graphics. Please note that the backing has a 1.5\" margin on all sides. If the design exceeds the neon size limit (40\u201Dx 40\u201D), we will divide them into multiple pieces to fit within the required dimensions."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Please note that the price of the neon sign is NOT yet final. Our designers will provide a finalized design and accurate quote for your approval."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-2"
   }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
@@ -15994,6 +15994,15 @@ const NeonSign = ({
     value: neonLength,
     onChange: e => setNeonLength(e.target.value),
     options: neonLengthOptions
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_NeonColors__WEBPACK_IMPORTED_MODULE_7__.NeonColors, {
+    colorRef: colorRef,
+    colors: color,
+    toggle: () => {
+      setOpenColor(prev => !prev);
+    },
+    openColor: openColor,
+    setToogle: setOpenColor,
+    getSelectedColors: handledSelectedColors
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Backing",
     value: acrylicBackingOption,
@@ -16038,15 +16047,6 @@ const NeonSign = ({
     }, option.option)),
     value: wireExitLocation,
     onlyValue: true
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_NeonColors__WEBPACK_IMPORTED_MODULE_7__.NeonColors, {
-    colorRef: colorRef,
-    colors: color,
-    toggle: () => {
-      setOpenColor(prev => !prev);
-    },
-    openColor: openColor,
-    setToogle: setOpenColor,
-    getSelectedColors: handledSelectedColors
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,
@@ -16195,7 +16195,7 @@ function RigidNeonSignNoBacking() {
     title: "Note"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
     className: "text-sm"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer is white to match the neon base."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "By default, each neon section will have 1 wire exit per segment. If you prefer all wire exits to be in one place, please let us know."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer is white to match the neon base."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "By default, each neon section will have 1 wire exit per segment. If you prefer all wire exits to be in one place, please let us know."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The neon height and width refer to the size of the neon graphics. If the design exceeds the continuous neon size limit (65 cm x 72 cm), we will divide them into multiple pieces to fit within the required dimensions"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Please note that the price of the neon sign is NOT yet final. Our designers will provide a finalized design and accurate quote for your approval."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-2"
   }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
@@ -16416,6 +16416,8 @@ const NeonSign = ({
     if (!mounting) missingFields.push('Select Mounting');
     if (mounting && mounting !== 'Plastic Nails') {
       if (!rigidM4StudLength) missingFields.push('Select M4 Stud Length');
+    }
+    if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.M4_STUD_WITH_SPACER) {
       if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (!remoteControl) missingFields.push('Select Remote Control');
@@ -16569,6 +16571,15 @@ const NeonSign = ({
       selected: option.option === waterproof
     }, option.option)),
     value: waterproof
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_NeonColors__WEBPACK_IMPORTED_MODULE_7__.NeonColors, {
+    colorRef: neonColorRef,
+    colors: neonColor,
+    toggle: () => {
+      setOpenNeonColor(prev => !prev);
+    },
+    openColor: openNeonColor,
+    setToogle: setOpenNeonColor,
+    getSelectedColors: handledSelectedColors
   }), waterproof !== 'Outdoor (Waterproof)' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "8mm Neon Length",
     value: neonLength8mm,
@@ -16625,15 +16636,6 @@ const NeonSign = ({
     }, option.option)),
     value: remoteControl,
     onlyValue: true
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_NeonColors__WEBPACK_IMPORTED_MODULE_7__.NeonColors, {
-    colorRef: neonColorRef,
-    colors: neonColor,
-    toggle: () => {
-      setOpenNeonColor(prev => !prev);
-    },
-    openColor: openNeonColor,
-    setToogle: setOpenNeonColor,
-    getSelectedColors: handledSelectedColors
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Wire Type",
     onChange: handleOnChangeWireType,
@@ -16796,7 +16798,7 @@ function RigidNeonSignWithBacking() {
     title: "Note"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
     className: "text-sm"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The neon height and width refer to the size of the neon graphics. Please note that the backing has a 2/3\" margin from neon edge to backing edge. If the design exceeds the continuous neon size limit (65 cm x 72 cm), we will divide them into multiple pieces to fit within the required dimensions."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The neon height and width refer to the size of the neon graphics. Please note that the backing has a 2/3\" margin from neon edge to backing edge. If the design exceeds the continuous neon size limit (65 cm x 72 cm), we will divide them into multiple pieces to fit within the required dimensions."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Please note that the price of the neon sign is NOT yet final. Our designers will provide a finalized design and accurate quote for your approval."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-2"
   }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
@@ -17169,6 +17171,16 @@ const NeonSign = ({
     value: height,
     onChange: e => setHeight(e.target.value),
     options: neonSignsHeight
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_NeonColors__WEBPACK_IMPORTED_MODULE_10__.NeonColors, {
+    colorRef: neonColorRef,
+    colors: neonColor,
+    toggle: () => {
+      setOpenNeonColor(prev => !prev);
+      setOpenColor(false);
+    },
+    openColor: openNeonColor,
+    setToogle: setOpenNeonColor,
+    getSelectedColors: handledSelectedColors
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "8mm Neon Length",
     value: neonLength8mm,
@@ -17261,16 +17273,6 @@ const NeonSign = ({
     }, option.option)),
     value: wireType,
     onlyValue: true
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_NeonColors__WEBPACK_IMPORTED_MODULE_10__.NeonColors, {
-    colorRef: neonColorRef,
-    colors: neonColor,
-    toggle: () => {
-      setOpenNeonColor(prev => !prev);
-      setOpenColor(false);
-    },
-    openColor: openNeonColor,
-    setToogle: setOpenNeonColor,
-    getSelectedColors: handledSelectedColors
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Environment",
     onChange: handleOnChangeWaterproof,
@@ -17480,26 +17482,26 @@ const neonColorOptions = [{
   name: 'Warm White',
   color: '#FFFACD'
 }, {
+  name: 'Lemon Yellow',
+  color: '#FFFF00'
+}, {
+  name: 'Orange',
+  color: '#FFA500'
+}, {
   name: 'Red',
   color: '#FF0000'
 }, {
   name: 'Pink',
   color: '#FFC0CB'
 }, {
-  name: 'Green',
-  color: '#008000'
-}, {
-  name: 'Cyan Blue',
-  color: '#00FFFF'
-}, {
-  name: 'Yellow',
-  color: '#FFFF00'
-}, {
   name: 'Blue',
   color: '#0000FF'
 }, {
-  name: 'Orange',
-  color: '#FFA500'
+  name: 'Cyan',
+  color: '#00FFFF'
+}, {
+  name: 'Green',
+  color: '#008000'
 }];
 const baseColorOptions = [{
   name: 'White',
@@ -32550,6 +32552,9 @@ const allAttributes = item => [{
   key: item.rigidWaterproof,
   label: 'ENVIRONMENT'
 }, {
+  key: item.neonColor,
+  label: 'NEON COLORS'
+}, {
   key: item.neonLength8mm,
   label: '8mm NEON LENGTH'
 }, {
@@ -32624,10 +32629,10 @@ const allAttributes = item => [{
   label: 'LED LIGHT COLOR'
 }, {
   key: item.acrylicBackingOption,
-  label: 'ACRYLIC BACKING OPTION'
+  label: 'BACKING'
 }, {
   key: item.rigidBacking,
-  label: 'BACKING OPTION'
+  label: 'BACKING'
 }, {
   key: item.paintedPCColor,
   label: 'PAINTED PC COLOR'
@@ -32680,9 +32685,6 @@ const allAttributes = item => [{
   key: item.wireType,
   label: 'WIRE TYPE'
 }, {
-  key: item.neonColor,
-  label: 'NEON COLORS'
-}, {
   key: item.installation,
   label: 'INSTALLATION'
 }, {
@@ -32727,7 +32729,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   STUD_MOUNT: () => (/* binding */ STUD_MOUNT),
 /* harmony export */   STUD_WITH_SPACER: () => (/* binding */ STUD_WITH_SPACER)
 /* harmony export */ });
-const INDOOR_NOT_WATERPROOF = 'Indoor (Not Waterproof)';
+const INDOOR_NOT_WATERPROOF = 'Indoor';
 const GLOSS_FINISH = 'Gloss';
 const CLEAR_COLOR = 'Clear';
 const FROSTED_CLEAR_COLOR = 'Frosted Clear';

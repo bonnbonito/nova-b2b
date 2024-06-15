@@ -1,4 +1,4 @@
-export const INDOOR_NOT_WATERPROOF = 'Indoor (Not Waterproof)';
+export const INDOOR_NOT_WATERPROOF = 'Indoor';
 export const GLOSS_FINISH = 'Gloss';
 export const CLEAR_COLOR = 'Clear';
 export const FROSTED_CLEAR_COLOR = 'Frosted Clear';

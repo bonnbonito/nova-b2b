@@ -103,6 +103,14 @@ export const neonColorOptions = [
 		color: '#FFFACD',
 	},
 	{
+		name: 'Lemon Yellow',
+		color: '#FFFF00',
+	},
+	{
+		name: 'Orange',
+		color: '#FFA500',
+	},
+	{
 		name: 'Red',
 		color: '#FF0000',
 	},
@@ -111,24 +119,16 @@ export const neonColorOptions = [
 		color: '#FFC0CB',
 	},
 	{
-		name: 'Green',
-		color: '#008000',
-	},
-	{
-		name: 'Cyan Blue',
-		color: '#00FFFF',
-	},
-	{
-		name: 'Yellow',
-		color: '#FFFF00',
-	},
-	{
 		name: 'Blue',
 		color: '#0000FF',
 	},
 	{
-		name: 'Orange',
-		color: '#FFA500',
+		name: 'Cyan',
+		color: '#00FFFF',
+	},
+	{
+		name: 'Green',
+		color: '#008000',
 	},
 ];
 

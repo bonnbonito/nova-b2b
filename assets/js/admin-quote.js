@@ -359,10 +359,14 @@ function allAttributes(sign) {
 			label: 'NEON LENGTH(ft)',
 			value: sign.neonLength ? sign.neonLength : '',
 		},
+
 		{
 			label: 'ENVIRONMENT',
 			value: sign.rigidWaterproof ? sign.rigidWaterproof : '',
 		},
+
+		{ label: 'NEON COLORS', value: sign.neonColor ? sign.neonColor : '' },
+
 		{
 			label: '8mm NEON LENGTH',
 			value: sign.neonLength8mm ? sign.neonLength8mm : '',
@@ -500,11 +504,11 @@ function allAttributes(sign) {
 		},
 
 		{
-			label: 'ACRYLIC BACKING OPTION',
+			label: 'BACKING',
 			value: sign.acrylicBackingOption ? sign.acrylicBackingOption : '',
 		},
 		{
-			label: 'BACKING OPTION',
+			label: 'BACKING',
 			value: sign.rigidBacking ? sign.rigidBacking : '',
 		},
 		{
@@ -560,7 +564,6 @@ function allAttributes(sign) {
 			label: 'WIRE TYPE',
 			value: sign.wireType ? sign.wireType : '',
 		},
-		{ label: 'NEON COLORS', value: sign.neonColor ? sign.neonColor : '' },
 
 		{
 			label: 'INSTALLATION',

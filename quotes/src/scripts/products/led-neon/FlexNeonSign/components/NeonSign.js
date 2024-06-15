@@ -389,6 +389,18 @@ export const NeonSign = ({ item }) => {
 					onChange={(e) => setNeonLength(e.target.value)}
 					options={neonLengthOptions}
 				/>
+
+				<NeonColors
+					colorRef={colorRef}
+					colors={color}
+					toggle={() => {
+						setOpenColor((prev) => !prev);
+					}}
+					openColor={openColor}
+					setToogle={setOpenColor}
+					getSelectedColors={handledSelectedColors}
+				/>
+
 				<Dropdown
 					title="Backing"
 					value={acrylicBackingOption}
@@ -457,17 +469,6 @@ export const NeonSign = ({ item }) => {
 					))}
 					value={wireExitLocation}
 					onlyValue={true}
-				/>
-
-				<NeonColors
-					colorRef={colorRef}
-					colors={color}
-					toggle={() => {
-						setOpenColor((prev) => !prev);
-					}}
-					openColor={openColor}
-					setToogle={setOpenColor}
-					getSelectedColors={handledSelectedColors}
 				/>
 
 				<Dropdown

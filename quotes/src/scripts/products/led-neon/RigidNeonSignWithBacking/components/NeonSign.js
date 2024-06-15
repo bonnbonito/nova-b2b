@@ -522,6 +522,18 @@ export const NeonSign = ({ item }) => {
 					options={neonSignsHeight}
 				/>
 
+				<NeonColors
+					colorRef={neonColorRef}
+					colors={neonColor}
+					toggle={() => {
+						setOpenNeonColor((prev) => !prev);
+						setOpenColor(false);
+					}}
+					openColor={openNeonColor}
+					setToogle={setOpenNeonColor}
+					getSelectedColors={handledSelectedColors}
+				/>
+
 				<Dropdown
 					title="8mm Neon Length"
 					value={neonLength8mm}
@@ -660,18 +672,6 @@ export const NeonSign = ({ item }) => {
 					))}
 					value={wireType}
 					onlyValue={true}
-				/>
-
-				<NeonColors
-					colorRef={neonColorRef}
-					colors={neonColor}
-					toggle={() => {
-						setOpenNeonColor((prev) => !prev);
-						setOpenColor(false);
-					}}
-					openColor={openNeonColor}
-					setToogle={setOpenNeonColor}
-					getSelectedColors={handledSelectedColors}
 				/>
 
 				<Dropdown

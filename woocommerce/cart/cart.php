@@ -123,7 +123,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 							</strong>
 						</div>
 					</div>
-
+						<?php if ( $_product->is_sold_individually() ) : ?>
 					<div class="quantity-change">
 						<div class="cursor-pointer decrease">
 							<svg width="20" height="20" viewBox="0 0 20 20" fill="none"
@@ -169,6 +169,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 
 						</div>
 					</div>
+					<?php endif; ?>
 
 				</div>
 

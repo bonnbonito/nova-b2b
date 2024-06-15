@@ -103,6 +103,11 @@ export default function RigidNeonSignWithBacking() {
 							(65 cm x 72 cm), we will divide them into multiple pieces to fit
 							within the required dimensions.
 						</li>
+						<li>
+							Please note that the price of the neon sign is NOT yet final. Our
+							designers will provide a finalized design and accurate quote for
+							your approval.
+						</li>
 					</ul>
 				</Note>
 

@@ -98,6 +98,17 @@ export default function RigidNeonSignNoBacking() {
 							If you prefer all wire exits to be in one place, please let us
 							know.
 						</li>
+						<li>
+							The neon height and width refer to the size of the neon graphics.
+							If the design exceeds the continuous neon size limit (65 cm x 72
+							cm), we will divide them into multiple pieces to fit within the
+							required dimensions
+						</li>
+						<li>
+							Please note that the price of the neon sign is NOT yet final. Our
+							designers will provide a finalized design and accurate quote for
+							your approval.
+						</li>
 					</ul>
 				</Note>
 
