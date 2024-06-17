@@ -158,7 +158,7 @@ class Pending_Payment {
 
 <p>Original Total: <?php echo $original_total; ?></p>
 
-<?php
+		<?php
 	}
 
 	public function hide_specific_orders( $query ) {
@@ -399,9 +399,6 @@ class Pending_Payment {
 
 		$payment_url = $order->get_checkout_payment_url();
 
-		$first_name     = $customer['first_name'];
-		$customer_email = $customer['email'];
-
 		if ( have_rows( 'payment_emails', $payment_type ) ) :
 			while ( have_rows( 'payment_emails', $payment_type ) ) :
 				the_row();
@@ -465,16 +462,16 @@ class Pending_Payment {
 <p>Hello,</p>
 <p>An outstanding invoice for {order_number} is due today. We have sent a reminder to:</p>
 <ul>
-    <li>Customer: {customer_name} - {business_id} </li>
-    <li>Company: {business_name}</li>
-    <li>Order ID: #{order_number}</li>
-    <li>Deadline of payment: {deadline}</li>
-    <li>Unpaid Balance: {pending_payment}</li>
+	<li>Customer: {customer_name} - {business_id} </li>
+	<li>Company: {business_name}</li>
+	<li>Order ID: #{order_number}</li>
+	<li>Deadline of payment: {deadline}</li>
+	<li>Unpaid Balance: {pending_payment}</li>
 </ul>
 
 <p>Order details:</p>
 {order_details}
-<?php
+		<?php
 		$message  = ob_get_clean();
 		$customer = $this->get_billing_information_from_payment( $order->get_id() );
 
@@ -519,14 +516,14 @@ class Pending_Payment {
 <p>Hello,</p>
 <p>We've informed your client that the product is now prepared and ready to ship:</p>
 <ul>
-    <li>Customer: {customer_name} - {business_id} </li>
-    <li>Company: {business_name}</li>
-    <li>Order ID: #{order_number}</li>
+	<li>Customer: {customer_name} - {business_id} </li>
+	<li>Company: {business_name}</li>
+	<li>Order ID: #{order_number}</li>
 </ul>
 
 <p>Here's the final invoice and their tracking information:</p>
 {order_details}
-<?php
+		<?php
 		$message       = ob_get_clean();
 		$first_name    = $order->get_billing_first_name();
 		$user_id       = $order->get_user_id() ? $order->get_user_id() : 0;

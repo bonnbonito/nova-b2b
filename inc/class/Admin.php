@@ -44,6 +44,17 @@ class Admin {
 		add_action( 'admin_menu', array( $this, 'export_quotes_menu' ) );
 		add_action( 'admin_init', array( $this, 'export_quotes_to_csv_check' ) );
 		add_action( 'wp_dashboard_setup', array( $this, 'remove_all_dashboard_widgets' ), 20 );
+		add_action( 'admin_notices', array( $this, 'notice_testing_mode' ) );
+	}
+
+	public function notice_testing_mode() {
+		if ( get_field( 'testing_mode', 'option' ) ) {
+			?>
+<div class="notice notice-warning">
+	<p><strong>TESTING MODE</strong>: Emails are temporarily disabled.</p>
+</div>
+			<?php
+		}
 	}
 
 	public function remove_all_dashboard_widgets() {
