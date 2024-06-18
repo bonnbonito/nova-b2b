@@ -277,12 +277,10 @@ class Pending_Payment {
 		$order          = wc_get_order( $payment_order_id );
 		$original_order = wc_get_order( $original_order_id );
 
-		$customer = $this->get_billing_information_from_payment( $payment );
-
 		$payment_url = $order->get_checkout_payment_url();
 
-		$first_name     = $customer['first_name'];
-		$customer_email = $customer['email'];
+		$first_name     = $order->get_billing_first_name();
+		$customer_email = $order->get_billing_email();
 
 		if ( ! $order ) {
 			return 'Order not found';
@@ -383,12 +381,11 @@ class Pending_Payment {
 		$payment_date_object = new \DateTime( $payment->payment_date );
 		$today               = new \DateTime();
 
-		$customer       = $this->get_billing_information_from_payment( $payment_order_id );
-		$first_name     = $customer['first_name'];
-		$customer_email = $customer['email'];
-
 		$order          = wc_get_order( $payment_order_id );
 		$original_order = wc_get_order( $original_order_id );
+
+		$first_name     = $order->get_billing_first_name();
+		$customer_email = $order->get_billing_email();
 
 		if ( ! $order ) {
 			return 'Order not found';
@@ -472,10 +469,10 @@ class Pending_Payment {
 <p>Order details:</p>
 {order_details}
 		<?php
-		$message  = ob_get_clean();
-		$customer = $this->get_billing_information_from_payment( $order->get_id() );
+		$message = ob_get_clean();
 
 		$user_id       = $order->get_user_id() ? $order->get_user_id() : 0;
+		$first_name    = $order->get_billing_first_name();
 		$business_id   = get_field( 'business_id', 'user_' . $user_id );
 		$business_name = get_field( 'business_name', 'user_' . $user_id );
 		$order_number  = $order->get_order_number();
