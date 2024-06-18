@@ -755,58 +755,70 @@ sendMockup.addEventListener('click', e => {
 		$role_instance->send_email( $to_admin, $admin_subject, $admin_message, $headers, array() );
 	}
 
-	public function for_quotation_email_old( $post_id ) {
+	public function for_quotation_admin_email( $post_id ) {
 
+		// Retrieve the partner user ID from the post's custom field
 		$user_id = get_field( 'partner', $post_id );
+		if ( ! $user_id ) {
+			error_log( 'No partner user ID found for post ID ' . $post_id );
+			return;
+		}
 
+		// Retrieve user information
 		$user_info = get_userdata( $user_id );
+		if ( ! $user_info ) {
+			error_log( 'No user info found for user ID ' . $user_id );
+			return;
+		}
 
-		$business_id = get_field( 'business_id', 'user_' . $user_id );
+		// Get business ID, default to 'N/A' if not found
+		$business_id = get_field( 'business_id', 'user_' . $user_id ) ?: 'N/A';
 
-		$company = get_field( 'business_name', 'user_' . $user_id ) ? get_field( 'business_name', 'user_' . $user_id ) : 'None';
+		// Get business name, default to 'None' if not found
+		$company = get_field( 'business_name', 'user_' . $user_id ) ?: 'None';
 
+		// Construct the edit post URL
 		$edit_post_url = admin_url( 'post.php?post=' . $post_id . '&action=edit' );
 
-		$to         = $user_info->user_email;
-		$first_name = $user_info->first_name;
+		// Retrieve the user's first name
+		$first_name = $user_info->first_name ?: 'Customer';
 
-		$subject  = 'NOVA Signage -  Mockup Submitted for Quotation (QUOTE ID:  Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . ') ';
-		$message  = '<p>Hello ' . $first_name . '.</p>';
-		$message .= '<p>We got your quote request for QUOTE ID: Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '.</p>';
-		$message .= '<p>Our team is reviewing your mockup.</p>';
-		$message .= '<p>Should we require additional information or clarification on your design specifications, we will reach out to you within the next 24 business hours.</p>';
-		$message .= '<p>Please review your order details:<br><a href="' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '">' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '</a></p>';
+		// Set up email headers
+		$headers   = array();
+		$headers[] = 'Content-Type: text/html; charset=UTF-8';
+		$headers[] = 'From: NOVA Signage <quotes@novasignage.com>';
+		$headers[] = 'Reply-To: NOVA Signage <quotes@novasignage.com>';
 
-		$message .= '<p>Thank you,<br>';
-		$message .= 'NOVA Signage Team</p>';
-
-		/*
-		Remove send email to client */
-		// $role_instance->send_email( $to, $subject, $message, $headers, array() );
-
-		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
-
-		$role_instance = \NOVA_B2B\Roles::get_instance();
-
+		// Retrieve admin customer rep emails
 		$to_admin = $this->to_admin_customer_rep_emails();
+		if ( ! $to_admin ) {
+			error_log( 'No admin customer rep emails found' );
+			return;
+		}
 
+		// Construct the subject for the admin email
 		$admin_subject = 'NOVA - Quote Request From: ' . $first_name . ' from ' . $company . ' ' . $business_id . ' - #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
 
-		$to_admin_message = '<p>Hello,</p>';
-
+		// Construct the message for the admin email
+		$to_admin_message  = '<p>Hello,</p>';
 		$to_admin_message .= '<p>Client sent a quotation request:</p>';
-
 		$to_admin_message .= '<ul>';
 		$to_admin_message .= '<li><strong>Customer:</strong> ' . $first_name . ' - ' . $business_id . '</li>';
 		$to_admin_message .= '<li><strong>Company:</strong> ' . $company . '</li>';
 		$to_admin_message .= '<li><strong>Quote ID:</strong> #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '</li>';
 		$to_admin_message .= '</ul><br>';
-
 		$to_admin_message .= '<p>You may review the quotation you sent here:<br>';
 		$to_admin_message .= '<a href="' . $edit_post_url . '">' . $edit_post_url . '</a></p>';
 
-		$role_instance->send_email( $to_admin, $admin_subject, $to_admin_message, $headers, array() );
+		// Get the instance of the Roles class and send the email
+		$role_instance = \NOVA_B2B\Roles::get_instance();
+		if ( $role_instance ) {
+			$role_instance->send_email( $to_admin, $admin_subject, $to_admin_message, $headers, array() );
+		} else {
+			error_log( 'NOVA_B2B\Roles::get_instance() returned null' );
+		}
 	}
+
 
 	public function for_quotation_email( $post_id ) {
 
@@ -954,25 +966,6 @@ sendMockup.addEventListener('click', e => {
 		if ( $newjson ) {
 			update_field( 'signage', $newjson, $product_id );
 		}
-	}
-
-	public function for_quotation_email_action( $post_id ) {
-
-		if ( wp_is_post_autosave( $post_id ) || wp_is_post_revision( $post_id ) ) {
-			return;
-		}
-
-		if ( 'nova_quote' !== get_post_type( $post_id ) ) {
-			return;
-		}
-
-		$quote_status = get_field( 'quote_status', $post_id );
-
-		if ( 'processing' !== $quote_status['value'] ) {
-			return;
-		}
-
-		// do_action( 'quote_to_processing', $post_id );
 	}
 
 	public function regenerate_pdf( $post_id, $post, $update ) {
@@ -1123,8 +1116,6 @@ sendMockup.addEventListener('click', e => {
 		}
 
 		update_field( 'quote_status', 'processing', $_POST['quote'] );
-
-		// $this->for_quotation_email( $_POST['quote'] );
 
 		$status['code'] = 2;
 		wp_send_json( $status );
@@ -1926,7 +1917,7 @@ h6 {
 				/*Remove for quotation email*/
 				$this->generate_pdf( $post_id, $html, 'USD' );
 				$this->generate_pdf( $post_id, $html_cad, 'CAD' );
-				$this->for_quotation_email( $post_id );
+				$this->for_quotation_admin_email( $post_id );
 			}
 
 			$status['code']         = 2;
