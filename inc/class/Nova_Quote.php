@@ -810,45 +810,68 @@ sendMockup.addEventListener('click', e => {
 
 	public function for_quotation_email( $post_id ) {
 
+		// Retrieve the partner user ID from the post's custom field
 		$user_id = get_field( 'partner', $post_id );
+		if ( ! $user_id ) {
+			error_log( 'No partner user ID found for post ID ' . $post_id );
+			return;
+		}
 
+		// Retrieve user information
 		$user_info = get_userdata( $user_id );
+		if ( ! $user_info ) {
+			error_log( 'No user info found for user ID ' . $user_id );
+			return;
+		}
 
-		$business_id = get_field( 'business_id', 'user_' . $user_id ) ? get_field( 'business_id', 'user_' . $user_id ) : 'N/A';
+		// Get business ID, default to 'N/A' if not found
+		$business_id = get_field( 'business_id', 'user_' . $user_id ) ?: 'N/A';
 
-		$company = get_field( 'business_name', 'user_' . $user_id ) ? get_field( 'business_name', 'user_' . $user_id ) : 'None';
+		// Get business name, default to 'None' if not found
+		$company = get_field( 'business_name', 'user_' . $user_id ) ?: 'None';
 
+		// Construct the edit post URL
 		$edit_post_url = admin_url( 'post.php?post=' . $post_id . '&action=edit' );
 
-		$first_name = $user_info->first_name;
+		// Retrieve the user's first name
+		$first_name = $user_info->first_name ?: 'Customer';
 
+		// Set up email headers
 		$headers   = array();
 		$headers[] = 'Content-Type: text/html; charset=UTF-8';
 		$headers[] = 'From: NOVA Signage <quotes@novasignage.com>';
 		$headers[] = 'Reply-To: NOVA Signage <quotes@novasignage.com>';
 
+		// Retrieve admin customer rep emails
 		$to_admin = $this->to_admin_customer_rep_emails();
+		if ( ! $to_admin ) {
+			error_log( 'No admin customer rep emails found' );
+			return;
+		}
 
+		// Construct the subject for the admin email
 		$admin_subject = 'NOVA - Quote Request From: ' . $first_name . ' from ' . $company . ' ' . $business_id . ' - #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
 
-		$to_admin_message = '<p>Hello,</p>';
-
+		// Construct the message for the admin email
+		$to_admin_message  = '<p>Hello,</p>';
 		$to_admin_message .= '<p>Client sent a quotation request:</p>';
-
 		$to_admin_message .= '<ul>';
 		$to_admin_message .= '<li><strong>Customer:</strong> ' . $first_name . ' - ' . $business_id . '</li>';
 		$to_admin_message .= '<li><strong>Company:</strong> ' . $company . '</li>';
 		$to_admin_message .= '<li><strong>Quote ID:</strong> #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '</li>';
 		$to_admin_message .= '</ul><br>';
-
 		$to_admin_message .= '<p>You may review the quotation you sent here:<br>';
 		$to_admin_message .= '<a href="' . $edit_post_url . '">' . $edit_post_url . '</a></p>';
 
+		// Get the instance of the Roles class and send the email
 		$role_instance = \NOVA_B2B\Roles::get_instance();
 		if ( $role_instance ) {
 			$role_instance->send_email( $to_admin, $admin_subject, $to_admin_message, $headers, array() );
+		} else {
+			error_log( 'NOVA_B2B\Roles::get_instance() returned null' );
 		}
 	}
+
 
 	public function to_admin_customer_rep_emails() {
 		if ( get_field( 'testing_mode', 'option' ) ) {
@@ -1903,7 +1926,6 @@ h6 {
 				/*Remove for quotation email*/
 				$this->generate_pdf( $post_id, $html, 'USD' );
 				$this->generate_pdf( $post_id, $html_cad, 'CAD' );
-
 				$this->for_quotation_email( $post_id );
 			}
 
