@@ -755,13 +755,16 @@ sendMockup.addEventListener('click', e => {
 		$role_instance->send_email( $to_admin, $admin_subject, $admin_message, $headers, array() );
 	}
 
-	public function for_quotation_email( $post_id ) {
+	public function for_quotation_email_old( $post_id ) {
 
 		$user_id = get_field( 'partner', $post_id );
 
-		$user_info     = get_userdata( $user_id );
-		$business_id   = get_field( 'business_id', 'user_' . $user_id );
-		$company       = get_field( 'business_name', 'user_' . $user_id ) ? get_field( 'business_name', 'user_' . $user_id ) : 'None';
+		$user_info = get_userdata( $user_id );
+
+		$business_id = get_field( 'business_id', 'user_' . $user_id );
+
+		$company = get_field( 'business_name', 'user_' . $user_id ) ? get_field( 'business_name', 'user_' . $user_id ) : 'None';
+
 		$edit_post_url = admin_url( 'post.php?post=' . $post_id . '&action=edit' );
 
 		$to         = $user_info->user_email;
@@ -777,13 +780,13 @@ sendMockup.addEventListener('click', e => {
 		$message .= '<p>Thank you,<br>';
 		$message .= 'NOVA Signage Team</p>';
 
-		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
-
-		$role_instance = \NOVA_B2B\Roles::get_instance();
-
 		/*
 		Remove send email to client */
 		// $role_instance->send_email( $to, $subject, $message, $headers, array() );
+
+		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
+
+		$role_instance = \NOVA_B2B\Roles::get_instance();
 
 		$to_admin = $this->to_admin_customer_rep_emails();
 
@@ -803,6 +806,45 @@ sendMockup.addEventListener('click', e => {
 		$to_admin_message .= '<a href="' . $edit_post_url . '">' . $edit_post_url . '</a></p>';
 
 		$role_instance->send_email( $to_admin, $admin_subject, $to_admin_message, $headers, array() );
+	}
+
+	public function for_quotation_email( $post_id ) {
+
+		$user_id = get_field( 'partner', $post_id );
+
+		$user_info = get_userdata( $user_id );
+
+		$business_id = get_field( 'business_id', 'user_' . $user_id );
+
+		$company = get_field( 'business_name', 'user_' . $user_id ) ? get_field( 'business_name', 'user_' . $user_id ) : 'None';
+
+		$edit_post_url = admin_url( 'post.php?post=' . $post_id . '&action=edit' );
+
+		$first_name = $user_info->first_name;
+
+		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
+
+		$to_admin = $this->to_admin_customer_rep_emails();
+
+		$admin_subject = 'NOVA - Quote Request From: ' . $first_name . ' from ' . $company . ' ' . $business_id . ' - #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
+
+		$to_admin_message = '<p>Hello,</p>';
+
+		$to_admin_message .= '<p>Client sent a quotation request:</p>';
+
+		$to_admin_message .= '<ul>';
+		$to_admin_message .= '<li><strong>Customer:</strong> ' . $first_name . ' - ' . $business_id . '</li>';
+		$to_admin_message .= '<li><strong>Company:</strong> ' . $company . '</li>';
+		$to_admin_message .= '<li><strong>Quote ID:</strong> #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '</li>';
+		$to_admin_message .= '</ul><br>';
+
+		$to_admin_message .= '<p>You may review the quotation you sent here:<br>';
+		$to_admin_message .= '<a href="' . $edit_post_url . '">' . $edit_post_url . '</a></p>';
+
+		$role_instance = \NOVA_B2B\Roles::get_instance();
+		if ( $role_instance ) {
+			$role_instance->send_email( $to_admin, $admin_subject, $to_admin_message, $headers, array() );
+		}
 	}
 
 	public function to_admin_customer_rep_emails() {
@@ -1225,8 +1267,14 @@ sendMockup.addEventListener('click', e => {
 
 		$final_price = number_format( $final_price * 1.3, 2, '.', '' );
 
-		$product_id   = get_field( 'product', $post_id )->ID;
-		$product_name = get_field( 'product', $post_id )->post_title;
+		$product = get_field( 'product', $post_id );
+
+		if ( ! $product ) {
+			return;
+		}
+
+		$product_id   = $product->ID;
+		$product_name = $product->post_title;
 		$signage      = get_field( 'signage', $post_id ) ? json_decode( get_field( 'signage', $post_id ) ) : null;
 		$note         = get_field( 'note', $post_id );
 
@@ -1418,13 +1466,23 @@ h6 {
 	}
 
 	public function html_invoice( $post_id ) {
+		if ( ! $post_id ) {
+			return;
+		}
 		ob_start();
 		$instance = \NOVA_B2B\Scripts::get_instance();
 		$user_id  = get_field( 'partner', $post_id );
 
 		$final_price = floatval( get_field( 'final_price', $post_id ) );
 
-		$product_id   = get_field( 'product', $post_id )->ID;
+		$product = get_field( 'product', $post_id );
+
+		if ( ! $product ) {
+			return;
+		}
+
+		$product_id = get_field( 'product', $post_id )->ID;
+
 		$product_name = get_field( 'product', $post_id )->post_title;
 		$signage      = get_field( 'signage', $post_id ) ? json_decode( get_field( 'signage', $post_id ) ) : null;
 		$note         = get_field( 'note', $post_id );
