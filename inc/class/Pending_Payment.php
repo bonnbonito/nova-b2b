@@ -215,7 +215,7 @@ class Pending_Payment {
 	}
 
 	protected function get_billing_information_from_payment( $payment ) {
-		$order = wc_get_order( intval( $payment->original_order ) );
+		$order = wc_get_order( $payment->original_order );
 		if ( ! $order ) {
 			return false;
 		}

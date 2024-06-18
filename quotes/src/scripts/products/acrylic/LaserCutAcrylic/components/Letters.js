@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import Description from '../../../../Description';
 import Dropdown from '../../../../Dropdown';
 import FontsDropdown from '../../../../FontsDropdown';
 import UploadFiles from '../../../../UploadFiles';
@@ -777,18 +778,7 @@ export function Letters({ item }) {
 					</div>
 				)}
 
-				<div className="px-[1px] col-span-4">
-					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-						COMMENTS
-					</label>
-					<textarea
-						className="w-full py-4 px-2 border-gray-200 color-black text-sm font-bold rounded-md placeholder:text-slate-400"
-						value={comments}
-						onChange={handleComments}
-						placeholder="ADD COMMENTS"
-						rows={4}
-					/>
-				</div>
+				<Description value={comments} handleComments={handleComments} />
 
 				<UploadFiles
 					itemId={item.id}

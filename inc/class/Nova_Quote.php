@@ -565,10 +565,10 @@ sendMockup.addEventListener('click', e => {
 		$to         = $user_info->user_email;
 		$first_name = $user_info->first_name;
 
-		$subject = 'Quote Status Updated: (' . $project_name . ') - #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
+		$subject = 'Revised Quote: (' . $project_name . ') - #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
 
 		$message  = '<p>Hello ' . $first_name . ',</p>';
-		$message .= '<p>Your request has been quoted. Please review the quotation for:</p>';
+		$message .= '<p>Your request has been revised and quoted. Please review the quotation for:</p>';
 
 		$message .= '<ul>';
 		$message .= '<li><strong>Project:</strong> ' . $project_name . '</li>';
@@ -581,6 +581,8 @@ sendMockup.addEventListener('click', e => {
 		if ( file_exists( $file_path ) ) {
 			$message .= '<p>Access the PDF copy of your quote here:<br><a href="' . esc_url( $file_link ) . '">' . esc_url( $file_link ) . '</a></p>';
 		}
+
+		$message .= '<p>Please check the NOTES section if there are any remarks.</p>';
 
 		$message .= '<p>Let us know if you have any questions or concerns.</p>';
 

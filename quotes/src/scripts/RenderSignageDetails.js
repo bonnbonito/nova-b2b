@@ -33,15 +33,23 @@ export const RenderSignageDetails = ({
 			);
 		}
 
+		if (signage.label === 'COMMENTS') {
+			return (
+				<div
+					className="grid grid-cols-1 gap-0 py-[2px] mb-1"
+					key={`${signage.label}-${index}`}
+				>
+					<div className={classLabel}>{signage.label}</div>
+					<div className="text-left text-sm">{signage.key}</div>
+				</div>
+			);
+		}
+
 		if (signage.isFile) {
 			return (
 				<div className={classContainer} key={`${signage.label}-${index}`}>
 					<div className={classLabel}>{signage.label}</div>
-					<div className={classValue}>
-						<a href={item.fileUrl} target="_blank">
-							{item.fileName}
-						</a>
-					</div>
+					<div className={classValue}>{signage.key}</div>
 				</div>
 			);
 		}

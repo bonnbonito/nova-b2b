@@ -7,6 +7,7 @@ import React, {
 	useState,
 } from 'react';
 import { useAppContext } from '../../../../AppProvider';
+import Description from '../../../../Description';
 import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
 import { convertJson } from '../../../../utils/ConvertJson';
@@ -691,18 +692,8 @@ export const NeonSign = ({ item }) => {
 				/>
 			</div>
 			<div className="quote-grid">
-				<div className="px-[1px] col-span-4">
-					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-						COMMENTS
-					</label>
-					<textarea
-						className="w-full py-4 px-2 border-gray-200 color-black text-sm font-bold rounded-md placeholder:text-slate-400"
-						value={item.comments}
-						onChange={handleComments}
-						placeholder="ADD COMMENTS"
-						rows={4}
-					/>
-				</div>
+				<Description value={item.comments} handleComments={handleComments} />
+
 				<UploadFiles
 					itemId={item.id}
 					setFilePaths={setFilePaths}

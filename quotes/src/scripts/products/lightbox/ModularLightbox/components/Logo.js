@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Description from '../../../../Description';
 import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
 
@@ -39,7 +40,8 @@ const uvPrintedCoverOptions = [
 ];
 
 export function Logo({ item }) {
-	const { signage, setSignage, setMissing } = useAppContext();
+	const { signage, setSignage, setMissing, updateSignageItem } =
+		useAppContext();
 
 	const [lightboxType, setLightboxType] = useState(item.lightboxType ?? '');
 	const [uvPrintedCover, setuvPrintedCover] = useState(
@@ -96,6 +98,10 @@ export function Logo({ item }) {
 			)
 		);
 	}
+
+	const handleComments = (e) => {
+		updateSignageItem(item.id, 'comments', e.target.value);
+	};
 
 	const handleOnChangeSets = (e) => {
 		setSets(e.target.value);
@@ -170,6 +176,11 @@ export function Logo({ item }) {
 		if (!lightboxType) missingFields.push('Select Light Box Type');
 
 		if (!uvPrintedCover) missingFields.push('Select UV Printed Cover');
+
+		if (uvPrintedCover && uvPrintedCover === 'Yes') {
+			if (!fileUrls || fileUrls.length === 0)
+				missingFields.push('Upload a PDF/AI File');
+		}
 
 		if (!waterproof) missingFields.push('Select Environment');
 
@@ -307,6 +318,8 @@ export function Logo({ item }) {
 			</div>
 
 			<div className="quote-grid">
+				<Description value={item.comments} handleComments={handleComments} />
+
 				{uvPrintedCover === 'Yes' && (
 					<UploadFiles
 						itemId={item.id}
