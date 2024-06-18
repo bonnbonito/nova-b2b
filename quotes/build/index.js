@@ -17962,9 +17962,7 @@ function Logo({
     fileNames: fileNames,
     setFileUrls: setFileUrls,
     setFileNames: setFileNames
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "text-xs text-[#9F9F9F] pt-4"
-  }, "We size the letters in proportion to your chosen font. Some uppercase/lowercase letters may appear shorter or taller than your selected height on the form to maintain visual harmony."));
+  })));
 }
 
 /***/ }),

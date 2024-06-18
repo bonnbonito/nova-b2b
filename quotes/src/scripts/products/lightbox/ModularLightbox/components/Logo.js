@@ -333,12 +333,6 @@ export function Logo({ item }) {
 					/>
 				)}
 			</div>
-
-			<div className="text-xs text-[#9F9F9F] pt-4">
-				We size the letters in proportion to your chosen font. Some
-				uppercase/lowercase letters may appear shorter or taller than your
-				selected height on the form to maintain visual harmony.
-			</div>
 		</>
 	);
 }
