@@ -635,19 +635,18 @@ sendMockup.addEventListener('click', e => {
 		$message .= '<ul>';
 		$message .= '<li><strong>Project:</strong> ' . $project_name . '</li>';
 		$message .= '<li><strong>Quote ID:</strong> Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '</li>';
-		$message .= '</ul>';
+		$message .= '</ul><br><br>';
 
-		$message .= '<p>Please check the <strong>NOTES</strong> section if there are any remarks. Click the link for more details:</p>';
-
-		$message .= '<p><a href="' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '">' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '</a></p>';
+		$message .= '<p>Kindly click the link to the website and proceed to checkout if everything looks good.<br>';
+		$message .= '<a href="' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '">' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '</a></p>';
 
 		if ( file_exists( $file_path ) ) {
 			$message .= '<p>Access the PDF copy of your quote here:<br><a href="' . esc_url( $file_link ) . '">' . esc_url( $file_link ) . '</a></p>';
 		}
 
-		$message .= '<p>You may now add this project to your cart.</p>';
+		$message .= '<p>Please check the NOTES section if there are any remarks.</p>';
 
-		$message .= '<p>Let us know if you need any adjustments.</p>';
+		$message .= '<p>Let us know if you have any questions or concerns.</p>';
 
 		$message .= '<p>Thank you,<br>';
 		$message .= 'NOVA Signage Team</p>';
