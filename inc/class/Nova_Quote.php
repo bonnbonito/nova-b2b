@@ -630,7 +630,7 @@ sendMockup.addEventListener('click', e => {
 		$subject = 'Revised Quote: (' . $project_name . ') - #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
 
 		$message  = '<p>Dear ' . $first_name . ',</p>';
-		$message .= '<p>Your custom sign mockup has been revised and is now available for your review:</p>';
+		$message .= '<p>Your request has been revised and quoted. Please review the quotation for:</p>';
 
 		$message .= '<ul>';
 		$message .= '<li><strong>Project:</strong> ' . $project_name . '</li>';
@@ -640,6 +640,10 @@ sendMockup.addEventListener('click', e => {
 		$message .= '<p>Please check the <strong>NOTES</strong> section if there are any remarks. Click the link for more details:</p>';
 
 		$message .= '<p><a href="' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '">' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '</a></p>';
+
+		if ( file_exists( $file_path ) ) {
+			$message .= '<p>Access the PDF copy of your quote here:<br><a href="' . esc_url( $file_link ) . '">' . esc_url( $file_link ) . '</a></p>';
+		}
 
 		$message .= '<p>You may now add this project to your cart.</p>';
 
