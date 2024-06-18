@@ -731,12 +731,12 @@ sendMockup.addEventListener('click', e => {
 
 		$first_name = $user_info->first_name;
 
-		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
+		$headers   = array();
+		$headers[] = 'Content-Type: text/html; charset=UTF-8';
+		$headers[] = 'From: NOVA Signage <quotes@novasignage.com>';
+		$headers[] = 'Reply-To: NOVA Signage <quotes@novasignage.com>';
 
-		$role_instance = \NOVA_B2B\Roles::get_instance();
-
-		$to_admin      = $this->to_admin_customer_rep_emails();
-		$admin_subject = 'NOVA - Quote Sent To: QUOTE ID: Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . ' - ' . $first_name . ' ' . $business_id . ' from ' . $company;
+		$to_admin = $this->to_admin_customer_rep_emails();
 
 		$admin_subject = 'NOVA - Quote Sent To: ' . $first_name . ' from ' . $company . ' ' . $business_id . ' - Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
 
@@ -752,7 +752,11 @@ sendMockup.addEventListener('click', e => {
 		$admin_message .= '<p>You may review the quotation you sent here:</p>';
 		$admin_message .= '<a href="' . $edit_post_url . '">' . $edit_post_url . '</a>';
 
-		$role_instance->send_email( $to_admin, $admin_subject, $admin_message, $headers, array() );
+		$role_instance = \NOVA_B2B\Roles::get_instance();
+
+		if ( $role_instance ) {
+			$role_instance->send_email( $to_admin, $admin_subject, $admin_message, $headers, array() );
+		}
 	}
 
 	public function for_quotation_admin_email( $post_id ) {
