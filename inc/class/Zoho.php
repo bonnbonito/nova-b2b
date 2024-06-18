@@ -166,7 +166,9 @@ class Zoho {
 		}
 
 		// Update user meta field
-		update_user_meta( $user_id, 'zoho_account_id', $_POST['zoho_account_id'] );
+		if ( isset( $_POST['zoho_account_id'] ) && ! empty( $_POST['zoho_account_id'] ) ) {
+			update_user_meta( $user_id, 'zoho_account_id', $_POST['zoho_account_id'] );
+		}
 	}
 
 	public function zoho_account_id( $user ) {
@@ -609,9 +611,13 @@ generateZohoId.addEventListener("click", e => {
 
 		$this->log_to_file( "Adding to zoho User ID: {$user_id}" );
 
-		$zoho = $this->get_user_zoho_id( $user_id );
+		$zoho_account_id = $this->get_user_zoho_id( $user_id );
 
-		$this->log_to_file( "Result: {$zoho}" );
+		if ( ! isset( $zoho_account_id ) ) {
+			$zoho_account_id = 'undefined';
+		}
+
+		$this->log_to_file( "Result: {$zoho_account_id}" );
 	}
 
 	public function send_order_to_zoho_crm( $order_id ) {

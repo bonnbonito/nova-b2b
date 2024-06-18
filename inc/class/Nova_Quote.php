@@ -143,7 +143,6 @@ class Nova_Quote {
 	}
 
 	public function update_dropbox_folder( $post_type, $post ) {
-
 		if ( $post_type !== 'nova_quote' ) {
 			return;
 		}
@@ -155,34 +154,38 @@ class Nova_Quote {
 		$show                = false;
 		$user_folder_arr     = array();
 		$font_folder_arr     = '';
-		foreach ( $data as $item ) {
-			foreach ( $item['filePaths'] as $filePath ) {
-				$parts = explode( '/', $filePath );
-				if ( isset( $parts[2] ) ) {
-					$user_folder_arr[] = $parts[2];
+
+		if ( $data ) {
+			foreach ( $data as $item ) {
+				if ( isset( $item['filePaths'] ) ) {
+					foreach ( $item['filePaths'] as $filePath ) {
+						$parts = explode( '/', $filePath );
+						if ( isset( $parts[2] ) ) {
+							$user_folder_arr[] = $parts[2];
+						}
+					}
+				}
+
+				if ( isset( $item['fontFilePath'] ) ) {
+					$parts = explode( '/', $item['fontFilePath'] );
+					if ( isset( $parts[2] ) ) {
+						$font_folder_arr = $parts[2];
+					}
 				}
 			}
 
-			if ( isset( $item['fontFilePath'] ) ) {
-				$parts = explode( '/', $item['fontFilePath'] );
-				if ( isset( $parts[2] ) ) {
-					$font_folder_arr = $parts[2];
+			$user_folder_arr = array_unique( $user_folder_arr );
+
+			if ( ! empty( $user_folder_arr ) ) {
+				$old_folder = $user_folder_arr[0];
+				if ( $old_folder !== $partner_business_id ) {
+					$show = true;
 				}
 			}
-		}
 
-		$user_folder_arr = array_unique( $user_folder_arr );
-
-		if ( ! empty( $user_folder_arr ) || isset( $user_folder_arr[0] ) ) {
-
-			$old_folder = $user_folder_arr[0];
-			if ( count( $user_folder_arr ) > 0 && $old_folder !== $partner_business_id ) {
+			if ( isset( $old_folder ) && $font_folder_arr && $old_folder !== $partner_business_id ) {
 				$show = true;
 			}
-		}
-
-		if ( $font_folder_arr && $old_folder !== $partner_business_id ) {
-			$show = true;
 		}
 
 		if ( $show ) {
@@ -196,6 +199,7 @@ class Nova_Quote {
 			);
 		}
 	}
+
 
 	public function nova_update_dropbox_folder( $post ) {
 		$signage             = get_field( 'signage', $post->ID );
