@@ -61,7 +61,7 @@ class Nova_Quote {
 		add_action( 'acf/save_post', array( $this, 'show_partner_email' ), 10, 1 );
 		add_action( 'save_post', array( $this, 'regenerate_pdf' ), 10, 3 );
 		add_action( 'quote_to_processing', array( $this, 'for_quotation_email' ) );
-		add_action( 'quote_to_payment', array( $this, 'for_payment_email' ) );
+		add_action( 'quote_to_payment', array( $this, 'for_payment_email' ), 90 );
 		add_action( 'quote_to_payment', array( $this, 'for_payment_admin_email' ) );
 		add_action( 'quote_to_payment', array( $this, 'create_nova_quote_product' ) );
 		add_action( 'wp', array( $this, 'single_quote_redirect' ) );
@@ -569,10 +569,10 @@ sendMockup.addEventListener('click', e => {
 		$to         = $user_info->user_email;
 		$first_name = $user_info->first_name;
 
-		$subject = 'Revised Quote: (' . $project_name . ') - #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
+		$subject = 'Quote Status Updated: (' . $project_name . ') - #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
 
 		$message  = '<p>Hello ' . $first_name . ',</p>';
-		$message .= '<p>Your request has been revised and quoted. Please review the quotation for:</p>';
+		$message .= '<p>Your request has been quoted. Please review the quotation for:</p>';
 
 		$message .= '<ul>';
 		$message .= '<li><strong>Project:</strong> ' . $project_name . '</li>';
@@ -586,8 +586,6 @@ sendMockup.addEventListener('click', e => {
 			$message .= '<p>Access the PDF copy of your quote here:<br><a href="' . esc_url( $file_link ) . '">' . esc_url( $file_link ) . '</a></p>';
 		}
 
-		$message .= '<p>Please check the NOTES section if there are any remarks.</p>';
-
 		$message .= '<p>Let us know if you have any questions or concerns.</p>';
 
 		$message .= '<p>Thank you,<br>';
@@ -600,7 +598,9 @@ sendMockup.addEventListener('click', e => {
 		$headers[] = 'From: NOVA Signage <quotes@novasignage.com>';
 		$headers[] = 'Reply-To: NOVA Signage <quotes@novasignage.com>';
 
-		$role_instance->send_email( $to, $subject, $message, $headers, array() );
+		if ( $role_instance ) {
+			$role_instance->send_email( $to, $subject, $message, $headers, array() );
+		}
 	}
 
 	public function quote_from_address( $email, $b, $from_email ) {
