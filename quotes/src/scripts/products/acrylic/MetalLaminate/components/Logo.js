@@ -395,6 +395,7 @@ export function Logo({ item }) {
 		acrylicBase,
 		sets,
 		selectedMounting,
+		logoPricingObject,
 	]);
 
 	const checkAndAddMissingFields = () => {

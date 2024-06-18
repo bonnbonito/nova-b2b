@@ -379,6 +379,7 @@ export function Logo({ item }) {
 		selectedFinishing,
 		sets,
 		mounting,
+		logoPricingObject,
 	]);
 
 	useOutsideClick([colorRef], () => {
@@ -481,7 +482,6 @@ export function Logo({ item }) {
 						colorName={color.name}
 						openColor={openColor}
 						toggleColor={() => {
-							setOpenFont(false);
 							setOpenColor((prev) => !prev);
 						}}
 						colorOptions={colorOptions}

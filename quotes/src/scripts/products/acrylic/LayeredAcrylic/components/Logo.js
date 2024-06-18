@@ -28,8 +28,6 @@ import {
 
 import { useAppContext } from '../../../../AppProvider';
 
-const NovaSingleOptions = NovaQuote.single_quote_options;
-
 export function Logo({ item }) {
 	const { signage, setSignage, setMissing } = useAppContext();
 

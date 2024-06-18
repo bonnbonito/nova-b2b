@@ -502,6 +502,7 @@ export function Logo({ item }) {
 		baseColor,
 		selectedMounting,
 		sets,
+		logoPricingObject,
 	]);
 
 	return (

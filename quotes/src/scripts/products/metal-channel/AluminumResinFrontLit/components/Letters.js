@@ -67,14 +67,10 @@ export function Letters({ item }) {
 		item.letterHeight ?? ''
 	);
 
-	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
-	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
-	const [usdSinglePrice, setUsdSinglePrice] = useState(
-		item.usdSinglePrice ?? 0
-	);
-	const [cadSinglePrice, setCadSinglePrice] = useState(
-		item.cadSinglePrice ?? 0
-	);
+	const [usdPrice, setUsdPrice] = useState(item.usdPrice);
+	const [cadPrice, setCadPrice] = useState(item.cadPrice);
+	const [usdSinglePrice, setUsdSinglePrice] = useState(item.usdSinglePrice);
+	const [cadSinglePrice, setCadSinglePrice] = useState(item.cadSinglePrice);
 
 	const [lettersHeight, setLettersHeight] = useState({
 		min: 5,
@@ -565,6 +561,7 @@ export function Letters({ item }) {
 		mounting,
 		sets,
 		font,
+		letterPricing,
 	]);
 
 	useEffect(() => {

@@ -353,6 +353,7 @@ export function Logo({ item }) {
 		mounting,
 		pvcBaseColor,
 		sets,
+		logoPricingObject,
 	]);
 
 	const checkAndAddMissingFields = () => {

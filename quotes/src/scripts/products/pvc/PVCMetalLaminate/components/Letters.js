@@ -368,6 +368,7 @@ export function Letters({ item }) {
 		font,
 		sets,
 		pvcBaseColor,
+		letterPricing,
 	]);
 
 	useEffect(() => {

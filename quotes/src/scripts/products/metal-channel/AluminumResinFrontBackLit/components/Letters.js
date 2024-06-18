@@ -646,6 +646,7 @@ export function Letters({ item }) {
 		mounting,
 		sets,
 		font,
+		letterPricing,
 	]);
 
 	useEffect(() => {

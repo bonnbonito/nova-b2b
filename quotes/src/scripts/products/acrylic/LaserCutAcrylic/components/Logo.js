@@ -406,6 +406,7 @@ export function Logo({ item }) {
 		sets,
 		color,
 		selectedMounting,
+		logoPricingObject,
 	]);
 
 	const checkAndAddMissingFields = () => {

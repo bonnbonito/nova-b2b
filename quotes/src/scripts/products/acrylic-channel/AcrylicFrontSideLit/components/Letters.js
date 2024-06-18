@@ -11,11 +11,9 @@ import {
 	studLengthOptions,
 } from '../../../../utils/SignageOptions';
 
-import { spacerPricing } from '../../../../utils/Pricing';
+import { calculateLetterPrice, spacerPricing } from '../../../../utils/Pricing';
 
 import { ledLightColors } from '../../../metal-channel/metalChannelOptions';
-
-import { translucentGraphicFilms } from '../../../../utils/ColorOptions';
 
 import VinylColors from '../../../../utils/VinylColors';
 
@@ -278,17 +276,6 @@ export function Letters({ item }) {
 			setSpacerStandoffDistance(''); // Always reset if the target is empty
 		}
 	};
-
-	// Helper function to determine letter price adjustments
-	function calculateLetterPrice(letter, baseLetterPrice, noLowerCase) {
-		let letterPrice = baseLetterPrice;
-
-		if (letter === ' ') return 0;
-		if (letter.match(/[a-z]/)) letterPrice *= noLowerCase ? 1 : 0.8;
-		if (letter.match(/[`~"*,.\-']/)) letterPrice *= 0.3;
-
-		return letterPrice;
-	}
 
 	const computePricing = () => {
 		if (

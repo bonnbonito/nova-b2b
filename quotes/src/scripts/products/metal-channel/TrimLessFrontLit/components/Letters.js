@@ -376,6 +376,7 @@ export function Letters({ item }) {
 		cadPrice,
 		usdSinglePrice,
 		cadSinglePrice,
+		letterPricing,
 	]);
 
 	useEffect(() => {

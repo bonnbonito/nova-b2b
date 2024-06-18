@@ -284,7 +284,6 @@ export function Letters({ item }) {
 				(item) => parseInt(item.Height) === parseInt(selectedLetterHeight)
 			);
 
-			console.log(letterPricing);
 			const baseLetterPrice = parseFloat(pricingDetail?.BackLit);
 
 			let tempTotal = 0;
