@@ -372,3 +372,42 @@ do_action( 'woocommerce_before_cart' ); ?>
 </div>
 
 <?php do_action( 'woocommerce_after_cart' ); ?>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+	const inputs = document.querySelectorAll('.qty.text');
+	const cartBtn = document.querySelector('button[name="update_cart"]');
+	const initialValues = {};
+
+	inputs.forEach((input, index) => {
+		initialValues[index] = input.value;
+
+		// Add event listener to watch for changes
+		input.addEventListener('input', () => {
+			checkForChanges(index, input.value);
+		});
+	});
+
+	// Function to check for changes
+	function checkForChanges(index, newValue) {
+		if (initialValues[index] === newValue) {
+			cartBtn.setAttribute('disabled', 'disabled');
+		}
+	}
+
+	// Add event listeners for increase and decrease buttons to watch for changes
+	document.querySelectorAll('.decrease').forEach((button, index) => {
+		button.addEventListener('click', () => {
+			const input = inputs[index];
+			input.dispatchEvent(new Event('input')); // Trigger input event to check for changes
+		});
+	});
+
+	document.querySelectorAll('.increase').forEach((button, index) => {
+		button.addEventListener('click', () => {
+			const input = inputs[index];
+			input.dispatchEvent(new Event('input')); // Trigger input event to check for changes
+		});
+	});
+});
+</script>

@@ -581,6 +581,16 @@ function allAttributes(sign) {
 		},
 
 		{
+			label: 'ENVIRONMENT',
+
+			value: sign.metalWaterproof ? sign.metalWaterproof : '',
+		},
+		{
+			label: 'LIGHTING PACKAGED',
+			value: sign.lightingPackaged ? sign.lightingPackaged : '',
+		},
+
+		{
 			label: 'REMOTE CONTROL',
 			value: sign.remoteControl ? sign.remoteControl : '',
 		},

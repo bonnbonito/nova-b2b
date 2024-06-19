@@ -1,6 +1,7 @@
 import {
 	GLOSS_FINISH,
 	INDOOR_NOT_WATERPROOF,
+	LIGHTING_INDOOR,
 	STUD_MOUNT,
 	STUD_WITH_SPACER,
 } from './defaults';
@@ -227,11 +228,21 @@ const arrayRange = (start, stop, step, inches = true) =>
 		</option>
 	));
 
+const lightingPackagedOptions = [
+	{
+		value: LIGHTING_INDOOR,
+	},
+	{
+		value: 'Low Voltage LED Driver, 10ft open wires, 1:1 blueprint',
+	},
+];
+
 export {
 	arrayRange,
 	defaultFinishOptions,
 	finishingOptions,
 	installationDefaultOptions,
+	lightingPackagedOptions,
 	metalFinishOptions,
 	metalInstallationOptions,
 	metalLaminateOptions,

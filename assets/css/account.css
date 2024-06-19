@@ -26,6 +26,14 @@
     .woocommerce.woocommerce .woocommerce-info .button {
         margin-top: 1em;
     }
+
+    .woocommerce-orders-table__cell-order-actions {
+        padding-bottom: 40px !important;
+    }
+
+    .woocommerce-orders-table__cell-order-actions .woocommerce-button.button {
+        font-size: 10px;
+    }
 }
 
 @media (min-width: 768px) {

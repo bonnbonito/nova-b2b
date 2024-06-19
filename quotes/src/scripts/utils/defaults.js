@@ -6,3 +6,5 @@ export const STUD_WITH_SPACER = 'Stud with spacer';
 export const STUD_MOUNT = 'Stud Mount';
 export const EXCHANGE_RATE = 1.3;
 export const M4_STUD_WITH_SPACER = 'M4 Stud with Spacer';
+export const LIGHTING_INDOOR =
+	'Low Voltage LED Driver, 6ft open wires, 1:1 blueprint';

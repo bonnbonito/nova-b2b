@@ -72,6 +72,8 @@ export const allAttributes = (item) => [
 	{ key: item.metalFinishing, label: 'METAL FINISHING' },
 	{ key: item.studLength, label: 'STUD LENGTH' },
 	{ key: item.spacerStandoffDistance, label: 'STANDOFF SPACE' },
+	{ key: item.metalWaterproof, label: 'ENVIRONMENT' },
+	{ key: item.lightingPackaged, label: 'LIGHTING PACKAGED' },
 	{ key: item.remoteControl, label: 'REMOTE CONTROL' },
 	{ key: item.wireExitLocation, label: 'WIRE EXIT LOCATION' },
 	{ key: item.wireType, label: 'WIRE TYPE' },
