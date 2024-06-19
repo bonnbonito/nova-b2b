@@ -4,7 +4,10 @@ import { useAppContext } from '../../../AppProvider';
 import Sidebar from '../../../Sidebar';
 import Signage from '../../../Signage';
 import { PlusIcon } from '../../../svg/Icons';
-import { INDOOR_NOT_WATERPROOF } from '../../../utils/defaults';
+import {
+	INDOOR_NOT_WATERPROOF,
+	LIGHTING_INDOOR,
+} from '../../../utils/defaults';
 import { Logo } from './components/Logo';
 
 const ModularLightbox = () => {
@@ -18,6 +21,7 @@ const ModularLightbox = () => {
 				type: 'lightbox',
 				title: 'LIGHTBOX 1',
 				waterproof: INDOOR_NOT_WATERPROOF,
+				lightingPackaged: LIGHTING_INDOOR,
 				uvPrintedCover: '',
 				usdPrice: 0,
 				cadPrice: 0,
@@ -66,6 +70,7 @@ const ModularLightbox = () => {
 						type: type,
 						title: `LIGHTBOX ${count + 1}`,
 						waterproof: INDOOR_NOT_WATERPROOF,
+						lightingPackaged: LIGHTING_INDOOR,
 						filePaths: [],
 						fileNames: [],
 						fileUrls: [],

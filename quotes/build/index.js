@@ -17751,6 +17751,7 @@ const ModularLightbox = () => {
       type: 'lightbox',
       title: 'LIGHTBOX 1',
       waterproof: _utils_defaults__WEBPACK_IMPORTED_MODULE_5__.INDOOR_NOT_WATERPROOF,
+      lightingPackaged: _utils_defaults__WEBPACK_IMPORTED_MODULE_5__.LIGHTING_INDOOR,
       uvPrintedCover: '',
       usdPrice: 0,
       cadPrice: 0,
@@ -17793,6 +17794,7 @@ const ModularLightbox = () => {
           type: type,
           title: `LIGHTBOX ${count + 1}`,
           waterproof: _utils_defaults__WEBPACK_IMPORTED_MODULE_5__.INDOOR_NOT_WATERPROOF,
+          lightingPackaged: _utils_defaults__WEBPACK_IMPORTED_MODULE_5__.LIGHTING_INDOOR,
           filePaths: [],
           fileNames: [],
           fileUrls: [],
@@ -17883,7 +17885,7 @@ const lightBoxTypeOptions = [{
 const uvPrintedCoverOptions = [{
   option: 'Yes'
 }, {
-  option: 'No'
+  option: 'No (White Blank Cover)'
 }];
 function Logo({
   item
@@ -17896,7 +17898,7 @@ function Logo({
     updateSignageItem
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_4__.useAppContext)();
   const [lightboxType, setLightboxType] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$lightboxType = item.lightboxType) !== null && _item$lightboxType !== void 0 ? _item$lightboxType : '');
-  const [uvPrintedCover, setuvPrintedCover] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$uvPrintedCover = item.uvPrintedCover) !== null && _item$uvPrintedCover !== void 0 ? _item$uvPrintedCover : '');
+  const [uvPrintedCover, setUvPrintedCover] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$uvPrintedCover = item.uvPrintedCover) !== null && _item$uvPrintedCover !== void 0 ? _item$uvPrintedCover : '');
   const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : _utils_defaults__WEBPACK_IMPORTED_MODULE_5__.INDOOR_NOT_WATERPROOF);
   const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileNames = item.fileNames) !== null && _item$fileNames !== void 0 ? _item$fileNames : []);
   const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrls = item.fileUrls) !== null && _item$fileUrls !== void 0 ? _item$fileUrls : []);
@@ -18063,7 +18065,7 @@ function Logo({
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "UV Printed Cover",
     value: uvPrintedCover,
-    onChange: e => setuvPrintedCover(e.target.value),
+    onChange: e => setUvPrintedCover(e.target.value),
     options: uvPrintedCoverOptions.map(cover => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: cover.option,
       selected: cover.option === uvPrintedCover
@@ -18076,6 +18078,14 @@ function Logo({
       selected: option.option == waterproof
     }, option.option)),
     value: waterproof,
+    onlyValue: true
+  }), waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_5__.INDOOR_NOT_WATERPROOF && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Included in the Package",
+    options: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: _utils_defaults__WEBPACK_IMPORTED_MODULE_5__.LIGHTING_INDOOR,
+      selected: _utils_defaults__WEBPACK_IMPORTED_MODULE_5__.LIGHTING_INDOOR
+    }, _utils_defaults__WEBPACK_IMPORTED_MODULE_5__.LIGHTING_INDOOR),
+    value: _utils_defaults__WEBPACK_IMPORTED_MODULE_5__.LIGHTING_INDOOR,
     onlyValue: true
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Quantity",

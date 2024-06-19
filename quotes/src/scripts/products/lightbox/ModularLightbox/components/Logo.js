@@ -7,7 +7,10 @@ import { useAppContext } from '../../../../AppProvider';
 
 import { EXCHANGE_RATE } from '../../../../utils/defaults';
 
-import { INDOOR_NOT_WATERPROOF } from '../../../../utils/defaults';
+import {
+	INDOOR_NOT_WATERPROOF,
+	LIGHTING_INDOOR,
+} from '../../../../utils/defaults';
 
 import { setOptions } from '../../../../utils/SignageOptions';
 
@@ -35,7 +38,7 @@ const uvPrintedCoverOptions = [
 		option: 'Yes',
 	},
 	{
-		option: 'No',
+		option: 'No (White Blank Cover)',
 	},
 ];
 
@@ -44,7 +47,7 @@ export function Logo({ item }) {
 		useAppContext();
 
 	const [lightboxType, setLightboxType] = useState(item.lightboxType ?? '');
-	const [uvPrintedCover, setuvPrintedCover] = useState(
+	const [uvPrintedCover, setUvPrintedCover] = useState(
 		item.uvPrintedCover ?? ''
 	);
 
@@ -282,7 +285,7 @@ export function Logo({ item }) {
 				<Dropdown
 					title="UV Printed Cover"
 					value={uvPrintedCover}
-					onChange={(e) => setuvPrintedCover(e.target.value)}
+					onChange={(e) => setUvPrintedCover(e.target.value)}
 					options={uvPrintedCoverOptions.map((cover) => (
 						<option
 							value={cover.option}
@@ -307,6 +310,19 @@ export function Logo({ item }) {
 					value={waterproof}
 					onlyValue={true}
 				/>
+
+				{waterproof === INDOOR_NOT_WATERPROOF && (
+					<Dropdown
+						title="Included in the Package"
+						options={
+							<option value={LIGHTING_INDOOR} selected={LIGHTING_INDOOR}>
+								{LIGHTING_INDOOR}
+							</option>
+						}
+						value={LIGHTING_INDOOR}
+						onlyValue={true}
+					/>
+				)}
 
 				<Dropdown
 					title="Quantity"
