@@ -159,9 +159,9 @@ export function Logo({ item }) {
 		const { singlePrice, total } = computePricing();
 		if (total && singlePrice) {
 			setUsdPrice(total);
-			setCadPrice((total * EXCHANGE_RATE).toFixed(2));
+			setCadPrice((total * EXCHANGE_RATE).toFixed(1));
 			setUsdSinglePrice(singlePrice);
-			setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
+			setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(1));
 		} else {
 			setUsdPrice(0);
 			setCadPrice(0);
