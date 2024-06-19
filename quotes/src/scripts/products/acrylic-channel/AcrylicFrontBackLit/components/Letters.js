@@ -31,6 +31,7 @@ import { useAppContext } from '../../../../AppProvider';
 import {
 	EXCHANGE_RATE,
 	INDOOR_NOT_WATERPROOF,
+	LIGHTING_INDOOR,
 	STUD_MOUNT,
 	STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
@@ -692,6 +693,7 @@ export function Letters({ item }) {
 						</option>
 					))}
 					value={waterproof}
+					onlyValue={true}
 				/>
 
 				<Dropdown
@@ -770,6 +772,19 @@ export function Letters({ item }) {
 							value={studLength}
 						/>
 					</>
+				)}
+
+				{waterproof === INDOOR_NOT_WATERPROOF && (
+					<Dropdown
+						title="Included in the Package"
+						options={
+							<option value={LIGHTING_INDOOR} selected={LIGHTING_INDOOR}>
+								{LIGHTING_INDOOR}
+							</option>
+						}
+						value={LIGHTING_INDOOR}
+						onlyValue={true}
+					/>
 				)}
 
 				<Dropdown

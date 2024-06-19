@@ -32,6 +32,7 @@ import { useAppContext } from '../../../../AppProvider';
 import {
 	EXCHANGE_RATE,
 	INDOOR_NOT_WATERPROOF,
+	LIGHTING_INDOOR,
 	STUD_MOUNT,
 	STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
@@ -64,7 +65,9 @@ export function Letters({ item }) {
 	const [openFont, setOpenFont] = useState(false);
 	const [color, setColor] = useState(item.acrylicReturnPaintColor ?? 'Black');
 	const [openColor, setOpenColor] = useState(false);
-	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
+	const [waterproof, setWaterproof] = useState(
+		item.waterproof ?? INDOOR_NOT_WATERPROOF
+	);
 	const [acrylicChannelThickness, setAcrylicChannelThickness] = useState(
 		item.acrylicChannelThickness ?? '1.2"'
 	);
@@ -122,6 +125,8 @@ export function Letters({ item }) {
 	const [spacerStandoffDistance, setSpacerStandoffDistance] = useState(
 		item.spacerStandoffDistance ?? ''
 	);
+
+	const [lightingPackaged, setLightingPackaged] = useState(LIGHTING_INDOOR);
 
 	const [sets, setSets] = useState(item.sets ?? 1);
 
@@ -202,6 +207,7 @@ export function Letters({ item }) {
 			acrylicFront,
 			usdSinglePrice,
 			cadSinglePrice,
+			lightingPackaged,
 		};
 
 		setSignage((prevSignage) =>
@@ -235,7 +241,15 @@ export function Letters({ item }) {
 		}
 	};
 
-	const handleOnChangeWaterproof = (e) => setWaterproof(e.target.value);
+	const handleOnChangeWaterproof = (e) => {
+		const target = e.target.value;
+		setWaterproof(target);
+		if (target === INDOOR_NOT_WATERPROOF) {
+			setLightingPackaged(LIGHTING_INDOOR);
+		} else {
+			setLightingPackaged('');
+		}
+	};
 
 	const handleOnChangeThickness = (e) => {
 		const target = e.target.value;
@@ -520,6 +534,7 @@ export function Letters({ item }) {
 		ledLightColor,
 		usdSinglePrice,
 		cadSinglePrice,
+		lightingPackaged,
 	]);
 
 	useOutsideClick(
@@ -701,6 +716,7 @@ export function Letters({ item }) {
 						</option>
 					))}
 					value={waterproof}
+					onlyValue={true}
 				/>
 
 				<Dropdown
@@ -764,6 +780,19 @@ export function Letters({ item }) {
 							value={studLength}
 						/>
 					</>
+				)}
+
+				{waterproof === INDOOR_NOT_WATERPROOF && (
+					<Dropdown
+						title="Included in the Package"
+						options={
+							<option value={LIGHTING_INDOOR} selected={LIGHTING_INDOOR}>
+								{LIGHTING_INDOOR}
+							</option>
+						}
+						value={LIGHTING_INDOOR}
+						onlyValue={true}
+					/>
 				)}
 
 				<Dropdown

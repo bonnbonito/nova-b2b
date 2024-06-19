@@ -147,6 +147,9 @@ export default function TrimLessFrontAndBackLit() {
 							The spacer will be black (default) or match the painted sign's
 							color.
 						</li>
+						<li>
+							The minimum stroke for all channel letter depth is 10mm (2/5").
+						</li>
 					</ul>
 				</Note>
 

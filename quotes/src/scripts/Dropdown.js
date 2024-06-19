@@ -8,8 +8,11 @@ export default function Dropdown({
 }) {
 	const selectClass = value || onlyValue ? 'text-black' : 'text-[#dddddd]';
 	return (
-		<div className="px-[1px]">
-			<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+		<div className="px-[1px] text-ellipsis overflow-hidden">
+			<label
+				className="uppercase font-title text-sm tracking-[1.4px] px-2 whitespace-nowrap"
+				title={title}
+			>
 				{title}
 			</label>
 			<select

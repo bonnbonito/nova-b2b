@@ -1776,7 +1776,7 @@ h6 {
 			'rigidM4StudLength'       => 'M4 STUD LENGTH',
 			'studLength'              => 'STUD LENGTH',
 			'spacerStandoffDistance'  => 'STANDOFF SPACE',
-			'metalWaterproof'         => 'ENVIRONMENT',
+			'trimLessWaterproof'      => 'ENVIRONMENT',
 			'lightingPackaged'        => 'LIGHTING PACKAGED',
 			'remoteControl'           => 'REMOTE CONTROL',
 			'wireExitLocation'        => 'WIRE EXIT LOCATION',

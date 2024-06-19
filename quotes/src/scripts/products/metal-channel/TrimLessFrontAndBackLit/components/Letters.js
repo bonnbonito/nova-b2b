@@ -12,6 +12,7 @@ import {
 
 import convert_json from '../../../../utils/ConvertJson';
 import {
+	lightingPackagedOptions,
 	setOptions,
 	spacerStandoffDefaultOptions,
 	studLengthOptions,
@@ -30,6 +31,7 @@ import {
 import {
 	EXCHANGE_RATE,
 	INDOOR_NOT_WATERPROOF,
+	LIGHTING_INDOOR,
 	STUD_MOUNT,
 	STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
@@ -49,7 +51,7 @@ export function Letters({ item }) {
 		item.returnColor ?? { name: 'Black', color: '#000000' }
 	);
 	const [openColor, setOpenColor] = useState(false);
-	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
+	const [waterproof, setWaterproof] = useState(item.trimLessWaterproof ?? '');
 
 	const [depth, setDepth] = useState(item.depth);
 
@@ -106,6 +108,12 @@ export function Letters({ item }) {
 	const [ledLightColor, setLedLightColor] = useState(
 		item.ledLightColor ?? '6500K White'
 	);
+
+	const [lightingOptions, setLightingOptions] = useState(
+		lightingPackagedOptions
+	);
+
+	const [lightingPackaged, setLightingPackaged] = useState('');
 
 	const [sets, setSets] = useState(item.sets ?? 1);
 	const handleOnChangeSets = (e) => {
@@ -165,7 +173,8 @@ export function Letters({ item }) {
 					comments,
 					depth,
 					font,
-					waterproof,
+					trimLessWaterproof: waterproof,
+					lightingPackaged,
 					returnColor: color,
 					letterHeight: selectedLetterHeight,
 					usdPrice,
@@ -234,6 +243,9 @@ export function Letters({ item }) {
 	const handleonChangeSpacerDistance = (e) => {
 		setSpacerStandoffDistance(e.target.value);
 	};
+
+	const handleOnChangeLightingPackaged = (e) =>
+		setLightingPackaged(e.target.value);
 
 	const handleonChangeStudLength = (e) => {
 		const target = e.target.value;
@@ -404,6 +416,8 @@ export function Letters({ item }) {
 
 		if (!waterproof) missingFields.push('Select Environment');
 
+		if (!lightingPackaged) missingFields.push('Select Lighting Packaged');
+
 		if (!mounting) missingFields.push('Select Mounting');
 
 		if (mounting === STUD_WITH_SPACER) {
@@ -467,6 +481,7 @@ export function Letters({ item }) {
 		comments,
 		font,
 		waterproof,
+		lightingPackaged,
 		color,
 		frontAcrylicCover,
 		usdPrice,
@@ -533,6 +548,30 @@ export function Letters({ item }) {
 		color?.name != 'Custom Color' && setCustomColor('');
 		font != 'Custom font' && setFontFileUrl('');
 	}, [color, font]);
+
+	useEffect(() => {
+		if (waterproof) {
+			if (waterproof === INDOOR_NOT_WATERPROOF) {
+				setLightingPackaged(LIGHTING_INDOOR);
+				setLightingOptions(
+					lightingPackagedOptions.filter(
+						(option) => option.value === LIGHTING_INDOOR
+					)
+				);
+			} else {
+				setLightingPackaged(
+					'Low Voltage LED Driver, 10ft open wires, 1:1 blueprint'
+				);
+				setLightingOptions(
+					lightingPackagedOptions.filter(
+						(option) => option.value !== LIGHTING_INDOOR
+					)
+				);
+			}
+		} else {
+			setLightingOptions(lightingPackagedOptions);
+		}
+	}, [waterproof]);
 
 	return (
 		<>
@@ -679,20 +718,6 @@ export function Letters({ item }) {
 				/>
 
 				<Dropdown
-					title="Environment"
-					onChange={handleOnChangeWaterproof}
-					options={waterProofOptions.map((option) => (
-						<option
-							value={option.option}
-							selected={option.option == waterproof}
-						>
-							{option.option}
-						</option>
-					))}
-					value={waterproof}
-				/>
-
-				<Dropdown
 					title="Mounting"
 					onChange={handleOnChangeMounting}
 					options={mountingDefaultOptions.map((mounting) => (
@@ -737,6 +762,34 @@ export function Letters({ item }) {
 						value={spacerStandoffDistance}
 					/>
 				)}
+
+				<Dropdown
+					title="Environment"
+					onChange={handleOnChangeWaterproof}
+					options={waterProofOptions.map((option) => (
+						<option
+							value={option.option}
+							selected={option.option == waterproof}
+						>
+							{option.option}
+						</option>
+					))}
+					value={waterproof}
+				/>
+
+				<Dropdown
+					title="Lighting Packaged"
+					onChange={handleOnChangeLightingPackaged}
+					options={lightingOptions.map((option) => (
+						<option
+							value={option.value}
+							selected={option.value == lightingPackaged}
+						>
+							{option.value}
+						</option>
+					))}
+					value={lightingPackaged}
+				/>
 
 				<Dropdown
 					title="Quantity"

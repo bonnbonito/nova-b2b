@@ -157,6 +157,11 @@ export default function TrimLessFrontAndBackLit() {
 							The spacer will be black (default) or match the painted sign's
 							color.
 						</li>
+						<li>
+							The spacer will be black (default) or match the painted sign's
+							color. The minimum stroke is greater than or equal to 12mm (1/2")
+							for indoors and 15mm (3/5") for outdoors.
+						</li>
 					</ul>
 				</Note>
 

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Description from '../../../../Description';
 import Dropdown from '../../../../Dropdown';
 import FontsDropdown from '../../../../FontsDropdown';
@@ -54,7 +54,7 @@ export function Letters({ item }) {
 		item.returnColor ?? { name: 'Black', color: '#000000' }
 	);
 	const [openColor, setOpenColor] = useState(false);
-	const [waterproof, setWaterproof] = useState(item.metalWaterproof ?? '');
+	const [waterproof, setWaterproof] = useState(item.trimLessWaterproof ?? '');
 
 	const [depth, setDepth] = useState(item.depth);
 
@@ -174,7 +174,7 @@ export function Letters({ item }) {
 					comments,
 					depth,
 					font,
-					metalWaterproof: waterproof,
+					trimLessWaterproof: waterproof,
 					lightingPackaged,
 					returnColor: color,
 					letterHeight: selectedLetterHeight,
@@ -576,6 +576,8 @@ export function Letters({ item }) {
 					)
 				);
 			}
+		} else {
+			setLightingOptions(lightingPackagedOptions);
 		}
 	}, [waterproof]);
 

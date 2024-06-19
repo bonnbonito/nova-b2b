@@ -5,7 +5,10 @@ import Note from '../../../Note';
 import Sidebar from '../../../Sidebar';
 import Signage from '../../../Signage';
 import { PlusIcon } from '../../../svg/Icons';
-import { INDOOR_NOT_WATERPROOF } from '../../../utils/defaults';
+import {
+	INDOOR_NOT_WATERPROOF,
+	LIGHTING_INDOOR,
+} from '../../../utils/defaults';
 import { Letters } from './components/Letters';
 import { Logo } from './components/Logo';
 
@@ -28,6 +31,7 @@ const AcrylicBackLit = () => {
 				vinylWhite: { name: '', color: '', code: '' },
 				ledLightColor: '6500K White',
 				backOption: 'Backlit',
+				lightingPackaged: LIGHTING_INDOOR,
 				letterHeight: '',
 				usdPrice: 0,
 				cadPrice: 0,
@@ -71,7 +75,6 @@ const AcrylicBackLit = () => {
 		acrylicChannelThickness: '1.2" (30mm)',
 		faceReturnColor: { name: 'Black', color: '#000000' },
 		ledLightColor: '6500K White',
-		waterproof: INDOOR_NOT_WATERPROOF,
 		product: NovaQuote.product,
 		backOption: 'Backlit',
 	};
@@ -136,6 +139,7 @@ const AcrylicBackLit = () => {
 							The spacer will be black (default) or match the painted sign's
 							color.
 						</li>
+						<li>The minimum stroke is greater than or equal to 6mm (1/4”).</li>
 					</ul>
 				</Note>
 

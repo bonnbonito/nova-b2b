@@ -49,7 +49,7 @@ export function Logo({ item }) {
 		item.returnColor ?? { name: 'Black', color: '#000000' }
 	);
 	const [openColor, setOpenColor] = useState(false);
-	const [waterproof, setWaterproof] = useState(item.metalWaterproof ?? '');
+	const [waterproof, setWaterproof] = useState(item.trimLessWaterproof ?? '');
 
 	const [depth, setDepth] = useState(item.depth);
 
@@ -113,7 +113,7 @@ export function Logo({ item }) {
 					...sign,
 					comments,
 					depth,
-					metalWaterproof: waterproof,
+					trimLessWaterproof: waterproof,
 					returnColor: color,
 					usdPrice,
 					cadPrice,
@@ -249,9 +249,6 @@ export function Logo({ item }) {
 		if (frontAcrylicCover === '3M Vinyl') {
 			if (!vinylWhite?.name) missingFields.push('Select 3M Vinyl');
 		}
-
-		if (!fileUrls || fileUrls.length === 0)
-			missingFields.push('Upload a PDF/AI File');
 
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
@@ -419,6 +416,8 @@ export function Logo({ item }) {
 					)
 				);
 			}
+		} else {
+			setLightingOptions(lightingPackagedOptions);
 		}
 	}, [waterproof]);
 

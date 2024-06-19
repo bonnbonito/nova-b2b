@@ -7,6 +7,7 @@ import { colorOptions } from '../../../../utils/ColorOptions';
 import ColorsDropdown from '../../../../utils/ColorsDropdown';
 
 import {
+	lightingPackagedOptions,
 	setOptions,
 	spacerStandoffDefaultOptions,
 	studLengthOptions,
@@ -27,6 +28,7 @@ import { metalFinishOptions } from '../../../metal/metalOptions';
 import {
 	EXCHANGE_RATE,
 	INDOOR_NOT_WATERPROOF,
+	LIGHTING_INDOOR,
 	STUD_MOUNT,
 	STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
@@ -47,7 +49,7 @@ export function Logo({ item }) {
 	const [height, setHeight] = useState(item.height ?? '');
 
 	const [openColor, setOpenColor] = useState(false);
-	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
+	const [waterproof, setWaterproof] = useState(item.trimLessWaterproof ?? '');
 
 	const [depth, setDepth] = useState(item.depth ?? '');
 	const [acrylicReveal, setAcrylicReveal] = useState(item.acrylicReveal);
@@ -84,6 +86,12 @@ export function Logo({ item }) {
 		item.spacerStandoffDistance ?? ''
 	);
 
+	const [lightingOptions, setLightingOptions] = useState(
+		lightingPackagedOptions
+	);
+
+	const [lightingPackaged, setLightingPackaged] = useState('');
+
 	const [mounting, setMounting] = useState(item.mounting ?? '');
 
 	const [ledLightColor, setLedLightColor] = useState(item.ledLightColor);
@@ -104,7 +112,7 @@ export function Logo({ item }) {
 					width,
 					height,
 					depth,
-					waterproof,
+					trimLessWaterproof: waterproof,
 					faceReturnColor: color,
 					usdPrice,
 					cadPrice,
@@ -123,6 +131,7 @@ export function Logo({ item }) {
 					sets,
 					usdSinglePrice,
 					cadSinglePrice,
+					lightingPackaged,
 				};
 			} else {
 				return sign;
@@ -148,6 +157,9 @@ export function Logo({ item }) {
 	};
 
 	const handleOnChangeWaterproof = (e) => setWaterproof(e.target.value);
+
+	const handleOnChangeLightingPackaged = (e) =>
+		setLightingPackaged(e.target.value);
 
 	const handleOnChangeAcrylicReveal = (e) => {
 		const target = e.target.value;
@@ -235,6 +247,8 @@ export function Logo({ item }) {
 
 		if (!waterproof) missingFields.push('Select Environment');
 
+		if (!lightingPackaged) missingFields.push('Select Lighting Packaged');
+
 		if (!mounting) missingFields.push('Select Mounting');
 
 		if (mounting === STUD_WITH_SPACER || mounting === STUD_MOUNT) {
@@ -252,9 +266,6 @@ export function Logo({ item }) {
 		if (!acrylicReveal) {
 			missingFields.push('Select Acrylic Reveal');
 		}
-
-		if (!fileUrls || fileUrls.length === 0)
-			missingFields.push('Upload a PDF/AI File');
 
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
@@ -317,6 +328,7 @@ export function Logo({ item }) {
 		sets,
 		usdSinglePrice,
 		cadSinglePrice,
+		lightingPackaged,
 	]);
 
 	const computePricing = () => {
@@ -438,6 +450,30 @@ export function Logo({ item }) {
 		color?.name != 'Custom Color' && setCustomColor('');
 	}, [color]);
 
+	useEffect(() => {
+		if (waterproof) {
+			if (waterproof === INDOOR_NOT_WATERPROOF) {
+				setLightingPackaged(LIGHTING_INDOOR);
+				setLightingOptions(
+					lightingPackagedOptions.filter(
+						(option) => option.value === LIGHTING_INDOOR
+					)
+				);
+			} else {
+				setLightingPackaged(
+					'Low Voltage LED Driver, 10ft open wires, 1:1 blueprint'
+				);
+				setLightingOptions(
+					lightingPackagedOptions.filter(
+						(option) => option.value !== LIGHTING_INDOOR
+					)
+				);
+			}
+		} else {
+			setLightingOptions(lightingPackagedOptions);
+		}
+	}, [waterproof]);
+
 	return (
 		<>
 			{item.productLine && (
@@ -544,20 +580,6 @@ export function Logo({ item }) {
 				/>
 
 				<Dropdown
-					title="Environment"
-					onChange={handleOnChangeWaterproof}
-					options={waterProofOptions.map((option) => (
-						<option
-							value={option.option}
-							selected={option.option == waterproof}
-						>
-							{option.option}
-						</option>
-					))}
-					value={waterproof}
-				/>
-
-				<Dropdown
 					title="Mounting"
 					onChange={handleOnChangeMounting}
 					options={mountingDefaultOptions.map((mounting) => (
@@ -602,6 +624,34 @@ export function Logo({ item }) {
 						value={spacerStandoffDistance}
 					/>
 				)}
+
+				<Dropdown
+					title="Environment"
+					onChange={handleOnChangeWaterproof}
+					options={waterProofOptions.map((option) => (
+						<option
+							value={option.option}
+							selected={option.option == waterproof}
+						>
+							{option.option}
+						</option>
+					))}
+					value={waterproof}
+				/>
+
+				<Dropdown
+					title="Lighting Packaged"
+					onChange={handleOnChangeLightingPackaged}
+					options={lightingOptions.map((option) => (
+						<option
+							value={option.value}
+							selected={option.value == lightingPackaged}
+						>
+							{option.value}
+						</option>
+					))}
+					value={lightingPackaged}
+				/>
 
 				<Dropdown
 					title="Quantity"

@@ -24,6 +24,7 @@ import { useAppContext } from '../../../../AppProvider';
 import {
 	EXCHANGE_RATE,
 	INDOOR_NOT_WATERPROOF,
+	LIGHTING_INDOOR,
 	STUD_MOUNT,
 	STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
@@ -129,6 +130,8 @@ export function Logo({ item }) {
 		item.spacerStandoffDistance ?? ''
 	);
 
+	const [lightingPackaged, setLightingPackaged] = useState(LIGHTING_INDOOR);
+
 	const [sets, setSets] = useState(item.sets ?? 1);
 
 	const colorRef = useRef(null);
@@ -160,6 +163,7 @@ export function Logo({ item }) {
 			spacerStandoffDistance,
 			usdSinglePrice,
 			cadSinglePrice,
+			lightingPackaged,
 		};
 
 		setSignage((prevSignage) =>
@@ -189,7 +193,15 @@ export function Logo({ item }) {
 		}
 	};
 
-	const handleOnChangeWaterproof = (e) => setWaterproof(e.target.value);
+	const handleOnChangeWaterproof = (e) => {
+		const target = e.target.value;
+		setWaterproof(target);
+		if (target === INDOOR_NOT_WATERPROOF) {
+			setLightingPackaged(LIGHTING_INDOOR);
+		} else {
+			setLightingPackaged('');
+		}
+	};
 
 	const handleOnChangeBackOption = (e) => setBackOption(e.target.value);
 
@@ -380,6 +392,7 @@ export function Logo({ item }) {
 		cadSinglePrice,
 		width,
 		height,
+		lightingPackaged,
 	]);
 
 	useOutsideClick([colorRef], () => {
@@ -467,7 +480,6 @@ export function Logo({ item }) {
 						</option>
 					))}
 					value={waterproof}
-					onlyValue={true}
 				/>
 
 				<Dropdown
@@ -546,6 +558,19 @@ export function Logo({ item }) {
 							value={studLength}
 						/>
 					</>
+				)}
+
+				{waterproof === INDOOR_NOT_WATERPROOF && (
+					<Dropdown
+						title="Included in the Package"
+						options={
+							<option value={LIGHTING_INDOOR} selected={LIGHTING_INDOOR}>
+								{LIGHTING_INDOOR}
+							</option>
+						}
+						value={LIGHTING_INDOOR}
+						onlyValue={true}
+					/>
 				)}
 
 				<Dropdown

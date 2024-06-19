@@ -11,6 +11,7 @@ import convert_json from '../../../../utils/ConvertJson';
 
 import { getLetterPricingTableByTitle } from '../../../../utils/Pricing';
 import {
+	lightingPackagedOptions,
 	setOptions,
 	spacerStandoffDefaultOptions,
 	studLengthOptions,
@@ -29,6 +30,7 @@ import { metalFinishOptions } from '../../../metal/metalOptions';
 import {
 	EXCHANGE_RATE,
 	INDOOR_NOT_WATERPROOF,
+	LIGHTING_INDOOR,
 	STUD_MOUNT,
 	STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
@@ -36,15 +38,6 @@ import {
 import { calculateLetterPrice, spacerPricing } from '../../../../utils/Pricing';
 
 import { useAppContext } from '../../../../AppProvider';
-
-const lowerCasePricing = parseFloat(
-	NovaQuote.lowercase_pricing ? NovaQuote.lowercase_pricing : 1
-);
-const smallPunctuations = parseFloat(
-	NovaQuote.small_punctuations_pricing
-		? NovaQuote.small_punctuations_pricing
-		: 1
-);
 
 export function Letters({ item }) {
 	const { signage, setSignage, setMissing } = useAppContext();
@@ -57,7 +50,7 @@ export function Letters({ item }) {
 		item.faceReturnColor ?? { name: '', color: '' }
 	);
 	const [openColor, setOpenColor] = useState(false);
-	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
+	const [waterproof, setWaterproof] = useState(item.trimLessWaterproof ?? '');
 
 	const [letterPricing, setLetterPricing] = useState([]);
 
@@ -86,6 +79,12 @@ export function Letters({ item }) {
 	const [selectedLetterHeight, setSelectedLetterHeight] = useState(
 		item.letterHeight ?? ''
 	);
+
+	const [lightingOptions, setLightingOptions] = useState(
+		lightingPackagedOptions
+	);
+
+	const [lightingPackaged, setLightingPackaged] = useState('');
 
 	const [letterPricingTables, setLetterPricingTables] = useState('');
 
@@ -171,7 +170,8 @@ export function Letters({ item }) {
 					comments,
 					depth,
 					font,
-					waterproof,
+					trimLessWaterproof: waterproof,
+					lightingPackaged,
 					faceReturnColor: color,
 					letterHeight: selectedLetterHeight,
 					usdPrice,
@@ -224,6 +224,9 @@ export function Letters({ item }) {
 	};
 
 	const handleOnChangeWaterproof = (e) => setWaterproof(e.target.value);
+
+	const handleOnChangeLightingPackaged = (e) =>
+		setLightingPackaged(e.target.value);
 
 	const handleOnChangeAcrylicReveal = (e) => {
 		const target = e.target.value;
@@ -357,6 +360,8 @@ export function Letters({ item }) {
 
 		if (!waterproof) missingFields.push('Select Environment');
 
+		if (!lightingPackaged) missingFields.push('Select Lighting Packaged');
+
 		if (!mounting) missingFields.push('Select Mounting');
 
 		if (mounting === STUD_WITH_SPACER) {
@@ -420,6 +425,7 @@ export function Letters({ item }) {
 		comments,
 		font,
 		waterproof,
+		lightingPackaged,
 		color,
 		usdPrice,
 		cadPrice,
@@ -590,6 +596,30 @@ export function Letters({ item }) {
 		font != 'Custom font' && setFontFileUrl('');
 	}, [color, font]);
 
+	useEffect(() => {
+		if (waterproof) {
+			if (waterproof === INDOOR_NOT_WATERPROOF) {
+				setLightingPackaged(LIGHTING_INDOOR);
+				setLightingOptions(
+					lightingPackagedOptions.filter(
+						(option) => option.value === LIGHTING_INDOOR
+					)
+				);
+			} else {
+				setLightingPackaged(
+					'Low Voltage LED Driver, 10ft open wires, 1:1 blueprint'
+				);
+				setLightingOptions(
+					lightingPackagedOptions.filter(
+						(option) => option.value !== LIGHTING_INDOOR
+					)
+				);
+			}
+		} else {
+			setLightingOptions(lightingPackagedOptions);
+		}
+	}, [waterproof]);
+
 	return (
 		<>
 			{item.productLine && (
@@ -742,20 +772,6 @@ export function Letters({ item }) {
 				/>
 
 				<Dropdown
-					title="Environment"
-					onChange={handleOnChangeWaterproof}
-					options={waterProofOptions.map((option) => (
-						<option
-							value={option.option}
-							selected={option.option == waterproof}
-						>
-							{option.option}
-						</option>
-					))}
-					value={waterproof}
-				/>
-
-				<Dropdown
 					title="Mounting"
 					onChange={handleOnChangeMounting}
 					options={mountingDefaultOptions.map((mounting) => (
@@ -800,6 +816,34 @@ export function Letters({ item }) {
 						value={spacerStandoffDistance}
 					/>
 				)}
+
+				<Dropdown
+					title="Environment"
+					onChange={handleOnChangeWaterproof}
+					options={waterProofOptions.map((option) => (
+						<option
+							value={option.option}
+							selected={option.option == waterproof}
+						>
+							{option.option}
+						</option>
+					))}
+					value={waterproof}
+				/>
+
+				<Dropdown
+					title="Lighting Packaged"
+					onChange={handleOnChangeLightingPackaged}
+					options={lightingOptions.map((option) => (
+						<option
+							value={option.value}
+							selected={option.value == lightingPackaged}
+						>
+							{option.value}
+						</option>
+					))}
+					value={lightingPackaged}
+				/>
 
 				<Dropdown
 					title="Quantity"

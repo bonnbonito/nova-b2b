@@ -5,7 +5,10 @@ import Note from '../../../Note';
 import Sidebar from '../../../Sidebar';
 import Signage from '../../../Signage';
 import { PlusIcon } from '../../../svg/Icons';
-import { INDOOR_NOT_WATERPROOF } from '../../../utils/defaults';
+import {
+	INDOOR_NOT_WATERPROOF,
+	LIGHTING_INDOOR,
+} from '../../../utils/defaults';
 import { Letters } from './components/Letters';
 import { Logo } from './components/Logo';
 
@@ -22,7 +25,8 @@ const AcrylicSideLit = () => {
 				letters: '',
 				font: '',
 				comments: '',
-				waterproof: '',
+				waterproof: INDOOR_NOT_WATERPROOF,
+				lightingPackaged: LIGHTING_INDOOR,
 				acrylicChannelThickness: '1.2" (30mm)',
 				ledLightColor: '6500K White',
 				letterHeight: '',
@@ -69,6 +73,7 @@ const AcrylicSideLit = () => {
 		acrylicReturn: 'White',
 		ledLightColor: '6500K White',
 		waterproof: INDOOR_NOT_WATERPROOF,
+		lightingPackaged: LIGHTING_INDOOR,
 		product: NovaQuote.product,
 		acrylicReturn: 'White',
 	};

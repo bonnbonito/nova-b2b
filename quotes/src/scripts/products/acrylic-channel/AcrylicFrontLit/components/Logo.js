@@ -29,6 +29,7 @@ import { useAppContext } from '../../../../AppProvider';
 import {
 	EXCHANGE_RATE,
 	INDOOR_NOT_WATERPROOF,
+	LIGHTING_INDOOR,
 	STUD_MOUNT,
 	STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
@@ -83,7 +84,9 @@ export function Logo({ item }) {
 	const [comments, setComments] = useState(item.comments ?? '');
 	const [color, setColor] = useState(item.acrylicReturnPaintColor ?? 'Black');
 	const [openColor, setOpenColor] = useState(false);
-	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
+	const [waterproof, setWaterproof] = useState(
+		item.waterproof ?? INDOOR_NOT_WATERPROOF
+	);
 	const [acrylicChannelThickness, setAcrylicChannelThickness] = useState(
 		item.acrylicChannelThickness ?? '1.2"'
 	);
@@ -132,6 +135,8 @@ export function Logo({ item }) {
 		item.spacerStandoffDistance ?? ''
 	);
 
+	const [lightingPackaged, setLightingPackaged] = useState(LIGHTING_INDOOR);
+
 	const [sets, setSets] = useState(item.sets ?? 1);
 
 	const colorRef = useRef(null);
@@ -165,6 +170,7 @@ export function Logo({ item }) {
 			acrylicFront,
 			usdSinglePrice,
 			cadSinglePrice,
+			lightingPackaged,
 		};
 
 		setSignage((prevSignage) =>
@@ -194,7 +200,15 @@ export function Logo({ item }) {
 		}
 	};
 
-	const handleOnChangeWaterproof = (e) => setWaterproof(e.target.value);
+	const handleOnChangeWaterproof = (e) => {
+		const target = e.target.value;
+		setWaterproof(target);
+		if (target === INDOOR_NOT_WATERPROOF) {
+			setLightingPackaged(LIGHTING_INDOOR);
+		} else {
+			setLightingPackaged('');
+		}
+	};
 
 	const handleOnChangeThickness = (e) => {
 		const target = e.target.value;
@@ -354,6 +368,7 @@ export function Logo({ item }) {
 		ledLightColor,
 		usdSinglePrice,
 		cadSinglePrice,
+		lightingPackaged,
 	]);
 
 	if (acrylicFront === '3M Vinyl') {
@@ -595,6 +610,19 @@ export function Logo({ item }) {
 							value={studLength}
 						/>
 					</>
+				)}
+
+				{waterproof === INDOOR_NOT_WATERPROOF && (
+					<Dropdown
+						title="Included in the Package"
+						options={
+							<option value={LIGHTING_INDOOR} selected={LIGHTING_INDOOR}>
+								{LIGHTING_INDOOR}
+							</option>
+						}
+						value={LIGHTING_INDOOR}
+						onlyValue={true}
+					/>
 				)}
 
 				<Dropdown

@@ -583,7 +583,7 @@ function allAttributes(sign) {
 		{
 			label: 'ENVIRONMENT',
 
-			value: sign.metalWaterproof ? sign.metalWaterproof : '',
+			value: sign.trimLessWaterproof ? sign.trimLessWaterproof : '',
 		},
 		{
 			label: 'LIGHTING PACKAGED',

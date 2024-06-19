@@ -12,11 +12,13 @@ import VinylColors from '../../../../utils/VinylColors';
 
 import { spacerPricing } from '../../../../utils/Pricing';
 import {
+	lightingPackagedOptions,
 	setOptions,
 	spacerStandoffDefaultOptions,
 	studLengthOptions,
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
+
 import {
 	aluminumResinDepthOptions,
 	ledLightColors,
@@ -28,6 +30,7 @@ import {
 import {
 	EXCHANGE_RATE,
 	INDOOR_NOT_WATERPROOF,
+	LIGHTING_INDOOR,
 	STUD_MOUNT,
 	STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
@@ -102,6 +105,12 @@ export function Logo({ item }) {
 		item.ledLightColor ?? '6500K White'
 	);
 
+	const [lightingOptions, setLightingOptions] = useState(
+		lightingPackagedOptions
+	);
+
+	const [lightingPackaged, setLightingPackaged] = useState('');
+
 	const [sets, setSets] = useState(item.sets ?? 1);
 	const handleOnChangeSets = (e) => {
 		setSets(e.target.value);
@@ -139,6 +148,7 @@ export function Logo({ item }) {
 					usdSinglePrice,
 					cadSinglePrice,
 					vinylWhite,
+					lightingPackaged,
 				};
 			} else {
 				return sign;
@@ -148,6 +158,9 @@ export function Logo({ item }) {
 	}
 
 	const handleComments = (e) => setComments(e.target.value);
+
+	const handleOnChangeLightingPackaged = (e) =>
+		setLightingPackaged(e.target.value);
 
 	const handleOnChangeMounting = (e) => {
 		const target = e.target.value;
@@ -264,6 +277,8 @@ export function Logo({ item }) {
 		}
 
 		if (!waterproof) missingFields.push('Select Environment');
+
+		if (!lightingPackaged) missingFields.push('Select Lighting Packaged');
 
 		if (!mounting) missingFields.push('Select Mounting');
 
@@ -418,6 +433,7 @@ export function Logo({ item }) {
 		usdSinglePrice,
 		cadSinglePrice,
 		vinylWhite,
+		lightingPackaged,
 	]);
 
 	if (frontAcrylicCover === '3M Vinyl') {
@@ -436,6 +452,30 @@ export function Logo({ item }) {
 	useEffect(() => {
 		color?.name != 'Custom Color' && setCustomColor('');
 	}, [color]);
+
+	useEffect(() => {
+		if (waterproof) {
+			if (waterproof === INDOOR_NOT_WATERPROOF) {
+				setLightingPackaged(LIGHTING_INDOOR);
+				setLightingOptions(
+					lightingPackagedOptions.filter(
+						(option) => option.value === LIGHTING_INDOOR
+					)
+				);
+			} else {
+				setLightingPackaged(
+					'Low Voltage LED Driver, 10ft open wires, 1:1 blueprint'
+				);
+				setLightingOptions(
+					lightingPackagedOptions.filter(
+						(option) => option.value !== LIGHTING_INDOOR
+					)
+				);
+			}
+		} else {
+			setLightingOptions(lightingPackagedOptions);
+		}
+	}, [waterproof]);
 
 	return (
 		<>
@@ -589,6 +629,20 @@ export function Logo({ item }) {
 						value={spacerStandoffDistance}
 					/>
 				)}
+
+				<Dropdown
+					title="Lighting Packaged"
+					onChange={handleOnChangeLightingPackaged}
+					options={lightingOptions.map((option) => (
+						<option
+							value={option.value}
+							selected={option.value == lightingPackaged}
+						>
+							{option.value}
+						</option>
+					))}
+					value={lightingPackaged}
+				/>
 
 				<Dropdown
 					title="Quantity"
