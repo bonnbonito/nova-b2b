@@ -98,6 +98,11 @@ export default function FlexNeonSign() {
 							designers will provide a finalized design and accurate quote for
 							your approval.
 						</li>
+						<li>The minimum cuttable length is 2.5cm</li>
+						<li>
+							Receive a discount for bulk orders of the same neon sign design.
+							Savings are reflected in the instant quote's estimated total.
+						</li>
 					</ul>
 				</Note>
 

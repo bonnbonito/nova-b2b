@@ -109,6 +109,10 @@ export default function RigidNeonSignNoBacking() {
 							designers will provide a finalized design and accurate quote for
 							your approval.
 						</li>
+						<li>
+							Receive a discount for bulk orders of the same neon sign design.
+							Savings are reflected in the instant quote's estimated total.
+						</li>
 					</ul>
 				</Note>
 
