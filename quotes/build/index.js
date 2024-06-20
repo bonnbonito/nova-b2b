@@ -12492,12 +12492,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
 /* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
 /* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
 /* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
-/* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/acrylic/LayeredAcrylic/components/Logo.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _components_ProductLayer__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/ProductLayer */ "./src/scripts/products/acrylic/LayeredAcrylic/components/ProductLayer.js");
+/* harmony import */ var _LaserCutAcrylic_components_Letters__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../LaserCutAcrylic/components/Letters */ "./src/scripts/products/acrylic/LaserCutAcrylic/components/Letters.js");
+/* harmony import */ var _LaserCutAcrylic_components_Logo__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../LaserCutAcrylic/components/Logo */ "./src/scripts/products/acrylic/LaserCutAcrylic/components/Logo.js");
+/* harmony import */ var _MetalLaminate_components_Letters__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../MetalLaminate/components/Letters */ "./src/scripts/products/acrylic/MetalLaminate/components/Letters.js");
+/* harmony import */ var _MetalLaminate_components_Logo__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../MetalLaminate/components/Logo */ "./src/scripts/products/acrylic/MetalLaminate/components/Logo.js");
+/* harmony import */ var _UvPrintedAcrylic_components_Logo__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../UvPrintedAcrylic/components/Logo */ "./src/scripts/products/acrylic/UvPrintedAcrylic/components/Logo.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _LayeredAcrylicContext__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./LayeredAcrylicContext */ "./src/scripts/products/acrylic/LayeredAcrylic/LayeredAcrylicContext.js");
 
 
 
@@ -12506,6 +12511,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
+const productLayers = NovaQuote.product_layers;
 const ASSEMBLY_FEES = 1.1;
 function LayeredAcrylic() {
   const {
@@ -12513,30 +12524,54 @@ function LayeredAcrylic() {
     setSignage,
     setTempFolder,
     tempFolderName
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_5__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_10__.useAppContext)();
+  const [openLayer, setOpenLayer] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   function setDefaultSignage() {
-    setSignage([{
-      id: (0,uuid__WEBPACK_IMPORTED_MODULE_6__["default"])(),
-      type: 'logo',
-      title: 'LOGO 1',
-      comments: '',
-      mounting: '',
-      acrylicThickness: '',
-      waterproof: '',
-      finishing: 'Matte',
-      usdPrice: 0,
-      cadPrice: 0,
-      filePaths: [],
-      fileNames: [],
-      fileUrls: [],
-      files: [],
-      width: '',
-      height: '',
-      layers: '',
-      sets: 1,
-      product: NovaQuote.product
-    }]);
+    setSignage([]);
   }
+  const showComponent = item => {
+    let output;
+    switch (item.component) {
+      case 'AcryLic':
+        if (item.type === 'letters') {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_LaserCutAcrylic_components_Letters__WEBPACK_IMPORTED_MODULE_5__.Letters, {
+            key: item.id,
+            item: item,
+            productId: item.product
+          });
+        } else {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_LaserCutAcrylic_components_Logo__WEBPACK_IMPORTED_MODULE_6__.Logo, {
+            key: item.id,
+            item: item,
+            productId: item.product
+          });
+        }
+        break;
+      case 'AcrylicUV':
+        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UvPrintedAcrylic_components_Logo__WEBPACK_IMPORTED_MODULE_9__.Logo, {
+          key: item.id,
+          item: item,
+          productId: item.product
+        });
+        break;
+      case 'AcrylicMetalLaminate':
+        if (item.type === 'letters') {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_MetalLaminate_components_Letters__WEBPACK_IMPORTED_MODULE_7__.Letters, {
+            key: item.id,
+            item: item,
+            productId: item.product
+          });
+        } else {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_MetalLaminate_components_Logo__WEBPACK_IMPORTED_MODULE_8__.Logo, {
+            key: item.id,
+            item: item,
+            productId: item.product
+          });
+        }
+        break;
+    }
+    return output;
+  };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting === '1') {
       const currentSignage = JSON.parse(NovaQuote.signage);
@@ -12549,58 +12584,86 @@ function LayeredAcrylic() {
       setDefaultSignage();
     }
   }, []);
-  const defaultArgs = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_6__["default"])(),
-    mounting: '',
-    acrylicThickness: '',
-    waterproof: '',
-    finishing: 'Matte',
-    description: '',
-    usdPrice: 0,
-    cadPrice: 0,
-    filePaths: [],
-    fileNames: [],
-    fileUrls: [],
-    files: [],
-    layers: '',
-    sets: 1,
-    studLength: '',
-    spacerStandoffDistance: '',
-    product: NovaQuote.product
-  };
-  function addSignage(type) {
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (NovaQuote.is_editting.length === 0) {
+      setTempFolder(tempFolderName);
+    } else {
+      setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+    }
+  }, []);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_LayeredAcrylicContext__WEBPACK_IMPORTED_MODULE_11__.LayeredAcrylicProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:flex gap-6"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:w-3/4 w-full"
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    index: index,
+    id: item.id,
+    item: item,
+    storage: storage
+  }, showComponent(item))), signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "gap-2"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "bg-white text-black font-title text-3xl inline-flex items-center gap-2 px-8 py-4 mb-2 border-solid border rounded-md",
+    onClick: () => setOpenLayer(prev => !prev)
+  }, "ADD LAYERS ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.PlusIcon, null)), openLayer && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: " border-gray-200 p-4 rounded-md border"
+  }, productLayers.map(layer => {
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_ProductLayer__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      layer: layer
+    });
+  })))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_1__["default"], null)));
+}
+
+/***/ }),
+
+/***/ "./src/scripts/products/acrylic/LayeredAcrylic/LayeredAcrylicContext.js":
+/*!******************************************************************************!*\
+  !*** ./src/scripts/products/acrylic/LayeredAcrylic/LayeredAcrylicContext.js ***!
+  \******************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   LayeredAcrylicProvider: () => (/* binding */ LayeredAcrylicProvider),
+/* harmony export */   useLayerAcrylic: () => (/* binding */ useLayerAcrylic)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+
+
+
+
+const LayeredAcrylicContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)();
+function useLayerAcrylic() {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(LayeredAcrylicContext);
+}
+function LayeredAcrylicProvider({
+  children
+}) {
+  const {
+    setSignage
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
+  function addSignage(productLine, productId, type, component, material) {
+    const defaultArgs = {
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_2__["default"])(),
+      productLine,
+      product: productId,
+      usdPrice: 0,
+      cadPrice: 0,
+      component,
+      comments: '',
+      material
+    };
     setSignage(prevSignage => {
-      // Count how many signages of this type already exist
       const count = prevSignage.filter(sign => sign.type === type).length;
       let args;
-      // Create new signage with incremented title number
-      if (type === 'letters') {
-        args = {
-          type: type,
-          title: `LETTERS ${count + 1}`,
-          letters: '',
-          comments: '',
-          font: '',
-          mounting: '',
-          waterproof: '',
-          acrylicThickness: '',
-          thickness_options: '',
-          color: {
-            name: '',
-            color: ''
-          },
-          letterHeight: '',
-          studLength: '',
-          spacerStandoffDistance: ''
-        };
-      } else {
-        args = {
-          type: type,
-          title: `LOGO ${count + 1}`,
-          width: '',
-          height: ''
-        };
-      }
+      args = {
+        type: type.toLowerCase(),
+        title: `${type} ${count + 1}`
+      };
       const newSignage = {
         ...defaultArgs,
         ...args
@@ -12610,39 +12673,37 @@ function LayeredAcrylic() {
       return [...prevSignage, newSignage];
     });
   }
-
-  /* useEffect(() => {
-  	localStorage.setItem(storage + '-x', JSON.stringify(signage));
-  }, [signage]); */
-
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (NovaQuote.is_editting.length === 0) {
-      setTempFolder(tempFolderName);
-    } else {
-      setTempFolder(`Q-${NovaQuote.current_quote_id}`);
-    }
-  }, []);
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "md:flex gap-6"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "md:w-3/4 w-full"
-  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    index: index,
-    id: item.id,
-    item: item
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_4__.Logo, {
-    key: item.id,
-    item: item
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "flex gap-2"
-  }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
-    className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
-    onClick: () => addSignage('logo'),
-    style: {
-      border: '1px solid #d2d2d2d2'
-    }
-  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_1__["default"], null));
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(LayeredAcrylicContext.Provider, {
+    value: addSignage
+  }, children);
 }
+
+/***/ }),
+
+/***/ "./src/scripts/products/acrylic/LayeredAcrylic/components/AddLayer.js":
+/*!****************************************************************************!*\
+  !*** ./src/scripts/products/acrylic/LayeredAcrylic/components/AddLayer.js ***!
+  \****************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+const AddLayer = ({
+  product,
+  type
+}) => {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "flex leading-none items-center rounded-md border bg-white border-gray-200  border-solid p-4 cursor-pointer justify-between hover:bg-slate-600 font-title text-black hover:text-white"
+  }, type);
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (AddLayer);
 
 /***/ }),
 
@@ -13044,6 +13105,54 @@ function Logo({
     className: "text-xs text-[#9F9F9F] mb-4"
   }, "*Note: The spacer will be black (default) or match the painted sign's color."));
 }
+
+/***/ }),
+
+/***/ "./src/scripts/products/acrylic/LayeredAcrylic/components/ProductLayer.js":
+/*!********************************************************************************!*\
+  !*** ./src/scripts/products/acrylic/LayeredAcrylic/components/ProductLayer.js ***!
+  \********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../svg/Icons */ "./src/scripts/svg/Icons.js");
+/* harmony import */ var _AddLayer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AddLayer */ "./src/scripts/products/acrylic/LayeredAcrylic/components/AddLayer.js");
+/* harmony import */ var _LayeredAcrylicContext__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../LayeredAcrylicContext */ "./src/scripts/products/acrylic/LayeredAcrylic/LayeredAcrylicContext.js");
+
+
+
+
+
+const ProductLayer = ({
+  layer
+}) => {
+  const addSignage = (0,_LayeredAcrylicContext__WEBPACK_IMPORTED_MODULE_3__.useLayerAcrylic)();
+  console.log(layer.product_line.ID);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, layer.product_line.post_title), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex gap-4"
+  }, layer.letters && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AddLayer__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    addSignage: addSignage,
+    type: "LETTERS",
+    product: layer.product_line,
+    title: layer.product_line.post_title
+  }, "LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "ml-2"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null))), layer.logo && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AddLayer__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    addSignage: addSignage,
+    type: "LOGO",
+    product: layer.product_line,
+    title: layer.product_line.post_title
+  }, "LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "ml-2"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null)))));
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ProductLayer);
 
 /***/ }),
 
@@ -14999,7 +15108,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-/*Acrlic */
+/*Acrylic */
 
 
 

@@ -7,7 +7,7 @@ import AccordionGroup from './components/AccordionGroup';
 import { useAppContext } from '../../AppProvider';
 import { CombineQuoteProvider } from './CombineQuoteContext';
 
-/*Acrlic */
+/*Acrylic */
 import { Letters as AcrylicLetters } from '../acrylic/LaserCutAcrylic/components/Letters';
 import { Logo as AcrylicLogo } from '../acrylic/LaserCutAcrylic/components/Logo';
 import { Logo as Acrylic3D } from '../acrylic/LayeredAcrylic/components/Logo';

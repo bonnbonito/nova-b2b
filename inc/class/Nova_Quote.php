@@ -2433,6 +2433,7 @@ h6 {
 				'logo_pricing_api'           => rest_url() . 'nova/v1/pricinglogos/',
 				'quantity_discount_api'      => rest_url() . 'nova/v1/quantity-discount/',
 				'show_all_partners'          => $this->show_all_partners(),
+				'product_layers'             => get_field( 'product_layers' ),
 
 			)
 		);
