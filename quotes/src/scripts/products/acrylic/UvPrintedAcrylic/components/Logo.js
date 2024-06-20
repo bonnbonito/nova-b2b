@@ -93,6 +93,69 @@ export function Logo({ item }) {
 		item.spacerStandoffDistance ?? ''
 	);
 
+	function computePricing() {
+		if (
+			width &&
+			height &&
+			selectedThickness &&
+			waterproof &&
+			logoPricingObject !== null
+		) {
+			const logoPricing = getLogoPricingTablebyThickness(
+				`${selectedThickness.value}mm`,
+				logoPricingObject
+			);
+			if (logoPricing !== undefined) {
+				const logoPricingTable =
+					logoPricing !== undefined ? convert_json(logoPricing) : [];
+
+				let tempTotal = 0;
+
+				const computed =
+					logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
+
+				if (computed) {
+					tempTotal += computed;
+				}
+
+				if (waterproof) {
+					tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.1;
+				}
+
+				if (selectedFinishing)
+					tempTotal *= selectedFinishing === GLOSS_FINISH ? 1.1 : 1;
+
+				if (baseColor) tempTotal *= baseColor === 'Custom Color' ? UV_PRICE : 1;
+
+				tempTotal *= 1.2;
+
+				if (selectedMounting === STUD_WITH_SPACER) {
+					let spacer = spacerPricing(tempTotal);
+					spacer = parseFloat(spacer.toFixed(2));
+
+					tempTotal += spacer;
+				}
+
+				const total = tempTotal * sets;
+
+				return {
+					singlePrice: tempTotal.toFixed(2) ?? 0,
+					total: total.toFixed(2) ?? 0,
+				};
+			} else {
+				return {
+					singlePrice: 0,
+					total: 0,
+				};
+			}
+		} else {
+			return {
+				singlePrice: 0,
+				total: 0,
+			};
+		}
+	}
+
 	const handleonChangeSpacerDistance = (e) => {
 		setSpacerStandoffDistance(e.target.value);
 	};
@@ -422,64 +485,6 @@ export function Logo({ item }) {
 		studLength,
 		spacerStandoffDistance,
 	]);
-
-	function computePricing() {
-		if (
-			width &&
-			height &&
-			selectedThickness &&
-			waterproof &&
-			logoPricingObject !== null
-		) {
-			const logoPricing = getLogoPricingTablebyThickness(
-				`${selectedThickness.value}mm`,
-				logoPricingObject
-			);
-			if (logoPricing !== undefined) {
-				const logoPricingTable =
-					logoPricing !== undefined ? convert_json(logoPricing) : [];
-
-				let tempTotal = 0;
-
-				const computed =
-					logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
-
-				if (computed) {
-					tempTotal += computed;
-				}
-
-				if (waterproof) {
-					tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.1;
-				}
-
-				if (selectedFinishing)
-					tempTotal *= selectedFinishing === GLOSS_FINISH ? 1.1 : 1;
-
-				if (baseColor) tempTotal *= baseColor === 'Custom Color' ? UV_PRICE : 1;
-
-				tempTotal *= 1.2;
-
-				if (selectedMounting === STUD_WITH_SPACER) {
-					let spacer = spacerPricing(tempTotal);
-					spacer = parseFloat(spacer.toFixed(2));
-
-					tempTotal += spacer;
-				}
-
-				const total = tempTotal * sets;
-
-				return {
-					singlePrice: tempTotal.toFixed(2) ?? 0,
-					total: total.toFixed(2) ?? 0,
-				};
-			}
-		} else {
-			return {
-				singlePrice: 0,
-				total: 0,
-			};
-		}
-	}
 
 	useEffect(() => {
 		const { singlePrice, total } = computePricing();

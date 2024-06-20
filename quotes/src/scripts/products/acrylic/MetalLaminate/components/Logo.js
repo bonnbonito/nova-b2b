@@ -122,6 +122,65 @@ export function Logo({ item }) {
 		}
 	};
 
+	function computePricing() {
+		if (
+			width &&
+			height &&
+			selectedThickness &&
+			waterproof &&
+			logoPricingObject !== null
+		) {
+			const logoPricing = getLogoPricingTablebyThickness(
+				`${selectedThickness.value}mm`,
+				logoPricingObject
+			);
+
+			if (logoPricing !== undefined) {
+				const logoPricingTable =
+					logoPricing !== undefined ? convert_json(logoPricing) : [];
+
+				const computed =
+					logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
+
+				let tempTotal = 0;
+
+				tempTotal += computed;
+
+				if (waterproof) {
+					tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.1;
+				}
+
+				tempTotal *= METAL_ACRYLIC_PRICING;
+
+				tempTotal *= acrylicBase?.name === 'Black' ? 1 : 1.1;
+
+				if (selectedMounting === STUD_WITH_SPACER) {
+					let spacer = spacerPricing(tempTotal);
+					spacer = parseFloat(spacer.toFixed(2));
+
+					tempTotal += spacer;
+				}
+
+				const total = tempTotal * sets;
+
+				return {
+					singlePrice: tempTotal.toFixed(2) ?? 0,
+					total: total ?? 0,
+				};
+			} else {
+				return {
+					singlePrice: 0,
+					total: 0,
+				};
+			}
+		} else {
+			return {
+				singlePrice: 0,
+				total: 0,
+			};
+		}
+	}
+
 	const handleonChangeStudLength = (e) => {
 		const target = e.target.value;
 		setStudLength(target); // Directly set the value without a callback
@@ -321,84 +380,6 @@ export function Logo({ item }) {
 		spacerStandoffDistance,
 	]);
 
-	function computePricing() {
-		if (
-			width &&
-			height &&
-			selectedThickness &&
-			waterproof &&
-			logoPricingObject !== null
-		) {
-			const logoPricing = getLogoPricingTablebyThickness(
-				`${selectedThickness.value}mm`,
-				logoPricingObject
-			);
-
-			if (logoPricing !== undefined) {
-				const logoPricingTable =
-					logoPricing !== undefined ? convert_json(logoPricing) : [];
-
-				const computed =
-					logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
-
-				let tempTotal = 0;
-
-				tempTotal += computed;
-
-				if (waterproof) {
-					tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.1;
-				}
-
-				tempTotal *= METAL_ACRYLIC_PRICING;
-
-				tempTotal *= acrylicBase?.name === 'Black' ? 1 : 1.1;
-
-				if (selectedMounting === STUD_WITH_SPACER) {
-					let spacer = spacerPricing(tempTotal);
-					spacer = parseFloat(spacer.toFixed(2));
-
-					tempTotal += spacer;
-				}
-
-				const total = tempTotal * sets;
-
-				return {
-					singlePrice: tempTotal.toFixed(2) ?? 0,
-					total: total ?? 0,
-				};
-			}
-		} else {
-			return {
-				singlePrice: 0,
-				total: 0,
-			};
-		}
-	}
-
-	useEffect(() => {
-		const { singlePrice, total } = computePricing();
-		if (total && singlePrice) {
-			setUsdPrice(total);
-			setCadPrice((total * EXCHANGE_RATE).toFixed(2));
-			setUsdSinglePrice(singlePrice);
-			setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
-		} else {
-			setUsdPrice(0);
-			setCadPrice(0);
-			setUsdSinglePrice(0);
-			setCadSinglePrice(0);
-		}
-	}, [
-		width,
-		height,
-		selectedThickness,
-		waterproof,
-		acrylicBase,
-		sets,
-		selectedMounting,
-		logoPricingObject,
-	]);
-
 	const checkAndAddMissingFields = () => {
 		const missingFields = [];
 
@@ -476,6 +457,30 @@ export function Logo({ item }) {
 		sets,
 		studLength,
 		spacerStandoffDistance,
+	]);
+
+	useEffect(() => {
+		const { singlePrice, total } = computePricing();
+		if (total && singlePrice) {
+			setUsdPrice(total);
+			setCadPrice((total * EXCHANGE_RATE).toFixed(2));
+			setUsdSinglePrice(singlePrice);
+			setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
+		} else {
+			setUsdPrice(0);
+			setCadPrice(0);
+			setUsdSinglePrice(0);
+			setCadSinglePrice(0);
+		}
+	}, [
+		width,
+		height,
+		selectedThickness,
+		waterproof,
+		acrylicBase,
+		sets,
+		selectedMounting,
+		logoPricingObject,
 	]);
 
 	return (
