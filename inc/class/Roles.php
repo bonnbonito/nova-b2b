@@ -833,11 +833,16 @@ jQuery(document).ready(function($) {
 		wp_send_json( $status );
 	}
 
-	public function send_email( $to, $subject, $content, $headers = array(), $attachments = array() ) {
+	public function send_email( $to, $subject, $content, $headers = array(), $attachments = array(), $heading = '' ) {
 		// Get the WooCommerce emailer instance
 		$mailer = WC()->mailer();
 		// Wrap the content with WooCommerce email template
-		$wrapped_content = $mailer->wrap_message( $subject, $content );
+
+		if ( ! $heading || empty( $heading ) ) {
+			$heading = $subject;
+		}
+
+		$wrapped_content = $mailer->wrap_message( $heading, $content );
 
 		// Send the email using WooCommerce's mailer
 		$mailer->send( $to, $subject, $wrapped_content, $headers, $attachments );

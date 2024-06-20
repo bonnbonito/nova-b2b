@@ -28,6 +28,7 @@ class Pending_Payment {
 		add_action( 'after_setup_theme', array( $this, 'create_custom_table' ) );
 		add_action( 'woocommerce_order_status_completed', array( $this, 'insert_pending_payment' ) );
 		add_action( 'woocommerce_order_status_completed', array( $this, 'change_pending_status' ) );
+		// add_action( 'woocommerce_order_status_completed', array( $this, 'test_note' ) );
 		add_action( 'admin_menu', array( $this, 'add_pending_payments_submenu_page' ) );
 		add_action( 'admin_post_nopriv_delete_pending_payment', array( $this, 'handle_delete_order' ) );
 		add_action( 'admin_post_delete_pending_payment', array( $this, 'handle_delete_order' ) );
@@ -42,7 +43,6 @@ class Pending_Payment {
 		add_filter( 'woocommerce_order_number', array( $this, 'pending_payment_order_number' ), 12, 2 );
 		add_filter( 'gettext', array( $this, 'pay_for_order_notice' ), 10, 3 );
 		add_action( 'woocommerce_order_status_completed', array( $this, 'admin_notification_paid_full' ) );
-		// add_filter( 'woocommerce_email_recipient_customer_completed_order', array( $this, 'disable_completed_order_email_for_pending' ), 10, 2 );
 	}
 
 	function pay_for_order_notice( $translated_text, $text, $domain ) {
@@ -183,14 +183,6 @@ class Pending_Payment {
 		}
 	}
 
-	public function disable_completed_order_email_for_pending( $recipient, $order ) {
-		if ( $order && get_post_meta( $order->get_id(), '_pending_id', true ) ) {
-			return '';
-		}
-
-		return $recipient;
-	}
-
 	public function pending_payment_order_email_content( $body_text, $order, $sent_to_admin, $plain_text, $email ) {
 		$pending_id     = $order->get_meta( '_pending_id' );
 		$from_order_id  = $order->get_meta( '_from_order_id' );
@@ -298,12 +290,13 @@ class Pending_Payment {
 
 		if ( $payment_emails ) {
 			$subject = $payment_emails[ $index - 1 ]['subject'];
-
+			$heading = $payment_emails[ $index - 1 ]['heading'];
 			$message = $payment_emails[ $index - 1 ]['content'];
 
 			$subject = str_replace( '{customer_name}', $first_name, $subject );
 			$subject = str_replace( '{deadline}', $payment_date, $subject );
 			$subject = str_replace( '{order_number}', $original_order->get_order_number(), $subject );
+			$heading = str_replace( '{order_number}', $original_order->get_order_number(), $heading );
 
 			$message = str_replace( '{customer_name}', $first_name, $message );
 			$message = str_replace( '{order_number}', $original_order->get_order_number(), $message );
@@ -326,7 +319,9 @@ class Pending_Payment {
 				$attachments = $this->attach_invoice( $order );
 
 				$role_instance = \NOVA_B2B\Roles::get_instance();
-				$role_instance->send_email( $customer_email, $subject, $message, $headers, $attachments );
+
+				$role_instance->send_email( $customer_email, $subject, $message, $headers, $attachments, $heading );
+
 				$key = 'payment_email_key_' . $index;
 
 				$label = $payment_emails[ $index - 1 ]['email_label'];
@@ -797,9 +792,9 @@ class Pending_Payment {
 
 		$exists = $this->get_data_from_order( $order_id );
 
-		// if ( $exists ) {
-		// return;
-		// }
+		if ( $exists ) {
+			return;
+		}
 
 		if ( $pending_order ) {
 			$order          = wc_get_order( $order_id );
@@ -864,6 +859,23 @@ class Pending_Payment {
 		}
 	}
 
+	public function test_note( $order_id ) {
+
+		$order = wc_get_order( $order_id );
+
+		$timestamp = current_time( 'timestamp' );
+
+		$order_note = sprintf(
+				/* translators: 1) carrier's name 2) shipped date, 3) tracking number */
+			__( 'Items shipped via %1$s on %2$s with tracking number %3$s (Shipstation).', 'woocommerce-shipstation-integration' ),
+			'UPS',
+			date_i18n( get_option( 'date_format' ), $timestamp ),
+			'UVISDFKSDKFKDSF'
+		);
+
+		$order->add_order_note( $order_note, 1 );
+	}
+
 	public function insert_payment_date( $total_rows, $order, $tax_display ) {
 
 		$order_id      = $order->get_id();
@@ -901,24 +913,18 @@ class Pending_Payment {
 		}
 	}
 
-	public function admin_notification_paid_full( $order_id ) {
-		$order = wc_get_order( $order_id );
-
-		if ( ! get_post_meta( $order_id, '_from_order_id', true ) ) {
-			return;
-		}
-
+	public function admin_email_pending_paid_full( $order ) {
 		$pending_id = $order->get_meta( '_pending_id' );
 
-		$role_instance = \NOVA_B2B\Roles::get_instance();
-		$headers       = array( 'Content-Type: text/html; charset=UTF-8' );
-		$user_id       = $order->get_customer_id();
-		$customer      = get_userdata( $order->get_customer_id() );
-		$payment       = $this->get_data( $pending_id );
-		$payment_date  = date( 'F d, Y', strtotime( $payment->payment_date ) );
-		$pending_total = $payment->pending_total;
-		$currency      = $payment->currency;
-		$first_name    = $customer->first_name;
+		$user_id = $order->get_customer_id();
+		$payment = $this->get_data( $pending_id );
+		if ( $payment ) {
+			$payment_date  = date( 'F d, Y', strtotime( $payment->payment_date ) );
+			$pending_total = $payment->pending_total;
+		}
+
+		$currency      = $order->get_currency();
+		$first_name    = $order->get_billing_first_name();
 		$user_id       = $order->get_user_id() ? $order->get_user_id() : 0;
 		$business_id   = get_field( 'business_id', 'user_' . $user_id );
 		$business_name = get_field( 'business_name', 'user_' . $user_id );
@@ -935,22 +941,33 @@ class Pending_Payment {
 
 		$message .= '<p>Here are the details about their payment:</p>';
 		$message .= '<ul>';
-		$message .= '<li>Amount paid: {pending_payment}</li>';
-		$message .= '<li>Date Paid: {today}</li>';
-		$message .= '<li>Payment Scheme: {payment_select}</li>';
-		$message .= '</ul>';
 
+		if ( $payment ) {
+			$message .= '<li>Amount paid: {pending_payment}</li>';
+		}
+
+		$message .= '<li>Date Paid: {today}</li>';
+
+		if ( $payment ) {
+			$message .= '<li>Payment Scheme: {payment_select}</li>';
+		}
+
+		$message .= '</ul>';
 		$message .= '<p>Review the final invoice and payment details:</p>';
 		$message .= '{order_details}';
 
 		$message = str_replace( '{order_number}', $order_number, $message );
-		$message = str_replace( '{deadline}', $payment_date, $message );
-		$message = str_replace( '{pending_payment}', $currency . '$' . round( floatval( $pending_total ), 2 ), $message );
+
+		if ( $payment ) {
+			$message = str_replace( '{deadline}', $payment_date, $message );
+			$message = str_replace( '{pending_payment}', $currency . '$' . round( floatval( $pending_total ), 2 ), $message );
+			$message = str_replace( '{payment_select}', get_the_title( $payment->payment_select ), $message );
+		}
+
 		$message = str_replace( '{customer_name}', $first_name, $message );
 		$message = str_replace( '{company_name}', $business_name, $message );
 		$message = str_replace( '{business_id}', $business_id, $message );
 		$message = str_replace( '{today}', date( 'F j, Y' ), $message );
-		$message = str_replace( '{payment_select}', get_the_title( $payment->payment_select ), $message );
 
 		ob_start();
 		add_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
@@ -967,8 +984,29 @@ class Pending_Payment {
 		$subject = str_replace( '{company_name}', $business_name, $subject );
 		$subject = str_replace( '{order_number}', $order_number, $subject );
 
+		return array(
+			'subject' => $subject,
+			'message' => $message,
+		);
+	}
+
+	public function admin_notification_paid_full( $order_id ) {
+		$order = wc_get_order( $order_id );
+
+		if ( get_post_meta( $order_id, '_adjusted_duplicate_order_id', true ) ) {
+			return;
+		}
+
+		$mail_content = $this->admin_email_pending_paid_full( $order );
+
+		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
+
 		$role_instance = \NOVA_B2B\Roles::get_instance();
-		$emails        = $role_instance->get_admin_and_customer_rep_emails();
-		$role_instance->send_email( $emails, $subject, $message, $headers, array() );
+		if ( $role_instance && $mail_content ) {
+			$subject = $mail_content['subject'];
+			$message = $mail_content['message'];
+			$emails  = $role_instance->get_admin_and_customer_rep_emails();
+			$role_instance->send_email( $emails, $subject, $message, $headers, array() );
+		}
 	}
 }

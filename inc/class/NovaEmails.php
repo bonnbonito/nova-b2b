@@ -27,13 +27,26 @@ class NovaEmails {
 		add_filter( 'kadence_woomail_order_body_text', array( $this, 'fully_paid_payment_processing_email' ), 42, 5 );
 		add_filter( 'woocommerce_email_additional_content_customer_processing_order', array( $this, 'pending_payment_additional_content' ), 40, 3 );
 		add_filter( 'woocommerce_email_additional_content_customer_completed_order', array( $this, 'complete_payment_additional_content' ), 41, 3 );
+		add_filter( 'woocommerce_email_heading_customer_completed_order', array( $this, 'complete_payment_heading' ), 41, 3 );
 		add_filter( 'woocommerce_email_additional_content_customer_completed_order', array( $this, 'fully_paid_payment_additional_content' ), 42, 3 );
+		add_filter( 'woocommerce_email_heading_customer_completed_order', array( $this, 'fully_paid_payment_heading' ), 42, 3 );
 		add_filter( 'woocommerce_email_subject_customer_processing_order', array( $this, 'pending_payment_subject' ), 40, 2 );
 		add_filter( 'woocommerce_email_subject_customer_completed_order', array( $this, 'completed_payment_subject' ), 41, 2 );
 		add_filter( 'woocommerce_email_subject_customer_completed_order', array( $this, 'fully_paid_payment_subject' ), 42, 2 );
 		add_filter( 'woocommerce_email_recipient_new_order', array( $this, 'filter_woocommerce_email_recipient_new_order' ), 10, 2 );
+		add_filter( 'woocommerce_email_recipient_new_order', array( $this, 'filter_woocommerce_email_recipient_new_order' ), 10, 2 );
 		// add_filter( 'woocommerce_email_attachments', array( $this, 'insert_invoice' ), 10, 4 );
 		add_filter( 'woocommerce_email_attachments', array( $this, 'insert_invoice' ), 10, 4 );
+		// Remove "On Hold" email notification
+		add_filter( 'woocommerce_email_enabled_customer_on_hold_order', '__return_false' );
+		add_filter( 'woocommerce_email_enabled_new_order', array( $this, 'disable_admin_new_order_email_on_hold' ), 10, 3 );
+	}
+
+	public function disable_admin_new_order_email_on_hold( $enabled, $order, $email ) {
+		if ( is_a( $order, 'WC_Order' ) && $order->has_status( 'on-hold' ) && $email->id === 'new_order' ) {
+			return false;
+		}
+		return $enabled;
 	}
 
 	public function insert_invoice( $attachments, $email_id, $order, $email ) {
@@ -188,6 +201,25 @@ class NovaEmails {
 		return $additional_content;
 	}
 
+	public function complete_payment_heading( $heading, $order, $email ) {
+		$order_id         = $order->get_id();
+		$payment_select   = get_post_meta( $order_id, '_payment_select', true );
+		$payment_order_id = get_post_meta( $order_id, '_adjusted_duplicate_order_id', true );
+		$payment_order    = wc_get_order( $payment_order_id );
+
+		if ( ! $this->is_deposit_order( $order_id ) ) {
+			return $heading;
+		}
+
+		if ( $payment_order_id && $payment_select ) {
+			$completed_email = get_field( 'completed_email', $payment_select );
+			$heading         = $completed_email['heading'] ? $completed_email['heading'] : $heading;
+			$heading         = str_replace( '{order_number}', $order->get_order_number(), $heading );
+		}
+
+		return $heading;
+	}
+
 	public function complete_payment_additional_content( $additional_content, $order, $email ) {
 		$order_id         = $order->get_id();
 		$payment_select   = get_post_meta( $order_id, '_payment_select', true );
@@ -205,6 +237,22 @@ class NovaEmails {
 		}
 
 		return $additional_content;
+	}
+
+	public function fully_paid_payment_heading( $heading, $order, $email ) {
+		$order_id       = $order->get_id();
+		$payment_select = get_post_meta( $order_id, '_payment_select', true );
+
+		if ( ! $this->is_payment_order( $order_id ) ) {
+			return $heading;
+		}
+
+		$paid_email = get_field( 'paid_email', $payment_select );
+
+		$heading = $paid_email['heading'] ? $paid_email['heading'] : $heading;
+		$heading = str_replace( '{order_number}', $order->get_order_number(), $heading );
+
+		return $heading;
 	}
 
 	public function fully_paid_payment_additional_content( $additional_content, $order, $email ) {
