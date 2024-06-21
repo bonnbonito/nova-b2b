@@ -44,6 +44,17 @@ import { NeonSign as RigidNeonSignNoBacking } from '../led-neon/RigidNeonSignNoB
 import { NeonSign as RigidNeonSignWithBacking } from '../led-neon/RigidNeonSignWithBacking/components/NeonSign';
 /*CUSTOM PROJECT */
 import { Logo as CustomProject } from '../custom/components/Logo';
+/**ACRYLIC CHANNEL LETTERS */
+import { Letters as AcrylicBackLitLetters } from '../acrylic-channel/AcrylicBackLit/components/Letters';
+import { Logo as AcrylicBackLitLogo } from '../acrylic-channel/AcrylicBackLit/components/Logo';
+import { Letters as AcrylicFrontBackLitLetters } from '../acrylic-channel/AcrylicFrontBackLit/components/Letters';
+import { Logo as AcrylicFrontBackLitLogo } from '../acrylic-channel/AcrylicFrontBackLit/components/Logo';
+import { Letters as AcrylicFrontLitLetters } from '../acrylic-channel/AcrylicFrontLit/components/Letters';
+import { Logo as AcrylicFrontLitLogo } from '../acrylic-channel/AcrylicFrontLit/components/Logo';
+import { Letters as AcrylicFrontSideLitLetters } from '../acrylic-channel/AcrylicFrontSideLit/components/Letters';
+import { Logo as AcrylicFrontSideLitLogo } from '../acrylic-channel/AcrylicFrontSideLit/components/Logo';
+import { Letters as AcrylicSideLitLetters } from '../acrylic-channel/AcrylicSideLit/components/Letters';
+import { Logo as AcrylicSideLitLogo } from '../acrylic-channel/AcrylicSideLit/components/Logo';
 
 const productLines = NovaQuote.product_lines_accordion;
 
@@ -92,6 +103,101 @@ export default function CombineQuotes() {
 	const showComponent = (item) => {
 		let output;
 		switch (item.component) {
+			case 'AcrylicSideLit':
+				if (item.type === 'letters') {
+					output = (
+						<AcrylicSideLitLetters
+							key={item.id}
+							item={item}
+							productId={item.product}
+						/>
+					);
+				} else {
+					output = (
+						<AcrylicSideLitLogo
+							key={item.id}
+							item={item}
+							productId={item.product}
+						/>
+					);
+				}
+				break;
+			case 'AcrylicFrontSideLit':
+				if (item.type === 'letters') {
+					output = (
+						<AcrylicFrontSideLitLetters
+							key={item.id}
+							item={item}
+							productId={item.product}
+						/>
+					);
+				} else {
+					output = (
+						<AcrylicFrontSideLitLogo
+							key={item.id}
+							item={item}
+							productId={item.product}
+						/>
+					);
+				}
+				break;
+			case 'AcrylicFrontBackLit':
+				if (item.type === 'letters') {
+					output = (
+						<AcrylicFrontBackLitLetters
+							key={item.id}
+							item={item}
+							productId={item.product}
+						/>
+					);
+				} else {
+					output = (
+						<AcrylicFrontBackLitLogo
+							key={item.id}
+							item={item}
+							productId={item.product}
+						/>
+					);
+				}
+				break;
+			case 'AcrylicBackLit':
+				if (item.type === 'letters') {
+					output = (
+						<AcrylicBackLitLetters
+							key={item.id}
+							item={item}
+							productId={item.product}
+						/>
+					);
+				} else {
+					output = (
+						<AcrylicBackLitLogo
+							key={item.id}
+							item={item}
+							productId={item.product}
+						/>
+					);
+				}
+				break;
+			case 'AcrylicFrontLit':
+				if (item.type === 'letters') {
+					output = (
+						<AcrylicFrontLitLetters
+							key={item.id}
+							item={item}
+							productId={item.product}
+						/>
+					);
+				} else {
+					output = (
+						<AcrylicFrontLitLogo
+							key={item.id}
+							item={item}
+							productId={item.product}
+						/>
+					);
+				}
+				break;
 			case 'CustomProject':
 				output = (
 					<CustomProject key={item.id} item={item} productId={item.product} />

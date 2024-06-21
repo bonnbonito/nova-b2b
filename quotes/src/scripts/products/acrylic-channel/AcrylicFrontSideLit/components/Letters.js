@@ -70,7 +70,9 @@ export function Letters({ item }) {
 	const [openFont, setOpenFont] = useState(false);
 	const [frontOption, setFrontOption] = useState(item.frontOption ?? '');
 	const [openVinyl, setOpenVinyl] = useState(false);
-	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
+	const [waterproof, setWaterproof] = useState(
+		item.trimLessWaterproof ?? INDOOR_NOT_WATERPROOF
+	);
 	const [acrylicReturn, setAcrylicReturn] = useState(
 		item.acrylicReturn ?? 'White'
 	);
@@ -181,7 +183,7 @@ export function Letters({ item }) {
 			font,
 			acrylicChannelThickness,
 			mounting: selectedMounting,
-			waterproof,
+			trimLessWaterproof: waterproof,
 			frontOption,
 			letterHeight: selectedLetterHeight,
 			ledLightColor,
@@ -201,6 +203,7 @@ export function Letters({ item }) {
 			spacerStandoffDistance,
 			usdSinglePrice,
 			cadSinglePrice,
+			includedItems: LIGHTING_INDOOR,
 		};
 
 		setSignage((prevSignage) =>
@@ -655,21 +658,6 @@ export function Letters({ item }) {
 				/>
 
 				<Dropdown
-					title="Environment"
-					onChange={handleOnChangeWaterproof}
-					options={waterProofOptions.map((option) => (
-						<option
-							value={option.option}
-							selected={option.option == waterproof}
-						>
-							{option.option}
-						</option>
-					))}
-					value={waterproof}
-					onlyValue={true}
-				/>
-
-				<Dropdown
 					title="Mounting Options"
 					onChange={handleOnChangeMount}
 					options={mountingDefaultOptions.map((option) => (
@@ -732,9 +720,24 @@ export function Letters({ item }) {
 					</>
 				)}
 
+				<Dropdown
+					title="Environment"
+					onChange={handleOnChangeWaterproof}
+					options={waterProofOptions.map((option) => (
+						<option
+							value={option.option}
+							selected={option.option == waterproof}
+						>
+							{option.option}
+						</option>
+					))}
+					value={waterproof}
+					onlyValue={true}
+				/>
+
 				{waterproof === INDOOR_NOT_WATERPROOF && (
 					<Dropdown
-						title="Included in the Package"
+						title="Included Items"
 						options={
 							<option value={LIGHTING_INDOOR} selected={LIGHTING_INDOOR}>
 								{LIGHTING_INDOOR}

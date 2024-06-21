@@ -25,7 +25,7 @@ export default function TrimLessBackLit() {
 				comments: '',
 				font: '',
 				customFont: '',
-				waterproof: '',
+				trimLessWaterproof: '',
 				thickness: '',
 				backLitFinishing: '',
 				mounting: '',

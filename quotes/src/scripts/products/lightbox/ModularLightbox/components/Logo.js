@@ -313,7 +313,7 @@ export function Logo({ item }) {
 
 				{waterproof === INDOOR_NOT_WATERPROOF && (
 					<Dropdown
-						title="Included in the Package"
+						title="Included Items"
 						options={
 							<option value={LIGHTING_INDOOR} selected={LIGHTING_INDOOR}>
 								{LIGHTING_INDOOR}

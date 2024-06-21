@@ -89,7 +89,7 @@ export function Logo({ item }) {
 	);
 	const [openColor, setOpenColor] = useState(false);
 	const [waterproof, setWaterproof] = useState(
-		item.waterproof ?? INDOOR_NOT_WATERPROOF
+		item.trimLessWaterproof ?? INDOOR_NOT_WATERPROOF
 	);
 	const [backOption, setBackOption] = useState(item.backOption ?? 'Backlit');
 	const [acrylicChannelThickness, setAcrylicChannelThickness] = useState(
@@ -130,7 +130,7 @@ export function Logo({ item }) {
 		item.spacerStandoffDistance ?? ''
 	);
 
-	const [lightingPackaged, setLightingPackaged] = useState(LIGHTING_INDOOR);
+	const [includedItems, setincludedItems] = useState(LIGHTING_INDOOR);
 
 	const [sets, setSets] = useState(item.sets ?? 1);
 
@@ -147,7 +147,7 @@ export function Logo({ item }) {
 			height,
 			acrylicChannelThickness,
 			mounting: selectedMounting,
-			waterproof,
+			trimLessWaterproof: waterproof,
 			backOption,
 			faceReturnColor: color,
 			ledLightColor,
@@ -163,7 +163,7 @@ export function Logo({ item }) {
 			spacerStandoffDistance,
 			usdSinglePrice,
 			cadSinglePrice,
-			lightingPackaged,
+			includedItems,
 		};
 
 		setSignage((prevSignage) =>
@@ -197,9 +197,9 @@ export function Logo({ item }) {
 		const target = e.target.value;
 		setWaterproof(target);
 		if (target === INDOOR_NOT_WATERPROOF) {
-			setLightingPackaged(LIGHTING_INDOOR);
+			setincludedItems(LIGHTING_INDOOR);
 		} else {
-			setLightingPackaged('');
+			setincludedItems('');
 		}
 	};
 
@@ -392,7 +392,7 @@ export function Logo({ item }) {
 		cadSinglePrice,
 		width,
 		height,
-		lightingPackaged,
+		includedItems,
 	]);
 
 	useOutsideClick([colorRef], () => {
@@ -466,20 +466,6 @@ export function Logo({ item }) {
 						</option>
 					))}
 					value={ledLightColor}
-				/>
-
-				<Dropdown
-					title="Environment"
-					onChange={handleOnChangeWaterproof}
-					options={waterProofOptions.map((option) => (
-						<option
-							value={option.option}
-							selected={option.option == waterproof}
-						>
-							{option.option}
-						</option>
-					))}
-					value={waterproof}
 				/>
 
 				<Dropdown
@@ -560,9 +546,23 @@ export function Logo({ item }) {
 					</>
 				)}
 
+				<Dropdown
+					title="Environment"
+					onChange={handleOnChangeWaterproof}
+					options={waterProofOptions.map((option) => (
+						<option
+							value={option.option}
+							selected={option.option == waterproof}
+						>
+							{option.option}
+						</option>
+					))}
+					value={waterproof}
+				/>
+
 				{waterproof === INDOOR_NOT_WATERPROOF && (
 					<Dropdown
-						title="Included in the Package"
+						title="Included Items"
 						options={
 							<option value={LIGHTING_INDOOR} selected={LIGHTING_INDOOR}>
 								{LIGHTING_INDOOR}

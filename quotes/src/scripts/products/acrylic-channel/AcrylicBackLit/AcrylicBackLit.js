@@ -31,7 +31,7 @@ const AcrylicBackLit = () => {
 				vinylWhite: { name: '', color: '', code: '' },
 				ledLightColor: '6500K White',
 				backOption: 'Backlit',
-				lightingPackaged: LIGHTING_INDOOR,
+				includedItems: LIGHTING_INDOOR,
 				letterHeight: '',
 				usdPrice: 0,
 				cadPrice: 0,

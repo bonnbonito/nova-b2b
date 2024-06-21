@@ -65,7 +65,9 @@ export function Logo({ item }) {
 	const [frontOption, setFrontOption] = useState(item.frontOption ?? '');
 
 	const [openColor, setOpenColor] = useState(false);
-	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
+	const [waterproof, setWaterproof] = useState(
+		item.trimLessWaterproof ?? INDOOR_NOT_WATERPROOF
+	);
 	const [acrylicReturn, setAcrylicReturn] = useState(
 		item.acrylicReturn ?? 'White'
 	);
@@ -123,7 +125,7 @@ export function Logo({ item }) {
 			comments,
 			acrylicChannelThickness,
 			mounting: selectedMounting,
-			waterproof,
+			trimLessWaterproof: waterproof,
 			frontOption,
 			paintColor: color,
 			ledLightColor,
@@ -142,6 +144,7 @@ export function Logo({ item }) {
 			metalLaminate,
 			width,
 			height,
+			includedItems: LIGHTING_INDOOR,
 		};
 
 		setSignage((prevSignage) =>
@@ -509,21 +512,6 @@ export function Logo({ item }) {
 				/>
 
 				<Dropdown
-					title="Environment"
-					onChange={handleOnChangeWaterproof}
-					options={waterProofOptions.map((option) => (
-						<option
-							value={option.option}
-							selected={option.option == waterproof}
-						>
-							{option.option}
-						</option>
-					))}
-					value={waterproof}
-					onlyValue={true}
-				/>
-
-				<Dropdown
 					title="Mounting Options"
 					onChange={handleOnChangeMount}
 					options={mountingDefaultOptions.map((option) => (
@@ -586,9 +574,24 @@ export function Logo({ item }) {
 					</>
 				)}
 
+				<Dropdown
+					title="Environment"
+					onChange={handleOnChangeWaterproof}
+					options={waterProofOptions.map((option) => (
+						<option
+							value={option.option}
+							selected={option.option == waterproof}
+						>
+							{option.option}
+						</option>
+					))}
+					value={waterproof}
+					onlyValue={true}
+				/>
+
 				{waterproof === INDOOR_NOT_WATERPROOF && (
 					<Dropdown
-						title="Included in the Package"
+						title="Included Items"
 						options={
 							<option value={LIGHTING_INDOOR} selected={LIGHTING_INDOOR}>
 								{LIGHTING_INDOOR}

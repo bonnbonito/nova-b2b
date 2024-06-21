@@ -589,6 +589,10 @@ function allAttributes(sign) {
 			label: 'LIGHTING PACKAGED',
 			value: sign.lightingPackaged ? sign.lightingPackaged : '',
 		},
+		{
+			label: 'INCLUDED ITEMS',
+			value: sign.includedItems ? sign.includedItems : '',
+		},
 
 		{
 			label: 'REMOTE CONTROL',

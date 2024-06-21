@@ -66,7 +66,7 @@ export function Letters({ item }) {
 	const [color, setColor] = useState(item.acrylicReturnPaintColor ?? 'Black');
 	const [openColor, setOpenColor] = useState(false);
 	const [waterproof, setWaterproof] = useState(
-		item.waterproof ?? INDOOR_NOT_WATERPROOF
+		item.trimLessWaterproof ?? INDOOR_NOT_WATERPROOF
 	);
 	const [acrylicChannelThickness, setAcrylicChannelThickness] = useState(
 		item.acrylicChannelThickness ?? '1.2"'
@@ -126,7 +126,7 @@ export function Letters({ item }) {
 		item.spacerStandoffDistance ?? ''
 	);
 
-	const [lightingPackaged, setLightingPackaged] = useState(LIGHTING_INDOOR);
+	const [includedItems, setincludedItems] = useState(LIGHTING_INDOOR);
 
 	const [sets, setSets] = useState(item.sets ?? 1);
 
@@ -185,7 +185,7 @@ export function Letters({ item }) {
 			font,
 			acrylicChannelThickness,
 			mounting: selectedMounting,
-			waterproof,
+			trimLessWaterproof: waterproof,
 			acrylicReturnPaintColor: color,
 			letterHeight: selectedLetterHeight,
 			ledLightColor,
@@ -207,7 +207,7 @@ export function Letters({ item }) {
 			acrylicFront,
 			usdSinglePrice,
 			cadSinglePrice,
-			lightingPackaged,
+			includedItems,
 		};
 
 		setSignage((prevSignage) =>
@@ -245,9 +245,9 @@ export function Letters({ item }) {
 		const target = e.target.value;
 		setWaterproof(target);
 		if (target === INDOOR_NOT_WATERPROOF) {
-			setLightingPackaged(LIGHTING_INDOOR);
+			setincludedItems(LIGHTING_INDOOR);
 		} else {
-			setLightingPackaged('');
+			setincludedItems('');
 		}
 	};
 
@@ -534,7 +534,7 @@ export function Letters({ item }) {
 		ledLightColor,
 		usdSinglePrice,
 		cadSinglePrice,
-		lightingPackaged,
+		includedItems,
 	]);
 
 	useOutsideClick(
@@ -705,21 +705,6 @@ export function Letters({ item }) {
 				/>
 
 				<Dropdown
-					title="Environment"
-					onChange={handleOnChangeWaterproof}
-					options={waterProofOptions.map((option) => (
-						<option
-							value={option.option}
-							selected={option.option == waterproof}
-						>
-							{option.option}
-						</option>
-					))}
-					value={waterproof}
-					onlyValue={true}
-				/>
-
-				<Dropdown
 					title="Mounting Options"
 					onChange={handleOnChangeMount}
 					options={mountingDefaultOptions.map((option) => (
@@ -782,9 +767,24 @@ export function Letters({ item }) {
 					</>
 				)}
 
+				<Dropdown
+					title="Environment"
+					onChange={handleOnChangeWaterproof}
+					options={waterProofOptions.map((option) => (
+						<option
+							value={option.option}
+							selected={option.option == waterproof}
+						>
+							{option.option}
+						</option>
+					))}
+					value={waterproof}
+					onlyValue={true}
+				/>
+
 				{waterproof === INDOOR_NOT_WATERPROOF && (
 					<Dropdown
-						title="Included in the Package"
+						title="Included Items"
 						options={
 							<option value={LIGHTING_INDOOR} selected={LIGHTING_INDOOR}>
 								{LIGHTING_INDOOR}

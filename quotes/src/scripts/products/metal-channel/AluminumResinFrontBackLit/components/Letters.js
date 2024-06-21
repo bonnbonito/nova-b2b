@@ -58,7 +58,7 @@ export function Letters({ item }) {
 		item.returnColor ?? { name: 'Black', color: '#000000' }
 	);
 	const [openColor, setOpenColor] = useState(false);
-	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
+	const [waterproof, setWaterproof] = useState(item.trimLessWaterproof ?? '');
 
 	const [depth, setDepth] = useState(item.depth);
 
@@ -118,7 +118,7 @@ export function Letters({ item }) {
 		lightingPackagedOptions
 	);
 
-	const [lightingPackaged, setLightingPackaged] = useState('');
+	const [includedItems, setIncludedItems] = useState('');
 
 	const [mounting, setMounting] = useState(item.mounting ?? '');
 
@@ -186,7 +186,7 @@ export function Letters({ item }) {
 					comments,
 					depth,
 					font,
-					waterproof,
+					trimLessWaterproof: waterproof,
 					returnColor: color,
 					letterHeight: selectedLetterHeight,
 					usdPrice,
@@ -209,7 +209,7 @@ export function Letters({ item }) {
 					sets,
 					usdSinglePrice,
 					cadSinglePrice,
-					lightingPackaged,
+					includedItems,
 				};
 			} else {
 				return sign;
@@ -222,8 +222,7 @@ export function Letters({ item }) {
 
 	const handleComments = (e) => setComments(e.target.value);
 
-	const handleOnChangeLightingPackaged = (e) =>
-		setLightingPackaged(e.target.value);
+	const handleOnChangeincludedItems = (e) => setIncludedItems(e.target.value);
 
 	const handleSelectFont = (value) => setFont(value);
 
@@ -401,7 +400,7 @@ export function Letters({ item }) {
 
 		if (!waterproof) missingFields.push('Select Environment');
 
-		if (!lightingPackaged) missingFields.push('Select Lighting Packaged');
+		if (!includedItems) missingFields.push('Select Included Items');
 
 		if (!mounting) missingFields.push('Select Mounting');
 
@@ -488,7 +487,7 @@ export function Letters({ item }) {
 		sets,
 		usdSinglePrice,
 		cadSinglePrice,
-		lightingPackaged,
+		includedItems,
 	]);
 
 	useEffect(() => {
@@ -673,14 +672,14 @@ export function Letters({ item }) {
 	useEffect(() => {
 		if (waterproof) {
 			if (waterproof === INDOOR_NOT_WATERPROOF) {
-				setLightingPackaged(LIGHTING_INDOOR);
+				setIncludedItems(LIGHTING_INDOOR);
 				setLightingOptions(
 					lightingPackagedOptions.filter(
 						(option) => option.value === LIGHTING_INDOOR
 					)
 				);
 			} else {
-				setLightingPackaged(
+				setIncludedItems(
 					'Low Voltage LED Driver, 10ft open wires, 1:1 blueprint'
 				);
 				setLightingOptions(
@@ -846,20 +845,6 @@ export function Letters({ item }) {
 				/>
 
 				<Dropdown
-					title="Environment"
-					onChange={handleOnChangeWaterproof}
-					options={waterProofOptions.map((option) => (
-						<option
-							value={option.option}
-							selected={option.option == waterproof}
-						>
-							{option.option}
-						</option>
-					))}
-					value={waterproof}
-				/>
-
-				<Dropdown
 					title="Mounting"
 					onChange={handleOnChangeMounting}
 					options={mountingDefaultOptions.map((mounting) => (
@@ -906,17 +891,31 @@ export function Letters({ item }) {
 				)}
 
 				<Dropdown
-					title="Lighting Packaged"
-					onChange={handleOnChangeLightingPackaged}
+					title="Environment"
+					onChange={handleOnChangeWaterproof}
+					options={waterProofOptions.map((option) => (
+						<option
+							value={option.option}
+							selected={option.option == waterproof}
+						>
+							{option.option}
+						</option>
+					))}
+					value={waterproof}
+				/>
+
+				<Dropdown
+					title="Included Items"
+					onChange={handleOnChangeincludedItems}
 					options={lightingOptions.map((option) => (
 						<option
 							value={option.value}
-							selected={option.value == lightingPackaged}
+							selected={option.value == includedItems}
 						>
 							{option.value}
 						</option>
 					))}
-					value={lightingPackaged}
+					value={includedItems}
 				/>
 
 				<Dropdown

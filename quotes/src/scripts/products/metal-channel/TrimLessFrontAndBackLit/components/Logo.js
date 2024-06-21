@@ -80,7 +80,7 @@ export function Logo({ item }) {
 		item.spacerStandoffDistance ?? ''
 	);
 
-	const [lightingPackaged, setLightingPackaged] = useState('');
+	const [includedItems, setIncludedItems] = useState('');
 
 	const [sets, setSets] = useState(item.sets ?? 1);
 	const handleOnChangeSets = (e) => {
@@ -113,7 +113,7 @@ export function Logo({ item }) {
 					comments,
 					depth,
 					trimLessWaterproof: waterproof,
-					lightingPackaged,
+					includedItems,
 					returnColor: color,
 					usdPrice,
 					cadPrice,
@@ -143,8 +143,7 @@ export function Logo({ item }) {
 
 	const handleComments = (e) => setComments(e.target.value);
 
-	const handleOnChangeLightingPackaged = (e) =>
-		setLightingPackaged(e.target.value);
+	const handleOnChangeincludedItems = (e) => setIncludedItems(e.target.value);
 
 	const handleOnChangeMounting = (e) => {
 		const target = e.target.value;
@@ -231,7 +230,7 @@ export function Logo({ item }) {
 
 		if (!waterproof) missingFields.push('Select Environment');
 
-		if (!lightingPackaged) missingFields.push('Select Lighting Packaged');
+		if (!includedItems) missingFields.push('Select Included Items');
 
 		if (!mounting) missingFields.push('Select Mounting');
 
@@ -310,7 +309,7 @@ export function Logo({ item }) {
 		height,
 		cadSinglePrice,
 		usdSinglePrice,
-		lightingPackaged,
+		includedItems,
 	]);
 
 	if (frontAcrylicCover === '3M Vinyl') {
@@ -404,14 +403,14 @@ export function Logo({ item }) {
 	useEffect(() => {
 		if (waterproof) {
 			if (waterproof === INDOOR_NOT_WATERPROOF) {
-				setLightingPackaged(LIGHTING_INDOOR);
+				setIncludedItems(LIGHTING_INDOOR);
 				setLightingOptions(
 					lightingPackagedOptions.filter(
 						(option) => option.value === LIGHTING_INDOOR
 					)
 				);
 			} else {
-				setLightingPackaged(
+				setIncludedItems(
 					'Low Voltage LED Driver, 10ft open wires, 1:1 blueprint'
 				);
 				setLightingOptions(
@@ -580,17 +579,17 @@ export function Logo({ item }) {
 				/>
 
 				<Dropdown
-					title="Lighting Packaged"
-					onChange={handleOnChangeLightingPackaged}
+					title="Included Items"
+					onChange={handleOnChangeincludedItems}
 					options={lightingOptions.map((option) => (
 						<option
 							value={option.value}
-							selected={option.value == lightingPackaged}
+							selected={option.value == includedItems}
 						>
 							{option.value}
 						</option>
 					))}
-					value={lightingPackaged}
+					value={includedItems}
 				/>
 
 				<Dropdown

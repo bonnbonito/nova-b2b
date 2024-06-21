@@ -4821,7 +4821,7 @@ const AcrylicBackLit = () => {
       },
       ledLightColor: '6500K White',
       backOption: 'Backlit',
-      lightingPackaged: _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.LIGHTING_INDOOR,
+      includedItems: _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.LIGHTING_INDOOR,
       letterHeight: '',
       usdPrice: 0,
       cadPrice: 0,
@@ -5003,7 +5003,7 @@ const lettersHeight = {
 function Letters({
   item
 }) {
-  var _item$letters, _item$comments, _item$font, _item$faceReturnColor, _item$waterproof, _item$backOption, _item$acrylicChannelT, _item$ledLightColor, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
+  var _item$letters, _item$comments, _item$font, _item$faceReturnColor, _item$trimLessWaterpr, _item$backOption, _item$acrylicChannelT, _item$ledLightColor, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
   const {
     signage,
     setSignage,
@@ -5018,7 +5018,7 @@ function Letters({
     color: '#000000'
   });
   const [openColor, setOpenColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.INDOOR_NOT_WATERPROOF);
+  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$trimLessWaterpr = item.trimLessWaterproof) !== null && _item$trimLessWaterpr !== void 0 ? _item$trimLessWaterpr : _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.INDOOR_NOT_WATERPROOF);
   const [backOption, setBackOption] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$backOption = item.backOption) !== null && _item$backOption !== void 0 ? _item$backOption : 'Backlit');
   const [acrylicChannelThickness, setAcrylicChannelThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicChannelT = item.acrylicChannelThickness) !== null && _item$acrylicChannelT !== void 0 ? _item$acrylicChannelT : '1.2"');
   const [ledLightColor, setLedLightColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$ledLightColor = item.ledLightColor) !== null && _item$ledLightColor !== void 0 ? _item$ledLightColor : '6500K White');
@@ -5042,7 +5042,7 @@ function Letters({
   const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$studLength = item.studLength) !== null && _item$studLength !== void 0 ? _item$studLength : '');
   const [spacerStandoffOptions, setSpacerStandoffOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.spacerStandoffDefaultOptions);
   const [spacerStandoffDistance, setSpacerStandoffDistance] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$spacerStandoffD = item.spacerStandoffDistance) !== null && _item$spacerStandoffD !== void 0 ? _item$spacerStandoffD : '');
-  const [lightingPackaged, setLightingPackaged] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_defaults__WEBPACK_IMPORTED_MODULE_15__.LIGHTING_INDOOR);
+  const [includedItems, setincludedItems] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_defaults__WEBPACK_IMPORTED_MODULE_15__.LIGHTING_INDOOR);
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
   const colorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const fontRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
@@ -5085,7 +5085,7 @@ function Letters({
       font,
       acrylicChannelThickness,
       mounting: selectedMounting,
-      waterproof,
+      trimLessWaterproof: waterproof,
       backOption,
       faceReturnColor: color,
       letterHeight: selectedLetterHeight,
@@ -5106,7 +5106,7 @@ function Letters({
       spacerStandoffDistance,
       usdSinglePrice,
       cadSinglePrice,
-      lightingPackaged
+      includedItems
     };
     setSignage(prevSignage => prevSignage.map(sign => sign.id === item.id ? {
       ...sign,
@@ -5167,9 +5167,9 @@ function Letters({
     const target = e.target.value;
     setWaterproof(target);
     if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.INDOOR_NOT_WATERPROOF) {
-      setLightingPackaged(_utils_defaults__WEBPACK_IMPORTED_MODULE_15__.LIGHTING_INDOOR);
+      setincludedItems(_utils_defaults__WEBPACK_IMPORTED_MODULE_15__.LIGHTING_INDOOR);
     } else {
-      setLightingPackaged('');
+      setincludedItems('');
     }
   };
   const handleOnChangeBackOption = e => setBackOption(e.target.value);
@@ -5302,7 +5302,7 @@ function Letters({
   }, [letters, font, color, acrylicChannelThickness, selectedMounting, waterproof, selectedLetterHeight, fileUrls, fontFileUrl, customColor, sets, studLength, spacerStandoffDistance]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-  }, [letters, comments, font, acrylicChannelThickness, selectedMounting, waterproof, backOption, color, usdPrice, cadPrice, selectedLetterHeight, fileUrls, fileNames, filePaths, files, fontFileUrl, fontFileName, fontFilePath, fontFile, customColor, sets, studLength, spacerStandoffDistance, ledLightColor, usdSinglePrice, cadSinglePrice, lightingPackaged]);
+  }, [letters, comments, font, acrylicChannelThickness, selectedMounting, waterproof, backOption, color, usdPrice, cadPrice, selectedLetterHeight, fileUrls, fileNames, filePaths, files, fontFileUrl, fontFileName, fontFilePath, fontFile, customColor, sets, studLength, spacerStandoffDistance, ledLightColor, usdSinglePrice, cadSinglePrice, includedItems]);
   (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_6__["default"])([colorRef, fontRef], () => {
     if (!openColor && !openFont) return;
     setOpenColor(false);
@@ -5398,15 +5398,6 @@ function Letters({
     }, color)),
     value: ledLightColor
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Environment",
-    onChange: handleOnChangeWaterproof,
-    options: waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      value: option.option,
-      selected: option.option == waterproof
-    }, option.option)),
-    value: waterproof,
-    onlyValue: true
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Back Option",
     onChange: handleOnChangeBackOption,
     options: backOptionOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -5448,7 +5439,16 @@ function Letters({
     }, option.value)),
     value: studLength
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Included in the Package",
+    title: "Environment",
+    onChange: handleOnChangeWaterproof,
+    options: waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.option,
+      selected: option.option == waterproof
+    }, option.option)),
+    value: waterproof,
+    onlyValue: true
+  }), waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.INDOOR_NOT_WATERPROOF && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Included Items",
     options: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.LIGHTING_INDOOR,
       selected: _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.LIGHTING_INDOOR
@@ -5565,7 +5565,7 @@ const maxWidthOptions = Array.from({
 function Logo({
   item
 }) {
-  var _item$width, _item$height, _item$comments, _item$faceReturnColor, _item$waterproof, _item$backOption, _item$acrylicChannelT, _item$ledLightColor, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$usdDiscount, _item$cadDiscount, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
+  var _item$width, _item$height, _item$comments, _item$faceReturnColor, _item$trimLessWaterpr, _item$backOption, _item$acrylicChannelT, _item$ledLightColor, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$usdDiscount, _item$cadDiscount, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
   const {
     signage,
     setSignage,
@@ -5579,7 +5579,7 @@ function Logo({
     color: '#000000'
   });
   const [openColor, setOpenColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.INDOOR_NOT_WATERPROOF);
+  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$trimLessWaterpr = item.trimLessWaterproof) !== null && _item$trimLessWaterpr !== void 0 ? _item$trimLessWaterpr : _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.INDOOR_NOT_WATERPROOF);
   const [backOption, setBackOption] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$backOption = item.backOption) !== null && _item$backOption !== void 0 ? _item$backOption : 'Backlit');
   const [acrylicChannelThickness, setAcrylicChannelThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicChannelT = item.acrylicChannelThickness) !== null && _item$acrylicChannelT !== void 0 ? _item$acrylicChannelT : '1.2"');
   const [ledLightColor, setLedLightColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$ledLightColor = item.ledLightColor) !== null && _item$ledLightColor !== void 0 ? _item$ledLightColor : '6500K White');
@@ -5599,7 +5599,7 @@ function Logo({
   const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$studLength = item.studLength) !== null && _item$studLength !== void 0 ? _item$studLength : '');
   const [spacerStandoffOptions, setSpacerStandoffOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.spacerStandoffDefaultOptions);
   const [spacerStandoffDistance, setSpacerStandoffDistance] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$spacerStandoffD = item.spacerStandoffDistance) !== null && _item$spacerStandoffD !== void 0 ? _item$spacerStandoffD : '');
-  const [lightingPackaged, setLightingPackaged] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_defaults__WEBPACK_IMPORTED_MODULE_12__.LIGHTING_INDOOR);
+  const [includedItems, setincludedItems] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_defaults__WEBPACK_IMPORTED_MODULE_12__.LIGHTING_INDOOR);
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
   const colorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   function updateSignage() {
@@ -5613,7 +5613,7 @@ function Logo({
       height,
       acrylicChannelThickness,
       mounting: selectedMounting,
-      waterproof,
+      trimLessWaterproof: waterproof,
       backOption,
       faceReturnColor: color,
       ledLightColor,
@@ -5629,7 +5629,7 @@ function Logo({
       spacerStandoffDistance,
       usdSinglePrice,
       cadSinglePrice,
-      lightingPackaged
+      includedItems
     };
     setSignage(prevSignage => prevSignage.map(sign => sign.id === item.id ? {
       ...sign,
@@ -5656,9 +5656,9 @@ function Logo({
     const target = e.target.value;
     setWaterproof(target);
     if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.INDOOR_NOT_WATERPROOF) {
-      setLightingPackaged(_utils_defaults__WEBPACK_IMPORTED_MODULE_12__.LIGHTING_INDOOR);
+      setincludedItems(_utils_defaults__WEBPACK_IMPORTED_MODULE_12__.LIGHTING_INDOOR);
     } else {
-      setLightingPackaged('');
+      setincludedItems('');
     }
   };
   const handleOnChangeBackOption = e => setBackOption(e.target.value);
@@ -5796,7 +5796,7 @@ function Logo({
   }, [color, acrylicChannelThickness, selectedMounting, waterproof, fileUrls, customColor, sets, studLength, spacerStandoffDistance, width, height]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-  }, [comments, acrylicChannelThickness, selectedMounting, waterproof, backOption, color, usdPrice, cadPrice, fileUrls, fileNames, filePaths, files, customColor, sets, studLength, spacerStandoffDistance, ledLightColor, usdSinglePrice, cadSinglePrice, width, height, lightingPackaged]);
+  }, [comments, acrylicChannelThickness, selectedMounting, waterproof, backOption, color, usdPrice, cadPrice, fileUrls, fileNames, filePaths, files, customColor, sets, studLength, spacerStandoffDistance, ledLightColor, usdSinglePrice, cadSinglePrice, width, height, includedItems]);
   (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_4__["default"])([colorRef], () => {
     if (!openColor) return;
     setOpenColor(false);
@@ -5851,14 +5851,6 @@ function Logo({
     }, color)),
     value: ledLightColor
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Environment",
-    onChange: handleOnChangeWaterproof,
-    options: waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      value: option.option,
-      selected: option.option == waterproof
-    }, option.option)),
-    value: waterproof
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Back Option",
     onChange: handleOnChangeBackOption,
     options: backOptionOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -5899,8 +5891,16 @@ function Logo({
       selected: option.value == studLength
     }, option.value)),
     value: studLength
-  })), waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.INDOOR_NOT_WATERPROOF && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Included in the Package",
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Environment",
+    onChange: handleOnChangeWaterproof,
+    options: waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.option,
+      selected: option.option == waterproof
+    }, option.option)),
+    value: waterproof
+  }), waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.INDOOR_NOT_WATERPROOF && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Included Items",
     options: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.LIGHTING_INDOOR,
       selected: _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.LIGHTING_INDOOR
@@ -5995,7 +5995,7 @@ const AcrylicFrontBackLit = () => {
       font: '',
       comments: '',
       waterproof: _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.INDOOR_NOT_WATERPROOF,
-      lightingPackaged: _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.LIGHTING_INDOOR,
+      includedItems: _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.LIGHTING_INDOOR,
       acrylicChannelThickness: '1.2" (30mm)',
       acrylicFront: 'White',
       acrylicReturnPaintColor: 'Black',
@@ -6053,7 +6053,7 @@ const AcrylicFrontBackLit = () => {
     ledLightColor: '6500K White',
     waterproof: _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.INDOOR_NOT_WATERPROOF,
     backOption: 'Backlit',
-    lightingPackaged: _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.LIGHTING_INDOOR,
+    includedItems: _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.LIGHTING_INDOOR,
     product: NovaQuote.product
   };
   const addSignage = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(type => {
@@ -6194,7 +6194,7 @@ const lettersHeight = {
 function Letters({
   item
 }) {
-  var _item$letters, _item$comments, _item$font, _item$acrylicReturnPa, _item$waterproof, _item$acrylicChannelT, _item$ledLightColor, _item$acrylicFront, _item$vinylWhite, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$backOption, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets, _item$vinylWhite$colo;
+  var _item$letters, _item$comments, _item$font, _item$acrylicReturnPa, _item$trimLessWaterpr, _item$acrylicChannelT, _item$ledLightColor, _item$acrylicFront, _item$vinylWhite, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$backOption, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets, _item$vinylWhite$colo;
   const {
     signage,
     setSignage,
@@ -6206,7 +6206,7 @@ function Letters({
   const [openFont, setOpenFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicReturnPa = item.acrylicReturnPaintColor) !== null && _item$acrylicReturnPa !== void 0 ? _item$acrylicReturnPa : 'Black');
   const [openColor, setOpenColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : '');
+  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$trimLessWaterpr = item.trimLessWaterproof) !== null && _item$trimLessWaterpr !== void 0 ? _item$trimLessWaterpr : _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.INDOOR_NOT_WATERPROOF);
   const [acrylicChannelThickness, setAcrylicChannelThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicChannelT = item.acrylicChannelThickness) !== null && _item$acrylicChannelT !== void 0 ? _item$acrylicChannelT : '1.2"');
   const [ledLightColor, setLedLightColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$ledLightColor = item.ledLightColor) !== null && _item$ledLightColor !== void 0 ? _item$ledLightColor : '6500K White');
   const handleOnChangeLedLight = e => setLedLightColor(e.target.value);
@@ -6281,7 +6281,7 @@ function Letters({
       font,
       acrylicChannelThickness,
       mounting: selectedMounting,
-      waterproof,
+      trimLessWaterproof: waterproof,
       acrylicReturnPaintColor: color,
       letterHeight: selectedLetterHeight,
       ledLightColor,
@@ -6303,7 +6303,8 @@ function Letters({
       acrylicFront,
       usdSinglePrice,
       cadSinglePrice,
-      backOption
+      backOption,
+      includedItems: _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.LIGHTING_INDOOR
     };
     setSignage(prevSignage => prevSignage.map(sign => sign.id === item.id ? {
       ...sign,
@@ -6634,15 +6635,6 @@ function Letters({
     }, color)),
     value: ledLightColor
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Environment",
-    onChange: handleOnChangeWaterproof,
-    options: waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      value: option.option,
-      selected: option.option == waterproof
-    }, option.option)),
-    value: waterproof,
-    onlyValue: true
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Back Option",
     onChange: handleOnChangeBackOption,
     options: backOptionOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -6683,8 +6675,17 @@ function Letters({
       selected: option.value == studLength
     }, option.value)),
     value: studLength
-  })), waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.INDOOR_NOT_WATERPROOF && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Included in the Package",
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Environment",
+    onChange: handleOnChangeWaterproof,
+    options: waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.option,
+      selected: option.option == waterproof
+    }, option.option)),
+    value: waterproof,
+    onlyValue: true
+  }), waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.INDOOR_NOT_WATERPROOF && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Included Items",
     options: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.LIGHTING_INDOOR,
       selected: _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.LIGHTING_INDOOR
@@ -6803,7 +6804,7 @@ const backOptionOptions = [{
 function Logo({
   item
 }) {
-  var _item$width, _item$height, _item$comments, _item$acrylicReturnPa, _item$waterproof, _item$acrylicChannelT, _item$ledLightColor, _item$acrylicFront, _item$vinylWhite, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$usdPrice, _item$cadPrice, _item$usdDiscount, _item$cadDiscount, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$backOption, _item$spacerStandoffD, _item$sets;
+  var _item$width, _item$height, _item$comments, _item$acrylicReturnPa, _item$trimLessWaterpr, _item$acrylicChannelT, _item$ledLightColor, _item$acrylicFront, _item$vinylWhite, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$usdPrice, _item$cadPrice, _item$usdDiscount, _item$cadDiscount, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$backOption, _item$spacerStandoffD, _item$sets;
   const {
     signage,
     setSignage,
@@ -6814,7 +6815,7 @@ function Logo({
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
   const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicReturnPa = item.acrylicReturnPaintColor) !== null && _item$acrylicReturnPa !== void 0 ? _item$acrylicReturnPa : 'Black');
   const [openColor, setOpenColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : '');
+  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$trimLessWaterpr = item.trimLessWaterproof) !== null && _item$trimLessWaterpr !== void 0 ? _item$trimLessWaterpr : _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF);
   const [acrylicChannelThickness, setAcrylicChannelThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicChannelT = item.acrylicChannelThickness) !== null && _item$acrylicChannelT !== void 0 ? _item$acrylicChannelT : '1.2"');
   const [ledLightColor, setLedLightColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$ledLightColor = item.ledLightColor) !== null && _item$ledLightColor !== void 0 ? _item$ledLightColor : '6500K White');
   const handleOnChangeLedLight = e => setLedLightColor(e.target.value);
@@ -6856,7 +6857,7 @@ function Logo({
       height,
       acrylicChannelThickness,
       mounting: selectedMounting,
-      waterproof,
+      trimLessWaterproof: waterproof,
       acrylicReturnPaintColor: color,
       ledLightColor,
       usdPrice,
@@ -6873,7 +6874,8 @@ function Logo({
       acrylicFront,
       usdSinglePrice,
       cadSinglePrice,
-      backOption
+      backOption,
+      includedItems: _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR
     };
     setSignage(prevSignage => prevSignage.map(sign => sign.id === item.id ? {
       ...sign,
@@ -7137,15 +7139,6 @@ function Logo({
     }, color)),
     value: ledLightColor
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Environment",
-    onChange: handleOnChangeWaterproof,
-    options: waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      value: option.option,
-      selected: option.option == waterproof
-    }, option.option)),
-    value: waterproof,
-    onlyValue: true
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Back Option",
     onChange: handleOnChangeBackOption,
     options: backOptionOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -7186,8 +7179,17 @@ function Logo({
       selected: option.value == studLength
     }, option.value)),
     value: studLength
-  })), waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Included in the Package",
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Environment",
+    onChange: handleOnChangeWaterproof,
+    options: waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.option,
+      selected: option.option == waterproof
+    }, option.option)),
+    value: waterproof,
+    onlyValue: true
+  }), waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Included Items",
     options: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR,
       selected: _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR
@@ -7307,7 +7309,7 @@ const AcrylicFrontLit = () => {
       font: '',
       comments: '',
       waterproof: _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.INDOOR_NOT_WATERPROOF,
-      lightingPackaged: _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.LIGHTING_INDOOR,
+      includedItems: _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.LIGHTING_INDOOR,
       acrylicChannelThickness: '1.2" (30mm)',
       acrylicFront: 'White',
       acrylicReturnPaintColor: 'Black',
@@ -7363,7 +7365,7 @@ const AcrylicFrontLit = () => {
       code: ''
     },
     ledLightColor: '6500K White',
-    lightingPackaged: _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.LIGHTING_INDOOR,
+    includedItems: _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.LIGHTING_INDOOR,
     product: NovaQuote.product
   };
   const addSignage = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(type => {
@@ -7501,7 +7503,7 @@ const lettersHeight = {
 function Letters({
   item
 }) {
-  var _item$letters, _item$comments, _item$font, _item$acrylicReturnPa, _item$waterproof, _item$acrylicChannelT, _item$ledLightColor, _item$acrylicFront, _item$vinylWhite, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdDiscount, _item$cadDiscount, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets, _item$vinylWhite$colo;
+  var _item$letters, _item$comments, _item$font, _item$acrylicReturnPa, _item$trimLessWaterpr, _item$acrylicChannelT, _item$ledLightColor, _item$acrylicFront, _item$vinylWhite, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdDiscount, _item$cadDiscount, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets, _item$vinylWhite$colo;
   const {
     signage,
     setSignage,
@@ -7513,7 +7515,7 @@ function Letters({
   const [openFont, setOpenFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicReturnPa = item.acrylicReturnPaintColor) !== null && _item$acrylicReturnPa !== void 0 ? _item$acrylicReturnPa : 'Black');
   const [openColor, setOpenColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.INDOOR_NOT_WATERPROOF);
+  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$trimLessWaterpr = item.trimLessWaterproof) !== null && _item$trimLessWaterpr !== void 0 ? _item$trimLessWaterpr : _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.INDOOR_NOT_WATERPROOF);
   const [acrylicChannelThickness, setAcrylicChannelThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicChannelT = item.acrylicChannelThickness) !== null && _item$acrylicChannelT !== void 0 ? _item$acrylicChannelT : '1.2"');
   const [ledLightColor, setLedLightColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$ledLightColor = item.ledLightColor) !== null && _item$ledLightColor !== void 0 ? _item$ledLightColor : '6500K White');
   const handleOnChangeLedLight = e => setLedLightColor(e.target.value);
@@ -7545,7 +7547,7 @@ function Letters({
   const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$studLength = item.studLength) !== null && _item$studLength !== void 0 ? _item$studLength : '');
   const [spacerStandoffOptions, setSpacerStandoffOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.spacerStandoffDefaultOptions);
   const [spacerStandoffDistance, setSpacerStandoffDistance] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$spacerStandoffD = item.spacerStandoffDistance) !== null && _item$spacerStandoffD !== void 0 ? _item$spacerStandoffD : '');
-  const [lightingPackaged, setLightingPackaged] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_defaults__WEBPACK_IMPORTED_MODULE_16__.LIGHTING_INDOOR);
+  const [includedItems, setincludedItems] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_defaults__WEBPACK_IMPORTED_MODULE_16__.LIGHTING_INDOOR);
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
   const colorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const fontRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
@@ -7589,7 +7591,7 @@ function Letters({
       font,
       acrylicChannelThickness,
       mounting: selectedMounting,
-      waterproof,
+      trimLessWaterproof: waterproof,
       acrylicReturnPaintColor: color,
       letterHeight: selectedLetterHeight,
       ledLightColor,
@@ -7611,7 +7613,7 @@ function Letters({
       acrylicFront,
       usdSinglePrice,
       cadSinglePrice,
-      lightingPackaged
+      includedItems
     };
     setSignage(prevSignage => prevSignage.map(sign => sign.id === item.id ? {
       ...sign,
@@ -7640,9 +7642,9 @@ function Letters({
     const target = e.target.value;
     setWaterproof(target);
     if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.INDOOR_NOT_WATERPROOF) {
-      setLightingPackaged(_utils_defaults__WEBPACK_IMPORTED_MODULE_16__.LIGHTING_INDOOR);
+      setincludedItems(_utils_defaults__WEBPACK_IMPORTED_MODULE_16__.LIGHTING_INDOOR);
     } else {
-      setLightingPackaged('');
+      setincludedItems('');
     }
   };
   const handleOnChangeThickness = e => {
@@ -7834,7 +7836,7 @@ function Letters({
   }, [letters, font, color, acrylicChannelThickness, selectedMounting, waterproof, selectedLetterHeight, fileUrls, fontFileUrl, customColor, sets, studLength, spacerStandoffDistance, acrylicFront, vinylWhite]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-  }, [letters, comments, font, acrylicChannelThickness, selectedMounting, waterproof, color, usdPrice, cadPrice, selectedLetterHeight, fileUrls, fileNames, filePaths, files, fontFileUrl, fontFileName, fontFilePath, fontFile, customColor, sets, studLength, spacerStandoffDistance, acrylicFront, vinylWhite, ledLightColor, usdSinglePrice, cadSinglePrice, lightingPackaged]);
+  }, [letters, comments, font, acrylicChannelThickness, selectedMounting, waterproof, color, usdPrice, cadPrice, selectedLetterHeight, fileUrls, fileNames, filePaths, files, fontFileUrl, fontFileName, fontFilePath, fontFile, customColor, sets, studLength, spacerStandoffDistance, acrylicFront, vinylWhite, ledLightColor, usdSinglePrice, cadSinglePrice, includedItems]);
   (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_6__["default"])([colorRef, fontRef, acrylicFront === '3M Vinyl' ? vinyl3MRef : null].filter(Boolean), () => {
     if (acrylicFront === '3M Vinyl') {
       if (!openColor && !openFont && !openVinylWhite) return;
@@ -7961,15 +7963,6 @@ function Letters({
     }, color)),
     value: ledLightColor
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Environment",
-    onChange: handleOnChangeWaterproof,
-    options: waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      value: option.option,
-      selected: option.option == waterproof
-    }, option.option)),
-    value: waterproof,
-    onlyValue: true
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting Options",
     onChange: handleOnChangeMount,
     options: mountingDefaultOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -8001,8 +7994,17 @@ function Letters({
       selected: option.value == studLength
     }, option.value)),
     value: studLength
-  })), waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.INDOOR_NOT_WATERPROOF && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Included in the Package",
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Environment",
+    onChange: handleOnChangeWaterproof,
+    options: waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.option,
+      selected: option.option == waterproof
+    }, option.option)),
+    value: waterproof,
+    onlyValue: true
+  }), waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.INDOOR_NOT_WATERPROOF && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Included Items",
     options: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.LIGHTING_INDOOR,
       selected: _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.LIGHTING_INDOOR
@@ -8118,7 +8120,7 @@ const maxWidthOptions = Array.from({
 function Logo({
   item
 }) {
-  var _item$width, _item$height, _item$comments, _item$acrylicReturnPa, _item$waterproof, _item$acrylicChannelT, _item$ledLightColor, _item$acrylicFront, _item$vinylWhite, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$usdPrice, _item$cadPrice, _item$usdDiscount, _item$cadDiscount, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
+  var _item$width, _item$height, _item$comments, _item$acrylicReturnPa, _item$trimLessWaterpr, _item$acrylicChannelT, _item$ledLightColor, _item$acrylicFront, _item$vinylWhite, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$usdPrice, _item$cadPrice, _item$usdDiscount, _item$cadDiscount, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
   const {
     signage,
     setSignage,
@@ -8129,7 +8131,7 @@ function Logo({
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
   const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicReturnPa = item.acrylicReturnPaintColor) !== null && _item$acrylicReturnPa !== void 0 ? _item$acrylicReturnPa : 'Black');
   const [openColor, setOpenColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF);
+  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$trimLessWaterpr = item.trimLessWaterproof) !== null && _item$trimLessWaterpr !== void 0 ? _item$trimLessWaterpr : _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF);
   const [acrylicChannelThickness, setAcrylicChannelThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicChannelT = item.acrylicChannelThickness) !== null && _item$acrylicChannelT !== void 0 ? _item$acrylicChannelT : '1.2"');
   const [ledLightColor, setLedLightColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$ledLightColor = item.ledLightColor) !== null && _item$ledLightColor !== void 0 ? _item$ledLightColor : '6500K White');
   const handleOnChangeLedLight = e => setLedLightColor(e.target.value);
@@ -8155,7 +8157,7 @@ function Logo({
   const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$studLength = item.studLength) !== null && _item$studLength !== void 0 ? _item$studLength : '');
   const [spacerStandoffOptions, setSpacerStandoffOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.spacerStandoffDefaultOptions);
   const [spacerStandoffDistance, setSpacerStandoffDistance] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$spacerStandoffD = item.spacerStandoffDistance) !== null && _item$spacerStandoffD !== void 0 ? _item$spacerStandoffD : '');
-  const [lightingPackaged, setLightingPackaged] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR);
+  const [includedItems, setincludedItems] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR);
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
   const colorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const vinyl3MRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
@@ -8170,7 +8172,7 @@ function Logo({
       height,
       acrylicChannelThickness,
       mounting: selectedMounting,
-      waterproof,
+      trimLessWaterproof: waterproof,
       acrylicReturnPaintColor: color,
       ledLightColor,
       usdPrice,
@@ -8187,7 +8189,7 @@ function Logo({
       acrylicFront,
       usdSinglePrice,
       cadSinglePrice,
-      lightingPackaged
+      includedItems
     };
     setSignage(prevSignage => prevSignage.map(sign => sign.id === item.id ? {
       ...sign,
@@ -8214,9 +8216,9 @@ function Logo({
     const target = e.target.value;
     setWaterproof(target);
     if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF) {
-      setLightingPackaged(_utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR);
+      setincludedItems(_utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR);
     } else {
-      setLightingPackaged('');
+      setincludedItems('');
     }
   };
   const handleOnChangeThickness = e => {
@@ -8324,7 +8326,7 @@ function Logo({
   }, [color, width, height, acrylicChannelThickness, selectedMounting, waterproof, fileUrls, customColor, sets, studLength, spacerStandoffDistance, acrylicFront, vinylWhite]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-  }, [comments, width, height, acrylicChannelThickness, selectedMounting, waterproof, color, usdPrice, cadPrice, fileUrls, fileNames, filePaths, files, customColor, sets, studLength, spacerStandoffDistance, acrylicFront, vinylWhite, ledLightColor, usdSinglePrice, cadSinglePrice, lightingPackaged]);
+  }, [comments, width, height, acrylicChannelThickness, selectedMounting, waterproof, color, usdPrice, cadPrice, fileUrls, fileNames, filePaths, files, customColor, sets, studLength, spacerStandoffDistance, acrylicFront, vinylWhite, ledLightColor, usdSinglePrice, cadSinglePrice, includedItems]);
   if (acrylicFront === '3M Vinyl') {
     (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_4__["default"])([colorRef, vinyl3MRef], () => {
       if (!openColor && !openVinylWhite) return;
@@ -8457,14 +8459,6 @@ function Logo({
     }, color)),
     value: ledLightColor
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Environment",
-    onChange: handleOnChangeWaterproof,
-    options: waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      value: option.option,
-      selected: option.option == waterproof
-    }, option.option)),
-    value: waterproof
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting Options",
     onChange: handleOnChangeMount,
     options: mountingDefaultOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -8496,8 +8490,16 @@ function Logo({
       selected: option.value == studLength
     }, option.value)),
     value: studLength
-  })), waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Included in the Package",
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Environment",
+    onChange: handleOnChangeWaterproof,
+    options: waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.option,
+      selected: option.option == waterproof
+    }, option.option)),
+    value: waterproof
+  }), waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Included Items",
     options: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR,
       selected: _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR
@@ -8592,7 +8594,7 @@ const AcrylicFrontSideLit = () => {
       font: '',
       comments: '',
       waterproof: _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.INDOOR_NOT_WATERPROOF,
-      lightingPackaged: _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.LIGHTING_INDOOR,
+      includedItems: _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.LIGHTING_INDOOR,
       acrylicChannelThickness: '1.2" (30mm)',
       ledLightColor: '6500K White',
       letterHeight: '',
@@ -8635,7 +8637,7 @@ const AcrylicFrontSideLit = () => {
     acrylicReturn: 'White',
     ledLightColor: '6500K White',
     waterproof: _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.INDOOR_NOT_WATERPROOF,
-    lightingPackaged: _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.LIGHTING_INDOOR,
+    includedItems: _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.LIGHTING_INDOOR,
     product: NovaQuote.product,
     acrylicReturn: 'White'
   };
@@ -8777,7 +8779,7 @@ const lettersHeight = {
 function Letters({
   item
 }) {
-  var _item$letters, _item$comments, _item$font, _item$frontOption, _item$waterproof, _item$acrylicReturn, _item$vinylWhite, _item$acrylicChannelT, _item$ledLightColor, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets, _item$vinylWhite$colo;
+  var _item$letters, _item$comments, _item$font, _item$frontOption, _item$trimLessWaterpr, _item$acrylicReturn, _item$vinylWhite, _item$acrylicChannelT, _item$ledLightColor, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets, _item$vinylWhite$colo;
   const {
     signage,
     setSignage,
@@ -8789,7 +8791,7 @@ function Letters({
   const [openFont, setOpenFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [frontOption, setFrontOption] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$frontOption = item.frontOption) !== null && _item$frontOption !== void 0 ? _item$frontOption : '');
   const [openVinyl, setOpenVinyl] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : '');
+  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$trimLessWaterpr = item.trimLessWaterproof) !== null && _item$trimLessWaterpr !== void 0 ? _item$trimLessWaterpr : _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.INDOOR_NOT_WATERPROOF);
   const [acrylicReturn, setAcrylicReturn] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicReturn = item.acrylicReturn) !== null && _item$acrylicReturn !== void 0 ? _item$acrylicReturn : 'White');
   const [vinylWhite, setVinylWhite] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$vinylWhite = item.vinylWhite) !== null && _item$vinylWhite !== void 0 ? _item$vinylWhite : {
     name: '',
@@ -8860,7 +8862,7 @@ function Letters({
       font,
       acrylicChannelThickness,
       mounting: selectedMounting,
-      waterproof,
+      trimLessWaterproof: waterproof,
       frontOption,
       letterHeight: selectedLetterHeight,
       ledLightColor,
@@ -8879,7 +8881,8 @@ function Letters({
       studLength,
       spacerStandoffDistance,
       usdSinglePrice,
-      cadSinglePrice
+      cadSinglePrice,
+      includedItems: _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.LIGHTING_INDOOR
     };
     setSignage(prevSignage => prevSignage.map(sign => sign.id === item.id ? {
       ...sign,
@@ -9194,15 +9197,6 @@ function Letters({
     }, color)),
     value: ledLightColor
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Environment",
-    onChange: handleOnChangeWaterproof,
-    options: waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      value: option.option,
-      selected: option.option == waterproof
-    }, option.option)),
-    value: waterproof,
-    onlyValue: true
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting Options",
     onChange: handleOnChangeMount,
     options: mountingDefaultOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -9234,8 +9228,17 @@ function Letters({
       selected: option.value == studLength
     }, option.value)),
     value: studLength
-  })), waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.INDOOR_NOT_WATERPROOF && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Included in the Package",
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Environment",
+    onChange: handleOnChangeWaterproof,
+    options: waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.option,
+      selected: option.option == waterproof
+    }, option.option)),
+    value: waterproof,
+    onlyValue: true
+  }), waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.INDOOR_NOT_WATERPROOF && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Included Items",
     options: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.LIGHTING_INDOOR,
       selected: _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.LIGHTING_INDOOR
@@ -9328,7 +9331,7 @@ const frontOptionOptions = [{
 function Logo({
   item
 }) {
-  var _item$comments, _item$width, _item$height, _item$frontOption, _item$waterproof, _item$acrylicReturn, _item$vinylWhite, _item$acrylicChannelT, _item$ledLightColor, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$usdPrice, _item$cadPrice, _item$usdDiscount, _item$cadDiscount, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
+  var _item$comments, _item$width, _item$height, _item$frontOption, _item$trimLessWaterpr, _item$acrylicReturn, _item$vinylWhite, _item$acrylicChannelT, _item$ledLightColor, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$usdPrice, _item$cadPrice, _item$usdDiscount, _item$cadDiscount, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
   const {
     signage,
     setSignage,
@@ -9339,7 +9342,7 @@ function Logo({
   const [height, setHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$height = item.height) !== null && _item$height !== void 0 ? _item$height : '');
   const [frontOption, setFrontOption] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$frontOption = item.frontOption) !== null && _item$frontOption !== void 0 ? _item$frontOption : '');
   const [openVinyl, setOpenVinyl] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : '');
+  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$trimLessWaterpr = item.trimLessWaterproof) !== null && _item$trimLessWaterpr !== void 0 ? _item$trimLessWaterpr : _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.INDOOR_NOT_WATERPROOF);
   const [acrylicReturn, setAcrylicReturn] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicReturn = item.acrylicReturn) !== null && _item$acrylicReturn !== void 0 ? _item$acrylicReturn : 'White');
   const [vinylWhite, setVinylWhite] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$vinylWhite = item.vinylWhite) !== null && _item$vinylWhite !== void 0 ? _item$vinylWhite : {
     name: '',
@@ -9376,7 +9379,7 @@ function Logo({
       height,
       acrylicChannelThickness,
       mounting: selectedMounting,
-      waterproof,
+      trimLessWaterproof: waterproof,
       frontOption,
       ledLightColor,
       vinylWhite,
@@ -9390,7 +9393,8 @@ function Logo({
       studLength,
       spacerStandoffDistance,
       usdSinglePrice,
-      cadSinglePrice
+      cadSinglePrice,
+      includedItems: _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.LIGHTING_INDOOR
     };
     setSignage(prevSignage => prevSignage.map(sign => sign.id === item.id ? {
       ...sign,
@@ -9630,15 +9634,6 @@ function Logo({
     }, color)),
     value: ledLightColor
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Environment",
-    onChange: handleOnChangeWaterproof,
-    options: waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      value: option.option,
-      selected: option.option == waterproof
-    }, option.option)),
-    value: waterproof,
-    onlyValue: true
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting Options",
     onChange: handleOnChangeMount,
     options: mountingDefaultOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -9670,8 +9665,17 @@ function Logo({
       selected: option.value == studLength
     }, option.value)),
     value: studLength
-  })), waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.INDOOR_NOT_WATERPROOF && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Included in the Package",
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Environment",
+    onChange: handleOnChangeWaterproof,
+    options: waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.option,
+      selected: option.option == waterproof
+    }, option.option)),
+    value: waterproof,
+    onlyValue: true
+  }), waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.INDOOR_NOT_WATERPROOF && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Included Items",
     options: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.LIGHTING_INDOOR,
       selected: _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.LIGHTING_INDOOR
@@ -9781,7 +9785,7 @@ const AcrylicSideLit = () => {
       font: '',
       comments: '',
       waterproof: _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.INDOOR_NOT_WATERPROOF,
-      lightingPackaged: _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.LIGHTING_INDOOR,
+      includedItems: _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.LIGHTING_INDOOR,
       acrylicChannelThickness: '1.2" (30mm)',
       ledLightColor: '6500K White',
       letterHeight: '',
@@ -9824,7 +9828,7 @@ const AcrylicSideLit = () => {
     acrylicReturn: 'White',
     ledLightColor: '6500K White',
     waterproof: _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.INDOOR_NOT_WATERPROOF,
-    lightingPackaged: _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.LIGHTING_INDOOR,
+    includedItems: _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.LIGHTING_INDOOR,
     product: NovaQuote.product,
     acrylicReturn: 'White'
   };
@@ -9963,7 +9967,7 @@ const lettersHeight = {
 function Letters({
   item
 }) {
-  var _item$letters, _item$comments, _item$font, _item$paintColor, _item$frontOption, _item$waterproof, _item$acrylicReturn, _item$acrylicChannelT, _item$ledLightColor, _item$metalLaminate, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
+  var _item$letters, _item$comments, _item$font, _item$paintColor, _item$frontOption, _item$trimLessWaterpr, _item$acrylicReturn, _item$acrylicChannelT, _item$ledLightColor, _item$metalLaminate, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
   const {
     signage,
     setSignage,
@@ -9976,7 +9980,7 @@ function Letters({
   const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$paintColor = item.paintColor) !== null && _item$paintColor !== void 0 ? _item$paintColor : '');
   const [frontOption, setFrontOption] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$frontOption = item.frontOption) !== null && _item$frontOption !== void 0 ? _item$frontOption : '');
   const [openColor, setOpenColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : '');
+  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$trimLessWaterpr = item.trimLessWaterproof) !== null && _item$trimLessWaterpr !== void 0 ? _item$trimLessWaterpr : _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.INDOOR_NOT_WATERPROOF);
   const [acrylicReturn, setAcrylicReturn] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicReturn = item.acrylicReturn) !== null && _item$acrylicReturn !== void 0 ? _item$acrylicReturn : 'White');
   const [acrylicChannelThickness, setAcrylicChannelThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicChannelT = item.acrylicChannelThickness) !== null && _item$acrylicChannelT !== void 0 ? _item$acrylicChannelT : '1.2"');
   const [ledLightColor, setLedLightColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$ledLightColor = item.ledLightColor) !== null && _item$ledLightColor !== void 0 ? _item$ledLightColor : '6500K White');
@@ -10044,7 +10048,7 @@ function Letters({
       font,
       acrylicChannelThickness,
       mounting: selectedMounting,
-      waterproof,
+      trimLessWaterproof: waterproof,
       frontOption,
       paintColor: color,
       letterHeight: selectedLetterHeight,
@@ -10065,7 +10069,8 @@ function Letters({
       spacerStandoffDistance,
       usdSinglePrice,
       cadSinglePrice,
-      metalLaminate
+      metalLaminate,
+      includedItems: _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.LIGHTING_INDOOR
     };
     setSignage(prevSignage => prevSignage.map(sign => sign.id === item.id ? {
       ...sign,
@@ -10395,15 +10400,6 @@ function Letters({
     }, color)),
     value: ledLightColor
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Environment",
-    onChange: handleOnChangeWaterproof,
-    options: waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      value: option.option,
-      selected: option.option == waterproof
-    }, option.option)),
-    value: waterproof,
-    onlyValue: true
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting Options",
     onChange: handleOnChangeMount,
     options: mountingDefaultOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -10435,8 +10431,17 @@ function Letters({
       selected: option.value == studLength
     }, option.value)),
     value: studLength
-  })), waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.INDOOR_NOT_WATERPROOF && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Included in the Package",
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Environment",
+    onChange: handleOnChangeWaterproof,
+    options: waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.option,
+      selected: option.option == waterproof
+    }, option.option)),
+    value: waterproof,
+    onlyValue: true
+  }), waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.INDOOR_NOT_WATERPROOF && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Included Items",
     options: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.LIGHTING_INDOOR,
       selected: _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.LIGHTING_INDOOR
@@ -10538,7 +10543,7 @@ const frontOptionOptions = [{
 function Logo({
   item
 }) {
-  var _item$comments, _item$width, _item$height, _item$paintColor, _item$frontOption, _item$waterproof, _item$acrylicReturn, _item$acrylicChannelT, _item$ledLightColor, _item$metalLaminate, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
+  var _item$comments, _item$width, _item$height, _item$paintColor, _item$frontOption, _item$trimLessWaterpr, _item$acrylicReturn, _item$acrylicChannelT, _item$ledLightColor, _item$metalLaminate, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
   const {
     signage,
     setSignage,
@@ -10550,7 +10555,7 @@ function Logo({
   const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$paintColor = item.paintColor) !== null && _item$paintColor !== void 0 ? _item$paintColor : '');
   const [frontOption, setFrontOption] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$frontOption = item.frontOption) !== null && _item$frontOption !== void 0 ? _item$frontOption : '');
   const [openColor, setOpenColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : '');
+  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$trimLessWaterpr = item.trimLessWaterproof) !== null && _item$trimLessWaterpr !== void 0 ? _item$trimLessWaterpr : _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF);
   const [acrylicReturn, setAcrylicReturn] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicReturn = item.acrylicReturn) !== null && _item$acrylicReturn !== void 0 ? _item$acrylicReturn : 'White');
   const [acrylicChannelThickness, setAcrylicChannelThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicChannelT = item.acrylicChannelThickness) !== null && _item$acrylicChannelT !== void 0 ? _item$acrylicChannelT : '1.2"');
   const [ledLightColor, setLedLightColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$ledLightColor = item.ledLightColor) !== null && _item$ledLightColor !== void 0 ? _item$ledLightColor : '6500K White');
@@ -10581,7 +10586,7 @@ function Logo({
       comments,
       acrylicChannelThickness,
       mounting: selectedMounting,
-      waterproof,
+      trimLessWaterproof: waterproof,
       frontOption,
       paintColor: color,
       ledLightColor,
@@ -10599,7 +10604,8 @@ function Logo({
       cadSinglePrice,
       metalLaminate,
       width,
-      height
+      height,
+      includedItems: _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR
     };
     setSignage(prevSignage => prevSignage.map(sign => sign.id === item.id ? {
       ...sign,
@@ -10856,15 +10862,6 @@ function Logo({
     }, color)),
     value: ledLightColor
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Environment",
-    onChange: handleOnChangeWaterproof,
-    options: waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      value: option.option,
-      selected: option.option == waterproof
-    }, option.option)),
-    value: waterproof,
-    onlyValue: true
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting Options",
     onChange: handleOnChangeMount,
     options: mountingDefaultOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -10896,8 +10893,17 @@ function Logo({
       selected: option.value == studLength
     }, option.value)),
     value: studLength
-  })), waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Included in the Package",
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Environment",
+    onChange: handleOnChangeWaterproof,
+    options: waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.option,
+      selected: option.option == waterproof
+    }, option.option)),
+    value: waterproof,
+    onlyValue: true
+  }), waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Included Items",
     options: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR,
       selected: _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR
@@ -15146,7 +15152,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_select__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! react-select */ "./node_modules/react-select/dist/react-select.esm.js");
+/* harmony import */ var react_select__WEBPACK_IMPORTED_MODULE_47__ = __webpack_require__(/*! react-select */ "./node_modules/react-select/dist/react-select.esm.js");
 /* harmony import */ var _SidebarAdmin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../SidebarAdmin */ "./src/scripts/SidebarAdmin.js");
 /* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Signage */ "./src/scripts/Signage.js");
 /* harmony import */ var _components_AccordionGroup__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/AccordionGroup */ "./src/scripts/products/combine/components/AccordionGroup.js");
@@ -15183,6 +15189,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _led_neon_RigidNeonSignNoBacking_components_NeonSign__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ../led-neon/RigidNeonSignNoBacking/components/NeonSign */ "./src/scripts/products/led-neon/RigidNeonSignNoBacking/components/NeonSign.js");
 /* harmony import */ var _led_neon_RigidNeonSignWithBacking_components_NeonSign__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ../led-neon/RigidNeonSignWithBacking/components/NeonSign */ "./src/scripts/products/led-neon/RigidNeonSignWithBacking/components/NeonSign.js");
 /* harmony import */ var _custom_components_Logo__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! ../custom/components/Logo */ "./src/scripts/products/custom/components/Logo.js");
+/* harmony import */ var _acrylic_channel_AcrylicBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ../acrylic-channel/AcrylicBackLit/components/Letters */ "./src/scripts/products/acrylic-channel/AcrylicBackLit/components/Letters.js");
+/* harmony import */ var _acrylic_channel_AcrylicBackLit_components_Logo__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ../acrylic-channel/AcrylicBackLit/components/Logo */ "./src/scripts/products/acrylic-channel/AcrylicBackLit/components/Logo.js");
+/* harmony import */ var _acrylic_channel_AcrylicFrontBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ../acrylic-channel/AcrylicFrontBackLit/components/Letters */ "./src/scripts/products/acrylic-channel/AcrylicFrontBackLit/components/Letters.js");
+/* harmony import */ var _acrylic_channel_AcrylicFrontBackLit_components_Logo__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ../acrylic-channel/AcrylicFrontBackLit/components/Logo */ "./src/scripts/products/acrylic-channel/AcrylicFrontBackLit/components/Logo.js");
+/* harmony import */ var _acrylic_channel_AcrylicFrontLit_components_Letters__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ../acrylic-channel/AcrylicFrontLit/components/Letters */ "./src/scripts/products/acrylic-channel/AcrylicFrontLit/components/Letters.js");
+/* harmony import */ var _acrylic_channel_AcrylicFrontLit_components_Logo__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! ../acrylic-channel/AcrylicFrontLit/components/Logo */ "./src/scripts/products/acrylic-channel/AcrylicFrontLit/components/Logo.js");
+/* harmony import */ var _acrylic_channel_AcrylicFrontSideLit_components_Letters__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! ../acrylic-channel/AcrylicFrontSideLit/components/Letters */ "./src/scripts/products/acrylic-channel/AcrylicFrontSideLit/components/Letters.js");
+/* harmony import */ var _acrylic_channel_AcrylicFrontSideLit_components_Logo__WEBPACK_IMPORTED_MODULE_44__ = __webpack_require__(/*! ../acrylic-channel/AcrylicFrontSideLit/components/Logo */ "./src/scripts/products/acrylic-channel/AcrylicFrontSideLit/components/Logo.js");
+/* harmony import */ var _acrylic_channel_AcrylicSideLit_components_Letters__WEBPACK_IMPORTED_MODULE_45__ = __webpack_require__(/*! ../acrylic-channel/AcrylicSideLit/components/Letters */ "./src/scripts/products/acrylic-channel/AcrylicSideLit/components/Letters.js");
+/* harmony import */ var _acrylic_channel_AcrylicSideLit_components_Logo__WEBPACK_IMPORTED_MODULE_46__ = __webpack_require__(/*! ../acrylic-channel/AcrylicSideLit/components/Logo */ "./src/scripts/products/acrylic-channel/AcrylicSideLit/components/Logo.js");
 
 
 
@@ -15229,6 +15245,17 @@ __webpack_require__.r(__webpack_exports__);
 
 /*CUSTOM PROJECT */
 
+/**ACRYLIC CHANNEL LETTERS */
+
+
+
+
+
+
+
+
+
+
 const productLines = NovaQuote.product_lines_accordion;
 const partners = NovaQuote.show_all_partners;
 const storage = window.location.href + NovaQuote.user_id + 'customquote';
@@ -15272,6 +15299,81 @@ function CombineQuotes() {
   const showComponent = item => {
     let output;
     switch (item.component) {
+      case 'AcrylicSideLit':
+        if (item.type === 'letters') {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_acrylic_channel_AcrylicSideLit_components_Letters__WEBPACK_IMPORTED_MODULE_45__.Letters, {
+            key: item.id,
+            item: item,
+            productId: item.product
+          });
+        } else {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_acrylic_channel_AcrylicSideLit_components_Logo__WEBPACK_IMPORTED_MODULE_46__.Logo, {
+            key: item.id,
+            item: item,
+            productId: item.product
+          });
+        }
+        break;
+      case 'AcrylicFrontSideLit':
+        if (item.type === 'letters') {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_acrylic_channel_AcrylicFrontSideLit_components_Letters__WEBPACK_IMPORTED_MODULE_43__.Letters, {
+            key: item.id,
+            item: item,
+            productId: item.product
+          });
+        } else {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_acrylic_channel_AcrylicFrontSideLit_components_Logo__WEBPACK_IMPORTED_MODULE_44__.Logo, {
+            key: item.id,
+            item: item,
+            productId: item.product
+          });
+        }
+        break;
+      case 'AcrylicFrontBackLit':
+        if (item.type === 'letters') {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_acrylic_channel_AcrylicFrontBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_39__.Letters, {
+            key: item.id,
+            item: item,
+            productId: item.product
+          });
+        } else {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_acrylic_channel_AcrylicFrontBackLit_components_Logo__WEBPACK_IMPORTED_MODULE_40__.Logo, {
+            key: item.id,
+            item: item,
+            productId: item.product
+          });
+        }
+        break;
+      case 'AcrylicBackLit':
+        if (item.type === 'letters') {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_acrylic_channel_AcrylicBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_37__.Letters, {
+            key: item.id,
+            item: item,
+            productId: item.product
+          });
+        } else {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_acrylic_channel_AcrylicBackLit_components_Logo__WEBPACK_IMPORTED_MODULE_38__.Logo, {
+            key: item.id,
+            item: item,
+            productId: item.product
+          });
+        }
+        break;
+      case 'AcrylicFrontLit':
+        if (item.type === 'letters') {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_acrylic_channel_AcrylicFrontLit_components_Letters__WEBPACK_IMPORTED_MODULE_41__.Letters, {
+            key: item.id,
+            item: item,
+            productId: item.product
+          });
+        } else {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_acrylic_channel_AcrylicFrontLit_components_Logo__WEBPACK_IMPORTED_MODULE_42__.Logo, {
+            key: item.id,
+            item: item,
+            productId: item.product
+          });
+        }
+        break;
       case 'CustomProject':
         output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_custom_components_Logo__WEBPACK_IMPORTED_MODULE_36__.Logo, {
           key: item.id,
@@ -15514,7 +15616,7 @@ function CombineQuotes() {
     className: "border-gray-200 p-4 rounded-md border mb-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "font-title text-lg mb-4"
-  }, "Select Partner:"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_select__WEBPACK_IMPORTED_MODULE_37__["default"], {
+  }, "Select Partner:"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_select__WEBPACK_IMPORTED_MODULE_47__["default"], {
     className: "basic-single",
     classNames: {
       indicatorSeparator: () => 'hidden'
@@ -18288,7 +18390,7 @@ function Logo({
     value: waterproof,
     onlyValue: true
   }), waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_5__.INDOOR_NOT_WATERPROOF && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Included in the Package",
+    title: "Included Items",
     options: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: _utils_defaults__WEBPACK_IMPORTED_MODULE_5__.LIGHTING_INDOOR,
       selected: _utils_defaults__WEBPACK_IMPORTED_MODULE_5__.LIGHTING_INDOOR
@@ -18368,7 +18470,7 @@ function TrimLessFrontAndBackLit() {
       comments: '',
       font: '',
       customFont: '',
-      waterproof: '',
+      trimLessWaterproof: '',
       thickness: '',
       vinylWhite: {
         name: '',
@@ -18418,7 +18520,7 @@ function TrimLessFrontAndBackLit() {
     comments: '',
     font: '',
     customFont: '',
-    waterproof: '',
+    trimLessWaterproof: '',
     thickness: '',
     frontAcrylicCover: '',
     vinylWhite: {
@@ -18579,7 +18681,7 @@ const smallPunctuations = parseFloat(NovaQuote.small_punctuations_pricing ? Nova
 function Letters({
   item
 }) {
-  var _item$letters, _item$comments, _item$font, _item$returnColor, _item$waterproof, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$acrylicReveal, _item$studLength, _item$spacerStandoffD, _item$vinylWhite, _item$frontAcrylicCov, _item$mounting, _item$ledLightColor, _item$sets, _item$vinylWhite$colo;
+  var _item$letters, _item$comments, _item$font, _item$returnColor, _item$trimLessWaterpr, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$acrylicReveal, _item$studLength, _item$spacerStandoffD, _item$vinylWhite, _item$frontAcrylicCov, _item$mounting, _item$ledLightColor, _item$sets, _item$vinylWhite$colo;
   const {
     signage,
     setSignage,
@@ -18594,7 +18696,7 @@ function Letters({
     color: '#000000'
   });
   const [openColor, setOpenColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : '');
+  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$trimLessWaterpr = item.trimLessWaterproof) !== null && _item$trimLessWaterpr !== void 0 ? _item$trimLessWaterpr : '');
   const [depth, setDepth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.depth);
   const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileNames = item.fileNames) !== null && _item$fileNames !== void 0 ? _item$fileNames : []);
   const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrls = item.fileUrls) !== null && _item$fileUrls !== void 0 ? _item$fileUrls : []);
@@ -18627,7 +18729,7 @@ function Letters({
   });
   const [frontAcrylicCover, setFrontAcrylicCover] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$frontAcrylicCov = item.frontAcrylicCover) !== null && _item$frontAcrylicCov !== void 0 ? _item$frontAcrylicCov : 'White');
   const [lightingOptions, setLightingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.lightingPackagedOptions);
-  const [lightingPackaged, setLightingPackaged] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
+  const [includedItems, setIncludedItems] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const [mounting, setMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
   const [ledLightColor, setLedLightColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$ledLightColor = item.ledLightColor) !== null && _item$ledLightColor !== void 0 ? _item$ledLightColor : '6500K White');
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
@@ -18675,7 +18777,7 @@ function Letters({
           comments,
           depth,
           font,
-          waterproof,
+          trimLessWaterproof: waterproof,
           returnColor: color,
           letterHeight: selectedLetterHeight,
           usdPrice,
@@ -18698,7 +18800,7 @@ function Letters({
           sets,
           usdSinglePrice,
           cadSinglePrice,
-          lightingPackaged
+          includedItems
         };
       } else {
         return sign;
@@ -18708,7 +18810,7 @@ function Letters({
   }
   const handleOnChangeLetters = e => setLetters(() => e.target.value);
   const handleComments = e => setComments(e.target.value);
-  const handleOnChangeLightingPackaged = e => setLightingPackaged(e.target.value);
+  const handleOnChangeincludedItems = e => setIncludedItems(e.target.value);
   const handleSelectFont = value => setFont(value);
   const handleOnChangeMounting = e => {
     const target = e.target.value;
@@ -18853,7 +18955,7 @@ function Letters({
       missingFields.push('Add the Pantone color code of your custom color.');
     }
     if (!waterproof) missingFields.push('Select Environment');
-    if (!lightingPackaged) missingFields.push('Select Lighting Packaged');
+    if (!includedItems) missingFields.push('Select Included Items');
     if (!mounting) missingFields.push('Select Mounting');
     if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER) {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -18897,7 +18999,7 @@ function Letters({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
-  }, [letters, depth, comments, font, waterproof, color, usdPrice, cadPrice, selectedLetterHeight, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, fontFileUrl, fontFileName, fontFilePath, fontFile, mounting, studLength, spacerStandoffDistance, frontAcrylicCover, vinylWhite, sets, usdSinglePrice, cadSinglePrice, lightingPackaged]);
+  }, [letters, depth, comments, font, waterproof, color, usdPrice, cadPrice, selectedLetterHeight, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, fontFileUrl, fontFileName, fontFilePath, fontFile, mounting, studLength, spacerStandoffDistance, frontAcrylicCover, vinylWhite, sets, usdSinglePrice, cadSinglePrice, includedItems]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (depth?.value) {
       const newHeightOptions = letterPricing?.filter(item => {
@@ -19029,10 +19131,10 @@ function Letters({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (waterproof) {
       if (waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF) {
-        setLightingPackaged(_utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR);
+        setIncludedItems(_utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR);
         setLightingOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.lightingPackagedOptions.filter(option => option.value === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR));
       } else {
-        setLightingPackaged('Low Voltage LED Driver, 10ft open wires, 1:1 blueprint');
+        setIncludedItems('Low Voltage LED Driver, 10ft open wires, 1:1 blueprint');
         setLightingOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.lightingPackagedOptions.filter(option => option.value !== _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR));
       }
     } else {
@@ -19155,14 +19257,6 @@ function Letters({
     }, color)),
     value: ledLightColor
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Environment",
-    onChange: handleOnChangeWaterproof,
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      value: option.option,
-      selected: option.option == waterproof
-    }, option.option)),
-    value: waterproof
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting",
     onChange: handleOnChangeMounting,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__.mountingDefaultOptions.map(mounting => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -19187,13 +19281,21 @@ function Letters({
     }, option.value)),
     value: spacerStandoffDistance
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Lighting Packaged",
-    onChange: handleOnChangeLightingPackaged,
+    title: "Environment",
+    onChange: handleOnChangeWaterproof,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.option,
+      selected: option.option == waterproof
+    }, option.option)),
+    value: waterproof
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Included Items",
+    onChange: handleOnChangeincludedItems,
     options: lightingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == lightingPackaged
+      selected: option.value == includedItems
     }, option.value)),
-    value: lightingPackaged
+    value: includedItems
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,
@@ -19275,7 +19377,7 @@ __webpack_require__.r(__webpack_exports__);
 function Logo({
   item
 }) {
-  var _item$comments, _item$width, _item$height, _item$returnColor, _item$vinylWhite, _item$waterproof, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$studLength, _item$spacerStandoffD, _item$frontAcrylicCov, _item$mounting, _item$ledLightColor, _item$sets, _item$acrylicReveal;
+  var _item$comments, _item$width, _item$height, _item$returnColor, _item$vinylWhite, _item$trimLessWaterpr, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$studLength, _item$spacerStandoffD, _item$frontAcrylicCov, _item$mounting, _item$ledLightColor, _item$sets, _item$acrylicReveal;
   const {
     signage,
     setSignage,
@@ -19294,7 +19396,7 @@ function Logo({
     code: ''
   });
   const [openColor, setOpenColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : '');
+  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$trimLessWaterpr = item.trimLessWaterproof) !== null && _item$trimLessWaterpr !== void 0 ? _item$trimLessWaterpr : '');
   const [depth, setDepth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.depth);
   const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileNames = item.fileNames) !== null && _item$fileNames !== void 0 ? _item$fileNames : []);
   const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrls = item.fileUrls) !== null && _item$fileUrls !== void 0 ? _item$fileUrls : []);
@@ -19327,7 +19429,7 @@ function Logo({
     setSets(e.target.value);
   };
   const [lightingOptions, setLightingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.lightingPackagedOptions);
-  const [lightingPackaged, setLightingPackaged] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
+  const [includedItems, setIncludedItems] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const [depthOptions, setDepthOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_metalChannelOptions__WEBPACK_IMPORTED_MODULE_10__.aluminumResinDepthOptions);
   const colorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const acrylicColorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
@@ -19339,7 +19441,7 @@ function Logo({
           ...sign,
           comments,
           depth,
-          waterproof,
+          trimLessWaterproof: waterproof,
           returnColor: color,
           usdPrice,
           cadPrice,
@@ -19359,7 +19461,7 @@ function Logo({
           usdSinglePrice,
           cadSinglePrice,
           vinylWhite,
-          lightingPackaged
+          includedItems
         };
       } else {
         return sign;
@@ -19416,7 +19518,7 @@ function Logo({
   const handleonChangeSpacerDistance = e => {
     setSpacerStandoffDistance(e.target.value);
   };
-  const handleOnChangeLightingPackaged = e => setLightingPackaged(e.target.value);
+  const handleOnChangeincludedItems = e => setIncludedItems(e.target.value);
   const handleonChangeStudLength = e => {
     const target = e.target.value;
     setStudLength(target); // Directly set the value without a callback
@@ -19468,7 +19570,7 @@ function Logo({
       if (!vinylWhite?.name) missingFields.push('Select 3M 3630 Vinyl');
     }
     if (!waterproof) missingFields.push('Select Environment');
-    if (!lightingPackaged) missingFields.push('Select Lighting Packaged');
+    if (!includedItems) missingFields.push('Select Included Items');
     if (!mounting) missingFields.push('Select Mounting');
     if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER) {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -19575,7 +19677,7 @@ function Logo({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
-  }, [depth, comments, waterproof, color, usdPrice, cadPrice, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, mounting, studLength, spacerStandoffDistance, frontAcrylicCover, sets, width, height, usdSinglePrice, cadSinglePrice, vinylWhite, lightingPackaged]);
+  }, [depth, comments, waterproof, color, usdPrice, cadPrice, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, mounting, studLength, spacerStandoffDistance, frontAcrylicCover, sets, width, height, usdSinglePrice, cadSinglePrice, vinylWhite, includedItems]);
   if (frontAcrylicCover === '3M Vinyl') {
     (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_4__["default"])([colorRef, acrylicColorRef], () => {
       if (!openColor && !openAcrylicCover) return;
@@ -19594,10 +19696,10 @@ function Logo({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (waterproof) {
       if (waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.INDOOR_NOT_WATERPROOF) {
-        setLightingPackaged(_utils_defaults__WEBPACK_IMPORTED_MODULE_11__.LIGHTING_INDOOR);
+        setIncludedItems(_utils_defaults__WEBPACK_IMPORTED_MODULE_11__.LIGHTING_INDOOR);
         setLightingOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.lightingPackagedOptions.filter(option => option.value === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.LIGHTING_INDOOR));
       } else {
-        setLightingPackaged('Low Voltage LED Driver, 10ft open wires, 1:1 blueprint');
+        setIncludedItems('Low Voltage LED Driver, 10ft open wires, 1:1 blueprint');
         setLightingOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.lightingPackagedOptions.filter(option => option.value !== _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.LIGHTING_INDOOR));
       }
     } else {
@@ -19678,14 +19780,6 @@ function Logo({
     }, color)),
     value: ledLightColor
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Environment",
-    onChange: handleOnChangeWaterproof,
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      value: option.option,
-      selected: option.option == waterproof
-    }, option.option)),
-    value: waterproof
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting",
     onChange: handleOnChangeMounting,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_10__.mountingDefaultOptions.map(mounting => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -19710,13 +19804,21 @@ function Logo({
     }, option.value)),
     value: spacerStandoffDistance
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Lighting Packaged",
-    onChange: handleOnChangeLightingPackaged,
+    title: "Environment",
+    onChange: handleOnChangeWaterproof,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.option,
+      selected: option.option == waterproof
+    }, option.option)),
+    value: waterproof
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Included Items",
+    onChange: handleOnChangeincludedItems,
     options: lightingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == lightingPackaged
+      selected: option.value == includedItems
     }, option.value)),
-    value: lightingPackaged
+    value: includedItems
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,
@@ -19802,7 +19904,7 @@ function TrimLessFrontAndBackLit() {
       comments: '',
       font: '',
       customFont: '',
-      waterproof: '',
+      trimLessWaterproof: '',
       thickness: '',
       vinylWhite: {
         name: '',
@@ -19851,7 +19953,7 @@ function TrimLessFrontAndBackLit() {
     comments: '',
     font: '',
     customFont: '',
-    waterproof: '',
+    trimLessWaterproof: '',
     thickness: '',
     frontAcrylicCover: '',
     vinylWhite: {
@@ -20008,7 +20110,7 @@ __webpack_require__.r(__webpack_exports__);
 function Letters({
   item
 }) {
-  var _item$letters, _item$comments, _item$font, _item$returnColor, _item$waterproof, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$studLength, _item$spacerStandoffD, _item$vinylWhite, _item$frontAcrylicCov, _item$mounting, _item$ledLightColor, _item$sets, _item$vinylWhite$colo;
+  var _item$letters, _item$comments, _item$font, _item$returnColor, _item$trimLessWaterpr, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$studLength, _item$spacerStandoffD, _item$vinylWhite, _item$frontAcrylicCov, _item$mounting, _item$ledLightColor, _item$sets, _item$vinylWhite$colo;
   const {
     signage,
     setSignage,
@@ -20023,7 +20125,7 @@ function Letters({
     color: '#000000'
   });
   const [openColor, setOpenColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : '');
+  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$trimLessWaterpr = item.trimLessWaterproof) !== null && _item$trimLessWaterpr !== void 0 ? _item$trimLessWaterpr : '');
   const [depth, setDepth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.depth);
   const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileNames = item.fileNames) !== null && _item$fileNames !== void 0 ? _item$fileNames : []);
   const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrls = item.fileUrls) !== null && _item$fileUrls !== void 0 ? _item$fileUrls : []);
@@ -20057,7 +20159,7 @@ function Letters({
   const [mounting, setMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
   const [ledLightColor, setLedLightColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$ledLightColor = item.ledLightColor) !== null && _item$ledLightColor !== void 0 ? _item$ledLightColor : '6500K White');
   const [lightingOptions, setLightingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.lightingPackagedOptions);
-  const [lightingPackaged, setLightingPackaged] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
+  const [includedItems, setIncludedItems] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
   const handleOnChangeSets = e => {
     setSets(e.target.value);
@@ -20103,7 +20205,7 @@ function Letters({
           comments,
           depth,
           font,
-          waterproof,
+          trimLessWaterproof: waterproof,
           returnColor: color,
           letterHeight: selectedLetterHeight,
           usdPrice,
@@ -20126,7 +20228,7 @@ function Letters({
           frontAcrylicCover,
           vinylWhite,
           sets,
-          lightingPackaged
+          includedItems
         };
       } else {
         return sign;
@@ -20135,7 +20237,7 @@ function Letters({
     setSignage(() => updatedSignage);
   }
   const handleOnChangeLetters = e => setLetters(() => e.target.value);
-  const handleOnChangeLightingPackaged = e => setLightingPackaged(e.target.value);
+  const handleOnChangeincludedItems = e => setIncludedItems(e.target.value);
   const handleComments = e => setComments(e.target.value);
   const handleSelectFont = value => setFont(value);
   const handleOnChangeMounting = e => {
@@ -20281,7 +20383,7 @@ function Letters({
       missingFields.push('Add the Pantone color code of your custom color.');
     }
     if (!waterproof) missingFields.push('Select Environment');
-    if (!lightingPackaged) missingFields.push('Select Lighting Packaged');
+    if (!includedItems) missingFields.push('Select Included Items');
     if (!mounting) missingFields.push('Select Mounting');
     if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER) {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -20325,7 +20427,7 @@ function Letters({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
-  }, [letters, depth, comments, font, waterproof, color, frontAcrylicCover, usdPrice, cadPrice, selectedLetterHeight, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, fontFileUrl, fontFileName, fontFilePath, fontFile, mounting, studLength, spacerStandoffDistance, frontAcrylicCover, vinylWhite, sets, usdSinglePrice, cadSinglePrice, lightingPackaged]);
+  }, [letters, depth, comments, font, waterproof, color, frontAcrylicCover, usdPrice, cadPrice, selectedLetterHeight, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, fontFileUrl, fontFileName, fontFilePath, fontFile, mounting, studLength, spacerStandoffDistance, frontAcrylicCover, vinylWhite, sets, usdSinglePrice, cadSinglePrice, includedItems]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (depth?.value) {
       const newHeightOptions = letterPricing?.filter(item => {
@@ -20411,10 +20513,10 @@ function Letters({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (waterproof) {
       if (waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF) {
-        setLightingPackaged(_utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR);
+        setIncludedItems(_utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR);
         setLightingOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.lightingPackagedOptions.filter(option => option.value === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR));
       } else {
-        setLightingPackaged('Low Voltage LED Driver, 10ft open wires, 1:1 blueprint');
+        setIncludedItems('Low Voltage LED Driver, 10ft open wires, 1:1 blueprint');
         setLightingOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.lightingPackagedOptions.filter(option => option.value !== _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR));
       }
     } else {
@@ -20530,14 +20632,6 @@ function Letters({
     }, color)),
     value: ledLightColor
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Environment",
-    onChange: handleOnChangeWaterproof,
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      value: option.option,
-      selected: option.option == waterproof
-    }, option.option)),
-    value: waterproof
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting",
     onChange: handleOnChangeMounting,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__.mountingDefaultOptions.map(mounting => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -20562,13 +20656,21 @@ function Letters({
     }, option.value)),
     value: spacerStandoffDistance
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Lighting Packaged",
-    onChange: handleOnChangeLightingPackaged,
+    title: "Environment",
+    onChange: handleOnChangeWaterproof,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.option,
+      selected: option.option == waterproof
+    }, option.option)),
+    value: waterproof
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Included Items",
+    onChange: handleOnChangeincludedItems,
     options: lightingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == lightingPackaged
+      selected: option.value == includedItems
     }, option.value)),
-    value: lightingPackaged
+    value: includedItems
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,
@@ -20650,7 +20752,7 @@ __webpack_require__.r(__webpack_exports__);
 function Logo({
   item
 }) {
-  var _item$comments, _item$width, _item$height, _item$returnColor, _item$waterproof, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$vinylWhite, _item$usdPrice, _item$cadPrice, _item$usdDiscount, _item$cadDiscount, _item$usdSinglePrice, _item$cadSinglePrice, _item$studLength, _item$spacerStandoffD, _item$frontAcrylicCov, _item$mounting, _item$ledLightColor, _item$sets;
+  var _item$comments, _item$width, _item$height, _item$returnColor, _item$trimLessWaterpr, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$vinylWhite, _item$usdPrice, _item$cadPrice, _item$usdDiscount, _item$cadDiscount, _item$usdSinglePrice, _item$cadSinglePrice, _item$studLength, _item$spacerStandoffD, _item$frontAcrylicCov, _item$mounting, _item$ledLightColor, _item$sets;
   const {
     signage,
     setSignage,
@@ -20664,7 +20766,7 @@ function Logo({
     color: '#000000'
   });
   const [openColor, setOpenColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : '');
+  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$trimLessWaterpr = item.trimLessWaterproof) !== null && _item$trimLessWaterpr !== void 0 ? _item$trimLessWaterpr : '');
   const [depth, setDepth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.depth);
   const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileNames = item.fileNames) !== null && _item$fileNames !== void 0 ? _item$fileNames : []);
   const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrls = item.fileUrls) !== null && _item$fileUrls !== void 0 ? _item$fileUrls : []);
@@ -20700,7 +20802,7 @@ function Logo({
   const [mounting, setMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
   const [ledLightColor, setLedLightColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$ledLightColor = item.ledLightColor) !== null && _item$ledLightColor !== void 0 ? _item$ledLightColor : '6500K White');
   const [lightingOptions, setLightingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.lightingPackagedOptions);
-  const [lightingPackaged, setLightingPackaged] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
+  const [includedItems, setIncludedItems] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
   const handleOnChangeSets = e => {
     setSets(e.target.value);
@@ -20715,7 +20817,7 @@ function Logo({
           ...sign,
           comments,
           depth,
-          waterproof,
+          trimLessWaterproof: waterproof,
           returnColor: color,
           usdPrice,
           cadPrice,
@@ -20735,7 +20837,7 @@ function Logo({
           usdSinglePrice,
           cadSinglePrice,
           vinylWhite,
-          lightingPackaged
+          includedItems
         };
       } else {
         return sign;
@@ -20744,7 +20846,7 @@ function Logo({
     setSignage(() => updatedSignage);
   }
   const handleComments = e => setComments(e.target.value);
-  const handleOnChangeLightingPackaged = e => setLightingPackaged(e.target.value);
+  const handleOnChangeincludedItems = e => setIncludedItems(e.target.value);
   const handleOnChangeMounting = e => {
     const target = e.target.value;
     setMounting(target);
@@ -20844,7 +20946,7 @@ function Logo({
       if (!vinylWhite?.name) missingFields.push('Select 3M 3630 Vinyl');
     }
     if (!waterproof) missingFields.push('Select Environment');
-    if (!lightingPackaged) missingFields.push('Select Lighting Packaged');
+    if (!includedItems) missingFields.push('Select Included Items');
     if (!mounting) missingFields.push('Select Mounting');
     if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER) {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -20951,7 +21053,7 @@ function Logo({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
-  }, [depth, comments, waterproof, color, usdPrice, cadPrice, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, mounting, studLength, spacerStandoffDistance, frontAcrylicCover, sets, width, height, usdSinglePrice, cadSinglePrice, vinylWhite, lightingPackaged]);
+  }, [depth, comments, waterproof, color, usdPrice, cadPrice, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, mounting, studLength, spacerStandoffDistance, frontAcrylicCover, sets, width, height, usdSinglePrice, cadSinglePrice, vinylWhite, includedItems]);
   if (frontAcrylicCover === '3M Vinyl') {
     (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_4__["default"])([colorRef, acrylicColorRef], () => {
       if (!openColor && !openAcrylicCover) return;
@@ -20970,10 +21072,10 @@ function Logo({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (waterproof) {
       if (waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.INDOOR_NOT_WATERPROOF) {
-        setLightingPackaged(_utils_defaults__WEBPACK_IMPORTED_MODULE_11__.LIGHTING_INDOOR);
+        setIncludedItems(_utils_defaults__WEBPACK_IMPORTED_MODULE_11__.LIGHTING_INDOOR);
         setLightingOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.lightingPackagedOptions.filter(option => option.value === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.LIGHTING_INDOOR));
       } else {
-        setLightingPackaged('Low Voltage LED Driver, 10ft open wires, 1:1 blueprint');
+        setIncludedItems('Low Voltage LED Driver, 10ft open wires, 1:1 blueprint');
         setLightingOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.lightingPackagedOptions.filter(option => option.value !== _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.LIGHTING_INDOOR));
       }
     } else {
@@ -21047,14 +21149,6 @@ function Logo({
     }, color)),
     value: ledLightColor
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Environment",
-    onChange: handleOnChangeWaterproof,
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      value: option.option,
-      selected: option.option == waterproof
-    }, option.option)),
-    value: waterproof
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting",
     onChange: handleOnChangeMounting,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_10__.mountingDefaultOptions.map(mounting => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -21079,13 +21173,21 @@ function Logo({
     }, option.value)),
     value: spacerStandoffDistance
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Lighting Packaged",
-    onChange: handleOnChangeLightingPackaged,
+    title: "Environment",
+    onChange: handleOnChangeWaterproof,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.option,
+      selected: option.option == waterproof
+    }, option.option)),
+    value: waterproof
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Included Items",
+    onChange: handleOnChangeincludedItems,
     options: lightingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == lightingPackaged
+      selected: option.value == includedItems
     }, option.value)),
-    value: lightingPackaged
+    value: includedItems
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,
@@ -21171,7 +21273,7 @@ function TrimLessBackLit() {
       comments: '',
       font: '',
       customFont: '',
-      waterproof: '',
+      trimLessWaterproof: '',
       thickness: '',
       backLitFinishing: '',
       mounting: '',
@@ -21378,7 +21480,7 @@ function Letters({
   const [metalFinish, setMetalFinish] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.backLitMetalFinish);
   const [selectedLetterHeight, setSelectedLetterHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letterHeight = item.letterHeight) !== null && _item$letterHeight !== void 0 ? _item$letterHeight : '');
   const [lightingOptions, setLightingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.lightingPackagedOptions);
-  const [lightingPackaged, setLightingPackaged] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
+  const [includedItems, setIncludedItems] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const [letterPricingTables, setLetterPricingTables] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     async function fetchLetterPricing() {
@@ -21435,7 +21537,7 @@ function Letters({
           depth,
           font,
           trimLessWaterproof: waterproof,
-          lightingPackaged,
+          includedItems,
           faceReturnColor: color,
           letterHeight: selectedLetterHeight,
           usdPrice,
@@ -21482,7 +21584,7 @@ function Letters({
     }
   };
   const handleOnChangeWaterproof = e => setWaterproof(e.target.value);
-  const handleOnChangeLightingPackaged = e => setLightingPackaged(e.target.value);
+  const handleOnChangeincludedItems = e => setIncludedItems(e.target.value);
   const handleOnChangeAcrylicReveal = e => {
     const target = e.target.value;
     setAcrylicReveal(() => target);
@@ -21595,7 +21697,7 @@ function Letters({
       if (!metalFinish) missingFields.push('Select Metal Finish');
     }
     if (!waterproof) missingFields.push('Select Environment');
-    if (!lightingPackaged) missingFields.push('Select Lighting Packaged');
+    if (!includedItems) missingFields.push('Select Included Items');
     if (!mounting) missingFields.push('Select Mounting');
     if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_WITH_SPACER) {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -21638,7 +21740,7 @@ function Letters({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
-  }, [letters, depth, comments, font, waterproof, lightingPackaged, color, usdPrice, cadPrice, usdSinglePrice, cadSinglePrice, selectedLetterHeight, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, fontFileUrl, fontFileName, fontFilePath, fontFile, mounting, studLength, spacerStandoffDistance, selectedFinishing, metalFinish, acrylicReveal, sets]);
+  }, [letters, depth, comments, font, waterproof, includedItems, color, usdPrice, cadPrice, usdSinglePrice, cadSinglePrice, selectedLetterHeight, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, fontFileUrl, fontFileName, fontFilePath, fontFile, mounting, studLength, spacerStandoffDistance, selectedFinishing, metalFinish, acrylicReveal, sets]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (depth?.value && letterPricingTables) {
       const table = (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_9__["default"])((0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_10__.getLetterPricingTableByTitle)(depth?.depth, letterPricingTables));
@@ -21749,10 +21851,10 @@ function Letters({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (waterproof) {
       if (waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.INDOOR_NOT_WATERPROOF) {
-        setLightingPackaged(_utils_defaults__WEBPACK_IMPORTED_MODULE_14__.LIGHTING_INDOOR);
+        setIncludedItems(_utils_defaults__WEBPACK_IMPORTED_MODULE_14__.LIGHTING_INDOOR);
         setLightingOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.lightingPackagedOptions.filter(option => option.value === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.LIGHTING_INDOOR));
       } else {
-        setLightingPackaged('Low Voltage LED Driver, 10ft open wires, 1:1 blueprint');
+        setIncludedItems('Low Voltage LED Driver, 10ft open wires, 1:1 blueprint');
         setLightingOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.lightingPackagedOptions.filter(option => option.value !== _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.LIGHTING_INDOOR));
       }
     } else {
@@ -21898,13 +22000,13 @@ function Letters({
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Lighting Packaged",
-    onChange: handleOnChangeLightingPackaged,
+    title: "Included Items",
+    onChange: handleOnChangeincludedItems,
     options: lightingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == lightingPackaged
+      selected: option.value == includedItems
     }, option.value)),
-    value: lightingPackaged
+    value: includedItems
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,
@@ -22018,7 +22120,7 @@ function Logo({
   const [spacerStandoffOptions, setSpacerStandoffOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.spacerStandoffDefaultOptions);
   const [spacerStandoffDistance, setSpacerStandoffDistance] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$spacerStandoffD = item.spacerStandoffDistance) !== null && _item$spacerStandoffD !== void 0 ? _item$spacerStandoffD : '');
   const [lightingOptions, setLightingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.lightingPackagedOptions);
-  const [lightingPackaged, setLightingPackaged] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
+  const [includedItems, setIncludedItems] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const [mounting, setMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
   const [ledLightColor, setLedLightColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.ledLightColor);
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
@@ -22054,7 +22156,7 @@ function Logo({
           sets,
           usdSinglePrice,
           cadSinglePrice,
-          lightingPackaged
+          includedItems
         };
       } else {
         return sign;
@@ -22076,7 +22178,7 @@ function Logo({
     }
   };
   const handleOnChangeWaterproof = e => setWaterproof(e.target.value);
-  const handleOnChangeLightingPackaged = e => setLightingPackaged(e.target.value);
+  const handleOnChangeincludedItems = e => setIncludedItems(e.target.value);
   const handleOnChangeAcrylicReveal = e => {
     const target = e.target.value;
     console.log(target);
@@ -22159,7 +22261,7 @@ function Logo({
       if (!metalFinish) missingFields.push('Select Metal Finish');
     }
     if (!waterproof) missingFields.push('Select Environment');
-    if (!lightingPackaged) missingFields.push('Select Lighting Packaged');
+    if (!includedItems) missingFields.push('Select Included Items');
     if (!mounting) missingFields.push('Select Mounting');
     if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER || mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT) {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -22201,7 +22303,7 @@ function Logo({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
-  }, [depth, width, height, comments, waterproof, color, usdPrice, cadPrice, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, mounting, studLength, spacerStandoffDistance, selectedFinishing, metalFinish, acrylicReveal, sets, usdSinglePrice, cadSinglePrice, lightingPackaged]);
+  }, [depth, width, height, comments, waterproof, color, usdPrice, cadPrice, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, mounting, studLength, spacerStandoffDistance, selectedFinishing, metalFinish, acrylicReveal, sets, usdSinglePrice, cadSinglePrice, includedItems]);
   const computePricing = () => {
     var _tempTotal$toFixed, _total$toFixed;
     if (!width || !height || !depth?.value) return 0;
@@ -22317,10 +22419,10 @@ function Logo({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (waterproof) {
       if (waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.INDOOR_NOT_WATERPROOF) {
-        setLightingPackaged(_utils_defaults__WEBPACK_IMPORTED_MODULE_10__.LIGHTING_INDOOR);
+        setIncludedItems(_utils_defaults__WEBPACK_IMPORTED_MODULE_10__.LIGHTING_INDOOR);
         setLightingOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.lightingPackagedOptions.filter(option => option.value === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.LIGHTING_INDOOR));
       } else {
-        setLightingPackaged('Low Voltage LED Driver, 10ft open wires, 1:1 blueprint');
+        setIncludedItems('Low Voltage LED Driver, 10ft open wires, 1:1 blueprint');
         setLightingOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.lightingPackagedOptions.filter(option => option.value !== _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.LIGHTING_INDOOR));
       }
     } else {
@@ -22429,13 +22531,13 @@ function Logo({
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Lighting Packaged",
-    onChange: handleOnChangeLightingPackaged,
+    title: "Included Items",
+    onChange: handleOnChangeincludedItems,
     options: lightingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == lightingPackaged
+      selected: option.value == includedItems
     }, option.value)),
-    value: lightingPackaged
+    value: includedItems
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,
@@ -22523,7 +22625,7 @@ function TrimLessFrontAndBackLit() {
       comments: '',
       font: '',
       customFont: '',
-      waterproof: '',
+      trimLessWaterproof: '',
       thickness: '',
       vinylWhite: {
         name: '',
@@ -22569,7 +22671,7 @@ function TrimLessFrontAndBackLit() {
     title: 'LETTERS 1',
     depth: '',
     comments: '',
-    waterproof: '',
+    trimLessWaterproof: '',
     thickness: '',
     frontAcrylicCover: 'White',
     vinylWhite: {
@@ -22771,7 +22873,7 @@ function Letters({
   const [mounting, setMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
   const [ledLightColor, setLedLightColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$ledLightColor = item.ledLightColor) !== null && _item$ledLightColor !== void 0 ? _item$ledLightColor : '6500K White');
   const [lightingOptions, setLightingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.lightingPackagedOptions);
-  const [lightingPackaged, setLightingPackaged] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
+  const [includedItems, setIncludedItems] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
   const handleOnChangeSets = e => {
     setSets(e.target.value);
@@ -22817,7 +22919,7 @@ function Letters({
           depth,
           font,
           trimLessWaterproof: waterproof,
-          lightingPackaged,
+          includedItems,
           returnColor: color,
           letterHeight: selectedLetterHeight,
           usdPrice,
@@ -22877,7 +22979,7 @@ function Letters({
   const handleonChangeSpacerDistance = e => {
     setSpacerStandoffDistance(e.target.value);
   };
-  const handleOnChangeLightingPackaged = e => setLightingPackaged(e.target.value);
+  const handleOnChangeincludedItems = e => setIncludedItems(e.target.value);
   const handleonChangeStudLength = e => {
     const target = e.target.value;
     setStudLength(target); // Directly set the value without a callback
@@ -23012,7 +23114,7 @@ function Letters({
       missingFields.push('Add the Pantone color code of your custom color.');
     }
     if (!waterproof) missingFields.push('Select Environment');
-    if (!lightingPackaged) missingFields.push('Select Lighting Packaged');
+    if (!includedItems) missingFields.push('Select Included Items');
     if (!mounting) missingFields.push('Select Mounting');
     if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER) {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -23056,7 +23158,7 @@ function Letters({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
-  }, [letters, depth, comments, font, waterproof, lightingPackaged, color, frontAcrylicCover, usdPrice, cadPrice, selectedLetterHeight, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, fontFileUrl, fontFileName, fontFilePath, fontFile, mounting, studLength, spacerStandoffDistance, frontAcrylicCover, vinylWhite, sets, usdSinglePrice, cadSinglePrice]);
+  }, [letters, depth, comments, font, waterproof, includedItems, color, frontAcrylicCover, usdPrice, cadPrice, selectedLetterHeight, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, fontFileUrl, fontFileName, fontFilePath, fontFile, mounting, studLength, spacerStandoffDistance, frontAcrylicCover, vinylWhite, sets, usdSinglePrice, cadSinglePrice]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (depth?.value) {
       const newHeightOptions = letterPricing?.filter(item => {
@@ -23092,10 +23194,10 @@ function Letters({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (waterproof) {
       if (waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF) {
-        setLightingPackaged(_utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR);
+        setIncludedItems(_utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR);
         setLightingOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.lightingPackagedOptions.filter(option => option.value === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR));
       } else {
-        setLightingPackaged('Low Voltage LED Driver, 10ft open wires, 1:1 blueprint');
+        setIncludedItems('Low Voltage LED Driver, 10ft open wires, 1:1 blueprint');
         setLightingOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.lightingPackagedOptions.filter(option => option.value !== _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR));
       }
     } else {
@@ -23183,7 +23285,7 @@ function Letters({
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Front Acrylic Cover",
     onChange: handleOnChangeWhite,
-    options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.whiteOptionsResin.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.whiteOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
       selected: option == frontAcrylicCover
     }, option.option)),
@@ -23243,13 +23345,13 @@ function Letters({
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Lighting Packaged",
-    onChange: handleOnChangeLightingPackaged,
+    title: "Included Items",
+    onChange: handleOnChangeincludedItems,
     options: lightingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == lightingPackaged
+      selected: option.value == includedItems
     }, option.value)),
-    value: lightingPackaged
+    value: includedItems
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,
@@ -23360,7 +23462,7 @@ function Logo({
   const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$studLength = item.studLength) !== null && _item$studLength !== void 0 ? _item$studLength : '');
   const [spacerStandoffOptions, setSpacerStandoffOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.spacerStandoffDefaultOptions);
   const [spacerStandoffDistance, setSpacerStandoffDistance] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$spacerStandoffD = item.spacerStandoffDistance) !== null && _item$spacerStandoffD !== void 0 ? _item$spacerStandoffD : '');
-  const [lightingPackaged, setLightingPackaged] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
+  const [includedItems, setIncludedItems] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
   const handleOnChangeSets = e => {
     setSets(e.target.value);
@@ -23384,7 +23486,7 @@ function Logo({
           comments,
           depth,
           trimLessWaterproof: waterproof,
-          lightingPackaged,
+          includedItems,
           returnColor: color,
           usdPrice,
           cadPrice,
@@ -23412,7 +23514,7 @@ function Logo({
     setSignage(() => updatedSignage);
   }
   const handleComments = e => setComments(e.target.value);
-  const handleOnChangeLightingPackaged = e => setLightingPackaged(e.target.value);
+  const handleOnChangeincludedItems = e => setIncludedItems(e.target.value);
   const handleOnChangeMounting = e => {
     const target = e.target.value;
     setMounting(target);
@@ -23488,7 +23590,7 @@ function Logo({
       missingFields.push('Add the Pantone color code of your custom color.');
     }
     if (!waterproof) missingFields.push('Select Environment');
-    if (!lightingPackaged) missingFields.push('Select Lighting Packaged');
+    if (!includedItems) missingFields.push('Select Included Items');
     if (!mounting) missingFields.push('Select Mounting');
     if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER || mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT) {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -23530,7 +23632,7 @@ function Logo({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
-  }, [depth, comments, waterproof, color, frontAcrylicCover, vinylWhite, usdPrice, cadPrice, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, mounting, studLength, spacerStandoffDistance, width, height, cadSinglePrice, usdSinglePrice, lightingPackaged]);
+  }, [depth, comments, waterproof, color, frontAcrylicCover, vinylWhite, usdPrice, cadPrice, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, mounting, studLength, spacerStandoffDistance, width, height, cadSinglePrice, usdSinglePrice, includedItems]);
   if (frontAcrylicCover === '3M Vinyl') {
     (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_4__["default"])([colorRef, acrylicColorRef], () => {
       if (!openColor && !openAcrylicCover) return;
@@ -23611,10 +23713,10 @@ function Logo({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (waterproof) {
       if (waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.INDOOR_NOT_WATERPROOF) {
-        setLightingPackaged(_utils_defaults__WEBPACK_IMPORTED_MODULE_10__.LIGHTING_INDOOR);
+        setIncludedItems(_utils_defaults__WEBPACK_IMPORTED_MODULE_10__.LIGHTING_INDOOR);
         setLightingOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.lightingPackagedOptions.filter(option => option.value === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.LIGHTING_INDOOR));
       } else {
-        setLightingPackaged('Low Voltage LED Driver, 10ft open wires, 1:1 blueprint');
+        setIncludedItems('Low Voltage LED Driver, 10ft open wires, 1:1 blueprint');
         setLightingOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.lightingPackagedOptions.filter(option => option.value !== _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.LIGHTING_INDOOR));
       }
     } else {
@@ -23721,13 +23823,13 @@ function Logo({
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Lighting Packaged",
-    onChange: handleOnChangeLightingPackaged,
+    title: "Included Items",
+    onChange: handleOnChangeincludedItems,
     options: lightingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == lightingPackaged
+      selected: option.value == includedItems
     }, option.value)),
-    value: lightingPackaged
+    value: includedItems
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,
@@ -23815,7 +23917,7 @@ function TrimLessFrontLit() {
       comments: '',
       font: '',
       customFont: '',
-      waterproof: '',
+      trimLessWaterproof: '',
       thickness: '',
       frontAcrylicCover: 'White',
       vinylWhite: {
@@ -23864,7 +23966,7 @@ function TrimLessFrontLit() {
     comments: '',
     font: '',
     customFont: '',
-    waterproof: '',
+    trimLessWaterproof: '',
     thickness: '',
     vinylWhite: {
       name: '',
@@ -24063,7 +24165,7 @@ function Letters({
   const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$studLength = item.studLength) !== null && _item$studLength !== void 0 ? _item$studLength : '');
   const [spacerStandoffOptions, setSpacerStandoffOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.spacerStandoffDefaultOptions);
   const [spacerStandoffDistance, setSpacerStandoffDistance] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$spacerStandoffD = item.spacerStandoffDistance) !== null && _item$spacerStandoffD !== void 0 ? _item$spacerStandoffD : '');
-  const [lightingPackaged, setLightingPackaged] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
+  const [includedItems, setIncludedItems] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
   const handleOnChangeSets = e => {
     setSets(e.target.value);
@@ -24117,7 +24219,7 @@ function Letters({
           depth,
           font,
           trimLessWaterproof: waterproof,
-          lightingPackaged,
+          includedItems,
           returnColor: color,
           letterHeight: selectedLetterHeight,
           usdPrice,
@@ -24165,7 +24267,7 @@ function Letters({
     }
   };
   const handleOnChangeWaterproof = e => setWaterproof(e.target.value);
-  const handleOnChangeLightingPackaged = e => setLightingPackaged(e.target.value);
+  const handleOnChangeincludedItems = e => setIncludedItems(e.target.value);
   const handleOnChangeLedLight = e => setLedLightColor(e.target.value);
   const handleonChangeSpacerDistance = e => {
     setSpacerStandoffDistance(e.target.value);
@@ -24313,7 +24415,7 @@ function Letters({
       missingFields.push('Add the Pantone color code of your custom color.');
     }
     if (!waterproof) missingFields.push('Select Environment');
-    if (!lightingPackaged) missingFields.push('Select Lighting Packaged');
+    if (!includedItems) missingFields.push('Select Included Items');
     if (!mounting) missingFields.push('Select Mounting');
     if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER) {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -24356,7 +24458,7 @@ function Letters({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
-  }, [letters, depth, comments, font, waterproof, color, frontAcrylicCover, vinylWhite, usdPrice, cadPrice, selectedLetterHeight, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, fontFileUrl, fontFileName, fontFilePath, fontFile, mounting, studLength, spacerStandoffDistance, usdSinglePrice, cadSinglePrice, lightingPackaged]);
+  }, [letters, depth, comments, font, waterproof, color, frontAcrylicCover, vinylWhite, usdPrice, cadPrice, selectedLetterHeight, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, fontFileUrl, fontFileName, fontFilePath, fontFile, mounting, studLength, spacerStandoffDistance, usdSinglePrice, cadSinglePrice, includedItems]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const newHeightOptions = letterPricing?.filter(item => {
       const value = item[depth?.value];
@@ -24390,10 +24492,10 @@ function Letters({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (waterproof) {
       if (waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF) {
-        setLightingPackaged(_utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR);
+        setIncludedItems(_utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR);
         setLightingOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.lightingPackagedOptions.filter(option => option.value === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR));
       } else {
-        setLightingPackaged('Low Voltage LED Driver, 10ft open wires, 1:1 blueprint');
+        setIncludedItems('Low Voltage LED Driver, 10ft open wires, 1:1 blueprint');
         setLightingOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.lightingPackagedOptions.filter(option => option.value !== _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR));
       }
     } else {
@@ -24481,7 +24583,7 @@ function Letters({
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Front Acrylic Cover",
     onChange: handleOnChangeWhite,
-    options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.whiteOptionsResin.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.whiteOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
       selected: option == frontAcrylicCover
     }, option.option)),
@@ -24541,13 +24643,13 @@ function Letters({
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Lighting Packaged",
-    onChange: handleOnChangeLightingPackaged,
+    title: "Included Items",
+    onChange: handleOnChangeincludedItems,
     options: lightingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == lightingPackaged
+      selected: option.value == includedItems
     }, option.value)),
-    value: lightingPackaged
+    value: includedItems
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,
@@ -24658,7 +24760,7 @@ function Logo({
   const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$studLength = item.studLength) !== null && _item$studLength !== void 0 ? _item$studLength : '');
   const [spacerStandoffOptions, setSpacerStandoffOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.spacerStandoffDefaultOptions);
   const [spacerStandoffDistance, setSpacerStandoffDistance] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$spacerStandoffD = item.spacerStandoffDistance) !== null && _item$spacerStandoffD !== void 0 ? _item$spacerStandoffD : '');
-  const [lightingPackaged, setLightingPackaged] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
+  const [includedItems, setIncludedItems] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const [lightingOptions, setLightingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.lightingPackagedOptions);
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
   const handleOnChangeSets = e => {
@@ -24701,7 +24803,7 @@ function Logo({
           sets,
           width,
           height,
-          lightingPackaged
+          includedItems
         };
       } else {
         return sign;
@@ -24723,7 +24825,7 @@ function Logo({
     }
   };
   const handleOnChangeWaterproof = e => setWaterproof(e.target.value);
-  const handleOnChangeLightingPackaged = e => setLightingPackaged(e.target.value);
+  const handleOnChangeincludedItems = e => setIncludedItems(e.target.value);
   const handleOnChangeLedLight = e => setLedLightColor(e.target.value);
   const handleonChangeSpacerDistance = e => {
     setSpacerStandoffDistance(e.target.value);
@@ -24786,7 +24888,7 @@ function Logo({
       missingFields.push('Add the Pantone color code of your custom color.');
     }
     if (!waterproof) missingFields.push('Select Environment');
-    if (!lightingPackaged) missingFields.push('Select Lighting Packaged');
+    if (!includedItems) missingFields.push('Select Included Items');
     if (!mounting) missingFields.push('Select Mounting');
     if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER || mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT) {
       if (!studLength) missingFields.push('Select Stud Length');
@@ -24907,10 +25009,10 @@ function Logo({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (waterproof) {
       if (waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.INDOOR_NOT_WATERPROOF) {
-        setLightingPackaged(_utils_defaults__WEBPACK_IMPORTED_MODULE_10__.LIGHTING_INDOOR);
+        setIncludedItems(_utils_defaults__WEBPACK_IMPORTED_MODULE_10__.LIGHTING_INDOOR);
         setLightingOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.lightingPackagedOptions.filter(option => option.value === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.LIGHTING_INDOOR));
       } else {
-        setLightingPackaged('Low Voltage LED Driver, 10ft open wires, 1:1 blueprint');
+        setIncludedItems('Low Voltage LED Driver, 10ft open wires, 1:1 blueprint');
         setLightingOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.lightingPackagedOptions.filter(option => option.value !== _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.LIGHTING_INDOOR));
       }
     } else {
@@ -25017,13 +25119,13 @@ function Logo({
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Lighting Packaged",
-    onChange: handleOnChangeLightingPackaged,
+    title: "Included Items",
+    onChange: handleOnChangeincludedItems,
     options: lightingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == lightingPackaged
+      selected: option.value == includedItems
     }, option.value)),
-    value: lightingPackaged
+    value: includedItems
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,
@@ -33384,6 +33486,9 @@ const allAttributes = item => [{
 }, {
   key: item.lightingPackaged,
   label: 'LIGHTING PACKAGED'
+}, {
+  key: item.includedItems,
+  label: 'INCLUDED ITEMS'
 }, {
   key: item.remoteControl,
   label: 'REMOTE CONTROL'

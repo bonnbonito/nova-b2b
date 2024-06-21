@@ -70,7 +70,9 @@ export function Letters({ item }) {
 	const [openFont, setOpenFont] = useState(false);
 	const [color, setColor] = useState(item.acrylicReturnPaintColor ?? 'Black');
 	const [openColor, setOpenColor] = useState(false);
-	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
+	const [waterproof, setWaterproof] = useState(
+		item.trimLessWaterproof ?? INDOOR_NOT_WATERPROOF
+	);
 	const [acrylicChannelThickness, setAcrylicChannelThickness] = useState(
 		item.acrylicChannelThickness ?? '1.2"'
 	);
@@ -188,7 +190,7 @@ export function Letters({ item }) {
 			font,
 			acrylicChannelThickness,
 			mounting: selectedMounting,
-			waterproof,
+			trimLessWaterproof: waterproof,
 			acrylicReturnPaintColor: color,
 			letterHeight: selectedLetterHeight,
 			ledLightColor,
@@ -211,6 +213,7 @@ export function Letters({ item }) {
 			usdSinglePrice,
 			cadSinglePrice,
 			backOption,
+			includedItems: LIGHTING_INDOOR,
 		};
 
 		setSignage((prevSignage) =>
@@ -682,21 +685,6 @@ export function Letters({ item }) {
 				/>
 
 				<Dropdown
-					title="Environment"
-					onChange={handleOnChangeWaterproof}
-					options={waterProofOptions.map((option) => (
-						<option
-							value={option.option}
-							selected={option.option == waterproof}
-						>
-							{option.option}
-						</option>
-					))}
-					value={waterproof}
-					onlyValue={true}
-				/>
-
-				<Dropdown
 					title="Back Option"
 					onChange={handleOnChangeBackOption}
 					options={backOptionOptions.map((option) => (
@@ -774,9 +762,24 @@ export function Letters({ item }) {
 					</>
 				)}
 
+				<Dropdown
+					title="Environment"
+					onChange={handleOnChangeWaterproof}
+					options={waterProofOptions.map((option) => (
+						<option
+							value={option.option}
+							selected={option.option == waterproof}
+						>
+							{option.option}
+						</option>
+					))}
+					value={waterproof}
+					onlyValue={true}
+				/>
+
 				{waterproof === INDOOR_NOT_WATERPROOF && (
 					<Dropdown
-						title="Included in the Package"
+						title="Included Items"
 						options={
 							<option value={LIGHTING_INDOOR} selected={LIGHTING_INDOOR}>
 								{LIGHTING_INDOOR}

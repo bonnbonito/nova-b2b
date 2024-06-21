@@ -5,10 +5,7 @@ import FontsDropdown from '../../../../FontsDropdown';
 import UploadFiles from '../../../../UploadFiles';
 import UploadFont from '../../../../UploadFont';
 import useOutsideClick from '../../../../utils/ClickOutside';
-import {
-	colorOptions,
-	whiteOptionsResin,
-} from '../../../../utils/ColorOptions';
+import { colorOptions, whiteOptions } from '../../../../utils/ColorOptions';
 import ColorsDropdown from '../../../../utils/ColorsDropdown';
 import VinylColors from '../../../../utils/VinylColors';
 
@@ -101,7 +98,7 @@ export function Letters({ item }) {
 		item.spacerStandoffDistance ?? ''
 	);
 
-	const [lightingPackaged, setLightingPackaged] = useState('');
+	const [includedItems, setIncludedItems] = useState('');
 
 	const [sets, setSets] = useState(item.sets ?? 1);
 	const handleOnChangeSets = (e) => {
@@ -175,7 +172,7 @@ export function Letters({ item }) {
 					depth,
 					font,
 					trimLessWaterproof: waterproof,
-					lightingPackaged,
+					includedItems,
 					returnColor: color,
 					letterHeight: selectedLetterHeight,
 					usdPrice,
@@ -230,8 +227,7 @@ export function Letters({ item }) {
 
 	const handleOnChangeWaterproof = (e) => setWaterproof(e.target.value);
 
-	const handleOnChangeLightingPackaged = (e) =>
-		setLightingPackaged(e.target.value);
+	const handleOnChangeincludedItems = (e) => setIncludedItems(e.target.value);
 
 	const handleOnChangeLedLight = (e) => setLedLightColor(e.target.value);
 
@@ -428,7 +424,7 @@ export function Letters({ item }) {
 
 		if (!waterproof) missingFields.push('Select Environment');
 
-		if (!lightingPackaged) missingFields.push('Select Lighting Packaged');
+		if (!includedItems) missingFields.push('Select Included Items');
 
 		if (!mounting) missingFields.push('Select Mounting');
 
@@ -514,7 +510,7 @@ export function Letters({ item }) {
 		spacerStandoffDistance,
 		usdSinglePrice,
 		cadSinglePrice,
-		lightingPackaged,
+		includedItems,
 	]);
 
 	useEffect(() => {
@@ -560,14 +556,14 @@ export function Letters({ item }) {
 	useEffect(() => {
 		if (waterproof) {
 			if (waterproof === INDOOR_NOT_WATERPROOF) {
-				setLightingPackaged(LIGHTING_INDOOR);
+				setIncludedItems(LIGHTING_INDOOR);
 				setLightingOptions(
 					lightingPackagedOptions.filter(
 						(option) => option.value === LIGHTING_INDOOR
 					)
 				);
 			} else {
-				setLightingPackaged(
+				setIncludedItems(
 					'Low Voltage LED Driver, 10ft open wires, 1:1 blueprint'
 				);
 				setLightingOptions(
@@ -683,7 +679,7 @@ export function Letters({ item }) {
 				<Dropdown
 					title="Front Acrylic Cover"
 					onChange={handleOnChangeWhite}
-					options={whiteOptionsResin.map((option) => (
+					options={whiteOptions.map((option) => (
 						<option
 							value={option.option}
 							selected={option == frontAcrylicCover}
@@ -786,17 +782,17 @@ export function Letters({ item }) {
 				/>
 
 				<Dropdown
-					title="Lighting Packaged"
-					onChange={handleOnChangeLightingPackaged}
+					title="Included Items"
+					onChange={handleOnChangeincludedItems}
 					options={lightingOptions.map((option) => (
 						<option
 							value={option.value}
-							selected={option.value == lightingPackaged}
+							selected={option.value == includedItems}
 						>
 							{option.value}
 						</option>
 					))}
-					value={lightingPackaged}
+					value={includedItems}
 				/>
 
 				<Dropdown

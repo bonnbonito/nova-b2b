@@ -26,7 +26,7 @@ const AcrylicSideLit = () => {
 				font: '',
 				comments: '',
 				waterproof: INDOOR_NOT_WATERPROOF,
-				lightingPackaged: LIGHTING_INDOOR,
+				includedItems: LIGHTING_INDOOR,
 				acrylicChannelThickness: '1.2" (30mm)',
 				ledLightColor: '6500K White',
 				letterHeight: '',
@@ -73,7 +73,7 @@ const AcrylicSideLit = () => {
 		acrylicReturn: 'White',
 		ledLightColor: '6500K White',
 		waterproof: INDOOR_NOT_WATERPROOF,
-		lightingPackaged: LIGHTING_INDOOR,
+		includedItems: LIGHTING_INDOOR,
 		product: NovaQuote.product,
 		acrylicReturn: 'White',
 	};
