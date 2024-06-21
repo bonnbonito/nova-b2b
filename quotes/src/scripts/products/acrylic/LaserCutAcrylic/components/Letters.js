@@ -196,9 +196,20 @@ export function Letters({ item }) {
 		};
 
 		setSignage((prevSignage) =>
-			prevSignage.map((sign) =>
-				sign.id === item.id ? { ...sign, ...updateDetails } : sign
-			)
+			prevSignage.map((sign, index) => {
+				if (sign.id === item.id) {
+					const updatedSign = { ...sign, ...updateDetails };
+					if (item.isLayered) {
+						updatedSign.title = `Layer ${index + 1}`;
+					}
+					return updatedSign;
+				} else {
+					if (item.isLayered) {
+						sign.title = `Layer ${index + 1}`;
+					}
+					return sign;
+				}
+			})
 		);
 	}
 
@@ -236,6 +247,11 @@ export function Letters({ item }) {
 			if (selectedMounting === STUD_WITH_SPACER) {
 				const spacer = spacerPricing(tempTotal);
 				tempTotal += parseFloat(spacer.toFixed(2));
+			}
+
+			/** if Layered 3D */
+			if (item.isLayered) {
+				tempTotal *= 1.4;
 			}
 
 			const total = tempTotal * sets;
@@ -746,13 +762,15 @@ export function Letters({ item }) {
 					</>
 				)}
 
-				<Dropdown
-					title="Quantity"
-					onChange={handleOnChangeSets}
-					options={setOptions}
-					value={sets}
-					onlyValue={true}
-				/>
+				{!item.hideQuantity && (
+					<Dropdown
+						title="Quantity"
+						onChange={handleOnChangeSets}
+						options={setOptions}
+						value={sets}
+						onlyValue={true}
+					/>
+				)}
 			</div>
 
 			{selectedMounting === STUD_WITH_SPACER && (

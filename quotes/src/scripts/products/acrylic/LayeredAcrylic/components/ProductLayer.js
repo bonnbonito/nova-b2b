@@ -2,21 +2,17 @@ import React from 'react';
 import { PlusIcon } from '../../../../svg/Icons';
 import AddLayer from './AddLayer';
 
-import { useLayerAcrylic } from '../LayeredAcrylicContext';
-
-const ProductLayer = ({ layer }) => {
-	const addSignage = useLayerAcrylic();
-	console.log(layer.product_line.ID);
+const ProductLayer = ({ layer, length }) => {
 	return (
 		<>
-			<h4>{layer.product_line.post_title}</h4>
+			<h5 className="uppercase">{layer.product_line.post_title}</h5>
 			<div className="flex gap-4">
 				{layer.letters && (
 					<AddLayer
-						addSignage={addSignage}
 						type="LETTERS"
+						length={length}
 						product={layer.product_line}
-						title={layer.product_line.post_title}
+						component={layer.component}
 					>
 						LETTERS
 						<div className="ml-2">
@@ -26,10 +22,10 @@ const ProductLayer = ({ layer }) => {
 				)}
 				{layer.logo && (
 					<AddLayer
-						addSignage={addSignage}
 						type="LOGO"
+						length={length}
 						product={layer.product_line}
-						title={layer.product_line.post_title}
+						component={layer.component}
 					>
 						LOGO
 						<div className="ml-2">

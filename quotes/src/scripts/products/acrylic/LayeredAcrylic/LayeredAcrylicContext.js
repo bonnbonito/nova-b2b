@@ -11,7 +11,7 @@ export function useLayerAcrylic() {
 export function LayeredAcrylicProvider({ children }) {
 	const { setSignage } = useAppContext();
 
-	function addSignage(productLine, productId, type, component, material) {
+	function addSignage(productLine, productId, type, component) {
 		const defaultArgs = {
 			id: uuidv4(),
 			productLine,
@@ -20,15 +20,14 @@ export function LayeredAcrylicProvider({ children }) {
 			cadPrice: 0,
 			component,
 			comments: '',
-			material,
 		};
 
 		setSignage((prevSignage) => {
-			const count = prevSignage.filter((sign) => sign.type === type).length;
 			let args;
 			args = {
 				type: type.toLowerCase(),
-				title: `${type} ${count + 1}`,
+				hideQuantity: true,
+				isLayered: true,
 			};
 			const newSignage = {
 				...defaultArgs,

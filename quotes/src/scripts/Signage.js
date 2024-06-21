@@ -6,7 +6,7 @@ import EditableText from './EditableText';
 import { ClearIcon, CollapseIcon, DuplicateIcon, TrashIcon } from './svg/Icons';
 import { debounce } from './utils/helpers';
 
-const Signage = ({ item, children, storage }) => {
+const Signage = ({ index, item, children, storage, editable = true }) => {
 	const { signage, setSignage, setMissing, updateSignageItem } =
 		useAppContext();
 
@@ -73,13 +73,17 @@ const Signage = ({ item, children, storage }) => {
 	}, []);
 
 	return (
-		<div className="rounded-md border border-gray-200 p-4 mb-8">
+		<div className="rounded-md border border-gray-200 p-4 mb-8 shadow-sm">
 			<div className={`flex justify-between ${open ? 'mb-4' : 'mb-0'}`}>
-				<EditableText
-					id={item.id}
-					text={item.title}
-					onChange={handleOnChangeTitle}
-				/>
+				{editable ? (
+					<EditableText
+						id={item.id}
+						text={item.title}
+						onChange={handleOnChangeTitle}
+					/>
+				) : (
+					<h3 className="signage-title uppercase mb-0">{item.title}</h3>
+				)}
 
 				<div className="flex gap-6">
 					<Tooltip id={item.id} />
@@ -102,7 +106,7 @@ const Signage = ({ item, children, storage }) => {
 					{signage.length < 10 && (
 						<div
 							className="cursor-pointer select-none"
-							onClick={() => duplicateSignage(item)}
+							onClick={() => duplicateSignage(item, editable, signage)}
 							data-tooltip-id={`${item.id}`}
 							data-tooltip-content="Duplicate"
 						>

@@ -3930,9 +3930,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const Signage = ({
+  index,
   item,
   children,
-  storage
+  storage,
+  editable = true
 }) => {
   const {
     signage,
@@ -3985,14 +3987,16 @@ const Signage = ({
     setOpen(prev => !prev);
   }, []);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "rounded-md border border-gray-200 p-4 mb-8"
+    className: "rounded-md border border-gray-200 p-4 mb-8 shadow-sm"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: `flex justify-between ${open ? 'mb-4' : 'mb-0'}`
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_EditableText__WEBPACK_IMPORTED_MODULE_3__["default"], {
+  }, editable ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_EditableText__WEBPACK_IMPORTED_MODULE_3__["default"], {
     id: item.id,
     text: item.title,
     onChange: handleOnChangeTitle
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", {
+    className: "signage-title uppercase mb-0"
+  }, item.title), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_tooltip__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
     id: item.id
@@ -4010,7 +4014,7 @@ const Signage = ({
     "data-tooltip-content": open ? 'Collapse' : 'Expand'
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.CollapseIcon, null)), signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "cursor-pointer select-none",
-    onClick: () => duplicateSignage(item),
+    onClick: () => duplicateSignage(item, editable, signage),
     "data-tooltip-id": `${item.id}`,
     "data-tooltip-content": "Duplicate"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.DuplicateIcon, null)), signage.length > 1 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -11604,10 +11608,23 @@ function Letters({
       usdSinglePrice,
       cadSinglePrice
     };
-    setSignage(prevSignage => prevSignage.map(sign => sign.id === item.id ? {
-      ...sign,
-      ...updateDetails
-    } : sign));
+    setSignage(prevSignage => prevSignage.map((sign, index) => {
+      if (sign.id === item.id) {
+        const updatedSign = {
+          ...sign,
+          ...updateDetails
+        };
+        if (item.isLayered) {
+          updatedSign.title = `Layer ${index + 1}`;
+        }
+        return updatedSign;
+      } else {
+        if (item.isLayered) {
+          sign.title = `Layer ${index + 1}`;
+        }
+        return sign;
+      }
+    }));
   }
   const computePricing = () => {
     if (letterPricing.length > 0 && selectedLetterHeight && selectedThickness && waterproof && letters.trim().length > 0) {
@@ -11633,6 +11650,11 @@ function Letters({
       if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER) {
         const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_9__.spacerPricing)(tempTotal);
         tempTotal += parseFloat(spacer.toFixed(2));
+      }
+
+      /** if Layered 3D */
+      if (item.isLayered) {
+        tempTotal *= 1.4;
       }
       const total = tempTotal * sets;
       return {
@@ -11967,7 +11989,7 @@ function Letters({
       selected: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  })), !item.hideQuantity && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.setOptions,
@@ -12106,7 +12128,10 @@ function Logo({
   const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$filePaths = item.filePaths) !== null && _item$filePaths !== void 0 ? _item$filePaths : []);
   const [files, setFiles] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$files = item.files) !== null && _item$files !== void 0 ? _item$files : []);
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
-  const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$color = item.color) !== null && _item$color !== void 0 ? _item$color : {});
+  const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$color = item.color) !== null && _item$color !== void 0 ? _item$color : {
+    name: '',
+    color: ''
+  });
   const [openColor, setOpenColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [customColor, setCustomColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$customColor = item.customColor) !== null && _item$customColor !== void 0 ? _item$customColor : '');
   const colorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
@@ -12199,10 +12224,11 @@ function Logo({
   };
   function updateSignage() {
     if (!signage.some(sign => sign.id === item.id)) return;
-    const updatedSignage = signage.map(sign => {
+    const updatedSignage = signage.map((sign, index) => {
       if (sign.id === item.id) {
         return {
           ...sign,
+          title: item.isLayered ? `Layer ${index + 1}` : item.title,
           comments,
           acrylicThickness: selectedThickness,
           mounting: selectedMounting,
@@ -12225,7 +12251,10 @@ function Logo({
           cadSinglePrice
         };
       } else {
-        return sign;
+        return {
+          title: item.isLayered ? `Layer ${index + 1}` : item.title,
+          ...sign
+        };
       }
     });
     setSignage(() => updatedSignage);
@@ -12271,6 +12300,11 @@ function Logo({
         if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER) {
           const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.spacerPricing)(tempTotal);
           tempTotal += spacer;
+        }
+
+        /** if Layered 3D */
+        if (item.isLayered) {
+          tempTotal *= 1.4;
         }
         const total = tempTotal * sets;
         return {
@@ -12441,7 +12475,7 @@ function Logo({
       selected: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  })), !item.hideQuantity && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.setOptions,
@@ -12492,17 +12526,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
-/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
-/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
-/* harmony import */ var _components_ProductLayer__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/ProductLayer */ "./src/scripts/products/acrylic/LayeredAcrylic/components/ProductLayer.js");
-/* harmony import */ var _LaserCutAcrylic_components_Letters__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../LaserCutAcrylic/components/Letters */ "./src/scripts/products/acrylic/LaserCutAcrylic/components/Letters.js");
-/* harmony import */ var _LaserCutAcrylic_components_Logo__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../LaserCutAcrylic/components/Logo */ "./src/scripts/products/acrylic/LaserCutAcrylic/components/Logo.js");
-/* harmony import */ var _MetalLaminate_components_Letters__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../MetalLaminate/components/Letters */ "./src/scripts/products/acrylic/MetalLaminate/components/Letters.js");
-/* harmony import */ var _MetalLaminate_components_Logo__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../MetalLaminate/components/Logo */ "./src/scripts/products/acrylic/MetalLaminate/components/Logo.js");
-/* harmony import */ var _UvPrintedAcrylic_components_Logo__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../UvPrintedAcrylic/components/Logo */ "./src/scripts/products/acrylic/UvPrintedAcrylic/components/Logo.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
-/* harmony import */ var _LayeredAcrylicContext__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./LayeredAcrylicContext */ "./src/scripts/products/acrylic/LayeredAcrylic/LayeredAcrylicContext.js");
+/* harmony import */ var _Note__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Note */ "./src/scripts/Note.js");
+/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
+/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
+/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
+/* harmony import */ var _components_ProductLayer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/ProductLayer */ "./src/scripts/products/acrylic/LayeredAcrylic/components/ProductLayer.js");
+/* harmony import */ var _LaserCutAcrylic_components_Letters__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../LaserCutAcrylic/components/Letters */ "./src/scripts/products/acrylic/LaserCutAcrylic/components/Letters.js");
+/* harmony import */ var _LaserCutAcrylic_components_Logo__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../LaserCutAcrylic/components/Logo */ "./src/scripts/products/acrylic/LaserCutAcrylic/components/Logo.js");
+/* harmony import */ var _MetalLaminate_components_Letters__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../MetalLaminate/components/Letters */ "./src/scripts/products/acrylic/MetalLaminate/components/Letters.js");
+/* harmony import */ var _MetalLaminate_components_Logo__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../MetalLaminate/components/Logo */ "./src/scripts/products/acrylic/MetalLaminate/components/Logo.js");
+/* harmony import */ var _UvPrintedAcrylic_components_Logo__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../UvPrintedAcrylic/components/Logo */ "./src/scripts/products/acrylic/UvPrintedAcrylic/components/Logo.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _LayeredAcrylicContext__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./LayeredAcrylicContext */ "./src/scripts/products/acrylic/LayeredAcrylic/LayeredAcrylicContext.js");
+
 
 
 
@@ -12524,46 +12560,51 @@ function LayeredAcrylic() {
     setSignage,
     setTempFolder,
     tempFolderName
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_10__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_11__.useAppContext)();
   const [openLayer, setOpenLayer] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   function setDefaultSignage() {
     setSignage([]);
   }
-  const showComponent = item => {
+  const showComponent = (item, index) => {
     let output;
     switch (item.component) {
       case 'AcryLic':
         if (item.type === 'letters') {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_LaserCutAcrylic_components_Letters__WEBPACK_IMPORTED_MODULE_5__.Letters, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_LaserCutAcrylic_components_Letters__WEBPACK_IMPORTED_MODULE_6__.Letters, {
             key: item.id,
+            index: index,
             item: item,
             productId: item.product
           });
         } else {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_LaserCutAcrylic_components_Logo__WEBPACK_IMPORTED_MODULE_6__.Logo, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_LaserCutAcrylic_components_Logo__WEBPACK_IMPORTED_MODULE_7__.Logo, {
             key: item.id,
+            index: index,
             item: item,
             productId: item.product
           });
         }
         break;
       case 'AcrylicUV':
-        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UvPrintedAcrylic_components_Logo__WEBPACK_IMPORTED_MODULE_9__.Logo, {
+        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UvPrintedAcrylic_components_Logo__WEBPACK_IMPORTED_MODULE_10__.Logo, {
           key: item.id,
+          index: index,
           item: item,
           productId: item.product
         });
         break;
       case 'AcrylicMetalLaminate':
         if (item.type === 'letters') {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_MetalLaminate_components_Letters__WEBPACK_IMPORTED_MODULE_7__.Letters, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_MetalLaminate_components_Letters__WEBPACK_IMPORTED_MODULE_8__.Letters, {
             key: item.id,
+            index: index,
             item: item,
             productId: item.product
           });
         } else {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_MetalLaminate_components_Logo__WEBPACK_IMPORTED_MODULE_8__.Logo, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_MetalLaminate_components_Logo__WEBPACK_IMPORTED_MODULE_9__.Logo, {
             key: item.id,
+            index: index,
             item: item,
             productId: item.product
           });
@@ -12572,6 +12613,14 @@ function LayeredAcrylic() {
     }
     return output;
   };
+  const signageOutput = signage.map((item, index) => {
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      index: index,
+      id: item.id,
+      item: item,
+      editable: false
+    }, showComponent(item, index));
+  });
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (NovaQuote.is_editting === '1') {
       const currentSignage = JSON.parse(NovaQuote.signage);
@@ -12591,27 +12640,31 @@ function LayeredAcrylic() {
       setTempFolder(`Q-${NovaQuote.current_quote_id}`);
     }
   }, []);
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_LayeredAcrylicContext__WEBPACK_IMPORTED_MODULE_11__.LayeredAcrylicProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_LayeredAcrylicContext__WEBPACK_IMPORTED_MODULE_12__.LayeredAcrylicProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:flex gap-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full"
-  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    index: index,
-    id: item.id,
-    item: item,
-    storage: storage
-  }, showComponent(item))), signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, signageOutput, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Note__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Note"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+    className: "text-sm"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
+    className: "font-bold"
+  }, "Layer 1 is the bottom layer. Each subsequent layer (Layer 2, Layer 3, etc.) is positioned above the previous one"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The minimum stroke for 3M double-sided tape is 10mm."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "For stud pins: The minimum stroke is 12mm (1/2\u201D) and the minimum acrylic thickness is 1/4\" (6mm)."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "You can choose a thicker acrylic to accommodate the design. If you choose thinner acrylic, take note that it cannot use stud pins and the sign must be carefully glued to the installation surface."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Sharp, thin points are not ideal unless requested. Slim sections will be cut for shipping as small lines may break easily. You can glue them together upon receipt."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color."))), signage.length < 5 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "gap-2"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
-    className: "bg-white text-black font-title text-3xl inline-flex items-center gap-2 px-8 py-4 mb-2 border-solid border rounded-md",
+    className: "bg-white text-black font-title text-2xl inline-flex items-center gap-2 px-8 py-3 mb-2 border-solid border rounded-md",
     onClick: () => setOpenLayer(prev => !prev)
-  }, "ADD LAYERS ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.PlusIcon, null)), openLayer && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: " border-gray-200 p-4 rounded-md border"
+  }, "ADD LAYER ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, {
+    open: !openLayer
+  })), openLayer && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: " border-black p-4 rounded-md border shadow-2xl"
   }, productLayers.map(layer => {
-    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_ProductLayer__WEBPACK_IMPORTED_MODULE_4__["default"], {
-      layer: layer
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_ProductLayer__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      layer: layer,
+      length: signage.length
     });
-  })))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_1__["default"], null)));
+  })))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], null)));
 }
 
 /***/ }),
@@ -12646,7 +12699,7 @@ function LayeredAcrylicProvider({
   const {
     setSignage
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
-  function addSignage(productLine, productId, type, component, material) {
+  function addSignage(productLine, productId, type, component) {
     const defaultArgs = {
       id: (0,uuid__WEBPACK_IMPORTED_MODULE_2__["default"])(),
       productLine,
@@ -12654,15 +12707,14 @@ function LayeredAcrylicProvider({
       usdPrice: 0,
       cadPrice: 0,
       component,
-      comments: '',
-      material
+      comments: ''
     };
     setSignage(prevSignage => {
-      const count = prevSignage.filter(sign => sign.type === type).length;
       let args;
       args = {
         type: type.toLowerCase(),
-        title: `${type} ${count + 1}`
+        hideQuantity: true,
+        isLayered: true
       };
       const newSignage = {
         ...defaultArgs,
@@ -12693,15 +12745,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _LayeredAcrylicContext__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../LayeredAcrylicContext */ "./src/scripts/products/acrylic/LayeredAcrylic/LayeredAcrylicContext.js");
+
 
 
 const AddLayer = ({
+  type,
   product,
-  type
+  component,
+  children
 }) => {
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
-    className: "flex leading-none items-center rounded-md border bg-white border-gray-200  border-solid p-4 cursor-pointer justify-between hover:bg-slate-600 font-title text-black hover:text-white"
-  }, type);
+  const addSignage = (0,_LayeredAcrylicContext__WEBPACK_IMPORTED_MODULE_1__.useLayerAcrylic)();
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex leading-none items-center rounded-md border bg-white border-gray-200  border-solid p-4 cursor-pointer justify-between hover:bg-slate-600 font-title text-black hover:text-white",
+    onClick: () => addSignage(product.post_title + ' - ' + type, product.ID, type, component)
+  }, children);
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (AddLayer);
 
@@ -13123,31 +13181,30 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../svg/Icons */ "./src/scripts/svg/Icons.js");
 /* harmony import */ var _AddLayer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AddLayer */ "./src/scripts/products/acrylic/LayeredAcrylic/components/AddLayer.js");
-/* harmony import */ var _LayeredAcrylicContext__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../LayeredAcrylicContext */ "./src/scripts/products/acrylic/LayeredAcrylic/LayeredAcrylicContext.js");
-
 
 
 
 
 const ProductLayer = ({
-  layer
+  layer,
+  length
 }) => {
-  const addSignage = (0,_LayeredAcrylicContext__WEBPACK_IMPORTED_MODULE_3__.useLayerAcrylic)();
-  console.log(layer.product_line.ID);
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, layer.product_line.post_title), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
+    className: "uppercase"
+  }, layer.product_line.post_title), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-4"
   }, layer.letters && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AddLayer__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    addSignage: addSignage,
     type: "LETTERS",
+    length: length,
     product: layer.product_line,
-    title: layer.product_line.post_title
+    component: layer.component
   }, "LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "ml-2"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null))), layer.logo && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AddLayer__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    addSignage: addSignage,
     type: "LOGO",
+    length: length,
     product: layer.product_line,
-    title: layer.product_line.post_title
+    component: layer.component
   }, "LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "ml-2"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null)))));
@@ -13546,6 +13603,11 @@ const Letters = ({
         spacer = parseFloat(spacer.toFixed(2));
         tempTotal += parseFloat(spacer.toFixed(2));
       }
+
+      /** if Layered 3D */
+      if (item.isLayered) {
+        tempTotal *= 1.4;
+      }
       const total = tempTotal * sets;
       return {
         singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -13559,10 +13621,11 @@ const Letters = ({
     }
   };
   function updateSignage() {
-    const updatedSignage = signage.map(sign => {
+    const updatedSignage = signage.map((sign, index) => {
       if (sign.id === item.id) {
         return {
           ...sign,
+          title: item.isLayered ? `Layer ${index + 1}` : item.title,
           letters,
           comments,
           font,
@@ -13591,7 +13654,10 @@ const Letters = ({
           spacerStandoffDistance
         };
       } else {
-        return sign;
+        return {
+          title: item.isLayered ? `Layer ${index + 1}` : item.title,
+          ...sign
+        };
       }
     });
     setSignage(() => updatedSignage);
@@ -13867,7 +13933,7 @@ const Letters = ({
       selected: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  })), !item.hideQuantity && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_10__.setOptions,
@@ -14025,6 +14091,11 @@ function Logo({
           spacer = parseFloat(spacer.toFixed(2));
           tempTotal += spacer;
         }
+
+        /** if Layered 3D */
+        if (item.isLayered) {
+          tempTotal *= 1.4;
+        }
         const total = tempTotal * sets;
         return {
           singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -14153,10 +14224,11 @@ function Logo({
     setMetalLaminate(e.target.value);
   };
   function updateSignage() {
-    const updatedSignage = signage.map(sign => {
+    const updatedSignage = signage.map((sign, index) => {
       if (sign.id === item.id) {
         return {
           ...sign,
+          title: item.isLayered ? `Layer ${index + 1}` : item.title,
           comments,
           acrylicThickness: selectedThickness,
           mounting: selectedMounting,
@@ -14179,7 +14251,10 @@ function Logo({
           spacerStandoffDistance
         };
       } else {
-        return sign;
+        return {
+          title: item.isLayered ? `Layer ${index + 1}` : item.title,
+          ...sign
+        };
       }
     });
     setSignage(() => updatedSignage);
@@ -14325,7 +14400,7 @@ function Logo({
       selected: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  })), !item.hideQuantity && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.setOptions,
@@ -14612,6 +14687,11 @@ function Logo({
           spacer = parseFloat(spacer.toFixed(2));
           tempTotal += spacer;
         }
+
+        /** if Layered 3D */
+        if (item.isLayered) {
+          tempTotal *= 1.4;
+        }
         const total = tempTotal * sets;
         return {
           singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -14767,10 +14847,11 @@ function Logo({
     option: 'Custom Color'
   }];
   function updateSignage() {
-    const updatedSignage = signage.map(sign => {
+    const updatedSignage = signage.map((sign, index) => {
       if (sign.id === item.id) {
         return {
           ...sign,
+          title: item.isLayered ? `Layer ${index + 1}` : item.title,
           comments,
           acrylicThickness: selectedThickness,
           mounting: selectedMounting,
@@ -14794,7 +14875,10 @@ function Logo({
           spacerStandoffDistance
         };
       } else {
-        return sign;
+        return {
+          title: item.isLayered ? `Layer ${index + 1}` : item.title,
+          ...sign
+        };
       }
     });
     setSignage(() => updatedSignage);
@@ -14948,7 +15032,7 @@ function Logo({
       selected: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  })), !item.hideQuantity && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.setOptions,

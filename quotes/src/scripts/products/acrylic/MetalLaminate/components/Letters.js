@@ -220,6 +220,11 @@ export const Letters = ({ item }) => {
 				tempTotal += parseFloat(spacer.toFixed(2));
 			}
 
+			/** if Layered 3D */
+			if (item.isLayered) {
+				tempTotal *= 1.4;
+			}
+
 			const total = tempTotal * sets;
 
 			return {
@@ -235,10 +240,11 @@ export const Letters = ({ item }) => {
 	};
 
 	function updateSignage() {
-		const updatedSignage = signage.map((sign) => {
+		const updatedSignage = signage.map((sign, index) => {
 			if (sign.id === item.id) {
 				return {
 					...sign,
+					title: item.isLayered ? `Layer ${index + 1}` : item.title,
 					letters,
 					comments,
 					font,
@@ -267,7 +273,10 @@ export const Letters = ({ item }) => {
 					spacerStandoffDistance,
 				};
 			} else {
-				return sign;
+				return {
+					title: item.isLayered ? `Layer ${index + 1}` : item.title,
+					...sign,
+				};
 			}
 		});
 		setSignage(() => updatedSignage);
@@ -716,13 +725,15 @@ export const Letters = ({ item }) => {
 					</>
 				)}
 
-				<Dropdown
-					title="Quantity"
-					onChange={handleOnChangeSets}
-					options={setOptions}
-					value={sets}
-					onlyValue={true}
-				/>
+				{!item.hideQuantity && (
+					<Dropdown
+						title="Quantity"
+						onChange={handleOnChangeSets}
+						options={setOptions}
+						value={sets}
+						onlyValue={true}
+					/>
+				)}
 			</div>
 
 			{selectedMounting === STUD_WITH_SPACER && (

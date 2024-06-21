@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Note from '../../../Note';
 import Sidebar from '../../../Sidebar';
 import Signage from '../../../Signage';
 import { PlusIcon } from '../../../svg/Icons';
@@ -27,7 +28,7 @@ export default function LayeredAcrylic() {
 		setSignage([]);
 	}
 
-	const showComponent = (item) => {
+	const showComponent = (item, index) => {
 		let output;
 		switch (item.component) {
 			case 'AcryLic':
@@ -35,19 +36,30 @@ export default function LayeredAcrylic() {
 					output = (
 						<AcrylicLetters
 							key={item.id}
+							index={index}
 							item={item}
 							productId={item.product}
 						/>
 					);
 				} else {
 					output = (
-						<AcrylicLogo key={item.id} item={item} productId={item.product} />
+						<AcrylicLogo
+							key={item.id}
+							index={index}
+							item={item}
+							productId={item.product}
+						/>
 					);
 				}
 				break;
 			case 'AcrylicUV':
 				output = (
-					<AcrylicUV key={item.id} item={item} productId={item.product} />
+					<AcrylicUV
+						key={item.id}
+						index={index}
+						item={item}
+						productId={item.product}
+					/>
 				);
 				break;
 			case 'AcrylicMetalLaminate':
@@ -55,6 +67,7 @@ export default function LayeredAcrylic() {
 					output = (
 						<AcrylicMetalLetters
 							key={item.id}
+							index={index}
 							item={item}
 							productId={item.product}
 						/>
@@ -63,6 +76,7 @@ export default function LayeredAcrylic() {
 					output = (
 						<AcrylicMetalLogo
 							key={item.id}
+							index={index}
 							item={item}
 							productId={item.product}
 						/>
@@ -73,6 +87,14 @@ export default function LayeredAcrylic() {
 
 		return output;
 	};
+
+	const signageOutput = signage.map((item, index) => {
+		return (
+			<Signage index={index} id={item.id} item={item} editable={false}>
+				{showComponent(item, index)}
+			</Signage>
+		);
+	});
 
 	useEffect(() => {
 		if (NovaQuote.is_editting === '1') {
@@ -99,24 +121,51 @@ export default function LayeredAcrylic() {
 		<LayeredAcrylicProvider>
 			<div className="md:flex gap-6">
 				<div className="md:w-3/4 w-full">
-					{signage.map((item, index) => (
-						<Signage index={index} id={item.id} item={item} storage={storage}>
-							{showComponent(item)}
-						</Signage>
-					))}
+					{signageOutput}
 
-					{signage.length < 10 && (
+					<Note title="Note">
+						<ul className="text-sm">
+							<li className="font-bold">
+								Layer 1 is the bottom layer. Each subsequent layer (Layer 2,
+								Layer 3, etc.) is positioned above the previous one
+							</li>
+							<li>The minimum stroke for 3M double-sided tape is 10mm.</li>
+							<li>
+								For stud pins: The minimum stroke is 12mm (1/2”) and the minimum
+								acrylic thickness is 1/4" (6mm).
+							</li>
+							<li>
+								You can choose a thicker acrylic to accommodate the design. If
+								you choose thinner acrylic, take note that it cannot use stud
+								pins and the sign must be carefully glued to the installation
+								surface.
+							</li>
+							<li>
+								Sharp, thin points are not ideal unless requested. Slim sections
+								will be cut for shipping as small lines may break easily. You
+								can glue them together upon receipt.
+							</li>
+							<li>
+								The spacer will be black (default) or match the painted sign's
+								color.
+							</li>
+						</ul>
+					</Note>
+
+					{signage.length < 5 && (
 						<div className="gap-2">
 							<button
-								className="bg-white text-black font-title text-3xl inline-flex items-center gap-2 px-8 py-4 mb-2 border-solid border rounded-md"
+								className="bg-white text-black font-title text-2xl inline-flex items-center gap-2 px-8 py-3 mb-2 border-solid border rounded-md"
 								onClick={() => setOpenLayer((prev) => !prev)}
 							>
-								ADD LAYERS <PlusIcon />
+								ADD LAYER <PlusIcon open={!openLayer} />
 							</button>
 							{openLayer && (
-								<div className=" border-gray-200 p-4 rounded-md border">
+								<div className=" border-black p-4 rounded-md border shadow-2xl">
 									{productLayers.map((layer) => {
-										return <ProductLayer layer={layer} />;
+										return (
+											<ProductLayer layer={layer} length={signage.length} />
+										);
 									})}
 								</div>
 							)}

@@ -161,6 +161,11 @@ export function Logo({ item }) {
 					tempTotal += spacer;
 				}
 
+				/** if Layered 3D */
+				if (item.isLayered) {
+					tempTotal *= 1.4;
+				}
+
 				const total = tempTotal * sets;
 
 				return {
@@ -323,10 +328,11 @@ export function Logo({ item }) {
 	};
 
 	function updateSignage() {
-		const updatedSignage = signage.map((sign) => {
+		const updatedSignage = signage.map((sign, index) => {
 			if (sign.id === item.id) {
 				return {
 					...sign,
+					title: item.isLayered ? `Layer ${index + 1}` : item.title,
 					comments,
 					acrylicThickness: selectedThickness,
 					mounting: selectedMounting,
@@ -349,7 +355,10 @@ export function Logo({ item }) {
 					spacerStandoffDistance,
 				};
 			} else {
-				return sign;
+				return {
+					title: item.isLayered ? `Layer ${index + 1}` : item.title,
+					...sign,
+				};
 			}
 		});
 		setSignage(() => updatedSignage);
@@ -615,13 +624,15 @@ export function Logo({ item }) {
 					</>
 				)}
 
-				<Dropdown
-					title="Quantity"
-					onChange={handleOnChangeSets}
-					options={setOptions}
-					value={sets}
-					onlyValue={true}
-				/>
+				{!item.hideQuantity && (
+					<Dropdown
+						title="Quantity"
+						onChange={handleOnChangeSets}
+						options={setOptions}
+						value={sets}
+						onlyValue={true}
+					/>
+				)}
 			</div>
 
 			{selectedMounting === STUD_WITH_SPACER && (
