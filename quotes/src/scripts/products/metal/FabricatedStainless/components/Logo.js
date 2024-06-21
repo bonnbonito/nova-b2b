@@ -367,7 +367,7 @@ export function Logo({ item }) {
 				}
 
 				if (mounting === 'PVC Backing') {
-					tempTotal *= 1.05;
+					tempTotal *= 1.15;
 				}
 
 				if (mounting && mounting === STUD_WITH_SPACER) {
