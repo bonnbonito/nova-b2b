@@ -144,11 +144,13 @@ export function Logo({ item }) {
 				}
 			}
 
+			tempTotal = tempTotal.toFixed(2);
+
 			let total = tempTotal * parseInt(sets);
 
 			return {
 				singlePrice: tempTotal ?? 0,
-				total: total ?? 0,
+				total: total.toFixed(2) ?? 0,
 			};
 		} else {
 			return {
@@ -162,9 +164,9 @@ export function Logo({ item }) {
 		const { singlePrice, total } = computePricing();
 		if (total && singlePrice) {
 			setUsdPrice(total);
-			setCadPrice((total * EXCHANGE_RATE).toFixed(1));
+			setCadPrice((total * EXCHANGE_RATE).toFixed(2));
 			setUsdSinglePrice(singlePrice);
-			setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(1));
+			setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
 		} else {
 			setUsdPrice(0);
 			setCadPrice(0);
@@ -263,7 +265,11 @@ export function Logo({ item }) {
 		<>
 			{item.productLine && (
 				<div clasName="py-4 my-4">
-					PRODUCT LINE: <span className="font-title">{item.productLine}</span>
+					PRODUCT LINE:{' '}
+					<span
+						className="font-title"
+						dangerouslySetInnerHTML={{ __html: item.productLine }}
+					/>
 				</div>
 			)}
 

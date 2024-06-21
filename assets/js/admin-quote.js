@@ -586,7 +586,7 @@ function allAttributes(sign) {
 			value: sign.trimLessWaterproof ? sign.trimLessWaterproof : '',
 		},
 		{
-			label: 'LIGHTING PACKAGED',
+			label: 'INCLUDED ITEMS',
 			value: sign.lightingPackaged ? sign.lightingPackaged : '',
 		},
 		{

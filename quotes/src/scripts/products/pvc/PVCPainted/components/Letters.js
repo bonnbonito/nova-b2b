@@ -532,7 +532,11 @@ export function Letters({ item }) {
 		<>
 			{item.productLine && (
 				<div clasName="py-4 my-4">
-					PRODUCT LINE: <span className="font-title">{item.productLine}</span>
+					PRODUCT LINE:{' '}
+					<span
+						className="font-title"
+						dangerouslySetInnerHTML={{ __html: item.productLine }}
+					/>
 				</div>
 			)}
 			<div className="mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md">

@@ -5,7 +5,10 @@ import AddLayer from './AddLayer';
 const ProductLayer = ({ layer, length }) => {
 	return (
 		<>
-			<h5 className="uppercase">{layer.product_line.post_title}</h5>
+			<h5
+				className="uppercase"
+				dangerouslySetInnerHTML={{ __html: layer.product_line.post_title }}
+			/>
 			<div className="flex gap-4">
 				{layer.letters && (
 					<AddLayer

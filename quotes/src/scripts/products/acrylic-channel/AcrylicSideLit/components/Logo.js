@@ -228,6 +228,10 @@ export function Logo({ item }) {
 			tempTotal *= 1.15;
 		}
 
+		if (frontOption === 'UV Printed') {
+			tempTotal *= 1.15;
+		}
+
 		if (selectedMounting === STUD_WITH_SPACER) {
 			const spacer = spacerPricing(tempTotal);
 			tempTotal += parseFloat(spacer.toFixed(2));
@@ -408,7 +412,11 @@ export function Logo({ item }) {
 		<>
 			{item.productLine && (
 				<div clasName="py-4 my-4">
-					PRODUCT LINE: <span className="font-title">{item.productLine}</span>
+					PRODUCT LINE:{' '}
+					<span
+						className="font-title"
+						dangerouslySetInnerHTML={{ __html: item.productLine }}
+					/>
 				</div>
 			)}
 

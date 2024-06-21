@@ -301,6 +301,10 @@ export function Letters({ item }) {
 				tempTotal *= 1.15;
 			}
 
+			if (frontOption === 'UV Printed') {
+				tempTotal *= 1.15;
+			}
+
 			if (selectedMounting === STUD_WITH_SPACER) {
 				const spacer = spacerPricing(tempTotal);
 				tempTotal += parseFloat(spacer.toFixed(2));
@@ -388,6 +392,11 @@ export function Letters({ item }) {
 
 		if (frontOption === 'Metal Laminate') {
 			if (!metalLaminate) missingFields.push('Select Metal Laminate');
+		}
+
+		if (frontOption === 'UV Printed') {
+			if (!fileUrls || fileUrls.length === 0)
+				missingFields.push('Upload a PDF/AI File');
 		}
 
 		if (frontOption === 'Painted') {
@@ -529,7 +538,11 @@ export function Letters({ item }) {
 		<>
 			{item.productLine && (
 				<div clasName="py-4 my-4">
-					PRODUCT LINE: <span className="font-title">{item.productLine}</span>
+					PRODUCT LINE:{' '}
+					<span
+						className="font-title"
+						dangerouslySetInnerHTML={{ __html: item.productLine }}
+					/>
 				</div>
 			)}
 			<div className="mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md">

@@ -5314,9 +5314,12 @@ function Letters({
   }, [color, font]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     clasName: "py-4 my-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "w-full self-center"
@@ -5806,9 +5809,12 @@ function Logo({
   }, [color]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     clasName: "py-4 my-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Acrylic Thickness",
@@ -6527,9 +6533,12 @@ function Letters({
   }, [color, font]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     clasName: "py-4 my-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "w-full self-center"
@@ -7071,9 +7080,12 @@ function Logo({
   }, [width, height, acrylicFront, selectedMounting, sets]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     clasName: "py-4 my-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Acrylic Thickness",
@@ -7855,9 +7867,12 @@ function Letters({
   }, [color, font]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     clasName: "py-4 my-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "w-full self-center"
@@ -8393,9 +8408,12 @@ function Logo({
   }, [width, height, acrylicFront, selectedMounting, sets]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     clasName: "py-4 my-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Acrylic Thickness",
@@ -9030,6 +9048,9 @@ function Letters({
     if (frontOption === '3M Vinyl') {
       if (!vinylWhite?.name) missingFields.push('Select 3M Vinyl');
     }
+    if (frontOption === 'UV Printed') {
+      if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    }
     if (!waterproof) missingFields.push('Select Environment');
     if (!selectedMounting) missingFields.push('Select Mounting');
     if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_MOUNT) {
@@ -9097,9 +9118,12 @@ function Letters({
   }, [font]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     clasName: "py-4 my-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "w-full self-center"
@@ -9574,9 +9598,12 @@ function Logo({
   }, [frontOption]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     clasName: "py-4 my-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Acrylic Thickness",
@@ -10153,6 +10180,9 @@ function Letters({
       if (frontOption === 'Metal Laminate') {
         tempTotal *= 1.15;
       }
+      if (frontOption === 'UV Printed') {
+        tempTotal *= 1.15;
+      }
       if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.STUD_WITH_SPACER) {
         const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_9__.spacerPricing)(tempTotal);
         tempTotal += parseFloat(spacer.toFixed(2));
@@ -10216,6 +10246,9 @@ function Letters({
     if (!frontOption) missingFields.push('Select Front Option');
     if (frontOption === 'Metal Laminate') {
       if (!metalLaminate) missingFields.push('Select Metal Laminate');
+    }
+    if (frontOption === 'UV Printed') {
+      if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
     }
     if (frontOption === 'Painted') {
       if (!color) missingFields.push('Select Paint Color');
@@ -10291,9 +10324,12 @@ function Letters({
   }, [frontOption]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     clasName: "py-4 my-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "w-full self-center"
@@ -10680,6 +10716,9 @@ function Logo({
     if (frontOption === 'Metal Laminate') {
       tempTotal *= 1.15;
     }
+    if (frontOption === 'UV Printed') {
+      tempTotal *= 1.15;
+    }
     if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER) {
       const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.spacerPricing)(tempTotal);
       tempTotal += parseFloat(spacer.toFixed(2));
@@ -10793,9 +10832,12 @@ function Logo({
   }, [frontOption]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     clasName: "py-4 my-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Acrylic Thickness",
@@ -11881,9 +11923,12 @@ function Letters({
   }, [selectedLetterHeight, selectedThickness, selectedFinishing, letters, waterproof, color, sets, font, selectedMounting, letterPricing]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     clasName: "py-4 my-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "w-full self-center"
@@ -12405,9 +12450,12 @@ function Logo({
   }, [color]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "py-4 mb-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Acrylic Thickness",
@@ -13071,9 +13119,12 @@ function Logo({
   }, [fileUrls, comments, width, height, layers, selectedMounting, selectedThickness, description, waterproof, selectedFinishing, sets, studLength, spacerStandoffDistance]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "py-4 mb-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "px-[1px] col-span-4"
@@ -13196,8 +13247,11 @@ const ProductLayer = ({
   length
 }) => {
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
-    className: "uppercase"
-  }, layer.product_line.post_title), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "uppercase",
+    dangerouslySetInnerHTML: {
+      __html: layer.product_line.post_title
+    }
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-4"
   }, layer.letters && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AddLayer__WEBPACK_IMPORTED_MODULE_2__["default"], {
     type: "LETTERS",
@@ -13825,9 +13879,12 @@ const Letters = ({
   }, [letters, comments, font, selectedThickness, waterproof, acrylicBase, usdPrice, cadPrice, usdSinglePrice, cadSinglePrice, selectedLetterHeight, fileUrls, fileNames, files, filePaths, fontFileUrl, fontFileName, fontFilePath, fontFile, metalLaminate, customFont, customColor, sets, selectedMounting, studLength, spacerStandoffDistance]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     clasName: "py-4 my-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "w-full self-center"
@@ -14330,9 +14387,12 @@ function Logo({
   }, [width, height, selectedThickness, waterproof, acrylicBase, sets, selectedMounting, logoPricingObject]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "py-4 mb-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Acrylic Thickness",
@@ -14960,9 +15020,12 @@ function Logo({
   }, [width, height, selectedThickness, waterproof, selectedFinishing, baseColor, selectedMounting, sets, logoPricingObject]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "py-4 mb-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Acrylic Thickness",
@@ -16008,9 +16071,12 @@ function Logo({
   }, [fileUrls, fileNames, files, filePaths, description]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "py-4 mb-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "px-[1px] col-span-4"
@@ -16437,9 +16503,12 @@ const NeonSign = ({
   };
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "py-4 mb-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
     title: "Neon Sign Width",
@@ -17030,9 +17099,12 @@ const NeonSign = ({
   };
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "py-4 mb-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
     title: "Neon Sign Width",
@@ -17656,9 +17728,12 @@ const NeonSign = ({
   });
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "py-4 mb-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
     title: "Neon Sign Width",
@@ -18261,7 +18336,7 @@ function Logo({
     let tempTotal = 0;
     const lightboxTable = logoPricingObject[0]?.logo_pricing.logo_pricing_table;
     if (lightboxTable && lightboxType) {
-      var _tempTotal;
+      var _tempTotal, _total$toFixed;
       const table = (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_7__["default"])(lightboxTable);
       const filtered = table.find(element => parseInt(element.Sets) === parseInt(sets));
       const val = lightBoxTypeOptions.find(element => element.option === lightboxType);
@@ -18273,10 +18348,11 @@ function Logo({
           tempTotal += 6;
         }
       }
+      tempTotal = tempTotal.toFixed(2);
       let total = tempTotal * parseInt(sets);
       return {
         singlePrice: (_tempTotal = tempTotal) !== null && _tempTotal !== void 0 ? _tempTotal : 0,
-        total: total !== null && total !== void 0 ? total : 0
+        total: (_total$toFixed = total.toFixed(2)) !== null && _total$toFixed !== void 0 ? _total$toFixed : 0
       };
     } else {
       return {
@@ -18292,9 +18368,9 @@ function Logo({
     } = computePricing();
     if (total && singlePrice) {
       setUsdPrice(total);
-      setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_5__.EXCHANGE_RATE).toFixed(1));
+      setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_5__.EXCHANGE_RATE).toFixed(2));
       setUsdSinglePrice(singlePrice);
-      setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_5__.EXCHANGE_RATE).toFixed(1));
+      setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_5__.EXCHANGE_RATE).toFixed(2));
     } else {
       setUsdPrice(0);
       setCadPrice(0);
@@ -18360,9 +18436,12 @@ function Logo({
   }, [lightboxType, uvPrintedCover, waterproof, fileUrls, sets, usdPrice, cadPrice, usdSinglePrice, cadSinglePrice]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     clasName: "py-4 my-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Light Box Type",
@@ -19143,9 +19222,12 @@ function Letters({
   }, [waterproof]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     clasName: "py-4 my-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "w-full self-center"
@@ -19708,9 +19790,12 @@ function Logo({
   }, [waterproof]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     clasName: "py-4 my-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Metal Depth",
@@ -20525,9 +20610,12 @@ function Letters({
   }, [waterproof]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     clasName: "py-4 my-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "w-full self-center"
@@ -21084,9 +21172,12 @@ function Logo({
   }, [waterproof]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     clasName: "py-4 my-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Metal Depth",
@@ -21863,9 +21954,12 @@ function Letters({
   }, [waterproof]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     clasName: "py-4 my-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "w-full self-center"
@@ -22431,9 +22525,12 @@ function Logo({
   }, [waterproof]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     clasName: "py-4 my-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Metal Depth",
@@ -23206,9 +23303,12 @@ function Letters({
   }, [waterproof]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     clasName: "py-4 my-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "w-full self-center"
@@ -23725,9 +23825,12 @@ function Logo({
   }, [waterproof]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     clasName: "py-4 my-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Metal Depth",
@@ -24504,9 +24607,12 @@ function Letters({
   }, [waterproof]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     clasName: "py-4 my-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "w-full self-center"
@@ -25021,9 +25127,12 @@ function Logo({
   }, [waterproof]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     clasName: "py-4 my-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Metal Depth",
@@ -25852,9 +25961,12 @@ function Letters({
   }, [color, font]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     clasName: "py-4 my-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "w-full self-center"
@@ -26362,9 +26474,12 @@ function Logo({
   });
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "py-4 mb-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Metal Option",
@@ -27099,9 +27214,12 @@ function Letters({
   }, [selectedThickness, mounting, setMetalMountingOptions]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     clasName: "py-4 my-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "w-full self-center"
@@ -27575,9 +27693,12 @@ function Logo({
   }, [selectedThickness, mounting, setMetalMountingOptions]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "py-4 mb-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Metal Thickness",
@@ -28317,9 +28438,12 @@ function Letters({
   }, [selectedThickness, mounting, setMetalMountingOptions]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     clasName: "py-4 my-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "w-full self-center"
@@ -28856,9 +28980,12 @@ function Logo({
   }, [selectedThickness, mounting, setMetalMountingOptions]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "py-4 mb-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Metal Option",
@@ -29719,9 +29846,12 @@ function Letters({
   }, [pvcBaseColor, font]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     clasName: "py-4 my-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "w-full self-center"
@@ -30222,9 +30352,12 @@ function Logo({
   }, [pvcBaseColor]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "py-4 mb-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Thickness",
@@ -30917,9 +31050,12 @@ function Letters({
   }, [color, font]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     clasName: "py-4 my-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "w-full self-center"
@@ -31434,9 +31570,12 @@ function Logo({
   }, [color]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "py-4 mb-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Thickness",
@@ -32040,9 +32179,12 @@ function Logo({
   }, [pvcBaseColor]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "py-4 mb-4"
-  }, "PRODUCT LINE: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "font-title"
-  }, item.productLine)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Thickness",
@@ -33485,7 +33627,7 @@ const allAttributes = item => [{
   label: 'ENVIRONMENT'
 }, {
   key: item.lightingPackaged,
-  label: 'LIGHTING PACKAGED'
+  label: 'INCLUDED ITEMS'
 }, {
   key: item.includedItems,
   label: 'INCLUDED ITEMS'

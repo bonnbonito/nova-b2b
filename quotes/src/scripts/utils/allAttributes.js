@@ -73,7 +73,7 @@ export const allAttributes = (item) => [
 	{ key: item.studLength, label: 'STUD LENGTH' },
 	{ key: item.spacerStandoffDistance, label: 'STANDOFF SPACE' },
 	{ key: item.trimLessWaterproof, label: 'ENVIRONMENT' },
-	{ key: item.lightingPackaged, label: 'LIGHTING PACKAGED' },
+	{ key: item.lightingPackaged, label: 'INCLUDED ITEMS' },
 	{ key: item.includedItems, label: 'INCLUDED ITEMS' },
 	{ key: item.remoteControl, label: 'REMOTE CONTROL' },
 	{ key: item.wireExitLocation, label: 'WIRE EXIT LOCATION' },

@@ -536,7 +536,11 @@ export const NeonSign = ({ item }) => {
 		<>
 			{item.productLine && (
 				<div className="py-4 mb-4">
-					PRODUCT LINE: <span className="font-title">{item.productLine}</span>
+					PRODUCT LINE:{' '}
+					<span
+						className="font-title"
+						dangerouslySetInnerHTML={{ __html: item.productLine }}
+					/>
 				</div>
 			)}
 
