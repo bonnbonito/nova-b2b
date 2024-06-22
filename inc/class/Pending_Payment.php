@@ -162,7 +162,7 @@ class Pending_Payment {
 	}
 
 	public function hide_specific_orders( $query ) {
-		if ( $query->is_main_query() && $query->get( 'post_type' ) === 'shop_order' ) {
+		if ( $query->is_main_query() && $query->get( 'post_type' ) === 'shop_order' && ! isset( $_GET['_hide_order'] ) ) {
 			$meta_query = $query->get( 'meta_query' ) ?: array();
 
 			$meta_query[] = array(
