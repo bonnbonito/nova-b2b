@@ -33,6 +33,18 @@ export const RenderSignageDetails = ({
 			);
 		}
 
+		if (signage.label === 'PRODUCT LINE') {
+			return (
+				<div className={classContainer} key={`${signage.label}-${index}`}>
+					<div className={classLabel}>{signage.label}</div>
+					<div
+						className={classValue}
+						dangerouslySetInnerHTML={{ __html: signage.key }}
+					/>
+				</div>
+			);
+		}
+
 		if (signage.label === 'COMMENTS') {
 			return (
 				<div

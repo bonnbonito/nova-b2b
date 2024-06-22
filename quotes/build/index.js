@@ -3583,6 +3583,19 @@ const RenderSignageDetails = ({
         className: "text-left text-sm"
       }, item.vinylWhite?.name, " - [", item.vinylWhite?.code, "]"));
     }
+    if (signage.label === 'PRODUCT LINE') {
+      return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: classContainer,
+        key: `${signage.label}-${index}`
+      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: classLabel
+      }, signage.label), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: classValue,
+        dangerouslySetInnerHTML: {
+          __html: signage.key
+        }
+      }));
+    }
     if (signage.label === 'COMMENTS') {
       return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
         className: "grid grid-cols-1 gap-0 py-[2px] mb-1",
