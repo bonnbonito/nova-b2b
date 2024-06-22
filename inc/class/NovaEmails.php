@@ -315,11 +315,14 @@ class NovaEmails {
 
 			$pending = \NOVA_B2B\Pending_Payment::get_instance();
 
-			$payment = $pending->get_payment_date( $order_id );
+			$payment        = $pending->get_payment_date( $order_id );
+			$payment_select = $payment->payment_select;
 
-			$payment_date = date( 'F d, Y', strtotime( $payment->payment_date ) );
-
-			$payment_select = get_post_meta( $order_id, '_payment_select', true );
+			$completed_date_obj  = $order->get_date_completed();
+			$shipped_date        = $completed_date_obj->date( 'F d, Y' );
+			$days_after_shipping = get_field( 'days_after_shipping', $payment_select );
+			$deadline            = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
+			$payment_date        = date( 'F d, Y', $deadline );
 
 			$completed_email = get_field( 'completed_email', $payment_select );
 
@@ -356,9 +359,13 @@ class NovaEmails {
 
 			$payment = $pending->get_payment_date( $order_id );
 
-			$payment_date = date( 'F d, Y', strtotime( $payment->payment_date ) );
-
-			$payment_select = get_post_meta( $order_id, '_payment_select', true );
+			$original_order_id   = $payment->original_order;
+			$original_order      = wc_get_order( $original_order_id );
+			$completed_date_obj  = $original_order->get_date_completed();
+			$shipped_date        = $completed_date_obj->date( 'F d, Y' );
+			$days_after_shipping = get_field( 'days_after_shipping', $payment_select );
+			$deadline            = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
+			$payment_date        = date( 'F d, Y', $deadline );
 
 			$paid_email = get_field( 'paid_email', $payment_select );
 

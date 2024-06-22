@@ -33,7 +33,7 @@ class Pending_Payment {
 		add_action( 'admin_post_nopriv_delete_pending_payment', array( $this, 'handle_delete_order' ) );
 		add_action( 'admin_post_delete_pending_payment', array( $this, 'handle_delete_order' ) );
 		add_action( 'wp', array( $this, 'schedule_pending_payment_checker' ) );
-		add_action( 'check_pending_payments_hook', array( $this, 'check_pending_payments' ) );
+		add_action( 'check_pending_payments_action_hook', array( $this, 'check_pending_payments' ) );
 		add_action( 'admin_post_send_payment_reminder', array( $this, 'handle_send_reminder' ) );
 		add_filter( 'kadence_woomail_order_body_text', array( $this, 'pending_payment_order_email_content' ), 999, 5 );
 		add_action( 'woocommerce_payment_complete', array( $this, 'custom_order_complete' ), 99, 1 );
@@ -158,7 +158,7 @@ class Pending_Payment {
 
 <p>Original Total: <?php echo $original_total; ?></p>
 
-		<?php
+<?php
 	}
 
 	public function hide_specific_orders( $query ) {
@@ -259,15 +259,19 @@ class Pending_Payment {
 	public function send_payment_reminder_email_manual( $payment_id, $index ) {
 		$payment           = $this->get_data( $payment_id );
 		$payment_order_id  = $payment->payment_order;
-		$payment_order_id  = $payment->payment_order;
-		$payment_order     = '#NV' . $payment->payment_order;
 		$original_order_id = $payment->original_order;
 		$pending_total     = $payment->pending_total;
 		$currency          = $payment->currency;
-		$payment_date      = date( 'F d, Y', strtotime( $payment->payment_date ) );
+		$payment_type      = $payment->payment_select;
 
 		$order          = wc_get_order( $payment_order_id );
 		$original_order = wc_get_order( $original_order_id );
+
+		$completed_date_obj  = $original_order->get_date_completed();
+		$shipped_date        = $completed_date_obj->date( 'F d, Y' );
+		$days_after_shipping = get_field( 'days_after_shipping', $payment_type );
+		$deadline            = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
+		$payment_date        = date( 'F d, Y', $deadline );
 
 		$payment_url = $order->get_checkout_payment_url();
 
@@ -286,7 +290,7 @@ class Pending_Payment {
 			return 'No index';
 		}
 
-		$payment_emails = get_field( 'payment_emails', $payment->payment_select );
+		$payment_emails = get_field( 'payment_emails', $payment_type );
 
 		if ( $payment_emails ) {
 			$subject = $payment_emails[ $index - 1 ]['subject'];
@@ -365,19 +369,22 @@ class Pending_Payment {
 
 	public function send_payment_reminder_email( $payment ) {
 
-		$payment_type        = $payment->payment_select;
-		$payment_order_id    = $payment->payment_order;
-		$original_order_id   = $payment->original_order;
-		$deposit             = $payment->deposit;
-		$pending_total       = $payment->pending_total;
-		$original_total      = $payment->original_total;
-		$currency            = $payment->currency;
-		$payment_date        = date( 'F d, Y', strtotime( $payment->payment_date ) );
-		$payment_date_object = new \DateTime( $payment->payment_date );
-		$today               = new \DateTime();
+		$payment_type      = $payment->payment_select;
+		$payment_order_id  = $payment->payment_order;
+		$original_order_id = $payment->original_order;
+		$pending_total     = $payment->pending_total;
+		$currency          = $payment->currency;
 
 		$order          = wc_get_order( $payment_order_id );
 		$original_order = wc_get_order( $original_order_id );
+
+		$completed_date_obj  = $original_order->get_date_completed();
+		$shipped_date        = $completed_date_obj->date( 'F d, Y' );
+		$days_after_shipping = get_field( 'days_after_shipping', $payment_type );
+		$deadline            = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
+		$payment_date        = date( 'F d, Y', $deadline );
+
+		$today = date( 'F d, Y' );
 
 		$first_name     = $order->get_billing_first_name();
 		$customer_email = $order->get_billing_email();
@@ -394,13 +401,14 @@ class Pending_Payment {
 		if ( have_rows( 'payment_emails', $payment_type ) ) :
 			while ( have_rows( 'payment_emails', $payment_type ) ) :
 				the_row();
-				$days = get_sub_field( 'send_after_days' ) ? intval( get_sub_field( 'send_after_days' ) ) : false;
+				$days = get_sub_field( 'send_after_days' );
 
-				if ( $days ) {
-					$payment_date_plus_days = clone $payment_date_object;
-					$payment_date_plus_days->modify( "+{$days} days" );
+				if ( $days !== false ) {
 
-					if ( $today == $payment_date_plus_days ) {
+					$days_later = strtotime( $shipped_date . ' +' . intval( $days ) . ' days' );
+					$date_later = date( 'F d, Y', $days_later );
+
+					if ( $today == $date_later ) {
 
 						$subject = get_sub_field( 'subject' );
 						$subject = str_replace( '{customer_name}', $first_name, $subject );
@@ -454,16 +462,16 @@ class Pending_Payment {
 <p>Hello,</p>
 <p>An outstanding invoice for {order_number} is due today. We have sent a reminder to:</p>
 <ul>
-	<li>Customer: {customer_name} - {business_id} </li>
-	<li>Company: {business_name}</li>
-	<li>Order ID: #{order_number}</li>
-	<li>Deadline of payment: {deadline}</li>
-	<li>Unpaid Balance: {pending_payment}</li>
+    <li>Customer: {customer_name} - {business_id} </li>
+    <li>Company: {business_name}</li>
+    <li>Order ID: #{order_number}</li>
+    <li>Deadline of payment: {deadline}</li>
+    <li>Unpaid Balance: {pending_payment}</li>
 </ul>
 
 <p>Order details:</p>
 {order_details}
-		<?php
+<?php
 		$message = ob_get_clean();
 
 		$user_id       = $order->get_user_id() ? $order->get_user_id() : 0;
@@ -508,14 +516,14 @@ class Pending_Payment {
 <p>Hello,</p>
 <p>We've informed your client that the product is now prepared and ready to ship:</p>
 <ul>
-	<li>Customer: {customer_name} - {business_id} </li>
-	<li>Company: {business_name}</li>
-	<li>Order ID: #{order_number}</li>
+    <li>Customer: {customer_name} - {business_id} </li>
+    <li>Company: {business_name}</li>
+    <li>Order ID: #{order_number}</li>
 </ul>
 
 <p>Here's the final invoice and their tracking information:</p>
 {order_details}
-		<?php
+<?php
 		$message       = ob_get_clean();
 		$first_name    = $order->get_billing_first_name();
 		$user_id       = $order->get_user_id() ? $order->get_user_id() : 0;
@@ -549,8 +557,8 @@ class Pending_Payment {
 
 
 	public function schedule_pending_payment_checker() {
-		if ( ! wp_next_scheduled( 'check_pending_payments_hook' ) ) {
-			wp_schedule_event( time(), 'daily', 'check_pending_payments_hook' );
+		if ( ! wp_next_scheduled( 'check_pending_payments_action_hook' ) ) {
+			wp_schedule_event( time(), 'daily', 'check_pending_payments_action_hook' );
 		}
 	}
 
@@ -693,13 +701,71 @@ class Pending_Payment {
 		} else {
 			echo '<tr><td colspan="10">No pending payments found.</td></tr>';
 		}
-
 		echo '</tbody>';
 		echo '</table>';
 		echo '</div>'; // Close the wrap div
 		echo '<style>.over {background-color: red; color: white;}';
 	}
 
+
+	public function check() {
+
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'nova_pendings';
+
+		$query = $wpdb->prepare( "SELECT * FROM {$table_name} WHERE payment_status = %s", 'Pending' );
+
+		$pending_payments = $wpdb->get_results( $query );
+
+		foreach ( $pending_payments as $payment ) {
+
+			$payment_type        = $payment->payment_select;
+			$payment_order_id    = $payment->payment_order;
+			$original_order_id   = $payment->original_order;
+			$original_order      = wc_get_order( $original_order_id );
+			$completed_date_obj  = $original_order->get_date_completed();
+			$shipped_date        = $completed_date_obj->date( 'F d, Y' );
+			$days_after_shipping = get_field( 'days_after_shipping', $payment_type );
+			$deadline            = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
+			$deadline_date       = date( 'F d, Y', $deadline );
+
+			$order = wc_get_order( $payment_order_id );
+
+			if ( ! $order ) {
+				echo 'Order not found<br>';
+			}
+
+			$today = date( 'F d, Y' );
+
+			echo '-----<br>';
+			echo $today . ' - ' . $shipped_date . ' - ' . $deadline_date . '<br>';
+			echo '-----<br>';
+
+			if ( have_rows( 'payment_emails', $payment_type ) ) :
+				while ( have_rows( 'payment_emails', $payment_type ) ) :
+					the_row();
+					$days = get_sub_field( 'send_after_days' );
+
+					if ( $days !== false ) {
+
+						echo $days . '-';
+
+						$days_later = strtotime( $shipped_date . ' +' . intval( $days ) . ' days' );
+						$date_later = date( 'F d, Y', $days_later );
+
+						if ( $today == $date_later ) {
+
+							echo 'Today ' . $date_later . '<br>';
+
+						} else {
+							echo ' "' . get_sub_field( 'email_label' ) . '" - Not Today ' . $date_later . '<br>';
+						}
+					}
+
+				endwhile;
+		endif;
+		}
+	}
 
 
 	public function create_custom_table() {
@@ -801,7 +867,7 @@ class Pending_Payment {
 			$original_total = get_post_meta( $order_id, '_original_total', true );
 			$payment_select = get_post_meta( $order_id, '_payment_select', true ) ? (int) get_post_meta( $order_id, '_payment_select', true ) : '';
 			$pending_total  = get_post_meta( $order_id, '_pending_payment', true );
-			$days           = get_field( 'days_after_shipping', $payment_select ) ? get_field( 'days_after_shipping', $payment_select ) : 20;
+			$days           = get_field( 'days_after_shipping', $payment_select ) ? get_field( 'days_after_shipping', $payment_select ) : 0;
 			$currency       = $order->get_currency();
 			$payment_order  = get_post_meta( $order_id, '_adjusted_duplicate_order_id', true );
 			$parent_order   = $order->get_ID();
@@ -881,11 +947,19 @@ class Pending_Payment {
 		$order_id      = $order->get_id();
 		$pending_order = get_post_meta( $order_id, '_adjusted_duplicate_order_id', true );
 
+		$completed_date_obj = $order->get_date_completed();
+		$shipped_date       = $completed_date_obj->date( 'F d, Y' );
+
+		$payment_type = $order->get_meta( '_payment_select' );
+
+		$days_after_shipping = get_field( 'days_after_shipping', $payment_type );
+		$deadline            = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
+		$payment_date        = date( 'F d, Y', $deadline );
+
 		if ( $pending_order ) {
 			$payment = $this->get_payment_date( $order_id );
 
-			if ( $payment && ! empty( $payment->payment_date ) ) {
-				$payment_date               = date( 'F d, Y', strtotime( $payment->payment_date ) );
+			if ( $payment && $payment_date ) {
 				$total_rows['payment_date'] = array(
 					'label' => __( 'Payment Date', 'woocommerce' ),
 					'value' => esc_html( $payment_date ),
@@ -919,7 +993,16 @@ class Pending_Payment {
 		$user_id = $order->get_customer_id();
 		$payment = $this->get_data( $pending_id );
 		if ( $payment ) {
-			$payment_date  = date( 'F d, Y', strtotime( $payment->payment_date ) );
+
+			$payment_type        = $payment->payment_select;
+			$original_order_id   = $payment->original_order;
+			$original_order      = wc_get_order( $original_order_id );
+			$completed_date_obj  = $original_order->get_date_completed();
+			$shipped_date        = $completed_date_obj->date( 'F d, Y' );
+			$days_after_shipping = get_field( 'days_after_shipping', $payment_type );
+			$deadline            = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
+			$payment_date        = date( 'F d, Y', $deadline );
+
 			$pending_total = $payment->pending_total;
 		}
 
@@ -961,7 +1044,7 @@ class Pending_Payment {
 		if ( $payment ) {
 			$message = str_replace( '{deadline}', $payment_date, $message );
 			$message = str_replace( '{pending_payment}', $currency . '$' . round( floatval( $pending_total ), 2 ), $message );
-			$message = str_replace( '{payment_select}', get_the_title( $payment->payment_select ), $message );
+			$message = str_replace( '{payment_select}', get_the_title( $payment_type ), $message );
 		}
 
 		$message = str_replace( '{customer_name}', $first_name, $message );
