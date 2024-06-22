@@ -11719,7 +11719,7 @@ function Letters({
 
     /** if Layered 3D */
     if (item.isLayered) {
-      tempTotal *= 1.4;
+      tempTotal *= _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.ASSEMBLY_FEES;
     }
     const total = tempTotal * sets;
     return {
@@ -12376,7 +12376,7 @@ function Logo({
 
     /** if Layered 3D */
     if (item.isLayered) {
-      tempTotal *= 1.4;
+      tempTotal *= _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.ASSEMBLY_FEES;
     }
     const total = tempTotal * sets;
     return {
@@ -13680,7 +13680,7 @@ const Letters = ({
 
     /** if Layered 3D */
     if (item.isLayered) {
-      tempTotal *= 1.4;
+      tempTotal *= _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.ASSEMBLY_FEES;
     }
     const total = tempTotal * sets;
     return {
@@ -14175,7 +14175,7 @@ function Logo({
 
     /** if Layered 3D */
     if (item.isLayered) {
-      tempTotal *= 1.4;
+      tempTotal *= _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.ASSEMBLY_FEES;
     }
     const total = tempTotal * sets;
     return {
@@ -14769,7 +14769,7 @@ function Logo({
 
     /** if Layered 3D */
     if (item.isLayered) {
-      tempTotal *= 1.4;
+      tempTotal *= _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.ASSEMBLY_FEES;
     }
     const total = tempTotal * sets;
     return {
@@ -33691,6 +33691,7 @@ const allAttributes = item => [{
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ASSEMBLY_FEES: () => (/* binding */ ASSEMBLY_FEES),
 /* harmony export */   CLEAR_COLOR: () => (/* binding */ CLEAR_COLOR),
 /* harmony export */   EXCHANGE_RATE: () => (/* binding */ EXCHANGE_RATE),
 /* harmony export */   FROSTED_CLEAR_COLOR: () => (/* binding */ FROSTED_CLEAR_COLOR),
@@ -33708,6 +33709,7 @@ const FROSTED_CLEAR_COLOR = 'Frosted Clear';
 const STUD_WITH_SPACER = 'Stud with spacer';
 const STUD_MOUNT = 'Stud Mount';
 const EXCHANGE_RATE = 1.3;
+const ASSEMBLY_FEES = 1.1;
 const M4_STUD_WITH_SPACER = 'M4 Stud with Spacer';
 const LIGHTING_INDOOR = 'Low Voltage LED Driver, 6ft open wires, 1:1 blueprint';
 

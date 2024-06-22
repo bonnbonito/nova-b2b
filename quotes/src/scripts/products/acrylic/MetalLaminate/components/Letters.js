@@ -23,6 +23,7 @@ import {
 import { METAL_ACRYLIC_PRICING } from '../MetalLaminate';
 
 import {
+	ASSEMBLY_FEES,
 	EXCHANGE_RATE,
 	INDOOR_NOT_WATERPROOF,
 	STUD_MOUNT,
@@ -228,7 +229,7 @@ export const Letters = ({ item }) => {
 
 		/** if Layered 3D */
 		if (item.isLayered) {
-			tempTotal *= 1.4;
+			tempTotal *= ASSEMBLY_FEES;
 		}
 
 		const total = tempTotal * sets;

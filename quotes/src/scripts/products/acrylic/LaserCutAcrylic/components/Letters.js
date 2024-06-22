@@ -25,6 +25,7 @@ import ColorsDropdown from '../../../../utils/ColorsDropdown';
 import { useAppContext } from '../../../../AppProvider';
 
 import {
+	ASSEMBLY_FEES,
 	CLEAR_COLOR,
 	EXCHANGE_RATE,
 	FROSTED_CLEAR_COLOR,
@@ -265,7 +266,7 @@ export function Letters({ item }) {
 
 		/** if Layered 3D */
 		if (item.isLayered) {
-			tempTotal *= 1.4;
+			tempTotal *= ASSEMBLY_FEES;
 		}
 
 		const total = tempTotal * sets;

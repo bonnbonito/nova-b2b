@@ -19,6 +19,7 @@ import {
 } from '../../../../utils/SignageOptions';
 
 import {
+	ASSEMBLY_FEES,
 	EXCHANGE_RATE,
 	GLOSS_FINISH,
 	INDOOR_NOT_WATERPROOF,
@@ -150,7 +151,7 @@ export function Logo({ item }) {
 
 		/** if Layered 3D */
 		if (item.isLayered) {
-			tempTotal *= 1.4;
+			tempTotal *= ASSEMBLY_FEES;
 		}
 
 		const total = tempTotal * sets;
