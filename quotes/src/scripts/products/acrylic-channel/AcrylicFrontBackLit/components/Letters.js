@@ -303,49 +303,52 @@ export function Letters({ item }) {
 
 	const computePricing = () => {
 		if (
-			letterPricing.length > 0 &&
-			selectedLetterHeight &&
-			letters.trim().length > 0
+			!letterPricing.length ||
+			!selectedLetterHeight ||
+			!letters.trim().length
 		) {
-			const pricingDetail = letterPricing.find(
-				(item) => parseInt(item.Height) === parseInt(selectedLetterHeight)
-			);
-
-			const baseLetterPrice = parseFloat(pricingDetail?.Value);
-
-			let tempTotal = 0;
-			const lettersArray = letters.trim().split('');
-			const noLowerCase = NovaQuote.no_lowercase.includes(font);
-
-			lettersArray.forEach((letter) => {
-				tempTotal += calculateLetterPrice(letter, baseLetterPrice, noLowerCase);
-			});
-
-			if (acrylicFront === '3M Vinyl') {
-				tempTotal *= 1.1;
-			}
-
-			if (acrylicFront === 'UV Printed') {
-				tempTotal *= 1.15;
-			}
-
-			if (selectedMounting === STUD_WITH_SPACER) {
-				const spacer = spacerPricing(tempTotal);
-				tempTotal += parseFloat(spacer.toFixed(2));
-			}
-
-			/* minimum price */
-			tempTotal = tempTotal > 50 ? tempTotal : 50;
-
-			const total = tempTotal * parseInt(sets);
-
 			return {
-				singlePrice: tempTotal ?? 0,
-				total: total.toFixed(2) ?? 0,
+				singlePrice: false,
+				total: false,
 			};
-		} else {
-			return 0;
 		}
+
+		const pricingDetail = letterPricing.find(
+			(item) => parseInt(item.Height) === parseInt(selectedLetterHeight)
+		);
+
+		const baseLetterPrice = parseFloat(pricingDetail?.Value);
+
+		let tempTotal = 0;
+		const lettersArray = letters.trim().split('');
+		const noLowerCase = NovaQuote.no_lowercase.includes(font);
+
+		lettersArray.forEach((letter) => {
+			tempTotal += calculateLetterPrice(letter, baseLetterPrice, noLowerCase);
+		});
+
+		if (acrylicFront === '3M Vinyl') {
+			tempTotal *= 1.1;
+		}
+
+		if (acrylicFront === 'UV Printed') {
+			tempTotal *= 1.15;
+		}
+
+		if (selectedMounting === STUD_WITH_SPACER) {
+			const spacer = spacerPricing(tempTotal);
+			tempTotal += parseFloat(spacer.toFixed(2));
+		}
+
+		/* minimum price */
+		tempTotal = tempTotal > 50 ? tempTotal : 50;
+
+		const total = tempTotal * parseInt(sets);
+
+		return {
+			singlePrice: tempTotal ?? 0,
+			total: total.toFixed(2) ?? 0,
+		};
 	};
 
 	useEffect(() => {

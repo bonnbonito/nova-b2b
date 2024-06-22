@@ -476,77 +476,73 @@ export function Letters({ item }) {
 
 	const computePricing = () => {
 		if (
-			letterPricingTables &&
-			letterPricing &&
-			selectedLetterHeight &&
-			depth &&
-			waterproof &&
-			acrylicReveal
+			!letterPricingTables ||
+			!letterPricing ||
+			!selectedLetterHeight ||
+			!depth ||
+			!waterproof ||
+			!acrylicReveal
 		) {
-			const pricingDetail = letterPricing[selectedLetterHeight - 5];
-
-			if (pricingDetail) {
-				let mm = 0;
-				if (acrylicReveal == '1/5"') {
-					mm = '5mm';
-				} else if (acrylicReveal == '2/5"') {
-					mm = '10mm';
-				} else if (acrylicReveal == '3/5"') {
-					mm = '15mm';
-				} else {
-					mm = 0;
-				}
-
-				const baseLetterPrice = pricingDetail[mm];
-
-				let tempTotal = 0;
-				const lettersArray = letters.trim().split('');
-				const noLowerCase = NovaQuote.no_lowercase.includes(font);
-
-				lettersArray.forEach((letter) => {
-					tempTotal += calculateLetterPrice(
-						letter,
-						baseLetterPrice,
-						noLowerCase
-					);
-				});
-
-				if (waterproof) {
-					tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.03;
-				}
-
-				if (metalFinish && metalFinish.includes('Polished')) {
-					tempTotal *= 1.3;
-				}
-
-				if (metalFinish && metalFinish.includes('Electroplated')) {
-					tempTotal *= 1.2;
-				}
-
-				if (mounting === STUD_WITH_SPACER) {
-					let spacer = spacerPricing(tempTotal);
-					spacer = parseFloat(spacer.toFixed(2));
-					tempTotal += spacer;
-				}
-
-				const total = tempTotal * parseInt(sets);
-
-				return {
-					singlePrice: tempTotal.toFixed(2) ?? 0,
-					total: total?.toFixed(2) ?? 0,
-				};
-			} else {
-				return {
-					singlePrice: 0,
-					total: 0,
-				};
-			}
-		} else {
 			return {
-				singlePrice: 0,
-				total: 0,
+				singlePrice: false,
+				total: false,
 			};
 		}
+
+		const pricingDetail = letterPricing[selectedLetterHeight - 5];
+
+		if (!pricingDetail) {
+			return {
+				singlePrice: false,
+				total: false,
+			};
+		}
+
+		let mm = 0;
+		if (acrylicReveal == '1/5"') {
+			mm = '5mm';
+		} else if (acrylicReveal == '2/5"') {
+			mm = '10mm';
+		} else if (acrylicReveal == '3/5"') {
+			mm = '15mm';
+		} else {
+			mm = 0;
+		}
+
+		const baseLetterPrice = pricingDetail[mm];
+
+		let tempTotal = 0;
+		const lettersArray = letters.trim().split('');
+		const noLowerCase = NovaQuote.no_lowercase.includes(font);
+
+		lettersArray.forEach((letter) => {
+			tempTotal += calculateLetterPrice(letter, baseLetterPrice, noLowerCase);
+		});
+
+		if (waterproof) {
+			tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.03;
+		}
+
+		if (metalFinish && metalFinish.includes('Polished')) {
+			tempTotal *= 1.3;
+		}
+
+		if (metalFinish && metalFinish.includes('Electroplated')) {
+			tempTotal *= 1.2;
+		}
+
+		if (mounting === STUD_WITH_SPACER) {
+			let spacer = spacerPricing(tempTotal);
+			spacer = parseFloat(spacer.toFixed(2));
+			tempTotal += spacer;
+		}
+
+		const total = tempTotal * parseInt(sets);
+
+		return {
+			singlePrice: tempTotal.toFixed(2) ?? 0,
+			total: total?.toFixed(2) ?? 0,
+		};
 	};
 
 	useEffect(() => {

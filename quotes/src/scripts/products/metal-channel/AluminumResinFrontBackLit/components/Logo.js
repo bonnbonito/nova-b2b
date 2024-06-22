@@ -336,8 +336,8 @@ export function Logo({ item }) {
 	const computePricing = () => {
 		if (!width || !height || !depth?.value) {
 			return {
-				singlePrice: 0,
-				total: 0,
+				singlePrice: false,
+				total: false,
 			};
 		}
 

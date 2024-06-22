@@ -246,8 +246,15 @@ export const NeonSign = ({ item }) => {
 			!neonLength ||
 			!waterproof ||
 			!acrylicBackingOption
-		)
-			return 0;
+		) {
+			return {
+				singlePrice: false,
+				total: false,
+				totalWithoutDiscount: false,
+				discount: false,
+			};
+		}
+
 		let tempTotal =
 			(parseInt(width) + 3) * (parseInt(height) + 3) * 0.1 +
 			parseInt(neonLength) * 6.9 +

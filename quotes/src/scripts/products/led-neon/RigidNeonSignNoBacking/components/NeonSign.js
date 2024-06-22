@@ -359,11 +359,14 @@ export const NeonSign = ({ item }) => {
 	}, [updateSignage, checkAndAddMissingFields]);
 
 	const computePricing = () => {
-		if (!width || !height)
+		if (!width || !height) {
 			return {
-				singlePrice: 0,
-				total: 0,
+				singlePrice: false,
+				total: false,
+				totalWithoutDiscount: false,
+				discount: false,
 			};
+		}
 
 		const L1 = neonLength8mm ? parseInt(neonLength8mm) : 0;
 		const L2 = neonLength10mm ? parseInt(neonLength10mm) : 0;

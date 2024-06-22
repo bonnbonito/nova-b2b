@@ -294,55 +294,55 @@ export function Letters({ item }) {
 
 	const computePricing = () => {
 		if (
-			letterPricing.length > 0 &&
-			selectedLetterHeight &&
-			selectedThickness &&
-			waterproof
+			!letterPricing.length ||
+			!selectedLetterHeight ||
+			!selectedThickness ||
+			!waterproof
 		) {
-			const pricingDetail = letterPricing[selectedLetterHeight - 4];
-			const baseLetterPrice = pricingDetail[selectedThickness.thickness];
-
-			let tempTotal = 0;
-			const lettersArray = letters.trim().split('');
-			const noLowerCase = NovaQuote.no_lowercase.includes(font);
-
-			lettersArray.forEach((letter) => {
-				tempTotal += calculateLetterPrice(letter, baseLetterPrice, noLowerCase);
-			});
-
-			if (waterproof) {
-				tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.03;
-			}
-
-			if (selectedFinishing) {
-				tempTotal *= selectedFinishing === GLOSS_FINISH ? 1.03 : 1;
-			}
-
-			if (mounting) {
-				tempTotal *= mounting === 'Double-sided tape' ? 1.01 : 1;
-			}
-
-			if (pvcBaseColor) {
-				tempTotal *= pvcBaseColor?.name !== 'Black' ? 1.1 : 1;
-			}
-
-			if (mounting === STUD_WITH_SPACER) {
-				const spacer = spacerPricing(tempTotal);
-				tempTotal += parseFloat(spacer.toFixed(2));
-			}
-
-			let total = tempTotal * parseInt(sets);
-
 			return {
-				singlePrice: tempTotal.toFixed(2) ?? 0,
-				total: total?.toFixed(2) ?? 0,
-			};
-		} else {
-			return {
-				singlePrice: 0,
-				total: 0,
+				singlePrice: false,
+				total: false,
 			};
 		}
+
+		const pricingDetail = letterPricing[selectedLetterHeight - 4];
+		const baseLetterPrice = pricingDetail[selectedThickness.thickness];
+
+		let tempTotal = 0;
+		const lettersArray = letters.trim().split('');
+		const noLowerCase = NovaQuote.no_lowercase.includes(font);
+
+		lettersArray.forEach((letter) => {
+			tempTotal += calculateLetterPrice(letter, baseLetterPrice, noLowerCase);
+		});
+
+		if (waterproof) {
+			tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.03;
+		}
+
+		if (selectedFinishing) {
+			tempTotal *= selectedFinishing === GLOSS_FINISH ? 1.03 : 1;
+		}
+
+		if (mounting) {
+			tempTotal *= mounting === 'Double-sided tape' ? 1.01 : 1;
+		}
+
+		if (pvcBaseColor) {
+			tempTotal *= pvcBaseColor?.name !== 'Black' ? 1.1 : 1;
+		}
+
+		if (mounting === STUD_WITH_SPACER) {
+			const spacer = spacerPricing(tempTotal);
+			tempTotal += parseFloat(spacer.toFixed(2));
+		}
+
+		let total = tempTotal * parseInt(sets);
+
+		return {
+			singlePrice: tempTotal.toFixed(2) ?? 0,
+			total: total?.toFixed(2) ?? 0,
+		};
 	};
 
 	useEffect(() => {

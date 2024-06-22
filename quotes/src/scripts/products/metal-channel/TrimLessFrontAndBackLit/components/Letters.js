@@ -301,46 +301,46 @@ export function Letters({ item }) {
 
 	const computePricing = () => {
 		if (
-			letterPricing.length > 0 &&
-			selectedLetterHeight &&
-			letters.trim().length > 0
+			!letterPricing.length ||
+			!selectedLetterHeight ||
+			!letters.trim().length
 		) {
-			const pricingDetail = letterPricing[selectedLetterHeight - 6];
-			const baseLetterPrice = pricingDetail[depth.depth];
-
-			let tempTotal = 0;
-			const lettersArray = letters.trim().split('');
-			const noLowerCase = NovaQuote.no_lowercase.includes(font);
-
-			lettersArray.forEach((letter) => {
-				tempTotal += calculateLetterPrice(letter, baseLetterPrice, noLowerCase);
-			});
-
-			if (frontAcrylicCover === '3M Vinyl') {
-				tempTotal *= 1.1;
-			}
-
-			if (waterproof && waterproof !== INDOOR_NOT_WATERPROOF) {
-				tempTotal *= 1.03;
-			}
-
-			if (mounting === STUD_WITH_SPACER) {
-				const spacer = spacerPricing(tempTotal);
-				tempTotal += parseFloat(spacer.toFixed(2));
-			}
-
-			const total = tempTotal * parseInt(sets);
-
 			return {
-				singlePrice: tempTotal.toFixed(2) ?? 0,
-				total: total?.toFixed(2) ?? 0,
-			};
-		} else {
-			return {
-				singlePrice: 0,
-				total: 0,
+				singlePrice: false,
+				total: false,
 			};
 		}
+
+		const pricingDetail = letterPricing[selectedLetterHeight - 6];
+		const baseLetterPrice = pricingDetail[depth.depth];
+
+		let tempTotal = 0;
+		const lettersArray = letters.trim().split('');
+		const noLowerCase = NovaQuote.no_lowercase.includes(font);
+
+		lettersArray.forEach((letter) => {
+			tempTotal += calculateLetterPrice(letter, baseLetterPrice, noLowerCase);
+		});
+
+		if (frontAcrylicCover === '3M Vinyl') {
+			tempTotal *= 1.1;
+		}
+
+		if (waterproof && waterproof !== INDOOR_NOT_WATERPROOF) {
+			tempTotal *= 1.03;
+		}
+
+		if (mounting === STUD_WITH_SPACER) {
+			const spacer = spacerPricing(tempTotal);
+			tempTotal += parseFloat(spacer.toFixed(2));
+		}
+
+		const total = tempTotal * parseInt(sets);
+
+		return {
+			singlePrice: tempTotal.toFixed(2) ?? 0,
+			total: total?.toFixed(2) ?? 0,
+		};
 	};
 
 	useEffect(() => {

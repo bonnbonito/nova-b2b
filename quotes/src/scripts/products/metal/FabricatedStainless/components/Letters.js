@@ -282,56 +282,60 @@ export function Letters({ item }) {
 	};
 
 	const computePricing = () => {
-		if (letterPricing.length > 0 && selectedLetterHeight && selectedThickness) {
-			const pricingDetail = letterPricing[selectedLetterHeight - 2];
-			const baseLetterPrice = pricingDetail[selectedThickness.value];
-
-			let tempTotal = 0;
-			const lettersArray = letters.trim().split('');
-			const noLowerCase = NovaQuote.no_lowercase.includes(font);
-
-			lettersArray.forEach((letter) => {
-				tempTotal += calculateLetterPrice(letter, baseLetterPrice, noLowerCase);
-			});
-
-			if (waterproof)
-				tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.1;
-
-			if (metal) tempTotal *= metal === '316 Stainless Steel' ? 1.3 : 1;
-
-			if (stainLessMetalFinish && stainLessMetalFinish.includes('Polished')) {
-				tempTotal *= 1.1;
-			}
-
-			if (
-				stainLessMetalFinish &&
-				stainLessMetalFinish.includes('Electroplated')
-			) {
-				tempTotal *= 1.2;
-			}
-
-			if (mounting === 'PVC Backing') {
-				tempTotal *= 1.15;
-			}
-
-			if (mounting && mounting === STUD_WITH_SPACER) {
-				let spacer = spacerPricing(tempTotal);
-				spacer = parseFloat(spacer.toFixed(2));
-				tempTotal += spacer;
-			}
-
-			const total = tempTotal * parseInt(sets);
-
+		if (
+			!letterPricing.length ||
+			!selectedLetterHeight ||
+			!selectedThickness ||
+			!waterproof
+		) {
 			return {
-				singlePrice: tempTotal.toFixed(2) ?? 0,
-				total: total?.toFixed(2) ?? 0,
-			};
-		} else {
-			return {
-				singlePrice: 0,
-				total: 0,
+				singlePrice: false,
+				total: false,
 			};
 		}
+
+		const pricingDetail = letterPricing[selectedLetterHeight - 2];
+		const baseLetterPrice = pricingDetail[selectedThickness.value];
+
+		let tempTotal = 0;
+		const lettersArray = letters.trim().split('');
+		const noLowerCase = NovaQuote.no_lowercase.includes(font);
+
+		lettersArray.forEach((letter) => {
+			tempTotal += calculateLetterPrice(letter, baseLetterPrice, noLowerCase);
+		});
+
+		if (waterproof) tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.1;
+
+		if (metal) tempTotal *= metal === '316 Stainless Steel' ? 1.3 : 1;
+
+		if (stainLessMetalFinish && stainLessMetalFinish.includes('Polished')) {
+			tempTotal *= 1.1;
+		}
+
+		if (
+			stainLessMetalFinish &&
+			stainLessMetalFinish.includes('Electroplated')
+		) {
+			tempTotal *= 1.2;
+		}
+
+		if (mounting === 'PVC Backing') {
+			tempTotal *= 1.15;
+		}
+
+		if (mounting && mounting === STUD_WITH_SPACER) {
+			let spacer = spacerPricing(tempTotal);
+			spacer = parseFloat(spacer.toFixed(2));
+			tempTotal += spacer;
+		}
+
+		const total = tempTotal * parseInt(sets);
+
+		return {
+			singlePrice: tempTotal.toFixed(2) ?? 0,
+			total: total?.toFixed(2) ?? 0,
+		};
 	};
 
 	useEffect(() => {

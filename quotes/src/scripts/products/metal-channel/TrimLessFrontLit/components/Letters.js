@@ -311,44 +311,47 @@ export function Letters({ item }) {
 
 	const computePricing = () => {
 		if (
-			letterPricing.length > 0 &&
-			selectedLetterHeight &&
-			depth &&
-			letters.trim().length > 0
+			!letterPricing.length ||
+			!selectedLetterHeight ||
+			!depth ||
+			!letters.trim().length
 		) {
-			const pricingDetail = letterPricing[selectedLetterHeight - 5];
-			const baseLetterPrice = pricingDetail[depth.value];
-
-			let tempTotal = 0;
-			const lettersArray = letters.trim().split('');
-			const noLowerCase = NovaQuote.no_lowercase.includes(font);
-
-			lettersArray.forEach((letter) => {
-				tempTotal += calculateLetterPrice(letter, baseLetterPrice, noLowerCase);
-			});
-
-			if (frontAcrylicCover === '3M Vinyl') {
-				tempTotal *= 1.1;
-			}
-
-			if (waterproof && waterproof !== INDOOR_NOT_WATERPROOF) {
-				tempTotal *= 1.03;
-			}
-
-			if (mounting === STUD_WITH_SPACER) {
-				const spacer = spacerPricing(tempTotal);
-				tempTotal += parseFloat(spacer.toFixed(2));
-			}
-
-			const total = tempTotal * parseInt(sets);
-
 			return {
-				singlePrice: tempTotal ?? 0,
-				total: total?.toFixed(2) ?? 0,
+				singlePrice: false,
+				total: false,
 			};
-		} else {
-			return 0;
 		}
+
+		const pricingDetail = letterPricing[selectedLetterHeight - 5];
+		const baseLetterPrice = pricingDetail[depth.value];
+
+		let tempTotal = 0;
+		const lettersArray = letters.trim().split('');
+		const noLowerCase = NovaQuote.no_lowercase.includes(font);
+
+		lettersArray.forEach((letter) => {
+			tempTotal += calculateLetterPrice(letter, baseLetterPrice, noLowerCase);
+		});
+
+		if (frontAcrylicCover === '3M Vinyl') {
+			tempTotal *= 1.1;
+		}
+
+		if (waterproof && waterproof !== INDOOR_NOT_WATERPROOF) {
+			tempTotal *= 1.03;
+		}
+
+		if (mounting === STUD_WITH_SPACER) {
+			const spacer = spacerPricing(tempTotal);
+			tempTotal += parseFloat(spacer.toFixed(2));
+		}
+
+		const total = tempTotal * parseInt(sets);
+
+		return {
+			singlePrice: tempTotal ?? 0,
+			total: total?.toFixed(2) ?? 0,
+		};
 	};
 
 	useEffect(() => {

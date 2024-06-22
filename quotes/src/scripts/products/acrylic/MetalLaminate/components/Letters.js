@@ -194,49 +194,49 @@ export const Letters = ({ item }) => {
 
 	const computePricing = () => {
 		if (
-			letterPricing.length > 0 &&
-			selectedLetterHeight &&
-			selectedThickness &&
-			waterproof &&
-			letters.trim().length > 0
+			!letterPricing.length ||
+			!selectedLetterHeight ||
+			!selectedThickness ||
+			!waterproof ||
+			!letters.trim().length
 		) {
-			const pricingDetail = letterPricing[selectedLetterHeight - 1];
-			const baseLetterPrice = pricingDetail[selectedThickness.value];
-			const noLowerCase = NovaQuote.no_lowercase.includes(font);
-			const lettersArray = letters.trim().split('');
-			let tempTotal = 0;
-
-			lettersArray.forEach((letter) => {
-				tempTotal += calculateLetterPrice(letter, baseLetterPrice, noLowerCase);
-			});
-
-			tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.1;
-			tempTotal *= acrylicBase?.name === 'Black' ? 1 : 1.1;
-			tempTotal *= METAL_ACRYLIC_PRICING;
-
-			if (selectedMounting === STUD_WITH_SPACER) {
-				let spacer = spacerPricing(tempTotal);
-				spacer = parseFloat(spacer.toFixed(2));
-				tempTotal += parseFloat(spacer.toFixed(2));
-			}
-
-			/** if Layered 3D */
-			if (item.isLayered) {
-				tempTotal *= 1.4;
-			}
-
-			const total = tempTotal * sets;
-
 			return {
-				singlePrice: tempTotal.toFixed(2) ?? 0,
-				total: total?.toFixed(2) ?? 0,
-			};
-		} else {
-			return {
-				singlePrice: 0,
-				total: 0,
+				singlePrice: false,
+				total: false,
 			};
 		}
+
+		const pricingDetail = letterPricing[selectedLetterHeight - 1];
+		const baseLetterPrice = pricingDetail[selectedThickness.value];
+		const noLowerCase = NovaQuote.no_lowercase.includes(font);
+		const lettersArray = letters.trim().split('');
+		let tempTotal = 0;
+
+		lettersArray.forEach((letter) => {
+			tempTotal += calculateLetterPrice(letter, baseLetterPrice, noLowerCase);
+		});
+
+		tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.1;
+		tempTotal *= acrylicBase?.name === 'Black' ? 1 : 1.1;
+		tempTotal *= METAL_ACRYLIC_PRICING;
+
+		if (selectedMounting === STUD_WITH_SPACER) {
+			let spacer = spacerPricing(tempTotal);
+			spacer = parseFloat(spacer.toFixed(2));
+			tempTotal += parseFloat(spacer.toFixed(2));
+		}
+
+		/** if Layered 3D */
+		if (item.isLayered) {
+			tempTotal *= 1.4;
+		}
+
+		const total = tempTotal * sets;
+
+		return {
+			singlePrice: tempTotal.toFixed(2) ?? 0,
+			total: total?.toFixed(2) ?? 0,
+		};
 	};
 
 	function updateSignage() {

@@ -117,47 +117,52 @@ export function Logo({ item }) {
 	const handleOnChangeWaterproof = (e) => setWaterproof(e.target.value);
 
 	const computePricing = () => {
-		if (!lightboxType && !logoPricingObject.length > 0) return 0;
+		if (!lightboxType && !logoPricingObject.length > 0) {
+			return {
+				singlePrice: false,
+				total: false,
+			};
+		}
 
 		let tempTotal = 0;
 
 		const lightboxTable = logoPricingObject[0]?.logo_pricing.logo_pricing_table;
 
-		if (lightboxTable && lightboxType) {
-			const table = convert_json(lightboxTable);
-
-			const filtered = table.find(
-				(element) => parseInt(element.Sets) === parseInt(sets)
-			);
-
-			const val = lightBoxTypeOptions.find(
-				(element) => element.option === lightboxType
-			);
-
-			tempTotal = parseFloat(filtered[val.value]);
-
-			if (val && uvPrintedCover && uvPrintedCover === 'Yes') {
-				if (val.value === '12"') {
-					tempTotal += 5;
-				} else {
-					tempTotal += 6;
-				}
-			}
-
-			tempTotal = tempTotal.toFixed(2);
-
-			let total = tempTotal * parseInt(sets);
-
+		if (!lightboxTable || !lightboxType) {
 			return {
-				singlePrice: tempTotal ?? 0,
-				total: total.toFixed(2) ?? 0,
-			};
-		} else {
-			return {
-				singlePrice: 0,
-				total: 0,
+				singlePrice: false,
+				total: false,
 			};
 		}
+
+		const table = convert_json(lightboxTable);
+
+		const filtered = table.find(
+			(element) => parseInt(element.Sets) === parseInt(sets)
+		);
+
+		const val = lightBoxTypeOptions.find(
+			(element) => element.option === lightboxType
+		);
+
+		tempTotal = parseFloat(filtered[val.value]);
+
+		if (val && uvPrintedCover && uvPrintedCover === 'Yes') {
+			if (val.value === '12"') {
+				tempTotal += 5;
+			} else {
+				tempTotal += 6;
+			}
+		}
+
+		tempTotal = tempTotal.toFixed(2);
+
+		let total = tempTotal * parseInt(sets);
+
+		return {
+			singlePrice: tempTotal ?? 0,
+			total: total.toFixed(2) ?? 0,
+		};
 	};
 
 	useEffect(() => {

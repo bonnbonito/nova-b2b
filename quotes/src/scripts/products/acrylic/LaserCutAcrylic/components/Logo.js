@@ -331,72 +331,71 @@ export function Logo({ item }) {
 
 	function computePricing() {
 		if (
-			width &&
-			height &&
-			selectedThickness &&
-			waterproof &&
-			logoPricingObject !== null
+			!width ||
+			!height ||
+			!selectedThickness ||
+			!waterproof ||
+			logoPricingObject === null
 		) {
-			const logoPricing = getLogoPricingTablebyThickness(
-				`${selectedThickness.value}mm`,
-				logoPricingObject
-			);
-
-			if (logoPricing !== undefined) {
-				const logoPricingTable =
-					logoPricing !== undefined ? convert_json(logoPricing) : [];
-
-				let tempTotal = 0;
-				const baseLogoPricing =
-					logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
-
-				if (baseLogoPricing) {
-					tempTotal += baseLogoPricing;
-				}
-
-				if (waterproof) {
-					tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.1;
-				}
-
-				if (selectedFinishing) {
-					tempTotal *= selectedFinishing === GLOSS_FINISH ? 1.1 : 1;
-				}
-
-				if (color?.name === CLEAR_COLOR) {
-					tempTotal *= 0.9;
-				}
-				if (color?.name === FROSTED_CLEAR_COLOR) {
-					tempTotal *= 0.95;
-				}
-
-				if (selectedMounting === STUD_WITH_SPACER) {
-					const spacer = spacerPricing(tempTotal);
-					tempTotal += spacer;
-				}
-
-				/** if Layered 3D */
-				if (item.isLayered) {
-					tempTotal *= 1.4;
-				}
-
-				const total = tempTotal * sets;
-
-				return {
-					singlePrice: tempTotal.toFixed(2) ?? 0,
-					total: total ?? 0,
-				};
-			} else {
-				return {
-					singlePrice: 0,
-					total: 0,
-				};
-			}
-		} else {
 			return {
-				singlePrice: 0,
-				total: 0,
+				singlePrice: false,
+				total: false,
 			};
 		}
+
+		const logoPricing = getLogoPricingTablebyThickness(
+			`${selectedThickness.value}mm`,
+			logoPricingObject
+		);
+
+		if (logoPricing === undefined) {
+			return {
+				singlePrice: false,
+				total: false,
+			};
+		}
+
+		const logoPricingTable = convert_json(logoPricing);
+
+		let tempTotal = 0;
+		const baseLogoPricing =
+			logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
+
+		if (baseLogoPricing) {
+			tempTotal += baseLogoPricing;
+		}
+
+		if (waterproof) {
+			tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.1;
+		}
+
+		if (selectedFinishing) {
+			tempTotal *= selectedFinishing === GLOSS_FINISH ? 1.1 : 1;
+		}
+
+		if (color?.name === CLEAR_COLOR) {
+			tempTotal *= 0.9;
+		}
+		if (color?.name === FROSTED_CLEAR_COLOR) {
+			tempTotal *= 0.95;
+		}
+
+		if (selectedMounting === STUD_WITH_SPACER) {
+			const spacer = spacerPricing(tempTotal);
+			tempTotal += spacer;
+		}
+
+		/** if Layered 3D */
+		if (item.isLayered) {
+			tempTotal *= 1.4;
+		}
+
+		const total = tempTotal * sets;
+
+		return {
+			singlePrice: tempTotal.toFixed(2) ?? 0,
+			total: total ?? 0,
+		};
 	}
 
 	useEffect(() => {

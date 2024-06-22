@@ -328,72 +328,71 @@ export function Logo({ item }) {
 
 	const computePricing = () => {
 		if (
-			width &&
-			height &&
-			selectedThickness &&
-			waterproof &&
-			logoPricingObject !== null
+			!width ||
+			!height ||
+			!selectedThickness ||
+			!waterproof ||
+			logoPricingObject === null
 		) {
-			const logoPricing = getLogoPricingTablebyThickness(
-				`${selectedThickness.value}`,
-				logoPricingObject
-			);
-
-			if (logoPricing !== undefined) {
-				let tempTotal = 0;
-
-				const logoPricingTable =
-					logoPricing !== undefined ? convert_json(logoPricing) : [];
-
-				const computed =
-					logoPricingTable.length > 0 ? logoPricingTable[width - 3][height] : 0;
-
-				tempTotal += computed;
-
-				if (waterproof)
-					tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.1;
-
-				if (metal) tempTotal *= metal === '316 Stainless Steel' ? 1.3 : 1;
-
-				if (stainLessMetalFinish && stainLessMetalFinish.includes('Polished')) {
-					tempTotal *= 1.1;
-				}
-
-				if (
-					stainLessMetalFinish &&
-					stainLessMetalFinish.includes('Electroplated')
-				) {
-					tempTotal *= 1.2;
-				}
-
-				if (mounting === 'PVC Backing') {
-					tempTotal *= 1.15;
-				}
-
-				if (mounting && mounting === STUD_WITH_SPACER) {
-					let spacer = spacerPricing(tempTotal);
-					spacer = parseFloat(spacer.toFixed(2));
-					tempTotal += spacer;
-				}
-
-				const total = tempTotal * parseInt(sets);
-
-				return {
-					singlePrice: tempTotal.toFixed(2) ?? 0,
-					total: total?.toFixed(2) ?? 0,
-				};
-			} else {
-				return {
-					singlePrice: 0,
-					total: 0,
-				};
-			}
-		} else {
 			return {
-				singlePrice: 0,
-				total: 0,
+				singlePrice: false,
+				total: false,
 			};
 		}
+
+		const logoPricing = getLogoPricingTablebyThickness(
+			`${selectedThickness.value}`,
+			logoPricingObject
+		);
+
+		if (logoPricing === undefined) {
+			return {
+				singlePrice: false,
+				total: false,
+			};
+		}
+
+		let tempTotal = 0;
+
+		const logoPricingTable =
+			logoPricing !== undefined ? convert_json(logoPricing) : [];
+
+		const computed =
+			logoPricingTable.length > 0 ? logoPricingTable[width - 3][height] : 0;
+
+		tempTotal += computed;
+
+		if (waterproof) tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.1;
+
+		if (metal) tempTotal *= metal === '316 Stainless Steel' ? 1.3 : 1;
+
+		if (stainLessMetalFinish && stainLessMetalFinish.includes('Polished')) {
+			tempTotal *= 1.1;
+		}
+
+		if (
+			stainLessMetalFinish &&
+			stainLessMetalFinish.includes('Electroplated')
+		) {
+			tempTotal *= 1.2;
+		}
+
+		if (mounting === 'PVC Backing') {
+			tempTotal *= 1.15;
+		}
+
+		if (mounting && mounting === STUD_WITH_SPACER) {
+			let spacer = spacerPricing(tempTotal);
+			spacer = parseFloat(spacer.toFixed(2));
+			tempTotal += spacer;
+		}
+
+		const total = tempTotal * parseInt(sets);
+
+		return {
+			singlePrice: tempTotal.toFixed(2) ?? 0,
+			total: total?.toFixed(2) ?? 0,
+		};
 	};
 
 	useEffect(() => {

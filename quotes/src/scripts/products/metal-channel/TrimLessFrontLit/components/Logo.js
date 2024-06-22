@@ -324,7 +324,12 @@ export function Logo({ item }) {
 	}
 
 	const computePricing = () => {
-		if (!width || !height || !depth?.value) return 0;
+		if (!width || !height || !depth?.value) {
+			return {
+				singlePrice: false,
+				total: false,
+			};
+		}
 
 		let P = 0;
 		let S = 0;
