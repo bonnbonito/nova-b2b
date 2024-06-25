@@ -4071,7 +4071,8 @@ function UploadFiles({
   setFileUrls,
   fileUrls,
   setFileNames,
-  fileNames
+  fileNames,
+  fileError = false
 }) {
   const {
     signage,
@@ -4359,9 +4360,9 @@ function UploadFiles({
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "px-[1px]"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
+    className: `uppercase font-title text-sm tracking-[1.4px] px-2 ${fileError && 'text-red-600'}`
   }, "UPLOAD PDF/AI FILE"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
-    className: "h-[40px] w-full py-2 px-2 text-center text-red rounded-md text-sm uppercase bg-slate-400 hover:bg-slate-600 font-title leading-[1em]",
+    className: `h-[40px] w-full py-2 px-2 text-center rounded-md text-sm uppercase bg-slate-400 hover:bg-slate-600 font-title leading-[1em] ${fileError && ' border border-solid border-red-600'}`,
     onClick: handleButtonClick,
     "aria-label": "Upload design file",
     disabled: isLoading
@@ -4415,7 +4416,8 @@ function UploadFont({
   setFontFileUrl,
   setFontFile,
   fontFileUrl,
-  setFontFileName
+  setFontFileName,
+  fontFileError = false
 }) {
   const fileRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const {
@@ -4717,9 +4719,9 @@ function UploadFont({
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "px-[1px]"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
+    className: `uppercase font-title text-sm tracking-[1.4px] px-2 ${fontFileError && 'text-red-600'}`
   }, "UPLOAD TTF/OTF File"), !fontFileUrl ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
-    className: "h-[40px] w-full py-2 px-2 text-center text-red rounded-md text-sm uppercase bg-slate-400 hover:bg-slate-600 font-title leading-[1em]",
+    className: `h-[40px] w-full py-2 px-2 text-center text-red rounded-md text-sm uppercase bg-slate-400 hover:bg-slate-600 font-title leading-[1em] ${fontFileError && 'border border-solid border-red-600'}`,
     onClick: handleButtonClick,
     "aria-label": "Upload font file",
     disabled: isLoading
@@ -5264,8 +5266,10 @@ function Letters({
     const missingFields = [];
     if (!letters) missingFields.push('Add your Line Text');
     if (!font) missingFields.push('Select Font');
-    if (font == 'Custom font' && !fontFileUrl) {
-      missingFields.push('Upload your custom font.');
+    if (font == 'Custom font') {
+      if (fontFileUrl.length === 0 && fileUrls.length === 0) {
+        missingFields.push('Upload your custom font or files.');
+      }
     }
     if (!selectedLetterHeight) missingFields.push('Select Letter Height');
     if (!acrylicChannelThickness) missingFields.push('Select Acrylic Thickness');
@@ -6472,8 +6476,10 @@ function Letters({
     const missingFields = [];
     if (!letters) missingFields.push('Add your Line Text');
     if (!font) missingFields.push('Select Font');
-    if (font == 'Custom font' && !fontFileUrl) {
-      missingFields.push('Upload your custom font.');
+    if (font == 'Custom font') {
+      if (fontFileUrl.length === 0 && fileUrls.length === 0) {
+        missingFields.push('Upload your custom font or files.');
+      }
     }
     if (!selectedLetterHeight) missingFields.push('Select Letter Height');
     if (!acrylicChannelThickness) missingFields.push('Select Acrylic Thickness');
@@ -7812,8 +7818,10 @@ function Letters({
     const missingFields = [];
     if (!letters) missingFields.push('Add your Line Text');
     if (!font) missingFields.push('Select Font');
-    if (font == 'Custom font' && !fontFileUrl) {
-      missingFields.push('Upload your custom font.');
+    if (font == 'Custom font') {
+      if (fontFileUrl.length === 0 && fileUrls.length === 0) {
+        missingFields.push('Upload your custom font or files.');
+      }
     }
     if (!selectedLetterHeight) missingFields.push('Select Letter Height');
     if (!acrylicChannelThickness) missingFields.push('Select Acrylic Thickness');
@@ -9059,8 +9067,10 @@ function Letters({
     const missingFields = [];
     if (!letters) missingFields.push('Add your Line Text');
     if (!font) missingFields.push('Select Font');
-    if (font == 'Custom font' && !fontFileUrl) {
-      missingFields.push('Upload your custom font.');
+    if (font == 'Custom font') {
+      if (fontFileUrl.length === 0 && fileUrls.length === 0) {
+        missingFields.push('Upload your custom font or files.');
+      }
     }
     if (!selectedLetterHeight) missingFields.push('Select Letter Height');
     if (!acrylicChannelThickness) missingFields.push('Select Acrylic Thickness');
@@ -10257,8 +10267,10 @@ function Letters({
     const missingFields = [];
     if (!letters) missingFields.push('Add your Line Text');
     if (!font) missingFields.push('Select Font');
-    if (font == 'Custom font' && !fontFileUrl) {
-      missingFields.push('Upload your custom font.');
+    if (font == 'Custom font') {
+      if (fontFileUrl.length === 0 && fileUrls.length === 0) {
+        missingFields.push('Upload your custom font or files.');
+      }
     }
     if (!selectedLetterHeight) missingFields.push('Select Letter Height');
     if (!acrylicChannelThickness) missingFields.push('Select Acrylic Thickness');
@@ -11858,8 +11870,10 @@ function Letters({
     const missingFields = [];
     if (!letters) missingFields.push('Add your Line Text');
     if (!font) missingFields.push('Select Font');
-    if (font == 'Custom font' && !fontFileUrl) {
-      missingFields.push('Upload your custom font.');
+    if (font == 'Custom font') {
+      if (fontFileUrl.length === 0 && fileUrls.length === 0) {
+        missingFields.push('Upload your custom font or files.');
+      }
     }
     if (!selectedLetterHeight) missingFields.push('Select Letter Height');
     if (!selectedThickness) missingFields.push('Select Acrylic Thickness');
@@ -13543,7 +13557,7 @@ __webpack_require__.r(__webpack_exports__);
 const Letters = ({
   item
 }) => {
-  var _item$letters, _item$comments, _item$font, _item$customFont, _item$customColor, _item$acrylicBase, _item$waterproof, _item$acrylicThicknes, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$metalLaminate, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
+  var _item$letters, _item$comments, _item$font, _item$customColor, _item$acrylicBase, _item$waterproof, _item$acrylicThicknes, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$metalLaminate, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
   const {
     signage,
     setSignage,
@@ -13553,7 +13567,6 @@ const Letters = ({
   const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letters = item.letters) !== null && _item$letters !== void 0 ? _item$letters : '');
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
   const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$font = item.font) !== null && _item$font !== void 0 ? _item$font : '');
-  const [customFont, setCustomFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$customFont = item.customFont) !== null && _item$customFont !== void 0 ? _item$customFont : '');
   const [customColor, setCustomColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$customColor = item.customColor) !== null && _item$customColor !== void 0 ? _item$customColor : '');
   const [acrylicBase, setAcrylicBase] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicBase = item.acrylicBase) !== null && _item$acrylicBase !== void 0 ? _item$acrylicBase : {
     name: 'Black',
@@ -13572,6 +13585,8 @@ const Letters = ({
   const [fontFileUrl, setFontFileUrl] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fontFileUrl = item.fontFileUrl) !== null && _item$fontFileUrl !== void 0 ? _item$fontFileUrl : '');
   const [fontFilePath, setFontFilePath] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fontFilePath = item.fontFilePath) !== null && _item$fontFilePath !== void 0 ? _item$fontFilePath : '');
   const [fontFile, setFontFile] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fontFile = item.fontFile) !== null && _item$fontFile !== void 0 ? _item$fontFile : '');
+  const [fontFileError, setFontFileError] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const [fileError, setFileError] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [letterHeightOptions, setLetterHeightOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const [metalLaminate, setMetalLaminate] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$metalLaminate = item.metalLaminate) !== null && _item$metalLaminate !== void 0 ? _item$metalLaminate : '');
   const [selectedLetterHeight, setSelectedLetterHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letterHeight = item.letterHeight) !== null && _item$letterHeight !== void 0 ? _item$letterHeight : '');
@@ -13728,7 +13743,6 @@ const Letters = ({
           fontFilePath,
           fontFileUrl,
           metalLaminate,
-          customFont,
           customColor,
           sets,
           studLength,
@@ -13817,8 +13831,10 @@ const Letters = ({
     const missingFields = [];
     if (!letters) missingFields.push('Add Line Text');
     if (!font) missingFields.push('Select Font');
-    if (font == 'Custom font' && !fontFileUrl) {
-      missingFields.push('Upload your custom font.');
+    if (font && font == 'Custom font') {
+      if (fontFileUrl.length === 0 && fileUrls.length === 0) {
+        missingFields.push('Upload your custom font or files.');
+      }
     }
     if (!selectedLetterHeight) missingFields.push('Select Letter Height');
     if (!selectedThickness) missingFields.push('Select Acrylic Thickness');
@@ -13897,7 +13913,7 @@ const Letters = ({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
-  }, [letters, comments, font, selectedThickness, waterproof, acrylicBase, usdPrice, cadPrice, usdSinglePrice, cadSinglePrice, selectedLetterHeight, fileUrls, fileNames, files, filePaths, fontFileUrl, fontFileName, fontFilePath, fontFile, metalLaminate, customFont, customColor, sets, selectedMounting, studLength, spacerStandoffDistance]);
+  }, [letters, comments, font, selectedThickness, waterproof, acrylicBase, usdPrice, cadPrice, usdSinglePrice, cadSinglePrice, selectedLetterHeight, fileUrls, fileNames, files, filePaths, fontFileUrl, fontFileName, fontFilePath, fontFile, metalLaminate, customColor, sets, selectedMounting, studLength, spacerStandoffDistance, fileError, fontFileError]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     clasName: "py-4 my-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
@@ -13949,7 +13965,8 @@ const Letters = ({
     fontFilePath: fontFilePath,
     fontFileUrl: fontFileUrl,
     setFontFileUrl: setFontFileUrl,
-    setFontFileName: setFontFileName
+    setFontFileName: setFontFileName,
+    fontFileError: fontFileError
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Acrylic Thickness",
     value: selectedThickness?.value,
@@ -14048,7 +14065,8 @@ const Letters = ({
     fileUrls: fileUrls,
     fileNames: fileNames,
     setFileUrls: setFileUrls,
-    setFileNames: setFileNames
+    setFileNames: setFileNames,
+    fileError: fileError
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-xs text-[#9F9F9F] pt-4"
   }, "We size the letters in proportion to your chosen font. Some uppercase/lowercase letters may appear shorter or taller than your selected height on the form to maintain visual harmony."));
@@ -19057,8 +19075,10 @@ function Letters({
     const missingFields = [];
     if (!letters) missingFields.push('Add Line Text');
     if (!font) missingFields.push('Select Font');
-    if (font == 'Custom font' && !fontFileUrl) {
-      missingFields.push('Upload your custom font.');
+    if (font == 'Custom font') {
+      if (fontFileUrl.length === 0 && fileUrls.length === 0) {
+        missingFields.push('Upload your custom font or files.');
+      }
     }
     if (!depth) missingFields.push('Select Metal Depth');
     if (!selectedLetterHeight) missingFields.push('Select Letter Height');
@@ -20490,8 +20510,10 @@ function Letters({
     const missingFields = [];
     if (!letters) missingFields.push('Add Line Text');
     if (!font) missingFields.push('Select Font');
-    if (font == 'Custom font' && !fontFileUrl) {
-      missingFields.push('Upload your custom font.');
+    if (font == 'Custom font') {
+      if (fontFileUrl.length === 0 && fileUrls.length === 0) {
+        missingFields.push('Upload your custom font or files.');
+      }
     }
     if (!depth) missingFields.push('Select Metal Depth');
     if (!selectedLetterHeight) missingFields.push('Select Letter Height');
@@ -21803,8 +21825,10 @@ function Letters({
     const missingFields = [];
     if (!letters) missingFields.push('Add Line Text');
     if (!font) missingFields.push('Select Font');
-    if (font == 'Custom font' && !fontFileUrl) {
-      missingFields.push('Upload your custom font.');
+    if (font == 'Custom font') {
+      if (fontFileUrl.length === 0 && fileUrls.length === 0) {
+        missingFields.push('Upload your custom font or files.');
+      }
     }
     if (!depth) missingFields.push('Select Metal Depth');
     if (!selectedLetterHeight) missingFields.push('Select Letter Height');
@@ -23234,8 +23258,10 @@ function Letters({
     const missingFields = [];
     if (!letters) missingFields.push('Add Line Text');
     if (!font) missingFields.push('Select Font');
-    if (font == 'Custom font' && !fontFileUrl) {
-      missingFields.push('Upload your custom font.');
+    if (font == 'Custom font') {
+      if (fontFileUrl.length === 0 && fileUrls.length === 0) {
+        missingFields.push('Upload your custom font or files.');
+      }
     }
     if (!depth) missingFields.push('Select Metal Depth');
     if (!selectedLetterHeight) missingFields.push('Select Letter Height');
@@ -24548,8 +24574,10 @@ function Letters({
     const missingFields = [];
     if (!letters) missingFields.push('Add Line Text');
     if (!font) missingFields.push('Select Font');
-    if (font == 'Custom font' && !fontFileUrl) {
-      missingFields.push('Upload your custom font.');
+    if (font == 'Custom font') {
+      if (fontFileUrl.length === 0 && fileUrls.length === 0) {
+        missingFields.push('Upload your custom font or files.');
+      }
     }
     if (!depth) missingFields.push('Select Metal Depth');
     if (!selectedLetterHeight) missingFields.push('Select Letter Height');
@@ -25919,8 +25947,10 @@ function Letters({
     const missingFields = [];
     if (!letters) missingFields.push('Add Line Text');
     if (!font) missingFields.push('Select Font');
-    if (font == 'Custom font' && !fontFileUrl) {
-      missingFields.push('Upload your custom font.');
+    if (font == 'Custom font') {
+      if (fontFileUrl.length === 0 && fileUrls.length === 0) {
+        missingFields.push('Upload your custom font or files.');
+      }
     }
     if (!metal) missingFields.push('Metal Option');
     if (!selectedThickness) missingFields.push('Select Metal Thickness');
@@ -27159,8 +27189,10 @@ function Letters({
     const missingFields = [];
     if (!letters) missingFields.push('Add Line Text');
     if (!font) missingFields.push('Select Font');
-    if (font == 'Custom font' && !fontFileUrl) {
-      missingFields.push('Upload your custom font.');
+    if (font == 'Custom font') {
+      if (fontFileUrl.length === 0 && fileUrls.length === 0) {
+        missingFields.push('Upload your custom font or files.');
+      }
     }
     if (!selectedLetterHeight) missingFields.push('Select Letter Height');
     if (!selectedThickness) missingFields.push('Select Acrylic Thickness');
@@ -28372,8 +28404,10 @@ function Letters({
     const missingFields = [];
     if (!letters) missingFields.push('Add Line Text');
     if (!font) missingFields.push('Select Font');
-    if (font == 'Custom font' && !fontFileUrl) {
-      missingFields.push('Upload your custom font.');
+    if (font == 'Custom font') {
+      if (fontFileUrl.length === 0 && fileUrls.length === 0) {
+        missingFields.push('Upload your custom font or files.');
+      }
     }
     if (!metal) missingFields.push('Metal Option');
     if (!selectedThickness) missingFields.push('Select Metal Thickness');
@@ -29806,8 +29840,10 @@ function Letters({
     const missingFields = [];
     if (!letters) missingFields.push('Add your Line Text');
     if (!font) missingFields.push('Select Font');
-    if (font == 'Custom font' && !fontFileUrl) {
-      missingFields.push('Upload your custom font.');
+    if (font == 'Custom font') {
+      if (fontFileUrl.length === 0 && fileUrls.length === 0) {
+        missingFields.push('Upload your custom font or files.');
+      }
     }
     if (!selectedLetterHeight) missingFields.push('Select Letter Height');
     if (!selectedThickness) missingFields.push('Select Thickness');
@@ -31008,8 +31044,10 @@ function Letters({
     const missingFields = [];
     if (!letters) missingFields.push('Add your Line Text');
     if (!font) missingFields.push('Select Font');
-    if (font == 'Custom font' && !fontFileUrl) {
-      missingFields.push('Upload your custom font.');
+    if (font == 'Custom font') {
+      if (fontFileUrl.length === 0 && fileUrls.length === 0) {
+        missingFields.push('Upload your custom font or files.');
+      }
     }
     if (!selectedLetterHeight) missingFields.push('Select Letter Height');
     if (!selectedThickness) missingFields.push('Select Thickness');

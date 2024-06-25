@@ -384,8 +384,10 @@ export function Letters({ item }) {
 
 		if (!letters) missingFields.push('Add Line Text');
 		if (!font) missingFields.push('Select Font');
-		if (font == 'Custom font' && !fontFileUrl) {
-			missingFields.push('Upload your custom font.');
+		if (font == 'Custom font') {
+			if (fontFileUrl.length === 0 && fileUrls.length === 0) {
+				missingFields.push('Upload your custom font or files.');
+			}
 		}
 		if (!selectedLetterHeight) missingFields.push('Select Letter Height');
 		if (!selectedThickness) missingFields.push('Select Acrylic Thickness');

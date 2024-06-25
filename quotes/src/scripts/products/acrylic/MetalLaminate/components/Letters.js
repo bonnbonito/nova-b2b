@@ -42,7 +42,7 @@ export const Letters = ({ item }) => {
 	const [letters, setLetters] = useState(item.letters ?? '');
 	const [comments, setComments] = useState(item.comments ?? '');
 	const [font, setFont] = useState(item.font ?? '');
-	const [customFont, setCustomFont] = useState(item.customFont ?? '');
+
 	const [customColor, setCustomColor] = useState(item.customColor ?? '');
 	const [acrylicBase, setAcrylicBase] = useState(
 		item.acrylicBase ?? { name: 'Black', color: '#000000' }
@@ -67,6 +67,9 @@ export const Letters = ({ item }) => {
 	const [fontFileUrl, setFontFileUrl] = useState(item.fontFileUrl ?? '');
 	const [fontFilePath, setFontFilePath] = useState(item.fontFilePath ?? '');
 	const [fontFile, setFontFile] = useState(item.fontFile ?? '');
+
+	const [fontFileError, setFontFileError] = useState(false);
+	const [fileError, setFileError] = useState(false);
 
 	const [letterHeightOptions, setLetterHeightOptions] = useState('');
 	const [metalLaminate, setMetalLaminate] = useState(item.metalLaminate ?? '');
@@ -267,7 +270,6 @@ export const Letters = ({ item }) => {
 					fontFilePath,
 					fontFileUrl,
 					metalLaminate,
-					customFont,
 					customColor,
 					sets,
 					studLength,
@@ -402,8 +404,10 @@ export const Letters = ({ item }) => {
 
 		if (!letters) missingFields.push('Add Line Text');
 		if (!font) missingFields.push('Select Font');
-		if (font == 'Custom font' && !fontFileUrl) {
-			missingFields.push('Upload your custom font.');
+		if (font && font == 'Custom font') {
+			if (fontFileUrl.length === 0 && fileUrls.length === 0) {
+				missingFields.push('Upload your custom font or files.');
+			}
 		}
 		if (!selectedLetterHeight) missingFields.push('Select Letter Height');
 		if (!selectedThickness) missingFields.push('Select Acrylic Thickness');
@@ -536,12 +540,13 @@ export const Letters = ({ item }) => {
 		fontFilePath,
 		fontFile,
 		metalLaminate,
-		customFont,
 		customColor,
 		sets,
 		selectedMounting,
 		studLength,
 		spacerStandoffDistance,
+		fileError,
+		fontFileError,
 	]);
 
 	return (
@@ -610,6 +615,7 @@ export const Letters = ({ item }) => {
 						fontFileUrl={fontFileUrl}
 						setFontFileUrl={setFontFileUrl}
 						setFontFileName={setFontFileName}
+						fontFileError={fontFileError}
 					/>
 				)}
 
@@ -775,6 +781,7 @@ export const Letters = ({ item }) => {
 					fileNames={fileNames}
 					setFileUrls={setFileUrls}
 					setFileNames={setFileNames}
+					fileError={fileError}
 				/>
 			</div>
 

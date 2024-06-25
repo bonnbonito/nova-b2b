@@ -10,6 +10,7 @@ export default function UploadFiles({
 	fileUrls,
 	setFileNames,
 	fileNames,
+	fileError = false,
 }) {
 	const { signage, tempFolder, isLoading, setIsLoading } = useAppContext();
 
@@ -399,11 +400,17 @@ export default function UploadFiles({
 	return (
 		<>
 			<div className="px-[1px]">
-				<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+				<label
+					className={`uppercase font-title text-sm tracking-[1.4px] px-2 ${
+						fileError && 'text-red-600'
+					}`}
+				>
 					UPLOAD PDF/AI FILE
 				</label>
 				<button
-					className="h-[40px] w-full py-2 px-2 text-center text-red rounded-md text-sm uppercase bg-slate-400 hover:bg-slate-600 font-title leading-[1em]"
+					className={`h-[40px] w-full py-2 px-2 text-center rounded-md text-sm uppercase bg-slate-400 hover:bg-slate-600 font-title leading-[1em] ${
+						fileError && ' border border-solid border-red-600'
+					}`}
 					onClick={handleButtonClick}
 					aria-label="Upload design file"
 					disabled={isLoading}
