@@ -388,7 +388,8 @@ export function Logo({ item }) {
 
 		tempTotal += computed;
 
-		if (waterproof) tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.1;
+		if (waterproof)
+			tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.05;
 
 		if (metal) tempTotal *= metal === '316 Stainless Steel' ? 1.3 : 1;
 

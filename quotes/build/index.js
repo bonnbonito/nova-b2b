@@ -26598,7 +26598,7 @@ function Logo({
     const logoPricingTable = logoPricing !== undefined ? (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_6__["default"])(logoPricing) : [];
     const computed = logoPricingTable.length > 0 ? logoPricingTable[width - 3][height] : 0;
     tempTotal += computed;
-    if (waterproof) tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
+    if (waterproof) tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.INDOOR_NOT_WATERPROOF ? 1 : 1.05;
     if (metal) tempTotal *= metal === '316 Stainless Steel' ? 1.3 : 1;
     if (stainLessMetalFinish && stainLessMetalFinish.includes('Polished')) {
       tempTotal *= 1.1;
