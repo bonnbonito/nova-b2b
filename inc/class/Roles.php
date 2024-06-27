@@ -54,6 +54,41 @@ class Roles {
 		add_action( 'wp_ajax_send_activation_email', array( $this, 'handle_send_activation_email' ) );
 		add_action( 'admin_notices', array( $this, 'display_send_activation_email_notice' ) );
 		add_action( 'kadence_header', array( $this, 'remove_multicurrency' ) );
+		add_action( 'rest_api_init', array( $this, 'rest_show_all_business_id' ) );
+	}
+
+	public function rest_show_all_business_id() {
+		register_rest_route(
+			'nova/v1',
+			'/show-all-business-id',
+			array(
+				'methods'             => 'GET',
+				'callback'            => array( $this, 'handle_show_all_business_id' ),
+				'permission_callback' => '__return_true',
+			)
+		);
+	}
+
+	public function handle_show_all_business_id( \WP_REST_Request $request ) {
+		$users = get_users( array( 'role' => 'partner' ) );
+
+		$results = array();
+
+		foreach ( $users as $user ) {
+			$employee_emails = get_user_meta( $user->ID, 'employee_emails', true );
+			$emails_array    = $employee_emails ? explode( ',', str_replace( ' ', '', trim( $employee_emails ) ) ) : array();
+			$emails_array[]  = $user->user_email;
+			$emails          = array_unique( $emails_array );
+			$results[]       = array(
+				'user_id'     => $user->ID,
+				'label'       => get_field( 'business_id', 'user_' . $user->ID ) . ' - ' . get_field( 'business_name', 'user_' . $user->ID ),
+				'business_id' => get_field( 'business_id', 'user_' . $user->ID ),
+				'emails'      => $emails,
+				'country'     => get_user_meta( $user->ID, 'billing_country', true ) ? get_user_meta( $user->ID, 'billing_country', true ) : 'NONE',
+			);
+		}
+
+		return $results;
 	}
 
 	public function remove_multicurrency() {
