@@ -17,7 +17,7 @@ import {
 import {
 	fabricatedMetalInstallationOptions,
 	fabricatedThicknessOptions,
-	finishOptions,
+	finishOptions2,
 	metalFinishOptions,
 	metalOptions,
 } from '../../metalOptions';
@@ -48,6 +48,11 @@ export function Letters({ item }) {
 	);
 
 	const [color, setColor] = useState(item.color ?? {});
+	const [returnColor, setReturnColor] = useState(
+		item.returnColor ?? { name: '', color: '' }
+	);
+	const [openReturnColor, setOpenReturnColor] = useState(false);
+
 	const [openColor, setOpenColor] = useState(false);
 	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
 	const [selectedThickness, setSelectedThickness] = useState(item.metalDepth);
@@ -130,6 +135,7 @@ export function Letters({ item }) {
 	};
 
 	const colorRef = useRef(null);
+	const returnColorRef = useRef(null);
 	const fontRef = useRef(null);
 
 	const [letterPricing, setLetterPricing] = useState([]);
@@ -204,6 +210,7 @@ export function Letters({ item }) {
 					spacerStandoffDistance,
 					usdSinglePrice,
 					cadSinglePrice,
+					returnColor,
 				};
 			} else {
 				return sign;
@@ -265,13 +272,21 @@ export function Letters({ item }) {
 		if (value === '') {
 			setStainLessMetalFinish('');
 			setColor({ name: '', color: '' });
+			setReturnColor({ name: '', color: '' });
 		}
-		if ('Metal Finish' === value) {
+		if ('Metal' === value) {
 			setColor({ name: '', color: '' });
+			setReturnColor({ name: '', color: '' });
 		}
 
-		if ('Painted Finish' === value) {
+		if ('Painted' === value) {
 			setStainLessMetalFinish('');
+			setReturnColor({ name: '', color: '' });
+		}
+
+		if ('UV Printed' === value) {
+			setStainLessMetalFinish('');
+			setColor({ name: '', color: '' });
 		}
 
 		setSelectedFinishing(e.target.value);
@@ -305,7 +320,8 @@ export function Letters({ item }) {
 			tempTotal += calculateLetterPrice(letter, baseLetterPrice, noLowerCase);
 		});
 
-		if (waterproof) tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.1;
+		if (waterproof)
+			tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.05;
 
 		if (metal) tempTotal *= metal === '316 Stainless Steel' ? 1.3 : 1;
 
@@ -322,6 +338,10 @@ export function Letters({ item }) {
 
 		if (mounting === 'PVC Backing') {
 			tempTotal *= 1.15;
+		}
+
+		if (selectedFinishing === 'UV Printed') {
+			tempTotal *= 1.1;
 		}
 
 		if (mounting && mounting === STUD_WITH_SPACER) {
@@ -407,14 +427,21 @@ export function Letters({ item }) {
 		if (!selectedLetterHeight) missingFields.push('Select Letter Height');
 
 		if (!selectedFinishing) missingFields.push('Select Finishing Options');
-		if (selectedFinishing === 'Painted Finish') {
+		if (selectedFinishing === 'Painted') {
 			if (!color.name) missingFields.push('Select Color');
 
 			if (color?.name === 'Custom Color' && !customColor) {
 				missingFields.push('Add the Pantone color code of your custom color.');
 			}
 		}
-		if (selectedFinishing === 'Metal Finish') {
+		if (selectedFinishing === 'UV Printed') {
+			if (!returnColor.name) missingFields.push('Select Return Color');
+
+			if (returnColor?.name === 'Custom Color' && !customColor) {
+				missingFields.push('Add the Pantone color code of your custom color.');
+			}
+		}
+		if (selectedFinishing === 'Metal') {
 			if (!stainLessMetalFinish)
 				missingFields.push('Select Metal Finishing Options');
 		}
@@ -499,6 +526,7 @@ export function Letters({ item }) {
 		spacerStandoffDistance,
 		usdSinglePrice,
 		cadSinglePrice,
+		returnColor,
 	]);
 
 	useEffect(() => {
@@ -521,11 +549,17 @@ export function Letters({ item }) {
 		}
 	}, [selectedThickness]);
 
-	if (selectedFinishing === 'Painted Finish') {
+	if (selectedFinishing === 'Painted') {
 		useOutsideClick([colorRef, fontRef], () => {
 			if (!openColor && !openFont) return;
 			setOpenColor(false);
 			setOpenFont(false);
+		});
+	} else if (selectedFinishing === 'UV Printed') {
+		useOutsideClick([fontRef, returnColorRef], () => {
+			if (!openFont && !openReturnColor) return;
+			setOpenFont(false);
+			setOpenReturnColor(false);
 		});
 	} else {
 		useOutsideClick([fontRef], () => {
@@ -535,9 +569,11 @@ export function Letters({ item }) {
 	}
 
 	useEffect(() => {
-		color?.name != 'Custom Color' && setCustomColor('');
+		if (color?.name === '' && returnColor?.name === '') {
+			setCustomColor('');
+		}
 		font != 'Custom font' && setFontFileUrl('');
-	}, [color, font]);
+	}, [color, returnColor, font]);
 
 	return (
 		<>
@@ -589,7 +625,10 @@ export function Letters({ item }) {
 					openFont={openFont}
 					setOpenFont={setOpenFont}
 					handleSelectFont={handleSelectFont}
-					close={() => setOpenColor(false)}
+					close={() => {
+						setOpenColor(false);
+						setOpenReturnColor(false);
+					}}
 				/>
 
 				{font == 'Custom font' && (
@@ -639,7 +678,7 @@ export function Letters({ item }) {
 				<Dropdown
 					title="Finishing Options"
 					onChange={handleChangeFinishing}
-					options={finishOptions.map((finishing) => (
+					options={finishOptions2.map((finishing) => (
 						<option
 							value={finishing.option}
 							selected={finishing.option === selectedFinishing}
@@ -650,7 +689,7 @@ export function Letters({ item }) {
 					value={selectedFinishing}
 				/>
 
-				{selectedFinishing === 'Metal Finish' && (
+				{selectedFinishing === 'Metal' && (
 					<Dropdown
 						title="Metal Finish"
 						onChange={handelMetalFinishChange}
@@ -666,7 +705,7 @@ export function Letters({ item }) {
 					/>
 				)}
 
-				{selectedFinishing === 'Painted Finish' && (
+				{selectedFinishing === 'Painted' && (
 					<ColorsDropdown
 						ref={colorRef}
 						title="Painted Color"
@@ -680,6 +719,27 @@ export function Letters({ item }) {
 						selectColor={(color) => {
 							setColor(color);
 							setOpenColor(false);
+						}}
+					/>
+				)}
+
+				{selectedFinishing === 'UV Printed' && (
+					<ColorsDropdown
+						ref={returnColorRef}
+						title="Return Color"
+						colorName={returnColor.name}
+						openColor={openReturnColor}
+						toggleColor={() => {
+							setOpenFont(false);
+							setOpenColor(false);
+							setOpenReturnColor((prev) => !prev);
+						}}
+						colorOptions={colorOptions}
+						selectColor={(color) => {
+							setReturnColor(color);
+							setOpenColor(false);
+							setOpenFont(false);
+							setOpenReturnColor(false);
 						}}
 					/>
 				)}
@@ -775,7 +835,8 @@ export function Letters({ item }) {
 			)}
 
 			<div className="quote-grid">
-				{color?.name == 'Custom Color' && (
+				{(color?.name == 'Custom Color' ||
+					returnColor?.name == 'Custom Color') && (
 					<div className="px-[1px] col-span-4">
 						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
 							Custom Color

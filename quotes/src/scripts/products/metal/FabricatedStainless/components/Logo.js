@@ -18,10 +18,12 @@ import {
 import {
 	fabricatedMetalInstallationOptions,
 	fabricatedThicknessOptions,
-	finishOptions,
+	finishOptions2,
 	metalFinishOptions,
 	metalOptions,
 } from '../../metalOptions';
+
+import ColorsDropdown from '../../../../utils/ColorsDropdown';
 
 import {
 	EXCHANGE_RATE,
@@ -53,6 +55,12 @@ export function Logo({ item }) {
 	const [files, setFiles] = useState(item.files ?? []);
 	const [color, setColor] = useState(item.color ?? {});
 	const [openColor, setOpenColor] = useState(false);
+
+	const [returnColor, setReturnColor] = useState(
+		item.returnColor ?? { name: '', color: '' }
+	);
+	const [openReturnColor, setOpenReturnColor] = useState(false);
+
 	const [customColor, setCustomColor] = useState(item.customColor ?? '');
 	const [selectedFinishing, setSelectedFinishing] = useState(item.metalFinish);
 
@@ -125,6 +133,7 @@ export function Logo({ item }) {
 	};
 
 	const colorRef = useRef(null);
+	const returnColorRef = useRef(null);
 
 	function handleComments(e) {
 		setComments(e.target.value);
@@ -150,13 +159,21 @@ export function Logo({ item }) {
 		if (value === '') {
 			setStainLessMetalFinish('');
 			setColor({ name: '', color: '' });
+			setReturnColor({ name: '', color: '' });
 		}
-		if ('Metal Finish' === value) {
+		if ('Metal' === value) {
 			setColor({ name: '', color: '' });
+			setReturnColor({ name: '', color: '' });
 		}
 
-		if ('Painted Finish' === value) {
+		if ('Painted' === value) {
 			setStainLessMetalFinish('');
+			setReturnColor({ name: '', color: '' });
+		}
+
+		if ('UV Printed' === value) {
+			setStainLessMetalFinish('');
+			setColor({ name: '', color: '' });
 		}
 
 		setSelectedFinishing(e.target.value);
@@ -203,6 +220,7 @@ export function Logo({ item }) {
 					spacerStandoffDistance,
 					usdSinglePrice,
 					cadSinglePrice,
+					returnColor,
 				};
 			} else {
 				return sign;
@@ -222,14 +240,21 @@ export function Logo({ item }) {
 			missingFields.push('Upload a PDF/AI File');
 
 		if (!selectedFinishing) missingFields.push('Select Finishing Options');
-		if (selectedFinishing === 'Painted Finish') {
+		if (selectedFinishing === 'Painted') {
 			if (!color.name) missingFields.push('Select Color');
 
 			if (color?.name === 'Custom Color' && !customColor) {
 				missingFields.push('Add the Pantone color code of your custom color.');
 			}
 		}
-		if (selectedFinishing === 'Metal Finish') {
+		if (selectedFinishing === 'UV Printed') {
+			if (!returnColor.name) missingFields.push('Select Return Color');
+
+			if (returnColor?.name === 'Custom Color' && !customColor) {
+				missingFields.push('Add the Pantone color code of your custom color.');
+			}
+		}
+		if (selectedFinishing === 'Metal') {
 			if (!stainLessMetalFinish)
 				missingFields.push('Select Metal Finishing Options');
 		}
@@ -308,6 +333,7 @@ export function Logo({ item }) {
 		spacerStandoffDistance,
 		usdSinglePrice,
 		cadSinglePrice,
+		returnColor,
 	]);
 
 	const [logoPricingObject, setLogoPricingObject] = useState([]);
@@ -381,6 +407,10 @@ export function Logo({ item }) {
 			tempTotal *= 1.15;
 		}
 
+		if (selectedFinishing === 'UV Printed') {
+			tempTotal *= 1.1;
+		}
+
 		if (mounting && mounting === STUD_WITH_SPACER) {
 			let spacer = spacerPricing(tempTotal);
 			spacer = parseFloat(spacer.toFixed(2));
@@ -421,10 +451,21 @@ export function Logo({ item }) {
 		logoPricingObject,
 	]);
 
+	useOutsideClick([returnColorRef], () => {
+		if (!setOpenReturnColor) return;
+		setOpenReturnColor(false);
+	});
+
 	useOutsideClick([colorRef], () => {
 		if (!openColor) return;
 		setOpenColor(false);
 	});
+
+	useEffect(() => {
+		if (color?.name === '' && returnColor?.name === '') {
+			setCustomColor('');
+		}
+	}, [color, returnColor]);
 
 	return (
 		<>
@@ -479,7 +520,7 @@ export function Logo({ item }) {
 				<Dropdown
 					title="Finishing Options"
 					onChange={handleChangeFinishing}
-					options={finishOptions.map((finishing) => (
+					options={finishOptions2.map((finishing) => (
 						<option
 							value={finishing.option}
 							selected={finishing.option === selectedFinishing}
@@ -490,7 +531,7 @@ export function Logo({ item }) {
 					value={selectedFinishing}
 				/>
 
-				{selectedFinishing === 'Metal Finish' && (
+				{selectedFinishing === 'Metal' && (
 					<Dropdown
 						title="Metal Finish"
 						onChange={handelMetalFinishChange}
@@ -506,55 +547,40 @@ export function Logo({ item }) {
 					/>
 				)}
 
-				{selectedFinishing === 'Painted Finish' && (
-					<div className="px-[1px] relative" ref={colorRef}>
-						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-							Painted Color
-						</label>
-						<div
-							className={`flex px-2 items-center select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${
-								color.name ? 'text-black' : 'text-[#dddddd]'
-							}`}
-							onClick={() => setOpenColor((prev) => !prev)}
-						>
-							<span
-								className="rounded-full w-[18px] h-[18px] border mr-2"
-								style={{
-									background:
-										color.name == 'Custom Color'
-											? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-											: color.color,
-								}}
-							></span>
-							{color.name === '' ? 'CHOOSE OPTION' : color.name}
-						</div>
-						{openColor && (
-							<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg">
-								{colorOptions.map((color) => {
-									return (
-										<div
-											className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm"
-											onClick={() => {
-												setColor(color);
-												setOpenColor(false);
-											}}
-										>
-											<span
-												className="w-[18px] h-[18px] inline-block rounded-full border"
-												style={{
-													background:
-														color.name == 'Custom Color'
-															? `conic-gradient( from 90deg, violet, indigo, blue, green, yellow, orange, red, violet)`
-															: color.color,
-												}}
-											></span>
-											{color.name}
-										</div>
-									);
-								})}
-							</div>
-						)}
-					</div>
+				{selectedFinishing === 'Painted' && (
+					<ColorsDropdown
+						ref={colorRef}
+						title="Painted Color"
+						colorName={color.name}
+						openColor={openColor}
+						toggleColor={() => {
+							setOpenColor((prev) => !prev);
+						}}
+						colorOptions={colorOptions}
+						selectColor={(color) => {
+							setColor(color);
+							setOpenColor(false);
+						}}
+					/>
+				)}
+
+				{selectedFinishing === 'UV Printed' && (
+					<ColorsDropdown
+						ref={returnColorRef}
+						title="Return Color"
+						colorName={returnColor.name}
+						openColor={openReturnColor}
+						toggleColor={() => {
+							setOpenColor(false);
+							setOpenReturnColor((prev) => !prev);
+						}}
+						colorOptions={colorOptions}
+						selectColor={(color) => {
+							setReturnColor(color);
+							setOpenColor(false);
+							setOpenReturnColor(false);
+						}}
+					/>
 				)}
 
 				<Dropdown

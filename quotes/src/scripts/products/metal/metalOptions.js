@@ -68,6 +68,18 @@ const finishOptions = [
 	},
 ];
 
+const finishOptions2 = [
+	{
+		option: 'Metal',
+	},
+	{
+		option: 'Painted',
+	},
+	{
+		option: 'UV Printed',
+	},
+];
+
 const stainlessSteelPolishedOptions = [
 	{
 		option: 'Standard (Face)',
@@ -177,6 +189,7 @@ export {
 	fabricatedMetalInstallationOptions,
 	fabricatedThicknessOptions,
 	finishOptions,
+	finishOptions2,
 	metalFinishColors,
 	metalFinishOptions,
 	metalInstallationOptions,
