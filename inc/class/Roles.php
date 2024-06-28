@@ -67,6 +67,94 @@ class Roles {
 				'permission_callback' => '__return_true',
 			)
 		);
+
+		register_rest_route(
+			'nova/v1',
+			'/streakBox/(?P<id>[\w-]+)',
+			array(
+				'methods'             => 'GET',
+				'callback'            => array( $this, 'handle_streak_box' ),
+				'permission_callback' => '__return_true',
+			)
+		);
+	}
+
+	public function handle_streak_box( \WP_REST_Request $request ) {
+		$id = $request['id'];
+
+		$curl = curl_init();
+
+		curl_setopt_array(
+			$curl,
+			array(
+				CURLOPT_URL            => 'https://api.streak.com/api/v1/boxes/' . $id,
+				CURLOPT_RETURNTRANSFER => true,
+				CURLOPT_ENCODING       => '',
+				CURLOPT_MAXREDIRS      => 10,
+				CURLOPT_TIMEOUT        => 30,
+				CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
+				CURLOPT_CUSTOMREQUEST  => 'GET',
+				CURLOPT_HTTPHEADER     => array(
+					'Content-Type: application/json',
+					'accept: application/json',
+					'authorization: Basic ODk1MDM0NzMwMzYzNDY2MmIwY2YxMDQ1MjFlZTQzNjc6',
+				),
+			)
+		);
+
+		$response = curl_exec( $curl );
+		$err      = curl_error( $curl );
+
+		curl_close( $curl );
+
+		if ( $err ) {
+			return new \WP_REST_Response(
+				array(
+					'error' => 'cURL Error #: ' . $err,
+				),
+				500
+			);
+		} else {
+			$decoded_response = json_decode( $response, true );
+
+			// Check if the JSON decoding was successful
+			if ( json_last_error() !== JSON_ERROR_NONE ) {
+				return new \WP_REST_Response(
+					array(
+						'error' => 'JSON Decode Error: ' . json_last_error_msg(),
+					),
+					500
+				);
+			}
+
+			// Create a new post with the title as the ID and content as the response
+			$post_id = wp_insert_post(
+				array(
+					'post_title'   => $id,
+					'post_content' => wp_json_encode( $decoded_response, JSON_PRETTY_PRINT ),
+					'post_status'  => 'publish',
+					'post_type'    => 'post',
+				)
+			);
+
+			if ( is_wp_error( $post_id ) ) {
+				return new \WP_REST_Response(
+					array(
+						'error' => $post_id->get_error_message(),
+					),
+					500
+				);
+			}
+
+			return new \WP_REST_Response(
+				array(
+					'success'  => true,
+					'post_id'  => $post_id,
+					'response' => $post_id,
+				),
+				200
+			);
+		}
 	}
 
 	public function handle_show_all_business_id( \WP_REST_Request $request ) {
