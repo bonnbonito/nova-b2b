@@ -497,7 +497,7 @@ class Pending_Payment {
 		$message = str_replace( '{deadline}', $deadline, $message );
 		$message = str_replace( '{pending_payment}', $currency . '$' . $pending_payment, $message );
 
-		$subject = 'NOVA - Payment Deadline Sent: {customer_name} from {business_name} {business_id} - ORDER #{order_number}';
+		$subject = 'NOVA INTERNAL - Payment Deadline Sent: {customer_name} from {business_name} {business_id} - ORDER #{order_number}';
 		$subject = str_replace( '{customer_name}', $first_name, $subject );
 		$subject = str_replace( '{business_id}', $business_id, $subject );
 		$subject = str_replace( '{business_name}', $business_name, $subject );
@@ -917,10 +917,13 @@ class Pending_Payment {
 
 			add_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
 
+			/*
+			Stop sending the shipped email to admin
 			$headers       = array( 'Content-Type: text/html; charset=UTF-8' );
 			$role_instance = \NOVA_B2B\Roles::get_instance();
 
 			$this->admin_notification_shipped_email( $order, $role_instance, $headers );
+			*/
 
 		}
 	}
@@ -1060,7 +1063,7 @@ class Pending_Payment {
 
 		$message = str_replace( '{order_details}', $order_details, $message );
 
-		$subject = 'NOVA - Payment Received: {customer_name} {business_id}  from {company_name}- ORDER {order_number}';
+		$subject = 'NOVA INTERNAL - Payment Received: {customer_name} {business_id}  from {company_name}- ORDER {order_number}';
 		$subject = str_replace( '{customer_name}', $first_name, $subject );
 		$subject = str_replace( '{business_id}', $business_id, $subject );
 		$subject = str_replace( '{business_name}', $business_name, $subject );
