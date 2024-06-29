@@ -266,6 +266,9 @@ export function Logo({ item }) {
 			missingFields.push('Select Acrylic Reveal');
 		}
 
+		if (!fileUrls || fileUrls.length === 0)
+			missingFields.push('Upload a PDF/AI File');
+
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
 				const existingIndex = prevMissing.findIndex(
