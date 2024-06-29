@@ -335,6 +335,9 @@ export function Letters({ item }) {
 			tempTotal += parseFloat(spacer.toFixed(2));
 		}
 
+		/** minimum price is 89 usd */
+		tempTotal = tempTotal < 89 ? 89 : tempTotal;
+
 		const total = tempTotal * parseInt(sets);
 
 		return {

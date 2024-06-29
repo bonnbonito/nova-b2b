@@ -19242,6 +19242,9 @@ function Letters({
       spacer = parseFloat(spacer.toFixed(2));
       tempTotal += spacer;
     }
+
+    /** minimum price is 89 usd */
+    tempTotal = tempTotal < 89 ? 89 : tempTotal;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -19795,6 +19798,9 @@ function Logo({
       const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_8__.spacerPricing)(tempTotal);
       tempTotal += parseFloat(spacer.toFixed(2));
     }
+
+    /** minimum price is 89 usd */
+    tempTotal = tempTotal < 89 ? 89 : tempTotal;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -20641,6 +20647,9 @@ function Letters({
       spacer = parseFloat(spacer.toFixed(2));
       tempTotal += spacer;
     }
+
+    /** minimum price is 89 usd */
+    tempTotal = tempTotal < 89 ? 89 : tempTotal;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -21188,6 +21197,9 @@ function Logo({
       const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_8__.spacerPricing)(tempTotal);
       tempTotal += parseFloat(spacer.toFixed(2));
     }
+
+    /** minimum price is 89 usd */
+    tempTotal = tempTotal < 89 ? 89 : tempTotal;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -21973,6 +21985,9 @@ function Letters({
       spacer = parseFloat(spacer.toFixed(2));
       tempTotal += spacer;
     }
+
+    /** minimum price is 89 usd */
+    tempTotal = tempTotal < 89 ? 89 : tempTotal;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -22559,6 +22574,9 @@ function Logo({
       const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_11__.spacerPricing)(tempTotal);
       tempTotal += parseFloat(spacer.toFixed(2));
     }
+
+    /** minimum price is 89 usd */
+    tempTotal = tempTotal < 89 ? 89 : tempTotal;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -23237,6 +23255,9 @@ function Letters({
       const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_14__.spacerPricing)(tempTotal);
       tempTotal += parseFloat(spacer.toFixed(2));
     }
+
+    /** minimum price is 89 usd */
+    tempTotal = tempTotal < 89 ? 89 : tempTotal;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -23870,6 +23891,9 @@ function Logo({
       const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_11__.spacerPricing)(tempTotal);
       tempTotal += parseFloat(spacer.toFixed(2));
     }
+
+    /** minimum price is 89 usd */
+    tempTotal = tempTotal < 89 ? 89 : tempTotal;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -24554,6 +24578,9 @@ function Letters({
       const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_14__.spacerPricing)(tempTotal);
       tempTotal += parseFloat(spacer.toFixed(2));
     }
+
+    /** minimum price is 89 usd */
+    tempTotal = tempTotal < 89 ? 89 : tempTotal;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal = tempTotal) !== null && _tempTotal !== void 0 ? _tempTotal : 0,
@@ -25182,6 +25209,9 @@ function Logo({
       const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_11__.spacerPricing)(tempTotal);
       tempTotal += parseFloat(spacer.toFixed(2));
     }
+
+    /** minimum price is 89 usd */
+    tempTotal = tempTotal < 89 ? 89 : tempTotal;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
