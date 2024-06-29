@@ -19101,6 +19101,9 @@ function Letters({
     if (frontAcrylicCover === '3M Vinyl') {
       if (!vinylWhite?.name) missingFields.push('Select 3M 3630 Vinyl');
     }
+    if (frontAcrylicCover === 'UV Printed') {
+      if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    }
     if (!sets) missingFields.push('Select Quantity');
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
@@ -19225,8 +19228,15 @@ function Letters({
     lettersArray.forEach(letter => {
       tempTotal += (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_14__.calculateLetterPrice)(letter, baseLetterPrice, noLowerCase);
     });
-    if (waterproof) tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF ? 1 : 1.02;
-    if (frontAcrylicCover === '3M Vinyl') tempTotal *= 1.1;
+    if (waterproof) {
+      tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF ? 1 : 1.02;
+    }
+    if (frontAcrylicCover === '3M Vinyl') {
+      tempTotal *= 1.1;
+    }
+    if (frontAcrylicCover === 'UV Printed') {
+      tempTotal *= 1.1;
+    }
     if (mounting && mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER) {
       let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_14__.spacerPricing)(tempTotal);
       spacer = parseFloat(spacer.toFixed(2));
@@ -20536,6 +20546,9 @@ function Letters({
     if (frontAcrylicCover === '3M Vinyl') {
       if (!vinylWhite?.name) missingFields.push('Select 3M 3630 Vinyl');
     }
+    if (frontAcrylicCover === 'UV Printed') {
+      if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    }
     if (!sets) missingFields.push('Select Quantity');
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
@@ -20614,8 +20627,15 @@ function Letters({
     lettersArray.forEach(letter => {
       tempTotal += (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_14__.calculateLetterPrice)(letter, baseLetterPrice, noLowerCase);
     });
-    if (waterproof) tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF ? 1 : 1.02;
-    if (frontAcrylicCover === '3M Vinyl') tempTotal *= 1.1;
+    if (waterproof) {
+      tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF ? 1 : 1.02;
+    }
+    if (frontAcrylicCover === '3M Vinyl') {
+      tempTotal *= 1.1;
+    }
+    if (frontAcrylicCover === 'UV Printed') {
+      tempTotal *= 1.1;
+    }
     if (mounting && mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER) {
       let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_14__.spacerPricing)(tempTotal);
       spacer = parseFloat(spacer.toFixed(2));

@@ -406,6 +406,11 @@ export function Letters({ item }) {
 			if (!vinylWhite?.name) missingFields.push('Select 3M 3630 Vinyl');
 		}
 
+		if (frontAcrylicCover === 'UV Printed') {
+			if (!fileUrls || fileUrls.length === 0)
+				missingFields.push('Upload a PDF/AI File');
+		}
+
 		if (!sets) missingFields.push('Select Quantity');
 
 		if (missingFields.length > 0) {
@@ -537,10 +542,17 @@ export function Letters({ item }) {
 			tempTotal += calculateLetterPrice(letter, baseLetterPrice, noLowerCase);
 		});
 
-		if (waterproof)
+		if (waterproof) {
 			tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.02;
+		}
 
-		if (frontAcrylicCover === '3M Vinyl') tempTotal *= 1.1;
+		if (frontAcrylicCover === '3M Vinyl') {
+			tempTotal *= 1.1;
+		}
+
+		if (frontAcrylicCover === 'UV Printed') {
+			tempTotal *= 1.1;
+		}
 
 		if (mounting && mounting === STUD_WITH_SPACER) {
 			let spacer = spacerPricing(tempTotal);
