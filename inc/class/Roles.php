@@ -57,6 +57,7 @@ class Roles {
 		add_action( 'admin_notices', array( $this, 'display_send_activation_email_notice' ) );
 		add_action( 'kadence_header', array( $this, 'remove_multicurrency' ) );
 		add_action( 'rest_api_init', array( $this, 'rest_show_all_business_id' ) );
+
 		if ( function_exists( 'get_field' ) ) {
 			$this->streak_api = get_field( 'streak_api', 'option' ) ?? null;
 		} else {
@@ -71,10 +72,20 @@ class Roles {
 	public function rest_show_all_business_id() {
 		register_rest_route(
 			'nova/v1',
-			'/show-all-business-id',
+			'/show-all-business-id/',
 			array(
 				'methods'             => 'GET',
 				'callback'            => array( $this, 'handle_show_all_business_id' ),
+				'permission_callback' => '__return_true',
+			)
+		);
+
+		register_rest_route(
+			'nova/v1',
+			'/businessId/(?P<email>[^\/]+)',
+			array(
+				'methods'             => 'GET',
+				'callback'            => array( $this, 'handle_find_business_id' ),
 				'permission_callback' => '__return_true',
 			)
 		);
@@ -87,6 +98,48 @@ class Roles {
 				'callback'            => array( $this, 'handle_streak_box' ),
 				'permission_callback' => '__return_true',
 			)
+		);
+	}
+
+	public function handle_test( \WP_REST_Request $request ) {
+		$id = $request['email'];
+		return $id;
+	}
+
+	public function handle_find_business_id( \WP_REST_Request $request ) {
+		$email = $request['email'];
+
+		$users = get_users( array( 'role' => 'partner' ) );
+
+		foreach ( $users as $user ) {
+			$employee_emails = get_user_meta( $user->ID, 'employee_emails', true );
+			$emails_array    = $employee_emails ? explode( ',', str_replace( ' ', '', trim( $employee_emails ) ) ) : array();
+			$emails_array[]  = $user->user_email;
+			$emails          = array_unique( $emails_array );
+			$results[]       = array(
+				'user_id'     => $user->ID,
+				'label'       => get_user_meta( $user->ID, 'business_id', true ) . ' - ' . get_user_meta( $user->ID, 'business_name', true ),
+				'business_id' => get_user_meta( $user->ID, 'business_id', true ),
+				'emails'      => $emails,
+				'country'     => get_user_meta( $user->ID, 'billing_country', true ) ? get_user_meta( $user->ID, 'billing_country', true ) : 'NONE',
+			);
+		}
+
+		foreach ( $results as $result ) {
+			if ( in_array( $email, $result['emails'] ) ) {
+				return new \WP_REST_Response(
+					$result,
+					200
+				);
+			}
+		}
+
+		// If the email was not found, return an appropriate message
+		return new \WP_REST_Response(
+			array(
+				'message' => 'Business ID not found for the given email.',
+			),
+			404
 		);
 	}
 
@@ -180,8 +233,8 @@ class Roles {
 			$emails          = array_unique( $emails_array );
 			$results[]       = array(
 				'user_id'     => $user->ID,
-				'label'       => get_field( 'business_id', 'user_' . $user->ID ) . ' - ' . get_field( 'business_name', 'user_' . $user->ID ),
-				'business_id' => get_field( 'business_id', 'user_' . $user->ID ),
+				'label'       => get_user_meta( $user->ID, 'business_id', true ) . ' - ' . get_user_meta( $user->ID, 'business_name', true ),
+				'business_id' => get_user_meta( $user->ID, 'business_id', true ),
 				'emails'      => $emails,
 				'country'     => get_user_meta( $user->ID, 'billing_country', true ) ? get_user_meta( $user->ID, 'billing_country', true ) : 'NONE',
 			);
@@ -656,7 +709,7 @@ jQuery(document).ready(function($) {
 		$user_edit_url = admin_url( 'user-edit.php?user_id=' . $user_id );
 		$business_id   = get_field( 'business_id', 'user_' . $user_id );
 
-		$subject  = 'NOVA - Pending Partner Status: ' . $first_name . ' from ' . $company . ' -  ' . $business_id;
+		$subject  = 'NOVA INTERNAL - Pending Partner Status: ' . $first_name . ' from ' . $company . ' -  ' . $business_id;
 		$message  = '<p>Hello,</p>';
 		$message .= '<p>You have a business partner application to approve:</p>';
 		$message .= '<ul>';
