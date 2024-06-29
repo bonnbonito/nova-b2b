@@ -308,6 +308,7 @@ export function Logo({ item }) {
 		height,
 		cadSinglePrice,
 		usdSinglePrice,
+		includedItems,
 	]);
 
 	if (frontAcrylicCover === '3M Vinyl') {

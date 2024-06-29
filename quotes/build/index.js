@@ -25104,7 +25104,7 @@ function Logo({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
-  }, [depth, comments, waterproof, color, frontAcrylicCover, vinylWhite, usdPrice, cadPrice, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, mounting, studLength, spacerStandoffDistance, width, height, cadSinglePrice, usdSinglePrice]);
+  }, [depth, comments, waterproof, color, frontAcrylicCover, vinylWhite, usdPrice, cadPrice, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, mounting, studLength, spacerStandoffDistance, width, height, cadSinglePrice, usdSinglePrice, includedItems]);
   if (frontAcrylicCover === '3M Vinyl') {
     (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_4__["default"])([colorRef, acrylicColorRef], () => {
       if (!openColor && !openAcrylicCover) return;
