@@ -24,6 +24,8 @@ class Roles {
 		return self::$instance;
 	}
 
+	private $streak_api;
+
 	public function __construct() {
 		add_action( 'init', array( $this, 'create_roles' ) );
 		add_action( 'after_setup_theme', array( $this, 'create_custom_table' ) );
@@ -55,6 +57,15 @@ class Roles {
 		add_action( 'admin_notices', array( $this, 'display_send_activation_email_notice' ) );
 		add_action( 'kadence_header', array( $this, 'remove_multicurrency' ) );
 		add_action( 'rest_api_init', array( $this, 'rest_show_all_business_id' ) );
+		if ( function_exists( 'get_field' ) ) {
+			$this->streak_api = get_field( 'streak_api', 'option' ) ?? null;
+		} else {
+			$this->streak_api = null;
+		}
+	}
+
+	public function get_streak_api() {
+		return $this->streak_api;
 	}
 
 	public function rest_show_all_business_id() {
@@ -97,7 +108,7 @@ class Roles {
 				CURLOPT_HTTPHEADER     => array(
 					'Content-Type: application/json',
 					'accept: application/json',
-					'authorization: Basic ODk1MDM0NzMwMzYzNDY2MmIwY2YxMDQ1MjFlZTQzNjc6',
+					'authorization: Basic ' . $this->streak_api,
 				),
 			)
 		);
