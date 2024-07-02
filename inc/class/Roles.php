@@ -112,6 +112,15 @@ class Roles {
 		$users = get_users( array( 'role' => 'partner' ) );
 
 		foreach ( $users as $user ) {
+
+			$country = get_user_meta( $user->ID, 'billing_country', true ) ? get_user_meta( $user->ID, 'billing_country', true ) : 'NONE';
+
+			if ( $country == 'CA' ) {
+				$country = 'CAN';
+			} elseif ( $country == 'US' ) {
+				$country = 'USA';
+			}
+
 			$employee_emails = get_user_meta( $user->ID, 'employee_emails', true );
 			$emails_array    = $employee_emails ? explode( ',', str_replace( ' ', '', trim( $employee_emails ) ) ) : array();
 			$emails_array[]  = $user->user_email;
@@ -121,7 +130,7 @@ class Roles {
 				'label'       => get_user_meta( $user->ID, 'business_id', true ) . ' - ' . get_user_meta( $user->ID, 'business_name', true ),
 				'business_id' => get_user_meta( $user->ID, 'business_id', true ),
 				'emails'      => $emails,
-				'country'     => get_user_meta( $user->ID, 'billing_country', true ) ? get_user_meta( $user->ID, 'billing_country', true ) : 'NONE',
+				'country'     => $country,
 			);
 		}
 
