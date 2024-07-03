@@ -316,6 +316,7 @@ class Scripts {
 		wp_register_script( 'admin-stainless-metal', get_stylesheet_directory_uri() . '/assets/js/admin-stainless-metal.js', array(), $theme->Version, true );
 		wp_register_script( 'admin-fabricated-metal', get_stylesheet_directory_uri() . '/assets/js/admin-fabricated-metal.js', array(), $theme->Version, true );
 		wp_register_script( 'admin-quote', get_stylesheet_directory_uri() . '/assets/js/admin-quote.js', array(), $theme->Version, true );
+		wp_register_script( 'admin-dropbox', get_stylesheet_directory_uri() . '/assets/js/admin-dropbox.js', array(), $theme->Version, true );
 		wp_register_script( 'admin-projects', get_stylesheet_directory_uri() . '/assets/js/admin-projects.js', array(), $theme->Version, true );
 		wp_register_script( 'dropbox-api', get_stylesheet_directory_uri() . '/assets/js/dropbox.js', array(), $theme->Version, true );
 
@@ -378,6 +379,9 @@ class Scripts {
 				'dropbox_secret'        => get_field( 'dropbox_secret_key', 'option' ),
 				'dropbox_token'         => get_field( 'dropbox_token_access', 'option' ),
 				'dropbox_refresh_token' => get_field( 'dropbox_refresh_token', 'option' ),
+				'quote_id'              => get_the_ID(),
+				'project_id_folder'     => get_field( 'project_id_folder', get_the_ID() ),
+				'partner_business_id'           => get_field( 'business_id', 'user_' . get_field( 'partner', get_the_ID() ) ),
 			)
 		);
 
@@ -425,6 +429,7 @@ class Scripts {
 
 		if ( $post && 'nova_quote' === $post->post_type ) {
 			wp_enqueue_script( 'admin-quote' );
+			wp_enqueue_script( 'admin-dropbox' );
 		}
 
 		wp_localize_script(
