@@ -23,9 +23,7 @@ class Zoho {
 	 */
 	public function __construct() {
 
-		if ( function_exists( 'acf_add_options_page' ) ) {
-			add_action( 'init', array( $this, 'add_options_page' ) );
-		}
+		add_action( 'acf/init', array( $this, 'add_options_page' ) );
 		add_action( 'admin_menu', array( $this, 'zoho_crm_connector_menu' ) );
 		add_action( 'show_user_profile', array( $this, 'zoho_account_id' ) );
 		add_action( 'edit_user_profile', array( $this, 'zoho_account_id' ) );

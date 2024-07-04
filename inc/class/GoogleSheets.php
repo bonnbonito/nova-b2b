@@ -22,9 +22,7 @@ class GoogleSheets {
 	 * Class Constructor.
 	 */
 	public function __construct() {
-		if ( function_exists( 'acf_add_options_page' ) ) {
-			add_action( 'init', array( $this, 'add_options_page' ) );
-		}
+		add_action( 'acf/init', array( $this, 'add_options_page' ) );
 		add_action( 'wp_loaded', array( $this, 'initialize_options' ) );
 		add_action( 'acf/input/admin_footer', array( $this, 'add_custom_button_to_acf_options_page' ) );
 		add_action( 'wp_ajax_google_token', array( $this, 'google_token' ) );

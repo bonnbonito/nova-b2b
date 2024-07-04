@@ -52,9 +52,7 @@ class Nova_Quote {
 		add_filter( 'acf/prepare_field/name=frontend_title', array( $this, 'acf_diable_field' ) );
 		add_filter( 'acf/prepare_field/name=dropbox_token_access', array( $this, 'acf_diable_field' ) );
 		add_action( 'template_redirect', array( $this, 'redirect_if_loggedin' ) );
-		if ( function_exists( 'acf_add_options_page' ) ) {
-			add_action( 'init', array( $this, 'add_options_page' ) );
-		}
+		add_action( 'acf/init', array( $this, 'add_options_page' ) );
 		add_action( 'admin_init', array( $this, 'handle_dropbox_oauth_redirect' ) );
 		// add_action( 'acf/save_post', array( $this, 'for_payment_email_action' ) );
 		add_action( 'acf/save_post', array( $this, 'quote_actions' ), 5, 1 );
@@ -131,8 +129,7 @@ class Nova_Quote {
 		return $views;
 	}
 
-	public function display_post_states( $states ) {
-		global $post;
+	public function display_post_states( $states, $post ) {
 		if ( $post->post_type == 'nova_quote' ) {
 			if ( $post->post_status == 'checked_out' ) {
 				return array( 'Checked Out' );
@@ -380,7 +377,11 @@ class Nova_Quote {
 			return;
 		}
 
-		if ( get_field( 'quote_status', $post->ID )['value'] === 'draft' ) {
+		if ( ! function_exists( 'get_field' ) ) {
+			return;
+		}
+
+		if ( isset( get_field( 'quote_status', $post->ID )['value'] ) && get_field( 'quote_status', $post->ID )['value'] === 'draft' ) {
 			add_meta_box(
 				'nova_admin_mockup_draft_email',
 				__( 'Send Draft Email', 'nova-b2b' ),

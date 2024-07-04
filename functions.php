@@ -50,8 +50,11 @@ if ( ! defined( 'NOVA_SEARCH_RESULTS_POST_PER_PAGE' ) ) {
 	define( 'NOVA_SEARCH_RESULTS_POST_PER_PAGE', 9 );
 }
 
+add_action( 'acf/init', 'nova_b2b_acf_init' );
 
-require NOVA_DIR_PATH . '/inc/autoloader.php';
+function nova_b2b_acf_init() {
+	require NOVA_DIR_PATH . '/inc/autoloader.php';
+}
 
 
 

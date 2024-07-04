@@ -3,7 +3,7 @@ async function moveProjectFolder() {
 
 	if (!moveProjectFolderbtn) return; // Ensures the button exists before attaching events
 
-	const projectPath = `/NOVA-CRM/${QuoteAdmin.partner_business_id}/${QuoteAdmin.project_id_folder}`;
+	const projectPath = `/NOVA-CRM/A-Uncatergorize Project/${QuoteAdmin.project_id_folder}`;
 	const newPath = `/NOVA-CRM/${QuoteAdmin.partner_business_id}/Q-${QuoteAdmin.quote_id}/${QuoteAdmin.project_id_folder}`;
 
 	moveProjectFolderbtn.addEventListener('click', async (e) => {
