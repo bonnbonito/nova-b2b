@@ -54,13 +54,9 @@ class Nova_Quote {
 		add_action( 'template_redirect', array( $this, 'redirect_if_loggedin' ) );
 		add_action( 'acf/init', array( $this, 'add_options_page' ) );
 		add_action( 'admin_init', array( $this, 'handle_dropbox_oauth_redirect' ) );
-		// add_action( 'acf/save_post', array( $this, 'for_payment_email_action' ) );
 		add_action( 'acf/save_post', array( $this, 'quote_actions' ), 5, 1 );
 		add_action( 'acf/save_post', array( $this, 'show_partner_email' ), 10, 1 );
 		add_action( 'save_post', array( $this, 'regenerate_pdf' ), 10, 3 );
-		add_action( 'quote_to_processing', array( $this, 'for_quotation_email' ) );
-		add_action( 'quote_to_payment', array( $this, 'for_payment_email' ), 90 );
-		add_action( 'quote_to_payment', array( $this, 'for_payment_admin_email' ) );
 		add_action( 'quote_to_payment', array( $this, 'create_nova_quote_product' ) );
 		add_action( 'wp', array( $this, 'single_quote_redirect' ) );
 		add_action( 'nova_product_instant_quote', array( $this, 'nova_product_instant_quote' ) );
@@ -74,7 +70,7 @@ class Nova_Quote {
 		add_action( 'add_meta_boxes', array( $this, 'update_dropbox_folder' ), 10, 2 );
 		add_action( 'add_meta_boxes', array( $this, 'generated_product_id' ), 10, 2 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'dequeue_lightbox_on_mockups_view' ), 100 );
-		add_action( 'admin_init', array( $this, 'process_send_mockup_email' ) );
+
 		add_action( 'template_redirect', array( $this, 'custom_quote_redirect' ) );
 		add_action( 'init', array( $this, 'register_custom_post_status' ) );
 		add_filter( 'display_post_states', array( $this, 'display_post_states' ), 10, 2 );
@@ -161,24 +157,7 @@ class Nova_Quote {
 		}
 	}
 
-	public function process_send_mockup_email() {
 
-		if ( isset( $_POST['send_mockup_update_email'], $_POST['post_id'] ) && check_admin_referer( 'send_mockup_email_action', 'send_mockup_email_nonce' ) ) {
-			$post_id = intval( $_POST['post_id'] );
-
-			if ( $post_id ) {
-				$this->for_mockup_update_email( $post_id );
-			}
-		}
-
-		if ( isset( $_POST['send_mockup_draft_email'], $_POST['post_id'] ) && check_admin_referer( 'send_mockup_email_action', 'send_mockup_email_nonce' ) ) {
-			$post_id = intval( $_POST['post_id'] );
-
-			if ( $post_id ) {
-				$this->for_mockup_draft_email( $post_id );
-			}
-		}
-	}
 
 	public function show_partner_email( $post_id ) {
 		$partner = get_field( 'partner', $post_id );
@@ -626,350 +605,6 @@ sendMockup.addEventListener('click', e => {
 		update_post_meta( $post_id, 'nova_product_generated_id', $existing_product_id );
 	}
 
-	public function for_payment_email( $post_id ) {
-
-		$user_id      = get_field( 'partner', $post_id );
-		$user_info    = get_userdata( $user_id );
-		$project_name = get_field( 'frontend_title', $post_id );
-		$business_id  = get_field( 'business_id', 'user_' . $user_id );
-
-		$billing_country = get_user_meta( $user_id, 'billing_country', true );
-		$currency        = ( $billing_country === 'CA' ) ? 'CAD' : 'USD';
-
-		$filename      = $business_id . '-INV-Q-' . $post_id . '-' . $currency . '.pdf';
-		$company       = get_field( 'business_name', 'user_' . $user_id ) ? get_field( 'business_name', 'user_' . $user_id ) : 'None';
-		$edit_post_url = admin_url( 'post.php?post=' . $post_id . '&action=edit' );
-		$file_link     = content_url( '/customer_invoices/' . $filename );
-		$file_path     = WP_CONTENT_DIR . '/customer_invoices/' . $filename;
-
-		$to         = $user_info->user_email;
-		$first_name = $user_info->first_name;
-
-		$subject = 'Quote Status Updated: (' . $project_name . ') - #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
-
-		$message  = '<p>Hello ' . $first_name . ',</p>';
-		$message .= '<p>Your request has been quoted. Please review the quotation for:</p>';
-
-		$message .= '<ul>';
-		$message .= '<li><strong>Project:</strong> ' . $project_name . '</li>';
-		$message .= '<li><strong>Quote ID:</strong> Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '</li>';
-		$message .= '</ul><br><br>';
-
-		$message .= '<p>Kindly click the link to the website and proceed to checkout if everything looks good.<br>';
-		$message .= '<a href="' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '">' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '</a></p>';
-
-		if ( file_exists( $file_path ) ) {
-			$message .= '<p>Access the PDF copy of your quote here:<br><a href="' . esc_url( $file_link ) . '">' . esc_url( $file_link ) . '</a></p>';
-		}
-
-		$message .= '<p>Let us know if you have any questions or concerns.</p>';
-
-		$message .= '<p>Thank you,<br>';
-		$message .= 'NOVA Signage Team</p>';
-
-		$role_instance = \NOVA_B2B\Roles::get_instance();
-
-		$headers   = array();
-		$headers[] = 'Content-Type: text/html; charset=UTF-8';
-		$headers[] = 'From: NOVA Signage <quotes@novasignage.com>';
-		$headers[] = 'Reply-To: NOVA Signage <quotes@novasignage.com>';
-
-		if ( $role_instance ) {
-			$role_instance->send_email( $to, $subject, $message, $headers, array() );
-		}
-	}
-
-	public function quote_from_address( $email, $b, $from_email ) {
-		$email = 'quotes@novasignage.com';
-		return $email;
-	}
-
-	public function for_mockup_update_email( $post_id ) {
-
-		$user_id      = get_field( 'partner', $post_id );
-		$user_info    = get_userdata( $user_id );
-		$project_name = get_field( 'frontend_title', $post_id );
-		$business_id  = get_field( 'business_id', 'user_' . $user_id );
-
-		$billing_country = get_user_meta( $user_id, 'billing_country', true );
-		$currency        = ( $billing_country === 'CA' ) ? 'CAD' : 'USD';
-
-		$filename      = $business_id . '-INV-Q-' . $post_id . '-' . $currency . '.pdf';
-		$company       = get_field( 'business_name', 'user_' . $user_id ) ? get_field( 'business_name', 'user_' . $user_id ) : 'None';
-		$edit_post_url = admin_url( 'post.php?post=' . $post_id . '&action=edit' );
-		$file_link     = content_url( '/customer_invoices/' . $filename );
-		$file_path     = WP_CONTENT_DIR . '/customer_invoices/' . $filename;
-
-		$to         = $user_info->user_email;
-		$first_name = $user_info->first_name;
-
-		$subject = 'Revised Quote: (' . $project_name . ') - #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
-
-		$message  = '<p>Dear ' . $first_name . ',</p>';
-		$message .= '<p>Your request has been revised and quoted. Please review the quotation for:</p>';
-
-		$message .= '<ul>';
-		$message .= '<li><strong>Project:</strong> ' . $project_name . '</li>';
-		$message .= '<li><strong>Quote ID:</strong> Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '</li>';
-		$message .= '</ul><br><br>';
-
-		$message .= '<p>Kindly click the link to the website and proceed to checkout if everything looks good.<br>';
-		$message .= '<a href="' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '">' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '</a></p>';
-
-		if ( file_exists( $file_path ) ) {
-			$message .= '<p>Access the PDF copy of your quote here:<br><a href="' . esc_url( $file_link ) . '">' . esc_url( $file_link ) . '</a></p>';
-		}
-
-		$message .= '<p>Please check the NOTES section if there are any remarks.</p>';
-
-		$message .= '<p>Let us know if you have any questions or concerns.</p>';
-
-		$message .= '<p>Thank you,<br>';
-		$message .= 'NOVA Signage Team</p>';
-
-		$headers   = array();
-		$headers[] = 'Content-Type: text/html; charset=UTF-8';
-		$headers[] = 'From: NOVA Signage <quotes@novasignage.com>';
-		$headers[] = 'Reply-To: NOVA Signage <quotes@novasignage.com>';
-
-		$role_instance = \NOVA_B2B\Roles::get_instance();
-
-		$sent = $role_instance->send_email( $to, $subject, $message, $headers, array() );
-
-		if ( $sent ) {
-			add_action(
-				'admin_notices',
-				function () use ( $to ) {
-						echo '<div class="notice notice-success is-dismissible"><p>Email successfully sent to ' . esc_html( $to ) . '.</p></div>';
-				}
-			);
-		}
-	}
-
-
-	public function for_mockup_draft_email( $post_id ) {
-
-		$user_id         = get_field( 'partner', $post_id );
-		$user_info       = get_userdata( $user_id );
-		$project_name    = get_field( 'frontend_title', $post_id );
-		$business_id     = get_field( 'business_id', 'user_' . $user_id );
-		$billing_country = get_user_meta( $user_id, 'billing_country', true );
-		$currency        = ( $billing_country === 'CA' ) ? 'CAD' : 'USD';
-		$filename        = $business_id . '-INV-Q-' . $post_id . '-' . $currency . '.pdf';
-		$company         = get_field( 'business_name', 'user_' . $user_id ) ? get_field( 'business_name', 'user_' . $user_id ) : 'None';
-		$edit_post_url   = admin_url( 'post.php?post=' . $post_id . '&action=edit' );
-		$file_link       = content_url( '/customer_invoices/' . $filename );
-		$file_path       = WP_CONTENT_DIR . '/customer_invoices/' . $filename;
-
-		$to         = $user_info->user_email;
-		$first_name = $user_info->first_name;
-
-		$subject = 'Revised Draft: (' . $project_name . ') - #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
-
-		$message  = '<p>Dear ' . $first_name . ',</p>';
-		$message .= '<p>Your custom sign draft has been updated by our team.</p>';
-
-		$message .= '<ul>';
-		$message .= '<li><strong>Project:</strong> ' . $project_name . '</li>';
-		$message .= '<li><strong>Quote ID:</strong> Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '</li>';
-		$message .= '</ul>';
-
-		$message .= '<p>You can use this link to finalize your project and submit it for a quote:</p>';
-
-		$message .= '<p><a href="' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '">' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '</a></p>';
-
-		$message .= '<p>You may now add this project to your cart.</p>';
-
-		$message .= '<p>Let us know if you need any adjustments.</p>';
-
-		$message .= '<p>Thank you,<br>';
-		$message .= 'NOVA Signage Team</p>';
-
-		$headers   = array();
-		$headers[] = 'Content-Type: text/html; charset=UTF-8';
-		$headers[] = 'From: NOVA Signage <quotes@novasignage.com>';
-		$headers[] = 'Reply-To: NOVA Signage <quotes@novasignage.com>';
-
-		$role_instance = \NOVA_B2B\Roles::get_instance();
-
-		$sent = $role_instance->send_email( $to, $subject, $message, $headers, array() );
-
-		if ( $sent ) {
-			add_action(
-				'admin_notices',
-				function () use ( $to ) {
-						echo '<div class="notice notice-success is-dismissible"><p>Email successfully sent to ' . esc_html( $to ) . '.</p></div>';
-				}
-			);
-		}
-	}
-
-	public function for_payment_admin_email( $post_id ) {
-
-		$user_id       = get_field( 'partner', $post_id );
-		$user_info     = get_userdata( $user_id );
-		$business_id   = get_field( 'business_id', 'user_' . $user_id );
-		$company       = get_field( 'business_name', 'user_' . $user_id ) ? get_field( 'business_name', 'user_' . $user_id ) : 'None';
-		$edit_post_url = admin_url( 'post.php?post=' . $post_id . '&action=edit' );
-
-		$first_name = $user_info->first_name;
-
-		$headers   = array();
-		$headers[] = 'Content-Type: text/html; charset=UTF-8';
-		$headers[] = 'From: NOVA Signage <quotes@novasignage.com>';
-		$headers[] = 'Reply-To: NOVA Signage <quotes@novasignage.com>';
-
-		$to_admin = $this->to_admin_customer_rep_emails();
-
-		$admin_subject = 'NOVA INTERNAL - Quote Sent To: ' . $first_name . ' from ' . $company . ' ' . $business_id . ' - Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
-
-		$admin_message = '<p>Hello,</p>';
-
-		$admin_message .= '<p>You sent a quotation to:</p>';
-		$admin_message .= '<ul>';
-		$admin_message .= '<li><strong>Customer:</strong> ' . $first_name . ' - ' . $business_id . '</li>';
-		$admin_message .= '<li><strong>Company:</strong> ' . $company . '</li>';
-		$admin_message .= '<li><strong>Quote ID:</strong> #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '</li>';
-		$admin_message .= '</ul><br>';
-
-		$admin_message .= '<p>You may review the quotation you sent here:</p>';
-		$admin_message .= '<a href="' . $edit_post_url . '">' . $edit_post_url . '</a>';
-
-		$role_instance = \NOVA_B2B\Roles::get_instance();
-
-		if ( $role_instance ) {
-			$role_instance->send_email( $to_admin, $admin_subject, $admin_message, $headers, array() );
-		}
-	}
-
-	public function for_quotation_admin_email( $post_id ) {
-
-		// Retrieve the partner user ID from the post's custom field
-		$user_id = get_field( 'partner', $post_id );
-		if ( ! $user_id ) {
-			error_log( 'No partner user ID found for post ID ' . $post_id );
-			return;
-		}
-
-		// Retrieve user information
-		$user_info = get_userdata( $user_id );
-		if ( ! $user_info ) {
-			error_log( 'No user info found for user ID ' . $user_id );
-			return;
-		}
-
-		// Get business ID, default to 'N/A' if not found
-		$business_id = get_field( 'business_id', 'user_' . $user_id ) ?: 'N/A';
-
-		// Get business name, default to 'None' if not found
-		$company = get_field( 'business_name', 'user_' . $user_id ) ?: 'None';
-
-		// Construct the edit post URL
-		$edit_post_url = admin_url( 'post.php?post=' . $post_id . '&action=edit' );
-
-		// Retrieve the user's first name
-		$first_name = $user_info->first_name ?: 'Customer';
-
-		// Set up email headers
-		$headers   = array();
-		$headers[] = 'Content-Type: text/html; charset=UTF-8';
-		$headers[] = 'From: NOVA Signage <quotes@novasignage.com>';
-		$headers[] = 'Reply-To: NOVA Signage <quotes@novasignage.com>';
-
-		// Retrieve admin customer rep emails
-		$to_admin = $this->to_admin_customer_rep_emails();
-		if ( ! $to_admin ) {
-			error_log( 'No admin customer rep emails found' );
-			return;
-		}
-
-		// Construct the subject for the admin email
-		$admin_subject = 'NOVA INTERNAL - Quote Request From: ' . $first_name . ' from ' . $company . ' ' . $business_id . ' - #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
-
-		// Construct the message for the admin email
-		$to_admin_message  = '<p>Hello,</p>';
-		$to_admin_message .= '<p>Client sent a quotation request:</p>';
-		$to_admin_message .= '<ul>';
-		$to_admin_message .= '<li><strong>Customer:</strong> ' . $first_name . ' - ' . $business_id . '</li>';
-		$to_admin_message .= '<li><strong>Company:</strong> ' . $company . '</li>';
-		$to_admin_message .= '<li><strong>Quote ID:</strong> #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '</li>';
-		$to_admin_message .= '</ul><br>';
-		$to_admin_message .= '<p>You may review the quotation you sent here:<br>';
-		$to_admin_message .= '<a href="' . $edit_post_url . '">' . $edit_post_url . '</a></p>';
-
-		// Get the instance of the Roles class and send the email
-		$role_instance = \NOVA_B2B\Roles::get_instance();
-		if ( $role_instance ) {
-			$role_instance->send_email( $to_admin, $admin_subject, $to_admin_message, $headers, array() );
-		} else {
-			error_log( 'NOVA_B2B\Roles::get_instance() returned null' );
-		}
-	}
-
-
-	public function for_quotation_email( $post_id ) {
-
-		// Retrieve the partner user ID from the post's custom field
-		$user_id = get_field( 'partner', $post_id );
-		if ( ! $user_id ) {
-			error_log( 'No partner user ID found for post ID ' . $post_id );
-			return;
-		}
-
-		// Retrieve user information
-		$user_info = get_userdata( $user_id );
-		if ( ! $user_info ) {
-			error_log( 'No user info found for user ID ' . $user_id );
-			return;
-		}
-
-		// Get business ID, default to 'N/A' if not found
-		$business_id = get_field( 'business_id', 'user_' . $user_id ) ?: 'N/A';
-
-		// Get business name, default to 'None' if not found
-		$company = get_field( 'business_name', 'user_' . $user_id ) ?: 'None';
-
-		// Construct the edit post URL
-		$edit_post_url = admin_url( 'post.php?post=' . $post_id . '&action=edit' );
-
-		// Retrieve the user's first name
-		$first_name = $user_info->first_name ?: 'Customer';
-
-		// Set up email headers
-		$headers   = array();
-		$headers[] = 'Content-Type: text/html; charset=UTF-8';
-		$headers[] = 'From: NOVA Signage <quotes@novasignage.com>';
-		$headers[] = 'Reply-To: NOVA Signage <quotes@novasignage.com>';
-
-		// Retrieve admin customer rep emails
-		$to_admin = $this->to_admin_customer_rep_emails();
-		if ( ! $to_admin ) {
-			error_log( 'No admin customer rep emails found' );
-			return;
-		}
-
-		// Construct the subject for the admin email
-		$admin_subject = 'NOVA - Quote Request From: ' . $first_name . ' from ' . $company . ' ' . $business_id . ' - #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
-
-		// Construct the message for the admin email
-		$to_admin_message  = '<p>Hello,</p>';
-		$to_admin_message .= '<p>Client sent a quotation request:</p>';
-		$to_admin_message .= '<ul>';
-		$to_admin_message .= '<li><strong>Customer:</strong> ' . $first_name . ' - ' . $business_id . '</li>';
-		$to_admin_message .= '<li><strong>Company:</strong> ' . $company . '</li>';
-		$to_admin_message .= '<li><strong>Quote ID:</strong> #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '</li>';
-		$to_admin_message .= '</ul><br>';
-		$to_admin_message .= '<p>You may review the quotation you sent here:<br>';
-		$to_admin_message .= '<a href="' . $edit_post_url . '">' . $edit_post_url . '</a></p>';
-
-		// Get the instance of the Roles class and send the email
-		$role_instance = \NOVA_B2B\Roles::get_instance();
-		if ( $role_instance ) {
-			$role_instance->send_email( $to_admin, $admin_subject, $to_admin_message, $headers, array() );
-		} else {
-			error_log( 'NOVA_B2B\Roles::get_instance() returned null' );
-		}
-	}
 
 
 	public function to_admin_customer_rep_emails() {
@@ -1000,24 +635,7 @@ sendMockup.addEventListener('click', e => {
 		return $user_emails;
 	}
 
-	public function for_payment_email_action( $post_id ) {
 
-		if ( wp_is_post_autosave( $post_id ) || wp_is_post_revision( $post_id ) ) {
-			return;
-		}
-
-		if ( 'nova_quote' !== get_post_type( $post_id ) ) {
-			return;
-		}
-
-		$quote_status = get_field( 'quote_status', $post_id );
-
-		if ( 'ready' !== $quote_status['value'] ) {
-			return;
-		}
-
-		do_action( 'for_payment_email_action' );
-	}
 
 	public function quote_actions( $post_id ) {
 
@@ -2007,7 +1625,13 @@ h6 {
 				/*Remove for quotation email*/
 				$this->generate_pdf( $post_id, $html, 'USD' );
 				$this->generate_pdf( $post_id, $html_cad, 'CAD' );
-				$this->for_quotation_admin_email( $post_id );
+
+				$email_instance = \NOVA_B2B\NovaEmails::get_instance();
+				if ( $email_instance ) {
+					$email_instance->for_quotation_admin_email( $post_id );
+				} else {
+					error_log( 'NOVA_B2B\NovaEmails::get_instance() returned null' );
+				}
 			}
 
 			$status['code']         = 2;

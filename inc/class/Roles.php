@@ -718,16 +718,17 @@ jQuery(document).ready(function($) {
 		$user_edit_url = admin_url( 'user-edit.php?user_id=' . $user_id );
 		$business_id   = get_field( 'business_id', 'user_' . $user_id );
 
-		$subject  = 'NOVA INTERNAL - Pending Partner Status: ' . $first_name . ' from ' . $company . ' -  ' . $business_id;
-		$message  = '<p>Hello,</p>';
-		$message .= '<p>You have a business partner application to approve:</p>';
-		$message .= '<ul>';
-		$message .= '<li><strong>Customer:</strong> - ' . $business_id . '</li>';
-		$message .= '<li><strong>Company:</strong> - ' . $company . '</li>';
-		$message .= '</ul><br>';
-		$message .= '<p style="margin-top: 20px;">' . $first_name . ' with Business ID ' . $business_id . ' submitted a business partner application. </p>';
-		$message .= '<p>Please <strong>APPROVE</strong> or <strong>DENY</strong> their Business Partner Status here:<br>';
-		$message .= '<a href="' . esc_url( $user_edit_url ) . '">Click Here</a></p>';
+		$subject      = 'NOVA INTERNAL - Pending Partner Status: ' . $first_name . ' from ' . $company . ' -  ' . $business_id;
+		$josh_subject = 'NOVA INTERNAL (Action Required) - Pending Partner Status: ' . $first_name . ' from ' . $company . ' -  ' . $business_id;
+		$message      = '<p>Hello,</p>';
+		$message     .= '<p>You have a business partner application to approve:</p>';
+		$message     .= '<ul>';
+		$message     .= '<li><strong>Customer:</strong> - ' . $business_id . '</li>';
+		$message     .= '<li><strong>Company:</strong> - ' . $company . '</li>';
+		$message     .= '</ul><br>';
+		$message     .= '<p style="margin-top: 20px;">' . $first_name . ' with Business ID ' . $business_id . ' submitted a business partner application. </p>';
+		$message     .= '<p>Please <strong>APPROVE</strong> or <strong>DENY</strong> their Business Partner Status here:<br>';
+		$message     .= '<a href="' . esc_url( $user_edit_url ) . '">Click Here</a></p>';
 
 		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
@@ -736,7 +737,11 @@ jQuery(document).ready(function($) {
 		/*** add Yat */
 		$emails[] = 'yat@novasignage.com';
 
+		/* remove joshua@hineon.com to $emails array */
+		$emails = array_diff( $emails, array( 'joshua@hineon.com' ) );
+
 		$this->send_email( $emails, $subject, $message, $headers, array() );
+		$this->send_email( 'joshua@hineon.com', $josh_subject, $message, $headers, array() );
 
 		$this->send_user_pending_email( $user_id );
 	}
@@ -949,11 +954,11 @@ jQuery(document).ready(function($) {
 		update_field( 'business_website', $businessWebsite, 'user_ ' . $user_id );
 		update_field( 'business_phone_number', $businessPhone, 'user_ ' . $user_id );
 		update_field( 'tax_id', $taxId, 'user_ ' . $user_id );
-		update_field( 'street_address', $street, 'user_ ' . $user_id );
-		update_field( 'city', $city, 'user_ ' . $user_id );
-		update_field( 'state', $state, 'user_ ' . $user_id );
-		update_field( 'zip', $zip, 'user_ ' . $user_id );
-		update_field( 'country', $country, 'user_ ' . $user_id );
+		// update_field( 'street_address', $street, 'user_ ' . $user_id );
+		// update_field( 'city', $city, 'user_ ' . $user_id );
+		// update_field( 'state', $state, 'user_ ' . $user_id );
+		// update_field( 'zip', $zip, 'user_ ' . $user_id );
+		// update_field( 'country', $country, 'user_ ' . $user_id );
 		update_field( 'pst', $pst, 'user_ ' . $user_id );
 		update_field( 'referral', $referral, 'user_ ' . $user_id );
 		update_field( 'how_did_you_hear_about_us', $_POST['hear'], 'user_ ' . $user_id );
