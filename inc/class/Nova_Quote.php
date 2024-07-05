@@ -299,31 +299,17 @@ class Nova_Quote {
 
 		$user_folder_arr = array_unique( $user_folder_arr );
 
-		if ( ! empty( $user_folder_arr ) || isset( $user_folder_arr[0] ) ) {
+		if ( ! empty( $user_folder_arr ) || isset( $user_folder_arr[0] ) || ! empty( $font_folder_arr ) || isset( $font_folder_arr ) ) {
 
 			$old_folder = $user_folder_arr[0];
-			$old_path   = '/NOVA-CRM/' . $old_folder . '/Q-' . $post->ID . '/FromClient';
-			$new_path   = '/NOVA-CRM/' . $partner_business_id . '/Q-' . $post->ID . '/FromClient';
+			$old_path   = '/NOVA-CRM/' . $old_folder . '/Q-' . $post->ID;
+			$new_path   = '/NOVA-CRM/' . $partner_business_id . '/Q-' . $post->ID;
 			if ( count( $user_folder_arr ) > 0 && $old_folder !== $partner_business_id ) {
 				?>
 <a class="button button-primary button-large mb-4 block" id="updateDropboxFolder" data-btn="updateDropbox"
 	data-id="<?php echo $post->ID; ?>" data-new="<?php echo $new_path; ?>" data-old="<?php echo $old_path; ?>"
 	style="margin-bottom: 10px;">Update
 	Dropbox Folder</a>
-				<?php
-			}
-		}
-
-		if ( ! empty( $font_folder_arr ) || isset( $font_folder_arr ) ) {
-
-			$old_folder = $font_folder_arr;
-			$old_path   = '/NOVA-CRM/' . $old_folder . '/Q-' . $post->ID . '/Fonts';
-			$new_path   = '/NOVA-CRM/' . $partner_business_id . '/Q-' . $post->ID . '/Fonts';
-			if ( $font_folder_arr && $old_folder !== $partner_business_id ) {
-				?>
-<a class="button button-primary button-large block" id="updateDropboxFolderFont" data-btn="updateDropbox"
-	data-id="<?php echo $post->ID; ?>" data-new="<?php echo $new_path; ?>" data-old="<?php echo $old_path; ?>">Update
-	Dropbox Font Folder</a>
 				<?php
 			}
 		}

@@ -72,6 +72,28 @@ async function moveProjectFolder() {
 			const updateMeta = await updateUserMetaData(true);
 			if (updateMeta) {
 				console.log(updateMeta);
+
+				const formData = new FormData();
+				formData.append('action', 'update_signage');
+				formData.append('nonce', QuoteAdmin.nonce);
+				formData.append('old_path', quoteFolder);
+				formData.append('new_path', newQuotePath);
+				formData.append('post_id', postID);
+				formData.append('signage', QuoteAdmin.signage);
+
+				const response = await fetch(QuoteAdmin.ajax_url, {
+					method: 'POST',
+					credentials: 'same-origin',
+					headers: {
+						'Cache-Control': 'no-cache',
+					},
+					body: formData,
+				});
+				const data = await response.json();
+				console.log(data);
+				if (data.code == 2) {
+					location.reload(); // Uncomment to reload the page if needed
+				}
 			}
 		} else {
 			const updateMeta = await updateUserMetaData(false);
