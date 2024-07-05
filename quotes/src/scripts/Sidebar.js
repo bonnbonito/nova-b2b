@@ -159,7 +159,7 @@ export default function Sidebar() {
 										<ModalSave
 											action="update-processing"
 											label="Submit Quote"
-											btnClass="mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
+											btnClass="uppercase mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
 										/>
 									) : (
 										''
@@ -168,7 +168,7 @@ export default function Sidebar() {
 									<ModalSave
 										action="update"
 										label="Update Quote"
-										btnClass="mb-5 font-title border border-nova-light rounded-md text-nova-gray w-full text-center bg-white text-sm h-[49px] hover:bg-nova-light hover:text-white shadow-[0_0_0_1px_rgba(0,0,0,0.3)]"
+										btnClass="uppercase mb-5 font-title border border-nova-light rounded-md text-nova-gray w-full text-center bg-white text-sm h-[49px] hover:bg-nova-light hover:text-white shadow-[0_0_0_1px_rgba(0,0,0,0.3)]"
 									/>
 								</>
 							) : (
@@ -177,7 +177,7 @@ export default function Sidebar() {
 										<ModalSave
 											action="processing"
 											label="Submit Quote"
-											btnClass="mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
+											btnClass="uppercase mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
 										/>
 									) : (
 										''
@@ -187,7 +187,7 @@ export default function Sidebar() {
 										<ModalSave
 											action="draft"
 											label="Save to Draft"
-											btnClass="mb-5 font-title border border-nova-light rounded-md text-nova-gray w-full text-center bg-white text-sm h-[49px] hover:bg-nova-light hover:text-white shadow-[0_0_0_1px_rgba(0,0,0,0.3)]"
+											btnClass="uppercase mb-5 font-title border border-nova-light rounded-md text-nova-gray w-full text-center bg-white text-sm h-[49px] hover:bg-nova-light hover:text-white shadow-[0_0_0_1px_rgba(0,0,0,0.3)]"
 										/>
 									)}
 								</>
@@ -202,7 +202,7 @@ export default function Sidebar() {
 						<ModalSave
 							action="update-processing-admin"
 							label="Update Quote"
-							btnClass="mb-5 font-title border border-nova-light rounded-md text-nova-gray w-full text-center bg-white text-sm h-[49px] hover:bg-nova-light hover:text-white shadow-[0_0_0_1px_rgba(0,0,0,0.3)]"
+							btnClass="uppercase mb-5 font-title border border-nova-light rounded-md text-nova-gray w-full text-center bg-white text-sm h-[49px] hover:bg-nova-light hover:text-white shadow-[0_0_0_1px_rgba(0,0,0,0.3)]"
 						/>
 					)}
 

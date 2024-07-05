@@ -28,6 +28,7 @@ class Pending_Payment {
 		add_action( 'after_setup_theme', array( $this, 'create_custom_table' ) );
 		add_action( 'woocommerce_order_status_completed', array( $this, 'insert_pending_payment' ) );
 		add_action( 'woocommerce_order_status_completed', array( $this, 'change_pending_status' ) );
+		add_action( 'woocommerce_order_status_completed', array( $this, 'update_user_meta_overdue_orders' ) );
 		// add_action( 'woocommerce_order_status_completed', array( $this, 'test_note' ) );
 		add_action( 'admin_menu', array( $this, 'add_pending_payments_submenu_page' ) );
 		add_action( 'admin_post_nopriv_delete_pending_payment', array( $this, 'handle_delete_order' ) );
@@ -45,7 +46,9 @@ class Pending_Payment {
 		add_action( 'woocommerce_order_status_completed', array( $this, 'admin_notification_paid_full' ) );
 	}
 
-	function pay_for_order_notice( $translated_text, $text, $domain ) {
+
+
+	public function pay_for_order_notice( $translated_text, $text, $domain ) {
 		// Check if the text to be translated matches the one we want to change
 		if ( $domain === 'woocommerce' && $text === 'Please log in to your account below to continue to the payment form.' ) {
 			$translated_text = 'Please login to your account to pay for the order. Contact us if you need assistance.';
@@ -452,16 +455,32 @@ class Pending_Payment {
 
 							$role_instance = \NOVA_B2B\Roles::get_instance();
 
-							$attachments = $this->attach_invoice( $order );
+							if ( $role_instance ) {
 
-							$role_instance->send_email( $customer_email, $subject, $message, $headers, $attachments );
+								$attachments = $this->attach_invoice( $order );
+
+								$role_instance->send_email( $customer_email, $subject, $message, $headers, $attachments );
+
+							}
+
 							$label = get_sub_field( 'email_label' );
+
 							if ( $label == 'Deadline email' ) {
 								$this->admin_notification_deadline_email( $original_order, $role_instance, $headers, $first_name, $payment_date, $pending_total );
+
+								$current_overdue = get_user_meta( $user_id, 'overdue_orders', true );
+								if ( $current_overdue ) {
+									$current_overdue   = explode( ',', $current_overdue );
+									$current_overdue[] = $payment_order_id;
+									update_user_meta( $user_id, 'overdue_orders', implode( ',', $current_overdue ) );
+								} else {
+									update_user_meta( $user_id, 'overdue_orders', $payment_order_id );
+								}
 							}
 
 							$key = 'payment_email_key_' . get_row_index();
 							update_post_meta( $payment_order_id, $key, 'sent' );
+
 						}
 					}
 				}
@@ -862,6 +881,34 @@ class Pending_Payment {
 		if ( $pending_id ) {
 			$update_data = array( 'payment_status' => 'Completed' );
 			$this->update_data( $pending_id, $update_data );
+		}
+	}
+
+	public function update_user_meta_overdue_orders( $order_id ) {
+		$order = wc_get_order( $order_id );
+		if ( ! $order ) {
+			return; // Bail if order is not found
+		}
+
+		$user_id = $order->get_customer_id();
+		if ( ! $user_id ) {
+			return; // Bail if no customer is associated with the order
+		}
+
+		$overdue_orders = get_user_meta( $user_id, 'overdue_orders', true );
+		if ( $overdue_orders ) {
+			$overdue_orders = explode( ',', $overdue_orders );
+
+			// Remove the order from the list of overdue orders
+			$overdue_orders = array_filter(
+				$overdue_orders,
+				function ( $value ) use ( $order_id ) {
+					return $value != $order_id; // Loose comparison
+				}
+			);
+
+			// Update the user meta with the new list of overdue orders
+			update_user_meta( $user_id, 'overdue_orders', implode( ',', $overdue_orders ) );
 		}
 	}
 

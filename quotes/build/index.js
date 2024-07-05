@@ -3734,23 +3734,23 @@ function Sidebar() {
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", null, tax === 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Tax not included"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The final quote will be ready in 24 business hours."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Extra freight charges may apply for connected fonts."))), signage.length > 0 && NovaQuote.quote_status?.value !== 'processing' && NovaQuote.quote_status?.value !== 'ready' && NovaQuote.quote_status?.value !== 'archived' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, NovaQuote.is_editting === '1' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, NovaQuote.user_role[0] !== 'pending' && (NovaQuote.is_admin === 'no' || canSaveToDraft) ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_2__["default"], {
     action: "update-processing",
     label: "Submit Quote",
-    btnClass: "mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
+    btnClass: "uppercase mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
   }) : '', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_2__["default"], {
     action: "update",
     label: "Update Quote",
-    btnClass: "mb-5 font-title border border-nova-light rounded-md text-nova-gray w-full text-center bg-white text-sm h-[49px] hover:bg-nova-light hover:text-white shadow-[0_0_0_1px_rgba(0,0,0,0.3)]"
+    btnClass: "uppercase mb-5 font-title border border-nova-light rounded-md text-nova-gray w-full text-center bg-white text-sm h-[49px] hover:bg-nova-light hover:text-white shadow-[0_0_0_1px_rgba(0,0,0,0.3)]"
   })) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, NovaQuote.user_role[0] !== 'pending' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_2__["default"], {
     action: "processing",
     label: "Submit Quote",
-    btnClass: "mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
+    btnClass: "uppercase mb-5 font-title rounded-md text-white w-full text-center bg-[#f22e00] text-sm h-[49px] hover:bg-[#ff5e3d]"
   }) : '', canSaveToDraft && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_2__["default"], {
     action: "draft",
     label: "Save to Draft",
-    btnClass: "mb-5 font-title border border-nova-light rounded-md text-nova-gray w-full text-center bg-white text-sm h-[49px] hover:bg-nova-light hover:text-white shadow-[0_0_0_1px_rgba(0,0,0,0.3)]"
+    btnClass: "uppercase mb-5 font-title border border-nova-light rounded-md text-nova-gray w-full text-center bg-white text-sm h-[49px] hover:bg-nova-light hover:text-white shadow-[0_0_0_1px_rgba(0,0,0,0.3)]"
   }))), signage.length > 0 && NovaQuote.quote_status?.value === 'processing' && NovaQuote.is_admin === 'yes' && NovaQuote.is_editting === '1' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ModalSave__WEBPACK_IMPORTED_MODULE_2__["default"], {
     action: "update-processing-admin",
     label: "Update Quote",
-    btnClass: "mb-5 font-title border border-nova-light rounded-md text-nova-gray w-full text-center bg-white text-sm h-[49px] hover:bg-nova-light hover:text-white shadow-[0_0_0_1px_rgba(0,0,0,0.3)]"
+    btnClass: "uppercase mb-5 font-title border border-nova-light rounded-md text-nova-gray w-full text-center bg-white text-sm h-[49px] hover:bg-nova-light hover:text-white shadow-[0_0_0_1px_rgba(0,0,0,0.3)]"
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-sm mb-4"
   }, "Quote & Draft Validity: 30 days")));
