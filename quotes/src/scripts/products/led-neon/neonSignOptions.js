@@ -93,7 +93,7 @@ export const wireExitLocationOptions = [
 	},
 ];
 
-export const neonColorOptions = [
+export const flexNeonColorOptions = [
 	{
 		name: 'White',
 		color: '#FFFFFF',
@@ -129,6 +129,45 @@ export const neonColorOptions = [
 	{
 		name: 'Green',
 		color: '#008000',
+	},
+];
+
+export const rigidNeonColorOptions = [
+	{
+		name: 'White',
+		color: '#FFFFFF',
+	},
+	{
+		name: 'Warm White',
+		color: '#FFFACD',
+	},
+	{
+		name: 'Red',
+		color: '#FF0000',
+	},
+	{
+		name: 'Pink',
+		color: '#FFC0CB',
+	},
+	{
+		name: 'Green',
+		color: '#008000',
+	},
+	{
+		name: 'Cyan Blue',
+		color: '#00FFFF',
+	},
+	{
+		name: 'Yellow',
+		color: '#FFFF00',
+	},
+	{
+		name: 'Blue',
+		color: '#0000FF',
+	},
+	{
+		name: 'Orange',
+		color: '#FFA500',
 	},
 ];
 

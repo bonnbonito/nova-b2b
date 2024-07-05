@@ -17,6 +17,7 @@ import {
 	spacerStandoffDefaultOptions,
 } from '../../../../utils/SignageOptions';
 import { NeonColors } from '../../components/NeonColors';
+import { rigidNeonColorOptions } from '../../neonSignOptions';
 
 import {
 	EXCHANGE_RATE,
@@ -579,6 +580,7 @@ export const NeonSign = ({ item }) => {
 					openColor={openNeonColor}
 					setToogle={setOpenNeonColor}
 					getSelectedColors={handledSelectedColors}
+					colorOptions={rigidNeonColorOptions}
 				/>
 
 				{waterproof !== 'Outdoor (Waterproof)' && (

@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import useOutsideClick from '../../../utils/ClickOutside';
-import { neonColorOptions } from '../neonSignOptions';
 
 export const NeonColors = ({
 	colorRef,
@@ -9,6 +8,7 @@ export const NeonColors = ({
 	openColor,
 	getSelectedColors,
 	setToogle,
+	colorOptions,
 }) => {
 	const [selectedColors, setSelectedColors] = useState(() =>
 		colors ? colors.split(', ').map((color) => color.trim()) : []
@@ -31,7 +31,7 @@ export const NeonColors = ({
 	const colorSelections = useMemo(
 		() => (
 			<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg">
-				{neonColorOptions.map((colorOption) => (
+				{colorOptions.map((colorOption) => (
 					<label
 						key={colorOption.name}
 						className="has-[:checked]:ring-indigo-500 has-[:checked]:text-indigo-900 has-[:checked]:bg-indigo-50 p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm  select-none"
