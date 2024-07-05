@@ -158,7 +158,7 @@ class Pending_Payment {
 
 <p>Original Total: <?php echo $original_total; ?></p>
 
-<?php
+		<?php
 	}
 
 	public function hide_specific_orders( $query ) {
@@ -275,8 +275,14 @@ class Pending_Payment {
 
 		$payment_url = $order->get_checkout_payment_url();
 
-		$first_name     = $order->get_billing_first_name();
-		$customer_email = $order->get_billing_email();
+		$first_name               = $order->get_billing_first_name();
+		$customer_email[]         = $order->get_billing_email();
+		$user_id                  = $order->get_user_id() ? $order->get_user_id() : 0;
+		$additional_billing_email = get_user_meta( $user_id, 'additional_billing_email', true );
+
+		if ( $additional_billing_email ) {
+			$customer_email[] = $additional_billing_email;
+		}
 
 		if ( ! $order ) {
 			return 'Order not found';
@@ -324,18 +330,20 @@ class Pending_Payment {
 
 				$role_instance = \NOVA_B2B\Roles::get_instance();
 
-				$role_instance->send_email( $customer_email, $subject, $message, $headers, $attachments, $heading );
+				if ( $role_instance ) {
 
-				$key = 'payment_email_key_' . $index;
+					$role_instance->send_email( $customer_email, $subject, $message, $headers, $attachments, $heading );
 
-				$label = $payment_emails[ $index - 1 ]['email_label'];
+					$key = 'payment_email_key_' . $index;
 
-				if ( $label == 'Deadline email' ) {
-					$this->admin_notification_deadline_email( $original_order, $role_instance, $headers, $first_name, $payment_date, $pending_total );
+					$label = $payment_emails[ $index - 1 ]['email_label'];
+
+					if ( $label == 'Deadline email' ) {
+						$this->admin_notification_deadline_email( $original_order, $role_instance, $headers, $first_name, $payment_date, $pending_total );
+					}
+
+					update_post_meta( $payment_order_id, $key, date( 'Y/m/d' ) );
 				}
-
-				update_post_meta( $payment_order_id, $key, date( 'Y/m/d' ) );
-
 			}
 		}
 	}
@@ -386,8 +394,14 @@ class Pending_Payment {
 
 		$today = date( 'F d, Y' );
 
-		$first_name     = $order->get_billing_first_name();
-		$customer_email = $order->get_billing_email();
+		$first_name               = $order->get_billing_first_name();
+		$customer_email[]         = $order->get_billing_email();
+		$user_id                  = $order->get_user_id() ? $order->get_user_id() : 0;
+		$additional_billing_email = get_user_meta( $user_id, 'additional_billing_email', true );
+
+		if ( $additional_billing_email ) {
+			$customer_email[] = $additional_billing_email;
+		}
 
 		if ( ! $order ) {
 			return 'Order not found';
@@ -462,16 +476,16 @@ class Pending_Payment {
 <p>Hello,</p>
 <p>An outstanding invoice for {order_number} is due today. We have sent a reminder to:</p>
 <ul>
-    <li>Customer: {customer_name} - {business_id} </li>
-    <li>Company: {business_name}</li>
-    <li>Order ID: #{order_number}</li>
-    <li>Deadline of payment: {deadline}</li>
-    <li>Unpaid Balance: {pending_payment}</li>
+	<li>Customer: {customer_name} - {business_id} </li>
+	<li>Company: {business_name}</li>
+	<li>Order ID: #{order_number}</li>
+	<li>Deadline of payment: {deadline}</li>
+	<li>Unpaid Balance: {pending_payment}</li>
 </ul>
 
 <p>Order details:</p>
 {order_details}
-<?php
+		<?php
 		$message = ob_get_clean();
 
 		$user_id       = $order->get_user_id() ? $order->get_user_id() : 0;
@@ -516,14 +530,14 @@ class Pending_Payment {
 <p>Hello,</p>
 <p>We've informed your client that the product is now prepared and ready to ship:</p>
 <ul>
-    <li>Customer: {customer_name} - {business_id} </li>
-    <li>Company: {business_name}</li>
-    <li>Order ID: #{order_number}</li>
+	<li>Customer: {customer_name} - {business_id} </li>
+	<li>Company: {business_name}</li>
+	<li>Order ID: #{order_number}</li>
 </ul>
 
 <p>Here's the final invoice and their tracking information:</p>
 {order_details}
-<?php
+		<?php
 		$message       = ob_get_clean();
 		$first_name    = $order->get_billing_first_name();
 		$user_id       = $order->get_user_id() ? $order->get_user_id() : 0;

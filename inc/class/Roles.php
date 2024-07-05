@@ -63,6 +63,24 @@ class Roles {
 		} else {
 			$this->streak_api = null;
 		}
+
+		add_filter( 'user_contactmethods', array( $this, 'add_contact_methods' ), 10, 2 );
+		add_action( 'personal_options_update', array( $this, 'save_additional_billing_email_field' ) );
+		add_action( 'edit_user_profile_update', array( $this, 'save_additional_billing_email_field' ) );
+	}
+
+	public function add_contact_methods( $contact_methods, $user ) {
+		$contact_methods['additional_billing_email'] = __( 'Billing Email', 'nova' );
+		return $contact_methods;
+	}
+
+	public function save_additional_billing_email_field( $user_id ) {
+		if ( ! current_user_can( 'edit_user', $user_id ) ) {
+			return false;
+		}
+		if ( isset( $_POST['additional_billing_email'] ) ) {
+			update_user_meta( $user_id, 'additional_billing_email', sanitize_email( $_POST['additional_billing_email'] ) );
+		}
 	}
 
 	public function get_streak_api() {

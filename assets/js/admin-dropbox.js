@@ -1,10 +1,9 @@
 async function moveProjectFolder() {
 	const moveProjectFolderbtn = document.getElementById('moveProjectFolder');
-
-	if (!moveProjectFolderbtn) return; // Ensures the button exists before attaching events
+	if (!moveProjectFolderbtn) return;
 
 	const projectPath = `/NOVA-CRM/A-Uncatergorize Project/${QuoteAdmin.project_id_folder}`;
-	const newPath = `/NOVA-CRM/${QuoteAdmin.partner_business_id}/Q-${QuoteAdmin.quote_id}/${QuoteAdmin.project_id_folder}`;
+	const newPath = `/NOVA-CRM/${QuoteAdmin.partner_business_id}/${QuoteAdmin.project_id_folder}`;
 
 	moveProjectFolderbtn.addEventListener('click', async (e) => {
 		e.preventDefault();
@@ -12,30 +11,81 @@ async function moveProjectFolder() {
 		moveProjectFolderbtn.disabled = true;
 
 		const folderExists = await isFolderExist(projectPath);
-
 		if (!folderExists) {
-			moveProjectFolderbtn.textContent = 'Folder does not exist';
-			moveProjectFolderbtn.disabled = true;
+			updateButton(moveProjectFolderbtn, 'Folder does not exist 123');
 			return;
 		}
 
-		moveProjectFolderbtn.textContent = 'Moving...';
+		const clientFolder = `/NOVA-CRM/A-Uncatergorize Project/${QuoteAdmin.project_id_folder}/Client Files`;
 
-		try {
-			const status = await renameDropboxFolder(projectPath, newPath);
-
-			if (status) {
-				console.log('Folder moved successfully');
-				moveProjectFolderbtn.textContent = 'Move Successful';
-				moveProjectFolderbtn.disabled = true;
-			} else {
-				moveProjectFolderbtn.textContent = 'Move Failed';
-			}
-		} catch (error) {
-			console.error('Error:', error);
-			moveProjectFolderbtn.textContent = 'Error Moving Folder';
+		if (
+			!(await moveFilesInFolder(
+				moveProjectFolderbtn,
+				projectPath,
+				clientFolder,
+				'Creating Clients Folder...',
+				'Creating Clients Folder Successful',
+				'Error Creating Clients Folder'
+			))
+		) {
+			return;
 		}
+
+		if (
+			!(await renameFolderWithFeedback(
+				moveProjectFolderbtn,
+				projectPath,
+				newPath,
+				'Moving...',
+				'Moving Project Folder Successful',
+				'Error Moving Folder'
+			))
+		) {
+			return;
+		}
+
+		const quoteFolder = `/NOVA-CRM/${QuoteAdmin.partner_business_id}/Q-${QuoteAdmin.quote_id}`;
+		const newQuotePath = `/NOVA-CRM/${QuoteAdmin.partner_business_id}/${QuoteAdmin.project_id_folder}/Q-${QuoteAdmin.quote_id}`;
+
+		await renameFolderWithFeedback(
+			moveProjectFolderbtn,
+			quoteFolder,
+			newQuotePath,
+			'Moving Quote Folder...',
+			'Moving Quote Folder Successful',
+			'Error Moving Quote Folder'
+		);
 	});
+}
+
+function updateButton(button, message) {
+	button.textContent = message;
+	button.disabled = true;
+}
+
+async function renameFolderWithFeedback(
+	button,
+	oldPath,
+	newPath,
+	inProgressMessage,
+	successMessage,
+	errorMessage
+) {
+	try {
+		button.textContent = inProgressMessage;
+		const status = await renameDropboxFolder(oldPath, newPath);
+		if (status) {
+			button.textContent = successMessage;
+			return true;
+		} else {
+			button.textContent = 'Move Failed';
+			return false;
+		}
+	} catch (error) {
+		console.error('Error:', error);
+		button.textContent = errorMessage;
+		return false;
+	}
 }
 
 async function isFolderExist(folderPath) {
@@ -213,6 +263,101 @@ const getRefreshToken = async () => {
 		return null;
 	}
 };
+
+async function moveFilesInFolder(
+	button,
+	oldPath,
+	newFolderPath,
+	inProgressMessage,
+	successMessage,
+	errorMessage
+) {
+	const accessToken = await getRefreshToken();
+	if (!accessToken) {
+		console.error('Failed to get access token');
+		updateButton(button, errorMessage);
+		return false;
+	}
+
+	try {
+		button.textContent = inProgressMessage;
+
+		// Create the new folder inside the oldPath
+		const createFolderUrl =
+			'https://api.dropboxapi.com/2/files/create_folder_v2';
+		const createFolderParams = JSON.stringify({ path: newFolderPath });
+
+		const createFolderResponse = await fetch(createFolderUrl, {
+			method: 'POST',
+			body: createFolderParams,
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+				'Content-Type': 'application/json',
+			},
+		});
+
+		if (!createFolderResponse.ok) {
+			const error = await createFolderResponse.text();
+			console.error('Failed to create folder. Response:', error);
+			throw new Error('Failed to create folder');
+		}
+
+		// List the files in the oldPath
+		const listFilesUrl = 'https://api.dropboxapi.com/2/files/list_folder';
+		const listFilesParams = JSON.stringify({ path: oldPath });
+
+		const listFilesResponse = await fetch(listFilesUrl, {
+			method: 'POST',
+			body: listFilesParams,
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+				'Content-Type': 'application/json',
+			},
+		});
+
+		if (!listFilesResponse.ok) {
+			const error = await listFilesResponse.text();
+			console.error('Failed to list files. Response:', error);
+			throw new Error('Failed to list files');
+		}
+
+		const listFilesData = await listFilesResponse.json();
+		const files = listFilesData.entries.filter(
+			(entry) => entry['.tag'] === 'file'
+		);
+
+		// Move each file to the new folder
+		for (const file of files) {
+			const moveFileUrl = 'https://api.dropboxapi.com/2/files/move_v2';
+			const moveFileParams = JSON.stringify({
+				from_path: file.path_lower,
+				to_path: `${newFolderPath}/${file.name}`,
+			});
+
+			const moveFileResponse = await fetch(moveFileUrl, {
+				method: 'POST',
+				body: moveFileParams,
+				headers: {
+					Authorization: `Bearer ${accessToken}`,
+					'Content-Type': 'application/json',
+				},
+			});
+
+			if (!moveFileResponse.ok) {
+				const error = await moveFileResponse.text();
+				console.error('Failed to move file. Response:', error);
+				throw new Error('Failed to move file');
+			}
+		}
+
+		button.textContent = successMessage;
+		return true;
+	} catch (error) {
+		console.error('Error:', error);
+		button.textContent = errorMessage;
+		return false;
+	}
+}
 
 if (document.readyState === 'loading') {
 	document.addEventListener('DOMContentLoaded', () => {
