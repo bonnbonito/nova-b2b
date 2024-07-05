@@ -17846,7 +17846,7 @@ const NeonSign = ({
     openColor: openNeonColor,
     setToogle: setOpenNeonColor,
     getSelectedColors: handledSelectedColors,
-    colorOptions: _neonSignOptions__WEBPACK_IMPORTED_MODULE_12__.flexNeonColorOptions
+    colorOptions: _neonSignOptions__WEBPACK_IMPORTED_MODULE_12__.rigidNeonColorOptions
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
     title: "8mm Neon Length",
     value: neonLength8mm,
