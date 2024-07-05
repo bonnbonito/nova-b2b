@@ -3,7 +3,7 @@
         <div class="md:flex md:gap-x-20 mb-9">
             <div class="form-field flex-1 mb-9 md:mb-0">
                 <label class="block mb-2 font-title uppercase" for="firstName">
-                    First Name
+                    First Name<span class="text-red-500">*</span>
                 </label>
                 <input
                     class="appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
@@ -13,7 +13,7 @@
 
             <div class="form-field flex-1">
                 <label class="block mb-2 font-title uppercase" for="lastName">
-                    Last Name
+                    Last Name<span class="text-red-500">*</span>
                 </label>
                 <input
                     class="appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
@@ -25,7 +25,7 @@
         <div class="md:flex md:gap-x-20 mb-9">
             <div class="form-field flex-1 mb-9 md:mb-0">
                 <label class="block mb-2 font-title uppercase" for="businessName">
-                    Business Name
+                    Business Name<span class="text-red-500">*</span>
                 </label>
                 <input
                     class="appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
@@ -35,7 +35,7 @@
 
             <div class="form-field flex-1">
                 <label class="block mb-2 font-title uppercase" for="businessEmail">
-                    Business Email
+                    Business Email<span class="text-red-500">*</span>
                 </label>
                 <input
                     class="appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
@@ -47,7 +47,7 @@
         <div class="md:flex md:gap-x-20 mb-9">
             <div class="form-field flex-1 mb-9 md:mb-0">
                 <label class="block mb-2 font-title uppercase" for="businessType">
-                    Business Type
+                    Business Type<span class="text-red-500">*</span>
                 </label>
                 <select id="businessType" name="businessType"
                     class="rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
@@ -76,12 +76,21 @@
         <div class="md:flex md:gap-x-20 mb-9">
             <div class="form-field flex-1 mb-9 md:mb-0">
                 <label class="block mb-2 font-title uppercase" for="businessPhone">
-                    Business Phone Number
+                    Business Phone Number<span class="text-red-500">*</span>
                 </label>
                 <input
                     class="appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
                     id="businessPhone" name="businessPhone" type="text" placeholder="Business Phone Number" required>
 
+            </div>
+
+            <div class="form-field flex-1">
+                <label class="block mb-2 font-title uppercase" for="billingEmail">
+                    Billing Email
+                </label>
+                <input
+                    class="appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
+                    id="billingEmail" name="billingEmail" type="email" placeholder="Billing Email">
             </div>
 
 
@@ -90,7 +99,7 @@
         <div class="md:flex md:gap-x-20 mb-9">
             <div class="form-field flex-1">
                 <label class="block mb-2 font-title uppercase" for="country">
-                    Country
+                    Country<span class="text-red-500">*</span>
                 </label>
                 <select id="country" name="country"
                     class="rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
@@ -114,7 +123,7 @@
         <div class="md:flex md:gap-x-20 mb-9">
             <div class="form-field flex-1">
                 <label class="block mb-2 font-title uppercase" for="street">
-                    Street Address
+                    Street Address<span class="text-red-500">*</span>
                 </label>
                 <input
                     class="appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
@@ -125,7 +134,7 @@
         <div class="md:flex md:gap-x-10 xl:gap-x-20 mb-14">
             <div class="form-field flex-1 mb-9 md:mb-0">
                 <label class="block mb-2 font-title uppercase" for="city">
-                    Town/City
+                    Town/City<span class="text-red-500">*</span>
                 </label>
                 <input
                     class="appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
@@ -134,7 +143,7 @@
 
             <div class="form-field flex-1 mb-9 md:mb-0">
                 <label class="block mb-2 font-title uppercase" for="state">
-                    State
+                    State<span class="text-red-500">*</span>
                 </label>
                 <select id="state" name="state"
                     class="appearance-none rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
@@ -145,7 +154,7 @@
 
             <div class="form-field flex-1">
                 <label class="block mb-2 font-title uppercase" for="zip">
-                    Zip Code
+                    Zip Code<span class="text-red-500">*</span>
                 </label>
                 <input
                     class="appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
@@ -172,7 +181,7 @@
         <div class="md:flex md:gap-x-20 md:gap-y-10 mb-14 flex-wrap">
             <div class="form-field md:w-1/2 mb-9 md:mb-0">
                 <label class="block mb-2 font-title uppercase" for="username">
-                    Username
+                    Username<span class="text-red-500">*</span>
                 </label>
                 <input
                     class="appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
@@ -181,7 +190,7 @@
 
             <div class="form-field md:w-1/2">
                 <label class="block mb-2 font-title uppercase" for="password">
-                    Password
+                    Password<span class="text-red-500">*</span>
                 </label>
                 <input
                     class="appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
@@ -243,7 +252,7 @@
                     class="w-5 h-5 text-nova-primary border-nova-light focus:ring-nova-primary" required>
                 <label for="privacy" class="ms-3 text-sm font-medium text-nova-gray">Yes, I have read the <a
                         class="text-black" href="/privacy-policy" target="_blank">Privacy
-                        Policy.</a></label>
+                        Policy.</a><span class="text-red-500">*</span></label>
             </div>
         </div>
 
@@ -251,7 +260,7 @@
         <div class="flex justify-center">
             <input type="hidden" name="action" value="nova_signup">
             <button type="submit"
-                class="uppercase font-title w-full max-w-[820px] mx-auto py-2 bg-nova-primary hover:bg-nova-secondary"
+                class="uppercase font-title w-full max-w-[820px] mx-auto py-2 text-white bg-nova-primary hover:bg-nova-secondary"
                 id="submitBtn">Submit
                 Application</button>
         </div>

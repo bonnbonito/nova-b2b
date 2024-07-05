@@ -874,6 +874,7 @@ jQuery(document).ready(function($) {
 		$lastName        = sanitize_text_field( $_POST['lastName'] );
 		$businessName    = isset( $_POST['businessName'] ) ? sanitize_text_field( $_POST['businessName'] ) : '';
 		$businessEmail   = sanitize_email( $_POST['businessEmail'] );
+		$billingEmail    = sanitize_email( $_POST['billingEmail'] );
 		$businessWebsite = isset( $_POST['businessWebsite'] ) ? esc_url( $_POST['businessWebsite'] ) : '';
 		$businessType    = isset( $_POST['businessType'] ) ? sanitize_text_field( $_POST['businessType'] ) : '';
 		$businessPhone   = isset( $_POST['businessPhone'] ) ? $this->sanitize_phone_number( $_POST['businessPhone'] ) : '';
@@ -963,6 +964,8 @@ jQuery(document).ready(function($) {
 		);
 
 		$business_id = 'TEMPORARY-' . $user_id;
+
+		update_user_meta( $user_id, 'additional_billing_email', $billingEmail );
 
 		update_field( 'business_id', $business_id, 'user_' . $user_id );
 		update_field( 'business_name', $businessName, 'user_ ' . $user_id );
