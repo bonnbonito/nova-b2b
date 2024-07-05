@@ -12,7 +12,7 @@ async function moveProjectFolder() {
 
 		const folderExists = await isFolderExist(projectPath);
 		if (!folderExists) {
-			updateButton(moveProjectFolderbtn, 'Folder does not exist 123');
+			updateButton(moveProjectFolderbtn, 'Folder does not exist');
 			return;
 		}
 
