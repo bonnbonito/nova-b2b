@@ -410,7 +410,7 @@ export default function UploadFont({
 
 			{!fontFileUrl ? (
 				<button
-					className={`h-[40px] w-full py-2 px-2 text-center text-red rounded-md text-sm uppercase bg-slate-400 hover:bg-slate-600 font-title leading-[1em] ${
+					className={`h-[40px] text-white w-full py-2 px-2 text-center text-red rounded-md text-sm uppercase bg-slate-400 hover:bg-slate-600 font-title leading-[1em] ${
 						fontFileError && 'border border-solid border-red-600'
 					}`}
 					onClick={handleButtonClick}

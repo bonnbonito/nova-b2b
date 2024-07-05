@@ -408,7 +408,7 @@ export default function UploadFiles({
 					UPLOAD PDF/AI FILE
 				</label>
 				<button
-					className={`h-[40px] w-full py-2 px-2 text-center rounded-md text-sm uppercase bg-slate-400 hover:bg-slate-600 font-title leading-[1em] ${
+					className={`h-[40px] w-full py-2 px-2 text-center rounded-md text-sm text-white uppercase bg-slate-400 hover:bg-slate-600 font-title leading-[1em] ${
 						fileError && ' border border-solid border-red-600'
 					}`}
 					onClick={handleButtonClick}
@@ -436,7 +436,7 @@ export default function UploadFiles({
 								{fileName}
 								<button
 									onClick={() => handleRemoveFile(index)}
-									className="text-xs"
+									className="text-xs px-3 py-1 bg-red-600 hover:bg-red-700 text-white"
 									disabled={isLoading}
 								>
 									Remove

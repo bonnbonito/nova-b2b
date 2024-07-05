@@ -42,6 +42,7 @@ class Nova_Quote {
 		add_action( 'wp_ajax_update_signage', array( $this, 'update_signage' ) );
 		add_action( 'wp_ajax_to_checkout', array( $this, 'nova_to_checkout' ) );
 		add_action( 'wp_ajax_delete_quote', array( $this, 'delete_quote' ) );
+		add_action( 'wp_ajax_update_project_folder_status', array( $this, 'update_project_folder_status' ) );
 		add_action( 'wp_ajax_save_custom_project', array( $this, 'save_custom_project' ) );
 		add_filter( 'upload_mimes', array( $this, 'enable_ai_files' ), 1, 1 );
 		add_filter( 'acf/prepare_field/name=signage', array( $this, 'acf_diable_field' ) );
@@ -77,6 +78,27 @@ class Nova_Quote {
 		add_filter( 'views_edit-nova_quote', array( $this, 'add_custom_post_status_links' ) );
 		add_action( 'admin_footer-post.php', array( $this, 'append_post_status_list' ) );
 		add_action( 'admin_footer-edit.php', array( $this, 'append_post_status_list' ) );
+	}
+
+	public function update_project_folder_status() {
+		$status = array(
+			'code' => 1,
+		);
+		if ( ! wp_verify_nonce( $_POST['nonce'], 'quote_nonce' ) ) {
+			$status['status'] = 'error';
+			$status['error']  = 'Nonce error';
+			wp_send_json( $status );
+		}
+
+		$post_id = $_POST['post_id'];
+		$value   = $_POST['status'];
+
+		update_post_meta( $post_id, 'folder_project_status', $value );
+
+		$status['post']   = $_POST;
+		$status['status'] = 'success';
+
+		wp_send_json( $status );
 	}
 
 	public function append_post_status_list() {
@@ -1610,6 +1632,12 @@ h6 {
 			$user_id = $_POST['user_id'];
 			$user    = get_userdata( $user_id );
 
+			$created_by = isset( $_POST['created_by'] ) ? $_POST['created_by'] : false;
+
+			if ( $created_by ) {
+				update_post_meta( $post_id, 'created_by', $created_by );
+			}
+
 			update_field( 'frontend_title', $_POST['title'], $post_id );
 			update_field( 'partner', $user_id, $post_id );
 			update_field( 'partner_email', $user->user_email, $post_id );
@@ -2135,6 +2163,7 @@ h6 {
 				'quantity_discount_api'      => rest_url() . 'nova/v1/quantity-discount/',
 				'show_all_partners'          => $this->show_all_partners(),
 				'product_layers'             => get_field( 'product_layers' ),
+				'project_folder_status'      => isset( $_GET['qid'] ) ? $this->get_project_folder() : null,
 
 			)
 		);
@@ -2142,6 +2171,19 @@ h6 {
 		if ( ( is_product( 'product' ) || is_account_page() || is_page( 'custom' ) || is_page( 'custom-project' ) ) && is_user_logged_in() || get_post_type() === 'signage' ) {
 			wp_enqueue_script( 'nova-quote' );
 			wp_enqueue_style( 'nova-quote' );
+		}
+	}
+
+	public function get_project_folder() {
+		if ( isset( $_GET['qid'] ) ) {
+			$id     = $_GET['qid'];
+			$status = get_post_meta( $_GET['qid'], 'folder_project_status', true );
+
+			if ( $status ) {
+				return get_field( 'project_id_folder', $id );
+			} else {
+				return false;
+			}
 		}
 	}
 

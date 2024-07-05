@@ -96,7 +96,13 @@ export default function CombineQuotes() {
 		if (NovaQuote.is_editting.length === 0) {
 			setTempFolder(tempFolderName);
 		} else {
-			setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+			if (NovaQuote.project_folder_status) {
+				setTempFolder(
+					`${NovaQuote.project_folder_status}/Q-${NovaQuote.current_quote_id}`
+				);
+			} else {
+				setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+			}
 		}
 	}, []);
 

@@ -13,6 +13,10 @@ async function moveProjectFolder() {
 		const folderExists = await isFolderExist(projectPath);
 		if (!folderExists) {
 			updateButton(moveProjectFolderbtn, 'Folder does not exist');
+			const updateMeta = await updateUserMetaData(false);
+			if (updateMeta) {
+				console.log(updateMeta);
+			}
 			return;
 		}
 
@@ -28,6 +32,10 @@ async function moveProjectFolder() {
 				'Error Creating Clients Folder'
 			))
 		) {
+			const updateMeta = await updateUserMetaData(false);
+			if (updateMeta) {
+				console.log(updateMeta);
+			}
 			return;
 		}
 
@@ -41,13 +49,17 @@ async function moveProjectFolder() {
 				'Error Moving Folder'
 			))
 		) {
+			const updateMeta = await updateUserMetaData(false);
+			if (updateMeta) {
+				console.log(updateMeta);
+			}
 			return;
 		}
 
 		const quoteFolder = `/NOVA-CRM/${QuoteAdmin.partner_business_id}/Q-${QuoteAdmin.quote_id}`;
 		const newQuotePath = `/NOVA-CRM/${QuoteAdmin.partner_business_id}/${QuoteAdmin.project_id_folder}/Q-${QuoteAdmin.quote_id}`;
 
-		await renameFolderWithFeedback(
+		const projectFolderStatus = await renameFolderWithFeedback(
 			moveProjectFolderbtn,
 			quoteFolder,
 			newQuotePath,
@@ -55,6 +67,18 @@ async function moveProjectFolder() {
 			'Moving Quote Folder Successful',
 			'Error Moving Quote Folder'
 		);
+		if (projectFolderStatus) {
+			console.log(projectFolderStatus);
+			const updateMeta = await updateUserMetaData(true);
+			if (updateMeta) {
+				console.log(updateMeta);
+			}
+		} else {
+			const updateMeta = await updateUserMetaData(false);
+			if (updateMeta) {
+				console.log(updateMeta);
+			}
+		}
 	});
 }
 
@@ -124,6 +148,38 @@ async function isFolderExist(folderPath) {
 			}
 			return false;
 		}
+	} catch (error) {
+		console.error('Error:', error);
+		return false;
+	}
+}
+
+async function updateUserMetaData(status) {
+	const formData = new FormData();
+	formData.append('nonce', QuoteAdmin.nonce);
+	formData.append('action', 'update_project_folder_status');
+	formData.append('post_id', QuoteAdmin.quote_id);
+	formData.append('status', status);
+
+	try {
+		console.log(formData);
+		const response = await fetch(QuoteAdmin.ajax_url, {
+			method: 'POST',
+			credentials: 'same-origin',
+			headers: {
+				'Cache-Control': 'no-cache',
+			},
+			body: formData,
+		});
+
+		if (!response.ok) {
+			const error = await response.text();
+			console.error('Error updating user metadata:', error);
+			throw new Error('Error updating user metadata');
+		}
+
+		const data = await response.json();
+		return data;
 	} catch (error) {
 		console.error('Error:', error);
 		return false;

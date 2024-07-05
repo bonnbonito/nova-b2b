@@ -161,6 +161,10 @@ function ModalSave({ action, btnClass, label, storage }) {
 				formData.append('editing', 'edit');
 			}
 
+			if (!NovaQuote.is_editting) {
+				formData.append('created_by', NovaQuote.user_id);
+			}
+
 			const status = await processQuote(formData);
 			if (status.status === 'success') {
 				if (NovaQuote.is_editting.length === 0) {

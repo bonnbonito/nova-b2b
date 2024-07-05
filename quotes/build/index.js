@@ -3014,6 +3014,9 @@ function ModalSave({
         formData.append('quote_id', NovaQuote.current_quote_id);
         formData.append('editing', 'edit');
       }
+      if (!NovaQuote.is_editting) {
+        formData.append('created_by', NovaQuote.user_id);
+      }
       const status = await (0,_utils_QuoteFunctions__WEBPACK_IMPORTED_MODULE_3__.processQuote)(formData);
       if (status.status === 'success') {
         if (NovaQuote.is_editting.length === 0) {
@@ -4362,7 +4365,7 @@ function UploadFiles({
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: `uppercase font-title text-sm tracking-[1.4px] px-2 ${fileError && 'text-red-600'}`
   }, "UPLOAD PDF/AI FILE"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
-    className: `h-[40px] w-full py-2 px-2 text-center rounded-md text-sm uppercase bg-slate-400 hover:bg-slate-600 font-title leading-[1em] ${fileError && ' border border-solid border-red-600'}`,
+    className: `h-[40px] w-full py-2 px-2 text-center rounded-md text-sm text-white uppercase bg-slate-400 hover:bg-slate-600 font-title leading-[1em] ${fileError && ' border border-solid border-red-600'}`,
     onClick: handleButtonClick,
     "aria-label": "Upload design file",
     disabled: isLoading
@@ -4383,7 +4386,7 @@ function UploadFiles({
     className: "flex gap-4 items-center"
   }, fileName, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     onClick: () => handleRemoveFile(index),
-    className: "text-xs",
+    className: "text-xs px-3 py-1 bg-red-600 hover:bg-red-700 text-white",
     disabled: isLoading
   }, "Remove"))))));
 }
@@ -4721,7 +4724,7 @@ function UploadFont({
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: `uppercase font-title text-sm tracking-[1.4px] px-2 ${fontFileError && 'text-red-600'}`
   }, "UPLOAD TTF/OTF File"), !fontFileUrl ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
-    className: `h-[40px] w-full py-2 px-2 text-center text-red rounded-md text-sm uppercase bg-slate-400 hover:bg-slate-600 font-title leading-[1em] ${fontFileError && 'border border-solid border-red-600'}`,
+    className: `h-[40px] text-white w-full py-2 px-2 text-center text-red rounded-md text-sm uppercase bg-slate-400 hover:bg-slate-600 font-title leading-[1em] ${fontFileError && 'border border-solid border-red-600'}`,
     onClick: handleButtonClick,
     "aria-label": "Upload font file",
     disabled: isLoading
@@ -11477,7 +11480,11 @@ function LaserCutAcrylic() {
     if (NovaQuote.is_editting.length === 0) {
       setTempFolder(tempFolderName);
     } else {
-      setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      if (NovaQuote.project_folder_status) {
+        setTempFolder(`${NovaQuote.project_folder_status}/Q-${NovaQuote.current_quote_id}`);
+      } else {
+        setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      }
     }
   }, []);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -12727,7 +12734,11 @@ function LayeredAcrylic() {
     if (NovaQuote.is_editting.length === 0) {
       setTempFolder(tempFolderName);
     } else {
-      setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      if (NovaQuote.project_folder_status) {
+        setTempFolder(`${NovaQuote.project_folder_status}/Q-${NovaQuote.current_quote_id}`);
+      } else {
+        setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      }
     }
   }, []);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_LayeredAcrylicContext__WEBPACK_IMPORTED_MODULE_12__.LayeredAcrylicProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -13469,7 +13480,11 @@ function MetalLaminate() {
     if (NovaQuote.is_editting.length === 0) {
       setTempFolder(tempFolderName);
     } else {
-      setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      if (NovaQuote.project_folder_status) {
+        setTempFolder(`${NovaQuote.project_folder_status}/Q-${NovaQuote.current_quote_id}`);
+      } else {
+        setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      }
     }
   }, []);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -14660,7 +14675,11 @@ function UvPrintedAcrylic() {
     if (NovaQuote.is_editting.length === 0) {
       setTempFolder(tempFolderName);
     } else {
-      setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      if (NovaQuote.project_folder_status) {
+        setTempFolder(`${NovaQuote.project_folder_status}/Q-${NovaQuote.current_quote_id}`);
+      } else {
+        setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      }
     }
   }, []);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -15388,7 +15407,11 @@ function CombineQuotes() {
     if (NovaQuote.is_editting.length === 0) {
       setTempFolder(tempFolderName);
     } else {
-      setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      if (NovaQuote.project_folder_status) {
+        setTempFolder(`${NovaQuote.project_folder_status}/Q-${NovaQuote.current_quote_id}`);
+      } else {
+        setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      }
     }
   }, []);
   const showComponent = item => {
@@ -15989,7 +16012,11 @@ function CustomProject() {
     if (NovaQuote.is_editting.length === 0) {
       setTempFolder(tempFolderName);
     } else {
-      setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      if (NovaQuote.project_folder_status) {
+        setTempFolder(`${NovaQuote.project_folder_status}/Q-${NovaQuote.current_quote_id}`);
+      } else {
+        setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      }
     }
   }, []);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -16222,7 +16249,11 @@ function FlexNeonSign() {
     if (NovaQuote.is_editting.length === 0) {
       setTempFolder(tempFolderName);
     } else {
-      setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      if (NovaQuote.project_folder_status) {
+        setTempFolder(`${NovaQuote.project_folder_status}/Q-${NovaQuote.current_quote_id}`);
+      } else {
+        setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      }
     }
     // Only run once, no need to add dependencies if they don't change
   }, []);
@@ -16738,7 +16769,11 @@ function RigidNeonSignNoBacking() {
     if (NovaQuote.is_editting.length === 0) {
       setTempFolder(tempFolderName);
     } else {
-      setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      if (NovaQuote.project_folder_status) {
+        setTempFolder(`${NovaQuote.project_folder_status}/Q-${NovaQuote.current_quote_id}`);
+      } else {
+        setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      }
     }
     // Only run once, no need to add dependencies if they don't change
   }, []);
@@ -17368,7 +17403,11 @@ function RigidNeonSignWithBacking() {
     if (NovaQuote.is_editting.length === 0) {
       setTempFolder(tempFolderName);
     } else {
-      setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      if (NovaQuote.project_folder_status) {
+        setTempFolder(`${NovaQuote.project_folder_status}/Q-${NovaQuote.current_quote_id}`);
+      } else {
+        setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      }
     }
     // Only run once, no need to add dependencies if they don't change
   }, []);
@@ -18719,7 +18758,11 @@ function TrimLessFrontAndBackLit() {
     if (NovaQuote.is_editting.length === 0) {
       setTempFolder(tempFolderName);
     } else {
-      setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      if (NovaQuote.project_folder_status) {
+        setTempFolder(`${NovaQuote.project_folder_status}/Q-${NovaQuote.current_quote_id}`);
+      } else {
+        setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      }
     }
   }, []);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -20173,7 +20216,11 @@ function TrimLessFrontAndBackLit() {
     if (NovaQuote.is_editting.length === 0) {
       setTempFolder(tempFolderName);
     } else {
-      setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      if (NovaQuote.project_folder_status) {
+        setTempFolder(`${NovaQuote.project_folder_status}/Q-${NovaQuote.current_quote_id}`);
+      } else {
+        setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      }
     }
   }, []);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -21532,7 +21579,11 @@ function TrimLessBackLit() {
     if (NovaQuote.is_editting.length === 0) {
       setTempFolder(tempFolderName);
     } else {
-      setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      if (NovaQuote.project_folder_status) {
+        setTempFolder(`${NovaQuote.project_folder_status}/Q-${NovaQuote.current_quote_id}`);
+      } else {
+        setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      }
     }
   }, []);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -22928,7 +22979,11 @@ function TrimLessFrontAndBackLit() {
     if (NovaQuote.is_editting.length === 0) {
       setTempFolder(tempFolderName);
     } else {
-      setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      if (NovaQuote.project_folder_status) {
+        setTempFolder(`${NovaQuote.project_folder_status}/Q-${NovaQuote.current_quote_id}`);
+      } else {
+        setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      }
     }
   }, []);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -24247,7 +24302,11 @@ function TrimLessFrontLit() {
     if (NovaQuote.is_editting.length === 0) {
       setTempFolder(tempFolderName);
     } else {
-      setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      if (NovaQuote.project_folder_status) {
+        setTempFolder(`${NovaQuote.project_folder_status}/Q-${NovaQuote.current_quote_id}`);
+      } else {
+        setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      }
     }
   }, []);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -25635,7 +25694,11 @@ function FabricatedStainless() {
     if (NovaQuote.is_editting.length === 0) {
       setTempFolder(tempFolderName);
     } else {
-      setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      if (NovaQuote.project_folder_status) {
+        setTempFolder(`${NovaQuote.project_folder_status}/Q-${NovaQuote.current_quote_id}`);
+      } else {
+        setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      }
     }
   }, []);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -27012,7 +27075,11 @@ function LaserCutAluminum() {
     if (NovaQuote.is_editting.length === 0) {
       setTempFolder(tempFolderName);
     } else {
-      setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      if (NovaQuote.project_folder_status) {
+        setTempFolder(`${NovaQuote.project_folder_status}/Q-${NovaQuote.current_quote_id}`);
+      } else {
+        setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      }
     }
   }, []);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -28193,7 +28260,11 @@ function FabricatedStainless() {
     if (NovaQuote.is_editting.length === 0) {
       setTempFolder(tempFolderName);
     } else {
-      setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      if (NovaQuote.project_folder_status) {
+        setTempFolder(`${NovaQuote.project_folder_status}/Q-${NovaQuote.current_quote_id}`);
+      } else {
+        setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      }
     }
   }, []);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -29648,7 +29719,11 @@ function PVCMetalLaminate() {
     if (NovaQuote.is_editting.length === 0) {
       setTempFolder(tempFolderName);
     } else {
-      setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      if (NovaQuote.project_folder_status) {
+        setTempFolder(`${NovaQuote.project_folder_status}/Q-${NovaQuote.current_quote_id}`);
+      } else {
+        setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      }
     }
   }, []);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -30864,7 +30939,11 @@ function PVCPainted() {
     if (NovaQuote.is_editting.length === 0) {
       setTempFolder(tempFolderName);
     } else {
-      setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      if (NovaQuote.project_folder_status) {
+        setTempFolder(`${NovaQuote.project_folder_status}/Q-${NovaQuote.current_quote_id}`);
+      } else {
+        setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      }
     }
   }, []);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -32046,7 +32125,11 @@ function PVCUv() {
     if (NovaQuote.is_editting.length === 0) {
       setTempFolder(tempFolderName);
     } else {
-      setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      if (NovaQuote.project_folder_status) {
+        setTempFolder(`${NovaQuote.project_folder_status}/Q-${NovaQuote.current_quote_id}`);
+      } else {
+        setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      }
     }
   }, []);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
