@@ -387,7 +387,7 @@ export function Letters({ item }) {
 		if (!acrylicChannelThickness)
 			missingFields.push('Select Acrylic Thickness');
 		if (!color) missingFields.push('Select Return Paint Color');
-		if (color === 'Custom Color' && !customColor) {
+		if (color.name === 'Custom Color' && !customColor) {
 			missingFields.push('Add the Pantone color code of your custom color.');
 		}
 		if (!waterproof) missingFields.push('Select Environment');
@@ -740,7 +740,7 @@ export function Letters({ item }) {
 			)}
 
 			<div className="quote-grid">
-				{color == 'Custom Color' && (
+				{color.name == 'Custom Color' && (
 					<div className="px-[1px] col-span-4">
 						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
 							Custom Color

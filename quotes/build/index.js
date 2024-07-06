@@ -5277,7 +5277,7 @@ function Letters({
     if (!selectedLetterHeight) missingFields.push('Select Letter Height');
     if (!acrylicChannelThickness) missingFields.push('Select Acrylic Thickness');
     if (!color) missingFields.push('Select Return Paint Color');
-    if (color === 'Custom Color' && !customColor) {
+    if (color.name === 'Custom Color' && !customColor) {
       missingFields.push('Add the Pantone color code of your custom color.');
     }
     if (!waterproof) missingFields.push('Select Environment');
@@ -5487,7 +5487,7 @@ function Letters({
     className: "text-xs text-[#9F9F9F] mb-4"
   }, "*Note: The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid"
-  }, color == 'Custom Color' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, color.name == 'Custom Color' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "px-[1px] col-span-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
@@ -5773,7 +5773,7 @@ function Logo({
     if (!width) missingFields.push('Select Logo Width');
     if (!height) missingFields.push('Select Logo Height');
     if (!color) missingFields.push('Select Return Paint Color');
-    if (color === 'Custom Color' && !customColor) {
+    if (color.name === 'Custom Color' && !customColor) {
       missingFields.push('Add the Pantone color code of your custom color.');
     }
     if (!waterproof) missingFields.push('Select Environment');
@@ -5942,7 +5942,7 @@ function Logo({
     className: "text-xs text-[#9F9F9F] mb-4"
   }, "*Note: The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid"
-  }, color == 'Custom Color' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, color.name == 'Custom Color' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "px-[1px] col-span-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"

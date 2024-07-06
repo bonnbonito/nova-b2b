@@ -28,6 +28,38 @@ class Streak {
 		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
 		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
 		add_action( 'admin_post_delete_streak_box', array( $this, 'handle_delete_streak_box' ) );
+		add_action( 'nova_b2b_add_streak_box', array( $this, 'display_streak_boxe' ), 10, 2 );
+	}
+
+	public function display_streak_boxe( $insert_id, $boxID ) {
+		$box = $this->fetch_streak_box_data( $boxID );
+
+		print_r( $box );
+	}
+
+	function fetch_streak_box_data( $boxID ) {
+		$url = 'https://api.streak.com/api/v1/boxes/' . $boxID;
+
+		$args = array(
+			'method'      => 'GET',
+			'timeout'     => 30,
+			'redirection' => 10,
+			'httpversion' => '1.1',
+			'headers'     => array(
+				'Content-Type'  => 'application/json',
+				'Accept'        => 'application/json',
+				'Authorization' => 'Basic ' . base64_encode( $this->get_streak_api() ),
+			),
+		);
+
+		$response = wp_remote_request( $url, $args );
+
+		if ( is_wp_error( $response ) ) {
+			$error_message = $response->get_error_message();
+			return "Something went wrong: $error_message";
+		} else {
+			return wp_remote_retrieve_body( $response );
+		}
 	}
 
 
@@ -109,7 +141,9 @@ class Streak {
 			)
 		);
 
-		do_action( 'nova_b2b_add_streak_box', $boxID );
+		$insert_id = $wpdb->insert_id;
+
+		do_action( 'nova_b2b_add_streak_box', $insert_id, $boxID );
 
 		return new \WP_REST_Response( array( 'status' => 'success' ), 200 );
 	}
@@ -190,7 +224,6 @@ class Streak {
             });
         });
     </script>';
-		$this->reset_streak_boxes_table();
 	}
 
 	/**
@@ -281,6 +314,6 @@ class Streak {
 		$wpdb->query( "ALTER TABLE $table_name AUTO_INCREMENT = 1" );
 
 		// Verify the table is reset
-		echo "Table $table_name has been reset and AUTO_INCREMENT is set to 1.";
+		return true;
 	}
 }
