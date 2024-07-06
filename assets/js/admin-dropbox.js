@@ -69,7 +69,9 @@ async function moveProjectFolder() {
 		);
 		if (projectFolderStatus) {
 			console.log(projectFolderStatus);
+
 			const updateMeta = await updateUserMetaData(true);
+
 			if (updateMeta) {
 				console.log(updateMeta);
 
