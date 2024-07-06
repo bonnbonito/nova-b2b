@@ -458,9 +458,15 @@ class NovaEmails {
 		$user_id   = get_field( 'partner', $post_id );
 		$user_info = get_userdata( $user_id );
 
+		// Retrieve admin customer rep emails
+		$to_admin = $this->to_admin_customer_rep_emails();
+		if ( ! $to_admin ) {
+			return;
+		}
+
 		/** if $user_id has a role of 'customer-rep' or 'admin', then return */
 		if ( in_array( 'customer-rep', (array) $user_info->roles ) || in_array( 'administrator', (array) $user_info->roles ) ) {
-			return;
+			$to_admin = array( 'bonn.j@hineon.com', 'kristelle.m@hineon.com' );
 		}
 
 		$business_id   = get_field( 'business_id', 'user_' . $user_id );
@@ -473,8 +479,6 @@ class NovaEmails {
 		$headers[] = 'Content-Type: text/html; charset=UTF-8';
 		$headers[] = 'From: NOVA Signage <quotes@novasignage.com>';
 		$headers[] = 'Reply-To: NOVA Signage <quotes@novasignage.com>';
-
-		$to_admin = $this->to_admin_customer_rep_emails();
 
 		$admin_subject = 'NOVA INTERNAL - Quote Sent To: ' . $first_name . ' from ' . $company . ' ' . $business_id . ' - Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
 
@@ -511,9 +515,18 @@ class NovaEmails {
 			return;
 		}
 
+		// Retrieve admin customer rep emails
+		$to_admin = $this->to_admin_customer_rep_emails();
+		if ( ! $to_admin ) {
+			return;
+		}
+
+		$from_admin = false;
+
 		/** if $user_id has a role of 'customer-rep' or 'admin', then return */
 		if ( in_array( 'customer-rep', (array) $user_info->roles ) || in_array( 'administrator', (array) $user_info->roles ) ) {
-			return;
+			$to_admin   = array( 'bonn.j@hineon.com', 'kristelle.m@hineon.com' );
+			$from_admin = true;
 		}
 
 		// Get business ID, default to 'N/A' if not found
@@ -533,13 +546,6 @@ class NovaEmails {
 		$headers[] = 'Content-Type: text/html; charset=UTF-8';
 		$headers[] = 'From: NOVA Signage <quotes@novasignage.com>';
 		$headers[] = 'Reply-To: NOVA Signage <quotes@novasignage.com>';
-
-		// Retrieve admin customer rep emails
-		$to_admin = $this->to_admin_customer_rep_emails();
-		if ( ! $to_admin ) {
-			error_log( 'No admin customer rep emails found' );
-			return;
-		}
 
 		/** remove joshua@hineon.com to $to_admin array */
 		$to_admin = array_diff( $to_admin, array( 'joshua@hineon.com' ) );
@@ -563,7 +569,9 @@ class NovaEmails {
 		$role_instance = \NOVA_B2B\Roles::get_instance();
 		if ( $role_instance ) {
 			$role_instance->send_email( $to_admin, $admin_subject, $to_admin_message, $headers, array() );
-			$role_instance->send_email( 'joshua@hineon.com', $josh_subject, $to_admin_message, $headers, array() );
+			if ( ! $from_admin ) {
+				$role_instance->send_email( 'joshua@hineon.com', $josh_subject, $to_admin_message, $headers, array() );
+			}
 		} else {
 			error_log( 'NOVA_B2B\Roles::get_instance() returned null' );
 		}
@@ -602,9 +610,15 @@ class NovaEmails {
 			return;
 		}
 
-		/** if $user_id has a role of 'customer-rep' or 'admin', then return */
-		if ( in_array( 'customer-rep', (array) $user_info->roles ) || in_array( 'administrator', (array) $user_info->roles ) ) {
+		// Retrieve admin customer rep emails
+		$to_admin = $this->to_admin_customer_rep_emails();
+		if ( ! $to_admin ) {
 			return;
+		}
+
+		/** if $user_id has a role of 'customer-rep' or 'admin' */
+		if ( in_array( 'customer-rep', (array) $user_info->roles ) || in_array( 'administrator', (array) $user_info->roles ) ) {
+			$to_admin = array( 'bonn.j@hineon.com', 'kristelle.m@hineon.com' );
 		}
 
 		// Get business ID, default to 'N/A' if not found
@@ -624,13 +638,6 @@ class NovaEmails {
 		$headers[] = 'Content-Type: text/html; charset=UTF-8';
 		$headers[] = 'From: NOVA Signage <quotes@novasignage.com>';
 		$headers[] = 'Reply-To: NOVA Signage <quotes@novasignage.com>';
-
-		// Retrieve admin customer rep emails
-		$to_admin = $this->to_admin_customer_rep_emails();
-		if ( ! $to_admin ) {
-			error_log( 'No admin customer rep emails found' );
-			return;
-		}
 
 		// Construct the subject for the admin email
 		$admin_subject = 'NOVA INTERNAL - Quote Request From: ' . $first_name . ' from ' . $company . ' ' . $business_id . ' - #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
