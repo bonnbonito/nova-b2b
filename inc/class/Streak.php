@@ -100,7 +100,6 @@ class Streak {
 		$table_name = $wpdb->prefix . 'streak_boxes';
 
 		$boxID = sanitize_text_field( $request['boxID'] );
-		$email = sanitize_email( $request['email'] );
 
 		$wpdb->insert(
 			$table_name,
@@ -191,6 +190,7 @@ class Streak {
             });
         });
     </script>';
+		$this->reset_streak_boxes_table();
 	}
 
 	/**
@@ -267,5 +267,20 @@ class Streak {
 
 		// Return the row if found, or false if not found
 		return $row ? $row : false;
+	}
+
+	function reset_streak_boxes_table() {
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'streak_boxes';
+
+		// Step 1: Delete all rows from the table
+		$wpdb->query( "TRUNCATE TABLE $table_name" );
+
+		// Step 2: Reset AUTO_INCREMENT to 1 (TRUNCATE automatically resets AUTO_INCREMENT)
+		// This step is optional since TRUNCATE resets AUTO_INCREMENT
+		$wpdb->query( "ALTER TABLE $table_name AUTO_INCREMENT = 1" );
+
+		// Verify the table is reset
+		echo "Table $table_name has been reset and AUTO_INCREMENT is set to 1.";
 	}
 }
