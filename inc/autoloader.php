@@ -37,6 +37,7 @@ $instances = array(
 	'NovaEmails',
 	'Pending_Payment',
 	'Zoho',
+	'Streak',
 );
 
 foreach ( $instances as $instance ) {

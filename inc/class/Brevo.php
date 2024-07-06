@@ -140,5 +140,3 @@ class Brevo {
 		}
 	}
 }
-
-$nova_brevo = Brevo::get_instance();

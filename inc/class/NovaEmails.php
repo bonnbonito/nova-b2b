@@ -584,14 +584,17 @@ class NovaEmails {
 		// Retrieve the partner user ID from the post's custom field
 		$user_id = get_field( 'partner', $post_id );
 		if ( ! $user_id ) {
-			error_log( 'No partner user ID found for post ID ' . $post_id );
 			return;
 		}
 
 		// Retrieve user information
 		$user_info = get_userdata( $user_id );
 		if ( ! $user_info ) {
-			error_log( 'No user info found for user ID ' . $user_id );
+			return;
+		}
+
+		/** if $user_id has a role of 'customer-rep' or 'admin', then return */
+		if ( in_array( 'customer-rep', (array) $user_info->roles ) || in_array( 'administrator', (array) $user_info->roles ) ) {
 			return;
 		}
 
