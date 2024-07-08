@@ -1261,7 +1261,7 @@ class Pending_Payment {
 			return;
 		}
 
-		echo '<div class="text-center">';
+		echo '<div class="text-center inline-flex flex-wrap flex-col justify-center content-center w-full">';
 		foreach ( $orders as $order ) {
 			$order_id    = $order->get_order_number();
 			$order_url   = $order->get_checkout_payment_url();
@@ -1269,7 +1269,7 @@ class Pending_Payment {
 			ob_start();
 			?>
 <a href="<?php echo esc_url( $order_url ); ?>"
-	class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-1" role="alert">
+	class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-1 inline-block" role="alert">
 	<strong class="font-bold">Order #<?php echo esc_html( $order_id ); ?> -
 			<?php echo wc_price( $order_total ); ?></strong>:
 	<span class="block sm:inline">Click here to pay.</span>
@@ -1278,7 +1278,7 @@ class Pending_Payment {
 			<?php
 			echo ob_get_clean();
 		}
-		echo '</ul>';
+		echo '</div>';
 	}
 
 	public function overdue_pending_payment_ouput() {
