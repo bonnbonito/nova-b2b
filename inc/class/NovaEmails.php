@@ -425,13 +425,18 @@ class NovaEmails {
 		$content .= '<p>NOVA Signage Team';
 
 		$content = str_replace( '{customer_name}', $order->get_billing_first_name(), $content );
-		ob_start();
-		add_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
-		do_action( 'woocommerce_email_order_details', $order, false, false, '' );
-		remove_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
-		$order_details = ob_get_clean();
-		$content       = str_replace( '{order_details}', $order_details, $content );
-		$content       = str_replace( '{payment_link}', $payment_order->get_checkout_payment_url(), $content );
+
+		$pending = \NOVA_B2B\Pending_Payment::get_instance();
+		if ( $pending ) {
+			ob_start();
+			add_filter( 'woocommerce_get_order_item_totals', array( $pending, 'insert_payment_date' ), 30, 3 );
+			do_action( 'woocommerce_email_order_details', $order, false, false, '' );
+			remove_filter( 'woocommerce_get_order_item_totals', array( $pending, 'insert_payment_date' ), 30, 3 );
+			$order_details = ob_get_clean();
+		}
+
+		$content = str_replace( '{order_details}', $order_details, $content );
+		$content = str_replace( '{payment_link}', $payment_order->get_checkout_payment_url(), $content );
 
 		return $content;
 	}

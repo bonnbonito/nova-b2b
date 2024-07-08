@@ -47,6 +47,61 @@ class Pending_Payment {
 		add_action( 'woocommerce_before_checkout_form', array( $this, 'redirect_if_overdue_orders' ), 10, 1 );
 		add_shortcode( 'nova_pending_payment_orders', array( $this, 'overdue_pending_payment_ouput' ) );
 		add_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
+		add_action( 'add_meta_boxes', array( $this, 'add_is_overdue_metabox' ) );
+		add_action( 'save_post_shop_order', array( $this, 'save_is_overdue_metabox' ) );
+	}
+
+	public function save_is_overdue_metabox( $post_id ) {
+		if ( ! isset( $_POST['is_overdue_metabox_nonce'] ) || ! wp_verify_nonce( $_POST['is_overdue_metabox_nonce'], 'save_is_overdue_metabox' ) ) {
+			return;
+		}
+
+		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+			return;
+		}
+
+		$is_overdue = isset( $_POST['is_overdue_checkbox'] ) ? 1 : 0;
+
+		update_post_meta( $post_id, 'is_overdue', $is_overdue );
+	}
+
+	public function add_is_overdue_metabox() {
+		global $post;
+
+		$from_order_id = get_post_meta( $post->ID, '_from_order_id', true );
+
+		if ( ! $from_order_id ) {
+			// If it doesn't, don't display the metabox
+			return;
+		}
+
+		add_meta_box(
+			'is_overdue_metabox', // Unique ID
+			__( 'Is Overdue', 'woocommerce' ), // Title
+			array( $this, 'is_overdue_metabox_callback' ), // Callback
+			'shop_order', // Post type
+			'side', // Context
+			'default' // Priority
+		);
+	}
+
+	public function is_overdue_metabox_callback( $post ) {
+
+		$from_order_id = get_post_meta( $post->ID, '_from_order_id', true );
+
+		if ( ! $from_order_id ) {
+			// If it doesn't, don't display the metabox
+			return;
+		}
+
+		wp_nonce_field( 'save_is_overdue_metabox', 'is_overdue_metabox_nonce' );
+
+		$is_overdue = get_post_meta( $post->ID, 'is_overdue', true );
+
+		echo '<label for="is_overdue_checkbox">';
+		echo '<input type="checkbox" id="is_overdue_checkbox" name="is_overdue_checkbox" value="1" ' . checked( 1, $is_overdue, false ) . ' />';
+		echo ' Mark this order as overdue';
+		echo '</label>';
 	}
 
 
@@ -1067,6 +1122,7 @@ class Pending_Payment {
 
 		$user_id = $order->get_customer_id();
 		$payment = $this->get_data( $pending_id );
+
 		if ( $payment ) {
 
 			$payment_type        = $payment->payment_select;
@@ -1077,8 +1133,7 @@ class Pending_Payment {
 			$days_after_shipping = get_field( 'days_after_shipping', $payment_type );
 			$deadline            = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
 			$payment_date        = date( 'F d, Y', $deadline );
-
-			$pending_total = $payment->pending_total;
+			$pending_total       = $payment->pending_total;
 		}
 
 		$currency      = $order->get_currency();
@@ -1122,19 +1177,20 @@ class Pending_Payment {
 			$message = str_replace( '{payment_select}', get_the_title( $payment_type ), $message );
 		}
 
-		$message = str_replace( '{customer_name}', $first_name, $message );
-		$message = str_replace( '{company_name}', $business_name, $message );
-		$message = str_replace( '{business_id}', $business_id, $message );
-		$message = str_replace( '{today}', date( 'F j, Y' ), $message );
-
-		ob_start();
-		add_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
-		do_action( 'woocommerce_email_order_details', $original_order, false, false, '' );
-		remove_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
-		$order_details = ob_get_clean();
+		$message       = str_replace( '{customer_name}', $first_name, $message );
+		$message       = str_replace( '{company_name}', $business_name, $message );
+		$message       = str_replace( '{business_id}', $business_id, $message );
+		$message       = str_replace( '{today}', date( 'F j, Y' ), $message );
+		$order_details = '';
+		if ( is_a( $original_order, 'WC_Order' ) ) {
+			ob_start();
+			add_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
+			do_action( 'woocommerce_email_order_details', $original_order, false, false, '' );
+			remove_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
+			$order_details = ob_get_clean();
+		}
 
 		$message = str_replace( '{order_details}', $order_details, $message );
-
 		$subject = 'NOVA INTERNAL - Payment Received: {customer_name} {business_id}  from {company_name}- ORDER {order_number}';
 		$subject = str_replace( '{customer_name}', $first_name, $subject );
 		$subject = str_replace( '{business_id}', $business_id, $subject );
@@ -1194,7 +1250,7 @@ class Pending_Payment {
 	public function has_overdue_pending_payment_orders( $customer_id ) {
 		$orders = $this->get_overdue_pending_payment_orders( $customer_id );
 
-		return ! empty( $orders );
+		return count( $orders ) >= 3;
 	}
 
 	public function display_overdue_pending_payment_orders( $customer_id ) {
@@ -1205,12 +1261,22 @@ class Pending_Payment {
 			return;
 		}
 
-		echo '<ul>';
+		echo '<div class="text-center">';
 		foreach ( $orders as $order ) {
 			$order_id    = $order->get_order_number();
 			$order_url   = $order->get_checkout_payment_url();
 			$order_total = $order->get_total(); // Get the order total
-			echo '<li><a href="' . esc_url( $order_url ) . '">Order #' . esc_html( $order_id ) . '</a> - ' . wc_price( $order_total ) . '</li>';
+			ob_start();
+			?>
+<a href="<?php echo esc_url( $order_url ); ?>"
+	class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-1" role="alert">
+	<strong class="font-bold">Order #<?php echo esc_html( $order_id ); ?> -
+			<?php echo wc_price( $order_total ); ?></strong>:
+	<span class="block sm:inline">Click here to pay.</span>
+</a>
+
+			<?php
+			echo ob_get_clean();
 		}
 		echo '</ul>';
 	}
