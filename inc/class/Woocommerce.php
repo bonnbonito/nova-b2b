@@ -455,6 +455,14 @@ class Woocommerce {
 	}
 
 	public function disable_bacs_for_non_admins( $available_gateways ) {
+
+		$env      = wp_get_environment_type();
+		$is_local = defined( 'WP_ENVIRONMENT_TYPE' ) && $env === 'local';
+
+		if ( $is_local ) {
+			return $available_gateways;
+		}
+
 		if ( ! current_user_can( 'manage_options' ) ) {
 			// Target checkout and order payment pages
 			if ( is_checkout() || is_wc_endpoint_url( 'order-pay' ) ) {

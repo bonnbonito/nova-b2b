@@ -300,53 +300,64 @@ class NovaEmails {
 			$body_text = str_replace( '{customer_email}', $order->get_billing_email(), $body_text );
 			$body_text = str_replace( '{payment_link}', $payment_order->get_checkout_payment_url(), $body_text );
 		}
-
 		return $body_text;
 	}
-
 
 	public function complete_payment_processing_email( $body_text, $order, $sent_to_admin, $plain_text, $email ) {
 		$order_id = $order->get_id();
 		$key      = $email->id;
 
-		$payment_select = get_post_meta( $order_id, '_payment_select', true );
-
 		if ( ! $this->is_deposit_order( $order_id ) ) {
 			return $body_text;
 		}
 
-		if ( $payment_select && $key === 'customer_completed_order' ) {
+		$payment_select = get_post_meta( $order_id, '_payment_select', true );
 
-			$pending = \NOVA_B2B\Pending_Payment::get_instance();
-
-			$payment        = $pending->get_payment_date( $order_id );
-			$payment_select = $payment->payment_select;
-
-			$completed_date_obj  = $order->get_date_completed();
-			$shipped_date        = $completed_date_obj->date( 'F d, Y' );
-			$days_after_shipping = get_field( 'days_after_shipping', $payment_select );
-			$deadline            = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
-			$payment_date        = date( 'F d, Y', $deadline );
-
-			$completed_email = get_field( 'completed_email', $payment_select );
-
-			$body_text = $completed_email['body_text'];
-
-			$pending_payment = get_post_meta( $order_id, '_pending_payment', true );
-
-			$body_text = str_replace( '{order_date}', wc_format_datetime( $order->get_date_created() ), $body_text );
-			$body_text = str_replace( '{pending_payment}', $pending_payment, $body_text );
-			$body_text = str_replace( '{order_number}', $order->get_order_number(), $body_text );
-			$body_text = str_replace( '{customer_first_name}', $order->get_billing_first_name(), $body_text );
-			$body_text = str_replace( '{customer_name}', $order->get_billing_first_name(), $body_text );
-			$body_text = str_replace( '{customer_last_name}', $order->get_billing_last_name(), $body_text );
-			$body_text = str_replace( '{customer_full_name}', $order->get_formatted_billing_full_name(), $body_text );
-			$body_text = str_replace( '{customer_company}', $order->get_billing_company(), $body_text );
-			$body_text = str_replace( '{customer_email}', $order->get_billing_email(), $body_text );
-			$body_text = str_replace( '{deadline}', $payment_date, $body_text );
-			$body_text = str_replace( '{payment_link}', $order->get_checkout_payment_url(), $body_text );
-
+		if ( ! $payment_select ) {
+			return $body_text;
 		}
+
+		if ( $key !== 'customer_completed_order' ) {
+			return $body_text;
+		}
+
+		$original_order_id = $order->get_meta( '_from_order_id' );
+
+		if ( ! $original_order_id ) {
+			return $body_text;
+		}
+
+		$original_order = wc_get_order( $original_order_id );
+
+		$pending = \NOVA_B2B\Pending_Payment::get_instance();
+
+		$payment        = $pending->get_payment_date( $order_id );
+		$payment_select = $payment->payment_select;
+
+		$completed_date_obj = $original_order->get_date_completed();
+
+		$shipped_date        = $completed_date_obj->date( 'F d, Y' );
+		$days_after_shipping = get_field( 'days_after_shipping', $payment_select );
+		$deadline            = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
+		$payment_date        = date( 'F d, Y', $deadline );
+
+		$completed_email = get_field( 'completed_email', $payment_select );
+
+		$body_text = $completed_email['body_text'];
+
+		$pending_payment = get_post_meta( $order_id, '_pending_payment', true );
+
+		$body_text = str_replace( '{order_date}', wc_format_datetime( $order->get_date_created() ), $body_text );
+		$body_text = str_replace( '{pending_payment}', $pending_payment, $body_text );
+		$body_text = str_replace( '{order_number}', $order->get_order_number(), $body_text );
+		$body_text = str_replace( '{customer_first_name}', $order->get_billing_first_name(), $body_text );
+		$body_text = str_replace( '{customer_name}', $order->get_billing_first_name(), $body_text );
+		$body_text = str_replace( '{customer_last_name}', $order->get_billing_last_name(), $body_text );
+		$body_text = str_replace( '{customer_full_name}', $order->get_formatted_billing_full_name(), $body_text );
+		$body_text = str_replace( '{customer_company}', $order->get_billing_company(), $body_text );
+		$body_text = str_replace( '{customer_email}', $order->get_billing_email(), $body_text );
+		$body_text = str_replace( '{deadline}', $payment_date, $body_text );
+		$body_text = str_replace( '{payment_link}', $order->get_checkout_payment_url(), $body_text );
 
 		return $body_text;
 	}
@@ -361,9 +372,7 @@ class NovaEmails {
 
 			$pending = \NOVA_B2B\Pending_Payment::get_instance();
 
-			$payment = $pending->get_payment_date( $order_id );
-
-			$original_order_id   = $payment->original_order;
+			$original_order_id   = $order->get_meta( '_from_order_id' );
 			$original_order      = wc_get_order( $original_order_id );
 			$completed_date_obj  = $original_order->get_date_completed();
 			$shipped_date        = $completed_date_obj->date( 'F d, Y' );
@@ -417,7 +426,9 @@ class NovaEmails {
 
 		$content = str_replace( '{customer_name}', $order->get_billing_first_name(), $content );
 		ob_start();
+		add_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
 		do_action( 'woocommerce_email_order_details', $order, false, false, '' );
+		remove_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
 		$order_details = ob_get_clean();
 		$content       = str_replace( '{order_details}', $order_details, $content );
 		$content       = str_replace( '{payment_link}', $payment_order->get_checkout_payment_url(), $content );
@@ -616,10 +627,16 @@ class NovaEmails {
 			return;
 		}
 
+		$from_admin = false;
+
 		/** if $user_id has a role of 'customer-rep' or 'admin' */
 		if ( in_array( 'customer-rep', (array) $user_info->roles ) || in_array( 'administrator', (array) $user_info->roles ) ) {
-			$to_admin = array( 'bonn.j@hineon.com', 'kristelle.m@hineon.com' );
+			$to_admin   = array( 'bonn.j@hineon.com', 'kristelle.m@hineon.com' );
+			$from_admin = true;
 		}
+
+		/** remove joshua@hineon.com to $to_admin array */
+		$to_admin = array_diff( $to_admin, array( 'joshua@hineon.com' ) );
 
 		// Get business ID, default to 'N/A' if not found
 		$business_id = get_field( 'business_id', 'user_' . $user_id ) ?: 'N/A';
@@ -641,6 +658,7 @@ class NovaEmails {
 
 		// Construct the subject for the admin email
 		$admin_subject = 'NOVA INTERNAL - Quote Request From: ' . $first_name . ' from ' . $company . ' ' . $business_id . ' - #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
+		$josh_subject  = 'NOVA INTERNAL (Action Required) - Quote Request From: ' . $first_name . ' from ' . $company . ' ' . $business_id . ' - #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
 
 		// Construct the message for the admin email
 		$to_admin_message  = '<p>Hello,</p>';
@@ -657,6 +675,9 @@ class NovaEmails {
 		$role_instance = \NOVA_B2B\Roles::get_instance();
 		if ( $role_instance ) {
 			$role_instance->send_email( $to_admin, $admin_subject, $to_admin_message, $headers, array() );
+			if ( ! $from_admin ) {
+				$role_instance->send_email( 'joshua@hineon.com', $josh_subject, $to_admin_message, $headers, array() );
+			}
 		} else {
 			error_log( 'NOVA_B2B\Roles::get_instance() returned null' );
 		}

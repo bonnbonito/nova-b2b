@@ -163,6 +163,7 @@ h5,
 h6,
 .font-title {
     letter-spacing: 1.2px;
+    text-transform: uppercase;
 }
 
 @media screen and (min-width: 768px) {

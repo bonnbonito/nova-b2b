@@ -44,6 +44,9 @@ class Pending_Payment {
 		add_filter( 'woocommerce_order_number', array( $this, 'pending_payment_order_number' ), 12, 2 );
 		add_filter( 'gettext', array( $this, 'pay_for_order_notice' ), 10, 3 );
 		add_action( 'woocommerce_order_status_completed', array( $this, 'admin_notification_paid_full' ) );
+		add_action( 'woocommerce_before_checkout_form', array( $this, 'redirect_if_overdue_orders' ), 10, 1 );
+		add_shortcode( 'nova_pending_payment_orders', array( $this, 'overdue_pending_payment_ouput' ) );
+		add_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
 	}
 
 
@@ -343,6 +346,8 @@ class Pending_Payment {
 
 					if ( $label == 'Deadline email' ) {
 						$this->admin_notification_deadline_email( $original_order, $role_instance, $headers, $first_name, $payment_date, $pending_total );
+
+						update_post_meta( $payment_order_id, 'is_overdue', true );
 					}
 
 					update_post_meta( $payment_order_id, $key, date( 'Y/m/d' ) );
@@ -445,7 +450,6 @@ class Pending_Payment {
 						add_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
 						do_action( 'woocommerce_email_order_details', $original_order, false, false, '' );
 						remove_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
-
 						$order_details = ob_get_clean();
 
 						$message = str_replace( '{order_details}', $order_details, $message );
@@ -469,6 +473,9 @@ class Pending_Payment {
 								$this->admin_notification_deadline_email( $original_order, $role_instance, $headers, $first_name, $payment_date, $pending_total );
 
 								$current_overdue = get_user_meta( $user_id, 'overdue_orders', true );
+
+								update_post_meta( $payment_order_id, 'is_overdue', true );
+
 								if ( $current_overdue ) {
 									$current_overdue   = explode( ',', $current_overdue );
 									$current_overdue[] = $payment_order_id;
@@ -519,7 +526,6 @@ class Pending_Payment {
 		add_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
 		do_action( 'woocommerce_email_order_details', $order, false, false, '' );
 		remove_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
-
 		$order_details = ob_get_clean();
 
 		$message = str_replace( '{order_details}', $order_details, $message );
@@ -1008,11 +1014,16 @@ class Pending_Payment {
 
 	public function insert_payment_date( $total_rows, $order, $tax_display ) {
 
-		$order_id      = $order->get_id();
+		$order_id           = $order->get_id();
+		$completed_date_obj = $order->get_date_completed();
+
+		if ( ! $completed_date_obj ) {
+			return $total_rows;
+		}
+
 		$pending_order = get_post_meta( $order_id, '_adjusted_duplicate_order_id', true );
 
-		$completed_date_obj = $order->get_date_completed();
-		$shipped_date       = $completed_date_obj->date( 'F d, Y' );
+		$shipped_date = $completed_date_obj->date( 'F d, Y' );
 
 		$payment_type = $order->get_meta( '_payment_select' );
 
@@ -1118,7 +1129,7 @@ class Pending_Payment {
 
 		ob_start();
 		add_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
-		do_action( 'woocommerce_email_order_details', $order, false, false, '' );
+		do_action( 'woocommerce_email_order_details', $original_order, false, false, '' );
 		remove_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
 		$order_details = ob_get_clean();
 
@@ -1154,6 +1165,81 @@ class Pending_Payment {
 			$message = $mail_content['message'];
 			$emails  = $role_instance->get_admin_and_customer_rep_emails();
 			$role_instance->send_email( $emails, $subject, $message, $headers, array() );
+		}
+	}
+
+	public function get_overdue_pending_payment_orders( $customer_id ) {
+		// Ensure WooCommerce is active
+		if ( ! class_exists( 'WooCommerce' ) ) {
+			return array();
+		}
+
+		// Query for orders
+		$query = new \WC_Order_Query(
+			array(
+				'customer_id' => $customer_id,
+				'status'      => 'wc-pending',
+				'limit'       => -1,
+				'meta_key'    => 'is_overdue',
+				'meta_value'  => true,
+			)
+		);
+
+		// Get the orders
+		$orders = $query->get_orders();
+
+		return $orders;
+	}
+
+	public function has_overdue_pending_payment_orders( $customer_id ) {
+		$orders = $this->get_overdue_pending_payment_orders( $customer_id );
+
+		return ! empty( $orders );
+	}
+
+	public function display_overdue_pending_payment_orders( $customer_id ) {
+		$orders = $this->get_overdue_pending_payment_orders( $customer_id );
+
+		if ( empty( $orders ) ) {
+			echo 'No pending payment overdue orders found.';
+			return;
+		}
+
+		echo '<ul>';
+		foreach ( $orders as $order ) {
+			$order_id    = $order->get_order_number();
+			$order_url   = $order->get_checkout_payment_url();
+			$order_total = $order->get_total(); // Get the order total
+			echo '<li><a href="' . esc_url( $order_url ) . '">Order #' . esc_html( $order_id ) . '</a> - ' . wc_price( $order_total ) . '</li>';
+		}
+		echo '</ul>';
+	}
+
+	public function overdue_pending_payment_ouput() {
+		ob_start();
+		$this->display_overdue_pending_payment_orders( get_current_user_id() );
+		return ob_get_clean();
+	}
+
+	public function redirect_if_overdue_orders() {
+		// Ensure WooCommerce functions are available
+		if ( ! function_exists( 'wc_get_page_permalink' ) ) {
+			return;
+		}
+
+		// Get the current user ID
+		$customer_id = get_current_user_id();
+
+		if ( ! $this->has_overdue_pending_payment_orders( $customer_id ) ) {
+			return;
+		}
+
+		$redirect_url = get_permalink( get_page_by_path( 'overdue-orders' ) );
+
+			// Redirect to the "overdue-orders" page
+		if ( ! empty( $redirect_url ) ) {
+			wp_safe_redirect( $redirect_url );
+			exit;
 		}
 	}
 }
