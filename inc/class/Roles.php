@@ -110,6 +110,16 @@ class Roles {
 
 		register_rest_route(
 			'nova/v1',
+			'/businessIdfromId/(?P<id>[^\/]+)',
+			array(
+				'methods'             => 'GET',
+				'callback'            => array( $this, 'handle_find_business_id_from_id' ),
+				'permission_callback' => '__return_true',
+			)
+		);
+
+		register_rest_route(
+			'nova/v1',
 			'/streakBox/(?P<id>[\w-]+)',
 			array(
 				'methods'             => 'GET',
@@ -117,6 +127,27 @@ class Roles {
 				'permission_callback' => '__return_true',
 			)
 		);
+	}
+
+	public function handle_find_business_id_from_id( \WP_REST_Request $request ) {
+		$id = $request['id'];
+
+		$business_id = get_user_meta( $id, 'business_id', true );
+
+		if ( $business_id ) {
+			return new \WP_REST_Response(
+				array(
+					'business_id' => $business_id,
+				)
+			);
+		} else {
+			return new \WP_REST_Response(
+				array(
+					'message' => 'Business ID not found for the given id.',
+				),
+				404
+			);
+		}
 	}
 
 	public function handle_test( \WP_REST_Request $request ) {

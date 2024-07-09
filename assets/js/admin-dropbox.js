@@ -1,3 +1,71 @@
+(function ($) {
+	if (typeof acf === 'undefined') {
+		return;
+	}
+	let oldBusinessID = QuoteAdmin.partner_business_id;
+
+	let oldPathFolder = QuoteAdmin.project_id_folder
+		? oldBusinessID + '/' + QuoteAdmin.project_id_folder
+		: oldBusinessID;
+
+	$(document).on(
+		'change',
+		'[data-key="field_655822df0cca6"] .acf-input select',
+		function (e) {
+			let field = acf.getField('field_655822df0cca6');
+			let value = field.val();
+			let signageField = $('#acf-field_6559838c2d89b').val();
+			const $publish = $('#publish');
+
+			$publish.prop('disabled', true);
+			$publish.val('Please wait...');
+
+			$.ajax({
+				url: QuoteAdmin.rest_api + '/businessIdfromId/' + value,
+				method: 'GET',
+				dataType: 'json',
+				success: function (data) {
+					if (data.business_id != oldBusinessID) {
+						let newPathFolder = QuoteAdmin.project_id_folder
+							? data.business_id + '/' + QuoteAdmin.project_id_folder
+							: data.business_id;
+						const updatedSignage = signageField.replace(
+							new RegExp(oldPathFolder, 'g'),
+							newPathFolder
+						);
+
+						console.log(updatedSignage);
+
+						$('#acf-field_6559838c2d89b').val(updatedSignage);
+						oldBusinessID = data.business_id;
+					}
+				},
+				error: function (error) {
+					console.log(error);
+				},
+				complete: function () {
+					$publish.prop('disabled', false);
+					$publish.val('Publish');
+				},
+			});
+		}
+	);
+})(jQuery);
+
+async function checkPartner() {
+	const partner = document.querySelector('[name="acf[field_655822df0cca6]"]');
+	partner.addEventListener('change', (e) => {
+		console.log(e.target.value);
+	});
+}
+
+async function getBusinessID(id) {
+	const businessId = await fetch(
+		QuoteAdmin.rest_api + '/businessIdfromId/' + id
+	);
+	console.log(businessId);
+}
+
 async function moveProjectFolder() {
 	const moveProjectFolderbtn = document.getElementById('moveProjectFolder');
 	if (!moveProjectFolderbtn) return;
@@ -80,7 +148,7 @@ async function moveProjectFolder() {
 				formData.append('nonce', QuoteAdmin.nonce);
 				formData.append('old_path', quoteFolder);
 				formData.append('new_path', newQuotePath);
-				formData.append('post_id', postID);
+				formData.append('post_id', QuoteAdmin.quote_id);
 				formData.append('signage', QuoteAdmin.signage);
 
 				const response = await fetch(QuoteAdmin.ajax_url, {

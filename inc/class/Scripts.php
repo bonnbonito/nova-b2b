@@ -381,7 +381,9 @@ class Scripts {
 				'dropbox_refresh_token' => get_field( 'dropbox_refresh_token', 'option' ),
 				'quote_id'              => get_the_ID(),
 				'project_id_folder'     => get_field( 'project_id_folder', get_the_ID() ),
-				'partner_business_id'           => get_field( 'business_id', 'user_' . get_field( 'partner', get_the_ID() ) ),
+				'partner_business_id'   => get_field( 'business_id', 'user_' . get_field( 'partner', get_the_ID() ) ),
+				'rest_api'              => esc_url_raw( rest_url() . 'nova/v1' ),
+				'get_project_folder'    => get_field( 'project_id_folder', get_the_ID() ),
 			)
 		);
 

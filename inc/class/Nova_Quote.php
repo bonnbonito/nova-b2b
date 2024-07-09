@@ -56,6 +56,7 @@ class Nova_Quote {
 		add_action( 'acf/init', array( $this, 'add_options_page' ) );
 		add_action( 'admin_init', array( $this, 'handle_dropbox_oauth_redirect' ) );
 		add_action( 'acf/save_post', array( $this, 'quote_actions' ), 5, 1 );
+		add_action( 'acf/save_post', array( $this, 'move_dropbox_folder_to_partner' ), 4, 1 );
 		add_action( 'acf/save_post', array( $this, 'show_partner_email' ), 10, 1 );
 		add_action( 'save_post', array( $this, 'regenerate_pdf' ), 10, 3 );
 		add_action( 'quote_to_payment', array( $this, 'create_nova_quote_product' ) );
@@ -643,6 +644,67 @@ sendMockup.addEventListener('click', e => {
 		return $user_emails;
 	}
 
+	public function move_dropbox_folder_to_partner( $post_id ) {
+		if ( wp_is_post_autosave( $post_id ) || wp_is_post_revision( $post_id ) ) {
+			return;
+		}
+
+		if ( 'nova_quote' !== get_post_type( $post_id ) ) {
+			return;
+		}
+
+		$signage = get_field( 'signage', $post_id );
+
+		$project_folder = get_field( 'project_id_folder', $post_id );
+
+		$new_partner_id = $_POST['acf']['field_655822df0cca6'];
+
+		// if ( $new_partner_id == get_field( 'partner', $post_id ) ) {
+		// return;
+		// }
+
+		$partner_business_id = get_field( 'business_id', 'user_' . $new_partner_id );
+		$data                = $signage ? json_decode( $signage, true ) : null;
+		$user_folder_arr     = array();
+		$font_folder_arr     = '';
+		foreach ( $data as $item ) {
+			foreach ( $item['filePaths'] as $filePath ) {
+				$parts = explode( '/', $filePath );
+				if ( isset( $parts[2] ) ) {
+					$user_folder_arr[] = $parts[2];
+				}
+			}
+
+			if ( isset( $item['fontFilePath'] ) ) {
+				$parts = explode( '/', $item['fontFilePath'] );
+				if ( isset( $parts[2] ) ) {
+					$font_folder_arr = $parts[2];
+				}
+			}
+		}
+
+		$user_folder_arr = array_unique( $user_folder_arr );
+
+		if ( ! empty( $user_folder_arr ) || isset( $user_folder_arr[0] ) || ! empty( $font_folder_arr ) || isset( $font_folder_arr ) ) {
+
+			$old_folder = $user_folder_arr[0];
+
+			$old_path = $project_folder ? '/NOVA-CRM/' . $old_folder . '/' . $project_folder . '/Q-' . $post_id : '/NOVA-CRM/' . $old_folder . '/Q-' . $post_id;
+			$new_path = $project_folder ? '/NOVA-CRM/' . $partner_business_id . '/' . $project_folder . '/Q-' . $post_id : '/NOVA-CRM/' . $partner_business_id . '/Q-' . $post_id;
+			if ( count( $user_folder_arr ) > 0 && $old_folder !== $partner_business_id ) {
+
+				/** Move Quote Folder */
+				$dropbox = Dropbox::get_instance();
+
+				if ( $dropbox ) {
+					$dropbox->rename_dropbox_folder( $old_path, $new_path );
+				}
+			} else {
+				return;
+			}
+		}
+	}
+
 
 
 	public function quote_actions( $post_id ) {
@@ -757,6 +819,8 @@ sendMockup.addEventListener('click', e => {
 			'refresh_token' => $data['refresh_token'] ?? null,
 		);
 	}
+
+
 
 
 
