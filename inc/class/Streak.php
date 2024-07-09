@@ -69,27 +69,29 @@ class Streak {
 	}
 
 	public function populate_streak_details( $insert_id, $boxID ) {
-		$result0 = $this->fetch_streak_box_data( $boxID );
+		$this->recursive_fetch_streak_box_data( $insert_id, $boxID, 5 );
+	}
 
-		/** wait 5 seconds before fetching the data again */
-		sleep( 5 );
+	private function recursive_fetch_streak_box_data( $insert_id, $boxID, $max_tries ) {
+		if ( $max_tries <= 0 ) {
+			return false; // Stop trying after max tries
+		}
 
-		$result = $this->fetch_streak_box_data( $boxID );
-
+		$result  = $this->fetch_streak_box_data( $boxID );
 		$decoded = json_decode( $result, true );
 
 		if ( isset( $decoded['firstEmailFrom'] ) ) {
-
 			$details = $this->get_streak_details_from_email( $decoded['firstEmailFrom'] ) ?: 'NONE';
-			if ( $details[0] ) {
-
+			if ( $details && isset( $details[0] ) ) {
 				$business_id = $details[0]['business_id'];
 				$email       = $decoded['firstEmailFrom'];
 				$country     = $details[0]['country'];
-
 				return $this->update_streak( $insert_id, $boxID, $email, $business_id, $country );
-
 			}
+		} else {
+			// Wait 5 seconds before fetching the data again
+			sleep( 5 );
+			return $this->recursive_fetch_streak_box_data( $insert_id, $boxID, $max_tries - 1 );
 		}
 	}
 
