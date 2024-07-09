@@ -71,6 +71,9 @@ class Streak {
 	public function populate_streak_details( $insert_id, $boxID ) {
 		$result0 = $this->fetch_streak_box_data( $boxID );
 
+		/** wait 5 seconds before fetching the data again */
+		sleep( 5 );
+
 		$result = $this->fetch_streak_box_data( $boxID );
 
 		$decoded = json_decode( $result, true );
@@ -84,7 +87,7 @@ class Streak {
 				$email       = $decoded['firstEmailFrom'];
 				$country     = $details[0]['country'];
 
-				$updated = $this->update_streak( $insert_id, $boxID, $email, $business_id, $country );
+				return $this->update_streak( $insert_id, $boxID, $email, $business_id, $country );
 
 			}
 		}

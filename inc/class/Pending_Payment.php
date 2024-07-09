@@ -1182,12 +1182,15 @@ class Pending_Payment {
 		$message       = str_replace( '{business_id}', $business_id, $message );
 		$message       = str_replace( '{today}', date( 'F j, Y' ), $message );
 		$order_details = '';
-		if ( is_a( $original_order, 'WC_Order' ) ) {
+
+		if ( $payment ) {
 			ob_start();
 			add_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
 			do_action( 'woocommerce_email_order_details', $original_order, false, false, '' );
 			remove_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
 			$order_details = ob_get_clean();
+		} else {
+			do_action( 'woocommerce_email_order_details', $order, false, false, '' );
 		}
 
 		$message = str_replace( '{order_details}', $order_details, $message );
