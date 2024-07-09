@@ -9,8 +9,6 @@ class Streak {
 	 */
 	private static $instance = null;
 
-	private static $google_sheet = 'https://script.google.com/macros/s/AKfycbxRKmAO3W6r1TK5nku00ops4M2-7hSQnh91uQu09_eYi_sQb0TxLNhJFhiEhkXwkSDa/exec';
-
 	/**
 	 * Instance Control
 	 */
@@ -31,6 +29,10 @@ class Streak {
 		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
 		add_action( 'admin_post_delete_streak_box', array( $this, 'handle_delete_streak_box' ) );
 		add_action( 'nova_b2b_add_streak_box', array( $this, 'populate_streak_details' ), 10, 2 );
+	}
+
+	public function get_google_sheet() {
+		return get_field( 'sheet_web_app_link', 'option' ) ? get_field( 'sheet_web_app_link', 'option' ) : null;
 	}
 
 	public function get_streak_details_from_email( $email ) {
@@ -67,9 +69,12 @@ class Streak {
 	}
 
 	public function populate_streak_details( $insert_id, $boxID ) {
+		$result0 = $this->fetch_streak_box_data( $boxID );
+
 		$result = $this->fetch_streak_box_data( $boxID );
 
 		$decoded = json_decode( $result, true );
+
 		if ( isset( $decoded['firstEmailFrom'] ) ) {
 
 			$details = $this->get_streak_details_from_email( $decoded['firstEmailFrom'] ) ?: 'NONE';
@@ -104,7 +109,8 @@ class Streak {
 
 		if ( is_wp_error( $response ) ) {
 			$error_message = $response->get_error_message();
-			return "Something went wrong: $error_message";
+			error_log( 'Error fetch_streak_box_data: ' . $error_message );
+			return false;
 		} else {
 			return wp_remote_retrieve_body( $response );
 		}
@@ -331,7 +337,7 @@ class Streak {
 			'boxId'    => $boxId,
 			'isSearch' => 'true',
 		);
-		$url    = self::$google_sheet;
+		$url    = $this->get_google_sheet();
 
 		$project_folder = wp_remote_get( $url, array( 'body' => $params ) );
 
@@ -400,7 +406,7 @@ class Streak {
 			'country'    => $country,
 		);
 
-		$url = self::$google_sheet;
+		$url = $this->get_google_sheet();
 
 		$response = wp_remote_post(
 			$url,
