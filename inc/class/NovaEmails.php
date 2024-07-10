@@ -36,14 +36,15 @@ class NovaEmails {
 		add_filter( 'woocommerce_email_recipient_new_order', array( $this, 'filter_woocommerce_email_recipient_new_order' ), 10, 2 );
 		add_filter( 'woocommerce_email_recipient_new_order', array( $this, 'filter_woocommerce_email_recipient_new_order' ), 10, 2 );
 		// add_filter( 'woocommerce_email_attachments', array( $this, 'insert_invoice' ), 10, 4 );
-		add_filter( 'woocommerce_email_attachments', array( $this, 'insert_invoice' ), 10, 4 );
 		// Remove "On Hold" email notification
-		add_filter( 'woocommerce_email_enabled_customer_on_hold_order', '__return_false' );
+		// add_filter( 'woocommerce_email_enabled_customer_on_hold_order', '__return_false' );
 		add_filter( 'woocommerce_email_enabled_new_order', array( $this, 'disable_admin_new_order_email_on_hold' ), 10, 3 );
 		add_action( 'quote_to_processing', array( $this, 'for_quotation_email' ) );
 		add_action( 'quote_to_payment', array( $this, 'for_payment_email' ), 90 );
 		add_action( 'quote_to_payment', array( $this, 'for_payment_admin_email' ) );
 		add_action( 'admin_init', array( $this, 'process_send_mockup_email' ) );
+		add_action( 'wpo_wcpdf_after_item_meta', array( $this, 'display_signage_details' ), 20, 3 );
+		add_filter( 'wpo_wcpdf_order_items_data', array( $this, 'add_signage_to_invoice' ), 10, 3 );
 	}
 
 	public function disable_admin_new_order_email_on_hold( $enabled, $order, $email ) {
@@ -881,5 +882,93 @@ class NovaEmails {
 		if ( $role_instance ) {
 			$role_instance->send_email( $to, $subject, $message, $headers, array() );
 		}
+	}
+
+
+	public function display_signage_details( $type, $item, $order ) {
+
+		$product      = $item['quote_id'];
+		$product_line = $item['product_line'];
+
+		$instance = \NOVA_B2B\Nova_Quote::get_instance();
+		if ( ! $instance ) {
+			return;
+		}
+		$attributes = $instance->allAttributes();
+
+		$html  = '<p style="font-size: 100%; margin-top: 0;margin-bottom: 0;">Quote ID: Q-' . str_pad( $product, 4, '0', STR_PAD_LEFT ) . '</p>';
+		$html .= '<p style="font-size: 100%; margin-top: 0; margin-bottom: 0;">Product: ' . $product_line . '</p>';
+
+		foreach ( $item['signage'] as $object ) {
+
+			$html .= '<div style="display: block;">';
+
+			$html .= '<table style="padding: 2px; border-collapse: collapse;font-size: 80%; margin-bottom: 10px;">
+    <tbody>';
+
+			foreach ( $attributes as $key => $attr ) {
+
+				if ( isset( $object->$key ) && ! empty( $object->$key ) ) {
+
+					if ( is_array( $attr ) ) {
+						if ( $attr['isLink'] ?? false && isset( $object->fontFileUrl, $object->fontFileName ) && ! empty( $object->fontFileUrl ) && ! empty( $object->fontFileName ) ) {
+							$html .= '<tr><td style="border: 1px solid #dddddd; padding: 5px;">' . $attr['label'] . ':</td><td style="border: 1px solid #dddddd; padding: 4px;"><a href="' . htmlspecialchars( $object->fontFileUrl ) . '" target="_blank">' . htmlspecialchars( $object->fontFileName ) . '</a></td></tr>';
+						} elseif ( $attr['isVinyl'] ?? false && isset( $object->vinylWhite->code ) && ! empty( $object->vinylWhite->name ) && ! empty( $object->vinylWhite->code ) ) {
+							if ( ( isset( $object->acrylicFront ) && $object->acrylicFront === '3M Vinyl' ) || ( isset( $object->frontOption ) && $object->frontOption === '3M Vinyl' ) || ( isset( $object->frontAcrylicCover ) && $object->frontAcrylicCover === '3M Vinyl' ) ) {
+								$html .= '<tr><td style="border: 1px solid #dddddd; padding: 5px;">' . $attr['label'] . ':</td><td style="border: 1px solid #dddddd; padding: 5px;">' . htmlspecialchars( $object->vinylWhite->name ) . ' - [' . htmlspecialchars( $object->vinylWhite->code ) . ']</td></tr>';
+							}
+						} elseif ( $attr['isFile'] ?? false && isset( $object->fileUrl, $object->fileName ) && ! empty( $object->fileUrl ) && ! empty( $object->fileName ) ) {
+							$html .= '<tr><td style="border: 1px solid #dddddd; padding: 5px;">' . $attr['label'] . ':</td><td style="border: 1px solid #dddddd; padding: 4px;"><a href="' . htmlspecialchars( $object->fileUrl ) . '" target="_blank">' . htmlspecialchars( $object->fileName ) . '</a></td></tr>';
+						} elseif ( $attr['isFiles'] ?? false && isset( $object->fileUrls, $object->fileNames ) && ! empty( $object->fileUrls ) && ! empty( $object->fileNames ) ) {
+							$filesHtml = '';
+							foreach ( $object->fileUrls as $index => $fileUrl ) {
+								$fileName   = $object->fileNames[ $index ] ?? $fileUrl;
+								$filesHtml .= '<a href="' . htmlspecialchars( $fileUrl, ENT_QUOTES, 'UTF-8' ) . '" target="_blank">' . htmlspecialchars( $fileName, ENT_QUOTES, 'UTF-8' ) . '</a><br>';
+							}
+							$html .= '<tr><td style="border: 1px solid #dddddd; padding: 5px;">' . $attr['label'] . ':</td><td style="border: 1px solid #dddddd; padding: 5px;">' . $filesHtml . '</td></tr>';
+						}
+					} else {
+						$value = $object->$key;
+						if ( is_object( $value ) ) {
+							if ( isset( $value->thickness ) ) {
+								$value = $value->thickness;
+							} elseif ( isset( $value->depth ) ) {
+								$value = $value->depth;
+							} elseif ( isset( $value->name ) ) {
+								$value = $value->name;
+							}
+						}
+						if ( isset( $value ) && ! empty( $value ) ) {
+							$html .= '<tr><td style="border: 1px solid #dddddd; padding: 5px;">' . $attr . ':</td><td style="border: 1px solid #dddddd; padding: 5px;">' . htmlspecialchars( $value ) . ( $key === 'letterHeight' ? '"' : '' ) . '</td></tr>';
+						}
+					}
+				}
+			}
+
+			$html .= '</tbody></table>';
+
+			$html .= '</div>';
+
+		}
+
+		echo $html;
+	}
+
+	public function add_signage_to_invoice( $data_list, $order, $type ) {
+
+		$items = $order->get_items();
+
+		foreach ( $items as $item_id => $item ) {
+			$signage                               = $item->get_meta( 'signage' );
+			$quote_id                              = $item->get_meta( 'quote_id' );
+			$product_line                          = get_the_title( $item->get_meta( 'product_line' ) );
+			$name                                  = ucwords( get_field( 'frontend_title', $item->get_meta( 'quote_id' ) ) );
+			$data_list[ $item_id ]['signage']      = $signage;
+			$data_list[ $item_id ]['quote_id']     = $quote_id;
+			$data_list[ $item_id ]['name']         = $name;
+			$data_list[ $item_id ]['product_line'] = $product_line;
+		}
+
+		return $data_list;
 	}
 }

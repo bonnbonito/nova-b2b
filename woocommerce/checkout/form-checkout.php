@@ -71,3 +71,40 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 </form>
 
 <?php do_action( 'woocommerce_after_checkout_form', $checkout ); ?>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+	const checkPSTRequirement = () => {
+		const shippingCountry = document.getElementById('shipping_country').value;
+		const shippingState = document.getElementById('shipping_state').value;
+		const pstField = document.getElementById('shipping_pst_field');
+
+		console.log(shippingCountry);
+		console.log(shippingState);
+
+		if (shippingCountry === 'CA' && shippingState === 'BC') {
+			pstField.classList.add('validate-required');
+			if (!pstField.querySelector('.required')) {
+				const requiredAbbr = document.createElement('abbr');
+				requiredAbbr.classList.add('required');
+				requiredAbbr.title = 'required';
+				requiredAbbr.textContent = '*';
+				pstField.querySelector('label').appendChild(requiredAbbr);
+			}
+		} else {
+			pstField.classList.remove('validate-required');
+			const requiredAbbr = pstField.querySelector('.required');
+			if (requiredAbbr) {
+				requiredAbbr.remove();
+			}
+		}
+	};
+
+	// Initial check on page load
+	checkPSTRequirement();
+
+	// Check on country/state change
+	document.getElementById('shipping_country').addEventListener('change', checkPSTRequirement);
+	document.getElementById('shipping_state').addEventListener('change', checkPSTRequirement);
+});
+</script>

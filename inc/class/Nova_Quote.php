@@ -104,7 +104,7 @@ class Nova_Quote {
 
 	public function append_post_status_list() {
 		global $post;
-		if ( $post->post_type == 'nova_quote' ) {
+		if ( isset( $post->post_type ) && $post->post_type == 'nova_quote' ) {
 			echo "<script>
         document.addEventListener('DOMContentLoaded', function() {
             var select = document.querySelector('select[name=\"post_status\"]');

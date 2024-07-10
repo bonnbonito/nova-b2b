@@ -49,6 +49,22 @@ class Pending_Payment {
 		add_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
 		add_action( 'add_meta_boxes', array( $this, 'add_is_overdue_metabox' ) );
 		add_action( 'save_post_shop_order', array( $this, 'save_is_overdue_metabox' ) );
+		add_filter( 'wpo_wcpdf_filename', array( $this, 'filter_filename' ), 99, 5 );
+	}
+
+	public function filter_filename( $filename, $type, $order_ids, $context, $args ) {
+		$order = wc_get_order( $order_ids[0] );
+		if ( ! $order ) {
+			return $filename;
+		}
+
+		$order_id    = $order->get_order_number();
+		$customer_id = $order->get_customer_id();
+		$business_id = get_field( 'business_id', 'user_' . $customer_id );
+
+		$filename = $business_id . '-INV-' . $order_id . '.pdf';
+
+		return $filename;
 	}
 
 	public function save_is_overdue_metabox( $post_id ) {
@@ -387,7 +403,7 @@ class Pending_Payment {
 			if ( $customer_email ) {
 				$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
-				$attachments = $this->attach_invoice( $order );
+				$attachments = \WPO\WC\PDF_Invoices\Main::instance()->attach_document_to_email( array(), 'customer_invoice', $order, null );
 
 				$role_instance = \NOVA_B2B\Roles::get_instance();
 
@@ -516,7 +532,7 @@ class Pending_Payment {
 
 							if ( $role_instance ) {
 
-								$attachments = $this->attach_invoice( $order );
+								$attachments = \WPO\WC\PDF_Invoices\Main::instance()->attach_document_to_email( array(), 'customer_invoice', $order, null );
 
 								$role_instance->send_email( $customer_email, $subject, $message, $headers, $attachments );
 

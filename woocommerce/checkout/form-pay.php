@@ -17,9 +17,27 @@
 
 defined( 'ABSPATH' ) || exit;
 
+
 $totals  = $order->get_order_item_totals(); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 $from_id = $order->get_meta( '_from_order_id' );
+
+$pdf_url = WPO_WCPDF()->endpoint->get_document_link( $order, 'invoice' );
+
+if ( $pdf_url ) { ?>
+<div class="block text-right mb-4">
+	<a class="bg-nova-primary hover:bg-gray-400 text-white font-bold py-2 px-4 rounded inline-flex items-center text-sm"
+		href="<?php echo esc_url( $pdf_url ); ?>" target="_blank" download>
+		<svg class="fill-current w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+			<path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" />
+		</svg>
+		<span>Download Invoice</span>
+	</a>
+</div>
+	<?php
+}
+
 ?>
+
 <form id="order_review" method="post">
 
 	<table class="shop_table">

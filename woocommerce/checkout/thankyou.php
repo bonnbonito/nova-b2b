@@ -26,9 +26,12 @@ defined( 'ABSPATH' ) || exit;
 	if ( $order ) :
 
 		do_action( 'woocommerce_before_thankyou', $order->get_id() );
+
 		?>
 
-		<?php if ( $order->has_status( 'failed' ) ) : ?>
+		<?php
+		if ( $order->has_status( 'failed' ) ) :
+			?>
 
 	<p class="woocommerce-notice woocommerce-notice--error woocommerce-thankyou-order-failed">
 			<?php esc_html_e( 'Unfortunately your order cannot be processed as the originating bank/merchant has declined your transaction. Please attempt your purchase again.', 'woocommerce' ); ?>
@@ -82,7 +85,19 @@ defined( 'ABSPATH' ) || exit;
 			<h5 class="font-title uppercase tracking-[1.8px] mb-0">
 				<?php esc_html_e( 'Payment method:', 'woocommerce' ); ?>
 			</h5>
-			<span class="text-[16px]>"><?php echo wp_kses_post( $order->get_payment_method_title() ); ?></span>
+			<div class="text-[16px]> block">
+				<div class="block mb-2"><?php echo wp_kses_post( $order->get_payment_method_title() ); ?></div>
+				<?php if ( $order->get_payment_method() === 'bacs' ) : ?>
+				<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative inline-flex flex-col"
+					role="alert">
+					<span class="font-bold text-sm block mb-1">hello@novasignage.com</span>
+					<span class="block text-sm">Please set the answer to the security question: <span
+							style="font-weight: bold;">neonsigns</span></span>
+				</div>
+
+				<?php endif; ?>
+			</div>
+
 		</li>
 		<?php endif; ?>
 
