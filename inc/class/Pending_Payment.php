@@ -50,6 +50,28 @@ class Pending_Payment {
 		add_action( 'add_meta_boxes', array( $this, 'add_is_overdue_metabox' ) );
 		add_action( 'save_post_shop_order', array( $this, 'save_is_overdue_metabox' ) );
 		add_filter( 'wpo_wcpdf_filename', array( $this, 'filter_filename' ), 99, 5 );
+		add_action( 'wpo_wcpdf_after_order_details', array( $this, 'etransfer_instructions' ), 10, 2 );
+	}
+
+	public function etransfer_instructions( $type, $order ) {
+		$payment_method = $order->get_payment_method();
+		if ( 'bacs' !== $payment_method ) {
+			return;
+		}
+		ob_start();
+		?>
+<h3 style="margin-bottom:4pt;">E-transfer Instruction</h3>
+<ul style="list-style: disc; margin-left: 5pt; padding-left: 5pt;">
+	<li>Log in to your bank’s website or mobile app.</li>
+	<li>Go to the “Send Money” or “E-Transfer” section.</li>
+	<li>Enter the email: <b>hello@novasignage.com</b></li>
+	<li>Specify the amount to send.</li>
+	<li>Create a security question if the bank requires one. Please set the answer to: <b>neonsigns</b></li>
+	<li>Confirm the details and send the transfer.</li>
+	<li>Inform our team via email</li>
+</ul>
+		<?php
+		echo ob_get_clean();
 	}
 
 	public function filter_filename( $filename, $type, $order_ids, $context, $args ) {

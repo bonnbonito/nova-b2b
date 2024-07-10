@@ -43,7 +43,7 @@ class NovaEmails {
 		add_action( 'quote_to_payment', array( $this, 'for_payment_email' ), 90 );
 		add_action( 'quote_to_payment', array( $this, 'for_payment_admin_email' ) );
 		add_action( 'admin_init', array( $this, 'process_send_mockup_email' ) );
-		add_action( 'wpo_wcpdf_after_item_meta', array( $this, 'display_signage_details' ), 20, 3 );
+		// add_action( 'wpo_wcpdf_after_item_meta', array( $this, 'display_signage_details' ), 20, 3 );
 		add_filter( 'wpo_wcpdf_order_items_data', array( $this, 'add_signage_to_invoice' ), 10, 3 );
 	}
 
