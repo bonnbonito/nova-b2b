@@ -74,13 +74,17 @@ class Streak {
 
 	private function recursive_fetch_streak_box_data( $insert_id, $boxID, $max_tries ) {
 		if ( $max_tries <= 0 ) {
+			error_log( 'Max tries reached for ' . $boxID );
 			return false; // Stop trying after max tries
 		}
+
+		error_log( 'Fetching data for ' . $boxID . ' with max tries of ' . $max_tries );
 
 		$result  = $this->fetch_streak_box_data( $boxID );
 		$decoded = json_decode( $result, true );
 
 		if ( isset( $decoded['firstEmailFrom'] ) ) {
+			error_log( 'Found email for ' . $boxID . ' with email ' . $decoded['firstEmailFrom'] );
 			$details = $this->get_streak_details_from_email( $decoded['firstEmailFrom'] ) ?: 'NONE';
 			if ( $details && isset( $details[0] ) ) {
 				$business_id = $details[0]['business_id'];
@@ -89,7 +93,8 @@ class Streak {
 				return $this->update_streak( $insert_id, $boxID, $email, $business_id, $country );
 			}
 		} else {
-			// Wait 5 seconds before fetching the data again
+
+			error_log( 'No data found for ' . $boxID . ' sleeping for 2 seconds' );
 			sleep( 2 );
 			return $this->recursive_fetch_streak_box_data( $insert_id, $boxID, $max_tries - 1 );
 		}
