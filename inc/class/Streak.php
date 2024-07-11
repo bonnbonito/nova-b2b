@@ -28,7 +28,7 @@ class Streak {
 		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
 		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
 		add_action( 'admin_post_delete_streak_box', array( $this, 'handle_delete_streak_box' ) );
-		add_action( 'nova_b2b_add_streak_box', array( $this, 'populate_streak_details' ), 10, 2 );
+		add_action( 'nova_b2b_add_streak_box', array( $this, 'populate_sheet' ), 10, 2 );
 	}
 
 	public function get_google_sheet() {
@@ -68,8 +68,13 @@ class Streak {
 		return $results;
 	}
 
-	public function populate_streak_details( $insert_id, $boxID ) {
-		$this->recursive_fetch_streak_box_data( $insert_id, $boxID, 5 );
+	public function populate_sheet( $insert_id, $boxID ) {
+		$this->fetch_streak_box_data( $boxID );
+		sleep( 3 );
+		$inserted = $this->insert_row_sheet( $boxID );
+		if ( $inserted ) {
+			$this->recursive_fetch_streak_box_data( $insert_id, $boxID, 2 );
+		}
 	}
 
 	private function recursive_fetch_streak_box_data( $insert_id, $boxID, $max_tries ) {
@@ -95,7 +100,7 @@ class Streak {
 		} else {
 
 			error_log( 'No data found for ' . $boxID . ' sleeping for 2 seconds' );
-			sleep( 2 );
+			sleep( 3 );
 			return $this->recursive_fetch_streak_box_data( $insert_id, $boxID, $max_tries - 1 );
 		}
 	}
@@ -407,13 +412,10 @@ class Streak {
 		}
 	}
 
-	public function update_sheet_sheet( $boxId, $email, $business_id, $country ) {
+	public function insert_row_sheet( $boxId ) {
 		$params = array(
-			'boxId'      => $boxId,
-			'projectId'  => '="NV-POJ-" & TEXT(10000 + ROW() - 1, "00000")',
-			'email'      => $email,
-			'businessId' => $business_id,
-			'country'    => $country,
+			'boxId'     => $boxId,
+			'projectId' => '="NV-POJ-" & TEXT(10000 + ROW() - 1, "00000")',
 		);
 
 		$url = $this->get_google_sheet();
@@ -431,7 +433,35 @@ class Streak {
 		if ( is_wp_error( $response ) ) {
 			error_log( 'Error: ' . $response->get_error_message() );
 		} else {
-			return $this->get_project_folder_id( $boxId, $business_id, $country );
+			return true;
+		}
+	}
+
+	public function update_sheet_sheet( $boxID, $email, $business_id, $country ) {
+		$params = array(
+			'boxId'      => $boxID,
+			'email'      => $email,
+			'businessId' => $business_id,
+			'country'    => $country,
+			'isUpdate'   => 'true',
+		);
+
+		$url = $this->get_google_sheet();
+
+		$response = wp_remote_post(
+			$url,
+			array(
+				'body'    => $params,
+				'headers' => array(
+					'Content-Type' => 'application/x-www-form-urlencoded',
+				),
+			)
+		);
+
+		if ( is_wp_error( $response ) ) {
+			error_log( 'Error: ' . $response->get_error_message() );
+		} else {
+			return $this->get_project_folder_id( $boxID, $business_id, $country );
 		}
 	}
 
