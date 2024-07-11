@@ -28,7 +28,7 @@ class Streak {
 		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
 		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
 		add_action( 'admin_post_delete_streak_box', array( $this, 'handle_delete_streak_box' ) );
-		add_action( 'nova_b2b_add_streak_box', array( $this, 'populate_sheet' ), 10, 2 );
+		add_action( 'nova_b2b_add_streak_box', array( $this, 'populate_streak_details' ), 10, 2 );
 	}
 
 	public function get_google_sheet() {
@@ -68,13 +68,11 @@ class Streak {
 		return $results;
 	}
 
-	public function populate_sheet( $insert_id, $boxID ) {
-		$this->fetch_streak_box_data( $boxID );
-		sleep( 3 );
-		$inserted = $this->insert_row_sheet( $boxID );
-		if ( $inserted ) {
-			$this->recursive_fetch_streak_box_data( $insert_id, $boxID, 2 );
-		}
+	public function populate_streak_details( $insert_id, $boxID ) {
+		$url       = rest_url() . 'nova/v1/get-streak-box/' . $boxID;
+		$emailFrom = wp_remote_get( $url );
+
+		$this->recursive_fetch_streak_box_data( $insert_id, $boxID, 5 );
 	}
 
 	private function recursive_fetch_streak_box_data( $insert_id, $boxID, $max_tries ) {
@@ -100,7 +98,7 @@ class Streak {
 		} else {
 
 			error_log( 'No data found for ' . $boxID . ' sleeping for 2 seconds' );
-			sleep( 3 );
+			sleep( 2 );
 			return $this->recursive_fetch_streak_box_data( $insert_id, $boxID, $max_tries - 1 );
 		}
 	}
@@ -191,6 +189,49 @@ class Streak {
 				'permission_callback' => array( $this, 'check_basic_auth' ),
 			)
 		);
+
+		register_rest_route(
+			'nova/v1',
+			'/get-streak-box/(?P<id>[\w-]+)',
+			array(
+				'methods'             => 'GET',
+				'callback'            => array( $this, 'get_streak_box' ),
+				'permission_callback' => '__return_true',
+			)
+		);
+	}
+
+	public function get_streak_box( $request ) {
+		$boxId = $request['id'];
+
+		$result = $this->fetch_streak_box_data( $boxId );
+
+		if ( $result ) {
+			$json = json_decode( $result, true );
+			if ( $json['firstEmailFrom'] ) {
+				return new \WP_REST_Response(
+					array(
+						'status'         => 'success',
+						'firstEmailFrom' => $json['firstEmailFrom'],
+					)
+				);
+			} else {
+				return new \WP_REST_Response(
+					array(
+						'status'  => 'error',
+						'message' => 'No email found',
+					)
+				);
+			}
+		} else {
+			return new \WP_REST_Response(
+				array(
+					'status'  => 'error',
+					'message' => 'Failed to fetch data',
+				),
+				500
+			);
+		}
 	}
 
 	/**
@@ -412,38 +453,13 @@ class Streak {
 		}
 	}
 
-	public function insert_row_sheet( $boxId ) {
+	public function update_sheet_sheet( $boxId, $email, $business_id, $country ) {
 		$params = array(
-			'boxId'     => $boxId,
-			'projectId' => '="NV-POJ-" & TEXT(10000 + ROW() - 1, "00000")',
-		);
-
-		$url = $this->get_google_sheet();
-
-		$response = wp_remote_post(
-			$url,
-			array(
-				'body'    => $params,
-				'headers' => array(
-					'Content-Type' => 'application/x-www-form-urlencoded',
-				),
-			)
-		);
-
-		if ( is_wp_error( $response ) ) {
-			error_log( 'Error: ' . $response->get_error_message() );
-		} else {
-			return true;
-		}
-	}
-
-	public function update_sheet_sheet( $boxID, $email, $business_id, $country ) {
-		$params = array(
-			'boxId'      => $boxID,
+			'boxId'      => $boxId,
+			'projectId'  => '="NV-POJ-" & TEXT(10000 + ROW() - 1, "00000")',
 			'email'      => $email,
 			'businessId' => $business_id,
 			'country'    => $country,
-			'isUpdate'   => 'true',
 		);
 
 		$url = $this->get_google_sheet();
@@ -461,7 +477,7 @@ class Streak {
 		if ( is_wp_error( $response ) ) {
 			error_log( 'Error: ' . $response->get_error_message() );
 		} else {
-			return $this->get_project_folder_id( $boxID, $business_id, $country );
+			return $this->get_project_folder_id( $boxId, $business_id, $country );
 		}
 	}
 
