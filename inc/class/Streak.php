@@ -31,7 +31,7 @@ class Streak {
 		add_filter( 'cron_schedules', array( $this, 'add_cron_schedule' ) );
 		add_action( 'nova_b2b_add_streak_box', array( $this, 'populate_streak_details' ), 10, 2 );
 		add_action( 'wp', array( $this, 'schedule_streak_checking' ) );
-		// add_action( 'check_streak_email', array( $this, 'get_first_email_from' ) );
+		add_action( 'check_streak_email', array( $this, 'check_and_update_boxID_without_email' ) );
 	}
 
 	public function schedule_streak_checking() {
@@ -48,11 +48,12 @@ class Streak {
 		$results = $wpdb->get_results( "SELECT * FROM $table_name WHERE email = '' OR email IS NULL" );
 
 		foreach ( $results as $row ) {
-			$id    = $row->id;
-			$boxID = $row->boxID;
+			$id         = $row->id;
+			$boxID      = $row->boxID;
+			$project_id = $row->project_id;
 			error_log( 'getting Email ' . $boxID );
 			// Make an API request to get the email for the boxID
-			$result = $this->populate_streak_details( $id, $boxID );
+			$result = $this->get_first_email_from( $id, $boxID, $project_id );
 
 		}
 	}
@@ -457,7 +458,7 @@ class Streak {
 			return 'No rows were updated';
 		} else {
 
-			return $this->update_sheet_sheet( $boxID, $project_id, $email, $business_id, $country );
+			return $this->update_sheet_sheet( $boxID, $email, $business_id, $country );
 
 		}
 	}
@@ -571,11 +572,14 @@ class Streak {
 			return false;
 		} else {
 			$project_id = $response['body'];
+			$this->update_project_id( $insert_id, $project_id );
 			return $this->update_box_streak_name( $insert_id, $boxId, $project_id );
 		}
 	}
 
-	public function update_sheet_sheet( $boxId, $project_id, $email, $business_id, $country ) {
+
+
+	public function update_sheet_sheet( $boxId, $email, $business_id, $country ) {
 		$params = array(
 			'boxId'      => $boxId,
 			'email'      => $email,
@@ -595,7 +599,27 @@ class Streak {
 		}
 	}
 
+	public function update_project_id( $insert_id, $project_id ) {
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'streak_boxes';
 
+		$result = $wpdb->update(
+			$table_name,
+			array(
+				'project_id' => $project_id,
+			),
+			array( 'id' => $insert_id ),
+		);
+
+		if ( $result === false ) {
+			error_log( 'wpdb update error: ' . $wpdb->last_error );
+			return 'Failed to update. Error: ' . $wpdb->last_error;
+		} elseif ( $result === 0 ) {
+			return 'No rows were updated';
+		} else {
+			return true;
+		}
+	}
 
 	/**
 	 * Update streak box in the database.
