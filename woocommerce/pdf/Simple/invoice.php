@@ -174,7 +174,6 @@
 	</tfoot>
 </table>
 
-<?php print_r( $this->get_woocommerce_totals() ); ?>
 
 <div class="bottom-spacer"></div>
 
