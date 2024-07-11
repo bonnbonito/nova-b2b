@@ -423,9 +423,11 @@ class Pending_Payment {
 			$message = str_replace( '{order_details}', $order_details, $message );
 
 			if ( $customer_email ) {
-				$headers = array( 'Content-Type: text/html; charset=UTF-8' );
-
-				$attachments = \WPO\WC\PDF_Invoices\Main::instance()->attach_document_to_email( array(), 'customer_invoice', $order, null );
+				$headers     = array( 'Content-Type: text/html; charset=UTF-8' );
+				$attachments = array();
+				if ( class_exists( '\WPO\WC\PDF_Invoices\Main' ) ) {
+					$attachments = \WPO\WC\PDF_Invoices\Main::instance()->attach_document_to_email( array(), 'customer_invoice', $order, null );
+				}
 
 				$role_instance = \NOVA_B2B\Roles::get_instance();
 
@@ -554,7 +556,11 @@ class Pending_Payment {
 
 							if ( $role_instance ) {
 
-								$attachments = \WPO\WC\PDF_Invoices\Main::instance()->attach_document_to_email( array(), 'customer_invoice', $order, null );
+								$attachments = array();
+
+								if ( class_exists( '\WPO\WC\PDF_Invoices\Main' ) ) {
+									$attachments = \WPO\WC\PDF_Invoices\Main::instance()->attach_document_to_email( array(), 'customer_invoice', $order, null );
+								}
 
 								$role_instance->send_email( $customer_email, $subject, $message, $headers, $attachments );
 

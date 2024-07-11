@@ -174,6 +174,8 @@
 	</tfoot>
 </table>
 
+<?php print_r( $this->get_woocommerce_totals() ); ?>
+
 <div class="bottom-spacer"></div>
 
 <?php do_action( 'wpo_wcpdf_after_order_details', $this->get_type(), $this->order ); ?>

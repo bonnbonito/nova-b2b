@@ -90,7 +90,7 @@ class Streak {
 			}
 		} else {
 			// Wait 5 seconds before fetching the data again
-			sleep( 5 );
+			sleep( 2 );
 			return $this->recursive_fetch_streak_box_data( $insert_id, $boxID, $max_tries - 1 );
 		}
 	}

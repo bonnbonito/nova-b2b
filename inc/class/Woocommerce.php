@@ -110,6 +110,15 @@ class Woocommerce {
 		add_filter( 'views_edit-shop_order', array( $this, 'add_hidden_orders_subsubsub_link' ) );
 		add_filter( 'request', array( $this, 'filter_orders_by_hidden_status' ) );
 		add_action( 'woocommerce_thankyou', array( $this, 'move_product_to_trash_after_order' ), 10, 1 );
+		add_filter( 'wpo_wcpdf_woocommerce_totals', array( $this, 'invoice_order_totals' ), 10, 3 );
+	}
+
+	public function invoice_order_totals( $totals, $order, $type ) {
+		if ( isset( $totals['overall_total']['value'] ) && ! empty( $totals['overall_total']['value'] ) ) {
+			$totals['order_total']['value'] = $totals['overall_total']['value'];
+		}
+
+		return $totals;
 	}
 
 	public function move_product_to_trash_after_order( $order_id ) {
@@ -430,6 +439,11 @@ class Woocommerce {
 	}
 
 	public function require_pst_on_bc( $fields ) {
+
+		/**  function get_shipping_country() on null, return $fields */
+		if ( ! WC()->customer->get_shipping_country() ) {
+			return $fields;
+		}
 
 		$shipping_country = WC()->customer->get_shipping_country();
 		$shipping_state   = WC()->customer->get_shipping_state();

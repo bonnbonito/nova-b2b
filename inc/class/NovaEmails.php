@@ -962,7 +962,7 @@ class NovaEmails {
 			$signage                               = $item->get_meta( 'signage' );
 			$quote_id                              = $item->get_meta( 'quote_id' );
 			$product_line                          = get_the_title( $item->get_meta( 'product_line' ) );
-			$name                                  = ucwords( get_field( 'frontend_title', $item->get_meta( 'quote_id' ) ) );
+			$name                                  = get_field( 'frontend_title', $item->get_meta( 'quote_id' ) ) ? ucwords( get_field( 'frontend_title', $item->get_meta( 'quote_id' ) ) ) : $data_list[ $item_id ]['name'];
 			$data_list[ $item_id ]['signage']      = $signage;
 			$data_list[ $item_id ]['quote_id']     = $quote_id;
 			$data_list[ $item_id ]['name']         = $name;
