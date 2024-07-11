@@ -28,7 +28,41 @@ class Streak {
 		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
 		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
 		add_action( 'admin_post_delete_streak_box', array( $this, 'handle_delete_streak_box' ) );
+		add_filter( 'cron_schedules', array( $this, 'add_cron_schedule' ) );
 		add_action( 'nova_b2b_add_streak_box', array( $this, 'populate_streak_details' ), 10, 2 );
+		add_action( 'wp', array( $this, 'schedule_streak_checking' ) );
+		add_action( 'check_streak_email', array( $this, 'check_and_update_boxID_without_email' ) );
+	}
+
+	public function schedule_streak_checking() {
+		if ( ! wp_next_scheduled( 'check_streak_email' ) ) {
+			wp_schedule_event( time(), 'daily', 'check_streak_email' );
+		}
+	}
+
+	public function check_and_update_boxID_without_email() {
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'streak_boxes';
+
+		// Fetch all rows where email is empty
+		$results = $wpdb->get_results( "SELECT * FROM $table_name WHERE email = '' OR email IS NULL" );
+
+		foreach ( $results as $row ) {
+			$id    = $row->id;
+			$boxID = $row->boxID;
+			error_log( 'getting Email ' . $boxID );
+			// Make an API request to get the email for the boxID
+			$result = $this->populate_streak_details( $id, $boxID );
+
+		}
+	}
+
+	public function add_cron_schedule( $schedules ) {
+		$schedules['every_2_minutes'] = array(
+			'interval' => 120,
+			'display'  => 'Every 2 minutes',
+		);
+		return $schedules;
 	}
 
 	public function get_google_sheet() {
@@ -208,7 +242,7 @@ class Streak {
 
 		if ( $result ) {
 			$json = json_decode( $result, true );
-			if ( $json['firstEmailFrom'] ) {
+			if ( isset( $json['firstEmailFrom'] ) ) {
 				return new \WP_REST_Response(
 					array(
 						'status'         => 'success',
@@ -242,6 +276,18 @@ class Streak {
 		$table_name = $wpdb->prefix . 'streak_boxes';
 
 		$boxID = sanitize_text_field( $request['boxID'] );
+
+		$exists = $this->get_row_by_boxID( $boxID );
+
+		if ( $exists ) {
+			return new \WP_REST_Response(
+				array(
+					'status'  => 'error',
+					'message' => 'BoxID already exists',
+				),
+				500
+			);
+		}
 
 		$wpdb->insert(
 			$table_name,
