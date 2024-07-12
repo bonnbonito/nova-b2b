@@ -599,7 +599,7 @@ class Pending_Payment {
 		ob_start();
 		?>
 <p>Hello,</p>
-<p>An outstanding invoice for {order_number} is due today. We have sent a reminder to:</p>
+<p>An outstanding invoice for #{order_number} is due today. We have sent a reminder to:</p>
 <ul>
 	<li>Customer: {customer_name} - {business_id} </li>
 	<li>Company: {business_name}</li>
@@ -1194,7 +1194,7 @@ class Pending_Payment {
 		$message  = '<p>Hello,</p>';
 		$message .= '<p>Client {customer_name} has paid for their outstanding balance.</p>';
 		$message .= '<ul>';
-		$message .= '<li>Order ID: {order_number}</li>';
+		$message .= '<li>Order ID: #{order_number}</li>';
 		$message .= '<li>Customer: {customer_name} - {business_id}</li>';
 		$message .= '<li>Company: {company_name}</li>';
 		$message .= '</li>';
@@ -1242,7 +1242,7 @@ class Pending_Payment {
 		}
 
 		$message = str_replace( '{order_details}', $order_details, $message );
-		$subject = 'NOVA INTERNAL - Payment Received: {customer_name} {business_id}  from {company_name}- ORDER {order_number}';
+		$subject = 'NOVA INTERNAL - Payment Received: {customer_name} {business_id}  from {company_name}- ORDER #{order_number}';
 		$subject = str_replace( '{customer_name}', $first_name, $subject );
 		$subject = str_replace( '{business_id}', $business_id, $subject );
 		$subject = str_replace( '{business_name}', $business_name, $subject );
