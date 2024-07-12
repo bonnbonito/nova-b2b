@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		updateCRMSheet.innerText = 'Getting partners...';
 
 		try {
-			const response = await fetchPartners();
+			const response = await downloadCRMSheet();
 			const data = await response.json();
 			console.log('Fetch Partners Response:', data);
 			updateCRMSheet.innerText = 'Update Complete!';
@@ -18,6 +18,56 @@ document.addEventListener('DOMContentLoaded', function () {
 		} finally {
 			updateCRMSheet.disabled = true;
 		}
+	}
+
+	async function downloadCRMSheet() {
+		const formData = new FormData();
+		formData.append('action', 'download_crm_sheet');
+		const response = await fetch(ajaxurl, {
+			method: 'POST',
+			credentials: 'same-origin',
+			headers: {
+				'Cache-Control': 'no-cache',
+			},
+			body: formData,
+		});
+
+		const data = await response.json();
+		if (data.code !== 2) throw new Error('Failed to fetch partners');
+
+		const csvData = convertToCSV(data.partners);
+		const blob = new Blob([csvData], { type: 'text/csv' });
+		const url = window.URL.createObjectURL(blob);
+		const a = document.createElement('a');
+		a.setAttribute('href', url);
+		a.setAttribute('download', 'partners.csv');
+		document.body.appendChild(a);
+		a.click();
+		document.body.removeChild(a);
+
+		return data.partners;
+	}
+
+	function convertToCSV(data) {
+		const array = typeof data !== 'object' ? JSON.parse(data) : data;
+		let str = '';
+		let row = '';
+
+		for (const index in array[0]) {
+			row += index + ',';
+		}
+		row = row.slice(0, -1);
+		str += row + '\r\n';
+
+		for (let i = 0; i < array.length; i++) {
+			let line = '';
+			for (const index in array[i]) {
+				if (line !== '') line += ',';
+				line += array[i][index];
+			}
+			str += line + '\r\n';
+		}
+		return str;
 	}
 
 	async function fetchPartners() {

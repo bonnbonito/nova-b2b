@@ -2,6 +2,8 @@
 
 namespace NOVA_B2B;
 
+use WP_Error;
+
 class GoogleSheets {
 	/**
 	 * Instance of this class
@@ -24,6 +26,7 @@ class GoogleSheets {
 	public function __construct() {
 		/** add to admin footer */
 		add_action( 'wp_ajax_update_crm_sheet', array( $this, 'update_crm_sheet' ) );
+		add_action( 'wp_ajax_download_crm_sheet', array( $this, 'download_crm_sheet' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_action( 'set_user_role', array( $this, 'update_sheet' ), 99 );
 		add_action( 'profile_update', array( $this, 'update_sheet' ), 99 );
@@ -47,6 +50,18 @@ class GoogleSheets {
 
 	public function get_crm_webapp_url() {
 		return get_field( 'google_sheet_web_app_url', 'option' );
+	}
+
+	public function download_crm_sheet() {
+		$status = array(
+			'code' => 1,
+		);
+
+		$partners           = self::get_all_partners();
+		$status['partners'] = $partners;
+		$status['code']     = 2;
+
+		wp_send_json( $status );
 	}
 
 	public function update_crm_sheet() {
@@ -83,6 +98,8 @@ class GoogleSheets {
 	public function clear_sheet() {
 		$url      = $this->get_crm_webapp_url() . '?action=clear&path=Partners (Master Copy)';
 		$response = wp_remote_get( $url );
+
+		return $response;
 	}
 
 	public static function get_all_partners() {
@@ -121,18 +138,18 @@ class GoogleSheets {
 			}
 
 			$results[] = array(
-				'businessId'       => get_field( 'business_id', 'user_' . $user->ID ),
-				'businessName'     => get_field( 'business_name', 'user_' . $user->ID ),
-				'username'         => $user->user_login,
-				'name'             => $first_name . ' ' . $last_name,
-				'email'            => $email,
-				'phone'            => get_field( 'business_phone_number', 'user_' . $user->ID ),
-				'website'          => get_field( 'business_website', 'user_' . $user->ID ),
-				'address'          => get_user_meta( $user->ID, 'billing_address_1', true ),
-				'city'             => get_user_meta( $user->ID, 'billing_city', true ),
-				'postcode'         => get_user_meta( $user->ID, 'billing_postcode', true ),
-				'state'            => $state,
-				'country'          => $country,
+				'businessId'       => get_field( 'business_id', 'user_' . $user->ID ) ?: 'None',
+				'businessName'     => get_field( 'business_name', 'user_' . $user->ID ) ?: 'None',
+				'username'         => $user->user_login ?: 'None',
+				'name'             => $first_name . ' ' . $last_name ?: 'None',
+				'email'            => $email ?: 'None',
+				'phone'            => get_field( 'business_phone_number', 'user_' . $user->ID ) ?: 'None',
+				'website'          => get_field( 'business_website', 'user_' . $user->ID ) ?: 'None',
+				'address'          => get_user_meta( $user->ID, 'billing_address_1', true ) ?: 'None',
+				'city'             => get_user_meta( $user->ID, 'billing_city', true ) ?: 'None',
+				'postcode'         => get_user_meta( $user->ID, 'billing_postcode', true ) ?: 'None',
+				'state'            => $state ?: 'None',
+				'country'          => $country ?: 'None',
 				'registrationDate' => ( new \DateTime( $user->user_registered ) )->format( 'Y-m-d' ),
 				'orders'           => self::user_orders_count( $user->ID ),
 				'quotes'           => self::user_quotes_count( $user->ID ),
