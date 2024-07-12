@@ -8,9 +8,9 @@ document.addEventListener('DOMContentLoaded', function () {
 		updateCRMSheet.innerText = 'Getting partners...';
 
 		try {
-			const data = await fetchPartners();
-			await clearSheet();
-			await insertPartners(data);
+			const response = await fetchPartners();
+			const data = await response.json();
+			console.log('Fetch Partners Response:', data);
 			updateCRMSheet.innerText = 'Update Complete!';
 		} catch (error) {
 			console.error('Error:', error);
@@ -37,10 +37,9 @@ document.addEventListener('DOMContentLoaded', function () {
 	}
 
 	async function clearSheet() {
-		const response = await fetch(
-			`${GoogleSheets.web_app_url}?action=clear&path=Partners (Master Copy)`,
-			{ method: 'GET' }
-		);
+		const url = `${GoogleSheets.web_app_url}?action=clear&path=Partners (Master Copy)`;
+		console.log('Clear Sheet URL:', url);
+		const response = await fetch(url, { method: 'GET', mode: 'no-cors' });
 		if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 		const text = await response.text();
 		console.log('Clear Sheet Response:', text);
@@ -62,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			url.searchParams.append(key, value);
 		}
 
-		const response = await fetch(url, { method: 'GET' });
+		const response = await fetch(url, { method: 'GET', mode: 'no-cors' });
 		if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 		const text = await response.text();
 		console.log('Insert Partner Response:', text);

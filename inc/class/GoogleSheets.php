@@ -55,10 +55,20 @@ class GoogleSheets {
 		);
 		try {
 
+			/** clear sheet */
+			$clear = $this->clear_sheet();
+
+			if ( is_wp_error( $clear ) ) {
+				$status['error'] = 'cant clear sheet';
+				wp_send_json( $status );
+				return;
+			}
+
 			$partners = self::get_all_partners();
 
-			$status['code'] = 2;
-			$status['data'] = $partners;
+			foreach ( $partners as $partner ) {
+				$this->insert_to_sheet( $partner );
+			}
 
 			wp_send_json( $status );
 
@@ -68,6 +78,11 @@ class GoogleSheets {
 		}
 
 		wp_send_json( $status );
+	}
+
+	public function clear_sheet() {
+		$url      = $this->get_crm_webapp_url() . '?action=clear&path=Partners (Master Copy)';
+		$response = wp_remote_get( $url );
 	}
 
 	public static function get_all_partners() {
@@ -125,6 +140,17 @@ class GoogleSheets {
 		}
 
 		return $results;
+	}
+
+	public function insert_to_sheet( $partner ) {
+		$url = $this->get_crm_webapp_url() . '?businessId=' . $partner['businessId'] . '&businessName=' . $partner['businessName'] . '&username=' . $partner['username'] . '&name=' . $partner['name'] . '&email=' . $partner['email'] . '&phone=' . $partner['phone'] . '&website=' . $partner['website'] . '&address=' . $partner['address'] . '&city=' . $partner['city'] . '&postcode=' . $partner['postcode'] . '&state=' . $partner['state'] . '&country=' . $partner['country'] . '&registrationDate=' . $partner['registrationDate'] . '&orders=' . $partner['orders'] . '&quotes=' . $partner['quotes'] . '&path=Partners (Master Copy)&action=write';
+
+		$response = wp_remote_get( $url );
+
+		if ( is_wp_error( $response ) ) {
+			return $response;
+		}
+		return $response;
 	}
 
 	public function update_sheet( $user_id ) {
