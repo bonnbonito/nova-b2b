@@ -372,7 +372,7 @@ class Streak {
 		echo '<div class="wrap">';
 		echo '<h1 class="wp-heading-inline">Streak Boxes</h1>';
 		echo '<table class="wp-list-table widefat fixed striped">';
-		echo '<thead><tr><th>ID</th><th>Box ID</th><th>Email</th><th>Business ID</th><th>Project ID</th><th>Country</th><th>Date</th><th>Action</th></tr></thead>';
+		echo '<thead><tr><th>ID</th><th>Box ID</th><th>Project ID</th><th>Email</th><th>Business ID</th><th>Country</th><th>Date</th><th>Action</th></tr></thead>';
 		echo '<tbody>';
 		foreach ( $results as $row ) {
 			$delete_nonce = wp_create_nonce( 'delete_streak_box_' . $row->id );

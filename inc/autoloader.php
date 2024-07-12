@@ -38,6 +38,7 @@ $instances = array(
 	'Pending_Payment',
 	'Zoho',
 	'Streak',
+	'GoogleSheets',
 	'Dropbox',
 );
 
