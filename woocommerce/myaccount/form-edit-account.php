@@ -76,7 +76,7 @@ do_action( 'woocommerce_before_edit_account_form' ); ?>
 
 
 
-	<fieldset id="passwordField" class="hidden">
+	<fieldset id="passwordField" class="hidden p-4">
 		<legend><?php esc_html_e( 'Password change', 'woocommerce' ); ?></legend>
 
 		<p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
