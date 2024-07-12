@@ -174,36 +174,106 @@ class Admin {
 		// Fetch users with the 'Partner' role
 		if ( isset( $_GET['export_partners'] ) && current_user_can( 'manage_options' ) ) {
 			$args  = array(
-				'role' => 'Partner',
+				'role'    => 'partner',
+				'orderby' => 'registered',
+				'order'   => 'ASC',
 			);
 			$users = get_users( $args );
+
+			$keywords = array( 'test', 'demo' );
 
 			header( 'Content-Type: text/csv; charset=utf-8' );
 			header( 'Content-Disposition: attachment; filename=users.csv' );
 
 			$output = fopen( 'php://output', 'w' );
-			fputcsv( $output, array( 'Business ID', 'Username', 'Email', 'Date Registered', 'Business Name', 'Business Phone', 'Business Website', 'Street Address', 'City', 'State', 'Zip', 'Country' ) );
+			fputcsv( $output, array( 'Business ID', 'Business Name', 'Username', 'Name', 'Email', 'Phone', 'Website', 'Address', 'City', 'Postcode', 'State', 'Country', 'Registration Date', '# of Orders', '# of Quotes' ) );
 
 			foreach ( $users as $user ) {
+				$first_name = $user->first_name;
+				$last_name  = $user->last_name;
+				$email      = $user->user_email;
+
+				// Skip user if any field contains the keywords
+				if ( self::containsKeywords( $first_name, $keywords ) ||
+				self::containsKeywords( $last_name, $keywords ) ||
+				self::containsKeywords( $email, $keywords ) ) {
+					continue;
+				}
+
+				// Retrieve country or default to 'NONE'
+				$country = get_user_meta( $user->ID, 'billing_country', true );
+				if ( empty( $country ) ) {
+					$country = 'NONE';
+				}
+
+				$state = get_user_meta( $user->ID, 'billing_state', true );
+				if ( empty( $state ) ) {
+					$state = 'NONE';
+				}
+
 				$user_data = array(
-					'Business ID'      => get_field( 'business_id', 'user_' . $user->ID ),
-					'Username'         => $user->user_login,
-					'Email'            => $user->user_email,
-					'Date Registered'  => $user->user_registered,
-					'Business Name'    => get_field( 'business_name', 'user_' . $user->ID ),
-					'Business Phone'   => get_field( 'business_phone', 'user_' . $user->ID ),
-					'Business Website' => get_field( 'business_website', 'user_' . $user->ID ),
-					'Street'           => get_field( 'street_address', 'user_' . $user->ID ),
-					'City'             => get_field( 'city', 'user_' . $user->ID ),
-					'State'            => get_field( 'state', 'user_' . $user->ID ),
-					'ZIP'              => get_field( 'zip', 'user_' . $user->ID ),
-					'Country'          => get_field( 'country', 'user_' . $user->ID ),
+					'Business ID'       => get_field( 'business_id', 'user_' . $user->ID ) ?: 'None',
+					'Business Name'     => get_field( 'business_name', 'user_' . $user->ID ) ?: 'None',
+					'Username'          => $user->user_login ?: 'None',
+					'Name'              => $first_name . ' ' . $last_name ?: 'None',
+					'Email'             => $email ?: 'None',
+					'Phone'             => get_field( 'business_phone_number', 'user_' . $user->ID ) ?: 'None',
+					'Website'           => get_field( 'business_website', 'user_' . $user->ID ) ?: 'None',
+					'Address'           => get_user_meta( $user->ID, 'billing_address_1', true ) ?: 'None',
+					'City'              => get_user_meta( $user->ID, 'billing_city', true ) ?: 'None',
+					'Postcode'          => get_user_meta( $user->ID, 'billing_postcode', true ) ?: 'None',
+					'State'             => get_user_meta( $user->ID, 'billing_state', true ) ?: 'None',
+					'Country'           => get_user_meta( $user->ID, 'billing_country', true ) ?: 'None',
+					'Registration Date' => ( new \DateTime( $user->user_registered ) )->format( 'Y-m-d' ),
+					'# of Orders'       => self::user_orders_count( $user->ID ),
+					'# of Quotes'       => self::user_quotes_count( $user->ID ),
 				);
+
 				fputcsv( $output, $user_data );
 			}
 			fclose( $output );
 			exit;
 		}
+	}
+
+	public function user_quotes_count( $user_id ) {
+		$args = array(
+			'post_type'      => 'nova_quote',  // Set to your custom post type
+			'posts_per_page' => -1,       // We don't need to retrieve all posts, just count them
+			'fields'         => 'ids',            // Fetch only the IDs to speed up the query
+			'post_status'    => 'publish',   // Consider only published posts; adjust if needed
+			'meta_query'     => array(
+				array(
+					'key'     => 'partner',  // The ACF field key
+					'value'   => $user_id, // The user ID you want to match
+					'compare' => '=',    // Exact match
+					'type'    => 'NUMERIC',  // Assuming the field is stored as a numeric value
+				),
+			),
+		);
+
+		$query = new \WP_Query( $args );
+		return $query->found_posts; // Return the count of matching posts
+	}
+
+	public function user_orders_count( $user_id ) {
+		if ( ! class_exists( 'WC_Order_Query' ) ) {
+			return 'WooCommerce is not active';
+		}
+
+		// Set up the order query arguments
+		$args = array(
+			'customer_id' => $user_id, // User ID
+			'return'      => 'ids',         // Return only IDs to speed up the query
+			'status'      => array( 'wc-completed', 'wc-processing', 'wc-on-hold' ), // Optional: specify order statuses
+		);
+
+		// Create a new WC_Order_Query object with the specified arguments
+		$query  = new \WC_Order_Query( $args );
+		$orders = $query->get_orders(); // Get the orders
+
+		// Return the count of orders
+		return count( $orders );
 	}
 
 	public function search_user_business_id( $args, $request, $query ) {
@@ -459,6 +529,16 @@ class Admin {
 				$query->set( 'meta_query', $meta_query );
 			}
 		}
+	}
+
+	public static function containsKeywords( $string, $keywords ) {
+		$lowerString = strtolower( $string ); // Convert string to lower case once
+		foreach ( $keywords as $keyword ) {
+			if ( strpos( $lowerString, $keyword ) !== false ) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public function move_row_actions_js() {

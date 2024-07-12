@@ -28,8 +28,8 @@ class GoogleSheets {
 		add_action( 'wp_ajax_update_crm_sheet', array( $this, 'update_crm_sheet' ) );
 		add_action( 'wp_ajax_download_crm_sheet', array( $this, 'download_crm_sheet' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-		add_action( 'set_user_role', array( $this, 'update_sheet' ), 99 );
-		add_action( 'profile_update', array( $this, 'update_sheet' ), 99 );
+		// add_action( 'set_user_role', array( $this, 'update_sheet' ), 99 );
+		// add_action( 'profile_update', array( $this, 'update_sheet' ), 99 );
 	}
 
 	public function enqueue_scripts() {
@@ -200,7 +200,7 @@ class GoogleSheets {
 		return $response;
 	}
 
-	public static function user_orders_count( $user_id ) {
+	public function user_orders_count( $user_id ) {
 		if ( ! class_exists( 'WC_Order_Query' ) ) {
 			return 'WooCommerce is not active';
 		}
@@ -220,7 +220,7 @@ class GoogleSheets {
 		return count( $orders );
 	}
 
-	public static function user_quotes_count( $user_id ) {
+	public function user_quotes_count( $user_id ) {
 		$args = array(
 			'post_type'      => 'nova_quote',  // Set to your custom post type
 			'posts_per_page' => -1,       // We don't need to retrieve all posts, just count them
