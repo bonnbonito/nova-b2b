@@ -28,8 +28,8 @@ class GoogleSheets {
 		add_action( 'wp_ajax_update_crm_sheet', array( $this, 'update_crm_sheet' ) );
 		add_action( 'wp_ajax_download_crm_sheet', array( $this, 'download_crm_sheet' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-		// add_action( 'set_user_role', array( $this, 'update_sheet' ), 99 );
-		// add_action( 'profile_update', array( $this, 'update_sheet' ), 99 );
+		add_action( 'set_user_role', array( $this, 'update_user_row' ), 99 );
+		add_action( 'profile_update', array( $this, 'update_user_row' ), 99 );
 	}
 
 	public function enqueue_scripts() {
@@ -170,25 +170,32 @@ class GoogleSheets {
 		return $response;
 	}
 
-	public function update_sheet( $user_id ) {
+	public function update_user_row( $user_id ) {
+
+		/** check if user role is partner */
+		$user = get_user_by( 'id', $user_id );
+
+		if ( ! in_array( 'partner', (array) $user->roles ) ) {
+			return;
+		}
 
 		$web_app_url      = $this->get_crm_webapp_url();
 		$user             = get_user_by( 'id', $user_id );
-		$business_id      = get_field( 'business_id', 'user_' . $user->ID );
-		$business_name    = get_field( 'business_name', 'user_' . $user->ID );
+		$business_id      = get_field( 'business_id', 'user_' . $user_id );
+		$business_name    = get_field( 'business_name', 'user_' . $user_id );
 		$username         = $user->user_login;
 		$name             = $user->first_name . ' ' . $user->last_name;
 		$email            = $user->user_email;
-		$phone            = get_field( 'business_phone_number', 'user_' . $user->ID );
-		$website          = get_field( 'business_website', 'user_' . $user->ID );
-		$address          = get_user_meta( $user->ID, 'billing_address_1', true );
-		$city             = get_user_meta( $user->ID, 'billing_city', true );
-		$postcode         = get_user_meta( $user->ID, 'billing_postcode', true );
-		$state            = get_user_meta( $user->ID, 'billing_state', true );
-		$country          = get_user_meta( $user->ID, 'billing_country', true );
+		$phone            = get_field( 'business_phone_number', 'user_' . $user_id );
+		$website          = get_field( 'business_website', 'user_' . $user_id );
+		$address          = get_user_meta( $user_id, 'billing_address_1', true );
+		$city             = get_user_meta( $user_id, 'billing_city', true );
+		$postcode         = get_user_meta( $user_id, 'billing_postcode', true );
+		$state            = get_user_meta( $user_id, 'billing_state', true );
+		$country          = get_user_meta( $user_id, 'billing_country', true );
 		$registrationDate = ( new \DateTime( $user->user_registered ) )->format( 'Y-m-d' );
-		$orders           = self::user_orders_count( $user->ID );
-		$quotes           = self::user_quotes_count( $user->ID );
+		$orders           = self::user_orders_count( $user_id );
+		$quotes           = self::user_quotes_count( $user_id );
 
 		$url = $web_app_url . '?businessId=' . $business_id . '&businessName=' . $business_name . '&username=' . $username . '&name=' . $name . '&email=' . $email . '&phone=' . $phone . '&website=' . $website . '&address=' . $address . '&city=' . $city . '&postcode=' . $postcode . '&state=' . $state . '&country=' . $country . '&registrationDate=' . $registrationDate . '&orders=' . $orders . '&quotes=' . $quotes . '&path=Partners (Master Copy)&action=update';
 
