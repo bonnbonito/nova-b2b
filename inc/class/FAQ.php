@@ -37,6 +37,28 @@ class FAQ {
 		add_action( 'init', array( $this, 'register_faq_nav_menu' ) );
 		add_action( 'admin_menu', array( $this, 'add_faq_menu_submenu_page' ) );
 		add_action( 'admin_init', array( $this, 'handle_faq_menu_update' ) );
+		/** when save post of nova-faq post type, run create_faq_nav_menu */
+		add_action( 'save_post_nova-faq', array( $this, 'create_faq_nav_menu' ), 10, 2 );
+		add_action( 'save_post_nova-faq', array( $this, 'update_has_child_meta' ), 10, 2 );
+	}
+
+	function update_has_child_meta( $post_id ) {
+		if ( get_post_type( $post_id ) == 'nova-faq' ) {
+			$children = get_posts(
+				array(
+					'post_type'   => 'nova-faq',
+					'post_parent' => $post_id,
+					'numberposts' => 1,
+					'fields'      => 'ids',
+				)
+			);
+
+			if ( ! empty( $children ) ) {
+				update_post_meta( $post_id, '_has_child', '1' );
+			} else {
+				delete_post_meta( $post_id, '_has_child' );
+			}
+		}
 	}
 
 	public function output_search() {
@@ -188,6 +210,18 @@ class FAQ {
 			'post_type'      => 'nova-faq',
 			'posts_per_page' => -1,
 			's'              => $search_term,
+			'meta_query'     => array(
+				'relation' => 'OR',
+				array(
+					'key'     => '_has_child',
+					'compare' => 'NOT EXISTS',
+				),
+				array(
+					'key'     => '_has_child',
+					'value'   => '',
+					'compare' => '=',
+				),
+			),
 		);
 
 		$faqs = new \WP_Query( $args );
