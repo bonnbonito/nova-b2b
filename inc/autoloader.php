@@ -40,6 +40,7 @@ $instances = array(
 	'Streak',
 	// 'GoogleSheets',
 	'Dropbox',
+	'FAQ',
 );
 
 foreach ( $instances as $instance ) {

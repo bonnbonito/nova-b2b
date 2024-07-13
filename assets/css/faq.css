@@ -1,0 +1,51 @@
+#menu-faq-menu {
+    padding-left: 0;
+    margin-left: 0;
+    list-style: none;
+}
+
+#menu-faq-menu a {
+    color: #000;
+    padding: 0 8px;
+    text-decoration: none;
+    text-underline-offset: 5px;
+}
+
+#menu-faq-menu a:hover {
+    text-decoration: underline;
+    color: rgb(55 65 81/var(--tw-text-opacity));
+}
+
+#menu-faq-menu>li {
+    padding-bottom: 20px;
+}
+
+#menu-faq-menu>li>a {
+    font-size: 16px;
+    text-transform: uppercase;
+    text-underline-offset: 5px;
+}
+
+
+
+#menu-faq-menu li.current-menu-item>a {
+    text-decoration: underline;
+
+}
+
+
+#menu-faq-menu>li:not(.current-menu-item):not(.current-menu-ancestor) .sub-menu {
+    display: none;
+}
+
+#menu-faq-menu .sub-menu {
+    list-style: none;
+}
+
+#menu-faq-menu .sub-menu li {
+    padding-top: 8px;
+}
+
+#menu-faq-menu .sub-menu a {
+    font-size: 14px;
+}
