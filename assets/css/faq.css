@@ -28,9 +28,13 @@
 
 
 
-#menu-faq-menu li.current-menu-item>a {
+#menu-faq-menu li.current-menu-item>a,
+#menu-faq-menu li.page-item-parent>a {
     text-decoration: underline;
+}
 
+#menu-faq-menu>li.page-item-parent>a {
+    text-decoration: none;
 }
 
 
@@ -48,4 +52,8 @@
 
 #menu-faq-menu .sub-menu a {
     font-size: 14px;
+}
+
+#menu-faq-menu .sub-menu:has(>li.page-item-parent) {
+    display: block !important;
 }

@@ -40,7 +40,37 @@ class FAQ {
 		/** when save post of nova-faq post type, run create_faq_nav_menu */
 		add_action( 'save_post_nova-faq', array( $this, 'create_faq_nav_menu' ), 10, 2 );
 		add_action( 'save_post_nova-faq', array( $this, 'update_has_child_meta' ), 10, 2 );
+		add_filter( 'wp_nav_menu_objects', array( $this, 'add_custom_class_to_menu_items' ), 10, 2 );
+		add_filter( 'body_class', array( $this, 'add_custom_class_to_body' ) );
 	}
+
+	public function add_custom_class_to_menu_items( $items, $args ) {
+		global $post;
+
+		if ( is_singular( 'nova-faq' ) ) {
+			$parent_id = $post->post_parent;
+
+			foreach ( $items as &$item ) {
+
+				$url = url_to_postid( $item->url );
+
+				if ( $url == $parent_id ) {
+					$item->classes[] = 'page-item-parent';
+				}
+			}
+		}
+		return $items;
+	}
+
+	public function add_custom_class_to_body( $classes ) {
+		global $post;
+		if ( is_singular( 'nova-faq' ) && isset( $post->post_parent ) ) {
+			$parent_id = $post->post_parent;
+			$classes[] = 'page-item-' . $parent_id;
+		}
+		return $classes;
+	}
+
 
 	function update_has_child_meta( $post_id ) {
 		if ( get_post_type( $post_id ) == 'nova-faq' ) {
@@ -132,6 +162,7 @@ class FAQ {
 				'theme_location' => 'faq-menu',
 			)
 		);
+
 		return ob_get_clean();
 	}
 
