@@ -2241,7 +2241,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 				the_row();
 				?>
 	<div class="faq-item visible">
-		<p class="faq-question"><?php echo get_sub_field( 'question' ); ?> <svg width="14" height="14"
+		<p class="faq-question mb-0"><?php echo get_sub_field( 'question' ); ?> <svg width="14" height="14"
 				viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
 				<line x1="7" y1="1" x2="7" y2="13" stroke="black" stroke-width="2" stroke-linecap="round">
 				</line>

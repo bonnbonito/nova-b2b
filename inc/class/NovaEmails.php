@@ -506,7 +506,14 @@ class NovaEmails {
 		$admin_message .= '<li><strong>Customer:</strong> ' . $first_name . ' - ' . $business_id . '</li>';
 		$admin_message .= '<li><strong>Company:</strong> ' . $company . '</li>';
 		$admin_message .= '<li><strong>Quote ID:</strong> #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '</li>';
-		$admin_message .= '</ul><br>';
+
+		$nova_quote = Nova_Quote::get_instance();
+		if ( $nova_quote ) {
+			$updated_by = $nova_quote->get_who_updated( $post_id );
+			if ( $updated_by ) {
+				$admin_message .= '<li><strong>Approved by:</strong> ' . $updated_by . '</li>';
+			}
+		}
 
 		$admin_message .= '<p>You may review the quotation you sent here:</p>';
 		$admin_message .= '<a href="' . $edit_post_url . '">' . $edit_post_url . '</a>';

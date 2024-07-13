@@ -50,6 +50,9 @@ class Nova_Product {
 				case 'installation':
 					$title = 'Installation | ' . $title;
 					break;
+				case 'faqs':
+					$title = 'FAQS | ' . $title;
+					break;
 			}
 		}
 
@@ -129,6 +132,9 @@ class Nova_Product {
 				case 'installation':
 					$tab_title = 'Installation';
 					break;
+				case 'faqs':
+					$tab_title = 'FAQS';
+					break;
 				default:
 					$tab_title = 'Instant Quote';
 			}
@@ -142,6 +148,10 @@ class Nova_Product {
 				href="<?php echo untrailingslashit( get_permalink() ); ?>/tech-specs">Tech Specs</a></h6>
 		<h6><a class="button <?php echo ( $tab === 'installation' ? 'active' : '' ); ?>"
 				href="<?php echo untrailingslashit( get_permalink() ); ?>/installation">Installation</a></h6>
+			<?php if ( get_field( 'faq_questions' ) ) { ?>
+		<h6><a class="button <?php echo ( $tab === 'faqs' ? 'active' : '' ); ?>"
+				href="<?php echo untrailingslashit( get_permalink() ); ?>/faqs">FAQS</a></h6>
+		<?php } ?>
 		<!-- <h6><a class="button active" href="#">Sample Board</a></h6> -->
 	</div>
 
@@ -168,6 +178,11 @@ class Nova_Product {
 			<a class="text-button block overflow-hidden"
 				href="<?php echo untrailingslashit( get_permalink() ); ?>/installation">
 				<h6 class="py-1">- Installation</h6>
+			</a>
+
+			<a class="text-button block overflow-hidden"
+				href="<?php echo untrailingslashit( get_permalink() ); ?>/faqs">
+				<h6 class="py-1">- FAQS</h6>
 			</a>
 			<h6 data-menu="sample" style="display: none;">- Sample Board</a></h6>
 		</div>

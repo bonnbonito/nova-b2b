@@ -29,6 +29,9 @@ global $post;
 			case 'tech-specs':
 				do_action( 'nova_product_specs' );
 				break;
+			case 'faqs':
+				do_action( 'nova_product_faqs' );
+				break;
 			case 'overview':
 				the_content(
 					sprintf(

@@ -42,6 +42,44 @@ class FAQ {
 		add_action( 'save_post_nova-faq', array( $this, 'update_has_child_meta' ), 10, 2 );
 		add_filter( 'wp_nav_menu_objects', array( $this, 'add_custom_class_to_menu_items' ), 10, 2 );
 		add_filter( 'body_class', array( $this, 'add_custom_class_to_body' ) );
+
+		add_action( 'nova_product_faqs', array( $this, 'nova_product_faqs' ) );
+	}
+
+	public function nova_product_faqs() {
+		$faqs = get_field( 'faq_questions' );
+
+		if ( $faqs ) {
+			?>
+<div id="faqItems" class="has-faq accordion">
+	<h2 class="uppercase text-center mb-10">Frequently asked Questions</h2>
+			<?php
+			foreach ( $faqs as $faq ) {
+				?>
+	<div class="faq-item visible">
+		<p class="faq-question mb-0"><?php echo $faq->post_title; ?> <svg width="14" height="14" viewBox="0 0 14 14"
+				fill="none" xmlns="http://www.w3.org/2000/svg">
+				<line x1="7" y1="1" x2="7" y2="13" stroke="black" stroke-width="2" stroke-linecap="round">
+				</line>
+				<line x1="13" y1="7" x2="1" y2="7" stroke="black" stroke-width="2" stroke-linecap="round">
+				</line>
+			</svg></p>
+		<div class="expander">
+			<div class="expander-content">
+				<div class="content-wrapper">
+					<div class="post-content-container" style="padding-top: 2em;">
+						<?php echo $faq->post_content; ?>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+				<?php
+			}
+			?>
+</div>
+			<?php
+		}
 	}
 
 	public function add_custom_class_to_menu_items( $items, $args ) {
@@ -365,7 +403,7 @@ class FAQ {
 </li>';
 
 		$breadcrumbs  = '<nav class="faq-breadcrumbs mb-14 py-4"><ol class="list-none p-0 ml-0 rounded flex bg-grey-light text-grey items-center">';
-		$homeLink     = home_url( '/' );
+		$homeLink     = home_url( '/faq/' );
 		$breadcrumbs .= '<li class="px-2"><a class="text-[14px] text-black underline-offset-2 hover:text-gray-700" href="' . $homeLink . '">HELP CENTER</a></li>';
 		if ( is_singular( 'nova-faq' ) && $post->post_parent ) {
 			$parent_id    = $post->post_parent;
