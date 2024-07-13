@@ -29,4 +29,7 @@ module.exports = {
 		require('@tailwindcss/typography'),
 		require('@tailwindcss/forms'),
 	],
+	corePlugins: {
+		preflight: false,
+	},
 };
