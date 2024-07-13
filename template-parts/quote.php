@@ -19,7 +19,8 @@ $final_price = $price_with_shipping ? ( get_woocommerce_currency() === 'USD' ? $
 
 
 ?>
-<div id="quote-<?php the_ID(); ?>" class="quote-row rounded border p-4 mb-4 text-xs uppercase relative pr-8">
+<div id="quote-<?php the_ID(); ?>"
+	class="quote-row rounded border border-solid border-[#D2D2D2] p-4 mb-4 text-xs uppercase relative pr-8">
 	<div class="block flex-wrap gap-4 lg:grid lg:grid-cols-[180px_1fr_375px] tracking-[1px] items-center">
 		<div class="flex flex-col gap-1 mb-1 lg:mb-0">
 			<div class="block"><span class="font-title text-sm">QUOTE ID:</span>
@@ -49,7 +50,7 @@ $final_price = $price_with_shipping ? ( get_woocommerce_currency() === 'USD' ? $
 						untrailingslashit( get_permalink( $product_id ) ) . '/?qid=' . get_the_ID() . '&qedit=1'
 					);
 					?>
-					" class="p-2 border rounded text-nova-gray text-[10px] tracking-[1px] hover:bg-nova-gray hover:text-white w-[110px] text-center">Edit
+					" class="p-2 border border-solid border-[#D2D2D2] rounded text-nova-gray text-[10px] tracking-[1px] hover:bg-nova-gray hover:text-white w-[110px] text-center">Edit
 				Order</a>
 				<?php if ( ! current_user_can( 'pending' ) ) { ?>
 			<a href="/" data-type="quotation" data-id="<?php the_ID(); ?>"
@@ -60,9 +61,8 @@ $final_price = $price_with_shipping ? ( get_woocommerce_currency() === 'USD' ? $
 
 			<?php elseif ( get_field( 'quote_status' )['value'] == 'processing' ) : ?>
 			<a href="<?php echo esc_url( '/my-account/mockups/view?qid=' . get_the_ID() ); ?>"
-				class="p-2 border rounded text-nova-gray text-[10px] tracking-[1px] hover:bg-nova-gray hover:text-white w-[110px] text-center">View
-				Details</a>
-			<span class="p-2 rounded text-[10px] w-[110px] text-center tracking-[1.2px]">Processing<br>
+				class="p-2 border border-solid border-[#D2D2D2] rounded text-nova-gray text-[10px] tracking-[1px] hover:bg-nova-gray hover:text-white w-[110px] text-center">View
+				Details</a> <span class="p-2 rounded text-[10px] w-[110px] text-center tracking-[1.2px]">Processing<br>
 				Quotation</span>
 
 			<?php elseif ( get_field( 'quote_status' )['value'] == 'archived' ) : ?>
@@ -86,9 +86,8 @@ $final_price = $price_with_shipping ? ( get_woocommerce_currency() === 'USD' ? $
 
 			<?php else : ?>
 			<a href="<?php echo esc_url( '/my-account/mockups/view?qid=' . get_the_ID() ); ?>"
-				class="p-2 border rounded text-nova-gray text-[10px] tracking-[1px] hover:bg-nova-gray hover:text-white w-[110px] text-center">View
+				class="p-2 border border-solid border-[#D2D2D2] rounded text-nova-gray text-[10px] tracking-[1px] hover:bg-nova-gray hover:text-white w-[110px] text-center">View
 				Details</a>
-
 				<?php
 				$cart_product_id = get_post_meta( get_the_ID(), 'nova_product_generated_id', true );
 

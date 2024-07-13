@@ -1,12 +1,13 @@
 <div class="nova-b2b">
-    <form class="nova-signup w-full border border-nova-light rounded-md px-8 pt-6 pb-8" id="novaSignUpForm">
+    <form class="nova-signup w-full border-solid border border-nova-light rounded-md px-8 pt-6 pb-8"
+        id="novaSignUpForm">
         <div class="md:flex md:gap-x-20 mb-9">
             <div class="form-field flex-1 mb-9 md:mb-0">
                 <label class="block mb-2 font-title uppercase" for="firstName">
                     First Name<span class="text-red-500">*</span>
                 </label>
                 <input
-                    class="appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
+                    class="appearance-none border-solid border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
                     id="firstName" name="firstName" type="text" placeholder="First Name" required>
 
             </div>
@@ -16,7 +17,7 @@
                     Last Name<span class="text-red-500">*</span>
                 </label>
                 <input
-                    class="appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
+                    class="appearance-none border-solid border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
                     id="lastName" type="text" name="lastName" placeholder="Last Name" required>
 
             </div>
@@ -28,7 +29,7 @@
                     Business Name<span class="text-red-500">*</span>
                 </label>
                 <input
-                    class="appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
+                    class="appearance-none border-solid border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
                     id="businessName" name="businessName" type="text" placeholder="Business Name" required>
 
             </div>
@@ -38,7 +39,7 @@
                     Business Email<span class="text-red-500">*</span>
                 </label>
                 <input
-                    class="appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
+                    class="appearance-none border-solid border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
                     id="businessEmail" name="businessEmail" type="email" placeholder="Business Email" required>
 
             </div>
@@ -67,7 +68,7 @@
                     Business Website
                 </label>
                 <input
-                    class="appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
+                    class="appearance-none border-solid border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
                     id="businessWebsite" name="businessWebsite" type="text" placeholder="Business Website">
 
             </div>
@@ -79,7 +80,7 @@
                     Business Phone Number<span class="text-red-500">*</span>
                 </label>
                 <input
-                    class="appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
+                    class="appearance-none border-solid border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
                     id="businessPhone" name="businessPhone" type="text" placeholder="Business Phone Number" required>
 
             </div>
@@ -89,7 +90,7 @@
                     Billing Email
                 </label>
                 <input
-                    class="appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
+                    class="appearance-none border-solid border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
                     id="billingEmail" name="billingEmail" type="email" placeholder="Billing Email">
             </div>
 
@@ -115,7 +116,7 @@
                     Federal Business Number
                 </label>
                 <input
-                    class="appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
+                    class="appearance-none border-solid border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
                     id="taxId" name="taxId" type="text" placeholder="Tax ID/Business Registration #">
             </div>
         </div>
@@ -126,7 +127,7 @@
                     Street Address<span class="text-red-500">*</span>
                 </label>
                 <input
-                    class="appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
+                    class="appearance-none border-solid border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
                     id="street" name="street" type="text" placeholder="Street Address" required>
             </div>
         </div>
@@ -137,7 +138,7 @@
                     Town/City<span class="text-red-500">*</span>
                 </label>
                 <input
-                    class="appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
+                    class="appearance-none border-solid border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
                     id="city" name="city" type="text" placeholder="Town/City" required>
             </div>
 
@@ -157,7 +158,7 @@
                     Zip Code<span class="text-red-500">*</span>
                 </label>
                 <input
-                    class="appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
+                    class="appearance-none border-solid border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
                     id="zip" name="zip" type="text" placeholder="Zip Code" required>
             </div>
         </div>
@@ -170,7 +171,7 @@
                         PST #
                     </label>
                     <input
-                        class="appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
+                        class="appearance-none border-solid border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
                         id="pst" name="pst" type="text" placeholder="PST #">
                 </div>
             </div>
@@ -184,7 +185,7 @@
                     Username<span class="text-red-500">*</span>
                 </label>
                 <input
-                    class="appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
+                    class="appearance-none border-solid border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
                     id="username" name="username" type="text" placeholder="Username" autocomplete="username" required>
             </div>
 
@@ -193,7 +194,7 @@
                     Password<span class="text-red-500">*</span>
                 </label>
                 <input
-                    class="appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
+                    class="appearance-none border-solid border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
                     id="password" name="password" type="password" placeholder="*******" autocomplete="current-password"
                     required>
             </div>
@@ -238,7 +239,7 @@
                     Referred by:
                 </label>
                 <input
-                    class="appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
+                    class="appearance-none border-solid border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
                     id="referredBy" name="referredBy" type="text" placeholder="Name">
             </div>
 

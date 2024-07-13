@@ -544,7 +544,7 @@ export function Letters({ item }) {
 					/>
 				</div>
 			)}
-			<div className="mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md">
+			<div className="mt-4 p-4 border-solid border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md">
 				<div className="w-full self-center">
 					<div
 						className="self-center text-center"
@@ -735,7 +735,7 @@ export function Letters({ item }) {
 							Custom Color
 						</label>
 						<input
-							className="w-full py-4 px-2 border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400"
+							className="w-full py-4 px-2 border-solid border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400"
 							type="text"
 							value={customColor}
 							onChange={(e) => setCustomColor(e.target.value)}

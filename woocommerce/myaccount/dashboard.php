@@ -30,7 +30,7 @@ $allowed_html = array(
 
 <div class="grid grid-cols-1 gap-x-6 gap-y-4 md:grid-cols-2">
 	<a href="<?php echo esc_url( wc_get_endpoint_url( 'edit-account' ) ); ?>"
-		class="border border-[#D2D2D2] p-4 rounded-md">
+		class="border border-solid border-[#D2D2D2] p-4 rounded-md">
 		<h4 class="flex gap-3 items-center"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
 				viewBox="0 0 16 16" fill="none">
 				<path
@@ -41,7 +41,7 @@ $allowed_html = array(
 		</p>
 	</a>
 	<a href=" <?php echo esc_url( wc_get_endpoint_url( 'mockups/all' ) ); ?>"
-		class="border border-[#D2D2D2] p-4 rounded-md">
+		class="border border-solid border-[#D2D2D2] p-4 rounded-md">
 		<h4 class="flex gap-3 items-center"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="20"
 				viewBox="0 0 18 20" fill="none">
 				<path
@@ -52,7 +52,8 @@ $allowed_html = array(
 		<p class="tracking-[1.4px] text-black text-[14px] leading-loose">Preview and customize your signage projects in
 			real-time to see it before production.</p>
 	</a>
-	<a href="<?php echo esc_url( wc_get_endpoint_url( 'orders' ) ); ?>" class="border border-[#D2D2D2] p-4 rounded-md">
+	<a href="<?php echo esc_url( wc_get_endpoint_url( 'orders' ) ); ?>"
+		class="border border-solid border-[#D2D2D2] p-4 rounded-md">
 		<h4 class="flex gap-3 items-center"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="20"
 				viewBox="0 0 16 20" fill="none">
 				<path d="M4 16H12V14H4V16ZM4 12H12V10H4V12ZM0 20V0H10L16 6V20H0ZM9 7V2H2V18H14V7H9Z" fill="#F22E00" />
@@ -62,7 +63,7 @@ $allowed_html = array(
 			about the status and progress of your projects.
 		</p>
 	</a>
-	<a href="#" class="border border-[#D2D2D2] p-4 rounded-md hidden">
+	<a href="#" class="border border-solid border-[#D2D2D2] p-4 rounded-md hidden">
 		<h4 class="flex gap-3 items-center"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
 				viewBox="0 0 18 18" fill="none">
 				<path

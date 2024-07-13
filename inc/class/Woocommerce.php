@@ -515,7 +515,7 @@ class Woocommerce {
 		$is_local = defined( 'WP_ENVIRONMENT_TYPE' ) && $env === 'local';
 
 		if ( $is_local ) {
-			// return $available_gateways;
+			return $available_gateways;
 		}
 
 		if ( ! current_user_can( 'manage_options' ) ) {
@@ -2156,19 +2156,19 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 <div
 	class="border-b font-title uppercase flex gap-6 md:gap-11 mb-8 whitespace-nowrap overflow-x-auto overflow-y-hidden">
 	<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/all' ) ); ?>"
-		class="py-4 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/all'] ) ? 'border-black' : 'border-transparent' ); ?> mb-[-4px] text-black">ALL
+		class="py-4 border-solid border-x-0 border-t-0 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/all'] ) ? 'border-black' : 'border-transparent' ); ?>  text-black">ALL
 		Mockups <span>(<?php echo $all; ?>)</span></a>
 	<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/drafts' ) ); ?>"
-		class="py-4 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/drafts'] ) ? 'border-black' : 'border-transparent' ); ?> mb-[-4px] text-black">Drafts
+		class="py-4 border-solid border-x-0 border-t-0 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/drafts'] ) ? 'border-black' : 'border-transparent' ); ?>  text-black">Drafts
 		<span>(<?php echo $drafts; ?>)</a>
 	<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/processing' ) ); ?>"
-		class="py-4 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/processing'] ) ? 'border-black' : 'border-transparent' ); ?> mb-[-4px] text-black">Processing
+		class="py-4 border-solid border-x-0 border-t-0 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/processing'] ) ? 'border-black' : 'border-transparent' ); ?>  text-black">Processing
 		<span>(<?php echo $processing; ?>)</a>
 	<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/payments' ) ); ?>"
-		class="py-4 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/payments'] ) ? 'border-black' : 'border-transparent' ); ?> mb-[-4px] text-black">Quoted
+		class="py-4 border-solid border-x-0 border-t-0 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/payments'] ) ? 'border-black' : 'border-transparent' ); ?>  text-black">Quoted
 		<span>(<?php echo $quoted; ?>)</a>
 	<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/archived' ) ); ?>"
-		class="py-4 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/archived'] ) ? 'border-black' : 'border-transparent' ); ?> mb-[-4px] text-black">Archived
+		class="py-4 border-solid border-x-0 border-t-0 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/archived'] ) ? 'border-black' : 'border-transparent' ); ?>  text-black">Archived
 		<span>(<?php echo $archived; ?>)</span></a>
 </div>
 		<?php

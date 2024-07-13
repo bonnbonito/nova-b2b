@@ -45,6 +45,66 @@ class Admin {
 		add_action( 'admin_init', array( $this, 'export_quotes_to_csv_check' ) );
 		add_action( 'wp_dashboard_setup', array( $this, 'remove_all_dashboard_widgets' ), 20 );
 		add_action( 'admin_notices', array( $this, 'notice_testing_mode' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'admin_quote_column' ) );
+		add_action( 'wp_ajax_update_quote_status', array( $this, 'update_quote_status' ) );
+	}
+
+	public function update_quote_status() {
+		$status = array(
+			'code' => 1,
+		);
+		if ( ! wp_verify_nonce( $_POST['nonce'], 'admin_account_nonce' ) ) {
+			$status['error']  = 'Nonce error';
+			$status['status'] = 'error';
+			wp_send_json( $status );
+		}
+
+		$value    = $_POST['quote_status'];
+		$quote_id = $_POST['post_id'];
+
+		$old_status = get_field( 'quote_status', $quote_id )['value'];
+
+		update_field( 'quote_status', $value, $quote_id );
+
+		if ( $old_status !== 'ready' && $value === 'ready' ) {
+			do_action( 'quote_to_payment', $quote_id, get_current_user_id() );
+		}
+
+		if ( $old_status === 'draft' && $value === 'processing' ) {
+			do_action( 'quote_to_processing', $quote_id, get_current_user_id() );
+		}
+
+		$background_colors = array(
+			'processing' => '#bb2124',
+			'ready'      => '#22bb33',
+			'draft'      => '#bbb',
+		);
+
+		$status['code']  = 2;
+		$status['post']  = $_POST;
+		$status['old']   = $old_status;
+		$status['color'] = $background_colors[ $value ];
+		wp_send_json( $status );
+	}
+
+	public function admin_quote_column() {
+		$theme = wp_get_theme();
+		wp_register_script( 'admin-quote-column', get_stylesheet_directory_uri() . '/assets/js/admin-quote-columns.js', array(), $theme->Version, true );
+		wp_register_style( 'admin-quote-column', get_stylesheet_directory_uri() . '/assets/css/admin-column.css', array(), $theme->Version );
+		if ( isset( $_GET['post_type'] ) && $_GET['post_type'] == 'nova_quote' ) {
+			wp_enqueue_script( 'admin-quote-column' );
+			wp_enqueue_style( 'admin-quote-column' );
+		}
+		wp_localize_script(
+			'admin-quote-column',
+			'AdminQuote',
+			array(
+				'ajax_url'   => admin_url( 'admin-ajax.php' ),
+				'nonce'      => wp_create_nonce( 'admin_account_nonce' ),
+				'quote_id'   => get_the_ID(),
+				'partner_id' => get_field( 'partner', get_the_ID() ),
+			)
+		);
 	}
 
 	public function notice_testing_mode() {
@@ -69,7 +129,6 @@ class Admin {
 			}
 		}
 	}
-
 
 	public function export_users_menu() {
 		add_management_page(
@@ -478,17 +537,58 @@ class Admin {
 				echo ( isset( $user_info->first_name ) ? $user_info->first_name : '' ) . ' ' . ( isset( $user_info->last_name ) ? $user_info->last_name : '' );
 				break;
 			case 'quote_status':
-				if ( isset( get_field( 'quote_status' )['value'] ) ) {
-					if ( get_field( 'quote_status' )['value'] === 'processing' ) {
-						echo '<span style="padding: 1em; background-color: #bb2124; color: #fff; display: block; text-align: center; width: 120px;">' . get_field( 'quote_status' )['label'] . '</span>';
-					} elseif ( get_field( 'quote_status' )['value'] === 'ready' ) {
-						echo '<span style="padding: 1em; background-color: #22bb33; color: #fff; display: block; text-align: center; width: 120px;">' . get_field( 'quote_status' )['label'] . '</span>';
-					} else {
-						echo '<span style="padding: 1em; background-color: gray; color: #fff; display: block; text-align: center; width: 120px;">' . get_field( 'quote_status' )['label'] . '</span>';
-					}
-				}
-
+				$this->quote_status_select_view( $post_id );
 				break;
+			case 'view_details':
+				$details = home_url( '/my-account/mockups/view/?qid=' . $post_id );
+				echo '<a target="_blank" class="button button-primary button-large" href="' . $details . '">View Details</a>';
+				break;
+		}
+	}
+
+	public function quote_status_old_view( $post_id ) {
+		if ( isset( get_field( 'quote_status', $post_id )['value'] ) ) {
+			if ( get_field( 'quote_status', $post_id )['value'] === 'processing' ) {
+				echo '<span style="padding: 1em; background-color: #bb2124; color: #fff; display: block; text-align: center; width: 120px;">' . get_field( 'quote_status', $post_id )['label'] . '</span>';
+			} elseif ( get_field( 'quote_status', $post_id )['value'] === 'ready' ) {
+				echo '<span style="padding: 1em; background-color: #22bb33; color: #fff; display: block; text-align: center; width: 120px;">' . get_field( 'quote_status', $post_id )['label'] . '</span>';
+			} else {
+				echo '<span style="padding: 1em; background-color: gray; color: #fff; display: block; text-align: center; width: 120px;">' . get_field( 'quote_status', $post_id )['label'] . '</span>';
+			}
+		}
+	}
+
+	public function quote_status_select_view( $post_id ) {
+
+		$loading = '<div class="spinner" role="status"></div>';
+
+		$quote_status = get_field( 'quote_status', $post_id );
+		if ( isset( $quote_status['value'] ) ) {
+			$status_value = $quote_status['value'];
+
+			// Define status options
+			$status_options = array(
+				'processing' => 'Processing',
+				'ready'      => 'To Payment',
+				'draft'      => 'Draft',
+			);
+
+			$background_colors = array(
+				'processing' => '#bb2124',
+				'ready'      => '#22bb33',
+				'draft'      => '#bbb',
+			);
+
+			// Generate the select dropdown
+			echo '<div class="select-wrap">';
+			echo '<select name="quote_status" style="border-color: ' . $background_colors[ $status_value ] . ';" data-quote-id="' . $post_id . '">';
+			foreach ( $status_options as $value => $label ) {
+				$selected = ( $status_value === $value ) ? 'selected' : '';
+				echo '<option value="' . esc_attr( $value ) . '" ' . $selected . '>' . esc_html( $label ) . '</option>';
+			}
+			echo '</select>';
+			echo $loading;
+			echo '</div>';
 		}
 	}
 
@@ -501,6 +601,8 @@ class Admin {
 		$new_columns['partner']      = 'Partner Name';
 		$new_columns['quote_status'] = 'Status';
 		$new_columns['project_name'] = 'Project Name';
+		$new_columns['view_details'] = 'View Details';
+
 		return $new_columns;
 	}
 

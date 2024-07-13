@@ -536,7 +536,7 @@ export function Letters({ item }) {
 					/>
 				</div>
 			)}
-			<div className="mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md">
+			<div className="mt-4 p-4 border-solid border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md">
 				<div className="w-full self-center">
 					<div
 						className="self-center text-center"

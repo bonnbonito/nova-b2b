@@ -400,6 +400,10 @@ ul#payment-select li input {
     background-color: #16a34a;
 }
 
+#payment ul.wc_payment_methods li.wc_payment_method>label {
+    align-items: center;
+}
+
 @media (min-width: 768px) {
 
     #payment ul.wc_payment_methods {

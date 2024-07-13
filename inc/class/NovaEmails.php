@@ -41,7 +41,7 @@ class NovaEmails {
 		add_filter( 'woocommerce_email_enabled_new_order', array( $this, 'disable_admin_new_order_email_on_hold' ), 10, 3 );
 		add_action( 'quote_to_processing', array( $this, 'for_quotation_email' ) );
 		add_action( 'quote_to_payment', array( $this, 'for_payment_email' ), 90 );
-		add_action( 'quote_to_payment', array( $this, 'for_payment_admin_email' ) );
+		add_action( 'quote_to_payment', array( $this, 'for_payment_admin_email' ), 91, 2 );
 		add_action( 'admin_init', array( $this, 'process_send_mockup_email' ) );
 		// add_action( 'wpo_wcpdf_after_item_meta', array( $this, 'display_signage_details' ), 20, 3 );
 		add_filter( 'wpo_wcpdf_order_items_data', array( $this, 'add_signage_to_invoice' ), 10, 3 );
@@ -470,7 +470,7 @@ class NovaEmails {
 		return $user_emails;
 	}
 
-	public function for_payment_admin_email( $post_id ) {
+	public function for_payment_admin_email( $post_id, $author_id ) {
 
 		$user_id   = get_field( 'partner', $post_id );
 		$user_info = get_userdata( $user_id );
@@ -507,12 +507,10 @@ class NovaEmails {
 		$admin_message .= '<li><strong>Company:</strong> ' . $company . '</li>';
 		$admin_message .= '<li><strong>Quote ID:</strong> #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '</li>';
 
-		$nova_quote = Nova_Quote::get_instance();
-		if ( $nova_quote ) {
-			$updated_by = $nova_quote->get_who_updated( $post_id );
-			if ( $updated_by ) {
-				$admin_message .= '<li><strong>Approved by:</strong> ' . $updated_by . '</li>';
-			}
+		$updated_by = get_user_by( 'id', $author_id );
+
+		if ( $updated_by ) {
+			$admin_message .= '<li><strong>Approved by:</strong> ' . $updated_by->display_name . ' - ' . $updated_by->user_email . '</li>';
 		}
 
 		$admin_message .= '<p>You may review the quotation you sent here:</p>';
@@ -526,6 +524,15 @@ class NovaEmails {
 	}
 
 	public function for_quotation_email( $post_id ) {
+
+		$post = get_post( $post_id );
+
+		$author = get_user_by( 'id', $post->post_author );
+
+		/** if author has a role of 'customer-rep' or 'admin', then return */
+		// if ( in_array( 'customer-rep', (array) $author->roles ) || in_array( 'administrator', (array) $author->roles ) ) {
+		// return;
+		// }
 
 		// Retrieve the partner user ID from the post's custom field
 		$user_id = get_field( 'partner', $post_id );
@@ -840,8 +847,14 @@ class NovaEmails {
 
 	public function for_payment_email( $post_id ) {
 
-		$user_id      = get_field( 'partner', $post_id );
-		$user_info    = get_userdata( $user_id );
+		$user_id   = get_field( 'partner', $post_id );
+		$user_info = get_userdata( $user_id );
+
+		/** if user has a role of 'customer-rep' or 'admin', then return */
+		if ( in_array( 'customer-rep', (array) $user_info->roles ) || in_array( 'administrator', (array) $user_info->roles ) ) {
+			return;
+		}
+
 		$project_name = get_field( 'frontend_title', $post_id );
 		$business_id  = get_field( 'business_id', 'user_' . $user_id );
 

@@ -746,7 +746,7 @@ export const NeonSign = ({ item }) => {
 							Custom Color
 						</label>
 						<input
-							className="w-full py-4 px-2 border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400"
+							className="w-full py-4 px-2 border-solid border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400"
 							type="text"
 							value={customColor}
 							onChange={(e) => setCustomColor(e.target.value)}

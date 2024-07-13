@@ -166,6 +166,16 @@ h6,
     text-transform: uppercase;
 }
 
+article a {
+    text-decoration: inherit;
+}
+
+.border,
+[type="checkbox"],
+[type="radio"] {
+    border-style: solid;
+}
+
 @media screen and (min-width: 768px) {
 
     /* disable Flickity for large devices */

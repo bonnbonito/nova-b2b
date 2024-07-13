@@ -1,4 +1,4 @@
-<div class="nova-account-navaigation  w-full border border-[#D2D2D2] p-4 rounded self-start">
+<div class="nova-account-navaigation  w-full border border-solid border-[#D2D2D2] p-4 rounded self-start">
 	<?php do_action( 'nova_inner_account_nav' ); ?>
 
 	<div class="">

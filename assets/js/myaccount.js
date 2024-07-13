@@ -93,6 +93,8 @@ function process(btn, action) {
 		formData.append('product_line', btn.dataset.product_line);
 	}
 
+	console.log(action);
+
 	fetch(NovaMyAccount.ajax_url, {
 		method: 'POST',
 		credentials: 'same-origin',

@@ -49,7 +49,7 @@ export default function PricesView({ item }) {
 		<div className="pb-8 mb-8 border-b-nova-light border-b">
 			{item.type === 'letters' && (
 				<>
-					<div className="mt-4 p-4 border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md exclude-from-pdf max-w-[834px]">
+					<div className="mt-4 p-4 border-solid border border-gray-200 w-full h-72 flex align-middle justify-center rounded-md exclude-from-pdf max-w-[834px]">
 						<div className="w-full self-center">
 							<div
 								className="self-center text-center"

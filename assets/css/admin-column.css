@@ -1,0 +1,10 @@
+.select-wrap {
+    display: inline-block;
+    position: relative;
+}
+
+select[name="quote_status"] {
+    padding: 0.5em;
+    width: 140px;
+    border-width: 2px;
+}
