@@ -222,31 +222,37 @@ class FAQ {
 	public function output_sub_categories() {
 		ob_start();
 		?>
-<h4 class="mb-9"><?php the_title(); ?></h4>
 		<?php
-		if ( $this->has_children( get_the_ID() ) ) {
-			$args     = array(
-				'post_parent' => get_the_ID(),
-				'post_type'   => 'nova-faq',
-				'order'       => 'ASC',
-				'orderby'     => 'menu_order',
-				'numberposts' => -1,
-			);
-			$children = get_posts( $args );
-			if ( $children ) {
-				echo '<ul class="list-none p-0 ml-0">';
-				foreach ( $children as $child ) {
-					?>
+		if ( is_singular( 'nova-faq' ) ) {
+			if ( $this->has_children( get_the_ID() ) ) {
+				$args     = array(
+					'post_parent' => get_the_ID(),
+					'post_type'   => 'nova-faq',
+					'order'       => 'ASC',
+					'orderby'     => 'menu_order',
+					'numberposts' => -1,
+				);
+				$children = get_posts( $args );
+				if ( $children ) {
+					echo '<h4 class="mb-9">' . get_the_title() . '</h4>';
+					echo '<ul class="list-none p-0 ml-0">';
+					foreach ( $children as $child ) {
+						?>
 <li class="py-2">
-	<a class="decoration-none text-[14px] text-black underline-offset-2 hover:text-gray-700"
+	<a style="text-decoration: none;"
+		class="decoration-none text-[14px] text-black underline-offset-2 hover:text-gray-700"
 		href="<?php echo get_permalink( $child->ID ); ?>"><?php echo get_the_title( $child->ID ); ?></a>
 </li>
-					<?php
+						<?php
+					}
+					echo '</ul>';
 				}
-				echo '</ul>';
+			} else {
+				echo '<h4 class="mb-9">' . get_the_title() . '</h4>';
+				echo get_the_content();
 			}
 		} else {
-			echo get_the_content();
+			echo $this->output_search_results();
 		}
 		return ob_get_clean();
 	}
