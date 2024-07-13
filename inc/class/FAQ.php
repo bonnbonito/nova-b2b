@@ -27,6 +27,7 @@ class FAQ {
 		add_action( 'kadence_single_content', array( $this, 'element_display' ), 1 );
 		add_shortcode( 'faq_breadcrumbs', array( $this, 'output_breadcrumbs' ) );
 		add_shortcode( 'faq_content', array( $this, 'output_content' ) );
+		add_shortcode( 'faq_grid', array( $this, 'output_grid' ) );
 		add_shortcode( 'faq_sub_categories', array( $this, 'output_sub_categories' ) );
 		add_shortcode( 'faq_sidebar', array( $this, 'output_sidebar' ) );
 		add_shortcode( 'faq_search', array( $this, 'output_search' ) );
@@ -46,39 +47,128 @@ class FAQ {
 		add_action( 'nova_product_faqs', array( $this, 'nova_product_faqs' ) );
 	}
 
+	public function get_nova_check() {
+		return '<svg width="45" height="44" viewBox="0 0 45 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M15.5455 43.2353L11.6591 36.6471L4.29545 35L5.01136 27.3824L0 21.6176L5.01136 15.8529L4.29545 8.23529L11.6591 6.58824L15.5455 0L22.5 2.98529L29.4545 0L33.3409 6.58824L40.7045 8.23529L39.9886 15.8529L45 21.6176L39.9886 27.3824L40.7045 35L33.3409 36.6471L29.4545 43.2353L22.5 40.25L15.5455 43.2353ZM17.2841 37.9853L22.5 35.7206L27.8182 37.9853L30.6818 33.0441L36.3068 31.7059L35.7955 25.9412L39.5795 21.6176L35.7955 17.1912L36.3068 11.4265L30.6818 10.1912L27.7159 5.25L22.5 7.51471L17.1818 5.25L14.3182 10.1912L8.69318 11.4265L9.20455 17.1912L5.42045 21.6176L9.20455 25.9412L8.69318 31.8088L14.3182 33.0441L17.2841 37.9853ZM20.3523 28.9265L31.9091 17.2941L29.0455 14.3088L20.3523 23.0588L15.9545 18.7353L13.0909 21.6176L20.3523 28.9265Z" fill="black"/>
+</svg>';
+	}
+
+	public function output_grid() {
+		ob_start();
+
+		if ( have_rows( 'faq_group' ) ) {
+			echo '<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-12 gap-y-16">';
+			while ( have_rows( 'faq_group' ) ) :
+				the_row();
+				$is_custom_page = get_sub_field( 'custom_page' );
+				$main           = false;
+				?>
+<div class="grid grid-cols-[45px_1fr]">
+    <div class="pt-2">
+        <?php echo $this->get_nova_check(); ?>
+    </div>
+    <div class="pl-9">
+        <h3 class="text-black mb-4">
+            <?php if ( $is_custom_page ) : ?>
+            <?php echo get_sub_field( 'title' ); ?>
+            <?php
+			else :
+				$main = get_sub_field( 'main' );
+				?>
+            <a href="<?php echo get_permalink( $main->ID ); ?>"><?php echo $main->post_title; ?></a>
+            <?php endif; ?>
+        </h3>
+        <ul class="list-none pl-0">
+            <?php
+				if ( ! $main ) {
+					$sub_faqs = get_sub_field( 'sub_categories' );
+					if ( $sub_faqs ) {
+						foreach ( $sub_faqs as $sub_faq ) {
+							?>
+            <li class="py-1">
+                <a style="text-decoration: none;"
+                    class="decoration-none  text-black hover:underline underline-offset-2 hover:text-nova-secondary"
+                    href="<?php echo get_permalink( $sub_faq['sub_faqs'][0]->ID ); ?>"><?php echo $sub_faq['sub_faqs'][0]->post_title; ?></a>
+            </li>
+            <?php
+						}
+					}
+				}
+				if ( get_sub_field( 'use_child_pages' ) ) {
+					/** get the direct child pages of $main->ID */
+					$children = get_posts(
+						array(
+							'post_type'   => 'nova-faq',
+							'post_status' => 'publish',
+							'post_parent' => $main->ID,
+							'orderby'     => 'menu_order',
+							'order'       => 'ASC',
+							'numberposts' => -1, // Get all child posts
+						)
+					);
+
+					if ( $children ) {
+						foreach ( $children as $child ) {
+							?>
+            <li class="py-1">
+                <a style="text-decoration: none;"
+                    class="decoration-none  text-black hover:underline underline-offset-2 hover:text-nova-secondary"
+                    href="<?php echo get_permalink( $child->ID ); ?>"><?php echo $child->post_title; ?></a>
+            </li>
+            <?php
+						}
+						echo '</ul>';
+					}
+				}
+				?>
+        </ul>
+
+
+    </div>
+
+</div>
+
+<?php
+			endwhile;
+				echo '</div>';
+		}
+
+		return ob_get_clean();
+	}
+
 	public function nova_product_faqs() {
 		$faqs = get_field( 'faq_questions' );
 
 		if ( $faqs ) {
 			?>
 <div id="faqItems" class="has-faq accordion">
-	<h2 class="uppercase text-center mb-10">Frequently asked Questions</h2>
-			<?php
+    <h2 class="uppercase text-center mb-10">Frequently asked Questions</h2>
+    <?php
 			foreach ( $faqs as $faq ) {
 				?>
-	<div class="faq-item visible">
-		<p class="faq-question mb-0"><?php echo $faq->post_title; ?> <svg width="14" height="14" viewBox="0 0 14 14"
-				fill="none" xmlns="http://www.w3.org/2000/svg">
-				<line x1="7" y1="1" x2="7" y2="13" stroke="black" stroke-width="2" stroke-linecap="round">
-				</line>
-				<line x1="13" y1="7" x2="1" y2="7" stroke="black" stroke-width="2" stroke-linecap="round">
-				</line>
-			</svg></p>
-		<div class="expander">
-			<div class="expander-content">
-				<div class="content-wrapper">
-					<div class="post-content-container" style="padding-top: 2em;">
-						<?php echo $faq->post_content; ?>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-				<?php
+    <div class="faq-item visible">
+        <p class="faq-question mb-0"><?php echo $faq->post_title; ?> <svg width="14" height="14" viewBox="0 0 14 14"
+                fill="none" xmlns="http://www.w3.org/2000/svg">
+                <line x1="7" y1="1" x2="7" y2="13" stroke="black" stroke-width="2" stroke-linecap="round">
+                </line>
+                <line x1="13" y1="7" x2="1" y2="7" stroke="black" stroke-width="2" stroke-linecap="round">
+                </line>
+            </svg></p>
+        <div class="expander">
+            <div class="expander-content">
+                <div class="content-wrapper">
+                    <div class="post-content-container" style="padding-top: 2em;">
+                        <?php echo $faq->post_content; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php
 			}
 			?>
 </div>
-			<?php
+<?php
 		}
 	}
 
@@ -134,20 +224,20 @@ class FAQ {
 		$search_term = isset( $_GET['faq'] ) ? $_GET['faq'] : '';
 		?>
 <div class="max-w-[550px] mx-auto w-full mt-4">
-	<form action="<?php echo home_url( '/faq/' ); ?>" method="get"
-		class="text-gray-500 border border-gray-200 rounded-md p-1 flex items-center justify-between border-solid">
-		<input class="placeholder:text-slate-400 border-0  flex-1 outline-0 focus:border-0" style="box-shadow: none;"
-			type="text" name="faq" placeholder="TYPE A QUESTION" value="<?php echo $search_term; ?>">
-		<button class="bg-transparent" type="submit" class="text-gray-500">
-			<svg width="13" height="14" viewBox="0 0 13 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-				<path
-					d="M4.82857 0C6.10919 0 7.33735 0.547855 8.24289 1.52304C9.14842 2.49823 9.65714 3.82087 9.65714 5.2C9.65714 6.488 9.21886 7.672 8.49829 8.584L8.69886 8.8H9.28571L13 12.8L11.8857 14L8.17143 10V9.368L7.97086 9.152C7.124 9.928 6.02457 10.4 4.82857 10.4C3.54795 10.4 2.31979 9.85215 1.41426 8.87696C0.508723 7.90177 0 6.57913 0 5.2C0 3.82087 0.508723 2.49823 1.41426 1.52304C2.31979 0.547855 3.54795 0 4.82857 0ZM4.82857 1.6C2.97143 1.6 1.48571 3.2 1.48571 5.2C1.48571 7.2 2.97143 8.8 4.82857 8.8C6.68571 8.8 8.17143 7.2 8.17143 5.2C8.17143 3.2 6.68571 1.6 4.82857 1.6Z"
-					fill="#D2D2D2" />
-			</svg>
-		</button>
-	</form>
+    <form action="<?php echo home_url( '/faq/' ); ?>" method="get"
+        class="text-gray-500 border border-gray-200 rounded-md p-1 flex items-center justify-between border-solid">
+        <input class="placeholder:text-slate-400 border-0  flex-1 outline-0 focus:border-0" style="box-shadow: none;"
+            type="text" name="faq" placeholder="TYPE A QUESTION" value="<?php echo $search_term; ?>">
+        <button class="bg-transparent" type="submit" class="text-gray-500">
+            <svg width="13" height="14" viewBox="0 0 13 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M4.82857 0C6.10919 0 7.33735 0.547855 8.24289 1.52304C9.14842 2.49823 9.65714 3.82087 9.65714 5.2C9.65714 6.488 9.21886 7.672 8.49829 8.584L8.69886 8.8H9.28571L13 12.8L11.8857 14L8.17143 10V9.368L7.97086 9.152C7.124 9.928 6.02457 10.4 4.82857 10.4C3.54795 10.4 2.31979 9.85215 1.41426 8.87696C0.508723 7.90177 0 6.57913 0 5.2C0 3.82087 0.508723 2.49823 1.41426 1.52304C2.31979 0.547855 3.54795 0 4.82857 0ZM4.82857 1.6C2.97143 1.6 1.48571 3.2 1.48571 5.2C1.48571 7.2 2.97143 8.8 4.82857 8.8C6.68571 8.8 8.17143 7.2 8.17143 5.2C8.17143 3.2 6.68571 1.6 4.82857 1.6Z"
+                    fill="#D2D2D2" />
+            </svg>
+        </button>
+    </form>
 </div>
-		<?php
+<?php
 		return ob_get_clean();
 	}
 
@@ -173,13 +263,13 @@ class FAQ {
 	public function faq_menu_settings_page() {
 		?>
 <div class="wrap">
-	<h1>FAQ Menu Settings</h1>
-	<form method="post" action="">
-		<?php wp_nonce_field( 'update_faq_menu', 'update_faq_menu_nonce' ); ?>
-		<p><input type="submit" name="update_faq_menu" class="button-primary" value="Update FAQ Menu"></p>
-	</form>
+    <h1>FAQ Menu Settings</h1>
+    <form method="post" action="">
+        <?php wp_nonce_field( 'update_faq_menu', 'update_faq_menu_nonce' ); ?>
+        <p><input type="submit" name="update_faq_menu" class="button-primary" value="Update FAQ Menu"></p>
+    </form>
 </div>
-		<?php
+<?php
 	}
 
 	public function register_faq_nav_menu() {
@@ -273,7 +363,7 @@ class FAQ {
 		$search_term = isset( $_GET['faq'] ) && ! ( empty( $_GET['faq'] ) ) ? $_GET['faq'] : '';
 		?>
 <h4 class="mb-9">SEARCH RESULTS FOR <span class="font-body">"<?php echo $search_term; ?>"</span></h4>
-		<?php
+<?php
 
 		$args = array(
 			'post_type'      => 'nova-faq',
@@ -301,11 +391,11 @@ class FAQ {
 				$faqs->the_post();
 				?>
 <li class="py-2">
-	<a style="text-decoration: none;"
-		class="decoration-none text-[14px] text-black underline-offset-2 hover:text-gray-700"
-		href="<?php echo get_permalink( get_the_ID() ); ?>"><?php echo get_the_title( get_the_ID() ); ?></a>
+    <a style="text-decoration: none;"
+        class="decoration-none text-[14px] text-black underline-offset-2 hover:text-gray-700"
+        href="<?php echo get_permalink( get_the_ID() ); ?>"><?php echo get_the_title( get_the_ID() ); ?></a>
 </li>
-				<?php
+<?php
 			}
 			echo '</ul>';
 			wp_reset_postdata();
@@ -325,7 +415,7 @@ class FAQ {
 	public function output_sub_categories() {
 		ob_start();
 		?>
-		<?php
+<?php
 		if ( is_singular( 'nova-faq' ) ) {
 			if ( $this->has_children( get_the_ID() ) ) {
 				$args     = array(
@@ -342,11 +432,11 @@ class FAQ {
 					foreach ( $children as $child ) {
 						?>
 <li class="py-2">
-	<a style="text-decoration: none;"
-		class="decoration-none text-[14px] text-black underline-offset-2 hover:text-gray-700"
-		href="<?php echo get_permalink( $child->ID ); ?>"><?php echo get_the_title( $child->ID ); ?></a>
+    <a style="text-decoration: none;"
+        class="decoration-none text-[14px] text-black underline-offset-2 hover:text-gray-700"
+        href="<?php echo get_permalink( $child->ID ); ?>"><?php echo get_the_title( $child->ID ); ?></a>
 </li>
-						<?php
+<?php
 					}
 					echo '</ul>';
 				}
@@ -367,7 +457,7 @@ class FAQ {
 		ob_start();
 		?>
 <h4 class="mb-9"><?php the_title(); ?></h4>
-		<?php
+<?php
 		echo get_the_content();
 		return ob_get_clean();
 	}
