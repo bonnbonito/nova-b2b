@@ -48,7 +48,7 @@ class FAQ {
 	}
 
 	public function get_nova_check() {
-		return '<svg width="45" height="44" viewBox="0 0 45 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+		return '<svg class="w-full" width="45" height="44" viewBox="0 0 45 44" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M15.5455 43.2353L11.6591 36.6471L4.29545 35L5.01136 27.3824L0 21.6176L5.01136 15.8529L4.29545 8.23529L11.6591 6.58824L15.5455 0L22.5 2.98529L29.4545 0L33.3409 6.58824L40.7045 8.23529L39.9886 15.8529L45 21.6176L39.9886 27.3824L40.7045 35L33.3409 36.6471L29.4545 43.2353L22.5 40.25L15.5455 43.2353ZM17.2841 37.9853L22.5 35.7206L27.8182 37.9853L30.6818 33.0441L36.3068 31.7059L35.7955 25.9412L39.5795 21.6176L35.7955 17.1912L36.3068 11.4265L30.6818 10.1912L27.7159 5.25L22.5 7.51471L17.1818 5.25L14.3182 10.1912L8.69318 11.4265L9.20455 17.1912L5.42045 21.6176L9.20455 25.9412L8.69318 31.8088L14.3182 33.0441L17.2841 37.9853ZM20.3523 28.9265L31.9091 17.2941L29.0455 14.3088L20.3523 23.0588L15.9545 18.7353L13.0909 21.6176L20.3523 28.9265Z" fill="black"/>
 </svg>';
 	}
@@ -57,17 +57,17 @@ class FAQ {
 		ob_start();
 
 		if ( have_rows( 'faq_group' ) ) {
-			echo '<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-12 gap-y-16">';
+			echo '<div class="grid grid-cols-1 sm:grid-cols-2 gap-10 md:grid-cols-3 md:gap-y-20 lg:gap-20">';
 			while ( have_rows( 'faq_group' ) ) :
 				the_row();
 				$is_custom_page = get_sub_field( 'custom_page' );
 				$main           = false;
 				?>
-<div class="grid grid-cols-[45px_1fr]">
-    <div class="pt-2">
+<div class="grid md:grid-cols-[45px_1fr] grid-cols-[35px_1fr]">
+    <div class="pt-0 md:pt-2">
         <?php echo $this->get_nova_check(); ?>
     </div>
-    <div class="pl-9">
+    <div class="pl-4 md:pl-9">
         <h3 class="text-black mb-4">
             <?php if ( $is_custom_page ) : ?>
             <?php echo get_sub_field( 'title' ); ?>
