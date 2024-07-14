@@ -31,6 +31,7 @@ class Woocommerce {
 		add_action( 'nova_product_specs', array( $this, 'nova_product_specs' ), 10 );
 		add_action( 'nova_product_specs', array( $this, 'nova_product_faqs' ), 11 );
 		add_filter( 'woocommerce_get_query_vars', array( $this, 'add_mockups_endpoint_query_var' ) );
+		add_filter( 'query_vars', array( $this, 'add_pg_var' ) );
 		add_filter( 'woocommerce_account_menu_items', array( $this, 'add_mockups_link_my_account' ) );
 		add_filter( 'woocommerce_account_menu_items', array( $this, 'add_mockups_endpoints' ) );
 		add_action( 'woocommerce_account_mockups_endpoint', array( $this, 'add_mockups_content' ) );
@@ -112,6 +113,11 @@ class Woocommerce {
 		add_action( 'woocommerce_thankyou', array( $this, 'move_product_to_trash_after_order' ), 10, 1 );
 		add_filter( 'wpo_wcpdf_woocommerce_totals', array( $this, 'invoice_order_totals' ), 10, 3 );
 		add_filter( 'woocommerce_order_get_total', array( $this, 'set_order_total_to_meta_value' ), 10, 2 );
+	}
+
+	public function add_pg_var( $vars ) {
+		$vars[] = 'pg';
+		return $vars;
 	}
 
 	public function set_order_total_to_meta_value( $total, $order ) {
@@ -1928,8 +1934,10 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		return $title;
 	}
 
-	public function mockups_processing_content() {
-		$user_id = get_current_user_id();
+	public function mockups_content( $quote_status = '' ) {
+		$user_id  = get_current_user_id();
+		$paged    = $_GET['pg'] ?? 1;
+		$per_page = 10;
 
 		$meta_query = array(
 			'relation' => 'AND',
@@ -1938,19 +1946,23 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 				'value'   => $user_id,
 				'compare' => '=',
 			),
-			array(
-				'key'     => 'quote_status',
-				'value'   => 'processing',
-				'compare' => '=',
-			),
 		);
+
+		if ( $quote_status ) {
+			$meta_query[] = array(
+				'key'     => 'quote_status',
+				'value'   => $quote_status,
+				'compare' => '=',
+			);
+		}
 
 		$query = new WP_Query(
 			array(
 				'post_type'      => 'nova_quote',
 				'meta_query'     => $meta_query,
 				'post_status'    => 'publish',
-				'posts_per_page' => -1,
+				'posts_per_page' => $per_page, // Adjust the number of posts per page
+				'paged'          => $paged,
 			)
 		);
 
@@ -1961,121 +1973,102 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 				$query->the_post();
 				get_template_part( 'template-parts/quote' );
 			}
+
+			$this->custom_pagination( $query->found_posts, $query->max_num_pages, $paged, $per_page );
+
 			wp_reset_postdata();
 		}
+	}
+
+	public function custom_pagination( $total_results, $total_pages, $current_page, $per_page ) {
+		if ( $total_pages <= 1 ) {
+			return; // No need to display pagination if there's only one page.
+		}
+
+		$base_url         = esc_url( add_query_arg( 'pg', '%#%' ) );
+		$pagination_links = paginate_links(
+			array(
+				'base'    => $base_url,
+				'format'  => '',
+				'current' => $current_page,
+				'total'   => $total_pages,
+				'type'    => 'array',
+			)
+		);
+
+		if ( ! $pagination_links ) {
+			return; // No links to display.
+		}
+
+		?>
+<div class="flex items-center justify-between border-t border-gray-200 bg-white py-3">
+	<div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+		<div>
+			<p class="text-sm text-gray-700">
+				<?php
+					$first_result = ( ( $current_page - 1 ) * $per_page ) + 1;
+					$last_result  = min( $current_page * $per_page, $total_pages * $per_page, $total_results );
+				?>
+				Showing
+				<span class="font-medium"><?php echo $first_result; ?></span>
+				to
+				<span class="font-medium"><?php echo $last_result; ?></span>
+				of
+				<span class="font-medium"><?php echo $total_results; ?></span>
+				results
+			</p>
+		</div>
+	</div>
+	<div class="flex flex-1 justify-end gap-4 sm:hidden">
+		<?php if ( $current_page > 1 ) : ?>
+		<a href="<?php echo str_replace( '%#%', $current_page - 1, $base_url ); ?>"
+			class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-nova-primary hover:text-white gap-2">
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
+				<path fill-rule="evenodd"
+					d="M11.78 5.22a.75.75 0 0 1 0 1.06L8.06 10l3.72 3.72a.75.75 0 1 1-1.06 1.06l-4.25-4.25a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Z"
+					clip-rule="evenodd" />
+			</svg>
+			<span class="ml-1"><?php _e( 'Previous' ); ?></span>
+		</a>
+		<?php endif; ?>
+		<?php if ( $current_page < $total_pages ) : ?>
+		<a href="<?php echo str_replace( '%#%', $current_page + 1, $base_url ); ?>"
+			class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-nova-primary hover:text-white">
+			<span>
+				<?php _e( 'Next' ); ?>
+			</span>
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
+				<path fill-rule="evenodd"
+					d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z"
+					clip-rule="evenodd" />
+			</svg>
+		</a>
+		<?php endif; ?>
+	</div>
+
+</div>
+		<?php
+	}
+
+
+	public function mockups_processing_content() {
+		$this->mockups_content( 'processing' );
 	}
 
 	public function mockups_drafts_content() {
-		$user_id = get_current_user_id();
-
-		$meta_query = array(
-			'relation' => 'AND',
-			array(
-				'key'     => 'partner',
-				'value'   => $user_id,
-				'compare' => '=',
-			),
-			array(
-				'key'     => 'quote_status',
-				'value'   => 'draft',
-				'compare' => '=',
-			),
-		);
-
-		$query = new WP_Query(
-			array(
-				'post_type'      => 'nova_quote',
-				'meta_query'     => $meta_query,
-				'post_status'    => 'publish',
-				'posts_per_page' => -1,
-			)
-		);
-
-		$this->mockups_nav();
-
-		if ( $query->have_posts() ) {
-			while ( $query->have_posts() ) {
-				$query->the_post();
-				get_template_part( 'template-parts/quote' );
-			}
-			wp_reset_postdata();
-		}
+		$this->mockups_content( 'draft' );
 	}
 
 	public function mockups_payments_content() {
-
-		$user_id = get_current_user_id();
-
-		$meta_query = array(
-			'relation' => 'AND',
-			array(
-				'key'     => 'partner',
-				'value'   => $user_id,
-				'compare' => '=',
-			),
-			array(
-				'key'     => 'quote_status',
-				'value'   => 'ready',
-				'compare' => '=',
-			),
-		);
-
-		$query = new WP_Query(
-			array(
-				'post_type'      => 'nova_quote',
-				'meta_query'     => $meta_query,
-				'post_status'    => 'publish',
-				'posts_per_page' => -1,
-			)
-		);
-
-		$this->mockups_nav();
-
-		if ( $query->have_posts() ) {
-			while ( $query->have_posts() ) {
-				$query->the_post();
-				get_template_part( 'template-parts/quote' );
-			}
-			wp_reset_postdata();
-		}
+		$this->mockups_content( 'ready' );
 	}
 
 	public function mockups_archived_content() {
+		$this->mockups_content( 'archived' );
+	}
 
-		$user_id = get_current_user_id();
-
-		$meta_query = array(
-			'relation' => 'AND',
-			array(
-				'key'     => 'partner',
-				'value'   => $user_id,
-				'compare' => '=',
-			),
-			array(
-				'key'     => 'quote_status',
-				'value'   => 'archived',
-				'compare' => '=',
-			),
-		);
-
-		$query = new WP_Query(
-			array(
-				'post_type'      => 'nova_quote',
-				'meta_query'     => $meta_query,
-				'post_status'    => 'publish',
-				'posts_per_page' => -1,
-			)
-		);
-
-		$this->mockups_nav();
-
-		if ( $query->have_posts() ) {
-			while ( $query->have_posts() ) {
-				$query->the_post();
-				get_template_part( 'template-parts/quote' );
-			}
-			wp_reset_postdata();
-		}
+	public function add_mockups_content() {
+		$this->mockups_content();
 	}
 
 	public function get_all_mockups_quantity( $hook ) {
@@ -2108,39 +2101,6 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		);
 
 		return $query->found_posts;
-	}
-
-	public function add_mockups_content() {
-
-		$user_id = get_current_user_id();
-
-		$meta_query = array(
-			'relation' => 'AND',
-			array(
-				'key'     => 'partner',
-				'value'   => $user_id,
-				'compare' => '=',
-			),
-		);
-
-		$query = new WP_Query(
-			array(
-				'post_type'      => 'nova_quote',
-				'meta_query'     => $meta_query,
-				'post_status'    => 'publish',
-				'posts_per_page' => -1,
-			)
-		);
-
-		$this->mockups_nav();
-
-		if ( $query->have_posts() ) {
-			while ( $query->have_posts() ) {
-				$query->the_post();
-				get_template_part( 'template-parts/quote' );
-			}
-			wp_reset_postdata();
-		}
 	}
 
 	public function mockups_nav() {
@@ -2188,6 +2148,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		$vars['mockups-processing'] = 'mockups/processing';
 		$vars['mockups-payments']   = 'mockups/payments';
 		$vars['mockups-view']       = 'mockups/view';
+		$vars[]                     = 'paged';
 		return $vars;
 	}
 

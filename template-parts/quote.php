@@ -16,8 +16,6 @@ $price_with_shipping = $price + $estimatedShipping;
 
 $final_price = $price_with_shipping ? ( get_woocommerce_currency() === 'USD' ? $price_with_shipping : $price_with_shipping * $exchange_rate_cad ) : 'TBD';
 
-
-
 ?>
 <div id="quote-<?php the_ID(); ?>"
 	class="quote-row rounded border border-solid border-[#D2D2D2] p-4 mb-4 text-xs uppercase relative pr-8">
