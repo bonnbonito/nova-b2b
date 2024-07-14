@@ -12,7 +12,7 @@
  *
  * @see     https://docs.woocommerce.com/document/template-structure/
  * @package WooCommerce\Templates
- * @version 7.8.0
+ * @version 9.0.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -82,19 +82,19 @@ $wrapper_classes = apply_filters(
 );
 ?>
 <div class="<?php echo esc_attr( implode( ' ', array_map( 'sanitize_html_class', $wrapper_classes ) ) ); ?>"
-	data-columns="<?php echo esc_attr( $columns ); ?>" style="opacity: 0; transition: opacity .25s ease-in-out;">
-	<div id="galleryMain" class="main-gallery-image splide">
-		<div class="splide__track">
-			<ul class="splide__list">
+    data-columns="<?php echo esc_attr( $columns ); ?>" style="opacity: 0; transition: opacity .25s ease-in-out;">
+    <div id="galleryMain" class="main-gallery-image splide">
+        <div class="splide__track">
+            <ul class="splide__list">
 
-				<li class="splide__slide hineon-product-gallery__image">
-					<a href="<?php the_post_thumbnail_url( 'full' ); ?>" data-fancybox="gallery">
-						<?php the_post_thumbnail( 'full' ); ?>
-					</a>
-				</li>
+                <li class="splide__slide hineon-product-gallery__image">
+                    <a href="<?php the_post_thumbnail_url( 'full' ); ?>" data-fancybox="gallery">
+                        <?php the_post_thumbnail( 'full' ); ?>
+                    </a>
+                </li>
 
 
-				<?php
+                <?php
 				$html = '';
 				foreach ( $attachment_ids as $attachment_id ) {
 					$html .= hineon_get_gallery_image_html( $attachment_id, true );
@@ -102,9 +102,9 @@ $wrapper_classes = apply_filters(
 
 				echo apply_filters( 'woocommerce_single_product_image_thumbnail_html', $html, $post_thumbnail_id ); // phpcs:disable WordPress.XSS.EscapeOutput.OutputNotEscaped
 				?>
-			</ul>
-		</div>
-		<ul class="splide__pagination"></ul>
-	</div>
-	<?php do_action( 'woocommerce_product_thumbnails' ); ?>
+            </ul>
+        </div>
+        <ul class="splide__pagination"></ul>
+    </div>
+    <?php do_action( 'woocommerce_product_thumbnails' ); ?>
 </div>
