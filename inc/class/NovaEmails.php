@@ -45,6 +45,11 @@ class NovaEmails {
 		add_action( 'admin_init', array( $this, 'process_send_mockup_email' ) );
 		// add_action( 'wpo_wcpdf_after_item_meta', array( $this, 'display_signage_details' ), 20, 3 );
 		add_filter( 'wpo_wcpdf_order_items_data', array( $this, 'add_signage_to_invoice' ), 10, 3 );
+		add_action( 'dp_duplicate_post', array( $this, 'duplicate_post' ), 10, 2 );
+	}
+
+	public function duplicate_post( $new_post_id, $post ) {
+		update_post_meta( $new_post_id, '_is_copy', $post->ID );
 	}
 
 	public function disable_admin_new_order_email_on_hold( $enabled, $order, $email ) {
@@ -501,17 +506,18 @@ class NovaEmails {
 
 		$admin_message = '<p>Hello,</p>';
 
+		$updated_by = get_user_by( 'id', $author_id );
+
+		if ( $updated_by ) {
+			$admin_message .= '<p>This quotation was approved by:<br>';
+			$admin_message .= '<strong>' . $updated_by->display_name . ' - ' . $updated_by->user_email . '</strong></p>';
+		}
+
 		$admin_message .= '<p>You sent a quotation to:</p>';
 		$admin_message .= '<ul>';
 		$admin_message .= '<li><strong>Customer:</strong> ' . $first_name . ' - ' . $business_id . '</li>';
 		$admin_message .= '<li><strong>Company:</strong> ' . $company . '</li>';
 		$admin_message .= '<li><strong>Quote ID:</strong> #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT ) . '</li>';
-
-		$updated_by = get_user_by( 'id', $author_id );
-
-		if ( $updated_by ) {
-			$admin_message .= '<li><strong>Approved by:</strong> ' . $updated_by->display_name . ' - ' . $updated_by->user_email . '</li>';
-		}
 
 		$admin_message .= '<p>You may review the quotation you sent here:</p>';
 		$admin_message .= '<a href="' . $edit_post_url . '">' . $edit_post_url . '</a>';
@@ -524,6 +530,10 @@ class NovaEmails {
 	}
 
 	public function for_quotation_email( $post_id ) {
+
+		if ( get_post_meta( $post_id, '_is_copy', true ) ) {
+			return;
+		}
 
 		$post = get_post( $post_id );
 
