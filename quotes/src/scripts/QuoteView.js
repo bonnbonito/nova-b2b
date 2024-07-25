@@ -89,8 +89,12 @@ export default function QuoteView() {
 	const estimatedShipping =
 		quotePrice > 0 ? Math.max(flatRate, standardRate) : 0;
 
+	const priceWithShipping = parseFloat(
+		(finalPrice + estimatedShipping).toFixed(2)
+	);
+
 	const tax = taxRate ? parseFloat((taxRate.tax_rate / 100).toFixed(2)) : 0;
-	const taxCompute = parseFloat((finalPrice * tax).toFixed(2));
+	const taxCompute = parseFloat((priceWithShipping * tax).toFixed(2));
 
 	const estimatedTotal = parseFloat(
 		(finalPrice + estimatedShipping + taxCompute).toFixed(2)

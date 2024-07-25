@@ -34,11 +34,10 @@ class NovaEmails {
 		add_filter( 'woocommerce_email_subject_customer_completed_order', array( $this, 'completed_payment_subject' ), 41, 2 );
 		add_filter( 'woocommerce_email_subject_customer_completed_order', array( $this, 'fully_paid_payment_subject' ), 42, 2 );
 		add_filter( 'woocommerce_email_recipient_new_order', array( $this, 'filter_woocommerce_email_recipient_new_order' ), 10, 2 );
-		add_filter( 'woocommerce_email_recipient_new_order', array( $this, 'filter_woocommerce_email_recipient_new_order' ), 10, 2 );
 		// add_filter( 'woocommerce_email_attachments', array( $this, 'insert_invoice' ), 10, 4 );
 		// Remove "On Hold" email notification
 		// add_filter( 'woocommerce_email_enabled_customer_on_hold_order', '__return_false' );
-		add_filter( 'woocommerce_email_enabled_new_order', array( $this, 'disable_admin_new_order_email_on_hold' ), 10, 3 );
+		// add_filter( 'woocommerce_email_enabled_new_order', array( $this, 'disable_admin_new_order_email_on_hold' ), 10, 3 );
 		add_action( 'quote_to_processing', array( $this, 'for_quotation_email' ) );
 		add_action( 'quote_to_payment', array( $this, 'for_payment_email' ), 90 );
 		add_action( 'quote_to_payment', array( $this, 'for_payment_admin_email' ), 91, 2 );

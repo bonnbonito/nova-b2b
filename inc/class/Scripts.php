@@ -203,7 +203,7 @@ class Scripts {
 			);
 
 			return $tax_rates ? $tax_rates[0] : null;
-		} catch ( Exception $e ) {
+		} catch ( \Exception $e ) {
 			// Optionally log the error or handle it as needed
 			return null;
 		}

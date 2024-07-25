@@ -3419,8 +3419,9 @@ function QuoteView() {
   const flatRate = currency === 'USD' ? 14.75 : 14.75 * _utils_defaults__WEBPACK_IMPORTED_MODULE_3__.EXCHANGE_RATE;
   const standardRate = parseFloat((finalPrice * 0.075).toFixed(2));
   const estimatedShipping = quotePrice > 0 ? Math.max(flatRate, standardRate) : 0;
+  const priceWithShipping = parseFloat((finalPrice + estimatedShipping).toFixed(2));
   const tax = taxRate ? parseFloat((taxRate.tax_rate / 100).toFixed(2)) : 0;
-  const taxCompute = parseFloat((finalPrice * tax).toFixed(2));
+  const taxCompute = parseFloat((priceWithShipping * tax).toFixed(2));
   const estimatedTotal = parseFloat((finalPrice + estimatedShipping + taxCompute).toFixed(2));
   const downloadFile = NovaAccount?.ID ? `/${NovaAccount.business_id}-INV-Q-${NovaAccount.ID}-${currency}.pdf` : null;
   return NovaAccount && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
