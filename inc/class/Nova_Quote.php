@@ -625,14 +625,31 @@ sendMockup.addEventListener('click', e => {
 			$product_data['meta_input']['_sold_individually'] = 'yes';
 		}
 
-		$existing_product_id = $this->product_exists_by_title( wp_strip_all_tags( $title ) );
-		if ( ! $existing_product_id ) {
-			$existing_product_id = wp_insert_post( $product_data );
-			wp_set_object_terms( $existing_product_id, 'nova_quote', 'product_type' );
-		}
+		// $existing_product_id = $this->product_exists_by_title( wp_strip_all_tags( $title ) );
+		// if ( ! $existing_product_id ) {
+		// $existing_product_id = wp_insert_post( $product_data );
+		// wp_set_object_terms( $existing_product_id, 'nova_quote', 'product_type' );
+		// }
+
+		$existing_product_id = wp_insert_post( $product_data );
+		wp_set_object_terms( $existing_product_id, 'nova_quote', 'product_type' );
 
 		foreach ( $product_meta as $meta_key => $meta_value ) {
 			update_post_meta( $existing_product_id, $meta_key, $meta_value );
+		}
+
+		$old_nova_product_generated_id = get_post_meta( $post_id, 'nova_product_generated_id', true );
+		// if $nova_product_generated_id exists, delete the product
+		if ( $old_nova_product_generated_id ) {
+			// remove it also in the cart if it exists
+			$cart = WC()->cart;
+			foreach ( $cart->get_cart() as $cart_item_key => $cart_item ) {
+				if ( $cart_item['product_id'] == $old_nova_product_generated_id ) {
+					$cart->remove_cart_item( $cart_item_key );
+					break;
+				}
+			}
+			wp_delete_post( $old_nova_product_generated_id, true );
 		}
 
 		update_post_meta( $post_id, 'nova_product_generated_id', $existing_product_id );

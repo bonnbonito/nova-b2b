@@ -91,7 +91,7 @@ class Woocommerce {
 		add_filter( 'payment_types', array( $this, 'partner_payment_types' ) );
 		add_filter( 'woocommerce_order_actions', array( $this, 'remove_send_invoice' ), 10, 2 );
 		add_filter( 'woocommerce_admin_order_actions', array( $this, 'remove_recalculate' ), 10, 2 );
-		// add_filter( 'wcumcs_custom_item_price_final', array( $this, 'change_to_custom_price' ), 9999999, 4 );
+		add_filter( 'wcumcs_custom_item_price_final', array( $this, 'change_to_custom_price' ), 9999999, 4 );
 		add_filter( 'woocommerce_checkout_fields', array( $this, 'require_pst_on_bc' ) );
 		add_filter( 'woocommerce_quantity_input_args', array( $this, 'quantity_input_args' ), 40, 2 );
 		add_filter( 'woocommerce_before_cart_contents', array( $this, 'change_max_value' ) );
@@ -1347,7 +1347,7 @@ class Woocommerce {
 		<?php if ( $signage_query->have_posts() ) { ?>
 		<div id="productCat-list" class="hidden shadow-lg">
 			<?php if ( $custom ) : ?>
-			<a class="product-cat-item text-black" data-signage="<?php echo $custom->ID; ?>"
+			<a class="product-cat-item text-black no-underline" data-signage="<?php echo $custom->ID; ?>"
 				href="<?php echo esc_url( get_the_permalink( $custom->ID ) ); ?>">
 				<?php echo get_the_post_thumbnail( $custom->ID, array( 35, 35 ) ); ?>
 				<?php echo get_the_title( $custom->ID ); ?>
@@ -1358,7 +1358,7 @@ class Woocommerce {
 			while ( $signage_query->have_posts() ) {
 				$signage_query->the_post();
 				?>
-			<a class="product-cat-item text-black" data-signage="<?php echo get_the_ID(); ?>"
+			<a class="product-cat-item text-black no-underline" data-signage="<?php echo get_the_ID(); ?>"
 				href="<?php echo esc_url( get_permalink() ); ?>">
 				<?php the_post_thumbnail( array( 35, 35 ) ); ?>
 				<?php the_title(); ?>
@@ -1410,7 +1410,8 @@ class Woocommerce {
 			while ( $nova_query->have_posts() ) {
 				$nova_query->the_post();
 				?>
-			<a class="product-cat-item text-black" href="<?php echo esc_url( get_permalink() ); ?>overview">
+			<a class="product-cat-item text-black no-underline"
+				href="<?php echo esc_url( get_permalink() ); ?>overview">
 				<?php the_post_thumbnail( array( 35, 35 ) ); ?>
 				<?php the_title(); ?>
 			</a>
@@ -1524,7 +1525,7 @@ class Woocommerce {
 		while ( $nova_query->have_posts() ) {
 			$nova_query->the_post();
 			?>
-<a class="product-cat-item text-black" href="<?php echo esc_url( get_permalink() ); ?>overview">
+<a class="product-cat-item text-black no-underline" href="<?php echo esc_url( get_permalink() ); ?>overview">
 			<?php the_post_thumbnail( array( 35, 35 ) ); ?>
 			<?php the_title(); ?>
 </a>

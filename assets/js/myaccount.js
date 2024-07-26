@@ -103,9 +103,9 @@ function process(btn, action) {
 		},
 		body: formData,
 	})
-		.then((response) => response.json())
-		.then((data) => {
-			if (data.code == 2) {
+		.then((response) => {
+			console.log(response);
+			if (response.status === 200) {
 				if (action === 'to_checkout') {
 					const cartTotal = document.querySelector('.header-cart-total');
 					cartTotal.innerText = parseInt(cartTotal.innerText) + 1;

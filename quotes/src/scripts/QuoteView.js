@@ -53,14 +53,11 @@ export default function QuoteView() {
 			},
 			body: formData,
 		})
-			.then((response) => response.json())
-			.then((data) => {
-				console.log(data);
-
-				if (data.code == 2) {
+			.then((response) => {
+				console.log(response);
+				if (response.status === 200) {
 					const cartTotal = document.querySelector('.header-cart-total');
 					cartTotal.innerText = parseInt(cartTotal.innerText) + 1;
-
 					setAddedToCart(true);
 
 					let event = new Event('added_to_cart');
