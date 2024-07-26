@@ -1110,9 +1110,10 @@ sendMockup.addEventListener('click', e => {
 		$tax_rate    = 0;
 		$tax_compute = 0;
 		if ( $tax ) {
-			$tax_rate_name = $tax->tax_rate_name;
-			$tax_rate      = floatval( $tax->tax_rate / 100 );
-			$tax_compute   = number_format( $final_price * $tax_rate, 2, '.', '' );
+			$tax_rate_name     = $tax->tax_rate_name;
+			$tax_rate          = floatval( $tax->tax_rate / 100 );
+			$priceWithShipping = $final_price + $estimatedShipping;
+			$tax_compute       = number_format( $priceWithShipping * $tax_rate, 2, '.', '' );
 		}
 
 		$estimate_total = $final_price + $tax_compute + $estimatedShipping;
@@ -1319,9 +1320,10 @@ h6 {
 		$tax_rate    = 0;
 		$tax_compute = 0;
 		if ( $tax ) {
-			$tax_rate_name = $tax->tax_rate_name;
-			$tax_rate      = floatval( $tax->tax_rate / 100 );
-			$tax_compute   = number_format( $final_price * $tax_rate, 2, '.', '' );
+			$tax_rate_name     = $tax->tax_rate_name;
+			$tax_rate          = floatval( $tax->tax_rate / 100 );
+			$priceWithShipping = $final_price + $estimatedShipping;
+			$tax_compute       = number_format( $priceWithShipping * $tax_rate, 2, '.', '' );
 		}
 
 		$estimate_total = $final_price + $tax_compute + $estimatedShipping;
@@ -1545,6 +1547,9 @@ h6 {
 			'returnColor'             => 'RETURN COLOR',
 			'customColor'             => 'CUSTOM COLOR',
 			'finishing'               => 'FINISHING',
+			'aluminumFinishing'       => 'ALUMINUM FINISHING',
+			'anodizedFinishing'       => 'ANODIZED FINISHING',
+			'anodizedColor'           => 'ANODIZED COLOR',
 			'metalColor'              => 'COLOR',
 			'metalCustomColor'        => 'CUSTOM COLOR',
 			'returnPaintColor'        => 'RETURN PAINT COLOR',

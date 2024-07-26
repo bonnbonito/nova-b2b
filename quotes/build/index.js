@@ -3505,9 +3505,7 @@ function QuoteView() {
     }
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex justify-between gap-4"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, `${NovaAccount?.quote_status?.value === 'ready' ? 'SUBTOTAL' : 'ESTIMATED SUBTOTAL'}`, ":"), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, finalPrice > 0 ? `${currency}$${Number(finalPrice.toFixed(2)).toLocaleString()}` : 'TBD')), taxRate && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "flex justify-between gap-4"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, taxRate.tax_rate_name), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, taxCompute > 0 ? `${currency}$${Number(taxCompute.toFixed(2)).toLocaleString()}` : 'TBD')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, `${NovaAccount?.quote_status?.value === 'ready' ? 'SUBTOTAL' : 'ESTIMATED SUBTOTAL'}`, ":"), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, finalPrice > 0 ? `${currency}$${Number(finalPrice.toFixed(2)).toLocaleString()}` : 'TBD')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex justify-between gap-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
     className: "flex gap-2"
@@ -3525,7 +3523,9 @@ function QuoteView() {
     d: "M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z"
   })), "PACKAGING & SHIPPING:"), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, estimatedShipping > 0 ? `${currency}$${Number(estimatedShipping.toFixed(2)).toLocaleString()}` : 'TBD')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: `text-sm mb-2 ${isHovered ? 'opacity-100' : 'opacity-0'}`
-  }, "The shipping cost depends on the address in your account. You can change the shipping type and shipping address during checkout."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "The shipping cost depends on the address in your account. You can change the shipping type and shipping address during checkout."), taxRate && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex justify-between gap-4"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, taxRate.tax_rate_name), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, taxCompute > 0 ? `${currency}$${Number(taxCompute.toFixed(2)).toLocaleString()}` : 'TBD')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex justify-between gap-4 border-b pb-14 mt-8"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, "ESTIMATED TOTAL:"), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, estimatedTotal > 0 ? `${currency}$${Number(parseFloat(estimatedTotal).toFixed(2)).toLocaleString()}` : 'TBD')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
     className: "mt-4 text-[10px] text-[#5E5E5E]"
@@ -27015,7 +27015,7 @@ function LaserCutAluminum() {
       files: [],
       fileUrl: '',
       file: '',
-      finishing: '',
+      aluminumFinishing: '',
       customFont: '',
       metalCustomColor: '',
       studLength: '',
@@ -27043,7 +27043,7 @@ function LaserCutAluminum() {
     mounting: '',
     metalThickness: '',
     waterproof: '',
-    finishing: '',
+    aluminumFinishing: '',
     usdPrice: 0,
     cadPrice: 0,
     filePaths: [],
@@ -27198,7 +27198,7 @@ __webpack_require__.r(__webpack_exports__);
 function Letters({
   item
 }) {
-  var _item$letters, _item$comments, _item$font, _item$waterproof, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$finishing, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
+  var _item$letters, _item$comments, _item$font, _item$waterproof, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$aluminumFinishi, _item$anodizedFinishi, _item$anodizedColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
   const {
     signage,
     setSignage,
@@ -27221,7 +27221,9 @@ function Letters({
   const [fontFilePath, setFontFilePath] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fontFilePath = item.fontFilePath) !== null && _item$fontFilePath !== void 0 ? _item$fontFilePath : '');
   const [fontFile, setFontFile] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fontFile = item.fontFile) !== null && _item$fontFile !== void 0 ? _item$fontFile : '');
   const [letterHeightOptions, setLetterHeightOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [selectedFinishing, setSelectedFinishing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$finishing = item.finishing) !== null && _item$finishing !== void 0 ? _item$finishing : '');
+  const [selectedFinishing, setSelectedFinishing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$aluminumFinishi = item.aluminumFinishing) !== null && _item$aluminumFinishi !== void 0 ? _item$aluminumFinishi : '');
+  const [anodizedFinishing, setAnodizedFinishing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$anodizedFinishi = item.anodizedFinishing) !== null && _item$anodizedFinishi !== void 0 ? _item$anodizedFinishi : '');
+  const [anodizedColor, setAnodizedColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$anodizedColor = item.anodizedColor) !== null && _item$anodizedColor !== void 0 ? _item$anodizedColor : '');
   const [customFont, setCustomFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.customFont);
   const [customColor, setCustomColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.metalCustomColor);
   const [metalMountingOptions, setMetalMountingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.metalInstallationOptions);
@@ -27331,7 +27333,9 @@ function Letters({
           fontFileName,
           fontFilePath,
           fontFileUrl,
-          finishing: selectedFinishing,
+          aluminumFinishing: selectedFinishing,
+          anodizedFinishing,
+          anodizedColor,
           customFont,
           metalCustomColor: customColor,
           sets,
@@ -27448,7 +27452,7 @@ function Letters({
   }, [letters]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-  }, [letters, comments, font, selectedThickness, mounting, waterproof, color, usdPrice, cadPrice, selectedLetterHeight, fileUrls, fileNames, files, filePaths, fontFileUrl, fontFileName, fontFilePath, fontFile, selectedFinishing, customFont, sets, customColor, studLength, spacerStandoffDistance, usdSinglePrice, cadSinglePrice]);
+  }, [letters, comments, font, selectedThickness, anodizedFinishing, anodizedColor, mounting, waterproof, color, usdPrice, cadPrice, selectedLetterHeight, fileUrls, fileNames, files, filePaths, fontFileUrl, fontFileName, fontFilePath, fontFile, selectedFinishing, customFont, sets, customColor, studLength, spacerStandoffDistance, usdSinglePrice, cadSinglePrice]);
   const checkAndAddMissingFields = () => {
     const missingFields = [];
     if (!letters) missingFields.push('Add Line Text');
@@ -27460,9 +27464,13 @@ function Letters({
     }
     if (!selectedLetterHeight) missingFields.push('Select Letter Height');
     if (!selectedThickness) missingFields.push('Select Acrylic Thickness');
-    if (!selectedFinishing) missingFields.push('Select Finishing Options');
+    if (!selectedFinishing) missingFields.push('Select Aluminum Finishing');
     if (selectedFinishing === 'Painted') {
       if (!color.name) missingFields.push('Select Color');
+    }
+    if (selectedFinishing === 'Anodized') {
+      if (!anodizedFinishing) missingFields.push('Select Anodized Finishing');
+      if (!anodizedColor) missingFields.push('Select Anodized Color');
     }
     if (selectedFinishing === 'Painted' && color?.name === 'Custom Color' && !customColor) {
       missingFields.push('Add the Pantone color code of your custom color.');
@@ -27506,7 +27514,7 @@ function Letters({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [letters, font, color, selectedThickness, mounting, waterproof, selectedLetterHeight, fileUrls, fileNames, files, filePaths, fontFileUrl, selectedFinishing, studLength, spacerStandoffDistance, customFont, customColor, sets]);
+  }, [letters, font, color, selectedThickness, anodizedFinishing, anodizedColor, mounting, waterproof, selectedLetterHeight, fileUrls, fileNames, files, filePaths, fontFileUrl, selectedFinishing, studLength, spacerStandoffDistance, customFont, customColor, sets]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const newHeightOptions = letterPricing?.filter(item => {
       const value = item[selectedThickness?.value];
@@ -27615,14 +27623,22 @@ function Letters({
     options: letterHeightOptions,
     value: selectedLetterHeight
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Finishing Options",
+    title: "Aluminum Finishing",
     onChange: handleChangeFinishing,
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.metalFinishOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.aluminumFinishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: finishing.option,
       selected: finishing.option === selectedFinishing
     }, finishing.option)),
     value: selectedFinishing
-  }), selectedFinishing === 'Painted' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_11__["default"], {
+  }), selectedFinishing === 'Anodized' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Anodized Finishing",
+    onChange: handleChangeFinishing,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.aluminumFinishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: finishing.option,
+      selected: finishing.option === selectedFinishing
+    }, finishing.option)),
+    value: selectedFinishing
+  })), selectedFinishing === 'Painted' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_11__["default"], {
     ref: colorRef,
     title: "Color",
     colorName: color.name,
@@ -27747,7 +27763,7 @@ __webpack_require__.r(__webpack_exports__);
 function Logo({
   item
 }) {
-  var _item$mounting, _item$width, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$finishing, _item$height, _item$comments, _item$waterproof, _item$mounting2, _item$studLength, _item$spacerStandoffD, _item$sets;
+  var _item$mounting, _item$width, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$aluminumFinishi, _item$anodizedFinishi, _item$anodizedColor, _item$height, _item$comments, _item$waterproof, _item$mounting2, _item$studLength, _item$spacerStandoffD, _item$sets;
   const {
     signage,
     setSignage,
@@ -27766,7 +27782,9 @@ function Logo({
   const [files, setFiles] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$files = item.files) !== null && _item$files !== void 0 ? _item$files : []);
   const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.metalColor);
   const [openColor, setOpenColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [selectedFinishing, setSelectedFinishing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$finishing = item.finishing) !== null && _item$finishing !== void 0 ? _item$finishing : '');
+  const [selectedFinishing, setSelectedFinishing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$aluminumFinishi = item.aluminumFinishing) !== null && _item$aluminumFinishi !== void 0 ? _item$aluminumFinishi : '');
+  const [anodizedFinishing, setAnodizedFinishing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$anodizedFinishi = item.anodizedFinishing) !== null && _item$anodizedFinishi !== void 0 ? _item$anodizedFinishi : '');
+  const [anodizedColor, setAnodizedColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$anodizedColor = item.anodizedColor) !== null && _item$anodizedColor !== void 0 ? _item$anodizedColor : '');
   const [customColor, setCustomColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.metalCustomColor);
   const maxWidthHeightOptions = Array.from({
     length: 43
@@ -27883,7 +27901,9 @@ function Logo({
           height,
           usdPrice,
           cadPrice,
-          finishing: selectedFinishing,
+          aluminumFinishing: selectedFinishing,
+          anodizedFinishing,
+          anodizedColor,
           files,
           fileNames,
           filePaths,
@@ -27904,16 +27924,20 @@ function Logo({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
-  }, [comments, selectedThickness, selectedMounting, waterproof, width, height, usdPrice, cadPrice, fileUrls, fileNames, selectedFinishing, files, filePaths, mounting, color, customColor, sets, studLength, spacerStandoffDistance, usdSinglePrice, cadSinglePrice]);
+  }, [comments, selectedThickness, selectedMounting, waterproof, width, height, usdPrice, cadPrice, fileUrls, fileNames, selectedFinishing, files, filePaths, mounting, color, customColor, sets, studLength, spacerStandoffDistance, usdSinglePrice, cadSinglePrice, anodizedFinishing, anodizedColor]);
   const checkAndAddMissingFields = () => {
     const missingFields = [];
     if (!selectedThickness) missingFields.push('Select Acrylic Thickness');
     if (!width) missingFields.push('Select Logo Width');
     if (!height) missingFields.push('Select Logo Height');
     if (!waterproof) missingFields.push('Select Environment');
-    if (!selectedFinishing) missingFields.push('Select Finishing');
+    if (!selectedFinishing) missingFields.push('Select Aluminum Finishing');
     if (selectedFinishing === 'Painted') {
       if (!color.name) missingFields.push('Select Color');
+    }
+    if (selectedFinishing === 'Anodized') {
+      if (!anodizedFinishing) missingFields.push('Select Anodized Finishing');
+      if (!anodizedColor) missingFields.push('Select Anodized Color');
     }
     if (selectedFinishing === 'Painted' && color?.name === 'Custom Color' && !customColor) {
       missingFields.push('Add the Pantone color code of your custom color.');
@@ -28062,9 +28086,9 @@ function Logo({
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Finishing Options",
+    title: "Aluminum Finishing",
     onChange: handleChangeFinishing,
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.metalFinishOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.aluminumFinishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: finishing.option,
       selected: finishing.option === selectedFinishing
     }, finishing.option)),
@@ -33481,6 +33505,9 @@ const SignageCount = (signage, type) => signage.filter(sign => sign.type === typ
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   aluminumFinishingOptions: () => (/* binding */ aluminumFinishingOptions),
+/* harmony export */   anodizedColorOptions: () => (/* binding */ anodizedColorOptions),
+/* harmony export */   anodizedFinishingOptions: () => (/* binding */ anodizedFinishingOptions),
 /* harmony export */   arrayRange: () => (/* binding */ arrayRange),
 /* harmony export */   defaultFinishOptions: () => (/* binding */ defaultFinishOptions),
 /* harmony export */   finishingOptions: () => (/* binding */ finishingOptions),
@@ -33558,6 +33585,29 @@ const metalFinishOptions = [{
   option: 'Brushed'
 }, {
   option: 'Painted'
+}];
+const aluminumFinishingOptions = [{
+  option: 'Brushed'
+}, {
+  option: 'Painted'
+}, {
+  option: 'Anodized'
+}];
+const anodizedFinishingOptions = [{
+  option: 'Sandblasted Matte'
+}, {
+  option: 'Brushed Anodized'
+}];
+const anodizedColorOptions = [{
+  option: 'Black'
+}, {
+  option: 'Brown'
+}, {
+  option: 'Clear'
+}, {
+  option: 'Gold'
+}, {
+  option: 'Champagne Gold'
 }];
 const waterProofOptions = [{
   option: _defaults__WEBPACK_IMPORTED_MODULE_1__.INDOOR_NOT_WATERPROOF
@@ -33903,6 +33953,15 @@ const allAttributes = item => [{
 }, {
   key: item.finishing,
   label: 'FINISHING'
+}, {
+  key: item.aluminumFinishing,
+  label: 'ALUMINUM FINISHING'
+}, {
+  key: item.anodizedFinishing,
+  label: 'ANODIZED FINISHING'
+}, {
+  key: item.anodizedColor,
+  label: 'ANODIZED COLOR'
 }, {
   key: item.metalColor?.name,
   label: 'COLOR'

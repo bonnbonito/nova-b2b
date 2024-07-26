@@ -176,6 +176,25 @@ article a {
     border-style: solid;
 }
 
+[multiple]:focus,
+[type="date"]:focus,
+[type="datetime-local"]:focus,
+[type="email"]:focus,
+[type="month"]:focus,
+[type="number"]:focus,
+[type="password"]:focus,
+[type="search"]:focus,
+[type="tel"]:focus,
+[type="text"]:focus,
+[type="time"]:focus,
+[type="url"]:focus,
+[type="week"]:focus,
+input:where(:not([type])):focus,
+select:focus,
+textarea:focus {
+    box-shadow: 0px 5px 15px -7px rgba(0, 0, 0, 0.1);
+}
+
 @media screen and (min-width: 768px) {
 
     /* disable Flickity for large devices */

@@ -17,6 +17,9 @@ module.exports = {
 				'nova-primary': '#f22e00',
 				'nova-secondary': '#ff5e3d',
 			},
+			ringColor: {
+				DEFAULT: '#0000',
+			},
 		},
 		fontFamily: {
 			title: ['"Secular One"', 'sans-serif'],

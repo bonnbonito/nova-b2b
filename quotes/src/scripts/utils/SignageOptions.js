@@ -84,6 +84,45 @@ const metalFinishOptions = [
 	},
 ];
 
+export const aluminumFinishingOptions = [
+	{
+		option: 'Brushed',
+	},
+	{
+		option: 'Painted',
+	},
+	{
+		option: 'Anodized',
+	},
+];
+
+export const anodizedFinishingOptions = [
+	{
+		option: 'Sandblasted Matte',
+	},
+	{
+		option: 'Brushed Anodized',
+	},
+];
+
+export const anodizedColorOptions = [
+	{
+		option: 'Black',
+	},
+	{
+		option: 'Brown',
+	},
+	{
+		option: 'Clear',
+	},
+	{
+		option: 'Gold',
+	},
+	{
+		option: 'Champagne Gold',
+	},
+];
+
 const waterProofOptions = [
 	{
 		option: INDOOR_NOT_WATERPROOF,

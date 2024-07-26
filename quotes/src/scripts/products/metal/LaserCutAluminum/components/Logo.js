@@ -10,7 +10,7 @@ import {
 	spacerPricing,
 } from '../../../../utils/Pricing';
 import {
-	metalFinishOptions,
+	aluminumFinishingOptions,
 	metalInstallationOptions,
 	metalThicknessOptions,
 	setOptions,
@@ -54,8 +54,15 @@ export function Logo({ item }) {
 	const [color, setColor] = useState(item.metalColor);
 	const [openColor, setOpenColor] = useState(false);
 	const [selectedFinishing, setSelectedFinishing] = useState(
-		item.finishing ?? ''
+		item.aluminumFinishing ?? ''
 	);
+
+	const [anodizedFinishing, setAnodizedFinishing] = useState(
+		item.anodizedFinishing ?? ''
+	);
+
+	const [anodizedColor, setAnodizedColor] = useState(item.anodizedColor ?? '');
+
 	const [customColor, setCustomColor] = useState(item.metalCustomColor);
 
 	const maxWidthHeightOptions = Array.from(
@@ -190,7 +197,9 @@ export function Logo({ item }) {
 					height,
 					usdPrice,
 					cadPrice,
-					finishing: selectedFinishing,
+					aluminumFinishing: selectedFinishing,
+					anodizedFinishing,
+					anodizedColor,
 					files,
 					fileNames,
 					filePaths,
@@ -234,6 +243,8 @@ export function Logo({ item }) {
 		spacerStandoffDistance,
 		usdSinglePrice,
 		cadSinglePrice,
+		anodizedFinishing,
+		anodizedColor,
 	]);
 
 	const checkAndAddMissingFields = () => {
@@ -243,9 +254,13 @@ export function Logo({ item }) {
 		if (!width) missingFields.push('Select Logo Width');
 		if (!height) missingFields.push('Select Logo Height');
 		if (!waterproof) missingFields.push('Select Environment');
-		if (!selectedFinishing) missingFields.push('Select Finishing');
+		if (!selectedFinishing) missingFields.push('Select Aluminum Finishing');
 		if (selectedFinishing === 'Painted') {
 			if (!color.name) missingFields.push('Select Color');
+		}
+		if (selectedFinishing === 'Anodized') {
+			if (!anodizedFinishing) missingFields.push('Select Anodized Finishing');
+			if (!anodizedColor) missingFields.push('Select Anodized Color');
 		}
 		if (
 			selectedFinishing === 'Painted' &&
@@ -467,9 +482,9 @@ export function Logo({ item }) {
 				/>
 
 				<Dropdown
-					title="Finishing Options"
+					title="Aluminum Finishing"
 					onChange={handleChangeFinishing}
-					options={metalFinishOptions.map((finishing) => (
+					options={aluminumFinishingOptions.map((finishing) => (
 						<option
 							value={finishing.option}
 							selected={finishing.option === selectedFinishing}

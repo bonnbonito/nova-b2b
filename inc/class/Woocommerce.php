@@ -91,7 +91,7 @@ class Woocommerce {
 		add_filter( 'payment_types', array( $this, 'partner_payment_types' ) );
 		add_filter( 'woocommerce_order_actions', array( $this, 'remove_send_invoice' ), 10, 2 );
 		add_filter( 'woocommerce_admin_order_actions', array( $this, 'remove_recalculate' ), 10, 2 );
-		add_filter( 'wcumcs_custom_item_price_final', array( $this, 'change_to_custom_price' ), 9999999, 4 );
+		// add_filter( 'wcumcs_custom_item_price_final', array( $this, 'change_to_custom_price' ), 9999999, 4 );
 		add_filter( 'woocommerce_checkout_fields', array( $this, 'require_pst_on_bc' ) );
 		add_filter( 'woocommerce_quantity_input_args', array( $this, 'quantity_input_args' ), 40, 2 );
 		add_filter( 'woocommerce_before_cart_contents', array( $this, 'change_max_value' ) );
@@ -102,6 +102,7 @@ class Woocommerce {
 		add_action( 'option_wcumcs_available_currencies', array( $this, 'list_of_currencies' ), 10, 2 );
 		add_filter( 'woocommerce_email_heading_customer_completed_order', array( $this, 'change_order_email_headings' ), 20, 2 );
 		add_filter( 'woocommerce_order_after_calculate_totals', array( $this, 'modify_order_total' ), 20, 2 );
+		add_filter( 'woocommerce_order_after_calculate_totals', array( $this, 'custom_adjust_order_calculated_tax' ), 19, 2 );
 		add_filter( 'user_has_cap', array( $this, 'order_pay_without_login' ), 9999, 3 );
 		add_filter( 'woocommerce_order_email_verification_required', '__return_false', 9999 );
 		add_action( 'template_redirect', array( $this, 'remove_login_form_on_thankyou_page' ) );
@@ -113,6 +114,110 @@ class Woocommerce {
 		add_action( 'woocommerce_thankyou', array( $this, 'move_product_to_trash_after_order' ), 10, 1 );
 		add_filter( 'wpo_wcpdf_woocommerce_totals', array( $this, 'invoice_order_totals' ), 10, 3 );
 		add_filter( 'woocommerce_order_get_total', array( $this, 'set_order_total_to_meta_value' ), 10, 2 );
+		// add_filter( 'woocommerce_calc_tax', array( $this, 'debug_woocommerce_tax_calculation' ), 9999, 5 );
+		// add_filter( 'woocommerce_calc_shipping_tax', array( $this, 'debug_woocommerce_shipping_tax_calculation' ), 9999, 3 );
+		// add_action( 'woocommerce_order_item_fee_after_calculate_taxes', array( $this, 'debug_after_fees' ), 99, 2 );
+		add_filter( 'woocommerce_cart_tax_totals', array( $this, 'custom_adjust_calculated_tax' ), 20, 2 );
+		add_filter( 'woocommerce_calculated_total', array( $this, 'nova_calculated_total' ), 9, 2 );
+	}
+
+	public function nova_calculated_total( $total, $cart ) {
+		$customer    = WC()->customer;
+		$customer_id = $customer->get_id();
+
+		$cart_total = $cart->get_subtotal();
+		$shipping   = $cart->get_shipping_total();
+
+		$subtotal = $cart_total + $shipping;
+
+		$instance = \NOVA_B2B\Scripts::get_instance();
+		$tax_rate = false;
+		if ( $instance ) {
+			$tax = $instance->get_woocommerce_tax_rate_by_country_and_state( $customer_id, '', '' );
+
+			if ( $tax ) {
+				$tax_rate = floatval( $tax->tax_rate / 100 );
+			}
+		}
+
+		if ( ! $tax_rate ) {
+			return $total;
+		}
+
+		$computed_tax = $subtotal * $tax_rate;
+		$total        = $subtotal + $computed_tax;
+
+		return $total;
+	}
+
+	public function custom_adjust_calculated_tax( $tax_totals, $cart ) {
+		$customer    = WC()->customer;
+		$customer_id = $customer->get_id();
+
+		$cart_total = $cart->get_subtotal();
+		$shipping   = $cart->get_shipping_total();
+
+		$subtotal = $cart_total + $shipping;
+
+		// Get the tax rates for the specified location
+		$instance = \NOVA_B2B\Scripts::get_instance();
+		$tax_rate = false;
+		if ( $instance ) {
+			$tax = $instance->get_woocommerce_tax_rate_by_country_and_state( $customer_id, '', '' );
+
+			if ( $tax ) {
+				$tax_rate = floatval( $tax->tax_rate / 100 );
+			}
+		}
+
+		if ( ! $tax_rate ) {
+			return $tax_totals;
+		}
+
+		foreach ( $tax_totals as $key => $tax_total ) {
+			$computed_tax                         = $subtotal * $tax_rate;
+			$tax_totals[ $key ]->amount           = $computed_tax;
+			$formatted_amount                     = wc_price( $computed_tax );
+			$tax_totals[ $key ]->formatted_amount = $formatted_amount;
+		}
+
+		return $tax_totals;
+	}
+
+	public function debug_after_fees( $order, $fees ) {
+		print_r( 'Fees: ' . print_r( $fees, true ) );
+		echo '<br>';
+	}
+
+	public function debug_woocommerce_shipping_tax_calculation( $taxes, $price, $rates ) {
+		// Log the input parameters for debugging
+		print_r( 'Prices: ' . print_r( $price, true ) );
+		echo '<br>';
+		print_r( 'Rates: ' . print_r( $rates, true ) );
+		echo '<br>';
+
+		// Log the calculated taxes
+		print_r( 'Calculated Taxes: ' . print_r( $taxes, true ) );
+		echo '-------------------------------------------------------------------------------<br>';
+
+		return $taxes;
+	}
+
+	public function debug_woocommerce_tax_calculation( $taxes, $price, $rates, $price_includes_tax, $surcharge ) {
+		// Log the input parameters for debugging
+		print_r( 'Price: ' . print_r( $price, true ) );
+		echo '<br>';
+		print_r( 'Rates: ' . print_r( $rates, true ) );
+		echo '<br>';
+		print_r( 'Price includes tax: ' . print_r( $price_includes_tax, true ) );
+		echo '<br>';
+		print_r( 'Surcharge: ' . print_r( $surcharge, true ) );
+		echo '<br>';
+
+		// Log the calculated taxes
+		print_r( 'Calculated Taxes: ' . print_r( $taxes, true ) );
+
+		return $taxes;
 	}
 
 	public function add_pg_var( $vars ) {
@@ -289,6 +394,40 @@ class Woocommerce {
 			}
 		}
 	}
+
+	public function custom_adjust_order_calculated_tax( $and_taxes, $order ) {
+		$customer_id = $order->get_user_id();
+
+		$order_total = $order->get_subtotal();
+		$shipping    = $order->get_shipping_total();
+
+		$subtotal = $order_total + $shipping;
+
+		// Get the tax rates for the specified location
+		$instance = \NOVA_B2B\Scripts::get_instance();
+		$tax_rate = false;
+		if ( $instance ) {
+			$tax = $instance->get_woocommerce_tax_rate_by_country_and_state( $customer_id, '', '' );
+
+			if ( $tax ) {
+				$tax_rate = floatval( $tax->tax_rate / 100 );
+			}
+		}
+
+		if ( ! $tax_rate ) {
+			return;
+		}
+
+		$computed_tax = $subtotal * $tax_rate;
+
+		$order->set_discount_tax( $computed_tax );
+
+		// Calculate the new order total
+		$new_total = $subtotal + $computed_tax;
+		$order->set_total( $new_total );
+	}
+
+
 
 	public function change_order_email_headings( $heading, $order ) {
 
@@ -481,7 +620,7 @@ class Woocommerce {
 	}
 
 
-	function change_to_custom_price( $final_price, $price, $product, $currency ) {
+	public function change_to_custom_price( $final_price, $price, $product, $currency ) {
 
 		if ( get_woocommerce_currency() == 'CAD' ) {
 			$final_price = $price * 1.3;

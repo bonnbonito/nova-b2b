@@ -8,7 +8,7 @@ import useOutsideClick from '../../../../utils/ClickOutside';
 import { colorOptions } from '../../../../utils/ColorOptions';
 import convert_json from '../../../../utils/ConvertJson';
 import {
-	metalFinishOptions,
+	aluminumFinishingOptions,
 	metalInstallationOptions,
 	metalThicknessOptions,
 	setOptions,
@@ -55,8 +55,15 @@ export function Letters({ item }) {
 
 	const [letterHeightOptions, setLetterHeightOptions] = useState([]);
 	const [selectedFinishing, setSelectedFinishing] = useState(
-		item.finishing ?? ''
+		item.aluminumFinishing ?? ''
 	);
+
+	const [anodizedFinishing, setAnodizedFinishing] = useState(
+		item.anodizedFinishing ?? ''
+	);
+
+	const [anodizedColor, setAnodizedColor] = useState(item.anodizedColor ?? '');
+
 	const [customFont, setCustomFont] = useState(item.customFont);
 	const [customColor, setCustomColor] = useState(item.metalCustomColor);
 	const [metalMountingOptions, setMetalMountingOptions] = useState(
@@ -190,7 +197,9 @@ export function Letters({ item }) {
 					fontFileName,
 					fontFilePath,
 					fontFileUrl,
-					finishing: selectedFinishing,
+					aluminumFinishing: selectedFinishing,
+					anodizedFinishing,
+					anodizedColor,
 					customFont,
 					metalCustomColor: customColor,
 					sets,
@@ -355,6 +364,8 @@ export function Letters({ item }) {
 		comments,
 		font,
 		selectedThickness,
+		anodizedFinishing,
+		anodizedColor,
 		mounting,
 		waterproof,
 		color,
@@ -391,9 +402,13 @@ export function Letters({ item }) {
 		}
 		if (!selectedLetterHeight) missingFields.push('Select Letter Height');
 		if (!selectedThickness) missingFields.push('Select Acrylic Thickness');
-		if (!selectedFinishing) missingFields.push('Select Finishing Options');
+		if (!selectedFinishing) missingFields.push('Select Aluminum Finishing');
 		if (selectedFinishing === 'Painted') {
 			if (!color.name) missingFields.push('Select Color');
+		}
+		if (selectedFinishing === 'Anodized') {
+			if (!anodizedFinishing) missingFields.push('Select Anodized Finishing');
+			if (!anodizedColor) missingFields.push('Select Anodized Color');
 		}
 		if (
 			selectedFinishing === 'Painted' &&
@@ -459,6 +474,8 @@ export function Letters({ item }) {
 		font,
 		color,
 		selectedThickness,
+		anodizedFinishing,
+		anodizedColor,
 		mounting,
 		waterproof,
 		selectedLetterHeight,
@@ -622,9 +639,9 @@ export function Letters({ item }) {
 				/>
 
 				<Dropdown
-					title="Finishing Options"
+					title="Aluminum Finishing"
 					onChange={handleChangeFinishing}
-					options={metalFinishOptions.map((finishing) => (
+					options={aluminumFinishingOptions.map((finishing) => (
 						<option
 							value={finishing.option}
 							selected={finishing.option === selectedFinishing}
@@ -634,6 +651,24 @@ export function Letters({ item }) {
 					))}
 					value={selectedFinishing}
 				/>
+
+				{selectedFinishing === 'Anodized' && (
+					<>
+						<Dropdown
+							title="Anodized Finishing"
+							onChange={handleChangeFinishing}
+							options={aluminumFinishingOptions.map((finishing) => (
+								<option
+									value={finishing.option}
+									selected={finishing.option === selectedFinishing}
+								>
+									{finishing.option}
+								</option>
+							))}
+							value={selectedFinishing}
+						/>
+					</>
+				)}
 
 				{selectedFinishing === 'Painted' && (
 					<>

@@ -341,6 +341,21 @@ function allAttributes(sign) {
 		{ label: 'FINISHING', value: sign.finishing ? sign.finishing : '' },
 
 		{
+			label: 'ALUMINUM FINISHING',
+			value: sign.aluminumFinishing ? sign.aluminumFinishing : '',
+		},
+
+		{
+			label: 'ANODIZED FINISHING',
+			value: sign.anodizedFinishing ? sign.anodizedFinishing : '',
+		},
+
+		{
+			label: 'ANODIZED COLOR',
+			value: sign.anodizedColor ? sign.anodizedColor : '',
+		},
+
+		{
 			label: 'COLOR',
 			value: sign.metalColor?.name ? sign.metalColor.name : '',
 		},
