@@ -74,14 +74,14 @@ class FAQ {
 		<a href="<?php echo get_permalink( $main->ID ); ?>"><?php echo $main->post_title; ?></a>
 		<?php endif; ?>
 	</h3>
-	<ul class="list-none pl-0 text-base">
+	<ul class="list-none pl-0 text-base leading-8">
 				<?php
 				if ( ! $main ) {
 					$sub_faqs = get_sub_field( 'sub_categories' );
 					if ( $sub_faqs ) {
 						foreach ( $sub_faqs as $sub_faq ) {
 							?>
-		<li class="py-1">
+		<li>
 			<a style="text-decoration: none;"
 				class="decoration-none  text-black hover:underline underline-offset-2 hover:text-nova-secondary"
 				href="<?php echo get_permalink( $sub_faq['sub_faqs'][0]->ID ); ?>"><?php echo $sub_faq['sub_faqs'][0]->post_title; ?></a>

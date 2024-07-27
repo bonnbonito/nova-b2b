@@ -122,7 +122,7 @@ class Woocommerce {
 		add_action( 'woocommerce_checkout_create_order', array( $this, 'order_adjust_tax' ), 10, 2 );
 	}
 
-	public function nova_adjust_tax( $order, $data ) {
+	public function order_adjust_tax( $order, $data ) {
 
 		$order_subtotal = $order->get_subtotal();
 		$shipping_total = $order->get_shipping_total();
