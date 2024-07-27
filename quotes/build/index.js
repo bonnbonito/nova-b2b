@@ -16486,7 +16486,7 @@ const NeonSign = ({
     tempTotal += parseInt(width) > 41 || parseInt(height) > 41 ? 150 : 0;
     tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.INDOOR_NOT_WATERPROOF ? 1 : 1.15;
     let additional = 0;
-    if (acrylicBackingOption === 'UV Printed Acrylic') {
+    if (acrylicBackingOption === 'UV Printed Backing') {
       additional = parseInt(width) * parseInt(height) * 0.05;
       tempTotal += additional;
     }
@@ -18088,7 +18088,7 @@ const acrylicBackingOptions = [{
 }, {
   option: 'Clear Acrylic'
 }, {
-  option: 'UV Printed Acrylic'
+  option: 'UV Printed Backing'
 }];
 const neonSignsMountingOptions = [{
   option: 'Standard Nails'
@@ -26068,7 +26068,7 @@ function Letters({
     lettersArray.forEach(letter => {
       tempTotal += (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_13__.calculateLetterPrice)(letter, baseLetterPrice, noLowerCase);
     });
-    if (waterproof) tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.INDOOR_NOT_WATERPROOF ? 1 : 1.05;
+    if (waterproof) tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.INDOOR_NOT_WATERPROOF ? 1 : 1.01;
     if (metal) tempTotal *= metal === '316 Stainless Steel' ? 1.3 : 1;
     if (stainLessMetalFinish && stainLessMetalFinish.includes('Polished')) {
       tempTotal *= 1.1;
@@ -26751,7 +26751,7 @@ function Logo({
     const logoPricingTable = logoPricing !== undefined ? (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_6__["default"])(logoPricing) : [];
     const computed = logoPricingTable.length > 0 ? logoPricingTable[width - 3][height] : 0;
     tempTotal += computed;
-    if (waterproof) tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.INDOOR_NOT_WATERPROOF ? 1 : 1.05;
+    if (waterproof) tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.INDOOR_NOT_WATERPROOF ? 1 : 1.01;
     if (metal) tempTotal *= metal === '316 Stainless Steel' ? 1.3 : 1;
     if (stainLessMetalFinish && stainLessMetalFinish.includes('Polished')) {
       tempTotal *= 1.1;
@@ -27137,7 +27137,7 @@ function LaserCutAluminum() {
     title: "Note"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
     className: "text-sm"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The brushed finish is horizontal by default. Please let us know in the comments section if you prefer a vertical finish."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The brushed finish is horizontal by default. Please let us know in the comments section if you prefer a vertical finish."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The minimum cuttable stroke is 3mm for 1/8\" thick aluminum."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-2"
   }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",

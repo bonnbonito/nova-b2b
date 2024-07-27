@@ -163,6 +163,7 @@ export default function LaserCutAluminum() {
 							The spacer will be black (default) or match the painted sign's
 							color.
 						</li>
+						<li>The minimum cuttable stroke is 3mm for 1/8" thick aluminum.</li>
 					</ul>
 				</Note>
 

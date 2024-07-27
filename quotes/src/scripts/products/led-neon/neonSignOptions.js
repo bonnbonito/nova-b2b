@@ -11,7 +11,7 @@ export const acrylicBackingOptions = [
 		option: 'Clear Acrylic',
 	},
 	{
-		option: 'UV Printed Acrylic',
+		option: 'UV Printed Backing',
 	},
 ];
 

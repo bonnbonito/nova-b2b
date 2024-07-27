@@ -321,7 +321,7 @@ export function Letters({ item }) {
 		});
 
 		if (waterproof)
-			tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.05;
+			tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.01;
 
 		if (metal) tempTotal *= metal === '316 Stainless Steel' ? 1.3 : 1;
 
