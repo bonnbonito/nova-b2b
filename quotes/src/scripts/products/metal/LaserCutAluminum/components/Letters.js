@@ -9,6 +9,8 @@ import { colorOptions } from '../../../../utils/ColorOptions';
 import convert_json from '../../../../utils/ConvertJson';
 import {
 	aluminumFinishingOptions,
+	anodizedColorOptions,
+	anodizedFinishingOptions,
 	metalInstallationOptions,
 	metalThicknessOptions,
 	setOptions,
@@ -263,6 +265,14 @@ export function Letters({ item }) {
 		setSelectedFinishing(e.target.value);
 	};
 
+	const handleChangeAnodizedFinishing = (e) => {
+		setAnodizedFinishing(e.target.value);
+	};
+
+	const handleChangeAnodizedColor = (e) => {
+		setAnodizedColor(e.target.value);
+	};
+
 	const computePricing = () => {
 		if (
 			!letterPricing.length ||
@@ -289,6 +299,10 @@ export function Letters({ item }) {
 
 		if (waterproof)
 			tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.02;
+
+		if ('Anodized' === selectedFinishing) {
+			tempTotal *= 1.25;
+		}
 
 		if (mounting && mounting === STUD_WITH_SPACER) {
 			let spacer = spacerPricing(tempTotal);
@@ -656,16 +670,30 @@ export function Letters({ item }) {
 					<>
 						<Dropdown
 							title="Anodized Finishing"
-							onChange={handleChangeFinishing}
-							options={aluminumFinishingOptions.map((finishing) => (
+							onChange={handleChangeAnodizedFinishing}
+							options={anodizedFinishingOptions.map((finishing) => (
 								<option
 									value={finishing.option}
-									selected={finishing.option === selectedFinishing}
+									selected={finishing.option === anodizedFinishing}
 								>
 									{finishing.option}
 								</option>
 							))}
-							value={selectedFinishing}
+							value={anodizedFinishing}
+						/>
+
+						<Dropdown
+							title="Anodized Colors"
+							onChange={handleChangeAnodizedColor}
+							options={anodizedColorOptions.map((color) => (
+								<option
+									value={color.option}
+									selected={color.option === anodizedColor}
+								>
+									{color.option}
+								</option>
+							))}
+							value={anodizedColor}
 						/>
 					</>
 				)}

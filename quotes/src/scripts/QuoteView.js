@@ -280,25 +280,31 @@ export default function QuoteView() {
 						</p>
 					</div>
 					<div>
-						{NovaAccount?.quote_status.value === 'ready' && (
-							<div
-								className={`rounded mb-3 px-4 py-3 border border-nova-light font-title text-white  text-xs inline-block hover:text-white  w-full text-center uppercase ${
-									addedToCart
-										? 'bg-gray-400 cursor-not-allowed'
-										: 'bg-nova-primary hover:bg-nova-secondary cursor-pointer'
-								}`}
-								disabled={isLoading}
-								onClick={addToCart}
-							>
-								{isLoading ? (
-									'Adding To Cart...'
-								) : (
-									<span className="tracking-[1.6px]">
-										{addedToCart ? 'ADDED TO CART' : 'ADD TO CART'}
-									</span>
-								)}
-							</div>
-						)}
+						{NovaAccount?.quote_status?.value === 'ready' &&
+							(NovaAccount?.post_status === 'checked_out' ? (
+								<div className="rounded mb-3 px-4 py-3 border border-nova-light font-title text-white text-xs inline-block w-full text-center uppercase bg-black">
+									Checked Out
+								</div>
+							) : (
+								<div
+									className={`rounded mb-3 px-4 py-3 border border-nova-light font-title text-white text-xs inline-block hover:text-white w-full text-center uppercase ${
+										addedToCart
+											? 'bg-gray-400 cursor-not-allowed'
+											: 'bg-nova-primary hover:bg-nova-secondary cursor-pointer'
+									}`}
+									disabled={isLoading}
+									onClick={addToCart}
+								>
+									{isLoading ? (
+										'Adding To Cart...'
+									) : (
+										<span className="tracking-[1.6px]">
+											{addedToCart ? 'ADDED TO CART' : 'ADD TO CART'}
+										</span>
+									)}
+								</div>
+							))}
+
 						<DeleteQuote />
 					</div>
 				</div>

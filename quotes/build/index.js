@@ -3529,13 +3529,15 @@ function QuoteView() {
     className: "flex justify-between gap-4 border-b pb-14 mt-8"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, "ESTIMATED TOTAL:"), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, estimatedTotal > 0 ? `${currency}$${Number(parseFloat(estimatedTotal).toFixed(2)).toLocaleString()}` : 'TBD')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
     className: "mt-4 text-[10px] text-[#5E5E5E]"
-  }, "Freight charges may vary based on factors such as shipping destination, package size, and delivery speed.\xA0")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, NovaAccount?.quote_status.value === 'ready' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: `rounded mb-3 px-4 py-3 border border-nova-light font-title text-white  text-xs inline-block hover:text-white  w-full text-center uppercase ${addedToCart ? 'bg-gray-400 cursor-not-allowed' : 'bg-nova-primary hover:bg-nova-secondary cursor-pointer'}`,
+  }, "Freight charges may vary based on factors such as shipping destination, package size, and delivery speed.\xA0")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, NovaAccount?.quote_status?.value === 'ready' && (NovaAccount?.post_status === 'checked_out' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "rounded mb-3 px-4 py-3 border border-nova-light font-title text-white text-xs inline-block w-full text-center uppercase bg-black"
+  }, "Checked Out") : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: `rounded mb-3 px-4 py-3 border border-nova-light font-title text-white text-xs inline-block hover:text-white w-full text-center uppercase ${addedToCart ? 'bg-gray-400 cursor-not-allowed' : 'bg-nova-primary hover:bg-nova-secondary cursor-pointer'}`,
     disabled: isLoading,
     onClick: addToCart
   }, isLoading ? 'Adding To Cart...' : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "tracking-[1.6px]"
-  }, addedToCart ? 'ADDED TO CART' : 'ADD TO CART')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_DeleteQuote__WEBPACK_IMPORTED_MODULE_1__.DeleteQuote, null))));
+  }, addedToCart ? 'ADDED TO CART' : 'ADD TO CART'))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_DeleteQuote__WEBPACK_IMPORTED_MODULE_1__.DeleteQuote, null))));
 }
 
 /***/ }),
@@ -4381,7 +4383,7 @@ function UploadFiles({
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "col-span-4 mb-4"
   }, fileNames?.length > 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "grid grid-cols-1 gap-2 text-sm border p-3 bg-slate-100"
+    className: "grid grid-cols-1 gap-2 text-sm border border-slate-300 p-3 bg-slate-100"
   }, fileNames.map((fileName, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     key: index,
     className: "flex gap-4 items-center"
@@ -27390,6 +27392,12 @@ function Letters({
     }
     setSelectedFinishing(e.target.value);
   };
+  const handleChangeAnodizedFinishing = e => {
+    setAnodizedFinishing(e.target.value);
+  };
+  const handleChangeAnodizedColor = e => {
+    setAnodizedColor(e.target.value);
+  };
   const computePricing = () => {
     var _tempTotal$toFixed, _total$toFixed;
     if (!letterPricing.length || !selectedLetterHeight || !selectedThickness || !waterproof) {
@@ -27407,6 +27415,9 @@ function Letters({
       tempTotal += (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_12__.calculateLetterPrice)(letter, baseLetterPrice, noLowerCase);
     });
     if (waterproof) tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.INDOOR_NOT_WATERPROOF ? 1 : 1.02;
+    if ('Anodized' === selectedFinishing) {
+      tempTotal *= 1.25;
+    }
     if (mounting && mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER) {
       let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_12__.spacerPricing)(tempTotal);
       spacer = parseFloat(spacer.toFixed(2));
@@ -27632,12 +27643,20 @@ function Letters({
     value: selectedFinishing
   }), selectedFinishing === 'Anodized' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Anodized Finishing",
-    onChange: handleChangeFinishing,
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.aluminumFinishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    onChange: handleChangeAnodizedFinishing,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.anodizedFinishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: finishing.option,
-      selected: finishing.option === selectedFinishing
+      selected: finishing.option === anodizedFinishing
     }, finishing.option)),
-    value: selectedFinishing
+    value: anodizedFinishing
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Anodized Colors",
+    onChange: handleChangeAnodizedColor,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.anodizedColorOptions.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: color.option,
+      selected: color.option === anodizedColor
+    }, color.option)),
+    value: anodizedColor
   })), selectedFinishing === 'Painted' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_11__["default"], {
     ref: colorRef,
     title: "Color",
@@ -27871,6 +27890,12 @@ function Logo({
     }
     setSelectedFinishing(e.target.value);
   };
+  const handleChangeAnodizedFinishing = e => {
+    setAnodizedFinishing(e.target.value);
+  };
+  const handleChangeAnodizedColor = e => {
+    setAnodizedColor(e.target.value);
+  };
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
   const handleOnChangeSets = e => {
     setSets(e.target.value);
@@ -28001,6 +28026,9 @@ function Logo({
     if (waterproof) {
       tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.INDOOR_NOT_WATERPROOF ? 1 : 1.02;
     }
+    if ('Anodized' === selectedFinishing) {
+      tempTotal *= 1.25;
+    }
     if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
       let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_7__.spacerPricing)(tempTotal);
       spacer = parseFloat(spacer.toFixed(2));
@@ -28093,7 +28121,23 @@ function Logo({
       selected: finishing.option === selectedFinishing
     }, finishing.option)),
     value: selectedFinishing
-  }), selectedFinishing === 'Painted' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_10__["default"], {
+  }), selectedFinishing === 'Anodized' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Anodized Finishing",
+    onChange: handleChangeAnodizedFinishing,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.anodizedFinishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: finishing.option,
+      selected: finishing.option === anodizedFinishing
+    }, finishing.option)),
+    value: anodizedFinishing
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Anodized Colors",
+    onChange: handleChangeAnodizedColor,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.anodizedColorOptions.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: color.option,
+      selected: color.option === anodizedColor
+    }, color.option)),
+    value: anodizedColor
+  })), selectedFinishing === 'Painted' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_10__["default"], {
     ref: colorRef,
     title: "Color",
     colorName: color.name,

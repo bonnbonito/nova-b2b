@@ -254,6 +254,7 @@ class Scripts {
 				'product_link' => esc_url( get_permalink( $product_id ) ),
 				'product_line' => $product_id,
 				'note'         => get_field( 'note', $id ),
+				'post_status'  => get_post_status( $id ),
 			);
 		}
 	}
