@@ -21,6 +21,13 @@ export function spacerPricing(total, maxVal = 25, percent = 0.02) {
 	return spacer;
 }
 
+export function anodizedPricing(total, minVal = 30, percent = 0.25) {
+	let price = total * percent < minVal ? minVal : total * percent;
+	price = parseFloat(price.toFixed(2));
+
+	return price;
+}
+
 export const quantityDiscount = (sets, quantityDiscountTable) => {
 	if (!quantityDiscountTable) return 1;
 	const discount = quantityDiscountTable.find(

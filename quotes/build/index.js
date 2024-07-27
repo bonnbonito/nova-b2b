@@ -27416,7 +27416,9 @@ function Letters({
     });
     if (waterproof) tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.INDOOR_NOT_WATERPROOF ? 1 : 1.02;
     if ('Anodized' === selectedFinishing) {
-      tempTotal *= 1.25;
+      let anodizedPrice = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_12__.anodizedPricing)(tempTotal);
+      anodizedPrice = parseFloat(anodizedPrice.toFixed(2));
+      tempTotal += anodizedPrice;
     }
     if (mounting && mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER) {
       let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_12__.spacerPricing)(tempTotal);
@@ -28027,7 +28029,9 @@ function Logo({
       tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.INDOOR_NOT_WATERPROOF ? 1 : 1.02;
     }
     if ('Anodized' === selectedFinishing) {
-      tempTotal *= 1.25;
+      let anodizedPrice = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_7__.anodizedPricing)(tempTotal);
+      anodizedPrice = parseFloat(anodizedPrice.toFixed(2));
+      tempTotal += anodizedPrice;
     }
     if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
       let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_7__.spacerPricing)(tempTotal);
@@ -33470,6 +33474,7 @@ const fontDefaultOptions = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   anodizedPricing: () => (/* binding */ anodizedPricing),
 /* harmony export */   calculateLetterPrice: () => (/* binding */ calculateLetterPrice),
 /* harmony export */   getLetterPricingTableByTitle: () => (/* binding */ getLetterPricingTableByTitle),
 /* harmony export */   getLogoPricingTablebyThickness: () => (/* binding */ getLogoPricingTablebyThickness),
@@ -33488,6 +33493,11 @@ function spacerPricing(total, maxVal = 25, percent = 0.02) {
   let spacer = total * percent > maxVal ? maxVal : total * percent;
   spacer = parseFloat(spacer.toFixed(2));
   return spacer;
+}
+function anodizedPricing(total, minVal = 30, percent = 0.25) {
+  let price = total * percent < minVal ? minVal : total * percent;
+  price = parseFloat(price.toFixed(2));
+  return price;
 }
 const quantityDiscount = (sets, quantityDiscountTable) => {
   var _discount$Discount;

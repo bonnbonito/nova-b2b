@@ -28,7 +28,11 @@ import {
 
 import ColorsDropdown from '../../../../utils/ColorsDropdown';
 
-import { calculateLetterPrice, spacerPricing } from '../../../../utils/Pricing';
+import {
+	anodizedPricing,
+	calculateLetterPrice,
+	spacerPricing,
+} from '../../../../utils/Pricing';
 
 import { useAppContext } from '../../../../AppProvider';
 
@@ -301,7 +305,9 @@ export function Letters({ item }) {
 			tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.02;
 
 		if ('Anodized' === selectedFinishing) {
-			tempTotal *= 1.25;
+			let anodizedPrice = anodizedPricing(tempTotal);
+			anodizedPrice = parseFloat(anodizedPrice.toFixed(2));
+			tempTotal += anodizedPrice;
 		}
 
 		if (mounting && mounting === STUD_WITH_SPACER) {

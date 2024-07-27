@@ -6,6 +6,7 @@ import useOutsideClick from '../../../../utils/ClickOutside';
 import { colorOptions } from '../../../../utils/ColorOptions';
 import convert_json from '../../../../utils/ConvertJson';
 import {
+	anodizedPricing,
 	getLogoPricingTablebyThickness,
 	spacerPricing,
 } from '../../../../utils/Pricing';
@@ -371,7 +372,9 @@ export function Logo({ item }) {
 		}
 
 		if ('Anodized' === selectedFinishing) {
-			tempTotal *= 1.25;
+			let anodizedPrice = anodizedPricing(tempTotal);
+			anodizedPrice = parseFloat(anodizedPrice.toFixed(2));
+			tempTotal += anodizedPrice;
 		}
 
 		if (mounting === STUD_WITH_SPACER) {
