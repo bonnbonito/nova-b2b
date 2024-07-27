@@ -74,7 +74,7 @@ class FAQ {
 		<a href="<?php echo get_permalink( $main->ID ); ?>"><?php echo $main->post_title; ?></a>
 		<?php endif; ?>
 	</h3>
-	<ul class="list-none pl-0 text-base leading-8">
+	<ul class="list-none pl-0 text-base leading-9">
 				<?php
 				if ( ! $main ) {
 					$sub_faqs = get_sub_field( 'sub_categories' );
@@ -106,10 +106,10 @@ class FAQ {
 					if ( $children ) {
 						foreach ( $children as $child ) {
 							?>
-		<li class="py-1">
+		<li>
 			<a style="text-decoration: none;"
 				class="decoration-none  text-black hover:underline underline-offset-2 hover:text-nova-secondary"
-				href="<?php echo get_permalink( $child->ID ); ?>"><?php echo $child->post_title; ?></a>
+				href="<?php echo get_permalink( $child->ID ); ?>"><?php echo ucwords( strtolower( $child->post_title ) ); ?></a>
 		</li>
 							<?php
 						}
