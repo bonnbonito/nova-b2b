@@ -1,5 +1,5 @@
 import React from 'react';
-import { PlusIcon } from '../../../../svg/Icons';
+import { PlusIcon } from '../../../svg/Icons';
 import AddLayer from './AddLayer';
 
 export const ProductLayer = ({ layer, length }) => {

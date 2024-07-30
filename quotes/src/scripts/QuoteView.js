@@ -13,12 +13,14 @@ export default function QuoteView() {
 	const NovaAccount = NovaMyAccount.quote;
 	const taxRate = NovaMyAccount.tax_rate;
 	const currency = wcumcs_vars_data.currency;
-	const signage = NovaMyAccount.quote ? JSON.parse(NovaAccount.data) : null;
+	const signage = NovaAccount ? JSON.parse(NovaAccount.data) : null;
 	const quoteRef = useRef(null);
 	const [isLoading, setIsLoading] = useState(false);
 	const [isDownloading, setIsDownloading] = useState(false);
 	const [isHovered, setIsHovered] = useState(false);
 	const [addedToCart, setAddedToCart] = useState(NovaQuote.is_added_to_cart);
+
+	const isOwner = NovaMyAccount.current_user_id == NovaMyAccount.quote.partner;
 
 	useEffect(() => {
 		if (!NovaAccount || Object.keys(NovaAccount).length === 0) {
@@ -111,20 +113,21 @@ export default function QuoteView() {
 					>
 						← Back To Mockups
 					</a>
-					{NovaAccount?.quote_status?.value === 'ready' && (
-						<a
-							href={downloadFile && NovaQuote.invoice_url + downloadFile}
-							className={`rounded px-4 py-3 border ${
-								!isDownloading
-									? 'border-nova-light font-title text-nova-primary bg-white'
-									: 'border-gray-300 text-gray-500 bg-gray-100'
-							} text-xs inline-block hover:text-white hover:bg-nova-primary w-[160px] text-center cursor-pointer`}
-							disabled={isDownloading}
-							target="_blank"
-						>
-							{isDownloading ? 'Downloading...' : 'DOWNLOAD PDF'}
-						</a>
-					)}
+					{(NovaMyAccount.is_user_admin || isOwner) &&
+						NovaAccount?.quote_status?.value === 'ready' && (
+							<a
+								href={downloadFile && NovaQuote.invoice_url + downloadFile}
+								className={`rounded px-4 py-3 border ${
+									!isDownloading
+										? 'border-nova-light font-title text-nova-primary bg-white'
+										: 'border-gray-300 text-gray-500 bg-gray-100'
+								} text-xs inline-block hover:text-white hover:bg-nova-primary w-[160px] text-center cursor-pointer`}
+								disabled={isDownloading}
+								target="_blank"
+							>
+								{isDownloading ? 'Downloading...' : 'DOWNLOAD PDF'}
+							</a>
+						)}
 				</div>
 
 				<div className="grid grid-cols-1 md:grid-cols-[1fr_160px] gap-4">
@@ -279,34 +282,36 @@ export default function QuoteView() {
 							destination, package size, and delivery speed. 
 						</p>
 					</div>
-					<div>
-						{NovaAccount?.quote_status?.value === 'ready' &&
-							(NovaAccount?.post_status === 'checked_out' ? (
-								<div className="rounded mb-3 px-4 py-3 border border-nova-light font-title text-white text-xs inline-block w-full text-center uppercase bg-black">
-									Checked Out
-								</div>
-							) : (
-								<div
-									className={`rounded mb-3 px-4 py-3 border border-nova-light font-title text-white text-xs inline-block hover:text-white w-full text-center uppercase ${
-										addedToCart
-											? 'bg-gray-400 cursor-not-allowed'
-											: 'bg-nova-primary hover:bg-nova-secondary cursor-pointer'
-									}`}
-									disabled={isLoading}
-									onClick={addToCart}
-								>
-									{isLoading ? (
-										'Adding To Cart...'
-									) : (
-										<span className="tracking-[1.6px]">
-											{addedToCart ? 'ADDED TO CART' : 'ADD TO CART'}
-										</span>
-									)}
-								</div>
-							))}
+					{isOwner && (
+						<div>
+							{NovaAccount?.quote_status?.value === 'ready' &&
+								(NovaAccount?.post_status === 'checked_out' ? (
+									<div className="rounded mb-3 px-4 py-3 border border-nova-light font-title text-white text-xs inline-block w-full text-center uppercase bg-black">
+										Checked Out
+									</div>
+								) : (
+									<div
+										className={`rounded mb-3 px-4 py-3 border border-nova-light font-title text-white text-xs inline-block hover:text-white w-full text-center uppercase ${
+											addedToCart
+												? 'bg-gray-400 cursor-not-allowed'
+												: 'bg-nova-primary hover:bg-nova-secondary cursor-pointer'
+										}`}
+										disabled={isLoading}
+										onClick={addToCart}
+									>
+										{isLoading ? (
+											'Adding To Cart...'
+										) : (
+											<span className="tracking-[1.6px]">
+												{addedToCart ? 'ADDED TO CART' : 'ADD TO CART'}
+											</span>
+										)}
+									</div>
+								))}
 
-						<DeleteQuote />
-					</div>
+							<DeleteQuote />
+						</div>
+					)}
 				</div>
 			</>
 		)

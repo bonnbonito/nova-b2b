@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ThreeDLayer from '../ThreeDLayer';
 import AccordionItem from './AccordionItem';
 
 export default function AccordionGroup({ group, products }) {
@@ -7,6 +8,7 @@ export default function AccordionGroup({ group, products }) {
 	function handleIsOpen(value) {
 		setIsOpen(value);
 	}
+
 	return (
 		<div
 			className={`border-gray-200 rounded-md border mb-2 bg-slate-50 overflow-hidden`}

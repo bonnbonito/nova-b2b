@@ -3368,12 +3368,13 @@ function QuoteView() {
   const NovaAccount = NovaMyAccount.quote;
   const taxRate = NovaMyAccount.tax_rate;
   const currency = wcumcs_vars_data.currency;
-  const signage = NovaMyAccount.quote ? JSON.parse(NovaAccount.data) : null;
+  const signage = NovaAccount ? JSON.parse(NovaAccount.data) : null;
   const quoteRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [isDownloading, setIsDownloading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [isHovered, setIsHovered] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [addedToCart, setAddedToCart] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(NovaQuote.is_added_to_cart);
+  const isOwner = NovaMyAccount.current_user_id == NovaMyAccount.quote.partner;
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (!NovaAccount || Object.keys(NovaAccount).length === 0) {
       window.location.href = NovaQuote.mockup_account_url;
@@ -3429,7 +3430,7 @@ function QuoteView() {
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
     href: NovaQuote.mockup_account_url,
     className: "border-nova-light rounded px-4 py-3 border font-title text-nova-gray uppercase text-xs bg-white inline-flex items-center hover:text-black hover:bg-nova-light"
-  }, "\u2190 Back To Mockups"), NovaAccount?.quote_status?.value === 'ready' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+  }, "\u2190 Back To Mockups"), (NovaMyAccount.is_user_admin || isOwner) && NovaAccount?.quote_status?.value === 'ready' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
     href: downloadFile && NovaQuote.invoice_url + downloadFile,
     className: `rounded px-4 py-3 border ${!isDownloading ? 'border-nova-light font-title text-nova-primary bg-white' : 'border-gray-300 text-gray-500 bg-gray-100'} text-xs inline-block hover:text-white hover:bg-nova-primary w-[160px] text-center cursor-pointer`,
     disabled: isDownloading,
@@ -3529,7 +3530,7 @@ function QuoteView() {
     className: "flex justify-between gap-4 border-b pb-14 mt-8"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, "ESTIMATED TOTAL:"), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, estimatedTotal > 0 ? `${currency}$${Number(parseFloat(estimatedTotal).toFixed(2)).toLocaleString()}` : 'TBD')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
     className: "mt-4 text-[10px] text-[#5E5E5E]"
-  }, "Freight charges may vary based on factors such as shipping destination, package size, and delivery speed.\xA0")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, NovaAccount?.quote_status?.value === 'ready' && (NovaAccount?.post_status === 'checked_out' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "Freight charges may vary based on factors such as shipping destination, package size, and delivery speed.\xA0")), isOwner && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, NovaAccount?.quote_status?.value === 'ready' && (NovaAccount?.post_status === 'checked_out' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "rounded mb-3 px-4 py-3 border border-nova-light font-title text-white text-xs inline-block w-full text-center uppercase bg-black"
   }, "Checked Out") : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: `rounded mb-3 px-4 py-3 border border-nova-light font-title text-white text-xs inline-block hover:text-white w-full text-center uppercase ${addedToCart ? 'bg-gray-400 cursor-not-allowed' : 'bg-nova-primary hover:bg-nova-secondary cursor-pointer'}`,
@@ -13282,6 +13283,7 @@ function Logo({
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ProductLayer: () => (/* binding */ ProductLayer),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
@@ -15222,7 +15224,7 @@ function CombineQuoteProvider({
   const {
     setSignage
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
-  function addSignage(productLine, productId, type, component, material) {
+  function addSignage(productLine, productId, type, component, material, isLayer = false) {
     const defaultArgs = {
       id: (0,uuid__WEBPACK_IMPORTED_MODULE_2__["default"])(),
       productLine,
@@ -15231,14 +15233,19 @@ function CombineQuoteProvider({
       cadPrice: 0,
       component,
       comments: '',
-      material
+      material,
+      isLayered: false,
+      hideQuantity: false
     };
     setSignage(prevSignage => {
       const count = prevSignage.filter(sign => sign.type === type).length;
+      const layerCount = prevSignage.filter(sign => sign.isLayer).length;
       let args;
       args = {
         type: type.toLowerCase(),
-        title: `${type} ${count + 1}`
+        title: `${isLayer ? 'LAYER' : type} ${isLayer ? layerCount + 1 : count + 1}`,
+        isLayered: isLayer,
+        hideQuantity: isLayer
       };
       const newSignage = {
         ...defaultArgs,
@@ -15420,6 +15427,13 @@ function CombineQuotes() {
   const showComponent = item => {
     let output;
     switch (item.component) {
+      case 'ThreeDLayer':
+        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ThreeDLayer, {
+          key: item.id,
+          item: item,
+          productId: item.product
+        });
+        break;
       case 'AcrylicSideLit':
         if (item.type === 'letters') {
           output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_acrylic_channel_AcrylicSideLit_components_Letters__WEBPACK_IMPORTED_MODULE_45__.Letters, {
@@ -15753,12 +15767,15 @@ function CombineQuotes() {
       });
     },
     name: "partners"
-  })), signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    index: index,
-    id: item.id,
-    item: item,
-    storage: storage
-  }, showComponent(item))), signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  })), signage.map((item, index) => {
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      index: index,
+      id: item.id,
+      item: item,
+      storage: storage,
+      editable: !item.isLayered
+    }, showComponent(item));
+  }), signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "gap-2"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "font-title text-3xl"
@@ -15771,6 +15788,58 @@ function CombineQuotes() {
     storage: storage
   })));
 }
+
+/***/ }),
+
+/***/ "./src/scripts/products/combine/ThreeDLayer.js":
+/*!*****************************************************!*\
+  !*** ./src/scripts/products/combine/ThreeDLayer.js ***!
+  \*****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../svg/Icons */ "./src/scripts/svg/Icons.js");
+/* harmony import */ var _components_ProductLayer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/ProductLayer */ "./src/scripts/products/combine/components/ProductLayer.js");
+
+
+
+
+
+const productLayers = NovaQuote.product_layers;
+function ThreeDLayer({
+  product
+}) {
+  const {
+    signage
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
+  const [openLayer, setOpenLayer] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const layerCount = signage.filter(sign => sign.isLayered).length;
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "border-gray-200 p-4 mx-4 cursor-pointer rounded-md border mb-2 bg-slate-200"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "font-title uppercase mb-2"
+  }, product.product.post_title), layerCount < 5 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "bg-white text-black font-title inline-flex items-center gap-2 px-8 py-3 mb-2 border-solid border rounded-md",
+    onClick: () => setOpenLayer(prev => !prev)
+  }, "ADD LAYER ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_2__.PlusIcon, {
+    open: !openLayer
+  })), openLayer && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: " border-black p-4 rounded-md border shadow-2xl"
+  }, productLayers.map(layer => {
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_ProductLayer__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      layer: layer,
+      length: signage.length
+    });
+  }))));
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ThreeDLayer);
 
 /***/ }),
 
@@ -15787,7 +15856,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _AccordionItem__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AccordionItem */ "./src/scripts/products/combine/components/AccordionItem.js");
+/* harmony import */ var _ThreeDLayer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../ThreeDLayer */ "./src/scripts/products/combine/ThreeDLayer.js");
+/* harmony import */ var _AccordionItem__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AccordionItem */ "./src/scripts/products/combine/components/AccordionItem.js");
+
 
 
 
@@ -15801,7 +15872,7 @@ function AccordionGroup({
   }
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: `border-gray-200 rounded-md border mb-2 bg-slate-50 overflow-hidden`
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AccordionItem__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AccordionItem__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: group.post_title,
     products: products,
     isOpen: handleIsOpen
@@ -15824,8 +15895,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
-/* harmony import */ var _AddSignage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AddSignage */ "./src/scripts/products/combine/components/AddSignage.js");
-/* harmony import */ var _CombineQuoteContext__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../CombineQuoteContext */ "./src/scripts/products/combine/CombineQuoteContext.js");
+/* harmony import */ var _CombineQuoteContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../CombineQuoteContext */ "./src/scripts/products/combine/CombineQuoteContext.js");
+/* harmony import */ var _ThreeDLayer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../ThreeDLayer */ "./src/scripts/products/combine/ThreeDLayer.js");
+/* harmony import */ var _AddSignage__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./AddSignage */ "./src/scripts/products/combine/components/AddSignage.js");
+
 
 
 
@@ -15836,54 +15909,116 @@ function AccordionItem({
   products,
   isOpen
 }) {
-  const [open, setOpen] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const addSignage = (0,_CombineQuoteContext__WEBPACK_IMPORTED_MODULE_3__.useCombineQuote)();
+  const [open, setOpen] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(isOpen);
+  const addSignage = (0,_CombineQuoteContext__WEBPACK_IMPORTED_MODULE_2__.useCombineQuote)();
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     isOpen(open);
   }, [open]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: open !== null && open !== void 0 ? open : 'bg-slate-50'
+    className: open ? 'bg-slate-50' : ''
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: `p-4 font-title uppercase text-lg select-none cursor-pointer bg-white hover:bg-slate-50 flex justify-between items-center ${open && 'bg-slate-50'}`,
     onClick: () => setOpen(prev => !prev)
   }, title, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, {
     open: !open
-  })), products.map(product => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: `border-gray-200 p-4 mx-4 cursor-pointer rounded-md border mb-2 bg-slate-200 ${open ? 'block' : 'hidden'}`
+  })), open && products.map(product => {
+    return product.component === 'ThreeDLayer' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(OutputThreeDLayer, {
+      key: product.id,
+      product: product
+    }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ProductItems, {
+      key: product.id,
+      product: product,
+      addSignage: addSignage,
+      title: title
+    });
+  }));
+}
+const OutputThreeDLayer = ({
+  product
+}) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ThreeDLayer__WEBPACK_IMPORTED_MODULE_3__["default"], {
+  product: product
+});
+const ProductItems = ({
+  product,
+  addSignage,
+  title
+}) => {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "border-gray-200 p-4 mx-4 cursor-pointer rounded-md border mb-2 bg-slate-200"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "font-title uppercase mb-2"
-  }, product.product.post_title), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    class: "flex gap-2"
-  }, product.letters && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AddSignage__WEBPACK_IMPORTED_MODULE_2__.AddSignage, {
+    className: "font-title uppercase mb-2",
+    dangerouslySetInnerHTML: {
+      __html: product.product.post_title
+    }
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex gap-2"
+  }, product.letters && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AddSignage__WEBPACK_IMPORTED_MODULE_4__.AddSignage, {
     addSignage: addSignage,
     product: product,
     title: title,
     type: "LETTERS"
   }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "ml-2"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null))), product.logo && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AddSignage__WEBPACK_IMPORTED_MODULE_2__.AddSignage, {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null))), product.logo && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AddSignage__WEBPACK_IMPORTED_MODULE_4__.AddSignage, {
     addSignage: addSignage,
     product: product,
     title: title,
     type: "LOGO"
   }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "ml-2"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null))), product.sign && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AddSignage__WEBPACK_IMPORTED_MODULE_2__.AddSignage, {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null))), product.sign && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AddSignage__WEBPACK_IMPORTED_MODULE_4__.AddSignage, {
     addSignage: addSignage,
     product: product,
     title: title,
     type: "SIGN"
   }, "ADD SIGN", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "ml-2"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null))), product.custom && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AddSignage__WEBPACK_IMPORTED_MODULE_2__.AddSignage, {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null))), product.custom && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AddSignage__WEBPACK_IMPORTED_MODULE_4__.AddSignage, {
     addSignage: addSignage,
     product: product,
     title: title,
     type: "CUSTOM"
   }, "ADD CUSTOM PROJECT", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "ml-2"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null)))))));
-}
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null)))));
+};
+
+/***/ }),
+
+/***/ "./src/scripts/products/combine/components/AddLayer.js":
+/*!*************************************************************!*\
+  !*** ./src/scripts/products/combine/components/AddLayer.js ***!
+  \*************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   AddLayer: () => (/* binding */ AddLayer),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _CombineQuoteContext__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../CombineQuoteContext */ "./src/scripts/products/combine/CombineQuoteContext.js");
+
+
+
+const AddLayer = ({
+  type,
+  product,
+  component,
+  children
+}) => {
+  const addSignage = (0,_CombineQuoteContext__WEBPACK_IMPORTED_MODULE_1__.useCombineQuote)();
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex leading-none items-center rounded-md border bg-white border-gray-200  border-solid p-4 cursor-pointer justify-between hover:bg-slate-600 font-title text-black hover:text-white",
+    onClick: () => {
+      console.log('Layer');
+      addSignage(product.post_title + ' - ' + type, product.ID, type, component, '', true, true);
+    }
+  }, children);
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (AddLayer);
 
 /***/ }),
 
@@ -15909,11 +16044,64 @@ const AddSignage = ({
   children
 }) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
   className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer justify-between hover:bg-slate-600 font-title text-black hover:text-white",
-  onClick: () => addSignage(product.product.post_title, product.product.ID, type, product.component, title),
+  onClick: () => {
+    addSignage(product.product.post_title, product.product.ID, type, product.component, title);
+  },
   style: {
     border: '1px solid #d2d2d2d2'
   }
 }, children);
+
+/***/ }),
+
+/***/ "./src/scripts/products/combine/components/ProductLayer.js":
+/*!*****************************************************************!*\
+  !*** ./src/scripts/products/combine/components/ProductLayer.js ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ProductLayer: () => (/* binding */ ProductLayer),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
+/* harmony import */ var _AddLayer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AddLayer */ "./src/scripts/products/combine/components/AddLayer.js");
+
+
+
+
+const ProductLayer = ({
+  layer,
+  length
+}) => {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
+    className: "uppercase",
+    dangerouslySetInnerHTML: {
+      __html: layer.product_line.post_title
+    }
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex gap-4"
+  }, layer.letters && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AddLayer__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    type: "LETTERS",
+    length: length,
+    product: layer.product_line,
+    component: layer.component
+  }, "LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "ml-2"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null))), layer.logo && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AddLayer__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    type: "LOGO",
+    length: length,
+    product: layer.product_line,
+    component: layer.component
+  }, "LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "ml-2"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null)))));
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ProductLayer);
 
 /***/ }),
 

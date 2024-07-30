@@ -2282,8 +2282,9 @@ h6 {
 				'logo_pricing_api'           => rest_url() . 'nova/v1/pricinglogos/',
 				'quantity_discount_api'      => rest_url() . 'nova/v1/quantity-discount/',
 				'show_all_partners'          => $this->show_all_partners(),
-				'product_layers'             => get_field( 'product_layers' ),
+				'product_layers'             => get_field( 'product_layers', $this->get_id_layer_product() ),
 				'project_folder_status'      => isset( $_GET['qid'] ) ? $this->get_project_folder() : null,
+				'layered_product_id'         => $this->get_id_layer_product(),
 
 			)
 		);
@@ -2292,6 +2293,10 @@ h6 {
 			wp_enqueue_script( 'nova-quote' );
 			wp_enqueue_style( 'nova-quote' );
 		}
+	}
+
+	public function get_id_layer_product() {
+		return get_field( 'layered_product_id', 'option' );
 	}
 
 	public function get_project_folder() {

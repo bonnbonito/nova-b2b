@@ -109,6 +109,11 @@ export default function CombineQuotes() {
 	const showComponent = (item) => {
 		let output;
 		switch (item.component) {
+			case 'ThreeDLayer':
+				output = (
+					<ThreeDLayer key={item.id} item={item} productId={item.product} />
+				);
+				break;
 			case 'AcrylicSideLit':
 				if (item.type === 'letters') {
 					output = (
@@ -498,11 +503,19 @@ export default function CombineQuotes() {
 						/>
 					</div>
 
-					{signage.map((item, index) => (
-						<Signage index={index} id={item.id} item={item} storage={storage}>
-							{showComponent(item)}
-						</Signage>
-					))}
+					{signage.map((item, index) => {
+						return (
+							<Signage
+								index={index}
+								id={item.id}
+								item={item}
+								storage={storage}
+								editable={!item.isLayered}
+							>
+								{showComponent(item)}
+							</Signage>
+						);
+					})}
 
 					{signage.length < 10 && (
 						<div className="gap-2">

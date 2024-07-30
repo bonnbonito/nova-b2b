@@ -11,7 +11,14 @@ export function useCombineQuote() {
 export function CombineQuoteProvider({ children }) {
 	const { setSignage } = useAppContext();
 
-	function addSignage(productLine, productId, type, component, material) {
+	function addSignage(
+		productLine,
+		productId,
+		type,
+		component,
+		material,
+		isLayer = false
+	) {
 		const defaultArgs = {
 			id: uuidv4(),
 			productLine,
@@ -21,15 +28,23 @@ export function CombineQuoteProvider({ children }) {
 			component,
 			comments: '',
 			material,
+			isLayered: false,
+			hideQuantity: false,
 		};
 
 		setSignage((prevSignage) => {
 			const count = prevSignage.filter((sign) => sign.type === type).length;
+			const layerCount = prevSignage.filter((sign) => sign.isLayer).length;
 			let args;
 			args = {
 				type: type.toLowerCase(),
-				title: `${type} ${count + 1}`,
+				title: `${isLayer ? 'LAYER' : type} ${
+					isLayer ? layerCount + 1 : count + 1
+				}`,
+				isLayered: isLayer,
+				hideQuantity: isLayer,
 			};
+
 			const newSignage = {
 				...defaultArgs,
 				...args,

@@ -117,12 +117,14 @@ class Scripts {
 			'nova-account',
 			'NovaMyAccount',
 			array(
-				'ajax_url' => admin_url( 'admin-ajax.php' ),
-				'nonce'    => wp_create_nonce( 'nova_account_nonce' ),
-				'quote'    => $this->get_quote(),
-				'tax_rate' => $this->get_tax_rate_by_project( $qid ),
-				'country'  => $this->get_customer_country_code(),
-				'state'    => $this->get_customer_state_code(),
+				'ajax_url'        => admin_url( 'admin-ajax.php' ),
+				'nonce'           => wp_create_nonce( 'nova_account_nonce' ),
+				'quote'           => $this->get_quote(),
+				'tax_rate'        => $this->get_tax_rate_by_project( $qid ),
+				'country'         => $this->get_customer_country_code(),
+				'state'           => $this->get_customer_state_code(),
+				'current_user_id' => get_current_user_id(),
+				'is_user_admin'   => $this->is_user_admin(),
 			)
 		);
 
@@ -135,6 +137,15 @@ class Scripts {
 			wp_enqueue_script( 'flickity' );
 			wp_enqueue_script( 'flickity-init' );
 		}
+	}
+
+	/* function that returns true the current user is an admin or customer rep */
+	public function is_user_admin() {
+		$user = wp_get_current_user();
+		if ( in_array( 'administrator', (array) $user->roles ) || in_array( 'customer_rep', (array) $user->roles ) ) {
+			return true;
+		}
+		return false;
 	}
 
 	public function get_customer_country_code() {
