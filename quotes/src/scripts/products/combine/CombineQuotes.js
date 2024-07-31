@@ -510,7 +510,7 @@ export default function CombineQuotes() {
 								id={item.id}
 								item={item}
 								storage={storage}
-								editable={!item.isLayered}
+								editable={item.isLayer ? false : true}
 							>
 								{showComponent(item)}
 							</Signage>

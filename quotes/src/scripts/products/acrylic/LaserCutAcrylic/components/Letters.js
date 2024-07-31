@@ -200,12 +200,12 @@ export function Letters({ item }) {
 			prevSignage.map((sign, index) => {
 				if (sign.id === item.id) {
 					const updatedSign = { ...sign, ...updateDetails };
-					if (item.isLayered) {
+					if (item.isLayered && !item.isCustom) {
 						updatedSign.title = `Layer ${index + 1}`;
 					}
 					return updatedSign;
 				} else {
-					if (item.isLayered) {
+					if (item.isLayered && !item.isCustom) {
 						sign.title = `Layer ${index + 1}`;
 					}
 					return sign;

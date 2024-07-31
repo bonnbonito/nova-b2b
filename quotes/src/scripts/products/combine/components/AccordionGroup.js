@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import ThreeDLayer from '../ThreeDLayer';
 import AccordionItem from './AccordionItem';
 
 export default function AccordionGroup({ group, products }) {

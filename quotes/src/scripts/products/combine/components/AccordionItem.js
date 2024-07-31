@@ -28,7 +28,12 @@ export default function AccordionItem({ title, products, isOpen }) {
 			{open &&
 				products.map((product) => {
 					return product.component === 'ThreeDLayer' ? (
-						<OutputThreeDLayer key={product.id} product={product} />
+						<OutputThreeDLayer
+							key={product.id}
+							product={product}
+							addSignage={addSignage}
+							title={title}
+						/>
 					) : (
 						<ProductItems
 							key={product.id}
@@ -42,7 +47,14 @@ export default function AccordionItem({ title, products, isOpen }) {
 	);
 }
 
-const OutputThreeDLayer = ({ product }) => <ThreeDLayer product={product} />;
+const OutputThreeDLayer = ({ product, addSignage, title }) => (
+	<ThreeDLayer
+		addSignage={addSignage}
+		product={product}
+		title={title}
+		type="LAYER"
+	/>
+);
 
 const ProductItems = ({ product, addSignage, title }) => {
 	return (

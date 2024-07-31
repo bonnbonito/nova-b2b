@@ -350,7 +350,10 @@ export function Logo({ item }) {
 			if (sign.id === item.id) {
 				return {
 					...sign,
-					title: item.isLayered ? `Layer ${index + 1}` : item.title,
+					title:
+						item.isLayered && !item.isCustom
+							? `Layer ${index + 1}`
+							: item.title,
 					comments,
 					acrylicThickness: selectedThickness,
 					mounting: selectedMounting,
@@ -375,7 +378,10 @@ export function Logo({ item }) {
 				};
 			} else {
 				return {
-					title: item.isLayered ? `Layer ${index + 1}` : item.title,
+					title:
+						item.isLayered && !item.isCustom
+							? `Layer ${index + 1}`
+							: item.title,
 					...sign,
 				};
 			}

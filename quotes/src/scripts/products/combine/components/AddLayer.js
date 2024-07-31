@@ -1,7 +1,7 @@
 import React from 'react';
 import { useCombineQuote } from '../CombineQuoteContext';
 
-export const AddLayer = ({ type, product, component, children }) => {
+export const AddLayer = ({ type, product, component, title, children }) => {
 	const addSignage = useCombineQuote();
 	return (
 		<div
@@ -13,7 +13,8 @@ export const AddLayer = ({ type, product, component, children }) => {
 					product.ID,
 					type,
 					component,
-					'',
+					title,
+					true,
 					true,
 					true
 				);

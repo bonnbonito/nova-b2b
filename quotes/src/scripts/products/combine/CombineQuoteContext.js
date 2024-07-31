@@ -17,7 +17,9 @@ export function CombineQuoteProvider({ children }) {
 		type,
 		component,
 		material,
-		isLayer = false
+		isLayered,
+		hideQuantity,
+		isCustom = false
 	) {
 		const defaultArgs = {
 			id: uuidv4(),
@@ -28,21 +30,19 @@ export function CombineQuoteProvider({ children }) {
 			component,
 			comments: '',
 			material,
-			isLayered: false,
-			hideQuantity: false,
+			isLayered,
+			hideQuantity,
+			isCustom,
 		};
 
+		console.log(isCustom, type);
+
 		setSignage((prevSignage) => {
-			const count = prevSignage.filter((sign) => sign.type === type).length;
-			const layerCount = prevSignage.filter((sign) => sign.isLayer).length;
+			const layerCount = prevSignage.filter((sign) => sign.isCustom).length;
 			let args;
 			args = {
 				type: type.toLowerCase(),
-				title: `${isLayer ? 'LAYER' : type} ${
-					isLayer ? layerCount + 1 : count + 1
-				}`,
-				isLayered: isLayer,
-				hideQuantity: isLayer,
+				title: `${isCustom ? `LAYER ${layerCount + 1}` : type}`,
 			};
 
 			const newSignage = {

@@ -4,7 +4,7 @@ import { PlusIcon } from '../../svg/Icons';
 import ProductLayer from './components/ProductLayer';
 const productLayers = NovaQuote.product_layers;
 
-function ThreeDLayer({ product }) {
+function ThreeDLayer({ product, addSignage, title }) {
 	const { signage } = useAppContext();
 	const [openLayer, setOpenLayer] = useState(false);
 	const layerCount = signage.filter((sign) => sign.isLayered).length;
@@ -25,7 +25,14 @@ function ThreeDLayer({ product }) {
 					{openLayer && (
 						<div className=" border-black p-4 rounded-md border shadow-2xl">
 							{productLayers.map((layer) => {
-								return <ProductLayer layer={layer} length={signage.length} />;
+								return (
+									<ProductLayer
+										layer={layer}
+										length={signage.length}
+										title={title}
+										addSignage={addSignage}
+									/>
+								);
 							})}
 						</div>
 					)}

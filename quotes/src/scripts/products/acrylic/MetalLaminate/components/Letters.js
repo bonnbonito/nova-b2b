@@ -248,7 +248,10 @@ export const Letters = ({ item }) => {
 			if (sign.id === item.id) {
 				return {
 					...sign,
-					title: item.isLayered ? `Layer ${index + 1}` : item.title,
+					title:
+						item.isLayered && !item.isCustom
+							? `Layer ${index + 1}`
+							: item.title,
 					letters,
 					comments,
 					font,
@@ -277,7 +280,10 @@ export const Letters = ({ item }) => {
 				};
 			} else {
 				return {
-					title: item.isLayered ? `Layer ${index + 1}` : item.title,
+					title:
+						item.isLayered && !item.isCustom
+							? `Layer ${index + 1}`
+							: item.title,
 					...sign,
 				};
 			}

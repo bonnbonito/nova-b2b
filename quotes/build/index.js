@@ -11704,12 +11704,12 @@ function Letters({
           ...sign,
           ...updateDetails
         };
-        if (item.isLayered) {
+        if (item.isLayered && !item.isCustom) {
           updatedSign.title = `Layer ${index + 1}`;
         }
         return updatedSign;
       } else {
-        if (item.isLayered) {
+        if (item.isLayered && !item.isCustom) {
           sign.title = `Layer ${index + 1}`;
         }
         return sign;
@@ -12328,7 +12328,7 @@ function Logo({
       if (sign.id === item.id) {
         return {
           ...sign,
-          title: item.isLayered ? `Layer ${index + 1}` : item.title,
+          title: item.isLayered && !item.isCustom ? `Layer ${index + 1}` : item.title,
           comments,
           acrylicThickness: selectedThickness,
           mounting: selectedMounting,
@@ -12352,7 +12352,7 @@ function Logo({
         };
       } else {
         return {
-          title: item.isLayered ? `Layer ${index + 1}` : item.title,
+          title: item.isLayered && !item.isCustom ? `Layer ${index + 1}` : item.title,
           ...sign
         };
       }
@@ -13741,7 +13741,7 @@ const Letters = ({
       if (sign.id === item.id) {
         return {
           ...sign,
-          title: item.isLayered ? `Layer ${index + 1}` : item.title,
+          title: item.isLayered && !item.isCustom ? `Layer ${index + 1}` : item.title,
           letters,
           comments,
           font,
@@ -13770,7 +13770,7 @@ const Letters = ({
         };
       } else {
         return {
-          title: item.isLayered ? `Layer ${index + 1}` : item.title,
+          title: item.isLayered && !item.isCustom ? `Layer ${index + 1}` : item.title,
           ...sign
         };
       }
@@ -14345,7 +14345,7 @@ function Logo({
       if (sign.id === item.id) {
         return {
           ...sign,
-          title: item.isLayered ? `Layer ${index + 1}` : item.title,
+          title: item.isLayered && !item.isCustom ? `Layer ${index + 1}` : item.title,
           comments,
           acrylicThickness: selectedThickness,
           mounting: selectedMounting,
@@ -14369,7 +14369,7 @@ function Logo({
         };
       } else {
         return {
-          title: item.isLayered ? `Layer ${index + 1}` : item.title,
+          title: item.isLayered && !item.isCustom ? `Layer ${index + 1}` : item.title,
           ...sign
         };
       }
@@ -14973,7 +14973,7 @@ function Logo({
       if (sign.id === item.id) {
         return {
           ...sign,
-          title: item.isLayered ? `Layer ${index + 1}` : item.title,
+          title: item.isLayered && !item.isCustom ? `Layer ${index + 1}` : item.title,
           comments,
           acrylicThickness: selectedThickness,
           mounting: selectedMounting,
@@ -14998,7 +14998,7 @@ function Logo({
         };
       } else {
         return {
-          title: item.isLayered ? `Layer ${index + 1}` : item.title,
+          title: item.isLayered && !item.isCustom ? `Layer ${index + 1}` : item.title,
           ...sign
         };
       }
@@ -15224,7 +15224,7 @@ function CombineQuoteProvider({
   const {
     setSignage
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
-  function addSignage(productLine, productId, type, component, material, isLayer = false) {
+  function addSignage(productLine, productId, type, component, material, isLayered, hideQuantity, isCustom = false) {
     const defaultArgs = {
       id: (0,uuid__WEBPACK_IMPORTED_MODULE_2__["default"])(),
       productLine,
@@ -15234,18 +15234,17 @@ function CombineQuoteProvider({
       component,
       comments: '',
       material,
-      isLayered: false,
-      hideQuantity: false
+      isLayered,
+      hideQuantity,
+      isCustom
     };
+    console.log(isCustom, type);
     setSignage(prevSignage => {
-      const count = prevSignage.filter(sign => sign.type === type).length;
-      const layerCount = prevSignage.filter(sign => sign.isLayer).length;
+      const layerCount = prevSignage.filter(sign => sign.isCustom).length;
       let args;
       args = {
         type: type.toLowerCase(),
-        title: `${isLayer ? 'LAYER' : type} ${isLayer ? layerCount + 1 : count + 1}`,
-        isLayered: isLayer,
-        hideQuantity: isLayer
+        title: `${isCustom ? `LAYER ${layerCount + 1}` : type}`
       };
       const newSignage = {
         ...defaultArgs,
@@ -15773,7 +15772,7 @@ function CombineQuotes() {
       id: item.id,
       item: item,
       storage: storage,
-      editable: !item.isLayered
+      editable: item.isLayer ? false : true
     }, showComponent(item));
   }), signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "gap-2"
@@ -15814,7 +15813,9 @@ __webpack_require__.r(__webpack_exports__);
 
 const productLayers = NovaQuote.product_layers;
 function ThreeDLayer({
-  product
+  product,
+  addSignage,
+  title
 }) {
   const {
     signage
@@ -15835,7 +15836,9 @@ function ThreeDLayer({
   }, productLayers.map(layer => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_ProductLayer__WEBPACK_IMPORTED_MODULE_3__["default"], {
       layer: layer,
-      length: signage.length
+      length: signage.length,
+      title: title,
+      addSignage: addSignage
     });
   }))));
 }
@@ -15856,9 +15859,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _ThreeDLayer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../ThreeDLayer */ "./src/scripts/products/combine/ThreeDLayer.js");
-/* harmony import */ var _AccordionItem__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AccordionItem */ "./src/scripts/products/combine/components/AccordionItem.js");
-
+/* harmony import */ var _AccordionItem__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AccordionItem */ "./src/scripts/products/combine/components/AccordionItem.js");
 
 
 
@@ -15872,7 +15873,7 @@ function AccordionGroup({
   }
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: `border-gray-200 rounded-md border mb-2 bg-slate-50 overflow-hidden`
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AccordionItem__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AccordionItem__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: group.post_title,
     products: products,
     isOpen: handleIsOpen
@@ -15924,7 +15925,9 @@ function AccordionItem({
   })), open && products.map(product => {
     return product.component === 'ThreeDLayer' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(OutputThreeDLayer, {
       key: product.id,
-      product: product
+      product: product,
+      addSignage: addSignage,
+      title: title
     }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ProductItems, {
       key: product.id,
       product: product,
@@ -15934,9 +15937,14 @@ function AccordionItem({
   }));
 }
 const OutputThreeDLayer = ({
-  product
+  product,
+  addSignage,
+  title
 }) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ThreeDLayer__WEBPACK_IMPORTED_MODULE_3__["default"], {
-  product: product
+  addSignage: addSignage,
+  product: product,
+  title: title,
+  type: "LAYER"
 });
 const ProductItems = ({
   product,
@@ -16007,6 +16015,7 @@ const AddLayer = ({
   type,
   product,
   component,
+  title,
   children
 }) => {
   const addSignage = (0,_CombineQuoteContext__WEBPACK_IMPORTED_MODULE_1__.useCombineQuote)();
@@ -16014,7 +16023,7 @@ const AddLayer = ({
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200  border-solid p-4 cursor-pointer justify-between hover:bg-slate-600 font-title text-black hover:text-white",
     onClick: () => {
       console.log('Layer');
-      addSignage(product.post_title + ' - ' + type, product.ID, type, component, '', true, true);
+      addSignage(product.post_title + ' - ' + type, product.ID, type, component, title, true, true, true);
     }
   }, children);
 };
@@ -16045,7 +16054,8 @@ const AddSignage = ({
 }) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
   className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer justify-between hover:bg-slate-600 font-title text-black hover:text-white",
   onClick: () => {
-    addSignage(product.product.post_title, product.product.ID, type, product.component, title);
+    console.log('Add Signage');
+    addSignage(product.product.post_title, product.product.ID, type, product.component, title, false);
   },
   style: {
     border: '1px solid #d2d2d2d2'
@@ -16076,7 +16086,8 @@ __webpack_require__.r(__webpack_exports__);
 
 const ProductLayer = ({
   layer,
-  length
+  length,
+  title
 }) => {
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
     className: "uppercase",
@@ -16089,14 +16100,16 @@ const ProductLayer = ({
     type: "LETTERS",
     length: length,
     product: layer.product_line,
-    component: layer.component
+    component: layer.component,
+    title: title
   }, "LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "ml-2"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null))), layer.logo && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AddLayer__WEBPACK_IMPORTED_MODULE_2__["default"], {
     type: "LOGO",
     length: length,
     product: layer.product_line,
-    component: layer.component
+    component: layer.component,
+    title: title
   }, "LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "ml-2"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null)))));
