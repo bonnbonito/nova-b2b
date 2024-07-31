@@ -31,6 +31,7 @@ function ThreeDLayer({ product, addSignage, title }) {
 										length={signage.length}
 										title={title}
 										addSignage={addSignage}
+										layerTitle={product.product.post_title}
 									/>
 								);
 							})}

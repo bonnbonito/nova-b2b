@@ -10,7 +10,6 @@ const processQuote = async (formData) => {
 		});
 
 		const data = await response.json();
-		console.log(data); // Optional: to log the response data for debugging
 		return data;
 	} catch (error) {
 		console.error('Error:', error);

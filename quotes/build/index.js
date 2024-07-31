@@ -15838,7 +15838,8 @@ function ThreeDLayer({
       layer: layer,
       length: signage.length,
       title: title,
-      addSignage: addSignage
+      addSignage: addSignage,
+      layerTitle: product.product.post_title
     });
   }))));
 }
@@ -16022,7 +16023,6 @@ const AddLayer = ({
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200  border-solid p-4 cursor-pointer justify-between hover:bg-slate-600 font-title text-black hover:text-white",
     onClick: () => {
-      console.log('Layer');
       addSignage(product.post_title + ' - ' + type, product.ID, type, component, title, true, true, true);
     }
   }, children);
@@ -16054,8 +16054,7 @@ const AddSignage = ({
 }) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
   className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer justify-between hover:bg-slate-600 font-title text-black hover:text-white",
   onClick: () => {
-    console.log('Add Signage');
-    addSignage(product.product.post_title, product.product.ID, type, product.component, title, false);
+    addSignage(product.product.post_title, product.product.ID, type, product.component, title, false, false);
   },
   style: {
     border: '1px solid #d2d2d2d2'
@@ -16087,7 +16086,8 @@ __webpack_require__.r(__webpack_exports__);
 const ProductLayer = ({
   layer,
   length,
-  title
+  title,
+  layerTitle
 }) => {
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
     className: "uppercase",
@@ -16101,7 +16101,7 @@ const ProductLayer = ({
     length: length,
     product: layer.product_line,
     component: layer.component,
-    title: title
+    title: `${title} - ${layerTitle}`
   }, "LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "ml-2"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null))), layer.logo && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AddLayer__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -16687,7 +16687,7 @@ const NeonSign = ({
     tempTotal += parseInt(width) > 41 || parseInt(height) > 41 ? 150 : 0;
     tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.INDOOR_NOT_WATERPROOF ? 1 : 1.15;
     let additional = 0;
-    if (acrylicBackingOption === 'UV Printed Backing') {
+    if (acrylicBackingOption === 'UV Printed PVC') {
       additional = parseInt(width) * parseInt(height) * 0.05;
       tempTotal += additional;
     }
@@ -18289,7 +18289,7 @@ const acrylicBackingOptions = [{
 }, {
   option: 'Clear Acrylic'
 }, {
-  option: 'UV Printed Backing'
+  option: 'UV Printed PVC'
 }];
 const neonSignsMountingOptions = [{
   option: 'Standard Nails'
@@ -33739,7 +33739,6 @@ const processQuote = async formData => {
       body: formData
     });
     const data = await response.json();
-    console.log(data); // Optional: to log the response data for debugging
     return data;
   } catch (error) {
     console.error('Error:', error);
@@ -34430,7 +34429,7 @@ const renameFolder = async (oldPath, newPath) => {
     });
     if (!moveResponse.ok) {
       const error = await moveResponse.text(); // Get the text of the error response
-      console.error('Failed to move folder. Response:', error);
+      //console.error('Failed to move folder. Response:', error);
       throw new Error('Failed to move folder');
     }
     const moveData = await moveResponse.json();

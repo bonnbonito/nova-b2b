@@ -25,7 +25,7 @@ export const renameFolder = async (oldPath, newPath) => {
 
 		if (!moveResponse.ok) {
 			const error = await moveResponse.text(); // Get the text of the error response
-			console.error('Failed to move folder. Response:', error);
+			//console.error('Failed to move folder. Response:', error);
 			throw new Error('Failed to move folder');
 		}
 

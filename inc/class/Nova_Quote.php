@@ -798,10 +798,15 @@ sendMockup.addEventListener('click', e => {
 			return;
 		}
 
-		if ( $update ) {
-			$html     = $this->html_invoice( $post_id );
-			$html_cad = $this->html_invoice( $post_id, 'CAD' );
+		if ( ! $update ) {
+			return;
+		}
+		$html = $this->html_invoice( $post_id );
+		if ( $html ) {
 			$this->generate_pdf( $post_id, $html, 'USD' );
+		}
+		$html_cad = $this->html_invoice( $post_id, 'CAD' );
+		if ( $html_cad ) {
 			$this->generate_pdf( $post_id, $html_cad, 'CAD' );
 		}
 	}

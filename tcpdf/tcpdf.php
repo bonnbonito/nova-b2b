@@ -16389,8 +16389,7 @@ class TCPDF {
 	 * @since 3.2.000 (2008-06-20)
 	 */
 	protected function getHtmlDomArray($html) {
-		$html = $html ?? '';
-
+		if ( ! $html ) return;
 		// array of CSS styles ( selector => properties).
 		$css = array();
 		// get CSS array defined at previous call

@@ -2,7 +2,7 @@ import React from 'react';
 import { PlusIcon } from '../../../svg/Icons';
 import AddLayer from './AddLayer';
 
-export const ProductLayer = ({ layer, length, title }) => {
+export const ProductLayer = ({ layer, length, title, layerTitle }) => {
 	return (
 		<>
 			<h5
@@ -16,7 +16,7 @@ export const ProductLayer = ({ layer, length, title }) => {
 						length={length}
 						product={layer.product_line}
 						component={layer.component}
-						title={title}
+						title={`${title} - ${layerTitle}`}
 					>
 						LETTERS
 						<div className="ml-2">

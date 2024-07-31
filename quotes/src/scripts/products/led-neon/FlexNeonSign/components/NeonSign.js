@@ -271,7 +271,7 @@ export const NeonSign = ({ item }) => {
 
 		let additional = 0;
 
-		if (acrylicBackingOption === 'UV Printed Backing') {
+		if (acrylicBackingOption === 'UV Printed PVC') {
 			additional = parseInt(width) * parseInt(height) * 0.05;
 			tempTotal += additional;
 		}
