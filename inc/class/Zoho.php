@@ -695,6 +695,10 @@ generateZohoId.addEventListener("click", e => {
 		foreach ( $order->get_items() as $item_id => $item ) {
 			$product = $item->get_product();
 
+			if ( ! $product ) {
+				continue;
+			}
+
 			$zoho_product_id = $this->get_zoho_product_id( $product->get_id() );
 
 			$items[] = array(

@@ -119,13 +119,47 @@ class Woocommerce {
 		// add_action( 'woocommerce_order_item_fee_after_calculate_taxes', array( $this, 'debug_after_fees' ), 99, 2 );
 		add_filter( 'woocommerce_cart_tax_totals', array( $this, 'custom_adjust_calculated_tax' ), 20, 2 );
 		add_filter( 'woocommerce_calculated_total', array( $this, 'nova_calculated_total' ), 9, 2 );
-		add_action( 'woocommerce_checkout_create_order', array( $this, 'order_adjust_tax' ), 10, 2 );
+		add_action( 'woocommerce_checkout_create_order', array( $this, 'order_adjust_tax' ), 99, 2 );
 		// add_action( 'woocommerce_checkout_create_order', array( $this, 'order_creating' ), 10, 2 );
+		add_filter( 'woocommerce_order_get_tax_totals', array( $this, 'order_get_tax_totals' ), 10, 2 );
 	}
 
-	public function order_creating( $order, $data ) {
-		print_r( $order );
-		die();
+	public function order_get_tax_totals( $tax_totals, $order ) {
+
+		// $_order_tax = $order->get_meta( '_order_tax' );
+
+		foreach ( $tax_totals as $key => $tax_total ) {
+
+			$rate_id                              = $tax_total->rate_id;
+			$tax_rate                             = \WC_Tax::get_rate_percent_value( $rate_id );
+			$tax_totals[ $key ]->amount           = $this->calculate_correct_tax( $order, $tax_rate );
+			$tax_totals[ $key ]->formatted_amount = wc_price( $tax_totals[ $key ]->amount );
+		}
+		// print_r( $tax_totals );
+		return $tax_totals;
+	}
+
+	public function get_rate_percent_value_from_order( $order ) {
+		$taxes = $order->get_taxes();
+
+		$rate_percent = false;
+
+		foreach ( $taxes as $tax_item ) {
+			$rate_percent = $tax_item->get_rate_percent();
+		}
+
+		return $rate_percent;
+	}
+
+	public function calculate_correct_tax( $order, $tax_rate ) {
+
+		$order_subtotal = $order->get_subtotal();
+		$shipping_total = $order->get_shipping_total();
+
+		// Calculate the subtotal including shipping
+		$subtotal = $order_subtotal + $shipping_total;
+
+		return floatval( $subtotal * ( $tax_rate / 100 ) );
 	}
 
 	public function order_adjust_tax( $order, $data ) {
@@ -144,6 +178,9 @@ class Woocommerce {
 
 			$tax_item->set_tax_total( $total_tax );
 		}
+
+		$order->set_discount_tax( $total_tax );
+		$order->set_cart_tax( $total_tax );
 	}
 
 	public function nova_calculated_total( $total, $cart ) {
@@ -269,6 +306,7 @@ class Woocommerce {
 	}
 
 	public function invoice_order_totals( $totals, $order, $type ) {
+
 		if ( isset( $totals['overall_total']['value'] ) && ! empty( $totals['overall_total']['value'] ) ) {
 			$totals['order_total']['value'] = $totals['overall_total']['value'];
 		}
@@ -286,13 +324,16 @@ class Woocommerce {
 
 		// Loop through order items
 		foreach ( $order->get_items() as $item_id => $item ) {
-			// Get the product ID
-			$product_id = $item->get_product_id();
+			// Ensure the item is a product item
+			if ( $item instanceof \WC_Order_Item_Product ) {
+				// Get the product ID
+				$product_id = $item->get_product_id();
 
-			// Check if the product exists and is not already in trash
-			if ( get_post_status( $product_id ) != 'trash' ) {
-				// Move the product to trash
-				wp_trash_post( $product_id );
+				// Check if the product exists and is not already in trash
+				if ( get_post_status( $product_id ) != 'trash' ) {
+					// Move the product to trash
+					wp_trash_post( $product_id );
+				}
 			}
 		}
 	}
@@ -766,14 +807,18 @@ class Woocommerce {
 		}
 
 		if ( $original_tax_names && $original_tax && $from_order ) {
+
+			$from_order_object = wc_get_order( $from_order );
+			$tax_rate          = $this->get_rate_percent_value_from_order( $from_order_object );
+			$tax_total         = $this->calculate_correct_tax( $from_order_object, $tax_rate );
 			?>
 <tr>
 	<td class="label"><?php echo $original_tax_names; ?>:</td>
 	<td width="1%"></td>
 	<td class="total">
 			<?php
-			if ( ! empty( $original_tax ) ) {
-				echo wc_price( $original_tax, array( 'currency' => $order->get_currency() ) );
+			if ( $tax_total ) {
+				echo wc_price( $tax_total, array( 'currency' => $order->get_currency() ) );
 			}
 			?>
 	</td>
@@ -782,9 +827,14 @@ class Woocommerce {
 		}
 
 		if ( $original_total && $from_order && $from_order ) :
+
 			?>
 <tr>
+			<?php if ( $original_tax_names ) : ?>
 	<td class="label"><?php esc_html_e( 'Overall Total (+shipping & tax)', 'woocommerce' ); ?>:</td>
+	<?php else : ?>
+	<td class="label"><?php esc_html_e( 'Overall Total (+shipping)', 'woocommerce' ); ?>:</td>
+	<?php endif; ?>
 	<td width="1%"></td>
 	<td class="total">
 			<?php
@@ -996,16 +1046,26 @@ class Woocommerce {
 				}
 
 				if ( $original_tax_names && $original_tax ) {
+					$from_order_object                 = wc_get_order( $from_order );
+					$tax_rate                          = $this->get_rate_percent_value_from_order( $from_order_object );
+					$tax_total                         = $this->calculate_correct_tax( $from_order_object, $tax_rate );
 					$overall_total_row['original_tax'] = array(
 						'label' => $original_tax_names,
-						'value' => wc_price( $original_tax, array( 'currency' => $order->get_currency() ) ),
+						'value' => wc_price( $tax_total, array( 'currency' => $from_order_object->get_currency() ) ),
 					);
 				}
 
-				$overall_total_row['overall_total'] = array(
-					'label' => __( 'Overall Total (+shipping):', 'woocommerce' ),
-					'value' => wc_price( $original_total, array( 'currency' => $order->get_currency() ) ),
-				);
+				if ( $original_tax_names && $original_tax ) {
+					$overall_total_row['overall_total'] = array(
+						'label' => __( 'Overall Total (+shipping & tax):', 'woocommerce' ),
+						'value' => wc_price( $original_total, array( 'currency' => $order->get_currency() ) ),
+					);
+				} else {
+					$overall_total_row['overall_total'] = array(
+						'label' => __( 'Overall Total (+shipping):', 'woocommerce' ),
+						'value' => wc_price( $original_total, array( 'currency' => $order->get_currency() ) ),
+					);
+				}
 
 				$overall_total_row['deposit_total'] = array(
 					'label' => __( 'Deposit:', 'woocommerce' ),
