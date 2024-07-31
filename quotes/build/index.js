@@ -16109,7 +16109,7 @@ const ProductLayer = ({
     length: length,
     product: layer.product_line,
     component: layer.component,
-    title: title
+    title: `${title} - ${layerTitle}`
   }, "LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "ml-2"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null)))));

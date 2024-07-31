@@ -30,7 +30,7 @@ export const ProductLayer = ({ layer, length, title, layerTitle }) => {
 						length={length}
 						product={layer.product_line}
 						component={layer.component}
-						title={title}
+						title={`${title} - ${layerTitle}`}
 					>
 						LOGO
 						<div className="ml-2">
