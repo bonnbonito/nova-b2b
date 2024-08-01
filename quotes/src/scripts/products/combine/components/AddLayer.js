@@ -7,16 +7,16 @@ export const AddLayer = ({ type, product, component, title, children }) => {
 		<div
 			className="flex leading-none items-center rounded-md border bg-white border-gray-200  border-solid p-4 cursor-pointer justify-between hover:bg-slate-600 font-title text-black hover:text-white"
 			onClick={() => {
-				addSignage(
-					product.post_title + ' - ' + type,
-					product.ID,
+				addSignage({
+					productLine: product.post_title + ' - ' + type,
+					productId: product.ID,
 					type,
-					component,
-					title,
-					true,
-					true,
-					true
-				);
+					component: component,
+					material: title,
+					isLayered: true,
+					hideQuantity: true,
+					isCustom: true,
+				});
 			}}
 		>
 			{children}

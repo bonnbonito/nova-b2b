@@ -11,7 +11,7 @@ export function useCombineQuote() {
 export function CombineQuoteProvider({ children }) {
 	const { setSignage } = useAppContext();
 
-	function addSignage(
+	function addSignage({
 		productLine,
 		productId,
 		type,
@@ -19,8 +19,8 @@ export function CombineQuoteProvider({ children }) {
 		material,
 		isLayered,
 		hideQuantity,
-		isCustom = false
-	) {
+		isCustom = false,
+	}) {
 		const defaultArgs = {
 			id: uuidv4(),
 			productLine,
@@ -34,8 +34,6 @@ export function CombineQuoteProvider({ children }) {
 			hideQuantity,
 			isCustom,
 		};
-
-		console.log(isCustom, type);
 
 		setSignage((prevSignage) => {
 			const layerCount = prevSignage.filter((sign) => sign.isCustom).length;

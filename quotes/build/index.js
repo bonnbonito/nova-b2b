@@ -15224,7 +15224,16 @@ function CombineQuoteProvider({
   const {
     setSignage
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
-  function addSignage(productLine, productId, type, component, material, isLayered, hideQuantity, isCustom = false) {
+  function addSignage({
+    productLine,
+    productId,
+    type,
+    component,
+    material,
+    isLayered,
+    hideQuantity,
+    isCustom = false
+  }) {
     const defaultArgs = {
       id: (0,uuid__WEBPACK_IMPORTED_MODULE_2__["default"])(),
       productLine,
@@ -15238,7 +15247,6 @@ function CombineQuoteProvider({
       hideQuantity,
       isCustom
     };
-    console.log(isCustom, type);
     setSignage(prevSignage => {
       const layerCount = prevSignage.filter(sign => sign.isCustom).length;
       let args;
@@ -16023,7 +16031,16 @@ const AddLayer = ({
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200  border-solid p-4 cursor-pointer justify-between hover:bg-slate-600 font-title text-black hover:text-white",
     onClick: () => {
-      addSignage(product.post_title + ' - ' + type, product.ID, type, component, title, true, true, true);
+      addSignage({
+        productLine: product.post_title + ' - ' + type,
+        productId: product.ID,
+        type,
+        component: component,
+        material: title,
+        isLayered: true,
+        hideQuantity: true,
+        isCustom: true
+      });
     }
   }, children);
 };
@@ -16054,7 +16071,15 @@ const AddSignage = ({
 }) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
   className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer justify-between hover:bg-slate-600 font-title text-black hover:text-white",
   onClick: () => {
-    addSignage(product.product.post_title, product.product.ID, type, product.component, title, false, false);
+    addSignage({
+      productLine: product.product.post_title,
+      productId: product.product.ID,
+      type,
+      component: product.component,
+      material: title,
+      isLayered: false,
+      hideQuantity: false
+    });
   },
   style: {
     border: '1px solid #d2d2d2d2'
