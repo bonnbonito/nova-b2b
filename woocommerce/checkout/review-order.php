@@ -206,7 +206,7 @@ $woo_instance = \NOVA_B2B\Woocommerce::get_instance();
 			</th>
 			<td colspan="2" class="text-right px-4 py-8">
 				<h5 class="uppercase text-3xl">
-					<?php echo wc_price( WC()->session->get( 'pending_payment' ), array( 'currency' => $order->get_currency() ) ); ?>
+					<?php echo wc_price( WC()->session->get( 'pending_payment' ), array( 'currency' => get_woocommerce_currency() ) ); ?>
 				</h5>
 			</td>
 		</tr>

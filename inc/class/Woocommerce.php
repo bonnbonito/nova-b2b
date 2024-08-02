@@ -216,7 +216,7 @@ class Woocommerce {
 		$customer    = WC()->customer;
 		$customer_id = $customer->get_id();
 
-		$currency = $cart->get_cart_currency();
+		$currency = get_woocommerce_currency();
 
 		$cart_total = $cart->get_subtotal();
 		$shipping   = $cart->get_shipping_total();
