@@ -30,8 +30,8 @@ class Streak {
 		add_action( 'admin_post_delete_streak_box', array( $this, 'handle_delete_streak_box' ) );
 		add_filter( 'cron_schedules', array( $this, 'add_cron_schedule' ) );
 		add_action( 'nova_b2b_add_streak_box', array( $this, 'populate_streak_details' ), 10, 2 );
-		add_action( 'wp', array( $this, 'schedule_streak_checking' ) );
-		add_action( 'check_streak_email', array( $this, 'check_and_update_boxID_without_email' ) );
+		//add_action( 'wp', array( $this, 'schedule_streak_checking' ) );
+		//add_action( 'check_streak_email', array( $this, 'check_and_update_boxID_without_email' ) );
 	}
 
 	public function schedule_streak_checking() {
@@ -121,8 +121,8 @@ class Streak {
 	}
 
 	public function populate_streak_details( $insert_id, $boxID ) {
-		$url       = rest_url() . 'nova/v1/get-streak-box/' . $boxID;
-		$emailFrom = wp_remote_get( $url );
+		//$url       = rest_url() . 'nova/v1/get-streak-box/' . $boxID;
+		//$emailFrom = wp_remote_get( $url );
 
 		$project_id = $this->insert_box_id_sheet( $insert_id, $boxID );
 

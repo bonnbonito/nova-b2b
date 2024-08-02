@@ -133,7 +133,7 @@ class Woocommerce {
 			$rate_id                              = $tax_total->rate_id;
 			$tax_rate                             = \WC_Tax::get_rate_percent_value( $rate_id );
 			$tax_totals[ $key ]->amount           = $this->calculate_correct_tax( $order, $tax_rate );
-			$tax_totals[ $key ]->formatted_amount = wc_price( $tax_totals[ $key ]->amount );
+			$tax_totals[ $key ]->formatted_amount = wc_price( $tax_totals[ $key ]->amount, array( 'currency' => $order->get_currency() ) );
 		}
 		// print_r( $tax_totals );
 		return $tax_totals;
@@ -216,6 +216,8 @@ class Woocommerce {
 		$customer    = WC()->customer;
 		$customer_id = $customer->get_id();
 
+		$currency = $cart->get_cart_currency();
+
 		$cart_total = $cart->get_subtotal();
 		$shipping   = $cart->get_shipping_total();
 
@@ -239,7 +241,7 @@ class Woocommerce {
 		foreach ( $tax_totals as $key => $tax_total ) {
 			$computed_tax                         = $subtotal * $tax_rate;
 			$tax_totals[ $key ]->amount           = $computed_tax;
-			$formatted_amount                     = wc_price( $computed_tax );
+			$formatted_amount                     = wc_price( $computed_tax, array( 'currency' => $currency ) );
 			$tax_totals[ $key ]->formatted_amount = $formatted_amount;
 		}
 
