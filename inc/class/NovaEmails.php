@@ -58,43 +58,6 @@ class NovaEmails {
 		return $enabled;
 	}
 
-	public function insert_invoice( $attachments, $email_id, $order, $email ) {
-
-		if ( $order->get_meta( '_adjusted_duplicate_order_id' ) || $order->get_meta( '_from_order_id' ) ) {
-
-			// Check if the email ID matches the ones you want to add the attachment to
-			if ( in_array( $email_id, array( 'customer_processing_order', 'customer_completed_order' ) ) ) {
-				// Add the custom attachment
-
-				if ( $email_id === 'customer_completed_order' && $order->get_meta( '_from_order_id' ) ) {
-					return $attachments;
-				}
-
-				$content    = $this->order_invoice_content( $order );
-				$nova_quote = \NOVA_B2B\Nova_Quote::get_instance();
-
-				$nova_quote->generate_invoice_pdf(
-					$order->get_user_id(),
-					$order->get_order_number(),
-					$content
-				);
-
-				$order_number = $order->get_order_number();
-				$business_id  = get_field( 'business_id', 'user_' . $order->get_user_id() );
-
-				$filename = $business_id . '-' . $order_number . '.pdf';
-
-				$file = WP_CONTENT_DIR . '/uploads/order_invoices/' . $filename;
-
-				if ( file_exists( $file ) ) {
-					$attachments[] = $file;
-				}
-			}
-		}
-
-		return $attachments;
-	}
-
 	public function filter_woocommerce_email_recipient_new_order( $recipient, $order ) {
 		if ( $order instanceof \WC_Order ) {
 			$order_id      = $order->get_id();
@@ -725,8 +688,6 @@ class NovaEmails {
 		$filename      = $business_id . '-INV-Q-' . $post_id . '-' . $currency . '.pdf';
 		$company       = get_field( 'business_name', 'user_' . $user_id ) ? get_field( 'business_name', 'user_' . $user_id ) : 'None';
 		$edit_post_url = admin_url( 'post.php?post=' . $post_id . '&action=edit' );
-		$file_link     = content_url( '/customer_invoices/' . $filename );
-		$file_path     = WP_CONTENT_DIR . '/customer_invoices/' . $filename;
 
 		$to         = $user_info->user_email;
 		$first_name = $user_info->first_name;
@@ -744,9 +705,9 @@ class NovaEmails {
 		$message .= '<p>Kindly click the link to the website and proceed to checkout if everything looks good.<br>';
 		$message .= '<a href="' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '">' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '</a></p>';
 
-		if ( file_exists( $file_path ) ) {
-			$message .= '<p>Access the PDF copy of your quote here:<br><a href="' . esc_url( $file_link ) . '">' . esc_url( $file_link ) . '</a></p>';
-		}
+		$file_link = home_url() . '/customer_invoice/qid/' . $post_id . '/';
+
+		$message .= '<p>Access the PDF copy of your quote here:<br><a href="' . esc_url( $file_link ) . '">' . esc_url( $file_link ) . '</a></p>';
 
 		$message .= '<p>Please check the NOTES section if there are any remarks.</p>';
 
@@ -787,8 +748,6 @@ class NovaEmails {
 		$filename        = $business_id . '-INV-Q-' . $post_id . '-' . $currency . '.pdf';
 		$company         = get_field( 'business_name', 'user_' . $user_id ) ? get_field( 'business_name', 'user_' . $user_id ) : 'None';
 		$edit_post_url   = admin_url( 'post.php?post=' . $post_id . '&action=edit' );
-		$file_link       = content_url( '/customer_invoices/' . $filename );
-		$file_path       = WP_CONTENT_DIR . '/customer_invoices/' . $filename;
 
 		$to         = $user_info->user_email;
 		$first_name = $user_info->first_name;
@@ -859,8 +818,8 @@ class NovaEmails {
 		$user_id   = get_field( 'partner', $post_id );
 		$user_info = get_userdata( $user_id );
 
-		/** if user has a role of 'customer-rep' or 'admin', then return */
-		if ( in_array( 'customer-rep', (array) $user_info->roles ) || in_array( 'administrator', (array) $user_info->roles ) ) {
+		/** if user has a role of 'customer-rep' or 'admin' except for kristelle.m@hineon.com, then return */
+		if ( $user_id != 23 && ( in_array( 'customer-rep', (array) $user_info->roles ) || in_array( 'administrator', (array) $user_info->roles ) ) ) {
 			return;
 		}
 
@@ -873,8 +832,6 @@ class NovaEmails {
 		$filename      = $business_id . '-INV-Q-' . $post_id . '-' . $currency . '.pdf';
 		$company       = get_field( 'business_name', 'user_' . $user_id ) ? get_field( 'business_name', 'user_' . $user_id ) : 'None';
 		$edit_post_url = admin_url( 'post.php?post=' . $post_id . '&action=edit' );
-		$file_link     = content_url( '/customer_invoices/' . $filename );
-		$file_path     = WP_CONTENT_DIR . '/customer_invoices/' . $filename;
 
 		$to         = $user_info->user_email;
 		$first_name = $user_info->first_name;
@@ -892,9 +849,9 @@ class NovaEmails {
 		$message .= '<p>Kindly click the link to the website and proceed to checkout if everything looks good.<br>';
 		$message .= '<a href="' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '">' . home_url() . '/my-account/mockups/view/?qid=' . $post_id . '</a></p>';
 
-		if ( file_exists( $file_path ) ) {
-			$message .= '<p>Access the PDF copy of your quote here:<br><a href="' . esc_url( $file_link ) . '">' . esc_url( $file_link ) . '</a></p>';
-		}
+		$file_link = home_url() . '/customer_invoice/qid/' . $post_id . '/';
+
+		$message .= '<p>Access the PDF copy of your quote here:<br><a href="' . esc_url( $file_link ) . '">' . esc_url( $file_link ) . '</a></p>';
 
 		$message .= '<p>Let us know if you have any questions or concerns.</p>';
 

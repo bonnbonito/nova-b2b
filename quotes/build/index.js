@@ -2544,8 +2544,10 @@ const DeleteQuote = () => {
     className: "m-0 font-title uppercase font-medium text-lg text-center"
   }, "Delete Quote"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_3__.Description, {
     className: "mt-[10px] mb-5 text-[15px] leading-normal"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex justify-center"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
-    class: "text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto",
+    className: "text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto",
     "aria-hidden": "true",
     fill: "currentColor",
     viewBox: "0 0 20 20",
@@ -2554,21 +2556,21 @@ const DeleteQuote = () => {
     "fill-rule": "evenodd",
     d: "M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z",
     "clip-rule": "evenodd"
-  })), isDeleted ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
-    class: "mb-4 text-gray-500 text-center"
+  }))), isDeleted ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    className: "mb-4 text-gray-500 text-center"
   }, "Deleted")) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
-    class: "mb-4 text-gray-500 text-center"
+    className: "mb-4 text-gray-500 text-center"
   }, "Are you sure you want to delete this quote?"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    class: "flex justify-center items-center space-x-4"
+    className: "flex justify-center items-center space-x-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_3__.Close, {
     asChild: true
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     type: "button",
-    class: "py-2 px-3 border border-solid text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10"
+    className: "py-2 px-3 border border-solid text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10"
   }, "No, cancel")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     onClick: handleDeleteQuote,
     disabled: isLoading,
-    class: "py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900"
+    className: "py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900"
   }, label)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_3__.Close, {
     asChild: true
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -3431,7 +3433,10 @@ function QuoteView() {
     href: NovaQuote.mockup_account_url,
     className: "border-nova-light rounded px-4 py-3 border font-title text-nova-gray uppercase text-xs bg-white inline-flex items-center hover:text-black hover:bg-nova-light"
   }, "\u2190 Back To Mockups"), (NovaMyAccount.is_user_admin || isOwner) && NovaAccount?.quote_status?.value === 'ready' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
-    href: downloadFile && NovaQuote.invoice_url + downloadFile,
+    href: `http://novatest.test/customer_invoice/qid/${NovaAccount?.ID}/`,
+    onClick: () => {
+      setIsDownloading(true);
+    },
     className: `rounded px-4 py-3 border ${!isDownloading ? 'border-nova-light font-title text-nova-primary bg-white' : 'border-gray-300 text-gray-500 bg-gray-100'} text-xs inline-block hover:text-white hover:bg-nova-primary w-[160px] text-center cursor-pointer`,
     disabled: isDownloading,
     target: "_blank"

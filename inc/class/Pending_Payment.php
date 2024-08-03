@@ -451,33 +451,6 @@ class Pending_Payment {
 		}
 	}
 
-	public function attach_invoice( $order ) {
-		$nova_email = \NOVA_B2B\NovaEmails::get_instance();
-
-		$nova_quote = \NOVA_B2B\Nova_Quote::get_instance();
-
-		$content = $nova_email->order_invoice_content( $order );
-
-		$nova_quote->generate_invoice_pdf(
-			$order->get_user_id(),
-			$order->get_order_number(),
-			$content
-		);
-
-		$order_number = $order->get_order_number();
-		$business_id  = get_field( 'business_id', 'user_' . $order->get_user_id() );
-
-		$filename = $business_id . '-' . $order_number . '.pdf';
-
-		$file        = WP_CONTENT_DIR . '/uploads/order_invoices/' . $filename;
-		$attachments = array();
-
-		if ( file_exists( $file ) ) {
-			$attachments[] = $file;
-		}
-		return $attachments;
-	}
-
 	public function send_payment_reminder_email( $payment ) {
 
 		$payment_type      = $payment->payment_select;

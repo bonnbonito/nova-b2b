@@ -68,14 +68,14 @@ class Admin {
 
 		if ( $old_status !== 'ready' && $value === 'ready' ) {
 			do_action( 'quote_to_payment', $quote_id, get_current_user_id() );
-			$nova_quote_instance = \NOVA_B2B\Nova_Quote::get_instance();
+			// $nova_quote_instance = \NOVA_B2B\Nova_Quote::get_instance();
 
-			if ( $nova_quote_instance ) {
-				$html     = $nova_quote_instance->html_invoice( $quote_id );
-				$html_cad = $nova_quote_instance->html_invoice( $quote_id, 'CAD' );
-				$nova_quote_instance->generate_pdf( $quote_id, $html, 'USD' );
-				$nova_quote_instance->generate_pdf( $quote_id, $html_cad, 'CAD' );
-			}
+			// if ( $nova_quote_instance ) {
+			// $html     = $nova_quote_instance->html_invoice( $quote_id );
+			// $html_cad = $nova_quote_instance->html_invoice( $quote_id, 'CAD' );
+			// $nova_quote_instance->generate_pdf( $quote_id, $html, 'USD' );
+			// $nova_quote_instance->generate_pdf( $quote_id, $html_cad, 'CAD' );
+			// }
 		}
 
 		if ( $old_status === 'draft' && $value === 'processing' ) {

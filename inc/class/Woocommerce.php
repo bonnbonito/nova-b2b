@@ -122,6 +122,26 @@ class Woocommerce {
 		add_action( 'woocommerce_checkout_create_order', array( $this, 'order_adjust_tax' ), 99, 2 );
 		// add_action( 'woocommerce_checkout_create_order', array( $this, 'order_creating' ), 10, 2 );
 		add_filter( 'woocommerce_order_get_tax_totals', array( $this, 'order_get_tax_totals' ), 10, 2 );
+		add_action( 'woocommerce_before_account_orders', array( $this, 'change_formatted_order_total' ) );
+
+		add_action( 'woocommerce_after_account_orders', array( $this, 'remove_show_total_from_payment_order' ) );
+	}
+
+	public function remove_show_total_from_payment_order() {
+		remove_filter( 'woocommerce_get_formatted_order_total', array( $this, 'show_total_from_payment_order' ), 20, 4 );
+	}
+
+	public function change_formatted_order_total() {
+		add_filter( 'woocommerce_get_formatted_order_total', array( $this, 'show_total_from_payment_order' ), 20, 4 );
+	}
+
+	public function show_total_from_payment_order( $formatted_total, $order, $tax_display, $display_refunded ) {
+		if ( $order->get_meta( '_adjusted_duplicate_order_id' ) ) {
+			$payment_order        = $order->get_meta( '_adjusted_duplicate_order_id' );
+			$payment_order_object = wc_get_order( $payment_order );
+			$formatted_total      = $payment_order_object->get_formatted_order_total();
+		}
+		return $formatted_total;
 	}
 
 	public function order_get_tax_totals( $tax_totals, $order ) {
@@ -2203,7 +2223,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 
 	public function mockups_content( $quote_status = '' ) {
 		$user_id  = get_current_user_id();
-		$paged    = $_GET['pg'] ?? 1;
+		$paged    = isset( $_GET['pg'] ) ? intval( $_GET['pg'] ) : 1;
 		$per_page = 10;
 
 		$meta_query = array(
@@ -2223,25 +2243,38 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 			);
 		}
 
-		$query = new WP_Query(
-			array(
-				'post_type'      => 'nova_quote',
-				'meta_query'     => $meta_query,
-				'post_status'    => 'publish',
-				'posts_per_page' => $per_page, // Adjust the number of posts per page
-				'paged'          => $paged,
-			)
+		$query_args = array(
+			'post_type'      => 'nova_quote',
+			'meta_query'     => $meta_query,
+			'post_status'    => 'publish',
+			'posts_per_page' => $per_page,
+			'paged'          => $paged,
 		);
+
+		$query_paged = new WP_Query( $query_args );
 
 		$this->mockups_nav();
 
-		if ( $query->have_posts() ) {
-			while ( $query->have_posts() ) {
-				$query->the_post();
+		if ( $query_paged->have_posts() ) {
+			while ( $query_paged->have_posts() ) {
+				$query_paged->the_post();
 				get_template_part( 'template-parts/quote' );
 			}
 
-			$this->custom_pagination( $query->found_posts, $query->max_num_pages, $paged, $per_page );
+			$this->custom_pagination( $query_paged->found_posts, $query_paged->max_num_pages, $paged, $per_page );
+		} else {
+			// Fallback to show all posts if paginated query returns no results
+			$query_args['posts_per_page'] = -1;
+			$query_all                    = new WP_Query( $query_args );
+
+			if ( $query_all->have_posts() ) {
+				while ( $query_all->have_posts() ) {
+					$query_all->the_post();
+					get_template_part( 'template-parts/quote' );
+				}
+			} else {
+				echo '<div role="alert"><div class="bg-red-500 text-white font-bold rounded-t px-4 py-2">0 Results</div><div class="border border-t-0 border-red-400 rounded-b bg-red-100 px-4 py-3 text-red-700"><p>No Quotes Found.</p></div></div>';
+			}
 
 			wp_reset_postdata();
 		}
@@ -2268,8 +2301,9 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		}
 
 		?>
-<div class="flex items-center justify-between border-t border-gray-200 bg-white py-3">
-	<div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+<div
+	class="flex flex-col-reverse gap-4 md:flex-row md:items-center md:justify-between border-t border-gray-200 bg-white py-3">
+	<div class="flex justify-center md:flex md:flex-1 md:items-center md:justify-between">
 		<div>
 			<p class="text-sm text-gray-700">
 				<?php
@@ -2286,7 +2320,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 			</p>
 		</div>
 	</div>
-	<div class="flex flex-1 justify-end gap-4 sm:hidden">
+	<div class="flex flex-1 mt-4 md:mt-0 justify-center md:justify-end gap-2 md:gap-4">
 		<?php if ( $current_page > 1 ) : ?>
 		<a href="<?php echo str_replace( '%#%', $current_page - 1, $base_url ); ?>"
 			class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-nova-primary hover:text-white gap-2">

@@ -116,7 +116,10 @@ export default function QuoteView() {
 					{(NovaMyAccount.is_user_admin || isOwner) &&
 						NovaAccount?.quote_status?.value === 'ready' && (
 							<a
-								href={downloadFile && NovaQuote.invoice_url + downloadFile}
+								href={`http://novatest.test/customer_invoice/qid/${NovaAccount?.ID}/`}
+								onClick={() => {
+									setIsDownloading(true);
+								}}
 								className={`rounded px-4 py-3 border ${
 									!isDownloading
 										? 'border-nova-light font-title text-nova-primary bg-white'
