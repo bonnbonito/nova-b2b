@@ -86,6 +86,7 @@ class Admin {
 			'processing' => '#bb2124',
 			'ready'      => '#22bb33',
 			'draft'      => '#bbb',
+			'archived'   => '#000000',
 		);
 
 		$status['code']  = 2;
@@ -579,12 +580,14 @@ class Admin {
 				'processing' => 'Processing',
 				'ready'      => 'To Payment',
 				'draft'      => 'Draft',
+				'archived'   => 'Archived',
 			);
 
 			$background_colors = array(
 				'processing' => '#bb2124',
 				'ready'      => '#22bb33',
-				'draft'      => '#bbb',
+				'draft'      => '#bbbbbb',
+				'archived'   => '#000000',
 			);
 
 			// Generate the select dropdown
