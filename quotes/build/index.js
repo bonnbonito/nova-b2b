@@ -3426,14 +3426,13 @@ function QuoteView() {
   const tax = taxRate ? parseFloat((taxRate.tax_rate / 100).toFixed(2)) : 0;
   const taxCompute = parseFloat((priceWithShipping * tax).toFixed(2));
   const estimatedTotal = parseFloat((finalPrice + estimatedShipping + taxCompute).toFixed(2));
-  const downloadFile = NovaAccount?.ID ? `/${NovaAccount.business_id}-INV-Q-${NovaAccount.ID}-${currency}.pdf` : null;
   return NovaAccount && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex pb-4 mb-4 border-b justify-between"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
     href: NovaQuote.mockup_account_url,
     className: "border-nova-light rounded px-4 py-3 border font-title text-nova-gray uppercase text-xs bg-white inline-flex items-center hover:text-black hover:bg-nova-light"
   }, "\u2190 Back To Mockups"), (NovaMyAccount.is_user_admin || isOwner) && NovaAccount?.quote_status?.value === 'ready' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
-    href: `http://novatest.test/customer_invoice/qid/${NovaAccount?.ID}/`,
+    href: `${NovaMyAccount.quote_pdf_url}${NovaAccount?.ID}/`,
     onClick: () => {
       setIsDownloading(true);
     },

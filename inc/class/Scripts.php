@@ -125,6 +125,7 @@ class Scripts {
 				'state'           => $this->get_customer_state_code(),
 				'current_user_id' => get_current_user_id(),
 				'is_user_admin'   => $this->is_user_admin(),
+				'quote_pdf_url'   => esc_url_raw( home_url( '/customer_invoice/qid/' ) ),
 			)
 		);
 

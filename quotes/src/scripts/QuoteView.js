@@ -99,10 +99,6 @@ export default function QuoteView() {
 		(finalPrice + estimatedShipping + taxCompute).toFixed(2)
 	);
 
-	const downloadFile = NovaAccount?.ID
-		? `/${NovaAccount.business_id}-INV-Q-${NovaAccount.ID}-${currency}.pdf`
-		: null;
-
 	return (
 		NovaAccount && (
 			<>
@@ -116,7 +112,7 @@ export default function QuoteView() {
 					{(NovaMyAccount.is_user_admin || isOwner) &&
 						NovaAccount?.quote_status?.value === 'ready' && (
 							<a
-								href={`http://novatest.test/customer_invoice/qid/${NovaAccount?.ID}/`}
+								href={`${NovaMyAccount.quote_pdf_url}${NovaAccount?.ID}/`}
 								onClick={() => {
 									setIsDownloading(true);
 								}}
