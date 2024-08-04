@@ -1,0 +1,23 @@
+{
+    "name": "order-history",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "preview": "npm-run-all --parallel sync wpstart",
+        "sync": "browser-sync start -p 'novatest.test/my-account/account-statement' --files '**/*.php' 'build/*.js' 'build/*.css'",
+        "buildwp": "wp-scripts build",
+        "build": "npm-run-all --sequential buildwp",
+        "wpstart": "wp-scripts start",
+        "start": "npm-run-all --parallel wpstart",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@wordpress/scripts": "^27.9.0",
+        "browser-sync": "^3.0.2",
+        "npm-run-all": "^4.1.5"
+    }
+}

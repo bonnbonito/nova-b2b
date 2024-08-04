@@ -20,6 +20,9 @@
 		<a href="<?php echo esc_url( wc_get_endpoint_url( 'orders' ) ); ?>"
 			class="block text-[14px] font-title text-black uppercase mb-2">ORDERS</a>
 
+		<a href="<?php echo esc_url( wc_get_endpoint_url( 'account-statement' ) ); ?>"
+			class="block text-[14px] font-title text-black uppercase mb-2">Order History</a>
+
 	</div>
 
 
