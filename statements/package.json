@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "preview": "npm-run-all --parallel sync wpstart",
-        "sync": "browser-sync start -p 'novatest.test/my-account/account-statement' --files '**/*.php' 'build/*.js' 'build/*.css'",
+        "sync": "browser-sync start -p 'novatest.test/my-account/invoice-history' --files '**/*.php' 'build/*.js' 'build/*.css'",
         "buildwp": "wp-scripts build",
         "build": "npm-run-all --sequential buildwp",
         "wpstart": "wp-scripts start",

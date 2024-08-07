@@ -2171,8 +2171,8 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 			case 'edit-account':
 				$endpoint_title = 'Account';
 				break;
-			case 'account-statement':
-				$endpoint_title = 'Order History';
+			case 'invoice-history':
+				$endpoint_title = 'Invoice History';
 				break;
 			default:
 				$endpoint_title = 'Dashboard';
@@ -2211,7 +2211,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 				$new_items['mockups-processing'] = 'Mockups Processing';
 				$new_items['mockups-archived']   = 'Mockups Archived';
 				$new_items['mockups-view']       = 'View Mockup';
-				$new_items['account-statement']  = 'Account History';
+				$new_items['invoice-history']    = 'Account History';
 			}
 		}
 
@@ -2453,7 +2453,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		$vars['mockups-processing'] = 'mockups/processing';
 		$vars['mockups-payments']   = 'mockups/payments';
 		$vars['mockups-view']       = 'mockups/view';
-		$vars['account-statement']  = 'account-statement';
+		$vars['invoice-history']    = 'invoice-history';
 		$vars[]                     = 'paged';
 		return $vars;
 	}

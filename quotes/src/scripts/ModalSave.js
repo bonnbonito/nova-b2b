@@ -28,43 +28,47 @@ function ModalSave({ action, btnClass, label, storage }) {
 	);
 
 	useEffect(() => {
-		if (required && required.length > 0) {
-			let htmlString = '';
-
-			required.forEach((missing) => {
-				if (missing.missingFields.length > 0) {
-					htmlString += `<strong class="uppercase">${missing.title}</strong>\n<ul>\n`;
-
-					// Add each missing field as a list item
-					missing.missingFields.forEach((field) => {
-						htmlString += `    <li>${field}</li>\n`;
-					});
-
-					// Close the unordered list for this item
-					htmlString += '</ul>\n';
-				}
-			});
-
-			if (htmlString) {
-				setError({
-					type: 'missing',
-					message: htmlString,
-				});
-			} else {
-				setError('');
-			}
+		if (action === 'draft' || action === 'update') {
+			setError('');
 		} else {
-			if (
-				NovaQuote.user_role[0] === 'pending' &&
-				(action === 'update-processing' || action === 'processing')
-			) {
-				setError({
-					type: 'not_approved',
-					message:
-						'Error: Your account is not yet approved. You cannot submit a quotation yet.',
+			if (required && required.length > 0) {
+				let htmlString = '';
+
+				required.forEach((missing) => {
+					if (missing.missingFields.length > 0) {
+						htmlString += `<strong class="uppercase">${missing.title}</strong>\n<ul>\n`;
+
+						// Add each missing field as a list item
+						missing.missingFields.forEach((field) => {
+							htmlString += `    <li>${field}</li>\n`;
+						});
+
+						// Close the unordered list for this item
+						htmlString += '</ul>\n';
+					}
 				});
+
+				if (htmlString) {
+					setError({
+						type: 'missing',
+						message: htmlString,
+					});
+				} else {
+					setError('');
+				}
 			} else {
-				setError(''); // No error
+				if (
+					NovaQuote.user_role[0] === 'pending' &&
+					(action === 'update-processing' || action === 'processing')
+				) {
+					setError({
+						type: 'not_approved',
+						message:
+							'Error: Your account is not yet approved. You cannot submit a quotation yet.',
+					});
+				} else {
+					setError(''); // No error
+				}
 			}
 		}
 	}, [signage]);
