@@ -543,20 +543,6 @@ export const NeonSign = ({ item }) => {
 
 			<div className="quote-grid mb-6">
 				<Dropdown
-					title="Neon Sign Width"
-					value={width}
-					onChange={(e) => setWidth(e.target.value)}
-					options={neonSignsWidthHeight}
-				/>
-
-				<Dropdown
-					title="Neon Sign Height"
-					value={height}
-					onChange={(e) => setHeight(e.target.value)}
-					options={neonSignsWidthHeight}
-				/>
-
-				<Dropdown
 					title="Environment"
 					onChange={handleOnChangeWaterproof}
 					options={waterProofOptions.map((option) => (
@@ -569,6 +555,20 @@ export const NeonSign = ({ item }) => {
 						</option>
 					))}
 					value={waterproof}
+				/>
+
+				<Dropdown
+					title="Neon Sign Width"
+					value={width}
+					onChange={(e) => setWidth(e.target.value)}
+					options={neonSignsWidthHeight}
+				/>
+
+				<Dropdown
+					title="Neon Sign Height"
+					value={height}
+					onChange={(e) => setHeight(e.target.value)}
+					options={neonSignsWidthHeight}
 				/>
 
 				<NeonColors
