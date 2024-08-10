@@ -43,9 +43,18 @@ function Orders() {
 
 		// Filter by status
 		if (searchStatus !== 'all') {
-			filteredOrders = filteredOrders.filter(
-				(order) => order.status === searchStatus
-			);
+			// if overdue
+			if (searchStatus === 'overdue') {
+				filteredOrders = filteredOrders.filter(
+					(order) => order.is_overdue === true
+				);
+			}
+			// if not overdue
+			else {
+				filteredOrders = filteredOrders.filter(
+					(order) => order.status === searchStatus
+				);
+			}
 		}
 
 		// Filter by date range

@@ -4650,8 +4650,17 @@ function OrderTable({
   }, "#", order.order_number)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
     className: "py-4 px-4"
   }, order.date), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
-    className: `py-4 px-4 capitalize order-actions ${order.status}`
-  }, `${order.status.replace('-', ' ')} ${order.status === 'pending' ? ' Payment' : ''}`), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
+    className: `py-4 px-4 capitalize order-actions ${order.status} ${order.is_overdue ? 'text-red-500 flex items-center' : ''}`
+  }, order.is_overdue ? 'Overdue' : `${order.status.replace('-', ' ')} ${order.status === 'pending' ? ' Payment' : ''}`, order.is_overdue && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    viewBox: "0 0 20 20",
+    fill: "red",
+    className: "size-5"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    fillRule: "evenodd",
+    d: "M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-8-5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0v-4.5A.75.75 0 0 1 10 5Zm0 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z",
+    clipRule: "evenodd"
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
     dangerouslySetInnerHTML: {
       __html: order.total
     },
@@ -4779,7 +4788,14 @@ function Orders() {
 
     // Filter by status
     if (searchStatus !== 'all') {
-      filteredOrders = filteredOrders.filter(order => order.status === searchStatus);
+      // if overdue
+      if (searchStatus === 'overdue') {
+        filteredOrders = filteredOrders.filter(order => order.is_overdue === true);
+      }
+      // if not overdue
+      else {
+        filteredOrders = filteredOrders.filter(order => order.status === searchStatus);
+      }
     }
 
     // Filter by date range
@@ -5228,7 +5244,10 @@ function SearchSelect({
   }, "Processing"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
     value: "completed",
     selected: value === 'completed'
-  }, "Completed")));
+  }, "Completed"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    value: "overdue",
+    selected: value === 'overdue'
+  }, "Overdue")));
 }
 
 /***/ }),

@@ -95,6 +95,13 @@ class Order_History {
 				$order_total          = $payment_order_object->get_total();
 			}
 
+			$is_overdue = false;
+
+			/** if order is pending and is overdue */
+			if ( $order->get_meta( 'is_overdue' ) && $order->get_status() == 'pending' ) {
+				$is_overdue = true;
+			}
+
 			$orders[] = array(
 				'id'           => $order->get_id(),
 				'order_number' => $order->get_order_number(),
@@ -104,6 +111,7 @@ class Order_History {
 				'status'       => $order->get_status(),
 				'actions'      => $actions,
 				'order_total'  => $order_total,
+				'is_overdue'   => $is_overdue,
 			);
 		}
 		return $orders;

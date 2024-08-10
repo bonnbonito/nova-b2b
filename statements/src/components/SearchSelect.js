@@ -31,6 +31,9 @@ export default function SearchSelect({ id, label, value, set }) {
 				<option value="completed" selected={value === 'completed'}>
 					Completed
 				</option>
+				<option value="overdue" selected={value === 'overdue'}>
+					Overdue
+				</option>
 			</select>
 		</div>
 	);
