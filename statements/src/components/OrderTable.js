@@ -19,6 +19,19 @@ export default function OrderTable({
 		}
 	};
 
+	const printInvoice = (url) => {
+		fetch(url)
+			.then((response) => response.blob())
+			.then((blob) => {
+				const fileURL = URL.createObjectURL(blob);
+				const printWindow = window.open(fileURL);
+				printWindow.addEventListener('load', () => {
+					printWindow.print();
+				});
+			})
+			.catch((error) => console.error('Error fetching the file:', error));
+	};
+
 	return (
 		<div className="table-responsive overflow-x-auto">
 			<table className="shop_table border-collapse w-full min-w-[800px]">
@@ -161,10 +174,18 @@ export default function OrderTable({
 
 											return (
 												<a
-													className="text-black uppercase flex items-center hover:text-nova-primary"
+													className={`text-black uppercase flex items-center hover:text-nova-primary print-link ${actionKey}`}
 													key={actionKey}
 													href={actionValue.url}
 													title={actionValue.name}
+													onClick={
+														actionKey === 'invoice'
+															? (e) => {
+																	e.preventDefault();
+																	printInvoice(actionValue.url);
+															  }
+															: undefined
+													}
 												>
 													{content}
 													{actionValue.name}

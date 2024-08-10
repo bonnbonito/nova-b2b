@@ -4620,6 +4620,15 @@ function OrderTable({
       sortTotal('none');
     }
   };
+  const printInvoice = url => {
+    fetch(url).then(response => response.blob()).then(blob => {
+      const fileURL = URL.createObjectURL(blob);
+      const printWindow = window.open(fileURL);
+      printWindow.addEventListener('load', () => {
+        printWindow.print();
+      });
+    }).catch(error => console.error('Error fetching the file:', error));
+  };
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "table-responsive overflow-x-auto"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("table", {
@@ -4728,10 +4737,14 @@ function OrderTable({
         break;
     }
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
-      className: "text-black uppercase flex items-center hover:text-nova-primary",
+      className: `text-black uppercase flex items-center hover:text-nova-primary print-link ${actionKey}`,
       key: actionKey,
       href: actionValue.url,
-      title: actionValue.name
+      title: actionValue.name,
+      onClick: actionKey === 'invoice' ? e => {
+        e.preventDefault();
+        printInvoice(actionValue.url);
+      } : undefined
     }, content, actionValue.name);
   }))))))));
 }
