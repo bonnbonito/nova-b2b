@@ -8,6 +8,7 @@ module.exports = {
 		'./woocommerce/**/*.php',
 		'./woocommerce/*.php',
 		'./quotes/build/*.{php,js}',
+		'./statements/build/*.{php,js}',
 	],
 	theme: {
 		extend: {

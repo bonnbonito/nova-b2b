@@ -41,6 +41,7 @@ $instances = array(
 	// 'GoogleSheets',
 	'Dropbox',
 	'FAQ',
+	'Order_History',
 );
 
 foreach ( $instances as $instance ) {
