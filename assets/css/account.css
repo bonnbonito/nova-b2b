@@ -148,3 +148,9 @@ a:has(.custom-pg-arrow) {
     background: #ff6262;
     color: #fff;
 }
+
+button.react-datepicker__navigation,
+button.react-datepicker__navigation:hover {
+    background-color: transparent;
+    line-height: 1;
+}

@@ -27,26 +27,28 @@ class Order_History {
 
 	public function enqueue_scripts() {
 		wp_register_script(
-			'nova-order-history',
+			'nova-orders',
 			get_theme_file_uri( '/statements/build/index.js' ),
 			array( 'wp-element' ),
 			wp_get_theme()->get( 'Version' ),
 			true
 		);
 
-		wp_register_style( 'nova-order-history', get_stylesheet_directory_uri() . '/statements/build/index.css', array( 'nova-output' ), wp_get_theme()->get( 'Version' ) );
+		wp_register_style( 'nova-orders', get_stylesheet_directory_uri() . '/statements/build/index.css', array( 'nova-output' ), wp_get_theme()->get( 'Version' ) );
 
 		wp_localize_script(
-			'nova-order-history',
-			'NovaOrderHistory',
+			'nova-orders',
+			'NovaOrders',
 			array(
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
 				'orders'   => $this->get_orders(),
 			)
 		);
 
-		if ( is_account_page() ) {
-			wp_enqueue_script( 'nova-order-history' );
+		// enqueue the script when on my-account/orders
+		if ( is_account_page() && is_wc_endpoint_url( 'orders' ) ) {
+			wp_enqueue_script( 'nova-orders' );
+			wp_enqueue_style( 'nova-orders', get_stylesheet_directory_uri() . '/statements/build/output.css', array( 'nova-output' ), wp_get_theme()->get( 'Version' ) );
 		}
 	}
 
@@ -66,25 +68,42 @@ class Order_History {
 		$current_user_id = get_current_user_id();
 
 		$args = array(
-			'customer_id' => $current_user_id,
-			'limit'       => -1, // Get all orders
-			'orderby'     => 'date',
-			'order'       => 'DESC',
-			'return'      => 'ids', // Return only order IDs
+			'customer_id'  => $current_user_id,
+			'limit'        => -1, // Get all orders
+			'orderby'      => 'date',
+			'order'        => 'DESC',
+			'meta_key'     => '_hide_order',
+			'meta_compare' => 'NOT EXISTS',
 		);
 
 		$order_ids = wc_get_orders( $args );
 
 		$orders = array();
 		foreach ( $order_ids as $order_id ) {
-			$order    = wc_get_order( $order_id );
+			$order = wc_get_order( $order_id );
+
+			$actions = wc_get_account_orders_actions( $order );
+
+			$total_with_currency = wc_price( $order->get_total(), array( 'currency' => $order->get_currency() ) );
+
+			$order_total = $order->get_total();
+
+			if ( $order->get_meta( '_adjusted_duplicate_order_id' ) ) {
+				$payment_order        = $order->get_meta( '_adjusted_duplicate_order_id' );
+				$payment_order_object = wc_get_order( $payment_order );
+				$total_with_currency  = $payment_order_object->get_formatted_order_total();
+				$order_total          = $payment_order_object->get_total();
+			}
+
 			$orders[] = array(
-				'id'       => $order->get_id(),
-				'date'     => $order->get_date_created()->format( 'Y-m-d' ),
-				'total'    => $order->get_total(),
-				'status'   => $order->get_status(),
-				'customer' => $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(),
-				'items'    => $this->get_order_items( $order ),
+				'id'           => $order->get_id(),
+				'order_number' => $order->get_order_number(),
+				'order_url'    => $order->get_view_order_url(),
+				'date'         => $order->get_date_created()->format( 'M d, Y' ),
+				'total'        => $total_with_currency,
+				'status'       => $order->get_status(),
+				'actions'      => $actions,
+				'order_total'  => $order_total,
 			);
 		}
 		return $orders;

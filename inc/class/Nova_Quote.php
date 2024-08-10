@@ -754,7 +754,7 @@ sendMockup.addEventListener('click', e => {
 
 		$user_folder_arr = array_unique( $user_folder_arr );
 
-		if ( ! empty( $user_folder_arr ) || isset( $user_folder_arr[0] ) || ! empty( $font_folder_arr ) || isset( $font_folder_arr ) ) {
+		if ( ! empty( $user_folder_arr ) && isset( $user_folder_arr[0] ) ) {
 
 			$old_folder = $user_folder_arr[0];
 

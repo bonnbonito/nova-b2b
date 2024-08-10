@@ -1,0 +1,66 @@
+.order-actions.cancelled {
+	color: red;
+}
+
+.pagination a {
+	cursor: pointer;
+}
+
+.react-datepicker-wrapper {
+	width: 100%;
+}
+
+#nova .searchform-order {
+	border: 1px solid #d2d2d2;
+	border-radius: 8px;
+	overflow: hidden;
+
+	input,
+	select {
+		border: 1px solid #d2d2d2;
+		border-radius: 4px;
+
+		&.is-error {
+			border-color: red;
+		}
+	}
+
+	.grid-cols-auto-fit-minmax {
+		grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+	}
+}
+
+span.sort-by {
+	display: inline-block;
+	position: relative;
+	width: 20px;
+	cursor: pointer;
+}
+
+span.sort-by:before,
+span.sort-by:after {
+	border: 4px solid transparent;
+	content: '';
+	display: block;
+	height: 0;
+	right: 5px;
+	position: absolute;
+	width: 0;
+	top: -5px;
+}
+span.sort-by:before {
+	border-bottom-color: #666;
+	margin-top: -9px;
+}
+span.sort-by:after {
+	border-top-color: #666;
+	margin-top: 1px;
+}
+
+span.sort-by.asc::after {
+	display: none;
+}
+
+span.sort-by.desc::before {
+	display: none;
+}
