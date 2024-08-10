@@ -21,7 +21,7 @@
 			class="block text-[14px] font-title text-black uppercase mb-2">ORDERS</a>
 
 		<a href="<?php echo esc_url( wc_get_endpoint_url( 'invoice-history' ) ); ?>"
-			class="block text-[14px] font-title text-black uppercase mb-2">Invoice History</a>
+			class="text-[14px] font-title text-black uppercase mb-2 hidden">Invoice History</a>
 
 	</div>
 
