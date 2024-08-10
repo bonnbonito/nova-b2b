@@ -16,7 +16,7 @@ export default function SearchTotal({
 					onChange={(event) => {
 						return setTotalSort(event.target.value);
 					}}
-					className={`w-full`}
+					className={`w-full p-2 text-sm`}
 				>
 					<option value="equals" selected={totalSort === 'equals'}>
 						=
@@ -36,7 +36,7 @@ export default function SearchTotal({
 						const value = event.target.value;
 						return setOrderTotal(value);
 					}}
-					className="w-full border-none rounded-sm p-2 placeholder:text-slate-400 placeholder:font-title"
+					className="w-full border-none rounded-sm p-2 placeholder:text-slate-400 placeholder:font-title text-sm"
 				/>
 			</div>
 		</div>

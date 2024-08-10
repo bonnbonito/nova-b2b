@@ -15,7 +15,7 @@ export default function SearchDates({
 			onClick={onClick}
 			ref={ref}
 			value={value}
-			className="w-full border-none rounded-sm p-2 placeholder:text-slate-400 placeholder:font-title"
+			className="w-full border-none rounded-sm p-2 placeholder:text-slate-400 placeholder:font-title text-sm"
 		/>
 	));
 
@@ -26,7 +26,7 @@ export default function SearchDates({
 			onClick={onClick}
 			ref={ref}
 			value={value}
-			className="w-full border-none rounded-sm p-2 placeholder:text-slate-400 placeholder:font-title"
+			className="w-full border-none rounded-sm p-2 placeholder:text-slate-400 placeholder:font-title text-sm"
 		/>
 	));
 

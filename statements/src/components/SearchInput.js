@@ -13,7 +13,7 @@ export default function SearchInput({ term, setTerm }) {
 				id="search-order-number"
 				type="text"
 				placeholder="="
-				className="w-full border-none rounded-sm p-2 text-black"
+				className="w-full border-none rounded-sm p-2 text-black text-sm"
 				value={term}
 				onChange={(event) => {
 					setTerm(event.target.value);

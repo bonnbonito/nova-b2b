@@ -9,7 +9,10 @@ export default function SearchSelect({ id, label, value, set }) {
 			>
 				{label}
 			</label>
-			<select onChange={(event) => set(event.target.value)} className="w-full">
+			<select
+				onChange={(event) => set(event.target.value)}
+				className="w-full p-2 text-sm"
+			>
 				<option value="all" selected={value === 'all'}>
 					Select {label}
 				</option>

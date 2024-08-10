@@ -5107,7 +5107,7 @@ function SearchDates({
     onClick: onClick,
     ref: ref,
     value: value,
-    className: "w-full border-none rounded-sm p-2 placeholder:text-slate-400 placeholder:font-title"
+    className: "w-full border-none rounded-sm p-2 placeholder:text-slate-400 placeholder:font-title text-sm"
   }));
   const EndDateInput = (0,react__WEBPACK_IMPORTED_MODULE_0__.forwardRef)(({
     value,
@@ -5118,7 +5118,7 @@ function SearchDates({
     onClick: onClick,
     ref: ref,
     value: value,
-    className: "w-full border-none rounded-sm p-2 placeholder:text-slate-400 placeholder:font-title"
+    className: "w-full border-none rounded-sm p-2 placeholder:text-slate-400 placeholder:font-title text-sm"
   }));
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "block text-sm text-[#5E5E5E] font-title mb-2"
@@ -5173,7 +5173,7 @@ function SearchInput({
     id: "search-order-number",
     type: "text",
     placeholder: "=",
-    className: "w-full border-none rounded-sm p-2 text-black",
+    className: "w-full border-none rounded-sm p-2 text-black text-sm",
     value: term,
     onChange: event => {
       setTerm(event.target.value);
@@ -5209,7 +5209,7 @@ function SearchSelect({
     className: "block text-sm text-[#5E5E5E] font-title mb-2"
   }, label), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
     onChange: event => set(event.target.value),
-    className: "w-full"
+    className: "w-full p-2 text-sm"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
     value: "all",
     selected: value === 'all'
@@ -5262,7 +5262,7 @@ function SearchTotal({
     onChange: event => {
       return setTotalSort(event.target.value);
     },
-    className: `w-full`
+    className: `w-full p-2 text-sm`
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
     value: "equals",
     selected: totalSort === 'equals'
@@ -5280,7 +5280,7 @@ function SearchTotal({
       const value = event.target.value;
       return setOrderTotal(value);
     },
-    className: "w-full border-none rounded-sm p-2 placeholder:text-slate-400 placeholder:font-title"
+    className: "w-full border-none rounded-sm p-2 placeholder:text-slate-400 placeholder:font-title text-sm"
   })));
 }
 
