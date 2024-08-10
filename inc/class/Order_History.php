@@ -23,6 +23,15 @@ class Order_History {
 	public function __construct() {
 		add_action( 'woocommerce_account_invoice-history_endpoint', array( $this, 'account_statement_content' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+		add_action( 'woocommerce_my_account_my_orders_actions', array( $this, 'remove_cancel_if_payment_order' ), 10, 2 );
+	}
+
+	public function remove_cancel_if_payment_order( $actions, $order ) {
+		$from_order_id = $order->get_meta( '_from_order_id' );
+		if ( $from_order_id ) {
+			unset( $actions['cancel'] );
+		}
+		return $actions;
 	}
 
 	public function enqueue_scripts() {
