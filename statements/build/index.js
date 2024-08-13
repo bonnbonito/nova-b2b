@@ -5364,7 +5364,7 @@ function SearchSelect({
   }, "Select ", label), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
     value: "pending",
     selected: value === 'pending'
-  }, "Pending"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+  }, "Pending Payment"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
     value: "on-hold",
     selected: value === 'on-hold'
   }, "On Hold"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {

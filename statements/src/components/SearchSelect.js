@@ -17,7 +17,7 @@ export default function SearchSelect({ id, label, value, set }) {
 					Select {label}
 				</option>
 				<option value="pending" selected={value === 'pending'}>
-					Pending
+					Pending Payment
 				</option>
 				<option value="on-hold" selected={value === 'on-hold'}>
 					On Hold
