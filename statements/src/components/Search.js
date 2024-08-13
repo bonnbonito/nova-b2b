@@ -4,7 +4,12 @@ import SearchInput from './SearchInput';
 import SearchSelect from './SearchSelect';
 import SearchTotal from './SearchTotal';
 
-export default function Search({ filters, reset, setOrderTotalSort }) {
+export default function Search({
+	filters,
+	reset,
+	setOrderTotalSort,
+	setDueDateSort,
+}) {
 	const [searchTerm, setSearchTerm] = useState('');
 	const [searchStatus, setSearchStatus] = useState('all');
 	const [startDate, setStartDate] = useState('');
@@ -32,6 +37,7 @@ export default function Search({ filters, reset, setOrderTotalSort }) {
 		setTotalSort('equals');
 		setSearchStatus('all');
 		setOrderTotalSort('none');
+		setDueDateSort('none');
 		reset(true);
 	};
 
