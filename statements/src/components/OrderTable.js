@@ -6,8 +6,11 @@ export default function OrderTable({
 	orderTotalSort,
 	setOrderTotalSort,
 	sortTotal,
+	dueDateSort,
+	setDueDateSort,
+	sortDueDate,
 }) {
-	const toggleSort = () => {
+	const toggleSortTotal = () => {
 		if (orderTotalSort === 'none') {
 			setOrderTotalSort('asc');
 			sortTotal('asc');
@@ -17,6 +20,19 @@ export default function OrderTable({
 		} else {
 			setOrderTotalSort('none');
 			sortTotal('none');
+		}
+	};
+
+	const toggleSortDueDate = () => {
+		if (dueDateSort === 'none') {
+			setDueDateSort('asc');
+			sortDueDate('asc');
+		} else if (dueDateSort === 'asc') {
+			setDueDateSort('desc');
+			sortDueDate('desc');
+		} else {
+			setDueDateSort('none');
+			sortDueDate('none');
 		}
 	};
 
@@ -47,9 +63,17 @@ export default function OrderTable({
 						<th className="font-medium p-4 pt-0 pb-3 text-black text-left font-title uppercase">
 							Status
 						</th>
+						{NovaOrders.has_payment_types && (
+							<th
+								className="font-medium p-4 pt-0 pb-3 text-black text-left font-title uppercase cursor-pointer"
+								onClick={toggleSortDueDate}
+							>
+								Due Date <span className={`sort-by ${dueDateSort}`}></span>
+							</th>
+						)}
 						<th
 							className="font-medium p-4 pt-0 pb-3 text-black text-left font-title uppercase cursor-pointer"
-							onClick={toggleSort}
+							onClick={toggleSortTotal}
 						>
 							Total <span className={`sort-by ${orderTotalSort}`}></span>
 						</th>
@@ -90,6 +114,9 @@ export default function OrderTable({
 									</svg>
 								)}
 							</td>
+							{NovaOrders.has_payment_types && (
+								<td className="py-4 px-4">{order.due_date}</td>
+							)}
 							<td
 								dangerouslySetInnerHTML={{ __html: order.total }}
 								className="py-4 px-4 font-title"
@@ -98,28 +125,32 @@ export default function OrderTable({
 								<div className="flex gap-x-4 justify-end uppercase">
 									{Object.entries(order.actions).map(
 										([actionKey, actionValue]) => {
-											let content;
+											let content, title;
 
 											switch (actionValue.name.toLowerCase()) {
 												case 'invoice':
 													content = (
 														<InvoiceIcon className="mr-1 hover:text-nova-primary" />
 													);
+													title = 'Print Invoice';
 													break;
 												case 'cancel':
 													content = (
 														<CancelIcon className="size-[14px] mr-1 hover:text-nova-primary" />
 													);
+													title = 'Cancel Order';
 													break;
 												case 'pay':
 													content = (
 														<PayIcon className="size-[14px] mr-1 hover:text-nova-primary" />
 													);
+													title = 'Pay Order';
 													break;
 												default:
 													content = (
 														<EyeIcon className="mr-1 hover:text-nova-primary" />
 													);
+													title = 'View Order';
 													break;
 											}
 
@@ -128,7 +159,7 @@ export default function OrderTable({
 													className={`text-black uppercase flex items-center hover:text-nova-primary print-link ${actionKey}`}
 													key={actionKey}
 													href={actionValue.url}
-													title={actionValue.name}
+													title={title}
 													onClick={
 														actionKey === 'invoice'
 															? (e) => {
@@ -139,7 +170,6 @@ export default function OrderTable({
 													}
 												>
 													{content}
-													{actionValue.name}
 												</a>
 											);
 										}

@@ -6,6 +6,7 @@ import Search from './Search';
 function Orders() {
 	const [orders, setOrders] = useState(NovaOrders.orders);
 	const [orderTotalSort, setOrderTotalSort] = useState('none');
+	const [dueDateSort, setDueDateSort] = useState('none');
 	const [currentPage, setCurrentPage] = useState(1);
 	const itemsPerPage = 10;
 
@@ -30,9 +31,9 @@ function Orders() {
 			totalSort,
 		} = filters;
 
-		console.log(filters);
-
 		let filteredOrders = NovaOrders.orders;
+
+		setDueDateSort('none');
 
 		// Filter by search term
 		if (searchTerm.length > 0) {
@@ -61,20 +62,19 @@ function Orders() {
 		if (startDate || endDate) {
 			filteredOrders = filteredOrders.filter((order) => {
 				const orderDate = new Date(order.date);
-
-				let isValid = false;
+				let isValid = true; // Start assuming the order is valid
 
 				if (startDate) {
 					const start = new Date(startDate);
-					if (orderDate >= start) {
-						isValid = true;
+					if (orderDate < start) {
+						isValid = false; // If the order date is before the start date, it's not valid
 					}
 				}
 
 				if (endDate) {
-					const end = new Date(endDate); // Convert end date to Date object
-					if (orderDate <= end) {
-						isValid = true;
+					const end = new Date(endDate);
+					if (orderDate > end) {
+						isValid = false; // If the order date is after the end date, it's not valid
 					}
 				}
 
@@ -117,6 +117,18 @@ function Orders() {
 			);
 		}
 
+		if (dueDateSort === 'asc') {
+			filteredOrders = filteredOrders
+				.filter((order) => order.due_date)
+				.sort((a, b) => new Date(a.due_date) - new Date(b.due_date));
+		}
+
+		if (dueDateSort === 'desc') {
+			filteredOrders = filteredOrders
+				.filter((order) => order.due_date)
+				.sort((a, b) => new Date(b.due_date) - new Date(a.due_date));
+		}
+
 		setOrders(filteredOrders);
 		setCurrentPage(1);
 	};
@@ -129,6 +141,7 @@ function Orders() {
 	};
 
 	const sortTotal = (sort) => {
+		setDueDateSort('none');
 		if (sort === 'asc') {
 			setOrders((prev) =>
 				[...prev].sort(
@@ -150,12 +163,71 @@ function Orders() {
 		}
 	};
 
+	const sortDueDate = (sort) => {
+		setOrderTotalSort('none');
+		setOrders((prev) => {
+			let sortedOrders = [...prev];
+
+			// First, bring orders with due_date and status 'pending' to the front
+			sortedOrders.sort((a, b) => {
+				if (
+					a.due_date &&
+					a.status === 'pending' &&
+					!(b.due_date && b.status === 'pending')
+				)
+					return -1;
+				if (
+					!(a.due_date && a.status === 'pending') &&
+					b.due_date &&
+					b.status === 'pending'
+				)
+					return 1;
+				return 0;
+			});
+
+			// Then sort them by due_date if both orders have due_date and status 'pending'
+			if (sort === 'asc') {
+				sortedOrders.sort((a, b) => {
+					if (
+						a.due_date &&
+						b.due_date &&
+						a.status === 'pending' &&
+						b.status === 'pending'
+					) {
+						return new Date(a.due_date) - new Date(b.due_date);
+					}
+					return 0;
+				});
+			} else if (sort === 'desc') {
+				sortedOrders.sort((a, b) => {
+					if (
+						a.due_date &&
+						b.due_date &&
+						a.status === 'pending' &&
+						b.status === 'pending'
+					) {
+						return new Date(b.due_date) - new Date(a.due_date);
+					}
+					return 0;
+				});
+			}
+
+			// Default sorting when 'none' is selected
+			if (sort === 'none') {
+				sortedOrders.sort((a, b) => parseFloat(b.id) - parseFloat(a.id));
+			}
+
+			return sortedOrders;
+		});
+	};
+
 	return (
 		<>
 			<Search
 				filters={handleFilter}
 				reset={handleReset}
 				setOrderTotalSort={setOrderTotalSort}
+				setDueDateSort={setDueDateSort}
 			/>
 			{orders.length > 0 ? (
 				<>
@@ -163,7 +235,10 @@ function Orders() {
 						orders={currentOrders}
 						orderTotalSort={orderTotalSort}
 						setOrderTotalSort={setOrderTotalSort}
+						dueDateSort={dueDateSort}
+						setDueDateSort={setDueDateSort}
 						sortTotal={sortTotal}
+						sortDueDate={sortDueDate}
 					/>
 					{totalPages > 1 && (
 						<Pagination

@@ -49,8 +49,9 @@ class Order_History {
 			'nova-orders',
 			'NovaOrders',
 			array(
-				'ajax_url' => admin_url( 'admin-ajax.php' ),
-				'orders'   => $this->get_orders(),
+				'ajax_url'          => admin_url( 'admin-ajax.php' ),
+				'orders'            => $this->get_orders(),
+				'has_payment_types' => $this->has_payment_types(),
 			)
 		);
 
@@ -59,6 +60,12 @@ class Order_History {
 			wp_enqueue_script( 'nova-orders' );
 			wp_enqueue_style( 'nova-orders', get_stylesheet_directory_uri() . '/statements/build/output.css', array( 'nova-output' ), wp_get_theme()->get( 'Version' ) );
 		}
+	}
+
+	public function has_payment_types() {
+		$current_user_id = get_current_user_id();
+
+		return get_field( 'payment_type', 'user_' . $current_user_id );
 	}
 
 	public function account_statement_content() {
@@ -111,6 +118,20 @@ class Order_History {
 				$is_overdue = true;
 			}
 
+			$due_date = false;
+
+			/** if order is payment, get due date */
+			if ( $order->get_meta( '_from_order_id' ) ) {
+				$from_order_id       = $order->get_meta( '_from_order_id' );
+				$from_order          = wc_get_order( $from_order_id );
+				$completed_date_obj  = $from_order->get_date_completed();
+				$shipped_date        = $completed_date_obj->date( 'F d, Y' );
+				$payment_type        = $from_order->get_meta( '_payment_select' );
+				$days_after_shipping = get_field( 'days_after_shipping', $payment_type );
+				$deadline            = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
+				$due_date            = date( 'M d, Y', $deadline );
+			}
+
 			$orders[] = array(
 				'id'           => $order->get_id(),
 				'order_number' => $order->get_order_number(),
@@ -120,6 +141,7 @@ class Order_History {
 				'status'       => $order->get_status(),
 				'actions'      => $actions,
 				'order_total'  => $order_total,
+				'due_date'     => $due_date,
 				'is_overdue'   => $is_overdue,
 			);
 		}

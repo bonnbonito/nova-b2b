@@ -4634,15 +4634,16 @@ const CancelIcon = ({
 const PayIcon = ({
   className
 }) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
-  width: "14",
-  height: "14",
-  viewBox: "0 0 14 10",
-  fill: "none",
   xmlns: "http://www.w3.org/2000/svg",
+  fill: "none",
+  viewBox: "0 0 24 24",
+  strokeWidth: 1.5,
+  stroke: "currentColor",
   className: className
 }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
-  d: "M7 8C7.79545 8 8.47159 7.70833 9.02841 7.125C9.58523 6.54167 9.86364 5.83333 9.86364 5C9.86364 4.16667 9.58523 3.45833 9.02841 2.875C8.47159 2.29167 7.79545 2 7 2C6.20455 2 5.52841 2.29167 4.97159 2.875C4.41477 3.45833 4.13636 4.16667 4.13636 5C4.13636 5.83333 4.41477 6.54167 4.97159 7.125C5.52841 7.70833 6.20455 8 7 8ZM7 6.8C6.52273 6.8 6.11705 6.625 5.78295 6.275C5.44886 5.925 5.28182 5.5 5.28182 5C5.28182 4.5 5.44886 4.075 5.78295 3.725C6.11705 3.375 6.52273 3.2 7 3.2C7.47727 3.2 7.88295 3.375 8.21705 3.725C8.55114 4.075 8.71818 4.5 8.71818 5C8.71818 5.5 8.55114 5.925 8.21705 6.275C7.88295 6.625 7.47727 6.8 7 6.8ZM7 10C5.45152 10 4.04091 9.54722 2.76818 8.64167C1.49545 7.73611 0.572727 6.52222 0 5C0.572727 3.47778 1.49545 2.26389 2.76818 1.35833C4.04091 0.452778 5.45152 0 7 0C8.54848 0 9.95909 0.452778 11.2318 1.35833C12.5045 2.26389 13.4273 3.47778 14 5C13.4273 6.52222 12.5045 7.73611 11.2318 8.64167C9.95909 9.54722 8.54848 10 7 10ZM7 8.66667C8.19848 8.66667 9.29886 8.33611 10.3011 7.675C11.3034 7.01389 12.0697 6.12222 12.6 5C12.0697 3.87778 11.3034 2.98611 10.3011 2.325C9.29886 1.66389 8.19848 1.33333 7 1.33333C5.80152 1.33333 4.70114 1.66389 3.69886 2.325C2.69659 2.98611 1.9303 3.87778 1.4 5C1.9303 6.12222 2.69659 7.01389 3.69886 7.675C4.70114 8.33611 5.80152 8.66667 7 8.66667Z",
-  fill: "currentColor"
+  strokeLinecap: "round",
+  strokeLinejoin: "round",
+  d: "M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z"
 }));
 const EyeIcon = ({
   className
@@ -4681,9 +4682,12 @@ function OrderTable({
   orders,
   orderTotalSort,
   setOrderTotalSort,
-  sortTotal
+  sortTotal,
+  dueDateSort,
+  setDueDateSort,
+  sortDueDate
 }) {
-  const toggleSort = () => {
+  const toggleSortTotal = () => {
     if (orderTotalSort === 'none') {
       setOrderTotalSort('asc');
       sortTotal('asc');
@@ -4693,6 +4697,18 @@ function OrderTable({
     } else {
       setOrderTotalSort('none');
       sortTotal('none');
+    }
+  };
+  const toggleSortDueDate = () => {
+    if (dueDateSort === 'none') {
+      setDueDateSort('asc');
+      sortDueDate('asc');
+    } else if (dueDateSort === 'asc') {
+      setDueDateSort('desc');
+      sortDueDate('desc');
+    } else {
+      setDueDateSort('none');
+      sortDueDate('none');
     }
   };
   const printInvoice = url => {
@@ -4714,9 +4730,14 @@ function OrderTable({
     className: "font-medium p-4 pt-0 pb-3 text-black text-left font-title uppercase"
   }, "Date"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
     className: "font-medium p-4 pt-0 pb-3 text-black text-left font-title uppercase"
-  }, "Status"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
+  }, "Status"), NovaOrders.has_payment_types && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
     className: "font-medium p-4 pt-0 pb-3 text-black text-left font-title uppercase cursor-pointer",
-    onClick: toggleSort
+    onClick: toggleSortDueDate
+  }, "Due Date ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: `sort-by ${dueDateSort}`
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
+    className: "font-medium p-4 pt-0 pb-3 text-black text-left font-title uppercase cursor-pointer",
+    onClick: toggleSortTotal
   }, "Total ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: `sort-by ${orderTotalSort}`
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
@@ -4744,7 +4765,9 @@ function OrderTable({
     fillRule: "evenodd",
     d: "M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-8-5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0v-4.5A.75.75 0 0 1 10 5Zm0 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z",
     clipRule: "evenodd"
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
+  }))), NovaOrders.has_payment_types && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
+    className: "py-4 px-4"
+  }, order.due_date), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
     dangerouslySetInnerHTML: {
       __html: order.total
     },
@@ -4754,39 +4777,43 @@ function OrderTable({
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-x-4 justify-end uppercase"
   }, Object.entries(order.actions).map(([actionKey, actionValue]) => {
-    let content;
+    let content, title;
     switch (actionValue.name.toLowerCase()) {
       case 'invoice':
         content = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Icons__WEBPACK_IMPORTED_MODULE_1__.InvoiceIcon, {
           className: "mr-1 hover:text-nova-primary"
         });
+        title = 'Print Invoice';
         break;
       case 'cancel':
         content = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Icons__WEBPACK_IMPORTED_MODULE_1__.CancelIcon, {
           className: "size-[14px] mr-1 hover:text-nova-primary"
         });
+        title = 'Cancel Order';
         break;
       case 'pay':
         content = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Icons__WEBPACK_IMPORTED_MODULE_1__.PayIcon, {
           className: "size-[14px] mr-1 hover:text-nova-primary"
         });
+        title = 'Pay Order';
         break;
       default:
         content = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Icons__WEBPACK_IMPORTED_MODULE_1__.EyeIcon, {
           className: "mr-1 hover:text-nova-primary"
         });
+        title = 'View Order';
         break;
     }
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
       className: `text-black uppercase flex items-center hover:text-nova-primary print-link ${actionKey}`,
       key: actionKey,
       href: actionValue.url,
-      title: actionValue.name,
+      title: title,
       onClick: actionKey === 'invoice' ? e => {
         e.preventDefault();
         printInvoice(actionValue.url);
       } : undefined
-    }, content, actionValue.name);
+    }, content);
   }))))))));
 }
 
@@ -4816,6 +4843,7 @@ __webpack_require__.r(__webpack_exports__);
 function Orders() {
   const [orders, setOrders] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(NovaOrders.orders);
   const [orderTotalSort, setOrderTotalSort] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('none');
+  const [dueDateSort, setDueDateSort] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('none');
   const [currentPage, setCurrentPage] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(1);
   const itemsPerPage = 10;
   const totalPages = Math.ceil(orders.length / itemsPerPage);
@@ -4832,8 +4860,8 @@ function Orders() {
       orderTotal,
       totalSort
     } = filters;
-    console.log(filters);
     let filteredOrders = NovaOrders.orders;
+    setDueDateSort('none');
 
     // Filter by search term
     if (searchTerm.length > 0) {
@@ -4856,17 +4884,18 @@ function Orders() {
     if (startDate || endDate) {
       filteredOrders = filteredOrders.filter(order => {
         const orderDate = new Date(order.date);
-        let isValid = false;
+        let isValid = true; // Start assuming the order is valid
+
         if (startDate) {
           const start = new Date(startDate);
-          if (orderDate >= start) {
-            isValid = true;
+          if (orderDate < start) {
+            isValid = false; // If the order date is before the start date, it's not valid
           }
         }
         if (endDate) {
-          const end = new Date(endDate); // Convert end date to Date object
-          if (orderDate <= end) {
-            isValid = true;
+          const end = new Date(endDate);
+          if (orderDate > end) {
+            isValid = false; // If the order date is after the end date, it's not valid
           }
         }
         return isValid;
@@ -4895,6 +4924,12 @@ function Orders() {
     if (orderTotalSort === 'desc') {
       filteredOrders = filteredOrders.sort((a, b) => b.order_total - a.order_total);
     }
+    if (dueDateSort === 'asc') {
+      filteredOrders = filteredOrders.filter(order => order.due_date).sort((a, b) => new Date(a.due_date) - new Date(b.due_date));
+    }
+    if (dueDateSort === 'desc') {
+      filteredOrders = filteredOrders.filter(order => order.due_date).sort((a, b) => new Date(b.due_date) - new Date(a.due_date));
+    }
     setOrders(filteredOrders);
     setCurrentPage(1);
   };
@@ -4905,6 +4940,7 @@ function Orders() {
     }
   };
   const sortTotal = sort => {
+    setDueDateSort('none');
     if (sort === 'asc') {
       setOrders(prev => [...prev].sort((a, b) => parseFloat(a.order_total) - parseFloat(b.order_total)));
     }
@@ -4915,15 +4951,55 @@ function Orders() {
       setOrders(prev => [...prev].sort((a, b) => parseFloat(b.id) - parseFloat(a.id)));
     }
   };
+  const sortDueDate = sort => {
+    setOrderTotalSort('none');
+    setOrders(prev => {
+      let sortedOrders = [...prev];
+
+      // First, bring orders with due_date and status 'pending' to the front
+      sortedOrders.sort((a, b) => {
+        if (a.due_date && a.status === 'pending' && !(b.due_date && b.status === 'pending')) return -1;
+        if (!(a.due_date && a.status === 'pending') && b.due_date && b.status === 'pending') return 1;
+        return 0;
+      });
+
+      // Then sort them by due_date if both orders have due_date and status 'pending'
+      if (sort === 'asc') {
+        sortedOrders.sort((a, b) => {
+          if (a.due_date && b.due_date && a.status === 'pending' && b.status === 'pending') {
+            return new Date(a.due_date) - new Date(b.due_date);
+          }
+          return 0;
+        });
+      } else if (sort === 'desc') {
+        sortedOrders.sort((a, b) => {
+          if (a.due_date && b.due_date && a.status === 'pending' && b.status === 'pending') {
+            return new Date(b.due_date) - new Date(a.due_date);
+          }
+          return 0;
+        });
+      }
+
+      // Default sorting when 'none' is selected
+      if (sort === 'none') {
+        sortedOrders.sort((a, b) => parseFloat(b.id) - parseFloat(a.id));
+      }
+      return sortedOrders;
+    });
+  };
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Search__WEBPACK_IMPORTED_MODULE_3__["default"], {
     filters: handleFilter,
     reset: handleReset,
-    setOrderTotalSort: setOrderTotalSort
+    setOrderTotalSort: setOrderTotalSort,
+    setDueDateSort: setDueDateSort
   }), orders.length > 0 ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_OrderTable__WEBPACK_IMPORTED_MODULE_1__["default"], {
     orders: currentOrders,
     orderTotalSort: orderTotalSort,
     setOrderTotalSort: setOrderTotalSort,
-    sortTotal: sortTotal
+    dueDateSort: dueDateSort,
+    setDueDateSort: setDueDateSort,
+    sortTotal: sortTotal,
+    sortDueDate: sortDueDate
   }), totalPages > 1 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Pagination__WEBPACK_IMPORTED_MODULE_2__["default"], {
     currentPage: currentPage,
     totalPages: totalPages,
@@ -5072,7 +5148,8 @@ __webpack_require__.r(__webpack_exports__);
 function Search({
   filters,
   reset,
-  setOrderTotalSort
+  setOrderTotalSort,
+  setDueDateSort
 }) {
   const [searchTerm, setSearchTerm] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const [searchStatus, setSearchStatus] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('all');
@@ -5099,6 +5176,7 @@ function Search({
     setTotalSort('equals');
     setSearchStatus('all');
     setOrderTotalSort('none');
+    setDueDateSort('none');
     reset(true);
   };
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
