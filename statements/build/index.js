@@ -4865,7 +4865,11 @@ function Orders() {
 
     // Filter by search term
     if (searchTerm.length > 0) {
-      filteredOrders = filteredOrders.filter(order => order.order_number.includes(searchTerm));
+      filteredOrders = filteredOrders.filter(order => {
+        /** remove non numeric characters to searchTerm */
+        console.log(searchTerm.replace(/[^0-9]/g, ''));
+        return order.order_number.includes(searchTerm.replace(/[^0-9]/g, ''));
+      });
     }
 
     // Filter by status
