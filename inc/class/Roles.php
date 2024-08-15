@@ -920,6 +920,7 @@ jQuery(document).ready(function($) {
 		$promotions      = isset( $_POST['promotions'] ) ? sanitize_text_field( $_POST['promotions'] ) : '';
 		$privacy         = isset( $_POST['privacy'] ) ? sanitize_text_field( $_POST['privacy'] ) : '';
 		$referral        = isset( $_POST['referredBy'] ) ? sanitize_text_field( $_POST['referredBy'] ) : '';
+		$referrer        = isset( $_POST['referrer'] ) ? sanitize_url( $_POST['referrer'] ) : '';
 
 		if ( username_exists( $username ) || email_exists( $businessEmail ) ) {
 			wp_send_json(
@@ -1016,6 +1017,9 @@ jQuery(document).ready(function($) {
 		update_field( 'referral', $referral, 'user_ ' . $user_id );
 		if ( isset( $_POST['hear'] ) ) {
 			update_field( 'how_did_you_hear_about_us', $_POST['hear'], 'user_ ' . $user_id );
+		}
+		if ( $referrer ) {
+			update_field( 'registration_page', $referrer, 'user_ ' . $user_id );
 		}
 		update_field( 'promotions', isset( $_POST['promotions'] ) && $_POST['promotions'] === 'yes' ? 1 : 0, 'user_ ' . $user_id );
 		update_field( 'privacy', $_POST['privacy'] === 'yes' ? 1 : 0, 'user_ ' . $user_id );
