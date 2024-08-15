@@ -32,11 +32,11 @@ class Shortcodes {
 	public function custom_project() {
 		ob_start();
 		?>
-		<?php if ( ! is_user_logged_in() ) : ?>
-			<?php echo do_shortcode( '[kadence_element id=" 202"]' ); ?>
-		<?php else : ?>
+<?php if ( ! is_user_logged_in() ) : ?>
+<?php echo do_shortcode( '[kadence_element id=" 202"]' ); ?>
+<?php else : ?>
 <div id="customProject"></div>
-			<?php
+<?php
 	endif;
 		return ob_get_clean();
 	}
@@ -46,30 +46,30 @@ class Shortcodes {
 		if ( have_rows( 'homepage_grid' ) ) :
 			?>
 <div class="homepage-layout mobile-slider">
-			<?php
+    <?php
 			while ( have_rows( 'homepage_grid' ) ) :
 				the_row();
 				$image = get_sub_field( 'image' )['id'];
 				?>
 
-	<div class="homepage-layout-item">
-				<?php echo wp_get_attachment_image( $image, 'full' ); ?>
-		<div class="homepage-layout-content">
-			<h3 class="mb-0"><?php echo get_sub_field( 'title' ); ?></h3>
-			<p><?php echo get_sub_field( 'content' ); ?></p>
-		</div>
-				<?php if ( get_sub_field( 'link' ) ) : ?>
-		<a href="<?php echo get_sub_field( 'link' ); ?>"></a>
-		<?php endif; ?>
-	</div>
+    <div class="homepage-layout-item">
+        <?php echo wp_get_attachment_image( $image, 'full' ); ?>
+        <div class="homepage-layout-content">
+            <h3 class="mb-0"><?php echo get_sub_field( 'title' ); ?></h3>
+            <p><?php echo get_sub_field( 'content' ); ?></p>
+        </div>
+        <?php if ( get_sub_field( 'link' ) ) : ?>
+        <a href="<?php echo get_sub_field( 'link' ); ?>"></a>
+        <?php endif; ?>
+    </div>
 
-	<?php endwhile; ?>
+    <?php endwhile; ?>
 </div>
-			<?php
+<?php
 
 		endif;
 		?>
-		<?php
+<?php
 		return ob_get_clean();
 	}
 
@@ -114,6 +114,10 @@ class Shortcodes {
 	}
 
 	public function nova_signup() {
+		if ( is_user_logged_in() ) {
+			return;
+		}
+		wp_enqueue_script( 'nova-registration' );
 		ob_start();
 
 		require NOVA_DIR_PATH . '/inc/shortcodes/signup.php';

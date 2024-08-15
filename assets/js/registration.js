@@ -182,6 +182,7 @@ function novaRegistration() {
 					window.location.href =
 						NovaSignUp.success_url + '/?user_id=' + data.result.user_id;
 				} else {
+					console.log(data);
 					alert(data.error);
 				}
 				submitBtn.classList.remove(
