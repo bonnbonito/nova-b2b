@@ -31,8 +31,11 @@
 
 <?php do_action( 'wpo_wcpdf_before_document_label', $this->get_type(), $this->order ); ?>
 
-<?php if ( $this->has_header_logo() ) : ?>
-<h1 class="document-type-label"><?php $this->title(); ?></h1>
+<?php
+if ( $this->has_header_logo() ) :
+	$title = $this->order->is_paid() ? 'Receipt' : 'Invoice';
+	?>
+<h1 class="document-type-label"><?php echo $title; ?></h1>
 <?php endif; ?>
 
 <?php do_action( 'wpo_wcpdf_after_document_label', $this->get_type(), $this->order ); ?>
