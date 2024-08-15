@@ -446,6 +446,20 @@ export function Logo({ item }) {
 
 			<div className="quote-grid mb-6">
 				<Dropdown
+					title="Environment"
+					onChange={handleOnChangeWaterproof}
+					options={waterProofOptions.map((option) => (
+						<option
+							value={option.option}
+							selected={option.option == waterproof}
+						>
+							{option.option}
+						</option>
+					))}
+					value={waterproof}
+				/>
+
+				<Dropdown
 					title="Metal Depth"
 					value={depth?.value}
 					onChange={handleOnChangeDepth}
@@ -575,20 +589,6 @@ export function Logo({ item }) {
 						value={spacerStandoffDistance}
 					/>
 				)}
-
-				<Dropdown
-					title="Environment"
-					onChange={handleOnChangeWaterproof}
-					options={waterProofOptions.map((option) => (
-						<option
-							value={option.option}
-							selected={option.option == waterproof}
-						>
-							{option.option}
-						</option>
-					))}
-					value={waterproof}
-				/>
 
 				<Dropdown
 					title="Included Items"
