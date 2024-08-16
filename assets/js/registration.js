@@ -83,9 +83,9 @@ function novaRegistration() {
 	const country = document.getElementById('country');
 	const state = document.getElementById('state');
 	const pstField = document.getElementById('pstField');
-	const postInput = pstField.querySelector('input');
+	const pstInput = document.getElementById('pst');
 	const taxField = document.getElementById('taxField');
-	const taxFieldInput = taxField.querySelector('input');
+	const taxFieldInput = document.getElementById('taxId');
 	const referralField = document.getElementById('referralField');
 	const referredBy = document.getElementById('referredBy');
 	const referral = document.getElementById('referral');
@@ -117,7 +117,11 @@ function novaRegistration() {
 				state.appendChild(option);
 			}
 			taxField.classList.add('hidden');
-			taxFieldInput.removeAttribute('disabled');
+			taxFieldInput.removeAttribute('required');
+			taxFieldInput.value = ''; // Clear any previous value
+			pstField.classList.add('hidden'); // Hide PST field for non-CA
+			pstInput.removeAttribute('required');
+			pstInput.value = ''; // Clear any previous PST value
 		} else if (e.target.value === 'CA') {
 			for (const provinceCode in CAD_STATES) {
 				const option = document.createElement('option');
@@ -128,6 +132,13 @@ function novaRegistration() {
 
 			taxField.classList.remove('hidden');
 			taxFieldInput.setAttribute('required', true);
+		} else {
+			taxField.classList.add('hidden');
+			taxFieldInput.removeAttribute('required');
+			taxFieldInput.value = ''; // Clear any previous value
+			pstField.classList.add('hidden'); // Hide PST field for non-CA
+			pstInput.removeAttribute('required');
+			pstInput.value = ''; // Clear any previous PST value
 		}
 		// You can continue to add similar logic for other countries if needed
 	});
@@ -136,10 +147,10 @@ function novaRegistration() {
 		const target = e.target.value;
 		if (target === 'BC') {
 			pstField.classList.remove('hidden');
-			postInput.setAttribute('required', true);
+			pstInput.setAttribute('required', true);
 		} else {
 			pstField.classList.add('hidden');
-			postInput.removeAttribute('required');
+			pstInput.removeAttribute('required');
 		}
 	});
 
