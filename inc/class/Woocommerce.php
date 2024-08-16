@@ -330,6 +330,11 @@ class Woocommerce {
 	public function invoice_order_totals( $totals, $order, $type ) {
 		if ( isset( $totals['overall_total']['value'] ) && ! empty( $totals['overall_total']['value'] ) ) {
 			$totals['order_total']['value'] = $totals['overall_total']['value'];
+
+			$pending_payment = floatval( $order->get_meta( '_pending_payment' ) );
+			if ( $pending_payment > 0 ) {
+				$totals['order_total']['value'] = wc_price( $pending_payment, array( 'currency' => $order->get_currency() ) );
+			}
 		}
 
 		$refunds      = $order->get_refunds();
