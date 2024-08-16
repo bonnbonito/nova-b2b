@@ -7,7 +7,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<?php
-	$title = $this->order->is_paid() ? 'Receipt' : 'Invoice';
+	$title = $this->order->is_paid() && ! $this->order->get_meta( '_adjusted_duplicate_order_id' ) ? 'Receipt' : 'Invoice';
 	?>
 	<title><?php echo $title; ?></title>
 	<style type="text/css">

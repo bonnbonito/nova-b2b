@@ -33,7 +33,7 @@
 
 <?php
 if ( $this->has_header_logo() ) :
-	$title = $this->order->is_paid() ? 'Receipt' : 'Invoice';
+	$title = $this->order->is_paid() && ! $this->order->get_meta( '_adjusted_duplicate_order_id' ) ? 'Receipt' : 'Invoice';
 	?>
 <h1 class="document-type-label"><?php echo $title; ?></h1>
 <?php endif; ?>
