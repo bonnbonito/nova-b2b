@@ -381,11 +381,21 @@ function allAttributes(sign) {
 		},
 
 		{
-			label: '3M VINYL',
+			label: '3M 3630 VINYL',
 			value: sign.vinylWhite?.name
 				? sign.vinylWhite?.name +
 				  (sign.vinylWhite?.code ? '-[' + sign.vinylWhite?.code + ']' : '')
 				: '',
+		},
+
+		{
+			label: '3M 3635 VINYL',
+			value: sign.vinyl3635 ? sign.vinyl3635 : '',
+		},
+
+		{
+			label: 'FRONT &amp; BACK VINYL',
+			value: sign.frontBackVinyl ? sign.frontBackVinyl : '',
 		},
 
 		{

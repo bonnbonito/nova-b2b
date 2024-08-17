@@ -1625,9 +1625,11 @@ h6 {
 			'acrylicReveal'           => 'ACRYLIC REVEAL',
 			'frontAcrylicCover'       => 'FRONT ACRYLIC COVER',
 			'vinylWhite'              => array(
-				'label'   => '3M VINYL',
+				'label'   => '3M 3630 VINYL',
 				'isVinyl' => true,
 			),
+			'vinyl3635'               => '3M 3635 VINYL',
+			'frontBackVinyl'          => 'FRONT &amp; BACK VINYL',
 			'acrylicReturnPaintColor' => 'RETURN PAINT COLOR',
 			'ledLightColor'           => 'LED LIGHT COLOR',
 			'acrylicBackingOption'    => 'BACKING',

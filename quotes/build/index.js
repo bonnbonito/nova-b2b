@@ -6034,7 +6034,7 @@ const AcrylicFrontBackLit = () => {
       waterproof: _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.INDOOR_NOT_WATERPROOF,
       includedItems: _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.LIGHTING_INDOOR,
       acrylicChannelThickness: '1.2" (30mm)',
-      acrylicFront: 'White',
+      frontAcrylicCover: 'White',
       acrylicReturnPaintColor: 'Black',
       vinylWhite: {
         name: '',
@@ -6080,7 +6080,7 @@ const AcrylicFrontBackLit = () => {
     comments: '',
     mounting: '',
     acrylicChannelThickness: '1.2" (30mm)',
-    acrylicFront: 'White',
+    frontAcrylicCover: 'White',
     acrylicReturnPaintColor: 'Black',
     vinylWhite: {
       name: '',
@@ -6231,7 +6231,7 @@ const lettersHeight = {
 function Letters({
   item
 }) {
-  var _item$letters, _item$comments, _item$font, _item$acrylicReturnPa, _item$trimLessWaterpr, _item$acrylicChannelT, _item$ledLightColor, _item$acrylicFront, _item$vinylWhite, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$backOption, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets, _item$vinylWhite$colo;
+  var _item$letters, _item$comments, _item$font, _item$acrylicReturnPa, _item$trimLessWaterpr, _item$acrylicChannelT, _item$ledLightColor, _item$frontAcrylicCov, _item$vinylWhite, _item$vinyl, _item$frontBackVinyl, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$backOption, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets, _item$vinylWhite$colo;
   const {
     signage,
     setSignage,
@@ -6247,13 +6247,15 @@ function Letters({
   const [acrylicChannelThickness, setAcrylicChannelThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicChannelT = item.acrylicChannelThickness) !== null && _item$acrylicChannelT !== void 0 ? _item$acrylicChannelT : '1.2"');
   const [ledLightColor, setLedLightColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$ledLightColor = item.ledLightColor) !== null && _item$ledLightColor !== void 0 ? _item$ledLightColor : '6500K White');
   const handleOnChangeLedLight = e => setLedLightColor(e.target.value);
-  const [acrylicFront, setAcrylicFront] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicFront = item.acrylicFront) !== null && _item$acrylicFront !== void 0 ? _item$acrylicFront : 'White');
+  const [frontAcrylicCover, setFrontAcrylicCover] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$frontAcrylicCov = item.frontAcrylicCover) !== null && _item$frontAcrylicCov !== void 0 ? _item$frontAcrylicCov : 'White');
   const [openVinylWhite, setOpenVinylWhite] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [vinylWhite, setVinylWhite] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$vinylWhite = item.vinylWhite) !== null && _item$vinylWhite !== void 0 ? _item$vinylWhite : {
     name: '',
     color: '',
     code: ''
   });
+  const [vinyl3635, setVinyl3635] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$vinyl = item.vinyl3635) !== null && _item$vinyl !== void 0 ? _item$vinyl : '');
+  const [frontBackVinyl, setFrontBackVinyl] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$frontBackVinyl = item.frontBackVinyl) !== null && _item$frontBackVinyl !== void 0 ? _item$frontBackVinyl : '');
   const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileNames = item.fileNames) !== null && _item$fileNames !== void 0 ? _item$fileNames : []);
   const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrls = item.fileUrls) !== null && _item$fileUrls !== void 0 ? _item$fileUrls : []);
   const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$filePaths = item.filePaths) !== null && _item$filePaths !== void 0 ? _item$filePaths : []);
@@ -6333,11 +6335,13 @@ function Letters({
       fontFilePath,
       fontFileUrl,
       vinylWhite,
+      vinyl3635,
+      frontBackVinyl,
       customColor,
       sets,
       studLength,
       spacerStandoffDistance,
-      acrylicFront,
+      frontAcrylicCover,
       usdSinglePrice,
       cadSinglePrice,
       backOption,
@@ -6376,13 +6380,26 @@ function Letters({
   };
   const handleOnChangeWhite = e => {
     const target = e.target.value;
-    setAcrylicFront(target);
-    if (target !== '3M Vinyl') {
+    setFrontAcrylicCover(target);
+    if (target !== '3M 3630 Vinyl') {
       setVinylWhite({
         name: '',
         color: ''
       });
+      setFrontBackVinyl('');
     }
+    if (target !== '3M 3635 Vinyl') {
+      setVinyl3635('');
+      setFrontBackVinyl('');
+    }
+  };
+  const handleOnChangeFrontBackVinyl = e => {
+    const target = e.target.value;
+    setFrontBackVinyl(target);
+  };
+  const handleOnChangeVinyl3635 = e => {
+    const target = e.target.value;
+    setVinyl3635(target);
   };
   const handleonChangeSpacerDistance = e => {
     setSpacerStandoffDistance(e.target.value);
@@ -6436,10 +6453,19 @@ function Letters({
     lettersArray.forEach(letter => {
       tempTotal += (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_9__.calculateLetterPrice)(letter, baseLetterPrice, noLowerCase);
     });
-    if (acrylicFront === '3M Vinyl') {
-      tempTotal *= 1.1;
+    if (frontAcrylicCover === '3M 3630 Vinyl') {
+      tempTotal *= 1.15;
+      if (frontBackVinyl === 'Front and Back') {
+        tempTotal *= 1.15;
+      }
     }
-    if (acrylicFront === 'UV Printed') {
+    if (frontAcrylicCover === '3M 3635 Vinyl') {
+      tempTotal *= 1.2;
+      if (frontBackVinyl === 'Front and Back') {
+        tempTotal *= 1.15;
+      }
+    }
+    if (frontAcrylicCover === 'UV Printed') {
       tempTotal *= 1.15;
     }
     if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.STUD_WITH_SPACER) {
@@ -6471,7 +6497,7 @@ function Letters({
       setUsdSinglePrice(0);
       setCadSinglePrice(0);
     }
-  }, [selectedLetterHeight, letters, sets, font, selectedMounting, letterPricing, acrylicFront]);
+  }, [selectedLetterHeight, letters, sets, font, selectedMounting, letterPricing, frontAcrylicCover, frontBackVinyl]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     setLetterHeightOptions(() => Array.from({
       length: parseInt(lettersHeight.max) - parseInt(lettersHeight.min) + 1
@@ -6511,9 +6537,15 @@ function Letters({
       if (!studLength) missingFields.push('Select Stud Length');
       if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
-    if (!acrylicFront) missingFields.push('Select Acrylic Front');
-    if (acrylicFront === '3M Vinyl') {
-      if (!vinylWhite?.name) missingFields.push('Select 3M Vinyl');
+    if (!frontAcrylicCover) missingFields.push('Select Acrylic Front');
+    if (frontAcrylicCover === '3M 3630 Vinyl') {
+      if (!vinylWhite?.name) missingFields.push('Select 3M 3630 Vinyl');
+    }
+    if (frontAcrylicCover === '3M 3635 Vinyl') {
+      if (!vinyl3635) missingFields.push('Select 3M 3635 Vinyl');
+    }
+    if (frontAcrylicCover === '3M 3630 Vinyl' || frontAcrylicCover === '3M 3635 Vinyl') {
+      if (!frontBackVinyl) missingFields.push('Select Front &amp; Back Vinyl');
     }
     if (!sets) missingFields.push('Select Quantity');
     if (missingFields.length > 0) {
@@ -6544,11 +6576,11 @@ function Letters({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [letters, font, color, acrylicChannelThickness, selectedMounting, waterproof, selectedLetterHeight, fileUrls, fontFileUrl, customColor, sets, studLength, spacerStandoffDistance, vinylWhite, acrylicFront]);
+  }, [letters, font, color, acrylicChannelThickness, selectedMounting, waterproof, selectedLetterHeight, fileUrls, fontFileUrl, customColor, sets, studLength, spacerStandoffDistance, vinylWhite, vinyl3635, frontBackVinyl, frontAcrylicCover]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-  }, [letters, comments, font, acrylicChannelThickness, selectedMounting, waterproof, color, usdPrice, cadPrice, selectedLetterHeight, fileUrls, fileNames, filePaths, files, fontFileUrl, fontFileName, fontFilePath, fontFile, customColor, sets, studLength, spacerStandoffDistance, acrylicFront, vinylWhite, ledLightColor, usdSinglePrice, cadSinglePrice, backOption]);
-  if (acrylicFront === '3M Vinyl') {
+  }, [letters, comments, font, acrylicChannelThickness, selectedMounting, waterproof, color, usdPrice, cadPrice, selectedLetterHeight, fileUrls, fileNames, filePaths, files, fontFileUrl, fontFileName, fontFilePath, fontFile, customColor, sets, studLength, spacerStandoffDistance, frontAcrylicCover, vinylWhite, vinyl3635, frontBackVinyl, ledLightColor, usdSinglePrice, cadSinglePrice, backOption]);
+  if (frontAcrylicCover === '3M 3630 Vinyl') {
     (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_6__["default"])([colorRef, fontRef, vinyl3MRef], () => {
       if (!openColor && !openFont && !openVinylWhite) return;
       setOpenColor(false);
@@ -6635,14 +6667,14 @@ function Letters({
     options: letterHeightOptions,
     value: selectedLetterHeight
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Acrylic Front",
+    title: "Acrylic Front Cover",
     onChange: handleOnChangeWhite,
-    options: _options__WEBPACK_IMPORTED_MODULE_14__.acrylicFrontOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_11__.whiteOptionsResin.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
-      selected: option == acrylicFront
+      selected: option == frontAcrylicCover
     }, option.option)),
-    value: acrylicFront
-  }), acrylicFront === '3M Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_13__["default"], {
+    value: frontAcrylicCover
+  }), frontAcrylicCover === '3M 3630 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_13__["default"], {
     ref: vinyl3MRef,
     vinylWhite: vinylWhite,
     openVinylWhite: openVinylWhite,
@@ -6655,7 +6687,23 @@ function Letters({
       setVinylWhite(color);
       setOpenVinylWhite(false);
     }
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_12__["default"], {
+  }), frontAcrylicCover === '3M 3635 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "3M 3635 Vinyl",
+    onChange: handleOnChangeVinyl3635,
+    options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_11__.vinlyl3635Options.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: `${option.name} - [${option.code}]`,
+      selected: `${option.name} - [${option.code}]` == vinyl3635
+    }, `${option.name} - [${option.code}]`)),
+    value: vinyl3635
+  })), (frontAcrylicCover === '3M 3630 Vinyl' || frontAcrylicCover === '3M 3635 Vinyl') && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Front & Back Vinyl",
+    onChange: handleOnChangeFrontBackVinyl,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.frontBackVinylOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.option,
+      selected: option.option == frontBackVinyl
+    }, option.option)),
+    value: frontBackVinyl
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_12__["default"], {
     ref: colorRef,
     title: "Return Paint Color",
     colorName: color,
@@ -6848,7 +6896,7 @@ const backOptionOptions = [{
 function Logo({
   item
 }) {
-  var _item$width, _item$height, _item$comments, _item$acrylicReturnPa, _item$trimLessWaterpr, _item$acrylicChannelT, _item$ledLightColor, _item$acrylicFront, _item$vinylWhite, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$usdPrice, _item$cadPrice, _item$usdDiscount, _item$cadDiscount, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$backOption, _item$spacerStandoffD, _item$sets;
+  var _item$width, _item$height, _item$comments, _item$acrylicReturnPa, _item$trimLessWaterpr, _item$acrylicChannelT, _item$ledLightColor, _item$frontAcrylicCov, _item$vinylWhite, _item$vinyl, _item$frontBackVinyl, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$usdPrice, _item$cadPrice, _item$usdDiscount, _item$cadDiscount, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$backOption, _item$spacerStandoffD, _item$sets;
   const {
     signage,
     setSignage,
@@ -6863,13 +6911,15 @@ function Logo({
   const [acrylicChannelThickness, setAcrylicChannelThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicChannelT = item.acrylicChannelThickness) !== null && _item$acrylicChannelT !== void 0 ? _item$acrylicChannelT : '1.2"');
   const [ledLightColor, setLedLightColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$ledLightColor = item.ledLightColor) !== null && _item$ledLightColor !== void 0 ? _item$ledLightColor : '6500K White');
   const handleOnChangeLedLight = e => setLedLightColor(e.target.value);
-  const [acrylicFront, setAcrylicFront] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicFront = item.acrylicFront) !== null && _item$acrylicFront !== void 0 ? _item$acrylicFront : 'White');
+  const [frontAcrylicCover, setFrontAcrylicCover] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$frontAcrylicCov = item.frontAcrylicCover) !== null && _item$frontAcrylicCov !== void 0 ? _item$frontAcrylicCov : 'White');
   const [openVinylWhite, setOpenVinylWhite] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [vinylWhite, setVinylWhite] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$vinylWhite = item.vinylWhite) !== null && _item$vinylWhite !== void 0 ? _item$vinylWhite : {
     name: '',
     color: '',
     code: ''
   });
+  const [vinyl3635, setVinyl3635] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$vinyl = item.vinyl3635) !== null && _item$vinyl !== void 0 ? _item$vinyl : '');
+  const [frontBackVinyl, setFrontBackVinyl] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$frontBackVinyl = item.frontBackVinyl) !== null && _item$frontBackVinyl !== void 0 ? _item$frontBackVinyl : '');
   const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileNames = item.fileNames) !== null && _item$fileNames !== void 0 ? _item$fileNames : []);
   const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrls = item.fileUrls) !== null && _item$fileUrls !== void 0 ? _item$fileUrls : []);
   const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$filePaths = item.filePaths) !== null && _item$filePaths !== void 0 ? _item$filePaths : []);
@@ -6911,11 +6961,13 @@ function Logo({
       filePaths,
       fileUrls,
       vinylWhite,
+      vinyl3635,
+      frontBackVinyl,
       customColor,
       sets,
       studLength,
       spacerStandoffDistance,
-      acrylicFront,
+      frontAcrylicCover,
       usdSinglePrice,
       cadSinglePrice,
       backOption,
@@ -6942,6 +6994,14 @@ function Logo({
       setSpacerStandoffDistance('');
     }
   };
+  const handleOnChangeVinyl3635 = e => {
+    const target = e.target.value;
+    setVinyl3635(target);
+  };
+  const handleOnChangeFrontBackVinyl = e => {
+    const target = e.target.value;
+    setFrontBackVinyl(target);
+  };
   const handleOnChangeWaterproof = e => setWaterproof(e.target.value);
   const handleOnChangeThickness = e => {
     const target = e.target.value;
@@ -6949,12 +7009,17 @@ function Logo({
   };
   const handleOnChangeWhite = e => {
     const target = e.target.value;
-    setAcrylicFront(target);
-    if (target !== '3M Vinyl') {
+    setFrontAcrylicCover(target);
+    if (target !== '3M 3630 Vinyl') {
       setVinylWhite({
         name: '',
         color: ''
       });
+      setFrontBackVinyl('');
+    }
+    if (target !== '3M 3635 Vinyl') {
+      setVinyl3635('');
+      setFrontBackVinyl('');
     }
   };
   const handleonChangeSpacerDistance = e => {
@@ -7011,9 +7076,15 @@ function Logo({
       if (!studLength) missingFields.push('Select Stud Length');
       if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
-    if (!acrylicFront) missingFields.push('Select Acrylic Front');
-    if (acrylicFront === '3M Vinyl') {
-      if (!vinylWhite?.name) missingFields.push('Select 3M Vinyl');
+    if (!frontAcrylicCover) missingFields.push('Select Acrylic Front');
+    if (frontAcrylicCover === '3M 3630 Vinyl') {
+      if (!vinylWhite?.name) missingFields.push('Select 3M 3630 Vinyl');
+    }
+    if (frontAcrylicCover === '3M 3635 Vinyl') {
+      if (!vinyl3635) missingFields.push('Select 3M 3635 Vinyl');
+    }
+    if (frontAcrylicCover === '3M 3630 Vinyl' || frontAcrylicCover === '3M 3635 Vinyl') {
+      if (!frontBackVinyl) missingFields.push('Select Front &amp; Back Vinyl');
     }
     if (!sets) missingFields.push('Select Quantity');
     if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
@@ -7045,11 +7116,11 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [color, width, height, acrylicChannelThickness, selectedMounting, waterproof, fileUrls, customColor, sets, studLength, spacerStandoffDistance, vinylWhite, acrylicFront]);
+  }, [color, width, height, acrylicChannelThickness, selectedMounting, waterproof, fileUrls, customColor, sets, studLength, spacerStandoffDistance, vinylWhite, frontAcrylicCover, vinyl3635, frontBackVinyl]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-  }, [comments, width, height, acrylicChannelThickness, selectedMounting, waterproof, color, usdPrice, cadPrice, fileUrls, fileNames, filePaths, files, customColor, sets, studLength, spacerStandoffDistance, acrylicFront, vinylWhite, ledLightColor, usdSinglePrice, cadSinglePrice, backOption]);
-  if (acrylicFront === '3M Vinyl') {
+  }, [comments, width, height, acrylicChannelThickness, selectedMounting, waterproof, color, usdPrice, cadPrice, fileUrls, fileNames, filePaths, files, customColor, sets, studLength, spacerStandoffDistance, frontAcrylicCover, vinylWhite, vinyl3635, frontBackVinyl, ledLightColor, usdSinglePrice, cadSinglePrice, backOption]);
+  if (frontAcrylicCover === '3M 3630 Vinyl') {
     (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_4__["default"])([colorRef, vinyl3MRef], () => {
       if (!openColor && !openVinylWhite) return;
       setOpenColor(false);
@@ -7072,10 +7143,19 @@ function Logo({
     };
     const perInch = 0.8;
     let tempTotal = parseInt(width) * parseInt(height) * perInch;
-    if (acrylicFront === '3M Vinyl') {
-      tempTotal *= 1.1;
+    if (frontAcrylicCover === '3M 3630 Vinyl') {
+      tempTotal *= 1.15;
+      if (frontBackVinyl === 'Front and Back') {
+        tempTotal *= 1.15;
+      }
     }
-    if (acrylicFront === 'UV Printed') {
+    if (frontAcrylicCover === '3M 3635 Vinyl') {
+      tempTotal *= 1.2;
+      if (frontBackVinyl === 'Front and Back') {
+        tempTotal *= 1.15;
+      }
+    }
+    if (frontAcrylicCover === 'UV Printed') {
       tempTotal *= 1.15;
     }
     if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER) {
@@ -7112,7 +7192,7 @@ function Logo({
       setUsdSinglePrice(0);
       setCadSinglePrice(0);
     }
-  }, [width, height, acrylicFront, selectedMounting, sets]);
+  }, [width, height, frontAcrylicCover, selectedMounting, sets, frontBackVinyl]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     clasName: "py-4 my-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
@@ -7142,33 +7222,47 @@ function Logo({
     onChange: e => setHeight(e.target.value),
     options: maxHeightOptions
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Acrylic Front",
+    title: "Acrylic Front Cover",
     onChange: handleOnChangeWhite,
-    options: _options__WEBPACK_IMPORTED_MODULE_11__.acrylicFrontOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_8__.whiteOptionsResin.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
-      selected: option == acrylicFront
+      selected: option == frontAcrylicCover
     }, option.option)),
-    value: acrylicFront
-  }), acrylicFront === '3M Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_10__["default"], {
+    value: frontAcrylicCover
+  }), frontAcrylicCover === '3M 3630 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_10__["default"], {
     ref: vinyl3MRef,
     vinylWhite: vinylWhite,
     openVinylWhite: openVinylWhite,
     toggleVinyl: () => {
       setOpenVinylWhite(prev => !prev);
       setOpenColor(false);
-      setOpenFont(false);
     },
     selectVinylColor: color => {
       setVinylWhite(color);
       setOpenVinylWhite(false);
     }
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_9__["default"], {
+  }), frontAcrylicCover === '3M 3635 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "3M 3635 Vinyl",
+    onChange: handleOnChangeVinyl3635,
+    options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_8__.vinlyl3635Options.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: `${option.name} - [${option.code}]`,
+      selected: `${option.name} - [${option.code}]` == vinyl3635
+    }, `${option.name} - [${option.code}]`)),
+    value: vinyl3635
+  })), (frontAcrylicCover === '3M 3630 Vinyl' || frontAcrylicCover === '3M 3635 Vinyl') && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Front & Back Vinyl",
+    onChange: handleOnChangeFrontBackVinyl,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.frontBackVinylOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.option,
+      selected: option.option == frontBackVinyl
+    }, option.option)),
+    value: frontBackVinyl
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_9__["default"], {
     ref: colorRef,
     title: "Return Paint Color",
     colorName: color,
     toggleColor: () => {
       setOpenColor(prev => !prev);
-      setOpenFont(false);
       setOpenVinylWhite(false);
     },
     openColor: openColor,
@@ -7365,6 +7459,7 @@ const AcrylicFrontLit = () => {
         color: '',
         code: ''
       },
+      vinyl3635: '',
       ledLightColor: '6500K White',
       letterHeight: '',
       usdPrice: 0,
@@ -7411,6 +7506,7 @@ const AcrylicFrontLit = () => {
       color: '',
       code: ''
     },
+    vinyl3635: '',
     ledLightColor: '6500K White',
     includedItems: _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.LIGHTING_INDOOR,
     product: NovaQuote.product
@@ -7550,7 +7646,7 @@ const lettersHeight = {
 function Letters({
   item
 }) {
-  var _item$letters, _item$comments, _item$font, _item$acrylicReturnPa, _item$trimLessWaterpr, _item$acrylicChannelT, _item$ledLightColor, _item$acrylicFront, _item$vinylWhite, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdDiscount, _item$cadDiscount, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets, _item$vinylWhite$colo;
+  var _item$letters, _item$comments, _item$font, _item$acrylicReturnPa, _item$trimLessWaterpr, _item$acrylicChannelT, _item$ledLightColor, _item$acrylicFront, _item$vinylWhite, _item$vinyl, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdDiscount, _item$cadDiscount, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets, _item$vinylWhite$colo;
   const {
     signage,
     setSignage,
@@ -7573,6 +7669,7 @@ function Letters({
     color: '',
     code: ''
   });
+  const [vinyl3635, setVinyl3635] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$vinyl = item.vinyl3635) !== null && _item$vinyl !== void 0 ? _item$vinyl : '');
   const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileNames = item.fileNames) !== null && _item$fileNames !== void 0 ? _item$fileNames : []);
   const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrls = item.fileUrls) !== null && _item$fileUrls !== void 0 ? _item$fileUrls : []);
   const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$filePaths = item.filePaths) !== null && _item$filePaths !== void 0 ? _item$filePaths : []);
@@ -7653,6 +7750,7 @@ function Letters({
       fontFilePath,
       fontFileUrl,
       vinylWhite,
+      vinyl3635,
       customColor,
       sets,
       studLength,
@@ -7707,12 +7805,19 @@ function Letters({
   const handleOnChangeWhite = e => {
     const target = e.target.value;
     setAcrylicFront(target);
-    if (target !== '3M Vinyl') {
+    if (target !== '3M 3630 Vinyl') {
       setVinylWhite({
         name: '',
         color: ''
       });
     }
+    if (target !== '3M 3635 Vinyl') {
+      setVinyl3635('');
+    }
+  };
+  const handleOnChangeVinyl3635 = e => {
+    const target = e.target.value;
+    setVinyl3635(target);
   };
   const handleonChangeSpacerDistance = e => {
     setSpacerStandoffDistance(e.target.value);
@@ -7768,8 +7873,11 @@ function Letters({
     lettersArray.forEach(letter => {
       tempTotal += (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_9__.calculateLetterPrice)(letter, baseLetterPrice, noLowerCase);
     });
-    if (acrylicFront === '3M Vinyl') {
-      tempTotal *= 1.1;
+    if (acrylicFront === '3M 3630 Vinyl') {
+      tempTotal *= 1.15;
+    }
+    if (acrylicFront === '3M 3635 Vinyl') {
+      tempTotal *= 1.2;
     }
     if (acrylicFront === 'UV Printed') {
       tempTotal *= 1.15;
@@ -7854,8 +7962,11 @@ function Letters({
       if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (!acrylicFront) missingFields.push('Select Acrylic Front');
-    if (acrylicFront === '3M Vinyl') {
-      if (!vinylWhite?.name) missingFields.push('Select 3M Vinyl');
+    if (acrylicFront === '3M 3630 Vinyl') {
+      if (!vinylWhite?.name) missingFields.push('Select 3M 3630 Vinyl');
+    }
+    if (acrylicFront === '3M 3635 Vinyl') {
+      if (!vinyl3635) missingFields.push('Select 3M 3635 Vinyl');
     }
     if (!sets) missingFields.push('Select Quantity');
     if (missingFields.length > 0) {
@@ -7886,12 +7997,12 @@ function Letters({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [letters, font, color, acrylicChannelThickness, selectedMounting, waterproof, selectedLetterHeight, fileUrls, fontFileUrl, customColor, sets, studLength, spacerStandoffDistance, acrylicFront, vinylWhite]);
+  }, [letters, font, color, acrylicChannelThickness, selectedMounting, waterproof, selectedLetterHeight, fileUrls, fontFileUrl, customColor, sets, studLength, spacerStandoffDistance, acrylicFront, vinylWhite, vinyl3635]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-  }, [letters, comments, font, acrylicChannelThickness, selectedMounting, waterproof, color, usdPrice, cadPrice, selectedLetterHeight, fileUrls, fileNames, filePaths, files, fontFileUrl, fontFileName, fontFilePath, fontFile, customColor, sets, studLength, spacerStandoffDistance, acrylicFront, vinylWhite, ledLightColor, usdSinglePrice, cadSinglePrice, includedItems]);
-  (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_6__["default"])([colorRef, fontRef, acrylicFront === '3M Vinyl' ? vinyl3MRef : null].filter(Boolean), () => {
-    if (acrylicFront === '3M Vinyl') {
+  }, [letters, comments, font, acrylicChannelThickness, selectedMounting, waterproof, color, usdPrice, cadPrice, selectedLetterHeight, fileUrls, fileNames, filePaths, files, fontFileUrl, fontFileName, fontFilePath, fontFile, customColor, sets, studLength, spacerStandoffDistance, acrylicFront, vinylWhite, vinyl3635, ledLightColor, usdSinglePrice, cadSinglePrice, includedItems]);
+  (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_6__["default"])([colorRef, fontRef, acrylicFront === '3M 3630 Vinyl' ? vinyl3MRef : null].filter(Boolean), () => {
+    if (acrylicFront === '3M 3630 Vinyl') {
       if (!openColor && !openFont && !openVinylWhite) return;
       setOpenColor(false);
       setOpenFont(false);
@@ -7982,7 +8093,7 @@ function Letters({
       selected: option == acrylicFront
     }, option.option)),
     value: acrylicFront
-  }), acrylicFront === '3M Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_13__["default"], {
+  }), acrylicFront === '3M 3630 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_13__["default"], {
     ref: vinyl3MRef,
     vinylWhite: vinylWhite,
     openVinylWhite: openVinylWhite,
@@ -7995,7 +8106,15 @@ function Letters({
       setVinylWhite(color);
       setOpenVinylWhite(false);
     }
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_12__["default"], {
+  }), acrylicFront === '3M 3635 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "3M 3635 Vinyl",
+    onChange: handleOnChangeVinyl3635,
+    options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_11__.vinlyl3635Options.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: `${option.name} - [${option.code}]`,
+      selected: `${option.name} - [${option.code}]` == vinyl3635
+    }, `${option.name} - [${option.code}]`)),
+    value: vinyl3635
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_12__["default"], {
     title: "Return Paint Color",
     ref: colorRef,
     colorName: color,
@@ -8176,7 +8295,7 @@ const maxWidthOptions = Array.from({
 function Logo({
   item
 }) {
-  var _item$width, _item$height, _item$comments, _item$acrylicReturnPa, _item$trimLessWaterpr, _item$acrylicChannelT, _item$ledLightColor, _item$acrylicFront, _item$vinylWhite, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$usdPrice, _item$cadPrice, _item$usdDiscount, _item$cadDiscount, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
+  var _item$width, _item$height, _item$comments, _item$acrylicReturnPa, _item$trimLessWaterpr, _item$acrylicChannelT, _item$ledLightColor, _item$acrylicFront, _item$vinylWhite, _item$vinyl, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$usdPrice, _item$cadPrice, _item$usdDiscount, _item$cadDiscount, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
   const {
     signage,
     setSignage,
@@ -8198,6 +8317,7 @@ function Logo({
     color: '',
     code: ''
   });
+  const [vinyl3635, setVinyl3635] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$vinyl = item.vinyl3635) !== null && _item$vinyl !== void 0 ? _item$vinyl : '');
   const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileNames = item.fileNames) !== null && _item$fileNames !== void 0 ? _item$fileNames : []);
   const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrls = item.fileUrls) !== null && _item$fileUrls !== void 0 ? _item$fileUrls : []);
   const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$filePaths = item.filePaths) !== null && _item$filePaths !== void 0 ? _item$filePaths : []);
@@ -8238,6 +8358,7 @@ function Logo({
       filePaths,
       fileUrls,
       vinylWhite,
+      vinyl3635,
       customColor,
       sets,
       studLength,
@@ -8284,12 +8405,19 @@ function Logo({
   const handleOnChangeWhite = e => {
     const target = e.target.value;
     setAcrylicFront(target);
-    if (target !== '3M Vinyl') {
+    if (target !== '3M 3630 Vinyl') {
       setVinylWhite({
         name: '',
         color: ''
       });
     }
+    if (target !== '3M 3635 Vinyl') {
+      setVinyl3635('');
+    }
+  };
+  const handleOnChangeVinyl3635 = e => {
+    const target = e.target.value;
+    setVinyl3635(target);
   };
   const handleonChangeSpacerDistance = e => {
     setSpacerStandoffDistance(e.target.value);
@@ -8346,8 +8474,11 @@ function Logo({
       if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (!acrylicFront) missingFields.push('Select Acrylic Front');
-    if (acrylicFront === '3M Vinyl') {
-      if (!vinylWhite?.name) missingFields.push('Select 3M Vinyl');
+    if (acrylicFront === '3M 3630 Vinyl') {
+      if (!vinylWhite?.name) missingFields.push('Select 3M 3630 Vinyl');
+    }
+    if (acrylicFront === '3M 3635 Vinyl') {
+      if (!vinyl3635) missingFields.push('Select 3M 3635 Vinyl');
     }
     if (!sets) missingFields.push('Select Quantity');
     if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
@@ -8379,11 +8510,11 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [color, width, height, acrylicChannelThickness, selectedMounting, waterproof, fileUrls, customColor, sets, studLength, spacerStandoffDistance, acrylicFront, vinylWhite]);
+  }, [color, width, height, acrylicChannelThickness, selectedMounting, waterproof, fileUrls, customColor, sets, studLength, spacerStandoffDistance, acrylicFront, vinylWhite, vinyl3635]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-  }, [comments, width, height, acrylicChannelThickness, selectedMounting, waterproof, color, usdPrice, cadPrice, fileUrls, fileNames, filePaths, files, customColor, sets, studLength, spacerStandoffDistance, acrylicFront, vinylWhite, ledLightColor, usdSinglePrice, cadSinglePrice, includedItems]);
-  if (acrylicFront === '3M Vinyl') {
+  }, [comments, width, height, acrylicChannelThickness, selectedMounting, waterproof, color, usdPrice, cadPrice, fileUrls, fileNames, filePaths, files, customColor, sets, studLength, spacerStandoffDistance, acrylicFront, vinylWhite, vinyl3635, ledLightColor, usdSinglePrice, cadSinglePrice, includedItems]);
+  if (acrylicFront === '3M 3630 Vinyl') {
     (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_4__["default"])([colorRef, vinyl3MRef], () => {
       if (!openColor && !openVinylWhite) return;
       setOpenColor(false);
@@ -8406,8 +8537,11 @@ function Logo({
     };
     const perInch = 0.7;
     let tempTotal = parseInt(width) * parseInt(height) * perInch;
-    if (acrylicFront === '3M Vinyl') {
-      tempTotal *= 1.1;
+    if (acrylicFront === '3M 3630 Vinyl') {
+      tempTotal *= 1.15;
+    }
+    if (acrylicFront === '3M 3635 Vinyl') {
+      tempTotal *= 1.2;
     }
     if (acrylicFront === 'UV Printed') {
       tempTotal *= 1.15;
@@ -8483,7 +8617,7 @@ function Logo({
       selected: option == acrylicFront
     }, option.option)),
     value: acrylicFront
-  }), acrylicFront === '3M Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_10__["default"], {
+  }), acrylicFront === '3M 3630 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_10__["default"], {
     ref: vinyl3MRef,
     vinylWhite: vinylWhite,
     openVinylWhite: openVinylWhite,
@@ -8495,7 +8629,15 @@ function Logo({
       setVinylWhite(color);
       setOpenVinylWhite(false);
     }
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_9__["default"], {
+  }), acrylicFront === '3M 3635 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "3M 3635 Vinyl",
+    onChange: handleOnChangeVinyl3635,
+    options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_8__.vinlyl3635Options.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: `${option.name} - [${option.code}]`,
+      selected: `${option.name} - [${option.code}]` == vinyl3635
+    }, `${option.name} - [${option.code}]`)),
+    value: vinyl3635
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_9__["default"], {
     title: "Return Paint Color",
     ref: colorRef,
     colorName: color,
@@ -8658,7 +8800,7 @@ const AcrylicFrontSideLit = () => {
       ledLightColor: '6500K White',
       letterHeight: '',
       acrylicReturn: 'White',
-      frontOption: 'White',
+      frontAcrylicCover: 'White',
       usdPrice: 0,
       cadPrice: 0,
       filePaths: [],
@@ -8698,6 +8840,7 @@ const AcrylicFrontSideLit = () => {
     waterproof: _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.INDOOR_NOT_WATERPROOF,
     includedItems: _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.LIGHTING_INDOOR,
     product: NovaQuote.product,
+    frontAcrylicCover: 'White',
     acrylicReturn: 'White'
   };
   const addSignage = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(type => {
@@ -8796,10 +8939,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
 /* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
 /* harmony import */ var _metal_channel_metalChannelOptions__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../metal-channel/metalChannelOptions */ "./src/scripts/products/metal-channel/metalChannelOptions.js");
-/* harmony import */ var _utils_VinylColors__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../utils/VinylColors */ "./src/scripts/utils/VinylColors.js");
-/* harmony import */ var _options__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../options */ "./src/scripts/products/acrylic-channel/AcrylicFrontSideLit/options.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
-/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
+/* harmony import */ var _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../utils/ColorOptions */ "./src/scripts/utils/ColorOptions.js");
+/* harmony import */ var _utils_VinylColors__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../../../utils/VinylColors */ "./src/scripts/utils/VinylColors.js");
+/* harmony import */ var _options__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../options */ "./src/scripts/products/acrylic-channel/AcrylicFrontSideLit/options.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
+
 
 
 
@@ -8817,19 +8962,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const waterProofOptions = [{
-  option: _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.INDOOR_NOT_WATERPROOF
+  option: _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.INDOOR_NOT_WATERPROOF
 }];
 const mountingDefaultOptions = [{
-  mounting_option: _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_MOUNT
+  mounting_option: _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.STUD_MOUNT
 }, {
-  mounting_option: _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_WITH_SPACER
-}];
-const frontOptionOptions = [{
-  option: 'White'
-}, {
-  option: '3M Vinyl'
-}, {
-  option: 'UV Printed'
+  mounting_option: _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.STUD_WITH_SPACER
 }];
 const lettersHeight = {
   min: 2,
@@ -8838,25 +8976,26 @@ const lettersHeight = {
 function Letters({
   item
 }) {
-  var _item$letters, _item$comments, _item$font, _item$frontOption, _item$trimLessWaterpr, _item$acrylicReturn, _item$vinylWhite, _item$acrylicChannelT, _item$ledLightColor, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets, _item$vinylWhite$colo;
+  var _item$letters, _item$comments, _item$font, _item$frontAcrylicCov, _item$trimLessWaterpr, _item$acrylicReturn, _item$vinylWhite, _item$vinyl, _item$acrylicChannelT, _item$ledLightColor, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets, _item$vinylWhite$colo;
   const {
     signage,
     setSignage,
     setMissing
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_13__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_14__.useAppContext)();
   const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letters = item.letters) !== null && _item$letters !== void 0 ? _item$letters : '');
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
   const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$font = item.font) !== null && _item$font !== void 0 ? _item$font : '');
   const [openFont, setOpenFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [frontOption, setFrontOption] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$frontOption = item.frontOption) !== null && _item$frontOption !== void 0 ? _item$frontOption : '');
+  const [frontAcrylicCover, setFrontAcrylicCover] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$frontAcrylicCov = item.frontAcrylicCover) !== null && _item$frontAcrylicCov !== void 0 ? _item$frontAcrylicCov : 'White');
   const [openVinyl, setOpenVinyl] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$trimLessWaterpr = item.trimLessWaterproof) !== null && _item$trimLessWaterpr !== void 0 ? _item$trimLessWaterpr : _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.INDOOR_NOT_WATERPROOF);
+  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$trimLessWaterpr = item.trimLessWaterproof) !== null && _item$trimLessWaterpr !== void 0 ? _item$trimLessWaterpr : _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.INDOOR_NOT_WATERPROOF);
   const [acrylicReturn, setAcrylicReturn] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicReturn = item.acrylicReturn) !== null && _item$acrylicReturn !== void 0 ? _item$acrylicReturn : 'White');
   const [vinylWhite, setVinylWhite] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$vinylWhite = item.vinylWhite) !== null && _item$vinylWhite !== void 0 ? _item$vinylWhite : {
     name: '',
     color: '',
     code: ''
   });
+  const [vinyl3635, setVinyl3635] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$vinyl = item.vinyl3635) !== null && _item$vinyl !== void 0 ? _item$vinyl : '');
   const [acrylicChannelThickness, setAcrylicChannelThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicChannelT = item.acrylicChannelThickness) !== null && _item$acrylicChannelT !== void 0 ? _item$acrylicChannelT : '1.2"');
   const [ledLightColor, setLedLightColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$ledLightColor = item.ledLightColor) !== null && _item$ledLightColor !== void 0 ? _item$ledLightColor : '6500K White');
   const handleOnChangeLedLight = e => setLedLightColor(e.target.value);
@@ -8922,10 +9061,11 @@ function Letters({
       acrylicChannelThickness,
       mounting: selectedMounting,
       trimLessWaterproof: waterproof,
-      frontOption,
+      frontAcrylicCover,
       letterHeight: selectedLetterHeight,
       ledLightColor,
       vinylWhite,
+      vinyl3635,
       usdPrice,
       cadPrice,
       files,
@@ -8941,7 +9081,7 @@ function Letters({
       spacerStandoffDistance,
       usdSinglePrice,
       cadSinglePrice,
-      includedItems: _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.LIGHTING_INDOOR
+      includedItems: _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.LIGHTING_INDOOR
     };
     setSignage(prevSignage => prevSignage.map(sign => sign.id === item.id ? {
       ...sign,
@@ -8957,8 +9097,8 @@ function Letters({
   const handleOnChangeMount = e => {
     const target = e.target.value;
     setSelectedMounting(target);
-    if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_WITH_SPACER || target === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_MOUNT) {
-      if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_MOUNT) {
+    if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.STUD_WITH_SPACER || target === _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.STUD_MOUNT) {
+      if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.STUD_MOUNT) {
         setSpacerStandoffDistance('');
       }
     } else {
@@ -8967,7 +9107,11 @@ function Letters({
     }
   };
   const handleOnChangeWaterproof = e => setWaterproof(e.target.value);
-  const handleOnChangeFrontOption = e => setFrontOption(e.target.value);
+  const handleOnChangeFrontOption = e => setFrontAcrylicCover(e.target.value);
+  const handleOnChangeVinyl3635 = e => {
+    const target = e.target.value;
+    setVinyl3635(target);
+  };
   const handleOnChangeThickness = e => {
     const target = e.target.value;
     setAcrylicChannelThickness(() => target);
@@ -9027,14 +9171,17 @@ function Letters({
     lettersArray.forEach(letter => {
       tempTotal += (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_9__.calculateLetterPrice)(letter, baseLetterPrice, noLowerCase);
     });
-    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_WITH_SPACER) {
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.STUD_WITH_SPACER) {
       const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_9__.spacerPricing)(tempTotal);
       tempTotal += parseFloat(spacer.toFixed(2));
     }
-    if (frontOption === '3M Vinyl') {
-      tempTotal *= 1.1;
+    if (frontAcrylicCover === '3M 3630 Vinyl') {
+      tempTotal *= 1.15;
     }
-    if (frontOption === 'UV Printed') {
+    if (frontAcrylicCover === '3M 3635 Vinyl') {
+      tempTotal *= 1.2;
+    }
+    if (frontAcrylicCover === 'UV Printed') {
       tempTotal *= 1.15;
     }
 
@@ -9053,16 +9200,16 @@ function Letters({
     } = computePricing();
     if (total && singlePrice) {
       setUsdPrice(total);
-      setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.EXCHANGE_RATE).toFixed(2));
+      setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.EXCHANGE_RATE).toFixed(2));
       setUsdSinglePrice(singlePrice);
-      setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.EXCHANGE_RATE).toFixed(2));
+      setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.EXCHANGE_RATE).toFixed(2));
     } else {
       setUsdPrice(0);
       setCadPrice(0);
       setUsdSinglePrice(0);
       setCadSinglePrice(0);
     }
-  }, [selectedLetterHeight, letters, sets, font, selectedMounting, letterPricing, frontOption]);
+  }, [selectedLetterHeight, letters, sets, font, selectedMounting, letterPricing, frontAcrylicCover]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     setLetterHeightOptions(() => Array.from({
       length: parseInt(lettersHeight.max) - parseInt(lettersHeight.min) + 1
@@ -9089,19 +9236,22 @@ function Letters({
     }
     if (!selectedLetterHeight) missingFields.push('Select Letter Height');
     if (!acrylicChannelThickness) missingFields.push('Select Acrylic Thickness');
-    if (!frontOption) missingFields.push('Select Front Option');
-    if (frontOption === '3M Vinyl') {
-      if (!vinylWhite?.name) missingFields.push('Select 3M Vinyl');
+    if (!frontAcrylicCover) missingFields.push('Select Front Option');
+    if (frontAcrylicCover === '3M 3630 Vinyl') {
+      if (!vinylWhite?.name) missingFields.push('Select 3M 3630 Vinyl');
     }
-    if (frontOption === 'UV Printed') {
+    if (frontAcrylicCover === '3M 3635 Vinyl') {
+      if (!vinyl3635) missingFields.push('Select 3M 3635 Vinyl');
+    }
+    if (frontAcrylicCover === 'UV Printed') {
       if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
     }
     if (!waterproof) missingFields.push('Select Environment');
     if (!selectedMounting) missingFields.push('Select Mounting');
-    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_MOUNT) {
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.STUD_MOUNT) {
       if (!studLength) missingFields.push('Select Stud Length');
     }
-    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_WITH_SPACER) {
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.STUD_WITH_SPACER) {
       if (!studLength) missingFields.push('Select Stud Length');
       if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
@@ -9134,11 +9284,11 @@ function Letters({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [letters, font, acrylicChannelThickness, selectedMounting, waterproof, selectedLetterHeight, fileUrls, fontFileUrl, sets, studLength, spacerStandoffDistance, frontOption, vinylWhite]);
+  }, [letters, font, acrylicChannelThickness, selectedMounting, waterproof, selectedLetterHeight, fileUrls, fontFileUrl, sets, studLength, spacerStandoffDistance, frontAcrylicCover, vinylWhite, vinyl3635]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-  }, [letters, comments, font, acrylicChannelThickness, selectedMounting, waterproof, usdPrice, cadPrice, selectedLetterHeight, fileUrls, fileNames, filePaths, files, fontFileUrl, fontFileName, fontFilePath, fontFile, sets, studLength, spacerStandoffDistance, ledLightColor, usdSinglePrice, cadSinglePrice, vinylWhite, frontOption]);
-  if (frontOption === '3M Vinyl') {
+  }, [letters, comments, font, acrylicChannelThickness, selectedMounting, waterproof, usdPrice, cadPrice, selectedLetterHeight, fileUrls, fileNames, filePaths, files, fontFileUrl, fontFileName, fontFilePath, fontFile, sets, studLength, spacerStandoffDistance, ledLightColor, usdSinglePrice, cadSinglePrice, vinylWhite, vinyl3635, frontAcrylicCover]);
+  if (frontAcrylicCover === '3M 3630 Vinyl') {
     (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_6__["default"])([fontRef, vinylRef], () => {
       if (!openVinyl && !openFont) return;
       setOpenVinyl(false);
@@ -9151,13 +9301,16 @@ function Letters({
     });
   }
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (frontOption !== '3M Vinyl') {
+    if (frontAcrylicCover !== '3M 3630 Vinyl') {
       setVinylWhite({
         name: '',
         color: ''
       });
     }
-  }, [frontOption]);
+    if (frontAcrylicCover !== '3M 3635 Vinyl') {
+      setVinyl3635('');
+    }
+  }, [frontAcrylicCover]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     font != 'Custom font' && setFontFileUrl('');
   }, [font]);
@@ -9218,7 +9371,7 @@ function Letters({
     title: "Acrylic Thickness",
     value: acrylicChannelThickness,
     onChange: handleOnChangeThickness,
-    options: _options__WEBPACK_IMPORTED_MODULE_12__.acrylicChannelThicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _options__WEBPACK_IMPORTED_MODULE_13__.acrylicChannelThicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: thickness.value,
       selected: thickness.value === acrylicChannelThickness
     }, thickness.value)),
@@ -9237,14 +9390,14 @@ function Letters({
     value: acrylicReturn,
     onlyValue: true
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Front Option",
+    title: "Front Acrylic Cover",
     onChange: handleOnChangeFrontOption,
-    options: frontOptionOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_11__.whiteOptionsResin.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
-      selected: option.option == frontOption
+      selected: option == frontAcrylicCover
     }, option.option)),
-    value: frontOption
-  }), frontOption === '3M Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_11__["default"], {
+    value: frontAcrylicCover
+  }), frontAcrylicCover === '3M 3630 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_12__["default"], {
     ref: vinylRef,
     vinylWhite: vinylWhite,
     setVinylWhite: setVinylWhite,
@@ -9257,6 +9410,14 @@ function Letters({
       setVinylWhite(color);
       setOpenVinyl(false);
     }
+  })), frontAcrylicCover === '3M 3635 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "3M 3635 Vinyl",
+    onChange: handleOnChangeVinyl3635,
+    options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_11__.vinlyl3635Options.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: `${option.name} - [${option.code}]`,
+      selected: `${option.name} - [${option.code}]` == vinyl3635
+    }, `${option.name} - [${option.code}]`)),
+    value: vinyl3635
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
@@ -9273,7 +9434,7 @@ function Letters({
       selected: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: selectedMounting
-  }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -9289,7 +9450,7 @@ function Letters({
       selected: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
-  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_MOUNT && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.STUD_MOUNT && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -9306,13 +9467,13 @@ function Letters({
     }, option.option)),
     value: waterproof,
     onlyValue: true
-  }), waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.INDOOR_NOT_WATERPROOF && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }), waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.INDOOR_NOT_WATERPROOF && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Included Items",
     options: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      value: _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.LIGHTING_INDOOR,
-      selected: _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.LIGHTING_INDOOR
-    }, _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.LIGHTING_INDOOR),
-    value: _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.LIGHTING_INDOOR,
+      value: _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.LIGHTING_INDOOR,
+      selected: _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.LIGHTING_INDOOR
+    }, _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.LIGHTING_INDOOR),
+    value: _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.LIGHTING_INDOOR,
     onlyValue: true
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Quantity",
@@ -9320,7 +9481,7 @@ function Letters({
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.setOptions,
     value: sets,
     onlyValue: true
-  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-xs text-[#9F9F9F] mb-4"
   }, "*Note: The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid"
@@ -9362,12 +9523,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_ClickOutside__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../utils/ClickOutside */ "./src/scripts/utils/ClickOutside.js");
 /* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
 /* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
-/* harmony import */ var _metal_channel_metalChannelOptions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../metal-channel/metalChannelOptions */ "./src/scripts/products/metal-channel/metalChannelOptions.js");
-/* harmony import */ var _utils_VinylColors__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../utils/VinylColors */ "./src/scripts/utils/VinylColors.js");
-/* harmony import */ var _options__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../options */ "./src/scripts/products/acrylic-channel/AcrylicFrontSideLit/options.js");
-/* harmony import */ var _options__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../options */ "./src/scripts/products/acrylic-channel/options.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
-/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
+/* harmony import */ var _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../utils/ColorOptions */ "./src/scripts/utils/ColorOptions.js");
+/* harmony import */ var _metal_channel_metalChannelOptions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../metal-channel/metalChannelOptions */ "./src/scripts/products/metal-channel/metalChannelOptions.js");
+/* harmony import */ var _utils_VinylColors__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../../utils/VinylColors */ "./src/scripts/utils/VinylColors.js");
+/* harmony import */ var _options__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../options */ "./src/scripts/products/acrylic-channel/AcrylicFrontSideLit/options.js");
+/* harmony import */ var _options__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../options */ "./src/scripts/products/acrylic-channel/options.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
+
 
 
 
@@ -9383,41 +9546,35 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const waterProofOptions = [{
-  option: _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.INDOOR_NOT_WATERPROOF
+  option: _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF
 }];
 const mountingDefaultOptions = [{
-  mounting_option: _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_MOUNT
+  mounting_option: _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_MOUNT
 }, {
-  mounting_option: _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER
-}];
-const frontOptionOptions = [{
-  option: 'White'
-}, {
-  option: '3M Vinyl'
-}, {
-  option: 'UV Printed'
+  mounting_option: _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER
 }];
 function Logo({
   item
 }) {
-  var _item$comments, _item$width, _item$height, _item$frontOption, _item$trimLessWaterpr, _item$acrylicReturn, _item$vinylWhite, _item$acrylicChannelT, _item$ledLightColor, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$usdPrice, _item$cadPrice, _item$usdDiscount, _item$cadDiscount, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
+  var _item$comments, _item$width, _item$height, _item$frontAcrylicCov, _item$trimLessWaterpr, _item$acrylicReturn, _item$vinylWhite, _item$vinyl, _item$acrylicChannelT, _item$ledLightColor, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$usdPrice, _item$cadPrice, _item$usdDiscount, _item$cadDiscount, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
   const {
     signage,
     setSignage,
     setMissing
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_11__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_12__.useAppContext)();
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
   const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$width = item.width) !== null && _item$width !== void 0 ? _item$width : '');
   const [height, setHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$height = item.height) !== null && _item$height !== void 0 ? _item$height : '');
-  const [frontOption, setFrontOption] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$frontOption = item.frontOption) !== null && _item$frontOption !== void 0 ? _item$frontOption : '');
+  const [frontAcrylicCover, setFrontOption] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$frontAcrylicCov = item.frontAcrylicCover) !== null && _item$frontAcrylicCov !== void 0 ? _item$frontAcrylicCov : '');
   const [openVinyl, setOpenVinyl] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$trimLessWaterpr = item.trimLessWaterproof) !== null && _item$trimLessWaterpr !== void 0 ? _item$trimLessWaterpr : _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.INDOOR_NOT_WATERPROOF);
+  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$trimLessWaterpr = item.trimLessWaterproof) !== null && _item$trimLessWaterpr !== void 0 ? _item$trimLessWaterpr : _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF);
   const [acrylicReturn, setAcrylicReturn] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicReturn = item.acrylicReturn) !== null && _item$acrylicReturn !== void 0 ? _item$acrylicReturn : 'White');
   const [vinylWhite, setVinylWhite] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$vinylWhite = item.vinylWhite) !== null && _item$vinylWhite !== void 0 ? _item$vinylWhite : {
     name: '',
     color: '',
     code: ''
   });
+  const [vinyl3635, setVinyl3635] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$vinyl = item.vinyl3635) !== null && _item$vinyl !== void 0 ? _item$vinyl : '');
   const [acrylicChannelThickness, setAcrylicChannelThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicChannelT = item.acrylicChannelThickness) !== null && _item$acrylicChannelT !== void 0 ? _item$acrylicChannelT : '1.2"');
   const [ledLightColor, setLedLightColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$ledLightColor = item.ledLightColor) !== null && _item$ledLightColor !== void 0 ? _item$ledLightColor : '6500K White');
   const handleOnChangeLedLight = e => setLedLightColor(e.target.value);
@@ -9449,9 +9606,10 @@ function Logo({
       acrylicChannelThickness,
       mounting: selectedMounting,
       trimLessWaterproof: waterproof,
-      frontOption,
+      frontAcrylicCover,
       ledLightColor,
       vinylWhite,
+      vinyl3635,
       usdPrice,
       cadPrice,
       files,
@@ -9463,7 +9621,7 @@ function Logo({
       spacerStandoffDistance,
       usdSinglePrice,
       cadSinglePrice,
-      includedItems: _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.LIGHTING_INDOOR
+      includedItems: _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR
     };
     setSignage(prevSignage => prevSignage.map(sign => sign.id === item.id ? {
       ...sign,
@@ -9477,8 +9635,8 @@ function Logo({
   const handleOnChangeMount = e => {
     const target = e.target.value;
     setSelectedMounting(target);
-    if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER || target === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_MOUNT) {
-      if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_MOUNT) {
+    if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER || target === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_MOUNT) {
+      if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_MOUNT) {
         setSpacerStandoffDistance('');
       }
     } else {
@@ -9488,6 +9646,10 @@ function Logo({
   };
   const handleOnChangeWaterproof = e => setWaterproof(e.target.value);
   const handleOnChangeFrontOption = e => setFrontOption(e.target.value);
+  const handleOnChangeVinyl3635 = e => {
+    const target = e.target.value;
+    setVinyl3635(target);
+  };
   const handleOnChangeThickness = e => {
     const target = e.target.value;
     setAcrylicChannelThickness(() => target);
@@ -9536,13 +9698,16 @@ function Logo({
     };
     const perInch = 0.8;
     let tempTotal = parseInt(width) * parseInt(height) * perInch;
-    if (frontOption === '3M Vinyl') {
-      tempTotal *= 1.1;
-    }
-    if (frontOption === 'UV Printed') {
+    if (frontAcrylicCover === '3M 3630 Vinyl') {
       tempTotal *= 1.15;
     }
-    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER) {
+    if (frontAcrylicCover === '3M 3635 Vinyl') {
+      tempTotal *= 1.2;
+    }
+    if (frontAcrylicCover === 'UV Printed') {
+      tempTotal *= 1.15;
+    }
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER) {
       const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.spacerPricing)(tempTotal);
       tempTotal += parseFloat(spacer.toFixed(2));
     }
@@ -9567,31 +9732,34 @@ function Logo({
     } = computePricing();
     if (total && singlePrice) {
       setUsdPrice(total);
-      setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.EXCHANGE_RATE).toFixed(2));
+      setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.EXCHANGE_RATE).toFixed(2));
       setUsdSinglePrice(singlePrice);
-      setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.EXCHANGE_RATE).toFixed(2));
+      setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.EXCHANGE_RATE).toFixed(2));
     } else {
       setUsdPrice(0);
       setCadPrice(0);
       setUsdSinglePrice(0);
       setCadSinglePrice(0);
     }
-  }, [width, height, frontOption, selectedMounting, sets]);
+  }, [width, height, frontAcrylicCover, selectedMounting, sets]);
   const checkAndAddMissingFields = () => {
     const missingFields = [];
     if (!acrylicChannelThickness) missingFields.push('Select Acrylic Thickness');
     if (!width) missingFields.push('Select Logo Width');
     if (!height) missingFields.push('Select Logo Height');
-    if (!frontOption) missingFields.push('Select Front Option');
-    if (frontOption === '3M Vinyl') {
-      if (!vinylWhite?.name) missingFields.push('Select 3M Vinyl');
+    if (!frontAcrylicCover) missingFields.push('Select Front Option');
+    if (frontAcrylicCover === '3M 3630 Vinyl') {
+      if (!vinylWhite?.name) missingFields.push('Select 3M 3630 Vinyl');
+    }
+    if (frontAcrylicCover === '3M 3635 Vinyl') {
+      if (!vinyl3635) missingFields.push('Select 3M 3635 Vinyl');
     }
     if (!waterproof) missingFields.push('Select Environment');
     if (!selectedMounting) missingFields.push('Select Mounting');
-    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_MOUNT) {
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_MOUNT) {
       if (!studLength) missingFields.push('Select Stud Length');
     }
-    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER) {
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER) {
       if (!studLength) missingFields.push('Select Stud Length');
       if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
@@ -9625,22 +9793,25 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [acrylicChannelThickness, selectedMounting, waterproof, fileUrls, sets, studLength, spacerStandoffDistance, width, height, vinylWhite, frontOption]);
+  }, [acrylicChannelThickness, selectedMounting, waterproof, fileUrls, sets, studLength, spacerStandoffDistance, width, height, vinylWhite, vinyl3635, frontAcrylicCover]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-  }, [comments, acrylicChannelThickness, selectedMounting, waterproof, usdPrice, cadPrice, fileUrls, fileNames, filePaths, files, sets, studLength, spacerStandoffDistance, ledLightColor, usdSinglePrice, cadSinglePrice, vinylWhite, frontOption, width, height]);
+  }, [comments, acrylicChannelThickness, selectedMounting, waterproof, usdPrice, cadPrice, fileUrls, fileNames, filePaths, files, sets, studLength, spacerStandoffDistance, ledLightColor, usdSinglePrice, cadSinglePrice, vinylWhite, vinyl3635, frontAcrylicCover, width, height]);
   (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_4__["default"])([vinylRef], () => {
     if (!openVinyl) return;
     setOpenVinyl(false);
   });
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (frontOption !== '3M Vinyl') {
+    if (frontAcrylicCover !== '3M 3630 Vinyl') {
       setVinylWhite({
         name: '',
         color: ''
       });
     }
-  }, [frontOption]);
+    if (frontAcrylicCover !== '3M 3635 Vinyl') {
+      setVinyl3635('');
+    }
+  }, [frontAcrylicCover]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     clasName: "py-4 my-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
@@ -9654,7 +9825,7 @@ function Logo({
     title: "Acrylic Thickness",
     value: acrylicChannelThickness,
     onChange: handleOnChangeThickness,
-    options: _options__WEBPACK_IMPORTED_MODULE_9__.acrylicChannelThicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _options__WEBPACK_IMPORTED_MODULE_10__.acrylicChannelThicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: thickness.value,
       selected: thickness.value === acrylicChannelThickness
     }, thickness.value)),
@@ -9663,12 +9834,12 @@ function Logo({
     title: "Logo Width",
     value: width,
     onChange: e => setWidth(e.target.value),
-    options: _options__WEBPACK_IMPORTED_MODULE_10__.maxWidthOptions
+    options: _options__WEBPACK_IMPORTED_MODULE_11__.maxWidthOptions
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Logo Height",
     value: height,
     onChange: e => setHeight(e.target.value),
-    options: _options__WEBPACK_IMPORTED_MODULE_10__.maxHeightOptions
+    options: _options__WEBPACK_IMPORTED_MODULE_11__.maxHeightOptions
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Return",
     options: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -9678,14 +9849,14 @@ function Logo({
     value: acrylicReturn,
     onlyValue: true
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Front Option",
+    title: "Front Acrylic Cover",
     onChange: handleOnChangeFrontOption,
-    options: frontOptionOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.whiteOptionsResin.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
-      selected: option.option == frontOption
+      selected: option.option == frontAcrylicCover
     }, option.option)),
-    value: frontOption
-  }), frontOption === '3M Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    value: frontAcrylicCover
+  }), frontAcrylicCover === '3M 3630 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_9__["default"], {
     ref: vinylRef,
     vinylWhite: vinylWhite,
     setVinylWhite: setVinylWhite,
@@ -9697,10 +9868,18 @@ function Logo({
       setVinylWhite(color);
       setOpenVinyl(false);
     }
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }), frontAcrylicCover === '3M 3635 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "3M 3635 Vinyl",
+    onChange: handleOnChangeVinyl3635,
+    options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.vinlyl3635Options.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: `${option.name} - [${option.code}]`,
+      selected: `${option.name} - [${option.code}]` == vinyl3635
+    }, `${option.name} - [${option.code}]`)),
+    value: vinyl3635
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
-    options: _metal_channel_metalChannelOptions__WEBPACK_IMPORTED_MODULE_7__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _metal_channel_metalChannelOptions__WEBPACK_IMPORTED_MODULE_8__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: color,
       selected: color == ledLightColor
     }, color)),
@@ -9713,7 +9892,7 @@ function Logo({
       selected: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: selectedMounting
-  }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -9729,7 +9908,7 @@ function Logo({
       selected: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
-  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_MOUNT && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_MOUNT && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -9746,13 +9925,13 @@ function Logo({
     }, option.option)),
     value: waterproof,
     onlyValue: true
-  }), waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.INDOOR_NOT_WATERPROOF && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }), waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Included Items",
     options: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      value: _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.LIGHTING_INDOOR,
-      selected: _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.LIGHTING_INDOOR
-    }, _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.LIGHTING_INDOOR),
-    value: _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.LIGHTING_INDOOR,
+      value: _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR,
+      selected: _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR
+    }, _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR),
+    value: _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR,
     onlyValue: true
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Quantity",
@@ -9760,7 +9939,7 @@ function Logo({
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.setOptions,
     value: sets,
     onlyValue: true
-  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-xs text-[#9F9F9F] mb-4"
   }, "*Note: The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid"
@@ -11086,7 +11265,9 @@ const acrylicChannelThicknessOptions = [{
 const acrylicFrontOptions = [{
   option: 'White'
 }, {
-  option: '3M Vinyl'
+  option: '3M 3630 Vinyl'
+}, {
+  option: '3M 3635 Vinyl'
 }, {
   option: 'UV Printed'
 }];
@@ -18917,6 +19098,8 @@ function TrimLessFrontAndBackLit() {
         color: '',
         code: ''
       },
+      vinyl3635: '',
+      frontBackVinyl: '',
       frontAcrylicCover: 'White',
       acrylicReveal: '1/5"',
       mounting: '',
@@ -18968,6 +19151,8 @@ function TrimLessFrontAndBackLit() {
       color: '',
       code: ''
     },
+    vinyl3635: '',
+    frontBackVinyl: '',
     mounting: '',
     studLength: '',
     spacerStandoffDistance: '',
@@ -19125,7 +19310,7 @@ const smallPunctuations = parseFloat(NovaQuote.small_punctuations_pricing ? Nova
 function Letters({
   item
 }) {
-  var _item$letters, _item$comments, _item$font, _item$returnColor, _item$trimLessWaterpr, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$acrylicReveal, _item$studLength, _item$spacerStandoffD, _item$vinylWhite, _item$frontAcrylicCov, _item$mounting, _item$ledLightColor, _item$sets, _item$vinylWhite$colo;
+  var _item$letters, _item$comments, _item$font, _item$returnColor, _item$trimLessWaterpr, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$acrylicReveal, _item$studLength, _item$spacerStandoffD, _item$vinylWhite, _item$vinyl, _item$frontBackVinyl, _item$frontAcrylicCov, _item$mounting, _item$ledLightColor, _item$sets, _item$vinylWhite$colo;
   const {
     signage,
     setSignage,
@@ -19171,6 +19356,8 @@ function Letters({
     color: '',
     code: ''
   });
+  const [vinyl3635, setVinyl3635] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$vinyl = item.vinyl3635) !== null && _item$vinyl !== void 0 ? _item$vinyl : '');
+  const [frontBackVinyl, setFrontBackVinyl] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$frontBackVinyl = item.frontBackVinyl) !== null && _item$frontBackVinyl !== void 0 ? _item$frontBackVinyl : '');
   const [frontAcrylicCover, setFrontAcrylicCover] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$frontAcrylicCov = item.frontAcrylicCover) !== null && _item$frontAcrylicCov !== void 0 ? _item$frontAcrylicCov : 'White');
   const [lightingOptions, setLightingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.lightingPackagedOptions);
   const [includedItems, setIncludedItems] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
@@ -19241,6 +19428,8 @@ function Letters({
           spacerStandoffDistance,
           frontAcrylicCover,
           vinylWhite,
+          vinyl3635,
+          frontBackVinyl,
           sets,
           usdSinglePrice,
           cadSinglePrice,
@@ -19256,6 +19445,10 @@ function Letters({
   const handleComments = e => setComments(e.target.value);
   const handleOnChangeincludedItems = e => setIncludedItems(e.target.value);
   const handleSelectFont = value => setFont(value);
+  const handleOnChangeWhiteFrontBackVinyl = e => {
+    const target = e.target.value;
+    setFrontBackVinyl(target);
+  };
   const handleOnChangeMounting = e => {
     const target = e.target.value;
     setMounting(target);
@@ -19319,12 +19512,21 @@ function Letters({
   const handleOnChangeWhite = e => {
     const target = e.target.value;
     setFrontAcrylicCover(target);
-    if (target !== '3M Vinyl') {
+    if (target !== '3M 3630 Vinyl') {
       setVinylWhite({
         name: '',
         color: ''
       });
+      setFrontBackVinyl('');
     }
+    if (target !== '3M 3635 Vinyl') {
+      setVinyl3635('');
+      setFrontBackVinyl('');
+    }
+  };
+  const handleOnChangeVinyl3635 = e => {
+    const target = e.target.value;
+    setVinyl3635(target);
   };
   const handleonChangeSpacerDistance = e => {
     setSpacerStandoffDistance(e.target.value);
@@ -19412,8 +19614,14 @@ function Letters({
     }
     if (!ledLightColor) missingFields.push('Select LED Light Color');
     if (!frontAcrylicCover) missingFields.push('Select Front Acrylic Cover');
-    if (frontAcrylicCover === '3M Vinyl') {
+    if (frontAcrylicCover === '3M 3630 Vinyl') {
       if (!vinylWhite?.name) missingFields.push('Select 3M 3630 Vinyl');
+    }
+    if (frontAcrylicCover === '3M 3635 Vinyl') {
+      if (!vinyl3635) missingFields.push('Select 3M 3635 Vinyl');
+    }
+    if (frontAcrylicCover === '3M 3630 Vinyl' || frontAcrylicCover === '3M 3635 Vinyl') {
+      if (!frontBackVinyl) missingFields.push('Select Front &amp; Back Vinyl');
     }
     if (frontAcrylicCover === 'UV Printed') {
       if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
@@ -19448,7 +19656,7 @@ function Letters({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
-  }, [letters, depth, comments, font, waterproof, color, usdPrice, cadPrice, selectedLetterHeight, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, fontFileUrl, fontFileName, fontFilePath, fontFile, mounting, studLength, spacerStandoffDistance, frontAcrylicCover, vinylWhite, sets, usdSinglePrice, cadSinglePrice, includedItems]);
+  }, [letters, depth, comments, font, waterproof, color, usdPrice, cadPrice, selectedLetterHeight, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, fontFileUrl, fontFileName, fontFilePath, fontFile, mounting, studLength, spacerStandoffDistance, frontAcrylicCover, vinylWhite, vinyl3635, frontBackVinyl, sets, usdSinglePrice, cadSinglePrice, includedItems]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (depth?.value) {
       const newHeightOptions = letterPricing?.filter(item => {
@@ -19466,7 +19674,7 @@ function Letters({
       }
     }
   }, [depth]);
-  if (frontAcrylicCover === '3M Vinyl') {
+  if (frontAcrylicCover === '3M 3630 Vinyl') {
     (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_6__["default"])([colorRef, fontRef, acrylicColorRef], () => {
       if (!openColor && !openFont && !openAcrylicCover) return;
       setOpenColor(false);
@@ -19545,8 +19753,17 @@ function Letters({
     if (waterproof) {
       tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF ? 1 : 1.02;
     }
-    if (frontAcrylicCover === '3M Vinyl') {
-      tempTotal *= 1.1;
+    if (frontAcrylicCover === '3M 3630 Vinyl') {
+      tempTotal *= 1.15;
+      if (frontBackVinyl === 'Front and Back') {
+        tempTotal *= 1.15;
+      }
+    }
+    if (frontAcrylicCover === '3M 3635 Vinyl') {
+      tempTotal *= 1.2;
+      if (frontBackVinyl === 'Front and Back') {
+        tempTotal *= 1.15;
+      }
     }
     if (frontAcrylicCover === 'UV Printed') {
       tempTotal *= 1.1;
@@ -19581,7 +19798,7 @@ function Letters({
       setUsdSinglePrice(0);
       setCadSinglePrice(0);
     }
-  }, [selectedLetterHeight, letters, waterproof, lettersHeight, frontAcrylicCover, mounting, sets, font, letterPricing]);
+  }, [selectedLetterHeight, letters, waterproof, lettersHeight, frontAcrylicCover, mounting, sets, font, letterPricing, frontBackVinyl]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     color?.name != 'Custom Color' && setCustomColor('');
     font != 'Custom font' && setFontFileUrl('');
@@ -19703,7 +19920,7 @@ function Letters({
       selected: option == frontAcrylicCover
     }, option.option)),
     value: frontAcrylicCover
-  }), frontAcrylicCover === '3M Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_9__["default"], {
+  }), frontAcrylicCover === '3M 3630 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_9__["default"], {
     ref: acrylicColorRef,
     vinylWhite: vinylWhite,
     setVinylWhite: setVinylWhite,
@@ -19717,6 +19934,22 @@ function Letters({
       setVinylWhite(color);
       setOpenAcrylicCover(false);
     }
+  })), frontAcrylicCover === '3M 3635 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "3M 3635 Vinyl",
+    onChange: handleOnChangeVinyl3635,
+    options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.vinlyl3635Options.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: `${option.name} - [${option.code}]`,
+      selected: `${option.name} - [${option.code}]` == vinyl3635
+    }, `${option.name} - [${option.code}]`)),
+    value: vinyl3635
+  })), (frontAcrylicCover === '3M 3630 Vinyl' || frontAcrylicCover === '3M 3635 Vinyl') && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Front & Back Vinyl",
+    onChange: handleOnChangeWhiteFrontBackVinyl,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.frontBackVinylOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.option,
+      selected: option.option == frontBackVinyl
+    }, option.option)),
+    value: frontBackVinyl
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
@@ -19838,7 +20071,7 @@ __webpack_require__.r(__webpack_exports__);
 function Logo({
   item
 }) {
-  var _item$comments, _item$width, _item$height, _item$returnColor, _item$vinylWhite, _item$trimLessWaterpr, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$studLength, _item$spacerStandoffD, _item$frontAcrylicCov, _item$mounting, _item$ledLightColor, _item$sets, _item$acrylicReveal;
+  var _item$comments, _item$width, _item$height, _item$returnColor, _item$vinylWhite, _item$vinyl, _item$frontBackVinyl, _item$trimLessWaterpr, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$studLength, _item$spacerStandoffD, _item$frontAcrylicCov, _item$mounting, _item$ledLightColor, _item$sets, _item$acrylicReveal;
   const {
     signage,
     setSignage,
@@ -19856,6 +20089,8 @@ function Logo({
     color: '',
     code: ''
   });
+  const [vinyl3635, setVinyl3635] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$vinyl = item.vinyl3635) !== null && _item$vinyl !== void 0 ? _item$vinyl : '');
+  const [frontBackVinyl, setFrontBackVinyl] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$frontBackVinyl = item.frontBackVinyl) !== null && _item$frontBackVinyl !== void 0 ? _item$frontBackVinyl : '');
   const [openColor, setOpenColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$trimLessWaterpr = item.trimLessWaterproof) !== null && _item$trimLessWaterpr !== void 0 ? _item$trimLessWaterpr : '');
   const [depth, setDepth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.depth);
@@ -19876,12 +20111,21 @@ function Logo({
   const handleOnChangeWhite = e => {
     const target = e.target.value;
     setFrontAcrylicCover(target);
-    if (target !== '3M Vinyl') {
+    if (target !== '3M 3630 Vinyl') {
       setVinylWhite({
         name: '',
         color: ''
       });
+      setFrontBackVinyl('');
     }
+    if (target !== '3M 3635 Vinyl') {
+      setVinyl3635('');
+      setFrontBackVinyl('');
+    }
+  };
+  const handleOnChangeVinyl3635 = e => {
+    const target = e.target.value;
+    setVinyl3635(target);
   };
   const [mounting, setMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
   const [ledLightColor, setLedLightColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$ledLightColor = item.ledLightColor) !== null && _item$ledLightColor !== void 0 ? _item$ledLightColor : '6500K White');
@@ -19922,6 +20166,8 @@ function Logo({
           usdSinglePrice,
           cadSinglePrice,
           vinylWhite,
+          vinyl3635,
+          frontBackVinyl,
           includedItems
         };
       } else {
@@ -19946,6 +20192,10 @@ function Logo({
   const handleOnChangeWaterproof = e => {
     const target = e.target.value;
     setWaterproof(() => target);
+  };
+  const handleOnChangeWhiteFrontBackVinyl = e => {
+    const target = e.target.value;
+    setFrontBackVinyl(target);
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (!waterproof) return;
@@ -20027,8 +20277,14 @@ function Logo({
     if (color?.name === 'Custom Color' && !customColor) {
       missingFields.push('Add the Pantone color code of your custom color.');
     }
-    if (frontAcrylicCover === '3M Vinyl') {
+    if (frontAcrylicCover === '3M 3630 Vinyl') {
       if (!vinylWhite?.name) missingFields.push('Select 3M 3630 Vinyl');
+    }
+    if (frontAcrylicCover === '3M 3635 Vinyl') {
+      if (!vinyl3635) missingFields.push('Select 3M 3635 Vinyl');
+    }
+    if (frontAcrylicCover === '3M 3630 Vinyl' || frontAcrylicCover === '3M 3635 Vinyl') {
+      if (!frontBackVinyl) missingFields.push('Select Front &amp; Back Vinyl');
     }
     if (!waterproof) missingFields.push('Select Environment');
     if (!includedItems) missingFields.push('Select Included Items');
@@ -20102,8 +20358,20 @@ function Logo({
     if (X > 41 || Y > 41) {
       tempTotal += 150;
     }
-    if (frontAcrylicCover === 'UV Printed' || frontAcrylicCover === '3M Vinyl') {
+    if (frontAcrylicCover === 'UV Printed') {
       tempTotal *= 1.1;
+    }
+    if (frontAcrylicCover === '3M 3630 Vinyl') {
+      tempTotal *= 1.15;
+      if (frontBackVinyl === 'Front and Back') {
+        tempTotal *= 1.15;
+      }
+    }
+    if (frontAcrylicCover === '3M 3635 Vinyl') {
+      tempTotal *= 1.2;
+      if (frontBackVinyl === 'Front and Back') {
+        tempTotal *= 1.15;
+      }
     }
     if (waterproof && waterproof !== _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.INDOOR_NOT_WATERPROOF) {
       tempTotal *= 1.03;
@@ -20137,12 +20405,12 @@ function Logo({
       setUsdSinglePrice(0);
       setCadSinglePrice(0);
     }
-  }, [depth, width, height, waterproof, mounting, frontAcrylicCover, sets]);
+  }, [depth, width, height, waterproof, mounting, frontAcrylicCover, sets, frontBackVinyl]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
-  }, [depth, comments, waterproof, color, usdPrice, cadPrice, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, mounting, studLength, spacerStandoffDistance, frontAcrylicCover, sets, width, height, usdSinglePrice, cadSinglePrice, vinylWhite, includedItems]);
-  if (frontAcrylicCover === '3M Vinyl') {
+  }, [depth, comments, waterproof, color, usdPrice, cadPrice, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, mounting, studLength, spacerStandoffDistance, frontAcrylicCover, sets, width, height, usdSinglePrice, cadSinglePrice, vinylWhite, vinyl3635, frontBackVinyl, includedItems]);
+  if (frontAcrylicCover === '3M 3630 Vinyl') {
     (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_4__["default"])([colorRef, acrylicColorRef], () => {
       if (!openColor && !openAcrylicCover) return;
       setOpenColor(false);
@@ -20233,7 +20501,7 @@ function Logo({
       selected: option == frontAcrylicCover
     }, option.option)),
     value: frontAcrylicCover
-  }), frontAcrylicCover === '3M Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_7__["default"], {
+  }), frontAcrylicCover === '3M 3630 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_7__["default"], {
     ref: acrylicColorRef,
     vinylWhite: vinylWhite,
     setVinylWhite: setVinylWhite,
@@ -20246,6 +20514,22 @@ function Logo({
       setVinylWhite(color);
       setOpenAcrylicCover(false);
     }
+  })), frontAcrylicCover === '3M 3635 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "3M 3635 Vinyl",
+    onChange: handleOnChangeVinyl3635,
+    options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_5__.vinlyl3635Options.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: `${option.name} - [${option.code}]`,
+      selected: `${option.name} - [${option.code}]` == vinyl3635
+    }, `${option.name} - [${option.code}]`)),
+    value: vinyl3635
+  })), (frontAcrylicCover === '3M 3630 Vinyl' || frontAcrylicCover === '3M 3635 Vinyl') && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Front & Back Vinyl",
+    onChange: handleOnChangeWhiteFrontBackVinyl,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.frontBackVinylOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.option,
+      selected: option.option == frontBackVinyl
+    }, option.option)),
+    value: frontBackVinyl
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
@@ -20378,6 +20662,7 @@ function TrimLessFrontAndBackLit() {
         color: '',
         code: ''
       },
+      vinyl3635: '',
       frontAcrylicCover: 'White',
       mounting: '',
       studLength: '',
@@ -20428,6 +20713,7 @@ function TrimLessFrontAndBackLit() {
       color: '',
       code: ''
     },
+    vinyl3635: '',
     mounting: '',
     studLength: '',
     spacerStandoffDistance: '',
@@ -20581,7 +20867,7 @@ __webpack_require__.r(__webpack_exports__);
 function Letters({
   item
 }) {
-  var _item$letters, _item$comments, _item$font, _item$returnColor, _item$trimLessWaterpr, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$studLength, _item$spacerStandoffD, _item$vinylWhite, _item$frontAcrylicCov, _item$mounting, _item$ledLightColor, _item$sets, _item$vinylWhite$colo;
+  var _item$letters, _item$comments, _item$font, _item$returnColor, _item$trimLessWaterpr, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$studLength, _item$spacerStandoffD, _item$vinylWhite, _item$vinyl, _item$frontAcrylicCov, _item$mounting, _item$ledLightColor, _item$sets, _item$vinylWhite$colo;
   const {
     signage,
     setSignage,
@@ -20626,6 +20912,7 @@ function Letters({
     color: '',
     code: ''
   });
+  const [vinyl3635, setVinyl3635] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$vinyl = item.vinyl3635) !== null && _item$vinyl !== void 0 ? _item$vinyl : '');
   const [frontAcrylicCover, setFrontAcrylicCover] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$frontAcrylicCov = item.frontAcrylicCover) !== null && _item$frontAcrylicCov !== void 0 ? _item$frontAcrylicCov : 'White');
   const [mounting, setMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
   const [ledLightColor, setLedLightColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$ledLightColor = item.ledLightColor) !== null && _item$ledLightColor !== void 0 ? _item$ledLightColor : '6500K White');
@@ -20698,6 +20985,7 @@ function Letters({
           spacerStandoffDistance,
           frontAcrylicCover,
           vinylWhite,
+          vinyl3635,
           sets,
           includedItems
         };
@@ -20774,12 +21062,19 @@ function Letters({
   const handleOnChangeWhite = e => {
     const target = e.target.value;
     setFrontAcrylicCover(target);
-    if (target !== '3M Vinyl') {
+    if (target !== '3M 3630 Vinyl') {
       setVinylWhite({
         name: '',
         color: ''
       });
     }
+    if (target !== '3M 3635 Vinyl') {
+      setVinyl3635('');
+    }
+  };
+  const handleOnChangeVinyl3635 = e => {
+    const target = e.target.value;
+    setVinyl3635(target);
   };
   const handleonChangeSpacerDistance = e => {
     setSpacerStandoffDistance(e.target.value);
@@ -20867,8 +21162,11 @@ function Letters({
     }
     if (!ledLightColor) missingFields.push('Select LED Light Color');
     if (!frontAcrylicCover) missingFields.push('Select Front Acrylic Cover');
-    if (frontAcrylicCover === '3M Vinyl') {
+    if (frontAcrylicCover === '3M 3630 Vinyl') {
       if (!vinylWhite?.name) missingFields.push('Select 3M 3630 Vinyl');
+    }
+    if (frontAcrylicCover === '3M 3635 Vinyl') {
+      if (!vinyl3635) missingFields.push('Select 3M 3635 Vinyl');
     }
     if (frontAcrylicCover === 'UV Printed') {
       if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
@@ -20903,7 +21201,7 @@ function Letters({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
-  }, [letters, depth, comments, font, waterproof, color, frontAcrylicCover, usdPrice, cadPrice, selectedLetterHeight, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, fontFileUrl, fontFileName, fontFilePath, fontFile, mounting, studLength, spacerStandoffDistance, frontAcrylicCover, vinylWhite, sets, usdSinglePrice, cadSinglePrice, includedItems]);
+  }, [letters, depth, comments, font, waterproof, color, frontAcrylicCover, usdPrice, cadPrice, selectedLetterHeight, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, fontFileUrl, fontFileName, fontFilePath, fontFile, mounting, studLength, spacerStandoffDistance, frontAcrylicCover, vinylWhite, vinyl3635, sets, usdSinglePrice, cadSinglePrice, includedItems]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (depth?.value) {
       const newHeightOptions = letterPricing?.filter(item => {
@@ -20921,7 +21219,7 @@ function Letters({
       }
     }
   }, [depth]);
-  if (frontAcrylicCover === '3M Vinyl') {
+  if (frontAcrylicCover === '3M 3630 Vinyl') {
     (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_6__["default"])([colorRef, fontRef, acrylicColorRef], () => {
       if (!openColor && !openFont && !openAcrylicCover) return;
       setOpenColor(false);
@@ -20954,8 +21252,11 @@ function Letters({
     if (waterproof) {
       tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF ? 1 : 1.02;
     }
-    if (frontAcrylicCover === '3M Vinyl') {
-      tempTotal *= 1.1;
+    if (frontAcrylicCover === '3M 3630 Vinyl') {
+      tempTotal *= 1.15;
+    }
+    if (frontAcrylicCover === '3M 3635 Vinyl') {
+      tempTotal *= 1.2;
     }
     if (frontAcrylicCover === 'UV Printed') {
       tempTotal *= 1.1;
@@ -21105,7 +21406,7 @@ function Letters({
       selected: option == frontAcrylicCover
     }, option.option)),
     value: frontAcrylicCover
-  }), frontAcrylicCover === '3M Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_9__["default"], {
+  }), frontAcrylicCover === '3M 3630 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_9__["default"], {
     ref: acrylicColorRef,
     vinylWhite: vinylWhite,
     setVinylWhite: setVinylWhite,
@@ -21119,6 +21420,14 @@ function Letters({
       setVinylWhite(color);
       setOpenAcrylicCover(false);
     }
+  })), frontAcrylicCover === '3M 3635 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "3M 3635 Vinyl",
+    onChange: handleOnChangeVinyl3635,
+    options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.vinlyl3635Options.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: `${option.name} - [${option.code}]`,
+      selected: `${option.name} - [${option.code}]` == vinyl3635
+    }, `${option.name} - [${option.code}]`)),
+    value: vinyl3635
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
@@ -21240,7 +21549,7 @@ __webpack_require__.r(__webpack_exports__);
 function Logo({
   item
 }) {
-  var _item$comments, _item$width, _item$height, _item$returnColor, _item$trimLessWaterpr, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$vinylWhite, _item$usdPrice, _item$cadPrice, _item$usdDiscount, _item$cadDiscount, _item$usdSinglePrice, _item$cadSinglePrice, _item$studLength, _item$spacerStandoffD, _item$frontAcrylicCov, _item$mounting, _item$ledLightColor, _item$sets;
+  var _item$comments, _item$width, _item$height, _item$returnColor, _item$trimLessWaterpr, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$vinylWhite, _item$vinyl, _item$usdPrice, _item$cadPrice, _item$usdDiscount, _item$cadDiscount, _item$usdSinglePrice, _item$cadSinglePrice, _item$studLength, _item$spacerStandoffD, _item$frontAcrylicCov, _item$mounting, _item$ledLightColor, _item$sets;
   const {
     signage,
     setSignage,
@@ -21266,6 +21575,7 @@ function Logo({
     color: '',
     code: ''
   });
+  const [vinyl3635, setVinyl3635] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$vinyl = item.vinyl3635) !== null && _item$vinyl !== void 0 ? _item$vinyl : '');
   const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdPrice = item.usdPrice) !== null && _item$usdPrice !== void 0 ? _item$usdPrice : 0);
   const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadPrice = item.cadPrice) !== null && _item$cadPrice !== void 0 ? _item$cadPrice : 0);
   const [usdDiscount, setUsdDiscount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdDiscount = item.usdDiscount) !== null && _item$usdDiscount !== void 0 ? _item$usdDiscount : 0);
@@ -21280,12 +21590,19 @@ function Logo({
   const handleOnChangeWhite = e => {
     const target = e.target.value;
     setFrontAcrylicCover(target);
-    if (target !== '3M Vinyl') {
+    if (target !== '3M 3630 Vinyl') {
       setVinylWhite({
         name: '',
         color: ''
       });
     }
+    if (target !== '3M 3635 Vinyl') {
+      setVinyl3635('');
+    }
+  };
+  const handleOnChangeVinyl3635 = e => {
+    const target = e.target.value;
+    setVinyl3635(target);
   };
   const [mounting, setMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
   const [ledLightColor, setLedLightColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$ledLightColor = item.ledLightColor) !== null && _item$ledLightColor !== void 0 ? _item$ledLightColor : '6500K White');
@@ -21325,6 +21642,7 @@ function Logo({
           usdSinglePrice,
           cadSinglePrice,
           vinylWhite,
+          vinyl3635,
           includedItems
         };
       } else {
@@ -21430,8 +21748,11 @@ function Logo({
     if (color?.name === 'Custom Color' && !customColor) {
       missingFields.push('Add the Pantone color code of your custom color.');
     }
-    if (frontAcrylicCover === '3M Vinyl') {
+    if (frontAcrylicCover === '3M 3630 Vinyl') {
       if (!vinylWhite?.name) missingFields.push('Select 3M 3630 Vinyl');
+    }
+    if (frontAcrylicCover === '3M 3635 Vinyl') {
+      if (!vinyl3635) missingFields.push('Select 3M 3635 Vinyl');
     }
     if (!waterproof) missingFields.push('Select Environment');
     if (!includedItems) missingFields.push('Select Included Items');
@@ -21505,8 +21826,14 @@ function Logo({
     if (X > 41 || Y > 41) {
       tempTotal += 150;
     }
-    if (frontAcrylicCover === 'UV Printed' || frontAcrylicCover === '3M Vinyl') {
+    if (frontAcrylicCover === 'UV Printed') {
       tempTotal *= 1.1;
+    }
+    if (frontAcrylicCover === '3M 3635 Vinyl') {
+      tempTotal *= 1.2;
+    }
+    if (frontAcrylicCover === '3M 3630 Vinyl') {
+      tempTotal *= 1.15;
     }
     if (waterproof && waterproof !== _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.INDOOR_NOT_WATERPROOF) {
       tempTotal *= 1.03;
@@ -21544,8 +21871,8 @@ function Logo({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
-  }, [depth, comments, waterproof, color, usdPrice, cadPrice, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, mounting, studLength, spacerStandoffDistance, frontAcrylicCover, sets, width, height, usdSinglePrice, cadSinglePrice, vinylWhite, includedItems]);
-  if (frontAcrylicCover === '3M Vinyl') {
+  }, [depth, comments, waterproof, color, usdPrice, cadPrice, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, mounting, studLength, spacerStandoffDistance, frontAcrylicCover, sets, width, height, usdSinglePrice, cadSinglePrice, vinylWhite, vinyl3635, includedItems]);
+  if (frontAcrylicCover === '3M 3630 Vinyl') {
     (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_4__["default"])([colorRef, acrylicColorRef], () => {
       if (!openColor && !openAcrylicCover) return;
       setOpenColor(false);
@@ -21629,7 +21956,7 @@ function Logo({
       selected: option == frontAcrylicCover
     }, option.option)),
     value: frontAcrylicCover
-  }), frontAcrylicCover === '3M Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_7__["default"], {
+  }), frontAcrylicCover === '3M 3630 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_7__["default"], {
     ref: acrylicColorRef,
     vinylWhite: vinylWhite,
     setVinylWhite: setVinylWhite,
@@ -21642,6 +21969,14 @@ function Logo({
       setVinylWhite(color);
       setOpenAcrylicCover(false);
     }
+  })), frontAcrylicCover === '3M 3635 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "3M 3635 Vinyl",
+    onChange: handleOnChangeVinyl3635,
+    options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_5__.vinlyl3635Options.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: `${option.name} - [${option.code}]`,
+      selected: `${option.name} - [${option.code}]` == vinyl3635
+    }, `${option.name} - [${option.code}]`)),
+    value: vinyl3635
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
@@ -23148,6 +23483,8 @@ function TrimLessFrontAndBackLit() {
         color: '',
         code: ''
       },
+      vinyl3635: '',
+      frontBackVinyl: '',
       frontAcrylicCover: 'White',
       mounting: '',
       studLength: '',
@@ -23195,6 +23532,8 @@ function TrimLessFrontAndBackLit() {
       color: '',
       code: ''
     },
+    vinyl3635: '',
+    frontBackVinyl: '',
     mounting: '',
     studLength: '',
     spacerStandoffDistance: '',
@@ -23344,7 +23683,7 @@ __webpack_require__.r(__webpack_exports__);
 function Letters({
   item
 }) {
-  var _item$letters, _item$comments, _item$font, _item$returnColor, _item$trimLessWaterpr, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$studLength, _item$spacerStandoffD, _item$vinylWhite, _item$frontAcrylicCov, _item$mounting, _item$ledLightColor, _item$sets, _item$vinylWhite$colo;
+  var _item$letters, _item$comments, _item$font, _item$returnColor, _item$trimLessWaterpr, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$studLength, _item$spacerStandoffD, _item$vinylWhite, _item$vinyl, _item$frontBackVinyl, _item$frontAcrylicCov, _item$mounting, _item$ledLightColor, _item$sets, _item$vinylWhite$colo;
   const {
     signage,
     setSignage,
@@ -23389,6 +23728,8 @@ function Letters({
     color: '',
     code: ''
   });
+  const [vinyl3635, setVinyl3635] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$vinyl = item.vinyl3635) !== null && _item$vinyl !== void 0 ? _item$vinyl : '');
+  const [frontBackVinyl, setFrontBackVinyl] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$frontBackVinyl = item.frontBackVinyl) !== null && _item$frontBackVinyl !== void 0 ? _item$frontBackVinyl : '');
   const [frontAcrylicCover, setFrontAcrylicCover] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$frontAcrylicCov = item.frontAcrylicCover) !== null && _item$frontAcrylicCov !== void 0 ? _item$frontAcrylicCov : 'White');
   const [mounting, setMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
   const [ledLightColor, setLedLightColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$ledLightColor = item.ledLightColor) !== null && _item$ledLightColor !== void 0 ? _item$ledLightColor : '6500K White');
@@ -23459,6 +23800,8 @@ function Letters({
           spacerStandoffDistance,
           frontAcrylicCover,
           vinylWhite,
+          vinyl3635,
+          frontBackVinyl,
           sets,
           usdSinglePrice,
           cadSinglePrice
@@ -23489,12 +23832,25 @@ function Letters({
   const handleOnChangeWhite = e => {
     const target = e.target.value;
     setFrontAcrylicCover(target);
-    if (target !== '3M Vinyl') {
+    if (target !== '3M 3630 Vinyl') {
       setVinylWhite({
         name: '',
         color: ''
       });
+      setFrontBackVinyl('');
     }
+    if (target !== '3M 3635 Vinyl') {
+      setVinyl3635('');
+      setFrontBackVinyl('');
+    }
+  };
+  const handleOnChangeVinyl3635 = e => {
+    const target = e.target.value;
+    setVinyl3635(target);
+  };
+  const handleOnChangeWhiteFrontBackVinyl = e => {
+    const target = e.target.value;
+    setFrontBackVinyl(target);
   };
   const handleonChangeSpacerDistance = e => {
     setSpacerStandoffDistance(e.target.value);
@@ -23571,8 +23927,17 @@ function Letters({
     lettersArray.forEach(letter => {
       tempTotal += (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_14__.calculateLetterPrice)(letter, baseLetterPrice, noLowerCase);
     });
-    if (frontAcrylicCover === '3M Vinyl') {
-      tempTotal *= 1.1;
+    if (frontAcrylicCover === '3M 3630 Vinyl') {
+      tempTotal *= 1.15;
+      if (frontBackVinyl === 'Front and Back') {
+        tempTotal *= 1.15;
+      }
+    }
+    if (frontAcrylicCover === '3M 3635 Vinyl') {
+      tempTotal *= 1.2;
+      if (frontBackVinyl === 'Front and Back') {
+        tempTotal *= 1.15;
+      }
     }
     if (waterproof && waterproof !== _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF) {
       tempTotal *= 1.03;
@@ -23606,7 +23971,7 @@ function Letters({
       setUsdSinglePrice(0);
       setCadSinglePrice(0);
     }
-  }, [selectedLetterHeight, letters, waterproof, lettersHeight, frontAcrylicCover, sets, font, mounting, letterPricing]);
+  }, [selectedLetterHeight, letters, waterproof, lettersHeight, frontAcrylicCover, sets, font, mounting, letterPricing, frontBackVinyl]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     setLetterHeightOptions(() => Array.from({
       length: parseInt(lettersHeight.max) - parseInt(lettersHeight.min) + 1
@@ -23649,8 +24014,14 @@ function Letters({
     }
     if (!ledLightColor) missingFields.push('Select LED Light Color');
     if (!frontAcrylicCover) missingFields.push('Select Front Acrylic Cover');
-    if (frontAcrylicCover === '3M Vinyl') {
+    if (frontAcrylicCover === '3M 3630 Vinyl') {
       if (!vinylWhite?.name) missingFields.push('Select 3M 3630 Vinyl');
+    }
+    if (frontAcrylicCover === '3M 3635 Vinyl') {
+      if (!vinyl3635) missingFields.push('Select 3M 3635 Vinyl');
+    }
+    if (frontAcrylicCover === '3M 3630 Vinyl' || frontAcrylicCover === '3M 3635 Vinyl') {
+      if (!frontBackVinyl) missingFields.push('Select Front &amp; Back Vinyl');
     }
     if (!sets) missingFields.push('Select Quantity');
     if (missingFields.length > 0) {
@@ -23682,7 +24053,7 @@ function Letters({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
-  }, [letters, depth, comments, font, waterproof, includedItems, color, frontAcrylicCover, usdPrice, cadPrice, selectedLetterHeight, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, fontFileUrl, fontFileName, fontFilePath, fontFile, mounting, studLength, spacerStandoffDistance, frontAcrylicCover, vinylWhite, sets, usdSinglePrice, cadSinglePrice]);
+  }, [letters, depth, comments, font, waterproof, includedItems, color, frontAcrylicCover, usdPrice, cadPrice, selectedLetterHeight, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, fontFileUrl, fontFileName, fontFilePath, fontFile, mounting, studLength, spacerStandoffDistance, frontAcrylicCover, vinylWhite, vinyl3635, frontBackVinyl, sets, usdSinglePrice, cadSinglePrice]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (depth?.value) {
       const newHeightOptions = letterPricing?.filter(item => {
@@ -23697,7 +24068,7 @@ function Letters({
       }
     }
   }, [depth]);
-  if (frontAcrylicCover === '3M Vinyl') {
+  if (frontAcrylicCover === '3M 3630 Vinyl') {
     (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_6__["default"])([colorRef, fontRef, acrylicColorRef], () => {
       if (!openColor && !openFont && !openAcrylicCover) return;
       setOpenColor(false);
@@ -23825,7 +24196,7 @@ function Letters({
       selected: option == frontAcrylicCover
     }, option.option)),
     value: frontAcrylicCover
-  }), frontAcrylicCover === '3M Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_11__["default"], {
+  }), frontAcrylicCover === '3M 3630 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_11__["default"], {
     ref: acrylicColorRef,
     vinylWhite: vinylWhite,
     setVinylWhite: setVinylWhite,
@@ -23839,6 +24210,22 @@ function Letters({
       setVinylWhite(color);
       setOpenAcrylicCover(false);
     }
+  })), frontAcrylicCover === '3M 3635 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "3M 3635 Vinyl",
+    onChange: handleOnChangeVinyl3635,
+    options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.vinlyl3635Options.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: `${option.name} - [${option.code}]`,
+      selected: `${option.name} - [${option.code}]` == vinyl3635
+    }, `${option.name} - [${option.code}]`)),
+    value: vinyl3635
+  })), (frontAcrylicCover === '3M 3630 Vinyl' || frontAcrylicCover === '3M 3635 Vinyl') && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Front & Back Vinyl",
+    onChange: handleOnChangeWhiteFrontBackVinyl,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.frontBackVinylOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.option,
+      selected: option.option == frontBackVinyl
+    }, option.option)),
+    value: frontBackVinyl
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
@@ -23960,7 +24347,7 @@ __webpack_require__.r(__webpack_exports__);
 function Logo({
   item
 }) {
-  var _item$comments, _item$width, _item$height, _item$returnColor, _item$trimLessWaterpr, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$studLength, _item$spacerStandoffD, _item$sets, _item$vinylWhite, _item$frontAcrylicCov, _item$mounting;
+  var _item$comments, _item$width, _item$height, _item$returnColor, _item$trimLessWaterpr, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$studLength, _item$spacerStandoffD, _item$sets, _item$vinylWhite, _item$vinyl, _item$frontBackVinyl, _item$frontAcrylicCov, _item$mounting;
   const {
     signage,
     setSignage,
@@ -23999,6 +24386,8 @@ function Logo({
     color: '',
     code: ''
   });
+  const [vinyl3635, setVinyl3635] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$vinyl = item.vinyl3635) !== null && _item$vinyl !== void 0 ? _item$vinyl : '');
+  const [frontBackVinyl, setFrontBackVinyl] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$frontBackVinyl = item.frontBackVinyl) !== null && _item$frontBackVinyl !== void 0 ? _item$frontBackVinyl : '');
   const [frontAcrylicCover, setFrontAcrylicCover] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$frontAcrylicCov = item.frontAcrylicCover) !== null && _item$frontAcrylicCov !== void 0 ? _item$frontAcrylicCov : 'White');
   const [mounting, setMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
   const [ledLightColor, setLedLightColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.ledLightColor);
@@ -24027,6 +24416,8 @@ function Logo({
           ledLightColor,
           frontAcrylicCover,
           vinylWhite,
+          vinyl3635,
+          frontBackVinyl,
           mounting,
           studLength,
           spacerStandoffDistance,
@@ -24062,12 +24453,25 @@ function Logo({
   const handleOnChangeWhite = e => {
     const target = e.target.value;
     setFrontAcrylicCover(target);
-    if (target !== '3M Vinyl') {
+    if (target !== '3M 3630 Vinyl') {
       setVinylWhite({
         name: '',
         color: ''
       });
+      setFrontBackVinyl('');
     }
+    if (target !== '3M 3635 Vinyl') {
+      setVinyl3635('');
+      setFrontBackVinyl('');
+    }
+  };
+  const handleOnChangeVinyl3635 = e => {
+    const target = e.target.value;
+    setVinyl3635(target);
+  };
+  const handleOnChangeWhiteFrontBackVinyl = e => {
+    const target = e.target.value;
+    setFrontBackVinyl(target);
   };
   const handleonChangeStudLength = e => {
     const target = e.target.value;
@@ -24127,8 +24531,14 @@ function Logo({
     }
     if (!ledLightColor) missingFields.push('Select LED Light Color');
     if (!frontAcrylicCover) missingFields.push('Select Front Acrylic Cover');
-    if (frontAcrylicCover === '3M Vinyl') {
-      if (!vinylWhite?.name) missingFields.push('Select 3M Vinyl');
+    if (frontAcrylicCover === '3M 3630 Vinyl') {
+      if (!vinylWhite?.name) missingFields.push('Select 3M 3630 Vinyl');
+    }
+    if (frontAcrylicCover === '3M 3635 Vinyl') {
+      if (!vinyl3635) missingFields.push('Select 3M 3635 Vinyl');
+    }
+    if (frontAcrylicCover === '3M 3630 Vinyl' || frontAcrylicCover === '3M 3635 Vinyl') {
+      if (!frontBackVinyl) missingFields.push('Select Front &amp; Back Vinyl');
     }
     if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
     if (missingFields.length > 0) {
@@ -24160,8 +24570,8 @@ function Logo({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
-  }, [depth, comments, waterproof, color, frontAcrylicCover, vinylWhite, usdPrice, cadPrice, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, mounting, studLength, spacerStandoffDistance, width, height, cadSinglePrice, usdSinglePrice, includedItems]);
-  if (frontAcrylicCover === '3M Vinyl') {
+  }, [depth, comments, waterproof, color, frontAcrylicCover, vinylWhite, vinyl3635, frontBackVinyl, usdPrice, cadPrice, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, mounting, studLength, spacerStandoffDistance, width, height, cadSinglePrice, usdSinglePrice, includedItems]);
+  if (frontAcrylicCover === '3M 3630 Vinyl') {
     (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_4__["default"])([colorRef, acrylicColorRef], () => {
       if (!openColor && !openAcrylicCover) return;
       setOpenColor(false);
@@ -24205,13 +24615,23 @@ function Logo({
       console.log('surcharge');
       tempTotal += 150;
     }
-    if (frontAcrylicCover === '3M Vinyl' || frontAcrylicCover === 'UV Printed') {
+    if (frontAcrylicCover === 'UV Printed') {
       tempTotal *= 1.1;
-      console.log('front', tempTotal);
+    }
+    if (frontAcrylicCover === '3M 3630 Vinyl') {
+      tempTotal *= 1.15;
+      if (frontBackVinyl === 'Front and Back') {
+        tempTotal *= 1.15;
+      }
+    }
+    if (frontAcrylicCover === '3M 3635 Vinyl') {
+      tempTotal *= 1.2;
+      if (frontBackVinyl === 'Front and Back') {
+        tempTotal *= 1.15;
+      }
     }
     if (waterproof && waterproof !== _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.INDOOR_NOT_WATERPROOF) {
       tempTotal *= 1.03;
-      console.log('waterproof', tempTotal);
     }
     if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER) {
       const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_11__.spacerPricing)(tempTotal);
@@ -24242,7 +24662,7 @@ function Logo({
       setUsdSinglePrice(0);
       setCadSinglePrice(0);
     }
-  }, [depth, width, height, waterproof, mounting, frontAcrylicCover, sets]);
+  }, [depth, width, height, waterproof, mounting, frontAcrylicCover, sets, frontBackVinyl]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     color?.name != 'Custom Color' && setCustomColor('');
   }, [color]);
@@ -24316,7 +24736,7 @@ function Logo({
       selected: option == frontAcrylicCover
     }, option.option)),
     value: frontAcrylicCover
-  }), frontAcrylicCover === '3M Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_7__["default"], {
+  }), frontAcrylicCover === '3M 3630 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_7__["default"], {
     ref: acrylicColorRef,
     vinylWhite: vinylWhite,
     setVinylWhite: setVinylWhite,
@@ -24329,6 +24749,22 @@ function Logo({
       setVinylWhite(color);
       setOpenAcrylicCover(false);
     }
+  })), frontAcrylicCover === '3M 3635 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "3M 3635 Vinyl",
+    onChange: handleOnChangeVinyl3635,
+    options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_5__.vinlyl3635Options.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: `${option.name} - [${option.code}]`,
+      selected: `${option.name} - [${option.code}]` == vinyl3635
+    }, `${option.name} - [${option.code}]`)),
+    value: vinyl3635
+  })), (frontAcrylicCover === '3M 3630 Vinyl' || frontAcrylicCover === '3M 3635 Vinyl') && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Front & Back Vinyl",
+    onChange: handleOnChangeWhiteFrontBackVinyl,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.frontBackVinylOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.option,
+      selected: option.option == frontBackVinyl
+    }, option.option)),
+    value: frontBackVinyl
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
@@ -24464,6 +24900,7 @@ function TrimLessFrontLit() {
         color: '',
         code: ''
       },
+      vinyl3635: '',
       mounting: '',
       studLength: '',
       spacerStandoffDistance: '',
@@ -24512,6 +24949,7 @@ function TrimLessFrontLit() {
       color: '',
       code: ''
     },
+    vinyl3635: '',
     frontAcrylicCover: 'White',
     mounting: '',
     studLength: '',
@@ -24667,7 +25105,7 @@ __webpack_require__.r(__webpack_exports__);
 function Letters({
   item
 }) {
-  var _item$letters, _item$comments, _item$font, _item$returnColor, _item$trimLessWaterpr, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$studLength, _item$spacerStandoffD, _item$sets, _item$vinylWhite, _item$frontAcrylicCov, _item$mounting, _item$ledLightColor, _item$vinylWhite$colo;
+  var _item$letters, _item$comments, _item$font, _item$returnColor, _item$trimLessWaterpr, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$studLength, _item$spacerStandoffD, _item$sets, _item$vinylWhite, _item$vinyl, _item$frontAcrylicCov, _item$mounting, _item$ledLightColor, _item$vinylWhite$colo;
   const {
     signage,
     setSignage,
@@ -24718,12 +25156,14 @@ function Letters({
     color: '',
     code: ''
   });
+  const [vinyl3635, setVinyl3635] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$vinyl = item.vinyl3635) !== null && _item$vinyl !== void 0 ? _item$vinyl : '');
   const [frontAcrylicCover, setFrontAcrylicCover] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$frontAcrylicCov = item.frontAcrylicCover) !== null && _item$frontAcrylicCov !== void 0 ? _item$frontAcrylicCov : 'White');
   const [mounting, setMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
   const [ledLightColor, setLedLightColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$ledLightColor = item.ledLightColor) !== null && _item$ledLightColor !== void 0 ? _item$ledLightColor : '6500K White');
   const colorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const fontRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const acrylicColorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const acrylic365ColorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const [letterPricing, setLetterPricing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     async function fetchLetterPricing() {
@@ -24779,6 +25219,7 @@ function Letters({
           ledLightColor,
           frontAcrylicCover,
           vinylWhite,
+          vinyl3635,
           mounting,
           studLength,
           spacerStandoffDistance,
@@ -24818,12 +25259,20 @@ function Letters({
   const handleOnChangeWhite = e => {
     const target = e.target.value;
     setFrontAcrylicCover(target);
-    if (target !== '3M Vinyl') {
+    if (target !== '3M 3630 Vinyl') {
       setVinylWhite({
         name: '',
-        color: ''
+        color: '',
+        code: ''
       });
     }
+    if (target !== '3M 3635 Vinyl') {
+      setVinyl3635('');
+    }
+  };
+  const handleOnChangeVinyl3635 = e => {
+    const target = e.target.value;
+    setVinyl3635(target);
   };
   const handleonChangeStudLength = e => {
     const target = e.target.value;
@@ -24898,8 +25347,11 @@ function Letters({
     lettersArray.forEach(letter => {
       tempTotal += calculateLetterPrice(letter, baseLetterPrice, noLowerCase);
     });
-    if (frontAcrylicCover === '3M Vinyl') {
-      tempTotal *= 1.1;
+    if (frontAcrylicCover === '3M 3630 Vinyl') {
+      tempTotal *= 1.15;
+    }
+    if (frontAcrylicCover === '3M 3635 Vinyl') {
+      tempTotal *= 1.2;
     }
     if (waterproof && waterproof !== _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF) {
       tempTotal *= 1.03;
@@ -24976,8 +25428,11 @@ function Letters({
     }
     if (!ledLightColor) missingFields.push('Select LED Light Color');
     if (!frontAcrylicCover) missingFields.push('Select Front Acrylic Cover');
-    if (frontAcrylicCover === '3M Vinyl') {
-      if (!vinylWhite?.name) missingFields.push('Select 3M Vinyl');
+    if (frontAcrylicCover === '3M 3630 Vinyl') {
+      if (!vinylWhite?.name) missingFields.push('Select 3M 3630 Vinyl');
+    }
+    if (frontAcrylicCover === '3M 3635 Vinyl') {
+      if (!vinyl3635) missingFields.push('Select 3M 3635 Vinyl');
     }
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
@@ -25008,7 +25463,7 @@ function Letters({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
-  }, [letters, depth, comments, font, waterproof, color, frontAcrylicCover, vinylWhite, usdPrice, cadPrice, selectedLetterHeight, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, fontFileUrl, fontFileName, fontFilePath, fontFile, mounting, studLength, spacerStandoffDistance, usdSinglePrice, cadSinglePrice, includedItems]);
+  }, [letters, depth, comments, font, waterproof, color, frontAcrylicCover, vinylWhite, vinyl3635, usdPrice, cadPrice, selectedLetterHeight, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, fontFileUrl, fontFileName, fontFilePath, fontFile, mounting, studLength, spacerStandoffDistance, usdSinglePrice, cadSinglePrice, includedItems]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const newHeightOptions = letterPricing?.filter(item => {
       const value = item[depth?.value];
@@ -25021,7 +25476,7 @@ function Letters({
       }));
     }
   }, [depth]);
-  if (frontAcrylicCover === '3M Vinyl') {
+  if (frontAcrylicCover === '3M 3630 Vinyl') {
     (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_6__["default"])([colorRef, fontRef, acrylicColorRef], () => {
       if (!openColor && !openFont && !openAcrylicCover) return;
       setOpenColor(false);
@@ -25149,7 +25604,7 @@ function Letters({
       selected: option == frontAcrylicCover
     }, option.option)),
     value: frontAcrylicCover
-  }), frontAcrylicCover === '3M Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_9__["default"], {
+  }), frontAcrylicCover === '3M 3630 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_9__["default"], {
     ref: acrylicColorRef,
     vinylWhite: vinylWhite,
     setVinylWhite: setVinylWhite,
@@ -25163,6 +25618,14 @@ function Letters({
       setVinylWhite(color);
       setOpenAcrylicCover(false);
     }
+  })), frontAcrylicCover === '3M 3635 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "3M 3635 Vinyl",
+    onChange: handleOnChangeVinyl3635,
+    options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.vinlyl3635Options.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: `${option.name} - [${option.code}]`,
+      selected: `${option.name} - [${option.code}]` == vinyl3635
+    }, `${option.name} - [${option.code}]`)),
+    value: vinyl3635
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
@@ -25284,7 +25747,7 @@ __webpack_require__.r(__webpack_exports__);
 function Logo({
   item
 }) {
-  var _item$comments, _item$width, _item$height, _item$returnColor, _item$trimLessWaterpr, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$studLength, _item$spacerStandoffD, _item$sets, _item$vinylWhite, _item$frontAcrylicCov, _item$mounting;
+  var _item$comments, _item$width, _item$height, _item$returnColor, _item$trimLessWaterpr, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$studLength, _item$spacerStandoffD, _item$sets, _item$vinylWhite, _item$vinyl, _item$frontAcrylicCov, _item$mounting;
   const {
     signage,
     setSignage,
@@ -25324,6 +25787,7 @@ function Logo({
     color: '',
     code: ''
   });
+  const [vinyl3635, setVinyl3635] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$vinyl = item.vinyl3635) !== null && _item$vinyl !== void 0 ? _item$vinyl : '');
   const [frontAcrylicCover, setFrontAcrylicCover] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$frontAcrylicCov = item.frontAcrylicCover) !== null && _item$frontAcrylicCov !== void 0 ? _item$frontAcrylicCov : 'White');
   const [mounting, setMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
   const [ledLightColor, setLedLightColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.ledLightColor);
@@ -25350,6 +25814,7 @@ function Logo({
           ledLightColor,
           frontAcrylicCover,
           vinylWhite,
+          vinyl3635,
           mounting,
           studLength,
           spacerStandoffDistance,
@@ -25386,12 +25851,19 @@ function Logo({
   const handleOnChangeWhite = e => {
     const target = e.target.value;
     setFrontAcrylicCover(target);
-    if (target !== '3M Vinyl') {
+    if (target !== '3M 3630 Vinyl') {
       setVinylWhite({
         name: '',
         color: ''
       });
     }
+    if (target !== '3M 3635 Vinyl') {
+      setVinyl3635('');
+    }
+  };
+  const handleOnChangeVinyl3635 = e => {
+    const target = e.target.value;
+    setVinyl3635(target);
   };
   const handleonChangeStudLength = e => {
     const target = e.target.value;
@@ -25451,8 +25923,11 @@ function Logo({
     }
     if (!ledLightColor) missingFields.push('Select LED Light Color');
     if (!frontAcrylicCover) missingFields.push('Select Front Acrylic Cover');
-    if (frontAcrylicCover === '3M Vinyl') {
-      if (!vinylWhite?.name) missingFields.push('Select 3M Vinyl');
+    if (frontAcrylicCover === '3M 3630 Vinyl') {
+      if (!vinylWhite?.name) missingFields.push('Select 3M 3630 Vinyl');
+    }
+    if (frontAcrylicCover === '3M 3635 Vinyl') {
+      if (!vinyl3635) missingFields.push('Select 3M 3635 Vinyl');
     }
     if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
     if (missingFields.length > 0) {
@@ -25484,8 +25959,8 @@ function Logo({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
-  }, [depth, comments, waterproof, color, frontAcrylicCover, vinylWhite, usdPrice, cadPrice, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, mounting, studLength, spacerStandoffDistance, width, height, cadSinglePrice, usdSinglePrice, includedItems]);
-  if (frontAcrylicCover === '3M Vinyl') {
+  }, [depth, comments, waterproof, color, frontAcrylicCover, vinylWhite, vinyl3635, usdPrice, cadPrice, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, mounting, studLength, spacerStandoffDistance, width, height, cadSinglePrice, usdSinglePrice, includedItems]);
+  if (frontAcrylicCover === '3M 3630 Vinyl') {
     (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_4__["default"])([colorRef, acrylicColorRef], () => {
       if (!openColor && !openAcrylicCover) return;
       setOpenColor(false);
@@ -25529,8 +26004,14 @@ function Logo({
     if (X > 41 || Y > 41) {
       tempTotal += 150;
     }
-    if (frontAcrylicCover === '3M Vinyl' || frontAcrylicCover === 'UV Printed') {
+    if (frontAcrylicCover === 'UV Printed') {
       tempTotal *= 1.1;
+    }
+    if (frontAcrylicCover === '3M 3635 Vinyl') {
+      tempTotal *= 1.2;
+    }
+    if (frontAcrylicCover === '3M 3630 Vinyl') {
+      tempTotal *= 1.15;
     }
     if (waterproof && waterproof !== _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.INDOOR_NOT_WATERPROOF) {
       tempTotal *= 1.03;
@@ -25638,7 +26119,7 @@ function Logo({
       selected: option == frontAcrylicCover
     }, option.option)),
     value: frontAcrylicCover
-  }), frontAcrylicCover === '3M Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_7__["default"], {
+  }), frontAcrylicCover === '3M 3630 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_7__["default"], {
     ref: acrylicColorRef,
     vinylWhite: vinylWhite,
     setVinylWhite: setVinylWhite,
@@ -25651,6 +26132,14 @@ function Logo({
       setVinylWhite(color);
       setOpenAcrylicCover(false);
     }
+  })), frontAcrylicCover === '3M 3635 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "3M 3635 Vinyl",
+    onChange: handleOnChangeVinyl3635,
+    options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_5__.vinlyl3635Options.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: `${option.name} - [${option.code}]`,
+      selected: `${option.name} - [${option.code}]` == vinyl3635
+    }, `${option.name} - [${option.code}]`)),
+    value: vinyl3635
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
@@ -33192,6 +33681,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   colorOptions: () => (/* binding */ colorOptions),
 /* harmony export */   metalFinishColors: () => (/* binding */ metalFinishColors),
 /* harmony export */   translucentGraphicFilms: () => (/* binding */ translucentGraphicFilms),
+/* harmony export */   vinlyl3635Options: () => (/* binding */ vinlyl3635Options),
 /* harmony export */   whiteOptions: () => (/* binding */ whiteOptions),
 /* harmony export */   whiteOptionsResin: () => (/* binding */ whiteOptionsResin)
 /* harmony export */ });
@@ -33338,14 +33828,39 @@ const metalFinishColors = [{
 const whiteOptions = [{
   option: 'White'
 }, {
-  option: '3M Vinyl'
+  option: '3M 3630 Vinyl'
+}, {
+  option: '3M 3635 Vinyl'
 }];
 const whiteOptionsResin = [{
   option: 'White'
 }, {
-  option: '3M Vinyl'
+  option: '3M 3630 Vinyl'
+}, {
+  option: '3M 3635 Vinyl'
 }, {
   option: 'UV Printed'
+}];
+const vinlyl3635Options = [{
+  name: 'Film White',
+  color: '#ded1b4',
+  code: '3635-210'
+}, {
+  name: 'Film Black',
+  color: '#ded1b4',
+  code: '3635-222'
+}, {
+  name: 'Film Sultan Blue',
+  color: '#ded1b4',
+  code: '3635-157'
+}, {
+  name: 'Film Smoke Gray',
+  color: '#ded1b4',
+  code: '3635-91'
+}, {
+  name: 'Graphic Film',
+  color: '#ded1b4',
+  code: '3635-110'
 }];
 const translucentGraphicFilms = [{
   name: 'Ivory',
@@ -33798,6 +34313,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   arrayRange: () => (/* binding */ arrayRange),
 /* harmony export */   defaultFinishOptions: () => (/* binding */ defaultFinishOptions),
 /* harmony export */   finishingOptions: () => (/* binding */ finishingOptions),
+/* harmony export */   frontBackVinylOptions: () => (/* binding */ frontBackVinylOptions),
 /* harmony export */   installationDefaultOptions: () => (/* binding */ installationDefaultOptions),
 /* harmony export */   lightingPackagedOptions: () => (/* binding */ lightingPackagedOptions),
 /* harmony export */   metalFinishOptions: () => (/* binding */ metalFinishOptions),
@@ -33989,6 +34505,11 @@ const lightingPackagedOptions = [{
 }, {
   value: 'Low Voltage LED Driver, 10ft open wires, 1:1 blueprint'
 }];
+const frontBackVinylOptions = [{
+  option: 'Front Only'
+}, {
+  option: 'Front and Back'
+}];
 
 
 /***/ }),
@@ -34064,7 +34585,7 @@ const VinylColors = react__WEBPACK_IMPORTED_MODULE_0___default().forwardRef(({
     ref: ref
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
-  }, "3M VINYL"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "3M 3630 VINYL"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: `flex flex-wrap items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${vinylWhite.name ? 'text-black' : 'text-[#dddddd]'}`,
     onClick: toggleVinyl
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
@@ -34266,8 +34787,14 @@ const allAttributes = item => [{
   label: 'FRONT ACRYLIC COVER'
 }, {
   key: item.vinylWhite?.name,
-  label: '3M VINYL',
+  label: '3M 3630 VINYL',
   isVinyl: true
+}, {
+  key: item.vinyl3635,
+  label: '3M 3635 VINYL'
+}, {
+  key: item.frontBackVinyl,
+  label: 'FRONT & BACK VINYL'
 }, {
   key: item.acrylicReturnPaintColor,
   label: 'RETURN PAINT COLOR'

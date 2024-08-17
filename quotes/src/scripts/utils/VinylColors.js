@@ -6,7 +6,7 @@ const VinylColors = React.forwardRef(
 		return (
 			<div className="px-[1px] relative" ref={ref}>
 				<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-					3M VINYL
+					3M 3630 VINYL
 				</label>
 				<div
 					className={`flex flex-wrap items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${

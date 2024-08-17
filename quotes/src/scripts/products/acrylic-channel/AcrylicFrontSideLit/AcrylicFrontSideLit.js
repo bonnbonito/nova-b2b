@@ -31,7 +31,7 @@ const AcrylicFrontSideLit = () => {
 				ledLightColor: '6500K White',
 				letterHeight: '',
 				acrylicReturn: 'White',
-				frontOption: 'White',
+				frontAcrylicCover: 'White',
 				usdPrice: 0,
 				cadPrice: 0,
 				filePaths: [],
@@ -75,6 +75,7 @@ const AcrylicFrontSideLit = () => {
 		waterproof: INDOOR_NOT_WATERPROOF,
 		includedItems: LIGHTING_INDOOR,
 		product: NovaQuote.product,
+		frontAcrylicCover: 'White',
 		acrylicReturn: 'White',
 	};
 

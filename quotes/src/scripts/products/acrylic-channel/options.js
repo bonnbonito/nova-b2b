@@ -9,7 +9,10 @@ export const acrylicFrontOptions = [
 		option: 'White',
 	},
 	{
-		option: '3M Vinyl',
+		option: '3M 3630 Vinyl',
+	},
+	{
+		option: '3M 3635 Vinyl',
 	},
 	{
 		option: 'UV Printed',

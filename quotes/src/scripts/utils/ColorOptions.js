@@ -193,7 +193,10 @@ const whiteOptions = [
 		option: 'White',
 	},
 	{
-		option: '3M Vinyl',
+		option: '3M 3630 Vinyl',
+	},
+	{
+		option: '3M 3635 Vinyl',
 	},
 ];
 
@@ -202,10 +205,41 @@ const whiteOptionsResin = [
 		option: 'White',
 	},
 	{
-		option: '3M Vinyl',
+		option: '3M 3630 Vinyl',
+	},
+	{
+		option: '3M 3635 Vinyl',
 	},
 	{
 		option: 'UV Printed',
+	},
+];
+
+const vinlyl3635Options = [
+	{
+		name: 'Film White',
+		color: '#ded1b4',
+		code: '3635-210',
+	},
+	{
+		name: 'Film Black',
+		color: '#ded1b4',
+		code: '3635-222',
+	},
+	{
+		name: 'Film Sultan Blue',
+		color: '#ded1b4',
+		code: '3635-157',
+	},
+	{
+		name: 'Film Smoke Gray',
+		color: '#ded1b4',
+		code: '3635-91',
+	},
+	{
+		name: 'Graphic Film',
+		color: '#ded1b4',
+		code: '3635-110',
 	},
 ];
 
@@ -496,6 +530,7 @@ export {
 	colorOptions,
 	metalFinishColors,
 	translucentGraphicFilms,
+	vinlyl3635Options,
 	whiteOptions,
 	whiteOptionsResin,
 };

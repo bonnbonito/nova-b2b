@@ -16,6 +16,11 @@ import { calculateLetterPrice, spacerPricing } from '../../../../utils/Pricing';
 
 import { ledLightColors } from '../../../metal-channel/metalChannelOptions';
 
+import {
+	vinlyl3635Options,
+	whiteOptionsResin,
+} from '../../../../utils/ColorOptions';
+
 import VinylColors from '../../../../utils/VinylColors';
 
 import { acrylicChannelThicknessOptions } from '../options';
@@ -45,18 +50,6 @@ const mountingDefaultOptions = [
 	},
 ];
 
-const frontOptionOptions = [
-	{
-		option: 'White',
-	},
-	{
-		option: '3M Vinyl',
-	},
-	{
-		option: 'UV Printed',
-	},
-];
-
 const lettersHeight = {
 	min: 2,
 	max: 43,
@@ -68,7 +61,9 @@ export function Letters({ item }) {
 	const [comments, setComments] = useState(item.comments ?? '');
 	const [font, setFont] = useState(item.font ?? '');
 	const [openFont, setOpenFont] = useState(false);
-	const [frontOption, setFrontOption] = useState(item.frontOption ?? '');
+	const [frontAcrylicCover, setFrontAcrylicCover] = useState(
+		item.frontAcrylicCover ?? 'White'
+	);
 	const [openVinyl, setOpenVinyl] = useState(false);
 	const [waterproof, setWaterproof] = useState(
 		item.trimLessWaterproof ?? INDOOR_NOT_WATERPROOF
@@ -80,6 +75,8 @@ export function Letters({ item }) {
 	const [vinylWhite, setVinylWhite] = useState(
 		item.vinylWhite ?? { name: '', color: '', code: '' }
 	);
+
+	const [vinyl3635, setVinyl3635] = useState(item.vinyl3635 ?? '');
 
 	const [acrylicChannelThickness, setAcrylicChannelThickness] = useState(
 		item.acrylicChannelThickness ?? '1.2"'
@@ -184,10 +181,11 @@ export function Letters({ item }) {
 			acrylicChannelThickness,
 			mounting: selectedMounting,
 			trimLessWaterproof: waterproof,
-			frontOption,
+			frontAcrylicCover,
 			letterHeight: selectedLetterHeight,
 			ledLightColor,
 			vinylWhite,
+			vinyl3635,
 			usdPrice,
 			cadPrice,
 			files,
@@ -239,7 +237,12 @@ export function Letters({ item }) {
 
 	const handleOnChangeWaterproof = (e) => setWaterproof(e.target.value);
 
-	const handleOnChangeFrontOption = (e) => setFrontOption(e.target.value);
+	const handleOnChangeFrontOption = (e) => setFrontAcrylicCover(e.target.value);
+
+	const handleOnChangeVinyl3635 = (e) => {
+		const target = e.target.value;
+		setVinyl3635(target);
+	};
 
 	const handleOnChangeThickness = (e) => {
 		const target = e.target.value;
@@ -313,11 +316,15 @@ export function Letters({ item }) {
 			tempTotal += parseFloat(spacer.toFixed(2));
 		}
 
-		if (frontOption === '3M Vinyl') {
-			tempTotal *= 1.1;
+		if (frontAcrylicCover === '3M 3630 Vinyl') {
+			tempTotal *= 1.15;
 		}
 
-		if (frontOption === 'UV Printed') {
+		if (frontAcrylicCover === '3M 3635 Vinyl') {
+			tempTotal *= 1.2;
+		}
+
+		if (frontAcrylicCover === 'UV Printed') {
 			tempTotal *= 1.15;
 		}
 
@@ -352,7 +359,7 @@ export function Letters({ item }) {
 		font,
 		selectedMounting,
 		letterPricing,
-		frontOption,
+		frontAcrylicCover,
 	]);
 
 	useEffect(() => {
@@ -394,13 +401,17 @@ export function Letters({ item }) {
 		if (!selectedLetterHeight) missingFields.push('Select Letter Height');
 		if (!acrylicChannelThickness)
 			missingFields.push('Select Acrylic Thickness');
-		if (!frontOption) missingFields.push('Select Front Option');
+		if (!frontAcrylicCover) missingFields.push('Select Front Option');
 
-		if (frontOption === '3M Vinyl') {
-			if (!vinylWhite?.name) missingFields.push('Select 3M Vinyl');
+		if (frontAcrylicCover === '3M 3630 Vinyl') {
+			if (!vinylWhite?.name) missingFields.push('Select 3M 3630 Vinyl');
 		}
 
-		if (frontOption === 'UV Printed') {
+		if (frontAcrylicCover === '3M 3635 Vinyl') {
+			if (!vinyl3635) missingFields.push('Select 3M 3635 Vinyl');
+		}
+
+		if (frontAcrylicCover === 'UV Printed') {
 			if (!fileUrls || fileUrls.length === 0)
 				missingFields.push('Upload a PDF/AI File');
 		}
@@ -468,8 +479,9 @@ export function Letters({ item }) {
 		sets,
 		studLength,
 		spacerStandoffDistance,
-		frontOption,
+		frontAcrylicCover,
 		vinylWhite,
+		vinyl3635,
 	]);
 
 	useEffect(() => {
@@ -499,10 +511,11 @@ export function Letters({ item }) {
 		usdSinglePrice,
 		cadSinglePrice,
 		vinylWhite,
-		frontOption,
+		vinyl3635,
+		frontAcrylicCover,
 	]);
 
-	if (frontOption === '3M Vinyl') {
+	if (frontAcrylicCover === '3M 3630 Vinyl') {
 		useOutsideClick([fontRef, vinylRef], () => {
 			if (!openVinyl && !openFont) return;
 			setOpenVinyl(false);
@@ -516,10 +529,13 @@ export function Letters({ item }) {
 	}
 
 	useEffect(() => {
-		if (frontOption !== '3M Vinyl') {
+		if (frontAcrylicCover !== '3M 3630 Vinyl') {
 			setVinylWhite({ name: '', color: '' });
 		}
-	}, [frontOption]);
+		if (frontAcrylicCover !== '3M 3635 Vinyl') {
+			setVinyl3635('');
+		}
+	}, [frontAcrylicCover]);
 
 	useEffect(() => {
 		font != 'Custom font' && setFontFileUrl('');
@@ -628,20 +644,20 @@ export function Letters({ item }) {
 				/>
 
 				<Dropdown
-					title="Front Option"
+					title="Front Acrylic Cover"
 					onChange={handleOnChangeFrontOption}
-					options={frontOptionOptions.map((option) => (
+					options={whiteOptionsResin.map((option) => (
 						<option
 							value={option.option}
-							selected={option.option == frontOption}
+							selected={option == frontAcrylicCover}
 						>
 							{option.option}
 						</option>
 					))}
-					value={frontOption}
+					value={frontAcrylicCover}
 				/>
 
-				{frontOption === '3M Vinyl' && (
+				{frontAcrylicCover === '3M 3630 Vinyl' && (
 					<>
 						<VinylColors
 							ref={vinylRef}
@@ -656,6 +672,24 @@ export function Letters({ item }) {
 								setVinylWhite(color);
 								setOpenVinyl(false);
 							}}
+						/>
+					</>
+				)}
+
+				{frontAcrylicCover === '3M 3635 Vinyl' && (
+					<>
+						<Dropdown
+							title="3M 3635 Vinyl"
+							onChange={handleOnChangeVinyl3635}
+							options={vinlyl3635Options.map((option) => (
+								<option
+									value={`${option.name} - [${option.code}]`}
+									selected={`${option.name} - [${option.code}]` == vinyl3635}
+								>
+									{`${option.name} - [${option.code}]`}
+								</option>
+							))}
+							value={vinyl3635}
 						/>
 					</>
 				)}

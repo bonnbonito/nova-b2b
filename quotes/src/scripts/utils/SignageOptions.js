@@ -276,10 +276,20 @@ const lightingPackagedOptions = [
 	},
 ];
 
+const frontBackVinylOptions = [
+	{
+		option: 'Front Only',
+	},
+	{
+		option: 'Front and Back',
+	},
+];
+
 export {
 	arrayRange,
 	defaultFinishOptions,
 	finishingOptions,
+	frontBackVinylOptions,
 	installationDefaultOptions,
 	lightingPackagedOptions,
 	metalFinishOptions,

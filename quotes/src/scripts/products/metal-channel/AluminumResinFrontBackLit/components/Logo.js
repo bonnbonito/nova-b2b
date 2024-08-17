@@ -5,6 +5,7 @@ import UploadFiles from '../../../../UploadFiles';
 import useOutsideClick from '../../../../utils/ClickOutside';
 import {
 	colorOptions,
+	vinlyl3635Options,
 	whiteOptionsResin,
 } from '../../../../utils/ColorOptions';
 import ColorsDropdown from '../../../../utils/ColorsDropdown';
@@ -12,6 +13,7 @@ import VinylColors from '../../../../utils/VinylColors';
 
 import { spacerPricing } from '../../../../utils/Pricing';
 import {
+	frontBackVinylOptions,
 	lightingPackagedOptions,
 	setOptions,
 	spacerStandoffDefaultOptions,
@@ -49,6 +51,11 @@ export function Logo({ item }) {
 	const [vinylWhite, setVinylWhite] = useState(
 		item.vinylWhite ?? { name: '', color: '', code: '' }
 	);
+	const [vinyl3635, setVinyl3635] = useState(item.vinyl3635 ?? '');
+	const [frontBackVinyl, setFrontBackVinyl] = useState(
+		item.frontBackVinyl ?? ''
+	);
+
 	const [openColor, setOpenColor] = useState(false);
 	const [waterproof, setWaterproof] = useState(item.trimLessWaterproof ?? '');
 
@@ -88,12 +95,22 @@ export function Logo({ item }) {
 	const handleOnChangeWhite = (e) => {
 		const target = e.target.value;
 		setFrontAcrylicCover(target);
-		if (target !== '3M Vinyl') {
+		if (target !== '3M 3630 Vinyl') {
 			setVinylWhite({
 				name: '',
 				color: '',
 			});
+			setFrontBackVinyl('');
 		}
+		if (target !== '3M 3635 Vinyl') {
+			setVinyl3635('');
+			setFrontBackVinyl('');
+		}
+	};
+
+	const handleOnChangeVinyl3635 = (e) => {
+		const target = e.target.value;
+		setVinyl3635(target);
 	};
 
 	const [mounting, setMounting] = useState(item.mounting ?? '');
@@ -149,6 +166,8 @@ export function Logo({ item }) {
 					usdSinglePrice,
 					cadSinglePrice,
 					vinylWhite,
+					vinyl3635,
+					frontBackVinyl,
 					includedItems,
 				};
 			} else {
@@ -177,6 +196,11 @@ export function Logo({ item }) {
 	const handleOnChangeWaterproof = (e) => {
 		const target = e.target.value;
 		setWaterproof(() => target);
+	};
+
+	const handleOnChangeWhiteFrontBackVinyl = (e) => {
+		const target = e.target.value;
+		setFrontBackVinyl(target);
 	};
 
 	useEffect(() => {
@@ -272,8 +296,19 @@ export function Logo({ item }) {
 			missingFields.push('Add the Pantone color code of your custom color.');
 		}
 
-		if (frontAcrylicCover === '3M Vinyl') {
+		if (frontAcrylicCover === '3M 3630 Vinyl') {
 			if (!vinylWhite?.name) missingFields.push('Select 3M 3630 Vinyl');
+		}
+
+		if (frontAcrylicCover === '3M 3635 Vinyl') {
+			if (!vinyl3635) missingFields.push('Select 3M 3635 Vinyl');
+		}
+
+		if (
+			frontAcrylicCover === '3M 3630 Vinyl' ||
+			frontAcrylicCover === '3M 3635 Vinyl'
+		) {
+			if (!frontBackVinyl) missingFields.push('Select Front &amp; Back Vinyl');
 		}
 
 		if (!waterproof) missingFields.push('Select Environment');
@@ -368,11 +403,22 @@ export function Logo({ item }) {
 			tempTotal += 150;
 		}
 
-		if (
-			frontAcrylicCover === 'UV Printed' ||
-			frontAcrylicCover === '3M Vinyl'
-		) {
+		if (frontAcrylicCover === 'UV Printed') {
 			tempTotal *= 1.1;
+		}
+
+		if (frontAcrylicCover === '3M 3630 Vinyl') {
+			tempTotal *= 1.15;
+			if (frontBackVinyl === 'Front and Back') {
+				tempTotal *= 1.15;
+			}
+		}
+
+		if (frontAcrylicCover === '3M 3635 Vinyl') {
+			tempTotal *= 1.2;
+			if (frontBackVinyl === 'Front and Back') {
+				tempTotal *= 1.15;
+			}
 		}
 
 		if (waterproof && waterproof !== INDOOR_NOT_WATERPROOF) {
@@ -408,7 +454,16 @@ export function Logo({ item }) {
 			setUsdSinglePrice(0);
 			setCadSinglePrice(0);
 		}
-	}, [depth, width, height, waterproof, mounting, frontAcrylicCover, sets]);
+	}, [
+		depth,
+		width,
+		height,
+		waterproof,
+		mounting,
+		frontAcrylicCover,
+		sets,
+		frontBackVinyl,
+	]);
 
 	useEffect(() => {
 		updateSignage();
@@ -436,10 +491,12 @@ export function Logo({ item }) {
 		usdSinglePrice,
 		cadSinglePrice,
 		vinylWhite,
+		vinyl3635,
+		frontBackVinyl,
 		includedItems,
 	]);
 
-	if (frontAcrylicCover === '3M Vinyl') {
+	if (frontAcrylicCover === '3M 3630 Vinyl') {
 		useOutsideClick([colorRef, acrylicColorRef], () => {
 			if (!openColor && !openAcrylicCover) return;
 			setOpenColor(false);
@@ -568,7 +625,7 @@ export function Logo({ item }) {
 					value={frontAcrylicCover}
 				/>
 
-				{frontAcrylicCover === '3M Vinyl' && (
+				{frontAcrylicCover === '3M 3630 Vinyl' && (
 					<>
 						<VinylColors
 							ref={acrylicColorRef}
@@ -583,6 +640,43 @@ export function Logo({ item }) {
 								setVinylWhite(color);
 								setOpenAcrylicCover(false);
 							}}
+						/>
+					</>
+				)}
+
+				{frontAcrylicCover === '3M 3635 Vinyl' && (
+					<>
+						<Dropdown
+							title="3M 3635 Vinyl"
+							onChange={handleOnChangeVinyl3635}
+							options={vinlyl3635Options.map((option) => (
+								<option
+									value={`${option.name} - [${option.code}]`}
+									selected={`${option.name} - [${option.code}]` == vinyl3635}
+								>
+									{`${option.name} - [${option.code}]`}
+								</option>
+							))}
+							value={vinyl3635}
+						/>
+					</>
+				)}
+
+				{(frontAcrylicCover === '3M 3630 Vinyl' ||
+					frontAcrylicCover === '3M 3635 Vinyl') && (
+					<>
+						<Dropdown
+							title="Front &amp; Back Vinyl"
+							onChange={handleOnChangeWhiteFrontBackVinyl}
+							options={frontBackVinylOptions.map((option) => (
+								<option
+									value={option.option}
+									selected={option.option == frontBackVinyl}
+								>
+									{option.option}
+								</option>
+							))}
+							value={frontBackVinyl}
 						/>
 					</>
 				)}

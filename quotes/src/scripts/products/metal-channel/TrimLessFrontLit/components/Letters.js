@@ -5,7 +5,11 @@ import FontsDropdown from '../../../../FontsDropdown';
 import UploadFiles from '../../../../UploadFiles';
 import UploadFont from '../../../../UploadFont';
 import useOutsideClick from '../../../../utils/ClickOutside';
-import { colorOptions, whiteOptions } from '../../../../utils/ColorOptions';
+import {
+	colorOptions,
+	vinlyl3635Options,
+	whiteOptions,
+} from '../../../../utils/ColorOptions';
 import ColorsDropdown from '../../../../utils/ColorsDropdown';
 import VinylColors from '../../../../utils/VinylColors';
 
@@ -108,6 +112,9 @@ export function Letters({ item }) {
 	const [vinylWhite, setVinylWhite] = useState(
 		item.vinylWhite ?? { name: '', color: '', code: '' }
 	);
+
+	const [vinyl3635, setVinyl3635] = useState(item.vinyl3635 ?? '');
+
 	const [frontAcrylicCover, setFrontAcrylicCover] = useState(
 		item.frontAcrylicCover ?? 'White'
 	);
@@ -121,6 +128,7 @@ export function Letters({ item }) {
 	const colorRef = useRef(null);
 	const fontRef = useRef(null);
 	const acrylicColorRef = useRef(null);
+	const acrylic365ColorRef = useRef(null);
 
 	const [letterPricing, setLetterPricing] = useState([]);
 
@@ -189,6 +197,7 @@ export function Letters({ item }) {
 					ledLightColor,
 					frontAcrylicCover,
 					vinylWhite,
+					vinyl3635,
 					mounting,
 					studLength,
 					spacerStandoffDistance,
@@ -238,12 +247,21 @@ export function Letters({ item }) {
 	const handleOnChangeWhite = (e) => {
 		const target = e.target.value;
 		setFrontAcrylicCover(target);
-		if (target !== '3M Vinyl') {
+		if (target !== '3M 3630 Vinyl') {
 			setVinylWhite({
 				name: '',
 				color: '',
+				code: '',
 			});
 		}
+		if (target !== '3M 3635 Vinyl') {
+			setVinyl3635('');
+		}
+	};
+
+	const handleOnChangeVinyl3635 = (e) => {
+		const target = e.target.value;
+		setVinyl3635(target);
 	};
 
 	const handleonChangeStudLength = (e) => {
@@ -333,8 +351,12 @@ export function Letters({ item }) {
 			tempTotal += calculateLetterPrice(letter, baseLetterPrice, noLowerCase);
 		});
 
-		if (frontAcrylicCover === '3M Vinyl') {
-			tempTotal *= 1.1;
+		if (frontAcrylicCover === '3M 3630 Vinyl') {
+			tempTotal *= 1.15;
+		}
+
+		if (frontAcrylicCover === '3M 3635 Vinyl') {
+			tempTotal *= 1.2;
 		}
 
 		if (waterproof && waterproof !== INDOOR_NOT_WATERPROOF) {
@@ -450,8 +472,12 @@ export function Letters({ item }) {
 
 		if (!frontAcrylicCover) missingFields.push('Select Front Acrylic Cover');
 
-		if (frontAcrylicCover === '3M Vinyl') {
-			if (!vinylWhite?.name) missingFields.push('Select 3M Vinyl');
+		if (frontAcrylicCover === '3M 3630 Vinyl') {
+			if (!vinylWhite?.name) missingFields.push('Select 3M 3630 Vinyl');
+		}
+
+		if (frontAcrylicCover === '3M 3635 Vinyl') {
+			if (!vinyl3635) missingFields.push('Select 3M 3635 Vinyl');
 		}
 
 		if (missingFields.length > 0) {
@@ -500,6 +526,7 @@ export function Letters({ item }) {
 		color,
 		frontAcrylicCover,
 		vinylWhite,
+		vinyl3635,
 		usdPrice,
 		cadPrice,
 		selectedLetterHeight,
@@ -541,7 +568,7 @@ export function Letters({ item }) {
 		}
 	}, [depth]);
 
-	if (frontAcrylicCover === '3M Vinyl') {
+	if (frontAcrylicCover === '3M 3630 Vinyl') {
 		useOutsideClick([colorRef, fontRef, acrylicColorRef], () => {
 			if (!openColor && !openFont && !openAcrylicCover) return;
 			setOpenColor(false);
@@ -716,7 +743,7 @@ export function Letters({ item }) {
 					value={frontAcrylicCover}
 				/>
 
-				{frontAcrylicCover === '3M Vinyl' && (
+				{frontAcrylicCover === '3M 3630 Vinyl' && (
 					<>
 						<VinylColors
 							ref={acrylicColorRef}
@@ -732,6 +759,24 @@ export function Letters({ item }) {
 								setVinylWhite(color);
 								setOpenAcrylicCover(false);
 							}}
+						/>
+					</>
+				)}
+
+				{frontAcrylicCover === '3M 3635 Vinyl' && (
+					<>
+						<Dropdown
+							title="3M 3635 Vinyl"
+							onChange={handleOnChangeVinyl3635}
+							options={vinlyl3635Options.map((option) => (
+								<option
+									value={`${option.name} - [${option.code}]`}
+									selected={`${option.name} - [${option.code}]` == vinyl3635}
+								>
+									{`${option.name} - [${option.code}]`}
+								</option>
+							))}
+							value={vinyl3635}
 						/>
 					</>
 				)}
