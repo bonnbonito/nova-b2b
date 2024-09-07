@@ -491,10 +491,11 @@ class NovaEmails {
 
 			/** to zendesk ticket */
 			$to_zendesk        = array( 'quotes@novasignage.com' );
+			$to_user           = $user_info->user_email;
 			$headers_zendesk   = array();
 			$headers_zendesk[] = 'Content-Type: text/html; charset=UTF-8';
-			$headers_zendesk[] = 'From: NOVA Signage <noreply@novasignage.com>';
-			$headers_zendesk[] = 'Reply-To: NOVA Signage <noreply@novasignage.com>';
+			$headers_zendesk[] = 'From: ' . $first_name . ' <' . $to_user . '>';
+			$headers_zendesk[] = 'Reply-To: ' . $first_name . ' <' . $to_user . '>';
 
 			$role_instance->send_email( $to_zendesk, $admin_subject, $admin_message, $headers_zendesk, array() );
 
