@@ -98,6 +98,11 @@ class Order_History {
 		foreach ( $order_ids as $order_id ) {
 			$order = wc_get_order( $order_id );
 
+			// Ensure we have a valid order object
+			if ( ! $order ) {
+				continue;
+			}
+
 			$actions = wc_get_account_orders_actions( $order );
 
 			$total_with_currency = wc_price( $order->get_total(), array( 'currency' => $order->get_currency() ) );
@@ -107,29 +112,41 @@ class Order_History {
 			if ( $order->get_meta( '_adjusted_duplicate_order_id' ) ) {
 				$payment_order        = $order->get_meta( '_adjusted_duplicate_order_id' );
 				$payment_order_object = wc_get_order( $payment_order );
-				$total_with_currency  = $payment_order_object->get_formatted_order_total();
-				$order_total          = $payment_order_object->get_total();
+
+				// Ensure we have a valid payment order object
+				if ( $payment_order_object ) {
+					$total_with_currency = $payment_order_object->get_formatted_order_total();
+					$order_total         = $payment_order_object->get_total();
+				}
 			}
 
 			$is_overdue = false;
 
-			/** if order is pending and is overdue */
+			// If order is pending and is overdue
 			if ( $order->get_meta( 'is_overdue' ) && $order->get_status() == 'pending' ) {
 				$is_overdue = true;
 			}
 
 			$due_date = false;
 
-			/** if order is payment, get due date */
+			// If order is payment, get due date
 			if ( $order->get_meta( '_from_order_id' ) ) {
-				$from_order_id       = $order->get_meta( '_from_order_id' );
-				$from_order          = wc_get_order( $from_order_id );
-				$completed_date_obj  = $from_order->get_date_completed();
-				$shipped_date        = $completed_date_obj->date( 'F d, Y' );
-				$payment_type        = $from_order->get_meta( '_payment_select' );
-				$days_after_shipping = get_field( 'days_after_shipping', $payment_type );
-				$deadline            = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
-				$due_date            = date( 'M d, Y', $deadline );
+				$from_order_id = $order->get_meta( '_from_order_id' );
+				$from_order    = wc_get_order( $from_order_id );
+
+				// Ensure we have a valid from order object
+				if ( $from_order ) {
+					$completed_date_obj = $from_order->get_date_completed();
+
+					// Check if the completed date is valid
+					if ( $completed_date_obj ) {
+						$shipped_date        = $completed_date_obj->date( 'F d, Y' );
+						$payment_type        = $from_order->get_meta( '_payment_select' );
+						$days_after_shipping = get_field( 'days_after_shipping', $payment_type );
+						$deadline            = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
+						$due_date            = date( 'M d, Y', $deadline );
+					}
+				}
 			}
 
 			$orders[] = array(
@@ -147,6 +164,7 @@ class Order_History {
 		}
 		return $orders;
 	}
+
 
 	public function get_order_items( $order ) {
 		$items = array();

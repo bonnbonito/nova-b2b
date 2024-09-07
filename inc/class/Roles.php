@@ -784,10 +784,11 @@ jQuery(document).ready(function($) {
 
 		$emails = $this->get_admin_and_customer_rep_emails();
 
-		/*** add Yat */
+		/*** Add Yat and Lok. */
 		$emails[] = 'yat@novasignage.com';
+		$emails[] = 'lok.l@hineon.com';
 
-		/* remove joshua@hineon.com to $emails array */
+		/* Remove joshua@hineon.com to $emails array */
 		$emails = array_diff( $emails, array( 'joshua@hineon.com' ) );
 
 		$this->send_email( $emails, $subject, $message, $headers, array() );

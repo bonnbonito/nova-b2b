@@ -487,6 +487,7 @@ class NovaEmails {
 		$role_instance = \NOVA_B2B\Roles::get_instance();
 
 		if ( $role_instance ) {
+			$to_admin[] = 'quotes@novasignage.com';
 			$role_instance->send_email( $to_admin, $admin_subject, $admin_message, $headers, array() );
 		}
 	}
