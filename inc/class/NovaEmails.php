@@ -487,8 +487,17 @@ class NovaEmails {
 		$role_instance = \NOVA_B2B\Roles::get_instance();
 
 		if ( $role_instance ) {
-			$to_admin[] = 'quotes@novasignage.com';
 			$role_instance->send_email( $to_admin, $admin_subject, $admin_message, $headers, array() );
+
+			/** to zendesk ticket */
+			$to_zendesk        = array( 'quotes@novasignage.com' );
+			$headers_zendesk   = array();
+			$headers_zendesk[] = 'Content-Type: text/html; charset=UTF-8';
+			$headers_zendesk[] = 'From: NOVA Signage <noreply@novasignage.com>';
+			$headers_zendesk[] = 'Reply-To: NOVA Signage <noreply@novasignage.com>';
+
+			$role_instance->send_email( $to_zendesk, $admin_subject, $admin_message, $headers_zendesk, array() );
+
 		}
 	}
 
