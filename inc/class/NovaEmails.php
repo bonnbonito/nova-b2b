@@ -489,8 +489,8 @@ class NovaEmails {
 		if ( $role_instance ) {
 			$role_instance->send_email( $to_admin, $admin_subject, $admin_message, $headers, array() );
 
-			/** to zendesk ticket */
-			$to_zendesk        = array( 'quotes@novasignage.com' );
+			/** to joshua */
+			$to_zendesk        = array( 'joshua@hineon.com' );
 			$to_user           = $user_info->user_email;
 			$headers_zendesk   = array();
 			$headers_zendesk[] = 'Content-Type: text/html; charset=UTF-8';

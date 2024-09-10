@@ -174,6 +174,7 @@ class Roles {
 			$employee_emails = get_user_meta( $user->ID, 'employee_emails', true );
 			$emails_array    = $employee_emails ? explode( ',', str_replace( ' ', '', trim( $employee_emails ) ) ) : array();
 			$emails_array[]  = $user->user_email;
+			$emails_array    = array_map( 'strtolower', $emails_array );
 			$emails          = array_unique( $emails_array );
 			$results[]       = array(
 				'user_id'     => $user->ID,
