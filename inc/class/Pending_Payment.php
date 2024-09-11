@@ -261,17 +261,60 @@ class Pending_Payment {
 	}
 
 	public function hide_specific_orders( $query ) {
-		if ( $query->is_main_query() && $query->get( 'post_type' ) === 'shop_order' && ! isset( $_GET['_hide_order'] ) ) {
-			$meta_query = $query->get( 'meta_query' ) ?: array();
+		if ( $query->is_main_query() && $query->get( 'post_type' ) === 'shop_order' ) {
+			if ( ! isset( $_GET['_hide_order'] ) ) {
+				$meta_query = $query->get( 'meta_query' ) ?: array();
 
-			$meta_query[] = array(
-				'key'     => '_hide_order',
-				'compare' => 'NOT EXISTS',
-			);
+				$meta_query[] = array(
+					'key'     => '_hide_order',
+					'compare' => 'NOT EXISTS',
+				);
 
-			$query->set( 'meta_query', $meta_query );
+				$query->set( 'meta_query', $meta_query );
+			}
+
+			if ( isset( $_GET['s'] ) && ! empty( $_GET['s'] ) ) {
+				// Sanitize the search query
+				$search_query = strtolower( sanitize_text_field( $_GET['s'] ) );
+
+				// Remove #NV0+ strings from the search query
+				$search_query = preg_replace( '/^#?nv0*/i', '', $search_query );
+
+				// Convert search query into an integer
+				$search_order_id = absint( $search_query );
+
+				// If the search query is a valid number, adjust the search to include +/-1
+				if ( $search_order_id ) {
+					$query->set( 'search_order_id', $search_order_id );
+
+					// Modify the search query
+					add_filter(
+						'posts_search',
+						function ( $search, $wp_query ) use ( $search_order_id ) {
+							global $wpdb;
+
+							// If we're searching by order ID and post type is shop_order
+							if ( $wp_query->is_search() && $wp_query->get( 'post_type' ) === 'shop_order' ) {
+								// Search for the order ID, the previous ID, and the next ID
+								$search = $wpdb->prepare(
+									" AND {$wpdb->posts}.ID IN (%d, %d, %d)",
+									$search_order_id - 1,
+									$search_order_id,
+									$search_order_id + 1
+								);
+							}
+
+							return $search;
+						},
+						10,
+						2
+					);
+				}
+			}
 		}
 	}
+
+
 
 	public function custom_order_complete( $order_id ) {
 		$order         = wc_get_order( $order_id );
@@ -283,12 +326,6 @@ class Pending_Payment {
 	}
 
 	public function pending_payment_order_email_content( $body_text, $order, $sent_to_admin, $plain_text, $email ) {
-		$key = $email->id;
-
-		if ( 'cancelled_order' === $key ) {
-			return $body_text;
-		}
-
 		$pending_id     = $order->get_meta( '_pending_id' );
 		$from_order_id  = $order->get_meta( '_from_order_id' );
 		$original_order = wc_get_order( $from_order_id );

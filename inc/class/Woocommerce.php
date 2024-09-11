@@ -123,8 +123,47 @@ class Woocommerce {
 		// add_action( 'woocommerce_checkout_create_order', array( $this, 'order_creating' ), 10, 2 );
 		add_filter( 'woocommerce_order_get_tax_totals', array( $this, 'order_get_tax_totals' ), 10, 2 );
 		add_action( 'woocommerce_before_account_orders', array( $this, 'change_formatted_order_total' ) );
-
 		add_action( 'woocommerce_after_account_orders', array( $this, 'remove_show_total_from_payment_order' ) );
+		add_filter( 'woocommerce_shop_order_search_fields', array( $this, 'order_name_search_fields' ) );
+		//add_action( 'pre_get_posts', array( $this, 'custom_search_by_order_number_in_admin' ) );
+	}
+
+	public function custom_search_by_order_number_in_admin( $query ) {
+		global $pagenow, $wpdb;
+
+		// Check if we are in the admin area and searching shop orders
+		if ( is_admin() && 'edit.php' === $pagenow && isset( $_GET['post_type'] ) && 'shop_order' === $_GET['post_type'] && ! empty( $_GET['s'] ) ) {
+
+			$search_query = sanitize_text_field( $_GET['s'] );
+
+			// Check if the search query starts with #NV
+			if ( strpos( $search_query, '#NV' ) === 0 ) {
+				// Remove the # and perform a meta query on the '_order_number' field
+				$order_number = substr( $search_query, 1 );
+
+				// Modify the query to search for the custom order number
+				$query->set(
+					'meta_query',
+					array(
+						array(
+							'key'     => '_order_number',
+							'value'   => $order_number,
+							'compare' => 'LIKE',
+						),
+					)
+				);
+
+				// Remove the default search query so it doesn't interfere
+				$query->set( 's', '' );
+			}
+		}
+	}
+
+	public function order_name_search_fields( $search_fields ) {
+		// Add '_order_number' to the search fields
+		$search_fields[] = '_order_number';
+
+		return $search_fields;
 	}
 
 	public function remove_show_total_from_payment_order() {
@@ -1068,7 +1107,7 @@ class Woocommerce {
 		$payment_select = get_post_meta( $post->ID, '_payment_select', true );
 		$order_edit_url = admin_url( 'post.php?post=' . $order_id . '&action=edit' );
 
-		//print_r( get_post_meta( $post->ID ) );
+		// print_r( get_post_meta( $post->ID ) );
 
 		?>
 <a href="<?php echo esc_url( $order_edit_url ); ?>" class="button button-primary">View Order</a>
