@@ -18,8 +18,6 @@ import {
 	depthOptions,
 	finishingOptions,
 	ledLightColors,
-	maxHeightOptions,
-	maxWidthOptions,
 	mountingDefaultOptions,
 } from '../../metalChannelOptions';
 
@@ -36,6 +34,34 @@ import {
 import { spacerPricing } from '../../../../utils/Pricing';
 
 import { useAppContext } from '../../../../AppProvider';
+
+const maxHeightOptions = Array.from(
+	{
+		length: 68,
+	},
+	(_, index) => {
+		const val = 5 + index;
+		return (
+			<option key={index} value={val}>
+				{val}"
+			</option>
+		);
+	}
+);
+
+const maxWidthOptions = Array.from(
+	{
+		length: 108,
+	},
+	(_, index) => {
+		const val = 5 + index;
+		return (
+			<option key={index} value={val}>
+				{val}"
+			</option>
+		);
+	}
+);
 
 export function Logo({ item }) {
 	const { signage, setSignage, setMissing } = useAppContext();

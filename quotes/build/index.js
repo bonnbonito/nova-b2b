@@ -20068,6 +20068,24 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+const maxHeightOptions = Array.from({
+  length: 39
+}, (_, index) => {
+  const val = 5 + index;
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    key: index,
+    value: val
+  }, val, "\"");
+});
+const maxWidthOptions = Array.from({
+  length: 39
+}, (_, index) => {
+  const val = 5 + index;
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    key: index,
+    value: val
+  }, val, "\"");
+});
 function Logo({
   item
 }) {
@@ -20467,12 +20485,12 @@ function Logo({
     title: "Logo Width",
     value: width,
     onChange: e => setWidth(e.target.value),
-    options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_10__.maxWidthOptions
+    options: maxWidthOptions
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Logo Height",
     value: height,
     onChange: e => setHeight(e.target.value),
-    options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_10__.maxHeightOptions
+    options: maxHeightOptions
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_6__["default"], {
     ref: colorRef,
     title: "Return Color",
@@ -21546,6 +21564,24 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+const maxHeightOptions = Array.from({
+  length: 39
+}, (_, index) => {
+  const val = 5 + index;
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    key: index,
+    value: val
+  }, val, "\"");
+});
+const maxWidthOptions = Array.from({
+  length: 39
+}, (_, index) => {
+  const val = 5 + index;
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    key: index,
+    value: val
+  }, val, "\"");
+});
 function Logo({
   item
 }) {
@@ -21929,12 +21965,12 @@ function Logo({
     title: "Logo Width",
     value: width,
     onChange: e => setWidth(e.target.value),
-    options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_10__.maxWidthOptions
+    options: maxWidthOptions
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Logo Height",
     value: height,
     onChange: e => setHeight(e.target.value),
-    options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_10__.maxHeightOptions
+    options: maxHeightOptions
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_6__["default"], {
     ref: colorRef,
     title: "Return Color",
@@ -22924,6 +22960,24 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+const maxHeightOptions = Array.from({
+  length: 68
+}, (_, index) => {
+  const val = 5 + index;
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    key: index,
+    value: val
+  }, val, "\"");
+});
+const maxWidthOptions = Array.from({
+  length: 108
+}, (_, index) => {
+  const val = 5 + index;
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    key: index,
+    value: val
+  }, val, "\"");
+});
 function Logo({
   item
 }) {
@@ -23306,12 +23360,12 @@ function Logo({
     title: "Logo Width",
     value: width,
     onChange: e => setWidth(e.target.value),
-    options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_8__.maxWidthOptions
+    options: maxWidthOptions
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Logo Height",
     value: height,
     onChange: e => setHeight(e.target.value),
-    options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_8__.maxHeightOptions
+    options: maxHeightOptions
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Finishing",
     onChange: handleChangeFinishing,
@@ -24344,6 +24398,24 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+const maxHeightOptions = Array.from({
+  length: 36
+}, (_, index) => {
+  const val = 5 + index;
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    key: index,
+    value: val
+  }, val, "\"");
+});
+const maxWidthOptions = Array.from({
+  length: 36
+}, (_, index) => {
+  const val = 5 + index;
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    key: index,
+    value: val
+  }, val, "\"");
+});
 function Logo({
   item
 }) {
@@ -24708,12 +24780,12 @@ function Logo({
     title: "Logo Width",
     value: width,
     onChange: e => setWidth(e.target.value),
-    options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_9__.maxWidthOptions
+    options: maxWidthOptions
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Logo Height",
     value: height,
     onChange: e => setHeight(e.target.value),
-    options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_9__.maxHeightOptions
+    options: maxHeightOptions
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_6__["default"], {
     ref: colorRef,
     title: "Return Color",
@@ -25744,6 +25816,24 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+const maxHeightOptions = Array.from({
+  length: 36
+}, (_, index) => {
+  const val = 5 + index;
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    key: index,
+    value: val
+  }, val, "\"");
+});
+const maxWidthOptions = Array.from({
+  length: 36
+}, (_, index) => {
+  const val = 5 + index;
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    key: index,
+    value: val
+  }, val, "\"");
+});
 function Logo({
   item
 }) {
@@ -26091,12 +26181,12 @@ function Logo({
     title: "Logo Width",
     value: width,
     onChange: e => setWidth(e.target.value),
-    options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_9__.maxWidthOptions
+    options: maxWidthOptions
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Logo Height",
     value: height,
     onChange: e => setHeight(e.target.value),
-    options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_9__.maxHeightOptions
+    options: maxHeightOptions
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_6__["default"], {
     ref: colorRef,
     title: "Return Color",

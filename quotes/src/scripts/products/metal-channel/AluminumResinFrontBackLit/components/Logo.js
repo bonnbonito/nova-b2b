@@ -23,8 +23,6 @@ import {
 import {
 	aluminumResinDepthOptions,
 	ledLightColors,
-	maxHeightOptions,
-	maxWidthOptions,
 	mountingDefaultOptions,
 } from '../../metalChannelOptions';
 
@@ -37,6 +35,34 @@ import {
 } from '../../../../utils/defaults';
 
 import { useAppContext } from '../../../../AppProvider';
+
+const maxHeightOptions = Array.from(
+	{
+		length: 39,
+	},
+	(_, index) => {
+		const val = 5 + index;
+		return (
+			<option key={index} value={val}>
+				{val}"
+			</option>
+		);
+	}
+);
+
+const maxWidthOptions = Array.from(
+	{
+		length: 39,
+	},
+	(_, index) => {
+		const val = 5 + index;
+		return (
+			<option key={index} value={val}>
+				{val}"
+			</option>
+		);
+	}
+);
 
 export function Logo({ item }) {
 	const { signage, setSignage, setMissing } = useAppContext();
