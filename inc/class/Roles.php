@@ -71,6 +71,7 @@ class Roles {
 	}
 
 	public function add_contact_methods( $contact_methods, $user ) {
+		$contact_methods['additional_order_email']   = __( 'Order Email', 'nova' );
 		$contact_methods['additional_billing_email'] = __( 'Billing Email', 'nova' );
 		return $contact_methods;
 	}
@@ -78,6 +79,9 @@ class Roles {
 	public function save_additional_billing_email_field( $user_id ) {
 		if ( ! current_user_can( 'edit_user', $user_id ) ) {
 			return false;
+		}
+		if ( isset( $_POST['additional_order_email'] ) ) {
+			update_user_meta( $user_id, 'additional_order_email', sanitize_email( $_POST['additional_order_email'] ) );
 		}
 		if ( isset( $_POST['additional_billing_email'] ) ) {
 			update_user_meta( $user_id, 'additional_billing_email', sanitize_email( $_POST['additional_billing_email'] ) );

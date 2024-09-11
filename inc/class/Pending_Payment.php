@@ -250,7 +250,7 @@ class Pending_Payment {
 		$original_total = get_post_meta( $post->ID, '_original_total', true );
 		$order_edit_url = admin_url( 'post.php?post=' . $order_id . '&action=edit' );
 
-		print_r( get_post_meta( $post->ID ) );
+		// print_r( get_post_meta( $post->ID ) );
 
 		?>
 <a href="<?php echo esc_url( $order_edit_url ); ?>" class="button button-primary">View Order</a>
@@ -283,6 +283,12 @@ class Pending_Payment {
 	}
 
 	public function pending_payment_order_email_content( $body_text, $order, $sent_to_admin, $plain_text, $email ) {
+		$key = $email->id;
+
+		if ( 'cancelled_order' === $key ) {
+			return $body_text;
+		}
+
 		$pending_id     = $order->get_meta( '_pending_id' );
 		$from_order_id  = $order->get_meta( '_from_order_id' );
 		$original_order = wc_get_order( $from_order_id );
@@ -375,12 +381,12 @@ class Pending_Payment {
 		$payment_url = $order->get_checkout_payment_url();
 
 		$first_name               = $order->get_billing_first_name();
-		$customer_email[]         = $order->get_billing_email();
+		$customer_email           = $order->get_billing_email();
 		$user_id                  = $order->get_user_id() ? $order->get_user_id() : 0;
 		$additional_billing_email = get_user_meta( $user_id, 'additional_billing_email', true );
 
 		if ( $additional_billing_email ) {
-			$customer_email[] = $additional_billing_email;
+			$customer_email = $additional_billing_email;
 		}
 
 		if ( ! $order ) {
@@ -471,12 +477,12 @@ class Pending_Payment {
 		$today = date( 'F d, Y' );
 
 		$first_name               = $order->get_billing_first_name();
-		$customer_email[]         = $order->get_billing_email();
+		$customer_email           = $order->get_billing_email();
 		$user_id                  = $order->get_user_id() ? $order->get_user_id() : 0;
 		$additional_billing_email = get_user_meta( $user_id, 'additional_billing_email', true );
 
 		if ( $additional_billing_email ) {
-			$customer_email[] = $additional_billing_email;
+			$customer_email = $additional_billing_email;
 		}
 
 		if ( ! $order ) {

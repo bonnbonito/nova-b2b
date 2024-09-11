@@ -45,6 +45,31 @@ class NovaEmails {
 		// add_action( 'wpo_wcpdf_after_item_meta', array( $this, 'display_signage_details' ), 20, 3 );
 		add_filter( 'wpo_wcpdf_order_items_data', array( $this, 'add_signage_to_invoice' ), 10, 3 );
 		add_action( 'dp_duplicate_post', array( $this, 'duplicate_post' ), 10, 2 );
+		// add_filter( 'woocommerce_order_get_billing_email', array( $this, 'custom_billing_email' ), 20, 2 );
+		add_filter( 'woocommerce_email_recipient_customer_completed_order', array( $this, 'custom_billing_email' ), 11, 2 );
+		add_filter( 'woocommerce_email_recipient_customer_processing_order', array( $this, 'custom_billing_email' ), 11, 2 );
+		add_filter( 'woocommerce_email_recipient_customer_on_hold_order', array( $this, 'custom_billing_email' ), 11, 2 );
+		add_filter( 'woocommerce_email_recipient_customer_refunded_order', array( $this, 'custom_billing_email' ), 11, 2 );
+	}
+
+	public function custom_billing_email( $recipient, $order ) {
+
+		if ( ! is_a( $order, 'WC_Order' ) ) {
+			return $recipient;
+		}
+
+		// Get customer ID and check if there is an additional email.
+		$customer_id = $order->get_customer_id();
+		if ( $customer_id ) {
+			$additional_email = get_user_meta( $customer_id, 'additional_order_email', true );
+
+			// If 'additional_order_email' exists and is a valid email, set it as the recipient.
+			if ( ! empty( $additional_email ) && is_email( $additional_email ) ) {
+				return $additional_email; // Replaces the original recipient.
+			}
+		}
+
+		return $recipient; // If no additional email, keep the original recipient.
 	}
 
 	public function duplicate_post( $new_post_id, $post ) {
@@ -331,14 +356,17 @@ class NovaEmails {
 	}
 
 	public function fully_paid_payment_processing_email( $body_text, $order, $sent_to_admin, $plain_text, $email ) {
+
 		$order_id = $order->get_id();
 		$key      = $email->id;
+
+		if ( 'customer_completed_order' !== $key ) {
+			return $body_text;
+		}
 
 		$payment_select = get_post_meta( $order_id, '_payment_select', true );
 
 		if ( $this->is_payment_order( $order_id ) && $payment_select && $key === 'customer_completed_order' ) {
-
-			$pending = \NOVA_B2B\Pending_Payment::get_instance();
 
 			$original_order_id   = $order->get_meta( '_from_order_id' );
 			$original_order      = wc_get_order( $original_order_id );
