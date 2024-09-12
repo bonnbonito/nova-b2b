@@ -23,14 +23,26 @@ class Order_History {
 	public function __construct() {
 		add_action( 'woocommerce_account_invoice-history_endpoint', array( $this, 'account_statement_content' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-		add_filter( 'woocommerce_my_account_my_orders_actions', array( $this, 'remove_cancel_if_payment_order' ), 10, 2 );
+		add_filter( 'woocommerce_my_account_my_orders_actions', array( $this, 'order_actions' ), 10, 2 );
 	}
 
-	public function remove_cancel_if_payment_order( $actions, $order ) {
-		$from_order_id = $order->get_meta( '_from_order_id' );
+	public function order_actions( $actions, $order ) {
+		$from_order_id    = $order->get_meta( '_from_order_id' );
+		$payment_order_id = $order->get_meta( '_adjusted_duplicate_order_id' );
 		if ( $from_order_id ) {
 			unset( $actions['cancel'] );
 		}
+
+		if ( $payment_order_id ) {
+			$payment_order = wc_get_order( $payment_order_id );
+			if ( $payment_order->get_status() == 'pending' ) {
+				$actions['pay'] = array(
+					'url'  => $payment_order->get_checkout_payment_url(),
+					'name' => __( 'Pay', 'woocommerce' ),
+				);
+			}
+		}
+
 		return $actions;
 	}
 
@@ -109,6 +121,8 @@ class Order_History {
 
 			$order_total = $order->get_total();
 
+			$payment_order_object = null;
+
 			if ( $order->get_meta( '_adjusted_duplicate_order_id' ) ) {
 				$payment_order        = $order->get_meta( '_adjusted_duplicate_order_id' );
 				$payment_order_object = wc_get_order( $payment_order );
@@ -150,17 +164,19 @@ class Order_History {
 			}
 
 			$orders[] = array(
-				'id'           => $order->get_id(),
-				'order_number' => $order->get_order_number(),
-				'order_url'    => $order->get_view_order_url(),
-				'date'         => $order->get_date_created()->format( 'M d, Y' ),
-				'total'        => $total_with_currency,
-				'status'       => $order->get_status(),
-				'actions'      => $actions,
-				'order_total'  => $order_total,
-				'due_date'     => $due_date,
-				'is_overdue'   => $is_overdue,
+				'id'                   => $order->get_id(),
+				'order_number'         => $order->get_order_number(),
+				'order_url'            => $order->get_view_order_url(),
+				'date'                 => $order->get_date_created()->format( 'M d, Y' ),
+				'total'                => $total_with_currency,
+				'status'               => $order->get_status(),
+				'actions'              => $actions,
+				'order_total'          => $order_total,
+				'due_date'             => $due_date,
+				'is_overdue'           => $is_overdue,
+				'payment_order_status' => isset( $payment_order_object ) ? $payment_order_object->get_status() : '',
 			);
+
 		}
 		return $orders;
 	}

@@ -30,6 +30,10 @@ const metalThicknessOptions = [
 
 const fabricatedThicknessOptions = [
 	{
+		thickness: '0.5"',
+		value: '0.5',
+	},
+	{
 		thickness: '1"',
 		value: '1',
 	},
