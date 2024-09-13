@@ -889,11 +889,11 @@ class Pending_Payment {
 				echo '</td>';
 
 				echo '<td>';
-				echo '<form method="post" action="' . admin_url( 'admin-post.php' ) . '" onsubmit="return confirm(\'Are you sure you want to delete this order?\');">';
+				echo '<form method="post" action="' . admin_url( 'admin-post.php' ) . '" onsubmit="return confirm(\'Are you sure you want to delete the order #' . $order->get_order_number() . '?\');">';
 				echo '<input type="hidden" name="action" value="delete_pending_payment"/>';
 				echo '<input type="hidden" name="delete_order_id" value="' . esc_attr( $row['id'] ) . '"/>';
 				wp_nonce_field( 'delete_order_action', 'delete_order_nonce' );
-				echo '<input type="submit" class="button action delete" value="Delete"/>';
+				echo '<input type="submit" class="button action delete" value="Delete #' . $order->get_order_number() . '"/>';
 				echo '</form>';
 				echo '</td>';
 				echo '</tr>';
