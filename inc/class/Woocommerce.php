@@ -1076,6 +1076,11 @@ class Woocommerce {
 	public function debug_order_meta() {
 		global $pagenow, $post;
 
+		// If current user id is not 1, return
+		if ( get_current_user_id() !== 1 ) {
+			return;
+		}
+
 		// Ensure we are on the post edit screen
 		if ( 'post.php' !== $pagenow || 'shop_order' !== get_post_type() ) {
 			return;
