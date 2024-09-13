@@ -658,7 +658,8 @@ export function Logo({ item }) {
 			)}
 
 			<div className="quote-grid">
-				{color?.name == 'Custom Color' && (
+				{(color?.name == 'Custom Color' ||
+					returnColor?.name == 'Custom Color') && (
 					<div className="px-[1px] col-span-4">
 						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
 							Custom Color
