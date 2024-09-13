@@ -4,6 +4,9 @@ namespace NOVA_B2B;
 require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
 use WC;
+use WC_DateTime;
+use DateTime;
+use DateInterval;
 
 class Pending_Payment {
 	/**
@@ -51,6 +54,36 @@ class Pending_Payment {
 		add_action( 'save_post_shop_order', array( $this, 'save_is_overdue_metabox' ) );
 		add_filter( 'wpo_wcpdf_filename', array( $this, 'filter_filename' ), 99, 5 );
 		add_action( 'wpo_wcpdf_after_order_details', array( $this, 'etransfer_instructions' ), 10, 2 );
+		add_filter( 'woocommerce_email_enabled_customer_completed_order', array( $this, 'disable_completed_email' ), 10, 2 );
+		add_filter( 'woocommerce_order_get_date_completed', array( $this, 'modify_order_completed_date' ), 10, 2 );
+	}
+
+	public function modify_order_completed_date( $date_completed, $order ) {
+		// Check if the order has a custom field for manual delivered date
+		$manual_delivered_date = get_field( 'manual_delivered_date', $order->get_id() );
+
+		if ( ! empty( $manual_delivered_date ) ) {
+			// Convert the manual delivered date from d/m/Y to Y-m-d H:i:s format
+			$date_obj = \DateTime::createFromFormat( 'd/m/Y', $manual_delivered_date );
+
+			if ( $date_obj ) {
+				// Return the date as a WC_DateTime object in the required format
+				return new \WC_DateTime( $date_obj->format( 'Y-m-d H:i:s' ) );
+			}
+		}
+
+		// Otherwise, return the original completion date
+		return $date_completed;
+	}
+
+	public function disable_completed_email( $enabled, $order ) {
+		$manual_delivered_date = get_field( 'manual_delivered_date', $order->get_id() );
+
+		if ( ! empty( $manual_delivered_date ) ) {
+			return false; // Disable the email
+		}
+
+		return $enabled; // Keep the default behavior if field is not set
 	}
 
 	public function etransfer_instructions( $type, $order ) {
@@ -406,6 +439,8 @@ class Pending_Payment {
 		$currency          = $payment->currency;
 		$payment_type      = $payment->payment_select;
 
+		$manual_delivered_date = get_field( 'manual_delivered_date', $original_order_id );
+
 		$order          = wc_get_order( $payment_order_id );
 		$original_order = wc_get_order( $original_order_id );
 
@@ -496,11 +531,16 @@ class Pending_Payment {
 
 	public function send_payment_reminder_email( $payment ) {
 
-		$payment_type      = $payment->payment_select;
-		$payment_order_id  = $payment->payment_order;
-		$original_order_id = $payment->original_order;
-		$pending_total     = $payment->pending_total;
-		$currency          = $payment->currency;
+		$payment_type          = $payment->payment_select;
+		$payment_order_id      = $payment->payment_order;
+		$original_order_id     = $payment->original_order;
+		$pending_total         = $payment->pending_total;
+		$currency              = $payment->currency;
+		$manual_delivered_date = get_field( 'manual_delivered_date', $original_order_id );
+
+		if ( $manual_delivered_date ) {
+			return;
+		}
 
 		$order          = wc_get_order( $payment_order_id );
 		$original_order = wc_get_order( $original_order_id );
@@ -1042,6 +1082,8 @@ class Pending_Payment {
 		$pending_order = get_post_meta( $order_id, '_adjusted_duplicate_order_id', true );
 		$order         = wc_get_order( $order_id );
 
+		$manual_delivered_date = get_field( 'manual_delivered_date', $order_id );
+
 		$exists = $this->get_data_from_order( $order_id );
 
 		if ( $exists ) {
@@ -1062,7 +1104,24 @@ class Pending_Payment {
 			$order->set_total( $deposit );
 			$order->save();
 
-			$future_date = date( 'Y-m-d H:i:s', strtotime( '+' . $days . ' days' ) );
+			/** if manual_delivered_date is set, use it */
+			if ( $manual_delivered_date ) {
+				// Create a DateTime object from the d/m/Y format
+				$date_obj = \DateTime::createFromFormat( 'd/m/Y', $manual_delivered_date );
+
+				// Format it into a WooCommerce-compatible date string (Y-m-d H:i:s)
+				if ( $date_obj ) {
+					// add $days to the DateTime object
+					$date_obj->add( new \DateInterval( 'P' . $days . 'D' ) );
+					$future_date = $date_obj->format( 'Y-m-d H:i:s' );
+				} else {
+					// Fallback if conversion fails (use current date)
+					$future_date = date( 'Y-m-d H:i:s', strtotime( '+' . $days . ' days' ) );
+				}
+			} else {
+				// If no manual delivered date, use the current date
+				$future_date = date( 'Y-m-d H:i:s', strtotime( '+' . $days . ' days' ) );
+			}
 
 			$data = array(
 				'time'           => current_time( 'mysql' ),
@@ -1103,14 +1162,6 @@ class Pending_Payment {
 
 			add_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
 
-			/*
-			Stop sending the shipped email to admin
-			$headers       = array( 'Content-Type: text/html; charset=UTF-8' );
-			$role_instance = \NOVA_B2B\Roles::get_instance();
-
-			$this->admin_notification_shipped_email( $order, $role_instance, $headers );
-			*/
-
 		}
 	}
 
@@ -1142,7 +1193,23 @@ class Pending_Payment {
 
 		$pending_order = get_post_meta( $order_id, '_adjusted_duplicate_order_id', true );
 
-		$shipped_date = $completed_date_obj->date( 'F d, Y' );
+		$manual_shipped = get_field( 'manual_delivered_date', $order_id );
+
+		if ( $manual_shipped ) {
+			// Create a DateTime object from the d/m/Y format
+			$date_obj = \DateTime::createFromFormat( 'd/m/Y', $manual_shipped );
+
+			// Format it into a WooCommerce-compatible date string (Y-m-d H:i:s)
+			if ( $date_obj ) {
+				$shipped_date = $date_obj->format( 'F d, Y' );
+			} else {
+				// Fallback if conversion fails (use completed date)
+				$shipped_date = $completed_date_obj->date( 'F d, Y' );
+			}
+		} else {
+			// If no manual shipped date, use the completed date
+			$shipped_date = $completed_date_obj->date( 'F d, Y' );
+		}
 
 		$payment_type = $order->get_meta( '_payment_select' );
 

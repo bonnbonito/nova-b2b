@@ -694,6 +694,12 @@ class Woocommerce {
 		if ( $payment_order ) {
 			return false;
 		}
+
+		$manually_shipped = get_field( 'manual_delivered_date', $order_id );
+		if ( $manually_shipped ) {
+			return false;
+		}
+
 		return $export;
 	}
 
