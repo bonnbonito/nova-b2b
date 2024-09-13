@@ -821,7 +821,7 @@ class Pending_Payment {
 		echo '<table class="wp-list-table widefat fixed striped">';
 		echo '<thead>';
 		echo '<tr>';
-		echo '<th>Name</th>';
+		echo '<th>Customer</th>';
 		echo '<th>Order</th>';
 		echo '<th>Payment Order</th>';
 		echo '<th>Deposit</th>';
@@ -844,8 +844,11 @@ class Pending_Payment {
 					$class = ' over';
 				}
 
+				$order         = wc_get_order( $row['payment_order'] );
+				$customer_name = $order->get_billing_first_name() . ' ' . $order->get_billing_last_name();
+
 				echo '<tr>';
-				echo "<td>{$row['name']}</td>";
+				echo "<td>{$customer_name}</td>";
 				$order_edit_link1 = admin_url( 'post.php?post=' . absint( $row['original_order'] ) . '&action=edit' );
 				echo "<td><a href='{$order_edit_link1}'>#{$row['original_order']}</a></td>";
 				$order_edit_link = admin_url( 'post.php?post=' . absint( $row['payment_order'] ) . '&action=edit' );
