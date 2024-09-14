@@ -156,6 +156,25 @@ $woo_instance = \NOVA_B2B\Woocommerce::get_instance();
 		<tr class="payment-selection">
 			<th class="px-4 py-8">Payment type</th>
 			<td colspan="2" class="px-4 py-8">
+				<?php
+				$chosen = WC()->session->get( 'deposit_chosen' );
+				$chosen = empty( $chosen ) ? WC()->checkout->get_value( 'deposit' ) : $chosen;
+				$chosen = empty( $chosen ) ? '100' : $chosen;
+
+				$args = array(
+					'type'    => 'radio',
+					'class'   => array( 'form-row-wide', 'update_totals_on_change' ),
+					'options' => array(
+						'100' => 'Pay 100%',
+						'30'  => 'Pay 30% Deposit',
+						'0'   => 'Net 30',
+					),
+					'default' => $chosen,
+				);
+
+				echo '<p><b>Payment Option</b></p>';
+				woocommerce_form_field( 'deposit', $args, $chosen );
+				?>
 				<ul id="payment-select">
 					<li>
 						<label for="payment_0" class="block justify-end p-3 border rounded-md w-full max-w-sm">

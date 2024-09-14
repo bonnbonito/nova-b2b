@@ -438,6 +438,7 @@ class NovaEmails {
 	}
 
 	public function to_admin_customer_rep_emails() {
+
 		if ( get_field( 'testing_mode', 'option' ) ) {
 			return array( 'bonn.j@hineon.com' );
 		}
@@ -613,6 +614,7 @@ class NovaEmails {
 			$role_instance->send_email( $to_admin, $admin_subject, $to_admin_message, $headers, array() );
 			if ( ! $from_admin ) {
 				$role_instance->send_email( 'joshua@hineon.com', $josh_subject, $to_admin_message, $headers, array() );
+				$role_instance->send_email( 'quotes@novasignage.com', $admin_subject, $to_admin_message, $headers, array() );
 			}
 		} else {
 			error_log( 'NOVA_B2B\Roles::get_instance() returned null' );
