@@ -33,6 +33,9 @@ class Deposit {
 		add_action( 'woocommerce_checkout_update_order_review', array( $this, 'handle_deposit_option' ) );
 		add_filter( 'woocommerce_calculated_total', array( $this, 'apply_deposit_percentage' ), 9999, 2 );
 		add_action( 'woocommerce_checkout_order_processed', array( $this, 'insert_payment_record' ), 20, 3 );
+		add_filter( 'woocommerce_order_needs_payment', array( $this, 'order_needs_payment' ), 10, 2 );
+		add_filter( 'woocommerce_order_get_date_paid', array( $this, 'order_get_date_paid' ), 10, 2 );
+		add_filter( 'wc_order_is_editable', array( $this, 'order_is_editable' ), 10, 2 );
 	}
 
 	/**
@@ -61,6 +64,8 @@ class Deposit {
 	public function insert_payment_record( $order_id, $posted_data, $order ) {
 
 		$deposit_chosen = WC()->session->get( 'deposit_chosen' );
+		$second_payment = WC()->session->get( 'second_payment' );
+
 		if ( ! $deposit_chosen || $deposit_chosen == '0' ) {
 			return;
 		}
@@ -112,6 +117,10 @@ class Deposit {
 			WC()->session->__unset( 'pending_amount' );
 
 			$order->calculate_totals();
+		}
+
+		if ( $second_payment ) {
+			update_post_meta( $order_id, 'needs_payment', false );
 		}
 	}
 
@@ -191,5 +200,26 @@ class Deposit {
 		$new_total = $total * $deposit;
 		WC()->session->set( 'pending_amount', $total - $new_total );
 		return $new_total;
+	}
+
+	public function order_needs_payment( $needs_payment, $order ) {
+		if ( $order->get_meta( 'needs_payment' ) ) {
+			return true;
+		}
+		return $needs_payment;
+	}
+
+	public function order_get_date_paid( $date_paid, $order ) {
+		if ( $order->get_meta( 'needs_payment' ) ) {
+			return false;
+		}
+		return $date_paid;
+	}
+
+	public function order_is_editable( $editable, $order ) {
+		if ( $order->get_meta( 'needs_payment' ) && $order->get_status() !== 'completed' ) {
+			return true;
+		}
+		return $editable;
 	}
 }
