@@ -27,11 +27,12 @@ class Deposit {
 	public function __construct() {
 		// Hook to initialize payment functionality
 		add_action( 'init', array( $this, 'create_payment_table' ) );
-		add_action( 'woocommerce_before_thankyou', array( $this, 'insert_payment_record' ) );
+		// add_action( 'woocommerce_before_thankyou', array( $this, 'insert_payment_record' ) );
 		add_action( 'woocommerce_order_after_calculate_totals', array( $this, 'adjust_order_total_based_on_payments' ), 9999, 2 );
 		add_action( 'woocommerce_admin_order_totals_after_total', array( $this, 'display_payments_in_admin' ) );
 		add_action( 'woocommerce_checkout_update_order_review', array( $this, 'handle_deposit_option' ) );
 		add_filter( 'woocommerce_calculated_total', array( $this, 'apply_deposit_percentage' ), 9999, 2 );
+		add_action( 'woocommerce_checkout_order_processed', array( $this, 'insert_payment_record' ), 20, 3 );
 	}
 
 	/**
@@ -57,7 +58,13 @@ class Deposit {
 	/**
 	 * Insert payment record into the custom table on WooCommerce thank you page
 	 */
-	public function insert_payment_record( $order_id ) {
+	public function insert_payment_record( $order_id, $posted_data, $order ) {
+
+		$deposit_chosen = WC()->session->get( 'deposit_chosen' );
+		if ( ! $deposit_chosen || $deposit_chosen == '0' ) {
+			return;
+		}
+
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'order_payments';
 
@@ -66,7 +73,20 @@ class Deposit {
 			return;
 		}
 
-		$wpdb->insert(
+		/** Check if order_id is already in the table */
+		$order_id_in_table = $wpdb->get_var(
+			"
+        SELECT order_id
+        FROM {$table_name}
+        WHERE order_id = {$order_id}
+    "
+		);
+
+		if ( $order_id_in_table ) {
+			return;
+		}
+
+		$inserted = $wpdb->insert(
 			$table_name,
 			array(
 				'order_id'     => $order_id,
@@ -76,7 +96,23 @@ class Deposit {
 			array( '%d', '%f', '%s' )
 		);
 
-		$order->calculate_totals();
+		if ( $inserted ) {
+
+			$deposit_amount = WC()->session->get( 'deposit_amount' );
+			$pending_amount = WC()->session->get( 'pending_amount' );
+
+			update_post_meta( $order_id, '_deposit_chosen', $deposit_chosen );
+			update_post_meta( $order_id, '_deposit_chosen_title', get_the_title( $deposit_chosen ) );
+			update_post_meta( $order_id, '_pending_amount', $pending_amount );
+			update_post_meta( $order_id, '_deposit_amount', $deposit_amount );
+			update_post_meta( $order_id, 'needs_payment', true );
+
+			WC()->session->__unset( 'deposit_chosen' );
+			WC()->session->__unset( 'deposit_amount' );
+			WC()->session->__unset( 'pending_amount' );
+
+			$order->calculate_totals();
+		}
 	}
 
 	/**
@@ -102,7 +138,7 @@ class Deposit {
 			$order->set_total( $new_total );
 
 			if ( $new_total > 0 ) {
-				$order->set_status( 'pending' );
+				// $order->set_status( 'pending' );
 			}
 			$order->save();
 		}
@@ -137,18 +173,23 @@ class Deposit {
 	 */
 	public function handle_deposit_option( $posted_data ) {
 		parse_str( $posted_data, $output );
-		if ( isset( $output['deposit'] ) ) {
-			WC()->session->set( 'deposit_chosen', $output['deposit'] );
-		}
+		$deposit_chosen = isset( $output['deposit_chosen'] ) ? $output['deposit_chosen'] : 0;
+		WC()->session->set( 'deposit_chosen', $deposit_chosen );
 	}
 
 	/**
 	 * Apply deposit percentage on total
 	 */
 	public function apply_deposit_percentage( $total, $cart ) {
-		if ( ! WC()->session->get( 'deposit_chosen' ) || WC()->session->get( 'deposit_chosen' ) == 'full' ) {
+		$payment_select = WC()->session->get( 'deposit_chosen' );
+		if ( ! $payment_select || $payment_select == '0' ) {
+			WC()->session->set( 'deposit_amount', 0 );
+			WC()->session->set( 'pending_amount', 0 );
 			return $total;
 		}
-		return $total * 0.3;
+		$deposit   = get_field( 'deposit', $payment_select ) / 100;
+		$new_total = $total * $deposit;
+		WC()->session->set( 'pending_amount', $total - $new_total );
+		return $new_total;
 	}
 }
