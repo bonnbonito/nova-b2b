@@ -30,6 +30,11 @@ import {
 	STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
 
+const newMetalFinishColors = [
+	{ name: 'Aluminum Brushed', color: '#ddd' },
+	...metalFinishColors,
+];
+
 import { calculateLetterPrice, spacerPricing } from '../../../../utils/Pricing';
 
 import { useAppContext } from '../../../../AppProvider';
@@ -188,7 +193,7 @@ export const Letters = ({ item }) => {
 	};
 
 	const handleChangeMetalLaminate = (e) => {
-		const selectedLaminate = metalFinishColors.find(
+		const selectedLaminate = newMetalFinishColors.find(
 			(laminate) => laminate.name === e.target.value
 		);
 		// Assuming setMetalLaminate and setColor are state setter functions
@@ -649,7 +654,7 @@ export const Letters = ({ item }) => {
 				<Dropdown
 					title="Metal Laminate"
 					onChange={handleChangeMetalLaminate}
-					options={metalFinishColors.map((laminate) => (
+					options={newMetalFinishColors.map((laminate) => (
 						<option
 							value={laminate.name}
 							selected={laminate.name === item.metalLaminate}

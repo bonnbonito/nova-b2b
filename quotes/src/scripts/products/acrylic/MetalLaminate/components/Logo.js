@@ -35,6 +35,11 @@ import {
 	metalFinishColors,
 } from '../../../../utils/ColorOptions';
 
+const newMetalFinishColors = [
+	{ name: 'Aluminum Brushed', color: '#ddd' },
+	...metalFinishColors,
+];
+
 export function Logo({ item }) {
 	const { signage, setSignage, setMissing } = useAppContext();
 
@@ -538,7 +543,7 @@ export function Logo({ item }) {
 				<Dropdown
 					title="Metal Laminate"
 					onChange={handleChangeMetalLaminate}
-					options={metalFinishColors.map((laminate) => (
+					options={newMetalFinishColors.map((laminate) => (
 						<option
 							value={laminate.name}
 							selected={laminate.name === metalLaminate}
