@@ -29,7 +29,8 @@ class Pending_Payment {
 	 */
 	public function __construct() {
 		add_action( 'after_setup_theme', array( $this, 'create_custom_table' ) );
-		add_action( 'woocommerce_order_status_completed', array( $this, 'insert_pending_payment' ) );
+		add_action( 'after_setup_theme', array( $this, 'create_custom_table_old' ) );
+		add_action( 'woocommerce_order_status_completed', array( $this, 'insert_pending_payment_old' ) );
 		add_action( 'woocommerce_order_status_completed', array( $this, 'change_pending_status' ) );
 		add_action( 'woocommerce_order_status_completed', array( $this, 'update_user_meta_overdue_orders' ) );
 		// add_action( 'woocommerce_order_status_completed', array( $this, 'test_note' ) );
@@ -139,9 +140,10 @@ class Pending_Payment {
 	public function add_is_overdue_metabox() {
 		global $post;
 
-		$from_order_id = get_post_meta( $post->ID, '_from_order_id', true );
+		$from_order_id  = get_post_meta( $post->ID, '_from_order_id', true );
+		$deposit_chosen = get_post_meta( $post->ID, '_deposit_chosen', true );
 
-		if ( ! $from_order_id ) {
+		if ( ! $from_order_id && ! $deposit_chosen ) {
 			// If it doesn't, don't display the metabox
 			return;
 		}
@@ -160,7 +162,9 @@ class Pending_Payment {
 
 		$from_order_id = get_post_meta( $post->ID, '_from_order_id', true );
 
-		if ( ! $from_order_id ) {
+		$deposit_chosen = get_post_meta( $post->ID, '_deposit_chosen', true );
+
+		if ( ! $from_order_id || ! $deposit_chosen ) {
 			// If it doesn't, don't display the metabox
 			return;
 		}
@@ -968,8 +972,34 @@ class Pending_Payment {
 		}
 	}
 
-
 	public function create_custom_table() {
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'nova_pending_payments';  // Prefixing the table name is a good practice
+
+		$charset_collate = $wpdb->get_charset_collate();
+
+		$sql = "CREATE TABLE $table_name (
+			id mediumint(9) NOT NULL AUTO_INCREMENT,
+			time datetime DEFAULT NULL,
+			name tinytext NOT NULL,
+			order_id mediumint(9) NOT NULL,
+			deposit varchar(55) NOT NULL,
+			pending_total varchar(55) NOT NULL,
+			total_amount varchar(55) NOT NULL,
+			currency varchar(10) NOT NULL,
+			payment_date datetime DEFAULT NULL,
+			reminder_sent varchar(10) NOT NULL,
+			reminder_sent_date varchar(55) NOT NULL,
+			payment_select varchar(10) NOT NULL,
+			payment_status varchar(55) NOT NULL,
+			PRIMARY KEY  (id)
+		) $charset_collate;";
+
+		dbDelta( $sql );
+	}
+
+
+	public function create_custom_table_old() {
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'nova_pendings';  // Prefixing the table name is a good practice
 
@@ -996,50 +1026,43 @@ class Pending_Payment {
 		dbDelta( $sql );
 	}
 
-	public function insert_data( $data, $format ) {
+	public function insert_data( $data, $format, $table_name = 'nova_pendings' ) {
 		global $wpdb;
-		$table_name = $wpdb->prefix . 'nova_pendings';
-		$result     = $wpdb->insert( $table_name, $data, $format );
+		$result = $wpdb->insert( $table_name, $data, $format );
 		return $result !== false ? $wpdb->insert_id : false;
 	}
 
-	public function get_data( $id ) {
+	public function get_data( $id, $table_name = 'nova_pendings' ) {
 		global $wpdb;
-		$table_name = $wpdb->prefix . 'nova_pendings';
-		$query      = $wpdb->prepare( "SELECT * FROM $table_name WHERE id = %d", $id );
+		$query = $wpdb->prepare( "SELECT * FROM $table_name WHERE id = %d", $id );
 		return $wpdb->get_row( $query );
 	}
 
-	public function get_data_from_order( $order_id ) {
+	public function get_data_from_order( $order_id, $table_name = 'nova_pendings' ) {
 		global $wpdb;
-		$table_name = $wpdb->prefix . 'nova_pendings';
-		$query      = $wpdb->prepare( "SELECT COUNT(*) FROM $table_name WHERE original_order = %d", $order_id );
+		$query = $wpdb->prepare( "SELECT COUNT(*) FROM $table_name WHERE original_order = %d", $order_id );
 		return $wpdb->get_var( $query );
 	}
 
-	public function get_payment_id_from_original_order( $order_id ) {
+	public function get_payment_id_from_original_order( $order_id, $table_name = 'nova_pendings' ) {
 		global $wpdb;
-		$table_name = $wpdb->prefix . 'nova_pendings';
-		$query      = $wpdb->prepare( "SELECT * FROM $table_name WHERE original_order = %d", $order_id );
+		$query = $wpdb->prepare( "SELECT * FROM $table_name WHERE original_order = %d", $order_id );
 		return $wpdb->get_row( $query );
 	}
 
-	public function get_payment_date( $order_id ) {
+	public function get_payment_date( $order_id, $table_name = 'nova_pendings' ) {
 		global $wpdb;
-		$table_name = $wpdb->prefix . 'nova_pendings';
-		$query      = $wpdb->prepare( "SELECT * FROM $table_name WHERE original_order = %d", $order_id );
+		$query = $wpdb->prepare( "SELECT * FROM $table_name WHERE original_order = %d", $order_id );
 		return $wpdb->get_row( $query );
 	}
 
-	public function update_data( $id, $data ) {
+	public function update_data( $id, $data, $table_name = 'nova_pendings' ) {
 		global $wpdb;
-		$table_name = $wpdb->prefix . 'nova_pendings';
 		return $wpdb->update( $table_name, $data, array( 'id' => $id ) );
 	}
 
-	public function delete_data( $id ) {
+	public function delete_data( $id, $table_name = 'nova_pendings' ) {
 		global $wpdb;
-		$table_name = $wpdb->prefix . 'nova_pendings';
 		return $wpdb->delete( $table_name, array( 'id' => $id ), array( '%d' ) );
 	}
 
@@ -1080,6 +1103,93 @@ class Pending_Payment {
 		}
 	}
 
+
+	public function insert_pending_payment_old( $order_id ) {
+		$pending_order = get_post_meta( $order_id, '_adjusted_duplicate_order_id', true );
+		$order         = wc_get_order( $order_id );
+
+		$manual_delivered_date = get_field( 'manual_delivered_date', $order_id );
+
+		$exists = $this->get_data_from_order( $order_id );
+
+		if ( $exists ) {
+			return;
+		}
+
+		if ( $pending_order ) {
+			$order          = wc_get_order( $order_id );
+			$original_total = get_post_meta( $order_id, '_original_total', true );
+			$payment_select = get_post_meta( $order_id, '_payment_select', true ) ? (int) get_post_meta( $order_id, '_payment_select', true ) : '';
+			$pending_total  = get_post_meta( $order_id, '_pending_payment', true );
+			$days           = get_field( 'days_after_shipping', $payment_select ) ? get_field( 'days_after_shipping', $payment_select ) : 0;
+			$currency       = $order->get_currency();
+			$payment_order  = get_post_meta( $order_id, '_adjusted_duplicate_order_id', true );
+			$parent_order   = $order->get_ID();
+			$deposit        = get_post_meta( $order_id, '_deposit_total', true );
+
+			$order->set_total( $deposit );
+			$order->save();
+
+			/** if manual_delivered_date is set, use it */
+			if ( $manual_delivered_date ) {
+				// Create a DateTime object from the d/m/Y format
+				$date_obj = \DateTime::createFromFormat( 'd/m/Y', $manual_delivered_date );
+
+				// Format it into a WooCommerce-compatible date string (Y-m-d H:i:s)
+				if ( $date_obj ) {
+					// add $days to the DateTime object
+					$date_obj->add( new \DateInterval( 'P' . $days . 'D' ) );
+					$future_date = $date_obj->format( 'Y-m-d H:i:s' );
+				} else {
+					// Fallback if conversion fails (use current date)
+					$future_date = date( 'Y-m-d H:i:s', strtotime( '+' . $days . ' days' ) );
+				}
+			} else {
+				// If no manual delivered date, use the current date
+				$future_date = date( 'Y-m-d H:i:s', strtotime( '+' . $days . ' days' ) );
+			}
+
+			$data = array(
+				'time'           => current_time( 'mysql' ),
+				'name'           => 'Pending payment for Order #' . $order_id,
+				'original_order' => $parent_order,
+				'payment_order'  => $payment_order,
+				'deposit'        => $deposit,
+				'pending_total'  => $pending_total,
+				'original_total' => $original_total,
+				'currency'       => $currency,
+				'payment_date'   => $future_date,
+				'payment_select' => $payment_select,
+				'payment_status' => 'Pending',
+			);
+
+			// Format array
+			$format = array(
+				'%s',
+				'%s',
+				'%d',
+				'%d',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%d',
+				'%s',
+			);
+
+			$inserted_id = $this->insert_data( $data, $format );
+
+			update_post_meta( $pending_order, '_pending_id', $inserted_id );
+			delete_post_meta( $pending_order, '_hide_order' );
+			update_post_meta( $order_id, '_hide_order', true );
+
+			$this->check_pending_payments();
+
+			add_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
+
+		}
+	}
 
 	public function insert_pending_payment( $order_id ) {
 		$pending_order = get_post_meta( $order_id, '_adjusted_duplicate_order_id', true );

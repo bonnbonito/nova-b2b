@@ -36,6 +36,8 @@ class Deposit {
 		add_filter( 'woocommerce_order_needs_payment', array( $this, 'order_needs_payment' ), 10, 2 );
 		add_filter( 'woocommerce_order_get_date_paid', array( $this, 'order_get_date_paid' ), 10, 2 );
 		add_filter( 'wc_order_is_editable', array( $this, 'order_is_editable' ), 10, 2 );
+		add_filter( 'woocommerce_get_order_item_totals', array( $this, 'deposit_insert_order_total_row' ), 90, 2 );
+		add_filter( 'woocommerce_order_is_paid', array( $this, 'order_is_paid' ), 10, 2 );
 	}
 
 	/**
@@ -209,6 +211,14 @@ class Deposit {
 		return $needs_payment;
 	}
 
+	public function order_is_paid( $is_paid, $order ) {
+		$needs_payment = $order->get_meta( 'needs_payment' );
+		if ( $needs_payment ) {
+			return false;
+		}
+		return $is_paid;
+	}
+
 	public function order_get_date_paid( $date_paid, $order ) {
 		if ( $order->get_meta( 'needs_payment' ) ) {
 			return false;
@@ -221,5 +231,35 @@ class Deposit {
 			return true;
 		}
 		return $editable;
+	}
+
+	public function deposit_insert_order_total_row( $total_rows, $order ) {
+		$deposit_title = get_post_meta( $order->get_id(), '_deposit_chosen_title', true );
+		if ( $deposit_title ) {
+			$deposit_amount = get_post_meta( $order->get_id(), '_deposit_amount', true );
+			$new_rows       = array();
+
+			foreach ( $total_rows as $key => $total ) {
+				// Insert the deposit details before the order total
+				if ( 'order_total' === $key ) {
+					// Add deposit title and amount rows
+					$new_rows['deposit_title']  = array(
+						'label' => __( 'Payment Type:', 'nova-b2b' ),
+						'value' => $deposit_title,
+					);
+					$new_rows['deposit_amount'] = array(
+						'label' => __( 'Deposit:', 'nova-b2b' ),
+						'value' => '-' . wc_price( $deposit_amount, array( 'currency' => $order->get_currency() ) ),
+					);
+				}
+
+				// Always add the existing rows
+				$new_rows[ $key ] = $total;
+			}
+
+			return $new_rows;
+		}
+
+		return $total_rows;
 	}
 }

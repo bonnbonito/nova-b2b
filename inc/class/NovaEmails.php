@@ -22,9 +22,11 @@ class NovaEmails {
 	 * Class Constructor.
 	 */
 	public function __construct() {
+		add_filter( 'kadence_woomail_order_body_text', array( $this, 'pending_payment_processing_email_old' ), 40, 5 );
 		add_filter( 'kadence_woomail_order_body_text', array( $this, 'pending_payment_processing_email' ), 40, 5 );
 		add_filter( 'kadence_woomail_order_body_text', array( $this, 'complete_payment_processing_email' ), 41, 5 );
 		add_filter( 'kadence_woomail_order_body_text', array( $this, 'fully_paid_payment_processing_email' ), 42, 5 );
+		add_filter( 'woocommerce_email_additional_content_customer_processing_order', array( $this, 'pending_payment_additional_content_old' ), 40, 3 );
 		add_filter( 'woocommerce_email_additional_content_customer_processing_order', array( $this, 'pending_payment_additional_content' ), 40, 3 );
 		add_filter( 'woocommerce_email_additional_content_customer_completed_order', array( $this, 'complete_payment_additional_content' ), 41, 3 );
 		add_filter( 'woocommerce_email_heading_customer_completed_order', array( $this, 'complete_payment_heading' ), 41, 3 );
@@ -178,7 +180,7 @@ class NovaEmails {
 		return $subject;
 	}
 
-	public function pending_payment_additional_content( $additional_content, $order, $email ) {
+	public function pending_payment_additional_content_old( $additional_content, $order, $email ) {
 		$order_id         = $order->get_id();
 		$payment_order_id = get_post_meta( $order_id, '_adjusted_duplicate_order_id', true );
 		$payment_order    = wc_get_order( $payment_order_id );
@@ -194,6 +196,23 @@ class NovaEmails {
 			$additional_content = $processing_email['additional_content'] ? $processing_email['additional_content'] : $additional_content;
 			$additional_content = str_replace( '{payment_link}', $payment_order->get_checkout_payment_url(), $additional_content );
 		}
+
+		return $additional_content;
+	}
+
+	public function pending_payment_additional_content( $additional_content, $order, $email ) {
+		$order_id = $order->get_id();
+
+		$deposit_chosen = get_post_meta( $order_id, '_deposit_chosen', true );
+		$needs_payment  = get_post_meta( $order_id, 'needs_payment', true );
+
+		if ( ! $deposit_chosen && ! $needs_payment ) {
+			return $additional_content;
+		}
+
+		$processing_email   = get_field( 'processing_email', $deposit_chosen );
+		$additional_content = $processing_email['additional_content'] ? $processing_email['additional_content'] : $additional_content;
+		$additional_content = str_replace( '{payment_link}', $order->get_checkout_payment_url(), $additional_content );
 
 		return $additional_content;
 	}
@@ -264,7 +283,7 @@ class NovaEmails {
 		return $paid_email['additional_content'] ? $paid_email['additional_content'] : $additional_content;
 	}
 
-	public function pending_payment_processing_email( $body_text, $order, $sent_to_admin, $plain_text, $email ) {
+	public function pending_payment_processing_email_old( $body_text, $order, $sent_to_admin, $plain_text, $email ) {
 		$order_id = $order->get_id();
 		$key      = $email->id;
 
@@ -292,6 +311,35 @@ class NovaEmails {
 			$body_text = str_replace( '{customer_company}', $order->get_billing_company(), $body_text );
 			$body_text = str_replace( '{customer_email}', $order->get_billing_email(), $body_text );
 			$body_text = str_replace( '{payment_link}', $payment_order->get_checkout_payment_url(), $body_text );
+		}
+		return $body_text;
+	}
+
+	public function pending_payment_processing_email( $body_text, $order, $sent_to_admin, $plain_text, $email ) {
+		$order_id = $order->get_id();
+		$key      = $email->id;
+
+		$deposit_chosen = get_post_meta( $order_id, '_deposit_chosen', true );
+		$needs_payment  = get_post_meta( $order_id, 'needs_payment', true );
+
+		if ( $needs_payment && $deposit_chosen && $key === 'customer_processing_order' ) {
+
+			$processing_email = get_field( 'processing_email', $deposit_chosen );
+
+			$body_text = $processing_email['body_text'];
+
+			$pending_amount = get_post_meta( $order_id, '_pending_amount', true );
+
+			$body_text = str_replace( '{order_date}', wc_format_datetime( $order->get_date_created() ), $body_text );
+			$body_text = str_replace( '{pending_payment}', $pending_amount, $body_text );
+			$body_text = str_replace( '{order_number}', $order->get_order_number(), $body_text );
+			$body_text = str_replace( '{customer_first_name}', $order->get_billing_first_name(), $body_text );
+			$body_text = str_replace( '{customer_name}', $order->get_billing_first_name(), $body_text );
+			$body_text = str_replace( '{customer_last_name}', $order->get_billing_last_name(), $body_text );
+			$body_text = str_replace( '{customer_full_name}', $order->get_formatted_billing_full_name(), $body_text );
+			$body_text = str_replace( '{customer_company}', $order->get_billing_company(), $body_text );
+			$body_text = str_replace( '{customer_email}', $order->get_billing_email(), $body_text );
+			$body_text = str_replace( '{payment_link}', $order->get_checkout_payment_url(), $body_text );
 		}
 		return $body_text;
 	}

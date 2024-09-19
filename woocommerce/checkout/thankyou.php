@@ -74,8 +74,41 @@ defined( 'ABSPATH' ) || exit;
 		</li>
 		<?php endif; ?>
 
+
+		<?php
+		$deposit_amount = $order->get_meta( '_deposit_amount' );
+		$deposit_title  = $order->get_meta( '_deposit_chosen_title' );
+		if ( isset( $deposit_title ) ) :
+			?>
+		<li class="woocommerce-order-overview__deposit-title deposit-title float-none">
+			<h5 class="font-title uppercase tracking-[1.8px] mb-0">
+				<?php esc_html_e( 'Payment Type:', 'woocommerce' ); ?>
+			</h5>
+			<span
+				class="text-[16px]>"><?php echo $deposit_title; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+		</li>
+		<li class="woocommerce-order-overview__deposit deposit float-none">
+			<h5 class="font-title uppercase tracking-[1.8px] mb-0"><?php esc_html_e( 'Deposit:', 'woocommerce' ); ?>
+			</h5>
+			<span
+				class="text-[16px]>">-<?php echo wc_price( $deposit_amount, array( 'currency' => $order->get_currency() ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+		</li>
+
+
+
+		<?php endif; ?>
+
 		<li class="woocommerce-order-overview__total total float-none">
-			<h5 class="font-title uppercase tracking-[1.8px] mb-0"><?php esc_html_e( 'Total:', 'woocommerce' ); ?></h5>
+			<h5 class="font-title uppercase tracking-[1.8px] mb-0">
+				<?php
+				$needs_payment = $order->get_meta( 'needs_payment' );
+				if ( $needs_payment ) :
+					?>
+					<?php esc_html_e( 'Total:', 'woocommerce' ); ?>
+				<?php else : ?>
+					<?php esc_html_e( 'Total:', 'woocommerce' ); ?>
+				<?php endif; ?>
+			</h5>
 			<span
 				class="text-[16px]>"><?php echo $order->get_formatted_order_total(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
 		</li>
