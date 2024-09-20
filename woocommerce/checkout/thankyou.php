@@ -78,7 +78,7 @@ defined( 'ABSPATH' ) || exit;
 		<?php
 		$deposit_amount = $order->get_meta( '_deposit_amount' );
 		$deposit_title  = $order->get_meta( '_deposit_chosen_title' );
-		if ( isset( $deposit_title ) ) :
+		if ( $deposit_title ) :
 			?>
 		<li class="woocommerce-order-overview__deposit-title deposit-title float-none">
 			<h5 class="font-title uppercase tracking-[1.8px] mb-0">

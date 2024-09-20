@@ -28,6 +28,8 @@ class Deposit {
 		// Hook to initialize payment functionality
 		add_action( 'init', array( $this, 'create_payment_table' ) );
 		// add_action( 'woocommerce_before_thankyou', array( $this, 'insert_payment_record' ) );
+		add_action( 'woocommerce_before_thankyou', array( $this, 'insert_nova_meta' ), 10, 1 );
+		// add_action( 'woocommerce_thankyou', array( $this, 'thank_you_actions' ), 10, 1 );
 		add_action( 'woocommerce_order_after_calculate_totals', array( $this, 'adjust_order_total_based_on_payments' ), 9999, 2 );
 		add_action( 'woocommerce_admin_order_totals_after_total', array( $this, 'display_payments_in_admin' ) );
 		add_action( 'woocommerce_checkout_update_order_review', array( $this, 'handle_deposit_option' ) );
@@ -38,7 +40,42 @@ class Deposit {
 		add_filter( 'wc_order_is_editable', array( $this, 'order_is_editable' ), 10, 2 );
 		add_filter( 'woocommerce_get_order_item_totals', array( $this, 'deposit_insert_order_total_row' ), 90, 2 );
 		add_filter( 'woocommerce_order_is_paid', array( $this, 'order_is_paid' ), 10, 2 );
+		add_action( 'nova_pending_payments_after_content', array( $this, 'pending_page_after_content' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_nova_output_style' ) );
+		add_action( 'woocommerce_order_status_completed', array( $this, 'needs_payment_update' ), 99 );
 	}
+
+	public function needs_payment_update( $order_id ) {
+		$order          = wc_get_order( $order_id );
+		$needs_payment  = $order->get_meta( 'needs_payment' );
+		$second_payment = $order->get_meta( 'second_payment' );
+		if ( $needs_payment ) {
+			delete_post_meta( $order_id, 'needs_payment' );
+		}
+	}
+
+
+	public function thank_you_actions( $order_id ) {
+	}
+
+	public function insert_nova_meta( $order_id ) {
+		$order = wc_get_order( $order_id );
+		if ( $order ) {
+			update_post_meta( $order_id, '_nova_new_order', true );
+		}
+	}
+
+	public function enqueue_nova_output_style() {
+		// Get the current screen
+		$screen = get_current_screen();
+
+		// Check if we're on the pending payments page
+		if ( isset( $screen->id ) && $screen->id === 'woocommerce_page_pending-payments' ) {
+			wp_enqueue_style( 'nova-table-data', get_stylesheet_directory_uri() . '/assets/css/table-data.css', array(), wp_get_theme()->get( 'Version' ) );
+
+		}
+	}
+
 
 	/**
 	 * Create custom payment table
@@ -60,13 +97,15 @@ class Deposit {
 		dbDelta( $sql );
 	}
 
+	public function second_payment_action( $order_id, $posted_data, $order ) {
+	}
+
 	/**
-	 * Insert payment record into the custom table on WooCommerce thank you page
+	 * Insert payment record into the custom table
 	 */
 	public function insert_payment_record( $order_id, $posted_data, $order ) {
 
 		$deposit_chosen = WC()->session->get( 'deposit_chosen' );
-		$second_payment = WC()->session->get( 'second_payment' );
 
 		if ( ! $deposit_chosen || $deposit_chosen == '0' ) {
 			return;
@@ -76,17 +115,25 @@ class Deposit {
 		$table_name = $wpdb->prefix . 'order_payments';
 
 		$order = wc_get_order( $order_id );
+
 		if ( $order->has_status( 'failed' ) ) {
 			return;
 		}
 
+		$second_payment = WC()->session->get( 'second_payment' );
+		if ( $second_payment ) {
+			update_post_meta( $order_id, 'second_payment', true );
+			WC()->session->__unset( 'second_payment' );
+		}
+
 		/** Check if order_id is already in the table */
+
 		$order_id_in_table = $wpdb->get_var(
 			"
-        SELECT order_id
-        FROM {$table_name}
-        WHERE order_id = {$order_id}
-    "
+		SELECT order_id
+		FROM {$table_name}
+		WHERE order_id = {$order_id}
+		"
 		);
 
 		if ( $order_id_in_table ) {
@@ -96,11 +143,12 @@ class Deposit {
 		$inserted = $wpdb->insert(
 			$table_name,
 			array(
-				'order_id'     => $order_id,
-				'amount'       => $order->get_total(),
-				'payment_date' => current_time( 'mysql' ),
+				'order_id'      => $order_id,
+				'amount'        => $order->get_total(),
+				'payment_date'  => current_time( 'mysql' ),
+				'needs_payment' => 1,
 			),
-			array( '%d', '%f', '%s' )
+			array( '%d', '%f', '%s', '%d' )
 		);
 
 		if ( $inserted ) {
@@ -119,10 +167,6 @@ class Deposit {
 			WC()->session->__unset( 'pending_amount' );
 
 			$order->calculate_totals();
-		}
-
-		if ( $second_payment ) {
-			update_post_meta( $order_id, 'needs_payment', false );
 		}
 	}
 
@@ -261,5 +305,32 @@ class Deposit {
 		}
 
 		return $total_rows;
+	}
+
+	public function pending_page_after_content() {
+		?>
+<div class="wrap">
+	<table class="table-data">
+		<thead>
+			<tr>
+				<th>Order ID</th>
+				<th>Customer</th>
+				<th>Payment Type</th>
+				<th>Pending Amount</th>
+				<th>Delivered Date</th>
+				<th>Due Date</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>The Sliding Mr. Bones (Next Stop, Pottersville)</td>
+				<td>Malcolm Lockyer</td>
+				<td>1961</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+		<?php
 	}
 }

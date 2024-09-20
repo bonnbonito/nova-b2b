@@ -28,6 +28,22 @@ class Order_Status {
 		$this->add_custom_order_status( 'Shipped', 'shipped', '#3498db' );
 		$this->add_custom_order_status( 'Delivered', 'delivered', '#2ecc71' );
 		$this->add_custom_order_status( 'In Production', 'production', '#333' );
+		add_action( 'woocommerce_order_note_added', array( $this, 'change_status_on_shipstation_note' ), 10, 2 );
+		add_action( 'woocommerce_shipstation_shipnotify', array( $this, 'change_status_to_delivered' ), 10, 2 );
+	}
+
+	public function change_status_to_delivered( $order, $details ) {
+		$order->update_status( 'delivered', 'Order status automatically changed to delivered.' );
+	}
+
+	public function change_status_on_shipstation_note( $comment_id, $order ) {
+		$comment      = get_comment( $comment_id );
+		$note_content = $comment->comment_content;
+
+		if ( strpos( $note_content, 'Order has been exported to Shipstation' ) !== false ) {
+			// Change the order status to "production".
+			$order->update_status( 'production', 'Order status automatically changed to production after being exported to Shipstation.' );
+		}
 	}
 
 	/**

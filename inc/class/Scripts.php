@@ -34,7 +34,8 @@ class Scripts {
 
 	public function nova_woocommerce_scripts() {
 
-		wp_enqueue_style( 'nova-output', get_stylesheet_directory_uri() . '/assets/css/dist/output.css' );
+		wp_register_style( 'nova-output', get_stylesheet_directory_uri() . '/assets/css/dist/output.css', wp_get_theme()->get( 'Version' ) );
+		wp_enqueue_style( 'nova-output' );
 
 		wp_register_script( 'splide', get_stylesheet_directory_uri() . '/assets/js/splide.min.js', array(), '4.1.4' );
 		wp_register_script( 'splide-init', get_stylesheet_directory_uri() . '/assets/js/splide-init.js', array( 'splide' ), wp_get_theme()->get( 'Version' ), false, false );
