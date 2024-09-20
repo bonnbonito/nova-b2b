@@ -579,7 +579,7 @@ const Composite = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(fun
       const minGridIndex = cellMap.findIndex(index => index != null && !isDisabled(elementsRef.current, index, disabledIndices));
       // last enabled index
       const maxGridIndex = cellMap.reduce((foundIndex, index, cellIndex) => index != null && !isDisabled(elementsRef.current, index, disabledIndices) ? cellIndex : foundIndex, -1);
-      nextIndex = cellMap[getGridNavigatedIndex({
+      const maybeNextIndex = cellMap[getGridNavigatedIndex({
         current: cellMap.map(itemIndex => itemIndex ? elementsRef.current[itemIndex] : null)
       }, {
         event,
@@ -596,7 +596,10 @@ const Composite = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(fun
         // moving in so we don't end up in the same item. Prefer
         // top/left over bottom/right.
         event.key === ARROW_DOWN ? 'bl' : event.key === ARROW_RIGHT ? 'tr' : 'tl')
-      })]; // navigated cell will never be nullish
+      })];
+      if (maybeNextIndex != null) {
+        nextIndex = maybeNextIndex;
+      }
     }
     const toEndKeys = {
       horizontal: [ARROW_RIGHT],
@@ -774,7 +777,8 @@ const FloatingArrow = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.forwardRef
         floating
       },
       middlewareData: {
-        arrow
+        arrow,
+        shift
       }
     },
     width = 14,
@@ -809,6 +813,12 @@ const FloatingArrow = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.forwardRef
   if (!floating) {
     return null;
   }
+  const [side, alignment] = placement.split('-');
+  const isVerticalSide = side === 'top' || side === 'bottom';
+  let computedStaticOffset = staticOffset;
+  if (isVerticalSide && shift != null && shift.x || !isVerticalSide && shift != null && shift.y) {
+    computedStaticOffset = null;
+  }
 
   // Strokes must be double the border width, this ensures the stroke's width
   // works as you'd expect.
@@ -816,16 +826,14 @@ const FloatingArrow = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.forwardRef
   const halfStrokeWidth = computedStrokeWidth / 2;
   const svgX = width / 2 * (tipRadius / -8 + 1);
   const svgY = height / 2 * tipRadius / 4;
-  const [side, alignment] = placement.split('-');
   const isCustomShape = !!d;
-  const isVerticalSide = side === 'top' || side === 'bottom';
-  const yOffsetProp = staticOffset && alignment === 'end' ? 'bottom' : 'top';
-  let xOffsetProp = staticOffset && alignment === 'end' ? 'right' : 'left';
-  if (staticOffset && isRTL) {
+  const yOffsetProp = computedStaticOffset && alignment === 'end' ? 'bottom' : 'top';
+  let xOffsetProp = computedStaticOffset && alignment === 'end' ? 'right' : 'left';
+  if (computedStaticOffset && isRTL) {
     xOffsetProp = alignment === 'end' ? 'left' : 'right';
   }
-  const arrowX = (arrow == null ? void 0 : arrow.x) != null ? staticOffset || arrow.x : '';
-  const arrowY = (arrow == null ? void 0 : arrow.y) != null ? staticOffset || arrow.y : '';
+  const arrowX = (arrow == null ? void 0 : arrow.x) != null ? computedStaticOffset || arrow.x : '';
+  const arrowY = (arrow == null ? void 0 : arrow.y) != null ? computedStaticOffset || arrow.y : '';
   const dValue = d || 'M0,0' + (" H" + width) + (" L" + (width - svgX) + "," + (height - svgY)) + (" Q" + width / 2 + "," + height + " " + svgX + "," + (height - svgY)) + ' Z';
   const rotation = {
     top: isCustomShape ? 'rotate(180deg)' : '',
@@ -845,7 +853,7 @@ const FloatingArrow = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.forwardRef
       [xOffsetProp]: arrowX,
       [yOffsetProp]: arrowY,
       [side]: isVerticalSide || isCustomShape ? '100%' : "calc(100% - " + computedStrokeWidth / 2 + "px)",
-      transform: "" + rotation + (transform != null ? transform : ''),
+      transform: [rotation, transform].filter(t => !!t).join(' '),
       ...restStyle
     }
   }), computedStrokeWidth > 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("path", {
@@ -1210,21 +1218,22 @@ function useHover(context, props) {
     var _handleCloseRef$curre;
     if (!enabled) return;
     if (open && (_handleCloseRef$curre = handleCloseRef.current) != null && _handleCloseRef$curre.__options.blockPointerEvents && isHoverOpen()) {
-      const body = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getDocument)(elements.floating).body;
-      body.setAttribute(safePolygonIdentifier, '');
-      body.style.pointerEvents = 'none';
       performedPointerEventsMutationRef.current = true;
       const floatingEl = elements.floating;
       if ((0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.isElement)(elements.domReference) && floatingEl) {
         var _tree$nodesRef$curren;
+        const body = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getDocument)(elements.floating).body;
+        body.setAttribute(safePolygonIdentifier, '');
         const ref = elements.domReference;
         const parentFloating = tree == null || (_tree$nodesRef$curren = tree.nodesRef.current.find(node => node.id === parentId)) == null || (_tree$nodesRef$curren = _tree$nodesRef$curren.context) == null ? void 0 : _tree$nodesRef$curren.elements.floating;
         if (parentFloating) {
           parentFloating.style.pointerEvents = '';
         }
+        body.style.pointerEvents = 'none';
         ref.style.pointerEvents = 'auto';
         floatingEl.style.pointerEvents = 'auto';
         return () => {
+          body.style.pointerEvents = '';
           ref.style.pointerEvents = '';
           floatingEl.style.pointerEvents = '';
         };
@@ -1478,7 +1487,7 @@ function getDeepestNode(nodes, id) {
 let counterMap = /*#__PURE__*/new WeakMap();
 let uncontrolledElementsSet = /*#__PURE__*/new WeakSet();
 let markerMap = {};
-let lockCount = 0;
+let lockCount$1 = 0;
 const supportsInert = () => typeof HTMLElement !== 'undefined' && 'inert' in HTMLElement.prototype;
 const unwrapHost = node => node && (node.host || unwrapHost(node.parentNode));
 const correctElements = (parent, targets) => targets.map(target => {
@@ -1540,7 +1549,7 @@ function applyAttributeToOthers(uncorrectedAvoidElements, body, ariaHidden, iner
       }
     });
   }
-  lockCount++;
+  lockCount$1++;
   return () => {
     hiddenElements.forEach(element => {
       const counterValue = (counterMap.get(element) || 0) - 1;
@@ -1557,8 +1566,8 @@ function applyAttributeToOthers(uncorrectedAvoidElements, body, ariaHidden, iner
         element.removeAttribute(markerName);
       }
     });
-    lockCount--;
-    if (!lockCount) {
+    lockCount$1--;
+    if (!lockCount$1) {
       counterMap = new WeakMap();
       counterMap = new WeakMap();
       uncontrolledElementsSet = new WeakSet();
@@ -1623,32 +1632,6 @@ function enableFocusInside(container) {
       element.removeAttribute('tabindex');
     }
   });
-}
-function getClosestTabbableElement(tabbableElements, element, floating) {
-  const elementIndex = tabbableElements.indexOf(element);
-  function traverseTabbableElements(next) {
-    const attr = createAttribute('focus-guard');
-    let index = elementIndex + (next ? 1 : 0);
-    let currentElement = tabbableElements[index];
-    while (currentElement && (!currentElement.isConnected || currentElement.hasAttribute(attr) || (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.contains)(floating, currentElement))) {
-      if (next) {
-        index++;
-      } else {
-        index--;
-      }
-      currentElement = tabbableElements[index];
-    }
-    return currentElement;
-  }
-
-  // First, try to find the next tabbable element
-  const next = traverseTabbableElements(true);
-  if (next) {
-    return next;
-  }
-
-  // If we can't find a next tabbable element, try to find the previous one
-  return traverseTabbableElements(false);
 }
 
 // See Diego Haz's Sandbox for making this logic work well on Safari/iOS:
@@ -1791,6 +1774,8 @@ function FloatingPortal(props) {
   const afterOutsideRef = react__WEBPACK_IMPORTED_MODULE_0__.useRef(null);
   const beforeInsideRef = react__WEBPACK_IMPORTED_MODULE_0__.useRef(null);
   const afterInsideRef = react__WEBPACK_IMPORTED_MODULE_0__.useRef(null);
+  const modal = focusManagerState == null ? void 0 : focusManagerState.modal;
+  const open = focusManagerState == null ? void 0 : focusManagerState.open;
   const shouldRenderGuards =
   // The FocusManager and therefore floating element are currently open/
   // rendered.
@@ -1802,7 +1787,7 @@ function FloatingPortal(props) {
 
   // https://codesandbox.io/s/tabbable-portal-f4tng?file=/src/TabbablePortal.tsx
   react__WEBPACK_IMPORTED_MODULE_0__.useEffect(() => {
-    if (!portalNode || !preserveTabOrder || focusManagerState != null && focusManagerState.modal) {
+    if (!portalNode || !preserveTabOrder || modal) {
       return;
     }
 
@@ -1824,7 +1809,12 @@ function FloatingPortal(props) {
       portalNode.removeEventListener('focusin', onFocus, true);
       portalNode.removeEventListener('focusout', onFocus, true);
     };
-  }, [portalNode, preserveTabOrder, focusManagerState == null ? void 0 : focusManagerState.modal]);
+  }, [portalNode, preserveTabOrder, modal]);
+  react__WEBPACK_IMPORTED_MODULE_0__.useEffect(() => {
+    if (!portalNode) return;
+    if (open) return;
+    enableFocusInside(portalNode);
+  }, [open, portalNode]);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(PortalContext.Provider, {
     value: react__WEBPACK_IMPORTED_MODULE_0__.useMemo(() => ({
       preserveTabOrder,
@@ -1860,12 +1850,24 @@ function FloatingPortal(props) {
       } else {
         const nextTabbable = getNextTabbable() || (focusManagerState == null ? void 0 : focusManagerState.refs.domReference.current);
         nextTabbable == null || nextTabbable.focus();
-        (focusManagerState == null ? void 0 : focusManagerState.closeOnFocusOut) && (focusManagerState == null ? void 0 : focusManagerState.onOpenChange(false, event.nativeEvent));
+        (focusManagerState == null ? void 0 : focusManagerState.closeOnFocusOut) && (focusManagerState == null ? void 0 : focusManagerState.onOpenChange(false, event.nativeEvent, 'focus-out'));
       }
     }
   }));
 }
 const usePortalContext = () => react__WEBPACK_IMPORTED_MODULE_0__.useContext(PortalContext);
+
+const FOCUSABLE_ATTRIBUTE = 'data-floating-ui-focusable';
+function getFloatingFocusElement(floatingElement) {
+  if (!floatingElement) {
+    return null;
+  }
+  // Try to find the element that has `{...getFloatingProps()}` spread on it.
+  // This indicates the floating element is acting as a positioning wrapper, and
+  // so focus should be managed on the child element with the event handlers and
+  // aria props.
+  return floatingElement.hasAttribute(FOCUSABLE_ATTRIBUTE) ? floatingElement : floatingElement.querySelector("[" + FOCUSABLE_ATTRIBUTE + "]") || floatingElement;
+}
 
 const LIST_LIMIT = 20;
 let previouslyFocusedElements = [];
@@ -1947,13 +1949,10 @@ function FloatingFocusManager(props) {
   const isPointerDownRef = react__WEBPACK_IMPORTED_MODULE_0__.useRef(false);
   const tabbableIndexRef = react__WEBPACK_IMPORTED_MODULE_0__.useRef(-1);
   const isInsidePortal = portalContext != null;
-  const firstElementChild = floating == null ? void 0 : floating.firstElementChild;
-  // If the floating element is acting as a positioning wrapper rather than the
-  // element that receives aria props, use it as the focus root instead.
-  const floatingFocusNode = (firstElementChild == null ? void 0 : firstElementChild.id) === floatingId ? firstElementChild : floating;
+  const floatingFocusElement = getFloatingFocusElement(floating);
   const getTabbableContent = useEffectEvent(function (container) {
     if (container === void 0) {
-      container = floatingFocusNode;
+      container = floatingFocusElement;
     }
     return container ? (0,tabbable__WEBPACK_IMPORTED_MODULE_7__.tabbable)(container, getTabbableOptions()) : [];
   });
@@ -1963,19 +1962,22 @@ function FloatingFocusManager(props) {
       if (domReference && type === 'reference') {
         return domReference;
       }
-      if (floatingFocusNode && type === 'floating') {
-        return floatingFocusNode;
+      if (floatingFocusElement && type === 'floating') {
+        return floatingFocusElement;
       }
       return content;
     }).filter(Boolean).flat();
   });
+  react__WEBPACK_IMPORTED_MODULE_0__.useEffect(() => {
+    preventReturnFocusRef.current = false;
+  }, [disabled]);
   react__WEBPACK_IMPORTED_MODULE_0__.useEffect(() => {
     if (disabled) return;
     if (!modal) return;
     function onKeyDown(event) {
       if (event.key === 'Tab') {
         // The focus guards have nothing to focus, so we need to stop the event.
-        if ((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.contains)(floatingFocusNode, (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.activeElement)((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getDocument)(floatingFocusNode))) && getTabbableContent().length === 0 && !isUntrappedTypeableCombobox) {
+        if ((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.contains)(floatingFocusElement, (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.activeElement)((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getDocument)(floatingFocusElement))) && getTabbableContent().length === 0 && !isUntrappedTypeableCombobox) {
           (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.stopEvent)(event);
         }
         const els = getTabbableElements();
@@ -1988,18 +1990,18 @@ function FloatingFocusManager(props) {
             enqueueFocus(els[1]);
           }
         }
-        if (orderRef.current[1] === 'floating' && target === floatingFocusNode && event.shiftKey) {
+        if (orderRef.current[1] === 'floating' && target === floatingFocusElement && event.shiftKey) {
           (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.stopEvent)(event);
           enqueueFocus(els[0]);
         }
       }
     }
-    const doc = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getDocument)(floatingFocusNode);
+    const doc = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getDocument)(floatingFocusElement);
     doc.addEventListener('keydown', onKeyDown);
     return () => {
       doc.removeEventListener('keydown', onKeyDown);
     };
-  }, [disabled, domReference, floatingFocusNode, modal, orderRef, isUntrappedTypeableCombobox, getTabbableContent, getTabbableElements]);
+  }, [disabled, domReference, floatingFocusElement, modal, orderRef, isUntrappedTypeableCombobox, getTabbableContent, getTabbableElements]);
   react__WEBPACK_IMPORTED_MODULE_0__.useEffect(() => {
     if (disabled) return;
     if (!floating) return;
@@ -2040,15 +2042,15 @@ function FloatingFocusManager(props) {
 
         // Restore focus to the previous tabbable element index to prevent
         // focus from being lost outside the floating tree.
-        if (restoreFocus && movedToUnrelatedNode && (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.activeElement)((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getDocument)(floatingFocusNode)) === (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getDocument)(floatingFocusNode).body) {
+        if (restoreFocus && movedToUnrelatedNode && (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.activeElement)((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getDocument)(floatingFocusElement)) === (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getDocument)(floatingFocusElement).body) {
           // Let `FloatingPortal` effect knows that focus is still inside the
           // floating tree.
-          if ((0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.isHTMLElement)(floatingFocusNode)) {
-            floatingFocusNode == null || floatingFocusNode.focus();
+          if ((0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.isHTMLElement)(floatingFocusElement)) {
+            floatingFocusElement.focus();
           }
           const prevTabbableIndex = tabbableIndexRef.current;
           const tabbableContent = getTabbableContent();
-          const nodeToFocus = tabbableContent[prevTabbableIndex] || tabbableContent[tabbableContent.length - 1] || floatingFocusNode;
+          const nodeToFocus = tabbableContent[prevTabbableIndex] || tabbableContent[tabbableContent.length - 1] || floatingFocusElement;
           if ((0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.isHTMLElement)(nodeToFocus)) {
             nodeToFocus.focus();
           }
@@ -2060,7 +2062,7 @@ function FloatingFocusManager(props) {
         // Fix React 18 Strict Mode returnFocus due to double rendering.
         relatedTarget !== getPreviouslyFocusedElement()) {
           preventReturnFocusRef.current = true;
-          onOpenChange(false, event);
+          onOpenChange(false, event, 'focus-out');
         }
       });
     }
@@ -2074,7 +2076,7 @@ function FloatingFocusManager(props) {
         floating.removeEventListener('focusout', handleFocusOutside);
       };
     }
-  }, [disabled, domReference, floating, floatingFocusNode, modal, nodeId, tree, portalContext, onOpenChange, closeOnFocusOut, restoreFocus, getTabbableContent, isUntrappedTypeableCombobox]);
+  }, [disabled, domReference, floating, floatingFocusElement, modal, nodeId, tree, portalContext, onOpenChange, closeOnFocusOut, restoreFocus, getTabbableContent, isUntrappedTypeableCombobox]);
   react__WEBPACK_IMPORTED_MODULE_0__.useEffect(() => {
     var _portalContext$portal;
     if (disabled) return;
@@ -2090,31 +2092,30 @@ function FloatingFocusManager(props) {
     }
   }, [disabled, domReference, floating, modal, orderRef, portalContext, isUntrappedTypeableCombobox, guards]);
   index(() => {
-    if (disabled || !(0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.isHTMLElement)(floatingFocusNode)) return;
-    const doc = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getDocument)(floatingFocusNode);
+    if (disabled || !(0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.isHTMLElement)(floatingFocusElement)) return;
+    const doc = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getDocument)(floatingFocusElement);
     const previouslyFocusedElement = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.activeElement)(doc);
 
     // Wait for any layout effect state setters to execute to set `tabIndex`.
     queueMicrotask(() => {
-      const focusableElements = getTabbableElements(floatingFocusNode);
+      const focusableElements = getTabbableElements(floatingFocusElement);
       const initialFocusValue = initialFocusRef.current;
-      const elToFocus = (typeof initialFocusValue === 'number' ? focusableElements[initialFocusValue] : initialFocusValue.current) || floatingFocusNode;
-      const focusAlreadyInsideFloatingEl = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.contains)(floatingFocusNode, previouslyFocusedElement);
+      const elToFocus = (typeof initialFocusValue === 'number' ? focusableElements[initialFocusValue] : initialFocusValue.current) || floatingFocusElement;
+      const focusAlreadyInsideFloatingEl = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.contains)(floatingFocusElement, previouslyFocusedElement);
       if (!ignoreInitialFocus && !focusAlreadyInsideFloatingEl && open) {
         enqueueFocus(elToFocus, {
-          preventScroll: elToFocus === floatingFocusNode
+          preventScroll: elToFocus === floatingFocusElement
         });
       }
     });
-  }, [disabled, open, floatingFocusNode, ignoreInitialFocus, getTabbableElements, initialFocusRef]);
+  }, [disabled, open, floatingFocusElement, ignoreInitialFocus, getTabbableElements, initialFocusRef]);
   index(() => {
-    if (disabled || !floatingFocusNode) return;
+    if (disabled || !floatingFocusElement) return;
     let preventReturnFocusScroll = false;
-    const doc = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getDocument)(floatingFocusNode);
+    const doc = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getDocument)(floatingFocusElement);
     const previouslyFocusedElement = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.activeElement)(doc);
     const contextData = dataRef.current;
     let openEvent = contextData.openEvent;
-    const domReference = refs.domReference.current;
     addPreviouslyFocusedElement(previouslyFocusedElement);
 
     // Dismissing via outside press should always ignore `returnFocus` to
@@ -2144,6 +2145,13 @@ function FloatingFocusManager(props) {
       }
     }
     events.on('openchange', onOpenChange);
+    const fallbackEl = doc.createElement('span');
+    fallbackEl.setAttribute('tabindex', '-1');
+    fallbackEl.setAttribute('aria-hidden', 'true');
+    Object.assign(fallbackEl.style, HIDDEN_STYLES);
+    if (isInsidePortal && domReference) {
+      domReference.insertAdjacentElement('afterend', fallbackEl);
+    }
     return () => {
       events.off('openchange', onOpenChange);
       const activeEl = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.activeElement)(doc);
@@ -2155,16 +2163,8 @@ function FloatingFocusManager(props) {
       if (shouldFocusReference && refs.domReference.current) {
         addPreviouslyFocusedElement(refs.domReference.current);
       }
-      const returnContextElement = domReference || previouslyFocusedElement;
-      const tabbableElements = (0,tabbable__WEBPACK_IMPORTED_MODULE_7__.tabbable)((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getDocument)(returnContextElement).body, getTabbableOptions());
-
-      // Wait for the return element to get potentially disconnected before
-      // checking.
+      const returnElement = getPreviouslyFocusedElement() || fallbackEl;
       queueMicrotask(() => {
-        let returnElement = getPreviouslyFocusedElement();
-        if (!returnElement && (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.isHTMLElement)(returnContextElement) && floating) {
-          returnElement = getClosestTabbableElement(tabbableElements, returnContextElement, floating);
-        }
         if (
         // eslint-disable-next-line react-hooks/exhaustive-deps
         returnFocusRef.current && !preventReturnFocusRef.current && (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.isHTMLElement)(returnElement) && (
@@ -2176,9 +2176,10 @@ function FloatingFocusManager(props) {
             preventScroll: preventReturnFocusScroll
           });
         }
+        fallbackEl.remove();
       });
     };
-  }, [disabled, floating, floatingFocusNode, returnFocusRef, dataRef, refs, events, tree, nodeId]);
+  }, [disabled, floating, floatingFocusElement, returnFocusRef, dataRef, refs, events, tree, nodeId, isInsidePortal, domReference]);
 
   // Synchronize the `context` & `modal` value to the FloatingPortal context.
   // It will decide whether or not it needs to render its own guards.
@@ -2198,11 +2199,11 @@ function FloatingFocusManager(props) {
   }, [disabled, portalContext, modal, open, onOpenChange, refs, closeOnFocusOut]);
   index(() => {
     if (disabled) return;
-    if (!floatingFocusNode) return;
+    if (!floatingFocusElement) return;
     if (typeof MutationObserver !== 'function') return;
     if (ignoreInitialFocus) return;
     const handleMutation = () => {
-      const tabIndex = floatingFocusNode.getAttribute('tabindex');
+      const tabIndex = floatingFocusElement.getAttribute('tabindex');
       const tabbableContent = getTabbableContent();
       const activeEl = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.activeElement)((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getDocument)(floating));
       const tabbableIndex = tabbableContent.indexOf(activeEl);
@@ -2211,15 +2212,15 @@ function FloatingFocusManager(props) {
       }
       if (orderRef.current.includes('floating') || activeEl !== refs.domReference.current && tabbableContent.length === 0) {
         if (tabIndex !== '0') {
-          floatingFocusNode.setAttribute('tabindex', '0');
+          floatingFocusElement.setAttribute('tabindex', '0');
         }
       } else if (tabIndex !== '-1') {
-        floatingFocusNode.setAttribute('tabindex', '-1');
+        floatingFocusElement.setAttribute('tabindex', '-1');
       }
     };
     handleMutation();
     const observer = new MutationObserver(handleMutation);
-    observer.observe(floatingFocusNode, {
+    observer.observe(floatingFocusElement, {
       childList: true,
       subtree: true,
       attributes: true
@@ -2227,7 +2228,7 @@ function FloatingFocusManager(props) {
     return () => {
       observer.disconnect();
     };
-  }, [disabled, floating, floatingFocusNode, refs, orderRef, getTabbableContent, ignoreInitialFocus]);
+  }, [disabled, floating, floatingFocusElement, refs, orderRef, getTabbableContent, ignoreInitialFocus]);
   function renderDismissButton(location) {
     if (disabled || !visuallyHiddenDismiss || !modal) {
       return null;
@@ -2278,7 +2279,53 @@ function FloatingFocusManager(props) {
   }));
 }
 
-const activeLocks = /*#__PURE__*/new Set();
+let lockCount = 0;
+function enableScrollLock() {
+  const isIOS = /iP(hone|ad|od)|iOS/.test((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getPlatform)());
+  const bodyStyle = document.body.style;
+  // RTL <body> scrollbar
+  const scrollbarX = Math.round(document.documentElement.getBoundingClientRect().left) + document.documentElement.scrollLeft;
+  const paddingProp = scrollbarX ? 'paddingLeft' : 'paddingRight';
+  const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+  const scrollX = bodyStyle.left ? parseFloat(bodyStyle.left) : window.scrollX;
+  const scrollY = bodyStyle.top ? parseFloat(bodyStyle.top) : window.scrollY;
+  bodyStyle.overflow = 'hidden';
+  if (scrollbarWidth) {
+    bodyStyle[paddingProp] = scrollbarWidth + "px";
+  }
+
+  // Only iOS doesn't respect `overflow: hidden` on document.body, and this
+  // technique has fewer side effects.
+  if (isIOS) {
+    var _window$visualViewpor, _window$visualViewpor2;
+    // iOS 12 does not support `visualViewport`.
+    const offsetLeft = ((_window$visualViewpor = window.visualViewport) == null ? void 0 : _window$visualViewpor.offsetLeft) || 0;
+    const offsetTop = ((_window$visualViewpor2 = window.visualViewport) == null ? void 0 : _window$visualViewpor2.offsetTop) || 0;
+    Object.assign(bodyStyle, {
+      position: 'fixed',
+      top: -(scrollY - Math.floor(offsetTop)) + "px",
+      left: -(scrollX - Math.floor(offsetLeft)) + "px",
+      right: '0'
+    });
+  }
+  return () => {
+    Object.assign(bodyStyle, {
+      overflow: '',
+      [paddingProp]: ''
+    });
+    if (isIOS) {
+      Object.assign(bodyStyle, {
+        position: '',
+        top: '',
+        left: '',
+        right: ''
+      });
+      window.scrollTo(scrollX, scrollY);
+    }
+  };
+}
+let cleanup = () => {};
+
 /**
  * Provides base styling for a fixed overlay element to dim content or block
  * pointer events behind a floating element.
@@ -2290,56 +2337,19 @@ const FloatingOverlay = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.forwardR
     lockScroll = false,
     ...rest
   } = props;
-  const lockId = useId();
   index(() => {
     if (!lockScroll) return;
-    activeLocks.add(lockId);
-    const isIOS = /iP(hone|ad|od)|iOS/.test((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getPlatform)());
-    const bodyStyle = document.body.style;
-    // RTL <body> scrollbar
-    const scrollbarX = Math.round(document.documentElement.getBoundingClientRect().left) + document.documentElement.scrollLeft;
-    const paddingProp = scrollbarX ? 'paddingLeft' : 'paddingRight';
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-    const scrollX = bodyStyle.left ? parseFloat(bodyStyle.left) : window.scrollX;
-    const scrollY = bodyStyle.top ? parseFloat(bodyStyle.top) : window.scrollY;
-    bodyStyle.overflow = 'hidden';
-    if (scrollbarWidth) {
-      bodyStyle[paddingProp] = scrollbarWidth + "px";
-    }
-
-    // Only iOS doesn't respect `overflow: hidden` on document.body, and this
-    // technique has fewer side effects.
-    if (isIOS) {
-      var _window$visualViewpor, _window$visualViewpor2;
-      // iOS 12 does not support `visualViewport`.
-      const offsetLeft = ((_window$visualViewpor = window.visualViewport) == null ? void 0 : _window$visualViewpor.offsetLeft) || 0;
-      const offsetTop = ((_window$visualViewpor2 = window.visualViewport) == null ? void 0 : _window$visualViewpor2.offsetTop) || 0;
-      Object.assign(bodyStyle, {
-        position: 'fixed',
-        top: -(scrollY - Math.floor(offsetTop)) + "px",
-        left: -(scrollX - Math.floor(offsetLeft)) + "px",
-        right: '0'
-      });
+    lockCount++;
+    if (lockCount === 1) {
+      cleanup = enableScrollLock();
     }
     return () => {
-      activeLocks.delete(lockId);
-      if (activeLocks.size === 0) {
-        Object.assign(bodyStyle, {
-          overflow: '',
-          [paddingProp]: ''
-        });
-        if (isIOS) {
-          Object.assign(bodyStyle, {
-            position: '',
-            top: '',
-            left: '',
-            right: ''
-          });
-          window.scrollTo(scrollX, scrollY);
-        }
+      lockCount--;
+      if (lockCount === 0) {
+        cleanup();
       }
     };
-  }, [lockId, lockScroll]);
+  }, [lockScroll]);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", _extends({
     ref: ref
   }, rest, {
@@ -3188,7 +3198,8 @@ function mergeProps(userProps, propsList, elementKey) {
   }
   return {
     ...(elementKey === 'floating' && {
-      tabIndex: -1
+      tabIndex: -1,
+      [FOCUSABLE_ATTRIBUTE]: ''
     }),
     ...domUserProps,
     ...propsList.map(value => {
@@ -3335,6 +3346,8 @@ function useListNavigation(context, props) {
       warn('In grid list navigation mode (`cols` > 1), the `orientation` should', 'be either "horizontal" or "both".');
     }
   }
+  const floatingFocusElement = getFloatingFocusElement(elements.floating);
+  const floatingFocusElementRef = useLatestRef(floatingFocusElement);
   const parentId = useFloatingParentNodeId();
   const tree = useFloatingTree();
   const onNavigate = useEffectEvent(unstable_onNavigate);
@@ -3350,7 +3363,6 @@ function useListNavigation(context, props) {
   const disabledIndicesRef = useLatestRef(disabledIndices);
   const latestOpenRef = useLatestRef(open);
   const scrollItemIntoViewRef = useLatestRef(scrollItemIntoView);
-  const floatingRef = useLatestRef(elements.floating);
   const selectedIndexRef = useLatestRef(selectedIndex);
   const [activeId, setActiveId] = react__WEBPACK_IMPORTED_MODULE_0__.useState();
   const [virtualId, setVirtualId] = react__WEBPACK_IMPORTED_MODULE_0__.useState();
@@ -3566,7 +3578,7 @@ function useListNavigation(context, props) {
           focusItem(listRef, indexRef);
           onNavigate(null);
           if (!virtual) {
-            enqueueFocus(floatingRef.current, {
+            enqueueFocus(floatingFocusElementRef.current, {
               preventScroll: true
             });
           }
@@ -3574,7 +3586,7 @@ function useListNavigation(context, props) {
       })
     };
     return props;
-  }, [open, floatingRef, focusItem, focusItemOnHover, listRef, onNavigate, virtual]);
+  }, [open, floatingFocusElementRef, focusItem, focusItemOnHover, listRef, onNavigate, virtual]);
   const commonOnKeyDown = useEffectEvent(event => {
     isPointerModalityRef.current = false;
     forceSyncFocus.current = true;
@@ -3582,7 +3594,7 @@ function useListNavigation(context, props) {
     // If the floating element is animating out, ignore navigation. Otherwise,
     // the `activeIndex` gets set to 0 despite not being open so the next time
     // the user ArrowDowns, the first item won't be focused.
-    if (!latestOpenRef.current && event.currentTarget === floatingRef.current) {
+    if (!latestOpenRef.current && event.currentTarget === floatingFocusElementRef.current) {
       return;
     }
     if (nested && isCrossOrientationCloseKey(event.key, orientation, rtl)) {
@@ -3621,7 +3633,7 @@ function useListNavigation(context, props) {
       const minGridIndex = cellMap.findIndex(index => index != null && !isDisabled(listRef.current, index, disabledIndices));
       // last enabled index
       const maxGridIndex = cellMap.reduce((foundIndex, index, cellIndex) => index != null && !isDisabled(listRef.current, index, disabledIndices) ? cellIndex : foundIndex, -1);
-      indexRef.current = cellMap[getGridNavigatedIndex({
+      const index = cellMap[getGridNavigatedIndex({
         current: cellMap.map(itemIndex => itemIndex != null ? listRef.current[itemIndex] : null)
       }, {
         event,
@@ -3639,9 +3651,11 @@ function useListNavigation(context, props) {
         // top/left over bottom/right.
         event.key === ARROW_DOWN ? 'bl' : event.key === ARROW_RIGHT ? 'tr' : 'tl'),
         stopEvent: true
-      })]; // navigated cell will never be nullish
-
-      onNavigate(indexRef.current);
+      })];
+      if (index != null) {
+        indexRef.current = index;
+        onNavigate(indexRef.current);
+      }
       if (orientation === 'both') {
         return;
       }
@@ -4228,6 +4242,18 @@ const inner = props => ({
       }
     } = state;
     const item = listRef.current[index];
+    const scrollEl = (scrollRef == null ? void 0 : scrollRef.current) || floating;
+
+    // Valid combinations:
+    // 1. Floating element is the scrollRef and has a border (default)
+    // 2. Floating element is not the scrollRef, floating element has a border
+    // 3. Floating element is not the scrollRef, scrollRef has a border
+    // Floating > {...getFloatingProps()} wrapper > scrollRef > items is not
+    // allowed as VoiceOver doesn't work.
+    const clientTop = floating.clientTop || scrollEl.clientTop;
+    const floatingIsBordered = floating.clientTop !== 0;
+    const scrollElIsBordered = scrollEl.clientTop !== 0;
+    const floatingIsScrollEl = floating === scrollEl;
     if (true) {
       if (!state.placement.startsWith('bottom')) {
         warn('`placement` side must be "bottom" when using the `inner`', 'middleware.');
@@ -4240,31 +4266,27 @@ const inner = props => ({
       ...state,
       ...(await (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_2__.offset)(-item.offsetTop - floating.clientTop - rects.reference.height / 2 - item.offsetHeight / 2 - innerOffset).fn(state))
     };
-    const el = (scrollRef == null ? void 0 : scrollRef.current) || floating;
-    const overflow = await (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_3__.detectOverflow)(getArgsWithCustomFloatingHeight(nextArgs, el.scrollHeight), detectOverflowOptions);
+    const overflow = await (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_3__.detectOverflow)(getArgsWithCustomFloatingHeight(nextArgs, scrollEl.scrollHeight + clientTop + floating.clientTop), detectOverflowOptions);
     const refOverflow = await (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_3__.detectOverflow)(nextArgs, {
       ...detectOverflowOptions,
       elementContext: 'reference'
     });
-    const diffY = Math.max(0, overflow.top);
+    const diffY = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_6__.max)(0, overflow.top);
     const nextY = nextArgs.y + diffY;
-    const maxHeight = Math.max(0, el.scrollHeight - diffY - Math.max(0, overflow.bottom));
-    el.style.maxHeight = maxHeight + "px";
-    el.scrollTop = diffY;
+    const maxHeight = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_6__.round)((0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_6__.max)(0, scrollEl.scrollHeight + (floatingIsBordered && floatingIsScrollEl || scrollElIsBordered ? clientTop * 2 : 0) - diffY - (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_6__.max)(0, overflow.bottom)));
+    scrollEl.style.maxHeight = maxHeight + "px";
+    scrollEl.scrollTop = diffY;
 
     // There is not enough space, fallback to standard anchored positioning
     if (onFallbackChange) {
-      if (el.offsetHeight < item.offsetHeight * Math.min(minItemsVisible, listRef.current.length - 1) - 1 || refOverflow.top >= -referenceOverflowThreshold || refOverflow.bottom >= -referenceOverflowThreshold) {
-        react_dom__WEBPACK_IMPORTED_MODULE_1__.flushSync(() => onFallbackChange(true));
-      } else {
-        react_dom__WEBPACK_IMPORTED_MODULE_1__.flushSync(() => onFallbackChange(false));
-      }
+      const shouldFallback = scrollEl.scrollHeight > scrollEl.offsetHeight && scrollEl.offsetHeight < item.offsetHeight * minItemsVisible - 1 || refOverflow.top >= -referenceOverflowThreshold || refOverflow.bottom >= -referenceOverflowThreshold;
+      react_dom__WEBPACK_IMPORTED_MODULE_1__.flushSync(() => onFallbackChange(shouldFallback));
     }
     if (overflowRef) {
       overflowRef.current = await (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_3__.detectOverflow)(getArgsWithCustomFloatingHeight({
         ...nextArgs,
         y: nextY
-      }, el.offsetHeight), detectOverflowOptions);
+      }, scrollEl.offsetHeight + clientTop + floating.clientTop), detectOverflowOptions);
     }
     return {
       y: nextY
@@ -16893,10 +16915,9 @@ async function convertValueToCoords(state, options) {
     crossAxis: 0,
     alignmentAxis: null
   } : {
-    mainAxis: 0,
-    crossAxis: 0,
-    alignmentAxis: null,
-    ...rawValue
+    mainAxis: rawValue.mainAxis || 0,
+    crossAxis: rawValue.crossAxis || 0,
+    alignmentAxis: rawValue.alignmentAxis
   };
   if (alignment && typeof alignmentAxis === 'number') {
     crossAxis = alignment === 'end' ? alignmentAxis * -1 : alignmentAxis;
@@ -17018,7 +17039,11 @@ const shift = function (options) {
         ...limitedCoords,
         data: {
           x: limitedCoords.x - x,
-          y: limitedCoords.y - y
+          y: limitedCoords.y - y,
+          enabled: {
+            [mainAxis]: checkMainAxis,
+            [crossAxis]: checkCrossAxis
+          }
         }
       };
     }
@@ -17107,6 +17132,7 @@ const size = function (options) {
     name: 'size',
     options,
     async fn(state) {
+      var _state$middlewareData, _state$middlewareData2;
       const {
         placement,
         rects,
@@ -17141,10 +17167,11 @@ const size = function (options) {
       const noShift = !state.middlewareData.shift;
       let availableHeight = overflowAvailableHeight;
       let availableWidth = overflowAvailableWidth;
-      if (isYAxis) {
-        availableWidth = alignment || noShift ? (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_0__.min)(overflowAvailableWidth, maximumClippingWidth) : maximumClippingWidth;
-      } else {
-        availableHeight = alignment || noShift ? (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_0__.min)(overflowAvailableHeight, maximumClippingHeight) : maximumClippingHeight;
+      if ((_state$middlewareData = state.middlewareData.shift) != null && _state$middlewareData.enabled.x) {
+        availableWidth = maximumClippingWidth;
+      }
+      if ((_state$middlewareData2 = state.middlewareData.shift) != null && _state$middlewareData2.enabled.y) {
+        availableHeight = maximumClippingHeight;
       }
       if (noShift && !alignment) {
         const xMin = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_0__.max)(overflow.left, 0);
@@ -17382,10 +17409,14 @@ function getClientRects(element) {
   return Array.from(element.getClientRects());
 }
 
-function getWindowScrollBarX(element) {
-  // If <html> has a CSS width greater than the viewport, then this will be
-  // incorrect for RTL.
-  return getBoundingClientRect((0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getDocumentElement)(element)).left + (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getNodeScroll)(element).scrollLeft;
+// If <html> has a CSS width greater than the viewport, then this will be
+// incorrect for RTL.
+function getWindowScrollBarX(element, rect) {
+  const leftScroll = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getNodeScroll)(element).scrollLeft;
+  if (!rect) {
+    return getBoundingClientRect((0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getDocumentElement)(element)).left + leftScroll;
+  }
+  return rect.left + leftScroll;
 }
 
 // Gets the entire size of the scrollable document area, even extending outside
@@ -17569,11 +17600,22 @@ function getRectRelativeToOffsetParent(element, offsetParent, strategy) {
       offsets.x = offsetRect.x + offsetParent.clientLeft;
       offsets.y = offsetRect.y + offsetParent.clientTop;
     } else if (documentElement) {
+      // If the <body> scrollbar appears on the left (e.g. RTL systems). Use
+      // Firefox with layout.scrollbar.side = 3 in about:config to test this.
       offsets.x = getWindowScrollBarX(documentElement);
     }
   }
-  const x = rect.left + scroll.scrollLeft - offsets.x;
-  const y = rect.top + scroll.scrollTop - offsets.y;
+  let htmlX = 0;
+  let htmlY = 0;
+  if (documentElement && !isOffsetParentAnElement && !isFixed) {
+    const htmlRect = documentElement.getBoundingClientRect();
+    htmlY = htmlRect.top + scroll.scrollTop;
+    htmlX = htmlRect.left + scroll.scrollLeft -
+    // RTL <body> scrollbar.
+    getWindowScrollBarX(documentElement, htmlRect);
+  }
+  const x = rect.left + scroll.scrollLeft - offsets.x - htmlX;
+  const y = rect.top + scroll.scrollTop - offsets.y - htmlY;
   return {
     x,
     y,
@@ -17593,7 +17635,16 @@ function getTrueOffsetParent(element, polyfill) {
   if (polyfill) {
     return polyfill(element);
   }
-  return element.offsetParent;
+  let rawOffsetParent = element.offsetParent;
+
+  // Firefox returns the <html> element as the offsetParent if it's non-static,
+  // while Chrome and Safari return the <body> element. The <body> element must
+  // be used to perform the correct calculations even if the <html> element is
+  // non-static.
+  if ((0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getDocumentElement)(element) === rawOffsetParent) {
+    rawOffsetParent = rawOffsetParent.ownerDocument.body;
+  }
+  return rawOffsetParent;
 }
 
 // Gets the closest ancestor positioned element. Handles some edge cases,
@@ -18078,6 +18129,7 @@ function useFloating(options) {
   const hasWhileElementsMounted = whileElementsMounted != null;
   const whileElementsMountedRef = useLatestRef(whileElementsMounted);
   const platformRef = useLatestRef(platform);
+  const openRef = useLatestRef(open);
   const update = react__WEBPACK_IMPORTED_MODULE_2__.useCallback(() => {
     if (!referenceRef.current || !floatingRef.current) {
       return;
@@ -18093,7 +18145,11 @@ function useFloating(options) {
     (0,_floating_ui_dom__WEBPACK_IMPORTED_MODULE_0__.computePosition)(referenceRef.current, floatingRef.current, config).then(data => {
       const fullData = {
         ...data,
-        isPositioned: true
+        // The floating element's position may be recomputed while it's closed
+        // but still mounted (such as when transitioning out). To ensure
+        // `isPositioned` will be `false` initially on the next open, avoid
+        // setting it to `true` when `open === false` (must be specified).
+        isPositioned: openRef.current !== false
       };
       if (isMountedRef.current && !deepEqual(dataRef.current, fullData)) {
         dataRef.current = fullData;
@@ -18102,7 +18158,7 @@ function useFloating(options) {
         });
       }
     });
-  }, [latestMiddleware, placement, strategy, platformRef]);
+  }, [latestMiddleware, placement, strategy, platformRef, openRef]);
   index(() => {
     if (open === false && dataRef.current.isPositioned) {
       dataRef.current.isPositioned = false;
@@ -18519,6 +18575,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   isTopLayer: () => (/* binding */ isTopLayer),
 /* harmony export */   isWebKit: () => (/* binding */ isWebKit)
 /* harmony export */ });
+function hasWindow() {
+  return typeof window !== 'undefined';
+}
 function getNodeName(node) {
   if (isNode(node)) {
     return (node.nodeName || '').toLowerCase();
@@ -18537,17 +18596,25 @@ function getDocumentElement(node) {
   return (_ref = (isNode(node) ? node.ownerDocument : node.document) || window.document) == null ? void 0 : _ref.documentElement;
 }
 function isNode(value) {
+  if (!hasWindow()) {
+    return false;
+  }
   return value instanceof Node || value instanceof getWindow(value).Node;
 }
 function isElement(value) {
+  if (!hasWindow()) {
+    return false;
+  }
   return value instanceof Element || value instanceof getWindow(value).Element;
 }
 function isHTMLElement(value) {
+  if (!hasWindow()) {
+    return false;
+  }
   return value instanceof HTMLElement || value instanceof getWindow(value).HTMLElement;
 }
 function isShadowRoot(value) {
-  // Browsers without `ShadowRoot` support.
-  if (typeof ShadowRoot === 'undefined') {
+  if (!hasWindow() || typeof ShadowRoot === 'undefined') {
     return false;
   }
   return value instanceof ShadowRoot || value instanceof getWindow(value).ShadowRoot;
