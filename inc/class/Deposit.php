@@ -45,6 +45,22 @@ class Deposit {
 		add_action( 'woocommerce_order_status_completed', array( $this, 'needs_payment_update' ), 99 );
 		add_action( 'woocommerce_order_status_delivered', array( $this, 'insert_delivered_date' ) );
 		add_action( 'woocommerce_order_status_shipped', array( $this, 'insert_shipped_date' ) );
+		add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'insert_emails_meta' ), 20, 2 );
+	}
+
+	public function insert_emails_meta( $order_id, $posted_data ) {
+		$deposit_chosen = get_post_meta( $order_id, '_deposit_chosen', true );
+		if ( ! $deposit_chosen ) {
+			return;
+		}
+
+		if ( have_rows( 'payment_emails', $deposit_chosen ) ) {
+			while ( have_rows( 'payment_emails', $deposit_chosen ) ) {
+				the_row();
+				$key = 'payment_email_key_' . $deposit_chosen . '_' . get_row_index();
+				update_post_meta( $order_id, $key, false );
+			}
+		}
 	}
 
 	public function insert_delivered_date( $order_id ) {
