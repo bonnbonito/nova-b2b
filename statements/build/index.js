@@ -4750,6 +4750,8 @@ function OrderTable({
     className: "font-medium p-4 pt-0 pb-3 text-black text-left font-title uppercase"
   }, "Order"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
     className: "font-medium p-4 pt-0 pb-3 text-black text-left font-title uppercase"
+  }, "PO#"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
+    className: "font-medium p-4 pt-0 pb-3 text-black text-left font-title uppercase"
   }, "Date"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
     className: "font-medium p-4 pt-0 pb-3 text-black text-left font-title uppercase"
   }, "Status"), NovaOrders.has_payment_types && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
@@ -4763,8 +4765,8 @@ function OrderTable({
   }, "Total ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: `sort-by ${orderTotalSort}`
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
-    className: "font-medium p-4 pt-0 pb-3 text-black text-left font-title uppercase"
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tbody", {
+    className: "font-medium p-4 pt-0 pb-3 text-black text-right font-title uppercase"
+  }, "Actions"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tbody", {
     className: "text-sm"
   }, orders.map(order => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", {
     key: order.id,
@@ -4775,6 +4777,8 @@ function OrderTable({
     href: order.order_url,
     className: "text-nova-primary"
   }, "#", order.order_number)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
+    className: "py-4 px-4"
+  }, order.po_number), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
     className: "py-4 px-4"
   }, order.date), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
     className: `py-4 px-4 capitalize order-actions ${order.status} ${order.is_overdue ? 'text-red-500 flex items-center' : ''}`
@@ -4797,6 +4801,19 @@ function OrderTable({
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
     className: "py-4 px-4 text-xs"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "relative"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    fill: "none",
+    viewBox: "0 0 24 24",
+    strokeWidth: 1.5,
+    stroke: "currentColor",
+    className: "size-6 cursor-pointer"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    d: "M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-x-4 justify-end uppercase"
   }, Object.entries(order.actions).map(([actionKey, actionValue]) => {
     let content, title;
@@ -4836,7 +4853,7 @@ function OrderTable({
         printInvoice(actionValue.url);
       } : undefined
     }, content);
-  }))))))));
+  })))))))));
 }
 
 /***/ }),
@@ -4889,8 +4906,9 @@ function Orders() {
     if (searchTerm.length > 0) {
       filteredOrders = filteredOrders.filter(order => {
         /** remove non numeric characters to searchTerm */
-        console.log(searchTerm.replace(/[^0-9]/g, ''));
-        return order.order_number.includes(searchTerm.replace(/[^0-9]/g, ''));
+        const orderID = '#' + order.order_number;
+        const poSearch = order.po_number && order.po_number.includes(searchTerm);
+        return orderID.includes(searchTerm) || poSearch;
       });
     }
 
@@ -5343,7 +5361,7 @@ function SearchInput({
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     htmlFor: "search-order-number",
     className: "block text-sm text-[#5E5E5E] font-title mb-2"
-  }, "Order Number"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+  }, "Search"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     id: "search-order-number",
     type: "text",
     placeholder: "=",

@@ -7,7 +7,7 @@ export default function SearchInput({ term, setTerm }) {
 				htmlFor="search-order-number"
 				className="block text-sm text-[#5E5E5E] font-title mb-2"
 			>
-				Order Number
+				Search
 			</label>
 			<input
 				id="search-order-number"

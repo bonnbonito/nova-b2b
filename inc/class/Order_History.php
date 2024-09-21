@@ -166,6 +166,7 @@ class Order_History {
 			$orders[] = array(
 				'id'                   => $order->get_id(),
 				'order_number'         => $order->get_order_number(),
+				'po_number'            => $order->get_meta( '_po_number' ),
 				'order_url'            => $order->get_view_order_url(),
 				'date'                 => $order->get_date_created()->format( 'M d, Y' ),
 				'total'                => $total_with_currency,
