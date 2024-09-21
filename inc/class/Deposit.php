@@ -45,20 +45,45 @@ class Deposit {
 		add_action( 'woocommerce_order_status_completed', array( $this, 'needs_payment_update' ), 99 );
 		add_action( 'woocommerce_order_status_delivered', array( $this, 'insert_delivered_date' ) );
 		add_action( 'woocommerce_order_status_shipped', array( $this, 'insert_shipped_date' ) );
-		add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'insert_emails_meta' ), 20, 2 );
+		add_action( 'woocommerce_before_cart', array( $this, 'remove_wc_sessions_on_cart' ) );
+		add_action( 'woocommerce_review_order_before_submit', array( $this, 'output_deposit_selection' ) );
+		add_filter( 'woocommerce_payment_complete_order_status', array( $this, 'change_payment_status' ), 10, 3 );
+		add_filter( 'woocommerce_bacs_process_payment_order_status', array( $this, 'change_onhold_status' ), 99, 2 );
 	}
 
-	public function insert_emails_meta( $order_id, $posted_data ) {
-		$deposit_chosen = get_post_meta( $order_id, '_deposit_chosen', true );
-		if ( ! $deposit_chosen ) {
-			return;
+	public function change_onhold_status( $on_hold, $order ) {
+		/** if current user is admin */
+		if ( is_admin() ) {
+			return $old_status;
 		}
+
+		return $on_hold;
+	}
+
+	public function change_payment_status( $order_status, $order_id, $order ) {
+		$status         = $order->get_status();
+		$delivered_date = get_post_meta( $order_id, 'delivered_date', true );
+
+		if ( ! $delivered_date ) {
+			return $status;
+		}
+
+		return $order_status;
+	}
+
+	public function remove_wc_sessions_on_cart() {
+		WC()->session->__unset( 'deposit_chosen' );
+		WC()->session->__unset( 'deposit_amount' );
+		WC()->session->__unset( 'pending_amount' );
+	}
+
+	public function insert_emails_meta( $order, $deposit_chosen ) {
 
 		if ( have_rows( 'payment_emails', $deposit_chosen ) ) {
 			while ( have_rows( 'payment_emails', $deposit_chosen ) ) {
 				the_row();
 				$key = 'payment_email_key_' . $deposit_chosen . '_' . get_row_index();
-				update_post_meta( $order_id, $key, false );
+				$order->update_meta_data( $key, false );
 			}
 		}
 	}
@@ -267,6 +292,8 @@ class Deposit {
 			update_post_meta( $order_id, '_deposit_amount', $deposit_amount );
 			update_post_meta( $order_id, 'needs_payment', true );
 
+			// $this->insert_emails_meta( $order, $deposit_chosen );
+
 			WC()->session->__unset( 'deposit_chosen' );
 			WC()->session->__unset( 'deposit_amount' );
 			WC()->session->__unset( 'pending_amount' );
@@ -418,6 +445,53 @@ class Deposit {
 	<div id="depositTable"></div>
 
 </div>
+		<?php
+	}
+
+	public function output_deposit_selection() {
+		$woo_instance = \NOVA_B2B\Woocommerce::get_instance();
+		if ( ! $woo_instance ) {
+			return;
+		}
+		$payments_selection = $woo_instance->get_payment_selections();
+
+		if ( ! $payments_selection ) {
+			return;
+		}
+
+		$chosen = WC()->session->get( 'deposit_chosen' );
+		$chosen = empty( $chosen ) ? WC()->checkout->get_value( 'deposit_chosen' ) : $chosen;
+		$chosen = empty( $chosen ) ? '0' : $chosen;
+		?>
+<fieldset>
+	<legend class="px-4 uppercase"><span><?php esc_html_e( 'Payment Type', 'woocommerce' ); ?></span></legend>
+	<div class="grid md:grid-cols-3 gap-4 update_totals_on_change">
+		<div class="cursor-pointer h-full">
+			<label for="payment_0"
+				class="block h-full justify-end p-3 border rounded-md w-full max-w-sm cursor-pointer hover:border-slate-500 hover:bg-slate-200 hover:shadow-lg">
+				<input class="bg-none" id="payment_0" type="radio" name="deposit_chosen" value="0"
+					<?php echo ( '0' == $chosen ? 'checked' : '' ); ?>>
+				<span>Full</span>
+				<span class="text-sm font-body block mt-2 hidden">Description</span>
+			</label>
+		</div>
+		<?php
+		foreach ( $payments_selection as $key => $selection ) {
+			?>
+		<div class="cursor-pointer h-full">
+			<label for="payment_<?php echo $selection['id']; ?>"
+				class="block h-full justify-end p-3 border rounded-md w-full max-w-sm cursor-pointer hover:border-slate-500 hover:bg-slate-200 hover:shadow-lg">
+				<input class="bg-none" id="payment_<?php echo $selection['id']; ?>" type="radio" name="deposit_chosen"
+					value="<?php echo $selection['id']; ?>" id="payment_<?php echo $selection['id']; ?>"
+					<?php echo ( $selection['id'] == $chosen ? 'checked' : '' ); ?>>
+				<span><?php echo $selection['title']; ?></span>
+				<span class="text-sm font-body block mt-2"><?php echo $selection['description']; ?></span>
+			</label>
+		</div>
+		<?php } ?>
+	</div>
+</fieldset>
+
 		<?php
 	}
 }
