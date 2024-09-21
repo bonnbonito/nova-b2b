@@ -4889,10 +4889,11 @@ __webpack_require__.r(__webpack_exports__);
 function OrderActions({
   order
 }) {
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "relative flex justify-end"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_DropdownMenu__WEBPACK_IMPORTED_MODULE_2__.DropdownMenu, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_DropdownMenu__WEBPACK_IMPORTED_MODULE_2__.DropdownMenuTrigger, {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_DropdownMenu__WEBPACK_IMPORTED_MODULE_2__.DropdownMenu, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_DropdownMenu__WEBPACK_IMPORTED_MODULE_2__.DropdownMenuTrigger, {
     asChild: true
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+    className: "flex items-center justify-center w-full h-full",
+    title: "Open Actions"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
     xmlns: "http://www.w3.org/2000/svg",
     fill: "none",
@@ -4904,7 +4905,7 @@ function OrderActions({
     strokeLinecap: "round",
     strokeLinejoin: "round",
     d: "M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_DropdownMenu__WEBPACK_IMPORTED_MODULE_2__.DropdownMenuContent, {
+  })))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_DropdownMenu__WEBPACK_IMPORTED_MODULE_2__.DropdownMenuContent, {
     className: "bg-white"
   }, Object.entries(order.actions).map(([actionKey, actionValue]) => {
     let content, title;
@@ -4944,7 +4945,7 @@ function OrderActions({
         printInvoice(actionValue.url);
       } : undefined
     }, content, " ", title));
-  }))));
+  })));
 }
 
 /***/ }),
