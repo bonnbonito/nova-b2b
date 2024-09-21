@@ -679,6 +679,7 @@ export const Letters = ({ item }) => {
 						setAcrylicBase(color);
 						setOpenAcrylicColor(false);
 					}}
+					samePrice={false}
 				/>
 
 				<Dropdown

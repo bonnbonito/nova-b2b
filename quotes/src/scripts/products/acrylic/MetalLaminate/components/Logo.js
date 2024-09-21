@@ -568,6 +568,7 @@ export function Logo({ item }) {
 						setAcrylicBase(color);
 						setOpenAcrylicColor(false);
 					}}
+					samePrice={false}
 				/>
 
 				<Dropdown

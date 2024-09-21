@@ -513,6 +513,7 @@ export function Logo({ item }) {
 						setPvcBaseColor(color);
 						setOpenColor(false);
 					}}
+					samePrice={false}
 				/>
 
 				<Dropdown

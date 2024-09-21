@@ -668,6 +668,7 @@ export function Letters({ item }) {
 						setPvcBaseColor(color);
 						setOpenColor(false);
 					}}
+					samePrice={false}
 				/>
 
 				<Dropdown
