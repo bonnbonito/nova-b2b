@@ -41,8 +41,19 @@ class Deposit {
 		add_filter( 'woocommerce_get_order_item_totals', array( $this, 'deposit_insert_order_total_row' ), 90, 2 );
 		add_filter( 'woocommerce_order_is_paid', array( $this, 'order_is_paid' ), 10, 2 );
 		add_action( 'nova_pending_payments_after_content', array( $this, 'pending_page_after_content' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_nova_output_style' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_nova_scripts' ) );
 		add_action( 'woocommerce_order_status_completed', array( $this, 'needs_payment_update' ), 99 );
+		add_action( 'woocommerce_order_status_delivered', array( $this, 'insert_delivered_date' ) );
+		add_action( 'woocommerce_order_status_shipped', array( $this, 'insert_shipped_date' ) );
+	}
+
+	public function insert_delivered_date( $order_id ) {
+		$today = date( 'Ymd' );
+		update_post_meta( $order_id, 'delivered_date', $today );
+	}
+	public function insert_shipped_date( $order_id ) {
+		$today = date( 'Ymd' );
+		update_post_meta( $order_id, 'shipped_date', $today );
 	}
 
 	public function needs_payment_update( $order_id ) {
@@ -65,13 +76,91 @@ class Deposit {
 		}
 	}
 
-	public function enqueue_nova_output_style() {
+	public function order_actions( $order ) {
+		$actions = array();
+
+		if ( $order->get_status() === 'pending' ) {
+			$actions['pay'] = array(
+				'name'  => __( 'Pay', 'woocommerce' ),
+				'url'   => $order->get_checkout_payment_url(),
+				'class' => 'button',
+			);
+		}
+
+		return $actions;
+	}
+
+	public function get_pending_payments() {
+
+		global $wpdb;
+		$pending_payments = array();
+
+		$table_name = $wpdb->prefix . 'order_payments';
+
+		// Get all data from the table
+		$results = $wpdb->get_results(
+			$wpdb->prepare( "SELECT * FROM $table_name" )
+		);
+
+		foreach ( $results as $result ) {
+
+			$order_id = $result->order_id;
+			$order    = wc_get_order( $order_id );
+
+			if ( ! $order ) {
+				continue;
+			}
+
+			$manual_delivered_date = get_field( 'manual_delivered_date', $order->get_id() );
+			$delivered_date        = $order->get_meta( 'delivered_date' );
+
+			if ( $manual_delivered_date ) {
+				$date_obj = \DateTime::createFromFormat( 'd/m/Y', $manual_delivered_date );
+				if ( $date_obj ) {
+					$delivered_date = $date_obj->format( 'F d, Y' );
+				}
+			}
+			$total = $order->get_total();
+
+			$pending_payments[] = array(
+				'order_id'        => $result->order_id,
+				'order_number'    => '#' . $order->get_order_number(),
+				'deposit_chosen'  => $order->get_meta( '_deposit_chosen_title' ),
+				'deposit_amount'  => wc_price( $order->get_meta( '_deposit_amount' ), array( 'currency' => $order->get_currency() ) ),
+				'total'           => $total,
+				'total_amount'    => wc_price( $total, array( 'currency' => $order->get_currency() ) ),
+				'payment_date'    => $result->payment_date,
+				'customer_name'   => $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(),
+				'order_status'    => wc_get_order_status_name( $order->get_status() ),
+				'delivered_date'  => $delivered_date,
+				'order_admin_url' => admin_url( 'post.php?post=' . $order_id . '&action=edit' ),
+				'order_actions'   => $this->order_actions( $order ),
+			);
+
+		}
+
+		return $pending_payments;
+	}
+
+	public function enqueue_nova_scripts() {
 		// Get the current screen
 		$screen = get_current_screen();
 
 		// Check if we're on the pending payments page
-		if ( isset( $screen->id ) && $screen->id === 'woocommerce_page_pending-payments' ) {
-			wp_enqueue_style( 'nova-table-data', get_stylesheet_directory_uri() . '/assets/css/table-data.css', array(), wp_get_theme()->get( 'Version' ) );
+		if ( isset( $screen->id ) && 'woocommerce_page_pending-payments' === $screen->id ) {
+			wp_enqueue_style( 'nova-deposits', get_stylesheet_directory_uri() . '/deposits/assets/css/dist/output.css', array(), wp_get_theme()->get( 'Version' ) );
+
+			wp_enqueue_script( 'nova-deposits', get_stylesheet_directory_uri() . '/deposits/build/index.js', array( 'wp-element' ), wp_get_theme()->get( 'Version' ), true );
+
+			wp_localize_script(
+				'nova-deposits',
+				'NovaDeposits',
+				array(
+					'ajax_url'         => admin_url( 'admin-ajax.php' ),
+					'nonce'            => wp_create_nonce( 'nonce' ),
+					'pending_payments' => $this->get_pending_payments(),
+				)
+			);
 
 		}
 	}
@@ -310,26 +399,8 @@ class Deposit {
 	public function pending_page_after_content() {
 		?>
 <div class="wrap">
-	<table class="table-data">
-		<thead>
-			<tr>
-				<th>Order ID</th>
-				<th>Customer</th>
-				<th>Payment Type</th>
-				<th>Pending Amount</th>
-				<th>Delivered Date</th>
-				<th>Due Date</th>
-				<th>Actions</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>The Sliding Mr. Bones (Next Stop, Pottersville)</td>
-				<td>Malcolm Lockyer</td>
-				<td>1961</td>
-			</tr>
-		</tbody>
-	</table>
+	<div id="depositTable"></div>
+
 </div>
 		<?php
 	}

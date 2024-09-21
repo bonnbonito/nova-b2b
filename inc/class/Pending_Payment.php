@@ -63,11 +63,6 @@ class Pending_Payment {
 		add_filter( 'woocommerce_order_get_date_completed', array( $this, 'modify_order_completed_date' ), 10, 2 );
 	}
 
-	public function insert_delivered_date( $order_id ) {
-		$today = date( 'Ymd' );
-		update_post_meta( $order_id, 'delivered_date', $today );
-	}
-
 
 	public function modify_order_completed_date( $date_completed, $order ) {
 		// Check if the order has a custom field for manual delivered date
@@ -116,15 +111,15 @@ class Pending_Payment {
 		?>
 <h3 style="margin-bottom:4pt;">E-transfer Instruction</h3>
 <ul style="list-style: disc; margin-left: 5pt; padding-left: 5pt;">
-	<li>Log in to your bank’s website or mobile app.</li>
-	<li>Go to the “Send Money” or “E-Transfer” section.</li>
-	<li>Enter the email: <b>hello@novasignage.com</b></li>
-	<li>Specify the amount to send.</li>
-	<li>Create a security question if the bank requires one. Please set the answer to: <b>neonsigns</b></li>
-	<li>Confirm the details and send the transfer.</li>
-	<li>Inform our team via email</li>
+    <li>Log in to your bank’s website or mobile app.</li>
+    <li>Go to the “Send Money” or “E-Transfer” section.</li>
+    <li>Enter the email: <b>hello@novasignage.com</b></li>
+    <li>Specify the amount to send.</li>
+    <li>Create a security question if the bank requires one. Please set the answer to: <b>neonsigns</b></li>
+    <li>Confirm the details and send the transfer.</li>
+    <li>Inform our team via email</li>
 </ul>
-		<?php
+<?php
 		echo ob_get_clean();
 	}
 
@@ -305,7 +300,7 @@ class Pending_Payment {
 
 <p>Original Total: <?php echo $original_total; ?></p>
 
-		<?php
+<?php
 	}
 
 	public function hide_specific_orders( $query ) {
@@ -672,16 +667,16 @@ class Pending_Payment {
 <p>Hello,</p>
 <p>An outstanding invoice for #{order_number} is due today. We have sent a reminder to:</p>
 <ul>
-	<li>Customer: {customer_name} - {business_id} </li>
-	<li>Company: {business_name}</li>
-	<li>Order ID: #{order_number}</li>
-	<li>Deadline of payment: {deadline}</li>
-	<li>Unpaid Balance: {pending_payment}</li>
+    <li>Customer: {customer_name} - {business_id} </li>
+    <li>Company: {business_name}</li>
+    <li>Order ID: #{order_number}</li>
+    <li>Deadline of payment: {deadline}</li>
+    <li>Unpaid Balance: {pending_payment}</li>
 </ul>
 
 <p>Order details:</p>
 {order_details}
-		<?php
+<?php
 		$message = ob_get_clean();
 
 		$user_id       = $order->get_user_id() ? $order->get_user_id() : 0;
@@ -725,14 +720,14 @@ class Pending_Payment {
 <p>Hello,</p>
 <p>We've informed your client that the product is now prepared and ready to ship:</p>
 <ul>
-	<li>Customer: {customer_name} - {business_id} </li>
-	<li>Company: {business_name}</li>
-	<li>Order ID: #{order_number}</li>
+    <li>Customer: {customer_name} - {business_id} </li>
+    <li>Company: {business_name}</li>
+    <li>Order ID: #{order_number}</li>
 </ul>
 
 <p>Here's the final invoice and their tracking information:</p>
 {order_details}
-		<?php
+<?php
 		$message       = ob_get_clean();
 		$first_name    = $order->get_billing_first_name();
 		$user_id       = $order->get_user_id() ? $order->get_user_id() : 0;
@@ -1536,14 +1531,14 @@ class Pending_Payment {
 			ob_start();
 			?>
 <a href="<?php echo esc_url( $order_url ); ?>"
-	class="bg-red-100 border-solid border border-red-400 text-red-700 px-4 py-3 rounded relative mb-1 inline-block"
-	role="alert">
-	<strong class="font-bold">Order #<?php echo esc_html( $order_id ); ?> -
-			<?php echo wc_price( $order_total ); ?></strong>:
-	<span class="block sm:inline">Click here to pay.</span>
+    class="bg-red-100 border-solid border border-red-400 text-red-700 px-4 py-3 rounded relative mb-1 inline-block"
+    role="alert">
+    <strong class="font-bold">Order #<?php echo esc_html( $order_id ); ?> -
+        <?php echo wc_price( $order_total ); ?></strong>:
+    <span class="block sm:inline">Click here to pay.</span>
 </a>
 
-			<?php
+<?php
 			echo ob_get_clean();
 		}
 		echo '</div>';
