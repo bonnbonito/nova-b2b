@@ -42,6 +42,7 @@ $instances = array(
 	'Dropbox',
 	'FAQ',
 	'Order_History',
+	'Checkout',
 );
 
 foreach ( $instances as $instance ) {

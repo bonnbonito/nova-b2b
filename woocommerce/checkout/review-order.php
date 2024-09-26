@@ -212,9 +212,6 @@ $woo_instance = \NOVA_B2B\Woocommerce::get_instance();
 		</tr>
 		<?php endif; ?>
 
-
-
-
 		<?php do_action( 'woocommerce_review_order_after_order_total' ); ?>
 
 	</tfoot>

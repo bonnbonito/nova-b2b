@@ -2047,7 +2047,7 @@ function createStringFromObject(mergedProps, registered, obj) {
   return string;
 }
 
-var labelPattern = /label:\s*([^\s;\n{]+)\s*(;|$)/g;
+var labelPattern = /label:\s*([^\s;{]+)\s*(;|$)/g;
 var sourceMapPattern;
 
 {
@@ -2425,7 +2425,7 @@ function getRegisteredStyles(registered, registeredStyles, classNames) {
   classNames.split(' ').forEach(function (className) {
     if (registered[className] !== undefined) {
       registeredStyles.push(registered[className] + ";");
-    } else {
+    } else if (className) {
       rawClassName += className + " ";
     }
   });
