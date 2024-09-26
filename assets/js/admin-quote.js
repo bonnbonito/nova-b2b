@@ -160,6 +160,18 @@ function allAttributes(sign) {
 		{ label: 'PRODUCT LINE', value: sign.productLine ? sign.productLine : '' },
 		{ label: 'TYPE', value: sign.type },
 		{ label: 'TEXT', value: sign.letters },
+		{
+			label: 'MATERIAL',
+			value: sign.etchedMaterial ? sign.etchedMaterial : '',
+		},
+		{
+			label: 'WIDTH',
+			value: sign.etchedWidth ? sign.etchedWidth : '',
+		},
+		{
+			label: 'HEIGHT',
+			value: sign.etchedHeight ? sign.etchedHeight : '',
+		},
 
 		{ label: 'FONT', value: sign.font ? sign.font : '' },
 		{
