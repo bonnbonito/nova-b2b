@@ -18,13 +18,13 @@ export default function SearchTotal({
 					}}
 					className={`w-full p-2 text-sm`}
 				>
-					<option value="equals" selected={totalSort === 'equals'}>
+					<option value="equals" defaultValue={totalSort === 'equals'}>
 						=
 					</option>
-					<option value="less" selected={totalSort === 'less'}>
+					<option value="less" defaultValue={totalSort === 'less'}>
 						LESS
 					</option>
-					<option value="greater" selected={totalSort === 'greater'}>
+					<option value="greater" defaultValue={totalSort === 'greater'}>
 						GREATER
 					</option>
 				</select>

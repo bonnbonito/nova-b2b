@@ -494,7 +494,10 @@ export function Logo({ item }) {
 					title="Metal Option"
 					onChange={(e) => setMetal(e.target.value)}
 					options={metalOptions.map((metal) => (
-						<option value={metal.option} selected={metal.option === item.metal}>
+						<option
+							value={metal.option}
+							defaultValue={metal.option === item.metal}
+						>
 							{metal.option}
 						</option>
 					))}
@@ -507,7 +510,7 @@ export function Logo({ item }) {
 					options={metalThicknessOptions.map((thickness) => (
 						<option
 							value={thickness.value}
-							selected={thickness === selectedThickness}
+							defaultValue={thickness === selectedThickness}
 						>
 							{thickness.thickness}
 						</option>
@@ -534,7 +537,7 @@ export function Logo({ item }) {
 					options={finishOptions.map((finishing) => (
 						<option
 							value={finishing.option}
-							selected={finishing.option === selectedFinishing}
+							defaultValue={finishing.option === selectedFinishing}
 						>
 							{finishing.option}
 						</option>
@@ -549,7 +552,7 @@ export function Logo({ item }) {
 						options={metalFinishOptions.map((metalFinish) => (
 							<option
 								value={metalFinish.option}
-								selected={metalFinish.option === stainLessMetalFinish}
+								defaultValue={metalFinish.option === stainLessMetalFinish}
 							>
 								{metalFinish.option}
 							</option>
@@ -567,7 +570,9 @@ export function Logo({ item }) {
 						options={stainlessSteelPolishedOptions.map((steelPolished) => (
 							<option
 								value={steelPolished.option}
-								selected={steelPolished.option === item.stainlessSteelPolished}
+								defaultValue={
+									steelPolished.option === item.stainlessSteelPolished
+								}
 							>
 								{steelPolished.option}
 							</option>
@@ -599,7 +604,7 @@ export function Logo({ item }) {
 					options={waterProofOptions.map((option) => (
 						<option
 							value={option.option}
-							selected={option.option == waterproof}
+							defaultValue={option.option == waterproof}
 						>
 							{option.option}
 						</option>
@@ -611,7 +616,10 @@ export function Logo({ item }) {
 					title="Mounting Options"
 					onChange={handleOnChangeInstallation}
 					options={metalMountingOptions.map((option) => (
-						<option value={option.option} selected={option.option === mounting}>
+						<option
+							value={option.option}
+							defaultValue={option.option === mounting}
+						>
 							{option.option}
 						</option>
 					))}
@@ -625,7 +633,7 @@ export function Logo({ item }) {
 						options={studLengthOptions.map((option) => (
 							<option
 								value={option.value}
-								selected={option.value == studLength}
+								defaultValue={option.value == studLength}
 							>
 								{option.value}
 							</option>
@@ -641,7 +649,7 @@ export function Logo({ item }) {
 						options={spacerStandoffOptions.map((option) => (
 							<option
 								value={option.value}
-								selected={option.value == spacerStandoffDistance}
+								defaultValue={option.value == spacerStandoffDistance}
 							>
 								{option.value}
 							</option>

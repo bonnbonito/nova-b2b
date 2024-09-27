@@ -609,7 +609,7 @@ export const NeonSign = ({ item }) => {
 						<option
 							key={option.option}
 							value={option.option}
-							selected={option.option === rigidBacking}
+							defaultValue={option.option === rigidBacking}
 						>
 							{option.option}
 						</option>
@@ -643,7 +643,7 @@ export const NeonSign = ({ item }) => {
 								<option
 									key={option.option}
 									value={option.option}
-									selected={option.option === finish}
+									defaultValue={option.option === finish}
 								>
 									{option.option}
 								</option>
@@ -660,7 +660,7 @@ export const NeonSign = ({ item }) => {
 						<option
 							key={option.option}
 							value={option.option}
-							selected={option.option === mounting}
+							defaultValue={option.option === mounting}
 						>
 							{option.option}
 						</option>
@@ -675,7 +675,7 @@ export const NeonSign = ({ item }) => {
 						<option
 							key={option.option}
 							value={option.option}
-							selected={option.option === remoteControl}
+							defaultValue={option.option === remoteControl}
 						>
 							{option.option}
 						</option>
@@ -691,7 +691,7 @@ export const NeonSign = ({ item }) => {
 						<option
 							key={option.option}
 							value={option.option}
-							selected={option.option === wireExitLocation}
+							defaultValue={option.option === wireExitLocation}
 						>
 							{option.option}
 						</option>
@@ -707,7 +707,7 @@ export const NeonSign = ({ item }) => {
 						<option
 							key={option.option}
 							value={option.option}
-							selected={option.option === wireType}
+							defaultValue={option.option === wireType}
 						>
 							{option.option}
 						</option>
@@ -723,7 +723,7 @@ export const NeonSign = ({ item }) => {
 						<option
 							key={option.option}
 							value={option.option}
-							selected={option.option === waterproof}
+							defaultValue={option.option === waterproof}
 						>
 							{option.option}
 						</option>

@@ -128,7 +128,11 @@ const Signage = ({ index, item, children, storage, editable = true }) => {
 			</div>
 			<div className={`signage-content ${open ? 'open' : ''}`}>
 				<div
-					className={(!open || item.type === 'letters') && 'overflow-hidden'}
+					className={
+						!open || item.type === 'letters'
+							? 'overflow-hidden'
+							: 'overflow-auto'
+					}
 				>
 					{children}
 				</div>

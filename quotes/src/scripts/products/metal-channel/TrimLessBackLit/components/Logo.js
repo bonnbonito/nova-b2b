@@ -513,7 +513,7 @@ export function Logo({ item }) {
 	return (
 		<>
 			{item.productLine && (
-				<div clasName="py-4 my-4">
+				<div className="py-4 my-4">
 					PRODUCT LINE:{' '}
 					<span
 						className="font-title"
@@ -529,7 +529,7 @@ export function Logo({ item }) {
 					options={waterProofOptions.map((option) => (
 						<option
 							value={option.option}
-							selected={option.option == waterproof}
+							defaultValue={option.option == waterproof}
 						>
 							{option.option}
 						</option>
@@ -542,7 +542,7 @@ export function Logo({ item }) {
 					value={depth?.value}
 					onChange={handleOnChangeDepth}
 					options={depthOptions.map((thickness) => (
-						<option value={thickness.value} selected={thickness === depth}>
+						<option value={thickness.value} defaultValue={thickness === depth}>
 							{thickness.depth}
 						</option>
 					))}
@@ -568,7 +568,7 @@ export function Logo({ item }) {
 					options={finishingOptions.map((finishing) => (
 						<option
 							value={finishing.value}
-							selected={finishing.value === selectedFinishing}
+							defaultValue={finishing.value === selectedFinishing}
 						>
 							{finishing.value}
 						</option>
@@ -583,7 +583,7 @@ export function Logo({ item }) {
 						options={metalFinishOptions.map((finish) => (
 							<option
 								value={finish.option}
-								selected={finish.option === metalFinish}
+								defaultValue={finish.option === metalFinish}
 							>
 								{finish.option}
 							</option>
@@ -615,7 +615,7 @@ export function Logo({ item }) {
 					title="LED Light Color"
 					onChange={handleOnChangeLedLight}
 					options={ledLightColors.map((color) => (
-						<option value={color} selected={color == ledLightColor}>
+						<option value={color} defaultValue={color == ledLightColor}>
 							{color}
 						</option>
 					))}
@@ -626,7 +626,7 @@ export function Logo({ item }) {
 					title="Acrylic Reveal"
 					onChange={handleOnChangeAcrylicReveal}
 					options={acrylicRevealOptions.map((option) => (
-						<option value={option} selected={option == acrylicReveal}>
+						<option value={option} defaultValue={option == acrylicReveal}>
 							{option}
 						</option>
 					))}
@@ -639,7 +639,7 @@ export function Logo({ item }) {
 					options={mountingDefaultOptions.map((mounting) => (
 						<option
 							value={mounting.value}
-							selected={mounting.value == mounting}
+							defaultValue={mounting.value == mounting}
 						>
 							{mounting.value}
 						</option>
@@ -654,7 +654,7 @@ export function Logo({ item }) {
 						options={studLengthOptions.map((option) => (
 							<option
 								value={option.value}
-								selected={option.value == studLength}
+								defaultValue={option.value == studLength}
 							>
 								{option.value}
 							</option>
@@ -670,7 +670,7 @@ export function Logo({ item }) {
 						options={spacerStandoffOptions.map((option) => (
 							<option
 								value={option.value}
-								selected={option.value == spacerStandoffDistance}
+								defaultValue={option.value == spacerStandoffDistance}
 							>
 								{option.value}
 							</option>
@@ -685,7 +685,7 @@ export function Logo({ item }) {
 					options={lightingOptions.map((option) => (
 						<option
 							value={option.value}
-							selected={option.value == includedItems}
+							defaultValue={option.value == includedItems}
 						>
 							{option.value}
 						</option>

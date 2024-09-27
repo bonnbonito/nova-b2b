@@ -469,7 +469,7 @@ export function Logo({ item }) {
 					options={thicknessOptions.map((thickness) => (
 						<option
 							value={thickness.value}
-							selected={thickness === selectedThickness}
+							defaultValue={thickness === selectedThickness}
 						>
 							{thickness.thickness}
 						</option>
@@ -495,7 +495,7 @@ export function Logo({ item }) {
 					value={layers}
 					onChange={(e) => setLayers(e.target.value)}
 					options={layersOptions.map((layer) => (
-						<option value={layer} selected={layer == layers}>
+						<option value={layer} defaultValue={layer == layers}>
 							{layer}
 						</option>
 					))}
@@ -507,7 +507,7 @@ export function Logo({ item }) {
 					options={finishingOptions.map((finishing) => (
 						<option
 							value={finishing.name}
-							selected={finishing.name === selectedFinishing}
+							defaultValue={finishing.name === selectedFinishing}
 						>
 							{finishing.name}
 						</option>
@@ -521,7 +521,7 @@ export function Logo({ item }) {
 					options={waterProofOptions.map((option) => (
 						<option
 							value={option.option}
-							selected={option.option == waterproof}
+							defaultValue={option.option == waterproof}
 						>
 							{option.option}
 						</option>
@@ -535,7 +535,7 @@ export function Logo({ item }) {
 					options={mountingOptions.map((option) => (
 						<option
 							value={option.mounting_option}
-							selected={option.mounting_option === selectedMounting}
+							defaultValue={option.mounting_option === selectedMounting}
 						>
 							{option.mounting_option}
 						</option>
@@ -552,7 +552,7 @@ export function Logo({ item }) {
 							options={studLengthOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == studLength}
+									defaultValue={option.value == studLength}
 								>
 									{option.value}
 								</option>
@@ -565,7 +565,7 @@ export function Logo({ item }) {
 							options={spacerStandoffOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == spacerStandoffDistance}
+									defaultValue={option.value == spacerStandoffDistance}
 								>
 									{option.value}
 								</option>

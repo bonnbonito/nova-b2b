@@ -479,7 +479,7 @@ export function Logo({ item }) {
 					options={thicknessOptions.map((thickness) => (
 						<option
 							value={thickness.value}
-							selected={thickness === item.thickness}
+							defaultValue={thickness === item.thickness}
 						>
 							{thickness.thickness}
 						</option>
@@ -522,7 +522,7 @@ export function Logo({ item }) {
 					options={finishingOptions.map((finishing) => (
 						<option
 							value={finishing.name}
-							selected={finishing.name === item.finishing}
+							defaultValue={finishing.name === item.finishing}
 						>
 							{finishing.name}
 						</option>
@@ -536,7 +536,7 @@ export function Logo({ item }) {
 					options={waterProofSelections.map((option) => (
 						<option
 							value={option.option}
-							selected={option.option == waterproof}
+							defaultValue={option.option == waterproof}
 						>
 							{option.option}
 						</option>
@@ -548,7 +548,10 @@ export function Logo({ item }) {
 					title="mounting"
 					onChange={handleOnChangeMounting}
 					options={mountingSelections.map((option) => (
-						<option value={option.value} selected={option.value === mounting}>
+						<option
+							value={option.value}
+							defaultValue={option.value === mounting}
+						>
 							{option.value}
 						</option>
 					))}
@@ -566,7 +569,7 @@ export function Logo({ item }) {
 							options={studLengthOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == studLength}
+									defaultValue={option.value == studLength}
 								>
 									{option.value}
 								</option>
@@ -583,7 +586,7 @@ export function Logo({ item }) {
 							options={spacerStandoffOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == spacerStandoffDistance}
+									defaultValue={option.value == spacerStandoffDistance}
 								>
 									{option.value}
 								</option>
