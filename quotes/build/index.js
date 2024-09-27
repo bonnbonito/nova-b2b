@@ -3191,14 +3191,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @radix-ui/react-dialog */ "./node_modules/@radix-ui/react-dialog/dist/index.mjs");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @radix-ui/react-dialog */ "./node_modules/@radix-ui/react-dialog/dist/index.mjs");
 /* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AppProvider */ "./src/scripts/AppProvider.tsx");
 /* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./svg/Icons */ "./src/scripts/svg/Icons.js");
 /* harmony import */ var _utils_QuoteFunctions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./utils/QuoteFunctions */ "./src/scripts/utils/QuoteFunctions.js");
 /* harmony import */ var _utils_uploadFunctions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./utils/uploadFunctions */ "./src/scripts/utils/uploadFunctions.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 
 
 
@@ -3271,7 +3270,7 @@ function ModalSave({
   }, [signage]);
   const loadingStatus = () => {
     if (isLoading) {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_svg_Icons__WEBPACK_IMPORTED_MODULE_2__.LoadingIcon, {
+      return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_2__.LoadingIcon, {
         text: "Saving..."
       });
     } else {
@@ -3418,123 +3417,95 @@ function ModalSave({
       }
     }
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_6__.Root, {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_5__.Root, {
     open: submitting ? true : open,
-    onOpenChange: setOpen,
-    children: [isLoading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
-      className: btnClass,
-      children: isLoading ? 'Please wait...' : label
-    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_6__.Trigger, {
-      asChild: true,
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
-        className: btnClass,
-        children: isLoading ? 'Please wait...' : label
-      })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_6__.Portal, {
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_6__.Overlay, {
-        className: "bg-black/50 data-[state=open]:animate-overlayShow fixed inset-0 z-[50]"
-      }), !error ? !submitted ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_6__.Content, {
-        className: "data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[550px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none z-[51] overflow-auto",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_6__.Title, {
-          className: "m-0 font-title uppercase font-medium text-2xl",
-          children: action === 'processing' || action === 'update-processing' ? 'Submit Your Quote Request' : 'Save Your Draft'
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_6__.Description, {
-          className: "mt-[10px] mb-5 text-[15px] leading-normal",
-          children: "Please add a PROJECT NAME."
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("form", {
-          ref: formRef,
-          onSubmit: handleFormSubmit,
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
-            className: "nline-flex h-[45px] w-full flex-1 items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none focus:shadow-[0_0_0_2px] font-title",
-            name: "quoteTitle",
-            id: "quoteTitle",
-            ref: inputRef,
-            required: true,
-            value: title,
-            onChange: handleTitleChange,
-            disabled: isLoading
-          }), action === 'processing' || action === 'update-processing' ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("p", {
-            className: "text-sm mt-4",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("strong", {
-              children: "NOTE:"
-            }), " Our team will finalize the pricing for this order once you click Submit. You CANNOT EDIT this project afterwards."]
-          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("p", {
-            className: "text-sm mt-4",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("strong", {
-              children: "NOTE:"
-            }), " You can still edit this product after you click", ' ', action === 'update' ? 'UPDATE QUOTE' : 'SAVE TO DRAFT', ". Go to MOCKUPS and select DRAFTS."]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
-            className: "mt-[25px] flex justify-end",
-            children: title.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
-              className: "block h-[35px] items-center justify-center rounded-[4px] px-[15px] font-medium leading-none focus:shadow-[0_0_0_2px] focus:outline-none background-nova-primary text-white font-title uppercase border bg-black",
-              disabled: isLoading,
-              children: loadingStatus()
-            })
-          })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_6__.Close, {
-          asChild: true,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
-            className: "text-nova-gray absolute top-[10px] right-[10px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center focus:shadow-[0_0_0_2px] focus:outline-none border cursor-pointer",
-            "aria-label": "Close",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_svg_Icons__WEBPACK_IMPORTED_MODULE_2__.CloseIcon, {})
-          })
-        })]
-      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_6__.Content, {
-        className: "data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[550px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none z-[51] overflow-auto",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_6__.Description, {
-          className: "mt-[10px] mb-5 text-[15px] leading-normal",
-          children: [(action === 'processing' || action === 'update-processing') && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
-            dangerouslySetInnerHTML: {
-              __html: toProcessingMessage()
-            }
-          }), action === 'draft' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
-            dangerouslySetInnerHTML: {
-              __html: saveDraftMessageHtml()
-            }
-          }), (action === 'update' || action === 'update-processing-admin') && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
-            dangerouslySetInnerHTML: {
-              __html: updateMessageHtml()
-            }
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-            className: "gap-2 block justify-center sm:flex",
-            children: [(action === 'draft' || action === 'update' || action === 'update-processing-admin') && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("a", {
-              href: NovaQuote.quote_url + '?qedit=1&qid=' + quoteID,
-              className: "block mb-4 text-center text-sm px-3 py-2 text-white no-underline bg-nova-primary rounded hover:bg-nova-secondary",
-              children: "Continue Editing"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("a", {
-              href: NovaQuote.quote_url,
-              className: "block mb-4 text-center text-sm px-3 py-2 text-white no-underline bg-nova-primary rounded hover:bg-nova-secondary",
-              children: "Create New Mockup"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("a", {
-              href: `${NovaQuote.mockup_account_url}`,
-              className: "block mb-4 text-center text-sm px-3 py-2 text-white no-underline bg-nova-primary rounded hover:bg-nova-secondary",
-              children: "Go to Mockups"
-            })]
-          })]
-        })
-      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_6__.Content, {
-        className: "data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[550px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none z-[51] overflow-auto",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_6__.Description, {
-          className: "mt-[10px] mb-5 text-[15px] leading-normal",
-          children: [error.type === 'missing' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("h5", {
-            className: "font-title mb-4 uppercase",
-            children: "Missing Values:"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
-            dangerouslySetInnerHTML: {
-              __html: error.message
-            }
-          })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_6__.Close, {
-          asChild: true,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
-            className: "text-nova-gray absolute top-[10px] right-[10px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center focus:shadow-[0_0_0_2px] focus:outline-none border cursor-pointer",
-            "aria-label": "Close",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_svg_Icons__WEBPACK_IMPORTED_MODULE_2__.CloseIcon, {})
-          })
-        })]
-      })]
-    })]
-  });
+    onOpenChange: setOpen
+  }, isLoading ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: btnClass
+  }, isLoading ? 'Please wait...' : label) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_5__.Trigger, {
+    asChild: true
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: btnClass
+  }, isLoading ? 'Please wait...' : label)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_5__.Portal, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_5__.Overlay, {
+    className: "bg-black/50 data-[state=open]:animate-overlayShow fixed inset-0 z-[50]"
+  }), !error ? !submitted ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_5__.Content, {
+    className: "data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[550px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none z-[51] overflow-auto"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_5__.Title, {
+    className: "m-0 font-title uppercase font-medium text-2xl"
+  }, action === 'processing' || action === 'update-processing' ? 'Submit Your Quote Request' : 'Save Your Draft'), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_5__.Description, {
+    className: "mt-[10px] mb-5 text-[15px] leading-normal"
+  }, "Please add a PROJECT NAME."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", {
+    ref: formRef,
+    onSubmit: handleFormSubmit
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    className: "nline-flex h-[45px] w-full flex-1 items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none focus:shadow-[0_0_0_2px] font-title",
+    name: "quoteTitle",
+    id: "quoteTitle",
+    ref: inputRef,
+    required: true,
+    value: title,
+    onChange: handleTitleChange,
+    disabled: isLoading
+  }), action === 'processing' || action === 'update-processing' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    className: "text-sm mt-4"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, "NOTE:"), " Our team will finalize the pricing for this order once you click Submit. You CANNOT EDIT this project afterwards.") : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    className: "text-sm mt-4"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, "NOTE:"), " You can still edit this product after you click", ' ', action === 'update' ? 'UPDATE QUOTE' : 'SAVE TO DRAFT', ". Go to MOCKUPS and select DRAFTS."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "mt-[25px] flex justify-end"
+  }, title.length > 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "block h-[35px] items-center justify-center rounded-[4px] px-[15px] font-medium leading-none focus:shadow-[0_0_0_2px] focus:outline-none background-nova-primary text-white font-title uppercase border bg-black",
+    disabled: isLoading
+  }, loadingStatus()))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_5__.Close, {
+    asChild: true
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-nova-gray absolute top-[10px] right-[10px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center focus:shadow-[0_0_0_2px] focus:outline-none border cursor-pointer",
+    "aria-label": "Close"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_2__.CloseIcon, null)))) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_5__.Content, {
+    className: "data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[550px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none z-[51] overflow-auto"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_5__.Description, {
+    className: "mt-[10px] mb-5 text-[15px] leading-normal"
+  }, (action === 'processing' || action === 'update-processing') && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    dangerouslySetInnerHTML: {
+      __html: toProcessingMessage()
+    }
+  }), action === 'draft' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    dangerouslySetInnerHTML: {
+      __html: saveDraftMessageHtml()
+    }
+  }), (action === 'update' || action === 'update-processing-admin') && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    dangerouslySetInnerHTML: {
+      __html: updateMessageHtml()
+    }
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "gap-2 block justify-center sm:flex"
+  }, (action === 'draft' || action === 'update' || action === 'update-processing-admin') && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+    href: NovaQuote.quote_url + '?qedit=1&qid=' + quoteID,
+    className: "block mb-4 text-center text-sm px-3 py-2 text-white no-underline bg-nova-primary rounded hover:bg-nova-secondary"
+  }, "Continue Editing"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+    href: NovaQuote.quote_url,
+    className: "block mb-4 text-center text-sm px-3 py-2 text-white no-underline bg-nova-primary rounded hover:bg-nova-secondary"
+  }, "Create New Mockup"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+    href: `${NovaQuote.mockup_account_url}`,
+    className: "block mb-4 text-center text-sm px-3 py-2 text-white no-underline bg-nova-primary rounded hover:bg-nova-secondary"
+  }, "Go to Mockups")))) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_5__.Content, {
+    className: "data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[550px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none z-[51] overflow-auto"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_5__.Title, {
+    className: "m-0 font-title uppercase font-medium text-2xl"
+  }, "Error"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_5__.Description, {
+    className: "mt-[10px] mb-5 text-[15px] leading-normal"
+  }, error.type === 'missing' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title mb-4 uppercase"
+  }, "Missing Values:")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "mt-[10px] mb-5 text-[15px] leading-normal",
+    dangerouslySetInnerHTML: {
+      __html: error.message
+    }
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_5__.Close, {
+    asChild: true
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-nova-gray absolute top-[10px] right-[10px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center focus:shadow-[0_0_0_2px] focus:outline-none border cursor-pointer",
+    "aria-label": "Close"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_2__.CloseIcon, null))))));
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ModalSave);
 
