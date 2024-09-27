@@ -69,7 +69,9 @@ export const NeonSign = ({ item }) => {
 	);
 
 	const acrylicBackingSelections = acrylicBackingOptions.map((item) => (
-		<option value={item.option}>{item.option}</option>
+		<option key={item.option} value={item.option}>
+			{item.option}
+		</option>
 	));
 
 	const neonSignsWidth = useMemo(() => {
@@ -88,7 +90,11 @@ export const NeonSign = ({ item }) => {
 	const [mounting, setMounting] = useState(item.mounting ?? 'Standard Nails');
 	const [sets, setSets] = useState(item.sets ?? 1);
 
-	const [setOptions, setSetOptions] = useState([<option value="1">1</option>]);
+	const [setOptions, setSetOptions] = useState([
+		<option key="1" value="1">
+			1
+		</option>,
+	]);
 
 	const [quantityDiscountTable, setQuantityDiscountTable] = useState([]);
 

@@ -17035,13 +17035,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
 /* harmony import */ var _SidebarNoPrice__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../SidebarNoPrice */ "./src/scripts/SidebarNoPrice.js");
 /* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Signage */ "./src/scripts/Signage.js");
 /* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../svg/Icons */ "./src/scripts/svg/Icons.js");
 /* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/custom/components/Logo.js");
 /* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../AppProvider */ "./src/scripts/AppProvider.tsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 
 
 
@@ -17059,7 +17058,7 @@ function CustomProject() {
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_5__.useAppContext)();
   function setDefaultSignage() {
     setSignage([{
-      id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_6__["default"])(),
       type: 'custom',
       title: 'CUSTOM PROJECT',
       description: '',
@@ -17086,7 +17085,7 @@ function CustomProject() {
     }
   }, []);
   const defaultArgs = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_6__["default"])(),
     type: 'custom',
     title: 'CUSTOM PROJECT',
     description: '',
@@ -17128,30 +17127,27 @@ function CustomProject() {
       }
     }
   }, []);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-    className: "md:flex gap-6",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-      className: "md:w-3/4 w-full",
-      children: [signage.map((item, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        index: index,
-        id: item.id,
-        item: item,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_components_Logo__WEBPACK_IMPORTED_MODULE_4__.Logo, {
-          item: item
-        }, item.id)
-      })), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-        className: "flex gap-2",
-        children: signage.length < 10 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("button", {
-          className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
-          onClick: () => addSignage('custom'),
-          style: {
-            border: '1px solid #d2d2d2d2'
-          },
-          children: ["ADD PROJECT", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.PlusIcon, {})]
-        })
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_SidebarNoPrice__WEBPACK_IMPORTED_MODULE_1__["default"], {})]
-  });
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:flex gap-6"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:w-3/4 w-full"
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    key: item.id,
+    index: index,
+    id: item.id,
+    item: item
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_4__.Logo, {
+    key: item.id,
+    item: item
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex gap-2"
+  }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
+    onClick: () => addSignage('custom'),
+    style: {
+      border: '1px solid #d2d2d2d2'
+    }
+  }, "ADD PROJECT", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_3__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_SidebarNoPrice__WEBPACK_IMPORTED_MODULE_1__["default"], null));
 }
 
 /***/ }),
@@ -17292,14 +17288,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
 /* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
 /* harmony import */ var _Note__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Note */ "./src/scripts/Note.js");
 /* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
 /* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
 /* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
 /* harmony import */ var _components_NeonSign__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/NeonSign */ "./src/scripts/products/led-neon/FlexNeonSign/components/NeonSign.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 
 
 
@@ -17317,7 +17312,7 @@ function FlexNeonSign() {
     tempFolderName
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
   const defaultSignage = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
     type: 'SIGN',
     title: 'SIGN 1',
     neonSignWidth: '',
@@ -17379,45 +17374,32 @@ function FlexNeonSign() {
     }
     // Only run once, no need to add dependencies if they don't change
   }, []);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
-    className: "md:flex gap-6",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
-      className: "md:w-3/4 w-full",
-      children: [signage.map((item, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_Signage__WEBPACK_IMPORTED_MODULE_4__["default"], {
-        index: index,
-        id: item.id,
-        item: item,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components_NeonSign__WEBPACK_IMPORTED_MODULE_6__.NeonSign, {
-          item: item,
-          productId: item.product
-        }, item.id)
-      })), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_Note__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        title: "Note",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("ul", {
-          className: "text-sm",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("li", {
-            children: "The neon height and width refer to the size of the neon graphics. Please note that the backing has a 1.5\" margin on all sides. If the design exceeds the neon size limit (40\u201Dx 40\u201D), we will divide them into multiple pieces to fit within the required dimensions."
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("li", {
-            children: "Please note that the price of the neon sign is NOT yet final. Our designers will provide a finalized design and accurate quote for your approval."
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("li", {
-            children: "The minimum cuttable length is 2.5cm"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("li", {
-            children: "Receive a discount for bulk orders of the same neon sign design. Savings are reflected in the instant quote's estimated total."
-          })]
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
-        className: "flex gap-2",
-        children: signage.length < 10 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("button", {
-          className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
-          onClick: () => addSignage('SIGN'),
-          style: {
-            border: '1px solid #d2d2d2d2'
-          },
-          children: ["ADD NEON SIGN", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_svg_Icons__WEBPACK_IMPORTED_MODULE_5__.PlusIcon, {})]
-        })
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_Sidebar__WEBPACK_IMPORTED_MODULE_3__["default"], {})]
-  });
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:flex gap-6"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:w-3/4 w-full"
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    key: item.id,
+    index: index,
+    id: item.id,
+    item: item
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_NeonSign__WEBPACK_IMPORTED_MODULE_6__.NeonSign, {
+    key: item.id,
+    item: item,
+    productId: item.product
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Note__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Note"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+    className: "text-sm"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The neon height and width refer to the size of the neon graphics. Please note that the backing has a 1.5\" margin on all sides. If the design exceeds the neon size limit (40\u201Dx 40\u201D), we will divide them into multiple pieces to fit within the required dimensions."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Please note that the price of the neon sign is NOT yet final. Our designers will provide a finalized design and accurate quote for your approval."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The minimum cuttable length is 2.5cm"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Receive a discount for bulk orders of the same neon sign design. Savings are reflected in the instant quote's estimated total."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex gap-2"
+  }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
+    onClick: () => addSignage('SIGN'),
+    style: {
+      border: '1px solid #d2d2d2d2'
+    }
+  }, "ADD NEON SIGN", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_5__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_3__["default"], null));
 }
 
 /***/ }),
@@ -17490,6 +17472,7 @@ const NeonSign = ({
   const [wireExitLocation, setWireExitLocation] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$wireExitLocatio = item.wireExitLocation) !== null && _item$wireExitLocatio !== void 0 ? _item$wireExitLocatio : 'Bottom Right');
   const [acrylicBackingOption, setAcrylicBackingOption] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicBackingO = item.acrylicBackingOption) !== null && _item$acrylicBackingO !== void 0 ? _item$acrylicBackingO : '');
   const acrylicBackingSelections = _neonSignOptions__WEBPACK_IMPORTED_MODULE_9__.acrylicBackingOptions.map(item => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    key: item.option,
     value: item.option
   }, item.option));
   const neonSignsWidth = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
@@ -17505,6 +17488,7 @@ const NeonSign = ({
   const [mounting, setMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : 'Standard Nails');
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
   const [setOptions, setSetOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([(0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    key: "1",
     value: "1"
   }, "1")]);
   const [quantityDiscountTable, setQuantityDiscountTable] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
@@ -17825,14 +17809,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
 /* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
 /* harmony import */ var _Note__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Note */ "./src/scripts/Note.js");
 /* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
 /* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
 /* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
 /* harmony import */ var _components_NeonSign__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/NeonSign */ "./src/scripts/products/led-neon/RigidNeonSignNoBacking/components/NeonSign.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 
 
 
@@ -17850,7 +17833,7 @@ function RigidNeonSignNoBacking() {
     tempFolderName
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
   const defaultSignage = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
     type: 'SIGN',
     title: 'SIGN 1',
     neonSignWidth: '',
@@ -17916,47 +17899,32 @@ function RigidNeonSignNoBacking() {
     }
     // Only run once, no need to add dependencies if they don't change
   }, []);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
-    className: "md:flex gap-6",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
-      className: "md:w-3/4 w-full",
-      children: [signage.map((item, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_Signage__WEBPACK_IMPORTED_MODULE_4__["default"], {
-        index: index,
-        id: item.id,
-        item: item,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components_NeonSign__WEBPACK_IMPORTED_MODULE_6__.NeonSign, {
-          item: item,
-          productId: item.product
-        }, item.id)
-      })), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_Note__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        title: "Note",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("ul", {
-          className: "text-sm",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("li", {
-            children: "The spacer is white to match the neon base."
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("li", {
-            children: "By default, each neon section will have 1 wire exit per segment. If you prefer all wire exits to be in one place, please let us know."
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("li", {
-            children: "The neon height and width refer to the size of the neon graphics. If the design exceeds the continuous neon size limit (65 cm x 72 cm), we will divide them into multiple pieces to fit within the required dimensions"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("li", {
-            children: "Please note that the price of the neon sign is NOT yet final. Our designers will provide a finalized design and accurate quote for your approval."
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("li", {
-            children: "Receive a discount for bulk orders of the same neon sign design. Savings are reflected in the instant quote's estimated total."
-          })]
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
-        className: "flex gap-2",
-        children: signage.length < 10 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("button", {
-          className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
-          onClick: () => addSignage('SIGN'),
-          style: {
-            border: '1px solid #d2d2d2d2'
-          },
-          children: ["ADD NEON SIGN", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_svg_Icons__WEBPACK_IMPORTED_MODULE_5__.PlusIcon, {})]
-        })
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_Sidebar__WEBPACK_IMPORTED_MODULE_3__["default"], {})]
-  });
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:flex gap-6"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:w-3/4 w-full"
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    key: item.id,
+    index: index,
+    id: item.id,
+    item: item
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_NeonSign__WEBPACK_IMPORTED_MODULE_6__.NeonSign, {
+    key: item.id,
+    item: item,
+    productId: item.product
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Note__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Note"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+    className: "text-sm"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer is white to match the neon base."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "By default, each neon section will have 1 wire exit per segment. If you prefer all wire exits to be in one place, please let us know."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The neon height and width refer to the size of the neon graphics. If the design exceeds the continuous neon size limit (65 cm x 72 cm), we will divide them into multiple pieces to fit within the required dimensions"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Please note that the price of the neon sign is NOT yet final. Our designers will provide a finalized design and accurate quote for your approval."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Receive a discount for bulk orders of the same neon sign design. Savings are reflected in the instant quote's estimated total."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex gap-2"
+  }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
+    onClick: () => addSignage('SIGN'),
+    style: {
+      border: '1px solid #d2d2d2d2'
+    }
+  }, "ADD NEON SIGN", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_5__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_3__["default"], null));
 }
 
 /***/ }),
@@ -18059,6 +18027,7 @@ const NeonSign = ({
   const [mounting, setMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
   const [setOptions, setSetOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([(0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    key: "1",
     value: "1"
   }, "1")]);
   const [spacerStandoffOptions, setSpacerStandoffOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
@@ -18411,6 +18380,7 @@ const NeonSign = ({
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
@@ -18473,7 +18443,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
 /* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
 /* harmony import */ var _Note__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Note */ "./src/scripts/Note.js");
 /* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
@@ -18481,7 +18451,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
 /* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../utils/defaults */ "./src/scripts/utils/defaults.js");
 /* harmony import */ var _components_NeonSign__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/NeonSign */ "./src/scripts/products/led-neon/RigidNeonSignWithBacking/components/NeonSign.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 
 
 
@@ -18500,7 +18469,7 @@ function RigidNeonSignWithBacking() {
     tempFolderName
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
   const defaultSignage = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_9__["default"])(),
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
     type: 'SIGN',
     title: 'SIGN 1',
     neonSignWidth: '',
@@ -18569,43 +18538,32 @@ function RigidNeonSignWithBacking() {
     }
     // Only run once, no need to add dependencies if they don't change
   }, []);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-    className: "md:flex gap-6",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-      className: "md:w-3/4 w-full",
-      children: [signage.map((item, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Signage__WEBPACK_IMPORTED_MODULE_4__["default"], {
-        index: index,
-        id: item.id,
-        item: item,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_NeonSign__WEBPACK_IMPORTED_MODULE_7__.NeonSign, {
-          item: item,
-          productId: item.product
-        }, item.id)
-      })), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Note__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        title: "Note",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("ul", {
-          className: "text-sm",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
-            children: "The neon height and width refer to the size of the neon graphics. Please note that the backing has a 2/3\" margin from neon edge to backing edge. If the design exceeds the continuous neon size limit (65 cm x 72 cm), we will divide them into multiple pieces to fit within the required dimensions."
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
-            children: "Please note that the price of the neon sign is NOT yet final. Our designers will provide a finalized design and accurate quote for your approval."
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
-            children: "Receive a discount for bulk orders of the same neon sign design. Savings are reflected in the instant quote's estimated total."
-          })]
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
-        className: "flex gap-2",
-        children: signage.length < 10 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("button", {
-          className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
-          onClick: () => addSignage('SIGN'),
-          style: {
-            border: '1px solid #d2d2d2d2'
-          },
-          children: ["ADD NEON SIGN", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_svg_Icons__WEBPACK_IMPORTED_MODULE_5__.PlusIcon, {})]
-        })
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Sidebar__WEBPACK_IMPORTED_MODULE_3__["default"], {})]
-  });
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:flex gap-6"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:w-3/4 w-full"
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    key: item.id,
+    index: index,
+    id: item.id,
+    item: item
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_NeonSign__WEBPACK_IMPORTED_MODULE_7__.NeonSign, {
+    key: item.id,
+    item: item,
+    productId: item.product
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Note__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Note"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+    className: "text-sm"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The neon height and width refer to the size of the neon graphics. Please note that the backing has a 2/3\" margin from neon edge to backing edge. If the design exceeds the continuous neon size limit (65 cm x 72 cm), we will divide them into multiple pieces to fit within the required dimensions."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Please note that the price of the neon sign is NOT yet final. Our designers will provide a finalized design and accurate quote for your approval."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Receive a discount for bulk orders of the same neon sign design. Savings are reflected in the instant quote's estimated total."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex gap-2"
+  }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
+    onClick: () => addSignage('SIGN'),
+    style: {
+      border: '1px solid #d2d2d2d2'
+    }
+  }, "ADD NEON SIGN", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_5__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_3__["default"], null));
 }
 
 /***/ }),
@@ -18716,6 +18674,7 @@ const NeonSign = ({
   const [mounting, setMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
   const [setOptions, setSetOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([(0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    key: "1",
     value: "1"
   }, "1")]);
   const [quantityDiscountTable, setQuantityDiscountTable] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
@@ -19813,7 +19772,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
 /* harmony import */ var _Note__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Note */ "./src/scripts/Note.js");
 /* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
 /* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
@@ -19821,7 +19780,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/metal-channel/AluminumResinFrontBackLit/components/Letters.js");
 /* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/metal-channel/AluminumResinFrontBackLit/components/Logo.js");
 /* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 
 
 
@@ -19841,7 +19799,7 @@ function TrimLessFrontAndBackLit() {
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_7__.useAppContext)();
   function setDefaultSignage() {
     setSignage([{
-      id: (0,uuid__WEBPACK_IMPORTED_MODULE_9__["default"])(),
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
       type: 'letters',
       title: 'LETTERS 1',
       depth: '',
@@ -19893,7 +19851,7 @@ function TrimLessFrontAndBackLit() {
     }
   }, []);
   const defaultArgs = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_9__["default"])(),
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
     type: 'letters',
     title: 'LETTERS 1',
     depth: '',
@@ -19979,53 +19937,42 @@ function TrimLessFrontAndBackLit() {
       }
     }
   }, []);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-    className: "md:flex gap-6",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-      className: "md:w-3/4 w-full flex flex-col",
-      children: [signage.map((item, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
-        index: index,
-        id: item.id,
-        item: item,
-        children: item.type === 'letters' ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_Letters__WEBPACK_IMPORTED_MODULE_5__.Letters, {
-          item: item,
-          productId: item.product
-        }, item.id) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_Logo__WEBPACK_IMPORTED_MODULE_6__.Logo, {
-          item: item,
-          productId: item.product
-        }, item.id)
-      })), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Note__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        title: "Note",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("ul", {
-          className: "text-sm",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
-            children: "The spacer will be black (default) or match the painted sign's color."
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
-            children: "The spacer will be black (default) or match the painted sign's color. The minimum stroke is greater than or equal to 12mm (1/2\") for indoors and 15mm (3/5\") for outdoors."
-          })]
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
-        className: "flex gap-2",
-        children: signage.length < 10 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("button", {
-            className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
-            onClick: () => addSignage('letters'),
-            style: {
-              border: '1px solid #d2d2d2d2'
-            },
-            children: ["ADD LETTERS", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, {})]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("button", {
-            className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
-            onClick: () => addSignage('logo'),
-            style: {
-              border: '1px solid #d2d2d2d2'
-            },
-            children: ["ADD LOGO", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, {})]
-          })]
-        })
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], {})]
-  });
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:flex gap-6"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:w-3/4 w-full flex flex-col"
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    key: item.id,
+    index: index,
+    id: item.id,
+    item: item
+  }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_5__.Letters, {
+    key: item.id,
+    item: item,
+    productId: item.product
+  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_6__.Logo, {
+    key: item.id,
+    item: item,
+    productId: item.product
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Note__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Note"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+    className: "text-sm"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color. The minimum stroke is greater than or equal to 12mm (1/2\") for indoors and 15mm (3/5\") for outdoors."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex gap-2"
+  }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
+    onClick: () => addSignage('letters'),
+    style: {
+      border: '1px solid #d2d2d2d2'
+    }
+  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
+    onClick: () => addSignage('logo'),
+    style: {
+      border: '1px solid #d2d2d2d2'
+    }
+  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], null));
 }
 
 /***/ }),
@@ -21408,7 +21355,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
 /* harmony import */ var _Note__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Note */ "./src/scripts/Note.js");
 /* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
 /* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
@@ -21416,7 +21363,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/metal-channel/AluminumResinFrontLit/components/Letters.js");
 /* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/metal-channel/AluminumResinFrontLit/components/Logo.js");
 /* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 
 
 
@@ -21436,7 +21382,7 @@ function TrimLessFrontAndBackLit() {
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_7__.useAppContext)();
   function setDefaultSignage() {
     setSignage([{
-      id: (0,uuid__WEBPACK_IMPORTED_MODULE_9__["default"])(),
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
       type: 'letters',
       title: 'LETTERS 1',
       depth: '',
@@ -21486,7 +21432,7 @@ function TrimLessFrontAndBackLit() {
     }
   }, []);
   const defaultArgs = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_9__["default"])(),
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
     type: 'letters',
     title: 'LETTERS 1',
     depth: '',
@@ -21569,53 +21515,42 @@ function TrimLessFrontAndBackLit() {
       }
     }
   }, []);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-    className: "md:flex gap-6",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-      className: "md:w-3/4 w-full flex flex-col",
-      children: [signage.map((item, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
-        index: index,
-        id: item.id,
-        item: item,
-        children: item.type === 'letters' ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_Letters__WEBPACK_IMPORTED_MODULE_5__.Letters, {
-          item: item,
-          productId: item.product
-        }, item.id) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_Logo__WEBPACK_IMPORTED_MODULE_6__.Logo, {
-          item: item,
-          productId: item.product
-        }, item.id)
-      })), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Note__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        title: "Note",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("ul", {
-          className: "text-sm",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
-            children: "The spacer will be black (default) or match the painted sign's color."
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
-            children: "The minimum stroke is greater than or equal to 12mm (1/2\") for indoors and 15mm (3/5\") for outdoors."
-          })]
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
-        className: "flex gap-2",
-        children: signage.length < 10 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("button", {
-            className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
-            onClick: () => addSignage('letters'),
-            style: {
-              border: '1px solid #d2d2d2d2'
-            },
-            children: ["ADD LETTERS", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, {})]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("button", {
-            className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
-            onClick: () => addSignage('logo'),
-            style: {
-              border: '1px solid #d2d2d2d2'
-            },
-            children: ["ADD LOGO", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, {})]
-          })]
-        })
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], {})]
-  });
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:flex gap-6"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:w-3/4 w-full flex flex-col"
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    key: item.id,
+    index: index,
+    id: item.id,
+    item: item
+  }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_5__.Letters, {
+    key: item.id,
+    item: item,
+    productId: item.product
+  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_6__.Logo, {
+    key: item.id,
+    item: item,
+    productId: item.product
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Note__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Note"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+    className: "text-sm"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The minimum stroke is greater than or equal to 12mm (1/2\") for indoors and 15mm (3/5\") for outdoors."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex gap-2"
+  }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
+    onClick: () => addSignage('letters'),
+    style: {
+      border: '1px solid #d2d2d2d2'
+    }
+  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
+    onClick: () => addSignage('logo'),
+    style: {
+      border: '1px solid #d2d2d2d2'
+    }
+  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], null));
 }
 
 /***/ }),
@@ -22886,7 +22821,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
 /* harmony import */ var _Note__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Note */ "./src/scripts/Note.js");
 /* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
 /* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
@@ -22894,7 +22829,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/metal-channel/TrimLessBackLit/components/Letters.js");
 /* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/metal-channel/TrimLessBackLit/components/Logo.js");
 /* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 
 
 
@@ -22914,7 +22848,7 @@ function TrimLessBackLit() {
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_7__.useAppContext)();
   function setDefaultSignage() {
     setSignage([{
-      id: (0,uuid__WEBPACK_IMPORTED_MODULE_9__["default"])(),
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
       type: 'letters',
       title: 'LETTERS 1',
       depth: '',
@@ -22960,7 +22894,7 @@ function TrimLessBackLit() {
     }
   }, []);
   const defaultArgs = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_9__["default"])(),
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
     ledLightColor: '6500K White',
     usdPrice: 0,
     cadPrice: 0,
@@ -23012,55 +22946,42 @@ function TrimLessBackLit() {
       }
     }
   }, []);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-    className: "md:flex gap-6",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-      className: "md:w-3/4 w-full",
-      children: [signage.map((item, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
-        index: index,
-        id: item.id,
-        item: item,
-        children: item.type === 'letters' ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_Letters__WEBPACK_IMPORTED_MODULE_5__.Letters, {
-          item: item,
-          productId: item.product
-        }, item.id) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_Logo__WEBPACK_IMPORTED_MODULE_6__.Logo, {
-          item: item,
-          productId: item.product
-        }, item.id)
-      })), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Note__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        title: "Note",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("ul", {
-          className: "text-sm",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
-            children: "The brushed finish is horizontal by default. Please let us know in the comments section if you prefer a vertical finish."
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
-            children: "The spacer will be black (default) or match the painted sign's color."
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
-            children: "The minimum stroke for all channel letter depth is 10mm (2/5\")."
-          })]
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
-        className: "flex gap-2",
-        children: signage.length < 10 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("button", {
-            className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
-            onClick: () => addSignage('letters'),
-            style: {
-              border: '1px solid #d2d2d2d2'
-            },
-            children: ["ADD LETTERS", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, {})]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("button", {
-            className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
-            onClick: () => addSignage('logo'),
-            style: {
-              border: '1px solid #d2d2d2d2'
-            },
-            children: ["ADD LOGO", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, {})]
-          })]
-        })
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], {})]
-  });
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:flex gap-6"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:w-3/4 w-full"
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    key: item.id,
+    index: index,
+    id: item.id,
+    item: item
+  }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_5__.Letters, {
+    key: item.id,
+    item: item,
+    productId: item.product
+  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_6__.Logo, {
+    key: item.id,
+    item: item,
+    productId: item.product
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Note__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Note"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+    className: "text-sm"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The brushed finish is horizontal by default. Please let us know in the comments section if you prefer a vertical finish."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The minimum stroke for all channel letter depth is 10mm (2/5\")."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex gap-2"
+  }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
+    onClick: () => addSignage('letters'),
+    style: {
+      border: '1px solid #d2d2d2d2'
+    }
+  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
+    onClick: () => addSignage('logo'),
+    style: {
+      border: '1px solid #d2d2d2d2'
+    }
+  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], null));
 }
 
 /***/ }),
@@ -24293,7 +24214,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
 /* harmony import */ var _Note__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Note */ "./src/scripts/Note.js");
 /* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
 /* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
@@ -24301,7 +24222,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/metal-channel/TrimLessFrontAndBackLit/components/Letters.js");
 /* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/metal-channel/TrimLessFrontAndBackLit/components/Logo.js");
 /* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 
 
 
@@ -24321,7 +24241,7 @@ function TrimLessFrontAndBackLit() {
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_7__.useAppContext)();
   function setDefaultSignage() {
     setSignage([{
-      id: (0,uuid__WEBPACK_IMPORTED_MODULE_9__["default"])(),
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
       type: 'letters',
       title: 'LETTERS 1',
       depth: '',
@@ -24372,7 +24292,7 @@ function TrimLessFrontAndBackLit() {
     }
   }, []);
   const defaultArgs = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_9__["default"])(),
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
     type: 'letters',
     title: 'LETTERS 1',
     depth: '',
@@ -24449,53 +24369,42 @@ function TrimLessFrontAndBackLit() {
       }
     }
   }, []);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-    className: "md:flex gap-6",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-      className: "md:w-3/4 w-full flex flex-col",
-      children: [signage.map((item, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
-        index: index,
-        id: item.id,
-        item: item,
-        children: item.type === 'letters' ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_Letters__WEBPACK_IMPORTED_MODULE_5__.Letters, {
-          item: item,
-          productId: item.product
-        }, item.id) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_Logo__WEBPACK_IMPORTED_MODULE_6__.Logo, {
-          item: item,
-          productId: item.product
-        }, item.id)
-      })), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Note__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        title: "Note",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("ul", {
-          className: "text-sm",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
-            children: "The spacer will be black (default) or match the painted sign's color."
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
-            children: "The minimum stroke for all channel letter depth is 10mm (2/5\")."
-          })]
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
-        className: "flex gap-2",
-        children: signage.length < 10 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("button", {
-            className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
-            onClick: () => addSignage('letters'),
-            style: {
-              border: '1px solid #d2d2d2d2'
-            },
-            children: ["ADD LETTERS", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, {})]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("button", {
-            className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
-            onClick: () => addSignage('logo'),
-            style: {
-              border: '1px solid #d2d2d2d2'
-            },
-            children: ["ADD LOGO", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, {})]
-          })]
-        })
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], {})]
-  });
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:flex gap-6"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:w-3/4 w-full flex flex-col"
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    key: item.id,
+    index: index,
+    id: item.id,
+    item: item
+  }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_5__.Letters, {
+    key: item.id,
+    item: item,
+    productId: item.product
+  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_6__.Logo, {
+    key: item.id,
+    item: item,
+    productId: item.product
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Note__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Note"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+    className: "text-sm"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The minimum stroke for all channel letter depth is 10mm (2/5\")."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex gap-2"
+  }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
+    onClick: () => addSignage('letters'),
+    style: {
+      border: '1px solid #d2d2d2d2'
+    }
+  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
+    onClick: () => addSignage('logo'),
+    style: {
+      border: '1px solid #d2d2d2d2'
+    }
+  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], null));
 }
 
 /***/ }),
@@ -25740,7 +25649,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
 /* harmony import */ var _Note__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Note */ "./src/scripts/Note.js");
 /* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
 /* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
@@ -25748,7 +25657,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/metal-channel/TrimLessFrontLit/components/Letters.js");
 /* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/metal-channel/TrimLessFrontLit/components/Logo.js");
 /* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 
 
 
@@ -25768,7 +25676,7 @@ function TrimLessFrontLit() {
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_7__.useAppContext)();
   function setDefaultSignage() {
     setSignage([{
-      id: (0,uuid__WEBPACK_IMPORTED_MODULE_9__["default"])(),
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
       type: 'letters',
       title: 'LETTERS 1',
       depth: '',
@@ -25818,7 +25726,7 @@ function TrimLessFrontLit() {
     }
   }, []);
   const defaultArgs = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_9__["default"])(),
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
     type: 'letters',
     title: 'LETTERS 1',
     depth: '',
@@ -25902,53 +25810,42 @@ function TrimLessFrontLit() {
       }
     }
   }, []);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-    className: "md:flex gap-6",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-      className: "md:w-3/4 w-full",
-      children: [signage.map((item, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
-        index: index,
-        id: item.id,
-        item: item,
-        children: item.type === 'letters' ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_Letters__WEBPACK_IMPORTED_MODULE_5__.Letters, {
-          item: item,
-          productId: item.product
-        }, item.id) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_Logo__WEBPACK_IMPORTED_MODULE_6__.Logo, {
-          item: item,
-          productId: item.product
-        }, item.id)
-      })), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Note__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        title: "Note",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("ul", {
-          className: "text-sm",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
-            children: "The spacer will be black (default) or match the painted sign's color."
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
-            children: "The minimum stroke for all channel letter depth is 10mm (2/5\")."
-          })]
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
-        className: "flex gap-2",
-        children: signage.length < 10 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("button", {
-            className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
-            onClick: () => addSignage('letters'),
-            style: {
-              border: '1px solid #d2d2d2d2'
-            },
-            children: ["ADD LETTERS", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, {})]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("button", {
-            className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
-            onClick: () => addSignage('logo'),
-            style: {
-              border: '1px solid #d2d2d2d2'
-            },
-            children: ["ADD LOGO", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, {})]
-          })]
-        })
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], {})]
-  });
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:flex gap-6"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:w-3/4 w-full"
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    key: item.id,
+    index: index,
+    id: item.id,
+    item: item
+  }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_5__.Letters, {
+    key: item.id,
+    item: item,
+    productId: item.product
+  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_6__.Logo, {
+    key: item.id,
+    item: item,
+    productId: item.product
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Note__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Note"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+    className: "text-sm"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The minimum stroke for all channel letter depth is 10mm (2/5\")."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex gap-2"
+  }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
+    onClick: () => addSignage('letters'),
+    style: {
+      border: '1px solid #d2d2d2d2'
+    }
+  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
+    onClick: () => addSignage('logo'),
+    style: {
+      border: '1px solid #d2d2d2d2'
+    }
+  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], null));
 }
 
 /***/ }),
@@ -27230,7 +27127,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
 /* harmony import */ var _Note__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Note */ "./src/scripts/Note.js");
 /* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
 /* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
@@ -27238,7 +27135,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/metal/FabricatedStainless/components/Letters.js");
 /* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/metal/FabricatedStainless/components/Logo.js");
 /* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 
 
 
@@ -27258,7 +27154,7 @@ function FabricatedStainless() {
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_7__.useAppContext)();
   function setDefaultSignage() {
     setSignage([{
-      id: (0,uuid__WEBPACK_IMPORTED_MODULE_9__["default"])(),
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
       type: 'letters',
       title: 'LETTERS 1',
       letters: '',
@@ -27302,7 +27198,7 @@ function FabricatedStainless() {
     }
   }, []);
   const defaultArgs = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_9__["default"])(),
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
     comments: '',
     mounting: '',
     metalDepth: '',
@@ -27375,49 +27271,40 @@ function FabricatedStainless() {
       }
     }
   }, []);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-    className: "md:flex gap-6",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-      className: "md:w-3/4 w-full",
-      children: [signage.map((item, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
-        index: index,
-        id: item.id,
-        item: item,
-        children: item.type === 'letters' ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_Letters__WEBPACK_IMPORTED_MODULE_5__.Letters, {
-          item: item
-        }, item.id) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_Logo__WEBPACK_IMPORTED_MODULE_6__.Logo, {
-          item: item
-        }, item.id)
-      })), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Note__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        title: "Note",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("ul", {
-          className: "text-sm",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
-            children: "The brushed finish is horizontal by default. Please let us know in the comments section if you prefer a vertical finish."
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
-            children: "The spacer will be black (default) or match the painted sign's color."
-          })]
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-        className: "flex gap-2",
-        children: [signage.length < 10 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("button", {
-          className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
-          onClick: () => addSignage('letters'),
-          style: {
-            border: '1px solid #d2d2d2d2'
-          },
-          children: ["ADD LETTERS", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, {})]
-        }), signage.length < 10 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("button", {
-          className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
-          onClick: () => addSignage('logo'),
-          style: {
-            border: '1px solid #d2d2d2d2'
-          },
-          children: ["ADD LOGO", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, {})]
-        })]
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], {})]
-  });
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:flex gap-6"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:w-3/4 w-full"
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    key: item.id,
+    index: index,
+    id: item.id,
+    item: item
+  }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_5__.Letters, {
+    key: item.id,
+    item: item
+  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_6__.Logo, {
+    key: item.id,
+    item: item
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Note__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Note"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+    className: "text-sm"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The brushed finish is horizontal by default. Please let us know in the comments section if you prefer a vertical finish."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex gap-2"
+  }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
+    onClick: () => addSignage('letters'),
+    style: {
+      border: '1px solid #d2d2d2d2'
+    }
+  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)), signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
+    onClick: () => addSignage('logo'),
+    style: {
+      border: '1px solid #d2d2d2d2'
+    }
+  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], null));
 }
 
 /***/ }),
@@ -28614,7 +28501,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
 /* harmony import */ var _Note__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Note */ "./src/scripts/Note.js");
 /* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
 /* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
@@ -28622,7 +28509,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/metal/LaserCutAluminum/components/Letters.js");
 /* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/metal/LaserCutAluminum/components/Logo.js");
 /* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 
 
 
@@ -28642,7 +28528,7 @@ function LaserCutAluminum() {
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_7__.useAppContext)();
   function setDefaultSignage() {
     setSignage([{
-      id: (0,uuid__WEBPACK_IMPORTED_MODULE_9__["default"])(),
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
       type: 'letters',
       title: 'LETTERS 1',
       letters: '',
@@ -28688,7 +28574,7 @@ function LaserCutAluminum() {
     }
   }, []);
   const defaultArgs = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_9__["default"])(),
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
     comments: '',
     mounting: '',
     metalThickness: '',
@@ -28767,51 +28653,40 @@ function LaserCutAluminum() {
       }
     }
   }, []);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-    className: "md:flex gap-6",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-      className: "md:w-3/4 w-full",
-      children: [signage.map((item, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
-        index: index,
-        id: item.id,
-        item: item,
-        children: item.type === 'letters' ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_Letters__WEBPACK_IMPORTED_MODULE_5__.Letters, {
-          item: item
-        }, item.id) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_Logo__WEBPACK_IMPORTED_MODULE_6__.Logo, {
-          item: item
-        }, item.id)
-      })), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Note__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        title: "Note",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("ul", {
-          className: "text-sm",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
-            children: "The brushed finish is horizontal by default. Please let us know in the comments section if you prefer a vertical finish."
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
-            children: "The spacer will be black (default) or match the painted sign's color."
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
-            children: "The minimum cuttable stroke is 3mm for 1/8\" thick aluminum."
-          })]
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-        className: "flex gap-2",
-        children: [signage.length < 10 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("button", {
-          className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
-          onClick: () => addSignage('letters'),
-          style: {
-            border: '1px solid #d2d2d2d2'
-          },
-          children: ["ADD LETTERS", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, {})]
-        }), signage.length < 10 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("button", {
-          className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
-          onClick: () => addSignage('logo'),
-          style: {
-            border: '1px solid #d2d2d2d2'
-          },
-          children: ["ADD LOGO", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, {})]
-        })]
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], {})]
-  });
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:flex gap-6"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:w-3/4 w-full"
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    key: item.id,
+    index: index,
+    id: item.id,
+    item: item
+  }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_5__.Letters, {
+    key: item.id,
+    item: item
+  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_6__.Logo, {
+    key: item.id,
+    item: item
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Note__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Note"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+    className: "text-sm"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The brushed finish is horizontal by default. Please let us know in the comments section if you prefer a vertical finish."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The minimum cuttable stroke is 3mm for 1/8\" thick aluminum."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex gap-2"
+  }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
+    onClick: () => addSignage('letters'),
+    style: {
+      border: '1px solid #d2d2d2d2'
+    }
+  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)), signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
+    onClick: () => addSignage('logo'),
+    style: {
+      border: '1px solid #d2d2d2d2'
+    }
+  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], null));
 }
 
 /***/ }),
@@ -29888,7 +29763,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
 /* harmony import */ var _Note__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Note */ "./src/scripts/Note.js");
 /* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
 /* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
@@ -29896,7 +29771,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/metal/LaserCutStainless/components/Letters.js");
 /* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/metal/LaserCutStainless/components/Logo.js");
 /* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 
 
 
@@ -29916,7 +29790,7 @@ function FabricatedStainless() {
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_7__.useAppContext)();
   function setDefaultSignage() {
     setSignage([{
-      id: (0,uuid__WEBPACK_IMPORTED_MODULE_9__["default"])(),
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
       type: 'letters',
       title: 'LETTERS 1',
       letters: '',
@@ -29961,7 +29835,7 @@ function FabricatedStainless() {
     }
   }, []);
   const defaultArgs = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_9__["default"])(),
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
     comments: '',
     mounting: '',
     metalThickness: '',
@@ -30035,49 +29909,40 @@ function FabricatedStainless() {
       }
     }
   }, []);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-    className: "md:flex gap-6",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-      className: "md:w-3/4 w-full",
-      children: [signage.map((item, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
-        index: index,
-        id: item.id,
-        item: item,
-        children: item.type === 'letters' ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_Letters__WEBPACK_IMPORTED_MODULE_5__.Letters, {
-          item: item
-        }, item.id) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_Logo__WEBPACK_IMPORTED_MODULE_6__.Logo, {
-          item: item
-        }, item.id)
-      })), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Note__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        title: "Note",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("ul", {
-          className: "text-sm",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
-            children: "The brushed finish is horizontal by default. Please let us know in the comments section if you prefer a vertical finish."
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
-            children: "The spacer will be black (default) or match the painted sign's color."
-          })]
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-        className: "flex gap-2",
-        children: [signage.length < 10 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("button", {
-          className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
-          onClick: () => addSignage('letters'),
-          style: {
-            border: '1px solid #d2d2d2d2'
-          },
-          children: ["ADD LETTERS", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, {})]
-        }), signage.length < 10 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("button", {
-          className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
-          onClick: () => addSignage('logo'),
-          style: {
-            border: '1px solid #d2d2d2d2'
-          },
-          children: ["ADD LOGO", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, {})]
-        })]
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], {})]
-  });
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:flex gap-6"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:w-3/4 w-full"
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    key: item.id,
+    index: index,
+    id: item.id,
+    item: item
+  }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_5__.Letters, {
+    key: item.id,
+    item: item
+  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_6__.Logo, {
+    key: item.id,
+    item: item
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Note__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Note"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+    className: "text-sm"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The brushed finish is horizontal by default. Please let us know in the comments section if you prefer a vertical finish."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex gap-2"
+  }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
+    onClick: () => addSignage('letters'),
+    style: {
+      border: '1px solid #d2d2d2d2'
+    }
+  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)), signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
+    onClick: () => addSignage('logo'),
+    style: {
+      border: '1px solid #d2d2d2d2'
+    }
+  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], null));
 }
 
 /***/ }),
@@ -31361,7 +31226,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
 /* harmony import */ var _Note__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Note */ "./src/scripts/Note.js");
 /* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
 /* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
@@ -31369,7 +31234,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/pvc/PVCMetalLaminate/components/Letters.js");
 /* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/pvc/PVCMetalLaminate/components/Logo.js");
 /* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 
 
 
@@ -31389,7 +31253,7 @@ function PVCMetalLaminate() {
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_7__.useAppContext)();
   function setDefaultSignage() {
     setSignage([{
-      id: (0,uuid__WEBPACK_IMPORTED_MODULE_9__["default"])(),
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
       type: 'letters',
       title: 'LETTERS 1',
       letters: '',
@@ -31430,7 +31294,7 @@ function PVCMetalLaminate() {
     }
   }, []);
   const defaultArgs = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_9__["default"])(),
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
     comments: '',
     mounting: '',
     thickness: '',
@@ -31508,53 +31372,40 @@ function PVCMetalLaminate() {
       }
     }
   }, []);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-    className: "md:flex gap-6",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-      className: "md:w-3/4 w-full",
-      children: [signage.map((item, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
-        index: index,
-        id: item.id,
-        item: item,
-        children: item.type === 'letters' ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_Letters__WEBPACK_IMPORTED_MODULE_5__.Letters, {
-          item: item
-        }, item.id) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_Logo__WEBPACK_IMPORTED_MODULE_6__.Logo, {
-          item: item
-        }, item.id)
-      })), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Note__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        title: "Note",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("ul", {
-          className: "text-sm",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
-            children: "The brushed finish is horizontal by default. Please let us know if you prefer a vertical finish."
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
-            children: "The spacer will be black (default) or match the painted sign's color."
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
-            children: "The minimum stroke for 3M double-sided tape is 10mm."
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
-            children: "For stud pins: The minimum stroke is 12mm (1/2\")."
-          })]
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-        className: "flex gap-2",
-        children: [signage.length < 10 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("button", {
-          className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
-          onClick: () => addSignage('letters'),
-          style: {
-            border: '1px solid #d2d2d2d2'
-          },
-          children: ["ADD LETTERS", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, {})]
-        }), signage.length < 10 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("button", {
-          className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
-          onClick: () => addSignage('logo'),
-          style: {
-            border: '1px solid #d2d2d2d2'
-          },
-          children: ["ADD LOGO", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, {})]
-        })]
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], {})]
-  });
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:flex gap-6"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:w-3/4 w-full"
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    key: item.id,
+    index: index,
+    id: item.id,
+    item: item
+  }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_5__.Letters, {
+    key: item.id,
+    item: item
+  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_6__.Logo, {
+    key: item.id,
+    item: item
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Note__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Note"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+    className: "text-sm"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The brushed finish is horizontal by default. Please let us know if you prefer a vertical finish."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The minimum stroke for 3M double-sided tape is 10mm."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "For stud pins: The minimum stroke is 12mm (1/2\")."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex gap-2"
+  }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
+    onClick: () => addSignage('letters'),
+    style: {
+      border: '1px solid #d2d2d2d2'
+    }
+  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)), signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
+    onClick: () => addSignage('logo'),
+    style: {
+      border: '1px solid #d2d2d2d2'
+    }
+  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], null));
 }
 
 /***/ }),
@@ -32600,7 +32451,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
 /* harmony import */ var _Note__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Note */ "./src/scripts/Note.js");
 /* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
 /* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
@@ -32608,7 +32459,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/pvc/PVCPainted/components/Letters.js");
 /* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/pvc/PVCPainted/components/Logo.js");
 /* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 
 
 
@@ -32628,7 +32478,7 @@ function PVCPainted() {
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_7__.useAppContext)();
   function setDefaultSignage() {
     setSignage([{
-      id: (0,uuid__WEBPACK_IMPORTED_MODULE_9__["default"])(),
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
       type: 'letters',
       title: 'LETTERS 1',
       letters: '',
@@ -32668,7 +32518,7 @@ function PVCPainted() {
     }
   }, []);
   const defaultArgs = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_9__["default"])(),
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
     comments: '',
     mounting: '',
     thickness: '',
@@ -32745,51 +32595,40 @@ function PVCPainted() {
       }
     }
   }, []);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-    className: "md:flex gap-6",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-      className: "md:w-3/4 w-full",
-      children: [signage.map((item, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
-        index: index,
-        id: item.id,
-        item: item,
-        children: item.type === 'letters' ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_Letters__WEBPACK_IMPORTED_MODULE_5__.Letters, {
-          item: item
-        }, item.id) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_Logo__WEBPACK_IMPORTED_MODULE_6__.Logo, {
-          item: item
-        }, item.id)
-      })), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Note__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        title: "Note",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("ul", {
-          className: "text-sm",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
-            children: "The spacer will be black (default) or match the painted sign's color."
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
-            children: "The minimum stroke for 3M double-sided tape is 10mm."
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
-            children: "For stud pins: The minimum stroke is 12mm (1/2\u201D)."
-          })]
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-        className: "flex gap-2",
-        children: [signage.length < 10 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("button", {
-          className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
-          onClick: () => addSignage('letters'),
-          style: {
-            border: '1px solid #d2d2d2d2'
-          },
-          children: ["ADD LETTERS", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, {})]
-        }), signage.length < 10 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("button", {
-          className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
-          onClick: () => addSignage('logo'),
-          style: {
-            border: '1px solid #d2d2d2d2'
-          },
-          children: ["ADD LOGO", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, {})]
-        })]
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], {})]
-  });
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:flex gap-6"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:w-3/4 w-full"
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    key: item.id,
+    index: index,
+    id: item.id,
+    item: item
+  }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_5__.Letters, {
+    key: item.id,
+    item: item
+  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_6__.Logo, {
+    key: item.id,
+    item: item
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Note__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Note"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+    className: "text-sm"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The minimum stroke for 3M double-sided tape is 10mm."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "For stud pins: The minimum stroke is 12mm (1/2\u201D)."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex gap-2"
+  }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
+    onClick: () => addSignage('letters'),
+    style: {
+      border: '1px solid #d2d2d2d2'
+    }
+  }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)), signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
+    onClick: () => addSignage('logo'),
+    style: {
+      border: '1px solid #d2d2d2d2'
+    }
+  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], null));
 }
 
 /***/ }),
@@ -33826,14 +33665,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
 /* harmony import */ var _Note__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Note */ "./src/scripts/Note.js");
 /* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
 /* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
 /* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
 /* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/pvc/PVCUv/components/Logo.js");
 /* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 
 
 
@@ -33852,7 +33690,7 @@ function PVCUv() {
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_6__.useAppContext)();
   function setDefaultSignage() {
     setSignage([{
-      id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
       type: 'logo',
       title: 'LOGO 1',
       comments: '',
@@ -33887,7 +33725,7 @@ function PVCUv() {
     }
   }, []);
   const defaultArgs = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
     comments: '',
     mounting: '',
     thickness: '',
@@ -33944,42 +33782,31 @@ function PVCUv() {
       }
     }
   }, []);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
-    className: "md:flex gap-6",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
-      className: "md:w-3/4 w-full",
-      children: [signage.map((item, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
-        index: index,
-        id: item.id,
-        item: item,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components_Logo__WEBPACK_IMPORTED_MODULE_5__.Logo, {
-          item: item
-        }, item.id)
-      })), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_Note__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        title: "Note",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("ul", {
-          className: "text-sm",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("li", {
-            children: "The spacer will be black (default) or match the painted sign's color."
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("li", {
-            children: "The minimum stroke for 3M double-sided tape is 10mm."
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("li", {
-            children: "For stud pins: The minimum stroke is 12mm (1/2\u201D)."
-          })]
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
-        className: "flex gap-2",
-        children: signage.length < 10 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("button", {
-          className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
-          onClick: () => addSignage('logo'),
-          style: {
-            border: '1px solid #d2d2d2d2'
-          },
-          children: ["ADD LOGO", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, {})]
-        })
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], {})]
-  });
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:flex gap-6"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:w-3/4 w-full"
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    key: item.id,
+    index: index,
+    id: item.id,
+    item: item
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_5__.Logo, {
+    key: item.id,
+    item: item
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Note__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Note"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+    className: "text-sm"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The minimum stroke for 3M double-sided tape is 10mm."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "For stud pins: The minimum stroke is 12mm (1/2\u201D)."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex gap-2"
+  }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
+    onClick: () => addSignage('logo'),
+    style: {
+      border: '1px solid #d2d2d2d2'
+    }
+  }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], null));
 }
 
 /***/ }),
@@ -35404,19 +35231,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   thicknessOptions: () => (/* binding */ thicknessOptions),
 /* harmony export */   waterProofOptions: () => (/* binding */ waterProofOptions)
 /* harmony export */ });
-/* harmony import */ var _defaults__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./defaults */ "./src/scripts/utils/defaults.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _defaults__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./defaults */ "./src/scripts/utils/defaults.js");
 
 
 const finishingOptions = [{
   name: 'Matte'
 }, {
-  name: _defaults__WEBPACK_IMPORTED_MODULE_0__.GLOSS_FINISH
+  name: _defaults__WEBPACK_IMPORTED_MODULE_1__.GLOSS_FINISH
 }];
 const defaultFinishOptions = [{
   name: 'Matte'
 }, {
-  name: _defaults__WEBPACK_IMPORTED_MODULE_0__.GLOSS_FINISH
+  name: _defaults__WEBPACK_IMPORTED_MODULE_1__.GLOSS_FINISH
 }];
 const thicknessOptions = [{
   thickness: '1/8"',
@@ -35488,7 +35316,7 @@ const anodizedColorOptions = [{
   option: 'Champagne Gold'
 }];
 const waterProofOptions = [{
-  option: _defaults__WEBPACK_IMPORTED_MODULE_0__.INDOOR_NOT_WATERPROOF
+  option: _defaults__WEBPACK_IMPORTED_MODULE_1__.INDOOR_NOT_WATERPROOF
 }, {
   option: 'Outdoor (Waterproof)'
 }];
@@ -35501,9 +35329,9 @@ const mountingDefaultOptions = [{
 }, {
   mounting_option: 'Pad - Combination All'
 }, {
-  mounting_option: _defaults__WEBPACK_IMPORTED_MODULE_0__.STUD_MOUNT
+  mounting_option: _defaults__WEBPACK_IMPORTED_MODULE_1__.STUD_MOUNT
 }, {
-  mounting_option: _defaults__WEBPACK_IMPORTED_MODULE_0__.STUD_WITH_SPACER
+  mounting_option: _defaults__WEBPACK_IMPORTED_MODULE_1__.STUD_WITH_SPACER
 }];
 const installationDefaultOptions = [{
   option: 'Plain'
@@ -35514,26 +35342,26 @@ const installationDefaultOptions = [{
 }, {
   option: 'Pad - Combination All'
 }, {
-  option: _defaults__WEBPACK_IMPORTED_MODULE_0__.STUD_MOUNT
+  option: _defaults__WEBPACK_IMPORTED_MODULE_1__.STUD_MOUNT
 }, {
-  option: _defaults__WEBPACK_IMPORTED_MODULE_0__.STUD_WITH_SPACER
+  option: _defaults__WEBPACK_IMPORTED_MODULE_1__.STUD_WITH_SPACER
 }];
 const metalInstallationOptions = [{
   option: 'Plain'
 }, {
-  option: _defaults__WEBPACK_IMPORTED_MODULE_0__.STUD_MOUNT
+  option: _defaults__WEBPACK_IMPORTED_MODULE_1__.STUD_MOUNT
 }, {
-  option: _defaults__WEBPACK_IMPORTED_MODULE_0__.STUD_WITH_SPACER
+  option: _defaults__WEBPACK_IMPORTED_MODULE_1__.STUD_WITH_SPACER
 }];
 const piecesOptions = ['30 pieces or fewer'];
 const setOptions = Array.from({
   length: 100
 }, (_, index) => {
   const val = 1 + index;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("option", {
-    value: val,
-    children: val
-  }, index);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    key: index,
+    value: val
+  }, val);
 });
 const spacerStandoffDefaultOptions = [{
   value: '0.5"'
@@ -35572,12 +35400,12 @@ const metalLaminateOptions = [{
 }];
 const arrayRange = (start, stop, step, inches = true) => Array.from({
   length: (stop - start) / step + 1
-}, (value, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("option", {
-  value: `${start + index * step}${inches ? '"' : "'"}`,
-  children: [start + index * step, inches ? '"' : "'"]
-}));
+}, (value, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+  key: index,
+  value: `${start + index * step}${inches ? '"' : "'"}`
+}, start + index * step, inches ? '"' : "'"));
 const lightingPackagedOptions = [{
-  value: _defaults__WEBPACK_IMPORTED_MODULE_0__.LIGHTING_INDOOR
+  value: _defaults__WEBPACK_IMPORTED_MODULE_1__.LIGHTING_INDOOR
 }, {
   value: 'Low Voltage LED Driver, 10ft open wires, 1:1 blueprint'
 }];

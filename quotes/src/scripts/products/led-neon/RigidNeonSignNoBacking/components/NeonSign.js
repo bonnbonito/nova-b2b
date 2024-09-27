@@ -121,7 +121,11 @@ export const NeonSign = ({ item }) => {
 	const [waterproof, setWaterproof] = useState(item.rigidWaterproof ?? '');
 	const [mounting, setMounting] = useState(item.mounting ?? '');
 	const [sets, setSets] = useState(item.sets ?? 1);
-	const [setOptions, setSetOptions] = useState([<option value="1">1</option>]);
+	const [setOptions, setSetOptions] = useState([
+		<option key="1" value="1">
+			1
+		</option>,
+	]);
 
 	const [spacerStandoffOptions, setSpacerStandoffOptions] = useState([
 		{ value: '0.5"' },
@@ -651,6 +655,7 @@ export const NeonSign = ({ item }) => {
 						onChange={handleonChangeSpacerDistance}
 						options={spacerStandoffOptions.map((option) => (
 							<option
+								key={option.value}
 								value={option.value}
 								defaultValue={option.value == spacerStandoffDistance}
 							>
