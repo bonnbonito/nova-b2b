@@ -533,9 +533,14 @@ class Pending_Payment {
 	}
 
 	public function check_overdue( $payment ) {
-		$payment_order_id  = $payment->payment_order;
-		$original_order_id = $payment->original_order;
-		$payment_type      = $payment->payment_select;
+		$payment_type          = $payment->payment_select;
+		$payment_order_id      = $payment->payment_order;
+		$original_order_id     = $payment->original_order;
+		$manual_delivered_date = get_field( 'manual_delivered_date', $original_order_id );
+
+		if ( isset( $manual_delivered_date ) && ! empty( $manual_delivered_date ) ) {
+			return;
+		}
 
 		$order          = wc_get_order( $payment_order_id );
 		$original_order = wc_get_order( $original_order_id );
@@ -544,14 +549,11 @@ class Pending_Payment {
 		$shipped_date        = $completed_date_obj->date( 'F d, Y' );
 		$days_after_shipping = get_field( 'days_after_shipping', $payment_type );
 		$deadline            = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
-		$payment_date        = date( 'F d, Y', $deadline );
+		$payment_date        = date( 'F d, Y', strtotime( $payment->payment_date ) );
 
 		$today = date( 'F d, Y' );
 
-		error_log( 'today: ' . $today );
-		error_log( 'payment_date: ' . $payment_date );
-
-		if ( $today > $payment_date ) {
+		if ( strtotime( $today ) > strtotime( $payment_date ) ) {
 			update_post_meta( $payment_order_id, 'is_overdue', true );
 		}
 	}
