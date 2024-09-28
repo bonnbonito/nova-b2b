@@ -2711,6 +2711,16 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		}
 	}
 
+	public function show_order_product_details( $projects ) {
+		foreach ( $projects as $project ) {
+			echo '<div class="block px-2 pb-2">';
+
+			$this->quote_details( $project );
+
+			echo '</div>'; // Close block div
+		}
+	}
+
 
 
 	public function show_details_order( $signage, $quoteID, $subtotal, $product_line ) {
