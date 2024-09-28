@@ -57,6 +57,14 @@ class Pending_Payment {
 		add_filter( 'woocommerce_email_enabled_customer_completed_order', array( $this, 'disable_completed_email' ), 10, 2 );
 		add_filter( 'woocommerce_order_get_date_completed', array( $this, 'modify_order_completed_date' ), 10, 2 );
 		add_filter( 'woocommerce_order_data_store_cpt_get_orders_query', array( $this, 'handle_overdue_query' ), 10, 2 );
+		add_action( 'show_user_profile', array( $this, 'overdue_list' ) );
+		add_action( 'edit_user_profile', array( $this, 'overdue_list' ) );
+	}
+
+	public function overdue_list( $user ) {
+		$overdue_orders = get_user_meta( $user->ID, 'overdue_orders', true );
+		echo '<h2>Overdue Orders</h2>';
+		print_r( $overdue_orders );
 	}
 
 
