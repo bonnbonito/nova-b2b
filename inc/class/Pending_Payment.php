@@ -555,6 +555,8 @@ class Pending_Payment {
 
 		if ( strtotime( $today ) > strtotime( $payment_date ) ) {
 			update_post_meta( $payment_order_id, 'is_overdue', true );
+		} else {
+			update_post_meta( $payment_order_id, 'is_overdue', false );
 		}
 	}
 
