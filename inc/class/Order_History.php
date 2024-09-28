@@ -102,6 +102,7 @@ class Order_History {
 			'order'        => 'DESC',
 			'meta_key'     => '_hide_order',
 			'meta_compare' => 'NOT EXISTS',
+			'status'       => array( 'wc-pending', 'wc-processing', 'wc-on-hold', 'wc-completed' ),
 		);
 
 		$order_ids = wc_get_orders( $args );

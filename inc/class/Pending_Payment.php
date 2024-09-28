@@ -548,6 +548,9 @@ class Pending_Payment {
 
 		$today = date( 'F d, Y' );
 
+		error_log( 'today: ' . $today );
+		error_log( 'payment_date: ' . $payment_date );
+
 		if ( $today > $payment_date ) {
 			update_post_meta( $payment_order_id, 'is_overdue', true );
 		}
