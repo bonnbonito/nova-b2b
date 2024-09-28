@@ -549,12 +549,14 @@ class Pending_Payment {
 		$shipped_date        = $completed_date_obj->date( 'F d, Y' );
 		$days_after_shipping = get_field( 'days_after_shipping', $payment_type );
 		$deadline            = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
-		$payment_date        = date( 'F d, Y', strtotime( $payment->payment_date ) );
+		$payment_date        = date( 'F d, Y', $deadline );
 
 		$today = date( 'F d, Y' );
 
 		if ( strtotime( $today ) > strtotime( $payment_date ) ) {
 			update_post_meta( $payment_order_id, 'is_overdue', true );
+		} else {
+			update_post_meta( $payment_order_id, 'is_overdue', false );
 		}
 	}
 
