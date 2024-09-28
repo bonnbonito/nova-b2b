@@ -75,7 +75,7 @@ export default function FlexNeonSign() {
 		<div className="md:flex gap-6">
 			<div className="md:w-3/4 w-full">
 				{signage.map((item, index) => (
-					<Signage index={index} id={item.id} item={item}>
+					<Signage key={item.id} index={index} id={item.id} item={item}>
 						<EtchedSign key={item.id} item={item} productId={item.product} />
 					</Signage>
 				))}
