@@ -285,6 +285,7 @@ export function Logo({ item }) {
 					onChange={handleOnChangeLightBox}
 					options={lightBoxTypeOptions.map((lightbox) => (
 						<option
+							key={lightbox.option}
 							value={lightbox.option}
 							defaultValue={lightbox.option === lightboxType}
 						>
@@ -299,6 +300,7 @@ export function Logo({ item }) {
 					onChange={(e) => setUvPrintedCover(e.target.value)}
 					options={uvPrintedCoverOptions.map((cover) => (
 						<option
+							key={cover.option}
 							value={cover.option}
 							defaultValue={cover.option === uvPrintedCover}
 						>

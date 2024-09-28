@@ -3018,7 +3018,6 @@ function EditableText({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {}, [label]);
   function handleOnCancel() {
-    console.log('Cancelling');
     setEditing(!editing);
     setLabel(text);
   }
@@ -19710,6 +19709,7 @@ function Logo({
     value: lightboxType,
     onChange: handleOnChangeLightBox,
     options: lightBoxTypeOptions.map(lightbox => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: lightbox.option,
       value: lightbox.option,
       defaultValue: lightbox.option === lightboxType
     }, lightbox.option))
@@ -19718,6 +19718,7 @@ function Logo({
     value: uvPrintedCover,
     onChange: e => setUvPrintedCover(e.target.value),
     options: uvPrintedCoverOptions.map(cover => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: cover.option,
       value: cover.option,
       defaultValue: cover.option === uvPrintedCover
     }, cover.option))

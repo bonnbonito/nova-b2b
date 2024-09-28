@@ -12,7 +12,6 @@ export default function EditableText({ id, text, onChange }) {
 	useEffect(() => {}, [label]);
 
 	function handleOnCancel() {
-		console.log('Cancelling');
 		setEditing(!editing);
 		setLabel(text);
 	}
