@@ -1,15 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { CancelIcon, EyeIcon, InvoiceIcon, PayIcon } from './Icons';
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from './ui/DropdownMenu';
 
 export default function OrderActions({ order }) {
+	const [isPrinting, setisPrinting] = useState(false);
+	const printInvoice = (url) => {
+		setisPrinting(true);
+		fetch(url)
+			.then((response) => response.blob())
+			.then((blob) => {
+				const fileURL = URL.createObjectURL(blob);
+				const printWindow = window.open(fileURL);
+				printWindow.addEventListener('load', () => {
+					printWindow.print();
+				});
+			})
+			.catch((error) => console.error('Error fetching the file:', error))
+			.finally(() => setisPrinting(false));
+	};
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
@@ -42,7 +55,7 @@ export default function OrderActions({ order }) {
 							content = (
 								<InvoiceIcon className="mr-1 hover:text-nova-primary" />
 							);
-							title = 'Print Invoice';
+							title = isPrinting ? 'Please wait...' : 'Print Invoice';
 							break;
 						case 'cancel':
 							content = (
@@ -69,6 +82,7 @@ export default function OrderActions({ order }) {
 								key={actionKey}
 								href={actionValue.url}
 								title={title}
+								target={actionKey === 'invoice' ? '_blank' : ''}
 								onClick={
 									actionKey === 'invoice'
 										? (e) => {

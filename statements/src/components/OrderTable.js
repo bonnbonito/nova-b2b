@@ -36,19 +36,6 @@ export default function OrderTable({
 		}
 	};
 
-	const printInvoice = (url) => {
-		fetch(url)
-			.then((response) => response.blob())
-			.then((blob) => {
-				const fileURL = URL.createObjectURL(blob);
-				const printWindow = window.open(fileURL);
-				printWindow.addEventListener('load', () => {
-					printWindow.print();
-				});
-			})
-			.catch((error) => console.error('Error fetching the file:', error));
-	};
-
 	return (
 		<div className="table-responsive overflow-x-auto">
 			<table className="shop_table border-collapse w-full min-w-[800px]">
@@ -66,7 +53,7 @@ export default function OrderTable({
 						<th className="font-medium p-4 pt-0 pb-3 text-black text-left font-title uppercase">
 							Status
 						</th>
-						{NovaOrders.has_payment_types && (
+						{NovaOrders.has_payment_types.length > 0 && (
 							<th
 								className="font-medium p-4 pt-0 pb-3 text-black text-left font-title uppercase cursor-pointer"
 								onClick={toggleSortDueDate}
