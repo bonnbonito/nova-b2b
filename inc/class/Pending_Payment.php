@@ -64,7 +64,42 @@ class Pending_Payment {
 	public function overdue_list( $user ) {
 		$overdue_orders = get_user_meta( $user->ID, 'overdue_orders', true );
 		echo '<h2>Overdue Orders</h2>';
-		print_r( $overdue_orders );
+
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'nova_pendings';
+
+		$query = $wpdb->prepare( "SELECT * FROM {$table_name} WHERE payment_status = %s", 'Pending' );
+
+		$pending_payments = $wpdb->get_results( $query );
+
+		$overdue_orders = array();
+
+		foreach ( $pending_payments as $pending_payment ) {
+			$order    = wc_get_order( $pending_payment->payment_order );
+			$original = $pending_payment->original_order;
+			$user_id  = $order->get_user_id();
+			if ( $user_id == $user->ID ) {
+				$today = date( 'F d, Y' );
+
+				echo '<pre>';
+				$payment_date = date( 'F d, Y', strtotime( $pending_payment->payment_date ) );
+				print_r( $payment_date . ' ' . $pending_payment->payment_order . ' ' . ( strtotime( $today ) > strtotime( $payment_date ) ) );
+				echo '</pre>';
+
+				if ( strtotime( $today ) > strtotime( $payment_date ) ) {
+					$overdue_orders[] = $pending_payment->payment_order;
+					update_post_meta( $pending_payment->payment_order, 'is_overdue', true );
+				} else {
+					update_post_meta( $pending_payment->payment_order, 'is_overdue', false );
+				}
+			}
+		}
+
+		if ( $overdue_orders ) {
+			update_user_meta( $user->ID, 'overdue_orders', implode( ',', $overdue_orders ) );
+		}
+
+		print_r( get_user_meta( $user->ID, 'overdue_orders', true ) );
 	}
 
 
@@ -552,19 +587,35 @@ class Pending_Payment {
 
 		$order          = wc_get_order( $payment_order_id );
 		$original_order = wc_get_order( $original_order_id );
+		$user_id        = $order->get_user_id();
 
 		$completed_date_obj  = $original_order->get_date_completed();
 		$shipped_date        = $completed_date_obj->date( 'F d, Y' );
 		$days_after_shipping = get_field( 'days_after_shipping', $payment_type );
 		$deadline            = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
 		$payment_date        = date( 'F d, Y', $deadline );
+		$current_overdue     = get_user_meta( $user_id, 'overdue_orders', true );
 
 		$today = date( 'F d, Y' );
 
 		if ( strtotime( $today ) > strtotime( $payment_date ) ) {
+			if ( $current_overdue ) {
+				$current_overdue   = explode( ',', $current_overdue );
+				$current_overdue[] = $payment_order_id;
+				update_user_meta( $user_id, 'overdue_orders', implode( ',', $current_overdue ) );
+			}
+
 			update_post_meta( $payment_order_id, 'is_overdue', true );
 		} else {
 			update_post_meta( $payment_order_id, 'is_overdue', false );
+			if ( $current_overdue ) {
+				$current_overdue = explode( ',', $current_overdue );
+				$key             = array_search( $payment_order_id, $current_overdue );
+				if ( $key !== false ) {
+					unset( $current_overdue[ $key ] );
+					update_user_meta( $user_id, 'overdue_orders', implode( ',', $current_overdue ) );
+				}
+			}
 		}
 	}
 
