@@ -575,6 +575,7 @@ export function Logo({ item }) {
 					onChange={(e) => setWaterproof(e.target.value)}
 					options={waterProofSelections.map((option) => (
 						<option
+							key={option.option}
 							value={option.option}
 							defaultValue={option.option == waterproof}
 						>

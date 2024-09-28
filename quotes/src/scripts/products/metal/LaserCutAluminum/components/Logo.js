@@ -462,6 +462,7 @@ export function Logo({ item }) {
 					onChange={handleOnChangeThickness}
 					options={metalThicknessOptions.map((thickness) => (
 						<option
+							key={thickness.value}
 							value={thickness.value}
 							defaultValue={thickness === selectedThickness}
 						>
@@ -489,6 +490,7 @@ export function Logo({ item }) {
 					onChange={(e) => setWaterproof(e.target.value)}
 					options={waterProofOptions.map((option) => (
 						<option
+							key={option.option}
 							value={option.option}
 							defaultValue={option.option == waterproof}
 						>
@@ -503,6 +505,7 @@ export function Logo({ item }) {
 					onChange={handleChangeFinishing}
 					options={aluminumFinishingOptions.map((finishing) => (
 						<option
+							key={finishing.option}
 							value={finishing.option}
 							defaultValue={finishing.option === selectedFinishing}
 						>
@@ -519,6 +522,7 @@ export function Logo({ item }) {
 							onChange={handleChangeAnodizedFinishing}
 							options={anodizedFinishingOptions.map((finishing) => (
 								<option
+									key={finishing.option}
 									value={finishing.option}
 									defaultValue={finishing.option === anodizedFinishing}
 								>
@@ -533,6 +537,7 @@ export function Logo({ item }) {
 							onChange={handleChangeAnodizedColor}
 							options={anodizedColorOptions.map((color) => (
 								<option
+									key={color.option}
 									value={color.option}
 									defaultValue={color.option === anodizedColor}
 								>
@@ -566,6 +571,7 @@ export function Logo({ item }) {
 					onChange={handleOnChangeInstallation}
 					options={metalMountingOptions.map((option) => (
 						<option
+							key={option.option}
 							value={option.option}
 							defaultValue={option.option === mounting}
 						>
@@ -581,6 +587,7 @@ export function Logo({ item }) {
 						onChange={handleonChangeStudLength}
 						options={studLengthOptions.map((option) => (
 							<option
+								key={option.value}
 								value={option.value}
 								defaultValue={option.value == studLength}
 							>
@@ -597,6 +604,7 @@ export function Logo({ item }) {
 						onChange={handleonChangeSpacerDistance}
 						options={spacerStandoffOptions.map((option) => (
 							<option
+								key={option.value}
 								value={option.value}
 								defaultValue={option.value == spacerStandoffDistance}
 							>

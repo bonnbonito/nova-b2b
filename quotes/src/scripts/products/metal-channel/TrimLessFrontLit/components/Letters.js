@@ -661,6 +661,7 @@ export function Letters({ item }) {
 					onChange={handleOnChangeWaterproof}
 					options={waterProofOptions.map((option) => (
 						<option
+							key={option.option}
 							value={option.option}
 							defaultValue={option.option == waterproof}
 						>
@@ -699,7 +700,11 @@ export function Letters({ item }) {
 					value={depth?.value}
 					onChange={handleOnChangeDepth}
 					options={depthOptions.map((thickness) => (
-						<option value={thickness.value} defaultValue={thickness === depth}>
+						<option
+							key={thickness.value}
+							value={thickness.value}
+							defaultValue={thickness === depth}
+						>
 							{thickness.depth}
 						</option>
 					))}
@@ -734,6 +739,7 @@ export function Letters({ item }) {
 					onChange={handleOnChangeWhite}
 					options={whiteOptions.map((option) => (
 						<option
+							key={option.option}
 							value={option.option}
 							defaultValue={option == frontAcrylicCover}
 						>
@@ -770,6 +776,7 @@ export function Letters({ item }) {
 							onChange={handleOnChangeVinyl3635}
 							options={vinlyl3635Options.map((option) => (
 								<option
+									key={option.code}
 									value={`${option.name} - [${option.code}]`}
 									defaultValue={
 										`${option.name} - [${option.code}]` == vinyl3635
@@ -787,7 +794,11 @@ export function Letters({ item }) {
 					title="LED Light Color"
 					onChange={handleOnChangeLedLight}
 					options={ledLightColors.map((color) => (
-						<option value={color} defaultValue={color == ledLightColor}>
+						<option
+							key={color}
+							value={color}
+							defaultValue={color == ledLightColor}
+						>
 							{color}
 						</option>
 					))}
@@ -799,6 +810,7 @@ export function Letters({ item }) {
 					onChange={handleOnChangeMounting}
 					options={mountingDefaultOptions.map((mounting) => (
 						<option
+							key={mounting.value}
 							value={mounting.value}
 							defaultValue={mounting.value == mounting}
 						>
@@ -814,6 +826,7 @@ export function Letters({ item }) {
 						onChange={handleonChangeStudLength}
 						options={studLengthOptions.map((option) => (
 							<option
+								key={option.value}
 								value={option.value}
 								defaultValue={option.value == studLength}
 							>
@@ -830,6 +843,7 @@ export function Letters({ item }) {
 						onChange={handleonChangeSpacerDistance}
 						options={spacerStandoffOptions.map((option) => (
 							<option
+								key={option.value}
 								value={option.value}
 								defaultValue={option.value == spacerStandoffDistance}
 							>
@@ -845,6 +859,7 @@ export function Letters({ item }) {
 					onChange={handleOnChangeincludedItems}
 					options={lightingOptions.map((option) => (
 						<option
+							key={option.value}
 							value={option.value}
 							defaultValue={option.value == includedItems}
 						>

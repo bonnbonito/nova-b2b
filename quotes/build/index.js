@@ -14071,6 +14071,7 @@ function Logo({
     title: "Environment",
     onChange: e => setWaterproof(e.target.value),
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option.option == waterproof
     }, option.option)),
@@ -19721,6 +19722,7 @@ function Logo({
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option.option == waterproof
     }, option.option)),
@@ -20572,6 +20574,7 @@ function Letters({
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option.option == waterproof
     }, option.option)),
@@ -20599,6 +20602,7 @@ function Letters({
     value: depth?.value,
     onChange: handleOnChangeDepth,
     options: depthOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
       defaultValue: thickness === depth
     }, thickness.depth))
@@ -20633,6 +20637,7 @@ function Letters({
     title: "Front Acrylic Cover",
     onChange: handleOnChangeWhite,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.whiteOptionsResin.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option == frontAcrylicCover
     }, option.option)),
@@ -20655,6 +20660,7 @@ function Letters({
     title: "3M 3635 Vinyl",
     onChange: handleOnChangeVinyl3635,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.vinlyl3635Options.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.code,
       value: `${option.name} - [${option.code}]`,
       defaultValue: `${option.name} - [${option.code}]` == vinyl3635
     }, `${option.name} - [${option.code}]`)),
@@ -20663,6 +20669,7 @@ function Letters({
     title: "Front & Back Vinyl",
     onChange: handleOnChangeWhiteFrontBackVinyl,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.frontBackVinylOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option.option == frontBackVinyl
     }, option.option)),
@@ -20671,6 +20678,7 @@ function Letters({
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: color,
       value: color,
       defaultValue: color == ledLightColor
     }, color)),
@@ -20679,6 +20687,7 @@ function Letters({
     title: "Mounting",
     onChange: handleOnChangeMounting,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__.mountingDefaultOptions.map(mounting => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: mounting.value,
       value: mounting.value,
       defaultValue: mounting.value == mounting
     }, mounting.value)),
@@ -20687,6 +20696,7 @@ function Letters({
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == studLength
     }, option.value)),
@@ -20695,6 +20705,7 @@ function Letters({
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
@@ -20703,6 +20714,7 @@ function Letters({
     title: "Included Items",
     onChange: handleOnChangeincludedItems,
     options: lightingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == includedItems
     }, option.value)),
@@ -21186,6 +21198,7 @@ function Logo({
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option.option == waterproof
     }, option.option)),
@@ -21195,6 +21208,7 @@ function Logo({
     value: depth?.value,
     onChange: handleOnChangeDepth,
     options: depthOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
       defaultValue: thickness === depth
     }, thickness.depth))
@@ -21232,6 +21246,7 @@ function Logo({
     title: "Front Acrylic Cover",
     onChange: handleOnChangeWhite,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_5__.whiteOptionsResin.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option == frontAcrylicCover
     }, option.option)),
@@ -21253,6 +21268,7 @@ function Logo({
     title: "3M 3635 Vinyl",
     onChange: handleOnChangeVinyl3635,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_5__.vinlyl3635Options.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.code,
       value: `${option.name} - [${option.code}]`,
       defaultValue: `${option.name} - [${option.code}]` == vinyl3635
     }, `${option.name} - [${option.code}]`)),
@@ -21261,6 +21277,7 @@ function Logo({
     title: "Front & Back Vinyl",
     onChange: handleOnChangeWhiteFrontBackVinyl,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.frontBackVinylOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option.option == frontBackVinyl
     }, option.option)),
@@ -21269,6 +21286,7 @@ function Logo({
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_10__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: color,
       value: color,
       defaultValue: color == ledLightColor
     }, color)),
@@ -21277,6 +21295,7 @@ function Logo({
     title: "Mounting",
     onChange: handleOnChangeMounting,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_10__.mountingDefaultOptions.map(mounting => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: mounting.value,
       value: mounting.value,
       defaultValue: mounting.value == mounting
     }, mounting.value)),
@@ -21285,6 +21304,7 @@ function Logo({
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == studLength
     }, option.value)),
@@ -21293,6 +21313,7 @@ function Logo({
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
@@ -21301,6 +21322,7 @@ function Logo({
     title: "Included Items",
     onChange: handleOnChangeincludedItems,
     options: lightingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == includedItems
     }, option.value)),
@@ -22084,6 +22106,7 @@ function Letters({
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option.option == waterproof
     }, option.option)),
@@ -22111,6 +22134,7 @@ function Letters({
     value: depth?.value,
     onChange: handleOnChangeDepth,
     options: depthOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
       defaultValue: thickness === depth
     }, thickness.depth))
@@ -22138,6 +22162,7 @@ function Letters({
     title: "Front Acrylic Cover",
     onChange: handleOnChangeWhite,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.whiteOptionsResin.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option == frontAcrylicCover
     }, option.option)),
@@ -22160,6 +22185,7 @@ function Letters({
     title: "3M 3635 Vinyl",
     onChange: handleOnChangeVinyl3635,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.vinlyl3635Options.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.code,
       value: `${option.name} - [${option.code}]`,
       defaultValue: `${option.name} - [${option.code}]` == vinyl3635
     }, `${option.name} - [${option.code}]`)),
@@ -22168,6 +22194,7 @@ function Letters({
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: color,
       value: color,
       defaultValue: color == ledLightColor
     }, color)),
@@ -22176,6 +22203,7 @@ function Letters({
     title: "Mounting",
     onChange: handleOnChangeMounting,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__.mountingDefaultOptions.map(mounting => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: mounting.value,
       value: mounting.value,
       defaultValue: mounting.value == mounting
     }, mounting.value)),
@@ -22184,6 +22212,7 @@ function Letters({
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == studLength
     }, option.value)),
@@ -22192,6 +22221,7 @@ function Letters({
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
@@ -22200,6 +22230,7 @@ function Letters({
     title: "Included Items",
     onChange: handleOnChangeincludedItems,
     options: lightingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == includedItems
     }, option.value)),
@@ -22667,6 +22698,7 @@ function Logo({
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option.option == waterproof
     }, option.option)),
@@ -22676,6 +22708,7 @@ function Logo({
     value: depth?.value,
     onChange: handleOnChangeDepth,
     options: depthOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
       defaultValue: thickness === depth
     }, thickness.depth))
@@ -22706,6 +22739,7 @@ function Logo({
     title: "Front Acrylic Cover",
     onChange: handleOnChangeWhite,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_5__.whiteOptionsResin.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option == frontAcrylicCover
     }, option.option)),
@@ -22727,6 +22761,7 @@ function Logo({
     title: "3M 3635 Vinyl",
     onChange: handleOnChangeVinyl3635,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_5__.vinlyl3635Options.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.code,
       value: `${option.name} - [${option.code}]`,
       defaultValue: `${option.name} - [${option.code}]` == vinyl3635
     }, `${option.name} - [${option.code}]`)),
@@ -22735,6 +22770,7 @@ function Logo({
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_10__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: color,
       value: color,
       defaultValue: color == ledLightColor
     }, color)),
@@ -22743,6 +22779,7 @@ function Logo({
     title: "Mounting",
     onChange: handleOnChangeMounting,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_10__.mountingDefaultOptions.map(mounting => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: mounting.value,
       value: mounting.value,
       defaultValue: mounting.value == mounting
     }, mounting.value)),
@@ -22751,6 +22788,7 @@ function Logo({
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == studLength
     }, option.value)),
@@ -22759,6 +22797,7 @@ function Logo({
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
@@ -22767,6 +22806,7 @@ function Logo({
     title: "Included Items",
     onChange: handleOnChangeincludedItems,
     options: lightingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == includedItems
     }, option.value)),
@@ -23491,6 +23531,7 @@ function Letters({
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option.option == waterproof
     }, option.option)),
@@ -23515,6 +23556,7 @@ function Letters({
     value: depth?.value,
     onChange: handleOnChangeDepth,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__.depthOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
       defaultValue: thickness === depth
     }, thickness.depth))
@@ -23527,6 +23569,7 @@ function Letters({
     title: "Finishing",
     onChange: handleChangeFinishing,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__.finishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: finishing.value,
       value: finishing.value,
       defaultValue: finishing.value === selectedFinishing
     }, finishing.value)),
@@ -23535,6 +23578,7 @@ function Letters({
     title: "Metal Finish",
     onChange: handelMetalFinishChange,
     options: _metal_metalOptions__WEBPACK_IMPORTED_MODULE_13__.metalFinishOptions.map(finish => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: finish.option,
       value: finish.option,
       defaultValue: finish.option === metalFinish
     }, finish.option)),
@@ -23557,6 +23601,7 @@ function Letters({
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: color,
       value: color,
       defaultValue: color == ledLightColor
     }, color)),
@@ -23565,6 +23610,7 @@ function Letters({
     title: "Acrylic Reveal",
     onChange: handleOnChangeAcrylicReveal,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__.acrylicRevealOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option,
       value: option,
       defaultValue: option == acrylicReveal
     }, option)),
@@ -23573,6 +23619,7 @@ function Letters({
     title: "Mounting",
     onChange: handleOnChangeMounting,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__.mountingDefaultOptions.map(mounting => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: mounting.value,
       value: mounting.value,
       defaultValue: mounting.value == mounting
     }, mounting.value)),
@@ -23581,6 +23628,7 @@ function Letters({
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == studLength
     }, option.value)),
@@ -23589,6 +23637,7 @@ function Letters({
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
@@ -23597,6 +23646,7 @@ function Letters({
     title: "Included Items",
     onChange: handleOnChangeincludedItems,
     options: lightingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == includedItems
     }, option.value)),
@@ -24063,6 +24113,7 @@ function Logo({
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option.option == waterproof
     }, option.option)),
@@ -24072,6 +24123,7 @@ function Logo({
     value: depth?.value,
     onChange: handleOnChangeDepth,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_8__.depthOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
       defaultValue: thickness === depth
     }, thickness.depth))
@@ -24089,6 +24141,7 @@ function Logo({
     title: "Finishing",
     onChange: handleChangeFinishing,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_8__.finishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: finishing.value,
       value: finishing.value,
       defaultValue: finishing.value === selectedFinishing
     }, finishing.value)),
@@ -24097,6 +24150,7 @@ function Logo({
     title: "Metal Finish",
     onChange: handelMetalFinishChange,
     options: _metal_metalOptions__WEBPACK_IMPORTED_MODULE_9__.metalFinishOptions.map(finish => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: finish.option,
       value: finish.option,
       defaultValue: finish.option === metalFinish
     }, finish.option)),
@@ -24118,6 +24172,7 @@ function Logo({
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_8__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: color,
       value: color,
       defaultValue: color == ledLightColor
     }, color)),
@@ -24126,6 +24181,7 @@ function Logo({
     title: "Acrylic Reveal",
     onChange: handleOnChangeAcrylicReveal,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_8__.acrylicRevealOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option,
       value: option,
       defaultValue: option == acrylicReveal
     }, option)),
@@ -24134,6 +24190,7 @@ function Logo({
     title: "Mounting",
     onChange: handleOnChangeMounting,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_8__.mountingDefaultOptions.map(mounting => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: mounting.value,
       value: mounting.value,
       defaultValue: mounting.value == mounting
     }, mounting.value)),
@@ -24142,6 +24199,7 @@ function Logo({
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == studLength
     }, option.value)),
@@ -24150,6 +24208,7 @@ function Logo({
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
@@ -24158,6 +24217,7 @@ function Logo({
     title: "Included Items",
     onChange: handleOnChangeincludedItems,
     options: lightingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == includedItems
     }, option.value)),
@@ -24912,6 +24972,7 @@ function Letters({
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option.option == waterproof
     }, option.option)),
@@ -24939,6 +25000,7 @@ function Letters({
     value: depth?.value,
     onChange: handleOnChangeDepth,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__.frontBackdepthOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
       defaultValue: thickness === depth
     }, thickness.depth))
@@ -24966,6 +25028,7 @@ function Letters({
     title: "Front Acrylic Cover",
     onChange: handleOnChangeWhite,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.whiteOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option == frontAcrylicCover
     }, option.option)),
@@ -24988,6 +25051,7 @@ function Letters({
     title: "3M 3635 Vinyl",
     onChange: handleOnChangeVinyl3635,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.vinlyl3635Options.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.code,
       value: `${option.name} - [${option.code}]`,
       defaultValue: `${option.name} - [${option.code}]` == vinyl3635
     }, `${option.name} - [${option.code}]`)),
@@ -24996,6 +25060,7 @@ function Letters({
     title: "Front & Back Vinyl",
     onChange: handleOnChangeWhiteFrontBackVinyl,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.frontBackVinylOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option.option == frontBackVinyl
     }, option.option)),
@@ -25004,6 +25069,7 @@ function Letters({
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: color,
       value: color,
       defaultValue: color == ledLightColor
     }, color)),
@@ -25012,6 +25078,7 @@ function Letters({
     title: "Mounting",
     onChange: handleOnChangeMounting,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__.mountingDefaultOptions.map(mounting => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: mounting.value,
       value: mounting.value,
       defaultValue: mounting.value == mounting
     }, mounting.value)),
@@ -25020,6 +25087,7 @@ function Letters({
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == studLength
     }, option.value)),
@@ -25028,6 +25096,7 @@ function Letters({
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
@@ -25036,6 +25105,7 @@ function Letters({
     title: "Included Items",
     onChange: handleOnChangeincludedItems,
     options: lightingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == includedItems
     }, option.value)),
@@ -25484,6 +25554,7 @@ function Logo({
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option.option == waterproof
     }, option.option)),
@@ -25493,6 +25564,7 @@ function Logo({
     value: depth?.value,
     onChange: handleOnChangeDepth,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_9__.frontBackdepthOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
       defaultValue: thickness === depth
     }, thickness.depth))
@@ -25524,6 +25596,7 @@ function Logo({
     title: "Front Acrylic Cover",
     onChange: handleOnChangeWhite,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_5__.whiteOptionsResin.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option == frontAcrylicCover
     }, option.option)),
@@ -25545,6 +25618,7 @@ function Logo({
     title: "3M 3635 Vinyl",
     onChange: handleOnChangeVinyl3635,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_5__.vinlyl3635Options.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.code,
       value: `${option.name} - [${option.code}]`,
       defaultValue: `${option.name} - [${option.code}]` == vinyl3635
     }, `${option.name} - [${option.code}]`)),
@@ -25553,6 +25627,7 @@ function Logo({
     title: "Front & Back Vinyl",
     onChange: handleOnChangeWhiteFrontBackVinyl,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.frontBackVinylOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option.option == frontBackVinyl
     }, option.option)),
@@ -25561,6 +25636,7 @@ function Logo({
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_9__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: color,
       value: color,
       defaultValue: color == ledLightColor
     }, color)),
@@ -25569,6 +25645,7 @@ function Logo({
     title: "Mounting",
     onChange: handleOnChangeMounting,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_9__.mountingDefaultOptions.map(mounting => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: mounting.value,
       value: mounting.value,
       defaultValue: mounting.value == mounting
     }, mounting.value)),
@@ -25577,6 +25654,7 @@ function Logo({
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == studLength
     }, option.value)),
@@ -25585,6 +25663,7 @@ function Logo({
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
@@ -25593,6 +25672,7 @@ function Logo({
     title: "Included Items",
     onChange: handleOnChangeincludedItems,
     options: lightingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == includedItems
     }, option.value)),
@@ -26339,6 +26419,7 @@ function Letters({
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option.option == waterproof
     }, option.option)),
@@ -26366,6 +26447,7 @@ function Letters({
     value: depth?.value,
     onChange: handleOnChangeDepth,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__.depthOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
       defaultValue: thickness === depth
     }, thickness.depth))
@@ -26393,6 +26475,7 @@ function Letters({
     title: "Front Acrylic Cover",
     onChange: handleOnChangeWhite,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.whiteOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option == frontAcrylicCover
     }, option.option)),
@@ -26415,6 +26498,7 @@ function Letters({
     title: "3M 3635 Vinyl",
     onChange: handleOnChangeVinyl3635,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.vinlyl3635Options.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.code,
       value: `${option.name} - [${option.code}]`,
       defaultValue: `${option.name} - [${option.code}]` == vinyl3635
     }, `${option.name} - [${option.code}]`)),
@@ -26423,6 +26507,7 @@ function Letters({
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: color,
       value: color,
       defaultValue: color == ledLightColor
     }, color)),
@@ -26431,6 +26516,7 @@ function Letters({
     title: "Mounting",
     onChange: handleOnChangeMounting,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__.mountingDefaultOptions.map(mounting => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: mounting.value,
       value: mounting.value,
       defaultValue: mounting.value == mounting
     }, mounting.value)),
@@ -26439,6 +26525,7 @@ function Letters({
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == studLength
     }, option.value)),
@@ -26447,6 +26534,7 @@ function Letters({
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
@@ -26455,6 +26543,7 @@ function Letters({
     title: "Included Items",
     onChange: handleOnChangeincludedItems,
     options: lightingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == includedItems
     }, option.value)),
@@ -26886,6 +26975,7 @@ function Logo({
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option.option == waterproof
     }, option.option)),
@@ -26895,6 +26985,7 @@ function Logo({
     value: depth?.value,
     onChange: handleOnChangeDepth,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_9__.depthOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
       defaultValue: thickness === depth
     }, thickness.depth))
@@ -26926,6 +27017,7 @@ function Logo({
     title: "Front Acrylic Cover",
     onChange: handleOnChangeWhite,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_5__.whiteOptionsResin.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option == frontAcrylicCover
     }, option.option)),
@@ -26947,6 +27039,7 @@ function Logo({
     title: "3M 3635 Vinyl",
     onChange: handleOnChangeVinyl3635,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_5__.vinlyl3635Options.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.code,
       value: `${option.name} - [${option.code}]`,
       defaultValue: `${option.name} - [${option.code}]` == vinyl3635
     }, `${option.name} - [${option.code}]`)),
@@ -26955,6 +27048,7 @@ function Logo({
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_9__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: color,
       value: color,
       defaultValue: color == ledLightColor
     }, color)),
@@ -26963,6 +27057,7 @@ function Logo({
     title: "Mounting",
     onChange: handleOnChangeMounting,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_9__.mountingDefaultOptions.map(mounting => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: mounting.value,
       value: mounting.value,
       defaultValue: mounting.value == mounting
     }, mounting.value)),
@@ -26971,6 +27066,7 @@ function Logo({
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == studLength
     }, option.value)),
@@ -26979,6 +27075,7 @@ function Logo({
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
@@ -26987,6 +27084,7 @@ function Logo({
     title: "Included Items",
     onChange: handleOnChangeincludedItems,
     options: lightingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == includedItems
     }, option.value)),
@@ -27820,6 +27918,7 @@ function Letters({
     title: "Metal Option",
     onChange: e => setMetal(e.target.value),
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_10__.metalOptions.map(metal => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: metal.option,
       value: metal.option,
       defaultValue: metal.option === metal
     }, metal.option)),
@@ -27829,6 +27928,7 @@ function Letters({
     value: selectedThickness?.value,
     onChange: handleOnChangeThickness,
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_10__.fabricatedThicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
       defaultValue: thickness === selectedThickness
     }, thickness.thickness))
@@ -27841,6 +27941,7 @@ function Letters({
     title: "Finishing Options",
     onChange: handleChangeFinishing,
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_10__.finishOptions2.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: finishing.option,
       value: finishing.option,
       defaultValue: finishing.option === selectedFinishing
     }, finishing.option)),
@@ -27849,6 +27950,7 @@ function Letters({
     title: "Metal Finish",
     onChange: handelMetalFinishChange,
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_10__.metalFinishOptions.map(metalFinish => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: metalFinish.option,
       value: metalFinish.option,
       defaultValue: metalFinish.option === stainLessMetalFinish
     }, metalFinish.option)),
@@ -27888,6 +27990,7 @@ function Letters({
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option.option == waterproof
     }, option.option)),
@@ -27896,6 +27999,7 @@ function Letters({
     title: "Mounting Options",
     onChange: handleOnChangeInstallation,
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_10__.fabricatedMetalInstallationOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option.option === mounting
     }, option.option)),
@@ -27904,6 +28008,7 @@ function Letters({
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == studLength
     }, option.value)),
@@ -27912,6 +28017,7 @@ function Letters({
     title: "SPACER DISTANCE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
@@ -27920,6 +28026,7 @@ function Letters({
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == studLength
     }, option.value)),
@@ -28353,6 +28460,7 @@ function Logo({
     title: "Metal Option",
     onChange: e => setMetal(e.target.value),
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_9__.metalOptions.map(metal => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: metal.option,
       value: metal.option,
       defaultValue: metal.option === metal
     }, metal.option)),
@@ -28362,6 +28470,7 @@ function Logo({
     value: selectedThickness?.value,
     onChange: handleOnChangeThickness,
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_9__.fabricatedThicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
       defaultValue: thickness === selectedThickness
     }, thickness.thickness))
@@ -28379,6 +28488,7 @@ function Logo({
     title: "Finishing Options",
     onChange: handleChangeFinishing,
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_9__.finishOptions2.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: finishing.option,
       value: finishing.option,
       defaultValue: finishing.option === selectedFinishing
     }, finishing.option)),
@@ -28387,6 +28497,7 @@ function Logo({
     title: "Metal Finish",
     onChange: handelMetalFinishChange,
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_9__.metalFinishOptions.map(metalFinish => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: metalFinish.option,
       value: metalFinish.option,
       defaultValue: metalFinish.option === stainLessMetalFinish
     }, metalFinish.option)),
@@ -28423,6 +28534,7 @@ function Logo({
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option.option == waterproof
     }, option.option)),
@@ -28431,6 +28543,7 @@ function Logo({
     title: "Mounting Options",
     onChange: handleOnChangeInstallation,
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_9__.fabricatedMetalInstallationOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option.option === mounting
     }, option.option)),
@@ -28439,6 +28552,7 @@ function Logo({
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == studLength
     }, option.value)),
@@ -28447,6 +28561,7 @@ function Logo({
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
@@ -29162,6 +29277,7 @@ function Letters({
     value: selectedThickness?.value,
     onChange: handleOnChangeThickness,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.metalThicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
       defaultValue: thickness === selectedThickness
     }, thickness.thickness))
@@ -29174,6 +29290,7 @@ function Letters({
     title: "Aluminum Finishing",
     onChange: handleChangeFinishing,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.aluminumFinishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: finishing.option,
       value: finishing.option,
       defaultValue: finishing.option === selectedFinishing
     }, finishing.option)),
@@ -29182,6 +29299,7 @@ function Letters({
     title: "Anodized Finishing",
     onChange: handleChangeAnodizedFinishing,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.anodizedFinishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: finishing.option,
       value: finishing.option,
       defaultValue: finishing.option === anodizedFinishing
     }, finishing.option)),
@@ -29190,6 +29308,7 @@ function Letters({
     title: "Anodized Colors",
     onChange: handleChangeAnodizedColor,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.anodizedColorOptions.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: color.option,
       value: color.option,
       defaultValue: color.option === anodizedColor
     }, color.option)),
@@ -29212,6 +29331,7 @@ function Letters({
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option.option == waterproof
     }, option.option)),
@@ -29220,6 +29340,7 @@ function Letters({
     title: "Mounting Options",
     onChange: handleOnChangeInstallation,
     options: metalMountingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option.option === mounting
     }, option.option)),
@@ -29228,6 +29349,7 @@ function Letters({
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == studLength
     }, option.value)),
@@ -29236,6 +29358,7 @@ function Letters({
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
@@ -29631,6 +29754,7 @@ function Logo({
     value: item.metalThickness?.value,
     onChange: handleOnChangeThickness,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.metalThicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
       defaultValue: thickness === selectedThickness
     }, thickness.thickness))
@@ -29648,6 +29772,7 @@ function Logo({
     title: "Environment",
     onChange: e => setWaterproof(e.target.value),
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option.option == waterproof
     }, option.option)),
@@ -29656,6 +29781,7 @@ function Logo({
     title: "Aluminum Finishing",
     onChange: handleChangeFinishing,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.aluminumFinishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: finishing.option,
       value: finishing.option,
       defaultValue: finishing.option === selectedFinishing
     }, finishing.option)),
@@ -29664,6 +29790,7 @@ function Logo({
     title: "Anodized Finishing",
     onChange: handleChangeAnodizedFinishing,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.anodizedFinishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: finishing.option,
       value: finishing.option,
       defaultValue: finishing.option === anodizedFinishing
     }, finishing.option)),
@@ -29672,6 +29799,7 @@ function Logo({
     title: "Anodized Colors",
     onChange: handleChangeAnodizedColor,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.anodizedColorOptions.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: color.option,
       value: color.option,
       defaultValue: color.option === anodizedColor
     }, color.option)),
@@ -29693,6 +29821,7 @@ function Logo({
     title: "Mounting Options",
     onChange: handleOnChangeInstallation,
     options: metalMountingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option.option === mounting
     }, option.option)),
@@ -29701,6 +29830,7 @@ function Logo({
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == studLength
     }, option.value)),
@@ -29709,6 +29839,7 @@ function Logo({
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
@@ -30438,6 +30569,7 @@ function Letters({
     title: "Metal Option",
     onChange: e => setMetal(e.target.value),
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_10__.metalOptions.map(metal => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: metal.option,
       value: metal.option,
       defaultValue: metal.option === metal
     }, metal.option)),
@@ -30447,6 +30579,7 @@ function Letters({
     value: selectedThickness?.value,
     onChange: handleOnChangeThickness,
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_10__.metalThicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
       defaultValue: thickness === selectedThickness
     }, thickness.thickness))
@@ -30459,6 +30592,7 @@ function Letters({
     title: "Finishing Options",
     onChange: handleChangeFinishing,
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_10__.finishOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: finishing.option,
       value: finishing.option,
       defaultValue: finishing.option === selectedFinishing
     }, finishing.option)),
@@ -30467,6 +30601,7 @@ function Letters({
     title: "Metal Finish",
     onChange: handelMetalFinishChange,
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_10__.metalFinishOptions.map(metalFinish => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: metalFinish.option,
       value: metalFinish.option,
       defaultValue: metalFinish.option === stainLessMetalFinish
     }, metalFinish.option)),
@@ -30475,6 +30610,7 @@ function Letters({
     title: "Steel Polish",
     onChange: e => setStainlessSteelPolished(e.target.value),
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_10__.stainlessSteelPolishedOptions.map(steelPolished => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: steelPolished.option,
       value: steelPolished.option,
       defaultValue: steelPolished.option === stainlessSteelPolished
     }, steelPolished.option)),
@@ -30497,6 +30633,7 @@ function Letters({
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option.option == waterproof
     }, option.option)),
@@ -30505,6 +30642,7 @@ function Letters({
     title: "Mounting Options",
     onChange: handleOnChangeInstallation,
     options: metalMountingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option.option === mounting
     }, option.option)),
@@ -30513,6 +30651,7 @@ function Letters({
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == studLength
     }, option.value)),
@@ -30521,6 +30660,7 @@ function Letters({
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
@@ -30937,6 +31077,7 @@ function Logo({
     title: "Metal Option",
     onChange: e => setMetal(e.target.value),
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_9__.metalOptions.map(metal => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: metal.option,
       value: metal.option,
       defaultValue: metal.option === item.metal
     }, metal.option)),
@@ -30946,6 +31087,7 @@ function Logo({
     value: selectedThickness?.value,
     onChange: handleOnChangeThickness,
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_9__.metalThicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
       defaultValue: thickness === selectedThickness
     }, thickness.thickness))
@@ -30963,6 +31105,7 @@ function Logo({
     title: "Finishing Options",
     onChange: handleChangeFinishing,
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_9__.finishOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: finishing.option,
       value: finishing.option,
       defaultValue: finishing.option === selectedFinishing
     }, finishing.option)),
@@ -30971,6 +31114,7 @@ function Logo({
     title: "Metal Finish",
     onChange: handelMetalFinishChange,
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_9__.metalFinishOptions.map(metalFinish => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: metalFinish.option,
       value: metalFinish.option,
       defaultValue: metalFinish.option === stainLessMetalFinish
     }, metalFinish.option)),
@@ -30979,6 +31123,7 @@ function Logo({
     title: "Steel Polish",
     onChange: e => setStainlessSteelPolished(e.target.value),
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_9__.stainlessSteelPolishedOptions.map(steelPolished => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: steelPolished.option,
       value: steelPolished.option,
       defaultValue: steelPolished.option === item.stainlessSteelPolished
     }, steelPolished.option)),
@@ -31000,6 +31145,7 @@ function Logo({
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option.option == waterproof
     }, option.option)),
@@ -31008,6 +31154,7 @@ function Logo({
     title: "Mounting Options",
     onChange: handleOnChangeInstallation,
     options: metalMountingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option.option === mounting
     }, option.option)),
@@ -31016,6 +31163,7 @@ function Logo({
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == studLength
     }, option.value)),
@@ -31024,6 +31172,7 @@ function Logo({
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
@@ -33579,6 +33728,7 @@ function Logo({
     title: "Environment",
     onChange: e => setWaterproof(e.target.value),
     options: waterProofSelections.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option.option == waterproof
     }, option.option)),
@@ -34200,6 +34350,7 @@ function Logo({
     title: "Environment",
     onChange: e => setWaterproof(e.target.value),
     options: waterProofSelections.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option.option == waterproof
     }, option.option)),
