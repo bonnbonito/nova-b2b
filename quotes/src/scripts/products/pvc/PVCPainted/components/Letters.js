@@ -601,6 +601,7 @@ export function Letters({ item }) {
 					onChange={handleOnChangeThickness}
 					options={thicknessOptions.map((thickness) => (
 						<option
+							key={thickness.value}
 							value={thickness.value}
 							defaultValue={thickness === selectedThickness}
 						>
@@ -636,6 +637,7 @@ export function Letters({ item }) {
 					onChange={handleChangeFinishing}
 					options={finishingOptions.map((finishing) => (
 						<option
+							key={finishing.name}
 							value={finishing.name}
 							defaultValue={finishing.name === item.finishing}
 						>
@@ -650,6 +652,7 @@ export function Letters({ item }) {
 					onChange={handleOnChangeWaterproof}
 					options={waterProofSelections.map((option) => (
 						<option
+							key={option.option}
 							value={option.option}
 							defaultValue={option.option == item.waterproof}
 						>
@@ -684,6 +687,7 @@ export function Letters({ item }) {
 							onChange={handleonChangeStudLength}
 							options={studLengthOptions.map((option) => (
 								<option
+									key={option.value}
 									value={option.value}
 									defaultValue={option.value == studLength}
 								>
@@ -701,6 +705,7 @@ export function Letters({ item }) {
 							onChange={handleonChangeSpacerDistance}
 							options={spacerStandoffOptions.map((option) => (
 								<option
+									key={option.value}
 									value={option.value}
 									defaultValue={option.value == spacerStandoffDistance}
 								>

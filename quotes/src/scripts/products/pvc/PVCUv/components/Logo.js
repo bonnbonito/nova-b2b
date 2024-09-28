@@ -478,6 +478,7 @@ export function Logo({ item }) {
 					onChange={handleOnChangeThickness}
 					options={thicknessOptions.map((thickness) => (
 						<option
+							key={thickness.value}
 							value={thickness.value}
 							defaultValue={thickness === item.thickness}
 						>
@@ -521,6 +522,7 @@ export function Logo({ item }) {
 					onChange={handleChangeFinishing}
 					options={finishingOptions.map((finishing) => (
 						<option
+							key={finishing.name}
 							value={finishing.name}
 							defaultValue={finishing.name === item.finishing}
 						>
@@ -550,6 +552,7 @@ export function Logo({ item }) {
 					onChange={handleOnChangeMounting}
 					options={mountingSelections.map((option) => (
 						<option
+							key={option.value}
 							value={option.value}
 							defaultValue={option.value === mounting}
 						>
@@ -569,6 +572,7 @@ export function Logo({ item }) {
 							onChange={handleonChangeStudLength}
 							options={studLengthOptions.map((option) => (
 								<option
+									key={option.value}
 									value={option.value}
 									defaultValue={option.value == studLength}
 								>
@@ -586,6 +590,7 @@ export function Logo({ item }) {
 							onChange={handleonChangeSpacerDistance}
 							options={spacerStandoffOptions.map((option) => (
 								<option
+									key={option.value}
 									value={option.value}
 									defaultValue={option.value == spacerStandoffDistance}
 								>

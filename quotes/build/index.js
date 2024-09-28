@@ -14038,6 +14038,7 @@ function Logo({
     value: selectedThickness?.value,
     onChange: handleOnChangeThickness,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.thicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
       defaultValue: thickness === selectedThickness
     }, thickness.thickness))
@@ -14088,6 +14089,7 @@ function Logo({
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == studLength
     }, option.value)),
@@ -14096,6 +14098,7 @@ function Logo({
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
@@ -32011,6 +32014,7 @@ function Letters({
     value: selectedThickness?.value,
     onChange: handleOnChangeThickness,
     options: _pvcOptions__WEBPACK_IMPORTED_MODULE_11__.thicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
       defaultValue: thickness === selectedThickness
     }, thickness.thickness))
@@ -32023,6 +32027,7 @@ function Letters({
     title: "Metal Laminate",
     onChange: handleChangeMetalLaminate,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.metalFinishColors.map(laminate => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: laminate.name,
       value: laminate.name,
       defaultValue: laminate.name === item.metalLaminate
     }, laminate.name)),
@@ -32045,6 +32050,7 @@ function Letters({
     title: "Finishing Options",
     onChange: handleChangeFinishing,
     options: _pvcOptions__WEBPACK_IMPORTED_MODULE_11__.finishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: finishing.name,
       value: finishing.name,
       defaultValue: finishing.name === item.finishing
     }, finishing.name)),
@@ -32053,6 +32059,7 @@ function Letters({
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: waterProofSelections.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option.option == item.waterproof
     }, option.option)),
@@ -32070,6 +32077,7 @@ function Letters({
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_10__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == studLength
     }, option.value)),
@@ -32078,6 +32086,7 @@ function Letters({
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
@@ -32475,6 +32484,7 @@ function Logo({
     value: item.thickness?.value,
     onChange: handleOnChangeThickness,
     options: _pvcOptions__WEBPACK_IMPORTED_MODULE_10__.thicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
       defaultValue: thickness === item.thickness
     }, thickness.thickness))
@@ -32492,6 +32502,7 @@ function Logo({
     title: "Metal Laminate",
     onChange: handleChangeMetalLaminate,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_5__.metalFinishColors.map(laminate => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: laminate.name,
       value: laminate.name,
       defaultValue: laminate.name === item.metalLaminate
     }, laminate.name)),
@@ -32514,6 +32525,7 @@ function Logo({
     title: "Finishing Options",
     onChange: handleChangeFinishing,
     options: _pvcOptions__WEBPACK_IMPORTED_MODULE_10__.finishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: finishing.name,
       value: finishing.name,
       defaultValue: finishing.name === item.finishing
     }, finishing.name)),
@@ -32522,6 +32534,7 @@ function Logo({
     title: "Environment",
     onChange: e => setWaterproof(e.target.value),
     options: waterProofSelections.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option.option == item.waterproof
     }, option.option)),
@@ -32530,6 +32543,7 @@ function Logo({
     title: "Mounting",
     onChange: handleOnChangeMounting,
     options: mountingSelections.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value === mounting
     }, option.value)),
@@ -32538,6 +32552,7 @@ function Logo({
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == studLength
     }, option.value)),
@@ -32546,6 +32561,7 @@ function Logo({
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
@@ -33221,6 +33237,7 @@ function Letters({
     value: selectedThickness?.value,
     onChange: handleOnChangeThickness,
     options: _pvcOptions__WEBPACK_IMPORTED_MODULE_10__.thicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
       defaultValue: thickness === selectedThickness
     }, thickness.thickness))
@@ -33246,6 +33263,7 @@ function Letters({
     title: "Finishing Options",
     onChange: handleChangeFinishing,
     options: _pvcOptions__WEBPACK_IMPORTED_MODULE_10__.finishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: finishing.name,
       value: finishing.name,
       defaultValue: finishing.name === item.finishing
     }, finishing.name)),
@@ -33254,6 +33272,7 @@ function Letters({
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: waterProofSelections.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
       defaultValue: option.option == item.waterproof
     }, option.option)),
@@ -33271,6 +33290,7 @@ function Letters({
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == studLength
     }, option.value)),
@@ -33279,6 +33299,7 @@ function Letters({
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
@@ -33698,6 +33719,7 @@ function Logo({
     value: item.thickness?.value,
     onChange: handleOnChangeThickness,
     options: _pvcOptions__WEBPACK_IMPORTED_MODULE_10__.thicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
       defaultValue: thickness === item.thickness
     }, thickness.thickness))
@@ -33737,6 +33759,7 @@ function Logo({
     title: "Finishing Options",
     onChange: handleChangeFinishing,
     options: _pvcOptions__WEBPACK_IMPORTED_MODULE_10__.finishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: finishing.name,
       value: finishing.name,
       defaultValue: finishing.name === finishing
     }, finishing.name)),
@@ -33745,6 +33768,7 @@ function Logo({
     title: "Mounting",
     onChange: handleOnChangeMounting,
     options: mountingSelections.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value === mounting
     }, option.value)),
@@ -33753,6 +33777,7 @@ function Logo({
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == studLength
     }, option.value)),
@@ -33761,6 +33786,7 @@ function Logo({
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
@@ -34311,6 +34337,7 @@ function Logo({
     value: item.thickness?.value,
     onChange: handleOnChangeThickness,
     options: _pvcOptions__WEBPACK_IMPORTED_MODULE_10__.thicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
       defaultValue: thickness === item.thickness
     }, thickness.thickness))
@@ -34342,6 +34369,7 @@ function Logo({
     title: "Finishing Options",
     onChange: handleChangeFinishing,
     options: _pvcOptions__WEBPACK_IMPORTED_MODULE_10__.finishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: finishing.name,
       value: finishing.name,
       defaultValue: finishing.name === item.finishing
     }, finishing.name)),
@@ -34359,6 +34387,7 @@ function Logo({
     title: "mounting",
     onChange: handleOnChangeMounting,
     options: mountingSelections.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value === mounting
     }, option.value)),
@@ -34367,6 +34396,7 @@ function Logo({
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == studLength
     }, option.value)),
@@ -34375,6 +34405,7 @@ function Logo({
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
       defaultValue: option.value == spacerStandoffDistance
     }, option.value)),

@@ -468,6 +468,7 @@ export function Logo({ item }) {
 					onChange={handleOnChangeThickness}
 					options={thicknessOptions.map((thickness) => (
 						<option
+							key={thickness.value}
 							value={thickness.value}
 							defaultValue={thickness === selectedThickness}
 						>
@@ -552,6 +553,7 @@ export function Logo({ item }) {
 							onChange={handleonChangeStudLength}
 							options={studLengthOptions.map((option) => (
 								<option
+									key={option.value}
 									value={option.value}
 									defaultValue={option.value == studLength}
 								>
@@ -565,6 +567,7 @@ export function Logo({ item }) {
 							onChange={handleonChangeSpacerDistance}
 							options={spacerStandoffOptions.map((option) => (
 								<option
+									key={option.value}
 									value={option.value}
 									defaultValue={option.value == spacerStandoffDistance}
 								>
