@@ -56,7 +56,10 @@ class Pending_Payment {
 		add_action( 'wpo_wcpdf_after_order_details', array( $this, 'etransfer_instructions' ), 10, 2 );
 		add_filter( 'woocommerce_email_enabled_customer_completed_order', array( $this, 'disable_completed_email' ), 10, 2 );
 		add_filter( 'woocommerce_order_get_date_completed', array( $this, 'modify_order_completed_date' ), 10, 2 );
+		add_filter( 'woocommerce_order_data_store_cpt_get_orders_query', array( $this, 'handle_overdue_query' ), 10, 2 );
 	}
+
+
 
 	public function modify_order_completed_date( $date_completed, $order ) {
 		// Check if the order has a custom field for manual delivered date
@@ -431,6 +434,8 @@ class Pending_Payment {
 		return $slug;
 	}
 
+
+
 	public function send_payment_reminder_email_manual( $payment_id, $index ) {
 		$payment           = $this->get_data( $payment_id );
 		$payment_order_id  = $payment->payment_order;
@@ -438,8 +443,6 @@ class Pending_Payment {
 		$pending_total     = $payment->pending_total;
 		$currency          = $payment->currency;
 		$payment_type      = $payment->payment_select;
-
-		$manual_delivered_date = get_field( 'manual_delivered_date', $original_order_id );
 
 		$order          = wc_get_order( $payment_order_id );
 		$original_order = wc_get_order( $original_order_id );
@@ -529,6 +532,27 @@ class Pending_Payment {
 		}
 	}
 
+	public function check_overdue( $payment ) {
+		$payment_order_id  = $payment->payment_order;
+		$original_order_id = $payment->original_order;
+		$payment_type      = $payment->payment_select;
+
+		$order          = wc_get_order( $payment_order_id );
+		$original_order = wc_get_order( $original_order_id );
+
+		$completed_date_obj  = $original_order->get_date_completed();
+		$shipped_date        = $completed_date_obj->date( 'F d, Y' );
+		$days_after_shipping = get_field( 'days_after_shipping', $payment_type );
+		$deadline            = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
+		$payment_date        = date( 'F d, Y', $deadline );
+
+		$today = date( 'F d, Y' );
+
+		if ( $today > $payment_date ) {
+			update_post_meta( $payment_order_id, 'is_overdue', true );
+		}
+	}
+
 	public function send_payment_reminder_email( $payment ) {
 
 		$payment_type          = $payment->payment_select;
@@ -538,7 +562,7 @@ class Pending_Payment {
 		$currency              = $payment->currency;
 		$manual_delivered_date = get_field( 'manual_delivered_date', $original_order_id );
 
-		if ( $manual_delivered_date ) {
+		if ( isset( $manual_delivered_date ) && ! empty( $manual_delivered_date ) ) {
 			return;
 		}
 
@@ -572,6 +596,7 @@ class Pending_Payment {
 		$payment_url = $order->get_checkout_payment_url();
 
 		if ( have_rows( 'payment_emails', $payment_type ) ) :
+
 			while ( have_rows( 'payment_emails', $payment_type ) ) :
 				the_row();
 				$days = get_sub_field( 'send_after_days' );
@@ -760,6 +785,48 @@ class Pending_Payment {
 		}
 	}
 
+	public function handle_overdue_query( $query, $query_vars ) {
+		if ( ! empty( $query_vars['overdue_orders'] ) && 'overdue' === $query_vars['overdue_orders'] ) {
+			$query['meta_query']['relation'] = 'AND';
+			$query['meta_query'][]           = array(
+				'key'   => 'is_overdue',
+				'value' => 0,
+			);
+			$query['meta_query'][]           = array(
+				'key'     => '_from_order_id',
+				'compare' => 'EXISTS',
+			);
+		}
+
+		return $query;
+	}
+
+	public function get_user_overdue_orders() {
+
+		$args = array(
+			'limit'          => -1,
+			'status'         => array( 'wc-processing', 'wc-on-hold', 'wc-pending' ),
+			'overdue_orders' => 'overdue',
+		);
+
+		return wc_get_orders( $args );
+	}
+
+	public function check_overdue_orders() {
+		$orders = $this->get_user_overdue_orders();
+
+		// Log the orders
+		if ( ! empty( $orders ) ) {
+			foreach ( $orders as $order ) {
+				error_log( 'Overdue Order ID: ' . $order->get_id() );
+			}
+		} else {
+			error_log( 'No overdue orders found.' );
+		}
+	}
+
+
+
 	public function check_pending_payments() {
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'nova_pendings';
@@ -771,6 +838,8 @@ class Pending_Payment {
 		foreach ( $pending_payments as $payment ) {
 
 			$this->send_payment_reminder_email( $payment );
+
+			$this->check_overdue( $payment );
 
 		}
 	}
