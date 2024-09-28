@@ -39,8 +39,12 @@ function Orders() {
 		if (searchTerm.length > 0) {
 			filteredOrders = filteredOrders.filter((order) => {
 				/** remove non numeric characters to searchTerm */
-				console.log(searchTerm.replace(/[^0-9]/g, ''));
-				return order.order_number.includes(searchTerm.replace(/[^0-9]/g, ''));
+				const orderID = '#' + order.order_number;
+
+				const poSearch =
+					order.po_number && order.po_number.includes(searchTerm);
+
+				return orderID.includes(searchTerm) || poSearch;
 			});
 		}
 

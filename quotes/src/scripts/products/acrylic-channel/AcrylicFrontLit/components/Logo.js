@@ -471,7 +471,7 @@ export function Logo({ item }) {
 	return (
 		<>
 			{item.productLine && (
-				<div clasName="py-4 my-4">
+				<div className="py-4 my-4">
 					PRODUCT LINE:{' '}
 					<span
 						className="font-title"
@@ -487,8 +487,9 @@ export function Logo({ item }) {
 					onChange={handleOnChangeThickness}
 					options={acrylicChannelThicknessOptions.map((thickness) => (
 						<option
+							key={thickness.value}
 							value={thickness.value}
-							selected={thickness.value === acrylicChannelThickness}
+							defaultValue={thickness.value === acrylicChannelThickness}
 						>
 							{thickness.value}
 						</option>
@@ -514,7 +515,11 @@ export function Logo({ item }) {
 					title="Acrylic Front"
 					onChange={handleOnChangeWhite}
 					options={acrylicFrontOptions.map((option) => (
-						<option value={option.option} selected={option == acrylicFront}>
+						<option
+							key={option.option}
+							value={option.option}
+							defaultValue={option == acrylicFront}
+						>
 							{option.option}
 						</option>
 					))}
@@ -544,8 +549,11 @@ export function Logo({ item }) {
 							onChange={handleOnChangeVinyl3635}
 							options={vinlyl3635Options.map((option) => (
 								<option
+									key={option.code}
 									value={`${option.name} - [${option.code}]`}
-									selected={`${option.name} - [${option.code}]` == vinyl3635}
+									defaultValue={
+										`${option.name} - [${option.code}]` == vinyl3635
+									}
 								>
 									{`${option.name} - [${option.code}]`}
 								</option>
@@ -575,7 +583,11 @@ export function Logo({ item }) {
 					title="LED Light Color"
 					onChange={handleOnChangeLedLight}
 					options={ledLightColors.map((color) => (
-						<option value={color} selected={color == ledLightColor}>
+						<option
+							key={color}
+							value={color}
+							defaultValue={color == ledLightColor}
+						>
 							{color}
 						</option>
 					))}
@@ -587,8 +599,9 @@ export function Logo({ item }) {
 					onChange={handleOnChangeMount}
 					options={mountingDefaultOptions.map((option) => (
 						<option
+							key={option.mounting_option}
 							value={option.mounting_option}
-							selected={option.mounting_option === selectedMounting}
+							defaultValue={option.mounting_option === selectedMounting}
 						>
 							{option.mounting_option}
 						</option>
@@ -603,8 +616,9 @@ export function Logo({ item }) {
 							onChange={handleonChangeStudLength}
 							options={studLengthOptions.map((option) => (
 								<option
+									key={option.value}
 									value={option.value}
-									selected={option.value == studLength}
+									defaultValue={option.value == studLength}
 								>
 									{option.value}
 								</option>
@@ -616,8 +630,9 @@ export function Logo({ item }) {
 							onChange={handleonChangeSpacerDistance}
 							options={spacerStandoffOptions.map((option) => (
 								<option
+									key={option.value}
 									value={option.value}
-									selected={option.value == spacerStandoffDistance}
+									defaultValue={option.value == spacerStandoffDistance}
 								>
 									{option.value}
 								</option>
@@ -634,8 +649,9 @@ export function Logo({ item }) {
 							onChange={handleonChangeStudLength}
 							options={studLengthOptions.map((option) => (
 								<option
+									key={option.value}
 									value={option.value}
-									selected={option.value == studLength}
+									defaultValue={option.value == studLength}
 								>
 									{option.value}
 								</option>
@@ -650,8 +666,9 @@ export function Logo({ item }) {
 					onChange={handleOnChangeWaterproof}
 					options={waterProofOptions.map((option) => (
 						<option
+							key={option.option}
 							value={option.option}
-							selected={option.option == waterproof}
+							defaultValue={option.option == waterproof}
 						>
 							{option.option}
 						</option>
@@ -663,7 +680,7 @@ export function Logo({ item }) {
 					<Dropdown
 						title="Included Items"
 						options={
-							<option value={LIGHTING_INDOOR} selected={LIGHTING_INDOOR}>
+							<option value={LIGHTING_INDOOR} defaultValue={LIGHTING_INDOOR}>
 								{LIGHTING_INDOOR}
 							</option>
 						}

@@ -79,9 +79,10 @@ const ColorsDropdown = React.forwardRef(
 				</div>
 				{openColor && (
 					<div className="absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg">
-						{colorOptions.map((color) => {
+						{colorOptions.map((color, index) => {
 							return (
 								<div
+									key={index}
 									className="p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm flex-wrap"
 									onClick={() => {
 										selectColor(color);

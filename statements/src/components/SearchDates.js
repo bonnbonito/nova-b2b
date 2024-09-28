@@ -38,7 +38,7 @@ export default function SearchDates({
 			<div className="grid grid-cols-2 gap-x-2">
 				<div>
 					<DatePicker
-						selected={startDate}
+						defaultValue={startDate}
 						onChange={(date) => setStartDate(date)}
 						selectsStart
 						startDate={startDate}
@@ -51,7 +51,7 @@ export default function SearchDates({
 
 				<div>
 					<DatePicker
-						selected={endDate}
+						defaultValue={endDate}
 						onChange={(date) => setEndDate(date)}
 						selectsEnd
 						startDate={startDate}

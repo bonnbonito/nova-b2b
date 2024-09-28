@@ -69,7 +69,9 @@ export const NeonSign = ({ item }) => {
 	);
 
 	const acrylicBackingSelections = acrylicBackingOptions.map((item) => (
-		<option value={item.option}>{item.option}</option>
+		<option key={item.option} value={item.option}>
+			{item.option}
+		</option>
 	));
 
 	const neonSignsWidth = useMemo(() => {
@@ -88,7 +90,11 @@ export const NeonSign = ({ item }) => {
 	const [mounting, setMounting] = useState(item.mounting ?? 'Standard Nails');
 	const [sets, setSets] = useState(item.sets ?? 1);
 
-	const [setOptions, setSetOptions] = useState([<option value="1">1</option>]);
+	const [setOptions, setSetOptions] = useState([
+		<option key="1" value="1">
+			1
+		</option>,
+	]);
 
 	const [quantityDiscountTable, setQuantityDiscountTable] = useState([]);
 
@@ -445,7 +451,7 @@ export const NeonSign = ({ item }) => {
 						<option
 							key={option.option}
 							value={option.option}
-							selected={option.option === waterproof}
+							defaultValue={option.option === waterproof}
 						>
 							{option.option}
 						</option>
@@ -460,7 +466,7 @@ export const NeonSign = ({ item }) => {
 						<option
 							key={option.option}
 							value={option.option}
-							selected={option.option === mounting}
+							defaultValue={option.option === mounting}
 						>
 							{option.option}
 						</option>
@@ -476,7 +482,7 @@ export const NeonSign = ({ item }) => {
 						<option
 							key={option.option}
 							value={option.option}
-							selected={option.option === remoteControl}
+							defaultValue={option.option === remoteControl}
 						>
 							{option.option}
 						</option>
@@ -492,7 +498,7 @@ export const NeonSign = ({ item }) => {
 						<option
 							key={option.option}
 							value={option.option}
-							selected={option.option === wireExitLocation}
+							defaultValue={option.option === wireExitLocation}
 						>
 							{option.option}
 						</option>

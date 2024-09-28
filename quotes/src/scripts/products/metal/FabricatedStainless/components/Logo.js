@@ -484,7 +484,11 @@ export function Logo({ item }) {
 					title="Metal Option"
 					onChange={(e) => setMetal(e.target.value)}
 					options={metalOptions.map((metal) => (
-						<option value={metal.option} selected={metal.option === metal}>
+						<option
+							key={metal.option}
+							value={metal.option}
+							defaultValue={metal.option === metal}
+						>
 							{metal.option}
 						</option>
 					))}
@@ -496,8 +500,9 @@ export function Logo({ item }) {
 					onChange={handleOnChangeThickness}
 					options={fabricatedThicknessOptions.map((thickness) => (
 						<option
+							key={thickness.value}
 							value={thickness.value}
-							selected={thickness === selectedThickness}
+							defaultValue={thickness === selectedThickness}
 						>
 							{thickness.thickness}
 						</option>
@@ -523,8 +528,9 @@ export function Logo({ item }) {
 					onChange={handleChangeFinishing}
 					options={finishOptions2.map((finishing) => (
 						<option
+							key={finishing.option}
 							value={finishing.option}
-							selected={finishing.option === selectedFinishing}
+							defaultValue={finishing.option === selectedFinishing}
 						>
 							{finishing.option}
 						</option>
@@ -538,8 +544,9 @@ export function Logo({ item }) {
 						onChange={handelMetalFinishChange}
 						options={metalFinishOptions.map((metalFinish) => (
 							<option
+								key={metalFinish.option}
 								value={metalFinish.option}
-								selected={metalFinish.option === stainLessMetalFinish}
+								defaultValue={metalFinish.option === stainLessMetalFinish}
 							>
 								{metalFinish.option}
 							</option>
@@ -589,8 +596,9 @@ export function Logo({ item }) {
 					onChange={handleOnChangeWaterproof}
 					options={waterProofOptions.map((option) => (
 						<option
+							key={option.option}
 							value={option.option}
-							selected={option.option == waterproof}
+							defaultValue={option.option == waterproof}
 						>
 							{option.option}
 						</option>
@@ -602,7 +610,11 @@ export function Logo({ item }) {
 					title="Mounting Options"
 					onChange={handleOnChangeInstallation}
 					options={fabricatedMetalInstallationOptions.map((option) => (
-						<option value={option.option} selected={option.option === mounting}>
+						<option
+							key={option.option}
+							value={option.option}
+							defaultValue={option.option === mounting}
+						>
 							{option.option}
 						</option>
 					))}
@@ -615,8 +627,9 @@ export function Logo({ item }) {
 						onChange={handleonChangeStudLength}
 						options={studLengthOptions.map((option) => (
 							<option
+								key={option.value}
 								value={option.value}
-								selected={option.value == studLength}
+								defaultValue={option.value == studLength}
 							>
 								{option.value}
 							</option>
@@ -631,8 +644,9 @@ export function Logo({ item }) {
 						onChange={handleonChangeSpacerDistance}
 						options={spacerStandoffOptions.map((option) => (
 							<option
+								key={option.value}
 								value={option.value}
-								selected={option.value == spacerStandoffDistance}
+								defaultValue={option.value == spacerStandoffDistance}
 							>
 								{option.value}
 							</option>

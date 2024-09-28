@@ -462,8 +462,9 @@ export function Logo({ item }) {
 					onChange={handleOnChangeThickness}
 					options={metalThicknessOptions.map((thickness) => (
 						<option
+							key={thickness.value}
 							value={thickness.value}
-							selected={thickness === selectedThickness}
+							defaultValue={thickness === selectedThickness}
 						>
 							{thickness.thickness}
 						</option>
@@ -489,8 +490,9 @@ export function Logo({ item }) {
 					onChange={(e) => setWaterproof(e.target.value)}
 					options={waterProofOptions.map((option) => (
 						<option
+							key={option.option}
 							value={option.option}
-							selected={option.option == waterproof}
+							defaultValue={option.option == waterproof}
 						>
 							{option.option}
 						</option>
@@ -503,8 +505,9 @@ export function Logo({ item }) {
 					onChange={handleChangeFinishing}
 					options={aluminumFinishingOptions.map((finishing) => (
 						<option
+							key={finishing.option}
 							value={finishing.option}
-							selected={finishing.option === selectedFinishing}
+							defaultValue={finishing.option === selectedFinishing}
 						>
 							{finishing.option}
 						</option>
@@ -519,8 +522,9 @@ export function Logo({ item }) {
 							onChange={handleChangeAnodizedFinishing}
 							options={anodizedFinishingOptions.map((finishing) => (
 								<option
+									key={finishing.option}
 									value={finishing.option}
-									selected={finishing.option === anodizedFinishing}
+									defaultValue={finishing.option === anodizedFinishing}
 								>
 									{finishing.option}
 								</option>
@@ -533,8 +537,9 @@ export function Logo({ item }) {
 							onChange={handleChangeAnodizedColor}
 							options={anodizedColorOptions.map((color) => (
 								<option
+									key={color.option}
 									value={color.option}
-									selected={color.option === anodizedColor}
+									defaultValue={color.option === anodizedColor}
 								>
 									{color.option}
 								</option>
@@ -565,7 +570,11 @@ export function Logo({ item }) {
 					title="Mounting Options"
 					onChange={handleOnChangeInstallation}
 					options={metalMountingOptions.map((option) => (
-						<option value={option.option} selected={option.option === mounting}>
+						<option
+							key={option.option}
+							value={option.option}
+							defaultValue={option.option === mounting}
+						>
 							{option.option}
 						</option>
 					))}
@@ -578,8 +587,9 @@ export function Logo({ item }) {
 						onChange={handleonChangeStudLength}
 						options={studLengthOptions.map((option) => (
 							<option
+								key={option.value}
 								value={option.value}
-								selected={option.value == studLength}
+								defaultValue={option.value == studLength}
 							>
 								{option.value}
 							</option>
@@ -594,8 +604,9 @@ export function Logo({ item }) {
 						onChange={handleonChangeSpacerDistance}
 						options={spacerStandoffOptions.map((option) => (
 							<option
+								key={option.value}
 								value={option.value}
-								selected={option.value == spacerStandoffDistance}
+								defaultValue={option.value == spacerStandoffDistance}
 							>
 								{option.value}
 							</option>

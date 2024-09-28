@@ -76,11 +76,7 @@ export default function Sidebar() {
 			<div className="rounded-md border border-gray-200 p-4 sticky top-36">
 				<div className="w-full max-h-[calc(100vh-300px)] overflow-y-auto pr-5">
 					{memoizedSignage.map((item, index) => (
-						<Prices
-							key={item.id}
-							item={item}
-							borderTop={index > 0 && 'border-t mt-2'}
-						/>
+						<Prices key={item.id} item={item} borderTop={index > 0 && true} />
 					))}
 
 					<hr className="mt-5" />

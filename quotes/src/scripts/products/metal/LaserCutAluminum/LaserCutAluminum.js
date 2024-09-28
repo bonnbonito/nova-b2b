@@ -144,7 +144,7 @@ export default function LaserCutAluminum() {
 		<div className="md:flex gap-6">
 			<div className="md:w-3/4 w-full">
 				{signage.map((item, index) => (
-					<Signage index={index} id={item.id} item={item}>
+					<Signage key={item.id} index={index} id={item.id} item={item}>
 						{item.type === 'letters' ? (
 							<Letters key={item.id} item={item} />
 						) : (

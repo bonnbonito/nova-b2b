@@ -300,7 +300,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 	}
 
 	public function redirect_singular_post_types() {
-		if ( is_singular( 'product' ) && is_product() || is_singular( 'payment_type' ) || is_singular( 'custom_project' ) ) {
+		if ( is_singular( 'payment_type' ) || is_singular( 'custom_project' ) ) {
 			/*
 			global $post;
 			$product = wc_get_product( $post->ID );

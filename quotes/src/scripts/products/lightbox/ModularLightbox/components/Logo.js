@@ -269,7 +269,7 @@ export function Logo({ item }) {
 	return (
 		<>
 			{item.productLine && (
-				<div clasName="py-4 my-4">
+				<div className="py-4 my-4">
 					PRODUCT LINE:{' '}
 					<span
 						className="font-title"
@@ -285,8 +285,9 @@ export function Logo({ item }) {
 					onChange={handleOnChangeLightBox}
 					options={lightBoxTypeOptions.map((lightbox) => (
 						<option
+							key={lightbox.option}
 							value={lightbox.option}
-							selected={lightbox.option === lightboxType}
+							defaultValue={lightbox.option === lightboxType}
 						>
 							{lightbox.option}
 						</option>
@@ -299,8 +300,9 @@ export function Logo({ item }) {
 					onChange={(e) => setUvPrintedCover(e.target.value)}
 					options={uvPrintedCoverOptions.map((cover) => (
 						<option
+							key={cover.option}
 							value={cover.option}
-							selected={cover.option === uvPrintedCover}
+							defaultValue={cover.option === uvPrintedCover}
 						>
 							{cover.option}
 						</option>
@@ -312,8 +314,9 @@ export function Logo({ item }) {
 					onChange={handleOnChangeWaterproof}
 					options={waterProofOptions.map((option) => (
 						<option
+							key={option.option}
 							value={option.option}
-							selected={option.option == waterproof}
+							defaultValue={option.option == waterproof}
 						>
 							{option.option}
 						</option>
@@ -326,7 +329,7 @@ export function Logo({ item }) {
 					<Dropdown
 						title="Included Items"
 						options={
-							<option value={LIGHTING_INDOOR} selected={LIGHTING_INDOOR}>
+							<option value={LIGHTING_INDOOR} defaultValue={LIGHTING_INDOOR}>
 								{LIGHTING_INDOOR}
 							</option>
 						}

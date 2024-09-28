@@ -44,12 +44,13 @@ export default function FontsDropdown({
 					>
 						- Custom Font
 					</div>
-					<div className="">
-						<h5 class="p-2 pb-0">Popular Fonts</h5>
+					<div>
+						<h5 className="p-2 pb-0">Popular Fonts</h5>
 
 						{fontDefaultOptions.popular_fonts.split(',').map((popularfont) => {
 							return (
 								<div
+									key={popularfont}
 									className={`p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm ${
 										popularfont === font && 'bg-slate-200'
 									}`}
@@ -63,10 +64,11 @@ export default function FontsDropdown({
 								</div>
 							);
 						})}
-						<h5 class="p-2 pb-0">Fonts</h5>
+						<h5 className="p-2 pb-0">Fonts</h5>
 						{fontDefaultOptions.fonts.split(',').map((regFont) => {
 							return (
 								<div
+									key={regFont}
 									className={`p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm ${
 										regFont === font && 'bg-slate-200'
 									}`}

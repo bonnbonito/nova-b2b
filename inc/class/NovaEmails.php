@@ -590,6 +590,11 @@ class NovaEmails {
 		$headers[] = 'From: NOVA Signage <quotes@novasignage.com>';
 		$headers[] = 'Reply-To: NOVA Signage <quotes@novasignage.com>';
 
+		$headers_admin   = array();
+		$headers_admin[] = 'Content-Type: text/html; charset=UTF-8';
+		$headers_admin[] = 'From: NOVA Signage <noreply@novasignage.com>';
+		$headers_admin[] = 'Reply-To: NOVA Signage <noreply@novasignage.com>';
+
 		/** remove joshua@hineon.com to $to_admin array */
 		$to_admin = array_diff( $to_admin, array( 'joshua@hineon.com' ) );
 
@@ -614,7 +619,7 @@ class NovaEmails {
 			$role_instance->send_email( $to_admin, $admin_subject, $to_admin_message, $headers, array() );
 			if ( ! $from_admin ) {
 				$role_instance->send_email( 'joshua@hineon.com', $josh_subject, $to_admin_message, $headers, array() );
-				$role_instance->send_email( 'quotes@novasignage.com', $admin_subject, $to_admin_message, $headers, array() );
+				$role_instance->send_email( 'quotes@novasignage.com', $admin_subject, $to_admin_message, $headers_admin, array() );
 			}
 		} else {
 			error_log( 'NOVA_B2B\Roles::get_instance() returned null' );
@@ -686,8 +691,8 @@ class NovaEmails {
 		// Set up email headers
 		$headers   = array();
 		$headers[] = 'Content-Type: text/html; charset=UTF-8';
-		$headers[] = 'From: NOVA Signage <quotes@novasignage.com>';
-		$headers[] = 'Reply-To: NOVA Signage <quotes@novasignage.com>';
+		$headers[] = 'From: NOVA Signage <noreply@novasignage.com>';
+		$headers[] = 'Reply-To: NOVA Signage <noreply@novasignage.com>';
 
 		// Construct the subject for the admin email
 		$admin_subject = 'NOVA INTERNAL - Quote Request From: ' . $first_name . ' from ' . $company . ' ' . $business_id . ' - #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
@@ -710,6 +715,7 @@ class NovaEmails {
 			$role_instance->send_email( $to_admin, $admin_subject, $to_admin_message, $headers, array() );
 			if ( ! $from_admin ) {
 				$role_instance->send_email( 'joshua@hineon.com', $josh_subject, $to_admin_message, $headers, array() );
+				$role_instance->send_email( 'quotes@novasignage.com', $josh_subject, $to_admin_message, $headers, array() );
 			}
 		} else {
 			error_log( 'NOVA_B2B\Roles::get_instance() returned null' );

@@ -20,6 +20,7 @@ export default function Dropdown({
 				className={`cursor-pointer text-ellipsis border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] ${selectClass}`}
 				onChange={onChange}
 				value={value}
+				readOnly={onlyValue}
 			>
 				{!onlyValue && <option value="">CHOOSE OPTION</option>}
 				{options}

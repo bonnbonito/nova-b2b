@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React, { memo, useMemo } from 'react';
 import { RenderSignageDetails } from './RenderSignageDetails';
 import TooltipText from './utils/TooltipText';
@@ -31,7 +30,11 @@ const Prices = memo(function Prices({ item, borderTop }) {
 	);
 
 	return (
-		<div className={`block ${borderTop}`}>
+		<div
+			className={`block border-x-0 border-b-0 ${
+				borderTop ? 'border-t border-solid border-gray-200' : ''
+			}`}
+		>
 			<div className="flex justify-between py-2 font-title uppercase md:tracking-[1.6px] text-lg gap-2">
 				<TooltipText text={item.title}>
 					<div className="text-ellipsis overflow-hidden text-nowrap">
@@ -39,11 +42,13 @@ const Prices = memo(function Prices({ item, borderTop }) {
 					</div>
 				</TooltipText>
 
-				<TooltipText text={outputPrice}>
-					<div className="text-ellipsis overflow-hidden text-nowrap">
-						{outputPrice}
-					</div>
-				</TooltipText>
+				{outputPrice && (
+					<TooltipText text={outputPrice}>
+						<div className="text-ellipsis overflow-hidden text-nowrap">
+							{outputPrice}
+						</div>
+					</TooltipText>
+				)}
 			</div>
 
 			<RenderSignageDetails
@@ -55,10 +60,5 @@ const Prices = memo(function Prices({ item, borderTop }) {
 		</div>
 	);
 });
-
-Prices.propTypes = {
-	item: PropTypes.object.isRequired,
-	borderTop: PropTypes.string,
-};
 
 export default Prices;
