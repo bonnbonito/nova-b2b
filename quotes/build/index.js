@@ -34412,10 +34412,15 @@ const electroplatedOptions = ['Electroplated Gold Brushed', 'Electroplated Gold 
 const stainlessFinishing = ['Painted', 'Brushed', 'Polished', 'Electroplated'];
 const aluminumFinishing = ['Painted', 'Brushed', 'Anodized Brushed', 'Anodized Sandblasted Matte'];
 const brassFinishing = ['Brushed'];
+const anodizedColorOptions = ['Black', 'Brown', 'Clear', 'Gold', 'Champagne Gold'];
+const graphicsStyleOptions = ['Raised', 'Recessed'];
+const edgesOptionsDefault = ['Square'];
+const mountingOptionsDefault = ['Double sided tape', 'Plain', 'Welded Stud - 1"', 'Pre-drilled Holes'];
+const studLengthOptions = ['1.5" (4cm)', '3.2" (8cm)', '4" (10cm)', '6" (15cm)'];
 const EtchedSign = ({
   item
 }) => {
-  var _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$etchedPaintedCo, _item$customColor, _item$etchedWidth, _item$etchedMaterial, _item$etchedHeight, _item$etchedMetalThic, _item$etchedFinishing, _item$etchedElectropl, _item$usdPrice, _item$cadPrice, _item$etchedAnodizedC, _item$usdSinglePrice, _item$cadSinglePrice, _item$waterproof, _item$mounting, _item$sets, _color$name;
+  var _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$etchedPaintedCo, _item$customColor, _item$etchedWidth, _item$etchedMaterial, _item$etchedHeight, _item$etchedMetalThic, _item$etchedFinishing, _item$etchedElectropl, _item$usdPrice, _item$cadPrice, _item$etchedAnodizedC, _item$etchedGraphicsS, _item$etchedEdges, _item$studLength, _item$usdSinglePrice, _item$cadSinglePrice, _item$waterproof, _item$mounting, _item$sets, _color$name;
   const {
     signage,
     setSignage,
@@ -34442,10 +34447,15 @@ const EtchedSign = ({
   const [widthOptions, setWidthOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const [heightOptions, setHeightOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const [anodizedColor, setAnodizedColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$etchedAnodizedC = item.etchedAnodizedColor) !== null && _item$etchedAnodizedC !== void 0 ? _item$etchedAnodizedC : '');
+  const [graphicsStyle, setGraphicsStyle] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$etchedGraphicsS = item.etchedGraphicsStyle) !== null && _item$etchedGraphicsS !== void 0 ? _item$etchedGraphicsS : '');
+  const [edges, setEdges] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$etchedEdges = item.etchedEdges) !== null && _item$etchedEdges !== void 0 ? _item$etchedEdges : 'Square');
+  const [edgesOptions, setEdgesOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(edgesOptionsDefault);
+  const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$studLength = item.studLength) !== null && _item$studLength !== void 0 ? _item$studLength : '');
   const [usdSinglePrice, setUsdSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdSinglePrice = item.usdSinglePrice) !== null && _item$usdSinglePrice !== void 0 ? _item$usdSinglePrice : 0);
   const [cadSinglePrice, setCadSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadSinglePrice = item.cadSinglePrice) !== null && _item$cadSinglePrice !== void 0 ? _item$cadSinglePrice : 0);
   const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : '');
-  const [mounting, setMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : 'Standard Nails');
+  const [mounting, setMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
+  const [mountingOptions, setMountingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(mountingOptionsDefault);
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
   const colorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const updateSignage = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(() => {
@@ -34463,6 +34473,9 @@ const EtchedSign = ({
           etchedPaintedColor: color?.name,
           etchedElectroplated: electroplated,
           etchedAnodizedColor: anodizedColor,
+          etchedGraphicsStyle: graphicsStyle,
+          studLength,
+          etchedEdges: edges,
           customColor,
           fileNames,
           filePaths,
@@ -34478,7 +34491,7 @@ const EtchedSign = ({
       return sign;
     });
     setSignage(updatedSignage);
-  }, [waterproof, color, customColor, mounting, material, metalThickness, finishing, electroplated, anodizedColor, fileNames, filePaths, fileUrls, files, sets, width, height, usdPrice, cadPrice, cadSinglePrice, usdSinglePrice]);
+  }, [waterproof, color, edges, customColor, mounting, material, metalThickness, finishing, studLength, electroplated, graphicsStyle, anodizedColor, fileNames, filePaths, fileUrls, files, sets, width, height, usdPrice, cadPrice, cadSinglePrice, usdSinglePrice]);
   const checkAndAddMissingFields = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(() => {
     const missingFields = [];
     if (!material) missingFields.push('Select Material');
@@ -34499,9 +34512,13 @@ const EtchedSign = ({
     if (color?.name === 'Custom Color' && !customColor) {
       missingFields.push('Add the Pantone color code of your custom color.');
     }
+    if (!graphicsStyle) missingFields.push('Select Graphics Style');
+    if (!edges) missingFields.push('Select Edges');
     if (!mounting) missingFields.push('Select Mounting');
+    if (metalThickness === '1/4" (6mm)' || metalThickness === '3/8" (9mm)' || metalThickness === '1/2" (12mm)') {
+      if (!studLength) missingFields.push('Select Stud Length');
+    }
     if (!waterproof) missingFields.push('Select Environment');
-    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
     if (!sets) missingFields.push('Select Quantity');
     setMissing(prevMissing => {
       const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
@@ -34527,12 +34544,90 @@ const EtchedSign = ({
     checkAndAddMissingFields();
   }, [updateSignage, checkAndAddMissingFields]);
   const computePricing = () => {
-    var _tempTotal, _totalWithDiscount$to;
+    var _tempTotal$toFixed, _total$toFixed;
+    if (!width || !height || !material || !metalThickness || !waterproof || !sets) {
+      return {
+        singlePrice: false,
+        total: false
+      };
+    }
+    let factor;
+    if (material === 'Flat Cut Stainless Steel') {
+      if (metalThickness === '1/25" (1mm)') {
+        factor = 0.29;
+      }
+      if (metalThickness === '1/16" (1.6mm)') {
+        factor = 0.34;
+      }
+      if (metalThickness === '1/8" (3mm)') {
+        factor = 0.49;
+      }
+      if (metalThickness === '1/4" (6mm)') {
+        factor = 0.8;
+      }
+      if (metalThickness === '3/8" (9mm)') {
+        factor = 1.17;
+      }
+    }
+    if (material === 'Flat Cut Aluminum') {
+      if (metalThickness === '1/25" (1mm)') {
+        factor = 0.28;
+      }
+      if (metalThickness === '1/16" (1.6mm)') {
+        factor = 0.32;
+      }
+      if (metalThickness === '1/8" (3mm)') {
+        factor = 0.38;
+      }
+      if (metalThickness === '1/4" (6mm)') {
+        factor = 0.59;
+      }
+      if (metalThickness === '3/8" (9mm)') {
+        factor = 0.75;
+      }
+      if (metalThickness === '1/2" (12mm)') {
+        factor = 1;
+      }
+    }
+    if (material === 'Flat Cut Brass') {
+      if (metalThickness === '1/25" (1mm)') {
+        factor = 0.36;
+      }
+      if (metalThickness === '1/16" (1.6mm)') {
+        factor = 0.46;
+      }
+      if (metalThickness === '1/8" (3mm)') {
+        factor = 0.63;
+      }
+      if (metalThickness === '1/4" (6mm)') {
+        factor = 1.24;
+      }
+      if (metalThickness === '3/8" (9mm)') {
+        factor = 1.67;
+      }
+    }
+    let tempTotal = (parseInt(width) + 1) * (parseInt(height) + 1) * factor;
+    tempTotal = tempTotal > 10 ? tempTotal : 10;
+    if (parseInt(width) > 20 || parseInt(height) > 20) {
+      tempTotal = tempTotal + 40;
+    }
+    if (parseInt(width) > 43 || parseInt(height) > 43) {
+      tempTotal = tempTotal + 100;
+    }
+    tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.INDOOR_NOT_WATERPROOF ? 1 : 1.2;
+    if (finishing === 'Polished') {
+      tempTotal *= 1.1;
+    }
+    if (finishing === 'Electroplated') {
+      tempTotal *= 1.2;
+    }
+    if (finishing === 'Anodized Brushed' || finishing === 'Anodized Sandblasted Matte') {
+      tempTotal *= 1.25;
+    }
+    let total = tempTotal * parseInt(sets);
     return {
-      singlePrice: (_tempTotal = tempTotal) !== null && _tempTotal !== void 0 ? _tempTotal : 0,
-      total: (_totalWithDiscount$to = totalWithDiscount?.toFixed(2)) !== null && _totalWithDiscount$to !== void 0 ? _totalWithDiscount$to : 0,
-      totalWithoutDiscount: total,
-      discount: discountPrice
+      singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
+      total: (_total$toFixed = total?.toFixed(2)) !== null && _total$toFixed !== void 0 ? _total$toFixed : 0
     };
   };
   const handleOnChangeSets = e => {
@@ -34550,12 +34645,28 @@ const EtchedSign = ({
           setFinishingOptions(aluminumFinishing);
           setMetalThicknessOptions([...metalThicknessOptionsDefault, '1/2" (12mm)']);
           setElectroplated('');
+          if (metalThickness === '1/4" (6mm)' || metalThickness === '3/8" (9mm)' || metalThickness === '1/2" (12mm)') {
+            setEdgesOptions(['Square', 'Rounded']);
+            setMountingOptions(['Stud', 'Plain', 'Pre–drilled Holes']);
+          } else {
+            setEdgesOptions(['Square']);
+            setEdges('Square');
+            setMountingOptions(mountingOptionsDefault);
+          }
         } else {
           if (metalThickness === '1/2" (12mm)') {
             setMetalThickness('');
           }
           setMetalThicknessOptions(metalThicknessOptionsDefault);
           setFinishingOptions(stainlessFinishing);
+          setAnodizedColor('');
+          setEdgesOptions(['Square']);
+          setEdges('Square');
+          if (metalThickness === '1/25" (1mm)' || metalThickness === '1/16" (1.6mm)' || metalThickness === '1/8" (3mm)') {
+            setMountingOptions(mountingOptionsDefault);
+          } else {
+            setMountingOptions(['Stud Mount', 'Plain', 'Pre–drilled Holes']);
+          }
         }
         setWidthOptions((0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.arrayRange)(2, 94, 1));
         setHeightOptions((0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.arrayRange)(2, 47, 1));
@@ -34574,6 +34685,9 @@ const EtchedSign = ({
         setMetalThicknessOptions(metalThicknessOptionsDefault);
         setFinishingOptions(brassFinishing);
         setElectroplated('');
+        setAnodizedColor('');
+        setEdgesOptions(['Square']);
+        setEdges('Square');
       }
     }
   };
@@ -34592,6 +34706,9 @@ const EtchedSign = ({
     if (target !== 'Electroplated') {
       setElectroplated('');
     }
+    if (target !== 'Anodized Brushed' && target !== 'Anodized Sandblasted Matte') {
+      setAnodizedColor('');
+    }
     setFinishing(target);
   };
   const handleonChangeElectroplated = e => {
@@ -34602,6 +34719,51 @@ const EtchedSign = ({
     const target = e.target.value;
     setAnodizedColor(target);
   };
+  const handleOnChangeMetalThickness = e => {
+    const target = e.target.value;
+    setMetalThickness(target);
+    if (target === '1/4" (6mm)' || target === '3/8" (9mm)' || target === '1/2" (12mm)') {
+      if (material === 'Flat Cut Aluminum') {
+        setEdgesOptions(['Square', 'Rounded']);
+        setMountingOptions(['Stud', 'Plain', 'Pre–drilled Holes']);
+        if (mounting !== 'Stud' && mounting !== 'Plain' && mounting !== 'Pre–drilled Holes') {
+          setMounting('');
+        }
+      } else {
+        setMountingOptions(['Stud Mount', 'Plain', 'Pre–drilled Holes']);
+        if (mounting !== 'Stud Mount' && mounting !== 'Plain' && mounting !== 'Pre–drilled Holes') {
+          setMounting('');
+        }
+        setEdgesOptions(['Square']);
+      }
+    } else {
+      setEdgesOptions(['Square']);
+      setEdges('Square');
+      // if mounting is not in mountingOptionsDefault, set blank
+      if (!mountingOptionsDefault.includes(mounting)) {
+        setMounting('');
+      }
+      setMountingOptions(mountingOptionsDefault);
+      setStudLength('');
+    }
+  };
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    const {
+      singlePrice,
+      total
+    } = computePricing();
+    if (total && singlePrice) {
+      setUsdPrice(total);
+      setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.EXCHANGE_RATE).toFixed(2));
+      setUsdSinglePrice(singlePrice);
+      setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.EXCHANGE_RATE).toFixed(2));
+    } else {
+      setUsdPrice(0);
+      setCadPrice(0);
+      setUsdSinglePrice(0);
+      setCadSinglePrice(0);
+    }
+  }, [material, metalThickness, width, height, waterproof, edges, finishing, mounting, sets]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "py-4 mb-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
@@ -34633,7 +34795,7 @@ const EtchedSign = ({
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
     title: "Metal Thickness",
     value: metalThickness,
-    onChange: e => setMetalThickness(e.target.value),
+    onChange: handleOnChangeMetalThickness,
     options: metalThicknessOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       className: "lowercase",
       key: option,
@@ -34674,12 +34836,30 @@ const EtchedSign = ({
   }), (finishing === 'Anodized Brushed' || finishing === 'Anodized Sandblasted Matte') && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
     title: "ANODIZED COLOR",
     onChange: handleonChangeAnodized,
-    options: electroplatedOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: anodizedColorOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: option,
       value: option,
-      defaultValue: option === electroplated
+      defaultValue: option === anodizedColor
     }, option)),
-    value: electroplated
+    value: anodizedColor
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: "GRAPHICS STYLE",
+    onChange: e => setGraphicsStyle(e.target.value),
+    options: graphicsStyleOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option,
+      value: option,
+      defaultValue: option === graphicsStyle
+    }, option)),
+    value: graphicsStyle
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: "EDGES",
+    onChange: e => setEdges(e.target.value),
+    options: edgesOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option,
+      value: option,
+      defaultValue: option === edges
+    }, option)),
+    value: edges
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
     title: "Environment",
     onChange: handleOnChangeWaterproof,
@@ -34689,6 +34869,24 @@ const EtchedSign = ({
       defaultValue: option.option === waterproof
     }, option.option)),
     value: waterproof
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: "Mounting",
+    onChange: e => setMounting(e.target.value),
+    options: mountingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option,
+      value: option,
+      defaultValue: option === mounting
+    }, option)),
+    value: mounting
+  }), (metalThickness === '1/4" (6mm)' || metalThickness === '3/8" (9mm)' || metalThickness === '1/2" (12mm)') && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: "STUD LENGTH",
+    onChange: e => setStudLength(e.target.value),
+    options: studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option,
+      value: option,
+      defaultValue: option === studLength
+    }, option)),
+    value: studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,
@@ -35948,6 +36146,12 @@ const allAttributes = item => [{
 }, {
   key: item.etchedAnodizedColor,
   label: 'ANODIZED COLOR'
+}, {
+  key: item.etchedGraphicsStyle,
+  label: 'GRAPHICS STYLE'
+}, {
+  key: item.etchedEdges,
+  label: 'EDGES'
 }, {
   key: item.metal,
   label: 'METAL'

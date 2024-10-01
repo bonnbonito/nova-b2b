@@ -192,6 +192,14 @@ function allAttributes(sign) {
 			label: 'ANODIZED COLOR',
 			value: sign.etchedAnodizedColor ? sign.etchedAnodizedColor : '',
 		},
+		{
+			label: 'GRAPHICS STYLE',
+			value: sign.etchedGraphicsStyle ? sign.etchedGraphicsStyle : '',
+		},
+		{
+			label: 'EDGES',
+			value: sign.etchedEdges ? sign.etchedEdges : '',
+		},
 
 		{ label: 'FONT', value: sign.font ? sign.font : '' },
 		{

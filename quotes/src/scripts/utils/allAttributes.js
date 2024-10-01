@@ -16,6 +16,8 @@ export const allAttributes = (item) => [
 	{ key: item.etchedPaintedColor, label: 'PAINTED COLOR' },
 	{ key: item.etchedElectroplated, label: 'ELECTROPLATED FINISHING' },
 	{ key: item.etchedAnodizedColor, label: 'ANODIZED COLOR' },
+	{ key: item.etchedGraphicsStyle, label: 'GRAPHICS STYLE' },
+	{ key: item.etchedEdges, label: 'EDGES' },
 	{ key: item.metal, label: 'METAL' },
 	{ key: item.thickness?.thickness, label: 'THICKNESS' },
 	{ key: item.metalDepth?.thickness, label: 'METAL DEPTH' },
