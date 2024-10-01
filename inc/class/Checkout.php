@@ -24,7 +24,7 @@ class Checkout {
 	public function __construct() {
 		add_action( 'woocommerce_review_order_after_order_total', array( $this, 'add_po_number_checkout_field' ) );
 		add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'save_po_number_checkout_field' ) );
-		add_filter( 'woocommerce_email_order_meta_fields', array( $this, 'add_po_number_to_order_emails' ), 10, 3 );
+		// add_filter( 'woocommerce_email_order_meta_fields', array( $this, 'add_po_number_to_order_emails' ), 10, 3 );
 		add_action( 'woocommerce_admin_order_totals_after_tax', array( $this, 'add_po_number' ) );
 		add_filter( 'woocommerce_get_order_item_totals', array( $this, 'add_po_number_row' ), 30, 2 );
 	}

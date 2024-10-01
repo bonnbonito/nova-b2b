@@ -66,7 +66,7 @@ const anodizedColorOptions = [
 	'Champagne Gold',
 ];
 
-const graphicsStyleOptions = ['Raised', 'Recessed'];
+const graphicsStyleOptions = ['Raised', 'Recessed', 'Extra Recessed'];
 
 const edgesOptionsDefault = ['Square'];
 
@@ -288,11 +288,6 @@ export const EtchedSign = ({ item }) => {
 		customColor,
 	]);
 
-	useEffect(() => {
-		updateSignage();
-		checkAndAddMissingFields();
-	}, [updateSignage, checkAndAddMissingFields]);
-
 	const computePricing = () => {
 		if (
 			!width ||
@@ -396,6 +391,18 @@ export const EtchedSign = ({ item }) => {
 			tempTotal *= 1.25;
 		}
 
+		if (graphicsStyle === 'Extra Recessed') {
+			tempTotal *= 1.2;
+		}
+
+		if (graphicsStyle === 'Raised') {
+			tempTotal *= 1.1;
+		}
+
+		if (edges === 'Bevel') {
+			tempTotal *= 1.1;
+		}
+
 		let total = tempTotal * parseInt(sets);
 
 		return {
@@ -435,7 +442,7 @@ export const EtchedSign = ({ item }) => {
 						metalThickness === '3/8" (9mm)' ||
 						metalThickness === '1/2" (12mm)'
 					) {
-						setEdgesOptions(['Square', 'Rounded']);
+						setEdgesOptions(['Square', 'Bevel']);
 						setMountingOptions(['Stud', 'Plain', 'Pre–drilled Holes']);
 					} else {
 						setEdgesOptions(['Square']);
@@ -536,7 +543,7 @@ export const EtchedSign = ({ item }) => {
 			target === '1/2" (12mm)'
 		) {
 			if (material === 'Flat Cut Aluminum') {
-				setEdgesOptions(['Square', 'Rounded']);
+				setEdgesOptions(['Square', 'Bevel']);
 				setMountingOptions(['Stud', 'Plain', 'Pre–drilled Holes']);
 				if (
 					mounting !== 'Stud' &&
@@ -591,7 +598,13 @@ export const EtchedSign = ({ item }) => {
 		finishing,
 		mounting,
 		sets,
+		graphicsStyle,
 	]);
+
+	useEffect(() => {
+		updateSignage();
+		checkAndAddMissingFields();
+	}, [updateSignage, checkAndAddMissingFields]);
 
 	return (
 		<>
