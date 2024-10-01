@@ -1509,29 +1509,45 @@ class Pending_Payment {
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'nova_pendings';
 
-		$query = $wpdb->prepare( "SELECT * FROM {$table_name} WHERE payment_status = %s", 'Pending' );
-
-		$pending_payments = $wpdb->get_results( $query );
+		// Fetch pending payments
+		$pending_payments = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT * FROM {$table_name} WHERE payment_status = %s",
+				'Pending'
+			)
+		);
 
 		$overdue_orders = array();
 
+		// Get today's date in 'Y-m-d' format
+		$today = date( 'Y-m-d' );
+
 		foreach ( $pending_payments as $pending_payment ) {
-			$order    = wc_get_order( $pending_payment->payment_order );
-			$original = $pending_payment->original_order;
-			$user_id  = $order->get_user_id();
-			if ( $user_id === $customer_id ) {
-				$today = date( 'F d, Y' );
+			// Get the order object
+			$order = wc_get_order( $pending_payment->payment_order );
 
-				$payment_date = date( 'F d, Y', strtotime( $pending_payment->payment_date ) );
+			if ( ! $order ) {
+				continue; // Skip if order doesn't exist
+			}
 
-				if ( strtotime( $today ) > strtotime( $payment_date ) ) {
-					$overdue_orders[] = $pending_payment->payment_order;
+			// Get the user ID associated with the order
+			$user_id = $order->get_user_id();
+
+			// Compare user IDs (ensure both are integers)
+			if ( intval( $user_id ) == intval( $customer_id ) ) {
+				// Get the payment date in 'Y-m-d' format
+				$payment_date = date( 'Y-m-d', strtotime( $pending_payment->payment_date ) );
+
+				// Check if the payment date is before today
+				if ( $payment_date < $today ) {
+					$overdue_orders[] = $order;
 				}
 			}
 		}
 
 		return $overdue_orders;
 	}
+
 
 	public function has_overdue_pending_payment_orders( $customer_id ) {
 		$orders = $this->get_overdue_pending_payment_orders( $customer_id );
