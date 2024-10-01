@@ -97,9 +97,13 @@ class Pending_Payment {
 
 		if ( $overdue_orders ) {
 			update_user_meta( $user->ID, 'overdue_orders', implode( ',', $overdue_orders ) );
+			echo '<ul>';
+			foreach ( $overdue_orders as $overdue_order ) {
+				$order = wc_get_order( $overdue_order );
+				echo '<li><a href="' . get_edit_post_link( $overdue_order ) . '">' . $order->get_order_number() . '</a></li>';
+			}
+			echo '</ul>';
 		}
-
-		print_r( get_user_meta( $user->ID, 'overdue_orders', true ) );
 	}
 
 
@@ -1502,21 +1506,31 @@ class Pending_Payment {
 			return array();
 		}
 
-		// Query for orders
-		$query = new \WC_Order_Query(
-			array(
-				'customer_id' => $customer_id,
-				'status'      => 'wc-pending',
-				'limit'       => -1,
-				'meta_key'    => 'is_overdue',
-				'meta_value'  => true,
-			)
-		);
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'nova_pendings';
 
-		// Get the orders
-		$orders = $query->get_orders();
+		$query = $wpdb->prepare( "SELECT * FROM {$table_name} WHERE payment_status = %s", 'Pending' );
 
-		return $orders;
+		$pending_payments = $wpdb->get_results( $query );
+
+		$overdue_orders = array();
+
+		foreach ( $pending_payments as $pending_payment ) {
+			$order    = wc_get_order( $pending_payment->payment_order );
+			$original = $pending_payment->original_order;
+			$user_id  = $order->get_user_id();
+			if ( $user_id === $customer_id ) {
+				$today = date( 'F d, Y' );
+
+				$payment_date = date( 'F d, Y', strtotime( $pending_payment->payment_date ) );
+
+				if ( strtotime( $today ) > strtotime( $payment_date ) ) {
+					$overdue_orders[] = $pending_payment->payment_order;
+				}
+			}
+		}
+
+		return $overdue_orders;
 	}
 
 	public function has_overdue_pending_payment_orders( $customer_id ) {
@@ -1563,7 +1577,8 @@ class Pending_Payment {
 
 	public function overdue_pending_payment_ouput() {
 		ob_start();
-		$this->display_overdue_pending_payment_orders( get_current_user_id() );
+		$user_id = isset( $_GET['userid'] ) && ! empty( $_GET['userid'] ) ? intval( $_GET['userid'] ) : get_current_user_id();
+		$this->display_overdue_pending_payment_orders( $user_id );
 		return ob_get_clean();
 	}
 
