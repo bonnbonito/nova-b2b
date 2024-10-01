@@ -269,7 +269,24 @@ export const EtchedSign = ({ item }) => {
 			}
 			return prevMissing;
 		});
-	}, [fileUrls, color, waterproof, mounting, sets, width, height, material]);
+	}, [
+		fileUrls,
+		color,
+		waterproof,
+		mounting,
+		sets,
+		width,
+		height,
+		material,
+		studLength,
+		metalThickness,
+		finishing,
+		electroplated,
+		anodizedColor,
+		graphicsStyle,
+		edges,
+		customColor,
+	]);
 
 	useEffect(() => {
 		updateSignage();

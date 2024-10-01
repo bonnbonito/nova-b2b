@@ -34538,7 +34538,7 @@ const EtchedSign = ({
       }
       return prevMissing;
     });
-  }, [fileUrls, color, waterproof, mounting, sets, width, height, material]);
+  }, [fileUrls, color, waterproof, mounting, sets, width, height, material, studLength, metalThickness, finishing, electroplated, anodizedColor, graphicsStyle, edges, customColor]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
