@@ -31,6 +31,7 @@ import LaserCutStainless from './scripts/products/metal/LaserCutStainless/LaserC
 import PVCMetalLaminate from './scripts/products/pvc/PVCMetalLaminate/PVCMetalLaminate';
 import PVCPainted from './scripts/products/pvc/PVCPainted/PVCPainted';
 import PVCUv from './scripts/products/pvc/PVCUv/PVCUv';
+import EtchedFlatCut from './scripts/products/wayfinding/EtchedFlatCut/EtchedFlatCut';
 
 declare global {
 	interface Window {
@@ -69,189 +70,39 @@ function CustomTempProject(): JSX.Element {
 
 function QuoteApp(): JSX.Element {
 	let component: JSX.Element;
-	switch (window.NovaQuote.quote_div_id) {
-		case 'combineQuotes':
-			component = (
-				<AppProvider>
-					<CombineQuotes />
-				</AppProvider>
-			);
-			break;
-		case 'ModularLightbox':
-			component = (
-				<AppProvider>
-					<ModularLightbox />
-				</AppProvider>
-			);
-			break;
-		case 'AcrylicSideLit':
-			component = (
-				<AppProvider>
-					<AcrylicSideLit />
-				</AppProvider>
-			);
-			break;
-		case 'AcrylicFrontSideLit':
-			component = (
-				<AppProvider>
-					<AcrylicFrontSideLit />
-				</AppProvider>
-			);
-			break;
-		case 'AcrylicFrontBackLit':
-			component = (
-				<AppProvider>
-					<AcrylicFrontBackLit />
-				</AppProvider>
-			);
-			break;
-		case 'AcrylicBackLit':
-			component = (
-				<AppProvider>
-					<AcrylicBackLit />
-				</AppProvider>
-			);
-			break;
-		case 'AcrylicFrontLit':
-			component = (
-				<AppProvider>
-					<AcrylicFrontLit />
-				</AppProvider>
-			);
-			break;
-		case 'RigidNeonSignNoBacking':
-			component = (
-				<AppProvider>
-					<RigidNeonSignNoBacking />
-				</AppProvider>
-			);
-			break;
-		case 'RigidNeonSignWithBacking':
-			component = (
-				<AppProvider>
-					<RigidNeonSignWithBacking />
-				</AppProvider>
-			);
-			break;
-		case 'FlexNeonSign':
-			component = (
-				<AppProvider>
-					<FlexNeonSign />
-				</AppProvider>
-			);
-			break;
-		case 'AluminumResinFrontBackLit':
-			component = (
-				<AppProvider>
-					<AluminumResinFrontBackLit />
-				</AppProvider>
-			);
-			break;
-		case 'AluminumResinFrontLit':
-			component = (
-				<AppProvider>
-					<AluminumResinFrontLit />
-				</AppProvider>
-			);
-			break;
-		case 'laserCutAcrylic':
-			component = (
-				<AppProvider>
-					<LaserCutAcrylic />
-				</AppProvider>
-			);
-			break;
-		case 'pvcMetalLaminate':
-			component = (
-				<AppProvider>
-					<PVCMetalLaminate />
-				</AppProvider>
-			);
-			break;
-		case 'pvcPainted':
-			component = (
-				<AppProvider>
-					<PVCPainted />
-				</AppProvider>
-			);
-			break;
-		case 'pvcUv':
-			component = (
-				<AppProvider>
-					<PVCUv />
-				</AppProvider>
-			);
-			break;
-		case 'layeredAcrylic':
-			component = (
-				<AppProvider>
-					<LayeredAcrylic />
-				</AppProvider>
-			);
-			break;
-		case 'laserCutAluminum':
-			component = (
-				<AppProvider>
-					<LaserCutAluminum />
-				</AppProvider>
-			);
-			break;
-		case 'uvPrintedAcrylic':
-			component = (
-				<AppProvider>
-					<UvPrintedAcrylic />
-				</AppProvider>
-			);
-			break;
-		case 'metalLaminateAcrylic':
-			component = (
-				<AppProvider>
-					<MetalLaminate />
-				</AppProvider>
-			);
-			break;
-		case 'metalChannelTrimlessFrontLit':
-			component = (
-				<AppProvider>
-					<TrimLessFrontLit />
-				</AppProvider>
-			);
-			break;
-		case 'laserCutStainless':
-			component = (
-				<AppProvider>
-					<LaserCutStainless />
-				</AppProvider>
-			);
-			break;
-		case 'metalChannelTrimlessFrontAndBackLit':
-			component = (
-				<AppProvider>
-					<TrimLessFrontAndBackLit />
-				</AppProvider>
-			);
-			break;
-		case 'metalChannelTrimlessBackLit':
-			component = (
-				<AppProvider>
-					<TrimLessBackLit />
-				</AppProvider>
-			);
-			break;
-		case 'metalFabricatedStainless':
-			component = (
-				<AppProvider>
-					<FabricatedStainless />
-				</AppProvider>
-			);
-			break;
-		default:
-			component = (
-				<AppProvider>
-					<CustomProject />
-				</AppProvider>
-			);
-			break;
-	}
-	return component;
+
+	const quoteComponents: Record<string, JSX.Element> = {
+		combineQuotes: <CombineQuotes />,
+		EtchedFlatCut: <EtchedFlatCut />,
+		ModularLightbox: <ModularLightbox />,
+		AcrylicSideLit: <AcrylicSideLit />,
+		AcrylicFrontSideLit: <AcrylicFrontSideLit />,
+		AcrylicFrontBackLit: <AcrylicFrontBackLit />,
+		AcrylicBackLit: <AcrylicBackLit />,
+		AcrylicFrontLit: <AcrylicFrontLit />,
+		RigidNeonSignNoBacking: <RigidNeonSignNoBacking />,
+		RigidNeonSignWithBacking: <RigidNeonSignWithBacking />,
+		FlexNeonSign: <FlexNeonSign />,
+		AluminumResinFrontBackLit: <AluminumResinFrontBackLit />,
+		AluminumResinFrontLit: <AluminumResinFrontLit />,
+		laserCutAcrylic: <LaserCutAcrylic />,
+		pvcMetalLaminate: <PVCMetalLaminate />,
+		pvcPainted: <PVCPainted />,
+		pvcUv: <PVCUv />,
+		layeredAcrylic: <LayeredAcrylic />,
+		laserCutAluminum: <LaserCutAluminum />,
+		uvPrintedAcrylic: <UvPrintedAcrylic />,
+		metalLaminateAcrylic: <MetalLaminate />,
+		metalChannelTrimlessFrontLit: <TrimLessFrontLit />,
+		laserCutStainless: <LaserCutStainless />,
+		metalChannelTrimlessFrontAndBackLit: <TrimLessFrontAndBackLit />,
+		metalChannelTrimlessBackLit: <TrimLessBackLit />,
+		metalFabricatedStainless: <FabricatedStainless />,
+		default: <CustomProject />,
+	};
+
+	component =
+		quoteComponents[window.NovaQuote.quote_div_id] || quoteComponents.default;
+
+	return <AppProvider>{component}</AppProvider>;
 }
