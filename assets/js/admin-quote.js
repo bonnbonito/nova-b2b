@@ -172,6 +172,26 @@ function allAttributes(sign) {
 			label: 'HEIGHT',
 			value: sign.etchedHeight ? sign.etchedHeight : '',
 		},
+		{
+			label: 'METAL THICKNESS',
+			value: sign.etchedMetalThickness ? sign.etchedMetalThickness : '',
+		},
+		{
+			label: 'FINISHING',
+			value: sign.etchedFinishing ? sign.etchedFinishing : '',
+		},
+		{
+			label: 'PAINTED COLOR',
+			value: sign.etchedPaintedColor ? sign.etchedPaintedColor : '',
+		},
+		{
+			label: 'ELECTROPLATED FINISHING',
+			value: sign.etchedElectroplated ? sign.etchedElectroplated : '',
+		},
+		{
+			label: 'ANODIZED COLOR',
+			value: sign.etchedAnodizedColor ? sign.etchedAnodizedColor : '',
+		},
 
 		{ label: 'FONT', value: sign.font ? sign.font : '' },
 		{
@@ -226,7 +246,7 @@ function allAttributes(sign) {
 
 		{
 			label: 'RETURN',
-			value: sign.acrylicReturn ? sign.acrylicReturn + '"' : '',
+			value: sign.acrylicReturn ? sign.acrylicReturn : '',
 		},
 
 		{ label: 'LOGO WIDTH', value: sign.width ? sign.width + '"' : '' },
@@ -234,12 +254,12 @@ function allAttributes(sign) {
 
 		{
 			label: 'FRONT OPTION',
-			value: sign.frontOption ? sign.frontOption + '"' : '',
+			value: sign.frontOption ? sign.frontOption : '',
 		},
 
 		{
 			label: 'PAINT COLOR',
-			value: sign.paintColor ? sign.paintColor + '"' : '',
+			value: sign.paintColor ? sign.paintColor : '',
 		},
 
 		{
