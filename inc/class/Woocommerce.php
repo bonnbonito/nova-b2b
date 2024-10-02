@@ -913,7 +913,11 @@ class Woocommerce {
 	}
 
 	public function customize_woocommerce_order_number( $order_number, $order ) {
-		return 'NV' . str_pad( $order_number, 5, '0', STR_PAD_LEFT );
+		$return = 'NV' . str_pad( $order_number, 5, '0', STR_PAD_LEFT );
+		if ( $order->get_meta( '_po_number' ) ) {
+			$return .= ' - (PO#: ' . $order->get_meta( '_po_number' ) . ')';
+		}
+		return $return;
 	}
 
 	public function add_deposit_row( $order_id ) {
