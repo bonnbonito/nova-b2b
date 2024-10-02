@@ -75,7 +75,7 @@ class Order_History {
 	}
 
 	public function has_payment_types() {
-		$current_user_id = isset( $_GET['customer_id'] ) ? absint( $_GET['customer_id'] ) : get_current_user_id();
+		$current_user_id = isset( $_GET['customer_id'] ) && current_user_can( 'administrator' ) ? absint( $_GET['customer_id'] ) : get_current_user_id();
 
 		return get_field( 'payment_type', 'user_' . $current_user_id );
 	}
