@@ -199,6 +199,13 @@ table.order-details {
 	border-color: #F22E00;
 }
 
+.order-details .quote-details td {
+	border: 0;
+	padding-top: 0;
+	padding-bottom: 0;
+	font-size: 0.85em;
+}
+
 /* product bundles compatibility */
 .order-details tr.bundled-item td.product {
 	padding-left: 5mm;

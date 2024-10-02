@@ -115,8 +115,16 @@ if ( $this->has_header_logo() ) :
 		<tr
 			class="<?php echo apply_filters( 'wpo_wcpdf_item_row_class', 'item-' . $item_id, esc_attr( $this->get_type() ), $this->order, $item_id ); ?>">
 			<td class="product">
-				<span class="item-name"><?php echo $item['name']; ?></span>
+				<span class="item-name"><strong><?php echo $item['name']; ?></strong></span>
 				<?php do_action( 'wpo_wcpdf_before_item_meta', $this->get_type(), $item, $this->order ); ?>
+				<?php
+				if ( isset( $item['signage'] ) && ! empty( $item['signage'] ) && is_array( $item['signage'] ) ) {
+					$woo_instance = \NOVA_B2B\Woocommerce::get_instance();
+					if ( $woo_instance ) {
+						$woo_instance->show_order_product_details_html( $item['signage'] );
+					}
+				}
+				?>
 				<span class="item-meta"><?php echo $item['meta']; ?></span>
 				<dl class="meta">
 					<?php
