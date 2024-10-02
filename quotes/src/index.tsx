@@ -31,6 +31,7 @@ import LaserCutStainless from './scripts/products/metal/LaserCutStainless/LaserC
 import PVCMetalLaminate from './scripts/products/pvc/PVCMetalLaminate/PVCMetalLaminate';
 import PVCPainted from './scripts/products/pvc/PVCPainted/PVCPainted';
 import PVCUv from './scripts/products/pvc/PVCUv/PVCUv';
+import EtchedFabricated from './scripts/products/wayfinding/EtchedFabricated/EtchedFabricated';
 import EtchedFlatCut from './scripts/products/wayfinding/EtchedFlatCut/EtchedFlatCut';
 
 declare global {
@@ -74,6 +75,7 @@ function QuoteApp(): JSX.Element {
 	const quoteComponents: Record<string, JSX.Element> = {
 		combineQuotes: <CombineQuotes />,
 		EtchedFlatCut: <EtchedFlatCut />,
+		EtchedFabricated: <EtchedFabricated />,
 		ModularLightbox: <ModularLightbox />,
 		AcrylicSideLit: <AcrylicSideLit />,
 		AcrylicFrontSideLit: <AcrylicFrontSideLit />,

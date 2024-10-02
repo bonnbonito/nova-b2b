@@ -6,7 +6,7 @@ import Signage from '../../../Signage';
 import { PlusIcon } from '../../../svg/Icons';
 import { EtchedSign } from './components/EtchedSign';
 
-export default function EtchedFlatCut() {
+export default function EtchedFabricated() {
 	const { signage, setSignage, setTempFolder, tempFolderName } =
 		useAppContext();
 
@@ -14,6 +14,7 @@ export default function EtchedFlatCut() {
 		id: uuidv4(),
 		type: 'ETCHED_SIGN',
 		title: 'ETCHED SIGN 1',
+		mounting: 'Stud Mount',
 		usdPrice: 0,
 		cadPrice: 0,
 		filePaths: [],

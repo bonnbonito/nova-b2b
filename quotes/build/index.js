@@ -34257,6 +34257,482 @@ const metalLaminateOptions = [{
 
 /***/ }),
 
+/***/ "./src/scripts/products/wayfinding/EtchedFabricated/EtchedFabricated.js":
+/*!******************************************************************************!*\
+  !*** ./src/scripts/products/wayfinding/EtchedFabricated/EtchedFabricated.js ***!
+  \******************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ EtchedFabricated)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
+/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
+/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
+/* harmony import */ var _components_EtchedSign__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/EtchedSign */ "./src/scripts/products/wayfinding/EtchedFabricated/components/EtchedSign.js");
+
+
+
+
+
+
+
+
+function EtchedFabricated() {
+  const {
+    signage,
+    setSignage,
+    setTempFolder,
+    tempFolderName
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
+  const defaultSignage = {
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_6__["default"])(),
+    type: 'ETCHED_SIGN',
+    title: 'ETCHED SIGN 1',
+    mounting: 'Stud Mount',
+    usdPrice: 0,
+    cadPrice: 0,
+    filePaths: [],
+    fileNames: [],
+    fileUrls: [],
+    files: [],
+    sets: 1,
+    product: NovaQuote.product
+  };
+  function setDefaultSignage() {
+    setSignage([defaultSignage]);
+  }
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (NovaQuote.is_editting === '1') {
+      const currentSignage = JSON.parse(NovaQuote.signage);
+      if (currentSignage) {
+        setSignage(currentSignage);
+      }
+    } else {
+      setDefaultSignage();
+    }
+  }, []);
+  function addSignage(type) {
+    setSignage(prevSignage => {
+      const count = prevSignage.filter(sign => sign.type === type).length;
+      let args = {
+        type: 'ETCHED_SIGN',
+        mounting: 'Standard Nails',
+        title: `ETCHED SIGN ${count + 1}`
+      };
+      const newSignage = {
+        ...defaultSignage,
+        ...args
+      };
+      return [...prevSignage, newSignage];
+    });
+  }
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (NovaQuote.is_editting.length === 0) {
+      setTempFolder(tempFolderName);
+    } else {
+      if (NovaQuote.project_folder_status) {
+        setTempFolder(`${NovaQuote.project_folder_status}/Q-${NovaQuote.current_quote_id}`);
+      } else {
+        setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      }
+    }
+    // Only run once, no need to add dependencies if they don't change
+  }, []);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:flex gap-6"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:w-3/4 w-full"
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    key: item.id,
+    index: index,
+    id: item.id,
+    item: item
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_EtchedSign__WEBPACK_IMPORTED_MODULE_5__.EtchedSign, {
+    key: item.id,
+    item: item,
+    productId: item.product
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex gap-2"
+  }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
+    onClick: () => addSignage('ETCHED_SIGN'),
+    style: {
+      border: '1px solid #d2d2d2d2'
+    }
+  }, "ADD ETCHED SIGN", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], null));
+}
+
+/***/ }),
+
+/***/ "./src/scripts/products/wayfinding/EtchedFabricated/components/EtchedSign.js":
+/*!***********************************************************************************!*\
+  !*** ./src/scripts/products/wayfinding/EtchedFabricated/components/EtchedSign.js ***!
+  \***********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   EtchedSign: () => (/* binding */ EtchedSign),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _Description__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../Description */ "./src/scripts/Description.js");
+/* harmony import */ var _Dropdown__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../Dropdown */ "./src/scripts/Dropdown.js");
+/* harmony import */ var _UploadFiles__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../UploadFiles */ "./src/scripts/UploadFiles.js");
+/* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
+/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
+/* harmony import */ var _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../utils/ColorOptions */ "./src/scripts/utils/ColorOptions.js");
+/* harmony import */ var _utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../utils/ColorsDropdown */ "./src/scripts/utils/ColorsDropdown.js");
+
+
+
+
+
+
+
+
+
+
+const metalThicknessOptions = ['0.5"', '1"', '1.5"', '2"'];
+const electroplatedOptions = ['Electroplated Gold Brushed', 'Electroplated Gold Polished', 'Electroplated Black Titanium Brushed', 'Electroplated Black Titanium Polished', 'Electroplated Bronze Brushed', 'Electroplated Red Copper Brushed'];
+const finishingOptions = ['Painted', 'Brushed', 'Polished', 'Electroplated'];
+const mountingOptions = ['Stud Mount', 'Stud with Spacer', 'PVC Backer'];
+const studLengthOptions = ['1.5" (4cm)', '3.2" (8cm)', '4" (10cm)', '6" (15cm)'];
+const widthOptions = (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.arrayRange)(2, 94, 1);
+const heightOptions = (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.arrayRange)(2, 47, 1);
+const EtchedSign = ({
+  item
+}) => {
+  var _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$etchedPaintedCo, _item$customColor, _item$etchedWidth, _item$etchedHeight, _item$etchedMetalThic, _item$etchedFinishing, _item$etchedElectropl, _item$usdPrice, _item$cadPrice, _item$studLength, _item$usdSinglePrice, _item$cadSinglePrice, _item$waterproof, _item$mounting, _item$sets, _color$name;
+  const {
+    signage,
+    setSignage,
+    setMissing,
+    updateSignageItem
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
+  const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileNames = item.fileNames) !== null && _item$fileNames !== void 0 ? _item$fileNames : []);
+  const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrls = item.fileUrls) !== null && _item$fileUrls !== void 0 ? _item$fileUrls : []);
+  const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$filePaths = item.filePaths) !== null && _item$filePaths !== void 0 ? _item$filePaths : []);
+  const [files, setFiles] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$files = item.files) !== null && _item$files !== void 0 ? _item$files : []);
+  const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$etchedPaintedCo = item.etchedPaintedColor) !== null && _item$etchedPaintedCo !== void 0 ? _item$etchedPaintedCo : '');
+  const [openColor, setOpenColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const [customColor, setCustomColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$customColor = item.customColor) !== null && _item$customColor !== void 0 ? _item$customColor : '');
+  const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$etchedWidth = item.etchedWidth) !== null && _item$etchedWidth !== void 0 ? _item$etchedWidth : '');
+  const [height, setHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$etchedHeight = item.etchedHeight) !== null && _item$etchedHeight !== void 0 ? _item$etchedHeight : '');
+  const [metalThickness, setMetalThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$etchedMetalThic = item.etchedMetalThickness) !== null && _item$etchedMetalThic !== void 0 ? _item$etchedMetalThic : '');
+  const [finishing, setFinishing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$etchedFinishing = item.etchedFinishing) !== null && _item$etchedFinishing !== void 0 ? _item$etchedFinishing : '');
+  const [electroplated, setElectroplated] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$etchedElectropl = item.etchedElectroplated) !== null && _item$etchedElectropl !== void 0 ? _item$etchedElectropl : '');
+  const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdPrice = item.usdPrice) !== null && _item$usdPrice !== void 0 ? _item$usdPrice : 0);
+  const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadPrice = item.cadPrice) !== null && _item$cadPrice !== void 0 ? _item$cadPrice : 0);
+  const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$studLength = item.studLength) !== null && _item$studLength !== void 0 ? _item$studLength : '');
+  const [usdSinglePrice, setUsdSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdSinglePrice = item.usdSinglePrice) !== null && _item$usdSinglePrice !== void 0 ? _item$usdSinglePrice : 0);
+  const [cadSinglePrice, setCadSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadSinglePrice = item.cadSinglePrice) !== null && _item$cadSinglePrice !== void 0 ? _item$cadSinglePrice : 0);
+  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : '');
+  const [mounting, setMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
+  const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
+  const colorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const updateSignage = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(() => {
+    const updatedSignage = signage.map(sign => {
+      if (sign.id === item.id) {
+        return {
+          ...sign,
+          waterproof,
+          mounting,
+          etchedWidth: width,
+          etchedHeight: height,
+          etchedMetalThickness: metalThickness,
+          etchedFinishing: finishing,
+          etchedPaintedColor: color?.name,
+          etchedElectroplated: electroplated,
+          studLength,
+          customColor,
+          fileNames,
+          filePaths,
+          fileUrls,
+          files,
+          sets,
+          usdPrice,
+          cadPrice,
+          cadSinglePrice,
+          usdSinglePrice
+        };
+      }
+      return sign;
+    });
+    setSignage(updatedSignage);
+  }, [waterproof, color, customColor, mounting, metalThickness, finishing, studLength, electroplated, fileNames, filePaths, fileUrls, files, sets, width, height, usdPrice, cadPrice, cadSinglePrice, usdSinglePrice]);
+  const checkAndAddMissingFields = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(() => {
+    const missingFields = [];
+    if (!width) missingFields.push('Select Width');
+    if (!height) missingFields.push('Select Height');
+    if (!metalThickness) missingFields.push('Select Metal Thickness');
+    if (!finishing) missingFields.push('Select Finishing');
+    if (finishing === 'Painted') {
+      if (!color) missingFields.push('Select Painted Color');
+    }
+    if (finishing === 'Electroplated') {
+      if (!electroplated) missingFields.push('Select Electroplated Finishing');
+    }
+    if (color?.name === 'Custom Color' && !customColor) {
+      missingFields.push('Add the Pantone color code of your custom color.');
+    }
+    if (!mounting) missingFields.push('Select Mounting');
+    if (metalThickness) {
+      if (!studLength) missingFields.push('Select Stud Length');
+    }
+    if (!waterproof) missingFields.push('Select Environment');
+    if (!sets) missingFields.push('Select Quantity');
+    setMissing(prevMissing => {
+      const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
+      if (existingIndex !== -1) {
+        const updatedMissing = [...prevMissing];
+        updatedMissing[existingIndex] = {
+          ...updatedMissing[existingIndex],
+          missingFields
+        };
+        return updatedMissing;
+      } else if (missingFields.length > 0) {
+        return [...prevMissing, {
+          id: item.id,
+          title: item.title,
+          missingFields
+        }];
+      }
+      return prevMissing;
+    });
+  }, [fileUrls, color, waterproof, mounting, sets, width, height, studLength, metalThickness, finishing, electroplated, customColor]);
+  const computePricing = () => {
+    var _tempTotal$toFixed, _total$toFixed;
+    if (!width || !height || !metalThickness || !waterproof || !sets) {
+      return {
+        singlePrice: false,
+        total: false
+      };
+    }
+    let factor;
+    if (metalThickness === '0.5"') {
+      factor = 0.5;
+    } else if (metalThickness === '1"') {
+      factor = 0.58;
+    } else if (metalThickness === '1.5"') {
+      factor = 0.65;
+    } else if (metalThickness === '2"') {
+      factor = 0.71;
+    }
+    let tempTotal = (parseInt(width) + 1) * (parseInt(height) + 1) * factor;
+    tempTotal = tempTotal > 10 ? tempTotal : 10;
+    if (parseInt(width) > 20 || parseInt(height) > 20) {
+      tempTotal = tempTotal + 40;
+    }
+    if (parseInt(width) > 43 || parseInt(height) > 43) {
+      tempTotal = tempTotal + 100;
+    }
+    tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.INDOOR_NOT_WATERPROOF ? 1 : 1.2;
+    if (finishing === 'Polished') {
+      tempTotal *= 1.1;
+    }
+    if (finishing === 'Electroplated') {
+      tempTotal *= 1.2;
+    }
+
+    // if (graphicsStyle === 'Extra Recessed') {
+    // 	tempTotal *= 1.2;
+    // }
+
+    // if (graphicsStyle === 'Raised') {
+    // 	tempTotal *= 1.1;
+    // }
+
+    let total = tempTotal * parseInt(sets);
+    return {
+      singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
+      total: (_total$toFixed = total?.toFixed(2)) !== null && _total$toFixed !== void 0 ? _total$toFixed : 0
+    };
+  };
+  const handleOnChangeSets = e => {
+    const value = e.target.value;
+    setSets(value);
+  };
+  const handleComments = e => {
+    updateSignageItem(item.id, 'comments', e.target.value);
+  };
+  const handleOnChangeWaterproof = e => {
+    setWaterproof(e.target.value);
+  };
+  const handleonChangeFinishing = e => {
+    const target = e.target.value;
+    if (target !== 'Painted') {
+      setColor('');
+      setCustomColor('');
+    }
+    if (target !== 'Electroplated') {
+      setElectroplated('');
+    }
+    setFinishing(target);
+  };
+  const handleonChangeElectroplated = e => {
+    const target = e.target.value;
+    setElectroplated(target);
+  };
+  const handleOnChangeMetalThickness = e => {
+    const target = e.target?.value;
+    if (!target) return;
+    setMetalThickness(target);
+  };
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    const {
+      singlePrice,
+      total
+    } = computePricing();
+    if (total && singlePrice) {
+      setUsdPrice(total);
+      setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.EXCHANGE_RATE).toFixed(2));
+      setUsdSinglePrice(singlePrice);
+      setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.EXCHANGE_RATE).toFixed(2));
+    } else {
+      setUsdPrice(0);
+      setCadPrice(0);
+      setUsdSinglePrice(0);
+      setCadSinglePrice(0);
+    }
+  }, [metalThickness, width, height, waterproof, finishing, mounting, sets]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    updateSignage();
+    checkAndAddMissingFields();
+  }, [updateSignage, checkAndAddMissingFields]);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "py-4 mb-4"
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "quote-grid mb-6"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: "Metal Thickness",
+    value: metalThickness,
+    onChange: handleOnChangeMetalThickness,
+    options: metalThicknessOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      className: "lowercase",
+      key: option,
+      value: option,
+      defaultValue: option === metalThickness
+    }, option))
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: "Width",
+    value: width,
+    onChange: e => setWidth(e.target.value),
+    options: widthOptions
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: "Height",
+    value: height,
+    onChange: e => setHeight(e.target.value),
+    options: heightOptions
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: "Finishing",
+    onChange: handleonChangeFinishing,
+    options: finishingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option,
+      value: option,
+      defaultValue: option === finishing
+    }, option)),
+    value: finishing
+  }), finishing === 'Painted' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    ref: colorRef,
+    title: "Painted Color",
+    colorName: (_color$name = color?.name) !== null && _color$name !== void 0 ? _color$name : '',
+    openColor: openColor,
+    toggleColor: () => {
+      setOpenColor(prev => !prev);
+    },
+    colorOptions: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.colorOptions,
+    selectColor: color => {
+      setColor(color);
+      setOpenColor(false);
+    }
+  }), finishing === 'Electroplated' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: "ELECTROPLATED",
+    onChange: handleonChangeElectroplated,
+    options: electroplatedOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option,
+      value: option,
+      defaultValue: option === electroplated
+    }, option)),
+    value: electroplated
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: "Environment",
+    onChange: handleOnChangeWaterproof,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
+      value: option.option,
+      defaultValue: option.option === waterproof
+    }, option.option)),
+    value: waterproof
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: "Mounting",
+    onChange: e => setMounting(e.target.value),
+    options: mountingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option,
+      value: option,
+      defaultValue: option === mounting
+    }, option)),
+    value: mounting
+  }), metalThickness && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: "STUD LENGTH",
+    onChange: e => setStudLength(e.target.value),
+    options: studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option,
+      value: option,
+      defaultValue: option === studLength
+    }, option)),
+    value: studLength
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: "Quantity",
+    onChange: handleOnChangeSets,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.setOptions,
+    value: sets,
+    onlyValue: true
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "quote-grid"
+  }, color?.name == 'Custom Color' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "px-[1px] col-span-4"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
+  }, "Custom Color"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    className: "w-full py-4 px-2 border-solid border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400",
+    type: "text",
+    value: customColor,
+    onChange: e => setCustomColor(e.target.value),
+    placeholder: "ADD THE PANTONE COLOR CODE"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Description__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    value: item.comments,
+    handleComments: handleComments
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    itemId: item.id,
+    setFilePaths: setFilePaths,
+    setFiles: setFiles,
+    filePaths: filePaths,
+    fileUrls: fileUrls,
+    fileNames: fileNames,
+    setFileUrls: setFileUrls,
+    setFileNames: setFileNames
+  })));
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,react__WEBPACK_IMPORTED_MODULE_0__.memo)(EtchedSign));
+
+/***/ }),
+
 /***/ "./src/scripts/products/wayfinding/EtchedFlatCut/EtchedFlatCut.js":
 /*!************************************************************************!*\
   !*** ./src/scripts/products/wayfinding/EtchedFlatCut/EtchedFlatCut.js ***!
@@ -34266,7 +34742,7 @@ const metalLaminateOptions = [{
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ FlexNeonSign)
+/* harmony export */   "default": () => (/* binding */ EtchedFlatCut)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
@@ -34284,7 +34760,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function FlexNeonSign() {
+function EtchedFlatCut() {
   const {
     signage,
     setSignage,
@@ -34498,7 +34974,6 @@ const EtchedSign = ({
     if (!width) missingFields.push('Select Width');
     if (!height) missingFields.push('Select Height');
     if (!metalThickness) missingFields.push('Select Metal Thickness');
-    if (!finishing) missingFields.push('Select Finishing');
     if (!finishing) missingFields.push('Select Finishing');
     if (finishing === 'Painted') {
       if (!color) missingFields.push('Select Painted Color');
@@ -54220,7 +54695,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _scripts_products_pvc_PVCMetalLaminate_PVCMetalLaminate__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./scripts/products/pvc/PVCMetalLaminate/PVCMetalLaminate */ "./src/scripts/products/pvc/PVCMetalLaminate/PVCMetalLaminate.js");
 /* harmony import */ var _scripts_products_pvc_PVCPainted_PVCPainted__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ./scripts/products/pvc/PVCPainted/PVCPainted */ "./src/scripts/products/pvc/PVCPainted/PVCPainted.js");
 /* harmony import */ var _scripts_products_pvc_PVCUv_PVCUv__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ./scripts/products/pvc/PVCUv/PVCUv */ "./src/scripts/products/pvc/PVCUv/PVCUv.js");
-/* harmony import */ var _scripts_products_wayfinding_EtchedFlatCut_EtchedFlatCut__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./scripts/products/wayfinding/EtchedFlatCut/EtchedFlatCut */ "./src/scripts/products/wayfinding/EtchedFlatCut/EtchedFlatCut.js");
+/* harmony import */ var _scripts_products_wayfinding_EtchedFabricated_EtchedFabricated__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./scripts/products/wayfinding/EtchedFabricated/EtchedFabricated */ "./src/scripts/products/wayfinding/EtchedFabricated/EtchedFabricated.js");
+/* harmony import */ var _scripts_products_wayfinding_EtchedFlatCut_EtchedFlatCut__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ./scripts/products/wayfinding/EtchedFlatCut/EtchedFlatCut */ "./src/scripts/products/wayfinding/EtchedFlatCut/EtchedFlatCut.js");
+
 
 
 
@@ -54277,7 +54754,8 @@ function QuoteApp() {
   let component;
   const quoteComponents = {
     combineQuotes: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_combine_CombineQuotes__WEBPACK_IMPORTED_MODULE_15__["default"], null),
-    EtchedFlatCut: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_wayfinding_EtchedFlatCut_EtchedFlatCut__WEBPACK_IMPORTED_MODULE_32__["default"], null),
+    EtchedFlatCut: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_wayfinding_EtchedFlatCut_EtchedFlatCut__WEBPACK_IMPORTED_MODULE_33__["default"], null),
+    EtchedFabricated: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_wayfinding_EtchedFabricated_EtchedFabricated__WEBPACK_IMPORTED_MODULE_32__["default"], null),
     ModularLightbox: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_lightbox_ModularLightbox_ModularLightbox__WEBPACK_IMPORTED_MODULE_20__["default"], null),
     AcrylicSideLit: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_channel_AcrylicSideLit_AcrylicSideLit__WEBPACK_IMPORTED_MODULE_10__["default"], null),
     AcrylicFrontSideLit: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_channel_AcrylicFrontSideLit_AcrylicFrontSideLit__WEBPACK_IMPORTED_MODULE_9__["default"], null),
