@@ -45,9 +45,6 @@ export default function OrderTable({
 							Order
 						</th>
 						<th className="font-medium p-4 pt-0 pb-3 text-black text-left font-title uppercase">
-							PO#
-						</th>
-						<th className="font-medium p-4 pt-0 pb-3 text-black text-left font-title uppercase">
 							Date
 						</th>
 						<th className="font-medium p-4 pt-0 pb-3 text-black text-left font-title uppercase">
@@ -80,7 +77,6 @@ export default function OrderTable({
 									#{order.order_number}
 								</a>
 							</td>
-							<td className="py-4 px-4">{order.po_number}</td>
 							<td className="py-4 px-4">{order.date}</td>
 							<td
 								className={`py-4 px-4 capitalize order-actions ${
