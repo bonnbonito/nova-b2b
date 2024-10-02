@@ -167,6 +167,9 @@ export const EtchedSign = ({ item }) => {
 
 		if (!sets) missingFields.push('Select Quantity');
 
+		if (!fileUrls || fileUrls.length === 0)
+			missingFields.push('Upload a PDF/AI File');
+
 		setMissing((prevMissing) => {
 			const existingIndex = prevMissing.findIndex(
 				(entry) => entry.id === item.id
@@ -242,14 +245,6 @@ export const EtchedSign = ({ item }) => {
 		if (finishing === 'Electroplated') {
 			tempTotal *= 1.2;
 		}
-
-		// if (graphicsStyle === 'Extra Recessed') {
-		// 	tempTotal *= 1.2;
-		// }
-
-		// if (graphicsStyle === 'Raised') {
-		// 	tempTotal *= 1.1;
-		// }
 
 		let total = tempTotal * parseInt(sets);
 

@@ -34492,6 +34492,7 @@ const EtchedSign = ({
     }
     if (!waterproof) missingFields.push('Select Environment');
     if (!sets) missingFields.push('Select Quantity');
+    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
     setMissing(prevMissing => {
       const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
       if (existingIndex !== -1) {
@@ -34544,15 +34545,6 @@ const EtchedSign = ({
     if (finishing === 'Electroplated') {
       tempTotal *= 1.2;
     }
-
-    // if (graphicsStyle === 'Extra Recessed') {
-    // 	tempTotal *= 1.2;
-    // }
-
-    // if (graphicsStyle === 'Raised') {
-    // 	tempTotal *= 1.1;
-    // }
-
     let total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
