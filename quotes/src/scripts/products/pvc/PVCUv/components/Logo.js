@@ -478,8 +478,9 @@ export function Logo({ item }) {
 					onChange={handleOnChangeThickness}
 					options={thicknessOptions.map((thickness) => (
 						<option
+							key={thickness.value}
 							value={thickness.value}
-							selected={thickness === item.thickness}
+							defaultValue={thickness === item.thickness}
 						>
 							{thickness.thickness}
 						</option>
@@ -513,6 +514,7 @@ export function Logo({ item }) {
 						setPvcBaseColor(color);
 						setOpenColor(false);
 					}}
+					samePrice={false}
 				/>
 
 				<Dropdown
@@ -520,8 +522,9 @@ export function Logo({ item }) {
 					onChange={handleChangeFinishing}
 					options={finishingOptions.map((finishing) => (
 						<option
+							key={finishing.name}
 							value={finishing.name}
-							selected={finishing.name === item.finishing}
+							defaultValue={finishing.name === item.finishing}
 						>
 							{finishing.name}
 						</option>
@@ -534,8 +537,9 @@ export function Logo({ item }) {
 					onChange={(e) => setWaterproof(e.target.value)}
 					options={waterProofSelections.map((option) => (
 						<option
+							key={option.option}
 							value={option.option}
-							selected={option.option == waterproof}
+							defaultValue={option.option == waterproof}
 						>
 							{option.option}
 						</option>
@@ -547,7 +551,11 @@ export function Logo({ item }) {
 					title="mounting"
 					onChange={handleOnChangeMounting}
 					options={mountingSelections.map((option) => (
-						<option value={option.value} selected={option.value === mounting}>
+						<option
+							key={option.value}
+							value={option.value}
+							defaultValue={option.value === mounting}
+						>
 							{option.value}
 						</option>
 					))}
@@ -564,8 +572,9 @@ export function Logo({ item }) {
 							onChange={handleonChangeStudLength}
 							options={studLengthOptions.map((option) => (
 								<option
+									key={option.value}
 									value={option.value}
-									selected={option.value == studLength}
+									defaultValue={option.value == studLength}
 								>
 									{option.value}
 								</option>
@@ -581,8 +590,9 @@ export function Logo({ item }) {
 							onChange={handleonChangeSpacerDistance}
 							options={spacerStandoffOptions.map((option) => (
 								<option
+									key={option.value}
 									value={option.value}
-									selected={option.value == spacerStandoffDistance}
+									defaultValue={option.value == spacerStandoffDistance}
 								>
 									{option.value}
 								</option>

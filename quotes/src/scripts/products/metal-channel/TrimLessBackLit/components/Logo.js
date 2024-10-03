@@ -513,7 +513,7 @@ export function Logo({ item }) {
 	return (
 		<>
 			{item.productLine && (
-				<div clasName="py-4 my-4">
+				<div className="py-4 my-4">
 					PRODUCT LINE:{' '}
 					<span
 						className="font-title"
@@ -528,8 +528,9 @@ export function Logo({ item }) {
 					onChange={handleOnChangeWaterproof}
 					options={waterProofOptions.map((option) => (
 						<option
+							key={option.option}
 							value={option.option}
-							selected={option.option == waterproof}
+							defaultValue={option.option == waterproof}
 						>
 							{option.option}
 						</option>
@@ -542,7 +543,11 @@ export function Logo({ item }) {
 					value={depth?.value}
 					onChange={handleOnChangeDepth}
 					options={depthOptions.map((thickness) => (
-						<option value={thickness.value} selected={thickness === depth}>
+						<option
+							key={thickness.value}
+							value={thickness.value}
+							defaultValue={thickness === depth}
+						>
 							{thickness.depth}
 						</option>
 					))}
@@ -567,8 +572,9 @@ export function Logo({ item }) {
 					onChange={handleChangeFinishing}
 					options={finishingOptions.map((finishing) => (
 						<option
+							key={finishing.value}
 							value={finishing.value}
-							selected={finishing.value === selectedFinishing}
+							defaultValue={finishing.value === selectedFinishing}
 						>
 							{finishing.value}
 						</option>
@@ -582,8 +588,9 @@ export function Logo({ item }) {
 						onChange={handelMetalFinishChange}
 						options={metalFinishOptions.map((finish) => (
 							<option
+								key={finish.option}
 								value={finish.option}
-								selected={finish.option === metalFinish}
+								defaultValue={finish.option === metalFinish}
 							>
 								{finish.option}
 							</option>
@@ -615,7 +622,11 @@ export function Logo({ item }) {
 					title="LED Light Color"
 					onChange={handleOnChangeLedLight}
 					options={ledLightColors.map((color) => (
-						<option value={color} selected={color == ledLightColor}>
+						<option
+							key={color}
+							value={color}
+							defaultValue={color == ledLightColor}
+						>
 							{color}
 						</option>
 					))}
@@ -626,7 +637,11 @@ export function Logo({ item }) {
 					title="Acrylic Reveal"
 					onChange={handleOnChangeAcrylicReveal}
 					options={acrylicRevealOptions.map((option) => (
-						<option value={option} selected={option == acrylicReveal}>
+						<option
+							key={option}
+							value={option}
+							defaultValue={option == acrylicReveal}
+						>
 							{option}
 						</option>
 					))}
@@ -638,8 +653,9 @@ export function Logo({ item }) {
 					onChange={handleOnChangeMounting}
 					options={mountingDefaultOptions.map((mounting) => (
 						<option
+							key={mounting.value}
 							value={mounting.value}
-							selected={mounting.value == mounting}
+							defaultValue={mounting.value == mounting}
 						>
 							{mounting.value}
 						</option>
@@ -653,8 +669,9 @@ export function Logo({ item }) {
 						onChange={handleonChangeStudLength}
 						options={studLengthOptions.map((option) => (
 							<option
+								key={option.value}
 								value={option.value}
-								selected={option.value == studLength}
+								defaultValue={option.value == studLength}
 							>
 								{option.value}
 							</option>
@@ -669,8 +686,9 @@ export function Logo({ item }) {
 						onChange={handleonChangeSpacerDistance}
 						options={spacerStandoffOptions.map((option) => (
 							<option
+								key={option.value}
 								value={option.value}
-								selected={option.value == spacerStandoffDistance}
+								defaultValue={option.value == spacerStandoffDistance}
 							>
 								{option.value}
 							</option>
@@ -684,8 +702,9 @@ export function Logo({ item }) {
 					onChange={handleOnChangeincludedItems}
 					options={lightingOptions.map((option) => (
 						<option
+							key={option.value}
 							value={option.value}
-							selected={option.value == includedItems}
+							defaultValue={option.value == includedItems}
 						>
 							{option.value}
 						</option>

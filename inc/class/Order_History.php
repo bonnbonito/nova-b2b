@@ -75,7 +75,7 @@ class Order_History {
 	}
 
 	public function has_payment_types() {
-		$current_user_id = isset( $_GET['customer_id'] ) ? absint( $_GET['customer_id'] ) : get_current_user_id();
+		$current_user_id = isset( $_GET['customer_id'] ) && current_user_can( 'administrator' ) ? absint( $_GET['customer_id'] ) : get_current_user_id();
 
 		return get_field( 'payment_type', 'user_' . $current_user_id );
 	}
@@ -102,6 +102,7 @@ class Order_History {
 			'order'        => 'DESC',
 			'meta_key'     => '_hide_order',
 			'meta_compare' => 'NOT EXISTS',
+			'status'       => array( 'wc-pending', 'wc-processing', 'wc-on-hold', 'wc-completed' ),
 		);
 
 		$order_ids = wc_get_orders( $args );
@@ -166,6 +167,7 @@ class Order_History {
 			$orders[] = array(
 				'id'                   => $order->get_id(),
 				'order_number'         => $order->get_order_number(),
+				'po_number'            => $order->get_meta( '_po_number' ),
 				'order_url'            => $order->get_view_order_url(),
 				'date'                 => $order->get_date_created()->format( 'M d, Y' ),
 				'total'                => $total_with_currency,

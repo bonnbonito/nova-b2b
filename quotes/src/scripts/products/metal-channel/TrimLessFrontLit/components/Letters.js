@@ -420,7 +420,7 @@ export function Letters({ item }) {
 						<option
 							key={index}
 							value={val}
-							selected={val === selectedLetterHeight}
+							defaultValue={val === selectedLetterHeight}
 						>
 							{val}"
 						</option>
@@ -428,7 +428,7 @@ export function Letters({ item }) {
 				}
 			)
 		);
-	}, [lettersHeight, letterHeightOptions]);
+	}, [lettersHeight]);
 
 	useEffect(() => {
 		adjustFontSize();
@@ -615,7 +615,7 @@ export function Letters({ item }) {
 	return (
 		<>
 			{item.productLine && (
-				<div clasName="py-4 my-4">
+				<div className="py-4 my-4">
 					PRODUCT LINE:{' '}
 					<span
 						className="font-title"
@@ -661,8 +661,9 @@ export function Letters({ item }) {
 					onChange={handleOnChangeWaterproof}
 					options={waterProofOptions.map((option) => (
 						<option
+							key={option.option}
 							value={option.option}
-							selected={option.option == waterproof}
+							defaultValue={option.option == waterproof}
 						>
 							{option.option}
 						</option>
@@ -699,7 +700,11 @@ export function Letters({ item }) {
 					value={depth?.value}
 					onChange={handleOnChangeDepth}
 					options={depthOptions.map((thickness) => (
-						<option value={thickness.value} selected={thickness === depth}>
+						<option
+							key={thickness.value}
+							value={thickness.value}
+							defaultValue={thickness === depth}
+						>
 							{thickness.depth}
 						</option>
 					))}
@@ -734,8 +739,9 @@ export function Letters({ item }) {
 					onChange={handleOnChangeWhite}
 					options={whiteOptions.map((option) => (
 						<option
+							key={option.option}
 							value={option.option}
-							selected={option == frontAcrylicCover}
+							defaultValue={option == frontAcrylicCover}
 						>
 							{option.option}
 						</option>
@@ -770,8 +776,11 @@ export function Letters({ item }) {
 							onChange={handleOnChangeVinyl3635}
 							options={vinlyl3635Options.map((option) => (
 								<option
+									key={option.code}
 									value={`${option.name} - [${option.code}]`}
-									selected={`${option.name} - [${option.code}]` == vinyl3635}
+									defaultValue={
+										`${option.name} - [${option.code}]` == vinyl3635
+									}
 								>
 									{`${option.name} - [${option.code}]`}
 								</option>
@@ -785,7 +794,11 @@ export function Letters({ item }) {
 					title="LED Light Color"
 					onChange={handleOnChangeLedLight}
 					options={ledLightColors.map((color) => (
-						<option value={color} selected={color == ledLightColor}>
+						<option
+							key={color}
+							value={color}
+							defaultValue={color == ledLightColor}
+						>
 							{color}
 						</option>
 					))}
@@ -797,8 +810,9 @@ export function Letters({ item }) {
 					onChange={handleOnChangeMounting}
 					options={mountingDefaultOptions.map((mounting) => (
 						<option
+							key={mounting.value}
 							value={mounting.value}
-							selected={mounting.value == mounting}
+							defaultValue={mounting.value == mounting}
 						>
 							{mounting.value}
 						</option>
@@ -812,8 +826,9 @@ export function Letters({ item }) {
 						onChange={handleonChangeStudLength}
 						options={studLengthOptions.map((option) => (
 							<option
+								key={option.value}
 								value={option.value}
-								selected={option.value == studLength}
+								defaultValue={option.value == studLength}
 							>
 								{option.value}
 							</option>
@@ -828,8 +843,9 @@ export function Letters({ item }) {
 						onChange={handleonChangeSpacerDistance}
 						options={spacerStandoffOptions.map((option) => (
 							<option
+								key={option.value}
 								value={option.value}
-								selected={option.value == spacerStandoffDistance}
+								defaultValue={option.value == spacerStandoffDistance}
 							>
 								{option.value}
 							</option>
@@ -843,8 +859,9 @@ export function Letters({ item }) {
 					onChange={handleOnChangeincludedItems}
 					options={lightingOptions.map((option) => (
 						<option
+							key={option.value}
 							value={option.value}
-							selected={option.value == includedItems}
+							defaultValue={option.value == includedItems}
 						>
 							{option.value}
 						</option>

@@ -384,7 +384,7 @@ export function Letters({ item }) {
 						<option
 							key={index}
 							value={val}
-							selected={val === selectedLetterHeight}
+							defaultValue={val === selectedLetterHeight}
 						>
 							{val}"
 						</option>
@@ -392,7 +392,7 @@ export function Letters({ item }) {
 				}
 			)
 		);
-	}, [lettersHeight, letterHeightOptions]);
+	}, [lettersHeight]);
 
 	useEffect(() => {
 		adjustFontSize();
@@ -558,7 +558,7 @@ export function Letters({ item }) {
 	return (
 		<>
 			{item.productLine && (
-				<div clasName="py-4 my-4">
+				<div className="py-4 my-4">
 					PRODUCT LINE:{' '}
 					<span
 						className="font-title"
@@ -626,8 +626,9 @@ export function Letters({ item }) {
 					onChange={handleOnChangeThickness}
 					options={thicknessOptions.map((thickness) => (
 						<option
+							key={thickness.value}
 							value={thickness.value}
-							selected={thickness === selectedThickness}
+							defaultValue={thickness === selectedThickness}
 						>
 							{thickness.thickness}
 						</option>
@@ -646,8 +647,9 @@ export function Letters({ item }) {
 					onChange={handleChangeMetalLaminate}
 					options={metalFinishColors.map((laminate) => (
 						<option
+							key={laminate.name}
 							value={laminate.name}
-							selected={laminate.name === item.metalLaminate}
+							defaultValue={laminate.name === item.metalLaminate}
 						>
 							{laminate.name}
 						</option>
@@ -668,6 +670,7 @@ export function Letters({ item }) {
 						setPvcBaseColor(color);
 						setOpenColor(false);
 					}}
+					samePrice={false}
 				/>
 
 				<Dropdown
@@ -675,8 +678,9 @@ export function Letters({ item }) {
 					onChange={handleChangeFinishing}
 					options={finishingOptions.map((finishing) => (
 						<option
+							key={finishing.name}
 							value={finishing.name}
-							selected={finishing.name === item.finishing}
+							defaultValue={finishing.name === item.finishing}
 						>
 							{finishing.name}
 						</option>
@@ -689,8 +693,9 @@ export function Letters({ item }) {
 					onChange={handleOnChangeWaterproof}
 					options={waterProofSelections.map((option) => (
 						<option
+							key={option.option}
 							value={option.option}
-							selected={option.option == item.waterproof}
+							defaultValue={option.option == item.waterproof}
 						>
 							{option.option}
 						</option>
@@ -705,7 +710,7 @@ export function Letters({ item }) {
 						<option
 							key={option.value}
 							value={option.value}
-							selected={option.value === mounting}
+							defaultValue={option.value === mounting}
 						>
 							{option.value}
 						</option>
@@ -723,8 +728,9 @@ export function Letters({ item }) {
 							onChange={handleonChangeStudLength}
 							options={studLengthOptions.map((option) => (
 								<option
+									key={option.value}
 									value={option.value}
-									selected={option.value == studLength}
+									defaultValue={option.value == studLength}
 								>
 									{option.value}
 								</option>
@@ -740,8 +746,9 @@ export function Letters({ item }) {
 							onChange={handleonChangeSpacerDistance}
 							options={spacerStandoffOptions.map((option) => (
 								<option
+									key={option.value}
 									value={option.value}
-									selected={option.value == spacerStandoffDistance}
+									defaultValue={option.value == spacerStandoffDistance}
 								>
 									{option.value}
 								</option>

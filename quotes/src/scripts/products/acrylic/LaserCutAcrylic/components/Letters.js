@@ -421,7 +421,7 @@ export function Letters({ item }) {
 						<option
 							key={index}
 							value={val}
-							selected={val === selectedLetterHeight}
+							defaultValue={val === selectedLetterHeight}
 						>
 							{val}"
 						</option>
@@ -429,7 +429,7 @@ export function Letters({ item }) {
 				}
 			)
 		);
-	}, [lettersHeight, letterHeightOptions]);
+	}, [lettersHeight]);
 
 	useEffect(() => {
 		adjustFontSize();
@@ -595,7 +595,7 @@ export function Letters({ item }) {
 	return (
 		<>
 			{item.productLine && (
-				<div clasName="py-4 my-4">
+				<div className="py-4 my-4">
 					PRODUCT LINE:{' '}
 					<span
 						className="font-title"
@@ -667,7 +667,8 @@ export function Letters({ item }) {
 					options={thicknessOptions.map((thickness) => (
 						<option
 							value={thickness.value}
-							selected={thickness === selectedThickness}
+							key={thickness.value}
+							defaultValue={thickness === selectedThickness}
 						>
 							{thickness.thickness}
 						</option>
@@ -703,7 +704,8 @@ export function Letters({ item }) {
 					options={finishingOptions.map((finishing) => (
 						<option
 							value={finishing.name}
-							selected={finishing.name === selectedFinishing}
+							key={finishing.name}
+							defaultValue={finishing.name === selectedFinishing}
 						>
 							{finishing.name}
 						</option>
@@ -717,7 +719,8 @@ export function Letters({ item }) {
 					options={waterProofSelections?.map((option) => (
 						<option
 							value={option.option}
-							selected={option.option == waterproof}
+							key={option.option}
+							defaultValue={option.option == waterproof}
 						>
 							{option.option}
 						</option>
@@ -731,7 +734,8 @@ export function Letters({ item }) {
 					options={mountingOptions.map((option) => (
 						<option
 							value={option.mounting_option}
-							selected={option.mounting_option === selectedMounting}
+							key={option.mounting_option}
+							defaultValue={option.mounting_option === selectedMounting}
 						>
 							{option.mounting_option}
 						</option>
@@ -750,7 +754,8 @@ export function Letters({ item }) {
 							options={studLengthOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == studLength}
+									key={option.value}
+									defaultValue={option.value == studLength}
 								>
 									{option.value}
 								</option>
@@ -767,7 +772,8 @@ export function Letters({ item }) {
 							options={spacerStandoffOptions.map((option) => (
 								<option
 									value={option.value}
-									selected={option.value == spacerStandoffDistance}
+									key={option.value}
+									defaultValue={option.value == spacerStandoffDistance}
 								>
 									{option.value}
 								</option>

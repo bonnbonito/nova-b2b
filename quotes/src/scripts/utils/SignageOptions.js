@@ -261,7 +261,7 @@ const metalLaminateOptions = [
 
 const arrayRange = (start, stop, step, inches = true) =>
 	Array.from({ length: (stop - start) / step + 1 }, (value, index) => (
-		<option value={`${start + index * step}${inches ? '"' : "'"}`}>
+		<option key={index} value={`${start + index * step}${inches ? '"' : "'"}`}>
 			{start + index * step}
 			{inches ? '"' : "'"}
 		</option>

@@ -61,7 +61,56 @@ class Pending_Payment {
 		add_action( 'wpo_wcpdf_after_order_details', array( $this, 'etransfer_instructions' ), 10, 2 );
 		add_filter( 'woocommerce_email_enabled_customer_completed_order', array( $this, 'disable_completed_email' ), 10, 2 );
 		add_filter( 'woocommerce_order_get_date_completed', array( $this, 'modify_order_completed_date' ), 10, 2 );
+		add_filter( 'woocommerce_order_data_store_cpt_get_orders_query', array( $this, 'handle_overdue_query' ), 10, 2 );
+		add_action( 'show_user_profile', array( $this, 'overdue_list' ) );
+		add_action( 'edit_user_profile', array( $this, 'overdue_list' ) );
 	}
+
+	public function overdue_list( $user ) {
+		$overdue_orders = get_user_meta( $user->ID, 'overdue_orders', true );
+		echo '<h2>Overdue Orders</h2>';
+
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'nova_pendings';
+
+		$query = $wpdb->prepare( "SELECT * FROM {$table_name} WHERE payment_status = %s", 'Pending' );
+
+		$pending_payments = $wpdb->get_results( $query );
+
+		$overdue_orders = array();
+
+		foreach ( $pending_payments as $pending_payment ) {
+			$order    = wc_get_order( $pending_payment->payment_order );
+			$original = $pending_payment->original_order;
+			$user_id  = $order->get_user_id();
+			if ( $user_id == $user->ID ) {
+				$today = date( 'F d, Y' );
+
+				echo '<pre>';
+				$payment_date = date( 'F d, Y', strtotime( $pending_payment->payment_date ) );
+				print_r( $payment_date . ' ' . $pending_payment->payment_order . ' ' . ( strtotime( $today ) > strtotime( $payment_date ) ) );
+				echo '</pre>';
+
+				if ( strtotime( $today ) > strtotime( $payment_date ) ) {
+					$overdue_orders[] = $pending_payment->payment_order;
+					update_post_meta( $pending_payment->payment_order, 'is_overdue', true );
+				} else {
+					update_post_meta( $pending_payment->payment_order, 'is_overdue', false );
+				}
+			}
+		}
+
+		if ( $overdue_orders ) {
+			update_user_meta( $user->ID, 'overdue_orders', implode( ',', $overdue_orders ) );
+			echo '<ul>';
+			foreach ( $overdue_orders as $overdue_order ) {
+				$order = wc_get_order( $overdue_order );
+				echo '<li><a href="' . get_edit_post_link( $overdue_order ) . '">' . $order->get_order_number() . '</a></li>';
+			}
+			echo '</ul>';
+		}
+	}
+
 
 
 	public function modify_order_completed_date( $date_completed, $order ) {
@@ -111,15 +160,15 @@ class Pending_Payment {
 		?>
 <h3 style="margin-bottom:4pt;">E-transfer Instruction</h3>
 <ul style="list-style: disc; margin-left: 5pt; padding-left: 5pt;">
-    <li>Log in to your bank’s website or mobile app.</li>
-    <li>Go to the “Send Money” or “E-Transfer” section.</li>
-    <li>Enter the email: <b>hello@novasignage.com</b></li>
-    <li>Specify the amount to send.</li>
-    <li>Create a security question if the bank requires one. Please set the answer to: <b>neonsigns</b></li>
-    <li>Confirm the details and send the transfer.</li>
-    <li>Inform our team via email</li>
+	<li>Log in to your bank’s website or mobile app.</li>
+	<li>Go to the “Send Money” or “E-Transfer” section.</li>
+	<li>Enter the email: <b>hello@novasignage.com</b></li>
+	<li>Specify the amount to send.</li>
+	<li>Create a security question if the bank requires one. Please set the answer to: <b>neonsigns</b></li>
+	<li>Confirm the details and send the transfer.</li>
+	<li>Inform our team via email</li>
 </ul>
-<?php
+		<?php
 		echo ob_get_clean();
 	}
 
@@ -300,7 +349,7 @@ class Pending_Payment {
 
 <p>Original Total: <?php echo $original_total; ?></p>
 
-<?php
+		<?php
 	}
 
 	public function hide_specific_orders( $query ) {
@@ -441,6 +490,8 @@ class Pending_Payment {
 		return $slug;
 	}
 
+
+
 	public function send_payment_reminder_email_manual( $payment_id, $index ) {
 		$payment           = $this->get_data( $payment_id );
 		$payment_order_id  = $payment->payment_order;
@@ -448,8 +499,6 @@ class Pending_Payment {
 		$pending_total     = $payment->pending_total;
 		$currency          = $payment->currency;
 		$payment_type      = $payment->payment_select;
-
-		$manual_delivered_date = get_field( 'manual_delivered_date', $original_order_id );
 
 		$order          = wc_get_order( $payment_order_id );
 		$original_order = wc_get_order( $original_order_id );
@@ -539,6 +588,50 @@ class Pending_Payment {
 		}
 	}
 
+	public function check_overdue( $payment ) {
+		$payment_type          = $payment->payment_select;
+		$payment_order_id      = $payment->payment_order;
+		$original_order_id     = $payment->original_order;
+		$manual_delivered_date = get_field( 'manual_delivered_date', $original_order_id );
+
+		if ( isset( $manual_delivered_date ) && ! empty( $manual_delivered_date ) ) {
+			return;
+		}
+
+		$order          = wc_get_order( $payment_order_id );
+		$original_order = wc_get_order( $original_order_id );
+		$user_id        = $order->get_user_id();
+
+		$completed_date_obj  = $original_order->get_date_completed();
+		$shipped_date        = $completed_date_obj->date( 'F d, Y' );
+		$days_after_shipping = get_field( 'days_after_shipping', $payment_type );
+		$deadline            = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
+		$payment_date        = date( 'F d, Y', $deadline );
+		$current_overdue     = get_user_meta( $user_id, 'overdue_orders', true );
+
+		$today = date( 'F d, Y' );
+
+		if ( strtotime( $today ) > strtotime( $payment_date ) ) {
+			if ( $current_overdue ) {
+				$current_overdue   = explode( ',', $current_overdue );
+				$current_overdue[] = $payment_order_id;
+				update_user_meta( $user_id, 'overdue_orders', implode( ',', $current_overdue ) );
+			}
+
+			update_post_meta( $payment_order_id, 'is_overdue', true );
+		} else {
+			update_post_meta( $payment_order_id, 'is_overdue', false );
+			if ( $current_overdue ) {
+				$current_overdue = explode( ',', $current_overdue );
+				$key             = array_search( $payment_order_id, $current_overdue );
+				if ( $key !== false ) {
+					unset( $current_overdue[ $key ] );
+					update_user_meta( $user_id, 'overdue_orders', implode( ',', $current_overdue ) );
+				}
+			}
+		}
+	}
+
 	public function send_payment_reminder_email( $payment ) {
 
 		$payment_type          = $payment->payment_select;
@@ -548,7 +641,7 @@ class Pending_Payment {
 		$currency              = $payment->currency;
 		$manual_delivered_date = get_field( 'manual_delivered_date', $original_order_id );
 
-		if ( $manual_delivered_date ) {
+		if ( isset( $manual_delivered_date ) && ! empty( $manual_delivered_date ) ) {
 			return;
 		}
 
@@ -582,6 +675,7 @@ class Pending_Payment {
 		$payment_url = $order->get_checkout_payment_url();
 
 		if ( have_rows( 'payment_emails', $payment_type ) ) :
+
 			while ( have_rows( 'payment_emails', $payment_type ) ) :
 				the_row();
 				$days = get_sub_field( 'send_after_days' );
@@ -667,16 +761,16 @@ class Pending_Payment {
 <p>Hello,</p>
 <p>An outstanding invoice for #{order_number} is due today. We have sent a reminder to:</p>
 <ul>
-    <li>Customer: {customer_name} - {business_id} </li>
-    <li>Company: {business_name}</li>
-    <li>Order ID: #{order_number}</li>
-    <li>Deadline of payment: {deadline}</li>
-    <li>Unpaid Balance: {pending_payment}</li>
+	<li>Customer: {customer_name} - {business_id} </li>
+	<li>Company: {business_name}</li>
+	<li>Order ID: #{order_number}</li>
+	<li>Deadline of payment: {deadline}</li>
+	<li>Unpaid Balance: {pending_payment}</li>
 </ul>
 
 <p>Order details:</p>
 {order_details}
-<?php
+		<?php
 		$message = ob_get_clean();
 
 		$user_id       = $order->get_user_id() ? $order->get_user_id() : 0;
@@ -720,14 +814,14 @@ class Pending_Payment {
 <p>Hello,</p>
 <p>We've informed your client that the product is now prepared and ready to ship:</p>
 <ul>
-    <li>Customer: {customer_name} - {business_id} </li>
-    <li>Company: {business_name}</li>
-    <li>Order ID: #{order_number}</li>
+	<li>Customer: {customer_name} - {business_id} </li>
+	<li>Company: {business_name}</li>
+	<li>Order ID: #{order_number}</li>
 </ul>
 
 <p>Here's the final invoice and their tracking information:</p>
 {order_details}
-<?php
+		<?php
 		$message       = ob_get_clean();
 		$first_name    = $order->get_billing_first_name();
 		$user_id       = $order->get_user_id() ? $order->get_user_id() : 0;
@@ -770,6 +864,48 @@ class Pending_Payment {
 		}
 	}
 
+	public function handle_overdue_query( $query, $query_vars ) {
+		if ( ! empty( $query_vars['overdue_orders'] ) && 'overdue' === $query_vars['overdue_orders'] ) {
+			$query['meta_query']['relation'] = 'AND';
+			$query['meta_query'][]           = array(
+				'key'   => 'is_overdue',
+				'value' => 0,
+			);
+			$query['meta_query'][]           = array(
+				'key'     => '_from_order_id',
+				'compare' => 'EXISTS',
+			);
+		}
+
+		return $query;
+	}
+
+	public function get_user_overdue_orders() {
+
+		$args = array(
+			'limit'          => -1,
+			'status'         => array( 'wc-processing', 'wc-on-hold', 'wc-pending' ),
+			'overdue_orders' => 'overdue',
+		);
+
+		return wc_get_orders( $args );
+	}
+
+	public function check_overdue_orders() {
+		$orders = $this->get_user_overdue_orders();
+
+		// Log the orders
+		if ( ! empty( $orders ) ) {
+			foreach ( $orders as $order ) {
+				error_log( 'Overdue Order ID: ' . $order->get_id() );
+			}
+		} else {
+			error_log( 'No overdue orders found.' );
+		}
+	}
+
+
+
 	public function check_pending_payments() {
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'nova_pendings';
@@ -781,6 +917,8 @@ class Pending_Payment {
 		foreach ( $pending_payments as $payment ) {
 
 			$this->send_payment_reminder_email( $payment );
+
+			$this->check_overdue( $payment );
 
 		}
 	}
@@ -1485,22 +1623,48 @@ class Pending_Payment {
 			return array();
 		}
 
-		// Query for orders
-		$query = new \WC_Order_Query(
-			array(
-				'customer_id' => $customer_id,
-				'status'      => 'wc-pending',
-				'limit'       => -1,
-				'meta_key'    => 'is_overdue',
-				'meta_value'  => true,
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'nova_pendings';
+
+		// Fetch pending payments
+		$pending_payments = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT * FROM {$table_name} WHERE payment_status = %s",
+				'Pending'
 			)
 		);
 
-		// Get the orders
-		$orders = $query->get_orders();
+		$overdue_orders = array();
 
-		return $orders;
+		// Get today's date in 'Y-m-d' format
+		$today = date( 'Y-m-d' );
+
+		foreach ( $pending_payments as $pending_payment ) {
+			// Get the order object
+			$order = wc_get_order( $pending_payment->payment_order );
+
+			if ( ! $order ) {
+				continue; // Skip if order doesn't exist
+			}
+
+			// Get the user ID associated with the order
+			$user_id = $order->get_user_id();
+
+			// Compare user IDs (ensure both are integers)
+			if ( intval( $user_id ) == intval( $customer_id ) ) {
+				// Get the payment date in 'Y-m-d' format
+				$payment_date = date( 'Y-m-d', strtotime( $pending_payment->payment_date ) );
+
+				// Check if the payment date is before today
+				if ( $payment_date < $today ) {
+					$overdue_orders[] = $order;
+				}
+			}
+		}
+
+		return $overdue_orders;
 	}
+
 
 	public function has_overdue_pending_payment_orders( $customer_id ) {
 		$orders = $this->get_overdue_pending_payment_orders( $customer_id );
@@ -1531,14 +1695,14 @@ class Pending_Payment {
 			ob_start();
 			?>
 <a href="<?php echo esc_url( $order_url ); ?>"
-    class="bg-red-100 border-solid border border-red-400 text-red-700 px-4 py-3 rounded relative mb-1 inline-block"
-    role="alert">
-    <strong class="font-bold">Order #<?php echo esc_html( $order_id ); ?> -
-        <?php echo wc_price( $order_total ); ?></strong>:
-    <span class="block sm:inline">Click here to pay.</span>
+	class="bg-red-100 border-solid border border-red-400 text-red-700 px-4 py-3 rounded relative mb-1 inline-block"
+	role="alert">
+	<strong class="font-bold">Order #<?php echo esc_html( $order_id ); ?> -
+			<?php echo wc_price( $order_total ); ?></strong>:
+	<span class="block sm:inline">Click here to pay.</span>
 </a>
 
-<?php
+			<?php
 			echo ob_get_clean();
 		}
 		echo '</div>';
@@ -1546,7 +1710,8 @@ class Pending_Payment {
 
 	public function overdue_pending_payment_ouput() {
 		ob_start();
-		$this->display_overdue_pending_payment_orders( get_current_user_id() );
+		$user_id = isset( $_GET['userid'] ) && ! empty( $_GET['userid'] ) ? intval( $_GET['userid'] ) : get_current_user_id();
+		$this->display_overdue_pending_payment_orders( $user_id );
 		return ob_get_clean();
 	}
 
@@ -1562,6 +1727,8 @@ class Pending_Payment {
 		if ( ! $this->has_overdue_pending_payment_orders( $customer_id ) ) {
 			return;
 		}
+
+		error_log( $customer_id . ' user has overdue payment orders' );
 
 		$redirect_url = get_permalink( get_page_by_path( 'overdue-orders' ) );
 

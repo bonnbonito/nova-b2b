@@ -12,7 +12,6 @@ export default function EditableText({ id, text, onChange }) {
 	useEffect(() => {}, [label]);
 
 	function handleOnCancel() {
-		console.log('Cancelling');
 		setEditing(!editing);
 		setLabel(text);
 	}
@@ -28,13 +27,13 @@ export default function EditableText({ id, text, onChange }) {
 				xmlns="http://www.w3.org/2000/svg"
 				fill="none"
 				viewBox="0 0 24 24"
-				stroke-width="1.5"
+				strokeWidth="1.5"
 				stroke="red"
-				class="w-6 h-6"
+				className="w-6 h-6"
 			>
 				<path
-					stroke-linecap="round"
-					stroke-linejoin="round"
+					strokeLinecap="round"
+					strokeLinejoin="round"
 					d="M6 18L18 6M6 6l12 12"
 				/>
 			</svg>
@@ -57,13 +56,13 @@ export default function EditableText({ id, text, onChange }) {
 				xmlns="http://www.w3.org/2000/svg"
 				fill="none"
 				viewBox="0 0 24 24"
-				stroke-width="1.5"
+				strokeWidth="1.5"
 				stroke="#008000"
-				class="w-6 h-6"
+				className="w-6 h-6"
 			>
 				<path
-					stroke-linecap="round"
-					stroke-linejoin="round"
+					strokeLinecap="round"
+					strokeLinejoin="round"
 					d="M4.5 12.75l6 6 9-13.5"
 				/>
 			</svg>

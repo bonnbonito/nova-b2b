@@ -35,6 +35,11 @@ import {
 	metalFinishColors,
 } from '../../../../utils/ColorOptions';
 
+const newMetalFinishColors = [
+	{ name: 'Aluminum Brushed', color: '#ddd' },
+	...metalFinishColors,
+];
+
 export function Logo({ item }) {
 	const { signage, setSignage, setMissing } = useAppContext();
 
@@ -513,8 +518,9 @@ export function Logo({ item }) {
 					onChange={handleOnChangeThickness}
 					options={thicknessOptions.map((thickness) => (
 						<option
+							key={thickness.value}
 							value={thickness.value}
-							selected={thickness === selectedThickness}
+							defaultValue={thickness === selectedThickness}
 						>
 							{thickness.thickness}
 						</option>
@@ -538,10 +544,11 @@ export function Logo({ item }) {
 				<Dropdown
 					title="Metal Laminate"
 					onChange={handleChangeMetalLaminate}
-					options={metalFinishColors.map((laminate) => (
+					options={newMetalFinishColors.map((laminate) => (
 						<option
+							key={laminate.name}
 							value={laminate.name}
-							selected={laminate.name === metalLaminate}
+							defaultValue={laminate.name === metalLaminate}
 						>
 							{laminate.name}
 						</option>
@@ -563,6 +570,7 @@ export function Logo({ item }) {
 						setAcrylicBase(color);
 						setOpenAcrylicColor(false);
 					}}
+					samePrice={false}
 				/>
 
 				<Dropdown
@@ -570,8 +578,9 @@ export function Logo({ item }) {
 					onChange={(e) => setWaterproof(e.target.value)}
 					options={waterProofSelections.map((option) => (
 						<option
+							key={option.option}
 							value={option.option}
-							selected={option.option == waterproof}
+							defaultValue={option.option == waterproof}
 						>
 							{option.option}
 						</option>
@@ -584,8 +593,9 @@ export function Logo({ item }) {
 					onChange={handleOnChangeMount}
 					options={mountingOptions.map((option) => (
 						<option
+							key={option.mounting_option}
 							value={option.mounting_option}
-							selected={option.mounting_option === selectedMounting}
+							defaultValue={option.mounting_option === selectedMounting}
 						>
 							{option.mounting_option}
 						</option>
@@ -603,8 +613,9 @@ export function Logo({ item }) {
 							onChange={handleonChangeStudLength}
 							options={studLengthOptions.map((option) => (
 								<option
+									key={option.value}
 									value={option.value}
-									selected={option.value == studLength}
+									defaultValue={option.value == studLength}
 								>
 									{option.value}
 								</option>
@@ -620,8 +631,9 @@ export function Logo({ item }) {
 							onChange={handleonChangeSpacerDistance}
 							options={spacerStandoffOptions.map((option) => (
 								<option
+									key={option.value}
 									value={option.value}
-									selected={option.value == spacerStandoffDistance}
+									defaultValue={option.value == spacerStandoffDistance}
 								>
 									{option.value}
 								</option>

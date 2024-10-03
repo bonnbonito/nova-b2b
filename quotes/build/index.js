@@ -2047,7 +2047,7 @@ function createStringFromObject(mergedProps, registered, obj) {
   return string;
 }
 
-var labelPattern = /label:\s*([^\s;\n{]+)\s*(;|$)/g;
+var labelPattern = /label:\s*([^\s;{]+)\s*(;|$)/g;
 var sourceMapPattern;
 
 {
@@ -2425,7 +2425,7 @@ function getRegisteredStyles(registered, registeredStyles, classNames) {
   classNames.split(' ').forEach(function (className) {
     if (registered[className] !== undefined) {
       registeredStyles.push(registered[className] + ";");
-    } else {
+    } else if (className) {
       rawClassName += className + " ";
     }
   });
@@ -2952,7 +2952,8 @@ function Dropdown({
     style: style,
     className: `cursor-pointer text-ellipsis border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] ${selectClass}`,
     onChange: onChange,
-    value: value
+    value: value,
+    readOnly: onlyValue
   }, !onlyValue && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
     value: ""
   }, "CHOOSE OPTION"), options));
@@ -2989,7 +2990,6 @@ function EditableText({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {}, [label]);
   function handleOnCancel() {
-    console.log('Cancelling');
     setEditing(!editing);
     setLabel(text);
   }
@@ -3002,12 +3002,12 @@ function EditableText({
     xmlns: "http://www.w3.org/2000/svg",
     fill: "none",
     viewBox: "0 0 24 24",
-    "stroke-width": "1.5",
+    strokeWidth: "1.5",
     stroke: "red",
-    class: "w-6 h-6"
+    className: "w-6 h-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
-    "stroke-linecap": "round",
-    "stroke-linejoin": "round",
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
     d: "M6 18L18 6M6 6l12 12"
   })));
   function handleOnSave() {
@@ -3023,12 +3023,12 @@ function EditableText({
     xmlns: "http://www.w3.org/2000/svg",
     fill: "none",
     viewBox: "0 0 24 24",
-    "stroke-width": "1.5",
+    strokeWidth: "1.5",
     stroke: "#008000",
-    class: "w-6 h-6"
+    className: "w-6 h-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
-    "stroke-linecap": "round",
-    "stroke-linejoin": "round",
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
     d: "M4.5 12.75l6 6 9-13.5"
   })));
   const EditIcon = () => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -3118,12 +3118,11 @@ function FontsDropdown({
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm font-title",
     onClick: handleCustomFontSelection
-  }, "- Custom Font"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: ""
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
-    class: "p-2 pb-0"
+  }, "- Custom Font"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
+    className: "p-2 pb-0"
   }, "Popular Fonts"), _utils_FontOptions__WEBPACK_IMPORTED_MODULE_1__.fontDefaultOptions.popular_fonts.split(',').map(popularfont => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      key: popularfont,
       className: `p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm ${popularfont === font && 'bg-slate-200'}`,
       style: {
         fontFamily: popularfont
@@ -3134,9 +3133,10 @@ function FontsDropdown({
       }
     }, "- ", popularfont);
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
-    class: "p-2 pb-0"
+    className: "p-2 pb-0"
   }, "Fonts"), _utils_FontOptions__WEBPACK_IMPORTED_MODULE_1__.fontDefaultOptions.fonts.split(',').map(regFont => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      key: regFont,
       className: `p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm ${regFont === font && 'bg-slate-200'}`,
       style: {
         fontFamily: regFont
@@ -3460,15 +3460,18 @@ function ModalSave({
     className: "block mb-4 text-center text-sm px-3 py-2 text-white no-underline bg-nova-primary rounded hover:bg-nova-secondary"
   }, "Go to Mockups")))) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_5__.Content, {
     className: "data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[550px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none z-[51] overflow-auto"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_5__.Description, {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_5__.Title, {
+    className: "m-0 font-title uppercase font-medium text-2xl"
+  }, "Error"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_5__.Description, {
     className: "mt-[10px] mb-5 text-[15px] leading-normal"
-  }, error.type === 'missing' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
+  }, error.type === 'missing' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "font-title mb-4 uppercase"
-  }, "Missing Values:"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "Missing Values:")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "mt-[10px] mb-5 text-[15px] leading-normal",
     dangerouslySetInnerHTML: {
       __html: error.message
     }
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_5__.Close, {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_dialog__WEBPACK_IMPORTED_MODULE_5__.Close, {
     asChild: true
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-nova-gray absolute top-[10px] right-[10px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center focus:shadow-[0_0_0_2px] focus:outline-none border cursor-pointer",
@@ -3522,11 +3525,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _RenderSignageDetails__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./RenderSignageDetails */ "./src/scripts/RenderSignageDetails.js");
 /* harmony import */ var _utils_TooltipText__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./utils/TooltipText */ "./src/scripts/utils/TooltipText.js");
-
 
 
 
@@ -3542,14 +3542,14 @@ const Prices = (0,react__WEBPACK_IMPORTED_MODULE_0__.memo)(function Prices({
     className: "text-xs lowercase"
   }, "/each")) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, "TBD"), [price, singlePrice, currency]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: `block ${borderTop}`
+    className: `block border-x-0 border-b-0 ${borderTop ? 'border-t border-solid border-gray-200' : ''}`
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex justify-between py-2 font-title uppercase md:tracking-[1.6px] text-lg gap-2"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_TooltipText__WEBPACK_IMPORTED_MODULE_2__["default"], {
     text: item.title
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-ellipsis overflow-hidden text-nowrap"
-  }, item.title)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_TooltipText__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }, item.title)), outputPrice && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_TooltipText__WEBPACK_IMPORTED_MODULE_2__["default"], {
     text: outputPrice
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-ellipsis overflow-hidden text-nowrap"
@@ -3560,10 +3560,6 @@ const Prices = (0,react__WEBPACK_IMPORTED_MODULE_0__.memo)(function Prices({
     classValue: "text-left text-sm break-words"
   }));
 });
-Prices.propTypes = {
-  item: (prop_types__WEBPACK_IMPORTED_MODULE_3___default().object).isRequired,
-  borderTop: (prop_types__WEBPACK_IMPORTED_MODULE_3___default().string)
-};
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Prices);
 
 /***/ }),
@@ -4026,7 +4022,7 @@ function Sidebar() {
   }, memoizedSignage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Prices__WEBPACK_IMPORTED_MODULE_3__["default"], {
     key: item.id,
     item: item,
-    borderTop: index > 0 && 'border-t mt-2'
+    borderTop: index > 0 && true
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("hr", {
     className: "mt-5"
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -4357,7 +4353,7 @@ const Signage = ({
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.TrashIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: `signage-content ${open ? 'open' : ''}`
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: (!open || item.type === 'letters') && 'overflow-hidden'
+    className: !open || item.type === 'letters' ? 'overflow-hidden' : 'overflow-auto'
   }, children)));
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,react__WEBPACK_IMPORTED_MODULE_0__.memo)(Signage));
@@ -5064,7 +5060,7 @@ function UploadFont({
     cy: "12",
     r: "10",
     stroke: "currentColor",
-    "stroke-width": "4"
+    strokeWidth: "4"
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
     className: "opacity-75",
     fill: "currentColor",
@@ -5574,10 +5570,10 @@ function Letters({
       return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
         key: index,
         value: val,
-        selected: val === selectedLetterHeight
+        defaultValue: val === selectedLetterHeight
       }, val, "\"");
     }));
-  }, [lettersHeight, letterHeightOptions]);
+  }, [lettersHeight]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     adjustFontSize();
   }, [letters]);
@@ -5648,7 +5644,7 @@ function Letters({
     font != 'Custom font' && setFontFileUrl('');
   }, [color, font]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    clasName: "py-4 my-4"
+    className: "py-4 my-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "font-title",
     dangerouslySetInnerHTML: {
@@ -5705,8 +5701,9 @@ function Letters({
     value: acrylicChannelThickness,
     onChange: handleOnChangeThickness,
     options: _options__WEBPACK_IMPORTED_MODULE_13__.acrylicChannelThicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
-      selected: thickness.value === acrylicChannelThickness
+      defaultValue: thickness.value === acrylicChannelThickness
     }, thickness.value)),
     onlyValue: true
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -5731,16 +5728,18 @@ function Letters({
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
     options: _metal_channel_metalChannelOptions__WEBPACK_IMPORTED_MODULE_10__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: color,
       value: color,
-      selected: color == ledLightColor
+      defaultValue: color == ledLightColor
     }, color)),
     value: ledLightColor
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Back Option",
     onChange: handleOnChangeBackOption,
     options: backOptionOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == backOption
+      defaultValue: option.option == backOption
     }, option.option)),
     value: backOption,
     onlyValue: true
@@ -5748,40 +5747,45 @@ function Letters({
     title: "Mounting Options",
     onChange: handleOnChangeMount,
     options: mountingDefaultOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.mounting_option,
       value: option.mounting_option,
-      selected: option.mounting_option === selectedMounting
+      defaultValue: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: selectedMounting
   }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "SPACER DISTANCE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == spacerStandoffDistance
+      defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
   })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.STUD_MOUNT && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == waterproof
+      defaultValue: option.option == waterproof
     }, option.option)),
     value: waterproof,
     onlyValue: true
@@ -5789,7 +5793,7 @@ function Letters({
     title: "Included Items",
     options: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.LIGHTING_INDOOR,
-      selected: _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.LIGHTING_INDOOR
+      defaultValue: _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.LIGHTING_INDOOR
     }, _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.LIGHTING_INDOOR),
     value: _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.LIGHTING_INDOOR,
     onlyValue: true
@@ -5798,6 +5802,7 @@ function Letters({
     onChange: handleOnChangeSets,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.setOptions,
     value: sets,
+    defaultValue: sets,
     onlyValue: true
   })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-xs text-[#9F9F9F] mb-4"
@@ -6143,7 +6148,7 @@ function Logo({
     color?.name != 'Custom Color' && setCustomColor('');
   }, [color]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    clasName: "py-4 my-4"
+    className: "py-4 my-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "font-title",
     dangerouslySetInnerHTML: {
@@ -6156,8 +6161,9 @@ function Logo({
     value: acrylicChannelThickness,
     onChange: handleOnChangeThickness,
     options: _options__WEBPACK_IMPORTED_MODULE_10__.acrylicChannelThicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
-      selected: thickness.value === acrylicChannelThickness
+      defaultValue: thickness.value === acrylicChannelThickness
     }, thickness.value)),
     onlyValue: true
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -6187,16 +6193,18 @@ function Logo({
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
     options: _metal_channel_metalChannelOptions__WEBPACK_IMPORTED_MODULE_7__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: color,
       value: color,
-      selected: color == ledLightColor
+      defaultValue: color == ledLightColor
     }, color)),
     value: ledLightColor
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Back Option",
     onChange: handleOnChangeBackOption,
     options: backOptionOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == backOption
+      defaultValue: option.option == backOption
     }, option.option)),
     value: backOption,
     onlyValue: true
@@ -6204,47 +6212,53 @@ function Logo({
     title: "Mounting Options",
     onChange: handleOnChangeMount,
     options: mountingDefaultOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.mounting_option,
       value: option.mounting_option,
-      selected: option.mounting_option === selectedMounting
+      defaultValue: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: selectedMounting
   }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "SPACER DISTANCE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == spacerStandoffDistance
+      defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
   })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_MOUNT && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == waterproof
+      defaultValue: option.option == waterproof
     }, option.option)),
     value: waterproof
   }), waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.INDOOR_NOT_WATERPROOF && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Included Items",
     options: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.LIGHTING_INDOOR,
       value: _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.LIGHTING_INDOOR,
-      selected: _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.LIGHTING_INDOOR
+      defaultValue: _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.LIGHTING_INDOOR
     }, _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.LIGHTING_INDOOR),
     value: _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.LIGHTING_INDOOR,
     onlyValue: true
@@ -6810,10 +6824,10 @@ function Letters({
       return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
         key: index,
         value: val,
-        selected: val === selectedLetterHeight
+        defaultValue: val === selectedLetterHeight
       }, val, "\"");
     }));
-  }, [lettersHeight, letterHeightOptions]);
+  }, [lettersHeight]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     adjustFontSize();
   }, [letters]);
@@ -6903,7 +6917,7 @@ function Letters({
     font != 'Custom font' && setFontFileUrl('');
   }, [color, font]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    clasName: "py-4 my-4"
+    className: "py-4 my-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "font-title",
     dangerouslySetInnerHTML: {
@@ -6961,8 +6975,9 @@ function Letters({
     value: acrylicChannelThickness,
     onChange: handleOnChangeThickness,
     options: _options__WEBPACK_IMPORTED_MODULE_14__.acrylicChannelThicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
-      selected: thickness.value === acrylicChannelThickness
+      defaultValue: thickness.value === acrylicChannelThickness
     }, thickness.value)),
     onlyValue: true
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -6974,8 +6989,9 @@ function Letters({
     title: "Acrylic Front Cover",
     onChange: handleOnChangeWhite,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_11__.whiteOptionsResin.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option == frontAcrylicCover
+      defaultValue: option == frontAcrylicCover
     }, option.option)),
     value: frontAcrylicCover
   }), frontAcrylicCover === '3M 3630 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_13__["default"], {
@@ -6995,16 +7011,18 @@ function Letters({
     title: "3M 3635 Vinyl",
     onChange: handleOnChangeVinyl3635,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_11__.vinlyl3635Options.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.code,
       value: `${option.name} - [${option.code}]`,
-      selected: `${option.name} - [${option.code}]` == vinyl3635
+      defaultValue: `${option.name} - [${option.code}]` == vinyl3635
     }, `${option.name} - [${option.code}]`)),
     value: vinyl3635
   })), (frontAcrylicCover === '3M 3630 Vinyl' || frontAcrylicCover === '3M 3635 Vinyl') && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Front & Back Vinyl",
     onChange: handleOnChangeFrontBackVinyl,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.frontBackVinylOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == frontBackVinyl
+      defaultValue: option.option == frontBackVinyl
     }, option.option)),
     value: frontBackVinyl
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_12__["default"], {
@@ -7026,16 +7044,18 @@ function Letters({
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
     options: _metal_channel_metalChannelOptions__WEBPACK_IMPORTED_MODULE_10__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: color,
       value: color,
-      selected: color == ledLightColor
+      defaultValue: color == ledLightColor
     }, color)),
     value: ledLightColor
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Back Option",
     onChange: handleOnChangeBackOption,
     options: backOptionOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == backOption
+      defaultValue: option.option == backOption
     }, option.option)),
     value: backOption,
     onlyValue: true
@@ -7043,40 +7063,45 @@ function Letters({
     title: "Mounting Options",
     onChange: handleOnChangeMount,
     options: mountingDefaultOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.mounting_option,
       value: option.mounting_option,
-      selected: option.mounting_option === selectedMounting
+      defaultValue: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: selectedMounting
   }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "SPACER DISTANCE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == spacerStandoffDistance
+      defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
   })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.STUD_MOUNT && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == waterproof
+      defaultValue: option.option == waterproof
     }, option.option)),
     value: waterproof,
     onlyValue: true
@@ -7084,7 +7109,7 @@ function Letters({
     title: "Included Items",
     options: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.LIGHTING_INDOOR,
-      selected: _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.LIGHTING_INDOOR
+      defaultValue: _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.LIGHTING_INDOOR
     }, _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.LIGHTING_INDOOR),
     value: _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.LIGHTING_INDOOR,
     onlyValue: true
@@ -7498,7 +7523,7 @@ function Logo({
     }
   }, [width, height, frontAcrylicCover, selectedMounting, sets, frontBackVinyl]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    clasName: "py-4 my-4"
+    className: "py-4 my-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "font-title",
     dangerouslySetInnerHTML: {
@@ -7511,8 +7536,9 @@ function Logo({
     value: acrylicChannelThickness,
     onChange: handleOnChangeThickness,
     options: _options__WEBPACK_IMPORTED_MODULE_11__.acrylicChannelThicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
-      selected: thickness.value === acrylicChannelThickness
+      defaultValue: thickness.value === acrylicChannelThickness
     }, thickness.value)),
     onlyValue: true
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -7529,8 +7555,9 @@ function Logo({
     title: "Acrylic Front Cover",
     onChange: handleOnChangeWhite,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_8__.whiteOptionsResin.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option == frontAcrylicCover
+      defaultValue: option == frontAcrylicCover
     }, option.option)),
     value: frontAcrylicCover
   }), frontAcrylicCover === '3M 3630 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_10__["default"], {
@@ -7549,16 +7576,18 @@ function Logo({
     title: "3M 3635 Vinyl",
     onChange: handleOnChangeVinyl3635,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_8__.vinlyl3635Options.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.code,
       value: `${option.name} - [${option.code}]`,
-      selected: `${option.name} - [${option.code}]` == vinyl3635
+      defaultValue: `${option.name} - [${option.code}]` == vinyl3635
     }, `${option.name} - [${option.code}]`)),
     value: vinyl3635
   })), (frontAcrylicCover === '3M 3630 Vinyl' || frontAcrylicCover === '3M 3635 Vinyl') && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Front & Back Vinyl",
     onChange: handleOnChangeFrontBackVinyl,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.frontBackVinylOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == frontBackVinyl
+      defaultValue: option.option == frontBackVinyl
     }, option.option)),
     value: frontBackVinyl
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_9__["default"], {
@@ -7579,16 +7608,18 @@ function Logo({
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
     options: _metal_channel_metalChannelOptions__WEBPACK_IMPORTED_MODULE_7__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: color,
       value: color,
-      selected: color == ledLightColor
+      defaultValue: color == ledLightColor
     }, color)),
     value: ledLightColor
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Back Option",
     onChange: handleOnChangeBackOption,
     options: backOptionOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == backOption
+      defaultValue: option.option == backOption
     }, option.option)),
     value: backOption,
     onlyValue: true
@@ -7596,40 +7627,45 @@ function Logo({
     title: "Mounting Options",
     onChange: handleOnChangeMount,
     options: mountingDefaultOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.mounting_option,
       value: option.mounting_option,
-      selected: option.mounting_option === selectedMounting
+      defaultValue: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: selectedMounting
   }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "SPACER DISTANCE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == spacerStandoffDistance
+      defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
   })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_MOUNT && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == waterproof
+      defaultValue: option.option == waterproof
     }, option.option)),
     value: waterproof,
     onlyValue: true
@@ -7637,7 +7673,7 @@ function Logo({
     title: "Included Items",
     options: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR,
-      selected: _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR
+      defaultValue: _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR
     }, _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR),
     value: _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR,
     onlyValue: true
@@ -8234,10 +8270,10 @@ function Letters({
       return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
         key: index,
         value: val,
-        selected: val === selectedLetterHeight
+        defaultValue: val === selectedLetterHeight
       }, val, "\"");
     }));
-  }, [lettersHeight, letterHeightOptions]);
+  }, [lettersHeight]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     adjustFontSize();
   }, [letters]);
@@ -8322,7 +8358,7 @@ function Letters({
     font != 'Custom font' && setFontFileUrl('');
   }, [color, font]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    clasName: "py-4 my-4"
+    className: "py-4 my-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "font-title",
     dangerouslySetInnerHTML: {
@@ -8380,8 +8416,9 @@ function Letters({
     value: acrylicChannelThickness,
     onChange: handleOnChangeThickness,
     options: _options__WEBPACK_IMPORTED_MODULE_14__.acrylicChannelThicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
-      selected: thickness.value === acrylicChannelThickness
+      defaultValue: thickness.value === acrylicChannelThickness
     }, thickness.value)),
     onlyValue: true
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -8393,8 +8430,9 @@ function Letters({
     title: "Acrylic Front",
     onChange: handleOnChangeWhite,
     options: _options__WEBPACK_IMPORTED_MODULE_14__.acrylicFrontOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option == acrylicFront
+      defaultValue: option == acrylicFront
     }, option.option)),
     value: acrylicFront
   }), acrylicFront === '3M 3630 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_13__["default"], {
@@ -8414,8 +8452,9 @@ function Letters({
     title: "3M 3635 Vinyl",
     onChange: handleOnChangeVinyl3635,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_11__.vinlyl3635Options.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.code,
       value: `${option.name} - [${option.code}]`,
-      selected: `${option.name} - [${option.code}]` == vinyl3635
+      defaultValue: `${option.name} - [${option.code}]` == vinyl3635
     }, `${option.name} - [${option.code}]`)),
     value: vinyl3635
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_12__["default"], {
@@ -8437,48 +8476,54 @@ function Letters({
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
     options: _metal_channel_metalChannelOptions__WEBPACK_IMPORTED_MODULE_10__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: color,
       value: color,
-      selected: color == ledLightColor
+      defaultValue: color == ledLightColor
     }, color)),
     value: ledLightColor
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting Options",
     onChange: handleOnChangeMount,
     options: mountingDefaultOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.mounting_option,
       value: option.mounting_option,
-      selected: option.mounting_option === selectedMounting
+      defaultValue: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: selectedMounting
   }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "SPACER DISTANCE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == spacerStandoffDistance
+      defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
   })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.STUD_MOUNT && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == waterproof
+      defaultValue: option.option == waterproof
     }, option.option)),
     value: waterproof,
     onlyValue: true
@@ -8486,7 +8531,7 @@ function Letters({
     title: "Included Items",
     options: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.LIGHTING_INDOOR,
-      selected: _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.LIGHTING_INDOOR
+      defaultValue: _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.LIGHTING_INDOOR
     }, _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.LIGHTING_INDOOR),
     value: _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.LIGHTING_INDOOR,
     onlyValue: true
@@ -8886,7 +8931,7 @@ function Logo({
     }
   }, [width, height, acrylicFront, selectedMounting, sets]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    clasName: "py-4 my-4"
+    className: "py-4 my-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "font-title",
     dangerouslySetInnerHTML: {
@@ -8899,8 +8944,9 @@ function Logo({
     value: acrylicChannelThickness,
     onChange: handleOnChangeThickness,
     options: _options__WEBPACK_IMPORTED_MODULE_11__.acrylicChannelThicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
-      selected: thickness.value === acrylicChannelThickness
+      defaultValue: thickness.value === acrylicChannelThickness
     }, thickness.value)),
     onlyValue: true
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -8917,8 +8963,9 @@ function Logo({
     title: "Acrylic Front",
     onChange: handleOnChangeWhite,
     options: _options__WEBPACK_IMPORTED_MODULE_11__.acrylicFrontOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option == acrylicFront
+      defaultValue: option == acrylicFront
     }, option.option)),
     value: acrylicFront
   }), acrylicFront === '3M 3630 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_10__["default"], {
@@ -8937,8 +8984,9 @@ function Logo({
     title: "3M 3635 Vinyl",
     onChange: handleOnChangeVinyl3635,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_8__.vinlyl3635Options.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.code,
       value: `${option.name} - [${option.code}]`,
-      selected: `${option.name} - [${option.code}]` == vinyl3635
+      defaultValue: `${option.name} - [${option.code}]` == vinyl3635
     }, `${option.name} - [${option.code}]`)),
     value: vinyl3635
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_9__["default"], {
@@ -8959,55 +9007,61 @@ function Logo({
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
     options: _metal_channel_metalChannelOptions__WEBPACK_IMPORTED_MODULE_7__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: color,
       value: color,
-      selected: color == ledLightColor
+      defaultValue: color == ledLightColor
     }, color)),
     value: ledLightColor
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting Options",
     onChange: handleOnChangeMount,
     options: mountingDefaultOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.mounting_option,
       value: option.mounting_option,
-      selected: option.mounting_option === selectedMounting
+      defaultValue: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: selectedMounting
   }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "SPACER DISTANCE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == spacerStandoffDistance
+      defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
   })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_MOUNT && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == waterproof
+      defaultValue: option.option == waterproof
     }, option.option)),
     value: waterproof
   }), waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Included Items",
     options: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR,
-      selected: _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR
+      defaultValue: _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR
     }, _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR),
     value: _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR,
     onlyValue: true
@@ -9522,10 +9576,10 @@ function Letters({
       return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
         key: index,
         value: val,
-        selected: val === selectedLetterHeight
+        defaultValue: val === selectedLetterHeight
       }, val, "\"");
     }));
-  }, [lettersHeight, letterHeightOptions]);
+  }, [lettersHeight]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     adjustFontSize();
   }, [letters]);
@@ -9619,7 +9673,7 @@ function Letters({
     font != 'Custom font' && setFontFileUrl('');
   }, [font]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    clasName: "py-4 my-4"
+    className: "py-4 my-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "font-title",
     dangerouslySetInnerHTML: {
@@ -9676,8 +9730,9 @@ function Letters({
     value: acrylicChannelThickness,
     onChange: handleOnChangeThickness,
     options: _options__WEBPACK_IMPORTED_MODULE_13__.acrylicChannelThicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
-      selected: thickness.value === acrylicChannelThickness
+      defaultValue: thickness.value === acrylicChannelThickness
     }, thickness.value)),
     onlyValue: true
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -9689,7 +9744,7 @@ function Letters({
     title: "Return",
     options: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: "White",
-      selected: true
+      defaultValue: true
     }, acrylicReturn),
     value: acrylicReturn,
     onlyValue: true
@@ -9697,8 +9752,9 @@ function Letters({
     title: "Front Acrylic Cover",
     onChange: handleOnChangeFrontOption,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_11__.whiteOptionsResin.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option == frontAcrylicCover
+      defaultValue: option == frontAcrylicCover
     }, option.option)),
     value: frontAcrylicCover
   }), frontAcrylicCover === '3M 3630 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_12__["default"], {
@@ -9718,56 +9774,63 @@ function Letters({
     title: "3M 3635 Vinyl",
     onChange: handleOnChangeVinyl3635,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_11__.vinlyl3635Options.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.code,
       value: `${option.name} - [${option.code}]`,
-      selected: `${option.name} - [${option.code}]` == vinyl3635
+      defaultValue: `${option.name} - [${option.code}]` == vinyl3635
     }, `${option.name} - [${option.code}]`)),
     value: vinyl3635
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
     options: _metal_channel_metalChannelOptions__WEBPACK_IMPORTED_MODULE_10__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: color,
       value: color,
-      selected: color == ledLightColor
+      defaultValue: color == ledLightColor
     }, color)),
     value: ledLightColor
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting Options",
     onChange: handleOnChangeMount,
     options: mountingDefaultOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.mounting_option,
       value: option.mounting_option,
-      selected: option.mounting_option === selectedMounting
+      defaultValue: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: selectedMounting
   }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "SPACER DISTANCE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == spacerStandoffDistance
+      defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
   })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.STUD_MOUNT && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == waterproof
+      defaultValue: option.option == waterproof
     }, option.option)),
     value: waterproof,
     onlyValue: true
@@ -9775,7 +9838,7 @@ function Letters({
     title: "Included Items",
     options: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.LIGHTING_INDOOR,
-      selected: _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.LIGHTING_INDOOR
+      defaultValue: _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.LIGHTING_INDOOR
     }, _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.LIGHTING_INDOOR),
     value: _utils_defaults__WEBPACK_IMPORTED_MODULE_15__.LIGHTING_INDOOR,
     onlyValue: true
@@ -10117,7 +10180,7 @@ function Logo({
     }
   }, [frontAcrylicCover]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    clasName: "py-4 my-4"
+    className: "py-4 my-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "font-title",
     dangerouslySetInnerHTML: {
@@ -10130,8 +10193,9 @@ function Logo({
     value: acrylicChannelThickness,
     onChange: handleOnChangeThickness,
     options: _options__WEBPACK_IMPORTED_MODULE_10__.acrylicChannelThicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
-      selected: thickness.value === acrylicChannelThickness
+      defaultValue: thickness.value === acrylicChannelThickness
     }, thickness.value)),
     onlyValue: true
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -10148,7 +10212,7 @@ function Logo({
     title: "Return",
     options: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: "White",
-      selected: true
+      defaultValue: true
     }, acrylicReturn),
     value: acrylicReturn,
     onlyValue: true
@@ -10156,8 +10220,9 @@ function Logo({
     title: "Front Acrylic Cover",
     onChange: handleOnChangeFrontOption,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.whiteOptionsResin.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == frontAcrylicCover
+      defaultValue: option.option == frontAcrylicCover
     }, option.option)),
     value: frontAcrylicCover
   }), frontAcrylicCover === '3M 3630 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_9__["default"], {
@@ -10176,56 +10241,63 @@ function Logo({
     title: "3M 3635 Vinyl",
     onChange: handleOnChangeVinyl3635,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.vinlyl3635Options.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.code,
       value: `${option.name} - [${option.code}]`,
-      selected: `${option.name} - [${option.code}]` == vinyl3635
+      defaultValue: `${option.name} - [${option.code}]` == vinyl3635
     }, `${option.name} - [${option.code}]`)),
     value: vinyl3635
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
     options: _metal_channel_metalChannelOptions__WEBPACK_IMPORTED_MODULE_8__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: color,
       value: color,
-      selected: color == ledLightColor
+      defaultValue: color == ledLightColor
     }, color)),
     value: ledLightColor
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting Options",
     onChange: handleOnChangeMount,
     options: mountingDefaultOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.mounting_option,
       value: option.mounting_option,
-      selected: option.mounting_option === selectedMounting
+      defaultValue: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: selectedMounting
   }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "SPACER DISTANCE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == spacerStandoffDistance
+      defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
   })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_MOUNT && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == waterproof
+      defaultValue: option.option == waterproof
     }, option.option)),
     value: waterproof,
     onlyValue: true
@@ -10233,7 +10305,7 @@ function Logo({
     title: "Included Items",
     options: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR,
-      selected: _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR
+      defaultValue: _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR
     }, _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR),
     value: _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR,
     onlyValue: true
@@ -10754,10 +10826,10 @@ function Letters({
       return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
         key: index,
         value: val,
-        selected: val === selectedLetterHeight
+        defaultValue: val === selectedLetterHeight
       }, val, "\"");
     }));
-  }, [lettersHeight, letterHeightOptions]);
+  }, [lettersHeight]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     adjustFontSize();
   }, [letters]);
@@ -10852,7 +10924,7 @@ function Letters({
     }
   }, [frontOption]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    clasName: "py-4 my-4"
+    className: "py-4 my-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "font-title",
     dangerouslySetInnerHTML: {
@@ -10909,8 +10981,9 @@ function Letters({
     value: acrylicChannelThickness,
     onChange: handleOnChangeThickness,
     options: _options__WEBPACK_IMPORTED_MODULE_13__.acrylicChannelThicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
-      selected: thickness.value === acrylicChannelThickness
+      defaultValue: thickness.value === acrylicChannelThickness
     }, thickness.value)),
     onlyValue: true
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -10922,7 +10995,7 @@ function Letters({
     title: "Return",
     options: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: "White",
-      selected: true
+      defaultValue: true
     }, acrylicReturn),
     value: acrylicReturn,
     onlyValue: true
@@ -10930,8 +11003,9 @@ function Letters({
     title: "Front Option",
     onChange: e => setFrontOption(e.target.value),
     options: _options__WEBPACK_IMPORTED_MODULE_14__.sideOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option === frontOption
+      defaultValue: option.option === frontOption
     }, option.option)),
     value: frontOption
   }), frontOption === 'Painted' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_12__["default"], {
@@ -10952,56 +11026,63 @@ function Letters({
     title: "METAL LAMINATE",
     onChange: handleOnChangeMetalLaminate,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.metalLaminateOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == metalLaminate
+      defaultValue: option.option == metalLaminate
     }, option.option)),
     value: metalLaminate
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
     options: _metal_channel_metalChannelOptions__WEBPACK_IMPORTED_MODULE_10__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: color,
       value: color,
-      selected: color == ledLightColor
+      defaultValue: color == ledLightColor
     }, color)),
     value: ledLightColor
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting Options",
     onChange: handleOnChangeMount,
     options: mountingDefaultOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.mounting_option,
       value: option.mounting_option,
-      selected: option.mounting_option === selectedMounting
+      defaultValue: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: selectedMounting
   }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "SPACER DISTANCE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == spacerStandoffDistance
+      defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
   })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.STUD_MOUNT && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == waterproof
+      defaultValue: option.option == waterproof
     }, option.option)),
     value: waterproof,
     onlyValue: true
@@ -11009,7 +11090,7 @@ function Letters({
     title: "Included Items",
     options: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.LIGHTING_INDOOR,
-      selected: _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.LIGHTING_INDOOR
+      defaultValue: _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.LIGHTING_INDOOR
     }, _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.LIGHTING_INDOOR),
     value: _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.LIGHTING_INDOOR,
     onlyValue: true
@@ -11360,7 +11441,7 @@ function Logo({
     }
   }, [frontOption]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    clasName: "py-4 my-4"
+    className: "py-4 my-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "font-title",
     dangerouslySetInnerHTML: {
@@ -11373,15 +11454,16 @@ function Logo({
     value: acrylicChannelThickness,
     onChange: handleOnChangeThickness,
     options: _options__WEBPACK_IMPORTED_MODULE_9__.acrylicChannelThicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
-      selected: thickness.value === acrylicChannelThickness
+      defaultValue: thickness.value === acrylicChannelThickness
     }, thickness.value)),
     onlyValue: true
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Return",
     options: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: "White",
-      selected: true
+      defaultValue: true
     }, acrylicReturn),
     value: acrylicReturn,
     onlyValue: true
@@ -11399,8 +11481,9 @@ function Logo({
     title: "Front Option",
     onChange: e => setFrontOption(e.target.value),
     options: _options__WEBPACK_IMPORTED_MODULE_11__.sideOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option === frontOption
+      defaultValue: option.option === frontOption
     }, option.option)),
     value: frontOption
   }), frontOption === 'Painted' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_10__["default"], {
@@ -11420,56 +11503,63 @@ function Logo({
     title: "METAL LAMINATE",
     onChange: handleOnChangeMetalLaminate,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.metalLaminateOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == metalLaminate
+      defaultValue: option.option == metalLaminate
     }, option.option)),
     value: metalLaminate
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
     options: _metal_channel_metalChannelOptions__WEBPACK_IMPORTED_MODULE_7__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: color,
       value: color,
-      selected: color == ledLightColor
+      defaultValue: color == ledLightColor
     }, color)),
     value: ledLightColor
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting Options",
     onChange: handleOnChangeMount,
     options: mountingDefaultOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.mounting_option,
       value: option.mounting_option,
-      selected: option.mounting_option === selectedMounting
+      defaultValue: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: selectedMounting
   }), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "SPACER DISTANCE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == spacerStandoffDistance
+      defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
   })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_MOUNT && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == waterproof
+      defaultValue: option.option == waterproof
     }, option.option)),
     value: waterproof,
     onlyValue: true
@@ -11477,7 +11567,7 @@ function Logo({
     title: "Included Items",
     options: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR,
-      selected: _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR
+      defaultValue: _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR
     }, _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR),
     value: _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR,
     onlyValue: true
@@ -11989,6 +12079,7 @@ function LaserCutAcrylic() {
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full"
   }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    key: item.id,
     index: index,
     id: item.id,
     item: item
@@ -12363,10 +12454,10 @@ function Letters({
       return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
         key: index,
         value: val,
-        selected: val === selectedLetterHeight
+        defaultValue: val === selectedLetterHeight
       }, val, "\"");
     }));
-  }, [lettersHeight, letterHeightOptions]);
+  }, [lettersHeight]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     adjustFontSize();
   }, [letters]);
@@ -12464,7 +12555,7 @@ function Letters({
     }
   }, [selectedLetterHeight, selectedThickness, selectedFinishing, letters, waterproof, color, sets, font, selectedMounting, letterPricing]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    clasName: "py-4 my-4"
+    className: "py-4 my-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "font-title",
     dangerouslySetInnerHTML: {
@@ -12521,7 +12612,8 @@ function Letters({
     onChange: handleOnChangeThickness,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.thicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: thickness.value,
-      selected: thickness === selectedThickness
+      key: thickness.value,
+      defaultValue: thickness === selectedThickness
     }, thickness.thickness))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Letter Height",
@@ -12547,7 +12639,8 @@ function Letters({
     onChange: handleChangeFinishing,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.finishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: finishing.name,
-      selected: finishing.name === selectedFinishing
+      key: finishing.name,
+      defaultValue: finishing.name === selectedFinishing
     }, finishing.name)),
     value: selectedFinishing
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -12555,7 +12648,8 @@ function Letters({
     onChange: handleOnChangeWaterproof,
     options: waterProofSelections?.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.option,
-      selected: option.option == waterproof
+      key: option.option,
+      defaultValue: option.option == waterproof
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -12563,7 +12657,8 @@ function Letters({
     onChange: handleOnChangeMount,
     options: mountingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.mounting_option,
-      selected: option.mounting_option === selectedMounting
+      key: option.mounting_option,
+      defaultValue: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: selectedMounting
   }), (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER || selectedMounting === 'Pad' || selectedMounting === 'Pad - Combination All' || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -12571,7 +12666,8 @@ function Letters({
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == studLength
+      key: option.value,
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -12579,7 +12675,8 @@ function Letters({
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
-      selected: option.value == spacerStandoffDistance
+      key: option.value,
+      defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
   })), !item.hideQuantity && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -13002,8 +13099,9 @@ function Logo({
     value: selectedThickness?.value,
     onChange: handleOnChangeThickness,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.thicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
-      selected: thickness === selectedThickness
+      defaultValue: thickness === selectedThickness
     }, thickness.thickness))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Logo Width",
@@ -13033,40 +13131,45 @@ function Logo({
     title: "Finishing Options",
     onChange: handleChangeFinishing,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.finishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: finishing.name,
       value: finishing.name,
-      selected: finishing.name === selectedFinishing
+      defaultValue: finishing.name === selectedFinishing
     }, finishing.name)),
     value: selectedFinishing
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Environment",
     onChange: e => setWaterproof(e.target.value),
     options: waterProofSelections.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == waterproof
+      defaultValue: option.option == waterproof
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting Options",
     onChange: handleOnChangeMount,
     options: mountingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.mounting_option,
       value: option.mounting_option,
-      selected: option.mounting_option === selectedMounting
+      defaultValue: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: selectedMounting
   }), (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER || selectedMounting === 'Pad' || selectedMounting === 'Pad - Combination All' || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == spacerStandoffDistance
+      defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
   })), !item.hideQuantity && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -13209,6 +13312,7 @@ function LayeredAcrylic() {
   };
   const signageOutput = signage.map((item, index) => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      key: item.id,
       index: index,
       id: item.id,
       item: item,
@@ -13257,8 +13361,9 @@ function LayeredAcrylic() {
     open: !openLayer
   })), openLayer && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: " border-black p-4 rounded-md border shadow-2xl"
-  }, productLayers.map(layer => {
+  }, productLayers.map((layer, index) => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_ProductLayer__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      key: index,
       layer: layer,
       length: signage.length
     });
@@ -13693,8 +13798,9 @@ function Logo({
     value: selectedThickness?.value,
     onChange: handleOnChangeThickness,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.thicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
-      selected: thickness === selectedThickness
+      defaultValue: thickness === selectedThickness
     }, thickness.thickness))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Logo Width",
@@ -13712,22 +13818,23 @@ function Logo({
     onChange: e => setLayers(e.target.value),
     options: layersOptions.map(layer => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: layer,
-      selected: layer == layers
+      defaultValue: layer == layers
     }, layer))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Finishing Options",
     onChange: handleChangeFinishing,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.finishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: finishing.name,
-      selected: finishing.name === selectedFinishing
+      defaultValue: finishing.name === selectedFinishing
     }, finishing.name)),
     value: selectedFinishing
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Environment",
     onChange: e => setWaterproof(e.target.value),
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == waterproof
+      defaultValue: option.option == waterproof
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -13735,23 +13842,25 @@ function Logo({
     onChange: handleOnChangeMount,
     options: mountingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.mounting_option,
-      selected: option.mounting_option === selectedMounting
+      defaultValue: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: selectedMounting
   }), (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.STUD_WITH_SPACER || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == spacerStandoffDistance
+      defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -13990,6 +14099,7 @@ function MetalLaminate() {
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full"
   }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    key: item.id,
     index: index,
     id: item.id,
     item: item
@@ -14065,6 +14175,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+const newMetalFinishColors = [{
+  name: 'Aluminum Brushed',
+  color: '#ddd'
+}, ..._utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.metalFinishColors];
 
 
 const Letters = ({
@@ -14189,7 +14303,7 @@ const Letters = ({
     }
   };
   const handleChangeMetalLaminate = e => {
-    const selectedLaminate = _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.metalFinishColors.find(laminate => laminate.name === e.target.value);
+    const selectedLaminate = newMetalFinishColors.find(laminate => laminate.name === e.target.value);
     // Assuming setMetalLaminate and setColor are state setter functions
     setMetalLaminate(selectedLaminate.name);
     setColor(selectedLaminate.color);
@@ -14333,10 +14447,10 @@ const Letters = ({
       return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
         key: index,
         value: val,
-        selected: val === selectedLetterHeight
+        defaultValue: val === selectedLetterHeight
       }, val, "\"");
     }));
-  }, [lettersHeight, letterHeightOptions]);
+  }, [lettersHeight]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     adjustFontSize();
   }, [letters]);
@@ -14428,7 +14542,7 @@ const Letters = ({
     checkAndAddMissingFields();
   }, [letters, comments, font, selectedThickness, waterproof, acrylicBase, usdPrice, cadPrice, usdSinglePrice, cadSinglePrice, selectedLetterHeight, fileUrls, fileNames, files, filePaths, fontFileUrl, fontFileName, fontFilePath, fontFile, metalLaminate, customColor, sets, selectedMounting, studLength, spacerStandoffDistance, fileError, fontFileError]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    clasName: "py-4 my-4"
+    className: "py-4 my-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "font-title",
     dangerouslySetInnerHTML: {
@@ -14485,8 +14599,9 @@ const Letters = ({
     value: selectedThickness?.value,
     onChange: handleOnChangeThickness,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_10__.thicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
-      selected: thickness === selectedThickness
+      defaultValue: thickness === selectedThickness
     }, thickness.thickness))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Letter Height",
@@ -14496,9 +14611,10 @@ const Letters = ({
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Metal Laminate",
     onChange: handleChangeMetalLaminate,
-    options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.metalFinishColors.map(laminate => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: newMetalFinishColors.map(laminate => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: laminate.name,
       value: laminate.name,
-      selected: laminate.name === item.metalLaminate
+      defaultValue: laminate.name === item.metalLaminate
     }, laminate.name)),
     value: metalLaminate
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_8__["default"], {
@@ -14514,37 +14630,42 @@ const Letters = ({
     selectColor: color => {
       setAcrylicBase(color);
       setOpenAcrylicColor(false);
-    }
+    },
+    samePrice: false
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: waterProofSelections.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == waterproof
+      defaultValue: option.option == waterproof
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting Options",
     onChange: handleOnChangeMount,
     options: mountingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.mounting_option,
       value: option.mounting_option,
-      selected: option.mounting_option === selectedMounting
+      defaultValue: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: selectedMounting
   }), (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER || selectedMounting === 'Pad' || selectedMounting === 'Pad - Combination All' || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_10__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == spacerStandoffDistance
+      defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
   })), !item.hideQuantity && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -14624,6 +14745,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+const newMetalFinishColors = [{
+  name: 'Aluminum Brushed',
+  color: '#ddd'
+}, ..._utils_ColorOptions__WEBPACK_IMPORTED_MODULE_11__.metalFinishColors];
 function Logo({
   item
 }) {
@@ -14946,8 +15071,9 @@ function Logo({
     value: selectedThickness?.value,
     onChange: handleOnChangeThickness,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.thicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
-      selected: thickness === selectedThickness
+      defaultValue: thickness === selectedThickness
     }, thickness.thickness))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Logo Width",
@@ -14962,9 +15088,10 @@ function Logo({
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Metal Laminate",
     onChange: handleChangeMetalLaminate,
-    options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_11__.metalFinishColors.map(laminate => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: newMetalFinishColors.map(laminate => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: laminate.name,
       value: laminate.name,
-      selected: laminate.name === metalLaminate
+      defaultValue: laminate.name === metalLaminate
     }, laminate.name)),
     value: metalLaminate
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_7__["default"], {
@@ -14980,37 +15107,42 @@ function Logo({
     selectColor: color => {
       setAcrylicBase(color);
       setOpenAcrylicColor(false);
-    }
+    },
+    samePrice: false
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Environment",
     onChange: e => setWaterproof(e.target.value),
     options: waterProofSelections.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == waterproof
+      defaultValue: option.option == waterproof
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting Options",
     onChange: handleOnChangeMount,
     options: mountingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.mounting_option,
       value: option.mounting_option,
-      selected: option.mounting_option === selectedMounting
+      defaultValue: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: selectedMounting
   }), (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER || selectedMounting === 'Pad' || selectedMounting === 'Pad - Combination All' || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == spacerStandoffDistance
+      defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
   })), !item.hideQuantity && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -15185,6 +15317,7 @@ function UvPrintedAcrylic() {
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full"
   }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    key: item.id,
     index: index,
     id: item.id,
     item: item
@@ -15581,8 +15714,9 @@ function Logo({
     value: selectedThickness?.value,
     onChange: handleOnChangeThickness,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.thicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
-      selected: thickness === selectedThickness
+      defaultValue: thickness === selectedThickness
     }, thickness.thickness))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Logo Width",
@@ -15599,55 +15733,62 @@ function Logo({
     value: printPreference,
     onChange: e => setPrintPreference(e.target.value),
     options: printOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == printPreference
+      defaultValue: option.option == printPreference
     }, option.option))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Base Color",
     value: baseColor,
     onChange: e => setBaseColor(e.target.value),
     options: baseColorOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == baseColor
+      defaultValue: option.option == baseColor
     }, option.option))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Finishing Options",
     onChange: handleChangeFinishing,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.finishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: finishing.name,
       value: finishing.name,
-      selected: finishing.name === selectedFinishing
+      defaultValue: finishing.name === selectedFinishing
     }, finishing.name)),
     value: selectedFinishing
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Environment",
     onChange: e => setWaterproof(e.target.value),
     options: waterProofSelections.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == waterproof
+      defaultValue: option.option == waterproof
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting Options",
     onChange: handleOnChangeMount,
     options: mountingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.mounting_option,
       value: option.mounting_option,
-      selected: option.mounting_option === selectedMounting
+      defaultValue: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: selectedMounting
   }), (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.STUD_WITH_SPACER || selectedMounting === 'Pad' || selectedMounting === 'Pad - Combination All' || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == spacerStandoffDistance
+      defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
   })), !item.hideQuantity && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -16746,6 +16887,7 @@ function CustomProject() {
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full"
   }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    key: item.id,
     index: index,
     id: item.id,
     item: item
@@ -16984,6 +17126,7 @@ function FlexNeonSign() {
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full"
   }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    key: item.id,
     index: index,
     id: item.id,
     item: item
@@ -17076,6 +17219,7 @@ const NeonSign = ({
   const [wireExitLocation, setWireExitLocation] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$wireExitLocatio = item.wireExitLocation) !== null && _item$wireExitLocatio !== void 0 ? _item$wireExitLocatio : 'Bottom Right');
   const [acrylicBackingOption, setAcrylicBackingOption] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicBackingO = item.acrylicBackingOption) !== null && _item$acrylicBackingO !== void 0 ? _item$acrylicBackingO : '');
   const acrylicBackingSelections = _neonSignOptions__WEBPACK_IMPORTED_MODULE_9__.acrylicBackingOptions.map(item => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    key: item.option,
     value: item.option
   }, item.option));
   const neonSignsWidth = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
@@ -17091,6 +17235,7 @@ const NeonSign = ({
   const [mounting, setMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : 'Standard Nails');
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
   const [setOptions, setSetOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([(0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    key: "1",
     value: "1"
   }, "1")]);
   const [quantityDiscountTable, setQuantityDiscountTable] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
@@ -17339,7 +17484,7 @@ const NeonSign = ({
     options: _neonSignOptions__WEBPACK_IMPORTED_MODULE_9__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: option.option,
       value: option.option,
-      selected: option.option === waterproof
+      defaultValue: option.option === waterproof
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
@@ -17348,7 +17493,7 @@ const NeonSign = ({
     options: _neonSignOptions__WEBPACK_IMPORTED_MODULE_9__.neonSignsMountingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: option.option,
       value: option.option,
-      selected: option.option === mounting
+      defaultValue: option.option === mounting
     }, option.option)),
     value: mounting,
     onlyValue: true
@@ -17358,7 +17503,7 @@ const NeonSign = ({
     options: _neonSignOptions__WEBPACK_IMPORTED_MODULE_9__.remoteControlOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: option.option,
       value: option.option,
-      selected: option.option === remoteControl
+      defaultValue: option.option === remoteControl
     }, option.option)),
     value: remoteControl,
     onlyValue: true
@@ -17368,7 +17513,7 @@ const NeonSign = ({
     options: _neonSignOptions__WEBPACK_IMPORTED_MODULE_9__.wireExitLocationOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: option.option,
       value: option.option,
-      selected: option.option === wireExitLocation
+      defaultValue: option.option === wireExitLocation
     }, option.option)),
     value: wireExitLocation,
     onlyValue: true
@@ -17506,6 +17651,7 @@ function RigidNeonSignNoBacking() {
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full"
   }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    key: item.id,
     index: index,
     id: item.id,
     item: item
@@ -17628,6 +17774,7 @@ const NeonSign = ({
   const [mounting, setMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
   const [setOptions, setSetOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([(0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    key: "1",
     value: "1"
   }, "1")]);
   const [spacerStandoffOptions, setSpacerStandoffOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
@@ -17915,7 +18062,7 @@ const NeonSign = ({
     options: waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: option.option,
       value: option.option,
-      selected: option.option === waterproof
+      defaultValue: option.option === waterproof
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
@@ -17964,7 +18111,7 @@ const NeonSign = ({
     options: rigidNoBackingMountingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: option.option,
       value: option.option,
-      selected: option.option === mounting
+      defaultValue: option.option === mounting
     }, option.option)),
     value: mounting
   }), (mounting === 'M4 Stud' || mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.M4_STUD_WITH_SPACER) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
@@ -17973,15 +18120,16 @@ const NeonSign = ({
     options: _neonSignOptions__WEBPACK_IMPORTED_MODULE_9__.ledSpacerStandoffDefaultOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: option.value,
       value: option.value,
-      selected: option.value === rigidM4StudLength
+      defaultValue: option.value === rigidM4StudLength
     }, option.value)),
     value: rigidM4StudLength
   }), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.M4_STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == spacerStandoffDistance
+      defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
@@ -17990,7 +18138,7 @@ const NeonSign = ({
     options: rcOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: option.option,
       value: option.option,
-      selected: option.option === remoteControl
+      defaultValue: option.option === remoteControl
     }, option.option)),
     value: remoteControl,
     onlyValue: true
@@ -18000,7 +18148,7 @@ const NeonSign = ({
     options: wireTypeOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: option.option,
       value: option.option,
-      selected: option.option === wireType
+      defaultValue: option.option === wireType
     }, option.option)),
     value: wireType
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
@@ -18142,6 +18290,7 @@ function RigidNeonSignWithBacking() {
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full"
   }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    key: item.id,
     index: index,
     id: item.id,
     item: item
@@ -18272,6 +18421,7 @@ const NeonSign = ({
   const [mounting, setMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
   const [setOptions, setSetOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([(0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    key: "1",
     value: "1"
   }, "1")]);
   const [quantityDiscountTable, setQuantityDiscountTable] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
@@ -18595,7 +18745,7 @@ const NeonSign = ({
     options: _neonSignOptions__WEBPACK_IMPORTED_MODULE_12__.rigidBackingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: option.option,
       value: option.option,
-      selected: option.option === rigidBacking
+      defaultValue: option.option === rigidBacking
     }, option.option)),
     value: rigidBacking,
     onlyValue: true
@@ -18619,7 +18769,7 @@ const NeonSign = ({
     options: pcFinishOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: option.option,
       value: option.option,
-      selected: option.option === finish
+      defaultValue: option.option === finish
     }, option.option)),
     value: finish
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
@@ -18628,7 +18778,7 @@ const NeonSign = ({
     options: _neonSignOptions__WEBPACK_IMPORTED_MODULE_12__.neonSignsMountingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: option.option,
       value: option.option,
-      selected: option.option === mounting
+      defaultValue: option.option === mounting
     }, option.option)),
     value: mounting
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
@@ -18637,7 +18787,7 @@ const NeonSign = ({
     options: rcOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: option.option,
       value: option.option,
-      selected: option.option === remoteControl
+      defaultValue: option.option === remoteControl
     }, option.option)),
     value: remoteControl,
     onlyValue: true
@@ -18647,7 +18797,7 @@ const NeonSign = ({
     options: _neonSignOptions__WEBPACK_IMPORTED_MODULE_12__.wireExitLocationOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: option.option,
       value: option.option,
-      selected: option.option === wireExitLocation
+      defaultValue: option.option === wireExitLocation
     }, option.option)),
     value: wireExitLocation,
     onlyValue: true
@@ -18657,7 +18807,7 @@ const NeonSign = ({
     options: wireTypeOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: option.option,
       value: option.option,
-      selected: option.option === wireType
+      defaultValue: option.option === wireType
     }, option.option)),
     value: wireType,
     onlyValue: true
@@ -18667,7 +18817,7 @@ const NeonSign = ({
     options: waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: option.option,
       value: option.option,
-      selected: option.option === waterproof
+      defaultValue: option.option === waterproof
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
@@ -19281,7 +19431,7 @@ function Logo({
     updateSignage();
   }, [lightboxType, uvPrintedCover, waterproof, fileUrls, sets, usdPrice, cadPrice, usdSinglePrice, cadSinglePrice]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    clasName: "py-4 my-4"
+    className: "py-4 my-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "font-title",
     dangerouslySetInnerHTML: {
@@ -19294,23 +19444,26 @@ function Logo({
     value: lightboxType,
     onChange: handleOnChangeLightBox,
     options: lightBoxTypeOptions.map(lightbox => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: lightbox.option,
       value: lightbox.option,
-      selected: lightbox.option === lightboxType
+      defaultValue: lightbox.option === lightboxType
     }, lightbox.option))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "UV Printed Cover",
     value: uvPrintedCover,
     onChange: e => setUvPrintedCover(e.target.value),
     options: uvPrintedCoverOptions.map(cover => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: cover.option,
       value: cover.option,
-      selected: cover.option === uvPrintedCover
+      defaultValue: cover.option === uvPrintedCover
     }, cover.option))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == waterproof
+      defaultValue: option.option == waterproof
     }, option.option)),
     value: waterproof,
     onlyValue: true
@@ -19318,7 +19471,7 @@ function Logo({
     title: "Included Items",
     options: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: _utils_defaults__WEBPACK_IMPORTED_MODULE_5__.LIGHTING_INDOOR,
-      selected: _utils_defaults__WEBPACK_IMPORTED_MODULE_5__.LIGHTING_INDOOR
+      defaultValue: _utils_defaults__WEBPACK_IMPORTED_MODULE_5__.LIGHTING_INDOOR
     }, _utils_defaults__WEBPACK_IMPORTED_MODULE_5__.LIGHTING_INDOOR),
     value: _utils_defaults__WEBPACK_IMPORTED_MODULE_5__.LIGHTING_INDOOR,
     onlyValue: true
@@ -19530,6 +19683,7 @@ function TrimLessFrontAndBackLit() {
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full flex flex-col"
   }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    key: item.id,
     index: index,
     id: item.id,
     item: item
@@ -19884,7 +20038,7 @@ function Letters({
       return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
         key: index,
         value: val,
-        selected: val === selectedLetterHeight
+        defaultValue: val === selectedLetterHeight
       }, val, "\"");
     }));
   }, [lettersHeight]);
@@ -20121,7 +20275,7 @@ function Letters({
     }
   }, [waterproof]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    clasName: "py-4 my-4"
+    className: "py-4 my-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "font-title",
     dangerouslySetInnerHTML: {
@@ -20159,8 +20313,9 @@ function Letters({
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == waterproof
+      defaultValue: option.option == waterproof
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_FontsDropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
@@ -20186,8 +20341,9 @@ function Letters({
     value: depth?.value,
     onChange: handleOnChangeDepth,
     options: depthOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
-      selected: thickness === depth
+      defaultValue: thickness === depth
     }, thickness.depth))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Letter Height",
@@ -20220,8 +20376,9 @@ function Letters({
     title: "Front Acrylic Cover",
     onChange: handleOnChangeWhite,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.whiteOptionsResin.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option == frontAcrylicCover
+      defaultValue: option == frontAcrylicCover
     }, option.option)),
     value: frontAcrylicCover
   }), frontAcrylicCover === '3M 3630 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_9__["default"], {
@@ -20242,56 +20399,63 @@ function Letters({
     title: "3M 3635 Vinyl",
     onChange: handleOnChangeVinyl3635,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.vinlyl3635Options.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.code,
       value: `${option.name} - [${option.code}]`,
-      selected: `${option.name} - [${option.code}]` == vinyl3635
+      defaultValue: `${option.name} - [${option.code}]` == vinyl3635
     }, `${option.name} - [${option.code}]`)),
     value: vinyl3635
   })), (frontAcrylicCover === '3M 3630 Vinyl' || frontAcrylicCover === '3M 3635 Vinyl') && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Front & Back Vinyl",
     onChange: handleOnChangeWhiteFrontBackVinyl,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.frontBackVinylOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == frontBackVinyl
+      defaultValue: option.option == frontBackVinyl
     }, option.option)),
     value: frontBackVinyl
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: color,
       value: color,
-      selected: color == ledLightColor
+      defaultValue: color == ledLightColor
     }, color)),
     value: ledLightColor
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting",
     onChange: handleOnChangeMounting,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__.mountingDefaultOptions.map(mounting => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: mounting.value,
       value: mounting.value,
-      selected: mounting.value == mounting
+      defaultValue: mounting.value == mounting
     }, mounting.value)),
     value: mounting
   }), (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER || mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   }), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == spacerStandoffDistance
+      defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Included Items",
     onChange: handleOnChangeincludedItems,
     options: lightingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == includedItems
+      defaultValue: option.value == includedItems
     }, option.value)),
     value: includedItems
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -20761,7 +20925,7 @@ function Logo({
     }
   }, [waterproof]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    clasName: "py-4 my-4"
+    className: "py-4 my-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "font-title",
     dangerouslySetInnerHTML: {
@@ -20773,8 +20937,9 @@ function Logo({
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == waterproof
+      defaultValue: option.option == waterproof
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -20782,8 +20947,9 @@ function Logo({
     value: depth?.value,
     onChange: handleOnChangeDepth,
     options: depthOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
-      selected: thickness === depth
+      defaultValue: thickness === depth
     }, thickness.depth))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Logo Width",
@@ -20819,8 +20985,9 @@ function Logo({
     title: "Front Acrylic Cover",
     onChange: handleOnChangeWhite,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_5__.whiteOptionsResin.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option == frontAcrylicCover
+      defaultValue: option == frontAcrylicCover
     }, option.option)),
     value: frontAcrylicCover
   }), frontAcrylicCover === '3M 3630 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_7__["default"], {
@@ -20840,56 +21007,63 @@ function Logo({
     title: "3M 3635 Vinyl",
     onChange: handleOnChangeVinyl3635,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_5__.vinlyl3635Options.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.code,
       value: `${option.name} - [${option.code}]`,
-      selected: `${option.name} - [${option.code}]` == vinyl3635
+      defaultValue: `${option.name} - [${option.code}]` == vinyl3635
     }, `${option.name} - [${option.code}]`)),
     value: vinyl3635
   })), (frontAcrylicCover === '3M 3630 Vinyl' || frontAcrylicCover === '3M 3635 Vinyl') && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Front & Back Vinyl",
     onChange: handleOnChangeWhiteFrontBackVinyl,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.frontBackVinylOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == frontBackVinyl
+      defaultValue: option.option == frontBackVinyl
     }, option.option)),
     value: frontBackVinyl
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_10__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: color,
       value: color,
-      selected: color == ledLightColor
+      defaultValue: color == ledLightColor
     }, color)),
     value: ledLightColor
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting",
     onChange: handleOnChangeMounting,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_10__.mountingDefaultOptions.map(mounting => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: mounting.value,
       value: mounting.value,
-      selected: mounting.value == mounting
+      defaultValue: mounting.value == mounting
     }, mounting.value)),
     value: mounting
   }), (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER || mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   }), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == spacerStandoffDistance
+      defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Included Items",
     onChange: handleOnChangeincludedItems,
     options: lightingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == includedItems
+      defaultValue: option.value == includedItems
     }, option.value)),
     value: includedItems
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -21107,6 +21281,7 @@ function TrimLessFrontAndBackLit() {
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full flex flex-col"
   }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    key: item.id,
     index: index,
     id: item.id,
     item: item
@@ -21450,7 +21625,7 @@ function Letters({
       return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
         key: index,
         value: val,
-        selected: val === selectedLetterHeight
+        defaultValue: val === selectedLetterHeight
       }, val, "\"");
     }));
   }, [lettersHeight]);
@@ -21632,7 +21807,7 @@ function Letters({
     }
   }, [waterproof]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    clasName: "py-4 my-4"
+    className: "py-4 my-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "font-title",
     dangerouslySetInnerHTML: {
@@ -21670,8 +21845,9 @@ function Letters({
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == waterproof
+      defaultValue: option.option == waterproof
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_FontsDropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
@@ -21697,8 +21873,9 @@ function Letters({
     value: depth?.value,
     onChange: handleOnChangeDepth,
     options: depthOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
-      selected: thickness === depth
+      defaultValue: thickness === depth
     }, thickness.depth))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Letter Height",
@@ -21724,8 +21901,9 @@ function Letters({
     title: "Front Acrylic Cover",
     onChange: handleOnChangeWhite,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.whiteOptionsResin.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option == frontAcrylicCover
+      defaultValue: option == frontAcrylicCover
     }, option.option)),
     value: frontAcrylicCover
   }), frontAcrylicCover === '3M 3630 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_9__["default"], {
@@ -21746,48 +21924,54 @@ function Letters({
     title: "3M 3635 Vinyl",
     onChange: handleOnChangeVinyl3635,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.vinlyl3635Options.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.code,
       value: `${option.name} - [${option.code}]`,
-      selected: `${option.name} - [${option.code}]` == vinyl3635
+      defaultValue: `${option.name} - [${option.code}]` == vinyl3635
     }, `${option.name} - [${option.code}]`)),
     value: vinyl3635
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: color,
       value: color,
-      selected: color == ledLightColor
+      defaultValue: color == ledLightColor
     }, color)),
     value: ledLightColor
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting",
     onChange: handleOnChangeMounting,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__.mountingDefaultOptions.map(mounting => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: mounting.value,
       value: mounting.value,
-      selected: mounting.value == mounting
+      defaultValue: mounting.value == mounting
     }, mounting.value)),
     value: mounting
   }), (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER || mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   }), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == spacerStandoffDistance
+      defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Included Items",
     onChange: handleOnChangeincludedItems,
     options: lightingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == includedItems
+      defaultValue: option.value == includedItems
     }, option.value)),
     value: includedItems
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -22241,7 +22425,7 @@ function Logo({
     }
   }, [waterproof]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    clasName: "py-4 my-4"
+    className: "py-4 my-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "font-title",
     dangerouslySetInnerHTML: {
@@ -22253,8 +22437,9 @@ function Logo({
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == waterproof
+      defaultValue: option.option == waterproof
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -22262,8 +22447,9 @@ function Logo({
     value: depth?.value,
     onChange: handleOnChangeDepth,
     options: depthOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
-      selected: thickness === depth
+      defaultValue: thickness === depth
     }, thickness.depth))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Logo Width",
@@ -22292,8 +22478,9 @@ function Logo({
     title: "Front Acrylic Cover",
     onChange: handleOnChangeWhite,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_5__.whiteOptionsResin.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option == frontAcrylicCover
+      defaultValue: option == frontAcrylicCover
     }, option.option)),
     value: frontAcrylicCover
   }), frontAcrylicCover === '3M 3630 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_7__["default"], {
@@ -22313,48 +22500,54 @@ function Logo({
     title: "3M 3635 Vinyl",
     onChange: handleOnChangeVinyl3635,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_5__.vinlyl3635Options.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.code,
       value: `${option.name} - [${option.code}]`,
-      selected: `${option.name} - [${option.code}]` == vinyl3635
+      defaultValue: `${option.name} - [${option.code}]` == vinyl3635
     }, `${option.name} - [${option.code}]`)),
     value: vinyl3635
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_10__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: color,
       value: color,
-      selected: color == ledLightColor
+      defaultValue: color == ledLightColor
     }, color)),
     value: ledLightColor
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting",
     onChange: handleOnChangeMounting,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_10__.mountingDefaultOptions.map(mounting => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: mounting.value,
       value: mounting.value,
-      selected: mounting.value == mounting
+      defaultValue: mounting.value == mounting
     }, mounting.value)),
     value: mounting
   }), (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER || mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   }), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == spacerStandoffDistance
+      defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Included Items",
     onChange: handleOnChangeincludedItems,
     options: lightingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == includedItems
+      defaultValue: option.value == includedItems
     }, option.value)),
     value: includedItems
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -22537,6 +22730,7 @@ function TrimLessBackLit() {
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full"
   }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    key: item.id,
     index: index,
     id: item.id,
     item: item
@@ -22843,10 +23037,10 @@ function Letters({
       return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
         key: index,
         value: val,
-        selected: val === selectedLetterHeight
+        defaultValue: val === selectedLetterHeight
       }, val, "\"");
     }));
-  }, [lettersHeight, letterHeightOptions]);
+  }, [lettersHeight]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     adjustFontSize();
   }, [letters]);
@@ -23038,7 +23232,7 @@ function Letters({
     }
   }, [waterproof]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    clasName: "py-4 my-4"
+    className: "py-4 my-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "font-title",
     dangerouslySetInnerHTML: {
@@ -23076,8 +23270,9 @@ function Letters({
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == waterproof
+      defaultValue: option.option == waterproof
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_FontsDropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
@@ -23100,8 +23295,9 @@ function Letters({
     value: depth?.value,
     onChange: handleOnChangeDepth,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__.depthOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
-      selected: thickness === depth
+      defaultValue: thickness === depth
     }, thickness.depth))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Letter Height",
@@ -23112,16 +23308,18 @@ function Letters({
     title: "Finishing",
     onChange: handleChangeFinishing,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__.finishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: finishing.value,
       value: finishing.value,
-      selected: finishing.value === selectedFinishing
+      defaultValue: finishing.value === selectedFinishing
     }, finishing.value)),
     value: selectedFinishing
   }), selectedFinishing === 'Metal' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Metal Finish",
     onChange: handelMetalFinishChange,
     options: _metal_metalOptions__WEBPACK_IMPORTED_MODULE_13__.metalFinishOptions.map(finish => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: finish.option,
       value: finish.option,
-      selected: finish.option === metalFinish
+      defaultValue: finish.option === metalFinish
     }, finish.option)),
     value: metalFinish
   }), selectedFinishing === 'Painted' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_8__["default"], {
@@ -23142,48 +23340,54 @@ function Letters({
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: color,
       value: color,
-      selected: color == ledLightColor
+      defaultValue: color == ledLightColor
     }, color)),
     value: ledLightColor
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Acrylic Reveal",
     onChange: handleOnChangeAcrylicReveal,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__.acrylicRevealOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option,
       value: option,
-      selected: option == acrylicReveal
+      defaultValue: option == acrylicReveal
     }, option)),
     value: acrylicReveal
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting",
     onChange: handleOnChangeMounting,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__.mountingDefaultOptions.map(mounting => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: mounting.value,
       value: mounting.value,
-      selected: mounting.value == mounting
+      defaultValue: mounting.value == mounting
     }, mounting.value)),
     value: mounting
   }), (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_WITH_SPACER || mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   }), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == spacerStandoffDistance
+      defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Included Items",
     onChange: handleOnChangeincludedItems,
     options: lightingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == includedItems
+      defaultValue: option.value == includedItems
     }, option.value)),
     value: includedItems
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -23636,7 +23840,7 @@ function Logo({
     }
   }, [waterproof]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    clasName: "py-4 my-4"
+    className: "py-4 my-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "font-title",
     dangerouslySetInnerHTML: {
@@ -23648,8 +23852,9 @@ function Logo({
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == waterproof
+      defaultValue: option.option == waterproof
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -23657,8 +23862,9 @@ function Logo({
     value: depth?.value,
     onChange: handleOnChangeDepth,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_8__.depthOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
-      selected: thickness === depth
+      defaultValue: thickness === depth
     }, thickness.depth))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Logo Width",
@@ -23674,16 +23880,18 @@ function Logo({
     title: "Finishing",
     onChange: handleChangeFinishing,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_8__.finishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: finishing.value,
       value: finishing.value,
-      selected: finishing.value === selectedFinishing
+      defaultValue: finishing.value === selectedFinishing
     }, finishing.value)),
     value: selectedFinishing
   }), selectedFinishing === 'Metal' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Metal Finish",
     onChange: handelMetalFinishChange,
     options: _metal_metalOptions__WEBPACK_IMPORTED_MODULE_9__.metalFinishOptions.map(finish => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: finish.option,
       value: finish.option,
-      selected: finish.option === metalFinish
+      defaultValue: finish.option === metalFinish
     }, finish.option)),
     value: metalFinish
   }), selectedFinishing === 'Painted' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_6__["default"], {
@@ -23703,48 +23911,54 @@ function Logo({
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_8__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: color,
       value: color,
-      selected: color == ledLightColor
+      defaultValue: color == ledLightColor
     }, color)),
     value: ledLightColor
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Acrylic Reveal",
     onChange: handleOnChangeAcrylicReveal,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_8__.acrylicRevealOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option,
       value: option,
-      selected: option == acrylicReveal
+      defaultValue: option == acrylicReveal
     }, option)),
     value: acrylicReveal
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting",
     onChange: handleOnChangeMounting,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_8__.mountingDefaultOptions.map(mounting => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: mounting.value,
       value: mounting.value,
-      selected: mounting.value == mounting
+      defaultValue: mounting.value == mounting
     }, mounting.value)),
     value: mounting
   }), (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER || mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   }), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == spacerStandoffDistance
+      defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Included Items",
     onChange: handleOnChangeincludedItems,
     options: lightingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == includedItems
+      defaultValue: option.value == includedItems
     }, option.value)),
     value: includedItems
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -23959,6 +24173,7 @@ function TrimLessFrontAndBackLit() {
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full flex flex-col"
   }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    key: item.id,
     index: index,
     id: item.id,
     item: item
@@ -24338,7 +24553,7 @@ function Letters({
       return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
         key: index,
         value: val,
-        selected: val === selectedLetterHeight
+        defaultValue: val === selectedLetterHeight
       }, val, "\"");
     }));
   }, [depth, lettersHeight, letterHeightOptions]);
@@ -24458,7 +24673,7 @@ function Letters({
     }
   }, [waterproof]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    clasName: "py-4 my-4"
+    className: "py-4 my-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "font-title",
     dangerouslySetInnerHTML: {
@@ -24496,8 +24711,9 @@ function Letters({
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == waterproof
+      defaultValue: option.option == waterproof
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_FontsDropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
@@ -24523,8 +24739,9 @@ function Letters({
     value: depth?.value,
     onChange: handleOnChangeDepth,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__.frontBackdepthOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
-      selected: thickness === depth
+      defaultValue: thickness === depth
     }, thickness.depth))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Letter Height",
@@ -24550,8 +24767,9 @@ function Letters({
     title: "Front Acrylic Cover",
     onChange: handleOnChangeWhite,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.whiteOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option == frontAcrylicCover
+      defaultValue: option == frontAcrylicCover
     }, option.option)),
     value: frontAcrylicCover
   }), frontAcrylicCover === '3M 3630 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_11__["default"], {
@@ -24572,56 +24790,63 @@ function Letters({
     title: "3M 3635 Vinyl",
     onChange: handleOnChangeVinyl3635,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.vinlyl3635Options.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.code,
       value: `${option.name} - [${option.code}]`,
-      selected: `${option.name} - [${option.code}]` == vinyl3635
+      defaultValue: `${option.name} - [${option.code}]` == vinyl3635
     }, `${option.name} - [${option.code}]`)),
     value: vinyl3635
   })), (frontAcrylicCover === '3M 3630 Vinyl' || frontAcrylicCover === '3M 3635 Vinyl') && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Front & Back Vinyl",
     onChange: handleOnChangeWhiteFrontBackVinyl,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.frontBackVinylOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == frontBackVinyl
+      defaultValue: option.option == frontBackVinyl
     }, option.option)),
     value: frontBackVinyl
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: color,
       value: color,
-      selected: color == ledLightColor
+      defaultValue: color == ledLightColor
     }, color)),
     value: ledLightColor
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting",
     onChange: handleOnChangeMounting,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__.mountingDefaultOptions.map(mounting => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: mounting.value,
       value: mounting.value,
-      selected: mounting.value == mounting
+      defaultValue: mounting.value == mounting
     }, mounting.value)),
     value: mounting
   }), (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER || mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   }), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == spacerStandoffDistance
+      defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Included Items",
     onChange: handleOnChangeincludedItems,
     options: lightingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == includedItems
+      defaultValue: option.value == includedItems
     }, option.value)),
     value: includedItems
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -25056,7 +25281,7 @@ function Logo({
     }
   }, [waterproof]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    clasName: "py-4 my-4"
+    className: "py-4 my-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "font-title",
     dangerouslySetInnerHTML: {
@@ -25068,8 +25293,9 @@ function Logo({
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == waterproof
+      defaultValue: option.option == waterproof
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -25077,8 +25303,9 @@ function Logo({
     value: depth?.value,
     onChange: handleOnChangeDepth,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_9__.frontBackdepthOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
-      selected: thickness === depth
+      defaultValue: thickness === depth
     }, thickness.depth))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Logo Width",
@@ -25108,8 +25335,9 @@ function Logo({
     title: "Front Acrylic Cover",
     onChange: handleOnChangeWhite,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_5__.whiteOptionsResin.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option == frontAcrylicCover
+      defaultValue: option == frontAcrylicCover
     }, option.option)),
     value: frontAcrylicCover
   }), frontAcrylicCover === '3M 3630 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_7__["default"], {
@@ -25129,56 +25357,63 @@ function Logo({
     title: "3M 3635 Vinyl",
     onChange: handleOnChangeVinyl3635,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_5__.vinlyl3635Options.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.code,
       value: `${option.name} - [${option.code}]`,
-      selected: `${option.name} - [${option.code}]` == vinyl3635
+      defaultValue: `${option.name} - [${option.code}]` == vinyl3635
     }, `${option.name} - [${option.code}]`)),
     value: vinyl3635
   })), (frontAcrylicCover === '3M 3630 Vinyl' || frontAcrylicCover === '3M 3635 Vinyl') && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Front & Back Vinyl",
     onChange: handleOnChangeWhiteFrontBackVinyl,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.frontBackVinylOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == frontBackVinyl
+      defaultValue: option.option == frontBackVinyl
     }, option.option)),
     value: frontBackVinyl
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_9__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: color,
       value: color,
-      selected: color == ledLightColor
+      defaultValue: color == ledLightColor
     }, color)),
     value: ledLightColor
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting",
     onChange: handleOnChangeMounting,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_9__.mountingDefaultOptions.map(mounting => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: mounting.value,
       value: mounting.value,
-      selected: mounting.value == mounting
+      defaultValue: mounting.value == mounting
     }, mounting.value)),
     value: mounting
   }), (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER || mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   }), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == spacerStandoffDistance
+      defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Included Items",
     onChange: handleOnChangeincludedItems,
     options: lightingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == includedItems
+      defaultValue: option.value == includedItems
     }, option.value)),
     value: includedItems
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -25399,6 +25634,7 @@ function TrimLessFrontLit() {
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full"
   }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    key: item.id,
     index: index,
     id: item.id,
     item: item
@@ -25770,10 +26006,10 @@ function Letters({
       return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
         key: index,
         value: val,
-        selected: val === selectedLetterHeight
+        defaultValue: val === selectedLetterHeight
       }, val, "\"");
     }));
-  }, [lettersHeight, letterHeightOptions]);
+  }, [lettersHeight]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     adjustFontSize();
   }, [letters]);
@@ -25884,7 +26120,7 @@ function Letters({
     }
   }, [waterproof]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    clasName: "py-4 my-4"
+    className: "py-4 my-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "font-title",
     dangerouslySetInnerHTML: {
@@ -25922,8 +26158,9 @@ function Letters({
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == waterproof
+      defaultValue: option.option == waterproof
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_FontsDropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
@@ -25949,8 +26186,9 @@ function Letters({
     value: depth?.value,
     onChange: handleOnChangeDepth,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__.depthOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
-      selected: thickness === depth
+      defaultValue: thickness === depth
     }, thickness.depth))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Letter Height",
@@ -25976,8 +26214,9 @@ function Letters({
     title: "Front Acrylic Cover",
     onChange: handleOnChangeWhite,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.whiteOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option == frontAcrylicCover
+      defaultValue: option == frontAcrylicCover
     }, option.option)),
     value: frontAcrylicCover
   }), frontAcrylicCover === '3M 3630 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_9__["default"], {
@@ -25998,48 +26237,54 @@ function Letters({
     title: "3M 3635 Vinyl",
     onChange: handleOnChangeVinyl3635,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.vinlyl3635Options.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.code,
       value: `${option.name} - [${option.code}]`,
-      selected: `${option.name} - [${option.code}]` == vinyl3635
+      defaultValue: `${option.name} - [${option.code}]` == vinyl3635
     }, `${option.name} - [${option.code}]`)),
     value: vinyl3635
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: color,
       value: color,
-      selected: color == ledLightColor
+      defaultValue: color == ledLightColor
     }, color)),
     value: ledLightColor
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting",
     onChange: handleOnChangeMounting,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__.mountingDefaultOptions.map(mounting => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: mounting.value,
       value: mounting.value,
-      selected: mounting.value == mounting
+      defaultValue: mounting.value == mounting
     }, mounting.value)),
     value: mounting
   }), (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER || mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   }), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == spacerStandoffDistance
+      defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Included Items",
     onChange: handleOnChangeincludedItems,
     options: lightingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == includedItems
+      defaultValue: option.value == includedItems
     }, option.value)),
     value: includedItems
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -26457,7 +26702,7 @@ function Logo({
     }
   }, [waterproof]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    clasName: "py-4 my-4"
+    className: "py-4 my-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "font-title",
     dangerouslySetInnerHTML: {
@@ -26469,8 +26714,9 @@ function Logo({
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == waterproof
+      defaultValue: option.option == waterproof
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -26478,8 +26724,9 @@ function Logo({
     value: depth?.value,
     onChange: handleOnChangeDepth,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_9__.depthOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
-      selected: thickness === depth
+      defaultValue: thickness === depth
     }, thickness.depth))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Logo Width",
@@ -26509,8 +26756,9 @@ function Logo({
     title: "Front Acrylic Cover",
     onChange: handleOnChangeWhite,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_5__.whiteOptionsResin.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option == frontAcrylicCover
+      defaultValue: option == frontAcrylicCover
     }, option.option)),
     value: frontAcrylicCover
   }), frontAcrylicCover === '3M 3630 Vinyl' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_VinylColors__WEBPACK_IMPORTED_MODULE_7__["default"], {
@@ -26530,48 +26778,54 @@ function Logo({
     title: "3M 3635 Vinyl",
     onChange: handleOnChangeVinyl3635,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_5__.vinlyl3635Options.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.code,
       value: `${option.name} - [${option.code}]`,
-      selected: `${option.name} - [${option.code}]` == vinyl3635
+      defaultValue: `${option.name} - [${option.code}]` == vinyl3635
     }, `${option.name} - [${option.code}]`)),
     value: vinyl3635
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_9__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: color,
       value: color,
-      selected: color == ledLightColor
+      defaultValue: color == ledLightColor
     }, color)),
     value: ledLightColor
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting",
     onChange: handleOnChangeMounting,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_9__.mountingDefaultOptions.map(mounting => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: mounting.value,
       value: mounting.value,
-      selected: mounting.value == mounting
+      defaultValue: mounting.value == mounting
     }, mounting.value)),
     value: mounting
   }), (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER || mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   }), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == spacerStandoffDistance
+      defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Included Items",
     onChange: handleOnChangeincludedItems,
     options: lightingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == includedItems
+      defaultValue: option.value == includedItems
     }, option.value)),
     value: includedItems
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -26860,6 +27114,7 @@ function FabricatedStainless() {
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full"
   }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    key: item.id,
     index: index,
     id: item.id,
     item: item
@@ -27235,10 +27490,10 @@ function Letters({
       return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
         key: index,
         value: val,
-        selected: val === selectedLetterHeight
+        defaultValue: val === selectedLetterHeight
       }, val, "\"");
     }));
-  }, [lettersHeight, letterHeightOptions]);
+  }, [lettersHeight]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     adjustFontSize();
   }, [letters]);
@@ -27347,7 +27602,7 @@ function Letters({
     font != 'Custom font' && setFontFileUrl('');
   }, [color, returnColor, font]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    clasName: "py-4 my-4"
+    className: "py-4 my-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "font-title",
     dangerouslySetInnerHTML: {
@@ -27403,8 +27658,9 @@ function Letters({
     title: "Metal Option",
     onChange: e => setMetal(e.target.value),
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_10__.metalOptions.map(metal => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: metal.option,
       value: metal.option,
-      selected: metal.option === metal
+      defaultValue: metal.option === metal
     }, metal.option)),
     value: metal
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -27412,8 +27668,9 @@ function Letters({
     value: selectedThickness?.value,
     onChange: handleOnChangeThickness,
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_10__.fabricatedThicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
-      selected: thickness === selectedThickness
+      defaultValue: thickness === selectedThickness
     }, thickness.thickness))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Letter Height",
@@ -27424,16 +27681,18 @@ function Letters({
     title: "Finishing Options",
     onChange: handleChangeFinishing,
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_10__.finishOptions2.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: finishing.option,
       value: finishing.option,
-      selected: finishing.option === selectedFinishing
+      defaultValue: finishing.option === selectedFinishing
     }, finishing.option)),
     value: selectedFinishing
   }), selectedFinishing === 'Metal' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Metal Finish",
     onChange: handelMetalFinishChange,
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_10__.metalFinishOptions.map(metalFinish => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: metalFinish.option,
       value: metalFinish.option,
-      selected: metalFinish.option === stainLessMetalFinish
+      defaultValue: metalFinish.option === stainLessMetalFinish
     }, metalFinish.option)),
     value: stainLessMetalFinish
   }), selectedFinishing === 'Painted' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_12__["default"], {
@@ -27471,40 +27730,45 @@ function Letters({
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == waterproof
+      defaultValue: option.option == waterproof
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting Options",
     onChange: handleOnChangeInstallation,
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_10__.fabricatedMetalInstallationOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option === mounting
+      defaultValue: option.option === mounting
     }, option.option)),
     value: mounting
   }), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "SPACER DISTANCE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == spacerStandoffDistance
+      defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
   })), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -27936,8 +28200,9 @@ function Logo({
     title: "Metal Option",
     onChange: e => setMetal(e.target.value),
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_9__.metalOptions.map(metal => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: metal.option,
       value: metal.option,
-      selected: metal.option === metal
+      defaultValue: metal.option === metal
     }, metal.option)),
     value: metal
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -27945,8 +28210,9 @@ function Logo({
     value: selectedThickness?.value,
     onChange: handleOnChangeThickness,
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_9__.fabricatedThicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
-      selected: thickness === selectedThickness
+      defaultValue: thickness === selectedThickness
     }, thickness.thickness))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Logo Width",
@@ -27962,16 +28228,18 @@ function Logo({
     title: "Finishing Options",
     onChange: handleChangeFinishing,
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_9__.finishOptions2.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: finishing.option,
       value: finishing.option,
-      selected: finishing.option === selectedFinishing
+      defaultValue: finishing.option === selectedFinishing
     }, finishing.option)),
     value: selectedFinishing
   }), selectedFinishing === 'Metal' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Metal Finish",
     onChange: handelMetalFinishChange,
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_9__.metalFinishOptions.map(metalFinish => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: metalFinish.option,
       value: metalFinish.option,
-      selected: metalFinish.option === stainLessMetalFinish
+      defaultValue: metalFinish.option === stainLessMetalFinish
     }, metalFinish.option)),
     value: stainLessMetalFinish
   }), selectedFinishing === 'Painted' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_10__["default"], {
@@ -28006,32 +28274,36 @@ function Logo({
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == waterproof
+      defaultValue: option.option == waterproof
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting Options",
     onChange: handleOnChangeInstallation,
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_9__.fabricatedMetalInstallationOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option === mounting
+      defaultValue: option.option === mounting
     }, option.option)),
     value: mounting
   }), (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER || mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   }), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == spacerStandoffDistance
+      defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -28241,6 +28513,7 @@ function LaserCutAluminum() {
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full"
   }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    key: item.id,
     index: index,
     id: item.id,
     item: item
@@ -28573,10 +28846,10 @@ function Letters({
       return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
         key: index,
         value: val,
-        selected: val === selectedLetterHeight
+        defaultValue: val === selectedLetterHeight
       }, val, "\"");
     }));
-  }, [lettersHeight, letterHeightOptions]);
+  }, [lettersHeight]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     adjustFontSize();
   }, [letters]);
@@ -28688,7 +28961,7 @@ function Letters({
     setMetalMountingOptions(newMountingOptions);
   }, [selectedThickness, mounting, setMetalMountingOptions]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    clasName: "py-4 my-4"
+    className: "py-4 my-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "font-title",
     dangerouslySetInnerHTML: {
@@ -28744,8 +29017,9 @@ function Letters({
     value: selectedThickness?.value,
     onChange: handleOnChangeThickness,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.metalThicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
-      selected: thickness === selectedThickness
+      defaultValue: thickness === selectedThickness
     }, thickness.thickness))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Letter Height",
@@ -28756,24 +29030,27 @@ function Letters({
     title: "Aluminum Finishing",
     onChange: handleChangeFinishing,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.aluminumFinishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: finishing.option,
       value: finishing.option,
-      selected: finishing.option === selectedFinishing
+      defaultValue: finishing.option === selectedFinishing
     }, finishing.option)),
     value: selectedFinishing
   }), selectedFinishing === 'Anodized' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Anodized Finishing",
     onChange: handleChangeAnodizedFinishing,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.anodizedFinishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: finishing.option,
       value: finishing.option,
-      selected: finishing.option === anodizedFinishing
+      defaultValue: finishing.option === anodizedFinishing
     }, finishing.option)),
     value: anodizedFinishing
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Anodized Colors",
     onChange: handleChangeAnodizedColor,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.anodizedColorOptions.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: color.option,
       value: color.option,
-      selected: color.option === anodizedColor
+      defaultValue: color.option === anodizedColor
     }, color.option)),
     value: anodizedColor
   })), selectedFinishing === 'Painted' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_11__["default"], {
@@ -28794,32 +29071,36 @@ function Letters({
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == waterproof
+      defaultValue: option.option == waterproof
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting Options",
     onChange: handleOnChangeInstallation,
     options: metalMountingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option === mounting
+      defaultValue: option.option === mounting
     }, option.option)),
     value: mounting
   }), (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER || mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   }), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == spacerStandoffDistance
+      defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -29213,8 +29494,9 @@ function Logo({
     value: item.metalThickness?.value,
     onChange: handleOnChangeThickness,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.metalThicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
-      selected: thickness === selectedThickness
+      defaultValue: thickness === selectedThickness
     }, thickness.thickness))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Logo Width",
@@ -29230,32 +29512,36 @@ function Logo({
     title: "Environment",
     onChange: e => setWaterproof(e.target.value),
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == waterproof
+      defaultValue: option.option == waterproof
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Aluminum Finishing",
     onChange: handleChangeFinishing,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.aluminumFinishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: finishing.option,
       value: finishing.option,
-      selected: finishing.option === selectedFinishing
+      defaultValue: finishing.option === selectedFinishing
     }, finishing.option)),
     value: selectedFinishing
   }), selectedFinishing === 'Anodized' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Anodized Finishing",
     onChange: handleChangeAnodizedFinishing,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.anodizedFinishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: finishing.option,
       value: finishing.option,
-      selected: finishing.option === anodizedFinishing
+      defaultValue: finishing.option === anodizedFinishing
     }, finishing.option)),
     value: anodizedFinishing
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Anodized Colors",
     onChange: handleChangeAnodizedColor,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.anodizedColorOptions.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: color.option,
       value: color.option,
-      selected: color.option === anodizedColor
+      defaultValue: color.option === anodizedColor
     }, color.option)),
     value: anodizedColor
   })), selectedFinishing === 'Painted' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_10__["default"], {
@@ -29275,24 +29561,27 @@ function Logo({
     title: "Mounting Options",
     onChange: handleOnChangeInstallation,
     options: metalMountingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option === mounting
+      defaultValue: option.option === mounting
     }, option.option)),
     value: item.mounting
   }), (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER || mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   }), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == spacerStandoffDistance
+      defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -29496,6 +29785,7 @@ function FabricatedStainless() {
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full"
   }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    key: item.id,
     index: index,
     id: item.id,
     item: item
@@ -29850,10 +30140,10 @@ function Letters({
       return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
         key: index,
         value: val,
-        selected: val === selectedLetterHeight
+        defaultValue: val === selectedLetterHeight
       }, val, "\"");
     }));
-  }, [lettersHeight, letterHeightOptions]);
+  }, [lettersHeight]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     adjustFontSize();
   }, [letters]);
@@ -29966,7 +30256,7 @@ function Letters({
     setMetalMountingOptions(newMountingOptions);
   }, [selectedThickness, mounting, setMetalMountingOptions]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    clasName: "py-4 my-4"
+    className: "py-4 my-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "font-title",
     dangerouslySetInnerHTML: {
@@ -30019,8 +30309,9 @@ function Letters({
     title: "Metal Option",
     onChange: e => setMetal(e.target.value),
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_10__.metalOptions.map(metal => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: metal.option,
       value: metal.option,
-      selected: metal.option === metal
+      defaultValue: metal.option === metal
     }, metal.option)),
     value: metal
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -30028,8 +30319,9 @@ function Letters({
     value: selectedThickness?.value,
     onChange: handleOnChangeThickness,
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_10__.metalThicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
-      selected: thickness === selectedThickness
+      defaultValue: thickness === selectedThickness
     }, thickness.thickness))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Letter Height",
@@ -30040,24 +30332,27 @@ function Letters({
     title: "Finishing Options",
     onChange: handleChangeFinishing,
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_10__.finishOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: finishing.option,
       value: finishing.option,
-      selected: finishing.option === selectedFinishing
+      defaultValue: finishing.option === selectedFinishing
     }, finishing.option)),
     value: selectedFinishing
   }), selectedFinishing === 'Metal Finish' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Metal Finish",
     onChange: handelMetalFinishChange,
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_10__.metalFinishOptions.map(metalFinish => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: metalFinish.option,
       value: metalFinish.option,
-      selected: metalFinish.option === stainLessMetalFinish
+      defaultValue: metalFinish.option === stainLessMetalFinish
     }, metalFinish.option)),
     value: stainLessMetalFinish
   }), (stainLessMetalFinish === 'Stainless Steel Polished' || stainLessMetalFinish === 'Electroplated Gold Polished' || stainLessMetalFinish === 'Electroplated Black Titanium Polished') && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Steel Polish",
     onChange: e => setStainlessSteelPolished(e.target.value),
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_10__.stainlessSteelPolishedOptions.map(steelPolished => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: steelPolished.option,
       value: steelPolished.option,
-      selected: steelPolished.option === stainlessSteelPolished
+      defaultValue: steelPolished.option === stainlessSteelPolished
     }, steelPolished.option)),
     value: stainlessSteelPolished
   }), selectedFinishing === 'Painted Finish' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_11__["default"], {
@@ -30078,32 +30373,36 @@ function Letters({
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == waterproof
+      defaultValue: option.option == waterproof
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting Options",
     onChange: handleOnChangeInstallation,
     options: metalMountingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option === mounting
+      defaultValue: option.option === mounting
     }, option.option)),
     value: mounting
   }), (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER || mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   }), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == spacerStandoffDistance
+      defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -30518,8 +30817,9 @@ function Logo({
     title: "Metal Option",
     onChange: e => setMetal(e.target.value),
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_9__.metalOptions.map(metal => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: metal.option,
       value: metal.option,
-      selected: metal.option === item.metal
+      defaultValue: metal.option === item.metal
     }, metal.option)),
     value: metal
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -30527,8 +30827,9 @@ function Logo({
     value: selectedThickness?.value,
     onChange: handleOnChangeThickness,
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_9__.metalThicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
-      selected: thickness === selectedThickness
+      defaultValue: thickness === selectedThickness
     }, thickness.thickness))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Logo Width",
@@ -30544,24 +30845,27 @@ function Logo({
     title: "Finishing Options",
     onChange: handleChangeFinishing,
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_9__.finishOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: finishing.option,
       value: finishing.option,
-      selected: finishing.option === selectedFinishing
+      defaultValue: finishing.option === selectedFinishing
     }, finishing.option)),
     value: selectedFinishing
   }), selectedFinishing === 'Metal Finish' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Metal Finish",
     onChange: handelMetalFinishChange,
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_9__.metalFinishOptions.map(metalFinish => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: metalFinish.option,
       value: metalFinish.option,
-      selected: metalFinish.option === stainLessMetalFinish
+      defaultValue: metalFinish.option === stainLessMetalFinish
     }, metalFinish.option)),
     value: stainLessMetalFinish
   }), (stainLessMetalFinish === 'Stainless Steel Polished' || stainLessMetalFinish === 'Electroplated Gold Polished' || stainLessMetalFinish === 'Electroplated Black Titanium Polished') && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Steel Polish",
     onChange: e => setStainlessSteelPolished(e.target.value),
     options: _metalOptions__WEBPACK_IMPORTED_MODULE_9__.stainlessSteelPolishedOptions.map(steelPolished => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: steelPolished.option,
       value: steelPolished.option,
-      selected: steelPolished.option === item.stainlessSteelPolished
+      defaultValue: steelPolished.option === item.stainlessSteelPolished
     }, steelPolished.option)),
     value: item.stainlessSteelPolished
   }), selectedFinishing === 'Painted Finish' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_11__["default"], {
@@ -30581,32 +30885,36 @@ function Logo({
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == waterproof
+      defaultValue: option.option == waterproof
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting Options",
     onChange: handleOnChangeInstallation,
     options: metalMountingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option === mounting
+      defaultValue: option.option === mounting
     }, option.option)),
     value: mounting
   }), (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER || mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   }), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == spacerStandoffDistance
+      defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -30958,6 +31266,7 @@ function PVCMetalLaminate() {
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full"
   }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    key: item.id,
     index: index,
     id: item.id,
     item: item
@@ -31301,10 +31610,10 @@ function Letters({
       return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
         key: index,
         value: val,
-        selected: val === selectedLetterHeight
+        defaultValue: val === selectedLetterHeight
       }, val, "\"");
     }));
-  }, [lettersHeight, letterHeightOptions]);
+  }, [lettersHeight]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     adjustFontSize();
   }, [letters]);
@@ -31388,7 +31697,7 @@ function Letters({
     font != 'Custom font' && setFontFileUrl('');
   }, [pvcBaseColor, font]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    clasName: "py-4 my-4"
+    className: "py-4 my-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "font-title",
     dangerouslySetInnerHTML: {
@@ -31442,8 +31751,9 @@ function Letters({
     value: selectedThickness?.value,
     onChange: handleOnChangeThickness,
     options: _pvcOptions__WEBPACK_IMPORTED_MODULE_11__.thicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
-      selected: thickness === selectedThickness
+      defaultValue: thickness === selectedThickness
     }, thickness.thickness))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Letter Height",
@@ -31454,8 +31764,9 @@ function Letters({
     title: "Metal Laminate",
     onChange: handleChangeMetalLaminate,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.metalFinishColors.map(laminate => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: laminate.name,
       value: laminate.name,
-      selected: laminate.name === item.metalLaminate
+      defaultValue: laminate.name === item.metalLaminate
     }, laminate.name)),
     value: metalLaminate
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_8__["default"], {
@@ -31470,21 +31781,24 @@ function Letters({
     selectColor: color => {
       setPvcBaseColor(color);
       setOpenColor(false);
-    }
+    },
+    samePrice: false
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Finishing Options",
     onChange: handleChangeFinishing,
     options: _pvcOptions__WEBPACK_IMPORTED_MODULE_11__.finishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: finishing.name,
       value: finishing.name,
-      selected: finishing.name === item.finishing
+      defaultValue: finishing.name === item.finishing
     }, finishing.name)),
     value: item.finishing
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: waterProofSelections.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == item.waterproof
+      defaultValue: option.option == item.waterproof
     }, option.option)),
     value: item.waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -31493,23 +31807,25 @@ function Letters({
     options: mountingSelections.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: option.value,
       value: option.value,
-      selected: option.value === mounting
+      defaultValue: option.value === mounting
     }, option.value)),
     value: item.mounting
   }), (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER || mounting === 'Pad' || mounting === 'Pad - Combination All' || mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_10__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   })), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == spacerStandoffDistance
+      defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -31905,8 +32221,9 @@ function Logo({
     value: item.thickness?.value,
     onChange: handleOnChangeThickness,
     options: _pvcOptions__WEBPACK_IMPORTED_MODULE_10__.thicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
-      selected: thickness === item.thickness
+      defaultValue: thickness === item.thickness
     }, thickness.thickness))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Logo Width",
@@ -31922,8 +32239,9 @@ function Logo({
     title: "Metal Laminate",
     onChange: handleChangeMetalLaminate,
     options: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_5__.metalFinishColors.map(laminate => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: laminate.name,
       value: laminate.name,
-      selected: laminate.name === item.metalLaminate
+      defaultValue: laminate.name === item.metalLaminate
     }, laminate.name)),
     value: metalLaminate
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_6__["default"], {
@@ -31938,45 +32256,51 @@ function Logo({
     selectColor: color => {
       setPvcBaseColor(color);
       setOpenColor(false);
-    }
+    },
+    samePrice: false
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Finishing Options",
     onChange: handleChangeFinishing,
     options: _pvcOptions__WEBPACK_IMPORTED_MODULE_10__.finishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: finishing.name,
       value: finishing.name,
-      selected: finishing.name === item.finishing
+      defaultValue: finishing.name === item.finishing
     }, finishing.name)),
     value: selectedFinishing
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Environment",
     onChange: e => setWaterproof(e.target.value),
     options: waterProofSelections.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == item.waterproof
+      defaultValue: option.option == item.waterproof
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting",
     onChange: handleOnChangeMounting,
     options: mountingSelections.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value === mounting
+      defaultValue: option.value === mounting
     }, option.value)),
     value: item.mounting
   }), (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER || mounting === 'Pad' || mounting === 'Pad - Combination All' || mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   })), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == spacerStandoffDistance
+      defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -32178,6 +32502,7 @@ function PVCPainted() {
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full"
   }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    key: item.id,
     index: index,
     id: item.id,
     item: item
@@ -32509,10 +32834,10 @@ function Letters({
       return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
         key: index,
         value: val,
-        selected: val === selectedLetterHeight
+        defaultValue: val === selectedLetterHeight
       }, val, "\"");
     }));
-  }, [lettersHeight, letterHeightOptions]);
+  }, [lettersHeight]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     adjustFontSize();
   }, [letters]);
@@ -32595,7 +32920,7 @@ function Letters({
     font != 'Custom font' && setFontFileUrl('');
   }, [color, font]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    clasName: "py-4 my-4"
+    className: "py-4 my-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "font-title",
     dangerouslySetInnerHTML: {
@@ -32649,8 +32974,9 @@ function Letters({
     value: selectedThickness?.value,
     onChange: handleOnChangeThickness,
     options: _pvcOptions__WEBPACK_IMPORTED_MODULE_10__.thicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
-      selected: thickness === selectedThickness
+      defaultValue: thickness === selectedThickness
     }, thickness.thickness))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Letter Height",
@@ -32674,16 +33000,18 @@ function Letters({
     title: "Finishing Options",
     onChange: handleChangeFinishing,
     options: _pvcOptions__WEBPACK_IMPORTED_MODULE_10__.finishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: finishing.name,
       value: finishing.name,
-      selected: finishing.name === item.finishing
+      defaultValue: finishing.name === item.finishing
     }, finishing.name)),
     value: item.finishing
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Environment",
     onChange: handleOnChangeWaterproof,
     options: waterProofSelections.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == item.waterproof
+      defaultValue: option.option == item.waterproof
     }, option.option)),
     value: item.waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -32692,23 +33020,25 @@ function Letters({
     options: mountingSelections.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: option.value,
       value: option.value,
-      selected: option.value === mounting
+      defaultValue: option.value === mounting
     }, option.value)),
     value: item.mounting
   }), (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER || mounting === 'Pad' || mounting === 'Pad - Combination All' || mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   })), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == spacerStandoffDistance
+      defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -33126,8 +33456,9 @@ function Logo({
     value: item.thickness?.value,
     onChange: handleOnChangeThickness,
     options: _pvcOptions__WEBPACK_IMPORTED_MODULE_10__.thicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
-      selected: thickness === item.thickness
+      defaultValue: thickness === item.thickness
     }, thickness.thickness))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Logo Width",
@@ -33156,40 +33487,45 @@ function Logo({
     title: "Environment",
     onChange: e => setWaterproof(e.target.value),
     options: waterProofSelections.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == waterproof
+      defaultValue: option.option == waterproof
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Finishing Options",
     onChange: handleChangeFinishing,
     options: _pvcOptions__WEBPACK_IMPORTED_MODULE_10__.finishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: finishing.name,
       value: finishing.name,
-      selected: finishing.name === finishing
+      defaultValue: finishing.name === finishing
     }, finishing.name)),
     value: selectedFinishing
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting",
     onChange: handleOnChangeMounting,
     options: mountingSelections.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value === mounting
+      defaultValue: option.value === mounting
     }, option.value)),
     value: mounting
   }), (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER || mounting === 'Pad' || mounting === 'Pad - Combination All' || mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   })), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == spacerStandoffDistance
+      defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -33364,6 +33700,7 @@ function PVCUv() {
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full"
   }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    key: item.id,
     index: index,
     id: item.id,
     item: item
@@ -33737,8 +34074,9 @@ function Logo({
     value: item.thickness?.value,
     onChange: handleOnChangeThickness,
     options: _pvcOptions__WEBPACK_IMPORTED_MODULE_10__.thicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: thickness.value,
       value: thickness.value,
-      selected: thickness === item.thickness
+      defaultValue: thickness === item.thickness
     }, thickness.thickness))
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Logo Width",
@@ -33762,45 +34100,51 @@ function Logo({
     selectColor: color => {
       setPvcBaseColor(color);
       setOpenColor(false);
-    }
+    },
+    samePrice: false
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Finishing Options",
     onChange: handleChangeFinishing,
     options: _pvcOptions__WEBPACK_IMPORTED_MODULE_10__.finishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: finishing.name,
       value: finishing.name,
-      selected: finishing.name === item.finishing
+      defaultValue: finishing.name === item.finishing
     }, finishing.name)),
     value: selectedFinishing
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Environment",
     onChange: e => setWaterproof(e.target.value),
     options: waterProofSelections.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
       value: option.option,
-      selected: option.option == waterproof
+      defaultValue: option.option == waterproof
     }, option.option)),
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "mounting",
     onChange: handleOnChangeMounting,
     options: mountingSelections.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value === mounting
+      defaultValue: option.value === mounting
     }, option.value)),
     value: mounting
   }), (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER || mounting === 'Pad' || mounting === 'Pad - Combination All' || mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == studLength
+      defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
   })), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.value,
       value: option.value,
-      selected: option.value == spacerStandoffDistance
+      defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -33913,6 +34257,1148 @@ const metalLaminateOptions = [{
 
 /***/ }),
 
+/***/ "./src/scripts/products/wayfinding/EtchedFabricated/EtchedFabricated.js":
+/*!******************************************************************************!*\
+  !*** ./src/scripts/products/wayfinding/EtchedFabricated/EtchedFabricated.js ***!
+  \******************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ EtchedFabricated)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
+/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
+/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
+/* harmony import */ var _components_EtchedSign__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/EtchedSign */ "./src/scripts/products/wayfinding/EtchedFabricated/components/EtchedSign.js");
+
+
+
+
+
+
+
+
+function EtchedFabricated() {
+  const {
+    signage,
+    setSignage,
+    setTempFolder,
+    tempFolderName
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
+  const defaultSignage = {
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_6__["default"])(),
+    type: 'ETCHED_SIGN',
+    title: 'ETCHED SIGN 1',
+    mounting: 'Stud Mount',
+    usdPrice: 0,
+    cadPrice: 0,
+    filePaths: [],
+    fileNames: [],
+    fileUrls: [],
+    files: [],
+    sets: 1,
+    product: NovaQuote.product
+  };
+  function setDefaultSignage() {
+    setSignage([defaultSignage]);
+  }
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (NovaQuote.is_editting === '1') {
+      const currentSignage = JSON.parse(NovaQuote.signage);
+      if (currentSignage) {
+        setSignage(currentSignage);
+      }
+    } else {
+      setDefaultSignage();
+    }
+  }, []);
+  function addSignage(type) {
+    setSignage(prevSignage => {
+      const count = prevSignage.filter(sign => sign.type === type).length;
+      let args = {
+        type: 'ETCHED_SIGN',
+        mounting: 'Standard Nails',
+        title: `ETCHED SIGN ${count + 1}`
+      };
+      const newSignage = {
+        ...defaultSignage,
+        ...args
+      };
+      return [...prevSignage, newSignage];
+    });
+  }
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (NovaQuote.is_editting.length === 0) {
+      setTempFolder(tempFolderName);
+    } else {
+      if (NovaQuote.project_folder_status) {
+        setTempFolder(`${NovaQuote.project_folder_status}/Q-${NovaQuote.current_quote_id}`);
+      } else {
+        setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      }
+    }
+    // Only run once, no need to add dependencies if they don't change
+  }, []);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:flex gap-6"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:w-3/4 w-full"
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    key: item.id,
+    index: index,
+    id: item.id,
+    item: item
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_EtchedSign__WEBPACK_IMPORTED_MODULE_5__.EtchedSign, {
+    key: item.id,
+    item: item,
+    productId: item.product
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex gap-2"
+  }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
+    onClick: () => addSignage('ETCHED_SIGN'),
+    style: {
+      border: '1px solid #d2d2d2d2'
+    }
+  }, "ADD ETCHED SIGN", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], null));
+}
+
+/***/ }),
+
+/***/ "./src/scripts/products/wayfinding/EtchedFabricated/components/EtchedSign.js":
+/*!***********************************************************************************!*\
+  !*** ./src/scripts/products/wayfinding/EtchedFabricated/components/EtchedSign.js ***!
+  \***********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   EtchedSign: () => (/* binding */ EtchedSign),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _Description__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../Description */ "./src/scripts/Description.js");
+/* harmony import */ var _Dropdown__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../Dropdown */ "./src/scripts/Dropdown.js");
+/* harmony import */ var _UploadFiles__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../UploadFiles */ "./src/scripts/UploadFiles.js");
+/* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
+/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
+/* harmony import */ var _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../utils/ColorOptions */ "./src/scripts/utils/ColorOptions.js");
+/* harmony import */ var _utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../utils/ColorsDropdown */ "./src/scripts/utils/ColorsDropdown.js");
+
+
+
+
+
+
+
+
+
+
+const metalThicknessOptions = ['0.5"', '1"', '1.5"', '2"'];
+const electroplatedOptions = ['Electroplated Gold Brushed', 'Electroplated Gold Polished', 'Electroplated Black Titanium Brushed', 'Electroplated Black Titanium Polished', 'Electroplated Bronze Brushed', 'Electroplated Red Copper Brushed'];
+const finishingOptions = ['Painted', 'Brushed', 'Polished', 'Electroplated'];
+const mountingOptions = ['Stud Mount', 'Stud with Spacer', 'PVC Backer'];
+const studLengthOptions = ['1.5" (4cm)', '3.2" (8cm)', '4" (10cm)', '6" (15cm)'];
+const widthOptions = (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.arrayRange)(2, 94, 1);
+const heightOptions = (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.arrayRange)(2, 47, 1);
+const EtchedSign = ({
+  item
+}) => {
+  var _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$etchedPaintedCo, _item$customColor, _item$etchedWidth, _item$etchedHeight, _item$etchedMetalThic, _item$etchedFinishing, _item$etchedElectropl, _item$usdPrice, _item$cadPrice, _item$studLength, _item$usdSinglePrice, _item$cadSinglePrice, _item$waterproof, _item$mounting, _item$sets, _color$name;
+  const {
+    signage,
+    setSignage,
+    setMissing,
+    updateSignageItem
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
+  const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileNames = item.fileNames) !== null && _item$fileNames !== void 0 ? _item$fileNames : []);
+  const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrls = item.fileUrls) !== null && _item$fileUrls !== void 0 ? _item$fileUrls : []);
+  const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$filePaths = item.filePaths) !== null && _item$filePaths !== void 0 ? _item$filePaths : []);
+  const [files, setFiles] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$files = item.files) !== null && _item$files !== void 0 ? _item$files : []);
+  const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$etchedPaintedCo = item.etchedPaintedColor) !== null && _item$etchedPaintedCo !== void 0 ? _item$etchedPaintedCo : '');
+  const [openColor, setOpenColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const [customColor, setCustomColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$customColor = item.customColor) !== null && _item$customColor !== void 0 ? _item$customColor : '');
+  const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$etchedWidth = item.etchedWidth) !== null && _item$etchedWidth !== void 0 ? _item$etchedWidth : '');
+  const [height, setHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$etchedHeight = item.etchedHeight) !== null && _item$etchedHeight !== void 0 ? _item$etchedHeight : '');
+  const [metalThickness, setMetalThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$etchedMetalThic = item.etchedMetalThickness) !== null && _item$etchedMetalThic !== void 0 ? _item$etchedMetalThic : '');
+  const [finishing, setFinishing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$etchedFinishing = item.etchedFinishing) !== null && _item$etchedFinishing !== void 0 ? _item$etchedFinishing : '');
+  const [electroplated, setElectroplated] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$etchedElectropl = item.etchedElectroplated) !== null && _item$etchedElectropl !== void 0 ? _item$etchedElectropl : '');
+  const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdPrice = item.usdPrice) !== null && _item$usdPrice !== void 0 ? _item$usdPrice : 0);
+  const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadPrice = item.cadPrice) !== null && _item$cadPrice !== void 0 ? _item$cadPrice : 0);
+  const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$studLength = item.studLength) !== null && _item$studLength !== void 0 ? _item$studLength : '');
+  const [usdSinglePrice, setUsdSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdSinglePrice = item.usdSinglePrice) !== null && _item$usdSinglePrice !== void 0 ? _item$usdSinglePrice : 0);
+  const [cadSinglePrice, setCadSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadSinglePrice = item.cadSinglePrice) !== null && _item$cadSinglePrice !== void 0 ? _item$cadSinglePrice : 0);
+  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : '');
+  const [mounting, setMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
+  const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
+  const colorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const updateSignage = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(() => {
+    const updatedSignage = signage.map(sign => {
+      if (sign.id === item.id) {
+        return {
+          ...sign,
+          waterproof,
+          mounting,
+          etchedWidth: width,
+          etchedHeight: height,
+          etchedMetalThickness: metalThickness,
+          etchedFinishing: finishing,
+          etchedPaintedColor: color?.name,
+          etchedElectroplated: electroplated,
+          studLength,
+          customColor,
+          fileNames,
+          filePaths,
+          fileUrls,
+          files,
+          sets,
+          usdPrice,
+          cadPrice,
+          cadSinglePrice,
+          usdSinglePrice
+        };
+      }
+      return sign;
+    });
+    setSignage(updatedSignage);
+  }, [waterproof, color, customColor, mounting, metalThickness, finishing, studLength, electroplated, fileNames, filePaths, fileUrls, files, sets, width, height, usdPrice, cadPrice, cadSinglePrice, usdSinglePrice]);
+  const checkAndAddMissingFields = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(() => {
+    const missingFields = [];
+    if (!width) missingFields.push('Select Width');
+    if (!height) missingFields.push('Select Height');
+    if (!metalThickness) missingFields.push('Select Metal Thickness');
+    if (!finishing) missingFields.push('Select Finishing');
+    if (finishing === 'Painted') {
+      if (!color) missingFields.push('Select Painted Color');
+    }
+    if (finishing === 'Electroplated') {
+      if (!electroplated) missingFields.push('Select Electroplated Finishing');
+    }
+    if (color?.name === 'Custom Color' && !customColor) {
+      missingFields.push('Add the Pantone color code of your custom color.');
+    }
+    if (!mounting) missingFields.push('Select Mounting');
+    if (metalThickness) {
+      if (!studLength) missingFields.push('Select Stud Length');
+    }
+    if (!waterproof) missingFields.push('Select Environment');
+    if (!sets) missingFields.push('Select Quantity');
+    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    setMissing(prevMissing => {
+      const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
+      if (existingIndex !== -1) {
+        const updatedMissing = [...prevMissing];
+        updatedMissing[existingIndex] = {
+          ...updatedMissing[existingIndex],
+          missingFields
+        };
+        return updatedMissing;
+      } else if (missingFields.length > 0) {
+        return [...prevMissing, {
+          id: item.id,
+          title: item.title,
+          missingFields
+        }];
+      }
+      return prevMissing;
+    });
+  }, [fileUrls, color, waterproof, mounting, sets, width, height, studLength, metalThickness, finishing, electroplated, customColor]);
+  const computePricing = () => {
+    var _tempTotal$toFixed, _total$toFixed;
+    if (!width || !height || !metalThickness || !waterproof || !sets) {
+      return {
+        singlePrice: false,
+        total: false
+      };
+    }
+    let factor;
+    if (metalThickness === '0.5"') {
+      factor = 0.5;
+    } else if (metalThickness === '1"') {
+      factor = 0.58;
+    } else if (metalThickness === '1.5"') {
+      factor = 0.65;
+    } else if (metalThickness === '2"') {
+      factor = 0.71;
+    }
+    let tempTotal = (parseInt(width) + 1) * (parseInt(height) + 1) * factor;
+    tempTotal = tempTotal > 10 ? tempTotal : 10;
+    if (parseInt(width) > 20 || parseInt(height) > 20) {
+      tempTotal = tempTotal + 40;
+    }
+    if (parseInt(width) > 43 || parseInt(height) > 43) {
+      tempTotal = tempTotal + 100;
+    }
+    tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.INDOOR_NOT_WATERPROOF ? 1 : 1.2;
+    if (finishing === 'Polished') {
+      tempTotal *= 1.1;
+    }
+    if (finishing === 'Electroplated') {
+      tempTotal *= 1.2;
+    }
+    let total = tempTotal * parseInt(sets);
+    return {
+      singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
+      total: (_total$toFixed = total?.toFixed(2)) !== null && _total$toFixed !== void 0 ? _total$toFixed : 0
+    };
+  };
+  const handleOnChangeSets = e => {
+    const value = e.target.value;
+    setSets(value);
+  };
+  const handleComments = e => {
+    updateSignageItem(item.id, 'comments', e.target.value);
+  };
+  const handleOnChangeWaterproof = e => {
+    setWaterproof(e.target.value);
+  };
+  const handleonChangeFinishing = e => {
+    const target = e.target.value;
+    if (target !== 'Painted') {
+      setColor('');
+      setCustomColor('');
+    }
+    if (target !== 'Electroplated') {
+      setElectroplated('');
+    }
+    setFinishing(target);
+  };
+  const handleonChangeElectroplated = e => {
+    const target = e.target.value;
+    setElectroplated(target);
+  };
+  const handleOnChangeMetalThickness = e => {
+    const target = e.target?.value;
+    if (!target) return;
+    setMetalThickness(target);
+  };
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    const {
+      singlePrice,
+      total
+    } = computePricing();
+    if (total && singlePrice) {
+      setUsdPrice(total);
+      setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.EXCHANGE_RATE).toFixed(2));
+      setUsdSinglePrice(singlePrice);
+      setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.EXCHANGE_RATE).toFixed(2));
+    } else {
+      setUsdPrice(0);
+      setCadPrice(0);
+      setUsdSinglePrice(0);
+      setCadSinglePrice(0);
+    }
+  }, [metalThickness, width, height, waterproof, finishing, mounting, sets]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    updateSignage();
+    checkAndAddMissingFields();
+  }, [updateSignage, checkAndAddMissingFields]);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "py-4 mb-4"
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "quote-grid mb-6"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: "Metal Thickness",
+    value: metalThickness,
+    onChange: handleOnChangeMetalThickness,
+    options: metalThicknessOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      className: "lowercase",
+      key: option,
+      value: option,
+      defaultValue: option === metalThickness
+    }, option))
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: "Width",
+    value: width,
+    onChange: e => setWidth(e.target.value),
+    options: widthOptions
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: "Height",
+    value: height,
+    onChange: e => setHeight(e.target.value),
+    options: heightOptions
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: "Finishing",
+    onChange: handleonChangeFinishing,
+    options: finishingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option,
+      value: option,
+      defaultValue: option === finishing
+    }, option)),
+    value: finishing
+  }), finishing === 'Painted' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    ref: colorRef,
+    title: "Painted Color",
+    colorName: (_color$name = color?.name) !== null && _color$name !== void 0 ? _color$name : '',
+    openColor: openColor,
+    toggleColor: () => {
+      setOpenColor(prev => !prev);
+    },
+    colorOptions: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.colorOptions,
+    selectColor: color => {
+      setColor(color);
+      setOpenColor(false);
+    }
+  }), finishing === 'Electroplated' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: "ELECTROPLATED",
+    onChange: handleonChangeElectroplated,
+    options: electroplatedOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option,
+      value: option,
+      defaultValue: option === electroplated
+    }, option)),
+    value: electroplated
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: "Environment",
+    onChange: handleOnChangeWaterproof,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
+      value: option.option,
+      defaultValue: option.option === waterproof
+    }, option.option)),
+    value: waterproof
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: "Mounting",
+    onChange: e => setMounting(e.target.value),
+    options: mountingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option,
+      value: option,
+      defaultValue: option === mounting
+    }, option)),
+    value: mounting
+  }), metalThickness && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: "STUD LENGTH",
+    onChange: e => setStudLength(e.target.value),
+    options: studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option,
+      value: option,
+      defaultValue: option === studLength
+    }, option)),
+    value: studLength
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: "Quantity",
+    onChange: handleOnChangeSets,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.setOptions,
+    value: sets,
+    onlyValue: true
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "quote-grid"
+  }, color?.name == 'Custom Color' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "px-[1px] col-span-4"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
+  }, "Custom Color"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    className: "w-full py-4 px-2 border-solid border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400",
+    type: "text",
+    value: customColor,
+    onChange: e => setCustomColor(e.target.value),
+    placeholder: "ADD THE PANTONE COLOR CODE"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Description__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    value: item.comments,
+    handleComments: handleComments
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    itemId: item.id,
+    setFilePaths: setFilePaths,
+    setFiles: setFiles,
+    filePaths: filePaths,
+    fileUrls: fileUrls,
+    fileNames: fileNames,
+    setFileUrls: setFileUrls,
+    setFileNames: setFileNames
+  })));
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,react__WEBPACK_IMPORTED_MODULE_0__.memo)(EtchedSign));
+
+/***/ }),
+
+/***/ "./src/scripts/products/wayfinding/EtchedFlatCut/EtchedFlatCut.js":
+/*!************************************************************************!*\
+  !*** ./src/scripts/products/wayfinding/EtchedFlatCut/EtchedFlatCut.js ***!
+  \************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ EtchedFlatCut)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
+/* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Signage */ "./src/scripts/Signage.js");
+/* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
+/* harmony import */ var _components_EtchedSign__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/EtchedSign */ "./src/scripts/products/wayfinding/EtchedFlatCut/components/EtchedSign.js");
+
+
+
+
+
+
+
+
+function EtchedFlatCut() {
+  const {
+    signage,
+    setSignage,
+    setTempFolder,
+    tempFolderName
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
+  const defaultSignage = {
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_6__["default"])(),
+    type: 'ETCHED_SIGN',
+    title: 'ETCHED SIGN 1',
+    usdPrice: 0,
+    cadPrice: 0,
+    filePaths: [],
+    fileNames: [],
+    fileUrls: [],
+    files: [],
+    sets: 1,
+    product: NovaQuote.product
+  };
+  function setDefaultSignage() {
+    setSignage([defaultSignage]);
+  }
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (NovaQuote.is_editting === '1') {
+      const currentSignage = JSON.parse(NovaQuote.signage);
+      if (currentSignage) {
+        setSignage(currentSignage);
+      }
+    } else {
+      setDefaultSignage();
+    }
+  }, []);
+  function addSignage(type) {
+    setSignage(prevSignage => {
+      const count = prevSignage.filter(sign => sign.type === type).length;
+      let args = {
+        type: 'ETCHED_SIGN',
+        mounting: 'Standard Nails',
+        title: `ETCHED SIGN ${count + 1}`
+      };
+      const newSignage = {
+        ...defaultSignage,
+        ...args
+      };
+      return [...prevSignage, newSignage];
+    });
+  }
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (NovaQuote.is_editting.length === 0) {
+      setTempFolder(tempFolderName);
+    } else {
+      if (NovaQuote.project_folder_status) {
+        setTempFolder(`${NovaQuote.project_folder_status}/Q-${NovaQuote.current_quote_id}`);
+      } else {
+        setTempFolder(`Q-${NovaQuote.current_quote_id}`);
+      }
+    }
+    // Only run once, no need to add dependencies if they don't change
+  }, []);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:flex gap-6"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "md:w-3/4 w-full"
+  }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    key: item.id,
+    index: index,
+    id: item.id,
+    item: item
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_EtchedSign__WEBPACK_IMPORTED_MODULE_5__.EtchedSign, {
+    key: item.id,
+    item: item,
+    productId: item.product
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "flex gap-2"
+  }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
+    onClick: () => addSignage('ETCHED_SIGN'),
+    style: {
+      border: '1px solid #d2d2d2d2'
+    }
+  }, "ADD ETCHED SIGN", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_4__.PlusIcon, null)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"], null));
+}
+
+/***/ }),
+
+/***/ "./src/scripts/products/wayfinding/EtchedFlatCut/components/EtchedSign.js":
+/*!********************************************************************************!*\
+  !*** ./src/scripts/products/wayfinding/EtchedFlatCut/components/EtchedSign.js ***!
+  \********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   EtchedSign: () => (/* binding */ EtchedSign),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _Description__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../Description */ "./src/scripts/Description.js");
+/* harmony import */ var _Dropdown__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../Dropdown */ "./src/scripts/Dropdown.js");
+/* harmony import */ var _UploadFiles__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../UploadFiles */ "./src/scripts/UploadFiles.js");
+/* harmony import */ var _utils_ConvertJson__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../utils/ConvertJson */ "./src/scripts/utils/ConvertJson.js");
+/* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
+/* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
+/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
+/* harmony import */ var _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../../utils/ColorOptions */ "./src/scripts/utils/ColorOptions.js");
+/* harmony import */ var _utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../utils/ColorsDropdown */ "./src/scripts/utils/ColorsDropdown.js");
+
+
+
+
+
+
+
+
+
+
+
+
+const materialOptions = ['Flat Cut Stainless Steel', 'Flat Cut Aluminum', 'Flat Cut Brass'];
+const metalThicknessOptionsDefault = ['1/25" (1mm)', '1/16" (1.6mm)', '1/8" (3mm)', '1/4" (6mm)', '3/8" (9mm)'];
+const electroplatedOptions = ['Electroplated Gold Brushed', 'Electroplated Gold Polished', 'Electroplated Black Titanium Brushed', 'Electroplated Black Titanium Polished', 'Electroplated Bronze Brushed', 'Electroplated Red Copper Brushed'];
+const stainlessFinishing = ['Painted', 'Brushed', 'Polished', 'Electroplated'];
+const aluminumFinishing = ['Painted', 'Brushed', 'Anodized Brushed', 'Anodized Sandblasted Matte'];
+const brassFinishing = ['Brushed'];
+const anodizedColorOptions = ['Black', 'Brown', 'Clear', 'Gold', 'Champagne Gold'];
+const graphicsStyleOptions = ['Raised', 'Recessed', 'Extra Recessed'];
+const edgesOptionsDefault = ['Square'];
+const mountingOptionsDefault = ['Double sided tape', 'Plain', 'Welded Stud - 1"', 'Pre-drilled Holes'];
+const studLengthOptions = ['1.5" (4cm)', '3.2" (8cm)', '4" (10cm)', '6" (15cm)'];
+const EtchedSign = ({
+  item
+}) => {
+  var _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$etchedPaintedCo, _item$customColor, _item$etchedWidth, _item$etchedMaterial, _item$etchedHeight, _item$etchedMetalThic, _item$etchedFinishing, _item$etchedElectropl, _item$usdPrice, _item$cadPrice, _item$etchedAnodizedC, _item$etchedGraphicsS, _item$etchedEdges, _item$studLength, _item$usdSinglePrice, _item$cadSinglePrice, _item$waterproof, _item$mounting, _item$sets, _color$name;
+  const {
+    signage,
+    setSignage,
+    setMissing,
+    updateSignageItem
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
+  const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileNames = item.fileNames) !== null && _item$fileNames !== void 0 ? _item$fileNames : []);
+  const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrls = item.fileUrls) !== null && _item$fileUrls !== void 0 ? _item$fileUrls : []);
+  const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$filePaths = item.filePaths) !== null && _item$filePaths !== void 0 ? _item$filePaths : []);
+  const [files, setFiles] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$files = item.files) !== null && _item$files !== void 0 ? _item$files : []);
+  const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$etchedPaintedCo = item.etchedPaintedColor) !== null && _item$etchedPaintedCo !== void 0 ? _item$etchedPaintedCo : '');
+  const [openColor, setOpenColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const [customColor, setCustomColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$customColor = item.customColor) !== null && _item$customColor !== void 0 ? _item$customColor : '');
+  const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$etchedWidth = item.etchedWidth) !== null && _item$etchedWidth !== void 0 ? _item$etchedWidth : '');
+  const [material, setMaterial] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$etchedMaterial = item.etchedMaterial) !== null && _item$etchedMaterial !== void 0 ? _item$etchedMaterial : '');
+  const [height, setHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$etchedHeight = item.etchedHeight) !== null && _item$etchedHeight !== void 0 ? _item$etchedHeight : '');
+  const [metalThickness, setMetalThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$etchedMetalThic = item.etchedMetalThickness) !== null && _item$etchedMetalThic !== void 0 ? _item$etchedMetalThic : '');
+  const [metalThicknessOptions, setMetalThicknessOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(metalThicknessOptionsDefault);
+  const [finishing, setFinishing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$etchedFinishing = item.etchedFinishing) !== null && _item$etchedFinishing !== void 0 ? _item$etchedFinishing : '');
+  const [electroplated, setElectroplated] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$etchedElectropl = item.etchedElectroplated) !== null && _item$etchedElectropl !== void 0 ? _item$etchedElectropl : '');
+  const [finishingOptions, setFinishingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdPrice = item.usdPrice) !== null && _item$usdPrice !== void 0 ? _item$usdPrice : 0);
+  const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadPrice = item.cadPrice) !== null && _item$cadPrice !== void 0 ? _item$cadPrice : 0);
+  const [widthOptions, setWidthOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  const [heightOptions, setHeightOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  const [anodizedColor, setAnodizedColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$etchedAnodizedC = item.etchedAnodizedColor) !== null && _item$etchedAnodizedC !== void 0 ? _item$etchedAnodizedC : '');
+  const [graphicsStyle, setGraphicsStyle] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$etchedGraphicsS = item.etchedGraphicsStyle) !== null && _item$etchedGraphicsS !== void 0 ? _item$etchedGraphicsS : '');
+  const [edges, setEdges] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$etchedEdges = item.etchedEdges) !== null && _item$etchedEdges !== void 0 ? _item$etchedEdges : 'Square');
+  const [edgesOptions, setEdgesOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(edgesOptionsDefault);
+  const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$studLength = item.studLength) !== null && _item$studLength !== void 0 ? _item$studLength : '');
+  const [usdSinglePrice, setUsdSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdSinglePrice = item.usdSinglePrice) !== null && _item$usdSinglePrice !== void 0 ? _item$usdSinglePrice : 0);
+  const [cadSinglePrice, setCadSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadSinglePrice = item.cadSinglePrice) !== null && _item$cadSinglePrice !== void 0 ? _item$cadSinglePrice : 0);
+  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : '');
+  const [mounting, setMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
+  const [mountingOptions, setMountingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(mountingOptionsDefault);
+  const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
+  const colorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const updateSignage = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(() => {
+    const updatedSignage = signage.map(sign => {
+      if (sign.id === item.id) {
+        return {
+          ...sign,
+          waterproof,
+          mounting,
+          etchedMaterial: material,
+          etchedWidth: width,
+          etchedHeight: height,
+          etchedMetalThickness: metalThickness,
+          etchedFinishing: finishing,
+          etchedPaintedColor: color?.name,
+          etchedElectroplated: electroplated,
+          etchedAnodizedColor: anodizedColor,
+          etchedGraphicsStyle: graphicsStyle,
+          studLength,
+          etchedEdges: edges,
+          customColor,
+          fileNames,
+          filePaths,
+          fileUrls,
+          files,
+          sets,
+          usdPrice,
+          cadPrice,
+          cadSinglePrice,
+          usdSinglePrice
+        };
+      }
+      return sign;
+    });
+    setSignage(updatedSignage);
+  }, [waterproof, color, edges, customColor, mounting, material, metalThickness, finishing, studLength, electroplated, graphicsStyle, anodizedColor, fileNames, filePaths, fileUrls, files, sets, width, height, usdPrice, cadPrice, cadSinglePrice, usdSinglePrice]);
+  const checkAndAddMissingFields = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(() => {
+    const missingFields = [];
+    if (!material) missingFields.push('Select Material');
+    if (!width) missingFields.push('Select Width');
+    if (!height) missingFields.push('Select Height');
+    if (!metalThickness) missingFields.push('Select Metal Thickness');
+    if (!finishing) missingFields.push('Select Finishing');
+    if (finishing === 'Painted') {
+      if (!color) missingFields.push('Select Painted Color');
+    }
+    if (finishing === 'Electroplated') {
+      if (!electroplated) missingFields.push('Select Electroplated Finishing');
+    }
+    if (finishing === 'Anodized Brushed' || finishing === 'Anodized Sandblasted Matte') {
+      if (!anodizedColor) missingFields.push('Select Anodized Color');
+    }
+    if (color?.name === 'Custom Color' && !customColor) {
+      missingFields.push('Add the Pantone color code of your custom color.');
+    }
+    if (!graphicsStyle) missingFields.push('Select Graphics Style');
+    if (!edges) missingFields.push('Select Edges');
+    if (!mounting) missingFields.push('Select Mounting');
+    if (metalThickness === '1/4" (6mm)' || metalThickness === '3/8" (9mm)' || metalThickness === '1/2" (12mm)') {
+      if (!studLength) missingFields.push('Select Stud Length');
+    }
+    if (!waterproof) missingFields.push('Select Environment');
+    if (!sets) missingFields.push('Select Quantity');
+    setMissing(prevMissing => {
+      const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
+      if (existingIndex !== -1) {
+        const updatedMissing = [...prevMissing];
+        updatedMissing[existingIndex] = {
+          ...updatedMissing[existingIndex],
+          missingFields
+        };
+        return updatedMissing;
+      } else if (missingFields.length > 0) {
+        return [...prevMissing, {
+          id: item.id,
+          title: item.title,
+          missingFields
+        }];
+      }
+      return prevMissing;
+    });
+  }, [fileUrls, color, waterproof, mounting, sets, width, height, material, studLength, metalThickness, finishing, electroplated, anodizedColor, graphicsStyle, edges, customColor]);
+  const computePricing = () => {
+    var _tempTotal$toFixed, _total$toFixed;
+    if (!width || !height || !material || !metalThickness || !waterproof || !sets) {
+      return {
+        singlePrice: false,
+        total: false
+      };
+    }
+    let factor;
+    if (material === 'Flat Cut Stainless Steel') {
+      if (metalThickness === '1/25" (1mm)') {
+        factor = 0.29;
+      }
+      if (metalThickness === '1/16" (1.6mm)') {
+        factor = 0.34;
+      }
+      if (metalThickness === '1/8" (3mm)') {
+        factor = 0.49;
+      }
+      if (metalThickness === '1/4" (6mm)') {
+        factor = 0.8;
+      }
+      if (metalThickness === '3/8" (9mm)') {
+        factor = 1.17;
+      }
+    }
+    if (material === 'Flat Cut Aluminum') {
+      if (metalThickness === '1/25" (1mm)') {
+        factor = 0.28;
+      }
+      if (metalThickness === '1/16" (1.6mm)') {
+        factor = 0.32;
+      }
+      if (metalThickness === '1/8" (3mm)') {
+        factor = 0.38;
+      }
+      if (metalThickness === '1/4" (6mm)') {
+        factor = 0.59;
+      }
+      if (metalThickness === '3/8" (9mm)') {
+        factor = 0.75;
+      }
+      if (metalThickness === '1/2" (12mm)') {
+        factor = 1;
+      }
+    }
+    if (material === 'Flat Cut Brass') {
+      if (metalThickness === '1/25" (1mm)') {
+        factor = 0.36;
+      }
+      if (metalThickness === '1/16" (1.6mm)') {
+        factor = 0.46;
+      }
+      if (metalThickness === '1/8" (3mm)') {
+        factor = 0.63;
+      }
+      if (metalThickness === '1/4" (6mm)') {
+        factor = 1.24;
+      }
+      if (metalThickness === '3/8" (9mm)') {
+        factor = 1.67;
+      }
+    }
+    let tempTotal = (parseInt(width) + 1) * (parseInt(height) + 1) * factor;
+    tempTotal = tempTotal > 10 ? tempTotal : 10;
+    if (parseInt(width) > 20 || parseInt(height) > 20) {
+      tempTotal = tempTotal + 40;
+    }
+    if (parseInt(width) > 43 || parseInt(height) > 43) {
+      tempTotal = tempTotal + 100;
+    }
+    tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.INDOOR_NOT_WATERPROOF ? 1 : 1.2;
+    if (finishing === 'Polished') {
+      tempTotal *= 1.1;
+    }
+    if (finishing === 'Electroplated') {
+      tempTotal *= 1.2;
+    }
+    if (finishing === 'Anodized Brushed' || finishing === 'Anodized Sandblasted Matte') {
+      tempTotal *= 1.25;
+    }
+    if (graphicsStyle === 'Extra Recessed') {
+      tempTotal *= 1.2;
+    }
+    if (graphicsStyle === 'Raised') {
+      tempTotal *= 1.1;
+    }
+    if (edges === 'Bevel') {
+      tempTotal *= 1.1;
+    }
+    let total = tempTotal * parseInt(sets);
+    return {
+      singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
+      total: (_total$toFixed = total?.toFixed(2)) !== null && _total$toFixed !== void 0 ? _total$toFixed : 0
+    };
+  };
+  const handleOnChangeSets = e => {
+    const value = e.target.value;
+    setSets(value);
+  };
+  const handleSelectedMaterial = e => {
+    const target = e.target.value;
+    setMaterial(target);
+    if (target) {
+      setFinishing('');
+      setColor('');
+      if (target === 'Flat Cut Stainless Steel' || target === 'Flat Cut Aluminum') {
+        if (target === 'Flat Cut Aluminum') {
+          setFinishingOptions(aluminumFinishing);
+          setMetalThicknessOptions([...metalThicknessOptionsDefault, '1/2" (12mm)']);
+          setElectroplated('');
+          if (metalThickness === '1/4" (6mm)' || metalThickness === '3/8" (9mm)' || metalThickness === '1/2" (12mm)') {
+            setEdgesOptions(['Square', 'Bevel']);
+            setMountingOptions(['Stud', 'Plain', 'Pre–drilled Holes']);
+          } else {
+            setEdgesOptions(['Square']);
+            setEdges('Square');
+            setMountingOptions(mountingOptionsDefault);
+          }
+        } else {
+          if (metalThickness === '1/2" (12mm)') {
+            setMetalThickness('');
+          }
+          setMetalThicknessOptions(metalThicknessOptionsDefault);
+          setFinishingOptions(stainlessFinishing);
+          setAnodizedColor('');
+          setEdgesOptions(['Square']);
+          setEdges('Square');
+          if (metalThickness === '1/25" (1mm)' || metalThickness === '1/16" (1.6mm)' || metalThickness === '1/8" (3mm)') {
+            setMountingOptions(mountingOptionsDefault);
+          } else {
+            setMountingOptions(['Stud Mount', 'Plain', 'Pre–drilled Holes']);
+          }
+        }
+        setWidthOptions((0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.arrayRange)(2, 94, 1));
+        setHeightOptions((0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.arrayRange)(2, 47, 1));
+      } else {
+        if (parseInt(width) > 58) {
+          setWidth('');
+        }
+        if (parseInt(height) > 23) {
+          setHeight('');
+        }
+        setWidthOptions((0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.arrayRange)(2, 58, 1));
+        setHeightOptions((0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.arrayRange)(2, 23, 1));
+        if (metalThickness === '1/2" (12mm)') {
+          setMetalThickness('');
+        }
+        setMetalThicknessOptions(metalThicknessOptionsDefault);
+        setFinishingOptions(brassFinishing);
+        setElectroplated('');
+        setAnodizedColor('');
+        setEdgesOptions(['Square']);
+        setEdges('Square');
+      }
+    }
+  };
+  const handleComments = e => {
+    updateSignageItem(item.id, 'comments', e.target.value);
+  };
+  const handleOnChangeWaterproof = e => {
+    setWaterproof(e.target.value);
+  };
+  const handleonChangeFinishing = e => {
+    const target = e.target.value;
+    if (target !== 'Painted') {
+      setColor('');
+      setCustomColor('');
+    }
+    if (target !== 'Electroplated') {
+      setElectroplated('');
+    }
+    if (target !== 'Anodized Brushed' && target !== 'Anodized Sandblasted Matte') {
+      setAnodizedColor('');
+    }
+    setFinishing(target);
+  };
+  const handleonChangeElectroplated = e => {
+    const target = e.target.value;
+    setElectroplated(target);
+  };
+  const handleonChangeAnodized = e => {
+    const target = e.target.value;
+    setAnodizedColor(target);
+  };
+  const handleOnChangeMetalThickness = e => {
+    const target = e.target.value;
+    setMetalThickness(target);
+    if (target === '1/4" (6mm)' || target === '3/8" (9mm)' || target === '1/2" (12mm)') {
+      if (material === 'Flat Cut Aluminum') {
+        setEdgesOptions(['Square', 'Bevel']);
+        setMountingOptions(['Stud', 'Plain', 'Pre–drilled Holes']);
+        if (mounting !== 'Stud' && mounting !== 'Plain' && mounting !== 'Pre–drilled Holes') {
+          setMounting('');
+        }
+      } else {
+        setMountingOptions(['Stud Mount', 'Plain', 'Pre–drilled Holes']);
+        if (mounting !== 'Stud Mount' && mounting !== 'Plain' && mounting !== 'Pre–drilled Holes') {
+          setMounting('');
+        }
+        setEdgesOptions(['Square']);
+      }
+    } else {
+      setEdgesOptions(['Square']);
+      setEdges('Square');
+      // if mounting is not in mountingOptionsDefault, set blank
+      if (!mountingOptionsDefault.includes(mounting)) {
+        setMounting('');
+      }
+      setMountingOptions(mountingOptionsDefault);
+      setStudLength('');
+    }
+  };
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    const {
+      singlePrice,
+      total
+    } = computePricing();
+    if (total && singlePrice) {
+      setUsdPrice(total);
+      setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.EXCHANGE_RATE).toFixed(2));
+      setUsdSinglePrice(singlePrice);
+      setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.EXCHANGE_RATE).toFixed(2));
+    } else {
+      setUsdPrice(0);
+      setCadPrice(0);
+      setUsdSinglePrice(0);
+      setCadSinglePrice(0);
+    }
+  }, [material, metalThickness, width, height, waterproof, edges, finishing, mounting, sets, graphicsStyle]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    updateSignage();
+    checkAndAddMissingFields();
+  }, [updateSignage, checkAndAddMissingFields]);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "py-4 mb-4"
+  }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-title",
+    dangerouslySetInnerHTML: {
+      __html: item.productLine
+    }
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "quote-grid mb-6"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: "Material",
+    onChange: handleSelectedMaterial,
+    options: materialOptions.map((option, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: index,
+      value: option,
+      defaultValue: option === material
+    }, option)),
+    value: material
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: "Width",
+    value: width,
+    onChange: e => setWidth(e.target.value),
+    options: widthOptions
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: "Height",
+    value: height,
+    onChange: e => setHeight(e.target.value),
+    options: heightOptions
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: "Metal Thickness",
+    value: metalThickness,
+    onChange: handleOnChangeMetalThickness,
+    options: metalThicknessOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      className: "lowercase",
+      key: option,
+      value: option,
+      defaultValue: option === metalThickness
+    }, option))
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: "Finishing",
+    onChange: handleonChangeFinishing,
+    options: finishingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option,
+      value: option,
+      defaultValue: option === finishing
+    }, option)),
+    value: finishing
+  }), finishing === 'Painted' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_10__["default"], {
+    ref: colorRef,
+    title: "Painted Color",
+    colorName: (_color$name = color?.name) !== null && _color$name !== void 0 ? _color$name : '',
+    openColor: openColor,
+    toggleColor: () => {
+      setOpenColor(prev => !prev);
+    },
+    colorOptions: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_9__.colorOptions,
+    selectColor: color => {
+      setColor(color);
+      setOpenColor(false);
+    }
+  }), finishing === 'Electroplated' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: "ELECTROPLATED",
+    onChange: handleonChangeElectroplated,
+    options: electroplatedOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option,
+      value: option,
+      defaultValue: option === electroplated
+    }, option)),
+    value: electroplated
+  }), (finishing === 'Anodized Brushed' || finishing === 'Anodized Sandblasted Matte') && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: "ANODIZED COLOR",
+    onChange: handleonChangeAnodized,
+    options: anodizedColorOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option,
+      value: option,
+      defaultValue: option === anodizedColor
+    }, option)),
+    value: anodizedColor
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: "GRAPHICS STYLE",
+    onChange: e => setGraphicsStyle(e.target.value),
+    options: graphicsStyleOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option,
+      value: option,
+      defaultValue: option === graphicsStyle
+    }, option)),
+    value: graphicsStyle
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: "EDGES",
+    onChange: e => setEdges(e.target.value),
+    options: edgesOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option,
+      value: option,
+      defaultValue: option === edges
+    }, option)),
+    value: edges
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: "Environment",
+    onChange: handleOnChangeWaterproof,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option.option,
+      value: option.option,
+      defaultValue: option.option === waterproof
+    }, option.option)),
+    value: waterproof
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: "Mounting",
+    onChange: e => setMounting(e.target.value),
+    options: mountingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option,
+      value: option,
+      defaultValue: option === mounting
+    }, option)),
+    value: mounting
+  }), (metalThickness === '1/4" (6mm)' || metalThickness === '3/8" (9mm)' || metalThickness === '1/2" (12mm)') && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: "STUD LENGTH",
+    onChange: e => setStudLength(e.target.value),
+    options: studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option,
+      value: option,
+      defaultValue: option === studLength
+    }, option)),
+    value: studLength
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: "Quantity",
+    onChange: handleOnChangeSets,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.setOptions,
+    value: sets,
+    onlyValue: true
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "quote-grid"
+  }, color?.name == 'Custom Color' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "px-[1px] col-span-4"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
+  }, "Custom Color"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    className: "w-full py-4 px-2 border-solid border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400",
+    type: "text",
+    value: customColor,
+    onChange: e => setCustomColor(e.target.value),
+    placeholder: "ADD THE PANTONE COLOR CODE"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Description__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    value: item.comments,
+    handleComments: handleComments
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    itemId: item.id,
+    setFilePaths: setFilePaths,
+    setFiles: setFiles,
+    filePaths: filePaths,
+    fileUrls: fileUrls,
+    fileNames: fileNames,
+    setFileUrls: setFileUrls,
+    setFileNames: setFileNames
+  })));
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,react__WEBPACK_IMPORTED_MODULE_0__.memo)(EtchedSign));
+
+/***/ }),
+
 /***/ "./src/scripts/svg/Icons.js":
 /*!**********************************!*\
   !*** ./src/scripts/svg/Icons.js ***!
@@ -33988,28 +35474,28 @@ const PlusIcon = ({
   y1: "1",
   x2: "7",
   y2: "13",
-  "stroke-width": "2",
-  "stroke-linecap": "square",
+  strokeWidth: "2",
+  strokeLinecap: "square",
   stroke: "currentColor"
 }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("line", {
   x1: "13",
   y1: "7",
   x2: "1",
   y2: "7",
-  "stroke-width": "2",
-  "stroke-linecap": "square",
+  strokeWidth: "2",
+  strokeLinecap: "square",
   stroke: "currentColor"
 }));
 const CloseIcon = () => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
   xmlns: "http://www.w3.org/2000/svg",
   fill: "none",
   viewBox: "0 0 24 24",
-  "stroke-width": "1.5",
+  strokeWidth: "1.5",
   stroke: "currentColor",
-  class: "w-6 h-6"
+  className: "w-6 h-6"
 }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
-  "stroke-linecap": "round",
-  "stroke-linejoin": "round",
+  strokeLinecap: "round",
+  strokeLinejoin: "round",
   d: "M6 18L18 6M6 6l12 12"
 }));
 const LoadingIcon = ({
@@ -34017,22 +35503,83 @@ const LoadingIcon = ({
 }) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
   className: "flex justify-center items-center"
 }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
-  class: "animate-spin -ml-1 mr-3 h-5 w-5 text-white",
+  className: "animate-spin -ml-1 mr-3 h-5 w-5 text-white",
   xmlns: "http://www.w3.org/2000/svg",
   fill: "none",
   viewBox: "0 0 24 24"
 }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("circle", {
-  class: "opacity-25",
+  className: "opacity-25",
   cx: "12",
   cy: "12",
   r: "10",
   stroke: "currentColor",
-  "stroke-width": "4"
+  strokeWidth: "4"
 }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
-  class: "opacity-75",
+  className: "opacity-75",
   fill: "currentColor",
   d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
 })), text);
+
+/***/ }),
+
+/***/ "./src/scripts/ui/Tooltip.tsx":
+/*!************************************!*\
+  !*** ./src/scripts/ui/Tooltip.tsx ***!
+  \************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Tooltip: () => (/* binding */ Tooltip),
+/* harmony export */   TooltipContent: () => (/* binding */ TooltipContent),
+/* harmony export */   TooltipProvider: () => (/* binding */ TooltipProvider),
+/* harmony export */   TooltipTrigger: () => (/* binding */ TooltipTrigger)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _radix_ui_react_tooltip__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @radix-ui/react-tooltip */ "./node_modules/@radix-ui/react-tooltip/dist/index.mjs");
+/* harmony import */ var _lib__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./lib */ "./src/scripts/ui/lib.js");
+
+
+
+
+const TooltipProvider = _radix_ui_react_tooltip__WEBPACK_IMPORTED_MODULE_2__.Provider;
+const Tooltip = _radix_ui_react_tooltip__WEBPACK_IMPORTED_MODULE_2__.Root;
+const TooltipTrigger = _radix_ui_react_tooltip__WEBPACK_IMPORTED_MODULE_2__.Trigger;
+const TooltipContent = react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(({
+  className,
+  sideOffset = 4,
+  ...props
+}, ref) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_tooltip__WEBPACK_IMPORTED_MODULE_2__.Content, {
+  ref: ref,
+  sideOffset: sideOffset,
+  className: (0,_lib__WEBPACK_IMPORTED_MODULE_1__.cn)('z-50 overflow-hidden rounded-md border bg-popover px-3 py-1.5 text-sm text-popover-foreground shadow-md animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2', className),
+  ...props
+}));
+TooltipContent.displayName = _radix_ui_react_tooltip__WEBPACK_IMPORTED_MODULE_2__.Content.displayName;
+
+
+/***/ }),
+
+/***/ "./src/scripts/ui/lib.js":
+/*!*******************************!*\
+  !*** ./src/scripts/ui/lib.js ***!
+  \*******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   cn: () => (/* binding */ cn)
+/* harmony export */ });
+/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! clsx */ "../node_modules/clsx/dist/clsx.mjs");
+/* harmony import */ var tailwind_merge__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! tailwind-merge */ "../node_modules/tailwind-merge/dist/bundle-mjs.mjs");
+
+
+function cn(...inputs) {
+  return (0,tailwind_merge__WEBPACK_IMPORTED_MODULE_1__.twMerge)((0,clsx__WEBPACK_IMPORTED_MODULE_0__.clsx)(...inputs));
+}
 
 /***/ }),
 
@@ -34501,6 +36048,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _ui_Tooltip__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../ui/Tooltip */ "./src/scripts/ui/Tooltip.tsx");
+
 
 
 const ColorsDropdown = react__WEBPACK_IMPORTED_MODULE_0___default().forwardRef(({
@@ -34509,7 +36058,8 @@ const ColorsDropdown = react__WEBPACK_IMPORTED_MODULE_0___default().forwardRef((
   toggleColor,
   openColor,
   colorOptions,
-  selectColor
+  selectColor,
+  samePrice = true
 }, ref) => {
   const selectedColorOption = colorOptions.find(option => option.name === colorName);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -34517,7 +36067,22 @@ const ColorsDropdown = react__WEBPACK_IMPORTED_MODULE_0___default().forwardRef((
     ref: ref
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
-  }, title), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, title, samePrice && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_Tooltip__WEBPACK_IMPORTED_MODULE_1__.TooltipProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_Tooltip__WEBPACK_IMPORTED_MODULE_1__.Tooltip, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_Tooltip__WEBPACK_IMPORTED_MODULE_1__.TooltipTrigger, {
+    asChild: true
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    viewBox: "0 0 16 16",
+    fill: "currentColor",
+    className: "size-4 cursor-pointer"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    fillRule: "evenodd",
+    d: "M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0ZM9 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM6.75 8a.75.75 0 0 0 0 1.5h.75v1.75a.75.75 0 0 0 1.5 0v-2.5A.75.75 0 0 0 8.25 8h-1.5Z",
+    clipRule: "evenodd"
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_Tooltip__WEBPACK_IMPORTED_MODULE_1__.TooltipContent, {
+    className: "bg-white"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-body text-sm normal-case"
+  }, "The pricing remains the same", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), " regardless of your color choice."))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: `flex flex-wrap items-center px-2 select border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] cursor-pointer ${colorName ? 'text-black' : 'text-[#dddddd]'}`,
     onClick: toggleColor
   }, selectedColorOption?.color && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
@@ -34529,8 +36094,9 @@ const ColorsDropdown = react__WEBPACK_IMPORTED_MODULE_0___default().forwardRef((
     className: "whitespace-nowrap text-ellipsis overflow-hidden flex-1 pr-5"
   }, colorName === '' ? 'CHOOSE OPTION' : colorName)), openColor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "absolute w-[205px] max-h-[180px] bg-white z-20 border border-gray-200 rounded-md overflow-y-auto shadow-lg"
-  }, colorOptions.map(color => {
+  }, colorOptions.map((color, index) => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      key: index,
       className: "p-2 cursor-pointer flex items-center gap-2 hover:bg-slate-200 text-sm flex-wrap",
       onClick: () => {
         selectColor(color);
@@ -34895,6 +36461,7 @@ const metalLaminateOptions = [{
 const arrayRange = (start, stop, step, inches = true) => Array.from({
   length: (stop - start) / step + 1
 }, (value, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+  key: index,
   value: `${start + index * step}${inches ? '"' : "'"}`
 }, start + index * step, inches ? '"' : "'"));
 const lightingPackagedOptions = [{
@@ -34925,9 +36492,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _radix_ui_react_tooltip__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @radix-ui/react-tooltip */ "./node_modules/@radix-ui/react-tooltip/dist/index.mjs");
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_2__);
-
 
 
 
@@ -34945,10 +36509,6 @@ const TooltipText = ({
   }, text, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_radix_ui_react_tooltip__WEBPACK_IMPORTED_MODULE_1__.Arrow, {
     className: "fill-white"
   })))));
-};
-TooltipText.propTypes = {
-  text: (prop_types__WEBPACK_IMPORTED_MODULE_2___default().string).isRequired,
-  children: (prop_types__WEBPACK_IMPORTED_MODULE_2___default().node).isRequired
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (TooltipText);
 
@@ -35038,6 +36598,36 @@ const allAttributes = item => [{
   key: item.fontFileUrl && item.fontFileName,
   label: 'CUSTOM FONT',
   isLink: true
+}, {
+  key: item.etchedMaterial,
+  label: 'MATERIAL'
+}, {
+  key: item.etchedWidth,
+  label: 'WIDTH'
+}, {
+  key: item.etchedHeight,
+  label: 'HEIGHT'
+}, {
+  key: item.etchedMetalThickness,
+  label: 'METAL THICKNESS'
+}, {
+  key: item.etchedFinishing,
+  label: 'FINISHING'
+}, {
+  key: item.etchedPaintedColor,
+  label: 'PAINTED COLOR'
+}, {
+  key: item.etchedElectroplated,
+  label: 'ELECTROPLATED FINISHING'
+}, {
+  key: item.etchedAnodizedColor,
+  label: 'ANODIZED COLOR'
+}, {
+  key: item.etchedGraphicsStyle,
+  label: 'GRAPHICS STYLE'
+}, {
+  key: item.etchedEdges,
+  label: 'EDGES'
 }, {
   key: item.metal,
   label: 'METAL'
@@ -35908,1109 +37498,6 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
-
-
-/***/ }),
-
-/***/ "./node_modules/object-assign/index.js":
-/*!*********************************************!*\
-  !*** ./node_modules/object-assign/index.js ***!
-  \*********************************************/
-/***/ ((module) => {
-
-"use strict";
-/*
-object-assign
-(c) Sindre Sorhus
-@license MIT
-*/
-
-
-/* eslint-disable no-unused-vars */
-var getOwnPropertySymbols = Object.getOwnPropertySymbols;
-var hasOwnProperty = Object.prototype.hasOwnProperty;
-var propIsEnumerable = Object.prototype.propertyIsEnumerable;
-
-function toObject(val) {
-	if (val === null || val === undefined) {
-		throw new TypeError('Object.assign cannot be called with null or undefined');
-	}
-
-	return Object(val);
-}
-
-function shouldUseNative() {
-	try {
-		if (!Object.assign) {
-			return false;
-		}
-
-		// Detect buggy property enumeration order in older V8 versions.
-
-		// https://bugs.chromium.org/p/v8/issues/detail?id=4118
-		var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
-		test1[5] = 'de';
-		if (Object.getOwnPropertyNames(test1)[0] === '5') {
-			return false;
-		}
-
-		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
-		var test2 = {};
-		for (var i = 0; i < 10; i++) {
-			test2['_' + String.fromCharCode(i)] = i;
-		}
-		var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
-			return test2[n];
-		});
-		if (order2.join('') !== '0123456789') {
-			return false;
-		}
-
-		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
-		var test3 = {};
-		'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
-			test3[letter] = letter;
-		});
-		if (Object.keys(Object.assign({}, test3)).join('') !==
-				'abcdefghijklmnopqrst') {
-			return false;
-		}
-
-		return true;
-	} catch (err) {
-		// We don't expect any of the above to throw, but better to be safe.
-		return false;
-	}
-}
-
-module.exports = shouldUseNative() ? Object.assign : function (target, source) {
-	var from;
-	var to = toObject(target);
-	var symbols;
-
-	for (var s = 1; s < arguments.length; s++) {
-		from = Object(arguments[s]);
-
-		for (var key in from) {
-			if (hasOwnProperty.call(from, key)) {
-				to[key] = from[key];
-			}
-		}
-
-		if (getOwnPropertySymbols) {
-			symbols = getOwnPropertySymbols(from);
-			for (var i = 0; i < symbols.length; i++) {
-				if (propIsEnumerable.call(from, symbols[i])) {
-					to[symbols[i]] = from[symbols[i]];
-				}
-			}
-		}
-	}
-
-	return to;
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/prop-types/checkPropTypes.js":
-/*!***************************************************!*\
-  !*** ./node_modules/prop-types/checkPropTypes.js ***!
-  \***************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-
-
-var printWarning = function() {};
-
-if (true) {
-  var ReactPropTypesSecret = __webpack_require__(/*! ./lib/ReactPropTypesSecret */ "./node_modules/prop-types/lib/ReactPropTypesSecret.js");
-  var loggedTypeFailures = {};
-  var has = __webpack_require__(/*! ./lib/has */ "./node_modules/prop-types/lib/has.js");
-
-  printWarning = function(text) {
-    var message = 'Warning: ' + text;
-    if (typeof console !== 'undefined') {
-      console.error(message);
-    }
-    try {
-      // --- Welcome to debugging React ---
-      // This error was thrown as a convenience so that you can use this stack
-      // to find the callsite that caused this warning to fire.
-      throw new Error(message);
-    } catch (x) { /**/ }
-  };
-}
-
-/**
- * Assert that the values match with the type specs.
- * Error messages are memorized and will only be shown once.
- *
- * @param {object} typeSpecs Map of name to a ReactPropType
- * @param {object} values Runtime values that need to be type-checked
- * @param {string} location e.g. "prop", "context", "child context"
- * @param {string} componentName Name of the component for error messages.
- * @param {?Function} getStack Returns the component stack.
- * @private
- */
-function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
-  if (true) {
-    for (var typeSpecName in typeSpecs) {
-      if (has(typeSpecs, typeSpecName)) {
-        var error;
-        // Prop type validation may throw. In case they do, we don't want to
-        // fail the render phase where it didn't fail before. So we log it.
-        // After these have been cleaned up, we'll let them throw.
-        try {
-          // This is intentionally an invariant that gets caught. It's the same
-          // behavior as without this statement except with a better message.
-          if (typeof typeSpecs[typeSpecName] !== 'function') {
-            var err = Error(
-              (componentName || 'React class') + ': ' + location + ' type `' + typeSpecName + '` is invalid; ' +
-              'it must be a function, usually from the `prop-types` package, but received `' + typeof typeSpecs[typeSpecName] + '`.' +
-              'This often happens because of typos such as `PropTypes.function` instead of `PropTypes.func`.'
-            );
-            err.name = 'Invariant Violation';
-            throw err;
-          }
-          error = typeSpecs[typeSpecName](values, typeSpecName, componentName, location, null, ReactPropTypesSecret);
-        } catch (ex) {
-          error = ex;
-        }
-        if (error && !(error instanceof Error)) {
-          printWarning(
-            (componentName || 'React class') + ': type specification of ' +
-            location + ' `' + typeSpecName + '` is invalid; the type checker ' +
-            'function must return `null` or an `Error` but returned a ' + typeof error + '. ' +
-            'You may have forgotten to pass an argument to the type checker ' +
-            'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and ' +
-            'shape all require an argument).'
-          );
-        }
-        if (error instanceof Error && !(error.message in loggedTypeFailures)) {
-          // Only monitor this failure once because there tends to be a lot of the
-          // same error.
-          loggedTypeFailures[error.message] = true;
-
-          var stack = getStack ? getStack() : '';
-
-          printWarning(
-            'Failed ' + location + ' type: ' + error.message + (stack != null ? stack : '')
-          );
-        }
-      }
-    }
-  }
-}
-
-/**
- * Resets warning cache when testing.
- *
- * @private
- */
-checkPropTypes.resetWarningCache = function() {
-  if (true) {
-    loggedTypeFailures = {};
-  }
-}
-
-module.exports = checkPropTypes;
-
-
-/***/ }),
-
-/***/ "./node_modules/prop-types/factoryWithTypeCheckers.js":
-/*!************************************************************!*\
-  !*** ./node_modules/prop-types/factoryWithTypeCheckers.js ***!
-  \************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-
-
-var ReactIs = __webpack_require__(/*! react-is */ "./node_modules/prop-types/node_modules/react-is/index.js");
-var assign = __webpack_require__(/*! object-assign */ "./node_modules/object-assign/index.js");
-
-var ReactPropTypesSecret = __webpack_require__(/*! ./lib/ReactPropTypesSecret */ "./node_modules/prop-types/lib/ReactPropTypesSecret.js");
-var has = __webpack_require__(/*! ./lib/has */ "./node_modules/prop-types/lib/has.js");
-var checkPropTypes = __webpack_require__(/*! ./checkPropTypes */ "./node_modules/prop-types/checkPropTypes.js");
-
-var printWarning = function() {};
-
-if (true) {
-  printWarning = function(text) {
-    var message = 'Warning: ' + text;
-    if (typeof console !== 'undefined') {
-      console.error(message);
-    }
-    try {
-      // --- Welcome to debugging React ---
-      // This error was thrown as a convenience so that you can use this stack
-      // to find the callsite that caused this warning to fire.
-      throw new Error(message);
-    } catch (x) {}
-  };
-}
-
-function emptyFunctionThatReturnsNull() {
-  return null;
-}
-
-module.exports = function(isValidElement, throwOnDirectAccess) {
-  /* global Symbol */
-  var ITERATOR_SYMBOL = typeof Symbol === 'function' && Symbol.iterator;
-  var FAUX_ITERATOR_SYMBOL = '@@iterator'; // Before Symbol spec.
-
-  /**
-   * Returns the iterator method function contained on the iterable object.
-   *
-   * Be sure to invoke the function with the iterable as context:
-   *
-   *     var iteratorFn = getIteratorFn(myIterable);
-   *     if (iteratorFn) {
-   *       var iterator = iteratorFn.call(myIterable);
-   *       ...
-   *     }
-   *
-   * @param {?object} maybeIterable
-   * @return {?function}
-   */
-  function getIteratorFn(maybeIterable) {
-    var iteratorFn = maybeIterable && (ITERATOR_SYMBOL && maybeIterable[ITERATOR_SYMBOL] || maybeIterable[FAUX_ITERATOR_SYMBOL]);
-    if (typeof iteratorFn === 'function') {
-      return iteratorFn;
-    }
-  }
-
-  /**
-   * Collection of methods that allow declaration and validation of props that are
-   * supplied to React components. Example usage:
-   *
-   *   var Props = require('ReactPropTypes');
-   *   var MyArticle = React.createClass({
-   *     propTypes: {
-   *       // An optional string prop named "description".
-   *       description: Props.string,
-   *
-   *       // A required enum prop named "category".
-   *       category: Props.oneOf(['News','Photos']).isRequired,
-   *
-   *       // A prop named "dialog" that requires an instance of Dialog.
-   *       dialog: Props.instanceOf(Dialog).isRequired
-   *     },
-   *     render: function() { ... }
-   *   });
-   *
-   * A more formal specification of how these methods are used:
-   *
-   *   type := array|bool|func|object|number|string|oneOf([...])|instanceOf(...)
-   *   decl := ReactPropTypes.{type}(.isRequired)?
-   *
-   * Each and every declaration produces a function with the same signature. This
-   * allows the creation of custom validation functions. For example:
-   *
-   *  var MyLink = React.createClass({
-   *    propTypes: {
-   *      // An optional string or URI prop named "href".
-   *      href: function(props, propName, componentName) {
-   *        var propValue = props[propName];
-   *        if (propValue != null && typeof propValue !== 'string' &&
-   *            !(propValue instanceof URI)) {
-   *          return new Error(
-   *            'Expected a string or an URI for ' + propName + ' in ' +
-   *            componentName
-   *          );
-   *        }
-   *      }
-   *    },
-   *    render: function() {...}
-   *  });
-   *
-   * @internal
-   */
-
-  var ANONYMOUS = '<<anonymous>>';
-
-  // Important!
-  // Keep this list in sync with production version in `./factoryWithThrowingShims.js`.
-  var ReactPropTypes = {
-    array: createPrimitiveTypeChecker('array'),
-    bigint: createPrimitiveTypeChecker('bigint'),
-    bool: createPrimitiveTypeChecker('boolean'),
-    func: createPrimitiveTypeChecker('function'),
-    number: createPrimitiveTypeChecker('number'),
-    object: createPrimitiveTypeChecker('object'),
-    string: createPrimitiveTypeChecker('string'),
-    symbol: createPrimitiveTypeChecker('symbol'),
-
-    any: createAnyTypeChecker(),
-    arrayOf: createArrayOfTypeChecker,
-    element: createElementTypeChecker(),
-    elementType: createElementTypeTypeChecker(),
-    instanceOf: createInstanceTypeChecker,
-    node: createNodeChecker(),
-    objectOf: createObjectOfTypeChecker,
-    oneOf: createEnumTypeChecker,
-    oneOfType: createUnionTypeChecker,
-    shape: createShapeTypeChecker,
-    exact: createStrictShapeTypeChecker,
-  };
-
-  /**
-   * inlined Object.is polyfill to avoid requiring consumers ship their own
-   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
-   */
-  /*eslint-disable no-self-compare*/
-  function is(x, y) {
-    // SameValue algorithm
-    if (x === y) {
-      // Steps 1-5, 7-10
-      // Steps 6.b-6.e: +0 != -0
-      return x !== 0 || 1 / x === 1 / y;
-    } else {
-      // Step 6.a: NaN == NaN
-      return x !== x && y !== y;
-    }
-  }
-  /*eslint-enable no-self-compare*/
-
-  /**
-   * We use an Error-like object for backward compatibility as people may call
-   * PropTypes directly and inspect their output. However, we don't use real
-   * Errors anymore. We don't inspect their stack anyway, and creating them
-   * is prohibitively expensive if they are created too often, such as what
-   * happens in oneOfType() for any type before the one that matched.
-   */
-  function PropTypeError(message, data) {
-    this.message = message;
-    this.data = data && typeof data === 'object' ? data: {};
-    this.stack = '';
-  }
-  // Make `instanceof Error` still work for returned errors.
-  PropTypeError.prototype = Error.prototype;
-
-  function createChainableTypeChecker(validate) {
-    if (true) {
-      var manualPropTypeCallCache = {};
-      var manualPropTypeWarningCount = 0;
-    }
-    function checkType(isRequired, props, propName, componentName, location, propFullName, secret) {
-      componentName = componentName || ANONYMOUS;
-      propFullName = propFullName || propName;
-
-      if (secret !== ReactPropTypesSecret) {
-        if (throwOnDirectAccess) {
-          // New behavior only for users of `prop-types` package
-          var err = new Error(
-            'Calling PropTypes validators directly is not supported by the `prop-types` package. ' +
-            'Use `PropTypes.checkPropTypes()` to call them. ' +
-            'Read more at http://fb.me/use-check-prop-types'
-          );
-          err.name = 'Invariant Violation';
-          throw err;
-        } else if ( true && typeof console !== 'undefined') {
-          // Old behavior for people using React.PropTypes
-          var cacheKey = componentName + ':' + propName;
-          if (
-            !manualPropTypeCallCache[cacheKey] &&
-            // Avoid spamming the console because they are often not actionable except for lib authors
-            manualPropTypeWarningCount < 3
-          ) {
-            printWarning(
-              'You are manually calling a React.PropTypes validation ' +
-              'function for the `' + propFullName + '` prop on `' + componentName + '`. This is deprecated ' +
-              'and will throw in the standalone `prop-types` package. ' +
-              'You may be seeing this warning due to a third-party PropTypes ' +
-              'library. See https://fb.me/react-warning-dont-call-proptypes ' + 'for details.'
-            );
-            manualPropTypeCallCache[cacheKey] = true;
-            manualPropTypeWarningCount++;
-          }
-        }
-      }
-      if (props[propName] == null) {
-        if (isRequired) {
-          if (props[propName] === null) {
-            return new PropTypeError('The ' + location + ' `' + propFullName + '` is marked as required ' + ('in `' + componentName + '`, but its value is `null`.'));
-          }
-          return new PropTypeError('The ' + location + ' `' + propFullName + '` is marked as required in ' + ('`' + componentName + '`, but its value is `undefined`.'));
-        }
-        return null;
-      } else {
-        return validate(props, propName, componentName, location, propFullName);
-      }
-    }
-
-    var chainedCheckType = checkType.bind(null, false);
-    chainedCheckType.isRequired = checkType.bind(null, true);
-
-    return chainedCheckType;
-  }
-
-  function createPrimitiveTypeChecker(expectedType) {
-    function validate(props, propName, componentName, location, propFullName, secret) {
-      var propValue = props[propName];
-      var propType = getPropType(propValue);
-      if (propType !== expectedType) {
-        // `propValue` being instance of, say, date/regexp, pass the 'object'
-        // check, but we can offer a more precise error message here rather than
-        // 'of type `object`'.
-        var preciseType = getPreciseType(propValue);
-
-        return new PropTypeError(
-          'Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + preciseType + '` supplied to `' + componentName + '`, expected ') + ('`' + expectedType + '`.'),
-          {expectedType: expectedType}
-        );
-      }
-      return null;
-    }
-    return createChainableTypeChecker(validate);
-  }
-
-  function createAnyTypeChecker() {
-    return createChainableTypeChecker(emptyFunctionThatReturnsNull);
-  }
-
-  function createArrayOfTypeChecker(typeChecker) {
-    function validate(props, propName, componentName, location, propFullName) {
-      if (typeof typeChecker !== 'function') {
-        return new PropTypeError('Property `' + propFullName + '` of component `' + componentName + '` has invalid PropType notation inside arrayOf.');
-      }
-      var propValue = props[propName];
-      if (!Array.isArray(propValue)) {
-        var propType = getPropType(propValue);
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected an array.'));
-      }
-      for (var i = 0; i < propValue.length; i++) {
-        var error = typeChecker(propValue, i, componentName, location, propFullName + '[' + i + ']', ReactPropTypesSecret);
-        if (error instanceof Error) {
-          return error;
-        }
-      }
-      return null;
-    }
-    return createChainableTypeChecker(validate);
-  }
-
-  function createElementTypeChecker() {
-    function validate(props, propName, componentName, location, propFullName) {
-      var propValue = props[propName];
-      if (!isValidElement(propValue)) {
-        var propType = getPropType(propValue);
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected a single ReactElement.'));
-      }
-      return null;
-    }
-    return createChainableTypeChecker(validate);
-  }
-
-  function createElementTypeTypeChecker() {
-    function validate(props, propName, componentName, location, propFullName) {
-      var propValue = props[propName];
-      if (!ReactIs.isValidElementType(propValue)) {
-        var propType = getPropType(propValue);
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected a single ReactElement type.'));
-      }
-      return null;
-    }
-    return createChainableTypeChecker(validate);
-  }
-
-  function createInstanceTypeChecker(expectedClass) {
-    function validate(props, propName, componentName, location, propFullName) {
-      if (!(props[propName] instanceof expectedClass)) {
-        var expectedClassName = expectedClass.name || ANONYMOUS;
-        var actualClassName = getClassName(props[propName]);
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + actualClassName + '` supplied to `' + componentName + '`, expected ') + ('instance of `' + expectedClassName + '`.'));
-      }
-      return null;
-    }
-    return createChainableTypeChecker(validate);
-  }
-
-  function createEnumTypeChecker(expectedValues) {
-    if (!Array.isArray(expectedValues)) {
-      if (true) {
-        if (arguments.length > 1) {
-          printWarning(
-            'Invalid arguments supplied to oneOf, expected an array, got ' + arguments.length + ' arguments. ' +
-            'A common mistake is to write oneOf(x, y, z) instead of oneOf([x, y, z]).'
-          );
-        } else {
-          printWarning('Invalid argument supplied to oneOf, expected an array.');
-        }
-      }
-      return emptyFunctionThatReturnsNull;
-    }
-
-    function validate(props, propName, componentName, location, propFullName) {
-      var propValue = props[propName];
-      for (var i = 0; i < expectedValues.length; i++) {
-        if (is(propValue, expectedValues[i])) {
-          return null;
-        }
-      }
-
-      var valuesString = JSON.stringify(expectedValues, function replacer(key, value) {
-        var type = getPreciseType(value);
-        if (type === 'symbol') {
-          return String(value);
-        }
-        return value;
-      });
-      return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of value `' + String(propValue) + '` ' + ('supplied to `' + componentName + '`, expected one of ' + valuesString + '.'));
-    }
-    return createChainableTypeChecker(validate);
-  }
-
-  function createObjectOfTypeChecker(typeChecker) {
-    function validate(props, propName, componentName, location, propFullName) {
-      if (typeof typeChecker !== 'function') {
-        return new PropTypeError('Property `' + propFullName + '` of component `' + componentName + '` has invalid PropType notation inside objectOf.');
-      }
-      var propValue = props[propName];
-      var propType = getPropType(propValue);
-      if (propType !== 'object') {
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected an object.'));
-      }
-      for (var key in propValue) {
-        if (has(propValue, key)) {
-          var error = typeChecker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret);
-          if (error instanceof Error) {
-            return error;
-          }
-        }
-      }
-      return null;
-    }
-    return createChainableTypeChecker(validate);
-  }
-
-  function createUnionTypeChecker(arrayOfTypeCheckers) {
-    if (!Array.isArray(arrayOfTypeCheckers)) {
-       true ? printWarning('Invalid argument supplied to oneOfType, expected an instance of array.') : 0;
-      return emptyFunctionThatReturnsNull;
-    }
-
-    for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
-      var checker = arrayOfTypeCheckers[i];
-      if (typeof checker !== 'function') {
-        printWarning(
-          'Invalid argument supplied to oneOfType. Expected an array of check functions, but ' +
-          'received ' + getPostfixForTypeWarning(checker) + ' at index ' + i + '.'
-        );
-        return emptyFunctionThatReturnsNull;
-      }
-    }
-
-    function validate(props, propName, componentName, location, propFullName) {
-      var expectedTypes = [];
-      for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
-        var checker = arrayOfTypeCheckers[i];
-        var checkerResult = checker(props, propName, componentName, location, propFullName, ReactPropTypesSecret);
-        if (checkerResult == null) {
-          return null;
-        }
-        if (checkerResult.data && has(checkerResult.data, 'expectedType')) {
-          expectedTypes.push(checkerResult.data.expectedType);
-        }
-      }
-      var expectedTypesMessage = (expectedTypes.length > 0) ? ', expected one of type [' + expectedTypes.join(', ') + ']': '';
-      return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` supplied to ' + ('`' + componentName + '`' + expectedTypesMessage + '.'));
-    }
-    return createChainableTypeChecker(validate);
-  }
-
-  function createNodeChecker() {
-    function validate(props, propName, componentName, location, propFullName) {
-      if (!isNode(props[propName])) {
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` supplied to ' + ('`' + componentName + '`, expected a ReactNode.'));
-      }
-      return null;
-    }
-    return createChainableTypeChecker(validate);
-  }
-
-  function invalidValidatorError(componentName, location, propFullName, key, type) {
-    return new PropTypeError(
-      (componentName || 'React class') + ': ' + location + ' type `' + propFullName + '.' + key + '` is invalid; ' +
-      'it must be a function, usually from the `prop-types` package, but received `' + type + '`.'
-    );
-  }
-
-  function createShapeTypeChecker(shapeTypes) {
-    function validate(props, propName, componentName, location, propFullName) {
-      var propValue = props[propName];
-      var propType = getPropType(propValue);
-      if (propType !== 'object') {
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type `' + propType + '` ' + ('supplied to `' + componentName + '`, expected `object`.'));
-      }
-      for (var key in shapeTypes) {
-        var checker = shapeTypes[key];
-        if (typeof checker !== 'function') {
-          return invalidValidatorError(componentName, location, propFullName, key, getPreciseType(checker));
-        }
-        var error = checker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret);
-        if (error) {
-          return error;
-        }
-      }
-      return null;
-    }
-    return createChainableTypeChecker(validate);
-  }
-
-  function createStrictShapeTypeChecker(shapeTypes) {
-    function validate(props, propName, componentName, location, propFullName) {
-      var propValue = props[propName];
-      var propType = getPropType(propValue);
-      if (propType !== 'object') {
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type `' + propType + '` ' + ('supplied to `' + componentName + '`, expected `object`.'));
-      }
-      // We need to check all keys in case some are required but missing from props.
-      var allKeys = assign({}, props[propName], shapeTypes);
-      for (var key in allKeys) {
-        var checker = shapeTypes[key];
-        if (has(shapeTypes, key) && typeof checker !== 'function') {
-          return invalidValidatorError(componentName, location, propFullName, key, getPreciseType(checker));
-        }
-        if (!checker) {
-          return new PropTypeError(
-            'Invalid ' + location + ' `' + propFullName + '` key `' + key + '` supplied to `' + componentName + '`.' +
-            '\nBad object: ' + JSON.stringify(props[propName], null, '  ') +
-            '\nValid keys: ' + JSON.stringify(Object.keys(shapeTypes), null, '  ')
-          );
-        }
-        var error = checker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret);
-        if (error) {
-          return error;
-        }
-      }
-      return null;
-    }
-
-    return createChainableTypeChecker(validate);
-  }
-
-  function isNode(propValue) {
-    switch (typeof propValue) {
-      case 'number':
-      case 'string':
-      case 'undefined':
-        return true;
-      case 'boolean':
-        return !propValue;
-      case 'object':
-        if (Array.isArray(propValue)) {
-          return propValue.every(isNode);
-        }
-        if (propValue === null || isValidElement(propValue)) {
-          return true;
-        }
-
-        var iteratorFn = getIteratorFn(propValue);
-        if (iteratorFn) {
-          var iterator = iteratorFn.call(propValue);
-          var step;
-          if (iteratorFn !== propValue.entries) {
-            while (!(step = iterator.next()).done) {
-              if (!isNode(step.value)) {
-                return false;
-              }
-            }
-          } else {
-            // Iterator will provide entry [k,v] tuples rather than values.
-            while (!(step = iterator.next()).done) {
-              var entry = step.value;
-              if (entry) {
-                if (!isNode(entry[1])) {
-                  return false;
-                }
-              }
-            }
-          }
-        } else {
-          return false;
-        }
-
-        return true;
-      default:
-        return false;
-    }
-  }
-
-  function isSymbol(propType, propValue) {
-    // Native Symbol.
-    if (propType === 'symbol') {
-      return true;
-    }
-
-    // falsy value can't be a Symbol
-    if (!propValue) {
-      return false;
-    }
-
-    // 19.4.3.5 Symbol.prototype[@@toStringTag] === 'Symbol'
-    if (propValue['@@toStringTag'] === 'Symbol') {
-      return true;
-    }
-
-    // Fallback for non-spec compliant Symbols which are polyfilled.
-    if (typeof Symbol === 'function' && propValue instanceof Symbol) {
-      return true;
-    }
-
-    return false;
-  }
-
-  // Equivalent of `typeof` but with special handling for array and regexp.
-  function getPropType(propValue) {
-    var propType = typeof propValue;
-    if (Array.isArray(propValue)) {
-      return 'array';
-    }
-    if (propValue instanceof RegExp) {
-      // Old webkits (at least until Android 4.0) return 'function' rather than
-      // 'object' for typeof a RegExp. We'll normalize this here so that /bla/
-      // passes PropTypes.object.
-      return 'object';
-    }
-    if (isSymbol(propType, propValue)) {
-      return 'symbol';
-    }
-    return propType;
-  }
-
-  // This handles more types than `getPropType`. Only used for error messages.
-  // See `createPrimitiveTypeChecker`.
-  function getPreciseType(propValue) {
-    if (typeof propValue === 'undefined' || propValue === null) {
-      return '' + propValue;
-    }
-    var propType = getPropType(propValue);
-    if (propType === 'object') {
-      if (propValue instanceof Date) {
-        return 'date';
-      } else if (propValue instanceof RegExp) {
-        return 'regexp';
-      }
-    }
-    return propType;
-  }
-
-  // Returns a string that is postfixed to a warning about an invalid type.
-  // For example, "undefined" or "of type array"
-  function getPostfixForTypeWarning(value) {
-    var type = getPreciseType(value);
-    switch (type) {
-      case 'array':
-      case 'object':
-        return 'an ' + type;
-      case 'boolean':
-      case 'date':
-      case 'regexp':
-        return 'a ' + type;
-      default:
-        return type;
-    }
-  }
-
-  // Returns class name of the object, if any.
-  function getClassName(propValue) {
-    if (!propValue.constructor || !propValue.constructor.name) {
-      return ANONYMOUS;
-    }
-    return propValue.constructor.name;
-  }
-
-  ReactPropTypes.checkPropTypes = checkPropTypes;
-  ReactPropTypes.resetWarningCache = checkPropTypes.resetWarningCache;
-  ReactPropTypes.PropTypes = ReactPropTypes;
-
-  return ReactPropTypes;
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/prop-types/index.js":
-/*!******************************************!*\
-  !*** ./node_modules/prop-types/index.js ***!
-  \******************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-if (true) {
-  var ReactIs = __webpack_require__(/*! react-is */ "./node_modules/prop-types/node_modules/react-is/index.js");
-
-  // By explicitly using `prop-types` you are opting into new development behavior.
-  // http://fb.me/prop-types-in-prod
-  var throwOnDirectAccess = true;
-  module.exports = __webpack_require__(/*! ./factoryWithTypeCheckers */ "./node_modules/prop-types/factoryWithTypeCheckers.js")(ReactIs.isElement, throwOnDirectAccess);
-} else {}
-
-
-/***/ }),
-
-/***/ "./node_modules/prop-types/lib/ReactPropTypesSecret.js":
-/*!*************************************************************!*\
-  !*** ./node_modules/prop-types/lib/ReactPropTypesSecret.js ***!
-  \*************************************************************/
-/***/ ((module) => {
-
-"use strict";
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-
-
-var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
-
-module.exports = ReactPropTypesSecret;
-
-
-/***/ }),
-
-/***/ "./node_modules/prop-types/lib/has.js":
-/*!********************************************!*\
-  !*** ./node_modules/prop-types/lib/has.js ***!
-  \********************************************/
-/***/ ((module) => {
-
-module.exports = Function.call.bind(Object.prototype.hasOwnProperty);
-
-
-/***/ }),
-
-/***/ "./node_modules/prop-types/node_modules/react-is/cjs/react-is.development.js":
-/*!***********************************************************************************!*\
-  !*** ./node_modules/prop-types/node_modules/react-is/cjs/react-is.development.js ***!
-  \***********************************************************************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-/** @license React v16.13.1
- * react-is.development.js
- *
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-
-
-
-
-if (true) {
-  (function() {
-'use strict';
-
-// The Symbol used to tag the ReactElement-like types. If there is no native Symbol
-// nor polyfill, then a plain number is used for performance.
-var hasSymbol = typeof Symbol === 'function' && Symbol.for;
-var REACT_ELEMENT_TYPE = hasSymbol ? Symbol.for('react.element') : 0xeac7;
-var REACT_PORTAL_TYPE = hasSymbol ? Symbol.for('react.portal') : 0xeaca;
-var REACT_FRAGMENT_TYPE = hasSymbol ? Symbol.for('react.fragment') : 0xeacb;
-var REACT_STRICT_MODE_TYPE = hasSymbol ? Symbol.for('react.strict_mode') : 0xeacc;
-var REACT_PROFILER_TYPE = hasSymbol ? Symbol.for('react.profiler') : 0xead2;
-var REACT_PROVIDER_TYPE = hasSymbol ? Symbol.for('react.provider') : 0xeacd;
-var REACT_CONTEXT_TYPE = hasSymbol ? Symbol.for('react.context') : 0xeace; // TODO: We don't use AsyncMode or ConcurrentMode anymore. They were temporary
-// (unstable) APIs that have been removed. Can we remove the symbols?
-
-var REACT_ASYNC_MODE_TYPE = hasSymbol ? Symbol.for('react.async_mode') : 0xeacf;
-var REACT_CONCURRENT_MODE_TYPE = hasSymbol ? Symbol.for('react.concurrent_mode') : 0xeacf;
-var REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol.for('react.forward_ref') : 0xead0;
-var REACT_SUSPENSE_TYPE = hasSymbol ? Symbol.for('react.suspense') : 0xead1;
-var REACT_SUSPENSE_LIST_TYPE = hasSymbol ? Symbol.for('react.suspense_list') : 0xead8;
-var REACT_MEMO_TYPE = hasSymbol ? Symbol.for('react.memo') : 0xead3;
-var REACT_LAZY_TYPE = hasSymbol ? Symbol.for('react.lazy') : 0xead4;
-var REACT_BLOCK_TYPE = hasSymbol ? Symbol.for('react.block') : 0xead9;
-var REACT_FUNDAMENTAL_TYPE = hasSymbol ? Symbol.for('react.fundamental') : 0xead5;
-var REACT_RESPONDER_TYPE = hasSymbol ? Symbol.for('react.responder') : 0xead6;
-var REACT_SCOPE_TYPE = hasSymbol ? Symbol.for('react.scope') : 0xead7;
-
-function isValidElementType(type) {
-  return typeof type === 'string' || typeof type === 'function' || // Note: its typeof might be other than 'symbol' or 'number' if it's a polyfill.
-  type === REACT_FRAGMENT_TYPE || type === REACT_CONCURRENT_MODE_TYPE || type === REACT_PROFILER_TYPE || type === REACT_STRICT_MODE_TYPE || type === REACT_SUSPENSE_TYPE || type === REACT_SUSPENSE_LIST_TYPE || typeof type === 'object' && type !== null && (type.$$typeof === REACT_LAZY_TYPE || type.$$typeof === REACT_MEMO_TYPE || type.$$typeof === REACT_PROVIDER_TYPE || type.$$typeof === REACT_CONTEXT_TYPE || type.$$typeof === REACT_FORWARD_REF_TYPE || type.$$typeof === REACT_FUNDAMENTAL_TYPE || type.$$typeof === REACT_RESPONDER_TYPE || type.$$typeof === REACT_SCOPE_TYPE || type.$$typeof === REACT_BLOCK_TYPE);
-}
-
-function typeOf(object) {
-  if (typeof object === 'object' && object !== null) {
-    var $$typeof = object.$$typeof;
-
-    switch ($$typeof) {
-      case REACT_ELEMENT_TYPE:
-        var type = object.type;
-
-        switch (type) {
-          case REACT_ASYNC_MODE_TYPE:
-          case REACT_CONCURRENT_MODE_TYPE:
-          case REACT_FRAGMENT_TYPE:
-          case REACT_PROFILER_TYPE:
-          case REACT_STRICT_MODE_TYPE:
-          case REACT_SUSPENSE_TYPE:
-            return type;
-
-          default:
-            var $$typeofType = type && type.$$typeof;
-
-            switch ($$typeofType) {
-              case REACT_CONTEXT_TYPE:
-              case REACT_FORWARD_REF_TYPE:
-              case REACT_LAZY_TYPE:
-              case REACT_MEMO_TYPE:
-              case REACT_PROVIDER_TYPE:
-                return $$typeofType;
-
-              default:
-                return $$typeof;
-            }
-
-        }
-
-      case REACT_PORTAL_TYPE:
-        return $$typeof;
-    }
-  }
-
-  return undefined;
-} // AsyncMode is deprecated along with isAsyncMode
-
-var AsyncMode = REACT_ASYNC_MODE_TYPE;
-var ConcurrentMode = REACT_CONCURRENT_MODE_TYPE;
-var ContextConsumer = REACT_CONTEXT_TYPE;
-var ContextProvider = REACT_PROVIDER_TYPE;
-var Element = REACT_ELEMENT_TYPE;
-var ForwardRef = REACT_FORWARD_REF_TYPE;
-var Fragment = REACT_FRAGMENT_TYPE;
-var Lazy = REACT_LAZY_TYPE;
-var Memo = REACT_MEMO_TYPE;
-var Portal = REACT_PORTAL_TYPE;
-var Profiler = REACT_PROFILER_TYPE;
-var StrictMode = REACT_STRICT_MODE_TYPE;
-var Suspense = REACT_SUSPENSE_TYPE;
-var hasWarnedAboutDeprecatedIsAsyncMode = false; // AsyncMode should be deprecated
-
-function isAsyncMode(object) {
-  {
-    if (!hasWarnedAboutDeprecatedIsAsyncMode) {
-      hasWarnedAboutDeprecatedIsAsyncMode = true; // Using console['warn'] to evade Babel and ESLint
-
-      console['warn']('The ReactIs.isAsyncMode() alias has been deprecated, ' + 'and will be removed in React 17+. Update your code to use ' + 'ReactIs.isConcurrentMode() instead. It has the exact same API.');
-    }
-  }
-
-  return isConcurrentMode(object) || typeOf(object) === REACT_ASYNC_MODE_TYPE;
-}
-function isConcurrentMode(object) {
-  return typeOf(object) === REACT_CONCURRENT_MODE_TYPE;
-}
-function isContextConsumer(object) {
-  return typeOf(object) === REACT_CONTEXT_TYPE;
-}
-function isContextProvider(object) {
-  return typeOf(object) === REACT_PROVIDER_TYPE;
-}
-function isElement(object) {
-  return typeof object === 'object' && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
-}
-function isForwardRef(object) {
-  return typeOf(object) === REACT_FORWARD_REF_TYPE;
-}
-function isFragment(object) {
-  return typeOf(object) === REACT_FRAGMENT_TYPE;
-}
-function isLazy(object) {
-  return typeOf(object) === REACT_LAZY_TYPE;
-}
-function isMemo(object) {
-  return typeOf(object) === REACT_MEMO_TYPE;
-}
-function isPortal(object) {
-  return typeOf(object) === REACT_PORTAL_TYPE;
-}
-function isProfiler(object) {
-  return typeOf(object) === REACT_PROFILER_TYPE;
-}
-function isStrictMode(object) {
-  return typeOf(object) === REACT_STRICT_MODE_TYPE;
-}
-function isSuspense(object) {
-  return typeOf(object) === REACT_SUSPENSE_TYPE;
-}
-
-exports.AsyncMode = AsyncMode;
-exports.ConcurrentMode = ConcurrentMode;
-exports.ContextConsumer = ContextConsumer;
-exports.ContextProvider = ContextProvider;
-exports.Element = Element;
-exports.ForwardRef = ForwardRef;
-exports.Fragment = Fragment;
-exports.Lazy = Lazy;
-exports.Memo = Memo;
-exports.Portal = Portal;
-exports.Profiler = Profiler;
-exports.StrictMode = StrictMode;
-exports.Suspense = Suspense;
-exports.isAsyncMode = isAsyncMode;
-exports.isConcurrentMode = isConcurrentMode;
-exports.isContextConsumer = isContextConsumer;
-exports.isContextProvider = isContextProvider;
-exports.isElement = isElement;
-exports.isForwardRef = isForwardRef;
-exports.isFragment = isFragment;
-exports.isLazy = isLazy;
-exports.isMemo = isMemo;
-exports.isPortal = isPortal;
-exports.isProfiler = isProfiler;
-exports.isStrictMode = isStrictMode;
-exports.isSuspense = isSuspense;
-exports.isValidElementType = isValidElementType;
-exports.typeOf = typeOf;
-  })();
-}
-
-
-/***/ }),
-
-/***/ "./node_modules/prop-types/node_modules/react-is/index.js":
-/*!****************************************************************!*\
-  !*** ./node_modules/prop-types/node_modules/react-is/index.js ***!
-  \****************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-
-
-if (false) {} else {
-  module.exports = __webpack_require__(/*! ./cjs/react-is.development.js */ "./node_modules/prop-types/node_modules/react-is/cjs/react-is.development.js");
-}
 
 
 /***/ }),
@@ -44130,6 +44617,2589 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 		__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	} else {}
 }());
+
+
+/***/ }),
+
+/***/ "../node_modules/clsx/dist/clsx.mjs":
+/*!******************************************!*\
+  !*** ../node_modules/clsx/dist/clsx.mjs ***!
+  \******************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   clsx: () => (/* binding */ clsx),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+function r(e){var t,f,n="";if("string"==typeof e||"number"==typeof e)n+=e;else if("object"==typeof e)if(Array.isArray(e)){var o=e.length;for(t=0;t<o;t++)e[t]&&(f=r(e[t]))&&(n&&(n+=" "),n+=f)}else for(f in e)e[f]&&(n&&(n+=" "),n+=f);return n}function clsx(){for(var e,t,f=0,n="",o=arguments.length;f<o;f++)(e=arguments[f])&&(t=r(e))&&(n&&(n+=" "),n+=t);return n}/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (clsx);
+
+/***/ }),
+
+/***/ "../node_modules/tailwind-merge/dist/bundle-mjs.mjs":
+/*!**********************************************************!*\
+  !*** ../node_modules/tailwind-merge/dist/bundle-mjs.mjs ***!
+  \**********************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   createTailwindMerge: () => (/* binding */ createTailwindMerge),
+/* harmony export */   extendTailwindMerge: () => (/* binding */ extendTailwindMerge),
+/* harmony export */   fromTheme: () => (/* binding */ fromTheme),
+/* harmony export */   getDefaultConfig: () => (/* binding */ getDefaultConfig),
+/* harmony export */   mergeConfigs: () => (/* binding */ mergeConfigs),
+/* harmony export */   twJoin: () => (/* binding */ twJoin),
+/* harmony export */   twMerge: () => (/* binding */ twMerge),
+/* harmony export */   validators: () => (/* binding */ validators)
+/* harmony export */ });
+const CLASS_PART_SEPARATOR = '-';
+const createClassGroupUtils = config => {
+  const classMap = createClassMap(config);
+  const {
+    conflictingClassGroups,
+    conflictingClassGroupModifiers
+  } = config;
+  const getClassGroupId = className => {
+    const classParts = className.split(CLASS_PART_SEPARATOR);
+    // Classes like `-inset-1` produce an empty string as first classPart. We assume that classes for negative values are used correctly and remove it from classParts.
+    if (classParts[0] === '' && classParts.length !== 1) {
+      classParts.shift();
+    }
+    return getGroupRecursive(classParts, classMap) || getGroupIdForArbitraryProperty(className);
+  };
+  const getConflictingClassGroupIds = (classGroupId, hasPostfixModifier) => {
+    const conflicts = conflictingClassGroups[classGroupId] || [];
+    if (hasPostfixModifier && conflictingClassGroupModifiers[classGroupId]) {
+      return [...conflicts, ...conflictingClassGroupModifiers[classGroupId]];
+    }
+    return conflicts;
+  };
+  return {
+    getClassGroupId,
+    getConflictingClassGroupIds
+  };
+};
+const getGroupRecursive = (classParts, classPartObject) => {
+  if (classParts.length === 0) {
+    return classPartObject.classGroupId;
+  }
+  const currentClassPart = classParts[0];
+  const nextClassPartObject = classPartObject.nextPart.get(currentClassPart);
+  const classGroupFromNextClassPart = nextClassPartObject ? getGroupRecursive(classParts.slice(1), nextClassPartObject) : undefined;
+  if (classGroupFromNextClassPart) {
+    return classGroupFromNextClassPart;
+  }
+  if (classPartObject.validators.length === 0) {
+    return undefined;
+  }
+  const classRest = classParts.join(CLASS_PART_SEPARATOR);
+  return classPartObject.validators.find(({
+    validator
+  }) => validator(classRest))?.classGroupId;
+};
+const arbitraryPropertyRegex = /^\[(.+)\]$/;
+const getGroupIdForArbitraryProperty = className => {
+  if (arbitraryPropertyRegex.test(className)) {
+    const arbitraryPropertyClassName = arbitraryPropertyRegex.exec(className)[1];
+    const property = arbitraryPropertyClassName?.substring(0, arbitraryPropertyClassName.indexOf(':'));
+    if (property) {
+      // I use two dots here because one dot is used as prefix for class groups in plugins
+      return 'arbitrary..' + property;
+    }
+  }
+};
+/**
+ * Exported for testing only
+ */
+const createClassMap = config => {
+  const {
+    theme,
+    prefix
+  } = config;
+  const classMap = {
+    nextPart: new Map(),
+    validators: []
+  };
+  const prefixedClassGroupEntries = getPrefixedClassGroupEntries(Object.entries(config.classGroups), prefix);
+  prefixedClassGroupEntries.forEach(([classGroupId, classGroup]) => {
+    processClassesRecursively(classGroup, classMap, classGroupId, theme);
+  });
+  return classMap;
+};
+const processClassesRecursively = (classGroup, classPartObject, classGroupId, theme) => {
+  classGroup.forEach(classDefinition => {
+    if (typeof classDefinition === 'string') {
+      const classPartObjectToEdit = classDefinition === '' ? classPartObject : getPart(classPartObject, classDefinition);
+      classPartObjectToEdit.classGroupId = classGroupId;
+      return;
+    }
+    if (typeof classDefinition === 'function') {
+      if (isThemeGetter(classDefinition)) {
+        processClassesRecursively(classDefinition(theme), classPartObject, classGroupId, theme);
+        return;
+      }
+      classPartObject.validators.push({
+        validator: classDefinition,
+        classGroupId
+      });
+      return;
+    }
+    Object.entries(classDefinition).forEach(([key, classGroup]) => {
+      processClassesRecursively(classGroup, getPart(classPartObject, key), classGroupId, theme);
+    });
+  });
+};
+const getPart = (classPartObject, path) => {
+  let currentClassPartObject = classPartObject;
+  path.split(CLASS_PART_SEPARATOR).forEach(pathPart => {
+    if (!currentClassPartObject.nextPart.has(pathPart)) {
+      currentClassPartObject.nextPart.set(pathPart, {
+        nextPart: new Map(),
+        validators: []
+      });
+    }
+    currentClassPartObject = currentClassPartObject.nextPart.get(pathPart);
+  });
+  return currentClassPartObject;
+};
+const isThemeGetter = func => func.isThemeGetter;
+const getPrefixedClassGroupEntries = (classGroupEntries, prefix) => {
+  if (!prefix) {
+    return classGroupEntries;
+  }
+  return classGroupEntries.map(([classGroupId, classGroup]) => {
+    const prefixedClassGroup = classGroup.map(classDefinition => {
+      if (typeof classDefinition === 'string') {
+        return prefix + classDefinition;
+      }
+      if (typeof classDefinition === 'object') {
+        return Object.fromEntries(Object.entries(classDefinition).map(([key, value]) => [prefix + key, value]));
+      }
+      return classDefinition;
+    });
+    return [classGroupId, prefixedClassGroup];
+  });
+};
+
+// LRU cache inspired from hashlru (https://github.com/dominictarr/hashlru/blob/v1.0.4/index.js) but object replaced with Map to improve performance
+const createLruCache = maxCacheSize => {
+  if (maxCacheSize < 1) {
+    return {
+      get: () => undefined,
+      set: () => {}
+    };
+  }
+  let cacheSize = 0;
+  let cache = new Map();
+  let previousCache = new Map();
+  const update = (key, value) => {
+    cache.set(key, value);
+    cacheSize++;
+    if (cacheSize > maxCacheSize) {
+      cacheSize = 0;
+      previousCache = cache;
+      cache = new Map();
+    }
+  };
+  return {
+    get(key) {
+      let value = cache.get(key);
+      if (value !== undefined) {
+        return value;
+      }
+      if ((value = previousCache.get(key)) !== undefined) {
+        update(key, value);
+        return value;
+      }
+    },
+    set(key, value) {
+      if (cache.has(key)) {
+        cache.set(key, value);
+      } else {
+        update(key, value);
+      }
+    }
+  };
+};
+const IMPORTANT_MODIFIER = '!';
+const createParseClassName = config => {
+  const {
+    separator,
+    experimentalParseClassName
+  } = config;
+  const isSeparatorSingleCharacter = separator.length === 1;
+  const firstSeparatorCharacter = separator[0];
+  const separatorLength = separator.length;
+  // parseClassName inspired by https://github.com/tailwindlabs/tailwindcss/blob/v3.2.2/src/util/splitAtTopLevelOnly.js
+  const parseClassName = className => {
+    const modifiers = [];
+    let bracketDepth = 0;
+    let modifierStart = 0;
+    let postfixModifierPosition;
+    for (let index = 0; index < className.length; index++) {
+      let currentCharacter = className[index];
+      if (bracketDepth === 0) {
+        if (currentCharacter === firstSeparatorCharacter && (isSeparatorSingleCharacter || className.slice(index, index + separatorLength) === separator)) {
+          modifiers.push(className.slice(modifierStart, index));
+          modifierStart = index + separatorLength;
+          continue;
+        }
+        if (currentCharacter === '/') {
+          postfixModifierPosition = index;
+          continue;
+        }
+      }
+      if (currentCharacter === '[') {
+        bracketDepth++;
+      } else if (currentCharacter === ']') {
+        bracketDepth--;
+      }
+    }
+    const baseClassNameWithImportantModifier = modifiers.length === 0 ? className : className.substring(modifierStart);
+    const hasImportantModifier = baseClassNameWithImportantModifier.startsWith(IMPORTANT_MODIFIER);
+    const baseClassName = hasImportantModifier ? baseClassNameWithImportantModifier.substring(1) : baseClassNameWithImportantModifier;
+    const maybePostfixModifierPosition = postfixModifierPosition && postfixModifierPosition > modifierStart ? postfixModifierPosition - modifierStart : undefined;
+    return {
+      modifiers,
+      hasImportantModifier,
+      baseClassName,
+      maybePostfixModifierPosition
+    };
+  };
+  if (experimentalParseClassName) {
+    return className => experimentalParseClassName({
+      className,
+      parseClassName
+    });
+  }
+  return parseClassName;
+};
+/**
+ * Sorts modifiers according to following schema:
+ * - Predefined modifiers are sorted alphabetically
+ * - When an arbitrary variant appears, it must be preserved which modifiers are before and after it
+ */
+const sortModifiers = modifiers => {
+  if (modifiers.length <= 1) {
+    return modifiers;
+  }
+  const sortedModifiers = [];
+  let unsortedModifiers = [];
+  modifiers.forEach(modifier => {
+    const isArbitraryVariant = modifier[0] === '[';
+    if (isArbitraryVariant) {
+      sortedModifiers.push(...unsortedModifiers.sort(), modifier);
+      unsortedModifiers = [];
+    } else {
+      unsortedModifiers.push(modifier);
+    }
+  });
+  sortedModifiers.push(...unsortedModifiers.sort());
+  return sortedModifiers;
+};
+const createConfigUtils = config => ({
+  cache: createLruCache(config.cacheSize),
+  parseClassName: createParseClassName(config),
+  ...createClassGroupUtils(config)
+});
+const SPLIT_CLASSES_REGEX = /\s+/;
+const mergeClassList = (classList, configUtils) => {
+  const {
+    parseClassName,
+    getClassGroupId,
+    getConflictingClassGroupIds
+  } = configUtils;
+  /**
+   * Set of classGroupIds in following format:
+   * `{importantModifier}{variantModifiers}{classGroupId}`
+   * @example 'float'
+   * @example 'hover:focus:bg-color'
+   * @example 'md:!pr'
+   */
+  const classGroupsInConflict = [];
+  const classNames = classList.trim().split(SPLIT_CLASSES_REGEX);
+  let result = '';
+  for (let index = classNames.length - 1; index >= 0; index -= 1) {
+    const originalClassName = classNames[index];
+    const {
+      modifiers,
+      hasImportantModifier,
+      baseClassName,
+      maybePostfixModifierPosition
+    } = parseClassName(originalClassName);
+    let hasPostfixModifier = Boolean(maybePostfixModifierPosition);
+    let classGroupId = getClassGroupId(hasPostfixModifier ? baseClassName.substring(0, maybePostfixModifierPosition) : baseClassName);
+    if (!classGroupId) {
+      if (!hasPostfixModifier) {
+        // Not a Tailwind class
+        result = originalClassName + (result.length > 0 ? ' ' + result : result);
+        continue;
+      }
+      classGroupId = getClassGroupId(baseClassName);
+      if (!classGroupId) {
+        // Not a Tailwind class
+        result = originalClassName + (result.length > 0 ? ' ' + result : result);
+        continue;
+      }
+      hasPostfixModifier = false;
+    }
+    const variantModifier = sortModifiers(modifiers).join(':');
+    const modifierId = hasImportantModifier ? variantModifier + IMPORTANT_MODIFIER : variantModifier;
+    const classId = modifierId + classGroupId;
+    if (classGroupsInConflict.includes(classId)) {
+      // Tailwind class omitted due to conflict
+      continue;
+    }
+    classGroupsInConflict.push(classId);
+    const conflictGroups = getConflictingClassGroupIds(classGroupId, hasPostfixModifier);
+    for (let i = 0; i < conflictGroups.length; ++i) {
+      const group = conflictGroups[i];
+      classGroupsInConflict.push(modifierId + group);
+    }
+    // Tailwind class not in conflict
+    result = originalClassName + (result.length > 0 ? ' ' + result : result);
+  }
+  return result;
+};
+
+/**
+ * The code in this file is copied from https://github.com/lukeed/clsx and modified to suit the needs of tailwind-merge better.
+ *
+ * Specifically:
+ * - Runtime code from https://github.com/lukeed/clsx/blob/v1.2.1/src/index.js
+ * - TypeScript types from https://github.com/lukeed/clsx/blob/v1.2.1/clsx.d.ts
+ *
+ * Original code has MIT license: Copyright (c) Luke Edwards <luke.edwards05@gmail.com> (lukeed.com)
+ */
+function twJoin() {
+  let index = 0;
+  let argument;
+  let resolvedValue;
+  let string = '';
+  while (index < arguments.length) {
+    if (argument = arguments[index++]) {
+      if (resolvedValue = toValue(argument)) {
+        string && (string += ' ');
+        string += resolvedValue;
+      }
+    }
+  }
+  return string;
+}
+const toValue = mix => {
+  if (typeof mix === 'string') {
+    return mix;
+  }
+  let resolvedValue;
+  let string = '';
+  for (let k = 0; k < mix.length; k++) {
+    if (mix[k]) {
+      if (resolvedValue = toValue(mix[k])) {
+        string && (string += ' ');
+        string += resolvedValue;
+      }
+    }
+  }
+  return string;
+};
+function createTailwindMerge(createConfigFirst, ...createConfigRest) {
+  let configUtils;
+  let cacheGet;
+  let cacheSet;
+  let functionToCall = initTailwindMerge;
+  function initTailwindMerge(classList) {
+    const config = createConfigRest.reduce((previousConfig, createConfigCurrent) => createConfigCurrent(previousConfig), createConfigFirst());
+    configUtils = createConfigUtils(config);
+    cacheGet = configUtils.cache.get;
+    cacheSet = configUtils.cache.set;
+    functionToCall = tailwindMerge;
+    return tailwindMerge(classList);
+  }
+  function tailwindMerge(classList) {
+    const cachedResult = cacheGet(classList);
+    if (cachedResult) {
+      return cachedResult;
+    }
+    const result = mergeClassList(classList, configUtils);
+    cacheSet(classList, result);
+    return result;
+  }
+  return function callTailwindMerge() {
+    return functionToCall(twJoin.apply(null, arguments));
+  };
+}
+const fromTheme = key => {
+  const themeGetter = theme => theme[key] || [];
+  themeGetter.isThemeGetter = true;
+  return themeGetter;
+};
+const arbitraryValueRegex = /^\[(?:([a-z-]+):)?(.+)\]$/i;
+const fractionRegex = /^\d+\/\d+$/;
+const stringLengths = /*#__PURE__*/new Set(['px', 'full', 'screen']);
+const tshirtUnitRegex = /^(\d+(\.\d+)?)?(xs|sm|md|lg|xl)$/;
+const lengthUnitRegex = /\d+(%|px|r?em|[sdl]?v([hwib]|min|max)|pt|pc|in|cm|mm|cap|ch|ex|r?lh|cq(w|h|i|b|min|max))|\b(calc|min|max|clamp)\(.+\)|^0$/;
+const colorFunctionRegex = /^(rgba?|hsla?|hwb|(ok)?(lab|lch))\(.+\)$/;
+// Shadow always begins with x and y offset separated by underscore optionally prepended by inset
+const shadowRegex = /^(inset_)?-?((\d+)?\.?(\d+)[a-z]+|0)_-?((\d+)?\.?(\d+)[a-z]+|0)/;
+const imageRegex = /^(url|image|image-set|cross-fade|element|(repeating-)?(linear|radial|conic)-gradient)\(.+\)$/;
+const isLength = value => isNumber(value) || stringLengths.has(value) || fractionRegex.test(value);
+const isArbitraryLength = value => getIsArbitraryValue(value, 'length', isLengthOnly);
+const isNumber = value => Boolean(value) && !Number.isNaN(Number(value));
+const isArbitraryNumber = value => getIsArbitraryValue(value, 'number', isNumber);
+const isInteger = value => Boolean(value) && Number.isInteger(Number(value));
+const isPercent = value => value.endsWith('%') && isNumber(value.slice(0, -1));
+const isArbitraryValue = value => arbitraryValueRegex.test(value);
+const isTshirtSize = value => tshirtUnitRegex.test(value);
+const sizeLabels = /*#__PURE__*/new Set(['length', 'size', 'percentage']);
+const isArbitrarySize = value => getIsArbitraryValue(value, sizeLabels, isNever);
+const isArbitraryPosition = value => getIsArbitraryValue(value, 'position', isNever);
+const imageLabels = /*#__PURE__*/new Set(['image', 'url']);
+const isArbitraryImage = value => getIsArbitraryValue(value, imageLabels, isImage);
+const isArbitraryShadow = value => getIsArbitraryValue(value, '', isShadow);
+const isAny = () => true;
+const getIsArbitraryValue = (value, label, testValue) => {
+  const result = arbitraryValueRegex.exec(value);
+  if (result) {
+    if (result[1]) {
+      return typeof label === 'string' ? result[1] === label : label.has(result[1]);
+    }
+    return testValue(result[2]);
+  }
+  return false;
+};
+const isLengthOnly = value =>
+// `colorFunctionRegex` check is necessary because color functions can have percentages in them which which would be incorrectly classified as lengths.
+// For example, `hsl(0 0% 0%)` would be classified as a length without this check.
+// I could also use lookbehind assertion in `lengthUnitRegex` but that isn't supported widely enough.
+lengthUnitRegex.test(value) && !colorFunctionRegex.test(value);
+const isNever = () => false;
+const isShadow = value => shadowRegex.test(value);
+const isImage = value => imageRegex.test(value);
+const validators = /*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  isAny,
+  isArbitraryImage,
+  isArbitraryLength,
+  isArbitraryNumber,
+  isArbitraryPosition,
+  isArbitraryShadow,
+  isArbitrarySize,
+  isArbitraryValue,
+  isInteger,
+  isLength,
+  isNumber,
+  isPercent,
+  isTshirtSize
+}, Symbol.toStringTag, {
+  value: 'Module'
+});
+const getDefaultConfig = () => {
+  const colors = fromTheme('colors');
+  const spacing = fromTheme('spacing');
+  const blur = fromTheme('blur');
+  const brightness = fromTheme('brightness');
+  const borderColor = fromTheme('borderColor');
+  const borderRadius = fromTheme('borderRadius');
+  const borderSpacing = fromTheme('borderSpacing');
+  const borderWidth = fromTheme('borderWidth');
+  const contrast = fromTheme('contrast');
+  const grayscale = fromTheme('grayscale');
+  const hueRotate = fromTheme('hueRotate');
+  const invert = fromTheme('invert');
+  const gap = fromTheme('gap');
+  const gradientColorStops = fromTheme('gradientColorStops');
+  const gradientColorStopPositions = fromTheme('gradientColorStopPositions');
+  const inset = fromTheme('inset');
+  const margin = fromTheme('margin');
+  const opacity = fromTheme('opacity');
+  const padding = fromTheme('padding');
+  const saturate = fromTheme('saturate');
+  const scale = fromTheme('scale');
+  const sepia = fromTheme('sepia');
+  const skew = fromTheme('skew');
+  const space = fromTheme('space');
+  const translate = fromTheme('translate');
+  const getOverscroll = () => ['auto', 'contain', 'none'];
+  const getOverflow = () => ['auto', 'hidden', 'clip', 'visible', 'scroll'];
+  const getSpacingWithAutoAndArbitrary = () => ['auto', isArbitraryValue, spacing];
+  const getSpacingWithArbitrary = () => [isArbitraryValue, spacing];
+  const getLengthWithEmptyAndArbitrary = () => ['', isLength, isArbitraryLength];
+  const getNumberWithAutoAndArbitrary = () => ['auto', isNumber, isArbitraryValue];
+  const getPositions = () => ['bottom', 'center', 'left', 'left-bottom', 'left-top', 'right', 'right-bottom', 'right-top', 'top'];
+  const getLineStyles = () => ['solid', 'dashed', 'dotted', 'double', 'none'];
+  const getBlendModes = () => ['normal', 'multiply', 'screen', 'overlay', 'darken', 'lighten', 'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference', 'exclusion', 'hue', 'saturation', 'color', 'luminosity'];
+  const getAlign = () => ['start', 'end', 'center', 'between', 'around', 'evenly', 'stretch'];
+  const getZeroAndEmpty = () => ['', '0', isArbitraryValue];
+  const getBreaks = () => ['auto', 'avoid', 'all', 'avoid-page', 'page', 'left', 'right', 'column'];
+  const getNumberAndArbitrary = () => [isNumber, isArbitraryValue];
+  return {
+    cacheSize: 500,
+    separator: ':',
+    theme: {
+      colors: [isAny],
+      spacing: [isLength, isArbitraryLength],
+      blur: ['none', '', isTshirtSize, isArbitraryValue],
+      brightness: getNumberAndArbitrary(),
+      borderColor: [colors],
+      borderRadius: ['none', '', 'full', isTshirtSize, isArbitraryValue],
+      borderSpacing: getSpacingWithArbitrary(),
+      borderWidth: getLengthWithEmptyAndArbitrary(),
+      contrast: getNumberAndArbitrary(),
+      grayscale: getZeroAndEmpty(),
+      hueRotate: getNumberAndArbitrary(),
+      invert: getZeroAndEmpty(),
+      gap: getSpacingWithArbitrary(),
+      gradientColorStops: [colors],
+      gradientColorStopPositions: [isPercent, isArbitraryLength],
+      inset: getSpacingWithAutoAndArbitrary(),
+      margin: getSpacingWithAutoAndArbitrary(),
+      opacity: getNumberAndArbitrary(),
+      padding: getSpacingWithArbitrary(),
+      saturate: getNumberAndArbitrary(),
+      scale: getNumberAndArbitrary(),
+      sepia: getZeroAndEmpty(),
+      skew: getNumberAndArbitrary(),
+      space: getSpacingWithArbitrary(),
+      translate: getSpacingWithArbitrary()
+    },
+    classGroups: {
+      // Layout
+      /**
+       * Aspect Ratio
+       * @see https://tailwindcss.com/docs/aspect-ratio
+       */
+      aspect: [{
+        aspect: ['auto', 'square', 'video', isArbitraryValue]
+      }],
+      /**
+       * Container
+       * @see https://tailwindcss.com/docs/container
+       */
+      container: ['container'],
+      /**
+       * Columns
+       * @see https://tailwindcss.com/docs/columns
+       */
+      columns: [{
+        columns: [isTshirtSize]
+      }],
+      /**
+       * Break After
+       * @see https://tailwindcss.com/docs/break-after
+       */
+      'break-after': [{
+        'break-after': getBreaks()
+      }],
+      /**
+       * Break Before
+       * @see https://tailwindcss.com/docs/break-before
+       */
+      'break-before': [{
+        'break-before': getBreaks()
+      }],
+      /**
+       * Break Inside
+       * @see https://tailwindcss.com/docs/break-inside
+       */
+      'break-inside': [{
+        'break-inside': ['auto', 'avoid', 'avoid-page', 'avoid-column']
+      }],
+      /**
+       * Box Decoration Break
+       * @see https://tailwindcss.com/docs/box-decoration-break
+       */
+      'box-decoration': [{
+        'box-decoration': ['slice', 'clone']
+      }],
+      /**
+       * Box Sizing
+       * @see https://tailwindcss.com/docs/box-sizing
+       */
+      box: [{
+        box: ['border', 'content']
+      }],
+      /**
+       * Display
+       * @see https://tailwindcss.com/docs/display
+       */
+      display: ['block', 'inline-block', 'inline', 'flex', 'inline-flex', 'table', 'inline-table', 'table-caption', 'table-cell', 'table-column', 'table-column-group', 'table-footer-group', 'table-header-group', 'table-row-group', 'table-row', 'flow-root', 'grid', 'inline-grid', 'contents', 'list-item', 'hidden'],
+      /**
+       * Floats
+       * @see https://tailwindcss.com/docs/float
+       */
+      float: [{
+        float: ['right', 'left', 'none', 'start', 'end']
+      }],
+      /**
+       * Clear
+       * @see https://tailwindcss.com/docs/clear
+       */
+      clear: [{
+        clear: ['left', 'right', 'both', 'none', 'start', 'end']
+      }],
+      /**
+       * Isolation
+       * @see https://tailwindcss.com/docs/isolation
+       */
+      isolation: ['isolate', 'isolation-auto'],
+      /**
+       * Object Fit
+       * @see https://tailwindcss.com/docs/object-fit
+       */
+      'object-fit': [{
+        object: ['contain', 'cover', 'fill', 'none', 'scale-down']
+      }],
+      /**
+       * Object Position
+       * @see https://tailwindcss.com/docs/object-position
+       */
+      'object-position': [{
+        object: [...getPositions(), isArbitraryValue]
+      }],
+      /**
+       * Overflow
+       * @see https://tailwindcss.com/docs/overflow
+       */
+      overflow: [{
+        overflow: getOverflow()
+      }],
+      /**
+       * Overflow X
+       * @see https://tailwindcss.com/docs/overflow
+       */
+      'overflow-x': [{
+        'overflow-x': getOverflow()
+      }],
+      /**
+       * Overflow Y
+       * @see https://tailwindcss.com/docs/overflow
+       */
+      'overflow-y': [{
+        'overflow-y': getOverflow()
+      }],
+      /**
+       * Overscroll Behavior
+       * @see https://tailwindcss.com/docs/overscroll-behavior
+       */
+      overscroll: [{
+        overscroll: getOverscroll()
+      }],
+      /**
+       * Overscroll Behavior X
+       * @see https://tailwindcss.com/docs/overscroll-behavior
+       */
+      'overscroll-x': [{
+        'overscroll-x': getOverscroll()
+      }],
+      /**
+       * Overscroll Behavior Y
+       * @see https://tailwindcss.com/docs/overscroll-behavior
+       */
+      'overscroll-y': [{
+        'overscroll-y': getOverscroll()
+      }],
+      /**
+       * Position
+       * @see https://tailwindcss.com/docs/position
+       */
+      position: ['static', 'fixed', 'absolute', 'relative', 'sticky'],
+      /**
+       * Top / Right / Bottom / Left
+       * @see https://tailwindcss.com/docs/top-right-bottom-left
+       */
+      inset: [{
+        inset: [inset]
+      }],
+      /**
+       * Right / Left
+       * @see https://tailwindcss.com/docs/top-right-bottom-left
+       */
+      'inset-x': [{
+        'inset-x': [inset]
+      }],
+      /**
+       * Top / Bottom
+       * @see https://tailwindcss.com/docs/top-right-bottom-left
+       */
+      'inset-y': [{
+        'inset-y': [inset]
+      }],
+      /**
+       * Start
+       * @see https://tailwindcss.com/docs/top-right-bottom-left
+       */
+      start: [{
+        start: [inset]
+      }],
+      /**
+       * End
+       * @see https://tailwindcss.com/docs/top-right-bottom-left
+       */
+      end: [{
+        end: [inset]
+      }],
+      /**
+       * Top
+       * @see https://tailwindcss.com/docs/top-right-bottom-left
+       */
+      top: [{
+        top: [inset]
+      }],
+      /**
+       * Right
+       * @see https://tailwindcss.com/docs/top-right-bottom-left
+       */
+      right: [{
+        right: [inset]
+      }],
+      /**
+       * Bottom
+       * @see https://tailwindcss.com/docs/top-right-bottom-left
+       */
+      bottom: [{
+        bottom: [inset]
+      }],
+      /**
+       * Left
+       * @see https://tailwindcss.com/docs/top-right-bottom-left
+       */
+      left: [{
+        left: [inset]
+      }],
+      /**
+       * Visibility
+       * @see https://tailwindcss.com/docs/visibility
+       */
+      visibility: ['visible', 'invisible', 'collapse'],
+      /**
+       * Z-Index
+       * @see https://tailwindcss.com/docs/z-index
+       */
+      z: [{
+        z: ['auto', isInteger, isArbitraryValue]
+      }],
+      // Flexbox and Grid
+      /**
+       * Flex Basis
+       * @see https://tailwindcss.com/docs/flex-basis
+       */
+      basis: [{
+        basis: getSpacingWithAutoAndArbitrary()
+      }],
+      /**
+       * Flex Direction
+       * @see https://tailwindcss.com/docs/flex-direction
+       */
+      'flex-direction': [{
+        flex: ['row', 'row-reverse', 'col', 'col-reverse']
+      }],
+      /**
+       * Flex Wrap
+       * @see https://tailwindcss.com/docs/flex-wrap
+       */
+      'flex-wrap': [{
+        flex: ['wrap', 'wrap-reverse', 'nowrap']
+      }],
+      /**
+       * Flex
+       * @see https://tailwindcss.com/docs/flex
+       */
+      flex: [{
+        flex: ['1', 'auto', 'initial', 'none', isArbitraryValue]
+      }],
+      /**
+       * Flex Grow
+       * @see https://tailwindcss.com/docs/flex-grow
+       */
+      grow: [{
+        grow: getZeroAndEmpty()
+      }],
+      /**
+       * Flex Shrink
+       * @see https://tailwindcss.com/docs/flex-shrink
+       */
+      shrink: [{
+        shrink: getZeroAndEmpty()
+      }],
+      /**
+       * Order
+       * @see https://tailwindcss.com/docs/order
+       */
+      order: [{
+        order: ['first', 'last', 'none', isInteger, isArbitraryValue]
+      }],
+      /**
+       * Grid Template Columns
+       * @see https://tailwindcss.com/docs/grid-template-columns
+       */
+      'grid-cols': [{
+        'grid-cols': [isAny]
+      }],
+      /**
+       * Grid Column Start / End
+       * @see https://tailwindcss.com/docs/grid-column
+       */
+      'col-start-end': [{
+        col: ['auto', {
+          span: ['full', isInteger, isArbitraryValue]
+        }, isArbitraryValue]
+      }],
+      /**
+       * Grid Column Start
+       * @see https://tailwindcss.com/docs/grid-column
+       */
+      'col-start': [{
+        'col-start': getNumberWithAutoAndArbitrary()
+      }],
+      /**
+       * Grid Column End
+       * @see https://tailwindcss.com/docs/grid-column
+       */
+      'col-end': [{
+        'col-end': getNumberWithAutoAndArbitrary()
+      }],
+      /**
+       * Grid Template Rows
+       * @see https://tailwindcss.com/docs/grid-template-rows
+       */
+      'grid-rows': [{
+        'grid-rows': [isAny]
+      }],
+      /**
+       * Grid Row Start / End
+       * @see https://tailwindcss.com/docs/grid-row
+       */
+      'row-start-end': [{
+        row: ['auto', {
+          span: [isInteger, isArbitraryValue]
+        }, isArbitraryValue]
+      }],
+      /**
+       * Grid Row Start
+       * @see https://tailwindcss.com/docs/grid-row
+       */
+      'row-start': [{
+        'row-start': getNumberWithAutoAndArbitrary()
+      }],
+      /**
+       * Grid Row End
+       * @see https://tailwindcss.com/docs/grid-row
+       */
+      'row-end': [{
+        'row-end': getNumberWithAutoAndArbitrary()
+      }],
+      /**
+       * Grid Auto Flow
+       * @see https://tailwindcss.com/docs/grid-auto-flow
+       */
+      'grid-flow': [{
+        'grid-flow': ['row', 'col', 'dense', 'row-dense', 'col-dense']
+      }],
+      /**
+       * Grid Auto Columns
+       * @see https://tailwindcss.com/docs/grid-auto-columns
+       */
+      'auto-cols': [{
+        'auto-cols': ['auto', 'min', 'max', 'fr', isArbitraryValue]
+      }],
+      /**
+       * Grid Auto Rows
+       * @see https://tailwindcss.com/docs/grid-auto-rows
+       */
+      'auto-rows': [{
+        'auto-rows': ['auto', 'min', 'max', 'fr', isArbitraryValue]
+      }],
+      /**
+       * Gap
+       * @see https://tailwindcss.com/docs/gap
+       */
+      gap: [{
+        gap: [gap]
+      }],
+      /**
+       * Gap X
+       * @see https://tailwindcss.com/docs/gap
+       */
+      'gap-x': [{
+        'gap-x': [gap]
+      }],
+      /**
+       * Gap Y
+       * @see https://tailwindcss.com/docs/gap
+       */
+      'gap-y': [{
+        'gap-y': [gap]
+      }],
+      /**
+       * Justify Content
+       * @see https://tailwindcss.com/docs/justify-content
+       */
+      'justify-content': [{
+        justify: ['normal', ...getAlign()]
+      }],
+      /**
+       * Justify Items
+       * @see https://tailwindcss.com/docs/justify-items
+       */
+      'justify-items': [{
+        'justify-items': ['start', 'end', 'center', 'stretch']
+      }],
+      /**
+       * Justify Self
+       * @see https://tailwindcss.com/docs/justify-self
+       */
+      'justify-self': [{
+        'justify-self': ['auto', 'start', 'end', 'center', 'stretch']
+      }],
+      /**
+       * Align Content
+       * @see https://tailwindcss.com/docs/align-content
+       */
+      'align-content': [{
+        content: ['normal', ...getAlign(), 'baseline']
+      }],
+      /**
+       * Align Items
+       * @see https://tailwindcss.com/docs/align-items
+       */
+      'align-items': [{
+        items: ['start', 'end', 'center', 'baseline', 'stretch']
+      }],
+      /**
+       * Align Self
+       * @see https://tailwindcss.com/docs/align-self
+       */
+      'align-self': [{
+        self: ['auto', 'start', 'end', 'center', 'stretch', 'baseline']
+      }],
+      /**
+       * Place Content
+       * @see https://tailwindcss.com/docs/place-content
+       */
+      'place-content': [{
+        'place-content': [...getAlign(), 'baseline']
+      }],
+      /**
+       * Place Items
+       * @see https://tailwindcss.com/docs/place-items
+       */
+      'place-items': [{
+        'place-items': ['start', 'end', 'center', 'baseline', 'stretch']
+      }],
+      /**
+       * Place Self
+       * @see https://tailwindcss.com/docs/place-self
+       */
+      'place-self': [{
+        'place-self': ['auto', 'start', 'end', 'center', 'stretch']
+      }],
+      // Spacing
+      /**
+       * Padding
+       * @see https://tailwindcss.com/docs/padding
+       */
+      p: [{
+        p: [padding]
+      }],
+      /**
+       * Padding X
+       * @see https://tailwindcss.com/docs/padding
+       */
+      px: [{
+        px: [padding]
+      }],
+      /**
+       * Padding Y
+       * @see https://tailwindcss.com/docs/padding
+       */
+      py: [{
+        py: [padding]
+      }],
+      /**
+       * Padding Start
+       * @see https://tailwindcss.com/docs/padding
+       */
+      ps: [{
+        ps: [padding]
+      }],
+      /**
+       * Padding End
+       * @see https://tailwindcss.com/docs/padding
+       */
+      pe: [{
+        pe: [padding]
+      }],
+      /**
+       * Padding Top
+       * @see https://tailwindcss.com/docs/padding
+       */
+      pt: [{
+        pt: [padding]
+      }],
+      /**
+       * Padding Right
+       * @see https://tailwindcss.com/docs/padding
+       */
+      pr: [{
+        pr: [padding]
+      }],
+      /**
+       * Padding Bottom
+       * @see https://tailwindcss.com/docs/padding
+       */
+      pb: [{
+        pb: [padding]
+      }],
+      /**
+       * Padding Left
+       * @see https://tailwindcss.com/docs/padding
+       */
+      pl: [{
+        pl: [padding]
+      }],
+      /**
+       * Margin
+       * @see https://tailwindcss.com/docs/margin
+       */
+      m: [{
+        m: [margin]
+      }],
+      /**
+       * Margin X
+       * @see https://tailwindcss.com/docs/margin
+       */
+      mx: [{
+        mx: [margin]
+      }],
+      /**
+       * Margin Y
+       * @see https://tailwindcss.com/docs/margin
+       */
+      my: [{
+        my: [margin]
+      }],
+      /**
+       * Margin Start
+       * @see https://tailwindcss.com/docs/margin
+       */
+      ms: [{
+        ms: [margin]
+      }],
+      /**
+       * Margin End
+       * @see https://tailwindcss.com/docs/margin
+       */
+      me: [{
+        me: [margin]
+      }],
+      /**
+       * Margin Top
+       * @see https://tailwindcss.com/docs/margin
+       */
+      mt: [{
+        mt: [margin]
+      }],
+      /**
+       * Margin Right
+       * @see https://tailwindcss.com/docs/margin
+       */
+      mr: [{
+        mr: [margin]
+      }],
+      /**
+       * Margin Bottom
+       * @see https://tailwindcss.com/docs/margin
+       */
+      mb: [{
+        mb: [margin]
+      }],
+      /**
+       * Margin Left
+       * @see https://tailwindcss.com/docs/margin
+       */
+      ml: [{
+        ml: [margin]
+      }],
+      /**
+       * Space Between X
+       * @see https://tailwindcss.com/docs/space
+       */
+      'space-x': [{
+        'space-x': [space]
+      }],
+      /**
+       * Space Between X Reverse
+       * @see https://tailwindcss.com/docs/space
+       */
+      'space-x-reverse': ['space-x-reverse'],
+      /**
+       * Space Between Y
+       * @see https://tailwindcss.com/docs/space
+       */
+      'space-y': [{
+        'space-y': [space]
+      }],
+      /**
+       * Space Between Y Reverse
+       * @see https://tailwindcss.com/docs/space
+       */
+      'space-y-reverse': ['space-y-reverse'],
+      // Sizing
+      /**
+       * Width
+       * @see https://tailwindcss.com/docs/width
+       */
+      w: [{
+        w: ['auto', 'min', 'max', 'fit', 'svw', 'lvw', 'dvw', isArbitraryValue, spacing]
+      }],
+      /**
+       * Min-Width
+       * @see https://tailwindcss.com/docs/min-width
+       */
+      'min-w': [{
+        'min-w': [isArbitraryValue, spacing, 'min', 'max', 'fit']
+      }],
+      /**
+       * Max-Width
+       * @see https://tailwindcss.com/docs/max-width
+       */
+      'max-w': [{
+        'max-w': [isArbitraryValue, spacing, 'none', 'full', 'min', 'max', 'fit', 'prose', {
+          screen: [isTshirtSize]
+        }, isTshirtSize]
+      }],
+      /**
+       * Height
+       * @see https://tailwindcss.com/docs/height
+       */
+      h: [{
+        h: [isArbitraryValue, spacing, 'auto', 'min', 'max', 'fit', 'svh', 'lvh', 'dvh']
+      }],
+      /**
+       * Min-Height
+       * @see https://tailwindcss.com/docs/min-height
+       */
+      'min-h': [{
+        'min-h': [isArbitraryValue, spacing, 'min', 'max', 'fit', 'svh', 'lvh', 'dvh']
+      }],
+      /**
+       * Max-Height
+       * @see https://tailwindcss.com/docs/max-height
+       */
+      'max-h': [{
+        'max-h': [isArbitraryValue, spacing, 'min', 'max', 'fit', 'svh', 'lvh', 'dvh']
+      }],
+      /**
+       * Size
+       * @see https://tailwindcss.com/docs/size
+       */
+      size: [{
+        size: [isArbitraryValue, spacing, 'auto', 'min', 'max', 'fit']
+      }],
+      // Typography
+      /**
+       * Font Size
+       * @see https://tailwindcss.com/docs/font-size
+       */
+      'font-size': [{
+        text: ['base', isTshirtSize, isArbitraryLength]
+      }],
+      /**
+       * Font Smoothing
+       * @see https://tailwindcss.com/docs/font-smoothing
+       */
+      'font-smoothing': ['antialiased', 'subpixel-antialiased'],
+      /**
+       * Font Style
+       * @see https://tailwindcss.com/docs/font-style
+       */
+      'font-style': ['italic', 'not-italic'],
+      /**
+       * Font Weight
+       * @see https://tailwindcss.com/docs/font-weight
+       */
+      'font-weight': [{
+        font: ['thin', 'extralight', 'light', 'normal', 'medium', 'semibold', 'bold', 'extrabold', 'black', isArbitraryNumber]
+      }],
+      /**
+       * Font Family
+       * @see https://tailwindcss.com/docs/font-family
+       */
+      'font-family': [{
+        font: [isAny]
+      }],
+      /**
+       * Font Variant Numeric
+       * @see https://tailwindcss.com/docs/font-variant-numeric
+       */
+      'fvn-normal': ['normal-nums'],
+      /**
+       * Font Variant Numeric
+       * @see https://tailwindcss.com/docs/font-variant-numeric
+       */
+      'fvn-ordinal': ['ordinal'],
+      /**
+       * Font Variant Numeric
+       * @see https://tailwindcss.com/docs/font-variant-numeric
+       */
+      'fvn-slashed-zero': ['slashed-zero'],
+      /**
+       * Font Variant Numeric
+       * @see https://tailwindcss.com/docs/font-variant-numeric
+       */
+      'fvn-figure': ['lining-nums', 'oldstyle-nums'],
+      /**
+       * Font Variant Numeric
+       * @see https://tailwindcss.com/docs/font-variant-numeric
+       */
+      'fvn-spacing': ['proportional-nums', 'tabular-nums'],
+      /**
+       * Font Variant Numeric
+       * @see https://tailwindcss.com/docs/font-variant-numeric
+       */
+      'fvn-fraction': ['diagonal-fractions', 'stacked-fractons'],
+      /**
+       * Letter Spacing
+       * @see https://tailwindcss.com/docs/letter-spacing
+       */
+      tracking: [{
+        tracking: ['tighter', 'tight', 'normal', 'wide', 'wider', 'widest', isArbitraryValue]
+      }],
+      /**
+       * Line Clamp
+       * @see https://tailwindcss.com/docs/line-clamp
+       */
+      'line-clamp': [{
+        'line-clamp': ['none', isNumber, isArbitraryNumber]
+      }],
+      /**
+       * Line Height
+       * @see https://tailwindcss.com/docs/line-height
+       */
+      leading: [{
+        leading: ['none', 'tight', 'snug', 'normal', 'relaxed', 'loose', isLength, isArbitraryValue]
+      }],
+      /**
+       * List Style Image
+       * @see https://tailwindcss.com/docs/list-style-image
+       */
+      'list-image': [{
+        'list-image': ['none', isArbitraryValue]
+      }],
+      /**
+       * List Style Type
+       * @see https://tailwindcss.com/docs/list-style-type
+       */
+      'list-style-type': [{
+        list: ['none', 'disc', 'decimal', isArbitraryValue]
+      }],
+      /**
+       * List Style Position
+       * @see https://tailwindcss.com/docs/list-style-position
+       */
+      'list-style-position': [{
+        list: ['inside', 'outside']
+      }],
+      /**
+       * Placeholder Color
+       * @deprecated since Tailwind CSS v3.0.0
+       * @see https://tailwindcss.com/docs/placeholder-color
+       */
+      'placeholder-color': [{
+        placeholder: [colors]
+      }],
+      /**
+       * Placeholder Opacity
+       * @see https://tailwindcss.com/docs/placeholder-opacity
+       */
+      'placeholder-opacity': [{
+        'placeholder-opacity': [opacity]
+      }],
+      /**
+       * Text Alignment
+       * @see https://tailwindcss.com/docs/text-align
+       */
+      'text-alignment': [{
+        text: ['left', 'center', 'right', 'justify', 'start', 'end']
+      }],
+      /**
+       * Text Color
+       * @see https://tailwindcss.com/docs/text-color
+       */
+      'text-color': [{
+        text: [colors]
+      }],
+      /**
+       * Text Opacity
+       * @see https://tailwindcss.com/docs/text-opacity
+       */
+      'text-opacity': [{
+        'text-opacity': [opacity]
+      }],
+      /**
+       * Text Decoration
+       * @see https://tailwindcss.com/docs/text-decoration
+       */
+      'text-decoration': ['underline', 'overline', 'line-through', 'no-underline'],
+      /**
+       * Text Decoration Style
+       * @see https://tailwindcss.com/docs/text-decoration-style
+       */
+      'text-decoration-style': [{
+        decoration: [...getLineStyles(), 'wavy']
+      }],
+      /**
+       * Text Decoration Thickness
+       * @see https://tailwindcss.com/docs/text-decoration-thickness
+       */
+      'text-decoration-thickness': [{
+        decoration: ['auto', 'from-font', isLength, isArbitraryLength]
+      }],
+      /**
+       * Text Underline Offset
+       * @see https://tailwindcss.com/docs/text-underline-offset
+       */
+      'underline-offset': [{
+        'underline-offset': ['auto', isLength, isArbitraryValue]
+      }],
+      /**
+       * Text Decoration Color
+       * @see https://tailwindcss.com/docs/text-decoration-color
+       */
+      'text-decoration-color': [{
+        decoration: [colors]
+      }],
+      /**
+       * Text Transform
+       * @see https://tailwindcss.com/docs/text-transform
+       */
+      'text-transform': ['uppercase', 'lowercase', 'capitalize', 'normal-case'],
+      /**
+       * Text Overflow
+       * @see https://tailwindcss.com/docs/text-overflow
+       */
+      'text-overflow': ['truncate', 'text-ellipsis', 'text-clip'],
+      /**
+       * Text Wrap
+       * @see https://tailwindcss.com/docs/text-wrap
+       */
+      'text-wrap': [{
+        text: ['wrap', 'nowrap', 'balance', 'pretty']
+      }],
+      /**
+       * Text Indent
+       * @see https://tailwindcss.com/docs/text-indent
+       */
+      indent: [{
+        indent: getSpacingWithArbitrary()
+      }],
+      /**
+       * Vertical Alignment
+       * @see https://tailwindcss.com/docs/vertical-align
+       */
+      'vertical-align': [{
+        align: ['baseline', 'top', 'middle', 'bottom', 'text-top', 'text-bottom', 'sub', 'super', isArbitraryValue]
+      }],
+      /**
+       * Whitespace
+       * @see https://tailwindcss.com/docs/whitespace
+       */
+      whitespace: [{
+        whitespace: ['normal', 'nowrap', 'pre', 'pre-line', 'pre-wrap', 'break-spaces']
+      }],
+      /**
+       * Word Break
+       * @see https://tailwindcss.com/docs/word-break
+       */
+      break: [{
+        break: ['normal', 'words', 'all', 'keep']
+      }],
+      /**
+       * Hyphens
+       * @see https://tailwindcss.com/docs/hyphens
+       */
+      hyphens: [{
+        hyphens: ['none', 'manual', 'auto']
+      }],
+      /**
+       * Content
+       * @see https://tailwindcss.com/docs/content
+       */
+      content: [{
+        content: ['none', isArbitraryValue]
+      }],
+      // Backgrounds
+      /**
+       * Background Attachment
+       * @see https://tailwindcss.com/docs/background-attachment
+       */
+      'bg-attachment': [{
+        bg: ['fixed', 'local', 'scroll']
+      }],
+      /**
+       * Background Clip
+       * @see https://tailwindcss.com/docs/background-clip
+       */
+      'bg-clip': [{
+        'bg-clip': ['border', 'padding', 'content', 'text']
+      }],
+      /**
+       * Background Opacity
+       * @deprecated since Tailwind CSS v3.0.0
+       * @see https://tailwindcss.com/docs/background-opacity
+       */
+      'bg-opacity': [{
+        'bg-opacity': [opacity]
+      }],
+      /**
+       * Background Origin
+       * @see https://tailwindcss.com/docs/background-origin
+       */
+      'bg-origin': [{
+        'bg-origin': ['border', 'padding', 'content']
+      }],
+      /**
+       * Background Position
+       * @see https://tailwindcss.com/docs/background-position
+       */
+      'bg-position': [{
+        bg: [...getPositions(), isArbitraryPosition]
+      }],
+      /**
+       * Background Repeat
+       * @see https://tailwindcss.com/docs/background-repeat
+       */
+      'bg-repeat': [{
+        bg: ['no-repeat', {
+          repeat: ['', 'x', 'y', 'round', 'space']
+        }]
+      }],
+      /**
+       * Background Size
+       * @see https://tailwindcss.com/docs/background-size
+       */
+      'bg-size': [{
+        bg: ['auto', 'cover', 'contain', isArbitrarySize]
+      }],
+      /**
+       * Background Image
+       * @see https://tailwindcss.com/docs/background-image
+       */
+      'bg-image': [{
+        bg: ['none', {
+          'gradient-to': ['t', 'tr', 'r', 'br', 'b', 'bl', 'l', 'tl']
+        }, isArbitraryImage]
+      }],
+      /**
+       * Background Color
+       * @see https://tailwindcss.com/docs/background-color
+       */
+      'bg-color': [{
+        bg: [colors]
+      }],
+      /**
+       * Gradient Color Stops From Position
+       * @see https://tailwindcss.com/docs/gradient-color-stops
+       */
+      'gradient-from-pos': [{
+        from: [gradientColorStopPositions]
+      }],
+      /**
+       * Gradient Color Stops Via Position
+       * @see https://tailwindcss.com/docs/gradient-color-stops
+       */
+      'gradient-via-pos': [{
+        via: [gradientColorStopPositions]
+      }],
+      /**
+       * Gradient Color Stops To Position
+       * @see https://tailwindcss.com/docs/gradient-color-stops
+       */
+      'gradient-to-pos': [{
+        to: [gradientColorStopPositions]
+      }],
+      /**
+       * Gradient Color Stops From
+       * @see https://tailwindcss.com/docs/gradient-color-stops
+       */
+      'gradient-from': [{
+        from: [gradientColorStops]
+      }],
+      /**
+       * Gradient Color Stops Via
+       * @see https://tailwindcss.com/docs/gradient-color-stops
+       */
+      'gradient-via': [{
+        via: [gradientColorStops]
+      }],
+      /**
+       * Gradient Color Stops To
+       * @see https://tailwindcss.com/docs/gradient-color-stops
+       */
+      'gradient-to': [{
+        to: [gradientColorStops]
+      }],
+      // Borders
+      /**
+       * Border Radius
+       * @see https://tailwindcss.com/docs/border-radius
+       */
+      rounded: [{
+        rounded: [borderRadius]
+      }],
+      /**
+       * Border Radius Start
+       * @see https://tailwindcss.com/docs/border-radius
+       */
+      'rounded-s': [{
+        'rounded-s': [borderRadius]
+      }],
+      /**
+       * Border Radius End
+       * @see https://tailwindcss.com/docs/border-radius
+       */
+      'rounded-e': [{
+        'rounded-e': [borderRadius]
+      }],
+      /**
+       * Border Radius Top
+       * @see https://tailwindcss.com/docs/border-radius
+       */
+      'rounded-t': [{
+        'rounded-t': [borderRadius]
+      }],
+      /**
+       * Border Radius Right
+       * @see https://tailwindcss.com/docs/border-radius
+       */
+      'rounded-r': [{
+        'rounded-r': [borderRadius]
+      }],
+      /**
+       * Border Radius Bottom
+       * @see https://tailwindcss.com/docs/border-radius
+       */
+      'rounded-b': [{
+        'rounded-b': [borderRadius]
+      }],
+      /**
+       * Border Radius Left
+       * @see https://tailwindcss.com/docs/border-radius
+       */
+      'rounded-l': [{
+        'rounded-l': [borderRadius]
+      }],
+      /**
+       * Border Radius Start Start
+       * @see https://tailwindcss.com/docs/border-radius
+       */
+      'rounded-ss': [{
+        'rounded-ss': [borderRadius]
+      }],
+      /**
+       * Border Radius Start End
+       * @see https://tailwindcss.com/docs/border-radius
+       */
+      'rounded-se': [{
+        'rounded-se': [borderRadius]
+      }],
+      /**
+       * Border Radius End End
+       * @see https://tailwindcss.com/docs/border-radius
+       */
+      'rounded-ee': [{
+        'rounded-ee': [borderRadius]
+      }],
+      /**
+       * Border Radius End Start
+       * @see https://tailwindcss.com/docs/border-radius
+       */
+      'rounded-es': [{
+        'rounded-es': [borderRadius]
+      }],
+      /**
+       * Border Radius Top Left
+       * @see https://tailwindcss.com/docs/border-radius
+       */
+      'rounded-tl': [{
+        'rounded-tl': [borderRadius]
+      }],
+      /**
+       * Border Radius Top Right
+       * @see https://tailwindcss.com/docs/border-radius
+       */
+      'rounded-tr': [{
+        'rounded-tr': [borderRadius]
+      }],
+      /**
+       * Border Radius Bottom Right
+       * @see https://tailwindcss.com/docs/border-radius
+       */
+      'rounded-br': [{
+        'rounded-br': [borderRadius]
+      }],
+      /**
+       * Border Radius Bottom Left
+       * @see https://tailwindcss.com/docs/border-radius
+       */
+      'rounded-bl': [{
+        'rounded-bl': [borderRadius]
+      }],
+      /**
+       * Border Width
+       * @see https://tailwindcss.com/docs/border-width
+       */
+      'border-w': [{
+        border: [borderWidth]
+      }],
+      /**
+       * Border Width X
+       * @see https://tailwindcss.com/docs/border-width
+       */
+      'border-w-x': [{
+        'border-x': [borderWidth]
+      }],
+      /**
+       * Border Width Y
+       * @see https://tailwindcss.com/docs/border-width
+       */
+      'border-w-y': [{
+        'border-y': [borderWidth]
+      }],
+      /**
+       * Border Width Start
+       * @see https://tailwindcss.com/docs/border-width
+       */
+      'border-w-s': [{
+        'border-s': [borderWidth]
+      }],
+      /**
+       * Border Width End
+       * @see https://tailwindcss.com/docs/border-width
+       */
+      'border-w-e': [{
+        'border-e': [borderWidth]
+      }],
+      /**
+       * Border Width Top
+       * @see https://tailwindcss.com/docs/border-width
+       */
+      'border-w-t': [{
+        'border-t': [borderWidth]
+      }],
+      /**
+       * Border Width Right
+       * @see https://tailwindcss.com/docs/border-width
+       */
+      'border-w-r': [{
+        'border-r': [borderWidth]
+      }],
+      /**
+       * Border Width Bottom
+       * @see https://tailwindcss.com/docs/border-width
+       */
+      'border-w-b': [{
+        'border-b': [borderWidth]
+      }],
+      /**
+       * Border Width Left
+       * @see https://tailwindcss.com/docs/border-width
+       */
+      'border-w-l': [{
+        'border-l': [borderWidth]
+      }],
+      /**
+       * Border Opacity
+       * @see https://tailwindcss.com/docs/border-opacity
+       */
+      'border-opacity': [{
+        'border-opacity': [opacity]
+      }],
+      /**
+       * Border Style
+       * @see https://tailwindcss.com/docs/border-style
+       */
+      'border-style': [{
+        border: [...getLineStyles(), 'hidden']
+      }],
+      /**
+       * Divide Width X
+       * @see https://tailwindcss.com/docs/divide-width
+       */
+      'divide-x': [{
+        'divide-x': [borderWidth]
+      }],
+      /**
+       * Divide Width X Reverse
+       * @see https://tailwindcss.com/docs/divide-width
+       */
+      'divide-x-reverse': ['divide-x-reverse'],
+      /**
+       * Divide Width Y
+       * @see https://tailwindcss.com/docs/divide-width
+       */
+      'divide-y': [{
+        'divide-y': [borderWidth]
+      }],
+      /**
+       * Divide Width Y Reverse
+       * @see https://tailwindcss.com/docs/divide-width
+       */
+      'divide-y-reverse': ['divide-y-reverse'],
+      /**
+       * Divide Opacity
+       * @see https://tailwindcss.com/docs/divide-opacity
+       */
+      'divide-opacity': [{
+        'divide-opacity': [opacity]
+      }],
+      /**
+       * Divide Style
+       * @see https://tailwindcss.com/docs/divide-style
+       */
+      'divide-style': [{
+        divide: getLineStyles()
+      }],
+      /**
+       * Border Color
+       * @see https://tailwindcss.com/docs/border-color
+       */
+      'border-color': [{
+        border: [borderColor]
+      }],
+      /**
+       * Border Color X
+       * @see https://tailwindcss.com/docs/border-color
+       */
+      'border-color-x': [{
+        'border-x': [borderColor]
+      }],
+      /**
+       * Border Color Y
+       * @see https://tailwindcss.com/docs/border-color
+       */
+      'border-color-y': [{
+        'border-y': [borderColor]
+      }],
+      /**
+       * Border Color Top
+       * @see https://tailwindcss.com/docs/border-color
+       */
+      'border-color-t': [{
+        'border-t': [borderColor]
+      }],
+      /**
+       * Border Color Right
+       * @see https://tailwindcss.com/docs/border-color
+       */
+      'border-color-r': [{
+        'border-r': [borderColor]
+      }],
+      /**
+       * Border Color Bottom
+       * @see https://tailwindcss.com/docs/border-color
+       */
+      'border-color-b': [{
+        'border-b': [borderColor]
+      }],
+      /**
+       * Border Color Left
+       * @see https://tailwindcss.com/docs/border-color
+       */
+      'border-color-l': [{
+        'border-l': [borderColor]
+      }],
+      /**
+       * Divide Color
+       * @see https://tailwindcss.com/docs/divide-color
+       */
+      'divide-color': [{
+        divide: [borderColor]
+      }],
+      /**
+       * Outline Style
+       * @see https://tailwindcss.com/docs/outline-style
+       */
+      'outline-style': [{
+        outline: ['', ...getLineStyles()]
+      }],
+      /**
+       * Outline Offset
+       * @see https://tailwindcss.com/docs/outline-offset
+       */
+      'outline-offset': [{
+        'outline-offset': [isLength, isArbitraryValue]
+      }],
+      /**
+       * Outline Width
+       * @see https://tailwindcss.com/docs/outline-width
+       */
+      'outline-w': [{
+        outline: [isLength, isArbitraryLength]
+      }],
+      /**
+       * Outline Color
+       * @see https://tailwindcss.com/docs/outline-color
+       */
+      'outline-color': [{
+        outline: [colors]
+      }],
+      /**
+       * Ring Width
+       * @see https://tailwindcss.com/docs/ring-width
+       */
+      'ring-w': [{
+        ring: getLengthWithEmptyAndArbitrary()
+      }],
+      /**
+       * Ring Width Inset
+       * @see https://tailwindcss.com/docs/ring-width
+       */
+      'ring-w-inset': ['ring-inset'],
+      /**
+       * Ring Color
+       * @see https://tailwindcss.com/docs/ring-color
+       */
+      'ring-color': [{
+        ring: [colors]
+      }],
+      /**
+       * Ring Opacity
+       * @see https://tailwindcss.com/docs/ring-opacity
+       */
+      'ring-opacity': [{
+        'ring-opacity': [opacity]
+      }],
+      /**
+       * Ring Offset Width
+       * @see https://tailwindcss.com/docs/ring-offset-width
+       */
+      'ring-offset-w': [{
+        'ring-offset': [isLength, isArbitraryLength]
+      }],
+      /**
+       * Ring Offset Color
+       * @see https://tailwindcss.com/docs/ring-offset-color
+       */
+      'ring-offset-color': [{
+        'ring-offset': [colors]
+      }],
+      // Effects
+      /**
+       * Box Shadow
+       * @see https://tailwindcss.com/docs/box-shadow
+       */
+      shadow: [{
+        shadow: ['', 'inner', 'none', isTshirtSize, isArbitraryShadow]
+      }],
+      /**
+       * Box Shadow Color
+       * @see https://tailwindcss.com/docs/box-shadow-color
+       */
+      'shadow-color': [{
+        shadow: [isAny]
+      }],
+      /**
+       * Opacity
+       * @see https://tailwindcss.com/docs/opacity
+       */
+      opacity: [{
+        opacity: [opacity]
+      }],
+      /**
+       * Mix Blend Mode
+       * @see https://tailwindcss.com/docs/mix-blend-mode
+       */
+      'mix-blend': [{
+        'mix-blend': [...getBlendModes(), 'plus-lighter', 'plus-darker']
+      }],
+      /**
+       * Background Blend Mode
+       * @see https://tailwindcss.com/docs/background-blend-mode
+       */
+      'bg-blend': [{
+        'bg-blend': getBlendModes()
+      }],
+      // Filters
+      /**
+       * Filter
+       * @deprecated since Tailwind CSS v3.0.0
+       * @see https://tailwindcss.com/docs/filter
+       */
+      filter: [{
+        filter: ['', 'none']
+      }],
+      /**
+       * Blur
+       * @see https://tailwindcss.com/docs/blur
+       */
+      blur: [{
+        blur: [blur]
+      }],
+      /**
+       * Brightness
+       * @see https://tailwindcss.com/docs/brightness
+       */
+      brightness: [{
+        brightness: [brightness]
+      }],
+      /**
+       * Contrast
+       * @see https://tailwindcss.com/docs/contrast
+       */
+      contrast: [{
+        contrast: [contrast]
+      }],
+      /**
+       * Drop Shadow
+       * @see https://tailwindcss.com/docs/drop-shadow
+       */
+      'drop-shadow': [{
+        'drop-shadow': ['', 'none', isTshirtSize, isArbitraryValue]
+      }],
+      /**
+       * Grayscale
+       * @see https://tailwindcss.com/docs/grayscale
+       */
+      grayscale: [{
+        grayscale: [grayscale]
+      }],
+      /**
+       * Hue Rotate
+       * @see https://tailwindcss.com/docs/hue-rotate
+       */
+      'hue-rotate': [{
+        'hue-rotate': [hueRotate]
+      }],
+      /**
+       * Invert
+       * @see https://tailwindcss.com/docs/invert
+       */
+      invert: [{
+        invert: [invert]
+      }],
+      /**
+       * Saturate
+       * @see https://tailwindcss.com/docs/saturate
+       */
+      saturate: [{
+        saturate: [saturate]
+      }],
+      /**
+       * Sepia
+       * @see https://tailwindcss.com/docs/sepia
+       */
+      sepia: [{
+        sepia: [sepia]
+      }],
+      /**
+       * Backdrop Filter
+       * @deprecated since Tailwind CSS v3.0.0
+       * @see https://tailwindcss.com/docs/backdrop-filter
+       */
+      'backdrop-filter': [{
+        'backdrop-filter': ['', 'none']
+      }],
+      /**
+       * Backdrop Blur
+       * @see https://tailwindcss.com/docs/backdrop-blur
+       */
+      'backdrop-blur': [{
+        'backdrop-blur': [blur]
+      }],
+      /**
+       * Backdrop Brightness
+       * @see https://tailwindcss.com/docs/backdrop-brightness
+       */
+      'backdrop-brightness': [{
+        'backdrop-brightness': [brightness]
+      }],
+      /**
+       * Backdrop Contrast
+       * @see https://tailwindcss.com/docs/backdrop-contrast
+       */
+      'backdrop-contrast': [{
+        'backdrop-contrast': [contrast]
+      }],
+      /**
+       * Backdrop Grayscale
+       * @see https://tailwindcss.com/docs/backdrop-grayscale
+       */
+      'backdrop-grayscale': [{
+        'backdrop-grayscale': [grayscale]
+      }],
+      /**
+       * Backdrop Hue Rotate
+       * @see https://tailwindcss.com/docs/backdrop-hue-rotate
+       */
+      'backdrop-hue-rotate': [{
+        'backdrop-hue-rotate': [hueRotate]
+      }],
+      /**
+       * Backdrop Invert
+       * @see https://tailwindcss.com/docs/backdrop-invert
+       */
+      'backdrop-invert': [{
+        'backdrop-invert': [invert]
+      }],
+      /**
+       * Backdrop Opacity
+       * @see https://tailwindcss.com/docs/backdrop-opacity
+       */
+      'backdrop-opacity': [{
+        'backdrop-opacity': [opacity]
+      }],
+      /**
+       * Backdrop Saturate
+       * @see https://tailwindcss.com/docs/backdrop-saturate
+       */
+      'backdrop-saturate': [{
+        'backdrop-saturate': [saturate]
+      }],
+      /**
+       * Backdrop Sepia
+       * @see https://tailwindcss.com/docs/backdrop-sepia
+       */
+      'backdrop-sepia': [{
+        'backdrop-sepia': [sepia]
+      }],
+      // Tables
+      /**
+       * Border Collapse
+       * @see https://tailwindcss.com/docs/border-collapse
+       */
+      'border-collapse': [{
+        border: ['collapse', 'separate']
+      }],
+      /**
+       * Border Spacing
+       * @see https://tailwindcss.com/docs/border-spacing
+       */
+      'border-spacing': [{
+        'border-spacing': [borderSpacing]
+      }],
+      /**
+       * Border Spacing X
+       * @see https://tailwindcss.com/docs/border-spacing
+       */
+      'border-spacing-x': [{
+        'border-spacing-x': [borderSpacing]
+      }],
+      /**
+       * Border Spacing Y
+       * @see https://tailwindcss.com/docs/border-spacing
+       */
+      'border-spacing-y': [{
+        'border-spacing-y': [borderSpacing]
+      }],
+      /**
+       * Table Layout
+       * @see https://tailwindcss.com/docs/table-layout
+       */
+      'table-layout': [{
+        table: ['auto', 'fixed']
+      }],
+      /**
+       * Caption Side
+       * @see https://tailwindcss.com/docs/caption-side
+       */
+      caption: [{
+        caption: ['top', 'bottom']
+      }],
+      // Transitions and Animation
+      /**
+       * Tranisition Property
+       * @see https://tailwindcss.com/docs/transition-property
+       */
+      transition: [{
+        transition: ['none', 'all', '', 'colors', 'opacity', 'shadow', 'transform', isArbitraryValue]
+      }],
+      /**
+       * Transition Duration
+       * @see https://tailwindcss.com/docs/transition-duration
+       */
+      duration: [{
+        duration: getNumberAndArbitrary()
+      }],
+      /**
+       * Transition Timing Function
+       * @see https://tailwindcss.com/docs/transition-timing-function
+       */
+      ease: [{
+        ease: ['linear', 'in', 'out', 'in-out', isArbitraryValue]
+      }],
+      /**
+       * Transition Delay
+       * @see https://tailwindcss.com/docs/transition-delay
+       */
+      delay: [{
+        delay: getNumberAndArbitrary()
+      }],
+      /**
+       * Animation
+       * @see https://tailwindcss.com/docs/animation
+       */
+      animate: [{
+        animate: ['none', 'spin', 'ping', 'pulse', 'bounce', isArbitraryValue]
+      }],
+      // Transforms
+      /**
+       * Transform
+       * @see https://tailwindcss.com/docs/transform
+       */
+      transform: [{
+        transform: ['', 'gpu', 'none']
+      }],
+      /**
+       * Scale
+       * @see https://tailwindcss.com/docs/scale
+       */
+      scale: [{
+        scale: [scale]
+      }],
+      /**
+       * Scale X
+       * @see https://tailwindcss.com/docs/scale
+       */
+      'scale-x': [{
+        'scale-x': [scale]
+      }],
+      /**
+       * Scale Y
+       * @see https://tailwindcss.com/docs/scale
+       */
+      'scale-y': [{
+        'scale-y': [scale]
+      }],
+      /**
+       * Rotate
+       * @see https://tailwindcss.com/docs/rotate
+       */
+      rotate: [{
+        rotate: [isInteger, isArbitraryValue]
+      }],
+      /**
+       * Translate X
+       * @see https://tailwindcss.com/docs/translate
+       */
+      'translate-x': [{
+        'translate-x': [translate]
+      }],
+      /**
+       * Translate Y
+       * @see https://tailwindcss.com/docs/translate
+       */
+      'translate-y': [{
+        'translate-y': [translate]
+      }],
+      /**
+       * Skew X
+       * @see https://tailwindcss.com/docs/skew
+       */
+      'skew-x': [{
+        'skew-x': [skew]
+      }],
+      /**
+       * Skew Y
+       * @see https://tailwindcss.com/docs/skew
+       */
+      'skew-y': [{
+        'skew-y': [skew]
+      }],
+      /**
+       * Transform Origin
+       * @see https://tailwindcss.com/docs/transform-origin
+       */
+      'transform-origin': [{
+        origin: ['center', 'top', 'top-right', 'right', 'bottom-right', 'bottom', 'bottom-left', 'left', 'top-left', isArbitraryValue]
+      }],
+      // Interactivity
+      /**
+       * Accent Color
+       * @see https://tailwindcss.com/docs/accent-color
+       */
+      accent: [{
+        accent: ['auto', colors]
+      }],
+      /**
+       * Appearance
+       * @see https://tailwindcss.com/docs/appearance
+       */
+      appearance: [{
+        appearance: ['none', 'auto']
+      }],
+      /**
+       * Cursor
+       * @see https://tailwindcss.com/docs/cursor
+       */
+      cursor: [{
+        cursor: ['auto', 'default', 'pointer', 'wait', 'text', 'move', 'help', 'not-allowed', 'none', 'context-menu', 'progress', 'cell', 'crosshair', 'vertical-text', 'alias', 'copy', 'no-drop', 'grab', 'grabbing', 'all-scroll', 'col-resize', 'row-resize', 'n-resize', 'e-resize', 's-resize', 'w-resize', 'ne-resize', 'nw-resize', 'se-resize', 'sw-resize', 'ew-resize', 'ns-resize', 'nesw-resize', 'nwse-resize', 'zoom-in', 'zoom-out', isArbitraryValue]
+      }],
+      /**
+       * Caret Color
+       * @see https://tailwindcss.com/docs/just-in-time-mode#caret-color-utilities
+       */
+      'caret-color': [{
+        caret: [colors]
+      }],
+      /**
+       * Pointer Events
+       * @see https://tailwindcss.com/docs/pointer-events
+       */
+      'pointer-events': [{
+        'pointer-events': ['none', 'auto']
+      }],
+      /**
+       * Resize
+       * @see https://tailwindcss.com/docs/resize
+       */
+      resize: [{
+        resize: ['none', 'y', 'x', '']
+      }],
+      /**
+       * Scroll Behavior
+       * @see https://tailwindcss.com/docs/scroll-behavior
+       */
+      'scroll-behavior': [{
+        scroll: ['auto', 'smooth']
+      }],
+      /**
+       * Scroll Margin
+       * @see https://tailwindcss.com/docs/scroll-margin
+       */
+      'scroll-m': [{
+        'scroll-m': getSpacingWithArbitrary()
+      }],
+      /**
+       * Scroll Margin X
+       * @see https://tailwindcss.com/docs/scroll-margin
+       */
+      'scroll-mx': [{
+        'scroll-mx': getSpacingWithArbitrary()
+      }],
+      /**
+       * Scroll Margin Y
+       * @see https://tailwindcss.com/docs/scroll-margin
+       */
+      'scroll-my': [{
+        'scroll-my': getSpacingWithArbitrary()
+      }],
+      /**
+       * Scroll Margin Start
+       * @see https://tailwindcss.com/docs/scroll-margin
+       */
+      'scroll-ms': [{
+        'scroll-ms': getSpacingWithArbitrary()
+      }],
+      /**
+       * Scroll Margin End
+       * @see https://tailwindcss.com/docs/scroll-margin
+       */
+      'scroll-me': [{
+        'scroll-me': getSpacingWithArbitrary()
+      }],
+      /**
+       * Scroll Margin Top
+       * @see https://tailwindcss.com/docs/scroll-margin
+       */
+      'scroll-mt': [{
+        'scroll-mt': getSpacingWithArbitrary()
+      }],
+      /**
+       * Scroll Margin Right
+       * @see https://tailwindcss.com/docs/scroll-margin
+       */
+      'scroll-mr': [{
+        'scroll-mr': getSpacingWithArbitrary()
+      }],
+      /**
+       * Scroll Margin Bottom
+       * @see https://tailwindcss.com/docs/scroll-margin
+       */
+      'scroll-mb': [{
+        'scroll-mb': getSpacingWithArbitrary()
+      }],
+      /**
+       * Scroll Margin Left
+       * @see https://tailwindcss.com/docs/scroll-margin
+       */
+      'scroll-ml': [{
+        'scroll-ml': getSpacingWithArbitrary()
+      }],
+      /**
+       * Scroll Padding
+       * @see https://tailwindcss.com/docs/scroll-padding
+       */
+      'scroll-p': [{
+        'scroll-p': getSpacingWithArbitrary()
+      }],
+      /**
+       * Scroll Padding X
+       * @see https://tailwindcss.com/docs/scroll-padding
+       */
+      'scroll-px': [{
+        'scroll-px': getSpacingWithArbitrary()
+      }],
+      /**
+       * Scroll Padding Y
+       * @see https://tailwindcss.com/docs/scroll-padding
+       */
+      'scroll-py': [{
+        'scroll-py': getSpacingWithArbitrary()
+      }],
+      /**
+       * Scroll Padding Start
+       * @see https://tailwindcss.com/docs/scroll-padding
+       */
+      'scroll-ps': [{
+        'scroll-ps': getSpacingWithArbitrary()
+      }],
+      /**
+       * Scroll Padding End
+       * @see https://tailwindcss.com/docs/scroll-padding
+       */
+      'scroll-pe': [{
+        'scroll-pe': getSpacingWithArbitrary()
+      }],
+      /**
+       * Scroll Padding Top
+       * @see https://tailwindcss.com/docs/scroll-padding
+       */
+      'scroll-pt': [{
+        'scroll-pt': getSpacingWithArbitrary()
+      }],
+      /**
+       * Scroll Padding Right
+       * @see https://tailwindcss.com/docs/scroll-padding
+       */
+      'scroll-pr': [{
+        'scroll-pr': getSpacingWithArbitrary()
+      }],
+      /**
+       * Scroll Padding Bottom
+       * @see https://tailwindcss.com/docs/scroll-padding
+       */
+      'scroll-pb': [{
+        'scroll-pb': getSpacingWithArbitrary()
+      }],
+      /**
+       * Scroll Padding Left
+       * @see https://tailwindcss.com/docs/scroll-padding
+       */
+      'scroll-pl': [{
+        'scroll-pl': getSpacingWithArbitrary()
+      }],
+      /**
+       * Scroll Snap Align
+       * @see https://tailwindcss.com/docs/scroll-snap-align
+       */
+      'snap-align': [{
+        snap: ['start', 'end', 'center', 'align-none']
+      }],
+      /**
+       * Scroll Snap Stop
+       * @see https://tailwindcss.com/docs/scroll-snap-stop
+       */
+      'snap-stop': [{
+        snap: ['normal', 'always']
+      }],
+      /**
+       * Scroll Snap Type
+       * @see https://tailwindcss.com/docs/scroll-snap-type
+       */
+      'snap-type': [{
+        snap: ['none', 'x', 'y', 'both']
+      }],
+      /**
+       * Scroll Snap Type Strictness
+       * @see https://tailwindcss.com/docs/scroll-snap-type
+       */
+      'snap-strictness': [{
+        snap: ['mandatory', 'proximity']
+      }],
+      /**
+       * Touch Action
+       * @see https://tailwindcss.com/docs/touch-action
+       */
+      touch: [{
+        touch: ['auto', 'none', 'manipulation']
+      }],
+      /**
+       * Touch Action X
+       * @see https://tailwindcss.com/docs/touch-action
+       */
+      'touch-x': [{
+        'touch-pan': ['x', 'left', 'right']
+      }],
+      /**
+       * Touch Action Y
+       * @see https://tailwindcss.com/docs/touch-action
+       */
+      'touch-y': [{
+        'touch-pan': ['y', 'up', 'down']
+      }],
+      /**
+       * Touch Action Pinch Zoom
+       * @see https://tailwindcss.com/docs/touch-action
+       */
+      'touch-pz': ['touch-pinch-zoom'],
+      /**
+       * User Select
+       * @see https://tailwindcss.com/docs/user-select
+       */
+      select: [{
+        select: ['none', 'text', 'all', 'auto']
+      }],
+      /**
+       * Will Change
+       * @see https://tailwindcss.com/docs/will-change
+       */
+      'will-change': [{
+        'will-change': ['auto', 'scroll', 'contents', 'transform', isArbitraryValue]
+      }],
+      // SVG
+      /**
+       * Fill
+       * @see https://tailwindcss.com/docs/fill
+       */
+      fill: [{
+        fill: [colors, 'none']
+      }],
+      /**
+       * Stroke Width
+       * @see https://tailwindcss.com/docs/stroke-width
+       */
+      'stroke-w': [{
+        stroke: [isLength, isArbitraryLength, isArbitraryNumber]
+      }],
+      /**
+       * Stroke
+       * @see https://tailwindcss.com/docs/stroke
+       */
+      stroke: [{
+        stroke: [colors, 'none']
+      }],
+      // Accessibility
+      /**
+       * Screen Readers
+       * @see https://tailwindcss.com/docs/screen-readers
+       */
+      sr: ['sr-only', 'not-sr-only'],
+      /**
+       * Forced Color Adjust
+       * @see https://tailwindcss.com/docs/forced-color-adjust
+       */
+      'forced-color-adjust': [{
+        'forced-color-adjust': ['auto', 'none']
+      }]
+    },
+    conflictingClassGroups: {
+      overflow: ['overflow-x', 'overflow-y'],
+      overscroll: ['overscroll-x', 'overscroll-y'],
+      inset: ['inset-x', 'inset-y', 'start', 'end', 'top', 'right', 'bottom', 'left'],
+      'inset-x': ['right', 'left'],
+      'inset-y': ['top', 'bottom'],
+      flex: ['basis', 'grow', 'shrink'],
+      gap: ['gap-x', 'gap-y'],
+      p: ['px', 'py', 'ps', 'pe', 'pt', 'pr', 'pb', 'pl'],
+      px: ['pr', 'pl'],
+      py: ['pt', 'pb'],
+      m: ['mx', 'my', 'ms', 'me', 'mt', 'mr', 'mb', 'ml'],
+      mx: ['mr', 'ml'],
+      my: ['mt', 'mb'],
+      size: ['w', 'h'],
+      'font-size': ['leading'],
+      'fvn-normal': ['fvn-ordinal', 'fvn-slashed-zero', 'fvn-figure', 'fvn-spacing', 'fvn-fraction'],
+      'fvn-ordinal': ['fvn-normal'],
+      'fvn-slashed-zero': ['fvn-normal'],
+      'fvn-figure': ['fvn-normal'],
+      'fvn-spacing': ['fvn-normal'],
+      'fvn-fraction': ['fvn-normal'],
+      'line-clamp': ['display', 'overflow'],
+      rounded: ['rounded-s', 'rounded-e', 'rounded-t', 'rounded-r', 'rounded-b', 'rounded-l', 'rounded-ss', 'rounded-se', 'rounded-ee', 'rounded-es', 'rounded-tl', 'rounded-tr', 'rounded-br', 'rounded-bl'],
+      'rounded-s': ['rounded-ss', 'rounded-es'],
+      'rounded-e': ['rounded-se', 'rounded-ee'],
+      'rounded-t': ['rounded-tl', 'rounded-tr'],
+      'rounded-r': ['rounded-tr', 'rounded-br'],
+      'rounded-b': ['rounded-br', 'rounded-bl'],
+      'rounded-l': ['rounded-tl', 'rounded-bl'],
+      'border-spacing': ['border-spacing-x', 'border-spacing-y'],
+      'border-w': ['border-w-s', 'border-w-e', 'border-w-t', 'border-w-r', 'border-w-b', 'border-w-l'],
+      'border-w-x': ['border-w-r', 'border-w-l'],
+      'border-w-y': ['border-w-t', 'border-w-b'],
+      'border-color': ['border-color-t', 'border-color-r', 'border-color-b', 'border-color-l'],
+      'border-color-x': ['border-color-r', 'border-color-l'],
+      'border-color-y': ['border-color-t', 'border-color-b'],
+      'scroll-m': ['scroll-mx', 'scroll-my', 'scroll-ms', 'scroll-me', 'scroll-mt', 'scroll-mr', 'scroll-mb', 'scroll-ml'],
+      'scroll-mx': ['scroll-mr', 'scroll-ml'],
+      'scroll-my': ['scroll-mt', 'scroll-mb'],
+      'scroll-p': ['scroll-px', 'scroll-py', 'scroll-ps', 'scroll-pe', 'scroll-pt', 'scroll-pr', 'scroll-pb', 'scroll-pl'],
+      'scroll-px': ['scroll-pr', 'scroll-pl'],
+      'scroll-py': ['scroll-pt', 'scroll-pb'],
+      touch: ['touch-x', 'touch-y', 'touch-pz'],
+      'touch-x': ['touch'],
+      'touch-y': ['touch'],
+      'touch-pz': ['touch']
+    },
+    conflictingClassGroupModifiers: {
+      'font-size': ['leading']
+    }
+  };
+};
+
+/**
+ * @param baseConfig Config where other config will be merged into. This object will be mutated.
+ * @param configExtension Partial config to merge into the `baseConfig`.
+ */
+const mergeConfigs = (baseConfig, {
+  cacheSize,
+  prefix,
+  separator,
+  experimentalParseClassName,
+  extend = {},
+  override = {}
+}) => {
+  overrideProperty(baseConfig, 'cacheSize', cacheSize);
+  overrideProperty(baseConfig, 'prefix', prefix);
+  overrideProperty(baseConfig, 'separator', separator);
+  overrideProperty(baseConfig, 'experimentalParseClassName', experimentalParseClassName);
+  for (const configKey in override) {
+    overrideConfigProperties(baseConfig[configKey], override[configKey]);
+  }
+  for (const key in extend) {
+    mergeConfigProperties(baseConfig[key], extend[key]);
+  }
+  return baseConfig;
+};
+const overrideProperty = (baseObject, overrideKey, overrideValue) => {
+  if (overrideValue !== undefined) {
+    baseObject[overrideKey] = overrideValue;
+  }
+};
+const overrideConfigProperties = (baseObject, overrideObject) => {
+  if (overrideObject) {
+    for (const key in overrideObject) {
+      overrideProperty(baseObject, key, overrideObject[key]);
+    }
+  }
+};
+const mergeConfigProperties = (baseObject, mergeObject) => {
+  if (mergeObject) {
+    for (const key in mergeObject) {
+      const mergeValue = mergeObject[key];
+      if (mergeValue !== undefined) {
+        baseObject[key] = (baseObject[key] || []).concat(mergeValue);
+      }
+    }
+  }
+};
+const extendTailwindMerge = (configExtension, ...createConfig) => typeof configExtension === 'function' ? createTailwindMerge(getDefaultConfig, configExtension, ...createConfig) : createTailwindMerge(() => mergeConfigs(getDefaultConfig(), configExtension), ...createConfig);
+const twMerge = /*#__PURE__*/createTailwindMerge(getDefaultConfig);
+
+//# sourceMappingURL=bundle-mjs.mjs.map
 
 
 /***/ }),
@@ -51617,6 +54687,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _scripts_products_pvc_PVCMetalLaminate_PVCMetalLaminate__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./scripts/products/pvc/PVCMetalLaminate/PVCMetalLaminate */ "./src/scripts/products/pvc/PVCMetalLaminate/PVCMetalLaminate.js");
 /* harmony import */ var _scripts_products_pvc_PVCPainted_PVCPainted__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ./scripts/products/pvc/PVCPainted/PVCPainted */ "./src/scripts/products/pvc/PVCPainted/PVCPainted.js");
 /* harmony import */ var _scripts_products_pvc_PVCUv_PVCUv__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ./scripts/products/pvc/PVCUv/PVCUv */ "./src/scripts/products/pvc/PVCUv/PVCUv.js");
+/* harmony import */ var _scripts_products_wayfinding_EtchedFabricated_EtchedFabricated__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./scripts/products/wayfinding/EtchedFabricated/EtchedFabricated */ "./src/scripts/products/wayfinding/EtchedFabricated/EtchedFabricated.js");
+/* harmony import */ var _scripts_products_wayfinding_EtchedFlatCut_EtchedFlatCut__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ./scripts/products/wayfinding/EtchedFlatCut/EtchedFlatCut */ "./src/scripts/products/wayfinding/EtchedFlatCut/EtchedFlatCut.js");
+
+
 
 
 
@@ -51670,87 +54744,38 @@ function CustomTempProject() {
 }
 function QuoteApp() {
   let component;
-  switch (window.NovaQuote.quote_div_id) {
-    case 'combineQuotes':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_combine_CombineQuotes__WEBPACK_IMPORTED_MODULE_15__["default"], null));
-      break;
-    case 'ModularLightbox':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_lightbox_ModularLightbox_ModularLightbox__WEBPACK_IMPORTED_MODULE_20__["default"], null));
-      break;
-    case 'AcrylicSideLit':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_channel_AcrylicSideLit_AcrylicSideLit__WEBPACK_IMPORTED_MODULE_10__["default"], null));
-      break;
-    case 'AcrylicFrontSideLit':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_channel_AcrylicFrontSideLit_AcrylicFrontSideLit__WEBPACK_IMPORTED_MODULE_9__["default"], null));
-      break;
-    case 'AcrylicFrontBackLit':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_channel_AcrylicFrontBackLit_AcrylicFrontBackLit__WEBPACK_IMPORTED_MODULE_7__["default"], null));
-      break;
-    case 'AcrylicBackLit':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_channel_AcrylicBackLit_AcrylicBackLit__WEBPACK_IMPORTED_MODULE_6__["default"], null));
-      break;
-    case 'AcrylicFrontLit':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_channel_AcrylicFrontLit_AcrylicFrontLit__WEBPACK_IMPORTED_MODULE_8__["default"], null));
-      break;
-    case 'RigidNeonSignNoBacking':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_led_neon_RigidNeonSignNoBacking_RigidNeonSignNoBacking__WEBPACK_IMPORTED_MODULE_18__["default"], null));
-      break;
-    case 'RigidNeonSignWithBacking':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_led_neon_RigidNeonSignWithBacking_RigidNeonSignWithBacking__WEBPACK_IMPORTED_MODULE_19__["default"], null));
-      break;
-    case 'FlexNeonSign':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_led_neon_FlexNeonSign_FlexNeonSign__WEBPACK_IMPORTED_MODULE_17__["default"], null));
-      break;
-    case 'AluminumResinFrontBackLit':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_channel_AluminumResinFrontBackLit_AluminumResinFrontBackLit__WEBPACK_IMPORTED_MODULE_21__["default"], null));
-      break;
-    case 'AluminumResinFrontLit':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_channel_AluminumResinFrontLit_AluminumResinFrontLit__WEBPACK_IMPORTED_MODULE_22__["default"], null));
-      break;
-    case 'laserCutAcrylic':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_LaserCutAcrylic_LaserCutAcrylic__WEBPACK_IMPORTED_MODULE_11__["default"], null));
-      break;
-    case 'pvcMetalLaminate':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_pvc_PVCMetalLaminate_PVCMetalLaminate__WEBPACK_IMPORTED_MODULE_29__["default"], null));
-      break;
-    case 'pvcPainted':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_pvc_PVCPainted_PVCPainted__WEBPACK_IMPORTED_MODULE_30__["default"], null));
-      break;
-    case 'pvcUv':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_pvc_PVCUv_PVCUv__WEBPACK_IMPORTED_MODULE_31__["default"], null));
-      break;
-    case 'layeredAcrylic':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_LayeredAcrylic_LayeredAcrylic__WEBPACK_IMPORTED_MODULE_12__["default"], null));
-      break;
-    case 'laserCutAluminum':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_LaserCutAluminum_LaserCutAluminum__WEBPACK_IMPORTED_MODULE_27__["default"], null));
-      break;
-    case 'uvPrintedAcrylic':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_UvPrintedAcrylic_UvPrintedAcrylic__WEBPACK_IMPORTED_MODULE_14__["default"], null));
-      break;
-    case 'metalLaminateAcrylic':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_MetalLaminate_MetalLaminate__WEBPACK_IMPORTED_MODULE_13__["default"], null));
-      break;
-    case 'metalChannelTrimlessFrontLit':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_channel_TrimLessFrontLit_TrimLessFrontLit__WEBPACK_IMPORTED_MODULE_25__["default"], null));
-      break;
-    case 'laserCutStainless':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_LaserCutStainless_LaserCutStainless__WEBPACK_IMPORTED_MODULE_28__["default"], null));
-      break;
-    case 'metalChannelTrimlessFrontAndBackLit':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_channel_TrimLessFrontAndBackLit_TrimLessFrontAndBackLit__WEBPACK_IMPORTED_MODULE_24__["default"], null));
-      break;
-    case 'metalChannelTrimlessBackLit':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_channel_TrimLessBackLit_TrimLessBackLit__WEBPACK_IMPORTED_MODULE_23__["default"], null));
-      break;
-    case 'metalFabricatedStainless':
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_FabricatedStainless_FabricatedStainless__WEBPACK_IMPORTED_MODULE_26__["default"], null));
-      break;
-    default:
-      component = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_custom_CustomProject__WEBPACK_IMPORTED_MODULE_16__["default"], null));
-      break;
-  }
-  return component;
+  const quoteComponents = {
+    combineQuotes: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_combine_CombineQuotes__WEBPACK_IMPORTED_MODULE_15__["default"], null),
+    EtchedFlatCut: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_wayfinding_EtchedFlatCut_EtchedFlatCut__WEBPACK_IMPORTED_MODULE_33__["default"], null),
+    EtchedFabricated: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_wayfinding_EtchedFabricated_EtchedFabricated__WEBPACK_IMPORTED_MODULE_32__["default"], null),
+    ModularLightbox: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_lightbox_ModularLightbox_ModularLightbox__WEBPACK_IMPORTED_MODULE_20__["default"], null),
+    AcrylicSideLit: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_channel_AcrylicSideLit_AcrylicSideLit__WEBPACK_IMPORTED_MODULE_10__["default"], null),
+    AcrylicFrontSideLit: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_channel_AcrylicFrontSideLit_AcrylicFrontSideLit__WEBPACK_IMPORTED_MODULE_9__["default"], null),
+    AcrylicFrontBackLit: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_channel_AcrylicFrontBackLit_AcrylicFrontBackLit__WEBPACK_IMPORTED_MODULE_7__["default"], null),
+    AcrylicBackLit: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_channel_AcrylicBackLit_AcrylicBackLit__WEBPACK_IMPORTED_MODULE_6__["default"], null),
+    AcrylicFrontLit: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_channel_AcrylicFrontLit_AcrylicFrontLit__WEBPACK_IMPORTED_MODULE_8__["default"], null),
+    RigidNeonSignNoBacking: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_led_neon_RigidNeonSignNoBacking_RigidNeonSignNoBacking__WEBPACK_IMPORTED_MODULE_18__["default"], null),
+    RigidNeonSignWithBacking: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_led_neon_RigidNeonSignWithBacking_RigidNeonSignWithBacking__WEBPACK_IMPORTED_MODULE_19__["default"], null),
+    FlexNeonSign: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_led_neon_FlexNeonSign_FlexNeonSign__WEBPACK_IMPORTED_MODULE_17__["default"], null),
+    AluminumResinFrontBackLit: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_channel_AluminumResinFrontBackLit_AluminumResinFrontBackLit__WEBPACK_IMPORTED_MODULE_21__["default"], null),
+    AluminumResinFrontLit: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_channel_AluminumResinFrontLit_AluminumResinFrontLit__WEBPACK_IMPORTED_MODULE_22__["default"], null),
+    laserCutAcrylic: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_LaserCutAcrylic_LaserCutAcrylic__WEBPACK_IMPORTED_MODULE_11__["default"], null),
+    pvcMetalLaminate: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_pvc_PVCMetalLaminate_PVCMetalLaminate__WEBPACK_IMPORTED_MODULE_29__["default"], null),
+    pvcPainted: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_pvc_PVCPainted_PVCPainted__WEBPACK_IMPORTED_MODULE_30__["default"], null),
+    pvcUv: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_pvc_PVCUv_PVCUv__WEBPACK_IMPORTED_MODULE_31__["default"], null),
+    layeredAcrylic: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_LayeredAcrylic_LayeredAcrylic__WEBPACK_IMPORTED_MODULE_12__["default"], null),
+    laserCutAluminum: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_LaserCutAluminum_LaserCutAluminum__WEBPACK_IMPORTED_MODULE_27__["default"], null),
+    uvPrintedAcrylic: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_UvPrintedAcrylic_UvPrintedAcrylic__WEBPACK_IMPORTED_MODULE_14__["default"], null),
+    metalLaminateAcrylic: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_acrylic_MetalLaminate_MetalLaminate__WEBPACK_IMPORTED_MODULE_13__["default"], null),
+    metalChannelTrimlessFrontLit: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_channel_TrimLessFrontLit_TrimLessFrontLit__WEBPACK_IMPORTED_MODULE_25__["default"], null),
+    laserCutStainless: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_LaserCutStainless_LaserCutStainless__WEBPACK_IMPORTED_MODULE_28__["default"], null),
+    metalChannelTrimlessFrontAndBackLit: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_channel_TrimLessFrontAndBackLit_TrimLessFrontAndBackLit__WEBPACK_IMPORTED_MODULE_24__["default"], null),
+    metalChannelTrimlessBackLit: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_channel_TrimLessBackLit_TrimLessBackLit__WEBPACK_IMPORTED_MODULE_23__["default"], null),
+    metalFabricatedStainless: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_metal_FabricatedStainless_FabricatedStainless__WEBPACK_IMPORTED_MODULE_26__["default"], null),
+    default: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_products_custom_CustomProject__WEBPACK_IMPORTED_MODULE_16__["default"], null)
+  };
+  component = quoteComponents[window.NovaQuote.quote_div_id] || quoteComponents.default;
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_scripts_AppProvider__WEBPACK_IMPORTED_MODULE_4__.AppProvider, null, component);
 }
 })();
 

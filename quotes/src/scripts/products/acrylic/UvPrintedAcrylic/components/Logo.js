@@ -545,8 +545,9 @@ export function Logo({ item }) {
 					onChange={handleOnChangeThickness}
 					options={thicknessOptions.map((thickness) => (
 						<option
+							key={thickness.value}
 							value={thickness.value}
-							selected={thickness === selectedThickness}
+							defaultValue={thickness === selectedThickness}
 						>
 							{thickness.thickness}
 						</option>
@@ -573,8 +574,9 @@ export function Logo({ item }) {
 					onChange={(e) => setPrintPreference(e.target.value)}
 					options={printOptions.map((option) => (
 						<option
+							key={option.option}
 							value={option.option}
-							selected={option.option == printPreference}
+							defaultValue={option.option == printPreference}
 						>
 							{option.option}
 						</option>
@@ -586,7 +588,11 @@ export function Logo({ item }) {
 					value={baseColor}
 					onChange={(e) => setBaseColor(e.target.value)}
 					options={baseColorOptions.map((option) => (
-						<option value={option.option} selected={option.option == baseColor}>
+						<option
+							key={option.option}
+							value={option.option}
+							defaultValue={option.option == baseColor}
+						>
 							{option.option}
 						</option>
 					))}
@@ -597,8 +603,9 @@ export function Logo({ item }) {
 					onChange={handleChangeFinishing}
 					options={finishingOptions.map((finishing) => (
 						<option
+							key={finishing.name}
 							value={finishing.name}
-							selected={finishing.name === selectedFinishing}
+							defaultValue={finishing.name === selectedFinishing}
 						>
 							{finishing.name}
 						</option>
@@ -611,8 +618,9 @@ export function Logo({ item }) {
 					onChange={(e) => setWaterproof(e.target.value)}
 					options={waterProofSelections.map((option) => (
 						<option
+							key={option.option}
 							value={option.option}
-							selected={option.option == waterproof}
+							defaultValue={option.option == waterproof}
 						>
 							{option.option}
 						</option>
@@ -625,8 +633,9 @@ export function Logo({ item }) {
 					onChange={handleOnChangeMount}
 					options={mountingOptions.map((option) => (
 						<option
+							key={option.mounting_option}
 							value={option.mounting_option}
-							selected={option.mounting_option === selectedMounting}
+							defaultValue={option.mounting_option === selectedMounting}
 						>
 							{option.mounting_option}
 						</option>
@@ -644,8 +653,9 @@ export function Logo({ item }) {
 							onChange={handleonChangeStudLength}
 							options={studLengthOptions.map((option) => (
 								<option
+									key={option.value}
 									value={option.value}
-									selected={option.value == studLength}
+									defaultValue={option.value == studLength}
 								>
 									{option.value}
 								</option>
@@ -661,8 +671,9 @@ export function Logo({ item }) {
 							onChange={handleonChangeSpacerDistance}
 							options={spacerStandoffOptions.map((option) => (
 								<option
+									key={option.value}
 									value={option.value}
-									selected={option.value == spacerStandoffDistance}
+									defaultValue={option.value == spacerStandoffDistance}
 								>
 									{option.value}
 								</option>

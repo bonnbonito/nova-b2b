@@ -62,7 +62,7 @@ class Scripts {
 			wp_enqueue_style( 'nova-account' );
 		}
 
-		if ( is_singular( 'product' ) || is_singular( 'signage' ) || is_page( 'custom' ) || is_page( 'custom-project' ) ) {
+		if ( is_singular( 'signage' ) || is_page( 'custom' ) || is_page( 'custom-project' ) ) {
 			wp_enqueue_script( 'splide' );
 			wp_enqueue_style( 'splide' );
 			wp_enqueue_script( 'nova-accordion' );

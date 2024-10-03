@@ -90,7 +90,13 @@ export default function LayeredAcrylic() {
 
 	const signageOutput = signage.map((item, index) => {
 		return (
-			<Signage index={index} id={item.id} item={item} editable={false}>
+			<Signage
+				key={item.id}
+				index={index}
+				id={item.id}
+				item={item}
+				editable={false}
+			>
 				{showComponent(item, index)}
 			</Signage>
 		);
@@ -168,9 +174,13 @@ export default function LayeredAcrylic() {
 							</button>
 							{openLayer && (
 								<div className=" border-black p-4 rounded-md border shadow-2xl">
-									{productLayers.map((layer) => {
+									{productLayers.map((layer, index) => {
 										return (
-											<ProductLayer layer={layer} length={signage.length} />
+											<ProductLayer
+												key={index}
+												layer={layer}
+												length={signage.length}
+											/>
 										);
 									})}
 								</div>

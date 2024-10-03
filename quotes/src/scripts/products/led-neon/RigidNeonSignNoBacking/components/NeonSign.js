@@ -121,7 +121,11 @@ export const NeonSign = ({ item }) => {
 	const [waterproof, setWaterproof] = useState(item.rigidWaterproof ?? '');
 	const [mounting, setMounting] = useState(item.mounting ?? '');
 	const [sets, setSets] = useState(item.sets ?? 1);
-	const [setOptions, setSetOptions] = useState([<option value="1">1</option>]);
+	const [setOptions, setSetOptions] = useState([
+		<option key="1" value="1">
+			1
+		</option>,
+	]);
 
 	const [spacerStandoffOptions, setSpacerStandoffOptions] = useState([
 		{ value: '0.5"' },
@@ -549,7 +553,7 @@ export const NeonSign = ({ item }) => {
 						<option
 							key={option.option}
 							value={option.option}
-							selected={option.option === waterproof}
+							defaultValue={option.option === waterproof}
 						>
 							{option.option}
 						</option>
@@ -620,7 +624,7 @@ export const NeonSign = ({ item }) => {
 						<option
 							key={option.option}
 							value={option.option}
-							selected={option.option === mounting}
+							defaultValue={option.option === mounting}
 						>
 							{option.option}
 						</option>
@@ -636,7 +640,7 @@ export const NeonSign = ({ item }) => {
 							<option
 								key={option.value}
 								value={option.value}
-								selected={option.value === rigidM4StudLength}
+								defaultValue={option.value === rigidM4StudLength}
 							>
 								{option.value}
 							</option>
@@ -651,8 +655,9 @@ export const NeonSign = ({ item }) => {
 						onChange={handleonChangeSpacerDistance}
 						options={spacerStandoffOptions.map((option) => (
 							<option
+								key={option.value}
 								value={option.value}
-								selected={option.value == spacerStandoffDistance}
+								defaultValue={option.value == spacerStandoffDistance}
 							>
 								{option.value}
 							</option>
@@ -668,7 +673,7 @@ export const NeonSign = ({ item }) => {
 						<option
 							key={option.option}
 							value={option.option}
-							selected={option.option === remoteControl}
+							defaultValue={option.option === remoteControl}
 						>
 							{option.option}
 						</option>
@@ -684,7 +689,7 @@ export const NeonSign = ({ item }) => {
 						<option
 							key={option.option}
 							value={option.option}
-							selected={option.option === wireType}
+							defaultValue={option.option === wireType}
 						>
 							{option.option}
 						</option>
