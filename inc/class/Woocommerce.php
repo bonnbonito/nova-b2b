@@ -2703,31 +2703,28 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		$instance   = \NOVA_B2B\Nova_Quote::get_instance();
 		$attributes = $instance->allAttributes();
 
-		echo '<table class="quote-details">';
+		echo '<dl class="quote-details">';
 
 		foreach ( $attributes as $key => $attr ) {
-			if ( $key === 'title' ) {
-				continue;
-			}
 			if ( isset( $projectArray[ $key ] ) && ! empty( $projectArray[ $key ] ) ) {
 				if ( is_array( $attr ) ) {
 					if ( ( $attr['isLink'] ?? false ) && isset( $projectArray['fontFileUrl'], $projectArray['fontFileName'] ) ) {
-						echo '<tr><td>' . htmlspecialchars( $attr['label'] ) . ':</td><td><a href="' . htmlspecialchars( $projectArray['fontFileUrl'] ) . '" target="_blank">' . htmlspecialchars( $projectArray['fontFileName'] ) . '</a></td></tr>';
+						echo '<dt>' . htmlspecialchars( $attr['label'] ) . ':</dt><dd><a href="' . htmlspecialchars( $projectArray['fontFileUrl'] ) . '" target="_blank">' . htmlspecialchars( $projectArray['fontFileName'] ) . '</a></dd>';
 					} elseif ( ( $attr['isVinyl'] ?? false ) && isset( $projectArray['vinylWhite']->name, $projectArray['vinylWhite']->code ) ) {
 						if ( ( isset( $projectArray['acrylicFront'] ) && $projectArray['acrylicFront'] === '3M Vinyl' ) ||
 						( isset( $projectArray['frontOption'] ) && $projectArray['frontOption'] === '3M Vinyl' ) ||
 						( isset( $projectArray['frontAcrylicCover'] ) && $projectArray['frontAcrylicCover'] === '3M Vinyl' ) ) {
-							echo '<tr><td>' . htmlspecialchars( $attr['label'] ) . ':</td><td>' . htmlspecialchars( $projectArray['vinylWhite']->name ) . ' - [' . htmlspecialchars( $projectArray['vinylWhite']->code ) . ']</td></tr>';
+							echo '<dt>' . htmlspecialchars( $attr['label'] ) . ':</dt><dd>' . htmlspecialchars( $projectArray['vinylWhite']->name ) . ' - [' . htmlspecialchars( $projectArray['vinylWhite']->code ) . ']</dd>';
 						}
 					} elseif ( ( $attr['isFile'] ?? false ) && isset( $projectArray['fileUrl'], $projectArray['fileName'] ) ) {
-						echo '<tr><td>' . htmlspecialchars( $attr['label'] ) . ':</td><td><a href="' . htmlspecialchars( $projectArray['fileUrl'] ) . '" target="_blank">' . htmlspecialchars( $projectArray['fileName'] ) . '</a></td></tr>';
+						echo '<dt>' . htmlspecialchars( $attr['label'] ) . ':</dt><dd><a href="' . htmlspecialchars( $projectArray['fileUrl'] ) . '" target="_blank">' . htmlspecialchars( $projectArray['fileName'] ) . '</a></dd>';
 					} elseif ( ( $attr['isFiles'] ?? false ) && isset( $projectArray['fileUrls'], $projectArray['fileNames'] ) ) {
 						$filesHtml = '';
 						foreach ( $projectArray['fileUrls'] as $index => $fileUrl ) {
 							$fileName   = $projectArray['fileNames'][ $index ] ?? $fileUrl;
 							$filesHtml .= '<a href="' . htmlspecialchars( $fileUrl, ENT_QUOTES, 'UTF-8' ) . '" target="_blank">' . htmlspecialchars( $fileName, ENT_QUOTES, 'UTF-8' ) . '</a><br>';
 						}
-						echo '<tr><td>' . htmlspecialchars( $attr['label'] ) . ':</td><td>' . $filesHtml . '</td></tr>';
+						echo '<dt>' . htmlspecialchars( $attr['label'] ) . ':</dt><dd>' . $filesHtml . '</dd>';
 					}
 				} else {
 					$value = $projectArray[ $key ];
@@ -2741,15 +2738,14 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 						}
 					}
 					if ( isset( $value ) && ! empty( $value ) ) {
-						echo '<tr><td>' . htmlspecialchars( $attr ) . ':</td><td>' . htmlspecialchars( $value ) . ( $key === 'letterHeight' ? '"' : '' ) . '</td></tr>';
+						echo '<dt>' . htmlspecialchars( $attr ) . ':</dt><dd>' . htmlspecialchars( $value ) . ( $key === 'letterHeight' ? '"' : '' ) . '</dd>';
 					}
 				}
 			}
 		}
 
-		echo '</table>';
+		echo '</dl>';
 	}
-
 
 
 
@@ -2782,10 +2778,19 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 	}
 
 	public function show_order_product_details_html( $projects ) {
-		foreach ( $projects as $project ) {
+		$project_keys = array_keys( $projects );
+		$last_key     = end( $project_keys );
+		foreach ( $projects as $key => $project ) {
+			$class = 'quote-details-row';
+			if ( $key === $last_key ) {
+				$class .= ' last-child';
+			}
+			echo '<tr class="' . $class . '"><td colspan="3">';
 			$this->quote_details_html( $project );
+			echo '</td></tr>';
 		}
 	}
+
 
 
 

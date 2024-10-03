@@ -193,10 +193,33 @@ table.order-details {
 	text-align: left;
 }
 
+
 .order-details thead th {
 	color: white;
 	background-color: #F22E00;
 	border-color: #F22E00;
+}
+
+.order-details .is-signage td,
+.order-details .is-signage th {
+	padding-bottom: 0;
+	border-bottom: 0;
+}
+
+.order-details .quote-details-row td,
+.order-details .quote-details-row th {
+	border-bottom: 0;
+	border-top: 0;
+}
+
+.order-details .quote-details-row.last-child td,
+.order-details .quote-details-row.last-child th {
+	border-bottom: 1px #ccc solid;
+}
+
+.quote-details {
+	padding: 10px;
+	border: 1px solid #eee;
 }
 
 .order-details .quote-details td {
