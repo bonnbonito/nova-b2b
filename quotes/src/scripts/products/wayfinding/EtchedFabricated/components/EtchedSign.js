@@ -5,7 +5,6 @@ import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
 import {
 	arrayRange,
-	setOptions,
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
 
@@ -13,6 +12,9 @@ import {
 	EXCHANGE_RATE,
 	INDOOR_NOT_WATERPROOF,
 } from '../../../../utils/defaults';
+
+import { convertJson } from '../../../../utils/ConvertJson';
+import { quantityDiscount } from '../../../../utils/Pricing';
 
 import { colorOptions } from '../../../../utils/ColorOptions';
 import ColorsDropdown from '../../../../utils/ColorsDropdown';
@@ -67,6 +69,15 @@ export const EtchedSign = ({ item }) => {
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
 
+	const [usdDiscount, setUsdDiscount] = useState(item.usdDiscount ?? 0);
+	const [usdTotalNoDiscount, setUsdTotalNoDiscount] = useState(
+		item.usdTotalNoDiscount ?? ''
+	);
+	const [cadDiscount, setCadDiscount] = useState(item.cadDiscount ?? 0);
+	const [cadTotalNoDiscount, setCadTotalNoDiscount] = useState(
+		item.cadTotalNoDiscount ?? ''
+	);
+
 	const [studLength, setStudLength] = useState(item.studLength ?? '');
 
 	const [usdSinglePrice, setUsdSinglePrice] = useState(
@@ -75,6 +86,12 @@ export const EtchedSign = ({ item }) => {
 	const [cadSinglePrice, setCadSinglePrice] = useState(
 		item.cadSinglePrice ?? 0
 	);
+	const [setOptions, setSetOptions] = useState([
+		<option key="1" value="1">
+			1
+		</option>,
+	]);
+	const [quantityDiscountTable, setQuantityDiscountTable] = useState([]);
 
 	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
 	const [mounting, setMounting] = useState(item.mounting ?? '');
@@ -107,6 +124,10 @@ export const EtchedSign = ({ item }) => {
 					cadPrice,
 					cadSinglePrice,
 					usdSinglePrice,
+					usdDiscount,
+					usdTotalNoDiscount,
+					cadTotalNoDiscount,
+					cadDiscount,
 				};
 			}
 			return sign;
@@ -132,6 +153,10 @@ export const EtchedSign = ({ item }) => {
 		cadPrice,
 		cadSinglePrice,
 		usdSinglePrice,
+		usdDiscount,
+		usdTotalNoDiscount,
+		cadTotalNoDiscount,
+		cadDiscount,
 	]);
 
 	const checkAndAddMissingFields = useCallback(() => {
@@ -209,6 +234,8 @@ export const EtchedSign = ({ item }) => {
 			return {
 				singlePrice: false,
 				total: false,
+				totalWithoutDiscount: false,
+				discount: false,
 			};
 		}
 
@@ -248,9 +275,17 @@ export const EtchedSign = ({ item }) => {
 
 		let total = tempTotal * parseInt(sets);
 
+		const discount = quantityDiscount(sets, quantityDiscountTable);
+
+		let totalWithDiscount = total * discount;
+
+		let discountPrice = total - totalWithDiscount;
+
 		return {
-			singlePrice: tempTotal.toFixed(2) ?? 0,
-			total: total?.toFixed(2) ?? 0,
+			singlePrice: tempTotal ?? 0,
+			total: totalWithDiscount?.toFixed(2) ?? 0,
+			totalWithoutDiscount: total,
+			discount: discountPrice,
 		};
 	};
 
@@ -294,24 +329,81 @@ export const EtchedSign = ({ item }) => {
 	};
 
 	useEffect(() => {
-		const { singlePrice, total } = computePricing();
-		if (total && singlePrice) {
-			setUsdPrice(total);
-			setCadPrice((total * EXCHANGE_RATE).toFixed(2));
-			setUsdSinglePrice(singlePrice);
-			setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
-		} else {
-			setUsdPrice(0);
-			setCadPrice(0);
-			setUsdSinglePrice(0);
-			setCadSinglePrice(0);
+		if (quantityDiscountTable.length > 0) {
+			const { singlePrice, total, totalWithoutDiscount, discount } =
+				computePricing();
+			if (total && singlePrice) {
+				setUsdPrice(total);
+				setCadPrice((total * EXCHANGE_RATE).toFixed(2));
+				setUsdSinglePrice(singlePrice);
+				setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
+				setUsdDiscount(discount.toFixed(2));
+				setCadDiscount((discount * EXCHANGE_RATE).toFixed(2));
+				setCadTotalNoDiscount(
+					(totalWithoutDiscount * EXCHANGE_RATE).toFixed(2)
+				);
+				setUsdTotalNoDiscount(totalWithoutDiscount.toFixed(2));
+			} else {
+				setUsdPrice(0);
+				setCadPrice(0);
+				setUsdSinglePrice(0);
+				setCadSinglePrice(0);
+				setUsdDiscount('');
+				setCadDiscount('');
+				setCadTotalNoDiscount('');
+				setUsdTotalNoDiscount('');
+			}
 		}
-	}, [metalThickness, width, height, waterproof, finishing, mounting, sets]);
+	}, [
+		metalThickness,
+		width,
+		height,
+		waterproof,
+		finishing,
+		mounting,
+		sets,
+		quantityDiscountTable,
+	]);
 
 	useEffect(() => {
 		updateSignage();
 		checkAndAddMissingFields();
 	}, [updateSignage, checkAndAddMissingFields]);
+
+	async function fetchQuantityDiscountPricing() {
+		try {
+			const response = await fetch(
+				NovaQuote.quantity_discount_api + item.product
+			);
+			const data = await response.json();
+			const tableJson = data.pricing_table
+				? convertJson(data.pricing_table)
+				: [];
+			setQuantityDiscountTable(tableJson);
+		} catch (error) {
+			console.error('Error fetching discount table pricing:', error);
+		} finally {
+			setSetOptions(
+				Array.from(
+					{
+						length: 200,
+					},
+					(_, index) => {
+						const val = 1 + index;
+						return (
+							<option key={index} value={val}>
+								{val}
+							</option>
+						);
+					}
+				)
+			);
+		}
+	}
+
+	useEffect(() => {
+		fetchQuantityDiscountPricing();
+	}, []);
 
 	return (
 		<>

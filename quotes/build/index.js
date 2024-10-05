@@ -34391,8 +34391,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UploadFiles__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../UploadFiles */ "./src/scripts/UploadFiles.js");
 /* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
 /* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
-/* harmony import */ var _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../utils/ColorOptions */ "./src/scripts/utils/ColorOptions.js");
-/* harmony import */ var _utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../utils/ColorsDropdown */ "./src/scripts/utils/ColorsDropdown.js");
+/* harmony import */ var _utils_ConvertJson__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../utils/ConvertJson */ "./src/scripts/utils/ConvertJson.js");
+/* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
+/* harmony import */ var _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../../utils/ColorOptions */ "./src/scripts/utils/ColorOptions.js");
+/* harmony import */ var _utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../utils/ColorsDropdown */ "./src/scripts/utils/ColorsDropdown.js");
+
+
 
 
 
@@ -34413,7 +34417,7 @@ const heightOptions = (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.arra
 const EtchedSign = ({
   item
 }) => {
-  var _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$etchedPaintedCo, _item$customColor, _item$etchedWidth, _item$etchedHeight, _item$etchedMetalThic, _item$etchedFinishing, _item$etchedElectropl, _item$usdPrice, _item$cadPrice, _item$studLength, _item$usdSinglePrice, _item$cadSinglePrice, _item$waterproof, _item$mounting, _item$sets, _color$name;
+  var _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$etchedPaintedCo, _item$customColor, _item$etchedWidth, _item$etchedHeight, _item$etchedMetalThic, _item$etchedFinishing, _item$etchedElectropl, _item$usdPrice, _item$cadPrice, _item$usdDiscount, _item$usdTotalNoDisco, _item$cadDiscount, _item$cadTotalNoDisco, _item$studLength, _item$usdSinglePrice, _item$cadSinglePrice, _item$waterproof, _item$mounting, _item$sets, _color$name;
   const {
     signage,
     setSignage,
@@ -34434,9 +34438,18 @@ const EtchedSign = ({
   const [electroplated, setElectroplated] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$etchedElectropl = item.etchedElectroplated) !== null && _item$etchedElectropl !== void 0 ? _item$etchedElectropl : '');
   const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdPrice = item.usdPrice) !== null && _item$usdPrice !== void 0 ? _item$usdPrice : 0);
   const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadPrice = item.cadPrice) !== null && _item$cadPrice !== void 0 ? _item$cadPrice : 0);
+  const [usdDiscount, setUsdDiscount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdDiscount = item.usdDiscount) !== null && _item$usdDiscount !== void 0 ? _item$usdDiscount : 0);
+  const [usdTotalNoDiscount, setUsdTotalNoDiscount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdTotalNoDisco = item.usdTotalNoDiscount) !== null && _item$usdTotalNoDisco !== void 0 ? _item$usdTotalNoDisco : '');
+  const [cadDiscount, setCadDiscount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadDiscount = item.cadDiscount) !== null && _item$cadDiscount !== void 0 ? _item$cadDiscount : 0);
+  const [cadTotalNoDiscount, setCadTotalNoDiscount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadTotalNoDisco = item.cadTotalNoDiscount) !== null && _item$cadTotalNoDisco !== void 0 ? _item$cadTotalNoDisco : '');
   const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$studLength = item.studLength) !== null && _item$studLength !== void 0 ? _item$studLength : '');
   const [usdSinglePrice, setUsdSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdSinglePrice = item.usdSinglePrice) !== null && _item$usdSinglePrice !== void 0 ? _item$usdSinglePrice : 0);
   const [cadSinglePrice, setCadSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadSinglePrice = item.cadSinglePrice) !== null && _item$cadSinglePrice !== void 0 ? _item$cadSinglePrice : 0);
+  const [setOptions, setSetOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([(0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    key: "1",
+    value: "1"
+  }, "1")]);
+  const [quantityDiscountTable, setQuantityDiscountTable] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : '');
   const [mounting, setMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
@@ -34464,13 +34477,17 @@ const EtchedSign = ({
           usdPrice,
           cadPrice,
           cadSinglePrice,
-          usdSinglePrice
+          usdSinglePrice,
+          usdDiscount,
+          usdTotalNoDiscount,
+          cadTotalNoDiscount,
+          cadDiscount
         };
       }
       return sign;
     });
     setSignage(updatedSignage);
-  }, [waterproof, color, customColor, mounting, metalThickness, finishing, studLength, electroplated, fileNames, filePaths, fileUrls, files, sets, width, height, usdPrice, cadPrice, cadSinglePrice, usdSinglePrice]);
+  }, [waterproof, color, customColor, mounting, metalThickness, finishing, studLength, electroplated, fileNames, filePaths, fileUrls, files, sets, width, height, usdPrice, cadPrice, cadSinglePrice, usdSinglePrice, usdDiscount, usdTotalNoDiscount, cadTotalNoDiscount, cadDiscount]);
   const checkAndAddMissingFields = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(() => {
     const missingFields = [];
     if (!width) missingFields.push('Select Width');
@@ -34513,11 +34530,13 @@ const EtchedSign = ({
     });
   }, [fileUrls, color, waterproof, mounting, sets, width, height, studLength, metalThickness, finishing, electroplated, customColor]);
   const computePricing = () => {
-    var _tempTotal$toFixed, _total$toFixed;
+    var _tempTotal, _totalWithDiscount$to;
     if (!width || !height || !metalThickness || !waterproof || !sets) {
       return {
         singlePrice: false,
-        total: false
+        total: false,
+        totalWithoutDiscount: false,
+        discount: false
       };
     }
     let factor;
@@ -34546,9 +34565,14 @@ const EtchedSign = ({
       tempTotal *= 1.2;
     }
     let total = tempTotal * parseInt(sets);
+    const discount = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_8__.quantityDiscount)(sets, quantityDiscountTable);
+    let totalWithDiscount = total * discount;
+    let discountPrice = total - totalWithDiscount;
     return {
-      singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
-      total: (_total$toFixed = total?.toFixed(2)) !== null && _total$toFixed !== void 0 ? _total$toFixed : 0
+      singlePrice: (_tempTotal = tempTotal) !== null && _tempTotal !== void 0 ? _tempTotal : 0,
+      total: (_totalWithDiscount$to = totalWithDiscount?.toFixed(2)) !== null && _totalWithDiscount$to !== void 0 ? _totalWithDiscount$to : 0,
+      totalWithoutDiscount: total,
+      discount: discountPrice
     };
   };
   const handleOnChangeSets = e => {
@@ -34582,26 +34606,61 @@ const EtchedSign = ({
     setMetalThickness(target);
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    const {
-      singlePrice,
-      total
-    } = computePricing();
-    if (total && singlePrice) {
-      setUsdPrice(total);
-      setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.EXCHANGE_RATE).toFixed(2));
-      setUsdSinglePrice(singlePrice);
-      setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.EXCHANGE_RATE).toFixed(2));
-    } else {
-      setUsdPrice(0);
-      setCadPrice(0);
-      setUsdSinglePrice(0);
-      setCadSinglePrice(0);
+    if (quantityDiscountTable.length > 0) {
+      const {
+        singlePrice,
+        total,
+        totalWithoutDiscount,
+        discount
+      } = computePricing();
+      if (total && singlePrice) {
+        setUsdPrice(total);
+        setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.EXCHANGE_RATE).toFixed(2));
+        setUsdSinglePrice(singlePrice);
+        setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.EXCHANGE_RATE).toFixed(2));
+        setUsdDiscount(discount.toFixed(2));
+        setCadDiscount((discount * _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.EXCHANGE_RATE).toFixed(2));
+        setCadTotalNoDiscount((totalWithoutDiscount * _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.EXCHANGE_RATE).toFixed(2));
+        setUsdTotalNoDiscount(totalWithoutDiscount.toFixed(2));
+      } else {
+        setUsdPrice(0);
+        setCadPrice(0);
+        setUsdSinglePrice(0);
+        setCadSinglePrice(0);
+        setUsdDiscount('');
+        setCadDiscount('');
+        setCadTotalNoDiscount('');
+        setUsdTotalNoDiscount('');
+      }
     }
-  }, [metalThickness, width, height, waterproof, finishing, mounting, sets]);
+  }, [metalThickness, width, height, waterproof, finishing, mounting, sets, quantityDiscountTable]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
   }, [updateSignage, checkAndAddMissingFields]);
+  async function fetchQuantityDiscountPricing() {
+    try {
+      const response = await fetch(NovaQuote.quantity_discount_api + item.product);
+      const data = await response.json();
+      const tableJson = data.pricing_table ? (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_7__.convertJson)(data.pricing_table) : [];
+      setQuantityDiscountTable(tableJson);
+    } catch (error) {
+      console.error('Error fetching discount table pricing:', error);
+    } finally {
+      setSetOptions(Array.from({
+        length: 200
+      }, (_, index) => {
+        const val = 1 + index;
+        return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+          key: index,
+          value: val
+        }, val);
+      }));
+    }
+  }
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    fetchQuantityDiscountPricing();
+  }, []);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "py-4 mb-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
@@ -34640,7 +34699,7 @@ const EtchedSign = ({
       defaultValue: option === finishing
     }, option)),
     value: finishing
-  }), finishing === 'Painted' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_8__["default"], {
+  }), finishing === 'Painted' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_10__["default"], {
     ref: colorRef,
     title: "Painted Color",
     colorName: (_color$name = color?.name) !== null && _color$name !== void 0 ? _color$name : '',
@@ -34648,7 +34707,7 @@ const EtchedSign = ({
     toggleColor: () => {
       setOpenColor(prev => !prev);
     },
-    colorOptions: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.colorOptions,
+    colorOptions: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_9__.colorOptions,
     selectColor: color => {
       setColor(color);
       setOpenColor(false);
@@ -34692,7 +34751,7 @@ const EtchedSign = ({
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.setOptions,
+    options: setOptions,
     value: sets,
     onlyValue: true
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -34888,7 +34947,7 @@ const studLengthOptions = ['1.5" (4cm)', '3.2" (8cm)', '4" (10cm)', '6" (15cm)']
 const EtchedSign = ({
   item
 }) => {
-  var _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$etchedPaintedCo, _item$customColor, _item$etchedWidth, _item$etchedMaterial, _item$etchedHeight, _item$etchedMetalThic, _item$etchedFinishing, _item$etchedElectropl, _item$usdPrice, _item$cadPrice, _item$etchedAnodizedC, _item$etchedGraphicsS, _item$etchedEdges, _item$studLength, _item$usdSinglePrice, _item$cadSinglePrice, _item$waterproof, _item$mounting, _item$sets, _color$name;
+  var _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$etchedPaintedCo, _item$customColor, _item$etchedWidth, _item$etchedMaterial, _item$etchedHeight, _item$etchedMetalThic, _item$etchedFinishing, _item$etchedElectropl, _item$usdPrice, _item$cadPrice, _item$usdDiscount, _item$usdTotalNoDisco, _item$cadDiscount, _item$cadTotalNoDisco, _item$etchedAnodizedC, _item$etchedGraphicsS, _item$etchedEdges, _item$studLength, _item$usdSinglePrice, _item$cadSinglePrice, _item$waterproof, _item$mounting, _item$sets, _color$name;
   const {
     signage,
     setSignage,
@@ -34912,6 +34971,10 @@ const EtchedSign = ({
   const [finishingOptions, setFinishingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdPrice = item.usdPrice) !== null && _item$usdPrice !== void 0 ? _item$usdPrice : 0);
   const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadPrice = item.cadPrice) !== null && _item$cadPrice !== void 0 ? _item$cadPrice : 0);
+  const [usdDiscount, setUsdDiscount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdDiscount = item.usdDiscount) !== null && _item$usdDiscount !== void 0 ? _item$usdDiscount : 0);
+  const [usdTotalNoDiscount, setUsdTotalNoDiscount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdTotalNoDisco = item.usdTotalNoDiscount) !== null && _item$usdTotalNoDisco !== void 0 ? _item$usdTotalNoDisco : '');
+  const [cadDiscount, setCadDiscount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadDiscount = item.cadDiscount) !== null && _item$cadDiscount !== void 0 ? _item$cadDiscount : 0);
+  const [cadTotalNoDiscount, setCadTotalNoDiscount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadTotalNoDisco = item.cadTotalNoDiscount) !== null && _item$cadTotalNoDisco !== void 0 ? _item$cadTotalNoDisco : '');
   const [widthOptions, setWidthOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const [heightOptions, setHeightOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const [anodizedColor, setAnodizedColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$etchedAnodizedC = item.etchedAnodizedColor) !== null && _item$etchedAnodizedC !== void 0 ? _item$etchedAnodizedC : '');
@@ -34921,6 +34984,11 @@ const EtchedSign = ({
   const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$studLength = item.studLength) !== null && _item$studLength !== void 0 ? _item$studLength : '');
   const [usdSinglePrice, setUsdSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdSinglePrice = item.usdSinglePrice) !== null && _item$usdSinglePrice !== void 0 ? _item$usdSinglePrice : 0);
   const [cadSinglePrice, setCadSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadSinglePrice = item.cadSinglePrice) !== null && _item$cadSinglePrice !== void 0 ? _item$cadSinglePrice : 0);
+  const [setOptions, setSetOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([(0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    key: "1",
+    value: "1"
+  }, "1")]);
+  const [quantityDiscountTable, setQuantityDiscountTable] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : '');
   const [mounting, setMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
   const [mountingOptions, setMountingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(mountingOptionsDefault);
@@ -34953,13 +35021,17 @@ const EtchedSign = ({
           usdPrice,
           cadPrice,
           cadSinglePrice,
-          usdSinglePrice
+          usdSinglePrice,
+          usdDiscount,
+          usdTotalNoDiscount,
+          cadTotalNoDiscount,
+          cadDiscount
         };
       }
       return sign;
     });
     setSignage(updatedSignage);
-  }, [waterproof, color, edges, customColor, mounting, material, metalThickness, finishing, studLength, electroplated, graphicsStyle, anodizedColor, fileNames, filePaths, fileUrls, files, sets, width, height, usdPrice, cadPrice, cadSinglePrice, usdSinglePrice]);
+  }, [waterproof, color, edges, customColor, mounting, material, metalThickness, finishing, studLength, electroplated, graphicsStyle, anodizedColor, fileNames, filePaths, fileUrls, files, sets, width, height, usdPrice, cadPrice, cadSinglePrice, usdSinglePrice, usdDiscount, usdTotalNoDiscount, cadTotalNoDiscount, cadDiscount]);
   const checkAndAddMissingFields = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(() => {
     const missingFields = [];
     if (!material) missingFields.push('Select Material');
@@ -35007,11 +35079,13 @@ const EtchedSign = ({
     });
   }, [fileUrls, color, waterproof, mounting, sets, width, height, material, studLength, metalThickness, finishing, electroplated, anodizedColor, graphicsStyle, edges, customColor]);
   const computePricing = () => {
-    var _tempTotal$toFixed, _total$toFixed;
+    var _tempTotal, _totalWithDiscount$to;
     if (!width || !height || !material || !metalThickness || !waterproof || !sets) {
       return {
         singlePrice: false,
-        total: false
+        total: false,
+        totalWithoutDiscount: false,
+        discount: false
       };
     }
     let factor;
@@ -35097,9 +35171,14 @@ const EtchedSign = ({
       tempTotal *= 1.1;
     }
     let total = tempTotal * parseInt(sets);
+    const discount = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.quantityDiscount)(sets, quantityDiscountTable);
+    let totalWithDiscount = total * discount;
+    let discountPrice = total - totalWithDiscount;
     return {
-      singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
-      total: (_total$toFixed = total?.toFixed(2)) !== null && _total$toFixed !== void 0 ? _total$toFixed : 0
+      singlePrice: (_tempTotal = tempTotal) !== null && _tempTotal !== void 0 ? _tempTotal : 0,
+      total: (_totalWithDiscount$to = totalWithDiscount?.toFixed(2)) !== null && _totalWithDiscount$to !== void 0 ? _totalWithDiscount$to : 0,
+      totalWithoutDiscount: total,
+      discount: discountPrice
     };
   };
   const handleOnChangeSets = e => {
@@ -35220,26 +35299,61 @@ const EtchedSign = ({
     }
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    const {
-      singlePrice,
-      total
-    } = computePricing();
-    if (total && singlePrice) {
-      setUsdPrice(total);
-      setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.EXCHANGE_RATE).toFixed(2));
-      setUsdSinglePrice(singlePrice);
-      setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.EXCHANGE_RATE).toFixed(2));
-    } else {
-      setUsdPrice(0);
-      setCadPrice(0);
-      setUsdSinglePrice(0);
-      setCadSinglePrice(0);
+    if (quantityDiscountTable.length > 0) {
+      const {
+        singlePrice,
+        total,
+        totalWithoutDiscount,
+        discount
+      } = computePricing();
+      if (total && singlePrice) {
+        setUsdPrice(total);
+        setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.EXCHANGE_RATE).toFixed(2));
+        setUsdSinglePrice(singlePrice);
+        setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.EXCHANGE_RATE).toFixed(2));
+        setUsdDiscount(discount.toFixed(2));
+        setCadDiscount((discount * _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.EXCHANGE_RATE).toFixed(2));
+        setCadTotalNoDiscount((totalWithoutDiscount * _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.EXCHANGE_RATE).toFixed(2));
+        setUsdTotalNoDiscount(totalWithoutDiscount.toFixed(2));
+      } else {
+        setUsdPrice(0);
+        setCadPrice(0);
+        setUsdSinglePrice(0);
+        setCadSinglePrice(0);
+        setUsdDiscount('');
+        setCadDiscount('');
+        setCadTotalNoDiscount('');
+        setUsdTotalNoDiscount('');
+      }
     }
-  }, [material, metalThickness, width, height, waterproof, edges, finishing, mounting, sets, graphicsStyle]);
+  }, [material, metalThickness, width, height, waterproof, edges, finishing, mounting, sets, graphicsStyle, quantityDiscountTable]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
   }, [updateSignage, checkAndAddMissingFields]);
+  async function fetchQuantityDiscountPricing() {
+    try {
+      const response = await fetch(NovaQuote.quantity_discount_api + item.product);
+      const data = await response.json();
+      const tableJson = data.pricing_table ? (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_5__.convertJson)(data.pricing_table) : [];
+      setQuantityDiscountTable(tableJson);
+    } catch (error) {
+      console.error('Error fetching discount table pricing:', error);
+    } finally {
+      setSetOptions(Array.from({
+        length: 200
+      }, (_, index) => {
+        const val = 1 + index;
+        return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+          key: index,
+          value: val
+        }, val);
+      }));
+    }
+  }
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    fetchQuantityDiscountPricing();
+  }, []);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "py-4 mb-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
@@ -35366,7 +35480,7 @@ const EtchedSign = ({
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.setOptions,
+    options: setOptions,
     value: sets,
     onlyValue: true
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
