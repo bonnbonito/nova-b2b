@@ -86,6 +86,7 @@ export const EtchedSign = ({ item }) => {
 	const [cadSinglePrice, setCadSinglePrice] = useState(
 		item.cadSinglePrice ?? 0
 	);
+
 	const [setOptions, setSetOptions] = useState([
 		<option key="1" value="1">
 			1
@@ -93,7 +94,9 @@ export const EtchedSign = ({ item }) => {
 	]);
 	const [quantityDiscountTable, setQuantityDiscountTable] = useState([]);
 
-	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
+	const [waterproof, setWaterproof] = useState(
+		item.waterproof ?? INDOOR_NOT_WATERPROOF
+	);
 	const [mounting, setMounting] = useState(item.mounting ?? '');
 
 	const [sets, setSets] = useState(item.sets ?? 1);
@@ -254,10 +257,6 @@ export const EtchedSign = ({ item }) => {
 		let tempTotal = (parseInt(width) + 1) * (parseInt(height) + 1) * factor;
 
 		tempTotal = tempTotal > 10 ? tempTotal : 10;
-
-		if (parseInt(width) > 20 || parseInt(height) > 20) {
-			tempTotal = tempTotal + 40;
-		}
 
 		if (parseInt(width) > 43 || parseInt(height) > 43) {
 			tempTotal = tempTotal + 100;

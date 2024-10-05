@@ -148,7 +148,9 @@ export const EtchedSign = ({ item }) => {
 	]);
 	const [quantityDiscountTable, setQuantityDiscountTable] = useState([]);
 
-	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
+	const [waterproof, setWaterproof] = useState(
+		item.waterproof ?? INDOOR_NOT_WATERPROOF
+	);
 	const [mounting, setMounting] = useState(item.mounting ?? '');
 	const [mountingOptions, setMountingOptions] = useState(
 		mountingOptionsDefault
@@ -273,6 +275,9 @@ export const EtchedSign = ({ item }) => {
 		if (!waterproof) missingFields.push('Select Environment');
 
 		if (!sets) missingFields.push('Select Quantity');
+
+		if (!fileUrls || fileUrls.length === 0)
+			missingFields.push('Upload a PDF/AI File');
 
 		setMissing((prevMissing) => {
 			const existingIndex = prevMissing.findIndex(
@@ -521,11 +526,15 @@ export const EtchedSign = ({ item }) => {
 				}
 				setMetalThicknessOptions(metalThicknessOptionsDefault);
 				setFinishingOptions(brassFinishing);
+				setFinishing('Brushed');
 				setElectroplated('');
 				setAnodizedColor('');
 				setEdgesOptions(['Square']);
 				setEdges('Square');
 			}
+		} else {
+			setFinishing('');
+			setFinishingOptions([]);
 		}
 	};
 

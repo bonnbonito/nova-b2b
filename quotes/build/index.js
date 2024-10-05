@@ -34450,7 +34450,7 @@ const EtchedSign = ({
     value: "1"
   }, "1")]);
   const [quantityDiscountTable, setQuantityDiscountTable] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : '');
+  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.INDOOR_NOT_WATERPROOF);
   const [mounting, setMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
   const colorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
@@ -34551,9 +34551,6 @@ const EtchedSign = ({
     }
     let tempTotal = (parseInt(width) + 1) * (parseInt(height) + 1) * factor;
     tempTotal = tempTotal > 10 ? tempTotal : 10;
-    if (parseInt(width) > 20 || parseInt(height) > 20) {
-      tempTotal = tempTotal + 40;
-    }
     if (parseInt(width) > 43 || parseInt(height) > 43) {
       tempTotal = tempTotal + 100;
     }
@@ -34989,7 +34986,7 @@ const EtchedSign = ({
     value: "1"
   }, "1")]);
   const [quantityDiscountTable, setQuantityDiscountTable] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : '');
+  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.INDOOR_NOT_WATERPROOF);
   const [mounting, setMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
   const [mountingOptions, setMountingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(mountingOptionsDefault);
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
@@ -35059,6 +35056,7 @@ const EtchedSign = ({
     }
     if (!waterproof) missingFields.push('Select Environment');
     if (!sets) missingFields.push('Select Quantity');
+    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
     setMissing(prevMissing => {
       const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
       if (existingIndex !== -1) {
@@ -35235,11 +35233,15 @@ const EtchedSign = ({
         }
         setMetalThicknessOptions(metalThicknessOptionsDefault);
         setFinishingOptions(brassFinishing);
+        setFinishing('Brushed');
         setElectroplated('');
         setAnodizedColor('');
         setEdgesOptions(['Square']);
         setEdges('Square');
       }
+    } else {
+      setFinishing('');
+      setFinishingOptions([]);
     }
   };
   const handleComments = e => {
