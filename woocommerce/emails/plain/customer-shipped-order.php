@@ -1,6 +1,6 @@
 <?php
 /**
- * Customer completed order email (plain text)
+ * Customer shipped order email (plain text)
  *
  * This template can be overridden by copying it to yourtheme/woocommerce/emails/plain/customer-completed-order.php.
  *
@@ -24,7 +24,7 @@ echo "\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n";
 /* translators: %s: Customer first name */
 echo sprintf( esc_html__( 'Hi %s,', 'woocommerce' ), esc_html( $order->get_billing_first_name() ) ) . "\n\n";
 /* translators: %s: Site title */
-echo esc_html__( 'We have finished processing your order.', 'woocommerce' ) . "\n\n";
+echo esc_html__( 'We have shipped your order.', 'woocommerce' ) . "\n\n";
 
 /*
  * @hooked WC_Emails::order_details() Shows the order details table.
