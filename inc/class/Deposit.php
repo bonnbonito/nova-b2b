@@ -29,7 +29,7 @@ class Deposit {
 		add_action( 'init', array( $this, 'create_payment_table' ) );
 		// add_action( 'woocommerce_before_thankyou', array( $this, 'insert_payment_record' ) );
 		add_action( 'woocommerce_before_thankyou', array( $this, 'insert_nova_meta' ), 10, 1 );
-		// add_action( 'woocommerce_thankyou', array( $this, 'thank_you_actions' ), 10, 1 );
+		add_action( 'woocommerce_thankyou', array( $this, 'thank_you_actions' ), 10, 1 );
 		add_action( 'woocommerce_order_after_calculate_totals', array( $this, 'adjust_order_total_based_on_payments' ), 9999, 2 );
 		add_action( 'woocommerce_admin_order_totals_after_total', array( $this, 'display_payments_in_admin' ) );
 		add_action( 'woocommerce_checkout_update_order_review', array( $this, 'handle_deposit_option' ) );
@@ -43,12 +43,54 @@ class Deposit {
 		add_action( 'nova_pending_payments_after_content', array( $this, 'pending_page_after_content' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_nova_scripts' ) );
 		add_action( 'woocommerce_order_status_completed', array( $this, 'needs_payment_update' ), 99 );
-		add_action( 'woocommerce_order_status_delivered', array( $this, 'insert_delivered_date' ) );
+		// add_action( 'woocommerce_order_status_delivered', array( $this, 'insert_delivered_date' ) );
 		add_action( 'woocommerce_order_status_shipped', array( $this, 'insert_shipped_date' ) );
 		add_action( 'woocommerce_before_cart', array( $this, 'remove_wc_sessions_on_cart' ) );
 		add_action( 'woocommerce_review_order_before_submit', array( $this, 'output_deposit_selection' ) );
 		add_filter( 'woocommerce_payment_complete_order_status', array( $this, 'change_payment_status' ), 10, 3 );
 		add_filter( 'woocommerce_bacs_process_payment_order_status', array( $this, 'change_onhold_status' ), 99, 2 );
+		add_action( 'woocommerce_admin_order_totals_after_tax', array( $this, 'add_deposit_row' ) );
+		add_filter( 'woocommerce_payment_successful_result', array( $this, 'successful_payment' ), 20, 2 );
+		add_filter( 'woocommerce_cod_process_payment_order_status', array( $this, 'cod_status' ), 20, 2 );
+	}
+
+	public function cod_status( $status, $order ) {
+		$second_payment = $order->get_meta( 'second_payment' );
+		if ( $second_payment ) {
+			$order_status = $order->get_status();
+			error_log( 'Second Order status ' . $order_status );
+			return $order_status;
+		}
+		return $status;
+	}
+
+	public function successful_payment( $result, $order_id ) {
+
+		$order      = wc_get_order( $order_id );
+		$nova_order = $order->get_meta( '_nova_order' );
+		if ( ! $nova_order ) {
+			return $result;
+		}
+		$needs_payment  = $order->get_meta( 'needs_payment' );
+		$second_payment = $order->get_meta( 'second_payment' );
+		if ( $needs_payment && $second_payment ) {
+			delete_post_meta( $order_id, 'needs_payment' );
+		}
+		return $result;
+	}
+
+	public function add_deposit_row( $order_id ) {
+
+		$order = wc_get_order( $order_id );
+
+		$deposit_title = $order->get_meta( '_deposit_chosen_title' );
+		if ( $deposit_title ) {
+			echo '<tr>';
+			echo '<td class="label">Payment Type:</td>';
+			echo '<td width="1%"></td>';
+			echo '<td class="amount">' . $deposit_title . '</td>';
+			echo '</tr>';
+		}
 	}
 
 	public function change_onhold_status( $on_hold, $order ) {
@@ -61,7 +103,25 @@ class Deposit {
 	}
 
 	public function change_payment_status( $order_status, $order_id, $order ) {
-		$status         = $order->get_status();
+
+		$nova_order = $order->get_meta( '_nova_order' );
+		$status     = $order->get_status();
+		if ( ! $nova_order ) {
+			return $order_status;
+		}
+
+		if ( WC()->session ) {
+			if ( WC()->session->get( 'first_payment' ) ) {
+				WC()->session->__unset( 'first_payment' );
+				return 'processing';
+			}
+		}
+
+		if ( $order->get_meta( 'needs_payment' ) && $order->get_meta( 'second_payment' ) ) {
+			delete_post_meta( $order_id, 'needs_payment' );
+			return $status;
+		}
+
 		$delivered_date = get_post_meta( $order_id, 'delivered_date', true );
 
 		if ( ! $delivered_date ) {
@@ -101,13 +161,20 @@ class Deposit {
 		$order          = wc_get_order( $order_id );
 		$needs_payment  = $order->get_meta( 'needs_payment' );
 		$second_payment = $order->get_meta( 'second_payment' );
-		if ( $needs_payment ) {
+		if ( $needs_payment && $second_payment ) {
 			delete_post_meta( $order_id, 'needs_payment' );
 		}
 	}
 
-
 	public function thank_you_actions( $order_id ) {
+		$first_payment = WC()->session->get( 'first_payment' );
+		if ( $first_payment ) {
+			// echo '<h1>HELLO</h1>';
+			// $order = wc_get_order( $order_id );
+			// $order->set_status( 'processing' );
+			// $order->save();
+			WC()->session->__unset( 'first_payment' );
+		}
 	}
 
 	public function insert_nova_meta( $order_id ) {
@@ -145,15 +212,42 @@ class Deposit {
 
 		foreach ( $results as $result ) {
 
-			$order_id = $result->order_id;
-			$order    = wc_get_order( $order_id );
+			$order_id      = $result->order_id;
+			$order         = wc_get_order( $order_id );
+			$time_diff     = '';
+			$due_date      = '';
+			$needs_payment = $order->get_meta( 'needs_payment' );
 
 			if ( ! $order ) {
 				continue;
 			}
 
+			if ( $order->get_status() === 'completed' ) {
+				continue;
+			}
+
+			if ( ! $needs_payment ) {
+				continue;
+			}
+
+			$deposit_chosen = $order->get_meta( '_deposit_chosen' );
+
+			$days = get_field( 'days_after_shipping', $deposit_chosen );
+
+			$payment_date = $result->payment_date;
+
+			$shipped_date = $order->get_meta( 'shipped_date' );
+
+			// ** due date is $shipped_date + $days */
+			if ( $shipped_date ) {
+				$due_date  = date( 'Y-m-d', strtotime( '+' . $days . ' days', strtotime( $shipped_date ) ) );
+				$time_diff = human_time_diff( current_time( 'timestamp' ), strtotime( $due_date ) );
+				$ago       = strtotime( $due_date ) < current_time( 'timestamp' );
+			}
+
 			$manual_delivered_date = get_field( 'manual_delivered_date', $order->get_id() );
-			$delivered_date        = $order->get_meta( 'delivered_date' );
+
+			$delivered_date = $order->get_meta( 'delivered_date' );
 
 			if ( $manual_delivered_date ) {
 				$date_obj = \DateTime::createFromFormat( 'd/m/Y', $manual_delivered_date );
@@ -161,21 +255,27 @@ class Deposit {
 					$delivered_date = $date_obj->format( 'F d, Y' );
 				}
 			}
+
 			$total = $order->get_total();
 
 			$pending_payments[] = array(
-				'order_id'        => $result->order_id,
-				'order_number'    => '#' . $order->get_order_number(),
-				'deposit_chosen'  => $order->get_meta( '_deposit_chosen_title' ),
-				'deposit_amount'  => wc_price( $order->get_meta( '_deposit_amount' ), array( 'currency' => $order->get_currency() ) ),
-				'total'           => $total,
-				'total_amount'    => wc_price( $total, array( 'currency' => $order->get_currency() ) ),
-				'payment_date'    => $result->payment_date,
-				'customer_name'   => $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(),
-				'order_status'    => wc_get_order_status_name( $order->get_status() ),
-				'delivered_date'  => $delivered_date,
-				'order_admin_url' => admin_url( 'post.php?post=' . $order_id . '&action=edit' ),
-				'order_actions'   => $this->order_actions( $order ),
+				'order_id'          => $result->order_id,
+				'ago'               => $shipped_date ? $ago : '',
+				'order_number'      => '#' . $order->get_order_number(),
+				'deposit_chosen'    => $order->get_meta( '_deposit_chosen_title' ),
+				'deposit_amount'    => wc_price( $order->get_meta( '_deposit_amount' ), array( 'currency' => $order->get_currency() ) ),
+				'total'             => $total,
+				'total_amount'      => wc_price( $total, array( 'currency' => $order->get_currency() ) ),
+				'payment_date'      => $payment_date,
+				'customer_name'     => $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(),
+				'order_status'      => wc_get_order_status_name( $order->get_status() ),
+				'delivered_date'    => $delivered_date,
+				'order_admin_url'   => admin_url( 'post.php?post=' . $order_id . '&action=edit' ),
+				'order_actions'     => $this->order_actions( $order ),
+				'deposit_chosen_id' => $order->get_meta( '_deposit_chosen' ),
+				'due_date'          => $shipped_date ? $due_date : '',
+				'shipped_date'      => $shipped_date,
+				'time_diff'         => $shipped_date ? $time_diff : '',
 			);
 
 		}
@@ -206,7 +306,6 @@ class Deposit {
 		}
 	}
 
-
 	/**
 	 * Create custom payment table
 	 */
@@ -235,7 +334,19 @@ class Deposit {
 	 */
 	public function insert_payment_record( $order_id, $posted_data, $order ) {
 
+		if ( $order->has_status( 'failed' ) ) {
+			return;
+		}
+
+		/* updated nova order */
+		update_post_meta( $order_id, '_nova_order', true );
+
 		$deposit_chosen = WC()->session->get( 'deposit_chosen' );
+		$second_payment = WC()->session->get( 'second_payment' );
+
+		if ( isset( $second_payment ) && ! empty( $second_payment ) ) {
+			update_post_meta( $order_id, 'second_payment', true );
+		}
 
 		if ( ! $deposit_chosen || $deposit_chosen == '0' ) {
 			return;
@@ -245,16 +356,6 @@ class Deposit {
 		$table_name = $wpdb->prefix . 'order_payments';
 
 		$order = wc_get_order( $order_id );
-
-		if ( $order->has_status( 'failed' ) ) {
-			return;
-		}
-
-		$second_payment = WC()->session->get( 'second_payment' );
-		if ( $second_payment ) {
-			update_post_meta( $order_id, 'second_payment', true );
-			WC()->session->__unset( 'second_payment' );
-		}
 
 		/** Check if order_id is already in the table */
 
@@ -325,7 +426,7 @@ class Deposit {
 			$order->set_total( $new_total );
 
 			if ( $new_total > 0 ) {
-				// $order->set_status( 'pending' );
+				// $order->set_status( 'processing' );
 			}
 			$order->save();
 		}
@@ -340,19 +441,17 @@ class Deposit {
 
 		$order = wc_get_order( $order_id );
 
-		echo '<tr><td class="label">Payments:</td><td width="1%"></td><td class="total"><ul style="margin:0">';
-
 		$payments = $wpdb->get_results(
 			$wpdb->prepare( "SELECT * FROM $table_name WHERE order_id = %d", $order_id )
 		);
 
 		if ( $payments ) {
+			echo '<tr><td class="label">Payments:</td><td width="1%"></td><td class="total"><ul style="margin:0">';
 			foreach ( $payments as $payment ) {
 				echo '<li style="margin:0">' . wc_price( $payment->amount, array( 'currency' => $order->get_currency() ) ) . ' (' . date( 'd-m-y', strtotime( $payment->payment_date ) ) . ')</li>';
 			}
+			echo '</ul></td></tr>';
 		}
-
-		echo '</ul></td></tr>';
 	}
 
 	/**
@@ -362,6 +461,9 @@ class Deposit {
 		parse_str( $posted_data, $output );
 		$deposit_chosen = isset( $output['deposit_chosen'] ) ? $output['deposit_chosen'] : 0;
 		WC()->session->set( 'deposit_chosen', $deposit_chosen );
+		if ( $deposit_chosen ) {
+			WC()->session->set( 'first_payment', true );
+		}
 	}
 
 	/**
@@ -381,7 +483,7 @@ class Deposit {
 	}
 
 	public function order_needs_payment( $needs_payment, $order ) {
-		if ( $order->get_meta( 'needs_payment' ) ) {
+		if ( $order->get_meta( 'needs_payment' ) && $order->get_status() !== 'completed' ) {
 			return true;
 		}
 		return $needs_payment;
@@ -442,10 +544,10 @@ class Deposit {
 	public function pending_page_after_content() {
 		?>
 <div class="wrap">
-	<div id="depositTable"></div>
+    <div id="depositTable"></div>
 
 </div>
-		<?php
+<?php
 	}
 
 	public function output_deposit_selection() {
@@ -464,34 +566,34 @@ class Deposit {
 		$chosen = empty( $chosen ) ? '0' : $chosen;
 		?>
 <fieldset>
-	<legend class="px-4 uppercase"><span><?php esc_html_e( 'Payment Type', 'woocommerce' ); ?></span></legend>
-	<div class="grid md:grid-cols-3 gap-4 update_totals_on_change">
-		<div class="cursor-pointer h-full">
-			<label for="payment_0"
-				class="block h-full justify-end p-3 border rounded-md w-full max-w-sm cursor-pointer hover:border-slate-500 hover:bg-slate-200 hover:shadow-lg">
-				<input class="bg-none" id="payment_0" type="radio" name="deposit_chosen" value="0"
-					<?php echo ( '0' == $chosen ? 'checked' : '' ); ?>>
-				<span>Full</span>
-				<span class="text-sm font-body block mt-2 hidden">Description</span>
-			</label>
-		</div>
-		<?php
+    <legend class="px-4 uppercase"><span><?php esc_html_e( 'Payment Type', 'woocommerce' ); ?></span></legend>
+    <div class="grid md:grid-cols-3 gap-4 update_totals_on_change">
+        <div class="cursor-pointer h-full">
+            <label for="payment_0"
+                class="block h-full justify-end p-3 border rounded-md w-full max-w-sm cursor-pointer hover:border-slate-500 hover:bg-slate-200 hover:shadow-lg">
+                <input class="bg-none" id="payment_0" type="radio" name="deposit_chosen" value="0"
+                    <?php echo ( '0' == $chosen ? 'checked' : '' ); ?>>
+                <span>Full</span>
+                <span class="text-sm font-body block mt-2 hidden">Description</span>
+            </label>
+        </div>
+        <?php
 		foreach ( $payments_selection as $key => $selection ) {
 			?>
-		<div class="cursor-pointer h-full">
-			<label for="payment_<?php echo $selection['id']; ?>"
-				class="block h-full justify-end p-3 border rounded-md w-full max-w-sm cursor-pointer hover:border-slate-500 hover:bg-slate-200 hover:shadow-lg">
-				<input class="bg-none" id="payment_<?php echo $selection['id']; ?>" type="radio" name="deposit_chosen"
-					value="<?php echo $selection['id']; ?>" id="payment_<?php echo $selection['id']; ?>"
-					<?php echo ( $selection['id'] == $chosen ? 'checked' : '' ); ?>>
-				<span><?php echo $selection['title']; ?></span>
-				<span class="text-sm font-body block mt-2"><?php echo $selection['description']; ?></span>
-			</label>
-		</div>
-		<?php } ?>
-	</div>
+        <div class="cursor-pointer h-full">
+            <label for="payment_<?php echo $selection['id']; ?>"
+                class="block h-full justify-end p-3 border rounded-md w-full max-w-sm cursor-pointer hover:border-slate-500 hover:bg-slate-200 hover:shadow-lg">
+                <input class="bg-none" id="payment_<?php echo $selection['id']; ?>" type="radio" name="deposit_chosen"
+                    value="<?php echo $selection['id']; ?>" id="payment_<?php echo $selection['id']; ?>"
+                    <?php echo ( $selection['id'] == $chosen ? 'checked' : '' ); ?>>
+                <span><?php echo $selection['title']; ?></span>
+                <span class="text-sm font-body block mt-2"><?php echo $selection['description']; ?></span>
+            </label>
+        </div>
+        <?php } ?>
+    </div>
 </fieldset>
 
-		<?php
+<?php
 	}
 }

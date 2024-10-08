@@ -29,11 +29,27 @@ class Order_Status {
 		$this->add_custom_order_status( 'Delivered', 'delivered', '#2ecc71' );
 		$this->add_custom_order_status( 'In Production', 'production', '#333' );
 		add_action( 'woocommerce_order_note_added', array( $this, 'change_status_on_shipstation_note' ), 10, 2 );
-		add_action( 'woocommerce_shipstation_shipnotify', array( $this, 'change_status_to_delivered' ), 10, 2 );
+		add_action( 'woocommerce_shipstation_shipnotify', array( $this, 'change_status_to_shipped' ), 10, 2 );
+		add_filter( 'woocommerce_email_classes', array( $this, 'custom_init_emails' ) );
+		add_filter( 'woocommerce_email_actions', array( $this, 'email_actions' ) );
 	}
 
-	public function change_status_to_delivered( $order, $details ) {
-		$order->update_status( 'delivered', 'Order status automatically changed to delivered.' );
+	public function email_actions( $actions ) {
+		$actions[] = 'woocommerce_order_status_production';
+		$actions[] = 'woocommerce_order_status_shipped';
+		return $actions;
+	}
+
+	public function custom_init_emails( $emails ) {
+
+		$emails['WC_Email_Customer_Production_Order'] = include_once 'emails/class-wc-email-customer-production-order.php';
+		$emails['WC_Email_Customer_Shipped_Order']    = include_once 'emails/class-wc-email-customer-shipped-order.php';
+
+		return $emails;
+	}
+
+	public function change_status_to_shipped( $order, $details ) {
+		$order->update_status( 'shipped', 'Order status automatically changed to delivered.' );
 	}
 
 	public function change_status_on_shipstation_note( $comment_id, $order ) {
