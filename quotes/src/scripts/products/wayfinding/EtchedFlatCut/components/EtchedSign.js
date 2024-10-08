@@ -10,11 +10,12 @@ import { useAppContext } from '../../../../AppProvider';
 import Description from '../../../../Description';
 import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
+
 import { convertJson } from '../../../../utils/ConvertJson';
 import { quantityDiscount } from '../../../../utils/Pricing';
+
 import {
 	arrayRange,
-	setOptions,
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
 
@@ -111,6 +112,16 @@ export const EtchedSign = ({ item }) => {
 	const [finishingOptions, setFinishingOptions] = useState([]);
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
+
+	const [usdDiscount, setUsdDiscount] = useState(item.usdDiscount ?? 0);
+	const [usdTotalNoDiscount, setUsdTotalNoDiscount] = useState(
+		item.usdTotalNoDiscount ?? ''
+	);
+	const [cadDiscount, setCadDiscount] = useState(item.cadDiscount ?? 0);
+	const [cadTotalNoDiscount, setCadTotalNoDiscount] = useState(
+		item.cadTotalNoDiscount ?? ''
+	);
+
 	const [widthOptions, setWidthOptions] = useState([]);
 	const [heightOptions, setHeightOptions] = useState([]);
 	const [anodizedColor, setAnodizedColor] = useState(
@@ -130,7 +141,16 @@ export const EtchedSign = ({ item }) => {
 		item.cadSinglePrice ?? 0
 	);
 
-	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
+	const [setOptions, setSetOptions] = useState([
+		<option key="1" value="1">
+			1
+		</option>,
+	]);
+	const [quantityDiscountTable, setQuantityDiscountTable] = useState([]);
+
+	const [waterproof, setWaterproof] = useState(
+		item.waterproof ?? INDOOR_NOT_WATERPROOF
+	);
 	const [mounting, setMounting] = useState(item.mounting ?? '');
 	const [mountingOptions, setMountingOptions] = useState(
 		mountingOptionsDefault
@@ -167,6 +187,10 @@ export const EtchedSign = ({ item }) => {
 					cadPrice,
 					cadSinglePrice,
 					usdSinglePrice,
+					usdDiscount,
+					usdTotalNoDiscount,
+					cadTotalNoDiscount,
+					cadDiscount,
 				};
 			}
 			return sign;
@@ -196,6 +220,10 @@ export const EtchedSign = ({ item }) => {
 		cadPrice,
 		cadSinglePrice,
 		usdSinglePrice,
+		usdDiscount,
+		usdTotalNoDiscount,
+		cadTotalNoDiscount,
+		cadDiscount,
 	]);
 
 	const checkAndAddMissingFields = useCallback(() => {
@@ -248,6 +276,9 @@ export const EtchedSign = ({ item }) => {
 
 		if (!sets) missingFields.push('Select Quantity');
 
+		if (!fileUrls || fileUrls.length === 0)
+			missingFields.push('Upload a PDF/AI File');
+
 		setMissing((prevMissing) => {
 			const existingIndex = prevMissing.findIndex(
 				(entry) => entry.id === item.id
@@ -298,6 +329,8 @@ export const EtchedSign = ({ item }) => {
 			return {
 				singlePrice: false,
 				total: false,
+				totalWithoutDiscount: false,
+				discount: false,
 			};
 		}
 
@@ -403,9 +436,17 @@ export const EtchedSign = ({ item }) => {
 
 		let total = tempTotal * parseInt(sets);
 
+		const discount = quantityDiscount(sets, quantityDiscountTable);
+
+		let totalWithDiscount = total * discount;
+
+		let discountPrice = total - totalWithDiscount;
+
 		return {
-			singlePrice: tempTotal.toFixed(2) ?? 0,
-			total: total?.toFixed(2) ?? 0,
+			singlePrice: tempTotal ?? 0,
+			total: totalWithDiscount?.toFixed(2) ?? 0,
+			totalWithoutDiscount: total,
+			discount: discountPrice,
 		};
 	};
 
@@ -485,11 +526,15 @@ export const EtchedSign = ({ item }) => {
 				}
 				setMetalThicknessOptions(metalThicknessOptionsDefault);
 				setFinishingOptions(brassFinishing);
+				setFinishing('Brushed');
 				setElectroplated('');
 				setAnodizedColor('');
 				setEdgesOptions(['Square']);
 				setEdges('Square');
 			}
+		} else {
+			setFinishing('');
+			setFinishingOptions([]);
 		}
 	};
 
@@ -574,17 +619,30 @@ export const EtchedSign = ({ item }) => {
 	};
 
 	useEffect(() => {
-		const { singlePrice, total } = computePricing();
-		if (total && singlePrice) {
-			setUsdPrice(total);
-			setCadPrice((total * EXCHANGE_RATE).toFixed(2));
-			setUsdSinglePrice(singlePrice);
-			setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
-		} else {
-			setUsdPrice(0);
-			setCadPrice(0);
-			setUsdSinglePrice(0);
-			setCadSinglePrice(0);
+		if (quantityDiscountTable.length > 0) {
+			const { singlePrice, total, totalWithoutDiscount, discount } =
+				computePricing();
+			if (total && singlePrice) {
+				setUsdPrice(total);
+				setCadPrice((total * EXCHANGE_RATE).toFixed(2));
+				setUsdSinglePrice(singlePrice);
+				setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
+				setUsdDiscount(discount.toFixed(2));
+				setCadDiscount((discount * EXCHANGE_RATE).toFixed(2));
+				setCadTotalNoDiscount(
+					(totalWithoutDiscount * EXCHANGE_RATE).toFixed(2)
+				);
+				setUsdTotalNoDiscount(totalWithoutDiscount.toFixed(2));
+			} else {
+				setUsdPrice(0);
+				setCadPrice(0);
+				setUsdSinglePrice(0);
+				setCadSinglePrice(0);
+				setUsdDiscount('');
+				setCadDiscount('');
+				setCadTotalNoDiscount('');
+				setUsdTotalNoDiscount('');
+			}
 		}
 	}, [
 		material,
@@ -597,12 +655,48 @@ export const EtchedSign = ({ item }) => {
 		mounting,
 		sets,
 		graphicsStyle,
+		quantityDiscountTable,
 	]);
 
 	useEffect(() => {
 		updateSignage();
 		checkAndAddMissingFields();
 	}, [updateSignage, checkAndAddMissingFields]);
+
+	async function fetchQuantityDiscountPricing() {
+		try {
+			const response = await fetch(
+				NovaQuote.quantity_discount_api + item.product
+			);
+			const data = await response.json();
+			const tableJson = data.pricing_table
+				? convertJson(data.pricing_table)
+				: [];
+			setQuantityDiscountTable(tableJson);
+		} catch (error) {
+			console.error('Error fetching discount table pricing:', error);
+		} finally {
+			setSetOptions(
+				Array.from(
+					{
+						length: 200,
+					},
+					(_, index) => {
+						const val = 1 + index;
+						return (
+							<option key={index} value={val}>
+								{val}
+							</option>
+						);
+					}
+				)
+			);
+		}
+	}
+
+	useEffect(() => {
+		fetchQuantityDiscountPricing();
+	}, []);
 
 	return (
 		<>
