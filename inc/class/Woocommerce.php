@@ -1847,13 +1847,19 @@ class Woocommerce {
 		$text           = 'Your order is being processed.';
 		$from_order_id  = $order->get_meta( '_from_order_id' );
 		$second_payment = $order->get_meta( 'second_payment' );
+		$original_order_ids = $order->get_meta( '_original_order_ids' );
 		if ( isset( $from_order_id ) && ! empty( $from_order_id ) ) {
 			// Change the thank you text
-			$text = 'Thank you for the payment 123';
+			$text = 'Thank you for the payment';
 		}
 		if ( isset( $second_payment ) && ! empty( $second_payment ) ) {
-			$text = 'Thank you for the payment second';
+			$text = 'Thank you for the payment';
 		}
+
+		if ( isset( $original_order_ids ) && ! empty( $original_order_ids ) ) {
+			$text = 'Thank you for the payment';
+		}
+
 		return $text;
 	}
 

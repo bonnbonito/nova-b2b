@@ -76,7 +76,7 @@ export default function OrderActions({ order }) {
 					}
 
 					return (
-						<DropdownMenuItem>
+						<DropdownMenuItem key={actionKey}>
 							<a
 								className={`text-black flex no-underline items-center hover:text-nova-primary print-link ${actionKey}`}
 								key={actionKey}

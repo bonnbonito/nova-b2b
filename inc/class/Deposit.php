@@ -52,6 +52,26 @@ class Deposit {
 		add_action( 'woocommerce_admin_order_totals_after_tax', array( $this, 'add_deposit_row' ) );
 		add_filter( 'woocommerce_payment_successful_result', array( $this, 'successful_payment' ), 20, 2 );
 		add_filter( 'woocommerce_cod_process_payment_order_status', array( $this, 'cod_status' ), 20, 2 );
+		add_action( 'woocommerce_payment_complete', array( $this, 'update_original_orders_after_payment' ), 20, 1 );
+	}
+
+	public function update_original_orders_after_payment( $order_id ) {
+		$order = wc_get_order( $order_id );
+
+		$original_order_ids = $order->get_meta( '_original_order_ids' );
+
+		if ( $original_order_ids && is_array( $original_order_ids ) ) {
+			foreach ( $original_order_ids as $original_order_id ) {
+				$original_order = wc_get_order( $original_order_id );
+				if ( $original_order ) {
+					// Update the status of the original orders
+					$original_order->payment_complete( $order->get_transaction_id() );
+					$original_order->add_order_note( sprintf( __( 'Payment completed via combined order #%s', 'nova-b2b' ), $order->get_order_number() ) );
+				}
+			}
+			// Optionally, update the combined order status
+			$order->update_status( 'completed' );
+		}
 	}
 
 	public function cod_status( $status, $order ) {

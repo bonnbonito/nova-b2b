@@ -4946,7 +4946,9 @@ function OrderActions({
         title = 'View Order';
         break;
     }
-    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_DropdownMenu__WEBPACK_IMPORTED_MODULE_2__.DropdownMenuItem, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_DropdownMenu__WEBPACK_IMPORTED_MODULE_2__.DropdownMenuItem, {
+      key: actionKey
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
       className: `text-black flex no-underline items-center hover:text-nova-primary print-link ${actionKey}`,
       key: actionKey,
       href: actionValue.url,
@@ -5381,6 +5383,360 @@ function Pagination({
 
 /***/ }),
 
+/***/ "./src/components/PendingOrderTable.js":
+/*!*********************************************!*\
+  !*** ./src/components/PendingOrderTable.js ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ PendingOrderTable)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function PendingOrderTable({
+  orders,
+  orderTotalSort,
+  setOrderTotalSort,
+  sortTotal,
+  dueDateSort,
+  setDueDateSort,
+  sortDueDate
+}) {
+  // State to manage selected orders
+  const [selectedOrders, setSelectedOrders] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+
+  // Determine if all orders are selected
+  const isAllSelected = orders.length > 0 && selectedOrders.length === orders.length;
+
+  // Function to handle toggling all orders
+  const handleSelectAll = () => {
+    if (isAllSelected) {
+      // Deselect all orders
+      setSelectedOrders([]);
+    } else {
+      // Select all orders
+      const allOrderIds = orders.map(order => order.id);
+      setSelectedOrders(allOrderIds);
+    }
+  };
+
+  // Function to handle individual order selection
+  const handleSelectOrderChange = orderId => event => {
+    const isChecked = event.target.checked;
+    if (isChecked) {
+      // Add order ID to selectedOrders if not already selected
+      setSelectedOrders(prevSelected => [...prevSelected, orderId]);
+    } else {
+      // Remove order ID from selectedOrders
+      setSelectedOrders(prevSelected => prevSelected.filter(id => id !== orderId));
+    }
+  };
+  const toggleSortTotal = () => {
+    if (orderTotalSort === 'none') {
+      setOrderTotalSort('asc');
+      sortTotal('asc');
+    } else if (orderTotalSort === 'asc') {
+      setOrderTotalSort('desc');
+      sortTotal('desc');
+    } else {
+      setOrderTotalSort('none');
+      sortTotal('none');
+    }
+  };
+  const toggleSortDueDate = () => {
+    if (dueDateSort === 'none') {
+      setDueDateSort('asc');
+      sortDueDate('asc');
+    } else if (dueDateSort === 'asc') {
+      setDueDateSort('desc');
+      sortDueDate('desc');
+    } else {
+      setDueDateSort('none');
+      sortDueDate('none');
+    }
+  };
+  const nonce = window.NovaOrders?.nonce || '';
+
+  // Calculate the total sum of selected orders
+  const totalSumOfOrders = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
+    const sum = orders.filter(order => selectedOrders.includes(order.id)).reduce((acc, order) => acc + parseFloat(order.order_total), 0);
+    return sum.toFixed(2);
+  }, [selectedOrders, orders]);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "table-responsive overflow-x-auto"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("table", {
+    className: "shop_table border-collapse w-full min-w-[800px]"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("thead", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
+    className: "font-medium p-4 pt-0 pb-3 text-black text-left font-title uppercase"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    type: "checkbox",
+    onChange: handleSelectAll,
+    checked: isAllSelected
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
+    className: "font-medium p-4 pt-0 pb-3 text-black text-left font-title uppercase"
+  }, "Order"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
+    className: "font-medium p-4 pt-0 pb-3 text-black text-left font-title uppercase"
+  }, "Date"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
+    className: "font-medium p-4 pt-0 pb-3 text-black text-left font-title uppercase"
+  }, "Payment Type"), NovaOrders.has_payment_types.length > 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
+    className: "font-medium p-4 pt-0 pb-3 text-black text-left font-title uppercase cursor-pointer",
+    onClick: toggleSortDueDate
+  }, "Due Date ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: `sort-by ${dueDateSort}`
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
+    className: "font-medium p-4 pt-0 pb-3 text-black text-left font-title uppercase cursor-pointer",
+    onClick: toggleSortTotal
+  }, "Total ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: `sort-by ${orderTotalSort}`
+  })))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tbody", {
+    className: "text-sm"
+  }, orders.map(order => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", {
+    key: order.id,
+    className: `hover:bg-gray-100 ${order.status}`
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
+    className: "py-4 px-4"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    type: "checkbox",
+    checked: selectedOrders.includes(order.id),
+    onChange: handleSelectOrderChange(order.id)
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
+    className: "py-4 px-4"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+    href: order.order_url,
+    className: "text-nova-primary"
+  }, "#", order.order_number)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
+    className: "py-4 px-4"
+  }, order.date), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
+    className: `py-4 px-4 capitalize order-actions ${order.status} ${order.is_overdue ? 'text-red-500 flex items-center' : ''}`
+  }, order.payment_select), NovaOrders.has_payment_types && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
+    className: "py-4 px-4"
+  }, order.due_date), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
+    dangerouslySetInnerHTML: {
+      __html: order.total
+    },
+    className: "py-4 px-4 font-title"
+  })))))), selectedOrders.length > 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", {
+    method: "post",
+    action: ""
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    type: "hidden",
+    name: "pay_multiple_orders_nonce",
+    value: nonce
+  }), selectedOrders.map(orderId => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    key: orderId,
+    type: "hidden",
+    name: "order_ids[]",
+    value: orderId
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    type: "submit",
+    name: "pay_multiple_orders_submit",
+    className: "bg-nova-primary text-white py-2 px-4 rounded-md mt-4"
+  }, "Pay Selected Invoice (Total: $", totalSumOfOrders, ")")));
+}
+
+/***/ }),
+
+/***/ "./src/components/PendingOrders.js":
+/*!*****************************************!*\
+  !*** ./src/components/PendingOrders.js ***!
+  \*****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Pagination__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Pagination */ "./src/components/Pagination.js");
+/* harmony import */ var _PendingOrderTable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./PendingOrderTable */ "./src/components/PendingOrderTable.js");
+/* harmony import */ var _Search__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Search */ "./src/components/Search.js");
+
+
+
+
+
+function PendingOrders() {
+  const [orders, setOrders] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(NovaOrders.pending_payment_orders);
+  const [orderTotalSort, setOrderTotalSort] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('none');
+  const [dueDateSort, setDueDateSort] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('none');
+  const [currentPage, setCurrentPage] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(1);
+  const itemsPerPage = 10;
+  const totalPages = Math.ceil(orders.length / itemsPerPage);
+  const currentOrders = orders.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const handlePageChange = pageNum => {
+    setCurrentPage(pageNum);
+  };
+  const handleFilter = filters => {
+    const {
+      searchTerm,
+      searchStatus,
+      startDate,
+      endDate,
+      orderTotal,
+      totalSort
+    } = filters;
+    let filteredOrders = NovaOrders.orders;
+    setDueDateSort('none');
+
+    // Filter by search term
+    if (searchTerm.length > 0) {
+      filteredOrders = filteredOrders.filter(order => {
+        /** remove non numeric characters to searchTerm */
+        const orderID = '#' + order.order_number;
+        const poSearch = order.po_number && order.po_number.includes(searchTerm);
+        return orderID.includes(searchTerm) || poSearch;
+      });
+    }
+
+    // Filter by status
+    if (searchStatus !== 'all') {
+      // if overdue
+      if (searchStatus === 'overdue') {
+        filteredOrders = filteredOrders.filter(order => order.is_overdue === true);
+      }
+      // if not overdue
+      else {
+        filteredOrders = filteredOrders.filter(order => order.status === searchStatus);
+      }
+    }
+
+    // Filter by date range
+    if (startDate || endDate) {
+      filteredOrders = filteredOrders.filter(order => {
+        const orderDate = new Date(order.date);
+        let isValid = true; // Start assuming the order is valid
+
+        if (startDate) {
+          const start = new Date(startDate);
+          if (orderDate < start) {
+            isValid = false; // If the order date is before the start date, it's not valid
+          }
+        }
+        if (endDate) {
+          const end = new Date(endDate);
+          if (orderDate > end) {
+            isValid = false; // If the order date is after the end date, it's not valid
+          }
+        }
+        return isValid;
+      });
+    }
+
+    // Filter by order total
+    if (parseFloat(orderTotal) > 0) {
+      switch (totalSort) {
+        case 'equals':
+          filteredOrders = filteredOrders.filter(order => parseFloat(order.order_total) === parseFloat(orderTotal));
+          break;
+        case 'less':
+          filteredOrders = filteredOrders.filter(order => parseFloat(order.order_total) <= parseFloat(orderTotal));
+          break;
+        case 'greater':
+          filteredOrders = filteredOrders.filter(order => parseFloat(order.order_total) >= parseFloat(orderTotal));
+          break;
+        default:
+          break;
+      }
+    }
+    if (orderTotalSort === 'asc') {
+      filteredOrders = filteredOrders.sort((a, b) => a.order_total - b.order_total);
+    }
+    if (orderTotalSort === 'desc') {
+      filteredOrders = filteredOrders.sort((a, b) => b.order_total - a.order_total);
+    }
+    if (dueDateSort === 'asc') {
+      filteredOrders = filteredOrders.filter(order => order.due_date).sort((a, b) => new Date(a.due_date) - new Date(b.due_date));
+    }
+    if (dueDateSort === 'desc') {
+      filteredOrders = filteredOrders.filter(order => order.due_date).sort((a, b) => new Date(b.due_date) - new Date(a.due_date));
+    }
+    setOrders(filteredOrders);
+    setCurrentPage(1);
+  };
+  const handleReset = reset => {
+    if (reset) {
+      setOrders(NovaOrders.orders);
+      setCurrentPage(1);
+    }
+  };
+  const sortTotal = sort => {
+    setDueDateSort('none');
+    if (sort === 'asc') {
+      setOrders(prev => [...prev].sort((a, b) => parseFloat(a.order_total) - parseFloat(b.order_total)));
+    }
+    if (sort === 'desc') {
+      setOrders(prev => [...prev].sort((a, b) => parseFloat(b.order_total) - parseFloat(a.order_total)));
+    }
+    if (sort === 'none') {
+      setOrders(prev => [...prev].sort((a, b) => parseFloat(b.id) - parseFloat(a.id)));
+    }
+  };
+  const sortDueDate = sort => {
+    setOrderTotalSort('none');
+    setOrders(prev => {
+      let sortedOrders = [...prev];
+
+      // First, bring orders with due_date and status 'pending' to the front
+      sortedOrders.sort((a, b) => {
+        if (a.due_date && a.status === 'pending' && !(b.due_date && b.status === 'pending')) return -1;
+        if (!(a.due_date && a.status === 'pending') && b.due_date && b.status === 'pending') return 1;
+        return 0;
+      });
+
+      // Then sort them by due_date if both orders have due_date and status 'pending'
+      if (sort === 'asc') {
+        sortedOrders.sort((a, b) => {
+          if (a.due_date && b.due_date && a.status === 'pending' && b.status === 'pending') {
+            return new Date(a.due_date) - new Date(b.due_date);
+          }
+          return 0;
+        });
+      } else if (sort === 'desc') {
+        sortedOrders.sort((a, b) => {
+          if (a.due_date && b.due_date && a.status === 'pending' && b.status === 'pending') {
+            return new Date(b.due_date) - new Date(a.due_date);
+          }
+          return 0;
+        });
+      }
+
+      // Default sorting when 'none' is selected
+      if (sort === 'none') {
+        sortedOrders.sort((a, b) => parseFloat(b.id) - parseFloat(a.id));
+      }
+      return sortedOrders;
+    });
+  };
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, orders.length > 0 ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_PendingOrderTable__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    orders: currentOrders,
+    orderTotalSort: orderTotalSort,
+    setOrderTotalSort: setOrderTotalSort,
+    dueDateSort: dueDateSort,
+    setDueDateSort: setDueDateSort,
+    sortTotal: sortTotal,
+    sortDueDate: sortDueDate
+  }), totalPages > 1 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Pagination__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    currentPage: currentPage,
+    totalPages: totalPages,
+    onPageChange: handlePageChange
+  })) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    class: "bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative",
+    role: "alert"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    class: "block sm:inline text-sm"
+  }, "No orders found for the given search criteria.")));
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PendingOrders);
+
+/***/ }),
+
 /***/ "./src/components/Search.js":
 /*!**********************************!*\
   !*** ./src/components/Search.js ***!
@@ -5513,7 +5869,7 @@ function SearchDates({
     placeholder: "FROM",
     onClick: onClick,
     ref: ref,
-    value: value,
+    defaultValue: value,
     className: "w-full border-none rounded-sm p-2 placeholder:text-slate-400 placeholder:font-title text-sm"
   }));
   const EndDateInput = (0,react__WEBPACK_IMPORTED_MODULE_0__.forwardRef)(({
@@ -5524,7 +5880,7 @@ function SearchDates({
     placeholder: "TO",
     onClick: onClick,
     ref: ref,
-    value: value,
+    defaultValue: value,
     className: "w-full border-none rounded-sm p-2 placeholder:text-slate-400 placeholder:font-title text-sm"
   }));
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
@@ -28315,7 +28671,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom/client */ "./node_modules/react-dom/client.js");
 /* harmony import */ var _components_Orders__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/Orders */ "./src/components/Orders.js");
-/* harmony import */ var _index_scss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./index.scss */ "./src/index.scss");
+/* harmony import */ var _components_PendingOrders__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/PendingOrders */ "./src/components/PendingOrders.js");
+/* harmony import */ var _index_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./index.scss */ "./src/index.scss");
+
 
 
 
@@ -28324,6 +28682,10 @@ __webpack_require__.r(__webpack_exports__);
 if (document.querySelector('#orderTable')) {
   const root = react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot(document.querySelector('#orderTable'));
   root.render((0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Orders__WEBPACK_IMPORTED_MODULE_2__["default"], null));
+}
+if (document.querySelector('#orderPendingTable')) {
+  const root = react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot(document.querySelector('#orderPendingTable'));
+  root.render((0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_PendingOrders__WEBPACK_IMPORTED_MODULE_3__["default"], null));
 }
 })();
 

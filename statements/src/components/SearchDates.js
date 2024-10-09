@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from 'react';
+import React, { forwardRef } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -14,7 +14,7 @@ export default function SearchDates({
 			placeholder="FROM"
 			onClick={onClick}
 			ref={ref}
-			value={value}
+			defaultValue={value}
 			className="w-full border-none rounded-sm p-2 placeholder:text-slate-400 placeholder:font-title text-sm"
 		/>
 	));
@@ -25,7 +25,7 @@ export default function SearchDates({
 			placeholder="TO"
 			onClick={onClick}
 			ref={ref}
-			value={value}
+			defaultValue={value}
 			className="w-full border-none rounded-sm p-2 placeholder:text-slate-400 placeholder:font-title text-sm"
 		/>
 	));
