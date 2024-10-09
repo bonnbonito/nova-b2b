@@ -5532,7 +5532,11 @@ function PendingOrderTable({
     type: "hidden",
     name: "order_ids[]",
     value: orderId
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    type: "hidden",
+    name: "customer_id",
+    value: "pay_multiple_orders"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     type: "submit",
     name: "pay_multiple_orders_submit",
     className: "bg-nova-primary text-white py-2 px-4 rounded-md mt-4"

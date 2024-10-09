@@ -170,6 +170,7 @@ export default function PendingOrderTable({
 							value={orderId}
 						/>
 					))}
+					<input type="hidden" name="customer_id" value="pay_multiple_orders" />
 					<button
 						type="submit"
 						name="pay_multiple_orders_submit"
