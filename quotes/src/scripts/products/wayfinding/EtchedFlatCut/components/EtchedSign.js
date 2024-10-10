@@ -14,6 +14,8 @@ import UploadFiles from '../../../../UploadFiles';
 import { convertJson } from '../../../../utils/ConvertJson';
 import { quantityDiscount } from '../../../../utils/Pricing';
 
+import { graphicsStyleOptions } from '../../options';
+
 import {
 	arrayRange,
 	waterProofOptions,
@@ -66,8 +68,6 @@ const anodizedColorOptions = [
 	'Gold',
 	'Champagne Gold',
 ];
-
-const graphicsStyleOptions = ['Raised', 'Recessed', 'Extra Recessed'];
 
 const edgesOptionsDefault = ['Square'];
 
@@ -128,7 +128,7 @@ export const EtchedSign = ({ item }) => {
 		item.etchedAnodizedColor ?? ''
 	);
 	const [graphicsStyle, setGraphicsStyle] = useState(
-		item.etchedGraphicsStyle ?? ''
+		item.etchedGraphicsStyle ?? 'Recessed'
 	);
 	const [edges, setEdges] = useState(item.etchedEdges ?? 'Square');
 	const [edgesOptions, setEdgesOptions] = useState(edgesOptionsDefault);

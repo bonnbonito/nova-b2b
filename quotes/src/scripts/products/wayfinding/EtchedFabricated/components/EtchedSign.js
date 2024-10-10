@@ -19,6 +19,8 @@ import { quantityDiscount } from '../../../../utils/Pricing';
 import { colorOptions } from '../../../../utils/ColorOptions';
 import ColorsDropdown from '../../../../utils/ColorsDropdown';
 
+import { graphicsStyleOptions } from '../../options';
+
 const metalThicknessOptions = ['0.5"', '1"', '1.5"', '2"'];
 
 const electroplatedOptions = [
@@ -60,6 +62,10 @@ export const EtchedSign = ({ item }) => {
 	const [height, setHeight] = useState(item.etchedHeight ?? '');
 	const [metalThickness, setMetalThickness] = useState(
 		item.etchedMetalThickness ?? ''
+	);
+
+	const [graphicsStyle, setGraphicsStyle] = useState(
+		item.etchedGraphicsStyle ?? 'Recessed'
 	);
 
 	const [finishing, setFinishing] = useState(item.etchedFinishing ?? '');
@@ -116,6 +122,7 @@ export const EtchedSign = ({ item }) => {
 					etchedFinishing: finishing,
 					etchedPaintedColor: color?.name,
 					etchedElectroplated: electroplated,
+					etchedGraphicsStyle: graphicsStyle,
 					studLength,
 					customColor,
 					fileNames,
@@ -160,6 +167,7 @@ export const EtchedSign = ({ item }) => {
 		usdTotalNoDiscount,
 		cadTotalNoDiscount,
 		cadDiscount,
+		graphicsStyle,
 	]);
 
 	const checkAndAddMissingFields = useCallback(() => {
@@ -190,6 +198,8 @@ export const EtchedSign = ({ item }) => {
 		if (metalThickness) {
 			if (!studLength) missingFields.push('Select Stud Length');
 		}
+
+		if (!graphicsStyle) missingFields.push('Select Graphics Style');
 
 		if (!waterproof) missingFields.push('Select Environment');
 
@@ -230,6 +240,7 @@ export const EtchedSign = ({ item }) => {
 		finishing,
 		electroplated,
 		customColor,
+		graphicsStyle,
 	]);
 
 	const computePricing = () => {
@@ -269,6 +280,10 @@ export const EtchedSign = ({ item }) => {
 		}
 
 		if (finishing === 'Electroplated') {
+			tempTotal *= 1.2;
+		}
+
+		if (graphicsStyle === 'Extra Recessed') {
 			tempTotal *= 1.2;
 		}
 
@@ -362,6 +377,7 @@ export const EtchedSign = ({ item }) => {
 		mounting,
 		sets,
 		quantityDiscountTable,
+		graphicsStyle,
 	]);
 
 	useEffect(() => {
@@ -493,6 +509,21 @@ export const EtchedSign = ({ item }) => {
 						value={electroplated}
 					/>
 				)}
+
+				<Dropdown
+					title="GRAPHICS STYLE"
+					onChange={(e) => setGraphicsStyle(e.target.value)}
+					options={graphicsStyleOptions.map((option) => (
+						<option
+							key={option}
+							value={option}
+							defaultValue={option === graphicsStyle}
+						>
+							{option}
+						</option>
+					))}
+					value={graphicsStyle}
+				/>
 
 				<Dropdown
 					title="Environment"
