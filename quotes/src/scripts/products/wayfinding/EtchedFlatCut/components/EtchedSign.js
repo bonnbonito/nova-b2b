@@ -405,7 +405,7 @@ export const EtchedSign = ({ item }) => {
 			tempTotal = tempTotal + 100;
 		}
 
-		tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.2;
+		tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.02;
 
 		if (finishing === 'Polished') {
 			tempTotal *= 1.1;

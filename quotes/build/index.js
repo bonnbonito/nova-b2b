@@ -34559,7 +34559,7 @@ const EtchedSign = ({
     if (parseInt(width) > 43 || parseInt(height) > 43) {
       tempTotal = tempTotal + 100;
     }
-    tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.INDOOR_NOT_WATERPROOF ? 1 : 1.2;
+    tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.INDOOR_NOT_WATERPROOF ? 1 : 1.02;
     if (finishing === 'Polished') {
       tempTotal *= 1.1;
     }
@@ -35167,7 +35167,7 @@ const EtchedSign = ({
     if (parseInt(width) > 43 || parseInt(height) > 43) {
       tempTotal = tempTotal + 100;
     }
-    tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.INDOOR_NOT_WATERPROOF ? 1 : 1.2;
+    tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.INDOOR_NOT_WATERPROOF ? 1 : 1.02;
     if (finishing === 'Polished') {
       tempTotal *= 1.1;
     }
