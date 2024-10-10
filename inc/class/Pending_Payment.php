@@ -1275,7 +1275,6 @@ class Pending_Payment {
 		}
 
 		if ( $pending_order ) {
-			$order          = wc_get_order( $order_id );
 			$original_total = get_post_meta( $order_id, '_original_total', true );
 			$payment_select = get_post_meta( $order_id, '_payment_select', true ) ? (int) get_post_meta( $order_id, '_payment_select', true ) : '';
 			$pending_total  = get_post_meta( $order_id, '_pending_payment', true );
