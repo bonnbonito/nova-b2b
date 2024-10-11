@@ -30,6 +30,14 @@ class Order_History {
 		add_filter( 'woocommerce_get_endpoint_url', array( $this, 'modify_endpoint_url' ), 10, 4 );
 		add_filter( 'nova_user_pending_payments_orders', array( $this, 'pending_orders' ), 10, 2 );
 		add_action( 'template_redirect', array( $this, 'handle_pay_multiple_orders_submission' ) );
+		add_filter( 'nova_account_title_filter', array( $this, 'pending_order_title' ) );
+	}
+
+	public function pending_order_title( $title ) {
+		if ( isset( $_GET['order_status'] ) && 'pending' === $_GET['order_status'] ) {
+			return 'Pending Payment Orders';
+		}
+		return $title;
 	}
 
 	public function handle_pay_multiple_orders_submission() {

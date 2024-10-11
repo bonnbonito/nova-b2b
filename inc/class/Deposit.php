@@ -44,7 +44,7 @@ class Deposit {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_nova_scripts' ) );
 		add_action( 'woocommerce_order_status_completed', array( $this, 'order_status_completed' ), 99 );
 		// add_action( 'woocommerce_order_status_delivered', array( $this, 'insert_delivered_date' ) );
-		add_action( 'woocommerce_order_status_shipped', array( $this, 'insert_shipped_date' ) );
+		add_action( 'woocommerce_order_status_shipped', array( $this, 'order_status_shipped' ) );
 		add_action( 'woocommerce_before_cart', array( $this, 'remove_wc_sessions_on_cart' ) );
 		add_action( 'woocommerce_review_order_before_submit', array( $this, 'output_deposit_selection' ) );
 		add_filter( 'woocommerce_payment_complete_order_status', array( $this, 'change_payment_status' ), 10, 3 );
@@ -174,9 +174,16 @@ class Deposit {
 		$today = date( 'Ymd' );
 		update_post_meta( $order_id, 'delivered_date', $today );
 	}
-	public function insert_shipped_date( $order_id ) {
+	public function order_status_shipped( $order_id ) {
 		$today = date( 'Ymd' );
 		update_post_meta( $order_id, 'shipped_date', $today );
+
+		$needs_payment = get_post_meta( $order_id, 'needs_payment', true );
+		if ( ! $needs_payment ) {
+			$order = wc_get_order( $order_id );
+			$order->set_status( 'completed' );
+			$order->save();
+		}
 	}
 
 	public function order_status_completed( $order_id ) {

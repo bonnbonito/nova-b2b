@@ -5735,7 +5735,7 @@ function PendingOrders() {
     role: "alert"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     class: "block sm:inline text-sm"
-  }, "No orders found for the given search criteria.")));
+  }, "No pending orders.")));
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PendingOrders);
 
