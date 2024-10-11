@@ -63,13 +63,17 @@ class Order_History {
 				// Proceed to payment
 				$this->create_combined_order_and_redirect( $orders_to_pay, $total_amount );
 			} else {
-				wc_add_notice( __( 'Unable to process the selected orders.', 'text-domain' ), 'error' );
+				wc_add_notice( __( 'Unable to process the selected orders.', 'nova-b2b' ), 'error' );
 			}
 		}
 	}
 
-	public function create_combined_order_and_redirect( $orders_to_pay, $total_amount ) {
+	public function create_combined_order_and_redirect( $orders_to_pay, $total_amount_order ) {
 		$current_user_id = get_current_user_id();
+		$total_amount    = 0;
+
+		// Collect order IDs
+		$original_order_ids = array();
 
 		// Create a new order
 		$combined_order = wc_create_order();
@@ -77,22 +81,54 @@ class Order_History {
 		// Set customer
 		$combined_order->set_customer_id( $current_user_id );
 
-		// Add meta data to link original orders
-		$original_order_ids = array();
-
+		// Loop through each original order
 		foreach ( $orders_to_pay as $order ) {
-			$original_order_ids[] = $order->get_id();
-			$combined_order->add_order_note( sprintf( __( 'Includes order #%s', 'nova-b2b' ), $order->get_order_number() ) );
+			$order_id             = $order->get_id();
+			$original_order_ids[] = $order_id;
+
+			$currency = $order->get_currency();
+
+			// Get the order total
+			$order_total   = $order->get_total();
+			$total_amount += $order_total;
+
+			// Create a new order item for this order
+			$item = new \WC_Order_Item_Product();
+
+			// Set the item name to the order ID
+			$item->set_name( 'Order #' . $order->get_order_number() );
+
+			// Set quantity to 1
+			$item->set_quantity( 1 );
+
+			// Set total and subtotal
+			$item->set_total( $order_total );
+			$item->set_subtotal( $order_total );
+
+			// Add the item to the combined order
+			$combined_order->add_item( $item );
 		}
 
+		$combined_order->set_currency( $currency );
+
+		// Add meta data to link original orders
 		$combined_order->update_meta_data( '_original_order_ids', $original_order_ids );
 
-		// Set order total
+		// Mark the order as temporary
+		$combined_order->update_meta_data( '_is_temporary_combined_order', true );
+
+		$combined_order->add_order_note( __( 'This order is a combined payment for multiple orders.', 'nova-2' ) );
+
+		// Set the order as virtual (no shipping)
+		$combined_order->set_shipping_total( 0 );
+		$combined_order->set_shipping_tax( 0 );
+		$combined_order->set_cart_tax( 0 );
 		$combined_order->set_total( $total_amount );
 
 		// Set status to pending payment
 		$combined_order->set_status( 'pending' );
 
+		// Save the order
 		$combined_order->save();
 
 		// Redirect to payment page
@@ -192,9 +228,9 @@ class Order_History {
 	public function account_statement_content() {
 		?>
 <div id="nova">
-    <div id="hello"></div>
+	<div id="hello"></div>
 </div>
-<?php
+		<?php
 	}
 
 	public function get_orders() {

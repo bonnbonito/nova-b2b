@@ -42,7 +42,7 @@ class Deposit {
 		add_filter( 'woocommerce_order_is_paid', array( $this, 'order_is_paid' ), 10, 2 );
 		add_action( 'nova_pending_payments_after_content', array( $this, 'pending_page_after_content' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_nova_scripts' ) );
-		add_action( 'woocommerce_order_status_completed', array( $this, 'needs_payment_update' ), 99 );
+		add_action( 'woocommerce_order_status_completed', array( $this, 'order_status_completed' ), 99 );
 		// add_action( 'woocommerce_order_status_delivered', array( $this, 'insert_delivered_date' ) );
 		add_action( 'woocommerce_order_status_shipped', array( $this, 'insert_shipped_date' ) );
 		add_action( 'woocommerce_before_cart', array( $this, 'remove_wc_sessions_on_cart' ) );
@@ -64,7 +64,6 @@ class Deposit {
 			foreach ( $original_order_ids as $original_order_id ) {
 				$original_order = wc_get_order( $original_order_id );
 				if ( $original_order ) {
-					// Update the status of the original orders
 					$original_order->payment_complete( $order->get_transaction_id() );
 					$original_order->add_order_note( sprintf( __( 'Payment completed via combined order #%s', 'nova-b2b' ), $order->get_order_number() ) );
 				}
@@ -76,9 +75,12 @@ class Deposit {
 
 	public function cod_status( $status, $order ) {
 		$second_payment = $order->get_meta( 'second_payment' );
+		$combined_order = $order->get_meta( '_original_order_ids' );
+		if ( $combined_order ) {
+			return 'wc-completed';
+		}
 		if ( $second_payment ) {
 			$order_status = $order->get_status();
-			error_log( 'Second Order status ' . $order_status );
 			return $order_status;
 		}
 		return $status;
@@ -177,12 +179,25 @@ class Deposit {
 		update_post_meta( $order_id, 'shipped_date', $today );
 	}
 
-	public function needs_payment_update( $order_id ) {
+	public function order_status_completed( $order_id ) {
 		$order          = wc_get_order( $order_id );
 		$needs_payment  = $order->get_meta( 'needs_payment' );
 		$second_payment = $order->get_meta( 'second_payment' );
 		if ( $needs_payment && $second_payment ) {
 			delete_post_meta( $order_id, 'needs_payment' );
+		}
+
+		$original_order_ids = $order->get_meta( '_original_order_ids' );
+
+		if ( $original_order_ids && is_array( $original_order_ids ) ) {
+			foreach ( $original_order_ids as $original_order_id ) {
+				$original_order = wc_get_order( $original_order_id );
+				if ( $original_order ) {
+					$original_order->set_status( 'completed' );
+					$original_order->save();
+					$original_order->add_order_note( sprintf( __( 'Order completed via combined order #%s', 'nova-b2b' ), $order->get_order_number() ) );
+				}
+			}
 		}
 	}
 
@@ -567,10 +582,10 @@ class Deposit {
 	public function pending_page_after_content() {
 		?>
 <div class="wrap">
-    <div id="depositTable"></div>
+	<div id="depositTable"></div>
 
 </div>
-<?php
+		<?php
 	}
 
 	public function output_deposit_selection() {
@@ -589,34 +604,34 @@ class Deposit {
 		$chosen = empty( $chosen ) ? '0' : $chosen;
 		?>
 <fieldset>
-    <legend class="px-4 uppercase"><span><?php esc_html_e( 'Payment Type', 'woocommerce' ); ?></span></legend>
-    <div class="grid md:grid-cols-3 gap-4 update_totals_on_change">
-        <div class="cursor-pointer h-full">
-            <label for="payment_0"
-                class="block h-full justify-end p-3 border rounded-md w-full max-w-sm cursor-pointer hover:border-slate-500 hover:bg-slate-200 hover:shadow-lg">
-                <input class="bg-none" id="payment_0" type="radio" name="deposit_chosen" value="0"
-                    <?php echo ( '0' == $chosen ? 'checked' : '' ); ?>>
-                <span>Full</span>
-                <span class="text-sm font-body block mt-2 hidden">Description</span>
-            </label>
-        </div>
-        <?php
+	<legend class="px-4 uppercase"><span><?php esc_html_e( 'Payment Type', 'woocommerce' ); ?></span></legend>
+	<div class="grid md:grid-cols-3 gap-4 update_totals_on_change">
+		<div class="cursor-pointer h-full">
+			<label for="payment_0"
+				class="block h-full justify-end p-3 border rounded-md w-full max-w-sm cursor-pointer hover:border-slate-500 hover:bg-slate-200 hover:shadow-lg">
+				<input class="bg-none" id="payment_0" type="radio" name="deposit_chosen" value="0"
+					<?php echo ( '0' == $chosen ? 'checked' : '' ); ?>>
+				<span>Full</span>
+				<span class="text-sm font-body block mt-2 hidden">Description</span>
+			</label>
+		</div>
+		<?php
 		foreach ( $payments_selection as $key => $selection ) {
 			?>
-        <div class="cursor-pointer h-full">
-            <label for="payment_<?php echo $selection['id']; ?>"
-                class="block h-full justify-end p-3 border rounded-md w-full max-w-sm cursor-pointer hover:border-slate-500 hover:bg-slate-200 hover:shadow-lg">
-                <input class="bg-none" id="payment_<?php echo $selection['id']; ?>" type="radio" name="deposit_chosen"
-                    value="<?php echo $selection['id']; ?>" id="payment_<?php echo $selection['id']; ?>"
-                    <?php echo ( $selection['id'] == $chosen ? 'checked' : '' ); ?>>
-                <span><?php echo $selection['title']; ?></span>
-                <span class="text-sm font-body block mt-2"><?php echo $selection['description']; ?></span>
-            </label>
-        </div>
-        <?php } ?>
-    </div>
+		<div class="cursor-pointer h-full">
+			<label for="payment_<?php echo $selection['id']; ?>"
+				class="block h-full justify-end p-3 border rounded-md w-full max-w-sm cursor-pointer hover:border-slate-500 hover:bg-slate-200 hover:shadow-lg">
+				<input class="bg-none" id="payment_<?php echo $selection['id']; ?>" type="radio" name="deposit_chosen"
+					value="<?php echo $selection['id']; ?>" id="payment_<?php echo $selection['id']; ?>"
+					<?php echo ( $selection['id'] == $chosen ? 'checked' : '' ); ?>>
+				<span><?php echo $selection['title']; ?></span>
+				<span class="text-sm font-body block mt-2"><?php echo $selection['description']; ?></span>
+			</label>
+		</div>
+		<?php } ?>
+	</div>
 </fieldset>
 
-<?php
+		<?php
 	}
 }
