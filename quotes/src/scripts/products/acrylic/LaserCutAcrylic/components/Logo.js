@@ -36,7 +36,7 @@ import {
 } from '../../../../utils/defaults';
 
 export function Logo({ item }) {
-	const { signage, setSignage, setMissing } = useAppContext();
+	const { signage, setSignage, setMissing, hasUploadedFile } = useAppContext();
 
 	const [selectedMounting, setSelectedMounting] = useState(item.mounting ?? '');
 	const [studLength, setStudLength] = useState(item.studLength ?? '');
@@ -456,8 +456,10 @@ export function Logo({ item }) {
 		}
 		if (!sets) missingFields.push('Select Quantity');
 
-		if (!fileUrls || fileUrls.length === 0)
-			missingFields.push('Upload a PDF/AI File');
+		if (!hasUploadedFile) {
+			if (!fileUrls || fileUrls.length === 0)
+				missingFields.push('Upload a PDF/AI File');
+		}
 
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
@@ -495,22 +497,7 @@ export function Logo({ item }) {
 
 	useEffect(() => {
 		checkAndAddMissingFields();
-	}, [
-		width,
-		height,
-		selectedThickness,
-		comments,
-		selectedMounting,
-		waterproof,
-		fileUrls,
-		fileNames,
-		filePaths,
-		files,
-		selectedFinishing,
-		sets,
-		studLength,
-		spacerStandoffDistance,
-	]);
+	}, [signage, hasUploadedFile]);
 
 	useOutsideClick([colorRef], () => {
 		if (!openColor) return;

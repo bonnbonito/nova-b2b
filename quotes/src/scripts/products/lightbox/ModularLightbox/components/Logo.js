@@ -43,8 +43,13 @@ const uvPrintedCoverOptions = [
 ];
 
 export function Logo({ item }) {
-	const { signage, setSignage, setMissing, updateSignageItem } =
-		useAppContext();
+	const {
+		signage,
+		setSignage,
+		setMissing,
+		updateSignageItem,
+		hasUploadedFile,
+	} = useAppContext();
 
 	const [lightboxType, setLightboxType] = useState(item.lightboxType ?? '');
 	const [uvPrintedCover, setUvPrintedCover] = useState(
@@ -188,8 +193,10 @@ export function Logo({ item }) {
 		if (!uvPrintedCover) missingFields.push('Select UV Printed Cover');
 
 		if (uvPrintedCover && uvPrintedCover === 'Yes') {
-			if (!fileUrls || fileUrls.length === 0)
-				missingFields.push('Upload a PDF/AI File');
+			if (!hasUploadedFile) {
+				if (!fileUrls || fileUrls.length === 0)
+					missingFields.push('Upload a PDF/AI File');
+			}
 		}
 
 		if (!waterproof) missingFields.push('Select Environment');
@@ -236,7 +243,7 @@ export function Logo({ item }) {
 
 	useEffect(() => {
 		checkAndAddMissingFields();
-	}, [lightboxType, uvPrintedCover, waterproof, fileUrls, sets]);
+	}, [signage, hasUploadedFile]);
 
 	useEffect(() => {
 		async function fetchLogoPricing() {

@@ -2696,6 +2696,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utils_helpers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./utils/helpers */ "./src/scripts/utils/helpers.js");
+
 
 
 // Create the context with a default value
@@ -2711,7 +2713,9 @@ const AppContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)({
   setIsLoading: () => {},
   setPartner: () => parseInt(NovaQuote.user_id),
   partner: parseInt(NovaQuote.user_id),
-  updateSignageItem: () => {}
+  updateSignageItem: () => {},
+  hasUploadedFile: false,
+  setHasUploadedFile: () => {}
 });
 function useAppContext() {
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(AppContext);
@@ -2724,6 +2728,7 @@ function AppProvider({
   const [tempFolder, setTempFolder] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [partner, setPartner] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(parseInt(NovaQuote.user_id));
+  const [hasUploadedFile, setHasUploadedFile] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
   const updateSignageItem = (id, key, value) => {
     setSignage(prevSignage => prevSignage.map(signage => signage.id === id ? {
@@ -2731,17 +2736,6 @@ function AppProvider({
       [key]: value
     } : signage));
   };
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    console.log('Attempting to preload fonts...');
-    async function preloadFonts() {
-      try {
-        await loadingFonts();
-      } catch (error) {
-        console.error('Error loading fonts:', error);
-      }
-    }
-    preloadFonts();
-  }, []);
   const loadingFonts = async () => {
     const loadPromises = NovaQuote.fonts.map(font => loadFont(font));
     await Promise.all(loadPromises);
@@ -2758,6 +2752,22 @@ function AppProvider({
       console.error(`Font ${name} failed to load`);
     }
   }
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    console.log('Attempting to preload fonts...');
+    async function preloadFonts() {
+      try {
+        await loadingFonts();
+      } catch (error) {
+        console.error('Error loading fonts:', error);
+      }
+    }
+    preloadFonts();
+  }, []);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    const hasFile = (0,_utils_helpers__WEBPACK_IMPORTED_MODULE_1__.hasFileUploadedCheck)(signage);
+    console.log(hasFile);
+    setHasUploadedFile(() => hasFile);
+  }, [signage]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(AppContext.Provider, {
     value: {
       signage,
@@ -2771,7 +2781,9 @@ function AppProvider({
       setIsLoading,
       setPartner,
       partner,
-      updateSignageItem
+      updateSignageItem,
+      hasUploadedFile,
+      setHasUploadedFile
     }
   }, children);
 }
@@ -5081,7 +5093,7 @@ function UploadFont({
   })))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     type: "file",
     ref: fileRef,
-    class: "hidden",
+    className: "hidden",
     onChange: handleChange,
     accept: ".ttf,.otf,.woff,.woff2,.zip,.rar,.png,.jpg,.jpeg,.pdf,.ai",
     "aria-label": "Font File input"
@@ -5912,7 +5924,8 @@ function Logo({
   const {
     signage,
     setSignage,
-    setMissing
+    setMissing,
+    hasUploadedFile
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_11__.useAppContext)();
   const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$width = item.width) !== null && _item$width !== void 0 ? _item$width : '');
   const [height, setHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$height = item.height) !== null && _item$height !== void 0 ? _item$height : '');
@@ -6107,7 +6120,9 @@ function Logo({
       if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (!sets) missingFields.push('Select Quantity');
-    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    if (!hasUploadedFile) {
+      if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    }
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
         const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
@@ -6136,7 +6151,7 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [color, acrylicChannelThickness, selectedMounting, waterproof, fileUrls, customColor, sets, studLength, spacerStandoffDistance, width, height]);
+  }, [signage, hasUploadedFile]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
   }, [comments, acrylicChannelThickness, selectedMounting, waterproof, backOption, color, usdPrice, cadPrice, fileUrls, fileNames, filePaths, files, customColor, sets, studLength, spacerStandoffDistance, ledLightColor, usdSinglePrice, cadSinglePrice, width, height, includedItems]);
@@ -7229,7 +7244,8 @@ function Logo({
   const {
     signage,
     setSignage,
-    setMissing
+    setMissing,
+    hasUploadedFile
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_12__.useAppContext)();
   const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$width = item.width) !== null && _item$width !== void 0 ? _item$width : '');
   const [height, setHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$height = item.height) !== null && _item$height !== void 0 ? _item$height : '');
@@ -7416,7 +7432,9 @@ function Logo({
       if (!frontBackVinyl) missingFields.push('Select Front &amp; Back Vinyl');
     }
     if (!sets) missingFields.push('Select Quantity');
-    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    if (!hasUploadedFile) {
+      if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    }
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
         const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
@@ -7445,7 +7463,7 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [color, width, height, acrylicChannelThickness, selectedMounting, waterproof, fileUrls, customColor, sets, studLength, spacerStandoffDistance, vinylWhite, frontAcrylicCover, vinyl3635, frontBackVinyl]);
+  }, [signage, hasUploadedFile]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
   }, [comments, width, height, acrylicChannelThickness, selectedMounting, waterproof, color, usdPrice, cadPrice, fileUrls, fileNames, filePaths, files, customColor, sets, studLength, spacerStandoffDistance, frontAcrylicCover, vinylWhite, vinyl3635, frontBackVinyl, ledLightColor, usdSinglePrice, cadSinglePrice, backOption]);
@@ -8648,7 +8666,8 @@ function Logo({
   const {
     signage,
     setSignage,
-    setMissing
+    setMissing,
+    hasUploadedFile
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_12__.useAppContext)();
   const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$width = item.width) !== null && _item$width !== void 0 ? _item$width : '');
   const [height, setHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$height = item.height) !== null && _item$height !== void 0 ? _item$height : '');
@@ -8830,7 +8849,9 @@ function Logo({
       if (!vinyl3635) missingFields.push('Select 3M 3635 Vinyl');
     }
     if (!sets) missingFields.push('Select Quantity');
-    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    if (!hasUploadedFile) {
+      if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    }
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
         const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
@@ -8859,7 +8880,7 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [color, width, height, acrylicChannelThickness, selectedMounting, waterproof, fileUrls, customColor, sets, studLength, spacerStandoffDistance, acrylicFront, vinylWhite, vinyl3635]);
+  }, [signage, hasUploadedFile]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
   }, [comments, width, height, acrylicChannelThickness, selectedMounting, waterproof, color, usdPrice, cadPrice, fileUrls, fileNames, filePaths, files, customColor, sets, studLength, spacerStandoffDistance, acrylicFront, vinylWhite, vinyl3635, ledLightColor, usdSinglePrice, cadSinglePrice, includedItems]);
@@ -9338,7 +9359,8 @@ function Letters({
   const {
     signage,
     setSignage,
-    setMissing
+    setMissing,
+    hasUploadedFile
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_14__.useAppContext)();
   const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letters = item.letters) !== null && _item$letters !== void 0 ? _item$letters : '');
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
@@ -9602,7 +9624,9 @@ function Letters({
       if (!vinyl3635) missingFields.push('Select 3M 3635 Vinyl');
     }
     if (frontAcrylicCover === 'UV Printed') {
-      if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+      if (!hasUploadedFile) {
+        if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+      }
     }
     if (!waterproof) missingFields.push('Select Environment');
     if (!selectedMounting) missingFields.push('Select Mounting');
@@ -9642,7 +9666,7 @@ function Letters({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [letters, font, acrylicChannelThickness, selectedMounting, waterproof, selectedLetterHeight, fileUrls, fontFileUrl, sets, studLength, spacerStandoffDistance, frontAcrylicCover, vinylWhite, vinyl3635]);
+  }, [signage, hasUploadedFile]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
   }, [letters, comments, font, acrylicChannelThickness, selectedMounting, waterproof, usdPrice, cadPrice, selectedLetterHeight, fileUrls, fileNames, filePaths, files, fontFileUrl, fontFileName, fontFilePath, fontFile, sets, studLength, spacerStandoffDistance, ledLightColor, usdSinglePrice, cadSinglePrice, vinylWhite, vinyl3635, frontAcrylicCover]);
@@ -9927,7 +9951,8 @@ function Logo({
   const {
     signage,
     setSignage,
-    setMissing
+    setMissing,
+    hasUploadedFile
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_12__.useAppContext)();
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
   const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$width = item.width) !== null && _item$width !== void 0 ? _item$width : '');
@@ -10131,7 +10156,9 @@ function Logo({
       if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (!sets) missingFields.push('Select Quantity');
-    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    if (!hasUploadedFile) {
+      if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    }
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
         const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
@@ -10160,7 +10187,7 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [acrylicChannelThickness, selectedMounting, waterproof, fileUrls, sets, studLength, spacerStandoffDistance, width, height, vinylWhite, vinyl3635, frontAcrylicCover]);
+  }, [signage, hasUploadedFile]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
   }, [comments, acrylicChannelThickness, selectedMounting, waterproof, usdPrice, cadPrice, fileUrls, fileNames, filePaths, files, sets, studLength, spacerStandoffDistance, ledLightColor, usdSinglePrice, cadSinglePrice, vinylWhite, vinyl3635, frontAcrylicCover, width, height]);
@@ -10598,7 +10625,8 @@ function Letters({
   const {
     signage,
     setSignage,
-    setMissing
+    setMissing,
+    hasUploadedFile
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_15__.useAppContext)();
   const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letters = item.letters) !== null && _item$letters !== void 0 ? _item$letters : '');
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
@@ -10849,7 +10877,9 @@ function Letters({
       if (!metalLaminate) missingFields.push('Select Metal Laminate');
     }
     if (frontOption === 'UV Printed') {
-      if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+      if (!hasUploadedFile) {
+        if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+      }
     }
     if (frontOption === 'Painted') {
       if (!color) missingFields.push('Select Paint Color');
@@ -10895,7 +10925,7 @@ function Letters({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [letters, font, color, acrylicChannelThickness, selectedMounting, waterproof, selectedLetterHeight, fileUrls, fontFileUrl, customColor, sets, studLength, spacerStandoffDistance, metalLaminate, frontOption]);
+  }, [signage, hasUploadedFile]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
   }, [letters, comments, font, acrylicChannelThickness, selectedMounting, waterproof, color, frontOption, usdPrice, cadPrice, selectedLetterHeight, fileUrls, fileNames, filePaths, files, fontFileUrl, fontFileName, fontFilePath, fontFile, customColor, sets, studLength, spacerStandoffDistance, ledLightColor, usdSinglePrice, cadSinglePrice, metalLaminate]);
@@ -12135,11 +12165,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_ClickOutside__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../utils/ClickOutside */ "./src/scripts/utils/ClickOutside.js");
 /* harmony import */ var _utils_ConvertJson__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../utils/ConvertJson */ "./src/scripts/utils/ConvertJson.js");
 /* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
-/* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
-/* harmony import */ var _ColorOptions__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../ColorOptions */ "./src/scripts/products/acrylic/LaserCutAcrylic/ColorOptions.js");
-/* harmony import */ var _utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../utils/ColorsDropdown */ "./src/scripts/utils/ColorsDropdown.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
-/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
+/* harmony import */ var _utils_helpers__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../../utils/helpers */ "./src/scripts/utils/helpers.js");
+/* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
+/* harmony import */ var _ColorOptions__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../ColorOptions */ "./src/scripts/products/acrylic/LaserCutAcrylic/ColorOptions.js");
+/* harmony import */ var _utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../../../utils/ColorsDropdown */ "./src/scripts/utils/ColorsDropdown.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
+
 
 
 
@@ -12163,7 +12195,7 @@ function Letters({
     signage,
     setSignage,
     setMissing
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_12__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_13__.useAppContext)();
   const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letters = item.letters) !== null && _item$letters !== void 0 ? _item$letters : '');
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
   const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$font = item.font) !== null && _item$font !== void 0 ? _item$font : '');
@@ -12320,26 +12352,26 @@ function Letters({
     const lettersArray = letters.trim().split('');
     const noLowerCase = NovaQuote.no_lowercase.includes(font);
     lettersArray.forEach(letter => {
-      tempTotal += (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_9__.calculateLetterPrice)(letter, baseLetterPrice, noLowerCase);
+      tempTotal += (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_10__.calculateLetterPrice)(letter, baseLetterPrice, noLowerCase);
     });
     if (waterproof) {
-      tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
+      tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
     }
     if (selectedFinishing) {
-      tempTotal *= selectedFinishing === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.GLOSS_FINISH ? 1.1 : 1;
+      tempTotal *= selectedFinishing === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.GLOSS_FINISH ? 1.1 : 1;
     }
     if (color?.name) {
-      if (color?.name === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.CLEAR_COLOR) tempTotal *= 0.9;
-      if (color?.name === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.FROSTED_CLEAR_COLOR) tempTotal *= 0.95;
+      if (color?.name === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.CLEAR_COLOR) tempTotal *= 0.9;
+      if (color?.name === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.FROSTED_CLEAR_COLOR) tempTotal *= 0.95;
     }
-    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER) {
-      const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_9__.spacerPricing)(tempTotal);
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_WITH_SPACER) {
+      const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_10__.spacerPricing)(tempTotal);
       tempTotal += parseFloat(spacer.toFixed(2));
     }
 
     /** if Layered 3D */
     if (item.isLayered) {
-      tempTotal *= _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.ASSEMBLY_FEES;
+      tempTotal *= _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.ASSEMBLY_FEES;
     }
     const total = tempTotal * sets;
     return {
@@ -12359,11 +12391,11 @@ function Letters({
     if (target === 'Plain' || target === 'Double-sided tape') {
       setStudLength('');
     }
-    if (target !== _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER) {
+    if (target !== _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_WITH_SPACER) {
       setSpacerStandoffDistance('');
     }
     if (target === 'Double-sided tape') {
-      setWaterProofSelections(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.waterProofOptions.filter(option => option.option == _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF));
+      setWaterProofSelections(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.waterProofOptions.filter(option => option.option == _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.INDOOR_NOT_WATERPROOF));
     } else {
       setWaterProofSelections(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.waterProofOptions);
     }
@@ -12380,7 +12412,7 @@ function Letters({
       if (parseInt(selectedLetterHeight) > 24) {
         setSelectedLetterHeight('');
       }
-      if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_MOUNT || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER || selectedMounting === 'Pad' || selectedMounting === 'Pad - Combination All') {
+      if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_MOUNT || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_WITH_SPACER || selectedMounting === 'Pad' || selectedMounting === 'Pad - Combination All') {
         setSelectedMounting('');
         setStudLength('');
         setSpacerStandoffDistance('');
@@ -12432,7 +12464,7 @@ function Letters({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     let newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.mountingDefaultOptions;
     if (selectedThickness?.value === '3') {
-      newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.mountingDefaultOptions.filter(option => option.mounting_option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_MOUNT && option.mounting_option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER && option.mounting_option !== 'Pad' && option.mounting_option !== 'Pad - Combination All');
+      newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.mountingDefaultOptions.filter(option => option.mounting_option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_MOUNT && option.mounting_option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_WITH_SPACER && option.mounting_option !== 'Pad' && option.mounting_option !== 'Pad - Combination All');
     } else {
       newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.mountingDefaultOptions;
     }
@@ -12463,6 +12495,9 @@ function Letters({
   }, [letters]);
   const checkAndAddMissingFields = () => {
     const missingFields = [];
+
+    /** filter signage if there is uploded file */
+
     if (!letters) missingFields.push('Add your Line Text');
     if (!font) missingFields.push('Select Font');
     if (font == 'Custom font') {
@@ -12479,10 +12514,10 @@ function Letters({
     if (!selectedFinishing) missingFields.push('Select Finishing');
     if (!waterproof) missingFields.push('Select Environment');
     if (!selectedMounting) missingFields.push('Select Mounting');
-    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_MOUNT || selectedMounting === 'Pad' || selectedMounting === 'Pad - Combination All') {
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_WITH_SPACER || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_MOUNT || selectedMounting === 'Pad' || selectedMounting === 'Pad - Combination All') {
       if (!studLength) missingFields.push('Select Stud Length');
     }
-    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER) {
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_WITH_SPACER) {
       if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (!sets) missingFields.push('Select Quantity');
@@ -12544,9 +12579,9 @@ function Letters({
     } = computePricing();
     if (total && singlePrice) {
       setUsdPrice(total);
-      setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.EXCHANGE_RATE).toFixed(2));
+      setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.EXCHANGE_RATE).toFixed(2));
       setUsdSinglePrice(singlePrice);
-      setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.EXCHANGE_RATE).toFixed(2));
+      setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.EXCHANGE_RATE).toFixed(2));
     } else {
       setUsdPrice(0);
       setCadPrice(0);
@@ -12620,7 +12655,7 @@ function Letters({
     onChange: handleOnChangeLetterHeight,
     options: letterHeightOptions,
     value: selectedLetterHeight
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_11__["default"], {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_12__["default"], {
     ref: colorRef,
     title: "Color",
     colorName: color.name,
@@ -12629,7 +12664,7 @@ function Letters({
       setOpenColor(prev => !prev);
       setOpenFont(false);
     },
-    colorOptions: _ColorOptions__WEBPACK_IMPORTED_MODULE_10__.colorOptions,
+    colorOptions: _ColorOptions__WEBPACK_IMPORTED_MODULE_11__.colorOptions,
     selectColor: color => {
       setColor(color);
       setOpenColor(false);
@@ -12661,7 +12696,7 @@ function Letters({
       defaultValue: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: selectedMounting
-  }), (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER || selectedMounting === 'Pad' || selectedMounting === 'Pad - Combination All' || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }), (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_WITH_SPACER || selectedMounting === 'Pad' || selectedMounting === 'Pad - Combination All' || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -12670,7 +12705,7 @@ function Letters({
       defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
-  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -12685,7 +12720,7 @@ function Letters({
     options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.setOptions,
     value: sets,
     onlyValue: true
-  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-xs text-[#9F9F9F] mb-4"
   }, "*Note: The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid"
@@ -12762,7 +12797,8 @@ function Logo({
   const {
     signage,
     setSignage,
-    setMissing
+    setMissing,
+    hasUploadedFile
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_10__.useAppContext)();
   const [selectedMounting, setSelectedMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
   const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$studLength = item.studLength) !== null && _item$studLength !== void 0 ? _item$studLength : '');
@@ -13048,7 +13084,9 @@ function Logo({
       missingFields.push('Add the Pantone color code of your custom color.');
     }
     if (!sets) missingFields.push('Select Quantity');
-    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    if (!hasUploadedFile) {
+      if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    }
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
         const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
@@ -13077,7 +13115,7 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [width, height, selectedThickness, comments, selectedMounting, waterproof, fileUrls, fileNames, filePaths, files, selectedFinishing, sets, studLength, spacerStandoffDistance]);
+  }, [signage, hasUploadedFile]);
   (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_4__["default"])([colorRef], () => {
     if (!openColor) return;
     setOpenColor(false);
@@ -13506,7 +13544,8 @@ function Logo({
   const {
     signage,
     setSignage,
-    setMissing
+    setMissing,
+    hasUploadedFile
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_8__.useAppContext)();
   const [selectedMounting, setSelectedMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
   const [selectedThickness, setSelectedThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicThicknes = item.acrylicThickness) !== null && _item$acrylicThicknes !== void 0 ? _item$acrylicThicknes : '');
@@ -13719,7 +13758,9 @@ function Logo({
   }, [width, height, selectedThickness, waterproof, selectedFinishing, sets, spacerStandoffDistance]);
   const checkAndAddMissingFields = () => {
     const missingFields = [];
-    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    if (!hasUploadedFile) {
+      if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    }
     if (!description) missingFields.push('Add Description');
     if (!selectedThickness) missingFields.push('Select Thickness');
     if (!width) missingFields.push('Select Logo Width');
@@ -13765,7 +13806,7 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [fileUrls, comments, width, height, layers, selectedMounting, selectedThickness, description, waterproof, selectedFinishing, sets, studLength, spacerStandoffDistance]);
+  }, [signage, hasUploadedFile]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "py-4 mb-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
@@ -14756,7 +14797,8 @@ function Logo({
   const {
     signage,
     setSignage,
-    setMissing
+    setMissing,
+    hasUploadedFile
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_10__.useAppContext)();
   const [selectedMounting, setSelectedMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
   const [selectedThickness, setSelectedThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicThicknes = item.acrylicThickness) !== null && _item$acrylicThicknes !== void 0 ? _item$acrylicThicknes : '');
@@ -15016,7 +15058,9 @@ function Logo({
       if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (!sets) missingFields.push('Select Quantity');
-    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    if (!hasUploadedFile) {
+      if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    }
     setMissing(prevMissing => {
       const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
       if (existingIndex !== -1) {
@@ -15039,7 +15083,7 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [selectedThickness, comments, selectedMounting, waterproof, acrylicBase, width, height, metalLaminate, fileUrls, fileNames, filePaths, files, customColor, sets, studLength, spacerStandoffDistance]);
+  }, [signage, hasUploadedFile]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const {
       singlePrice,
@@ -15380,7 +15424,8 @@ function Logo({
   const {
     signage,
     setSignage,
-    setMissing
+    setMissing,
+    hasUploadedFile
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_8__.useAppContext)();
   const [selectedMounting, setSelectedMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
   const [selectedThickness, setSelectedThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicThicknes = item.acrylicThickness) !== null && _item$acrylicThicknes !== void 0 ? _item$acrylicThicknes : '');
@@ -15647,9 +15692,11 @@ function Logo({
       if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (!selectedFinishing) missingFields.push('Select Finishing Option');
-    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
     if (baseColor === 'Custom Color' && !customColor) missingFields.push('Add the Pantone color code of your custom color');
     if (!sets) missingFields.push('Select Quantity');
+    if (!hasUploadedFile) {
+      if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    }
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
         const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
@@ -15679,7 +15726,7 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [selectedThickness, selectedMounting, waterproof, width, height, fileUrls, fileNames, selectedFinishing, files, filePaths, baseColor, printPreference, customColor, sets, studLength, spacerStandoffDistance]);
+  }, [signage, hasUploadedFile]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
   }, [comments, selectedThickness, selectedMounting, waterproof, width, height, usdPrice, cadPrice, usdSinglePrice, cadSinglePrice, fileUrls, fileNames, customColor, selectedFinishing, files, filePaths, printPreference, baseColor, sets, studLength, spacerStandoffDistance]);
@@ -17196,7 +17243,8 @@ const NeonSign = ({
     signage,
     setSignage,
     setMissing,
-    updateSignageItem
+    updateSignageItem,
+    hasUploadedFile
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
   const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileNames = item.fileNames) !== null && _item$fileNames !== void 0 ? _item$fileNames : []);
   const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrls = item.fileUrls) !== null && _item$fileUrls !== void 0 ? _item$fileUrls : []);
@@ -17306,7 +17354,9 @@ const NeonSign = ({
     if (!wireExitLocation) missingFields.push('Select Wire Exit Location');
     if (!color) missingFields.push('Select Color');
     if (!waterproof) missingFields.push('Select Environment');
-    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    if (!hasUploadedFile) {
+      if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    }
     if (!sets) missingFields.push('Select Quantity');
     setMissing(prevMissing => {
       const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
@@ -17326,7 +17376,7 @@ const NeonSign = ({
       }
       return prevMissing;
     });
-  }, [fileUrls, color, waterproof, mounting, sets, width, height, neonLength, acrylicBackingOption, remoteControl, wireExitLocation]);
+  }, [signage]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
@@ -17733,7 +17783,8 @@ const NeonSign = ({
     signage,
     setSignage,
     setMissing,
-    updateSignageItem
+    updateSignageItem,
+    hasUploadedFile
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
   const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileNames = item.fileNames) !== null && _item$fileNames !== void 0 ? _item$fileNames : []);
   const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrls = item.fileUrls) !== null && _item$fileUrls !== void 0 ? _item$fileUrls : []);
@@ -17904,7 +17955,9 @@ const NeonSign = ({
     if (!neonColor) missingFields.push('Select Neon Colors');
     if (!waterproof) missingFields.push('Select Environment');
     if (!wireType) missingFields.push('Select Wire Type');
-    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    if (!hasUploadedFile) {
+      if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    }
     if (!sets) missingFields.push('Select Quantity');
     setMissing(prevMissing => {
       const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
@@ -17924,7 +17977,7 @@ const NeonSign = ({
       }
       return prevMissing;
     });
-  }, [fileUrls, neonColor, waterproof, mounting, sets, width, height, remoteControl, neonLength8mm, neonLength10mm, neonLength14mm, neonLength20mm, rigidM4StudLength, spacerStandoffDistance, wireType]);
+  }, [signage]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
@@ -18377,7 +18430,8 @@ const NeonSign = ({
     signage,
     setSignage,
     setMissing,
-    updateSignageItem
+    updateSignageItem,
+    hasUploadedFile
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
   const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileNames = item.fileNames) !== null && _item$fileNames !== void 0 ? _item$fileNames : []);
   const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrls = item.fileUrls) !== null && _item$fileUrls !== void 0 ? _item$fileUrls : []);
@@ -18512,7 +18566,9 @@ const NeonSign = ({
     if (!wireType) missingFields.push('Select WireType');
     if (!neonColor) missingFields.push('Select Neon Colors');
     if (!waterproof) missingFields.push('Select Environment');
-    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    if (!hasUploadedFile) {
+      if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    }
     if (!sets) missingFields.push('Select Quantity');
     setMissing(prevMissing => {
       const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
@@ -18532,7 +18588,7 @@ const NeonSign = ({
       }
       return prevMissing;
     });
-  }, [fileUrls, color, neonColor, customColor, waterproof, mounting, finish, sets, width, height, rigidBacking, remoteControl, neonLength8mm, neonLength10mm, neonLength14mm, neonLength20mm, wireType, wireExitLocation]);
+  }, [signage]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
@@ -19272,7 +19328,8 @@ function Logo({
     signage,
     setSignage,
     setMissing,
-    updateSignageItem
+    updateSignageItem,
+    hasUploadedFile
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_4__.useAppContext)();
   const [lightboxType, setLightboxType] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$lightboxType = item.lightboxType) !== null && _item$lightboxType !== void 0 ? _item$lightboxType : '');
   const [uvPrintedCover, setUvPrintedCover] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$uvPrintedCover = item.uvPrintedCover) !== null && _item$uvPrintedCover !== void 0 ? _item$uvPrintedCover : '');
@@ -19379,7 +19436,9 @@ function Logo({
     if (!lightboxType) missingFields.push('Select Light Box Type');
     if (!uvPrintedCover) missingFields.push('Select UV Printed Cover');
     if (uvPrintedCover && uvPrintedCover === 'Yes') {
-      if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+      if (!hasUploadedFile) {
+        if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+      }
     }
     if (!waterproof) missingFields.push('Select Environment');
     if (!sets) missingFields.push('Select Quantity');
@@ -19414,7 +19473,7 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [lightboxType, uvPrintedCover, waterproof, fileUrls, sets]);
+  }, [signage, hasUploadedFile]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     async function fetchLogoPricing() {
       try {
@@ -20561,7 +20620,8 @@ function Logo({
   const {
     signage,
     setSignage,
-    setMissing
+    setMissing,
+    hasUploadedFile
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_12__.useAppContext)();
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
   const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$width = item.width) !== null && _item$width !== void 0 ? _item$width : '');
@@ -20785,7 +20845,9 @@ function Logo({
     if (!ledLightColor) missingFields.push('Select LED Light Color');
     if (!frontAcrylicCover) missingFields.push('Select Front Acrylic Cover');
     if (!sets) missingFields.push('Select Quantity');
-    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    if (!hasUploadedFile) {
+      if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    }
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
         const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
@@ -20894,8 +20956,10 @@ function Logo({
   }, [depth, width, height, waterproof, mounting, frontAcrylicCover, sets, frontBackVinyl]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-    checkAndAddMissingFields();
   }, [depth, comments, waterproof, color, usdPrice, cadPrice, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, mounting, studLength, spacerStandoffDistance, frontAcrylicCover, sets, width, height, usdSinglePrice, cadSinglePrice, vinylWhite, vinyl3635, frontBackVinyl, includedItems]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    checkAndAddMissingFields();
+  }, [signage, hasUploadedFile]);
   if (frontAcrylicCover === '3M 3630 Vinyl') {
     (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_4__["default"])([colorRef, acrylicColorRef], () => {
       if (!openColor && !openAcrylicCover) return;
@@ -22077,7 +22141,8 @@ function Logo({
   const {
     signage,
     setSignage,
-    setMissing
+    setMissing,
+    hasUploadedFile
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_12__.useAppContext)();
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
   const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$width = item.width) !== null && _item$width !== void 0 ? _item$width : '');
@@ -22291,7 +22356,9 @@ function Logo({
     if (!ledLightColor) missingFields.push('Select LED Light Color');
     if (!frontAcrylicCover) missingFields.push('Select Front Acrylic Cover');
     if (!sets) missingFields.push('Select Quantity');
-    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    if (!hasUploadedFile) {
+      if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    }
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
         const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
@@ -22394,8 +22461,10 @@ function Logo({
   }, [depth, width, height, waterproof, mounting, frontAcrylicCover, sets]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-    checkAndAddMissingFields();
   }, [depth, comments, waterproof, color, usdPrice, cadPrice, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, mounting, studLength, spacerStandoffDistance, frontAcrylicCover, sets, width, height, usdSinglePrice, cadSinglePrice, vinylWhite, vinyl3635, includedItems]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    checkAndAddMissingFields();
+  }, [signage, hasUploadedFile]);
   if (frontAcrylicCover === '3M 3630 Vinyl') {
     (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_4__["default"])([colorRef, acrylicColorRef], () => {
       if (!openColor && !openAcrylicCover) return;
@@ -23493,7 +23562,8 @@ function Logo({
   const {
     signage,
     setSignage,
-    setMissing
+    setMissing,
+    hasUploadedFile
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_12__.useAppContext)();
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
   const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$faceReturnColor = item.faceReturnColor) !== null && _item$faceReturnColor !== void 0 ? _item$faceReturnColor : {
@@ -23675,7 +23745,9 @@ function Logo({
     if (!acrylicReveal) {
       missingFields.push('Select Acrylic Reveal');
     }
-    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    if (!hasUploadedFile) {
+      if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    }
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
         const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
@@ -23704,8 +23776,10 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-    checkAndAddMissingFields();
   }, [depth, width, height, comments, waterproof, color, usdPrice, cadPrice, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, mounting, studLength, spacerStandoffDistance, selectedFinishing, metalFinish, acrylicReveal, sets, usdSinglePrice, cadSinglePrice, includedItems]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    checkAndAddMissingFields();
+  }, [signage, hasUploadedFile]);
   const computePricing = () => {
     var _tempTotal$toFixed, _total$toFixed;
     if (!width || !height || !depth?.value) {
@@ -24952,7 +25026,8 @@ function Logo({
   const {
     signage,
     setSignage,
-    setMissing
+    setMissing,
+    hasUploadedFile
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_12__.useAppContext)();
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
   const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$width = item.width) !== null && _item$width !== void 0 ? _item$width : '');
@@ -25141,7 +25216,9 @@ function Logo({
     if (frontAcrylicCover === '3M 3630 Vinyl' || frontAcrylicCover === '3M 3635 Vinyl') {
       if (!frontBackVinyl) missingFields.push('Select Front &amp; Back Vinyl');
     }
-    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    if (!hasUploadedFile) {
+      if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    }
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
         const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
@@ -25170,8 +25247,10 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-    checkAndAddMissingFields();
   }, [depth, comments, waterproof, color, frontAcrylicCover, vinylWhite, vinyl3635, frontBackVinyl, usdPrice, cadPrice, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, mounting, studLength, spacerStandoffDistance, width, height, cadSinglePrice, usdSinglePrice, includedItems]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    checkAndAddMissingFields();
+  }, [signage, hasUploadedFile]);
   if (frontAcrylicCover === '3M 3630 Vinyl') {
     (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_4__["default"])([colorRef, acrylicColorRef], () => {
       if (!openColor && !openAcrylicCover) return;
@@ -26390,7 +26469,8 @@ function Logo({
   const {
     signage,
     setSignage,
-    setMissing
+    setMissing,
+    hasUploadedFile
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_12__.useAppContext)();
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
   const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$width = item.width) !== null && _item$width !== void 0 ? _item$width : '');
@@ -26568,7 +26648,9 @@ function Logo({
     if (frontAcrylicCover === '3M 3635 Vinyl') {
       if (!vinyl3635) missingFields.push('Select 3M 3635 Vinyl');
     }
-    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    if (!hasUploadedFile) {
+      if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    }
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
         const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
@@ -26597,8 +26679,10 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-    checkAndAddMissingFields();
   }, [depth, comments, waterproof, color, frontAcrylicCover, vinylWhite, vinyl3635, usdPrice, cadPrice, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, mounting, studLength, spacerStandoffDistance, width, height, cadSinglePrice, usdSinglePrice, includedItems]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    checkAndAddMissingFields();
+  }, [signage, hasUploadedFile]);
   if (frontAcrylicCover === '3M 3630 Vinyl') {
     (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_4__["default"])([colorRef, acrylicColorRef], () => {
       if (!openColor && !openAcrylicCover) return;
@@ -27856,7 +27940,8 @@ function Logo({
   const {
     signage,
     setSignage,
-    setMissing
+    setMissing,
+    hasUploadedFile
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_12__.useAppContext)();
   const [selectedMounting, setSelectedMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
   const [selectedThickness, setSelectedThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.metalDepth);
@@ -28043,7 +28128,9 @@ function Logo({
     if (!selectedThickness) missingFields.push('Select Metal Depth');
     if (!width) missingFields.push('Select Logo Width');
     if (!height) missingFields.push('Select Logo Height');
-    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    if (!hasUploadedFile) {
+      if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    }
     if (!selectedFinishing) missingFields.push('Select Finishing Options');
     if (selectedFinishing === 'Painted') {
       if (!color.name) missingFields.push('Select Color');
@@ -28098,7 +28185,6 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-    checkAndAddMissingFields();
   }, [comments, selectedThickness, selectedMounting, waterproof, width, height, usdPrice, cadPrice, fileUrls, fileNames, selectedFinishing, stainLessMetalFinish, files, filePaths, mounting, color, customColor, metal, sets, studLength, spacerStandoffDistance, usdSinglePrice, cadSinglePrice, returnColor]);
   const [logoPricingObject, setLogoPricingObject] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
@@ -28187,6 +28273,9 @@ function Logo({
       setCustomColor('');
     }
   }, [color, returnColor]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    checkAndAddMissingFields();
+  }, [signage, hasUploadedFile]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "py-4 mb-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
@@ -29186,7 +29275,8 @@ function Logo({
   const {
     signage,
     setSignage,
-    setMissing
+    setMissing,
+    hasUploadedFile
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_11__.useAppContext)();
   const [selectedMounting, setSelectedMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
   const [selectedThickness, setSelectedThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.metalThickness);
@@ -29348,7 +29438,6 @@ function Logo({
   }
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-    checkAndAddMissingFields();
   }, [comments, selectedThickness, selectedMounting, waterproof, width, height, usdPrice, cadPrice, fileUrls, fileNames, selectedFinishing, files, filePaths, mounting, color, customColor, sets, studLength, spacerStandoffDistance, usdSinglePrice, cadSinglePrice, anodizedFinishing, anodizedColor]);
   const checkAndAddMissingFields = () => {
     const missingFields = [];
@@ -29376,7 +29465,9 @@ function Logo({
       if (!studLength) missingFields.push('Select Stud Length');
     }
     if (!sets) missingFields.push('Select Quantity');
-    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    if (!hasUploadedFile) {
+      if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    }
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
         const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
@@ -29480,6 +29571,9 @@ function Logo({
     }
     setMetalMountingOptions(newMountingOptions);
   }, [selectedThickness, mounting, setMetalMountingOptions]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    checkAndAddMissingFields();
+  }, [signage, hasUploadedFile]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "py-4 mb-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
@@ -30490,7 +30584,8 @@ function Logo({
   const {
     signage,
     setSignage,
-    setMissing
+    setMissing,
+    hasUploadedFile
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_12__.useAppContext)();
   const [selectedThickness, setSelectedThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.metalThickness);
   const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$width = item.width) !== null && _item$width !== void 0 ? _item$width : '');
@@ -30657,7 +30752,9 @@ function Logo({
     if (!selectedThickness) missingFields.push('Select Metal Thickness');
     if (!width) missingFields.push('Select Logo Width');
     if (!height) missingFields.push('Select Logo Height');
-    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    if (!hasUploadedFile) {
+      if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    }
     if (!selectedFinishing) missingFields.push('Select Finishing Options');
     if (selectedFinishing === 'Painted Finish') {
       if (!color.name) missingFields.push('Select Color');
@@ -30709,7 +30806,6 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-    checkAndAddMissingFields();
   }, [comments, selectedThickness, mounting, waterproof, width, height, usdPrice, cadPrice, fileUrls, fileNames, selectedFinishing, stainLessMetalFinish, stainlessSteelPolished, files, filePaths, mounting, color, customColor, metal, sets, studLength, spacerStandoffDistance, usdSinglePrice, cadSinglePrice]);
   const [logoPricingObject, setLogoPricingObject] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
@@ -30804,6 +30900,9 @@ function Logo({
     }
     setMetalMountingOptions(newMountingOptions);
   }, [selectedThickness, mounting, setMetalMountingOptions]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    checkAndAddMissingFields();
+  }, [signage, hasUploadedFile]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "py-4 mb-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
@@ -31913,7 +32012,8 @@ function Logo({
   const {
     signage,
     setSignage,
-    setMissing
+    setMissing,
+    hasUploadedFile
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_12__.useAppContext)();
   const [selectedThickness, setSelectedThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.thickness);
   const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$width = item.width) !== null && _item$width !== void 0 ? _item$width : '');
@@ -32157,7 +32257,9 @@ function Logo({
       if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (!selectedFinishing) missingFields.push('Select Finishing');
-    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    if (!hasUploadedFile) {
+      if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    }
     if (!sets) missingFields.push('Select Quantity');
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
@@ -32188,7 +32290,7 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [width, comments, height, selectedThickness, mounting, waterproof, fileUrls, fileNames, files, filePaths, selectedFinishing, pvcBaseColor, customColor, sets, studLength, spacerStandoffDistance]);
+  }, [signage, hasUploadedFile]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if ('Outdoor (Waterproof)' === waterproof) {
       if ('Double-sided tape' === mounting) {
@@ -33126,7 +33228,8 @@ function Logo({
   const {
     signage,
     setSignage,
-    setMissing
+    setMissing,
+    hasUploadedFile
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_12__.useAppContext)();
   const [selectedThickness, setSelectedThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.thickness);
   const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$width = item.width) !== null && _item$width !== void 0 ? _item$width : '');
@@ -33392,7 +33495,9 @@ function Logo({
       if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (!selectedFinishing) missingFields.push('Select Finishing');
-    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    if (!hasUploadedFile) {
+      if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    }
     if (!sets) missingFields.push('Select Quantity');
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
@@ -33423,7 +33528,7 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [width, comments, height, selectedThickness, mounting, waterproof, fileUrls, fileNames, files, filePaths, selectedFinishing, color, customColor, sets, studLength, spacerStandoffDistance]);
+  }, [signage, hasUploadedFile]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if ('Outdoor (Waterproof)' === waterproof) {
       if ('Double-sided tape' === mounting) {
@@ -33770,7 +33875,8 @@ function Logo({
   const {
     signage,
     setSignage,
-    setMissing
+    setMissing,
+    hasUploadedFile
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_12__.useAppContext)();
   const [selectedThickness, setSelectedThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.thickness);
   const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$width = item.width) !== null && _item$width !== void 0 ? _item$width : '');
@@ -34010,7 +34116,9 @@ function Logo({
       if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (!selectedFinishing) missingFields.push('Select Finishing');
-    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    if (!hasUploadedFile) {
+      if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    }
     if (!sets) missingFields.push('Select Quantity');
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
@@ -34041,7 +34149,7 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [width, comments, height, selectedThickness, mounting, waterproof, fileUrls, fileNames, files, filePaths, selectedFinishing, sets, studLength, spacerStandoffDistance]);
+  }, [signage, hasUploadedFile]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if ('Outdoor (Waterproof)' === waterproof) {
       if ('Double-sided tape' === mounting) {
@@ -37072,7 +37180,8 @@ const LIGHTING_INDOOR = 'Low Voltage LED Driver, 6ft open wires, 1:1 blueprint';
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   debounce: () => (/* binding */ debounce)
+/* harmony export */   debounce: () => (/* binding */ debounce),
+/* harmony export */   hasFileUploadedCheck: () => (/* binding */ hasFileUploadedCheck)
 /* harmony export */ });
 function debounce(func, wait) {
   let timeout;
@@ -37084,6 +37193,12 @@ function debounce(func, wait) {
       func.apply(context, args);
     }, wait);
   };
+}
+function hasFileUploadedCheck(signage) {
+  return signage.some(item => hasFileUrls(item));
+}
+function hasFileUrls(item) {
+  return item.fileUrls.length > 0;
 }
 
 /***/ }),

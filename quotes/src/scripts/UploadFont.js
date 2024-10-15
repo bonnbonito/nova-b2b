@@ -478,7 +478,7 @@ export default function UploadFont({
 			<input
 				type="file"
 				ref={fileRef}
-				class="hidden"
+				className="hidden"
 				onChange={handleChange}
 				accept=".ttf,.otf,.woff,.woff2,.zip,.rar,.png,.jpg,.jpeg,.pdf,.ai"
 				aria-label="Font File input"

@@ -85,7 +85,7 @@ const backOptionOptions = [
 ];
 
 export function Logo({ item }) {
-	const { signage, setSignage, setMissing } = useAppContext();
+	const { signage, setSignage, setMissing, hasUploadedFile } = useAppContext();
 	const [width, setWidth] = useState(item.width ?? '');
 	const [height, setHeight] = useState(item.height ?? '');
 	const [comments, setComments] = useState(item.comments ?? '');
@@ -326,8 +326,10 @@ export function Logo({ item }) {
 
 		if (!sets) missingFields.push('Select Quantity');
 
-		if (!fileUrls || fileUrls.length === 0)
-			missingFields.push('Upload a PDF/AI File');
+		if (!hasUploadedFile) {
+			if (!fileUrls || fileUrls.length === 0)
+				missingFields.push('Upload a PDF/AI File');
+		}
 
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
@@ -365,23 +367,7 @@ export function Logo({ item }) {
 
 	useEffect(() => {
 		checkAndAddMissingFields();
-	}, [
-		color,
-		width,
-		height,
-		acrylicChannelThickness,
-		selectedMounting,
-		waterproof,
-		fileUrls,
-		customColor,
-		sets,
-		studLength,
-		spacerStandoffDistance,
-		vinylWhite,
-		frontAcrylicCover,
-		vinyl3635,
-		frontBackVinyl,
-	]);
+	}, [signage, hasUploadedFile]);
 
 	useEffect(() => {
 		updateSignage();

@@ -32,7 +32,7 @@ import { useAppContext } from '../../../../AppProvider';
 const UV_PRICE = 1.05;
 
 export function Logo({ item }) {
-	const { signage, setSignage, setMissing } = useAppContext();
+	const { signage, setSignage, setMissing, hasUploadedFile } = useAppContext();
 
 	const [selectedMounting, setSelectedMounting] = useState(item.mounting ?? '');
 	const [selectedThickness, setSelectedThickness] = useState(
@@ -414,11 +414,15 @@ export function Logo({ item }) {
 
 		if (!selectedFinishing) missingFields.push('Select Finishing Option');
 
-		if (!fileUrls || fileUrls.length === 0)
-			missingFields.push('Upload a PDF/AI File');
 		if (baseColor === 'Custom Color' && !customColor)
 			missingFields.push('Add the Pantone color code of your custom color');
 		if (!sets) missingFields.push('Select Quantity');
+
+		if (!hasUploadedFile) {
+			if (!fileUrls || fileUrls.length === 0)
+				missingFields.push('Upload a PDF/AI File');
+		}
+
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
 				const existingIndex = prevMissing.findIndex(
@@ -457,24 +461,7 @@ export function Logo({ item }) {
 
 	useEffect(() => {
 		checkAndAddMissingFields();
-	}, [
-		selectedThickness,
-		selectedMounting,
-		waterproof,
-		width,
-		height,
-		fileUrls,
-		fileNames,
-		selectedFinishing,
-		files,
-		filePaths,
-		baseColor,
-		printPreference,
-		customColor,
-		sets,
-		studLength,
-		spacerStandoffDistance,
-	]);
+	}, [signage, hasUploadedFile]);
 
 	useEffect(() => {
 		updateSignage();

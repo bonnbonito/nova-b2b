@@ -36,7 +36,7 @@ import ColorsDropdown from '../../../../utils/ColorsDropdown';
 import { useAppContext } from '../../../../AppProvider';
 
 export function Logo({ item }) {
-	const { signage, setSignage, setMissing } = useAppContext();
+	const { signage, setSignage, setMissing, hasUploadedFile } = useAppContext();
 	const [selectedThickness, setSelectedThickness] = useState(
 		item.metalThickness
 	);
@@ -239,8 +239,11 @@ export function Logo({ item }) {
 		if (!selectedThickness) missingFields.push('Select Metal Thickness');
 		if (!width) missingFields.push('Select Logo Width');
 		if (!height) missingFields.push('Select Logo Height');
-		if (!fileUrls || fileUrls.length === 0)
-			missingFields.push('Upload a PDF/AI File');
+
+		if (!hasUploadedFile) {
+			if (!fileUrls || fileUrls.length === 0)
+				missingFields.push('Upload a PDF/AI File');
+		}
 
 		if (!selectedFinishing) missingFields.push('Select Finishing Options');
 		if (selectedFinishing === 'Painted Finish') {
@@ -310,7 +313,6 @@ export function Logo({ item }) {
 
 	useEffect(() => {
 		updateSignage();
-		checkAndAddMissingFields();
 	}, [
 		comments,
 		selectedThickness,
@@ -477,6 +479,10 @@ export function Logo({ item }) {
 
 		setMetalMountingOptions(newMountingOptions);
 	}, [selectedThickness, mounting, setMetalMountingOptions]);
+
+	useEffect(() => {
+		checkAndAddMissingFields();
+	}, [signage, hasUploadedFile]);
 
 	return (
 		<>

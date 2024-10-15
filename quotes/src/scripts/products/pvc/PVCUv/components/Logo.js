@@ -34,7 +34,7 @@ import {
 import { useAppContext } from '../../../../AppProvider';
 
 export function Logo({ item }) {
-	const { signage, setSignage, setMissing } = useAppContext();
+	const { signage, setSignage, setMissing, hasUploadedFile } = useAppContext();
 	const [selectedThickness, setSelectedThickness] = useState(item.thickness);
 	const [width, setWidth] = useState(item.width ?? '');
 	const [maxWidthHeight, setMaxWidthHeight] = useState(36);
@@ -376,8 +376,10 @@ export function Logo({ item }) {
 
 		if (!selectedFinishing) missingFields.push('Select Finishing');
 
-		if (!fileUrls || fileUrls.length === 0)
-			missingFields.push('Upload a PDF/AI File');
+		if (!hasUploadedFile) {
+			if (!fileUrls || fileUrls.length === 0)
+				missingFields.push('Upload a PDF/AI File');
+		}
 
 		if (!sets) missingFields.push('Select Quantity');
 
@@ -419,22 +421,7 @@ export function Logo({ item }) {
 
 	useEffect(() => {
 		checkAndAddMissingFields();
-	}, [
-		width,
-		comments,
-		height,
-		selectedThickness,
-		mounting,
-		waterproof,
-		fileUrls,
-		fileNames,
-		files,
-		filePaths,
-		selectedFinishing,
-		sets,
-		studLength,
-		spacerStandoffDistance,
-	]);
+	}, [signage, hasUploadedFile]);
 
 	useEffect(() => {
 		if ('Outdoor (Waterproof)' === waterproof) {

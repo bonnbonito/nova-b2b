@@ -64,7 +64,7 @@ const maxWidthOptions = Array.from(
 );
 
 export function Logo({ item }) {
-	const { signage, setSignage, setMissing } = useAppContext();
+	const { signage, setSignage, setMissing, hasUploadedFile } = useAppContext();
 	const [comments, setComments] = useState(item.comments ?? '');
 
 	const [color, setColor] = useState(
@@ -292,8 +292,10 @@ export function Logo({ item }) {
 			missingFields.push('Select Acrylic Reveal');
 		}
 
-		if (!fileUrls || fileUrls.length === 0)
-			missingFields.push('Upload a PDF/AI File');
+		if (!hasUploadedFile) {
+			if (!fileUrls || fileUrls.length === 0)
+				missingFields.push('Upload a PDF/AI File');
+		}
 
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
@@ -331,7 +333,6 @@ export function Logo({ item }) {
 
 	useEffect(() => {
 		updateSignage();
-		checkAndAddMissingFields();
 	}, [
 		depth,
 		width,
@@ -358,6 +359,10 @@ export function Logo({ item }) {
 		cadSinglePrice,
 		includedItems,
 	]);
+
+	useEffect(() => {
+		checkAndAddMissingFields();
+	}, [signage, hasUploadedFile]);
 
 	const computePricing = () => {
 		if (!width || !height || !depth?.value) {

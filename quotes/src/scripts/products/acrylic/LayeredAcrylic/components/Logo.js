@@ -29,7 +29,7 @@ import {
 import { useAppContext } from '../../../../AppProvider';
 
 export function Logo({ item }) {
-	const { signage, setSignage, setMissing } = useAppContext();
+	const { signage, setSignage, setMissing, hasUploadedFile } = useAppContext();
 
 	const [selectedMounting, setSelectedMounting] = useState(item.mounting ?? '');
 	const [selectedThickness, setSelectedThickness] = useState(
@@ -351,8 +351,11 @@ export function Logo({ item }) {
 	const checkAndAddMissingFields = () => {
 		const missingFields = [];
 
-		if (!fileUrls || fileUrls.length === 0)
-			missingFields.push('Upload a PDF/AI File');
+		if (!hasUploadedFile) {
+			if (!fileUrls || fileUrls.length === 0)
+				missingFields.push('Upload a PDF/AI File');
+		}
+
 		if (!description) missingFields.push('Add Description');
 		if (!selectedThickness) missingFields.push('Select Thickness');
 		if (!width) missingFields.push('Select Logo Width');
@@ -411,21 +414,7 @@ export function Logo({ item }) {
 
 	useEffect(() => {
 		checkAndAddMissingFields();
-	}, [
-		fileUrls,
-		comments,
-		width,
-		height,
-		layers,
-		selectedMounting,
-		selectedThickness,
-		description,
-		waterproof,
-		selectedFinishing,
-		sets,
-		studLength,
-		spacerStandoffDistance,
-	]);
+	}, [signage, hasUploadedFile]);
 
 	return (
 		<>

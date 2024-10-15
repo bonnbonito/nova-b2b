@@ -56,7 +56,7 @@ const lettersHeight = {
 };
 
 export function Letters({ item }) {
-	const { signage, setSignage, setMissing } = useAppContext();
+	const { signage, setSignage, setMissing, hasUploadedFile } = useAppContext();
 	const [letters, setLetters] = useState(item.letters ?? '');
 	const [comments, setComments] = useState(item.comments ?? '');
 	const [font, setFont] = useState(item.font ?? '');
@@ -397,8 +397,10 @@ export function Letters({ item }) {
 		}
 
 		if (frontOption === 'UV Printed') {
-			if (!fileUrls || fileUrls.length === 0)
-				missingFields.push('Upload a PDF/AI File');
+			if (!hasUploadedFile) {
+				if (!fileUrls || fileUrls.length === 0)
+					missingFields.push('Upload a PDF/AI File');
+			}
 		}
 
 		if (frontOption === 'Painted') {
@@ -459,23 +461,7 @@ export function Letters({ item }) {
 
 	useEffect(() => {
 		checkAndAddMissingFields();
-	}, [
-		letters,
-		font,
-		color,
-		acrylicChannelThickness,
-		selectedMounting,
-		waterproof,
-		selectedLetterHeight,
-		fileUrls,
-		fontFileUrl,
-		customColor,
-		sets,
-		studLength,
-		spacerStandoffDistance,
-		metalLaminate,
-		frontOption,
-	]);
+	}, [signage, hasUploadedFile]);
 
 	useEffect(() => {
 		updateSignage();

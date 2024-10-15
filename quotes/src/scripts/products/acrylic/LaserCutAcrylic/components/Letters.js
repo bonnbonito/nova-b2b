@@ -16,6 +16,8 @@ import {
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
 
+import { hasFileUploaded } from '../../../../utils/helpers';
+
 import { calculateLetterPrice, spacerPricing } from '../../../../utils/Pricing';
 
 import { colorOptions } from '../ColorOptions';
@@ -437,6 +439,8 @@ export function Letters({ item }) {
 
 	const checkAndAddMissingFields = () => {
 		const missingFields = [];
+
+		/** filter signage if there is uploded file */
 
 		if (!letters) missingFields.push('Add your Line Text');
 		if (!font) missingFields.push('Select Font');

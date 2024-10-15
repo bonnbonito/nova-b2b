@@ -52,8 +52,13 @@ const wireTypeOptions = [
 ];
 
 export const NeonSign = ({ item }) => {
-	const { signage, setSignage, setMissing, updateSignageItem } =
-		useAppContext();
+	const {
+		signage,
+		setSignage,
+		setMissing,
+		updateSignageItem,
+		hasUploadedFile,
+	} = useAppContext();
 
 	const [fileNames, setFileNames] = useState(item.fileNames ?? []);
 	const [fileUrls, setFileUrls] = useState(item.fileUrls ?? []);
@@ -282,8 +287,10 @@ export const NeonSign = ({ item }) => {
 
 		if (!waterproof) missingFields.push('Select Environment');
 
-		if (!fileUrls || fileUrls.length === 0)
-			missingFields.push('Upload a PDF/AI File');
+		if (!hasUploadedFile) {
+			if (!fileUrls || fileUrls.length === 0)
+				missingFields.push('Upload a PDF/AI File');
+		}
 
 		if (!sets) missingFields.push('Select Quantity');
 
@@ -306,26 +313,7 @@ export const NeonSign = ({ item }) => {
 			}
 			return prevMissing;
 		});
-	}, [
-		fileUrls,
-		color,
-		neonColor,
-		customColor,
-		waterproof,
-		mounting,
-		finish,
-		sets,
-		width,
-		height,
-		rigidBacking,
-		remoteControl,
-		neonLength8mm,
-		neonLength10mm,
-		neonLength14mm,
-		neonLength20mm,
-		wireType,
-		wireExitLocation,
-	]);
+	}, [signage]);
 
 	useEffect(() => {
 		updateSignage();

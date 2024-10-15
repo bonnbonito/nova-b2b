@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { hasFileUploadedCheck } from './utils/helpers';
 
 interface AppContextType {
 	signage: any[];
@@ -13,6 +14,8 @@ interface AppContextType {
 	setTempFolder: (tempFolder: string) => void;
 	setIsLoading: (isLoading: boolean) => void;
 	updateSignageItem: (id: string, key: string, value: any) => void;
+	hasUploadedFile: boolean;
+	setHasUploadedFile: (hasUploadedFile: boolean) => void;
 }
 
 // Create the context with a default value
@@ -29,6 +32,8 @@ const AppContext = createContext<AppContextType>({
 	setPartner: () => parseInt(NovaQuote.user_id),
 	partner: parseInt(NovaQuote.user_id),
 	updateSignageItem: () => {},
+	hasUploadedFile: false,
+	setHasUploadedFile: () => {},
 });
 
 export function useAppContext() {
@@ -41,6 +46,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 	const [tempFolder, setTempFolder] = useState<string>('');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [partner, setPartner] = useState<number>(parseInt(NovaQuote.user_id));
+	const [hasUploadedFile, setHasUploadedFile] = useState<boolean>(false);
 
 	const tempFolderName = `temp-${Math.random().toString(36).substring(2, 9)}`;
 
@@ -51,18 +57,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 			)
 		);
 	};
-
-	useEffect(() => {
-		console.log('Attempting to preload fonts...');
-		async function preloadFonts() {
-			try {
-				await loadingFonts();
-			} catch (error) {
-				console.error('Error loading fonts:', error);
-			}
-		}
-		preloadFonts();
-	}, []);
 
 	const loadingFonts = async () => {
 		const loadPromises = NovaQuote.fonts.map((font) => loadFont(font));
@@ -80,6 +74,24 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 		}
 	}
 
+	useEffect(() => {
+		console.log('Attempting to preload fonts...');
+		async function preloadFonts() {
+			try {
+				await loadingFonts();
+			} catch (error) {
+				console.error('Error loading fonts:', error);
+			}
+		}
+		preloadFonts();
+	}, []);
+
+	useEffect(() => {
+		const hasFile = hasFileUploadedCheck(signage);
+		console.log(hasFile);
+		setHasUploadedFile(() => hasFile);
+	}, [signage]);
+
 	return (
 		<AppContext.Provider
 			value={{
@@ -95,6 +107,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 				setPartner,
 				partner,
 				updateSignageItem,
+				hasUploadedFile,
+				setHasUploadedFile,
 			}}
 		>
 			{children}
