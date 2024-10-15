@@ -41,7 +41,7 @@ export const rigidBackingOptions = [
 		option: 'UV Printed on PC',
 	},
 	{
-		option: 'Painted PC',
+		option: 'Painted PC (Matte)',
 	},
 ];
 
