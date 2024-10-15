@@ -83,6 +83,7 @@ class Woocommerce {
 		add_filter( 'woocommerce_get_order_item_totals', array( $this, 'deposit_insert_order_total_row' ), 90, 2 );
 		add_action( 'add_meta_boxes', array( $this, 'add_custom_meta_box_to_orders' ) );
 		add_action( 'add_meta_boxes', array( $this, 'debug_order_meta' ) );
+		add_action( 'add_meta_boxes', array( $this, 'shipping_metabox' ) );
 		add_action( 'woocommerce_admin_order_totals_after_tax', array( $this, 'add_deposit_row' ) );
 		add_action( 'wp_ajax_populate_signage', array( $this, 'populate_signage' ) );
 		add_action( 'wp_ajax_nopriv_populate_signage', array( $this, 'populate_signage' ) );
@@ -126,6 +127,7 @@ class Woocommerce {
 		add_action( 'woocommerce_after_account_orders', array( $this, 'remove_show_total_from_payment_order' ) );
 		add_filter( 'woocommerce_shop_order_search_fields', array( $this, 'order_name_search_fields' ) );
 		// add_action( 'pre_get_posts', array( $this, 'custom_search_by_order_number_in_admin' ) );
+		add_action( 'save_post', array( $this, 'nova_save_shipping_metabox' ) );
 	}
 
 	public function custom_search_by_order_number_in_admin( $query ) {
@@ -1077,6 +1079,92 @@ class Woocommerce {
 			);
 		}
 	}
+
+	public function shipping_metabox() {
+		global $pagenow, $post;
+
+		if ( 'post.php' !== $pagenow || 'shop_order' !== get_post_type() ) {
+			return;
+		}
+
+		$order_id = isset( $post->ID ) ? $post->ID : false;
+
+		if ( ! $order_id ) {
+			return;
+		}
+
+		add_meta_box(
+			'nova_shipping_metabox',
+			__( 'Shipping Details', 'nova-b2b' ),
+			array( $this, 'nova_shipping_metabox_callback' ),
+			'shop_order',
+			'side',
+			'default'
+		);
+	}
+
+	public function nova_shipping_metabox_callback( $post ) {
+		// Add a nonce field for security
+		wp_nonce_field( 'nova_save_shipping_metabox', 'nova_shipping_metabox_nonce' );
+
+		// Retrieve existing values from the database
+		$shipping_carrier = get_post_meta( $post->ID, '_shipping_carrier', true );
+		$tracking_number  = get_post_meta( $post->ID, '_tracking_number', true );
+
+		// Display the form fields
+		?>
+<p>
+	<label for="shipping_carrier"><?php esc_html_e( 'Shipping Carrier', 'nova-b2b' ); ?></label>
+	<input type="text" name="shipping_carrier" id="shipping_carrier"
+		value="<?php echo esc_attr( $shipping_carrier ); ?>" style="width:100%;" />
+</p>
+<p>
+	<label for="tracking_number"><?php esc_html_e( 'Tracking Number', 'nova-b2b' ); ?></label>
+	<input type="text" name="tracking_number" id="tracking_number" value="<?php echo esc_attr( $tracking_number ); ?>"
+		style="width:100%;" />
+</p>
+		<?php if ( 'UPS' === $shipping_carrier && $tracking_number ) : ?>
+<p>
+	<a href="https://www.ups.com/track?track=yes&trackNums=<?php echo esc_attr( $tracking_number ); ?>"
+		target="_blank">UPS Tracking link</a>
+</p>
+			<?php
+		endif;
+	}
+
+	public function nova_save_shipping_metabox( $post_id ) {
+		// Check if nonce is set
+		if ( ! isset( $_POST['nova_shipping_metabox_nonce'] ) ) {
+			return $post_id;
+		}
+		$nonce = $_POST['nova_shipping_metabox_nonce'];
+
+		// Verify that the nonce is valid
+		if ( ! wp_verify_nonce( $nonce, 'nova_save_shipping_metabox' ) ) {
+			return $post_id;
+		}
+
+		// Check for autosave
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return $post_id;
+		}
+
+		// Check user permissions
+		if ( 'product' === $_POST['post_type'] ) {
+			if ( ! current_user_can( 'edit_product', $post_id ) ) {
+				return $post_id;
+			}
+		}
+
+		// Sanitize user input
+		$shipping_carrier = isset( $_POST['shipping_carrier'] ) ? sanitize_text_field( $_POST['shipping_carrier'] ) : '';
+		$tracking_number  = isset( $_POST['tracking_number'] ) ? sanitize_text_field( $_POST['tracking_number'] ) : '';
+
+		// Update the meta fields in the database
+		update_post_meta( $post_id, '_shipping_carrier', $shipping_carrier );
+		update_post_meta( $post_id, '_tracking_number', $tracking_number );
+	}
+
 	public function debug_order_meta() {
 		global $pagenow, $post;
 
