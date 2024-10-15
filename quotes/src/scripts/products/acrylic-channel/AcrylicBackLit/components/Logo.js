@@ -356,7 +356,20 @@ export function Logo({ item }) {
 
 	useEffect(() => {
 		checkAndAddMissingFields();
-	}, [signage, hasUploadedFile]);
+	}, [
+		color,
+		acrylicChannelThickness,
+		selectedMounting,
+		waterproof,
+		fileUrls,
+		customColor,
+		sets,
+		studLength,
+		spacerStandoffDistance,
+		width,
+		height,
+		hasUploadedFile,
+	]);
 
 	useEffect(() => {
 		updateSignage();

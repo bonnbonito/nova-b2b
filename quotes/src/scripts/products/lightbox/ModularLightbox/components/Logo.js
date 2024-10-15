@@ -243,7 +243,14 @@ export function Logo({ item }) {
 
 	useEffect(() => {
 		checkAndAddMissingFields();
-	}, [signage, hasUploadedFile]);
+	}, [
+		lightboxType,
+		uvPrintedCover,
+		waterproof,
+		fileUrls,
+		sets,
+		hasUploadedFile,
+	]);
 
 	useEffect(() => {
 		async function fetchLogoPricing() {

@@ -414,7 +414,22 @@ export function Logo({ item }) {
 
 	useEffect(() => {
 		checkAndAddMissingFields();
-	}, [signage, hasUploadedFile]);
+	}, [
+		fileUrls,
+		comments,
+		width,
+		height,
+		layers,
+		selectedMounting,
+		selectedThickness,
+		description,
+		waterproof,
+		selectedFinishing,
+		sets,
+		studLength,
+		spacerStandoffDistance,
+		hasUploadedFile,
+	]);
 
 	return (
 		<>

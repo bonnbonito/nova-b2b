@@ -234,7 +234,20 @@ export const NeonSign = ({ item }) => {
 			}
 			return prevMissing;
 		});
-	}, [signage]);
+	}, [
+		fileUrls,
+		color,
+		waterproof,
+		mounting,
+		sets,
+		width,
+		height,
+		neonLength,
+		acrylicBackingOption,
+		remoteControl,
+		wireExitLocation,
+		hasUploadedFile,
+	]);
 
 	useEffect(() => {
 		updateSignage();

@@ -313,6 +313,7 @@ export function Logo({ item }) {
 
 	useEffect(() => {
 		updateSignage();
+		checkAndAddMissingFields();
 	}, [
 		comments,
 		selectedThickness,
@@ -338,6 +339,7 @@ export function Logo({ item }) {
 		spacerStandoffDistance,
 		usdSinglePrice,
 		cadSinglePrice,
+		hasUploadedFile,
 	]);
 
 	const [logoPricingObject, setLogoPricingObject] = useState([]);
@@ -479,10 +481,6 @@ export function Logo({ item }) {
 
 		setMetalMountingOptions(newMountingOptions);
 	}, [selectedThickness, mounting, setMetalMountingOptions]);
-
-	useEffect(() => {
-		checkAndAddMissingFields();
-	}, [signage, hasUploadedFile]);
 
 	return (
 		<>

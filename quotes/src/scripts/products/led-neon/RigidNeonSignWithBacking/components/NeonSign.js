@@ -313,7 +313,27 @@ export const NeonSign = ({ item }) => {
 			}
 			return prevMissing;
 		});
-	}, [signage]);
+	}, [
+		fileUrls,
+		color,
+		neonColor,
+		customColor,
+		waterproof,
+		mounting,
+		finish,
+		sets,
+		width,
+		height,
+		rigidBacking,
+		remoteControl,
+		neonLength8mm,
+		neonLength10mm,
+		neonLength14mm,
+		neonLength20mm,
+		wireType,
+		wireExitLocation,
+		hasUploadedFile,
+	]);
 
 	useEffect(() => {
 		updateSignage();

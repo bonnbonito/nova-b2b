@@ -231,6 +231,7 @@ export function Logo({ item }) {
 
 	useEffect(() => {
 		updateSignage();
+		checkAndAddMissingFields();
 	}, [
 		comments,
 		selectedThickness,
@@ -255,6 +256,7 @@ export function Logo({ item }) {
 		cadSinglePrice,
 		anodizedFinishing,
 		anodizedColor,
+		hasUploadedFile,
 	]);
 
 	const checkAndAddMissingFields = () => {
@@ -445,10 +447,6 @@ export function Logo({ item }) {
 
 		setMetalMountingOptions(newMountingOptions);
 	}, [selectedThickness, mounting, setMetalMountingOptions]);
-
-	useEffect(() => {
-		checkAndAddMissingFields();
-	}, [signage, hasUploadedFile]);
 
 	return (
 		<>

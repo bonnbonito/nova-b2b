@@ -347,7 +347,24 @@ export const NeonSign = ({ item }) => {
 			}
 			return prevMissing;
 		});
-	}, [signage]);
+	}, [
+		fileUrls,
+		neonColor,
+		waterproof,
+		mounting,
+		sets,
+		width,
+		height,
+		remoteControl,
+		neonLength8mm,
+		neonLength10mm,
+		neonLength14mm,
+		neonLength20mm,
+		rigidM4StudLength,
+		spacerStandoffDistance,
+		wireType,
+		hasUploadedFile,
+	]);
 
 	useEffect(() => {
 		updateSignage();

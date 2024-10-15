@@ -6151,7 +6151,7 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [signage, hasUploadedFile]);
+  }, [color, acrylicChannelThickness, selectedMounting, waterproof, fileUrls, customColor, sets, studLength, spacerStandoffDistance, width, height, hasUploadedFile]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
   }, [comments, acrylicChannelThickness, selectedMounting, waterproof, backOption, color, usdPrice, cadPrice, fileUrls, fileNames, filePaths, files, customColor, sets, studLength, spacerStandoffDistance, ledLightColor, usdSinglePrice, cadSinglePrice, width, height, includedItems]);
@@ -7463,7 +7463,7 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [signage, hasUploadedFile]);
+  }, [color, width, height, acrylicChannelThickness, selectedMounting, waterproof, fileUrls, customColor, sets, studLength, spacerStandoffDistance, vinylWhite, frontAcrylicCover, vinyl3635, frontBackVinyl, hasUploadedFile]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
   }, [comments, width, height, acrylicChannelThickness, selectedMounting, waterproof, color, usdPrice, cadPrice, fileUrls, fileNames, filePaths, files, customColor, sets, studLength, spacerStandoffDistance, frontAcrylicCover, vinylWhite, vinyl3635, frontBackVinyl, ledLightColor, usdSinglePrice, cadSinglePrice, backOption]);
@@ -8880,7 +8880,7 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [signage, hasUploadedFile]);
+  }, [color, width, height, acrylicChannelThickness, selectedMounting, waterproof, fileUrls, customColor, sets, studLength, spacerStandoffDistance, acrylicFront, vinylWhite, vinyl3635, hasUploadedFile]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
   }, [comments, width, height, acrylicChannelThickness, selectedMounting, waterproof, color, usdPrice, cadPrice, fileUrls, fileNames, filePaths, files, customColor, sets, studLength, spacerStandoffDistance, acrylicFront, vinylWhite, vinyl3635, ledLightColor, usdSinglePrice, cadSinglePrice, includedItems]);
@@ -10187,7 +10187,7 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [signage, hasUploadedFile]);
+  }, [acrylicChannelThickness, selectedMounting, waterproof, fileUrls, sets, studLength, spacerStandoffDistance, width, height, vinylWhite, vinyl3635, frontAcrylicCover, hasUploadedFile]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
   }, [comments, acrylicChannelThickness, selectedMounting, waterproof, usdPrice, cadPrice, fileUrls, fileNames, filePaths, files, sets, studLength, spacerStandoffDistance, ledLightColor, usdSinglePrice, cadSinglePrice, vinylWhite, vinyl3635, frontAcrylicCover, width, height]);
@@ -11223,7 +11223,8 @@ function Logo({
   const {
     signage,
     setSignage,
-    setMissing
+    setMissing,
+    hasUploadedFile
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_12__.useAppContext)();
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
   const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$width = item.width) !== null && _item$width !== void 0 ? _item$width : '');
@@ -11422,7 +11423,9 @@ function Logo({
       if (!metalLaminate) missingFields.push('Select Metal Laminate');
     }
     if (!sets) missingFields.push('Select Quantity');
-    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    if (!hasUploadedFile) {
+      if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+    }
     if (missingFields.length > 0) {
       setMissing(prevMissing => {
         const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
@@ -11451,7 +11454,7 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [color, width, height, acrylicChannelThickness, selectedMounting, waterproof, fileUrls, customColor, sets, studLength, spacerStandoffDistance, metalLaminate, frontOption]);
+  }, [color, width, height, acrylicChannelThickness, selectedMounting, waterproof, fileUrls, customColor, sets, studLength, spacerStandoffDistance, metalLaminate, frontOption, hasUploadedFile]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
   }, [comments, acrylicChannelThickness, selectedMounting, waterproof, color, usdPrice, cadPrice, fileUrls, fileNames, filePaths, files, customColor, sets, studLength, spacerStandoffDistance, ledLightColor, usdSinglePrice, cadSinglePrice, metalLaminate, width, frontOption, height]);
@@ -13115,7 +13118,7 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [signage, hasUploadedFile]);
+  }, [width, height, selectedThickness, comments, selectedMounting, waterproof, fileUrls, fileNames, filePaths, files, selectedFinishing, sets, studLength, spacerStandoffDistance, hasUploadedFile]);
   (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_4__["default"])([colorRef], () => {
     if (!openColor) return;
     setOpenColor(false);
@@ -13806,7 +13809,7 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [signage, hasUploadedFile]);
+  }, [fileUrls, comments, width, height, layers, selectedMounting, selectedThickness, description, waterproof, selectedFinishing, sets, studLength, spacerStandoffDistance, hasUploadedFile]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "py-4 mb-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
@@ -15083,7 +15086,7 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [signage, hasUploadedFile]);
+  }, [selectedThickness, comments, selectedMounting, waterproof, acrylicBase, width, height, metalLaminate, fileUrls, fileNames, filePaths, files, customColor, sets, studLength, spacerStandoffDistance, hasUploadedFile]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const {
       singlePrice,
@@ -15726,7 +15729,7 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [signage, hasUploadedFile]);
+  }, [selectedThickness, selectedMounting, waterproof, width, height, fileUrls, fileNames, selectedFinishing, files, filePaths, baseColor, printPreference, customColor, sets, studLength, spacerStandoffDistance, hasUploadedFile]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
   }, [comments, selectedThickness, selectedMounting, waterproof, width, height, usdPrice, cadPrice, usdSinglePrice, cadSinglePrice, fileUrls, fileNames, customColor, selectedFinishing, files, filePaths, printPreference, baseColor, sets, studLength, spacerStandoffDistance]);
@@ -17376,7 +17379,7 @@ const NeonSign = ({
       }
       return prevMissing;
     });
-  }, [signage]);
+  }, [fileUrls, color, waterproof, mounting, sets, width, height, neonLength, acrylicBackingOption, remoteControl, wireExitLocation, hasUploadedFile]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
@@ -17977,7 +17980,7 @@ const NeonSign = ({
       }
       return prevMissing;
     });
-  }, [signage]);
+  }, [fileUrls, neonColor, waterproof, mounting, sets, width, height, remoteControl, neonLength8mm, neonLength10mm, neonLength14mm, neonLength20mm, rigidM4StudLength, spacerStandoffDistance, wireType, hasUploadedFile]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
@@ -18588,7 +18591,7 @@ const NeonSign = ({
       }
       return prevMissing;
     });
-  }, [signage]);
+  }, [fileUrls, color, neonColor, customColor, waterproof, mounting, finish, sets, width, height, rigidBacking, remoteControl, neonLength8mm, neonLength10mm, neonLength14mm, neonLength20mm, wireType, wireExitLocation, hasUploadedFile]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
@@ -19473,7 +19476,7 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [signage, hasUploadedFile]);
+  }, [lightboxType, uvPrintedCover, waterproof, fileUrls, sets, hasUploadedFile]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     async function fetchLogoPricing() {
       try {
@@ -20956,10 +20959,8 @@ function Logo({
   }, [depth, width, height, waterproof, mounting, frontAcrylicCover, sets, frontBackVinyl]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-  }, [depth, comments, waterproof, color, usdPrice, cadPrice, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, mounting, studLength, spacerStandoffDistance, frontAcrylicCover, sets, width, height, usdSinglePrice, cadSinglePrice, vinylWhite, vinyl3635, frontBackVinyl, includedItems]);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [signage, hasUploadedFile]);
+  }, [depth, comments, waterproof, color, usdPrice, cadPrice, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, mounting, studLength, spacerStandoffDistance, frontAcrylicCover, sets, width, height, usdSinglePrice, cadSinglePrice, vinylWhite, vinyl3635, frontBackVinyl, includedItems, hasUploadedFile]);
   if (frontAcrylicCover === '3M 3630 Vinyl') {
     (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_4__["default"])([colorRef, acrylicColorRef], () => {
       if (!openColor && !openAcrylicCover) return;
@@ -22461,10 +22462,8 @@ function Logo({
   }, [depth, width, height, waterproof, mounting, frontAcrylicCover, sets]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-  }, [depth, comments, waterproof, color, usdPrice, cadPrice, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, mounting, studLength, spacerStandoffDistance, frontAcrylicCover, sets, width, height, usdSinglePrice, cadSinglePrice, vinylWhite, vinyl3635, includedItems]);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [signage, hasUploadedFile]);
+  }, [depth, comments, waterproof, color, usdPrice, cadPrice, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, mounting, studLength, spacerStandoffDistance, frontAcrylicCover, sets, width, height, usdSinglePrice, cadSinglePrice, vinylWhite, vinyl3635, includedItems, hasUploadedFile]);
   if (frontAcrylicCover === '3M 3630 Vinyl') {
     (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_4__["default"])([colorRef, acrylicColorRef], () => {
       if (!openColor && !openAcrylicCover) return;
@@ -23776,10 +23775,8 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-  }, [depth, width, height, comments, waterproof, color, usdPrice, cadPrice, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, mounting, studLength, spacerStandoffDistance, selectedFinishing, metalFinish, acrylicReveal, sets, usdSinglePrice, cadSinglePrice, includedItems]);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [signage, hasUploadedFile]);
+  }, [depth, width, height, comments, waterproof, color, usdPrice, cadPrice, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, mounting, studLength, spacerStandoffDistance, selectedFinishing, metalFinish, acrylicReveal, sets, usdSinglePrice, cadSinglePrice, includedItems, hasUploadedFile]);
   const computePricing = () => {
     var _tempTotal$toFixed, _total$toFixed;
     if (!width || !height || !depth?.value) {
@@ -25247,10 +25244,8 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-  }, [depth, comments, waterproof, color, frontAcrylicCover, vinylWhite, vinyl3635, frontBackVinyl, usdPrice, cadPrice, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, mounting, studLength, spacerStandoffDistance, width, height, cadSinglePrice, usdSinglePrice, includedItems]);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [signage, hasUploadedFile]);
+  }, [depth, comments, waterproof, color, frontAcrylicCover, vinylWhite, vinyl3635, frontBackVinyl, usdPrice, cadPrice, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, mounting, studLength, spacerStandoffDistance, width, height, cadSinglePrice, usdSinglePrice, includedItems, hasUploadedFile]);
   if (frontAcrylicCover === '3M 3630 Vinyl') {
     (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_4__["default"])([colorRef, acrylicColorRef], () => {
       if (!openColor && !openAcrylicCover) return;
@@ -26679,10 +26674,8 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-  }, [depth, comments, waterproof, color, frontAcrylicCover, vinylWhite, vinyl3635, usdPrice, cadPrice, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, mounting, studLength, spacerStandoffDistance, width, height, cadSinglePrice, usdSinglePrice, includedItems]);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [signage, hasUploadedFile]);
+  }, [depth, comments, waterproof, color, frontAcrylicCover, vinylWhite, vinyl3635, usdPrice, cadPrice, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, mounting, studLength, spacerStandoffDistance, width, height, cadSinglePrice, usdSinglePrice, includedItems, hasUploadedFile]);
   if (frontAcrylicCover === '3M 3630 Vinyl') {
     (0,_utils_ClickOutside__WEBPACK_IMPORTED_MODULE_4__["default"])([colorRef, acrylicColorRef], () => {
       if (!openColor && !openAcrylicCover) return;
@@ -28185,7 +28178,8 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-  }, [comments, selectedThickness, selectedMounting, waterproof, width, height, usdPrice, cadPrice, fileUrls, fileNames, selectedFinishing, stainLessMetalFinish, files, filePaths, mounting, color, customColor, metal, sets, studLength, spacerStandoffDistance, usdSinglePrice, cadSinglePrice, returnColor]);
+    checkAndAddMissingFields();
+  }, [comments, selectedThickness, selectedMounting, waterproof, width, height, usdPrice, cadPrice, fileUrls, fileNames, selectedFinishing, stainLessMetalFinish, files, filePaths, mounting, color, customColor, metal, sets, studLength, spacerStandoffDistance, usdSinglePrice, cadSinglePrice, returnColor, hasUploadedFile]);
   const [logoPricingObject, setLogoPricingObject] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     async function fetchLogoPricing() {
@@ -28273,9 +28267,6 @@ function Logo({
       setCustomColor('');
     }
   }, [color, returnColor]);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    checkAndAddMissingFields();
-  }, [signage, hasUploadedFile]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "py-4 mb-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
@@ -29438,7 +29429,8 @@ function Logo({
   }
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-  }, [comments, selectedThickness, selectedMounting, waterproof, width, height, usdPrice, cadPrice, fileUrls, fileNames, selectedFinishing, files, filePaths, mounting, color, customColor, sets, studLength, spacerStandoffDistance, usdSinglePrice, cadSinglePrice, anodizedFinishing, anodizedColor]);
+    checkAndAddMissingFields();
+  }, [comments, selectedThickness, selectedMounting, waterproof, width, height, usdPrice, cadPrice, fileUrls, fileNames, selectedFinishing, files, filePaths, mounting, color, customColor, sets, studLength, spacerStandoffDistance, usdSinglePrice, cadSinglePrice, anodizedFinishing, anodizedColor, hasUploadedFile]);
   const checkAndAddMissingFields = () => {
     const missingFields = [];
     if (!selectedThickness) missingFields.push('Select Acrylic Thickness');
@@ -29571,9 +29563,6 @@ function Logo({
     }
     setMetalMountingOptions(newMountingOptions);
   }, [selectedThickness, mounting, setMetalMountingOptions]);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    checkAndAddMissingFields();
-  }, [signage, hasUploadedFile]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "py-4 mb-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
@@ -30806,7 +30795,8 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-  }, [comments, selectedThickness, mounting, waterproof, width, height, usdPrice, cadPrice, fileUrls, fileNames, selectedFinishing, stainLessMetalFinish, stainlessSteelPolished, files, filePaths, mounting, color, customColor, metal, sets, studLength, spacerStandoffDistance, usdSinglePrice, cadSinglePrice]);
+    checkAndAddMissingFields();
+  }, [comments, selectedThickness, mounting, waterproof, width, height, usdPrice, cadPrice, fileUrls, fileNames, selectedFinishing, stainLessMetalFinish, stainlessSteelPolished, files, filePaths, mounting, color, customColor, metal, sets, studLength, spacerStandoffDistance, usdSinglePrice, cadSinglePrice, hasUploadedFile]);
   const [logoPricingObject, setLogoPricingObject] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     async function fetchLogoPricing() {
@@ -30900,9 +30890,6 @@ function Logo({
     }
     setMetalMountingOptions(newMountingOptions);
   }, [selectedThickness, mounting, setMetalMountingOptions]);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    checkAndAddMissingFields();
-  }, [signage, hasUploadedFile]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "py-4 mb-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
@@ -32290,7 +32277,7 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [signage, hasUploadedFile]);
+  }, [width, comments, height, selectedThickness, mounting, waterproof, fileUrls, fileNames, files, filePaths, selectedFinishing, pvcBaseColor, customColor, sets, studLength, spacerStandoffDistance, hasUploadedFile]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if ('Outdoor (Waterproof)' === waterproof) {
       if ('Double-sided tape' === mounting) {
@@ -33528,7 +33515,7 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [signage, hasUploadedFile]);
+  }, [width, comments, height, selectedThickness, mounting, waterproof, fileUrls, fileNames, files, filePaths, selectedFinishing, color, customColor, sets, studLength, spacerStandoffDistance, hasUploadedFile]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if ('Outdoor (Waterproof)' === waterproof) {
       if ('Double-sided tape' === mounting) {
@@ -34149,7 +34136,7 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [signage, hasUploadedFile]);
+  }, [width, comments, height, selectedThickness, mounting, waterproof, fileUrls, fileNames, files, filePaths, selectedFinishing, sets, studLength, spacerStandoffDistance, hasUploadedFile]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if ('Outdoor (Waterproof)' === waterproof) {
       if ('Double-sided tape' === mounting) {

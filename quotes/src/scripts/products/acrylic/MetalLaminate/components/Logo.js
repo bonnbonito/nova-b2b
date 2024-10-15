@@ -459,7 +459,25 @@ export function Logo({ item }) {
 
 	useEffect(() => {
 		checkAndAddMissingFields();
-	}, [signage, hasUploadedFile]);
+	}, [
+		selectedThickness,
+		comments,
+		selectedMounting,
+		waterproof,
+		acrylicBase,
+		width,
+		height,
+		metalLaminate,
+		fileUrls,
+		fileNames,
+		filePaths,
+		files,
+		customColor,
+		sets,
+		studLength,
+		spacerStandoffDistance,
+		hasUploadedFile,
+	]);
 
 	useEffect(() => {
 		const { singlePrice, total } = computePricing();

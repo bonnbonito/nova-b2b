@@ -56,7 +56,7 @@ const frontOptionOptions = [
 ];
 
 export function Logo({ item }) {
-	const { signage, setSignage, setMissing } = useAppContext();
+	const { signage, setSignage, setMissing, hasUploadedFile } = useAppContext();
 	const [comments, setComments] = useState(item.comments ?? '');
 	const [width, setWidth] = useState(item.width ?? '');
 	const [height, setHeight] = useState(item.height ?? '');
@@ -308,8 +308,10 @@ export function Logo({ item }) {
 
 		if (!sets) missingFields.push('Select Quantity');
 
-		if (!fileUrls || fileUrls.length === 0)
-			missingFields.push('Upload a PDF/AI File');
+		if (!hasUploadedFile) {
+			if (!fileUrls || fileUrls.length === 0)
+				missingFields.push('Upload a PDF/AI File');
+		}
 
 		if (missingFields.length > 0) {
 			setMissing((prevMissing) => {
@@ -361,6 +363,7 @@ export function Logo({ item }) {
 		spacerStandoffDistance,
 		metalLaminate,
 		frontOption,
+		hasUploadedFile,
 	]);
 
 	useEffect(() => {

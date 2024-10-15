@@ -311,6 +311,7 @@ export function Logo({ item }) {
 
 	useEffect(() => {
 		updateSignage();
+		checkAndAddMissingFields();
 	}, [
 		comments,
 		selectedThickness,
@@ -336,6 +337,7 @@ export function Logo({ item }) {
 		usdSinglePrice,
 		cadSinglePrice,
 		returnColor,
+		hasUploadedFile,
 	]);
 
 	const [logoPricingObject, setLogoPricingObject] = useState([]);
@@ -469,10 +471,6 @@ export function Logo({ item }) {
 			setCustomColor('');
 		}
 	}, [color, returnColor]);
-
-	useEffect(() => {
-		checkAndAddMissingFields();
-	}, [signage, hasUploadedFile]);
 
 	return (
 		<>

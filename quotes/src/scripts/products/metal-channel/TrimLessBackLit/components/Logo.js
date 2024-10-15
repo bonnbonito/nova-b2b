@@ -333,6 +333,7 @@ export function Logo({ item }) {
 
 	useEffect(() => {
 		updateSignage();
+		checkAndAddMissingFields();
 	}, [
 		depth,
 		width,
@@ -358,11 +359,8 @@ export function Logo({ item }) {
 		usdSinglePrice,
 		cadSinglePrice,
 		includedItems,
+		hasUploadedFile,
 	]);
-
-	useEffect(() => {
-		checkAndAddMissingFields();
-	}, [signage, hasUploadedFile]);
 
 	const computePricing = () => {
 		if (!width || !height || !depth?.value) {

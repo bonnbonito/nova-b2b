@@ -348,7 +348,23 @@ export function Logo({ item }) {
 
 	useEffect(() => {
 		checkAndAddMissingFields();
-	}, [signage, hasUploadedFile]);
+	}, [
+		color,
+		width,
+		height,
+		acrylicChannelThickness,
+		selectedMounting,
+		waterproof,
+		fileUrls,
+		customColor,
+		sets,
+		studLength,
+		spacerStandoffDistance,
+		acrylicFront,
+		vinylWhite,
+		vinyl3635,
+		hasUploadedFile,
+	]);
 
 	useEffect(() => {
 		updateSignage();

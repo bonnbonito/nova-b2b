@@ -475,7 +475,25 @@ export function Logo({ item }) {
 
 	useEffect(() => {
 		checkAndAddMissingFields();
-	}, [signage, hasUploadedFile]);
+	}, [
+		width,
+		comments,
+		height,
+		selectedThickness,
+		mounting,
+		waterproof,
+		fileUrls,
+		fileNames,
+		files,
+		filePaths,
+		selectedFinishing,
+		color,
+		customColor,
+		sets,
+		studLength,
+		spacerStandoffDistance,
+		hasUploadedFile,
+	]);
 
 	useEffect(() => {
 		if ('Outdoor (Waterproof)' === waterproof) {

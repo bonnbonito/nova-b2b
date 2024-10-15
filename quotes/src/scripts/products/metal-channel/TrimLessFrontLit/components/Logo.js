@@ -333,6 +333,7 @@ export function Logo({ item }) {
 
 	useEffect(() => {
 		updateSignage();
+		checkAndAddMissingFields();
 	}, [
 		depth,
 		comments,
@@ -357,11 +358,8 @@ export function Logo({ item }) {
 		cadSinglePrice,
 		usdSinglePrice,
 		includedItems,
+		hasUploadedFile,
 	]);
-
-	useEffect(() => {
-		checkAndAddMissingFields();
-	}, [signage, hasUploadedFile]);
 
 	if (frontAcrylicCover === '3M 3630 Vinyl') {
 		useOutsideClick([colorRef, acrylicColorRef], () => {
