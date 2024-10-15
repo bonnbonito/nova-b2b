@@ -342,6 +342,7 @@ export const EtchedSign = ({ item }) => {
 		setMetalThickness(target);
 	};
 
+	/**
 	useEffect(() => {
 		if (quantityDiscountTable.length > 0) {
 			const { singlePrice, total, totalWithoutDiscount, discount } =
@@ -379,6 +380,7 @@ export const EtchedSign = ({ item }) => {
 		quantityDiscountTable,
 		graphicsStyle,
 	]);
+	 */
 
 	useEffect(() => {
 		updateSignage();

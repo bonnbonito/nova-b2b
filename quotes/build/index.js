@@ -34610,35 +34610,47 @@ const EtchedSign = ({
     if (!target) return;
     setMetalThickness(target);
   };
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (quantityDiscountTable.length > 0) {
-      const {
-        singlePrice,
-        total,
-        totalWithoutDiscount,
-        discount
-      } = computePricing();
-      if (total && singlePrice) {
-        setUsdPrice(total);
-        setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.EXCHANGE_RATE).toFixed(2));
-        setUsdSinglePrice(singlePrice);
-        setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.EXCHANGE_RATE).toFixed(2));
-        setUsdDiscount(discount.toFixed(2));
-        setCadDiscount((discount * _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.EXCHANGE_RATE).toFixed(2));
-        setCadTotalNoDiscount((totalWithoutDiscount * _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.EXCHANGE_RATE).toFixed(2));
-        setUsdTotalNoDiscount(totalWithoutDiscount.toFixed(2));
-      } else {
-        setUsdPrice(0);
-        setCadPrice(0);
-        setUsdSinglePrice(0);
-        setCadSinglePrice(0);
-        setUsdDiscount('');
-        setCadDiscount('');
-        setCadTotalNoDiscount('');
-        setUsdTotalNoDiscount('');
-      }
-    }
-  }, [metalThickness, width, height, waterproof, finishing, mounting, sets, quantityDiscountTable, graphicsStyle]);
+
+  /**
+  useEffect(() => {
+  	if (quantityDiscountTable.length > 0) {
+  		const { singlePrice, total, totalWithoutDiscount, discount } =
+  			computePricing();
+  		if (total && singlePrice) {
+  			setUsdPrice(total);
+  			setCadPrice((total * EXCHANGE_RATE).toFixed(2));
+  			setUsdSinglePrice(singlePrice);
+  			setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
+  			setUsdDiscount(discount.toFixed(2));
+  			setCadDiscount((discount * EXCHANGE_RATE).toFixed(2));
+  			setCadTotalNoDiscount(
+  				(totalWithoutDiscount * EXCHANGE_RATE).toFixed(2)
+  			);
+  			setUsdTotalNoDiscount(totalWithoutDiscount.toFixed(2));
+  		} else {
+  			setUsdPrice(0);
+  			setCadPrice(0);
+  			setUsdSinglePrice(0);
+  			setCadSinglePrice(0);
+  			setUsdDiscount('');
+  			setCadDiscount('');
+  			setCadTotalNoDiscount('');
+  			setUsdTotalNoDiscount('');
+  		}
+  	}
+  }, [
+  	metalThickness,
+  	width,
+  	height,
+  	waterproof,
+  	finishing,
+  	mounting,
+  	sets,
+  	quantityDiscountTable,
+  	graphicsStyle,
+  ]);
+   */
+
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
@@ -35318,35 +35330,49 @@ const EtchedSign = ({
       setStudLength('');
     }
   };
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (quantityDiscountTable.length > 0) {
-      const {
-        singlePrice,
-        total,
-        totalWithoutDiscount,
-        discount
-      } = computePricing();
-      if (total && singlePrice) {
-        setUsdPrice(total);
-        setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.EXCHANGE_RATE).toFixed(2));
-        setUsdSinglePrice(singlePrice);
-        setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.EXCHANGE_RATE).toFixed(2));
-        setUsdDiscount(discount.toFixed(2));
-        setCadDiscount((discount * _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.EXCHANGE_RATE).toFixed(2));
-        setCadTotalNoDiscount((totalWithoutDiscount * _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.EXCHANGE_RATE).toFixed(2));
-        setUsdTotalNoDiscount(totalWithoutDiscount.toFixed(2));
-      } else {
-        setUsdPrice(0);
-        setCadPrice(0);
-        setUsdSinglePrice(0);
-        setCadSinglePrice(0);
-        setUsdDiscount('');
-        setCadDiscount('');
-        setCadTotalNoDiscount('');
-        setUsdTotalNoDiscount('');
-      }
-    }
-  }, [material, metalThickness, width, height, waterproof, edges, finishing, mounting, sets, graphicsStyle, quantityDiscountTable]);
+
+  /**
+  useEffect(() => {
+  	if (quantityDiscountTable.length > 0) {
+  		const { singlePrice, total, totalWithoutDiscount, discount } =
+  			computePricing();
+  		if (total && singlePrice) {
+  			setUsdPrice(total);
+  			setCadPrice((total * EXCHANGE_RATE).toFixed(2));
+  			setUsdSinglePrice(singlePrice);
+  			setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
+  			setUsdDiscount(discount.toFixed(2));
+  			setCadDiscount((discount * EXCHANGE_RATE).toFixed(2));
+  			setCadTotalNoDiscount(
+  				(totalWithoutDiscount * EXCHANGE_RATE).toFixed(2)
+  			);
+  			setUsdTotalNoDiscount(totalWithoutDiscount.toFixed(2));
+  		} else {
+  			setUsdPrice(0);
+  			setCadPrice(0);
+  			setUsdSinglePrice(0);
+  			setCadSinglePrice(0);
+  			setUsdDiscount('');
+  			setCadDiscount('');
+  			setCadTotalNoDiscount('');
+  			setUsdTotalNoDiscount('');
+  		}
+  	}
+  }, [
+  	material,
+  	metalThickness,
+  	width,
+  	height,
+  	waterproof,
+  	edges,
+  	finishing,
+  	mounting,
+  	sets,
+  	graphicsStyle,
+  	quantityDiscountTable,
+  ]);
+   */
+
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
