@@ -17,6 +17,8 @@ export default function PricesView({ item }) {
 		padding: '0 10px 20px 10px',
 	};
 
+	console.log(item);
+
 	const headlineRef = useRef(null);
 
 	const adjustFontSize = () => {

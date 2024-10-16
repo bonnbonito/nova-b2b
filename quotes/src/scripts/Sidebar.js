@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useAppContext } from './AppProvider';
 import ModalSave from './ModalSave';
 import Prices from './Prices';
-import { EXCHANGE_RATE } from './utils/defaults';
+import { EXCHANGE_RATE, shippingRates } from './utils/defaults';
 
 const currency = wcumcs_vars_data.currency;
 
@@ -57,7 +57,9 @@ export default function Sidebar() {
 
 	const flatRate = currency === 'USD' ? 14.75 : 14.75 * EXCHANGE_RATE;
 
-	const standardRate = totalPrice > 0 ? parseFloat(totalPrice * 0.075) : 0;
+	const { standard } = shippingRates(totalPrice, currency);
+
+	const standardRate = parseFloat(standard.toFixed(2));
 
 	const estimatedShipping =
 		totalPrice > 0 ? parseFloat(Math.max(flatRate, standardRate)) : 0;
@@ -202,7 +204,7 @@ export default function Sidebar() {
 						/>
 					)}
 
-				<div className="text-sm mb-4">Quote & Draft Validity: 30 days</div>
+				<div className="text-sm mb-4">Quote & Draft Validity: 30 days 123</div>
 			</div>
 		</div>
 	);

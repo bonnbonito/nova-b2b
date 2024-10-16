@@ -50,6 +50,10 @@ if ( ! defined( 'NOVA_SEARCH_RESULTS_POST_PER_PAGE' ) ) {
 	define( 'NOVA_SEARCH_RESULTS_POST_PER_PAGE', 9 );
 }
 
+if ( ! defined( 'NOVA_EXCHANGE_RATE' ) ) {
+	define( 'NOVA_EXCHANGE_RATE', 1.35 );
+}
+
 add_action( 'acf/init', 'nova_b2b_acf_init', 1 );
 
 function nova_b2b_acf_init() {

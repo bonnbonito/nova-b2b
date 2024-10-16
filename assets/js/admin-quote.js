@@ -4,7 +4,7 @@ const cadPrice = document.getElementById('cadPrice');
 const finalPriceInput = document.querySelector(
 	'[data-name="final_price"] input'
 );
-const EXCHANGE_RATE = 1.3;
+const EXCHANGE_RATE = 1.35;
 
 function displayQuoteDetails() {
 	// Initialize and display the CAD price based on the USD price

@@ -809,7 +809,7 @@ class Woocommerce {
 	public function change_to_custom_price( $final_price, $price, $product, $currency ) {
 
 		if ( get_woocommerce_currency() == 'CAD' ) {
-			$final_price = $price * 1.3;
+			$final_price = $price * NOVA_EXCHANGE_RATE;
 		}
 
 		return $final_price;
@@ -1520,13 +1520,21 @@ class Woocommerce {
 
 	public function custom_shipping_logic( $rates, $package ) {
 		// Get the total cart cost
-		$cart_total = WC()->cart->cart_contents_total;
+		$cart_total    = WC()->cart->cart_contents_total;
+		$currency      = get_woocommerce_currency();
+		$flat_rate     = 14.75;
+		$expedite_rate = 29.5;
+		if ( $currency === 'CAD' ) {
+			$flat_rate     *= NOVA_EXCHANGE_RATE;
+			$expedite_rate *= NOVA_EXCHANGE_RATE;
+		}
 
-		// Calculate the standard and expedite costs
-		$standard_cost = $cart_total * 0.075; // 7.5%
-		$expedite_cost = $cart_total * 0.155 > 29.5 ? $cart_total * 0.155 : 29.5; // 15.5%
-		if ( get_woocommerce_currency() === 'CAD' ) {
-			$expedite_cost *= 1.3;
+		if ( $cart_total < 800 ) {
+			$standard_cost = $cart_total * 0.09 > $flat_rate ? $cart_total * 0.09 : $flat_rate; // 9%
+			$expedite_cost = $cart_total * 0.175 > $expedite_rate ? $cart_total * 0.175 : $expedite_rate; // 17.5%
+		} else {
+			$standard_cost = $cart_total * 0.08 > $flat_rate ? $cart_total * 0.08 : $flat_rate; // 8%
+			$expedite_cost = $cart_total * 0.155 > $expedite_rate ? $cart_total * 0.155 : $expedite_rate; // 15.5%
 		}
 
 		// Assuming the method IDs are 'flat_rate', 'standard', and 'expedite'

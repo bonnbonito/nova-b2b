@@ -96,9 +96,8 @@ export function Logo({ item }) {
 					<textarea
 						className="h-[160px] rounded-md text-sm"
 						onChange={handleOnChangeDescription}
-					>
-						{description}
-					</textarea>
+						value={description}
+					/>
 				</div>
 				<UploadFiles
 					itemId={item.id}
