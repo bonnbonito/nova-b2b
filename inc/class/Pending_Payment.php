@@ -127,8 +127,11 @@ class Pending_Payment {
 	}
 
 	public function disable_completed_email( $enabled, $order ) {
-		$manual_delivered_date = get_field( 'manual_delivered_date', $order->get_id() );
+		if ( ! $order ) {
+			return $enabled;
+		}
 
+		$manual_delivered_date = get_field( 'manual_delivered_date', $order->get_id() );
 		if ( ! empty( $manual_delivered_date ) ) {
 			return false; // Disable the email
 		}
