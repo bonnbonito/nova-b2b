@@ -5,16 +5,24 @@ $price = get_field( 'final_price' ) ? (float) get_field( 'final_price' ) : 0;
 
 $currency_settings = new WooCommerce_Ultimate_Multi_Currency_Suite_Settings( '' );
 
-$exchange_rate_cad = 1.3;
+$currency = get_woocommerce_currency();
 
-$flat_rate     = 14.75;
-$standard_rate = $price * 0.075;
+$flat_rate = 14.75;
+if ( $currency === 'CAD' ) {
+	$flat_rate = 14.75 * NOVA_EXCHANGE_RATE;
+}
+
+if ( $price < 800 ) {
+	$standard_rate = $price * 0.09 > $flat_rate ? $price * 0.09 : $flat_rate; // 9%
+} else {
+	$standard_rate = $price * 0.08 > $flat_rate ? $price * 0.08 : $flat_rate;
+}
 
 $estimatedShipping = $price > 0 ? number_format( max( $flat_rate, $standard_rate ), 2, '.', '' ) : 0;
 
 $price_with_shipping = $price + $estimatedShipping;
 
-$final_price = $price_with_shipping ? ( get_woocommerce_currency() === 'USD' ? $price_with_shipping : $price_with_shipping * $exchange_rate_cad ) : 'TBD';
+$final_price = $price_with_shipping ? ( get_woocommerce_currency() === 'USD' ? $price_with_shipping : $price_with_shipping * NOVA_EXCHANGE_RATE ) : 'TBD';
 
 ?>
 <div id="quote-<?php the_ID(); ?>"

@@ -618,6 +618,7 @@ export const EtchedSign = ({ item }) => {
 		}
 	};
 
+	/**
 	useEffect(() => {
 		if (quantityDiscountTable.length > 0) {
 			const { singlePrice, total, totalWithoutDiscount, discount } =
@@ -657,6 +658,7 @@ export const EtchedSign = ({ item }) => {
 		graphicsStyle,
 		quantityDiscountTable,
 	]);
+	 */
 
 	useEffect(() => {
 		updateSignage();

@@ -113,9 +113,8 @@ export default function ProjectWrap({ item, index }) {
 						<textarea
 							className="h-[160px] rounded-sm"
 							onChange={handleOnChangeDescription}
-						>
-							{description}
-						</textarea>
+							value={description}
+						/>
 					</div>
 					<div className="w-1/4 flex flex-col justify-between">
 						<div className="mb-4">

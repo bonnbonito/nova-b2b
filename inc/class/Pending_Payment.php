@@ -144,6 +144,7 @@ class Pending_Payment {
 		}
 		$manual_delivered_date = get_field( 'manual_delivered_date', $order->get_id() );
 
+		$manual_delivered_date = get_field( 'manual_delivered_date', $order->get_id() );
 		if ( ! empty( $manual_delivered_date ) ) {
 			return false; // Disable the email
 		}

@@ -3610,6 +3610,7 @@ function PricesView({
     lineHeight: '1.6',
     padding: '0 10px 20px 10px'
   };
+  console.log(item);
   const headlineRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const adjustFontSize = () => {
     if (!headlineRef.current) {
@@ -3735,9 +3736,11 @@ function QuoteView() {
   };
   const quotePrice = NovaAccount?.final_price ? parseFloat(NovaAccount.final_price) : 0;
   const finalPrice = currency === 'USD' ? quotePrice : quotePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_3__.EXCHANGE_RATE;
-  const flatRate = currency === 'USD' ? 14.75 : 14.75 * _utils_defaults__WEBPACK_IMPORTED_MODULE_3__.EXCHANGE_RATE;
-  const standardRate = parseFloat((finalPrice * 0.075).toFixed(2));
-  const estimatedShipping = quotePrice > 0 ? Math.max(flatRate, standardRate) : 0;
+  const {
+    standard
+  } = (0,_utils_defaults__WEBPACK_IMPORTED_MODULE_3__.shippingRates)(finalPrice, currency);
+  const standardRate = parseFloat(standard.toFixed(2));
+  const estimatedShipping = quotePrice > 0 ? standardRate : 0;
   const priceWithShipping = parseFloat((finalPrice + estimatedShipping).toFixed(2));
   const tax = taxRate ? parseFloat((taxRate.tax_rate / 100).toFixed(2)) : 0;
   const taxCompute = parseFloat((priceWithShipping * tax).toFixed(2));
@@ -3814,6 +3817,7 @@ function QuoteView() {
   }, "PRODUCT:"), ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "text-sm"
   }, NovaAccount?.product_name ? decodeHTML(NovaAccount?.product_name) : 'None')), signage?.map(item => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_PricesView__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    key: item.id,
     id: item.id,
     item: item
   })), NovaAccount?.note && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -4016,7 +4020,10 @@ function Sidebar() {
   const totalNoDiscount = currency === 'USD' ? totalNoDiscountUSD : totalNoDiscountCAD;
   const totalDiscount = currency === 'USD' ? totalUsdDiscount : totalCadDiscount;
   const flatRate = currency === 'USD' ? 14.75 : 14.75 * _utils_defaults__WEBPACK_IMPORTED_MODULE_4__.EXCHANGE_RATE;
-  const standardRate = totalPrice > 0 ? parseFloat(totalPrice * 0.075) : 0;
+  const {
+    standard
+  } = (0,_utils_defaults__WEBPACK_IMPORTED_MODULE_4__.shippingRates)(totalPrice, currency);
+  const standardRate = parseFloat(standard.toFixed(2));
   const estimatedShipping = totalPrice > 0 ? parseFloat(Math.max(flatRate, standardRate)) : 0;
 
   //const taxCompute = parseFloat(totalPrice * tax);
@@ -4077,7 +4084,7 @@ function Sidebar() {
     btnClass: "uppercase mb-5 font-title border border-nova-light rounded-md text-nova-gray w-full text-center bg-white text-sm h-[49px] hover:bg-nova-light hover:text-white shadow-[0_0_0_1px_rgba(0,0,0,0.3)]"
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-sm mb-4"
-  }, "Quote & Draft Validity: 30 days")));
+  }, "Quote & Draft Validity: 30 days 123")));
 }
 
 /***/ }),
@@ -4218,6 +4225,7 @@ function SidebarNoPrice() {
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "w-full max-h-[calc(100vh-300px)] overflow-y-auto pr-5"
   }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Prices__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    key: item.id,
     id: item.id,
     item: item,
     borderTop: index > 0 && 'border-t mt-2'
@@ -13825,8 +13833,9 @@ function Logo({
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
   }, "DESCRIPTION"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("textarea", {
     className: "h-[160px] rounded-md text-sm",
-    onChange: handleOnChangeDescription
-  }, description)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    onChange: handleOnChangeDescription,
+    value: description
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_2__["default"], {
     itemId: item.id,
     setFilePaths: setFilePaths,
     setFiles: setFiles,
@@ -17057,8 +17066,9 @@ function Logo({
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
   }, "DESCRIPTION"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("textarea", {
     className: "h-[160px] rounded-md text-sm",
-    onChange: handleOnChangeDescription
-  }, description)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    onChange: handleOnChangeDescription,
+    value: description
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFiles__WEBPACK_IMPORTED_MODULE_2__["default"], {
     itemId: item.id,
     setFilePaths: setFilePaths,
     setFiles: setFiles,
@@ -34705,35 +34715,47 @@ const EtchedSign = ({
     if (!target) return;
     setMetalThickness(target);
   };
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (quantityDiscountTable.length > 0) {
-      const {
-        singlePrice,
-        total,
-        totalWithoutDiscount,
-        discount
-      } = computePricing();
-      if (total && singlePrice) {
-        setUsdPrice(total);
-        setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.EXCHANGE_RATE).toFixed(2));
-        setUsdSinglePrice(singlePrice);
-        setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.EXCHANGE_RATE).toFixed(2));
-        setUsdDiscount(discount.toFixed(2));
-        setCadDiscount((discount * _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.EXCHANGE_RATE).toFixed(2));
-        setCadTotalNoDiscount((totalWithoutDiscount * _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.EXCHANGE_RATE).toFixed(2));
-        setUsdTotalNoDiscount(totalWithoutDiscount.toFixed(2));
-      } else {
-        setUsdPrice(0);
-        setCadPrice(0);
-        setUsdSinglePrice(0);
-        setCadSinglePrice(0);
-        setUsdDiscount('');
-        setCadDiscount('');
-        setCadTotalNoDiscount('');
-        setUsdTotalNoDiscount('');
-      }
-    }
-  }, [metalThickness, width, height, waterproof, finishing, mounting, sets, quantityDiscountTable, graphicsStyle]);
+
+  /**
+  useEffect(() => {
+  	if (quantityDiscountTable.length > 0) {
+  		const { singlePrice, total, totalWithoutDiscount, discount } =
+  			computePricing();
+  		if (total && singlePrice) {
+  			setUsdPrice(total);
+  			setCadPrice((total * EXCHANGE_RATE).toFixed(2));
+  			setUsdSinglePrice(singlePrice);
+  			setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
+  			setUsdDiscount(discount.toFixed(2));
+  			setCadDiscount((discount * EXCHANGE_RATE).toFixed(2));
+  			setCadTotalNoDiscount(
+  				(totalWithoutDiscount * EXCHANGE_RATE).toFixed(2)
+  			);
+  			setUsdTotalNoDiscount(totalWithoutDiscount.toFixed(2));
+  		} else {
+  			setUsdPrice(0);
+  			setCadPrice(0);
+  			setUsdSinglePrice(0);
+  			setCadSinglePrice(0);
+  			setUsdDiscount('');
+  			setCadDiscount('');
+  			setCadTotalNoDiscount('');
+  			setUsdTotalNoDiscount('');
+  		}
+  	}
+  }, [
+  	metalThickness,
+  	width,
+  	height,
+  	waterproof,
+  	finishing,
+  	mounting,
+  	sets,
+  	quantityDiscountTable,
+  	graphicsStyle,
+  ]);
+   */
+
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
@@ -35413,35 +35435,49 @@ const EtchedSign = ({
       setStudLength('');
     }
   };
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (quantityDiscountTable.length > 0) {
-      const {
-        singlePrice,
-        total,
-        totalWithoutDiscount,
-        discount
-      } = computePricing();
-      if (total && singlePrice) {
-        setUsdPrice(total);
-        setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.EXCHANGE_RATE).toFixed(2));
-        setUsdSinglePrice(singlePrice);
-        setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.EXCHANGE_RATE).toFixed(2));
-        setUsdDiscount(discount.toFixed(2));
-        setCadDiscount((discount * _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.EXCHANGE_RATE).toFixed(2));
-        setCadTotalNoDiscount((totalWithoutDiscount * _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.EXCHANGE_RATE).toFixed(2));
-        setUsdTotalNoDiscount(totalWithoutDiscount.toFixed(2));
-      } else {
-        setUsdPrice(0);
-        setCadPrice(0);
-        setUsdSinglePrice(0);
-        setCadSinglePrice(0);
-        setUsdDiscount('');
-        setCadDiscount('');
-        setCadTotalNoDiscount('');
-        setUsdTotalNoDiscount('');
-      }
-    }
-  }, [material, metalThickness, width, height, waterproof, edges, finishing, mounting, sets, graphicsStyle, quantityDiscountTable]);
+
+  /**
+  useEffect(() => {
+  	if (quantityDiscountTable.length > 0) {
+  		const { singlePrice, total, totalWithoutDiscount, discount } =
+  			computePricing();
+  		if (total && singlePrice) {
+  			setUsdPrice(total);
+  			setCadPrice((total * EXCHANGE_RATE).toFixed(2));
+  			setUsdSinglePrice(singlePrice);
+  			setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
+  			setUsdDiscount(discount.toFixed(2));
+  			setCadDiscount((discount * EXCHANGE_RATE).toFixed(2));
+  			setCadTotalNoDiscount(
+  				(totalWithoutDiscount * EXCHANGE_RATE).toFixed(2)
+  			);
+  			setUsdTotalNoDiscount(totalWithoutDiscount.toFixed(2));
+  		} else {
+  			setUsdPrice(0);
+  			setCadPrice(0);
+  			setUsdSinglePrice(0);
+  			setCadSinglePrice(0);
+  			setUsdDiscount('');
+  			setCadDiscount('');
+  			setCadTotalNoDiscount('');
+  			setUsdTotalNoDiscount('');
+  		}
+  	}
+  }, [
+  	material,
+  	metalThickness,
+  	width,
+  	height,
+  	waterproof,
+  	edges,
+  	finishing,
+  	mounting,
+  	sets,
+  	graphicsStyle,
+  	quantityDiscountTable,
+  ]);
+   */
+
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
@@ -37143,7 +37179,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   LIGHTING_INDOOR: () => (/* binding */ LIGHTING_INDOOR),
 /* harmony export */   M4_STUD_WITH_SPACER: () => (/* binding */ M4_STUD_WITH_SPACER),
 /* harmony export */   STUD_MOUNT: () => (/* binding */ STUD_MOUNT),
-/* harmony export */   STUD_WITH_SPACER: () => (/* binding */ STUD_WITH_SPACER)
+/* harmony export */   STUD_WITH_SPACER: () => (/* binding */ STUD_WITH_SPACER),
+/* harmony export */   shippingRates: () => (/* binding */ shippingRates)
 /* harmony export */ });
 const INDOOR_NOT_WATERPROOF = 'Indoor';
 const GLOSS_FINISH = 'Gloss';
@@ -37151,10 +37188,26 @@ const CLEAR_COLOR = 'Clear';
 const FROSTED_CLEAR_COLOR = 'Frosted Clear';
 const STUD_WITH_SPACER = 'Stud with spacer';
 const STUD_MOUNT = 'Stud Mount';
-const EXCHANGE_RATE = 1.3;
+const EXCHANGE_RATE = 1.35;
 const ASSEMBLY_FEES = 1.1;
 const M4_STUD_WITH_SPACER = 'M4 Stud with Spacer';
 const LIGHTING_INDOOR = 'Low Voltage LED Driver, 6ft open wires, 1:1 blueprint';
+const shippingRates = (total, currency) => {
+  let standard, expedite;
+  let flatRate = currency === 'USD' ? 14.75 : 14.75 * EXCHANGE_RATE;
+  let expediateRate = currency === 'USD' ? 29.5 : 29.5 * EXCHANGE_RATE;
+  if (total < 800) {
+    standard = total * 0.09 > flatRate ? total * 0.09 : flatRate;
+    expedite = total * 0.175 > expediateRate ? total * 0.175 : expediateRate;
+  } else {
+    standard = total * 0.08 > flatRate ? total * 0.08 : flatRate;
+    expedite = total * 0.155 > expediateRate ? total * 0.155 : expediateRate;
+  }
+  return {
+    standard,
+    expedite
+  };
+};
 
 /***/ }),
 

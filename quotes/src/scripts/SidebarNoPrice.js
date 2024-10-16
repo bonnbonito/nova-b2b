@@ -11,6 +11,7 @@ export default function SidebarNoPrice() {
 				<div className="w-full max-h-[calc(100vh-300px)] overflow-y-auto pr-5">
 					{signage.map((item, index) => (
 						<Prices
+							key={item.id}
 							id={item.id}
 							item={item}
 							borderTop={index > 0 && 'border-t mt-2'}

@@ -26,6 +26,7 @@ class NovaEmails {
 		add_filter( 'kadence_woomail_order_body_text', array( $this, 'pending_payment_processing_email' ), 40, 5 );
 		add_filter( 'kadence_woomail_order_body_text', array( $this, 'complete_payment_processing_email' ), 41, 5 );
 		add_filter( 'kadence_woomail_order_body_text', array( $this, 'fully_paid_payment_processing_email' ), 42, 5 );
+		add_filter( 'kadence_woomail_order_body_text', array( $this, 'ups_tracking' ), 50, 5 );
 		add_filter( 'woocommerce_email_additional_content_customer_processing_order', array( $this, 'pending_payment_additional_content_old' ), 40, 3 );
 		add_filter( 'woocommerce_email_additional_content_customer_processing_order', array( $this, 'pending_payment_additional_content' ), 40, 3 );
 		add_filter( 'woocommerce_email_additional_content_customer_completed_order', array( $this, 'complete_payment_additional_content' ), 41, 3 );
@@ -399,6 +400,23 @@ class NovaEmails {
 		$body_text = str_replace( '{customer_email}', $order->get_billing_email(), $body_text );
 		$body_text = str_replace( '{deadline}', $payment_date, $body_text );
 		$body_text = str_replace( '{payment_link}', $order->get_checkout_payment_url(), $body_text );
+
+		return $body_text;
+	}
+
+	public function ups_tracking( $body_text, $order, $sent_to_admin, $plain_text, $email ) {
+		$order_id = $order->get_id();
+		$key      = $email->id;
+		if ( 'customer_completed_order' !== $key ) {
+			return $body_text;
+		}
+		$tracking_number  = get_post_meta( $order_id, '_tracking_number', true );
+		$shipping_carrier = get_post_meta( $order_id, '_shipping_carrier', true );
+
+		if ( 'UPS' === $shipping_carrier && $tracking_number ) {
+			$body_text .= '<p><strong>' . __( 'Tracking Number:', 'nova-b2b' ) . ' ' . $tracking_number . '</strong><br>';
+			$body_text .= '<a href="https://www.ups.com/track?track=yes&trackNums=' . $tracking_number . '" target="_blank">' . __( 'Track Shipment', 'nova-b2b' ) . '</a></p>';
+		}
 
 		return $body_text;
 	}
