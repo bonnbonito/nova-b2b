@@ -1568,11 +1568,12 @@ class Woocommerce {
 				unset( $rates['flat_rate:2'], $rates['flat_rate:4'] );
 			}
 		}
-		*/
+
 
 		if ( is_cart() ) {
 			unset( $rates['flat_rate:3'] );
 		}
+		*/
 
 		return $rates;
 	}
