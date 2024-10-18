@@ -393,7 +393,7 @@ ul#payment-select li input {
 }
 
 .woocommerce-cart .woocommerce ul#shipping_method li:has(input[value="flat_rate:3"]) {
-    display: none;
+    /* display: none; */
 }
 
 .woocommerce-button.button.pay {
