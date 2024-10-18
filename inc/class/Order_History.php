@@ -107,6 +107,9 @@ class Order_History {
 
 		$order_ids = wc_get_orders( $args );
 
+		// check if the order is overdue to due_date
+		$current_time = time();
+
 		$orders = array();
 		foreach ( $order_ids as $order_id ) {
 			$order = wc_get_order( $order_id );
@@ -160,6 +163,17 @@ class Order_History {
 						$days_after_shipping = get_field( 'days_after_shipping', $payment_type );
 						$deadline            = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
 						$due_date            = date( 'M d, Y', $deadline );
+
+						if ( $current_time > $deadline ) {
+							if ( $order->get_status() == 'pending' ) {
+								$is_overdue = true;
+								if ( ! $order->get_meta( '_is_overdue' ) ) {
+									update_post_meta( $order->get_id(), '_is_overdue', true );
+								}
+							}
+						} elseif ( $order->get_meta( '_is_overdue' ) ) {
+							update_post_meta( $order->get_id(), '_is_overdue', true );
+						}
 					}
 				}
 			}
@@ -173,6 +187,7 @@ class Order_History {
 				'total'                => $total_with_currency,
 				'status'               => $order->get_status(),
 				'actions'              => $actions,
+				'deadline'             => $deadline,
 				'order_total'          => $order_total,
 				'due_date'             => $due_date,
 				'is_overdue'           => $is_overdue,
