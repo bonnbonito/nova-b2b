@@ -34,11 +34,6 @@ class Order_Status {
 		add_action( 'woocommerce_shipstation_shipnotify', array( $this, 'change_status_to_shipped' ), 10, 2 );
 		add_filter( 'woocommerce_email_classes', array( $this, 'custom_init_emails' ) );
 		add_filter( 'woocommerce_email_actions', array( $this, 'email_actions' ) );
-		add_action( 'woocommerce_order_status_shipped', array( $this, 'order_status_shipped' ), 20, 1 );
-	}
-
-	public function order_status_shipped( $order_id ) {
-		$order = wc_get_order( $order_id );
 	}
 
 	public function email_actions( $actions ) {

@@ -176,12 +176,15 @@ class Deposit {
 	}
 	public function order_status_shipped( $order_id ) {
 		$today = date( 'Ymd' );
+		$order = wc_get_order( $order_id );
 		update_post_meta( $order_id, 'shipped_date', $today );
 
 		$needs_payment = get_post_meta( $order_id, 'needs_payment', true );
 		if ( ! $needs_payment ) {
-			$order = wc_get_order( $order_id );
 			$order->set_status( 'completed' );
+			$order->save();
+		} else {
+			$order->set_status( 'pending' );
 			$order->save();
 		}
 	}
