@@ -27,7 +27,7 @@ class Woocommerce {
 	 * Class Constructor.
 	 */
 	public function __construct() {
-		remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_product_data_tabs', 10 );
+		// remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_product_data_tabs', 10 );
 		add_action( 'nova_product_specs', array( $this, 'nova_product_specs' ), 10 );
 		add_action( 'nova_product_specs', array( $this, 'nova_product_faqs' ), 11 );
 		add_filter( 'woocommerce_get_query_vars', array( $this, 'add_mockups_endpoint_query_var' ) );
@@ -62,7 +62,7 @@ class Woocommerce {
 		add_action( 'woocommerce_cart_actions', array( $this, 'update_quantity_script' ) );
 		add_action( 'woocommerce_after_add_to_cart_button', array( $this, 'update_single_quantity_script' ) );
 		add_action( 'woocommerce_before_cart', array( $this, 'edit_cart_form_wrap_before' ), 1 );
-		add_action( 'woocommerce_checkout_after_customer_details', array( $this, 'remove_checkout_coupon_form' ), 10 );
+		// add_action( 'woocommerce_checkout_after_customer_details', array( $this, 'remove_checkout_coupon_form' ), 10 );
 		add_filter( 'woocommerce_cart_totals_order_total_html', array( $this, 'woocommerce_cart_totals_order_total_html' ) );
 		add_filter( 'woocommerce_endpoint_order-received_title', array( $this, 'order_received_title' ), 20, 2 );
 		add_filter( 'woocommerce_thankyou_order_received_text', array( $this, 'woocommerce_thankyou_order_received_text' ), 20, 2 );
@@ -707,6 +707,11 @@ class Woocommerce {
 
 		$manually_shipped = get_field( 'manual_delivered_date', $order_id );
 		if ( $manually_shipped ) {
+			return false;
+		}
+
+		$combined_orders = get_field( '_original_order_ids' );
+		if ( $combined_orders ) {
 			return false;
 		}
 
@@ -1529,12 +1534,14 @@ class Woocommerce {
 		$currency      = get_woocommerce_currency();
 		$flat_rate     = 14.75;
 		$expedite_rate = 29.5;
+		$min_price     = 800;
 		if ( $currency === 'CAD' ) {
 			$flat_rate     *= NOVA_EXCHANGE_RATE;
 			$expedite_rate *= NOVA_EXCHANGE_RATE;
+			$min_price     *= NOVA_EXCHANGE_RATE;
 		}
 
-		if ( $cart_total < 800 ) {
+		if ( $cart_total < $min_price ) {
 			$standard_cost = $cart_total * 0.09 > $flat_rate ? $cart_total * 0.09 : $flat_rate; // 9%
 			$expedite_cost = $cart_total * 0.175 > $expedite_rate ? $cart_total * 0.175 : $expedite_rate; // 17.5%
 		} else {
@@ -2393,7 +2400,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		}
 		$title = apply_filters( 'nova_account_title_filter', $endpoint_title );
 		?>
-<h2 class="pb-4 mb-4 uppercase mt-0"><?php echo $title; ?></h2>
+<h2 class="pb-4 mb-4 uppercase mt-0"><?php echo $endpoint_title; ?></h2>
 		<?php
 	}
 
