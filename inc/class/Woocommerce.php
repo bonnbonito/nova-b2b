@@ -710,6 +710,11 @@ class Woocommerce {
 			return false;
 		}
 
+		$combined_orders = get_field( '_original_order_ids' );
+		if ( $combined_orders ) {
+			return false;
+		}
+
 		return $export;
 	}
 
@@ -1524,12 +1529,14 @@ class Woocommerce {
 		$currency      = get_woocommerce_currency();
 		$flat_rate     = 14.75;
 		$expedite_rate = 29.5;
+		$min_price     = 800;
 		if ( $currency === 'CAD' ) {
 			$flat_rate     *= NOVA_EXCHANGE_RATE;
 			$expedite_rate *= NOVA_EXCHANGE_RATE;
+			$min_price     *= NOVA_EXCHANGE_RATE;
 		}
 
-		if ( $cart_total < 800 ) {
+		if ( $cart_total < $min_price ) {
 			$standard_cost = $cart_total * 0.09 > $flat_rate ? $cart_total * 0.09 : $flat_rate; // 9%
 			$expedite_cost = $cart_total * 0.175 > $expedite_rate ? $cart_total * 0.175 : $expedite_rate; // 17.5%
 		} else {
@@ -1951,12 +1958,23 @@ class Woocommerce {
 		if ( ! $order ) {
 			return;
 		}
-		$from_order_id = $order->get_meta( '_from_order_id' );
-		if ( ! empty( $from_order_id ) ) {
+		$text               = 'Your order is being processed.';
+		$from_order_id      = $order->get_meta( '_from_order_id' );
+		$second_payment     = $order->get_meta( 'second_payment' );
+		$original_order_ids = $order->get_meta( '_original_order_ids' );
+		if ( isset( $from_order_id ) && ! empty( $from_order_id ) ) {
 			// Change the thank you text
-			return 'Thank you for the payment';
+			$text = 'Thank you for the payment';
 		}
-		return 'Your order is being processed.';
+		if ( isset( $second_payment ) && ! empty( $second_payment ) ) {
+			$text = 'Thank you for the payment';
+		}
+
+		if ( isset( $original_order_ids ) && ! empty( $original_order_ids ) ) {
+			$text = 'Thank you for the payment';
+		}
+
+		return $text;
 	}
 
 	public function order_received_title( $title, $order_id ) {
@@ -2375,8 +2393,9 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 				$endpoint_title = 'Dashboard';
 				break;
 		}
+		$title = apply_filters( 'nova_account_title_filter', $endpoint_title );
 		?>
-<h2 class="pb-4 mb-4 uppercase mt-0"><?php echo $endpoint_title; ?></h2>
+<h2 class="pb-4 mb-4 uppercase mt-0"><?php echo $title; ?></h2>
 		<?php
 	}
 
