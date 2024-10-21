@@ -146,6 +146,7 @@ class Order_History {
 			}
 
 			$due_date = false;
+			$deadline = false;
 
 			// If order is payment, get due date
 			if ( $order->get_meta( '_from_order_id' ) ) {

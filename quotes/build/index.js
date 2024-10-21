@@ -37101,7 +37101,8 @@ const shippingRates = (total, currency) => {
   let standard, expedite;
   let flatRate = currency === 'USD' ? 14.75 : 14.75 * EXCHANGE_RATE;
   let expediateRate = currency === 'USD' ? 29.5 : 29.5 * EXCHANGE_RATE;
-  if (total < 800) {
+  let minPrice = currency === 'USD' ? 800 : 800 * EXCHANGE_RATE;
+  if (total < minPrice) {
     standard = total * 0.09 > flatRate ? total * 0.09 : flatRate;
     expedite = total * 0.175 > expediateRate ? total * 0.175 : expediateRate;
   } else {

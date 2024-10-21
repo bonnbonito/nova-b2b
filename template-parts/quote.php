@@ -8,11 +8,13 @@ $currency_settings = new WooCommerce_Ultimate_Multi_Currency_Suite_Settings( '' 
 $currency = get_woocommerce_currency();
 
 $flat_rate = 14.75;
+$min_price = 800;
 if ( $currency === 'CAD' ) {
 	$flat_rate = 14.75 * NOVA_EXCHANGE_RATE;
+	$min_price = 800 * NOVA_EXCHANGE_RATE;
 }
 
-if ( $price < 800 ) {
+if ( $price < $min_price ) {
 	$standard_rate = $price * 0.09 > $flat_rate ? $price * 0.09 : $flat_rate; // 9%
 } else {
 	$standard_rate = $price * 0.08 > $flat_rate ? $price * 0.08 : $flat_rate;

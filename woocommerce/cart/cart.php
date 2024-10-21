@@ -338,7 +338,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 			<div>
 				<div colspan="6" class="actions text-right">
 
-					<div class="flex gap-4">
+					<div class="flex gap-4 justify-between">
 						<?php if ( wc_coupons_enabled() ) { ?>
 						<div class="coupon">
 							<label for="coupon_code"
