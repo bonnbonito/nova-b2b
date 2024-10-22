@@ -404,6 +404,10 @@ ul#payment-select li input {
     align-items: center;
 }
 
+#primary tr.cart-discount td {
+    text-align: right;
+}
+
 @media (min-width: 768px) {
 
     #payment ul.wc_payment_methods {
