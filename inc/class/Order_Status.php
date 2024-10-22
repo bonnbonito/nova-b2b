@@ -28,7 +28,6 @@ class Order_Status {
 	public function __construct() {
 		// Add custom order statuses
 		$this->add_custom_order_status( 'Shipped', 'shipped', '#3498db' );
-		// $this->add_custom_order_status( 'Delivered', 'delivered', '#2ecc71' );
 		$this->add_custom_order_status( 'In Production', 'production', '#333' );
 		add_action( 'woocommerce_order_note_added', array( $this, 'change_status_on_shipstation_note' ), 10, 2 );
 		add_action( 'woocommerce_shipstation_shipnotify', array( $this, 'change_status_to_shipped' ), 10, 2 );
@@ -37,6 +36,21 @@ class Order_Status {
 		add_filter( 'kadence_woomail_email_types', array( $this, 'email_types' ), 10, 1 );
 		add_filter( 'kadence_woomail_customized_email_types', array( $this, 'email_types' ), 10, 1 );
 		add_filter( 'kadence_woomail_email_type_class_name_array', array( $this, 'kadence_email_classes' ) );
+		add_filter( 'woocommerce_get_order_status_labels', array( $this, 'order_status_labels' ), 10, 2 );
+		add_filter( 'wc_order_statuses', array( $this, 'add_custom_statuses_to_order_statuses' ) );
+	}
+
+	public function add_custom_statuses_to_order_statuses( $statuses ) {
+		$statuses['wc-production'] = _x( 'In Production', 'Order status', 'woocommerce' );
+		$statuses['wc-shipped']    = _x( 'Shipped', 'Order status', 'woocommerce' );
+
+		return $statuses;
+	}
+
+	public function order_status_labels( $status_names, $order ) {
+		$status_names['production'] = __( 'Order is now in shipstation.', 'nova-b2b' );
+		$status_names['shipped']    = __( 'Shipped', 'nova-b2b' );
+		return $status_names;
 	}
 
 	public function kadence_email_classes( $emails ) {
@@ -109,27 +123,11 @@ class Order_Status {
 			}
 		);
 
-		// Add custom order status to WooCommerce order statuses
-		add_filter(
-			'wc_order_statuses',
-			function ( $order_statuses ) use ( $status_name, $status_slug ) {
-				$new_order_statuses = array();
-				foreach ( $order_statuses as $key => $status ) {
-					$new_order_statuses[ $key ] = $status;
-					// Insert the new status after "completed"
-					if ( 'wc-completed' === $key ) {
-						$new_order_statuses[ 'wc-' . $status_slug ] = _x( $status_name, 'Order status', 'nova-b2b' );
-					}
-				}
-				return $new_order_statuses;
-			}
-		);
-
 		// Add custom status to bulk actions
 		add_filter(
 			'bulk_actions-edit-shop_order',
 			function ( $bulk_actions ) use ( $status_name, $status_slug ) {
-				$bulk_actions[ 'mark_' . $status_slug ] = __( 'Change status to ' . $status_name, 'nova-b2b' );
+				$bulk_actions[ 'mark_' . $status_slug ] = __( 'Change status to ' . $status_slug, 'nova-b2b' );
 				return $bulk_actions;
 			}
 		);
@@ -138,7 +136,7 @@ class Order_Status {
 		add_filter(
 			'woocommerce_order_actions',
 			function ( $actions ) use ( $status_name, $status_slug ) {
-				$actions[ 'mark_' . $status_slug ] = __( 'Mark as ' . $status_name, 'nova-b2b' );
+				$actions[ 'mark_' . $status_slug ] = __( 'Mark as ' . $status_slug, 'nova-b2b' );
 				return $actions;
 			}
 		);

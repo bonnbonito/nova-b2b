@@ -65,3 +65,12 @@ function nova_b2b_acf_init() {
 /**
  * Add custom functions here
  */
+
+add_filter(
+	'wc_order_statuses',
+	function ( $statuses ) {
+		$statuses['wc-production'] = _x( 'In Production', 'Order status', 'woocommerce' );
+		$statuses['wc-shipped']    = _x( 'Shipped', 'Order status', 'woocommerce' );
+		return $statuses;
+	}
+);
