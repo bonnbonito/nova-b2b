@@ -20,7 +20,6 @@ defined( 'ABSPATH' ) || exit;
 
 $totals  = $order->get_order_item_totals(); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 $from_id = $order->get_meta( '_from_order_id' );
-WC()->session->set( 'second_payment', 'yes' );
 
 if ( function_exists( 'WPO_WCPDF' ) ) {
 	$pdf_url = WPO_WCPDF()->endpoint->get_document_link( $order, 'invoice' );

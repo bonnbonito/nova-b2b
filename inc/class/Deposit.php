@@ -35,6 +35,7 @@ class Deposit {
 		add_action( 'woocommerce_checkout_update_order_review', array( $this, 'handle_deposit_option' ) );
 		add_filter( 'woocommerce_calculated_total', array( $this, 'apply_deposit_percentage' ), 9999, 2 );
 		add_action( 'woocommerce_checkout_order_processed', array( $this, 'insert_payment_record' ), 20, 3 );
+		add_action( 'woocommerce_before_pay_action', array( $this, 'second_payment_meta' ), 20, 1 );
 		add_filter( 'woocommerce_order_needs_payment', array( $this, 'order_needs_payment' ), 10, 2 );
 		add_filter( 'woocommerce_order_get_date_paid', array( $this, 'order_get_date_paid' ), 10, 2 );
 		add_filter( 'wc_order_is_editable', array( $this, 'order_is_editable' ), 10, 2 );
@@ -44,7 +45,7 @@ class Deposit {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_nova_scripts' ) );
 		add_action( 'woocommerce_order_status_completed', array( $this, 'order_status_completed' ), 99 );
 		// add_action( 'woocommerce_order_status_delivered', array( $this, 'insert_delivered_date' ) );
-		add_action( 'woocommerce_order_status_shipped', array( $this, 'order_status_shipped' ) );
+		add_action( 'woocommerce_order_status_shipped', array( $this, 'order_status_shipped' ), 20, 1 );
 		add_action( 'woocommerce_before_cart', array( $this, 'remove_wc_sessions_on_cart' ) );
 		add_action( 'woocommerce_review_order_before_submit', array( $this, 'output_deposit_selection' ) );
 		add_filter( 'woocommerce_payment_complete_order_status', array( $this, 'change_payment_status' ), 10, 3 );
@@ -53,6 +54,94 @@ class Deposit {
 		add_filter( 'woocommerce_payment_successful_result', array( $this, 'successful_payment' ), 20, 2 );
 		add_filter( 'woocommerce_cod_process_payment_order_status', array( $this, 'cod_status' ), 20, 2 );
 		add_action( 'woocommerce_payment_complete', array( $this, 'update_original_orders_after_payment' ), 20, 1 );
+		add_filter( 'woocommerce_email_heading_customer_completed_order', array( $this, 'second_payment_heading' ), 50, 3 );
+		add_filter( 'woocommerce_email_subject_customer_completed_order', array( $this, 'second_payment_subject' ), 50, 2 );
+		add_filter( 'kadence_woomail_order_body_text', array( $this, 'fully_paid_content' ), 41, 5 );
+		add_filter( 'kadence_woomail_order_body_text', array( $this, 'in_production_content' ), 40, 5 );
+	}
+
+	public function in_production_content( $body_text, $order, $sent_to_admin, $plain_text, $email ) {
+		$key = $email->id;
+
+		$deposit_chosen = $order->get_meta( '_deposit_chosen' );
+
+		if ( ! $deposit_chosen ) {
+			return $body_text;
+		}
+
+		if ( 'customer_production_order' !== $key ) {
+			return $body_text;
+		}
+
+		$production_email = get_field( 'production_email', $deposit_chosen );
+		$body_text        = $production_email['body_text'];
+		$body_text        = str_replace( '{order_number}', $order->get_order_number(), $body_text );
+		$body_text        = str_replace( '{customer_first_name}', $order->get_billing_first_name(), $body_text );
+		$body_text        = str_replace( '{customer_name}', $order->get_billing_first_name(), $body_text );
+		$body_text        = str_replace( '{customer_last_name}', $order->get_billing_last_name(), $body_text );
+		$body_text        = str_replace( '{customer_full_name}', $order->get_formatted_billing_full_name(), $body_text );
+		$body_text        = str_replace( '{customer_company}', $order->get_billing_company(), $body_text );
+		$body_text        = str_replace( '{customer_email}', $order->get_billing_email(), $body_text );
+
+		$body_text = str_replace( '{order_date}', wc_format_datetime( $order->get_date_created() ), $body_text );
+
+		return $body_text;
+	}
+
+	public function fully_paid_content( $body_text, $order, $sent_to_admin, $plain_text, $email ) {
+		$key = $email->id;
+
+		$deposit_chosen = $order->get_meta( '_deposit_chosen' );
+
+		if ( ! $deposit_chosen ) {
+			return $body_text;
+		}
+
+		$second_payment = $order->get_meta( 'second_payment' );
+
+		if ( ! $second_payment ) {
+			return $body_text;
+		}
+
+		if ( 'customer_completed_order' !== $key ) {
+			return $body_text;
+		}
+
+		$paid_email = get_field( 'paid_email', $deposit_chosen );
+		$body_text  = $paid_email['body_text'];
+		$body_text  = str_replace( '{order_number}', $order->get_order_number(), $body_text );
+		$body_text  = str_replace( '{customer_first_name}', $order->get_billing_first_name(), $body_text );
+		$body_text  = str_replace( '{customer_name}', $order->get_billing_first_name(), $body_text );
+		$body_text  = str_replace( '{customer_last_name}', $order->get_billing_last_name(), $body_text );
+		$body_text  = str_replace( '{customer_full_name}', $order->get_formatted_billing_full_name(), $body_text );
+		$body_text  = str_replace( '{customer_company}', $order->get_billing_company(), $body_text );
+		$body_text  = str_replace( '{customer_email}', $order->get_billing_email(), $body_text );
+
+		$body_text = str_replace( '{order_date}', wc_format_datetime( $order->get_date_created() ), $body_text );
+
+		return $body_text;
+	}
+
+	public function second_payment_subject( $subject, $order ) {
+		$second_payment = $order->get_meta( 'second_payment' );
+		if ( ! $second_payment ) {
+			return $subject;
+		}
+
+		$subject = __( 'Payment Received', 'woocommerce' );
+		return $subject;
+	}
+
+	public function second_payment_heading( $heading, $order, $email ) {
+
+		$second_payment = $order->get_meta( 'second_payment' );
+		if ( ! $second_payment ) {
+			return $heading;
+		}
+
+		$heading = __( 'Payment Received', 'woocommerce' );
+
+		return $heading;
 	}
 
 	public function update_original_orders_after_payment( $order_id ) {
@@ -374,6 +463,11 @@ class Deposit {
 	public function second_payment_action( $order_id, $posted_data, $order ) {
 	}
 
+	public function second_payment_meta( $order ) {
+		$order->update_meta_data( 'second_payment', true );
+		$order->save();
+	}
+
 	/**
 	 * Insert payment record into the custom table
 	 */
@@ -387,13 +481,6 @@ class Deposit {
 		update_post_meta( $order_id, '_nova_order', true );
 
 		$deposit_chosen = WC()->session->get( 'deposit_chosen' );
-
-		$second_payment = WC()->session->get( 'second_payment' );
-
-		if ( isset( $second_payment ) && ! empty( $second_payment ) ) {
-			update_post_meta( $order_id, 'second_payment', true );
-			WC()->session->__unset( 'second_payment' );
-		}
 
 		if ( ! $deposit_chosen || $deposit_chosen == '0' ) {
 			return;

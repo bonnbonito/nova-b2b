@@ -24,11 +24,16 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 do_action( 'woocommerce_email_header', $email_heading, $email ); ?>
 
-<?php /* translators: %s: Customer first name */ ?>
+<?php
+/* translators: %s: Customer first name */
+?>
 <p><?php printf( esc_html__( 'Hi %s,', 'woocommerce' ), esc_html( $order->get_billing_first_name() ) ); ?></p>
 <p><?php esc_html_e( 'Your order is now in production.', 'woocommerce' ); ?></p>
 <?php
-
+$content = ob_get_clean();
+if ( ! empty( $content ) ) {
+	echo apply_filters( 'nova_production_order_email_content', $content, $order );
+}
 /*
  * @hooked WC_Emails::order_details() Shows the order details table.
  * @hooked WC_Structured_Data::generate_order_data() Generates structured data.

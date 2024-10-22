@@ -28,12 +28,31 @@ class Order_Status {
 	public function __construct() {
 		// Add custom order statuses
 		$this->add_custom_order_status( 'Shipped', 'shipped', '#3498db' );
-		$this->add_custom_order_status( 'Delivered', 'delivered', '#2ecc71' );
+		// $this->add_custom_order_status( 'Delivered', 'delivered', '#2ecc71' );
 		$this->add_custom_order_status( 'In Production', 'production', '#333' );
 		add_action( 'woocommerce_order_note_added', array( $this, 'change_status_on_shipstation_note' ), 10, 2 );
 		add_action( 'woocommerce_shipstation_shipnotify', array( $this, 'change_status_to_shipped' ), 10, 2 );
 		add_filter( 'woocommerce_email_classes', array( $this, 'custom_init_emails' ) );
 		add_filter( 'woocommerce_email_actions', array( $this, 'email_actions' ) );
+		add_filter( 'kadence_woomail_email_types', array( $this, 'email_types' ), 10, 1 );
+		add_filter( 'kadence_woomail_customized_email_types', array( $this, 'email_types' ), 10, 1 );
+		add_filter( 'kadence_woomail_email_type_class_name_array', array( $this, 'kadence_email_classes' ) );
+	}
+
+	public function kadence_email_classes( $emails ) {
+		if ( class_exists( 'WC_Email_Customer_Production_Order' ) ) {
+			$emails['customer_production_order'] = 'WC_Email_Customer_Production_Order';
+		}
+		if ( class_exists( 'WC_Email_Customer_Shipped_Order' ) ) {
+			$emails['customer_shipped_order'] = 'WC_Email_Customer_Shipped_Order';
+		}
+		return $emails;
+	}
+
+	public function email_types( $types ) {
+		$types['customer_production_order'] = __( 'Customer Production Order', 'nova-b2b' );
+		$types['customer_shipped_order']    = __( 'Customer Shipped Order', 'nova-b2b' );
+		return $types;
 	}
 
 	public function email_actions( $actions ) {
@@ -51,7 +70,7 @@ class Order_Status {
 	}
 
 	public function change_status_to_shipped( $order, $details ) {
-		$order->update_status( 'shipped', 'Order status automatically changed to delivered.' );
+		$order->update_status( 'shipped', 'Order status automatically changed to shipped.' );
 	}
 
 	public function change_status_on_shipstation_note( $comment_id, $order ) {
