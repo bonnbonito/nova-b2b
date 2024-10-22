@@ -128,6 +128,12 @@ class Woocommerce {
 		add_filter( 'woocommerce_shop_order_search_fields', array( $this, 'order_name_search_fields' ) );
 		// add_action( 'pre_get_posts', array( $this, 'custom_search_by_order_number_in_admin' ) );
 		add_action( 'save_post', array( $this, 'nova_save_shipping_metabox' ) );
+		add_filter( 'woocommerce_product_tabs', array( $this, 'remove_reviews_tab' ), 98 );
+	}
+
+	public function remove_reviews_tab( $tabs ) {
+		unset( $tabs['reviews'] ); // Remove the reviews tab
+		return $tabs;
 	}
 
 	public function custom_search_by_order_number_in_admin( $query ) {
