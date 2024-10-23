@@ -60,6 +60,7 @@ class Deposit {
 		add_filter( 'kadence_woomail_order_body_text', array( $this, 'in_production_content' ), 40, 5 );
 		add_action( 'wp_ajax_delete_pending_payment_order', array( $this, 'delete_pending_payment_order' ) );
 		add_action( 'check_pending_payments_action_hook', array( $this, 'check_pending_payments' ) );
+		add_action( 'wp', array( $this, 'schedule_pending_payment_checker' ) );
 	}
 
 	public function check_pending_payments() {
@@ -500,6 +501,15 @@ class Deposit {
 			// $order->save();
 			WC()->session->__unset( 'first_payment' );
 		}
+		if ( WC()->session->get( 'deposit_chosen' ) ) {
+			WC()->session->__unset( 'deposit_chosen' );
+		}
+		if ( WC()->session->get( 'deposit_amount' ) ) {
+			WC()->session->__unset( 'deposit_amount' );
+		}
+		if ( WC()->session->get( 'pending_amount' ) ) {
+			WC()->session->__unset( 'pending_amount' );
+		}
 	}
 
 	public function insert_nova_meta( $order_id ) {
@@ -664,6 +674,7 @@ class Deposit {
 			order_id bigint(20) UNSIGNED NOT NULL,
 			amount decimal(10, 2) NOT NULL,
 			payment_date datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
+			needs_payment tinyint(1) NOT NULL DEFAULT 0,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 
