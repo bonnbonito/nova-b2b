@@ -59,6 +59,178 @@ class Deposit {
 		add_filter( 'kadence_woomail_order_body_text', array( $this, 'fully_paid_content' ), 41, 5 );
 		add_filter( 'kadence_woomail_order_body_text', array( $this, 'in_production_content' ), 40, 5 );
 		add_action( 'wp_ajax_delete_pending_payment_order', array( $this, 'delete_pending_payment_order' ) );
+		add_action( 'check_pending_payments_action_hook', array( $this, 'check_pending_payments' ) );
+	}
+
+	public function check_pending_payments() {
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'order_payments';
+
+		$results = $wpdb->get_results(
+			$wpdb->prepare( "SELECT * FROM $table_name" )
+		);
+
+		// Get all data from the table
+		$results = $wpdb->get_results(
+			$wpdb->prepare( "SELECT * FROM $table_name" )
+		);
+
+		foreach ( $results as $result ) {
+
+			$order_id       = $result->order_id;
+			$order          = wc_get_order( $order_id );
+			$needs_payment  = $order->get_meta( 'needs_payment' );
+			$deposit_chosen = $order->get_meta( '_deposit_chosen' );
+
+			if ( ! $order ) {
+				continue;
+			}
+
+			if ( $order->get_status() === 'completed' ) {
+				continue;
+			}
+
+			if ( ! $needs_payment ) {
+				continue;
+			}
+
+			if ( ! $deposit_chosen ) {
+				continue;
+			}
+
+			// $this->send_payment_reminder_email( $order_id );
+
+			// $this->check_overdue( $result );
+
+		}
+	}
+
+	public function send_payment_reminder_email( $order_id ) {
+
+		$order = wc_get_order( $order_id );
+
+		$deposit_chosen = $order->get_meta( '_deposit_chosen' );
+
+		$manual_delivered_date = get_field( 'manual_delivered_date', $order_id );
+
+		if ( isset( $manual_delivered_date ) && ! empty( $manual_delivered_date ) ) {
+			return;
+		}
+
+		$currency = $order->get_currency();
+
+		$shipped_date        = false;
+		$days_after_shipping = get_field( 'days_after_shipping', $$deposit_chosen );
+		$deadline            = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
+		$payment_date        = date( 'F d, Y', $deadline );
+
+		$today = date( 'F d, Y' );
+
+		$first_name               = $order->get_billing_first_name();
+		$customer_email           = $order->get_billing_email();
+		$user_id                  = $order->get_user_id() ? $order->get_user_id() : 0;
+		$additional_billing_email = get_user_meta( $user_id, 'additional_billing_email', true );
+
+		if ( $additional_billing_email ) {
+			$customer_email = $additional_billing_email;
+		}
+
+		if ( ! $order ) {
+			return;
+		}
+		if ( ! $customer_email ) {
+			return;
+		}
+
+		$payment_url = $order->get_checkout_payment_url();
+
+		$pending_total = $order->get_meta( '_pending_amount' );
+
+		if ( have_rows( 'payment_emails', $deposit_chosen ) ) :
+
+			while ( have_rows( 'payment_emails', $deposit_chosen ) ) :
+				the_row();
+				$days = get_sub_field( 'send_after_days' );
+
+				if ( $days !== false ) {
+
+					$days_later = strtotime( $shipped_date . ' +' . intval( $days ) . ' days' );
+					$date_later = date( 'F d, Y', $days_later );
+
+					if ( $today == $date_later ) {
+
+						$subject = get_sub_field( 'subject' );
+						$subject = str_replace( '{customer_name}', $first_name, $subject );
+						$subject = str_replace( '{deadline}', $payment_date, $subject );
+						$subject = str_replace( '{order_number}', $order->get_order_number(), $subject );
+
+						$message = get_sub_field( 'content' );
+						$message = str_replace( '{customer_name}', $first_name, $message );
+						$message = str_replace( '{invoice_amount}', $currency . '$ ' . round( floatval( $pending_total ), 2 ), $message );
+						$message = str_replace( '{pending_payment}', $currency . '$ ' . round( floatval( $pending_total ), 2 ), $message );
+						$message = str_replace( '{payment_link}', $payment_url, $message );
+						$message = str_replace( '{deadline}', $payment_date, $message );
+						$message = str_replace( '{order_number}', $order->get_order_number(), $message );
+
+						// Get the order details
+						ob_start();
+						add_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
+						do_action( 'woocommerce_email_order_details', $order, false, false, '' );
+						remove_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
+						$order_details = ob_get_clean();
+
+						$message = str_replace( '{order_details}', $order_details, $message );
+
+						if ( $customer_email ) {
+							$headers = array( 'Content-Type: text/html; charset=UTF-8' );
+
+							$role_instance = \NOVA_B2B\Roles::get_instance();
+
+							if ( $role_instance ) {
+
+								$attachments = array();
+
+								if ( class_exists( '\WPO\WC\PDF_Invoices\Main' ) ) {
+									$attachments = \WPO\WC\PDF_Invoices\Main::instance()->attach_document_to_email( array(), 'customer_invoice', $order, null );
+								}
+
+								$role_instance->send_email( $customer_email, $subject, $message, $headers, $attachments );
+
+							}
+
+							$label = get_sub_field( 'email_label' );
+
+							if ( $label == 'Deadline email' ) {
+								// $this->admin_notification_deadline_email( $original_order, $role_instance, $headers, $first_name, $payment_date, $pending_total );
+
+								$current_overdue = get_user_meta( $user_id, 'overdue_orders', true );
+
+								update_post_meta( $order_id, 'is_overdue', true );
+
+								if ( $current_overdue ) {
+									$current_overdue   = explode( ',', $current_overdue );
+									$current_overdue[] = $order_id;
+									update_user_meta( $user_id, 'overdue_orders', implode( ',', $current_overdue ) );
+								} else {
+									update_user_meta( $user_id, 'overdue_orders', $order_id );
+								}
+							}
+
+							$key = 'payment_email_key_' . get_row_index();
+							update_post_meta( $order_id, $key, 'sent' );
+
+						}
+					}
+				}
+
+			endwhile;
+		endif;
+	}
+
+	public function schedule_pending_payment_checker() {
+		if ( ! wp_next_scheduled( 'check_needs_payment_action_hook' ) ) {
+			wp_schedule_event( time(), 'daily', 'check_needs_payment_action_hook' );
+		}
 	}
 
 	public function delete_pending_payment_order() {
@@ -400,7 +572,7 @@ class Deposit {
 
 			$manual_delivered_date = get_field( 'manual_delivered_date', $order->get_id() );
 
-			$delivered_date = $order->get_meta( 'delivered_date' );
+			$delivered_date = false;
 
 			if ( $manual_delivered_date ) {
 				$date_obj = \DateTime::createFromFormat( 'd/m/Y', $manual_delivered_date );
