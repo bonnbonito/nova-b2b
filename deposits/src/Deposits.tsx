@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Actions } from './components/Actions';
 import { Button } from './components/ui/ButtonUI';
 import {
 	Table,
@@ -32,10 +33,34 @@ type Order = {
 	due_date: string;
 	time_diff: string;
 	ago: boolean;
+	emails: string[];
 };
 
 export default function Deposits() {
 	const [orders, setOrders] = useState<Order[]>(NovaDeposits.pending_payments);
+
+	const deleteOrder = (order_id: number) => {
+		const formData = new FormData();
+		formData.append('action', 'delete_pending_payment_order');
+		formData.append('order_id', order_id.toString());
+		formData.append('security', NovaDeposits.nonce);
+		fetch(NovaDeposits.ajax_url, {
+			method: 'POST',
+			body: formData,
+		})
+			.then((response) => response.json())
+			.then((data) => {
+				console.log('data', data);
+				if (data.success) {
+					setOrders(
+						NovaDeposits.pending_payments.filter(
+							(order) => order.order_id != order_id
+						)
+					);
+				}
+			})
+			.catch((error) => console.error(error));
+	};
 
 	return (
 		<Table>
@@ -133,7 +158,9 @@ export default function Deposits() {
 									</TooltipProvider>
 								)}
 							</TableCell>
-							<TableCell className="text-right">...</TableCell>
+							<TableCell className="text-right">
+								<Actions order={order} deleteOrder={deleteOrder} />
+							</TableCell>
 						</TableRow>
 					);
 				})}

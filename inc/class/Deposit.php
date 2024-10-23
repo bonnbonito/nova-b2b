@@ -58,6 +58,25 @@ class Deposit {
 		add_filter( 'woocommerce_email_subject_customer_completed_order', array( $this, 'second_payment_subject' ), 50, 2 );
 		add_filter( 'kadence_woomail_order_body_text', array( $this, 'fully_paid_content' ), 41, 5 );
 		add_filter( 'kadence_woomail_order_body_text', array( $this, 'in_production_content' ), 40, 5 );
+		add_action( 'wp_ajax_delete_pending_payment_order', array( $this, 'delete_pending_payment_order' ) );
+	}
+
+	public function delete_pending_payment_order() {
+		$order_id = $_POST['order_id'];
+		if ( ! wp_verify_nonce( $_POST['security'], 'nonce' ) ) {
+			wp_send_json( 'Nonce Error' );
+		}
+		if ( ! $order_id ) {
+			wp_send_json( 'Order ID not found' );
+		}
+		$this->delete_payments_by_order_id( $order_id );
+
+		wp_send_json(
+			array(
+				'success' => true,
+				'message' => 'Payment record deleted successfully',
+			)
+		);
 	}
 
 	public function in_production_content( $body_text, $order, $sent_to_admin, $plain_text, $email ) {
@@ -390,6 +409,25 @@ class Deposit {
 				}
 			}
 
+			$emails = array();
+
+			if ( have_rows( 'payment_emails', $deposit_chosen ) ) {
+				while ( have_rows( 'payment_emails', $deposit_chosen ) ) {
+					the_row( 'payment_emails', $deposit_chosen );
+
+					$row_index  = get_row_index();
+					$key        = 'payment_email_key_' . $row_index;
+					$email_sent = get_post_meta( $order_id, $key, true );
+
+					$emails[] = array(
+						'email_label' => get_sub_field( 'email_label' ),
+						'email_key'   => $key,
+						'order_id'    => $order_id,
+						'email_sent'  => $email_sent,
+					);
+				}
+			}
+
 			$total = $order->get_total();
 
 			$pending_payments[] = array(
@@ -410,6 +448,7 @@ class Deposit {
 				'due_date'          => $shipped_date ? $due_date : '',
 				'shipped_date'      => $shipped_date,
 				'time_diff'         => $shipped_date ? $time_diff : '',
+				'emails'            => $emails,
 			);
 
 		}
@@ -458,6 +497,17 @@ class Deposit {
 
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 		dbDelta( $sql );
+	}
+
+	public function delete_payments_by_order_id( $order_id ) {
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'order_payments';
+
+		// Ensure that the order_id is an integer to prevent SQL injection
+		$order_id = intval( $order_id );
+
+		// Delete records from the table where order_id matches
+		$wpdb->delete( $table_name, array( 'order_id' => $order_id ), array( '%d' ) );
 	}
 
 	public function second_payment_action( $order_id, $posted_data, $order ) {
@@ -680,7 +730,6 @@ class Deposit {
 		?>
 <div class="wrap">
 	<div id="depositTable"></div>
-
 </div>
 		<?php
 	}

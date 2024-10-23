@@ -1,7 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
 	content: ['./src/**/*.{html,js,ts,tsx,php}'],
-	important: '#depositTable',
 	theme: {
 		container: {
 			center: true,
