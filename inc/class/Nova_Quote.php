@@ -2630,5 +2630,3 @@ h6 {
 		}
 	}
 }
-
-Nova_Quote::get_instance();

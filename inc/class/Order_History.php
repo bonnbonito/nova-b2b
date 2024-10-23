@@ -332,6 +332,29 @@ class Order_History {
 				}
 			}
 
+			$deposit_chosen = $order->get_meta( '_deposit_chosen' );
+
+			if ( $deposit_chosen ) {
+
+				$shipped_date        = $order->get_meta( 'shipped_date' );
+				$days_after_shipping = get_field( 'days_after_shipping', $deposit_chosen );
+
+				if ( $shipped_date ) {
+					$deadline = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
+					$due_date = date( 'M d, Y', $deadline );
+					if ( $current_time > $deadline ) {
+						if ( ! $order->has_status( array( 'completed', 'on-hold', 'trash' ) ) ) {
+							$is_overdue = true;
+							if ( ! $order->get_meta( '_is_overdue' ) ) {
+								update_post_meta( $order->get_id(), '_is_overdue', true );
+							}
+						}
+					} elseif ( $order->get_meta( '_is_overdue' ) ) {
+						update_post_meta( $order->get_id(), '_is_overdue', true );
+					}
+				}
+			}
+
 			$orders[] = array(
 				'id'                   => $order->get_id(),
 				'order_number'         => $order->get_order_number(),
@@ -388,6 +411,10 @@ class Order_History {
 
 			// Ensure we have a valid order object
 			if ( ! $order ) {
+				continue;
+			}
+
+			if ( 'completed' === $order->get_status() || 'trash' === $order->get_status() ) {
 				continue;
 			}
 
@@ -486,15 +513,11 @@ class Order_History {
 				continue;
 			}
 
-			if ( $order->get_status() === 'completed' ) {
+			if ( ! $order->has_status( array( 'pending' ) ) ) {
 				continue;
 			}
 
 			if ( $current_user != $order->get_user_id() ) {
-				continue;
-			}
-
-			if ( $order->get_status() !== 'pending' ) {
 				continue;
 			}
 
@@ -533,7 +556,7 @@ class Order_History {
 			$is_overdue = false;
 
 			// If order is pending and is overdue
-			if ( $order->get_meta( 'is_overdue' ) && $order->get_status() == 'pending' ) {
+			if ( $order->get_meta( 'is_overdue' ) && $order->get_status() === 'pending' ) {
 				$is_overdue = true;
 			}
 
@@ -553,7 +576,7 @@ class Order_History {
 				'status'               => $order->get_status(),
 				'actions'              => $actions,
 				'order_total'          => $total,
-				'due_date'             => $due_date,
+				'due_date'             => date( 'F d, Y', strtotime( $due_date ) ),
 				'is_overdue'           => $is_overdue,
 				'payment_order_status' => isset( $payment_order_object ) ? $payment_order_object->get_status() : '',
 				'payment_select'       => $payment_select_title,
@@ -562,9 +585,7 @@ class Order_History {
 		}
 
 		/* merge the two arrays */
-		$orders = array_merge( $orders, $pending_payments );
-
-		return $orders;
+		return array_merge( $orders, $pending_payments );
 	}
 
 	public function get_order_items( $order ) {

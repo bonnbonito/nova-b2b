@@ -1617,12 +1617,7 @@ class Pending_Payment {
 		}
 	}
 
-	public function get_overdue_pending_payment_orders( $customer_id ) {
-		// Ensure WooCommerce is active
-		if ( ! class_exists( 'WooCommerce' ) ) {
-			return array();
-		}
-
+	public function get_overdue_old( $customer_id ) {
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'nova_pendings';
 
@@ -1665,6 +1660,79 @@ class Pending_Payment {
 		}
 
 		return $overdue_orders;
+	}
+
+	public function get_overdue( $customer_id ) {
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'order_payments';
+
+		$results = $wpdb->get_results(
+			$wpdb->prepare( "SELECT * FROM $table_name" )
+		);
+
+		$current_time   = time();
+		$overdue_orders = array();
+
+		foreach ( $results as $result ) {
+
+			$order_id       = $result->order_id;
+			$order          = wc_get_order( $order_id );
+			$needs_payment  = $order->get_meta( 'needs_payment' );
+			$deposit_chosen = $order->get_meta( '_deposit_chosen' );
+
+			if ( ! $order ) {
+				continue;
+			}
+
+			if ( $order->has_status( array( 'completed', 'on-hold', 'trash' ) ) ) {
+				continue;
+			}
+
+			if ( ! $needs_payment ) {
+				continue;
+			}
+
+			if ( ! $deposit_chosen ) {
+				continue;
+			}
+
+			$user_id = $order->get_user_id();
+
+			if ( intval( $user_id ) === intval( $customer_id ) ) {
+
+				$shipped_date        = $order->get_meta( 'shipped_date' );
+				$days_after_shipping = get_field( 'days_after_shipping', $deposit_chosen );
+
+				if ( $shipped_date ) {
+					$deadline = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
+					$due_date = date( 'M d, Y', $deadline );
+					if ( $current_time > $deadline ) {
+						if ( ! $order->has_status( array( 'completed', 'on-hold', 'trash' ) ) ) {
+							$overdue_orders[] = $order;
+							if ( ! $order->get_meta( '_is_overdue' ) ) {
+								update_post_meta( $order->get_id(), '_is_overdue', true );
+							}
+						}
+					} elseif ( $order->get_meta( '_is_overdue' ) ) {
+						update_post_meta( $order->get_id(), '_is_overdue', true );
+					}
+				}
+			}
+		}
+
+		return $overdue_orders;
+	}
+
+	public function get_overdue_pending_payment_orders( $customer_id ) {
+		// Ensure WooCommerce is active
+		if ( ! class_exists( 'WooCommerce' ) ) {
+			return array();
+		}
+
+		$old_overdue_orders = $this->get_overdue_old( $customer_id );
+		$overdue_orders     = $this->get_overdue( $customer_id );
+
+		return array_merge( $old_overdue_orders, $overdue_orders );
 	}
 
 

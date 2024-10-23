@@ -35,7 +35,8 @@ class Deposit {
 		add_action( 'woocommerce_checkout_update_order_review', array( $this, 'handle_deposit_option' ) );
 		add_filter( 'woocommerce_calculated_total', array( $this, 'apply_deposit_percentage' ), 9999, 2 );
 		add_action( 'woocommerce_checkout_order_processed', array( $this, 'insert_payment_record' ), 20, 3 );
-		add_action( 'woocommerce_before_pay_action', array( $this, 'second_payment_meta' ), 20, 1 );
+		// add_action( 'woocommerce_after_pay_action', array( $this, 'second_payment_meta' ), 20, 1 );
+		add_filter( 'woocommerce_payment_successful_result', array( $this, 'second_payment_meta' ), 20, 2 );
 		add_filter( 'woocommerce_order_needs_payment', array( $this, 'order_needs_payment' ), 10, 2 );
 		add_filter( 'woocommerce_order_get_date_paid', array( $this, 'order_get_date_paid' ), 10, 2 );
 		add_filter( 'wc_order_is_editable', array( $this, 'order_is_editable' ), 10, 2 );
@@ -47,9 +48,9 @@ class Deposit {
 		// add_action( 'woocommerce_order_status_delivered', array( $this, 'insert_delivered_date' ) );
 		add_action( 'woocommerce_order_status_shipped', array( $this, 'order_status_shipped' ), 20, 1 );
 		add_action( 'woocommerce_before_cart', array( $this, 'remove_wc_sessions_on_cart' ) );
-		add_action( 'woocommerce_review_order_before_submit', array( $this, 'output_deposit_selection' ) );
+		add_action( 'woocommerce_review_order_before_payment', array( $this, 'output_deposit_selection' ) );
 		add_filter( 'woocommerce_payment_complete_order_status', array( $this, 'change_payment_status' ), 10, 3 );
-		add_filter( 'woocommerce_bacs_process_payment_order_status', array( $this, 'change_onhold_status' ), 99, 2 );
+		// add_filter( 'woocommerce_bacs_process_payment_order_status', array( $this, 'change_onhold_status' ), 99, 2 );
 		add_action( 'woocommerce_admin_order_totals_after_tax', array( $this, 'add_deposit_row' ) );
 		add_filter( 'woocommerce_payment_successful_result', array( $this, 'successful_payment' ), 20, 2 );
 		add_filter( 'woocommerce_cod_process_payment_order_status', array( $this, 'cod_status' ), 20, 2 );
@@ -61,15 +62,59 @@ class Deposit {
 		add_action( 'wp_ajax_delete_pending_payment_order', array( $this, 'delete_pending_payment_order' ) );
 		add_action( 'check_pending_payments_action_hook', array( $this, 'check_pending_payments' ) );
 		add_action( 'wp', array( $this, 'schedule_pending_payment_checker' ) );
+		add_action( 'add_meta_boxes', array( $this, 'add_needs_payment_metabox' ) );
+		add_action( 'save_post_shop_order', array( $this, 'save_needs_payment_metabox' ) );
+	}
+
+	public function save_needs_payment_metabox( $post_id ) {
+		if ( ! isset( $_POST['needs_payment_metabox_nonce'] ) || ! wp_verify_nonce( $_POST['needs_payment_metabox_nonce'], 'save_needs_payment_metabox' ) ) {
+			return;
+		}
+
+		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+			return;
+		}
+
+		$needs_payment = isset( $_POST['needs_payment_checkbox'] ) ? 1 : 0;
+
+		update_post_meta( $post_id, 'needs_payment', $needs_payment );
+	}
+
+	public function needs_payment_metabox_callback( $post ) {
+
+		wp_nonce_field( 'save_needs_payment_metabox', 'needs_payment_metabox_nonce' );
+
+		$needs_payment = get_post_meta( $post->ID, 'needs_payment', true );
+
+		echo '<label for="needs_payment_checkbox">';
+		echo '<input type="checkbox" id="needs_payment_checkbox" name="needs_payment_checkbox" value="1" ' . checked( 1, $needs_payment, false ) . ' />';
+		echo ' Needs Payment?';
+		echo '</label>';
+	}
+
+	public function add_needs_payment_metabox() {
+		global $post;
+
+		$deposit_chosen = get_post_meta( $post->ID, '_deposit_chosen', true );
+
+		if ( ! $deposit_chosen ) {
+			// If it doesn't, don't display the metabox
+			return;
+		}
+
+		add_meta_box(
+			'needs_payment_metabox', // Unique ID
+			__( 'Needs Payment', 'woocommerce' ), // Title
+			array( $this, 'needs_payment_metabox_callback' ), // Callback
+			'shop_order', // Post type
+			'side', // Context
+			'default' // Priority
+		);
 	}
 
 	public function check_pending_payments() {
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'order_payments';
-
-		$results = $wpdb->get_results(
-			$wpdb->prepare( "SELECT * FROM $table_name" )
-		);
 
 		// Get all data from the table
 		$results = $wpdb->get_results(
@@ -121,7 +166,7 @@ class Deposit {
 		$currency = $order->get_currency();
 
 		$shipped_date        = false;
-		$days_after_shipping = get_field( 'days_after_shipping', $$deposit_chosen );
+		$days_after_shipping = get_field( 'days_after_shipping', $deposit_chosen );
 		$deadline            = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
 		$payment_date        = date( 'F d, Y', $deadline );
 
@@ -397,9 +442,12 @@ class Deposit {
 	}
 
 	public function change_onhold_status( $on_hold, $order ) {
+		$status = $order->get_status();
+
+		$deposit_chosen = $order->get_meta( '_deposit_chosen' );
 		/** if current user is admin */
-		if ( is_admin() ) {
-			return $old_status;
+		if ( $deposit_chosen ) {
+			return $status;
 		}
 
 		return $on_hold;
@@ -557,7 +605,7 @@ class Deposit {
 				continue;
 			}
 
-			if ( $order->get_status() === 'completed' ) {
+			if ( $order->has_status( array( 'completed', 'cancelled' ) ) ) {
 				continue;
 			}
 
@@ -675,6 +723,7 @@ class Deposit {
 			amount decimal(10, 2) NOT NULL,
 			payment_date datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
 			needs_payment tinyint(1) NOT NULL DEFAULT 0,
+			customer_id bigint(20) UNSIGNED NOT NULL,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 
@@ -696,9 +745,18 @@ class Deposit {
 	public function second_payment_action( $order_id, $posted_data, $order ) {
 	}
 
-	public function second_payment_meta( $order ) {
-		$order->update_meta_data( 'second_payment', true );
-		$order->save();
+	public function second_payment_meta( $result, $order_id ) {
+		$order = wc_get_order( $order_id );
+
+		if ( $order->get_meta( '_deposit_chosen' ) ) {
+			$today = current_time( 'mysql' );
+			$order->update_meta_data( 'second_payment_date', $today );
+			$order->update_meta_data( 'second_payment', true );
+			$order->save();
+
+		}
+
+		return $result;
 	}
 
 	/**
@@ -745,8 +803,9 @@ class Deposit {
 				'amount'        => $order->get_total(),
 				'payment_date'  => current_time( 'mysql' ),
 				'needs_payment' => 1,
+				'customer_id'   => $order->get_customer_id(),
 			),
-			array( '%d', '%f', '%s', '%d' )
+			array( '%d', '%f', '%s', '%d', '%d' )
 		);
 
 		if ( $inserted ) {
