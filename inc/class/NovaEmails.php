@@ -34,6 +34,7 @@ class NovaEmails {
 		add_filter( 'woocommerce_email_additional_content_customer_completed_order', array( $this, 'fully_paid_payment_additional_content' ), 42, 3 );
 		add_filter( 'woocommerce_email_heading_customer_completed_order', array( $this, 'fully_paid_payment_heading' ), 42, 3 );
 		add_filter( 'woocommerce_email_subject_customer_processing_order', array( $this, 'pending_payment_subject' ), 40, 2 );
+		add_filter( 'woocommerce_email_subject_customer_processing_order', array( $this, 'pending_payment_email_subject' ), 40, 2 );
 		add_filter( 'woocommerce_email_subject_customer_completed_order', array( $this, 'completed_payment_subject' ), 41, 2 );
 		add_filter( 'woocommerce_email_subject_customer_completed_order', array( $this, 'fully_paid_payment_subject' ), 42, 2 );
 		add_filter( 'woocommerce_email_recipient_new_order', array( $this, 'filter_woocommerce_email_recipient_new_order' ), 10, 2 );
@@ -158,6 +159,21 @@ class NovaEmails {
 
 			$subject = str_replace( '{order_number}', $order->get_order_number(), $subject );
 		}
+
+		return $subject;
+	}
+
+	public function pending_payment_email_subject( $subject, $order ) {
+		$order_id       = $order->get_id();
+		$deposit_chosen = get_post_meta( $order_id, '_deposit_chosen', true );
+
+		if ( ! $deposit_chosen ) {
+			return $subject;
+		}
+
+		$processing_email = get_field( 'processing_email', $deposit_chosen );
+		$subject          = $processing_email['subject'] ? $processing_email['subject'] : $subject;
+		$subject          = str_replace( '{order_number}', $order->get_order_number(), $subject );
 
 		return $subject;
 	}
