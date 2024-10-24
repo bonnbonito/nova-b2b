@@ -212,7 +212,7 @@ class NovaEmails {
 		if ( $payment_select ) {
 			$processing_email   = get_field( 'processing_email', $payment_select );
 			$additional_content = $processing_email['additional_content'] ? $processing_email['additional_content'] : $additional_content;
-			$additional_content = str_replace( '{payment_link}', '<p>Please click here to pay: ' . $payment_order->get_checkout_payment_url() . '</p>', $additional_content );
+			$additional_content = str_replace( '{payment_link}', '<p><strong>Please click here to pay:</strong> ' . $payment_order->get_checkout_payment_url() . '</p>', $additional_content );
 		}
 
 		return $additional_content;
@@ -230,7 +230,7 @@ class NovaEmails {
 
 		$processing_email   = get_field( 'processing_email', $deposit_chosen );
 		$additional_content = $processing_email['additional_content'] ? $processing_email['additional_content'] : $additional_content;
-		$additional_content = str_replace( '{payment_link}', $needs_payment ? '<p>Please click here to pay: ' . $order->get_checkout_payment_url() . '</p>' : '', $additional_content );
+		$additional_content = str_replace( '{payment_link}', $needs_payment ? '<p><strong>Please click here to pay:</strong> ' . $order->get_checkout_payment_url() . '</p>' : '', $additional_content );
 
 		return $additional_content;
 	}
@@ -267,7 +267,7 @@ class NovaEmails {
 		if ( $payment_order_id && $payment_select ) {
 			$completed_email    = get_field( 'completed_email', $payment_select );
 			$additional_content = $completed_email['additional_content'] ? $completed_email['additional_content'] : $additional_content;
-			$additional_content = str_replace( '{payment_link}', '<p>Please click here to pay: ' . $payment_order->get_checkout_payment_url() . '</p>', $additional_content );
+			$additional_content = str_replace( '{payment_link}', '<p><strong>Please click here to pay:</strong> ' . $payment_order->get_checkout_payment_url() . '</p>', $additional_content );
 		}
 
 		return $additional_content;
@@ -328,7 +328,7 @@ class NovaEmails {
 			$body_text = str_replace( '{customer_full_name}', $order->get_formatted_billing_full_name(), $body_text );
 			$body_text = str_replace( '{customer_company}', $order->get_billing_company(), $body_text );
 			$body_text = str_replace( '{customer_email}', $order->get_billing_email(), $body_text );
-			$body_text = str_replace( '{payment_link}', '<p>Please click here to pay: ' . $payment_order->get_checkout_payment_url() . '</p>', $body_text );
+			$body_text = str_replace( '{payment_link}', '<p><strong>Please click here to pay:</strong> ' . $payment_order->get_checkout_payment_url() . '</p>', $body_text );
 		}
 		return $body_text;
 	}
@@ -357,7 +357,7 @@ class NovaEmails {
 			$body_text = str_replace( '{customer_full_name}', $order->get_formatted_billing_full_name(), $body_text );
 			$body_text = str_replace( '{customer_company}', $order->get_billing_company(), $body_text );
 			$body_text = str_replace( '{customer_email}', $order->get_billing_email(), $body_text );
-			$body_text = str_replace( '{payment_link}', $needs_payment ? '<p>Please click here to pay: ' . $order->get_checkout_payment_url() . '</p>' : '', $body_text );
+			$body_text = str_replace( '{payment_link}', $needs_payment ? '<p><strong>Please click here to pay:</strong> ' . $order->get_checkout_payment_url() . '</p>' : '', $body_text );
 		}
 		return $body_text;
 	}
@@ -416,7 +416,7 @@ class NovaEmails {
 		$body_text = str_replace( '{customer_company}', $order->get_billing_company(), $body_text );
 		$body_text = str_replace( '{customer_email}', $order->get_billing_email(), $body_text );
 		$body_text = str_replace( '{deadline}', $payment_date, $body_text );
-		$body_text = str_replace( '{payment_link}', '<p>Please click here to pay: ' . $order->get_checkout_payment_url() . '</p>', $body_text );
+		$body_text = str_replace( '{payment_link}', '<p><strong>Please click here to pay:</strong> ' . $order->get_checkout_payment_url() . '</p>', $body_text );
 
 		return $body_text;
 	}
@@ -474,7 +474,7 @@ class NovaEmails {
 			$body_text = str_replace( '{customer_company}', $order->get_billing_company(), $body_text );
 			$body_text = str_replace( '{customer_email}', $order->get_billing_email(), $body_text );
 			$body_text = str_replace( '{deadline}', $payment_date, $body_text );
-			$body_text = str_replace( '{payment_link}', '<p>Please click here to pay: ' . $order->get_checkout_payment_url() . '</p>', $body_text );
+			$body_text = str_replace( '{payment_link}', '<p><strong>Please click here to pay:</strong> ' . $order->get_checkout_payment_url() . '</p>', $body_text );
 
 		}
 
@@ -514,7 +514,7 @@ class NovaEmails {
 		}
 
 		$content = str_replace( '{order_details}', $order_details, $content );
-		$content = str_replace( '{payment_link}', '<p>Please click here to pay: ' . $payment_order->get_checkout_payment_url() . '</p>', $content );
+		$content = str_replace( '{payment_link}', '<p><strong>Please click here to pay:</strong> ' . $payment_order->get_checkout_payment_url() . '</p>', $content );
 
 		return $content;
 	}
