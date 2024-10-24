@@ -73,7 +73,10 @@ const Signage = ({ index, item, children, storage, editable = true }) => {
 	}, []);
 
 	return (
-		<div className="rounded-md border border-gray-200 p-4 mb-8 shadow-sm">
+		<div
+			id={item.id}
+			className="rounded-md border border-gray-200 p-4 mb-8 shadow-sm"
+		>
 			<div className={`flex justify-between ${open ? 'mb-4' : 'mb-0'}`}>
 				{editable ? (
 					<EditableText

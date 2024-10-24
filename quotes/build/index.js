@@ -4323,6 +4323,7 @@ const Signage = ({
     setOpen(prev => !prev);
   }, []);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    id: item.id,
     className: "rounded-md border border-gray-200 p-4 mb-8 shadow-sm"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: `flex justify-between ${open ? 'mb-4' : 'mb-0'}`
