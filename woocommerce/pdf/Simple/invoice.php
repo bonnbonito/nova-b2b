@@ -4,6 +4,11 @@
 <?php
 do_action( 'wpo_wcpdf_before_document', $this->get_type(), $this->order );
 
+$invoice_title = 'Invoice';
+if ( $this->order->is_paid() && ! $this->order->get_meta( '_adjusted_duplicate_order_id' ) ) {
+	$invoice_title = 'Receipt';
+}
+
 ?>
 
 <table class="head container">

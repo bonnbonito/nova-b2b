@@ -23,20 +23,20 @@ class NovaEmails {
 	 */
 	public function __construct() {
 		add_filter( 'kadence_woomail_order_body_text', array( $this, 'pending_payment_processing_email_old' ), 40, 5 );
-		add_filter( 'kadence_woomail_order_body_text', array( $this, 'pending_payment_processing_email' ), 40, 5 );
-		add_filter( 'kadence_woomail_order_body_text', array( $this, 'complete_payment_processing_email' ), 41, 5 );
-		add_filter( 'kadence_woomail_order_body_text', array( $this, 'fully_paid_payment_processing_email' ), 42, 5 );
+		add_filter( 'kadence_woomail_order_body_text', array( $this, 'pending_payment_processing_email' ), 41, 5 );
+		add_filter( 'kadence_woomail_order_body_text', array( $this, 'complete_payment_processing_email' ), 42, 5 );
+		add_filter( 'kadence_woomail_order_body_text', array( $this, 'fully_paid_payment_processing_email' ), 43, 5 );
 		add_filter( 'kadence_woomail_order_body_text', array( $this, 'ups_tracking' ), 50, 5 );
 		add_filter( 'woocommerce_email_additional_content_customer_processing_order', array( $this, 'pending_payment_additional_content_old' ), 40, 3 );
-		add_filter( 'woocommerce_email_additional_content_customer_processing_order', array( $this, 'pending_payment_additional_content' ), 40, 3 );
-		add_filter( 'woocommerce_email_additional_content_customer_completed_order', array( $this, 'complete_payment_additional_content' ), 41, 3 );
+		add_filter( 'woocommerce_email_additional_content_customer_processing_order', array( $this, 'pending_payment_additional_content' ), 41, 3 );
+		add_filter( 'woocommerce_email_additional_content_customer_completed_order', array( $this, 'complete_payment_additional_content' ), 42, 3 );
 		add_filter( 'woocommerce_email_heading_customer_completed_order', array( $this, 'complete_payment_heading' ), 41, 3 );
-		add_filter( 'woocommerce_email_additional_content_customer_completed_order', array( $this, 'fully_paid_payment_additional_content' ), 42, 3 );
+		add_filter( 'woocommerce_email_additional_content_customer_completed_order', array( $this, 'fully_paid_payment_additional_content' ), 43, 3 );
 		add_filter( 'woocommerce_email_heading_customer_completed_order', array( $this, 'fully_paid_payment_heading' ), 42, 3 );
 		add_filter( 'woocommerce_email_subject_customer_processing_order', array( $this, 'pending_payment_subject' ), 40, 2 );
-		add_filter( 'woocommerce_email_subject_customer_processing_order', array( $this, 'pending_payment_email_subject' ), 40, 2 );
-		add_filter( 'woocommerce_email_subject_customer_completed_order', array( $this, 'completed_payment_subject' ), 41, 2 );
-		add_filter( 'woocommerce_email_subject_customer_completed_order', array( $this, 'fully_paid_payment_subject' ), 42, 2 );
+		add_filter( 'woocommerce_email_subject_customer_processing_order', array( $this, 'pending_payment_email_subject' ), 41, 2 );
+		add_filter( 'woocommerce_email_subject_customer_completed_order', array( $this, 'completed_payment_subject' ), 42, 2 );
+		add_filter( 'woocommerce_email_subject_customer_completed_order', array( $this, 'fully_paid_payment_subject' ), 43, 2 );
 		add_filter( 'woocommerce_email_recipient_new_order', array( $this, 'filter_woocommerce_email_recipient_new_order' ), 10, 2 );
 		// add_filter( 'woocommerce_email_attachments', array( $this, 'insert_invoice' ), 10, 4 );
 		// Remove "On Hold" email notification
@@ -211,7 +211,7 @@ class NovaEmails {
 		if ( $payment_select ) {
 			$processing_email   = get_field( 'processing_email', $payment_select );
 			$additional_content = $processing_email['additional_content'] ? $processing_email['additional_content'] : $additional_content;
-			$additional_content = str_replace( '{payment_link}', $payment_order->get_checkout_payment_url(), $additional_content );
+			$additional_content = str_replace( '{payment_link}', '<p>Please click here to pay: ' . $payment_order->get_checkout_payment_url() . '</p>', $additional_content );
 		}
 
 		return $additional_content;
@@ -223,13 +223,13 @@ class NovaEmails {
 		$deposit_chosen = get_post_meta( $order_id, '_deposit_chosen', true );
 		$needs_payment  = get_post_meta( $order_id, 'needs_payment', true );
 
-		if ( ! $deposit_chosen && ! $needs_payment ) {
+		if ( ! $deposit_chosen ) {
 			return $additional_content;
 		}
 
 		$processing_email   = get_field( 'processing_email', $deposit_chosen );
 		$additional_content = $processing_email['additional_content'] ? $processing_email['additional_content'] : $additional_content;
-		$additional_content = str_replace( '{payment_link}', $order->get_checkout_payment_url(), $additional_content );
+		$additional_content = str_replace( '{payment_link}', $needs_payment ? '<p>Please click here to pay: ' . $order->get_checkout_payment_url() . '</p>' : '', $additional_content );
 
 		return $additional_content;
 	}
@@ -266,7 +266,7 @@ class NovaEmails {
 		if ( $payment_order_id && $payment_select ) {
 			$completed_email    = get_field( 'completed_email', $payment_select );
 			$additional_content = $completed_email['additional_content'] ? $completed_email['additional_content'] : $additional_content;
-			$additional_content = str_replace( '{payment_link}', $payment_order->get_checkout_payment_url(), $additional_content );
+			$additional_content = str_replace( '{payment_link}', '<p>Please click here to pay: ' . $payment_order->get_checkout_payment_url() . '</p>', $additional_content );
 		}
 
 		return $additional_content;
@@ -327,7 +327,7 @@ class NovaEmails {
 			$body_text = str_replace( '{customer_full_name}', $order->get_formatted_billing_full_name(), $body_text );
 			$body_text = str_replace( '{customer_company}', $order->get_billing_company(), $body_text );
 			$body_text = str_replace( '{customer_email}', $order->get_billing_email(), $body_text );
-			$body_text = str_replace( '{payment_link}', $payment_order->get_checkout_payment_url(), $body_text );
+			$body_text = str_replace( '{payment_link}', '<p>Please click here to pay: ' . $payment_order->get_checkout_payment_url() . '</p>', $body_text );
 		}
 		return $body_text;
 	}
@@ -339,7 +339,7 @@ class NovaEmails {
 		$deposit_chosen = get_post_meta( $order_id, '_deposit_chosen', true );
 		$needs_payment  = get_post_meta( $order_id, 'needs_payment', true );
 
-		if ( $needs_payment && $deposit_chosen && $key === 'customer_processing_order' ) {
+		if ( $deposit_chosen && $key === 'customer_processing_order' ) {
 
 			$processing_email = get_field( 'processing_email', $deposit_chosen );
 
@@ -356,7 +356,7 @@ class NovaEmails {
 			$body_text = str_replace( '{customer_full_name}', $order->get_formatted_billing_full_name(), $body_text );
 			$body_text = str_replace( '{customer_company}', $order->get_billing_company(), $body_text );
 			$body_text = str_replace( '{customer_email}', $order->get_billing_email(), $body_text );
-			$body_text = str_replace( '{payment_link}', $order->get_checkout_payment_url(), $body_text );
+			$body_text = str_replace( '{payment_link}', $needs_payment ? '<p>Please click here to pay: ' . $order->get_checkout_payment_url() . '</p>' : '', $body_text );
 		}
 		return $body_text;
 	}
@@ -415,7 +415,7 @@ class NovaEmails {
 		$body_text = str_replace( '{customer_company}', $order->get_billing_company(), $body_text );
 		$body_text = str_replace( '{customer_email}', $order->get_billing_email(), $body_text );
 		$body_text = str_replace( '{deadline}', $payment_date, $body_text );
-		$body_text = str_replace( '{payment_link}', $order->get_checkout_payment_url(), $body_text );
+		$body_text = str_replace( '{payment_link}', '<p>Please click here to pay: ' . $order->get_checkout_payment_url() . '</p>', $body_text );
 
 		return $body_text;
 	}
@@ -423,13 +423,12 @@ class NovaEmails {
 	public function ups_tracking( $body_text, $order, $sent_to_admin, $plain_text, $email ) {
 		$order_id = $order->get_id();
 		$key      = $email->id;
-		if ( 'customer_completed_order' !== $key ) {
-			return $body_text;
-		}
+
 		$tracking_number  = get_post_meta( $order_id, '_tracking_number', true );
 		$shipping_carrier = get_post_meta( $order_id, '_shipping_carrier', true );
 
 		if ( 'UPS' === $shipping_carrier && $tracking_number ) {
+			$body_text .= '<p>Track you order here:</p>';
 			$body_text .= '<p><strong>' . __( 'Tracking Number:', 'nova-b2b' ) . ' ' . $tracking_number . '</strong><br>';
 			$body_text .= '<a href="https://www.ups.com/track?track=yes&trackNums=' . $tracking_number . '" target="_blank">' . __( 'Track Shipment', 'nova-b2b' ) . '</a></p>';
 		}
@@ -474,7 +473,7 @@ class NovaEmails {
 			$body_text = str_replace( '{customer_company}', $order->get_billing_company(), $body_text );
 			$body_text = str_replace( '{customer_email}', $order->get_billing_email(), $body_text );
 			$body_text = str_replace( '{deadline}', $payment_date, $body_text );
-			$body_text = str_replace( '{payment_link}', $order->get_checkout_payment_url(), $body_text );
+			$body_text = str_replace( '{payment_link}', '<p>Please click here to pay: ' . $order->get_checkout_payment_url() . '</p>', $body_text );
 
 		}
 
@@ -495,12 +494,12 @@ class NovaEmails {
 		$content .= '</table>';
 
 		$content .= '<p>Hi, {customer_name}!</p>';
-		$content .= 'Here are the details of your order:';
+		$content .= '<p>Here are the details of your order:</p>';
 		$content .= '{order_details}';
 		$content .= '&nbsp;';
-		$content .= '<p>Please click here to pay: {payment_link}';
-		$content .= '<p>Thank you for choosing NOVA Signage!';
-		$content .= '<p>NOVA Signage Team';
+		$content .= '{payment_link}';
+		$content .= '<p>Thank you for choosing NOVA Signage!</p>';
+		$content .= '<p>NOVA Signage Team</p>';
 
 		$content = str_replace( '{customer_name}', $order->get_billing_first_name(), $content );
 
@@ -514,7 +513,7 @@ class NovaEmails {
 		}
 
 		$content = str_replace( '{order_details}', $order_details, $content );
-		$content = str_replace( '{payment_link}', $payment_order->get_checkout_payment_url(), $content );
+		$content = str_replace( '{payment_link}', '<p>Please click here to pay: ' . $payment_order->get_checkout_payment_url() . '</p>', $content );
 
 		return $content;
 	}
