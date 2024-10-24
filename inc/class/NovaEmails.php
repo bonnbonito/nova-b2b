@@ -37,7 +37,7 @@ class NovaEmails {
 		add_filter( 'woocommerce_email_subject_customer_processing_order', array( $this, 'pending_payment_email_subject' ), 41, 2 );
 		add_filter( 'woocommerce_email_subject_customer_completed_order', array( $this, 'completed_payment_subject' ), 42, 2 );
 		add_filter( 'woocommerce_email_subject_customer_completed_order', array( $this, 'fully_paid_payment_subject' ), 43, 2 );
-		add_filter( 'woocommerce_email_recipient_new_order', array( $this, 'filter_woocommerce_email_recipient_new_order' ), 10, 2 );
+		// add_filter( 'woocommerce_email_recipient_new_order', array( $this, 'filter_woocommerce_email_recipient_new_order' ), 10, 2 );
 		// add_filter( 'woocommerce_email_attachments', array( $this, 'insert_invoice' ), 10, 4 );
 		// Remove "On Hold" email notification
 		// add_filter( 'woocommerce_email_enabled_customer_on_hold_order', '__return_false' );
@@ -89,11 +89,12 @@ class NovaEmails {
 
 	public function filter_woocommerce_email_recipient_new_order( $recipient, $order ) {
 		if ( $order instanceof \WC_Order ) {
-			$order_id      = $order->get_id();
-			$from_order_id = get_post_meta( $order_id, '_from_order_id', true );
+			$order_id       = $order->get_id();
+			$from_order_id  = get_post_meta( $order_id, '_from_order_id', true );
+			$payment_select = get_post_meta( $order_id, '_payment_select', true );
 
 			// Check if the order has the _from_order_id meta
-			if ( ! empty( $from_order_id ) ) {
+			if ( $payment_select && ! empty( $from_order_id ) ) {
 				// Remove the customer email from the recipients
 				$recipient = '';
 			}
