@@ -584,7 +584,7 @@ function getTitleSectionHTML(sign) {
         <h3 style="text-transform: uppercase;">
             ${sign.title} ----- ${priceSection}
             ${editButtonHTML}
-            <input type="number" id="priceInput_${sign.id}" data-edit="${sign.id}" style="display: none;" value="${sign.usdPrice}" step="0.01"/>
+            <input type="text" id="priceInput_${sign.id}" data-edit="${sign.id}" style="display: none;" value="${sign.usdPrice}"/>
         </h3>
     `;
 }
