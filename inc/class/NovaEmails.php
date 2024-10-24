@@ -86,11 +86,12 @@ class NovaEmails {
 
 	public function filter_woocommerce_email_recipient_new_order( $recipient, $order ) {
 		if ( $order instanceof \WC_Order ) {
-			$order_id      = $order->get_id();
-			$from_order_id = get_post_meta( $order_id, '_from_order_id', true );
+			$order_id       = $order->get_id();
+			$from_order_id  = get_post_meta( $order_id, '_from_order_id', true );
+			$payment_select = get_post_meta( $order_id, '_payment_select', true );
 
 			// Check if the order has the _from_order_id meta
-			if ( ! empty( $from_order_id ) ) {
+			if ( $payment_select && ! empty( $from_order_id ) ) {
 				// Remove the customer email from the recipients
 				$recipient = '';
 			}
