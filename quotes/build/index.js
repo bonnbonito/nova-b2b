@@ -3578,6 +3578,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _RenderSignageDetails__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./RenderSignageDetails */ "./src/scripts/RenderSignageDetails.js");
+/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./utils/defaults */ "./src/scripts/utils/defaults.js");
+
 
 
 
@@ -3585,7 +3587,7 @@ function PricesView({
   item
 }) {
   const currency = wcumcs_vars_data.currency;
-  const price = currency === 'USD' ? item.usdPrice : item.cadPrice;
+  const price = currency === 'USD' ? item.usdPrice : (item.cadPrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_2__.EXCHANGE_RATE).toFixed(2);
   const style = {
     margin: '0',
     fontSize: '50px',
