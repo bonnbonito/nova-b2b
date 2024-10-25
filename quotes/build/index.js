@@ -3587,7 +3587,7 @@ function PricesView({
   item
 }) {
   const currency = wcumcs_vars_data.currency;
-  const price = currency === 'USD' ? item.usdPrice : (item.cadPrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_2__.EXCHANGE_RATE).toFixed(2);
+  const price = currency === 'USD' ? item.usdPrice : (item.usdPrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_2__.EXCHANGE_RATE).toFixed(2);
   const style = {
     margin: '0',
     fontSize: '50px',

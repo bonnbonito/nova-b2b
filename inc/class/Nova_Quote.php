@@ -1258,7 +1258,7 @@ h6 {
 				$projectArray = get_object_vars( $project );
 				$price        = $projectArray['usdPrice'];
 				if ( $currency === 'CAD' ) {
-					$price = $price * NOVA_EXCHANGE_RATE;
+					$price = $projectArray['usdPrice'] * NOVA_EXCHANGE_RATE;
 				}
 
 				?>
