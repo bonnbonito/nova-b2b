@@ -79,7 +79,7 @@ if ( ! class_exists( 'WC_Email_Customer_Production_Order', false ) ) :
 		 * @return string
 		 */
 		public function get_default_subject() {
-			return __( 'Your {site_title} order is now in production.', 'woocommerce' );
+			return __( 'Order {order_number} is in production', 'woocommerce' );
 		}
 
 		/**
@@ -89,7 +89,7 @@ if ( ! class_exists( 'WC_Email_Customer_Production_Order', false ) ) :
 		 * @return string
 		 */
 		public function get_default_heading() {
-			return __( 'Your order is in production.', 'woocommerce' );
+			return __( 'Order {order_number} is in production', 'woocommerce' );
 		}
 
 		/**

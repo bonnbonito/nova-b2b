@@ -870,7 +870,7 @@ class Deposit {
 		);
 
 		if ( $payments ) {
-			echo '<tr><td class="label">Payments:</td><td width="1%"></td><td class="total"><ul style="margin:0">';
+			echo '<tr><td class="label">Deposits:</td><td width="1%"></td><td class="total"><ul style="margin:0">';
 			foreach ( $payments as $payment ) {
 				echo '<li style="margin:0">' . wc_price( $payment->amount, array( 'currency' => $order->get_currency() ) ) . ' (' . date( 'd-m-y', strtotime( $payment->payment_date ) ) . ')</li>';
 			}

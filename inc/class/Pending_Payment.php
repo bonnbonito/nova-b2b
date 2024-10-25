@@ -419,8 +419,16 @@ class Pending_Payment {
 	}
 
 	public function pending_payment_order_email_content( $body_text, $order, $sent_to_admin, $plain_text, $email ) {
-		$pending_id     = $order->get_meta( '_pending_id' );
-		$from_order_id  = $order->get_meta( '_from_order_id' );
+		$pending_id = $order->get_meta( '_pending_id' );
+		if ( ! $pending_id ) {
+			return $body_text;
+		}
+
+		$from_order_id = $order->get_meta( '_from_order_id' );
+		if ( ! $from_order_id ) {
+			return $body_text;
+		}
+
 		$original_order = wc_get_order( $from_order_id );
 
 		if ( $pending_id && $from_order_id ) {
