@@ -42,8 +42,14 @@ class Dropbox {
 
 	public function frontend_scripts() {
 		$theme = wp_get_theme();
-		wp_register_style( 'nova-dropbox-gallery', get_stylesheet_directory_uri() . '/assets/css/dropbox-gallery.css', array(), $theme->Version );
-		wp_register_script( 'nova-dropbox-gallery', get_stylesheet_directory_uri() . '/assets/js/dropbox-gallery.js', array(), wp_get_theme()->get( 'Version' ), true );
+
+		wp_register_style( 'nova-embla', get_stylesheet_directory_uri() . '/assets/css/embla.css', array(), '8.3.0' );
+		wp_register_style( 'nova-dropbox-gallery', get_stylesheet_directory_uri() . '/assets/css/dropbox-gallery.css', array( 'nova-embla' ), $theme->Version );
+
+		wp_register_script( 'nova-dropbox-gallery', get_stylesheet_directory_uri() . '/assets/js/dropbox-gallery.js', array( 'nova-embla', 'nova-embla-autoplay', 'nova-embla-autoscroll' ), wp_get_theme()->get( 'Version' ), true );
+		wp_register_script( 'nova-embla', get_stylesheet_directory_uri() . '/assets/js/embla.min.js', array(), '8.3.0', true );
+		wp_register_script( 'nova-embla-autoplay', get_stylesheet_directory_uri() . '/assets/js/embla-autoplay.min.js', array(), '8.3.0', true );
+		wp_register_script( 'nova-embla-autoscroll', get_stylesheet_directory_uri() . '/assets/js/embla-autoscroll.min.js', array(), '8.3.0', true );
 	}
 
 	public function display_dropbox_gallery( $atts ) {
@@ -64,13 +70,52 @@ class Dropbox {
 
 		wp_enqueue_script( 'nova-dropbox-gallery' );
 		wp_enqueue_style( 'nova-dropbox-gallery' );
-		$output = '<div class="nova-dropbox-gallery">';
 
-		foreach ( $fetched_images as $image ) {
-			$output .= '<a href="' . esc_url( $image['sharedLink'] ) . '"><img src="' . esc_url( $image['sharedLink'] ) . '" alt=""></a>';
-		}
+		ob_start();
+		?>
+<section id="dropbox-<?php echo esc_attr( $id ); ?>" class="embla nova-dropbox-gallery theme-dark">
+    <div class="embla__viewport">
+        <div class="embla__container">
+            <?php foreach ( $fetched_images as $image ) : ?>
+            <div class="embla__slide">
+                <div class="embla__lazy-load">
+                    <span class="embla__lazy-load__spinner"></span>
+                    <a href="<?php echo esc_url( $image['sharedLink'] ); ?>">
+                        <img class="embla__slide__img embla__lazy-load__img"
+                            src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D" alt="nova image"
+                            data-src="<?php echo esc_url( $image['sharedLink'] ); ?>" />
+                    </a>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
 
-		$output .= '</div>';
+    <div class="embla__controls">
+        <div class="embla__buttons">
+            <button class="embla__button embla__button--prev" type="button">
+                <svg class="embla__button__svg" viewBox="0 0 532 532">
+                    <path fill="currentColor"
+                        d="M355.66 11.354c13.793-13.805 36.208-13.805 50.001 0 13.785 13.804 13.785 36.238 0 50.034L201.22 266l204.442 204.61c13.785 13.805 13.785 36.239 0 50.044-13.793 13.796-36.208 13.796-50.002 0a5994246.277 5994246.277 0 0 0-229.332-229.454 35.065 35.065 0 0 1-10.326-25.126c0-9.2 3.393-18.26 10.326-25.2C172.192 194.973 332.731 34.31 355.66 11.354Z">
+                    </path>
+                </svg>
+            </button>
+
+            <button class="embla__button embla__button--next" type="button">
+                <svg class="embla__button__svg" viewBox="0 0 532 532">
+                    <path fill="currentColor"
+                        d="M176.34 520.646c-13.793 13.805-36.208 13.805-50.001 0-13.785-13.804-13.785-36.238 0-50.034L330.78 266 126.34 61.391c-13.785-13.805-13.785-36.239 0-50.044 13.793-13.796 36.208-13.796 50.002 0 22.928 22.947 206.395 206.507 229.332 229.454a35.065 35.065 0 0 1 10.326 25.126c0 9.2-3.393 18.26-10.326 25.2-45.865 45.901-206.404 206.564-229.332 229.52Z">
+                    </path>
+                </svg>
+            </button>
+        </div>
+
+        <div class="embla__dots"></div>
+    </div>
+</section>
+
+<?php
+		$output = ob_get_clean();
 
 		return $output;
 	}
