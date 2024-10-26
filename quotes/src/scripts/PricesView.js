@@ -7,7 +7,7 @@ export default function PricesView({ item }) {
 	const price =
 		currency === 'USD'
 			? item.usdPrice
-			: (item.usdPrice * EXCHANGE_RATE).toFixed(2);
+			: (Math.round(item.usdPrice * EXCHANGE_RATE * 100) / 100).toFixed(2);
 	const style = {
 		margin: '0',
 		fontSize: '50px',
