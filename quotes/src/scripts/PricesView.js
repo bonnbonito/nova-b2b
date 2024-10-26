@@ -1,9 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 import { RenderSignageDetails } from './RenderSignageDetails';
+import { EXCHANGE_RATE } from './utils/defaults';
 
 export default function PricesView({ item }) {
 	const currency = wcumcs_vars_data.currency;
-	const price = currency === 'USD' ? item.usdPrice : item.cadPrice;
+	const price =
+		currency === 'USD'
+			? item.usdPrice
+			: (Math.round(item.usdPrice * EXCHANGE_RATE * 100) / 100).toFixed(2);
 	const style = {
 		margin: '0',
 		fontSize: '50px',

@@ -3590,6 +3590,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _RenderSignageDetails__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./RenderSignageDetails */ "./src/scripts/RenderSignageDetails.js");
+/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./utils/defaults */ "./src/scripts/utils/defaults.js");
+
 
 
 
@@ -3597,7 +3599,7 @@ function PricesView({
   item
 }) {
   const currency = wcumcs_vars_data.currency;
-  const price = currency === 'USD' ? item.usdPrice : item.cadPrice;
+  const price = currency === 'USD' ? item.usdPrice : (Math.round(item.usdPrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_2__.EXCHANGE_RATE * 100) / 100).toFixed(2);
   const style = {
     margin: '0',
     fontSize: '50px',
@@ -4335,6 +4337,7 @@ const Signage = ({
     setOpen(prev => !prev);
   }, []);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    id: item.id,
     className: "rounded-md border border-gray-200 p-4 mb-8 shadow-sm"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: `flex justify-between ${open ? 'mb-4' : 'mb-0'}`
@@ -37197,12 +37200,21 @@ const shippingRates = (total, currency) => {
   let flatRate = currency === 'USD' ? 14.75 : 14.75 * EXCHANGE_RATE;
   let expediateRate = currency === 'USD' ? 29.5 : 29.5 * EXCHANGE_RATE;
   let minPrice = currency === 'USD' ? 800 : 800 * EXCHANGE_RATE;
+  let belowMin = 0;
+  let aboveMin = 0;
+  let belowMinEx = 0;
+  let aboveMinEx = 0;
   if (total < minPrice) {
     standard = total * 0.09 > flatRate ? total * 0.09 : flatRate;
     expedite = total * 0.175 > expediateRate ? total * 0.175 : expediateRate;
   } else {
-    standard = total * 0.08 > flatRate ? total * 0.08 : flatRate;
-    expedite = total * 0.155 > expediateRate ? total * 0.155 : expediateRate;
+    belowMin = minPrice * 0.09;
+    belowMinEx = minPrice * 0.175;
+    let difference = total - minPrice;
+    aboveMin = difference * 0.08;
+    aboveMinEx = difference * 0.155;
+    standard = belowMin + aboveMin;
+    expedite = belowMinEx + aboveMinEx;
   }
   return {
     standard,
