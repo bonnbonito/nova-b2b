@@ -20,8 +20,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 do_action( 'kadence_after_content' );
 ?>
-	</div><!-- #inner-wrap -->
-	<?php
+</div><!-- #inner-wrap -->
+<?php
 	do_action( 'kadence_before_footer' );
 	/**
 	 * Kadence footer hook.
@@ -37,4 +37,5 @@ do_action( 'kadence_after_content' );
 
 <?php wp_footer(); ?>
 </body>
+
 </html>

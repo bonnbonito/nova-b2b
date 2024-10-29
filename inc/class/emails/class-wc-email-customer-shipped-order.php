@@ -79,7 +79,7 @@ if ( ! class_exists( 'WC_Email_Customer_Shipped_Order', false ) ) :
 		 * @return string
 		 */
 		public function get_default_subject() {
-			return __( 'Order {order_number} has been shipped', 'woocommerce' );
+			return __( 'Order #{order_number} has been shipped', 'woocommerce' );
 		}
 
 		/**
@@ -89,7 +89,7 @@ if ( ! class_exists( 'WC_Email_Customer_Shipped_Order', false ) ) :
 		 * @return string
 		 */
 		public function get_default_heading() {
-			return __( 'Order {order_number} has been shipped', 'woocommerce' );
+			return __( 'Order #{order_number} has been shipped', 'woocommerce' );
 		}
 
 		/**

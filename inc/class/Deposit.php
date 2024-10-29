@@ -46,7 +46,7 @@ class Deposit {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_nova_scripts' ) );
 		add_action( 'woocommerce_order_status_completed', array( $this, 'order_status_completed' ), 99 );
 		// add_action( 'woocommerce_order_status_delivered', array( $this, 'insert_delivered_date' ) );
-		add_action( 'woocommerce_order_status_shipped', array( $this, 'order_status_shipped' ), 20, 1 );
+		add_action( 'woocommerce_order_status_shipped', array( $this, 'order_status_shipped' ), 1, 1 );
 		add_action( 'woocommerce_before_cart', array( $this, 'remove_wc_sessions_on_cart' ) );
 		add_action( 'woocommerce_review_order_before_payment', array( $this, 'output_deposit_selection' ) );
 		add_filter( 'woocommerce_payment_complete_order_status', array( $this, 'change_payment_status' ), 10, 3 );
@@ -55,8 +55,8 @@ class Deposit {
 		add_filter( 'woocommerce_payment_successful_result', array( $this, 'successful_payment' ), 20, 2 );
 		add_filter( 'woocommerce_cod_process_payment_order_status', array( $this, 'cod_status' ), 20, 2 );
 		add_action( 'woocommerce_payment_complete', array( $this, 'update_original_orders_after_payment' ), 20, 1 );
-		add_filter( 'woocommerce_email_heading_customer_completed_order', array( $this, 'second_payment_heading' ), 50, 3 );
-		add_filter( 'woocommerce_email_subject_customer_completed_order', array( $this, 'second_payment_subject' ), 50, 2 );
+		// add_filter( 'woocommerce_email_heading_customer_completed_order', array( $this, 'second_payment_heading' ), 50, 3 );
+		// add_filter( 'woocommerce_email_subject_customer_completed_order', array( $this, 'second_payment_subject' ), 50, 2 );
 		add_filter( 'kadence_woomail_order_body_text', array( $this, 'fully_paid_content' ), 41, 5 );
 		add_filter( 'kadence_woomail_order_body_text', array( $this, 'in_production_content' ), 40, 5 );
 		add_action( 'wp_ajax_delete_pending_payment_order', array( $this, 'delete_pending_payment_order' ) );
@@ -64,6 +64,17 @@ class Deposit {
 		add_action( 'wp', array( $this, 'schedule_pending_payment_checker' ) );
 		add_action( 'add_meta_boxes', array( $this, 'add_needs_payment_metabox' ) );
 		add_action( 'save_post_shop_order', array( $this, 'save_needs_payment_metabox' ) );
+		add_action( 'woocommerce_payment_complete', array( $this, 'early_payment' ), 99, 2 );
+	}
+
+	public function early_payment( $order_id, $transaction_id ) {
+		$order          = wc_get_order( $order_id );
+		$deposit_chosen = $order->get_meta( '_deposit_chosen' );
+		$shipped_date   = $order->get_meta( '_shipped_date' );
+
+		if ( $deposit_chosen && ! $shipped_date ) {
+			error_log( 'Deposit chosen but no shipped date' );
+		}
 	}
 
 	public function save_needs_payment_metabox( $post_id ) {
@@ -473,9 +484,9 @@ class Deposit {
 			return $status;
 		}
 
-		$delivered_date = get_post_meta( $order_id, 'delivered_date', true );
+		$shipped_date = get_post_meta( $order_id, 'shipped_date', true );
 
-		if ( ! $delivered_date ) {
+		if ( ! $shipped_date ) {
 			return $status;
 		}
 
@@ -745,6 +756,37 @@ class Deposit {
 	public function second_payment_action( $order_id, $posted_data, $order ) {
 	}
 
+	public function early_payment_email( $order ) {
+		$first_name               = $order->get_billing_first_name();
+		$customer_email           = $order->get_billing_email();
+		$user_id                  = $order->get_user_id() ? $order->get_user_id() : 0;
+		$additional_billing_email = get_user_meta( $user_id, 'additional_billing_email', true );
+		if ( $additional_billing_email ) {
+			$customer_email = $additional_billing_email;
+		}
+		$content = file_get_contents( NOVA_CLASS_PATH . '/emails/content/customer-early-payment.php' );
+		$content = str_replace( '{first_name}', $first_name, $content );
+		$content = str_replace( '{order_number}', $order->get_order_number(), $content );
+
+		ob_start();
+		do_action( 'woocommerce_email_order_details', $order, false, false, '' );
+		$order_details = ob_get_clean();
+		$content       = str_replace( '{order_details}', $order_details, $content );
+
+		$headers     = array( 'Content-Type: text/html; charset=UTF-8' );
+		$attachments = array();
+		if ( class_exists( '\WPO\WC\PDF_Invoices\Main' ) ) {
+			$attachments = \WPO\WC\PDF_Invoices\Main::instance()->attach_document_to_email( array(), 'customer_invoice', $order, null );
+		}
+		$subject = 'Order #' . $order->get_order_number() . ' thank you for your payment!';
+		$heading = 'Order #' . $order->get_order_number() . ' thank you for your payment!';
+
+		$role_instance = \NOVA_B2B\Roles::get_instance();
+		if ( $role_instance ) {
+			$role_instance->send_email( $customer_email, $subject, $content, $headers, $attachments, $heading );
+		}
+	}
+
 	public function second_payment_meta( $result, $order_id ) {
 		$order = wc_get_order( $order_id );
 
@@ -752,8 +794,15 @@ class Deposit {
 			$today = current_time( 'mysql' );
 			$order->update_meta_data( 'second_payment_date', $today );
 			$order->update_meta_data( 'second_payment', true );
-			$order->save();
+			$original_order_ids = $order->get_meta( '_original_order_ids' );
 
+			$status = $order->get_status();
+
+			if ( 'pending' !== $status && ! $original_order_ids ) {
+				$this->early_payment_email( $order );
+			}
+
+			$order->save();
 		}
 
 		return $result;

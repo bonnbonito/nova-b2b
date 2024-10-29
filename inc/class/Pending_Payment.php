@@ -1692,7 +1692,7 @@ class Pending_Payment {
 				continue;
 			}
 
-			if ( $order->has_status( array( 'completed', 'on-hold', 'trash' ) ) ) {
+			if ( ! $order->has_status( array( 'pending' ) ) ) {
 				continue;
 			}
 
