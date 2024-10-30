@@ -54,6 +54,11 @@ if ( ! defined( 'NOVA_EXCHANGE_RATE' ) ) {
 	define( 'NOVA_EXCHANGE_RATE', 1.35 );
 }
 
+/** if Woocommerce activated */
+if ( class_exists( 'woocommerce' ) ) {
+	require NOVA_DIR_PATH . '/inc/class/Order_Shipped.php';
+}
+
 add_action( 'acf/init', 'nova_b2b_acf_init', 1 );
 
 function nova_b2b_acf_init() {
@@ -65,12 +70,3 @@ function nova_b2b_acf_init() {
 /**
  * Add custom functions here
  */
-
-add_filter(
-	'wc_order_statuses',
-	function ( $statuses ) {
-		$statuses['wc-production'] = _x( 'In Production', 'Order status', 'woocommerce' );
-		$statuses['wc-shipped']    = _x( 'Shipped', 'Order status', 'woocommerce' );
-		return $statuses;
-	}
-);

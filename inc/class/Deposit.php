@@ -65,6 +65,7 @@ class Deposit {
 		add_action( 'add_meta_boxes', array( $this, 'add_needs_payment_metabox' ) );
 		add_action( 'save_post_shop_order', array( $this, 'save_needs_payment_metabox' ) );
 		add_action( 'woocommerce_payment_complete', array( $this, 'early_payment' ), 99, 2 );
+		add_action( 'nova_pending_payment_email', array( $this, 'send_pending_email' ), 10, 1 );
 	}
 
 	public function early_payment( $order_id, $transaction_id ) {
@@ -162,6 +163,72 @@ class Deposit {
 		}
 	}
 
+	public function send_pending_email( $order ) {
+		$order_id                 = $order->get_id();
+		$tracking_number          = get_post_meta( $order_id, '_tracking_number', true );
+		$shipping_carrier         = get_post_meta( $order_id, '_shipping_carrier', true );
+		$first_name               = $order->get_billing_first_name();
+		$customer_email           = $order->get_billing_email();
+		$user_id                  = $order->get_user_id() ? $order->get_user_id() : 0;
+		$additional_billing_email = get_user_meta( $user_id, 'additional_billing_email', true );
+		$payment_url              = '<p><strong>Please click here to pay:</strong> ' . $order->get_checkout_payment_url() . '</p>';
+
+		if ( $additional_billing_email ) {
+			$customer_email = $additional_billing_email;
+		}
+
+		$subject  = 'Order #{order_number} shipped and out for delivery';
+		$message  = '<p>Hello {customer_name},</p>';
+		$message .= '<p>Order #{order_number} has been shipped.</p>';
+		if ( 'UPS' === $shipping_carrier && $tracking_number ) {
+			$message .= '<p>Track you order here:</p>';
+			$message .= '<p><strong>' . __( 'Tracking Number:', 'nova-b2b' ) . ' ' . $tracking_number . '</strong><br>';
+			$message .= '<a href="https://www.ups.com/track?track=yes&trackNums=' . $tracking_number . '" target="_blank">' . __( 'Track Shipment', 'nova-b2b' ) . '</a></p>';
+		}
+		$message .= '{order_details}';
+		$message .= '{payment_url}';
+		$message .= '<p>For more updates and to explore our offerings, visit our <a href="https://novasignage.com/" target="_blank">website.</a></p>';
+		$message .= '<p>Thank you for choosing NOVA Signage!<br>NOVA Signage Team</p>';
+
+		$pending = \NOVA_B2B\Pending_Payment::get_instance();
+
+		if ( $pending ) {
+			ob_start();
+			add_filter( 'woocommerce_get_order_item_totals', array( $pending, 'insert_payment_date' ), 30, 3 );
+			do_action( 'woocommerce_email_order_details', $order, false, false, '' );
+			remove_filter( 'woocommerce_get_order_item_totals', array( $pending, 'insert_payment_date' ), 30, 3 );
+			$order_details = ob_get_clean();
+		}
+
+		$subject = str_replace( '{order_number}', $order->get_order_number(), $subject );
+		$message = str_replace( '{order_details}', $order_details, $message );
+		$message = str_replace( '{payment_url}', $payment_url, $message );
+		$message = str_replace( '{customer_name}', $first_name, $message );
+		$message = str_replace( '{order_number}', $order->get_order_number(), $message );
+
+		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
+
+		$attachments = array();
+
+		if ( $customer_email ) {
+			$headers = array( 'Content-Type: text/html; charset=UTF-8' );
+
+			$role_instance = \NOVA_B2B\Roles::get_instance();
+
+			if ( $role_instance ) {
+
+				$attachments = array();
+
+				if ( class_exists( '\WPO\WC\PDF_Invoices\Main' ) ) {
+					$attachments = \WPO\WC\PDF_Invoices\Main::instance()->attach_document_to_email( array(), 'customer_invoice', $order, null );
+				}
+
+				$role_instance->send_email( $customer_email, $subject, $message, $headers, $attachments );
+
+			}
+		}
+	}
+
 	public function send_payment_reminder_email( $order_id ) {
 
 		$order = wc_get_order( $order_id );
@@ -230,11 +297,15 @@ class Deposit {
 						$message = str_replace( '{order_number}', $order->get_order_number(), $message );
 
 						// Get the order details
-						ob_start();
-						add_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
-						do_action( 'woocommerce_email_order_details', $order, false, false, '' );
-						remove_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
-						$order_details = ob_get_clean();
+						$pending = \NOVA_B2B\Pending_Payment::get_instance();
+
+						if ( $pending ) {
+							ob_start();
+							add_filter( 'woocommerce_get_order_item_totals', array( $pending, 'insert_payment_date' ), 30, 3 );
+							do_action( 'woocommerce_email_order_details', $order, false, false, '' );
+							remove_filter( 'woocommerce_get_order_item_totals', array( $pending, 'insert_payment_date' ), 30, 3 );
+							$order_details = ob_get_clean();
+						}
 
 						$message = str_replace( '{order_details}', $order_details, $message );
 
@@ -524,6 +595,7 @@ class Deposit {
 			$order->set_status( 'completed' );
 			$order->save();
 		} else {
+			do_action( 'nova_pending_payment_email', $order );
 			$order->set_status( 'pending' );
 			$order->save();
 		}
@@ -544,8 +616,8 @@ class Deposit {
 				$original_order = wc_get_order( $original_order_id );
 				if ( $original_order ) {
 					$original_order->set_status( 'completed' );
-					$original_order->save();
 					$original_order->add_order_note( sprintf( __( 'Order completed via combined order #%s', 'nova-b2b' ), $order->get_order_number() ) );
+					$original_order->save();
 				}
 			}
 		}

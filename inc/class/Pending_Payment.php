@@ -1512,25 +1512,46 @@ class Pending_Payment {
 
 		$payment_type = $order->get_meta( '_payment_select' );
 
-		$days_after_shipping = get_field( 'days_after_shipping', $payment_type );
-		$deadline            = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
-		$payment_date        = date( 'F d, Y', $deadline );
+		$deposit_chosen = $order->get_meta( '_deposit_chosen' );
 
-		if ( $pending_order ) {
-			$payment = $this->get_payment_date( $order_id );
+		if ( $payment_type ) {
+			$days_after_shipping = get_field( 'days_after_shipping', $payment_type );
+			$deadline            = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
+			$payment_date        = date( 'F d, Y', $deadline );
 
-			if ( $payment && $payment_date ) {
-				$total_rows['payment_date'] = array(
-					'label' => __( 'Payment Date', 'woocommerce' ),
-					'value' => esc_html( $payment_date ),
-				);
+			if ( $pending_order ) {
+				$payment = $this->get_payment_date( $order_id );
 
-				// Reorder to make sure the payment date is the last item
-				$payment_date = $total_rows['payment_date'];
-				unset( $total_rows['payment_date'] );
-				$total_rows['payment_date'] = $payment_date;
+				if ( $payment && $payment_date ) {
+					$total_rows['payment_date'] = array(
+						'label' => __( 'Payment Date', 'woocommerce' ),
+						'value' => esc_html( $payment_date ),
+					);
 
+					// Reorder to make sure the payment date is the last item
+					$payment_date = $total_rows['payment_date'];
+					unset( $total_rows['payment_date'] );
+					$total_rows['payment_date'] = $payment_date;
+
+				}
 			}
+		}
+
+		if ( $deposit_chosen ) {
+
+			$days_after_shipping = get_field( 'days_after_shipping', $deposit_chosen );
+			$deadline            = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
+			$payment_date        = date( 'F d, Y', $deadline );
+
+			$total_rows['payment_date'] = array(
+				'label' => __( 'Payment Date', 'woocommerce' ),
+				'value' => esc_html( $payment_date ),
+			);
+
+			$payment_date = $total_rows['payment_date'];
+			unset( $total_rows['payment_date'] );
+			$total_rows['payment_date'] = $payment_date;
+
 		}
 
 		return $total_rows;

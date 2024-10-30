@@ -5,7 +5,7 @@ namespace NOVA_B2B;
 
 use function wc_get_order;
 
-class Order_Status {
+class Pending_Orders {
 	/**
 	 * Instance of this class
 	 *
@@ -27,17 +27,17 @@ class Order_Status {
 	 */
 	public function __construct() {
 		// Add custom order statuses
-		$this->add_custom_order_status( 'Shipped', 'shipped', '#3498db' );
-		$this->add_custom_order_status( 'In Production', 'production', '#333' );
+		// $this->add_custom_order_status( 'Shipped', 'shipped', '#3498db' );
+		// $this->add_custom_order_status( 'In Production', 'production', '#333' );
+		// add_action( 'woocommerce_shipstation_shipnotify', array( $this, 'change_status_to_shipped' ), 10, 2 );
+		// add_filter( 'woocommerce_email_classes', array( $this, 'custom_init_emails' ) );
+		// add_filter( 'woocommerce_email_actions', array( $this, 'email_actions' ) );
+		// add_filter( 'kadence_woomail_email_types', array( $this, 'email_types' ), 10, 1 );
+		// add_filter( 'kadence_woomail_customized_email_types', array( $this, 'email_types' ), 10, 1 );
+		// add_filter( 'kadence_woomail_email_type_class_name_array', array( $this, 'kadence_email_classes' ) );
+		// add_filter( 'woocommerce_get_order_status_labels', array( $this, 'order_status_labels' ), 10, 2 );
+		// add_filter( 'wc_order_statuses', array( $this, 'add_custom_statuses_to_order_statuses' ) );
 		add_action( 'woocommerce_order_note_added', array( $this, 'change_status_on_shipstation_note' ), 10, 2 );
-		add_action( 'woocommerce_shipstation_shipnotify', array( $this, 'change_status_to_shipped' ), 10, 2 );
-		add_filter( 'woocommerce_email_classes', array( $this, 'custom_init_emails' ) );
-		add_filter( 'woocommerce_email_actions', array( $this, 'email_actions' ) );
-		add_filter( 'kadence_woomail_email_types', array( $this, 'email_types' ), 10, 1 );
-		add_filter( 'kadence_woomail_customized_email_types', array( $this, 'email_types' ), 10, 1 );
-		add_filter( 'kadence_woomail_email_type_class_name_array', array( $this, 'kadence_email_classes' ) );
-		add_filter( 'woocommerce_get_order_status_labels', array( $this, 'order_status_labels' ), 10, 2 );
-		add_filter( 'wc_order_statuses', array( $this, 'add_custom_statuses_to_order_statuses' ) );
 	}
 
 	public function add_custom_statuses_to_order_statuses( $statuses ) {
@@ -93,7 +93,7 @@ class Order_Status {
 
 		if ( strpos( $note_content, 'Order has been exported to Shipstation' ) !== false ) {
 			// Change the order status to "production".
-			$order->update_status( 'production', 'Order status automatically changed to production after being exported to Shipstation.' );
+			// $order->update_status( 'production', 'Order status automatically changed to production after being exported to Shipstation.' );
 		}
 	}
 
