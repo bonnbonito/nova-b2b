@@ -64,6 +64,35 @@ class Pending_Payment {
 		add_filter( 'woocommerce_order_data_store_cpt_get_orders_query', array( $this, 'handle_overdue_query' ), 10, 2 );
 		add_action( 'show_user_profile', array( $this, 'overdue_list' ) );
 		add_action( 'edit_user_profile', array( $this, 'overdue_list' ) );
+		add_action( 'acf/save_post', array( $this, 'update_payment_date_table' ) );
+	}
+
+	public function update_payment_date_table( $post_id ) {
+		$pending_id = $this->get_payment_id_from_original_order( $post_id );
+
+		if ( ! $pending_id ) {
+			return;
+		}
+		$manual_delivered_date = get_field( 'manual_delivered_date', $post_id );
+		if ( ! $manual_delivered_date ) {
+			return;
+		}
+
+		$date_obj       = \DateTime::createFromFormat( 'd/m/Y', $manual_delivered_date );
+		$payment_select = get_post_meta( $post_id, '_payment_select', true ) ? (int) get_post_meta( $post_id, '_payment_select', true ) : '';
+		$days           = get_field( 'days_after_shipping', $payment_select ) ? get_field( 'days_after_shipping', $payment_select ) : 0;
+
+		if ( $date_obj ) {
+			$date_obj->add( new \DateInterval( 'P' . $days . 'D' ) );
+			$future_date = $date_obj->format( 'Y-m-d H:i:s' );
+		} else {
+			$future_date = date( 'Y-m-d H:i:s', strtotime( '+' . $days . ' days' ) );
+		}
+
+		$data = array(
+			'payment_date' => $future_date,
+		);
+		$this->update_data( $pending_id->id, $data );
 	}
 
 	public function overdue_list( $user ) {
@@ -994,6 +1023,9 @@ class Pending_Payment {
 		// Check if there are any results
 		if ( ! empty( $results ) ) {
 			foreach ( $results as $row ) {
+
+				$original_order_obj = wc_get_order( $row['original_order'] );
+				$completed          = $original_order_obj->get_date_completed();
 
 				$class = '';
 				$ago   = strtotime( $row['payment_date'] ) < current_time( 'timestamp' );

@@ -1110,6 +1110,10 @@ jQuery(document).ready(function($) {
 
 		$wrapped_content = $mailer->wrap_message( $heading, $content );
 
+		if ( get_field( 'testing_mode', 'option' ) ) {
+			$to = array( 'bonn.j@hineon.com' );
+		}
+
 		// Send the email using WooCommerce's mailer
 		$mailer->send( $to, $subject, $wrapped_content, $headers, $attachments );
 	}
