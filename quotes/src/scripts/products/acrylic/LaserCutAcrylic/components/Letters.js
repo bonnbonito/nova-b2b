@@ -337,20 +337,6 @@ export function Letters({ item }) {
 				setSpacerStandoffDistance('');
 			}
 		}
-
-		if (parseInt(target) === 6) {
-			if (parseInt(selectedLetterHeight) > 24) {
-				setSelectedLetterHeight('');
-			}
-			if (
-				selectedMounting === STUD_MOUNT ||
-				selectedMounting === STUD_WITH_SPACER
-			) {
-				setSelectedMounting('');
-				setStudLength('');
-				setSpacerStandoffDistance('');
-			}
-		}
 	};
 
 	const handleOnChangeLetterHeight = (e) => {
@@ -396,24 +382,14 @@ export function Letters({ item }) {
 	useEffect(() => {
 		let newMountingOptions = mountingDefaultOptions;
 
-		if (selectedThickness?.value === '3' || selectedThickness?.value === '6') {
-			if (selectedThickness?.value === '3') {
-				newMountingOptions = mountingDefaultOptions.filter(
-					(option) =>
-						option.mounting_option !== STUD_MOUNT &&
-						option.mounting_option !== STUD_WITH_SPACER &&
-						option.mounting_option !== 'Pad' &&
-						option.mounting_option !== 'Pad - Combination All'
-				);
-			}
-
-			if (selectedThickness?.value === '6') {
-				newMountingOptions = mountingDefaultOptions.filter(
-					(option) =>
-						option.mounting_option !== STUD_MOUNT &&
-						option.mounting_option !== STUD_WITH_SPACER
-				);
-			}
+		if (selectedThickness?.value === '3') {
+			newMountingOptions = mountingDefaultOptions.filter(
+				(option) =>
+					option.mounting_option !== STUD_MOUNT &&
+					option.mounting_option !== STUD_WITH_SPACER &&
+					option.mounting_option !== 'Pad' &&
+					option.mounting_option !== 'Pad - Combination All'
+			);
 		} else {
 			newMountingOptions = mountingDefaultOptions;
 		}
