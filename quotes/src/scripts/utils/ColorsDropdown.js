@@ -4,7 +4,7 @@ import {
 	TooltipContent,
 	TooltipProvider,
 	TooltipTrigger,
-} from '../ui/Tooltip';
+} from '../ui/ToolTip';
 
 const ColorsDropdown = React.forwardRef(
 	(

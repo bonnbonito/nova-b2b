@@ -52,8 +52,13 @@ const wireTypeOptions = [
 ];
 
 export const NeonSign = ({ item }) => {
-	const { signage, setSignage, setMissing, updateSignageItem } =
-		useAppContext();
+	const {
+		signage,
+		setSignage,
+		setMissing,
+		updateSignageItem,
+		hasUploadedFile,
+	} = useAppContext();
 
 	const [fileNames, setFileNames] = useState(item.fileNames ?? []);
 	const [fileUrls, setFileUrls] = useState(item.fileUrls ?? []);
@@ -67,7 +72,9 @@ export const NeonSign = ({ item }) => {
 	const [width, setWidth] = useState(item.neonSignWidth ?? '');
 	const [finish, setFinish] = useState(item.paintedPCFinish ?? '');
 	const [customColor, setCustomColor] = useState(item.customColor ?? '');
-	const [neonLength8mm, setNeonLength8mm] = useState(item.neonLength8mm ?? '');
+	const [neonLength8mm, setNeonLength8mm] = useState(
+		item.neonLength8mm ?? 'TBC'
+	);
 	const [rigidBacking, setRigidBacking] = useState(
 		item.rigidBacking ?? 'Frosted Clear PC'
 	);
@@ -78,13 +85,13 @@ export const NeonSign = ({ item }) => {
 		item.wireType ?? '6ft Clear DC5521 female'
 	);
 	const [neonLength10mm, setNeonLength10mm] = useState(
-		item.neonLength10mm ?? ''
+		item.neonLength10mm ?? 'TBC'
 	);
 	const [neonLength14mm, setNeonLength14mm] = useState(
-		item.neonLength14mm ?? ''
+		item.neonLength14mm ?? 'TBC'
 	);
 	const [neonLength20mm, setNeonLength20mm] = useState(
-		item.neonLength20mm ?? ''
+		item.neonLength20mm ?? 'TBC'
 	);
 	const [height, setHeight] = useState(item.neonSignHeight ?? '');
 
@@ -117,7 +124,13 @@ export const NeonSign = ({ item }) => {
 	}, []);
 
 	const neonLength = useMemo(() => {
-		return arrayRange(1, 100, 1, false);
+		const tbc = (
+			<option key="tbc" value="TBC">
+				To be Calculated
+			</option>
+		);
+		const options = arrayRange(1, 100, 1);
+		return [tbc, ...options];
 	}, []);
 
 	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
@@ -251,16 +264,16 @@ export const NeonSign = ({ item }) => {
 		if (!width) missingFields.push('Select Neon Sign Width');
 		if (!height) missingFields.push('Select Neon Sign Height');
 
-		if (
-			!neonLength8mm &&
-			!neonLength14mm &&
-			!neonLength10mm &&
-			!neonLength20mm
-		) {
-			missingFields.push(
-				'Set one of 8mm Neon Length, 10mm Neon Length, 14mm Neon Length, 20mm Neon Length'
-			);
-		}
+		// if (
+		// 	!neonLength8mm &&
+		// 	!neonLength14mm &&
+		// 	!neonLength10mm &&
+		// 	!neonLength20mm
+		// ) {
+		// 	missingFields.push(
+		// 		'Set one of 8mm Neon Length, 10mm Neon Length, 14mm Neon Length, 20mm Neon Length'
+		// 	);
+		// }
 
 		if (!mounting) missingFields.push('Select Mounting');
 
@@ -282,8 +295,10 @@ export const NeonSign = ({ item }) => {
 
 		if (!waterproof) missingFields.push('Select Environment');
 
-		if (!fileUrls || fileUrls.length === 0)
-			missingFields.push('Upload a PDF/AI File');
+		if (!hasUploadedFile) {
+			if (!fileUrls || fileUrls.length === 0)
+				missingFields.push('Upload a PDF/AI File');
+		}
 
 		if (!sets) missingFields.push('Select Quantity');
 
@@ -325,6 +340,7 @@ export const NeonSign = ({ item }) => {
 		neonLength20mm,
 		wireType,
 		wireExitLocation,
+		hasUploadedFile,
 	]);
 
 	useEffect(() => {
@@ -585,12 +601,16 @@ export const NeonSign = ({ item }) => {
 					value={neonLength8mm}
 					onChange={(e) => setNeonLength8mm(e.target.value)}
 					options={neonLength}
+					onlyValue={true}
+					info="Please only enter a length provided by a designer familiar with neon tracing<br> to ensure accuracy; otherwise, leave it blank, and we’ll calculate it."
 				/>
 				<Dropdown
 					title="10mm Neon Length"
 					value={neonLength10mm}
 					onChange={(e) => setNeonLength10mm(e.target.value)}
 					options={neonLength}
+					onlyValue={true}
+					info="Please only enter a length provided by a designer familiar with neon tracing<br> to ensure accuracy; otherwise, leave it blank, and we’ll calculate it."
 				/>
 
 				<Dropdown
@@ -598,12 +618,16 @@ export const NeonSign = ({ item }) => {
 					value={neonLength14mm}
 					onChange={(e) => setNeonLength14mm(e.target.value)}
 					options={neonLength}
+					onlyValue={true}
+					info="Please only enter a length provided by a designer familiar with neon tracing<br> to ensure accuracy; otherwise, leave it blank, and we’ll calculate it."
 				/>
 				<Dropdown
 					title="20mm Neon Length"
 					value={neonLength20mm}
 					onChange={(e) => setNeonLength20mm(e.target.value)}
 					options={neonLength}
+					onlyValue={true}
+					info="Please only enter a length provided by a designer familiar with neon tracing<br> to ensure accuracy; otherwise, leave it blank, and we’ll calculate it."
 				/>
 
 				<Dropdown
