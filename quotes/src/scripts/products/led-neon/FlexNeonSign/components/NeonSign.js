@@ -437,7 +437,7 @@ export const NeonSign = ({ item }) => {
 					value={neonLength}
 					onChange={(e) => setNeonLength(e.target.value)}
 					options={neonLengthOptions}
-					info="<strong>NOTE</strong>: Please only enter a length provided by a designer familiar with neon tracing<br> to ensure accuracy; otherwise, leave it blank, and we’ll calculate it."
+					info="Please only enter a length provided by a designer familiar with neon tracing<br> to ensure accuracy; otherwise, leave it blank, and we’ll calculate it."
 				/>
 
 				<NeonColors

@@ -17509,7 +17509,7 @@ const NeonSign = ({
     value: neonLength,
     onChange: e => setNeonLength(e.target.value),
     options: neonLengthOptions,
-    info: "<strong>NOTE</strong>: Please only enter a length provided by a designer familiar with neon tracing<br> to ensure accuracy; otherwise, leave it blank, and we\u2019ll calculate it."
+    info: "Please only enter a length provided by a designer familiar with neon tracing<br> to ensure accuracy; otherwise, leave it blank, and we\u2019ll calculate it."
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_NeonColors__WEBPACK_IMPORTED_MODULE_8__.NeonColors, {
     colorRef: colorRef,
     colors: color,
