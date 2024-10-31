@@ -17820,7 +17820,7 @@ const NeonSign = ({
       key: "tbc",
       value: "TBC"
     }, "To be Calculated");
-    const options = (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.arrayRangeBasic)(1, 100, 1);
+    const options = (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.arrayRange)(1, 100, 1, false);
     return [tbc, ...options];
   }, []);
   const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$rigidWaterproof = item.rigidWaterproof) !== null && _item$rigidWaterproof !== void 0 ? _item$rigidWaterproof : '');
@@ -18494,7 +18494,7 @@ const NeonSign = ({
       key: "tbc",
       value: "TBC"
     }, "To be Calculated");
-    const options = (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_10__.arrayRangeBasic)(1, 100, 1, false);
+    const options = (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_10__.arrayRange)(1, 100, 1, false);
     return [tbc, ...options];
   }, []);
   const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : '');

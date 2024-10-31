@@ -15,7 +15,7 @@ import { colorOptions } from '../../../../utils/ColorOptions';
 import ColorsDropdown from '../../../../utils/ColorsDropdown';
 import { convertJson } from '../../../../utils/ConvertJson';
 import { quantityDiscount } from '../../../../utils/Pricing';
-import { arrayRange, arrayRangeBasic } from '../../../../utils/SignageOptions';
+import { arrayRange } from '../../../../utils/SignageOptions';
 import { NeonColors } from '../../components/NeonColors';
 import { rigidNeonColorOptions } from '../../neonSignOptions';
 
@@ -129,7 +129,7 @@ export const NeonSign = ({ item }) => {
 				To be Calculated
 			</option>
 		);
-		const options = arrayRangeBasic(1, 100, 1, false);
+		const options = arrayRange(1, 100, 1, false);
 		return [tbc, ...options];
 	}, []);
 

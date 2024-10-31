@@ -14,7 +14,6 @@ import { convertJson } from '../../../../utils/ConvertJson';
 import { quantityDiscount, spacerPricing } from '../../../../utils/Pricing';
 import {
 	arrayRange,
-	arrayRangeBasic,
 	spacerStandoffDefaultOptions,
 } from '../../../../utils/SignageOptions';
 import { NeonColors } from '../../components/NeonColors';
@@ -128,7 +127,7 @@ export const NeonSign = ({ item }) => {
 				To be Calculated
 			</option>
 		);
-		const options = arrayRangeBasic(1, 100, 1);
+		const options = arrayRange(1, 100, 1, false);
 		return [tbc, ...options];
 	}, []);
 
