@@ -570,7 +570,7 @@ export const NeonSign = ({ item }) => {
 
 			<div className="quote-grid mb-6">
 				<Dropdown
-					title="Neon Sign Width 123"
+					title="Neon Sign Width"
 					value={width}
 					onChange={(e) => setWidth(e.target.value)}
 					options={neonSignsWidth}

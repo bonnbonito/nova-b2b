@@ -18790,7 +18790,7 @@ const NeonSign = ({
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
-    title: "Neon Sign Width 123",
+    title: "Neon Sign Width",
     value: width,
     onChange: e => setWidth(e.target.value),
     options: neonSignsWidth
