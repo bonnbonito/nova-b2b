@@ -267,6 +267,13 @@ const arrayRange = (start, stop, step, inches = true) =>
 		</option>
 	));
 
+const arrayRangeBasic = (start, stop, step) =>
+	Array.from({ length: (stop - start) / step + 1 }, (value, index) => (
+		<option key={index} value={`${start + index * step}`}>
+			{start + index * step}
+		</option>
+	));
+
 const lightingPackagedOptions = [
 	{
 		value: LIGHTING_INDOOR,
@@ -287,6 +294,7 @@ const frontBackVinylOptions = [
 
 export {
 	arrayRange,
+	arrayRangeBasic,
 	defaultFinishOptions,
 	finishingOptions,
 	frontBackVinylOptions,

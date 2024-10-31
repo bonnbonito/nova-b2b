@@ -15,7 +15,7 @@ import { colorOptions } from '../../../../utils/ColorOptions';
 import ColorsDropdown from '../../../../utils/ColorsDropdown';
 import { convertJson } from '../../../../utils/ConvertJson';
 import { quantityDiscount } from '../../../../utils/Pricing';
-import { arrayRange } from '../../../../utils/SignageOptions';
+import { arrayRange, arrayRangeBasic } from '../../../../utils/SignageOptions';
 import { NeonColors } from '../../components/NeonColors';
 import { rigidNeonColorOptions } from '../../neonSignOptions';
 
@@ -129,7 +129,7 @@ export const NeonSign = ({ item }) => {
 				To be Calculated
 			</option>
 		);
-		const options = arrayRange(1, 100, 1);
+		const options = arrayRangeBasic(1, 100, 1, false);
 		return [tbc, ...options];
 	}, []);
 
@@ -358,10 +358,10 @@ export const NeonSign = ({ item }) => {
 			};
 		}
 
-		const L1 = neonLength8mm ? parseInt(neonLength8mm) : 0;
-		const L2 = neonLength10mm ? parseInt(neonLength10mm) : 0;
-		const L3 = neonLength14mm ? parseInt(neonLength14mm) : 0;
-		const L4 = neonLength20mm ? parseInt(neonLength20mm) : 0;
+		const L1 = parseInt(neonLength8mm) || 0;
+		const L2 = parseInt(neonLength10mm) || 0;
+		const L3 = parseInt(neonLength14mm) || 0;
+		const L4 = parseInt(neonLength20mm) || 0;
 
 		let tempTotal =
 			L1 * 15 +
@@ -570,7 +570,7 @@ export const NeonSign = ({ item }) => {
 
 			<div className="quote-grid mb-6">
 				<Dropdown
-					title="Neon Sign Width"
+					title="Neon Sign Width 123"
 					value={width}
 					onChange={(e) => setWidth(e.target.value)}
 					options={neonSignsWidth}

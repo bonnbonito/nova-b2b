@@ -17820,7 +17820,7 @@ const NeonSign = ({
       key: "tbc",
       value: "TBC"
     }, "To be Calculated");
-    const options = (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.arrayRange)(1, 100, 1);
+    const options = (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.arrayRangeBasic)(1, 100, 1);
     return [tbc, ...options];
   }, []);
   const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$rigidWaterproof = item.rigidWaterproof) !== null && _item$rigidWaterproof !== void 0 ? _item$rigidWaterproof : '');
@@ -18003,10 +18003,10 @@ const NeonSign = ({
         discount: false
       };
     }
-    const L1 = neonLength8mm ? parseInt(neonLength8mm) : 0;
-    const L2 = neonLength10mm ? parseInt(neonLength10mm) : 0;
-    const L3 = neonLength14mm ? parseInt(neonLength14mm) : 0;
-    const L4 = neonLength20mm ? parseInt(neonLength20mm) : 0;
+    const L1 = parseInt(neonLength8mm) || 0;
+    const L2 = parseInt(neonLength10mm) || 0;
+    const L3 = parseInt(neonLength14mm) || 0;
+    const L4 = parseInt(neonLength20mm) || 0;
     let tempTotal = L1 * 15 + L2 * 13 + L3 * 15 + L4 * 25 + (parseInt(width) + 1) * (parseInt(height) + 1) * 0.075 + 10;
     tempTotal = tempTotal > 79 ? tempTotal : 79;
     if (waterproof) {
@@ -18494,7 +18494,7 @@ const NeonSign = ({
       key: "tbc",
       value: "TBC"
     }, "To be Calculated");
-    const options = (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_10__.arrayRange)(1, 100, 1);
+    const options = (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_10__.arrayRangeBasic)(1, 100, 1, false);
     return [tbc, ...options];
   }, []);
   const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : '');
@@ -18638,10 +18638,10 @@ const NeonSign = ({
         discount: false
       };
     }
-    const L1 = neonLength8mm ? parseInt(neonLength8mm) : 0;
-    const L2 = neonLength10mm ? parseInt(neonLength10mm) : 0;
-    const L3 = neonLength14mm ? parseInt(neonLength14mm) : 0;
-    const L4 = neonLength20mm ? parseInt(neonLength20mm) : 0;
+    const L1 = parseInt(neonLength8mm) || 0;
+    const L2 = parseInt(neonLength10mm) || 0;
+    const L3 = parseInt(neonLength14mm) || 0;
+    const L4 = parseInt(neonLength20mm) || 0;
     let tempTotal = L1 * 15 + L2 * 13 + L3 * 15 + L4 * 25 + (parseInt(width) + 2) * (parseInt(height) + 2) * 0.15 + 25;
 
     // Minimum price
@@ -18790,7 +18790,7 @@ const NeonSign = ({
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
-    title: "Neon Sign Width",
+    title: "Neon Sign Width 123",
     value: width,
     onChange: e => setWidth(e.target.value),
     options: neonSignsWidth
@@ -36548,6 +36548,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   anodizedColorOptions: () => (/* binding */ anodizedColorOptions),
 /* harmony export */   anodizedFinishingOptions: () => (/* binding */ anodizedFinishingOptions),
 /* harmony export */   arrayRange: () => (/* binding */ arrayRange),
+/* harmony export */   arrayRangeBasic: () => (/* binding */ arrayRangeBasic),
 /* harmony export */   defaultFinishOptions: () => (/* binding */ defaultFinishOptions),
 /* harmony export */   finishingOptions: () => (/* binding */ finishingOptions),
 /* harmony export */   frontBackVinylOptions: () => (/* binding */ frontBackVinylOptions),
@@ -36738,6 +36739,12 @@ const arrayRange = (start, stop, step, inches = true) => Array.from({
   key: index,
   value: `${start + index * step}${inches ? '"' : "'"}`
 }, start + index * step, inches ? '"' : "'"));
+const arrayRangeBasic = (start, stop, step) => Array.from({
+  length: (stop - start) / step + 1
+}, (value, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+  key: index,
+  value: `${start + index * step}`
+}, start + index * step));
 const lightingPackagedOptions = [{
   value: _defaults__WEBPACK_IMPORTED_MODULE_1__.LIGHTING_INDOOR
 }, {
