@@ -17,7 +17,7 @@ export default function FlexNeonSign() {
 		title: 'SIGN 1',
 		neonSignWidth: '',
 		neonSignHeight: '',
-		neonLength: '',
+		neonLength: 'TBC',
 		acrylicBackingOption: 'Black PVC',
 		remoteControl: 'No',
 		wireExitLocation: 'Bottom Right',

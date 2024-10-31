@@ -139,8 +139,12 @@ export default function Sidebar() {
 
 				<div className="text-[11px] mb-5">
 					<ul>
+						<li>
+							<strong className="text-[13px]">
+								The final quote will be ready in 24 business hours.
+							</strong>
+						</li>
 						{tax === 0 && <li>Tax not included</li>}
-						<li>The final quote will be ready in 24 business hours.</li>
 						<li>Extra freight charges may apply for connected fonts.</li>
 					</ul>
 				</div>

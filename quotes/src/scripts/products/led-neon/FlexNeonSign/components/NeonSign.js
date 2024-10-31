@@ -62,7 +62,7 @@ export const NeonSign = ({ item }) => {
 	const [cadSinglePrice, setCadSinglePrice] = useState(
 		item.cadSinglePrice ?? 0
 	);
-	const [neonLength, setNeonLength] = useState(item.neonLength ?? '');
+	const [neonLength, setNeonLength] = useState(item.neonLength ?? 'TBC');
 	const [remoteControl, setRemoteControl] = useState(
 		item.remoteControl ?? 'No'
 	);
@@ -88,7 +88,13 @@ export const NeonSign = ({ item }) => {
 	}, []);
 
 	const neonLengthOptions = useMemo(() => {
-		return arrayRange(2, 100, 1, false);
+		const tbc = (
+			<option key="tbc" value="TBC">
+				To be Calculated
+			</option>
+		);
+		const options = arrayRange(2, 100, 1, false);
+		return [tbc, ...options];
 	}, []);
 
 	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
@@ -431,6 +437,7 @@ export const NeonSign = ({ item }) => {
 					value={neonLength}
 					onChange={(e) => setNeonLength(e.target.value)}
 					options={neonLengthOptions}
+					info="Please only enter a length provided by a designer familiar with neon tracing<br> to ensure accuracy; otherwise, leave it blank, and we’ll calculate it."
 				/>
 
 				<NeonColors
