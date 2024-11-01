@@ -55,6 +55,7 @@ class Order_History {
 			$order_ids     = array_map( 'absint', $_POST['order_ids'] );
 			$total_amount  = 0;
 			$orders_to_pay = array();
+			$currency      = null; // Initialize currency variable
 
 			$current_user_id = get_current_user_id();
 
@@ -62,6 +63,18 @@ class Order_History {
 				$order = wc_get_order( $order_id );
 
 				if ( $order && $order->get_customer_id() === $current_user_id && in_array( $order->get_status(), array( 'pending', 'on-hold' ), true ) ) {
+					// Get the currency of the order
+					$order_currency = $order->get_currency();
+
+					if ( is_null( $currency ) ) {
+						// Set the currency if not set yet
+						$currency = $order_currency;
+					} elseif ( $currency !== $order_currency ) {
+						// If currencies don't match, display error and exit
+						wc_add_notice( __( 'Selected orders have different currencies and cannot be combined.', 'nova-b2b' ), 'error' );
+						return;
+					}
+
 					$total_amount   += $order->get_total();
 					$orders_to_pay[] = $order;
 				}
@@ -76,6 +89,7 @@ class Order_History {
 		}
 	}
 
+
 	public function create_combined_order_and_redirect( $orders_to_pay, $total_amount_order ) {
 		$current_user_id = get_current_user_id();
 		$total_amount    = 0;
@@ -88,6 +102,24 @@ class Order_History {
 
 		// Set customer
 		$combined_order->set_customer_id( $current_user_id );
+
+		// Get billing and shipping details from the first order
+		$first_order = reset( $orders_to_pay );
+
+		if ( $first_order ) {
+			// Set billing details
+			$combined_order->set_billing_first_name( $first_order->get_billing_first_name() );
+			$combined_order->set_billing_last_name( $first_order->get_billing_last_name() );
+			$combined_order->set_billing_company( $first_order->get_billing_company() );
+			$combined_order->set_billing_address_1( $first_order->get_billing_address_1() );
+			$combined_order->set_billing_address_2( $first_order->get_billing_address_2() );
+			$combined_order->set_billing_city( $first_order->get_billing_city() );
+			$combined_order->set_billing_state( $first_order->get_billing_state() );
+			$combined_order->set_billing_postcode( $first_order->get_billing_postcode() );
+			$combined_order->set_billing_country( $first_order->get_billing_country() );
+			$combined_order->set_billing_email( $first_order->get_billing_email() );
+			$combined_order->set_billing_phone( $first_order->get_billing_phone() );
+		}
 
 		// Loop through each original order
 		foreach ( $orders_to_pay as $order ) {
@@ -125,9 +157,9 @@ class Order_History {
 		// Mark the order as temporary
 		$combined_order->update_meta_data( '_is_temporary_combined_order', true );
 
-		$combined_order->add_order_note( __( 'This order is a combined payment for multiple orders.', 'nova-2' ) );
+		$combined_order->add_order_note( __( 'This order is a combined payment for multiple orders.', 'nova-b2b' ) );
 
-		// Set the order as virtual (no shipping)
+		// Set the order totals
 		$combined_order->set_shipping_total( 0 );
 		$combined_order->set_shipping_tax( 0 );
 		$combined_order->set_cart_tax( 0 );
@@ -143,6 +175,7 @@ class Order_History {
 		wp_safe_redirect( $combined_order->get_checkout_payment_url() );
 		exit;
 	}
+
 
 
 	public function modify_endpoint_url( $url, $endpoint, $value, $permalink ) {
@@ -272,6 +305,12 @@ class Order_History {
 				continue;
 			}
 
+			$combined_order = $order->get_meta( '_original_order_ids' );
+
+			if ( $combined_order ) {
+				// continue;
+			}
+
 			$actions = wc_get_account_orders_actions( $order );
 
 			$total_with_currency = wc_price( $order->get_total(), array( 'currency' => $order->get_currency() ) );
@@ -386,10 +425,7 @@ class Order_History {
 		$orders = array();
 
 		$query = $wpdb->prepare(
-			"SELECT * FROM {$table_name}
-        WHERE payment_status != %s
-        ORDER BY 'id' ASC",
-			'Completed'
+			"SELECT * FROM {$table_name}"
 		);
 
 		// Fetch data from the custom table
@@ -400,6 +436,11 @@ class Order_History {
 		if ( ! empty( $results ) ) {
 			foreach ( $results as $row ) {
 				$order = wc_get_order( $row['payment_order'] );
+
+				if ( ! $order ) {
+					continue;
+				}
+
 				if ( $current_user_id == $order->get_user_id() ) {
 					$order_ids[] = $row['payment_order'];
 				}

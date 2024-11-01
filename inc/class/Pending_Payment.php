@@ -1033,8 +1033,19 @@ class Pending_Payment {
 					$class = ' over';
 				}
 
-				$order         = wc_get_order( $row['payment_order'] );
-				$customer_name = $order->get_billing_first_name() . ' ' . $order->get_billing_last_name();
+				$order = wc_get_order( absint( $row['payment_order'] ) );
+
+				if ( ! $order ) {
+					continue;
+				}
+
+				$first_name    = $order->get_billing_first_name() ? $order->get_billing_first_name() : 'Customer';
+				$last_name     = $order->get_billing_last_name() ? $order->get_billing_last_name() : '';
+				$customer_name = $first_name . ' ' . $last_name;
+
+				if ( 'completed' === $order->get_status() || 'trash' === $order->get_status() ) {
+					continue;
+				}
 
 				echo '<tr>';
 				echo "<td>{$customer_name}</td>";
@@ -1769,6 +1780,7 @@ class Pending_Payment {
 					$due_date = date( 'M d, Y', $deadline );
 					if ( $current_time > $deadline ) {
 						if ( ! $order->has_status( array( 'completed', 'on-hold', 'trash' ) ) ) {
+							$overdue_orders[] = $order;
 							if ( ! $order->get_meta( '_is_overdue' ) ) {
 								update_post_meta( $order->get_id(), '_is_overdue', true );
 							}
