@@ -221,6 +221,7 @@ function Deposits() {
       console.log('data', data);
       if (data.success) {
         setOrders(NovaDeposits.pending_payments.filter(order => order.order_id != order_id));
+        location.reload();
       }
     }).catch(error => console.error(error));
   };
@@ -327,9 +328,37 @@ function Actions({
 }) {
   const [isLoading, setIsLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [showLogoutAlert, setShowLogoutAlert] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const [showEmailAlert, setShowEmailAlert] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const [selectedEmail, setSelectedEmail] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  const [selectedIndex, setSelectedIndex] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0);
   const handleDelete = () => {
     // Implement your logout logic here
     deleteOrder(order.order_id);
+    setIsLoading(false); // Reset loading state after deletion
+    setShowLogoutAlert(false); // Close the alert dialog after action
+  };
+  const sendReminder = (email, index) => {
+    if (!email) return;
+    const formData = new FormData();
+    formData.append('action', 'nova_deposit_reminder_email');
+    formData.append('email_key', email?.email_key);
+    formData.append('order_id', email?.order_id);
+    formData.append('row_index', index);
+    formData.append('security', NovaDeposits.nonce);
+    console.log(email, index);
+    fetch(NovaDeposits.ajax_url, {
+      method: 'POST',
+      body: formData
+    }).then(response => response.json()).then(data => {
+      console.log('data', data);
+      location.reload();
+      // Optionally, update the state or provide feedback to the user
+      // setIsLoading(false); // Reset loading state after sending email
+      // setShowEmailAlert(false); // Close the alert dialog after action
+    }).catch(error => {
+      console.error(error);
+      setIsLoading(false); // Reset loading state even if there's an error
+    });
   };
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_DropdownMenuUI__WEBPACK_IMPORTED_MODULE_2__.DropdownMenu, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_DropdownMenuUI__WEBPACK_IMPORTED_MODULE_2__.DropdownMenuTrigger, {
     asChild: true
@@ -340,10 +369,14 @@ function Actions({
     className: "mr-2 h-4 w-4 animate-spin"
   }), "Please wait") : 'Open')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_DropdownMenuUI__WEBPACK_IMPORTED_MODULE_2__.DropdownMenuContent, {
     className: "bg-white w-80"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_DropdownMenuUI__WEBPACK_IMPORTED_MODULE_2__.DropdownMenuLabel, null, "Emails"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_DropdownMenuUI__WEBPACK_IMPORTED_MODULE_2__.DropdownMenuSeparator, null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_DropdownMenuUI__WEBPACK_IMPORTED_MODULE_2__.DropdownMenuGroup, null, order.emails?.map((email, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_DropdownMenuUI__WEBPACK_IMPORTED_MODULE_2__.DropdownMenuItem, {
+  }, order.shipped_date && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_DropdownMenuUI__WEBPACK_IMPORTED_MODULE_2__.DropdownMenuLabel, null, "Emails"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_DropdownMenuUI__WEBPACK_IMPORTED_MODULE_2__.DropdownMenuSeparator, null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_DropdownMenuUI__WEBPACK_IMPORTED_MODULE_2__.DropdownMenuGroup, null, order.emails?.map((email, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_DropdownMenuUI__WEBPACK_IMPORTED_MODULE_2__.DropdownMenuItem, {
     key: index,
-    onClick: () => console.log(email)
-  }, email.email_sent ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(lucide_react__WEBPACK_IMPORTED_MODULE_5__["default"], null) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(lucide_react__WEBPACK_IMPORTED_MODULE_6__["default"], null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, email.email_label)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_DropdownMenuUI__WEBPACK_IMPORTED_MODULE_2__.DropdownMenuSeparator, null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_DropdownMenuUI__WEBPACK_IMPORTED_MODULE_2__.DropdownMenuItem, {
+    onClick: () => {
+      setShowEmailAlert(true); // Corrected function name
+      setSelectedEmail(email); // Corrected typo
+      setSelectedIndex(index);
+    }
+  }, email.email_sent ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(lucide_react__WEBPACK_IMPORTED_MODULE_5__["default"], null) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(lucide_react__WEBPACK_IMPORTED_MODULE_6__["default"], null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, email.email_label)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_DropdownMenuUI__WEBPACK_IMPORTED_MODULE_2__.DropdownMenuSeparator, null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_DropdownMenuUI__WEBPACK_IMPORTED_MODULE_2__.DropdownMenuItem, {
     onClick: () => {
       setIsLoading(true);
       setShowLogoutAlert(true);
@@ -352,10 +385,26 @@ function Actions({
     open: showLogoutAlert,
     onOpenChange: setShowLogoutAlert
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_AlertDialogUI__WEBPACK_IMPORTED_MODULE_3__.AlertDialogContent, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_AlertDialogUI__WEBPACK_IMPORTED_MODULE_3__.AlertDialogHeader, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_AlertDialogUI__WEBPACK_IMPORTED_MODULE_3__.AlertDialogTitle, null, "Are you sure you want to delete?"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_AlertDialogUI__WEBPACK_IMPORTED_MODULE_3__.AlertDialogDescription, null, "This will delete the order in the pending payment table.")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_AlertDialogUI__WEBPACK_IMPORTED_MODULE_3__.AlertDialogFooter, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_AlertDialogUI__WEBPACK_IMPORTED_MODULE_3__.AlertDialogCancel, {
-    onClick: () => setIsLoading(false)
+    onClick: () => {
+      setIsLoading(false);
+      setShowLogoutAlert(false);
+    }
   }, "Cancel"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_AlertDialogUI__WEBPACK_IMPORTED_MODULE_3__.AlertDialogAction, {
     onClick: handleDelete
-  }, "Delete")))));
+  }, "Delete")))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_AlertDialogUI__WEBPACK_IMPORTED_MODULE_3__.AlertDialog, {
+    open: showEmailAlert,
+    onOpenChange: setShowEmailAlert
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_AlertDialogUI__WEBPACK_IMPORTED_MODULE_3__.AlertDialogContent, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_AlertDialogUI__WEBPACK_IMPORTED_MODULE_3__.AlertDialogHeader, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_AlertDialogUI__WEBPACK_IMPORTED_MODULE_3__.AlertDialogTitle, null, "Are you sure you want to send the email?"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_AlertDialogUI__WEBPACK_IMPORTED_MODULE_3__.AlertDialogDescription, null, "This will send a reminder email.")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_AlertDialogUI__WEBPACK_IMPORTED_MODULE_3__.AlertDialogFooter, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_AlertDialogUI__WEBPACK_IMPORTED_MODULE_3__.AlertDialogCancel, {
+    onClick: () => {
+      setIsLoading(false);
+      setShowEmailAlert(false);
+    }
+  }, "Cancel"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_AlertDialogUI__WEBPACK_IMPORTED_MODULE_3__.AlertDialogAction, {
+    onClick: () => {
+      setIsLoading(true);
+      sendReminder(selectedEmail, selectedIndex);
+    }
+  }, "Send")))));
 }
 
 /***/ }),

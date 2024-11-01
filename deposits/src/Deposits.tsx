@@ -57,6 +57,7 @@ export default function Deposits() {
 							(order) => order.order_id != order_id
 						)
 					);
+					location.reload();
 				}
 			})
 			.catch((error) => console.error(error));

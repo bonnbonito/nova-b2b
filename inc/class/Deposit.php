@@ -67,6 +67,141 @@ class Deposit {
 		add_action( 'save_post_shop_order', array( $this, 'save_needs_payment_metabox' ) );
 		// add_action( 'woocommerce_payment_complete', array( $this, 'early_payment' ), 99, 2 );
 		add_action( 'nova_pending_payment_email', array( $this, 'send_pending_email' ), 10, 1 );
+
+		/*** Reminder Email Actions */
+		add_action( 'wp_ajax_nova_deposit_reminder_email', array( $this, 'nova_deposit_reminder_email' ) );
+	}
+
+	public function nova_deposit_reminder_email() {
+
+		if ( ! wp_verify_nonce( $_POST['security'], 'nonce' ) ) {
+			$status = array(
+				'success' => false,
+				'message' => 'Nonce Error',
+			);
+			wp_send_json( $status );
+		}
+
+		$order_id = $_POST['order_id'];
+
+		if ( ! $order_id ) {
+			$status = array(
+				'success' => false,
+				'message' => 'Order ID not found',
+			);
+			wp_send_json( $status );
+		}
+
+		$order          = wc_get_order( $order_id );
+		$deposit_chosen = $order->get_meta( '_deposit_chosen' );
+		$index          = intval( $_POST['row_index'] );
+		$currency       = $order->get_currency();
+		$pending_total  = $order->get_meta( '_pending_amount' );
+		$email_key      = $_POST['email_key'];
+
+		$shipped_date        = $order->get_meta( 'shipped_date' );
+		$days_after_shipping = get_field( 'days_after_shipping', $deposit_chosen );
+		$deadline            = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
+		$payment_date        = date( 'F d, Y', $deadline );
+
+		$payment_url = '<p><strong>Please click here to pay:</strong> ' . $order->get_checkout_payment_url() . '</p>';
+
+		$first_name               = $order->get_billing_first_name();
+		$customer_email           = $order->get_billing_email();
+		$user_id                  = $order->get_user_id() ? $order->get_user_id() : 0;
+		$additional_billing_email = get_user_meta( $user_id, 'additional_billing_email', true );
+
+		if ( $additional_billing_email ) {
+			$customer_email = $additional_billing_email;
+		}
+
+		if ( ! $order ) {
+			$status = array(
+				'success' => false,
+				'message' => 'No Order',
+			);
+			wp_send_json( $status );
+
+		}
+		if ( ! $customer_email ) {
+			$status = array(
+				'success' => false,
+				'message' => 'No Email',
+			);
+			wp_send_json( $status );
+		}
+
+		if ( ! isset( $index ) ) {
+			$status = array(
+				'success' => false,
+				'message' => 'No Index',
+			);
+			wp_send_json( $status );
+
+		}
+
+		$payment_emails = get_field( 'payment_emails', $deposit_chosen );
+
+		if ( $payment_emails ) {
+			$subject = $payment_emails[ $index ]['subject'];
+			$heading = $payment_emails[ $index ]['heading'];
+			$message = $payment_emails[ $index ]['content'];
+
+			$subject = str_replace( '{customer_name}', $first_name, $subject );
+			$subject = str_replace( '{deadline}', $payment_date, $subject );
+			$subject = str_replace( '{order_number}', $order->get_order_number(), $subject );
+			$heading = str_replace( '{order_number}', $order->get_order_number(), $heading );
+
+			$message = str_replace( '{customer_name}', $first_name, $message );
+			$message = str_replace( '{order_number}', $order->get_order_number(), $message );
+			$message = str_replace( '{invoice_amount}', $currency . '$ ' . round( floatval( $pending_total ), 2 ), $message );
+			$message = str_replace( '{pending_payment}', $currency . '$ ' . round( floatval( $pending_total ), 2 ), $message );
+			$message = str_replace( '{payment_link}', $payment_url, $message );
+			$message = str_replace( '{deadline}', $payment_date, $message );
+
+			$pending = \NOVA_B2B\Pending_Payment::get_instance();
+			ob_start();
+			add_filter( 'woocommerce_get_order_item_totals', array( $pending, 'insert_payment_date' ), 30, 3 );
+			do_action( 'woocommerce_email_order_details', $order, false, false, '' );
+			remove_filter( 'woocommerce_get_order_item_totals', array( $pending, 'insert_payment_date' ), 30, 3 );
+			$order_details = ob_get_clean();
+
+			$message = str_replace( '{order_details}', $order_details, $message );
+
+			if ( $customer_email ) {
+				$headers     = array( 'Content-Type: text/html; charset=UTF-8' );
+				$attachments = array();
+				if ( class_exists( '\WPO\WC\PDF_Invoices\Main' ) ) {
+					$attachments = \WPO\WC\PDF_Invoices\Main::instance()->attach_document_to_email( array(), 'customer_invoice', $order, null );
+				}
+
+				$role_instance = \NOVA_B2B\Roles::get_instance();
+
+				if ( $role_instance ) {
+
+					$role_instance->send_email( $customer_email, $subject, $message, $headers, $attachments, $heading );
+
+					$label = $payment_emails[ $index ]['email_label'];
+
+					if ( $label == 'Deadline email' ) {
+
+						if ( $pending ) {
+							$pending->admin_notification_deadline_email( $order, $role_instance, $headers, $first_name, $payment_date, $pending_total );
+						}
+
+						update_post_meta( $order_id, 'is_overdue', true );
+					}
+
+					update_post_meta( $order_id, $email_key, date( 'Y/m/d' ) );
+				}
+			}
+		}
+
+		$status = array(
+			'success' => true,
+			'message' => 'Email sent',
+		);
+		wp_send_json( $status );
 	}
 
 	public function early_payment( $order_id, $transaction_id ) {
@@ -161,10 +296,32 @@ class Deposit {
 				continue;
 			}
 
-			// $this->send_payment_reminder_email( $order_id );
+			$this->send_payment_reminder_email( $order_id );
 
-			// $this->check_overdue( $result );
+			$this->check_overdue( $result );
+		}
+	}
 
+	public function check_overdue( $result ) {
+		$order_id            = $result->order_id;
+		$order               = wc_get_order( $order_id );
+		$deposit_chosen      = $order->get_meta( '_deposit_chosen' );
+		$shipped_date        = $order->get_meta( 'shipped_date' );
+		$days_after_shipping = get_field( 'days_after_shipping', $deposit_chosen );
+		$current_time        = time();
+
+		if ( $shipped_date ) {
+			$deadline = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
+			$due_date = date( 'M d, Y', $deadline );
+			if ( $current_time > $deadline ) {
+				if ( ! $order->has_status( array( 'completed', 'on-hold', 'trash' ) ) ) {
+					if ( ! $order->get_meta( '_is_overdue' ) ) {
+						update_post_meta( $order->get_id(), '_is_overdue', true );
+					}
+				}
+			} elseif ( $order->get_meta( '_is_overdue' ) ) {
+				update_post_meta( $order->get_id(), '_is_overdue', false );
+			}
 		}
 	}
 
@@ -574,7 +731,7 @@ class Deposit {
 		if ( have_rows( 'payment_emails', $deposit_chosen ) ) {
 			while ( have_rows( 'payment_emails', $deposit_chosen ) ) {
 				the_row();
-				$key = 'payment_email_key_' . $deposit_chosen . '_' . get_row_index();
+				$key = 'payment_email_key_' . get_row_index();
 				$order->update_meta_data( $key, false );
 			}
 		}

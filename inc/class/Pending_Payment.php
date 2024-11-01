@@ -1769,13 +1769,13 @@ class Pending_Payment {
 					$due_date = date( 'M d, Y', $deadline );
 					if ( $current_time > $deadline ) {
 						if ( ! $order->has_status( array( 'completed', 'on-hold', 'trash' ) ) ) {
-							$overdue_orders[] = $order;
 							if ( ! $order->get_meta( '_is_overdue' ) ) {
 								update_post_meta( $order->get_id(), '_is_overdue', true );
 							}
+							$overdue_orders[] = $order;
 						}
 					} elseif ( $order->get_meta( '_is_overdue' ) ) {
-						update_post_meta( $order->get_id(), '_is_overdue', true );
+						update_post_meta( $order->get_id(), '_is_overdue', false );
 					}
 				}
 			}

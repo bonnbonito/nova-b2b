@@ -26,10 +26,44 @@ import {
 export function Actions({ order, deleteOrder }) {
 	const [isLoading, setIsLoading] = useState(false);
 	const [showLogoutAlert, setShowLogoutAlert] = useState(false);
+	const [showEmailAlert, setShowEmailAlert] = useState(false);
+	const [selectedEmail, setSelectedEmail] = useState(null);
+	const [selectedIndex, setSelectedIndex] = useState(0);
 
 	const handleDelete = () => {
 		// Implement your logout logic here
 		deleteOrder(order.order_id);
+		setIsLoading(false); // Reset loading state after deletion
+		setShowLogoutAlert(false); // Close the alert dialog after action
+	};
+
+	const sendReminder = (email, index) => {
+		if (!email) return;
+		const formData = new FormData();
+		formData.append('action', 'nova_deposit_reminder_email');
+		formData.append('email_key', email?.email_key);
+		formData.append('order_id', email?.order_id);
+		formData.append('row_index', index);
+		formData.append('security', NovaDeposits.nonce);
+
+		console.log(email, index);
+
+		fetch(NovaDeposits.ajax_url, {
+			method: 'POST',
+			body: formData,
+		})
+			.then((response) => response.json())
+			.then((data) => {
+				console.log('data', data);
+				location.reload();
+				// Optionally, update the state or provide feedback to the user
+				// setIsLoading(false); // Reset loading state after sending email
+				// setShowEmailAlert(false); // Close the alert dialog after action
+			})
+			.catch((error) => {
+				console.error(error);
+				setIsLoading(false); // Reset loading state even if there's an error
+			});
 	};
 
 	return (
@@ -48,17 +82,29 @@ export function Actions({ order, deleteOrder }) {
 					</Button>
 				</DropdownMenuTrigger>
 				<DropdownMenuContent className="bg-white w-80">
-					<DropdownMenuLabel>Emails</DropdownMenuLabel>
-					<DropdownMenuSeparator />
-					<DropdownMenuGroup>
-						{order.emails?.map((email, index) => (
-							<DropdownMenuItem key={index} onClick={() => console.log(email)}>
-								{email.email_sent ? <CheckCheckIcon /> : <Mail />}
-								<span>{email.email_label}</span>
-							</DropdownMenuItem>
-						))}
-					</DropdownMenuGroup>
-					<DropdownMenuSeparator />
+					{order.shipped_date && (
+						<>
+							<DropdownMenuLabel>Emails</DropdownMenuLabel>
+							<DropdownMenuSeparator />
+							<DropdownMenuGroup>
+								{order.emails?.map((email, index) => (
+									<DropdownMenuItem
+										key={index}
+										onClick={() => {
+											setShowEmailAlert(true); // Corrected function name
+											setSelectedEmail(email); // Corrected typo
+											setSelectedIndex(index);
+										}}
+									>
+										{email.email_sent ? <CheckCheckIcon /> : <Mail />}
+										<span>{email.email_label}</span>
+									</DropdownMenuItem>
+								))}
+							</DropdownMenuGroup>
+							<DropdownMenuSeparator />
+						</>
+					)}
+
 					<DropdownMenuItem
 						onClick={() => {
 							setIsLoading(true);
@@ -84,10 +130,45 @@ export function Actions({ order, deleteOrder }) {
 						</AlertDialogDescription>
 					</AlertDialogHeader>
 					<AlertDialogFooter>
-						<AlertDialogCancel onClick={() => setIsLoading(false)}>
+						<AlertDialogCancel
+							onClick={() => {
+								setIsLoading(false);
+								setShowLogoutAlert(false);
+							}}
+						>
 							Cancel
 						</AlertDialogCancel>
 						<AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
+					</AlertDialogFooter>
+				</AlertDialogContent>
+			</AlertDialog>
+			<AlertDialog open={showEmailAlert} onOpenChange={setShowEmailAlert}>
+				<AlertDialogContent>
+					<AlertDialogHeader>
+						<AlertDialogTitle>
+							Are you sure you want to send the email?
+						</AlertDialogTitle>
+						<AlertDialogDescription>
+							This will send a reminder email.
+						</AlertDialogDescription>
+					</AlertDialogHeader>
+					<AlertDialogFooter>
+						<AlertDialogCancel
+							onClick={() => {
+								setIsLoading(false);
+								setShowEmailAlert(false);
+							}}
+						>
+							Cancel
+						</AlertDialogCancel>
+						<AlertDialogAction
+							onClick={() => {
+								setIsLoading(true);
+								sendReminder(selectedEmail, selectedIndex);
+							}}
+						>
+							Send
+						</AlertDialogAction>
 					</AlertDialogFooter>
 				</AlertDialogContent>
 			</AlertDialog>
