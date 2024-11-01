@@ -35,8 +35,9 @@ class Deposit {
 		add_action( 'woocommerce_checkout_update_order_review', array( $this, 'handle_deposit_option' ) );
 		add_filter( 'woocommerce_calculated_total', array( $this, 'apply_deposit_percentage' ), 9999, 2 );
 		add_action( 'woocommerce_checkout_order_processed', array( $this, 'insert_payment_record' ), 20, 3 );
-		// add_action( 'woocommerce_after_pay_action', array( $this, 'second_payment_meta' ), 20, 1 );
+		// add_action( 'woocommerce_before_pay_action', array( $this, 'second_payment_meta' ), 20, 1 );
 		add_filter( 'woocommerce_payment_successful_result', array( $this, 'second_payment_meta' ), 20, 2 );
+		// add_filter( 'woocommerce_payment_successful_result', array( $this, 'successful_payment' ), 21, 2 );
 		add_filter( 'woocommerce_order_needs_payment', array( $this, 'order_needs_payment' ), 10, 2 );
 		add_filter( 'woocommerce_order_get_date_paid', array( $this, 'order_get_date_paid' ), 10, 2 );
 		add_filter( 'wc_order_is_editable', array( $this, 'order_is_editable' ), 10, 2 );
@@ -49,10 +50,10 @@ class Deposit {
 		add_action( 'woocommerce_order_status_shipped', array( $this, 'order_status_shipped' ), 1, 1 );
 		add_action( 'woocommerce_before_cart', array( $this, 'remove_wc_sessions_on_cart' ) );
 		add_action( 'woocommerce_review_order_before_payment', array( $this, 'output_deposit_selection' ) );
-		add_filter( 'woocommerce_payment_complete_order_status', array( $this, 'change_payment_status' ), 10, 3 );
+		add_filter( 'woocommerce_payment_complete_order_status', array( $this, 'change_payment_status' ), 30, 3 );
 		// add_filter( 'woocommerce_bacs_process_payment_order_status', array( $this, 'change_onhold_status' ), 99, 2 );
 		add_action( 'woocommerce_admin_order_totals_after_tax', array( $this, 'add_deposit_row' ) );
-		add_filter( 'woocommerce_payment_successful_result', array( $this, 'successful_payment' ), 20, 2 );
+
 		add_filter( 'woocommerce_cod_process_payment_order_status', array( $this, 'cod_status' ), 20, 2 );
 		add_action( 'woocommerce_payment_complete', array( $this, 'update_original_orders_after_payment' ), 20, 1 );
 		// add_filter( 'woocommerce_email_heading_customer_completed_order', array( $this, 'second_payment_heading' ), 50, 3 );
@@ -64,18 +65,22 @@ class Deposit {
 		add_action( 'wp', array( $this, 'schedule_pending_payment_checker' ) );
 		add_action( 'add_meta_boxes', array( $this, 'add_needs_payment_metabox' ) );
 		add_action( 'save_post_shop_order', array( $this, 'save_needs_payment_metabox' ) );
-		add_action( 'woocommerce_payment_complete', array( $this, 'early_payment' ), 99, 2 );
+		// add_action( 'woocommerce_payment_complete', array( $this, 'early_payment' ), 99, 2 );
 		add_action( 'nova_pending_payment_email', array( $this, 'send_pending_email' ), 10, 1 );
 	}
 
 	public function early_payment( $order_id, $transaction_id ) {
 		$order          = wc_get_order( $order_id );
 		$deposit_chosen = $order->get_meta( '_deposit_chosen' );
-		$shipped_date   = $order->get_meta( '_shipped_date' );
+		$shipped_date   = $order->get_meta( 'shipped_date' );
 
 		if ( $deposit_chosen && ! $shipped_date ) {
 			error_log( 'Deposit chosen but no shipped date' );
+			$this->early_payment_email( $order );
 		}
+		error_log( 'order completed' );
+		error_log( $deposit_chosen . ' deposit chosen' );
+		error_log( $shipped_date . '= shipped date' );
 	}
 
 	public function save_needs_payment_metabox( $post_id ) {
@@ -494,20 +499,7 @@ class Deposit {
 		return $status;
 	}
 
-	public function successful_payment( $result, $order_id ) {
 
-		$order      = wc_get_order( $order_id );
-		$nova_order = $order->get_meta( '_nova_order' );
-		if ( ! $nova_order ) {
-			return $result;
-		}
-		$needs_payment  = $order->get_meta( 'needs_payment' );
-		$second_payment = $order->get_meta( 'second_payment' );
-		if ( $needs_payment && $second_payment ) {
-			delete_post_meta( $order_id, 'needs_payment' );
-		}
-		return $result;
-	}
 
 	public function add_deposit_row( $order_id ) {
 
@@ -537,22 +529,29 @@ class Deposit {
 
 	public function change_payment_status( $order_status, $order_id, $order ) {
 
-		$nova_order = $order->get_meta( '_nova_order' );
-		$status     = $order->get_status();
-		if ( ! $nova_order ) {
+		$old_status     = $order->get_status();
+		$nova_order     = $order->get_meta( '_nova_order' );
+		$deposit_chosen = $order->get_meta( '_deposit_chosen' );
+		if ( ! $nova_order || ! $deposit_chosen ) {
 			return $order_status;
 		}
+
+		$status = $order_status;
 
 		if ( WC()->session ) {
 			if ( WC()->session->get( 'first_payment' ) ) {
 				WC()->session->__unset( 'first_payment' );
-				return 'processing';
+				$status = 'processing';
 			}
 		}
 
 		if ( $order->get_meta( 'needs_payment' ) && $order->get_meta( 'second_payment' ) ) {
 			delete_post_meta( $order_id, 'needs_payment' );
-			return $status;
+			if ( 'pending' === $old_status ) {
+				$status = 'completed';
+			} else {
+				$status = $old_status;
+			}
 		}
 
 		$shipped_date = get_post_meta( $order_id, 'shipped_date', true );
@@ -561,7 +560,7 @@ class Deposit {
 			return $status;
 		}
 
-		return $order_status;
+		return $status;
 	}
 
 	public function remove_wc_sessions_on_cart() {
@@ -860,19 +859,30 @@ class Deposit {
 	}
 
 	public function second_payment_meta( $result, $order_id ) {
-		$order = wc_get_order( $order_id );
+		$order          = wc_get_order( $order_id );
+		$second_payment = $order->get_meta( 'second_payment' );
 
 		if ( $order->get_meta( '_deposit_chosen' ) ) {
-			$today = current_time( 'mysql' );
-			$order->update_meta_data( 'second_payment_date', $today );
-			$order->update_meta_data( 'second_payment', true );
+
+			$shipped_date = $order->get_meta( 'shipped_date' );
+
+			$needs_payment = $order->get_meta( 'needs_payment' );
+
+			if ( $needs_payment && $second_payment ) {
+				delete_post_meta( $order_id, 'needs_payment' );
+			}
+
 			$original_order_ids = $order->get_meta( '_original_order_ids' );
 
 			$status = $order->get_status();
 
-			if ( 'pending' !== $status && ! $original_order_ids ) {
+			if ( ! $shipped_date && ! $original_order_ids && $second_payment ) {
 				$this->early_payment_email( $order );
 			}
+
+			// if ( 'pending' !== $status && ! $original_order_ids ) {
+			// $this->early_payment_email( $order );
+			// }
 
 			$order->save();
 		}

@@ -17870,7 +17870,7 @@ const NeonSign = ({
       key: "tbc",
       value: "TBC"
     }, "To be Calculated");
-    const options = (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.arrayRange)(1, 100, 1);
+    const options = (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.arrayRange)(1, 100, 1, false);
     return [tbc, ...options];
   }, []);
   const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$rigidWaterproof = item.rigidWaterproof) !== null && _item$rigidWaterproof !== void 0 ? _item$rigidWaterproof : '');
@@ -18053,10 +18053,10 @@ const NeonSign = ({
         discount: false
       };
     }
-    const L1 = neonLength8mm ? parseInt(neonLength8mm) : 0;
-    const L2 = neonLength10mm ? parseInt(neonLength10mm) : 0;
-    const L3 = neonLength14mm ? parseInt(neonLength14mm) : 0;
-    const L4 = neonLength20mm ? parseInt(neonLength20mm) : 0;
+    const L1 = parseInt(neonLength8mm) || 0;
+    const L2 = parseInt(neonLength10mm) || 0;
+    const L3 = parseInt(neonLength14mm) || 0;
+    const L4 = parseInt(neonLength20mm) || 0;
     let tempTotal = L1 * 15 + L2 * 13 + L3 * 15 + L4 * 25 + (parseInt(width) + 1) * (parseInt(height) + 1) * 0.075 + 10;
     tempTotal = tempTotal > 79 ? tempTotal : 79;
     if (waterproof) {
@@ -18544,7 +18544,7 @@ const NeonSign = ({
       key: "tbc",
       value: "TBC"
     }, "To be Calculated");
-    const options = (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_10__.arrayRange)(1, 100, 1);
+    const options = (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_10__.arrayRange)(1, 100, 1, false);
     return [tbc, ...options];
   }, []);
   const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : '');
@@ -18688,10 +18688,10 @@ const NeonSign = ({
         discount: false
       };
     }
-    const L1 = neonLength8mm ? parseInt(neonLength8mm) : 0;
-    const L2 = neonLength10mm ? parseInt(neonLength10mm) : 0;
-    const L3 = neonLength14mm ? parseInt(neonLength14mm) : 0;
-    const L4 = neonLength20mm ? parseInt(neonLength20mm) : 0;
+    const L1 = parseInt(neonLength8mm) || 0;
+    const L2 = parseInt(neonLength10mm) || 0;
+    const L3 = parseInt(neonLength14mm) || 0;
+    const L4 = parseInt(neonLength20mm) || 0;
     let tempTotal = L1 * 15 + L2 * 13 + L3 * 15 + L4 * 25 + (parseInt(width) + 2) * (parseInt(height) + 2) * 0.15 + 25;
 
     // Minimum price

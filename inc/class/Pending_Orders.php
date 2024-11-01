@@ -32,6 +32,7 @@ class Pending_Orders {
 		add_action( 'woocommerce_shipstation_shipnotify', array( $this, 'shipstation_order_update_to_shipped' ), 10, 2 );
 	}
 
+
 	public function order_update_to_production( $order_id ) {
 		wp_mail( get_option( 'admin_email' ), 'Nova Order Update', 'Order has been updated to production' );
 	}
@@ -80,22 +81,22 @@ class Pending_Orders {
 
 		?>
 <p>
-	<label for="nova_order_update">
-		<?php _e( 'Current Update', 'woocommerce' ); ?>
-	</label>
-	<select name="nova_order_update" id="nova_order_update">
-		<option value="" <?php selected( $order_update, '' ); ?>>
-			<?php _e( '-- Select Status --', 'woocommerce' ); ?>
-		</option>
-		<option value="production" <?php selected( $order_update, 'production' ); ?>>
-			<?php _e( 'Production', 'woocommerce' ); ?>
-		</option>
-		<option value="shipped" <?php selected( $order_update, 'shipped' ); ?>>
-			<?php _e( 'Shipped', 'woocommerce' ); ?>
-		</option>
-	</select>
+    <label for="nova_order_update">
+        <?php _e( 'Current Update', 'woocommerce' ); ?>
+    </label>
+    <select name="nova_order_update" id="nova_order_update">
+        <option value="" <?php selected( $order_update, '' ); ?>>
+            <?php _e( '-- Select Status --', 'woocommerce' ); ?>
+        </option>
+        <option value="production" <?php selected( $order_update, 'production' ); ?>>
+            <?php _e( 'Production', 'woocommerce' ); ?>
+        </option>
+        <option value="shipped" <?php selected( $order_update, 'shipped' ); ?>>
+            <?php _e( 'Shipped', 'woocommerce' ); ?>
+        </option>
+    </select>
 </p>
-		<?php
+<?php
 	}
 
 	public function save_nova_order_update_metabox( $post_id ) {

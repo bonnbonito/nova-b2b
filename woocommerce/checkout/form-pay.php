@@ -18,8 +18,14 @@
 defined( 'ABSPATH' ) || exit;
 
 
-$totals  = $order->get_order_item_totals(); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-$from_id = $order->get_meta( '_from_order_id' );
+$totals         = $order->get_order_item_totals(); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+$from_id        = $order->get_meta( '_from_order_id' );
+$second_payment = $order->get_meta( 'second_payment' );
+$order_id       = $order->get_id();
+if ( ! $second_payment ) {
+	$order->update_meta_data( 'second_payment', true );
+	$order->save();
+}
 
 if ( function_exists( 'WPO_WCPDF' ) ) {
 	$pdf_url = WPO_WCPDF()->endpoint->get_document_link( $order, 'invoice' );

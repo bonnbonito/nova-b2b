@@ -1012,7 +1012,7 @@ class Pending_Payment {
 		echo '<th>Payment Order</th>';
 		echo '<th>Deposit</th>';
 		echo '<th>Pending Total</th>';
-		echo '<th>Payment Date</th>';
+		echo '<th>Due Date</th>';
 		echo '<th>Payment Select</th>';
 		echo '<th colspan="3">Payment Status</th>';
 		echo '<th></th>';
@@ -1524,7 +1524,7 @@ class Pending_Payment {
 
 				if ( $payment && $payment_date ) {
 					$total_rows['payment_date'] = array(
-						'label' => __( 'Payment Date', 'woocommerce' ),
+						'label' => __( 'Due Date', 'woocommerce' ),
 						'value' => esc_html( $payment_date ),
 					);
 
@@ -1544,7 +1544,7 @@ class Pending_Payment {
 			$payment_date        = date( 'F d, Y', $deadline );
 
 			$total_rows['payment_date'] = array(
-				'label' => __( 'Payment Date', 'woocommerce' ),
+				'label' => __( 'Due Date', 'woocommerce' ),
 				'value' => esc_html( $payment_date ),
 			);
 

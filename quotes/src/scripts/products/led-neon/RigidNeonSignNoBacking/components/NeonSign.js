@@ -127,7 +127,7 @@ export const NeonSign = ({ item }) => {
 				To be Calculated
 			</option>
 		);
-		const options = arrayRange(1, 100, 1);
+		const options = arrayRange(1, 100, 1, false);
 		return [tbc, ...options];
 	}, []);
 
@@ -389,10 +389,10 @@ export const NeonSign = ({ item }) => {
 			};
 		}
 
-		const L1 = neonLength8mm ? parseInt(neonLength8mm) : 0;
-		const L2 = neonLength10mm ? parseInt(neonLength10mm) : 0;
-		const L3 = neonLength14mm ? parseInt(neonLength14mm) : 0;
-		const L4 = neonLength20mm ? parseInt(neonLength20mm) : 0;
+		const L1 = parseInt(neonLength8mm) || 0;
+		const L2 = parseInt(neonLength10mm) || 0;
+		const L3 = parseInt(neonLength14mm) || 0;
+		const L4 = parseInt(neonLength20mm) || 0;
 
 		let tempTotal =
 			L1 * 15 +
