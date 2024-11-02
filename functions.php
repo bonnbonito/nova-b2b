@@ -56,6 +56,23 @@ if ( ! defined( 'NOVA_EXCHANGE_RATE' ) ) {
 
 /** if Woocommerce activated */
 if ( class_exists( 'woocommerce' ) ) {
+
+	add_filter( 'option_woocommerce_currency', 'modify_woocommerce_currency_based_on_user' );
+
+	function modify_woocommerce_currency_based_on_user( $default_currency ) {
+
+		if ( ! is_user_logged_in() || current_user_can( 'administrator' ) ) {
+			return $default_currency;
+		}
+
+		$user_id         = get_current_user_id();
+		$billing_country = get_user_meta( $user_id, 'billing_country', true );
+
+		$new_currency = $billing_country === 'CA' ? 'CAD' : 'USD';
+
+		return $new_currency;
+	}
+
 	require NOVA_DIR_PATH . '/inc/class/Order_Shipped.php';
 }
 
