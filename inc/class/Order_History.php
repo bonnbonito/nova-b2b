@@ -92,6 +92,27 @@ class Order_History {
 		}
 	}
 
+	public function delete_temporary_products_on_order_complete( $order_id ) {
+		$order = wc_get_order( $order_id );
+
+		if ( $order ) {
+			// Check if this is a combined order
+			$is_temporary_combined_order = $order->get_meta( '_is_temporary_combined_order' );
+
+			if ( $is_temporary_combined_order ) {
+				// Get the product IDs
+				$created_product_ids = $order->get_meta( '_created_product_ids' );
+
+				if ( is_array( $created_product_ids ) ) {
+					foreach ( $created_product_ids as $product_id ) {
+						// Delete the product
+						wp_delete_post( $product_id, true );
+					}
+				}
+			}
+		}
+	}
+
 
 	public function create_combined_order_and_redirect( $orders_to_pay, $total_amount_order ) {
 		$current_user_id = get_current_user_id();
