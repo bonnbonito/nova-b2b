@@ -34,6 +34,14 @@ class Order_History {
 		add_action( 'woocommerce_thankyou', array( $this, 'delete_temporary_products_on_order_complete' ), 99, 1 );
 		add_action( 'woocommerce_order_status_cancelled', array( $this, 'delete_temporary_products_on_order_complete' ), 10, 1 );
 		add_action( 'woocommerce_order_status_failed', array( $this, 'delete_temporary_products_on_order_complete' ), 10, 1 );
+		add_filter( 'woocommerce_email_enabled_customer_completed_order', array( $this, 'disable_completed_email_for_combined_order' ), 10, 2 );
+	}
+
+	public function disable_completed_email_for_combined_order( $enabled, $order ) {
+		if ( $order && $order->get_meta( '_is_temporary_combined_order' ) ) {
+			return false;
+		}
+		return $enabled;
 	}
 
 	public function pending_order_title( $title ) {
