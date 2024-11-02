@@ -31,6 +31,9 @@ class Order_History {
 		add_filter( 'nova_user_pending_payments_orders', array( $this, 'pending_orders' ), 10, 2 );
 		add_action( 'template_redirect', array( $this, 'handle_pay_multiple_orders_submission' ) );
 		add_filter( 'nova_account_title_filter', array( $this, 'pending_order_title' ) );
+		add_action( 'woocommerce_thankyou', array( $this, 'delete_temporary_products_on_order_complete' ), 99, 1 );
+		add_action( 'woocommerce_order_status_cancelled', array( $this, 'delete_temporary_products_on_order_complete' ), 10, 1 );
+		add_action( 'woocommerce_order_status_failed', array( $this, 'delete_temporary_products_on_order_complete' ), 10, 1 );
 	}
 
 	public function pending_order_title( $title ) {
@@ -132,18 +135,27 @@ class Order_History {
 			$order_total   = $order->get_total();
 			$total_amount += $order_total;
 
-			// Create a new order item for this order
+			// Create a new private product for this order
+			$product = new \WC_Product_Simple();
+
+			// Set product details
+			$product->set_name( 'Order #' . $order->get_order_number() );
+			$product->set_price( $order_total );
+			$product->set_regular_price( $order_total );
+			$product->set_status( 'private' );
+			$product->set_catalog_visibility( 'hidden' );
+			$product->set_sold_individually( true );
+			$product->save();
+
+			// Store the product ID for cleanup later (optional)
+			$created_product_ids[] = $product->get_id();
+
+			// Create a new order item using the product
 			$item = new \WC_Order_Item_Product();
-
-			// Set the item name to the order ID
-			$item->set_name( 'Order #' . $order->get_order_number() );
-
-			// Set quantity to 1
+			$item->set_product( $product );
 			$item->set_quantity( 1 );
-
-			// Set total and subtotal
-			$item->set_total( $order_total );
 			$item->set_subtotal( $order_total );
+			$item->set_total( $order_total );
 
 			// Add the item to the combined order
 			$combined_order->add_item( $item );
@@ -151,8 +163,9 @@ class Order_History {
 
 		$combined_order->set_currency( $currency );
 
-		// Add meta data to link original orders
+		// Add meta data to link original orders and created products
 		$combined_order->update_meta_data( '_original_order_ids', $original_order_ids );
+		$combined_order->update_meta_data( '_created_product_ids', $created_product_ids ); // For cleanup
 
 		// Mark the order as temporary
 		$combined_order->update_meta_data( '_is_temporary_combined_order', true );
@@ -175,6 +188,7 @@ class Order_History {
 		wp_safe_redirect( $combined_order->get_checkout_payment_url() );
 		exit;
 	}
+
 
 
 
@@ -425,7 +439,10 @@ class Order_History {
 		$orders = array();
 
 		$query = $wpdb->prepare(
-			"SELECT * FROM {$table_name}"
+			"SELECT * FROM {$table_name}
+        WHERE payment_status != %s
+        ORDER BY 'id' ASC",
+			'Completed'
 		);
 
 		// Fetch data from the custom table
