@@ -57,7 +57,7 @@ if ( ! defined( 'NOVA_EXCHANGE_RATE' ) ) {
 /** if Woocommerce activated */
 if ( class_exists( 'woocommerce' ) ) {
 
-	add_filter( 'option_woocommerce_currency', 'modify_woocommerce_currency_based_on_user' );
+	// add_filter( 'option_woocommerce_currency', 'nova_modify_woocommerce_currency_based_on_user' );
 
 	function modify_woocommerce_currency_based_on_user( $default_currency ) {
 
@@ -72,6 +72,38 @@ if ( class_exists( 'woocommerce' ) ) {
 
 		return $new_currency;
 	}
+
+	// Add action before the order table in the email
+	add_action( 'woocommerce_email_before_order_table', 'nova_modify_based_currency', 10, 4 );
+
+	function nova_modify_based_currency( $order, $sent_to_admin, $plain_text, $email ) {
+		// Get the currency of the current order
+		$order_currency = $order->get_currency();
+
+		// Add a filter to modify the currency option temporarily
+		add_filter(
+			'option_woocommerce_currency',
+			function ( $currency ) use ( $order_currency ) {
+				return $order_currency;
+			}
+		);
+
+		// Ensure the filter is removed after the email is sent
+		add_action( 'woocommerce_email_after_order_table', 'nova_restore_based_currency', 10, 4 );
+	}
+
+	// Function to remove the currency filter
+	function nova_restore_based_currency( $order, $sent_to_admin, $plain_text, $email ) {
+		// Remove the filter added earlier
+		remove_filter( 'option_woocommerce_currency', 'nova_currency_filter_callback' );
+	}
+
+	// Since anonymous functions cannot be removed directly, define a named function
+	function nova_currency_filter_callback( $currency ) {
+		// This function body will not be used directly
+		return $currency;
+	}
+
 
 	require NOVA_DIR_PATH . '/inc/class/Order_Shipped.php';
 }

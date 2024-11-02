@@ -711,6 +711,10 @@ class Deposit {
 			}
 		}
 
+		if ( $order->get_meta( '_is_temporary_combined_order' ) ) {
+			$status = 'completed';
+		}
+
 		$shipped_date = get_post_meta( $order_id, 'shipped_date', true );
 
 		if ( ! $shipped_date ) {
