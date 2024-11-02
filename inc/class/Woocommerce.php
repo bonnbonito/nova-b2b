@@ -129,6 +129,7 @@ class Woocommerce {
 		// add_action( 'pre_get_posts', array( $this, 'custom_search_by_order_number_in_admin' ) );
 		add_action( 'save_post', array( $this, 'nova_save_shipping_metabox' ) );
 		add_filter( 'woocommerce_product_tabs', array( $this, 'remove_reviews_tab' ), 98 );
+		add_filter( 'option_woocommerce_currency', 'modify_woocommerce_currency_based_on_user' );
 	}
 
 	public function remove_reviews_tab( $tabs ) {
@@ -671,6 +672,19 @@ class Woocommerce {
 		}
 
 		return $modified_values;
+	}
+
+	public function modify_woocommerce_currency_based_on_user( $default_currency ) {
+		if ( ! is_user_logged_in() || current_user_can( 'administrator' ) ) {
+			return $default_currency;
+		}
+
+		$user_id         = get_current_user_id();
+		$billing_country = get_user_meta( $user_id, 'billing_country', true );
+
+		$new_currency = $billing_country === 'CA' ? 'CAD' : 'USD';
+
+		return $new_currency;
 	}
 
 
