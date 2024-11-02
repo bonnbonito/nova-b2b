@@ -57,9 +57,9 @@ if ( ! defined( 'NOVA_EXCHANGE_RATE' ) ) {
 /** if Woocommerce activated */
 if ( class_exists( 'woocommerce' ) ) {
 
-	// add_filter( 'option_woocommerce_currency', 'nova_modify_woocommerce_currency_based_on_user' );
+	add_filter( 'option_woocommerce_currency', 'nova_modify_woocommerce_currency_based_on_user' );
 
-	function modify_woocommerce_currency_based_on_user( $default_currency ) {
+	function nova_modify_woocommerce_currency_based_on_user( $default_currency ) {
 
 		if ( ! is_user_logged_in() || current_user_can( 'administrator' ) ) {
 			return $default_currency;
@@ -74,7 +74,7 @@ if ( class_exists( 'woocommerce' ) ) {
 	}
 
 	// Add action before the order table in the email
-	add_action( 'woocommerce_email_before_order_table', 'nova_modify_based_currency', 10, 4 );
+	// add_action( 'woocommerce_email_before_order_table', 'nova_modify_based_currency', 10, 4 );
 
 	function nova_modify_based_currency( $order, $sent_to_admin, $plain_text, $email ) {
 		// Get the currency of the current order
