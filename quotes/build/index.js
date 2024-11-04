@@ -37324,11 +37324,11 @@ function debounce(func, wait) {
     }, wait);
   };
 }
+function hasFileUrls(item) {
+  return item?.fileUrls?.length > 0;
+}
 function hasFileUploadedCheck(signage) {
   return signage.some(item => hasFileUrls(item));
-}
-function hasFileUrls(item) {
-  return item.fileUrls.length > 0;
 }
 
 /***/ }),

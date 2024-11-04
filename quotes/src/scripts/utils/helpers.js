@@ -10,10 +10,10 @@ export function debounce(func, wait) {
 	};
 }
 
-export function hasFileUploadedCheck(signage) {
-	return signage.some((item) => hasFileUrls(item));
+function hasFileUrls(item) {
+	return item?.fileUrls?.length > 0;
 }
 
-function hasFileUrls(item) {
-	return item.fileUrls.length > 0;
+export function hasFileUploadedCheck(signage) {
+	return signage.some((item) => hasFileUrls(item));
 }
