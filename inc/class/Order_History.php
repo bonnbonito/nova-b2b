@@ -35,6 +35,58 @@ class Order_History {
 		add_action( 'woocommerce_order_status_cancelled', array( $this, 'delete_temporary_products_on_order_complete' ), 10, 1 );
 		add_action( 'woocommerce_order_status_failed', array( $this, 'delete_temporary_products_on_order_complete' ), 10, 1 );
 		add_filter( 'woocommerce_email_enabled_customer_completed_order', array( $this, 'disable_completed_email_for_combined_order' ), 10, 2 );
+		add_action( 'init', array( $this, 'schedule_temporary_orders_cleanup_event' ) );
+		add_action( 'delete_temporary_orders_daily_event', array( $this, 'delete_old_temporary_orders' ) );
+	}
+
+	public function delete_old_temporary_orders() {
+		// Define the time threshold (1 day ago)
+		$time_threshold = strtotime( '-1 day' );
+
+		// Query arguments to get temporary combined orders older than 1 day
+		$args = array(
+			'type'         => 'shop_order',
+			'status'       => array( 'pending', 'failed', 'cancelled' ), // Include relevant statuses
+			'meta_key'     => '_is_temporary_combined_order',
+			'meta_value'   => '1',
+			'date_created' => '<' . date( 'Y-m-d H:i:s', $time_threshold ),
+			'limit'        => -1,
+			'return'       => 'ids',
+		);
+
+		$orders = wc_get_orders( $args );
+
+		if ( ! empty( $orders ) ) {
+			foreach ( $orders as $order_id ) {
+				// Optionally, delete associated temporary products
+				$this->delete_temporary_products_from_order( $order_id );
+
+				// Delete the order permanently
+				wp_delete_post( $order_id, true );
+			}
+		}
+	}
+
+	public function delete_temporary_products_from_order( $order_id ) {
+		$order = wc_get_order( $order_id );
+
+		if ( $order ) {
+			// Get the product IDs
+			$created_product_ids = $order->get_meta( '_created_product_ids' );
+
+			if ( is_array( $created_product_ids ) ) {
+				foreach ( $created_product_ids as $product_id ) {
+					// Delete the product
+					wp_delete_post( $product_id, true );
+				}
+			}
+		}
+	}
+
+	public function schedule_temporary_orders_cleanup_event() {
+		if ( ! wp_next_scheduled( 'delete_temporary_orders_daily_event' ) ) {
+			wp_schedule_event( time(), 'daily', 'delete_temporary_orders_daily_event' );
+		}
 	}
 
 	public function disable_completed_email_for_combined_order( $enabled, $order ) {
