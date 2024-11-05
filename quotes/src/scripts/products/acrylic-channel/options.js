@@ -33,7 +33,7 @@ export const sideOptions = [
 
 export const maxHeightOptions = Array.from(
 	{
-		length: 43,
+		length: 26,
 	},
 	(_, index) => {
 		const val = 1 + index;
@@ -47,7 +47,7 @@ export const maxHeightOptions = Array.from(
 
 export const maxWidthOptions = Array.from(
 	{
-		length: 86,
+		length: 26,
 	},
 	(_, index) => {
 		const val = 1 + index;

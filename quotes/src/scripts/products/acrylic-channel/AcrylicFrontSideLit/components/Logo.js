@@ -221,7 +221,7 @@ export function Logo({ item }) {
 				total: false,
 			};
 
-		const perInch = 0.8;
+		const perInch = 1;
 
 		let tempTotal = parseInt(width) * parseInt(height) * perInch;
 
@@ -230,7 +230,7 @@ export function Logo({ item }) {
 		}
 
 		if (frontAcrylicCover === '3M 3635 Vinyl') {
-			tempTotal *= 1.2;
+			tempTotal *= 1.15;
 		}
 
 		if (frontAcrylicCover === 'UV Printed') {
@@ -248,7 +248,8 @@ export function Logo({ item }) {
 		}
 
 		/* minimum price */
-		tempTotal = tempTotal > 50 ? tempTotal : 50;
+		const minOrderValue = 80;
+		tempTotal = tempTotal > minOrderValue ? tempTotal : minOrderValue;
 
 		const total = tempTotal * parseInt(sets);
 

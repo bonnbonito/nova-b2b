@@ -52,7 +52,7 @@ const mountingDefaultOptions = [
 
 const lettersHeight = {
 	min: 2,
-	max: 43,
+	max: 24,
 };
 
 export function Letters({ item }) {
@@ -329,7 +329,8 @@ export function Letters({ item }) {
 		}
 
 		/* minimum price */
-		tempTotal = tempTotal > 50 ? tempTotal : 50;
+		const minOrderValue = 80;
+		tempTotal = tempTotal > minOrderValue ? tempTotal : minOrderValue;
 
 		const total = tempTotal * parseInt(sets);
 
