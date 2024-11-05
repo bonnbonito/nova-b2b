@@ -54,7 +54,7 @@ const mountingDefaultOptions = [
 
 const maxHeightOptions = Array.from(
 	{
-		length: 43,
+		length: 26,
 	},
 	(_, index) => {
 		const val = 1 + index;
@@ -68,7 +68,7 @@ const maxHeightOptions = Array.from(
 
 const maxWidthOptions = Array.from(
 	{
-		length: 86,
+		length: 26,
 	},
 	(_, index) => {
 		const val = 1 + index;
@@ -419,7 +419,7 @@ export function Logo({ item }) {
 				total: false,
 			};
 
-		const perInch = 0.7;
+		const perInch = 0.9;
 
 		let tempTotal = parseInt(width) * parseInt(height) * perInch;
 
@@ -428,7 +428,7 @@ export function Logo({ item }) {
 		}
 
 		if (acrylicFront === '3M 3635 Vinyl') {
-			tempTotal *= 1.2;
+			tempTotal *= 1.15;
 		}
 
 		if (acrylicFront === 'UV Printed') {

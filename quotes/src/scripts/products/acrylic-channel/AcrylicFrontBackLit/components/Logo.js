@@ -52,7 +52,7 @@ const mountingDefaultOptions = [
 
 const maxWidthOptions = Array.from(
 	{
-		length: 86,
+		length: 26,
 	},
 	(_, index) => {
 		const val = 1 + index;
@@ -66,7 +66,7 @@ const maxWidthOptions = Array.from(
 
 const maxHeightOptions = Array.from(
 	{
-		length: 43,
+		length: 26,
 	},
 	(_, index) => {
 		const val = 1 + index;
@@ -440,7 +440,7 @@ export function Logo({ item }) {
 				total: false,
 			};
 
-		const perInch = 0.8;
+		const perInch = 1;
 
 		let tempTotal = parseInt(width) * parseInt(height) * perInch;
 
@@ -473,7 +473,8 @@ export function Logo({ item }) {
 		}
 
 		/* minimum price */
-		tempTotal = tempTotal > 50 ? tempTotal : 50;
+		const minOrderValue = 80;
+		tempTotal = tempTotal > minOrderValue ? tempTotal : minOrderValue;
 
 		const total = tempTotal * parseInt(sets);
 

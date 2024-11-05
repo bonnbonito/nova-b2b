@@ -5376,7 +5376,7 @@ const mountingDefaultOptions = [{
 }];
 const lettersHeight = {
   min: 2,
-  max: 43
+  max: 24
 };
 function Letters({
   item
@@ -5516,7 +5516,8 @@ function Letters({
     }
 
     /* minimum price */
-    tempTotal = tempTotal > 50 ? tempTotal : 50;
+    const minOrderValue = 80;
+    tempTotal = tempTotal > minOrderValue ? tempTotal : minOrderValue;
     let total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -5936,7 +5937,7 @@ const mountingDefaultOptions = [{
   mounting_option: _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER
 }];
 const maxHeightOptions = Array.from({
-  length: 43
+  length: 26
 }, (_, index) => {
   const val = 1 + index;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -5945,7 +5946,7 @@ const maxHeightOptions = Array.from({
   }, val, "\"");
 });
 const maxWidthOptions = Array.from({
-  length: 86
+  length: 26
 }, (_, index) => {
   const val = 1 + index;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -6100,7 +6101,7 @@ function Logo({
       singlePrice: false,
       total: false
     };
-    const perInch = 0.7;
+    const perInch = 0.9;
     let tempTotal = parseInt(width) * parseInt(height) * perInch;
     if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER) {
       const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.spacerPricing)(tempTotal);
@@ -6113,7 +6114,8 @@ function Logo({
     }
 
     /* minimum price */
-    tempTotal = tempTotal > 50 ? tempTotal : 50;
+    const minOrderValue = 80;
+    tempTotal = tempTotal > minOrderValue ? tempTotal : minOrderValue;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -6595,7 +6597,7 @@ const backOptionOptions = [{
 }];
 const lettersHeight = {
   min: 2,
-  max: 43
+  max: 24
 };
 function Letters({
   item
@@ -6829,7 +6831,7 @@ function Letters({
       }
     }
     if (frontAcrylicCover === '3M 3635 Vinyl') {
-      tempTotal *= 1.2;
+      tempTotal *= 1.15;
       if (frontBackVinyl === 'Front and Back') {
         tempTotal *= 1.15;
       }
@@ -6843,7 +6845,8 @@ function Letters({
     }
 
     /* minimum price */
-    tempTotal = tempTotal > 50 ? tempTotal : 50;
+    const minOrderValue = 80;
+    tempTotal = tempTotal > minOrderValue ? tempTotal : minOrderValue;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal = tempTotal) !== null && _tempTotal !== void 0 ? _tempTotal : 0,
@@ -7253,7 +7256,7 @@ const mountingDefaultOptions = [{
   mounting_option: _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER
 }];
 const maxWidthOptions = Array.from({
-  length: 86
+  length: 26
 }, (_, index) => {
   const val = 1 + index;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -7262,7 +7265,7 @@ const maxWidthOptions = Array.from({
   }, val, "\"");
 });
 const maxHeightOptions = Array.from({
-  length: 43
+  length: 26
 }, (_, index) => {
   const val = 1 + index;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -7524,7 +7527,7 @@ function Logo({
       singlePrice: false,
       total: false
     };
-    const perInch = 0.8;
+    const perInch = 1;
     let tempTotal = parseInt(width) * parseInt(height) * perInch;
     if (frontAcrylicCover === '3M 3630 Vinyl') {
       tempTotal *= 1.15;
@@ -7552,7 +7555,8 @@ function Logo({
     }
 
     /* minimum price */
-    tempTotal = tempTotal > 50 ? tempTotal : 50;
+    const minOrderValue = 80;
+    tempTotal = tempTotal > minOrderValue ? tempTotal : minOrderValue;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -8035,7 +8039,7 @@ const mountingDefaultOptions = [{
 }];
 const lettersHeight = {
   min: 2,
-  max: 43
+  max: 24
 };
 function Letters({
   item
@@ -8271,7 +8275,7 @@ function Letters({
       tempTotal *= 1.15;
     }
     if (acrylicFront === '3M 3635 Vinyl') {
-      tempTotal *= 1.2;
+      tempTotal *= 1.15;
     }
     if (acrylicFront === 'UV Printed') {
       tempTotal *= 1.15;
@@ -8282,7 +8286,8 @@ function Letters({
     }
 
     /* minimum price */
-    tempTotal = tempTotal > 50 ? tempTotal : 50;
+    const minOrderValue = 80;
+    tempTotal = tempTotal > minOrderValue ? tempTotal : minOrderValue;
     let total = tempTotal * parseInt(sets);
     const discount = 1;
     let totalWithDiscount = total * discount;
@@ -8678,7 +8683,7 @@ const mountingDefaultOptions = [{
   mounting_option: _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER
 }];
 const maxHeightOptions = Array.from({
-  length: 43
+  length: 26
 }, (_, index) => {
   const val = 1 + index;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -8687,7 +8692,7 @@ const maxHeightOptions = Array.from({
   }, val, "\"");
 });
 const maxWidthOptions = Array.from({
-  length: 86
+  length: 26
 }, (_, index) => {
   const val = 1 + index;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -8941,13 +8946,13 @@ function Logo({
       singlePrice: false,
       total: false
     };
-    const perInch = 0.7;
+    const perInch = 0.9;
     let tempTotal = parseInt(width) * parseInt(height) * perInch;
     if (acrylicFront === '3M 3630 Vinyl') {
       tempTotal *= 1.15;
     }
     if (acrylicFront === '3M 3635 Vinyl') {
-      tempTotal *= 1.2;
+      tempTotal *= 1.15;
     }
     if (acrylicFront === 'UV Printed') {
       tempTotal *= 1.15;
@@ -9386,7 +9391,7 @@ const mountingDefaultOptions = [{
 }];
 const lettersHeight = {
   min: 2,
-  max: 43
+  max: 24
 };
 function Letters({
   item
@@ -9602,7 +9607,8 @@ function Letters({
     }
 
     /* minimum price */
-    tempTotal = tempTotal > 50 ? tempTotal : 50;
+    const minOrderValue = 80;
+    tempTotal = tempTotal > minOrderValue ? tempTotal : minOrderValue;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -10124,13 +10130,13 @@ function Logo({
       singlePrice: false,
       total: false
     };
-    const perInch = 0.8;
+    const perInch = 1;
     let tempTotal = parseInt(width) * parseInt(height) * perInch;
     if (frontAcrylicCover === '3M 3630 Vinyl') {
       tempTotal *= 1.15;
     }
     if (frontAcrylicCover === '3M 3635 Vinyl') {
-      tempTotal *= 1.2;
+      tempTotal *= 1.15;
     }
     if (frontAcrylicCover === 'UV Printed') {
       tempTotal *= 1.15;
@@ -10146,7 +10152,8 @@ function Logo({
     }
 
     /* minimum price */
-    tempTotal = tempTotal > 50 ? tempTotal : 50;
+    const minOrderValue = 80;
+    tempTotal = tempTotal > minOrderValue ? tempTotal : minOrderValue;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -10652,7 +10659,7 @@ const mountingDefaultOptions = [{
 }];
 const lettersHeight = {
   min: 2,
-  max: 43
+  max: 24
 };
 function Letters({
   item
@@ -10858,7 +10865,8 @@ function Letters({
     }
 
     /* minimum price */
-    tempTotal = tempTotal > 50 ? tempTotal : 50;
+    const minOrderValue = 80;
+    tempTotal = tempTotal > minOrderValue ? tempTotal : minOrderValue;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -11388,7 +11396,7 @@ function Logo({
       singlePrice: false,
       total: false
     };
-    const perInch = 0.8;
+    const perInch = 1;
     let tempTotal = parseInt(width) * parseInt(height) * perInch;
     if (frontOption === 'Metal Laminate') {
       tempTotal *= 1.15;
@@ -11407,7 +11415,8 @@ function Logo({
     }
 
     /* minimum price */
-    tempTotal = tempTotal > 50 ? tempTotal : 50;
+    const minOrderValue = 80;
+    tempTotal = tempTotal < minOrderValue ? minOrderValue : tempTotal;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -11742,7 +11751,7 @@ const sideOptions = [{
   option: 'UV Printed'
 }];
 const maxHeightOptions = Array.from({
-  length: 43
+  length: 26
 }, (_, index) => {
   const val = 1 + index;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -11751,7 +11760,7 @@ const maxHeightOptions = Array.from({
   }, val, "\"");
 });
 const maxWidthOptions = Array.from({
-  length: 86
+  length: 26
 }, (_, index) => {
   const val = 1 + index;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -36634,6 +36643,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   anodizedColorOptions: () => (/* binding */ anodizedColorOptions),
 /* harmony export */   anodizedFinishingOptions: () => (/* binding */ anodizedFinishingOptions),
 /* harmony export */   arrayRange: () => (/* binding */ arrayRange),
+/* harmony export */   arrayRangeBasic: () => (/* binding */ arrayRangeBasic),
 /* harmony export */   defaultFinishOptions: () => (/* binding */ defaultFinishOptions),
 /* harmony export */   finishingOptions: () => (/* binding */ finishingOptions),
 /* harmony export */   frontBackVinylOptions: () => (/* binding */ frontBackVinylOptions),
@@ -36824,6 +36834,12 @@ const arrayRange = (start, stop, step, inches = true) => Array.from({
   key: index,
   value: `${start + index * step}${inches ? '"' : "'"}`
 }, start + index * step, inches ? '"' : "'"));
+const arrayRangeBasic = (start, stop, step) => Array.from({
+  length: (stop - start) / step + 1
+}, (value, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+  key: index,
+  value: `${start + index * step}`
+}, start + index * step));
 const lightingPackagedOptions = [{
   value: _defaults__WEBPACK_IMPORTED_MODULE_1__.LIGHTING_INDOOR
 }, {
@@ -38189,7 +38205,7 @@ function RemoveScrollSideCar(props) {
         return;
     }, [props.inert, props.lockRef.current, props.shards]);
     var shouldCancelEvent = react__WEBPACK_IMPORTED_MODULE_0__.useCallback(function (event, parent) {
-        if ('touches' in event && event.touches.length === 2) {
+        if (('touches' in event && event.touches.length === 2) || (event.type === 'wheel' && event.ctrlKey)) {
             return !lastProps.current.allowPinchZoom;
         }
         var touch = getTouchXY(event);
@@ -38418,6 +38434,9 @@ var alwaysContainsScroll = function (node) {
     return node.tagName === 'TEXTAREA';
 };
 var elementCanBeScrolled = function (node, overflow) {
+    if (!(node instanceof Element)) {
+        return false;
+    }
     var styles = window.getComputedStyle(node);
     return (
     // not-not-scrollable
@@ -38437,8 +38456,8 @@ var locationCouldBeScrolled = function (axis, node) {
         }
         var isScrollable = elementCouldBeScrolled(axis, current);
         if (isScrollable) {
-            var _a = getScrollVariables(axis, current), s = _a[1], d = _a[2];
-            if (s > d) {
+            var _a = getScrollVariables(axis, current), scrollHeight = _a[1], clientHeight = _a[2];
+            if (scrollHeight > clientHeight) {
                 return true;
             }
         }
@@ -38561,9 +38580,9 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/react-select/dist/Select-c7902d94.esm.js":
+/***/ "./node_modules/react-select/dist/Select-1fd588c9.esm.js":
 /*!***************************************************************!*\
-  !*** ./node_modules/react-select/dist/Select-c7902d94.esm.js ***!
+  !*** ./node_modules/react-select/dist/Select-1fd588c9.esm.js ***!
   \***************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -39268,7 +39287,7 @@ var LOCK_STYLES = {
   height: '100%'
 };
 function preventTouchMove(e) {
-  e.preventDefault();
+  if (e.cancelable) e.preventDefault();
 }
 function allowTouchMove(e) {
   e.stopPropagation();
@@ -42721,17 +42740,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   NonceProvider: () => (/* binding */ NonceProvider),
 /* harmony export */   components: () => (/* reexport safe */ _index_a301f526_esm_js__WEBPACK_IMPORTED_MODULE_5__.c),
-/* harmony export */   createFilter: () => (/* reexport safe */ _Select_c7902d94_esm_js__WEBPACK_IMPORTED_MODULE_3__.c),
+/* harmony export */   createFilter: () => (/* reexport safe */ _Select_1fd588c9_esm_js__WEBPACK_IMPORTED_MODULE_3__.c),
 /* harmony export */   "default": () => (/* binding */ StateManagedSelect$1),
-/* harmony export */   defaultTheme: () => (/* reexport safe */ _Select_c7902d94_esm_js__WEBPACK_IMPORTED_MODULE_3__.d),
-/* harmony export */   mergeStyles: () => (/* reexport safe */ _Select_c7902d94_esm_js__WEBPACK_IMPORTED_MODULE_3__.m),
+/* harmony export */   defaultTheme: () => (/* reexport safe */ _Select_1fd588c9_esm_js__WEBPACK_IMPORTED_MODULE_3__.d),
+/* harmony export */   mergeStyles: () => (/* reexport safe */ _Select_1fd588c9_esm_js__WEBPACK_IMPORTED_MODULE_3__.m),
 /* harmony export */   useStateManager: () => (/* reexport safe */ _useStateManager_7e1e8489_esm_js__WEBPACK_IMPORTED_MODULE_0__.u)
 /* harmony export */ });
 /* harmony import */ var _useStateManager_7e1e8489_esm_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./useStateManager-7e1e8489.esm.js */ "./node_modules/react-select/dist/useStateManager-7e1e8489.esm.js");
 /* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/esm/extends */ "./node_modules/@babel/runtime/helpers/esm/extends.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _Select_c7902d94_esm_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Select-c7902d94.esm.js */ "./node_modules/react-select/dist/Select-c7902d94.esm.js");
+/* harmony import */ var _Select_1fd588c9_esm_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Select-1fd588c9.esm.js */ "./node_modules/react-select/dist/Select-1fd588c9.esm.js");
 /* harmony import */ var _emotion_react__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @emotion/react */ "./node_modules/@emotion/react/dist/emotion-element-7a1343fa.browser.development.esm.js");
 /* harmony import */ var _emotion_cache__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @emotion/cache */ "./node_modules/@emotion/cache/dist/emotion-cache.browser.development.esm.js");
 /* harmony import */ var _index_a301f526_esm_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./index-a301f526.esm.js */ "./node_modules/react-select/dist/index-a301f526.esm.js");
@@ -42777,7 +42796,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var StateManagedSelect = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_2__.forwardRef)(function (props, ref) {
   var baseSelectProps = (0,_useStateManager_7e1e8489_esm_js__WEBPACK_IMPORTED_MODULE_0__.u)(props);
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__.createElement(_Select_c7902d94_esm_js__WEBPACK_IMPORTED_MODULE_3__.S, (0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_1__["default"])({
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__.createElement(_Select_1fd588c9_esm_js__WEBPACK_IMPORTED_MODULE_3__.S, (0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_1__["default"])({
     ref: ref
   }, baseSelectProps));
 });
@@ -46779,6 +46798,20 @@ const getDefaultConfig = () => {
         'border-y': [borderColor]
       }],
       /**
+       * Border Color S
+       * @see https://tailwindcss.com/docs/border-color
+       */
+      'border-color-s': [{
+        'border-s': [borderColor]
+      }],
+      /**
+       * Border Color E
+       * @see https://tailwindcss.com/docs/border-color
+       */
+      'border-color-e': [{
+        'border-e': [borderColor]
+      }],
+      /**
        * Border Color Top
        * @see https://tailwindcss.com/docs/border-color
        */
@@ -47524,7 +47557,7 @@ const getDefaultConfig = () => {
       'border-w': ['border-w-s', 'border-w-e', 'border-w-t', 'border-w-r', 'border-w-b', 'border-w-l'],
       'border-w-x': ['border-w-r', 'border-w-l'],
       'border-w-y': ['border-w-t', 'border-w-b'],
-      'border-color': ['border-color-t', 'border-color-r', 'border-color-b', 'border-color-l'],
+      'border-color': ['border-color-s', 'border-color-e', 'border-color-t', 'border-color-r', 'border-color-b', 'border-color-l'],
       'border-color-x': ['border-color-r', 'border-color-l'],
       'border-color-y': ['border-color-t', 'border-color-b'],
       'scroll-m': ['scroll-mx', 'scroll-my', 'scroll-ms', 'scroll-me', 'scroll-mt', 'scroll-mr', 'scroll-mb', 'scroll-ml'],
@@ -49504,6 +49537,31 @@ function getBoundingClientRect(element, includeScale, isFixedStrategy, offsetPar
   });
 }
 
+// If <html> has a CSS width greater than the viewport, then this will be
+// incorrect for RTL.
+function getWindowScrollBarX(element, rect) {
+  const leftScroll = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getNodeScroll)(element).scrollLeft;
+  if (!rect) {
+    return getBoundingClientRect((0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getDocumentElement)(element)).left + leftScroll;
+  }
+  return rect.left + leftScroll;
+}
+
+function getHTMLOffset(documentElement, scroll, ignoreScrollbarX) {
+  if (ignoreScrollbarX === void 0) {
+    ignoreScrollbarX = false;
+  }
+  const htmlRect = documentElement.getBoundingClientRect();
+  const x = htmlRect.left + scroll.scrollLeft - (ignoreScrollbarX ? 0 :
+  // RTL <body> scrollbar.
+  getWindowScrollBarX(documentElement, htmlRect));
+  const y = htmlRect.top + scroll.scrollTop;
+  return {
+    x,
+    y
+  };
+}
+
 function convertOffsetParentRelativeRectToViewportRelativeRect(_ref) {
   let {
     elements,
@@ -49535,26 +49593,17 @@ function convertOffsetParentRelativeRectToViewportRelativeRect(_ref) {
       offsets.y = offsetRect.y + offsetParent.clientTop;
     }
   }
+  const htmlOffset = documentElement && !isOffsetParentAnElement && !isFixed ? getHTMLOffset(documentElement, scroll, true) : (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_1__.createCoords)(0);
   return {
     width: rect.width * scale.x,
     height: rect.height * scale.y,
-    x: rect.x * scale.x - scroll.scrollLeft * scale.x + offsets.x,
-    y: rect.y * scale.y - scroll.scrollTop * scale.y + offsets.y
+    x: rect.x * scale.x - scroll.scrollLeft * scale.x + offsets.x + htmlOffset.x,
+    y: rect.y * scale.y - scroll.scrollTop * scale.y + offsets.y + htmlOffset.y
   };
 }
 
 function getClientRects(element) {
   return Array.from(element.getClientRects());
-}
-
-// If <html> has a CSS width greater than the viewport, then this will be
-// incorrect for RTL.
-function getWindowScrollBarX(element, rect) {
-  const leftScroll = (0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getNodeScroll)(element).scrollLeft;
-  if (!rect) {
-    return getBoundingClientRect((0,_floating_ui_utils_dom__WEBPACK_IMPORTED_MODULE_0__.getDocumentElement)(element)).left + leftScroll;
-  }
-  return rect.left + leftScroll;
 }
 
 // Gets the entire size of the scrollable document area, even extending outside
@@ -49631,9 +49680,10 @@ function getClientRectFromClippingAncestor(element, clippingAncestor, strategy) 
   } else {
     const visualOffsets = getVisualOffsets(element);
     rect = {
-      ...clippingAncestor,
       x: clippingAncestor.x - visualOffsets.x,
-      y: clippingAncestor.y - visualOffsets.y
+      y: clippingAncestor.y - visualOffsets.y,
+      width: clippingAncestor.width,
+      height: clippingAncestor.height
     };
   }
   return (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_1__.rectToClientRect)(rect);
@@ -49743,17 +49793,9 @@ function getRectRelativeToOffsetParent(element, offsetParent, strategy) {
       offsets.x = getWindowScrollBarX(documentElement);
     }
   }
-  let htmlX = 0;
-  let htmlY = 0;
-  if (documentElement && !isOffsetParentAnElement && !isFixed) {
-    const htmlRect = documentElement.getBoundingClientRect();
-    htmlY = htmlRect.top + scroll.scrollTop;
-    htmlX = htmlRect.left + scroll.scrollLeft -
-    // RTL <body> scrollbar.
-    getWindowScrollBarX(documentElement, htmlRect);
-  }
-  const x = rect.left + scroll.scrollLeft - offsets.x - htmlX;
-  const y = rect.top + scroll.scrollTop - offsets.y - htmlY;
+  const htmlOffset = documentElement && !isOffsetParentAnElement && !isFixed ? getHTMLOffset(documentElement, scroll) : (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_1__.createCoords)(0);
+  const x = rect.left + scroll.scrollLeft - offsets.x - htmlOffset.x;
+  const y = rect.top + scroll.scrollTop - offsets.y - htmlOffset.y;
   return {
     x,
     y,
@@ -50947,18 +50989,18 @@ __webpack_require__.r(__webpack_exports__);
 
 function createContext2(rootComponentName, defaultContext) {
   const Context = react__WEBPACK_IMPORTED_MODULE_0__.createContext(defaultContext);
-  function Provider(props) {
+  const Provider = (props) => {
     const { children, ...context } = props;
     const value = react__WEBPACK_IMPORTED_MODULE_0__.useMemo(() => context, Object.values(context));
     return /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(Context.Provider, { value, children });
-  }
+  };
+  Provider.displayName = rootComponentName + "Provider";
   function useContext2(consumerName) {
     const context = react__WEBPACK_IMPORTED_MODULE_0__.useContext(Context);
     if (context) return context;
     if (defaultContext !== void 0) return defaultContext;
     throw new Error(`\`${consumerName}\` must be used within \`${rootComponentName}\``);
   }
-  Provider.displayName = rootComponentName + "Provider";
   return [Provider, useContext2];
 }
 function createContextScope(scopeName, createContextScopeDeps = []) {
@@ -50967,20 +51009,20 @@ function createContextScope(scopeName, createContextScopeDeps = []) {
     const BaseContext = react__WEBPACK_IMPORTED_MODULE_0__.createContext(defaultContext);
     const index = defaultContexts.length;
     defaultContexts = [...defaultContexts, defaultContext];
-    function Provider(props) {
+    const Provider = (props) => {
       const { scope, children, ...context } = props;
-      const Context = scope?.[scopeName][index] || BaseContext;
+      const Context = scope?.[scopeName]?.[index] || BaseContext;
       const value = react__WEBPACK_IMPORTED_MODULE_0__.useMemo(() => context, Object.values(context));
       return /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(Context.Provider, { value, children });
-    }
+    };
+    Provider.displayName = rootComponentName + "Provider";
     function useContext2(consumerName, scope) {
-      const Context = scope?.[scopeName][index] || BaseContext;
+      const Context = scope?.[scopeName]?.[index] || BaseContext;
       const context = react__WEBPACK_IMPORTED_MODULE_0__.useContext(Context);
       if (context) return context;
       if (defaultContext !== void 0) return defaultContext;
       throw new Error(`\`${consumerName}\` must be used within \`${rootComponentName}\``);
     }
-    Provider.displayName = rootComponentName + "Provider";
     return [Provider, useContext2];
   }
   const createScope = () => {
@@ -51675,7 +51717,10 @@ function createFocusGuard() {
   const element = document.createElement("span");
   element.setAttribute("data-radix-focus-guard", "");
   element.tabIndex = 0;
-  element.style.cssText = "outline: none; opacity: 0; position: fixed; pointer-events: none";
+  element.style.outline = "none";
+  element.style.opacity = "0";
+  element.style.position = "fixed";
+  element.style.pointerEvents = "none";
   return element;
 }
 var Root = FocusGuards;
@@ -52002,13 +52047,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   Presence: () => (/* binding */ Presence)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "react-dom");
-/* harmony import */ var _radix_ui_react_compose_refs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @radix-ui/react-compose-refs */ "./node_modules/@radix-ui/react-compose-refs/dist/index.mjs");
-/* harmony import */ var _radix_ui_react_use_layout_effect__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @radix-ui/react-use-layout-effect */ "./node_modules/@radix-ui/react-use-layout-effect/dist/index.mjs");
+/* harmony import */ var _radix_ui_react_compose_refs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @radix-ui/react-compose-refs */ "./node_modules/@radix-ui/react-compose-refs/dist/index.mjs");
+/* harmony import */ var _radix_ui_react_use_layout_effect__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @radix-ui/react-use-layout-effect */ "./node_modules/@radix-ui/react-use-layout-effect/dist/index.mjs");
 "use client";
 
 // packages/react/presence/src/Presence.tsx
-
 
 
 
@@ -52027,7 +52070,7 @@ var Presence = (props) => {
   const { present, children } = props;
   const presence = usePresence(present);
   const child = typeof children === "function" ? children({ present: presence.isPresent }) : react__WEBPACK_IMPORTED_MODULE_0__.Children.only(children);
-  const ref = (0,_radix_ui_react_compose_refs__WEBPACK_IMPORTED_MODULE_2__.useComposedRefs)(presence.ref, getElementRef(child));
+  const ref = (0,_radix_ui_react_compose_refs__WEBPACK_IMPORTED_MODULE_1__.useComposedRefs)(presence.ref, getElementRef(child));
   const forceMount = typeof children === "function";
   return forceMount || presence.isPresent ? react__WEBPACK_IMPORTED_MODULE_0__.cloneElement(child, { ref }) : null;
 };
@@ -52055,7 +52098,7 @@ function usePresence(present) {
     const currentAnimationName = getAnimationName(stylesRef.current);
     prevAnimationNameRef.current = state === "mounted" ? currentAnimationName : "none";
   }, [state]);
-  (0,_radix_ui_react_use_layout_effect__WEBPACK_IMPORTED_MODULE_3__.useLayoutEffect)(() => {
+  (0,_radix_ui_react_use_layout_effect__WEBPACK_IMPORTED_MODULE_2__.useLayoutEffect)(() => {
     const styles = stylesRef.current;
     const wasPresent = prevPresentRef.current;
     const hasPresentChanged = wasPresent !== present;
@@ -52077,13 +52120,24 @@ function usePresence(present) {
       prevPresentRef.current = present;
     }
   }, [present, send]);
-  (0,_radix_ui_react_use_layout_effect__WEBPACK_IMPORTED_MODULE_3__.useLayoutEffect)(() => {
+  (0,_radix_ui_react_use_layout_effect__WEBPACK_IMPORTED_MODULE_2__.useLayoutEffect)(() => {
     if (node) {
+      let timeoutId;
+      const ownerWindow = node.ownerDocument.defaultView ?? window;
       const handleAnimationEnd = (event) => {
         const currentAnimationName = getAnimationName(stylesRef.current);
         const isCurrentAnimation = currentAnimationName.includes(event.animationName);
         if (event.target === node && isCurrentAnimation) {
-          react_dom__WEBPACK_IMPORTED_MODULE_1__.flushSync(() => send("ANIMATION_END"));
+          send("ANIMATION_END");
+          if (!prevPresentRef.current) {
+            const currentFillMode = node.style.animationFillMode;
+            node.style.animationFillMode = "forwards";
+            timeoutId = ownerWindow.setTimeout(() => {
+              if (node.style.animationFillMode === "forwards") {
+                node.style.animationFillMode = currentFillMode;
+              }
+            });
+          }
         }
       };
       const handleAnimationStart = (event) => {
@@ -52095,6 +52149,7 @@ function usePresence(present) {
       node.addEventListener("animationcancel", handleAnimationEnd);
       node.addEventListener("animationend", handleAnimationEnd);
       return () => {
+        ownerWindow.clearTimeout(timeoutId);
         node.removeEventListener("animationstart", handleAnimationStart);
         node.removeEventListener("animationcancel", handleAnimationEnd);
         node.removeEventListener("animationend", handleAnimationEnd);
@@ -52884,7 +52939,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @floating-ui/react-dom */ "./node_modules/@floating-ui/dom/dist/floating-ui.dom.mjs");
 /* harmony import */ var _radix_ui_react_arrow__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @radix-ui/react-arrow */ "./node_modules/@radix-ui/react-tooltip/node_modules/@radix-ui/react-arrow/dist/index.mjs");
 /* harmony import */ var _radix_ui_react_compose_refs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @radix-ui/react-compose-refs */ "./node_modules/@radix-ui/react-compose-refs/dist/index.mjs");
-/* harmony import */ var _radix_ui_react_context__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @radix-ui/react-context */ "./node_modules/@radix-ui/react-context/dist/index.mjs");
+/* harmony import */ var _radix_ui_react_context__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @radix-ui/react-context */ "./node_modules/@radix-ui/react-tooltip/node_modules/@radix-ui/react-popper/node_modules/@radix-ui/react-context/dist/index.mjs");
 /* harmony import */ var _radix_ui_react_primitive__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @radix-ui/react-primitive */ "./node_modules/@radix-ui/react-primitive/dist/index.mjs");
 /* harmony import */ var _radix_ui_react_use_callback_ref__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @radix-ui/react-use-callback-ref */ "./node_modules/@radix-ui/react-use-callback-ref/dist/index.mjs");
 /* harmony import */ var _radix_ui_react_use_layout_effect__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @radix-ui/react-use-layout-effect */ "./node_modules/@radix-ui/react-use-layout-effect/dist/index.mjs");
@@ -53169,6 +53224,102 @@ var Root2 = Popper;
 var Anchor = PopperAnchor;
 var Content = PopperContent;
 var Arrow = PopperArrow;
+
+//# sourceMappingURL=index.mjs.map
+
+
+/***/ }),
+
+/***/ "./node_modules/@radix-ui/react-tooltip/node_modules/@radix-ui/react-popper/node_modules/@radix-ui/react-context/dist/index.mjs":
+/*!**************************************************************************************************************************************!*\
+  !*** ./node_modules/@radix-ui/react-tooltip/node_modules/@radix-ui/react-popper/node_modules/@radix-ui/react-context/dist/index.mjs ***!
+  \**************************************************************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   createContext: () => (/* binding */ createContext2),
+/* harmony export */   createContextScope: () => (/* binding */ createContextScope)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+// packages/react/context/src/createContext.tsx
+
+
+function createContext2(rootComponentName, defaultContext) {
+  const Context = react__WEBPACK_IMPORTED_MODULE_0__.createContext(defaultContext);
+  function Provider(props) {
+    const { children, ...context } = props;
+    const value = react__WEBPACK_IMPORTED_MODULE_0__.useMemo(() => context, Object.values(context));
+    return /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(Context.Provider, { value, children });
+  }
+  function useContext2(consumerName) {
+    const context = react__WEBPACK_IMPORTED_MODULE_0__.useContext(Context);
+    if (context) return context;
+    if (defaultContext !== void 0) return defaultContext;
+    throw new Error(`\`${consumerName}\` must be used within \`${rootComponentName}\``);
+  }
+  Provider.displayName = rootComponentName + "Provider";
+  return [Provider, useContext2];
+}
+function createContextScope(scopeName, createContextScopeDeps = []) {
+  let defaultContexts = [];
+  function createContext3(rootComponentName, defaultContext) {
+    const BaseContext = react__WEBPACK_IMPORTED_MODULE_0__.createContext(defaultContext);
+    const index = defaultContexts.length;
+    defaultContexts = [...defaultContexts, defaultContext];
+    function Provider(props) {
+      const { scope, children, ...context } = props;
+      const Context = scope?.[scopeName][index] || BaseContext;
+      const value = react__WEBPACK_IMPORTED_MODULE_0__.useMemo(() => context, Object.values(context));
+      return /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(Context.Provider, { value, children });
+    }
+    function useContext2(consumerName, scope) {
+      const Context = scope?.[scopeName][index] || BaseContext;
+      const context = react__WEBPACK_IMPORTED_MODULE_0__.useContext(Context);
+      if (context) return context;
+      if (defaultContext !== void 0) return defaultContext;
+      throw new Error(`\`${consumerName}\` must be used within \`${rootComponentName}\``);
+    }
+    Provider.displayName = rootComponentName + "Provider";
+    return [Provider, useContext2];
+  }
+  const createScope = () => {
+    const scopeContexts = defaultContexts.map((defaultContext) => {
+      return react__WEBPACK_IMPORTED_MODULE_0__.createContext(defaultContext);
+    });
+    return function useScope(scope) {
+      const contexts = scope?.[scopeName] || scopeContexts;
+      return react__WEBPACK_IMPORTED_MODULE_0__.useMemo(
+        () => ({ [`__scope${scopeName}`]: { ...scope, [scopeName]: contexts } }),
+        [scope, contexts]
+      );
+    };
+  };
+  createScope.scopeName = scopeName;
+  return [createContext3, composeContextScopes(createScope, ...createContextScopeDeps)];
+}
+function composeContextScopes(...scopes) {
+  const baseScope = scopes[0];
+  if (scopes.length === 1) return baseScope;
+  const createScope = () => {
+    const scopeHooks = scopes.map((createScope2) => ({
+      useScope: createScope2(),
+      scopeName: createScope2.scopeName
+    }));
+    return function useComposedScopes(overrideScopes) {
+      const nextScopes = scopeHooks.reduce((nextScopes2, { useScope, scopeName }) => {
+        const scopeProps = useScope(overrideScopes);
+        const currentScope = scopeProps[`__scope${scopeName}`];
+        return { ...nextScopes2, ...currentScope };
+      }, {});
+      return react__WEBPACK_IMPORTED_MODULE_0__.useMemo(() => ({ [`__scope${baseScope.scopeName}`]: nextScopes }), [nextScopes]);
+    };
+  };
+  createScope.scopeName = baseScope.scopeName;
+  return createScope;
+}
 
 //# sourceMappingURL=index.mjs.map
 
@@ -54535,6 +54686,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   __propKey: () => (/* binding */ __propKey),
 /* harmony export */   __read: () => (/* binding */ __read),
 /* harmony export */   __rest: () => (/* binding */ __rest),
+/* harmony export */   __rewriteRelativeImportExtension: () => (/* binding */ __rewriteRelativeImportExtension),
 /* harmony export */   __runInitializers: () => (/* binding */ __runInitializers),
 /* harmony export */   __setFunctionName: () => (/* binding */ __setFunctionName),
 /* harmony export */   __spread: () => (/* binding */ __spread),
@@ -54808,10 +54960,19 @@ var __setModuleDefault = Object.create ? (function(o, v) {
   o["default"] = v;
 };
 
+var ownKeys = function(o) {
+  ownKeys = Object.getOwnPropertyNames || function (o) {
+    var ar = [];
+    for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+    return ar;
+  };
+  return ownKeys(o);
+};
+
 function __importStar(mod) {
   if (mod && mod.__esModule) return mod;
   var result = {};
-  if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+  if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
   __setModuleDefault(result, mod);
   return result;
 }
@@ -54892,12 +55053,25 @@ function __disposeResources(env) {
   return next();
 }
 
+function __rewriteRelativeImportExtension(path, preserveJsx) {
+  if (typeof path === "string" && /^\.\.?\//.test(path)) {
+      return path.replace(/\.(tsx)$|((?:\.d)?)((?:\.[^./]+?)?)\.([cm]?)ts$/i, function (m, tsx, d, ext, cm) {
+          return tsx ? preserveJsx ? ".jsx" : ".js" : d && (!ext || !cm) ? m : (d + ext + "." + cm.toLowerCase() + "js");
+      });
+  }
+  return path;
+}
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   __extends,
   __assign,
   __rest,
   __decorate,
   __param,
+  __esDecorate,
+  __runInitializers,
+  __propKey,
+  __setFunctionName,
   __metadata,
   __awaiter,
   __generator,
@@ -54920,6 +55094,7 @@ function __disposeResources(env) {
   __classPrivateFieldIn,
   __addDisposableResource,
   __disposeResources,
+  __rewriteRelativeImportExtension,
 });
 
 
@@ -55041,7 +55216,7 @@ function __disposeResources(env) {
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+// This entry needs to be wrapped in an IIFE because it needs to be in strict mode.
 (() => {
 "use strict";
 /*!***********************!*\

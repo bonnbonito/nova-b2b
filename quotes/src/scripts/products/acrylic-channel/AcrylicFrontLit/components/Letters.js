@@ -57,7 +57,7 @@ const mountingDefaultOptions = [
 
 const lettersHeight = {
 	min: 2,
-	max: 43,
+	max: 24,
 };
 
 export function Letters({ item }) {
@@ -354,7 +354,7 @@ export function Letters({ item }) {
 		}
 
 		if (acrylicFront === '3M 3635 Vinyl') {
-			tempTotal *= 1.2;
+			tempTotal *= 1.15;
 		}
 
 		if (acrylicFront === 'UV Printed') {
@@ -367,7 +367,8 @@ export function Letters({ item }) {
 		}
 
 		/* minimum price */
-		tempTotal = tempTotal > 50 ? tempTotal : 50;
+		const minOrderValue = 80;
+		tempTotal = tempTotal > minOrderValue ? tempTotal : minOrderValue;
 
 		let total = tempTotal * parseInt(sets);
 

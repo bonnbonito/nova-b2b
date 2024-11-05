@@ -220,7 +220,7 @@ export function Logo({ item }) {
 				total: false,
 			};
 
-		const perInch = 0.8;
+		const perInch = 1;
 
 		let tempTotal = parseInt(width) * parseInt(height) * perInch;
 
@@ -243,7 +243,8 @@ export function Logo({ item }) {
 		}
 
 		/* minimum price */
-		tempTotal = tempTotal > 50 ? tempTotal : 50;
+		const minOrderValue = 80;
+		tempTotal = tempTotal < minOrderValue ? minOrderValue : tempTotal;
 
 		const total = tempTotal * parseInt(sets);
 
