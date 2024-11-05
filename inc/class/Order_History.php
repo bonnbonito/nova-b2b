@@ -351,7 +351,7 @@ class Order_History {
 			$combined_order = $order->get_meta( '_original_order_ids' );
 
 			if ( $combined_order ) {
-				// continue;
+				continue;
 			}
 
 			$actions = wc_get_account_orders_actions( $order );
@@ -502,6 +502,12 @@ class Order_History {
 			}
 
 			if ( 'completed' === $order->get_status() || 'trash' === $order->get_status() ) {
+				continue;
+			}
+
+			$combined_order = $order->get_meta( '_original_order_ids' );
+
+			if ( $combined_order ) {
 				continue;
 			}
 
