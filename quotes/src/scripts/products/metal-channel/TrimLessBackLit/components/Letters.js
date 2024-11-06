@@ -460,11 +460,19 @@ export function Letters({ item }) {
 			setLetterPricing(() => table);
 
 			if (depth.value == 8) {
-				if (selectedLetterHeight < 12) {
+				if (selectedLetterHeight < 9) {
 					setSelectedLetterHeight('');
 				}
 				setLettersHeight(() => ({
-					min: 12,
+					min: 9,
+					max: 40,
+				}));
+			} else if (depth.value == 5) {
+				if (selectedLetterHeight < 6) {
+					setSelectedLetterHeight('');
+				}
+				setLettersHeight(() => ({
+					min: 6,
 					max: 40,
 				}));
 			} else {

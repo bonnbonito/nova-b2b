@@ -23233,11 +23233,19 @@ function Letters({
       const table = (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_9__["default"])((0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_10__.getLetterPricingTableByTitle)(depth?.depth, letterPricingTables));
       setLetterPricing(() => table);
       if (depth.value == 8) {
-        if (selectedLetterHeight < 12) {
+        if (selectedLetterHeight < 9) {
           setSelectedLetterHeight('');
         }
         setLettersHeight(() => ({
-          min: 12,
+          min: 9,
+          max: 40
+        }));
+      } else if (depth.value == 5) {
+        if (selectedLetterHeight < 6) {
+          setSelectedLetterHeight('');
+        }
+        setLettersHeight(() => ({
+          min: 6,
           max: 40
         }));
       } else {
@@ -23607,7 +23615,7 @@ const maxWidthOptions = Array.from({
 function Logo({
   item
 }) {
-  var _item$comments, _item$faceReturnColor, _item$width, _item$height, _item$trimLessWaterpr, _item$depth, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$studLength, _item$spacerStandoffD, _item$mounting, _item$sets;
+  var _item$comments, _item$faceReturnColor, _item$width, _item$height, _item$trimLessWaterpr, _item$depth, _item$acrylicReveal, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$studLength, _item$spacerStandoffD, _item$mounting, _item$sets;
   const {
     signage,
     setSignage,
@@ -23623,7 +23631,7 @@ function Logo({
   const [openColor, setOpenColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$trimLessWaterpr = item.trimLessWaterproof) !== null && _item$trimLessWaterpr !== void 0 ? _item$trimLessWaterpr : '');
   const [depth, setDepth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$depth = item.depth) !== null && _item$depth !== void 0 ? _item$depth : '');
-  const [acrylicReveal, setAcrylicReveal] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.acrylicReveal);
+  const [acrylicReveal, setAcrylicReveal] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicReveal = item.acrylicReveal) !== null && _item$acrylicReveal !== void 0 ? _item$acrylicReveal : '');
   const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileNames = item.fileNames) !== null && _item$fileNames !== void 0 ? _item$fileNames : []);
   const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrls = item.fileUrls) !== null && _item$fileUrls !== void 0 ? _item$fileUrls : []);
   const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$filePaths = item.filePaths) !== null && _item$filePaths !== void 0 ? _item$filePaths : []);
