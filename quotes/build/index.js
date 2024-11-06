@@ -26078,10 +26078,10 @@ function Letters({
       tempTotal += calculateLetterPrice(letter, baseLetterPrice, noLowerCase);
     });
     if (frontAcrylicCover === '3M 3630 Vinyl') {
-      tempTotal *= 1.15;
+      tempTotal *= 1.1;
     }
     if (frontAcrylicCover === '3M 3635 Vinyl') {
-      tempTotal *= 1.2;
+      tempTotal *= 1.1;
     }
     if (waterproof && waterproof !== _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF) {
       tempTotal *= 1.03;
