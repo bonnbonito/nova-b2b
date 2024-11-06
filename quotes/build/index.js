@@ -24407,7 +24407,7 @@ function Letters({
   const [usdSinglePrice, setUsdSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdSinglePrice = item.usdSinglePrice) !== null && _item$usdSinglePrice !== void 0 ? _item$usdSinglePrice : 0);
   const [cadSinglePrice, setCadSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadSinglePrice = item.cadSinglePrice) !== null && _item$cadSinglePrice !== void 0 ? _item$cadSinglePrice : 0);
   const [lettersHeight, setLettersHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
-    min: 6,
+    min: 5,
     max: 40
   });
   const [openAcrylicCover, setOpenAcrylicCover] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
@@ -24619,13 +24619,13 @@ function Letters({
       tempTotal += (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_14__.calculateLetterPrice)(letter, baseLetterPrice, noLowerCase);
     });
     if (frontAcrylicCover === '3M 3630 Vinyl') {
-      tempTotal *= 1.15;
+      tempTotal *= 1.1;
       if (frontBackVinyl === 'Front and Back') {
         tempTotal *= 1.15;
       }
     }
     if (frontAcrylicCover === '3M 3635 Vinyl') {
-      tempTotal *= 1.2;
+      tempTotal *= 1.1;
       if (frontBackVinyl === 'Front and Back') {
         tempTotal *= 1.15;
       }
