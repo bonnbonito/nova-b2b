@@ -67,7 +67,13 @@ const ledLightColors = [
 	'Blue',
 ];
 
-const acrylicRevealOptions = ['0', '1/5"', '2/5"', '3/5"'];
+const acrylicRevealOptions = [
+	'No Backer (Open)',
+	'0 - Recessed Backer',
+	'1/5"',
+	'2/5"',
+	'3/5"',
+];
 
 export const maxHeightOptions = Array.from(
 	{

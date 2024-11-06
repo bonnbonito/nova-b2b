@@ -45,7 +45,7 @@ export default function TrimLessBackLit() {
 				fontFileUrl: '',
 				backLitMetalFinish: '',
 				fontFile: '',
-				acrylicReveal: '0',
+				acrylicReveal: '',
 				sets: 1,
 				product: NovaQuote.product,
 			},
@@ -70,7 +70,7 @@ export default function TrimLessBackLit() {
 		ledLightColor: '6500K White',
 		usdPrice: 0,
 		cadPrice: 0,
-		acrylicReveal: '0',
+		acrylicReveal: '',
 		sets: 1,
 		product: NovaQuote.product,
 	};
