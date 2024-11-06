@@ -354,14 +354,14 @@ export function Letters({ item }) {
 		if (frontAcrylicCover === '3M 3630 Vinyl') {
 			tempTotal *= 1.1;
 			if (frontBackVinyl === 'Front and Back') {
-				tempTotal *= 1.15;
+				tempTotal *= 1.1;
 			}
 		}
 
 		if (frontAcrylicCover === '3M 3635 Vinyl') {
 			tempTotal *= 1.1;
 			if (frontBackVinyl === 'Front and Back') {
-				tempTotal *= 1.15;
+				tempTotal *= 1.1;
 			}
 		}
 
