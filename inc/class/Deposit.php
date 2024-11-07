@@ -105,7 +105,7 @@ class Deposit {
 	public function change_combined_order_email_content( $body_text, $order, $sent_to_admin, $plain_text, $email ) {
 		if ( $order && $order->get_meta( '_original_order_ids' ) ) {
 			if ( ! $sent_to_admin ) {
-				$body_text = '<p>Thank you for your payment! We’ve successfully processed it. Please see the attached Receipt and the details below for your combined orders:</p>';
+				$body_text = '<p>Thank you for your payment! We’ve successfully processed it. Please see the attached receipt and the details below for your combined orders:</p>';
 			} else {
 				$body_text = '<p>If the payment is via e-transfer, please manually mark it as Completed after confirmation. Otherwise, please disregard this email.</p>';
 			}
