@@ -70,6 +70,61 @@ class Deposit {
 
 		/*** Reminder Email Actions */
 		add_action( 'wp_ajax_nova_deposit_reminder_email', array( $this, 'nova_deposit_reminder_email' ) );
+
+		/** Change email details */
+		add_filter( 'woocommerce_email_subject_new_order', array( $this, 'change_combined_order_email_admin_subject' ), 99, 2 );
+		add_filter( 'woocommerce_email_heading_new_order', array( $this, 'change_combined_order_email_admin_subject' ), 99, 2 );
+		add_filter( 'woocommerce_email_subject_customer_processing_order', array( $this, 'change_combined_order_email_subject' ), 99, 2 );
+		add_filter( 'woocommerce_email_heading_customer_processing_order', array( $this, 'change_combined_order_email_heading' ), 99, 2 );
+		add_filter( 'woocommerce_email_additional_content_customer_processing_order', array( $this, 'change_combined_order_email_additional_content' ), 99, 2 );
+		add_filter( 'kadence_woomail_order_body_text', array( $this, 'change_combined_order_email_content' ), 50, 5 );
+	}
+
+	public function change_combined_order_email_admin_subject( $subject, $order ) {
+		if ( $order && $order->get_meta( '_original_order_ids' ) ) {
+			$customer     = $order->get_customer_id();
+			$business     = get_user_meta( $customer, 'business_id', true );
+			$company_name = get_user_meta( $customer, 'company_name', true );
+			$company      = $company_name ? 'from ' . $company_name : '';
+			$subject      = 'NOVA INTERNAL (Action Required) - Payment Confirmation: {customer_name} {business_id} {company_name} - #' . $order->get_order_number();
+
+			$subject = str_replace( '{customer_name}', $order->get_billing_first_name(), $subject );
+			$subject = str_replace( '{business_id}', $business, $subject );
+			$subject = str_replace( '{company_name}', $company, $subject );
+		}
+		return $subject;
+	}
+
+	public function change_combined_order_email_subject( $subject, $order ) {
+		if ( $order && $order->get_meta( '_original_order_ids' ) ) {
+			$subject = 'Payment Confirmation: Merged Order #' . $order->get_order_number() . ' Receipt';
+		}
+		return $subject;
+	}
+
+	public function change_combined_order_email_content( $body_text, $order, $sent_to_admin, $plain_text, $email ) {
+		if ( $order && $order->get_meta( '_original_order_ids' ) ) {
+			if ( ! $sent_to_admin ) {
+				$body_text = '<p>Thank you for your payment! We’ve successfully processed it. Please see the attached Receipt and the details below for your combined orders:</p>';
+			} else {
+				$body_text = '<p>If the payment is via e-transfer, please manually mark it as Completed after confirmation. Otherwise, please disregard this email.</p>';
+			}
+		}
+		return $body_text;
+	}
+
+	public function change_combined_order_email_heading( $heading, $order ) {
+		if ( $order && $order->get_meta( '_original_order_ids' ) ) {
+			$heading = 'Payment Confirmation: Merged Order #' . $order->get_order_number() . ' Receipt';
+		}
+		return $heading;
+	}
+
+	public function change_combined_order_email_additional_content( $content, $order ) {
+		if ( $order && $order->get_meta( '_original_order_ids' ) ) {
+			$content = "<p>If you have any questions or need further assistance, please don't hesitate to reach out.</p>";
+		}
+		return $content;
 	}
 
 	public function nova_deposit_reminder_email() {
@@ -634,8 +689,11 @@ class Deposit {
 			foreach ( $original_order_ids as $original_order_id ) {
 				$original_order = wc_get_order( $original_order_id );
 				if ( $original_order ) {
-					$original_order->payment_complete( $order->get_transaction_id() );
-					$original_order->add_order_note( sprintf( __( 'Payment completed via combined order #%s', 'nova-b2b' ), $order->get_order_number() ) );
+
+					$original_order->add_order_note( sprintf( __( 'Order and Payment completed via combined order #%1$s with transaction id %2$s', 'nova-b2b' ), $order->get_order_number(), $order->get_transaction_id() ) );
+
+					update_post_meta( $original_order_id, 'needs_payment', false );
+					$original_order->update_status( 'completed' );
 				}
 			}
 			// Optionally, update the combined order status
@@ -771,16 +829,16 @@ class Deposit {
 
 		$original_order_ids = $order->get_meta( '_original_order_ids' );
 
-		if ( $original_order_ids && is_array( $original_order_ids ) ) {
-			foreach ( $original_order_ids as $original_order_id ) {
-				$original_order = wc_get_order( $original_order_id );
-				if ( $original_order ) {
-					$original_order->set_status( 'completed' );
-					$original_order->add_order_note( sprintf( __( 'Order completed via combined order #%s', 'nova-b2b' ), $order->get_order_number() ) );
-					$original_order->save();
-				}
-			}
-		}
+		// if ( $original_order_ids && is_array( $original_order_ids ) ) {
+		// foreach ( $original_order_ids as $original_order_id ) {
+		// $original_order = wc_get_order( $original_order_id );
+		// if ( $original_order ) {
+		// $original_order->set_status( 'completed' );
+		// $original_order->add_order_note( sprintf( __( 'Order completed via combined order #%s', 'nova-b2b' ), $order->get_order_number() ) );
+		// $original_order->save();
+		// }
+		// }
+		// }
 	}
 
 	public function thank_you_actions( $order_id ) {
@@ -848,7 +906,7 @@ class Deposit {
 				continue;
 			}
 
-			if ( $order->has_status( array( 'completed', 'cancelled' ) ) ) {
+			if ( ! $order->has_status( array( 'processing', 'pending' ) ) ) {
 				continue;
 			}
 

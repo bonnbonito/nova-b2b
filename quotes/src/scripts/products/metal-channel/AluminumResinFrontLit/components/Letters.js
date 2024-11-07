@@ -561,15 +561,15 @@ export function Letters({ item }) {
 		});
 
 		if (waterproof) {
-			tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.02;
+			tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.03;
 		}
 
 		if (frontAcrylicCover === '3M 3630 Vinyl') {
-			tempTotal *= 1.15;
+			tempTotal *= 1.1;
 		}
 
 		if (frontAcrylicCover === '3M 3635 Vinyl') {
-			tempTotal *= 1.2;
+			tempTotal *= 1.1;
 		}
 
 		if (frontAcrylicCover === 'UV Printed') {

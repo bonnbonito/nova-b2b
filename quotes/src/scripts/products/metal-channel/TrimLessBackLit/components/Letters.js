@@ -55,7 +55,7 @@ export function Letters({ item }) {
 	const [letterPricing, setLetterPricing] = useState([]);
 
 	const [depth, setDepth] = useState(item.depth ?? '');
-	const [acrylicReveal, setAcrylicReveal] = useState(item.acrylicReveal);
+	const [acrylicReveal, setAcrylicReveal] = useState(item.acrylicReveal ?? '');
 
 	const [fileNames, setFileNames] = useState(item.fileNames ?? []);
 	const [fileUrls, setFileUrls] = useState(item.fileUrls ?? []);
@@ -460,11 +460,19 @@ export function Letters({ item }) {
 			setLetterPricing(() => table);
 
 			if (depth.value == 8) {
-				if (selectedLetterHeight < 12) {
+				if (selectedLetterHeight < 9) {
 					setSelectedLetterHeight('');
 				}
 				setLettersHeight(() => ({
-					min: 12,
+					min: 9,
+					max: 40,
+				}));
+			} else if (depth.value == 5) {
+				if (selectedLetterHeight < 6) {
+					setSelectedLetterHeight('');
+				}
+				setLettersHeight(() => ({
+					min: 6,
 					max: 40,
 				}));
 			} else {
@@ -501,7 +509,7 @@ export function Letters({ item }) {
 		}
 
 		let mm = 0;
-		if (acrylicReveal == '1/5"') {
+		if (acrylicReveal == '1/5"' || acrylicReveal == '0 - Recessed Backer') {
 			mm = '5mm';
 		} else if (acrylicReveal == '2/5"') {
 			mm = '10mm';

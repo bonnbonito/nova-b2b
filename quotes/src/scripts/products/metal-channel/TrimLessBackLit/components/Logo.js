@@ -78,7 +78,7 @@ export function Logo({ item }) {
 	const [waterproof, setWaterproof] = useState(item.trimLessWaterproof ?? '');
 
 	const [depth, setDepth] = useState(item.depth ?? '');
-	const [acrylicReveal, setAcrylicReveal] = useState(item.acrylicReveal);
+	const [acrylicReveal, setAcrylicReveal] = useState(item.acrylicReveal ?? '');
 
 	const [fileNames, setFileNames] = useState(item.fileNames ?? []);
 	const [fileUrls, setFileUrls] = useState(item.fileUrls ?? []);

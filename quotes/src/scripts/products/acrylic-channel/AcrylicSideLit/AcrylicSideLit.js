@@ -127,6 +127,11 @@ const AcrylicSideLit = () => {
 				<Note title="Note">
 					<ul className="text-sm">
 						<li>
+							If you need a bigger channel sign, please{' '}
+							<a href="https://novasignage.com/contact-us/">contact us</a> for a
+							custom quote.
+						</li>
+						<li>
 							The default cut is straight, but for strokes ranging from 6mm to
 							15mm, it will be sloped
 						</li>

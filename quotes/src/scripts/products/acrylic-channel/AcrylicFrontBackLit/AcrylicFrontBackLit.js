@@ -133,6 +133,11 @@ const AcrylicFrontBackLit = () => {
 				<Note title="Note">
 					<ul className="text-sm">
 						<li>
+							If you need a bigger channel sign, please{' '}
+							<a href="https://novasignage.com/contact-us/">contact us</a> for a
+							custom quote.
+						</li>
+						<li>
 							If you want different LED light colors for the front and back of
 							your sign, please mention it in the comments.
 						</li>

@@ -5298,7 +5298,9 @@ const AcrylicBackLit = () => {
     title: "Note"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
     className: "text-sm"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The default cut is straight, but for strokes ranging from 6mm to 15mm, it will be sloped"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "We can customize the colors that are not on the 3M Vinyl options through UV printing."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The minimum stroke is greater than or equal to 6mm (1/4\u201D)."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "If you need a bigger channel sign, please", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+    href: "https://novasignage.com/contact-us/"
+  }, "contact us"), " for a custom quote."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The default cut is straight, but for strokes ranging from 6mm to 15mm, it will be sloped"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "We can customize the colors that are not on the 3M Vinyl options through UV printing."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The minimum stroke is greater than or equal to 6mm (1/4\u201D)."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-2"
   }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
@@ -6517,7 +6519,9 @@ const AcrylicFrontBackLit = () => {
     title: "Note"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
     className: "text-sm"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "If you want different LED light colors for the front and back of your sign, please mention it in the comments."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The default cut is straight, but for strokes ranging from 6mm to 15mm, it will be sloped"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "We can customize the colors that are not on the 3M Vinyl options through UV printing."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The minimum stroke is greater than or equal to 6mm (1/4\u201D)"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "If you need a bigger channel sign, please", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+    href: "https://novasignage.com/contact-us/"
+  }, "contact us"), " for a custom quote."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "If you want different LED light colors for the front and back of your sign, please mention it in the comments."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The default cut is straight, but for strokes ranging from 6mm to 15mm, it will be sloped"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "We can customize the colors that are not on the 3M Vinyl options through UV printing."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The minimum stroke is greater than or equal to 6mm (1/4\u201D)"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-2"
   }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
@@ -7962,7 +7966,9 @@ const AcrylicFrontLit = () => {
     title: "Note"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
     className: "text-sm"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The default cut is straight, but for strokes ranging from 6mm to 15mm, it will be sloped"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "We can customize the colors that are not on the 3M Vinyl options through UV printing."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The minimum stroke is greater than or equal to 6mm (1/4\u201D)"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "If you need a bigger channel sign, please", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+    href: "https://novasignage.com/contact-us/"
+  }, "contact us"), " for a custom quote."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The default cut is straight, but for strokes ranging from 6mm to 15mm, it will be sloped"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "We can customize the colors that are not on the 3M Vinyl options through UV printing."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The minimum stroke is greater than or equal to 6mm (1/4\u201D)"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-2"
   }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
@@ -9316,7 +9322,9 @@ const AcrylicFrontSideLit = () => {
     title: "Note"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
     className: "text-sm"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The default cut is straight, but for strokes ranging from 6mm to 15mm, it will be sloped"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "We can customize the colors that are not on the 3M Vinyl options through UV printing."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The minimum stroke is greater than or equal to 6mm (1/4\u201D). "))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "If you need a bigger channel sign, please", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+    href: "https://novasignage.com/contact-us/"
+  }, "contact us"), " for a custom quote."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The default cut is straight, but for strokes ranging from 6mm to 15mm, it will be sloped"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "We can customize the colors that are not on the 3M Vinyl options through UV printing."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The minimum stroke is greater than or equal to 6mm (1/4\u201D). "))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-2"
   }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
@@ -10582,7 +10590,9 @@ const AcrylicSideLit = () => {
     title: "Note"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
     className: "text-sm"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The default cut is straight, but for strokes ranging from 6mm to 15mm, it will be sloped"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "We can customize the colors that are not on the 3M Vinyl options through UV printing."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The minimum stroke is greater than or equal to 6mm (1/4\u201D). "))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "If you need a bigger channel sign, please", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+    href: "https://novasignage.com/contact-us/"
+  }, "contact us"), " for a custom quote."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The default cut is straight, but for strokes ranging from 6mm to 15mm, it will be sloped"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "We can customize the colors that are not on the 3M Vinyl options through UV printing."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The minimum stroke is greater than or equal to 6mm (1/4\u201D). "))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-2"
   }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
@@ -20335,7 +20345,7 @@ function Letters({
           }
 
           // Adjusting for waterproof and finishing
-          letterPrice *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF ? 1 : 1.02;
+          letterPrice *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF ? 1 : 1.03;
           letterPrice *= vinylWhite?.name ? 1.1 : 1;
           totalLetterPrice += letterPrice;
         });
@@ -20373,15 +20383,15 @@ function Letters({
       tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF ? 1 : 1.02;
     }
     if (frontAcrylicCover === '3M 3630 Vinyl') {
-      tempTotal *= 1.15;
+      tempTotal *= 1.1;
       if (frontBackVinyl === 'Front and Back') {
-        tempTotal *= 1.15;
+        tempTotal *= 1.1;
       }
     }
     if (frontAcrylicCover === '3M 3635 Vinyl') {
-      tempTotal *= 1.2;
+      tempTotal *= 1.1;
       if (frontBackVinyl === 'Front and Back') {
-        tempTotal *= 1.15;
+        tempTotal *= 1.1;
       }
     }
     if (frontAcrylicCover === 'UV Printed') {
@@ -21911,13 +21921,13 @@ function Letters({
       tempTotal += (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_14__.calculateLetterPrice)(letter, baseLetterPrice, noLowerCase);
     });
     if (waterproof) {
-      tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF ? 1 : 1.02;
+      tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF ? 1 : 1.03;
     }
     if (frontAcrylicCover === '3M 3630 Vinyl') {
-      tempTotal *= 1.15;
+      tempTotal *= 1.1;
     }
     if (frontAcrylicCover === '3M 3635 Vinyl') {
-      tempTotal *= 1.2;
+      tempTotal *= 1.1;
     }
     if (frontAcrylicCover === 'UV Printed') {
       tempTotal *= 1.1;
@@ -22822,7 +22832,7 @@ function TrimLessBackLit() {
       fontFileUrl: '',
       backLitMetalFinish: '',
       fontFile: '',
-      acrylicReveal: '0',
+      acrylicReveal: '',
       sets: 1,
       product: NovaQuote.product
     }]);
@@ -22844,7 +22854,7 @@ function TrimLessBackLit() {
     ledLightColor: '6500K White',
     usdPrice: 0,
     cadPrice: 0,
-    acrylicReveal: '0',
+    acrylicReveal: '',
     sets: 1,
     product: NovaQuote.product
   };
@@ -22981,7 +22991,7 @@ __webpack_require__.r(__webpack_exports__);
 function Letters({
   item
 }) {
-  var _item$letters, _item$comments, _item$font, _item$faceReturnColor, _item$trimLessWaterpr, _item$depth, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$studLength, _item$spacerStandoffD, _item$mounting, _item$sets;
+  var _item$letters, _item$comments, _item$font, _item$faceReturnColor, _item$trimLessWaterpr, _item$depth, _item$acrylicReveal, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$studLength, _item$spacerStandoffD, _item$mounting, _item$sets;
   const {
     signage,
     setSignage,
@@ -22999,7 +23009,7 @@ function Letters({
   const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$trimLessWaterpr = item.trimLessWaterproof) !== null && _item$trimLessWaterpr !== void 0 ? _item$trimLessWaterpr : '');
   const [letterPricing, setLetterPricing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const [depth, setDepth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$depth = item.depth) !== null && _item$depth !== void 0 ? _item$depth : '');
-  const [acrylicReveal, setAcrylicReveal] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.acrylicReveal);
+  const [acrylicReveal, setAcrylicReveal] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicReveal = item.acrylicReveal) !== null && _item$acrylicReveal !== void 0 ? _item$acrylicReveal : '');
   const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileNames = item.fileNames) !== null && _item$fileNames !== void 0 ? _item$fileNames : []);
   const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrls = item.fileUrls) !== null && _item$fileUrls !== void 0 ? _item$fileUrls : []);
   const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$filePaths = item.filePaths) !== null && _item$filePaths !== void 0 ? _item$filePaths : []);
@@ -23282,11 +23292,19 @@ function Letters({
       const table = (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_9__["default"])((0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_10__.getLetterPricingTableByTitle)(depth?.depth, letterPricingTables));
       setLetterPricing(() => table);
       if (depth.value == 8) {
-        if (selectedLetterHeight < 12) {
+        if (selectedLetterHeight < 9) {
           setSelectedLetterHeight('');
         }
         setLettersHeight(() => ({
-          min: 12,
+          min: 9,
+          max: 40
+        }));
+      } else if (depth.value == 5) {
+        if (selectedLetterHeight < 6) {
+          setSelectedLetterHeight('');
+        }
+        setLettersHeight(() => ({
+          min: 6,
           max: 40
         }));
       } else {
@@ -23313,7 +23331,7 @@ function Letters({
       };
     }
     let mm = 0;
-    if (acrylicReveal == '1/5"') {
+    if (acrylicReveal == '1/5"' || acrylicReveal == '0 - Recessed Backer') {
       mm = '5mm';
     } else if (acrylicReveal == '2/5"') {
       mm = '10mm';
@@ -23656,7 +23674,7 @@ const maxWidthOptions = Array.from({
 function Logo({
   item
 }) {
-  var _item$comments, _item$faceReturnColor, _item$width, _item$height, _item$trimLessWaterpr, _item$depth, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$studLength, _item$spacerStandoffD, _item$mounting, _item$sets;
+  var _item$comments, _item$faceReturnColor, _item$width, _item$height, _item$trimLessWaterpr, _item$depth, _item$acrylicReveal, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$studLength, _item$spacerStandoffD, _item$mounting, _item$sets;
   const {
     signage,
     setSignage,
@@ -23673,7 +23691,7 @@ function Logo({
   const [openColor, setOpenColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$trimLessWaterpr = item.trimLessWaterproof) !== null && _item$trimLessWaterpr !== void 0 ? _item$trimLessWaterpr : '');
   const [depth, setDepth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$depth = item.depth) !== null && _item$depth !== void 0 ? _item$depth : '');
-  const [acrylicReveal, setAcrylicReveal] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.acrylicReveal);
+  const [acrylicReveal, setAcrylicReveal] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicReveal = item.acrylicReveal) !== null && _item$acrylicReveal !== void 0 ? _item$acrylicReveal : '');
   const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileNames = item.fileNames) !== null && _item$fileNames !== void 0 ? _item$fileNames : []);
   const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrls = item.fileUrls) !== null && _item$fileUrls !== void 0 ? _item$fileUrls : []);
   const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$filePaths = item.filePaths) !== null && _item$filePaths !== void 0 ? _item$filePaths : []);
@@ -24459,7 +24477,7 @@ function Letters({
   const [usdSinglePrice, setUsdSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdSinglePrice = item.usdSinglePrice) !== null && _item$usdSinglePrice !== void 0 ? _item$usdSinglePrice : 0);
   const [cadSinglePrice, setCadSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadSinglePrice = item.cadSinglePrice) !== null && _item$cadSinglePrice !== void 0 ? _item$cadSinglePrice : 0);
   const [lettersHeight, setLettersHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
-    min: 6,
+    min: 5,
     max: 40
   });
   const [openAcrylicCover, setOpenAcrylicCover] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
@@ -24671,15 +24689,15 @@ function Letters({
       tempTotal += (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_14__.calculateLetterPrice)(letter, baseLetterPrice, noLowerCase);
     });
     if (frontAcrylicCover === '3M 3630 Vinyl') {
-      tempTotal *= 1.15;
+      tempTotal *= 1.1;
       if (frontBackVinyl === 'Front and Back') {
-        tempTotal *= 1.15;
+        tempTotal *= 1.1;
       }
     }
     if (frontAcrylicCover === '3M 3635 Vinyl') {
-      tempTotal *= 1.2;
+      tempTotal *= 1.1;
       if (frontBackVinyl === 'Front and Back') {
-        tempTotal *= 1.15;
+        tempTotal *= 1.1;
       }
     }
     if (waterproof && waterproof !== _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF) {
@@ -26133,10 +26151,10 @@ function Letters({
       tempTotal += calculateLetterPrice(letter, baseLetterPrice, noLowerCase);
     });
     if (frontAcrylicCover === '3M 3630 Vinyl') {
-      tempTotal *= 1.15;
+      tempTotal *= 1.1;
     }
     if (frontAcrylicCover === '3M 3635 Vinyl') {
-      tempTotal *= 1.2;
+      tempTotal *= 1.1;
     }
     if (waterproof && waterproof !== _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF) {
       tempTotal *= 1.03;
@@ -27105,7 +27123,7 @@ const aluminumResinDepthOptions = [{
   value: '8'
 }];
 const ledLightColors = ['6500K White', '3000K Warm White', 'Red', 'Green', 'Blue'];
-const acrylicRevealOptions = ['0', '1/5"', '2/5"', '3/5"'];
+const acrylicRevealOptions = ['No Backer (Open)', '0 - Recessed Backer', '1/5"', '2/5"', '3/5"'];
 const maxHeightOptions = Array.from({
   length: 66
 }, (_, index) => {
