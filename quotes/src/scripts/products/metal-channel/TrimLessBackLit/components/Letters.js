@@ -541,6 +541,10 @@ export function Letters({ item }) {
 			tempTotal *= 1.2;
 		}
 
+		if (selectedFinishing === 'Painted') {
+			tempTotal *= 1.1;
+		}
+
 		if (mounting === STUD_WITH_SPACER) {
 			let spacer = spacerPricing(tempTotal);
 			spacer = parseFloat(spacer.toFixed(2));
@@ -584,6 +588,7 @@ export function Letters({ item }) {
 		font,
 		mounting,
 		letterPricingTables,
+		selectedFinishing,
 	]);
 
 	if (selectedFinishing === 'Painted') {

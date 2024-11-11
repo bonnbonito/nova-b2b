@@ -579,76 +579,6 @@ export function Letters({ item }) {
 		});
 	}
 
-	useEffect(() => {
-		if (letterPricing.length > 0 && selectedLetterHeight && depth) {
-			const pricingDetail = letterPricing[selectedLetterHeight - 5];
-			const baseLetterPrice = pricingDetail[depth.value];
-
-			let totalLetterPrice = 0;
-			const lettersArray = letters.trim().split('');
-			const noLowerCase = NovaQuote.no_lowercase.includes(font);
-
-			if (
-				lettersArray.length > 0 &&
-				selectedLetterHeight &&
-				waterproof &&
-				depth
-			) {
-				lettersArray.forEach((letter) => {
-					let letterPrice = baseLetterPrice;
-
-					if (letter === ' ') {
-						// If the character is a space, set the price to 0 and skip further checks
-						letterPrice = 0;
-					} else if (letter.match(/[a-z]/)) {
-						// Check for lowercase letter
-						letterPrice *= noLowerCase ? 1 : lowerCasePricing; // 80% of the base price
-					} else if (letter.match(/[A-Z]/)) {
-						// Check for uppercase letter
-						// Uppercase letters use 100% of base price, so no change needed
-					} else if (letter.match(/[`~"*,.\-']/)) {
-						// Check for small punctuation marks
-						letterPrice *= smallPunctuations; // 30% of the base price
-					} else if (letter.match(/[^a-zA-Z]/)) {
-						// Check for symbol (not a letter or small punctuation)
-						// Symbols use 100% of base price, so no change needed
-					}
-
-					// Adjusting for waterproof and finishing
-					letterPrice *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.03;
-
-					letterPrice *= vinylWhite?.name ? 1.1 : 1;
-
-					totalLetterPrice += letterPrice;
-				});
-
-				if (mounting === STUD_WITH_SPACER) {
-					let spacer = spacerPricing(totalLetterPrice);
-					spacer = parseFloat(spacer.toFixed(2));
-
-					totalLetterPrice += spacer;
-				}
-
-				totalLetterPrice *= sets;
-
-				setUsdPrice(parseFloat(totalLetterPrice).toFixed(2));
-				setCadPrice((totalLetterPrice * parseFloat(EXCHANGE_RATE)).toFixed(2));
-			} else {
-				setUsdPrice(0);
-				setCadPrice(0);
-			}
-		}
-	}, [
-		selectedLetterHeight,
-		letters,
-		waterproof,
-		lettersHeight,
-		vinylWhite,
-		mounting,
-		sets,
-		font,
-	]);
-
 	const computePricing = () => {
 		if (!letterPricing.length || !selectedLetterHeight || !depth) {
 			return {
@@ -669,7 +599,7 @@ export function Letters({ item }) {
 		});
 
 		if (waterproof) {
-			tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.02;
+			tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.03;
 		}
 
 		if (frontAcrylicCover === '3M 3630 Vinyl') {
