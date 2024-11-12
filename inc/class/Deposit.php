@@ -56,8 +56,8 @@ class Deposit {
 
 		add_filter( 'woocommerce_cod_process_payment_order_status', array( $this, 'cod_status' ), 20, 2 );
 		add_action( 'woocommerce_payment_complete', array( $this, 'update_original_orders_after_payment' ), 20, 1 );
-		// add_filter( 'woocommerce_email_heading_customer_completed_order', array( $this, 'second_payment_heading' ), 50, 3 );
-		// add_filter( 'woocommerce_email_subject_customer_completed_order', array( $this, 'second_payment_subject' ), 50, 2 );
+		add_filter( 'woocommerce_email_heading_customer_completed_order', array( $this, 'completed_heading_email' ), 50, 3 );
+		add_filter( 'woocommerce_email_subject_customer_completed_order', array( $this, 'completed_heading_subject' ), 50, 2 );
 		add_filter( 'kadence_woomail_order_body_text', array( $this, 'fully_paid_content' ), 41, 5 );
 		add_filter( 'kadence_woomail_order_body_text', array( $this, 'in_production_content' ), 40, 5 );
 		add_action( 'wp_ajax_delete_pending_payment_order', array( $this, 'delete_pending_payment_order' ) );
@@ -668,16 +668,37 @@ class Deposit {
 		return $subject;
 	}
 
-	public function second_payment_heading( $heading, $order, $email ) {
+	public function completed_heading_email( $heading, $order, $email ) {
 
 		$second_payment = $order->get_meta( 'second_payment' );
-		if ( ! $second_payment ) {
+		$deposit_chosen = $order->get_meta( '_deposit_chosen' );
+		$needs_payment  = $order->get_meta( 'needs_payment' );
+		if ( ! $second_payment && ! $deposit_chosen ) {
 			return $heading;
 		}
 
-		$heading = __( 'Payment Received', 'woocommerce' );
+		$paid_email = get_field( 'paid_email', $deposit_chosen );
+
+		$heading = $paid_email['heading'] ? $paid_email['heading'] : $heading;
+		$heading = str_replace( '{order_number}', $order->get_order_number(), $heading );
 
 		return $heading;
+	}
+
+	public function completed_heading_subject( $subject, $order ) {
+
+		$second_payment = $order->get_meta( 'second_payment' );
+		$deposit_chosen = $order->get_meta( '_deposit_chosen' );
+		$needs_payment  = $order->get_meta( 'needs_payment' );
+		if ( ! $second_payment && ! $deposit_chosen ) {
+			return $subject;
+		}
+
+		$paid_email = get_field( 'paid_email', $deposit_chosen );
+
+		$subject = $paid_email['subject'] ? $paid_email['subject'] : $subject;
+		$subject = str_replace( '{order_number}', $order->get_order_number(), $subject );
+		return $subject;
 	}
 
 	public function update_original_orders_after_payment( $order_id ) {
@@ -1201,7 +1222,7 @@ class Deposit {
 			$new_total = $total - $paid;
 			$order->set_total( $new_total );
 
-			$order->set_status( 'processing' );
+			// $order->set_status( 'processing' );
 			$order->save();
 		}
 	}
@@ -1323,9 +1344,9 @@ class Deposit {
 	public function pending_page_after_content() {
 		?>
 <div class="wrap">
-	<div id="depositTable"></div>
+    <div id="depositTable"></div>
 </div>
-		<?php
+<?php
 	}
 
 	public function output_deposit_selection() {
@@ -1344,34 +1365,34 @@ class Deposit {
 		$chosen = empty( $chosen ) ? '0' : $chosen;
 		?>
 <fieldset>
-	<legend class="px-4 uppercase"><span><?php esc_html_e( 'Payment Type', 'woocommerce' ); ?></span></legend>
-	<div class="grid md:grid-cols-3 gap-4 update_totals_on_change">
-		<div class="cursor-pointer h-full">
-			<label for="payment_0"
-				class="block h-full justify-end p-3 border rounded-md w-full max-w-sm cursor-pointer hover:border-slate-500 hover:bg-slate-200 hover:shadow-lg">
-				<input class="bg-none" id="payment_0" type="radio" name="deposit_chosen" value="0"
-					<?php echo ( '0' == $chosen ? 'checked' : '' ); ?>>
-				<span>Full</span>
-				<span class="text-sm font-body block mt-2 hidden">Description</span>
-			</label>
-		</div>
-		<?php
+    <legend class="px-4 uppercase"><span><?php esc_html_e( 'Payment Type', 'woocommerce' ); ?></span></legend>
+    <div class="grid md:grid-cols-3 gap-4 update_totals_on_change">
+        <div class="cursor-pointer h-full">
+            <label for="payment_0"
+                class="block h-full justify-end p-3 border rounded-md w-full max-w-sm cursor-pointer hover:border-slate-500 hover:bg-slate-200 hover:shadow-lg">
+                <input class="bg-none" id="payment_0" type="radio" name="deposit_chosen" value="0"
+                    <?php echo ( '0' == $chosen ? 'checked' : '' ); ?>>
+                <span>Full</span>
+                <span class="text-sm font-body block mt-2 hidden">Description</span>
+            </label>
+        </div>
+        <?php
 		foreach ( $payments_selection as $key => $selection ) {
 			?>
-		<div class="cursor-pointer h-full">
-			<label for="payment_<?php echo $selection['id']; ?>"
-				class="block h-full justify-end p-3 border rounded-md w-full max-w-sm cursor-pointer hover:border-slate-500 hover:bg-slate-200 hover:shadow-lg">
-				<input class="bg-none" id="payment_<?php echo $selection['id']; ?>" type="radio" name="deposit_chosen"
-					value="<?php echo $selection['id']; ?>" id="payment_<?php echo $selection['id']; ?>"
-					<?php echo ( $selection['id'] == $chosen ? 'checked' : '' ); ?>>
-				<span><?php echo $selection['title']; ?></span>
-				<span class="text-sm font-body block mt-2"><?php echo $selection['description']; ?></span>
-			</label>
-		</div>
-		<?php } ?>
-	</div>
+        <div class="cursor-pointer h-full">
+            <label for="payment_<?php echo $selection['id']; ?>"
+                class="block h-full justify-end p-3 border rounded-md w-full max-w-sm cursor-pointer hover:border-slate-500 hover:bg-slate-200 hover:shadow-lg">
+                <input class="bg-none" id="payment_<?php echo $selection['id']; ?>" type="radio" name="deposit_chosen"
+                    value="<?php echo $selection['id']; ?>" id="payment_<?php echo $selection['id']; ?>"
+                    <?php echo ( $selection['id'] == $chosen ? 'checked' : '' ); ?>>
+                <span><?php echo $selection['title']; ?></span>
+                <span class="text-sm font-body block mt-2"><?php echo $selection['description']; ?></span>
+            </label>
+        </div>
+        <?php } ?>
+    </div>
 </fieldset>
 
-		<?php
+<?php
 	}
 }
