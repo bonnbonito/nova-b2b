@@ -831,8 +831,7 @@ class Deposit {
 
 		$needs_payment = get_post_meta( $order_id, 'needs_payment', true );
 		if ( ! $needs_payment ) {
-			$order->set_status( 'completed' );
-			$order->save();
+			$order->update_status( 'completed' );
 		} else {
 			do_action( 'nova_pending_payment_email', $order );
 			$order->set_status( 'pending' );
@@ -1344,9 +1343,9 @@ class Deposit {
 	public function pending_page_after_content() {
 		?>
 <div class="wrap">
-    <div id="depositTable"></div>
+	<div id="depositTable"></div>
 </div>
-<?php
+		<?php
 	}
 
 	public function output_deposit_selection() {
@@ -1365,34 +1364,34 @@ class Deposit {
 		$chosen = empty( $chosen ) ? '0' : $chosen;
 		?>
 <fieldset>
-    <legend class="px-4 uppercase"><span><?php esc_html_e( 'Payment Type', 'woocommerce' ); ?></span></legend>
-    <div class="grid md:grid-cols-3 gap-4 update_totals_on_change">
-        <div class="cursor-pointer h-full">
-            <label for="payment_0"
-                class="block h-full justify-end p-3 border rounded-md w-full max-w-sm cursor-pointer hover:border-slate-500 hover:bg-slate-200 hover:shadow-lg">
-                <input class="bg-none" id="payment_0" type="radio" name="deposit_chosen" value="0"
-                    <?php echo ( '0' == $chosen ? 'checked' : '' ); ?>>
-                <span>Full</span>
-                <span class="text-sm font-body block mt-2 hidden">Description</span>
-            </label>
-        </div>
-        <?php
+	<legend class="px-4 uppercase"><span><?php esc_html_e( 'Payment Type', 'woocommerce' ); ?></span></legend>
+	<div class="grid md:grid-cols-3 gap-4 update_totals_on_change">
+		<div class="cursor-pointer h-full">
+			<label for="payment_0"
+				class="block h-full justify-end p-3 border rounded-md w-full max-w-sm cursor-pointer hover:border-slate-500 hover:bg-slate-200 hover:shadow-lg">
+				<input class="bg-none" id="payment_0" type="radio" name="deposit_chosen" value="0"
+					<?php echo ( '0' == $chosen ? 'checked' : '' ); ?>>
+				<span>Full</span>
+				<span class="text-sm font-body block mt-2 hidden">Description</span>
+			</label>
+		</div>
+		<?php
 		foreach ( $payments_selection as $key => $selection ) {
 			?>
-        <div class="cursor-pointer h-full">
-            <label for="payment_<?php echo $selection['id']; ?>"
-                class="block h-full justify-end p-3 border rounded-md w-full max-w-sm cursor-pointer hover:border-slate-500 hover:bg-slate-200 hover:shadow-lg">
-                <input class="bg-none" id="payment_<?php echo $selection['id']; ?>" type="radio" name="deposit_chosen"
-                    value="<?php echo $selection['id']; ?>" id="payment_<?php echo $selection['id']; ?>"
-                    <?php echo ( $selection['id'] == $chosen ? 'checked' : '' ); ?>>
-                <span><?php echo $selection['title']; ?></span>
-                <span class="text-sm font-body block mt-2"><?php echo $selection['description']; ?></span>
-            </label>
-        </div>
-        <?php } ?>
-    </div>
+		<div class="cursor-pointer h-full">
+			<label for="payment_<?php echo $selection['id']; ?>"
+				class="block h-full justify-end p-3 border rounded-md w-full max-w-sm cursor-pointer hover:border-slate-500 hover:bg-slate-200 hover:shadow-lg">
+				<input class="bg-none" id="payment_<?php echo $selection['id']; ?>" type="radio" name="deposit_chosen"
+					value="<?php echo $selection['id']; ?>" id="payment_<?php echo $selection['id']; ?>"
+					<?php echo ( $selection['id'] == $chosen ? 'checked' : '' ); ?>>
+				<span><?php echo $selection['title']; ?></span>
+				<span class="text-sm font-body block mt-2"><?php echo $selection['description']; ?></span>
+			</label>
+		</div>
+		<?php } ?>
+	</div>
 </fieldset>
 
-<?php
+		<?php
 	}
 }

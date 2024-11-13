@@ -1772,7 +1772,18 @@ class Pending_Payment {
 
 			if ( intval( $user_id ) === intval( $customer_id ) ) {
 
-				$shipped_date        = $order->get_meta( 'shipped_date' );
+				$manual_delivered_date = get_field( 'manual_delivered_date', $order->get_id() );
+
+				$delivered_date = false;
+
+				if ( $manual_delivered_date ) {
+					$date_obj = \DateTime::createFromFormat( 'd/m/Y', $manual_delivered_date );
+					if ( $date_obj ) {
+						$delivered_date = $date_obj->format( 'F d, Y' );
+					}
+				}
+
+				$shipped_date        = $delivered_date ? $delivered_date : $order->get_meta( 'shipped_date' );
 				$days_after_shipping = get_field( 'days_after_shipping', $deposit_chosen );
 
 				if ( $shipped_date ) {

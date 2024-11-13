@@ -432,8 +432,17 @@ class Order_History {
 				$is_overdue = true;
 			}
 
-			$due_date = false;
-			$deadline = false;
+			$due_date       = false;
+			$deadline       = false;
+			$delivered_date = false;
+
+			$manual_delivered_date = get_field( 'manual_delivered_date', $order->get_id() );
+			if ( $manual_delivered_date ) {
+				$date_obj = \DateTime::createFromFormat( 'd/m/Y', $manual_delivered_date );
+				if ( $date_obj ) {
+					$delivered_date = $date_obj->format( 'F d, Y' );
+				}
+			}
 
 			// If order is payment, get due date
 			if ( $order->get_meta( '_from_order_id' ) ) {
@@ -470,7 +479,8 @@ class Order_History {
 
 			if ( $deposit_chosen ) {
 
-				$shipped_date        = $order->get_meta( 'shipped_date' );
+				$shipped_date = $delivered_date ? $delivered_date : $order->get_meta( 'shipped_date' );
+
 				$days_after_shipping = get_field( 'days_after_shipping', $deposit_chosen );
 
 				if ( $shipped_date ) {
