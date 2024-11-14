@@ -710,6 +710,10 @@ class Pending_Payment {
 			return 'No email';
 		}
 
+		if ( 'completed' === $order->get_status() || 'trash' === $order->get_status() ) {
+			return 'Order not pending';
+		}
+
 		$payment_url = '<p><strong>Please click here to pay:</strong> ' . $order->get_checkout_payment_url() . '</p>';
 
 		if ( have_rows( 'payment_emails', $payment_type ) ) :
@@ -1034,10 +1038,6 @@ class Pending_Payment {
 				}
 
 				$order = wc_get_order( absint( $row['payment_order'] ) );
-
-				if ( ! $order ) {
-					continue;
-				}
 
 				$first_name    = $order->get_billing_first_name() ? $order->get_billing_first_name() : 'Customer';
 				$last_name     = $order->get_billing_last_name() ? $order->get_billing_last_name() : '';

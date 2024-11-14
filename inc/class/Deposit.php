@@ -351,6 +351,10 @@ class Deposit {
 				continue;
 			}
 
+			if ( $order->get_status() != 'pending' ) {
+				continue;
+			}
+
 			$this->send_payment_reminder_email( $order_id );
 
 			$this->check_overdue( $result );
