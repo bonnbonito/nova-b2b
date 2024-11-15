@@ -34,7 +34,7 @@ class Order_History {
 		add_action( 'woocommerce_thankyou', array( $this, 'delete_temporary_products_on_order_complete' ), 99, 1 );
 		add_action( 'woocommerce_order_status_cancelled', array( $this, 'delete_temporary_products_on_order_complete' ), 10, 1 );
 		add_action( 'woocommerce_order_status_failed', array( $this, 'delete_temporary_products_on_order_complete' ), 10, 1 );
-		add_filter( 'woocommerce_email_enabled_customer_completed_order', array( $this, 'disable_completed_email_for_combined_order' ), 10, 2 );
+		add_filter( 'woocommerce_email_enabled_customer_completed_order', array( $this, 'disable_completed_email_for_combined_order' ), 11, 2 );
 		add_action( 'init', array( $this, 'schedule_temporary_orders_cleanup_event' ) );
 		add_action( 'delete_temporary_orders_daily_event', array( $this, 'delete_old_temporary_orders' ) );
 	}
@@ -250,6 +250,7 @@ class Order_History {
 
 		// Mark the order as temporary
 		$combined_order->update_meta_data( '_is_temporary_combined_order', true );
+		$combined_order->update_meta_data( '_ga_tracked', true );
 
 		$combined_order->add_order_note( __( 'This order is a combined payment for multiple orders.', 'nova-b2b' ) );
 
@@ -364,9 +365,9 @@ class Order_History {
 	public function account_statement_content() {
 		?>
 <div id="nova">
-	<div id="hello"></div>
+    <div id="hello"></div>
 </div>
-		<?php
+<?php
 	}
 
 	public function get_orders() {

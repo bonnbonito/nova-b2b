@@ -171,13 +171,15 @@ class Pending_Payment {
 		if ( ! $order ) {
 			return $enabled;
 		}
-		$manual_delivered_date = get_field( 'manual_delivered_date', $order->get_id() );
 
 		$manual_delivered_date = get_field( 'manual_delivered_date', $order->get_id() );
+
 		if ( ! empty( $manual_delivered_date ) ) {
-			return false; // Disable the email
+			$disable_completed = get_field( 'disable_completed_email', $order->get_id() );
+			if ( $disable_completed ) {
+				return false;
+			}
 		}
-
 		return $enabled; // Keep the default behavior if field is not set
 	}
 

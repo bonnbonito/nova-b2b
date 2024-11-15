@@ -6,6 +6,7 @@ use WP_Query;
 use function WC;
 use WC_Order_Item_Shipping;
 use function is_cart;
+use DateTime;
 
 class Woocommerce {
 	/**
@@ -129,7 +130,7 @@ class Woocommerce {
 		// add_action( 'pre_get_posts', array( $this, 'custom_search_by_order_number_in_admin' ) );
 		add_action( 'save_post', array( $this, 'nova_save_shipping_metabox' ) );
 		add_filter( 'woocommerce_product_tabs', array( $this, 'remove_reviews_tab' ), 98 );
-		add_filter( 'option_woocommerce_currency', array( $this, 'modify_woocommerce_currency_based_on_user') );
+		add_filter( 'option_woocommerce_currency', array( $this, 'modify_woocommerce_currency_based_on_user' ) );
 	}
 
 	public function remove_reviews_tab( $tabs ) {
