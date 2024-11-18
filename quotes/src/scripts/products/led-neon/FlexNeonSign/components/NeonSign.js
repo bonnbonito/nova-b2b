@@ -172,6 +172,7 @@ export const NeonSign = ({ item }) => {
 					neonSignHeight: height,
 					acrylicBackingOption,
 					wireExitLocation,
+					remoteControl,
 				};
 			}
 			return sign;

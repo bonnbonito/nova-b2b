@@ -17401,7 +17401,8 @@ const NeonSign = ({
           neonSignWidth: width,
           neonSignHeight: height,
           acrylicBackingOption,
-          wireExitLocation
+          wireExitLocation,
+          remoteControl
         };
       }
       return sign;
