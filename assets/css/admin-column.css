@@ -1,10 +1,10 @@
 .select-wrap {
-    display: inline-block;
-    position: relative;
+	display: inline-block;
+	position: relative;
 }
 
-.select-wrap select[name="quote_status"] {
-    padding: 0.5em;
-    width: 140px;
-    border-width: 2px;
+.select-wrap select[name='quote_status_filter'] {
+	padding: 0.5em;
+	width: 140px;
+	border-width: 2px;
 }

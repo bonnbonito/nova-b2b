@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
 	const quoteStatus = document.querySelectorAll(
-		'.select-wrap select[name="quote_status"]'
+		'.select-wrap select[name="quote_status_filter"]'
 	);
 
 	quoteStatus.forEach(function (item) {

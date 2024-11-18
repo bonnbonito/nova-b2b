@@ -592,7 +592,7 @@ class Admin {
 
 			// Generate the select dropdown
 			echo '<div class="select-wrap">';
-			echo '<select name="quote_status" style="border-color: ' . $background_colors[ $status_value ] . ';" data-quote-id="' . $post_id . '">';
+			echo '<select name="quote_status_filter" style="border-color: ' . $background_colors[ $status_value ] . ';" data-quote-id="' . $post_id . '">';
 			foreach ( $status_options as $value => $label ) {
 				$selected = ( $status_value === $value ) ? 'selected' : '';
 				echo '<option value="' . esc_attr( $value ) . '" ' . $selected . '>' . esc_html( $label ) . '</option>';
