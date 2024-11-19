@@ -114,6 +114,8 @@ function nova_b2b_acf_init() {
 	require NOVA_DIR_PATH . '/inc/autoloader.php';
 }
 
+require NOVA_DIR_PATH . '/inc/class/EmailLimit.php';
+
 
 
 /**

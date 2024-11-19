@@ -54,6 +54,7 @@ class NovaEmails {
 		add_filter( 'woocommerce_email_recipient_customer_processing_order', array( $this, 'custom_billing_email' ), 11, 2 );
 		add_filter( 'woocommerce_email_recipient_customer_on_hold_order', array( $this, 'custom_billing_email' ), 11, 2 );
 		add_filter( 'woocommerce_email_recipient_customer_refunded_order', array( $this, 'custom_billing_email' ), 11, 2 );
+		add_filter( 'woocommerce_email_recipient_customer_shipped_order', array( $this, 'custom_billing_email' ), 11, 2 );
 	}
 
 	public function custom_billing_email( $recipient, $order ) {
