@@ -612,7 +612,7 @@ class Pending_Payment {
 
 					$role_instance->send_email( $customer_email, $subject, $message, $headers, $attachments, $heading );
 
-					$key = 'payment_email_key_' . $index;
+					$key = 'nova_payment_email_key_' . $index;
 
 					$label = $payment_emails[ $index - 1 ]['email_label'];
 
@@ -730,7 +730,7 @@ class Pending_Payment {
 					$date_later = date( 'F d, Y', $days_later );
 
 					$is_last_row = get_row_index() == count( get_field( 'payment_emails', $payment_type ) );
-					$email_sent  = get_post_meta( $payment_order_id, 'payment_email_key_' . get_row_index(), true );
+					$email_sent  = get_post_meta( $payment_order_id, 'nova_payment_email_key_' . get_row_index(), true );
 
 					if ( $today == $date_later ) {
 
@@ -791,7 +791,7 @@ class Pending_Payment {
 								}
 							}
 
-							$key = 'payment_email_key_' . get_row_index();
+							$key = 'nova_payment_email_key_' . get_row_index();
 							update_post_meta( $payment_order_id, $key, 'sent ' . date( 'Y/m/d' ) );
 
 						}
@@ -1069,7 +1069,7 @@ class Pending_Payment {
 					while ( have_rows( 'payment_emails', $row['payment_select'] ) ) {
 						the_row( 'payment_emails', $row['payment_select'] );
 
-						$key        = 'payment_email_key_' . get_row_index();
+						$key        = 'nova_payment_email_key_' . get_row_index();
 						$email_sent = get_post_meta( $row['payment_order'], $key, true );
 
 						echo '<li style="display: flex; gap: 1em; align-items: center;">' . get_sub_field( 'email_label' );
