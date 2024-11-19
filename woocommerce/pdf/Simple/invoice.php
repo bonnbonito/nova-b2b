@@ -9,6 +9,13 @@ if ( $this->order->is_paid() && ! $this->order->get_meta( '_adjusted_duplicate_o
 	$invoice_title = 'Receipt';
 }
 
+$needs_payment  = $this->order->get_meta( 'needs_payment' );
+$deposit_chosen = $this->order->get_meta( '_deposit_chosen' );
+
+if ( $deposit_chosen && ! $needs_payment ) {
+	$invoice_title = 'Receipt';
+}
+
 $combined_order = ! empty( $this->order->get_meta( '_original_order_ids' ) );
 
 ?>
@@ -45,7 +52,7 @@ $combined_order = ! empty( $this->order->get_meta( '_original_order_ids' ) );
 if ( $this->has_header_logo() ) :
 	$title = $this->order->is_paid() && ! $this->order->get_meta( '_adjusted_duplicate_order_id' ) ? 'Receipt' : 'Invoice';
 	?>
-<h1 class="document-type-label"><?php echo $title; ?></h1>
+<h1 class="document-type-label"><?php echo $invoice_title; ?></h1>
 <?php endif; ?>
 
 <?php do_action( 'wpo_wcpdf_after_document_label', $this->get_type(), $this->order ); ?>

@@ -9,9 +9,17 @@
 	<?php
 	$has_duplicate_order = $this->order->get_meta( '_adjusted_duplicate_order_id' );
 
-	$title = $this->order->is_paid() && ! $has_duplicate_order ? 'Receipt' : 'Invoice';
+	$heading_title = $this->order->is_paid() && ! $has_duplicate_order ? 'Receipt' : 'Invoice';
+
+	$needs_payment  = $this->order->get_meta( 'needs_payment' );
+	$deposit_chosen = $this->order->get_meta( '_deposit_chosen' );
+
+	if ( ! $needs_payment && $deposit_chosen ) {
+		$heading_title = 'Receipt';
+	}
+
 	?>
-	<title><?php echo $title; ?></title>
+	<title><?php echo $heading_title; ?></title>
 	<style type="text/css">
 	<?php
 	$this->template_styles();
