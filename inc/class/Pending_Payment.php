@@ -732,7 +732,7 @@ class Pending_Payment {
 					$is_last_row = get_row_index() == count( get_field( 'payment_emails', $payment_type ) );
 					$email_sent  = get_post_meta( $payment_order_id, 'payment_email_key_' . get_row_index(), true );
 
-					if ( $today == $date_later || ( $is_last_row && $today >= $date_later && ! $email_sent ) ) {
+					if ( $today == $date_later ) {
 
 						$subject = get_sub_field( 'subject' );
 						$subject = str_replace( '{customer_name}', $first_name, $subject );
