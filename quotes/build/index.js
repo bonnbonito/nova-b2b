@@ -35984,116 +35984,167 @@ const colorOptions = [{
   name: 'White',
   color: '#ffffff'
 }, {
-  name: 'Pantone 428 C - Light Gray',
-  color: '#c1c6c8'
+  name: 'PMS 428 C - Platinum Grey',
+  color: '#bdc0c3'
 }, {
-  name: 'Pantone 429 C - Gray',
-  color: '#A2AAAD'
+  name: 'Pantone 423 C - Gray',
+  color: '#a09fa8'
 }, {
   name: 'Pantone 431 C - Stone Gray',
-  color: '#5b6770'
+  color: '#7b7c87'
 }, {
-  name: 'Pantone 7506 C - Sand',
-  color: '#efdbb2'
+  name: 'Pantone 7449 C - Ivory',
+  color: '#e9dccc'
+}, {
+  name: 'Pantone 7506 C - Desert Sand',
+  color: '#e3cba6'
 }, {
   name: 'Pantone 602 C - Canary Yellow',
-  color: '#f0e87b'
+  color: '#ebeb91'
 }, {
   name: 'Pantone 102 C - Lemon Yellow',
-  color: '#fce300'
+  color: '#ece340'
 }, {
-  name: 'Pantone 116 C - Yellow',
-  color: '#ffcd00'
+  name: 'Pantone 108 C - Yellow',
+  color: '#e8d83d'
 }, {
-  name: 'Pantone 137 C - Radiant Yellow',
-  color: '#ffa300'
+  name: 'Pantone 606 C - Citrus Yellow',
+  color: '#c0b531'
 }, {
-  name: 'Pantone 1505 C - Orange',
-  color: '#ff6900'
+  name: 'Pantone 116 C - Sundance Yellow',
+  color: '#e7cd3b'
 }, {
-  name: 'Pantone 1655 C - Burnt Orange',
-  color: '#fc4c02'
+  name: 'Pantone 137 C - Mango',
+  color: '#dea132'
+}, {
+  name: 'Pantone 021 C - Orange',
+  color: '#d55728'
+}, {
+  name: 'Pantone 485 C - Red Orange',
+  color: '#b32c1e'
+}, {
+  name: 'Pantone 172 C - Rampart Orange',
+  color: '#d23924'
 }, {
   name: 'Pantone 1785 C - Salmon Pink',
-  color: '#f8485e'
+  color: '#d15860'
 }, {
   name: 'Pantone 185 C - Red',
-  color: '#e4002b'
+  color: '#c32638'
 }, {
-  name: 'Pantone 186 C - Brick Red',
-  color: '#c8102e'
+  name: 'Pantone 7623 C - Brick Red',
+  color: '#722d2e'
 }, {
-  name: 'Pantone 201 C - Maroon',
-  color: '#9d2235'
+  name: 'Pantone 1817 C - Black Cherry',
+  color: '#4d2529'
+}, {
+  name: 'Pantone 202 C - Maroon',
+  color: '#752933'
 }, {
   name: 'Pantone 209 C - Mauve',
-  color: '#6f263d'
+  color: '#65283e'
 }, {
   name: 'Pantone 220 C - Deep Pink',
-  color: '#a50050'
+  color: '#942859'
+}, {
+  name: 'Pantone 241 C - Magenta',
+  color: '#91087f'
 }, {
   name: 'Pantone 211 C - Perwinkle Pink',
-  color: '#f57eb6'
+  color: '#d677a5'
 }, {
-  name: 'Pantone 2665 C - Purple',
-  color: '#7d55c7'
+  name: 'Pantone 2665 C - Light Purple',
+  color: '#77559e'
 }, {
-  name: 'Pantone 277 C - Light Blue',
-  color: '#abcae9'
+  name: 'Pantone 2665 C - Violet Toner',
+  color: '#674dbc'
+}, {
+  name: 'Pantone 2725 C - Purple',
+  color: '#291443'
+}, {
+  name: 'Pantone 2995 C - Light Blue',
+  color: '#649fd5'
 }, {
   name: 'Pantone 300 C - Blue',
-  color: '#005eb8'
+  color: '#3b41ae'
 }, {
-  name: 'Pantone 294 C - Peacock Blue',
-  color: '#002f6c'
+  name: 'Pantone 286 C - Medium Blue',
+  color: '#271e97'
 }, {
-  name: 'Pantone 2756 C - Blue Violet',
-  color: '#151f6d'
+  name: 'Pantone 281 C - Dark Blue',
+  color: '#141755'
 }, {
   name: 'Pantone 5395 C - Midnight Blue',
-  color: '#081f2c'
+  color: '#12152a'
 }, {
-  name: 'Pantone 320 C - Teal Blue',
-  color: '#009CA6'
+  name: 'Pantone 5425 C - Blue Violet',
+  color: '#8192a5'
+}, {
+  name: 'Pantone 321 C - Teal Blue',
+  color: '#4e868e'
 }, {
   name: 'Pantone 809 C - Safety Green',
-  color: '#e3e829'
+  color: '#d7de47'
 }, {
-  name: 'Pantone 355 C - Sap Green',
-  color: '#009639'
+  name: 'Pantone 355 C - Spring Green',
+  color: '#5ba152'
 }, {
-  name: 'Pantone 349 C - Emerald Green',
-  color: '#046a38'
+  name: 'Pantone 356 C - Emerald Green',
+  color: '#407735'
 }, {
-  name: 'Pantone 3455 C - Hunter Green',
-  color: '#154734'
+  name: 'Pantone 350 C - Federal Green',
+  color: '#2B452c'
 }, {
-  name: 'Pantone 3308 C - Forest Green',
-  color: '#034638'
+  name: 'Pantone 3415 C - Light Green',
+  color: '#41774f'
+}, {
+  name: 'Pantone 3435 C - Dark Green',
+  color: '#2a4533'
+}, {
+  name: 'Pantone 3308 C - Hunter Green',
+  color: '#234237'
 }, {
   name: 'Pantone 476 C - Brown',
-  color: '#4e3629'
+  color: '#513e2e'
 }, {
   name: 'Pantone 4715 C - Spice Brown',
-  color: '#956c58'
+  color: '#976d5b'
 }, {
-  name: 'Pantone 124 C - Brilliant Gold',
-  color: '#eaaa00'
+  name: 'Pantone 7556 C - Brilliant Gold*',
+  color: '#a48b32'
 }, {
-  name: 'Pantone 465 C - Gold',
-  color: '#b9975b'
+  name: 'Pantone 465 C - Metallic Gold*',
+  color: '#aa945e'
 }, {
-  name: 'Pantone 7407 C - Aztec Gold',
-  color: '#cba052'
+  name: 'Pantone 2317 C - Aztec Gold*',
+  color: '#a28660'
 }, {
-  name: 'Pantone 2319 C - Bronze',
-  color: '#7f5f36'
+  name: 'Pantone 2319 C - Bronze*',
+  color: '#8c582d'
 }, {
-  name: 'Pantone 209 C - Copper',
-  color: '#6f263d'
+  name: 'PMS 7660 C - Copper*',
+  color: '#773f2e'
 }, {
-  name: 'Silver',
-  color: '#a6a9aa'
+  name: 'PMS 7599 C - Aztec Copper*',
+  color: '#95421e'
+}, {
+  name: 'Pantone 2335 C - Medium Bronze*',
+  color: '#574e46'
+}, {
+  name: 'Pantone 2334 C - Old Copper*',
+  color: '#67615f'
+}, {
+  name: 'Pantone 445 C - Legacy Bronze*',
+  color: '#4f5456'
+}, {
+  name: 'Pantone 447 C - Dark Oxide*',
+  color: '#373835'
+}, {
+  name: 'Pantone 412 C - Duranodic Bronze*',
+  color: '#2e2827'
+}, {
+  name: 'PMS 420 C - Metallic Silver*',
+  color: '#c2c3c0'
 }];
 const metalFinishColors = [{
   name: 'Stainless Steel Brushed',
