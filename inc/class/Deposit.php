@@ -828,6 +828,7 @@ class Deposit {
 		$today = date( 'Ymd' );
 		update_post_meta( $order_id, 'delivered_date', $today );
 	}
+
 	public function order_status_shipped( $order_id ) {
 		$today = date( 'Ymd' );
 		$order = wc_get_order( $order_id );

@@ -513,6 +513,8 @@ export function Logo({ item }) {
 		studLength,
 		spacerStandoffDistance,
 		hasUploadedFile,
+		color,
+		customColor,
 	]);
 
 	useOutsideClick([colorRef], () => {
