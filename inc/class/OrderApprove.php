@@ -1,0 +1,130 @@
+<?php
+
+namespace NOVA_B2B;
+
+class OrderApprove {
+	/**
+	 * Instance of this class
+	 *
+	 * @var null
+	 */
+	private static $instance = null;
+
+	/**
+	 * Instance Control
+	 */
+	public static function get_instance() {
+		if ( is_null( self::$instance ) ) {
+			self::$instance = new self();
+		}
+		return self::$instance;
+	}
+
+	/**
+	 * Class Constructor.
+	 */
+	public function __construct() {
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueu_script' ) );
+		add_action( 'wp_ajax_approve_mockup', array( $this, 'approve_mockup' ) );
+	}
+
+	/**
+	 * Enqueue Scripts.
+	 */
+	public function enqueu_script() {
+		if ( ! is_user_logged_in() ) {
+			return;
+		}
+
+		wp_enqueue_script( 'order-approve', get_stylesheet_directory_uri() . '/assets/js/order-approve.js', array(), wp_get_theme()->get( 'Version' ), false, false );
+
+		wp_localize_script(
+			'order-approve',
+			'order_approve_ajax',
+			array(
+				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'nonce'    => wp_create_nonce( 'order_approve_nonce' ),
+			)
+		);
+	}
+
+	/**
+	 * Ajax Approve Mockup.
+	 */
+	public function approve_mockup() {
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'order_approve_nonce' ) ) {
+			wp_send_json_error( 'Security check failed.' );
+			wp_die();
+		}
+
+		$order_id       = isset( $_POST['order_id'] ) ? intval( $_POST['order_id'] ) : 0;
+		$approve        = isset( $_POST['approve'] ) ? sanitize_text_field( $_POST['approve'] ) : '';
+		$revision_notes = isset( $_POST['revision_notes'] ) ? sanitize_textarea_field( $_POST['revision_notes'] ) : '';
+
+		if ( ! $order_id ) {
+			wp_send_json_error( 'Invalid order ID.' );
+			wp_die();
+		}
+
+		$order = wc_get_order( $order_id );
+		if ( ! $order ) {
+			wp_send_json_error( 'Order not found.' );
+			wp_die();
+		}
+
+		// Ensure the current user owns the order
+		if ( $order->get_user_id() != get_current_user_id() ) {
+			wp_send_json_error( 'You are not authorized to access this order.' );
+			wp_die();
+		}
+
+		// Prepare email content
+
+		$to = 'quotes@novasignage.com';
+
+		if ( $approve === 'approve' ) {
+			$subject = '[NOVA INTERNAL] Approved Mockup for Order #' . $order_id;
+			$message = '<p>The customer has approved the designs for Order #' . $order_id . '.</p>';
+			// get order edit link
+			$message .= '<p>View the order here: ' . get_edit_post_link( $order_id ) . '</p>';
+			// Optionally add order note
+			$order->add_order_note( 'Customer approved the designs.' );
+			update_field( 'order_approved', true, $order_id );
+			update_field( 'order_approved_date', date( 'F d, Y' ), $order_id );
+		} elseif ( $approve === 'revision' ) {
+			if ( empty( $revision_notes ) ) {
+				wp_send_json_error( 'Please provide revision notes.' );
+				wp_die();
+			}
+			$subject  = '[NOVA INTERNAL] Mockup Review for Order #' . $order_id;
+			$message  = '<p>The customer has requested revisions for Order #' . $order_id . '.</p>' . "\n\n";
+			$message .= '<p>View the order here: ' . get_edit_post_link( $order_id ) . '</p>';
+			$message .= '<p>Revision Notes:</p>' . "\n" . $revision_notes;
+			// Optionally add order note
+			$order->add_order_note( 'Customer requested revisions: ' . $revision_notes );
+		} else {
+			wp_send_json_error( 'Invalid selection.' );
+			wp_die();
+		}
+
+		// Set email headers to HTML
+		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
+
+		// Send the email
+		$mail_sent = wp_mail( $to, $subject, $message, $headers );
+
+		if ( $mail_sent ) {
+			wp_send_json(
+				array(
+					'success' => true,
+					'action'  => $approve,
+					'message' => 'Email sent successfully.',
+				)
+			);
+		} else {
+			wp_send_json_error( 'Failed to send email.' );
+		}
+
+		wp_die();
+	}
+}

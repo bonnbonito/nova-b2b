@@ -40,3 +40,25 @@ defined( 'ABSPATH' ) || exit;
 	echo $message;
 	?>
 </h4>
+
+<?php
+
+$from_order_id      = $order->get_meta( '_from_order_id' );
+$second_payment     = $order->get_meta( 'second_payment' );
+$original_order_ids = $order->get_meta( '_original_order_ids' );
+$order_id           = $order->get_id();
+
+if ( empty( $from_order_id ) || empty( $second_payment ) || empty( $original_order_ids ) ) {
+	$dropbox_urls = get_field( 'dropbox_urls', $order_id );
+	if ( empty( $dropbox_urls ) ) {
+		return;
+	}
+	?>
+<div class="woocommerce-message woocommerce-message--info woocommerce-thankyou-order-details">
+	<h4>NOTE:</h4>
+	<p>Please review your order mockup. Production begins after you approve the mockups.</p>
+	<a href="/review-mockup?order_id=<?php echo $order->get_id(); ?>" class="button" style="float: none;">Review
+		Mockup</a>
+</div>
+	<?php
+}

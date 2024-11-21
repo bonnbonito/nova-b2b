@@ -46,6 +46,7 @@ $instances = array(
 	'FAQ',
 	'Order_History',
 	'Checkout',
+	'OrderApprove',
 );
 
 foreach ( $instances as $instance ) {
