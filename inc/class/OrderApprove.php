@@ -98,7 +98,8 @@ class OrderApprove {
 			}
 			$subject  = '[NOVA INTERNAL] Mockup Review for Order #' . $order_id;
 			$message  = '<p>The customer has requested revisions for Order #' . $order_id . '.</p>' . "\n\n";
-			$message .= 'Revision Notes:' . "\n" . $revision_notes;
+			$message .= '<p>View the order here: ' . get_edit_post_link( $order_id ) . '</p>';
+			$message .= '<p>Revision Notes:</p>' . "\n" . $revision_notes;
 			// Optionally add order note
 			$order->add_order_note( 'Customer requested revisions: ' . $revision_notes );
 		} else {
@@ -113,7 +114,13 @@ class OrderApprove {
 		$mail_sent = wp_mail( $to, $subject, $message, $headers );
 
 		if ( $mail_sent ) {
-			wp_send_json_success( 'Email sent successfully.' );
+			wp_send_json(
+				array(
+					'success' => true,
+					'action'  => $approve,
+					'message' => 'Email sent successfully.',
+				)
+			);
 		} else {
 			wp_send_json_error( 'Failed to send email.' );
 		}

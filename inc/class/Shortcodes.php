@@ -66,19 +66,35 @@ class Shortcodes {
 
 		// Start output buffering
 		ob_start();
-		?>
+		$dropbox_urls = get_field( 'dropbox_urls', $order_id );
+		if ( ! empty( $dropbox_urls ) ) {
+			?>
 <div class="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4 border-solid" role="alert">
 	<h3 class="text-red-600">Important:</h3>
 	<p>Please review your designs carefully. <br>By checking <strong>'Approve'</strong>, you confirm that all
 		details are correct and authorize production.</p>
 </div>
+<div id="review-approved" class="mt-4 border border-solid p-4" style="display:none;">
+	<h4>Design Approved <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
+			<path fill-rule="evenodd"
+				d="M16.403 12.652a3 3 0 0 0 0-5.304 3 3 0 0 0-3.75-3.751 3 3 0 0 0-5.305 0 3 3 0 0 0-3.751 3.75 3 3 0 0 0 0 5.305 3 3 0 0 0 3.75 3.751 3 3 0 0 0 5.305 0 3 3 0 0 0 3.751-3.75Zm-2.546-4.46a.75.75 0 0 0-1.214-.883l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z"
+				clip-rule="evenodd" fill="green" />
+		</svg>
+	</h4>
+	<p class="mb-0">Your signage will now move into production.</p>
+	<p>Please check your email for updates on your order timeline and progress.</p>
+</div>
+<div id="review-revised" class="mt-4 border border-solid p-4" style="display:none;">
+	<h4>Revision Requested</h4>
+	<p class="mb-0">We'll review your changes and send you an updated mockup within 24 hours. </p>
+	<p>You'll be notified by email when your new design is ready for review.</p>
+</div>
 <div class="review-mockup">
-		<?php
+			<?php
 			// Retrieve the Dropbox URLs associated with the order
-			$dropbox_urls = get_field( 'dropbox_urls', $order_id );
-		if ( ! empty( $dropbox_urls ) ) {
 			$index = 1;
 			?>
+	<p class="mt-8 mb-0">Provide specific details about any design changes you'd like to make.</p>
 	<table class="table-auto mt-4 border-collapse">
 		<tbody>
 			<?php foreach ( $dropbox_urls as $key => $url ) { ?>
@@ -104,17 +120,16 @@ class Shortcodes {
 		<div>
 			<input type="hidden" name="action" value="approve_mockup" />
 			<input type="hidden" name="order_id" value="<?php echo $order_id; ?>" />
-			<label for="approve" class="flex items-center"><input class="mr-1" type="radio" name="approve"
-					value="approve" id="approve"> I approve
-				the
-				designs.</label>
+
 		</div>
-		<label for="revision" class="flex items-center"><input class="mr-1" type="radio" name="approve" value="revision"
-				id="revision">Need
-			revision.</label>
+		<label for="approve" class="flex items-center text-xl"><input class="mr-1" type="radio" name="approve"
+				value="approve" id="approve"> Approve</label>
+		<label for="revision" class="flex items-center  text-xl"><input class="mr-1" type="radio" name="approve"
+				value="revision" id="revision">Revise</label>
 		<div class="mt-4" id="revision-wrapper" style="display:none;">
 			<h4>Revision Notes:</h4>
 			<textarea name="revision_notes" id="revision_notes" cols="30" rows="10"></textarea>
+			<p>Our team will send an updated mockup within 24 business hours.</p>
 		</div>
 
 		<button type="submit" class="bg-nova-primary text-white px-4 py-2 rounded-md mt-4">Submit</button>

@@ -3,6 +3,10 @@ document.addEventListener('DOMContentLoaded', function () {
 	const approveRadios = document.querySelectorAll('input[name="approve"]');
 	const revisionWrapper = document.getElementById('revision-wrapper');
 	const revisionNotes = document.getElementById('revision_notes');
+	const reviewMockup = document.querySelector('.review-mockup');
+	const reviewApproved = document.querySelector('#review-approved');
+	const reviewRevised = document.querySelector('#review-revised');
+	const submitButton = reviewForm.querySelector('button[type="submit"]');
 
 	// Show or hide the revision notes based on selected option
 	approveRadios.forEach(function (radio) {
@@ -40,14 +44,13 @@ document.addEventListener('DOMContentLoaded', function () {
 		}
 
 		// Disable the submit button to prevent multiple submissions
-		const submitButton = reviewForm.querySelector('button[type="submit"]');
+
 		submitButton.disabled = true;
 
 		// Collect form data
 		const formData = new FormData(reviewForm);
 		formData.append('nonce', order_approve_ajax.nonce);
-
-		console.log(formData);
+		submitButton.innerHTML = 'Submitting...';
 
 		// Send AJAX request using fetch
 		fetch(order_approve_ajax.ajax_url, {
@@ -69,17 +72,19 @@ document.addEventListener('DOMContentLoaded', function () {
 			.then((data) => {
 				console.log(data);
 				if (data.success) {
-					alert('Your response has been submitted successfully.');
 					// Optionally reset the form or redirect the user
 					reviewForm.reset();
-					revisionWrapper.style.display = 'none';
+					reviewMockup.style.display = 'none';
+					console.log(data.action);
+					if (data.action === 'approve') {
+						reviewApproved.style.display = 'block';
+					} else if (data.action === 'revision') {
+						reviewRevised.style.display = 'block';
+					}
 				} else {
 					alert('An error occurred: ' + data.data);
+					submitButton.innerHTML = 'Submit';
 				}
-			})
-			.catch((error) => {
-				submitButton.disabled = false;
-				alert('An AJAX error occurred: ' + error.message);
 			});
 	});
 });
