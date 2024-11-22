@@ -113,8 +113,7 @@ class OrderApprove {
 		// Set email headers with customer's email as the 'From' address
 		$headers = array(
 			'Content-Type: text/html; charset=UTF-8',
-			'From: Nova Signage <no-reply@novasignage.com>',
-			'Reply-To: ' . $customer_name . ' <' . $customer_email . '>',
+			'From: Nova Signage <quotes@novasignage.com>',
 		);
 
 		// Send the email
