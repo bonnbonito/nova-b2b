@@ -25,7 +25,7 @@ export default function SearchSelect({ id, label, value, set }) {
 				<option value="completed" defaultValue={value === 'completed'}>
 					Completed
 				</option>
-				{NovaOrders.has_payment_types.length > 0 && (
+				{NovaOrders.has_payment_types?.length > 0 && (
 					<>
 						<option value="pending" defaultValue={value === 'pending'}>
 							Pending Payment

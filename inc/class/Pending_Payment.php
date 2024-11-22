@@ -111,7 +111,11 @@ class Pending_Payment {
 		foreach ( $pending_payments as $pending_payment ) {
 			$order    = wc_get_order( $pending_payment->payment_order );
 			$original = $pending_payment->original_order;
-			$user_id  = $order->get_user_id();
+			// get customer ID
+			if ( ! $order ) {
+				continue;
+			}
+			$user_id = $order->get_customer_id();
 			if ( $user_id == $user->ID ) {
 				$today = date( 'F d, Y' );
 
