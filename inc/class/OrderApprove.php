@@ -79,13 +79,12 @@ class OrderApprove {
 		}
 
 		// Prepare email content
-
 		$to = 'quotes@novasignage.com';
 
 		if ( $approve === 'approve' ) {
 			$subject = '[NOVA INTERNAL] Approved Mockup for Order #' . $order_id;
 			$message = '<p>The customer has approved the designs for Order #' . $order_id . '.</p>';
-			// get order edit link
+			// Get order edit link
 			$message .= '<p>View the order here: ' . get_edit_post_link( $order_id ) . '</p>';
 			// Optionally add order note
 			$order->add_order_note( 'Customer approved the designs.' );
@@ -99,7 +98,7 @@ class OrderApprove {
 			$subject  = '[NOVA INTERNAL] Mockup Review for Order #' . $order_id;
 			$message  = '<p>The customer has requested revisions for Order #' . $order_id . '.</p>' . "\n\n";
 			$message .= '<p>View the order here: ' . get_edit_post_link( $order_id ) . '</p>';
-			$message .= '<p>Revision Notes:</p>' . "\n" . $revision_notes;
+			$message .= '<p>Revision Notes:</p>' . "\n" . nl2br( esc_html( $revision_notes ) );
 			// Optionally add order note
 			$order->add_order_note( 'Customer requested revisions: ' . $revision_notes );
 		} else {
@@ -107,8 +106,16 @@ class OrderApprove {
 			wp_die();
 		}
 
-		// Set email headers to HTML
-		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
+		// Get customer email and name
+		$customer_email = $order->get_billing_email();
+		$customer_name  = $order->get_billing_first_name() . ' ' . $order->get_billing_last_name();
+
+		// Set email headers with customer's email as the 'From' address
+		$headers = array(
+			'Content-Type: text/html; charset=UTF-8',
+			'From: Nova Signage <no-reply@novasignage.com>',
+			'Reply-To: ' . $customer_name . ' <' . $customer_email . '>',
+		);
 
 		// Send the email
 		$mail_sent = wp_mail( $to, $subject, $message, $headers );
