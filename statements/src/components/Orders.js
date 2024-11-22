@@ -21,7 +21,7 @@ function Orders() {
 		setCurrentPage(pageNum);
 	};
 
-	const handleFilter = (filters) => {
+	const handleFilter = (filters = {}) => {
 		const {
 			searchTerm,
 			searchStatus,

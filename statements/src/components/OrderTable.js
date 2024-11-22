@@ -50,7 +50,7 @@ export default function OrderTable({
 						<th className="font-medium p-4 pt-0 pb-3 text-black text-left font-title uppercase">
 							Status
 						</th>
-						{NovaOrders.has_payment_types.length > 0 && (
+						{NovaOrders.has_payment_types?.length > 0 && (
 							<th
 								className="font-medium p-4 pt-0 pb-3 text-black text-left font-title uppercase cursor-pointer"
 								onClick={toggleSortDueDate}

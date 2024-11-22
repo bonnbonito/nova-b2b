@@ -5112,7 +5112,7 @@ function OrderTable({
     className: "font-medium p-4 pt-0 pb-3 text-black text-left font-title uppercase"
   }, "Date"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
     className: "font-medium p-4 pt-0 pb-3 text-black text-left font-title uppercase"
-  }, "Status"), NovaOrders.has_payment_types.length > 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
+  }, "Status"), NovaOrders.has_payment_types?.length > 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
     className: "font-medium p-4 pt-0 pb-3 text-black text-left font-title uppercase cursor-pointer",
     onClick: toggleSortDueDate
   }, "Due Date ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
@@ -5195,7 +5195,7 @@ function Orders() {
   const handlePageChange = pageNum => {
     setCurrentPage(pageNum);
   };
-  const handleFilter = filters => {
+  const handleFilter = (filters = {}) => {
     const {
       searchTerm,
       searchStatus,
