@@ -45,6 +45,7 @@ export default function SearchDates({
 						endDate={endDate}
 						maxDate={endDate}
 						dateFormat="MMM dd, yyyy"
+						selected={startDate}
 						customInput={<StartDateInput />}
 					/>
 				</div>
@@ -58,6 +59,7 @@ export default function SearchDates({
 						endDate={endDate}
 						minDate={startDate}
 						dateFormat="MMM dd, yyyy"
+						selected={endDate}
 						customInput={<EndDateInput />}
 					/>
 				</div>

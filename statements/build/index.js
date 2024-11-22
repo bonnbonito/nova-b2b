@@ -5987,6 +5987,7 @@ function SearchDates({
     endDate: endDate,
     maxDate: endDate,
     dateFormat: "MMM dd, yyyy",
+    selected: startDate,
     customInput: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(StartDateInput, null)
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)((react_datepicker__WEBPACK_IMPORTED_MODULE_2___default()), {
     defaultValue: endDate,
@@ -5996,6 +5997,7 @@ function SearchDates({
     endDate: endDate,
     minDate: startDate,
     dateFormat: "MMM dd, yyyy",
+    selected: endDate,
     customInput: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(EndDateInput, null)
   }))));
 }
