@@ -196,7 +196,7 @@ const colorOptions = [
 		color: '#8c582d',
 	},
 	{
-		name: 'PMS 7660 C - Copper*',
+		name: 'PMS 7600 C - Copper*',
 		color: '#773f2e',
 	},
 	{

@@ -36122,7 +36122,7 @@ const colorOptions = [{
   name: 'Pantone 2319 C - Bronze*',
   color: '#8c582d'
 }, {
-  name: 'PMS 7660 C - Copper*',
+  name: 'PMS 7600 C - Copper*',
   color: '#773f2e'
 }, {
   name: 'PMS 7599 C - Aztec Copper*',
