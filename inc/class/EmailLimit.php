@@ -15,7 +15,18 @@ class EmailLimit {
 	 *
 	 * @var int
 	 */
-	private $email_limit = 6;
+	private $email_limit = 10;
+
+	/**
+	 * List of excluded email addresses
+	 *
+	 * @var array
+	 */
+	private $excluded_emails = array(
+		'bonn.j@hineon.com',
+		'joshua@hineon.com',
+		'kristelle.m@hineon.com',
+	);
 
 	/**
 	 * Instance Control
@@ -45,6 +56,11 @@ class EmailLimit {
 		$recipients = $this->get_recipients( $args['to'] );
 
 		foreach ( $recipients as $recipient ) {
+			// Skip excluded emails
+			if ( in_array( $recipient, $this->excluded_emails, true ) ) {
+				continue;
+			}
+
 			if ( $this->has_exceeded_limit( $recipient ) ) {
 				error_log( "Email limit reached for $recipient." );
 				$args['to'] = 'bonn.j@hineon.com';
