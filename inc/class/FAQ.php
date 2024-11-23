@@ -150,7 +150,7 @@ class FAQ {
 			<div class="expander-content">
 				<div class="content-wrapper">
 					<div class="post-content-container" style="padding-top: 2em;">
-						<?php echo $faq->post_content; ?>
+						<?php echo do_shortcode( $faq->post_content ); ?>
 					</div>
 				</div>
 			</div>
