@@ -38,6 +38,8 @@ class Shortcodes {
 			return ob_get_clean();
 		}
 
+		wp_enqueue_script( 'order-approve' );
+
 		// Check if 'order_id' is set in the URL parameters
 		if ( ! isset( $_GET['order_id'] ) || empty( $_GET['order_id'] ) ) {
 			// No order ID provided

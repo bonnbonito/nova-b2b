@@ -84,11 +84,6 @@ class OrderApprove {
 	}
 
 
-
-
-
-
-
 	public function admin_enqueu_scripts( $hook ) {
 		/** only order edit page */
 		$screen = get_current_screen();
@@ -118,7 +113,7 @@ class OrderApprove {
 			return;
 		}
 
-		wp_enqueue_script( 'order-approve', get_stylesheet_directory_uri() . '/assets/js/order-approve.js', array(), wp_get_theme()->get( 'Version' ), false, false );
+		wp_register_script( 'order-approve', get_stylesheet_directory_uri() . '/assets/js/order-approve.js', array(), wp_get_theme()->get( 'Version' ), false, false );
 
 		wp_localize_script(
 			'order-approve',

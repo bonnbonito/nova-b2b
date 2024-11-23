@@ -34,7 +34,7 @@ function toggleAccordion(panelToActivate) {
 }
 
 faqItems?.forEach((faqItem) => {
-	faqItem.addEventListener('click', () => {
+	faqItem.querySelector('.faq-question').addEventListener('click', () => {
 		faqItem.querySelector('.faq-question').classList.toggle('active');
 		faqItem.querySelector('.expander').classList.toggle('expanded');
 	});
