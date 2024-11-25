@@ -52,7 +52,10 @@ class OrderApprove {
 		}
 		$customer_name = $order->get_billing_first_name();
 
-		$headers     = array( 'Content-Type: text/html; charset=UTF-8' );
+		$headers     = array();
+		$headers[]   = 'Content-Type: text/html; charset=UTF-8';
+		$headers[]   = 'From: NOVA Signage <quotes@novasignage.com>';
+		$headers[]   = 'Reply-To: NOVA Signage <quotes@novasignage.com>';
 		$attachments = array();
 
 		if ( class_exists( '\WPO\WC\PDF_Invoices\Main' ) ) {
@@ -62,13 +65,13 @@ class OrderApprove {
 		$role_instance = \NOVA_B2B\Roles::get_instance();
 
 		if ( $role_instance ) {
-			$subject  = 'Your Revised Mockup (Order ' . $order->get_order_number() . ') is Ready for Review';
+			$subject  = 'Your Revised Mockup #(Order ' . $order->get_order_number() . ') is Ready for Review';
 			$heading  = 'Order #' . $order->get_order_number() . ' is Ready for Review';
 			$message  = '<p>Dear ' . $customer_name . ',</p>' . "\n\n";
 			$message .= "<p>We've completed the requested revisions to your mockup and it's now ready for your review</p>" . "\n\n";
 			$message .= '<p>Next steps:</p>';
 			$message .= '<ol>';
-			$message .= '<li>Please review the updated mockup: <a href"' . home_url() . '/review-mockup?order_id=' . $order_id . '">' . home_url() . '/review-mockup?order_id=' . $order_id . '</a></li>';
+			$message .= '<li>Please review the updated mockup: <a target="_blank" href"' . home_url() . '/review-mockup?order_id=' . $order_id . '">' . home_url() . '/review-mockup?order_id=' . $order_id . '</a></li>';
 			$message .= "<li>Select 'Approve' if all details are correct, or add a comment for additional feedback.</li>";
 			$message .= "<li>Once approved, we'll move directly to production.</li>";
 			$message .= '</ol>';
