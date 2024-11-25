@@ -4111,7 +4111,7 @@ function Sidebar() {
     btnClass: "uppercase mb-5 font-title border border-nova-light rounded-md text-nova-gray w-full text-center bg-white text-sm h-[49px] hover:bg-nova-light hover:text-white shadow-[0_0_0_1px_rgba(0,0,0,0.3)]"
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-sm mb-4"
-  }, "Quote & Draft Validity: 30 days 123")));
+  }, "Quote & Draft Validity: 30 days")));
 }
 
 /***/ }),

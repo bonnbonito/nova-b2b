@@ -57,7 +57,10 @@ class Shortcodes {
 
 		// Check if the current user is the owner of the order
 		if ( $order->get_user_id() != get_current_user_id() ) {
-			return '<div class="alert alert-danger"><p>You are not authorized to access this order.</p></div>';
+			// if user role is not admin
+			if ( ! current_user_can( 'manage_options' ) ) {
+				return '<div class="alert alert-danger"><p>You are not authorized to access this order.</p></div>';
+			}
 		}
 
 		$order_approved = get_field( 'order_approved', $order_id );

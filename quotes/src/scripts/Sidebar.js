@@ -208,7 +208,7 @@ export default function Sidebar() {
 						/>
 					)}
 
-				<div className="text-sm mb-4">Quote & Draft Validity: 30 days 123</div>
+				<div className="text-sm mb-4">Quote & Draft Validity: 30 days</div>
 			</div>
 		</div>
 	);

@@ -161,9 +161,9 @@ class OrderApprove {
 
 		if ( $approve === 'approve' ) {
 			$subject = '[NOVA INTERNAL] Approved Mockup for Order #' . $order_id;
-			$message = '<p>The customer has approved the designs for Order #' . $order_id . '.</p>';
+			$message = '<p>The customer has approved the designs for Order #' . $order->get_order_number() . '.</p>';
 			// Get order edit link
-			$message .= '<p>View the order here: ' . get_edit_post_link( $order_id ) . '</p>';
+			$message .= '<p>View the order here: ' . home_url() . '/wp-admin/post.php?post=' . $order_id . '&action=edit' . '</p>';
 			// Optionally add order note
 			$order->add_order_note( 'Customer approved the designs.' );
 			update_field( 'order_approved', true, $order_id );
