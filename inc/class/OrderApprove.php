@@ -71,7 +71,7 @@ class OrderApprove {
 			$message .= "<p>We've completed the requested revisions to your mockup and it's now ready for your review</p>" . "\n\n";
 			$message .= '<p>Next steps:</p>';
 			$message .= '<ol>';
-			$message .= '<li>Please review the updated mockup: ' . home_url() . '/review-mockup?order_id=' . $order_id . '">' . home_url() . '/review-mockup?order_id=' . $order_id . '</li>';
+			$message .= '<li>Please review the updated mockup: ' . home_url() . '/review-mockup?order_id=' . $order_id . '</li>';
 			$message .= "<li>Select 'Approve' if all details are correct, or add a comment for additional feedback.</li>";
 			$message .= "<li>Once approved, we'll move directly to production.</li>";
 			$message .= '</ol>';
