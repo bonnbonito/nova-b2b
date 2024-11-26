@@ -197,8 +197,13 @@ class OrderApprove {
 			'From: Nova Signage <quotes@novasignage.com>',
 		);
 
+		$headers_admin   = array();
+		$headers_admin[] = 'Content-Type: text/html; charset=UTF-8';
+		$headers_admin[] = 'From: NOVA Signage <noreply@novasignage.com>';
+		$headers_admin[] = 'Reply-To: NOVA Signage <noreply@novasignage.com>';
+
 		// Send the email
-		$mail_sent = wp_mail( $to, $subject, $message, $headers );
+		$mail_sent = wp_mail( $to, $subject, $message, $headers_admin );
 
 		if ( $mail_sent ) {
 			wp_send_json(
