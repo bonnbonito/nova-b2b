@@ -119,6 +119,11 @@ export default function RigidNeonSignNoBacking() {
 							Receive a discount for bulk orders of the same neon sign design.
 							Savings are reflected in the instant quote's estimated total.
 						</li>
+						<li>
+							Please only enter a length provided by a designer familiar with
+							neon tracing to ensure accuracy; otherwise, leave it blank, and
+							we'll calculate it.
+						</li>
 					</ul>
 				</Note>
 

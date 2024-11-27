@@ -39,6 +39,8 @@ import { calculateLetterPrice, spacerPricing } from '../../../../utils/Pricing';
 
 import { useAppContext } from '../../../../AppProvider';
 
+const returnColorOptions = ['Same Color', 'Different Color'];
+
 export function Letters({ item }) {
 	const { signage, setSignage, setMissing } = useAppContext();
 	const [letters, setLetters] = useState(item.letters ?? '');
@@ -46,9 +48,7 @@ export function Letters({ item }) {
 	const [font, setFont] = useState(item.font ?? '');
 	const [openFont, setOpenFont] = useState(false);
 
-	const [color, setColor] = useState(
-		item.faceReturnColor ?? { name: '', color: '' }
-	);
+	const [color, setColor] = useState(item.faceColor ?? { name: '', color: '' });
 	const [openColor, setOpenColor] = useState(false);
 	const [waterproof, setWaterproof] = useState(item.trimLessWaterproof ?? '');
 
@@ -74,7 +74,10 @@ export function Letters({ item }) {
 		item.backLitFinishing
 	);
 
-	const [metalFinish, setMetalFinish] = useState(item.backLitMetalFinish);
+	const [metalFinish, setMetalFinish] = useState(item.backLitMetalFinish ?? '');
+	const [faceReturnColor, setFaceReturnColor] = useState(
+		item.faceReturnColor ?? ''
+	);
 
 	const [selectedLetterHeight, setSelectedLetterHeight] = useState(
 		item.letterHeight ?? ''
@@ -172,7 +175,8 @@ export function Letters({ item }) {
 					font,
 					trimLessWaterproof: waterproof,
 					includedItems,
-					faceReturnColor: color,
+					faceReturnColor,
+					faceColor: color,
 					letterHeight: selectedLetterHeight,
 					usdPrice,
 					cadPrice,
@@ -769,22 +773,39 @@ export function Letters({ item }) {
 
 				{selectedFinishing === 'Painted' && (
 					<>
-						<ColorsDropdown
+						<Dropdown
 							title="Face & Return Color"
-							ref={colorRef}
-							colorName={color?.name}
-							openColor={openColor}
-							toggleColor={() => {
-								setOpenColor((prev) => !prev);
-								setOpenFont(false);
-							}}
-							colorOptions={colorOptions}
-							selectColor={(color) => {
-								setColor(color);
-								setOpenColor(false);
-							}}
+							onChange={(e) => setFaceReturnColor(e.target.value)}
+							options={returnColorOptions.map((option) => (
+								<option
+									key={option}
+									value={option}
+									defaultValue={option === faceReturnColor}
+								>
+									{option}
+								</option>
+							))}
+							value={faceReturnColor}
 						/>
 					</>
+				)}
+
+				{faceReturnColor === 'Different Color' && (
+					<ColorsDropdown
+						title="Face Color"
+						ref={colorRef}
+						colorName={color?.name}
+						openColor={openColor}
+						toggleColor={() => {
+							setOpenColor((prev) => !prev);
+							setOpenFont(false);
+						}}
+						colorOptions={colorOptions}
+						selectColor={(color) => {
+							setColor(color);
+							setOpenColor(false);
+						}}
+					/>
 				)}
 
 				<Dropdown

@@ -17245,7 +17245,7 @@ function FlexNeonSign() {
     title: "Note"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
     className: "text-sm"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The neon height and width refer to the size of the neon graphics. Please note that the backing has a 1.5\" margin on all sides. If the design exceeds the neon size limit (40\u201Dx 40\u201D), we will divide them into multiple pieces to fit within the required dimensions."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Please note that the price of the neon sign is NOT yet final. Our designers will provide a finalized design and accurate quote for your approval."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The minimum cuttable length is 2.5cm"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Receive a discount for bulk orders of the same neon sign design. Savings are reflected in the instant quote's estimated total."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The neon height and width refer to the size of the neon graphics. Please note that the backing has a 1.5\" margin on all sides. If the design exceeds the neon size limit (40\u201Dx 40\u201D), we will divide them into multiple pieces to fit within the required dimensions."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Please note that the price of the neon sign is NOT yet final. Our designers will provide a finalized design and accurate quote for your approval."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The minimum cuttable length is 2.5cm"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Receive a discount for bulk orders of the same neon sign design. Savings are reflected in the instant quote's estimated total."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Please only enter a length provided by a designer familiar with neon tracing to ensure accuracy; otherwise, leave it blank, and we'll calculate it."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-2"
   }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
@@ -17780,7 +17780,7 @@ function RigidNeonSignNoBacking() {
     title: "Note"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
     className: "text-sm"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer is white to match the neon base."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "By default, each neon section will have 1 wire exit per segment. If you prefer all wire exits to be in one place, please let us know."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The neon height and width refer to the size of the neon graphics. If the design exceeds the continuous neon size limit (65 cm x 72 cm), we will divide them into multiple pieces to fit within the required dimensions"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Please note that the price of the neon sign is NOT yet final. Our designers will provide a finalized design and accurate quote for your approval."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Receive a discount for bulk orders of the same neon sign design. Savings are reflected in the instant quote's estimated total."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The spacer is white to match the neon base."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "By default, each neon section will have 1 wire exit per segment. If you prefer all wire exits to be in one place, please let us know."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The neon height and width refer to the size of the neon graphics. If the design exceeds the continuous neon size limit (65 cm x 72 cm), we will divide them into multiple pieces to fit within the required dimensions"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Please note that the price of the neon sign is NOT yet final. Our designers will provide a finalized design and accurate quote for your approval."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Receive a discount for bulk orders of the same neon sign design. Savings are reflected in the instant quote's estimated total."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Please only enter a length provided by a designer familiar with neon tracing to ensure accuracy; otherwise, leave it blank, and we'll calculate it."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-2"
   }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
@@ -18446,7 +18446,7 @@ function RigidNeonSignWithBacking() {
     title: "Note"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
     className: "text-sm"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The neon height and width refer to the size of the neon graphics. Please note that the backing has a 2/3\" margin from neon edge to backing edge. If the design exceeds the continuous neon size limit (65 cm x 72 cm), we will divide them into multiple pieces to fit within the required dimensions."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Please note that the price of the neon sign is NOT yet final. Our designers will provide a finalized design and accurate quote for your approval."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Receive a discount for bulk orders of the same neon sign design. Savings are reflected in the instant quote's estimated total."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "The neon height and width refer to the size of the neon graphics. Please note that the backing has a 2/3\" margin from neon edge to backing edge. If the design exceeds the continuous neon size limit (65 cm x 72 cm), we will divide them into multiple pieces to fit within the required dimensions."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Please note that the price of the neon sign is NOT yet final. Our designers will provide a finalized design and accurate quote for your approval."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Receive a discount for bulk orders of the same neon sign design. Savings are reflected in the instant quote's estimated total."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "Please only enter a length provided by a designer familiar with neon tracing to ensure accuracy; otherwise, leave it blank, and we'll calculate it."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-2"
   }, signage.length < 10 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "flex leading-none items-center rounded-md border bg-white border-gray-200 p-4 cursor-pointer w-[193px] justify-between hover:bg-slate-600 font-title text-black hover:text-white",
@@ -22943,10 +22943,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+const returnColorOptions = ['Same Color', 'Different Color'];
 function Letters({
   item
 }) {
-  var _item$letters, _item$comments, _item$font, _item$faceReturnColor, _item$trimLessWaterpr, _item$depth, _item$acrylicReveal, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$studLength, _item$spacerStandoffD, _item$mounting, _item$sets;
+  var _item$letters, _item$comments, _item$font, _item$faceColor, _item$trimLessWaterpr, _item$depth, _item$acrylicReveal, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$backLitMetalFin, _item$faceReturnColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$studLength, _item$spacerStandoffD, _item$mounting, _item$sets;
   const {
     signage,
     setSignage,
@@ -22956,7 +22957,7 @@ function Letters({
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
   const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$font = item.font) !== null && _item$font !== void 0 ? _item$font : '');
   const [openFont, setOpenFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$faceReturnColor = item.faceReturnColor) !== null && _item$faceReturnColor !== void 0 ? _item$faceReturnColor : {
+  const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$faceColor = item.faceColor) !== null && _item$faceColor !== void 0 ? _item$faceColor : {
     name: '',
     color: ''
   });
@@ -22976,7 +22977,8 @@ function Letters({
   const [letterHeightOptions, setLetterHeightOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const [customColor, setCustomColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$customColor = item.customColor) !== null && _item$customColor !== void 0 ? _item$customColor : '');
   const [selectedFinishing, setSelectedFinishing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.backLitFinishing);
-  const [metalFinish, setMetalFinish] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.backLitMetalFinish);
+  const [metalFinish, setMetalFinish] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$backLitMetalFin = item.backLitMetalFinish) !== null && _item$backLitMetalFin !== void 0 ? _item$backLitMetalFin : '');
+  const [faceReturnColor, setFaceReturnColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$faceReturnColor = item.faceReturnColor) !== null && _item$faceReturnColor !== void 0 ? _item$faceReturnColor : '');
   const [selectedLetterHeight, setSelectedLetterHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letterHeight = item.letterHeight) !== null && _item$letterHeight !== void 0 ? _item$letterHeight : '');
   const [lightingOptions, setLightingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.lightingPackagedOptions);
   const [includedItems, setIncludedItems] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
@@ -23037,7 +23039,8 @@ function Letters({
           font,
           trimLessWaterproof: waterproof,
           includedItems,
-          faceReturnColor: color,
+          faceReturnColor,
+          faceColor: color,
           letterHeight: selectedLetterHeight,
           usdPrice,
           cadPrice,
@@ -23465,8 +23468,17 @@ function Letters({
       defaultValue: finish.option === metalFinish
     }, finish.option)),
     value: metalFinish
-  }), selectedFinishing === 'Painted' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_8__["default"], {
+  }), selectedFinishing === 'Painted' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Face & Return Color",
+    onChange: e => setFaceReturnColor(e.target.value),
+    options: returnColorOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option,
+      value: option,
+      defaultValue: option === faceReturnColor
+    }, option)),
+    value: faceReturnColor
+  })), faceReturnColor === 'Different Color' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    title: "Face Color",
     ref: colorRef,
     colorName: color?.name,
     openColor: openColor,
@@ -23479,7 +23491,7 @@ function Letters({
       setColor(color);
       setOpenColor(false);
     }
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
     options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -37197,6 +37209,9 @@ const allAttributes = item => [{
   key: item.faceReturnColor?.name,
   label: 'FACE & RETURN COLOR'
 }, {
+  key: item.faceColor?.name,
+  label: 'FACE COLOR'
+}, {
   key: item.neonSignWidth,
   label: 'NEON SIGN WIDTH'
 }, {
@@ -37262,6 +37277,9 @@ const allAttributes = item => [{
 }, {
   key: item.customColor,
   label: 'CUSTOM COLOR'
+}, {
+  key: item.returnCustomColor,
+  label: 'RETURN CUSTOM COLOR'
 }, {
   key: item.finishing,
   label: 'FINISHING'
