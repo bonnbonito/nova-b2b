@@ -279,7 +279,7 @@ export const NeonSign = ({ item }) => {
 
 		if (!remoteControl) missingFields.push('Select Remote Control');
 
-		if (rigidBacking === 'Painted PC') {
+		if (rigidBacking === 'Painted PC (Matte)') {
 			if (!color?.name) missingFields.push('Select Painted PC Color');
 
 			if (!finish) missingFields.push('Select Painted PC Finish');
@@ -389,7 +389,7 @@ export const NeonSign = ({ item }) => {
 			case 'UV Printed on PC':
 				rigidBackingPrice = parseInt(width) * parseInt(height) * 0.015;
 				break;
-			case 'Painted PC':
+			case 'Painted PC (Matte)':
 				rigidBackingPrice = parseInt(width) * parseInt(height) * 0.03;
 				break;
 			default:
@@ -538,7 +538,7 @@ export const NeonSign = ({ item }) => {
 
 	const handleOnChangeBacking = (e) => {
 		const target = e.target.value;
-		if (target !== 'Painted PC') {
+		if (target !== 'Painted PC (Matte)') {
 			setColor('');
 			setFinish('');
 		}
@@ -646,7 +646,7 @@ export const NeonSign = ({ item }) => {
 					onlyValue={true}
 				/>
 
-				{rigidBacking === 'Painted PC' && (
+				{rigidBacking === 'Painted PC (Matte)' && (
 					<>
 						<ColorsDropdown
 							ref={colorRef}

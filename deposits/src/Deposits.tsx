@@ -110,7 +110,7 @@ export default function Deposits() {
 							<TableCell>{order.order_status}</TableCell>
 							<TableCell>
 								{due_date && (
-									<TooltipProvider>
+									<TooltipProvider delayDuration={0}>
 										<Tooltip>
 											<TooltipTrigger asChild>
 												<p className="flex gap-2 items-center">

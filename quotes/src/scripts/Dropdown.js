@@ -22,7 +22,7 @@ export default function Dropdown({
 				title={title}
 			>
 				{title && (
-					<TooltipProvider>
+					<TooltipProvider delayDuration={0}>
 						<Tooltip>
 							<TooltipTrigger asChild>
 								<span className="cursor-pointer">

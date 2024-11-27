@@ -48,8 +48,14 @@ export function Letters({ item }) {
 	const [font, setFont] = useState(item.font ?? '');
 	const [openFont, setOpenFont] = useState(false);
 
-	const [color, setColor] = useState(item.faceColor ?? { name: '', color: '' });
+	const [color, setColor] = useState(
+		item.backLitfaceColor ?? { name: '', color: '' }
+	);
+	const [returnColor, setReturnColor] = useState(
+		item.backlitReturnColor ?? { name: '', color: '' }
+	);
 	const [openColor, setOpenColor] = useState(false);
+	const [openReturnColor, setOpenReturnColor] = useState(false);
 	const [waterproof, setWaterproof] = useState(item.trimLessWaterproof ?? '');
 
 	const [letterPricing, setLetterPricing] = useState([]);
@@ -69,6 +75,9 @@ export function Letters({ item }) {
 
 	const [letterHeightOptions, setLetterHeightOptions] = useState([]);
 	const [customColor, setCustomColor] = useState(item.customColor ?? '');
+	const [returnCustomColor, setReturnCustomColor] = useState(
+		item.returnCustomColor ?? ''
+	);
 
 	const [selectedFinishing, setSelectedFinishing] = useState(
 		item.backLitFinishing
@@ -76,7 +85,7 @@ export function Letters({ item }) {
 
 	const [metalFinish, setMetalFinish] = useState(item.backLitMetalFinish ?? '');
 	const [faceReturnColor, setFaceReturnColor] = useState(
-		item.faceReturnColor ?? ''
+		item.backLitfaceReturnColor ?? ''
 	);
 
 	const [selectedLetterHeight, setSelectedLetterHeight] = useState(
@@ -142,6 +151,7 @@ export function Letters({ item }) {
 
 	const colorRef = useRef(null);
 	const fontRef = useRef(null);
+	const returnColorRef = useRef(null);
 
 	const headlineRef = useRef(null);
 
@@ -175,8 +185,9 @@ export function Letters({ item }) {
 					font,
 					trimLessWaterproof: waterproof,
 					includedItems,
-					faceReturnColor,
-					faceColor: color,
+					backLitfaceReturnColor: faceReturnColor,
+					backLitfaceColor: color,
+					backLitReturnColor: returnColor,
 					letterHeight: selectedLetterHeight,
 					usdPrice,
 					cadPrice,
@@ -191,6 +202,7 @@ export function Letters({ item }) {
 					fontFilePath,
 					fontFileUrl,
 					customColor,
+					returnCustomColor,
 					ledLightColor,
 					mounting,
 					studLength,
@@ -242,8 +254,8 @@ export function Letters({ item }) {
 		const target = e.target.value;
 		if (target === 'Metal') {
 			setColor({ name: '', color: '' });
+			setFaceReturnColor('');
 		} else {
-			setColor({ name: 'Black', color: '#000000' });
 			setMetalFinish('');
 		}
 		setSelectedFinishing(e.target.value);
@@ -280,6 +292,18 @@ export function Letters({ item }) {
 
 	const handleOnChangeLetterHeight = (e) => {
 		setSelectedLetterHeight(e.target.value);
+	};
+
+	const handleOnChangeFaceReturnColor = (e) => {
+		const target = e.target.value;
+		setFaceReturnColor(target);
+		if (target !== 'Different Color') {
+			setColor({ name: '', color: '' });
+			setReturnColor({ name: '', color: '' });
+		} else {
+			setColor({ name: 'Black', color: '#000000' });
+			setReturnColor({ name: 'Black', color: '#000000' });
+		}
 	};
 
 	const handleonChangeStudLength = (e) => {
@@ -352,10 +376,19 @@ export function Letters({ item }) {
 		if (!selectedFinishing) missingFields.push('Select Finishing');
 
 		if (selectedFinishing === 'Painted') {
-			if (!color.name) missingFields.push('Select Face & Return Color');
+			if (!faceReturnColor) missingFields.push('Select Face Return Color');
+			if (faceReturnColor === 'Different Color') {
+				if (!color.name) missingFields.push('Select Face Color');
+				if (!returnColor.name) missingFields.push('Select Return Color');
+			}
 
 			if (color?.name === 'Custom Color' && !customColor) {
 				missingFields.push('Add the Pantone color code of your custom color.');
+			}
+			if (returnColor?.name === 'Custom Color' && !returnCustomColor) {
+				missingFields.push(
+					'Add the Pantone color code of your return custom color.'
+				);
 			}
 		}
 
@@ -443,6 +476,8 @@ export function Letters({ item }) {
 		files,
 		filePaths,
 		customColor,
+		returnCustomColor,
+		returnColor,
 		fontFileUrl,
 		fontFileName,
 		fontFilePath,
@@ -451,6 +486,7 @@ export function Letters({ item }) {
 		studLength,
 		spacerStandoffDistance,
 		selectedFinishing,
+		faceReturnColor,
 		metalFinish,
 		acrylicReveal,
 		sets,
@@ -610,8 +646,9 @@ export function Letters({ item }) {
 
 	useEffect(() => {
 		color?.name != 'Custom Color' && setCustomColor('');
+		returnColor?.name != 'Custom Color' && setReturnCustomColor('');
 		font != 'Custom font' && setFontFileUrl('');
-	}, [color, font]);
+	}, [color, font, returnColor]);
 
 	useEffect(() => {
 		if (waterproof) {
@@ -775,7 +812,7 @@ export function Letters({ item }) {
 					<>
 						<Dropdown
 							title="Face & Return Color"
-							onChange={(e) => setFaceReturnColor(e.target.value)}
+							onChange={handleOnChangeFaceReturnColor}
 							options={returnColorOptions.map((option) => (
 								<option
 									key={option}
@@ -791,21 +828,38 @@ export function Letters({ item }) {
 				)}
 
 				{faceReturnColor === 'Different Color' && (
-					<ColorsDropdown
-						title="Face Color"
-						ref={colorRef}
-						colorName={color?.name}
-						openColor={openColor}
-						toggleColor={() => {
-							setOpenColor((prev) => !prev);
-							setOpenFont(false);
-						}}
-						colorOptions={colorOptions}
-						selectColor={(color) => {
-							setColor(color);
-							setOpenColor(false);
-						}}
-					/>
+					<>
+						<ColorsDropdown
+							title="Face Color"
+							ref={colorRef}
+							colorName={color?.name}
+							openColor={openColor}
+							toggleColor={() => {
+								setOpenColor((prev) => !prev);
+								setOpenFont(false);
+							}}
+							colorOptions={colorOptions}
+							selectColor={(color) => {
+								setColor(color);
+								setOpenColor(false);
+							}}
+						/>
+						<ColorsDropdown
+							title="Return Color"
+							ref={returnColorRef}
+							colorName={returnColor?.name}
+							openColor={openReturnColor}
+							toggleColor={() => {
+								setOpenReturnColor((prev) => !prev);
+								setOpenFont(false);
+							}}
+							colorOptions={colorOptions}
+							selectColor={(color) => {
+								setReturnColor(color);
+								setOpenReturnColor(false);
+							}}
+						/>
+					</>
 				)}
 
 				<Dropdown
@@ -929,6 +983,20 @@ export function Letters({ item }) {
 							type="text"
 							value={customColor}
 							onChange={(e) => setCustomColor(e.target.value)}
+							placeholder="ADD THE PANTONE COLOR CODE"
+						/>
+					</div>
+				)}
+				{returnColor?.name == 'Custom Color' && (
+					<div className="px-[1px] col-span-4">
+						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+							Return Custom Color
+						</label>
+						<input
+							className="w-full py-4 px-2 border-solid border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400"
+							type="text"
+							value={returnCustomColor}
+							onChange={(e) => setReturnCustomColor(e.target.value)}
 							placeholder="ADD THE PANTONE COLOR CODE"
 						/>
 					</div>

@@ -27,7 +27,7 @@ const ColorsDropdown = React.forwardRef(
 				<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
 					{title}
 					{samePrice && (
-						<TooltipProvider>
+						<TooltipProvider delayDuration={0}>
 							<Tooltip>
 								<TooltipTrigger asChild>
 									<svg

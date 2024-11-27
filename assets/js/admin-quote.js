@@ -291,8 +291,18 @@ function allAttributes(sign) {
 		},
 
 		{
+			label: 'FACE & RETURN COLOR',
+			value: sign.backLitfaceReturnColor ? sign.backLitfaceReturnColor : '',
+		},
+
+		{
 			label: 'FACE COLOR',
-			value: sign.faceColor?.name ? sign.faceColor.name : '',
+			value: sign.backLitfaceColor?.name ? sign.backLitfaceColor.name : '',
+		},
+
+		{
+			label: 'RETURN(SIDE) COLOR',
+			value: sign.backLitReturnColor?.name ? sign.backLitReturnColor.name : '',
 		},
 
 		{
