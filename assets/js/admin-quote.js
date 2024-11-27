@@ -291,6 +291,11 @@ function allAttributes(sign) {
 		},
 
 		{
+			label: 'FACE COLOR',
+			value: sign.faceColor?.name ? sign.faceColor.name : '',
+		},
+
+		{
 			label: 'NEON SIGN WIDTH',
 			value: sign.neonSignWidth ? sign.neonSignWidth : '',
 		},
@@ -377,6 +382,11 @@ function allAttributes(sign) {
 		},
 
 		{ label: 'CUSTOM COLOR', value: sign.customColor ? sign.customColor : '' },
+
+		{
+			label: 'RETURN CUSTOM COLOR',
+			value: sign.returnCustomColor ? sign.returnCustomColor : '',
+		},
 
 		{ label: 'FINISHING', value: sign.finishing ? sign.finishing : '' },
 
