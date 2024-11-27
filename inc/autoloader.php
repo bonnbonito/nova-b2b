@@ -47,6 +47,7 @@ $instances = array(
 	'Order_History',
 	'Checkout',
 	'OrderApprove',
+	'AutoLogin',
 );
 
 foreach ( $instances as $instance ) {
