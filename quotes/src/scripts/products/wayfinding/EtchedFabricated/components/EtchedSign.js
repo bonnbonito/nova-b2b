@@ -5,12 +5,14 @@ import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
 import {
 	arrayRange,
+	spacerStandoffDefaultOptions,
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
 
 import {
 	EXCHANGE_RATE,
 	INDOOR_NOT_WATERPROOF,
+	STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
 
 import { convertJson } from '../../../../utils/ConvertJson';
@@ -34,7 +36,7 @@ const electroplatedOptions = [
 
 const finishingOptions = ['Painted', 'Brushed', 'Polished', 'Electroplated'];
 
-const mountingOptions = ['Stud Mount', 'Stud with Spacer', 'PVC Backer'];
+const mountingOptions = ['Stud Mount', STUD_WITH_SPACER, 'PVC Backer'];
 
 const studLengthOptions = [
 	'1.5" (4cm)',
@@ -85,6 +87,12 @@ export const EtchedSign = ({ item }) => {
 	);
 
 	const [studLength, setStudLength] = useState(item.studLength ?? '');
+	const [spacerStandoffDistance, setSpacerStandoffDistance] = useState(
+		item.spacerStandoffDistance ?? ''
+	);
+	const [spacerStandoffOptions, setSpacerStandoffOptions] = useState(
+		spacerStandoffDefaultOptions
+	);
 
 	const [usdSinglePrice, setUsdSinglePrice] = useState(
 		item.usdSinglePrice ?? 0
@@ -124,6 +132,7 @@ export const EtchedSign = ({ item }) => {
 					etchedElectroplated: electroplated,
 					etchedGraphicsStyle: graphicsStyle,
 					studLength,
+					spacerStandoffDistance,
 					customColor,
 					fileNames,
 					filePaths,
@@ -151,6 +160,7 @@ export const EtchedSign = ({ item }) => {
 		metalThickness,
 		finishing,
 		studLength,
+		spacerStandoffDistance,
 		electroplated,
 		fileNames,
 		filePaths,
@@ -314,6 +324,46 @@ export const EtchedSign = ({ item }) => {
 
 	const handleOnChangeWaterproof = (e) => {
 		setWaterproof(e.target.value);
+	};
+
+	const handleOnChangeMounting = (e) => {
+		const target = e.target.value;
+		setMounting(target);
+		if (target !== 'Stud Mount' && target !== STUD_WITH_SPACER) {
+			setStudLength('');
+			setSpacerStandoffDistance('');
+		}
+		if (target === 'Stud Mount') {
+			setSpacerStandoffDistance('');
+		}
+	};
+
+	const handleonChangeStudLength = (e) => {
+		const target = e.target.value;
+		setStudLength(target); // Directly set the value without a callback
+
+		if (target === '1.5" (4cm)') {
+			setSpacerStandoffOptions([{ value: '0.5"' }, { value: '1"' }]);
+			if (!['0.5"', '1"'].includes(spacerStandoffDistance)) {
+				setSpacerStandoffDistance(''); // Reset if not one of the valid options
+			}
+		} else if (['3.2" (8cm)', '4" (10cm)'].includes(target)) {
+			setSpacerStandoffOptions([
+				{ value: '0.5"' },
+				{ value: '1"' },
+				{ value: '1.5"' },
+				{ value: '2"' },
+			]);
+			if (['3.2" (8cm)', '4" (10cm)'].includes(spacerStandoffDistance)) {
+				setSpacerStandoffDistance(''); // Reset if the distance is invalid for these options
+			}
+		} else {
+			setSpacerStandoffOptions(spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
+		}
+
+		if (target === '') {
+			setSpacerStandoffDistance(''); // Always reset if the target is empty
+		}
 	};
 
 	const handleonChangeFinishing = (e) => {
@@ -544,7 +594,7 @@ export const EtchedSign = ({ item }) => {
 
 				<Dropdown
 					title="Mounting"
-					onChange={(e) => setMounting(e.target.value)}
+					onChange={handleOnChangeMounting}
 					options={mountingOptions.map((option) => (
 						<option
 							key={option}
@@ -559,7 +609,7 @@ export const EtchedSign = ({ item }) => {
 				{metalThickness && (
 					<Dropdown
 						title="STUD LENGTH"
-						onChange={(e) => setStudLength(e.target.value)}
+						onChange={handleonChangeStudLength}
 						options={studLengthOptions.map((option) => (
 							<option
 								key={option}
@@ -571,6 +621,24 @@ export const EtchedSign = ({ item }) => {
 						))}
 						value={studLength}
 					/>
+				)}
+				{mounting === STUD_WITH_SPACER && (
+					<>
+						<Dropdown
+							title="STANDOFF SPACE"
+							onChange={(e) => setSpacerStandoffDistance(e.target.value)}
+							options={spacerStandoffOptions.map((option) => (
+								<option
+									value={option.value}
+									key={option.value}
+									defaultValue={option.value == spacerStandoffDistance}
+								>
+									{option.value}
+								</option>
+							))}
+							value={spacerStandoffDistance}
+						/>
+					</>
 				)}
 
 				<Dropdown

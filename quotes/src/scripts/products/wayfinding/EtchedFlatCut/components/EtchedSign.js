@@ -18,12 +18,14 @@ import { graphicsStyleOptions } from '../../options';
 
 import {
 	arrayRange,
+	spacerStandoffDefaultOptions,
 	waterProofOptions,
 } from '../../../../utils/SignageOptions';
 
 import {
 	EXCHANGE_RATE,
 	INDOOR_NOT_WATERPROOF,
+	STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
 
 import { colorOptions } from '../../../../utils/ColorOptions';
@@ -109,6 +111,12 @@ export const EtchedSign = ({ item }) => {
 	const [electroplated, setElectroplated] = useState(
 		item.etchedElectroplated ?? ''
 	);
+	const [spacerStandoffDistance, setSpacerStandoffDistance] = useState(
+		item.spacerStandoffDistance ?? ''
+	);
+	const [spacerStandoffOptions, setSpacerStandoffOptions] = useState(
+		spacerStandoffDefaultOptions
+	);
 	const [finishingOptions, setFinishingOptions] = useState([]);
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
@@ -176,6 +184,7 @@ export const EtchedSign = ({ item }) => {
 					etchedAnodizedColor: anodizedColor,
 					etchedGraphicsStyle: graphicsStyle,
 					studLength,
+					spacerStandoffDistance,
 					etchedEdges: edges,
 					customColor,
 					fileNames,
@@ -206,6 +215,7 @@ export const EtchedSign = ({ item }) => {
 		metalThickness,
 		finishing,
 		studLength,
+		spacerStandoffDistance,
 		electroplated,
 		graphicsStyle,
 		anodizedColor,
@@ -462,6 +472,7 @@ export const EtchedSign = ({ item }) => {
 		if (target) {
 			setFinishing('');
 			setColor('');
+			setMounting('');
 
 			if (
 				target === 'Flat Cut Stainless Steel' ||
@@ -482,7 +493,12 @@ export const EtchedSign = ({ item }) => {
 						metalThickness === '1/2" (12mm)'
 					) {
 						setEdgesOptions(['Square', 'Bevel']);
-						setMountingOptions(['Stud', 'Plain', 'Pre–drilled Holes']);
+						setMountingOptions([
+							'Stud Mount',
+							'Plain',
+							'Pre–drilled Holes',
+							STUD_WITH_SPACER,
+						]);
 					} else {
 						setEdgesOptions(['Square']);
 						setEdges('Square');
@@ -505,7 +521,12 @@ export const EtchedSign = ({ item }) => {
 					) {
 						setMountingOptions(mountingOptionsDefault);
 					} else {
-						setMountingOptions(['Stud Mount', 'Plain', 'Pre–drilled Holes']);
+						setMountingOptions([
+							'Stud Mount',
+							'Plain',
+							'Pre–drilled Holes',
+							STUD_WITH_SPACER,
+						]);
 					}
 				}
 
@@ -538,8 +559,49 @@ export const EtchedSign = ({ item }) => {
 		}
 	};
 
+	const handleonChangeStudLength = (e) => {
+		const target = e.target.value;
+		setStudLength(target); // Directly set the value without a callback
+		console.log(target);
+
+		if (target === '1.5" (4cm)') {
+			setSpacerStandoffOptions([{ value: '0.5"' }, { value: '1"' }]);
+			if (!['0.5"', '1"'].includes(spacerStandoffDistance)) {
+				setSpacerStandoffDistance(''); // Reset if not one of the valid options
+			}
+		} else if (['3.2" (8cm)', '4" (10cm)'].includes(target)) {
+			setSpacerStandoffOptions([
+				{ value: '0.5"' },
+				{ value: '1"' },
+				{ value: '1.5"' },
+				{ value: '2"' },
+			]);
+			if (['3.2" (8cm)', '4" (10cm)'].includes(spacerStandoffDistance)) {
+				setSpacerStandoffDistance(''); // Reset if the distance is invalid for these options
+			}
+		} else {
+			setSpacerStandoffOptions(spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
+		}
+
+		if (target === '') {
+			setSpacerStandoffDistance(''); // Always reset if the target is empty
+		}
+	};
+
 	const handleComments = (e) => {
 		updateSignageItem(item.id, 'comments', e.target.value);
+	};
+
+	const handleOnChangeMounting = (e) => {
+		const target = e.target.value;
+		setMounting(target);
+		if (target !== 'Stud Mount' && target !== STUD_WITH_SPACER) {
+			setStudLength('');
+			setSpacerStandoffDistance('');
+		}
+		if (target === 'Stud Mount') {
+			setSpacerStandoffDistance('');
+		}
 	};
 
 	const handleOnChangeWaterproof = (e) => {
@@ -587,20 +649,32 @@ export const EtchedSign = ({ item }) => {
 		) {
 			if (material === 'Flat Cut Aluminum') {
 				setEdgesOptions(['Square', 'Bevel']);
-				setMountingOptions(['Stud', 'Plain', 'Pre–drilled Holes']);
+				setMountingOptions([
+					'Stud Mount',
+					'Plain',
+					'Pre–drilled Holes',
+					STUD_WITH_SPACER,
+				]);
 				if (
-					mounting !== 'Stud' &&
+					mounting !== 'Stud Mount' &&
 					mounting !== 'Plain' &&
-					mounting !== 'Pre–drilled Holes'
+					mounting !== 'Pre–drilled Holes' &&
+					mounting !== STUD_WITH_SPACER
 				) {
 					setMounting('');
 				}
 			} else {
-				setMountingOptions(['Stud Mount', 'Plain', 'Pre–drilled Holes']);
+				setMountingOptions([
+					'Stud Mount',
+					'Plain',
+					'Pre–drilled Holes',
+					STUD_WITH_SPACER,
+				]);
 				if (
 					mounting !== 'Stud Mount' &&
 					mounting !== 'Plain' &&
-					mounting !== 'Pre–drilled Holes'
+					mounting !== 'Pre–drilled Holes' &&
+					mounting !== STUD_WITH_SPACER
 				) {
 					setMounting('');
 				}
@@ -615,6 +689,7 @@ export const EtchedSign = ({ item }) => {
 			}
 			setMountingOptions(mountingOptionsDefault);
 			setStudLength('');
+			setSpacerStandoffDistance('');
 		}
 	};
 
@@ -867,7 +942,7 @@ export const EtchedSign = ({ item }) => {
 
 				<Dropdown
 					title="Mounting"
-					onChange={(e) => setMounting(e.target.value)}
+					onChange={handleOnChangeMounting}
 					options={mountingOptions.map((option) => (
 						<option
 							key={option}
@@ -884,7 +959,7 @@ export const EtchedSign = ({ item }) => {
 					metalThickness === '1/2" (12mm)') && (
 					<Dropdown
 						title="STUD LENGTH"
-						onChange={(e) => setStudLength(e.target.value)}
+						onChange={handleonChangeStudLength}
 						options={studLengthOptions.map((option) => (
 							<option
 								key={option}
@@ -896,6 +971,24 @@ export const EtchedSign = ({ item }) => {
 						))}
 						value={studLength}
 					/>
+				)}
+				{mounting === STUD_WITH_SPACER && (
+					<>
+						<Dropdown
+							title="STANDOFF SPACE"
+							onChange={(e) => setSpacerStandoffDistance(e.target.value)}
+							options={spacerStandoffOptions.map((option) => (
+								<option
+									value={option.value}
+									key={option.value}
+									defaultValue={option.value == spacerStandoffDistance}
+								>
+									{option.value}
+								</option>
+							))}
+							value={spacerStandoffDistance}
+						/>
+					</>
 				)}
 
 				<Dropdown

@@ -34582,14 +34582,14 @@ __webpack_require__.r(__webpack_exports__);
 const metalThicknessOptions = ['0.5"', '1"', '1.5"', '2"'];
 const electroplatedOptions = ['Electroplated Gold Brushed', 'Electroplated Gold Polished', 'Electroplated Black Titanium Brushed', 'Electroplated Black Titanium Polished', 'Electroplated Bronze Brushed', 'Electroplated Red Copper Brushed'];
 const finishingOptions = ['Painted', 'Brushed', 'Polished', 'Electroplated'];
-const mountingOptions = ['Stud Mount', 'Stud with Spacer', 'PVC Backer'];
+const mountingOptions = ['Stud Mount', _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.STUD_WITH_SPACER, 'PVC Backer'];
 const studLengthOptions = ['1.5" (4cm)', '3.2" (8cm)', '4" (10cm)', '6" (15cm)'];
 const widthOptions = (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.arrayRange)(2, 94, 1);
 const heightOptions = (0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.arrayRange)(2, 47, 1);
 const EtchedSign = ({
   item
 }) => {
-  var _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$etchedPaintedCo, _item$customColor, _item$etchedWidth, _item$etchedHeight, _item$etchedMetalThic, _item$etchedGraphicsS, _item$etchedFinishing, _item$etchedElectropl, _item$usdPrice, _item$cadPrice, _item$usdDiscount, _item$usdTotalNoDisco, _item$cadDiscount, _item$cadTotalNoDisco, _item$studLength, _item$usdSinglePrice, _item$cadSinglePrice, _item$waterproof, _item$mounting, _item$sets, _color$name;
+  var _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$etchedPaintedCo, _item$customColor, _item$etchedWidth, _item$etchedHeight, _item$etchedMetalThic, _item$etchedGraphicsS, _item$etchedFinishing, _item$etchedElectropl, _item$usdPrice, _item$cadPrice, _item$usdDiscount, _item$usdTotalNoDisco, _item$cadDiscount, _item$cadTotalNoDisco, _item$studLength, _item$spacerStandoffD, _item$usdSinglePrice, _item$cadSinglePrice, _item$waterproof, _item$mounting, _item$sets, _color$name;
   const {
     signage,
     setSignage,
@@ -34616,6 +34616,8 @@ const EtchedSign = ({
   const [cadDiscount, setCadDiscount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadDiscount = item.cadDiscount) !== null && _item$cadDiscount !== void 0 ? _item$cadDiscount : 0);
   const [cadTotalNoDiscount, setCadTotalNoDiscount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadTotalNoDisco = item.cadTotalNoDiscount) !== null && _item$cadTotalNoDisco !== void 0 ? _item$cadTotalNoDisco : '');
   const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$studLength = item.studLength) !== null && _item$studLength !== void 0 ? _item$studLength : '');
+  const [spacerStandoffDistance, setSpacerStandoffDistance] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$spacerStandoffD = item.spacerStandoffDistance) !== null && _item$spacerStandoffD !== void 0 ? _item$spacerStandoffD : '');
+  const [spacerStandoffOptions, setSpacerStandoffOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.spacerStandoffDefaultOptions);
   const [usdSinglePrice, setUsdSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdSinglePrice = item.usdSinglePrice) !== null && _item$usdSinglePrice !== void 0 ? _item$usdSinglePrice : 0);
   const [cadSinglePrice, setCadSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadSinglePrice = item.cadSinglePrice) !== null && _item$cadSinglePrice !== void 0 ? _item$cadSinglePrice : 0);
   const [setOptions, setSetOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([(0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -34642,6 +34644,7 @@ const EtchedSign = ({
           etchedElectroplated: electroplated,
           etchedGraphicsStyle: graphicsStyle,
           studLength,
+          spacerStandoffDistance,
           customColor,
           fileNames,
           filePaths,
@@ -34661,7 +34664,7 @@ const EtchedSign = ({
       return sign;
     });
     setSignage(updatedSignage);
-  }, [waterproof, color, customColor, mounting, metalThickness, finishing, studLength, electroplated, fileNames, filePaths, fileUrls, files, sets, width, height, usdPrice, cadPrice, cadSinglePrice, usdSinglePrice, usdDiscount, usdTotalNoDiscount, cadTotalNoDiscount, cadDiscount, graphicsStyle]);
+  }, [waterproof, color, customColor, mounting, metalThickness, finishing, studLength, spacerStandoffDistance, electroplated, fileNames, filePaths, fileUrls, files, sets, width, height, usdPrice, cadPrice, cadSinglePrice, usdSinglePrice, usdDiscount, usdTotalNoDiscount, cadTotalNoDiscount, cadDiscount, graphicsStyle]);
   const checkAndAddMissingFields = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(() => {
     const missingFields = [];
     if (!width) missingFields.push('Select Width');
@@ -34759,6 +34762,50 @@ const EtchedSign = ({
   };
   const handleOnChangeWaterproof = e => {
     setWaterproof(e.target.value);
+  };
+  const handleOnChangeMounting = e => {
+    const target = e.target.value;
+    setMounting(target);
+    if (target !== 'Stud Mount' && target !== _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.STUD_WITH_SPACER) {
+      setStudLength('');
+      setSpacerStandoffDistance('');
+    }
+    if (target === 'Stud Mount') {
+      setSpacerStandoffDistance('');
+    }
+  };
+  const handleonChangeStudLength = e => {
+    const target = e.target.value;
+    setStudLength(target); // Directly set the value without a callback
+
+    if (target === '1.5" (4cm)') {
+      setSpacerStandoffOptions([{
+        value: '0.5"'
+      }, {
+        value: '1"'
+      }]);
+      if (!['0.5"', '1"'].includes(spacerStandoffDistance)) {
+        setSpacerStandoffDistance(''); // Reset if not one of the valid options
+      }
+    } else if (['3.2" (8cm)', '4" (10cm)'].includes(target)) {
+      setSpacerStandoffOptions([{
+        value: '0.5"'
+      }, {
+        value: '1"'
+      }, {
+        value: '1.5"'
+      }, {
+        value: '2"'
+      }]);
+      if (['3.2" (8cm)', '4" (10cm)'].includes(spacerStandoffDistance)) {
+        setSpacerStandoffDistance(''); // Reset if the distance is invalid for these options
+      }
+    } else {
+      setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_5__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
+    }
+    if (target === '') {
+      setSpacerStandoffDistance(''); // Always reset if the target is empty
+    }
   };
   const handleonChangeFinishing = e => {
     const target = e.target.value;
@@ -34928,7 +34975,7 @@ const EtchedSign = ({
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
     title: "Mounting",
-    onChange: e => setMounting(e.target.value),
+    onChange: handleOnChangeMounting,
     options: mountingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: option,
       value: option,
@@ -34937,14 +34984,23 @@ const EtchedSign = ({
     value: mounting
   }), metalThickness && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
     title: "STUD LENGTH",
-    onChange: e => setStudLength(e.target.value),
+    onChange: handleonChangeStudLength,
     options: studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: option,
       value: option,
       defaultValue: option === studLength
     }, option)),
     value: studLength
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+  }), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: "STANDOFF SPACE",
+    onChange: e => setSpacerStandoffDistance(e.target.value),
+    options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.value,
+      key: option.value,
+      defaultValue: option.value == spacerStandoffDistance
+    }, option.value)),
+    value: spacerStandoffDistance
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,
     options: setOptions,
@@ -35144,7 +35200,7 @@ const studLengthOptions = ['1.5" (4cm)', '3.2" (8cm)', '4" (10cm)', '6" (15cm)']
 const EtchedSign = ({
   item
 }) => {
-  var _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$etchedPaintedCo, _item$customColor, _item$etchedWidth, _item$etchedMaterial, _item$etchedHeight, _item$etchedMetalThic, _item$etchedFinishing, _item$etchedElectropl, _item$usdPrice, _item$cadPrice, _item$usdDiscount, _item$usdTotalNoDisco, _item$cadDiscount, _item$cadTotalNoDisco, _item$etchedAnodizedC, _item$etchedGraphicsS, _item$etchedEdges, _item$studLength, _item$usdSinglePrice, _item$cadSinglePrice, _item$waterproof, _item$mounting, _item$sets, _color$name;
+  var _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$etchedPaintedCo, _item$customColor, _item$etchedWidth, _item$etchedMaterial, _item$etchedHeight, _item$etchedMetalThic, _item$etchedFinishing, _item$etchedElectropl, _item$spacerStandoffD, _item$usdPrice, _item$cadPrice, _item$usdDiscount, _item$usdTotalNoDisco, _item$cadDiscount, _item$cadTotalNoDisco, _item$etchedAnodizedC, _item$etchedGraphicsS, _item$etchedEdges, _item$studLength, _item$usdSinglePrice, _item$cadSinglePrice, _item$waterproof, _item$mounting, _item$sets, _color$name;
   const {
     signage,
     setSignage,
@@ -35165,6 +35221,8 @@ const EtchedSign = ({
   const [metalThicknessOptions, setMetalThicknessOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(metalThicknessOptionsDefault);
   const [finishing, setFinishing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$etchedFinishing = item.etchedFinishing) !== null && _item$etchedFinishing !== void 0 ? _item$etchedFinishing : '');
   const [electroplated, setElectroplated] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$etchedElectropl = item.etchedElectroplated) !== null && _item$etchedElectropl !== void 0 ? _item$etchedElectropl : '');
+  const [spacerStandoffDistance, setSpacerStandoffDistance] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$spacerStandoffD = item.spacerStandoffDistance) !== null && _item$spacerStandoffD !== void 0 ? _item$spacerStandoffD : '');
+  const [spacerStandoffOptions, setSpacerStandoffOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.spacerStandoffDefaultOptions);
   const [finishingOptions, setFinishingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdPrice = item.usdPrice) !== null && _item$usdPrice !== void 0 ? _item$usdPrice : 0);
   const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadPrice = item.cadPrice) !== null && _item$cadPrice !== void 0 ? _item$cadPrice : 0);
@@ -35208,6 +35266,7 @@ const EtchedSign = ({
           etchedAnodizedColor: anodizedColor,
           etchedGraphicsStyle: graphicsStyle,
           studLength,
+          spacerStandoffDistance,
           etchedEdges: edges,
           customColor,
           fileNames,
@@ -35228,7 +35287,7 @@ const EtchedSign = ({
       return sign;
     });
     setSignage(updatedSignage);
-  }, [waterproof, color, edges, customColor, mounting, material, metalThickness, finishing, studLength, electroplated, graphicsStyle, anodizedColor, fileNames, filePaths, fileUrls, files, sets, width, height, usdPrice, cadPrice, cadSinglePrice, usdSinglePrice, usdDiscount, usdTotalNoDiscount, cadTotalNoDiscount, cadDiscount]);
+  }, [waterproof, color, edges, customColor, mounting, material, metalThickness, finishing, studLength, spacerStandoffDistance, electroplated, graphicsStyle, anodizedColor, fileNames, filePaths, fileUrls, files, sets, width, height, usdPrice, cadPrice, cadSinglePrice, usdSinglePrice, usdDiscount, usdTotalNoDiscount, cadTotalNoDiscount, cadDiscount]);
   const checkAndAddMissingFields = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(() => {
     const missingFields = [];
     if (!material) missingFields.push('Select Material');
@@ -35389,6 +35448,7 @@ const EtchedSign = ({
     if (target) {
       setFinishing('');
       setColor('');
+      setMounting('');
       if (target === 'Flat Cut Stainless Steel' || target === 'Flat Cut Aluminum') {
         if (target === 'Flat Cut Aluminum') {
           setFinishingOptions(aluminumFinishing);
@@ -35396,7 +35456,7 @@ const EtchedSign = ({
           setElectroplated('');
           if (metalThickness === '1/4" (6mm)' || metalThickness === '3/8" (9mm)' || metalThickness === '1/2" (12mm)') {
             setEdgesOptions(['Square', 'Bevel']);
-            setMountingOptions(['Stud', 'Plain', 'Pre–drilled Holes']);
+            setMountingOptions(['Stud Mount', 'Plain', 'Pre–drilled Holes', _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER]);
           } else {
             setEdgesOptions(['Square']);
             setEdges('Square');
@@ -35414,7 +35474,7 @@ const EtchedSign = ({
           if (metalThickness === '1/25" (1mm)' || metalThickness === '1/16" (1.6mm)' || metalThickness === '1/8" (3mm)') {
             setMountingOptions(mountingOptionsDefault);
           } else {
-            setMountingOptions(['Stud Mount', 'Plain', 'Pre–drilled Holes']);
+            setMountingOptions(['Stud Mount', 'Plain', 'Pre–drilled Holes', _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER]);
           }
         }
         setWidthOptions((0,_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.arrayRange)(2, 94, 1));
@@ -35444,8 +35504,52 @@ const EtchedSign = ({
       setFinishingOptions([]);
     }
   };
+  const handleonChangeStudLength = e => {
+    const target = e.target.value;
+    setStudLength(target); // Directly set the value without a callback
+    console.log(target);
+    if (target === '1.5" (4cm)') {
+      setSpacerStandoffOptions([{
+        value: '0.5"'
+      }, {
+        value: '1"'
+      }]);
+      if (!['0.5"', '1"'].includes(spacerStandoffDistance)) {
+        setSpacerStandoffDistance(''); // Reset if not one of the valid options
+      }
+    } else if (['3.2" (8cm)', '4" (10cm)'].includes(target)) {
+      setSpacerStandoffOptions([{
+        value: '0.5"'
+      }, {
+        value: '1"'
+      }, {
+        value: '1.5"'
+      }, {
+        value: '2"'
+      }]);
+      if (['3.2" (8cm)', '4" (10cm)'].includes(spacerStandoffDistance)) {
+        setSpacerStandoffDistance(''); // Reset if the distance is invalid for these options
+      }
+    } else {
+      setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
+    }
+    if (target === '') {
+      setSpacerStandoffDistance(''); // Always reset if the target is empty
+    }
+  };
   const handleComments = e => {
     updateSignageItem(item.id, 'comments', e.target.value);
+  };
+  const handleOnChangeMounting = e => {
+    const target = e.target.value;
+    setMounting(target);
+    if (target !== 'Stud Mount' && target !== _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
+      setStudLength('');
+      setSpacerStandoffDistance('');
+    }
+    if (target === 'Stud Mount') {
+      setSpacerStandoffDistance('');
+    }
   };
   const handleOnChangeWaterproof = e => {
     setWaterproof(e.target.value);
@@ -35478,13 +35582,13 @@ const EtchedSign = ({
     if (target === '1/4" (6mm)' || target === '3/8" (9mm)' || target === '1/2" (12mm)') {
       if (material === 'Flat Cut Aluminum') {
         setEdgesOptions(['Square', 'Bevel']);
-        setMountingOptions(['Stud', 'Plain', 'Pre–drilled Holes']);
-        if (mounting !== 'Stud' && mounting !== 'Plain' && mounting !== 'Pre–drilled Holes') {
+        setMountingOptions(['Stud Mount', 'Plain', 'Pre–drilled Holes', _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER]);
+        if (mounting !== 'Stud Mount' && mounting !== 'Plain' && mounting !== 'Pre–drilled Holes' && mounting !== _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
           setMounting('');
         }
       } else {
-        setMountingOptions(['Stud Mount', 'Plain', 'Pre–drilled Holes']);
-        if (mounting !== 'Stud Mount' && mounting !== 'Plain' && mounting !== 'Pre–drilled Holes') {
+        setMountingOptions(['Stud Mount', 'Plain', 'Pre–drilled Holes', _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER]);
+        if (mounting !== 'Stud Mount' && mounting !== 'Plain' && mounting !== 'Pre–drilled Holes' && mounting !== _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
           setMounting('');
         }
         setEdgesOptions(['Square']);
@@ -35498,6 +35602,7 @@ const EtchedSign = ({
       }
       setMountingOptions(mountingOptionsDefault);
       setStudLength('');
+      setSpacerStandoffDistance('');
     }
   };
 
@@ -35677,7 +35782,7 @@ const EtchedSign = ({
     value: waterproof
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
     title: "Mounting",
-    onChange: e => setMounting(e.target.value),
+    onChange: handleOnChangeMounting,
     options: mountingOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: option,
       value: option,
@@ -35686,14 +35791,23 @@ const EtchedSign = ({
     value: mounting
   }), (metalThickness === '1/4" (6mm)' || metalThickness === '3/8" (9mm)' || metalThickness === '1/2" (12mm)') && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
     title: "STUD LENGTH",
-    onChange: e => setStudLength(e.target.value),
+    onChange: handleonChangeStudLength,
     options: studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: option,
       value: option,
       defaultValue: option === studLength
     }, option)),
     value: studLength
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+  }), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    title: "STANDOFF SPACE",
+    onChange: e => setSpacerStandoffDistance(e.target.value),
+    options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: option.value,
+      key: option.value,
+      defaultValue: option.value == spacerStandoffDistance
+    }, option.value)),
+    value: spacerStandoffDistance
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,
     options: setOptions,
