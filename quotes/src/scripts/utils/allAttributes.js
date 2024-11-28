@@ -36,6 +36,7 @@ export const allAttributes = (item) => [
 	{ key: item.backLitMetalFinish, label: 'METAL FINISH' },
 	{ key: item.faceReturnColor?.name, label: 'FACE & RETURN COLOR' },
 	{ key: item.backLitfaceReturnColor, label: 'FACE & RETURN COLOR' },
+	{ key: item.backLitSameColor?.name, label: 'COLOR' },
 	{ key: item.backLitfaceColor?.name, label: 'FACE COLOR' },
 	{ key: item.backLitReturnColor?.name, label: 'RETURN(SIDE) COLOR' },
 	{ key: item.neonSignWidth, label: 'NEON SIGN WIDTH' },

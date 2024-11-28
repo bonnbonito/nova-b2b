@@ -38,7 +38,7 @@ import { useAppContext } from '../../../../AppProvider';
 
 const maxHeightOptions = Array.from(
 	{
-		length: 39,
+		length: 22,
 	},
 	(_, index) => {
 		const val = 5 + index;
@@ -52,7 +52,7 @@ const maxHeightOptions = Array.from(
 
 const maxWidthOptions = Array.from(
 	{
-		length: 39,
+		length: 22,
 	},
 	(_, index) => {
 		const val = 5 + index;

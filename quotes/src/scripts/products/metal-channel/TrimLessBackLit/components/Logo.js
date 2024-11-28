@@ -63,18 +63,31 @@ const maxWidthOptions = Array.from(
 	}
 );
 
+const returnColorOptions = ['Same Color', 'Different Color'];
+
 export function Logo({ item }) {
 	const { signage, setSignage, setMissing, hasUploadedFile } = useAppContext();
 	const [comments, setComments] = useState(item.comments ?? '');
 
 	const [color, setColor] = useState(
-		item.faceReturnColor ?? { name: '', color: '' }
+		item.backLitfaceColor ?? { name: '', color: '' }
+	);
+
+	const [sameColor, setSameColor] = useState(
+		item.backLitSameColor ?? { name: '', color: '' }
+	);
+
+	const [returnColor, setReturnColor] = useState(
+		item.backlitReturnColor ?? { name: '', color: '' }
 	);
 
 	const [width, setWidth] = useState(item.width ?? '');
 	const [height, setHeight] = useState(item.height ?? '');
 
 	const [openColor, setOpenColor] = useState(false);
+	const [openSameColor, setOpenSameColor] = useState(false);
+	const [openReturnColor, setOpenReturnColor] = useState(false);
+
 	const [waterproof, setWaterproof] = useState(item.trimLessWaterproof ?? '');
 
 	const [depth, setDepth] = useState(item.depth ?? '');
@@ -86,6 +99,12 @@ export function Logo({ item }) {
 	const [files, setFiles] = useState(item.files ?? []);
 
 	const [customColor, setCustomColor] = useState(item.customColor ?? '');
+	const [returnCustomColor, setReturnCustomColor] = useState(
+		item.returnCustomColor ?? ''
+	);
+	const [faceReturnColor, setFaceReturnColor] = useState(
+		item.backLitfaceReturnColor ?? ''
+	);
 
 	const [selectedFinishing, setSelectedFinishing] = useState(
 		item.backLitFinishing
@@ -128,6 +147,8 @@ export function Logo({ item }) {
 	};
 
 	const colorRef = useRef(null);
+	const sameColorRef = useRef(null);
+	const returnColorRef = useRef(null);
 
 	function updateSignage() {
 		const updatedSignage = signage.map((sign) => {
@@ -139,7 +160,11 @@ export function Logo({ item }) {
 					height,
 					depth,
 					trimLessWaterproof: waterproof,
-					faceReturnColor: color,
+					backLitfaceReturnColor: faceReturnColor,
+					backLitfaceColor: color,
+					backLitSameColor: sameColor,
+					backLitReturnColor: returnColor,
+					returnCustomColor,
 					usdPrice,
 					cadPrice,
 					files,
@@ -198,8 +223,12 @@ export function Logo({ item }) {
 		const target = e.target.value;
 		if (target === 'Metal') {
 			setColor({ name: '', color: '' });
+			setSameColor({ name: '', color: '' });
+			setCustomColor('');
+			setReturnCustomColor('');
+			setReturnColor({ name: '', color: '' });
+			setFaceReturnColor('');
 		} else {
-			setColor({ name: 'Black', color: '#000000' });
 			setMetalFinish('');
 		}
 		setSelectedFinishing(e.target.value);
@@ -248,6 +277,23 @@ export function Logo({ item }) {
 		}
 	};
 
+	const handleOnChangeFaceReturnColor = (e) => {
+		const target = e.target.value;
+		setFaceReturnColor(target);
+		if (target !== 'Different Color') {
+			setColor({ name: '', color: '' });
+			setReturnColor({ name: '', color: '' });
+			setSameColor({ name: 'Black', color: '#000000' });
+			setCustomColor('');
+			setReturnCustomColor('');
+		} else {
+			setColor({ name: 'Black', color: '#000000' });
+			setReturnColor({ name: 'Black', color: '#000000' });
+			setSameColor({ name: '', color: '' });
+			setCustomColor('');
+		}
+	};
+
 	const checkAndAddMissingFields = () => {
 		const missingFields = [];
 
@@ -259,10 +305,23 @@ export function Logo({ item }) {
 		if (!selectedFinishing) missingFields.push('Select Finishing');
 
 		if (selectedFinishing === 'Painted') {
-			if (!color.name) missingFields.push('Select Face & Return Color');
+			if (!faceReturnColor) missingFields.push('Select Face Return Color');
+			if (faceReturnColor === 'Different Color') {
+				if (!color.name) missingFields.push('Select Face Color');
+				if (!returnColor.name) missingFields.push('Select Return Color');
+			}
 
-			if (color?.name === 'Custom Color' && !customColor) {
+			if (
+				(color?.name === 'Custom Color' ||
+					sameColor?.name === 'Custom Color') &&
+				!customColor
+			) {
 				missingFields.push('Add the Pantone color code of your custom color.');
+			}
+			if (returnColor?.name === 'Custom Color' && !returnCustomColor) {
+				missingFields.push(
+					'Add the Pantone color code of your return custom color.'
+				);
 			}
 		}
 
@@ -341,6 +400,7 @@ export function Logo({ item }) {
 		comments,
 		waterproof,
 		color,
+		sameColor,
 		usdPrice,
 		cadPrice,
 		ledLightColor,
@@ -349,6 +409,8 @@ export function Logo({ item }) {
 		files,
 		filePaths,
 		customColor,
+		returnCustomColor,
+		returnColor,
 		mounting,
 		studLength,
 		spacerStandoffDistance,
@@ -604,18 +666,71 @@ export function Logo({ item }) {
 
 				{selectedFinishing === 'Painted' && (
 					<>
-						<ColorsDropdown
+						<Dropdown
 							title="Face & Return Color"
+							onChange={handleOnChangeFaceReturnColor}
+							options={returnColorOptions.map((option) => (
+								<option
+									key={option}
+									value={option}
+									defaultValue={option === faceReturnColor}
+								>
+									{option}
+								</option>
+							))}
+							value={faceReturnColor}
+						/>
+					</>
+				)}
+
+				{faceReturnColor === 'Different Color' && (
+					<>
+						<ColorsDropdown
+							title="Face Color"
 							ref={colorRef}
 							colorName={color?.name}
 							openColor={openColor}
 							toggleColor={() => {
 								setOpenColor((prev) => !prev);
+								setOpenSameColor(false);
 							}}
 							colorOptions={colorOptions}
 							selectColor={(color) => {
 								setColor(color);
 								setOpenColor(false);
+							}}
+						/>
+						<ColorsDropdown
+							title="Return Color"
+							ref={returnColorRef}
+							colorName={returnColor?.name}
+							openColor={openReturnColor}
+							toggleColor={() => {
+								setOpenReturnColor((prev) => !prev);
+								setOpenSameColor(false);
+							}}
+							colorOptions={colorOptions}
+							selectColor={(color) => {
+								setReturnColor(color);
+								setOpenReturnColor(false);
+							}}
+						/>
+					</>
+				)}
+				{faceReturnColor === 'Same Color' && (
+					<>
+						<ColorsDropdown
+							title="Color"
+							ref={sameColorRef}
+							colorName={sameColor?.name}
+							openColor={openSameColor}
+							toggleColor={() => {
+								setOpenSameColor((prev) => !prev);
+							}}
+							colorOptions={colorOptions}
+							selectColor={(color) => {
+								setSameColor(color);
+								setOpenSameColor(false);
 							}}
 						/>
 					</>
@@ -732,7 +847,8 @@ export function Logo({ item }) {
 			)}
 
 			<div className="quote-grid">
-				{color?.name == 'Custom Color' && (
+				{(color?.name == 'Custom Color' ||
+					sameColor?.name == 'Custom Color') && (
 					<div className="px-[1px] col-span-4">
 						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
 							Custom Color
@@ -742,6 +858,21 @@ export function Logo({ item }) {
 							type="text"
 							value={customColor}
 							onChange={(e) => setCustomColor(e.target.value)}
+							placeholder="ADD THE PANTONE COLOR CODE"
+						/>
+					</div>
+				)}
+
+				{returnColor?.name == 'Custom Color' && (
+					<div className="px-[1px] col-span-4">
+						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+							Return Custom Color
+						</label>
+						<input
+							className="w-full py-4 px-2 border-solid border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400"
+							type="text"
+							value={returnCustomColor}
+							onChange={(e) => setReturnCustomColor(e.target.value)}
 							placeholder="ADD THE PANTONE COLOR CODE"
 						/>
 					</div>

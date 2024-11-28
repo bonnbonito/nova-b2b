@@ -296,6 +296,11 @@ function allAttributes(sign) {
 		},
 
 		{
+			label: 'COLOR',
+			value: sign.backLitSameColor?.name ? sign.backLitSameColor.name : '',
+		},
+
+		{
 			label: 'FACE COLOR',
 			value: sign.backLitfaceColor?.name ? sign.backLitfaceColor.name : '',
 		},

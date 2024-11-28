@@ -282,8 +282,6 @@ export const NeonSign = ({ item }) => {
 		if (rigidBacking === 'Painted PC (Matte)') {
 			if (!color?.name) missingFields.push('Select Painted PC Color');
 
-			if (!finish) missingFields.push('Select Painted PC Finish');
-
 			if (color?.name === 'Custom Color' && !customColor) {
 				missingFields.push('Add the Pantone color code of your custom color.');
 			}
@@ -662,21 +660,6 @@ export const NeonSign = ({ item }) => {
 								setColor(color);
 								setOpenColor(false);
 							}}
-						/>
-
-						<Dropdown
-							title="Painted PC Finish"
-							onChange={handleOnFinish}
-							options={pcFinishOptions.map((option) => (
-								<option
-									key={option.option}
-									value={option.option}
-									defaultValue={option.option === finish}
-								>
-									{option.option}
-								</option>
-							))}
-							value={finish}
 						/>
 					</>
 				)}

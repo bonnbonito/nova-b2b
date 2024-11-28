@@ -18661,7 +18661,6 @@ const NeonSign = ({
     if (!remoteControl) missingFields.push('Select Remote Control');
     if (rigidBacking === 'Painted PC (Matte)') {
       if (!color?.name) missingFields.push('Select Painted PC Color');
-      if (!finish) missingFields.push('Select Painted PC Finish');
       if (color?.name === 'Custom Color' && !customColor) {
         missingFields.push('Add the Pantone color code of your custom color.');
       }
@@ -18930,15 +18929,6 @@ const NeonSign = ({
       setColor(color);
       setOpenColor(false);
     }
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
-    title: "Painted PC Finish",
-    onChange: handleOnFinish,
-    options: pcFinishOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      key: option.option,
-      value: option.option,
-      defaultValue: option.option === finish
-    }, option.option)),
-    value: finish
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
     title: "Mounting Options",
     onChange: handleOnChangeMounting,
@@ -19973,7 +19963,7 @@ function Letters({
   const [acrylicReveal, setAcrylicReveal] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicReveal = item.acrylicReveal) !== null && _item$acrylicReveal !== void 0 ? _item$acrylicReveal : '1/5"');
   const [lettersHeight, setLettersHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
     min: 5,
-    max: 40
+    max: 26
   });
   const [openAcrylicCover, setOpenAcrylicCover] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$studLength = item.studLength) !== null && _item$studLength !== void 0 ? _item$studLength : '');
@@ -20297,7 +20287,8 @@ function Letters({
         }
         setLettersHeight(() => ({
           min: newHeightOptions[0].Depth,
-          max: newHeightOptions[newHeightOptions.length - 1].Depth
+          //max: newHeightOptions[newHeightOptions.length - 1].Depth,
+          max: 26
         }));
       }
     }
@@ -20661,7 +20652,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const maxHeightOptions = Array.from({
-  length: 39
+  length: 22
 }, (_, index) => {
   const val = 5 + index;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -20670,7 +20661,7 @@ const maxHeightOptions = Array.from({
   }, val, "\"");
 });
 const maxWidthOptions = Array.from({
-  length: 39
+  length: 22
 }, (_, index) => {
   const val = 5 + index;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -21525,7 +21516,7 @@ function Letters({
   const [cadSinglePrice, setCadSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.cadSinglePrice);
   const [lettersHeight, setLettersHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
     min: 5,
-    max: 40
+    max: 26
   });
   const [openAcrylicCover, setOpenAcrylicCover] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$studLength = item.studLength) !== null && _item$studLength !== void 0 ? _item$studLength : '');
@@ -21838,7 +21829,8 @@ function Letters({
         }
         setLettersHeight(() => ({
           min: newHeightOptions[0].Depth,
-          max: newHeightOptions[newHeightOptions.length - 1].Depth
+          // max: newHeightOptions[newHeightOptions.length - 1].Depth,
+          max: 26
         }));
       }
     }
@@ -22180,7 +22172,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const maxHeightOptions = Array.from({
-  length: 39
+  length: 22
 }, (_, index) => {
   const val = 5 + index;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -22189,7 +22181,7 @@ const maxHeightOptions = Array.from({
   }, val, "\"");
 });
 const maxWidthOptions = Array.from({
-  length: 39
+  length: 22
 }, (_, index) => {
   const val = 5 + index;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -22945,7 +22937,7 @@ const returnColorOptions = ['Same Color', 'Different Color'];
 function Letters({
   item
 }) {
-  var _item$letters, _item$comments, _item$font, _item$backLitfaceColo, _item$backlitReturnCo, _item$trimLessWaterpr, _item$depth, _item$acrylicReveal, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$returnCustomCol, _item$backLitMetalFin, _item$backLitfaceRetu, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$studLength, _item$spacerStandoffD, _item$mounting, _item$sets;
+  var _item$letters, _item$comments, _item$font, _item$backLitfaceColo, _item$backLitSameColo, _item$backlitReturnCo, _item$trimLessWaterpr, _item$depth, _item$acrylicReveal, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$returnCustomCol, _item$backLitMetalFin, _item$backLitfaceRetu, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$studLength, _item$spacerStandoffD, _item$mounting, _item$sets;
   const {
     signage,
     setSignage,
@@ -22959,11 +22951,16 @@ function Letters({
     name: '',
     color: ''
   });
+  const [sameColor, setSameColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$backLitSameColo = item.backLitSameColor) !== null && _item$backLitSameColo !== void 0 ? _item$backLitSameColo : {
+    name: '',
+    color: ''
+  });
   const [returnColor, setReturnColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$backlitReturnCo = item.backlitReturnColor) !== null && _item$backlitReturnCo !== void 0 ? _item$backlitReturnCo : {
     name: '',
     color: ''
   });
   const [openColor, setOpenColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const [openSameColor, setOpenSameColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [openReturnColor, setOpenReturnColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$trimLessWaterpr = item.trimLessWaterproof) !== null && _item$trimLessWaterpr !== void 0 ? _item$trimLessWaterpr : '');
   const [letterPricing, setLetterPricing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
@@ -23018,6 +23015,7 @@ function Letters({
   };
   const colorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const fontRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const sameColorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const returnColorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const headlineRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const adjustFontSize = () => {
@@ -23046,6 +23044,7 @@ function Letters({
           includedItems,
           backLitfaceReturnColor: faceReturnColor,
           backLitfaceColor: color,
+          backLitSameColor: sameColor,
           backLitReturnColor: returnColor,
           letterHeight: selectedLetterHeight,
           usdPrice,
@@ -23106,6 +23105,16 @@ function Letters({
         name: '',
         color: ''
       });
+      setSameColor({
+        name: '',
+        color: ''
+      });
+      setCustomColor('');
+      setReturnCustomColor('');
+      setReturnColor({
+        name: '',
+        color: ''
+      });
       setFaceReturnColor('');
     } else {
       setMetalFinish('');
@@ -23147,6 +23156,12 @@ function Letters({
         name: '',
         color: ''
       });
+      setSameColor({
+        name: 'Black',
+        color: '#000000'
+      });
+      setCustomColor('');
+      setReturnCustomColor('');
     } else {
       setColor({
         name: 'Black',
@@ -23156,6 +23171,11 @@ function Letters({
         name: 'Black',
         color: '#000000'
       });
+      setSameColor({
+        name: '',
+        color: ''
+      });
+      setCustomColor('');
     }
   };
   const handleonChangeStudLength = e => {
@@ -23224,7 +23244,7 @@ function Letters({
         if (!color.name) missingFields.push('Select Face Color');
         if (!returnColor.name) missingFields.push('Select Return Color');
       }
-      if (color?.name === 'Custom Color' && !customColor) {
+      if ((color?.name === 'Custom Color' || sameColor?.name === 'Custom Color') && !customColor) {
         missingFields.push('Add the Pantone color code of your custom color.');
       }
       if (returnColor?.name === 'Custom Color' && !returnCustomColor) {
@@ -23278,7 +23298,7 @@ function Letters({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
-  }, [letters, depth, comments, font, waterproof, includedItems, color, usdPrice, cadPrice, usdSinglePrice, cadSinglePrice, selectedLetterHeight, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, returnCustomColor, returnColor, fontFileUrl, fontFileName, fontFilePath, fontFile, mounting, studLength, spacerStandoffDistance, selectedFinishing, faceReturnColor, metalFinish, acrylicReveal, sets]);
+  }, [letters, depth, comments, font, waterproof, includedItems, color, usdPrice, cadPrice, usdSinglePrice, cadSinglePrice, selectedLetterHeight, ledLightColor, fileUrls, fileNames, files, filePaths, sameColor, customColor, returnCustomColor, returnColor, fontFileUrl, fontFileName, fontFilePath, fontFile, mounting, studLength, spacerStandoffDistance, selectedFinishing, faceReturnColor, metalFinish, acrylicReveal, sets]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (depth?.value && letterPricingTables) {
       const table = (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_9__["default"])((0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_10__.getLetterPricingTableByTitle)(depth?.depth, letterPricingTables));
@@ -23462,7 +23482,9 @@ function Letters({
     openFont: openFont,
     setOpenFont: setOpenFont,
     handleSelectFont: handleSelectFont,
-    close: () => setOpenColor(false)
+    close: () => {
+      setOpenColor(false);
+    }
   }), font == 'Custom font' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_UploadFont__WEBPACK_IMPORTED_MODULE_5__["default"], {
     itemId: item.id,
     setFontFilePath: setFontFilePath,
@@ -23520,6 +23542,7 @@ function Letters({
     toggleColor: () => {
       setOpenColor(prev => !prev);
       setOpenFont(false);
+      setOpenSameColor(false);
     },
     colorOptions: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.colorOptions,
     selectColor: color => {
@@ -23534,11 +23557,26 @@ function Letters({
     toggleColor: () => {
       setOpenReturnColor(prev => !prev);
       setOpenFont(false);
+      setOpenSameColor(false);
     },
     colorOptions: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.colorOptions,
     selectColor: color => {
       setReturnColor(color);
       setOpenReturnColor(false);
+    }
+  })), faceReturnColor === 'Same Color' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    title: "Color",
+    ref: sameColorRef,
+    colorName: sameColor?.name,
+    openColor: openSameColor,
+    toggleColor: () => {
+      setOpenSameColor(prev => !prev);
+      setOpenFont(false);
+    },
+    colorOptions: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.colorOptions,
+    selectColor: color => {
+      setSameColor(color);
+      setOpenSameColor(false);
     }
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "LED Light Color",
@@ -23604,7 +23642,7 @@ function Letters({
     className: "text-xs text-[#9F9F9F] mb-4"
   }, "*Note: The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid"
-  }, color?.name == 'Custom Color' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (color?.name == 'Custom Color' || sameColor?.name == 'Custom Color') && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "px-[1px] col-span-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
@@ -23700,10 +23738,11 @@ const maxWidthOptions = Array.from({
     value: val
   }, val, "\"");
 });
+const returnColorOptions = ['Same Color', 'Different Color'];
 function Logo({
   item
 }) {
-  var _item$comments, _item$faceReturnColor, _item$width, _item$height, _item$trimLessWaterpr, _item$depth, _item$acrylicReveal, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$studLength, _item$spacerStandoffD, _item$mounting, _item$sets;
+  var _item$comments, _item$backLitfaceColo, _item$backLitSameColo, _item$backlitReturnCo, _item$width, _item$height, _item$trimLessWaterpr, _item$depth, _item$acrylicReveal, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$customColor, _item$returnCustomCol, _item$backLitfaceRetu, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$studLength, _item$spacerStandoffD, _item$mounting, _item$sets;
   const {
     signage,
     setSignage,
@@ -23711,13 +23750,23 @@ function Logo({
     hasUploadedFile
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_12__.useAppContext)();
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
-  const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$faceReturnColor = item.faceReturnColor) !== null && _item$faceReturnColor !== void 0 ? _item$faceReturnColor : {
+  const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$backLitfaceColo = item.backLitfaceColor) !== null && _item$backLitfaceColo !== void 0 ? _item$backLitfaceColo : {
+    name: '',
+    color: ''
+  });
+  const [sameColor, setSameColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$backLitSameColo = item.backLitSameColor) !== null && _item$backLitSameColo !== void 0 ? _item$backLitSameColo : {
+    name: '',
+    color: ''
+  });
+  const [returnColor, setReturnColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$backlitReturnCo = item.backlitReturnColor) !== null && _item$backlitReturnCo !== void 0 ? _item$backlitReturnCo : {
     name: '',
     color: ''
   });
   const [width, setWidth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$width = item.width) !== null && _item$width !== void 0 ? _item$width : '');
   const [height, setHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$height = item.height) !== null && _item$height !== void 0 ? _item$height : '');
   const [openColor, setOpenColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const [openSameColor, setOpenSameColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const [openReturnColor, setOpenReturnColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$trimLessWaterpr = item.trimLessWaterproof) !== null && _item$trimLessWaterpr !== void 0 ? _item$trimLessWaterpr : '');
   const [depth, setDepth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$depth = item.depth) !== null && _item$depth !== void 0 ? _item$depth : '');
   const [acrylicReveal, setAcrylicReveal] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicReveal = item.acrylicReveal) !== null && _item$acrylicReveal !== void 0 ? _item$acrylicReveal : '');
@@ -23726,6 +23775,8 @@ function Logo({
   const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$filePaths = item.filePaths) !== null && _item$filePaths !== void 0 ? _item$filePaths : []);
   const [files, setFiles] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$files = item.files) !== null && _item$files !== void 0 ? _item$files : []);
   const [customColor, setCustomColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$customColor = item.customColor) !== null && _item$customColor !== void 0 ? _item$customColor : '');
+  const [returnCustomColor, setReturnCustomColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$returnCustomCol = item.returnCustomColor) !== null && _item$returnCustomCol !== void 0 ? _item$returnCustomCol : '');
+  const [faceReturnColor, setFaceReturnColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$backLitfaceRetu = item.backLitfaceReturnColor) !== null && _item$backLitfaceRetu !== void 0 ? _item$backLitfaceRetu : '');
   const [selectedFinishing, setSelectedFinishing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.backLitFinishing);
   const [metalFinish, setMetalFinish] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.backLitMetalFinish);
   const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdPrice = item.usdPrice) !== null && _item$usdPrice !== void 0 ? _item$usdPrice : 0);
@@ -23744,6 +23795,8 @@ function Logo({
     setSets(e.target.value);
   };
   const colorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const sameColorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const returnColorRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   function updateSignage() {
     const updatedSignage = signage.map(sign => {
       if (sign.id === item.id) {
@@ -23754,7 +23807,11 @@ function Logo({
           height,
           depth,
           trimLessWaterproof: waterproof,
-          faceReturnColor: color,
+          backLitfaceReturnColor: faceReturnColor,
+          backLitfaceColor: color,
+          backLitSameColor: sameColor,
+          backLitReturnColor: returnColor,
+          returnCustomColor,
           usdPrice,
           cadPrice,
           files,
@@ -23808,11 +23865,18 @@ function Logo({
         name: '',
         color: ''
       });
-    } else {
-      setColor({
-        name: 'Black',
-        color: '#000000'
+      setSameColor({
+        name: '',
+        color: ''
       });
+      setCustomColor('');
+      setReturnCustomColor('');
+      setReturnColor({
+        name: '',
+        color: ''
+      });
+      setFaceReturnColor('');
+    } else {
       setMetalFinish('');
     }
     setSelectedFinishing(e.target.value);
@@ -23861,6 +23925,40 @@ function Logo({
       setSpacerStandoffDistance(''); // Always reset if the target is empty
     }
   };
+  const handleOnChangeFaceReturnColor = e => {
+    const target = e.target.value;
+    setFaceReturnColor(target);
+    if (target !== 'Different Color') {
+      setColor({
+        name: '',
+        color: ''
+      });
+      setReturnColor({
+        name: '',
+        color: ''
+      });
+      setSameColor({
+        name: 'Black',
+        color: '#000000'
+      });
+      setCustomColor('');
+      setReturnCustomColor('');
+    } else {
+      setColor({
+        name: 'Black',
+        color: '#000000'
+      });
+      setReturnColor({
+        name: 'Black',
+        color: '#000000'
+      });
+      setSameColor({
+        name: '',
+        color: ''
+      });
+      setCustomColor('');
+    }
+  };
   const checkAndAddMissingFields = () => {
     const missingFields = [];
     if (!depth) missingFields.push('Select Metal Depth');
@@ -23868,9 +23966,16 @@ function Logo({
     if (!height) missingFields.push('Select Logo Height');
     if (!selectedFinishing) missingFields.push('Select Finishing');
     if (selectedFinishing === 'Painted') {
-      if (!color.name) missingFields.push('Select Face & Return Color');
-      if (color?.name === 'Custom Color' && !customColor) {
+      if (!faceReturnColor) missingFields.push('Select Face Return Color');
+      if (faceReturnColor === 'Different Color') {
+        if (!color.name) missingFields.push('Select Face Color');
+        if (!returnColor.name) missingFields.push('Select Return Color');
+      }
+      if ((color?.name === 'Custom Color' || sameColor?.name === 'Custom Color') && !customColor) {
         missingFields.push('Add the Pantone color code of your custom color.');
+      }
+      if (returnColor?.name === 'Custom Color' && !returnCustomColor) {
+        missingFields.push('Add the Pantone color code of your return custom color.');
       }
     }
     if (selectedFinishing === 'Metal') {
@@ -23922,7 +24027,7 @@ function Logo({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
-  }, [depth, width, height, comments, waterproof, color, usdPrice, cadPrice, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, mounting, studLength, spacerStandoffDistance, selectedFinishing, metalFinish, acrylicReveal, sets, usdSinglePrice, cadSinglePrice, includedItems, hasUploadedFile]);
+  }, [depth, width, height, comments, waterproof, color, sameColor, usdPrice, cadPrice, ledLightColor, fileUrls, fileNames, files, filePaths, customColor, returnCustomColor, returnColor, mounting, studLength, spacerStandoffDistance, selectedFinishing, metalFinish, acrylicReveal, sets, usdSinglePrice, cadSinglePrice, includedItems, hasUploadedFile]);
   const computePricing = () => {
     var _tempTotal$toFixed, _total$toFixed;
     if (!width || !height || !depth?.value) {
@@ -24111,18 +24216,55 @@ function Logo({
       defaultValue: finish.option === metalFinish
     }, finish.option)),
     value: metalFinish
-  }), selectedFinishing === 'Painted' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_6__["default"], {
+  }), selectedFinishing === 'Painted' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Face & Return Color",
+    onChange: handleOnChangeFaceReturnColor,
+    options: returnColorOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: option,
+      value: option,
+      defaultValue: option === faceReturnColor
+    }, option)),
+    value: faceReturnColor
+  })), faceReturnColor === 'Different Color' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    title: "Face Color",
     ref: colorRef,
     colorName: color?.name,
     openColor: openColor,
     toggleColor: () => {
       setOpenColor(prev => !prev);
+      setOpenSameColor(false);
     },
     colorOptions: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_5__.colorOptions,
     selectColor: color => {
       setColor(color);
       setOpenColor(false);
+    }
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    title: "Return Color",
+    ref: returnColorRef,
+    colorName: returnColor?.name,
+    openColor: openReturnColor,
+    toggleColor: () => {
+      setOpenReturnColor(prev => !prev);
+      setOpenSameColor(false);
+    },
+    colorOptions: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_5__.colorOptions,
+    selectColor: color => {
+      setReturnColor(color);
+      setOpenReturnColor(false);
+    }
+  })), faceReturnColor === 'Same Color' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    title: "Color",
+    ref: sameColorRef,
+    colorName: sameColor?.name,
+    openColor: openSameColor,
+    toggleColor: () => {
+      setOpenSameColor(prev => !prev);
+    },
+    colorOptions: _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_5__.colorOptions,
+    selectColor: color => {
+      setSameColor(color);
+      setOpenSameColor(false);
     }
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "LED Light Color",
@@ -24188,7 +24330,7 @@ function Logo({
     className: "text-xs text-[#9F9F9F] mb-4"
   }, "*Note: The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid"
-  }, color?.name == 'Custom Color' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (color?.name == 'Custom Color' || sameColor?.name == 'Custom Color') && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "px-[1px] col-span-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "uppercase font-title text-sm tracking-[1.4px] px-2"
@@ -24197,6 +24339,16 @@ function Logo({
     type: "text",
     value: customColor,
     onChange: e => setCustomColor(e.target.value),
+    placeholder: "ADD THE PANTONE COLOR CODE"
+  })), returnColor?.name == 'Custom Color' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "px-[1px] col-span-4"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "uppercase font-title text-sm tracking-[1.4px] px-2"
+  }, "Return Custom Color"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    className: "w-full py-4 px-2 border-solid border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400",
+    type: "text",
+    value: returnCustomColor,
+    onChange: e => setReturnCustomColor(e.target.value),
     placeholder: "ADD THE PANTONE COLOR CODE"
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Description__WEBPACK_IMPORTED_MODULE_1__["default"], {
     value: comments,
@@ -37272,6 +37424,9 @@ const allAttributes = item => [{
 }, {
   key: item.backLitfaceReturnColor,
   label: 'FACE & RETURN COLOR'
+}, {
+  key: item.backLitSameColor?.name,
+  label: 'COLOR'
 }, {
   key: item.backLitfaceColor?.name,
   label: 'FACE COLOR'

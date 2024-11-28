@@ -51,10 +51,16 @@ export function Letters({ item }) {
 	const [color, setColor] = useState(
 		item.backLitfaceColor ?? { name: '', color: '' }
 	);
+
+	const [sameColor, setSameColor] = useState(
+		item.backLitSameColor ?? { name: '', color: '' }
+	);
+
 	const [returnColor, setReturnColor] = useState(
 		item.backlitReturnColor ?? { name: '', color: '' }
 	);
 	const [openColor, setOpenColor] = useState(false);
+	const [openSameColor, setOpenSameColor] = useState(false);
 	const [openReturnColor, setOpenReturnColor] = useState(false);
 	const [waterproof, setWaterproof] = useState(item.trimLessWaterproof ?? '');
 
@@ -151,6 +157,7 @@ export function Letters({ item }) {
 
 	const colorRef = useRef(null);
 	const fontRef = useRef(null);
+	const sameColorRef = useRef(null);
 	const returnColorRef = useRef(null);
 
 	const headlineRef = useRef(null);
@@ -187,6 +194,7 @@ export function Letters({ item }) {
 					includedItems,
 					backLitfaceReturnColor: faceReturnColor,
 					backLitfaceColor: color,
+					backLitSameColor: sameColor,
 					backLitReturnColor: returnColor,
 					letterHeight: selectedLetterHeight,
 					usdPrice,
@@ -254,6 +262,10 @@ export function Letters({ item }) {
 		const target = e.target.value;
 		if (target === 'Metal') {
 			setColor({ name: '', color: '' });
+			setSameColor({ name: '', color: '' });
+			setCustomColor('');
+			setReturnCustomColor('');
+			setReturnColor({ name: '', color: '' });
 			setFaceReturnColor('');
 		} else {
 			setMetalFinish('');
@@ -300,9 +312,14 @@ export function Letters({ item }) {
 		if (target !== 'Different Color') {
 			setColor({ name: '', color: '' });
 			setReturnColor({ name: '', color: '' });
+			setSameColor({ name: 'Black', color: '#000000' });
+			setCustomColor('');
+			setReturnCustomColor('');
 		} else {
 			setColor({ name: 'Black', color: '#000000' });
 			setReturnColor({ name: 'Black', color: '#000000' });
+			setSameColor({ name: '', color: '' });
+			setCustomColor('');
 		}
 	};
 
@@ -382,7 +399,11 @@ export function Letters({ item }) {
 				if (!returnColor.name) missingFields.push('Select Return Color');
 			}
 
-			if (color?.name === 'Custom Color' && !customColor) {
+			if (
+				(color?.name === 'Custom Color' ||
+					sameColor?.name === 'Custom Color') &&
+				!customColor
+			) {
 				missingFields.push('Add the Pantone color code of your custom color.');
 			}
 			if (returnColor?.name === 'Custom Color' && !returnCustomColor) {
@@ -475,6 +496,7 @@ export function Letters({ item }) {
 		fileNames,
 		files,
 		filePaths,
+		sameColor,
 		customColor,
 		returnCustomColor,
 		returnColor,
@@ -739,7 +761,9 @@ export function Letters({ item }) {
 					openFont={openFont}
 					setOpenFont={setOpenFont}
 					handleSelectFont={handleSelectFont}
-					close={() => setOpenColor(false)}
+					close={() => {
+						setOpenColor(false);
+					}}
 				/>
 
 				{font == 'Custom font' && (
@@ -837,6 +861,7 @@ export function Letters({ item }) {
 							toggleColor={() => {
 								setOpenColor((prev) => !prev);
 								setOpenFont(false);
+								setOpenSameColor(false);
 							}}
 							colorOptions={colorOptions}
 							selectColor={(color) => {
@@ -852,11 +877,31 @@ export function Letters({ item }) {
 							toggleColor={() => {
 								setOpenReturnColor((prev) => !prev);
 								setOpenFont(false);
+								setOpenSameColor(false);
 							}}
 							colorOptions={colorOptions}
 							selectColor={(color) => {
 								setReturnColor(color);
 								setOpenReturnColor(false);
+							}}
+						/>
+					</>
+				)}
+				{faceReturnColor === 'Same Color' && (
+					<>
+						<ColorsDropdown
+							title="Color"
+							ref={sameColorRef}
+							colorName={sameColor?.name}
+							openColor={openSameColor}
+							toggleColor={() => {
+								setOpenSameColor((prev) => !prev);
+								setOpenFont(false);
+							}}
+							colorOptions={colorOptions}
+							selectColor={(color) => {
+								setSameColor(color);
+								setOpenSameColor(false);
 							}}
 						/>
 					</>
@@ -973,7 +1018,8 @@ export function Letters({ item }) {
 			)}
 
 			<div className="quote-grid">
-				{color?.name == 'Custom Color' && (
+				{(color?.name == 'Custom Color' ||
+					sameColor?.name == 'Custom Color') && (
 					<div className="px-[1px] col-span-4">
 						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
 							Custom Color

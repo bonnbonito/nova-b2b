@@ -96,7 +96,7 @@ export function Letters({ item }) {
 
 	const [lettersHeight, setLettersHeight] = useState({
 		min: 5,
-		max: 40,
+		max: 26,
 	});
 
 	const [openAcrylicCover, setOpenAcrylicCover] = useState(false);
@@ -558,7 +558,8 @@ export function Letters({ item }) {
 
 				setLettersHeight(() => ({
 					min: newHeightOptions[0].Depth,
-					max: newHeightOptions[newHeightOptions.length - 1].Depth,
+					//max: newHeightOptions[newHeightOptions.length - 1].Depth,
+					max: 26,
 				}));
 			}
 		}
