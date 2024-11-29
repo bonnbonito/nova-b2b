@@ -18,7 +18,7 @@ class AutoLogin {
 		add_action( 'show_user_profile', array( $this, 'add_autologin_link_to_user_profile' ) );
 		add_action( 'personal_options_update', array( $this, 'save_autologin_link_on_profile_update' ) );
 		add_action( 'edit_user_profile_update', array( $this, 'save_autologin_link_on_profile_update' ) );
-		add_action( 'edit_user_profile', array( $this, 'add_autologin_regenerate_button' ) );
+		//add_action( 'edit_user_profile', array( $this, 'add_autologin_regenerate_button' ) );
 		add_action( 'personal_options_update', array( $this, 'handle_autologin_regenerate_button' ) );
 		add_action( 'edit_user_profile_update', array( $this, 'handle_autologin_regenerate_button' ) );
 	}
@@ -121,6 +121,10 @@ class AutoLogin {
 		echo '</td>';
 		echo '</tr>';
 		echo '</table>';
+		echo '<h2>Regenerate Autologin Link</h2>';
+		echo '<input type="checkbox" name="regenerate_autologin" value="1"> Yes';
+		echo '<input type="hidden" name="user_id" value="' . esc_attr( $user->ID ) . '">';
+		wp_nonce_field( 'regenerate_autologin_action', 'regenerate_autologin_nonce' );
 	}
 
 	public function save_autologin_link_on_profile_update( $user_id ) {
@@ -137,13 +141,5 @@ class AutoLogin {
 		if ( ! current_user_can( 'edit_users' ) ) {
 			return;
 		}
-
-		echo '<h2>Regenerate Autologin Link</h2>';
-		echo '<form method="post" action="">';
-		echo '<input type="hidden" name="regenerate_autologin" value="1">';
-		echo '<input type="hidden" name="user_id" value="' . esc_attr( $user->ID ) . '">';
-		wp_nonce_field( 'regenerate_autologin_action', 'regenerate_autologin_nonce' );
-		submit_button( 'Regenerate Autologin Link' );
-		echo '</form>';
 	}
 }
