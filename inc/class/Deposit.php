@@ -499,7 +499,9 @@ class Deposit {
 				$key = 'nova_payment_email_key_' . get_row_index();
 				$email_sent  = get_post_meta( $order_id, $key, true );
 
-				if ( $email_sent ) continue;
+				if ( $email_sent ) {
+					 continue;
+				}
 
 				if ( $days !== false ) {
 
