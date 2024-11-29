@@ -496,6 +496,10 @@ class Deposit {
 			while ( have_rows( 'payment_emails', $deposit_chosen ) ) :
 				the_row();
 				$days = get_sub_field( 'send_after_days' );
+				$key = 'nova_payment_email_key_' . get_row_index();
+				$email_sent  = get_post_meta( $order_id, $key, true );
+
+				if ( $email_sent ) continue;
 
 				if ( $days !== false ) {
 
@@ -565,7 +569,7 @@ class Deposit {
 								}
 							}
 
-							$key = 'nova_payment_email_key_' . get_row_index();
+
 							update_post_meta( $order_id, $key, 'sent ' . date( 'Y/m/d' ) );
 
 						}

@@ -736,6 +736,11 @@ class Pending_Payment {
 					$is_last_row = get_row_index() == count( get_field( 'payment_emails', $payment_type ) );
 					$email_sent  = get_post_meta( $payment_order_id, 'nova_payment_email_key_' . get_row_index(), true );
 
+					//return if already sent
+					if ( $email_sent ) {
+						continue;
+					}
+
 					if ( $today == $date_later ) {
 
 						$subject = get_sub_field( 'subject' );
