@@ -160,6 +160,10 @@ class FAQ {
 			}
 			?>
 </div>
+<div class="p-4 text-center">
+	<a href="<?php echo home_url(); ?>/faq/" class="button text-center mt-4">VIEW ALL FAQS</a>
+</div>
+
 			<?php
 		}
 	}
