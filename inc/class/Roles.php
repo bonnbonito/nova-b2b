@@ -58,6 +58,7 @@ class Roles {
 		add_action( 'admin_notices', array( $this, 'display_send_activation_email_notice' ) );
 		add_action( 'kadence_header', array( $this, 'remove_multicurrency' ) );
 		add_action( 'rest_api_init', array( $this, 'rest_show_all_business_id' ) );
+		add_filter( 'wp_mail', array( $this, 'send_email_to_additional_nova_email' ) );
 
 		if ( function_exists( 'get_field' ) ) {
 			$this->streak_api = get_field( 'streak_api', 'option' ) ?? null;
@@ -70,7 +71,53 @@ class Roles {
 		add_action( 'edit_user_profile_update', array( $this, 'save_additional_billing_email_field' ) );
 	}
 
+	public function send_email_to_additional_nova_email( $args ) {
+		// Ensure $to is set and contains email(s)
+		if ( empty( $args['to'] ) ) {
+			return $args;
+		}
+
+		// Normalize $to into an array
+		$to_addresses = is_array( $args['to'] ) ? $args['to'] : explode( ',', $args['to'] );
+
+		foreach ( $to_addresses as $email ) {
+			$email = trim( $email );
+
+			// Find the user by email
+			$user = get_user_by( 'email', $email );
+			if ( $user ) {
+				// Get the "additional_nova_email" meta for the user
+				$additional_email = get_user_meta( $user->ID, 'additional_nova_email', true );
+
+				if ( is_email( $additional_email ) ) {
+					// Send a separate email to the additional email address
+					$new_args = array(
+						'to'          => $additional_email,
+						'subject'     => $args['subject'], // Use the same subject
+						'message'     => $args['message'], // Use the same message
+						'headers'     => $args['headers'], // Use the same headers
+						'attachments' => $args['attachments'] ?? array(), // Include attachments if any
+					);
+
+					// Send the email
+					wp_mail(
+						$new_args['to'],
+						$new_args['subject'],
+						$new_args['message'],
+						$new_args['headers'],
+						$new_args['attachments']
+					);
+				}
+			}
+		}
+
+		// Return the original arguments for the primary email
+		return $args;
+	}
+
+
 	public function add_contact_methods( $contact_methods, $user ) {
+		$contact_methods['additional_nova_email']    = __( 'Additional Email', 'nova' );
 		$contact_methods['additional_order_email']   = __( 'Order Email', 'nova' );
 		$contact_methods['additional_billing_email'] = __( 'Billing Email', 'nova' );
 		return $contact_methods;
@@ -79,6 +126,9 @@ class Roles {
 	public function save_additional_billing_email_field( $user_id ) {
 		if ( ! current_user_can( 'edit_user', $user_id ) ) {
 			return false;
+		}
+		if ( isset( $_POST['additional_nova_email'] ) ) {
+			update_user_meta( $user_id, 'additional_nova_email', sanitize_email( $_POST['additional_nova_email'] ) );
 		}
 		if ( isset( $_POST['additional_order_email'] ) ) {
 			update_user_meta( $user_id, 'additional_order_email', sanitize_email( $_POST['additional_order_email'] ) );
@@ -480,9 +530,6 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 	}
 
-
-
-
 	public function states_by_country() {
 		$states = array(
 			'US' => array(
@@ -606,8 +653,6 @@ jQuery(document).ready(function($) {
 		}
 	}
 
-
-
 	public function update_role_business_id( $user_id, $new_role, $old_roles ) {
 		switch ( $new_role ) {
 			case 'partner':
@@ -648,10 +693,6 @@ jQuery(document).ready(function($) {
 			update_field( 'business_id', $business_id, 'user_' . $user_id );
 		}
 	}
-
-
-
-
 
 	public function log_role_change( $user_id, $new_role, $old_roles ) {
 		$user_info = get_userdata( $user_id );
@@ -1065,7 +1106,6 @@ jQuery(document).ready(function($) {
 		$this->send_email( $user_email, $subject, $message );
 	}
 
-
 	public function send_activation() {
 
 		$status = array(
@@ -1146,9 +1186,6 @@ jQuery(document).ready(function($) {
 
 		return $user_emails;
 	}
-
-
-
 
 	public function create_roles() {
 		global $wp_roles;
@@ -1256,7 +1293,6 @@ jQuery(document).ready(function($) {
 			}
 		}
 	}
-
 
 	public function clear_table() {
 		global $wpdb; // Make sure $wpdb is accessible
@@ -1373,8 +1409,6 @@ jQuery(document).ready(function($) {
 		return false;
 	}
 
-
-
 	private function process_business_id_user( $user ) {
 		$user_id    = $user->ID;
 		$first_name = get_user_meta( $user_id, 'first_name', true );
@@ -1434,8 +1468,6 @@ jQuery(document).ready(function($) {
 			update_field( 'business_id', '', 'user_' . $user_id );
 		}
 	}
-
-
 
 	public function regenerate_business_id() {
 		$batch_size = 20; // Process 100 users per batch
