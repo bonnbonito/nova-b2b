@@ -185,15 +185,19 @@ function allAttributes(sign) {
 			value: sign.etchedPaintedColor ? sign.etchedPaintedColor : '',
 		},
 		{
-			label: 'ELECTROPLATED FINISHING',
-			value: sign.etchedElectroplated ? sign.etchedElectroplated : '',
+			label: 'METAL FINISHING',
+			value: sign.etchedMetalFinish ? sign.etchedMetalFinish : '',
 		},
 		{
 			label: 'ANODIZED COLOR',
 			value: sign.etchedAnodizedColor ? sign.etchedAnodizedColor : '',
 		},
 		{
-			label: 'GRAPHICS STYLE',
+			label: 'ANODIZED FINISHING',
+			value: sign.etchedAnodizedFinishing ? sign.etchedAnodizedFinishing : '',
+		},
+		{
+			label: 'ETCHING STYLE',
 			value: sign.etchedGraphicsStyle ? sign.etchedGraphicsStyle : '',
 		},
 		{

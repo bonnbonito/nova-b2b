@@ -1,4 +1,4 @@
-=== Hineon Theme ===
+=== Nova Signage Theme ===
 Contributors: bonnbonito
 Requires at least: 5.4
 Tested up to: 6.2

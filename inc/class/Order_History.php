@@ -365,9 +365,9 @@ class Order_History {
 	public function account_statement_content() {
 		?>
 <div id="nova">
-    <div id="hello"></div>
+	<div id="hello"></div>
 </div>
-<?php
+		<?php
 	}
 
 	public function get_orders() {
@@ -659,15 +659,16 @@ class Order_History {
 
 		foreach ( $results as $result ) {
 
-			$order_id      = $result->order_id;
-			$order         = wc_get_order( $order_id );
-			$time_diff     = '';
-			$due_date      = '';
-			$needs_payment = $order->get_meta( 'needs_payment' );
+			$order_id  = $result->order_id;
+			$order     = wc_get_order( $order_id );
+			$time_diff = '';
+			$due_date  = '';
 
 			if ( ! $order ) {
 				continue;
 			}
+
+			$needs_payment = $order->get_meta( 'needs_payment' );
 
 			if ( ! $order->has_status( array( 'pending' ) ) ) {
 				continue;

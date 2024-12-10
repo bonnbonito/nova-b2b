@@ -45,7 +45,9 @@ const metalThicknessOptionsDefault = [
 	'3/8" (9mm)',
 ];
 
-const electroplatedOptions = [
+const metalFinishingOptions = [
+	'Stainless Steel Brushed',
+	'Stainless Steel Polished',
 	'Electroplated Gold Brushed',
 	'Electroplated Gold Polished',
 	'Electroplated Black Titanium Brushed',
@@ -54,13 +56,8 @@ const electroplatedOptions = [
 	'Electroplated Red Copper Brushed',
 ];
 
-const stainlessFinishing = ['Painted', 'Brushed', 'Polished', 'Electroplated'];
-const aluminumFinishing = [
-	'Painted',
-	'Brushed',
-	'Anodized Brushed',
-	'Anodized Sandblasted Matte',
-];
+const stainlessFinishing = ['Painted', 'Metal'];
+const aluminumFinishing = ['Painted', 'Brushed', 'Anodized'];
 const brassFinishing = ['Brushed'];
 
 const anodizedColorOptions = [
@@ -70,6 +67,8 @@ const anodizedColorOptions = [
 	'Gold',
 	'Champagne Gold',
 ];
+
+const anodizedFinishingOptions = ['Sandblasted Matte', 'Brushed Anodized'];
 
 const edgesOptionsDefault = ['Square'];
 
@@ -108,8 +107,8 @@ export const EtchedSign = ({ item }) => {
 		metalThicknessOptionsDefault
 	);
 	const [finishing, setFinishing] = useState(item.etchedFinishing ?? '');
-	const [electroplated, setElectroplated] = useState(
-		item.etchedElectroplated ?? ''
+	const [etchedMetalFinish, setEtchedMetalFinish] = useState(
+		item.etchedMetalFinish ?? ''
 	);
 	const [spacerStandoffDistance, setSpacerStandoffDistance] = useState(
 		item.spacerStandoffDistance ?? ''
@@ -135,6 +134,11 @@ export const EtchedSign = ({ item }) => {
 	const [anodizedColor, setAnodizedColor] = useState(
 		item.etchedAnodizedColor ?? ''
 	);
+
+	const [anodizedFinishing, setAnodizedFinishing] = useState(
+		item.etchedAnodizedFinishing ?? ''
+	);
+
 	const [graphicsStyle, setGraphicsStyle] = useState(
 		item.etchedGraphicsStyle ?? 'Recessed'
 	);
@@ -180,7 +184,8 @@ export const EtchedSign = ({ item }) => {
 					etchedMetalThickness: metalThickness,
 					etchedFinishing: finishing,
 					etchedPaintedColor: color?.name,
-					etchedElectroplated: electroplated,
+					etchedMetalFinish,
+					etchedAnodizedFinishing: anodizedFinishing,
 					etchedAnodizedColor: anodizedColor,
 					etchedGraphicsStyle: graphicsStyle,
 					studLength,
@@ -216,7 +221,8 @@ export const EtchedSign = ({ item }) => {
 		finishing,
 		studLength,
 		spacerStandoffDistance,
-		electroplated,
+		etchedMetalFinish,
+		anodizedFinishing,
 		graphicsStyle,
 		anodizedColor,
 		fileNames,
@@ -253,22 +259,20 @@ export const EtchedSign = ({ item }) => {
 			if (!color) missingFields.push('Select Painted Color');
 		}
 
-		if (finishing === 'Electroplated') {
-			if (!electroplated) missingFields.push('Select Electroplated Finishing');
+		if (finishing === 'Metal') {
+			if (!etchedMetalFinish) missingFields.push('Select Metal Finishing');
 		}
 
-		if (
-			finishing === 'Anodized Brushed' ||
-			finishing === 'Anodized Sandblasted Matte'
-		) {
+		if (finishing === 'Anodized') {
 			if (!anodizedColor) missingFields.push('Select Anodized Color');
+			if (!anodizedFinishing) missingFields.push('Select Anodized Finishing');
 		}
 
 		if (color?.name === 'Custom Color' && !customColor) {
 			missingFields.push('Add the Pantone color code of your custom color.');
 		}
 
-		if (!graphicsStyle) missingFields.push('Select Graphics Style');
+		if (!graphicsStyle) missingFields.push('Select Etching Style');
 
 		if (!edges) missingFields.push('Select Edges');
 
@@ -320,8 +324,9 @@ export const EtchedSign = ({ item }) => {
 		studLength,
 		metalThickness,
 		finishing,
-		electroplated,
+		etchedMetalFinish,
 		anodizedColor,
+		anodizedFinishing,
 		graphicsStyle,
 		edges,
 		customColor,
@@ -421,7 +426,7 @@ export const EtchedSign = ({ item }) => {
 			tempTotal *= 1.1;
 		}
 
-		if (finishing === 'Electroplated') {
+		if (finishing === 'Metal') {
 			tempTotal *= 1.2;
 		}
 
@@ -485,7 +490,7 @@ export const EtchedSign = ({ item }) => {
 						...metalThicknessOptionsDefault,
 						'1/2" (12mm)',
 					]);
-					setElectroplated('');
+					setEtchedMetalFinish('');
 
 					if (
 						metalThickness === '1/4" (6mm)' ||
@@ -511,6 +516,7 @@ export const EtchedSign = ({ item }) => {
 					setMetalThicknessOptions(metalThicknessOptionsDefault);
 					setFinishingOptions(stainlessFinishing);
 					setAnodizedColor('');
+					setAnodizedFinishing('');
 					setEdgesOptions(['Square']);
 					setEdges('Square');
 
@@ -548,8 +554,9 @@ export const EtchedSign = ({ item }) => {
 				setMetalThicknessOptions(metalThicknessOptionsDefault);
 				setFinishingOptions(brassFinishing);
 				setFinishing('Brushed');
-				setElectroplated('');
+				setEtchedMetalFinish('');
 				setAnodizedColor('');
+				setAnodizedFinishing('');
 				setEdgesOptions(['Square']);
 				setEdges('Square');
 			}
@@ -615,28 +622,31 @@ export const EtchedSign = ({ item }) => {
 			setCustomColor('');
 		}
 
-		if (target !== 'Electroplated') {
-			setElectroplated('');
+		if (target !== 'Metal') {
+			setEtchedMetalFinish('');
 		}
 
-		if (
-			target !== 'Anodized Brushed' &&
-			target !== 'Anodized Sandblasted Matte'
-		) {
+		if (target !== 'Anodized' && target !== 'Anodized') {
 			setAnodizedColor('');
+			setAnodizedFinishing('');
 		}
 
 		setFinishing(target);
 	};
 
-	const handleonChangeElectroplated = (e) => {
+	const handleonChangeEtchedMetalFinish = (e) => {
 		const target = e.target.value;
-		setElectroplated(target);
+		setEtchedMetalFinish(target);
 	};
 
 	const handleonChangeAnodized = (e) => {
 		const target = e.target.value;
 		setAnodizedColor(target);
+	};
+
+	const handleonChangeAnodizedFinishing = (e) => {
+		const target = e.target.value;
+		setAnodizedFinishing(target);
 	};
 
 	const handleOnChangeMetalThickness = (e) => {
@@ -864,43 +874,58 @@ export const EtchedSign = ({ item }) => {
 					/>
 				)}
 
-				{finishing === 'Electroplated' && (
+				{finishing === 'Metal' && (
 					<Dropdown
-						title="ELECTROPLATED"
-						onChange={handleonChangeElectroplated}
-						options={electroplatedOptions.map((option) => (
+						title="Metal Finishing"
+						onChange={handleonChangeEtchedMetalFinish}
+						options={metalFinishingOptions.map((option) => (
 							<option
 								key={option}
 								value={option}
-								defaultValue={option === electroplated}
+								defaultValue={option === etchedMetalFinish}
 							>
 								{option}
 							</option>
 						))}
-						value={electroplated}
+						value={etchedMetalFinish}
 					/>
 				)}
 
-				{(finishing === 'Anodized Brushed' ||
-					finishing === 'Anodized Sandblasted Matte') && (
-					<Dropdown
-						title="ANODIZED COLOR"
-						onChange={handleonChangeAnodized}
-						options={anodizedColorOptions.map((option) => (
-							<option
-								key={option}
-								value={option}
-								defaultValue={option === anodizedColor}
-							>
-								{option}
-							</option>
-						))}
-						value={anodizedColor}
-					/>
+				{finishing === 'Anodized' && (
+					<>
+						<Dropdown
+							title="ANODIZED COLOR"
+							onChange={handleonChangeAnodized}
+							options={anodizedColorOptions.map((option) => (
+								<option
+									key={option}
+									value={option}
+									defaultValue={option === anodizedColor}
+								>
+									{option}
+								</option>
+							))}
+							value={anodizedColor}
+						/>
+						<Dropdown
+							title="ANODIZED FINISHING"
+							onChange={handleonChangeAnodizedFinishing}
+							options={anodizedFinishingOptions.map((option) => (
+								<option
+									key={option}
+									value={option}
+									defaultValue={option === anodizedFinishing}
+								>
+									{option}
+								</option>
+							))}
+							value={anodizedFinishing}
+						/>
+					</>
 				)}
 
 				<Dropdown
-					title="GRAPHICS STYLE"
+					title="ETCHING STYLE"
 					onChange={(e) => setGraphicsStyle(e.target.value)}
 					options={graphicsStyleOptions.map((option) => (
 						<option

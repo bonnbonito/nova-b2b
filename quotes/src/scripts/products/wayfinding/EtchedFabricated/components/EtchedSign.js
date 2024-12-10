@@ -26,6 +26,8 @@ import { graphicsStyleOptions } from '../../options';
 const metalThicknessOptions = ['0.5"', '1"', '1.5"', '2"'];
 
 const electroplatedOptions = [
+	'Stainless Steel Brushed',
+	'Stainless Steel Polished',
 	'Electroplated Gold Brushed',
 	'Electroplated Gold Polished',
 	'Electroplated Black Titanium Brushed',
@@ -34,7 +36,7 @@ const electroplatedOptions = [
 	'Electroplated Red Copper Brushed',
 ];
 
-const finishingOptions = ['Painted', 'Brushed', 'Polished', 'Electroplated'];
+const finishingOptions = ['Painted', 'Metal'];
 
 const mountingOptions = ['Stud Mount', STUD_WITH_SPACER, 'PVC Backer'];
 
@@ -72,7 +74,7 @@ export const EtchedSign = ({ item }) => {
 
 	const [finishing, setFinishing] = useState(item.etchedFinishing ?? '');
 	const [electroplated, setElectroplated] = useState(
-		item.etchedElectroplated ?? ''
+		item.etchedMetalFinish ?? ''
 	);
 	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
 	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
@@ -129,7 +131,7 @@ export const EtchedSign = ({ item }) => {
 					etchedMetalThickness: metalThickness,
 					etchedFinishing: finishing,
 					etchedPaintedColor: color?.name,
-					etchedElectroplated: electroplated,
+					etchedMetalFinish: electroplated,
 					etchedGraphicsStyle: graphicsStyle,
 					studLength,
 					spacerStandoffDistance,
@@ -195,8 +197,8 @@ export const EtchedSign = ({ item }) => {
 			if (!color) missingFields.push('Select Painted Color');
 		}
 
-		if (finishing === 'Electroplated') {
-			if (!electroplated) missingFields.push('Select Electroplated Finishing');
+		if (finishing === 'Metal') {
+			if (!electroplated) missingFields.push('Select Metal Finishing');
 		}
 
 		if (color?.name === 'Custom Color' && !customColor) {
@@ -209,7 +211,7 @@ export const EtchedSign = ({ item }) => {
 			if (!studLength) missingFields.push('Select Stud Length');
 		}
 
-		if (!graphicsStyle) missingFields.push('Select Graphics Style');
+		if (!graphicsStyle) missingFields.push('Select Etching Style');
 
 		if (!waterproof) missingFields.push('Select Environment');
 
@@ -289,7 +291,7 @@ export const EtchedSign = ({ item }) => {
 			tempTotal *= 1.1;
 		}
 
-		if (finishing === 'Electroplated') {
+		if (finishing === 'Metal') {
 			tempTotal *= 1.2;
 		}
 
@@ -373,7 +375,7 @@ export const EtchedSign = ({ item }) => {
 			setCustomColor('');
 		}
 
-		if (target !== 'Electroplated') {
+		if (target !== 'Metal') {
 			setElectroplated('');
 		}
 
@@ -545,9 +547,9 @@ export const EtchedSign = ({ item }) => {
 					/>
 				)}
 
-				{finishing === 'Electroplated' && (
+				{finishing === 'Metal' && (
 					<Dropdown
-						title="ELECTROPLATED"
+						title="Metal Finishing"
 						onChange={handleonChangeElectroplated}
 						options={electroplatedOptions.map((option) => (
 							<option
@@ -563,7 +565,7 @@ export const EtchedSign = ({ item }) => {
 				)}
 
 				<Dropdown
-					title="GRAPHICS STYLE"
+					title="Etching Style"
 					onChange={(e) => setGraphicsStyle(e.target.value)}
 					options={graphicsStyleOptions.map((option) => (
 						<option
