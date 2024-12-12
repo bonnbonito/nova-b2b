@@ -1,9 +1,0 @@
-{
-	"intelephense.environment.includePaths": [
-		"E:\\laragon\\www\\novatest\\wp-content\\plugins\\woocommerce\\",
-		"E:\\laragon\\www\\novatest\\wp-content\\plugins\\advanced-custom-fields-pro\\",
-		"E:\\laragon\\www\\novatest\\wp-content\\themes\\kadence\\",
-		"E:\\laragon\\www\\novatest\\wp-content\\plugins\\woocommerce-pdf-invoices-packing-slips\\",
-		"E:\\laragon\\www\\novatest\\wp-content\\plugins\\woocommerce-ultimate-multi-currency-suite\\"
-	]
-}
