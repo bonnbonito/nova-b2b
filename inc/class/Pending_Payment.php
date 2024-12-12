@@ -1053,6 +1053,10 @@ class Pending_Payment {
 
 				$order = wc_get_order( absint( $row['payment_order'] ) );
 
+				if ( ! $order ) {
+					continue;
+				}
+
 				$first_name    = $order->get_billing_first_name() ? $order->get_billing_first_name() : 'Customer';
 				$last_name     = $order->get_billing_last_name() ? $order->get_billing_last_name() : '';
 				$customer_name = $first_name . ' ' . $last_name;
@@ -1773,13 +1777,11 @@ class Pending_Payment {
 			}
 
 			$needs_payment = $order->get_meta( 'needs_payment' );
-
 			if ( ! $needs_payment ) {
 				continue;
 			}
 
 			$deposit_chosen = $order->get_meta( '_deposit_chosen' );
-
 			if ( ! $deposit_chosen ) {
 				continue;
 			}

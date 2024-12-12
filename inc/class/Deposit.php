@@ -495,12 +495,12 @@ class Deposit {
 
 			while ( have_rows( 'payment_emails', $deposit_chosen ) ) :
 				the_row();
-				$days = get_sub_field( 'send_after_days' );
-				$key = 'nova_payment_email_key_' . get_row_index();
-				$email_sent  = get_post_meta( $order_id, $key, true );
+				$days       = get_sub_field( 'send_after_days' );
+				$key        = 'nova_payment_email_key_' . get_row_index();
+				$email_sent = get_post_meta( $order_id, $key, true );
 
 				if ( $email_sent ) {
-					 continue;
+					continue;
 				}
 
 				if ( $days !== false ) {
@@ -570,7 +570,6 @@ class Deposit {
 									update_user_meta( $user_id, 'overdue_orders', $order_id );
 								}
 							}
-
 
 							update_post_meta( $order_id, $key, 'sent ' . date( 'Y/m/d' ) );
 
@@ -927,11 +926,10 @@ class Deposit {
 
 		foreach ( $results as $result ) {
 
-			$order_id      = $result->order_id;
-			$order         = wc_get_order( $order_id );
-			$time_diff     = '';
-			$due_date      = '';
-			$needs_payment = $order->get_meta( 'needs_payment' );
+			$order_id  = $result->order_id;
+			$order     = wc_get_order( $order_id );
+			$time_diff = '';
+			$due_date  = '';
 
 			if ( ! $order ) {
 				continue;
@@ -941,6 +939,7 @@ class Deposit {
 				continue;
 			}
 
+			$needs_payment = $order->get_meta( 'needs_payment' );
 			if ( ! $needs_payment ) {
 				continue;
 			}
