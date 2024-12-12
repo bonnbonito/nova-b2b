@@ -736,7 +736,7 @@ class Pending_Payment {
 					$is_last_row = get_row_index() == count( get_field( 'payment_emails', $payment_type ) );
 					$email_sent  = get_post_meta( $payment_order_id, 'nova_payment_email_key_' . get_row_index(), true );
 
-					//return if already sent
+					// return if already sent
 					if ( $email_sent ) {
 						continue;
 					}
@@ -1761,10 +1761,8 @@ class Pending_Payment {
 
 		foreach ( $results as $result ) {
 
-			$order_id       = $result->order_id;
-			$order          = wc_get_order( $order_id );
-			$needs_payment  = $order->get_meta( 'needs_payment' );
-			$deposit_chosen = $order->get_meta( '_deposit_chosen' );
+			$order_id = $result->order_id;
+			$order    = wc_get_order( $order_id );
 
 			if ( ! $order ) {
 				continue;
@@ -1774,9 +1772,13 @@ class Pending_Payment {
 				continue;
 			}
 
+			$needs_payment = $order->get_meta( 'needs_payment' );
+
 			if ( ! $needs_payment ) {
 				continue;
 			}
+
+			$deposit_chosen = $order->get_meta( '_deposit_chosen' );
 
 			if ( ! $deposit_chosen ) {
 				continue;
