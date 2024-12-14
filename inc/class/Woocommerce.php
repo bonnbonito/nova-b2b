@@ -1322,7 +1322,11 @@ class Woocommerce {
 					);
 				}
 
-				if ( $original_tax_names && $original_tax ) {
+				$fee_items = $order->get_items('fee');
+				$coupons = $order->get_coupons();
+
+
+				if ( $original_tax_names && $original_tax && !$fee_items && !$coupons ) {
 					$from_order_object = wc_get_order( $from_order );
 					$tax_rate          = $this->get_rate_percent_value_from_order( $from_order_object );
 					$tax_total         = $this->calculate_correct_tax( $from_order_object, $tax_rate );
