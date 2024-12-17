@@ -65,18 +65,17 @@ class OrderApprove {
 		$role_instance = \NOVA_B2B\Roles::get_instance();
 
 		if ( $role_instance ) {
-			$subject  = 'Your Revised Mockup (Order #' . $order->get_order_number() . ') is Ready for Review';
+			$subject  = '[Nova Signage] Order #' . $order->get_order_number() . '- Please Review Mockup and Production Drawing';
 			$heading  = 'Order #' . $order->get_order_number() . ' is Ready for Review';
 			$message  = '<p>Dear ' . $customer_name . ',</p>' . "\n\n";
-			$message .= "<p>We've completed the requested revisions to your mockup and it's now ready for your review</p>" . "\n\n";
-			$message .= '<p>Next steps:</p>';
-			$message .= '<ol>';
-			$message .= '<li>Please review the updated mockup: ' . home_url() . '/review-mockup?order_id=' . $order_id . '</li>';
-			$message .= "<li>Select 'Approve' if all details are correct, or add a comment for additional feedback.</li>";
-			$message .= "<li>Once approved, we'll move directly to production.</li>";
-			$message .= '</ol>';
-			$message .= '<p>We look forward to your feedback.</p>' . "\n\n";
-			$message .= '<p>Best regards,' . "\n\n";
+			$message .= '<p>Please review the mockup and production drawing for Order #' . $order->get_order_number() . '. We need your confirmation before the production begins.</p>' . "\n\n";
+			$message .= '<p><strong>MOCKUPS & PRODUCTION DRAWING HERE:</strong><br>';
+			$message .= home_url() . '/review-mockup?order_id=' . $order_id . '</p>';
+			$message .= '<p><strong>Approve if:</strong><br>';
+			$message .= 'All details are correct. Once you approve, changes cannot be made. We will start the production after approval.</p>';
+			$message .= '<p><strong>Revise if:</strong><br>';
+			$message .= 'You need to change a detail. We will revise it based on your comment within 24 business hours.</p>' . "\n\n";
+			$message .= '<p>Best regards,<br>';
 			$message .= 'Nova Signage</p>' . "\n\n";
 
 			$role_instance->send_email( $customer_email, $subject, $message, $headers, $attachments, $heading );

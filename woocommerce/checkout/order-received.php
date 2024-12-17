@@ -49,16 +49,11 @@ $original_order_ids = $order->get_meta( '_original_order_ids' );
 $order_id           = $order->get_id();
 
 if ( empty( $from_order_id ) || empty( $second_payment ) || empty( $original_order_ids ) ) {
-	$dropbox_urls = get_field( 'dropbox_urls', $order_id );
-	if ( empty( $dropbox_urls ) ) {
-		return;
-	}
 	?>
 <div class="woocommerce-message woocommerce-message--info woocommerce-thankyou-order-details">
-	<h4>NOTE:</h4>
-	<p>Please review your order mockup. Production begins after you approve the mockups.</p>
-	<a href="/review-mockup?order_id=<?php echo $order->get_id(); ?>" class="button" style="float: none;">Review
-		Mockup</a>
+	<h4>IMPORTANT:</h4>
+	<p>You will receive the production drawing and finalized mockup within 24 hours. We'll notify you via email.</p>
+	<p>Production will start <strong>only after you approve the mockup</strong>.</p>
 </div>
 	<?php
 }
