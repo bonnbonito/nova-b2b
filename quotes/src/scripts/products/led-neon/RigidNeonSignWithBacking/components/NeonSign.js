@@ -381,7 +381,7 @@ export const NeonSign = ({ item }) => {
 			case 'Black PC':
 				rigidBackingPrice = parseInt(width) * parseInt(height) * 0.02;
 				break;
-			case 'Clear Backing':
+			case 'Clear Acrylic':
 				rigidBackingPrice = parseInt(width) * parseInt(height) * 0.03;
 				break;
 			case 'UV Printed on PC':
