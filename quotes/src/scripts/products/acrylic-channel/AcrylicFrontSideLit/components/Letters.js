@@ -325,7 +325,7 @@ export function Letters({ item }) {
 		}
 
 		if (frontAcrylicCover === 'UV Printed') {
-			tempTotal *= 1.15;
+			tempTotal *= 1.1;
 		}
 
 		/* minimum price */

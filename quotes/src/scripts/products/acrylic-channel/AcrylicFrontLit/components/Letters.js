@@ -354,11 +354,11 @@ export function Letters({ item }) {
 		}
 
 		if (acrylicFront === '3M 3635 Vinyl') {
-			tempTotal *= 1.15;
+			tempTotal *= 1.2;
 		}
 
 		if (acrylicFront === 'UV Printed') {
-			tempTotal *= 1.15;
+			tempTotal *= 1.1;
 		}
 
 		if (selectedMounting === STUD_WITH_SPACER) {

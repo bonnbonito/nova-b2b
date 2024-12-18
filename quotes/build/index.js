@@ -6684,7 +6684,7 @@ function Letters({
       }
     }
     if (frontAcrylicCover === '3M 3635 Vinyl') {
-      tempTotal *= 1.15;
+      tempTotal *= 1.2;
       if (frontBackVinyl === 'Front and Back') {
         tempTotal *= 1.15;
       }
@@ -8130,10 +8130,10 @@ function Letters({
       tempTotal *= 1.15;
     }
     if (acrylicFront === '3M 3635 Vinyl') {
-      tempTotal *= 1.15;
+      tempTotal *= 1.2;
     }
     if (acrylicFront === 'UV Printed') {
-      tempTotal *= 1.15;
+      tempTotal *= 1.1;
     }
     if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_16__.STUD_WITH_SPACER) {
       const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_9__.spacerPricing)(tempTotal);
@@ -8807,10 +8807,10 @@ function Logo({
       tempTotal *= 1.15;
     }
     if (acrylicFront === '3M 3635 Vinyl') {
-      tempTotal *= 1.15;
+      tempTotal *= 1.2;
     }
     if (acrylicFront === 'UV Printed') {
-      tempTotal *= 1.15;
+      tempTotal *= 1.1;
     }
     if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER) {
       const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.spacerPricing)(tempTotal);
@@ -9460,7 +9460,7 @@ function Letters({
       tempTotal *= 1.2;
     }
     if (frontAcrylicCover === 'UV Printed') {
-      tempTotal *= 1.15;
+      tempTotal *= 1.1;
     }
 
     /* minimum price */
@@ -9993,10 +9993,10 @@ function Logo({
       tempTotal *= 1.15;
     }
     if (frontAcrylicCover === '3M 3635 Vinyl') {
-      tempTotal *= 1.15;
+      tempTotal *= 1.2;
     }
     if (frontAcrylicCover === 'UV Printed') {
-      tempTotal *= 1.15;
+      tempTotal *= 1.1;
     }
     if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER) {
       const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.spacerPricing)(tempTotal);
@@ -20178,15 +20178,15 @@ function Letters({
       tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF ? 1 : 1.03;
     }
     if (frontAcrylicCover === '3M 3630 Vinyl') {
-      tempTotal *= 1.1;
+      tempTotal *= 1.15;
       if (frontBackVinyl === 'Front and Back') {
-        tempTotal *= 1.1;
+        tempTotal *= 1.15;
       }
     }
     if (frontAcrylicCover === '3M 3635 Vinyl') {
-      tempTotal *= 1.1;
+      tempTotal *= 1.2;
       if (frontBackVinyl === 'Front and Back') {
-        tempTotal *= 1.1;
+        tempTotal *= 1.15;
       }
     }
     if (frontAcrylicCover === 'UV Printed') {

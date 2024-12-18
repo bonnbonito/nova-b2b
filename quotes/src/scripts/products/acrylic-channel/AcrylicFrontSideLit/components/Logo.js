@@ -230,11 +230,11 @@ export function Logo({ item }) {
 		}
 
 		if (frontAcrylicCover === '3M 3635 Vinyl') {
-			tempTotal *= 1.15;
+			tempTotal *= 1.2;
 		}
 
 		if (frontAcrylicCover === 'UV Printed') {
-			tempTotal *= 1.15;
+			tempTotal *= 1.1;
 		}
 
 		if (selectedMounting === STUD_WITH_SPACER) {
