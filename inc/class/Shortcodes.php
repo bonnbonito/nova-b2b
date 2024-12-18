@@ -105,7 +105,7 @@ class Shortcodes {
 			<?php foreach ( $dropbox_urls as $key => $url ) { ?>
 			<tr>
 				<td class="border border-slate-400 p-2 pl-4 text-slate-500 dark:text-slate-400 border-solid">
-					<a href="<?php echo esc_url( $url['dropbox_url'] ); ?>" target="_blank">
+					<a href="<?php echo esc_url( $url['dropbox_url'] ); ?>" target="_blank" class="kt-no-lightbox">
 						<!-- SVG Icon -->
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
 							<path fill-rule="evenodd"
