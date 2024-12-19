@@ -511,6 +511,13 @@ export function Logo({ item }) {
 			console.log('waterproof', tempTotal);
 		}
 
+		if (
+			selectedFinishing === 'Painted' &&
+			faceReturnColor === 'Different Color'
+		) {
+			tempTotal *= 1.1;
+		}
+
 		if (mounting === STUD_WITH_SPACER) {
 			const spacer = spacerPricing(tempTotal);
 			tempTotal += parseFloat(spacer.toFixed(2));
@@ -540,7 +547,16 @@ export function Logo({ item }) {
 			setUsdSinglePrice(0);
 			setCadSinglePrice(0);
 		}
-	}, [depth, width, height, waterproof, mounting, sets, acrylicReveal]);
+	}, [
+		depth,
+		width,
+		height,
+		waterproof,
+		mounting,
+		sets,
+		acrylicReveal,
+		faceReturnColor,
+	]);
 
 	useOutsideClick([colorRef], () => {
 		if (!openColor) return;

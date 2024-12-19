@@ -603,7 +603,10 @@ export function Letters({ item }) {
 			tempTotal *= 1.2;
 		}
 
-		if (selectedFinishing === 'Painted') {
+		if (
+			selectedFinishing === 'Painted' &&
+			faceReturnColor === 'Different Color'
+		) {
 			tempTotal *= 1.1;
 		}
 
@@ -643,6 +646,7 @@ export function Letters({ item }) {
 		waterproof,
 		lettersHeight,
 		letterPricing,
+		faceReturnColor,
 		depth,
 		acrylicReveal,
 		metalFinish,
