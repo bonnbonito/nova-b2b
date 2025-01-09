@@ -1,5 +1,5 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
+import * as React from 'react';
+import { createRoot } from 'react-dom/client';
 import 'react-tooltip/dist/react-tooltip.css';
 
 import './index.css';
@@ -16,6 +16,7 @@ import MetalLaminate from './scripts/products/acrylic/MetalLaminate/MetalLaminat
 import UvPrintedAcrylic from './scripts/products/acrylic/UvPrintedAcrylic/UvPrintedAcrylic';
 import CombineQuotes from './scripts/products/combine/CombineQuotes';
 import CustomProject from './scripts/products/custom/CustomProject';
+import CustomSculpture from './scripts/products/custom-sculpture/CustomSculpture';
 import FlexNeonSign from './scripts/products/led-neon/FlexNeonSign/FlexNeonSign';
 import RigidNeonSignNoBacking from './scripts/products/led-neon/RigidNeonSignNoBacking/RigidNeonSignNoBacking';
 import RigidNeonSignWithBacking from './scripts/products/led-neon/RigidNeonSignWithBacking/RigidNeonSignWithBacking';
@@ -45,20 +46,34 @@ declare global {
 const rootElement = document.getElementById('QuoteApp');
 const quoteView = document.getElementById('quoteView');
 const customProject = document.getElementById('customProject');
+const customSculpture = document.getElementById('customSculpture');
 
 if (rootElement) {
-	const root = ReactDOM.createRoot(rootElement);
+	const root = createRoot(rootElement);
 	root.render(<QuoteApp />);
 }
 
 if (quoteView) {
-	const root = ReactDOM.createRoot(quoteView);
+	const root = createRoot(quoteView);
 	root.render(<QuoteView />);
 }
 
+if (customSculpture) {
+	const root = createRoot(customSculpture);
+	root.render(<CustomSculptureProject />);
+}
+
 if (customProject) {
-	const root = ReactDOM.createRoot(customProject);
+	const root = createRoot(customProject);
 	root.render(<CustomTempProject />);
+}
+
+function CustomSculptureProject(): JSX.Element {
+	return (
+		<AppProvider>
+			<CustomSculpture />
+		</AppProvider>
+	);
 }
 
 function CustomTempProject(): JSX.Element {

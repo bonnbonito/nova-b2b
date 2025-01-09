@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { hasFileUploadedCheck } from './utils/helpers';
 
 interface AppContextType {
@@ -40,9 +40,11 @@ export function useAppContext() {
 	return useContext(AppContext);
 }
 
+declare const NovaQuote: Record<string, any>;
+
 export function AppProvider({ children }: { children: React.ReactNode }) {
-	const [signage, setSignage] = useState<any[]>([]);
-	const [missing, setMissing] = useState<any[]>([]);
+	const [signage, setSignage] = useState<Array<Record<string, unknown>>>([]);
+	const [missing, setMissing] = useState<Array<Record<string, unknown>>>([]);
 	const [tempFolder, setTempFolder] = useState<string>('');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [partner, setPartner] = useState<number>(parseInt(NovaQuote.user_id));

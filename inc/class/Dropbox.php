@@ -261,7 +261,7 @@ class Dropbox {
 						?>
 						<label>
 							<input type="checkbox" name="selected_fetched_images[]" value="<?php echo esc_attr( $image['sharedLink'] ); ?>"
-								<?php echo $checked; ?>>
+								<?php echo $checked; ?> />
 							<img src="<?php echo esc_url( $image['sharedLink'] ); ?>" alt="">
 						</label>
 					<?php endforeach; ?>
@@ -270,7 +270,6 @@ class Dropbox {
 				<?php endif; ?>
 			</div>
 			<?php
-			$selected_fetched_images = get_post_meta( $post->ID, 'selected_fetched_images', true );
 		endif;
 	}
 
