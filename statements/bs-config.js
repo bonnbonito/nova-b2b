@@ -24,7 +24,7 @@ module.exports = {
 		ignoreInitial: true,
 	},
 	server: false,
-	proxy: 'novatest.test',
+	proxy: 'nova.local',
 	port: 3000,
 	middleware: false,
 	serveStatic: [],

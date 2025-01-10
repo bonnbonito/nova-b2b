@@ -116,50 +116,60 @@ export default function PendingOrderTable({
 							>
 								Total <span className={`sort-by ${orderTotalSort}`}></span>
 							</th>
+							<th></th>
 						</tr>
 					</thead>
 					<tbody className="text-sm">
-						{orders.map((order) => (
-							<tr
-								key={order.id}
-								className={`hover:bg-gray-100 ${order.status}`}
-							>
-								<td className="py-4 px-4">
-									<input
-										type="checkbox"
-										checked={selectedOrders.includes(order.id)}
-										onChange={handleSelectOrderChange(order.id)}
-									/>
-								</td>
-								<td className="py-4 px-4">
-									<a href={order.order_url} className="text-nova-primary">
-										#{order.order_number}
-									</a>
-								</td>
-								<td className="py-4 px-4">{order.date}</td>
-								<td
-									className={`py-4 px-4 capitalize order-actions ${
-										order.status
-									} ${
-										order.is_overdue ? 'text-red-500 flex items-center' : ''
-									}`}
+						{orders.map((order) => {
+							return (
+								<tr
+									key={order.id}
+									className={`hover:bg-gray-100 ${order.status}`}
 								>
-									{order.payment_select}
-								</td>
-								{NovaOrders.has_payment_types && (
-									<td className="py-4 px-4">{order.due_date}</td>
-								)}
-								<td
-									dangerouslySetInnerHTML={{ __html: order.total }}
-									className="py-4 px-4 font-title"
-								></td>
-							</tr>
-						))}
+									<td className="py-4 px-4">
+										<input
+											type="checkbox"
+											checked={selectedOrders.includes(order.id)}
+											onChange={handleSelectOrderChange(order.id)}
+										/>
+									</td>
+									<td className="py-4 px-4">
+										<a href={order.order_url} className="text-nova-primary">
+											#{order.order_number}
+										</a>
+									</td>
+									<td className="py-4 px-4">{order.date}</td>
+									<td
+										className={`py-4 px-4 capitalize order-actions ${
+											order.status
+										} ${
+											order.is_overdue ? 'text-red-500 flex items-center' : ''
+										}`}
+									>
+										{order.payment_select}
+									</td>
+									{NovaOrders.has_payment_types && (
+										<td className="py-4 px-4">{order.due_date}</td>
+									)}
+									<td
+										dangerouslySetInnerHTML={{ __html: order.total }}
+										className="py-4 px-4 font-title"
+									></td>
+									{order.actions?.pay && (
+										<td>
+											<a href={order.actions.pay.url} className="button">
+												{order.actions.pay.name}
+											</a>
+										</td>
+									)}
+								</tr>
+							);
+						})}
 					</tbody>
 				</table>
 			</div>
 			{/* Show a button that says "Pay Selected Invoice" if there are selected orders */}
-			{selectedOrders.length > 0 && (
+			{selectedOrders.length > 1 && (
 				<form method="post" action="">
 					<input type="hidden" name="pay_multiple_orders_nonce" value={nonce} />
 					{selectedOrders.map((orderId) => (

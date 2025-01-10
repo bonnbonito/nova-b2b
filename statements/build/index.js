@@ -20,22 +20,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   FloatingOverlay: () => (/* binding */ FloatingOverlay),
 /* harmony export */   FloatingPortal: () => (/* binding */ FloatingPortal),
 /* harmony export */   FloatingTree: () => (/* binding */ FloatingTree),
-/* harmony export */   arrow: () => (/* reexport safe */ _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_2__.arrow),
-/* harmony export */   autoPlacement: () => (/* reexport safe */ _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_2__.autoPlacement),
-/* harmony export */   autoUpdate: () => (/* reexport safe */ _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_3__.autoUpdate),
-/* harmony export */   computePosition: () => (/* reexport safe */ _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_3__.computePosition),
-/* harmony export */   detectOverflow: () => (/* reexport safe */ _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_3__.detectOverflow),
-/* harmony export */   flip: () => (/* reexport safe */ _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_2__.flip),
-/* harmony export */   getOverflowAncestors: () => (/* reexport safe */ _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.getOverflowAncestors),
-/* harmony export */   hide: () => (/* reexport safe */ _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_2__.hide),
-/* harmony export */   inline: () => (/* reexport safe */ _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_2__.inline),
+/* harmony export */   arrow: () => (/* reexport safe */ _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_3__.arrow),
+/* harmony export */   autoPlacement: () => (/* reexport safe */ _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_3__.autoPlacement),
+/* harmony export */   autoUpdate: () => (/* reexport safe */ _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.autoUpdate),
+/* harmony export */   computePosition: () => (/* reexport safe */ _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.computePosition),
+/* harmony export */   detectOverflow: () => (/* reexport safe */ _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.detectOverflow),
+/* harmony export */   flip: () => (/* reexport safe */ _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_3__.flip),
+/* harmony export */   getOverflowAncestors: () => (/* reexport safe */ _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.getOverflowAncestors),
+/* harmony export */   hide: () => (/* reexport safe */ _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_3__.hide),
+/* harmony export */   inline: () => (/* reexport safe */ _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_3__.inline),
 /* harmony export */   inner: () => (/* binding */ inner),
-/* harmony export */   limitShift: () => (/* reexport safe */ _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_2__.limitShift),
-/* harmony export */   offset: () => (/* reexport safe */ _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_2__.offset),
-/* harmony export */   platform: () => (/* reexport safe */ _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_3__.platform),
+/* harmony export */   limitShift: () => (/* reexport safe */ _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_3__.limitShift),
+/* harmony export */   offset: () => (/* reexport safe */ _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_3__.offset),
+/* harmony export */   platform: () => (/* reexport safe */ _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.platform),
 /* harmony export */   safePolygon: () => (/* binding */ safePolygon),
-/* harmony export */   shift: () => (/* reexport safe */ _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_2__.shift),
-/* harmony export */   size: () => (/* reexport safe */ _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_2__.size),
+/* harmony export */   shift: () => (/* reexport safe */ _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_3__.shift),
+/* harmony export */   size: () => (/* reexport safe */ _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_3__.size),
 /* harmony export */   useClick: () => (/* binding */ useClick),
 /* harmony export */   useClientPoint: () => (/* binding */ useClientPoint),
 /* harmony export */   useDelayGroup: () => (/* binding */ useDelayGroup),
@@ -62,14 +62,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @floating-ui/react/utils */ "./node_modules/@floating-ui/react/dist/floating-ui.react.utils.mjs");
-/* harmony import */ var _floating_ui_utils__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @floating-ui/utils */ "./node_modules/@floating-ui/utils/dist/floating-ui.utils.mjs");
-/* harmony import */ var _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @floating-ui/react-dom */ "./node_modules/@floating-ui/utils/dist/floating-ui.utils.dom.mjs");
-/* harmony import */ var tabbable__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! tabbable */ "./node_modules/tabbable/dist/index.esm.js");
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "react-dom");
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @floating-ui/react-dom */ "./node_modules/@floating-ui/react-dom/dist/floating-ui.react-dom.mjs");
-/* harmony import */ var _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @floating-ui/react-dom */ "./node_modules/@floating-ui/dom/dist/floating-ui.dom.mjs");
+/* harmony import */ var _floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @floating-ui/react/utils */ "./node_modules/@floating-ui/react/dist/floating-ui.react.utils.mjs");
+/* harmony import */ var _floating_ui_utils__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @floating-ui/utils */ "./node_modules/@floating-ui/utils/dist/floating-ui.utils.mjs");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @floating-ui/react-dom */ "./node_modules/@floating-ui/utils/dist/floating-ui.utils.dom.mjs");
+/* harmony import */ var tabbable__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! tabbable */ "./node_modules/tabbable/dist/index.esm.js");
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-dom */ "react-dom");
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @floating-ui/react-dom */ "./node_modules/@floating-ui/react-dom/dist/floating-ui.react-dom.mjs");
+/* harmony import */ var _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @floating-ui/react-dom */ "./node_modules/@floating-ui/dom/dist/floating-ui.dom.mjs");
+
 
 
 
@@ -177,7 +179,7 @@ function getGridNavigatedIndex(elementsRef, _ref) {
   } = _ref;
   let nextIndex = prevIndex;
   if (event.key === ARROW_UP) {
-    stop && (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.stopEvent)(event);
+    stop && (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.stopEvent)(event);
     if (prevIndex === -1) {
       nextIndex = maxIndex;
     } else {
@@ -203,7 +205,7 @@ function getGridNavigatedIndex(elementsRef, _ref) {
     }
   }
   if (event.key === ARROW_DOWN) {
-    stop && (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.stopEvent)(event);
+    stop && (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.stopEvent)(event);
     if (prevIndex === -1) {
       nextIndex = minIndex;
     } else {
@@ -227,9 +229,9 @@ function getGridNavigatedIndex(elementsRef, _ref) {
 
   // Remains on the same row/column.
   if (orientation === 'both') {
-    const prevRow = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_6__.floor)(prevIndex / cols);
+    const prevRow = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_7__.floor)(prevIndex / cols);
     if (event.key === (rtl ? ARROW_LEFT : ARROW_RIGHT)) {
-      stop && (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.stopEvent)(event);
+      stop && (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.stopEvent)(event);
       if (prevIndex % cols !== cols - 1) {
         nextIndex = findNonDisabledIndex(elementsRef, {
           startingIndex: prevIndex,
@@ -252,7 +254,7 @@ function getGridNavigatedIndex(elementsRef, _ref) {
       }
     }
     if (event.key === (rtl ? ARROW_RIGHT : ARROW_LEFT)) {
-      stop && (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.stopEvent)(event);
+      stop && (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.stopEvent)(event);
       if (prevIndex % cols !== 0) {
         nextIndex = findNonDisabledIndex(elementsRef, {
           startingIndex: prevIndex,
@@ -277,7 +279,7 @@ function getGridNavigatedIndex(elementsRef, _ref) {
         nextIndex = prevIndex;
       }
     }
-    const lastRow = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_6__.floor)(maxIndex / cols) === prevRow;
+    const lastRow = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_7__.floor)(maxIndex / cols) === prevRow;
     if (isIndexOutOfBounds(elementsRef, nextIndex)) {
       if (loop && lastRow) {
         nextIndex = event.key === (rtl ? ARROW_RIGHT : ARROW_LEFT) ? maxIndex : findNonDisabledIndex(elementsRef, {
@@ -429,15 +431,16 @@ function FloatingList(props) {
       setMap(newMap);
     }
   }, [map]);
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(FloatingListContext.Provider, {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(FloatingListContext.Provider, {
     value: react__WEBPACK_IMPORTED_MODULE_0__.useMemo(() => ({
       register,
       unregister,
       map,
       elementsRef,
       labelsRef
-    }), [register, unregister, map, elementsRef, labelsRef])
-  }, children);
+    }), [register, unregister, map, elementsRef, labelsRef]),
+    children: children
+  });
 }
 /**
  * Used to register a list item and its index (DOM position) in the
@@ -499,7 +502,9 @@ function renderJsx(render, computedProps) {
   if (render) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.cloneElement(render, computedProps);
   }
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", computedProps);
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+    ...computedProps
+  });
 }
 const CompositeContext = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createContext({
   activeIndex: 0,
@@ -634,11 +639,13 @@ const Composite = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(fun
       handleKeyDown(e);
     }
   };
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(CompositeContext.Provider, {
-    value: contextValue
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(FloatingList, {
-    elementsRef: elementsRef
-  }, renderJsx(render, computedProps)));
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(CompositeContext.Provider, {
+    value: contextValue,
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(FloatingList, {
+      elementsRef: elementsRef,
+      children: renderJsx(render, computedProps)
+    })
+  });
 });
 /**
  * @see https://floating-ui.com/docs/Composite
@@ -673,21 +680,6 @@ const CompositeItem = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.forwardRef
   };
   return renderJsx(render, computedProps);
 });
-
-function _extends() {
-  _extends = Object.assign ? Object.assign.bind() : function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-    return target;
-  };
-  return _extends.apply(this, arguments);
-}
 
 let serverHandoffComplete = false;
 let count = 0;
@@ -786,7 +778,7 @@ const FloatingArrow = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.forwardRef
   // https://github.com/floating-ui/floating-ui/issues/2932
   index(() => {
     if (!floating) return;
-    const isRTL = (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.getComputedStyle)(floating).direction === 'rtl';
+    const isRTL = (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.getComputedStyle)(floating).direction === 'rtl';
     if (isRTL) {
       setIsRTL(true);
     }
@@ -822,7 +814,8 @@ const FloatingArrow = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.forwardRef
     bottom: isCustomShape ? '' : 'rotate(180deg)',
     right: isCustomShape ? 'rotate(-90deg)' : 'rotate(90deg)'
   }[side];
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("svg", _extends({}, rest, {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("svg", {
+    ...rest,
     "aria-hidden": true,
     ref: ref,
     width: isCustomShape ? width : width + computedStrokeWidth,
@@ -836,26 +829,28 @@ const FloatingArrow = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.forwardRef
       [side]: isVerticalSide || isCustomShape ? '100%' : "calc(100% - " + computedStrokeWidth / 2 + "px)",
       transform: [rotation, transform].filter(t => !!t).join(' '),
       ...restStyle
-    }
-  }), computedStrokeWidth > 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("path", {
-    clipPath: "url(#" + clipPathId + ")",
-    fill: "none",
-    stroke: stroke
-    // Account for the stroke on the fill path rendered below.
-    ,
-    strokeWidth: computedStrokeWidth + (d ? 0 : 1),
-    d: dValue
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("path", {
-    stroke: computedStrokeWidth && !d ? rest.fill : 'none',
-    d: dValue
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("clipPath", {
-    id: clipPathId
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("rect", {
-    x: -halfStrokeWidth,
-    y: halfStrokeWidth * (isCustomShape ? -1 : 1),
-    width: width + computedStrokeWidth,
-    height: width
-  })));
+    },
+    children: [computedStrokeWidth > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("path", {
+      clipPath: "url(#" + clipPathId + ")",
+      fill: "none",
+      stroke: stroke
+      // Account for the stroke on the fill path rendered below.
+      ,
+      strokeWidth: computedStrokeWidth + (d ? 0 : 1),
+      d: dValue
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("path", {
+      stroke: computedStrokeWidth && !d ? rest.fill : 'none',
+      d: dValue
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("clipPath", {
+      id: clipPathId,
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("rect", {
+        x: -halfStrokeWidth,
+        y: halfStrokeWidth * (isCustomShape ? -1 : 1),
+        width: width + computedStrokeWidth,
+        height: width
+      })
+    })]
+  });
 });
 
 function createPubSub() {
@@ -902,6 +897,7 @@ function useFloatingNodeId(customParentId) {
   const reactParentId = useFloatingParentNodeId();
   const parentId = customParentId || reactParentId;
   index(() => {
+    if (!id) return;
     const node = {
       id,
       parentId
@@ -923,12 +919,13 @@ function FloatingNode(props) {
     id
   } = props;
   const parentId = useFloatingParentNodeId();
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(FloatingNodeContext.Provider, {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(FloatingNodeContext.Provider, {
     value: react__WEBPACK_IMPORTED_MODULE_0__.useMemo(() => ({
       id,
       parentId
-    }), [id, parentId])
-  }, children);
+    }), [id, parentId]),
+    children: children
+  });
 }
 /**
  * Provides context for nested floating elements when they are not children of
@@ -952,14 +949,15 @@ function FloatingTree(props) {
     nodesRef.current = nodesRef.current.filter(n => n !== node);
   }, []);
   const events = react__WEBPACK_IMPORTED_MODULE_0__.useState(() => createPubSub())[0];
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(FloatingTreeContext.Provider, {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(FloatingTreeContext.Provider, {
     value: react__WEBPACK_IMPORTED_MODULE_0__.useMemo(() => ({
       nodesRef,
       addNode,
       removeNode,
       events
-    }), [addNode, removeNode, events])
-  }, children);
+    }), [addNode, removeNode, events]),
+    children: children
+  });
 }
 
 function createAttribute(name) {
@@ -976,7 +974,7 @@ function useLatestRef(value) {
 
 const safePolygonIdentifier = /*#__PURE__*/createAttribute('safe-polygon');
 function getDelay(value, prop, pointerType) {
-  if (pointerType && !(0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.isMouseLikePointerType)(pointerType)) {
+  if (pointerType && !(0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.isMouseLikePointerType)(pointerType)) {
     return 0;
   }
   if (typeof value === 'number') {
@@ -1056,7 +1054,7 @@ function useHover(context, props) {
         onOpenChange(false, event, 'hover');
       }
     }
-    const html = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getDocument)(elements.floating).documentElement;
+    const html = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.getDocument)(elements.floating).documentElement;
     html.addEventListener('mouseleave', onLeave);
     return () => {
       html.removeEventListener('mouseleave', onLeave);
@@ -1084,7 +1082,7 @@ function useHover(context, props) {
   });
   const clearPointerEvents = useEffectEvent(() => {
     if (performedPointerEventsMutationRef.current) {
-      const body = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getDocument)(elements.floating).body;
+      const body = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.getDocument)(elements.floating).body;
       body.style.pointerEvents = '';
       body.removeAttribute(safePolygonIdentifier);
       performedPointerEventsMutationRef.current = false;
@@ -1102,7 +1100,7 @@ function useHover(context, props) {
     function onMouseEnter(event) {
       clearTimeout(timeoutRef.current);
       blockMouseMoveRef.current = false;
-      if (mouseOnly && !(0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.isMouseLikePointerType)(pointerTypeRef.current) || restMs > 0 && !getDelay(delayRef.current, 'open')) {
+      if (mouseOnly && !(0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.isMouseLikePointerType)(pointerTypeRef.current) || restMs > 0 && !getDelay(delayRef.current, 'open')) {
         return;
       }
       const openDelay = getDelay(delayRef.current, 'open', pointerTypeRef.current);
@@ -1119,7 +1117,7 @@ function useHover(context, props) {
     function onMouseLeave(event) {
       if (isClickLikeOpenEvent()) return;
       unbindMouseMoveRef.current();
-      const doc = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getDocument)(elements.floating);
+      const doc = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.getDocument)(elements.floating);
       clearTimeout(restTimeoutRef.current);
       restTimeoutPendingRef.current = false;
       if (handleCloseRef.current && dataRef.current.floatingContext) {
@@ -1151,7 +1149,7 @@ function useHover(context, props) {
       // Allow interactivity without `safePolygon` on touch devices. With a
       // pointer, a short close delay is an alternative, so it should work
       // consistently.
-      const shouldClose = pointerTypeRef.current === 'touch' ? !(0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.contains)(elements.floating, event.relatedTarget) : true;
+      const shouldClose = pointerTypeRef.current === 'touch' ? !(0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.contains)(elements.floating, event.relatedTarget) : true;
       if (shouldClose) {
         closeWithDelay(event);
       }
@@ -1177,7 +1175,7 @@ function useHover(context, props) {
         }
       })(event);
     }
-    if ((0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.isElement)(elements.domReference)) {
+    if ((0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.isElement)(elements.domReference)) {
       var _elements$floating;
       const ref = elements.domReference;
       open && ref.addEventListener('mouseleave', onScrollMouseLeave);
@@ -1208,9 +1206,9 @@ function useHover(context, props) {
     if (open && (_handleCloseRef$curre = handleCloseRef.current) != null && _handleCloseRef$curre.__options.blockPointerEvents && isHoverOpen()) {
       performedPointerEventsMutationRef.current = true;
       const floatingEl = elements.floating;
-      if ((0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.isElement)(elements.domReference) && floatingEl) {
+      if ((0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.isElement)(elements.domReference) && floatingEl) {
         var _tree$nodesRef$curren;
-        const body = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getDocument)(elements.floating).body;
+        const body = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.getDocument)(elements.floating).body;
         body.setAttribute(safePolygonIdentifier, '');
         const ref = elements.domReference;
         const parentFloating = tree == null || (_tree$nodesRef$curren = tree.nodesRef.current.find(node => node.id === parentId)) == null || (_tree$nodesRef$curren = _tree$nodesRef$curren.context) == null ? void 0 : _tree$nodesRef$curren.elements.floating;
@@ -1260,7 +1258,7 @@ function useHover(context, props) {
             onOpenChange(true, nativeEvent, 'hover');
           }
         }
-        if (mouseOnly && !(0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.isMouseLikePointerType)(pointerTypeRef.current)) {
+        if (mouseOnly && !(0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.isMouseLikePointerType)(pointerTypeRef.current)) {
           return;
         }
         if (open || restMs === 0) {
@@ -1358,13 +1356,14 @@ function FloatingDelayGroup(props) {
       initialCurrentIdRef.current = null;
     }
   }, [state.currentId, state.isInstantPhase]);
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(FloatingDelayGroupContext.Provider, {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(FloatingDelayGroupContext.Provider, {
     value: react__WEBPACK_IMPORTED_MODULE_0__.useMemo(() => ({
       ...state,
       setState,
       setCurrentId
-    }), [state, setCurrentId])
-  }, children);
+    }), [state, setCurrentId]),
+    children: children
+  });
 }
 /**
  * Enables grouping when called inside a component that's a child of a
@@ -1548,13 +1547,14 @@ function applyAttributeToOthers(uncorrectedAvoidElements, body, ariaHidden, iner
       return;
     }
     [].forEach.call(parent.children, node => {
-      if ((0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.getNodeName)(node) === 'script') return;
+      if ((0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.getNodeName)(node) === 'script') return;
       if (elementsToKeep.has(node)) {
         deep(node);
       } else {
         const attr = controlAttribute ? node.getAttribute(controlAttribute) : null;
         const alreadyHidden = attr !== null && attr !== 'false';
-        const counterValue = (counterMap.get(node) || 0) + 1;
+        const currentCounterValue = counterMap.get(node) || 0;
+        const counterValue = controlAttribute ? currentCounterValue + 1 : currentCounterValue;
         const markerValue = (markerCounter.get(node) || 0) + 1;
         counterMap.set(node, counterValue);
         markerCounter.set(node, markerValue);
@@ -1574,7 +1574,8 @@ function applyAttributeToOthers(uncorrectedAvoidElements, body, ariaHidden, iner
   lockCount$1++;
   return () => {
     hiddenElements.forEach(element => {
-      const counterValue = (counterMap.get(element) || 0) - 1;
+      const currentCounterValue = counterMap.get(element) || 0;
+      const counterValue = controlAttribute ? currentCounterValue - 1 : currentCounterValue;
       const markerValue = (markerCounter.get(element) || 0) - 1;
       counterMap.set(element, counterValue);
       markerCounter.set(element, markerValue);
@@ -1604,7 +1605,7 @@ function markOthers(avoidElements, ariaHidden, inert) {
   if (inert === void 0) {
     inert = false;
   }
-  const body = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getDocument)(avoidElements[0]).body;
+  const body = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.getDocument)(avoidElements[0]).body;
   return applyAttributeToOthers(avoidElements.concat(Array.from(body.querySelectorAll('[aria-live]'))), body, ariaHidden, inert);
 }
 
@@ -1617,11 +1618,11 @@ const getTabbableOptions = () => ({
   typeof ResizeObserver === 'function' && ResizeObserver.toString().includes('[native code]') ? 'full' : 'none'
 });
 function getTabbableIn(container, direction) {
-  const allTabbable = (0,tabbable__WEBPACK_IMPORTED_MODULE_7__.tabbable)(container, getTabbableOptions());
+  const allTabbable = (0,tabbable__WEBPACK_IMPORTED_MODULE_8__.tabbable)(container, getTabbableOptions());
   if (direction === 'prev') {
     allTabbable.reverse();
   }
-  const activeIndex = allTabbable.indexOf((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.activeElement)((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getDocument)(container)));
+  const activeIndex = allTabbable.indexOf((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.activeElement)((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.getDocument)(container)));
   const nextTabbableElements = allTabbable.slice(activeIndex + 1);
   return nextTabbableElements[0];
 }
@@ -1634,10 +1635,10 @@ function getPreviousTabbable() {
 function isOutsideEvent(event, container) {
   const containerElement = container || event.currentTarget;
   const relatedTarget = event.relatedTarget;
-  return !relatedTarget || !(0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.contains)(containerElement, relatedTarget);
+  return !relatedTarget || !(0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.contains)(containerElement, relatedTarget);
 }
 function disableFocusInside(container) {
-  const tabbableElements = (0,tabbable__WEBPACK_IMPORTED_MODULE_7__.tabbable)(container, getTabbableOptions());
+  const tabbableElements = (0,tabbable__WEBPACK_IMPORTED_MODULE_8__.tabbable)(container, getTabbableOptions());
   tabbableElements.forEach(element => {
     element.dataset.tabindex = element.getAttribute('tabindex') || '';
     element.setAttribute('tabindex', '-1');
@@ -1655,9 +1656,6 @@ function enableFocusInside(container) {
     }
   });
 }
-
-// See Diego Haz's Sandbox for making this logic work well on Safari/iOS:
-// https://codesandbox.io/s/tabbable-portal-f4tng?file=/src/FocusTrap.tsx
 
 const HIDDEN_STYLES = {
   border: 0,
@@ -1682,7 +1680,7 @@ function setActiveElementOnTab(event) {
 const FocusGuard = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(function FocusGuard(props, ref) {
   const [role, setRole] = react__WEBPACK_IMPORTED_MODULE_0__.useState();
   index(() => {
-    if ((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.isSafari)()) {
+    if ((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.isSafari)()) {
       // Unlike other screen readers such as NVDA and JAWS, the virtual cursor
       // on VoiceOver does trigger the onFocus event, so we can use the focus
       // trap element. On Safari, only buttons trigger the onFocus event.
@@ -1704,7 +1702,10 @@ const FocusGuard = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(fu
     [createAttribute('focus-guard')]: '',
     style: HIDDEN_STYLES
   };
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", _extends({}, props, restProps));
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+    ...props,
+    ...restProps
+  });
 });
 
 const PortalContext = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createContext(null);
@@ -1757,7 +1758,7 @@ function useFloatingPortalNode(props) {
     if (!uniqueId) return;
     if (portalNodeRef.current) return;
     let container = root || (portalContext == null ? void 0 : portalContext.portalNode);
-    if (container && !(0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.isElement)(container)) container = container.current;
+    if (container && !(0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.isElement)(container)) container = container.current;
     container = container || document.body;
     let idWrapper = null;
     if (id) {
@@ -1840,7 +1841,7 @@ function FloatingPortal(props) {
     if (open) return;
     enableFocusInside(portalNode);
   }, [open, portalNode]);
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(PortalContext.Provider, {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(PortalContext.Provider, {
     value: react__WEBPACK_IMPORTED_MODULE_0__.useMemo(() => ({
       preserveTabOrder,
       beforeOutsideRef,
@@ -1849,36 +1850,37 @@ function FloatingPortal(props) {
       afterInsideRef,
       portalNode,
       setFocusManagerState
-    }), [preserveTabOrder, portalNode])
-  }, shouldRenderGuards && portalNode && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(FocusGuard, {
-    "data-type": "outside",
-    ref: beforeOutsideRef,
-    onFocus: event => {
-      if (isOutsideEvent(event, portalNode)) {
-        var _beforeInsideRef$curr;
-        (_beforeInsideRef$curr = beforeInsideRef.current) == null || _beforeInsideRef$curr.focus();
-      } else {
-        const prevTabbable = getPreviousTabbable() || (focusManagerState == null ? void 0 : focusManagerState.refs.domReference.current);
-        prevTabbable == null || prevTabbable.focus();
+    }), [preserveTabOrder, portalNode]),
+    children: [shouldRenderGuards && portalNode && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(FocusGuard, {
+      "data-type": "outside",
+      ref: beforeOutsideRef,
+      onFocus: event => {
+        if (isOutsideEvent(event, portalNode)) {
+          var _beforeInsideRef$curr;
+          (_beforeInsideRef$curr = beforeInsideRef.current) == null || _beforeInsideRef$curr.focus();
+        } else {
+          const prevTabbable = getPreviousTabbable() || (focusManagerState == null ? void 0 : focusManagerState.domReference);
+          prevTabbable == null || prevTabbable.focus();
+        }
       }
-    }
-  }), shouldRenderGuards && portalNode && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", {
-    "aria-owns": portalNode.id,
-    style: HIDDEN_STYLES
-  }), portalNode && /*#__PURE__*/react_dom__WEBPACK_IMPORTED_MODULE_1__.createPortal(children, portalNode), shouldRenderGuards && portalNode && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(FocusGuard, {
-    "data-type": "outside",
-    ref: afterOutsideRef,
-    onFocus: event => {
-      if (isOutsideEvent(event, portalNode)) {
-        var _afterInsideRef$curre;
-        (_afterInsideRef$curre = afterInsideRef.current) == null || _afterInsideRef$curre.focus();
-      } else {
-        const nextTabbable = getNextTabbable() || (focusManagerState == null ? void 0 : focusManagerState.refs.domReference.current);
-        nextTabbable == null || nextTabbable.focus();
-        (focusManagerState == null ? void 0 : focusManagerState.closeOnFocusOut) && (focusManagerState == null ? void 0 : focusManagerState.onOpenChange(false, event.nativeEvent, 'focus-out'));
+    }), shouldRenderGuards && portalNode && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+      "aria-owns": portalNode.id,
+      style: HIDDEN_STYLES
+    }), portalNode && /*#__PURE__*/react_dom__WEBPACK_IMPORTED_MODULE_2__.createPortal(children, portalNode), shouldRenderGuards && portalNode && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(FocusGuard, {
+      "data-type": "outside",
+      ref: afterOutsideRef,
+      onFocus: event => {
+        if (isOutsideEvent(event, portalNode)) {
+          var _afterInsideRef$curre;
+          (_afterInsideRef$curre = afterInsideRef.current) == null || _afterInsideRef$curre.focus();
+        } else {
+          const nextTabbable = getNextTabbable() || (focusManagerState == null ? void 0 : focusManagerState.domReference);
+          nextTabbable == null || nextTabbable.focus();
+          (focusManagerState == null ? void 0 : focusManagerState.closeOnFocusOut) && (focusManagerState == null ? void 0 : focusManagerState.onOpenChange(false, event.nativeEvent, 'focus-out'));
+        }
       }
-    }
-  }));
+    })]
+  });
 }
 const usePortalContext = () => react__WEBPACK_IMPORTED_MODULE_0__.useContext(PortalContext);
 
@@ -1898,29 +1900,31 @@ const LIST_LIMIT = 20;
 let previouslyFocusedElements = [];
 function addPreviouslyFocusedElement(element) {
   previouslyFocusedElements = previouslyFocusedElements.filter(el => el.isConnected);
-  let tabbableEl = element;
-  if (!tabbableEl || (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.getNodeName)(tabbableEl) === 'body') return;
-  if (!(0,tabbable__WEBPACK_IMPORTED_MODULE_7__.isTabbable)(tabbableEl, getTabbableOptions())) {
-    const tabbableChild = (0,tabbable__WEBPACK_IMPORTED_MODULE_7__.tabbable)(tabbableEl, getTabbableOptions())[0];
-    if (tabbableChild) {
-      tabbableEl = tabbableChild;
+  if (element && (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.getNodeName)(element) !== 'body') {
+    previouslyFocusedElements.push(element);
+    if (previouslyFocusedElements.length > LIST_LIMIT) {
+      previouslyFocusedElements = previouslyFocusedElements.slice(-LIST_LIMIT);
     }
-  }
-  previouslyFocusedElements.push(tabbableEl);
-  if (previouslyFocusedElements.length > LIST_LIMIT) {
-    previouslyFocusedElements = previouslyFocusedElements.slice(-LIST_LIMIT);
   }
 }
 function getPreviouslyFocusedElement() {
   return previouslyFocusedElements.slice().reverse().find(el => el.isConnected);
 }
+function getFirstTabbableElement(container) {
+  const tabbableOptions = getTabbableOptions();
+  if ((0,tabbable__WEBPACK_IMPORTED_MODULE_8__.isTabbable)(container, tabbableOptions)) {
+    return container;
+  }
+  return (0,tabbable__WEBPACK_IMPORTED_MODULE_8__.tabbable)(container, tabbableOptions)[0] || container;
+}
 const VisuallyHiddenDismiss = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(function VisuallyHiddenDismiss(props, ref) {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", _extends({}, props, {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
+    ...props,
     type: "button",
     ref: ref,
     tabIndex: -1,
     style: HIDDEN_STYLES
-  }));
+  });
 });
 /**
  * Provides focus management for the floating element.
@@ -1938,31 +1942,35 @@ function FloatingFocusManager(props) {
     restoreFocus = false,
     modal = true,
     visuallyHiddenDismiss = false,
-    closeOnFocusOut = true
+    closeOnFocusOut = true,
+    outsideElementsInert = false
   } = props;
   const {
     open,
-    refs,
-    nodeId,
     onOpenChange,
     events,
     dataRef,
-    floatingId,
     elements: {
       domReference,
       floating
     }
   } = context;
+  const getNodeId = useEffectEvent(() => {
+    var _dataRef$current$floa;
+    return (_dataRef$current$floa = dataRef.current.floatingContext) == null ? void 0 : _dataRef$current$floa.nodeId;
+  });
   const ignoreInitialFocus = typeof initialFocus === 'number' && initialFocus < 0;
   // If the reference is a combobox and is typeable (e.g. input/textarea),
   // there are different focus semantics. The guards should not be rendered, but
   // aria-hidden should be applied to all nodes still. Further, the visually
   // hidden dismiss button should only appear at the end of the list, not the
   // start.
-  const isUntrappedTypeableCombobox = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.isTypeableCombobox)(domReference) && ignoreInitialFocus;
+  const isUntrappedTypeableCombobox = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.isTypeableCombobox)(domReference) && ignoreInitialFocus;
 
   // Force the guards to be rendered if the `inert` attribute is not supported.
-  const guards = supportsInert() ? _guards : true;
+  const inertSupported = supportsInert();
+  const guards = inertSupported ? _guards : true;
+  const useInert = !guards || inertSupported && outsideElementsInert;
   const orderRef = useLatestRef(order);
   const initialFocusRef = useLatestRef(initialFocus);
   const returnFocusRef = useLatestRef(returnFocus);
@@ -1979,7 +1987,7 @@ function FloatingFocusManager(props) {
     if (container === void 0) {
       container = floatingFocusElement;
     }
-    return container ? (0,tabbable__WEBPACK_IMPORTED_MODULE_7__.tabbable)(container, getTabbableOptions()) : [];
+    return container ? (0,tabbable__WEBPACK_IMPORTED_MODULE_8__.tabbable)(container, getTabbableOptions()) : [];
   });
   const getTabbableElements = useEffectEvent(container => {
     const content = getTabbableContent(container);
@@ -1999,13 +2007,13 @@ function FloatingFocusManager(props) {
     function onKeyDown(event) {
       if (event.key === 'Tab') {
         // The focus guards have nothing to focus, so we need to stop the event.
-        if ((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.contains)(floatingFocusElement, (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.activeElement)((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getDocument)(floatingFocusElement))) && getTabbableContent().length === 0 && !isUntrappedTypeableCombobox) {
-          (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.stopEvent)(event);
+        if ((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.contains)(floatingFocusElement, (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.activeElement)((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.getDocument)(floatingFocusElement))) && getTabbableContent().length === 0 && !isUntrappedTypeableCombobox) {
+          (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.stopEvent)(event);
         }
         const els = getTabbableElements();
-        const target = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getTarget)(event);
+        const target = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.getTarget)(event);
         if (orderRef.current[0] === 'reference' && target === domReference) {
-          (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.stopEvent)(event);
+          (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.stopEvent)(event);
           if (event.shiftKey) {
             enqueueFocus(els[els.length - 1]);
           } else {
@@ -2013,12 +2021,12 @@ function FloatingFocusManager(props) {
           }
         }
         if (orderRef.current[1] === 'floating' && target === floatingFocusElement && event.shiftKey) {
-          (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.stopEvent)(event);
+          (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.stopEvent)(event);
           enqueueFocus(els[0]);
         }
       }
     }
-    const doc = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getDocument)(floatingFocusElement);
+    const doc = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.getDocument)(floatingFocusElement);
     doc.addEventListener('keydown', onKeyDown);
     return () => {
       doc.removeEventListener('keydown', onKeyDown);
@@ -2028,7 +2036,7 @@ function FloatingFocusManager(props) {
     if (disabled) return;
     if (!floating) return;
     function handleFocusIn(event) {
-      const target = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getTarget)(event);
+      const target = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.getTarget)(event);
       const tabbableContent = getTabbableContent();
       const tabbableIndex = tabbableContent.indexOf(target);
       if (tabbableIndex !== -1) {
@@ -2054,26 +2062,27 @@ function FloatingFocusManager(props) {
     function handleFocusOutside(event) {
       const relatedTarget = event.relatedTarget;
       queueMicrotask(() => {
-        const movedToUnrelatedNode = !((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.contains)(domReference, relatedTarget) || (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.contains)(floating, relatedTarget) || (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.contains)(relatedTarget, floating) || (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.contains)(portalContext == null ? void 0 : portalContext.portalNode, relatedTarget) || relatedTarget != null && relatedTarget.hasAttribute(createAttribute('focus-guard')) || tree && (getChildren(tree.nodesRef.current, nodeId).find(node => {
+        const nodeId = getNodeId();
+        const movedToUnrelatedNode = !((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.contains)(domReference, relatedTarget) || (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.contains)(floating, relatedTarget) || (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.contains)(relatedTarget, floating) || (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.contains)(portalContext == null ? void 0 : portalContext.portalNode, relatedTarget) || relatedTarget != null && relatedTarget.hasAttribute(createAttribute('focus-guard')) || tree && (getChildren(tree.nodesRef.current, nodeId).find(node => {
           var _node$context, _node$context2;
-          return (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.contains)((_node$context = node.context) == null ? void 0 : _node$context.elements.floating, relatedTarget) || (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.contains)((_node$context2 = node.context) == null ? void 0 : _node$context2.elements.domReference, relatedTarget);
+          return (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.contains)((_node$context = node.context) == null ? void 0 : _node$context.elements.floating, relatedTarget) || (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.contains)((_node$context2 = node.context) == null ? void 0 : _node$context2.elements.domReference, relatedTarget);
         }) || getAncestors(tree.nodesRef.current, nodeId).find(node => {
-          var _node$context3, _node$context4;
-          return ((_node$context3 = node.context) == null ? void 0 : _node$context3.elements.floating) === relatedTarget || ((_node$context4 = node.context) == null ? void 0 : _node$context4.elements.domReference) === relatedTarget;
+          var _node$context3, _node$context4, _node$context5;
+          return [(_node$context3 = node.context) == null ? void 0 : _node$context3.elements.floating, getFloatingFocusElement((_node$context4 = node.context) == null ? void 0 : _node$context4.elements.floating)].includes(relatedTarget) || ((_node$context5 = node.context) == null ? void 0 : _node$context5.elements.domReference) === relatedTarget;
         })));
 
         // Restore focus to the previous tabbable element index to prevent
         // focus from being lost outside the floating tree.
-        if (restoreFocus && movedToUnrelatedNode && (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.activeElement)((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getDocument)(floatingFocusElement)) === (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getDocument)(floatingFocusElement).body) {
+        if (restoreFocus && movedToUnrelatedNode && (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.activeElement)((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.getDocument)(floatingFocusElement)) === (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.getDocument)(floatingFocusElement).body) {
           // Let `FloatingPortal` effect knows that focus is still inside the
           // floating tree.
-          if ((0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.isHTMLElement)(floatingFocusElement)) {
+          if ((0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.isHTMLElement)(floatingFocusElement)) {
             floatingFocusElement.focus();
           }
           const prevTabbableIndex = tabbableIndexRef.current;
           const tabbableContent = getTabbableContent();
           const nodeToFocus = tabbableContent[prevTabbableIndex] || tabbableContent[tabbableContent.length - 1] || floatingFocusElement;
-          if ((0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.isHTMLElement)(nodeToFocus)) {
+          if ((0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.isHTMLElement)(nodeToFocus)) {
             nodeToFocus.focus();
           }
         }
@@ -2088,7 +2097,7 @@ function FloatingFocusManager(props) {
         }
       });
     }
-    if (floating && (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.isHTMLElement)(domReference)) {
+    if (floating && (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.isHTMLElement)(domReference)) {
       domReference.addEventListener('focusout', handleFocusOutside);
       domReference.addEventListener('pointerdown', handlePointerDown);
       floating.addEventListener('focusout', handleFocusOutside);
@@ -2098,32 +2107,39 @@ function FloatingFocusManager(props) {
         floating.removeEventListener('focusout', handleFocusOutside);
       };
     }
-  }, [disabled, domReference, floating, floatingFocusElement, modal, nodeId, tree, portalContext, onOpenChange, closeOnFocusOut, restoreFocus, getTabbableContent, isUntrappedTypeableCombobox]);
+  }, [disabled, domReference, floating, floatingFocusElement, modal, tree, portalContext, onOpenChange, closeOnFocusOut, restoreFocus, getTabbableContent, isUntrappedTypeableCombobox, getNodeId]);
+  const beforeGuardRef = react__WEBPACK_IMPORTED_MODULE_0__.useRef(null);
+  const afterGuardRef = react__WEBPACK_IMPORTED_MODULE_0__.useRef(null);
+  const mergedBeforeGuardRef = useMergeRefs([beforeGuardRef, portalContext == null ? void 0 : portalContext.beforeInsideRef]);
+  const mergedAfterGuardRef = useMergeRefs([afterGuardRef, portalContext == null ? void 0 : portalContext.afterInsideRef]);
   react__WEBPACK_IMPORTED_MODULE_0__.useEffect(() => {
     var _portalContext$portal;
     if (disabled) return;
+    if (!floating) return;
 
     // Don't hide portals nested within the parent portal.
     const portalNodes = Array.from((portalContext == null || (_portalContext$portal = portalContext.portalNode) == null ? void 0 : _portalContext$portal.querySelectorAll("[" + createAttribute('portal') + "]")) || []);
-    if (floating) {
-      const insideElements = [floating, ...portalNodes, startDismissButtonRef.current, endDismissButtonRef.current, orderRef.current.includes('reference') || isUntrappedTypeableCombobox ? domReference : null].filter(x => x != null);
-      const cleanup = modal || isUntrappedTypeableCombobox ? markOthers(insideElements, guards, !guards) : markOthers(insideElements);
-      return () => {
-        cleanup();
-      };
-    }
-  }, [disabled, domReference, floating, modal, orderRef, portalContext, isUntrappedTypeableCombobox, guards]);
+    const ancestorFloatingNodes = tree && !modal ? getAncestors(tree == null ? void 0 : tree.nodesRef.current, getNodeId()).map(node => {
+      var _node$context6;
+      return (_node$context6 = node.context) == null ? void 0 : _node$context6.elements.floating;
+    }) : [];
+    const insideElements = [floating, ...portalNodes, ...ancestorFloatingNodes, startDismissButtonRef.current, endDismissButtonRef.current, beforeGuardRef.current, afterGuardRef.current, portalContext == null ? void 0 : portalContext.beforeOutsideRef.current, portalContext == null ? void 0 : portalContext.afterOutsideRef.current, orderRef.current.includes('reference') || isUntrappedTypeableCombobox ? domReference : null].filter(x => x != null);
+    const cleanup = modal || isUntrappedTypeableCombobox ? markOthers(insideElements, !useInert, useInert) : markOthers(insideElements);
+    return () => {
+      cleanup();
+    };
+  }, [disabled, domReference, floating, modal, orderRef, portalContext, isUntrappedTypeableCombobox, guards, useInert, tree, getNodeId]);
   index(() => {
-    if (disabled || !(0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.isHTMLElement)(floatingFocusElement)) return;
-    const doc = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getDocument)(floatingFocusElement);
-    const previouslyFocusedElement = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.activeElement)(doc);
+    if (disabled || !(0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.isHTMLElement)(floatingFocusElement)) return;
+    const doc = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.getDocument)(floatingFocusElement);
+    const previouslyFocusedElement = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.activeElement)(doc);
 
     // Wait for any layout effect state setters to execute to set `tabIndex`.
     queueMicrotask(() => {
       const focusableElements = getTabbableElements(floatingFocusElement);
       const initialFocusValue = initialFocusRef.current;
       const elToFocus = (typeof initialFocusValue === 'number' ? focusableElements[initialFocusValue] : initialFocusValue.current) || floatingFocusElement;
-      const focusAlreadyInsideFloatingEl = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.contains)(floatingFocusElement, previouslyFocusedElement);
+      const focusAlreadyInsideFloatingEl = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.contains)(floatingFocusElement, previouslyFocusedElement);
       if (!ignoreInitialFocus && !focusAlreadyInsideFloatingEl && open) {
         enqueueFocus(elToFocus, {
           preventScroll: elToFocus === floatingFocusElement
@@ -2134,8 +2150,8 @@ function FloatingFocusManager(props) {
   index(() => {
     if (disabled || !floatingFocusElement) return;
     let preventReturnFocusScroll = false;
-    const doc = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getDocument)(floatingFocusElement);
-    const previouslyFocusedElement = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.activeElement)(doc);
+    const doc = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.getDocument)(floatingFocusElement);
+    const previouslyFocusedElement = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.activeElement)(doc);
     const contextData = dataRef.current;
     let openEvent = contextData.openEvent;
     addPreviouslyFocusedElement(previouslyFocusedElement);
@@ -2152,10 +2168,10 @@ function FloatingFocusManager(props) {
       if (open) {
         openEvent = event;
       }
-      if (reason === 'escape-key' && refs.domReference.current) {
-        addPreviouslyFocusedElement(refs.domReference.current);
+      if (reason === 'escape-key' && domReference) {
+        addPreviouslyFocusedElement(domReference);
       }
-      if (reason === 'hover' && event.type === 'mouseleave') {
+      if (['hover', 'safe-polygon'].includes(reason) && event.type === 'mouseleave') {
         preventReturnFocusRef.current = true;
       }
       if (reason !== 'outside-press') return;
@@ -2163,7 +2179,7 @@ function FloatingFocusManager(props) {
         preventReturnFocusRef.current = false;
         preventReturnFocusScroll = true;
       } else {
-        preventReturnFocusRef.current = !((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.isVirtualClick)(event) || (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.isVirtualPointerEvent)(event));
+        preventReturnFocusRef.current = !((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.isVirtualClick)(event) || (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.isVirtualPointerEvent)(event));
       }
     }
     events.on('openchange', onOpenChange);
@@ -2182,32 +2198,34 @@ function FloatingFocusManager(props) {
     }
     return () => {
       events.off('openchange', onOpenChange);
-      const activeEl = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.activeElement)(doc);
-      const isFocusInsideFloatingTree = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.contains)(floating, activeEl) || tree && getChildren(tree.nodesRef.current, nodeId).some(node => {
-        var _node$context5;
-        return (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.contains)((_node$context5 = node.context) == null ? void 0 : _node$context5.elements.floating, activeEl);
+      const activeEl = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.activeElement)(doc);
+      const isFocusInsideFloatingTree = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.contains)(floating, activeEl) || tree && getChildren(tree.nodesRef.current, getNodeId()).some(node => {
+        var _node$context7;
+        return (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.contains)((_node$context7 = node.context) == null ? void 0 : _node$context7.elements.floating, activeEl);
       });
       const shouldFocusReference = isFocusInsideFloatingTree || openEvent && ['click', 'mousedown'].includes(openEvent.type);
-      if (shouldFocusReference && refs.domReference.current) {
-        addPreviouslyFocusedElement(refs.domReference.current);
+      if (shouldFocusReference && domReference) {
+        addPreviouslyFocusedElement(domReference);
       }
       const returnElement = getReturnElement();
       queueMicrotask(() => {
+        // This is `returnElement`, if it's tabbable, or its first tabbable child.
+        const tabbableReturnElement = getFirstTabbableElement(returnElement);
         if (
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        returnFocusRef.current && !preventReturnFocusRef.current && (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.isHTMLElement)(returnElement) && (
+        returnFocusRef.current && !preventReturnFocusRef.current && (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.isHTMLElement)(tabbableReturnElement) && (
         // If the focus moved somewhere else after mount, avoid returning focus
         // since it likely entered a different element which should be
         // respected: https://github.com/floating-ui/floating-ui/issues/2607
-        returnElement !== activeEl && activeEl !== doc.body ? isFocusInsideFloatingTree : true)) {
-          returnElement.focus({
+        tabbableReturnElement !== activeEl && activeEl !== doc.body ? isFocusInsideFloatingTree : true)) {
+          tabbableReturnElement.focus({
             preventScroll: preventReturnFocusScroll
           });
         }
         fallbackEl.remove();
       });
     };
-  }, [disabled, floating, floatingFocusElement, returnFocusRef, dataRef, refs, events, tree, nodeId, isInsidePortal, domReference]);
+  }, [disabled, floating, floatingFocusElement, returnFocusRef, dataRef, events, tree, isInsidePortal, domReference, getNodeId]);
   react__WEBPACK_IMPORTED_MODULE_0__.useEffect(() => {
     // The `returnFocus` cleanup behavior is inside a microtask; ensure we
     // wait for it to complete before resetting the flag.
@@ -2226,12 +2244,12 @@ function FloatingFocusManager(props) {
       closeOnFocusOut,
       open,
       onOpenChange,
-      refs
+      domReference
     });
     return () => {
       portalContext.setFocusManagerState(null);
     };
-  }, [disabled, portalContext, modal, open, onOpenChange, refs, closeOnFocusOut]);
+  }, [disabled, portalContext, modal, open, onOpenChange, closeOnFocusOut, domReference]);
   index(() => {
     if (disabled) return;
     if (!floatingFocusElement) return;
@@ -2240,12 +2258,12 @@ function FloatingFocusManager(props) {
     const handleMutation = () => {
       const tabIndex = floatingFocusElement.getAttribute('tabindex');
       const tabbableContent = getTabbableContent();
-      const activeEl = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.activeElement)((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getDocument)(floating));
+      const activeEl = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.activeElement)((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.getDocument)(floating));
       const tabbableIndex = tabbableContent.indexOf(activeEl);
       if (tabbableIndex !== -1) {
         tabbableIndexRef.current = tabbableIndex;
       }
-      if (orderRef.current.includes('floating') || activeEl !== refs.domReference.current && tabbableContent.length === 0) {
+      if (orderRef.current.includes('floating') || activeEl !== domReference && tabbableContent.length === 0) {
         if (tabIndex !== '0') {
           floatingFocusElement.setAttribute('tabindex', '0');
         }
@@ -2263,60 +2281,63 @@ function FloatingFocusManager(props) {
     return () => {
       observer.disconnect();
     };
-  }, [disabled, floating, floatingFocusElement, refs, orderRef, getTabbableContent, ignoreInitialFocus]);
+  }, [disabled, floating, floatingFocusElement, domReference, orderRef, getTabbableContent, ignoreInitialFocus]);
   function renderDismissButton(location) {
     if (disabled || !visuallyHiddenDismiss || !modal) {
       return null;
     }
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(VisuallyHiddenDismiss, {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(VisuallyHiddenDismiss, {
       ref: location === 'start' ? startDismissButtonRef : endDismissButtonRef,
-      onClick: event => onOpenChange(false, event.nativeEvent)
-    }, typeof visuallyHiddenDismiss === 'string' ? visuallyHiddenDismiss : 'Dismiss');
+      onClick: event => onOpenChange(false, event.nativeEvent),
+      children: typeof visuallyHiddenDismiss === 'string' ? visuallyHiddenDismiss : 'Dismiss'
+    });
   }
   const shouldRenderGuards = !disabled && guards && (modal ? !isUntrappedTypeableCombobox : true) && (isInsidePortal || modal);
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, shouldRenderGuards && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(FocusGuard, {
-    "data-type": "inside",
-    ref: portalContext == null ? void 0 : portalContext.beforeInsideRef,
-    onFocus: event => {
-      if (modal) {
-        const els = getTabbableElements();
-        enqueueFocus(order[0] === 'reference' ? els[0] : els[els.length - 1]);
-      } else if (portalContext != null && portalContext.preserveTabOrder && portalContext.portalNode) {
-        preventReturnFocusRef.current = false;
-        if (isOutsideEvent(event, portalContext.portalNode)) {
-          const nextTabbable = getNextTabbable() || domReference;
-          nextTabbable == null || nextTabbable.focus();
-        } else {
-          var _portalContext$before;
-          (_portalContext$before = portalContext.beforeOutsideRef.current) == null || _portalContext$before.focus();
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.Fragment, {
+    children: [shouldRenderGuards && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(FocusGuard, {
+      "data-type": "inside",
+      ref: mergedBeforeGuardRef,
+      onFocus: event => {
+        if (modal) {
+          const els = getTabbableElements();
+          enqueueFocus(order[0] === 'reference' ? els[0] : els[els.length - 1]);
+        } else if (portalContext != null && portalContext.preserveTabOrder && portalContext.portalNode) {
+          preventReturnFocusRef.current = false;
+          if (isOutsideEvent(event, portalContext.portalNode)) {
+            const nextTabbable = getNextTabbable() || domReference;
+            nextTabbable == null || nextTabbable.focus();
+          } else {
+            var _portalContext$before;
+            (_portalContext$before = portalContext.beforeOutsideRef.current) == null || _portalContext$before.focus();
+          }
         }
       }
-    }
-  }), !isUntrappedTypeableCombobox && renderDismissButton('start'), children, renderDismissButton('end'), shouldRenderGuards && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(FocusGuard, {
-    "data-type": "inside",
-    ref: portalContext == null ? void 0 : portalContext.afterInsideRef,
-    onFocus: event => {
-      if (modal) {
-        enqueueFocus(getTabbableElements()[0]);
-      } else if (portalContext != null && portalContext.preserveTabOrder && portalContext.portalNode) {
-        if (closeOnFocusOut) {
-          preventReturnFocusRef.current = true;
-        }
-        if (isOutsideEvent(event, portalContext.portalNode)) {
-          const prevTabbable = getPreviousTabbable() || domReference;
-          prevTabbable == null || prevTabbable.focus();
-        } else {
-          var _portalContext$afterO;
-          (_portalContext$afterO = portalContext.afterOutsideRef.current) == null || _portalContext$afterO.focus();
+    }), !isUntrappedTypeableCombobox && renderDismissButton('start'), children, renderDismissButton('end'), shouldRenderGuards && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(FocusGuard, {
+      "data-type": "inside",
+      ref: mergedAfterGuardRef,
+      onFocus: event => {
+        if (modal) {
+          enqueueFocus(getTabbableElements()[0]);
+        } else if (portalContext != null && portalContext.preserveTabOrder && portalContext.portalNode) {
+          if (closeOnFocusOut) {
+            preventReturnFocusRef.current = true;
+          }
+          if (isOutsideEvent(event, portalContext.portalNode)) {
+            const prevTabbable = getPreviousTabbable() || domReference;
+            prevTabbable == null || prevTabbable.focus();
+          } else {
+            var _portalContext$afterO;
+            (_portalContext$afterO = portalContext.afterOutsideRef.current) == null || _portalContext$afterO.focus();
+          }
         }
       }
-    }
-  }));
+    })]
+  });
 }
 
 let lockCount = 0;
 function enableScrollLock() {
-  const isIOS = /iP(hone|ad|od)|iOS/.test((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getPlatform)());
+  const isIOS = /iP(hone|ad|od)|iOS/.test((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.getPlatform)());
   const bodyStyle = document.body.style;
   // RTL <body> scrollbar
   const scrollbarX = Math.round(document.documentElement.getBoundingClientRect().left) + document.documentElement.scrollLeft;
@@ -2385,9 +2406,9 @@ const FloatingOverlay = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.forwardR
       }
     };
   }, [lockScroll]);
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", _extends({
-    ref: ref
-  }, rest, {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+    ref: ref,
+    ...rest,
     style: {
       position: 'fixed',
       overflow: 'auto',
@@ -2397,14 +2418,14 @@ const FloatingOverlay = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.forwardR
       left: 0,
       ...rest.style
     }
-  }));
+  });
 });
 
 function isButtonTarget(event) {
-  return (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.isHTMLElement)(event.target) && event.target.tagName === 'BUTTON';
+  return (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.isHTMLElement)(event.target) && event.target.tagName === 'BUTTON';
 }
 function isSpaceIgnored(element) {
-  return (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.isTypeableElement)(element);
+  return (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.isTypeableElement)(element);
 }
 /**
  * Opens or closes the floating element when clicking the reference element.
@@ -2443,7 +2464,7 @@ function useClick(context, props) {
       // https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button
       if (event.button !== 0) return;
       if (eventOption === 'click') return;
-      if ((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.isMouseLikePointerType)(pointerType, true) && ignoreMouse) return;
+      if ((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.isMouseLikePointerType)(pointerType, true) && ignoreMouse) return;
       if (open && toggle && (dataRef.current.openEvent && stickIfOpen ? dataRef.current.openEvent.type === 'mousedown' : true)) {
         onOpenChange(false, event.nativeEvent, 'click');
       } else {
@@ -2458,7 +2479,7 @@ function useClick(context, props) {
         pointerTypeRef.current = undefined;
         return;
       }
-      if ((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.isMouseLikePointerType)(pointerType, true) && ignoreMouse) return;
+      if ((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.isMouseLikePointerType)(pointerType, true) && ignoreMouse) return;
       if (open && toggle && (dataRef.current.openEvent && stickIfOpen ? dataRef.current.openEvent.type === 'click' : true)) {
         onOpenChange(false, event.nativeEvent, 'click');
       } else {
@@ -2620,14 +2641,14 @@ function useClientPoint(context, props) {
   // mouse even if the floating element is transitioning out. On touch
   // devices, this is undesirable because the floating element will move to
   // the dismissal touch point.
-  const openCheck = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.isMouseLikePointerType)(pointerType) ? floating : open;
+  const openCheck = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.isMouseLikePointerType)(pointerType) ? floating : open;
   const addListener = react__WEBPACK_IMPORTED_MODULE_0__.useCallback(() => {
     // Explicitly specified `x`/`y` coordinates shouldn't add a listener.
     if (!openCheck || !enabled || x != null || y != null) return;
-    const win = (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.getWindow)(floating);
+    const win = (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.getWindow)(floating);
     function handleMouseMove(event) {
-      const target = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getTarget)(event);
-      if (!(0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.contains)(floating, target)) {
+      const target = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.getTarget)(event);
+      if (!(0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.contains)(floating, target)) {
         setReference(event.clientX, event.clientY);
       } else {
         win.removeEventListener('mousemove', handleMouseMove);
@@ -2769,16 +2790,16 @@ function useDismiss(context, props) {
         }
       }
     }
-    onOpenChange(false, (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.isReactEvent)(event) ? event.nativeEvent : event, 'escape-key');
+    onOpenChange(false, (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.isReactEvent)(event) ? event.nativeEvent : event, 'escape-key');
   });
   const closeOnEscapeKeyDownCapture = useEffectEvent(event => {
     var _getTarget2;
     const callback = () => {
       var _getTarget;
       closeOnEscapeKeyDown(event);
-      (_getTarget = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getTarget)(event)) == null || _getTarget.removeEventListener('keydown', callback);
+      (_getTarget = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.getTarget)(event)) == null || _getTarget.removeEventListener('keydown', callback);
     };
-    (_getTarget2 = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getTarget)(event)) == null || _getTarget2.addEventListener('keydown', callback);
+    (_getTarget2 = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.getTarget)(event)) == null || _getTarget2.addEventListener('keydown', callback);
   });
   const closeOnPressOutside = useEffectEvent(event => {
     var _dataRef$current$floa2;
@@ -2802,13 +2823,13 @@ function useDismiss(context, props) {
     if (typeof outsidePress === 'function' && !outsidePress(event)) {
       return;
     }
-    const target = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getTarget)(event);
+    const target = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.getTarget)(event);
     const inertSelector = "[" + createAttribute('inert') + "]";
-    const markers = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getDocument)(elements.floating).querySelectorAll(inertSelector);
-    let targetRootAncestor = (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.isElement)(target) ? target : null;
-    while (targetRootAncestor && !(0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.isLastTraversableNode)(targetRootAncestor)) {
-      const nextParent = (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.getParentNode)(targetRootAncestor);
-      if ((0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.isLastTraversableNode)(nextParent) || !(0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.isElement)(nextParent)) {
+    const markers = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.getDocument)(elements.floating).querySelectorAll(inertSelector);
+    let targetRootAncestor = (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.isElement)(target) ? target : null;
+    while (targetRootAncestor && !(0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.isLastTraversableNode)(targetRootAncestor)) {
+      const nextParent = (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.getParentNode)(targetRootAncestor);
+      if ((0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.isLastTraversableNode)(nextParent) || !(0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.isElement)(nextParent)) {
         break;
       }
       targetRootAncestor = nextParent;
@@ -2816,43 +2837,43 @@ function useDismiss(context, props) {
 
     // Check if the click occurred on a third-party element injected after the
     // floating element rendered.
-    if (markers.length && (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.isElement)(target) && !(0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.isRootElement)(target) &&
+    if (markers.length && (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.isElement)(target) && !(0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.isRootElement)(target) &&
     // Clicked on a direct ancestor (e.g. FloatingOverlay).
-    !(0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.contains)(target, elements.floating) &&
+    !(0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.contains)(target, elements.floating) &&
     // If the target root element contains none of the markers, then the
     // element was injected after the floating element rendered.
-    Array.from(markers).every(marker => !(0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.contains)(targetRootAncestor, marker))) {
+    Array.from(markers).every(marker => !(0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.contains)(targetRootAncestor, marker))) {
       return;
     }
 
     // Check if the click occurred on the scrollbar
-    if ((0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.isHTMLElement)(target) && floating) {
-      // In Firefox, `target.scrollWidth > target.clientWidth` for inline
-      // elements.
-      const canScrollX = target.clientWidth > 0 && target.scrollWidth > target.clientWidth;
-      const canScrollY = target.clientHeight > 0 && target.scrollHeight > target.clientHeight;
-      let xCond = canScrollY && event.offsetX > target.clientWidth;
+    if ((0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.isHTMLElement)(target) && floating) {
+      const lastTraversableNode = (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.isLastTraversableNode)(target);
+      const style = (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.getComputedStyle)(target);
+      const scrollRe = /auto|scroll/;
+      const isScrollableX = lastTraversableNode || scrollRe.test(style.overflowX);
+      const isScrollableY = lastTraversableNode || scrollRe.test(style.overflowY);
+      const canScrollX = isScrollableX && target.clientWidth > 0 && target.scrollWidth > target.clientWidth;
+      const canScrollY = isScrollableY && target.clientHeight > 0 && target.scrollHeight > target.clientHeight;
+      const isRTL = style.direction === 'rtl';
 
+      // Check click position relative to scrollbar.
       // In some browsers it is possible to change the <body> (or window)
       // scrollbar to the left side, but is very rare and is difficult to
       // check for. Plus, for modal dialogs with backdrops, it is more
       // important that the backdrop is checked but not so much the window.
-      if (canScrollY) {
-        const isRTL = (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.getComputedStyle)(target).direction === 'rtl';
-        if (isRTL) {
-          xCond = event.offsetX <= target.offsetWidth - target.clientWidth;
-        }
-      }
-      if (xCond || canScrollX && event.offsetY > target.clientHeight) {
+      const pressedVerticalScrollbar = canScrollY && (isRTL ? event.offsetX <= target.offsetWidth - target.clientWidth : event.offsetX > target.clientWidth);
+      const pressedHorizontalScrollbar = canScrollX && event.offsetY > target.clientHeight;
+      if (pressedVerticalScrollbar || pressedHorizontalScrollbar) {
         return;
       }
     }
     const nodeId = (_dataRef$current$floa2 = dataRef.current.floatingContext) == null ? void 0 : _dataRef$current$floa2.nodeId;
     const targetIsInsideChildren = tree && getChildren(tree.nodesRef.current, nodeId).some(node => {
       var _node$context;
-      return (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.isEventTargetWithin)(event, (_node$context = node.context) == null ? void 0 : _node$context.elements.floating);
+      return (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.isEventTargetWithin)(event, (_node$context = node.context) == null ? void 0 : _node$context.elements.floating);
     });
-    if ((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.isEventTargetWithin)(event, elements.floating) || (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.isEventTargetWithin)(event, elements.domReference) || targetIsInsideChildren) {
+    if ((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.isEventTargetWithin)(event, elements.floating) || (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.isEventTargetWithin)(event, elements.domReference) || targetIsInsideChildren) {
       return;
     }
     const children = tree ? getChildren(tree.nodesRef.current, nodeId) : [];
@@ -2876,9 +2897,9 @@ function useDismiss(context, props) {
     const callback = () => {
       var _getTarget3;
       closeOnPressOutside(event);
-      (_getTarget3 = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getTarget)(event)) == null || _getTarget3.removeEventListener(outsidePressEvent, callback);
+      (_getTarget3 = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.getTarget)(event)) == null || _getTarget3.removeEventListener(outsidePressEvent, callback);
     };
-    (_getTarget4 = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getTarget)(event)) == null || _getTarget4.addEventListener(outsidePressEvent, callback);
+    (_getTarget4 = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.getTarget)(event)) == null || _getTarget4.addEventListener(outsidePressEvent, callback);
   });
   react__WEBPACK_IMPORTED_MODULE_0__.useEffect(() => {
     if (!open || !enabled) {
@@ -2903,9 +2924,9 @@ function useDismiss(context, props) {
       },
       // 0ms or 1ms don't work in Safari. 5ms appears to consistently work.
       // Only apply to WebKit for the test to remain 0ms.
-      (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.isWebKit)() ? 5 : 0);
+      (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.isWebKit)() ? 5 : 0);
     }
-    const doc = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getDocument)(elements.floating);
+    const doc = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.getDocument)(elements.floating);
     if (escapeKey) {
       doc.addEventListener('keydown', escapeKeyCapture ? closeOnEscapeKeyDownCapture : closeOnEscapeKeyDown, escapeKeyCapture);
       doc.addEventListener('compositionstart', handleCompositionStart);
@@ -2914,14 +2935,14 @@ function useDismiss(context, props) {
     outsidePress && doc.addEventListener(outsidePressEvent, outsidePressCapture ? closeOnPressOutsideCapture : closeOnPressOutside, outsidePressCapture);
     let ancestors = [];
     if (ancestorScroll) {
-      if ((0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.isElement)(elements.domReference)) {
-        ancestors = (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.getOverflowAncestors)(elements.domReference);
+      if ((0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.isElement)(elements.domReference)) {
+        ancestors = (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.getOverflowAncestors)(elements.domReference);
       }
-      if ((0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.isElement)(elements.floating)) {
-        ancestors = ancestors.concat((0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.getOverflowAncestors)(elements.floating));
+      if ((0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.isElement)(elements.floating)) {
+        ancestors = ancestors.concat((0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.getOverflowAncestors)(elements.floating));
       }
-      if (!(0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.isElement)(elements.reference) && elements.reference && elements.reference.contextElement) {
-        ancestors = ancestors.concat((0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.getOverflowAncestors)(elements.reference.contextElement));
+      if (!(0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.isElement)(elements.reference) && elements.reference && elements.reference.contextElement) {
+        ancestors = ancestors.concat((0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.getOverflowAncestors)(elements.reference.contextElement));
       }
     }
 
@@ -2953,11 +2974,16 @@ function useDismiss(context, props) {
   }, [outsidePress, outsidePressEvent]);
   const reference = react__WEBPACK_IMPORTED_MODULE_0__.useMemo(() => ({
     onKeyDown: closeOnEscapeKeyDown,
-    [bubbleHandlerKeys[referencePressEvent]]: event => {
-      if (referencePress) {
+    ...(referencePress && {
+      [bubbleHandlerKeys[referencePressEvent]]: event => {
         onOpenChange(false, event.nativeEvent, 'reference-press');
-      }
-    }
+      },
+      ...(referencePressEvent !== 'click' && {
+        onClick(event) {
+          onOpenChange(false, event.nativeEvent, 'reference-press');
+        }
+      })
+    })
   }), [closeOnEscapeKeyDown, onOpenChange, referencePress, referencePressEvent]);
   const floating = react__WEBPACK_IMPORTED_MODULE_0__.useMemo(() => ({
     onKeyDown: closeOnEscapeKeyDown,
@@ -2989,7 +3015,7 @@ function useFloatingRootContext(options) {
   const nested = useFloatingParentNodeId() != null;
   if (true) {
     const optionDomReference = elementsProp.reference;
-    if (optionDomReference && !(0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.isElement)(optionDomReference)) {
+    if (optionDomReference && !(0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.isElement)(optionDomReference)) {
       error('Cannot pass a virtual element to the `elements.reference` option,', 'as it must be a real DOM element. Use `refs.setPositionReference()`', 'instead.');
     }
   }
@@ -3055,7 +3081,7 @@ function useFloating(options) {
       domReferenceRef.current = domReference;
     }
   }, [domReference]);
-  const position = (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_2__.useFloating)({
+  const position = (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_3__.useFloating)({
     ...options,
     elements: {
       ...computedElements,
@@ -3065,7 +3091,7 @@ function useFloating(options) {
     }
   });
   const setPositionReference = react__WEBPACK_IMPORTED_MODULE_0__.useCallback(node => {
-    const computedPositionReference = (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.isElement)(node) ? {
+    const computedPositionReference = (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.isElement)(node) ? {
       getBoundingClientRect: () => node.getBoundingClientRect(),
       contextElement: node
     } : node;
@@ -3075,18 +3101,18 @@ function useFloating(options) {
     position.refs.setReference(computedPositionReference);
   }, [position.refs]);
   const setReference = react__WEBPACK_IMPORTED_MODULE_0__.useCallback(node => {
-    if ((0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.isElement)(node) || node === null) {
+    if ((0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.isElement)(node) || node === null) {
       domReferenceRef.current = node;
       setDomReference(node);
     }
 
     // Backwards-compatibility for passing a virtual element to `reference`
     // after it has set the DOM reference.
-    if ((0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.isElement)(position.refs.reference.current) || position.refs.reference.current === null ||
+    if ((0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.isElement)(position.refs.reference.current) || position.refs.reference.current === null ||
     // Don't allow setting virtual elements using the old technique back to
     // `null` to support `positionReference` + an unstable `reference`
     // callback ref.
-    node !== null && !(0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.isElement)(node)) {
+    node !== null && !(0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.isElement)(node)) {
       position.refs.setReference(node);
     }
   }, [position.refs]);
@@ -3147,13 +3173,13 @@ function useFocus(context, props) {
   const keyboardModalityRef = react__WEBPACK_IMPORTED_MODULE_0__.useRef(true);
   react__WEBPACK_IMPORTED_MODULE_0__.useEffect(() => {
     if (!enabled) return;
-    const win = (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.getWindow)(elements.domReference);
+    const win = (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.getWindow)(elements.domReference);
 
     // If the reference was focused and the user left the tab/window, and the
     // floating element was not open, the focus should be blocked when they
     // return to the tab/window.
     function onBlur() {
-      if (!open && (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.isHTMLElement)(elements.domReference) && elements.domReference === (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.activeElement)((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getDocument)(elements.domReference))) {
+      if (!open && (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.isHTMLElement)(elements.domReference) && elements.domReference === (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.activeElement)((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.getDocument)(elements.domReference))) {
         blockFocusRef.current = true;
       }
     }
@@ -3189,7 +3215,7 @@ function useFocus(context, props) {
   }, []);
   const reference = react__WEBPACK_IMPORTED_MODULE_0__.useMemo(() => ({
     onPointerDown(event) {
-      if ((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.isVirtualPointerEvent)(event.nativeEvent)) return;
+      if ((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.isVirtualPointerEvent)(event.nativeEvent)) return;
       keyboardModalityRef.current = false;
     },
     onMouseLeave() {
@@ -3197,17 +3223,17 @@ function useFocus(context, props) {
     },
     onFocus(event) {
       if (blockFocusRef.current) return;
-      const target = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getTarget)(event.nativeEvent);
-      if (visibleOnly && (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.isElement)(target)) {
+      const target = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.getTarget)(event.nativeEvent);
+      if (visibleOnly && (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.isElement)(target)) {
         try {
           // Mac Safari unreliably matches `:focus-visible` on the reference
           // if focus was outside the page initially - use the fallback
           // instead.
-          if ((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.isSafari)() && (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.isMac)()) throw Error();
+          if ((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.isSafari)() && (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.isMac)()) throw Error();
           if (!target.matches(':focus-visible')) return;
         } catch (e) {
           // Old browsers will throw an error when using `:focus-visible`.
-          if (!keyboardModalityRef.current && !(0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.isTypeableElement)(target)) {
+          if (!keyboardModalityRef.current && !(0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.isTypeableElement)(target)) {
             return;
           }
         }
@@ -3221,12 +3247,12 @@ function useFocus(context, props) {
 
       // Hit the non-modal focus management portal guard. Focus will be
       // moved into the floating element immediately after.
-      const movedToFocusGuard = (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.isElement)(relatedTarget) && relatedTarget.hasAttribute(createAttribute('focus-guard')) && relatedTarget.getAttribute('data-type') === 'outside';
+      const movedToFocusGuard = (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.isElement)(relatedTarget) && relatedTarget.hasAttribute(createAttribute('focus-guard')) && relatedTarget.getAttribute('data-type') === 'outside';
 
       // Wait for the window blur listener to fire.
       timeoutRef.current = window.setTimeout(() => {
         var _dataRef$current$floa;
-        const activeEl = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.activeElement)(elements.domReference ? elements.domReference.ownerDocument : document);
+        const activeEl = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.activeElement)(elements.domReference ? elements.domReference.ownerDocument : document);
 
         // Focus left the page, keep it open.
         if (!relatedTarget && activeEl === elements.domReference) return;
@@ -3238,7 +3264,7 @@ function useFocus(context, props) {
         // as it will only point to the shadow host of the newly focused element
         // and not the element that actually has received focus if it is located
         // inside a shadow root.
-        if ((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.contains)((_dataRef$current$floa = dataRef.current.floatingContext) == null ? void 0 : _dataRef$current$floa.refs.floating.current, activeEl) || (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.contains)(elements.domReference, activeEl) || movedToFocusGuard) {
+        if ((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.contains)((_dataRef$current$floa = dataRef.current.floatingContext) == null ? void 0 : _dataRef$current$floa.refs.floating.current, activeEl) || (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.contains)(elements.domReference, activeEl) || movedToFocusGuard) {
           return;
         }
         onOpenChange(false, nativeEvent, 'focus');
@@ -3337,7 +3363,6 @@ function useInteractions(propsList) {
   }), [getReferenceProps, getFloatingProps, getItemProps]);
 }
 
-let isPreventScrollSupported = false;
 function doSwitch(orientation, vertical, horizontal) {
   switch (orientation) {
     case 'vertical':
@@ -3418,8 +3443,10 @@ function useListNavigation(context, props) {
   const floatingFocusElementRef = useLatestRef(floatingFocusElement);
   const parentId = useFloatingParentNodeId();
   const tree = useFloatingTree();
-  const onNavigate = useEffectEvent(unstable_onNavigate);
-  const typeableComboboxReference = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.isTypeableCombobox)(elements.domReference);
+  const onNavigate = useEffectEvent(() => {
+    unstable_onNavigate(indexRef.current === -1 ? null : indexRef.current);
+  });
+  const typeableComboboxReference = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.isTypeableCombobox)(elements.domReference);
   const focusItemOnOpenRef = react__WEBPACK_IMPORTED_MODULE_0__.useRef(focusItemOnOpen);
   const indexRef = react__WEBPACK_IMPORTED_MODULE_0__.useRef(selectedIndex != null ? selectedIndex : -1);
   const keyRef = react__WEBPACK_IMPORTED_MODULE_0__.useRef(null);
@@ -3427,7 +3454,7 @@ function useListNavigation(context, props) {
   const previousOnNavigateRef = react__WEBPACK_IMPORTED_MODULE_0__.useRef(onNavigate);
   const previousMountedRef = react__WEBPACK_IMPORTED_MODULE_0__.useRef(!!elements.floating);
   const previousOpenRef = react__WEBPACK_IMPORTED_MODULE_0__.useRef(open);
-  const forceSyncFocus = react__WEBPACK_IMPORTED_MODULE_0__.useRef(false);
+  const forceSyncFocusRef = react__WEBPACK_IMPORTED_MODULE_0__.useRef(false);
   const forceScrollIntoViewRef = react__WEBPACK_IMPORTED_MODULE_0__.useRef(false);
   const disabledIndicesRef = useLatestRef(disabledIndices);
   const latestOpenRef = useLatestRef(open);
@@ -3435,10 +3462,7 @@ function useListNavigation(context, props) {
   const selectedIndexRef = useLatestRef(selectedIndex);
   const [activeId, setActiveId] = react__WEBPACK_IMPORTED_MODULE_0__.useState();
   const [virtualId, setVirtualId] = react__WEBPACK_IMPORTED_MODULE_0__.useState();
-  const focusItem = useEffectEvent(function (listRef, indexRef, forceScrollIntoView) {
-    if (forceScrollIntoView === void 0) {
-      forceScrollIntoView = false;
-    }
+  const focusItem = useEffectEvent(() => {
     function runFocus(item) {
       if (virtual) {
         setActiveId(item.id);
@@ -3448,16 +3472,8 @@ function useListNavigation(context, props) {
         }
       } else {
         enqueueFocus(item, {
-          preventScroll: true,
-          // Mac Safari does not move the virtual cursor unless the focus call
-          // is sync. However, for the very first focus call, we need to wait
-          // for the position to be ready in order to prevent unwanted
-          // scrolling. This means the virtual cursor will not move to the first
-          // item when first opening the floating element, but will on
-          // subsequent calls. `preventScroll` is supported in modern Safari,
-          // so we can use that instead.
-          // iOS Safari must be async or the first item will not be focused.
-          sync: (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.isMac)() && (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.isSafari)() ? isPreventScrollSupported || forceSyncFocus.current : false
+          sync: forceSyncFocusRef.current,
+          preventScroll: true
         });
       }
     }
@@ -3465,14 +3481,15 @@ function useListNavigation(context, props) {
     if (initialItem) {
       runFocus(initialItem);
     }
-    requestAnimationFrame(() => {
+    const scheduler = forceSyncFocusRef.current ? v => v() : requestAnimationFrame;
+    scheduler(() => {
       const waitedItem = listRef.current[indexRef.current] || initialItem;
       if (!waitedItem) return;
       if (!initialItem) {
         runFocus(waitedItem);
       }
       const scrollIntoViewOptions = scrollItemIntoViewRef.current;
-      const shouldScrollIntoView = scrollIntoViewOptions && item && (forceScrollIntoView || !isPointerModalityRef.current);
+      const shouldScrollIntoView = scrollIntoViewOptions && item && (forceScrollIntoViewRef.current || !isPointerModalityRef.current);
       if (shouldScrollIntoView) {
         // JSDOM doesn't support `.scrollIntoView()` but it's widely supported
         // by all browsers.
@@ -3483,14 +3500,6 @@ function useListNavigation(context, props) {
       }
     });
   });
-  index(() => {
-    document.createElement('div').focus({
-      get preventScroll() {
-        isPreventScrollSupported = true;
-        return false;
-      }
-    });
-  }, []);
 
   // Sync `selectedIndex` to be the `activeIndex` upon opening the floating
   // element. Also, reset `activeIndex` upon closing the floating element.
@@ -3502,14 +3511,14 @@ function useListNavigation(context, props) {
         // item comes into view when the floating element is opened.
         forceScrollIntoViewRef.current = true;
         indexRef.current = selectedIndex;
-        onNavigate(selectedIndex);
+        onNavigate();
       }
     } else if (previousMountedRef.current) {
       // Since the user can specify `onNavigate` conditionally
       // (onNavigate: open ? setActiveIndex : setSelectedIndex),
       // we store and call the previous function.
       indexRef.current = -1;
-      previousOnNavigateRef.current(null);
+      previousOnNavigateRef.current();
     }
   }, [enabled, open, elements.floating, selectedIndex, onNavigate]);
 
@@ -3517,45 +3526,45 @@ function useListNavigation(context, props) {
   // open.
   index(() => {
     if (!enabled) return;
-    if (open && elements.floating) {
-      if (activeIndex == null) {
-        forceSyncFocus.current = false;
-        if (selectedIndexRef.current != null) {
-          return;
-        }
-
-        // Reset while the floating element was open (e.g. the list changed).
-        if (previousMountedRef.current) {
-          indexRef.current = -1;
-          focusItem(listRef, indexRef);
-        }
-
-        // Initial sync.
-        if ((!previousOpenRef.current || !previousMountedRef.current) && focusItemOnOpenRef.current && (keyRef.current != null || focusItemOnOpenRef.current === true && keyRef.current == null)) {
-          let runs = 0;
-          const waitForListPopulated = () => {
-            if (listRef.current[0] == null) {
-              // Avoid letting the browser paint if possible on the first try,
-              // otherwise use rAF. Don't try more than twice, since something
-              // is wrong otherwise.
-              if (runs < 2) {
-                const scheduler = runs ? requestAnimationFrame : queueMicrotask;
-                scheduler(waitForListPopulated);
-              }
-              runs++;
-            } else {
-              indexRef.current = keyRef.current == null || isMainOrientationToEndKey(keyRef.current, orientation, rtl) || nested ? getMinIndex(listRef, disabledIndicesRef.current) : getMaxIndex(listRef, disabledIndicesRef.current);
-              keyRef.current = null;
-              onNavigate(indexRef.current);
-            }
-          };
-          waitForListPopulated();
-        }
-      } else if (!isIndexOutOfBounds(listRef, activeIndex)) {
-        indexRef.current = activeIndex;
-        focusItem(listRef, indexRef, forceScrollIntoViewRef.current);
-        forceScrollIntoViewRef.current = false;
+    if (!open) return;
+    if (!elements.floating) return;
+    if (activeIndex == null) {
+      forceSyncFocusRef.current = false;
+      if (selectedIndexRef.current != null) {
+        return;
       }
+
+      // Reset while the floating element was open (e.g. the list changed).
+      if (previousMountedRef.current) {
+        indexRef.current = -1;
+        focusItem();
+      }
+
+      // Initial sync.
+      if ((!previousOpenRef.current || !previousMountedRef.current) && focusItemOnOpenRef.current && (keyRef.current != null || focusItemOnOpenRef.current === true && keyRef.current == null)) {
+        let runs = 0;
+        const waitForListPopulated = () => {
+          if (listRef.current[0] == null) {
+            // Avoid letting the browser paint if possible on the first try,
+            // otherwise use rAF. Don't try more than twice, since something
+            // is wrong otherwise.
+            if (runs < 2) {
+              const scheduler = runs ? requestAnimationFrame : queueMicrotask;
+              scheduler(waitForListPopulated);
+            }
+            runs++;
+          } else {
+            indexRef.current = keyRef.current == null || isMainOrientationToEndKey(keyRef.current, orientation, rtl) || nested ? getMinIndex(listRef, disabledIndicesRef.current) : getMaxIndex(listRef, disabledIndicesRef.current);
+            keyRef.current = null;
+            onNavigate();
+          }
+        };
+        waitForListPopulated();
+      }
+    } else if (!isIndexOutOfBounds(listRef, activeIndex)) {
+      indexRef.current = activeIndex;
+      focusItem();
+      forceScrollIntoViewRef.current = false;
     }
   }, [enabled, open, elements.floating, activeIndex, selectedIndexRef, nested, listRef, orientation, rtl, onNavigate, focusItem, disabledIndicesRef]);
 
@@ -3568,8 +3577,8 @@ function useListNavigation(context, props) {
     }
     const nodes = tree.nodesRef.current;
     const parent = (_nodes$find = nodes.find(node => node.id === parentId)) == null || (_nodes$find = _nodes$find.context) == null ? void 0 : _nodes$find.elements.floating;
-    const activeEl = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.activeElement)((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getDocument)(elements.floating));
-    const treeContainsActiveEl = nodes.some(node => node.context && (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.contains)(node.context.elements.floating, activeEl));
+    const activeEl = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.activeElement)((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.getDocument)(elements.floating));
+    const treeContainsActiveEl = nodes.some(node => node.context && (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.contains)(node.context.elements.floating, activeEl));
     if (parent && !treeContainsActiveEl && isPointerModalityRef.current) {
       parent.focus({
         preventScroll: true
@@ -3594,6 +3603,7 @@ function useListNavigation(context, props) {
   }, [enabled, tree, virtual, parentId, virtualItemRef]);
   index(() => {
     previousOnNavigateRef.current = onNavigate;
+    previousOpenRef.current = open;
     previousMountedRef.current = !!elements.floating;
   });
   index(() => {
@@ -3601,16 +3611,14 @@ function useListNavigation(context, props) {
       keyRef.current = null;
     }
   }, [open]);
-  index(() => {
-    previousOpenRef.current = open;
-  }, [open]);
   const hasActiveIndex = activeIndex != null;
   const item = react__WEBPACK_IMPORTED_MODULE_0__.useMemo(() => {
     function syncCurrentTarget(currentTarget) {
       if (!open) return;
       const index = listRef.current.indexOf(currentTarget);
-      if (index !== -1) {
-        onNavigate(index);
+      if (index !== -1 && indexRef.current !== index) {
+        indexRef.current = index;
+        onNavigate();
       }
     }
     const props = {
@@ -3618,6 +3626,7 @@ function useListNavigation(context, props) {
         let {
           currentTarget
         } = _ref;
+        forceSyncFocusRef.current = true;
         syncCurrentTarget(currentTarget);
       },
       onClick: _ref2 => {
@@ -3634,6 +3643,8 @@ function useListNavigation(context, props) {
           let {
             currentTarget
           } = _ref3;
+          forceSyncFocusRef.current = true;
+          forceScrollIntoViewRef.current = false;
           syncCurrentTarget(currentTarget);
         },
         onPointerLeave(_ref4) {
@@ -3643,11 +3654,12 @@ function useListNavigation(context, props) {
           if (!isPointerModalityRef.current || pointerType === 'touch') {
             return;
           }
+          forceSyncFocusRef.current = true;
           indexRef.current = -1;
-          focusItem(listRef, indexRef);
-          onNavigate(null);
+          onNavigate();
           if (!virtual) {
-            enqueueFocus(floatingFocusElementRef.current, {
+            var _floatingFocusElement;
+            (_floatingFocusElement = floatingFocusElementRef.current) == null || _floatingFocusElement.focus({
               preventScroll: true
             });
           }
@@ -3655,10 +3667,10 @@ function useListNavigation(context, props) {
       })
     };
     return props;
-  }, [open, floatingFocusElementRef, focusItem, focusItemOnHover, listRef, onNavigate, virtual]);
+  }, [open, floatingFocusElementRef, focusItemOnHover, listRef, onNavigate, virtual]);
   const commonOnKeyDown = useEffectEvent(event => {
     isPointerModalityRef.current = false;
-    forceSyncFocus.current = true;
+    forceSyncFocusRef.current = true;
 
     // When composing a character, Chrome fires ArrowDown twice. Firefox/Safari
     // don't appear to suffer from this. `event.isComposing` is avoided due to
@@ -3675,9 +3687,9 @@ function useListNavigation(context, props) {
       return;
     }
     if (nested && isCrossOrientationCloseKey(event.key, orientation, rtl)) {
-      (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.stopEvent)(event);
+      (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.stopEvent)(event);
       onOpenChange(false, event.nativeEvent, 'list-navigation');
-      if ((0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.isHTMLElement)(elements.domReference)) {
+      if ((0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.isHTMLElement)(elements.domReference)) {
         if (virtual) {
           tree == null || tree.events.emit('virtualfocus', elements.domReference);
         } else {
@@ -3691,14 +3703,14 @@ function useListNavigation(context, props) {
     const maxIndex = getMaxIndex(listRef, disabledIndices);
     if (!typeableComboboxReference) {
       if (event.key === 'Home') {
-        (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.stopEvent)(event);
+        (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.stopEvent)(event);
         indexRef.current = minIndex;
-        onNavigate(indexRef.current);
+        onNavigate();
       }
       if (event.key === 'End') {
-        (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.stopEvent)(event);
+        (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.stopEvent)(event);
         indexRef.current = maxIndex;
-        onNavigate(indexRef.current);
+        onNavigate();
       }
     }
 
@@ -3738,19 +3750,19 @@ function useListNavigation(context, props) {
       })];
       if (index != null) {
         indexRef.current = index;
-        onNavigate(indexRef.current);
+        onNavigate();
       }
       if (orientation === 'both') {
         return;
       }
     }
     if (isMainOrientationKey(event.key, orientation)) {
-      (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.stopEvent)(event);
+      (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.stopEvent)(event);
 
       // Reset the index if no item is focused.
-      if (open && !virtual && (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.activeElement)(event.currentTarget.ownerDocument) === event.currentTarget) {
+      if (open && !virtual && (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.activeElement)(event.currentTarget.ownerDocument) === event.currentTarget) {
         indexRef.current = isMainOrientationToEndKey(event.key, orientation, rtl) ? minIndex : maxIndex;
-        onNavigate(indexRef.current);
+        onNavigate();
         return;
       }
       if (isMainOrientationToEndKey(event.key, orientation, rtl)) {
@@ -3781,10 +3793,9 @@ function useListNavigation(context, props) {
         }
       }
       if (isIndexOutOfBounds(listRef, indexRef.current)) {
-        onNavigate(null);
-      } else {
-        onNavigate(indexRef.current);
+        indexRef.current = -1;
       }
+      onNavigate();
     }
   });
   const ariaActiveDescendantProp = react__WEBPACK_IMPORTED_MODULE_0__.useMemo(() => {
@@ -3795,23 +3806,23 @@ function useListNavigation(context, props) {
   const floating = react__WEBPACK_IMPORTED_MODULE_0__.useMemo(() => {
     return {
       'aria-orientation': orientation === 'both' ? undefined : orientation,
-      ...(!(0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.isTypeableCombobox)(elements.domReference) && ariaActiveDescendantProp),
+      ...(!typeableComboboxReference ? ariaActiveDescendantProp : {}),
       onKeyDown: commonOnKeyDown,
       onPointerMove() {
         isPointerModalityRef.current = true;
       }
     };
-  }, [ariaActiveDescendantProp, commonOnKeyDown, elements.domReference, orientation]);
+  }, [ariaActiveDescendantProp, commonOnKeyDown, orientation, typeableComboboxReference]);
   const reference = react__WEBPACK_IMPORTED_MODULE_0__.useMemo(() => {
     function checkVirtualMouse(event) {
-      if (focusItemOnOpen === 'auto' && (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.isVirtualClick)(event.nativeEvent)) {
+      if (focusItemOnOpen === 'auto' && (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.isVirtualClick)(event.nativeEvent)) {
         focusItemOnOpenRef.current = true;
       }
     }
     function checkVirtualPointer(event) {
       // `pointerdown` fires first, reset the state then perform the checks.
       focusItemOnOpenRef.current = focusItemOnOpen;
-      if (focusItemOnOpen === 'auto' && (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.isVirtualPointerEvent)(event.nativeEvent)) {
+      if (focusItemOnOpen === 'auto' && (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.isVirtualPointerEvent)(event.nativeEvent)) {
         focusItemOnOpenRef.current = true;
       }
     }
@@ -3839,7 +3850,7 @@ function useListNavigation(context, props) {
               const isCurrentTarget = ((_deepestNode$context = deepestNode.context) == null ? void 0 : _deepestNode$context.elements.domReference) === event.currentTarget;
               const dispatchItem = isCrossCloseKey && !isCurrentTarget ? (_deepestNode$context2 = deepestNode.context) == null ? void 0 : _deepestNode$context2.elements.domReference : isCrossOpenKey ? listRef.current.find(item => (item == null ? void 0 : item.id) === activeId) : null;
               if (dispatchItem) {
-                (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.stopEvent)(event);
+                (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.stopEvent)(event);
                 dispatchItem.dispatchEvent(eventObject);
                 setVirtualId(undefined);
               }
@@ -3847,7 +3858,7 @@ function useListNavigation(context, props) {
             if ((isMainKey || isHomeOrEndKey) && deepestNode.context) {
               if (deepestNode.context.open && deepestNode.parentId && event.currentTarget !== deepestNode.context.elements.domReference) {
                 var _deepestNode$context$;
-                (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.stopEvent)(event);
+                (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.stopEvent)(event);
                 (_deepestNode$context$ = deepestNode.context.elements.domReference) == null || _deepestNode$context$.dispatchEvent(eventObject);
                 return;
               }
@@ -3866,10 +3877,10 @@ function useListNavigation(context, props) {
         }
         if (nested) {
           if (isCrossOpenKey) {
-            (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.stopEvent)(event);
+            (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.stopEvent)(event);
             if (open) {
               indexRef.current = getMinIndex(listRef, disabledIndicesRef.current);
-              onNavigate(indexRef.current);
+              onNavigate();
             } else {
               onOpenChange(true, event.nativeEvent, 'list-navigation');
             }
@@ -3880,23 +3891,25 @@ function useListNavigation(context, props) {
           if (selectedIndex != null) {
             indexRef.current = selectedIndex;
           }
-          (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.stopEvent)(event);
+          (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.stopEvent)(event);
           if (!open && openOnArrowKeyDown) {
             onOpenChange(true, event.nativeEvent, 'list-navigation');
           } else {
             commonOnKeyDown(event);
           }
           if (open) {
-            onNavigate(indexRef.current);
+            onNavigate();
           }
         }
       },
       onFocus() {
         if (open && !virtual) {
-          onNavigate(null);
+          indexRef.current = -1;
+          onNavigate();
         }
       },
       onPointerDown: checkVirtualPointer,
+      onPointerEnter: checkVirtualPointer,
       onMouseDown: checkVirtualMouse,
       onClick: checkVirtualMouse
     };
@@ -4225,7 +4238,7 @@ function useTypeahead(context, props) {
       if (getMatchingIndex(listContent, listContent, stringRef.current) === -1) {
         setTypingChange(false);
       } else if (event.key === ' ') {
-        (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.stopEvent)(event);
+        (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.stopEvent)(event);
       }
     }
     if (listContent == null || ignoreKeysRef.current.includes(event.key) ||
@@ -4236,7 +4249,7 @@ function useTypeahead(context, props) {
       return;
     }
     if (open && event.key !== ' ') {
-      (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.stopEvent)(event);
+      (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.stopEvent)(event);
       setTypingChange(true);
     }
 
@@ -4305,6 +4318,7 @@ function getArgsWithCustomFloatingHeight(state, height) {
  * Positions the floating element such that an inner element inside of it is
  * anchored to the reference element.
  * @see https://floating-ui.com/docs/inner
+ * @deprecated
  */
 const inner = props => ({
   name: 'inner',
@@ -4320,7 +4334,7 @@ const inner = props => ({
       referenceOverflowThreshold = 0,
       scrollRef,
       ...detectOverflowOptions
-    } = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_6__.evaluate)(props, state);
+    } = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_7__.evaluate)(props, state);
     const {
       rects,
       elements: {
@@ -4350,28 +4364,28 @@ const inner = props => ({
     }
     const nextArgs = {
       ...state,
-      ...(await (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_2__.offset)(-item.offsetTop - floating.clientTop - rects.reference.height / 2 - item.offsetHeight / 2 - innerOffset).fn(state))
+      ...(await (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_3__.offset)(-item.offsetTop - floating.clientTop - rects.reference.height / 2 - item.offsetHeight / 2 - innerOffset).fn(state))
     };
-    const overflow = await (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_3__.detectOverflow)(getArgsWithCustomFloatingHeight(nextArgs, scrollEl.scrollHeight + clientTop + floating.clientTop), detectOverflowOptions);
-    const refOverflow = await (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_3__.detectOverflow)(nextArgs, {
+    const overflow = await (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.detectOverflow)(getArgsWithCustomFloatingHeight(nextArgs, scrollEl.scrollHeight + clientTop + floating.clientTop), detectOverflowOptions);
+    const refOverflow = await (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.detectOverflow)(nextArgs, {
       ...detectOverflowOptions,
       elementContext: 'reference'
     });
-    const diffY = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_6__.max)(0, overflow.top);
+    const diffY = (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_7__.max)(0, overflow.top);
     const nextY = nextArgs.y + diffY;
     const isScrollable = scrollEl.scrollHeight > scrollEl.clientHeight;
-    const rounder = isScrollable ? v => v : _floating_ui_utils__WEBPACK_IMPORTED_MODULE_6__.round;
-    const maxHeight = rounder((0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_6__.max)(0, scrollEl.scrollHeight + (floatingIsBordered && floatingIsScrollEl || scrollElIsBordered ? clientTop * 2 : 0) - diffY - (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_6__.max)(0, overflow.bottom)));
+    const rounder = isScrollable ? v => v : _floating_ui_utils__WEBPACK_IMPORTED_MODULE_7__.round;
+    const maxHeight = rounder((0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_7__.max)(0, scrollEl.scrollHeight + (floatingIsBordered && floatingIsScrollEl || scrollElIsBordered ? clientTop * 2 : 0) - diffY - (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_7__.max)(0, overflow.bottom)));
     scrollEl.style.maxHeight = maxHeight + "px";
     scrollEl.scrollTop = diffY;
 
     // There is not enough space, fallback to standard anchored positioning
     if (onFallbackChange) {
-      const shouldFallback = scrollEl.offsetHeight < item.offsetHeight * (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_6__.min)(minItemsVisible, listRef.current.length) - 1 || refOverflow.top >= -referenceOverflowThreshold || refOverflow.bottom >= -referenceOverflowThreshold;
-      react_dom__WEBPACK_IMPORTED_MODULE_1__.flushSync(() => onFallbackChange(shouldFallback));
+      const shouldFallback = scrollEl.offsetHeight < item.offsetHeight * (0,_floating_ui_utils__WEBPACK_IMPORTED_MODULE_7__.min)(minItemsVisible, listRef.current.length) - 1 || refOverflow.top >= -referenceOverflowThreshold || refOverflow.bottom >= -referenceOverflowThreshold;
+      react_dom__WEBPACK_IMPORTED_MODULE_2__.flushSync(() => onFallbackChange(shouldFallback));
     }
     if (overflowRef) {
-      overflowRef.current = await (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_3__.detectOverflow)(getArgsWithCustomFloatingHeight({
+      overflowRef.current = await (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.detectOverflow)(getArgsWithCustomFloatingHeight({
         ...nextArgs,
         y: nextY
       }, scrollEl.offsetHeight + clientTop + floating.clientTop), detectOverflowOptions);
@@ -4385,6 +4399,7 @@ const inner = props => ({
  * Changes the `inner` middleware's `offset` upon a `wheel` event to
  * expand the floating element's height, revealing more list items.
  * @see https://floating-ui.com/docs/inner
+ * @deprecated
  */
 function useInnerOffset(context, props) {
   const {
@@ -4418,10 +4433,10 @@ function useInnerOffset(context, props) {
       }
       if (!isAtTop && dY > 0 || !isAtBottom && dY < 0) {
         e.preventDefault();
-        react_dom__WEBPACK_IMPORTED_MODULE_1__.flushSync(() => {
+        react_dom__WEBPACK_IMPORTED_MODULE_2__.flushSync(() => {
           onChange(d => d + Math[method](dY, remainingScroll * sign));
         });
-      } else if (/firefox/i.test((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getUserAgent)())) {
+      } else if (/firefox/i.test((0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.getUserAgent)())) {
         // Needed to propagate scrolling during momentum scrolling phase once
         // it gets limited by the boundary. UX improvement, not critical.
         el.scrollTop += dY;
@@ -4465,7 +4480,7 @@ function useInnerOffset(context, props) {
       if (prevScrollTopRef.current !== null) {
         const scrollDiff = el.scrollTop - prevScrollTopRef.current;
         if (overflowRef.current.bottom < -0.5 && scrollDiff < -1 || overflowRef.current.top < -0.5 && scrollDiff > 1) {
-          react_dom__WEBPACK_IMPORTED_MODULE_1__.flushSync(() => onChange(d => d + scrollDiff));
+          react_dom__WEBPACK_IMPORTED_MODULE_2__.flushSync(() => onChange(d => d + scrollDiff));
         }
       }
 
@@ -4559,10 +4574,10 @@ function safePolygon(options) {
         clientY
       } = event;
       const clientPoint = [clientX, clientY];
-      const target = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.getTarget)(event);
+      const target = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.getTarget)(event);
       const isLeave = event.type === 'mouseleave';
-      const isOverFloatingEl = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.contains)(elements.floating, target);
-      const isOverReferenceEl = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.contains)(elements.domReference, target);
+      const isOverFloatingEl = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.contains)(elements.floating, target);
+      const isOverReferenceEl = (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.contains)(elements.domReference, target);
       const refRect = elements.domReference.getBoundingClientRect();
       const rect = elements.floating.getBoundingClientRect();
       const side = placement.split('-')[0];
@@ -4591,7 +4606,7 @@ function safePolygon(options) {
 
       // Prevent overlapping floating element from being stuck in an open-close
       // loop: https://github.com/floating-ui/floating-ui/issues/1910
-      if (isLeave && (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_4__.isElement)(event.relatedTarget) && (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_5__.contains)(elements.floating, event.relatedTarget)) {
+      if (isLeave && (0,_floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_5__.isElement)(event.relatedTarget) && (0,_floating_ui_react_utils__WEBPACK_IMPORTED_MODULE_6__.contains)(elements.floating, event.relatedTarget)) {
         return;
       }
 
@@ -5581,34 +5596,39 @@ function PendingOrderTable({
     onClick: toggleSortTotal
   }, "Total ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: `sort-by ${orderTotalSort}`
-  })))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tbody", {
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", null))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tbody", {
     className: "text-sm"
-  }, orders.map(order => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", {
-    key: order.id,
-    className: `hover:bg-gray-100 ${order.status}`
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
-    className: "py-4 px-4"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    type: "checkbox",
-    checked: selectedOrders.includes(order.id),
-    onChange: handleSelectOrderChange(order.id)
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
-    className: "py-4 px-4"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
-    href: order.order_url,
-    className: "text-nova-primary"
-  }, "#", order.order_number)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
-    className: "py-4 px-4"
-  }, order.date), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
-    className: `py-4 px-4 capitalize order-actions ${order.status} ${order.is_overdue ? 'text-red-500 flex items-center' : ''}`
-  }, order.payment_select), NovaOrders.has_payment_types && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
-    className: "py-4 px-4"
-  }, order.due_date), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
-    dangerouslySetInnerHTML: {
-      __html: order.total
-    },
-    className: "py-4 px-4 font-title"
-  })))))), selectedOrders.length > 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", {
+  }, orders.map(order => {
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", {
+      key: order.id,
+      className: `hover:bg-gray-100 ${order.status}`
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
+      className: "py-4 px-4"
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+      type: "checkbox",
+      checked: selectedOrders.includes(order.id),
+      onChange: handleSelectOrderChange(order.id)
+    })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
+      className: "py-4 px-4"
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+      href: order.order_url,
+      className: "text-nova-primary"
+    }, "#", order.order_number)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
+      className: "py-4 px-4"
+    }, order.date), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
+      className: `py-4 px-4 capitalize order-actions ${order.status} ${order.is_overdue ? 'text-red-500 flex items-center' : ''}`
+    }, order.payment_select), NovaOrders.has_payment_types && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
+      className: "py-4 px-4"
+    }, order.due_date), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
+      dangerouslySetInnerHTML: {
+        __html: order.total
+      },
+      className: "py-4 px-4 font-title"
+    }), order.actions?.pay && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+      href: order.actions.pay.url,
+      className: "button"
+    }, order.actions.pay.name)));
+  })))), selectedOrders.length > 1 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", {
     method: "post",
     action: ""
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
@@ -22252,384 +22272,6 @@ function cleanEscapedString(input) {
 
 /***/ }),
 
-/***/ "./node_modules/date-fns/parseISO.js":
-/*!*******************************************!*\
-  !*** ./node_modules/date-fns/parseISO.js ***!
-  \*******************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-exports.parseISO = parseISO;
-var _index = __webpack_require__(/*! ./constants.js */ "./node_modules/date-fns/constants.js");
-
-/**
- * The {@link parseISO} function options.
- */
-
-/**
- * @name parseISO
- * @category Common Helpers
- * @summary Parse ISO string
- *
- * @description
- * Parse the given string in ISO 8601 format and return an instance of Date.
- *
- * Function accepts complete ISO 8601 formats as well as partial implementations.
- * ISO 8601: http://en.wikipedia.org/wiki/ISO_8601
- *
- * If the argument isn't a string, the function cannot parse the string or
- * the values are invalid, it returns Invalid Date.
- *
- * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
- *
- * @param argument - The value to convert
- * @param options - An object with options
- *
- * @returns The parsed date in the local time zone
- *
- * @example
- * // Convert string '2014-02-11T11:30:30' to date:
- * const result = parseISO('2014-02-11T11:30:30')
- * //=> Tue Feb 11 2014 11:30:30
- *
- * @example
- * // Convert string '+02014101' to date,
- * // if the additional number of digits in the extended year format is 1:
- * const result = parseISO('+02014101', { additionalDigits: 1 })
- * //=> Fri Apr 11 2014 00:00:00
- */
-function parseISO(argument, options) {
-  const additionalDigits = options?.additionalDigits ?? 2;
-  const dateStrings = splitDateString(argument);
-
-  let date;
-  if (dateStrings.date) {
-    const parseYearResult = parseYear(dateStrings.date, additionalDigits);
-    date = parseDate(parseYearResult.restDateString, parseYearResult.year);
-  }
-
-  if (!date || isNaN(date.getTime())) {
-    return new Date(NaN);
-  }
-
-  const timestamp = date.getTime();
-  let time = 0;
-  let offset;
-
-  if (dateStrings.time) {
-    time = parseTime(dateStrings.time);
-    if (isNaN(time)) {
-      return new Date(NaN);
-    }
-  }
-
-  if (dateStrings.timezone) {
-    offset = parseTimezone(dateStrings.timezone);
-    if (isNaN(offset)) {
-      return new Date(NaN);
-    }
-  } else {
-    const dirtyDate = new Date(timestamp + time);
-    // JS parsed string assuming it's in UTC timezone
-    // but we need it to be parsed in our timezone
-    // so we use utc values to build date in our timezone.
-    // Year values from 0 to 99 map to the years 1900 to 1999
-    // so set year explicitly with setFullYear.
-    const result = new Date(0);
-    result.setFullYear(
-      dirtyDate.getUTCFullYear(),
-      dirtyDate.getUTCMonth(),
-      dirtyDate.getUTCDate(),
-    );
-    result.setHours(
-      dirtyDate.getUTCHours(),
-      dirtyDate.getUTCMinutes(),
-      dirtyDate.getUTCSeconds(),
-      dirtyDate.getUTCMilliseconds(),
-    );
-    return result;
-  }
-
-  return new Date(timestamp + time + offset);
-}
-
-const patterns = {
-  dateTimeDelimiter: /[T ]/,
-  timeZoneDelimiter: /[Z ]/i,
-  timezone: /([Z+-].*)$/,
-};
-
-const dateRegex =
-  /^-?(?:(\d{3})|(\d{2})(?:-?(\d{2}))?|W(\d{2})(?:-?(\d{1}))?|)$/;
-const timeRegex =
-  /^(\d{2}(?:[.,]\d*)?)(?::?(\d{2}(?:[.,]\d*)?))?(?::?(\d{2}(?:[.,]\d*)?))?$/;
-const timezoneRegex = /^([+-])(\d{2})(?::?(\d{2}))?$/;
-
-function splitDateString(dateString) {
-  const dateStrings = {};
-  const array = dateString.split(patterns.dateTimeDelimiter);
-  let timeString;
-
-  // The regex match should only return at maximum two array elements.
-  // [date], [time], or [date, time].
-  if (array.length > 2) {
-    return dateStrings;
-  }
-
-  if (/:/.test(array[0])) {
-    timeString = array[0];
-  } else {
-    dateStrings.date = array[0];
-    timeString = array[1];
-    if (patterns.timeZoneDelimiter.test(dateStrings.date)) {
-      dateStrings.date = dateString.split(patterns.timeZoneDelimiter)[0];
-      timeString = dateString.substr(
-        dateStrings.date.length,
-        dateString.length,
-      );
-    }
-  }
-
-  if (timeString) {
-    const token = patterns.timezone.exec(timeString);
-    if (token) {
-      dateStrings.time = timeString.replace(token[1], "");
-      dateStrings.timezone = token[1];
-    } else {
-      dateStrings.time = timeString;
-    }
-  }
-
-  return dateStrings;
-}
-
-function parseYear(dateString, additionalDigits) {
-  const regex = new RegExp(
-    "^(?:(\\d{4}|[+-]\\d{" +
-      (4 + additionalDigits) +
-      "})|(\\d{2}|[+-]\\d{" +
-      (2 + additionalDigits) +
-      "})$)",
-  );
-
-  const captures = dateString.match(regex);
-  // Invalid ISO-formatted year
-  if (!captures) return { year: NaN, restDateString: "" };
-
-  const year = captures[1] ? parseInt(captures[1]) : null;
-  const century = captures[2] ? parseInt(captures[2]) : null;
-
-  // either year or century is null, not both
-  return {
-    year: century === null ? year : century * 100,
-    restDateString: dateString.slice((captures[1] || captures[2]).length),
-  };
-}
-
-function parseDate(dateString, year) {
-  // Invalid ISO-formatted year
-  if (year === null) return new Date(NaN);
-
-  const captures = dateString.match(dateRegex);
-  // Invalid ISO-formatted string
-  if (!captures) return new Date(NaN);
-
-  const isWeekDate = !!captures[4];
-  const dayOfYear = parseDateUnit(captures[1]);
-  const month = parseDateUnit(captures[2]) - 1;
-  const day = parseDateUnit(captures[3]);
-  const week = parseDateUnit(captures[4]);
-  const dayOfWeek = parseDateUnit(captures[5]) - 1;
-
-  if (isWeekDate) {
-    if (!validateWeekDate(year, week, dayOfWeek)) {
-      return new Date(NaN);
-    }
-    return dayOfISOWeekYear(year, week, dayOfWeek);
-  } else {
-    const date = new Date(0);
-    if (
-      !validateDate(year, month, day) ||
-      !validateDayOfYearDate(year, dayOfYear)
-    ) {
-      return new Date(NaN);
-    }
-    date.setUTCFullYear(year, month, Math.max(dayOfYear, day));
-    return date;
-  }
-}
-
-function parseDateUnit(value) {
-  return value ? parseInt(value) : 1;
-}
-
-function parseTime(timeString) {
-  const captures = timeString.match(timeRegex);
-  if (!captures) return NaN; // Invalid ISO-formatted time
-
-  const hours = parseTimeUnit(captures[1]);
-  const minutes = parseTimeUnit(captures[2]);
-  const seconds = parseTimeUnit(captures[3]);
-
-  if (!validateTime(hours, minutes, seconds)) {
-    return NaN;
-  }
-
-  return (
-    hours * _index.millisecondsInHour +
-    minutes * _index.millisecondsInMinute +
-    seconds * 1000
-  );
-}
-
-function parseTimeUnit(value) {
-  return (value && parseFloat(value.replace(",", "."))) || 0;
-}
-
-function parseTimezone(timezoneString) {
-  if (timezoneString === "Z") return 0;
-
-  const captures = timezoneString.match(timezoneRegex);
-  if (!captures) return 0;
-
-  const sign = captures[1] === "+" ? -1 : 1;
-  const hours = parseInt(captures[2]);
-  const minutes = (captures[3] && parseInt(captures[3])) || 0;
-
-  if (!validateTimezone(hours, minutes)) {
-    return NaN;
-  }
-
-  return (
-    sign *
-    (hours * _index.millisecondsInHour + minutes * _index.millisecondsInMinute)
-  );
-}
-
-function dayOfISOWeekYear(isoWeekYear, week, day) {
-  const date = new Date(0);
-  date.setUTCFullYear(isoWeekYear, 0, 4);
-  const fourthOfJanuaryDay = date.getUTCDay() || 7;
-  const diff = (week - 1) * 7 + day + 1 - fourthOfJanuaryDay;
-  date.setUTCDate(date.getUTCDate() + diff);
-  return date;
-}
-
-// Validation functions
-
-// February is null to handle the leap year (using ||)
-const daysInMonths = [31, null, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-
-function isLeapYearIndex(year) {
-  return year % 400 === 0 || (year % 4 === 0 && year % 100 !== 0);
-}
-
-function validateDate(year, month, date) {
-  return (
-    month >= 0 &&
-    month <= 11 &&
-    date >= 1 &&
-    date <= (daysInMonths[month] || (isLeapYearIndex(year) ? 29 : 28))
-  );
-}
-
-function validateDayOfYearDate(year, dayOfYear) {
-  return dayOfYear >= 1 && dayOfYear <= (isLeapYearIndex(year) ? 366 : 365);
-}
-
-function validateWeekDate(_year, week, day) {
-  return week >= 1 && week <= 53 && day >= 0 && day <= 6;
-}
-
-function validateTime(hours, minutes, seconds) {
-  if (hours === 24) {
-    return minutes === 0 && seconds === 0;
-  }
-
-  return (
-    seconds >= 0 &&
-    seconds < 60 &&
-    minutes >= 0 &&
-    minutes < 60 &&
-    hours >= 0 &&
-    hours < 25
-  );
-}
-
-function validateTimezone(_hours, minutes) {
-  return minutes >= 0 && minutes <= 59;
-}
-
-
-/***/ }),
-
-/***/ "./node_modules/date-fns/parseJSON.js":
-/*!********************************************!*\
-  !*** ./node_modules/date-fns/parseJSON.js ***!
-  \********************************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-exports.parseJSON = parseJSON; /**
- * @name parseJSON
- * @category Common Helpers
- * @summary Parse a JSON date string
- *
- * @description
- * Converts a complete ISO date string in UTC time, the typical format for transmitting
- * a date in JSON, to a JavaScript `Date` instance.
- *
- * This is a minimal implementation for converting dates retrieved from a JSON API to
- * a `Date` instance which can be used with other functions in the `date-fns` library.
- * The following formats are supported:
- *
- * - `2000-03-15T05:20:10.123Z`: The output of `.toISOString()` and `JSON.stringify(new Date())`
- * - `2000-03-15T05:20:10Z`: Without milliseconds
- * - `2000-03-15T05:20:10+00:00`: With a zero offset, the default JSON encoded format in some other languages
- * - `2000-03-15T05:20:10+05:45`: With a positive or negative offset, the default JSON encoded format in some other languages
- * - `2000-03-15T05:20:10+0000`: With a zero offset without a colon
- * - `2000-03-15T05:20:10`: Without a trailing 'Z' symbol
- * - `2000-03-15T05:20:10.1234567`: Up to 7 digits in milliseconds field. Only first 3 are taken into account since JS does not allow fractional milliseconds
- * - `2000-03-15 05:20:10`: With a space instead of a 'T' separator for APIs returning a SQL date without reformatting
- *
- * For convenience and ease of use these other input types are also supported
- * via [toDate](https://date-fns.org/docs/toDate):
- *
- * - A `Date` instance will be cloned
- * - A `number` will be treated as a timestamp
- *
- * Any other input type or invalid date strings will return an `Invalid Date`.
- *
- * @param dateStr - A fully formed ISO8601 date string to convert
- *
- * @returns The parsed date in the local time zone
- */
-function parseJSON(dateStr) {
-  const parts = dateStr.match(
-    /(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2}):(\d{2})(?:\.(\d{0,7}))?(?:Z|(.)(\d{2}):?(\d{2})?)?/,
-  );
-  if (parts) {
-    // Group 8 matches the sign
-    return new Date(
-      Date.UTC(
-        +parts[1],
-        +parts[2] - 1,
-        +parts[3],
-        +parts[4] - (+parts[9] || 0) * (parts[8] == "-" ? -1 : 1),
-        +parts[5] - (+parts[10] || 0) * (parts[8] == "-" ? -1 : 1),
-        +parts[6],
-        +((parts[7] || "0") + "00").substring(0, 3),
-      ),
-    );
-  }
-  return new Date(NaN);
-}
-
-
-/***/ }),
-
 /***/ "./node_modules/date-fns/parse/_lib/Parser.js":
 /*!****************************************************!*\
   !*** ./node_modules/date-fns/parse/_lib/Parser.js ***!
@@ -25259,6 +24901,384 @@ function normalizeTwoDigitYear(twoDigitYear, currentYear) {
 
 function isLeapYearIndex(year) {
   return year % 400 === 0 || (year % 4 === 0 && year % 100 !== 0);
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/date-fns/parseISO.js":
+/*!*******************************************!*\
+  !*** ./node_modules/date-fns/parseISO.js ***!
+  \*******************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+exports.parseISO = parseISO;
+var _index = __webpack_require__(/*! ./constants.js */ "./node_modules/date-fns/constants.js");
+
+/**
+ * The {@link parseISO} function options.
+ */
+
+/**
+ * @name parseISO
+ * @category Common Helpers
+ * @summary Parse ISO string
+ *
+ * @description
+ * Parse the given string in ISO 8601 format and return an instance of Date.
+ *
+ * Function accepts complete ISO 8601 formats as well as partial implementations.
+ * ISO 8601: http://en.wikipedia.org/wiki/ISO_8601
+ *
+ * If the argument isn't a string, the function cannot parse the string or
+ * the values are invalid, it returns Invalid Date.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ *
+ * @param argument - The value to convert
+ * @param options - An object with options
+ *
+ * @returns The parsed date in the local time zone
+ *
+ * @example
+ * // Convert string '2014-02-11T11:30:30' to date:
+ * const result = parseISO('2014-02-11T11:30:30')
+ * //=> Tue Feb 11 2014 11:30:30
+ *
+ * @example
+ * // Convert string '+02014101' to date,
+ * // if the additional number of digits in the extended year format is 1:
+ * const result = parseISO('+02014101', { additionalDigits: 1 })
+ * //=> Fri Apr 11 2014 00:00:00
+ */
+function parseISO(argument, options) {
+  const additionalDigits = options?.additionalDigits ?? 2;
+  const dateStrings = splitDateString(argument);
+
+  let date;
+  if (dateStrings.date) {
+    const parseYearResult = parseYear(dateStrings.date, additionalDigits);
+    date = parseDate(parseYearResult.restDateString, parseYearResult.year);
+  }
+
+  if (!date || isNaN(date.getTime())) {
+    return new Date(NaN);
+  }
+
+  const timestamp = date.getTime();
+  let time = 0;
+  let offset;
+
+  if (dateStrings.time) {
+    time = parseTime(dateStrings.time);
+    if (isNaN(time)) {
+      return new Date(NaN);
+    }
+  }
+
+  if (dateStrings.timezone) {
+    offset = parseTimezone(dateStrings.timezone);
+    if (isNaN(offset)) {
+      return new Date(NaN);
+    }
+  } else {
+    const dirtyDate = new Date(timestamp + time);
+    // JS parsed string assuming it's in UTC timezone
+    // but we need it to be parsed in our timezone
+    // so we use utc values to build date in our timezone.
+    // Year values from 0 to 99 map to the years 1900 to 1999
+    // so set year explicitly with setFullYear.
+    const result = new Date(0);
+    result.setFullYear(
+      dirtyDate.getUTCFullYear(),
+      dirtyDate.getUTCMonth(),
+      dirtyDate.getUTCDate(),
+    );
+    result.setHours(
+      dirtyDate.getUTCHours(),
+      dirtyDate.getUTCMinutes(),
+      dirtyDate.getUTCSeconds(),
+      dirtyDate.getUTCMilliseconds(),
+    );
+    return result;
+  }
+
+  return new Date(timestamp + time + offset);
+}
+
+const patterns = {
+  dateTimeDelimiter: /[T ]/,
+  timeZoneDelimiter: /[Z ]/i,
+  timezone: /([Z+-].*)$/,
+};
+
+const dateRegex =
+  /^-?(?:(\d{3})|(\d{2})(?:-?(\d{2}))?|W(\d{2})(?:-?(\d{1}))?|)$/;
+const timeRegex =
+  /^(\d{2}(?:[.,]\d*)?)(?::?(\d{2}(?:[.,]\d*)?))?(?::?(\d{2}(?:[.,]\d*)?))?$/;
+const timezoneRegex = /^([+-])(\d{2})(?::?(\d{2}))?$/;
+
+function splitDateString(dateString) {
+  const dateStrings = {};
+  const array = dateString.split(patterns.dateTimeDelimiter);
+  let timeString;
+
+  // The regex match should only return at maximum two array elements.
+  // [date], [time], or [date, time].
+  if (array.length > 2) {
+    return dateStrings;
+  }
+
+  if (/:/.test(array[0])) {
+    timeString = array[0];
+  } else {
+    dateStrings.date = array[0];
+    timeString = array[1];
+    if (patterns.timeZoneDelimiter.test(dateStrings.date)) {
+      dateStrings.date = dateString.split(patterns.timeZoneDelimiter)[0];
+      timeString = dateString.substr(
+        dateStrings.date.length,
+        dateString.length,
+      );
+    }
+  }
+
+  if (timeString) {
+    const token = patterns.timezone.exec(timeString);
+    if (token) {
+      dateStrings.time = timeString.replace(token[1], "");
+      dateStrings.timezone = token[1];
+    } else {
+      dateStrings.time = timeString;
+    }
+  }
+
+  return dateStrings;
+}
+
+function parseYear(dateString, additionalDigits) {
+  const regex = new RegExp(
+    "^(?:(\\d{4}|[+-]\\d{" +
+      (4 + additionalDigits) +
+      "})|(\\d{2}|[+-]\\d{" +
+      (2 + additionalDigits) +
+      "})$)",
+  );
+
+  const captures = dateString.match(regex);
+  // Invalid ISO-formatted year
+  if (!captures) return { year: NaN, restDateString: "" };
+
+  const year = captures[1] ? parseInt(captures[1]) : null;
+  const century = captures[2] ? parseInt(captures[2]) : null;
+
+  // either year or century is null, not both
+  return {
+    year: century === null ? year : century * 100,
+    restDateString: dateString.slice((captures[1] || captures[2]).length),
+  };
+}
+
+function parseDate(dateString, year) {
+  // Invalid ISO-formatted year
+  if (year === null) return new Date(NaN);
+
+  const captures = dateString.match(dateRegex);
+  // Invalid ISO-formatted string
+  if (!captures) return new Date(NaN);
+
+  const isWeekDate = !!captures[4];
+  const dayOfYear = parseDateUnit(captures[1]);
+  const month = parseDateUnit(captures[2]) - 1;
+  const day = parseDateUnit(captures[3]);
+  const week = parseDateUnit(captures[4]);
+  const dayOfWeek = parseDateUnit(captures[5]) - 1;
+
+  if (isWeekDate) {
+    if (!validateWeekDate(year, week, dayOfWeek)) {
+      return new Date(NaN);
+    }
+    return dayOfISOWeekYear(year, week, dayOfWeek);
+  } else {
+    const date = new Date(0);
+    if (
+      !validateDate(year, month, day) ||
+      !validateDayOfYearDate(year, dayOfYear)
+    ) {
+      return new Date(NaN);
+    }
+    date.setUTCFullYear(year, month, Math.max(dayOfYear, day));
+    return date;
+  }
+}
+
+function parseDateUnit(value) {
+  return value ? parseInt(value) : 1;
+}
+
+function parseTime(timeString) {
+  const captures = timeString.match(timeRegex);
+  if (!captures) return NaN; // Invalid ISO-formatted time
+
+  const hours = parseTimeUnit(captures[1]);
+  const minutes = parseTimeUnit(captures[2]);
+  const seconds = parseTimeUnit(captures[3]);
+
+  if (!validateTime(hours, minutes, seconds)) {
+    return NaN;
+  }
+
+  return (
+    hours * _index.millisecondsInHour +
+    minutes * _index.millisecondsInMinute +
+    seconds * 1000
+  );
+}
+
+function parseTimeUnit(value) {
+  return (value && parseFloat(value.replace(",", "."))) || 0;
+}
+
+function parseTimezone(timezoneString) {
+  if (timezoneString === "Z") return 0;
+
+  const captures = timezoneString.match(timezoneRegex);
+  if (!captures) return 0;
+
+  const sign = captures[1] === "+" ? -1 : 1;
+  const hours = parseInt(captures[2]);
+  const minutes = (captures[3] && parseInt(captures[3])) || 0;
+
+  if (!validateTimezone(hours, minutes)) {
+    return NaN;
+  }
+
+  return (
+    sign *
+    (hours * _index.millisecondsInHour + minutes * _index.millisecondsInMinute)
+  );
+}
+
+function dayOfISOWeekYear(isoWeekYear, week, day) {
+  const date = new Date(0);
+  date.setUTCFullYear(isoWeekYear, 0, 4);
+  const fourthOfJanuaryDay = date.getUTCDay() || 7;
+  const diff = (week - 1) * 7 + day + 1 - fourthOfJanuaryDay;
+  date.setUTCDate(date.getUTCDate() + diff);
+  return date;
+}
+
+// Validation functions
+
+// February is null to handle the leap year (using ||)
+const daysInMonths = [31, null, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+function isLeapYearIndex(year) {
+  return year % 400 === 0 || (year % 4 === 0 && year % 100 !== 0);
+}
+
+function validateDate(year, month, date) {
+  return (
+    month >= 0 &&
+    month <= 11 &&
+    date >= 1 &&
+    date <= (daysInMonths[month] || (isLeapYearIndex(year) ? 29 : 28))
+  );
+}
+
+function validateDayOfYearDate(year, dayOfYear) {
+  return dayOfYear >= 1 && dayOfYear <= (isLeapYearIndex(year) ? 366 : 365);
+}
+
+function validateWeekDate(_year, week, day) {
+  return week >= 1 && week <= 53 && day >= 0 && day <= 6;
+}
+
+function validateTime(hours, minutes, seconds) {
+  if (hours === 24) {
+    return minutes === 0 && seconds === 0;
+  }
+
+  return (
+    seconds >= 0 &&
+    seconds < 60 &&
+    minutes >= 0 &&
+    minutes < 60 &&
+    hours >= 0 &&
+    hours < 25
+  );
+}
+
+function validateTimezone(_hours, minutes) {
+  return minutes >= 0 && minutes <= 59;
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/date-fns/parseJSON.js":
+/*!********************************************!*\
+  !*** ./node_modules/date-fns/parseJSON.js ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+exports.parseJSON = parseJSON; /**
+ * @name parseJSON
+ * @category Common Helpers
+ * @summary Parse a JSON date string
+ *
+ * @description
+ * Converts a complete ISO date string in UTC time, the typical format for transmitting
+ * a date in JSON, to a JavaScript `Date` instance.
+ *
+ * This is a minimal implementation for converting dates retrieved from a JSON API to
+ * a `Date` instance which can be used with other functions in the `date-fns` library.
+ * The following formats are supported:
+ *
+ * - `2000-03-15T05:20:10.123Z`: The output of `.toISOString()` and `JSON.stringify(new Date())`
+ * - `2000-03-15T05:20:10Z`: Without milliseconds
+ * - `2000-03-15T05:20:10+00:00`: With a zero offset, the default JSON encoded format in some other languages
+ * - `2000-03-15T05:20:10+05:45`: With a positive or negative offset, the default JSON encoded format in some other languages
+ * - `2000-03-15T05:20:10+0000`: With a zero offset without a colon
+ * - `2000-03-15T05:20:10`: Without a trailing 'Z' symbol
+ * - `2000-03-15T05:20:10.1234567`: Up to 7 digits in milliseconds field. Only first 3 are taken into account since JS does not allow fractional milliseconds
+ * - `2000-03-15 05:20:10`: With a space instead of a 'T' separator for APIs returning a SQL date without reformatting
+ *
+ * For convenience and ease of use these other input types are also supported
+ * via [toDate](https://date-fns.org/docs/toDate):
+ *
+ * - A `Date` instance will be cloned
+ * - A `number` will be treated as a timestamp
+ *
+ * Any other input type or invalid date strings will return an `Invalid Date`.
+ *
+ * @param dateStr - A fully formed ISO8601 date string to convert
+ *
+ * @returns The parsed date in the local time zone
+ */
+function parseJSON(dateStr) {
+  const parts = dateStr.match(
+    /(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2}):(\d{2})(?:\.(\d{0,7}))?(?:Z|(.)(\d{2}):?(\d{2})?)?/,
+  );
+  if (parts) {
+    // Group 8 matches the sign
+    return new Date(
+      Date.UTC(
+        +parts[1],
+        +parts[2] - 1,
+        +parts[3],
+        +parts[4] - (+parts[9] || 0) * (parts[8] == "-" ? -1 : 1),
+        +parts[5] - (+parts[10] || 0) * (parts[8] == "-" ? -1 : 1),
+        +parts[6],
+        +((parts[7] || "0") + "00").substring(0, 3),
+      ),
+    );
+  }
+  return new Date(NaN);
 }
 
 
@@ -28625,11 +28645,11 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 /*!
-  react-datepicker v7.5.0
+  react-datepicker v7.6.0
   https://github.com/Hacker0x01/react-datepicker
   Released under the MIT License.
 */
-!function(e,t){ true?t(exports,__webpack_require__(/*! clsx */ "./node_modules/clsx/dist/clsx.js"),__webpack_require__(/*! react */ "react"),__webpack_require__(/*! date-fns */ "./node_modules/date-fns/index.js"),__webpack_require__(/*! date-fns/addDays */ "./node_modules/date-fns/addDays.js"),__webpack_require__(/*! date-fns/addHours */ "./node_modules/date-fns/addHours.js"),__webpack_require__(/*! date-fns/addMinutes */ "./node_modules/date-fns/addMinutes.js"),__webpack_require__(/*! date-fns/addMonths */ "./node_modules/date-fns/addMonths.js"),__webpack_require__(/*! date-fns/addQuarters */ "./node_modules/date-fns/addQuarters.js"),__webpack_require__(/*! date-fns/addSeconds */ "./node_modules/date-fns/addSeconds.js"),__webpack_require__(/*! date-fns/addWeeks */ "./node_modules/date-fns/addWeeks.js"),__webpack_require__(/*! date-fns/addYears */ "./node_modules/date-fns/addYears.js"),__webpack_require__(/*! date-fns/differenceInCalendarDays */ "./node_modules/date-fns/differenceInCalendarDays.js"),__webpack_require__(/*! date-fns/differenceInCalendarMonths */ "./node_modules/date-fns/differenceInCalendarMonths.js"),__webpack_require__(/*! date-fns/differenceInCalendarQuarters */ "./node_modules/date-fns/differenceInCalendarQuarters.js"),__webpack_require__(/*! date-fns/differenceInCalendarYears */ "./node_modules/date-fns/differenceInCalendarYears.js"),__webpack_require__(/*! date-fns/endOfDay */ "./node_modules/date-fns/endOfDay.js"),__webpack_require__(/*! date-fns/endOfMonth */ "./node_modules/date-fns/endOfMonth.js"),__webpack_require__(/*! date-fns/endOfWeek */ "./node_modules/date-fns/endOfWeek.js"),__webpack_require__(/*! date-fns/endOfYear */ "./node_modules/date-fns/endOfYear.js"),__webpack_require__(/*! date-fns/format */ "./node_modules/date-fns/format.js"),__webpack_require__(/*! date-fns/getDate */ "./node_modules/date-fns/getDate.js"),__webpack_require__(/*! date-fns/getDay */ "./node_modules/date-fns/getDay.js"),__webpack_require__(/*! date-fns/getHours */ "./node_modules/date-fns/getHours.js"),__webpack_require__(/*! date-fns/getISOWeek */ "./node_modules/date-fns/getISOWeek.js"),__webpack_require__(/*! date-fns/getMinutes */ "./node_modules/date-fns/getMinutes.js"),__webpack_require__(/*! date-fns/getMonth */ "./node_modules/date-fns/getMonth.js"),__webpack_require__(/*! date-fns/getQuarter */ "./node_modules/date-fns/getQuarter.js"),__webpack_require__(/*! date-fns/getSeconds */ "./node_modules/date-fns/getSeconds.js"),__webpack_require__(/*! date-fns/getTime */ "./node_modules/date-fns/getTime.js"),__webpack_require__(/*! date-fns/getYear */ "./node_modules/date-fns/getYear.js"),__webpack_require__(/*! date-fns/isAfter */ "./node_modules/date-fns/isAfter.js"),__webpack_require__(/*! date-fns/isBefore */ "./node_modules/date-fns/isBefore.js"),__webpack_require__(/*! date-fns/isDate */ "./node_modules/date-fns/isDate.js"),__webpack_require__(/*! date-fns/isEqual */ "./node_modules/date-fns/isEqual.js"),__webpack_require__(/*! date-fns/isSameDay */ "./node_modules/date-fns/isSameDay.js"),__webpack_require__(/*! date-fns/isSameMonth */ "./node_modules/date-fns/isSameMonth.js"),__webpack_require__(/*! date-fns/isSameQuarter */ "./node_modules/date-fns/isSameQuarter.js"),__webpack_require__(/*! date-fns/isSameYear */ "./node_modules/date-fns/isSameYear.js"),__webpack_require__(/*! date-fns/isValid */ "./node_modules/date-fns/isValid.js"),__webpack_require__(/*! date-fns/isWithinInterval */ "./node_modules/date-fns/isWithinInterval.js"),__webpack_require__(/*! date-fns/max */ "./node_modules/date-fns/max.js"),__webpack_require__(/*! date-fns/min */ "./node_modules/date-fns/min.js"),__webpack_require__(/*! date-fns/parse */ "./node_modules/date-fns/parse.js"),__webpack_require__(/*! date-fns/parseISO */ "./node_modules/date-fns/parseISO.js"),__webpack_require__(/*! date-fns/set */ "./node_modules/date-fns/set.js"),__webpack_require__(/*! date-fns/setHours */ "./node_modules/date-fns/setHours.js"),__webpack_require__(/*! date-fns/setMinutes */ "./node_modules/date-fns/setMinutes.js"),__webpack_require__(/*! date-fns/setMonth */ "./node_modules/date-fns/setMonth.js"),__webpack_require__(/*! date-fns/setQuarter */ "./node_modules/date-fns/setQuarter.js"),__webpack_require__(/*! date-fns/setSeconds */ "./node_modules/date-fns/setSeconds.js"),__webpack_require__(/*! date-fns/setYear */ "./node_modules/date-fns/setYear.js"),__webpack_require__(/*! date-fns/startOfDay */ "./node_modules/date-fns/startOfDay.js"),__webpack_require__(/*! date-fns/startOfMonth */ "./node_modules/date-fns/startOfMonth.js"),__webpack_require__(/*! date-fns/startOfQuarter */ "./node_modules/date-fns/startOfQuarter.js"),__webpack_require__(/*! date-fns/startOfWeek */ "./node_modules/date-fns/startOfWeek.js"),__webpack_require__(/*! date-fns/startOfYear */ "./node_modules/date-fns/startOfYear.js"),__webpack_require__(/*! date-fns/subDays */ "./node_modules/date-fns/subDays.js"),__webpack_require__(/*! date-fns/subMonths */ "./node_modules/date-fns/subMonths.js"),__webpack_require__(/*! date-fns/subQuarters */ "./node_modules/date-fns/subQuarters.js"),__webpack_require__(/*! date-fns/subWeeks */ "./node_modules/date-fns/subWeeks.js"),__webpack_require__(/*! date-fns/subYears */ "./node_modules/date-fns/subYears.js"),__webpack_require__(/*! date-fns/toDate */ "./node_modules/date-fns/toDate.js"),__webpack_require__(/*! @floating-ui/react */ "./node_modules/@floating-ui/react/dist/floating-ui.react.esm.js"),__webpack_require__(/*! react-dom */ "react-dom")):0}(this,(function(e,t,r,n,a,o,s,i,l,c,p,d,u,f,h,m,v,g,D,y,k,w,S,b,M,C,_,E,Y,P,x,N,O,T,I,R,L,F,A,H,W,Q,q,K,B,V,j,U,$,z,X,G,J,Z,ee,te,re,ne,ae,oe,se,ie,le,ce,pe){"use strict";function de(e){return e&&"object"==typeof e&&"default"in e?e:{default:e}}var ue=de(r),fe=de(pe),he=function(e,t){return he=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(e,t){e.__proto__=t}||function(e,t){for(var r in t)Object.prototype.hasOwnProperty.call(t,r)&&(e[r]=t[r])},he(e,t)};function me(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Class extends value "+String(t)+" is not a constructor or null");function r(){this.constructor=e}he(e,t),e.prototype=null===t?Object.create(t):(r.prototype=t.prototype,new r)}var ve=function(){return ve=Object.assign||function(e){for(var t,r=1,n=arguments.length;r<n;r++)for(var a in t=arguments[r])Object.prototype.hasOwnProperty.call(t,a)&&(e[a]=t[a]);return e},ve.apply(this,arguments)};function ge(e,t,r){if(r||2===arguments.length)for(var n,a=0,o=t.length;a<o;a++)!n&&a in t||(n||(n=Array.prototype.slice.call(t,0,a)),n[a]=t[a]);return e.concat(n||Array.prototype.slice.call(t))}"function"==typeof SuppressedError&&SuppressedError;var De,ye=function(e){var t=e.showTimeSelectOnly,r=void 0!==t&&t,n=e.showTime,a=void 0!==n&&n,o=e.className,s=e.children,i=r?"Choose Time":"Choose Date".concat(a?" and Time":"");return ue.default.createElement("div",{className:o,role:"dialog","aria-label":i,"aria-modal":"true"},s)},ke=function(e){var t=e.children,n=e.onClickOutside,a=e.className,o=e.containerRef,s=e.style,i=function(e,t){var n=r.useRef(null),a=r.useRef(e);a.current=e;var o=r.useCallback((function(e){var r;n.current&&!n.current.contains(e.target)&&(t&&e.target instanceof HTMLElement&&e.target.classList.contains(t)||null===(r=a.current)||void 0===r||r.call(a,e))}),[t]);return r.useEffect((function(){return document.addEventListener("mousedown",o),function(){document.removeEventListener("mousedown",o)}}),[o]),n}(n,e.ignoreClass);return ue.default.createElement("div",{className:a,style:s,ref:function(e){i.current=e,o&&(o.current=e)}},t)};function we(){return"undefined"!=typeof window?window:globalThis}!function(e){e.ArrowUp="ArrowUp",e.ArrowDown="ArrowDown",e.ArrowLeft="ArrowLeft",e.ArrowRight="ArrowRight",e.PageUp="PageUp",e.PageDown="PageDown",e.Home="Home",e.End="End",e.Enter="Enter",e.Space=" ",e.Tab="Tab",e.Escape="Escape",e.Backspace="Backspace",e.X="x"}(De||(De={}));var Se=12,be=/P+p+|P+|p+|''|'(''|[^'])+('|$)|./g;function Me(e){if(null==e)return new Date;var t="string"==typeof e?B.parseISO(e):le.toDate(e);return _e(t)?t:new Date}function Ce(e,t,r,n,a){var o,s=null,i=Ve(r)||Ve(Be()),l=!0;if(Array.isArray(t))return t.forEach((function(t){var o=K.parse(e,t,new Date,{locale:i,useAdditionalWeekYearTokens:!0,useAdditionalDayOfYearTokens:!0});n&&(l=_e(o,a)&&e===Ee(o,t,r)),_e(o,a)&&l&&(s=o)})),s;if(s=K.parse(e,t,new Date,{locale:i,useAdditionalWeekYearTokens:!0,useAdditionalDayOfYearTokens:!0}),n)l=_e(s)&&e===Ee(s,t,r);else if(!_e(s)){var c=(null!==(o=t.match(be))&&void 0!==o?o:[]).map((function(e){var t=e[0];if("p"===t||"P"===t){var r=k.longFormatters[t];return i?r(e,i.formatLong):t}return e})).join("");e.length>0&&(s=K.parse(e,c.slice(0,e.length),new Date,{useAdditionalWeekYearTokens:!0,useAdditionalDayOfYearTokens:!0})),_e(s)||(s=new Date(e))}return _e(s)&&l?s:null}function _e(e,t){return H.isValid(e)&&!O.isBefore(e,null!=t?t:new Date("1/1/1800"))}function Ee(e,t,r){if("en"===r)return k.format(e,t,{useAdditionalWeekYearTokens:!0,useAdditionalDayOfYearTokens:!0});var n=r?Ve(r):void 0;return r&&!n&&console.warn('A locale object was not found for the provided string ["'.concat(r,'"].')),!n&&Be()&&Ve(Be())&&(n=Ve(Be())),k.format(e,t,{locale:n,useAdditionalWeekYearTokens:!0,useAdditionalDayOfYearTokens:!0})}function Ye(e,t){var r=t.dateFormat,n=t.locale,a=Array.isArray(r)&&r.length>0?r[0]:r;return e&&Ee(e,a,n)||""}function Pe(e,t){var r=t.hour,n=void 0===r?0:r,a=t.minute,o=void 0===a?0:a,s=t.second,i=void 0===s?0:s;return j.setHours(U.setMinutes(X.setSeconds(e,i),o),n)}function xe(e){return J.startOfDay(e)}function Ne(e,t,r){var n=Ve(t||Be());return te.startOfWeek(e,{locale:n,weekStartsOn:r})}function Oe(e){return Z.startOfMonth(e)}function Te(e){return re.startOfYear(e)}function Ie(e){return ee.startOfQuarter(e)}function Re(){return J.startOfDay(Me())}function Le(e){return v.endOfDay(e)}function Fe(e){return g.endOfMonth(e)}function Ae(e,t){return e&&t?A.isSameYear(e,t):!e&&!t}function He(e,t){return e&&t?L.isSameMonth(e,t):!e&&!t}function We(e,t){return e&&t?F.isSameQuarter(e,t):!e&&!t}function Qe(e,t){return e&&t?R.isSameDay(e,t):!e&&!t}function qe(e,t){return e&&t?I.isEqual(e,t):!e&&!t}function Ke(e,t,r){var n,a=J.startOfDay(t),o=v.endOfDay(r);try{n=W.isWithinInterval(e,{start:a,end:o})}catch(e){n=!1}return n}function Be(){return we().__localeId__}function Ve(e){if("string"==typeof e){var t=we();return t.__localeData__?t.__localeData__[e]:void 0}return e}function je(e,t){return Ee($.setMonth(Me(),e),"LLLL",t)}function Ue(e,t){return Ee($.setMonth(Me(),e),"LLL",t)}function $e(e,t){var r=void 0===t?{}:t,n=r.minDate,a=r.maxDate,o=r.excludeDates,s=r.excludeDateIntervals,i=r.includeDates,l=r.includeDateIntervals,c=r.filterDate;return nt(e,{minDate:n,maxDate:a})||o&&o.some((function(t){return t instanceof Date?Qe(e,t):Qe(e,t.date)}))||s&&s.some((function(t){var r=t.start,n=t.end;return W.isWithinInterval(e,{start:r,end:n})}))||i&&!i.some((function(t){return Qe(e,t)}))||l&&!l.some((function(t){var r=t.start,n=t.end;return W.isWithinInterval(e,{start:r,end:n})}))||c&&!c(Me(e))||!1}function ze(e,t){var r=void 0===t?{}:t,n=r.excludeDates,a=r.excludeDateIntervals;return a&&a.length>0?a.some((function(t){var r=t.start,n=t.end;return W.isWithinInterval(e,{start:r,end:n})})):n&&n.some((function(t){var r;return t instanceof Date?Qe(e,t):Qe(e,null!==(r=t.date)&&void 0!==r?r:new Date)}))||!1}function Xe(e,t){var r=void 0===t?{}:t,n=r.minDate,a=r.maxDate,o=r.excludeDates,s=r.includeDates,i=r.filterDate;return nt(e,{minDate:n?Z.startOfMonth(n):void 0,maxDate:a?g.endOfMonth(a):void 0})||(null==o?void 0:o.some((function(t){return He(e,t instanceof Date?t:t.date)})))||s&&!s.some((function(t){return He(e,t)}))||i&&!i(Me(e))||!1}function Ge(e,t,r,n){var a=x.getYear(e),o=_.getMonth(e),s=x.getYear(t),i=_.getMonth(t),l=x.getYear(n);return a===s&&a===l?o<=r&&r<=i:a<s&&(l===a&&o<=r||l===s&&i>=r||l<s&&l>a)}function Je(e,t){var r=void 0===t?{}:t,n=r.minDate,a=r.maxDate,o=r.excludeDates,s=r.includeDates;return nt(e,{minDate:n,maxDate:a})||o&&o.some((function(t){return He(t instanceof Date?t:t.date,e)}))||s&&!s.some((function(t){return He(t,e)}))||!1}function Ze(e,t){var r=void 0===t?{}:t,n=r.minDate,a=r.maxDate,o=r.excludeDates,s=r.includeDates,i=r.filterDate;return nt(e,{minDate:n,maxDate:a})||(null==o?void 0:o.some((function(t){return We(e,t instanceof Date?t:t.date)})))||s&&!s.some((function(t){return We(e,t)}))||i&&!i(Me(e))||!1}function et(e,t,r){if(!t||!r)return!1;if(!H.isValid(t)||!H.isValid(r))return!1;var n=x.getYear(t),a=x.getYear(r);return n<=e&&a>=e}function tt(e,t){var r=void 0===t?{}:t,n=r.minDate,a=r.maxDate,o=r.excludeDates,s=r.includeDates,i=r.filterDate,l=new Date(e,0,1);return nt(l,{minDate:n?re.startOfYear(n):void 0,maxDate:a?y.endOfYear(a):void 0})||(null==o?void 0:o.some((function(e){return Ae(l,e instanceof Date?e:e.date)})))||s&&!s.some((function(e){return Ae(l,e)}))||i&&!i(Me(l))||!1}function rt(e,t,r,n){var a=x.getYear(e),o=E.getQuarter(e),s=x.getYear(t),i=E.getQuarter(t),l=x.getYear(n);return a===s&&a===l?o<=r&&r<=i:a<s&&(l===a&&o<=r||l===s&&i>=r||l<s&&l>a)}function nt(e,t){var r,n=void 0===t?{}:t,a=n.minDate,o=n.maxDate;return null!==(r=a&&u.differenceInCalendarDays(e,a)<0||o&&u.differenceInCalendarDays(e,o)>0)&&void 0!==r&&r}function at(e,t){return t.some((function(t){return b.getHours(t)===b.getHours(e)&&C.getMinutes(t)===C.getMinutes(e)&&Y.getSeconds(t)===Y.getSeconds(e)}))}function ot(e,t){var r=void 0===t?{}:t,n=r.excludeTimes,a=r.includeTimes,o=r.filterTime;return n&&at(e,n)||a&&!at(e,a)||o&&!o(e)||!1}function st(e,t){var r=t.minTime,n=t.maxTime;if(!r||!n)throw new Error("Both minTime and maxTime props required");var a=Me();a=j.setHours(a,b.getHours(e)),a=U.setMinutes(a,C.getMinutes(e)),a=X.setSeconds(a,Y.getSeconds(e));var o=Me();o=j.setHours(o,b.getHours(r)),o=U.setMinutes(o,C.getMinutes(r)),o=X.setSeconds(o,Y.getSeconds(r));var s,i=Me();i=j.setHours(i,b.getHours(n)),i=U.setMinutes(i,C.getMinutes(n)),i=X.setSeconds(i,Y.getSeconds(n));try{s=!W.isWithinInterval(a,{start:o,end:i})}catch(e){s=!1}return s}function it(e,t){var r=void 0===t?{}:t,n=r.minDate,a=r.includeDates,o=ae.subMonths(e,1);return n&&f.differenceInCalendarMonths(n,o)>0||a&&a.every((function(e){return f.differenceInCalendarMonths(e,o)>0}))||!1}function lt(e,t){var r=void 0===t?{}:t,n=r.maxDate,a=r.includeDates,o=i.addMonths(e,1);return n&&f.differenceInCalendarMonths(o,n)>0||a&&a.every((function(e){return f.differenceInCalendarMonths(o,e)>0}))||!1}function ct(e,t){var r=void 0===t?{}:t,n=r.minDate,a=r.includeDates,o=ie.subYears(e,1);return n&&m.differenceInCalendarYears(n,o)>0||a&&a.every((function(e){return m.differenceInCalendarYears(e,o)>0}))||!1}function pt(e,t){var r=void 0===t?{}:t,n=r.maxDate,a=r.includeDates,o=d.addYears(e,1);return n&&m.differenceInCalendarYears(o,n)>0||a&&a.every((function(e){return m.differenceInCalendarYears(o,e)>0}))||!1}function dt(e){var t=e.minDate,r=e.includeDates;if(r&&t){var n=r.filter((function(e){return u.differenceInCalendarDays(e,t)>=0}));return q.min(n)}return r?q.min(r):t}function ut(e){var t=e.maxDate,r=e.includeDates;if(r&&t){var n=r.filter((function(e){return u.differenceInCalendarDays(e,t)<=0}));return Q.max(n)}return r?Q.max(r):t}function ft(e,t){var r;void 0===e&&(e=[]),void 0===t&&(t="react-datepicker__day--highlighted");for(var n=new Map,a=0,o=e.length;a<o;a++){var s=e[a];if(T.isDate(s)){var i=Ee(s,"MM.dd.yyyy");(f=n.get(i)||[]).includes(t)||(f.push(t),n.set(i,f))}else if("object"==typeof s){var l=null!==(r=Object.keys(s)[0])&&void 0!==r?r:"",c=s[l];if("string"==typeof l&&Array.isArray(c))for(var p=0,d=c.length;p<d;p++){var u=c[p];if(u){var f;i=Ee(u,"MM.dd.yyyy");(f=n.get(i)||[]).includes(l)||(f.push(l),n.set(i,f))}}}}return n}function ht(e,t){void 0===e&&(e=[]),void 0===t&&(t="react-datepicker__day--holidays");var r=new Map;return e.forEach((function(e){var n=e.date,a=e.holidayName;if(T.isDate(n)){var o=Ee(n,"MM.dd.yyyy"),s=r.get(o)||{className:"",holidayNames:[]};if(!("className"in s)||s.className!==t||(i=s.holidayNames,l=[a],i.length!==l.length||!i.every((function(e,t){return e===l[t]})))){var i,l;s.className=t;var c=s.holidayNames;s.holidayNames=c?ge(ge([],c,!0),[a],!1):[a],r.set(o,s)}}})),r}function mt(e,t,r,n,a){for(var i=a.length,l=[],p=0;p<i;p++){var d=e,u=a[p];u&&(d=o.addHours(d,b.getHours(u)),d=s.addMinutes(d,C.getMinutes(u)),d=c.addSeconds(d,Y.getSeconds(u)));var f=s.addMinutes(e,(r+1)*n);N.isAfter(d,t)&&O.isBefore(d,f)&&null!=u&&l.push(u)}return l}function vt(e){return e<10?"0".concat(e):"".concat(e)}function gt(e,t){void 0===t&&(t=Se);var r=Math.ceil(x.getYear(e)/t)*t;return{startPeriod:r-(t-1),endPeriod:r}}function Dt(e){var t=e.getSeconds(),r=e.getMilliseconds();return le.toDate(e.getTime()-1e3*t-r)}function yt(e){if(!T.isDate(e))throw new Error("Invalid date");var t=new Date(e);return t.setHours(0,0,0,0),t}function kt(e,t){if(!T.isDate(e)||!T.isDate(t))throw new Error("Invalid date received");var r=yt(e),n=yt(t);return O.isBefore(r,n)}function wt(e){return e.key===De.Space}var St,bt=function(e){function t(t){var n=e.call(this,t)||this;return n.inputRef=ue.default.createRef(),n.onTimeChange=function(e){var t,r;n.setState({time:e});var a=n.props.date,o=a instanceof Date&&!isNaN(+a)?a:new Date;if(null==e?void 0:e.includes(":")){var s=e.split(":"),i=s[0],l=s[1];o.setHours(Number(i)),o.setMinutes(Number(l))}null===(r=(t=n.props).onChange)||void 0===r||r.call(t,o)},n.renderTimeInput=function(){var e=n.state.time,t=n.props,a=t.date,o=t.timeString,s=t.customTimeInput;return s?r.cloneElement(s,{date:a,value:e,onChange:n.onTimeChange}):ue.default.createElement("input",{type:"time",className:"react-datepicker-time__input",placeholder:"Time",name:"time-input",ref:n.inputRef,onClick:function(){var e;null===(e=n.inputRef.current)||void 0===e||e.focus()},required:!0,value:e,onChange:function(e){n.onTimeChange(e.target.value||o)}})},n.state={time:n.props.timeString},n}return me(t,e),t.getDerivedStateFromProps=function(e,t){return e.timeString!==t.time?{time:e.timeString}:null},t.prototype.render=function(){return ue.default.createElement("div",{className:"react-datepicker__input-time-container"},ue.default.createElement("div",{className:"react-datepicker-time__caption"},this.props.timeInputLabel),ue.default.createElement("div",{className:"react-datepicker-time__input-container"},ue.default.createElement("div",{className:"react-datepicker-time__input"},this.renderTimeInput())))},t}(r.Component),Mt=function(e){function n(){var n=null!==e&&e.apply(this,arguments)||this;return n.dayEl=r.createRef(),n.handleClick=function(e){!n.isDisabled()&&n.props.onClick&&n.props.onClick(e)},n.handleMouseEnter=function(e){!n.isDisabled()&&n.props.onMouseEnter&&n.props.onMouseEnter(e)},n.handleOnKeyDown=function(e){var t,r;e.key===De.Space&&(e.preventDefault(),e.key=De.Enter),null===(r=(t=n.props).handleOnKeyDown)||void 0===r||r.call(t,e)},n.isSameDay=function(e){return Qe(n.props.day,e)},n.isKeyboardSelected=function(){var e;if(n.props.disabledKeyboardNavigation)return!1;var t=n.props.selectsMultiple?null===(e=n.props.selectedDates)||void 0===e?void 0:e.some((function(e){return n.isSameDayOrWeek(e)})):n.isSameDayOrWeek(n.props.selected),r=n.props.preSelection&&n.isDisabled(n.props.preSelection);return!t&&n.isSameDayOrWeek(n.props.preSelection)&&!r},n.isDisabled=function(e){return void 0===e&&(e=n.props.day),$e(e,{minDate:n.props.minDate,maxDate:n.props.maxDate,excludeDates:n.props.excludeDates,excludeDateIntervals:n.props.excludeDateIntervals,includeDateIntervals:n.props.includeDateIntervals,includeDates:n.props.includeDates,filterDate:n.props.filterDate})},n.isExcluded=function(){return ze(n.props.day,{excludeDates:n.props.excludeDates,excludeDateIntervals:n.props.excludeDateIntervals})},n.isStartOfWeek=function(){return Qe(n.props.day,Ne(n.props.day,n.props.locale,n.props.calendarStartDay))},n.isSameWeek=function(e){return n.props.showWeekPicker&&Qe(e,Ne(n.props.day,n.props.locale,n.props.calendarStartDay))},n.isSameDayOrWeek=function(e){return n.isSameDay(e)||n.isSameWeek(e)},n.getHighLightedClass=function(){var e=n.props,t=e.day,r=e.highlightDates;if(!r)return!1;var a=Ee(t,"MM.dd.yyyy");return r.get(a)},n.getHolidaysClass=function(){var e,t=n.props,r=t.day,a=t.holidays;if(!a)return[void 0];var o=Ee(r,"MM.dd.yyyy");return a.has(o)?[null===(e=a.get(o))||void 0===e?void 0:e.className]:[void 0]},n.isInRange=function(){var e=n.props,t=e.day,r=e.startDate,a=e.endDate;return!(!r||!a)&&Ke(t,r,a)},n.isInSelectingRange=function(){var e,t=n.props,r=t.day,a=t.selectsStart,o=t.selectsEnd,s=t.selectsRange,i=t.selectsDisabledDaysInRange,l=t.startDate,c=t.endDate,p=null!==(e=n.props.selectingDate)&&void 0!==e?e:n.props.preSelection;return!(!(a||o||s)||!p||!i&&n.isDisabled())&&(a&&c&&(O.isBefore(p,c)||qe(p,c))?Ke(r,p,c):(o&&l&&(N.isAfter(p,l)||qe(p,l))||!(!s||!l||c||!N.isAfter(p,l)&&!qe(p,l)))&&Ke(r,l,p))},n.isSelectingRangeStart=function(){var e;if(!n.isInSelectingRange())return!1;var t=n.props,r=t.day,a=t.startDate,o=t.selectsStart,s=null!==(e=n.props.selectingDate)&&void 0!==e?e:n.props.preSelection;return Qe(r,o?s:a)},n.isSelectingRangeEnd=function(){var e;if(!n.isInSelectingRange())return!1;var t=n.props,r=t.day,a=t.endDate,o=t.selectsEnd,s=t.selectsRange,i=null!==(e=n.props.selectingDate)&&void 0!==e?e:n.props.preSelection;return Qe(r,o||s?i:a)},n.isRangeStart=function(){var e=n.props,t=e.day,r=e.startDate,a=e.endDate;return!(!r||!a)&&Qe(r,t)},n.isRangeEnd=function(){var e=n.props,t=e.day,r=e.startDate,a=e.endDate;return!(!r||!a)&&Qe(a,t)},n.isWeekend=function(){var e=S.getDay(n.props.day);return 0===e||6===e},n.isAfterMonth=function(){return void 0!==n.props.month&&(n.props.month+1)%12===_.getMonth(n.props.day)},n.isBeforeMonth=function(){return void 0!==n.props.month&&(_.getMonth(n.props.day)+1)%12===n.props.month},n.isCurrentDay=function(){return n.isSameDay(Me())},n.isSelected=function(){var e;return n.props.selectsMultiple?null===(e=n.props.selectedDates)||void 0===e?void 0:e.some((function(e){return n.isSameDayOrWeek(e)})):n.isSameDayOrWeek(n.props.selected)},n.getClassNames=function(e){var r,a=n.props.dayClassName?n.props.dayClassName(e):void 0;return t.clsx("react-datepicker__day",a,"react-datepicker__day--"+Ee(n.props.day,"ddd",r),{"react-datepicker__day--disabled":n.isDisabled(),"react-datepicker__day--excluded":n.isExcluded(),"react-datepicker__day--selected":n.isSelected(),"react-datepicker__day--keyboard-selected":n.isKeyboardSelected(),"react-datepicker__day--range-start":n.isRangeStart(),"react-datepicker__day--range-end":n.isRangeEnd(),"react-datepicker__day--in-range":n.isInRange(),"react-datepicker__day--in-selecting-range":n.isInSelectingRange(),"react-datepicker__day--selecting-range-start":n.isSelectingRangeStart(),"react-datepicker__day--selecting-range-end":n.isSelectingRangeEnd(),"react-datepicker__day--today":n.isCurrentDay(),"react-datepicker__day--weekend":n.isWeekend(),"react-datepicker__day--outside-month":n.isAfterMonth()||n.isBeforeMonth()},n.getHighLightedClass(),n.getHolidaysClass())},n.getAriaLabel=function(){var e=n.props,t=e.day,r=e.ariaLabelPrefixWhenEnabled,a=void 0===r?"Choose":r,o=e.ariaLabelPrefixWhenDisabled,s=void 0===o?"Not available":o,i=n.isDisabled()||n.isExcluded()?s:a;return"".concat(i," ").concat(Ee(t,"PPPP",n.props.locale))},n.getTitle=function(){var e=n.props,t=e.day,r=e.holidays,a=void 0===r?new Map:r,o=e.excludeDates,s=Ee(t,"MM.dd.yyyy"),i=[];return a.has(s)&&i.push.apply(i,a.get(s).holidayNames),n.isExcluded()&&i.push(null==o?void 0:o.filter((function(e){return e instanceof Date?Qe(e,t):Qe(null==e?void 0:e.date,t)})).map((function(e){if(!(e instanceof Date))return null==e?void 0:e.message}))),i.join(", ")},n.getTabIndex=function(){var e=n.props.selected,t=n.props.preSelection;return(!n.props.showWeekPicker||!n.props.showWeekNumber&&n.isStartOfWeek())&&(n.isKeyboardSelected()||n.isSameDay(e)&&Qe(t,e))?0:-1},n.handleFocusDay=function(){var e;n.shouldFocusDay()&&(null===(e=n.dayEl.current)||void 0===e||e.focus({preventScroll:!0}))},n.renderDayContents=function(){return n.props.monthShowsDuplicateDaysEnd&&n.isAfterMonth()||n.props.monthShowsDuplicateDaysStart&&n.isBeforeMonth()?null:n.props.renderDayContents?n.props.renderDayContents(w.getDate(n.props.day),n.props.day):w.getDate(n.props.day)},n.render=function(){return ue.default.createElement("div",{ref:n.dayEl,className:n.getClassNames(n.props.day),onKeyDown:n.handleOnKeyDown,onClick:n.handleClick,onMouseEnter:n.props.usePointerEvent?void 0:n.handleMouseEnter,onPointerEnter:n.props.usePointerEvent?n.handleMouseEnter:void 0,tabIndex:n.getTabIndex(),"aria-label":n.getAriaLabel(),role:"option",title:n.getTitle(),"aria-disabled":n.isDisabled(),"aria-current":n.isCurrentDay()?"date":void 0,"aria-selected":n.isSelected()||n.isInRange()},n.renderDayContents(),""!==n.getTitle()&&ue.default.createElement("span",{className:"overlay"},n.getTitle()))},n}return me(n,e),n.prototype.componentDidMount=function(){this.handleFocusDay()},n.prototype.componentDidUpdate=function(){this.handleFocusDay()},n.prototype.shouldFocusDay=function(){var e=!1;return 0===this.getTabIndex()&&this.isSameDay(this.props.preSelection)&&(document.activeElement&&document.activeElement!==document.body||(e=!0),this.props.inline&&!this.props.shouldFocusDayInline&&(e=!1),this.isDayActiveElement()&&(e=!0),this.isDuplicateDay()&&(e=!1)),e},n.prototype.isDayActiveElement=function(){var e,t,r;return(null===(t=null===(e=this.props.containerRef)||void 0===e?void 0:e.current)||void 0===t?void 0:t.contains(document.activeElement))&&(null===(r=document.activeElement)||void 0===r?void 0:r.classList.contains("react-datepicker__day"))},n.prototype.isDuplicateDay=function(){return this.props.monthShowsDuplicateDaysEnd&&this.isAfterMonth()||this.props.monthShowsDuplicateDaysStart&&this.isBeforeMonth()},n}(r.Component),Ct=function(e){function n(){var t=null!==e&&e.apply(this,arguments)||this;return t.weekNumberEl=r.createRef(),t.handleClick=function(e){t.props.onClick&&t.props.onClick(e)},t.handleOnKeyDown=function(e){var r,n;e.key===De.Space&&(e.preventDefault(),e.key=De.Enter),null===(n=(r=t.props).handleOnKeyDown)||void 0===n||n.call(r,e)},t.isKeyboardSelected=function(){return!t.props.disabledKeyboardNavigation&&!Qe(t.props.date,t.props.selected)&&Qe(t.props.date,t.props.preSelection)},t.getTabIndex=function(){return t.props.showWeekPicker&&t.props.showWeekNumber&&(t.isKeyboardSelected()||Qe(t.props.date,t.props.selected)&&Qe(t.props.preSelection,t.props.selected))?0:-1},t.handleFocusWeekNumber=function(e){var r=!1;0===t.getTabIndex()&&!(null==e?void 0:e.isInputFocused)&&Qe(t.props.date,t.props.preSelection)&&(document.activeElement&&document.activeElement!==document.body||(r=!0),t.props.inline&&!t.props.shouldFocusDayInline&&(r=!1),t.props.containerRef&&t.props.containerRef.current&&t.props.containerRef.current.contains(document.activeElement)&&document.activeElement&&document.activeElement.classList.contains("react-datepicker__week-number")&&(r=!0)),r&&t.weekNumberEl.current&&t.weekNumberEl.current.focus({preventScroll:!0})},t}return me(n,e),Object.defineProperty(n,"defaultProps",{get:function(){return{ariaLabelPrefix:"week "}},enumerable:!1,configurable:!0}),n.prototype.componentDidMount=function(){this.handleFocusWeekNumber()},n.prototype.componentDidUpdate=function(e){this.handleFocusWeekNumber(e)},n.prototype.render=function(){var e=this.props,r=e.weekNumber,a=e.ariaLabelPrefix,o=void 0===a?n.defaultProps.ariaLabelPrefix:a,s=e.onClick,i={"react-datepicker__week-number":!0,"react-datepicker__week-number--clickable":!!s,"react-datepicker__week-number--selected":!!s&&Qe(this.props.date,this.props.selected),"react-datepicker__week-number--keyboard-selected":this.isKeyboardSelected()};return ue.default.createElement("div",{ref:this.weekNumberEl,className:t.clsx(i),"aria-label":"".concat(o," ").concat(this.props.weekNumber),onClick:this.handleClick,onKeyDown:this.handleOnKeyDown,tabIndex:this.getTabIndex()},r)},n}(r.Component),_t=function(e){function r(){var t=null!==e&&e.apply(this,arguments)||this;return t.isDisabled=function(e){return $e(e,{minDate:t.props.minDate,maxDate:t.props.maxDate,excludeDates:t.props.excludeDates,excludeDateIntervals:t.props.excludeDateIntervals,includeDateIntervals:t.props.includeDateIntervals,includeDates:t.props.includeDates,filterDate:t.props.filterDate})},t.handleDayClick=function(e,r){t.props.onDayClick&&t.props.onDayClick(e,r)},t.handleDayMouseEnter=function(e){t.props.onDayMouseEnter&&t.props.onDayMouseEnter(e)},t.handleWeekClick=function(e,n,a){for(var o,s,i,l=new Date(e),c=0;c<7;c++){var p=new Date(e);if(p.setDate(p.getDate()+c),!t.isDisabled(p)){l=p;break}}"function"==typeof t.props.onWeekSelect&&t.props.onWeekSelect(l,n,a),t.props.showWeekPicker&&t.handleDayClick(l,a),(null!==(o=t.props.shouldCloseOnSelect)&&void 0!==o?o:r.defaultProps.shouldCloseOnSelect)&&(null===(i=(s=t.props).setOpen)||void 0===i||i.call(s,!1))},t.formatWeekNumber=function(e){return t.props.formatWeekNumber?t.props.formatWeekNumber(e):function(e){return M.getISOWeek(e)}(e)},t.renderDays=function(){var e=t.startOfWeek(),n=[],o=t.formatWeekNumber(e);if(t.props.showWeekNumber){var s=t.props.onWeekSelect||t.props.showWeekPicker?t.handleWeekClick.bind(t,e,o):void 0;n.push(ue.default.createElement(Ct,ve({key:"W"},r.defaultProps,t.props,{weekNumber:o,date:e,onClick:s})))}return n.concat([0,1,2,3,4,5,6].map((function(n){var o=a.addDays(e,n);return ue.default.createElement(Mt,ve({},r.defaultProps,t.props,{ariaLabelPrefixWhenEnabled:t.props.chooseDayAriaLabelPrefix,ariaLabelPrefixWhenDisabled:t.props.disabledDayAriaLabelPrefix,key:o.valueOf(),day:o,onClick:t.handleDayClick.bind(t,o),onMouseEnter:t.handleDayMouseEnter.bind(t,o)}))})))},t.startOfWeek=function(){return Ne(t.props.day,t.props.locale,t.props.calendarStartDay)},t.isKeyboardSelected=function(){return!t.props.disabledKeyboardNavigation&&!Qe(t.startOfWeek(),t.props.selected)&&Qe(t.startOfWeek(),t.props.preSelection)},t}return me(r,e),Object.defineProperty(r,"defaultProps",{get:function(){return{shouldCloseOnSelect:!0}},enumerable:!1,configurable:!0}),r.prototype.render=function(){var e={"react-datepicker__week":!0,"react-datepicker__week--selected":Qe(this.startOfWeek(),this.props.selected),"react-datepicker__week--keyboard-selected":this.isKeyboardSelected()};return ue.default.createElement("div",{className:t.clsx(e)},this.renderDays())},r}(r.Component),Et="two_columns",Yt="three_columns",Pt="four_columns",xt=((St={})[Et]={grid:[[0,1],[2,3],[4,5],[6,7],[8,9],[10,11]],verticalNavigationOffset:2},St[Yt]={grid:[[0,1,2],[3,4,5],[6,7,8],[9,10,11]],verticalNavigationOffset:3},St[Pt]={grid:[[0,1,2,3],[4,5,6,7],[8,9,10,11]],verticalNavigationOffset:4},St);function Nt(e,t){return e?Pt:t?Et:Yt}var Ot=function(e){function n(){var n=null!==e&&e.apply(this,arguments)||this;return n.MONTH_REFS=ge([],Array(12),!0).map((function(){return r.createRef()})),n.QUARTER_REFS=ge([],Array(4),!0).map((function(){return r.createRef()})),n.isDisabled=function(e){return $e(e,{minDate:n.props.minDate,maxDate:n.props.maxDate,excludeDates:n.props.excludeDates,excludeDateIntervals:n.props.excludeDateIntervals,includeDateIntervals:n.props.includeDateIntervals,includeDates:n.props.includeDates,filterDate:n.props.filterDate})},n.isExcluded=function(e){return ze(e,{excludeDates:n.props.excludeDates,excludeDateIntervals:n.props.excludeDateIntervals})},n.handleDayClick=function(e,t){var r,a;null===(a=(r=n.props).onDayClick)||void 0===a||a.call(r,e,t,n.props.orderInDisplay)},n.handleDayMouseEnter=function(e){var t,r;null===(r=(t=n.props).onDayMouseEnter)||void 0===r||r.call(t,e)},n.handleMouseLeave=function(){var e,t;null===(t=(e=n.props).onMouseLeave)||void 0===t||t.call(e)},n.isRangeStartMonth=function(e){var t=n.props,r=t.day,a=t.startDate,o=t.endDate;return!(!a||!o)&&He($.setMonth(r,e),a)},n.isRangeStartQuarter=function(e){var t=n.props,r=t.day,a=t.startDate,o=t.endDate;return!(!a||!o)&&We(z.setQuarter(r,e),a)},n.isRangeEndMonth=function(e){var t=n.props,r=t.day,a=t.startDate,o=t.endDate;return!(!a||!o)&&He($.setMonth(r,e),o)},n.isRangeEndQuarter=function(e){var t=n.props,r=t.day,a=t.startDate,o=t.endDate;return!(!a||!o)&&We(z.setQuarter(r,e),o)},n.isInSelectingRangeMonth=function(e){var t,r=n.props,a=r.day,o=r.selectsStart,s=r.selectsEnd,i=r.selectsRange,l=r.startDate,c=r.endDate,p=null!==(t=n.props.selectingDate)&&void 0!==t?t:n.props.preSelection;return!(!(o||s||i)||!p)&&(o&&c?Ge(p,c,e,a):(s&&l||!(!i||!l||c))&&Ge(l,p,e,a))},n.isSelectingMonthRangeStart=function(e){var t;if(!n.isInSelectingRangeMonth(e))return!1;var r=n.props,a=r.day,o=r.startDate,s=r.selectsStart,i=$.setMonth(a,e),l=null!==(t=n.props.selectingDate)&&void 0!==t?t:n.props.preSelection;return He(i,s?l:o)},n.isSelectingMonthRangeEnd=function(e){var t;if(!n.isInSelectingRangeMonth(e))return!1;var r=n.props,a=r.day,o=r.endDate,s=r.selectsEnd,i=r.selectsRange,l=$.setMonth(a,e),c=null!==(t=n.props.selectingDate)&&void 0!==t?t:n.props.preSelection;return He(l,s||i?c:o)},n.isInSelectingRangeQuarter=function(e){var t,r=n.props,a=r.day,o=r.selectsStart,s=r.selectsEnd,i=r.selectsRange,l=r.startDate,c=r.endDate,p=null!==(t=n.props.selectingDate)&&void 0!==t?t:n.props.preSelection;return!(!(o||s||i)||!p)&&(o&&c?rt(p,c,e,a):(s&&l||!(!i||!l||c))&&rt(l,p,e,a))},n.isWeekInMonth=function(e){var t=n.props.day,r=a.addDays(e,6);return He(e,t)||He(r,t)},n.isCurrentMonth=function(e,t){return x.getYear(e)===x.getYear(Me())&&t===_.getMonth(Me())},n.isCurrentQuarter=function(e,t){return x.getYear(e)===x.getYear(Me())&&t===E.getQuarter(Me())},n.isSelectedMonth=function(e,t,r){return _.getMonth(r)===t&&x.getYear(e)===x.getYear(r)},n.isSelectMonthInList=function(e,t,r){return r.some((function(r){return n.isSelectedMonth(e,t,r)}))},n.isSelectedQuarter=function(e,t,r){return E.getQuarter(e)===t&&x.getYear(e)===x.getYear(r)},n.renderWeeks=function(){for(var e=[],t=n.props.fixedHeight,r=0,a=!1,o=Ne(Oe(n.props.day),n.props.locale,n.props.calendarStartDay),s=n.props.selected?function(e){return n.props.showWeekPicker?Ne(e,n.props.locale,n.props.calendarStartDay):n.props.selected}(n.props.selected):void 0,i=n.props.preSelection?function(e){return n.props.showWeekPicker?Ne(e,n.props.locale,n.props.calendarStartDay):n.props.preSelection}(n.props.preSelection):void 0;e.push(ue.default.createElement(_t,ve({},n.props,{ariaLabelPrefix:n.props.weekAriaLabelPrefix,key:r,day:o,month:_.getMonth(n.props.day),onDayClick:n.handleDayClick,onDayMouseEnter:n.handleDayMouseEnter,selected:s,preSelection:i,showWeekNumber:n.props.showWeekNumbers}))),!a;){r++,o=p.addWeeks(o,1);var l=t&&r>=6,c=!t&&!n.isWeekInMonth(o);if(l||c){if(!n.props.peekNextMonth)break;a=!0}}return e},n.onMonthClick=function(e,t){var r=n.isMonthDisabledForLabelDate(t),a=r.isDisabled,o=r.labelDate;a||n.handleDayClick(Oe(o),e)},n.onMonthMouseEnter=function(e){var t=n.isMonthDisabledForLabelDate(e),r=t.isDisabled,a=t.labelDate;r||n.handleDayMouseEnter(Oe(a))},n.handleMonthNavigation=function(e,t){var r,a,o,s;null===(a=(r=n.props).setPreSelection)||void 0===a||a.call(r,t),null===(s=null===(o=n.MONTH_REFS[e])||void 0===o?void 0:o.current)||void 0===s||s.focus()},n.handleKeyboardNavigation=function(e,t,r){var a,o=n.props,s=o.selected,l=o.preSelection,c=o.setPreSelection,p=o.minDate,d=o.maxDate,u=o.showFourColumnMonthYearPicker,f=o.showTwoColumnMonthYearPicker;if(l){var h=Nt(u,f),m=n.getVerticalOffset(h),v=null===(a=xt[h])||void 0===a?void 0:a.grid,g=function(e,t,r){var n,a,o=t,s=r;switch(e){case De.ArrowRight:o=i.addMonths(t,1),s=11===r?0:r+1;break;case De.ArrowLeft:o=ae.subMonths(t,1),s=0===r?11:r-1;break;case De.ArrowUp:o=ae.subMonths(t,m),s=(null===(n=null==v?void 0:v[0])||void 0===n?void 0:n.includes(r))?r+12-m:r-m;break;case De.ArrowDown:o=i.addMonths(t,m),s=(null===(a=null==v?void 0:v[v.length-1])||void 0===a?void 0:a.includes(r))?r-12+m:r+m}return{newCalculatedDate:o,newCalculatedMonth:s}};if(t!==De.Enter){var D=function(e,t,r){for(var a=e,o=!1,s=0,i=g(a,t,r),l=i.newCalculatedDate,c=i.newCalculatedMonth;!o;){if(s>=40){l=t,c=r;break}var u;if(p&&l<p)a=De.ArrowRight,l=(u=g(a,l,c)).newCalculatedDate,c=u.newCalculatedMonth;if(d&&l>d)a=De.ArrowLeft,l=(u=g(a,l,c)).newCalculatedDate,c=u.newCalculatedMonth;if(Je(l,n.props))l=(u=g(a,l,c)).newCalculatedDate,c=u.newCalculatedMonth;else o=!0;s++}return{newCalculatedDate:l,newCalculatedMonth:c}}(t,l,r),y=D.newCalculatedDate,k=D.newCalculatedMonth;switch(t){case De.ArrowRight:case De.ArrowLeft:case De.ArrowUp:case De.ArrowDown:n.handleMonthNavigation(k,y)}}else n.isMonthDisabled(r)||(n.onMonthClick(e,r),null==c||c(s))}},n.getVerticalOffset=function(e){var t,r;return null!==(r=null===(t=xt[e])||void 0===t?void 0:t.verticalNavigationOffset)&&void 0!==r?r:0},n.onMonthKeyDown=function(e,t){var r=n.props,a=r.disabledKeyboardNavigation,o=r.handleOnMonthKeyDown,s=e.key;s!==De.Tab&&e.preventDefault(),a||n.handleKeyboardNavigation(e,s,t),o&&o(e)},n.onQuarterClick=function(e,t){var r=z.setQuarter(n.props.day,t);Ze(r,n.props)||n.handleDayClick(Ie(r),e)},n.onQuarterMouseEnter=function(e){var t=z.setQuarter(n.props.day,e);Ze(t,n.props)||n.handleDayMouseEnter(Ie(t))},n.handleQuarterNavigation=function(e,t){var r,a,o,s;n.isDisabled(t)||n.isExcluded(t)||(null===(a=(r=n.props).setPreSelection)||void 0===a||a.call(r,t),null===(s=null===(o=n.QUARTER_REFS[e-1])||void 0===o?void 0:o.current)||void 0===s||s.focus())},n.onQuarterKeyDown=function(e,t){var r,a,o=e.key;if(!n.props.disabledKeyboardNavigation)switch(o){case De.Enter:n.onQuarterClick(e,t),null===(a=(r=n.props).setPreSelection)||void 0===a||a.call(r,n.props.selected);break;case De.ArrowRight:if(!n.props.preSelection)break;n.handleQuarterNavigation(4===t?1:t+1,l.addQuarters(n.props.preSelection,1));break;case De.ArrowLeft:if(!n.props.preSelection)break;n.handleQuarterNavigation(1===t?4:t-1,oe.subQuarters(n.props.preSelection,1))}},n.isMonthDisabledForLabelDate=function(e){var t,r=n.props,a=r.day,o=r.minDate,s=r.maxDate,i=r.excludeDates,l=r.includeDates,c=$.setMonth(a,e);return{isDisabled:null!==(t=(o||s||i||l)&&Xe(c,n.props))&&void 0!==t&&t,labelDate:c}},n.isMonthDisabled=function(e){return n.isMonthDisabledForLabelDate(e).isDisabled},n.getMonthClassNames=function(e){var r=n.props,a=r.day,o=r.startDate,s=r.endDate,i=r.preSelection,l=r.monthClassName,c=l?l($.setMonth(a,e)):void 0,p=n.getSelection();return t.clsx("react-datepicker__month-text","react-datepicker__month-".concat(e),c,{"react-datepicker__month-text--disabled":n.isMonthDisabled(e),"react-datepicker__month-text--selected":p?n.isSelectMonthInList(a,e,p):void 0,"react-datepicker__month-text--keyboard-selected":!n.props.disabledKeyboardNavigation&&i&&n.isSelectedMonth(a,e,i)&&!n.isMonthDisabled(e),"react-datepicker__month-text--in-selecting-range":n.isInSelectingRangeMonth(e),"react-datepicker__month-text--in-range":o&&s?Ge(o,s,e,a):void 0,"react-datepicker__month-text--range-start":n.isRangeStartMonth(e),"react-datepicker__month-text--range-end":n.isRangeEndMonth(e),"react-datepicker__month-text--selecting-range-start":n.isSelectingMonthRangeStart(e),"react-datepicker__month-text--selecting-range-end":n.isSelectingMonthRangeEnd(e),"react-datepicker__month-text--today":n.isCurrentMonth(a,e)})},n.getTabIndex=function(e){if(null==n.props.preSelection)return"-1";var t=_.getMonth(n.props.preSelection),r=n.isMonthDisabledForLabelDate(t).isDisabled;return e!==t||r||n.props.disabledKeyboardNavigation?"-1":"0"},n.getQuarterTabIndex=function(e){if(null==n.props.preSelection)return"-1";var t=E.getQuarter(n.props.preSelection),r=Ze(n.props.day,n.props);return e!==t||r||n.props.disabledKeyboardNavigation?"-1":"0"},n.getAriaLabel=function(e){var t=n.props,r=t.chooseDayAriaLabelPrefix,a=void 0===r?"Choose":r,o=t.disabledDayAriaLabelPrefix,s=void 0===o?"Not available":o,i=t.day,l=t.locale,c=$.setMonth(i,e),p=n.isDisabled(c)||n.isExcluded(c)?s:a;return"".concat(p," ").concat(Ee(c,"MMMM yyyy",l))},n.getQuarterClassNames=function(e){var r=n.props,a=r.day,o=r.startDate,s=r.endDate,i=r.selected,l=r.minDate,c=r.maxDate,p=r.excludeDates,d=r.includeDates,u=r.filterDate,f=r.preSelection,h=r.disabledKeyboardNavigation,m=(l||c||p||d||u)&&Ze(z.setQuarter(a,e),n.props);return t.clsx("react-datepicker__quarter-text","react-datepicker__quarter-".concat(e),{"react-datepicker__quarter-text--disabled":m,"react-datepicker__quarter-text--selected":i?n.isSelectedQuarter(a,e,i):void 0,"react-datepicker__quarter-text--keyboard-selected":!h&&f&&n.isSelectedQuarter(a,e,f)&&!m,"react-datepicker__quarter-text--in-selecting-range":n.isInSelectingRangeQuarter(e),"react-datepicker__quarter-text--in-range":o&&s?rt(o,s,e,a):void 0,"react-datepicker__quarter-text--range-start":n.isRangeStartQuarter(e),"react-datepicker__quarter-text--range-end":n.isRangeEndQuarter(e)})},n.getMonthContent=function(e){var t=n.props,r=t.showFullMonthYearPicker,a=t.renderMonthContent,o=t.locale,s=t.day,i=Ue(e,o),l=je(e,o);return a?a(e,i,l,s):r?l:i},n.getQuarterContent=function(e){var t,r=n.props,a=r.renderQuarterContent,o=function(e,t){return Ee(z.setQuarter(Me(),e),"QQQ",t)}(e,r.locale);return null!==(t=null==a?void 0:a(e,o))&&void 0!==t?t:o},n.renderMonths=function(){var e,t=n.props,r=t.showTwoColumnMonthYearPicker,a=t.showFourColumnMonthYearPicker,o=t.day,s=t.selected,i=null===(e=xt[Nt(a,r)])||void 0===e?void 0:e.grid;return null==i?void 0:i.map((function(e,t){return ue.default.createElement("div",{className:"react-datepicker__month-wrapper",key:t},e.map((function(e,t){return ue.default.createElement("div",{ref:n.MONTH_REFS[e],key:t,onClick:function(t){n.onMonthClick(t,e)},onKeyDown:function(t){wt(t)&&(t.preventDefault(),t.key=De.Enter),n.onMonthKeyDown(t,e)},onMouseEnter:n.props.usePointerEvent?void 0:function(){return n.onMonthMouseEnter(e)},onPointerEnter:n.props.usePointerEvent?function(){return n.onMonthMouseEnter(e)}:void 0,tabIndex:Number(n.getTabIndex(e)),className:n.getMonthClassNames(e),"aria-disabled":n.isMonthDisabled(e),role:"option","aria-label":n.getAriaLabel(e),"aria-current":n.isCurrentMonth(o,e)?"date":void 0,"aria-selected":s?n.isSelectedMonth(o,e,s):void 0},n.getMonthContent(e))})))}))},n.renderQuarters=function(){var e=n.props,t=e.day,r=e.selected;return ue.default.createElement("div",{className:"react-datepicker__quarter-wrapper"},[1,2,3,4].map((function(e,a){return ue.default.createElement("div",{key:a,ref:n.QUARTER_REFS[a],role:"option",onClick:function(t){n.onQuarterClick(t,e)},onKeyDown:function(t){n.onQuarterKeyDown(t,e)},onMouseEnter:n.props.usePointerEvent?void 0:function(){return n.onQuarterMouseEnter(e)},onPointerEnter:n.props.usePointerEvent?function(){return n.onQuarterMouseEnter(e)}:void 0,className:n.getQuarterClassNames(e),"aria-selected":r?n.isSelectedQuarter(t,e,r):void 0,tabIndex:Number(n.getQuarterTabIndex(e)),"aria-current":n.isCurrentQuarter(t,e)?"date":void 0},n.getQuarterContent(e))})))},n.getClassNames=function(){var e=n.props,r=e.selectingDate,a=e.selectsStart,o=e.selectsEnd,s=e.showMonthYearPicker,i=e.showQuarterYearPicker,l=e.showWeekPicker;return t.clsx("react-datepicker__month",{"react-datepicker__month--selecting-range":r&&(a||o)},{"react-datepicker__monthPicker":s},{"react-datepicker__quarterPicker":i},{"react-datepicker__weekPicker":l})},n}return me(n,e),n.prototype.getSelection=function(){var e=this.props,t=e.selected,r=e.selectedDates;return e.selectsMultiple?r:t?[t]:void 0},n.prototype.render=function(){var e=this.props,t=e.showMonthYearPicker,r=e.showQuarterYearPicker,n=e.day,a=e.ariaLabelPrefix,o=void 0===a?"Month ":a,s=o?o.trim()+" ":"";return ue.default.createElement("div",{className:this.getClassNames(),onMouseLeave:this.props.usePointerEvent?void 0:this.handleMouseLeave,onPointerLeave:this.props.usePointerEvent?this.handleMouseLeave:void 0,"aria-label":"".concat(s).concat(Ee(n,"MMMM, yyyy",this.props.locale)),role:"listbox"},t?this.renderMonths():r?this.renderQuarters():this.renderWeeks())},n}(r.Component),Tt=function(e){function t(){var t=null!==e&&e.apply(this,arguments)||this;return t.isSelectedMonth=function(e){return t.props.month===e},t.renderOptions=function(){return t.props.monthNames.map((function(e,r){return ue.default.createElement("div",{className:t.isSelectedMonth(r)?"react-datepicker__month-option react-datepicker__month-option--selected_month":"react-datepicker__month-option",key:e,onClick:t.onChange.bind(t,r),"aria-selected":t.isSelectedMonth(r)?"true":void 0},t.isSelectedMonth(r)?ue.default.createElement("span",{className:"react-datepicker__month-option--selected"},"✓"):"",e)}))},t.onChange=function(e){return t.props.onChange(e)},t.handleClickOutside=function(){return t.props.onCancel()},t}return me(t,e),t.prototype.render=function(){return ue.default.createElement(ke,{className:"react-datepicker__month-dropdown",onClickOutside:this.handleClickOutside},this.renderOptions())},t}(r.Component),It=function(e){function t(){var t=null!==e&&e.apply(this,arguments)||this;return t.state={dropdownVisible:!1},t.renderSelectOptions=function(e){return e.map((function(e,t){return ue.default.createElement("option",{key:e,value:t},e)}))},t.renderSelectMode=function(e){return ue.default.createElement("select",{value:t.props.month,className:"react-datepicker__month-select",onChange:function(e){return t.onChange(parseInt(e.target.value))}},t.renderSelectOptions(e))},t.renderReadView=function(e,r){return ue.default.createElement("div",{key:"read",style:{visibility:e?"visible":"hidden"},className:"react-datepicker__month-read-view",onClick:t.toggleDropdown},ue.default.createElement("span",{className:"react-datepicker__month-read-view--down-arrow"}),ue.default.createElement("span",{className:"react-datepicker__month-read-view--selected-month"},r[t.props.month]))},t.renderDropdown=function(e){return ue.default.createElement(Tt,ve({key:"dropdown"},t.props,{monthNames:e,onChange:t.onChange,onCancel:t.toggleDropdown}))},t.renderScrollMode=function(e){var r=t.state.dropdownVisible,n=[t.renderReadView(!r,e)];return r&&n.unshift(t.renderDropdown(e)),n},t.onChange=function(e){t.toggleDropdown(),e!==t.props.month&&t.props.onChange(e)},t.toggleDropdown=function(){return t.setState({dropdownVisible:!t.state.dropdownVisible})},t}return me(t,e),t.prototype.render=function(){var e,t=this,r=[0,1,2,3,4,5,6,7,8,9,10,11].map(this.props.useShortMonthInDropdown?function(e){return Ue(e,t.props.locale)}:function(e){return je(e,t.props.locale)});switch(this.props.dropdownMode){case"scroll":e=this.renderScrollMode(r);break;case"select":e=this.renderSelectMode(r)}return ue.default.createElement("div",{className:"react-datepicker__month-dropdown-container react-datepicker__month-dropdown-container--".concat(this.props.dropdownMode)},e)},t}(r.Component);function Rt(e,t){for(var r=[],n=Oe(e),a=Oe(t);!N.isAfter(n,a);)r.push(Me(n)),n=i.addMonths(n,1);return r}var Lt=function(e){function r(t){var r=e.call(this,t)||this;return r.renderOptions=function(){return r.state.monthYearsList.map((function(e){var t=P.getTime(e),n=Ae(r.props.date,e)&&He(r.props.date,e);return ue.default.createElement("div",{className:n?"react-datepicker__month-year-option--selected_month-year":"react-datepicker__month-year-option",key:t,onClick:r.onChange.bind(r,t),"aria-selected":n?"true":void 0},n?ue.default.createElement("span",{className:"react-datepicker__month-year-option--selected"},"✓"):"",Ee(e,r.props.dateFormat,r.props.locale))}))},r.onChange=function(e){return r.props.onChange(e)},r.handleClickOutside=function(){r.props.onCancel()},r.state={monthYearsList:Rt(r.props.minDate,r.props.maxDate)},r}return me(r,e),r.prototype.render=function(){var e=t.clsx({"react-datepicker__month-year-dropdown":!0,"react-datepicker__month-year-dropdown--scrollable":this.props.scrollableMonthYearDropdown});return ue.default.createElement(ke,{className:e,onClickOutside:this.handleClickOutside},this.renderOptions())},r}(r.Component),Ft=function(e){function t(){var t=null!==e&&e.apply(this,arguments)||this;return t.state={dropdownVisible:!1},t.renderSelectOptions=function(){for(var e=Oe(t.props.minDate),r=Oe(t.props.maxDate),n=[];!N.isAfter(e,r);){var a=P.getTime(e);n.push(ue.default.createElement("option",{key:a,value:a},Ee(e,t.props.dateFormat,t.props.locale))),e=i.addMonths(e,1)}return n},t.onSelectChange=function(e){t.onChange(parseInt(e.target.value))},t.renderSelectMode=function(){return ue.default.createElement("select",{value:P.getTime(Oe(t.props.date)),className:"react-datepicker__month-year-select",onChange:t.onSelectChange},t.renderSelectOptions())},t.renderReadView=function(e){var r=Ee(t.props.date,t.props.dateFormat,t.props.locale);return ue.default.createElement("div",{key:"read",style:{visibility:e?"visible":"hidden"},className:"react-datepicker__month-year-read-view",onClick:t.toggleDropdown},ue.default.createElement("span",{className:"react-datepicker__month-year-read-view--down-arrow"}),ue.default.createElement("span",{className:"react-datepicker__month-year-read-view--selected-month-year"},r))},t.renderDropdown=function(){return ue.default.createElement(Lt,ve({key:"dropdown"},t.props,{onChange:t.onChange,onCancel:t.toggleDropdown}))},t.renderScrollMode=function(){var e=t.state.dropdownVisible,r=[t.renderReadView(!e)];return e&&r.unshift(t.renderDropdown()),r},t.onChange=function(e){t.toggleDropdown();var r=Me(e);Ae(t.props.date,r)&&He(t.props.date,r)||t.props.onChange(r)},t.toggleDropdown=function(){return t.setState({dropdownVisible:!t.state.dropdownVisible})},t}return me(t,e),t.prototype.render=function(){var e;switch(this.props.dropdownMode){case"scroll":e=this.renderScrollMode();break;case"select":e=this.renderSelectMode()}return ue.default.createElement("div",{className:"react-datepicker__month-year-dropdown-container react-datepicker__month-year-dropdown-container--".concat(this.props.dropdownMode)},e)},t}(r.Component),At=function(e){function t(){var r=null!==e&&e.apply(this,arguments)||this;return r.state={height:null},r.scrollToTheSelectedTime=function(){requestAnimationFrame((function(){var e,n,a;r.list&&(r.list.scrollTop=null!==(a=r.centerLi&&t.calcCenterPosition(r.props.monthRef?r.props.monthRef.clientHeight-(null!==(n=null===(e=r.header)||void 0===e?void 0:e.clientHeight)&&void 0!==n?n:0):r.list.clientHeight,r.centerLi))&&void 0!==a?a:0)}))},r.handleClick=function(e){var t,n;(r.props.minTime||r.props.maxTime)&&st(e,r.props)||(r.props.excludeTimes||r.props.includeTimes||r.props.filterTime)&&ot(e,r.props)||null===(n=(t=r.props).onChange)||void 0===n||n.call(t,e)},r.isSelectedTime=function(e){return r.props.selected&&(t=r.props.selected,n=e,Dt(t).getTime()===Dt(n).getTime());var t,n},r.isDisabledTime=function(e){return(r.props.minTime||r.props.maxTime)&&st(e,r.props)||(r.props.excludeTimes||r.props.includeTimes||r.props.filterTime)&&ot(e,r.props)},r.liClasses=function(e){var n,a=["react-datepicker__time-list-item",r.props.timeClassName?r.props.timeClassName(e):void 0];return r.isSelectedTime(e)&&a.push("react-datepicker__time-list-item--selected"),r.isDisabledTime(e)&&a.push("react-datepicker__time-list-item--disabled"),r.props.injectTimes&&(3600*b.getHours(e)+60*C.getMinutes(e)+Y.getSeconds(e))%(60*(null!==(n=r.props.intervals)&&void 0!==n?n:t.defaultProps.intervals))!=0&&a.push("react-datepicker__time-list-item--injected"),a.join(" ")},r.handleOnKeyDown=function(e,t){var n,a;e.key===De.Space&&(e.preventDefault(),e.key=De.Enter),(e.key===De.ArrowUp||e.key===De.ArrowLeft)&&e.target instanceof HTMLElement&&e.target.previousSibling&&(e.preventDefault(),e.target.previousSibling instanceof HTMLElement&&e.target.previousSibling.focus()),(e.key===De.ArrowDown||e.key===De.ArrowRight)&&e.target instanceof HTMLElement&&e.target.nextSibling&&(e.preventDefault(),e.target.nextSibling instanceof HTMLElement&&e.target.nextSibling.focus()),e.key===De.Enter&&r.handleClick(t),null===(a=(n=r.props).handleOnKeyDown)||void 0===a||a.call(n,e)},r.renderTimes=function(){for(var e,n=[],a="string"==typeof r.props.format?r.props.format:"p",o=null!==(e=r.props.intervals)&&void 0!==e?e:t.defaultProps.intervals,i=r.props.selected||r.props.openToDate||Me(),l=xe(i),c=r.props.injectTimes&&r.props.injectTimes.sort((function(e,t){return e.getTime()-t.getTime()})),p=60*function(e){var t=new Date(e.getFullYear(),e.getMonth(),e.getDate()),r=new Date(e.getFullYear(),e.getMonth(),e.getDate(),24);return Math.round((+r-+t)/36e5)}(i),d=p/o,u=0;u<d;u++){var f=s.addMinutes(l,u*o);if(n.push(f),c){var h=mt(l,f,u,o,c);n=n.concat(h)}}var m=n.reduce((function(e,t){return t.getTime()<=i.getTime()?t:e}),n[0]);return n.map((function(e){return ue.default.createElement("li",{key:e.valueOf(),onClick:r.handleClick.bind(r,e),className:r.liClasses(e),ref:function(t){e===m&&(r.centerLi=t)},onKeyDown:function(t){r.handleOnKeyDown(t,e)},tabIndex:e===m?0:-1,role:"option","aria-selected":r.isSelectedTime(e)?"true":void 0,"aria-disabled":r.isDisabledTime(e)?"true":void 0},Ee(e,a,r.props.locale))}))},r.renderTimeCaption=function(){return!1===r.props.showTimeCaption?ue.default.createElement(ue.default.Fragment,null):ue.default.createElement("div",{className:"react-datepicker__header react-datepicker__header--time ".concat(r.props.showTimeSelectOnly?"react-datepicker__header--time--only":""),ref:function(e){r.header=e}},ue.default.createElement("div",{className:"react-datepicker-time__header"},r.props.timeCaption))},r}return me(t,e),Object.defineProperty(t,"defaultProps",{get:function(){return{intervals:30,todayButton:null,timeCaption:"Time",showTimeCaption:!0}},enumerable:!1,configurable:!0}),t.prototype.componentDidMount=function(){this.scrollToTheSelectedTime(),this.props.monthRef&&this.header&&this.setState({height:this.props.monthRef.clientHeight-this.header.clientHeight})},t.prototype.render=function(){var e,r=this,n=this.state.height;return ue.default.createElement("div",{className:"react-datepicker__time-container ".concat((null!==(e=this.props.todayButton)&&void 0!==e?e:t.defaultProps.todayButton)?"react-datepicker__time-container--with-today-button":"")},this.renderTimeCaption(),ue.default.createElement("div",{className:"react-datepicker__time"},ue.default.createElement("div",{className:"react-datepicker__time-box"},ue.default.createElement("ul",{className:"react-datepicker__time-list",ref:function(e){r.list=e},style:n?{height:n}:{},role:"listbox","aria-label":this.props.timeCaption},this.renderTimes()))))},t.calcCenterPosition=function(e,t){return t.offsetTop-(e/2-t.clientHeight/2)},t}(r.Component),Ht=function(e){function n(n){var a=e.call(this,n)||this;return a.YEAR_REFS=ge([],Array(a.props.yearItemNumber),!0).map((function(){return r.createRef()})),a.isDisabled=function(e){return $e(e,{minDate:a.props.minDate,maxDate:a.props.maxDate,excludeDates:a.props.excludeDates,includeDates:a.props.includeDates,filterDate:a.props.filterDate})},a.isExcluded=function(e){return ze(e,{excludeDates:a.props.excludeDates})},a.selectingDate=function(){var e;return null!==(e=a.props.selectingDate)&&void 0!==e?e:a.props.preSelection},a.updateFocusOnPaginate=function(e){window.requestAnimationFrame((function(){var t,r;null===(r=null===(t=a.YEAR_REFS[e])||void 0===t?void 0:t.current)||void 0===r||r.focus()}))},a.handleYearClick=function(e,t){a.props.onDayClick&&a.props.onDayClick(e,t)},a.handleYearNavigation=function(e,t){var r,n,o,s,i=a.props,l=i.date,c=i.yearItemNumber;if(void 0!==l&&void 0!==c){var p=gt(l,c).startPeriod;a.isDisabled(t)||a.isExcluded(t)||(null===(n=(r=a.props).setPreSelection)||void 0===n||n.call(r,t),e-p<0?a.updateFocusOnPaginate(c-(p-e)):e-p>=c?a.updateFocusOnPaginate(Math.abs(c-(e-p))):null===(s=null===(o=a.YEAR_REFS[e-p])||void 0===o?void 0:o.current)||void 0===s||s.focus())}},a.isSameDay=function(e,t){return Qe(e,t)},a.isCurrentYear=function(e){return e===x.getYear(Me())},a.isRangeStart=function(e){return a.props.startDate&&a.props.endDate&&Ae(G.setYear(Me(),e),a.props.startDate)},a.isRangeEnd=function(e){return a.props.startDate&&a.props.endDate&&Ae(G.setYear(Me(),e),a.props.endDate)},a.isInRange=function(e){return et(e,a.props.startDate,a.props.endDate)},a.isInSelectingRange=function(e){var t=a.props,r=t.selectsStart,n=t.selectsEnd,o=t.selectsRange,s=t.startDate,i=t.endDate;return!(!(r||n||o)||!a.selectingDate())&&(r&&i?et(e,a.selectingDate(),i):(n&&s||!(!o||!s||i))&&et(e,s,a.selectingDate()))},a.isSelectingRangeStart=function(e){var t;if(!a.isInSelectingRange(e))return!1;var r=a.props,n=r.startDate,o=r.selectsStart,s=G.setYear(Me(),e);return Ae(s,o?null!==(t=a.selectingDate())&&void 0!==t?t:null:null!=n?n:null)},a.isSelectingRangeEnd=function(e){var t;if(!a.isInSelectingRange(e))return!1;var r=a.props,n=r.endDate,o=r.selectsEnd,s=r.selectsRange,i=G.setYear(Me(),e);return Ae(i,o||s?null!==(t=a.selectingDate())&&void 0!==t?t:null:null!=n?n:null)},a.isKeyboardSelected=function(e){if(void 0!==a.props.date&&null!=a.props.selected&&null!=a.props.preSelection){var t=a.props,r=t.minDate,n=t.maxDate,o=t.excludeDates,s=t.includeDates,i=t.filterDate,l=Te(G.setYear(a.props.date,e)),c=(r||n||o||s||i)&&tt(e,a.props);return!a.props.disabledKeyboardNavigation&&!a.props.inline&&!Qe(l,Te(a.props.selected))&&Qe(l,Te(a.props.preSelection))&&!c}},a.onYearClick=function(e,t){var r=a.props.date;void 0!==r&&a.handleYearClick(Te(G.setYear(r,t)),e)},a.onYearKeyDown=function(e,t){var r,n,o=e.key,s=a.props,i=s.date,l=s.yearItemNumber,c=s.handleOnKeyDown;if(o!==De.Tab&&e.preventDefault(),!a.props.disabledKeyboardNavigation)switch(o){case De.Enter:if(null==a.props.selected)break;a.onYearClick(e,t),null===(n=(r=a.props).setPreSelection)||void 0===n||n.call(r,a.props.selected);break;case De.ArrowRight:if(null==a.props.preSelection)break;a.handleYearNavigation(t+1,d.addYears(a.props.preSelection,1));break;case De.ArrowLeft:if(null==a.props.preSelection)break;a.handleYearNavigation(t-1,ie.subYears(a.props.preSelection,1));break;case De.ArrowUp:if(void 0===i||void 0===l||null==a.props.preSelection)break;var p=gt(i,l).startPeriod;if((h=t-(f=3))<p){var u=l%f;t>=p&&t<p+u?f=u:f+=u,h=t-f}a.handleYearNavigation(h,ie.subYears(a.props.preSelection,f));break;case De.ArrowDown:if(void 0===i||void 0===l||null==a.props.preSelection)break;var f,h,m=gt(i,l).endPeriod;if((h=t+(f=3))>m){u=l%f;t<=m&&t>m-u?f=u:f+=u,h=t+f}a.handleYearNavigation(h,d.addYears(a.props.preSelection,f))}c&&c(e)},a.getYearClassNames=function(e){var r=a.props,n=r.date,o=r.minDate,s=r.maxDate,i=r.selected,l=r.excludeDates,c=r.includeDates,p=r.filterDate,d=r.yearClassName;return t.clsx("react-datepicker__year-text","react-datepicker__year-".concat(e),n?null==d?void 0:d(G.setYear(n,e)):void 0,{"react-datepicker__year-text--selected":i?e===x.getYear(i):void 0,"react-datepicker__year-text--disabled":(o||s||l||c||p)&&tt(e,a.props),"react-datepicker__year-text--keyboard-selected":a.isKeyboardSelected(e),"react-datepicker__year-text--range-start":a.isRangeStart(e),"react-datepicker__year-text--range-end":a.isRangeEnd(e),"react-datepicker__year-text--in-range":a.isInRange(e),"react-datepicker__year-text--in-selecting-range":a.isInSelectingRange(e),"react-datepicker__year-text--selecting-range-start":a.isSelectingRangeStart(e),"react-datepicker__year-text--selecting-range-end":a.isSelectingRangeEnd(e),"react-datepicker__year-text--today":a.isCurrentYear(e)})},a.getYearTabIndex=function(e){if(a.props.disabledKeyboardNavigation||null==a.props.preSelection)return"-1";var t=x.getYear(a.props.preSelection),r=tt(e,a.props);return e!==t||r?"-1":"0"},a.getYearContainerClassNames=function(){var e=a.props,r=e.selectingDate,n=e.selectsStart,o=e.selectsEnd,s=e.selectsRange;return t.clsx("react-datepicker__year",{"react-datepicker__year--selecting-range":r&&(n||o||s)})},a.getYearContent=function(e){return a.props.renderYearContent?a.props.renderYearContent(e):e},a}return me(n,e),n.prototype.render=function(){var e=this,t=[],r=this.props,n=r.date,a=r.yearItemNumber,o=r.onYearMouseEnter,s=r.onYearMouseLeave;if(void 0===n)return null;for(var i=gt(n,a),l=i.startPeriod,c=i.endPeriod,p=function(r){t.push(ue.default.createElement("div",{ref:d.YEAR_REFS[r-l],onClick:function(t){e.onYearClick(t,r)},onKeyDown:function(t){wt(t)&&(t.preventDefault(),t.key=De.Enter),e.onYearKeyDown(t,r)},tabIndex:Number(d.getYearTabIndex(r)),className:d.getYearClassNames(r),onMouseEnter:d.props.usePointerEvent?void 0:function(e){return o(e,r)},onPointerEnter:d.props.usePointerEvent?function(e){return o(e,r)}:void 0,onMouseLeave:d.props.usePointerEvent?void 0:function(e){return s(e,r)},onPointerLeave:d.props.usePointerEvent?function(e){return s(e,r)}:void 0,key:r,"aria-current":d.isCurrentYear(r)?"date":void 0},d.getYearContent(r)))},d=this,u=l;u<=c;u++)p(u);return ue.default.createElement("div",{className:this.getYearContainerClassNames()},ue.default.createElement("div",{className:"react-datepicker__year-wrapper",onMouseLeave:this.props.usePointerEvent?void 0:this.props.clearSelectingDate,onPointerLeave:this.props.usePointerEvent?this.props.clearSelectingDate:void 0},t))},n}(r.Component);function Wt(e,t,r,n){for(var a=[],o=0;o<2*t+1;o++){var s=e+t-o,i=!0;r&&(i=x.getYear(r)<=s),n&&i&&(i=x.getYear(n)>=s),i&&a.push(s)}return a}var Qt=function(e){function n(t){var n=e.call(this,t)||this;n.renderOptions=function(){var e=n.props.year,t=n.state.yearsList.map((function(t){return ue.default.createElement("div",{className:e===t?"react-datepicker__year-option react-datepicker__year-option--selected_year":"react-datepicker__year-option",key:t,onClick:n.onChange.bind(n,t),"aria-selected":e===t?"true":void 0},e===t?ue.default.createElement("span",{className:"react-datepicker__year-option--selected"},"✓"):"",t)})),r=n.props.minDate?x.getYear(n.props.minDate):null,a=n.props.maxDate?x.getYear(n.props.maxDate):null;return a&&n.state.yearsList.find((function(e){return e===a}))||t.unshift(ue.default.createElement("div",{className:"react-datepicker__year-option",key:"upcoming",onClick:n.incrementYears},ue.default.createElement("a",{className:"react-datepicker__navigation react-datepicker__navigation--years react-datepicker__navigation--years-upcoming"}))),r&&n.state.yearsList.find((function(e){return e===r}))||t.push(ue.default.createElement("div",{className:"react-datepicker__year-option",key:"previous",onClick:n.decrementYears},ue.default.createElement("a",{className:"react-datepicker__navigation react-datepicker__navigation--years react-datepicker__navigation--years-previous"}))),t},n.onChange=function(e){n.props.onChange(e)},n.handleClickOutside=function(){n.props.onCancel()},n.shiftYears=function(e){var t=n.state.yearsList.map((function(t){return t+e}));n.setState({yearsList:t})},n.incrementYears=function(){return n.shiftYears(1)},n.decrementYears=function(){return n.shiftYears(-1)};var a=t.yearDropdownItemNumber,o=t.scrollableYearDropdown,s=a||(o?10:5);return n.state={yearsList:Wt(n.props.year,s,n.props.minDate,n.props.maxDate)},n.dropdownRef=r.createRef(),n}return me(n,e),n.prototype.componentDidMount=function(){var e=this.dropdownRef.current;if(e){var t=e.children?Array.from(e.children):null,r=t?t.find((function(e){return e.ariaSelected})):null;e.scrollTop=r&&r instanceof HTMLElement?r.offsetTop+(r.clientHeight-e.clientHeight)/2:(e.scrollHeight-e.clientHeight)/2}},n.prototype.render=function(){var e=t.clsx({"react-datepicker__year-dropdown":!0,"react-datepicker__year-dropdown--scrollable":this.props.scrollableYearDropdown});return ue.default.createElement(ke,{className:e,containerRef:this.dropdownRef,onClickOutside:this.handleClickOutside},this.renderOptions())},n}(r.Component),qt=function(e){function t(){var t=null!==e&&e.apply(this,arguments)||this;return t.state={dropdownVisible:!1},t.renderSelectOptions=function(){for(var e=t.props.minDate?x.getYear(t.props.minDate):1900,r=t.props.maxDate?x.getYear(t.props.maxDate):2100,n=[],a=e;a<=r;a++)n.push(ue.default.createElement("option",{key:a,value:a},a));return n},t.onSelectChange=function(e){t.onChange(parseInt(e.target.value))},t.renderSelectMode=function(){return ue.default.createElement("select",{value:t.props.year,className:"react-datepicker__year-select",onChange:t.onSelectChange},t.renderSelectOptions())},t.renderReadView=function(e){return ue.default.createElement("div",{key:"read",style:{visibility:e?"visible":"hidden"},className:"react-datepicker__year-read-view",onClick:function(e){return t.toggleDropdown(e)}},ue.default.createElement("span",{className:"react-datepicker__year-read-view--down-arrow"}),ue.default.createElement("span",{className:"react-datepicker__year-read-view--selected-year"},t.props.year))},t.renderDropdown=function(){return ue.default.createElement(Qt,ve({key:"dropdown"},t.props,{onChange:t.onChange,onCancel:t.toggleDropdown}))},t.renderScrollMode=function(){var e=t.state.dropdownVisible,r=[t.renderReadView(!e)];return e&&r.unshift(t.renderDropdown()),r},t.onChange=function(e){t.toggleDropdown(),e!==t.props.year&&t.props.onChange(e)},t.toggleDropdown=function(e){t.setState({dropdownVisible:!t.state.dropdownVisible},(function(){t.props.adjustDateOnChange&&t.handleYearChange(t.props.date,e)}))},t.handleYearChange=function(e,r){var n;null===(n=t.onSelect)||void 0===n||n.call(t,e,r),t.setOpen()},t.onSelect=function(e,r){var n,a;null===(a=(n=t.props).onSelect)||void 0===a||a.call(n,e,r)},t.setOpen=function(){var e,r;null===(r=(e=t.props).setOpen)||void 0===r||r.call(e,!0)},t}return me(t,e),t.prototype.render=function(){var e;switch(this.props.dropdownMode){case"scroll":e=this.renderScrollMode();break;case"select":e=this.renderSelectMode()}return ue.default.createElement("div",{className:"react-datepicker__year-dropdown-container react-datepicker__year-dropdown-container--".concat(this.props.dropdownMode)},e)},t}(r.Component),Kt=["react-datepicker__year-select","react-datepicker__month-select","react-datepicker__month-year-select"],Bt=function(e){function o(s){var c=e.call(this,s)||this;return c.monthContainer=void 0,c.handleClickOutside=function(e){c.props.onClickOutside(e)},c.setClickOutsideRef=function(){return c.containerRef.current},c.handleDropdownFocus=function(e){var t,r,n,a;n=e.target,a=(n.className||"").split(/\s+/),Kt.some((function(e){return a.indexOf(e)>=0}))&&(null===(r=(t=c.props).onDropdownFocus)||void 0===r||r.call(t,e))},c.getDateInView=function(){var e=c.props,t=e.preSelection,r=e.selected,n=e.openToDate,a=dt(c.props),o=ut(c.props),s=Me(),i=n||r||t;return i||(a&&O.isBefore(s,a)?a:o&&N.isAfter(s,o)?o:s)},c.increaseMonth=function(){c.setState((function(e){var t=e.date;return{date:i.addMonths(t,1)}}),(function(){return c.handleMonthChange(c.state.date)}))},c.decreaseMonth=function(){c.setState((function(e){var t=e.date;return{date:ae.subMonths(t,1)}}),(function(){return c.handleMonthChange(c.state.date)}))},c.handleDayClick=function(e,t,r){c.props.onSelect(e,t,r),c.props.setPreSelection&&c.props.setPreSelection(e)},c.handleDayMouseEnter=function(e){c.setState({selectingDate:e}),c.props.onDayMouseEnter&&c.props.onDayMouseEnter(e)},c.handleMonthMouseLeave=function(){c.setState({selectingDate:void 0}),c.props.onMonthMouseLeave&&c.props.onMonthMouseLeave()},c.handleYearMouseEnter=function(e,t){c.setState({selectingDate:G.setYear(Me(),t)}),c.props.onYearMouseEnter&&c.props.onYearMouseEnter(e,t)},c.handleYearMouseLeave=function(e,t){c.props.onYearMouseLeave&&c.props.onYearMouseLeave(e,t)},c.handleYearChange=function(e){var t,r,n,a;null===(r=(t=c.props).onYearChange)||void 0===r||r.call(t,e),c.setState({isRenderAriaLiveMessage:!0}),c.props.adjustDateOnChange&&(c.props.onSelect(e),null===(a=(n=c.props).setOpen)||void 0===a||a.call(n,!0)),c.props.setPreSelection&&c.props.setPreSelection(e)},c.getEnabledPreSelectionDateForMonth=function(e){if(!$e(e,c.props))return e;for(var t=Oe(e),r=Fe(e),o=n.differenceInDays(r,t),s=null,i=0;i<=o;i++){var l=a.addDays(t,i);if(!$e(l,c.props)){s=l;break}}return s},c.handleMonthChange=function(e){var t,r,n,a=null!==(t=c.getEnabledPreSelectionDateForMonth(e))&&void 0!==t?t:e;c.handleCustomMonthChange(a),c.props.adjustDateOnChange&&(c.props.onSelect(a),null===(n=(r=c.props).setOpen)||void 0===n||n.call(r,!0)),c.props.setPreSelection&&c.props.setPreSelection(a)},c.handleCustomMonthChange=function(e){var t,r;null===(r=(t=c.props).onMonthChange)||void 0===r||r.call(t,e),c.setState({isRenderAriaLiveMessage:!0})},c.handleMonthYearChange=function(e){c.handleYearChange(e),c.handleMonthChange(e)},c.changeYear=function(e){c.setState((function(t){var r=t.date;return{date:G.setYear(r,Number(e))}}),(function(){return c.handleYearChange(c.state.date)}))},c.changeMonth=function(e){c.setState((function(t){var r=t.date;return{date:$.setMonth(r,Number(e))}}),(function(){return c.handleMonthChange(c.state.date)}))},c.changeMonthYear=function(e){c.setState((function(t){var r=t.date;return{date:G.setYear($.setMonth(r,_.getMonth(e)),x.getYear(e))}}),(function(){return c.handleMonthYearChange(c.state.date)}))},c.header=function(e){void 0===e&&(e=c.state.date);var r=Ne(e,c.props.locale,c.props.calendarStartDay),n=[];return c.props.showWeekNumbers&&n.push(ue.default.createElement("div",{key:"W",className:"react-datepicker__day-name"},c.props.weekLabel||"#")),n.concat([0,1,2,3,4,5,6].map((function(e){var n=a.addDays(r,e),o=c.formatWeekday(n,c.props.locale),s=c.props.weekDayClassName?c.props.weekDayClassName(n):void 0;return ue.default.createElement("div",{key:e,"aria-label":Ee(n,"EEEE",c.props.locale),className:t.clsx("react-datepicker__day-name",s)},o)})))},c.formatWeekday=function(e,t){return c.props.formatWeekDay?function(e,t,r){return t(Ee(e,"EEEE",r))}(e,c.props.formatWeekDay,t):c.props.useWeekdaysShort?function(e,t){return Ee(e,"EEE",t)}(e,t):function(e,t){return Ee(e,"EEEEEE",t)}(e,t)},c.decreaseYear=function(){c.setState((function(e){var t,r=e.date;return{date:ie.subYears(r,c.props.showYearPicker?null!==(t=c.props.yearItemNumber)&&void 0!==t?t:o.defaultProps.yearItemNumber:1)}}),(function(){return c.handleYearChange(c.state.date)}))},c.clearSelectingDate=function(){c.setState({selectingDate:void 0})},c.renderPreviousButton=function(){var e;if(!c.props.renderCustomHeader){var t;switch(!0){case c.props.showMonthYearPicker:t=ct(c.state.date,c.props);break;case c.props.showYearPicker:t=function(e,t){var r=void 0===t?{}:t,n=r.minDate,a=r.yearItemNumber,o=void 0===a?Se:a,s=gt(Te(ie.subYears(e,o)),o).endPeriod,i=n&&x.getYear(n);return i&&i>s||!1}(c.state.date,c.props);break;case c.props.showQuarterYearPicker:t=function(e,t){var r=void 0===t?{}:t,n=r.minDate,a=r.includeDates,o=re.startOfYear(e),s=oe.subQuarters(o,1);return n&&h.differenceInCalendarQuarters(n,s)>0||a&&a.every((function(e){return h.differenceInCalendarQuarters(e,s)>0}))||!1}(c.state.date,c.props);break;default:t=it(c.state.date,c.props)}if(((null!==(e=c.props.forceShowMonthNavigation)&&void 0!==e?e:o.defaultProps.forceShowMonthNavigation)||c.props.showDisabledMonthNavigation||!t)&&!c.props.showTimeSelectOnly){var r=["react-datepicker__navigation","react-datepicker__navigation--previous"],n=c.decreaseMonth;(c.props.showMonthYearPicker||c.props.showQuarterYearPicker||c.props.showYearPicker)&&(n=c.decreaseYear),t&&c.props.showDisabledMonthNavigation&&(r.push("react-datepicker__navigation--previous--disabled"),n=void 0);var a=c.props.showMonthYearPicker||c.props.showQuarterYearPicker||c.props.showYearPicker,s=c.props,i=s.previousMonthButtonLabel,l=void 0===i?o.defaultProps.previousMonthButtonLabel:i,p=s.previousYearButtonLabel,d=void 0===p?o.defaultProps.previousYearButtonLabel:p,u=c.props,f=u.previousMonthAriaLabel,m=void 0===f?"string"==typeof l?l:"Previous Month":f,v=u.previousYearAriaLabel,g=void 0===v?"string"==typeof d?d:"Previous Year":v;return ue.default.createElement("button",{type:"button",className:r.join(" "),onClick:n,onKeyDown:c.props.handleOnKeyDown,"aria-label":a?g:m},ue.default.createElement("span",{className:["react-datepicker__navigation-icon","react-datepicker__navigation-icon--previous"].join(" ")},a?d:l))}}},c.increaseYear=function(){c.setState((function(e){var t,r=e.date;return{date:d.addYears(r,c.props.showYearPicker?null!==(t=c.props.yearItemNumber)&&void 0!==t?t:o.defaultProps.yearItemNumber:1)}}),(function(){return c.handleYearChange(c.state.date)}))},c.renderNextButton=function(){var e;if(!c.props.renderCustomHeader){var t;switch(!0){case c.props.showMonthYearPicker:t=pt(c.state.date,c.props);break;case c.props.showYearPicker:t=function(e,t){var r=void 0===t?{}:t,n=r.maxDate,a=r.yearItemNumber,o=void 0===a?Se:a,s=gt(d.addYears(e,o),o).startPeriod,i=n&&x.getYear(n);return i&&i<s||!1}(c.state.date,c.props);break;case c.props.showQuarterYearPicker:t=function(e,t){var r=void 0===t?{}:t,n=r.maxDate,a=r.includeDates,o=y.endOfYear(e),s=l.addQuarters(o,1);return n&&h.differenceInCalendarQuarters(s,n)>0||a&&a.every((function(e){return h.differenceInCalendarQuarters(s,e)>0}))||!1}(c.state.date,c.props);break;default:t=lt(c.state.date,c.props)}if(((null!==(e=c.props.forceShowMonthNavigation)&&void 0!==e?e:o.defaultProps.forceShowMonthNavigation)||c.props.showDisabledMonthNavigation||!t)&&!c.props.showTimeSelectOnly){var r=["react-datepicker__navigation","react-datepicker__navigation--next"];c.props.showTimeSelect&&r.push("react-datepicker__navigation--next--with-time"),c.props.todayButton&&r.push("react-datepicker__navigation--next--with-today-button");var n=c.increaseMonth;(c.props.showMonthYearPicker||c.props.showQuarterYearPicker||c.props.showYearPicker)&&(n=c.increaseYear),t&&c.props.showDisabledMonthNavigation&&(r.push("react-datepicker__navigation--next--disabled"),n=void 0);var a=c.props.showMonthYearPicker||c.props.showQuarterYearPicker||c.props.showYearPicker,s=c.props,i=s.nextMonthButtonLabel,p=void 0===i?o.defaultProps.nextMonthButtonLabel:i,u=s.nextYearButtonLabel,f=void 0===u?o.defaultProps.nextYearButtonLabel:u,m=c.props,v=m.nextMonthAriaLabel,g=void 0===v?"string"==typeof p?p:"Next Month":v,D=m.nextYearAriaLabel,k=void 0===D?"string"==typeof f?f:"Next Year":D;return ue.default.createElement("button",{type:"button",className:r.join(" "),onClick:n,onKeyDown:c.props.handleOnKeyDown,"aria-label":a?k:g},ue.default.createElement("span",{className:["react-datepicker__navigation-icon","react-datepicker__navigation-icon--next"].join(" ")},a?f:p))}}},c.renderCurrentMonth=function(e){void 0===e&&(e=c.state.date);var t=["react-datepicker__current-month"];return c.props.showYearDropdown&&t.push("react-datepicker__current-month--hasYearDropdown"),c.props.showMonthDropdown&&t.push("react-datepicker__current-month--hasMonthDropdown"),c.props.showMonthYearDropdown&&t.push("react-datepicker__current-month--hasMonthYearDropdown"),ue.default.createElement("h2",{className:t.join(" ")},Ee(e,c.props.dateFormat,c.props.locale))},c.renderYearDropdown=function(e){if(void 0===e&&(e=!1),c.props.showYearDropdown&&!e)return ue.default.createElement(qt,ve({},o.defaultProps,c.props,{date:c.state.date,onChange:c.changeYear,year:x.getYear(c.state.date)}))},c.renderMonthDropdown=function(e){if(void 0===e&&(e=!1),c.props.showMonthDropdown&&!e)return ue.default.createElement(It,ve({},o.defaultProps,c.props,{month:_.getMonth(c.state.date),onChange:c.changeMonth}))},c.renderMonthYearDropdown=function(e){if(void 0===e&&(e=!1),c.props.showMonthYearDropdown&&!e)return ue.default.createElement(Ft,ve({},o.defaultProps,c.props,{date:c.state.date,onChange:c.changeMonthYear}))},c.handleTodayButtonClick=function(e){c.props.onSelect(Re(),e),c.props.setPreSelection&&c.props.setPreSelection(Re())},c.renderTodayButton=function(){if(c.props.todayButton&&!c.props.showTimeSelectOnly)return ue.default.createElement("div",{className:"react-datepicker__today-button",onClick:c.handleTodayButtonClick},c.props.todayButton)},c.renderDefaultHeader=function(e){var t=e.monthDate,r=e.i;return ue.default.createElement("div",{className:"react-datepicker__header ".concat(c.props.showTimeSelect?"react-datepicker__header--has-time-select":"")},c.renderCurrentMonth(t),ue.default.createElement("div",{className:"react-datepicker__header__dropdown react-datepicker__header__dropdown--".concat(c.props.dropdownMode),onFocus:c.handleDropdownFocus},c.renderMonthDropdown(0!==r),c.renderMonthYearDropdown(0!==r),c.renderYearDropdown(0!==r)),ue.default.createElement("div",{className:"react-datepicker__day-names"},c.header(t)))},c.renderCustomHeader=function(e){var t,r,n=e.monthDate,a=e.i;if(c.props.showTimeSelect&&!c.state.monthContainer||c.props.showTimeSelectOnly)return null;var o=it(c.state.date,c.props),s=lt(c.state.date,c.props),i=ct(c.state.date,c.props),l=pt(c.state.date,c.props),p=!c.props.showMonthYearPicker&&!c.props.showQuarterYearPicker&&!c.props.showYearPicker;return ue.default.createElement("div",{className:"react-datepicker__header react-datepicker__header--custom",onFocus:c.props.onDropdownFocus},null===(r=(t=c.props).renderCustomHeader)||void 0===r?void 0:r.call(t,ve(ve({},c.state),{customHeaderCount:a,monthDate:n,changeMonth:c.changeMonth,changeYear:c.changeYear,decreaseMonth:c.decreaseMonth,increaseMonth:c.increaseMonth,decreaseYear:c.decreaseYear,increaseYear:c.increaseYear,prevMonthButtonDisabled:o,nextMonthButtonDisabled:s,prevYearButtonDisabled:i,nextYearButtonDisabled:l})),p&&ue.default.createElement("div",{className:"react-datepicker__day-names"},c.header(n)))},c.renderYearHeader=function(e){var t=e.monthDate,r=c.props,n=r.showYearPicker,a=r.yearItemNumber,s=gt(t,void 0===a?o.defaultProps.yearItemNumber:a),i=s.startPeriod,l=s.endPeriod;return ue.default.createElement("div",{className:"react-datepicker__header react-datepicker-year-header"},n?"".concat(i," - ").concat(l):x.getYear(t))},c.renderHeader=function(e){var t=e.monthDate,r=e.i,n={monthDate:t,i:void 0===r?0:r};switch(!0){case void 0!==c.props.renderCustomHeader:return c.renderCustomHeader(n);case c.props.showMonthYearPicker||c.props.showQuarterYearPicker||c.props.showYearPicker:return c.renderYearHeader(n);default:return c.renderDefaultHeader(n)}},c.renderMonths=function(){var e,t;if(!c.props.showTimeSelectOnly&&!c.props.showYearPicker){for(var r=[],n=null!==(e=c.props.monthsShown)&&void 0!==e?e:o.defaultProps.monthsShown,a=c.props.showPreviousMonths?n-1:0,s=c.props.showMonthYearPicker||c.props.showQuarterYearPicker?d.addYears(c.state.date,a):ae.subMonths(c.state.date,a),l=null!==(t=c.props.monthSelectedIn)&&void 0!==t?t:a,p=0;p<n;++p){var u=p-l+a,f=c.props.showMonthYearPicker||c.props.showQuarterYearPicker?d.addYears(s,u):i.addMonths(s,u),h="month-".concat(p),m=p<n-1,v=p>0;r.push(ue.default.createElement("div",{key:h,ref:function(e){c.monthContainer=null!=e?e:void 0},className:"react-datepicker__month-container"},c.renderHeader({monthDate:f,i:p}),ue.default.createElement(Ot,ve({},o.defaultProps,c.props,{ariaLabelPrefix:c.props.monthAriaLabelPrefix,day:f,onDayClick:c.handleDayClick,handleOnKeyDown:c.props.handleOnDayKeyDown,handleOnMonthKeyDown:c.props.handleOnKeyDown,onDayMouseEnter:c.handleDayMouseEnter,onMouseLeave:c.handleMonthMouseLeave,orderInDisplay:p,selectingDate:c.state.selectingDate,monthShowsDuplicateDaysEnd:m,monthShowsDuplicateDaysStart:v}))))}return r}},c.renderYears=function(){if(!c.props.showTimeSelectOnly)return c.props.showYearPicker?ue.default.createElement("div",{className:"react-datepicker__year--container"},c.renderHeader({monthDate:c.state.date}),ue.default.createElement(Ht,ve({},o.defaultProps,c.props,{selectingDate:c.state.selectingDate,date:c.state.date,onDayClick:c.handleDayClick,clearSelectingDate:c.clearSelectingDate,onYearMouseEnter:c.handleYearMouseEnter,onYearMouseLeave:c.handleYearMouseLeave}))):void 0},c.renderTimeSection=function(){if(c.props.showTimeSelect&&(c.state.monthContainer||c.props.showTimeSelectOnly))return ue.default.createElement(At,ve({},o.defaultProps,c.props,{onChange:c.props.onTimeChange,format:c.props.timeFormat,intervals:c.props.timeIntervals,monthRef:c.state.monthContainer}))},c.renderInputTimeSection=function(){var e=c.props.selected?new Date(c.props.selected):void 0,t=e&&_e(e)&&Boolean(c.props.selected)?"".concat(vt(e.getHours()),":").concat(vt(e.getMinutes())):"";if(c.props.showTimeInput)return ue.default.createElement(bt,ve({},o.defaultProps,c.props,{date:e,timeString:t,onChange:c.props.onTimeChange}))},c.renderAriaLiveRegion=function(){var e,t,r=gt(c.state.date,null!==(e=c.props.yearItemNumber)&&void 0!==e?e:o.defaultProps.yearItemNumber),n=r.startPeriod,a=r.endPeriod;return t=c.props.showYearPicker?"".concat(n," - ").concat(a):c.props.showMonthYearPicker||c.props.showQuarterYearPicker?x.getYear(c.state.date):"".concat(je(_.getMonth(c.state.date),c.props.locale)," ").concat(x.getYear(c.state.date)),ue.default.createElement("span",{role:"alert","aria-live":"polite",className:"react-datepicker__aria-live"},c.state.isRenderAriaLiveMessage&&t)},c.renderChildren=function(){if(c.props.children)return ue.default.createElement("div",{className:"react-datepicker__children-container"},c.props.children)},c.containerRef=r.createRef(),c.state={date:c.getDateInView(),selectingDate:void 0,monthContainer:void 0,isRenderAriaLiveMessage:!1},c}return me(o,e),Object.defineProperty(o,"defaultProps",{get:function(){return{monthsShown:1,forceShowMonthNavigation:!1,timeCaption:"Time",previousYearButtonLabel:"Previous Year",nextYearButtonLabel:"Next Year",previousMonthButtonLabel:"Previous Month",nextMonthButtonLabel:"Next Month",yearItemNumber:Se}},enumerable:!1,configurable:!0}),o.prototype.componentDidMount=function(){var e=this;this.props.showTimeSelect&&(this.assignMonthContainer=void e.setState({monthContainer:e.monthContainer}))},o.prototype.componentDidUpdate=function(e){var t=this;if(!this.props.preSelection||Qe(this.props.preSelection,e.preSelection)&&this.props.monthSelectedIn===e.monthSelectedIn)this.props.openToDate&&!Qe(this.props.openToDate,e.openToDate)&&this.setState({date:this.props.openToDate});else{var r=!He(this.state.date,this.props.preSelection);this.setState({date:this.props.preSelection},(function(){return r&&t.handleCustomMonthChange(t.state.date)}))}},o.prototype.render=function(){var e=this.props.container||ye;return ue.default.createElement(ke,{onClickOutside:this.handleClickOutside,style:{display:"contents"},containerRef:this.containerRef,ignoreClass:this.props.outsideClickIgnoreClass},ue.default.createElement(e,{className:t.clsx("react-datepicker",this.props.className,{"react-datepicker--time-only":this.props.showTimeSelectOnly}),showTime:this.props.showTimeSelect||this.props.showTimeInput,showTimeSelectOnly:this.props.showTimeSelectOnly},this.renderAriaLiveRegion(),this.renderPreviousButton(),this.renderNextButton(),this.renderMonths(),this.renderYears(),this.renderTodayButton(),this.renderTimeSection(),this.renderInputTimeSection(),this.renderChildren()))},o}(r.Component),Vt=function(e){var t=e.icon,r=e.className,n=void 0===r?"":r,a=e.onClick,o="react-datepicker__calendar-icon";return"string"==typeof t?ue.default.createElement("i",{className:"".concat(o," ").concat(t," ").concat(n),"aria-hidden":"true",onClick:a}):ue.default.isValidElement(t)?ue.default.cloneElement(t,{className:"".concat(t.props.className||""," ").concat(o," ").concat(n),onClick:function(e){"function"==typeof t.props.onClick&&t.props.onClick(e),"function"==typeof a&&a(e)}}):ue.default.createElement("svg",{className:"".concat(o," ").concat(n),xmlns:"http://www.w3.org/2000/svg",viewBox:"0 0 448 512",onClick:a},ue.default.createElement("path",{d:"M96 32V64H48C21.5 64 0 85.5 0 112v48H448V112c0-26.5-21.5-48-48-48H352V32c0-17.7-14.3-32-32-32s-32 14.3-32 32V64H160V32c0-17.7-14.3-32-32-32S96 14.3 96 32zM448 192H0V464c0 26.5 21.5 48 48 48H400c26.5 0 48-21.5 48-48V192z"}))},jt=function(e){function t(t){var r=e.call(this,t)||this;return r.portalRoot=null,r.el=document.createElement("div"),r}return me(t,e),t.prototype.componentDidMount=function(){this.portalRoot=(this.props.portalHost||document).getElementById(this.props.portalId),this.portalRoot||(this.portalRoot=document.createElement("div"),this.portalRoot.setAttribute("id",this.props.portalId),(this.props.portalHost||document.body).appendChild(this.portalRoot)),this.portalRoot.appendChild(this.el)},t.prototype.componentWillUnmount=function(){this.portalRoot&&this.portalRoot.removeChild(this.el)},t.prototype.render=function(){return fe.default.createPortal(this.props.children,this.el)},t}(r.Component),Ut=function(e){return(e instanceof HTMLAnchorElement||!e.disabled)&&-1!==e.tabIndex},$t=function(e){function t(t){var n=e.call(this,t)||this;return n.getTabChildren=function(){var e;return Array.prototype.slice.call(null===(e=n.tabLoopRef.current)||void 0===e?void 0:e.querySelectorAll("[tabindex], a, button, input, select, textarea"),1,-1).filter(Ut)},n.handleFocusStart=function(){var e=n.getTabChildren();e&&e.length>1&&e[e.length-1].focus()},n.handleFocusEnd=function(){var e=n.getTabChildren();e&&e.length>1&&e[0].focus()},n.tabLoopRef=r.createRef(),n}return me(t,e),t.prototype.render=function(){var e;return(null!==(e=this.props.enableTabLoop)&&void 0!==e?e:t.defaultProps.enableTabLoop)?ue.default.createElement("div",{className:"react-datepicker__tab-loop",ref:this.tabLoopRef},ue.default.createElement("div",{className:"react-datepicker__tab-loop__start",tabIndex:0,onFocus:this.handleFocusStart}),this.props.children,ue.default.createElement("div",{className:"react-datepicker__tab-loop__end",tabIndex:0,onFocus:this.handleFocusEnd})):this.props.children},t.defaultProps={enableTabLoop:!0},t}(r.Component);var zt,Xt=function(e){function n(){return null!==e&&e.apply(this,arguments)||this}return me(n,e),Object.defineProperty(n,"defaultProps",{get:function(){return{hidePopper:!0}},enumerable:!1,configurable:!0}),n.prototype.render=function(){var e=this.props,a=e.className,o=e.wrapperClassName,s=e.hidePopper,i=void 0===s?n.defaultProps.hidePopper:s,l=e.popperComponent,c=e.targetComponent,p=e.enableTabLoop,d=e.popperOnKeyDown,u=e.portalId,f=e.portalHost,h=e.popperProps,m=e.showArrow,v=void 0;if(!i){var g=t.clsx("react-datepicker-popper",a);v=ue.default.createElement($t,{enableTabLoop:p},ue.default.createElement("div",{ref:h.refs.setFloating,style:h.floatingStyles,className:g,"data-placement":h.placement,onKeyDown:d},l,m&&ue.default.createElement(ce.FloatingArrow,{ref:h.arrowRef,context:h.context,fill:"currentColor",strokeWidth:1,height:8,width:16,style:{transform:"translateY(-1px)"},className:"react-datepicker__triangle"})))}this.props.popperContainer&&(v=r.createElement(this.props.popperContainer,{},v)),u&&!i&&(v=ue.default.createElement(jt,{portalId:u,portalHost:f},v));var D=t.clsx("react-datepicker-wrapper",o);return ue.default.createElement(ue.default.Fragment,null,ue.default.createElement("div",{ref:h.refs.setReference,className:D},c),v)},n}(r.Component),Gt=(zt=Xt,function(e){var t,n="boolean"!=typeof e.hidePopper||e.hidePopper,a=r.useRef(null),o=ce.useFloating(ve({open:!n,whileElementsMounted:ce.autoUpdate,placement:e.popperPlacement,middleware:ge([ce.flip({padding:15}),ce.offset(10),ce.arrow({element:a})],null!==(t=e.popperModifiers)&&void 0!==t?t:[],!0)},e.popperProps)),s=ve(ve({},e),{hidePopper:n,popperProps:ve(ve({},o),{arrowRef:a})});return ue.default.createElement(zt,ve({},s))}),Jt="react-datepicker-ignore-onclickoutside";var Zt="Date input not valid.",er=function(e){function n(o){var s=e.call(this,o)||this;return s.calendar=null,s.input=null,s.getPreSelection=function(){return s.props.openToDate?s.props.openToDate:s.props.selectsEnd&&s.props.startDate?s.props.startDate:s.props.selectsStart&&s.props.endDate?s.props.endDate:Me()},s.modifyHolidays=function(){var e;return null===(e=s.props.holidays)||void 0===e?void 0:e.reduce((function(e,t){var r=new Date(t.date);return _e(r)?ge(ge([],e,!0),[ve(ve({},t),{date:r})],!1):e}),[])},s.calcInitialState=function(){var e,t=s.getPreSelection(),r=dt(s.props),n=ut(s.props),a=r&&O.isBefore(t,xe(r))?r:n&&N.isAfter(t,Le(n))?n:t;return{open:s.props.startOpen||!1,preventFocus:!1,inputValue:null,preSelection:null!==(e=s.props.selectsRange?s.props.startDate:s.props.selected)&&void 0!==e?e:a,highlightDates:ft(s.props.highlightDates),focused:!1,shouldFocusDayInline:!1,isRenderAriaLiveMessage:!1,wasHidden:!1}},s.resetHiddenStatus=function(){s.setState(ve(ve({},s.state),{wasHidden:!1}))},s.setHiddenStatus=function(){s.setState(ve(ve({},s.state),{wasHidden:!0}))},s.setHiddenStateOnVisibilityHidden=function(){"hidden"===document.visibilityState&&s.setHiddenStatus()},s.clearPreventFocusTimeout=function(){s.preventFocusTimeout&&clearTimeout(s.preventFocusTimeout)},s.setFocus=function(){s.input&&s.input.focus&&s.input.focus({preventScroll:!0})},s.setBlur=function(){s.input&&s.input.blur&&s.input.blur(),s.cancelFocusInput()},s.setOpen=function(e,t){void 0===t&&(t=!1),s.setState({open:e,preSelection:e&&s.state.open?s.state.preSelection:s.calcInitialState().preSelection,lastPreSelectChange:rr},(function(){e||s.setState((function(e){return{focused:!!t&&e.focused}}),(function(){!t&&s.setBlur(),s.setState({inputValue:null})}))}))},s.inputOk=function(){return T.isDate(s.state.preSelection)},s.isCalendarOpen=function(){return void 0===s.props.open?s.state.open&&!s.props.disabled&&!s.props.readOnly:s.props.open},s.handleFocus=function(e){var t,r,n=s.state.wasHidden,a=!n||s.state.open;n&&s.resetHiddenStatus(),!s.state.preventFocus&&a&&(null===(r=(t=s.props).onFocus)||void 0===r||r.call(t,e),s.props.preventOpenOnFocus||s.props.readOnly||s.setOpen(!0)),s.setState({focused:!0})},s.sendFocusBackToInput=function(){s.preventFocusTimeout&&s.clearPreventFocusTimeout(),s.setState({preventFocus:!0},(function(){s.preventFocusTimeout=setTimeout((function(){s.setFocus(),s.setState({preventFocus:!1})}))}))},s.cancelFocusInput=function(){clearTimeout(s.inputFocusTimeout),s.inputFocusTimeout=void 0},s.deferFocusInput=function(){s.cancelFocusInput(),s.inputFocusTimeout=setTimeout((function(){return s.setFocus()}),1)},s.handleDropdownFocus=function(){s.cancelFocusInput()},s.handleBlur=function(e){var t,r;(!s.state.open||s.props.withPortal||s.props.showTimeInput)&&(null===(r=(t=s.props).onBlur)||void 0===r||r.call(t,e)),s.setState({focused:!1})},s.handleCalendarClickOutside=function(e){var t,r;s.props.inline||s.setOpen(!1),null===(r=(t=s.props).onClickOutside)||void 0===r||r.call(t,e),s.props.withPortal&&e.preventDefault()},s.handleChange=function(){for(var e,t,r=[],a=0;a<arguments.length;a++)r[a]=arguments[a];var o=r[0];if(!s.props.onChangeRaw||(s.props.onChangeRaw.apply(s,r),o&&"function"==typeof o.isDefaultPrevented&&!o.isDefaultPrevented())){s.setState({inputValue:(null==o?void 0:o.target)instanceof HTMLInputElement?o.target.value:null,lastPreSelectChange:tr});var i=s.props,l=i.dateFormat,c=void 0===l?n.defaultProps.dateFormat:l,p=i.strictParsing,d=void 0===p?n.defaultProps.strictParsing:p,u=i.selectsRange,f=i.startDate,h=i.endDate,m=(null==o?void 0:o.target)instanceof HTMLInputElement?o.target.value:"";if(u){var v=m.split("-",2).map((function(e){return e.trim()})),g=v[0],D=v[1],y=Ce(null!=g?g:"",c,s.props.locale,d),k=Ce(null!=D?D:"",c,s.props.locale,d),w=(null==f?void 0:f.getTime())!==(null==y?void 0:y.getTime()),S=(null==h?void 0:h.getTime())!==(null==k?void 0:k.getTime());if(!w&&!S)return;if(y&&$e(y,s.props))return;if(k&&$e(k,s.props))return;null===(t=(e=s.props).onChange)||void 0===t||t.call(e,[y,k],o)}else{var M=Ce(m,c,s.props.locale,d,s.props.minDate);s.props.showTimeSelectOnly&&s.props.selected&&M&&!Qe(M,s.props.selected)&&(M=V.set(s.props.selected,{hours:b.getHours(M),minutes:C.getMinutes(M),seconds:Y.getSeconds(M)})),!M&&m||s.setSelected(M,o,!0)}}},s.handleSelect=function(e,t,r){if(s.props.shouldCloseOnSelect&&!s.props.showTimeSelect&&s.sendFocusBackToInput(),s.props.onChangeRaw&&s.props.onChangeRaw(t),s.setSelected(e,t,!1,r),s.props.showDateSelect&&s.setState({isRenderAriaLiveMessage:!0}),!s.props.shouldCloseOnSelect||s.props.showTimeSelect)s.setPreSelection(e);else if(!s.props.inline){s.props.selectsRange||s.setOpen(!1);var n=s.props,a=n.startDate,o=n.endDate;!a||o||!s.props.swapRange&&kt(e,a)||s.setOpen(!1)}},s.setSelected=function(e,t,r,n){var a,o,i=e;if(s.props.showYearPicker){if(null!==i&&tt(x.getYear(i),s.props))return}else if(s.props.showMonthYearPicker){if(null!==i&&Xe(i,s.props))return}else if(null!==i&&$e(i,s.props))return;var l=s.props,c=l.onChange,p=l.selectsRange,d=l.startDate,u=l.endDate,f=l.selectsMultiple,h=l.selectedDates,m=l.minTime,v=l.swapRange;if(!qe(s.props.selected,i)||s.props.allowSameDay||p||f)if(null!==i&&(!s.props.selected||r&&(s.props.showTimeSelect||s.props.showTimeSelectOnly||s.props.showTimeInput)||(i=Pe(i,{hour:b.getHours(s.props.selected),minute:C.getMinutes(s.props.selected),second:Y.getSeconds(s.props.selected)})),r||!s.props.showTimeSelect&&!s.props.showTimeSelectOnly||m&&(i=Pe(i,{hour:m.getHours(),minute:m.getMinutes(),second:m.getSeconds()})),s.props.inline||s.setState({preSelection:i}),s.props.focusSelectedMonth||s.setState({monthSelectedIn:n})),p){var g=d&&!u,D=d&&u;!d&&!u?null==c||c([i,null],t):g&&(null===i?null==c||c([null,null],t):kt(i,d)?v?null==c||c([i,d],t):null==c||c([i,null],t):null==c||c([d,i],t)),D&&(null==c||c([i,null],t))}else if(f){if(null!==i)if(null==h?void 0:h.length)if(h.some((function(e){return Qe(e,i)}))){var y=h.filter((function(e){return!Qe(e,i)}));null==c||c(y,t)}else null==c||c(ge(ge([],h,!0),[i],!1),t);else null==c||c([i],t)}else null==c||c(i,t);r||(null===(o=(a=s.props).onSelect)||void 0===o||o.call(a,i,t),s.setState({inputValue:null}))},s.setPreSelection=function(e){var t=T.isDate(s.props.minDate),r=T.isDate(s.props.maxDate),n=!0;if(e){var a=xe(e);if(t&&r)n=Ke(e,s.props.minDate,s.props.maxDate);else if(t){var o=xe(s.props.minDate);n=N.isAfter(e,o)||qe(a,o)}else if(r){var i=Le(s.props.maxDate);n=O.isBefore(e,i)||qe(a,i)}}n&&s.setState({preSelection:e})},s.toggleCalendar=function(){s.setOpen(!s.state.open)},s.handleTimeChange=function(e){var t,r;if(!s.props.selectsRange&&!s.props.selectsMultiple){var n=s.props.selected?s.props.selected:s.getPreSelection(),a=s.props.selected?e:Pe(n,{hour:b.getHours(e),minute:C.getMinutes(e)});s.setState({preSelection:a}),null===(r=(t=s.props).onChange)||void 0===r||r.call(t,a),s.props.shouldCloseOnSelect&&!s.props.showTimeInput&&(s.sendFocusBackToInput(),s.setOpen(!1)),s.props.showTimeInput&&s.setOpen(!0),(s.props.showTimeSelectOnly||s.props.showTimeSelect)&&s.setState({isRenderAriaLiveMessage:!0}),s.setState({inputValue:null})}},s.onInputClick=function(){var e,t;s.props.disabled||s.props.readOnly||s.setOpen(!0),null===(t=(e=s.props).onInputClick)||void 0===t||t.call(e)},s.onInputKeyDown=function(e){var t,r,n,a,o,i;null===(r=(t=s.props).onKeyDown)||void 0===r||r.call(t,e);var l=e.key;if(s.state.open||s.props.inline||s.props.preventOpenOnFocus){if(s.state.open){if(l===De.ArrowDown||l===De.ArrowUp){e.preventDefault();var c=s.props.showTimeSelectOnly?".react-datepicker__time-list-item[tabindex='0']":s.props.showWeekPicker&&s.props.showWeekNumbers?'.react-datepicker__week-number[tabindex="0"]':s.props.showFullMonthYearPicker||s.props.showMonthYearPicker?'.react-datepicker__month-text[tabindex="0"]':'.react-datepicker__day[tabindex="0"]',p=(null===(a=s.calendar)||void 0===a?void 0:a.containerRef.current)instanceof Element&&s.calendar.containerRef.current.querySelector(c);return void(p instanceof HTMLElement&&p.focus({preventScroll:!0}))}var d=Me(s.state.preSelection);l===De.Enter?(e.preventDefault(),s.inputOk()&&s.state.lastPreSelectChange===rr?(s.handleSelect(d,e),!s.props.shouldCloseOnSelect&&s.setPreSelection(d)):s.setOpen(!1)):l===De.Escape?(e.preventDefault(),s.sendFocusBackToInput(),s.setOpen(!1)):l===De.Tab&&s.setOpen(!1),s.inputOk()||null===(i=(o=s.props).onInputError)||void 0===i||i.call(o,{code:1,msg:Zt})}}else l!==De.ArrowDown&&l!==De.ArrowUp&&l!==De.Enter||null===(n=s.onInputClick)||void 0===n||n.call(s)},s.onPortalKeyDown=function(e){e.key===De.Escape&&(e.preventDefault(),s.setState({preventFocus:!0},(function(){s.setOpen(!1),setTimeout((function(){s.setFocus(),s.setState({preventFocus:!1})}))})))},s.onDayKeyDown=function(e){var t,r,n,o,l,c,u=s.props,f=u.minDate,h=u.maxDate,m=u.disabledKeyboardNavigation,v=u.showWeekPicker,g=u.shouldCloseOnSelect,y=u.locale,k=u.calendarStartDay,w=u.adjustDateOnChange,S=u.inline;if(null===(r=(t=s.props).onKeyDown)||void 0===r||r.call(t,e),!m){var b=e.key,M=e.shiftKey,C=Me(s.state.preSelection),E=function(e,t){var r=t;switch(e){case De.ArrowRight:r=v?p.addWeeks(t,1):a.addDays(t,1);break;case De.ArrowLeft:r=v?se.subWeeks(t,1):ne.subDays(t,1);break;case De.ArrowUp:r=se.subWeeks(t,1);break;case De.ArrowDown:r=p.addWeeks(t,1);break;case De.PageUp:r=M?ie.subYears(t,1):ae.subMonths(t,1);break;case De.PageDown:r=M?d.addYears(t,1):i.addMonths(t,1);break;case De.Home:r=Ne(t,y,k);break;case De.End:r=function(e){return D.endOfWeek(e)}(t)}return r};if(b===De.Enter)return e.preventDefault(),s.handleSelect(C,e),void(!g&&s.setPreSelection(C));if(b===De.Escape)return e.preventDefault(),s.setOpen(!1),void(s.inputOk()||null===(o=(n=s.props).onInputError)||void 0===o||o.call(n,{code:1,msg:Zt}));var Y=null;switch(b){case De.ArrowLeft:case De.ArrowRight:case De.ArrowUp:case De.ArrowDown:case De.PageUp:case De.PageDown:case De.Home:case De.End:Y=function(e,t){for(var r=e,n=!1,a=0,o=E(e,t);!n;){if(a>=40){o=t;break}f&&o<f&&(r=De.ArrowRight,o=$e(f,s.props)?E(r,o):f),h&&o>h&&(r=De.ArrowLeft,o=$e(h,s.props)?E(r,o):h),$e(o,s.props)?(r!==De.PageUp&&r!==De.Home||(r=De.ArrowRight),r!==De.PageDown&&r!==De.End||(r=De.ArrowLeft),o=E(r,o)):n=!0,a++}return o}(b,C)}if(Y){if(e.preventDefault(),s.setState({lastPreSelectChange:rr}),w&&s.setSelected(Y),s.setPreSelection(Y),S){var P=_.getMonth(C),N=_.getMonth(Y),O=x.getYear(C),T=x.getYear(Y);P!==N||O!==T?s.setState({shouldFocusDayInline:!0}):s.setState({shouldFocusDayInline:!1})}}else null===(c=(l=s.props).onInputError)||void 0===c||c.call(l,{code:1,msg:Zt})}},s.onPopperKeyDown=function(e){e.key===De.Escape&&(e.preventDefault(),s.sendFocusBackToInput())},s.onClearClick=function(e){e&&e.preventDefault&&e.preventDefault(),s.sendFocusBackToInput();var t=s.props,r=t.selectsRange,n=t.onChange;r?null==n||n([null,null],e):null==n||n(null,e),s.setState({inputValue:null})},s.clear=function(){s.onClearClick()},s.onScroll=function(e){"boolean"==typeof s.props.closeOnScroll&&s.props.closeOnScroll?e.target!==document&&e.target!==document.documentElement&&e.target!==document.body||s.setOpen(!1):"function"==typeof s.props.closeOnScroll&&s.props.closeOnScroll(e)&&s.setOpen(!1)},s.renderCalendar=function(){var e,t;return s.props.inline||s.isCalendarOpen()?ue.default.createElement(Bt,ve({showMonthYearDropdown:void 0,ref:function(e){s.calendar=e}},s.props,s.state,{setOpen:s.setOpen,dateFormat:null!==(e=s.props.dateFormatCalendar)&&void 0!==e?e:n.defaultProps.dateFormatCalendar,onSelect:s.handleSelect,onClickOutside:s.handleCalendarClickOutside,holidays:ht(s.modifyHolidays()),outsideClickIgnoreClass:Jt,onDropdownFocus:s.handleDropdownFocus,onTimeChange:s.handleTimeChange,className:s.props.calendarClassName,container:s.props.calendarContainer,handleOnKeyDown:s.props.onKeyDown,handleOnDayKeyDown:s.onDayKeyDown,setPreSelection:s.setPreSelection,dropdownMode:null!==(t=s.props.dropdownMode)&&void 0!==t?t:n.defaultProps.dropdownMode}),s.props.children):null},s.renderAriaLiveRegion=function(){var e,t=s.props,r=t.dateFormat,a=void 0===r?n.defaultProps.dateFormat:r,o=t.locale,i=s.props.showTimeInput||s.props.showTimeSelect?"PPPPp":"PPPP";return e=s.props.selectsRange?"Selected start date: ".concat(Ye(s.props.startDate,{dateFormat:i,locale:o}),". ").concat(s.props.endDate?"End date: "+Ye(s.props.endDate,{dateFormat:i,locale:o}):""):s.props.showTimeSelectOnly?"Selected time: ".concat(Ye(s.props.selected,{dateFormat:a,locale:o})):s.props.showYearPicker?"Selected year: ".concat(Ye(s.props.selected,{dateFormat:"yyyy",locale:o})):s.props.showMonthYearPicker?"Selected month: ".concat(Ye(s.props.selected,{dateFormat:"MMMM yyyy",locale:o})):s.props.showQuarterYearPicker?"Selected quarter: ".concat(Ye(s.props.selected,{dateFormat:"yyyy, QQQ",locale:o})):"Selected date: ".concat(Ye(s.props.selected,{dateFormat:i,locale:o})),ue.default.createElement("span",{role:"alert","aria-live":"polite",className:"react-datepicker__aria-live"},e)},s.renderDateInput=function(){var e,a,o,i=t.clsx(s.props.className,((e={})[Jt]=s.state.open,e)),l=s.props.customInput||ue.default.createElement("input",{type:"text"}),c=s.props.customInputRef||"ref",p=s.props,d=p.dateFormat,u=void 0===d?n.defaultProps.dateFormat:d,f=p.locale,h="string"==typeof s.props.value?s.props.value:"string"==typeof s.state.inputValue?s.state.inputValue:s.props.selectsRange?function(e,t,r){if(!e)return"";var n=Ye(e,r),a=t?Ye(t,r):"";return"".concat(n," - ").concat(a)}(s.props.startDate,s.props.endDate,{dateFormat:u,locale:f}):s.props.selectsMultiple?function(e,t){if(!(null==e?void 0:e.length))return"";var r=e[0]?Ye(e[0],t):"";if(1===e.length)return r;if(2===e.length&&e[1]){var n=Ye(e[1],t);return"".concat(r,", ").concat(n)}var a=e.length-1;return"".concat(r," (+").concat(a,")")}(null!==(o=s.props.selectedDates)&&void 0!==o?o:[],{dateFormat:u,locale:f}):Ye(s.props.selected,{dateFormat:u,locale:f});return r.cloneElement(l,((a={})[c]=function(e){s.input=e},a.value=h,a.onBlur=s.handleBlur,a.onChange=s.handleChange,a.onClick=s.onInputClick,a.onFocus=s.handleFocus,a.onKeyDown=s.onInputKeyDown,a.id=s.props.id,a.name=s.props.name,a.form=s.props.form,a.autoFocus=s.props.autoFocus,a.placeholder=s.props.placeholderText,a.disabled=s.props.disabled,a.autoComplete=s.props.autoComplete,a.className=t.clsx(l.props.className,i),a.title=s.props.title,a.readOnly=s.props.readOnly,a.required=s.props.required,a.tabIndex=s.props.tabIndex,a["aria-describedby"]=s.props.ariaDescribedBy,a["aria-invalid"]=s.props.ariaInvalid,a["aria-labelledby"]=s.props.ariaLabelledBy,a["aria-required"]=s.props.ariaRequired,a))},s.renderClearButton=function(){var e=s.props,r=e.isClearable,n=e.disabled,a=e.selected,o=e.startDate,i=e.endDate,l=e.clearButtonTitle,c=e.clearButtonClassName,p=void 0===c?"":c,d=e.ariaLabelClose,u=void 0===d?"Close":d,f=e.selectedDates;return r&&(null!=a||null!=o||null!=i||(null==f?void 0:f.length))?ue.default.createElement("button",{type:"button",className:t.clsx("react-datepicker__close-icon",p,{"react-datepicker__close-icon--disabled":n}),disabled:n,"aria-label":u,onClick:s.onClearClick,title:l,tabIndex:-1}):null},s.state=s.calcInitialState(),s.preventFocusTimeout=void 0,s}return me(n,e),Object.defineProperty(n,"defaultProps",{get:function(){return{allowSameDay:!1,dateFormat:"MM/dd/yyyy",dateFormatCalendar:"LLLL yyyy",disabled:!1,disabledKeyboardNavigation:!1,dropdownMode:"scroll",preventOpenOnFocus:!1,monthsShown:1,readOnly:!1,withPortal:!1,selectsDisabledDaysInRange:!1,shouldCloseOnSelect:!0,showTimeSelect:!1,showTimeInput:!1,showPreviousMonths:!1,showMonthYearPicker:!1,showFullMonthYearPicker:!1,showTwoColumnMonthYearPicker:!1,showFourColumnMonthYearPicker:!1,showYearPicker:!1,showQuarterYearPicker:!1,showWeekPicker:!1,strictParsing:!1,swapRange:!1,timeIntervals:30,timeCaption:"Time",previousMonthAriaLabel:"Previous Month",previousMonthButtonLabel:"Previous Month",nextMonthAriaLabel:"Next Month",nextMonthButtonLabel:"Next Month",previousYearAriaLabel:"Previous Year",previousYearButtonLabel:"Previous Year",nextYearAriaLabel:"Next Year",nextYearButtonLabel:"Next Year",timeInputLabel:"Time",enableTabLoop:!0,yearItemNumber:Se,focusSelectedMonth:!1,showPopperArrow:!0,excludeScrollbar:!0,customTimeInput:null,calendarStartDay:void 0,toggleCalendarOnIconClick:!1,usePointerEvent:!1}},enumerable:!1,configurable:!0}),n.prototype.componentDidMount=function(){window.addEventListener("scroll",this.onScroll,!0),document.addEventListener("visibilitychange",this.setHiddenStateOnVisibilityHidden)},n.prototype.componentDidUpdate=function(e,t){var r,n,a,o,s,i;e.inline&&(s=e.selected,i=this.props.selected,s&&i?_.getMonth(s)!==_.getMonth(i)||x.getYear(s)!==x.getYear(i):s!==i)&&this.setPreSelection(this.props.selected),void 0!==this.state.monthSelectedIn&&e.monthsShown!==this.props.monthsShown&&this.setState({monthSelectedIn:0}),e.highlightDates!==this.props.highlightDates&&this.setState({highlightDates:ft(this.props.highlightDates)}),t.focused||qe(e.selected,this.props.selected)||this.setState({inputValue:null}),t.open!==this.state.open&&(!1===t.open&&!0===this.state.open&&(null===(n=(r=this.props).onCalendarOpen)||void 0===n||n.call(r)),!0===t.open&&!1===this.state.open&&(null===(o=(a=this.props).onCalendarClose)||void 0===o||o.call(a)))},n.prototype.componentWillUnmount=function(){this.clearPreventFocusTimeout(),window.removeEventListener("scroll",this.onScroll,!0),document.removeEventListener("visibilitychange",this.setHiddenStateOnVisibilityHidden)},n.prototype.renderInputContainer=function(){var e=this.props,r=e.showIcon,n=e.icon,a=e.calendarIconClassname,o=e.calendarIconClassName,s=e.toggleCalendarOnIconClick,i=this.state.open;return a&&console.warn("calendarIconClassname props is deprecated. should use calendarIconClassName props."),ue.default.createElement("div",{className:"react-datepicker__input-container".concat(r?" react-datepicker__view-calendar-icon":"")},r&&ue.default.createElement(Vt,ve({icon:n,className:t.clsx(o,!o&&a,i&&"react-datepicker-ignore-onclickoutside")},s?{onClick:this.toggleCalendar}:null)),this.state.isRenderAriaLiveMessage&&this.renderAriaLiveRegion(),this.renderDateInput(),this.renderClearButton())},n.prototype.render=function(){var e=this.renderCalendar();if(this.props.inline)return e;if(this.props.withPortal){var t=this.state.open?ue.default.createElement($t,{enableTabLoop:this.props.enableTabLoop},ue.default.createElement("div",{className:"react-datepicker__portal",tabIndex:-1,onKeyDown:this.onPortalKeyDown},e)):null;return this.state.open&&this.props.portalId&&(t=ue.default.createElement(jt,ve({portalId:this.props.portalId},this.props),t)),ue.default.createElement("div",null,this.renderInputContainer(),t)}return ue.default.createElement(Gt,ve({},this.props,{className:this.props.popperClassName,hidePopper:!this.isCalendarOpen(),targetComponent:this.renderInputContainer(),popperComponent:e,popperOnKeyDown:this.onPopperKeyDown,showArrow:this.props.showPopperArrow}))},n}(r.Component),tr="input",rr="navigate";e.CalendarContainer=ye,e.default=er,e.getDefaultLocale=Be,e.registerLocale=function(e,t){var r=we();r.__localeData__||(r.__localeData__={}),r.__localeData__[e]=t},e.setDefaultLocale=function(e){we().__localeId__=e},Object.defineProperty(e,"__esModule",{value:!0})}));
+!function(e,t){ true?t(exports,__webpack_require__(/*! clsx */ "./node_modules/clsx/dist/clsx.js"),__webpack_require__(/*! react */ "react"),__webpack_require__(/*! date-fns */ "./node_modules/date-fns/index.js"),__webpack_require__(/*! date-fns/addDays */ "./node_modules/date-fns/addDays.js"),__webpack_require__(/*! date-fns/addHours */ "./node_modules/date-fns/addHours.js"),__webpack_require__(/*! date-fns/addMinutes */ "./node_modules/date-fns/addMinutes.js"),__webpack_require__(/*! date-fns/addMonths */ "./node_modules/date-fns/addMonths.js"),__webpack_require__(/*! date-fns/addQuarters */ "./node_modules/date-fns/addQuarters.js"),__webpack_require__(/*! date-fns/addSeconds */ "./node_modules/date-fns/addSeconds.js"),__webpack_require__(/*! date-fns/addWeeks */ "./node_modules/date-fns/addWeeks.js"),__webpack_require__(/*! date-fns/addYears */ "./node_modules/date-fns/addYears.js"),__webpack_require__(/*! date-fns/differenceInCalendarDays */ "./node_modules/date-fns/differenceInCalendarDays.js"),__webpack_require__(/*! date-fns/differenceInCalendarMonths */ "./node_modules/date-fns/differenceInCalendarMonths.js"),__webpack_require__(/*! date-fns/differenceInCalendarQuarters */ "./node_modules/date-fns/differenceInCalendarQuarters.js"),__webpack_require__(/*! date-fns/differenceInCalendarYears */ "./node_modules/date-fns/differenceInCalendarYears.js"),__webpack_require__(/*! date-fns/endOfDay */ "./node_modules/date-fns/endOfDay.js"),__webpack_require__(/*! date-fns/endOfMonth */ "./node_modules/date-fns/endOfMonth.js"),__webpack_require__(/*! date-fns/endOfWeek */ "./node_modules/date-fns/endOfWeek.js"),__webpack_require__(/*! date-fns/endOfYear */ "./node_modules/date-fns/endOfYear.js"),__webpack_require__(/*! date-fns/format */ "./node_modules/date-fns/format.js"),__webpack_require__(/*! date-fns/getDate */ "./node_modules/date-fns/getDate.js"),__webpack_require__(/*! date-fns/getDay */ "./node_modules/date-fns/getDay.js"),__webpack_require__(/*! date-fns/getHours */ "./node_modules/date-fns/getHours.js"),__webpack_require__(/*! date-fns/getISOWeek */ "./node_modules/date-fns/getISOWeek.js"),__webpack_require__(/*! date-fns/getMinutes */ "./node_modules/date-fns/getMinutes.js"),__webpack_require__(/*! date-fns/getMonth */ "./node_modules/date-fns/getMonth.js"),__webpack_require__(/*! date-fns/getQuarter */ "./node_modules/date-fns/getQuarter.js"),__webpack_require__(/*! date-fns/getSeconds */ "./node_modules/date-fns/getSeconds.js"),__webpack_require__(/*! date-fns/getTime */ "./node_modules/date-fns/getTime.js"),__webpack_require__(/*! date-fns/getYear */ "./node_modules/date-fns/getYear.js"),__webpack_require__(/*! date-fns/isAfter */ "./node_modules/date-fns/isAfter.js"),__webpack_require__(/*! date-fns/isBefore */ "./node_modules/date-fns/isBefore.js"),__webpack_require__(/*! date-fns/isDate */ "./node_modules/date-fns/isDate.js"),__webpack_require__(/*! date-fns/isEqual */ "./node_modules/date-fns/isEqual.js"),__webpack_require__(/*! date-fns/isSameDay */ "./node_modules/date-fns/isSameDay.js"),__webpack_require__(/*! date-fns/isSameMonth */ "./node_modules/date-fns/isSameMonth.js"),__webpack_require__(/*! date-fns/isSameQuarter */ "./node_modules/date-fns/isSameQuarter.js"),__webpack_require__(/*! date-fns/isSameYear */ "./node_modules/date-fns/isSameYear.js"),__webpack_require__(/*! date-fns/isValid */ "./node_modules/date-fns/isValid.js"),__webpack_require__(/*! date-fns/isWithinInterval */ "./node_modules/date-fns/isWithinInterval.js"),__webpack_require__(/*! date-fns/max */ "./node_modules/date-fns/max.js"),__webpack_require__(/*! date-fns/min */ "./node_modules/date-fns/min.js"),__webpack_require__(/*! date-fns/parse */ "./node_modules/date-fns/parse.js"),__webpack_require__(/*! date-fns/parseISO */ "./node_modules/date-fns/parseISO.js"),__webpack_require__(/*! date-fns/set */ "./node_modules/date-fns/set.js"),__webpack_require__(/*! date-fns/setHours */ "./node_modules/date-fns/setHours.js"),__webpack_require__(/*! date-fns/setMinutes */ "./node_modules/date-fns/setMinutes.js"),__webpack_require__(/*! date-fns/setMonth */ "./node_modules/date-fns/setMonth.js"),__webpack_require__(/*! date-fns/setQuarter */ "./node_modules/date-fns/setQuarter.js"),__webpack_require__(/*! date-fns/setSeconds */ "./node_modules/date-fns/setSeconds.js"),__webpack_require__(/*! date-fns/setYear */ "./node_modules/date-fns/setYear.js"),__webpack_require__(/*! date-fns/startOfDay */ "./node_modules/date-fns/startOfDay.js"),__webpack_require__(/*! date-fns/startOfMonth */ "./node_modules/date-fns/startOfMonth.js"),__webpack_require__(/*! date-fns/startOfQuarter */ "./node_modules/date-fns/startOfQuarter.js"),__webpack_require__(/*! date-fns/startOfWeek */ "./node_modules/date-fns/startOfWeek.js"),__webpack_require__(/*! date-fns/startOfYear */ "./node_modules/date-fns/startOfYear.js"),__webpack_require__(/*! date-fns/subDays */ "./node_modules/date-fns/subDays.js"),__webpack_require__(/*! date-fns/subMonths */ "./node_modules/date-fns/subMonths.js"),__webpack_require__(/*! date-fns/subQuarters */ "./node_modules/date-fns/subQuarters.js"),__webpack_require__(/*! date-fns/subWeeks */ "./node_modules/date-fns/subWeeks.js"),__webpack_require__(/*! date-fns/subYears */ "./node_modules/date-fns/subYears.js"),__webpack_require__(/*! date-fns/toDate */ "./node_modules/date-fns/toDate.js"),__webpack_require__(/*! @floating-ui/react */ "./node_modules/@floating-ui/react/dist/floating-ui.react.esm.js"),__webpack_require__(/*! react-dom */ "react-dom")):0}(this,(function(e,t,r,n,a,o,s,i,l,c,d,p,u,f,h,m,v,g,D,y,k,w,S,b,M,C,_,E,P,Y,x,O,N,T,I,R,L,F,A,W,H,Q,q,K,B,V,j,U,$,z,X,G,J,Z,ee,te,re,ne,ae,oe,se,ie,le,ce,de){"use strict";function pe(e){return e&&"object"==typeof e&&"default"in e?e:{default:e}}var ue=pe(r),fe=pe(de),he=function(e,t){return he=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(e,t){e.__proto__=t}||function(e,t){for(var r in t)Object.prototype.hasOwnProperty.call(t,r)&&(e[r]=t[r])},he(e,t)};function me(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Class extends value "+String(t)+" is not a constructor or null");function r(){this.constructor=e}he(e,t),e.prototype=null===t?Object.create(t):(r.prototype=t.prototype,new r)}var ve=function(){return ve=Object.assign||function(e){for(var t,r=1,n=arguments.length;r<n;r++)for(var a in t=arguments[r])Object.prototype.hasOwnProperty.call(t,a)&&(e[a]=t[a]);return e},ve.apply(this,arguments)};function ge(e,t,r){if(r||2===arguments.length)for(var n,a=0,o=t.length;a<o;a++)!n&&a in t||(n||(n=Array.prototype.slice.call(t,0,a)),n[a]=t[a]);return e.concat(n||Array.prototype.slice.call(t))}"function"==typeof SuppressedError&&SuppressedError;var De,ye=function(e){var t=e.showTimeSelectOnly,r=void 0!==t&&t,n=e.showTime,a=void 0!==n&&n,o=e.className,s=e.children,i=r?"Choose Time":"Choose Date".concat(a?" and Time":"");return ue.default.createElement("div",{className:o,role:"dialog","aria-label":i,"aria-modal":"true"},s)},ke=function(e){var t=e.children,n=e.onClickOutside,a=e.className,o=e.containerRef,s=e.style,i=function(e,t){var n=r.useRef(null),a=r.useRef(e);a.current=e;var o=r.useCallback((function(e){var r;n.current&&!n.current.contains(e.target)&&(t&&e.target instanceof HTMLElement&&e.target.classList.contains(t)||null===(r=a.current)||void 0===r||r.call(a,e))}),[t]);return r.useEffect((function(){return document.addEventListener("mousedown",o),function(){document.removeEventListener("mousedown",o)}}),[o]),n}(n,e.ignoreClass);return ue.default.createElement("div",{className:a,style:s,ref:function(e){i.current=e,o&&(o.current=e)}},t)};function we(){return"undefined"!=typeof window?window:globalThis}!function(e){e.ArrowUp="ArrowUp",e.ArrowDown="ArrowDown",e.ArrowLeft="ArrowLeft",e.ArrowRight="ArrowRight",e.PageUp="PageUp",e.PageDown="PageDown",e.Home="Home",e.End="End",e.Enter="Enter",e.Space=" ",e.Tab="Tab",e.Escape="Escape",e.Backspace="Backspace",e.X="x"}(De||(De={}));var Se=12,be=/P+p+|P+|p+|''|'(''|[^'])+('|$)|./g;function Me(e){if(null==e)return new Date;var t="string"==typeof e?B.parseISO(e):le.toDate(e);return _e(t)?t:new Date}function Ce(e,t,r,n,a){var o,s=null,i=Ve(r)||Ve(Be()),l=!0;if(Array.isArray(t))return t.forEach((function(t){var o=K.parse(e,t,new Date,{locale:i,useAdditionalWeekYearTokens:!0,useAdditionalDayOfYearTokens:!0});n&&(l=_e(o,a)&&e===Ee(o,t,r)),_e(o,a)&&l&&(s=o)})),s;if(s=K.parse(e,t,new Date,{locale:i,useAdditionalWeekYearTokens:!0,useAdditionalDayOfYearTokens:!0}),n)l=_e(s)&&e===Ee(s,t,r);else if(!_e(s)){var c=(null!==(o=t.match(be))&&void 0!==o?o:[]).map((function(e){var t=e[0];if("p"===t||"P"===t){var r=k.longFormatters[t];return i?r(e,i.formatLong):t}return e})).join("");e.length>0&&(s=K.parse(e,c.slice(0,e.length),new Date,{useAdditionalWeekYearTokens:!0,useAdditionalDayOfYearTokens:!0})),_e(s)||(s=new Date(e))}return _e(s)&&l?s:null}function _e(e,t){return W.isValid(e)&&!N.isBefore(e,null!=t?t:new Date("1/1/1800"))}function Ee(e,t,r){if("en"===r)return k.format(e,t,{useAdditionalWeekYearTokens:!0,useAdditionalDayOfYearTokens:!0});var n=r?Ve(r):void 0;return r&&!n&&console.warn('A locale object was not found for the provided string ["'.concat(r,'"].')),!n&&Be()&&Ve(Be())&&(n=Ve(Be())),k.format(e,t,{locale:n,useAdditionalWeekYearTokens:!0,useAdditionalDayOfYearTokens:!0})}function Pe(e,t){var r=t.dateFormat,n=t.locale,a=Array.isArray(r)&&r.length>0?r[0]:r;return e&&Ee(e,a,n)||""}function Ye(e,t){var r=t.hour,n=void 0===r?0:r,a=t.minute,o=void 0===a?0:a,s=t.second,i=void 0===s?0:s;return j.setHours(U.setMinutes(X.setSeconds(e,i),o),n)}function xe(e){return J.startOfDay(e)}function Oe(e,t,r){var n=Ve(t||Be());return te.startOfWeek(e,{locale:n,weekStartsOn:r})}function Ne(e){return Z.startOfMonth(e)}function Te(e){return re.startOfYear(e)}function Ie(e){return ee.startOfQuarter(e)}function Re(){return J.startOfDay(Me())}function Le(e){return v.endOfDay(e)}function Fe(e){return g.endOfMonth(e)}function Ae(e,t){return e&&t?A.isSameYear(e,t):!e&&!t}function We(e,t){return e&&t?L.isSameMonth(e,t):!e&&!t}function He(e,t){return e&&t?F.isSameQuarter(e,t):!e&&!t}function Qe(e,t){return e&&t?R.isSameDay(e,t):!e&&!t}function qe(e,t){return e&&t?I.isEqual(e,t):!e&&!t}function Ke(e,t,r){var n,a=J.startOfDay(t),o=v.endOfDay(r);try{n=H.isWithinInterval(e,{start:a,end:o})}catch(e){n=!1}return n}function Be(){return we().__localeId__}function Ve(e){if("string"==typeof e){var t=we();return t.__localeData__?t.__localeData__[e]:void 0}return e}function je(e,t){return Ee($.setMonth(Me(),e),"LLLL",t)}function Ue(e,t){return Ee($.setMonth(Me(),e),"LLL",t)}function $e(e,t){var r=void 0===t?{}:t,n=r.minDate,a=r.maxDate,o=r.excludeDates,s=r.excludeDateIntervals,i=r.includeDates,l=r.includeDateIntervals,c=r.filterDate;return nt(e,{minDate:n,maxDate:a})||o&&o.some((function(t){return t instanceof Date?Qe(e,t):Qe(e,t.date)}))||s&&s.some((function(t){var r=t.start,n=t.end;return H.isWithinInterval(e,{start:r,end:n})}))||i&&!i.some((function(t){return Qe(e,t)}))||l&&!l.some((function(t){var r=t.start,n=t.end;return H.isWithinInterval(e,{start:r,end:n})}))||c&&!c(Me(e))||!1}function ze(e,t){var r=void 0===t?{}:t,n=r.excludeDates,a=r.excludeDateIntervals;return a&&a.length>0?a.some((function(t){var r=t.start,n=t.end;return H.isWithinInterval(e,{start:r,end:n})})):n&&n.some((function(t){var r;return t instanceof Date?Qe(e,t):Qe(e,null!==(r=t.date)&&void 0!==r?r:new Date)}))||!1}function Xe(e,t){var r=void 0===t?{}:t,n=r.minDate,a=r.maxDate,o=r.excludeDates,s=r.includeDates,i=r.filterDate;return nt(e,{minDate:n?Z.startOfMonth(n):void 0,maxDate:a?g.endOfMonth(a):void 0})||(null==o?void 0:o.some((function(t){return We(e,t instanceof Date?t:t.date)})))||s&&!s.some((function(t){return We(e,t)}))||i&&!i(Me(e))||!1}function Ge(e,t,r,n){var a=x.getYear(e),o=_.getMonth(e),s=x.getYear(t),i=_.getMonth(t),l=x.getYear(n);return a===s&&a===l?o<=r&&r<=i:a<s&&(l===a&&o<=r||l===s&&i>=r||l<s&&l>a)}function Je(e,t){var r=void 0===t?{}:t,n=r.minDate,a=r.maxDate,o=r.excludeDates,s=r.includeDates;return nt(e,{minDate:n,maxDate:a})||o&&o.some((function(t){return We(t instanceof Date?t:t.date,e)}))||s&&!s.some((function(t){return We(t,e)}))||!1}function Ze(e,t){var r=void 0===t?{}:t,n=r.minDate,a=r.maxDate,o=r.excludeDates,s=r.includeDates,i=r.filterDate;return nt(e,{minDate:n,maxDate:a})||(null==o?void 0:o.some((function(t){return He(e,t instanceof Date?t:t.date)})))||s&&!s.some((function(t){return He(e,t)}))||i&&!i(Me(e))||!1}function et(e,t,r){if(!t||!r)return!1;if(!W.isValid(t)||!W.isValid(r))return!1;var n=x.getYear(t),a=x.getYear(r);return n<=e&&a>=e}function tt(e,t){var r=void 0===t?{}:t,n=r.minDate,a=r.maxDate,o=r.excludeDates,s=r.includeDates,i=r.filterDate,l=new Date(e,0,1);return nt(l,{minDate:n?re.startOfYear(n):void 0,maxDate:a?y.endOfYear(a):void 0})||(null==o?void 0:o.some((function(e){return Ae(l,e instanceof Date?e:e.date)})))||s&&!s.some((function(e){return Ae(l,e)}))||i&&!i(Me(l))||!1}function rt(e,t,r,n){var a=x.getYear(e),o=E.getQuarter(e),s=x.getYear(t),i=E.getQuarter(t),l=x.getYear(n);return a===s&&a===l?o<=r&&r<=i:a<s&&(l===a&&o<=r||l===s&&i>=r||l<s&&l>a)}function nt(e,t){var r,n=void 0===t?{}:t,a=n.minDate,o=n.maxDate;return null!==(r=a&&u.differenceInCalendarDays(e,a)<0||o&&u.differenceInCalendarDays(e,o)>0)&&void 0!==r&&r}function at(e,t){return t.some((function(t){return b.getHours(t)===b.getHours(e)&&C.getMinutes(t)===C.getMinutes(e)&&P.getSeconds(t)===P.getSeconds(e)}))}function ot(e,t){var r=void 0===t?{}:t,n=r.excludeTimes,a=r.includeTimes,o=r.filterTime;return n&&at(e,n)||a&&!at(e,a)||o&&!o(e)||!1}function st(e,t){var r=t.minTime,n=t.maxTime;if(!r||!n)throw new Error("Both minTime and maxTime props required");var a=Me();a=j.setHours(a,b.getHours(e)),a=U.setMinutes(a,C.getMinutes(e)),a=X.setSeconds(a,P.getSeconds(e));var o=Me();o=j.setHours(o,b.getHours(r)),o=U.setMinutes(o,C.getMinutes(r)),o=X.setSeconds(o,P.getSeconds(r));var s,i=Me();i=j.setHours(i,b.getHours(n)),i=U.setMinutes(i,C.getMinutes(n)),i=X.setSeconds(i,P.getSeconds(n));try{s=!H.isWithinInterval(a,{start:o,end:i})}catch(e){s=!1}return s}function it(e,t){var r=void 0===t?{}:t,n=r.minDate,a=r.includeDates,o=ae.subMonths(e,1);return n&&f.differenceInCalendarMonths(n,o)>0||a&&a.every((function(e){return f.differenceInCalendarMonths(e,o)>0}))||!1}function lt(e,t){var r=void 0===t?{}:t,n=r.maxDate,a=r.includeDates,o=i.addMonths(e,1);return n&&f.differenceInCalendarMonths(o,n)>0||a&&a.every((function(e){return f.differenceInCalendarMonths(o,e)>0}))||!1}function ct(e,t){var r=void 0===t?{}:t,n=r.minDate,a=r.includeDates,o=ie.subYears(e,1);return n&&m.differenceInCalendarYears(n,o)>0||a&&a.every((function(e){return m.differenceInCalendarYears(e,o)>0}))||!1}function dt(e,t){var r=void 0===t?{}:t,n=r.maxDate,a=r.includeDates,o=p.addYears(e,1);return n&&m.differenceInCalendarYears(o,n)>0||a&&a.every((function(e){return m.differenceInCalendarYears(o,e)>0}))||!1}function pt(e){var t=e.minDate,r=e.includeDates;if(r&&t){var n=r.filter((function(e){return u.differenceInCalendarDays(e,t)>=0}));return q.min(n)}return r?q.min(r):t}function ut(e){var t=e.maxDate,r=e.includeDates;if(r&&t){var n=r.filter((function(e){return u.differenceInCalendarDays(e,t)<=0}));return Q.max(n)}return r?Q.max(r):t}function ft(e,t){var r;void 0===e&&(e=[]),void 0===t&&(t="react-datepicker__day--highlighted");for(var n=new Map,a=0,o=e.length;a<o;a++){var s=e[a];if(T.isDate(s)){var i=Ee(s,"MM.dd.yyyy");(f=n.get(i)||[]).includes(t)||(f.push(t),n.set(i,f))}else if("object"==typeof s){var l=null!==(r=Object.keys(s)[0])&&void 0!==r?r:"",c=s[l];if("string"==typeof l&&Array.isArray(c))for(var d=0,p=c.length;d<p;d++){var u=c[d];if(u){var f;i=Ee(u,"MM.dd.yyyy");(f=n.get(i)||[]).includes(l)||(f.push(l),n.set(i,f))}}}}return n}function ht(e,t){void 0===e&&(e=[]),void 0===t&&(t="react-datepicker__day--holidays");var r=new Map;return e.forEach((function(e){var n=e.date,a=e.holidayName;if(T.isDate(n)){var o=Ee(n,"MM.dd.yyyy"),s=r.get(o)||{className:"",holidayNames:[]};if(!("className"in s)||s.className!==t||(i=s.holidayNames,l=[a],i.length!==l.length||!i.every((function(e,t){return e===l[t]})))){var i,l;s.className=t;var c=s.holidayNames;s.holidayNames=c?ge(ge([],c,!0),[a],!1):[a],r.set(o,s)}}})),r}function mt(e,t,r,n,a){for(var i=a.length,l=[],d=0;d<i;d++){var p=e,u=a[d];u&&(p=o.addHours(p,b.getHours(u)),p=s.addMinutes(p,C.getMinutes(u)),p=c.addSeconds(p,P.getSeconds(u)));var f=s.addMinutes(e,(r+1)*n);O.isAfter(p,t)&&N.isBefore(p,f)&&null!=u&&l.push(u)}return l}function vt(e){return e<10?"0".concat(e):"".concat(e)}function gt(e,t){void 0===t&&(t=Se);var r=Math.ceil(x.getYear(e)/t)*t;return{startPeriod:r-(t-1),endPeriod:r}}function Dt(e){var t=e.getSeconds(),r=e.getMilliseconds();return le.toDate(e.getTime()-1e3*t-r)}function yt(e){if(!T.isDate(e))throw new Error("Invalid date");var t=new Date(e);return t.setHours(0,0,0,0),t}function kt(e,t){if(!T.isDate(e)||!T.isDate(t))throw new Error("Invalid date received");var r=yt(e),n=yt(t);return N.isBefore(r,n)}function wt(e){return e.key===De.Space}var St,bt=function(e){function t(t){var n=e.call(this,t)||this;return n.inputRef=ue.default.createRef(),n.onTimeChange=function(e){var t,r;n.setState({time:e});var a=n.props.date,o=a instanceof Date&&!isNaN(+a)?a:new Date;if(null==e?void 0:e.includes(":")){var s=e.split(":"),i=s[0],l=s[1];o.setHours(Number(i)),o.setMinutes(Number(l))}null===(r=(t=n.props).onChange)||void 0===r||r.call(t,o)},n.renderTimeInput=function(){var e=n.state.time,t=n.props,a=t.date,o=t.timeString,s=t.customTimeInput;return s?r.cloneElement(s,{date:a,value:e,onChange:n.onTimeChange}):ue.default.createElement("input",{type:"time",className:"react-datepicker-time__input",placeholder:"Time",name:"time-input",ref:n.inputRef,onClick:function(){var e;null===(e=n.inputRef.current)||void 0===e||e.focus()},required:!0,value:e,onChange:function(e){n.onTimeChange(e.target.value||o)}})},n.state={time:n.props.timeString},n}return me(t,e),t.getDerivedStateFromProps=function(e,t){return e.timeString!==t.time?{time:e.timeString}:null},t.prototype.render=function(){return ue.default.createElement("div",{className:"react-datepicker__input-time-container"},ue.default.createElement("div",{className:"react-datepicker-time__caption"},this.props.timeInputLabel),ue.default.createElement("div",{className:"react-datepicker-time__input-container"},ue.default.createElement("div",{className:"react-datepicker-time__input"},this.renderTimeInput())))},t}(r.Component),Mt=function(e){function n(){var n=null!==e&&e.apply(this,arguments)||this;return n.dayEl=r.createRef(),n.handleClick=function(e){!n.isDisabled()&&n.props.onClick&&n.props.onClick(e)},n.handleMouseEnter=function(e){!n.isDisabled()&&n.props.onMouseEnter&&n.props.onMouseEnter(e)},n.handleOnKeyDown=function(e){var t,r;e.key===De.Space&&(e.preventDefault(),e.key=De.Enter),null===(r=(t=n.props).handleOnKeyDown)||void 0===r||r.call(t,e)},n.isSameDay=function(e){return Qe(n.props.day,e)},n.isKeyboardSelected=function(){var e;if(n.props.disabledKeyboardNavigation)return!1;var t=n.props.selectsMultiple?null===(e=n.props.selectedDates)||void 0===e?void 0:e.some((function(e){return n.isSameDayOrWeek(e)})):n.isSameDayOrWeek(n.props.selected),r=n.props.preSelection&&n.isDisabled(n.props.preSelection);return!t&&n.isSameDayOrWeek(n.props.preSelection)&&!r},n.isDisabled=function(e){return void 0===e&&(e=n.props.day),$e(e,{minDate:n.props.minDate,maxDate:n.props.maxDate,excludeDates:n.props.excludeDates,excludeDateIntervals:n.props.excludeDateIntervals,includeDateIntervals:n.props.includeDateIntervals,includeDates:n.props.includeDates,filterDate:n.props.filterDate})},n.isExcluded=function(){return ze(n.props.day,{excludeDates:n.props.excludeDates,excludeDateIntervals:n.props.excludeDateIntervals})},n.isStartOfWeek=function(){return Qe(n.props.day,Oe(n.props.day,n.props.locale,n.props.calendarStartDay))},n.isSameWeek=function(e){return n.props.showWeekPicker&&Qe(e,Oe(n.props.day,n.props.locale,n.props.calendarStartDay))},n.isSameDayOrWeek=function(e){return n.isSameDay(e)||n.isSameWeek(e)},n.getHighLightedClass=function(){var e=n.props,t=e.day,r=e.highlightDates;if(!r)return!1;var a=Ee(t,"MM.dd.yyyy");return r.get(a)},n.getHolidaysClass=function(){var e,t=n.props,r=t.day,a=t.holidays;if(!a)return[void 0];var o=Ee(r,"MM.dd.yyyy");return a.has(o)?[null===(e=a.get(o))||void 0===e?void 0:e.className]:[void 0]},n.isInRange=function(){var e=n.props,t=e.day,r=e.startDate,a=e.endDate;return!(!r||!a)&&Ke(t,r,a)},n.isInSelectingRange=function(){var e,t=n.props,r=t.day,a=t.selectsStart,o=t.selectsEnd,s=t.selectsRange,i=t.selectsDisabledDaysInRange,l=t.startDate,c=t.endDate,d=null!==(e=n.props.selectingDate)&&void 0!==e?e:n.props.preSelection;return!(!(a||o||s)||!d||!i&&n.isDisabled())&&(a&&c&&(N.isBefore(d,c)||qe(d,c))?Ke(r,d,c):(o&&l&&(O.isAfter(d,l)||qe(d,l))||!(!s||!l||c||!O.isAfter(d,l)&&!qe(d,l)))&&Ke(r,l,d))},n.isSelectingRangeStart=function(){var e;if(!n.isInSelectingRange())return!1;var t=n.props,r=t.day,a=t.startDate,o=t.selectsStart,s=null!==(e=n.props.selectingDate)&&void 0!==e?e:n.props.preSelection;return Qe(r,o?s:a)},n.isSelectingRangeEnd=function(){var e;if(!n.isInSelectingRange())return!1;var t=n.props,r=t.day,a=t.endDate,o=t.selectsEnd,s=t.selectsRange,i=null!==(e=n.props.selectingDate)&&void 0!==e?e:n.props.preSelection;return Qe(r,o||s?i:a)},n.isRangeStart=function(){var e=n.props,t=e.day,r=e.startDate,a=e.endDate;return!(!r||!a)&&Qe(r,t)},n.isRangeEnd=function(){var e=n.props,t=e.day,r=e.startDate,a=e.endDate;return!(!r||!a)&&Qe(a,t)},n.isWeekend=function(){var e=S.getDay(n.props.day);return 0===e||6===e},n.isAfterMonth=function(){return void 0!==n.props.month&&(n.props.month+1)%12===_.getMonth(n.props.day)},n.isBeforeMonth=function(){return void 0!==n.props.month&&(_.getMonth(n.props.day)+1)%12===n.props.month},n.isCurrentDay=function(){return n.isSameDay(Me())},n.isSelected=function(){var e;return n.props.selectsMultiple?null===(e=n.props.selectedDates)||void 0===e?void 0:e.some((function(e){return n.isSameDayOrWeek(e)})):n.isSameDayOrWeek(n.props.selected)},n.getClassNames=function(e){var r,a=n.props.dayClassName?n.props.dayClassName(e):void 0;return t.clsx("react-datepicker__day",a,"react-datepicker__day--"+Ee(n.props.day,"ddd",r),{"react-datepicker__day--disabled":n.isDisabled(),"react-datepicker__day--excluded":n.isExcluded(),"react-datepicker__day--selected":n.isSelected(),"react-datepicker__day--keyboard-selected":n.isKeyboardSelected(),"react-datepicker__day--range-start":n.isRangeStart(),"react-datepicker__day--range-end":n.isRangeEnd(),"react-datepicker__day--in-range":n.isInRange(),"react-datepicker__day--in-selecting-range":n.isInSelectingRange(),"react-datepicker__day--selecting-range-start":n.isSelectingRangeStart(),"react-datepicker__day--selecting-range-end":n.isSelectingRangeEnd(),"react-datepicker__day--today":n.isCurrentDay(),"react-datepicker__day--weekend":n.isWeekend(),"react-datepicker__day--outside-month":n.isAfterMonth()||n.isBeforeMonth()},n.getHighLightedClass(),n.getHolidaysClass())},n.getAriaLabel=function(){var e=n.props,t=e.day,r=e.ariaLabelPrefixWhenEnabled,a=void 0===r?"Choose":r,o=e.ariaLabelPrefixWhenDisabled,s=void 0===o?"Not available":o,i=n.isDisabled()||n.isExcluded()?s:a;return"".concat(i," ").concat(Ee(t,"PPPP",n.props.locale))},n.getTitle=function(){var e=n.props,t=e.day,r=e.holidays,a=void 0===r?new Map:r,o=e.excludeDates,s=Ee(t,"MM.dd.yyyy"),i=[];return a.has(s)&&i.push.apply(i,a.get(s).holidayNames),n.isExcluded()&&i.push(null==o?void 0:o.filter((function(e){return e instanceof Date?Qe(e,t):Qe(null==e?void 0:e.date,t)})).map((function(e){if(!(e instanceof Date))return null==e?void 0:e.message}))),i.join(", ")},n.getTabIndex=function(){var e=n.props.selected,t=n.props.preSelection;return(!n.props.showWeekPicker||!n.props.showWeekNumber&&n.isStartOfWeek())&&(n.isKeyboardSelected()||n.isSameDay(e)&&Qe(t,e))?0:-1},n.handleFocusDay=function(){var e;n.shouldFocusDay()&&(null===(e=n.dayEl.current)||void 0===e||e.focus({preventScroll:!0}))},n.renderDayContents=function(){return n.props.monthShowsDuplicateDaysEnd&&n.isAfterMonth()||n.props.monthShowsDuplicateDaysStart&&n.isBeforeMonth()?null:n.props.renderDayContents?n.props.renderDayContents(w.getDate(n.props.day),n.props.day):w.getDate(n.props.day)},n.render=function(){return ue.default.createElement("div",{ref:n.dayEl,className:n.getClassNames(n.props.day),onKeyDown:n.handleOnKeyDown,onClick:n.handleClick,onMouseEnter:n.props.usePointerEvent?void 0:n.handleMouseEnter,onPointerEnter:n.props.usePointerEvent?n.handleMouseEnter:void 0,tabIndex:n.getTabIndex(),"aria-label":n.getAriaLabel(),role:"option",title:n.getTitle(),"aria-disabled":n.isDisabled(),"aria-current":n.isCurrentDay()?"date":void 0,"aria-selected":n.isSelected()||n.isInRange()},n.renderDayContents(),""!==n.getTitle()&&ue.default.createElement("span",{className:"overlay"},n.getTitle()))},n}return me(n,e),n.prototype.componentDidMount=function(){this.handleFocusDay()},n.prototype.componentDidUpdate=function(){this.handleFocusDay()},n.prototype.shouldFocusDay=function(){var e=!1;return 0===this.getTabIndex()&&this.isSameDay(this.props.preSelection)&&(document.activeElement&&document.activeElement!==document.body||(e=!0),this.props.inline&&!this.props.shouldFocusDayInline&&(e=!1),this.isDayActiveElement()&&(e=!0),this.isDuplicateDay()&&(e=!1)),e},n.prototype.isDayActiveElement=function(){var e,t,r;return(null===(t=null===(e=this.props.containerRef)||void 0===e?void 0:e.current)||void 0===t?void 0:t.contains(document.activeElement))&&(null===(r=document.activeElement)||void 0===r?void 0:r.classList.contains("react-datepicker__day"))},n.prototype.isDuplicateDay=function(){return this.props.monthShowsDuplicateDaysEnd&&this.isAfterMonth()||this.props.monthShowsDuplicateDaysStart&&this.isBeforeMonth()},n}(r.Component),Ct=function(e){function n(){var t=null!==e&&e.apply(this,arguments)||this;return t.weekNumberEl=r.createRef(),t.handleClick=function(e){t.props.onClick&&t.props.onClick(e)},t.handleOnKeyDown=function(e){var r,n;e.key===De.Space&&(e.preventDefault(),e.key=De.Enter),null===(n=(r=t.props).handleOnKeyDown)||void 0===n||n.call(r,e)},t.isKeyboardSelected=function(){return!t.props.disabledKeyboardNavigation&&!Qe(t.props.date,t.props.selected)&&Qe(t.props.date,t.props.preSelection)},t.getTabIndex=function(){return t.props.showWeekPicker&&t.props.showWeekNumber&&(t.isKeyboardSelected()||Qe(t.props.date,t.props.selected)&&Qe(t.props.preSelection,t.props.selected))?0:-1},t.handleFocusWeekNumber=function(e){var r=!1;0===t.getTabIndex()&&!(null==e?void 0:e.isInputFocused)&&Qe(t.props.date,t.props.preSelection)&&(document.activeElement&&document.activeElement!==document.body||(r=!0),t.props.inline&&!t.props.shouldFocusDayInline&&(r=!1),t.props.containerRef&&t.props.containerRef.current&&t.props.containerRef.current.contains(document.activeElement)&&document.activeElement&&document.activeElement.classList.contains("react-datepicker__week-number")&&(r=!0)),r&&t.weekNumberEl.current&&t.weekNumberEl.current.focus({preventScroll:!0})},t}return me(n,e),Object.defineProperty(n,"defaultProps",{get:function(){return{ariaLabelPrefix:"week "}},enumerable:!1,configurable:!0}),n.prototype.componentDidMount=function(){this.handleFocusWeekNumber()},n.prototype.componentDidUpdate=function(e){this.handleFocusWeekNumber(e)},n.prototype.render=function(){var e=this.props,r=e.weekNumber,a=e.isWeekDisabled,o=e.ariaLabelPrefix,s=void 0===o?n.defaultProps.ariaLabelPrefix:o,i=e.onClick,l={"react-datepicker__week-number":!0,"react-datepicker__week-number--clickable":!!i&&!a,"react-datepicker__week-number--selected":!!i&&Qe(this.props.date,this.props.selected)};return ue.default.createElement("div",{ref:this.weekNumberEl,className:t.clsx(l),"aria-label":"".concat(s," ").concat(this.props.weekNumber),onClick:this.handleClick,onKeyDown:this.handleOnKeyDown,tabIndex:this.getTabIndex()},r)},n}(r.Component),_t=function(e){function r(){var t=null!==e&&e.apply(this,arguments)||this;return t.isDisabled=function(e){return $e(e,{minDate:t.props.minDate,maxDate:t.props.maxDate,excludeDates:t.props.excludeDates,excludeDateIntervals:t.props.excludeDateIntervals,includeDateIntervals:t.props.includeDateIntervals,includeDates:t.props.includeDates,filterDate:t.props.filterDate})},t.handleDayClick=function(e,r){t.props.onDayClick&&t.props.onDayClick(e,r)},t.handleDayMouseEnter=function(e){t.props.onDayMouseEnter&&t.props.onDayMouseEnter(e)},t.handleWeekClick=function(e,n,a){for(var o,s,i,l=new Date(e),c=0;c<7;c++){var d=new Date(e);if(d.setDate(d.getDate()+c),!t.isDisabled(d)){l=d;break}}"function"==typeof t.props.onWeekSelect&&t.props.onWeekSelect(l,n,a),t.props.showWeekPicker&&t.handleDayClick(l,a),(null!==(o=t.props.shouldCloseOnSelect)&&void 0!==o?o:r.defaultProps.shouldCloseOnSelect)&&(null===(i=(s=t.props).setOpen)||void 0===i||i.call(s,!1))},t.formatWeekNumber=function(e){return t.props.formatWeekNumber?t.props.formatWeekNumber(e):function(e){return M.getISOWeek(e)}(e)},t.isWeekDisabled=function(){for(var e=t.startOfWeek(),r=a.addDays(e,6),n=new Date(e);n<=r;){if(!t.isDisabled(n))return!1;n=a.addDays(n,1)}return!0},t.renderDays=function(){var e=t.startOfWeek(),n=[],o=t.formatWeekNumber(e);if(t.props.showWeekNumber){var s=t.props.onWeekSelect||t.props.showWeekPicker?t.handleWeekClick.bind(t,e,o):void 0;n.push(ue.default.createElement(Ct,ve({key:"W"},r.defaultProps,t.props,{weekNumber:o,isWeekDisabled:t.isWeekDisabled(),date:e,onClick:s})))}return n.concat([0,1,2,3,4,5,6].map((function(n){var o=a.addDays(e,n);return ue.default.createElement(Mt,ve({},r.defaultProps,t.props,{ariaLabelPrefixWhenEnabled:t.props.chooseDayAriaLabelPrefix,ariaLabelPrefixWhenDisabled:t.props.disabledDayAriaLabelPrefix,key:o.valueOf(),day:o,onClick:t.handleDayClick.bind(t,o),onMouseEnter:t.handleDayMouseEnter.bind(t,o)}))})))},t.startOfWeek=function(){return Oe(t.props.day,t.props.locale,t.props.calendarStartDay)},t.isKeyboardSelected=function(){return!t.props.disabledKeyboardNavigation&&!Qe(t.startOfWeek(),t.props.selected)&&Qe(t.startOfWeek(),t.props.preSelection)},t}return me(r,e),Object.defineProperty(r,"defaultProps",{get:function(){return{shouldCloseOnSelect:!0}},enumerable:!1,configurable:!0}),r.prototype.render=function(){var e={"react-datepicker__week":!0,"react-datepicker__week--selected":Qe(this.startOfWeek(),this.props.selected),"react-datepicker__week--keyboard-selected":this.isKeyboardSelected()};return ue.default.createElement("div",{className:t.clsx(e)},this.renderDays())},r}(r.Component),Et="two_columns",Pt="three_columns",Yt="four_columns",xt=((St={})[Et]={grid:[[0,1],[2,3],[4,5],[6,7],[8,9],[10,11]],verticalNavigationOffset:2},St[Pt]={grid:[[0,1,2],[3,4,5],[6,7,8],[9,10,11]],verticalNavigationOffset:3},St[Yt]={grid:[[0,1,2,3],[4,5,6,7],[8,9,10,11]],verticalNavigationOffset:4},St);function Ot(e,t){return e?Yt:t?Et:Pt}var Nt=function(e){function n(){var n=null!==e&&e.apply(this,arguments)||this;return n.MONTH_REFS=ge([],Array(12),!0).map((function(){return r.createRef()})),n.QUARTER_REFS=ge([],Array(4),!0).map((function(){return r.createRef()})),n.isDisabled=function(e){return $e(e,{minDate:n.props.minDate,maxDate:n.props.maxDate,excludeDates:n.props.excludeDates,excludeDateIntervals:n.props.excludeDateIntervals,includeDateIntervals:n.props.includeDateIntervals,includeDates:n.props.includeDates,filterDate:n.props.filterDate})},n.isExcluded=function(e){return ze(e,{excludeDates:n.props.excludeDates,excludeDateIntervals:n.props.excludeDateIntervals})},n.handleDayClick=function(e,t){var r,a;null===(a=(r=n.props).onDayClick)||void 0===a||a.call(r,e,t,n.props.orderInDisplay)},n.handleDayMouseEnter=function(e){var t,r;null===(r=(t=n.props).onDayMouseEnter)||void 0===r||r.call(t,e)},n.handleMouseLeave=function(){var e,t;null===(t=(e=n.props).onMouseLeave)||void 0===t||t.call(e)},n.isRangeStartMonth=function(e){var t=n.props,r=t.day,a=t.startDate,o=t.endDate;return!(!a||!o)&&We($.setMonth(r,e),a)},n.isRangeStartQuarter=function(e){var t=n.props,r=t.day,a=t.startDate,o=t.endDate;return!(!a||!o)&&He(z.setQuarter(r,e),a)},n.isRangeEndMonth=function(e){var t=n.props,r=t.day,a=t.startDate,o=t.endDate;return!(!a||!o)&&We($.setMonth(r,e),o)},n.isRangeEndQuarter=function(e){var t=n.props,r=t.day,a=t.startDate,o=t.endDate;return!(!a||!o)&&He(z.setQuarter(r,e),o)},n.isInSelectingRangeMonth=function(e){var t,r=n.props,a=r.day,o=r.selectsStart,s=r.selectsEnd,i=r.selectsRange,l=r.startDate,c=r.endDate,d=null!==(t=n.props.selectingDate)&&void 0!==t?t:n.props.preSelection;return!(!(o||s||i)||!d)&&(o&&c?Ge(d,c,e,a):(s&&l||!(!i||!l||c))&&Ge(l,d,e,a))},n.isSelectingMonthRangeStart=function(e){var t;if(!n.isInSelectingRangeMonth(e))return!1;var r=n.props,a=r.day,o=r.startDate,s=r.selectsStart,i=$.setMonth(a,e),l=null!==(t=n.props.selectingDate)&&void 0!==t?t:n.props.preSelection;return We(i,s?l:o)},n.isSelectingMonthRangeEnd=function(e){var t;if(!n.isInSelectingRangeMonth(e))return!1;var r=n.props,a=r.day,o=r.endDate,s=r.selectsEnd,i=r.selectsRange,l=$.setMonth(a,e),c=null!==(t=n.props.selectingDate)&&void 0!==t?t:n.props.preSelection;return We(l,s||i?c:o)},n.isInSelectingRangeQuarter=function(e){var t,r=n.props,a=r.day,o=r.selectsStart,s=r.selectsEnd,i=r.selectsRange,l=r.startDate,c=r.endDate,d=null!==(t=n.props.selectingDate)&&void 0!==t?t:n.props.preSelection;return!(!(o||s||i)||!d)&&(o&&c?rt(d,c,e,a):(s&&l||!(!i||!l||c))&&rt(l,d,e,a))},n.isWeekInMonth=function(e){var t=n.props.day,r=a.addDays(e,6);return We(e,t)||We(r,t)},n.isCurrentMonth=function(e,t){return x.getYear(e)===x.getYear(Me())&&t===_.getMonth(Me())},n.isCurrentQuarter=function(e,t){return x.getYear(e)===x.getYear(Me())&&t===E.getQuarter(Me())},n.isSelectedMonth=function(e,t,r){return _.getMonth(r)===t&&x.getYear(e)===x.getYear(r)},n.isSelectMonthInList=function(e,t,r){return r.some((function(r){return n.isSelectedMonth(e,t,r)}))},n.isSelectedQuarter=function(e,t,r){return E.getQuarter(e)===t&&x.getYear(e)===x.getYear(r)},n.renderWeeks=function(){for(var e=[],t=n.props.fixedHeight,r=0,a=!1,o=Oe(Ne(n.props.day),n.props.locale,n.props.calendarStartDay),s=n.props.selected?function(e){return n.props.showWeekPicker?Oe(e,n.props.locale,n.props.calendarStartDay):n.props.selected}(n.props.selected):void 0,i=n.props.preSelection?function(e){return n.props.showWeekPicker?Oe(e,n.props.locale,n.props.calendarStartDay):n.props.preSelection}(n.props.preSelection):void 0;e.push(ue.default.createElement(_t,ve({},n.props,{ariaLabelPrefix:n.props.weekAriaLabelPrefix,key:r,day:o,month:_.getMonth(n.props.day),onDayClick:n.handleDayClick,onDayMouseEnter:n.handleDayMouseEnter,selected:s,preSelection:i,showWeekNumber:n.props.showWeekNumbers}))),!a;){r++,o=d.addWeeks(o,1);var l=t&&r>=6,c=!t&&!n.isWeekInMonth(o);if(l||c){if(!n.props.peekNextMonth)break;a=!0}}return e},n.onMonthClick=function(e,t){var r=n.isMonthDisabledForLabelDate(t),a=r.isDisabled,o=r.labelDate;a||n.handleDayClick(Ne(o),e)},n.onMonthMouseEnter=function(e){var t=n.isMonthDisabledForLabelDate(e),r=t.isDisabled,a=t.labelDate;r||n.handleDayMouseEnter(Ne(a))},n.handleMonthNavigation=function(e,t){var r,a,o,s;null===(a=(r=n.props).setPreSelection)||void 0===a||a.call(r,t),null===(s=null===(o=n.MONTH_REFS[e])||void 0===o?void 0:o.current)||void 0===s||s.focus()},n.handleKeyboardNavigation=function(e,t,r){var a,o=n.props,s=o.selected,l=o.preSelection,c=o.setPreSelection,d=o.minDate,p=o.maxDate,u=o.showFourColumnMonthYearPicker,f=o.showTwoColumnMonthYearPicker;if(l){var h=Ot(u,f),m=n.getVerticalOffset(h),v=null===(a=xt[h])||void 0===a?void 0:a.grid,g=function(e,t,r){var n,a,o=t,s=r;switch(e){case De.ArrowRight:o=i.addMonths(t,1),s=11===r?0:r+1;break;case De.ArrowLeft:o=ae.subMonths(t,1),s=0===r?11:r-1;break;case De.ArrowUp:o=ae.subMonths(t,m),s=(null===(n=null==v?void 0:v[0])||void 0===n?void 0:n.includes(r))?r+12-m:r-m;break;case De.ArrowDown:o=i.addMonths(t,m),s=(null===(a=null==v?void 0:v[v.length-1])||void 0===a?void 0:a.includes(r))?r-12+m:r+m}return{newCalculatedDate:o,newCalculatedMonth:s}};if(t!==De.Enter){var D=function(e,t,r){for(var a=e,o=!1,s=0,i=g(a,t,r),l=i.newCalculatedDate,c=i.newCalculatedMonth;!o;){if(s>=40){l=t,c=r;break}var u;if(d&&l<d)a=De.ArrowRight,l=(u=g(a,l,c)).newCalculatedDate,c=u.newCalculatedMonth;if(p&&l>p)a=De.ArrowLeft,l=(u=g(a,l,c)).newCalculatedDate,c=u.newCalculatedMonth;if(Je(l,n.props))l=(u=g(a,l,c)).newCalculatedDate,c=u.newCalculatedMonth;else o=!0;s++}return{newCalculatedDate:l,newCalculatedMonth:c}}(t,l,r),y=D.newCalculatedDate,k=D.newCalculatedMonth;switch(t){case De.ArrowRight:case De.ArrowLeft:case De.ArrowUp:case De.ArrowDown:n.handleMonthNavigation(k,y)}}else n.isMonthDisabled(r)||(n.onMonthClick(e,r),null==c||c(s))}},n.getVerticalOffset=function(e){var t,r;return null!==(r=null===(t=xt[e])||void 0===t?void 0:t.verticalNavigationOffset)&&void 0!==r?r:0},n.onMonthKeyDown=function(e,t){var r=n.props,a=r.disabledKeyboardNavigation,o=r.handleOnMonthKeyDown,s=e.key;s!==De.Tab&&e.preventDefault(),a||n.handleKeyboardNavigation(e,s,t),o&&o(e)},n.onQuarterClick=function(e,t){var r=z.setQuarter(n.props.day,t);Ze(r,n.props)||n.handleDayClick(Ie(r),e)},n.onQuarterMouseEnter=function(e){var t=z.setQuarter(n.props.day,e);Ze(t,n.props)||n.handleDayMouseEnter(Ie(t))},n.handleQuarterNavigation=function(e,t){var r,a,o,s;n.isDisabled(t)||n.isExcluded(t)||(null===(a=(r=n.props).setPreSelection)||void 0===a||a.call(r,t),null===(s=null===(o=n.QUARTER_REFS[e-1])||void 0===o?void 0:o.current)||void 0===s||s.focus())},n.onQuarterKeyDown=function(e,t){var r,a,o=e.key;if(!n.props.disabledKeyboardNavigation)switch(o){case De.Enter:n.onQuarterClick(e,t),null===(a=(r=n.props).setPreSelection)||void 0===a||a.call(r,n.props.selected);break;case De.ArrowRight:if(!n.props.preSelection)break;n.handleQuarterNavigation(4===t?1:t+1,l.addQuarters(n.props.preSelection,1));break;case De.ArrowLeft:if(!n.props.preSelection)break;n.handleQuarterNavigation(1===t?4:t-1,oe.subQuarters(n.props.preSelection,1))}},n.isMonthDisabledForLabelDate=function(e){var t,r=n.props,a=r.day,o=r.minDate,s=r.maxDate,i=r.excludeDates,l=r.includeDates,c=$.setMonth(a,e);return{isDisabled:null!==(t=(o||s||i||l)&&Xe(c,n.props))&&void 0!==t&&t,labelDate:c}},n.isMonthDisabled=function(e){return n.isMonthDisabledForLabelDate(e).isDisabled},n.getMonthClassNames=function(e){var r=n.props,a=r.day,o=r.startDate,s=r.endDate,i=r.preSelection,l=r.monthClassName,c=l?l($.setMonth(a,e)):void 0,d=n.getSelection();return t.clsx("react-datepicker__month-text","react-datepicker__month-".concat(e),c,{"react-datepicker__month-text--disabled":n.isMonthDisabled(e),"react-datepicker__month-text--selected":d?n.isSelectMonthInList(a,e,d):void 0,"react-datepicker__month-text--keyboard-selected":!n.props.disabledKeyboardNavigation&&i&&n.isSelectedMonth(a,e,i)&&!n.isMonthDisabled(e),"react-datepicker__month-text--in-selecting-range":n.isInSelectingRangeMonth(e),"react-datepicker__month-text--in-range":o&&s?Ge(o,s,e,a):void 0,"react-datepicker__month-text--range-start":n.isRangeStartMonth(e),"react-datepicker__month-text--range-end":n.isRangeEndMonth(e),"react-datepicker__month-text--selecting-range-start":n.isSelectingMonthRangeStart(e),"react-datepicker__month-text--selecting-range-end":n.isSelectingMonthRangeEnd(e),"react-datepicker__month-text--today":n.isCurrentMonth(a,e)})},n.getTabIndex=function(e){if(null==n.props.preSelection)return"-1";var t=_.getMonth(n.props.preSelection),r=n.isMonthDisabledForLabelDate(t).isDisabled;return e!==t||r||n.props.disabledKeyboardNavigation?"-1":"0"},n.getQuarterTabIndex=function(e){if(null==n.props.preSelection)return"-1";var t=E.getQuarter(n.props.preSelection),r=Ze(n.props.day,n.props);return e!==t||r||n.props.disabledKeyboardNavigation?"-1":"0"},n.getAriaLabel=function(e){var t=n.props,r=t.chooseDayAriaLabelPrefix,a=void 0===r?"Choose":r,o=t.disabledDayAriaLabelPrefix,s=void 0===o?"Not available":o,i=t.day,l=t.locale,c=$.setMonth(i,e),d=n.isDisabled(c)||n.isExcluded(c)?s:a;return"".concat(d," ").concat(Ee(c,"MMMM yyyy",l))},n.getQuarterClassNames=function(e){var r=n.props,a=r.day,o=r.startDate,s=r.endDate,i=r.selected,l=r.minDate,c=r.maxDate,d=r.excludeDates,p=r.includeDates,u=r.filterDate,f=r.preSelection,h=r.disabledKeyboardNavigation,m=(l||c||d||p||u)&&Ze(z.setQuarter(a,e),n.props);return t.clsx("react-datepicker__quarter-text","react-datepicker__quarter-".concat(e),{"react-datepicker__quarter-text--disabled":m,"react-datepicker__quarter-text--selected":i?n.isSelectedQuarter(a,e,i):void 0,"react-datepicker__quarter-text--keyboard-selected":!h&&f&&n.isSelectedQuarter(a,e,f)&&!m,"react-datepicker__quarter-text--in-selecting-range":n.isInSelectingRangeQuarter(e),"react-datepicker__quarter-text--in-range":o&&s?rt(o,s,e,a):void 0,"react-datepicker__quarter-text--range-start":n.isRangeStartQuarter(e),"react-datepicker__quarter-text--range-end":n.isRangeEndQuarter(e)})},n.getMonthContent=function(e){var t=n.props,r=t.showFullMonthYearPicker,a=t.renderMonthContent,o=t.locale,s=t.day,i=Ue(e,o),l=je(e,o);return a?a(e,i,l,s):r?l:i},n.getQuarterContent=function(e){var t,r=n.props,a=r.renderQuarterContent,o=function(e,t){return Ee(z.setQuarter(Me(),e),"QQQ",t)}(e,r.locale);return null!==(t=null==a?void 0:a(e,o))&&void 0!==t?t:o},n.renderMonths=function(){var e,t=n.props,r=t.showTwoColumnMonthYearPicker,a=t.showFourColumnMonthYearPicker,o=t.day,s=t.selected,i=null===(e=xt[Ot(a,r)])||void 0===e?void 0:e.grid;return null==i?void 0:i.map((function(e,t){return ue.default.createElement("div",{className:"react-datepicker__month-wrapper",key:t},e.map((function(e,t){return ue.default.createElement("div",{ref:n.MONTH_REFS[e],key:t,onClick:function(t){n.onMonthClick(t,e)},onKeyDown:function(t){wt(t)&&(t.preventDefault(),t.key=De.Enter),n.onMonthKeyDown(t,e)},onMouseEnter:n.props.usePointerEvent?void 0:function(){return n.onMonthMouseEnter(e)},onPointerEnter:n.props.usePointerEvent?function(){return n.onMonthMouseEnter(e)}:void 0,tabIndex:Number(n.getTabIndex(e)),className:n.getMonthClassNames(e),"aria-disabled":n.isMonthDisabled(e),role:"option","aria-label":n.getAriaLabel(e),"aria-current":n.isCurrentMonth(o,e)?"date":void 0,"aria-selected":s?n.isSelectedMonth(o,e,s):void 0},n.getMonthContent(e))})))}))},n.renderQuarters=function(){var e=n.props,t=e.day,r=e.selected;return ue.default.createElement("div",{className:"react-datepicker__quarter-wrapper"},[1,2,3,4].map((function(e,a){return ue.default.createElement("div",{key:a,ref:n.QUARTER_REFS[a],role:"option",onClick:function(t){n.onQuarterClick(t,e)},onKeyDown:function(t){n.onQuarterKeyDown(t,e)},onMouseEnter:n.props.usePointerEvent?void 0:function(){return n.onQuarterMouseEnter(e)},onPointerEnter:n.props.usePointerEvent?function(){return n.onQuarterMouseEnter(e)}:void 0,className:n.getQuarterClassNames(e),"aria-selected":r?n.isSelectedQuarter(t,e,r):void 0,tabIndex:Number(n.getQuarterTabIndex(e)),"aria-current":n.isCurrentQuarter(t,e)?"date":void 0},n.getQuarterContent(e))})))},n.getClassNames=function(){var e=n.props,r=e.selectingDate,a=e.selectsStart,o=e.selectsEnd,s=e.showMonthYearPicker,i=e.showQuarterYearPicker,l=e.showWeekPicker;return t.clsx("react-datepicker__month",{"react-datepicker__month--selecting-range":r&&(a||o)},{"react-datepicker__monthPicker":s},{"react-datepicker__quarterPicker":i},{"react-datepicker__weekPicker":l})},n}return me(n,e),n.prototype.getSelection=function(){var e=this.props,t=e.selected,r=e.selectedDates;return e.selectsMultiple?r:t?[t]:void 0},n.prototype.render=function(){var e=this.props,t=e.showMonthYearPicker,r=e.showQuarterYearPicker,n=e.day,a=e.ariaLabelPrefix,o=void 0===a?"Month ":a,s=o?o.trim()+" ":"";return ue.default.createElement("div",{className:this.getClassNames(),onMouseLeave:this.props.usePointerEvent?void 0:this.handleMouseLeave,onPointerLeave:this.props.usePointerEvent?this.handleMouseLeave:void 0,"aria-label":"".concat(s).concat(Ee(n,"MMMM, yyyy",this.props.locale)),role:"listbox"},t?this.renderMonths():r?this.renderQuarters():this.renderWeeks())},n}(r.Component),Tt=function(e){function t(){var t=null!==e&&e.apply(this,arguments)||this;return t.isSelectedMonth=function(e){return t.props.month===e},t.renderOptions=function(){return t.props.monthNames.map((function(e,r){return ue.default.createElement("div",{className:t.isSelectedMonth(r)?"react-datepicker__month-option react-datepicker__month-option--selected_month":"react-datepicker__month-option",key:e,onClick:t.onChange.bind(t,r),"aria-selected":t.isSelectedMonth(r)?"true":void 0},t.isSelectedMonth(r)?ue.default.createElement("span",{className:"react-datepicker__month-option--selected"},"✓"):"",e)}))},t.onChange=function(e){return t.props.onChange(e)},t.handleClickOutside=function(){return t.props.onCancel()},t}return me(t,e),t.prototype.render=function(){return ue.default.createElement(ke,{className:"react-datepicker__month-dropdown",onClickOutside:this.handleClickOutside},this.renderOptions())},t}(r.Component),It=function(e){function t(){var t=null!==e&&e.apply(this,arguments)||this;return t.state={dropdownVisible:!1},t.renderSelectOptions=function(e){return e.map((function(e,t){return ue.default.createElement("option",{key:e,value:t},e)}))},t.renderSelectMode=function(e){return ue.default.createElement("select",{value:t.props.month,className:"react-datepicker__month-select",onChange:function(e){return t.onChange(parseInt(e.target.value))}},t.renderSelectOptions(e))},t.renderReadView=function(e,r){return ue.default.createElement("div",{key:"read",style:{visibility:e?"visible":"hidden"},className:"react-datepicker__month-read-view",onClick:t.toggleDropdown},ue.default.createElement("span",{className:"react-datepicker__month-read-view--down-arrow"}),ue.default.createElement("span",{className:"react-datepicker__month-read-view--selected-month"},r[t.props.month]))},t.renderDropdown=function(e){return ue.default.createElement(Tt,ve({key:"dropdown"},t.props,{monthNames:e,onChange:t.onChange,onCancel:t.toggleDropdown}))},t.renderScrollMode=function(e){var r=t.state.dropdownVisible,n=[t.renderReadView(!r,e)];return r&&n.unshift(t.renderDropdown(e)),n},t.onChange=function(e){t.toggleDropdown(),e!==t.props.month&&t.props.onChange(e)},t.toggleDropdown=function(){return t.setState({dropdownVisible:!t.state.dropdownVisible})},t}return me(t,e),t.prototype.render=function(){var e,t=this,r=[0,1,2,3,4,5,6,7,8,9,10,11].map(this.props.useShortMonthInDropdown?function(e){return Ue(e,t.props.locale)}:function(e){return je(e,t.props.locale)});switch(this.props.dropdownMode){case"scroll":e=this.renderScrollMode(r);break;case"select":e=this.renderSelectMode(r)}return ue.default.createElement("div",{className:"react-datepicker__month-dropdown-container react-datepicker__month-dropdown-container--".concat(this.props.dropdownMode)},e)},t}(r.Component);function Rt(e,t){for(var r=[],n=Ne(e),a=Ne(t);!O.isAfter(n,a);)r.push(Me(n)),n=i.addMonths(n,1);return r}var Lt=function(e){function r(t){var r=e.call(this,t)||this;return r.renderOptions=function(){return r.state.monthYearsList.map((function(e){var t=Y.getTime(e),n=Ae(r.props.date,e)&&We(r.props.date,e);return ue.default.createElement("div",{className:n?"react-datepicker__month-year-option--selected_month-year":"react-datepicker__month-year-option",key:t,onClick:r.onChange.bind(r,t),"aria-selected":n?"true":void 0},n?ue.default.createElement("span",{className:"react-datepicker__month-year-option--selected"},"✓"):"",Ee(e,r.props.dateFormat,r.props.locale))}))},r.onChange=function(e){return r.props.onChange(e)},r.handleClickOutside=function(){r.props.onCancel()},r.state={monthYearsList:Rt(r.props.minDate,r.props.maxDate)},r}return me(r,e),r.prototype.render=function(){var e=t.clsx({"react-datepicker__month-year-dropdown":!0,"react-datepicker__month-year-dropdown--scrollable":this.props.scrollableMonthYearDropdown});return ue.default.createElement(ke,{className:e,onClickOutside:this.handleClickOutside},this.renderOptions())},r}(r.Component),Ft=function(e){function t(){var t=null!==e&&e.apply(this,arguments)||this;return t.state={dropdownVisible:!1},t.renderSelectOptions=function(){for(var e=Ne(t.props.minDate),r=Ne(t.props.maxDate),n=[];!O.isAfter(e,r);){var a=Y.getTime(e);n.push(ue.default.createElement("option",{key:a,value:a},Ee(e,t.props.dateFormat,t.props.locale))),e=i.addMonths(e,1)}return n},t.onSelectChange=function(e){t.onChange(parseInt(e.target.value))},t.renderSelectMode=function(){return ue.default.createElement("select",{value:Y.getTime(Ne(t.props.date)),className:"react-datepicker__month-year-select",onChange:t.onSelectChange},t.renderSelectOptions())},t.renderReadView=function(e){var r=Ee(t.props.date,t.props.dateFormat,t.props.locale);return ue.default.createElement("div",{key:"read",style:{visibility:e?"visible":"hidden"},className:"react-datepicker__month-year-read-view",onClick:t.toggleDropdown},ue.default.createElement("span",{className:"react-datepicker__month-year-read-view--down-arrow"}),ue.default.createElement("span",{className:"react-datepicker__month-year-read-view--selected-month-year"},r))},t.renderDropdown=function(){return ue.default.createElement(Lt,ve({key:"dropdown"},t.props,{onChange:t.onChange,onCancel:t.toggleDropdown}))},t.renderScrollMode=function(){var e=t.state.dropdownVisible,r=[t.renderReadView(!e)];return e&&r.unshift(t.renderDropdown()),r},t.onChange=function(e){t.toggleDropdown();var r=Me(e);Ae(t.props.date,r)&&We(t.props.date,r)||t.props.onChange(r)},t.toggleDropdown=function(){return t.setState({dropdownVisible:!t.state.dropdownVisible})},t}return me(t,e),t.prototype.render=function(){var e;switch(this.props.dropdownMode){case"scroll":e=this.renderScrollMode();break;case"select":e=this.renderSelectMode()}return ue.default.createElement("div",{className:"react-datepicker__month-year-dropdown-container react-datepicker__month-year-dropdown-container--".concat(this.props.dropdownMode)},e)},t}(r.Component),At=function(e){function t(){var r=null!==e&&e.apply(this,arguments)||this;return r.state={height:null},r.scrollToTheSelectedTime=function(){requestAnimationFrame((function(){var e,n,a;r.list&&(r.list.scrollTop=null!==(a=r.centerLi&&t.calcCenterPosition(r.props.monthRef?r.props.monthRef.clientHeight-(null!==(n=null===(e=r.header)||void 0===e?void 0:e.clientHeight)&&void 0!==n?n:0):r.list.clientHeight,r.centerLi))&&void 0!==a?a:0)}))},r.handleClick=function(e){var t,n;(r.props.minTime||r.props.maxTime)&&st(e,r.props)||(r.props.excludeTimes||r.props.includeTimes||r.props.filterTime)&&ot(e,r.props)||null===(n=(t=r.props).onChange)||void 0===n||n.call(t,e)},r.isSelectedTime=function(e){return r.props.selected&&(t=r.props.selected,n=e,Dt(t).getTime()===Dt(n).getTime());var t,n},r.isDisabledTime=function(e){return(r.props.minTime||r.props.maxTime)&&st(e,r.props)||(r.props.excludeTimes||r.props.includeTimes||r.props.filterTime)&&ot(e,r.props)},r.liClasses=function(e){var n,a=["react-datepicker__time-list-item",r.props.timeClassName?r.props.timeClassName(e):void 0];return r.isSelectedTime(e)&&a.push("react-datepicker__time-list-item--selected"),r.isDisabledTime(e)&&a.push("react-datepicker__time-list-item--disabled"),r.props.injectTimes&&(3600*b.getHours(e)+60*C.getMinutes(e)+P.getSeconds(e))%(60*(null!==(n=r.props.intervals)&&void 0!==n?n:t.defaultProps.intervals))!=0&&a.push("react-datepicker__time-list-item--injected"),a.join(" ")},r.handleOnKeyDown=function(e,t){var n,a;e.key===De.Space&&(e.preventDefault(),e.key=De.Enter),(e.key===De.ArrowUp||e.key===De.ArrowLeft)&&e.target instanceof HTMLElement&&e.target.previousSibling&&(e.preventDefault(),e.target.previousSibling instanceof HTMLElement&&e.target.previousSibling.focus()),(e.key===De.ArrowDown||e.key===De.ArrowRight)&&e.target instanceof HTMLElement&&e.target.nextSibling&&(e.preventDefault(),e.target.nextSibling instanceof HTMLElement&&e.target.nextSibling.focus()),e.key===De.Enter&&r.handleClick(t),null===(a=(n=r.props).handleOnKeyDown)||void 0===a||a.call(n,e)},r.renderTimes=function(){for(var e,n=[],a="string"==typeof r.props.format?r.props.format:"p",o=null!==(e=r.props.intervals)&&void 0!==e?e:t.defaultProps.intervals,i=r.props.selected||r.props.openToDate||Me(),l=xe(i),c=r.props.injectTimes&&r.props.injectTimes.sort((function(e,t){return e.getTime()-t.getTime()})),d=60*function(e){var t=new Date(e.getFullYear(),e.getMonth(),e.getDate()),r=new Date(e.getFullYear(),e.getMonth(),e.getDate(),24);return Math.round((+r-+t)/36e5)}(i),p=d/o,u=0;u<p;u++){var f=s.addMinutes(l,u*o);if(n.push(f),c){var h=mt(l,f,u,o,c);n=n.concat(h)}}var m=n.reduce((function(e,t){return t.getTime()<=i.getTime()?t:e}),n[0]);return n.map((function(e){return ue.default.createElement("li",{key:e.valueOf(),onClick:r.handleClick.bind(r,e),className:r.liClasses(e),ref:function(t){e===m&&(r.centerLi=t)},onKeyDown:function(t){r.handleOnKeyDown(t,e)},tabIndex:e===m?0:-1,role:"option","aria-selected":r.isSelectedTime(e)?"true":void 0,"aria-disabled":r.isDisabledTime(e)?"true":void 0},Ee(e,a,r.props.locale))}))},r.renderTimeCaption=function(){return!1===r.props.showTimeCaption?ue.default.createElement(ue.default.Fragment,null):ue.default.createElement("div",{className:"react-datepicker__header react-datepicker__header--time ".concat(r.props.showTimeSelectOnly?"react-datepicker__header--time--only":""),ref:function(e){r.header=e}},ue.default.createElement("div",{className:"react-datepicker-time__header"},r.props.timeCaption))},r}return me(t,e),Object.defineProperty(t,"defaultProps",{get:function(){return{intervals:30,todayButton:null,timeCaption:"Time",showTimeCaption:!0}},enumerable:!1,configurable:!0}),t.prototype.componentDidMount=function(){this.scrollToTheSelectedTime(),this.props.monthRef&&this.header&&this.setState({height:this.props.monthRef.clientHeight-this.header.clientHeight})},t.prototype.render=function(){var e,r=this,n=this.state.height;return ue.default.createElement("div",{className:"react-datepicker__time-container ".concat((null!==(e=this.props.todayButton)&&void 0!==e?e:t.defaultProps.todayButton)?"react-datepicker__time-container--with-today-button":"")},this.renderTimeCaption(),ue.default.createElement("div",{className:"react-datepicker__time"},ue.default.createElement("div",{className:"react-datepicker__time-box"},ue.default.createElement("ul",{className:"react-datepicker__time-list",ref:function(e){r.list=e},style:n?{height:n}:{},role:"listbox","aria-label":this.props.timeCaption},this.renderTimes()))))},t.calcCenterPosition=function(e,t){return t.offsetTop-(e/2-t.clientHeight/2)},t}(r.Component),Wt=function(e){function n(n){var a=e.call(this,n)||this;return a.YEAR_REFS=ge([],Array(a.props.yearItemNumber),!0).map((function(){return r.createRef()})),a.isDisabled=function(e){return $e(e,{minDate:a.props.minDate,maxDate:a.props.maxDate,excludeDates:a.props.excludeDates,includeDates:a.props.includeDates,filterDate:a.props.filterDate})},a.isExcluded=function(e){return ze(e,{excludeDates:a.props.excludeDates})},a.selectingDate=function(){var e;return null!==(e=a.props.selectingDate)&&void 0!==e?e:a.props.preSelection},a.updateFocusOnPaginate=function(e){window.requestAnimationFrame((function(){var t,r;null===(r=null===(t=a.YEAR_REFS[e])||void 0===t?void 0:t.current)||void 0===r||r.focus()}))},a.handleYearClick=function(e,t){a.props.onDayClick&&a.props.onDayClick(e,t)},a.handleYearNavigation=function(e,t){var r,n,o,s,i=a.props,l=i.date,c=i.yearItemNumber;if(void 0!==l&&void 0!==c){var d=gt(l,c).startPeriod;a.isDisabled(t)||a.isExcluded(t)||(null===(n=(r=a.props).setPreSelection)||void 0===n||n.call(r,t),e-d<0?a.updateFocusOnPaginate(c-(d-e)):e-d>=c?a.updateFocusOnPaginate(Math.abs(c-(e-d))):null===(s=null===(o=a.YEAR_REFS[e-d])||void 0===o?void 0:o.current)||void 0===s||s.focus())}},a.isSameDay=function(e,t){return Qe(e,t)},a.isCurrentYear=function(e){return e===x.getYear(Me())},a.isRangeStart=function(e){return a.props.startDate&&a.props.endDate&&Ae(G.setYear(Me(),e),a.props.startDate)},a.isRangeEnd=function(e){return a.props.startDate&&a.props.endDate&&Ae(G.setYear(Me(),e),a.props.endDate)},a.isInRange=function(e){return et(e,a.props.startDate,a.props.endDate)},a.isInSelectingRange=function(e){var t=a.props,r=t.selectsStart,n=t.selectsEnd,o=t.selectsRange,s=t.startDate,i=t.endDate;return!(!(r||n||o)||!a.selectingDate())&&(r&&i?et(e,a.selectingDate(),i):(n&&s||!(!o||!s||i))&&et(e,s,a.selectingDate()))},a.isSelectingRangeStart=function(e){var t;if(!a.isInSelectingRange(e))return!1;var r=a.props,n=r.startDate,o=r.selectsStart,s=G.setYear(Me(),e);return Ae(s,o?null!==(t=a.selectingDate())&&void 0!==t?t:null:null!=n?n:null)},a.isSelectingRangeEnd=function(e){var t;if(!a.isInSelectingRange(e))return!1;var r=a.props,n=r.endDate,o=r.selectsEnd,s=r.selectsRange,i=G.setYear(Me(),e);return Ae(i,o||s?null!==(t=a.selectingDate())&&void 0!==t?t:null:null!=n?n:null)},a.isKeyboardSelected=function(e){if(void 0!==a.props.date&&null!=a.props.selected&&null!=a.props.preSelection){var t=a.props,r=t.minDate,n=t.maxDate,o=t.excludeDates,s=t.includeDates,i=t.filterDate,l=Te(G.setYear(a.props.date,e)),c=(r||n||o||s||i)&&tt(e,a.props);return!a.props.disabledKeyboardNavigation&&!a.props.inline&&!Qe(l,Te(a.props.selected))&&Qe(l,Te(a.props.preSelection))&&!c}},a.onYearClick=function(e,t){var r=a.props.date;void 0!==r&&a.handleYearClick(Te(G.setYear(r,t)),e)},a.onYearKeyDown=function(e,t){var r,n,o=e.key,s=a.props,i=s.date,l=s.yearItemNumber,c=s.handleOnKeyDown;if(o!==De.Tab&&e.preventDefault(),!a.props.disabledKeyboardNavigation)switch(o){case De.Enter:if(null==a.props.selected)break;a.onYearClick(e,t),null===(n=(r=a.props).setPreSelection)||void 0===n||n.call(r,a.props.selected);break;case De.ArrowRight:if(null==a.props.preSelection)break;a.handleYearNavigation(t+1,p.addYears(a.props.preSelection,1));break;case De.ArrowLeft:if(null==a.props.preSelection)break;a.handleYearNavigation(t-1,ie.subYears(a.props.preSelection,1));break;case De.ArrowUp:if(void 0===i||void 0===l||null==a.props.preSelection)break;var d=gt(i,l).startPeriod;if((h=t-(f=3))<d){var u=l%f;t>=d&&t<d+u?f=u:f+=u,h=t-f}a.handleYearNavigation(h,ie.subYears(a.props.preSelection,f));break;case De.ArrowDown:if(void 0===i||void 0===l||null==a.props.preSelection)break;var f,h,m=gt(i,l).endPeriod;if((h=t+(f=3))>m){u=l%f;t<=m&&t>m-u?f=u:f+=u,h=t+f}a.handleYearNavigation(h,p.addYears(a.props.preSelection,f))}c&&c(e)},a.getYearClassNames=function(e){var r=a.props,n=r.date,o=r.minDate,s=r.maxDate,i=r.selected,l=r.excludeDates,c=r.includeDates,d=r.filterDate,p=r.yearClassName;return t.clsx("react-datepicker__year-text","react-datepicker__year-".concat(e),n?null==p?void 0:p(G.setYear(n,e)):void 0,{"react-datepicker__year-text--selected":i?e===x.getYear(i):void 0,"react-datepicker__year-text--disabled":(o||s||l||c||d)&&tt(e,a.props),"react-datepicker__year-text--keyboard-selected":a.isKeyboardSelected(e),"react-datepicker__year-text--range-start":a.isRangeStart(e),"react-datepicker__year-text--range-end":a.isRangeEnd(e),"react-datepicker__year-text--in-range":a.isInRange(e),"react-datepicker__year-text--in-selecting-range":a.isInSelectingRange(e),"react-datepicker__year-text--selecting-range-start":a.isSelectingRangeStart(e),"react-datepicker__year-text--selecting-range-end":a.isSelectingRangeEnd(e),"react-datepicker__year-text--today":a.isCurrentYear(e)})},a.getYearTabIndex=function(e){if(a.props.disabledKeyboardNavigation||null==a.props.preSelection)return"-1";var t=x.getYear(a.props.preSelection),r=tt(e,a.props);return e!==t||r?"-1":"0"},a.getYearContent=function(e){return a.props.renderYearContent?a.props.renderYearContent(e):e},a}return me(n,e),n.prototype.render=function(){var e=this,t=[],r=this.props,n=r.date,a=r.yearItemNumber,o=r.onYearMouseEnter,s=r.onYearMouseLeave;if(void 0===n)return null;for(var i=gt(n,a),l=i.startPeriod,c=i.endPeriod,d=function(r){t.push(ue.default.createElement("div",{ref:p.YEAR_REFS[r-l],onClick:function(t){e.onYearClick(t,r)},onKeyDown:function(t){wt(t)&&(t.preventDefault(),t.key=De.Enter),e.onYearKeyDown(t,r)},tabIndex:Number(p.getYearTabIndex(r)),className:p.getYearClassNames(r),onMouseEnter:p.props.usePointerEvent?void 0:function(e){return o(e,r)},onPointerEnter:p.props.usePointerEvent?function(e){return o(e,r)}:void 0,onMouseLeave:p.props.usePointerEvent?void 0:function(e){return s(e,r)},onPointerLeave:p.props.usePointerEvent?function(e){return s(e,r)}:void 0,key:r,"aria-current":p.isCurrentYear(r)?"date":void 0},p.getYearContent(r)))},p=this,u=l;u<=c;u++)d(u);return ue.default.createElement("div",{className:"react-datepicker__year"},ue.default.createElement("div",{className:"react-datepicker__year-wrapper",onMouseLeave:this.props.usePointerEvent?void 0:this.props.clearSelectingDate,onPointerLeave:this.props.usePointerEvent?this.props.clearSelectingDate:void 0},t))},n}(r.Component);function Ht(e,t,r,n){for(var a=[],o=0;o<2*t+1;o++){var s=e+t-o,i=!0;r&&(i=x.getYear(r)<=s),n&&i&&(i=x.getYear(n)>=s),i&&a.push(s)}return a}var Qt=function(e){function n(t){var n=e.call(this,t)||this;n.renderOptions=function(){var e=n.props.year,t=n.state.yearsList.map((function(t){return ue.default.createElement("div",{className:e===t?"react-datepicker__year-option react-datepicker__year-option--selected_year":"react-datepicker__year-option",key:t,onClick:n.onChange.bind(n,t),"aria-selected":e===t?"true":void 0},e===t?ue.default.createElement("span",{className:"react-datepicker__year-option--selected"},"✓"):"",t)})),r=n.props.minDate?x.getYear(n.props.minDate):null,a=n.props.maxDate?x.getYear(n.props.maxDate):null;return a&&n.state.yearsList.find((function(e){return e===a}))||t.unshift(ue.default.createElement("div",{className:"react-datepicker__year-option",key:"upcoming",onClick:n.incrementYears},ue.default.createElement("a",{className:"react-datepicker__navigation react-datepicker__navigation--years react-datepicker__navigation--years-upcoming"}))),r&&n.state.yearsList.find((function(e){return e===r}))||t.push(ue.default.createElement("div",{className:"react-datepicker__year-option",key:"previous",onClick:n.decrementYears},ue.default.createElement("a",{className:"react-datepicker__navigation react-datepicker__navigation--years react-datepicker__navigation--years-previous"}))),t},n.onChange=function(e){n.props.onChange(e)},n.handleClickOutside=function(){n.props.onCancel()},n.shiftYears=function(e){var t=n.state.yearsList.map((function(t){return t+e}));n.setState({yearsList:t})},n.incrementYears=function(){return n.shiftYears(1)},n.decrementYears=function(){return n.shiftYears(-1)};var a=t.yearDropdownItemNumber,o=t.scrollableYearDropdown,s=a||(o?10:5);return n.state={yearsList:Ht(n.props.year,s,n.props.minDate,n.props.maxDate)},n.dropdownRef=r.createRef(),n}return me(n,e),n.prototype.componentDidMount=function(){var e=this.dropdownRef.current;if(e){var t=e.children?Array.from(e.children):null,r=t?t.find((function(e){return e.ariaSelected})):null;e.scrollTop=r&&r instanceof HTMLElement?r.offsetTop+(r.clientHeight-e.clientHeight)/2:(e.scrollHeight-e.clientHeight)/2}},n.prototype.render=function(){var e=t.clsx({"react-datepicker__year-dropdown":!0,"react-datepicker__year-dropdown--scrollable":this.props.scrollableYearDropdown});return ue.default.createElement(ke,{className:e,containerRef:this.dropdownRef,onClickOutside:this.handleClickOutside},this.renderOptions())},n}(r.Component),qt=function(e){function t(){var t=null!==e&&e.apply(this,arguments)||this;return t.state={dropdownVisible:!1},t.renderSelectOptions=function(){for(var e=t.props.minDate?x.getYear(t.props.minDate):1900,r=t.props.maxDate?x.getYear(t.props.maxDate):2100,n=[],a=e;a<=r;a++)n.push(ue.default.createElement("option",{key:a,value:a},a));return n},t.onSelectChange=function(e){t.onChange(parseInt(e.target.value))},t.renderSelectMode=function(){return ue.default.createElement("select",{value:t.props.year,className:"react-datepicker__year-select",onChange:t.onSelectChange},t.renderSelectOptions())},t.renderReadView=function(e){return ue.default.createElement("div",{key:"read",style:{visibility:e?"visible":"hidden"},className:"react-datepicker__year-read-view",onClick:function(e){return t.toggleDropdown(e)}},ue.default.createElement("span",{className:"react-datepicker__year-read-view--down-arrow"}),ue.default.createElement("span",{className:"react-datepicker__year-read-view--selected-year"},t.props.year))},t.renderDropdown=function(){return ue.default.createElement(Qt,ve({key:"dropdown"},t.props,{onChange:t.onChange,onCancel:t.toggleDropdown}))},t.renderScrollMode=function(){var e=t.state.dropdownVisible,r=[t.renderReadView(!e)];return e&&r.unshift(t.renderDropdown()),r},t.onChange=function(e){t.toggleDropdown(),e!==t.props.year&&t.props.onChange(e)},t.toggleDropdown=function(e){t.setState({dropdownVisible:!t.state.dropdownVisible},(function(){t.props.adjustDateOnChange&&t.handleYearChange(t.props.date,e)}))},t.handleYearChange=function(e,r){var n;null===(n=t.onSelect)||void 0===n||n.call(t,e,r),t.setOpen()},t.onSelect=function(e,r){var n,a;null===(a=(n=t.props).onSelect)||void 0===a||a.call(n,e,r)},t.setOpen=function(){var e,r;null===(r=(e=t.props).setOpen)||void 0===r||r.call(e,!0)},t}return me(t,e),t.prototype.render=function(){var e;switch(this.props.dropdownMode){case"scroll":e=this.renderScrollMode();break;case"select":e=this.renderSelectMode()}return ue.default.createElement("div",{className:"react-datepicker__year-dropdown-container react-datepicker__year-dropdown-container--".concat(this.props.dropdownMode)},e)},t}(r.Component),Kt=["react-datepicker__year-select","react-datepicker__month-select","react-datepicker__month-year-select"],Bt=function(e){function o(s){var c=e.call(this,s)||this;return c.monthContainer=void 0,c.handleClickOutside=function(e){c.props.onClickOutside(e)},c.setClickOutsideRef=function(){return c.containerRef.current},c.handleDropdownFocus=function(e){var t,r,n,a;n=e.target,a=(n.className||"").split(/\s+/),Kt.some((function(e){return a.indexOf(e)>=0}))&&(null===(r=(t=c.props).onDropdownFocus)||void 0===r||r.call(t,e))},c.getDateInView=function(){var e=c.props,t=e.preSelection,r=e.selected,n=e.openToDate,a=pt(c.props),o=ut(c.props),s=Me(),i=n||r||t;return i||(a&&N.isBefore(s,a)?a:o&&O.isAfter(s,o)?o:s)},c.increaseMonth=function(){c.setState((function(e){var t=e.date;return{date:i.addMonths(t,1)}}),(function(){return c.handleMonthChange(c.state.date)}))},c.decreaseMonth=function(){c.setState((function(e){var t=e.date;return{date:ae.subMonths(t,1)}}),(function(){return c.handleMonthChange(c.state.date)}))},c.handleDayClick=function(e,t,r){c.props.onSelect(e,t,r),c.props.setPreSelection&&c.props.setPreSelection(e)},c.handleDayMouseEnter=function(e){c.setState({selectingDate:e}),c.props.onDayMouseEnter&&c.props.onDayMouseEnter(e)},c.handleMonthMouseLeave=function(){c.setState({selectingDate:void 0}),c.props.onMonthMouseLeave&&c.props.onMonthMouseLeave()},c.handleYearMouseEnter=function(e,t){c.setState({selectingDate:G.setYear(Me(),t)}),c.props.onYearMouseEnter&&c.props.onYearMouseEnter(e,t)},c.handleYearMouseLeave=function(e,t){c.props.onYearMouseLeave&&c.props.onYearMouseLeave(e,t)},c.handleYearChange=function(e){var t,r,n,a;null===(r=(t=c.props).onYearChange)||void 0===r||r.call(t,e),c.setState({isRenderAriaLiveMessage:!0}),c.props.adjustDateOnChange&&(c.props.onSelect(e),null===(a=(n=c.props).setOpen)||void 0===a||a.call(n,!0)),c.props.setPreSelection&&c.props.setPreSelection(e)},c.getEnabledPreSelectionDateForMonth=function(e){if(!$e(e,c.props))return e;for(var t=Ne(e),r=Fe(e),o=n.differenceInDays(r,t),s=null,i=0;i<=o;i++){var l=a.addDays(t,i);if(!$e(l,c.props)){s=l;break}}return s},c.handleMonthChange=function(e){var t,r,n,a=null!==(t=c.getEnabledPreSelectionDateForMonth(e))&&void 0!==t?t:e;c.handleCustomMonthChange(a),c.props.adjustDateOnChange&&(c.props.onSelect(a),null===(n=(r=c.props).setOpen)||void 0===n||n.call(r,!0)),c.props.setPreSelection&&c.props.setPreSelection(a)},c.handleCustomMonthChange=function(e){var t,r;null===(r=(t=c.props).onMonthChange)||void 0===r||r.call(t,e),c.setState({isRenderAriaLiveMessage:!0})},c.handleMonthYearChange=function(e){c.handleYearChange(e),c.handleMonthChange(e)},c.changeYear=function(e){c.setState((function(t){var r=t.date;return{date:G.setYear(r,Number(e))}}),(function(){return c.handleYearChange(c.state.date)}))},c.changeMonth=function(e){c.setState((function(t){var r=t.date;return{date:$.setMonth(r,Number(e))}}),(function(){return c.handleMonthChange(c.state.date)}))},c.changeMonthYear=function(e){c.setState((function(t){var r=t.date;return{date:G.setYear($.setMonth(r,_.getMonth(e)),x.getYear(e))}}),(function(){return c.handleMonthYearChange(c.state.date)}))},c.header=function(e){void 0===e&&(e=c.state.date);var r=Oe(e,c.props.locale,c.props.calendarStartDay),n=[];return c.props.showWeekNumbers&&n.push(ue.default.createElement("div",{key:"W",className:"react-datepicker__day-name"},c.props.weekLabel||"#")),n.concat([0,1,2,3,4,5,6].map((function(e){var n=a.addDays(r,e),o=c.formatWeekday(n,c.props.locale),s=c.props.weekDayClassName?c.props.weekDayClassName(n):void 0;return ue.default.createElement("div",{key:e,"aria-label":Ee(n,"EEEE",c.props.locale),className:t.clsx("react-datepicker__day-name",s)},o)})))},c.formatWeekday=function(e,t){return c.props.formatWeekDay?function(e,t,r){return t(Ee(e,"EEEE",r))}(e,c.props.formatWeekDay,t):c.props.useWeekdaysShort?function(e,t){return Ee(e,"EEE",t)}(e,t):function(e,t){return Ee(e,"EEEEEE",t)}(e,t)},c.decreaseYear=function(){c.setState((function(e){var t,r=e.date;return{date:ie.subYears(r,c.props.showYearPicker?null!==(t=c.props.yearItemNumber)&&void 0!==t?t:o.defaultProps.yearItemNumber:1)}}),(function(){return c.handleYearChange(c.state.date)}))},c.clearSelectingDate=function(){c.setState({selectingDate:void 0})},c.renderPreviousButton=function(){var e,t,r;if(!c.props.renderCustomHeader){var n,a=null!==(e=c.props.monthsShown)&&void 0!==e?e:o.defaultProps.monthsShown,s=c.props.showPreviousMonths?a-1:0,i=null!==(t=c.props.monthSelectedIn)&&void 0!==t?t:s,l=ae.subMonths(c.state.date,i);switch(!0){case c.props.showMonthYearPicker:n=ct(c.state.date,c.props);break;case c.props.showYearPicker:n=function(e,t){var r=void 0===t?{}:t,n=r.minDate,a=r.yearItemNumber,o=void 0===a?Se:a,s=gt(Te(ie.subYears(e,o)),o).endPeriod,i=n&&x.getYear(n);return i&&i>s||!1}(c.state.date,c.props);break;case c.props.showQuarterYearPicker:n=function(e,t){var r=void 0===t?{}:t,n=r.minDate,a=r.includeDates,o=re.startOfYear(e),s=oe.subQuarters(o,1);return n&&h.differenceInCalendarQuarters(n,s)>0||a&&a.every((function(e){return h.differenceInCalendarQuarters(e,s)>0}))||!1}(c.state.date,c.props);break;default:n=it(l,c.props)}if(((null!==(r=c.props.forceShowMonthNavigation)&&void 0!==r?r:o.defaultProps.forceShowMonthNavigation)||c.props.showDisabledMonthNavigation||!n)&&!c.props.showTimeSelectOnly){var d=["react-datepicker__navigation","react-datepicker__navigation--previous"],p=c.decreaseMonth;(c.props.showMonthYearPicker||c.props.showQuarterYearPicker||c.props.showYearPicker)&&(p=c.decreaseYear),n&&c.props.showDisabledMonthNavigation&&(d.push("react-datepicker__navigation--previous--disabled"),p=void 0);var u=c.props.showMonthYearPicker||c.props.showQuarterYearPicker||c.props.showYearPicker,f=c.props,m=f.previousMonthButtonLabel,v=void 0===m?o.defaultProps.previousMonthButtonLabel:m,g=f.previousYearButtonLabel,D=void 0===g?o.defaultProps.previousYearButtonLabel:g,y=c.props,k=y.previousMonthAriaLabel,w=void 0===k?"string"==typeof v?v:"Previous Month":k,S=y.previousYearAriaLabel,b=void 0===S?"string"==typeof D?D:"Previous Year":S;return ue.default.createElement("button",{type:"button",className:d.join(" "),onClick:p,onKeyDown:c.props.handleOnKeyDown,"aria-label":u?b:w},ue.default.createElement("span",{className:["react-datepicker__navigation-icon","react-datepicker__navigation-icon--previous"].join(" ")},u?D:v))}}},c.increaseYear=function(){c.setState((function(e){var t,r=e.date;return{date:p.addYears(r,c.props.showYearPicker?null!==(t=c.props.yearItemNumber)&&void 0!==t?t:o.defaultProps.yearItemNumber:1)}}),(function(){return c.handleYearChange(c.state.date)}))},c.renderNextButton=function(){var e;if(!c.props.renderCustomHeader){var t;switch(!0){case c.props.showMonthYearPicker:t=dt(c.state.date,c.props);break;case c.props.showYearPicker:t=function(e,t){var r=void 0===t?{}:t,n=r.maxDate,a=r.yearItemNumber,o=void 0===a?Se:a,s=gt(p.addYears(e,o),o).startPeriod,i=n&&x.getYear(n);return i&&i<s||!1}(c.state.date,c.props);break;case c.props.showQuarterYearPicker:t=function(e,t){var r=void 0===t?{}:t,n=r.maxDate,a=r.includeDates,o=y.endOfYear(e),s=l.addQuarters(o,1);return n&&h.differenceInCalendarQuarters(s,n)>0||a&&a.every((function(e){return h.differenceInCalendarQuarters(s,e)>0}))||!1}(c.state.date,c.props);break;default:t=lt(c.state.date,c.props)}if(((null!==(e=c.props.forceShowMonthNavigation)&&void 0!==e?e:o.defaultProps.forceShowMonthNavigation)||c.props.showDisabledMonthNavigation||!t)&&!c.props.showTimeSelectOnly){var r=["react-datepicker__navigation","react-datepicker__navigation--next"];c.props.showTimeSelect&&r.push("react-datepicker__navigation--next--with-time"),c.props.todayButton&&r.push("react-datepicker__navigation--next--with-today-button");var n=c.increaseMonth;(c.props.showMonthYearPicker||c.props.showQuarterYearPicker||c.props.showYearPicker)&&(n=c.increaseYear),t&&c.props.showDisabledMonthNavigation&&(r.push("react-datepicker__navigation--next--disabled"),n=void 0);var a=c.props.showMonthYearPicker||c.props.showQuarterYearPicker||c.props.showYearPicker,s=c.props,i=s.nextMonthButtonLabel,d=void 0===i?o.defaultProps.nextMonthButtonLabel:i,u=s.nextYearButtonLabel,f=void 0===u?o.defaultProps.nextYearButtonLabel:u,m=c.props,v=m.nextMonthAriaLabel,g=void 0===v?"string"==typeof d?d:"Next Month":v,D=m.nextYearAriaLabel,k=void 0===D?"string"==typeof f?f:"Next Year":D;return ue.default.createElement("button",{type:"button",className:r.join(" "),onClick:n,onKeyDown:c.props.handleOnKeyDown,"aria-label":a?k:g},ue.default.createElement("span",{className:["react-datepicker__navigation-icon","react-datepicker__navigation-icon--next"].join(" ")},a?f:d))}}},c.renderCurrentMonth=function(e){void 0===e&&(e=c.state.date);var t=["react-datepicker__current-month"];return c.props.showYearDropdown&&t.push("react-datepicker__current-month--hasYearDropdown"),c.props.showMonthDropdown&&t.push("react-datepicker__current-month--hasMonthDropdown"),c.props.showMonthYearDropdown&&t.push("react-datepicker__current-month--hasMonthYearDropdown"),ue.default.createElement("h2",{className:t.join(" ")},Ee(e,c.props.dateFormat,c.props.locale))},c.renderYearDropdown=function(e){if(void 0===e&&(e=!1),c.props.showYearDropdown&&!e)return ue.default.createElement(qt,ve({},o.defaultProps,c.props,{date:c.state.date,onChange:c.changeYear,year:x.getYear(c.state.date)}))},c.renderMonthDropdown=function(e){if(void 0===e&&(e=!1),c.props.showMonthDropdown&&!e)return ue.default.createElement(It,ve({},o.defaultProps,c.props,{month:_.getMonth(c.state.date),onChange:c.changeMonth}))},c.renderMonthYearDropdown=function(e){if(void 0===e&&(e=!1),c.props.showMonthYearDropdown&&!e)return ue.default.createElement(Ft,ve({},o.defaultProps,c.props,{date:c.state.date,onChange:c.changeMonthYear}))},c.handleTodayButtonClick=function(e){c.props.onSelect(Re(),e),c.props.setPreSelection&&c.props.setPreSelection(Re())},c.renderTodayButton=function(){if(c.props.todayButton&&!c.props.showTimeSelectOnly)return ue.default.createElement("div",{className:"react-datepicker__today-button",onClick:c.handleTodayButtonClick},c.props.todayButton)},c.renderDefaultHeader=function(e){var t=e.monthDate,r=e.i;return ue.default.createElement("div",{className:"react-datepicker__header ".concat(c.props.showTimeSelect?"react-datepicker__header--has-time-select":"")},c.renderCurrentMonth(t),ue.default.createElement("div",{className:"react-datepicker__header__dropdown react-datepicker__header__dropdown--".concat(c.props.dropdownMode),onFocus:c.handleDropdownFocus},c.renderMonthDropdown(0!==r),c.renderMonthYearDropdown(0!==r),c.renderYearDropdown(0!==r)),ue.default.createElement("div",{className:"react-datepicker__day-names"},c.header(t)))},c.renderCustomHeader=function(e){var t,r,n=e.monthDate,a=e.i;if(c.props.showTimeSelect&&!c.state.monthContainer||c.props.showTimeSelectOnly)return null;var o=it(c.state.date,c.props),s=lt(c.state.date,c.props),i=ct(c.state.date,c.props),l=dt(c.state.date,c.props),d=!c.props.showMonthYearPicker&&!c.props.showQuarterYearPicker&&!c.props.showYearPicker;return ue.default.createElement("div",{className:"react-datepicker__header react-datepicker__header--custom",onFocus:c.props.onDropdownFocus},null===(r=(t=c.props).renderCustomHeader)||void 0===r?void 0:r.call(t,ve(ve({},c.state),{customHeaderCount:a,monthDate:n,changeMonth:c.changeMonth,changeYear:c.changeYear,decreaseMonth:c.decreaseMonth,increaseMonth:c.increaseMonth,decreaseYear:c.decreaseYear,increaseYear:c.increaseYear,prevMonthButtonDisabled:o,nextMonthButtonDisabled:s,prevYearButtonDisabled:i,nextYearButtonDisabled:l})),d&&ue.default.createElement("div",{className:"react-datepicker__day-names"},c.header(n)))},c.renderYearHeader=function(e){var t=e.monthDate,r=c.props,n=r.showYearPicker,a=r.yearItemNumber,s=gt(t,void 0===a?o.defaultProps.yearItemNumber:a),i=s.startPeriod,l=s.endPeriod;return ue.default.createElement("div",{className:"react-datepicker__header react-datepicker-year-header"},n?"".concat(i," - ").concat(l):x.getYear(t))},c.renderHeader=function(e){var t=e.monthDate,r=e.i,n={monthDate:t,i:void 0===r?0:r};switch(!0){case void 0!==c.props.renderCustomHeader:return c.renderCustomHeader(n);case c.props.showMonthYearPicker||c.props.showQuarterYearPicker||c.props.showYearPicker:return c.renderYearHeader(n);default:return c.renderDefaultHeader(n)}},c.renderMonths=function(){var e,t;if(!c.props.showTimeSelectOnly&&!c.props.showYearPicker){for(var r=[],n=null!==(e=c.props.monthsShown)&&void 0!==e?e:o.defaultProps.monthsShown,a=c.props.showPreviousMonths?n-1:0,s=c.props.showMonthYearPicker||c.props.showQuarterYearPicker?p.addYears(c.state.date,a):ae.subMonths(c.state.date,a),l=null!==(t=c.props.monthSelectedIn)&&void 0!==t?t:a,d=0;d<n;++d){var u=d-l+a,f=c.props.showMonthYearPicker||c.props.showQuarterYearPicker?p.addYears(s,u):i.addMonths(s,u),h="month-".concat(d),m=d<n-1,v=d>0;r.push(ue.default.createElement("div",{key:h,ref:function(e){c.monthContainer=null!=e?e:void 0},className:"react-datepicker__month-container"},c.renderHeader({monthDate:f,i:d}),ue.default.createElement(Nt,ve({},o.defaultProps,c.props,{ariaLabelPrefix:c.props.monthAriaLabelPrefix,day:f,onDayClick:c.handleDayClick,handleOnKeyDown:c.props.handleOnDayKeyDown,handleOnMonthKeyDown:c.props.handleOnKeyDown,onDayMouseEnter:c.handleDayMouseEnter,onMouseLeave:c.handleMonthMouseLeave,orderInDisplay:d,selectingDate:c.state.selectingDate,monthShowsDuplicateDaysEnd:m,monthShowsDuplicateDaysStart:v}))))}return r}},c.renderYears=function(){if(!c.props.showTimeSelectOnly)return c.props.showYearPicker?ue.default.createElement("div",{className:"react-datepicker__year--container"},c.renderHeader({monthDate:c.state.date}),ue.default.createElement(Wt,ve({},o.defaultProps,c.props,{selectingDate:c.state.selectingDate,date:c.state.date,onDayClick:c.handleDayClick,clearSelectingDate:c.clearSelectingDate,onYearMouseEnter:c.handleYearMouseEnter,onYearMouseLeave:c.handleYearMouseLeave}))):void 0},c.renderTimeSection=function(){if(c.props.showTimeSelect&&(c.state.monthContainer||c.props.showTimeSelectOnly))return ue.default.createElement(At,ve({},o.defaultProps,c.props,{onChange:c.props.onTimeChange,format:c.props.timeFormat,intervals:c.props.timeIntervals,monthRef:c.state.monthContainer}))},c.renderInputTimeSection=function(){var e=c.props.selected?new Date(c.props.selected):void 0,t=e&&_e(e)&&Boolean(c.props.selected)?"".concat(vt(e.getHours()),":").concat(vt(e.getMinutes())):"";if(c.props.showTimeInput)return ue.default.createElement(bt,ve({},o.defaultProps,c.props,{date:e,timeString:t,onChange:c.props.onTimeChange}))},c.renderAriaLiveRegion=function(){var e,t,r=gt(c.state.date,null!==(e=c.props.yearItemNumber)&&void 0!==e?e:o.defaultProps.yearItemNumber),n=r.startPeriod,a=r.endPeriod;return t=c.props.showYearPicker?"".concat(n," - ").concat(a):c.props.showMonthYearPicker||c.props.showQuarterYearPicker?x.getYear(c.state.date):"".concat(je(_.getMonth(c.state.date),c.props.locale)," ").concat(x.getYear(c.state.date)),ue.default.createElement("span",{role:"alert","aria-live":"polite",className:"react-datepicker__aria-live"},c.state.isRenderAriaLiveMessage&&t)},c.renderChildren=function(){if(c.props.children)return ue.default.createElement("div",{className:"react-datepicker__children-container"},c.props.children)},c.containerRef=r.createRef(),c.state={date:c.getDateInView(),selectingDate:void 0,monthContainer:void 0,isRenderAriaLiveMessage:!1},c}return me(o,e),Object.defineProperty(o,"defaultProps",{get:function(){return{monthsShown:1,forceShowMonthNavigation:!1,timeCaption:"Time",previousYearButtonLabel:"Previous Year",nextYearButtonLabel:"Next Year",previousMonthButtonLabel:"Previous Month",nextMonthButtonLabel:"Next Month",yearItemNumber:Se}},enumerable:!1,configurable:!0}),o.prototype.componentDidMount=function(){var e=this;this.props.showTimeSelect&&(this.assignMonthContainer=void e.setState({monthContainer:e.monthContainer}))},o.prototype.componentDidUpdate=function(e){var t=this;if(!this.props.preSelection||Qe(this.props.preSelection,e.preSelection)&&this.props.monthSelectedIn===e.monthSelectedIn)this.props.openToDate&&!Qe(this.props.openToDate,e.openToDate)&&this.setState({date:this.props.openToDate});else{var r=!We(this.state.date,this.props.preSelection);this.setState({date:this.props.preSelection},(function(){return r&&t.handleCustomMonthChange(t.state.date)}))}},o.prototype.render=function(){var e=this.props.container||ye;return ue.default.createElement(ke,{onClickOutside:this.handleClickOutside,style:{display:"contents"},containerRef:this.containerRef,ignoreClass:this.props.outsideClickIgnoreClass},ue.default.createElement(e,{className:t.clsx("react-datepicker",this.props.className,{"react-datepicker--time-only":this.props.showTimeSelectOnly}),showTime:this.props.showTimeSelect||this.props.showTimeInput,showTimeSelectOnly:this.props.showTimeSelectOnly},this.renderAriaLiveRegion(),this.renderPreviousButton(),this.renderNextButton(),this.renderMonths(),this.renderYears(),this.renderTodayButton(),this.renderTimeSection(),this.renderInputTimeSection(),this.renderChildren()))},o}(r.Component),Vt=function(e){var t=e.icon,r=e.className,n=void 0===r?"":r,a=e.onClick,o="react-datepicker__calendar-icon";return"string"==typeof t?ue.default.createElement("i",{className:"".concat(o," ").concat(t," ").concat(n),"aria-hidden":"true",onClick:a}):ue.default.isValidElement(t)?ue.default.cloneElement(t,{className:"".concat(t.props.className||""," ").concat(o," ").concat(n),onClick:function(e){"function"==typeof t.props.onClick&&t.props.onClick(e),"function"==typeof a&&a(e)}}):ue.default.createElement("svg",{className:"".concat(o," ").concat(n),xmlns:"http://www.w3.org/2000/svg",viewBox:"0 0 448 512",onClick:a},ue.default.createElement("path",{d:"M96 32V64H48C21.5 64 0 85.5 0 112v48H448V112c0-26.5-21.5-48-48-48H352V32c0-17.7-14.3-32-32-32s-32 14.3-32 32V64H160V32c0-17.7-14.3-32-32-32S96 14.3 96 32zM448 192H0V464c0 26.5 21.5 48 48 48H400c26.5 0 48-21.5 48-48V192z"}))},jt=function(e){function t(t){var r=e.call(this,t)||this;return r.portalRoot=null,r.el=document.createElement("div"),r}return me(t,e),t.prototype.componentDidMount=function(){this.portalRoot=(this.props.portalHost||document).getElementById(this.props.portalId),this.portalRoot||(this.portalRoot=document.createElement("div"),this.portalRoot.setAttribute("id",this.props.portalId),(this.props.portalHost||document.body).appendChild(this.portalRoot)),this.portalRoot.appendChild(this.el)},t.prototype.componentWillUnmount=function(){this.portalRoot&&this.portalRoot.removeChild(this.el)},t.prototype.render=function(){return fe.default.createPortal(this.props.children,this.el)},t}(r.Component),Ut=function(e){return(e instanceof HTMLAnchorElement||!e.disabled)&&-1!==e.tabIndex},$t=function(e){function t(t){var n=e.call(this,t)||this;return n.getTabChildren=function(){var e;return Array.prototype.slice.call(null===(e=n.tabLoopRef.current)||void 0===e?void 0:e.querySelectorAll("[tabindex], a, button, input, select, textarea"),1,-1).filter(Ut)},n.handleFocusStart=function(){var e=n.getTabChildren();e&&e.length>1&&e[e.length-1].focus()},n.handleFocusEnd=function(){var e=n.getTabChildren();e&&e.length>1&&e[0].focus()},n.tabLoopRef=r.createRef(),n}return me(t,e),t.prototype.render=function(){var e;return(null!==(e=this.props.enableTabLoop)&&void 0!==e?e:t.defaultProps.enableTabLoop)?ue.default.createElement("div",{className:"react-datepicker__tab-loop",ref:this.tabLoopRef},ue.default.createElement("div",{className:"react-datepicker__tab-loop__start",tabIndex:0,onFocus:this.handleFocusStart}),this.props.children,ue.default.createElement("div",{className:"react-datepicker__tab-loop__end",tabIndex:0,onFocus:this.handleFocusEnd})):this.props.children},t.defaultProps={enableTabLoop:!0},t}(r.Component);var zt,Xt=function(e){function n(){return null!==e&&e.apply(this,arguments)||this}return me(n,e),Object.defineProperty(n,"defaultProps",{get:function(){return{hidePopper:!0}},enumerable:!1,configurable:!0}),n.prototype.render=function(){var e=this.props,a=e.className,o=e.wrapperClassName,s=e.hidePopper,i=void 0===s?n.defaultProps.hidePopper:s,l=e.popperComponent,c=e.targetComponent,d=e.enableTabLoop,p=e.popperOnKeyDown,u=e.portalId,f=e.portalHost,h=e.popperProps,m=e.showArrow,v=void 0;if(!i){var g=t.clsx("react-datepicker-popper",a);v=ue.default.createElement($t,{enableTabLoop:d},ue.default.createElement("div",{ref:h.refs.setFloating,style:h.floatingStyles,className:g,"data-placement":h.placement,onKeyDown:p},l,m&&ue.default.createElement(ce.FloatingArrow,{ref:h.arrowRef,context:h.context,fill:"currentColor",strokeWidth:1,height:8,width:16,style:{transform:"translateY(-1px)"},className:"react-datepicker__triangle"})))}this.props.popperContainer&&(v=r.createElement(this.props.popperContainer,{},v)),u&&!i&&(v=ue.default.createElement(jt,{portalId:u,portalHost:f},v));var D=t.clsx("react-datepicker-wrapper",o);return ue.default.createElement(ue.default.Fragment,null,ue.default.createElement("div",{ref:h.refs.setReference,className:D},c),v)},n}(r.Component),Gt=(zt=Xt,function(e){var t,n="boolean"!=typeof e.hidePopper||e.hidePopper,a=r.useRef(null),o=ce.useFloating(ve({open:!n,whileElementsMounted:ce.autoUpdate,placement:e.popperPlacement,middleware:ge([ce.flip({padding:15}),ce.offset(10),ce.arrow({element:a})],null!==(t=e.popperModifiers)&&void 0!==t?t:[],!0)},e.popperProps)),s=ve(ve({},e),{hidePopper:n,popperProps:ve(ve({},o),{arrowRef:a})});return ue.default.createElement(zt,ve({},s))}),Jt="react-datepicker-ignore-onclickoutside";var Zt="Date input not valid.",er=function(e){function n(o){var s=e.call(this,o)||this;return s.calendar=null,s.input=null,s.getPreSelection=function(){return s.props.openToDate?s.props.openToDate:s.props.selectsEnd&&s.props.startDate?s.props.startDate:s.props.selectsStart&&s.props.endDate?s.props.endDate:Me()},s.modifyHolidays=function(){var e;return null===(e=s.props.holidays)||void 0===e?void 0:e.reduce((function(e,t){var r=new Date(t.date);return _e(r)?ge(ge([],e,!0),[ve(ve({},t),{date:r})],!1):e}),[])},s.calcInitialState=function(){var e,t=s.getPreSelection(),r=pt(s.props),n=ut(s.props),a=r&&N.isBefore(t,xe(r))?r:n&&O.isAfter(t,Le(n))?n:t;return{open:s.props.startOpen||!1,preventFocus:!1,inputValue:null,preSelection:null!==(e=s.props.selectsRange?s.props.startDate:s.props.selected)&&void 0!==e?e:a,highlightDates:ft(s.props.highlightDates),focused:!1,shouldFocusDayInline:!1,isRenderAriaLiveMessage:!1,wasHidden:!1}},s.resetHiddenStatus=function(){s.setState(ve(ve({},s.state),{wasHidden:!1}))},s.setHiddenStatus=function(){s.setState(ve(ve({},s.state),{wasHidden:!0}))},s.setHiddenStateOnVisibilityHidden=function(){"hidden"===document.visibilityState&&s.setHiddenStatus()},s.clearPreventFocusTimeout=function(){s.preventFocusTimeout&&clearTimeout(s.preventFocusTimeout)},s.safeFocus=function(){setTimeout((function(){var e,t;null===(t=null===(e=s.input)||void 0===e?void 0:e.focus)||void 0===t||t.call(e,{preventScroll:!0})}),0)},s.safeBlur=function(){setTimeout((function(){var e,t;null===(t=null===(e=s.input)||void 0===e?void 0:e.blur)||void 0===t||t.call(e)}),0)},s.setFocus=function(){s.safeFocus()},s.setBlur=function(){s.safeBlur(),s.cancelFocusInput()},s.setOpen=function(e,t){void 0===t&&(t=!1),s.setState({open:e,preSelection:e&&s.state.open?s.state.preSelection:s.calcInitialState().preSelection,lastPreSelectChange:rr},(function(){e||s.setState((function(e){return{focused:!!t&&e.focused}}),(function(){!t&&s.setBlur(),s.setState({inputValue:null})}))}))},s.inputOk=function(){return T.isDate(s.state.preSelection)},s.isCalendarOpen=function(){return void 0===s.props.open?s.state.open&&!s.props.disabled&&!s.props.readOnly:s.props.open},s.handleFocus=function(e){var t,r,n=s.state.wasHidden,a=!n||s.state.open;n&&s.resetHiddenStatus(),!s.state.preventFocus&&a&&(null===(r=(t=s.props).onFocus)||void 0===r||r.call(t,e),s.props.preventOpenOnFocus||s.props.readOnly||s.setOpen(!0)),s.setState({focused:!0})},s.sendFocusBackToInput=function(){s.preventFocusTimeout&&s.clearPreventFocusTimeout(),s.setState({preventFocus:!0},(function(){s.preventFocusTimeout=setTimeout((function(){s.setFocus(),s.setState({preventFocus:!1})}))}))},s.cancelFocusInput=function(){clearTimeout(s.inputFocusTimeout),s.inputFocusTimeout=void 0},s.deferFocusInput=function(){s.cancelFocusInput(),s.inputFocusTimeout=setTimeout((function(){return s.setFocus()}),1)},s.handleDropdownFocus=function(){s.cancelFocusInput()},s.handleBlur=function(e){var t,r;(!s.state.open||s.props.withPortal||s.props.showTimeInput)&&(null===(r=(t=s.props).onBlur)||void 0===r||r.call(t,e)),s.setState({focused:!1})},s.handleCalendarClickOutside=function(e){var t,r;s.props.inline||s.setOpen(!1),null===(r=(t=s.props).onClickOutside)||void 0===r||r.call(t,e),s.props.withPortal&&e.preventDefault()},s.handleChange=function(){for(var e,t,r=[],a=0;a<arguments.length;a++)r[a]=arguments[a];var o=r[0];if(!s.props.onChangeRaw||(s.props.onChangeRaw.apply(s,r),o&&"function"==typeof o.isDefaultPrevented&&!o.isDefaultPrevented())){s.setState({inputValue:(null==o?void 0:o.target)instanceof HTMLInputElement?o.target.value:null,lastPreSelectChange:tr});var i=s.props,l=i.dateFormat,c=void 0===l?n.defaultProps.dateFormat:l,d=i.strictParsing,p=void 0===d?n.defaultProps.strictParsing:d,u=i.selectsRange,f=i.startDate,h=i.endDate,m=(null==o?void 0:o.target)instanceof HTMLInputElement?o.target.value:"";if(u){var v=m.split("-",2).map((function(e){return e.trim()})),g=v[0],D=v[1],y=Ce(null!=g?g:"",c,s.props.locale,p),k=Ce(null!=D?D:"",c,s.props.locale,p),w=(null==f?void 0:f.getTime())!==(null==y?void 0:y.getTime()),S=(null==h?void 0:h.getTime())!==(null==k?void 0:k.getTime());if(!w&&!S)return;if(y&&$e(y,s.props))return;if(k&&$e(k,s.props))return;null===(t=(e=s.props).onChange)||void 0===t||t.call(e,[y,k],o)}else{var M=Ce(m,c,s.props.locale,p,s.props.minDate);s.props.showTimeSelectOnly&&s.props.selected&&M&&!Qe(M,s.props.selected)&&(M=V.set(s.props.selected,{hours:b.getHours(M),minutes:C.getMinutes(M),seconds:P.getSeconds(M)})),!M&&m||s.setSelected(M,o,!0)}}},s.handleSelect=function(e,t,r){if(s.props.shouldCloseOnSelect&&!s.props.showTimeSelect&&s.sendFocusBackToInput(),s.props.onChangeRaw&&s.props.onChangeRaw(t),s.setSelected(e,t,!1,r),s.props.showDateSelect&&s.setState({isRenderAriaLiveMessage:!0}),!s.props.shouldCloseOnSelect||s.props.showTimeSelect)s.setPreSelection(e);else if(!s.props.inline){s.props.selectsRange||s.setOpen(!1);var n=s.props,a=n.startDate,o=n.endDate;!a||o||!s.props.swapRange&&kt(e,a)||s.setOpen(!1)}},s.setSelected=function(e,t,r,n){var a,o,i=e;if(s.props.showYearPicker){if(null!==i&&tt(x.getYear(i),s.props))return}else if(s.props.showMonthYearPicker){if(null!==i&&Xe(i,s.props))return}else if(null!==i&&$e(i,s.props))return;var l=s.props,c=l.onChange,d=l.selectsRange,p=l.startDate,u=l.endDate,f=l.selectsMultiple,h=l.selectedDates,m=l.minTime,v=l.swapRange;if(!qe(s.props.selected,i)||s.props.allowSameDay||d||f)if(null!==i&&(!s.props.selected||r&&(s.props.showTimeSelect||s.props.showTimeSelectOnly||s.props.showTimeInput)||(i=Ye(i,{hour:b.getHours(s.props.selected),minute:C.getMinutes(s.props.selected),second:P.getSeconds(s.props.selected)})),r||!s.props.showTimeSelect&&!s.props.showTimeSelectOnly||m&&(i=Ye(i,{hour:m.getHours(),minute:m.getMinutes(),second:m.getSeconds()})),s.props.inline||s.setState({preSelection:i}),s.props.focusSelectedMonth||s.setState({monthSelectedIn:n})),d){var g=p&&!u,D=p&&u;!p&&!u?null==c||c([i,null],t):g&&(null===i?null==c||c([null,null],t):kt(i,p)?v?null==c||c([i,p],t):null==c||c([i,null],t):null==c||c([p,i],t)),D&&(null==c||c([i,null],t))}else if(f){if(null!==i)if(null==h?void 0:h.length)if(h.some((function(e){return Qe(e,i)}))){var y=h.filter((function(e){return!Qe(e,i)}));null==c||c(y,t)}else null==c||c(ge(ge([],h,!0),[i],!1),t);else null==c||c([i],t)}else null==c||c(i,t);r||(null===(o=(a=s.props).onSelect)||void 0===o||o.call(a,i,t),s.setState({inputValue:null}))},s.setPreSelection=function(e){var t=T.isDate(s.props.minDate),r=T.isDate(s.props.maxDate),n=!0;if(e){var a=xe(e);if(t&&r)n=Ke(e,s.props.minDate,s.props.maxDate);else if(t){var o=xe(s.props.minDate);n=O.isAfter(e,o)||qe(a,o)}else if(r){var i=Le(s.props.maxDate);n=N.isBefore(e,i)||qe(a,i)}}n&&s.setState({preSelection:e})},s.toggleCalendar=function(){s.setOpen(!s.state.open)},s.handleTimeChange=function(e){var t,r;if(!s.props.selectsRange&&!s.props.selectsMultiple){var n=s.props.selected?s.props.selected:s.getPreSelection(),a=s.props.selected?e:Ye(n,{hour:b.getHours(e),minute:C.getMinutes(e)});s.setState({preSelection:a}),null===(r=(t=s.props).onChange)||void 0===r||r.call(t,a),s.props.shouldCloseOnSelect&&!s.props.showTimeInput&&(s.sendFocusBackToInput(),s.setOpen(!1)),s.props.showTimeInput&&s.setOpen(!0),(s.props.showTimeSelectOnly||s.props.showTimeSelect)&&s.setState({isRenderAriaLiveMessage:!0}),s.setState({inputValue:null})}},s.onInputClick=function(){var e,t;s.props.disabled||s.props.readOnly||s.setOpen(!0),null===(t=(e=s.props).onInputClick)||void 0===t||t.call(e)},s.onInputKeyDown=function(e){var t,r,n,a,o,i;null===(r=(t=s.props).onKeyDown)||void 0===r||r.call(t,e);var l=e.key;if(s.state.open||s.props.inline||s.props.preventOpenOnFocus){if(s.state.open){if(l===De.ArrowDown||l===De.ArrowUp){e.preventDefault();var c=s.props.showTimeSelectOnly?".react-datepicker__time-list-item[tabindex='0']":s.props.showWeekPicker&&s.props.showWeekNumbers?'.react-datepicker__week-number[tabindex="0"]':s.props.showFullMonthYearPicker||s.props.showMonthYearPicker?'.react-datepicker__month-text[tabindex="0"]':'.react-datepicker__day[tabindex="0"]',d=(null===(a=s.calendar)||void 0===a?void 0:a.containerRef.current)instanceof Element&&s.calendar.containerRef.current.querySelector(c);return void(d instanceof HTMLElement&&d.focus({preventScroll:!0}))}var p=Me(s.state.preSelection);l===De.Enter?(e.preventDefault(),e.target.blur(),s.inputOk()&&s.state.lastPreSelectChange===rr?(s.handleSelect(p,e),!s.props.shouldCloseOnSelect&&s.setPreSelection(p)):s.setOpen(!1)):l===De.Escape?(e.preventDefault(),e.target.blur(),s.sendFocusBackToInput(),s.setOpen(!1)):l===De.Tab&&s.setOpen(!1),s.inputOk()||null===(i=(o=s.props).onInputError)||void 0===i||i.call(o,{code:1,msg:Zt})}}else l!==De.ArrowDown&&l!==De.ArrowUp&&l!==De.Enter||null===(n=s.onInputClick)||void 0===n||n.call(s)},s.onPortalKeyDown=function(e){e.key===De.Escape&&(e.preventDefault(),s.setState({preventFocus:!0},(function(){s.setOpen(!1),setTimeout((function(){s.setFocus(),s.setState({preventFocus:!1})}))})))},s.onDayKeyDown=function(e){var t,r,n,o,l,c,u=s.props,f=u.minDate,h=u.maxDate,m=u.disabledKeyboardNavigation,v=u.showWeekPicker,g=u.shouldCloseOnSelect,y=u.locale,k=u.calendarStartDay,w=u.adjustDateOnChange,S=u.inline;if(null===(r=(t=s.props).onKeyDown)||void 0===r||r.call(t,e),!m){var b=e.key,M=e.shiftKey,C=Me(s.state.preSelection),E=function(e,t){var r=t;switch(e){case De.ArrowRight:r=v?d.addWeeks(t,1):a.addDays(t,1);break;case De.ArrowLeft:r=v?se.subWeeks(t,1):ne.subDays(t,1);break;case De.ArrowUp:r=se.subWeeks(t,1);break;case De.ArrowDown:r=d.addWeeks(t,1);break;case De.PageUp:r=M?ie.subYears(t,1):ae.subMonths(t,1);break;case De.PageDown:r=M?p.addYears(t,1):i.addMonths(t,1);break;case De.Home:r=Oe(t,y,k);break;case De.End:r=function(e){return D.endOfWeek(e)}(t)}return r};if(b===De.Enter)return e.preventDefault(),s.handleSelect(C,e),void(!g&&s.setPreSelection(C));if(b===De.Escape)return e.preventDefault(),s.setOpen(!1),void(s.inputOk()||null===(o=(n=s.props).onInputError)||void 0===o||o.call(n,{code:1,msg:Zt}));var P=null;switch(b){case De.ArrowLeft:case De.ArrowRight:case De.ArrowUp:case De.ArrowDown:case De.PageUp:case De.PageDown:case De.Home:case De.End:P=function(e,t){for(var r=e,n=!1,a=0,o=E(e,t);!n;){if(a>=40){o=t;break}f&&o<f&&(r=De.ArrowRight,o=$e(f,s.props)?E(r,o):f),h&&o>h&&(r=De.ArrowLeft,o=$e(h,s.props)?E(r,o):h),$e(o,s.props)?(r!==De.PageUp&&r!==De.Home||(r=De.ArrowRight),r!==De.PageDown&&r!==De.End||(r=De.ArrowLeft),o=E(r,o)):n=!0,a++}return o}(b,C)}if(P){if(e.preventDefault(),s.setState({lastPreSelectChange:rr}),w&&s.setSelected(P),s.setPreSelection(P),S){var Y=_.getMonth(C),O=_.getMonth(P),N=x.getYear(C),T=x.getYear(P);Y!==O||N!==T?s.setState({shouldFocusDayInline:!0}):s.setState({shouldFocusDayInline:!1})}}else null===(c=(l=s.props).onInputError)||void 0===c||c.call(l,{code:1,msg:Zt})}},s.onPopperKeyDown=function(e){e.key===De.Escape&&(e.preventDefault(),s.sendFocusBackToInput())},s.onClearClick=function(e){e&&e.preventDefault&&e.preventDefault(),s.sendFocusBackToInput();var t=s.props,r=t.selectsRange,n=t.onChange;r?null==n||n([null,null],e):null==n||n(null,e),s.setState({inputValue:null})},s.clear=function(){s.onClearClick()},s.onScroll=function(e){"boolean"==typeof s.props.closeOnScroll&&s.props.closeOnScroll?e.target!==document&&e.target!==document.documentElement&&e.target!==document.body||s.setOpen(!1):"function"==typeof s.props.closeOnScroll&&s.props.closeOnScroll(e)&&s.setOpen(!1)},s.renderCalendar=function(){var e,t;return s.props.inline||s.isCalendarOpen()?ue.default.createElement(Bt,ve({showMonthYearDropdown:void 0,ref:function(e){s.calendar=e}},s.props,s.state,{setOpen:s.setOpen,dateFormat:null!==(e=s.props.dateFormatCalendar)&&void 0!==e?e:n.defaultProps.dateFormatCalendar,onSelect:s.handleSelect,onClickOutside:s.handleCalendarClickOutside,holidays:ht(s.modifyHolidays()),outsideClickIgnoreClass:Jt,onDropdownFocus:s.handleDropdownFocus,onTimeChange:s.handleTimeChange,className:s.props.calendarClassName,container:s.props.calendarContainer,handleOnKeyDown:s.props.onKeyDown,handleOnDayKeyDown:s.onDayKeyDown,setPreSelection:s.setPreSelection,dropdownMode:null!==(t=s.props.dropdownMode)&&void 0!==t?t:n.defaultProps.dropdownMode}),s.props.children):null},s.renderAriaLiveRegion=function(){var e,t=s.props,r=t.dateFormat,a=void 0===r?n.defaultProps.dateFormat:r,o=t.locale,i=s.props.showTimeInput||s.props.showTimeSelect?"PPPPp":"PPPP";return e=s.props.selectsRange?"Selected start date: ".concat(Pe(s.props.startDate,{dateFormat:i,locale:o}),". ").concat(s.props.endDate?"End date: "+Pe(s.props.endDate,{dateFormat:i,locale:o}):""):s.props.showTimeSelectOnly?"Selected time: ".concat(Pe(s.props.selected,{dateFormat:a,locale:o})):s.props.showYearPicker?"Selected year: ".concat(Pe(s.props.selected,{dateFormat:"yyyy",locale:o})):s.props.showMonthYearPicker?"Selected month: ".concat(Pe(s.props.selected,{dateFormat:"MMMM yyyy",locale:o})):s.props.showQuarterYearPicker?"Selected quarter: ".concat(Pe(s.props.selected,{dateFormat:"yyyy, QQQ",locale:o})):"Selected date: ".concat(Pe(s.props.selected,{dateFormat:i,locale:o})),ue.default.createElement("span",{role:"alert","aria-live":"polite",className:"react-datepicker__aria-live"},e)},s.renderDateInput=function(){var e,a,o,i=t.clsx(s.props.className,((e={})[Jt]=s.state.open,e)),l=s.props.customInput||ue.default.createElement("input",{type:"text"}),c=s.props.customInputRef||"ref",d=s.props,p=d.dateFormat,u=void 0===p?n.defaultProps.dateFormat:p,f=d.locale,h="string"==typeof s.props.value?s.props.value:"string"==typeof s.state.inputValue?s.state.inputValue:s.props.selectsRange?function(e,t,r){if(!e)return"";var n=Pe(e,r),a=t?Pe(t,r):"";return"".concat(n," - ").concat(a)}(s.props.startDate,s.props.endDate,{dateFormat:u,locale:f}):s.props.selectsMultiple?function(e,t){if(!(null==e?void 0:e.length))return"";var r=e[0]?Pe(e[0],t):"";if(1===e.length)return r;if(2===e.length&&e[1]){var n=Pe(e[1],t);return"".concat(r,", ").concat(n)}var a=e.length-1;return"".concat(r," (+").concat(a,")")}(null!==(o=s.props.selectedDates)&&void 0!==o?o:[],{dateFormat:u,locale:f}):Pe(s.props.selected,{dateFormat:u,locale:f});return r.cloneElement(l,((a={})[c]=function(e){s.input=e},a.value=h,a.onBlur=s.handleBlur,a.onChange=s.handleChange,a.onClick=s.onInputClick,a.onFocus=s.handleFocus,a.onKeyDown=s.onInputKeyDown,a.id=s.props.id,a.name=s.props.name,a.form=s.props.form,a.autoFocus=s.props.autoFocus,a.placeholder=s.props.placeholderText,a.disabled=s.props.disabled,a.autoComplete=s.props.autoComplete,a.className=t.clsx(l.props.className,i),a.title=s.props.title,a.readOnly=s.props.readOnly,a.required=s.props.required,a.tabIndex=s.props.tabIndex,a["aria-describedby"]=s.props.ariaDescribedBy,a["aria-invalid"]=s.props.ariaInvalid,a["aria-labelledby"]=s.props.ariaLabelledBy,a["aria-required"]=s.props.ariaRequired,a))},s.renderClearButton=function(){var e=s.props,r=e.isClearable,n=e.disabled,a=e.selected,o=e.startDate,i=e.endDate,l=e.clearButtonTitle,c=e.clearButtonClassName,d=void 0===c?"":c,p=e.ariaLabelClose,u=void 0===p?"Close":p,f=e.selectedDates;return r&&(null!=a||null!=o||null!=i||(null==f?void 0:f.length))?ue.default.createElement("button",{type:"button",className:t.clsx("react-datepicker__close-icon",d,{"react-datepicker__close-icon--disabled":n}),disabled:n,"aria-label":u,onClick:s.onClearClick,title:l,tabIndex:-1}):null},s.state=s.calcInitialState(),s.preventFocusTimeout=void 0,s}return me(n,e),Object.defineProperty(n,"defaultProps",{get:function(){return{allowSameDay:!1,dateFormat:"MM/dd/yyyy",dateFormatCalendar:"LLLL yyyy",disabled:!1,disabledKeyboardNavigation:!1,dropdownMode:"scroll",preventOpenOnFocus:!1,monthsShown:1,readOnly:!1,withPortal:!1,selectsDisabledDaysInRange:!1,shouldCloseOnSelect:!0,showTimeSelect:!1,showTimeInput:!1,showPreviousMonths:!1,showMonthYearPicker:!1,showFullMonthYearPicker:!1,showTwoColumnMonthYearPicker:!1,showFourColumnMonthYearPicker:!1,showYearPicker:!1,showQuarterYearPicker:!1,showWeekPicker:!1,strictParsing:!1,swapRange:!1,timeIntervals:30,timeCaption:"Time",previousMonthAriaLabel:"Previous Month",previousMonthButtonLabel:"Previous Month",nextMonthAriaLabel:"Next Month",nextMonthButtonLabel:"Next Month",previousYearAriaLabel:"Previous Year",previousYearButtonLabel:"Previous Year",nextYearAriaLabel:"Next Year",nextYearButtonLabel:"Next Year",timeInputLabel:"Time",enableTabLoop:!0,yearItemNumber:Se,focusSelectedMonth:!1,showPopperArrow:!0,excludeScrollbar:!0,customTimeInput:null,calendarStartDay:void 0,toggleCalendarOnIconClick:!1,usePointerEvent:!1}},enumerable:!1,configurable:!0}),n.prototype.componentDidMount=function(){window.addEventListener("scroll",this.onScroll,!0),document.addEventListener("visibilitychange",this.setHiddenStateOnVisibilityHidden)},n.prototype.componentDidUpdate=function(e,t){var r,n,a,o,s,i;e.inline&&(s=e.selected,i=this.props.selected,s&&i?_.getMonth(s)!==_.getMonth(i)||x.getYear(s)!==x.getYear(i):s!==i)&&this.setPreSelection(this.props.selected),void 0!==this.state.monthSelectedIn&&e.monthsShown!==this.props.monthsShown&&this.setState({monthSelectedIn:0}),e.highlightDates!==this.props.highlightDates&&this.setState({highlightDates:ft(this.props.highlightDates)}),t.focused||qe(e.selected,this.props.selected)||this.setState({inputValue:null}),t.open!==this.state.open&&(!1===t.open&&!0===this.state.open&&(null===(n=(r=this.props).onCalendarOpen)||void 0===n||n.call(r)),!0===t.open&&!1===this.state.open&&(null===(o=(a=this.props).onCalendarClose)||void 0===o||o.call(a)))},n.prototype.componentWillUnmount=function(){this.clearPreventFocusTimeout(),window.removeEventListener("scroll",this.onScroll,!0),document.removeEventListener("visibilitychange",this.setHiddenStateOnVisibilityHidden)},n.prototype.renderInputContainer=function(){var e=this.props,r=e.showIcon,n=e.icon,a=e.calendarIconClassname,o=e.calendarIconClassName,s=e.toggleCalendarOnIconClick,i=this.state.open;return a&&console.warn("calendarIconClassname props is deprecated. should use calendarIconClassName props."),ue.default.createElement("div",{className:"react-datepicker__input-container".concat(r?" react-datepicker__view-calendar-icon":"")},r&&ue.default.createElement(Vt,ve({icon:n,className:t.clsx(o,!o&&a,i&&"react-datepicker-ignore-onclickoutside")},s?{onClick:this.toggleCalendar}:null)),this.state.isRenderAriaLiveMessage&&this.renderAriaLiveRegion(),this.renderDateInput(),this.renderClearButton())},n.prototype.render=function(){var e=this.renderCalendar();if(this.props.inline)return e;if(this.props.withPortal){var t=this.state.open?ue.default.createElement($t,{enableTabLoop:this.props.enableTabLoop},ue.default.createElement("div",{className:"react-datepicker__portal",tabIndex:-1,onKeyDown:this.onPortalKeyDown},e)):null;return this.state.open&&this.props.portalId&&(t=ue.default.createElement(jt,ve({portalId:this.props.portalId},this.props),t)),ue.default.createElement("div",null,this.renderInputContainer(),t)}return ue.default.createElement(Gt,ve({},this.props,{className:this.props.popperClassName,hidePopper:!this.isCalendarOpen(),targetComponent:this.renderInputContainer(),popperComponent:e,popperOnKeyDown:this.onPopperKeyDown,showArrow:this.props.showPopperArrow}))},n}(r.Component),tr="input",rr="navigate";e.CalendarContainer=ye,e.default=er,e.getDefaultLocale=Be,e.registerLocale=function(e,t){var r=we();r.__localeData__||(r.__localeData__={}),r.__localeData__[e]=t},e.setDefaultLocale=function(e){we().__localeId__=e},Object.defineProperty(e,"__esModule",{value:!0})}));
 
 
 /***/ }),
@@ -33297,6 +33317,10 @@ const platform = {
   isRTL
 };
 
+function rectsAreEqual(a, b) {
+  return a.x === b.x && a.y === b.y && a.width === b.width && a.height === b.height;
+}
+
 // https://samthor.au/2021/observing-dom/
 function observeMove(element, onMove) {
   let io = null;
@@ -33316,12 +33340,13 @@ function observeMove(element, onMove) {
       threshold = 1;
     }
     cleanup();
+    const elementRectForRootMargin = element.getBoundingClientRect();
     const {
       left,
       top,
       width,
       height
-    } = element.getBoundingClientRect();
+    } = elementRectForRootMargin;
     if (!skip) {
       onMove();
     }
@@ -33353,6 +33378,16 @@ function observeMove(element, onMove) {
         } else {
           refresh(false, ratio);
         }
+      }
+      if (ratio === 1 && !rectsAreEqual(elementRectForRootMargin, element.getBoundingClientRect())) {
+        // It's possible that even though the ratio is reported as 1, the
+        // element is not actually fully within the IntersectionObserver's root
+        // area anymore. This can happen under performance constraints. This may
+        // be a bug in the browser's IntersectionObserver implementation. To
+        // work around this, we compare the element's bounding rect now with
+        // what it was at the time we created the IntersectionObserver. If they
+        // are not equal then the element moved, so we refresh.
+        refresh();
       }
       isFirstUpdate = false;
     }
@@ -33431,7 +33466,7 @@ function autoUpdate(reference, floating, update, options) {
   }
   function frameLoop() {
     const nextRefRect = getBoundingClientRect(reference);
-    if (prevRefRect && (nextRefRect.x !== prevRefRect.x || nextRefRect.y !== prevRefRect.y || nextRefRect.width !== prevRefRect.width || nextRefRect.height !== prevRefRect.height)) {
+    if (prevRefRect && !rectsAreEqual(prevRefRect, nextRefRect)) {
       update();
     }
     prevRefRect = nextRefRect;
@@ -34236,7 +34271,8 @@ function isContainingBlock(elementOrCss) {
   const css = isElement(elementOrCss) ? getComputedStyle(elementOrCss) : elementOrCss;
 
   // https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block
-  return css.transform !== 'none' || css.perspective !== 'none' || (css.containerType ? css.containerType !== 'normal' : false) || !webkit && (css.backdropFilter ? css.backdropFilter !== 'none' : false) || !webkit && (css.filter ? css.filter !== 'none' : false) || ['transform', 'perspective', 'filter'].some(value => (css.willChange || '').includes(value)) || ['paint', 'layout', 'strict', 'content'].some(value => (css.contain || '').includes(value));
+  // https://drafts.csswg.org/css-transforms-2/#individual-transforms
+  return ['transform', 'translate', 'scale', 'rotate', 'perspective'].some(value => css[value] ? css[value] !== 'none' : false) || (css.containerType ? css.containerType !== 'normal' : false) || !webkit && (css.backdropFilter ? css.backdropFilter !== 'none' : false) || !webkit && (css.filter ? css.filter !== 'none' : false) || ['transform', 'translate', 'scale', 'rotate', 'perspective', 'filter'].some(value => (css.willChange || '').includes(value)) || ['paint', 'layout', 'strict', 'content'].some(value => (css.contain || '').includes(value));
 }
 function getContainingBlock(element) {
   let currentNode = getParentNode(element);
@@ -34580,7 +34616,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   createCollection: () => (/* binding */ createCollection)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var _radix_ui_react_context__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @radix-ui/react-context */ "./node_modules/@radix-ui/react-collection/node_modules/@radix-ui/react-context/dist/index.mjs");
+/* harmony import */ var _radix_ui_react_context__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @radix-ui/react-context */ "./node_modules/@radix-ui/react-context/dist/index.mjs");
 /* harmony import */ var _radix_ui_react_compose_refs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @radix-ui/react-compose-refs */ "./node_modules/@radix-ui/react-compose-refs/dist/index.mjs");
 /* harmony import */ var _radix_ui_react_slot__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @radix-ui/react-slot */ "./node_modules/@radix-ui/react-slot/dist/index.mjs");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
@@ -34658,102 +34694,6 @@ function createCollection(name) {
 
 /***/ }),
 
-/***/ "./node_modules/@radix-ui/react-collection/node_modules/@radix-ui/react-context/dist/index.mjs":
-/*!*****************************************************************************************************!*\
-  !*** ./node_modules/@radix-ui/react-collection/node_modules/@radix-ui/react-context/dist/index.mjs ***!
-  \*****************************************************************************************************/
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   createContext: () => (/* binding */ createContext2),
-/* harmony export */   createContextScope: () => (/* binding */ createContextScope)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-// packages/react/context/src/createContext.tsx
-
-
-function createContext2(rootComponentName, defaultContext) {
-  const Context = react__WEBPACK_IMPORTED_MODULE_0__.createContext(defaultContext);
-  function Provider(props) {
-    const { children, ...context } = props;
-    const value = react__WEBPACK_IMPORTED_MODULE_0__.useMemo(() => context, Object.values(context));
-    return /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(Context.Provider, { value, children });
-  }
-  function useContext2(consumerName) {
-    const context = react__WEBPACK_IMPORTED_MODULE_0__.useContext(Context);
-    if (context) return context;
-    if (defaultContext !== void 0) return defaultContext;
-    throw new Error(`\`${consumerName}\` must be used within \`${rootComponentName}\``);
-  }
-  Provider.displayName = rootComponentName + "Provider";
-  return [Provider, useContext2];
-}
-function createContextScope(scopeName, createContextScopeDeps = []) {
-  let defaultContexts = [];
-  function createContext3(rootComponentName, defaultContext) {
-    const BaseContext = react__WEBPACK_IMPORTED_MODULE_0__.createContext(defaultContext);
-    const index = defaultContexts.length;
-    defaultContexts = [...defaultContexts, defaultContext];
-    function Provider(props) {
-      const { scope, children, ...context } = props;
-      const Context = scope?.[scopeName][index] || BaseContext;
-      const value = react__WEBPACK_IMPORTED_MODULE_0__.useMemo(() => context, Object.values(context));
-      return /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(Context.Provider, { value, children });
-    }
-    function useContext2(consumerName, scope) {
-      const Context = scope?.[scopeName][index] || BaseContext;
-      const context = react__WEBPACK_IMPORTED_MODULE_0__.useContext(Context);
-      if (context) return context;
-      if (defaultContext !== void 0) return defaultContext;
-      throw new Error(`\`${consumerName}\` must be used within \`${rootComponentName}\``);
-    }
-    Provider.displayName = rootComponentName + "Provider";
-    return [Provider, useContext2];
-  }
-  const createScope = () => {
-    const scopeContexts = defaultContexts.map((defaultContext) => {
-      return react__WEBPACK_IMPORTED_MODULE_0__.createContext(defaultContext);
-    });
-    return function useScope(scope) {
-      const contexts = scope?.[scopeName] || scopeContexts;
-      return react__WEBPACK_IMPORTED_MODULE_0__.useMemo(
-        () => ({ [`__scope${scopeName}`]: { ...scope, [scopeName]: contexts } }),
-        [scope, contexts]
-      );
-    };
-  };
-  createScope.scopeName = scopeName;
-  return [createContext3, composeContextScopes(createScope, ...createContextScopeDeps)];
-}
-function composeContextScopes(...scopes) {
-  const baseScope = scopes[0];
-  if (scopes.length === 1) return baseScope;
-  const createScope = () => {
-    const scopeHooks = scopes.map((createScope2) => ({
-      useScope: createScope2(),
-      scopeName: createScope2.scopeName
-    }));
-    return function useComposedScopes(overrideScopes) {
-      const nextScopes = scopeHooks.reduce((nextScopes2, { useScope, scopeName }) => {
-        const scopeProps = useScope(overrideScopes);
-        const currentScope = scopeProps[`__scope${scopeName}`];
-        return { ...nextScopes2, ...currentScope };
-      }, {});
-      return react__WEBPACK_IMPORTED_MODULE_0__.useMemo(() => ({ [`__scope${baseScope.scopeName}`]: nextScopes }), [nextScopes]);
-    };
-  };
-  createScope.scopeName = baseScope.scopeName;
-  return createScope;
-}
-
-//# sourceMappingURL=index.mjs.map
-
-
-/***/ }),
-
 /***/ "./node_modules/@radix-ui/react-compose-refs/dist/index.mjs":
 /*!******************************************************************!*\
   !*** ./node_modules/@radix-ui/react-compose-refs/dist/index.mjs ***!
@@ -34771,13 +34711,34 @@ __webpack_require__.r(__webpack_exports__);
 
 function setRef(ref, value) {
   if (typeof ref === "function") {
-    ref(value);
+    return ref(value);
   } else if (ref !== null && ref !== void 0) {
     ref.current = value;
   }
 }
 function composeRefs(...refs) {
-  return (node) => refs.forEach((ref) => setRef(ref, node));
+  return (node) => {
+    let hasCleanup = false;
+    const cleanups = refs.map((ref) => {
+      const cleanup = setRef(ref, node);
+      if (!hasCleanup && typeof cleanup == "function") {
+        hasCleanup = true;
+      }
+      return cleanup;
+    });
+    if (hasCleanup) {
+      return () => {
+        for (let i = 0; i < cleanups.length; i++) {
+          const cleanup = cleanups[i];
+          if (typeof cleanup == "function") {
+            cleanup();
+          } else {
+            setRef(refs[i], null);
+          }
+        }
+      };
+    }
+  };
 }
 function useComposedRefs(...refs) {
   return react__WEBPACK_IMPORTED_MODULE_0__.useCallback(composeRefs(...refs), refs);
@@ -36730,7 +36691,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _floating_ui_react_dom__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @floating-ui/react-dom */ "./node_modules/@floating-ui/dom/dist/floating-ui.dom.mjs");
 /* harmony import */ var _radix_ui_react_arrow__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @radix-ui/react-arrow */ "./node_modules/@radix-ui/react-arrow/dist/index.mjs");
 /* harmony import */ var _radix_ui_react_compose_refs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @radix-ui/react-compose-refs */ "./node_modules/@radix-ui/react-compose-refs/dist/index.mjs");
-/* harmony import */ var _radix_ui_react_context__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @radix-ui/react-context */ "./node_modules/@radix-ui/react-popper/node_modules/@radix-ui/react-context/dist/index.mjs");
+/* harmony import */ var _radix_ui_react_context__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @radix-ui/react-context */ "./node_modules/@radix-ui/react-context/dist/index.mjs");
 /* harmony import */ var _radix_ui_react_primitive__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @radix-ui/react-primitive */ "./node_modules/@radix-ui/react-primitive/dist/index.mjs");
 /* harmony import */ var _radix_ui_react_use_callback_ref__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @radix-ui/react-use-callback-ref */ "./node_modules/@radix-ui/react-use-callback-ref/dist/index.mjs");
 /* harmony import */ var _radix_ui_react_use_layout_effect__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @radix-ui/react-use-layout-effect */ "./node_modules/@radix-ui/react-use-layout-effect/dist/index.mjs");
@@ -37021,102 +36982,6 @@ var Arrow = PopperArrow;
 
 /***/ }),
 
-/***/ "./node_modules/@radix-ui/react-popper/node_modules/@radix-ui/react-context/dist/index.mjs":
-/*!*************************************************************************************************!*\
-  !*** ./node_modules/@radix-ui/react-popper/node_modules/@radix-ui/react-context/dist/index.mjs ***!
-  \*************************************************************************************************/
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   createContext: () => (/* binding */ createContext2),
-/* harmony export */   createContextScope: () => (/* binding */ createContextScope)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-// packages/react/context/src/createContext.tsx
-
-
-function createContext2(rootComponentName, defaultContext) {
-  const Context = react__WEBPACK_IMPORTED_MODULE_0__.createContext(defaultContext);
-  function Provider(props) {
-    const { children, ...context } = props;
-    const value = react__WEBPACK_IMPORTED_MODULE_0__.useMemo(() => context, Object.values(context));
-    return /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(Context.Provider, { value, children });
-  }
-  function useContext2(consumerName) {
-    const context = react__WEBPACK_IMPORTED_MODULE_0__.useContext(Context);
-    if (context) return context;
-    if (defaultContext !== void 0) return defaultContext;
-    throw new Error(`\`${consumerName}\` must be used within \`${rootComponentName}\``);
-  }
-  Provider.displayName = rootComponentName + "Provider";
-  return [Provider, useContext2];
-}
-function createContextScope(scopeName, createContextScopeDeps = []) {
-  let defaultContexts = [];
-  function createContext3(rootComponentName, defaultContext) {
-    const BaseContext = react__WEBPACK_IMPORTED_MODULE_0__.createContext(defaultContext);
-    const index = defaultContexts.length;
-    defaultContexts = [...defaultContexts, defaultContext];
-    function Provider(props) {
-      const { scope, children, ...context } = props;
-      const Context = scope?.[scopeName][index] || BaseContext;
-      const value = react__WEBPACK_IMPORTED_MODULE_0__.useMemo(() => context, Object.values(context));
-      return /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(Context.Provider, { value, children });
-    }
-    function useContext2(consumerName, scope) {
-      const Context = scope?.[scopeName][index] || BaseContext;
-      const context = react__WEBPACK_IMPORTED_MODULE_0__.useContext(Context);
-      if (context) return context;
-      if (defaultContext !== void 0) return defaultContext;
-      throw new Error(`\`${consumerName}\` must be used within \`${rootComponentName}\``);
-    }
-    Provider.displayName = rootComponentName + "Provider";
-    return [Provider, useContext2];
-  }
-  const createScope = () => {
-    const scopeContexts = defaultContexts.map((defaultContext) => {
-      return react__WEBPACK_IMPORTED_MODULE_0__.createContext(defaultContext);
-    });
-    return function useScope(scope) {
-      const contexts = scope?.[scopeName] || scopeContexts;
-      return react__WEBPACK_IMPORTED_MODULE_0__.useMemo(
-        () => ({ [`__scope${scopeName}`]: { ...scope, [scopeName]: contexts } }),
-        [scope, contexts]
-      );
-    };
-  };
-  createScope.scopeName = scopeName;
-  return [createContext3, composeContextScopes(createScope, ...createContextScopeDeps)];
-}
-function composeContextScopes(...scopes) {
-  const baseScope = scopes[0];
-  if (scopes.length === 1) return baseScope;
-  const createScope = () => {
-    const scopeHooks = scopes.map((createScope2) => ({
-      useScope: createScope2(),
-      scopeName: createScope2.scopeName
-    }));
-    return function useComposedScopes(overrideScopes) {
-      const nextScopes = scopeHooks.reduce((nextScopes2, { useScope, scopeName }) => {
-        const scopeProps = useScope(overrideScopes);
-        const currentScope = scopeProps[`__scope${scopeName}`];
-        return { ...nextScopes2, ...currentScope };
-      }, {});
-      return react__WEBPACK_IMPORTED_MODULE_0__.useMemo(() => ({ [`__scope${baseScope.scopeName}`]: nextScopes }), [nextScopes]);
-    };
-  };
-  createScope.scopeName = baseScope.scopeName;
-  return createScope;
-}
-
-//# sourceMappingURL=index.mjs.map
-
-
-/***/ }),
-
 /***/ "./node_modules/@radix-ui/react-portal/dist/index.mjs":
 /*!************************************************************!*\
   !*** ./node_modules/@radix-ui/react-portal/dist/index.mjs ***!
@@ -37392,7 +37257,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _radix_ui_primitive__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @radix-ui/primitive */ "./node_modules/@radix-ui/primitive/dist/index.mjs");
 /* harmony import */ var _radix_ui_react_collection__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @radix-ui/react-collection */ "./node_modules/@radix-ui/react-collection/dist/index.mjs");
 /* harmony import */ var _radix_ui_react_compose_refs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @radix-ui/react-compose-refs */ "./node_modules/@radix-ui/react-compose-refs/dist/index.mjs");
-/* harmony import */ var _radix_ui_react_context__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @radix-ui/react-context */ "./node_modules/@radix-ui/react-roving-focus/node_modules/@radix-ui/react-context/dist/index.mjs");
+/* harmony import */ var _radix_ui_react_context__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @radix-ui/react-context */ "./node_modules/@radix-ui/react-context/dist/index.mjs");
 /* harmony import */ var _radix_ui_react_id__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @radix-ui/react-id */ "./node_modules/@radix-ui/react-id/dist/index.mjs");
 /* harmony import */ var _radix_ui_react_primitive__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @radix-ui/react-primitive */ "./node_modules/@radix-ui/react-primitive/dist/index.mjs");
 /* harmony import */ var _radix_ui_react_use_callback_ref__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @radix-ui/react-use-callback-ref */ "./node_modules/@radix-ui/react-use-callback-ref/dist/index.mjs");
@@ -37619,102 +37484,6 @@ function wrapArray(array, startIndex) {
 }
 var Root = RovingFocusGroup;
 var Item = RovingFocusGroupItem;
-
-//# sourceMappingURL=index.mjs.map
-
-
-/***/ }),
-
-/***/ "./node_modules/@radix-ui/react-roving-focus/node_modules/@radix-ui/react-context/dist/index.mjs":
-/*!*******************************************************************************************************!*\
-  !*** ./node_modules/@radix-ui/react-roving-focus/node_modules/@radix-ui/react-context/dist/index.mjs ***!
-  \*******************************************************************************************************/
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   createContext: () => (/* binding */ createContext2),
-/* harmony export */   createContextScope: () => (/* binding */ createContextScope)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-// packages/react/context/src/createContext.tsx
-
-
-function createContext2(rootComponentName, defaultContext) {
-  const Context = react__WEBPACK_IMPORTED_MODULE_0__.createContext(defaultContext);
-  function Provider(props) {
-    const { children, ...context } = props;
-    const value = react__WEBPACK_IMPORTED_MODULE_0__.useMemo(() => context, Object.values(context));
-    return /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(Context.Provider, { value, children });
-  }
-  function useContext2(consumerName) {
-    const context = react__WEBPACK_IMPORTED_MODULE_0__.useContext(Context);
-    if (context) return context;
-    if (defaultContext !== void 0) return defaultContext;
-    throw new Error(`\`${consumerName}\` must be used within \`${rootComponentName}\``);
-  }
-  Provider.displayName = rootComponentName + "Provider";
-  return [Provider, useContext2];
-}
-function createContextScope(scopeName, createContextScopeDeps = []) {
-  let defaultContexts = [];
-  function createContext3(rootComponentName, defaultContext) {
-    const BaseContext = react__WEBPACK_IMPORTED_MODULE_0__.createContext(defaultContext);
-    const index = defaultContexts.length;
-    defaultContexts = [...defaultContexts, defaultContext];
-    function Provider(props) {
-      const { scope, children, ...context } = props;
-      const Context = scope?.[scopeName][index] || BaseContext;
-      const value = react__WEBPACK_IMPORTED_MODULE_0__.useMemo(() => context, Object.values(context));
-      return /* @__PURE__ */ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(Context.Provider, { value, children });
-    }
-    function useContext2(consumerName, scope) {
-      const Context = scope?.[scopeName][index] || BaseContext;
-      const context = react__WEBPACK_IMPORTED_MODULE_0__.useContext(Context);
-      if (context) return context;
-      if (defaultContext !== void 0) return defaultContext;
-      throw new Error(`\`${consumerName}\` must be used within \`${rootComponentName}\``);
-    }
-    Provider.displayName = rootComponentName + "Provider";
-    return [Provider, useContext2];
-  }
-  const createScope = () => {
-    const scopeContexts = defaultContexts.map((defaultContext) => {
-      return react__WEBPACK_IMPORTED_MODULE_0__.createContext(defaultContext);
-    });
-    return function useScope(scope) {
-      const contexts = scope?.[scopeName] || scopeContexts;
-      return react__WEBPACK_IMPORTED_MODULE_0__.useMemo(
-        () => ({ [`__scope${scopeName}`]: { ...scope, [scopeName]: contexts } }),
-        [scope, contexts]
-      );
-    };
-  };
-  createScope.scopeName = scopeName;
-  return [createContext3, composeContextScopes(createScope, ...createContextScopeDeps)];
-}
-function composeContextScopes(...scopes) {
-  const baseScope = scopes[0];
-  if (scopes.length === 1) return baseScope;
-  const createScope = () => {
-    const scopeHooks = scopes.map((createScope2) => ({
-      useScope: createScope2(),
-      scopeName: createScope2.scopeName
-    }));
-    return function useComposedScopes(overrideScopes) {
-      const nextScopes = scopeHooks.reduce((nextScopes2, { useScope, scopeName }) => {
-        const scopeProps = useScope(overrideScopes);
-        const currentScope = scopeProps[`__scope${scopeName}`];
-        return { ...nextScopes2, ...currentScope };
-      }, {});
-      return react__WEBPACK_IMPORTED_MODULE_0__.useMemo(() => ({ [`__scope${baseScope.scopeName}`]: nextScopes }), [nextScopes]);
-    };
-  };
-  createScope.scopeName = baseScope.scopeName;
-  return createScope;
-}
 
 //# sourceMappingURL=index.mjs.map
 
@@ -39262,7 +39031,7 @@ const getDefaultConfig = () => {
        * Font Variant Numeric
        * @see https://tailwindcss.com/docs/font-variant-numeric
        */
-      'fvn-fraction': ['diagonal-fractions', 'stacked-fractons'],
+      'fvn-fraction': ['diagonal-fractions', 'stacked-fractions'],
       /**
        * Letter Spacing
        * @see https://tailwindcss.com/docs/letter-spacing
