@@ -35,6 +35,15 @@ class Checkout {
 		// Add meta box in the order backend
 		add_action( 'add_meta_boxes', array( $this, 'add_po_number_meta_box' ) );
 		add_action( 'save_post_shop_order', array( $this, 'save_po_number_meta_box' ), 10, 1 );
+
+		//add input fields to override price and shipping
+		add_action( 'add_meta_boxes', array( $this, 'add_overrides_metabox' ) );
+		add_action( 'save_post_shop_order', array( $this, 'save_override_meta_box' ), 10, 1 );
+		add_filter( 'woocommerce_order_get_total', array( $this, 'override_total' ), 999, 2 );
+		add_filter( 'woocommerce_order_get_total_tax', array( $this, 'override_tax' ), 99999, 2 );
+
+		add_filter( 'wpo_wcpdf_woocommerce_totals', array( $this, 'override_pdf_totals' ), 20, 3 );
+
 	}
 
 	/**
@@ -62,13 +71,13 @@ class Checkout {
 		if ( $po_number ) {
 			?>
 <tr>
-	<td class="label"><?php esc_html_e( 'PO#', 'nova_b2b' ); ?>:</td>
-	<td width="1%"></td>
-	<td class="po_number">
-		<strong><?php echo esc_html( $po_number ); ?></strong>
-	</td>
+  <td class="label"><?php esc_html_e( 'PO#', 'nova_b2b' ); ?>:</td>
+  <td width="1%"></td>
+  <td class="po_number">
+    <strong><?php echo esc_html( $po_number ); ?></strong>
+  </td>
 </tr>
-			<?php
+<?php
 		}
 	}
 
@@ -90,9 +99,9 @@ class Checkout {
 		woocommerce_form_field(
 			'po_number',
 			array(
-				'type'        => 'text',
-				'class'       => array( 'form-row-wide' ),
-				'label'       => false,
+				'type' => 'text',
+				'class' => array( 'form-row-wide' ),
+				'label' => false,
 				'placeholder' => __( 'Enter your PO number', 'nova_b2b' ),
 			),
 			WC()->checkout->get_value( 'po_number' )
@@ -116,6 +125,22 @@ class Checkout {
 	}
 
 	/**
+	 * Summary of add_overrides_metabox
+	 */
+	public function add_overrides_metabox() {
+		add_meta_box(
+			'nova_b2b_po_number',
+			__( 'Override Prices', 'nova_b2b' ),
+			array( $this, 'display_overrides_meta_box' ),
+			'shop_order',
+			'side',
+			'default'
+		);
+	}
+
+
+
+	/**
 	 * Display the PO number field in the meta box.
 	 */
 	public function display_po_number_meta_box( $post ) {
@@ -124,6 +149,98 @@ class Checkout {
 
 		echo '<p><label for="nova_b2b_po_number_field">' . esc_html__( 'PO#', 'nova_b2b' ) . ':</label></p>';
 		echo '<p><input type="text" id="nova_b2b_po_number_field" name="nova_b2b_po_number_field" value="' . esc_attr( $po_number ) . '" /></p>';
+	}
+
+	/**
+	 * Summary of display_overrides_meta_box
+	 * @return void
+	 */
+	public function display_overrides_meta_box( $post ) {
+		$price = get_post_meta( $post->ID, '_override_price', true );
+		$item_price = get_post_meta( $post->ID, '_override_item_price', true );
+		$shipping = get_post_meta( $post->ID, '_override_shipping', true );
+		$tax = get_post_meta( $post->ID, '_override_tax', true );
+		wp_nonce_field( 'nova_b2b_save_overrides', 'nova_b2b_overrides_nonce' );
+
+		echo '<p><label for="nova_b2b_override_item_price">' . esc_html__( 'Override Item Price', 'nova_b2b' ) . ':</label></p>';
+		echo '<p><input type="text" id="nova_b2b_override_item_price" name="nova_b2b_override_item_price" value="' . esc_attr( $item_price ) . '" /></p>';
+	
+		echo '<p><label for="nova_b2b_override_shipping">' . esc_html__( 'Override Shipping', 'nova_b2b' ) . ':</label></p>';
+		echo '<p><input type="text" id="nova_b2b_override_shipping" name="nova_b2b_override_shipping" value="' . esc_attr( $shipping ) . '" /></p>';
+		echo '<p><label for="nova_b2b_override_tax">' . esc_html__( 'Override Total Tax', 'nova_b2b' ) . ':</label></p>';
+		echo '<p><input type="text" id="nova_b2b_override_tax" name="nova_b2b_override_tax" value="' . esc_attr( $tax ) . '" /></p>';
+		echo '<p><label for="nova_b2b_override_price">' . esc_html__( 'Override Total Price', 'nova_b2b' ) . ':</label></p>';
+		echo '<p><input type="text" id="nova_b2b_override_price" name="nova_b2b_override_price" value="' . esc_attr( $price ) . '" /></p>';
+
+	}
+
+	/**
+	 * Summary of save_override_meta_box
+	 * @param mixed $post_id
+	 * @return void
+	 */
+	public function save_override_meta_box( $post_id ) {
+		// Verify nonce
+		if ( ! isset( $_POST['nova_b2b_overrides_nonce'] ) || ! wp_verify_nonce( $_POST['nova_b2b_overrides_nonce'], 'nova_b2b_save_overrides' ) ) {
+			return;
+		}
+
+		// Check user permissions
+		if ( ! current_user_can( 'edit_shop_order', $post_id ) ) {
+			return;
+		}
+
+		// Sanitize and save the override price
+		if ( isset( $_POST['nova_b2b_override_price'] ) ) {
+			update_post_meta( $post_id, '_override_price', sanitize_text_field( $_POST['nova_b2b_override_price'] ) );
+		}
+		if ( isset( $_POST['nova_b2b_override_shipping'] ) ) {
+			update_post_meta( $post_id, '_override_shipping', sanitize_text_field( $_POST['nova_b2b_override_shipping'] ) );
+		}
+		if ( isset( $_POST['nova_b2b_override_tax'] ) ) {
+			update_post_meta( $post_id, '_override_tax', sanitize_text_field( $_POST['nova_b2b_override_tax'] ) );
+		}
+		if ( isset( $_POST['nova_b2b_override_item_price'] ) ) {
+			update_post_meta( $post_id, '_override_item_price', sanitize_text_field( $_POST['nova_b2b_override_item_price'] ) );
+		}
+	}
+
+	/**
+	 * Summary of override_total
+	 * @param mixed $and_taxes
+	 * @param mixed $order
+	 * @return void
+	 */
+	public function override_total( $total, $order ) {
+		$override_price = $order->get_meta( '_override_price' );
+
+
+
+		if ( $override_price ) {
+			return $override_price;
+		}
+
+		return $total;
+	}
+
+	public function override_tax( $total, $order ) {
+		$override_tax = $order->get_meta( '_override_tax' );
+
+		if ( $override_tax ) {
+			return $override_tax;
+		}
+
+		return $total;
+	}
+
+	public function override_shipping( $total, $order ) {
+		$override_shipping = $order->get_meta( '_override_shipping' );
+
+		if ( $override_shipping ) {
+			return $override_shipping;
+		}
+
+		return $total;
 	}
 
 	/**
@@ -144,5 +261,44 @@ class Checkout {
 		if ( isset( $_POST['nova_b2b_po_number_field'] ) ) {
 			update_post_meta( $post_id, '_po_number', sanitize_text_field( $_POST['nova_b2b_po_number_field'] ) );
 		}
+	}
+
+	public function override_pdf_totals( $totals, $order, $type ) {
+		$price = $order->get_meta( '_override_price' );
+		$item_price = $order->get_meta( '_override_item_price' );
+		$shipping = $order->get_meta( '_override_shipping' );
+		$tax = $order->get_meta( '_override_tax' );
+		if ( $price ) {
+			$desired_keys = [ 
+				'payment_select' => true,
+			];
+
+			$new_total = array_intersect_key( $totals, $desired_keys );
+
+			if ( $item_price ) {
+				$new_total['item_subtotal'] = array(
+					'label' => 'Item Total',
+					'value' => wc_price( $item_price )
+				);
+			}
+
+			if ( $tax ) {
+				$new_total['original_tax'] = array(
+					'label' => $totals['original_tax']['label'],
+					'value' => wc_price( $tax )
+				);
+			}
+
+			$new_total['order_total'] = array(
+				'label' => 'Total',
+				'value' => wc_price( $price )
+			);
+
+
+
+			return $new_total;
+		}
+
+		return $totals;
 	}
 }

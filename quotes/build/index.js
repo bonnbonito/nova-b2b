@@ -56487,7 +56487,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
 const rootElement = document.getElementById('QuoteApp');
 const quoteView = document.getElementById('quoteView');
 const customProject = document.getElementById('customProject');
