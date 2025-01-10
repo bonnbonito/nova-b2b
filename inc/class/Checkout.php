@@ -160,13 +160,16 @@ class Checkout {
 		$item_price = get_post_meta( $post->ID, '_override_item_price', true );
 		$shipping = get_post_meta( $post->ID, '_override_shipping', true );
 		$tax = get_post_meta( $post->ID, '_override_tax', true );
+		$tax_name = get_post_meta( $post->ID, '_override_tax_name', true );
 		wp_nonce_field( 'nova_b2b_save_overrides', 'nova_b2b_overrides_nonce' );
 
 		echo '<p><label for="nova_b2b_override_item_price">' . esc_html__( 'Override Item Price', 'nova_b2b' ) . ':</label></p>';
 		echo '<p><input type="text" id="nova_b2b_override_item_price" name="nova_b2b_override_item_price" value="' . esc_attr( $item_price ) . '" /></p>';
-	
+
 		echo '<p><label for="nova_b2b_override_shipping">' . esc_html__( 'Override Shipping', 'nova_b2b' ) . ':</label></p>';
 		echo '<p><input type="text" id="nova_b2b_override_shipping" name="nova_b2b_override_shipping" value="' . esc_attr( $shipping ) . '" /></p>';
+		echo '<p><label for="nova_b2b_override_tax_name">' . esc_html__( 'Override Tax Name', 'nova_b2b' ) . ':</label></p>';
+		echo '<p><input type="text" id="nova_b2b_override_tax_name" name="nova_b2b_override_tax_name" value="' . esc_attr( $tax_name ) . '" /></p>';
 		echo '<p><label for="nova_b2b_override_tax">' . esc_html__( 'Override Total Tax', 'nova_b2b' ) . ':</label></p>';
 		echo '<p><input type="text" id="nova_b2b_override_tax" name="nova_b2b_override_tax" value="' . esc_attr( $tax ) . '" /></p>';
 		echo '<p><label for="nova_b2b_override_price">' . esc_html__( 'Override Total Price', 'nova_b2b' ) . ':</label></p>';
@@ -199,6 +202,9 @@ class Checkout {
 		}
 		if ( isset( $_POST['nova_b2b_override_tax'] ) ) {
 			update_post_meta( $post_id, '_override_tax', sanitize_text_field( $_POST['nova_b2b_override_tax'] ) );
+		}
+		if ( isset( $_POST['nova_b2b_override_tax_name'] ) ) {
+			update_post_meta( $post_id, '_override_tax_name', sanitize_text_field( $_POST['nova_b2b_override_tax_name'] ) );
 		}
 		if ( isset( $_POST['nova_b2b_override_item_price'] ) ) {
 			update_post_meta( $post_id, '_override_item_price', sanitize_text_field( $_POST['nova_b2b_override_item_price'] ) );
@@ -268,6 +274,7 @@ class Checkout {
 		$item_price = $order->get_meta( '_override_item_price' );
 		$shipping = $order->get_meta( '_override_shipping' );
 		$tax = $order->get_meta( '_override_tax' );
+		$tax_name = $order->get_meta( '_override_tax_name' );
 		if ( $price ) {
 			$desired_keys = [ 
 				'payment_select' => true,
@@ -282,9 +289,9 @@ class Checkout {
 				);
 			}
 
-			if ( $tax ) {
+			if ( $tax && $tax_name ) {
 				$new_total['original_tax'] = array(
-					'label' => $totals['original_tax']['label'],
+					'label' => $tax_name,
 					'value' => wc_price( $tax )
 				);
 			}
