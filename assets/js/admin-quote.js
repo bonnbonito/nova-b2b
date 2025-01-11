@@ -38,18 +38,52 @@ function convertToCAD(usdPrice, exchangeRate) {
 	return parseFloat(usdPrice) * exchangeRate;
 }
 
+function computeShipping(price) {
+	const minPrice = 800;
+	const flatRate = 14.75;
+	let aboveMin = 0;
+	let belowMin = 0;
+	let shipping = 0;
+	if (price < 800) {
+		shipping = price * 0.09 > flatRate ? price * 0.09 : flatRate;
+	} else {
+		belowMin = minPrice * 0.09;
+		let difference = price - minPrice;
+		aboveMin = difference * 0.08;
+		shipping = belowMin + aboveMin;
+	}
+	return {
+		shipping: parseFloat(shipping).toFixed(2),
+		cadShipping: parseFloat(shipping * EXCHANGE_RATE).toFixed(2),
+		previewPrice: (parseFloat(shipping) + parseFloat(price)).toFixed(2),
+		previewCadPrice: (
+			(parseFloat(shipping) + parseFloat(price)) *
+			EXCHANGE_RATE
+		).toFixed(2),
+	};
+}
+
 function displayTotalUsdPrice(signage) {
 	const totalUsdPrice = signage.reduce(
 		(acc, item) => acc + parseFloat(item.usdPrice),
 		0
 	);
+
+	console.log(totalUsdPrice);
+
 	const priceDisplay = totalUsdPrice ? `$${totalUsdPrice.toFixed(2)}` : 'TBD';
 	const cadPriceDisplay = convertToCAD(totalUsdPrice, EXCHANGE_RATE).toFixed(2);
+
+	const { shipping, cadShipping, previewPrice, previewCadPrice } =
+		computeShipping(totalUsdPrice.toFixed(2));
 
 	const totalPriceElement = document.createElement('div');
 	totalPriceElement.className = 'total-signage-price';
 	totalPriceElement.innerHTML = `<h2 style="padding-bottom: 0;">Price: <span id="totalComputed">${priceDisplay}</span></h2>
-	<h3 style="padding-left: 12px; margin-top: 0;">CAD Price: <span id="totalCadComputed">$${cadPriceDisplay}</span></h3>`;
+	<h3 style="padding-left: 12px; margin-top: 0; margin-bottom: 0;">CAD Price: <span id="totalCadComputed">$${cadPriceDisplay}</span></h3>
+	<h4 style="padding-left: 12px;">Shipping: [USD $<span id="shippingPrice">${shipping}</span>] [CAD $<span id="shippingCadPrice">${cadShipping}</span>]</h4>
+	<h4 style="padding-left: 12px;">Price + Shipping: [USD $<span id="previewPrice">${previewPrice}</span>] [CAD $<span id="previewCadPrice">${previewCadPrice}</span>]</h4>
+	`;
 
 	document.getElementById('novaquote').appendChild(totalPriceElement);
 }
@@ -73,18 +107,19 @@ function displaySignageItem(sign) {
 				if (signIndex !== -1) {
 					signage[signIndex].usdPrice = newPrice;
 
-					console.log(newPrice);
-
 					const newCadPrice = convertToCAD(newPrice, EXCHANGE_RATE).toFixed(2);
 
-					console.log(newCadPrice);
+					console.log(parseFloat(newPrice));
+
+					const { shipping, cadShipping, previewPrice, previewCadPrice } =
+						computeShipping(newPrice);
+
+					console.log(shipping, cadShipping, previewPrice, previewCadPrice);
 
 					signage[signIndex].cadPrice = newCadPrice;
 					// Update the displayed price
 					document.getElementById(`priceDisplay_${sign.id}`).textContent =
 						newPrice;
-
-					console.log(`.signage-value[data-id="${sign.id}"]`);
 
 					document.querySelector(
 						`.signage-value[data-id="${sign.id}"]`
@@ -106,7 +141,17 @@ function displaySignageItem(sign) {
 					document.getElementById('totalCadComputed').textContent =
 						cadPriceDisplay;
 
-					console.log(signage);
+					const shippingPriceSpan = document.getElementById('shippingPrice');
+					const shippingCadPriceSpan =
+						document.getElementById('shippingCadPrice');
+					const previewPriceSpan = document.getElementById('previewPrice');
+					const previewCadPriceSpan =
+						document.getElementById('previewCadPrice');
+
+					shippingPriceSpan.textContent = shipping;
+					shippingCadPriceSpan.textContent = cadShipping;
+					previewPriceSpan.textContent = previewPrice;
+					previewCadPriceSpan.textContent = previewCadPrice;
 
 					finalPriceInput.value = totalUsdPrice.toFixed(2);
 					signageInput.value = JSON.stringify(signage);
@@ -635,3 +680,138 @@ if (document.readyState === 'loading') {
 } else {
 	displayQuoteDetails();
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+	const usdPriceInput = document.getElementById('calculatorUsdPrice');
+	const usdShippingInput = document.getElementById('calculatorUsdShipping');
+	const cadPriceInput = document.getElementById('calculatorCadPrice');
+	const cadShippingInput = document.getElementById('calculatorCadShipping');
+	const previewPriceInput = document.getElementById('calculatorPreviewPrice');
+	const previewCadPriceInput = document.getElementById(
+		'calculatorPreviewCadPrice'
+	);
+
+	function calculateFromUSDPrice() {
+		let usdPrice = parseFloat(usdPriceInput.value) || 0;
+		let usdShipping = calculateUSDShipping(usdPrice);
+		let cadPrice = usdPrice * 1.35;
+		let cadShipping = usdShipping * 1.35;
+		let previewPrice = usdPrice + usdShipping;
+		let previewCadPrice = previewPrice * 1.35;
+
+		usdShippingInput.value = usdShipping;
+		cadPriceInput.value = cadPrice;
+		cadShippingInput.value = cadShipping;
+		previewPriceInput.value = previewPrice;
+		previewCadPriceInput.value = previewCadPrice;
+	}
+
+	function calculateFromUSDShipping() {
+		let usdShipping = parseFloat(usdShippingInput.value) || 0;
+		let usdPrice = calculatePriceFromShipping(usdShipping);
+		let cadPrice = usdPrice * 1.35;
+		let cadShipping = usdShipping * 1.35;
+		let previewPrice = usdPrice + usdShipping;
+		let previewCadPrice = previewPrice * 1.35;
+
+		usdPriceInput.value = usdPrice;
+		cadPriceInput.value = cadPrice;
+		cadShippingInput.value = cadShipping;
+		previewPriceInput.value = previewPrice;
+		previewCadPriceInput.value = previewCadPrice;
+	}
+
+	function calculateFromCADPrice() {
+		let cadPrice = parseFloat(cadPriceInput.value) || 0;
+		let usdPrice = cadPrice / 1.35;
+		let usdShipping = calculateUSDShipping(usdPrice);
+		let cadShipping = usdShipping * 1.35;
+		let previewPrice = usdPrice + usdShipping;
+		let previewCadPrice = previewPrice * 1.35;
+
+		usdPriceInput.value = usdPrice;
+		usdShippingInput.value = usdShipping;
+		cadShippingInput.value = cadShipping;
+		previewPriceInput.value = previewPrice;
+		previewCadPriceInput.value = previewCadPrice;
+	}
+
+	function calculateFromCADShipping() {
+		let cadShipping = parseFloat(cadShippingInput.value) || 0;
+		let usdShipping = cadShipping / 1.35;
+		let usdPrice = calculatePriceFromShipping(usdShipping);
+		let cadPrice = usdPrice * 1.35;
+		let previewPrice = usdPrice + usdShipping;
+		let previewCadPrice = previewPrice * 1.35;
+
+		usdPriceInput.value = usdPrice;
+		usdShippingInput.value = usdShipping;
+		cadPriceInput.value = cadPrice;
+		previewPriceInput.value = previewPrice;
+		previewCadPriceInput.value = previewCadPrice;
+	}
+
+	function calculateFromPreviewPrice() {
+		let previewPrice = parseFloat(previewPriceInput.value) || 0;
+		let usdShipping = parseFloat(usdShippingInput.value) || 0;
+		let usdPrice = previewPrice - usdShipping;
+		let usdShippingUpdated = calculateUSDShipping(usdPrice);
+		let cadPrice = usdPrice * 1.35;
+		let cadShipping = usdShippingUpdated * 1.35;
+		let previewCadPrice = previewPrice * 1.35;
+
+		usdPriceInput.value = usdPrice;
+		usdShippingInput.value = usdShippingUpdated;
+		cadPriceInput.value = cadPrice;
+		cadShippingInput.value = cadShipping;
+		previewCadPriceInput.value = previewCadPrice;
+	}
+
+	function calculateFromPreviewCadPrice() {
+		let previewCadPrice = parseFloat(previewCadPriceInput.value) || 0;
+		let previewPrice = previewCadPrice / 1.35;
+		let usdShipping = parseFloat(usdShippingInput.value) || 0;
+		let usdPrice = previewPrice - usdShipping;
+		let usdShippingUpdated = calculateUSDShipping(usdPrice);
+		let cadPrice = usdPrice * 1.35;
+		let cadShipping = usdShippingUpdated * 1.35;
+
+		usdPriceInput.value = usdPrice;
+		usdShippingInput.value = usdShippingUpdated;
+		cadPriceInput.value = cadPrice;
+		cadShippingInput.value = cadShipping;
+		previewPriceInput.value = previewPrice;
+	}
+
+	function calculateUSDShipping(usdPrice) {
+		if (usdPrice < 800) {
+			let standard = 14.75;
+			let percentage = usdPrice * 0.09;
+			return Math.max(standard, percentage);
+		} else {
+			let minPrice = 800;
+			let belowMin = minPrice * 0.09;
+			let difference = usdPrice - minPrice;
+			let aboveMin = difference * 0.08;
+			return belowMin + aboveMin;
+		}
+	}
+
+	function calculatePriceFromShipping(usdShipping) {
+		// Approximate reverse calculation based on USD Shipping rules
+		let price = 0;
+		if (usdShipping > 14.75) {
+			price = usdShipping / 0.09; // Assume it's the lower threshold condition
+		} else {
+			price = 800 + (usdShipping - 800 * 0.09) / 0.08;
+		}
+		return price;
+	}
+
+	usdPriceInput.addEventListener('input', calculateFromUSDPrice);
+	usdShippingInput.addEventListener('input', calculateFromUSDShipping);
+	cadPriceInput.addEventListener('input', calculateFromCADPrice);
+	cadShippingInput.addEventListener('input', calculateFromCADShipping);
+	previewPriceInput.addEventListener('input', calculateFromPreviewPrice);
+	previewCadPriceInput.addEventListener('input', calculateFromPreviewCadPrice);
+});

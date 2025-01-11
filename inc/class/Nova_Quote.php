@@ -71,6 +71,7 @@ class Nova_Quote {
 		add_action( 'add_meta_boxes', array( $this, 'nova_quote_admin_changed' ), 10, 2 );
 		add_action( 'add_meta_boxes', array( $this, 'update_dropbox_folder' ), 10, 2 );
 		add_action( 'add_meta_boxes', array( $this, 'generated_product_id' ), 10, 2 );
+		add_action( 'add_meta_boxes', array( $this, 'dynamic_calculator' ), 10, 2 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'dequeue_lightbox_on_mockups_view' ), 100 );
 
 		add_action( 'template_redirect', array( $this, 'custom_quote_redirect' ) );
@@ -91,14 +92,14 @@ class Nova_Quote {
 		$invoice_id = get_query_var( 'customer_invoice' );
 
 		if ( $invoice_id ) {
-			$user_id   = get_field( 'partner', $invoice_id );
+			$user_id = get_field( 'partner', $invoice_id );
 			$user_info = get_userdata( $user_id );
 
 			$billing_country = get_user_meta( $user_id, 'billing_country', true );
-			$currency        = ( $billing_country === 'CA' ) ? 'CAD' : 'USD';
+			$currency = ( $billing_country === 'CA' ) ? 'CAD' : 'USD';
 
 			$html = $this->html_invoice( $invoice_id, $currency );
-			$pdf  = $this->generate_pdf( $invoice_id, $html, $currency, 'D' );
+			$pdf = $this->generate_pdf( $invoice_id, $html, $currency, 'D' );
 			return $pdf;
 		}
 	}
@@ -109,16 +110,16 @@ class Nova_Quote {
 		);
 		if ( ! wp_verify_nonce( $_POST['nonce'], 'quote_nonce' ) ) {
 			$status['status'] = 'error';
-			$status['error']  = 'Nonce error';
+			$status['error'] = 'Nonce error';
 			wp_send_json( $status );
 		}
 
 		$post_id = $_POST['post_id'];
-		$value   = $_POST['status'];
+		$value = $_POST['status'];
 
 		update_post_meta( $post_id, 'folder_project_status', $value );
 
-		$status['post']   = $_POST;
+		$status['post'] = $_POST;
 		$status['status'] = 'success';
 
 		wp_send_json( $status );
@@ -147,7 +148,7 @@ class Nova_Quote {
 			// Count the number of posts with the 'checked_out' status
 			$checked_out_count = get_posts(
 				array(
-					'post_type'   => 'nova_quote',
+					'post_type' => 'nova_quote',
 					'post_status' => 'checked_out',
 					'numberposts' => -1,
 				)
@@ -158,7 +159,7 @@ class Nova_Quote {
 				'<a href="%s">%s <span class="count">(%d)</span></a>',
 				add_query_arg(
 					array(
-						'post_type'   => 'nova_quote',
+						'post_type' => 'nova_quote',
 						'post_status' => 'checked_out',
 					),
 					admin_url( 'edit.php' )
@@ -183,12 +184,12 @@ class Nova_Quote {
 		register_post_status(
 			'checked_out',
 			array(
-				'label'                     => _x( 'Checked Out', 'post' ),
-				'public'                    => false,
-				'exclude_from_search'       => true,
-				'show_in_admin_all_list'    => true,
+				'label' => _x( 'Checked Out', 'post' ),
+				'public' => false,
+				'exclude_from_search' => true,
+				'show_in_admin_all_list' => true,
 				'show_in_admin_status_list' => true,
-				'label_count'               => _n_noop( 'Checked Out <span class="count">(%s)</span>', 'Checked Out <span class="count">(%s)</span>' ),
+				'label_count' => _n_noop( 'Checked Out <span class="count">(%s)</span>', 'Checked Out <span class="count">(%s)</span>' ),
 			)
 		);
 	}
@@ -219,6 +220,45 @@ class Nova_Quote {
 		}
 	}
 
+	public function dynamic_calculator( $post_type, $post ) {
+		if ( $post_type !== 'nova_quote' ) {
+			return;
+		}
+
+		add_meta_box(
+			'nova_quote_dynamic_calculator',
+			__( 'Calculator:' ),
+			array( $this, 'show_dynamic_calculator' ),
+			'nova_quote',
+			'side',
+			'high'
+		);
+	}
+
+	public function show_dynamic_calculator( $post ) {
+		?>
+		<div>
+			<label for="usdPrice">USD Price:</label><br>
+			<input type="number" id="calculatorUsdPrice" step="0.01"><br><br>
+
+			<label for="usdShipping">USD Shipping:</label><br>
+			<input type="number" id="calculatorUsdShipping" step="0.01"><br><br>
+
+			<label for="cadPrice">CAD Price:</label><br>
+			<input type="number" id="calculatorCadPrice" step="0.01"><br><br>
+
+			<label for="cadShipping">CAD Shipping:</label><br>
+			<input type="number" id="calculatorCadShipping" step="0.01"><br><br>
+
+			<label for="calculatorPreviewPrice">USD Price (+ Shipping):</label><br>
+			<input type="number" id="calculatorPreviewPrice" step="0.01"><br><br>
+
+			<label for="calculatorPreviewCadPrice">CAD Price (+ Shipping):</label><br>
+			<input type="number" id="calculatorPreviewCadPrice" step="0.01"><br><br>
+		</div>
+		<?php
+	}
+
 	public function generated_product_id( $post_type, $post ) {
 		if ( $post_type !== 'nova_quote' ) {
 			return;
@@ -243,13 +283,13 @@ class Nova_Quote {
 			return;
 		}
 
-		$signage             = get_field( 'signage', $post->ID );
-		$partner             = get_field( 'partner', $post->ID );
+		$signage = get_field( 'signage', $post->ID );
+		$partner = get_field( 'partner', $post->ID );
 		$partner_business_id = get_field( 'business_id', 'user_' . $partner );
-		$data                = $signage ? json_decode( $signage, true ) : null;
-		$show                = false;
-		$user_folder_arr     = array();
-		$font_folder_arr     = '';
+		$data = $signage ? json_decode( $signage, true ) : null;
+		$show = false;
+		$user_folder_arr = array();
+		$font_folder_arr = '';
 
 		if ( $data ) {
 			foreach ( $data as $item ) {
@@ -298,12 +338,12 @@ class Nova_Quote {
 
 
 	public function nova_update_dropbox_folder( $post ) {
-		$signage             = get_field( 'signage', $post->ID );
-		$partner             = get_field( 'partner', $post->ID );
+		$signage = get_field( 'signage', $post->ID );
+		$partner = get_field( 'partner', $post->ID );
 		$partner_business_id = get_field( 'business_id', 'user_' . $partner );
-		$data                = $signage ? json_decode( $signage, true ) : null;
-		$user_folder_arr     = array();
-		$font_folder_arr     = '';
+		$data = $signage ? json_decode( $signage, true ) : null;
+		$user_folder_arr = array();
+		$font_folder_arr = '';
 		foreach ( $data as $item ) {
 			foreach ( $item['filePaths'] as $filePath ) {
 				$parts = explode( '/', $filePath );
@@ -325,14 +365,14 @@ class Nova_Quote {
 		if ( ! empty( $user_folder_arr ) || isset( $user_folder_arr[0] ) || ! empty( $font_folder_arr ) || isset( $font_folder_arr ) ) {
 
 			$old_folder = $user_folder_arr[0];
-			$old_path   = '/NOVA-CRM/' . $old_folder . '/Q-' . $post->ID;
-			$new_path   = '/NOVA-CRM/' . $partner_business_id . '/Q-' . $post->ID;
+			$old_path = '/NOVA-CRM/' . $old_folder . '/Q-' . $post->ID;
+			$new_path = '/NOVA-CRM/' . $partner_business_id . '/Q-' . $post->ID;
 			if ( count( $user_folder_arr ) > 0 && $old_folder !== $partner_business_id ) {
 				?>
-<a class="button button-primary button-large mb-4 block" id="updateDropboxFolder" data-btn="updateDropbox"
-	data-id="<?php echo $post->ID; ?>" data-new="<?php echo $new_path; ?>" data-old="<?php echo $old_path; ?>"
-	style="margin-bottom: 10px;">Update
-	Dropbox Folder</a>
+				<a class="button button-primary button-large mb-4 block" id="updateDropboxFolder" data-btn="updateDropbox"
+					data-id="<?php echo $post->ID; ?>" data-new="<?php echo $new_path; ?>" data-old="<?php echo $old_path; ?>"
+					style="margin-bottom: 10px;">Update
+					Dropbox Folder</a>
 				<?php
 			}
 		}
@@ -361,16 +401,16 @@ class Nova_Quote {
 	public function get_who_updated( $post ) {
 		$args = array(
 			'post_parent' => $post->ID,
-			'post_type'   => 'revision',
+			'post_type' => 'revision',
 			'numberposts' => 1,
-			'orderby'     => 'modified',
-			'order'       => 'DESC',
+			'orderby' => 'modified',
+			'order' => 'DESC',
 		);
 
 		$latest_revision = get_children( $args );
 
 		if ( $latest_revision ) {
-			$revision           = array_shift( $latest_revision );
+			$revision = array_shift( $latest_revision );
 			$revision_author_id = $revision->post_author;
 
 			// Get the user data of the author of the revision
@@ -383,16 +423,16 @@ class Nova_Quote {
 	public function nova_quote_who_updated( $post ) {
 		$args = array(
 			'post_parent' => $post->ID,
-			'post_type'   => 'revision',
+			'post_type' => 'revision',
 			'numberposts' => 1,
-			'orderby'     => 'modified',
-			'order'       => 'DESC',
+			'orderby' => 'modified',
+			'order' => 'DESC',
 		);
 
 		$latest_revision = get_children( $args );
 
 		if ( $latest_revision ) {
-			$revision           = array_shift( $latest_revision );
+			$revision = array_shift( $latest_revision );
 			$revision_author_id = $revision->post_author;
 
 			// Get the user data of the author of the revision
@@ -439,37 +479,39 @@ class Nova_Quote {
 
 	public function nova_admin_mockup_draft_email_callback( $post ) {
 		?>
-<form action="" method="post">
-		<?php wp_nonce_field( 'send_mockup_email_action', 'send_mockup_email_nonce' ); ?>
-	<input type="hidden" name="post_id" value="<?php echo $post->ID; ?>">
-	<input id="sendDraft" type="submit" name="send_mockup_draft_email" class="button button-primary"
-		value="<?php esc_attr_e( 'Send Draft Email', 'nova-b2b' ); ?>">
-</form>
-<script>
-const sendDraft = document.getElementById('sendDraft');
-sendDraft.addEventListener('click', e => {
-	sendDraft.value = "Sending...";
-	sendDraft.attr.disabled = true;
-})
-</script>
+		<form action="" method="post">
+			<?php wp_nonce_field( 'send_mockup_email_action', 'send_mockup_email_nonce' ); ?>
+			<input type="hidden" name="post_id" value="<?php echo $post->ID; ?>">
+			<input id="sendDraft" type="submit" name="send_mockup_draft_email" class="button button-primary"
+				value="<?php esc_attr_e( 'Send Draft Email', 'nova-b2b' ); ?>">
+		</form>
+		<script>
+			const sendDraft = document.getElementById('sendDraft');
+			sendDraft.addEventListener('click', e =>
+			{
+				sendDraft.value = "Sending...";
+				sendDraft.attr.disabled = true;
+			})
+		</script>
 		<?php
 	}
 
 	public function nova_admin_mockup_update_email_callback( $post ) {
 		?>
-<form action="" method="post">
-		<?php wp_nonce_field( 'send_mockup_email_action', 'send_mockup_email_nonce' ); ?>
-	<input type="hidden" name="post_id" value="<?php echo $post->ID; ?>">
-	<input id="sendMockup" type="submit" name="send_mockup_update_email" class="button button-primary"
-		value="<?php esc_attr_e( 'Send Mockup Email', 'nova-b2b' ); ?>">
-</form>
-<script>
-const sendMockup = document.getElementById('sendMockup');
-sendMockup.addEventListener('click', e => {
-	sendMockup.value = "Sending...";
-	sendMockup.attr.disabled = true;
-})
-</script>
+		<form action="" method="post">
+			<?php wp_nonce_field( 'send_mockup_email_action', 'send_mockup_email_nonce' ); ?>
+			<input type="hidden" name="post_id" value="<?php echo $post->ID; ?>">
+			<input id="sendMockup" type="submit" name="send_mockup_update_email" class="button button-primary"
+				value="<?php esc_attr_e( 'Send Mockup Email', 'nova-b2b' ); ?>">
+		</form>
+		<script>
+			const sendMockup = document.getElementById('sendMockup');
+			sendMockup.addEventListener('click', e =>
+			{
+				sendMockup.value = "Sending...";
+				sendMockup.attr.disabled = true;
+			})
+		</script>
 		<?php
 	}
 
@@ -490,18 +532,18 @@ sendMockup.addEventListener('click', e => {
 	public function nova_admin_view_quote_callback() {
 		$details = home_url( '/my-account/mockups/view/?qid=' . get_the_ID() );
 
-		$product_id   = get_field( 'product' );
-		$edit_url     = get_permalink( $product_id ) . '?qedit=1&qid=' . get_the_ID();
+		$product_id = get_field( 'product' );
+		$edit_url = get_permalink( $product_id ) . '?qedit=1&qid=' . get_the_ID();
 		$quote_status = get_field( 'quote_status' );
 		?>
 
-<a href="<?php echo esc_url( $details ); ?>" target="_blank" class="button button-primary button-large">View Details</a>
+		<a href="<?php echo esc_url( $details ); ?>" target="_blank" class="button button-primary button-large">View Details</a>
 		<?php if ( $product_id && $quote_status['value'] != 'ready' ) : ?>
-<br>
-<a style="margin-top: 10px;" href="<?php echo esc_url( $edit_url ); ?>" target="_blank"
-	class="button button-primary button-large">Edit Quote</a>
+			<br>
+			<a style="margin-top: 10px;" href="<?php echo esc_url( $edit_url ); ?>" target="_blank"
+				class="button button-primary button-large">Edit Quote</a>
 			<?php
-	endif;
+		endif;
 	}
 
 
@@ -526,17 +568,17 @@ sendMockup.addEventListener('click', e => {
 		?>
 		<?php if ( ! is_user_logged_in() ) : ?>
 			<?php echo do_shortcode( '[kadence_element id=" 202"]' ); ?>
-			<?php
+		<?php
 		elseif ( get_field( 'quote_div_id' ) ) :
 			?>
-<div id="QuoteApp"></div>
+			<div id="QuoteApp"></div>
 			<?php
-				else :
-					?>
-<div id="customProject"></div>
-					<?php
+		else :
+			?>
+			<div id="customProject"></div>
+			<?php
 
-				endif;
+		endif;
 	}
 
 	public function single_quote_redirect() {
@@ -548,36 +590,36 @@ sendMockup.addEventListener('click', e => {
 
 	public function create_nova_quote_product( $post_id ) {
 
-		$title        = get_field( 'frontend_title', $post_id );
-		$final_price  = get_field( 'final_price', $post_id );
-		$product_id   = get_field( 'product', $post_id )->ID;
+		$title = get_field( 'frontend_title', $post_id );
+		$final_price = get_field( 'final_price', $post_id );
+		$product_id = get_field( 'product', $post_id )->ID;
 		$product_name = get_field( 'product', $post_id )->post_title;
-		$signage      = get_field( 'signage', $post_id ) ? json_decode( get_field( 'signage', $post_id ) ) : null;
-		$note         = get_field( 'note', $post_id );
+		$signage = get_field( 'signage', $post_id ) ? json_decode( get_field( 'signage', $post_id ) ) : null;
+		$note = get_field( 'note', $post_id );
 
 		$status['final_price'] = get_field( 'final_price', $post_id );
-		$status['note']        = $note;
-		$status['quote']       = $signage;
+		$status['note'] = $note;
+		$status['quote'] = $signage;
 
 		$product_meta = array(
-			'usd_price'    => $final_price,
-			'signage'      => $signage,
-			'nova_quote'   => true,
-			'nova_title'   => $title,
-			'quote_id'     => $post_id,
-			'nova_note'    => $note,
-			'product'      => $product_name,
+			'usd_price' => $final_price,
+			'signage' => $signage,
+			'nova_quote' => true,
+			'nova_title' => $title,
+			'quote_id' => $post_id,
+			'nova_note' => $note,
+			'product' => $product_name,
 			'product_name' => $product_name,
-			'product_id'   => $product_id,
-			'note'         => $note,
+			'product_id' => $product_id,
+			'note' => $note,
 		);
 
 		ob_start();
 		?>
-<p>Product: <?php echo $product_name; ?></p>
-<strong>Projects</strong>
+		<p>Product: <?php echo $product_name; ?></p>
+		<strong>Projects</strong>
 		<?php
-			echo '<ul>';
+		echo '<ul>';
 		foreach ( $signage as $project ) {
 			$projectArray = get_object_vars( $project );
 
@@ -600,7 +642,7 @@ sendMockup.addEventListener('click', e => {
 						$valueText .= '<li>' . ucfirst( $subKey ) . ': ' . $subValue . '</li>';
 					}
 					$valueText .= '</ul>';
-					$value      = $valueText;
+					$value = $valueText;
 				} elseif ( is_array( $value ) ) {
 					$valueText = '<ul>';
 					foreach ( $value as $subKey => $subValue ) {
@@ -615,7 +657,7 @@ sendMockup.addEventListener('click', e => {
 						$valueText .= $subValue;
 					}
 					$valueText .= '</ul>';
-					$value      = $valueText;
+					$value = $valueText;
 				} else {
 					$value = htmlspecialchars( $value, ENT_QUOTES, 'UTF-8' );
 				}
@@ -629,18 +671,18 @@ sendMockup.addEventListener('click', e => {
 				}
 			}
 		}
-			echo '</ul>';
+		echo '</ul>';
 
 		$content = ob_get_clean();
 
 		$product_data = array(
-			'post_title'   => wp_strip_all_tags( $title ),
+			'post_title' => wp_strip_all_tags( $title ),
 			'post_content' => $content,
-			'post_status'  => 'publish',
-			'post_type'    => 'product',
-			'meta_input'   => array(
+			'post_status' => 'publish',
+			'post_type' => 'product',
+			'meta_input' => array(
 				'_regular_price' => $final_price,
-				'_price'         => $final_price,
+				'_price' => $final_price,
 			),
 		);
 
@@ -733,9 +775,9 @@ sendMockup.addEventListener('click', e => {
 		// }
 
 		$partner_business_id = get_field( 'business_id', 'user_' . $new_partner_id );
-		$data                = $signage ? json_decode( $signage, true ) : null;
-		$user_folder_arr     = array();
-		$font_folder_arr     = '';
+		$data = $signage ? json_decode( $signage, true ) : null;
+		$user_folder_arr = array();
+		$font_folder_arr = '';
 		foreach ( $data as $item ) {
 			foreach ( $item['filePaths'] as $filePath ) {
 				$parts = explode( '/', $filePath );
@@ -837,7 +879,7 @@ sendMockup.addEventListener('click', e => {
 	public function handle_dropbox_oauth_redirect() {
 		if ( isset( $_GET['code'] ) && isset( $_GET['state'] ) ) {
 			$authorizationCode = sanitize_text_field( $_GET['code'] );
-			$state             = sanitize_text_field( $_GET['state'] );
+			$state = sanitize_text_field( $_GET['state'] );
 
 			if ( ! wp_verify_nonce( $state, 'dropbox' ) ) {
 				wp_redirect( admin_url( 'admin.php?page=nova-options&error=invalid_state' ) );
@@ -846,7 +888,7 @@ sendMockup.addEventListener('click', e => {
 
 			$tokens = $this->exchangeAuthorizationCodeForAccessToken( $authorizationCode );
 
-			$accessToken  = $tokens['access_token'] ?? null;
+			$accessToken = $tokens['access_token'] ?? null;
 			$refreshToken = $tokens['refresh_token'] ?? null;
 
 			if ( $accessToken && $refreshToken ) {
@@ -865,17 +907,17 @@ sendMockup.addEventListener('click', e => {
 
 
 	public function exchangeAuthorizationCodeForAccessToken( $authorizationCode ) {
-		$clientId     = get_field( 'dropbox_app_key', 'option' );
+		$clientId = get_field( 'dropbox_app_key', 'option' );
 		$clientSecret = get_field( 'dropbox_secret_key', 'option' );
-		$redirectUri  = get_field( 'dropbox_redirect_url', 'option' );
+		$redirectUri = get_field( 'dropbox_redirect_url', 'option' );
 
-		$url    = 'https://api.dropboxapi.com/oauth2/token';
+		$url = 'https://api.dropboxapi.com/oauth2/token';
 		$params = array(
-			'code'          => $authorizationCode,
-			'grant_type'    => 'authorization_code',
-			'client_id'     => $clientId,
+			'code' => $authorizationCode,
+			'grant_type' => 'authorization_code',
+			'client_id' => $clientId,
 			'client_secret' => $clientSecret,
-			'redirect_uri'  => $redirectUri,
+			'redirect_uri' => $redirectUri,
 		);
 
 		$response = wp_remote_post( $url, array( 'body' => $params ) );
@@ -889,7 +931,7 @@ sendMockup.addEventListener('click', e => {
 		$data = $body ? json_decode( $body, true ) : null;
 
 		return array(
-			'access_token'  => $data['access_token'] ?? null,
+			'access_token' => $data['access_token'] ?? null,
 			'refresh_token' => $data['refresh_token'] ?? null,
 		);
 	}
@@ -915,9 +957,9 @@ sendMockup.addEventListener('click', e => {
 			'code' => 1,
 		);
 		if ( ! wp_verify_nonce( $_POST['nonce'], 'quote_nonce' ) ) {
-			$status['error']  = 'Nonce error';
+			$status['error'] = 'Nonce error';
 			$status['status'] = 'error';
-			$status['code']   = '3';
+			$status['code'] = '3';
 			wp_send_json( $status );
 		}
 		$post_id = $_POST['quote_id'];
@@ -926,11 +968,11 @@ sendMockup.addEventListener('click', e => {
 
 		if ( wp_trash_post( $post_id ) ) {
 			$status['status'] = 'success';
-			$status['code']   = '2';
+			$status['code'] = '2';
 
 			if ( $product_id ) {
 				$status['product_id'] = $product_id;
-				$cart                 = WC()->cart;
+				$cart = WC()->cart;
 				foreach ( $cart->get_cart() as $cart_item_key => $cart_item ) {
 					if ( $cart_item['product_id'] == $product_id ) {
 						$cart->remove_cart_item( $cart_item_key );
@@ -939,9 +981,9 @@ sendMockup.addEventListener('click', e => {
 				}
 			}
 		} else {
-			$status['error']  = 'Deletion failed';
+			$status['error'] = 'Deletion failed';
 			$status['status'] = 'error';
-			$status['code']   = '4';
+			$status['code'] = '4';
 		}
 
 		$status['post'] = $_POST;
@@ -954,14 +996,14 @@ sendMockup.addEventListener('click', e => {
 			'code' => 1,
 		);
 		if ( ! wp_verify_nonce( $_POST['nonce'], 'nova_account_nonce' ) ) {
-			$status['error']  = 'Nonce error';
+			$status['error'] = 'Nonce error';
 			$status['status'] = 'error';
 			wp_send_json( $status );
 		}
 
 		if ( $_POST['role'] === 'pending' ) {
-			$status['code']   = 3;
-			$status['error']  = 'Pending Account';
+			$status['code'] = 3;
+			$status['error'] = 'Pending Account';
 			$status['status'] = 'error';
 			wp_send_json( $status );
 		}
@@ -980,8 +1022,8 @@ sendMockup.addEventListener('click', e => {
 	public function product_exists_by_title( $product_title ) {
 		$existing_product_query = new WP_Query(
 			array(
-				'post_type'      => 'product',
-				'title'          => $product_title,
+				'post_type' => 'product',
+				'title' => $product_title,
 				'posts_per_page' => 1,
 			)
 		);
@@ -1000,7 +1042,7 @@ sendMockup.addEventListener('click', e => {
 			'code' => 1,
 		);
 		if ( ! wp_verify_nonce( $_POST['nonce'], 'nova_account_nonce' ) ) {
-			$status['error']  = 'Nonce error';
+			$status['error'] = 'Nonce error';
 			$status['status'] = 'error';
 			wp_send_json( $status );
 		}
@@ -1008,54 +1050,54 @@ sendMockup.addEventListener('click', e => {
 		$checkout_id = $_POST['product_id'];
 
 		if ( ! $checkout_id ) {
-			$status['error']  = 'No Product';
+			$status['error'] = 'No Product';
 			$status['status'] = 'error';
 			wp_send_json( $status );
 		}
 
 		if ( $_POST['role'] === 'pending' ) {
-			$status['code']   = 3;
-			$status['error']  = 'Pending Account';
+			$status['code'] = 3;
+			$status['error'] = 'Pending Account';
 			$status['status'] = 'error';
 			wp_send_json( $status );
 		}
 
 		$post_id = $_POST['quote'];
 
-		$title        = get_the_title( $post_id );
-		$final_price  = get_field( 'final_price', $post_id );
-		$product_id   = $_POST['nova_product'];
+		$title = get_the_title( $post_id );
+		$final_price = get_field( 'final_price', $post_id );
+		$product_id = $_POST['nova_product'];
 		$product_line = $_POST['product_line'];
 		$product_name = $_POST['product'];
-		$signage      = get_field( 'signage', $post_id ) ? json_decode( get_field( 'signage', $post_id ) ) : null;
-		$note         = get_field( 'note', $post_id );
+		$signage = get_field( 'signage', $post_id ) ? json_decode( get_field( 'signage', $post_id ) ) : null;
+		$note = get_field( 'note', $post_id );
 
 		$status['final_price'] = get_field( 'final_price', $post_id );
-		$status['note']        = $note;
-		$status['quote']       = $signage;
-		$status['post']        = $_POST;
+		$status['note'] = $note;
+		$status['quote'] = $signage;
+		$status['post'] = $_POST;
 
 		$product_meta = array(
-			'usd_price'    => $final_price,
-			'signage'      => $signage,
-			'nova_quote'   => true,
-			'nova_title'   => $title,
-			'quote_id'     => $post_id,
-			'nova_note'    => $note,
-			'product'      => $product_name,
-			'product_id'   => $product_id,
+			'usd_price' => $final_price,
+			'signage' => $signage,
+			'nova_quote' => true,
+			'nova_title' => $title,
+			'quote_id' => $post_id,
+			'nova_note' => $note,
+			'product' => $product_name,
+			'product_id' => $product_id,
 			'product_line' => $product_line,
-			'note'         => $note,
+			'note' => $note,
 		);
 
 		$product_data = array(
-			'post_title'   => wp_strip_all_tags( $title ),
+			'post_title' => wp_strip_all_tags( $title ),
 			'post_content' => '',
-			'post_status'  => 'publish',
-			'post_type'    => 'product',
-			'meta_input'   => array(
+			'post_status' => 'publish',
+			'post_type' => 'product',
+			'meta_input' => array(
 				'_regular_price' => $final_price,
-				'_price'         => $final_price,
+				'_price' => $final_price,
 			),
 		);
 
@@ -1067,7 +1109,7 @@ sendMockup.addEventListener('click', e => {
 				array(),
 				$product_meta,
 			);
-			$status['code']          = 2;
+			$status['code'] = 2;
 			$status['product_added'] = 'yes';
 		}
 
@@ -1081,17 +1123,17 @@ sendMockup.addEventListener('click', e => {
 			'code' => 1,
 		);
 		if ( ! wp_verify_nonce( $_POST['nonce'], 'quote_nonce' ) ) {
-			$status['error']  = 'Nonce error';
+			$status['error'] = 'Nonce error';
 			$status['status'] = 'error';
 			wp_send_json( $status );
 		}
 
 		$quote_id = $_POST['quote_id'];
-		$updated  = $_POST['updated'];
+		$updated = $_POST['updated'];
 
 		update_field( 'signage', $updated, $quote_id );
 
-		$status['post']   = $_POST;
+		$status['post'] = $_POST;
 		$status['status'] = 'success';
 
 		wp_send_json( $status );
@@ -1103,13 +1145,13 @@ sendMockup.addEventListener('click', e => {
 		);
 		if ( ! wp_verify_nonce( $_POST['nonce'], 'quote_nonce' ) ) {
 			$status['status'] = 'error';
-			$status['error']  = 'Nonce error';
+			$status['error'] = 'Nonce error';
 			wp_send_json( $status );
 		}
 
 		$args = array(
-			'post_type'   => 'custom_project',
-			'post_title'  => $_POST['title'],
+			'post_type' => 'custom_project',
+			'post_title' => $_POST['title'],
 			'post_status' => 'publish',
 			'post_author' => $_POST['user'],
 		);
@@ -1120,8 +1162,8 @@ sendMockup.addEventListener('click', e => {
 
 			update_field( 'projects', $_POST['projects'], $post_id );
 
-			$status['code']   = 2;
-			$status['post']   = $_POST;
+			$status['code'] = 2;
+			$status['post'] = $_POST;
 			$status['status'] = 'success';
 		} else {
 			$status['code'] = 3;
@@ -1134,7 +1176,7 @@ sendMockup.addEventListener('click', e => {
 	public function html_invoice( $post_id, $currency = 'USD' ) {
 		ob_start();
 		$instance = \NOVA_B2B\Scripts::get_instance();
-		$user_id  = get_field( 'partner', $post_id );
+		$user_id = get_field( 'partner', $post_id );
 
 		$final_price = floatval( get_field( 'final_price', $post_id ) );
 
@@ -1150,10 +1192,10 @@ sendMockup.addEventListener('click', e => {
 			return;
 		}
 
-		$product_id   = $product->ID;
+		$product_id = $product->ID;
 		$product_name = $product->post_title;
-		$signage      = get_field( 'signage', $post_id ) ? json_decode( get_field( 'signage', $post_id ) ) : null;
-		$note         = get_field( 'note', $post_id );
+		$signage = get_field( 'signage', $post_id ) ? json_decode( get_field( 'signage', $post_id ) ) : null;
+		$note = get_field( 'note', $post_id );
 
 		$min_price = 800;
 		$flat_rate = 14.75;
@@ -1170,9 +1212,9 @@ sendMockup.addEventListener('click', e => {
 			$standard_rate = $final_price * 0.09 > $flat_rate ? $final_price * 0.09 : $flat_rate; // 9%
 		} else {
 
-			$below_min  = $min_price * 0.09;
+			$below_min = $min_price * 0.09;
 			$difference = $final_price - $min_price;
-			$above_min  = $difference * 0.08;
+			$above_min = $difference * 0.08;
 
 			$standard_rate = $below_min + $above_min;
 
@@ -1180,192 +1222,201 @@ sendMockup.addEventListener('click', e => {
 
 		$estimated_shipping = $final_price > 0 ? number_format( max( $flat_rate, $standard_rate ), 2, '.', '' ) : 0;
 
-		$instance            = \NOVA_B2B\Scripts::get_instance();
-		$tax_rate            = 0;
-		$tax_compute         = 0;
+		$instance = \NOVA_B2B\Scripts::get_instance();
+		$tax_rate = 0;
+		$tax_compute = 0;
 		$price_with_shipping = $final_price + $estimated_shipping;
-		$tax_rate            = false;
-		$tax_rate_name       = false;
-		$tax_compute         = 0;
-		$tax                 = false;
+		$tax_rate = false;
+		$tax_rate_name = false;
+		$tax_compute = 0;
+		$tax = false;
 		if ( $instance ) {
 			$tax = $instance->get_woocommerce_tax_rate_by_country_and_state( $user_id, '', '' );
 			if ( $tax ) {
 				$tax_rate_name = $tax->tax_rate_name;
-				$tax_rate      = floatval( $tax->tax_rate / 100 );
-				$tax_compute   = number_format( $price_with_shipping * $tax_rate, 2, '.', '' );
+				$tax_rate = floatval( $tax->tax_rate / 100 );
+				$tax_compute = number_format( $price_with_shipping * $tax_rate, 2, '.', '' );
 			}
 		}
 
 		$estimate_total = $price_with_shipping + $tax_compute;
 		$estimate_total = number_format( $estimate_total, 2, '.', '' );
 		?>
-<style>
-h4,
-h6 {
-	margin-bottom: 0pt;
-	margin-top: 0px;
-}
-</style>
-<table style="margin-bottom: 20px;">
-	<tr>
-		<td style="margin-top: 0; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #000;">
-			<img src="<?php echo get_stylesheet_directory() . '/assets/img/nova-logo.png'; ?>" alt="Nova Signage"
-				style="margin-top: 0;" />
-		</td>
-	</tr>
-	<tr>
-		<td style="padding: 30px;"></td>
-	</tr>
-	<tr>
-		<td>
-			<h4 style="font-size: 14pt; margin-bottom: 0;">QUOTE ID:
-				Q-<?php echo str_pad( $post_id, 4, '0', STR_PAD_LEFT ); ?>
-			</h4>
-			<p style="padding-bottom: 0; margin-bottom: 0;">INITIAL QUOTE REQUESTED ON: <font face="lato">
-					<?php echo get_the_date( 'F j, Y', $post_id ); ?></font>
-			</p>
-			<p style="padding-bottom: 0; margin-bottom: 0;">LAST QUOTE SAVED: <font face="lato">
-					<?php echo get_the_modified_date( 'F j, Y', $post_id ); ?></font>
-			</p>
-			<p style="padding-bottom: 0; margin-bottom: 0;">QUOTE NAME: <font face="lato">
-					<?php echo get_field( 'frontend_title', $post_id ); ?></font>
-			</p>
-			<p style="padding-bottom: 0; margin-bottom: 0;">BUSINESS ID: <font face="lato">
-					<?php echo get_field( 'business_id', 'user_' . $user_id ); ?></font>
-			</p>
-			<p style="padding-bottom: 0; margin-bottom: 0;">COMPANY NAME: <font face="lato">
-					<?php echo ( get_field( 'business_name', 'user_' . $user_id ) ? get_field( 'business_name', 'user_' . $user_id ) : 'None' ); ?>
-				</font>
-			</p>
-			<p style="padding-bottom: 0; margin-bottom: 0;">MATERIAL: <font face="lato">
-					<?php echo $instance->get_material_name( $product_id ); ?></font>
-			</p>
-			<p style="padding-bottom: 0; margin-bottom: 40px;">PRODUCT: <font face="lato">
-					<?php echo $product_name; ?></font>
-			</p>
-		</td>
-	</tr>
-
-	<tr>
-		<td cellpadding="10"></td>
-	</tr>
-
-	<tr>
-		<td style="padding-top: 20px; padding-bottom: 20px;">
-			<?php
-			foreach ( $signage as $project ) {
-				$projectArray = get_object_vars( $project );
-				$price        = $projectArray['usdPrice'];
-				if ( $currency === 'CAD' ) {
-					$price = number_format( $projectArray['usdPrice'] * NOVA_EXCHANGE_RATE, 2, '.', '' );
-				}
-
-				?>
-			<table style="margin-top: 40px; margin-bottom: 20px;">
-				<tr style="font-size: 17px; font-weight: bold;">
-					<td><?php echo $projectArray['title']; ?></td>
-					<td style="text-align: right;"><?php echo $currency; ?>$ <?php echo $price; ?></td>
-				</tr>
-				<?php
-				if ( isset( $projectArray['letters'] ) && ! empty( $projectArray['letters'] ) ) {
-					$color = '#000000';
-					if ( isset( $projectArray['vinylWhite']->color ) && ! empty( $projectArray['vinylWhite']->color ) ) {
-						$color = 'color: ' . $projectArray['vinylWhite']->color;
-					} elseif ( isset( $projectArray['color']->color ) && ! empty( $projectArray['color']->color ) ) {
-						$color = 'color: ' . $projectArray['color']->color;
-					}
-					$face  = $projectArray['font'] ? strtolower( str_replace( array( 'regular', ' ', 'bold' ), array( '', '_', 'b' ), $projectArray['font'] ) ) : '';
-					$style = $color . $face;
-					?>
-				<tr>
-					<td colspan="2">
-						<div style="padding: 100px; border-radius: 8px; border: 1px solid #ddd;">
-							<h1 style="text-align: center;">
-								<font size="22" face="<?php echo $face; ?>"
-									<?php echo ( isset( $projectArray['color'] ) && $projectArray['color']->color ? ' color="' . $projectArray['color']->color . '" ' : '' ); ?>>
-									<?php echo $projectArray['letters']; ?>
-								</font>
-							</h1>
-						</div>
-					</td>
-				</tr>
-				<?php } ?>
-				<tr>
-					<td colspan="2" style="padding:40px;"></td>
-				</tr>
-			</table>
-
-				<?php
-				$this->output_project_item( $project );
+		<style>
+			h4,
+			h6 {
+				margin-bottom: 0pt;
+				margin-top: 0px;
 			}
+		</style>
+		<table style="margin-bottom: 20px;">
+			<tr>
+				<td style="margin-top: 0; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #000;">
+					<img src="<?php echo get_stylesheet_directory() . '/assets/img/nova-logo.png'; ?>" alt="Nova Signage"
+						style="margin-top: 0;" />
+				</td>
+			</tr>
+			<tr>
+				<td style="padding: 30px;"></td>
+			</tr>
+			<tr>
+				<td>
+					<h4 style="font-size: 14pt; margin-bottom: 0;">QUOTE ID:
+						Q-<?php echo str_pad( $post_id, 4, '0', STR_PAD_LEFT ); ?>
+					</h4>
+					<p style="padding-bottom: 0; margin-bottom: 0;">INITIAL QUOTE REQUESTED ON: <font face="lato">
+							<?php echo get_the_date( 'F j, Y', $post_id ); ?>
+						</font>
+					</p>
+					<p style="padding-bottom: 0; margin-bottom: 0;">LAST QUOTE SAVED: <font face="lato">
+							<?php echo get_the_modified_date( 'F j, Y', $post_id ); ?>
+						</font>
+					</p>
+					<p style="padding-bottom: 0; margin-bottom: 0;">QUOTE NAME: <font face="lato">
+							<?php echo get_field( 'frontend_title', $post_id ); ?>
+						</font>
+					</p>
+					<p style="padding-bottom: 0; margin-bottom: 0;">BUSINESS ID: <font face="lato">
+							<?php echo get_field( 'business_id', 'user_' . $user_id ); ?>
+						</font>
+					</p>
+					<p style="padding-bottom: 0; margin-bottom: 0;">COMPANY NAME: <font face="lato">
+							<?php echo ( get_field( 'business_name', 'user_' . $user_id ) ? get_field( 'business_name', 'user_' . $user_id ) : 'None' ); ?>
+						</font>
+					</p>
+					<p style="padding-bottom: 0; margin-bottom: 0;">MATERIAL: <font face="lato">
+							<?php echo $instance->get_material_name( $product_id ); ?>
+						</font>
+					</p>
+					<p style="padding-bottom: 0; margin-bottom: 40px;">PRODUCT: <font face="lato">
+							<?php echo $product_name; ?>
+						</font>
+					</p>
+				</td>
+			</tr>
 
-			?>
-		</td>
-	</tr>
-		<?php if ( $note ) : ?>
-	<tr>
-		<td style="font-size:110%;">NOTE:</td>
-	</tr>
-	<tr>
-		<td style="font-family: Arial">
-			<?php echo $note; ?>
-		</td>
-	</tr>
-	<?php endif; ?>
-	<tr>
-		<td></td>
-	</tr>
-	<tr>
-		<td style="padding-top: 20px; border-top: 1px solid #ddd;">
-			<table>
+			<tr>
+				<td cellpadding="10"></td>
+			</tr>
+
+			<tr>
+				<td style="padding-top: 20px; padding-bottom: 20px;">
+					<?php
+					foreach ( $signage as $project ) {
+						$projectArray = get_object_vars( $project );
+						$price = $projectArray['usdPrice'];
+						if ( $currency === 'CAD' ) {
+							$price = number_format( $projectArray['usdPrice'] * NOVA_EXCHANGE_RATE, 2, '.', '' );
+						}
+
+						?>
+						<table style="margin-top: 40px; margin-bottom: 20px;">
+							<tr style="font-size: 17px; font-weight: bold;">
+								<td><?php echo $projectArray['title']; ?></td>
+								<td style="text-align: right;"><?php echo $currency; ?>$ <?php echo $price; ?></td>
+							</tr>
+							<?php
+							if ( isset( $projectArray['letters'] ) && ! empty( $projectArray['letters'] ) ) {
+								$color = '#000000';
+								if ( isset( $projectArray['vinylWhite']->color ) && ! empty( $projectArray['vinylWhite']->color ) ) {
+									$color = 'color: ' . $projectArray['vinylWhite']->color;
+								} elseif ( isset( $projectArray['color']->color ) && ! empty( $projectArray['color']->color ) ) {
+									$color = 'color: ' . $projectArray['color']->color;
+								}
+								$face = $projectArray['font'] ? strtolower( str_replace( array( 'regular', ' ', 'bold' ), array( '', '_', 'b' ), $projectArray['font'] ) ) : '';
+								$style = $color . $face;
+								?>
+								<tr>
+									<td colspan="2">
+										<div style="padding: 100px; border-radius: 8px; border: 1px solid #ddd;">
+											<h1 style="text-align: center;">
+												<font size="22" face="<?php echo $face; ?>" <?php echo ( isset( $projectArray['color'] ) && $projectArray['color']->color ? ' color="' . $projectArray['color']->color . '" ' : '' ); ?>>
+													<?php echo $projectArray['letters']; ?>
+												</font>
+											</h1>
+										</div>
+									</td>
+								</tr>
+							<?php } ?>
+							<tr>
+								<td colspan="2" style="padding:40px;"></td>
+							</tr>
+						</table>
+
+						<?php
+						$this->output_project_item( $project );
+					}
+
+					?>
+				</td>
+			</tr>
+			<?php if ( $note ) : ?>
 				<tr>
-					<td></td>
-					<td></td>
+					<td style="font-size:110%;">NOTE:</td>
 				</tr>
 				<tr>
-					<td>
-						<h5 style="font-size: 13pt">ESTIMATED SUBTOTAL:</h5>
-					</td>
-					<td style="text-align: right;">
-						<h5 style="font-size: 13pt"><?php echo $currency; ?>$
-							<?php echo $final_price; ?></h5>
+					<td style="font-family: Arial">
+						<?php echo $note; ?>
 					</td>
 				</tr>
-				<tr>
-					<td>
-						<h5 style="font-size: 13pt">PACKAGING &amp; SHIPPING:</h5>
-					</td>
-					<td style="text-align: right;">
-						<h5 style="font-size: 13pt"><?php echo $currency; ?>$
-							<?php echo $estimated_shipping; ?></h5>
-					</td>
-				</tr>
-				<?php if ( $tax ) { ?>
-				<tr>
-					<td>
-						<h5 style="font-size: 13pt"><?php echo $tax_rate_name; ?>:</h5>
-					</td>
-					<td style="text-align: right;">
-						<h5 style="font-size: 13pt"><?php echo $currency; ?>$
-							<?php echo $tax_compute; ?></h5>
-					</td>
-				</tr>
-				<?php } ?>
-				<tr>
-					<td style="padding-top: 20px; padding-bottom: 20px;">
-						<h4 style="font-size: 14pt;">ESTIMATED TOTAL:
-						</h4>
-					</td>
-					<td style="padding-top: 20px; padding-bottom: 20px; text-align: right;">
-						<h4 style="font-size: 14pt;"><?php echo $currency; ?>$
-							<?php echo $estimate_total; ?></h4>
-					</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-</table>
+			<?php endif; ?>
+			<tr>
+				<td></td>
+			</tr>
+			<tr>
+				<td style="padding-top: 20px; border-top: 1px solid #ddd;">
+					<table>
+						<tr>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>
+								<h5 style="font-size: 13pt">ESTIMATED SUBTOTAL:</h5>
+							</td>
+							<td style="text-align: right;">
+								<h5 style="font-size: 13pt"><?php echo $currency; ?>$
+									<?php echo $final_price; ?>
+								</h5>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<h5 style="font-size: 13pt">PACKAGING &amp; SHIPPING:</h5>
+							</td>
+							<td style="text-align: right;">
+								<h5 style="font-size: 13pt"><?php echo $currency; ?>$
+									<?php echo $estimated_shipping; ?>
+								</h5>
+							</td>
+						</tr>
+						<?php if ( $tax ) { ?>
+							<tr>
+								<td>
+									<h5 style="font-size: 13pt"><?php echo $tax_rate_name; ?>:</h5>
+								</td>
+								<td style="text-align: right;">
+									<h5 style="font-size: 13pt"><?php echo $currency; ?>$
+										<?php echo $tax_compute; ?>
+									</h5>
+								</td>
+							</tr>
+						<?php } ?>
+						<tr>
+							<td style="padding-top: 20px; padding-bottom: 20px;">
+								<h4 style="font-size: 14pt;">ESTIMATED TOTAL:
+								</h4>
+							</td>
+							<td style="padding-top: 20px; padding-bottom: 20px; text-align: right;">
+								<h4 style="font-size: 14pt;"><?php echo $currency; ?>$
+									<?php echo $estimate_total; ?>
+								</h4>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
 
 		<?php
 		return ob_get_clean();
@@ -1390,191 +1441,200 @@ h6 {
 		$product_id = get_field( 'product', $post_id )->ID;
 
 		$product_name = get_field( 'product', $post_id )->post_title;
-		$signage      = get_field( 'signage', $post_id ) ? json_decode( get_field( 'signage', $post_id ) ) : null;
-		$note         = get_field( 'note', $post_id );
+		$signage = get_field( 'signage', $post_id ) ? json_decode( get_field( 'signage', $post_id ) ) : null;
+		$note = get_field( 'note', $post_id );
 
-		$flat_rate     = 14.75;
+		$flat_rate = 14.75;
 		$standard_rate = $final_price * 0.075;
 
 		$estimated_shipping = $final_price > 0 ? number_format( max( $flat_rate, $standard_rate ), 2, '.', '' ) : 0;
 
-		$instance            = \NOVA_B2B\Scripts::get_instance();
-		$tax_rate            = 0;
-		$tax_compute         = 0;
+		$instance = \NOVA_B2B\Scripts::get_instance();
+		$tax_rate = 0;
+		$tax_compute = 0;
 		$price_with_shipping = $final_price + $estimated_shipping;
 
 		if ( $instance ) {
-			$tax           = $instance->get_woocommerce_tax_rate_by_country_and_state( $user_id, '', '' );
+			$tax = $instance->get_woocommerce_tax_rate_by_country_and_state( $user_id, '', '' );
 			$tax_rate_name = $tax->tax_rate_name;
-			$tax_rate      = floatval( $tax->tax_rate / 100 );
-			$tax_compute   = number_format( $price_with_shipping * $tax_rate, 2, '.', '' );
+			$tax_rate = floatval( $tax->tax_rate / 100 );
+			$tax_compute = number_format( $price_with_shipping * $tax_rate, 2, '.', '' );
 		}
 
 		$estimate_total = $price_with_shipping + $tax_compute;
 		$estimate_total = number_format( $estimate_total, 2, '.', '' );
 
 		?>
-<style>
-h4,
-h6 {
-	margin-bottom: 0pt;
-	margin-top: 0px;
-}
-</style>
-<table>
-	<tr>
-		<td style="margin-top: 0; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #000;">
-			<img src="<?php echo get_stylesheet_directory() . '/assets/img/nova-logo.png'; ?>" alt="Nova Signage"
-				style="margin-top: 0;" />
-		</td>
-	</tr>
-	<tr>
-		<td style="padding: 30px;"></td>
-	</tr>
-	<tr>
-		<td>
-			<h4 style="font-size: 14pt; margin: 0;">QUOTE ID: Q-<?php echo str_pad( $post_id, 4, '0', STR_PAD_LEFT ); ?>
-			</h4>
-			<p style="padding-bottom: 0; margin-bottom: 0;">INITIAL QUOTE REQUESTED ON: <font face="lato">
-					<?php echo get_the_date( 'F j, Y', $post_id ); ?></font>
-			</p>
-			<p style="padding-bottom: 0; margin-bottom: 0;">LAST QUOTE SAVED: <font face="lato">
-					<?php echo get_the_modified_date( 'F j, Y', $post_id ); ?></font>
-			</p>
-			<p style="padding-bottom: 0; margin-bottom: 0;">QUOTE NAME: <font face="lato">
-					<?php echo get_field( 'frontend_title', $post_id ); ?></font>
-			</p>
-			<p style="padding-bottom: 0; margin-bottom: 0;">BUSINESS ID: <font face="lato">
-					<?php echo get_field( 'business_id', 'user_' . $user_id ); ?></font>
-			</p>
-			<p style="padding-bottom: 0; margin-bottom: 0;">COMPANY NAME: <font face="lato">
-					<?php echo ( get_field( 'business_name', 'user_' . $user_id ) ? get_field( 'business_name', 'user_' . $user_id ) : 'None' ); ?>
-				</font>
-			</p>
-			<p style="padding-bottom: 0; margin-bottom: 0;">MATERIAL: <font face="lato">
-					<?php echo $instance->get_material_name( $product_id ); ?></font>
-			</p>
-			<p style="padding-bottom: 0; margin-bottom: 40px;">PRODUCT: <font face="lato">
-					<?php echo $product_name; ?></font>
-			</p>
-		</td>
-	</tr>
-
-	<tr>
-		<td cellpadding="10"></td>
-	</tr>
-
-	<tr>
-		<td style="padding-top: 20px; padding-bottom: 20px;">
-			<?php
-			foreach ( $signage as $project ) {
-				$projectArray = get_object_vars( $project );
-				$price        = $projectArray['usdPrice'];
-
-				?>
-			<table style="margin-top: 40pt;">
-				<tr style="font-size: 17px; font-weight: bold;">
-					<td><?php echo $projectArray['title']; ?></td>
-					<td style="text-align: right;">USD$ <?php echo $price; ?></td>
-				</tr>
-				<?php
-				if ( isset( $projectArray['letters'] ) && ! empty( $projectArray['letters'] ) ) {
-					$color = isset( $projectArray['color'] ) ? ' color: ' . $projectArray['color']->color : '';
-					$face  = $projectArray['font'] ? strtolower( str_replace( array( 'regular', ' ', 'bold' ), array( '', '_', 'b' ), $projectArray['font'] ) ) : '';
-					$style = $color . $face;
-					?>
-				<tr>
-					<td colspan="2">
-						<div style="padding: 100px; border-radius: 8px; border: 1px solid #ddd;">
-							<h1 style="text-align: center;">
-								<font size="22" face="<?php echo $face; ?>"
-									<?php echo ( isset( $projectArray['color'] ) && $projectArray['color']->color ? ' color="' . $projectArray['color']->color . '" ' : '' ); ?>>
-									<?php echo $projectArray['letters']; ?>
-								</font>
-							</h1>
-						</div>
-					</td>
-				</tr>
-				<?php } ?>
-				<tr>
-					<td colspan="2" style="padding:40px;"></td>
-				</tr>
-			</table>
-
-				<?php
-
-				$this->output_project_item( $project );
-
+		<style>
+			h4,
+			h6 {
+				margin-bottom: 0pt;
+				margin-top: 0px;
 			}
+		</style>
+		<table>
+			<tr>
+				<td style="margin-top: 0; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #000;">
+					<img src="<?php echo get_stylesheet_directory() . '/assets/img/nova-logo.png'; ?>" alt="Nova Signage"
+						style="margin-top: 0;" />
+				</td>
+			</tr>
+			<tr>
+				<td style="padding: 30px;"></td>
+			</tr>
+			<tr>
+				<td>
+					<h4 style="font-size: 14pt; margin: 0;">QUOTE ID: Q-<?php echo str_pad( $post_id, 4, '0', STR_PAD_LEFT ); ?>
+					</h4>
+					<p style="padding-bottom: 0; margin-bottom: 0;">INITIAL QUOTE REQUESTED ON: <font face="lato">
+							<?php echo get_the_date( 'F j, Y', $post_id ); ?>
+						</font>
+					</p>
+					<p style="padding-bottom: 0; margin-bottom: 0;">LAST QUOTE SAVED: <font face="lato">
+							<?php echo get_the_modified_date( 'F j, Y', $post_id ); ?>
+						</font>
+					</p>
+					<p style="padding-bottom: 0; margin-bottom: 0;">QUOTE NAME: <font face="lato">
+							<?php echo get_field( 'frontend_title', $post_id ); ?>
+						</font>
+					</p>
+					<p style="padding-bottom: 0; margin-bottom: 0;">BUSINESS ID: <font face="lato">
+							<?php echo get_field( 'business_id', 'user_' . $user_id ); ?>
+						</font>
+					</p>
+					<p style="padding-bottom: 0; margin-bottom: 0;">COMPANY NAME: <font face="lato">
+							<?php echo ( get_field( 'business_name', 'user_' . $user_id ) ? get_field( 'business_name', 'user_' . $user_id ) : 'None' ); ?>
+						</font>
+					</p>
+					<p style="padding-bottom: 0; margin-bottom: 0;">MATERIAL: <font face="lato">
+							<?php echo $instance->get_material_name( $product_id ); ?>
+						</font>
+					</p>
+					<p style="padding-bottom: 0; margin-bottom: 40px;">PRODUCT: <font face="lato">
+							<?php echo $product_name; ?>
+						</font>
+					</p>
+				</td>
+			</tr>
 
-			?>
-		</td>
-	</tr>
-		<?php if ( $note ) : ?>
-	<tr>
-		<td style="font-size:110%;">NOTE:</td>
-	</tr>
-	<tr>
-		<td style="font-family: Arial">
-			<?php
-			echo $note;
-			?>
-		</td>
-	</tr>
-	<?php endif; ?>
-	<tr>
-		<td></td>
-	</tr>
-	<tr>
-		<td style="padding-top: 20px; border-top: 1px solid #ddd;">
-			<table>
+			<tr>
+				<td cellpadding="10"></td>
+			</tr>
+
+			<tr>
+				<td style="padding-top: 20px; padding-bottom: 20px;">
+					<?php
+					foreach ( $signage as $project ) {
+						$projectArray = get_object_vars( $project );
+						$price = $projectArray['usdPrice'];
+
+						?>
+						<table style="margin-top: 40pt;">
+							<tr style="font-size: 17px; font-weight: bold;">
+								<td><?php echo $projectArray['title']; ?></td>
+								<td style="text-align: right;">USD$ <?php echo $price; ?></td>
+							</tr>
+							<?php
+							if ( isset( $projectArray['letters'] ) && ! empty( $projectArray['letters'] ) ) {
+								$color = isset( $projectArray['color'] ) ? ' color: ' . $projectArray['color']->color : '';
+								$face = $projectArray['font'] ? strtolower( str_replace( array( 'regular', ' ', 'bold' ), array( '', '_', 'b' ), $projectArray['font'] ) ) : '';
+								$style = $color . $face;
+								?>
+								<tr>
+									<td colspan="2">
+										<div style="padding: 100px; border-radius: 8px; border: 1px solid #ddd;">
+											<h1 style="text-align: center;">
+												<font size="22" face="<?php echo $face; ?>" <?php echo ( isset( $projectArray['color'] ) && $projectArray['color']->color ? ' color="' . $projectArray['color']->color . '" ' : '' ); ?>>
+													<?php echo $projectArray['letters']; ?>
+												</font>
+											</h1>
+										</div>
+									</td>
+								</tr>
+							<?php } ?>
+							<tr>
+								<td colspan="2" style="padding:40px;"></td>
+							</tr>
+						</table>
+
+						<?php
+
+						$this->output_project_item( $project );
+
+					}
+
+					?>
+				</td>
+			</tr>
+			<?php if ( $note ) : ?>
 				<tr>
-					<td></td>
-					<td></td>
+					<td style="font-size:110%;">NOTE:</td>
 				</tr>
 				<tr>
-					<td>
-						<h5 style="font-size: 13pt">ESTIMATED SUBTOTAL:</h5>
-					</td>
-					<td style="text-align: right;">
-						<h5 style="font-size: 13pt">USD$
-							<?php echo $final_price; ?></h5>
+					<td style="font-family: Arial">
+						<?php
+						echo $note;
+						?>
 					</td>
 				</tr>
-				<tr>
-					<td>
-						<h5 style="font-size: 13pt">PACKAGING &amp; SHIPPING:</h5>
-					</td>
-					<td style="text-align: right;">
-						<h5 style="font-size: 13pt">USD$
-							<?php echo $estimated_shipping; ?></h5>
-					</td>
-				</tr>
-				<?php if ( $tax ) { ?>
-				<tr>
-					<td>
-						<h5 style="font-size: 13pt"><?php echo $tax_rate_name; ?>:</h5>
-					</td>
-					<td style="text-align: right;">
-						<h5 style="font-size: 13pt">USD$
-							<?php echo $tax_compute; ?></h5>
-					</td>
-				</tr>
-				<?php } ?>
-				<tr>
-					<td style="padding-top: 20px; padding-bottom: 20px;">
-						<h4 style="font-size: 14pt;">ESTIMATED TOTAL:
-						</h4>
-					</td>
-					<td style="padding-top: 20px; padding-bottom: 20px; text-align: right;">
-						<h4 style="font-size: 14pt;">USD$
-							<?php echo $estimate_total; ?></h4>
-					</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-</table>
+			<?php endif; ?>
+			<tr>
+				<td></td>
+			</tr>
+			<tr>
+				<td style="padding-top: 20px; border-top: 1px solid #ddd;">
+					<table>
+						<tr>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>
+								<h5 style="font-size: 13pt">ESTIMATED SUBTOTAL:</h5>
+							</td>
+							<td style="text-align: right;">
+								<h5 style="font-size: 13pt">USD$
+									<?php echo $final_price; ?>
+								</h5>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<h5 style="font-size: 13pt">PACKAGING &amp; SHIPPING:</h5>
+							</td>
+							<td style="text-align: right;">
+								<h5 style="font-size: 13pt">USD$
+									<?php echo $estimated_shipping; ?>
+								</h5>
+							</td>
+						</tr>
+						<?php if ( $tax ) { ?>
+							<tr>
+								<td>
+									<h5 style="font-size: 13pt"><?php echo $tax_rate_name; ?>:</h5>
+								</td>
+								<td style="text-align: right;">
+									<h5 style="font-size: 13pt">USD$
+										<?php echo $tax_compute; ?>
+									</h5>
+								</td>
+							</tr>
+						<?php } ?>
+						<tr>
+							<td style="padding-top: 20px; padding-bottom: 20px;">
+								<h4 style="font-size: 14pt;">ESTIMATED TOTAL:
+								</h4>
+							</td>
+							<td style="padding-top: 20px; padding-bottom: 20px; text-align: right;">
+								<h4 style="font-size: 14pt;">USD$
+									<?php echo $estimate_total; ?>
+								</h4>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
 
 		<?php
 		return ob_get_clean();
@@ -1582,121 +1642,121 @@ h6 {
 
 	public function allAttributes() {
 		return array(
-			'title'                   => 'TITLE',
-			'material'                => 'MATERIAL',
-			'productLine'             => 'PRODUCT LINE',
-			'letters'                 => 'TEXT',
-			'font'                    => 'FONT',
-			'customFont'              => 'CUSTOM FONT',
-			'fontFile'                => array(
-				'label'  => 'FONT FILE',
+			'title' => 'TITLE',
+			'material' => 'MATERIAL',
+			'productLine' => 'PRODUCT LINE',
+			'letters' => 'TEXT',
+			'font' => 'FONT',
+			'customFont' => 'CUSTOM FONT',
+			'fontFile' => array(
+				'label' => 'FONT FILE',
 				'isLink' => true,
 			),
-			'etchedMaterial'          => 'MATERIAL',
-			'etchedWidth'             => 'WIDTH',
-			'etchedHeight'            => 'HEIGHT',
-			'etchedMetalThickness'    => 'METAL THICKNESS',
-			'etchedFinishing'         => 'FINISHING',
-			'etchedPaintedColor'      => 'PAINTED COLOR',
-			'etchedMetalFinish'       => 'METAL FINISHING',
-			'etchedAnodizedColor'     => 'ANODIZED COLOR',
+			'etchedMaterial' => 'MATERIAL',
+			'etchedWidth' => 'WIDTH',
+			'etchedHeight' => 'HEIGHT',
+			'etchedMetalThickness' => 'METAL THICKNESS',
+			'etchedFinishing' => 'FINISHING',
+			'etchedPaintedColor' => 'PAINTED COLOR',
+			'etchedMetalFinish' => 'METAL FINISHING',
+			'etchedAnodizedColor' => 'ANODIZED COLOR',
 			'etchedAnodizedFinishing' => 'ANODIZED FINISHING',
-			'etchedGraphicsStyle'     => 'ETCHING STYLE',
-			'etchedEdges'             => 'EDGES',
-			'metal'                   => 'METAL',
-			'thickness'               => 'THICKNESS',
-			'metalDepth'              => 'METAL DEPTH',
-			'acrylicThickness'        => 'ACRYLIC THICKNESS',
+			'etchedGraphicsStyle' => 'ETCHING STYLE',
+			'etchedEdges' => 'EDGES',
+			'metal' => 'METAL',
+			'thickness' => 'THICKNESS',
+			'metalDepth' => 'METAL DEPTH',
+			'acrylicThickness' => 'ACRYLIC THICKNESS',
 			'acrylicChannelThickness' => 'ACRYLIC THICKNESS',
-			'metalThickness'          => 'METAL THICKNESS',
-			'depth'                   => 'METAL DEPTH',
-			'letterHeight'            => 'LETTER HEIGHT',
-			'acrylicReturn'           => 'RETURN',
-			'width'                   => 'LOGO WIDTH',
-			'height'                  => 'LOGO HEIGHT',
-			'frontOption'             => 'FRONT OPTION',
-			'paintColor'              => 'PAINT COLOR',
-			'acrylicFront'            => 'ACRYLIC FRONT',
-			'backLitFinishing'        => 'FINISHING',
-			'backLitMetalFinish'      => 'METAL FINISH',
-			'faceReturnColor'         => 'FACE & RETURN COLOR',
-			'backLitfaceReturnColor'  => 'FACE & RETURN COLOR',
-			'backLitSameColor'        => 'COLOR',
-			'backLitfaceColor'        => 'FACE COLOR',
-			'backLitReturnColor'      => 'RETURN(SIDE) COLOR',
-			'neonSignWidth'           => 'NEON SIGN WIDTH',
-			'neonSignHeight'          => 'NEON SIGN HEIGHT',
-			'neonUsed'                => 'NEON USED(ft)',
-			'neonThickness'           => 'NEON THICKNESS',
-			'neonLength'              => 'NEON LENGTH(ft)',
-			'rigidWaterproof'         => 'ENVIRONMENT',
-			'neonColor'               => 'NEON COLORS',
-			'neonLength8mm'           => '8mm NEON LENGTH',
-			'neonLength10mm'          => '10mm NEON LENGTH',
-			'neonLength14mm'          => '14mm NEON LENGTH',
-			'neonLength20mm'          => '20mm NEON LENGTH',
-			'metalFinish'             => 'FINISHING',
-			'stainLessMetalFinish'    => 'METAL FINISH',
-			'stainlessSteelPolished'  => 'STEEL POLISH',
-			'layers'                  => 'LAYERS',
-			'metalLaminate'           => 'METAL LAMINATE',
-			'pvcBaseColor'            => 'PVC BASE COLOR',
-			'acrylicBase'             => 'ACRYLIC BASE',
-			'printPreference'         => 'PRINT PREFERENCE',
-			'color'                   => 'COLOR',
-			'returnColor'             => 'RETURN COLOR',
-			'customColor'             => 'CUSTOM COLOR',
-			'returnCustomColor'       => 'RETURN CUSTOM COLOR',
-			'finishing'               => 'FINISHING',
-			'aluminumFinishing'       => 'ALUMINUM FINISHING',
-			'anodizedFinishing'       => 'ANODIZED FINISHING',
-			'anodizedColor'           => 'ANODIZED COLOR',
-			'metalColor'              => 'COLOR',
-			'metalCustomColor'        => 'CUSTOM COLOR',
-			'returnPaintColor'        => 'RETURN PAINT COLOR',
-			'acrylicReveal'           => 'ACRYLIC REVEAL',
-			'frontAcrylicCover'       => 'FRONT ACRYLIC COVER',
-			'vinylWhite'              => array(
-				'label'   => '3M 3630 VINYL',
+			'metalThickness' => 'METAL THICKNESS',
+			'depth' => 'METAL DEPTH',
+			'letterHeight' => 'LETTER HEIGHT',
+			'acrylicReturn' => 'RETURN',
+			'width' => 'LOGO WIDTH',
+			'height' => 'LOGO HEIGHT',
+			'frontOption' => 'FRONT OPTION',
+			'paintColor' => 'PAINT COLOR',
+			'acrylicFront' => 'ACRYLIC FRONT',
+			'backLitFinishing' => 'FINISHING',
+			'backLitMetalFinish' => 'METAL FINISH',
+			'faceReturnColor' => 'FACE & RETURN COLOR',
+			'backLitfaceReturnColor' => 'FACE & RETURN COLOR',
+			'backLitSameColor' => 'COLOR',
+			'backLitfaceColor' => 'FACE COLOR',
+			'backLitReturnColor' => 'RETURN(SIDE) COLOR',
+			'neonSignWidth' => 'NEON SIGN WIDTH',
+			'neonSignHeight' => 'NEON SIGN HEIGHT',
+			'neonUsed' => 'NEON USED(ft)',
+			'neonThickness' => 'NEON THICKNESS',
+			'neonLength' => 'NEON LENGTH(ft)',
+			'rigidWaterproof' => 'ENVIRONMENT',
+			'neonColor' => 'NEON COLORS',
+			'neonLength8mm' => '8mm NEON LENGTH',
+			'neonLength10mm' => '10mm NEON LENGTH',
+			'neonLength14mm' => '14mm NEON LENGTH',
+			'neonLength20mm' => '20mm NEON LENGTH',
+			'metalFinish' => 'FINISHING',
+			'stainLessMetalFinish' => 'METAL FINISH',
+			'stainlessSteelPolished' => 'STEEL POLISH',
+			'layers' => 'LAYERS',
+			'metalLaminate' => 'METAL LAMINATE',
+			'pvcBaseColor' => 'PVC BASE COLOR',
+			'acrylicBase' => 'ACRYLIC BASE',
+			'printPreference' => 'PRINT PREFERENCE',
+			'color' => 'COLOR',
+			'returnColor' => 'RETURN COLOR',
+			'customColor' => 'CUSTOM COLOR',
+			'returnCustomColor' => 'RETURN CUSTOM COLOR',
+			'finishing' => 'FINISHING',
+			'aluminumFinishing' => 'ALUMINUM FINISHING',
+			'anodizedFinishing' => 'ANODIZED FINISHING',
+			'anodizedColor' => 'ANODIZED COLOR',
+			'metalColor' => 'COLOR',
+			'metalCustomColor' => 'CUSTOM COLOR',
+			'returnPaintColor' => 'RETURN PAINT COLOR',
+			'acrylicReveal' => 'ACRYLIC REVEAL',
+			'frontAcrylicCover' => 'FRONT ACRYLIC COVER',
+			'vinylWhite' => array(
+				'label' => '3M 3630 VINYL',
 				'isVinyl' => true,
 			),
-			'vinyl3635'               => '3M 3635 VINYL',
-			'frontBackVinyl'          => 'FRONT &amp; BACK VINYL',
+			'vinyl3635' => '3M 3635 VINYL',
+			'frontBackVinyl' => 'FRONT &amp; BACK VINYL',
 			'acrylicReturnPaintColor' => 'RETURN PAINT COLOR',
-			'ledLightColor'           => 'LED LIGHT COLOR',
-			'acrylicBackingOption'    => 'BACKING',
-			'rigidBacking'            => 'BACKING',
-			'paintedPCColor'          => 'PAINTED PC COLOR',
-			'pcCustomColor'           => 'PC CUSTOM COLOR',
-			'baseColor'               => 'BASE COLOR',
-			'baseCustomColor'         => 'BASE CUSTOM COLOR',
-			'paintedPCFinish'         => 'PAINTED PC FINISH',
-			'lightboxType'            => 'LIGHT BOX TYPE',
-			'uvPrintedCover'          => 'UV PRINTED COVER',
-			'waterproof'              => 'ENVIRONMENT',
-			'backOption'              => 'BACK OPTION',
-			'mounting'                => 'MOUNTING',
-			'rigidM4StudLength'       => 'M4 STUD LENGTH',
-			'studLength'              => 'STUD LENGTH',
-			'spacerStandoffDistance'  => 'STANDOFF SPACE',
-			'trimLessWaterproof'      => 'ENVIRONMENT',
-			'lightingPackaged'        => 'INCLUDED ITEMS',
-			'includedItems'           => 'INCLUDED ITEMS',
-			'remoteControl'           => 'REMOTE CONTROL',
-			'wireExitLocation'        => 'WIRE EXIT LOCATION',
-			'wireType'                => 'WIRE TYPE',
-			'metalFinishing'          => 'METAL FINISHING',
-			'installation'            => 'INSTALLATION',
-			'pieces'                  => 'PIECES',
-			'sets'                    => 'QUANTITY',
-			'comments'                => 'COMMENTS',
-			'description'             => 'DESCRIPTION',
-			'file'                    => array(
-				'label'  => 'FILE',
+			'ledLightColor' => 'LED LIGHT COLOR',
+			'acrylicBackingOption' => 'BACKING',
+			'rigidBacking' => 'BACKING',
+			'paintedPCColor' => 'PAINTED PC COLOR',
+			'pcCustomColor' => 'PC CUSTOM COLOR',
+			'baseColor' => 'BASE COLOR',
+			'baseCustomColor' => 'BASE CUSTOM COLOR',
+			'paintedPCFinish' => 'PAINTED PC FINISH',
+			'lightboxType' => 'LIGHT BOX TYPE',
+			'uvPrintedCover' => 'UV PRINTED COVER',
+			'waterproof' => 'ENVIRONMENT',
+			'backOption' => 'BACK OPTION',
+			'mounting' => 'MOUNTING',
+			'rigidM4StudLength' => 'M4 STUD LENGTH',
+			'studLength' => 'STUD LENGTH',
+			'spacerStandoffDistance' => 'STANDOFF SPACE',
+			'trimLessWaterproof' => 'ENVIRONMENT',
+			'lightingPackaged' => 'INCLUDED ITEMS',
+			'includedItems' => 'INCLUDED ITEMS',
+			'remoteControl' => 'REMOTE CONTROL',
+			'wireExitLocation' => 'WIRE EXIT LOCATION',
+			'wireType' => 'WIRE TYPE',
+			'metalFinishing' => 'METAL FINISHING',
+			'installation' => 'INSTALLATION',
+			'pieces' => 'PIECES',
+			'sets' => 'QUANTITY',
+			'comments' => 'COMMENTS',
+			'description' => 'DESCRIPTION',
+			'file' => array(
+				'label' => 'FILE',
 				'isFile' => true,
 			),
-			'fileNames'               => array(
-				'label'   => 'FILES',
+			'fileNames' => array(
+				'label' => 'FILES',
 				'isFiles' => true,
 			),
 		);
@@ -1722,7 +1782,7 @@ h6 {
 					} elseif ( $attr['isFiles'] ?? false && isset( $projectArray['fileUrls'], $projectArray['fileNames'] ) ) {
 						$filesHtml = '';
 						foreach ( $projectArray['fileUrls'] as $index => $fileUrl ) {
-							$fileName   = $projectArray['fileNames'][ $index ] ?? $fileUrl;
+							$fileName = $projectArray['fileNames'][ $index ] ?? $fileUrl;
 							$filesHtml .= '<a href="' . htmlspecialchars( $fileUrl, ENT_QUOTES, 'UTF-8' ) . '" target="_blank">' . htmlspecialchars( $fileName, ENT_QUOTES, 'UTF-8' ) . '</a><br>';
 						}
 						echo '<tr style="font-size: 14px;"><td style="width: 160px; padding: 8px; border: 1px solid #000;"><strong style="text-transform: uppercase;">' . $attr['label'] . ': </strong></td><td style="width: 160px; padding: 8px; border: 1px solid #000;"><font face="lato">' . $filesHtml . '</font></td></tr>';
@@ -1756,7 +1816,7 @@ h6 {
 		);
 		if ( ! wp_verify_nonce( $_POST['nonce'], 'quote_nonce' ) ) {
 			$status['status'] = 'error';
-			$status['error']  = 'Nonce error';
+			$status['error'] = 'Nonce error';
 			wp_send_json( $status );
 		}
 
@@ -1774,7 +1834,7 @@ h6 {
 		);
 		if ( ! wp_verify_nonce( $_POST['nonce'], 'quote_nonce' ) ) {
 			$status['status'] = 'error';
-			$status['error']  = 'Nonce error';
+			$status['error'] = 'Nonce error';
 			wp_send_json( $status );
 		}
 
@@ -1785,8 +1845,8 @@ h6 {
 			$partner_id = $_POST['partner'];
 
 			$args = array(
-				'post_type'   => 'nova_quote',
-				'post_title'  => $_POST['title'],
+				'post_type' => 'nova_quote',
+				'post_title' => $_POST['title'],
 				'post_status' => 'publish',
 			);
 
@@ -1798,7 +1858,7 @@ h6 {
 
 			wp_update_post(
 				array(
-					'ID'         => $post_id,
+					'ID' => $post_id,
 					'post_title' => $post_id . ' - ' . $_POST['title'],
 				)
 			);
@@ -1810,14 +1870,14 @@ h6 {
 			if ( isset( $_POST['quote_id'] ) && isset( $_POST['editing'] ) && $_POST['editing'] === 'edit' ) {
 				wp_update_post(
 					array(
-						'ID'         => $post_id,
+						'ID' => $post_id,
 						'post_title' => $post_id . ' - ' . $_POST['title'],
 					)
 				);
 			}
 
 			$user_id = $_POST['user_id'];
-			$user    = get_userdata( $user_id );
+			$user = get_userdata( $user_id );
 
 			$created_by = isset( $_POST['created_by'] ) ? $_POST['created_by'] : false;
 
@@ -1835,7 +1895,7 @@ h6 {
 			update_field( 'currency', $_POST['currency'], $post_id );
 
 			if ( 'processing' == $_POST['quote_status'] ) {
-				$html     = $this->html_invoice( $post_id );
+				$html = $this->html_invoice( $post_id );
 				$html_cad = $this->html_invoice( $post_id, 'CAD' );
 				/*Remove for quotation email*/
 				$this->generate_pdf( $post_id, $html, 'USD' );
@@ -1849,10 +1909,10 @@ h6 {
 				}
 			}
 
-			$status['code']         = 2;
-			$status['post']         = $_POST;
+			$status['code'] = 2;
+			$status['post'] = $_POST;
 			$status['generated_id'] = $post_id;
-			$status['status']       = 'success';
+			$status['status'] = 'success';
 
 		} else {
 			$status['code'] = 3;
@@ -1992,7 +2052,7 @@ h6 {
 
 	public function create_order_invoice_folder() {
 		$upload_dir = wp_upload_dir();
-		$base_dir   = $upload_dir['basedir'] . '/order_invoices';
+		$base_dir = $upload_dir['basedir'] . '/order_invoices';
 
 		if ( file_exists( $base_dir ) ) {
 			return true;
@@ -2009,7 +2069,7 @@ h6 {
 	public function create_customer_invoice_folder( $business_id ) {
 		// Get the WordPress uploads directory.
 		$upload_dir = wp_upload_dir();
-		$base_dir   = $upload_dir['basedir'] . '/customer_invoices';
+		$base_dir = $upload_dir['basedir'] . '/customer_invoices';
 
 		// Ensure the base directory exists.
 		if ( ! file_exists( $base_dir ) ) {
@@ -2040,7 +2100,7 @@ h6 {
 
 	public function enable_ai_files( $mimes ) {
 		$mimes['svg'] = 'image/svg+xml';
-		$mimes['ai']  = 'application/postscript';
+		$mimes['ai'] = 'application/postscript';
 		return $mimes;
 	}
 
@@ -2052,9 +2112,9 @@ h6 {
 		if ( ! wp_verify_nonce( $_POST['nonce'], 'quote_nonce' ) ) {
 			wp_send_json( 'Nonce Error' );
 		}
-		$id           = $_POST['post_id'];
-		$old          = $_POST['old_path'];
-		$new          = $_POST['new_path'];
+		$id = $_POST['post_id'];
+		$old = $_POST['old_path'];
+		$new = $_POST['new_path'];
 		$signage_json = $_POST['signage'];
 
 		// Replace old path with new path in the JSON string
@@ -2063,9 +2123,9 @@ h6 {
 		// Update the 'signage' field with the new JSON string
 		update_field( 'signage', $new_signage_json, $id );
 
-		$status['code']    = 2;
+		$status['code'] = 2;
 		$status['signage'] = $new_signage_json;
-		$status['post']    = $_POST;
+		$status['post'] = $_POST;
 
 		wp_send_json( $status );
 	}
@@ -2086,14 +2146,14 @@ h6 {
 		if ( file_exists( $file_path ) ) {
 			// Attempt to delete the file
 			if ( unlink( $file_path ) ) {
-				$status['code']    = 2;
+				$status['code'] = 2;
 				$status['message'] = 'File successfully deleted.';
 			} else {
-				$status['code']    = 3;
+				$status['code'] = 3;
 				$status['message'] = 'Error: Unable to delete the file.';
 			}
 		} else {
-			$status['code']  = 4;
+			$status['code'] = 4;
 			$status['error'] = 'Error: File does not exist.';
 		}
 
@@ -2102,7 +2162,7 @@ h6 {
 
 	public function upload_signage_file() {
 		$status = array(
-			'code'     => 1,
+			'code' => 1,
 			'uploaded' => 0,
 		);
 
@@ -2114,32 +2174,32 @@ h6 {
 			require_once ABSPATH . 'wp-admin/includes/file.php';
 		}
 
-		$file               = $_FILES['file'];
+		$file = $_FILES['file'];
 		$status['fileName'] = $file['name'];
 
 		// Set a custom upload directory based on the current user's username.
 		add_filter(
 			'upload_dir',
-			function ( $dir ) {
-				$user     = wp_get_current_user();
+			function ($dir) {
+				$user = wp_get_current_user();
 				$username = $user->user_login;
 
 				// Create the custom path.
 				$custom_dir = '/' . $username;
 
 				return array(
-					'path'   => $dir['basedir'] . $custom_dir,
-					'url'    => $dir['baseurl'] . $custom_dir,
+					'path' => $dir['basedir'] . $custom_dir,
+					'url' => $dir['baseurl'] . $custom_dir,
 					'subdir' => $custom_dir,
 				) + $dir;
 			}
 		);
 
 		$upload_overrides = array( 'test_form' => false );
-		$movefile         = wp_handle_upload( $file, $upload_overrides );
+		$movefile = wp_handle_upload( $file, $upload_overrides );
 
 		if ( $movefile && ! isset( $movefile['error'] ) ) {
-			$status['code']    = 2;
+			$status['code'] = 2;
 			$status['message'] = "File is valid, and was successfully uploaded.\n";
 		} else {
 			$status['message'] = $movefile['error'];
@@ -2167,7 +2227,7 @@ h6 {
 
 		$pricing = $acrylic_options['letter_height_x_logo_pricing'];
 
-		$status['code']    = 2;
+		$status['code'] = 2;
 		$status['pricing'] = $pricing;
 		wp_send_json( $status );
 	}
@@ -2177,8 +2237,8 @@ h6 {
 			'nova/v1',
 			'/pricingletters/(?P<id>\d+)',
 			array(
-				'methods'             => 'GET',
-				'callback'            => array( $this, 'handle_pricing_letter_table' ),
+				'methods' => 'GET',
+				'callback' => array( $this, 'handle_pricing_letter_table' ),
 				'permission_callback' => '__return_true',
 			)
 		);
@@ -2187,8 +2247,8 @@ h6 {
 			'nova/v1',
 			'/multipricingletters/(?P<id>\d+)',
 			array(
-				'methods'             => 'GET',
-				'callback'            => array( $this, 'handle_multipricing_letter_tables' ),
+				'methods' => 'GET',
+				'callback' => array( $this, 'handle_multipricing_letter_tables' ),
 				'permission_callback' => '__return_true',
 			)
 		);
@@ -2197,8 +2257,8 @@ h6 {
 			'nova/v1',
 			'/pricinglogos/(?P<id>\d+)',
 			array(
-				'methods'             => 'GET',
-				'callback'            => array( $this, 'handle_pricing_logo_table' ),
+				'methods' => 'GET',
+				'callback' => array( $this, 'handle_pricing_logo_table' ),
 				'permission_callback' => '__return_true',
 			)
 		);
@@ -2207,8 +2267,8 @@ h6 {
 			'nova/v1',
 			'/quantity-discount/(?P<id>\d+)',
 			array(
-				'methods'             => 'GET',
-				'callback'            => array( $this, 'handle_multiple_quantity_discount_table' ),
+				'methods' => 'GET',
+				'callback' => array( $this, 'handle_multiple_quantity_discount_table' ),
 				'permission_callback' => '__return_true',
 			)
 		);
@@ -2229,7 +2289,7 @@ h6 {
 
 		if ( ! $table ) {
 			$parent_id = wp_get_post_parent_id( $id );
-			$table     = get_field( 'logo_pricing_tables', $parent_id );
+			$table = get_field( 'logo_pricing_tables', $parent_id );
 		}
 
 		return $table;
@@ -2258,8 +2318,8 @@ h6 {
 			'nova/v1',
 			'/upload-quote-file',
 			array(
-				'methods'             => 'POST',
-				'callback'            => array( $this, 'handle_quote_file_upload' ),
+				'methods' => 'POST',
+				'callback' => array( $this, 'handle_quote_file_upload' ),
 				'permission_callback' => '__return_true',
 			)
 		);
@@ -2268,7 +2328,7 @@ h6 {
 	public function handle_quote_file_upload( $request ) {
 		return 'DONE';
 		$files = $request->get_file_params();
-		$file  = $files['file'];
+		$file = $files['file'];
 
 		// Define the upload directory and options.
 		$upload = wp_upload_bits( $file['name'], null, file_get_contents( $file['tmp_name'] ) );
@@ -2303,55 +2363,55 @@ h6 {
 			'nova-quote',
 			'NovaQuote',
 			array(
-				'ajax_url'                   => admin_url( 'admin-ajax.php' ),
-				'invoice_url'                => esc_url_raw( content_url( '/customer_invoices' ) ),
-				'nonce'                      => wp_create_nonce( 'quote_nonce' ),
-				'quote_options'              => $this->get_quote_options(),
-				'letter_pricing_table'       => $this->get_letter_pricing_table(),
-				'letter_pricing_tables'      => $this->get_letter_pricing_tables(),
-				'parent_id'                  => $this->get_parent_id(),
-				'logo_pricing_tables'        => $this->get_logo_pricing_tables(),
-				'fonts'                      => $this->get_fonts(),
-				'no_lowercase'               => $this->no_lowercase(),
-				'upload_rest'                => esc_url_raw( rest_url( '/nova/v1/upload-quote-file' ) ),
-				'logged_in'                  => is_user_logged_in(),
-				'user_role'                  => $this->get_current_user_role_slugs(),
-				'user_id'                    => $this->get_partner_id(),
-				'product'                    => get_the_ID(),
-				'quote_url'                  => get_permalink( get_the_ID() ),
-				'mockup_account_url'         => esc_url_raw( home_url( '/my-account/mockups/all' ) ),
-				'mockup_drafts_url'          => esc_url_raw( home_url( '/my-account/mockups/drafts' ) ),
-				'mockup_quoted_url'          => esc_url_raw( home_url( '/my-account/mockups/payments' ) ),
-				'mockup_processing_url'      => esc_url_raw( home_url( '/my-account/mockups/processing' ) ),
-				'dashboard_url'              => esc_url_raw( home_url( '/my-account/' ) ),
-				'is_editting'                => $this->is_editting(),
-				'signage'                    => $this->get_signage(),
-				'is_admin'                   => $this->is_admin(),
-				'nova_quote_product'         => get_field( 'nova_quote_product', 'option' ),
-				'current_quote_id'           => isset( $_GET['qid'] ) ? $_GET['qid'] : null,
-				'current_quote_title'        => isset( $_GET['qid'] ) ? get_field( 'frontend_title', $_GET['qid'] ) : null,
-				'dropbox_app_key'            => get_field( 'dropbox_app_key', 'option' ),
-				'dropbox_secret'             => get_field( 'dropbox_secret_key', 'option' ),
-				'dropbox_token'              => get_field( 'dropbox_token_access', 'option' ),
-				'dropbox_refresh_token'      => get_field( 'dropbox_refresh_token', 'option' ),
-				'business_id'                => get_field( 'business_id', 'user_' . get_current_user_id() ),
-				'single_quote_options'       => get_field( 'single_quote_options' ),
-				'generated_product_id'       => isset( $_GET['qid'] ) ? get_post_meta( $_GET['qid'], 'nova_product_generated_id', true ) : null,
-				'metal_stainless_pricing'    => get_field( 'lasercut_stainless_metal_pricing' ),
-				'quote_status'               => isset( $_GET['qid'] ) ? get_field( 'quote_status', $_GET['qid'] ) : '',
+				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'invoice_url' => esc_url_raw( content_url( '/customer_invoices' ) ),
+				'nonce' => wp_create_nonce( 'quote_nonce' ),
+				'quote_options' => $this->get_quote_options(),
+				'letter_pricing_table' => $this->get_letter_pricing_table(),
+				'letter_pricing_tables' => $this->get_letter_pricing_tables(),
+				'parent_id' => $this->get_parent_id(),
+				'logo_pricing_tables' => $this->get_logo_pricing_tables(),
+				'fonts' => $this->get_fonts(),
+				'no_lowercase' => $this->no_lowercase(),
+				'upload_rest' => esc_url_raw( rest_url( '/nova/v1/upload-quote-file' ) ),
+				'logged_in' => is_user_logged_in(),
+				'user_role' => $this->get_current_user_role_slugs(),
+				'user_id' => $this->get_partner_id(),
+				'product' => get_the_ID(),
+				'quote_url' => get_permalink( get_the_ID() ),
+				'mockup_account_url' => esc_url_raw( home_url( '/my-account/mockups/all' ) ),
+				'mockup_drafts_url' => esc_url_raw( home_url( '/my-account/mockups/drafts' ) ),
+				'mockup_quoted_url' => esc_url_raw( home_url( '/my-account/mockups/payments' ) ),
+				'mockup_processing_url' => esc_url_raw( home_url( '/my-account/mockups/processing' ) ),
+				'dashboard_url' => esc_url_raw( home_url( '/my-account/' ) ),
+				'is_editting' => $this->is_editting(),
+				'signage' => $this->get_signage(),
+				'is_admin' => $this->is_admin(),
+				'nova_quote_product' => get_field( 'nova_quote_product', 'option' ),
+				'current_quote_id' => isset( $_GET['qid'] ) ? $_GET['qid'] : null,
+				'current_quote_title' => isset( $_GET['qid'] ) ? get_field( 'frontend_title', $_GET['qid'] ) : null,
+				'dropbox_app_key' => get_field( 'dropbox_app_key', 'option' ),
+				'dropbox_secret' => get_field( 'dropbox_secret_key', 'option' ),
+				'dropbox_token' => get_field( 'dropbox_token_access', 'option' ),
+				'dropbox_refresh_token' => get_field( 'dropbox_refresh_token', 'option' ),
+				'business_id' => get_field( 'business_id', 'user_' . get_current_user_id() ),
+				'single_quote_options' => get_field( 'single_quote_options' ),
+				'generated_product_id' => isset( $_GET['qid'] ) ? get_post_meta( $_GET['qid'], 'nova_product_generated_id', true ) : null,
+				'metal_stainless_pricing' => get_field( 'lasercut_stainless_metal_pricing' ),
+				'quote_status' => isset( $_GET['qid'] ) ? get_field( 'quote_status', $_GET['qid'] ) : '',
 				'small_punctuations_pricing' => $this->small_punctuations_pricing(),
-				'lowercase_pricing'          => $this->lowercase_pricing(),
-				'quote_div_id'               => get_field( 'quote_div_id' ),
-				'is_added_to_cart'           => $this->is_added_to_cart(),
-				'product_lines_accordion'    => get_field( 'product_lines_accordion', 'option' ),
-				'letters_pricing_api'        => rest_url() . 'nova/v1/pricingletters/',
-				'letters_multi_pricing_api'  => rest_url() . 'nova/v1/multipricingletters/',
-				'logo_pricing_api'           => rest_url() . 'nova/v1/pricinglogos/',
-				'quantity_discount_api'      => rest_url() . 'nova/v1/quantity-discount/',
-				'show_all_partners'          => $this->show_all_partners(),
-				'product_layers'             => get_field( 'product_layers', $this->get_id_layer_product() ),
-				'project_folder_status'      => isset( $_GET['qid'] ) ? $this->get_project_folder() : null,
-				'layered_product_id'         => $this->get_id_layer_product(),
+				'lowercase_pricing' => $this->lowercase_pricing(),
+				'quote_div_id' => get_field( 'quote_div_id' ),
+				'is_added_to_cart' => $this->is_added_to_cart(),
+				'product_lines_accordion' => get_field( 'product_lines_accordion', 'option' ),
+				'letters_pricing_api' => rest_url() . 'nova/v1/pricingletters/',
+				'letters_multi_pricing_api' => rest_url() . 'nova/v1/multipricingletters/',
+				'logo_pricing_api' => rest_url() . 'nova/v1/pricinglogos/',
+				'quantity_discount_api' => rest_url() . 'nova/v1/quantity-discount/',
+				'show_all_partners' => $this->show_all_partners(),
+				'product_layers' => get_field( 'product_layers', $this->get_id_layer_product() ),
+				'project_folder_status' => isset( $_GET['qid'] ) ? $this->get_project_folder() : null,
+				'layered_product_id' => $this->get_id_layer_product(),
 
 			)
 		);
@@ -2368,7 +2428,7 @@ h6 {
 
 	public function get_project_folder() {
 		if ( isset( $_GET['qid'] ) ) {
-			$id     = $_GET['qid'];
+			$id = $_GET['qid'];
 			$status = get_post_meta( $_GET['qid'], 'folder_project_status', true );
 
 			if ( $status ) {
@@ -2390,12 +2450,12 @@ h6 {
 	}
 
 	public function show_all_partners() {
-		$args    = array(
-			'role'    => 'partner',
+		$args = array(
+			'role' => 'partner',
 			'orderby' => 'registered',
-			'order'   => 'ASC',
+			'order' => 'ASC',
 		);
-		$users   = get_users( $args );
+		$users = get_users( $args );
 		$results = array();
 
 		$keywords = array( 'test', 'demo' );
@@ -2403,8 +2463,8 @@ h6 {
 		foreach ( $users as $user ) {
 
 			$first_name = $user->first_name;
-			$last_name  = $user->last_name;
-			$email      = $user->user_email;
+			$last_name = $user->last_name;
+			$email = $user->user_email;
 
 			// Skip user if any field contains the keywords
 			if ( self::containsKeywords( $first_name, $keywords ) ||
@@ -2455,7 +2515,7 @@ h6 {
 	public function get_current_user_role_slugs() {
 		if ( is_user_logged_in() ) {
 			$current_user = wp_get_current_user();
-			$roles        = (array) $current_user->roles;
+			$roles = (array) $current_user->roles;
 			return $roles;
 		} else {
 			return array();
@@ -2493,7 +2553,7 @@ h6 {
 
 		if ( ! $pricing ) {
 			$parent_id = wp_get_post_parent_id( get_the_ID() );
-			$pricing   = get_field( 'lowercase_pricing', $parent_id );
+			$pricing = get_field( 'lowercase_pricing', $parent_id );
 		}
 
 		return $pricing;
@@ -2504,7 +2564,7 @@ h6 {
 
 		if ( ! $pricing ) {
 			$parent_id = wp_get_post_parent_id( get_the_ID() );
-			$pricing   = get_field( 'small_punctuations_pricing', $parent_id );
+			$pricing = get_field( 'small_punctuations_pricing', $parent_id );
 		}
 
 		return $pricing;
@@ -2516,7 +2576,7 @@ h6 {
 
 		if ( ! $table ) {
 			$parent_id = wp_get_post_parent_id( get_the_ID() );
-			$table     = get_field( 'logo_pricing_tables', $parent_id );
+			$table = get_field( 'logo_pricing_tables', $parent_id );
 		}
 
 		return $table;
@@ -2553,7 +2613,7 @@ h6 {
 
 			$fonts[] = array(
 				'name' => pathinfo( $file, PATHINFO_FILENAME ),
-				'src'  => get_stylesheet_directory_uri() . '/assets/fonts/' . $encoded_basename,
+				'src' => get_stylesheet_directory_uri() . '/assets/fonts/' . $encoded_basename,
 			);
 		}
 
@@ -2609,9 +2669,9 @@ h6 {
 			array(
 				'page_title' => 'Nova Options',
 				'menu_title' => 'Nova Options',
-				'menu_slug'  => 'nova-options',
+				'menu_slug' => 'nova-options',
 				'capability' => 'edit_posts',
-				'redirect'   => false,
+				'redirect' => false,
 			)
 		);
 	}
