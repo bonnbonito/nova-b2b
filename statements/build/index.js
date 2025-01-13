@@ -5499,6 +5499,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _OrderActions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./OrderActions */ "./src/components/OrderActions.js");
+
 
 
 function PendingOrderTable({
@@ -5596,7 +5598,9 @@ function PendingOrderTable({
     onClick: toggleSortTotal
   }, "Total ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: `sort-by ${orderTotalSort}`
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", null))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tbody", {
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
+    className: "font-medium p-4 pt-0 pb-3 text-black text-left font-title uppercase cursor-pointer"
+  }, "Actions"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tbody", {
     className: "text-sm"
   }, orders.map(order => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", {
@@ -5624,10 +5628,11 @@ function PendingOrderTable({
         __html: order.total
       },
       className: "py-4 px-4 font-title"
-    }), order.actions?.pay && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
-      href: order.actions.pay.url,
-      className: "button"
-    }, order.actions.pay.name)));
+    }), order.actions?.pay && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
+      className: "py-4 px-4 text-xs"
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_OrderActions__WEBPACK_IMPORTED_MODULE_1__["default"], {
+      order: order
+    })));
   })))), selectedOrders.length > 1 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", {
     method: "post",
     action: ""

@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import OrderActions from './OrderActions';
 
 export default function PendingOrderTable({
 	orders,
@@ -116,7 +117,9 @@ export default function PendingOrderTable({
 							>
 								Total <span className={`sort-by ${orderTotalSort}`}></span>
 							</th>
-							<th></th>
+							<th className="font-medium p-4 pt-0 pb-3 text-black text-left font-title uppercase cursor-pointer">
+								Actions
+							</th>
 						</tr>
 					</thead>
 					<tbody className="text-sm">
@@ -156,10 +159,8 @@ export default function PendingOrderTable({
 										className="py-4 px-4 font-title"
 									></td>
 									{order.actions?.pay && (
-										<td>
-											<a href={order.actions.pay.url} className="button">
-												{order.actions.pay.name}
-											</a>
+										<td className="py-4 px-4 text-xs">
+											<OrderActions order={order} />
 										</td>
 									)}
 								</tr>
