@@ -45,13 +45,13 @@ class Order_History {
 
 		// Query arguments to get temporary combined orders older than 1 day
 		$args = array(
-			'type'         => 'shop_order',
-			'status'       => array( 'pending', 'failed', 'cancelled' ), // Include relevant statuses
-			'meta_key'     => '_is_temporary_combined_order',
-			'meta_value'   => '1',
+			'type' => 'shop_order',
+			'status' => array( 'pending', 'failed', 'cancelled' ), // Include relevant statuses
+			'meta_key' => '_is_temporary_combined_order',
+			'meta_value' => '1',
 			'date_created' => '<' . date( 'Y-m-d H:i:s', $time_threshold ),
-			'limit'        => -1,
-			'return'       => 'ids',
+			'limit' => -1,
+			'return' => 'ids',
 		);
 
 		$orders = wc_get_orders( $args );
@@ -115,10 +115,10 @@ class Order_History {
 				return;
 			}
 
-			$order_ids     = array_map( 'absint', $_POST['order_ids'] );
-			$total_amount  = 0;
+			$order_ids = array_map( 'absint', $_POST['order_ids'] );
+			$total_amount = 0;
 			$orders_to_pay = array();
-			$currency      = null; // Initialize currency variable
+			$currency = null; // Initialize currency variable
 
 			$current_user_id = get_current_user_id();
 
@@ -138,7 +138,7 @@ class Order_History {
 						return;
 					}
 
-					$total_amount   += $order->get_total();
+					$total_amount += $order->get_total();
 					$orders_to_pay[] = $order;
 				}
 			}
@@ -176,7 +176,7 @@ class Order_History {
 
 	public function create_combined_order_and_redirect( $orders_to_pay, $total_amount_order ) {
 		$current_user_id = get_current_user_id();
-		$total_amount    = 0;
+		$total_amount = 0;
 
 		// Collect order IDs
 		$original_order_ids = array();
@@ -207,13 +207,13 @@ class Order_History {
 
 		// Loop through each original order
 		foreach ( $orders_to_pay as $order ) {
-			$order_id             = $order->get_id();
+			$order_id = $order->get_id();
 			$original_order_ids[] = $order_id;
 
 			$currency = $order->get_currency();
 
 			// Get the order total
-			$order_total   = $order->get_total();
+			$order_total = $order->get_total();
 			$total_amount += $order_total;
 
 			// Create a new private product for this order
@@ -306,7 +306,7 @@ class Order_History {
 	}
 
 	public function order_actions( $actions, $order ) {
-		$from_order_id    = $order->get_meta( '_from_order_id' );
+		$from_order_id = $order->get_meta( '_from_order_id' );
 		$payment_order_id = $order->get_meta( '_adjusted_duplicate_order_id' );
 		if ( $from_order_id ) {
 			unset( $actions['cancel'] );
@@ -316,7 +316,7 @@ class Order_History {
 			$payment_order = wc_get_order( $payment_order_id );
 			if ( $payment_order->get_status() == 'pending' ) {
 				$actions['pay'] = array(
-					'url'  => $payment_order->get_checkout_payment_url(),
+					'url' => $payment_order->get_checkout_payment_url(),
 					'name' => __( 'Pay', 'woocommerce' ),
 				);
 			}
@@ -340,12 +340,12 @@ class Order_History {
 			'nova-orders',
 			'NovaOrders',
 			array(
-				'ajax_url'               => admin_url( 'admin-ajax.php' ),
-				'orders'                 => $this->get_orders(),
-				'has_payment_types'      => $this->has_payment_types(),
+				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'orders' => $this->get_orders(),
+				'has_payment_types' => $this->has_payment_types(),
 				'pending_payment_orders' => $this->get_pending_payments(),
-				'nonce'                  => wp_create_nonce( 'nova_orders_nonce' ),
-				'customer_id'            => isset( $_GET['customer_id'] ) ? absint( $_GET['customer_id'] ) : get_current_user_id(),
+				'nonce' => wp_create_nonce( 'nova_orders_nonce' ),
+				'customer_id' => isset( $_GET['customer_id'] ) ? absint( $_GET['customer_id'] ) : get_current_user_id(),
 			)
 		);
 
@@ -364,9 +364,9 @@ class Order_History {
 
 	public function account_statement_content() {
 		?>
-<div id="nova">
-	<div id="hello"></div>
-</div>
+		<div id="nova">
+			<div id="hello"></div>
+		</div>
 		<?php
 	}
 
@@ -378,13 +378,13 @@ class Order_History {
 		$current_user_id = isset( $_GET['customer_id'] ) ? absint( $_GET['customer_id'] ) : get_current_user_id();
 
 		$args = array(
-			'customer_id'  => $current_user_id,
-			'limit'        => -1, // Get all orders
-			'orderby'      => 'date',
-			'order'        => 'DESC',
-			'meta_key'     => '_hide_order',
+			'customer_id' => $current_user_id,
+			'limit' => -1, // Get all orders
+			'orderby' => 'date',
+			'order' => 'DESC',
+			'meta_key' => '_hide_order',
 			'meta_compare' => 'NOT EXISTS',
-			'status'       => array( 'wc-pending', 'wc-processing', 'wc-on-hold', 'wc-completed' ),
+			'status' => array( 'wc-pending', 'wc-processing', 'wc-on-hold', 'wc-completed' ),
 		);
 
 		$order_ids = wc_get_orders( $args );
@@ -416,13 +416,13 @@ class Order_History {
 			$payment_order_object = null;
 
 			if ( $order->get_meta( '_adjusted_duplicate_order_id' ) ) {
-				$payment_order        = $order->get_meta( '_adjusted_duplicate_order_id' );
+				$payment_order = $order->get_meta( '_adjusted_duplicate_order_id' );
 				$payment_order_object = wc_get_order( $payment_order );
 
 				// Ensure we have a valid payment order object
 				if ( $payment_order_object ) {
 					$total_with_currency = $payment_order_object->get_formatted_order_total();
-					$order_total         = $payment_order_object->get_total();
+					$order_total = $payment_order_object->get_total();
 				}
 			}
 
@@ -433,8 +433,8 @@ class Order_History {
 				$is_overdue = true;
 			}
 
-			$due_date       = false;
-			$deadline       = false;
+			$due_date = false;
+			$deadline = false;
 			$delivered_date = false;
 
 			$manual_delivered_date = get_field( 'manual_delivered_date', $order->get_id() );
@@ -448,7 +448,7 @@ class Order_History {
 			// If order is payment, get due date
 			if ( $order->get_meta( '_from_order_id' ) ) {
 				$from_order_id = $order->get_meta( '_from_order_id' );
-				$from_order    = wc_get_order( $from_order_id );
+				$from_order = wc_get_order( $from_order_id );
 
 				// Ensure we have a valid from order object
 				if ( $from_order ) {
@@ -456,11 +456,11 @@ class Order_History {
 
 					// Check if the completed date is valid
 					if ( $completed_date_obj ) {
-						$shipped_date        = $completed_date_obj->date( 'F d, Y' );
-						$payment_type        = $from_order->get_meta( '_payment_select' );
+						$shipped_date = $completed_date_obj->date( 'F d, Y' );
+						$payment_type = $from_order->get_meta( '_payment_select' );
 						$days_after_shipping = get_field( 'days_after_shipping', $payment_type );
-						$deadline            = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
-						$due_date            = date( 'M d, Y', $deadline );
+						$deadline = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
+						$due_date = date( 'M d, Y', $deadline );
 
 						if ( $current_time > $deadline ) {
 							if ( $order->get_status() == 'pending' ) {
@@ -501,18 +501,18 @@ class Order_History {
 			}
 
 			$orders[] = array(
-				'id'                   => $order->get_id(),
-				'order_number'         => $order->get_order_number(),
-				'po_number'            => $order->get_meta( '_po_number' ),
-				'order_url'            => $order->get_view_order_url(),
-				'date'                 => $order->get_date_created()->format( 'M d, Y' ),
-				'total'                => $total_with_currency,
-				'status'               => $order->get_status(),
-				'actions'              => $actions,
-				'deadline'             => $deadline,
-				'order_total'          => $order_total,
-				'due_date'             => $due_date,
-				'is_overdue'           => $is_overdue,
+				'id' => $order->get_id(),
+				'order_number' => $order->get_order_number(),
+				'po_number' => $order->get_meta( '_po_number' ),
+				'order_url' => $order->get_view_order_url(),
+				'date' => $order->get_date_created()->format( 'M d, Y' ),
+				'total' => $total_with_currency,
+				'status' => $order->get_status(),
+				'actions' => $actions,
+				'deadline' => $deadline,
+				'order_total' => $order_total,
+				'due_date' => $due_date,
+				'is_overdue' => $is_overdue,
 				'payment_order_status' => isset( $payment_order_object ) ? $payment_order_object->get_status() : '',
 			);
 
@@ -541,7 +541,7 @@ class Order_History {
 		$results = $wpdb->get_results( $query, ARRAY_A );
 
 		$current_user_id = isset( $_GET['customer_id'] ) ? absint( $_GET['customer_id'] ) : get_current_user_id();
-		$order_ids       = array();
+		$order_ids = array();
 		if ( ! empty( $results ) ) {
 			foreach ( $results as $row ) {
 				$order = wc_get_order( $row['payment_order'] );
@@ -583,13 +583,13 @@ class Order_History {
 			$payment_order_object = null;
 
 			if ( $order->get_meta( '_adjusted_duplicate_order_id' ) ) {
-				$payment_order        = $order->get_meta( '_adjusted_duplicate_order_id' );
+				$payment_order = $order->get_meta( '_adjusted_duplicate_order_id' );
 				$payment_order_object = wc_get_order( $payment_order );
 
 				// Ensure we have a valid payment order object
 				if ( $payment_order_object ) {
 					$total_with_currency = $payment_order_object->get_formatted_order_total();
-					$order_total         = $payment_order_object->get_total();
+					$order_total = $payment_order_object->get_total();
 				}
 			}
 
@@ -605,7 +605,7 @@ class Order_History {
 			// If order is payment, get due date
 			if ( $order->get_meta( '_from_order_id' ) ) {
 				$from_order_id = $order->get_meta( '_from_order_id' );
-				$from_order    = wc_get_order( $from_order_id );
+				$from_order = wc_get_order( $from_order_id );
 
 				// Ensure we have a valid from order object
 				if ( $from_order ) {
@@ -613,11 +613,11 @@ class Order_History {
 
 					// Check if the completed date is valid
 					if ( $completed_date_obj ) {
-						$shipped_date        = $completed_date_obj->date( 'F d, Y' );
-						$payment_type        = $from_order->get_meta( '_payment_select' );
+						$shipped_date = $completed_date_obj->date( 'F d, Y' );
+						$payment_type = $from_order->get_meta( '_payment_select' );
 						$days_after_shipping = get_field( 'days_after_shipping', $payment_type );
-						$deadline            = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
-						$due_date            = date( 'M d, Y', $deadline );
+						$deadline = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
+						$due_date = date( 'M d, Y', $deadline );
 					}
 				}
 			}
@@ -627,19 +627,19 @@ class Order_History {
 			$payment_select_title = get_the_title( $payment_select );
 
 			$orders[] = array(
-				'id'                   => $order->get_id(),
-				'order_number'         => $order->get_order_number(),
-				'po_number'            => $order->get_meta( '_po_number' ),
-				'order_url'            => $order->get_view_order_url(),
-				'date'                 => $order->get_date_created()->format( 'M d, Y' ),
-				'total'                => $total_with_currency,
-				'status'               => $order->get_status(),
-				'actions'              => $actions,
-				'order_total'          => $order_total,
-				'due_date'             => $due_date,
-				'is_overdue'           => $is_overdue,
+				'id' => $order->get_id(),
+				'order_number' => $order->get_order_number(),
+				'po_number' => $order->get_meta( '_po_number' ),
+				'order_url' => $order->get_view_order_url(),
+				'date' => $order->get_date_created()->format( 'M d, Y' ),
+				'total' => $total_with_currency,
+				'status' => $order->get_status(),
+				'actions' => $actions,
+				'order_total' => $order_total,
+				'due_date' => $due_date,
+				'is_overdue' => $is_overdue,
 				'payment_order_status' => isset( $payment_order_object ) ? $payment_order_object->get_status() : '',
-				'payment_select'       => $payment_select_title,
+				'payment_select' => $payment_select_title,
 			);
 
 		}
@@ -659,10 +659,10 @@ class Order_History {
 
 		foreach ( $results as $result ) {
 
-			$order_id  = $result->order_id;
-			$order     = wc_get_order( $order_id );
+			$order_id = $result->order_id;
+			$order = wc_get_order( $order_id );
 			$time_diff = '';
-			$due_date  = '';
+			$due_date = '';
 
 			if ( ! $order ) {
 				continue;
@@ -681,32 +681,42 @@ class Order_History {
 			if ( ! $needs_payment ) {
 				continue;
 			}
-
-			$deposit_chosen = $order->get_meta( '_deposit_chosen' );
-
-			$days = get_field( 'days_after_shipping', $deposit_chosen );
-
-			$payment_date = $result->payment_date;
-
-			$shipped_date = $order->get_meta( 'shipped_date' );
-
-			// ** due date is $shipped_date + $days */
-			if ( $shipped_date ) {
-				$due_date  = date( 'Y-m-d', strtotime( '+' . $days . ' days', strtotime( $shipped_date ) ) );
-				$time_diff = human_time_diff( current_time( 'timestamp' ), strtotime( $due_date ) );
-				$ago       = strtotime( $due_date ) < current_time( 'timestamp' );
-			}
+			$is_overdue = false;
+			$due_date = false;
+			$deadline = false;
+			$delivered_date = false;
 
 			$manual_delivered_date = get_field( 'manual_delivered_date', $order->get_id() );
-
-			$delivered_date = $order->get_meta( 'delivered_date' );
-
 			if ( $manual_delivered_date ) {
 				$date_obj = \DateTime::createFromFormat( 'd/m/Y', $manual_delivered_date );
 				if ( $date_obj ) {
 					$delivered_date = $date_obj->format( 'F d, Y' );
 				}
 			}
+
+			$deposit_chosen = $order->get_meta( '_deposit_chosen' );
+
+			if ( $deposit_chosen ) {
+
+				$shipped_date = $delivered_date ? $delivered_date : $order->get_meta( 'shipped_date' );
+
+				$days_after_shipping = get_field( 'days_after_shipping', $deposit_chosen );
+
+				$current_time = time();
+
+				if ( $shipped_date ) {
+					$deadline = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
+					$due_date = date( 'M d, Y', $deadline );
+					if ( $current_time > $deadline ) {
+						if ( ! $order->has_status( array( 'completed', 'on-hold', 'trash' ) ) ) {
+							$is_overdue = true;
+
+						}
+					}
+				}
+			}
+
+
 
 			$total = $order->get_total();
 
@@ -719,24 +729,23 @@ class Order_History {
 
 			$actions = wc_get_account_orders_actions( $order );
 
-			$deposit_chosen = $order->get_meta( '_deposit_chosen' );
 
 			$payment_select_title = get_the_title( $deposit_chosen );
 
 			$pending_payments[] = array(
-				'id'                   => $order->get_id(),
-				'order_number'         => $order->get_order_number(),
-				'po_number'            => $order->get_meta( '_po_number' ),
-				'order_url'            => $order->get_view_order_url(),
-				'date'                 => $order->get_date_created()->format( 'M d, Y' ),
-				'total'                => wc_price( $total, array( 'currency' => $order->get_currency() ) ),
-				'status'               => $order->get_status(),
-				'actions'              => $actions,
-				'order_total'          => $total,
-				'due_date'             => date( 'F d, Y', strtotime( $due_date ) ),
-				'is_overdue'           => $is_overdue,
+				'id' => $order->get_id(),
+				'order_number' => $order->get_order_number(),
+				'po_number' => $order->get_meta( '_po_number' ),
+				'order_url' => $order->get_view_order_url(),
+				'date' => $order->get_date_created()->format( 'M d, Y' ),
+				'total' => wc_price( $total, array( 'currency' => $order->get_currency() ) ),
+				'status' => $order->get_status(),
+				'actions' => $actions,
+				'order_total' => $total,
+				'due_date' => date( 'F d, Y', strtotime( $due_date ) ),
+				'is_overdue' => $is_overdue,
 				'payment_order_status' => isset( $payment_order_object ) ? $payment_order_object->get_status() : '',
-				'payment_select'       => $payment_select_title,
+				'payment_select' => $payment_select_title,
 			);
 
 		}
@@ -749,11 +758,11 @@ class Order_History {
 		$items = array();
 		foreach ( $order->get_items() as $item_id => $item ) {
 			$items[] = array(
-				'id'       => $item_id,
-				'name'     => $item->get_name(),
+				'id' => $item_id,
+				'name' => $item->get_name(),
 				'quantity' => $item->get_quantity(),
 				'subtotal' => $item->get_subtotal(),
-				'total'    => $item->get_total(),
+				'total' => $item->get_total(),
 			);
 		}
 		return $items;
