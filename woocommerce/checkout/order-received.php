@@ -21,7 +21,7 @@ defined( 'ABSPATH' ) || exit;
 ?>
 
 <h4 class="woocommerce-notice woocommerce-notice--success woocommerce-thankyou-order-received uppercase">
-	<?php
+  <?php
 	/**
 	 * Filter the message shown after a checkout is complete.
 	 *
@@ -48,12 +48,12 @@ $second_payment     = $order->get_meta( 'second_payment' );
 $original_order_ids = $order->get_meta( '_original_order_ids' );
 $order_id           = $order->get_id();
 
-if ( empty( $from_order_id ) || empty( $second_payment ) || empty( $original_order_ids ) ) {
+if ( empty( $from_order_id ) && empty( $second_payment ) && empty( $original_order_ids ) ) {
 	?>
 <div class="woocommerce-message woocommerce-message--info woocommerce-thankyou-order-details">
-	<h4>IMPORTANT:</h4>
-	<p>You will receive the production drawing and finalized mockup within 24 hours. We'll notify you via email.</p>
-	<p>Production will start <strong>only after you approve the mockup</strong>.</p>
+  <h4>IMPORTANT:</h4>
+  <p>You will receive the production drawing and finalized mockup within 24 hours. We'll notify you via email.</p>
+  <p>Production will start <strong>only after you approve the mockup</strong>.</p>
 </div>
-	<?php
+<?php
 }

@@ -431,6 +431,7 @@ class Woocommerce {
 				$totals = $array_before + $array_after;
 			}
 		}
+		
 
 		return $totals;
 	}

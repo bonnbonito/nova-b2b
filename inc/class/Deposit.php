@@ -82,11 +82,11 @@ class Deposit {
 
 	public function change_combined_order_email_admin_subject( $subject, $order ) {
 		if ( $order && $order->get_meta( '_original_order_ids' ) ) {
-			$customer     = $order->get_customer_id();
-			$business     = get_user_meta( $customer, 'business_id', true );
+			$customer = $order->get_customer_id();
+			$business = get_user_meta( $customer, 'business_id', true );
 			$company_name = get_user_meta( $customer, 'company_name', true );
-			$company      = $company_name ? 'from ' . $company_name : '';
-			$subject      = 'NOVA INTERNAL (Action Required) - Payment Confirmation: {customer_name} {business_id} {company_name} - #' . $order->get_order_number();
+			$company = $company_name ? 'from ' . $company_name : '';
+			$subject = 'NOVA INTERNAL (Action Required) - Payment Confirmation: {customer_name} {business_id} {company_name} - #' . $order->get_order_number();
 
 			$subject = str_replace( '{customer_name}', $order->get_billing_first_name(), $subject );
 			$subject = str_replace( '{business_id}', $business, $subject );
@@ -147,23 +147,23 @@ class Deposit {
 			wp_send_json( $status );
 		}
 
-		$order          = wc_get_order( $order_id );
+		$order = wc_get_order( $order_id );
 		$deposit_chosen = $order->get_meta( '_deposit_chosen' );
-		$index          = intval( $_POST['row_index'] );
-		$currency       = $order->get_currency();
-		$pending_total  = $order->get_meta( '_pending_amount' );
-		$email_key      = $_POST['email_key'];
+		$index = intval( $_POST['row_index'] );
+		$currency = $order->get_currency();
+		$pending_total = $order->get_meta( '_pending_amount' );
+		$email_key = $_POST['email_key'];
 
-		$shipped_date        = $order->get_meta( 'shipped_date' );
+		$shipped_date = $order->get_meta( 'shipped_date' );
 		$days_after_shipping = get_field( 'days_after_shipping', $deposit_chosen );
-		$deadline            = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
-		$payment_date        = date( 'F d, Y', $deadline );
+		$deadline = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
+		$payment_date = date( 'F d, Y', $deadline );
 
 		$payment_url = '<p><strong>Please click here to pay:</strong> ' . $order->get_checkout_payment_url() . '</p>';
 
-		$first_name               = $order->get_billing_first_name();
-		$customer_email           = $order->get_billing_email();
-		$user_id                  = $order->get_user_id() ? $order->get_user_id() : 0;
+		$first_name = $order->get_billing_first_name();
+		$customer_email = $order->get_billing_email();
+		$user_id = $order->get_user_id() ? $order->get_user_id() : 0;
 		$additional_billing_email = get_user_meta( $user_id, 'additional_billing_email', true );
 
 		if ( $additional_billing_email ) {
@@ -224,7 +224,7 @@ class Deposit {
 			$message = str_replace( '{order_details}', $order_details, $message );
 
 			if ( $customer_email ) {
-				$headers     = array( 'Content-Type: text/html; charset=UTF-8' );
+				$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 				$attachments = array();
 				if ( class_exists( '\WPO\WC\PDF_Invoices\Main' ) ) {
 					$attachments = \WPO\WC\PDF_Invoices\Main::instance()->attach_document_to_email( array(), 'customer_invoice', $order, null );
@@ -260,9 +260,9 @@ class Deposit {
 	}
 
 	public function early_payment( $order_id, $transaction_id ) {
-		$order          = wc_get_order( $order_id );
+		$order = wc_get_order( $order_id );
 		$deposit_chosen = $order->get_meta( '_deposit_chosen' );
-		$shipped_date   = $order->get_meta( 'shipped_date' );
+		$shipped_date = $order->get_meta( 'shipped_date' );
 
 		if ( $deposit_chosen && ! $shipped_date ) {
 			error_log( 'Deposit chosen but no shipped date' );
@@ -330,14 +330,21 @@ class Deposit {
 
 		foreach ( $results as $result ) {
 
-			$order_id       = $result->order_id;
-			$order          = wc_get_order( $order_id );
-			$needs_payment  = $order->get_meta( 'needs_payment' );
-			$deposit_chosen = $order->get_meta( '_deposit_chosen' );
+			$order_id = $result->order_id;
 
+			if ( ! $order_id ) {
+				continue;
+			}
+
+			$order = wc_get_order( $order_id );
 			if ( ! $order ) {
 				continue;
 			}
+
+			$needs_payment = $order->get_meta( 'needs_payment' );
+			$deposit_chosen = $order->get_meta( '_deposit_chosen' );
+
+
 
 			if ( $order->get_status() === 'completed' ) {
 				continue;
@@ -362,12 +369,17 @@ class Deposit {
 	}
 
 	public function check_overdue( $result ) {
-		$order_id            = $result->order_id;
-		$order               = wc_get_order( $order_id );
-		$deposit_chosen      = $order->get_meta( '_deposit_chosen' );
-		$shipped_date        = $order->get_meta( 'shipped_date' );
+		$order_id = $result->order_id;
+		$order = wc_get_order( $order_id );
+
+		if ( ! $order ) {
+			return;
+		}
+
+		$deposit_chosen = $order->get_meta( '_deposit_chosen' );
+		$shipped_date = $order->get_meta( 'shipped_date' );
 		$days_after_shipping = get_field( 'days_after_shipping', $deposit_chosen );
-		$current_time        = time();
+		$current_time = time();
 
 		if ( $shipped_date ) {
 			$deadline = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
@@ -385,21 +397,21 @@ class Deposit {
 	}
 
 	public function send_pending_email( $order ) {
-		$order_id                 = $order->get_id();
-		$tracking_number          = get_post_meta( $order_id, '_tracking_number', true );
-		$shipping_carrier         = get_post_meta( $order_id, '_shipping_carrier', true );
-		$first_name               = $order->get_billing_first_name();
-		$customer_email           = $order->get_billing_email();
-		$user_id                  = $order->get_user_id() ? $order->get_user_id() : 0;
+		$order_id = $order->get_id();
+		$tracking_number = get_post_meta( $order_id, '_tracking_number', true );
+		$shipping_carrier = get_post_meta( $order_id, '_shipping_carrier', true );
+		$first_name = $order->get_billing_first_name();
+		$customer_email = $order->get_billing_email();
+		$user_id = $order->get_user_id() ? $order->get_user_id() : 0;
 		$additional_billing_email = get_user_meta( $user_id, 'additional_billing_email', true );
-		$payment_url              = '<p><strong>Please click here to pay:</strong> ' . $order->get_checkout_payment_url() . '</p>';
+		$payment_url = '<p><strong>Please click here to pay:</strong> ' . $order->get_checkout_payment_url() . '</p>';
 
 		if ( $additional_billing_email ) {
 			$customer_email = $additional_billing_email;
 		}
 
-		$subject  = 'Order #{order_number} shipped and out for delivery';
-		$message  = '<p>Hello {customer_name},</p>';
+		$subject = 'Order #{order_number} shipped and out for delivery';
+		$message = '<p>Hello {customer_name},</p>';
 		$message .= '<p>Order #{order_number} has been shipped.</p>';
 		if ( 'UPS' === $shipping_carrier && $tracking_number ) {
 			$message .= '<p>Track you order here:</p>';
@@ -464,16 +476,16 @@ class Deposit {
 
 		$currency = $order->get_currency();
 
-		$shipped_date        = false;
+		$shipped_date = false;
 		$days_after_shipping = get_field( 'days_after_shipping', $deposit_chosen );
-		$deadline            = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
-		$payment_date        = date( 'F d, Y', $deadline );
+		$deadline = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
+		$payment_date = date( 'F d, Y', $deadline );
 
 		$today = date( 'F d, Y' );
 
-		$first_name               = $order->get_billing_first_name();
-		$customer_email           = $order->get_billing_email();
-		$user_id                  = $order->get_user_id() ? $order->get_user_id() : 0;
+		$first_name = $order->get_billing_first_name();
+		$customer_email = $order->get_billing_email();
+		$user_id = $order->get_user_id() ? $order->get_user_id() : 0;
 		$additional_billing_email = get_user_meta( $user_id, 'additional_billing_email', true );
 
 		if ( $additional_billing_email ) {
@@ -495,8 +507,8 @@ class Deposit {
 
 			while ( have_rows( 'payment_emails', $deposit_chosen ) ) :
 				the_row();
-				$days       = get_sub_field( 'send_after_days' );
-				$key        = 'nova_payment_email_key_' . get_row_index();
+				$days = get_sub_field( 'send_after_days' );
+				$key = 'nova_payment_email_key_' . get_row_index();
 				$email_sent = get_post_meta( $order_id, $key, true );
 
 				if ( $email_sent ) {
@@ -563,7 +575,7 @@ class Deposit {
 								update_post_meta( $order_id, 'is_overdue', true );
 
 								if ( $current_overdue ) {
-									$current_overdue   = explode( ',', $current_overdue );
+									$current_overdue = explode( ',', $current_overdue );
 									$current_overdue[] = $order_id;
 									update_user_meta( $user_id, 'overdue_orders', implode( ',', $current_overdue ) );
 								} else {
@@ -619,14 +631,14 @@ class Deposit {
 		}
 
 		$production_email = get_field( 'production_email', $deposit_chosen );
-		$body_text        = $production_email['body_text'];
-		$body_text        = str_replace( '{order_number}', $order->get_order_number(), $body_text );
-		$body_text        = str_replace( '{customer_first_name}', $order->get_billing_first_name(), $body_text );
-		$body_text        = str_replace( '{customer_name}', $order->get_billing_first_name(), $body_text );
-		$body_text        = str_replace( '{customer_last_name}', $order->get_billing_last_name(), $body_text );
-		$body_text        = str_replace( '{customer_full_name}', $order->get_formatted_billing_full_name(), $body_text );
-		$body_text        = str_replace( '{customer_company}', $order->get_billing_company(), $body_text );
-		$body_text        = str_replace( '{customer_email}', $order->get_billing_email(), $body_text );
+		$body_text = $production_email['body_text'];
+		$body_text = str_replace( '{order_number}', $order->get_order_number(), $body_text );
+		$body_text = str_replace( '{customer_first_name}', $order->get_billing_first_name(), $body_text );
+		$body_text = str_replace( '{customer_name}', $order->get_billing_first_name(), $body_text );
+		$body_text = str_replace( '{customer_last_name}', $order->get_billing_last_name(), $body_text );
+		$body_text = str_replace( '{customer_full_name}', $order->get_formatted_billing_full_name(), $body_text );
+		$body_text = str_replace( '{customer_company}', $order->get_billing_company(), $body_text );
+		$body_text = str_replace( '{customer_email}', $order->get_billing_email(), $body_text );
 
 		$body_text = str_replace( '{order_date}', wc_format_datetime( $order->get_date_created() ), $body_text );
 
@@ -653,14 +665,14 @@ class Deposit {
 		}
 
 		$paid_email = get_field( 'paid_email', $deposit_chosen );
-		$body_text  = $paid_email['body_text'];
-		$body_text  = str_replace( '{order_number}', $order->get_order_number(), $body_text );
-		$body_text  = str_replace( '{customer_first_name}', $order->get_billing_first_name(), $body_text );
-		$body_text  = str_replace( '{customer_name}', $order->get_billing_first_name(), $body_text );
-		$body_text  = str_replace( '{customer_last_name}', $order->get_billing_last_name(), $body_text );
-		$body_text  = str_replace( '{customer_full_name}', $order->get_formatted_billing_full_name(), $body_text );
-		$body_text  = str_replace( '{customer_company}', $order->get_billing_company(), $body_text );
-		$body_text  = str_replace( '{customer_email}', $order->get_billing_email(), $body_text );
+		$body_text = $paid_email['body_text'];
+		$body_text = str_replace( '{order_number}', $order->get_order_number(), $body_text );
+		$body_text = str_replace( '{customer_first_name}', $order->get_billing_first_name(), $body_text );
+		$body_text = str_replace( '{customer_name}', $order->get_billing_first_name(), $body_text );
+		$body_text = str_replace( '{customer_last_name}', $order->get_billing_last_name(), $body_text );
+		$body_text = str_replace( '{customer_full_name}', $order->get_formatted_billing_full_name(), $body_text );
+		$body_text = str_replace( '{customer_company}', $order->get_billing_company(), $body_text );
+		$body_text = str_replace( '{customer_email}', $order->get_billing_email(), $body_text );
 
 		$body_text = str_replace( '{order_date}', wc_format_datetime( $order->get_date_created() ), $body_text );
 
@@ -681,7 +693,7 @@ class Deposit {
 
 		$second_payment = $order->get_meta( 'second_payment' );
 		$deposit_chosen = $order->get_meta( '_deposit_chosen' );
-		$needs_payment  = $order->get_meta( 'needs_payment' );
+		$needs_payment = $order->get_meta( 'needs_payment' );
 		if ( ! $second_payment && ! $deposit_chosen ) {
 			return $heading;
 		}
@@ -698,7 +710,7 @@ class Deposit {
 
 		$second_payment = $order->get_meta( 'second_payment' );
 		$deposit_chosen = $order->get_meta( '_deposit_chosen' );
-		$needs_payment  = $order->get_meta( 'needs_payment' );
+		$needs_payment = $order->get_meta( 'needs_payment' );
 		if ( ! $second_payment && ! $deposit_chosen ) {
 			return $subject;
 		}
@@ -774,8 +786,8 @@ class Deposit {
 
 	public function change_payment_status( $order_status, $order_id, $order ) {
 
-		$old_status     = $order->get_status();
-		$nova_order     = $order->get_meta( '_nova_order' );
+		$old_status = $order->get_status();
+		$nova_order = $order->get_meta( '_nova_order' );
 		$deposit_chosen = $order->get_meta( '_deposit_chosen' );
 		if ( ! $nova_order || ! $deposit_chosen ) {
 			return $order_status;
@@ -850,8 +862,8 @@ class Deposit {
 	}
 
 	public function order_status_completed( $order_id ) {
-		$order          = wc_get_order( $order_id );
-		$needs_payment  = $order->get_meta( 'needs_payment' );
+		$order = wc_get_order( $order_id );
+		$needs_payment = $order->get_meta( 'needs_payment' );
 		$second_payment = $order->get_meta( 'second_payment' );
 		if ( $needs_payment && $second_payment ) {
 			delete_post_meta( $order_id, 'needs_payment' );
@@ -859,16 +871,17 @@ class Deposit {
 
 		$original_order_ids = $order->get_meta( '_original_order_ids' );
 
-		// if ( $original_order_ids && is_array( $original_order_ids ) ) {
-		// foreach ( $original_order_ids as $original_order_id ) {
-		// $original_order = wc_get_order( $original_order_id );
-		// if ( $original_order ) {
-		// $original_order->set_status( 'completed' );
-		// $original_order->add_order_note( sprintf( __( 'Order completed via combined order #%s', 'nova-b2b' ), $order->get_order_number() ) );
-		// $original_order->save();
-		// }
-		// }
-		// }
+		if ( $original_order_ids && is_array( $original_order_ids ) ) {
+			foreach ( $original_order_ids as $original_order_id ) {
+				$original_order = wc_get_order( $original_order_id );
+				if ( $original_order ) {
+					$original_order->update_meta_data( '_completed_by_combined', true );
+					$original_order->set_status( 'completed' );
+					$original_order->add_order_note( sprintf( __( 'Order completed via combined order #%s', 'nova-b2b' ), $order->get_order_number() ) );
+					$original_order->save();
+				}
+			}
+		}
 	}
 
 	public function thank_you_actions( $order_id ) {
@@ -903,8 +916,8 @@ class Deposit {
 
 		if ( $order->get_status() === 'pending' ) {
 			$actions['pay'] = array(
-				'name'  => __( 'Pay', 'woocommerce' ),
-				'url'   => $order->get_checkout_payment_url(),
+				'name' => __( 'Pay', 'woocommerce' ),
+				'url' => $order->get_checkout_payment_url(),
 				'class' => 'button',
 			);
 		}
@@ -926,10 +939,10 @@ class Deposit {
 
 		foreach ( $results as $result ) {
 
-			$order_id  = $result->order_id;
-			$order     = wc_get_order( $order_id );
+			$order_id = $result->order_id;
+			$order = wc_get_order( $order_id );
 			$time_diff = '';
-			$due_date  = '';
+			$due_date = '';
 
 			if ( ! $order ) {
 				continue;
@@ -954,9 +967,9 @@ class Deposit {
 
 			// ** due date is $shipped_date + $days */
 			if ( $shipped_date ) {
-				$due_date  = date( 'Y-m-d', strtotime( '+' . $days . ' days', strtotime( $shipped_date ) ) );
+				$due_date = date( 'Y-m-d', strtotime( '+' . $days . ' days', strtotime( $shipped_date ) ) );
 				$time_diff = human_time_diff( current_time( 'timestamp' ), strtotime( $due_date ) );
-				$ago       = strtotime( $due_date ) < current_time( 'timestamp' );
+				$ago = strtotime( $due_date ) < current_time( 'timestamp' );
 			}
 
 			$manual_delivered_date = get_field( 'manual_delivered_date', $order->get_id() );
@@ -976,15 +989,15 @@ class Deposit {
 				while ( have_rows( 'payment_emails', $deposit_chosen ) ) {
 					the_row( 'payment_emails', $deposit_chosen );
 
-					$row_index  = get_row_index();
-					$key        = 'nova_payment_email_key_' . $row_index;
+					$row_index = get_row_index();
+					$key = 'nova_payment_email_key_' . $row_index;
 					$email_sent = get_post_meta( $order_id, $key, true );
 
 					$emails[] = array(
 						'email_label' => get_sub_field( 'email_label' ),
-						'email_key'   => $key,
-						'order_id'    => $order_id,
-						'email_sent'  => $email_sent,
+						'email_key' => $key,
+						'order_id' => $order_id,
+						'email_sent' => $email_sent,
 					);
 				}
 			}
@@ -992,24 +1005,24 @@ class Deposit {
 			$total = $order->get_total();
 
 			$pending_payments[] = array(
-				'order_id'          => $result->order_id,
-				'ago'               => $shipped_date ? $ago : '',
-				'order_number'      => '#' . $order->get_order_number(),
-				'deposit_chosen'    => $order->get_meta( '_deposit_chosen_title' ),
-				'deposit_amount'    => wc_price( $order->get_meta( '_deposit_amount' ), array( 'currency' => $order->get_currency() ) ),
-				'total'             => $total,
-				'total_amount'      => wc_price( $total, array( 'currency' => $order->get_currency() ) ),
-				'payment_date'      => $payment_date,
-				'customer_name'     => $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(),
-				'order_status'      => wc_get_order_status_name( $order->get_status() ),
-				'delivered_date'    => $delivered_date,
-				'order_admin_url'   => admin_url( 'post.php?post=' . $order_id . '&action=edit' ),
-				'order_actions'     => $this->order_actions( $order ),
+				'order_id' => $result->order_id,
+				'ago' => $shipped_date ? $ago : '',
+				'order_number' => '#' . $order->get_order_number(),
+				'deposit_chosen' => $order->get_meta( '_deposit_chosen_title' ),
+				'deposit_amount' => wc_price( $order->get_meta( '_deposit_amount' ), array( 'currency' => $order->get_currency() ) ),
+				'total' => $total,
+				'total_amount' => wc_price( $total, array( 'currency' => $order->get_currency() ) ),
+				'payment_date' => $payment_date,
+				'customer_name' => $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(),
+				'order_status' => wc_get_order_status_name( $order->get_status() ),
+				'delivered_date' => $delivered_date,
+				'order_admin_url' => admin_url( 'post.php?post=' . $order_id . '&action=edit' ),
+				'order_actions' => $this->order_actions( $order ),
 				'deposit_chosen_id' => $order->get_meta( '_deposit_chosen' ),
-				'due_date'          => $shipped_date ? $due_date : '',
-				'shipped_date'      => $shipped_date,
-				'time_diff'         => $shipped_date ? $time_diff : '',
-				'emails'            => $emails,
+				'due_date' => $shipped_date ? $due_date : '',
+				'shipped_date' => $shipped_date,
+				'time_diff' => $shipped_date ? $time_diff : '',
+				'emails' => $emails,
 			);
 
 		}
@@ -1031,8 +1044,8 @@ class Deposit {
 				'nova-deposits',
 				'NovaDeposits',
 				array(
-					'ajax_url'         => admin_url( 'admin-ajax.php' ),
-					'nonce'            => wp_create_nonce( 'nonce' ),
+					'ajax_url' => admin_url( 'admin-ajax.php' ),
+					'nonce' => wp_create_nonce( 'nonce' ),
 					'pending_payments' => $this->get_pending_payments(),
 				)
 			);
@@ -1045,7 +1058,7 @@ class Deposit {
 	 */
 	public function create_payment_table() {
 		global $wpdb;
-		$table_name      = $wpdb->prefix . 'order_payments';
+		$table_name = $wpdb->prefix . 'order_payments';
 		$charset_collate = $wpdb->get_charset_collate();
 
 		$sql = "CREATE TABLE $table_name (
@@ -1077,9 +1090,9 @@ class Deposit {
 	}
 
 	public function early_payment_email( $order ) {
-		$first_name               = $order->get_billing_first_name();
-		$customer_email           = $order->get_billing_email();
-		$user_id                  = $order->get_user_id() ? $order->get_user_id() : 0;
+		$first_name = $order->get_billing_first_name();
+		$customer_email = $order->get_billing_email();
+		$user_id = $order->get_user_id() ? $order->get_user_id() : 0;
 		$additional_billing_email = get_user_meta( $user_id, 'additional_billing_email', true );
 		if ( $additional_billing_email ) {
 			$customer_email = $additional_billing_email;
@@ -1091,9 +1104,9 @@ class Deposit {
 		ob_start();
 		do_action( 'woocommerce_email_order_details', $order, false, false, '' );
 		$order_details = ob_get_clean();
-		$content       = str_replace( '{order_details}', $order_details, $content );
+		$content = str_replace( '{order_details}', $order_details, $content );
 
-		$headers     = array( 'Content-Type: text/html; charset=UTF-8' );
+		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 		$attachments = array();
 		if ( class_exists( '\WPO\WC\PDF_Invoices\Main' ) ) {
 			$attachments = \WPO\WC\PDF_Invoices\Main::instance()->attach_document_to_email( array(), 'customer_invoice', $order, null );
@@ -1108,7 +1121,7 @@ class Deposit {
 	}
 
 	public function second_payment_meta( $result, $order_id ) {
-		$order          = wc_get_order( $order_id );
+		$order = wc_get_order( $order_id );
 		$second_payment = $order->get_meta( 'second_payment' );
 
 		if ( $order->get_meta( '_deposit_chosen' ) ) {
@@ -1179,11 +1192,11 @@ class Deposit {
 		$inserted = $wpdb->insert(
 			$table_name,
 			array(
-				'order_id'      => $order_id,
-				'amount'        => $order->get_total(),
-				'payment_date'  => current_time( 'mysql' ),
+				'order_id' => $order_id,
+				'amount' => $order->get_total(),
+				'payment_date' => current_time( 'mysql' ),
 				'needs_payment' => 1,
-				'customer_id'   => $order->get_customer_id(),
+				'customer_id' => $order->get_customer_id(),
 			),
 			array( '%d', '%f', '%s', '%d', '%d' )
 		);
@@ -1222,7 +1235,7 @@ class Deposit {
 
 		if ( $payments ) {
 			$total = $order->get_total();
-			$paid  = 0.00;
+			$paid = 0.00;
 
 			foreach ( $payments as $payment ) {
 				$paid += $payment->amount;
@@ -1280,7 +1293,7 @@ class Deposit {
 			WC()->session->set( 'pending_amount', 0 );
 			return $total;
 		}
-		$deposit   = get_field( 'deposit', $payment_select ) / 100;
+		$deposit = get_field( 'deposit', $payment_select ) / 100;
 		$new_total = $total * $deposit;
 		WC()->session->set( 'deposit_amount', $new_total );
 		WC()->session->set( 'pending_amount', $total - $new_total );
@@ -1324,13 +1337,13 @@ class Deposit {
 		$deposit_title = get_post_meta( $order->get_id(), '_deposit_chosen_title', true );
 		if ( $deposit_title ) {
 			$deposit_amount = get_post_meta( $order->get_id(), '_deposit_amount', true );
-			$new_rows       = array();
+			$new_rows = array();
 
 			foreach ( $total_rows as $key => $total ) {
 				// Insert the deposit details before the order total
 				if ( 'order_total' === $key ) {
 					// Add deposit title and amount rows
-					$new_rows['deposit_title']  = array(
+					$new_rows['deposit_title'] = array(
 						'label' => __( 'Payment Type:', 'nova-b2b' ),
 						'value' => $deposit_title,
 					);
@@ -1353,9 +1366,9 @@ class Deposit {
 	public function pending_page_after_content() {
 		?>
 <div class="wrap">
-	<div id="depositTable"></div>
+  <div id="depositTable"></div>
 </div>
-		<?php
+<?php
 	}
 
 	public function output_deposit_selection() {
@@ -1374,34 +1387,34 @@ class Deposit {
 		$chosen = empty( $chosen ) ? '0' : $chosen;
 		?>
 <fieldset>
-	<legend class="px-4 uppercase"><span><?php esc_html_e( 'Payment Type', 'woocommerce' ); ?></span></legend>
-	<div class="grid md:grid-cols-3 gap-4 update_totals_on_change">
-		<div class="cursor-pointer h-full">
-			<label for="payment_0"
-				class="block h-full justify-end p-3 border rounded-md w-full max-w-sm cursor-pointer hover:border-slate-500 hover:bg-slate-200 hover:shadow-lg">
-				<input class="bg-none" id="payment_0" type="radio" name="deposit_chosen" value="0"
-					<?php echo ( '0' == $chosen ? 'checked' : '' ); ?>>
-				<span>Full</span>
-				<span class="text-sm font-body block mt-2 hidden">Description</span>
-			</label>
-		</div>
-		<?php
-		foreach ( $payments_selection as $key => $selection ) {
-			?>
-		<div class="cursor-pointer h-full">
-			<label for="payment_<?php echo $selection['id']; ?>"
-				class="block h-full justify-end p-3 border rounded-md w-full max-w-sm cursor-pointer hover:border-slate-500 hover:bg-slate-200 hover:shadow-lg">
-				<input class="bg-none" id="payment_<?php echo $selection['id']; ?>" type="radio" name="deposit_chosen"
-					value="<?php echo $selection['id']; ?>" id="payment_<?php echo $selection['id']; ?>"
-					<?php echo ( $selection['id'] == $chosen ? 'checked' : '' ); ?>>
-				<span><?php echo $selection['title']; ?></span>
-				<span class="text-sm font-body block mt-2"><?php echo $selection['description']; ?></span>
-			</label>
-		</div>
-		<?php } ?>
-	</div>
+  <legend class="px-4 uppercase"><span><?php esc_html_e( 'Payment Type', 'woocommerce' ); ?></span></legend>
+  <div class="grid md:grid-cols-3 gap-4 update_totals_on_change">
+    <div class="cursor-pointer h-full">
+      <label for="payment_0"
+        class="block h-full justify-end p-3 border rounded-md w-full max-w-sm cursor-pointer hover:border-slate-500 hover:bg-slate-200 hover:shadow-lg">
+        <input class="bg-none" id="payment_0" type="radio" name="deposit_chosen" value="0"
+          <?php echo ( '0' == $chosen ? 'checked' : '' ); ?>>
+        <span>Full</span>
+        <span class="text-sm font-body block mt-2 hidden">Description</span>
+      </label>
+    </div>
+    <?php
+				foreach ( $payments_selection as $key => $selection ) {
+					?>
+    <div class="cursor-pointer h-full">
+      <label for="payment_<?php echo $selection['id']; ?>"
+        class="block h-full justify-end p-3 border rounded-md w-full max-w-sm cursor-pointer hover:border-slate-500 hover:bg-slate-200 hover:shadow-lg">
+        <input class="bg-none" id="payment_<?php echo $selection['id']; ?>" type="radio" name="deposit_chosen"
+          value="<?php echo $selection['id']; ?>" id="payment_<?php echo $selection['id']; ?>"
+          <?php echo ( $selection['id'] == $chosen ? 'checked' : '' ); ?>>
+        <span><?php echo $selection['title']; ?></span>
+        <span class="text-sm font-body block mt-2"><?php echo $selection['description']; ?></span>
+      </label>
+    </div>
+    <?php } ?>
+  </div>
 </fieldset>
 
-		<?php
+<?php
 	}
 }

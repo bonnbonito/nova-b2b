@@ -90,7 +90,10 @@ class Order_History {
 	}
 
 	public function disable_completed_email_for_combined_order( $enabled, $order ) {
-		if ( $order && $order->get_meta( '_is_temporary_combined_order' ) ) {
+		if ( $order->get_meta( '_is_temporary_combined_order' ) ) {
+			return false;
+		}
+		if ( $order->get_meta( '_completed_by_combined' ) ) {
 			return false;
 		}
 		return $enabled;
@@ -364,10 +367,10 @@ class Order_History {
 
 	public function account_statement_content() {
 		?>
-		<div id="nova">
-			<div id="hello"></div>
-		</div>
-		<?php
+<div id="nova">
+  <div id="hello"></div>
+</div>
+<?php
 	}
 
 	public function get_orders() {
@@ -710,7 +713,6 @@ class Order_History {
 					if ( $current_time > $deadline ) {
 						if ( ! $order->has_status( array( 'completed', 'on-hold', 'trash' ) ) ) {
 							$is_overdue = true;
-
 						}
 					}
 				}
