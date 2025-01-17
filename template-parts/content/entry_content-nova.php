@@ -14,7 +14,7 @@ global $post;
 	<?php
 	do_action( 'kadence_single_before_entry_content' );
 
-	if ( $post->post_parent ) {
+	if ( $post->post_parent || get_post_field( 'post_name', $post->ID ) === 'custom-sculpture' ) {
 
 		$template = get_query_var( 'pagetab' );
 
@@ -36,7 +36,7 @@ global $post;
 				the_content(
 					sprintf(
 						wp_kses(
-						/* translators: %s: Name of current post. Only visible to screen readers */
+							/* translators: %s: Name of current post. Only visible to screen readers */
 							__( 'Continue reading<span class="screen-reader-text"> "%s"</span>', 'kadence' ),
 							array(
 								'span' => array(
@@ -76,7 +76,7 @@ global $post;
 	wp_link_pages(
 		array(
 			'before' => '<div class="page-links">' . esc_html__( 'Pages:', 'kadence' ),
-			'after'  => '</div>',
+			'after' => '</div>',
 		)
 	);
 	do_action( 'kadence_single_after_entry_content' );

@@ -62,38 +62,38 @@ class Nova_Product {
 	public function nova_product_installation() {
 		if ( have_rows( 'installations' ) ) :
 			?>
-<div class="product-nav-content-item" data-nav="installation">
-	<h2 class="mb-10 uppercase">Installation</h2>
+			<div class="product-nav-content-item" data-nav="installation">
+				<h2 class="mb-10 uppercase">Installation</h2>
 
-	<div class="md:grid md:grid-cols-2 gap-x-10 gap-y-6">
-			<?php
-			while ( have_rows( 'installations' ) ) :
-				the_row();
-				?>
-		<div class="installation-item grid md:grid-cols-[280px_1fr] md:mb-0 mb-5 gap-4">
-			<div>
-				<?php
-				$image = get_sub_field( 'image' );
-				if ( ! empty( $image ) ) :
-					?>
-				<a href="<?php echo esc_url( $image['url'] ); ?>"><img class="w-full"
-						src="<?php echo esc_url( $image['url'] ); ?>"
-						alt="<?php echo esc_attr( $image['alt'] ); ?>" /></a>
-				<?php endif; ?>
+				<div class="md:grid md:grid-cols-2 gap-x-10 gap-y-6">
+					<?php
+					while ( have_rows( 'installations' ) ) :
+						the_row();
+						?>
+						<div class="installation-item grid md:grid-cols-[280px_1fr] md:mb-0 mb-5 gap-4">
+							<div>
+								<?php
+								$image = get_sub_field( 'image' );
+								if ( ! empty( $image ) ) :
+									?>
+									<a href="<?php echo esc_url( $image['url'] ); ?>"><img class="w-full"
+											src="<?php echo esc_url( $image['url'] ); ?>" alt="<?php echo esc_attr( $image['alt'] ); ?>" /></a>
+								<?php endif; ?>
+							</div>
+							<div class="px-0">
+								<h6 class="uppercase tracking-[1.6px]"><?php echo get_sub_field( 'title' ); ?></h6>
+								<div class="md:text-[14px] leading-loose tracking-[1.4px]">
+									<?php echo get_sub_field( 'content' ); ?>
+								</div>
+							</div>
+						</div>
+					<?php endwhile; ?>
+				</div>
+
+
 			</div>
-			<div class="px-0">
-				<h6 class="uppercase tracking-[1.6px]"><?php echo get_sub_field( 'title' ); ?></h6>
-				<div class="md:text-[14px] leading-loose tracking-[1.4px]">
-					<?php echo get_sub_field( 'content' ); ?></div>
-			</div>
-		</div>
-		<?php endwhile; ?>
-	</div>
-
-
-</div>
 			<?php
-	endif;
+		endif;
 	}
 
 	public function get_parent_or_current_id() {
@@ -113,104 +113,116 @@ class Nova_Product {
 	public function signage_nav_tabs() {
 		global $post;
 
-		$id = get_the_ID();
-
-		if ( $post->post_type !== 'signage' ) {
+		if ( ! $this->should_display_nav_tabs( $post ) ) {
 			return;
 		}
-		if ( $post->post_parent > 0 ) {
 
-			$tab = get_query_var( 'pagetab' );
+		$tab = get_query_var( 'pagetab' );
+		$tab_title = $this->get_tab_title( $tab );
+		$permalink = untrailingslashit( get_permalink() );
 
-			switch ( $tab ) {
-				case 'tech-specs':
-					$tab_title = 'Tech Specs';
-					break;
-				case 'overview':
-					$tab_title = 'Overview';
-					break;
-				case 'installation':
-					$tab_title = 'Installation';
-					break;
-				case 'faqs':
-					$tab_title = 'FAQS';
-					break;
-				default:
-					$tab_title = 'Instant Quote';
-			}
+		$nav_items = $this->get_nav_items( $permalink, $tab );
 
-			?>
-<div class="product-nav-tabs not-tab">
-	<div id="productNovaNav" class="product-nav-tabs-left">
-		<h6><a class="button <?php echo ( $tab === 'overview' ? 'active' : '' ); ?>"
-				href="<?php echo untrailingslashit( get_permalink() ); ?>/overview">Overview</a></h6>
-		<h6><a class="button <?php echo ( $tab === 'tech-specs' ? 'active' : '' ); ?>"
-				href="<?php echo untrailingslashit( get_permalink() ); ?>/tech-specs">Tech Specs</a></h6>
-		<h6><a class="button <?php echo ( $tab === 'installation' ? 'active' : '' ); ?>"
-				href="<?php echo untrailingslashit( get_permalink() ); ?>/installation">Installation</a></h6>
-			<?php if ( get_field( 'faq_questions' ) ) { ?>
-		<h6><a class="button <?php echo ( $tab === 'faqs' ? 'active' : '' ); ?>"
-				href="<?php echo untrailingslashit( get_permalink() ); ?>/faqs">FAQS</a></h6>
-		<?php } ?>
-		<!-- <h6><a class="button active" href="#">Sample Board</a></h6> -->
-	</div>
+		$this->render_nav_tabs( $nav_items, $tab, $tab_title, $permalink );
+	}
 
-	<div id="productNavMobile" class="product-nav-tabs-mobile">
+	private function should_display_nav_tabs( $post ) {
+		return $post->post_type === 'signage' &&
+			( $post->post_parent > 0 || get_post_field( 'post_name', $post->ID ) === 'custom-sculpture' );
+	}
 
-		<h6 id="current" data-click="toggleMobileNav"><span id="text"><?php echo $tab_title; ?></span> <svg
-				xmlns="http://www.w3.org/2000/svg" width="13" height="7" viewBox="0 0 13 7" fill="none">
-				<path d="M11 2L6.66667 6L2 2" stroke="black" stroke-width="1.5" stroke-linecap="square"
-					stroke-linejoin="round" />
-			</svg>
-		</h6>
+	private function get_tab_title( $tab ) {
+		$titles = [ 
+			'tech-specs' => 'Tech Specs',
+			'overview' => 'Overview',
+			'installation' => 'Installation',
+			'faqs' => 'FAQS',
+		];
 
-		<div id="innerMobileNav" class="mt-1 hidden">
-			<a class="text-button block overflow-hidden"
-				href="<?php echo untrailingslashit( get_permalink() ); ?>/overview">
-				<h6 class="py-1">- Overview</h6>
+		return $titles[ $tab ] ?? 'Instant Quote';
+	}
+
+	private function get_nav_items( $permalink, $current_tab ) {
+		$items = [ 
+			[ 'slug' => 'overview', 'label' => 'Overview' ],
+			[ 'slug' => 'tech-specs', 'label' => 'Tech Specs' ],
+			[ 'slug' => 'installation', 'label' => 'Installation' ],
+		];
+
+		if ( get_field( 'faq_questions' ) ) {
+			$items[] = [ 'slug' => 'faqs', 'label' => 'FAQS' ];
+		}
+
+		return array_map( function ($item) use ($permalink, $current_tab) {
+			return [ 
+				'url' => "{$permalink}/{$item['slug']}",
+				'label' => $item['label'],
+				'active' => $current_tab === $item['slug']
+			];
+		}, $items );
+	}
+
+	private function render_nav_tabs( $nav_items, $tab, $tab_title, $permalink ) {
+		?>
+		<div class="product-nav-tabs not-tab">
+			<div id="productNovaNav" class="product-nav-tabs-left">
+				<?php foreach ( $nav_items as $item ) : ?>
+					<h6>
+						<a class="button <?php echo $item['active'] ? 'active' : ''; ?>" href="<?php echo esc_url( $item['url'] ); ?>">
+							<?php echo esc_html( $item['label'] ); ?>
+						</a>
+					</h6>
+				<?php endforeach; ?>
+			</div>
+
+			<?php $this->render_mobile_nav( $nav_items, $tab_title ); ?>
+
+			<a href="<?php echo esc_url( $permalink ); ?>" class="button <?php echo ! $tab ? 'active' : ''; ?>">
+				Instant Quote
 			</a>
-
-			<a class="text-button block overflow-hidden"
-				href="<?php echo untrailingslashit( get_permalink() ); ?>/tech-specs">
-				<h6 class="py-1 ">- Tech Specs</h6>
-			</a>
-
-			<a class="text-button block overflow-hidden"
-				href="<?php echo untrailingslashit( get_permalink() ); ?>/installation">
-				<h6 class="py-1">- Installation</h6>
-			</a>
-
-			<a class="text-button block overflow-hidden"
-				href="<?php echo untrailingslashit( get_permalink() ); ?>/faqs">
-				<h6 class="py-1">- FAQS</h6>
-			</a>
-			<h6 data-menu="sample" style="display: none;">- Sample Board</a></h6>
 		</div>
 
+		<?php $this->render_mobile_nav_script(); ?>
+	<?php
+	}
 
-	</div>
+	private function render_mobile_nav( $nav_items, $tab_title ) {
+		?>
+		<div id="productNavMobile" class="product-nav-tabs-mobile">
+			<h6 id="current" data-click="toggleMobileNav">
+				<span id="text"><?php echo esc_html( $tab_title ); ?></span>
+				<svg xmlns="http://www.w3.org/2000/svg" width="13" height="7" viewBox="0 0 13 7" fill="none">
+					<path d="M11 2L6.66667 6L2 2" stroke="black" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="round" />
+				</svg>
+			</h6>
 
-	<a href="<?php echo untrailingslashit( get_permalink() ); ?>"
-		class="button <?php echo ( ! $tab ? 'active' : '' ); ?>">Instant Quote</a>
-</div>
+			<div id="innerMobileNav" class="mt-1 hidden">
+				<?php foreach ( $nav_items as $item ) : ?>
+					<a class="text-button block overflow-hidden" href="<?php echo esc_url( $item['url'] ); ?>">
+						<h6 class="py-1">- <?php echo esc_html( $item['label'] ); ?></h6>
+					</a>
+				<?php endforeach; ?>
+			</div>
+		</div>
+		<?php
+	}
 
-<script>
-document.addEventListener("DOMContentLoaded", (event) => {
-	const productNavMobile = document.getElementById('productNavMobile');
-	const toggleMobileNav = document.querySelector('h6[data-click="toggleMobileNav"]');
-	const innerMobileNav = document.getElementById('innerMobileNav');
-	toggleMobileNav.addEventListener('click', e => {
-		e.preventDefault();
-		if (innerMobileNav) {
-			innerMobileNav.classList.toggle('hidden');
-		}
+	private function render_mobile_nav_script() {
+		?>
+		<script>
+			document.addEventListener("DOMContentLoaded", (event) =>
+			{
+				const toggleMobileNav = document.querySelector('h6[data-click="toggleMobileNav"]');
+				const innerMobileNav = document.getElementById('innerMobileNav');
 
-	});
-});
-</script>
-
-			<?php
-		}
+				toggleMobileNav?.addEventListener('click', e =>
+				{
+					e.preventDefault();
+					innerMobileNav?.classList.toggle('hidden');
+				});
+			});
+		</script>
+		<?php
 	}
 
 	public function modify_acrylic_post_title( $title, $post_id ) {
@@ -227,8 +239,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
 	}
 
 	public function change_all_count( $views ) {
-		$allcount     = $this->get_all_products_count();
-		$class        = ( isset( $_REQUEST['all_posts'] ) && $_REQUEST['all_posts'] === '1' ) ? 'current' : '';
+		$allcount = $this->get_all_products_count();
+		$class = ( isset( $_REQUEST['all_posts'] ) && $_REQUEST['all_posts'] === '1' ) ? 'current' : '';
 		$views['all'] = "<a href='edit.php?post_type=product&all_posts=1' class='{$class}'>All ({$allcount})</a>";
 
 		return $views;
@@ -236,13 +248,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 	public function get_all_products_count() {
 
-		$args     = array(
-			'post_type'      => 'product',
-			'tax_query'      => array(
+		$args = array(
+			'post_type' => 'product',
+			'tax_query' => array(
 				array(
 					'taxonomy' => 'product_type',
-					'field'    => 'slug',
-					'terms'    => array( 'nova_quote' ),
+					'field' => 'slug',
+					'terms' => array( 'nova_quote' ),
 					'operator' => 'NOT IN',
 				),
 			),
@@ -257,11 +269,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
 		global $typenow;
 
 		if ( is_admin() && $typenow === 'product' && isset( $_GET['product_type'] ) && $_GET['product_type'] === 'nova_quote' ) {
-			$tax_query   = $query->get( 'tax_query' ) ?: array();
+			$tax_query = $query->get( 'tax_query' ) ?: array();
 			$tax_query[] = array(
 				'taxonomy' => 'product_type',
-				'field'    => 'slug',
-				'terms'    => array( 'nova_quote' ),
+				'field' => 'slug',
+				'terms' => array( 'nova_quote' ),
 				'operator' => 'IN',
 			);
 			$query->set( 'tax_query', $tax_query );
@@ -282,14 +294,14 @@ document.addEventListener("DOMContentLoaded", (event) => {
 	}
 
 	public function get_nova_quote_products_count() {
-		$args     = array(
-			'post_type'      => 'product',
-			'post_status'    => 'publish',
-			'tax_query'      => array(
+		$args = array(
+			'post_type' => 'product',
+			'post_status' => 'publish',
+			'tax_query' => array(
 				array(
 					'taxonomy' => 'product_type', // Replace with the correct taxonomy, if different
-					'field'    => 'slug',
-					'terms'    => 'nova_quote',   // The slug of the custom product type
+					'field' => 'slug',
+					'terms' => 'nova_quote',   // The slug of the custom product type
 				),
 			),
 			'posts_per_page' => -1,
@@ -302,15 +314,15 @@ document.addEventListener("DOMContentLoaded", (event) => {
 	public function redirect_singular_post_types() {
 		if ( is_singular( 'payment_type' ) || is_singular( 'custom_project' ) ) {
 			/*
-			global $post;
-			$product = wc_get_product( $post->ID );
+				 global $post;
+				 $product = wc_get_product( $post->ID );
 
-			if ( $product && $product->is_type( 'nova_quote' ) ) {
-				wp_redirect( home_url() );
-				exit;
-			}*/
+				 if ( $product && $product->is_type( 'nova_quote' ) ) {
+					 wp_redirect( home_url() );
+					 exit;
+				 }*/
 			wp_redirect( home_url() );
-				exit;
+			exit;
 		}
 	}
 
@@ -359,11 +371,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 	public function exclude_nova_quote_from_shop( $query ) {
 		if ( ( $query->is_main_query() && ! isset( $_GET['product_type'] ) ) && ( is_shop() || is_product_category() || is_product_tag() ) ) {
-			$tax_query   = $query->get( 'tax_query' ) ?: array();
+			$tax_query = $query->get( 'tax_query' ) ?: array();
 			$tax_query[] = array(
 				'taxonomy' => 'product_type',
-				'field'    => 'slug',
-				'terms'    => array( 'nova_quote' ),
+				'field' => 'slug',
+				'terms' => array( 'nova_quote' ),
 				'operator' => 'NOT IN',
 			);
 			$query->set( 'tax_query', $tax_query );
@@ -372,11 +384,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 	public function exclude_nova_quote_from_search( $query ) {
 		if ( is_search() && $query->is_main_query() ) {
-			$tax_query   = $query->get( 'tax_query' ) ?: array();
+			$tax_query = $query->get( 'tax_query' ) ?: array();
 			$tax_query[] = array(
 				'taxonomy' => 'product_type',
-				'field'    => 'slug',
-				'terms'    => array( 'nova_quote' ),
+				'field' => 'slug',
+				'terms' => array( 'nova_quote' ),
 				'operator' => 'NOT IN',
 			);
 			$query->set( 'tax_query', $tax_query );
@@ -386,7 +398,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 	public function exclude_nova_quote_from_related_products( $related_posts, $product_id, $args ) {
 		return array_filter(
 			$related_posts,
-			function ( $related_post_id ) {
+			function ($related_post_id) {
 				$product = wc_get_product( $related_post_id );
 				return 'nova_quote' !== $product->get_type();
 			}
