@@ -5022,6 +5022,9 @@ function OrderActions({
   })))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_DropdownMenu__WEBPACK_IMPORTED_MODULE_2__.DropdownMenuContent, {
     className: "bg-white"
   }, Object.entries(order.actions).map(([actionKey, actionValue]) => {
+    if (actionValue.name.toLowerCase() === 'cancel') {
+      return null;
+    }
     let content, title;
     switch (actionValue.name.toLowerCase()) {
       case 'invoice':

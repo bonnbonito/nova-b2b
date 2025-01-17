@@ -48,8 +48,11 @@ export default function OrderActions({ order }) {
 			</DropdownMenuTrigger>
 			<DropdownMenuContent className="bg-white">
 				{Object.entries(order.actions).map(([actionKey, actionValue]) => {
-					let content, title;
+					if (actionValue.name.toLowerCase() === 'cancel') {
+						return null;
+					}
 
+					let content, title;
 					switch (actionValue.name.toLowerCase()) {
 						case 'invoice':
 							content = (
