@@ -92,6 +92,7 @@ export default function PendingOrderTable({
 									type="checkbox"
 									onChange={handleSelectAll}
 									checked={isAllSelected}
+									className="border-2 border-black"
 								/>
 							</th>
 							<th className="font-medium p-4 pt-0 pb-3 text-black text-left font-title uppercase">

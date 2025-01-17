@@ -5584,7 +5584,8 @@ function PendingOrderTable({
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     type: "checkbox",
     onChange: handleSelectAll,
-    checked: isAllSelected
+    checked: isAllSelected,
+    className: "border-2 border-black"
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
     className: "font-medium p-4 pt-0 pb-3 text-black text-left font-title uppercase"
   }, "Order"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
