@@ -3266,7 +3266,7 @@ const Prices = (0,react__WEBPACK_IMPORTED_MODULE_0__.memo)(function Prices({
   const currency = wcumcs_vars_data.currency;
   const price = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => currency === 'USD' ? item.usdPrice : item.cadPrice, [currency, item]);
   const singlePrice = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => currency === 'USD' ? item.usdSinglePrice : item.cadSinglePrice, [currency, item]);
-  const outputPrice = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => price > 0 ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, currency, "$", Number(singlePrice !== null && singlePrice !== void 0 ? singlePrice : price).toFixed(2).toLocaleString(), singlePrice && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+  const outputPrice = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => price > 0 ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, currency, "$", Number(singlePrice !== null && singlePrice !== void 0 ? singlePrice : price).toFixed(2).toLocaleString(), singlePrice && !item.isLayered && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "text-xs lowercase"
   }, "/each")) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, "TBD"), [price, singlePrice, currency]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {

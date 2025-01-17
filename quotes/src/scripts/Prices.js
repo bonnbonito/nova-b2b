@@ -21,7 +21,9 @@ const Prices = memo(function Prices({ item, borderTop }) {
 					{Number(singlePrice ?? price)
 						.toFixed(2)
 						.toLocaleString()}
-					{singlePrice && <span className="text-xs lowercase">/each</span>}
+					{singlePrice && !item.isLayered && (
+						<span className="text-xs lowercase">/each</span>
+					)}
 				</span>
 			) : (
 				<span>TBD</span>
