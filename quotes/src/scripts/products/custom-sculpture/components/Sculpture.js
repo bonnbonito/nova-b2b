@@ -1,6 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useAppContext } from '../../../AppProvider';
 import UploadFiles from '../../../UploadFiles';
+import Dropdown from '../../../Dropdown';
+import TextInput from '../../../TextInput';
+
+import { INDOOR_NOT_WATERPROOF } from '../../../utils/defaults';
+
+import DatePickerNova from '../../../DatePickerNova';
 
 export function Sculpture({ item }) {
 	const { signage, setSignage, setMissing, hasUploadedFile } = useAppContext();
@@ -8,6 +14,57 @@ export function Sculpture({ item }) {
 	const [fileUrls, setFileUrls] = useState(item.fileUrls ?? []);
 	const [filePaths, setFilePaths] = useState(item.filePaths ?? []);
 	const [files, setFiles] = useState(item.files ?? []);
+
+	const [sculptureMaterial, setSculptureMaterial] = useState(
+		item.sculptureMaterial ?? ''
+	);
+
+	const [sculptureSize, setSculptureSize] = useState(item.sculptureSize ?? '');
+	const [sculptureLifeSpan, setSculptureLifeSpan] = useState(
+		item.sculptureLifeSpan ?? ''
+	);
+
+	const [purpose, setPurpose] = useState(item.purpose ?? '');
+	const [projectTimeline, setProjectTimeline] = useState(
+		item.projectTimeline ?? ''
+	);
+	const [dateNeeded, setDateNeeded] = useState(item.dateNeeded ?? '');
+
+	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
+	const [sets, setSets] = useState(item.sets ?? 1);
+
+	const setOptions = Array.from(
+		{
+			length: 100,
+		},
+		(_, index) => {
+			const val = 1 + index;
+			return (
+				<option key={index} value={val}>
+					{val}
+				</option>
+			);
+		}
+	);
+
+	const waterProofOptions = [
+		{
+			option: INDOOR_NOT_WATERPROOF,
+		},
+		{
+			option: 'Outdoor',
+		},
+	];
+
+	const materialOptions = [
+		'We Recommend',
+		'Resin',
+		'Fiberglass Resin',
+		'Stainless Steel',
+		'Aluminum',
+		'Wood',
+		'Interactive Light',
+	];
 
 	const [description, setDescription] = useState(item.description ?? '');
 
@@ -22,7 +79,15 @@ export function Sculpture({ item }) {
 					fileNames,
 					filePaths,
 					fileUrls,
+					sculptureMaterial,
+					sculptureSize,
+					purpose,
+					projectTimeline,
 					description,
+					dateNeeded,
+					sculptureLifeSpan,
+					sets,
+					waterproof,
 				};
 			} else {
 				return sign;
@@ -33,6 +98,17 @@ export function Sculpture({ item }) {
 
 	const checkAndAddMissingFields = () => {
 		const missingFields = [];
+
+		if (!sculptureMaterial) missingFields.push('Select a material');
+		if (!sculptureSize) missingFields.push('Add the size');
+		if (!waterproof) missingFields.push('Select environment');
+		if (!sculptureLifeSpan) missingFields.push('Add the lifespan');
+		if (!purpose) missingFields.push('Add the purpose');
+		if (!dateNeeded) missingFields.push('Add the date needed');
+
+		if (!projectTimeline) missingFields.push('Add the project timeline');
+
+		if (!sets) missingFields.push('Select the quantity');
 
 		if (!description) missingFields.push('Add your description');
 
@@ -81,7 +157,23 @@ export function Sculpture({ item }) {
 	useEffect(() => {
 		updateSignage();
 		checkAndAddMissingFields();
-	}, [fileUrls, fileNames, files, filePaths, description, hasUploadedFile]);
+	}, [
+		fileUrls,
+		fileNames,
+		files,
+		filePaths,
+		description,
+		hasUploadedFile,
+		sculptureMaterial,
+		sculptureSize,
+		purpose,
+		projectTimeline,
+		description,
+		dateNeeded,
+		sculptureLifeSpan,
+		sets,
+		waterproof,
+	]);
 
 	return (
 		<>
@@ -94,6 +186,96 @@ export function Sculpture({ item }) {
 					/>
 				</div>
 			)}
+
+			<div className="quote-grid mb-6">
+				<Dropdown
+					title="Material Preference"
+					value={sculptureMaterial}
+					onChange={(e) => setSculptureMaterial(e.target.value)}
+					options={materialOptions.map((material) => (
+						<option
+							key={material}
+							value={material}
+							defaultValue={material === sculptureMaterial}
+						>
+							{material}
+						</option>
+					))}
+				/>
+
+				<TextInput
+					title="Size (HxWxD)"
+					value={sculptureSize}
+					onChange={(e) => setSculptureSize(e.target.value)}
+					placeholder="Input size"
+				/>
+
+				<Dropdown
+					title="Environment"
+					onChange={(e) => setWaterproof(e.target.value)}
+					options={waterProofOptions.map((option) => (
+						<option
+							key={option.option}
+							value={option.option}
+							defaultValue={option.option === waterproof}
+						>
+							{option.option}
+						</option>
+					))}
+					value={waterproof}
+				/>
+
+				<TextInput
+					title="Lifespan Expectation"
+					value={sculptureLifeSpan}
+					onChange={(e) => setSculptureLifeSpan(e.target.value)}
+					placeholder="years"
+				/>
+
+				<TextInput
+					title="Purpose"
+					value={purpose}
+					onChange={(e) => setPurpose(e.target.value)}
+					placeholder="Please specify where it will be used e.g., Retail, Trade Show"
+					className="col-span-4"
+				/>
+
+				<TextInput
+					title="Project Timeline"
+					value={projectTimeline}
+					onChange={(e) => setProjectTimeline(e.target.value)}
+					placeholder="Please provide the estimated timeline for the project (e.g., 2–4 months)"
+					className="col-span-4"
+				/>
+
+				<DatePickerNova
+					title="Date Needed"
+					selected={dateNeeded}
+					onChange={(date) => {
+						if (date) {
+							const formattedDate = date.toLocaleDateString('en-US', {
+								month: 'long',
+								day: 'numeric',
+								year: 'numeric',
+							});
+							setDateNeeded(formattedDate);
+						} else {
+							setDateNeeded('');
+						}
+					}}
+					minDate={new Date(Date.now() + 86400000)}
+					placeholderText="Month/Day/Year"
+				/>
+
+				<Dropdown
+					title="Quantity"
+					onChange={(e) => setSets(e.target.value)}
+					options={setOptions}
+					value={sets}
+					onlyValue={true}
+				/>
+			</div>
+
 			<div className="quote-grid">
 				<div className="px-[1px] col-span-4">
 					<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
@@ -105,6 +287,7 @@ export function Sculpture({ item }) {
 						value={description}
 					/>
 				</div>
+
 				<UploadFiles
 					itemId={item.id}
 					setFilePaths={setFilePaths}

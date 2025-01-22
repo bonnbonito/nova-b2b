@@ -1,45 +1,50 @@
 .signage-title {
-  font-size: 30px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: #2F2F2F;
+	font-size: 30px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: normal;
+	letter-spacing: 3px;
+	text-transform: uppercase;
+	color: #2f2f2f;
 }
 
 .signage-content {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 200ms;
+	display: grid;
+	grid-template-rows: 0fr;
+	transition: grid-template-rows 200ms;
 }
 
-
 .signage-content.open {
-  grid-template-rows: 1fr;
+	grid-template-rows: 1fr;
 }
 
 #novaQuoteNote p {
-  margin-bottom: 0.25rem;
+	margin-bottom: 0.25rem;
 }
 
 #novaQuoteNote {
-  margin-bottom: 40px;
+	margin-bottom: 40px;
 }
 
 .select {
-  border: 1px solid var(--global-gray-400);
-  background-size: 16px 100%;
-  padding: 0.2em 35px 0.2em 0.5em;
-  background: var(--global-palette9) url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNSIgaGVpZ2h0PSIyNSIgZmlsbD0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2U9IiNiYmIiPjxwYXRoIGQ9Ik02IDlsNiA2IDYtNiIvPjwvc3ZnPg==) no-repeat 98% 50%;
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  appearance: none;
-  box-shadow: none;
-  outline: 0;
-  box-shadow: 0px 0px 0px -7px rgba(0, 0, 0, 0)
+	border: 1px solid var(--global-gray-400);
+	background-size: 16px 100%;
+	padding: 0.2em 35px 0.2em 0.5em;
+	background: var(--global-palette9)
+		url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNSIgaGVpZ2h0PSIyNSIgZmlsbD0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2U9IiNiYmIiPjxwYXRoIGQ9Ik02IDlsNiA2IDYtNiIvPjwvc3ZnPg==)
+		no-repeat 98% 50%;
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	appearance: none;
+	box-shadow: none;
+	outline: 0;
+	box-shadow: 0px 0px 0px -7px rgba(0, 0, 0, 0);
 }
 
 h5 {
-  letter-spacing: 0.1em;
+	letter-spacing: 0.1em;
+}
+
+.react-datepicker__navigation:hover {
+	background-color: transparent;
 }

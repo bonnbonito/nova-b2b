@@ -90,8 +90,8 @@ class NovaEmails {
 
 	public function filter_woocommerce_email_recipient_new_order( $recipient, $order ) {
 		if ( $order instanceof \WC_Order ) {
-			$order_id       = $order->get_id();
-			$from_order_id  = get_post_meta( $order_id, '_from_order_id', true );
+			$order_id = $order->get_id();
+			$from_order_id = get_post_meta( $order_id, '_from_order_id', true );
 			$payment_select = get_post_meta( $order_id, '_payment_select', true );
 
 			// Check if the order has the _from_order_id meta
@@ -128,7 +128,7 @@ class NovaEmails {
 	}
 
 	public function fully_paid_payment_subject( $subject, $order ) {
-		$order_id       = $order->get_id();
+		$order_id = $order->get_id();
 		$payment_select = get_post_meta( $order_id, '_payment_select', true );
 
 		if ( ! $this->is_payment_order( $order_id ) ) {
@@ -137,8 +137,8 @@ class NovaEmails {
 
 		if ( $payment_select ) {
 			$payment_select = get_post_meta( $order_id, '_payment_select', true );
-			$paid_email     = get_field( 'paid_email', $payment_select );
-			$subject        = $paid_email['subject'] ? $paid_email['subject'] : $subject;
+			$paid_email = get_field( 'paid_email', $payment_select );
+			$subject = $paid_email['subject'] ? $paid_email['subject'] : $subject;
 
 			$subject = str_replace( '{order_number}', $order->get_order_number(), $subject );
 		}
@@ -147,7 +147,7 @@ class NovaEmails {
 	}
 
 	public function completed_payment_subject( $subject, $order ) {
-		$order_id       = $order->get_id();
+		$order_id = $order->get_id();
 		$payment_select = get_post_meta( $order_id, '_payment_select', true );
 
 		if ( ! $this->is_deposit_order( $order_id ) ) {
@@ -155,9 +155,9 @@ class NovaEmails {
 		}
 
 		if ( $payment_select ) {
-			$payment_select  = get_post_meta( $order_id, '_payment_select', true );
+			$payment_select = get_post_meta( $order_id, '_payment_select', true );
 			$completed_email = get_field( 'completed_email', $payment_select );
-			$subject         = $completed_email['subject'] ? $completed_email['subject'] : $subject;
+			$subject = $completed_email['subject'] ? $completed_email['subject'] : $subject;
 
 			$subject = str_replace( '{order_number}', $order->get_order_number(), $subject );
 		}
@@ -166,7 +166,7 @@ class NovaEmails {
 	}
 
 	public function pending_payment_email_subject( $subject, $order ) {
-		$order_id       = $order->get_id();
+		$order_id = $order->get_id();
 		$deposit_chosen = get_post_meta( $order_id, '_deposit_chosen', true );
 
 		if ( ! $deposit_chosen ) {
@@ -174,14 +174,14 @@ class NovaEmails {
 		}
 
 		$processing_email = get_field( 'processing_email', $deposit_chosen );
-		$subject          = $processing_email['subject'] ? $processing_email['subject'] : $subject;
-		$subject          = str_replace( '{order_number}', $order->get_order_number(), $subject );
+		$subject = $processing_email['subject'] ? $processing_email['subject'] : $subject;
+		$subject = str_replace( '{order_number}', $order->get_order_number(), $subject );
 
 		return $subject;
 	}
 
 	public function pending_payment_subject( $subject, $order ) {
-		$order_id       = $order->get_id();
+		$order_id = $order->get_id();
 		$payment_select = get_post_meta( $order_id, '_payment_select', true );
 
 		if ( ! $this->is_deposit_order( $order_id ) ) {
@@ -189,9 +189,9 @@ class NovaEmails {
 		}
 
 		if ( $payment_select ) {
-			$payment_select   = get_post_meta( $order_id, '_payment_select', true );
+			$payment_select = get_post_meta( $order_id, '_payment_select', true );
 			$processing_email = get_field( 'processing_email', $payment_select );
-			$subject          = $processing_email['subject'] ? $processing_email['subject'] : $subject;
+			$subject = $processing_email['subject'] ? $processing_email['subject'] : $subject;
 
 			$subject = str_replace( '{order_number}', $order->get_order_number(), $subject );
 		}
@@ -200,9 +200,9 @@ class NovaEmails {
 	}
 
 	public function pending_payment_additional_content_old( $additional_content, $order, $email ) {
-		$order_id         = $order->get_id();
+		$order_id = $order->get_id();
 		$payment_order_id = get_post_meta( $order_id, '_adjusted_duplicate_order_id', true );
-		$payment_order    = wc_get_order( $payment_order_id );
+		$payment_order = wc_get_order( $payment_order_id );
 
 		if ( ! $this->is_deposit_order( $order_id ) ) {
 			return $additional_content;
@@ -211,7 +211,7 @@ class NovaEmails {
 		$payment_select = get_post_meta( $order_id, '_payment_select', true );
 
 		if ( $payment_select ) {
-			$processing_email   = get_field( 'processing_email', $payment_select );
+			$processing_email = get_field( 'processing_email', $payment_select );
 			$additional_content = $processing_email['additional_content'] ? $processing_email['additional_content'] : $additional_content;
 			$additional_content = str_replace( '{payment_link}', '<p><strong>Please click here to pay:</strong> ' . $payment_order->get_checkout_payment_url() . '</p>', $additional_content );
 		}
@@ -223,13 +223,13 @@ class NovaEmails {
 		$order_id = $order->get_id();
 
 		$deposit_chosen = get_post_meta( $order_id, '_deposit_chosen', true );
-		$needs_payment  = get_post_meta( $order_id, 'needs_payment', true );
+		$needs_payment = get_post_meta( $order_id, 'needs_payment', true );
 
 		if ( ! $deposit_chosen ) {
 			return $additional_content;
 		}
 
-		$processing_email   = get_field( 'processing_email', $deposit_chosen );
+		$processing_email = get_field( 'processing_email', $deposit_chosen );
 		$additional_content = $processing_email['additional_content'] ? $processing_email['additional_content'] : $additional_content;
 		$additional_content = str_replace( '{payment_link}', $needs_payment ? '<p><strong>Please click here to pay:</strong> ' . $order->get_checkout_payment_url() . '</p>' : '', $additional_content );
 
@@ -237,10 +237,10 @@ class NovaEmails {
 	}
 
 	public function complete_payment_heading( $heading, $order, $email ) {
-		$order_id         = $order->get_id();
-		$payment_select   = get_post_meta( $order_id, '_payment_select', true );
+		$order_id = $order->get_id();
+		$payment_select = get_post_meta( $order_id, '_payment_select', true );
 		$payment_order_id = get_post_meta( $order_id, '_adjusted_duplicate_order_id', true );
-		$payment_order    = wc_get_order( $payment_order_id );
+		$payment_order = wc_get_order( $payment_order_id );
 
 		if ( ! $this->is_deposit_order( $order_id ) ) {
 			return $heading;
@@ -248,25 +248,25 @@ class NovaEmails {
 
 		if ( $payment_order_id && $payment_select ) {
 			$completed_email = get_field( 'completed_email', $payment_select );
-			$heading         = $completed_email['heading'] ? $completed_email['heading'] : $heading;
-			$heading         = str_replace( '{order_number}', $order->get_order_number(), $heading );
+			$heading = $completed_email['heading'] ? $completed_email['heading'] : $heading;
+			$heading = str_replace( '{order_number}', $order->get_order_number(), $heading );
 		}
 
 		return $heading;
 	}
 
 	public function complete_payment_additional_content( $additional_content, $order, $email ) {
-		$order_id         = $order->get_id();
-		$payment_select   = get_post_meta( $order_id, '_payment_select', true );
+		$order_id = $order->get_id();
+		$payment_select = get_post_meta( $order_id, '_payment_select', true );
 		$payment_order_id = get_post_meta( $order_id, '_adjusted_duplicate_order_id', true );
-		$payment_order    = wc_get_order( $payment_order_id );
+		$payment_order = wc_get_order( $payment_order_id );
 
 		if ( ! $this->is_deposit_order( $order_id ) ) {
 			return $additional_content;
 		}
 
 		if ( $payment_order_id && $payment_select ) {
-			$completed_email    = get_field( 'completed_email', $payment_select );
+			$completed_email = get_field( 'completed_email', $payment_select );
 			$additional_content = $completed_email['additional_content'] ? $completed_email['additional_content'] : $additional_content;
 			$additional_content = str_replace( '{payment_link}', '<p><strong>Please click here to pay:</strong> ' . $payment_order->get_checkout_payment_url() . '</p>', $additional_content );
 		}
@@ -275,7 +275,7 @@ class NovaEmails {
 	}
 
 	public function fully_paid_payment_heading( $heading, $order, $email ) {
-		$order_id       = $order->get_id();
+		$order_id = $order->get_id();
 		$payment_select = get_post_meta( $order_id, '_payment_select', true );
 
 		if ( ! $this->is_payment_order( $order_id ) ) {
@@ -291,7 +291,7 @@ class NovaEmails {
 	}
 
 	public function fully_paid_payment_additional_content( $additional_content, $order, $email ) {
-		$order_id       = $order->get_id();
+		$order_id = $order->get_id();
 		$payment_select = get_post_meta( $order_id, '_payment_select', true );
 
 		if ( ! $this->is_payment_order( $order_id ) ) {
@@ -304,11 +304,11 @@ class NovaEmails {
 
 	public function pending_payment_processing_email_old( $body_text, $order, $sent_to_admin, $plain_text, $email ) {
 		$order_id = $order->get_id();
-		$key      = $email->id;
+		$key = $email->id;
 
-		$payment_select   = get_post_meta( $order_id, '_payment_select', true );
+		$payment_select = get_post_meta( $order_id, '_payment_select', true );
 		$payment_order_id = get_post_meta( $order_id, '_adjusted_duplicate_order_id', true );
-		$payment_order    = wc_get_order( $payment_order_id );
+		$payment_order = wc_get_order( $payment_order_id );
 
 		if ( $payment_order_id && $payment_select && $key === 'customer_processing_order' ) {
 
@@ -336,10 +336,10 @@ class NovaEmails {
 
 	public function pending_payment_processing_email( $body_text, $order, $sent_to_admin, $plain_text, $email ) {
 		$order_id = $order->get_id();
-		$key      = $email->id;
+		$key = $email->id;
 
 		$deposit_chosen = get_post_meta( $order_id, '_deposit_chosen', true );
-		$needs_payment  = get_post_meta( $order_id, 'needs_payment', true );
+		$needs_payment = get_post_meta( $order_id, 'needs_payment', true );
 
 		if ( $deposit_chosen && $key === 'customer_processing_order' ) {
 
@@ -365,7 +365,7 @@ class NovaEmails {
 
 	public function complete_payment_processing_email( $body_text, $order, $sent_to_admin, $plain_text, $email ) {
 		$order_id = $order->get_id();
-		$key      = $email->id;
+		$key = $email->id;
 
 		if ( ! $this->is_deposit_order( $order_id ) ) {
 			return $body_text;
@@ -391,15 +391,15 @@ class NovaEmails {
 
 		$pending = \NOVA_B2B\Pending_Payment::get_instance();
 
-		$payment        = $pending->get_payment_date( $order_id );
+		$payment = $pending->get_payment_date( $order_id );
 		$payment_select = $payment->payment_select;
 
 		$completed_date_obj = $original_order->get_date_completed();
 
-		$shipped_date        = $completed_date_obj->date( 'F d, Y' );
+		$shipped_date = $completed_date_obj->date( 'F d, Y' );
 		$days_after_shipping = get_field( 'days_after_shipping', $payment_select );
-		$deadline            = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
-		$payment_date        = date( 'F d, Y', $deadline );
+		$deadline = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
+		$payment_date = date( 'F d, Y', $deadline );
 
 		$completed_email = get_field( 'completed_email', $payment_select );
 
@@ -424,9 +424,9 @@ class NovaEmails {
 
 	public function ups_tracking( $body_text, $order, $sent_to_admin, $plain_text, $email ) {
 		$order_id = $order->get_id();
-		$key      = $email->id;
+		$key = $email->id;
 
-		$tracking_number  = get_post_meta( $order_id, '_tracking_number', true );
+		$tracking_number = get_post_meta( $order_id, '_tracking_number', true );
 		$shipping_carrier = get_post_meta( $order_id, '_shipping_carrier', true );
 
 		if ( 'UPS' === $shipping_carrier && $tracking_number ) {
@@ -441,7 +441,7 @@ class NovaEmails {
 	public function fully_paid_payment_processing_email( $body_text, $order, $sent_to_admin, $plain_text, $email ) {
 
 		$order_id = $order->get_id();
-		$key      = $email->id;
+		$key = $email->id;
 
 		if ( 'customer_completed_order' !== $key ) {
 			return $body_text;
@@ -451,13 +451,13 @@ class NovaEmails {
 
 		if ( $this->is_payment_order( $order_id ) && $payment_select && $key === 'customer_completed_order' ) {
 
-			$original_order_id   = $order->get_meta( '_from_order_id' );
-			$original_order      = wc_get_order( $original_order_id );
-			$completed_date_obj  = $original_order->get_date_completed();
-			$shipped_date        = $completed_date_obj->date( 'F d, Y' );
+			$original_order_id = $order->get_meta( '_from_order_id' );
+			$original_order = wc_get_order( $original_order_id );
+			$completed_date_obj = $original_order->get_date_completed();
+			$shipped_date = $completed_date_obj->date( 'F d, Y' );
 			$days_after_shipping = get_field( 'days_after_shipping', $payment_select );
-			$deadline            = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
-			$payment_date        = date( 'F d, Y', $deadline );
+			$deadline = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
+			$payment_date = date( 'F d, Y', $deadline );
 
 			$paid_email = get_field( 'paid_email', $payment_select );
 
@@ -484,12 +484,12 @@ class NovaEmails {
 
 	public function order_invoice_content( $order ) {
 		$payment_order_id = $order->get_meta( '_adjusted_duplicate_order_id' );
-		$payment_order    = $order;
+		$payment_order = $order;
 		if ( $payment_order_id ) {
 			$payment_order = wc_get_order( $payment_order_id );
 		}
 
-		$content  = '<table>';
+		$content = '<table>';
 		$content .= '<tr><td style="margin-top: 0; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #000;">';
 		$content .= '<img src="' . get_stylesheet_directory() . '/assets/img/nova-logo.png' . '" alt="Nova Signage">';
 		$content .= '</td></tr>';
@@ -551,7 +551,7 @@ class NovaEmails {
 
 	public function for_payment_admin_email( $post_id, $author_id ) {
 
-		$user_id   = get_field( 'partner', $post_id );
+		$user_id = get_field( 'partner', $post_id );
 		$user_info = get_userdata( $user_id );
 
 		// Retrieve admin customer rep emails
@@ -565,13 +565,13 @@ class NovaEmails {
 			$to_admin = array( 'bonn.j@hineon.com', 'kristelle.m@hineon.com' );
 		}
 
-		$business_id   = get_field( 'business_id', 'user_' . $user_id );
-		$company       = get_field( 'business_name', 'user_' . $user_id ) ? get_field( 'business_name', 'user_' . $user_id ) : 'None';
+		$business_id = get_field( 'business_id', 'user_' . $user_id );
+		$company = get_field( 'business_name', 'user_' . $user_id ) ? get_field( 'business_name', 'user_' . $user_id ) : 'None';
 		$edit_post_url = admin_url( 'post.php?post=' . $post_id . '&action=edit' );
 
 		$first_name = $user_info->first_name;
 
-		$headers   = array();
+		$headers = array();
 		$headers[] = 'Content-Type: text/html; charset=UTF-8';
 		$headers[] = 'From: NOVA Signage <quotes@novasignage.com>';
 		$headers[] = 'Reply-To: NOVA Signage <quotes@novasignage.com>';
@@ -602,9 +602,9 @@ class NovaEmails {
 			$role_instance->send_email( $to_admin, $admin_subject, $admin_message, $headers, array() );
 
 			/** to joshua */
-			$to_zendesk        = array( 'joshua@hineon.com' );
-			$to_user           = $user_info->user_email;
-			$headers_zendesk   = array();
+			$to_zendesk = array( 'joshua@hineon.com' );
+			$to_user = $user_info->user_email;
+			$headers_zendesk = array();
 			$headers_zendesk[] = 'Content-Type: text/html; charset=UTF-8';
 			$headers_zendesk[] = 'From: ' . $first_name . ' <' . $to_user . '>';
 			$headers_zendesk[] = 'Reply-To: ' . $first_name . ' <' . $to_user . '>';
@@ -651,7 +651,7 @@ class NovaEmails {
 
 		/** if $user_id has a role of 'customer-rep' or 'admin', then return */
 		if ( in_array( 'customer-rep', (array) $user_info->roles ) || in_array( 'administrator', (array) $user_info->roles ) ) {
-			$to_admin   = array( 'bonn.j@hineon.com', 'kristelle.m@hineon.com' );
+			$to_admin = array( 'bonn.j@hineon.com', 'kristelle.m@hineon.com' );
 			$from_admin = true;
 		}
 
@@ -668,12 +668,12 @@ class NovaEmails {
 		$first_name = $user_info->first_name ?: 'Customer';
 
 		// Set up email headers
-		$headers   = array();
+		$headers = array();
 		$headers[] = 'Content-Type: text/html; charset=UTF-8';
 		$headers[] = 'From: NOVA Signage <quotes@novasignage.com>';
 		$headers[] = 'Reply-To: NOVA Signage <quotes@novasignage.com>';
 
-		$headers_admin   = array();
+		$headers_admin = array();
 		$headers_admin[] = 'Content-Type: text/html; charset=UTF-8';
 		$headers_admin[] = 'From: NOVA Signage <noreply@novasignage.com>';
 		$headers_admin[] = 'Reply-To: NOVA Signage <noreply@novasignage.com>';
@@ -683,10 +683,10 @@ class NovaEmails {
 
 		// Construct the subject for the admin email
 		$admin_subject = 'NOVA INTERNAL - Quote Request From: ' . $first_name . ' from ' . $company . ' ' . $business_id . ' - #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
-		$josh_subject  = 'NOVA INTERNAL (Action Required) - Quote Request From: ' . $first_name . ' from ' . $company . ' ' . $business_id . ' - #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
+		$josh_subject = 'NOVA INTERNAL (Action Required) - Quote Request From: ' . $first_name . ' from ' . $company . ' ' . $business_id . ' - #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
 
 		// Construct the message for the admin email
-		$to_admin_message  = '<p>Hello,</p>';
+		$to_admin_message = '<p>Hello,</p>';
 		$to_admin_message .= '<p>Client sent a quotation request:</p>';
 		$to_admin_message .= '<ul>';
 		$to_admin_message .= '<li><strong>Customer:</strong> ' . $first_name . ' - ' . $business_id . '</li>';
@@ -752,7 +752,7 @@ class NovaEmails {
 
 		/** if $user_id has a role of 'customer-rep' or 'admin' */
 		if ( in_array( 'customer-rep', (array) $user_info->roles ) || in_array( 'administrator', (array) $user_info->roles ) ) {
-			$to_admin   = array( 'bonn.j@hineon.com', 'kristelle.m@hineon.com' );
+			$to_admin = array( 'bonn.j@hineon.com', 'kristelle.m@hineon.com' );
 			$from_admin = true;
 		}
 
@@ -772,17 +772,17 @@ class NovaEmails {
 		$first_name = $user_info->first_name ?: 'Customer';
 
 		// Set up email headers
-		$headers   = array();
+		$headers = array();
 		$headers[] = 'Content-Type: text/html; charset=UTF-8';
 		$headers[] = 'From: NOVA Signage <noreply@novasignage.com>';
 		$headers[] = 'Reply-To: NOVA Signage <noreply@novasignage.com>';
 
 		// Construct the subject for the admin email
 		$admin_subject = 'NOVA INTERNAL - Quote Request From: ' . $first_name . ' from ' . $company . ' ' . $business_id . ' - #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
-		$josh_subject  = 'NOVA INTERNAL (Action Required) - Quote Request From: ' . $first_name . ' from ' . $company . ' ' . $business_id . ' - #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
+		$josh_subject = 'NOVA INTERNAL (Action Required) - Quote Request From: ' . $first_name . ' from ' . $company . ' ' . $business_id . ' - #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
 
 		// Construct the message for the admin email
-		$to_admin_message  = '<p>Hello,</p>';
+		$to_admin_message = '<p>Hello,</p>';
 		$to_admin_message .= '<p>Client sent a quotation request:</p>';
 		$to_admin_message .= '<ul>';
 		$to_admin_message .= '<li><strong>Customer:</strong> ' . $first_name . ' - ' . $business_id . '</li>';
@@ -807,24 +807,24 @@ class NovaEmails {
 
 	public function for_mockup_update_email( $post_id ) {
 
-		$user_id      = get_field( 'partner', $post_id );
-		$user_info    = get_userdata( $user_id );
+		$user_id = get_field( 'partner', $post_id );
+		$user_info = get_userdata( $user_id );
 		$project_name = get_field( 'frontend_title', $post_id );
-		$business_id  = get_field( 'business_id', 'user_' . $user_id );
+		$business_id = get_field( 'business_id', 'user_' . $user_id );
 
 		$billing_country = get_user_meta( $user_id, 'billing_country', true );
-		$currency        = ( $billing_country === 'CA' ) ? 'CAD' : 'USD';
+		$currency = ( $billing_country === 'CA' ) ? 'CAD' : 'USD';
 
-		$filename      = $business_id . '-INV-Q-' . $post_id . '-' . $currency . '.pdf';
-		$company       = get_field( 'business_name', 'user_' . $user_id ) ? get_field( 'business_name', 'user_' . $user_id ) : 'None';
+		$filename = $business_id . '-INV-Q-' . $post_id . '-' . $currency . '.pdf';
+		$company = get_field( 'business_name', 'user_' . $user_id ) ? get_field( 'business_name', 'user_' . $user_id ) : 'None';
 		$edit_post_url = admin_url( 'post.php?post=' . $post_id . '&action=edit' );
 
-		$to         = $user_info->user_email;
+		$to = $user_info->user_email;
 		$first_name = $user_info->first_name;
 
 		$subject = 'Revised Quote: (' . $project_name . ') - #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
 
-		$message  = '<p>Dear ' . $first_name . ',</p>';
+		$message = '<p>Dear ' . $first_name . ',</p>';
 		$message .= '<p>Your request has been revised and quoted. Please review the quotation for:</p>';
 
 		$message .= '<ul>';
@@ -846,7 +846,7 @@ class NovaEmails {
 		$message .= '<p>Thank you,<br>';
 		$message .= 'NOVA Signage Team</p>';
 
-		$headers   = array();
+		$headers = array();
 		$headers[] = 'Content-Type: text/html; charset=UTF-8';
 		$headers[] = 'From: NOVA Signage <quotes@novasignage.com>';
 		$headers[] = 'Reply-To: NOVA Signage <quotes@novasignage.com>';
@@ -860,8 +860,8 @@ class NovaEmails {
 		if ( $sent ) {
 			add_action(
 				'admin_notices',
-				function () use ( $to ) {
-						echo '<div class="notice notice-success is-dismissible"><p>Email successfully sent to ' . esc_html( $to ) . '.</p></div>';
+				function () use ($to) {
+					echo '<div class="notice notice-success is-dismissible"><p>Email successfully sent to ' . esc_html( $to ) . '.</p></div>';
 				}
 			);
 		}
@@ -869,22 +869,22 @@ class NovaEmails {
 
 	public function for_mockup_draft_email( $post_id ) {
 
-		$user_id         = get_field( 'partner', $post_id );
-		$user_info       = get_userdata( $user_id );
-		$project_name    = get_field( 'frontend_title', $post_id );
-		$business_id     = get_field( 'business_id', 'user_' . $user_id );
+		$user_id = get_field( 'partner', $post_id );
+		$user_info = get_userdata( $user_id );
+		$project_name = get_field( 'frontend_title', $post_id );
+		$business_id = get_field( 'business_id', 'user_' . $user_id );
 		$billing_country = get_user_meta( $user_id, 'billing_country', true );
-		$currency        = ( $billing_country === 'CA' ) ? 'CAD' : 'USD';
-		$filename        = $business_id . '-INV-Q-' . $post_id . '-' . $currency . '.pdf';
-		$company         = get_field( 'business_name', 'user_' . $user_id ) ? get_field( 'business_name', 'user_' . $user_id ) : 'None';
-		$edit_post_url   = admin_url( 'post.php?post=' . $post_id . '&action=edit' );
+		$currency = ( $billing_country === 'CA' ) ? 'CAD' : 'USD';
+		$filename = $business_id . '-INV-Q-' . $post_id . '-' . $currency . '.pdf';
+		$company = get_field( 'business_name', 'user_' . $user_id ) ? get_field( 'business_name', 'user_' . $user_id ) : 'None';
+		$edit_post_url = admin_url( 'post.php?post=' . $post_id . '&action=edit' );
 
-		$to         = $user_info->user_email;
+		$to = $user_info->user_email;
 		$first_name = $user_info->first_name;
 
 		$subject = 'Revised Draft: (' . $project_name . ') - #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
 
-		$message  = '<p>Dear ' . $first_name . ',</p>';
+		$message = '<p>Dear ' . $first_name . ',</p>';
 		$message .= '<p>Your custom sign draft has been updated by our team.</p>';
 
 		$message .= '<ul>';
@@ -903,7 +903,7 @@ class NovaEmails {
 		$message .= '<p>Thank you,<br>';
 		$message .= 'NOVA Signage Team</p>';
 
-		$headers   = array();
+		$headers = array();
 		$headers[] = 'Content-Type: text/html; charset=UTF-8';
 		$headers[] = 'From: NOVA Signage <quotes@novasignage.com>';
 		$headers[] = 'Reply-To: NOVA Signage <quotes@novasignage.com>';
@@ -916,8 +916,8 @@ class NovaEmails {
 			if ( $sent ) {
 				add_action(
 					'admin_notices',
-					function () use ( $to ) {
-							echo '<div class="notice notice-success is-dismissible"><p>Email successfully sent to ' . esc_html( $to ) . '.</p></div>';
+					function () use ($to) {
+						echo '<div class="notice notice-success is-dismissible"><p>Email successfully sent to ' . esc_html( $to ) . '.</p></div>';
 					}
 				);
 			}
@@ -945,7 +945,7 @@ class NovaEmails {
 
 	public function for_payment_email( $post_id ) {
 
-		$user_id   = get_field( 'partner', $post_id );
+		$user_id = get_field( 'partner', $post_id );
 		$user_info = get_userdata( $user_id );
 
 		/** if user has a role of 'customer-rep' or 'admin' except for kristelle.m@hineon.com, then return */
@@ -954,21 +954,21 @@ class NovaEmails {
 		}
 
 		$project_name = get_field( 'frontend_title', $post_id );
-		$business_id  = get_field( 'business_id', 'user_' . $user_id );
+		$business_id = get_field( 'business_id', 'user_' . $user_id );
 
 		$billing_country = get_user_meta( $user_id, 'billing_country', true );
-		$currency        = ( $billing_country === 'CA' ) ? 'CAD' : 'USD';
+		$currency = ( $billing_country === 'CA' ) ? 'CAD' : 'USD';
 
-		$filename      = $business_id . '-INV-Q-' . $post_id . '-' . $currency . '.pdf';
-		$company       = get_field( 'business_name', 'user_' . $user_id ) ? get_field( 'business_name', 'user_' . $user_id ) : 'None';
+		$filename = $business_id . '-INV-Q-' . $post_id . '-' . $currency . '.pdf';
+		$company = get_field( 'business_name', 'user_' . $user_id ) ? get_field( 'business_name', 'user_' . $user_id ) : 'None';
 		$edit_post_url = admin_url( 'post.php?post=' . $post_id . '&action=edit' );
 
-		$to         = $user_info->user_email;
+		$to = $user_info->user_email;
 		$first_name = $user_info->first_name;
 
 		$subject = 'Quote Status Updated: (' . $project_name . ') - #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
 
-		$message  = '<p>Hello ' . $first_name . ',</p>';
+		$message = '<p>Hello ' . $first_name . ',</p>';
 		$message .= '<p>Your request has been quoted. Please review the quotation for:</p>';
 
 		$message .= '<ul>';
@@ -990,7 +990,7 @@ class NovaEmails {
 
 		$role_instance = \NOVA_B2B\Roles::get_instance();
 
-		$headers   = array();
+		$headers = array();
 		$headers[] = 'Content-Type: text/html; charset=UTF-8';
 		$headers[] = 'From: NOVA Signage <quotes@novasignage.com>';
 		$headers[] = 'Reply-To: NOVA Signage <quotes@novasignage.com>';
@@ -1003,7 +1003,7 @@ class NovaEmails {
 
 	public function display_signage_details( $type, $item, $order ) {
 
-		$product      = $item['quote_id'];
+		$product = $item['quote_id'];
 		$product_line = $item['product_line'];
 
 		$instance = \NOVA_B2B\Nova_Quote::get_instance();
@@ -1012,7 +1012,7 @@ class NovaEmails {
 		}
 		$attributes = $instance->allAttributes();
 
-		$html  = '<p style="font-size: 100%; margin-top: 0;margin-bottom: 0;">Quote ID: Q-' . str_pad( $product, 4, '0', STR_PAD_LEFT ) . '</p>';
+		$html = '<p style="font-size: 100%; margin-top: 0;margin-bottom: 0;">Quote ID: Q-' . str_pad( $product, 4, '0', STR_PAD_LEFT ) . '</p>';
 		$html .= '<p style="font-size: 100%; margin-top: 0; margin-bottom: 0;">Product: ' . $product_line . '</p>';
 
 		foreach ( $item['signage'] as $object ) {
@@ -1038,7 +1038,7 @@ class NovaEmails {
 						} elseif ( $attr['isFiles'] ?? false && isset( $object->fileUrls, $object->fileNames ) && ! empty( $object->fileUrls ) && ! empty( $object->fileNames ) ) {
 							$filesHtml = '';
 							foreach ( $object->fileUrls as $index => $fileUrl ) {
-								$fileName   = $object->fileNames[ $index ] ?? $fileUrl;
+								$fileName = $object->fileNames[ $index ] ?? $fileUrl;
 								$filesHtml .= '<a href="' . htmlspecialchars( $fileUrl, ENT_QUOTES, 'UTF-8' ) . '" target="_blank">' . htmlspecialchars( $fileName, ENT_QUOTES, 'UTF-8' ) . '</a><br>';
 							}
 							$html .= '<tr><td style="border: 1px solid #dddddd; padding: 5px;">' . $attr['label'] . ':</td><td style="border: 1px solid #dddddd; padding: 5px;">' . $filesHtml . '</td></tr>';
@@ -1075,13 +1075,13 @@ class NovaEmails {
 		$items = $order->get_items();
 
 		foreach ( $items as $item_id => $item ) {
-			$signage                               = $item->get_meta( 'signage' );
-			$quote_id                              = $item->get_meta( 'quote_id' );
-			$product_line                          = get_the_title( $item->get_meta( 'product_line' ) );
-			$name                                  = get_field( 'frontend_title', $item->get_meta( 'quote_id' ) ) ? ucwords( get_field( 'frontend_title', $item->get_meta( 'quote_id' ) ) ) : $data_list[ $item_id ]['name'];
-			$data_list[ $item_id ]['signage']      = $signage;
-			$data_list[ $item_id ]['quote_id']     = $quote_id;
-			$data_list[ $item_id ]['name']         = $name;
+			$signage = $item->get_meta( 'signage' );
+			$quote_id = $item->get_meta( 'quote_id' );
+			$product_line = get_the_title( $item->get_meta( 'product_line' ) );
+			$name = get_field( 'frontend_title', $item->get_meta( 'quote_id' ) ) ? ucwords( get_field( 'frontend_title', $item->get_meta( 'quote_id' ) ) ) : $data_list[ $item_id ]['name'];
+			$data_list[ $item_id ]['signage'] = $signage;
+			$data_list[ $item_id ]['quote_id'] = $quote_id;
+			$data_list[ $item_id ]['name'] = $name;
 			$data_list[ $item_id ]['product_line'] = $product_line;
 		}
 

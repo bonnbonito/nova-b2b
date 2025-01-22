@@ -156,8 +156,8 @@ class Woocommerce {
 					'meta_query',
 					array(
 						array(
-							'key'     => '_order_number',
-							'value'   => $order_number,
+							'key' => '_order_number',
+							'value' => $order_number,
 							'compare' => 'LIKE',
 						),
 					)
@@ -186,9 +186,9 @@ class Woocommerce {
 
 	public function show_total_from_payment_order( $formatted_total, $order, $tax_display, $display_refunded ) {
 		if ( $order->get_meta( '_adjusted_duplicate_order_id' ) ) {
-			$payment_order        = $order->get_meta( '_adjusted_duplicate_order_id' );
+			$payment_order = $order->get_meta( '_adjusted_duplicate_order_id' );
 			$payment_order_object = wc_get_order( $payment_order );
-			$formatted_total      = $payment_order_object->get_formatted_order_total();
+			$formatted_total = $payment_order_object->get_formatted_order_total();
 		}
 		return $formatted_total;
 	}
@@ -199,9 +199,9 @@ class Woocommerce {
 
 		foreach ( $tax_totals as $key => $tax_total ) {
 
-			$rate_id                              = $tax_total->rate_id;
-			$tax_rate                             = \WC_Tax::get_rate_percent_value( $rate_id );
-			$tax_totals[ $key ]->amount           = $this->calculate_correct_tax( $order, $tax_rate );
+			$rate_id = $tax_total->rate_id;
+			$tax_rate = \WC_Tax::get_rate_percent_value( $rate_id );
+			$tax_totals[ $key ]->amount = $this->calculate_correct_tax( $order, $tax_rate );
 			$tax_totals[ $key ]->formatted_amount = wc_price( $tax_totals[ $key ]->amount, array( 'currency' => $order->get_currency() ) );
 		}
 		// print_r( $tax_totals );
@@ -253,12 +253,12 @@ class Woocommerce {
 	}
 
 	public function nova_calculated_total( $total, $cart ) {
-		$customer    = WC()->customer;
+		$customer = WC()->customer;
 		$customer_id = $customer->get_id();
 
 		$cart_total = $cart->get_subtotal();
-		$shipping   = $cart->get_shipping_total();
-		$discount   = $cart->get_discount_total();
+		$shipping = $cart->get_shipping_total();
+		$discount = $cart->get_discount_total();
 
 		$subtotal = $cart_total + $shipping;
 
@@ -277,20 +277,20 @@ class Woocommerce {
 		}
 
 		$computed_tax = $subtotal * $tax_rate;
-		$total_tax    = $subtotal + round( $computed_tax, 2 );
-		$total        = $total_tax - $discount;
+		$total_tax = $subtotal + round( $computed_tax, 2 );
+		$total = $total_tax - $discount;
 
 		return $total;
 	}
 
 	public function custom_adjust_calculated_tax( $tax_totals, $cart ) {
-		$customer    = WC()->customer;
+		$customer = WC()->customer;
 		$customer_id = $customer->get_id();
 
 		$currency = get_woocommerce_currency();
 
 		$cart_total = $cart->get_subtotal();
-		$shipping   = $cart->get_shipping_total();
+		$shipping = $cart->get_shipping_total();
 
 		$subtotal = $cart_total + $shipping;
 
@@ -310,9 +310,9 @@ class Woocommerce {
 		}
 
 		foreach ( $tax_totals as $key => $tax_total ) {
-			$computed_tax                         = $subtotal * $tax_rate;
-			$tax_totals[ $key ]->amount           = $computed_tax;
-			$formatted_amount                     = wc_price( $computed_tax, array( 'currency' => $currency ) );
+			$computed_tax = $subtotal * $tax_rate;
+			$tax_totals[ $key ]->amount = $computed_tax;
+			$formatted_amount = wc_price( $computed_tax, array( 'currency' => $currency ) );
 			$tax_totals[ $key ]->formatted_amount = $formatted_amount;
 		}
 
@@ -395,7 +395,7 @@ class Woocommerce {
 			// }
 		}
 
-		$refunds      = $order->get_refunds();
+		$refunds = $order->get_refunds();
 		$refund_array = array();
 
 		if ( $refunds ) {
@@ -411,7 +411,7 @@ class Woocommerce {
 			}
 
 			$refund_total = array_sum( wp_list_pluck( $refunds, 'amount' ) ); // use 'amount' instead of 'total'
-			$new_total    = floatval( $order->get_total() ) - floatval( $refund_total ); // corrected calculation
+			$new_total = floatval( $order->get_total() ) - floatval( $refund_total ); // corrected calculation
 
 			$totals['order_total']['value'] = wc_price( $new_total, array( 'currency' => $order->get_currency() ) );
 
@@ -420,7 +420,7 @@ class Woocommerce {
 			if ( $position !== false ) {
 				// Split the array into two parts
 				$array_before = array_slice( $totals, 0, $position, true );
-				$array_after  = array_slice( $totals, $position, null, true );
+				$array_after = array_slice( $totals, $position, null, true );
 
 				// Insert $refund_array before 'order_total'
 				foreach ( $refund_array as $refund ) {
@@ -431,7 +431,7 @@ class Woocommerce {
 				$totals = $array_before + $array_after;
 			}
 		}
-		
+
 
 		return $totals;
 	}
@@ -490,7 +490,7 @@ class Woocommerce {
 
 	public function filter_orders_by_hidden_status( $vars ) {
 		if ( isset( $_GET['_hide_order'] ) && 'true' === $_GET['_hide_order'] ) {
-			$vars['meta_key']   = '_hide_order';
+			$vars['meta_key'] = '_hide_order';
 			$vars['meta_value'] = '1';
 		}
 		return $vars;
@@ -515,7 +515,7 @@ class Woocommerce {
 	}
 
 	public function save_tracking_details_to_order_meta_from_note( $args ) {
-		$order_id         = $args['order_id'];
+		$order_id = $args['order_id'];
 		$payment_order_id = get_post_meta( $order_id, '_adjusted_duplicate_order_id', true );
 
 		$note_content = $args['customer_note'];
@@ -550,7 +550,7 @@ class Woocommerce {
 		preg_match( '/tracking number (.*?)\.$/', $str, $matches2 );
 
 		return array(
-			'carrier'         => isset( $matches1[1] ) ? $matches1[1] : null,
+			'carrier' => isset( $matches1[1] ) ? $matches1[1] : null,
 			'tracking_number' => isset( $matches2[1] ) ? $matches2[1] : null,
 		);
 	}
@@ -559,9 +559,9 @@ class Woocommerce {
 		if ( isset( $caps[0], $_GET['key'] ) ) {
 			if ( $caps[0] == 'pay_for_order' ) {
 				$order_id = isset( $args[2] ) ? $args[2] : null;
-				$order    = wc_get_order( $order_id );
+				$order = wc_get_order( $order_id );
 				if ( $order ) {
-						$allcaps['pay_for_order'] = true;
+					$allcaps['pay_for_order'] = true;
 				}
 			}
 		}
@@ -569,13 +569,13 @@ class Woocommerce {
 	}
 
 	public function modify_order_total( $and_taxes, $order ) {
-		$order_id      = $order->get_id();
+		$order_id = $order->get_id();
 		$deposit_total = get_post_meta( $order_id, '_deposit_total', true );
 		$payment_order = get_post_meta( $order_id, '_from_order_id', true );
 
 		if ( $deposit_total && $payment_order ) {
 			$deposit = floatval( $deposit_total );
-			$total   = $order->get_total();
+			$total = $order->get_total();
 
 			if ( $total > 0 && $total >= $deposit ) {
 				$total -= $deposit;
@@ -589,7 +589,7 @@ class Woocommerce {
 		$customer_id = $order->get_user_id();
 
 		$order_total = $order->get_subtotal();
-		$shipping    = $order->get_shipping_total();
+		$shipping = $order->get_shipping_total();
 
 		$subtotal = $order_total + $shipping;
 
@@ -654,7 +654,7 @@ class Woocommerce {
 			return $values; // Return the original string if there's an error
 		}
 
-		$user_id         = get_current_user_id();
+		$user_id = get_current_user_id();
 		$billing_country = get_user_meta( $user_id, 'billing_country', true );
 
 		if ( $billing_country === 'CA' ) {
@@ -681,7 +681,7 @@ class Woocommerce {
 			return $default_currency;
 		}
 
-		$user_id         = get_current_user_id();
+		$user_id = get_current_user_id();
 		$billing_country = get_user_meta( $user_id, 'billing_country', true );
 
 		$new_currency = $billing_country === 'CA' ? 'CAD' : 'USD';
@@ -695,7 +695,7 @@ class Woocommerce {
 			return;
 		}
 
-		$user_id         = get_current_user_id();
+		$user_id = get_current_user_id();
 		$billing_country = get_user_meta( $user_id, 'billing_country', true );
 
 		$new_currency = $billing_country === 'CA' ? 'CAD' : 'USD';
@@ -747,8 +747,8 @@ class Woocommerce {
 			return;
 		}
 
-		$order_id        = $order->get_id();
-		$carrier         = $order->get_meta( '_shipping_carrier' );
+		$order_id = $order->get_id();
+		$carrier = $order->get_meta( '_shipping_carrier' );
 		$tracking_number = $order->get_meta( '_tracking_number' );
 
 		if ( $carrier || $tracking_number ) {
@@ -765,7 +765,7 @@ class Woocommerce {
 	public function add_tracking_and_carrier_to_email_table( $total_rows, $order, $tax_display ) {
 		$order_id = $order->get_id();
 
-		$carrier         = $order->get_meta( '_shipping_carrier' );
+		$carrier = $order->get_meta( '_shipping_carrier' );
 		$tracking_number = $order->get_meta( '_tracking_number' );
 
 		$new_rows = array();
@@ -794,7 +794,7 @@ class Woocommerce {
 	public function custom_order_total_based_on_meta( $total, $order ) {
 		// Check if the order has the required meta keys.
 		$has_adjusted_id = get_post_meta( $order->get_id(), '_adjusted_duplicate_order_id', true );
-		$deposit_total   = get_post_meta( $order->get_id(), '_deposit_total', true );
+		$deposit_total = get_post_meta( $order->get_id(), '_deposit_total', true );
 
 		if ( ! empty( $has_adjusted_id ) && ! empty( $deposit_total ) ) {
 			return (float) $deposit_total;
@@ -825,7 +825,7 @@ class Woocommerce {
 		}
 
 		$shipping_country = WC()->customer->get_shipping_country();
-		$shipping_state   = WC()->customer->get_shipping_state();
+		$shipping_state = WC()->customer->get_shipping_state();
 
 		if ( 'CA' === $shipping_country && 'BC' === $shipping_state ) {
 			$fields['shipping']['shipping_pst']['required'] = true;
@@ -871,7 +871,7 @@ class Woocommerce {
 
 	public function disable_bacs_for_non_admins( $available_gateways ) {
 
-		$env      = wp_get_environment_type();
+		$env = wp_get_environment_type();
 		$is_local = defined( 'WP_ENVIRONMENT_TYPE' ) && $env === 'local';
 
 		if ( $is_local ) {
@@ -896,7 +896,7 @@ class Woocommerce {
 					$shipping_state = $order->get_shipping_state();
 
 					// Get Customer ID
-					$customer_id   = $order->get_customer_id();
+					$customer_id = $order->get_customer_id();
 					$payment_types = $this->partner_payment_types( array(), $customer_id );
 					/* check if payment_types is has title Net30 */
 
@@ -916,7 +916,7 @@ class Woocommerce {
 							}
 						}
 					} elseif ( isset( $available_gateways['bacs'] ) ) {
-							unset( $available_gateways['bacs'] );
+						unset( $available_gateways['bacs'] );
 					}
 				}
 			}
@@ -943,7 +943,7 @@ class Woocommerce {
 						}
 					}
 				} elseif ( isset( $available_gateways['bacs'] ) ) {
-						unset( $available_gateways['bacs'] );
+					unset( $available_gateways['bacs'] );
 				}
 			}
 		}
@@ -961,130 +961,130 @@ class Woocommerce {
 
 	public function add_deposit_row( $order_id ) {
 
-		$order                           = wc_get_order( $order_id );
-		$deposit_total                   = get_post_meta( $order_id, '_deposit_total', true );
-		$payment_select                  = get_post_meta( $order_id, '_payment_select', true );
+		$order = wc_get_order( $order_id );
+		$deposit_total = get_post_meta( $order_id, '_deposit_total', true );
+		$payment_select = get_post_meta( $order_id, '_payment_select', true );
 		$has_adjusted_duplicate_order_id = get_post_meta( $order_id, '_adjusted_duplicate_order_id', true );
-		$pending_payment                 = get_post_meta( $order_id, '_pending_payment', true );
-		$original_total                  = get_post_meta( $order_id, '_original_total', true );
-		$from_order                      = get_post_meta( $order_id, '_from_order_id', true );
-		$original_tax_names              = get_post_meta( $order_id, '_original_tax_names', true );
-		$original_tax                    = get_post_meta( $order_id, '_original_tax', true );
-		$original_shipping               = get_post_meta( $order_id, '_original_shipping', true );
-		$original_shipping_method        = get_post_meta( $order_id, '_original_shipping_method', true );
+		$pending_payment = get_post_meta( $order_id, '_pending_payment', true );
+		$original_total = get_post_meta( $order_id, '_original_total', true );
+		$from_order = get_post_meta( $order_id, '_from_order_id', true );
+		$original_tax_names = get_post_meta( $order_id, '_original_tax_names', true );
+		$original_tax = get_post_meta( $order_id, '_original_tax', true );
+		$original_shipping = get_post_meta( $order_id, '_original_shipping', true );
+		$original_shipping_method = get_post_meta( $order_id, '_original_shipping_method', true );
 
 		if ( $original_tax_names && $original_tax && $from_order ) {
 			?>
-<tr>
-  <td class="label"><?php echo 'Shipping (' . $original_shipping_method . ')'; ?>:</td>
-  <td width="1%"></td>
-  <td class="total">
-    <?php
-			if ( ! empty( $original_shipping ) ) {
-				echo wc_price( $original_shipping, array( 'currency' => $order->get_currency() ) );
-			}
-			?>
-  </td>
-</tr>
-<?php
+			<tr>
+				<td class="label"><?php echo 'Shipping (' . $original_shipping_method . ')'; ?>:</td>
+				<td width="1%"></td>
+				<td class="total">
+					<?php
+					if ( ! empty( $original_shipping ) ) {
+						echo wc_price( $original_shipping, array( 'currency' => $order->get_currency() ) );
+					}
+					?>
+				</td>
+			</tr>
+			<?php
 		}
 
 		if ( $original_tax_names && $original_tax && $from_order ) {
 
 			$from_order_object = wc_get_order( $from_order );
-			$tax_rate          = $this->get_rate_percent_value_from_order( $from_order_object );
-			$tax_total         = $this->calculate_correct_tax( $from_order_object, $tax_rate );
+			$tax_rate = $this->get_rate_percent_value_from_order( $from_order_object );
+			$tax_total = $this->calculate_correct_tax( $from_order_object, $tax_rate );
 			/*
-			?>
-<tr>
-  <td class="label"><?php echo $original_tax_names; ?>:</td>
-  <td width="1%"></td>
-  <td class="total">
-    <?php
-			if ( $tax_total ) {
-				echo wc_price( $tax_total, array( 'currency' => $order->get_currency() ) );
-			}
-			?>
-  </td>
-</tr>
-<?php
-			*/
+				 ?>
+	 <tr>
+		 <td class="label"><?php echo $original_tax_names; ?>:</td>
+		 <td width="1%"></td>
+		 <td class="total">
+			 <?php
+				 if ( $tax_total ) {
+					 echo wc_price( $tax_total, array( 'currency' => $order->get_currency() ) );
+				 }
+				 ?>
+		 </td>
+	 </tr>
+	 <?php
+				 */
 		}
 
 		if ( $original_total && $from_order && $from_order ) :
 
 			?>
-<tr>
-  <?php if ( $original_tax_names ) : ?>
-  <td class="label"><?php esc_html_e( 'Overall Total (+shipping & tax)', 'woocommerce' ); ?>:</td>
-  <?php else : ?>
-  <td class="label"><?php esc_html_e( 'Overall Total (+shipping)', 'woocommerce' ); ?>:</td>
-  <?php endif; ?>
-  <td width="1%"></td>
-  <td class="total">
-    <?php
-			if ( ! empty( $original_total ) ) {
-				echo wc_price( $original_total, array( 'currency' => $order->get_currency() ) );
-			}
-			?>
-  </td>
-</tr>
+			<tr>
+				<?php if ( $original_tax_names ) : ?>
+					<td class="label"><?php esc_html_e( 'Overall Total (+shipping & tax)', 'woocommerce' ); ?>:</td>
+				<?php else : ?>
+					<td class="label"><?php esc_html_e( 'Overall Total (+shipping)', 'woocommerce' ); ?>:</td>
+				<?php endif; ?>
+				<td width="1%"></td>
+				<td class="total">
+					<?php
+					if ( ! empty( $original_total ) ) {
+						echo wc_price( $original_total, array( 'currency' => $order->get_currency() ) );
+					}
+					?>
+				</td>
+			</tr>
 
-<?php
-			endif;
+			<?php
+		endif;
 
 		if ( $payment_select ) {
 			?>
-<tr>
-  <td class="label"><?php echo 'Payment Type'; ?>:</td>
-  <td width="1%"></td>
-  <td class="total">
-    <strong><?php echo get_the_title( $payment_select ); ?></strong>
-  </td>
-</tr>
-<?php
+			<tr>
+				<td class="label"><?php echo 'Payment Type'; ?>:</td>
+				<td width="1%"></td>
+				<td class="total">
+					<strong><?php echo get_the_title( $payment_select ); ?></strong>
+				</td>
+			</tr>
+			<?php
 		}
 
 		if ( $deposit_total ) :
 
 			if ( empty( $has_adjusted_duplicate_order_id ) ) :
 				?>
-<tr>
-  <td class="label"><?php esc_html_e( 'Deposit', 'woocommerce' ); ?>:</td>
-  <td width="1%"></td>
-  <td class="total">
-    <?php
-				if ( ! empty( $deposit_total ) ) {
-					echo '-' . wc_price( $deposit_total, array( 'currency' => $order->get_currency() ) );
-				} else {
-					echo wc_price( 0, array( 'currency' => $order->get_currency() ) );
-				}
-				?>
-  </td>
-</tr>
+				<tr>
+					<td class="label"><?php esc_html_e( 'Deposit', 'woocommerce' ); ?>:</td>
+					<td width="1%"></td>
+					<td class="total">
+						<?php
+						if ( ! empty( $deposit_total ) ) {
+							echo '-' . wc_price( $deposit_total, array( 'currency' => $order->get_currency() ) );
+						} else {
+							echo wc_price( 0, array( 'currency' => $order->get_currency() ) );
+						}
+						?>
+					</td>
+				</tr>
 
-<?php
-				endif;
+				<?php
+			endif;
 
-	endif;
+		endif;
 
 		if ( $pending_payment && $has_adjusted_duplicate_order_id ) {
 			?>
-<tr>
-  <td class="label"><?php esc_html_e( 'Pending Payment', 'woocommerce' ); ?>:</td>
-  <td width="1%"></td>
-  <td class="total">
-    <?php
-			if ( ! empty( $pending_payment ) ) {
-				echo wc_price( $pending_payment, array( 'currency' => $order->get_currency() ) );
-			} else {
-				echo wc_price( 0, array( 'currency' => $order->get_currency() ) );
-			}
-			?>
-  </td>
-</tr>
+			<tr>
+				<td class="label"><?php esc_html_e( 'Pending Payment', 'woocommerce' ); ?>:</td>
+				<td width="1%"></td>
+				<td class="total">
+					<?php
+					if ( ! empty( $pending_payment ) ) {
+						echo wc_price( $pending_payment, array( 'currency' => $order->get_currency() ) );
+					} else {
+						echo wc_price( 0, array( 'currency' => $order->get_currency() ) );
+					}
+					?>
+				</td>
+			</tr>
 
-<?php
+			<?php
 		}
 	}
 
@@ -1148,26 +1148,26 @@ class Woocommerce {
 
 		// Retrieve existing values from the database
 		$shipping_carrier = get_post_meta( $post->ID, '_shipping_carrier', true );
-		$tracking_number  = get_post_meta( $post->ID, '_tracking_number', true );
+		$tracking_number = get_post_meta( $post->ID, '_tracking_number', true );
 
 		// Display the form fields
 		?>
-<p>
-  <label for="shipping_carrier"><?php esc_html_e( 'Shipping Carrier', 'nova-b2b' ); ?></label>
-  <input type="text" name="shipping_carrier" id="shipping_carrier" value="<?php echo esc_attr( $shipping_carrier ); ?>"
-    style="width:100%;" />
-</p>
-<p>
-  <label for="tracking_number"><?php esc_html_e( 'Tracking Number', 'nova-b2b' ); ?></label>
-  <input type="text" name="tracking_number" id="tracking_number" value="<?php echo esc_attr( $tracking_number ); ?>"
-    style="width:100%;" />
-</p>
-<?php if ( 'UPS' === $shipping_carrier && $tracking_number ) : ?>
-<p>
-  <a href="https://www.ups.com/track?track=yes&trackNums=<?php echo esc_attr( $tracking_number ); ?>"
-    target="_blank">UPS Tracking link</a>
-</p>
-<?php
+		<p>
+			<label for="shipping_carrier"><?php esc_html_e( 'Shipping Carrier', 'nova-b2b' ); ?></label>
+			<input type="text" name="shipping_carrier" id="shipping_carrier" value="<?php echo esc_attr( $shipping_carrier ); ?>"
+				style="width:100%;" />
+		</p>
+		<p>
+			<label for="tracking_number"><?php esc_html_e( 'Tracking Number', 'nova-b2b' ); ?></label>
+			<input type="text" name="tracking_number" id="tracking_number" value="<?php echo esc_attr( $tracking_number ); ?>"
+				style="width:100%;" />
+		</p>
+		<?php if ( 'UPS' === $shipping_carrier && $tracking_number ) : ?>
+			<p>
+				<a href="https://www.ups.com/track?track=yes&trackNums=<?php echo esc_attr( $tracking_number ); ?>"
+					target="_blank">UPS Tracking link</a>
+			</p>
+			<?php
 		endif;
 	}
 
@@ -1197,7 +1197,7 @@ class Woocommerce {
 
 		// Sanitize user input
 		$shipping_carrier = isset( $_POST['shipping_carrier'] ) ? sanitize_text_field( $_POST['shipping_carrier'] ) : '';
-		$tracking_number  = isset( $_POST['tracking_number'] ) ? sanitize_text_field( $_POST['tracking_number'] ) : '';
+		$tracking_number = isset( $_POST['tracking_number'] ) ? sanitize_text_field( $_POST['tracking_number'] ) : '';
 
 		// Update the meta fields in the database
 		update_post_meta( $post_id, '_shipping_carrier', $shipping_carrier );
@@ -1238,13 +1238,21 @@ class Woocommerce {
 		echo '<pre>';
 		print_r( get_post_meta( $post->ID ) );
 		$order = wc_get_order( $post->ID );
+		echo '<h3>Order Items:</h3>';
+		$items = $order->get_items();
+		foreach ( $items as $item ) {
+			echo '<h4>Item ID: ' . $item->get_id() . '</h4>';
+			echo '<pre>';
+			print_r( $item->get_meta_data() );
+			echo '</pre>';
+		}
 		print_r( $order );
 		echo '</pre>';
 	}
 
 	public function pending_payment_order_content( $post ) {
 		// Output your custom content here. For example:
-		$order_id       = get_post_meta( $post->ID, '_adjusted_duplicate_order_id', true );
+		$order_id = get_post_meta( $post->ID, '_adjusted_duplicate_order_id', true );
 		$original_total = get_post_meta( $post->ID, '_original_total', true );
 		$payment_select = get_post_meta( $post->ID, '_payment_select', true );
 		$order_edit_url = admin_url( 'post.php?post=' . $order_id . '&action=edit' );
@@ -1252,25 +1260,25 @@ class Woocommerce {
 		// print_r( get_post_meta( $post->ID ) );
 
 		?>
-<a href="<?php echo esc_url( $order_edit_url ); ?>" class="button button-primary">View Order</a>
+		<a href="<?php echo esc_url( $order_edit_url ); ?>" class="button button-primary">View Order</a>
 
-<p>Original Total: <?php echo $original_total; ?></p>
+		<p>Original Total: <?php echo $original_total; ?></p>
 
-<?php
+		<?php
 	}
 
 	public function deposit_insert_order_total_row( $total_rows, $order ) {
 		// Check if the order has the '_deposit_total' meta key
-		$payment_order            = get_post_meta( $order->get_id(), '_adjusted_duplicate_order_id', true );
-		$pending_payment          = get_post_meta( $order->get_id(), '_pending_payment', true );
-		$payment_select           = get_post_meta( $order->get_id(), '_payment_select', true );
-		$deposit_total            = get_post_meta( $order->get_id(), '_deposit_total', true );
-		$from_order               = get_post_meta( $order->get_id(), '_from_order_id', true );
-		$original_total           = get_post_meta( $order->get_id(), '_original_total', true );
-		$original_shipping        = get_post_meta( $order->get_id(), '_original_shipping', true );
+		$payment_order = get_post_meta( $order->get_id(), '_adjusted_duplicate_order_id', true );
+		$pending_payment = get_post_meta( $order->get_id(), '_pending_payment', true );
+		$payment_select = get_post_meta( $order->get_id(), '_payment_select', true );
+		$deposit_total = get_post_meta( $order->get_id(), '_deposit_total', true );
+		$from_order = get_post_meta( $order->get_id(), '_from_order_id', true );
+		$original_total = get_post_meta( $order->get_id(), '_original_total', true );
+		$original_shipping = get_post_meta( $order->get_id(), '_original_shipping', true );
 		$original_shipping_method = get_post_meta( $order->get_id(), '_original_shipping_method', true );
-		$original_tax_names       = get_post_meta( $order->get_id(), '_original_tax_names', true );
-		$original_tax             = get_post_meta( $order->get_id(), '_original_tax', true );
+		$original_tax_names = get_post_meta( $order->get_id(), '_original_tax_names', true );
+		$original_tax = get_post_meta( $order->get_id(), '_original_tax', true );
 
 		if ( $from_order || $payment_order ) {
 
@@ -1323,17 +1331,17 @@ class Woocommerce {
 					);
 				}
 
-				$fee_items = $order->get_items('fee');
+				$fee_items = $order->get_items( 'fee' );
 				$coupons = $order->get_coupons();
 
 
-				if ( $original_tax_names && $original_tax && !$fee_items && !$coupons ) {
+				if ( $original_tax_names && $original_tax && ! $fee_items && ! $coupons ) {
 					$from_order_object = wc_get_order( $from_order );
-					$tax_rate          = $this->get_rate_percent_value_from_order( $from_order_object );
-					$tax_total         = $this->calculate_correct_tax( $from_order_object, $tax_rate );
+					$tax_rate = $this->get_rate_percent_value_from_order( $from_order_object );
+					$tax_total = $this->calculate_correct_tax( $from_order_object, $tax_rate );
 					$overall_total_row['original_tax'] = array(
-					'label' => $original_tax_names,
-					'value' => wc_price( $tax_total, array( 'currency' => $from_order_object->get_currency() ) ),
+						'label' => $original_tax_names,
+						'value' => wc_price( $tax_total, array( 'currency' => $from_order_object->get_currency() ) ),
 					);
 				}
 
@@ -1381,7 +1389,7 @@ class Woocommerce {
 				$item->get_quantity(),
 				array(
 					'subtotal' => $item->get_subtotal(),
-					'total'    => $item->get_total(), // Adjust if necessary based on your logic
+					'total' => $item->get_total(), // Adjust if necessary based on your logic
 				)
 			);
 
@@ -1438,13 +1446,13 @@ class Woocommerce {
 
 		if ( isset( $payment_select ) && $payment_select !== 0 ) {
 
-			$tax             = WC()->session->get( 'original_tax' );
-			$shipping        = WC()->session->get( 'original_shipping' );
-			$total           = WC()->session->get( 'original_total' );
+			$tax = WC()->session->get( 'original_tax' );
+			$shipping = WC()->session->get( 'original_shipping' );
+			$total = WC()->session->get( 'original_total' );
 			$shipping_method = WC()->session->get( 'original_shipping_methods' );
 			$pending_payment = WC()->session->get( 'pending_payment' );
-			$deposit_total   = WC()->session->get( 'deposit_total' );
-			$tax_names       = WC()->session->get( 'original_tax_names' );
+			$deposit_total = WC()->session->get( 'deposit_total' );
+			$tax_names = WC()->session->get( 'original_tax_names' );
 
 			// Save the session values as order meta for the original order
 			update_post_meta( $order_id, '_payment_select', $payment_select );
@@ -1493,11 +1501,11 @@ class Woocommerce {
 
 			if ( $payment_select && 0 !== $payment_select ) {
 				// Handling shipping methods
-				$chosen_methods        = WC()->session->get( 'chosen_shipping_methods' );
+				$chosen_methods = WC()->session->get( 'chosen_shipping_methods' );
 				$shipping_method_names = array();
 				foreach ( $chosen_methods as $method_id ) {
-					list($method, $instance_id) = explode( ':', $method_id );
-					$available_shipping_rates   = WC()->session->get( 'shipping_for_package_0' )['rates'];
+					list( $method, $instance_id ) = explode( ':', $method_id );
+					$available_shipping_rates = WC()->session->get( 'shipping_for_package_0' )['rates'];
 					if ( isset( $available_shipping_rates[ $method_id ] ) ) {
 						$shipping_method_names[] = $available_shipping_rates[ $method_id ]->get_label();
 					}
@@ -1506,7 +1514,7 @@ class Woocommerce {
 				WC()->session->set( 'original_shipping_methods', $shipping_names );
 
 				// Handling taxes
-				$tax_totals  = WC()->cart->get_tax_totals(); // Retrieves the tax totals as objects
+				$tax_totals = WC()->cart->get_tax_totals(); // Retrieves the tax totals as objects
 				$tax_details = array();
 				foreach ( $tax_totals as $code => $tax ) {
 					$tax_details[ $code ] = $tax->label;  // Capturing each tax name
@@ -1515,7 +1523,7 @@ class Woocommerce {
 				WC()->session->set( 'original_tax_names', $tax_names ); // Store tax names in the session
 
 				// Calculate new total based on deposit
-				$deposit   = get_field( 'deposit', $payment_select ) / 100;
+				$deposit = get_field( 'deposit', $payment_select ) / 100;
 				$new_total = $total * $deposit;
 
 				// Storing other session values
@@ -1553,20 +1561,20 @@ class Woocommerce {
 
 	public function custom_shipping_logic( $rates, $package ) {
 		// Get the total cart cost
-		$cart_total    = WC()->cart->cart_contents_total;
-		$currency      = get_woocommerce_currency();
-		$flat_rate     = 14.75;
+		$cart_total = WC()->cart->cart_contents_total;
+		$currency = get_woocommerce_currency();
+		$flat_rate = 14.75;
 		$expedite_rate = 29.5;
-		$min_price     = 800;
-		$above_min     = 0;
-		$below_min     = 0;
-		$above_min_ex  = 0;
-		$below_min_ex  = 0;
+		$min_price = 800;
+		$above_min = 0;
+		$below_min = 0;
+		$above_min_ex = 0;
+		$below_min_ex = 0;
 
 		if ( $currency === 'CAD' ) {
-			$flat_rate     *= NOVA_EXCHANGE_RATE;
+			$flat_rate *= NOVA_EXCHANGE_RATE;
 			$expedite_rate *= NOVA_EXCHANGE_RATE;
-			$min_price     *= NOVA_EXCHANGE_RATE;
+			$min_price *= NOVA_EXCHANGE_RATE;
 		}
 
 		if ( $cart_total < $min_price ) {
@@ -1574,12 +1582,12 @@ class Woocommerce {
 			$expedite_cost = $cart_total * 0.175 > $expedite_rate ? $cart_total * 0.175 : $expedite_rate; // 17.5%
 		} else {
 
-			$below_min    = $min_price * 0.09; // 9%
+			$below_min = $min_price * 0.09; // 9%
 			$below_min_ex = $min_price * 0.175; // 17.5%
 
 			$diff = $cart_total - $min_price;
 
-			$above_min    = $diff * 0.08; // 8%
+			$above_min = $diff * 0.08; // 8%
 			$above_min_ex = $diff * 0.155; // 15.5%
 
 			$standard_cost = $below_min + $above_min;
@@ -1588,8 +1596,8 @@ class Woocommerce {
 
 		// Assuming the method IDs are 'flat_rate', 'standard', and 'expedite'
 		$flat_rate = isset( $rates['flat_rate:4'] ) ? $rates['flat_rate:4'] : null;
-		$standard  = isset( $rates['flat_rate:2'] ) ? $rates['flat_rate:2'] : null;
-		$expedite  = isset( $rates['flat_rate:3'] ) ? $rates['flat_rate:3'] : null;
+		$standard = isset( $rates['flat_rate:2'] ) ? $rates['flat_rate:2'] : null;
+		$expedite = isset( $rates['flat_rate:3'] ) ? $rates['flat_rate:3'] : null;
 
 		// Update the standard and expedite rates
 		if ( $standard ) {
@@ -1610,19 +1618,19 @@ class Woocommerce {
 
 		// Check if the address is Vancouver and modify Expedite
 		/*
-		if ( isset( $package['destination']['city'] ) && strtolower( $package['destination']['city'] ) === 'vancouver' ) {
-			if ( $expedite ) {
-				$rates['flat_rate:3']->cost = min( $expedite_cost, $standard_cost, ( isset( $flat_rate->cost ) ? $flat_rate->cost : PHP_INT_MAX ) );
-				// Unset other rates to show only Expedite
-				unset( $rates['flat_rate:2'], $rates['flat_rate:4'] );
+			if ( isset( $package['destination']['city'] ) && strtolower( $package['destination']['city'] ) === 'vancouver' ) {
+				if ( $expedite ) {
+					$rates['flat_rate:3']->cost = min( $expedite_cost, $standard_cost, ( isset( $flat_rate->cost ) ? $flat_rate->cost : PHP_INT_MAX ) );
+					// Unset other rates to show only Expedite
+					unset( $rates['flat_rate:2'], $rates['flat_rate:4'] );
+				}
 			}
-		}
 
 
-		if ( is_cart() ) {
-			unset( $rates['flat_rate:3'] );
-		}
-		*/
+			if ( is_cart() ) {
+				unset( $rates['flat_rate:3'] );
+			}
+			*/
 
 		return $rates;
 	}
@@ -1630,9 +1638,9 @@ class Woocommerce {
 	public function add_pst_field( $fields ) {
 
 		$fields['shipping_pst'] = array(
-			'label'    => __( 'PST', 'woocommerce' ), // Change the label to something appropriate
+			'label' => __( 'PST', 'woocommerce' ), // Change the label to something appropriate
 			'required' => false, // Not required by default
-			'class'    => array( 'form-row-wide', 'custom-field-bc', 'hide-if-not-canada' ), // Custom class for JavaScript
+			'class' => array( 'form-row-wide', 'custom-field-bc', 'hide-if-not-canada' ), // Custom class for JavaScript
 			'priority' => 105, // Adjust the priority to position it right after the state field
 		);
 
@@ -1686,7 +1694,7 @@ class Woocommerce {
 	public function has_children( $post_id, $post_type = 'page' ) {
 		$children = get_posts(
 			array(
-				'post_type'   => $post_type,
+				'post_type' => $post_type,
 				'post_parent' => $post_id,
 				'numberposts' => 1, // We only need to check if at least one exists.
 			)
@@ -1703,12 +1711,12 @@ class Woocommerce {
 		$custom_quote = get_page_by_path( 'custom-quote', OBJECT, 'signage' );
 
 		$product_cat_list = array(
-			'post_type'      => 'signage',
-			'post_status'    => 'publish',
+			'post_type' => 'signage',
+			'post_status' => 'publish',
 			'posts_per_page' => -1,
-			'post_parent'    => 0,
-			'orderby'        => 'menu_order',
-			'order'          => 'ASC',
+			'post_parent' => 0,
+			'orderby' => 'menu_order',
+			'order' => 'ASC',
 		);
 
 		if ( $custom_quote && ! current_user_can( 'administrator' ) ) {
@@ -1717,179 +1725,187 @@ class Woocommerce {
 
 		$signage_query = new WP_Query( $product_cat_list );
 		?>
-<div class="md:flex md:gap-10 p-dropdown-wrap mb-24 mt-10 relative">
-  <div class="p-dropdown cursor-pointer mb-4 md:mb-0">
-    <div id="productCat" class="p-dropdown-current overflow-hidden grow">
-      <div class="p-drowpdown-wrap grow h-[55px] p-[10px] dropdown-trigger" data-open="productCat-list">
-        <div id="productCatCurrent" class="flex grow gap-2 items-center">
-          <div class="selectedWrap flex items-center gap-3">
-            <?php if ( $this->get_parent_ID() ) : ?>
-            <?php $this->output_current_signage( $this->get_parent_ID() ); ?>
-            <?php else : ?>
-            <div class="text-[#D2D2D2]">SELECT OPTION</div>
-            <?php endif; ?>
-          </div>
-          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="8" viewBox="0 0 15 8" fill="none" class="ml-auto">
-            <path d="M13.3516 2L7.8861 6.54054L2.00021 2" stroke="black" stroke-width="2" stroke-linecap="square"
-              stroke-linejoin="round" />
-          </svg>
-        </div>
-      </div>
-    </div>
-    <?php if ( $signage_query->have_posts() ) { ?>
-    <div id="productCat-list" class="hidden shadow-lg">
-      <?php if ( $custom ) : ?>
-      <a class="product-cat-item text-black no-underline" data-signage="<?php echo $custom->ID; ?>"
-        href="<?php echo esc_url( get_the_permalink( $custom->ID ) ); ?>">
-        <?php echo get_the_post_thumbnail( $custom->ID, array( 35, 35 ) ); ?>
-        <?php echo get_the_title( $custom->ID ); ?>
-      </a>
-      <?php endif; ?>
+		<div class="md:flex md:gap-10 p-dropdown-wrap mb-24 mt-10 relative">
+			<div class="p-dropdown cursor-pointer mb-4 md:mb-0">
+				<div id="productCat" class="p-dropdown-current overflow-hidden grow">
+					<div class="p-drowpdown-wrap grow h-[55px] p-[10px] dropdown-trigger" data-open="productCat-list">
+						<div id="productCatCurrent" class="flex grow gap-2 items-center">
+							<div class="selectedWrap flex items-center gap-3">
+								<?php if ( $this->get_parent_ID() ) : ?>
+									<?php $this->output_current_signage( $this->get_parent_ID() ); ?>
+								<?php else : ?>
+									<div class="text-[#D2D2D2]">SELECT OPTION</div>
+								<?php endif; ?>
+							</div>
+							<svg xmlns="http://www.w3.org/2000/svg" width="15" height="8" viewBox="0 0 15 8" fill="none" class="ml-auto">
+								<path d="M13.3516 2L7.8861 6.54054L2.00021 2" stroke="black" stroke-width="2" stroke-linecap="square"
+									stroke-linejoin="round" />
+							</svg>
+						</div>
+					</div>
+				</div>
+				<?php if ( $signage_query->have_posts() ) { ?>
+					<div id="productCat-list" class="hidden shadow-lg">
+						<?php if ( $custom ) : ?>
+							<a class="product-cat-item text-black no-underline" data-signage="<?php echo $custom->ID; ?>"
+								href="<?php echo esc_url( get_the_permalink( $custom->ID ) ); ?>">
+								<?php echo get_the_post_thumbnail( $custom->ID, array( 35, 35 ) ); ?>
+								<?php echo get_the_title( $custom->ID ); ?>
+							</a>
+						<?php endif; ?>
 
-      <?php
-			while ( $signage_query->have_posts() ) {
-				$signage_query->the_post();
+						<?php
+						while ( $signage_query->have_posts() ) {
+							$signage_query->the_post();
+							?>
+							<a class="product-cat-item text-black no-underline" data-signage="<?php echo get_the_ID(); ?>"
+								href="<?php echo esc_url( get_permalink() ); ?>">
+								<?php the_post_thumbnail( array( 35, 35 ) ); ?>
+								<?php the_title(); ?>
+							</a>
+
+							<?php
+						}
+						wp_reset_postdata();
+						?>
+					</div>
+				<?php } ?>
+			</div>
+
+			<div class="p-dropdown cursor-pointer">
+				<div id="novaProduct" class="p-dropdown-current overflow-hidden grow">
+					<div class="p-drowpdown-wrap grow h-[55px] p-[10px] dropdown-trigger" data-open="novaProduct-list">
+						<div id="novaProductCurrent" class="flex grow gap-2 items-center">
+							<div class="selectedWrap flex items-center gap-3">
+								<?php if ( $this->get_signage_ID() ) : ?>
+									<?php $this->output_current_signage( $this->get_signage_ID() ); ?>
+								<?php else : ?>
+									<span class="text-[#D2D2D2]">SELECT OPTION</span>
+								<?php endif; ?>
+							</div>
+							<svg xmlns="http://www.w3.org/2000/svg" width="15" height="8" viewBox="0 0 15 8" fill="none" class="ml-auto">
+								<path d="M13.3516 2L7.8861 6.54054L2.00021 2" stroke="black" stroke-width="2" stroke-linecap="square"
+									stroke-linejoin="round" />
+							</svg>
+						</div>
+					</div>
+				</div>
+				<?php
+				$nova_query = new WP_Query(
+					array(
+						'post_type' => 'signage',
+						'post_status' => 'publish',
+						'posts_per_page' => -1,
+						'post_parent' => $this->get_parent_ID(),
+						'orderby' => 'menu_order',
+						'order' => 'ASC',
+					)
+				);
 				?>
-      <a class="product-cat-item text-black no-underline" data-signage="<?php echo get_the_ID(); ?>"
-        href="<?php echo esc_url( get_permalink() ); ?>">
-        <?php the_post_thumbnail( array( 35, 35 ) ); ?>
-        <?php the_title(); ?>
-      </a>
+				<?php if ( $nova_query->have_posts() ) { ?>
+					<div id="novaProduct-list" class="hidden shadow-lg">
 
-      <?php
-			}
-				wp_reset_postdata();
-			?>
-    </div>
-    <?php } ?>
-  </div>
+						<?php
+						while ( $nova_query->have_posts() ) {
+							$nova_query->the_post();
+							?>
+							<a class="product-cat-item text-black no-underline" href="<?php echo esc_url( get_permalink() ); ?>overview">
+								<?php the_post_thumbnail( array( 35, 35 ) ); ?>
+								<?php the_title(); ?>
+							</a>
 
-  <div class="p-dropdown cursor-pointer">
-    <div id="novaProduct" class="p-dropdown-current overflow-hidden grow">
-      <div class="p-drowpdown-wrap grow h-[55px] p-[10px] dropdown-trigger" data-open="novaProduct-list">
-        <div id="novaProductCurrent" class="flex grow gap-2 items-center">
-          <div class="selectedWrap flex items-center gap-3">
-            <?php if ( $this->get_signage_ID() ) : ?>
-            <?php $this->output_current_signage( $this->get_signage_ID() ); ?>
-            <?php else : ?>
-            <span class="text-[#D2D2D2]">SELECT OPTION</span>
-            <?php endif; ?>
-          </div>
-          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="8" viewBox="0 0 15 8" fill="none" class="ml-auto">
-            <path d="M13.3516 2L7.8861 6.54054L2.00021 2" stroke="black" stroke-width="2" stroke-linecap="square"
-              stroke-linejoin="round" />
-          </svg>
-        </div>
-      </div>
-    </div>
-    <?php
-		$nova_query = new WP_Query(
-			array(
-				'post_type'      => 'signage',
-				'post_status'    => 'publish',
-				'posts_per_page' => -1,
-				'post_parent'    => $this->get_parent_ID(),
-				'orderby'        => 'menu_order',
-				'order'          => 'ASC',
-			)
-		);
-		?>
-    <?php if ( $nova_query->have_posts() ) { ?>
-    <div id="novaProduct-list" class="hidden shadow-lg">
+							<?php
+						}
+						wp_reset_postdata();
+						?>
+					</div>
+				<?php } ?>
+			</div>
 
-      <?php
-			while ( $nova_query->have_posts() ) {
-				$nova_query->the_post();
-				?>
-      <a class="product-cat-item text-black no-underline" href="<?php echo esc_url( get_permalink() ); ?>overview">
-        <?php the_post_thumbnail( array( 35, 35 ) ); ?>
-        <?php the_title(); ?>
-      </a>
-
-      <?php
-			}
-				wp_reset_postdata();
-			?>
-    </div>
-    <?php } ?>
-  </div>
-
-  <script>
-  document.addEventListener("DOMContentLoaded", (event) => {
-    const triggers = document.querySelectorAll('.dropdown-trigger');
-    const productCatList = document.getElementById('productCat-list');
-    const novaProductCurrent = document.getElementById('novaProductCurrent');
-    const novaProductList = document.getElementById('novaProduct-list');
+			<script>
+				document.addEventListener("DOMContentLoaded", (event) =>
+				{
+					const triggers = document.querySelectorAll('.dropdown-trigger');
+					const productCatList = document.getElementById('productCat-list');
+					const novaProductCurrent = document.getElementById('novaProductCurrent');
+					const novaProductList = document.getElementById('novaProduct-list');
 
 
 
-    productCatList.querySelectorAll('.product-cat-item').forEach(item => {
-      item.addEventListener("click", () => {
-        const parentId = item.dataset.signage;
-        const selectWrap = novaProductCurrent.querySelector('.selectedWrap');
-        const currentWrap = productCatCurrent.querySelector('.selectedWrap');
-        const content = item.innerHTML;
-        currentWrap.innerHTML = content;
+					productCatList.querySelectorAll('.product-cat-item').forEach(item =>
+					{
+						item.addEventListener("click", () =>
+						{
+							const parentId = item.dataset.signage;
+							const selectWrap = novaProductCurrent.querySelector('.selectedWrap');
+							const currentWrap = productCatCurrent.querySelector('.selectedWrap');
+							const content = item.innerHTML;
+							currentWrap.innerHTML = content;
 
-        selectWrap.innerHTML =
-          '<span class="text-[#D2D2D2]">LOADING...</span>';
+							selectWrap.innerHTML =
+								'<span class="text-[#D2D2D2]">LOADING...</span>';
 
-        novaProductList.innerHTML = '';
+							novaProductList.innerHTML = '';
 
-        const data = new FormData();
-        data.append('action', 'populate_signage');
-        data.append('parent_id', parentId);
-        data.append('nonce', NovaMyAccount.nonce);
-
-
-        productCatList.classList.add('hidden');
-        novaProductList.classList.add('hidden');
-
-        fetch(NovaMyAccount.ajax_url, {
-            method: 'POST',
-            credentials: 'same-origin',
-            headers: {
-              'Cache-Control': 'no-cache',
-            },
-            body: data,
-          })
-          .then((response) => response.json())
-          .then((data) => {
-            selectWrap.innerHTML =
-              '<span class="text-[#D2D2D2]">SELECT OPTION</span>';
+							const data = new FormData();
+							data.append('action', 'populate_signage');
+							data.append('parent_id', parentId);
+							data.append('nonce', NovaMyAccount.nonce);
 
 
-            novaProductList.innerHTML = data['html'];
-          })
-          .catch((error) => console.error('Error:', error))
+							productCatList.classList.add('hidden');
+							novaProductList.classList.add('hidden');
 
-      });
-    });
+							fetch(NovaMyAccount.ajax_url, {
+								method: 'POST',
+								credentials: 'same-origin',
+								headers: {
+									'Cache-Control': 'no-cache',
+								},
+								body: data,
+							})
+								.then((response) => response.json())
+								.then((data) =>
+								{
+									selectWrap.innerHTML =
+										'<span class="text-[#D2D2D2]">SELECT OPTION</span>';
 
-    triggers.forEach(trigger => {
-      trigger.addEventListener('click', e => {
-        e.preventDefault();
-        const open = trigger.dataset.open;
-        const dropdown = document.getElementById(open);
-        dropdown.classList.toggle('hidden');
 
-        document.addEventListener('click', function closeDropdown(event) {
-          const dropdownWrap = document.querySelector('.p-dropdown-wrap');
+									novaProductList.innerHTML = data['html'];
+								})
+								.catch((error) => console.error('Error:', error))
 
-          if ((!dropdown.contains(event.target) && !dropdownWrap.contains(
-              event.target)) && event.target !== trigger) {
-            dropdown.classList.add('hidden');
-            document.removeEventListener('click', closeDropdown);
-          }
-        });
-      });
-    });
-  });
-  </script>
+						});
+					});
 
-</div>
-<?php
-			return ob_get_clean();
+					triggers.forEach(trigger =>
+					{
+						trigger.addEventListener('click', e =>
+						{
+							e.preventDefault();
+							const open = trigger.dataset.open;
+							const dropdown = document.getElementById(open);
+							dropdown.classList.toggle('hidden');
+
+							document.addEventListener('click', function closeDropdown(event)
+							{
+								const dropdownWrap = document.querySelector('.p-dropdown-wrap');
+
+								if ((!dropdown.contains(event.target) && !dropdownWrap.contains(
+									event.target)) && event.target !== trigger)
+								{
+									dropdown.classList.add('hidden');
+									document.removeEventListener('click', closeDropdown);
+								}
+							});
+						});
+					});
+				});
+			</script>
+
+		</div>
+		<?php
+		return ob_get_clean();
 	}
 
 	public function populate_signage() {
@@ -1897,17 +1913,17 @@ class Woocommerce {
 			'code' => 1,
 		);
 		if ( ! wp_verify_nonce( $_POST['nonce'], 'nova_account_nonce' ) ) {
-			$status['error']  = 'Nonce error';
+			$status['error'] = 'Nonce error';
 			$status['status'] = 'error';
 			wp_send_json( $status );
 		}
 
 		$nova_query = new WP_Query(
 			array(
-				'post_type'      => 'signage',
-				'post_status'    => 'publish',
+				'post_type' => 'signage',
+				'post_status' => 'publish',
 				'posts_per_page' => -1,
-				'post_parent'    => $_POST['parent_id'],
+				'post_parent' => $_POST['parent_id'],
 			)
 		);
 
@@ -1915,11 +1931,11 @@ class Woocommerce {
 		while ( $nova_query->have_posts() ) {
 			$nova_query->the_post();
 			?>
-<a class="product-cat-item text-black no-underline" href="<?php echo esc_url( get_permalink() ); ?>overview">
-  <?php the_post_thumbnail( array( 35, 35 ) ); ?>
-  <?php the_title(); ?>
-</a>
-<?php
+			<a class="product-cat-item text-black no-underline" href="<?php echo esc_url( get_permalink() ); ?>overview">
+				<?php the_post_thumbnail( array( 35, 35 ) ); ?>
+				<?php the_title(); ?>
+			</a>
+			<?php
 		}
 		wp_reset_postdata();
 
@@ -1944,27 +1960,27 @@ class Woocommerce {
 			while ( have_rows( 'product_guide' ) ) :
 				the_row();
 				?>
-<div class="md:flex gap-20 items-center mb-10 md:mb-20">
-  <?php
-				$image = get_sub_field( 'image' );
-				?>
-  <div class="md:w-1/3 mb-5 md:mb-0">
-    <h3 class="uppercase"><?php echo get_sub_field( 'title' ); ?></h3>
-    <p class="text-[16px] mb-4"><?php echo get_sub_field( 'content' ); ?></p>
-    <?php if ( get_sub_field( 'link' ) ) : ?>
-    <a href="<?php echo esc_url( get_sub_field( 'link' )['url'] ); ?>"
-      class="text-nova-secondary lowercase underline text-[16px]"><?php echo get_sub_field( 'link' )['title']; ?></a>
-    <?php endif; ?>
-  </div>
-  <div class="md:w-2/3">
-    <a href="<?php echo esc_url( $image['url'] ); ?>"><img class="w-full h-full object-cover aspect-[4/3]"
-        src="<?php echo esc_url( $image['url'] ); ?>" alt="<?php echo esc_attr( $image['alt'] ); ?>" /></a>
-  </div>
-</div>
+				<div class="md:flex gap-20 items-center mb-10 md:mb-20">
+					<?php
+					$image = get_sub_field( 'image' );
+					?>
+					<div class="md:w-1/3 mb-5 md:mb-0">
+						<h3 class="uppercase"><?php echo get_sub_field( 'title' ); ?></h3>
+						<p class="text-[16px] mb-4"><?php echo get_sub_field( 'content' ); ?></p>
+						<?php if ( get_sub_field( 'link' ) ) : ?>
+							<a href="<?php echo esc_url( get_sub_field( 'link' )['url'] ); ?>"
+								class="text-nova-secondary lowercase underline text-[16px]"><?php echo get_sub_field( 'link' )['title']; ?></a>
+						<?php endif; ?>
+					</div>
+					<div class="md:w-2/3">
+						<a href="<?php echo esc_url( $image['url'] ); ?>"><img class="w-full h-full object-cover aspect-[4/3]"
+								src="<?php echo esc_url( $image['url'] ); ?>" alt="<?php echo esc_attr( $image['alt'] ); ?>" /></a>
+					</div>
+				</div>
 
-<?php
+				<?php
 			endwhile;
-	endif;
+		endif;
 		return ob_get_clean();
 	}
 
@@ -1972,24 +1988,24 @@ class Woocommerce {
 		ob_start();
 		if ( have_rows( 'features' ) ) :
 			?>
-<div class="md:flex justify-between product-features-icons gap-12">
-  <?php
-			while ( have_rows( 'features' ) ) :
-				the_row();
-				$image = get_sub_field( 'icon' );
-				?>
-  <div class="text-center md:mb-0 mb-[40px] flex-1">
-    <div class="img-wrap h-[55px]">
-      <img class="mx-auto" src="<?php echo esc_url( $image['url'] ); ?>"
-        alt="<?php echo esc_attr( $image['alt'] ); ?>" />
-    </div>
-    <h5 class="uppercase tracking-[1.8px] mt-9"><?php echo get_sub_field( 'name' ); ?></h5>
-  </div>
-  <?php endwhile; ?>
-</div>
+			<div class="md:flex justify-between product-features-icons gap-12">
+				<?php
+				while ( have_rows( 'features' ) ) :
+					the_row();
+					$image = get_sub_field( 'icon' );
+					?>
+					<div class="text-center md:mb-0 mb-[40px] flex-1">
+						<div class="img-wrap h-[55px]">
+							<img class="mx-auto" src="<?php echo esc_url( $image['url'] ); ?>"
+								alt="<?php echo esc_attr( $image['alt'] ); ?>" />
+						</div>
+						<h5 class="uppercase tracking-[1.8px] mt-9"><?php echo get_sub_field( 'name' ); ?></h5>
+					</div>
+				<?php endwhile; ?>
+			</div>
 
-<?php
-			endif;
+			<?php
+		endif;
 		return ob_get_clean();
 	}
 
@@ -1999,8 +2015,8 @@ class Woocommerce {
 		}
 
 		// Get the meta values from the order
-		$from_order_id      = $order->get_meta( '_from_order_id' );
-		$second_payment     = $order->get_meta( 'second_payment' );
+		$from_order_id = $order->get_meta( '_from_order_id' );
+		$second_payment = $order->get_meta( 'second_payment' );
 		$original_order_ids = $order->get_meta( '_original_order_ids' );
 
 		// If any of the specified meta values are present, modify the thank you text
@@ -2029,131 +2045,146 @@ class Woocommerce {
 
 	public function update_quantity_script() {
 		?>
-<script>
-function initializeQuantityButtons() {
-  const cartForm = document.querySelector('form.woocommerce-cart-form');
-  const updateCartButton = document.querySelector('button[name="update_cart"]');
-  const quantityChanges = document.querySelectorAll('.quantity-change');
+		<script>
+			function initializeQuantityButtons()
+			{
+				const cartForm = document.querySelector('form.woocommerce-cart-form');
+				const updateCartButton = document.querySelector('button[name="update_cart"]');
+				const quantityChanges = document.querySelectorAll('.quantity-change');
 
-  quantityChanges.forEach(q => {
-    const decrease = q.querySelector('.decrease');
-    const increase = q.querySelector('.increase');
-    const input = q.querySelector('input.qty');
+				quantityChanges.forEach(q =>
+				{
+					const decrease = q.querySelector('.decrease');
+					const increase = q.querySelector('.increase');
+					const input = q.querySelector('input.qty');
 
-    // Remove existing event listeners
-    increase.removeEventListener('click', increaseClickListener);
-    decrease.removeEventListener('click', decreaseClickListener);
+					// Remove existing event listeners
+					increase.removeEventListener('click', increaseClickListener);
+					decrease.removeEventListener('click', decreaseClickListener);
 
-    // Add new event listeners
-    increase.addEventListener('click', increaseClickListener);
-    decrease.addEventListener('click', decreaseClickListener);
+					// Add new event listeners
+					increase.addEventListener('click', increaseClickListener);
+					decrease.addEventListener('click', decreaseClickListener);
 
-    function increaseClickListener(e) {
-      increaseHandler(e, input);
-    }
+					function increaseClickListener(e)
+					{
+						increaseHandler(e, input);
+					}
 
-    function decreaseClickListener(e) {
-      decreaseHandler(e, input);
-    }
-  });
+					function decreaseClickListener(e)
+					{
+						decreaseHandler(e, input);
+					}
+				});
 
-  function increaseHandler(e, input) {
-    e.preventDefault();
-    let currentValue = parseInt(input.value, 10);
-    input.value = currentValue + 1;
-    updateCartButton.disabled = false;
-  }
+				function increaseHandler(e, input)
+				{
+					e.preventDefault();
+					let currentValue = parseInt(input.value, 10);
+					input.value = currentValue + 1;
+					updateCartButton.disabled = false;
+				}
 
-  function decreaseHandler(e, input) {
-    e.preventDefault();
-    let currentValue = parseInt(input.value, 10);
-    if (currentValue > 1) {
-      input.value = currentValue - 1;
-      updateCartButton.disabled = false;
-    }
-  }
-}
+				function decreaseHandler(e, input)
+				{
+					e.preventDefault();
+					let currentValue = parseInt(input.value, 10);
+					if (currentValue > 1)
+					{
+						input.value = currentValue - 1;
+						updateCartButton.disabled = false;
+					}
+				}
+			}
 
 
-document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
-jQuery(document.body).on('updated_cart_totals', initializeQuantityButtons);
-</script>
-<?php
+			document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
+			jQuery(document.body).on('updated_cart_totals', initializeQuantityButtons);
+		</script>
+		<?php
 	}
 
 	public function update_single_quantity_script() {
 		global $product;
 		?>
-<script>
-function initializeQuantityButtons() {
-  const quantityChanges = document.querySelectorAll('.quantity-change');
-  const currentPrice = '<?php echo $product->get_price(); ?>';
-  const currencySymbol = '<?php echo get_woocommerce_currency_symbol(); ?>';
+		<script>
+			function initializeQuantityButtons()
+			{
+				const quantityChanges = document.querySelectorAll('.quantity-change');
+				const currentPrice = '<?php echo $product->get_price(); ?>';
+				const currencySymbol = '<?php echo get_woocommerce_currency_symbol(); ?>';
 
-  function computePrice(qty) {
+				function computePrice(qty)
+				{
 
-    let computeprice = qty * parseFloat(currentPrice);
-    console.log(computeprice);
-    computeprice = computeprice.toLocaleString('en-US', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    });
+					let computeprice = qty * parseFloat(currentPrice);
+					console.log(computeprice);
+					computeprice = computeprice.toLocaleString('en-US', {
+						minimumFractionDigits: 2,
+						maximumFractionDigits: 2
+					});
 
-    document.getElementById("watchPrice").innerHTML = currencySymbol + computeprice;
+					document.getElementById("watchPrice").innerHTML = currencySymbol + computeprice;
 
-  }
-
-
-  quantityChanges.forEach(q => {
-    const decrease = q.querySelector('.decrease');
-    const increase = q.querySelector('.increase');
-    const input = q.querySelector('input.qty');
-
-    // Remove existing event listeners
-    increase.removeEventListener('click', increaseClickListener);
-    decrease.removeEventListener('click', decreaseClickListener);
-
-    // Add new event listeners
-    increase.addEventListener('click', increaseClickListener);
-    decrease.addEventListener('click', decreaseClickListener);
+				}
 
 
+				quantityChanges.forEach(q =>
+				{
+					const decrease = q.querySelector('.decrease');
+					const increase = q.querySelector('.increase');
+					const input = q.querySelector('input.qty');
 
-    function increaseClickListener(e) {
-      increaseHandler(e, input);
-    }
+					// Remove existing event listeners
+					increase.removeEventListener('click', increaseClickListener);
+					decrease.removeEventListener('click', decreaseClickListener);
 
-    function decreaseClickListener(e) {
-      decreaseHandler(e, input);
-    }
-  });
-
-  function increaseHandler(e, input) {
-    e.preventDefault();
-    let currentValue = parseInt(input.value, 10);
-    input.value = currentValue + 1;
-
-    console.log(input.value);
-
-    computePrice(input.value);
+					// Add new event listeners
+					increase.addEventListener('click', increaseClickListener);
+					decrease.addEventListener('click', decreaseClickListener);
 
 
-  }
 
-  function decreaseHandler(e, input) {
-    e.preventDefault();
-    let currentValue = parseInt(input.value, 10);
-    if (currentValue > 1) {
-      input.value = currentValue - 1;
-      computePrice(input.value)
-    }
-    console.log(input.value);
-  }
-}
+					function increaseClickListener(e)
+					{
+						increaseHandler(e, input);
+					}
 
-document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
-</script>
-<?php
+					function decreaseClickListener(e)
+					{
+						decreaseHandler(e, input);
+					}
+				});
+
+				function increaseHandler(e, input)
+				{
+					e.preventDefault();
+					let currentValue = parseInt(input.value, 10);
+					input.value = currentValue + 1;
+
+					console.log(input.value);
+
+					computePrice(input.value);
+
+
+				}
+
+				function decreaseHandler(e, input)
+				{
+					e.preventDefault();
+					let currentValue = parseInt(input.value, 10);
+					if (currentValue > 1)
+					{
+						input.value = currentValue - 1;
+						computePrice(input.value)
+					}
+					console.log(input.value);
+				}
+			}
+
+			document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
+		</script>
+		<?php
 	}
 
 	public function edit_cart_summary_title() {
@@ -2182,13 +2213,13 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		$items = $order->get_items();
 
 		foreach ( $items as $item_id => $item ) {
-			$signage  = $item->get_meta( 'signage' );
+			$signage = $item->get_meta( 'signage' );
 			$quote_id = $item->get_meta( 'quote_id' );
 			if ( ! empty( $signage ) && isset( $quote_id ) ) {
 				update_field( 'paid', true, $quote_id );
 				update_field( 'order_id', $order->get_order_number(), $quote_id );
 				$args = array(
-					'ID'          => $quote_id,
+					'ID' => $quote_id,
 					'post_status' => 'checked_out',
 				);
 				wp_update_post( $args );
@@ -2283,7 +2314,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 
 	public function nova_quote_display_signage( $cart_item, $cart_item_key ) {
 		if ( is_wc_endpoint_url( 'order-received' ) || is_wc_endpoint_url( 'view-order' ) ) {
-				return;
+			return;
 		}
 		if ( isset( $cart_item['signage'] ) && $cart_item['nova_title'] ) {
 
@@ -2301,10 +2332,10 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 
 	public function generate_html_table_from_array( $array, $product, $nova_title, $product_line ) {
 
-		$instance   = \NOVA_B2B\Nova_Quote::get_instance();
+		$instance = \NOVA_B2B\Nova_Quote::get_instance();
 		$attributes = $instance->allAttributes();
 
-		$html  = '<h6 style="font-size: 100%; margin-top: 10px;margin-bottom: 0;">Quote ID: <strong>Q-' . str_pad( $product, 4, '0', STR_PAD_LEFT ) . '</strong></h6>';
+		$html = '<h6 style="font-size: 100%; margin-top: 10px;margin-bottom: 0;">Quote ID: <strong>Q-' . str_pad( $product, 4, '0', STR_PAD_LEFT ) . '</strong></h6>';
 		$html .= '<h6 style="font-size: 100%; margin-top: 0; margin-bottom: 0;">Project Name: <strong>' . $nova_title . '</strong></h6>';
 		$html .= '<h6 style="font-size: 100%; margin-top: 0; margin-bottom: 0;">Product: <strong>' . $product_line . '</strong></h6>';
 
@@ -2332,7 +2363,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 						} elseif ( $attr['isFiles'] ?? false && isset( $object->fileUrls, $object->fileNames ) && ! empty( $object->fileUrls ) && ! empty( $object->fileNames ) ) {
 							$filesHtml = '';
 							foreach ( $object->fileUrls as $index => $fileUrl ) {
-								$fileName   = $object->fileNames[ $index ] ?? $fileUrl;
+								$fileName = $object->fileNames[ $index ] ?? $fileUrl;
 								$filesHtml .= '<a href="' . htmlspecialchars( $fileUrl, ENT_QUOTES, 'UTF-8' ) . '" target="_blank">' . htmlspecialchars( $fileName, ENT_QUOTES, 'UTF-8' ) . '</a><br>';
 							}
 							$html .= '<tr><td style="border: 1px solid #dddddd; padding: 10px;"><strong>' . $attr['label'] . ':</strong></td><td style="border: 1px solid #dddddd; padding: 10px;">' . $filesHtml . '</td></tr>';
@@ -2395,12 +2426,12 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 
 	public function nova_add_to_cart_meta( $cart_item_data, $product_id, $variation_id ) {
 		if ( isset( get_field( 'nova_quote_product', 'option' )->ID ) && get_field( 'nova_quote_product', 'option' )->ID === $product_id && isset( $_POST['nova_title'] ) && isset( $_POST['quote_id'] ) ) {
-			$cart_item_data['nova_title']   = sanitize_text_field( $_POST['nova_title'] );
-			$cart_item_data['signage']      = $_POST['signage'];
-			$cart_item_date['quote_id']     = $_POST['quote_id'];
-			$cart_item_date['product']      = $_POST['product'];
+			$cart_item_data['nova_title'] = sanitize_text_field( $_POST['nova_title'] );
+			$cart_item_data['signage'] = $_POST['signage'];
+			$cart_item_date['quote_id'] = $_POST['quote_id'];
+			$cart_item_date['product'] = $_POST['product'];
 			$cart_item_date['product_line'] = $_POST['product_line'];
-			$cart_item_date['nova_quote']   = true;
+			$cart_item_date['nova_quote'] = true;
 			if ( isset( $_POST['nova_note'] ) ) {
 				$cart_item_date['nova_note'] = $_POST['nova_note'];
 			}
@@ -2437,8 +2468,8 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		}
 		$title = apply_filters( 'nova_account_title_filter', $endpoint_title );
 		?>
-<h2 class="pb-4 mb-4 uppercase mt-0"><?php echo $title; ?></h2>
-<?php
+		<h2 class="pb-4 mb-4 uppercase mt-0"><?php echo $title; ?></h2>
+		<?php
 	}
 
 	public function nova_account_navigation() {
@@ -2464,12 +2495,12 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 			$new_items[ $key ] = $value;
 
 			if ( 'mockups' === $key ) {
-				$new_items['mockups-drafts']     = 'Mockups Drafts';
-				$new_items['mockups-payments']   = 'Mockups Payments';
+				$new_items['mockups-drafts'] = 'Mockups Drafts';
+				$new_items['mockups-payments'] = 'Mockups Payments';
 				$new_items['mockups-processing'] = 'Mockups Processing';
-				$new_items['mockups-archived']   = 'Mockups Archived';
-				$new_items['mockups-view']       = 'View Mockup';
-				$new_items['invoice-history']    = 'Account History';
+				$new_items['mockups-archived'] = 'Mockups Archived';
+				$new_items['mockups-view'] = 'View Mockup';
+				$new_items['invoice-history'] = 'Account History';
 			}
 		}
 
@@ -2484,33 +2515,33 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 	}
 
 	public function mockups_content( $quote_status = '' ) {
-		$user_id  = get_current_user_id();
-		$paged    = isset( $_GET['pg'] ) ? intval( $_GET['pg'] ) : 1;
+		$user_id = get_current_user_id();
+		$paged = isset( $_GET['pg'] ) ? intval( $_GET['pg'] ) : 1;
 		$per_page = 10;
 
 		$meta_query = array(
 			'relation' => 'AND',
 			array(
-				'key'     => 'partner',
-				'value'   => $user_id,
+				'key' => 'partner',
+				'value' => $user_id,
 				'compare' => '=',
 			),
 		);
 
 		if ( $quote_status ) {
 			$meta_query[] = array(
-				'key'     => 'quote_status',
-				'value'   => $quote_status,
+				'key' => 'quote_status',
+				'value' => $quote_status,
 				'compare' => '=',
 			);
 		}
 
 		$query_args = array(
-			'post_type'      => 'nova_quote',
-			'meta_query'     => $meta_query,
-			'post_status'    => 'publish',
+			'post_type' => 'nova_quote',
+			'meta_query' => $meta_query,
+			'post_status' => 'publish',
 			'posts_per_page' => $per_page,
-			'paged'          => $paged,
+			'paged' => $paged,
 		);
 
 		$query_paged = new WP_Query( $query_args );
@@ -2527,7 +2558,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		} else {
 			// Fallback to show all posts if paginated query returns no results
 			$query_args['posts_per_page'] = -1;
-			$query_all                    = new WP_Query( $query_args );
+			$query_all = new WP_Query( $query_args );
 
 			if ( $query_all->have_posts() ) {
 				while ( $query_all->have_posts() ) {
@@ -2547,14 +2578,14 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 			return; // No need to display pagination if there's only one page.
 		}
 
-		$base_url         = esc_url( add_query_arg( 'pg', '%#%' ) );
+		$base_url = esc_url( add_query_arg( 'pg', '%#%' ) );
 		$pagination_links = paginate_links(
 			array(
-				'base'    => $base_url,
-				'format'  => '',
+				'base' => $base_url,
+				'format' => '',
 				'current' => $current_page,
-				'total'   => $total_pages,
-				'type'    => 'array',
+				'total' => $total_pages,
+				'type' => 'array',
 			)
 		);
 
@@ -2563,54 +2594,54 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		}
 
 		?>
-<div
-  class="flex flex-col-reverse gap-4 md:flex-row md:items-center md:justify-between border-t border-gray-200 bg-white py-3">
-  <div class="flex justify-center md:flex md:flex-1 md:items-center md:justify-between">
-    <div>
-      <p class="text-sm text-gray-700">
-        <?php
-					$first_result = ( ( $current_page - 1 ) * $per_page ) + 1;
-					$last_result  = min( $current_page * $per_page, $total_pages * $per_page, $total_results );
-				?>
-        Showing
-        <span class="font-medium"><?php echo $first_result; ?></span>
-        to
-        <span class="font-medium"><?php echo $last_result; ?></span>
-        of
-        <span class="font-medium"><?php echo $total_results; ?></span>
-        results
-      </p>
-    </div>
-  </div>
-  <div class="flex flex-1 mt-4 md:mt-0 justify-center md:justify-end gap-2 md:gap-4">
-    <?php if ( $current_page > 1 ) : ?>
-    <a href="<?php echo str_replace( '%#%', $current_page - 1, $base_url ); ?>"
-      class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-nova-primary hover:text-white gap-2">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
-        <path fill-rule="evenodd"
-          d="M11.78 5.22a.75.75 0 0 1 0 1.06L8.06 10l3.72 3.72a.75.75 0 1 1-1.06 1.06l-4.25-4.25a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Z"
-          clip-rule="evenodd" />
-      </svg>
-      <span class="ml-1"><?php _e( 'Previous' ); ?></span>
-    </a>
-    <?php endif; ?>
-    <?php if ( $current_page < $total_pages ) : ?>
-    <a href="<?php echo str_replace( '%#%', $current_page + 1, $base_url ); ?>"
-      class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-nova-primary hover:text-white">
-      <span>
-        <?php _e( 'Next' ); ?>
-      </span>
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
-        <path fill-rule="evenodd"
-          d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z"
-          clip-rule="evenodd" />
-      </svg>
-    </a>
-    <?php endif; ?>
-  </div>
+		<div
+			class="flex flex-col-reverse gap-4 md:flex-row md:items-center md:justify-between border-t border-gray-200 bg-white py-3">
+			<div class="flex justify-center md:flex md:flex-1 md:items-center md:justify-between">
+				<div>
+					<p class="text-sm text-gray-700">
+						<?php
+						$first_result = ( ( $current_page - 1 ) * $per_page ) + 1;
+						$last_result = min( $current_page * $per_page, $total_pages * $per_page, $total_results );
+						?>
+						Showing
+						<span class="font-medium"><?php echo $first_result; ?></span>
+						to
+						<span class="font-medium"><?php echo $last_result; ?></span>
+						of
+						<span class="font-medium"><?php echo $total_results; ?></span>
+						results
+					</p>
+				</div>
+			</div>
+			<div class="flex flex-1 mt-4 md:mt-0 justify-center md:justify-end gap-2 md:gap-4">
+				<?php if ( $current_page > 1 ) : ?>
+					<a href="<?php echo str_replace( '%#%', $current_page - 1, $base_url ); ?>"
+						class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-nova-primary hover:text-white gap-2">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
+							<path fill-rule="evenodd"
+								d="M11.78 5.22a.75.75 0 0 1 0 1.06L8.06 10l3.72 3.72a.75.75 0 1 1-1.06 1.06l-4.25-4.25a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Z"
+								clip-rule="evenodd" />
+						</svg>
+						<span class="ml-1"><?php _e( 'Previous' ); ?></span>
+					</a>
+				<?php endif; ?>
+				<?php if ( $current_page < $total_pages ) : ?>
+					<a href="<?php echo str_replace( '%#%', $current_page + 1, $base_url ); ?>"
+						class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-nova-primary hover:text-white">
+						<span>
+							<?php _e( 'Next' ); ?>
+						</span>
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
+							<path fill-rule="evenodd"
+								d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z"
+								clip-rule="evenodd" />
+						</svg>
+					</a>
+				<?php endif; ?>
+			</div>
 
-</div>
-<?php
+		</div>
+		<?php
 	}
 
 
@@ -2640,25 +2671,25 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		$meta_query = array(
 			'relation' => 'AND',
 			array(
-				'key'     => 'partner',
-				'value'   => $user_id,
+				'key' => 'partner',
+				'value' => $user_id,
 				'compare' => '=',
 			),
 		);
 
 		if ( $hook != 'all' ) {
 			$meta_query[] = array(
-				'key'     => 'quote_status',
-				'value'   => $hook,
+				'key' => 'quote_status',
+				'value' => $hook,
 				'compare' => '=',
 			);
 		}
 
 		$query = new WP_Query(
 			array(
-				'post_type'      => 'nova_quote',
-				'meta_query'     => $meta_query,
-				'post_status'    => 'publish',
+				'post_type' => 'nova_quote',
+				'meta_query' => $meta_query,
+				'post_status' => 'publish',
 				'posts_per_page' => -1,
 			)
 		);
@@ -2669,32 +2700,32 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 	public function mockups_nav() {
 		global $wp_query;
 
-		$all        = $this->get_all_mockups_quantity( 'all' );
-		$drafts     = $this->get_all_mockups_quantity( 'draft' );
+		$all = $this->get_all_mockups_quantity( 'all' );
+		$drafts = $this->get_all_mockups_quantity( 'draft' );
 		$processing = $this->get_all_mockups_quantity( 'processing' );
-		$quoted     = $this->get_all_mockups_quantity( 'ready' );
-		$archived   = $this->get_all_mockups_quantity( 'archived' );
+		$quoted = $this->get_all_mockups_quantity( 'ready' );
+		$archived = $this->get_all_mockups_quantity( 'archived' );
 
 		?>
-<div
-  class="border-b font-title uppercase flex gap-6 md:gap-11 mb-8 whitespace-nowrap overflow-x-auto overflow-y-hidden">
-  <a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/all' ) ); ?>"
-    class="py-4 border-solid border-x-0 border-t-0 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/all'] ) ? 'border-black' : 'border-transparent' ); ?>  text-black">ALL
-    Mockups <span>(<?php echo $all; ?>)</span></a>
-  <a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/drafts' ) ); ?>"
-    class="py-4 border-solid border-x-0 border-t-0 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/drafts'] ) ? 'border-black' : 'border-transparent' ); ?>  text-black">Drafts
-    <span>(<?php echo $drafts; ?>)</a>
-  <a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/processing' ) ); ?>"
-    class="py-4 border-solid border-x-0 border-t-0 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/processing'] ) ? 'border-black' : 'border-transparent' ); ?>  text-black">Processing
-    <span>(<?php echo $processing; ?>)</a>
-  <a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/payments' ) ); ?>"
-    class="py-4 border-solid border-x-0 border-t-0 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/payments'] ) ? 'border-black' : 'border-transparent' ); ?>  text-black">Quoted
-    <span>(<?php echo $quoted; ?>)</a>
-  <a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/archived' ) ); ?>"
-    class="py-4 border-solid border-x-0 border-t-0 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/archived'] ) ? 'border-black' : 'border-transparent' ); ?>  text-black">Archived
-    <span>(<?php echo $archived; ?>)</span></a>
-</div>
-<?php
+		<div
+			class="border-b font-title uppercase flex gap-6 md:gap-11 mb-8 whitespace-nowrap overflow-x-auto overflow-y-hidden">
+			<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/all' ) ); ?>"
+				class="py-4 border-solid border-x-0 border-t-0 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/all'] ) ? 'border-black' : 'border-transparent' ); ?>	text-black">ALL
+				Mockups <span>(<?php echo $all; ?>)</span></a>
+			<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/drafts' ) ); ?>"
+				class="py-4 border-solid border-x-0 border-t-0 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/drafts'] ) ? 'border-black' : 'border-transparent' ); ?>	text-black">Drafts
+				<span>(<?php echo $drafts; ?>)</a>
+			<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/processing' ) ); ?>"
+				class="py-4 border-solid border-x-0 border-t-0 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/processing'] ) ? 'border-black' : 'border-transparent' ); ?>	text-black">Processing
+				<span>(<?php echo $processing; ?>)</a>
+			<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/payments' ) ); ?>"
+				class="py-4 border-solid border-x-0 border-t-0 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/payments'] ) ? 'border-black' : 'border-transparent' ); ?>	text-black">Quoted
+				<span>(<?php echo $quoted; ?>)</a>
+			<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/archived' ) ); ?>"
+				class="py-4 border-solid border-x-0 border-t-0 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/archived'] ) ? 'border-black' : 'border-transparent' ); ?>	text-black">Archived
+				<span>(<?php echo $archived; ?>)</span></a>
+		</div>
+		<?php
 	}
 
 	public function add_mockups_link_my_account( $items ) {
@@ -2705,112 +2736,112 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 	}
 
 	public function add_mockups_endpoint_query_var( $vars ) {
-		$vars['mockups']            = 'mockups/all';
-		$vars['mockups-drafts']     = 'mockups/drafts';
-		$vars['mockups-archived']   = 'mockups/archived';
+		$vars['mockups'] = 'mockups/all';
+		$vars['mockups-drafts'] = 'mockups/drafts';
+		$vars['mockups-archived'] = 'mockups/archived';
 		$vars['mockups-processing'] = 'mockups/processing';
-		$vars['mockups-payments']   = 'mockups/payments';
-		$vars['mockups-view']       = 'mockups/view';
-		$vars['invoice-history']    = 'invoice-history';
-		$vars[]                     = 'paged';
+		$vars['mockups-payments'] = 'mockups/payments';
+		$vars['mockups-view'] = 'mockups/view';
+		$vars['invoice-history'] = 'invoice-history';
+		$vars[] = 'paged';
 		return $vars;
 	}
 
 	public function nova_product_specs() {
 		if ( have_rows( 'tech_specs_group' ) ) :
 			?>
-<div class="nova_product_specs_group">
-  <?php
-			while ( have_rows( 'tech_specs_group' ) ) :
-				the_row();
-				?>
-  <h2><?php echo get_sub_field( 'title' ); ?></h2>
-  <?php
-				if ( have_rows( 'specs' ) ) :
+			<div class="nova_product_specs_group">
+				<?php
+				while ( have_rows( 'tech_specs_group' ) ) :
+					the_row();
 					?>
-  <div class="spec-group">
-    <?php
-					while ( have_rows( 'specs' ) ) :
-						the_row();
+					<h2><?php echo get_sub_field( 'title' ); ?></h2>
+					<?php
+					if ( have_rows( 'specs' ) ) :
 						?>
-    <div class="spec-item">
-      <div class="spec-label">
-        <?php echo get_sub_field( 'name' ); ?>
-      </div>
-      <div class="spec-value">
-        <?php echo get_sub_field( 'value' ); ?>
-      </div>
-    </div>
+						<div class="spec-group">
+							<?php
+							while ( have_rows( 'specs' ) ) :
+								the_row();
+								?>
+								<div class="spec-item">
+									<div class="spec-label">
+										<?php echo get_sub_field( 'name' ); ?>
+									</div>
+									<div class="spec-value">
+										<?php echo get_sub_field( 'value' ); ?>
+									</div>
+								</div>
 
-    <?php
-						endwhile;
+								<?php
+							endwhile;
+							?>
+						</div>
+						<?php
+					endif;
 					?>
-  </div>
-  <?php
-			endif;
-				?>
 
-  <?php endwhile; ?>
-</div>
-<?php
-			endif;
+				<?php endwhile; ?>
+			</div>
+			<?php
+		endif;
 	}
 
 	public function nova_product_faqs() {
 		if ( have_rows( 'faqs' ) ) {
 			?>
-<div id="faqItems" class="has-faq accordion">
-  <h2 class="uppercase text-center mb-10">Frequently asked Questions</h2>
-  <?php
-			while ( have_rows( 'faqs' ) ) {
-				the_row();
+			<div id="faqItems" class="has-faq accordion">
+				<h2 class="uppercase text-center mb-10">Frequently asked Questions</h2>
+				<?php
+				while ( have_rows( 'faqs' ) ) {
+					the_row();
+					?>
+					<div class="faq-item visible">
+						<p class="faq-question mb-0"><?php echo get_sub_field( 'question' ); ?> <svg width="14" height="14"
+								viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<line x1="7" y1="1" x2="7" y2="13" stroke="black" stroke-width="2" stroke-linecap="round">
+								</line>
+								<line x1="13" y1="7" x2="1" y2="7" stroke="black" stroke-width="2" stroke-linecap="round">
+								</line>
+							</svg></p>
+						<div class="expander">
+							<div class="expander-content">
+								<div class="content-wrapper">
+									<?php if ( get_sub_field( 'answer' ) ) : ?>
+										<div class="post-content-container" style="padding-top: 2em;">
+											<?php echo get_sub_field( 'answer' ); ?>
+										</div>
+									<?php endif; ?>
+								</div>
+							</div>
+						</div>
+					</div>
+					<?php
+				}
 				?>
-  <div class="faq-item visible">
-    <p class="faq-question mb-0"><?php echo get_sub_field( 'question' ); ?> <svg width="14" height="14"
-        viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <line x1="7" y1="1" x2="7" y2="13" stroke="black" stroke-width="2" stroke-linecap="round">
-        </line>
-        <line x1="13" y1="7" x2="1" y2="7" stroke="black" stroke-width="2" stroke-linecap="round">
-        </line>
-      </svg></p>
-    <div class="expander">
-      <div class="expander-content">
-        <div class="content-wrapper">
-          <?php if ( get_sub_field( 'answer' ) ) : ?>
-          <div class="post-content-container" style="padding-top: 2em;">
-            <?php echo get_sub_field( 'answer' ); ?>
-          </div>
-          <?php endif; ?>
-        </div>
-      </div>
-    </div>
-  </div>
-  <?php
-			}
-			?>
-</div>
-<?php
+			</div>
+			<?php
 		}
 	}
 
 	public function myaccount_nav_avatar() {
 		$current_user = wp_get_current_user();
 		?>
-<div class="kadence-account-avatar">
-  <div class="kadence-customer-image">
-    <a class="kt-link-to-gravatar" href="https://gravatar.com/" target="_blank" rel="no"
-      title="<?php echo esc_attr__( 'Update Profile Photo', 'kadence' ); ?>">
-      <?php echo get_avatar( $current_user->ID, 40, null, null, array( 'class' => array( 'rounded-full' ) ) ); ?>
-    </a>
-  </div>
-</div>
-<div class="kadence-customer-name">
-  <h5 class="uppercase mt-2 mb-0 block"><?php echo esc_html( $current_user->display_name ); ?></h5>
-  <div class="block text-[14px] text-black uppercase"><span class="font-title text-[12px]">BUSINESS ID:</span>
-    <?php echo get_field( 'business_id', 'user_' . get_current_user_id() ); ?></div>
-  <a href="<?php echo wp_logout_url( '/' ); ?>" class="text-black text-[10px]">LOG OUT</a>
-</div>
-<?php
+		<div class="kadence-account-avatar">
+			<div class="kadence-customer-image">
+				<a class="kt-link-to-gravatar" href="https://gravatar.com/" target="_blank" rel="no"
+					title="<?php echo esc_attr__( 'Update Profile Photo', 'kadence' ); ?>">
+					<?php echo get_avatar( $current_user->ID, 40, null, null, array( 'class' => array( 'rounded-full' ) ) ); ?>
+				</a>
+			</div>
+		</div>
+		<div class="kadence-customer-name">
+			<h5 class="uppercase mt-2 mb-0 block"><?php echo esc_html( $current_user->display_name ); ?></h5>
+			<div class="block text-[14px] text-black uppercase"><span class="font-title text-[12px]">BUSINESS ID:</span>
+				<?php echo get_field( 'business_id', 'user_' . get_current_user_id() ); ?></div>
+			<a href="<?php echo wp_logout_url( '/' ); ?>" class="text-black text-[10px]">LOG OUT</a>
+		</div>
+		<?php
 	}
 
 	function camelcase_to_regular( $input ) {
@@ -2821,7 +2852,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 	public function quote_details( $project ) {
 		$projectArray = get_object_vars( $project );
 
-		$instance   = \NOVA_B2B\Nova_Quote::get_instance();
+		$instance = \NOVA_B2B\Nova_Quote::get_instance();
 		$attributes = $instance->allAttributes();
 
 		foreach ( $attributes as $key => $attr ) {
@@ -2841,7 +2872,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 					} elseif ( $attr['isFiles'] ?? false && isset( $projectArray['fileUrls'], $projectArray['fileNames'] ) && ! empty( $projectArray['fileUrls'] ) && ! empty( $projectArray['fileNames'] ) ) {
 						$filesHtml = '';
 						foreach ( $projectArray['fileUrls'] as $index => $fileUrl ) {
-							$fileName   = $projectArray['fileNames'][ $index ] ?? $fileUrl;
+							$fileName = $projectArray['fileNames'][ $index ] ?? $fileUrl;
 							$filesHtml .= '<a href="' . htmlspecialchars( $fileUrl, ENT_QUOTES, 'UTF-8' ) . '" target="_blank">' . htmlspecialchars( $fileName, ENT_QUOTES, 'UTF-8' ) . '</a><br>';
 						}
 						echo '<div class="grid grid-cols-2 py-[2px]"><div class="text-left text-xs font-title uppercase">' . $attr['label'] . ':</div><div class="text-left text-[10px] uppercase">' . $filesHtml . '</div></div>';
@@ -2868,7 +2899,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 	public function quote_details_html( $project ) {
 		$projectArray = get_object_vars( $project );
 
-		$instance   = \NOVA_B2B\Nova_Quote::get_instance();
+		$instance = \NOVA_B2B\Nova_Quote::get_instance();
 		$attributes = $instance->allAttributes();
 
 		echo '<dl class="quote-details">';
@@ -2880,8 +2911,8 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 						echo '<dt>' . htmlspecialchars( $attr['label'] ) . ':</dt><dd><a href="' . htmlspecialchars( $projectArray['fontFileUrl'] ) . '" target="_blank">' . htmlspecialchars( $projectArray['fontFileName'] ) . '</a></dd>';
 					} elseif ( ( $attr['isVinyl'] ?? false ) && isset( $projectArray['vinylWhite']->name, $projectArray['vinylWhite']->code ) ) {
 						if ( ( isset( $projectArray['acrylicFront'] ) && $projectArray['acrylicFront'] === '3M Vinyl' ) ||
-						( isset( $projectArray['frontOption'] ) && $projectArray['frontOption'] === '3M Vinyl' ) ||
-						( isset( $projectArray['frontAcrylicCover'] ) && $projectArray['frontAcrylicCover'] === '3M Vinyl' ) ) {
+							( isset( $projectArray['frontOption'] ) && $projectArray['frontOption'] === '3M Vinyl' ) ||
+							( isset( $projectArray['frontAcrylicCover'] ) && $projectArray['frontAcrylicCover'] === '3M Vinyl' ) ) {
 							echo '<dt>' . htmlspecialchars( $attr['label'] ) . ':</dt><dd>' . htmlspecialchars( $projectArray['vinylWhite']->name ) . ' - [' . htmlspecialchars( $projectArray['vinylWhite']->code ) . ']</dd>';
 						}
 					} elseif ( ( $attr['isFile'] ?? false ) && isset( $projectArray['fileUrl'], $projectArray['fileName'] ) ) {
@@ -2889,7 +2920,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 					} elseif ( ( $attr['isFiles'] ?? false ) && isset( $projectArray['fileUrls'], $projectArray['fileNames'] ) ) {
 						$filesHtml = '';
 						foreach ( $projectArray['fileUrls'] as $index => $fileUrl ) {
-							$fileName   = $projectArray['fileNames'][ $index ] ?? $fileUrl;
+							$fileName = $projectArray['fileNames'][ $index ] ?? $fileUrl;
 							$filesHtml .= '<a href="' . htmlspecialchars( $fileUrl, ENT_QUOTES, 'UTF-8' ) . '" target="_blank">' . htmlspecialchars( $fileName, ENT_QUOTES, 'UTF-8' ) . '</a><br>';
 						}
 						echo '<dt>' . htmlspecialchars( $attr['label'] ) . ':</dt><dd>' . $filesHtml . '</dd>';
@@ -2925,7 +2956,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 			// Display title and price
 			if ( ! empty( $project->title ) ) {
 				$currencySymbol = get_woocommerce_currency_symbol();
-				$price          = get_woocommerce_currency() === 'USD' ? number_format( $project->usdPrice, 2 ) : number_format( $project->cadPrice, 2 );
+				$price = get_woocommerce_currency() === 'USD' ? number_format( $project->usdPrice, 2 ) : number_format( $project->cadPrice, 2 );
 				echo "<div class='flex justify-between py-2 font-title uppercase'>{$project->title} <span>{$currencySymbol}{$price}</span></div>";
 			}
 
@@ -2947,7 +2978,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 
 	public function show_order_product_details_html( $projects ) {
 		$project_keys = array_keys( $projects );
-		$last_key     = end( $project_keys );
+		$last_key = end( $project_keys );
 		foreach ( $projects as $key => $project ) {
 			$class = 'quote-details-row';
 			if ( $key === $last_key ) {
@@ -2965,39 +2996,39 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 	public function show_details_order( $signage, $quoteID, $subtotal, $product_line ) {
 		ob_start();
 		?>
-<div id="quote-<?php echo $quoteID; ?>" style="display:none;max-width:550px; width: 100%;">
-  <div class="pb-8 mb-8 border-b-nova-light border-b">
-    <h4 class="text-[16px]">QUOTE ID: Q-<?php echo str_pad( $quoteID, 4, '0', STR_PAD_LEFT ); ?></h4>
-    <h4 class="text-[16px]">PRODUCT:
-      <?php echo $product_line; ?>
-    </h4>
-    <?php
-		$this->show_project_details( $signage );
-		?>
-  </div>
-  <h6 class="uppercase flex">Subtotal: <span class="ml-auto"><?php echo $subtotal; ?></span></h6>
-</div>
-<?php
-			echo ob_get_clean();
+		<div id="quote-<?php echo $quoteID; ?>" style="display:none;max-width:550px; width: 100%;">
+			<div class="pb-8 mb-8 border-b-nova-light border-b">
+				<h4 class="text-[16px]">QUOTE ID: Q-<?php echo str_pad( $quoteID, 4, '0', STR_PAD_LEFT ); ?></h4>
+				<h4 class="text-[16px]">PRODUCT:
+					<?php echo $product_line; ?>
+				</h4>
+				<?php
+				$this->show_project_details( $signage );
+				?>
+			</div>
+			<h6 class="uppercase flex">Subtotal: <span class="ml-auto"><?php echo $subtotal; ?></span></h6>
+		</div>
+		<?php
+		echo ob_get_clean();
 	}
 
 	public function show_details( $signage, $quoteID, $subtotal ) {
 		ob_start();
 		?>
-<div id="quote-<?php echo $quoteID; ?>" style="display:none;max-width:550px; width: 100%;">
-  <div class="pb-8 mb-8 border-b-nova-light border-b">
-    <h4 class="text-[16px]">QUOTE ID: Q-<?php echo str_pad( $quoteID, 4, '0', STR_PAD_LEFT ); ?></h4>
-    <h4 class="text-[16px] uppercase">PRODUCT:
-      <?php echo ( get_field( 'product', $quoteID ) ? get_field( 'product', $quoteID )->post_title : 'CUSTOM PROJECT' ); ?>
-    </h4>
-    <?php
-		$this->show_project_details( $signage );
-		?>
-  </div>
-  <h6 class="uppercase flex">Subtotal: <span class="ml-auto"><?php echo $subtotal; ?></span></h6>
-</div>
-<?php
-			echo ob_get_clean();
+		<div id="quote-<?php echo $quoteID; ?>" style="display:none;max-width:550px; width: 100%;">
+			<div class="pb-8 mb-8 border-b-nova-light border-b">
+				<h4 class="text-[16px]">QUOTE ID: Q-<?php echo str_pad( $quoteID, 4, '0', STR_PAD_LEFT ); ?></h4>
+				<h4 class="text-[16px] uppercase">PRODUCT:
+					<?php echo ( get_field( 'product', $quoteID ) ? get_field( 'product', $quoteID )->post_title : 'CUSTOM PROJECT' ); ?>
+				</h4>
+				<?php
+				$this->show_project_details( $signage );
+				?>
+			</div>
+			<h6 class="uppercase flex">Subtotal: <span class="ml-auto"><?php echo $subtotal; ?></span></h6>
+		</div>
+		<?php
+		echo ob_get_clean();
 	}
 
 	public function my_account_billing_shipping_fields() {
@@ -3051,19 +3082,19 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 	}
 
 	public function get_payment_selections() {
-		$args     = array(
-			'post_type'      => 'payment_type',
+		$args = array(
+			'post_type' => 'payment_type',
 			'posts_per_page' => -1,
 		);
-		$query    = new WP_Query( $args );
+		$query = new WP_Query( $args );
 		$payments = array();
 		if ( $query->have_posts() ) {
 			while ( $query->have_posts() ) {
 				$query->the_post();
 				// Save the current post's title and ID
 				$payments[] = array(
-					'title'       => get_the_title(),
-					'id'          => get_the_ID(),
+					'title' => get_the_title(),
+					'id' => get_the_ID(),
 					'description' => get_field( 'description' ),
 				);
 			}
@@ -3076,7 +3107,7 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		if ( ! $user_id ) {
 			$user_id = get_current_user_id();
 		}
-		$payments      = array();
+		$payments = array();
 		$user_payments = get_field( 'payment_type', 'user_' . $user_id );
 		global $post;
 		if ( $user_payments ) :
@@ -3084,8 +3115,8 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 			foreach ( $user_payments as $post ) :
 				setup_postdata( $post );
 				$payments[] = array(
-					'title'       => get_the_title(),
-					'id'          => get_the_ID(),
+					'title' => get_the_title(),
+					'id' => get_the_ID(),
 					'description' => get_field( 'description' ),
 				);
 			endforeach;

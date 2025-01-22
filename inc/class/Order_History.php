@@ -37,6 +37,50 @@ class Order_History {
 		add_filter( 'woocommerce_email_enabled_customer_completed_order', array( $this, 'disable_completed_email_for_combined_order' ), 11, 2 );
 		add_action( 'init', array( $this, 'schedule_temporary_orders_cleanup_event' ) );
 		add_action( 'delete_temporary_orders_daily_event', array( $this, 'delete_old_temporary_orders' ) );
+
+
+		add_filter( 'woocommerce_email_subject_customer_completed_order', array( $this, 'combined_completed_subject' ), 50, 2 );
+		add_filter( 'woocommerce_email_heading_customer_completed_order', array( $this, 'combined_completed_heading' ), 42, 3 );
+
+		add_filter( 'woocommerce_bacs_email_instructions', array( $this, 'combined_order_bacs_instruction' ), 20, 4 );
+
+	}
+
+	public function combined_order_bacs_instruction( $instructions, $order, $sent_to_admin, $plain_text ) {
+		$order_id = $order->get_id();
+		$original_order_ids = get_post_meta( $order_id, '_original_order_ids', true );
+
+		if ( ! $original_order_ids ) {
+			return $instructions;
+		}
+
+		return '';
+	}
+
+	public function combined_completed_heading( $heading, $order, $email ) {
+		$order_id = $order->get_id();
+		$original_order_ids = get_post_meta( $order_id, '_original_order_ids', true );
+
+		if ( ! $original_order_ids ) {
+			return $heading;
+		}
+
+		$heading = "Thank you for your payment";
+
+		return $heading;
+	}
+
+	public function combined_completed_subject( $subject, $order ) {
+		$order_id = $order->get_id();
+		$original_order_ids = get_post_meta( $order_id, '_original_order_ids', true );
+
+		if ( ! $original_order_ids ) {
+			return $subject;
+		}
+
+		$subject = 'Payment received.';
+
+		return $subject;
 	}
 
 	public function delete_old_temporary_orders() {
@@ -90,10 +134,10 @@ class Order_History {
 	}
 
 	public function disable_completed_email_for_combined_order( $enabled, $order ) {
-		if ( $order->get_meta( '_is_temporary_combined_order' ) ) {
-			return false;
+		if ( $order && $order->get_meta( '_is_temporary_combined_order' ) ) {
+			// return false;
 		}
-		if ( $order->get_meta( '_completed_by_combined' ) ) {
+		if ( $order && $order->get_meta( '_completed_by_combined' ) ) {
 			return false;
 		}
 		return $enabled;
@@ -367,10 +411,10 @@ class Order_History {
 
 	public function account_statement_content() {
 		?>
-<div id="nova">
-  <div id="hello"></div>
-</div>
-<?php
+		<div id="nova">
+			<div id="hello"></div>
+		</div>
+		<?php
 	}
 
 	public function get_orders() {
@@ -657,7 +701,7 @@ class Order_History {
 
 		// Get all data from the table
 		$results = $wpdb->get_results(
-			$wpdb->prepare( "SELECT * FROM $table_name" )
+			"SELECT * FROM $table_name"
 		);
 
 		foreach ( $results as $result ) {

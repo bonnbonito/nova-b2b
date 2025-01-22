@@ -77,7 +77,22 @@ class Deposit {
 		add_filter( 'woocommerce_email_subject_customer_processing_order', array( $this, 'change_combined_order_email_subject' ), 99, 2 );
 		add_filter( 'woocommerce_email_heading_customer_processing_order', array( $this, 'change_combined_order_email_heading' ), 99, 2 );
 		add_filter( 'woocommerce_email_additional_content_customer_processing_order', array( $this, 'change_combined_order_email_additional_content' ), 99, 2 );
+		add_filter( 'woocommerce_email_subject_customer_on_hold_order', array( $this, 'change_combined_oh_hold_email_subject' ), 99, 2 );
+		add_filter( 'woocommerce_email_heading_customer_on_hold_order', array( $this, 'change_combined_oh_hold_email_heading' ), 99, 2 );
 		add_filter( 'kadence_woomail_order_body_text', array( $this, 'change_combined_order_email_content' ), 50, 5 );
+	}
+
+	public function change_combined_oh_hold_email_subject( $subject, $order ) {
+		if ( $order && $order->get_meta( '_original_order_ids' ) ) {
+			$subject = 'Pending Payment for Combined Order';
+		}
+		return $subject;
+	}
+	public function change_combined_oh_hold_email_heading( $heading, $order ) {
+		if ( $order && $order->get_meta( '_original_order_ids' ) ) {
+			$heading = 'Pending Payment for Combined Order';
+		}
+		return $heading;
 	}
 
 	public function change_combined_order_email_admin_subject( $subject, $order ) {
@@ -103,11 +118,29 @@ class Deposit {
 	}
 
 	public function change_combined_order_email_content( $body_text, $order, $sent_to_admin, $plain_text, $email ) {
+		$first_name = $order->get_billing_first_name();
+		$total = $order->get_total();
+		$order_number = $order->get_order_number();
+		$total_formatted = wc_price( $total, array( 'currency' => $order->get_currency() ) );
 		if ( $order && $order->get_meta( '_original_order_ids' ) ) {
 			if ( ! $sent_to_admin ) {
-				$body_text = '<p>Thank you for your payment! We’ve successfully processed it. Please see the attached receipt and the details below for your combined orders:</p>';
+				if ( $order->get_status() !== 'on-hold' ) {
+					$body_text = '<p>Hello ' . $first_name . ',</p><br>';
+					$body_text .= '<p>This confirms receipt of your combined payment.</p>
+					<p>Please see the attached receipt and the details below for your combined orders:</p>
+					<p><strong>Total Amount: ' . $total_formatted . '</p>';
+				} else {
+					$body_text = '<p>Hello ' . $first_name . ',</p><br>';
+					$body_text .= '<p>This email confirms that we have sent you a combined invoice under #' . $order_number . '. Please review and pay for the attached invoice.</p>';
+					$body_text .= '<p><strong>Total Amount: ' . $total_formatted . '</p>';
+
+					$body_text .= '<p><strong>E-Transfer Instructions</strong></p>';
+
+				}
 			} else {
-				$body_text = '<p>If the payment is via e-transfer, please manually mark it as Completed after confirmation. Otherwise, please disregard this email.</p>';
+				if ( ! $order->get_meta( '_original_order_ids' ) ) {
+					$body_text = '<p>If the payment is via e-transfer, please manually mark it as Completed after confirmation. Otherwise, please disregard this email.</p>';
+				}
 			}
 		}
 		return $body_text;
@@ -324,9 +357,7 @@ class Deposit {
 		$table_name = $wpdb->prefix . 'order_payments';
 
 		// Get all data from the table
-		$results = $wpdb->get_results(
-			$wpdb->prepare( "SELECT * FROM $table_name" )
-		);
+		$results = $wpdb->get_results( "SELECT * FROM $table_name" );
 
 		foreach ( $results as $result ) {
 
@@ -934,7 +965,7 @@ class Deposit {
 
 		// Get all data from the table
 		$results = $wpdb->get_results(
-			$wpdb->prepare( "SELECT * FROM $table_name" )
+			"SELECT * FROM $table_name"
 		);
 
 		foreach ( $results as $result ) {
@@ -1365,10 +1396,10 @@ class Deposit {
 
 	public function pending_page_after_content() {
 		?>
-<div class="wrap">
-  <div id="depositTable"></div>
-</div>
-<?php
+		<div class="wrap">
+			<div id="depositTable"></div>
+		</div>
+		<?php
 	}
 
 	public function output_deposit_selection() {
@@ -1386,35 +1417,33 @@ class Deposit {
 		$chosen = empty( $chosen ) ? WC()->checkout->get_value( 'deposit_chosen' ) : $chosen;
 		$chosen = empty( $chosen ) ? '0' : $chosen;
 		?>
-<fieldset>
-  <legend class="px-4 uppercase"><span><?php esc_html_e( 'Payment Type', 'woocommerce' ); ?></span></legend>
-  <div class="grid md:grid-cols-3 gap-4 update_totals_on_change">
-    <div class="cursor-pointer h-full">
-      <label for="payment_0"
-        class="block h-full justify-end p-3 border rounded-md w-full max-w-sm cursor-pointer hover:border-slate-500 hover:bg-slate-200 hover:shadow-lg">
-        <input class="bg-none" id="payment_0" type="radio" name="deposit_chosen" value="0"
-          <?php echo ( '0' == $chosen ? 'checked' : '' ); ?>>
-        <span>Full</span>
-        <span class="text-sm font-body block mt-2 hidden">Description</span>
-      </label>
-    </div>
-    <?php
+		<fieldset>
+			<legend class="px-4 uppercase"><span><?php esc_html_e( 'Payment Type', 'woocommerce' ); ?></span></legend>
+			<div class="grid md:grid-cols-3 gap-4 update_totals_on_change">
+				<div class="cursor-pointer h-full">
+					<label for="payment_0"
+						class="block h-full justify-end p-3 border rounded-md w-full max-w-sm cursor-pointer hover:border-slate-500 hover:bg-slate-200 hover:shadow-lg">
+						<input class="bg-none" id="payment_0" type="radio" name="deposit_chosen" value="0" <?php echo ( '0' == $chosen ? 'checked' : '' ); ?>>
+						<span>Full</span>
+						<span class="text-sm font-body block mt-2 hidden">Description</span>
+					</label>
+				</div>
+				<?php
 				foreach ( $payments_selection as $key => $selection ) {
 					?>
-    <div class="cursor-pointer h-full">
-      <label for="payment_<?php echo $selection['id']; ?>"
-        class="block h-full justify-end p-3 border rounded-md w-full max-w-sm cursor-pointer hover:border-slate-500 hover:bg-slate-200 hover:shadow-lg">
-        <input class="bg-none" id="payment_<?php echo $selection['id']; ?>" type="radio" name="deposit_chosen"
-          value="<?php echo $selection['id']; ?>" id="payment_<?php echo $selection['id']; ?>"
-          <?php echo ( $selection['id'] == $chosen ? 'checked' : '' ); ?>>
-        <span><?php echo $selection['title']; ?></span>
-        <span class="text-sm font-body block mt-2"><?php echo $selection['description']; ?></span>
-      </label>
-    </div>
-    <?php } ?>
-  </div>
-</fieldset>
+					<div class="cursor-pointer h-full">
+						<label for="payment_<?php echo $selection['id']; ?>"
+							class="block h-full justify-end p-3 border rounded-md w-full max-w-sm cursor-pointer hover:border-slate-500 hover:bg-slate-200 hover:shadow-lg">
+							<input class="bg-none" id="payment_<?php echo $selection['id']; ?>" type="radio" name="deposit_chosen"
+								value="<?php echo $selection['id']; ?>" id="payment_<?php echo $selection['id']; ?>" <?php echo ( $selection['id'] == $chosen ? 'checked' : '' ); ?>>
+							<span><?php echo $selection['title']; ?></span>
+							<span class="text-sm font-body block mt-2"><?php echo $selection['description']; ?></span>
+						</label>
+					</div>
+				<?php } ?>
+			</div>
+		</fieldset>
 
-<?php
+		<?php
 	}
 }

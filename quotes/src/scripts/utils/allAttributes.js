@@ -86,7 +86,17 @@ export const allAttributes = (item) => [
 	{ key: item.paintedPCFinish, label: 'PAINTED PC FINISH' },
 	{ key: item.lightboxType, label: 'LIGHT BOX TYPE' },
 	{ key: item.uvPrintedCover, label: 'UV PRINTED COVER' },
+
+	{ key: item.sculptureMaterial, label: 'MATERIAL PREFERENCE' },
+	{ key: item.sculptureSize, label: 'SIZE (HxWxD)' },
+
 	{ key: item.waterproof, label: 'ENVIRONMENT' },
+
+	{ key: item.sculptureLifeSpan, label: 'LIFESPAN' },
+	{ key: item.purpose, label: 'PURPOSE' },
+	{ key: item.projectTimeline, label: 'PROJECT TIMELINE' },
+	{ key: item.dateNeeded, label: 'DATE NEEDED' },
+
 	{ key: item.backOption, label: 'BACK OPTION' },
 	{ key: item.mounting, label: 'MOUNTING' },
 	{ key: item.rigidM4StudLength, label: 'M4 STUD LENGTH' },

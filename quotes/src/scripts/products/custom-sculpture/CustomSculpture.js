@@ -4,6 +4,7 @@ import SidebarNoPrice from '../../SidebarNoPrice';
 import Signage from '../../Signage';
 import { PlusIcon } from '../../svg/Icons';
 import { Sculpture } from './components/Sculpture';
+import Note from '../../Note';
 
 import { useAppContext } from '../../AppProvider';
 
@@ -17,6 +18,7 @@ export default function CustomSculpture() {
 				id: uuidv4(),
 				type: 'custom-sculpture',
 				title: 'CUSTOM SCULPTURE',
+				sculptureMaterial: 'We Recommend',
 				description: '',
 				usdPrice: 0,
 				cadPrice: 0,
@@ -100,6 +102,16 @@ export default function CustomSculpture() {
 					</Signage>
 				))}
 
+				<Note title="Note">
+					<ul className="text-sm">
+						<li>
+							Please upload as many reference files as you can, such as your
+							design concepts, final product examples, or similar items, to help
+							us better understand your vision.
+						</li>
+					</ul>
+				</Note>
+
 				<div className="flex gap-2">
 					{signage.length < 10 && (
 						<button
@@ -107,7 +119,7 @@ export default function CustomSculpture() {
 							onClick={() => addSignage('custom-sculpture')}
 							style={{ border: '1px solid #d2d2d2d2' }}
 						>
-							ADD PROJECT
+							ADD SCULPTURE
 							<PlusIcon />
 						</button>
 					)}

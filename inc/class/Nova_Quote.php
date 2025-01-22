@@ -1749,7 +1749,17 @@ h6 {
 			'paintedPCFinish' => 'PAINTED PC FINISH',
 			'lightboxType' => 'LIGHT BOX TYPE',
 			'uvPrintedCover' => 'UV PRINTED COVER',
+			'sculptureMaterial' => 'MATERIAL PREFERENCE',
+			'sculptureSize' => 'SIZE (HxWxD)',
+
 			'waterproof' => 'ENVIRONMENT',
+
+			'sculptureLifeSpan' => 'LIFESPAN',
+			'purpose' => 'PURPOSE',
+			'projectTimeline' => 'PROJECT TIMELINE',
+			'dateNeeded' => 'DATE NEEDED',
+
+
 			'backOption' => 'BACK OPTION',
 			'mounting' => 'MOUNTING',
 			'rigidM4StudLength' => 'M4 STUD LENGTH',

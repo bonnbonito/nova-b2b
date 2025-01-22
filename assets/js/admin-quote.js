@@ -563,7 +563,33 @@ function allAttributes(sign) {
 			value: sign.uvPrintedCover ? sign.uvPrintedCover : '',
 		},
 
+		{
+			label: 'MATERIAL PREFERENCE',
+			value: sign.sculptureMaterial ? sign.sculptureMaterial : '',
+		},
+		{
+			label: 'SIZE (HxWxD)',
+			value: sign.sculptureSize ? sign.sculptureSize : '',
+		},
+
 		{ label: 'ENVIRONMENT', value: sign.waterproof ? sign.waterproof : '' },
+
+		{
+			label: 'LIFESPAN',
+			value: sign.sculptureLifeSpan ? sign.sculptureLifeSpan : '',
+		},
+		{
+			label: 'PURPOSE',
+			value: sign.purpose ? sign.purpose : '',
+		},
+		{
+			label: 'PROJECT TIMELINE',
+			value: sign.projectTimeline ? sign.projectTimeline : '',
+		},
+		{
+			label: 'DATE NEEDED',
+			value: sign.dateNeeded ? sign.dateNeeded : '',
+		},
 
 		{ label: 'BACK OPTION', value: sign.backOption ? sign.backOption : '' },
 
