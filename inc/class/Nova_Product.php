@@ -62,37 +62,37 @@ class Nova_Product {
 	public function nova_product_installation() {
 		if ( have_rows( 'installations' ) ) :
 			?>
-			<div class="product-nav-content-item" data-nav="installation">
-				<h2 class="mb-10 uppercase">Installation</h2>
+<div class="product-nav-content-item" data-nav="installation">
+  <h2 class="mb-10 uppercase">Installation</h2>
 
-				<div class="md:grid md:grid-cols-2 gap-x-10 gap-y-6">
-					<?php
+  <div class="md:grid md:grid-cols-2 gap-x-10 gap-y-6">
+    <?php
 					while ( have_rows( 'installations' ) ) :
 						the_row();
 						?>
-						<div class="installation-item grid md:grid-cols-[280px_1fr] md:mb-0 mb-5 gap-4">
-							<div>
-								<?php
+    <div class="installation-item grid md:grid-cols-[280px_1fr] md:mb-0 mb-5 gap-4">
+      <div>
+        <?php
 								$image = get_sub_field( 'image' );
 								if ( ! empty( $image ) ) :
 									?>
-									<a href="<?php echo esc_url( $image['url'] ); ?>"><img class="w-full"
-											src="<?php echo esc_url( $image['url'] ); ?>" alt="<?php echo esc_attr( $image['alt'] ); ?>" /></a>
-								<?php endif; ?>
-							</div>
-							<div class="px-0">
-								<h6 class="uppercase tracking-[1.6px]"><?php echo get_sub_field( 'title' ); ?></h6>
-								<div class="md:text-[14px] leading-loose tracking-[1.4px]">
-									<?php echo get_sub_field( 'content' ); ?>
-								</div>
-							</div>
-						</div>
-					<?php endwhile; ?>
-				</div>
+        <a href="<?php echo esc_url( $image['url'] ); ?>"><img class="w-full"
+            src="<?php echo esc_url( $image['url'] ); ?>" alt="<?php echo esc_attr( $image['alt'] ); ?>" /></a>
+        <?php endif; ?>
+      </div>
+      <div class="px-0">
+        <h6 class="uppercase tracking-[1.6px]"><?php echo get_sub_field( 'title' ); ?></h6>
+        <div class="md:text-[14px] leading-loose tracking-[1.4px]">
+          <?php echo get_sub_field( 'content' ); ?>
+        </div>
+      </div>
+    </div>
+    <?php endwhile; ?>
+  </div>
 
 
-			</div>
-			<?php
+</div>
+<?php
 		endif;
 	}
 
@@ -149,6 +149,12 @@ class Nova_Product {
 			[ 'slug' => 'installation', 'label' => 'Installation' ],
 		];
 
+		if ( get_post_field( 'post_name', get_the_ID() ) === 'custom-sculpture' ) {
+			$items = [ 
+				[ 'slug' => 'overview', 'label' => 'Overview' ],
+			];
+		}
+
 		if ( get_field( 'faq_questions' ) ) {
 			$items[] = [ 'slug' => 'faqs', 'label' => 'FAQS' ];
 		}
@@ -164,65 +170,63 @@ class Nova_Product {
 
 	private function render_nav_tabs( $nav_items, $tab, $tab_title, $permalink ) {
 		?>
-		<div class="product-nav-tabs not-tab">
-			<div id="productNovaNav" class="product-nav-tabs-left">
-				<?php foreach ( $nav_items as $item ) : ?>
-					<h6>
-						<a class="button <?php echo $item['active'] ? 'active' : ''; ?>" href="<?php echo esc_url( $item['url'] ); ?>">
-							<?php echo esc_html( $item['label'] ); ?>
-						</a>
-					</h6>
-				<?php endforeach; ?>
-			</div>
+<div class="product-nav-tabs not-tab">
+  <div id="productNovaNav" class="product-nav-tabs-left">
+    <?php foreach ( $nav_items as $item ) : ?>
+    <h6>
+      <a class="button <?php echo $item['active'] ? 'active' : ''; ?>" href="<?php echo esc_url( $item['url'] ); ?>">
+        <?php echo esc_html( $item['label'] ); ?>
+      </a>
+    </h6>
+    <?php endforeach; ?>
+  </div>
 
-			<?php $this->render_mobile_nav( $nav_items, $tab_title ); ?>
+  <?php $this->render_mobile_nav( $nav_items, $tab_title ); ?>
 
-			<a href="<?php echo esc_url( $permalink ); ?>" class="button <?php echo ! $tab ? 'active' : ''; ?>">
-				Instant Quote
-			</a>
-		</div>
+  <a href="<?php echo esc_url( $permalink ); ?>" class="button <?php echo ! $tab ? 'active' : ''; ?>">
+    Instant Quote
+  </a>
+</div>
 
-		<?php $this->render_mobile_nav_script(); ?>
-	<?php
+<?php $this->render_mobile_nav_script(); ?>
+<?php
 	}
 
 	private function render_mobile_nav( $nav_items, $tab_title ) {
 		?>
-		<div id="productNavMobile" class="product-nav-tabs-mobile">
-			<h6 id="current" data-click="toggleMobileNav">
-				<span id="text"><?php echo esc_html( $tab_title ); ?></span>
-				<svg xmlns="http://www.w3.org/2000/svg" width="13" height="7" viewBox="0 0 13 7" fill="none">
-					<path d="M11 2L6.66667 6L2 2" stroke="black" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="round" />
-				</svg>
-			</h6>
+<div id="productNavMobile" class="product-nav-tabs-mobile">
+  <h6 id="current" data-click="toggleMobileNav">
+    <span id="text"><?php echo esc_html( $tab_title ); ?></span>
+    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="7" viewBox="0 0 13 7" fill="none">
+      <path d="M11 2L6.66667 6L2 2" stroke="black" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="round" />
+    </svg>
+  </h6>
 
-			<div id="innerMobileNav" class="mt-1 hidden">
-				<?php foreach ( $nav_items as $item ) : ?>
-					<a class="text-button block overflow-hidden" href="<?php echo esc_url( $item['url'] ); ?>">
-						<h6 class="py-1">- <?php echo esc_html( $item['label'] ); ?></h6>
-					</a>
-				<?php endforeach; ?>
-			</div>
-		</div>
-		<?php
+  <div id="innerMobileNav" class="mt-1 hidden">
+    <?php foreach ( $nav_items as $item ) : ?>
+    <a class="text-button block overflow-hidden" href="<?php echo esc_url( $item['url'] ); ?>">
+      <h6 class="py-1">- <?php echo esc_html( $item['label'] ); ?></h6>
+    </a>
+    <?php endforeach; ?>
+  </div>
+</div>
+<?php
 	}
 
 	private function render_mobile_nav_script() {
 		?>
-		<script>
-			document.addEventListener("DOMContentLoaded", (event) =>
-			{
-				const toggleMobileNav = document.querySelector('h6[data-click="toggleMobileNav"]');
-				const innerMobileNav = document.getElementById('innerMobileNav');
+<script>
+document.addEventListener("DOMContentLoaded", (event) => {
+  const toggleMobileNav = document.querySelector('h6[data-click="toggleMobileNav"]');
+  const innerMobileNav = document.getElementById('innerMobileNav');
 
-				toggleMobileNav?.addEventListener('click', e =>
-				{
-					e.preventDefault();
-					innerMobileNav?.classList.toggle('hidden');
-				});
-			});
-		</script>
-		<?php
+  toggleMobileNav?.addEventListener('click', e => {
+    e.preventDefault();
+    innerMobileNav?.classList.toggle('hidden');
+  });
+});
+</script>
+<?php
 	}
 
 	public function modify_acrylic_post_title( $title, $post_id ) {
