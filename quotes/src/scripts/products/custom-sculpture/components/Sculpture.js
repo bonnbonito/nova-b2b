@@ -63,6 +63,7 @@ export function Sculpture({ item }) {
 		'Stainless Steel',
 		'Aluminum',
 		'Wood',
+		'Plush',
 		'Interactive Light',
 	];
 
