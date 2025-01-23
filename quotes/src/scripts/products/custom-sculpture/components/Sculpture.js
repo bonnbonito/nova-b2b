@@ -57,7 +57,7 @@ export function Sculpture({ item }) {
 	];
 
 	const materialOptions = [
-		'We Recommend',
+		'NOVA Recommend',
 		'Resin',
 		'Fiberglass Resin',
 		'Stainless Steel',
@@ -202,13 +202,15 @@ export function Sculpture({ item }) {
 							{material}
 						</option>
 					))}
+					info={`Choose <span class="text-nova-primary">NOVA Recommendation</span> to let us suggest<br> a material based on your design and description`}
 				/>
 
 				<TextInput
-					title="Size (HxWxD)"
+					title="SIZE (HxWxD)"
 					value={sculptureSize}
 					onChange={(e) => setSculptureSize(e.target.value)}
-					placeholder="Input size"
+					placeholder="INPUT SIZE"
+					textTransform={false}
 				/>
 
 				<Dropdown
@@ -237,7 +239,7 @@ export function Sculpture({ item }) {
 					title="Purpose"
 					value={purpose}
 					onChange={(e) => setPurpose(e.target.value)}
-					placeholder="Please specify where it will be used e.g., Retail, Trade Show"
+					placeholder="Please specify where it will be used e.g., Retail, Trade Show, Public Parks"
 					className="col-span-4"
 				/>
 
@@ -245,8 +247,9 @@ export function Sculpture({ item }) {
 					title="Project Timeline"
 					value={projectTimeline}
 					onChange={(e) => setProjectTimeline(e.target.value)}
-					placeholder="Please provide the estimated timeline for the project (e.g., 2–4 months)"
+					placeholder="Please provide the estimated timeline for the project (e.g., 4–5 months)."
 					className="col-span-4"
+					info="Our project takes at least 15 weeks to be completed.<br>Please keep this in mind while adding the project timeline."
 				/>
 
 				<DatePickerNova

@@ -14,12 +14,15 @@ export default function TextInput({
 	onlyValue,
 	info,
 	className,
+	textTransform = true,
 }) {
 	const selectClass = value || onlyValue ? 'text-black' : 'text-[#dddddd]';
 	return (
 		<div className={`px-[1px] text-ellipsis overflow-hidden ${className}`}>
 			<label
-				className="uppercase font-title text-sm tracking-[1.4px] px-2 whitespace-nowrap"
+				className={`font-title text-sm tracking-[1.4px] px-2 whitespace-nowrap ${
+					textTransform ? '' : 'normal-case'
+				}`}
 				title={title}
 			>
 				{title && (
@@ -59,7 +62,9 @@ export default function TextInput({
 			<input
 				type="text"
 				style={style}
-				className={`text-ellipsis border border-gray-200 w-full rounded-md text-sm font-title uppercase h-[40px] ${selectClass}`}
+				className={`text-ellipsis border border-gray-200 w-full rounded-md text-sm font-title h-[40px] ${selectClass} ${
+					textTransform ? 'uppercase' : 'normal-case'
+				}`}
 				onChange={onChange}
 				value={value}
 				readOnly={onlyValue}
