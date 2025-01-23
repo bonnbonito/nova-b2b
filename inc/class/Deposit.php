@@ -1272,10 +1272,16 @@ class Deposit {
 				$paid += $payment->amount;
 			}
 
-			$new_total = $total - $paid;
-			$order->set_total( $new_total );
+			// Get fees total
+			$fees_total = 0;
+			foreach ( $order->get_fees() as $fee ) {
+				$fees_total += $fee->get_total();
+			}
 
-			// $order->set_status( 'processing' );
+			// Calculate new total including fees
+			$new_total = $total - $paid + $fees_total;
+
+			$order->set_total( $new_total );
 			$order->save();
 		}
 	}
