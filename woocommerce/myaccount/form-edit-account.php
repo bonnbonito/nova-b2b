@@ -12,15 +12,14 @@
  *
  * @see https://woo.com/document/template-structure/
  * @package WooCommerce\Templates
- * @version 8.7.0
+ * @version 9.6.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
 do_action( 'woocommerce_before_edit_account_form' ); ?>
 
-<form class="woocommerce-EditAccountForm edit-account" action="" method="post"
-	<?php do_action( 'woocommerce_edit_account_form_tag' ); ?>>
+<form class="woocommerce-EditAccountForm edit-account" action="" method="post" <?php do_action( 'woocommerce_edit_account_form_tag' ); ?>>
 
 	<?php do_action( 'woocommerce_edit_account_form_start' ); ?>
 
@@ -55,12 +54,12 @@ do_action( 'woocommerce_before_edit_account_form' ); ?>
 	</p>
 
 	<?php
-		/**
-		 * Hook where additional fields should be rendered.
-		 *
-		 * @since 8.7.0
-		 */
-		do_action( 'woocommerce_edit_account_form_fields' );
+	/**
+	 * Hook where additional fields should be rendered.
+	 *
+	 * @since 8.7.0
+	 */
+	do_action( 'woocommerce_edit_account_form_fields' );
 	?>
 
 	<div class="flex items-center gap-2 mb-6 mt-8">
@@ -82,8 +81,8 @@ do_action( 'woocommerce_before_edit_account_form' ); ?>
 		<p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
 			<label
 				for="password_current"><?php esc_html_e( 'Current password (leave blank to leave unchanged)', 'woocommerce' ); ?></label>
-			<input type="password" class="woocommerce-Input woocommerce-Input--password input-text"
-				name="password_current" id="password_current" autocomplete="off" />
+			<input type="password" class="woocommerce-Input woocommerce-Input--password input-text" name="password_current"
+				id="password_current" autocomplete="off" />
 		</p>
 		<p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
 			<label
@@ -99,24 +98,26 @@ do_action( 'woocommerce_before_edit_account_form' ); ?>
 	</fieldset>
 	<div class="clear"></div>
 	<script>
-	document.addEventListener('DOMContentLoaded', () => {
-		const pwSwitch = document.getElementById('switch'),
-			passwordField = document.getElementById('passwordField');
+		document.addEventListener('DOMContentLoaded', () =>
+		{
+			const pwSwitch = document.getElementById('switch'),
+				passwordField = document.getElementById('passwordField');
 
-		pwSwitch.addEventListener('change', () => {
-			passwordField.classList.toggle('hidden');
+			pwSwitch.addEventListener('change', () =>
+			{
+				passwordField.classList.toggle('hidden');
+			});
+
 		});
-
-	});
 	</script>
 
 	<?php
-		/**
-		 * My Account edit account form.
-		 *
-		 * @since 2.6.0
-		 */
-		do_action( 'woocommerce_edit_account_form' );
+	/**
+	 * My Account edit account form.
+	 *
+	 * @since 2.6.0
+	 */
+	do_action( 'woocommerce_edit_account_form' );
 	?>
 
 	<p>
