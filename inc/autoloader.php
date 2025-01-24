@@ -28,6 +28,7 @@ spl_autoload_register( 'autoloader' );
 
 $instances = array(
 	'Shortcodes',
+	'Post',
 	'Roles',
 	'Admin',
 	'Scripts',
