@@ -61,68 +61,68 @@ class FAQ {
 			while ( have_rows( 'faq_group' ) ) :
 				the_row();
 				$is_custom_page = get_sub_field( 'custom_page' );
-				$main           = false;
+				$main = false;
 				?>
-<div class="block">
-	<h3 class="text-black mb-4 text-2xl">
-				<?php if ( $is_custom_page ) : ?>
-					<?php echo get_sub_field( 'title' ); ?>
-					<?php
-			else :
-				$main = get_sub_field( 'main' );
-				?>
-		<a href="<?php echo get_permalink( $main->ID ); ?>"><?php echo $main->post_title; ?></a>
-		<?php endif; ?>
-	</h3>
-	<ul class="list-none pl-0 text-base leading-9">
-				<?php
-				if ( ! $main ) {
-					$sub_faqs = get_sub_field( 'sub_categories' );
-					if ( $sub_faqs ) {
-						foreach ( $sub_faqs as $sub_faq ) {
-							?>
-		<li>
-			<a style="text-decoration: none;"
-				class="decoration-none  text-black hover:underline underline-offset-2 hover:text-nova-secondary"
-				href="<?php echo get_permalink( $sub_faq['sub_faqs'][0]->ID ); ?>"><?php echo $sub_faq['sub_faqs'][0]->post_title; ?></a>
-		</li>
+				<div class="block">
+					<h3 class="text-black mb-4 text-2xl">
+						<?php if ( $is_custom_page ) : ?>
+							<?php echo get_sub_field( 'title' ); ?>
 							<?php
+						else :
+							$main = get_sub_field( 'main' );
+							?>
+							<a href="<?php echo get_permalink( $main->ID ); ?>"><?php echo $main->post_title; ?></a>
+						<?php endif; ?>
+					</h3>
+					<ul class="list-none pl-0 text-base leading-9">
+						<?php
+						if ( ! $main ) {
+							$sub_faqs = get_sub_field( 'sub_categories' );
+							if ( $sub_faqs ) {
+								foreach ( $sub_faqs as $sub_faq ) {
+									?>
+									<li>
+										<a style="text-decoration: none;"
+											class="decoration-none  text-black hover:underline underline-offset-2 hover:text-nova-secondary"
+											href="<?php echo get_permalink( $sub_faq['sub_faqs'][0]->ID ); ?>"><?php echo $sub_faq['sub_faqs'][0]->post_title; ?></a>
+									</li>
+									<?php
+								}
+							}
 						}
-					}
-				}
-				if ( get_sub_field( 'use_child_pages' ) ) {
-					/** get the direct child pages of $main->ID */
-					$children = get_posts(
-						array(
-							'post_type'   => 'nova-faq',
-							'post_status' => 'publish',
-							'post_parent' => $main->ID,
-							'orderby'     => 'menu_order',
-							'order'       => 'ASC',
-							'numberposts' => -1, // Get all child posts
-						)
-					);
+						if ( get_sub_field( 'use_child_pages' ) ) {
+							/** get the direct child pages of $main->ID */
+							$children = get_posts(
+								array(
+									'post_type' => 'nova-faq',
+									'post_status' => 'publish',
+									'post_parent' => $main->ID,
+									'orderby' => 'menu_order',
+									'order' => 'ASC',
+									'numberposts' => -1, // Get all child posts
+								)
+							);
 
-					if ( $children ) {
-						foreach ( $children as $child ) {
-							?>
-		<li>
-			<a style="text-decoration: none;"
-				class="decoration-none  text-black hover:underline underline-offset-2 hover:text-nova-secondary"
-				href="<?php echo get_permalink( $child->ID ); ?>"><?php echo ucwords( strtolower( $child->post_title ) ); ?></a>
-		</li>
-							<?php
+							if ( $children ) {
+								foreach ( $children as $child ) {
+									?>
+									<li>
+										<a style="text-decoration: none;"
+											class="decoration-none  text-black hover:underline underline-offset-2 hover:text-nova-secondary"
+											href="<?php echo get_permalink( $child->ID ); ?>"><?php echo ucwords( strtolower( $child->post_title ) ); ?></a>
+									</li>
+									<?php
+								}
+								echo '</ul>';
+							}
 						}
-						echo '</ul>';
-					}
-				}
-				?>
-	</ul>
-</div>
+						?>
+					</ul>
+				</div>
 
 				<?php
 			endwhile;
-				echo '</div>';
+			echo '</div>';
 		}
 
 		return ob_get_clean();
@@ -133,36 +133,44 @@ class FAQ {
 
 		if ( $faqs ) {
 			?>
-<div id="faqItems" class="has-faq accordion">
-	<h2 class="uppercase text-center mb-10">Frequently asked Questions</h2>
-			<?php
-			foreach ( $faqs as $faq ) {
-				?>
-	<div class="faq-item visible">
-		<p class="faq-question mb-0"><?php echo $faq->post_title; ?> <svg width="14" height="14" viewBox="0 0 14 14"
-				fill="none" xmlns="http://www.w3.org/2000/svg">
-				<line x1="7" y1="1" x2="7" y2="13" stroke="black" stroke-width="2" stroke-linecap="round">
-				</line>
-				<line x1="13" y1="7" x2="1" y2="7" stroke="black" stroke-width="2" stroke-linecap="round">
-				</line>
-			</svg></p>
-		<div class="expander">
-			<div class="expander-content">
-				<div class="content-wrapper">
-					<div class="post-content-container" style="padding-top: 2em;">
-						<?php echo do_shortcode( $faq->post_content ); ?>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+			<div id="faqItems" class="has-faq accordion">
+				<h2 class="uppercase text-center mb-10">Frequently asked Questions</h2>
 				<?php
-			}
-			?>
-</div>
-<div class="p-4 text-center">
-	<a href="<?php echo home_url(); ?>/faq/" class="button text-center mt-4">VIEW ALL FAQS</a>
-</div>
+				foreach ( $faqs as $faq ) {
+					?>
+					<div class="faq-item visible">
+						<p class="faq-question mb-0"><?php echo $faq->post_title; ?> <svg width="14" height="14" viewBox="0 0 14 14"
+								fill="none" xmlns="http://www.w3.org/2000/svg">
+								<line x1="7" y1="1" x2="7" y2="13" stroke="black" stroke-width="2" stroke-linecap="round">
+								</line>
+								<line x1="13" y1="7" x2="1" y2="7" stroke="black" stroke-width="2" stroke-linecap="round">
+								</line>
+							</svg></p>
+						<div class="expander">
+							<div class="expander-content">
+								<div class="content-wrapper">
+									<div class="post-content-container" style="padding-top: 2em;">
+										<?php echo do_shortcode( $faq->post_content ); ?>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<?php
+				}
+				?>
+			</div>
+			<div class="p-4 text-center">
+				<?php
+				$faq_link = get_field( 'faq_link' );
+
+				$url = home_url() . '/faq/';
+				if ( $faq_link ) {
+					$url = get_permalink( $faq_link->ID );
+				}
+				?>
+				<a href="<?php echo esc_url( $url ); ?>" class="button text-center mt-4">VIEW MORE FAQS</a>
+			</div>
 
 			<?php
 		}
@@ -200,10 +208,10 @@ class FAQ {
 		if ( get_post_type( $post_id ) == 'nova-faq' ) {
 			$children = get_posts(
 				array(
-					'post_type'   => 'nova-faq',
+					'post_type' => 'nova-faq',
 					'post_parent' => $post_id,
 					'numberposts' => 1,
-					'fields'      => 'ids',
+					'fields' => 'ids',
 				)
 			);
 
@@ -219,20 +227,20 @@ class FAQ {
 		ob_start();
 		$search_term = isset( $_GET['faq'] ) ? $_GET['faq'] : '';
 		?>
-<div class="max-w-[550px] mx-auto w-full mt-4">
-	<form action="<?php echo home_url( '/faq/' ); ?>" method="get"
-		class="text-gray-500 border border-gray-200 rounded-md p-1 flex items-center justify-between border-solid">
-		<input class="placeholder:text-slate-400 border-0  flex-1 outline-0 focus:border-0" style="box-shadow: none;"
-			type="text" name="faq" placeholder="TYPE A QUESTION" value="<?php echo $search_term; ?>">
-		<button class="bg-transparent" type="submit" class="text-gray-500">
-			<svg width="13" height="14" viewBox="0 0 13 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-				<path
-					d="M4.82857 0C6.10919 0 7.33735 0.547855 8.24289 1.52304C9.14842 2.49823 9.65714 3.82087 9.65714 5.2C9.65714 6.488 9.21886 7.672 8.49829 8.584L8.69886 8.8H9.28571L13 12.8L11.8857 14L8.17143 10V9.368L7.97086 9.152C7.124 9.928 6.02457 10.4 4.82857 10.4C3.54795 10.4 2.31979 9.85215 1.41426 8.87696C0.508723 7.90177 0 6.57913 0 5.2C0 3.82087 0.508723 2.49823 1.41426 1.52304C2.31979 0.547855 3.54795 0 4.82857 0ZM4.82857 1.6C2.97143 1.6 1.48571 3.2 1.48571 5.2C1.48571 7.2 2.97143 8.8 4.82857 8.8C6.68571 8.8 8.17143 7.2 8.17143 5.2C8.17143 3.2 6.68571 1.6 4.82857 1.6Z"
-					fill="#D2D2D2" />
-			</svg>
-		</button>
-	</form>
-</div>
+		<div class="max-w-[550px] mx-auto w-full mt-4">
+			<form action="<?php echo home_url( '/faq/' ); ?>" method="get"
+				class="text-gray-500 border border-gray-200 rounded-md p-1 flex items-center justify-between border-solid">
+				<input class="placeholder:text-slate-400 border-0  flex-1 outline-0 focus:border-0" style="box-shadow: none;"
+					type="text" name="faq" placeholder="TYPE A QUESTION" value="<?php echo $search_term; ?>">
+				<button class="bg-transparent" type="submit" class="text-gray-500">
+					<svg width="13" height="14" viewBox="0 0 13 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path
+							d="M4.82857 0C6.10919 0 7.33735 0.547855 8.24289 1.52304C9.14842 2.49823 9.65714 3.82087 9.65714 5.2C9.65714 6.488 9.21886 7.672 8.49829 8.584L8.69886 8.8H9.28571L13 12.8L11.8857 14L8.17143 10V9.368L7.97086 9.152C7.124 9.928 6.02457 10.4 4.82857 10.4C3.54795 10.4 2.31979 9.85215 1.41426 8.87696C0.508723 7.90177 0 6.57913 0 5.2C0 3.82087 0.508723 2.49823 1.41426 1.52304C2.31979 0.547855 3.54795 0 4.82857 0ZM4.82857 1.6C2.97143 1.6 1.48571 3.2 1.48571 5.2C1.48571 7.2 2.97143 8.8 4.82857 8.8C6.68571 8.8 8.17143 7.2 8.17143 5.2C8.17143 3.2 6.68571 1.6 4.82857 1.6Z"
+							fill="#D2D2D2" />
+					</svg>
+				</button>
+			</form>
+		</div>
 		<?php
 		return ob_get_clean();
 	}
@@ -258,13 +266,13 @@ class FAQ {
 
 	public function faq_menu_settings_page() {
 		?>
-<div class="wrap">
-	<h1>FAQ Menu Settings</h1>
-	<form method="post" action="">
-		<?php wp_nonce_field( 'update_faq_menu', 'update_faq_menu_nonce' ); ?>
-		<p><input type="submit" name="update_faq_menu" class="button-primary" value="Update FAQ Menu"></p>
-	</form>
-</div>
+		<div class="wrap">
+			<h1>FAQ Menu Settings</h1>
+			<form method="post" action="">
+				<?php wp_nonce_field( 'update_faq_menu', 'update_faq_menu_nonce' ); ?>
+				<p><input type="submit" name="update_faq_menu" class="button-primary" value="Update FAQ Menu"></p>
+			</form>
+		</div>
 		<?php
 	}
 
@@ -291,7 +299,7 @@ class FAQ {
 	}
 
 	public function create_faq_nav_menu() {
-		$menu_name   = 'FAQ Menu';
+		$menu_name = 'FAQ Menu';
 		$menu_exists = wp_get_nav_menu_object( $menu_name );
 
 		if ( ! $menu_exists ) {
@@ -304,22 +312,22 @@ class FAQ {
 
 		$parent_faqs = get_posts(
 			array(
-				'post_type'   => 'nova-faq',
+				'post_type' => 'nova-faq',
 				'post_parent' => 0,
 				'numberposts' => -1,
-				'orderby'     => 'menu_order',
-				'order'       => 'ASC',
+				'orderby' => 'menu_order',
+				'order' => 'ASC',
 			)
 		);
 
 		foreach ( $parent_faqs as $parent_faq ) {
 			$child_faqs = get_posts(
 				array(
-					'post_type'   => 'nova-faq',
+					'post_type' => 'nova-faq',
 					'post_parent' => $parent_faq->ID,
 					'numberposts' => -1,
-					'orderby'     => 'menu_order',
-					'order'       => 'ASC',
+					'orderby' => 'menu_order',
+					'order' => 'ASC',
 				)
 			);
 
@@ -328,28 +336,28 @@ class FAQ {
 					$menu_id,
 					0,
 					array(
-						'menu-item-title'  => $parent_faq->post_title,
-						'menu-item-url'    => get_permalink( $parent_faq->ID ),
+						'menu-item-title' => $parent_faq->post_title,
+						'menu-item-url' => get_permalink( $parent_faq->ID ),
 						'menu-item-status' => 'publish',
 					)
 				);
 
 				foreach ( $child_faqs as $child_faq ) {
-						wp_update_nav_menu_item(
-							$menu_id,
-							0,
-							array(
-								'menu-item-title'     => $child_faq->post_title,
-								'menu-item-url'       => get_permalink( $child_faq->ID ),
-								'menu-item-status'    => 'publish',
-								'menu-item-parent-id' => $parent_item_id,
-							)
-						);
+					wp_update_nav_menu_item(
+						$menu_id,
+						0,
+						array(
+							'menu-item-title' => $child_faq->post_title,
+							'menu-item-url' => get_permalink( $child_faq->ID ),
+							'menu-item-status' => 'publish',
+							'menu-item-parent-id' => $parent_item_id,
+						)
+					);
 				}
 			}
 		}
 
-		$locations             = get_theme_mod( 'nav_menu_locations' );
+		$locations = get_theme_mod( 'nav_menu_locations' );
 		$locations['faq-menu'] = $menu_id;
 		set_theme_mod( 'nav_menu_locations', $locations );
 	}
@@ -358,22 +366,22 @@ class FAQ {
 		ob_start();
 		$search_term = isset( $_GET['faq'] ) && ! ( empty( $_GET['faq'] ) ) ? $_GET['faq'] : '';
 		?>
-<h4 class="mb-9">SEARCH RESULTS FOR <span class="font-body">"<?php echo $search_term; ?>"</span></h4>
+		<h4 class="mb-9">SEARCH RESULTS FOR <span class="font-body">"<?php echo $search_term; ?>"</span></h4>
 		<?php
 
 		$args = array(
-			'post_type'      => 'nova-faq',
+			'post_type' => 'nova-faq',
 			'posts_per_page' => -1,
-			's'              => $search_term,
-			'meta_query'     => array(
+			's' => $search_term,
+			'meta_query' => array(
 				'relation' => 'OR',
 				array(
-					'key'     => '_has_child',
+					'key' => '_has_child',
 					'compare' => 'NOT EXISTS',
 				),
 				array(
-					'key'     => '_has_child',
-					'value'   => '',
+					'key' => '_has_child',
+					'value' => '',
 					'compare' => '=',
 				),
 			),
@@ -386,11 +394,11 @@ class FAQ {
 			while ( $faqs->have_posts() ) {
 				$faqs->the_post();
 				?>
-<li class="py-2">
-	<a style="text-decoration: none;"
-		class="decoration-none text-[14px] text-black underline-offset-2 hover:text-gray-700"
-		href="<?php echo get_permalink( get_the_ID() ); ?>"><?php echo get_the_title( get_the_ID() ); ?></a>
-</li>
+				<li class="py-2">
+					<a style="text-decoration: none;"
+						class="decoration-none text-[14px] text-black underline-offset-2 hover:text-gray-700"
+						href="<?php echo get_permalink( get_the_ID() ); ?>"><?php echo get_the_title( get_the_ID() ); ?></a>
+				</li>
 				<?php
 			}
 			echo '</ul>';
@@ -414,11 +422,11 @@ class FAQ {
 		<?php
 		if ( is_singular( 'nova-faq' ) ) {
 			if ( $this->has_children( get_the_ID() ) ) {
-				$args     = array(
+				$args = array(
 					'post_parent' => get_the_ID(),
-					'post_type'   => 'nova-faq',
-					'order'       => 'ASC',
-					'orderby'     => 'menu_order',
+					'post_type' => 'nova-faq',
+					'order' => 'ASC',
+					'orderby' => 'menu_order',
 					'numberposts' => -1,
 				);
 				$children = get_posts( $args );
@@ -427,11 +435,11 @@ class FAQ {
 					echo '<ul class="list-none p-0 ml-0">';
 					foreach ( $children as $child ) {
 						?>
-<li class="py-2">
-	<a style="text-decoration: none;"
-		class="decoration-none text-[14px] text-black underline-offset-2 hover:text-gray-700"
-		href="<?php echo get_permalink( $child->ID ); ?>"><?php echo get_the_title( $child->ID ); ?></a>
-</li>
+						<li class="py-2">
+							<a style="text-decoration: none;"
+								class="decoration-none text-[14px] text-black underline-offset-2 hover:text-gray-700"
+								href="<?php echo get_permalink( $child->ID ); ?>"><?php echo get_the_title( $child->ID ); ?></a>
+						</li>
 						<?php
 					}
 					echo '</ul>';
@@ -453,7 +461,7 @@ class FAQ {
 	public function output_content() {
 		ob_start();
 		?>
-<h4 class="mb-9"><?php the_title(); ?></h4>
+		<h4 class="mb-9"><?php the_title(); ?></h4>
 		<?php
 		echo get_the_content();
 		return ob_get_clean();
@@ -489,16 +497,16 @@ class FAQ {
 
 </li>';
 
-		$breadcrumbs  = '<nav class="faq-breadcrumbs mb-14 py-4"><ol class="list-none p-0 ml-0 rounded flex bg-grey-light text-grey items-center">';
-		$homeLink     = home_url( '/faq/' );
+		$breadcrumbs = '<nav class="faq-breadcrumbs mb-14 py-4"><ol class="list-none p-0 ml-0 rounded flex bg-grey-light text-grey items-center">';
+		$homeLink = home_url( '/faq/' );
 		$breadcrumbs .= '<li class="px-2"><a class="text-[14px] text-black underline-offset-2 hover:text-gray-700" href="' . $homeLink . '">HELP CENTER</a></li>';
 		if ( is_singular( 'nova-faq' ) && $post->post_parent ) {
-			$parent_id    = $post->post_parent;
+			$parent_id = $post->post_parent;
 			$parent_pages = array();
 			while ( $parent_id ) {
-				$page           = get_post( $parent_id );
+				$page = get_post( $parent_id );
 				$parent_pages[] = $seperator . '<li class="px-2"><a class="text-[14px] text-black underline-offset-2 hover:text-gray-700" href="' . get_permalink( $page->ID ) . '">' . get_the_title( $page->ID ) . '</a></li>';
-				$parent_id      = $page->post_parent;
+				$parent_id = $page->post_parent;
 			}
 			$parent_pages = array_reverse( $parent_pages );
 			foreach ( $parent_pages as $parent_page ) {
@@ -514,7 +522,7 @@ class FAQ {
 	public function has_children( $post_id ) {
 		$args = array(
 			'post_parent' => $post_id,
-			'post_type'   => 'any',
+			'post_type' => 'any',
 			'numberposts' => 1, // We only need to check if at least one child exists
 		);
 
