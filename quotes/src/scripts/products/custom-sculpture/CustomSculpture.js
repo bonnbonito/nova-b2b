@@ -18,7 +18,7 @@ export default function CustomSculpture() {
 				id: uuidv4(),
 				type: 'custom-sculpture',
 				title: 'CUSTOM SCULPTURE',
-				sculptureMaterial: 'We Recommend',
+				sculptureMaterial: 'NOVA Suggestion',
 				description: '',
 				usdPrice: 0,
 				cadPrice: 0,

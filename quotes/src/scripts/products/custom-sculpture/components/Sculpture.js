@@ -6,6 +6,40 @@ import TextInput from '../../../TextInput';
 
 import { INDOOR_NOT_WATERPROOF } from '../../../utils/defaults';
 
+const setOptions = Array.from(
+	{
+		length: 100,
+	},
+	(_, index) => {
+		const val = 1 + index;
+		return (
+			<option key={index} value={val}>
+				{val}
+			</option>
+		);
+	}
+);
+
+const waterProofOptions = [
+	{
+		option: INDOOR_NOT_WATERPROOF,
+	},
+	{
+		option: 'Outdoor',
+	},
+];
+
+const materialOptions = [
+	'NOVA Suggestion',
+	'Resin',
+	'Fiberglass Resin',
+	'Stainless Steel',
+	'Aluminum',
+	'Wood',
+	'Plush',
+	'Interactive Light',
+];
+
 export function Sculpture({ item }) {
 	const { signage, setSignage, setMissing, hasUploadedFile } = useAppContext();
 	const [fileNames, setFileNames] = useState(item.fileNames ?? []);
@@ -14,56 +48,18 @@ export function Sculpture({ item }) {
 	const [files, setFiles] = useState(item.files ?? []);
 
 	const [sculptureMaterial, setSculptureMaterial] = useState(
-		item.sculptureMaterial ?? ''
+		item.sculptureMaterial ?? 'NOVA Suggestion'
 	);
 
 	const [sculptureSize, setSculptureSize] = useState(item.sculptureSize ?? '');
-	const [sculptureLifeSpan, setSculptureLifeSpan] = useState(
-		item.sculptureLifeSpan ?? ''
-	);
 
 	const [purpose, setPurpose] = useState(item.purpose ?? '');
 	const [projectTimeline, setProjectTimeline] = useState(
 		item.projectTimeline ?? ''
 	);
-	const [dateNeeded, setDateNeeded] = useState(item.dateNeeded ?? '');
 
 	const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
 	const [sets, setSets] = useState(item.sets ?? 1);
-
-	const setOptions = Array.from(
-		{
-			length: 100,
-		},
-		(_, index) => {
-			const val = 1 + index;
-			return (
-				<option key={index} value={val}>
-					{val}
-				</option>
-			);
-		}
-	);
-
-	const waterProofOptions = [
-		{
-			option: INDOOR_NOT_WATERPROOF,
-		},
-		{
-			option: 'Outdoor',
-		},
-	];
-
-	const materialOptions = [
-		'NOVA Recommend',
-		'Resin',
-		'Fiberglass Resin',
-		'Stainless Steel',
-		'Aluminum',
-		'Wood',
-		'Plush',
-		'Interactive Light',
-	];
 
 	const [description, setDescription] = useState(item.description ?? '');
 
@@ -83,8 +79,6 @@ export function Sculpture({ item }) {
 					purpose,
 					projectTimeline,
 					description,
-					dateNeeded,
-					sculptureLifeSpan,
 					sets,
 					waterproof,
 				};
@@ -101,9 +95,7 @@ export function Sculpture({ item }) {
 		if (!sculptureMaterial) missingFields.push('Select a material');
 		if (!sculptureSize) missingFields.push('Add the size');
 		if (!waterproof) missingFields.push('Select environment');
-		if (!sculptureLifeSpan) missingFields.push('Add the lifespan');
 		if (!purpose) missingFields.push('Add the purpose');
-		if (!dateNeeded) missingFields.push('Add the date needed');
 
 		if (!projectTimeline) missingFields.push('Add the project timeline');
 
@@ -168,8 +160,6 @@ export function Sculpture({ item }) {
 		purpose,
 		projectTimeline,
 		description,
-		dateNeeded,
-		sculptureLifeSpan,
 		sets,
 		waterproof,
 	]);
@@ -200,7 +190,7 @@ export function Sculpture({ item }) {
 							{material}
 						</option>
 					))}
-					info={`Choose <span class="text-nova-primary ">NOVA Recommendation</span> to let us suggest<br> a material based on your design and description`}
+					info={`Choose <span class="text-nova-primary ">NOVA Suggestion</span> to let us suggest<br> a material based on your design and description`}
 				/>
 
 				<TextInput

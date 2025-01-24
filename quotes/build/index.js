@@ -16685,7 +16685,7 @@ function CustomSculpture() {
       id: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
       type: 'custom-sculpture',
       title: 'CUSTOM SCULPTURE',
-      sculptureMaterial: 'We Recommend',
+      sculptureMaterial: 'NOVA Suggestion',
       description: '',
       usdPrice: 0,
       cadPrice: 0,
@@ -16806,10 +16806,25 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+const setOptions = Array.from({
+  length: 100
+}, (_, index) => {
+  const val = 1 + index;
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    key: index,
+    value: val
+  }, val);
+});
+const waterProofOptions = [{
+  option: _utils_defaults__WEBPACK_IMPORTED_MODULE_5__.INDOOR_NOT_WATERPROOF
+}, {
+  option: 'Outdoor'
+}];
+const materialOptions = ['NOVA Suggestion', 'Resin', 'Fiberglass Resin', 'Stainless Steel', 'Aluminum', 'Wood', 'Plush', 'Interactive Light'];
 function Sculpture({
   item
 }) {
-  var _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$sculptureMateri, _item$sculptureSize, _item$sculptureLifeSp, _item$purpose, _item$projectTimeline, _item$dateNeeded, _item$waterproof, _item$sets, _item$description;
+  var _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$sculptureMateri, _item$sculptureSize, _item$purpose, _item$projectTimeline, _item$waterproof, _item$sets, _item$description;
   const {
     signage,
     setSignage,
@@ -16820,29 +16835,12 @@ function Sculpture({
   const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrls = item.fileUrls) !== null && _item$fileUrls !== void 0 ? _item$fileUrls : []);
   const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$filePaths = item.filePaths) !== null && _item$filePaths !== void 0 ? _item$filePaths : []);
   const [files, setFiles] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$files = item.files) !== null && _item$files !== void 0 ? _item$files : []);
-  const [sculptureMaterial, setSculptureMaterial] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sculptureMateri = item.sculptureMaterial) !== null && _item$sculptureMateri !== void 0 ? _item$sculptureMateri : '');
+  const [sculptureMaterial, setSculptureMaterial] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sculptureMateri = item.sculptureMaterial) !== null && _item$sculptureMateri !== void 0 ? _item$sculptureMateri : 'NOVA Suggestion');
   const [sculptureSize, setSculptureSize] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sculptureSize = item.sculptureSize) !== null && _item$sculptureSize !== void 0 ? _item$sculptureSize : '');
-  const [sculptureLifeSpan, setSculptureLifeSpan] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sculptureLifeSp = item.sculptureLifeSpan) !== null && _item$sculptureLifeSp !== void 0 ? _item$sculptureLifeSp : '');
   const [purpose, setPurpose] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$purpose = item.purpose) !== null && _item$purpose !== void 0 ? _item$purpose : '');
   const [projectTimeline, setProjectTimeline] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$projectTimeline = item.projectTimeline) !== null && _item$projectTimeline !== void 0 ? _item$projectTimeline : '');
-  const [dateNeeded, setDateNeeded] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$dateNeeded = item.dateNeeded) !== null && _item$dateNeeded !== void 0 ? _item$dateNeeded : '');
   const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : '');
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
-  const setOptions = Array.from({
-    length: 100
-  }, (_, index) => {
-    const val = 1 + index;
-    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      key: index,
-      value: val
-    }, val);
-  });
-  const waterProofOptions = [{
-    option: _utils_defaults__WEBPACK_IMPORTED_MODULE_5__.INDOOR_NOT_WATERPROOF
-  }, {
-    option: 'Outdoor'
-  }];
-  const materialOptions = ['NOVA Recommend', 'Resin', 'Fiberglass Resin', 'Stainless Steel', 'Aluminum', 'Wood', 'Plush', 'Interactive Light'];
   const [description, setDescription] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$description = item.description) !== null && _item$description !== void 0 ? _item$description : '');
   const handleOnChangeDescription = e => setDescription(e.target.value);
   function updateSignage() {
@@ -16859,8 +16857,6 @@ function Sculpture({
           purpose,
           projectTimeline,
           description,
-          dateNeeded,
-          sculptureLifeSpan,
           sets,
           waterproof
         };
@@ -16875,9 +16871,7 @@ function Sculpture({
     if (!sculptureMaterial) missingFields.push('Select a material');
     if (!sculptureSize) missingFields.push('Add the size');
     if (!waterproof) missingFields.push('Select environment');
-    if (!sculptureLifeSpan) missingFields.push('Add the lifespan');
     if (!purpose) missingFields.push('Add the purpose');
-    if (!dateNeeded) missingFields.push('Add the date needed');
     if (!projectTimeline) missingFields.push('Add the project timeline');
     if (!sets) missingFields.push('Select the quantity');
     if (!description) missingFields.push('Add your description');
@@ -16916,7 +16910,7 @@ function Sculpture({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
-  }, [fileUrls, fileNames, files, filePaths, description, hasUploadedFile, sculptureMaterial, sculptureSize, purpose, projectTimeline, description, dateNeeded, sculptureLifeSpan, sets, waterproof]);
+  }, [fileUrls, fileNames, files, filePaths, description, hasUploadedFile, sculptureMaterial, sculptureSize, purpose, projectTimeline, description, sets, waterproof]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "py-4 mb-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
@@ -16935,7 +16929,7 @@ function Sculpture({
       value: material,
       defaultValue: material === sculptureMaterial
     }, material)),
-    info: `Choose <span class="text-nova-primary ">NOVA Recommendation</span> to let us suggest<br> a material based on your design and description`
+    info: `Choose <span class="text-nova-primary ">NOVA Suggestion</span> to let us suggest<br> a material based on your design and description`
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_TextInput__WEBPACK_IMPORTED_MODULE_4__["default"], {
     title: "SIZE (HxWxD)",
     value: sculptureSize,
