@@ -6,8 +6,6 @@ import TextInput from '../../../TextInput';
 
 import { INDOOR_NOT_WATERPROOF } from '../../../utils/defaults';
 
-import DatePickerNova from '../../../DatePickerNova';
-
 export function Sculpture({ item }) {
 	const { signage, setSignage, setMissing, hasUploadedFile } = useAppContext();
 	const [fileNames, setFileNames] = useState(item.fileNames ?? []);
@@ -202,7 +200,7 @@ export function Sculpture({ item }) {
 							{material}
 						</option>
 					))}
-					info={`Choose <span class="text-nova-primary">NOVA Recommendation</span> to let us suggest<br> a material based on your design and description`}
+					info={`Choose <span class="text-nova-primary ">NOVA Recommendation</span> to let us suggest<br> a material based on your design and description`}
 				/>
 
 				<TextInput
@@ -229,13 +227,6 @@ export function Sculpture({ item }) {
 				/>
 
 				<TextInput
-					title="Lifespan Expectation"
-					value={sculptureLifeSpan}
-					onChange={(e) => setSculptureLifeSpan(e.target.value)}
-					placeholder="years"
-				/>
-
-				<TextInput
 					title="Purpose"
 					value={purpose}
 					onChange={(e) => setPurpose(e.target.value)}
@@ -250,25 +241,6 @@ export function Sculpture({ item }) {
 					placeholder="Please provide the estimated timeline for the project (e.g., 4–5 months)."
 					className="col-span-4"
 					info="Our project takes at least 15 weeks to be completed.<br>Please keep this in mind while adding the project timeline."
-				/>
-
-				<DatePickerNova
-					title="Date Needed"
-					selected={dateNeeded}
-					onChange={(date) => {
-						if (date) {
-							const formattedDate = date.toLocaleDateString('en-US', {
-								month: 'long',
-								day: 'numeric',
-								year: 'numeric',
-							});
-							setDateNeeded(formattedDate);
-						} else {
-							setDateNeeded('');
-						}
-					}}
-					minDate={new Date(Date.now() + 86400000)}
-					placeholderText="Month/Day/Year"
 				/>
 
 				<Dropdown
