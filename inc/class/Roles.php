@@ -272,7 +272,7 @@ class Roles {
 			)
 		) );
 
-		return $quotes->have_posts();
+		return $quotes->have_posts() ? $quotes->posts[0]->post_date : null;
 	}
 	public function get_user_quotes( $user_id ) {
 		$quotes = new \WP_Query( array(
