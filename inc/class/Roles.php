@@ -92,10 +92,10 @@ class Roles {
 				if ( is_email( $additional_email ) ) {
 					// Send a separate email to the additional email address
 					$new_args = array(
-						'to'          => $additional_email,
-						'subject'     => $args['subject'], // Use the same subject
-						'message'     => $args['message'], // Use the same message
-						'headers'     => $args['headers'], // Use the same headers
+						'to' => $additional_email,
+						'subject' => $args['subject'], // Use the same subject
+						'message' => $args['message'], // Use the same message
+						'headers' => $args['headers'], // Use the same headers
 						'attachments' => $args['attachments'] ?? array(), // Include attachments if any
 					);
 
@@ -117,8 +117,8 @@ class Roles {
 
 
 	public function add_contact_methods( $contact_methods, $user ) {
-		$contact_methods['additional_nova_email']    = __( 'Additional Email', 'nova' );
-		$contact_methods['additional_order_email']   = __( 'Order Email', 'nova' );
+		$contact_methods['additional_nova_email'] = __( 'Additional Email', 'nova' );
+		$contact_methods['additional_order_email'] = __( 'Order Email', 'nova' );
 		$contact_methods['additional_billing_email'] = __( 'Billing Email', 'nova' );
 		return $contact_methods;
 	}
@@ -147,8 +147,8 @@ class Roles {
 			'nova/v1',
 			'/show-all-business-id/',
 			array(
-				'methods'             => 'GET',
-				'callback'            => array( $this, 'handle_show_all_business_id' ),
+				'methods' => 'GET',
+				'callback' => array( $this, 'handle_show_all_business_id' ),
 				'permission_callback' => '__return_true',
 			)
 		);
@@ -157,8 +157,8 @@ class Roles {
 			'nova/v1',
 			'/businessId/(?P<email>[^\/]+)',
 			array(
-				'methods'             => 'GET',
-				'callback'            => array( $this, 'handle_find_business_id' ),
+				'methods' => 'GET',
+				'callback' => array( $this, 'handle_find_business_id' ),
 				'permission_callback' => '__return_true',
 			)
 		);
@@ -167,8 +167,8 @@ class Roles {
 			'nova/v1',
 			'/businessIdfromId/(?P<id>[^\/]+)',
 			array(
-				'methods'             => 'GET',
-				'callback'            => array( $this, 'handle_find_business_id_from_id' ),
+				'methods' => 'GET',
+				'callback' => array( $this, 'handle_find_business_id_from_id' ),
 				'permission_callback' => '__return_true',
 			)
 		);
@@ -177,8 +177,8 @@ class Roles {
 			'nova/v1',
 			'/streakBox/(?P<id>[\w-]+)',
 			array(
-				'methods'             => 'GET',
-				'callback'            => array( $this, 'handle_streak_box' ),
+				'methods' => 'GET',
+				'callback' => array( $this, 'handle_streak_box' ),
 				'permission_callback' => '__return_true',
 			)
 		);
@@ -226,16 +226,19 @@ class Roles {
 			}
 
 			$employee_emails = get_user_meta( $user->ID, 'employee_emails', true );
-			$emails_array    = $employee_emails ? explode( ',', str_replace( ' ', '', trim( $employee_emails ) ) ) : array();
-			$emails_array[]  = $user->user_email;
-			$emails_array    = array_map( 'strtolower', $emails_array );
-			$emails          = array_unique( $emails_array );
-			$results[]       = array(
-				'user_id'     => $user->ID,
-				'label'       => get_user_meta( $user->ID, 'business_id', true ) . ' - ' . get_user_meta( $user->ID, 'business_name', true ),
+			$emails_array = $employee_emails ? explode( ',', str_replace( ' ', '', trim( $employee_emails ) ) ) : array();
+			$emails_array[] = $user->user_email;
+			$emails_array = array_map( 'strtolower', $emails_array );
+			$emails = array_unique( $emails_array );
+			$results[] = array(
+				'user_id' => $user->ID,
+				'label' => get_user_meta( $user->ID, 'business_id', true ) . ' - ' . get_user_meta( $user->ID, 'business_name', true ),
 				'business_id' => get_user_meta( $user->ID, 'business_id', true ),
-				'emails'      => $emails,
-				'country'     => $country,
+				'emails' => $emails,
+				'country' => $country,
+				'quotes' => $this->get_user_quotes( $user->ID ),
+				'orders' => $this->get_user_orders( $user->ID ),
+				'active' => $this->is_user_quote_active( $user->ID ),
 			);
 		}
 
@@ -257,6 +260,69 @@ class Roles {
 		);
 	}
 
+	public function is_user_quote_active( $user_id ) {
+		$four_weeks_ago = date('Y-m-d H:i:s', strtotime('-4 weeks'));
+		
+		$quotes = new \WP_Query(array(
+			'post_type' => 'nova_quote',
+			'posts_per_page' => -1,
+			'author' => $user_id,
+			'date_query' => array(
+				'after' => $four_weeks_ago
+			)
+		));
+
+		return $quotes->found_posts > 0;
+	}
+	public function get_user_quotes( $user_id ) {
+		$quotes = new \WP_Query( array(
+			'post_type' => 'nova_quote',
+			'posts_per_page' => -1,
+			'meta_query' => array(
+				'relation' => 'AND',
+				array(
+					'key' => 'partner',
+					'value' => $user_id,
+					'compare' => '='
+				),
+				array(
+					'key' => 'quote_status',
+					'value' => 'ready',
+					'compare' => '='
+				)
+			)
+		) );
+		return $quotes->found_posts;
+	}
+
+	public function get_user_orders( $user_id ) {
+		$orders = wc_get_orders(
+			array(
+				'limit' => -1,
+				'return' => 'ids',
+				'customer' => $user_id,
+				'meta_query' => array(
+					array(
+						'key' => '_hide_order',
+						'compare' => 'EXISTS',
+					)
+				),
+			)
+		);
+		$result = [];
+
+		foreach ( $orders as $order ) {
+			$hide = get_post_meta( $order, '_hide_order', true );
+			if ( $hide )
+				continue;
+			$result[] = $order;
+		}
+
+		return count( $result );
+
+
+	}
+
 	public function handle_streak_box( \WP_REST_Request $request ) {
 		$id = $request['id'];
 
@@ -265,14 +331,14 @@ class Roles {
 		curl_setopt_array(
 			$curl,
 			array(
-				CURLOPT_URL            => 'https://api.streak.com/api/v1/boxes/' . $id,
+				CURLOPT_URL => 'https://api.streak.com/api/v1/boxes/' . $id,
 				CURLOPT_RETURNTRANSFER => true,
-				CURLOPT_ENCODING       => '',
-				CURLOPT_MAXREDIRS      => 10,
-				CURLOPT_TIMEOUT        => 30,
-				CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
-				CURLOPT_CUSTOMREQUEST  => 'GET',
-				CURLOPT_HTTPHEADER     => array(
+				CURLOPT_ENCODING => '',
+				CURLOPT_MAXREDIRS => 10,
+				CURLOPT_TIMEOUT => 30,
+				CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+				CURLOPT_CUSTOMREQUEST => 'GET',
+				CURLOPT_HTTPHEADER => array(
 					'Content-Type: application/json',
 					'accept: application/json',
 					'authorization: Basic ' . $this->streak_api,
@@ -281,7 +347,7 @@ class Roles {
 		);
 
 		$response = curl_exec( $curl );
-		$err      = curl_error( $curl );
+		$err = curl_error( $curl );
 
 		curl_close( $curl );
 
@@ -308,10 +374,10 @@ class Roles {
 			// Create a new post with the title as the ID and content as the response
 			$post_id = wp_insert_post(
 				array(
-					'post_title'   => $id,
+					'post_title' => $id,
 					'post_content' => wp_json_encode( $decoded_response, JSON_PRETTY_PRINT ),
-					'post_status'  => 'publish',
-					'post_type'    => 'post',
+					'post_status' => 'publish',
+					'post_type' => 'post',
 				)
 			);
 
@@ -326,8 +392,8 @@ class Roles {
 
 			return new \WP_REST_Response(
 				array(
-					'success'  => true,
-					'post_id'  => $post_id,
+					'success' => true,
+					'post_id' => $post_id,
 					'response' => $post_id,
 				),
 				200
@@ -342,15 +408,15 @@ class Roles {
 
 		foreach ( $users as $user ) {
 			$employee_emails = get_user_meta( $user->ID, 'employee_emails', true );
-			$emails_array    = $employee_emails ? explode( ',', str_replace( ' ', '', trim( $employee_emails ) ) ) : array();
-			$emails_array[]  = $user->user_email;
-			$emails          = array_unique( $emails_array );
-			$results[]       = array(
-				'user_id'     => $user->ID,
-				'label'       => get_user_meta( $user->ID, 'business_id', true ) . ' - ' . get_user_meta( $user->ID, 'business_name', true ),
+			$emails_array = $employee_emails ? explode( ',', str_replace( ' ', '', trim( $employee_emails ) ) ) : array();
+			$emails_array[] = $user->user_email;
+			$emails = array_unique( $emails_array );
+			$results[] = array(
+				'user_id' => $user->ID,
+				'label' => get_user_meta( $user->ID, 'business_id', true ) . ' - ' . get_user_meta( $user->ID, 'business_name', true ),
 				'business_id' => get_user_meta( $user->ID, 'business_id', true ),
-				'emails'      => $emails,
-				'country'     => get_user_meta( $user->ID, 'billing_country', true ) ? get_user_meta( $user->ID, 'billing_country', true ) : 'NONE',
+				'emails' => $emails,
+				'country' => get_user_meta( $user->ID, 'billing_country', true ) ? get_user_meta( $user->ID, 'billing_country', true ) : 'NONE',
 			);
 		}
 
@@ -368,9 +434,9 @@ class Roles {
 		if ( $message = get_transient( 'send_activation_email_notice' ) ) {
 			?>
 <div class="notice notice-success is-dismissible">
-	<p><?php echo esc_html( $message ); ?></p>
+  <p><?php echo esc_html( $message ); ?></p>
 </div>
-			<?php
+<?php
 			// Delete the transient
 			delete_transient( 'send_activation_email_notice' );
 		}
@@ -381,7 +447,7 @@ class Roles {
 
 		if ( isset( $_POST['user_id'] ) ) {
 			$user_id = intval( $_POST['user_id'] );
-			$user    = get_userdata( $user_id );
+			$user = get_userdata( $user_id );
 
 			// Check if the user has the 'temporary' role
 			if ( in_array( 'temporary', (array) $user->roles ) ) {
@@ -401,54 +467,54 @@ class Roles {
 			?>
 <h2>Account Activation</h2>
 <table class="form-table">
-	<tr>
-		<th>
-			<label for="send_activation_email">Send Activation Email</label>
-		</th>
-		<td>
-			<button id="send_activation_email_button" class="button button-primary"
-				data-user-id="<?php echo esc_attr( $user->ID ); ?>">Send Activation Email</button>
-			<span id="activation_email_status"></span>
-		</td>
-	</tr>
+  <tr>
+    <th>
+      <label for="send_activation_email">Send Activation Email</label>
+    </th>
+    <td>
+      <button id="send_activation_email_button" class="button button-primary"
+        data-user-id="<?php echo esc_attr( $user->ID ); ?>">Send Activation Email</button>
+      <span id="activation_email_status"></span>
+    </td>
+  </tr>
 </table>
 <script type="text/javascript">
 document.addEventListener('DOMContentLoaded', function() {
-	var sendEmailButton = document.getElementById('send_activation_email_button');
-	var statusSpan = document.getElementById('activation_email_status');
+  var sendEmailButton = document.getElementById('send_activation_email_button');
+  var statusSpan = document.getElementById('activation_email_status');
 
-	sendEmailButton.addEventListener('click', function() {
-		var userId = sendEmailButton.getAttribute('data-user-id');
-		statusSpan.textContent = 'Sending...';
+  sendEmailButton.addEventListener('click', function() {
+    var userId = sendEmailButton.getAttribute('data-user-id');
+    statusSpan.textContent = 'Sending...';
 
-		fetch(ajaxurl, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded',
-				},
-				body: new URLSearchParams({
-					action: 'send_activation_email',
-					user_id: userId,
-					nonce: '<?php echo wp_create_nonce( 'send_activation_email_nonce' ); ?>',
-				})
-			})
-			.then(response => response.json())
-			.then(data => {
-				if (data.success) {
-					statusSpan.textContent = 'Activation email sent.';
-					sendEmailButton.style.display = 'none';
-				} else {
-					statusSpan.textContent = 'Failed to send activation email.';
-				}
-			})
-			.catch(error => {
-				statusSpan.textContent = 'An error occurred.';
-				console.error('Error:', error);
-			});
-	});
+    fetch(ajaxurl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          action: 'send_activation_email',
+          user_id: userId,
+          nonce: '<?php echo wp_create_nonce( 'send_activation_email_nonce' ); ?>',
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          statusSpan.textContent = 'Activation email sent.';
+          sendEmailButton.style.display = 'none';
+        } else {
+          statusSpan.textContent = 'Failed to send activation email.';
+        }
+      })
+      .catch(error => {
+        statusSpan.textContent = 'An error occurred.';
+        console.error('Error:', error);
+      });
+  });
 });
 </script>
-			<?php
+<?php
 		}
 	}
 
@@ -456,28 +522,28 @@ document.addEventListener('DOMContentLoaded', function() {
 		?>
 <h3>Registration Information</h3>
 <table class="form-table" id="registration-info">
-	<tr>
-		<th><label for="registration_date">Registration Date</label></th>
-		<td>
-			<?php echo date( 'M d, Y', strtotime( $user->user_registered ) ); ?>
-		</td>
-	</tr>
+  <tr>
+    <th><label for="registration_date">Registration Date</label></th>
+    <td>
+      <?php echo date( 'M d, Y', strtotime( $user->user_registered ) ); ?>
+    </td>
+  </tr>
 </table>
 <script type="text/javascript">
 document.addEventListener('DOMContentLoaded', function() {
-	var regInfo = document.getElementById('registration-info').closest('table');
-	var personalOptions = document.querySelector('.user-rich-editing-wrap').closest('table');
-	if (regInfo && personalOptions) {
-		personalOptions.parentNode.insertBefore(regInfo, personalOptions);
-	}
+  var regInfo = document.getElementById('registration-info').closest('table');
+  var personalOptions = document.querySelector('.user-rich-editing-wrap').closest('table');
+  if (regInfo && personalOptions) {
+    personalOptions.parentNode.insertBefore(regInfo, personalOptions);
+  }
 });
 </script>
-		<?php
+<?php
 	}
 
 	public function show_registration_date_business_name_column_content( $value, $column_name, $user_id ) {
 		if ( 'registration_date' == $column_name ) {
-			$user  = get_userdata( $user_id );
+			$user = get_userdata( $user_id );
 			$value = $user->user_registered;
 			return date( 'M d, Y', strtotime( $value ) );
 		}
@@ -488,7 +554,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 
 	public function add_registration_business_name_column( $columns ) {
-		$columns['business_name']     = 'Business Name';
+		$columns['business_name'] = 'Business Name';
 		$columns['registration_date'] = 'Registration Date';
 		return $columns;
 	}
@@ -634,22 +700,22 @@ document.addEventListener('DOMContentLoaded', function() {
 			?>
 <script type="text/javascript">
 jQuery(document).ready(function($) {
-	// Move the row actions from their original location to the 'user_id' column
-	$('#the-list tr').each(function() {
-		var $this = $(this);
-		var rowActions = $this.find('.row-actions').clone(); // Clone the row actions
-		$this.find('.row-actions').remove(); // Remove the original row actions
+  // Move the row actions from their original location to the 'user_id' column
+  $('#the-list tr').each(function() {
+    var $this = $(this);
+    var rowActions = $this.find('.row-actions').clone(); // Clone the row actions
+    $this.find('.row-actions').remove(); // Remove the original row actions
 
-		// Check if the 'user_id' column exists and append the cloned row actions
-		var userIDCell = $this.find('td.business_id');
-		if (userIDCell.length) {
-			userIDCell.append(rowActions);
-		}
-	});
+    // Check if the 'user_id' column exists and append the cloned row actions
+    var userIDCell = $this.find('td.business_id');
+    if (userIDCell.length) {
+      userIDCell.append(rowActions);
+    }
+  });
 });
 </script>
 
-			<?php
+<?php
 		}
 	}
 
@@ -677,8 +743,8 @@ jQuery(document).ready(function($) {
 
 	public function update_role_business_id_on_profile_update( $user_id, $old_user_data ) {
 		$old_roles = $old_user_data->roles;
-		$user      = get_userdata( $user_id );
-		$new_role  = $user->roles ? $user->roles[0] : '';
+		$user = get_userdata( $user_id );
+		$new_role = $user->roles ? $user->roles[0] : '';
 
 		if ( $new_role == 'temporary' ) {
 			update_field( 'business_id', 'TEMPORARY-' . $user_id, 'user_' . $user_id );
@@ -715,11 +781,11 @@ jQuery(document).ready(function($) {
 		if ( in_array( 'pending', $old_roles ) && $role == 'partner' ) {
 			$user_info = get_userdata( $user_id );
 
-			$to         = $user_info->user_email;
+			$to = $user_info->user_email;
 			$first_name = $user_info->first_name;
 
-			$subject  = 'Welcome to NOVA Signage, ' . $first_name . '!';
-			$message  = '<p style="margin-top: 20px;">Hello  ' . $first_name . ',</p>';
+			$subject = 'Welcome to NOVA Signage, ' . $first_name . '!';
+			$message = '<p style="margin-top: 20px;">Hello  ' . $first_name . ',</p>';
 			$message .= '<p>Welcome to NOVA Signage! Your Business Partner application has been approved.</p>';
 			$message .= '<p>You may now <a href="' . home_url( '/my-account/' ) . '">login</a> to see our products, get instant quotes, or start a custom sign project.';
 			$message .= '<p><a href="' . home_url( '/' ) . '" style="padding: 10px 16px; display: inline-block; text-decoration: none; border-style: solid; background-color: #d33; color: #fff; font-size: 16px; font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif; font-weight: 400; background: #d33; padding-top: 10px; padding-bottom: 10px; padding-left: 8px; padding-right: 8px; border-width: 0px; border-radius: 4px; border-color: #dedede;">EXPLORE OUR PRODUCTS</a><br>';
@@ -782,7 +848,7 @@ jQuery(document).ready(function($) {
 	public function business_id_user_column( $value, $column_name, $user_id ) {
 		if ( 'business_id' === $column_name ) {
 			$user_edit_link = esc_url( admin_url( "user-edit.php?user_id={$user_id}" ) );
-			$business_id    = get_field( 'business_id', 'user_' . $user_id );
+			$business_id = get_field( 'business_id', 'user_' . $user_id );
 			return "<strong><a href='{$user_edit_link}'>{$business_id}</a></strong>";
 		}
 
@@ -796,7 +862,7 @@ jQuery(document).ready(function($) {
 	}
 
 	public function add_business_id_column( $columns ) {
-		$cb_column    = array( 'cb' => $columns['cb'] );
+		$cb_column = array( 'cb' => $columns['cb'] );
 		$posts_column = array( 'posts' => $columns['posts'] );
 		unset( $columns['cb'] );
 		unset( $columns['posts'] );
@@ -809,22 +875,22 @@ jQuery(document).ready(function($) {
 		delete_user_meta( $user_id, 'account_activation_key' );
 		$user = new WP_User( $user_id );
 		$user->set_role( 'pending' );
-		$first_name    = $user->get( 'first_name' );
-		$company       = get_field( 'business_name', 'user_' . $user_id ) ? get_field( 'business_name', 'user_' . $user_id ) : 'None';
+		$first_name = $user->get( 'first_name' );
+		$company = get_field( 'business_name', 'user_' . $user_id ) ? get_field( 'business_name', 'user_' . $user_id ) : 'None';
 		$user_edit_url = admin_url( 'user-edit.php?user_id=' . $user_id );
-		$business_id   = get_field( 'business_id', 'user_' . $user_id );
+		$business_id = get_field( 'business_id', 'user_' . $user_id );
 
-		$subject      = 'NOVA INTERNAL - Pending Partner Status: ' . $first_name . ' from ' . $company . ' -  ' . $business_id;
+		$subject = 'NOVA INTERNAL - Pending Partner Status: ' . $first_name . ' from ' . $company . ' -  ' . $business_id;
 		$josh_subject = 'NOVA INTERNAL (Action Required) - Pending Partner Status: ' . $first_name . ' from ' . $company . ' -  ' . $business_id;
-		$message      = '<p>Hello,</p>';
-		$message     .= '<p>You have a business partner application to approve:</p>';
-		$message     .= '<ul>';
-		$message     .= '<li><strong>Customer:</strong> - ' . $business_id . '</li>';
-		$message     .= '<li><strong>Company:</strong> - ' . $company . '</li>';
-		$message     .= '</ul><br>';
-		$message     .= '<p style="margin-top: 20px;">' . $first_name . ' with Business ID ' . $business_id . ' submitted a business partner application. </p>';
-		$message     .= '<p>Please <strong>APPROVE</strong> or <strong>DENY</strong> their Business Partner Status here:<br>';
-		$message     .= '<a href="' . esc_url( $user_edit_url ) . '">Click Here</a></p>';
+		$message = '<p>Hello,</p>';
+		$message .= '<p>You have a business partner application to approve:</p>';
+		$message .= '<ul>';
+		$message .= '<li><strong>Customer:</strong> - ' . $business_id . '</li>';
+		$message .= '<li><strong>Company:</strong> - ' . $company . '</li>';
+		$message .= '</ul><br>';
+		$message .= '<p style="margin-top: 20px;">' . $first_name . ' with Business ID ' . $business_id . ' submitted a business partner application. </p>';
+		$message .= '<p>Please <strong>APPROVE</strong> or <strong>DENY</strong> their Business Partner Status here:<br>';
+		$message .= '<a href="' . esc_url( $user_edit_url ) . '">Click Here</a></p>';
 
 		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
@@ -844,13 +910,13 @@ jQuery(document).ready(function($) {
 	}
 
 	public function send_user_pending_email( $user_id ) {
-		$user       = get_userdata( $user_id );
+		$user = get_userdata( $user_id );
 		$first_name = get_user_meta( $user_id, 'first_name', true );
 		$user_email = $user->user_email;
 
 		$subject = 'Your NOVA Business Partner Status is under review';
 
-		$message  = '<p style="margin-top: 20px;">Hello  ' . $first_name . ',</p>';
+		$message = '<p style="margin-top: 20px;">Hello  ' . $first_name . ',</p>';
 		$message .= '<p>Your Business Partner account will be reviewed within 24 business hours. Please wait for the approval email.</p>';
 		$message .= '<p>Thank you,<br>';
 		$message .= 'NOVA Signage Team</p>';
@@ -872,7 +938,7 @@ jQuery(document).ready(function($) {
 			wp_send_json( $status );
 		}
 
-		$login    = $_POST['login'];
+		$login = $_POST['login'];
 		$password = $_POST['user_password'];
 
 		$user_id = is_email( $login ) ? email_exists( $login ) : username_exists( $login );
@@ -884,7 +950,7 @@ jQuery(document).ready(function($) {
 		$user = wp_authenticate( $login, $password );
 
 		if ( is_wp_error( $user ) ) {
-			$status['code']  = is_email( $login ) ? 3 : 4;
+			$status['code'] = is_email( $login ) ? 3 : 4;
 			$status['error'] = $user->get_error_message();
 		} else {
 			wp_set_current_user( $user->ID );
@@ -893,18 +959,18 @@ jQuery(document).ready(function($) {
 		}
 
 		$front_page_url = trailingslashit( home_url( '/' ) );
-		$from           = trailingslashit( $_POST['referrer'] );
+		$from = trailingslashit( $_POST['referrer'] );
 		if ( $from !== $front_page_url ) {
 			$status['reload'] = 'yes';
 		}
 
-		$status['referrer']   = wp_get_referer();
+		$status['referrer'] = wp_get_referer();
 		$status['is_product'] = $_POST['product_page'];
 		wp_send_json( $status );
 	}
 
 	public function add_pending_users_count_bubble() {
-		$users         = count_users();
+		$users = count_users();
 		$pending_count = $users['avail_roles']['pending'] ?? 0;
 
 		if ( $pending_count > 0 ) {
@@ -941,51 +1007,51 @@ jQuery(document).ready(function($) {
 		if ( ! wp_verify_nonce( $_POST['nonce'], 'nova_signup_nonce' ) ) {
 			wp_send_json(
 				$status = array(
-					'code'  => 5,
+					'code' => 5,
 					'error' => 'Nonce Error',
 				)
 			);
 		}
 
-		$username        = sanitize_user( $_POST['username'] );
-		$password        = $_POST['password'];
-		$firstName       = sanitize_text_field( $_POST['firstName'] );
-		$lastName        = sanitize_text_field( $_POST['lastName'] );
-		$businessName    = isset( $_POST['businessName'] ) ? sanitize_text_field( $_POST['businessName'] ) : '';
-		$businessEmail   = sanitize_email( $_POST['businessEmail'] );
-		$billingEmail    = sanitize_email( $_POST['billingEmail'] );
+		$username = sanitize_user( $_POST['username'] );
+		$password = $_POST['password'];
+		$firstName = sanitize_text_field( $_POST['firstName'] );
+		$lastName = sanitize_text_field( $_POST['lastName'] );
+		$businessName = isset( $_POST['businessName'] ) ? sanitize_text_field( $_POST['businessName'] ) : '';
+		$businessEmail = sanitize_email( $_POST['businessEmail'] );
+		$billingEmail = sanitize_email( $_POST['billingEmail'] );
 		$businessWebsite = isset( $_POST['businessWebsite'] ) ? esc_url( $_POST['businessWebsite'] ) : '';
-		$businessType    = isset( $_POST['businessType'] ) ? sanitize_text_field( $_POST['businessType'] ) : '';
-		$businessPhone   = isset( $_POST['businessPhone'] ) ? $this->sanitize_phone_number( $_POST['businessPhone'] ) : '';
-		$taxId           = isset( $_POST['taxId'] ) ? sanitize_text_field( $_POST['taxId'] ) : '';
-		$street          = isset( $_POST['street'] ) ? sanitize_text_field( $_POST['street'] ) : '';
-		$city            = isset( $_POST['city'] ) ? sanitize_text_field( $_POST['city'] ) : '';
-		$state           = isset( $_POST['state'] ) ? sanitize_text_field( $_POST['state'] ) : '';
-		$zip             = isset( $_POST['zip'] ) ? sanitize_text_field( $_POST['zip'] ) : '';
-		$pst             = isset( $_POST['pst'] ) ? sanitize_text_field( $_POST['pst'] ) : '';
-		$country         = isset( $_POST['country'] ) ? sanitize_text_field( $_POST['country'] ) : '';
-		$promotions      = isset( $_POST['promotions'] ) ? sanitize_text_field( $_POST['promotions'] ) : '';
-		$privacy         = isset( $_POST['privacy'] ) ? sanitize_text_field( $_POST['privacy'] ) : '';
-		$referral        = isset( $_POST['referredBy'] ) ? sanitize_text_field( $_POST['referredBy'] ) : '';
-		$referrer        = isset( $_POST['referrer'] ) ? sanitize_url( $_POST['referrer'] ) : '';
+		$businessType = isset( $_POST['businessType'] ) ? sanitize_text_field( $_POST['businessType'] ) : '';
+		$businessPhone = isset( $_POST['businessPhone'] ) ? $this->sanitize_phone_number( $_POST['businessPhone'] ) : '';
+		$taxId = isset( $_POST['taxId'] ) ? sanitize_text_field( $_POST['taxId'] ) : '';
+		$street = isset( $_POST['street'] ) ? sanitize_text_field( $_POST['street'] ) : '';
+		$city = isset( $_POST['city'] ) ? sanitize_text_field( $_POST['city'] ) : '';
+		$state = isset( $_POST['state'] ) ? sanitize_text_field( $_POST['state'] ) : '';
+		$zip = isset( $_POST['zip'] ) ? sanitize_text_field( $_POST['zip'] ) : '';
+		$pst = isset( $_POST['pst'] ) ? sanitize_text_field( $_POST['pst'] ) : '';
+		$country = isset( $_POST['country'] ) ? sanitize_text_field( $_POST['country'] ) : '';
+		$promotions = isset( $_POST['promotions'] ) ? sanitize_text_field( $_POST['promotions'] ) : '';
+		$privacy = isset( $_POST['privacy'] ) ? sanitize_text_field( $_POST['privacy'] ) : '';
+		$referral = isset( $_POST['referredBy'] ) ? sanitize_text_field( $_POST['referredBy'] ) : '';
+		$referrer = isset( $_POST['referrer'] ) ? sanitize_url( $_POST['referrer'] ) : '';
 
 		if ( username_exists( $username ) || email_exists( $businessEmail ) ) {
 			wp_send_json(
 				$status = array(
-					'code'  => 3,
+					'code' => 3,
 					'error' => 'Username/Email already exists.',
 				)
 			);
 		}
 
 		$userData = array(
-			'user_login'           => $username,
-			'user_pass'            => $password,
-			'user_email'           => $businessEmail,
+			'user_login' => $username,
+			'user_pass' => $password,
+			'user_email' => $businessEmail,
 			'show_admin_bar_front' => false,
-			'first_name'           => $firstName,
-			'last_name'            => $lastName,
-			'role'                 => 'temporary',
+			'first_name' => $firstName,
+			'last_name' => $lastName,
+			'role' => 'temporary',
 		);
 
 		$user_id = wp_insert_user( $userData );
@@ -994,7 +1060,7 @@ jQuery(document).ready(function($) {
 			// Handle error when user creation fails
 			wp_send_json(
 				$status = array(
-					'code'  => 4,
+					'code' => 4,
 					'error' => $user_id->get_error_message(),
 				)
 			);
@@ -1002,29 +1068,29 @@ jQuery(document).ready(function($) {
 
 		$billing_keys = array(
 			'billing_first_name' => $firstName,
-			'billing_last_name'  => $lastName,
-			'billing_company'    => $businessName,
-			'billing_email'      => $businessEmail,
-			'billing_phone'      => $businessPhone,
-			'billing_address_1'  => $street,
-			'billing_city'       => $city,
-			'billing_state'      => $state,
-			'billing_postcode'   => $zip,
-			'billing_country'    => $country,
+			'billing_last_name' => $lastName,
+			'billing_company' => $businessName,
+			'billing_email' => $businessEmail,
+			'billing_phone' => $businessPhone,
+			'billing_address_1' => $street,
+			'billing_city' => $city,
+			'billing_state' => $state,
+			'billing_postcode' => $zip,
+			'billing_country' => $country,
 		);
 
 		$shipping_keys = array(
 			'shipping_first_name' => $firstName,
-			'shipping_last_name'  => $lastName,
-			'shipping_company'    => $businessName,
-			'shipping_email'      => $businessEmail,
-			'shipping_phone'      => $businessPhone,
-			'shipping_address_1'  => $street,
-			'shipping_city'       => $city,
-			'shipping_state'      => $state,
-			'shipping_postcode'   => $zip,
-			'shipping_country'    => $country,
-			'shipping_pst'        => $pst,
+			'shipping_last_name' => $lastName,
+			'shipping_company' => $businessName,
+			'shipping_email' => $businessEmail,
+			'shipping_phone' => $businessPhone,
+			'shipping_address_1' => $street,
+			'shipping_city' => $city,
+			'shipping_state' => $state,
+			'shipping_postcode' => $zip,
+			'shipping_country' => $country,
+			'shipping_pst' => $pst,
 		);
 
 		foreach ( $billing_keys as $key => $value ) {
@@ -1037,9 +1103,9 @@ jQuery(document).ready(function($) {
 
 		wp_update_user(
 			array(
-				'ID'         => $user_id,
+				'ID' => $user_id,
 				'first_name' => $firstName,
-				'last_name'  => $lastName,
+				'last_name' => $lastName,
 			)
 		);
 
@@ -1077,13 +1143,13 @@ jQuery(document).ready(function($) {
 		// Send activation email
 		// wp_mail( $businessEmail, $subject, $message, $headers );
 
-		$status['code']   = 2;
-		$status['post']   = $_POST;
+		$status['code'] = 2;
+		$status['post'] = $_POST;
 		$status['result'] = array(
-			'business_id'    => $business_id,
-			'email'          => $businessEmail,
-			'first_name'     => $firstName,
-			'user_id'        => $user_id,
+			'business_id' => $business_id,
+			'email' => $businessEmail,
+			'first_name' => $firstName,
+			'user_id' => $user_id,
 			'activation_key' => $activation_key,
 		);
 
@@ -1094,9 +1160,9 @@ jQuery(document).ready(function($) {
 
 	public function send_user_activate_email( $user_id ) {
 
-		$user_data      = get_userdata( $user_id );
-		$user_email     = $user_data->user_email;
-		$firstName      = $user_data->first_name;
+		$user_data = get_userdata( $user_id );
+		$user_email = $user_data->user_email;
+		$firstName = $user_data->first_name;
 		$activation_key = get_user_meta( $user_id, 'account_activation_key', true );
 
 		$subject = 'Activate your NOVA Signage account';
@@ -1116,14 +1182,14 @@ jQuery(document).ready(function($) {
 			wp_send_json( 'Nonce Error' );
 		}
 
-		$user_id        = $_POST['user_id'];
-		$firstName      = sanitize_text_field( $_POST['first_name'] );
-		$businessEmail  = sanitize_email( $_POST['email'] );
-		$business_id    = sanitize_text_field( $_POST['business_id'] );
+		$user_id = $_POST['user_id'];
+		$firstName = sanitize_text_field( $_POST['first_name'] );
+		$businessEmail = sanitize_email( $_POST['email'] );
+		$business_id = sanitize_text_field( $_POST['business_id'] );
 		$activation_key = $_POST['activation_key'];
 
-		$subject  = 'NOVA Signage: Activate Your Account';
-		$message  = '<p style="margin-top: 20px;">Hello  ' . $firstName . ',</p>';
+		$subject = 'NOVA Signage: Activate Your Account';
+		$message = '<p style="margin-top: 20px;">Hello  ' . $firstName . ',</p>';
 		$message .= '<p>Thank you for submitting your application as a NOVA Business Partner. Your <b>Business ID</b> number is: ' . $business_id . "\n\n</p>";
 		$message .= '<p>Please click the link below to activate your account:' . "\n\n</p>";
 		$message .= '<a href="' . home_url() . '/activate?pu=' . $user_id . '&key=' . $activation_key . '">';
@@ -1237,7 +1303,7 @@ jQuery(document).ready(function($) {
 		foreach ( $tables as $table ) {
 
 			$sanitized_table_name = str_replace( '-', '_', $table );
-			$table_name           = $wpdb->prefix . $sanitized_table_name;
+			$table_name = $wpdb->prefix . $sanitized_table_name;
 
 			$charset_collate = $wpdb->get_charset_collate();
 
@@ -1259,19 +1325,19 @@ jQuery(document).ready(function($) {
 
 		// Sanitize the type and prepare the table name
 		$sanitized_type = str_replace( '-', '_', $type );
-		$table_name     = $wpdb->prefix . $sanitized_type;
-		$current_time   = current_time( 'mysql' );
+		$table_name = $wpdb->prefix . $sanitized_type;
+		$current_time = current_time( 'mysql' );
 
 		// Prepare data and format arrays
-		$data   = array(
-			'time'       => $current_time,
+		$data = array(
+			'time' => $current_time,
 			'user_group' => $group,
-			'user_id'    => $user_id,
+			'user_id' => $user_id,
 		);
 		$format = array( '%s', '%s', '%d' );
 
 		// Check if the entry already exists
-		$query  = $wpdb->prepare( "SELECT COUNT(*) FROM `$table_name` WHERE user_group = %s AND user_id = %d", $group, $user_id );
+		$query = $wpdb->prepare( "SELECT COUNT(*) FROM `$table_name` WHERE user_group = %s AND user_id = %d", $group, $user_id );
 		$exists = $wpdb->get_var( $query );
 
 		if ( $exists > 0 ) {
@@ -1304,12 +1370,12 @@ jQuery(document).ready(function($) {
 			'type_marketing-agencies',
 			'type_others',
 		);
-		$error  = false;
+		$error = false;
 
 		foreach ( $tables as $table ) {
 			$sanitized_table_name = str_replace( '-', '_', $table );
-			$table_name           = $wpdb->prefix . $sanitized_table_name;
-			$sql                  = "TRUNCATE TABLE `$table_name`";
+			$table_name = $wpdb->prefix . $sanitized_table_name;
+			$sql = "TRUNCATE TABLE `$table_name`";
 			$wpdb->query( $sql );
 
 			if ( $wpdb->last_error ) {
@@ -1334,10 +1400,10 @@ jQuery(document).ready(function($) {
 			return;
 		}
 
-		$business_group      = strtoupper( $country . $state );
-		$business_id_start   = strtoupper( $country . $state . '-' . substr( $businessType, 0, 1 ) );
+		$business_group = strtoupper( $country . $state );
+		$business_id_start = strtoupper( $country . $state . '-' . substr( $businessType, 0, 1 ) );
 		$business_type_table = 'type_' . $businessType;
-		$business_type_id    = $this->insert_business_type( $business_type_table, $business_group, $user_id );
+		$business_type_id = $this->insert_business_type( $business_type_table, $business_group, $user_id );
 		if ( $business_type_id ) {
 			$business_id = $business_id_start . str_pad( $business_type_id, 3, '0', STR_PAD_LEFT );
 			return $business_id;
@@ -1349,21 +1415,21 @@ jQuery(document).ready(function($) {
 		$user = get_user_by( 'id', $user_id );
 
 		if ( in_array( 'administrator', (array) $user->roles ) || in_array( 'customer-rep', (array) $user->roles ) ) {
-					update_field( 'business_id', 'NOVA-' . $user_id, 'user_' . $user_id );
+			update_field( 'business_id', 'NOVA-' . $user_id, 'user_' . $user_id );
 		} else {
 
 			$state = get_user_meta( $user_id, 'billing_state', true );
 
-			$country      = get_user_meta( $user_id, 'billing_country', true );
+			$country = get_user_meta( $user_id, 'billing_country', true );
 			$businessType = get_field( 'business_type', 'user_' . $user_id );
 
 			if ( isset( $country ) && ! empty( $country ) && isset( $state ) && ! empty( $state ) && isset( $businessType ) && ! empty( $businessType ) ) {
 
-				$business_group      = strtoupper( $country . $state );
-				$business_id_start   = strtoupper( $country . $state . '-' . substr( $businessType, 0, 1 ) );
+				$business_group = strtoupper( $country . $state );
+				$business_id_start = strtoupper( $country . $state . '-' . substr( $businessType, 0, 1 ) );
 				$business_type_table = 'type_' . $businessType;
-				$business_type_id    = $this->insert_business_type( $business_type_table, $business_group, $user_id );
-				$business_id         = $business_id_start . str_pad( $business_type_id, 3, '0', STR_PAD_LEFT );
+				$business_type_id = $this->insert_business_type( $business_type_table, $business_group, $user_id );
+				$business_id = $business_id_start . str_pad( $business_type_id, 3, '0', STR_PAD_LEFT );
 
 				update_field( 'business_id', $business_id, 'user_' . $user_id );
 			} else {
@@ -1376,9 +1442,9 @@ jQuery(document).ready(function($) {
 		// Fetch users that may already have this business ID
 		$existing_users = get_users(
 			array(
-				'meta_key'   => 'business_id',
+				'meta_key' => 'business_id',
 				'meta_value' => $business_id,
-				'exclude'    => array( $user_id ),  // Exclude the current user from the search
+				'exclude' => array( $user_id ),  // Exclude the current user from the search
 			)
 		);
 
@@ -1410,17 +1476,17 @@ jQuery(document).ready(function($) {
 	}
 
 	private function process_business_id_user( $user ) {
-		$user_id    = $user->ID;
+		$user_id = $user->ID;
 		$first_name = get_user_meta( $user_id, 'first_name', true );
-		$last_name  = get_user_meta( $user_id, 'last_name', true );
-		$email      = get_user_meta( $user_id, 'user_email', true );
+		$last_name = get_user_meta( $user_id, 'last_name', true );
+		$email = get_user_meta( $user_id, 'user_email', true );
 
 		// Early exit for specific roles
 		$role_based_ids = array(
 			'administrator' => 'NOVA-' . $user_id,
-			'customer-rep'  => 'CUSTOMER REP-' . $user_id,
-			'temporary'     => 'TEMPORARY-' . $user_id,
-			'pending'       => 'PENDING-' . $user_id,
+			'customer-rep' => 'CUSTOMER REP-' . $user_id,
+			'temporary' => 'TEMPORARY-' . $user_id,
+			'pending' => 'PENDING-' . $user_id,
 		);
 		foreach ( $role_based_ids as $role => $id ) {
 			if ( in_array( $role, (array) $user->roles ) ) {
@@ -1440,16 +1506,16 @@ jQuery(document).ready(function($) {
 		}
 
 		// Process business ID creation
-		$state        = get_user_meta( $user_id, 'billing_state', true );
-		$country      = get_user_meta( $user_id, 'billing_country', true );
+		$state = get_user_meta( $user_id, 'billing_state', true );
+		$country = get_user_meta( $user_id, 'billing_country', true );
 		$businessType = get_field( 'business_type', 'user_' . $user_id );
 
 		if ( $country && $state && $businessType ) {
-			$business_group      = strtoupper( $country . $state );
-			$business_id_start   = strtoupper( $country . $state . '-' . substr( $businessType, 0, 1 ) );
+			$business_group = strtoupper( $country . $state );
+			$business_id_start = strtoupper( $country . $state . '-' . substr( $businessType, 0, 1 ) );
 			$business_type_table = 'type_' . $businessType;
-			$business_type_id    = $this->insert_business_type( $business_type_table, $business_group, $user_id );
-			$business_id         = $business_id_start . str_pad( $business_type_id, 3, '0', STR_PAD_LEFT );
+			$business_type_id = $this->insert_business_type( $business_type_table, $business_group, $user_id );
+			$business_id = $business_id_start . str_pad( $business_type_id, 3, '0', STR_PAD_LEFT );
 
 			// $existing_user = get_users(
 			// array(
@@ -1471,8 +1537,8 @@ jQuery(document).ready(function($) {
 
 	public function regenerate_business_id() {
 		$batch_size = 20; // Process 100 users per batch
-		$page       = 0;
-		$processed  = true;
+		$page = 0;
+		$processed = true;
 		$this->clear_table();
 
 		while ( $processed ) {
@@ -1480,10 +1546,10 @@ jQuery(document).ready(function($) {
 			echo 'Starting ... <br>';
 			$users = get_users(
 				array(
-					'number'  => $batch_size,
-					'offset'  => $page * $batch_size,
+					'number' => $batch_size,
+					'offset' => $page * $batch_size,
 					'orderby' => 'ID',  // Sort by user ID
-					'order'   => 'ASC',    // Ascending order
+					'order' => 'ASC',    // Ascending order
 				)
 			);
 
@@ -1498,14 +1564,14 @@ jQuery(document).ready(function($) {
 				// Your existing user processing code goes here
 
 				$business_id = $this->process_business_id_user( $user );
-				$user_id     = $user->ID;
+				$user_id = $user->ID;
 				// $business_id = get_field( 'business_id', $user->ID );
 				// if ( $business_id ) {
 				// update_field( 'old_business_id', $business_id, $user->ID );
 				// }
 
-				$country      = get_user_meta( $user->ID, 'billing_country', true );
-				$state        = get_user_meta( $user->ID, 'billing_state', true );
+				$country = get_user_meta( $user->ID, 'billing_country', true );
+				$state = get_user_meta( $user->ID, 'billing_state', true );
 				$businessType = get_field( 'business_type', 'user_' . $user_id );
 				echo 'Country: ' . $country . '<br>';
 				echo 'State: ' . $state . '<br>';
