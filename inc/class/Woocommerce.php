@@ -995,20 +995,20 @@ class Woocommerce {
 			$tax_rate = $this->get_rate_percent_value_from_order( $from_order_object );
 			$tax_total = $this->calculate_correct_tax( $from_order_object, $tax_rate );
 			/*
-				 ?>
+						?>
 	 <tr>
 		 <td class="label"><?php echo $original_tax_names; ?>:</td>
 		 <td width="1%"></td>
 		 <td class="total">
 			 <?php
-				 if ( $tax_total ) {
-					 echo wc_price( $tax_total, array( 'currency' => $order->get_currency() ) );
-				 }
-				 ?>
+						if ( $tax_total ) {
+							echo wc_price( $tax_total, array( 'currency' => $order->get_currency() ) );
+						}
+						?>
 		 </td>
 	 </tr>
 	 <?php
-				 */
+						*/
 		}
 
 		if ( $original_total && $from_order && $from_order ) :
@@ -1236,7 +1236,6 @@ class Woocommerce {
 
 	public function debug_order_meta_content( $post ) {
 		echo '<pre>';
-		print_r( get_post_meta( $post->ID ) );
 		$order = wc_get_order( $post->ID );
 		echo '<h3>Order Items:</h3>';
 		$items = $order->get_items();
@@ -1618,19 +1617,19 @@ class Woocommerce {
 
 		// Check if the address is Vancouver and modify Expedite
 		/*
-			if ( isset( $package['destination']['city'] ) && strtolower( $package['destination']['city'] ) === 'vancouver' ) {
-				if ( $expedite ) {
-					$rates['flat_rate:3']->cost = min( $expedite_cost, $standard_cost, ( isset( $flat_rate->cost ) ? $flat_rate->cost : PHP_INT_MAX ) );
-					// Unset other rates to show only Expedite
-					unset( $rates['flat_rate:2'], $rates['flat_rate:4'] );
+				if ( isset( $package['destination']['city'] ) && strtolower( $package['destination']['city'] ) === 'vancouver' ) {
+					if ( $expedite ) {
+						$rates['flat_rate:3']->cost = min( $expedite_cost, $standard_cost, ( isset( $flat_rate->cost ) ? $flat_rate->cost : PHP_INT_MAX ) );
+						// Unset other rates to show only Expedite
+						unset( $rates['flat_rate:2'], $rates['flat_rate:4'] );
+					}
 				}
-			}
 
 
-			if ( is_cart() ) {
-				unset( $rates['flat_rate:3'] );
-			}
-			*/
+				if ( is_cart() ) {
+					unset( $rates['flat_rate:3'] );
+				}
+				*/
 
 		return $rates;
 	}
@@ -2333,6 +2332,9 @@ class Woocommerce {
 	public function generate_html_table_from_array( $array, $product, $nova_title, $product_line ) {
 
 		$instance = \NOVA_B2B\Nova_Quote::get_instance();
+		if ( ! $instance ) {
+			return;
+		}
 		$attributes = $instance->allAttributes();
 
 		$html = '<h6 style="font-size: 100%; margin-top: 10px;margin-bottom: 0;">Quote ID: <strong>Q-' . str_pad( $product, 4, '0', STR_PAD_LEFT ) . '</strong></h6>';
