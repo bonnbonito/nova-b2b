@@ -5,8 +5,6 @@ namespace NOVA_B2B;
 use WP_Query;
 use function WC;
 use WC_Order_Item_Shipping;
-use function is_cart;
-use DateTime;
 
 class Woocommerce {
 	/**
@@ -177,7 +175,7 @@ class Woocommerce {
 	}
 
 	public function remove_show_total_from_payment_order() {
-		remove_filter( 'woocommerce_get_formatted_order_total', array( $this, 'show_total_from_payment_order' ), 20, 4 );
+		remove_filter( 'woocommerce_get_formatted_order_total', array( $this, 'show_total_from_payment_order' ), 20 );
 	}
 
 	public function change_formatted_order_total() {
@@ -379,7 +377,8 @@ class Woocommerce {
 
 		if ( ! empty( $fee_items ) ) {
 			foreach ( $fee_items as $item_id => $item ) {
-				$total += $item->get_total();
+				$fee_data = $item->get_data();
+				$total += $fee_data['total'];
 			}
 		}
 
@@ -995,35 +994,24 @@ class Woocommerce {
 			$tax_rate = $this->get_rate_percent_value_from_order( $from_order_object );
 			$tax_total = $this->calculate_correct_tax( $from_order_object, $tax_rate );
 			/*
-<<<<<<< HEAD
-						?>
-=======
-									?>
->>>>>>> new-b2b
+							 <<<<<<< HEAD
+													 ?>
+	 =======
+	 ?>
+	 >>>>>>> new-b2b
 	 <tr>
 		 <td class="label"><?php echo $original_tax_names; ?>:</td>
 		 <td width="1%"></td>
 		 <td class="total">
 			 <?php
-<<<<<<< HEAD
-						if ( $tax_total ) {
-							echo wc_price( $tax_total, array( 'currency' => $order->get_currency() ) );
-						}
-						?>
+													 if ( $tax_total ) {
+														 echo wc_price( $tax_total, array( 'currency' => $order->get_currency() ) );
+													 }
+													 ?>
 		 </td>
 	 </tr>
 	 <?php
-						*/
-=======
-									if ( $tax_total ) {
-										echo wc_price( $tax_total, array( 'currency' => $order->get_currency() ) );
-									}
-									?>
-		 </td>
-	 </tr>
-	 <?php
-									*/
->>>>>>> new-b2b
+													 */
 		}
 
 		if ( $original_total && $from_order && $from_order ) :
@@ -1632,35 +1620,19 @@ class Woocommerce {
 
 		// Check if the address is Vancouver and modify Expedite
 		/*
-<<<<<<< HEAD
-				if ( isset( $package['destination']['city'] ) && strtolower( $package['destination']['city'] ) === 'vancouver' ) {
-					if ( $expedite ) {
-						$rates['flat_rate:3']->cost = min( $expedite_cost, $standard_cost, ( isset( $flat_rate->cost ) ? $flat_rate->cost : PHP_INT_MAX ) );
-						// Unset other rates to show only Expedite
-						unset( $rates['flat_rate:2'], $rates['flat_rate:4'] );
-					}
-				}
+											if ( isset( $package['destination']['city'] ) && strtolower( $package['destination']['city'] ) === 'vancouver' ) {
+												if ( $expedite ) {
+													$rates['flat_rate:3']->cost = min( $expedite_cost, $standard_cost, ( isset( $flat_rate->cost ) ? $flat_rate->cost : PHP_INT_MAX ) );
+													// Unset other rates to show only Expedite
+													unset( $rates['flat_rate:2'], $rates['flat_rate:4'] );
+												}
+											}
 
 
-				if ( is_cart() ) {
-					unset( $rates['flat_rate:3'] );
-				}
-				*/
-=======
-						if ( isset( $package['destination']['city'] ) && strtolower( $package['destination']['city'] ) === 'vancouver' ) {
-							if ( $expedite ) {
-								$rates['flat_rate:3']->cost = min( $expedite_cost, $standard_cost, ( isset( $flat_rate->cost ) ? $flat_rate->cost : PHP_INT_MAX ) );
-								// Unset other rates to show only Expedite
-								unset( $rates['flat_rate:2'], $rates['flat_rate:4'] );
-							}
-						}
-
-
-						if ( is_cart() ) {
-							unset( $rates['flat_rate:3'] );
-						}
-						*/
->>>>>>> new-b2b
+											if ( is_cart() ) {
+												unset( $rates['flat_rate:3'] );
+											}
+											*/
 
 		return $rates;
 	}
@@ -2897,6 +2869,8 @@ class Woocommerce {
 		$projectArray = get_object_vars( $project );
 
 		$instance = \NOVA_B2B\Nova_Quote::get_instance();
+		if ( ! $instance )
+			return;
 		$attributes = $instance->allAttributes();
 
 		foreach ( $attributes as $key => $attr ) {
@@ -2944,6 +2918,8 @@ class Woocommerce {
 		$projectArray = get_object_vars( $project );
 
 		$instance = \NOVA_B2B\Nova_Quote::get_instance();
+		if ( ! $instance )
+			return;
 		$attributes = $instance->allAttributes();
 
 		echo '<dl class="quote-details">';

@@ -39,14 +39,15 @@ class RestAPI {
 				)
 			)
 		);
-
 		if ( is_wp_error( $response ) ) {
 			error_log( 'REST API Error: ' . $response->get_error_message() );
 			return;
 		}
 
 		$body = wp_remote_retrieve_body( $response );
+
 		$data = json_decode( $body );
+
 		?>
 		<script>
 			console.log(<?php echo json_encode( $data ); ?>);
@@ -64,10 +65,9 @@ class RestAPI {
 			array(
 				'methods' => 'GET',
 				'callback' => array( $this, 'get_nova_orders' ),
-				'permission_callback' => '__return_true',
-				// 'permission_callback' => function () {
-				// 	return current_user_can( 'manage_woocommerce' );
-				// },
+				'permission_callback' => function () {
+					return current_user_can( 'manage_woocommerce' );
+				},
 			)
 		);
 	}
@@ -86,17 +86,6 @@ class RestAPI {
 			AND pm2.meta_value IS NULL
 			ORDER BY p.post_date DESC"
 		);
-
-		return $order_ids;
-
-	}
-
-	/**
-	 * Get orders excluding those with _hide_order meta
-	 */
-	public function get_nova_orders() {
-
-		$order_ids = $this->get_nova_live_orders();
 
 		$response = array();
 
@@ -126,32 +115,45 @@ class RestAPI {
 				$payment_type = get_the_title( intval( $deposit_chosen ) );
 			}
 
+			$script = \NOVA_B2B\Scripts::get_instance();
+
 
 			$items = $order->get_items();
 
 			foreach ( $items as $item ) {
 				$signage = $item->get_meta( 'signage' );
+
+
+
 				if ( $signage ) {
-					foreach ( $signage as $sign ) {
-
-						print_r( $sign );
-
-						$response[] = array(
-							'order_id' => $order->get_id(),
-							'customer_name' => $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(),
-							'customer_email' => $order->get_billing_email(),
-							'state' => $order->get_billing_state(),
-							'country' => $order->get_billing_country(),
-							'currency' => $order->get_currency(),
-							'price' => $order->get_total(),
-							'order_date' => $order->get_date_created()->format( 'Y-m-d H:i:s' ),
-							'payment_type' => $payment_type,
-							'product_line' => get_the_title( $sign->product ),
-						);
-					}
+					$response[] = array(
+						'Order ID' => $order->get_id(),
+						'Customer Name' => $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(),
+						'Customer Email' => $order->get_billing_email(),
+						'State' => $order->get_billing_state(),
+						'Country' => $order->get_billing_country(),
+						'Currency' => $order->get_currency(),
+						'Item Total' => floatval( $order->get_subtotal() ),
+						'Total Price' => floatval( $order->get_total() ),
+						'Order Date' => $order->get_date_created()->format( 'Y-m-d H:i:s' ),
+						'Payment Type' => $payment_type,
+						'Product Line' => get_the_title( $signage[0]->product ),
+						'Material' => $script ? $script->get_material_name( $signage[0]->product ) : '',
+					);
 				}
 			}
 		}
+
+		return $response;
+
+	}
+
+	/**
+	 * Get orders excluding those with _hide_order meta
+	 */
+	public function get_nova_orders() {
+
+		$response = $this->get_nova_live_orders();
 
 		return new \WP_REST_Response( $response, 200 );
 	}

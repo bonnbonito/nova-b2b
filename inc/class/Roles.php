@@ -301,20 +301,15 @@ class Roles {
 				'limit' => -1,
 				'return' => 'ids',
 				'customer' => $user_id,
-				'meta_query' => array(
-					array(
-						'key' => '_hide_order',
-						'compare' => 'EXISTS',
-					)
-				),
 			)
 		);
 		$result = [];
 
 		foreach ( $orders as $order ) {
 			$hide = get_post_meta( $order, '_hide_order', true );
-			if ( $hide )
+			if ( $hide ) {
 				continue;
+			}
 			$result[] = $order;
 		}
 
@@ -1272,7 +1267,7 @@ class Roles {
 		}
 
 		if ( ! isset( $wp_roles ) ) {
-			$wp_roles = new WP_Roles(); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+			$wp_roles = new \WP_Roles(); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 		}
 
 		// Partner role.
@@ -1446,33 +1441,6 @@ class Roles {
 			} else {
 				update_field( 'business_id', '' . $user_id, 'user_' . $user_id );
 			}
-		}
-	}
-
-	public function handle_business_id_conflict( $business_id, $user_id, $business_type_table, $business_group, $business_id_start ) {
-		// Fetch users that may already have this business ID
-		$existing_users = get_users(
-			array(
-				'meta_key' => 'business_id',
-				'meta_value' => $business_id,
-				'exclude' => array( $user_id ),  // Exclude the current user from the search
-			)
-		);
-
-		// Check if the business ID is already used
-		if ( ! empty( $existing_users ) ) {
-			// Generate a new business type ID
-			print_r( $existing_users );
-			die();
-			$business_type_id = $this->insert_business_type( $business_type_table, $business_group, $user_id );
-			// Create a new business ID based on the new business type ID
-			$new_business_id = $business_id_start . str_pad( $business_type_id, 3, '0', STR_PAD_LEFT );
-
-			// Recursive call to ensure this new business ID is also not in conflict
-			return $this->handle_business_id_conflict( $new_business_id, $user_id, $business_type_table, $business_group, $business_id_start );
-		} else {
-			// If no conflict, update the business ID field and return the confirmed business ID
-			return $business_id;
 		}
 	}
 
