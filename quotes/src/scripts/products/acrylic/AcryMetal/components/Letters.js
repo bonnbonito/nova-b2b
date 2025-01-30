@@ -7,20 +7,14 @@ import UploadFont from '../../../../UploadFont';
 import useOutsideClick from '../../../../utils/ClickOutside';
 import convert_json from '../../../../utils/ConvertJson';
 import {
-  finishingOptions,
   mountingDefaultOptions,
   setOptions,
   spacerStandoffDefaultOptions,
   studLengthOptions,
-  thicknessOptions,
   waterProofOptions,
 } from '../../../../utils/SignageOptions';
 
 import { calculateLetterPrice, spacerPricing } from '../../../../utils/Pricing';
-
-import { colorOptions } from '../ColorOptions';
-
-import ColorsDropdown from '../../../../utils/ColorsDropdown';
 
 import { useAppContext } from '../../../../AppProvider';
 
@@ -35,14 +29,23 @@ import {
   STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
 
+const thicknessOptions = [
+  {
+    thickness: '1/4"',
+    value: '6mm',
+  },
+  {
+    thickness: '1/2"',
+    value: '12mm',
+  },
+];
+
 export function Letters({ item }) {
   const { signage, setSignage, setMissing } = useAppContext();
   const [letters, setLetters] = useState(item.letters ?? '');
   const [comments, setComments] = useState(item.comments ?? '');
   const [font, setFont] = useState(item.font ?? '');
   const [openFont, setOpenFont] = useState(false);
-  const [color, setColor] = useState(item.color ?? { name: '', color: '' });
-  const [openColor, setOpenColor] = useState(false);
   const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
   const [selectedThickness, setSelectedThickness] = useState(item.acrylicThickness ?? '');
 
@@ -70,14 +73,15 @@ export function Letters({ item }) {
 
   const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
   const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
+
   const [usdSinglePrice, setUsdSinglePrice] = useState(item.usdSinglePrice ?? 0);
   const [cadSinglePrice, setCadSinglePrice] = useState(item.cadSinglePrice ?? 0);
 
   const [mountingOptions, setMountingOptions] = useState(mountingDefaultOptions);
 
   const [lettersHeight, setLettersHeight] = useState({
-    min: 2,
-    max: 43,
+    min: 1,
+    max: 24,
   });
 
   const [selectedMounting, setSelectedMounting] = useState(item.mounting ?? '');
@@ -90,7 +94,6 @@ export function Letters({ item }) {
 
   const [sets, setSets] = useState(item.sets ?? 1);
 
-  const colorRef = useRef(null);
   const fontRef = useRef(null);
 
   const [letterPricing, setLetterPricing] = useState([]);
@@ -156,7 +159,6 @@ export function Letters({ item }) {
       acrylicThickness: selectedThickness,
       mounting: selectedMounting,
       waterproof,
-      color,
       letterHeight: selectedLetterHeight,
       usdPrice,
       cadPrice,
@@ -229,15 +231,6 @@ export function Letters({ item }) {
 
     if (waterproof) {
       tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.1;
-    }
-
-    if (selectedFinishing) {
-      tempTotal *= selectedFinishing === GLOSS_FINISH ? 1.1 : 1;
-    }
-
-    if (color?.name) {
-      if (color?.name === CLEAR_COLOR) tempTotal *= 0.9;
-      if (color?.name === FROSTED_CLEAR_COLOR) tempTotal *= 0.95;
     }
 
     if (selectedMounting === STUD_WITH_SPACER) {
@@ -422,11 +415,7 @@ export function Letters({ item }) {
     }
     if (!selectedLetterHeight) missingFields.push('Select Letter Height');
     if (!selectedThickness) missingFields.push('Select Acrylic Thickness');
-    if (!color.name) missingFields.push('Select Color');
-    if (color?.name === 'Custom Color' && !customColor) {
-      missingFields.push('Add the Pantone color code of your custom color.');
-    }
-    if (!selectedFinishing) missingFields.push('Select Finishing');
+
     if (!waterproof) missingFields.push('Select Environment');
     if (!selectedMounting) missingFields.push('Select Mounting');
 
@@ -487,7 +476,6 @@ export function Letters({ item }) {
     selectedThickness,
     selectedMounting,
     waterproof,
-    color,
     usdPrice,
     cadPrice,
     usdSinglePrice,
@@ -524,16 +512,14 @@ export function Letters({ item }) {
     }
   }, [selectedThickness]);
 
-  useOutsideClick([colorRef, fontRef], () => {
-    if (!openColor && !openFont) return;
-    setOpenColor(false);
+  useOutsideClick([fontRef], () => {
+    if (!openFont) return;
     setOpenFont(false);
   });
 
   useEffect(() => {
-    color?.name != 'Custom Color' && setCustomColor('');
     font != 'Custom font' && setFontFileUrl('');
-  }, [color, font]);
+  }, [font]);
 
   useEffect(() => {
     const { singlePrice, total } = computePricing();
@@ -544,17 +530,14 @@ export function Letters({ item }) {
       setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
     } else {
       setUsdPrice(0);
-      setCadPrice(0);
       setUsdSinglePrice(0);
       setCadSinglePrice(0);
     }
   }, [
     selectedLetterHeight,
     selectedThickness,
-    selectedFinishing,
     letters,
     waterproof,
-    color,
     sets,
     font,
     selectedMounting,
@@ -579,7 +562,7 @@ export function Letters({ item }) {
               whiteSpace: 'nowrap',
               overflow: 'hidden',
               fontFamily: font === 'Custom font' ? '' : font,
-              color: color.color,
+              color: '#000',
               textShadow: '0px 0px 1px rgba(0, 0, 0, 1)',
             }}
           >
@@ -607,9 +590,7 @@ export function Letters({ item }) {
           openFont={openFont}
           setOpenFont={setOpenFont}
           handleSelectFont={handleSelectFont}
-          close={() => {
-            setOpenColor(false);
-          }}
+          close={() => {}}
         />
 
         {font == 'Custom font' && (
@@ -625,6 +606,13 @@ export function Letters({ item }) {
         )}
 
         <Dropdown
+          title="Letter Height"
+          onChange={handleOnChangeLetterHeight}
+          options={letterHeightOptions}
+          value={selectedLetterHeight}
+        />
+
+        <Dropdown
           title="Acrylic Thickness"
           value={selectedThickness?.value}
           onChange={handleOnChangeThickness}
@@ -637,44 +625,6 @@ export function Letters({ item }) {
               {thickness.thickness}
             </option>
           ))}
-        />
-
-        <Dropdown
-          title="Letter Height"
-          onChange={handleOnChangeLetterHeight}
-          options={letterHeightOptions}
-          value={selectedLetterHeight}
-        />
-
-        <ColorsDropdown
-          ref={colorRef}
-          title="Color"
-          colorName={color.name}
-          openColor={openColor}
-          toggleColor={() => {
-            setOpenColor(prev => !prev);
-            setOpenFont(false);
-          }}
-          colorOptions={colorOptions}
-          selectColor={color => {
-            setColor(color);
-            setOpenColor(false);
-          }}
-        />
-
-        <Dropdown
-          title="Finishing Options"
-          onChange={handleChangeFinishing}
-          options={finishingOptions.map(finishing => (
-            <option
-              value={finishing.name}
-              key={finishing.name}
-              defaultValue={finishing.name === selectedFinishing}
-            >
-              {finishing.name}
-            </option>
-          ))}
-          value={selectedFinishing}
         />
 
         <Dropdown
@@ -746,16 +696,6 @@ export function Letters({ item }) {
             />
           </>
         )}
-
-        {!item.hideQuantity && (
-          <Dropdown
-            title="Quantity"
-            onChange={handleOnChangeSets}
-            options={setOptions}
-            value={sets}
-            onlyValue={true}
-          />
-        )}
       </div>
 
       {selectedMounting === STUD_WITH_SPACER && (
@@ -765,21 +705,6 @@ export function Letters({ item }) {
       )}
 
       <div className="quote-grid">
-        {color?.name == 'Custom Color' && (
-          <div className="px-[1px] col-span-4">
-            <label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-              Custom Color
-            </label>
-            <input
-              className="w-full py-4 px-2 border-solid border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400"
-              type="text"
-              value={customColor}
-              onChange={e => setCustomColor(e.target.value)}
-              placeholder="ADD THE PANTONE COLOR CODE"
-            />
-          </div>
-        )}
-
         <Description value={comments} handleComments={handleComments} />
 
         <UploadFiles

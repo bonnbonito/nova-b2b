@@ -5,6 +5,7 @@ import './index.css';
 import { AppProvider } from './scripts/AppProvider';
 import QuoteView from './scripts/QuoteView';
 import AcrylicBackLit from './scripts/products/acrylic-channel/AcrylicBackLit/AcrylicBackLit';
+import AcryMetal from './scripts/products/acrylic/AcryMetal/AcryMetal';
 import AcrylicFrontBackLit from './scripts/products/acrylic-channel/AcrylicFrontBackLit/AcrylicFrontBackLit';
 import AcrylicFrontLit from './scripts/products/acrylic-channel/AcrylicFrontLit/AcrylicFrontLit';
 import AcrylicFrontSideLit from './scripts/products/acrylic-channel/AcrylicFrontSideLit/AcrylicFrontSideLit';
@@ -35,11 +36,11 @@ import EtchedFabricated from './scripts/products/wayfinding/EtchedFabricated/Etc
 import EtchedFlatCut from './scripts/products/wayfinding/EtchedFlatCut/EtchedFlatCut';
 
 declare global {
-	interface Window {
-		NovaQuote: {
-			quote_div_id: string;
-		};
-	}
+  interface Window {
+    NovaQuote: {
+      quote_div_id: string;
+    };
+  }
 }
 
 const rootElement = document.getElementById('QuoteApp');
@@ -48,77 +49,77 @@ const customProject = document.getElementById('customProject');
 const customSculpture = document.getElementById('customSculpture');
 
 if (rootElement) {
-	const root = createRoot(rootElement);
-	root.render(<QuoteApp />);
+  const root = createRoot(rootElement);
+  root.render(<QuoteApp />);
 }
 
 if (quoteView) {
-	const root = createRoot(quoteView);
-	root.render(<QuoteView />);
+  const root = createRoot(quoteView);
+  root.render(<QuoteView />);
 }
 
 if (customSculpture) {
-	const root = createRoot(customSculpture);
-	root.render(<CustomSculptureProject />);
+  const root = createRoot(customSculpture);
+  root.render(<CustomSculptureProject />);
 }
 
 if (customProject) {
-	const root = createRoot(customProject);
-	root.render(<CustomTempProject />);
+  const root = createRoot(customProject);
+  root.render(<CustomTempProject />);
 }
 
 function CustomSculptureProject(): JSX.Element {
-	return (
-		<AppProvider>
-			<CustomSculpture />
-		</AppProvider>
-	);
+  return (
+    <AppProvider>
+      <CustomSculpture />
+    </AppProvider>
+  );
 }
 
 function CustomTempProject(): JSX.Element {
-	return (
-		<AppProvider>
-			<CustomProject />
-		</AppProvider>
-	);
+  return (
+    <AppProvider>
+      <CustomProject />
+    </AppProvider>
+  );
 }
 
 function QuoteApp(): JSX.Element {
-	let component: JSX.Element;
+  let component: JSX.Element;
 
-	const quoteComponents: Record<string, JSX.Element> = {
-		combineQuotes: <CombineQuotes />,
-		EtchedFlatCut: <EtchedFlatCut />,
-		EtchedFabricated: <EtchedFabricated />,
-		ModularLightbox: <ModularLightbox />,
-		AcrylicSideLit: <AcrylicSideLit />,
-		AcrylicFrontSideLit: <AcrylicFrontSideLit />,
-		AcrylicFrontBackLit: <AcrylicFrontBackLit />,
-		AcrylicBackLit: <AcrylicBackLit />,
-		AcrylicFrontLit: <AcrylicFrontLit />,
-		RigidNeonSignNoBacking: <RigidNeonSignNoBacking />,
-		RigidNeonSignWithBacking: <RigidNeonSignWithBacking />,
-		FlexNeonSign: <FlexNeonSign />,
-		AluminumResinFrontBackLit: <AluminumResinFrontBackLit />,
-		AluminumResinFrontLit: <AluminumResinFrontLit />,
-		laserCutAcrylic: <LaserCutAcrylic />,
-		pvcMetalLaminate: <PVCMetalLaminate />,
-		pvcPainted: <PVCPainted />,
-		pvcUv: <PVCUv />,
-		layeredAcrylic: <LayeredAcrylic />,
-		laserCutAluminum: <LaserCutAluminum />,
-		uvPrintedAcrylic: <UvPrintedAcrylic />,
-		metalLaminateAcrylic: <MetalLaminate />,
-		metalChannelTrimlessFrontLit: <TrimLessFrontLit />,
-		laserCutStainless: <LaserCutStainless />,
-		metalChannelTrimlessFrontAndBackLit: <TrimLessFrontAndBackLit />,
-		metalChannelTrimlessBackLit: <TrimLessBackLit />,
-		metalFabricatedStainless: <FabricatedStainless />,
-		default: <CustomProject />,
-	};
+  const quoteComponents: Record<string, JSX.Element> = {
+    combineQuotes: <CombineQuotes />,
+    EtchedFlatCut: <EtchedFlatCut />,
+    EtchedFabricated: <EtchedFabricated />,
+    ModularLightbox: <ModularLightbox />,
+    AcrylicSideLit: <AcrylicSideLit />,
+    AcrylicFrontSideLit: <AcrylicFrontSideLit />,
+    AcrylicFrontBackLit: <AcrylicFrontBackLit />,
+    AcrylicBackLit: <AcrylicBackLit />,
+    AcrylicFrontLit: <AcrylicFrontLit />,
+    RigidNeonSignNoBacking: <RigidNeonSignNoBacking />,
+    RigidNeonSignWithBacking: <RigidNeonSignWithBacking />,
+    FlexNeonSign: <FlexNeonSign />,
+    AluminumResinFrontBackLit: <AluminumResinFrontBackLit />,
+    AluminumResinFrontLit: <AluminumResinFrontLit />,
+    laserCutAcrylic: <LaserCutAcrylic />,
+    pvcMetalLaminate: <PVCMetalLaminate />,
+    pvcPainted: <PVCPainted />,
+    pvcUv: <PVCUv />,
+    layeredAcrylic: <LayeredAcrylic />,
+    laserCutAluminum: <LaserCutAluminum />,
+    uvPrintedAcrylic: <UvPrintedAcrylic />,
+    metalLaminateAcrylic: <MetalLaminate />,
+    metalChannelTrimlessFrontLit: <TrimLessFrontLit />,
+    laserCutStainless: <LaserCutStainless />,
+    metalChannelTrimlessFrontAndBackLit: <TrimLessFrontAndBackLit />,
+    metalChannelTrimlessBackLit: <TrimLessBackLit />,
+    metalFabricatedStainless: <FabricatedStainless />,
+    AcryMetal: <AcryMetal />,
+    default: <CustomProject />,
+  };
 
-	component =
-		quoteComponents[window.NovaQuote.quote_div_id] || quoteComponents.default;
+  component = quoteComponents[window.NovaQuote.quote_div_id] || quoteComponents.default;
 
-	return <AppProvider>{component}</AppProvider>;
+  return <AppProvider>{component}</AppProvider>;
 }
