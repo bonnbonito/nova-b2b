@@ -32,6 +32,7 @@ import LaserCutStainless from './scripts/products/metal/LaserCutStainless/LaserC
 import PVCMetalLaminate from './scripts/products/pvc/PVCMetalLaminate/PVCMetalLaminate';
 import PVCPainted from './scripts/products/pvc/PVCPainted/PVCPainted';
 import PVCUv from './scripts/products/pvc/PVCUv/PVCUv';
+import PVCMetal from './scripts/products/pvc/PVCMetal/PVCMetal';
 import EtchedFabricated from './scripts/products/wayfinding/EtchedFabricated/EtchedFabricated';
 import EtchedFlatCut from './scripts/products/wayfinding/EtchedFlatCut/EtchedFlatCut';
 
@@ -104,6 +105,7 @@ function QuoteApp(): JSX.Element {
     AluminumResinFrontLit: <AluminumResinFrontLit />,
     laserCutAcrylic: <LaserCutAcrylic />,
     pvcMetalLaminate: <PVCMetalLaminate />,
+    pvcMetal: <PVCMetal />,
     pvcPainted: <PVCPainted />,
     pvcUv: <PVCUv />,
     layeredAcrylic: <LayeredAcrylic />,

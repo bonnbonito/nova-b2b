@@ -1500,7 +1500,9 @@ h6 {
 			'stainlessSteelPolished' => 'STEEL POLISH',
 			'layers' => 'LAYERS',
 			'metalLaminate' => 'METAL LAMINATE',
+			'metalFilm' => 'METAL FILM',
 			'pvcBaseColor' => 'PVC BASE COLOR',
+			'pvcBase' => 'PVC BASE',
 			'acrylicBase' => 'ACRYLIC BASE',
 			'printPreference' => 'PRINT PREFERENCE',
 			'color' => 'COLOR',
@@ -2222,7 +2224,7 @@ h6 {
 				'product_layers' => get_field( 'product_layers', $this->get_id_layer_product() ),
 				'project_folder_status' => isset( $_GET['qid'] ) ? $this->get_project_folder() : null,
 				'layered_product_id' => $this->get_id_layer_product(),
-
+				'tbd_pricing' => get_field( 'tbd', get_the_ID() ),
 			)
 		);
 

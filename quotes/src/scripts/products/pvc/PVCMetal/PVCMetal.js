@@ -1,14 +1,16 @@
 import React, { useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { useAppContext } from '../../../AppProvider';
 import Note from '../../../Note';
 import Sidebar from '../../../Sidebar';
 import Signage from '../../../Signage';
 import { PlusIcon } from '../../../svg/Icons';
+
 import { Letters } from './components/Letters';
 import { Logo } from './components/Logo';
 
-export default function AcryMetal() {
+import { useAppContext } from '../../../AppProvider';
+
+export default function PVCMetal() {
   const { signage, setSignage, setTempFolder, tempFolderName } = useAppContext();
 
   function setDefaultSignage() {
@@ -22,7 +24,9 @@ export default function AcryMetal() {
         font: '',
         mounting: '',
         waterproof: '',
-        acrylicThickness: '',
+        thickness: '',
+        metalLaminate: '',
+        pvcBase: 'Painted - Same color as metal',
         letterHeight: '',
         usdPrice: 0,
         cadPrice: 0,
@@ -32,8 +36,10 @@ export default function AcryMetal() {
         files: [],
         sets: 1,
         customFont: '',
+        customColor: '',
         studLength: '',
         spacerStandoffDistance: '',
+        finishing: 'Matte',
         product: NovaQuote.product,
       },
     ]);
@@ -42,10 +48,9 @@ export default function AcryMetal() {
   useEffect(() => {
     if (NovaQuote.is_editting === '1') {
       const currentSignage = JSON.parse(NovaQuote.signage);
+
       if (currentSignage) {
         setSignage(currentSignage);
-      } else {
-        window.location.href = window.location.pathname;
       }
     } else {
       setDefaultSignage();
@@ -56,18 +61,21 @@ export default function AcryMetal() {
     id: uuidv4(),
     comments: '',
     mounting: '',
-    acrylicThickness: '',
+    thickness: '',
     waterproof: '',
     finishing: 'Matte',
     usdPrice: 0,
     cadPrice: 0,
+    pvcBase: 'Painted - Same color as metal',
+    metalLaminate: '',
+    customColor: '',
     filePaths: [],
     fileNames: [],
     fileUrls: [],
     files: [],
-    sets: 1,
     studLength: '',
     spacerStandoffDistance: '',
+    sets: 1,
     product: NovaQuote.product,
   };
 
@@ -86,10 +94,12 @@ export default function AcryMetal() {
           thickness_options: '',
           letterHeight: '',
           customFont: '',
+          customColor: '',
           filePaths: [],
           fileNames: [],
           fileUrls: [],
           files: [],
+          sets: 1,
         };
       } else {
         args = {
@@ -131,9 +141,9 @@ export default function AcryMetal() {
         {signage.map((item, index) => (
           <Signage key={item.id} index={index} id={item.id} item={item}>
             {item.type === 'letters' ? (
-              <Letters key={item.id} item={item} productId={item.product} />
+              <Letters key={item.id} item={item} />
             ) : (
-              <Logo key={item.id} item={item} productId={item.product} />
+              <Logo key={item.id} item={item} />
             )}
           </Signage>
         ))}
@@ -141,18 +151,12 @@ export default function AcryMetal() {
         <Note title="Note">
           <ul className="text-sm">
             <li>
-              The brushed finish is horizontal by default. Please let us know in the comments
-              section if you prefer a vertical finish.
+              The brushed finish is horizontal by default. Please let us know if you prefer a
+              vertical finish.
             </li>
+            <li>The spacer will be black (default) or match the painted sign's color.</li>
             <li>The minimum stroke for 3M double-sided tape is 10mm.</li>
-            <li>
-              For stud pins: The minimum stroke is 12mm (1/2”) and the minimum acrylic thickness is
-              1/4" (6mm).
-            </li>
-            <li>
-              Sharp, thin points are not ideal unless requested. Slim sections will be cut for
-              shipping as small lines may break easily. You can glue them together upon receipt.
-            </li>
+            <li>For stud pins: The minimum stroke is 12mm (1/2").</li>
           </ul>
         </Note>
 

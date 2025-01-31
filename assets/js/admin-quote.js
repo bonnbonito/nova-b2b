@@ -421,6 +421,14 @@ function allAttributes(sign) {
 		},
 
 		{
+			label: 'METAL FILM',
+			value: sign.metalFilm ? sign.metalFilm : '',
+		},
+		{
+			label: 'PVC BASE',
+			value: sign.pvcBase ? sign.pvcBase : '',
+		},
+		{
 			label: 'PVC BASE COLOR',
 			value: sign.pvcBaseColor?.name ? sign.pvcBaseColor?.name : '',
 		},
