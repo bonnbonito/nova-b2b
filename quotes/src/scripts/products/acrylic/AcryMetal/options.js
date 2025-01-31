@@ -8,3 +8,5 @@ export const thicknessOptions = [
     value: '12mm',
   },
 ];
+
+export const metalFilmOptions = ['Brushed Silver', 'Brushed Gold'];

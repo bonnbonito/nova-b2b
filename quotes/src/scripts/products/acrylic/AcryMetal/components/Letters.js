@@ -26,10 +26,10 @@ import {
   STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
 
-import { thicknessOptions } from '../options';
+import { thicknessOptions, metalFilmOptions } from '../options';
 
 export function Letters({ item }) {
-  const { signage, setSignage, setMissing } = useAppContext();
+  const { signage, setSignage, setMissing, hasUploadedFile } = useAppContext();
   const [letters, setLetters] = useState(item.letters ?? '');
   const [comments, setComments] = useState(item.comments ?? '');
   const [font, setFont] = useState(item.font ?? '');
@@ -64,6 +64,8 @@ export function Letters({ item }) {
 
   const [usdSinglePrice, setUsdSinglePrice] = useState(item.usdSinglePrice ?? 0);
   const [cadSinglePrice, setCadSinglePrice] = useState(item.cadSinglePrice ?? 0);
+
+  const [metalFilm, setMetalFilm] = useState(item.metalFilm ?? '');
 
   const [mountingOptions, setMountingOptions] = useState(mountingDefaultOptions);
 
@@ -165,6 +167,7 @@ export function Letters({ item }) {
       spacerStandoffDistance,
       usdSinglePrice,
       cadSinglePrice,
+      metalFilm,
     };
 
     setSignage(prevSignage =>
@@ -411,6 +414,8 @@ export function Letters({ item }) {
     if (!selectedLetterHeight) missingFields.push('Select Letter Height');
     if (!selectedThickness) missingFields.push('Select Acrylic Thickness');
 
+    if (!metalFilm) missingFields.push('Select Metal Film');
+
     if (!waterproof) missingFields.push('Select Environment');
     if (!selectedMounting) missingFields.push('Select Mounting');
 
@@ -487,6 +492,8 @@ export function Letters({ item }) {
     sets,
     studLength,
     spacerStandoffDistance,
+    metalFilm,
+    hasUploadedFile,
   ]);
 
   useEffect(() => {
@@ -619,6 +626,17 @@ export function Letters({ item }) {
               {thickness.thickness}
             </option>
           ))}
+        />
+
+        <Dropdown
+          title="Metal Film"
+          onChange={e => setMetalFilm(e.target.value)}
+          options={metalFilmOptions.map(film => (
+            <option key={film} value={film} defaultValue={film == metalFilm}>
+              {film}
+            </option>
+          ))}
+          value={metalFilm}
         />
 
         <Dropdown

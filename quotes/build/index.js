@@ -11770,11 +11770,12 @@ __webpack_require__.r(__webpack_exports__);
 function Letters({
   item
 }) {
-  var _item$letters, _item$comments, _item$font, _item$waterproof, _item$acrylicThicknes, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fileName, _item$fileUrl, _item$filePath, _item$file, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$finishing, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
+  var _item$letters, _item$comments, _item$font, _item$waterproof, _item$acrylicThicknes, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fileName, _item$fileUrl, _item$filePath, _item$file, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$finishing, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$metalFilm, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
   const {
     signage,
     setSignage,
-    setMissing
+    setMissing,
+    hasUploadedFile
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_10__.useAppContext)();
   const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letters = item.letters) !== null && _item$letters !== void 0 ? _item$letters : '');
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
@@ -11803,6 +11804,7 @@ function Letters({
   const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadPrice = item.cadPrice) !== null && _item$cadPrice !== void 0 ? _item$cadPrice : 0);
   const [usdSinglePrice, setUsdSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdSinglePrice = item.usdSinglePrice) !== null && _item$usdSinglePrice !== void 0 ? _item$usdSinglePrice : 0);
   const [cadSinglePrice, setCadSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadSinglePrice = item.cadSinglePrice) !== null && _item$cadSinglePrice !== void 0 ? _item$cadSinglePrice : 0);
+  const [metalFilm, setMetalFilm] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$metalFilm = item.metalFilm) !== null && _item$metalFilm !== void 0 ? _item$metalFilm : '');
   const [mountingOptions, setMountingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.mountingDefaultOptions);
   const [lettersHeight, setLettersHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
     min: 1,
@@ -11885,7 +11887,8 @@ function Letters({
       studLength,
       spacerStandoffDistance,
       usdSinglePrice,
-      cadSinglePrice
+      cadSinglePrice,
+      metalFilm
     };
     setSignage(prevSignage => prevSignage.map((sign, index) => {
       if (sign.id === item.id) {
@@ -12080,6 +12083,7 @@ function Letters({
     }
     if (!selectedLetterHeight) missingFields.push('Select Letter Height');
     if (!selectedThickness) missingFields.push('Select Acrylic Thickness');
+    if (!metalFilm) missingFields.push('Select Metal Film');
     if (!waterproof) missingFields.push('Select Environment');
     if (!selectedMounting) missingFields.push('Select Mounting');
     if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT || selectedMounting === 'Pad' || selectedMounting === 'Pad - Combination All') {
@@ -12118,7 +12122,7 @@ function Letters({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
     checkAndAddMissingFields();
-  }, [letters, comments, font, selectedThickness, selectedMounting, waterproof, usdPrice, cadPrice, usdSinglePrice, cadSinglePrice, selectedLetterHeight, fileUrls, fileNames, filePaths, files, fontFileUrl, fontFileName, fontFilePath, fontFile, sets, studLength, spacerStandoffDistance]);
+  }, [letters, comments, font, selectedThickness, selectedMounting, waterproof, usdPrice, cadPrice, usdSinglePrice, cadSinglePrice, selectedLetterHeight, fileUrls, fileNames, filePaths, files, fontFileUrl, fontFileName, fontFilePath, fontFile, sets, studLength, spacerStandoffDistance, metalFilm, hasUploadedFile]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const newHeightOptions = letterPricing?.filter(item => {
       const value = item[selectedThickness?.value];
@@ -12219,6 +12223,15 @@ function Letters({
       key: thickness.value,
       defaultValue: thickness === selectedThickness
     }, thickness.thickness))
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Metal Film",
+    onChange: e => setMetalFilm(e.target.value),
+    options: _options__WEBPACK_IMPORTED_MODULE_12__.metalFilmOptions.map(film => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: film,
+      value: film,
+      defaultValue: film == metalFilm
+    }, film)),
+    value: metalFilm
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Environment",
     onChange: handleOnChangeWaterproof,
@@ -12322,7 +12335,7 @@ __webpack_require__.r(__webpack_exports__);
 function Logo({
   item
 }) {
-  var _item$mounting, _item$studLength, _item$spacerStandoffD, _item$acrylicThicknes, _item$width, _item$height, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$sets, _item$comments, _item$waterproof;
+  var _item$mounting, _item$studLength, _item$spacerStandoffD, _item$acrylicThicknes, _item$width, _item$height, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$metalFilm, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$sets, _item$comments, _item$waterproof;
   const {
     signage,
     setSignage,
@@ -12378,6 +12391,7 @@ function Logo({
   const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadPrice = item.cadPrice) !== null && _item$cadPrice !== void 0 ? _item$cadPrice : 0);
   const [usdSinglePrice, setUsdSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdSinglePrice = item.usdSinglePrice) !== null && _item$usdSinglePrice !== void 0 ? _item$usdSinglePrice : 0);
   const [cadSinglePrice, setCadSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadSinglePrice = item.cadSinglePrice) !== null && _item$cadSinglePrice !== void 0 ? _item$cadSinglePrice : 0);
+  const [metalFilm, setMetalFilm] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$metalFilm = item.metalFilm) !== null && _item$metalFilm !== void 0 ? _item$metalFilm : '');
   const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileNames = item.fileNames) !== null && _item$fileNames !== void 0 ? _item$fileNames : []);
   const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrls = item.fileUrls) !== null && _item$fileUrls !== void 0 ? _item$fileUrls : []);
   const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$filePaths = item.filePaths) !== null && _item$filePaths !== void 0 ? _item$filePaths : []);
@@ -12489,7 +12503,8 @@ function Logo({
           studLength,
           spacerStandoffDistance,
           usdSinglePrice,
-          cadSinglePrice
+          cadSinglePrice,
+          metalFilm
         };
       } else {
         return {
@@ -12502,7 +12517,7 @@ function Logo({
   }
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-  }, [comments, selectedThickness, selectedMounting, waterproof, width, height, usdPrice, cadPrice, fileUrls, fileNames, files, sets, filePaths, studLength, spacerStandoffDistance, usdSinglePrice, cadSinglePrice]);
+  }, [comments, selectedThickness, selectedMounting, waterproof, width, height, usdPrice, cadPrice, fileUrls, fileNames, files, sets, filePaths, studLength, spacerStandoffDistance, usdSinglePrice, cadSinglePrice, metalFilm]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const fetchLogoPricing = async () => {
       if (NovaQuote.tbd_pricing) return;
@@ -12624,7 +12639,7 @@ function Logo({
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     checkAndAddMissingFields();
-  }, [width, height, selectedThickness, comments, selectedMounting, waterproof, fileUrls, fileNames, filePaths, files, sets, studLength, spacerStandoffDistance, hasUploadedFile]);
+  }, [width, height, selectedThickness, comments, selectedMounting, waterproof, fileUrls, fileNames, filePaths, files, sets, studLength, spacerStandoffDistance, hasUploadedFile, metalFilm]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "py-4 mb-4"
   }, "PRODUCT LINE:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
@@ -12669,6 +12684,15 @@ function Logo({
         value: val
       }, val, "\"");
     })
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Metal Film",
+    onChange: e => setMetalFilm(e.target.value),
+    options: _options__WEBPACK_IMPORTED_MODULE_10__.metalFilmOptions.map(film => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: film,
+      value: film,
+      defaultValue: film == metalFilm
+    }, film)),
+    value: metalFilm
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Environment",
     onChange: e => setWaterproof(e.target.value),
@@ -12741,6 +12765,7 @@ function Logo({
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   metalFilmOptions: () => (/* binding */ metalFilmOptions),
 /* harmony export */   thicknessOptions: () => (/* binding */ thicknessOptions)
 /* harmony export */ });
 const thicknessOptions = [{
@@ -12750,6 +12775,7 @@ const thicknessOptions = [{
   thickness: '1/2"',
   value: '12mm'
 }];
+const metalFilmOptions = ['Brushed Silver', 'Brushed Gold'];
 
 /***/ }),
 

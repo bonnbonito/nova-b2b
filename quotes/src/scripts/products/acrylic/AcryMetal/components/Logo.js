@@ -23,7 +23,7 @@ import {
   STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
 
-import { thicknessOptions } from '../options';
+import { thicknessOptions, metalFilmOptions } from '../options';
 
 export function Logo({ item }) {
   const { signage, setSignage, setMissing, hasUploadedFile } = useAppContext();
@@ -79,6 +79,8 @@ export function Logo({ item }) {
   const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
   const [usdSinglePrice, setUsdSinglePrice] = useState(item.usdSinglePrice ?? 0);
   const [cadSinglePrice, setCadSinglePrice] = useState(item.cadSinglePrice ?? 0);
+
+  const [metalFilm, setMetalFilm] = useState(item.metalFilm ?? '');
 
   const [fileNames, setFileNames] = useState(item.fileNames ?? []);
   const [fileUrls, setFileUrls] = useState(item.fileUrls ?? []);
@@ -238,6 +240,7 @@ export function Logo({ item }) {
           spacerStandoffDistance,
           usdSinglePrice,
           cadSinglePrice,
+          metalFilm,
         };
       } else {
         return {
@@ -269,6 +272,7 @@ export function Logo({ item }) {
     spacerStandoffDistance,
     usdSinglePrice,
     cadSinglePrice,
+    metalFilm,
   ]);
 
   useEffect(() => {
@@ -435,6 +439,7 @@ export function Logo({ item }) {
     studLength,
     spacerStandoffDistance,
     hasUploadedFile,
+    metalFilm,
   ]);
 
   return (
@@ -497,6 +502,17 @@ export function Logo({ item }) {
               );
             }
           )}
+        />
+
+        <Dropdown
+          title="Metal Film"
+          onChange={e => setMetalFilm(e.target.value)}
+          options={metalFilmOptions.map(film => (
+            <option key={film} value={film} defaultValue={film == metalFilm}>
+              {film}
+            </option>
+          ))}
+          value={metalFilm}
         />
 
         <Dropdown
