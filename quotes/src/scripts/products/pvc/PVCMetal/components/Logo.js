@@ -89,7 +89,6 @@ export function Logo({ item }) {
   const [fileUrls, setFileUrls] = useState(item.fileUrls ?? []);
   const [filePaths, setFilePaths] = useState(item.filePaths ?? []);
   const [files, setFiles] = useState(item.files ?? []);
-  const [selectedFinishing, setSelectedFinishing] = useState(item.finishing ?? '');
   const [mountingSelections, setMountingSelections] = useState(mountingOptions);
 
   const [maxWidthOptions, setMaxWidthOptions] = useState(
@@ -149,24 +148,6 @@ export function Logo({ item }) {
     setSelectedThickness(() => selected[0]);
   };
 
-  useEffect(() => {
-    if (parseInt(selectedThickness?.value) > 3) {
-      setMaxWidthHeight(42);
-    } else {
-      setMaxWidthHeight(23);
-      if (height > 25) {
-        setHeight('');
-      }
-      if (width > 25) {
-        setWidth('');
-      }
-    }
-  }, [selectedThickness]);
-
-  const handleChangeFinishing = e => {
-    setSelectedFinishing(e.target.value);
-  };
-
   function updateSignage() {
     const updatedSignage = signage.map(sign => {
       if (sign.id === item.id) {
@@ -180,7 +161,6 @@ export function Logo({ item }) {
           height,
           usdPrice,
           cadPrice,
-          finishing: selectedFinishing,
           files,
           fileNames,
           filePaths,
@@ -215,7 +195,6 @@ export function Logo({ item }) {
     cadPrice,
     fileUrls,
     fileNames,
-    selectedFinishing,
     files,
     filePaths,
     sets,
@@ -313,17 +292,7 @@ export function Logo({ item }) {
       setUsdSinglePrice(0);
       setCadSinglePrice(0);
     }
-  }, [
-    width,
-    height,
-    selectedThickness,
-    waterproof,
-    selectedFinishing,
-    mounting,
-    pvcBase,
-    sets,
-    logoPricingObject,
-  ]);
+  }, [width, height, selectedThickness, waterproof, mounting, pvcBase, sets, logoPricingObject]);
 
   const checkAndAddMissingFields = () => {
     const missingFields = [];
@@ -451,14 +420,38 @@ export function Logo({ item }) {
           title="Logo Width"
           value={width}
           onChange={e => setWidth(e.target.value)}
-          options={maxWidthOptions}
+          options={Array.from(
+            {
+              length: 42,
+            },
+            (_, index) => {
+              const val = 2 + index;
+              return (
+                <option key={index} value={val}>
+                  {val}"
+                </option>
+              );
+            }
+          )}
         />
 
         <Dropdown
           title="Logo Height"
           value={height}
           onChange={e => setHeight(e.target.value)}
-          options={maxWidthOptions}
+          options={Array.from(
+            {
+              length: 23,
+            },
+            (_, index) => {
+              const val = 2 + index;
+              return (
+                <option key={index} value={val}>
+                  {val}"
+                </option>
+              );
+            }
+          )}
         />
 
         <Dropdown

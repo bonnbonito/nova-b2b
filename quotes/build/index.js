@@ -33574,7 +33574,7 @@ __webpack_require__.r(__webpack_exports__);
 function Logo({
   item
 }) {
-  var _item$width, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$pvcBase, _item$customColor, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$metalFilm, _item$metalLaminate, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$finishing, _item$height, _item$comments, _item$waterproof, _item$sets;
+  var _item$width, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$pvcBase, _item$customColor, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$metalFilm, _item$metalLaminate, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$height, _item$comments, _item$waterproof, _item$sets;
   const {
     signage,
     setSignage,
@@ -33640,7 +33640,6 @@ function Logo({
   const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrls = item.fileUrls) !== null && _item$fileUrls !== void 0 ? _item$fileUrls : []);
   const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$filePaths = item.filePaths) !== null && _item$filePaths !== void 0 ? _item$filePaths : []);
   const [files, setFiles] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$files = item.files) !== null && _item$files !== void 0 ? _item$files : []);
-  const [selectedFinishing, setSelectedFinishing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$finishing = item.finishing) !== null && _item$finishing !== void 0 ? _item$finishing : '');
   const [mountingSelections, setMountingSelections] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_pvcOptions__WEBPACK_IMPORTED_MODULE_7__.mountingOptions);
   const [maxWidthOptions, setMaxWidthOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(Array.from({
     length: maxWidthHeight
@@ -33682,22 +33681,6 @@ function Logo({
     const selected = _options__WEBPACK_IMPORTED_MODULE_8__.thicknessOptions.filter(option => option.value === target);
     setSelectedThickness(() => selected[0]);
   };
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (parseInt(selectedThickness?.value) > 3) {
-      setMaxWidthHeight(42);
-    } else {
-      setMaxWidthHeight(23);
-      if (height > 25) {
-        setHeight('');
-      }
-      if (width > 25) {
-        setWidth('');
-      }
-    }
-  }, [selectedThickness]);
-  const handleChangeFinishing = e => {
-    setSelectedFinishing(e.target.value);
-  };
   function updateSignage() {
     const updatedSignage = signage.map(sign => {
       if (sign.id === item.id) {
@@ -33711,7 +33694,6 @@ function Logo({
           height,
           usdPrice,
           cadPrice,
-          finishing: selectedFinishing,
           files,
           fileNames,
           filePaths,
@@ -33734,7 +33716,7 @@ function Logo({
   }
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     updateSignage();
-  }, [comments, selectedThickness, waterproof, width, height, mounting, usdPrice, cadPrice, fileUrls, fileNames, selectedFinishing, files, filePaths, sets, studLength, spacerStandoffDistance, metalLaminate, pvcBase, usdSinglePrice, cadSinglePrice, metalFilm, hasUploadedFile]);
+  }, [comments, selectedThickness, waterproof, width, height, mounting, usdPrice, cadPrice, fileUrls, fileNames, files, filePaths, sets, studLength, spacerStandoffDistance, metalLaminate, pvcBase, usdSinglePrice, cadSinglePrice, metalFilm, hasUploadedFile]);
   const [logoPricingObject, setLogoPricingObject] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     async function fetchLogoPricing() {
@@ -33806,7 +33788,7 @@ function Logo({
       setUsdSinglePrice(0);
       setCadSinglePrice(0);
     }
-  }, [width, height, selectedThickness, waterproof, selectedFinishing, mounting, pvcBase, sets, logoPricingObject]);
+  }, [width, height, selectedThickness, waterproof, mounting, pvcBase, sets, logoPricingObject]);
   const checkAndAddMissingFields = () => {
     const missingFields = [];
     if (!selectedThickness) missingFields.push('Select Acrylic Thickness');
@@ -33888,12 +33870,28 @@ function Logo({
     title: "Logo Width",
     value: width,
     onChange: e => setWidth(e.target.value),
-    options: maxWidthOptions
+    options: Array.from({
+      length: 42
+    }, (_, index) => {
+      const val = 2 + index;
+      return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+        key: index,
+        value: val
+      }, val, "\"");
+    })
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Logo Height",
     value: height,
     onChange: e => setHeight(e.target.value),
-    options: maxWidthOptions
+    options: Array.from({
+      length: 23
+    }, (_, index) => {
+      const val = 2 + index;
+      return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+        key: index,
+        value: val
+      }, val, "\"");
+    })
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Metal Film",
     onChange: e => setMetalFilm(e.target.value),
