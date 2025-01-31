@@ -288,6 +288,13 @@ export function Logo({ item }) {
   }, [item.product]);
 
   function computePricing() {
+    const tbdPricing = NovaQuote.tbd_pricing;
+    if (tbdPricing) {
+      return {
+        singlePrice: false,
+        total: false,
+      };
+    }
     if (!width || !height || !selectedThickness || !waterproof || logoPricingObject === null) {
       return {
         singlePrice: false,

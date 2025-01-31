@@ -23,7 +23,7 @@ class RestAPI {
 	 */
 	public function __construct() {
 		add_action( 'rest_api_init', array( $this, 'register_rest_routes' ) );
-		add_action( 'wp_footer', array( $this, 'debug' ) );
+		//add_action( 'wp_footer', array( $this, 'debug' ) );
 	}
 
 	/**
@@ -49,10 +49,10 @@ class RestAPI {
 		$data = json_decode( $body );
 
 		?>
-		<script>
-			console.log(<?php echo json_encode( $data ); ?>);
-		</script>
-		<?php
+<script>
+console.log(<?php echo json_encode( $data ); ?>);
+</script>
+<?php
 	}
 
 	/**

@@ -11907,6 +11907,13 @@ function Letters({
   }
   const computePricing = () => {
     var _tempTotal$toFixed, _total$toFixed;
+    const tbdPricing = NovaQuote.tbd_pricing;
+    if (tbdPricing) {
+      return {
+        singlePrice: false,
+        total: false
+      };
+    }
     if (!letterPricing.length || !selectedLetterHeight || !selectedThickness || !waterproof || !letters.trim().length) {
       return {
         singlePrice: false,
@@ -12511,6 +12518,13 @@ function Logo({
   }, [item.product]);
   function computePricing() {
     var _tempTotal$toFixed;
+    const tbdPricing = NovaQuote.tbd_pricing;
+    if (tbdPricing) {
+      return {
+        singlePrice: false,
+        total: false
+      };
+    }
     if (!width || !height || !selectedThickness || !waterproof || logoPricingObject === null) {
       return {
         singlePrice: false,

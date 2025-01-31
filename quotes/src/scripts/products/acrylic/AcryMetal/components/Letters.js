@@ -186,6 +186,13 @@ export function Letters({ item }) {
   }
 
   const computePricing = () => {
+    const tbdPricing = NovaQuote.tbd_pricing;
+    if (tbdPricing) {
+      return {
+        singlePrice: false,
+        total: false,
+      };
+    }
     if (
       !letterPricing.length ||
       !selectedLetterHeight ||
