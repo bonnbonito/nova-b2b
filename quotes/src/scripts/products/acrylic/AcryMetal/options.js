@@ -1,11 +1,12 @@
+export const acryMetalPricing = 1.65;
 export const thicknessOptions = [
   {
     thickness: '1/4"',
-    value: '6mm',
+    value: '6',
   },
   {
     thickness: '1/2"',
-    value: '12mm',
+    value: '12',
   },
 ];
 

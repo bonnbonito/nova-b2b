@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import Description from '../../../../Description';
 import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
-import useOutsideClick from '../../../../utils/ClickOutside';
 import convert_json from '../../../../utils/ConvertJson';
 import { getLogoPricingTablebyThickness, spacerPricing } from '../../../../utils/Pricing';
 import {
@@ -23,7 +22,7 @@ import {
   STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
 
-import { thicknessOptions, metalFilmOptions } from '../options';
+import { thicknessOptions, metalFilmOptions, acryMetalPricing } from '../options';
 
 export function Logo({ item }) {
   const { signage, setSignage, setMissing, hasUploadedFile } = useAppContext();
@@ -335,6 +334,8 @@ export function Logo({ item }) {
       const spacer = spacerPricing(tempTotal);
       tempTotal += spacer;
     }
+
+    tempTotal *= acryMetalPricing;
 
     /** if Layered 3D */
     if (item.isLayered) {

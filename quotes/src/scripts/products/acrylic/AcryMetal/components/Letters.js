@@ -26,7 +26,7 @@ import {
   STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
 
-import { thicknessOptions, metalFilmOptions } from '../options';
+import { thicknessOptions, metalFilmOptions, acryMetalPricing } from '../options';
 
 export function Letters({ item }) {
   const { signage, setSignage, setMissing, hasUploadedFile } = useAppContext();
@@ -235,6 +235,8 @@ export function Letters({ item }) {
       const spacer = spacerPricing(tempTotal);
       tempTotal += parseFloat(spacer.toFixed(2));
     }
+
+    tempTotal *= acryMetalPricing;
 
     /** if Layered 3D */
     if (item.isLayered) {

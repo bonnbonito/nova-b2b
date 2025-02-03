@@ -1,3 +1,4 @@
+export const pvcMetalPricing = 1.65;
 export const thicknessOptions = [
   {
     thickness: '1/2"',
@@ -5,7 +6,7 @@ export const thicknessOptions = [
   },
   {
     thickness: '1"',
-    value: '26mm',
+    value: '25mm',
   },
 ];
 

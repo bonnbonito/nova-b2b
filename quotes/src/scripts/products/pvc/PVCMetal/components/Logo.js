@@ -13,7 +13,7 @@ import {
 
 import { mountingOptions } from '../../pvcOptions';
 
-import { thicknessOptions, metalFilmOptions } from '../options';
+import { thicknessOptions, metalFilmOptions, pvcMetalPricing } from '../options';
 
 import {
   EXCHANGE_RATE,
@@ -251,8 +251,11 @@ export function Logo({ item }) {
       };
     }
 
+    let comWidth = width <= 4 ? 4 : width;
+    let comHeight = height <= 4 ? 4 : height;
+
     const logoPricingTable = convert_json(logoPricing);
-    const computed = logoPricingTable.length > 0 ? logoPricingTable[width - 4][height] : 0;
+    const computed = logoPricingTable.length > 0 ? logoPricingTable[comWidth - 4][comHeight] : 0;
 
     let tempTotal = 0;
 
@@ -270,6 +273,8 @@ export function Logo({ item }) {
       const spacer = spacerPricing(tempTotal);
       tempTotal += parseFloat(spacer.toFixed(2));
     }
+
+    tempTotal *= pvcMetalPricing;
 
     const total = tempTotal * parseInt(sets);
 

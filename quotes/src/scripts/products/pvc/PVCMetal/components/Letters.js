@@ -5,8 +5,6 @@ import FontsDropdown from '../../../../FontsDropdown';
 import UploadFiles from '../../../../UploadFiles';
 import UploadFont from '../../../../UploadFont';
 import useOutsideClick from '../../../../utils/ClickOutside';
-import { colorOptions } from '../../../../utils/ColorOptions';
-import ColorsDropdown from '../../../../utils/ColorsDropdown';
 import convert_json from '../../../../utils/ConvertJson';
 import {
   setOptions,
@@ -17,7 +15,7 @@ import {
 
 import { mountingOptions } from '../../pvcOptions';
 
-import { thicknessOptions, metalFilmOptions } from '../options';
+import { thicknessOptions, metalFilmOptions, pvcMetalPricing } from '../options';
 
 import {
   EXCHANGE_RATE,
@@ -265,7 +263,9 @@ export function Letters({ item }) {
       };
     }
 
-    const pricingDetail = letterPricing[selectedLetterHeight - 4];
+    let comHeight = selectedLetterHeight <= 4 ? 4 : selectedLetterHeight;
+
+    const pricingDetail = letterPricing[comHeight - 4];
     const baseLetterPrice = pricingDetail[selectedThickness.thickness];
 
     let tempTotal = 0;
@@ -288,6 +288,8 @@ export function Letters({ item }) {
       const spacer = spacerPricing(tempTotal);
       tempTotal += parseFloat(spacer.toFixed(2));
     }
+
+    tempTotal *= pvcMetalPricing;
 
     let total = tempTotal * parseInt(sets);
 
@@ -513,7 +515,7 @@ export function Letters({ item }) {
           openFont={openFont}
           setOpenFont={setOpenFont}
           handleSelectFont={handleSelectFont}
-          close={() => setOpenColor(false)}
+          close={() => {}}
         />
 
         {font == 'Custom font' && (
