@@ -18057,7 +18057,7 @@ const waterProofOptions = [{
 }, {
   option: 'Outdoor'
 }];
-const materialOptions = ['NOVA Suggestion', 'Resin', 'Fiberglass Resin', 'Stainless Steel', 'Aluminum', 'Wood', 'Plush', 'Interactive Light'];
+const materialOptions = ['NOVA Suggestion', 'Resin', 'Fiberglass Resin', 'Stainless Steel', 'Aluminum', 'Wood', 'Plush', 'Interactive Light', 'Directional Sign'];
 function Sculpture({
   item
 }) {
