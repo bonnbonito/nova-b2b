@@ -23,6 +23,7 @@ class RestAPI {
 	 */
 	public function __construct() {
 		add_action( 'rest_api_init', array( $this, 'register_rest_routes' ) );
+		add_action( 'admin_menu', array( $this, 'add_export_orders_submenu_page' ) );
 		//add_action( 'wp_footer', array( $this, 'debug' ) );
 	}
 
@@ -49,10 +50,10 @@ class RestAPI {
 		$data = json_decode( $body );
 
 		?>
-<script>
-console.log(<?php echo json_encode( $data ); ?>);
-</script>
-<?php
+		<script>
+			console.log(<?php echo json_encode( $data ); ?>);
+		</script>
+		<?php
 	}
 
 	/**
@@ -128,17 +129,18 @@ console.log(<?php echo json_encode( $data ); ?>);
 				if ( $signage ) {
 					$response[] = array(
 						'Order ID' => $order->get_id(),
-						'Customer Name' => $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(),
-						'Customer Email' => $order->get_billing_email(),
-						'State' => $order->get_billing_state(),
-						'Country' => $order->get_billing_country(),
-						'Currency' => $order->get_currency(),
+						'Product Line' => wp_strip_all_tags( get_the_title( $signage[0]->product ) ),
+						'Customer Name' => wp_strip_all_tags( $order->get_billing_first_name() . ' ' . $order->get_billing_last_name() ),
+						'Business ID' => get_field( 'business_id', 'user_' . $order->get_customer_id() ),
+						'Customer Email' => wp_strip_all_tags( $order->get_billing_email() ),
+						'State' => wp_strip_all_tags( $order->get_billing_state() ),
+						'Country' => wp_strip_all_tags( $order->get_billing_country() ),
+						'Currency' => wp_strip_all_tags( $order->get_currency() ),
 						'Item Total' => floatval( $order->get_subtotal() ),
 						'Total Price' => floatval( $order->get_total() ),
-						'Order Date' => $order->get_date_created()->format( 'Y-m-d H:i:s' ),
-						'Payment Type' => $payment_type,
-						'Product Line' => get_the_title( $signage[0]->product ),
-						'Material' => $script ? $script->get_material_name( $signage[0]->product ) : '',
+						'Order Date' => wp_strip_all_tags( $order->get_date_created()->format( 'Y-m-d H:i:s' ) ),
+						'Payment Type' => wp_strip_all_tags( $payment_type ),
+						'Material' => wp_strip_all_tags( $script ? $script->get_material_name( $signage[0]->product ) : '' ),
 					);
 				}
 			}
@@ -156,5 +158,98 @@ console.log(<?php echo json_encode( $data ); ?>);
 		$response = $this->get_nova_live_orders();
 
 		return new \WP_REST_Response( $response, 200 );
+	}
+
+	/**
+	 * Add Export Orders submenu page under WooCommerce menu
+	 */
+	public function add_export_orders_submenu_page() {
+		add_submenu_page(
+			'woocommerce',
+			'Export Orders',
+			'Export Orders',
+			'manage_woocommerce',
+			'export-orders',
+			array( $this, 'export_orders_page_content' )
+		);
+	}
+
+	/**
+	 * Display the Export Orders page content
+	 */
+	public function export_orders_page_content() {
+		if ( ! current_user_can( 'manage_woocommerce' ) ) {
+			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+		}
+
+		// Check if export button was clicked
+		if ( isset( $_GET['export_orders'] ) && $_GET['export_orders'] === '1' ) {
+			$this->export_orders_to_csv();
+			return;
+		}
+
+		?>
+		<div class="wrap">
+			<h1>Export Orders</h1>
+			<p>Click the button below to export all orders to a CSV file.</p>
+			<a href="<?php echo admin_url( 'admin.php?page=export-orders&export_orders=1' ); ?>"
+				class="button button-primary">Export Orders</a>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Export orders to CSV file
+	 */
+	private function export_orders_to_csv() {
+		// Prevent WordPress from sending its headers
+		if ( ! headers_sent() ) {
+			// Clear any previous output
+			ob_clean();
+
+			// Prevent WordPress from processing further output
+			remove_all_actions( 'wp_headers' );
+			remove_all_actions( 'admin_head' );
+			remove_all_actions( 'admin_footer' );
+
+			// Set headers for CSV download
+			header( 'Content-Type: text/csv; charset=utf-8' );
+			header( 'Content-Disposition: attachment; filename="nova-orders-' . date( 'Y-m-d' ) . '.csv"' );
+			header( 'Pragma: no-cache' );
+			header( 'Expires: 0' );
+		}
+
+		$orders_data = $this->get_nova_live_orders();
+
+		if ( empty( $orders_data ) ) {
+			wp_die( 'No orders found to export.' );
+		}
+
+		// Create output stream
+		$output = fopen( 'php://output', 'w' );
+
+		// Add UTF-8 BOM for proper Excel encoding
+		fputs( $output, "\xEF\xBB\xBF" );
+
+		// Add headers
+		fputcsv( $output, array_keys( $orders_data[0] ) );
+
+		// Add data
+		foreach ( $orders_data as $row ) {
+			// Clean each field
+			$clean_row = array_map( function ($value) {
+				// First decode HTML entities
+				$decoded = html_entity_decode( $value, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+				// Then strip any remaining HTML tags
+				$stripped = wp_strip_all_tags( $decoded );
+				// Finally trim any whitespace
+				return trim( $stripped );
+			}, $row );
+
+			fputcsv( $output, $clean_row );
+		}
+
+		fclose( $output );
+		exit();
 	}
 }
