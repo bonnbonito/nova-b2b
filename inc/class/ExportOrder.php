@@ -375,7 +375,7 @@ class ExportOrder {
 				[ 'valueInputOption' => 'RAW' ]
 			);
 
-			// Auto-resize columns and format header
+			// Auto-resize columns and format cells
 			$requests = [ 
 				new Google_Service_Sheets_Request( [ 
 					'autoResizeDimensions' => [ 
@@ -387,6 +387,7 @@ class ExportOrder {
 						]
 					]
 				] ),
+				// Make header bold
 				new Google_Service_Sheets_Request( [ 
 					'repeatCell' => [ 
 						'range' => [ 
@@ -402,6 +403,66 @@ class ExportOrder {
 							]
 						],
 						'fields' => 'userEnteredFormat.textFormat.bold'
+					]
+				] ),
+				// Format Item Price column as number
+				new Google_Service_Sheets_Request( [ 
+					'repeatCell' => [ 
+						'range' => [ 
+							'sheetId' => 0,
+							'startRowIndex' => 1,
+							'startColumnIndex' => 9, // Index of Item Price column
+							'endColumnIndex' => 10
+						],
+						'cell' => [ 
+							'userEnteredFormat' => [ 
+								'numberFormat' => [ 
+									'type' => 'NUMBER',
+									'pattern' => '#,##0.00'
+								]
+							]
+						],
+						'fields' => 'userEnteredFormat.numberFormat'
+					]
+				] ),
+				// Format Total Price column as number
+				new Google_Service_Sheets_Request( [ 
+					'repeatCell' => [ 
+						'range' => [ 
+							'sheetId' => 0,
+							'startRowIndex' => 1,
+							'startColumnIndex' => 10, // Index of Total Price column
+							'endColumnIndex' => 11
+						],
+						'cell' => [ 
+							'userEnteredFormat' => [ 
+								'numberFormat' => [ 
+									'type' => 'NUMBER',
+									'pattern' => '#,##0.00'
+								]
+							]
+						],
+						'fields' => 'userEnteredFormat.numberFormat'
+					]
+				] ),
+				// Format Order Date column as date
+				new Google_Service_Sheets_Request( [ 
+					'repeatCell' => [ 
+						'range' => [ 
+							'sheetId' => 0,
+							'startRowIndex' => 1,
+							'startColumnIndex' => 11, // Index of Order Date column
+							'endColumnIndex' => 12
+						],
+						'cell' => [ 
+							'userEnteredFormat' => [ 
+								'numberFormat' => [ 
+									'type' => 'DATE',
+									'pattern' => 'mm/dd/yyyy'
+								]
+							]
+						],
+						'fields' => 'userEnteredFormat.numberFormat'
 					]
 				] )
 			];
