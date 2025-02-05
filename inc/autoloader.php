@@ -49,7 +49,7 @@ $instances = array(
 	'Checkout',
 	'OrderApprove',
 	'AutoLogin',
-	'RestAPI',
+	'ExportOrder',
 );
 
 foreach ( $instances as $instance ) {
