@@ -239,6 +239,8 @@ class Roles {
 				'quotes' => $this->get_user_quotes( $user->ID ),
 				'orders' => $this->get_user_orders( $user->ID ),
 				'active' => $this->is_user_quote_active( $user->ID ),
+				'order_total' => $this->get_user_order_total( $user->ID ),
+				'averate_order' => $this->get_user_average_order( $user->ID ),
 			);
 		}
 
@@ -315,7 +317,64 @@ class Roles {
 
 		return count( $result );
 
+	}
 
+	public function get_user_order_total( $user_id ) {
+		$orders = wc_get_orders(
+			array(
+				'limit' => -1,
+				'customer' => $user_id,
+				'status' => array( 'completed', 'processing', 'pending' ),
+			)
+		);
+
+		$total = 0;
+		$country = get_user_meta( $user_id, 'billing_country', true );
+
+		foreach ( $orders as $order ) {
+			$hide = get_post_meta( $order->get_id(), '_hide_order', true );
+			$temporary = get_post_meta( $order->get_ID(), '_is_temporary_combined_order', true );
+			if ( $hide || $temporary ) {
+				continue;
+			}
+			$total += (float) $order->get_total();
+		}
+
+		$formatted_total = number_format( $total, 2, '.', ',' );
+		$currency_symbol = $country === 'CA' ? 'CAD $' : 'USD $';
+		return $currency_symbol . $formatted_total;
+	}
+
+	public function get_user_average_order( $user_id ) {
+		$orders = wc_get_orders(
+			array(
+				'limit' => -1,
+				'customer' => $user_id,
+				'status' => array( 'completed', 'processing', 'pending' ),
+			)
+		);
+
+		$total = 0;
+		$count = 0;
+		$country = get_user_meta( $user_id, 'billing_country', true );
+		$currency_symbol = $country === 'CA' ? 'CAD $' : 'USD $';
+
+		foreach ( $orders as $order ) {
+			$hide = get_post_meta( $order->get_id(), '_hide_order', true );
+			$temporary = get_post_meta( $order->get_ID(), '_is_temporary_combined_order', true );
+			if ( $hide || $temporary ) {
+				continue;
+			}
+			$total += (float) $order->get_total();
+			$count++;
+		}
+
+		if ( $count === 0 ) {
+			return $currency_symbol . '0.00';
+		}
+
+		$average = $total / $count;
+		return $currency_symbol . number_format( $average, 2, '.', ',' );
 	}
 
 	public function handle_streak_box( \WP_REST_Request $request ) {
