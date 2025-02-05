@@ -158,7 +158,7 @@ class ExportOrder {
 						'Currency' => wp_strip_all_tags( $order->get_currency() ),
 						'Item Price' => floatval( $item_total ),
 						'Total Price' => floatval( $order->get_total() ),
-						'Order Date' => wp_strip_all_tags( $order->get_date_created()->format( 'M/d/Y' ) ),
+						'Order Date' => wp_strip_all_tags( $order->get_date_created()->format( 'm/d/Y' ) ),
 						'Payment Type' => wp_strip_all_tags( $payment_type ),
 					);
 				}
