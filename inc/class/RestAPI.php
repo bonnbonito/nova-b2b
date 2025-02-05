@@ -2,6 +2,15 @@
 
 namespace NOVA_B2B;
 
+use Google_Client;
+use Google_Service_Sheets;
+use Google_Service_Sheets_Spreadsheet;
+use Google_Service_Sheets_ValueRange;
+use Google_Service_Sheets_Request;
+use Google_Service_Sheets_BatchUpdateSpreadsheetRequest;
+use Google_Service_Sheets_ClearValuesRequest;
+use Exception;
+
 class RestAPI {
 	/**
 	 * Instance of this class
@@ -24,6 +33,9 @@ class RestAPI {
 	public function __construct() {
 		add_action( 'rest_api_init', array( $this, 'register_rest_routes' ) );
 		add_action( 'admin_menu', array( $this, 'add_export_orders_submenu_page' ) );
+		add_action( 'woocommerce_new_order', array( $this, 'auto_export_to_sheets' ) );
+		add_action( 'woocommerce_order_status_changed', array( $this, 'auto_export_to_sheets' ) );
+		add_action( 'do_nova_sheets_export', array( $this, 'do_sheets_export' ) );
 		//add_action( 'wp_footer', array( $this, 'debug' ) );
 	}
 
@@ -124,11 +136,19 @@ class RestAPI {
 			foreach ( $items as $item ) {
 				$signage = $item->get_meta( 'signage' );
 
+				$order_number = 'NV' . $order->get_id();
+
+
+				//get item total
+				$item_total = $item->get_total();
+
+
 
 
 				if ( $signage ) {
 					$response[] = array(
-						'Order ID' => $order->get_id(),
+						'Order ID' => $order_number,
+						'Material' => wp_strip_all_tags( $script ? $script->get_material_name( $signage[0]->product ) : '' ),
 						'Product Line' => wp_strip_all_tags( get_the_title( $signage[0]->product ) ),
 						'Customer Name' => wp_strip_all_tags( $order->get_billing_first_name() . ' ' . $order->get_billing_last_name() ),
 						'Business ID' => get_field( 'business_id', 'user_' . $order->get_customer_id() ),
@@ -136,11 +156,10 @@ class RestAPI {
 						'State' => wp_strip_all_tags( $order->get_billing_state() ),
 						'Country' => wp_strip_all_tags( $order->get_billing_country() ),
 						'Currency' => wp_strip_all_tags( $order->get_currency() ),
-						'Item Total' => floatval( $order->get_subtotal() ),
+						'Item Total' => floatval( $item_total ),
 						'Total Price' => floatval( $order->get_total() ),
-						'Order Date' => wp_strip_all_tags( $order->get_date_created()->format( 'Y-m-d H:i:s' ) ),
+						'Order Date' => wp_strip_all_tags( $order->get_date_created()->format( 'F d,Y' ) ),
 						'Payment Type' => wp_strip_all_tags( $payment_type ),
-						'Material' => wp_strip_all_tags( $script ? $script->get_material_name( $signage[0]->product ) : '' ),
 					);
 				}
 			}
@@ -188,12 +207,37 @@ class RestAPI {
 			return;
 		}
 
+		// Check if Google Sheets export was requested
+		if ( isset( $_GET['export_to_sheets'] ) && $_GET['export_to_sheets'] === '1' ) {
+			$this->export_orders_to_sheets();
+			return;
+		}
+
 		?>
 		<div class="wrap">
 			<h1>Export Orders</h1>
-			<p>Click the button below to export all orders to a CSV file.</p>
-			<a href="<?php echo admin_url( 'admin.php?page=export-orders&export_orders=1' ); ?>"
-				class="button button-primary">Export Orders</a>
+			<p>Click one of the buttons below to export all orders.</p>
+			<?php
+			?>
+			<div class="button-group">
+				<a href="<?php echo admin_url( 'admin.php?page=export-orders&export_orders=1' ); ?>" class="button button-primary"
+					style="margin-right: 10px;">Export to CSV</a>
+				<a href="<?php echo admin_url( 'admin.php?page=export-orders&export_to_sheets=1' ); ?>"
+					class="button button-secondary">Update Google Sheet</a>
+			</div>
+			<?php
+			// Display Google Sheets settings if they exist
+			$sheet_url = get_option( 'nova_orders_sheet_url' );
+			$last_updated = get_option( 'nova_orders_sheet_last_updated' );
+			if ( $sheet_url ) {
+				echo '<div class="sheet-info" style="margin-top: 20px;">';
+				echo '<p class="description">Google Sheet: <a href="' . esc_url( $sheet_url ) . '" target="_blank">View Sheet</a>';
+				if ( $last_updated ) {
+					echo '<br>Last updated: ' . date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $last_updated ) );
+				}
+				echo '</p></div>';
+			}
+			?>
 		</div>
 		<?php
 	}
@@ -251,5 +295,160 @@ class RestAPI {
 
 		fclose( $output );
 		exit();
+	}
+
+	/**
+	 * Export orders to Google Sheets
+	 */
+	private function export_orders_to_sheets() {
+		if ( ! class_exists( 'Google_Client' ) ) {
+			require_once get_template_directory() . '/vendor/autoload.php';
+		}
+
+		try {
+			$client = new Google_Client();
+			$client->setApplicationName( 'Nova Orders Export' );
+			// Set full access scope
+			$client->setScopes( [ 
+				Google_Service_Sheets::SPREADSHEETS,
+				Google_Service_Sheets::DRIVE,
+				Google_Service_Sheets::DRIVE_FILE
+			] );
+
+			// Get credentials from WordPress options
+			$credentials = get_option( 'nova_google_sheets_credentials' );
+			$spreadsheet_id = get_field( 'google_sheets_id', 'option' );
+
+			if ( empty( $credentials ) ) {
+				wp_die( 'Google Sheets credentials not found. Please configure them in the theme options.' );
+			}
+
+			if ( empty( $spreadsheet_id ) ) {
+				wp_die( 'Google Sheets ID not found. Please configure it in the theme options.' );
+			}
+
+			$client->setAuthConfig( $credentials );
+
+			$service = new Google_Service_Sheets( $client );
+
+			// First, try to get the spreadsheet to check permissions
+			try {
+				$spreadsheet = $service->spreadsheets->get( $spreadsheet_id );
+			} catch (Exception $e) {
+				wp_die( 'Error accessing Google Sheet. Please make sure the sheet is shared with the service account email address. Error: ' . $e->getMessage() );
+			}
+
+			// Get the orders data
+			$orders_data = $this->get_nova_live_orders();
+			if ( empty( $orders_data ) ) {
+				wp_die( 'No orders found to export.' );
+			}
+
+			// Prepare the data for Google Sheets
+			$values = [];
+			// Add headers
+			$values[] = array_keys( $orders_data[0] );
+
+			// Add data rows
+			foreach ( $orders_data as $row ) {
+				$clean_row = array_map( function ($value) {
+					$decoded = html_entity_decode( $value, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+					$stripped = wp_strip_all_tags( $decoded );
+					return trim( $stripped );
+				}, $row );
+				$values[] = array_values( $clean_row );
+			}
+
+			// Clear the existing content
+			$clear_request = new Google_Service_Sheets_ClearValuesRequest();
+			$service->spreadsheets_values->clear( $spreadsheet_id, 'A:Z', $clear_request );
+
+			$body = new Google_Service_Sheets_ValueRange( [ 
+				'values' => $values
+			] );
+
+			// Update the sheet
+			$result = $service->spreadsheets_values->update(
+				$spreadsheet_id,
+				'Orders!A1:Z',
+				$body,
+				[ 'valueInputOption' => 'RAW' ]
+			);
+
+			// Auto-resize columns and format header
+			$requests = [ 
+				new Google_Service_Sheets_Request( [ 
+					'autoResizeDimensions' => [ 
+						'dimensions' => [ 
+							'sheetId' => 0,
+							'dimension' => 'COLUMNS',
+							'startIndex' => 0,
+							'endIndex' => count( $values[0] )
+						]
+					]
+				] ),
+				new Google_Service_Sheets_Request( [ 
+					'repeatCell' => [ 
+						'range' => [ 
+							'sheetId' => 0,
+							'startRowIndex' => 0,
+							'endRowIndex' => 1
+						],
+						'cell' => [ 
+							'userEnteredFormat' => [ 
+								'textFormat' => [ 
+									'bold' => true
+								]
+							]
+						],
+						'fields' => 'userEnteredFormat.textFormat.bold'
+					]
+				] )
+			];
+
+			$batchUpdateRequest = new Google_Service_Sheets_BatchUpdateSpreadsheetRequest( [ 
+				'requests' => $requests
+			] );
+
+			$service->spreadsheets->batchUpdate( $spreadsheet_id, $batchUpdateRequest );
+
+			// Save the sheet URL
+			$sheet_url = "https://docs.google.com/spreadsheets/d/{$spreadsheet_id}";
+			update_option( 'nova_orders_sheet_url', $sheet_url );
+
+			// Add last updated timestamp
+			update_option( 'nova_orders_sheet_last_updated', current_time( 'mysql' ) );
+
+			// Redirect back with success message
+			wp_redirect( add_query_arg( 'sheets_export_success', '1', admin_url( 'admin.php?page=export-orders' ) ) );
+			exit;
+
+		} catch (Exception $e) {
+			wp_die( 'Error exporting to Google Sheets: ' . $e->getMessage() );
+		}
+	}
+
+	/**
+	 * Auto export to sheets when order is created or status changes
+	 */
+	public function auto_export_to_sheets() {
+		// Don't run if we're doing AJAX or in admin
+		if ( wp_doing_ajax() || is_admin() ) {
+			return;
+		}
+
+		// Run the export in the background after 1 minute to ensure order data is fully processed
+		wp_schedule_single_event( time() + 60, 'do_nova_sheets_export' );
+	}
+
+	/**
+	 * Background export handler
+	 */
+	public function do_sheets_export() {
+		try {
+			$this->export_orders_to_sheets();
+		} catch (Exception $e) {
+			error_log( 'Nova Sheets Export Error: ' . $e->getMessage() );
+		}
 	}
 }
