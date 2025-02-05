@@ -240,7 +240,7 @@ class Roles {
 				'orders' => $this->get_user_orders( $user->ID ),
 				'active' => $this->is_user_quote_active( $user->ID ),
 				'order_total' => $this->get_user_order_total( $user->ID ),
-				'averate_order' => $this->get_user_average_order( $user->ID ),
+				'average_order' => $this->get_user_average_order( $user->ID ),
 			);
 		}
 
