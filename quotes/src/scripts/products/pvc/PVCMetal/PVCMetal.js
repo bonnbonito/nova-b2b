@@ -39,7 +39,6 @@ export default function PVCMetal() {
         customColor: '',
         studLength: '',
         spacerStandoffDistance: '',
-        finishing: 'Matte',
         product: NovaQuote.product,
       },
     ]);
@@ -63,7 +62,6 @@ export default function PVCMetal() {
     mounting: '',
     thickness: '',
     waterproof: '',
-    finishing: 'Matte',
     usdPrice: 0,
     cadPrice: 0,
     pvcBase: 'Painted - Same color as metal',

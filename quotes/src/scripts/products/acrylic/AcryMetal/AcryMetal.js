@@ -58,7 +58,6 @@ export default function AcryMetal() {
     mounting: '',
     acrylicThickness: '',
     waterproof: '',
-    finishing: 'Matte',
     usdPrice: 0,
     cadPrice: 0,
     filePaths: [],

@@ -54,7 +54,6 @@ export function Letters({ item }) {
   const [fontFile, setFontFile] = useState(item.fontFile ?? '');
 
   const [letterHeightOptions, setLetterHeightOptions] = useState([]);
-  const [selectedFinishing, setSelectedFinishing] = useState(item.finishing ?? '');
   const [customColor, setCustomColor] = useState(item.customColor ?? '');
 
   const [selectedLetterHeight, setSelectedLetterHeight] = useState(item.letterHeight ?? '');
@@ -160,7 +159,6 @@ export function Letters({ item }) {
       fontFileName,
       fontFilePath,
       fontFileUrl,
-      finishing: selectedFinishing,
       customColor,
       sets,
       studLength,
@@ -311,10 +309,6 @@ export function Letters({ item }) {
 
   const handleOnChangeLetterHeight = e => {
     setSelectedLetterHeight(e.target.value);
-  };
-
-  const handleChangeFinishing = e => {
-    setSelectedFinishing(e.target.value);
   };
 
   const handleonChangeSpacerDistance = e => {
@@ -609,13 +603,6 @@ export function Letters({ item }) {
         )}
 
         <Dropdown
-          title="Letter Height"
-          onChange={handleOnChangeLetterHeight}
-          options={letterHeightOptions}
-          value={selectedLetterHeight}
-        />
-
-        <Dropdown
           title="Acrylic Thickness"
           value={selectedThickness?.value}
           onChange={handleOnChangeThickness}
@@ -628,6 +615,13 @@ export function Letters({ item }) {
               {thickness.thickness}
             </option>
           ))}
+        />
+
+        <Dropdown
+          title="Letter Height"
+          onChange={handleOnChangeLetterHeight}
+          options={letterHeightOptions}
+          value={selectedLetterHeight}
         />
 
         <Dropdown

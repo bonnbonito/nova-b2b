@@ -11623,7 +11623,6 @@ function AcryMetal() {
     mounting: '',
     acrylicThickness: '',
     waterproof: '',
-    finishing: 'Matte',
     usdPrice: 0,
     cadPrice: 0,
     filePaths: [],
@@ -11770,7 +11769,7 @@ __webpack_require__.r(__webpack_exports__);
 function Letters({
   item
 }) {
-  var _item$letters, _item$comments, _item$font, _item$waterproof, _item$acrylicThicknes, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fileName, _item$fileUrl, _item$filePath, _item$file, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$finishing, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$metalFilm, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
+  var _item$letters, _item$comments, _item$font, _item$waterproof, _item$acrylicThicknes, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fileName, _item$fileUrl, _item$filePath, _item$file, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$metalFilm, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
   const {
     signage,
     setSignage,
@@ -11797,7 +11796,6 @@ function Letters({
   const [fontFilePath, setFontFilePath] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fontFilePath = item.fontFilePath) !== null && _item$fontFilePath !== void 0 ? _item$fontFilePath : '');
   const [fontFile, setFontFile] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fontFile = item.fontFile) !== null && _item$fontFile !== void 0 ? _item$fontFile : '');
   const [letterHeightOptions, setLetterHeightOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [selectedFinishing, setSelectedFinishing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$finishing = item.finishing) !== null && _item$finishing !== void 0 ? _item$finishing : '');
   const [customColor, setCustomColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$customColor = item.customColor) !== null && _item$customColor !== void 0 ? _item$customColor : '');
   const [selectedLetterHeight, setSelectedLetterHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letterHeight = item.letterHeight) !== null && _item$letterHeight !== void 0 ? _item$letterHeight : '');
   const [usdPrice, setUsdPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdPrice = item.usdPrice) !== null && _item$usdPrice !== void 0 ? _item$usdPrice : 0);
@@ -11881,7 +11879,6 @@ function Letters({
       fontFileName,
       fontFilePath,
       fontFileUrl,
-      finishing: selectedFinishing,
       customColor,
       sets,
       studLength,
@@ -11998,9 +11995,6 @@ function Letters({
   };
   const handleOnChangeLetterHeight = e => {
     setSelectedLetterHeight(e.target.value);
-  };
-  const handleChangeFinishing = e => {
-    setSelectedFinishing(e.target.value);
   };
   const handleonChangeSpacerDistance = e => {
     setSpacerStandoffDistance(e.target.value);
@@ -12211,11 +12205,6 @@ function Letters({
     setFontFileUrl: setFontFileUrl,
     setFontFileName: setFontFileName
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Letter Height",
-    onChange: handleOnChangeLetterHeight,
-    options: letterHeightOptions,
-    value: selectedLetterHeight
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Acrylic Thickness",
     value: selectedThickness?.value,
     onChange: handleOnChangeThickness,
@@ -12224,6 +12213,11 @@ function Letters({
       key: thickness.value,
       defaultValue: thickness === selectedThickness
     }, thickness.thickness))
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Letter Height",
+    onChange: handleOnChangeLetterHeight,
+    options: letterHeightOptions,
+    value: selectedLetterHeight
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Metal Film",
     onChange: e => setMetalFilm(e.target.value),
@@ -30499,16 +30493,22 @@ function Letters({
   };
   const handleChangeFinishing = e => {
     const value = e.target.value;
-    if ('Brushed' === value) {
+    if (value !== 'Painted') {
       setColor({
         name: '',
         color: ''
       });
+      setCustomColor('');
     }
-    setSelectedFinishing(e.target.value);
+    if (value !== 'Anodized') {
+      setAnodizedFinishing('');
+      setAnodizedColor('');
+    }
+    setSelectedFinishing(value);
   };
   const handleChangeAnodizedFinishing = e => {
-    setAnodizedFinishing(e.target.value);
+    const value = e.target.value;
+    setAnodizedFinishing(value);
   };
   const handleChangeAnodizedColor = e => {
     setAnodizedColor(e.target.value);
@@ -31008,13 +31008,18 @@ function Logo({
   };
   const handleChangeFinishing = e => {
     const value = e.target.value;
-    if ('Brushed' === value) {
+    if (value !== 'Painted') {
       setColor({
         name: '',
         color: ''
       });
+      setCustomColor('');
     }
-    setSelectedFinishing(e.target.value);
+    if (value !== 'Anodized') {
+      setAnodizedFinishing('');
+      setAnodizedColor('');
+    }
+    setSelectedFinishing(value);
   };
   const handleChangeAnodizedFinishing = e => {
     setAnodizedFinishing(e.target.value);
@@ -31793,6 +31798,7 @@ function Letters({
     }
     if ('Painted Finish' === value) {
       setStainLessMetalFinish('');
+      setStainlessSteelPolished('');
     }
     setSelectedFinishing(e.target.value);
   };
@@ -32896,7 +32902,6 @@ function PVCMetal() {
       customColor: '',
       studLength: '',
       spacerStandoffDistance: '',
-      finishing: 'Matte',
       product: NovaQuote.product
     }]);
   }
@@ -32916,7 +32921,6 @@ function PVCMetal() {
     mounting: '',
     thickness: '',
     waterproof: '',
-    finishing: 'Matte',
     usdPrice: 0,
     cadPrice: 0,
     pvcBase: 'Painted - Same color as metal',
