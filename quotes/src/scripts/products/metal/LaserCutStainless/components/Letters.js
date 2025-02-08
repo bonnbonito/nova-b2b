@@ -255,7 +255,7 @@ export function Letters({ item }) {
       setStainlessSteelPolished('');
     }
 
-    setSelectedFinishing(e.target.value);
+    setSelectedFinishing(value);
   };
 
   const handelMetalFinishChange = e => {

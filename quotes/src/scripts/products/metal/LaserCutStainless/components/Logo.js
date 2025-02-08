@@ -161,7 +161,7 @@ export function Logo({ item }) {
       setStainlessSteelPolished('');
     }
 
-    setSelectedFinishing(e.target.value);
+    setSelectedFinishing(value);
   };
 
   const handleOnChangeInstallation = e => {

@@ -31800,7 +31800,7 @@ function Letters({
       setStainLessMetalFinish('');
       setStainlessSteelPolished('');
     }
-    setSelectedFinishing(e.target.value);
+    setSelectedFinishing(value);
   };
   const handelMetalFinishChange = e => {
     const value = e.target.value;
@@ -32338,7 +32338,7 @@ function Logo({
       setStainLessMetalFinish('');
       setStainlessSteelPolished('');
     }
-    setSelectedFinishing(e.target.value);
+    setSelectedFinishing(value);
   };
   const handleOnChangeInstallation = e => {
     const target = e.target.value;
