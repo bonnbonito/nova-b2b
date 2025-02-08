@@ -62,10 +62,10 @@ class ExportOrder {
 		$data = json_decode( $body );
 
 		?>
-		<script>
-			console.log(<?php echo json_encode( $data ); ?>);
-		</script>
-		<?php
+<script>
+console.log(<?php echo json_encode( $data ); ?>);
+</script>
+<?php
 	}
 
 	/**
@@ -160,6 +160,7 @@ class ExportOrder {
 						'Total Price' => floatval( $order->get_total() ),
 						'Order Date' => wp_strip_all_tags( $order->get_date_created()->format( 'm/d/Y' ) ),
 						'Payment Type' => wp_strip_all_tags( $payment_type ),
+						'Order Status' => wp_strip_all_tags( $order->get_status() ),
 					);
 				}
 			}
@@ -214,18 +215,18 @@ class ExportOrder {
 		}
 
 		?>
-		<div class="wrap">
-			<h1>Export Orders</h1>
-			<p>Click one of the buttons below to export all orders.</p>
-			<?php
+<div class="wrap">
+  <h1>Export Orders</h1>
+  <p>Click one of the buttons below to export all orders.</p>
+  <?php
 			?>
-			<div class="button-group">
-				<a href="<?php echo admin_url( 'admin.php?page=export-orders&export_orders=1' ); ?>" class="button button-primary"
-					style="margin-right: 10px;">Export to CSV</a>
-				<a href="<?php echo admin_url( 'admin.php?page=export-orders&export_to_sheets=1' ); ?>"
-					class="button button-secondary">Update Google Sheet</a>
-			</div>
-			<?php
+  <div class="button-group">
+    <a href="<?php echo admin_url( 'admin.php?page=export-orders&export_orders=1' ); ?>" class="button button-primary"
+      style="margin-right: 10px;">Export to CSV</a>
+    <a href="<?php echo admin_url( 'admin.php?page=export-orders&export_to_sheets=1' ); ?>"
+      class="button button-secondary">Update Google Sheet</a>
+  </div>
+  <?php
 			// Display Google Sheets settings if they exist
 			$sheet_url = get_option( 'nova_orders_sheet_url' );
 			$last_updated = get_option( 'nova_orders_sheet_last_updated' );
@@ -238,8 +239,8 @@ class ExportOrder {
 				echo '</p></div>';
 			}
 			?>
-		</div>
-		<?php
+</div>
+<?php
 	}
 
 	/**
