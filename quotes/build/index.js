@@ -32336,6 +32336,7 @@ function Logo({
     }
     if ('Painted Finish' === value) {
       setStainLessMetalFinish('');
+      setStainlessSteelPolished('');
     }
     setSelectedFinishing(e.target.value);
   };
