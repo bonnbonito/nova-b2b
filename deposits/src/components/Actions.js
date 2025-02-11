@@ -67,111 +67,101 @@ export function Actions({ order, deleteOrder }) {
 	};
 
 	return (
-		<>
-			<DropdownMenu>
-				<DropdownMenuTrigger asChild>
-					<Button variant="outline" disabled={isLoading}>
-						{isLoading ? (
+		order.shipped_date && (
+			<>
+				<DropdownMenu>
+					<DropdownMenuTrigger asChild>
+						<Button variant="outline" disabled={isLoading}>
+							{isLoading ? (
+								<>
+									<Loader2 className="mr-2 h-4 w-4 animate-spin" />
+									Please wait
+								</>
+							) : (
+								'Open'
+							)}
+						</Button>
+					</DropdownMenuTrigger>
+					<DropdownMenuContent className="bg-white w-80">
+						{order.shipped_date && (
 							<>
-								<Loader2 className="mr-2 h-4 w-4 animate-spin" />
-								Please wait
+								<DropdownMenuLabel>Emails</DropdownMenuLabel>
+								<DropdownMenuSeparator />
+								<DropdownMenuGroup>
+									{order.emails?.map((email, index) => (
+										<DropdownMenuItem
+											key={index}
+											onClick={() => {
+												setShowEmailAlert(true); // Corrected function name
+												setSelectedEmail(email); // Corrected typo
+												setSelectedIndex(index);
+											}}
+										>
+											{email.email_sent ? <CheckCheckIcon /> : <Mail />}
+											<span>{email.email_label}</span>
+										</DropdownMenuItem>
+									))}
+								</DropdownMenuGroup>
 							</>
-						) : (
-							'Open'
 						)}
-					</Button>
-				</DropdownMenuTrigger>
-				<DropdownMenuContent className="bg-white w-80">
-					{order.shipped_date && (
-						<>
-							<DropdownMenuLabel>Emails</DropdownMenuLabel>
-							<DropdownMenuSeparator />
-							<DropdownMenuGroup>
-								{order.emails?.map((email, index) => (
-									<DropdownMenuItem
-										key={index}
-										onClick={() => {
-											setShowEmailAlert(true); // Corrected function name
-											setSelectedEmail(email); // Corrected typo
-											setSelectedIndex(index);
-										}}
-									>
-										{email.email_sent ? <CheckCheckIcon /> : <Mail />}
-										<span>{email.email_label}</span>
-									</DropdownMenuItem>
-								))}
-							</DropdownMenuGroup>
-							<DropdownMenuSeparator />
-						</>
-					)}
-
-					<DropdownMenuItem
-						onClick={() => {
-							setIsLoading(true);
-							setShowLogoutAlert(true);
-						}}
-					>
-						<Trash2 />
-						<span>Delete</span>
-						<DropdownMenuShortcut>
-							<SquareX />
-						</DropdownMenuShortcut>
-					</DropdownMenuItem>
-				</DropdownMenuContent>
-			</DropdownMenu>
-			<AlertDialog open={showLogoutAlert} onOpenChange={setShowLogoutAlert}>
-				<AlertDialogContent>
-					<AlertDialogHeader>
-						<AlertDialogTitle>
-							Are you sure you want to delete?
-						</AlertDialogTitle>
-						<AlertDialogDescription>
-							This will delete the order in the pending payment table.
-						</AlertDialogDescription>
-					</AlertDialogHeader>
-					<AlertDialogFooter>
-						<AlertDialogCancel
-							onClick={() => {
-								setIsLoading(false);
-								setShowLogoutAlert(false);
-							}}
-						>
-							Cancel
-						</AlertDialogCancel>
-						<AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
-					</AlertDialogFooter>
-				</AlertDialogContent>
-			</AlertDialog>
-			<AlertDialog open={showEmailAlert} onOpenChange={setShowEmailAlert}>
-				<AlertDialogContent>
-					<AlertDialogHeader>
-						<AlertDialogTitle>
-							Are you sure you want to send the email?
-						</AlertDialogTitle>
-						<AlertDialogDescription>
-							This will send a reminder email.
-						</AlertDialogDescription>
-					</AlertDialogHeader>
-					<AlertDialogFooter>
-						<AlertDialogCancel
-							onClick={() => {
-								setIsLoading(false);
-								setShowEmailAlert(false);
-							}}
-						>
-							Cancel
-						</AlertDialogCancel>
-						<AlertDialogAction
-							onClick={() => {
-								setIsLoading(true);
-								sendReminder(selectedEmail, selectedIndex);
-							}}
-						>
-							Send
-						</AlertDialogAction>
-					</AlertDialogFooter>
-				</AlertDialogContent>
-			</AlertDialog>
-		</>
+					</DropdownMenuContent>
+				</DropdownMenu>
+				<AlertDialog open={showLogoutAlert} onOpenChange={setShowLogoutAlert}>
+					<AlertDialogContent>
+						<AlertDialogHeader>
+							<AlertDialogTitle>
+								Are you sure you want to delete?
+							</AlertDialogTitle>
+							<AlertDialogDescription>
+								This will delete the order in the pending payment table.
+							</AlertDialogDescription>
+						</AlertDialogHeader>
+						<AlertDialogFooter>
+							<AlertDialogCancel
+								onClick={() => {
+									setIsLoading(false);
+									setShowLogoutAlert(false);
+								}}
+							>
+								Cancel
+							</AlertDialogCancel>
+							<AlertDialogAction onClick={handleDelete}>
+								Delete
+							</AlertDialogAction>
+						</AlertDialogFooter>
+					</AlertDialogContent>
+				</AlertDialog>
+				<AlertDialog open={showEmailAlert} onOpenChange={setShowEmailAlert}>
+					<AlertDialogContent>
+						<AlertDialogHeader>
+							<AlertDialogTitle>
+								Are you sure you want to send the email?
+							</AlertDialogTitle>
+							<AlertDialogDescription>
+								This will send a reminder email.
+							</AlertDialogDescription>
+						</AlertDialogHeader>
+						<AlertDialogFooter>
+							<AlertDialogCancel
+								onClick={() => {
+									setIsLoading(false);
+									setShowEmailAlert(false);
+								}}
+							>
+								Cancel
+							</AlertDialogCancel>
+							<AlertDialogAction
+								onClick={() => {
+									setIsLoading(true);
+									sendReminder(selectedEmail, selectedIndex);
+								}}
+							>
+								Send
+							</AlertDialogAction>
+						</AlertDialogFooter>
+					</AlertDialogContent>
+				</AlertDialog>
+			</>
+		)
 	);
 }
