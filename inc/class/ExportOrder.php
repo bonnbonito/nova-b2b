@@ -62,10 +62,10 @@ class ExportOrder {
 		$data = json_decode( $body );
 
 		?>
-<script>
-console.log(<?php echo json_encode( $data ); ?>);
-</script>
-<?php
+		<script>
+			console.log(<?php echo json_encode( $data ); ?>);
+		</script>
+		<?php
 	}
 
 	/**
@@ -112,6 +112,11 @@ console.log(<?php echo json_encode( $data ); ?>);
 			$customer_name = $order->get_billing_first_name() . ' ' . $order->get_billing_last_name();
 			/** if 'test' is in customer name, continue */
 			if ( stripos( $customer_name, 'test' ) !== false ) {
+				continue;
+			}
+
+			/** if customer is admin, continue */
+			if ( current_user_can( 'administrator' ) ) {
 				continue;
 			}
 
@@ -210,23 +215,23 @@ console.log(<?php echo json_encode( $data ); ?>);
 
 		// Check if Google Sheets export was requested
 		if ( isset( $_GET['export_to_sheets'] ) && $_GET['export_to_sheets'] === '1' ) {
-			$this->export_orders_to_sheets();
+			$this->update_google_sheet();
 			return;
 		}
 
 		?>
-<div class="wrap">
-  <h1>Export Orders</h1>
-  <p>Click one of the buttons below to export all orders.</p>
-  <?php
+		<div class="wrap">
+			<h1>Export Orders</h1>
+			<p>Click one of the buttons below to export all orders.</p>
+			<?php
 			?>
-  <div class="button-group">
-    <a href="<?php echo admin_url( 'admin.php?page=export-orders&export_orders=1' ); ?>" class="button button-primary"
-      style="margin-right: 10px;">Export to CSV</a>
-    <a href="<?php echo admin_url( 'admin.php?page=export-orders&export_to_sheets=1' ); ?>"
-      class="button button-secondary">Update Google Sheet</a>
-  </div>
-  <?php
+			<div class="button-group">
+				<a href="<?php echo admin_url( 'admin.php?page=export-orders&export_orders=1' ); ?>" class="button button-primary"
+					style="margin-right: 10px;">Export to CSV</a>
+				<a href="<?php echo admin_url( 'admin.php?page=export-orders&export_to_sheets=1' ); ?>"
+					class="button button-secondary">Update Google Sheet</a>
+			</div>
+			<?php
 			// Display Google Sheets settings if they exist
 			$sheet_url = get_option( 'nova_orders_sheet_url' );
 			$last_updated = get_option( 'nova_orders_sheet_last_updated' );
@@ -239,8 +244,8 @@ console.log(<?php echo json_encode( $data ); ?>);
 				echo '</p></div>';
 			}
 			?>
-</div>
-<?php
+		</div>
+		<?php
 	}
 
 	/**
@@ -296,6 +301,13 @@ console.log(<?php echo json_encode( $data ); ?>);
 
 		fclose( $output );
 		exit();
+	}
+
+	public function update_google_sheet() {
+		$this->export_orders_to_sheets();
+		// Redirect back with success message
+		wp_redirect( add_query_arg( 'sheets_export_success', '1', admin_url( 'admin.php?page=export-orders' ) ) );
+		exit;
 	}
 
 	/**
@@ -481,10 +493,6 @@ console.log(<?php echo json_encode( $data ); ?>);
 			// Add last updated timestamp
 			update_option( 'nova_orders_sheet_last_updated', current_time( 'mysql' ) );
 
-			// Redirect back with success message
-			wp_redirect( add_query_arg( 'sheets_export_success', '1', admin_url( 'admin.php?page=export-orders' ) ) );
-			exit;
-
 		} catch (Exception $e) {
 			wp_die( 'Error exporting to Google Sheets: ' . $e->getMessage() );
 		}
@@ -495,7 +503,7 @@ console.log(<?php echo json_encode( $data ); ?>);
 	 */
 	public function auto_export_to_sheets() {
 		// Don't run if we're doing AJAX or in admin
-		if ( wp_doing_ajax() || is_admin() ) {
+		if ( wp_doing_ajax() ) {
 			return;
 		}
 
