@@ -115,8 +115,10 @@ class ExportOrder {
 				continue;
 			}
 
+			$customer_id = $order->get_customer_id();
+
 			/** if customer is admin, continue */
-			if ( current_user_can( 'administrator' ) ) {
+			if ( $customer_id && user_can( $customer_id, 'administrator' ) ) {
 				continue;
 			}
 
