@@ -78,71 +78,45 @@ class ExportOrder {
 			array(
 				'methods' => 'GET',
 				'callback' => array( $this, 'get_nova_orders' ),
-				'permission_callback' => array( $this, 'verify_request_auth' ),
+				'permission_callback' => array( $this, 'verify_api_key' ),
 			)
 		);
 	}
 
 	/**
-	 * Verify request authentication
-	 * Checks for either Basic Auth credentials or WooCommerce management capabilities
+	 * Verify API key from request header
 	 *
-	 * @param WP_REST_Request $request The request object
-	 * @return bool|WP_Error
-	 */
-	public function verify_request_auth( $request ) {
-		// Check for Basic Auth header
-		$auth_header = $request->get_header( 'Authorization' );
-
-		if ( $auth_header && strpos( $auth_header, 'Basic ' ) === 0 ) {
-			return $this->validate_basic_auth( $auth_header );
-		}
-
-		// Fallback to WordPress capability check
-		return current_user_can( 'manage_woocommerce' );
-	}
-
-	/**
-	 * Validate Basic Authentication
-	 *
-	 * @param string $auth_header The Authorization header
+	 * @param \WP_REST_Request $request The request object
 	 * @return bool|\WP_Error
 	 */
-	private function validate_basic_auth( $auth_header ) {
-		// Remove 'Basic ' from the header
-		$credentials = substr( $auth_header, 6 );
+	public function verify_api_key( $request ) {
+		$api_key = $request->get_header( 'X-API-Key' );
 
-		// Decode base64 credentials
-		$decoded = base64_decode( $credentials );
-
-		if ( ! $decoded || strpos( $decoded, ':' ) === false ) {
+		if ( empty( $api_key ) ) {
 			return new \WP_Error(
 				'rest_forbidden',
-				'Invalid username or password',
+				'Missing API key',
 				array( 'status' => 401 )
 			);
 		}
 
-		// Split into username and password
-		list( $username, $password ) = explode( ':', $decoded, 2 );
+		// Get the stored API key from WordPress options
+		$valid_key = get_field( 'nova_api_key', 'option' );
 
-		// Authenticate user
-		$user = wp_authenticate( $username, $password );
-
-		if ( is_wp_error( $user ) ) {
+		if ( empty( $valid_key ) ) {
 			return new \WP_Error(
 				'rest_forbidden',
-				'Invalid username or password',
+				'API key not configured',
 				array( 'status' => 401 )
 			);
 		}
 
-		// Check if user has required capability
-		if ( ! user_can( $user, 'manage_woocommerce' ) ) {
+		// Compare API keys using hash_equals to prevent timing attacks
+		if ( ! hash_equals( $valid_key, $api_key ) ) {
 			return new \WP_Error(
 				'rest_forbidden',
-				'You do not have permission to view orders',
-				array( 'status' => 403 )
+				'Invalid API key',
+				array( 'status' => 401 )
 			);
 		}
 
