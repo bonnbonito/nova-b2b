@@ -78,11 +78,75 @@ class ExportOrder {
 			array(
 				'methods' => 'GET',
 				'callback' => array( $this, 'get_nova_orders' ),
-				'permission_callback' => function () {
-					return current_user_can( 'manage_woocommerce' );
-				},
+				'permission_callback' => array( $this, 'verify_request_auth' ),
 			)
 		);
+	}
+
+	/**
+	 * Verify request authentication
+	 * Checks for either Basic Auth credentials or WooCommerce management capabilities
+	 *
+	 * @param WP_REST_Request $request The request object
+	 * @return bool|WP_Error
+	 */
+	public function verify_request_auth( $request ) {
+		// Check for Basic Auth header
+		$auth_header = $request->get_header( 'Authorization' );
+
+		if ( $auth_header && strpos( $auth_header, 'Basic ' ) === 0 ) {
+			return $this->validate_basic_auth( $auth_header );
+		}
+
+		// Fallback to WordPress capability check
+		return current_user_can( 'manage_woocommerce' );
+	}
+
+	/**
+	 * Validate Basic Authentication
+	 *
+	 * @param string $auth_header The Authorization header
+	 * @return bool|\WP_Error
+	 */
+	private function validate_basic_auth( $auth_header ) {
+		// Remove 'Basic ' from the header
+		$credentials = substr( $auth_header, 6 );
+
+		// Decode base64 credentials
+		$decoded = base64_decode( $credentials );
+
+		if ( ! $decoded || strpos( $decoded, ':' ) === false ) {
+			return new \WP_Error(
+				'rest_forbidden',
+				'Invalid username or password',
+				array( 'status' => 401 )
+			);
+		}
+
+		// Split into username and password
+		list( $username, $password ) = explode( ':', $decoded, 2 );
+
+		// Authenticate user
+		$user = wp_authenticate( $username, $password );
+
+		if ( is_wp_error( $user ) ) {
+			return new \WP_Error(
+				'rest_forbidden',
+				'Invalid username or password',
+				array( 'status' => 401 )
+			);
+		}
+
+		// Check if user has required capability
+		if ( ! user_can( $user, 'manage_woocommerce' ) ) {
+			return new \WP_Error(
+				'rest_forbidden',
+				'You do not have permission to view orders',
+				array( 'status' => 403 )
+			);
+		}
+
+		return true;
 	}
 
 	public function get_nova_live_orders() {
