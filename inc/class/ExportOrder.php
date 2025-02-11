@@ -81,6 +81,15 @@ class ExportOrder {
 				'permission_callback' => array( $this, 'verify_api_key' ),
 			)
 		);
+		register_rest_route(
+			'nova/v1',
+			'/orders',
+			array(
+				'methods' => 'GET',
+				'callback' => array( $this, 'get_orders' ),
+				'permission_callback' => '__return_true',
+			)
+		);
 	}
 
 	/**
@@ -123,7 +132,7 @@ class ExportOrder {
 		return true;
 	}
 
-	public function get_nova_live_orders() {
+	public function get_nova_live_orders( $include_email = true ) {
 		global $wpdb;
 
 		// Get all order IDs
@@ -221,6 +230,16 @@ class ExportOrder {
 	public function get_nova_orders() {
 
 		$response = $this->get_nova_live_orders();
+
+		return new \WP_REST_Response( $response, 200 );
+	}
+
+	/**
+	 * Get orders excluding those with _hide_order meta
+	 */
+	public function get_orders() {
+
+		$response = $this->get_nova_live_orders( false );
 
 		return new \WP_REST_Response( $response, 200 );
 	}
