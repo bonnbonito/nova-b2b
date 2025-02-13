@@ -50,7 +50,6 @@ $instances = array(
 	'OrderApprove',
 	'AutoLogin',
 	'ExportOrder',
-	'Currency'
 );
 
 foreach ( $instances as $instance ) {
