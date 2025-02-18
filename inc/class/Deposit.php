@@ -501,13 +501,19 @@ class Deposit {
 
 		$manual_delivered_date = get_field( 'manual_delivered_date', $order_id );
 
+		$shipped_date = $order->get_meta( 'shipped_date' );
+
 		if ( isset( $manual_delivered_date ) && ! empty( $manual_delivered_date ) ) {
-			// return;
+			$shipped_date = $manual_delivered_date;
 		}
 
-		$currency = $order->get_currency();
+		if ( ! $shipped_date ) {
+			return;
+		}
 
-		$shipped_date = false;
+
+
+		$currency = $order->get_currency();
 		$days_after_shipping = get_field( 'days_after_shipping', $deposit_chosen );
 		$deadline = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
 		$payment_date = date( 'F d, Y', $deadline );
@@ -542,14 +548,17 @@ class Deposit {
 				$key = 'nova_payment_email_key_' . get_row_index();
 				$email_sent = get_post_meta( $order_id, $key, true );
 
+
 				if ( $email_sent ) {
 					continue;
 				}
 
 				if ( $days !== false ) {
 
+
 					$days_later = strtotime( $shipped_date . ' +' . intval( $days ) . ' days' );
 					$date_later = date( 'F d, Y', $days_later );
+
 
 					if ( $today == $date_later ) {
 
