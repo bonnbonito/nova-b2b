@@ -49,7 +49,7 @@ class Deposit {
 		// add_action( 'woocommerce_order_status_delivered', array( $this, 'insert_delivered_date' ) );
 		add_action( 'woocommerce_order_status_shipped', array( $this, 'order_status_shipped' ), 1, 1 );
 		add_action( 'woocommerce_before_cart', array( $this, 'remove_wc_sessions_on_cart' ) );
-		add_action( 'woocommerce_review_order_before_payment', array( $this, 'output_deposit_selection' ) );
+		//add_action( 'woocommerce_checkout_order_review', array( $this, 'output_deposit_selection' ), 19 );
 		add_filter( 'woocommerce_payment_complete_order_status', array( $this, 'change_payment_status' ), 30, 3 );
 		// add_filter( 'woocommerce_bacs_process_payment_order_status', array( $this, 'change_onhold_status' ), 99, 2 );
 		add_action( 'woocommerce_admin_order_totals_after_tax', array( $this, 'add_deposit_row' ) );
@@ -393,6 +393,8 @@ class Deposit {
 				continue;
 			}
 
+			error_log( 'sending payment reminder email for order ' . $order_id );
+
 			$this->send_payment_reminder_email( $order_id );
 
 			$this->check_overdue( $result );
@@ -507,12 +509,6 @@ class Deposit {
 			$shipped_date = $manual_delivered_date;
 		}
 
-		if ( ! $shipped_date ) {
-			return;
-		}
-
-
-
 		$currency = $order->get_currency();
 		$days_after_shipping = get_field( 'days_after_shipping', $deposit_chosen );
 		$deadline = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
@@ -548,6 +544,7 @@ class Deposit {
 				$key = 'nova_payment_email_key_' . get_row_index();
 				$email_sent = get_post_meta( $order_id, $key, true );
 
+				error_log( 'email sent for order ' . $order_id . ' is ' . $email_sent );
 
 				if ( $email_sent ) {
 					continue;
@@ -555,10 +552,12 @@ class Deposit {
 
 				if ( $days !== false ) {
 
+					error_log( 'days is ' . $days );
 
 					$days_later = strtotime( $shipped_date . ' +' . intval( $days ) . ' days' );
 					$date_later = date( 'F d, Y', $days_later );
 
+					error_log( 'today is ' . $today . ' and date later is ' . $date_later );
 
 					if ( $today == $date_later ) {
 
@@ -1419,20 +1418,29 @@ class Deposit {
 
 	public function output_deposit_selection() {
 		$woo_instance = \NOVA_B2B\Woocommerce::get_instance();
+		$pending_payment = \NOVA_B2B\Pending_Payment::get_instance();
 		if ( ! $woo_instance ) {
 			return;
 		}
+
+		if ( ! $pending_payment ) {
+			return;
+		}
+
+		$disable = $pending_payment->disable_custom_payment_types( get_current_user_id() );
+
 		$payments_selection = $woo_instance->get_payment_selections();
 
 		if ( ! $payments_selection ) {
 			return;
 		}
 
+
 		$chosen = WC()->session->get( 'deposit_chosen' );
 		$chosen = empty( $chosen ) ? WC()->checkout->get_value( 'deposit_chosen' ) : $chosen;
 		$chosen = empty( $chosen ) ? '0' : $chosen;
 		?>
-		<fieldset>
+		<fieldset id="customPayment">
 			<legend class="px-4 uppercase"><span><?php esc_html_e( 'Payment Type', 'woocommerce' ); ?></span></legend>
 			<div class="grid md:grid-cols-3 gap-4 update_totals_on_change">
 				<div class="cursor-pointer h-full">
@@ -1440,19 +1448,26 @@ class Deposit {
 						class="block h-full justify-end p-3 border rounded-md w-full max-w-sm cursor-pointer hover:border-slate-500 hover:bg-slate-200 hover:shadow-lg">
 						<input class="bg-none" id="payment_0" type="radio" name="deposit_chosen" value="0" <?php echo ( '0' == $chosen ? 'checked' : '' ); ?>>
 						<span>Full</span>
-						<span class="text-sm font-body block mt-2 hidden">Description</span>
+						<span class="text-sm font-body block mt-2">Description</span>
 					</label>
 				</div>
 				<?php
 				foreach ( $payments_selection as $key => $selection ) {
 					?>
-					<div class="cursor-pointer h-full">
+					<div class="h-full <?php echo $disable ? 'opacity-50' : 'cursor-pointer'; ?>">
 						<label for="payment_<?php echo $selection['id']; ?>"
-							class="block h-full justify-end p-3 border rounded-md w-full max-w-sm cursor-pointer hover:border-slate-500 hover:bg-slate-200 hover:shadow-lg">
-							<input class="bg-none" id="payment_<?php echo $selection['id']; ?>" type="radio" name="deposit_chosen"
-								value="<?php echo $selection['id']; ?>" id="payment_<?php echo $selection['id']; ?>" <?php echo ( $selection['id'] == $chosen ? 'checked' : '' ); ?>>
-							<span><?php echo $selection['title']; ?></span>
-							<span class="text-sm font-body block mt-2"><?php echo $selection['description']; ?></span>
+							class="block h-full justify-end p-3 border rounded-md w-full max-w-sm hover:border-slate-500 hover:bg-slate-200 hover:shadow-lg <?php echo $disable ? 'cursor-not-allowed' : 'cursor-pointer'; ?>">
+							<?php if ( ! $disable ) { ?>
+								<input class="bg-none" id="payment_<?php echo $selection['id']; ?>" type="radio" name="deposit_chosen"
+									value="<?php echo $selection['id']; ?>" id="payment_<?php echo $selection['id']; ?>" <?php echo ( $selection['id'] == $chosen ? 'checked' : '' ); ?>>
+								<span><?php echo $selection['title']; ?></span>
+								<span class="text-sm font-body block mt-2"><?php echo $selection['description']; ?></span>
+							<?php } else { ?>
+								<span><?php echo $selection['title']; ?></span>
+								<span class="text-sm font-body block mt-2 normal-case">
+									You've hit the CAD 11,000 (USD 8,150) credit limit; please use a credit card or settle outstanding balances.
+								</span>
+							<?php } ?>
 						</label>
 					</div>
 				<?php } ?>

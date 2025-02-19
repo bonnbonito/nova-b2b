@@ -22,7 +22,7 @@ $nova_update_checker = PucFactory::buildUpdateChecker(
 
 add_filter(
 	'ai1wm_exclude_themes_from_export',
-	function ( $exclude_filters ) {
+	function ($exclude_filters) {
 		$exclude_filters[] = '/node_modules';
 		return $exclude_filters;
 	}
@@ -54,6 +54,14 @@ if ( ! defined( 'NOVA_EXCHANGE_RATE' ) ) {
 	define( 'NOVA_EXCHANGE_RATE', 1.35 );
 }
 
+if ( ! defined( 'NOVA_LIMIT_PENDING_USD' ) ) {
+	define( 'NOVA_LIMIT_PENDING_USD', 8150 );
+}
+
+if ( ! defined( 'NOVA_LIMIT_PENDING_CAD' ) ) {
+	define( 'NOVA_LIMIT_PENDING_CAD', 11000 );
+}
+
 /** if Woocommerce activated */
 if ( class_exists( 'woocommerce' ) ) {
 
@@ -65,7 +73,7 @@ if ( class_exists( 'woocommerce' ) ) {
 			return $default_currency;
 		}
 
-		$user_id         = get_current_user_id();
+		$user_id = get_current_user_id();
 		$billing_country = get_user_meta( $user_id, 'billing_country', true );
 
 		$new_currency = $billing_country === 'CA' ? 'CAD' : 'USD';
@@ -83,7 +91,7 @@ if ( class_exists( 'woocommerce' ) ) {
 		// Add a filter to modify the currency option temporarily
 		add_filter(
 			'option_woocommerce_currency',
-			function ( $currency ) use ( $order_currency ) {
+			function ($currency) use ($order_currency) {
 				return $order_currency;
 			}
 		);

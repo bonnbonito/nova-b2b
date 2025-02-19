@@ -52,7 +52,7 @@ class Pending_Payment {
 		add_filter( 'woocommerce_order_number', array( $this, 'pending_payment_order_number' ), 12, 2 );
 		add_filter( 'gettext', array( $this, 'pay_for_order_notice' ), 10, 3 );
 		add_action( 'woocommerce_order_status_completed', array( $this, 'admin_notification_paid_full' ) );
-		add_action( 'woocommerce_before_checkout_form', array( $this, 'redirect_if_overdue_orders' ), 10, 1 );
+		//add_action( 'woocommerce_before_checkout_form', array( $this, 'redirect_if_overdue_orders' ), 10, 1 );
 		add_shortcode( 'nova_pending_payment_orders', array( $this, 'overdue_pending_payment_ouput' ) );
 		add_filter( 'woocommerce_get_order_item_totals', array( $this, 'insert_payment_date' ), 30, 3 );
 		add_action( 'add_meta_boxes', array( $this, 'add_is_overdue_metabox' ) );
@@ -196,8 +196,8 @@ class Pending_Payment {
 		?>
 		<h3 style="margin-bottom:4pt;">E-transfer Instruction</h3>
 		<ul style="list-style: disc; margin-left: 5pt; padding-left: 5pt;">
-			<li>Log in to your bank’s website or mobile app.</li>
-			<li>Go to the “Send Money” or “E-Transfer” section.</li>
+			<li>Log in to your bank's website or mobile app.</li>
+			<li>Go to the "Send Money" or "E-Transfer" section.</li>
 			<li>Enter the email: <b>hello@novasignage.com</b></li>
 			<li>Specify the amount to send.</li>
 			<li>Create a security question if the bank requires one. Please set the answer to: <b>neonsigns</b></li>
@@ -1837,6 +1837,49 @@ class Pending_Payment {
 		return array_merge( $old_overdue_orders, $overdue_orders );
 	}
 
+
+	/**
+	 * Get the total sum of all pending payment orders for a customer
+	 *
+	 * @param int $customer_id The customer ID to get pending payments for
+	 * @return float The total sum of pending payments
+	 */
+	public function get_pending_payments_sum_total( $customer_id ) {
+		$total = 0;
+		$orders = $this->get_overdue_pending_payment_orders( $customer_id );
+
+		foreach ( $orders as $order ) {
+			if ( ! $order ) {
+				continue;
+			}
+
+			$pending_amount = $order->get_meta( '_pending_amount' );
+			if ( $pending_amount ) {
+				$total += floatval( $pending_amount );
+			} else {
+				// Fallback to order total if no pending amount is set
+				$total += floatval( $order->get_total() );
+			}
+		}
+
+		return round( $total, 2 );
+	}
+
+	public function disable_custom_payment_types( $customer_id ) {
+		$pending_sum = $this->get_pending_payments_sum_total( $customer_id );
+		$currency = get_woocommerce_currency();
+		if ( $currency === 'USD' ) {
+			if ( $pending_sum > NOVA_LIMIT_PENDING_USD ) {
+				return true;
+			}
+		} else {
+			if ( $pending_sum > NOVA_LIMIT_PENDING_CAD ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
 
 	public function has_overdue_pending_payment_orders( $customer_id ) {
 		$orders = $this->get_overdue_pending_payment_orders( $customer_id );
