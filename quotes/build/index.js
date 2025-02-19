@@ -32777,17 +32777,23 @@ const stainlessSteelPolishedOptions = [{
 }];
 const metalFinishOptions = [{
   option: 'Stainless Steel Brushed'
-}, {
-  option: 'Stainless Steel Polished'
-}, {
+},
+// {
+// 	option: 'Stainless Steel Polished',
+// },
+{
   option: 'Electroplated Gold Brushed'
-}, {
-  option: 'Electroplated Gold Polished'
-}, {
+},
+// {
+// 	option: 'Electroplated Gold Polished',
+// },
+{
   option: 'Electroplated Black Titanium Brushed'
-}, {
-  option: 'Electroplated Black Titanium Polished'
-}, {
+},
+// {
+// 	option: 'Electroplated Black Titanium Polished',
+// },
+{
   option: 'Electroplated Bronze Brushed'
 }, {
   option: 'Electroplated Red Copper Brushed'
@@ -32795,22 +32801,28 @@ const metalFinishOptions = [{
 const metalFinishColors = [{
   name: 'Stainless Steel Brushed',
   color: '#caccce'
-}, {
-  name: 'Stainless Steel Polished',
-  color: '#caccce'
-}, {
+},
+// {
+// 	name: 'Stainless Steel Polished',
+// 	color: '#caccce',
+// },
+{
   name: 'Electroplated Gold Brushed',
   color: '#ffbf00'
-}, {
-  name: 'Electroplated Gold Polished',
-  color: '#ffbf00'
-}, {
+},
+// {
+// 	name: 'Electroplated Gold Polished',
+// 	color: '#ffbf00',
+// },
+{
   name: 'Electroplated Black Titanium Brushed',
   color: '#14130E'
-}, {
-  name: 'Electroplated Black Titanium Polished',
-  color: '#14130E'
-}, {
+},
+// {
+// 	name: 'Electroplated Black Titanium Polished',
+// 	color: '#14130E',
+// },
+{
   name: 'Electroplated Bronze Brushed',
   color: '#CD7F32'
 }, {
@@ -37115,9 +37127,11 @@ __webpack_require__.r(__webpack_exports__);
 
 const finishingOptions = [{
   name: 'Matte'
-}, {
-  name: _utils_defaults__WEBPACK_IMPORTED_MODULE_0__.GLOSS_FINISH
-}];
+}
+// {
+// 	name: GLOSS_FINISH,
+// },
+];
 const installationOptions = [{
   value: 'Plain'
 }, {
@@ -39613,14 +39627,18 @@ __webpack_require__.r(__webpack_exports__);
 
 const finishingOptions = [{
   name: 'Matte'
-}, {
-  name: _defaults__WEBPACK_IMPORTED_MODULE_1__.GLOSS_FINISH
-}];
+}
+// {
+// 	name: GLOSS_FINISH
+// }
+];
 const defaultFinishOptions = [{
   name: 'Matte'
-}, {
-  name: _defaults__WEBPACK_IMPORTED_MODULE_1__.GLOSS_FINISH
-}];
+}
+// {
+// 	name: GLOSS_FINISH,
+// },
+];
 const thicknessOptions = [{
   thickness: '1/8"',
   value: '3'
