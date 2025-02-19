@@ -1846,20 +1846,19 @@ class Pending_Payment {
 	 */
 	public function get_pending_payments_sum_total( $customer_id ) {
 		$total = 0;
-		$orders = $this->get_overdue_pending_payment_orders( $customer_id );
+		$order_history = \NOVA_B2B\Order_History::get_instance();
+		if ( ! $order_history ) {
+			return 0;
+		}
+		$orders = $order_history->get_pending_payments();
 
 		foreach ( $orders as $order ) {
 			if ( ! $order ) {
 				continue;
 			}
 
-			$pending_amount = $order->get_meta( '_pending_amount' );
-			if ( $pending_amount ) {
-				$total += floatval( $pending_amount );
-			} else {
-				// Fallback to order total if no pending amount is set
-				$total += floatval( $order->get_total() );
-			}
+			$pending_amount = $order['order_total'];
+			$total += floatval( $pending_amount );
 		}
 
 		return round( $total, 2 );
