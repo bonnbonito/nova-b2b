@@ -13,6 +13,8 @@ export default function PendingOrderTable({
 	// State to manage selected orders
 	const [selectedOrders, setSelectedOrders] = useState([]);
 
+	console.log(orders);
+
 	// Determine if all orders are selected
 	const isAllSelected =
 		orders.length > 0 && selectedOrders.length === orders.length;
@@ -142,7 +144,7 @@ export default function PendingOrderTable({
 											#{order.order_number}
 										</a>
 									</td>
-									<td className="py-4 px-4">{order.date}</td>
+									<td className="py-4 px-4">{order.date ?? ''}</td>
 									<td
 										className={`py-4 px-4 capitalize order-actions ${
 											order.status

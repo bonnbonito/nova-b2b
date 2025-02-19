@@ -5517,6 +5517,7 @@ function PendingOrderTable({
 }) {
   // State to manage selected orders
   const [selectedOrders, setSelectedOrders] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  console.log(orders);
 
   // Determine if all orders are selected
   const isAllSelected = orders.length > 0 && selectedOrders.length === orders.length;
@@ -5607,6 +5608,7 @@ function PendingOrderTable({
   }, "Actions"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tbody", {
     className: "text-sm"
   }, orders.map(order => {
+    var _order$date;
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", {
       key: order.id,
       className: `hover:bg-gray-100 ${order.status}`
@@ -5623,7 +5625,7 @@ function PendingOrderTable({
       className: "text-nova-primary"
     }, "#", order.order_number)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
       className: "py-4 px-4"
-    }, order.date), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
+    }, (_order$date = order.date) !== null && _order$date !== void 0 ? _order$date : ''), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
       className: `py-4 px-4 capitalize order-actions ${order.status} ${order.is_overdue ? 'text-red-500 flex items-center' : ''}`
     }, order.payment_select), NovaOrders.has_payment_types && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
       className: "py-4 px-4"

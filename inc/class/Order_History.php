@@ -717,7 +717,7 @@ class Order_History {
 
 			$needs_payment = $order->get_meta( 'needs_payment' );
 
-			if ( ! $order->has_status( array( 'pending' ) ) ) {
+			if ( ! $order->has_status( array( 'pending', 'processing' ) ) ) {
 				continue;
 			}
 
@@ -788,7 +788,7 @@ class Order_History {
 				'status' => $order->get_status(),
 				'actions' => $actions,
 				'order_total' => $total,
-				'due_date' => date( 'F d, Y', strtotime( $due_date ) ),
+				'due_date' => $due_date ? date( 'F d, Y', strtotime( $due_date ) ) : '',
 				'is_overdue' => $is_overdue,
 				'payment_order_status' => isset( $payment_order_object ) ? $payment_order_object->get_status() : '',
 				'payment_select' => $payment_select_title,
