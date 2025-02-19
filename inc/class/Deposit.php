@@ -1448,7 +1448,7 @@ class Deposit {
 						class="block h-full justify-end p-3 border rounded-md w-full max-w-sm cursor-pointer hover:border-slate-500 hover:bg-slate-200 hover:shadow-lg">
 						<input class="bg-none" id="payment_0" type="radio" name="deposit_chosen" value="0" <?php echo ( '0' == $chosen ? 'checked' : '' ); ?>>
 						<span>Full</span>
-						<span class="text-sm font-body block mt-2">Description</span>
+
 					</label>
 				</div>
 				<?php
