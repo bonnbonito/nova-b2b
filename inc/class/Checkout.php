@@ -70,14 +70,14 @@ class Checkout {
 
 		if ( $po_number ) {
 			?>
-<tr>
-  <td class="label"><?php esc_html_e( 'PO#', 'nova_b2b' ); ?>:</td>
-  <td width="1%"></td>
-  <td class="po_number">
-    <strong><?php echo esc_html( $po_number ); ?></strong>
-  </td>
-</tr>
-<?php
+			<tr>
+				<td class="label"><?php esc_html_e( 'PO#', 'nova_b2b' ); ?>:</td>
+				<td width="1%"></td>
+				<td class="po_number">
+					<strong><?php echo esc_html( $po_number ); ?></strong>
+				</td>
+			</tr>
+			<?php
 		}
 	}
 
@@ -304,6 +304,25 @@ class Checkout {
 
 
 			return $new_total;
+		}
+
+		/** if completed order, add deposit and pending amounts	 */
+		if ( $order->get_status() === 'completed' ) {
+			$deposit_amount = $order->get_meta( '_deposit_amount' );
+			$pending_amount = $order->get_meta( '_pending_amount' );
+
+			if ( $deposit_amount && $pending_amount ) {
+
+				$overall = $deposit_amount + $pending_amount;
+
+				$totals['order_total'] = array(
+					'label' => 'Total',
+					'value' => wc_price( $overall )
+				);
+
+
+			}
+
 		}
 
 		return $totals;
