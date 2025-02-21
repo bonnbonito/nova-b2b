@@ -271,7 +271,7 @@ export const NeonSign = ({ item }) => {
     let remotePrice = 0;
 
     if (remoteControl === 'Yes') {
-      remotePrice = 14;
+      remotePrice = 16;
     }
 
     tempTotal += remotePrice;
