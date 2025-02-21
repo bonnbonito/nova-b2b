@@ -18824,7 +18824,7 @@ const NeonSign = ({
     tempTotal += mountingPrice;
     let remotePrice = 0;
     if (remoteControl === 'Yes') {
-      remotePrice = 7;
+      remotePrice = 14;
     }
     tempTotal += remotePrice;
     let total = tempTotal * parseInt(sets);
