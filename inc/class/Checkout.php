@@ -308,6 +308,14 @@ class Checkout {
 
 		/** if completed order, add deposit and pending amounts	 */
 		if ( $order->get_status() === 'completed' ) {
+
+
+
+			$totals['deposit_amount'] = array(
+				'label' => 'Deposit',
+				'value' => 'asdf',
+			);
+
 			$deposit_amount = $order->get_meta( '_deposit_amount' );
 			$pending_amount = $order->get_meta( '_pending_amount' );
 
@@ -320,10 +328,13 @@ class Checkout {
 					'value' => wc_price( $overall )
 				);
 
-
 			}
 
+			if ( isset( $totals['deposit_amount'] ) ) {
+				unset( $totals['deposit_amount'] );
+			}
 		}
+
 
 		return $totals;
 	}
