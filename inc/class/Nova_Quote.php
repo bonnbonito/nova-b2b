@@ -977,40 +977,65 @@ class Nova_Quote {
 	}
 
 	public function delete_quote() {
-		$status = array(
+		$status = [ 
 			'code' => 1,
-		);
-		if ( ! wp_verify_nonce( $_POST['nonce'], 'quote_nonce' ) ) {
-			$status['error'] = 'Nonce error';
-			$status['status'] = 'error';
-			$status['code'] = '3';
+			'status' => 'error',
+		];
+
+		// Verify nonce
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( $_POST['nonce'] ), 'quote_nonce' ) ) {
+			$status['error'] = __( 'Security verification failed.', 'nova-b2b' );
+			$status['code'] = 3;
 			wp_send_json( $status );
 		}
-		$post_id = $_POST['quote_id'];
 
-		$product_id = get_post_meta( $post_id, 'nova_product_generated_id', true );
-
-		if ( wp_trash_post( $post_id ) ) {
-			$status['status'] = 'success';
-			$status['code'] = '2';
-
-			if ( $product_id ) {
-				$status['product_id'] = $product_id;
-				$cart = WC()->cart;
-				foreach ( $cart->get_cart() as $cart_item_key => $cart_item ) {
-					if ( $cart_item['product_id'] == $product_id ) {
-						$cart->remove_cart_item( $cart_item_key );
-						break;
-					}
-				}
-			}
-		} else {
-			$status['error'] = 'Deletion failed';
-			$status['status'] = 'error';
-			$status['code'] = '4';
+		// Validate and sanitize post ID
+		if ( ! isset( $_POST['quote_id'] ) || empty( $_POST['quote_id'] ) ) {
+			$status['error'] = __( 'Quote ID is required.', 'nova-b2b' );
+			wp_send_json( $status );
 		}
 
-		$status['post'] = $_POST;
+		$post_id = absint( $_POST['quote_id'] );
+
+		// Check if post exists and is of correct type
+		$post = get_post( $post_id );
+		if ( ! $post || 'nova_quote' !== $post->post_type ) {
+			$status['error'] = __( 'Invalid quote.', 'nova-b2b' );
+			wp_send_json( $status );
+		}
+
+		// Check user permissions
+		if ( ! current_user_can( 'delete_post', $post_id ) ) {
+			$status['error'] = __( 'You do not have permission to delete this quote.', 'nova-b2b' );
+			wp_send_json( $status );
+		}
+
+		// Get product ID before deletion (for reference only)
+		$product_id = get_post_meta( $post_id, 'nova_product_generated_id', true );
+
+		// Try to trash the post
+		$trashed = wp_trash_post( $post_id );
+
+		if ( $trashed ) {
+			$status['status'] = 'success';
+			$status['code'] = 2;
+
+			// Clear the entire cart - much faster than looping through items
+			if ( function_exists( 'WC' ) && isset( WC()->cart ) ) {
+				WC()->cart->empty_cart();
+				$status['cart_cleared'] = true;
+
+				if ( $product_id ) {
+					$status['product_id'] = absint( $product_id );
+				}
+			}
+
+			// Log the successful deletion
+			error_log( sprintf( 'Quote #%d successfully moved to trash by user #%d', $post_id, get_current_user_id() ) );
+		} else {
+			$status['error'] = __( 'Failed to delete quote.', 'nova-b2b' );
+			$status['code'] = 4;
+		}
 
 		wp_send_json( $status );
 	}
