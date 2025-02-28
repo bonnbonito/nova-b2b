@@ -9,7 +9,6 @@ import {
   setOptions,
   spacerStandoffDefaultOptions,
   studLengthOptions,
-  waterProofOptions,
 } from '../../../../utils/SignageOptions';
 
 import { useAppContext } from '../../../../AppProvider';
@@ -23,6 +22,12 @@ import {
 } from '../../../../utils/defaults';
 
 import { thicknessOptions, metalFilmOptions, acryMetalPricing } from '../options';
+
+const waterProofOptions = [
+  {
+    option: INDOOR_NOT_WATERPROOF,
+  },
+];
 
 export function Logo({ item }) {
   const { signage, setSignage, setMissing, hasUploadedFile } = useAppContext();
@@ -107,7 +112,7 @@ export function Logo({ item }) {
   );
 
   const [comments, setComments] = useState(item.comments ?? '');
-  const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
+  const [waterproof, setWaterproof] = useState(INDOOR_NOT_WATERPROOF);
   const [mountingOptions, setMountingOptions] = useState(mountingDefaultOptions);
 
   const handleOnChangeMount = e => {

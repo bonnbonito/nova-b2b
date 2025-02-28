@@ -250,19 +250,10 @@ const metalLaminateOptions = [
     option: 'Stainless Steel Brushed',
   },
   {
-    option: 'Stainless Steel Polished',
-  },
-  {
     option: 'Black Titanium Brushed',
   },
   {
-    option: 'Black Titanium Polished',
-  },
-  {
     option: 'Gold Brushed',
-  },
-  {
-    option: 'Gold Polished',
   },
 ];
 

@@ -11766,10 +11766,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+const waterProofOptions = [{
+  option: _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.INDOOR_NOT_WATERPROOF
+}];
 function Letters({
   item
 }) {
-  var _item$letters, _item$comments, _item$font, _item$waterproof, _item$acrylicThicknes, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fileName, _item$fileUrl, _item$filePath, _item$file, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$metalFilm, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
+  var _item$letters, _item$comments, _item$font, _item$acrylicThicknes, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fileName, _item$fileUrl, _item$filePath, _item$file, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$metalFilm, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
   const {
     signage,
     setSignage,
@@ -11780,9 +11783,9 @@ function Letters({
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
   const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$font = item.font) !== null && _item$font !== void 0 ? _item$font : '');
   const [openFont, setOpenFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : '');
+  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_defaults__WEBPACK_IMPORTED_MODULE_11__.INDOOR_NOT_WATERPROOF);
   const [selectedThickness, setSelectedThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicThicknes = item.acrylicThickness) !== null && _item$acrylicThicknes !== void 0 ? _item$acrylicThicknes : '');
-  const [waterProofSelections, setWaterProofSelections] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.waterProofOptions);
+  const [waterProofSelections, setWaterProofSelections] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(waterProofOptions);
   const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileNames = item.fileNames) !== null && _item$fileNames !== void 0 ? _item$fileNames : []);
   const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrls = item.fileUrls) !== null && _item$fileUrls !== void 0 ? _item$fileUrls : []);
   const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$filePaths = item.filePaths) !== null && _item$filePaths !== void 0 ? _item$filePaths : []);
@@ -11969,9 +11972,9 @@ function Letters({
       setSpacerStandoffDistance('');
     }
     if (target === 'Double-sided tape') {
-      setWaterProofSelections(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.waterProofOptions.filter(option => option.option == _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.INDOOR_NOT_WATERPROOF));
+      setWaterProofSelections(waterProofOptions.filter(option => option.option == _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.INDOOR_NOT_WATERPROOF));
     } else {
-      setWaterProofSelections(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.waterProofOptions);
+      setWaterProofSelections(waterProofOptions);
     }
   };
   const handleOnChangeWaterproof = e => setWaterproof(e.target.value);
@@ -12325,10 +12328,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+const waterProofOptions = [{
+  option: _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.INDOOR_NOT_WATERPROOF
+}];
 function Logo({
   item
 }) {
-  var _item$mounting, _item$studLength, _item$spacerStandoffD, _item$acrylicThicknes, _item$width, _item$height, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$metalFilm, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$sets, _item$comments, _item$waterproof;
+  var _item$mounting, _item$studLength, _item$spacerStandoffD, _item$acrylicThicknes, _item$width, _item$height, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$metalFilm, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$sets, _item$comments;
   const {
     signage,
     setSignage,
@@ -12339,7 +12345,7 @@ function Logo({
   const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$studLength = item.studLength) !== null && _item$studLength !== void 0 ? _item$studLength : '');
   const [spacerStandoffOptions, setSpacerStandoffOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.spacerStandoffDefaultOptions);
   const [spacerStandoffDistance, setSpacerStandoffDistance] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$spacerStandoffD = item.spacerStandoffDistance) !== null && _item$spacerStandoffD !== void 0 ? _item$spacerStandoffD : '');
-  const [waterProofSelections, setWaterProofSelections] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.waterProofOptions);
+  const [waterProofSelections, setWaterProofSelections] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(waterProofOptions);
   const handleonChangeSpacerDistance = e => {
     setSpacerStandoffDistance(e.target.value);
   };
@@ -12401,7 +12407,7 @@ function Logo({
     }, val, "\"");
   }));
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
-  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : '');
+  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_defaults__WEBPACK_IMPORTED_MODULE_8__.INDOOR_NOT_WATERPROOF);
   const [mountingOptions, setMountingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.mountingDefaultOptions);
   const handleOnChangeMount = e => {
     const target = e.target.value;
@@ -12413,9 +12419,9 @@ function Logo({
       setSpacerStandoffDistance('');
     }
     if (target === 'Double-sided tape') {
-      setWaterProofSelections(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.waterProofOptions.filter(option => option.option === _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.INDOOR_NOT_WATERPROOF));
+      setWaterProofSelections(waterProofOptions.filter(option => option.option === _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.INDOOR_NOT_WATERPROOF));
     } else {
-      setWaterProofSelections(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.waterProofOptions);
+      setWaterProofSelections(waterProofOptions);
     }
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
@@ -39084,19 +39090,10 @@ const metalFinishColors = [{
   name: 'Stainless Steel Brushed',
   color: '#caccce'
 }, {
-  name: 'Stainless Steel Polished',
-  color: '#caccce'
-}, {
   name: 'Black Titanium Brushed',
   color: '#14130E'
 }, {
-  name: 'Black Titanium Polished',
-  color: '#14130E'
-}, {
   name: 'Gold Brushed',
-  color: '#ffbf00'
-}, {
-  name: 'Gold Polished',
   color: '#ffbf00'
 }];
 const whiteOptions = [{
@@ -39781,15 +39778,9 @@ const studLengthOptions = [{
 const metalLaminateOptions = [{
   option: 'Stainless Steel Brushed'
 }, {
-  option: 'Stainless Steel Polished'
-}, {
   option: 'Black Titanium Brushed'
 }, {
-  option: 'Black Titanium Polished'
-}, {
   option: 'Gold Brushed'
-}, {
-  option: 'Gold Polished'
 }];
 const arrayRange = (start, stop, step, inches = true) => Array.from({
   length: (stop - start) / step + 1

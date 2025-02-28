@@ -11,7 +11,6 @@ import {
   setOptions,
   spacerStandoffDefaultOptions,
   studLengthOptions,
-  waterProofOptions,
 } from '../../../../utils/SignageOptions';
 
 import { calculateLetterPrice, spacerPricing } from '../../../../utils/Pricing';
@@ -28,13 +27,19 @@ import {
 
 import { thicknessOptions, metalFilmOptions, acryMetalPricing } from '../options';
 
+const waterProofOptions = [
+  {
+    option: INDOOR_NOT_WATERPROOF,
+  },
+];
+
 export function Letters({ item }) {
   const { signage, setSignage, setMissing, hasUploadedFile } = useAppContext();
   const [letters, setLetters] = useState(item.letters ?? '');
   const [comments, setComments] = useState(item.comments ?? '');
   const [font, setFont] = useState(item.font ?? '');
   const [openFont, setOpenFont] = useState(false);
-  const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
+  const [waterproof, setWaterproof] = useState(INDOOR_NOT_WATERPROOF);
   const [selectedThickness, setSelectedThickness] = useState(item.acrylicThickness ?? '');
 
   const [waterProofSelections, setWaterProofSelections] = useState(waterProofOptions);
