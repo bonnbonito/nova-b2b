@@ -1004,12 +1004,6 @@ class Nova_Quote {
 			wp_send_json( $status );
 		}
 
-		// Check user permissions
-		if ( ! current_user_can( 'delete_post', $post_id ) ) {
-			$status['error'] = __( 'You do not have permission to delete this quote.', 'nova-b2b' );
-			wp_send_json( $status );
-		}
-
 		// Get product ID before deletion (for reference only)
 		$product_id = get_post_meta( $post_id, 'nova_product_generated_id', true );
 
