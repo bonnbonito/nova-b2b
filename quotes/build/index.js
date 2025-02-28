@@ -33088,10 +33088,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+const waterProofOptions = [{
+  option: _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.INDOOR_NOT_WATERPROOF
+}];
 function Letters({
   item
 }) {
-  var _item$letters, _item$comments, _item$font, _item$pvcBase, _item$waterproof, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$metalFilm, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$customColor, _item$letterHeight, _item$sets, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice;
+  var _item$letters, _item$comments, _item$font, _item$pvcBase, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$metalFilm, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$customColor, _item$letterHeight, _item$sets, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice;
   const {
     signage,
     setSignage,
@@ -33102,8 +33105,8 @@ function Letters({
   const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$font = item.font) !== null && _item$font !== void 0 ? _item$font : '');
   const [openFont, setOpenFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [pvcBase, setPvcBase] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$pvcBase = item.pvcBase) !== null && _item$pvcBase !== void 0 ? _item$pvcBase : 'Painted - Same color as metal');
-  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : '');
-  const [waterProofSelections, setWaterProofSelections] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.waterProofOptions);
+  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_defaults__WEBPACK_IMPORTED_MODULE_11__.INDOOR_NOT_WATERPROOF);
+  const [waterProofSelections, setWaterProofSelections] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(waterProofOptions);
   const [selectedThickness, setSelectedThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.thickness);
   const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileNames = item.fileNames) !== null && _item$fileNames !== void 0 ? _item$fileNames : []);
   const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrls = item.fileUrls) !== null && _item$fileUrls !== void 0 ? _item$fileUrls : []);
@@ -33263,9 +33266,9 @@ function Letters({
       setSpacerStandoffDistance('');
     }
     if (target === 'Double-sided tape') {
-      setWaterProofSelections(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.waterProofOptions.filter(option => option.option === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.INDOOR_NOT_WATERPROOF));
+      setWaterProofSelections(waterProofOptions.filter(option => option.option === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.INDOOR_NOT_WATERPROOF));
     } else {
-      setWaterProofSelections(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.waterProofOptions);
+      setWaterProofSelections(waterProofOptions);
     }
   };
   const handleOnChangeWaterproof = e => setWaterproof(e.target.value);
@@ -33594,10 +33597,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+const waterProofOptions = [{
+  option: _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.INDOOR_NOT_WATERPROOF
+}];
 function Logo({
   item
 }) {
-  var _item$width, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$pvcBase, _item$customColor, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$metalFilm, _item$metalLaminate, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$height, _item$comments, _item$waterproof, _item$sets;
+  var _item$width, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$pvcBase, _item$customColor, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$metalFilm, _item$metalLaminate, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$height, _item$comments, _item$sets;
   const {
     signage,
     setSignage,
@@ -33675,8 +33681,8 @@ function Logo({
   }));
   const [height, setHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$height = item.height) !== null && _item$height !== void 0 ? _item$height : '');
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
-  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$waterproof = item.waterproof) !== null && _item$waterproof !== void 0 ? _item$waterproof : '');
-  const [waterProofSelections, setWaterProofSelections] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.waterProofOptions);
+  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_defaults__WEBPACK_IMPORTED_MODULE_9__.INDOOR_NOT_WATERPROOF);
+  const [waterProofSelections, setWaterProofSelections] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(waterProofOptions);
   const handleOnChangeMounting = e => {
     const target = e.target.value;
     setMounting(target);
@@ -33687,9 +33693,9 @@ function Logo({
       setSpacerStandoffDistance('');
     }
     if (target === 'Double-sided tape') {
-      setWaterProofSelections(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.waterProofOptions.filter(option => option.option === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.INDOOR_NOT_WATERPROOF));
+      setWaterProofSelections(waterProofOptions.filter(option => option.option === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.INDOOR_NOT_WATERPROOF));
     } else {
-      setWaterProofSelections(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.waterProofOptions);
+      setWaterProofSelections(waterProofOptions);
     }
   };
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);

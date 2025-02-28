@@ -8,7 +8,6 @@ import {
   setOptions,
   spacerStandoffDefaultOptions,
   studLengthOptions,
-  waterProofOptions,
 } from '../../../../utils/SignageOptions';
 
 import { mountingOptions } from '../../pvcOptions';
@@ -23,6 +22,12 @@ import {
 } from '../../../../utils/defaults';
 
 import { useAppContext } from '../../../../AppProvider';
+
+const waterProofOptions = [
+  {
+    option: INDOOR_NOT_WATERPROOF,
+  },
+];
 
 export function Logo({ item }) {
   const { signage, setSignage, setMissing, hasUploadedFile } = useAppContext();
@@ -109,7 +114,7 @@ export function Logo({ item }) {
 
   const [height, setHeight] = useState(item.height ?? '');
   const [comments, setComments] = useState(item.comments ?? '');
-  const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
+  const [waterproof, setWaterproof] = useState(INDOOR_NOT_WATERPROOF);
   const [waterProofSelections, setWaterProofSelections] = useState(waterProofOptions);
 
   const handleOnChangeMounting = e => {

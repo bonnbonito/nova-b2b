@@ -10,7 +10,6 @@ import {
   setOptions,
   spacerStandoffDefaultOptions,
   studLengthOptions,
-  waterProofOptions,
 } from '../../../../utils/SignageOptions';
 
 import { mountingOptions } from '../../pvcOptions';
@@ -28,6 +27,12 @@ import { calculateLetterPrice, spacerPricing } from '../../../../utils/Pricing';
 
 import { useAppContext } from '../../../../AppProvider';
 
+const waterProofOptions = [
+  {
+    option: INDOOR_NOT_WATERPROOF,
+  },
+];
+
 export function Letters({ item }) {
   const { signage, setSignage, setMissing } = useAppContext();
   const [letters, setLetters] = useState(item.letters ?? '');
@@ -35,7 +40,7 @@ export function Letters({ item }) {
   const [font, setFont] = useState(item.font ?? '');
   const [openFont, setOpenFont] = useState(false);
   const [pvcBase, setPvcBase] = useState(item.pvcBase ?? 'Painted - Same color as metal');
-  const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
+  const [waterproof, setWaterproof] = useState(INDOOR_NOT_WATERPROOF);
   const [waterProofSelections, setWaterProofSelections] = useState(waterProofOptions);
   const [selectedThickness, setSelectedThickness] = useState(item.thickness);
   const [fileNames, setFileNames] = useState(item.fileNames ?? []);
