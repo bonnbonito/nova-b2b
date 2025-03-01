@@ -537,9 +537,12 @@ class Nova_Quote {
 		$quote_status = get_field( 'quote_status' );
 
 		$quote_date = get_post_meta( get_the_ID(), 'date_quoted', true );
-		$quote_date = date( 'F j, Y', strtotime( $quote_date ) );
-		if ( $quote_date ) :
-			echo '<p>Quote Date: ' . $quote_date . '</p>';
+
+
+
+		if ( ! empty( $quote_date ) ) :
+			$date = date( 'F j, Y', strtotime( $quote_date ) );
+			echo '<p>Quote Date: ' . $date . '</p>';
 		endif;
 		?>
 
