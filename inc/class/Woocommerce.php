@@ -130,6 +130,41 @@ class Woocommerce {
 		add_filter( 'woocommerce_product_tabs', array( $this, 'remove_reviews_tab' ), 98 );
 		add_filter( 'option_woocommerce_currency', array( $this, 'modify_woocommerce_currency_based_on_user' ) );
 		add_action( 'woocommerce_new_order', array( $this, 'update_ga_tracked' ) );
+		add_filter( 'woocommerce_quantity_input_args', array( $this, 'clearance_sale_min_quantity' ), 10, 2 );
+		add_filter( 'woocommerce_add_to_cart_validation', array( $this, 'clearance_sale_add_to_cart_validation' ), 20, 3 );
+		add_filter( 'woocommerce_cart_item_backorder_notification', array( $this, 'backorder_notification' ), 20, 2 );
+		add_filter( 'woocommerce_get_availability_text', array( $this, 'backorder_text' ), 20, 2 );
+	}
+
+	public function backorder_text( $availability_text, $product ) {
+		if ( $product->managing_stock() && $product->is_on_backorder( 1 ) || ! $product->managing_stock() && $product->is_on_backorder( 1 ) ) {
+			$availability_text = '<p class="stock available-on-backorder">' . esc_html__( 'Pre-order: Your item will ship within 2 weeks', 'nova' ) . '</p>';
+		}
+
+		return $availability_text;
+	}
+
+	public function backorder_notification( $notification, $product_id ) {
+		return '<p class="stock available-on-backorder">' . esc_html__( 'Pre-order: Your item will ship within 2 weeks', 'nova' ) . '</p>';
+	}
+
+	public function clearance_sale_add_to_cart_validation( $passed, $product_id, $quantity ) {
+
+		$is_clearance_sale = has_term( 'clearance-sale', 'product_cat', $product_id ) ? true : false;
+
+		if ( $quantity < 2 && $is_clearance_sale ) {
+			error_log( 'clearance_sale_add_to_cart_validation quantity: ' . $quantity );
+			wc_add_notice( sprintf( __( 'Sorry, the minimum quantity for clearance sale products is %d.', 'woocommerce' ), 2 ), 'error' );
+			return false;
+		}
+		return $passed;
+	}
+
+	public function clearance_sale_min_quantity( $args, $product ) {
+		if ( $product && has_term( 'clearance-sale', 'product_cat', $product->get_id() ) ) {
+			$args['min_value'] = 2; // Set minimum quantity to 2 for clearance sale products
+		}
+		return $args;
 	}
 
 	public function update_ga_tracked( $order_id ) {
@@ -1033,8 +1068,8 @@ class Woocommerce {
 			$tax_rate = $this->get_rate_percent_value_from_order( $from_order_object );
 			$tax_total = $this->calculate_correct_tax( $from_order_object, $tax_rate );
 			/*
-																					<<<<<<< HEAD
-																											?>
+																																																																															 <<<<<<< HEAD
+																																																																																					 ?>
 =======
 ?>
 >>>>>>> new-b2b
@@ -1043,14 +1078,14 @@ class Woocommerce {
   <td width="1%"></td>
   <td class="total">
     <?php
-																											if ( $tax_total ) {
-																												echo wc_price( $tax_total, array( 'currency' => $order->get_currency() ) );
-																											}
-																											?>
+																																																																																					 if ( $tax_total ) {
+																																																																																						 echo wc_price( $tax_total, array( 'currency' => $order->get_currency() ) );
+																																																																																					 }
+																																																																																					 ?>
   </td>
 </tr>
 <?php
-																											*/
+																																																																																					 */
 		}
 
 		if ( $original_total && $from_order && $from_order ) :
@@ -1659,19 +1694,19 @@ class Woocommerce {
 
 		// Check if the address is Vancouver and modify Expedite
 		/*
-																				if ( isset( $package['destination']['city'] ) && strtolower( $package['destination']['city'] ) === 'vancouver' ) {
-																					if ( $expedite ) {
-																						$rates['flat_rate:3']->cost = min( $expedite_cost, $standard_cost, ( isset( $flat_rate->cost ) ? $flat_rate->cost : PHP_INT_MAX ) );
-																						// Unset other rates to show only Expedite
-																						unset( $rates['flat_rate:2'], $rates['flat_rate:4'] );
-																					}
-																				}
+																																																											if ( isset( $package['destination']['city'] ) && strtolower( $package['destination']['city'] ) === 'vancouver' ) {
+																																																												if ( $expedite ) {
+																																																													$rates['flat_rate:3']->cost = min( $expedite_cost, $standard_cost, ( isset( $flat_rate->cost ) ? $flat_rate->cost : PHP_INT_MAX ) );
+																																																													// Unset other rates to show only Expedite
+																																																													unset( $rates['flat_rate:2'], $rates['flat_rate:4'] );
+																																																												}
+																																																											}
 
 
-																				if ( is_cart() ) {
-																					unset( $rates['flat_rate:3'] );
-																				}
-																				*/
+																																																											if ( is_cart() ) {
+																																																												unset( $rates['flat_rate:3'] );
+																																																											}
+																																																											*/
 
 		return $rates;
 	}
