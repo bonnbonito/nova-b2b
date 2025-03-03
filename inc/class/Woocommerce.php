@@ -135,10 +135,33 @@ class Woocommerce {
 		add_filter( 'woocommerce_cart_item_backorder_notification', array( $this, 'backorder_notification' ), 20, 2 );
 		add_filter( 'woocommerce_get_availability_text', array( $this, 'backorder_text' ), 20, 2 );
 		add_filter( 'theme_mod_custom_quantity', array( $this, 'custom_quantity' ), 30, 2 );
+		add_filter( 'woocommerce_get_stock_html', array( $this, 'clearance_minimum_notice' ), 20, 2 );
+	}
+
+	public function clearance_minimum_notice( $html, $product ) {
+		if ( ! $product ) {
+			return $html;
+		}
+
+		// Check if the product is a variation
+		$product_id = $product->is_type( 'variation' ) ? $product->get_parent_id() : $product->get_id();
+
+		// Check if the product belongs to the 'clearance-sale' category
+		$is_clearance_sale = has_term( 'clearance-sale', 'product_cat', $product_id );
+
+		if ( $is_clearance_sale ) {
+			$html = '<p class="clearance-notice stock">2pc minimum for sale items</p> ' . $html;
+		}
+
+		return $html;
 	}
 
 	public function custom_quantity( $value ) {
-		return 1;
+		if ( is_product() ) {
+			return true;
+		}
+
+		return $value;
 	}
 
 	public function backorder_text( $availability_text, $product ) {
