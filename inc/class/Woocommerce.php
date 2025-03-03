@@ -151,18 +151,7 @@ class Woocommerce {
 			return $price;
 		}
 
-		// Append "/each" only to the first price displayed
-		if ( $product->is_type( 'variable' ) ) {
-			// For variable products, modify the price range
-			$prices = explode( '-', $price );
-			if ( count( $prices ) > 1 ) {
-				$prices[0] = trim( $prices[0] ) . ' /each';
-				$price = implode( ' - ', $prices );
-			}
-		} else {
-			// For simple products, just add "/each"
-			$price .= ' /each';
-		}
+		$price .= ' /each';
 
 		return $price;
 	}
