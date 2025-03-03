@@ -136,6 +136,35 @@ class Woocommerce {
 		add_filter( 'woocommerce_get_availability_text', array( $this, 'backorder_text' ), 20, 2 );
 		add_filter( 'theme_mod_custom_quantity', array( $this, 'custom_quantity' ), 30, 2 );
 		add_filter( 'woocommerce_get_stock_html', array( $this, 'clearance_minimum_notice' ), 20, 2 );
+		add_filter( 'woocommerce_get_price_html', array( $this, 'modify_price_html' ), 10, 2 );
+	}
+
+	/**
+	 * Modifies the price HTML to append "/each" to the price display
+	 *
+	 * @param string $price The original price HTML
+	 * @param WC_Product $product The product object
+	 * @return string Modified price HTML
+	 */
+	public function modify_price_html( $price, $product ) {
+		if ( ! $product ) {
+			return $price;
+		}
+
+		// Append "/each" only to the first price displayed
+		if ( $product->is_type( 'variable' ) ) {
+			// For variable products, modify the price range
+			$prices = explode( '-', $price );
+			if ( count( $prices ) > 1 ) {
+				$prices[0] = trim( $prices[0] ) . ' /each';
+				$price = implode( ' - ', $prices );
+			}
+		} else {
+			// For simple products, just add "/each"
+			$price .= ' /each';
+		}
+
+		return $price;
 	}
 
 	public function clearance_minimum_notice( $html, $product ) {
@@ -1096,8 +1125,8 @@ class Woocommerce {
 			$tax_rate = $this->get_rate_percent_value_from_order( $from_order_object );
 			$tax_total = $this->calculate_correct_tax( $from_order_object, $tax_rate );
 			/*
-																																																																																					 <<<<<<< HEAD
-																																																																																											 ?>
+																																																																																								 <<<<<<< HEAD
+																																																																																														 ?>
 	 =======
 	 ?>
 	 >>>>>>> new-b2b
@@ -1106,14 +1135,14 @@ class Woocommerce {
 		 <td width="1%"></td>
 		 <td class="total">
 			 <?php
-																																																																																											 if ( $tax_total ) {
-																																																																																												 echo wc_price( $tax_total, array( 'currency' => $order->get_currency() ) );
-																																																																																											 }
-																																																																																											 ?>
+																																																																																														 if ( $tax_total ) {
+																																																																																															 echo wc_price( $tax_total, array( 'currency' => $order->get_currency() ) );
+																																																																																														 }
+																																																																																														 ?>
 		 </td>
 	 </tr>
 	 <?php
-																																																																																											 */
+																																																																																														 */
 		}
 
 		if ( $original_total && $from_order && $from_order ) :
@@ -1722,19 +1751,19 @@ class Woocommerce {
 
 		// Check if the address is Vancouver and modify Expedite
 		/*
-																																																															if ( isset( $package['destination']['city'] ) && strtolower( $package['destination']['city'] ) === 'vancouver' ) {
-																																																																if ( $expedite ) {
-																																																																	$rates['flat_rate:3']->cost = min( $expedite_cost, $standard_cost, ( isset( $flat_rate->cost ) ? $flat_rate->cost : PHP_INT_MAX ) );
-																																																																	// Unset other rates to show only Expedite
-																																																																	unset( $rates['flat_rate:2'], $rates['flat_rate:4'] );
-																																																																}
-																																																															}
+																																																																	if ( isset( $package['destination']['city'] ) && strtolower( $package['destination']['city'] ) === 'vancouver' ) {
+																																																																		if ( $expedite ) {
+																																																																			$rates['flat_rate:3']->cost = min( $expedite_cost, $standard_cost, ( isset( $flat_rate->cost ) ? $flat_rate->cost : PHP_INT_MAX ) );
+																																																																			// Unset other rates to show only Expedite
+																																																																			unset( $rates['flat_rate:2'], $rates['flat_rate:4'] );
+																																																																		}
+																																																																	}
 
 
-																																																															if ( is_cart() ) {
-																																																																unset( $rates['flat_rate:3'] );
-																																																															}
-																																																															*/
+																																																																	if ( is_cart() ) {
+																																																																		unset( $rates['flat_rate:3'] );
+																																																																	}
+																																																																	*/
 
 		return $rates;
 	}
