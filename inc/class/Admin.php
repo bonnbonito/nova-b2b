@@ -3,6 +3,13 @@
 namespace NOVA_B2B;
 
 use WP_Roles;
+use function add_filter;
+use function add_action;
+use function get_current_user_id;
+use function get_field;
+use function get_the_ID;
+use function get_stylesheet_directory_uri;
+use function wp_create_nonce;
 
 class Admin {
 	/**
@@ -54,12 +61,12 @@ class Admin {
 			'code' => 1,
 		);
 		if ( ! wp_verify_nonce( $_POST['nonce'], 'admin_account_nonce' ) ) {
-			$status['error']  = 'Nonce error';
+			$status['error'] = 'Nonce error';
 			$status['status'] = 'error';
 			wp_send_json( $status );
 		}
 
-		$value    = $_POST['quote_status'];
+		$value = $_POST['quote_status'];
 		$quote_id = $_POST['post_id'];
 
 		$old_status = get_field( 'quote_status', $quote_id )['value'];
@@ -84,14 +91,14 @@ class Admin {
 
 		$background_colors = array(
 			'processing' => '#bb2124',
-			'ready'      => '#22bb33',
-			'draft'      => '#bbb',
-			'archived'   => '#000000',
+			'ready' => '#22bb33',
+			'draft' => '#bbb',
+			'archived' => '#000000',
 		);
 
-		$status['code']  = 2;
-		$status['post']  = $_POST;
-		$status['old']   = $old_status;
+		$status['code'] = 2;
+		$status['post'] = $_POST;
+		$status['old'] = $old_status;
 		$status['color'] = $background_colors[ $value ];
 		wp_send_json( $status );
 	}
@@ -100,17 +107,24 @@ class Admin {
 		$theme = wp_get_theme();
 		wp_register_script( 'admin-quote-column', get_stylesheet_directory_uri() . '/assets/js/admin-quote-columns.js', array(), $theme->Version, true );
 		wp_register_style( 'admin-quote-column', get_stylesheet_directory_uri() . '/assets/css/admin-column.css', array(), $theme->Version );
+
+		// Add Select2 library
+		wp_register_style( 'select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css', array(), '4.1.0' );
+		wp_register_script( 'select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js', array( 'jquery' ), '4.1.0', true );
+
 		if ( isset( $_GET['post_type'] ) && $_GET['post_type'] == 'nova_quote' ) {
 			wp_enqueue_script( 'admin-quote-column' );
 			wp_enqueue_style( 'admin-quote-column' );
+			wp_enqueue_style( 'select2' );
+			wp_enqueue_script( 'select2' );
 		}
 		wp_localize_script(
 			'admin-quote-column',
 			'AdminQuote',
 			array(
-				'ajax_url'   => admin_url( 'admin-ajax.php' ),
-				'nonce'      => wp_create_nonce( 'admin_account_nonce' ),
-				'quote_id'   => get_the_ID(),
+				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'nonce' => wp_create_nonce( 'admin_account_nonce' ),
+				'quote_id' => get_the_ID(),
 				'partner_id' => get_field( 'partner', get_the_ID() ),
 			)
 		);
@@ -120,9 +134,9 @@ class Admin {
 		if ( get_field( 'testing_mode', 'option' ) ) {
 			?>
 <div class="notice notice-warning">
-	<p><strong>TESTING MODE</strong>: Emails are temporarily disabled.</p>
+  <p><strong>TESTING MODE</strong>: Emails are temporarily disabled.</p>
 </div>
-			<?php
+<?php
 		}
 	}
 
@@ -204,10 +218,10 @@ class Admin {
 	public function export_quotes_to_csv() {
 		// Fetch users with the 'Partner' role
 		if ( isset( $_GET['export_quotes'] ) && current_user_can( 'manage_options' ) ) {
-			$args   = array(
-				'post_type'      => 'nova_quote',
+			$args = array(
+				'post_type' => 'nova_quote',
 				'posts_per_page' => -1,
-				'post_status'    => 'publish',
+				'post_status' => 'publish',
 			);
 			$quotes = get_posts( $args );
 
@@ -219,16 +233,16 @@ class Admin {
 
 			foreach ( $quotes as $quote ) {
 
-				$user_id      = get_field( 'partner', $quote->ID );
-				$user_info    = get_userdata( $user_id );
+				$user_id = get_field( 'partner', $quote->ID );
+				$user_info = get_userdata( $user_id );
 				$partner_name = ( $user_info->first_name ? $user_info->first_name : '' ) . ' ' . ( $user_info->last_name ? $user_info->last_name : '' );
 
 				$quote_data = array(
-					'Quote ID'     => $quote->ID,
-					'Date'         => $quote->post_date,
-					'Business ID'  => get_field( 'business_id', 'user_' . $user_id ),
+					'Quote ID' => $quote->ID,
+					'Date' => $quote->post_date,
+					'Business ID' => get_field( 'business_id', 'user_' . $user_id ),
 					'Partner Name' => $partner_name,
-					'Status'       => get_field( 'quote_status', $quote->ID ) ? get_field( 'quote_status', $quote->ID )['label'] : '',
+					'Status' => get_field( 'quote_status', $quote->ID ) ? get_field( 'quote_status', $quote->ID )['label'] : '',
 					'Project Name' => get_field( 'frontend_title', $quote->ID ),
 				);
 				fputcsv( $output, $quote_data );
@@ -241,10 +255,10 @@ class Admin {
 	public function export_users_to_csv() {
 		// Fetch users with the 'Partner' role
 		if ( isset( $_GET['export_partners'] ) && current_user_can( 'manage_options' ) ) {
-			$args  = array(
-				'role'    => 'partner',
+			$args = array(
+				'role' => 'partner',
 				'orderby' => 'registered',
-				'order'   => 'ASC',
+				'order' => 'ASC',
 			);
 			$users = get_users( $args );
 
@@ -258,13 +272,13 @@ class Admin {
 
 			foreach ( $users as $user ) {
 				$first_name = $user->first_name;
-				$last_name  = $user->last_name;
-				$email      = $user->user_email;
+				$last_name = $user->last_name;
+				$email = $user->user_email;
 
 				// Skip user if any field contains the keywords
 				if ( self::containsKeywords( $first_name, $keywords ) ||
-				self::containsKeywords( $last_name, $keywords ) ||
-				self::containsKeywords( $email, $keywords ) ) {
+					self::containsKeywords( $last_name, $keywords ) ||
+					self::containsKeywords( $email, $keywords ) ) {
 					continue;
 				}
 
@@ -280,21 +294,21 @@ class Admin {
 				}
 
 				$user_data = array(
-					'Business ID'       => get_field( 'business_id', 'user_' . $user->ID ) ?: 'None',
-					'Business Name'     => get_field( 'business_name', 'user_' . $user->ID ) ?: 'None',
-					'Username'          => $user->user_login ?: 'None',
-					'Name'              => $first_name . ' ' . $last_name ?: 'None',
-					'Email'             => $email ?: 'None',
-					'Phone'             => get_field( 'business_phone_number', 'user_' . $user->ID ) ?: 'None',
-					'Website'           => get_field( 'business_website', 'user_' . $user->ID ) ?: 'None',
-					'Address'           => get_user_meta( $user->ID, 'billing_address_1', true ) ?: 'None',
-					'City'              => get_user_meta( $user->ID, 'billing_city', true ) ?: 'None',
-					'Postcode'          => get_user_meta( $user->ID, 'billing_postcode', true ) ?: 'None',
-					'State'             => get_user_meta( $user->ID, 'billing_state', true ) ?: 'None',
-					'Country'           => get_user_meta( $user->ID, 'billing_country', true ) ?: 'None',
+					'Business ID' => get_field( 'business_id', 'user_' . $user->ID ) ?: 'None',
+					'Business Name' => get_field( 'business_name', 'user_' . $user->ID ) ?: 'None',
+					'Username' => $user->user_login ?: 'None',
+					'Name' => $first_name . ' ' . $last_name ?: 'None',
+					'Email' => $email ?: 'None',
+					'Phone' => get_field( 'business_phone_number', 'user_' . $user->ID ) ?: 'None',
+					'Website' => get_field( 'business_website', 'user_' . $user->ID ) ?: 'None',
+					'Address' => get_user_meta( $user->ID, 'billing_address_1', true ) ?: 'None',
+					'City' => get_user_meta( $user->ID, 'billing_city', true ) ?: 'None',
+					'Postcode' => get_user_meta( $user->ID, 'billing_postcode', true ) ?: 'None',
+					'State' => get_user_meta( $user->ID, 'billing_state', true ) ?: 'None',
+					'Country' => get_user_meta( $user->ID, 'billing_country', true ) ?: 'None',
 					'Registration Date' => ( new \DateTime( $user->user_registered ) )->format( 'Y-m-d' ),
-					'# of Orders'       => self::user_orders_count( $user->ID ),
-					'# of Quotes'       => self::user_quotes_count( $user->ID ),
+					'# of Orders' => self::user_orders_count( $user->ID ),
+					'# of Quotes' => self::user_quotes_count( $user->ID ),
 				);
 
 				fputcsv( $output, $user_data );
@@ -306,16 +320,16 @@ class Admin {
 
 	public function user_quotes_count( $user_id ) {
 		$args = array(
-			'post_type'      => 'nova_quote',  // Set to your custom post type
+			'post_type' => 'nova_quote',  // Set to your custom post type
 			'posts_per_page' => -1,       // We don't need to retrieve all posts, just count them
-			'fields'         => 'ids',            // Fetch only the IDs to speed up the query
-			'post_status'    => 'publish',   // Consider only published posts; adjust if needed
-			'meta_query'     => array(
+			'fields' => 'ids',            // Fetch only the IDs to speed up the query
+			'post_status' => 'publish',   // Consider only published posts; adjust if needed
+			'meta_query' => array(
 				array(
-					'key'     => 'partner',  // The ACF field key
-					'value'   => $user_id, // The user ID you want to match
+					'key' => 'partner',  // The ACF field key
+					'value' => $user_id, // The user ID you want to match
 					'compare' => '=',    // Exact match
-					'type'    => 'NUMERIC',  // Assuming the field is stored as a numeric value
+					'type' => 'NUMERIC',  // Assuming the field is stored as a numeric value
 				),
 			),
 		);
@@ -332,12 +346,12 @@ class Admin {
 		// Set up the order query arguments
 		$args = array(
 			'customer_id' => $user_id, // User ID
-			'return'      => 'ids',         // Return only IDs to speed up the query
-			'status'      => array( 'wc-completed', 'wc-processing', 'wc-on-hold' ), // Optional: specify order statuses
+			'return' => 'ids',         // Return only IDs to speed up the query
+			'status' => array( 'wc-completed', 'wc-processing', 'wc-on-hold' ), // Optional: specify order statuses
 		);
 
 		// Create a new WC_Order_Query object with the specified arguments
-		$query  = new \WC_Order_Query( $args );
+		$query = new \WC_Order_Query( $args );
 		$orders = $query->get_orders(); // Get the orders
 
 		// Return the count of orders
@@ -352,33 +366,33 @@ class Admin {
 			$args['meta_query'] = array(
 				'relation' => 'OR',
 				array(
-					'key'     => 'business_id',
-					'value'   => $search_term,
+					'key' => 'business_id',
+					'value' => $search_term,
 					'compare' => 'LIKE',
 				),
 				array(
-					'key'     => 'first_name',
-					'value'   => $search_term,
+					'key' => 'first_name',
+					'value' => $search_term,
 					'compare' => 'LIKE',
 				),
 				array(
-					'key'     => 'last_name',
-					'value'   => $search_term,
+					'key' => 'last_name',
+					'value' => $search_term,
 					'compare' => 'LIKE',
 				),
 				array(
-					'key'     => 'business_name',
-					'value'   => $search_term,
+					'key' => 'business_name',
+					'value' => $search_term,
 					'compare' => 'LIKE',
 				),
 				array(
-					'key'     => 'business_email',
-					'value'   => $search_term,
+					'key' => 'business_email',
+					'value' => $search_term,
 					'compare' => 'LIKE',
 				),
 				array(
-					'key'     => 'employee_emails',
-					'value'   => $search_term,
+					'key' => 'employee_emails',
+					'value' => $search_term,
 					'compare' => 'LIKE',
 				),
 			);
@@ -401,8 +415,8 @@ class Admin {
 
 	public function extend_user_search( $query ) {
 
-		$query->query_vars['meta_key']     = 'business_id';
-		$query->query_vars['meta_value']   = 'USAZ';
+		$query->query_vars['meta_key'] = 'business_id';
+		$query->query_vars['meta_value'] = 'USAZ';
 		$query->query_vars['meta_compare'] = 'LIKE';
 	}
 
@@ -418,9 +432,9 @@ class Admin {
 	}
 
 	public function custom_acf_user_display( $text, $user, $field, $post_id ) {
-		$business_id   = get_field( 'business_id', 'user_' . $user->ID );
+		$business_id = get_field( 'business_id', 'user_' . $user->ID );
 		$business_name = get_field( 'business_name', 'user_' . $user->ID ) ? ' - ' . get_field( 'business_name', 'user_' . $user->ID ) : '';
-		$name          = $user->first_name . ' ' . $user->last_name;
+		$name = $user->first_name . ' ' . $user->last_name;
 		if ( $business_id ) {
 			return $business_id . ' - ' . $name . ' ' . $business_name;
 		}
@@ -455,11 +469,11 @@ class Admin {
 
 		if ( current_user_can( 'customer-rep' ) ) {
 			$user_search->query_where =
-			$user_search->query_where . ' AND ' .
-			$wpdb->prefix . "usermeta.meta_key = '{$wpdb->prefix}capabilities' AND (" .
-			$wpdb->prefix . "usermeta.meta_value LIKE '%pending%' OR " .
-			$wpdb->prefix . "usermeta.meta_value LIKE '%partner%' OR " .
-			$wpdb->prefix . "usermeta.meta_value LIKE '%temporary%' )";
+				$user_search->query_where . ' AND ' .
+				$wpdb->prefix . "usermeta.meta_key = '{$wpdb->prefix}capabilities' AND (" .
+				$wpdb->prefix . "usermeta.meta_value LIKE '%pending%' OR " .
+				$wpdb->prefix . "usermeta.meta_value LIKE '%partner%' OR " .
+				$wpdb->prefix . "usermeta.meta_value LIKE '%temporary%' )";
 		}
 	}
 
@@ -470,7 +484,7 @@ class Admin {
 				$wp_roles = new WP_Roles();
 			}
 
-			$new_roles     = array();
+			$new_roles = array();
 			$allowed_roles = array( 'pending', 'partner', 'temporary' );
 
 			foreach ( $allowed_roles as $role ) {
@@ -489,9 +503,9 @@ class Admin {
 		if ( $typenow == 'nova_quote' ) { // Check if it's the correct post type
 			// Dropdown for Quote Status
 			$quote_statuses = array(
-				'draft'      => 'Draft',
+				'draft' => 'Draft',
 				'processing' => 'Processing',
-				'ready'      => 'To Payment',
+				'ready' => 'To Payment',
 			); // Assume this function returns an array of quote statuses
 			echo '<select name="quote_status">';
 			echo '<option value="">All Statuses</option>';
@@ -503,25 +517,33 @@ class Admin {
 
 			// Dropdown for Partner
 			$partners = $this->get_partners();
-			echo '<select name="partner">';
+			echo '<div style="float: left; margin-right: 10px;">';
+			echo '<select name="partner" id="partnerUsers">';
 			echo '<option value="">All Partners</option>';
 			foreach ( $partners as $key => $value ) {
 				$selected = ( isset( $_GET['partner'] ) && $_GET['partner'] == $key ) ? ' selected="selected"' : '';
 				echo "<option value='{$key}'{$selected}>{$value}</option>";
 			}
 			echo '</select>';
+			echo '</div>';
 
 		}
 	}
 
 	public function get_partners() {
-		$partners_array = array();
-		// $args           = array( 'role' => array( 'partner' ) );
-		$partners = get_users( array() );
+		$partners = get_users( array(
+			'orderby' => 'meta_value',
+			'meta_key' => 'first_name',
+			'order' => 'ASC'
+		) );
 
+		$partners_array = array();
 		foreach ( $partners as $partner ) {
-			// Assuming you want to use user display name as value and user ID as key
-			$partners_array[ $partner->ID ] = $partner->display_name;
+			$display_name = $partner->first_name ?
+				$partner->first_name . ' ' . $partner->last_name :
+				$partner->display_name;
+
+			$partners_array[ $partner->ID ] = $display_name;
 		}
 
 		return $partners_array;
@@ -541,7 +563,7 @@ class Admin {
 				break;
 			case 'partner':
 				// Display content for the partner column
-				$user_id   = get_field( 'partner', $post_id );
+				$user_id = get_field( 'partner', $post_id );
 				$user_info = get_userdata( $user_id );
 				echo ( isset( $user_info->first_name ) ? $user_info->first_name : '' ) . ' ' . ( isset( $user_info->last_name ) ? $user_info->last_name : '' );
 				break;
@@ -578,16 +600,16 @@ class Admin {
 			// Define status options
 			$status_options = array(
 				'processing' => 'Processing',
-				'ready'      => 'To Payment',
-				'draft'      => 'Draft',
-				'archived'   => 'Archived',
+				'ready' => 'To Payment',
+				'draft' => 'Draft',
+				'archived' => 'Archived',
 			);
 
 			$background_colors = array(
 				'processing' => '#bb2124',
-				'ready'      => '#22bb33',
-				'draft'      => '#bbbbbb',
-				'archived'   => '#000000',
+				'ready' => '#22bb33',
+				'draft' => '#bbbbbb',
+				'archived' => '#000000',
 			);
 
 			// Generate the select dropdown
@@ -605,11 +627,11 @@ class Admin {
 
 	public function add_nova_columns( $defaults ) {
 		// unset( $defaults['author'] );
-		$new_columns['cb']           = $defaults['cb'];
-		$new_columns['quote_id']     = 'Quote ID';
-		$new_columns['date']         = 'Date';
-		$new_columns['business_id']  = 'Business ID';
-		$new_columns['partner']      = 'Partner Name';
+		$new_columns['cb'] = $defaults['cb'];
+		$new_columns['quote_id'] = 'Quote ID';
+		$new_columns['date'] = 'Date';
+		$new_columns['business_id'] = 'Business ID';
+		$new_columns['partner'] = 'Partner Name';
 		$new_columns['quote_status'] = 'Status';
 		$new_columns['project_name'] = 'Project Name';
 		$new_columns['view_details'] = 'View Details';
@@ -624,16 +646,16 @@ class Admin {
 
 			if ( ! empty( $_GET['quote_status'] ) ) {
 				$meta_query[] = array(
-					'key'     => 'quote_status',
-					'value'   => $_GET['quote_status'],
+					'key' => 'quote_status',
+					'value' => $_GET['quote_status'],
 					'compare' => '=',
 				);
 			}
 
 			if ( ! empty( $_GET['partner'] ) ) {
 				$meta_query[] = array(
-					'key'     => 'partner',
-					'value'   => $_GET['partner'],
+					'key' => 'partner',
+					'value' => $_GET['partner'],
 					'compare' => '=',
 				);
 			}
@@ -660,21 +682,21 @@ class Admin {
 			?>
 <script type="text/javascript">
 jQuery(document).ready(function($) {
-	// Move the row actions from their original location to the 'user_id' column
-	$('#the-list tr').each(function() {
-		var $this = $(this);
-		var rowActions = $this.find('.row-actions').clone(); // Clone the row actions
-		$this.find('.row-actions').remove(); // Remove the original row actions
+  // Move the row actions from their original location to the 'user_id' column
+  $('#the-list tr').each(function() {
+    var $this = $(this);
+    var rowActions = $this.find('.row-actions').clone(); // Clone the row actions
+    $this.find('.row-actions').remove(); // Remove the original row actions
 
-		// Check if the 'user_id' column exists and append the cloned row actions
-		var userIDCell = $this.find('td.quote_id');
-		if (userIDCell.length) {
-			userIDCell.append(rowActions);
-		}
-	});
+    // Check if the 'user_id' column exists and append the cloned row actions
+    var userIDCell = $this.find('td.quote_id');
+    if (userIDCell.length) {
+      userIDCell.append(rowActions);
+    }
+  });
 });
 </script>
-			<?php
+<?php
 		}
 	}
 }

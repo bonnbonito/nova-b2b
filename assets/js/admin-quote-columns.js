@@ -1,4 +1,14 @@
 document.addEventListener('DOMContentLoaded', function () {
+	// Initialize Select2 on partner users dropdown
+	const partnerUsers = document.querySelector('#partnerUsers');
+	if (partnerUsers) {
+		jQuery(partnerUsers).select2({
+			width: '100%',
+			placeholder: 'Select a Partner',
+			allowClear: true,
+		});
+	}
+
 	const quoteStatus = document.querySelectorAll(
 		'.select-wrap select[name="quote_status_filter"]'
 	);
