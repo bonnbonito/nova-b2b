@@ -517,7 +517,7 @@ class Admin {
 
 			// Dropdown for Partner
 			$partners = $this->get_partners();
-			echo '<div style="float: left; margin-right: 10px;">';
+			echo '<div style="float: left; margin-right: 10px; min-width: 200px;">';
 			echo '<select name="partner" id="partnerUsers">';
 			echo '<option value="">All Partners</option>';
 			foreach ( $partners as $key => $value ) {
