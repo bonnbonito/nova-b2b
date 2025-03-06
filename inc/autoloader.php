@@ -39,6 +39,7 @@ $instances = array(
 	'NovaEmails',
 	'Pending_Payment',
 	'Deposit',
+	'QuotesArchived',
 	// 'Pending_Orders',
 	// 'Zoho',
 	// 'Streak',

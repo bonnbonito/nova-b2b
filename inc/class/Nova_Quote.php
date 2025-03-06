@@ -82,6 +82,9 @@ class Nova_Quote {
 		add_action( 'admin_footer-post.php', array( $this, 'append_post_status_list' ) );
 		add_action( 'admin_footer-edit.php', array( $this, 'append_post_status_list' ) );
 		add_action( 'template_redirect', array( $this, 'download_pdf_redirect' ) );
+
+		// Add action for quote dates page
+		add_action( 'admin_menu', array( $this, 'add_quote_dates_page' ) );
 	}
 
 	public function pdf_rewrite_rules() {
@@ -2517,6 +2520,87 @@ class Nova_Quote {
 				'redirect' => false,
 			)
 		);
+
+		// Add sub-page for quote date updates
+		acf_add_options_sub_page(
+			array(
+				'page_title' => 'Update Quote Dates',
+				'menu_title' => 'Update Quote Dates',
+				'parent_slug' => 'nova-options',
+				'capability' => 'edit_posts',
+				'position' => false,
+				'icon_url' => false,
+				'submit_value' => 'Update Quote Dates',
+			)
+		);
+	}
+
+	/**
+	 * Update quote dates for quotes with 'ready' status
+	 */
+	public function update_quote_dates() {
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			return;
+		}
+
+		$args = array(
+			'post_type' => 'nova_quote',
+			'posts_per_page' => -1,
+			'meta_query' => array(
+				array(
+					'key' => 'quote_status',
+					'value' => 'ready'
+				),
+				array(
+					'key' => 'date_quoted',
+					'compare' => 'NOT EXISTS'
+				)
+			)
+		);
+
+		$quotes = get_posts( $args );
+		$updated_count = 0;
+
+		foreach ( $quotes as $quote ) {
+			$revisions = wp_get_post_revisions( $quote->ID );
+			if ( ! empty( $revisions ) ) {
+				$last_revision = reset( $revisions );
+				update_post_meta( $quote->ID, 'date_quoted', $last_revision->post_date );
+				$updated_count++;
+			}
+		}
+
+		return $updated_count;
+	}
+
+	/**
+	 * Display the quote date update page
+	 */
+	public function display_quote_dates_page() {
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+		}
+
+		$message = '';
+		if ( isset( $_POST['update_quote_dates'] ) && check_admin_referer( 'update_quote_dates_nonce' ) ) {
+			$updated_count = $this->update_quote_dates();
+			$message = sprintf(
+				'<div class="notice notice-success"><p>Successfully updated %d quotes with their last revision dates.</p></div>',
+				$updated_count
+			);
+		}
+		?>
+		<div class="wrap">
+			<h1>Update Quote Dates</h1>
+			<?php echo $message; ?>
+			<p>This tool will update the <code>date_quoted</code> meta field for all quotes with status "ready" that don't have a
+				date set. The date will be set to the last revision date.</p>
+			<form method="post" action="">
+				<?php wp_nonce_field( 'update_quote_dates_nonce' ); ?>
+				<p><input type="submit" name="update_quote_dates" class="button button-primary" value="Update Quote Dates"></p>
+			</form>
+		</div>
+		<?php
 	}
 
 	public function dropbox_api() {
@@ -2547,5 +2631,16 @@ class Nova_Quote {
 		if ( isset( $_GET['success'] ) ) {
 			echo '<div class="notice notice-success is-dismissible"><p>Access token successfully retrieved and saved.</p></div>';
 		}
+	}
+
+	public function add_quote_dates_page() {
+		add_submenu_page(
+			'nova-options',
+			'Update Quote Dates',
+			'Update Quote Dates',
+			'edit_posts',
+			'update-quote-dates',
+			array( $this, 'display_quote_dates_page' )
+		);
 	}
 }

@@ -124,7 +124,8 @@ function nova_b2b_acf_init() {
 
 require NOVA_DIR_PATH . '/inc/class/EmailLimit.php';
 
-
+// Add cleanup hook for quote archiving cron
+add_action( 'switch_theme', array( 'NOVA_B2B\QuotesArchived', 'cleanup_cron' ) );
 
 /**
  * Add custom functions here

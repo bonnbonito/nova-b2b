@@ -54,6 +54,11 @@ class Admin {
 		add_action( 'admin_notices', array( $this, 'notice_testing_mode' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_quote_column' ) );
 		add_action( 'wp_ajax_update_quote_status', array( $this, 'update_quote_status' ) );
+
+		// Add bulk actions for quotes
+		add_filter( 'bulk_actions-edit-nova_quote', array( $this, 'add_quote_bulk_actions' ) );
+		add_filter( 'handle_bulk_actions-edit-nova_quote', array( $this, 'handle_quote_bulk_actions' ), 10, 3 );
+		add_action( 'admin_notices', array( $this, 'quote_bulk_action_notices' ) );
 	}
 
 	public function update_quote_status() {
@@ -133,10 +138,10 @@ class Admin {
 	public function notice_testing_mode() {
 		if ( get_field( 'testing_mode', 'option' ) ) {
 			?>
-<div class="notice notice-warning">
-  <p><strong>TESTING MODE</strong>: Emails are temporarily disabled.</p>
-</div>
-<?php
+			<div class="notice notice-warning">
+				<p><strong>TESTING MODE</strong>: Emails are temporarily disabled.</p>
+			</div>
+			<?php
 		}
 	}
 
@@ -680,23 +685,87 @@ class Admin {
 		$screen = get_current_screen();
 		if ( $screen->id === 'edit-nova_quote' ) {
 			?>
-<script type="text/javascript">
-jQuery(document).ready(function($) {
-  // Move the row actions from their original location to the 'user_id' column
-  $('#the-list tr').each(function() {
-    var $this = $(this);
-    var rowActions = $this.find('.row-actions').clone(); // Clone the row actions
-    $this.find('.row-actions').remove(); // Remove the original row actions
+			<script type="text/javascript">
+				jQuery(document).ready(function ($)
+				{
+					// Move the row actions from their original location to the 'user_id' column
+					$('#the-list tr').each(function ()
+					{
+						var $this = $(this);
+						var rowActions = $this.find('.row-actions').clone(); // Clone the row actions
+						$this.find('.row-actions').remove(); // Remove the original row actions
 
-    // Check if the 'user_id' column exists and append the cloned row actions
-    var userIDCell = $this.find('td.quote_id');
-    if (userIDCell.length) {
-      userIDCell.append(rowActions);
-    }
-  });
-});
-</script>
-<?php
+						// Check if the 'user_id' column exists and append the cloned row actions
+						var userIDCell = $this.find('td.quote_id');
+						if (userIDCell.length)
+						{
+							userIDCell.append(rowActions);
+						}
+					});
+				});
+			</script>
+			<?php
+		}
+	}
+
+	/**
+	 * Add bulk actions for quotes
+	 *
+	 * @param array $bulk_actions Array of bulk actions.
+	 * @return array Modified bulk actions.
+	 */
+	public function add_quote_bulk_actions( $bulk_actions ) {
+		$bulk_actions['archive'] = __( 'Archive', 'nova-b2b' );
+		return $bulk_actions;
+	}
+
+	/**
+	 * Handle bulk actions for quotes
+	 *
+	 * @param string $redirect_to The redirect URL.
+	 * @param string $action The bulk action.
+	 * @param array  $post_ids Array of post IDs.
+	 * @return string Modified redirect URL.
+	 */
+	public function handle_quote_bulk_actions( $redirect_to, $action, $post_ids ) {
+		if ( 'archive' !== $action ) {
+			return $redirect_to;
+		}
+
+		$archived = 0;
+		foreach ( $post_ids as $post_id ) {
+			$post = get_post( $post_id );
+			if ( $post && $post->post_type === 'nova_quote' && $post->post_status !== 'archive' ) {
+				wp_update_post(
+					array(
+						'ID' => $post_id,
+						'post_status' => 'archive',
+					)
+				);
+				$archived++;
+			}
+		}
+
+		$redirect_to = add_query_arg( 'bulk_archived_quotes', $archived, $redirect_to );
+		return $redirect_to;
+	}
+
+	/**
+	 * Display bulk action notices
+	 */
+	public function quote_bulk_action_notices() {
+		if ( ! empty( $_REQUEST['bulk_archived_quotes'] ) ) {
+			$count = intval( $_REQUEST['bulk_archived_quotes'] );
+			printf(
+				'<div class="updated notice is-dismissible"><p>' .
+				_n(
+					'Archived %s quote.',
+					'Archived %s quotes.',
+					$count,
+					'nova-b2b'
+				) . '</p></div>',
+				$count
+			);
 		}
 	}
 }
