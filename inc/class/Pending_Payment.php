@@ -67,6 +67,7 @@ class Pending_Payment {
 		add_action( 'acf/save_post', array( $this, 'update_payment_date_table' ) );
 	}
 
+
 	public function update_payment_date_table( $post_id ) {
 		$pending_id = $this->get_payment_id_from_original_order( $post_id );
 
@@ -194,17 +195,17 @@ class Pending_Payment {
 		}
 		ob_start();
 		?>
-		<h3 style="margin-bottom:4pt;">E-transfer Instruction</h3>
-		<ul style="list-style: disc; margin-left: 5pt; padding-left: 5pt;">
-			<li>Log in to your bank's website or mobile app.</li>
-			<li>Go to the "Send Money" or "E-Transfer" section.</li>
-			<li>Enter the email: <b>hello@novasignage.com</b></li>
-			<li>Specify the amount to send.</li>
-			<li>Create a security question if the bank requires one. Please set the answer to: <b>neonsigns</b></li>
-			<li>Confirm the details and send the transfer.</li>
-			<li>Inform our team via email</li>
-		</ul>
-		<?php
+<h3 style="margin-bottom:4pt;">E-transfer Instruction</h3>
+<ul style="list-style: disc; margin-left: 5pt; padding-left: 5pt;">
+  <li>Log in to your bank's website or mobile app.</li>
+  <li>Go to the "Send Money" or "E-Transfer" section.</li>
+  <li>Enter the email: <b>hello@novasignage.com</b></li>
+  <li>Specify the amount to send.</li>
+  <li>Create a security question if the bank requires one. Please set the answer to: <b>neonsigns</b></li>
+  <li>Confirm the details and send the transfer.</li>
+  <li>Inform our team via email</li>
+</ul>
+<?php
 		echo ob_get_clean();
 	}
 
@@ -381,11 +382,11 @@ class Pending_Payment {
 		// print_r( get_post_meta( $post->ID ) );
 
 		?>
-		<a href="<?php echo esc_url( $order_edit_url ); ?>" class="button button-primary">View Order</a>
+<a href="<?php echo esc_url( $order_edit_url ); ?>" class="button button-primary">View Order</a>
 
-		<p>Original Total: <?php echo $original_total; ?></p>
+<p>Original Total: <?php echo $original_total; ?></p>
 
-		<?php
+<?php
 	}
 
 	public function hide_specific_orders( $query ) {
@@ -814,19 +815,19 @@ class Pending_Payment {
 	public function admin_notification_deadline_email( $order, $role_instance, $headers, $first_name, $deadline, $pending_payment ) {
 		ob_start();
 		?>
-		<p>Hello,</p>
-		<p>An outstanding invoice for #{order_number} is due today. We have sent a reminder to:</p>
-		<ul>
-			<li>Customer: {customer_name} - {business_id} </li>
-			<li>Company: {business_name}</li>
-			<li>Order ID: #{order_number}</li>
-			<li>Deadline of payment: {deadline}</li>
-			<li>Unpaid Balance: {pending_payment}</li>
-		</ul>
+<p>Hello,</p>
+<p>An outstanding invoice for #{order_number} is due today. We have sent a reminder to:</p>
+<ul>
+  <li>Customer: {customer_name} - {business_id} </li>
+  <li>Company: {business_name}</li>
+  <li>Order ID: #{order_number}</li>
+  <li>Deadline of payment: {deadline}</li>
+  <li>Unpaid Balance: {pending_payment}</li>
+</ul>
 
-		<p>Order details:</p>
-		{order_details}
-		<?php
+<p>Order details:</p>
+{order_details}
+<?php
 		$message = ob_get_clean();
 
 		$user_id = $order->get_user_id() ? $order->get_user_id() : 0;
@@ -867,17 +868,17 @@ class Pending_Payment {
 	public function admin_notification_shipped_email( $order, $role_instance, $headers ) {
 		ob_start();
 		?>
-		<p>Hello,</p>
-		<p>We've informed your client that the product is now prepared and ready to ship:</p>
-		<ul>
-			<li>Customer: {customer_name} - {business_id} </li>
-			<li>Company: {business_name}</li>
-			<li>Order ID: #{order_number}</li>
-		</ul>
+<p>Hello,</p>
+<p>We've informed your client that the product is now prepared and ready to ship:</p>
+<ul>
+  <li>Customer: {customer_name} - {business_id} </li>
+  <li>Company: {business_name}</li>
+  <li>Order ID: #{order_number}</li>
+</ul>
 
-		<p>Here's the final invoice and their tracking information:</p>
-		{order_details}
-		<?php
+<p>Here's the final invoice and their tracking information:</p>
+{order_details}
+<?php
 		$message = ob_get_clean();
 		$first_name = $order->get_billing_first_name();
 		$user_id = $order->get_user_id() ? $order->get_user_id() : 0;
@@ -1719,6 +1720,7 @@ class Pending_Payment {
 			)
 		);
 
+
 		$overdue_orders = array();
 
 		// Get today's date
@@ -1748,6 +1750,7 @@ class Pending_Payment {
 				}
 			}
 		}
+
 
 		return $overdue_orders;
 	}
@@ -1831,11 +1834,21 @@ class Pending_Payment {
 			return array();
 		}
 
+
+
 		$old_overdue_orders = $this->get_overdue_old( $customer_id );
+
 		$overdue_orders = $this->get_overdue( $customer_id );
 
-		return array_merge( $old_overdue_orders, $overdue_orders );
+
+		$merged = array_merge( $old_overdue_orders, $overdue_orders );
+
+
+
+		return $merged;
 	}
+
+
 
 
 	/**
@@ -1864,26 +1877,27 @@ class Pending_Payment {
 		return round( $total, 2 );
 	}
 
+	public function get_pending_limit( $customer_id ) {
+		$currency = get_woocommerce_currency();
+		$field_key = 'net_30_pending_payment_limit_' . strtolower( $currency );
+		$default_constant = 'NOVA_LIMIT_PENDING_' . $currency;
+
+		$limit = get_field( $field_key, 'user_' . $customer_id );
+		return floatval( $limit ?: constant( $default_constant ) );
+	}
+
 	public function disable_custom_payment_types( $customer_id ) {
 		$pending_sum = $this->get_pending_payments_sum_total( $customer_id );
-		$currency = get_woocommerce_currency();
-		if ( $currency === 'USD' ) {
-			if ( $pending_sum > NOVA_LIMIT_PENDING_USD ) {
-				return true;
-			}
-		} else {
-			if ( $pending_sum > NOVA_LIMIT_PENDING_CAD ) {
-				return true;
-			}
-		}
+		$limit = $this->get_pending_limit( $customer_id );
 
-		return false;
+		return $pending_sum > $limit;
+
 	}
 
 	public function has_overdue_pending_payment_orders( $customer_id ) {
 		$orders = $this->get_overdue_pending_payment_orders( $customer_id );
 
-		return count( $orders ) >= 3;
+		return count( $orders ) >= 4;
 	}
 
 	public function display_overdue_pending_payment_orders( $customer_id ) {
@@ -1908,15 +1922,15 @@ class Pending_Payment {
 			$order_total = $order->get_total(); // Get the order total
 			ob_start();
 			?>
-			<a href="<?php echo esc_url( $order_url ); ?>"
-				class="bg-red-100 border-solid border border-red-400 text-red-700 px-4 py-3 rounded relative mb-1 inline-block"
-				role="alert">
-				<strong class="font-bold">Order #<?php echo esc_html( $order_id ); ?> -
-					<?php echo wc_price( $order_total ); ?></strong>:
-				<span class="block sm:inline">Click here to pay.</span>
-			</a>
+<a href="<?php echo esc_url( $order_url ); ?>"
+  class="bg-red-100 border-solid border border-red-400 text-red-700 px-4 py-3 rounded relative mb-1 inline-block"
+  role="alert">
+  <strong class="font-bold">Order #<?php echo esc_html( $order_id ); ?> -
+    <?php echo wc_price( $order_total ); ?></strong>:
+  <span class="block sm:inline">Click here to pay.</span>
+</a>
 
-			<?php
+<?php
 			echo ob_get_clean();
 		}
 		echo '</div>';
@@ -1951,5 +1965,27 @@ class Pending_Payment {
 			wp_safe_redirect( $redirect_url );
 			exit;
 		}
+	}
+
+	/**
+	 * Check if user has at least 2 orders overdue by more than 30 days
+	 *
+	 * @param int $customer_id The customer ID to check
+	 * @return bool True if user has at least 2 overdue orders
+	 */
+	public function has_severely_overdue_orders( $customer_id ) {
+		$args = array(
+			'customer_id' => $customer_id,
+			'status' => array( 'wc-pending' ),
+			'limit' => -1,
+			'meta_key' => 'is_overdue',
+			'meta_value' => true,
+			'meta_compare' => '=',
+		);
+
+		$orders = wc_get_orders( $args );
+
+		// Return true if there are 2 or more overdue orders
+		return count( $orders ) >= 2;
 	}
 }

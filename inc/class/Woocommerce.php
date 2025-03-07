@@ -1163,8 +1163,8 @@ class Woocommerce {
 			$tax_rate = $this->get_rate_percent_value_from_order( $from_order_object );
 			$tax_total = $this->calculate_correct_tax( $from_order_object, $tax_rate );
 			/*
-																																																																																																																																				<<<<<<< HEAD
-																																																																																																																																										?>
+																																																																																																																																														 <<<<<<< HEAD
+																																																																																																																																																				 ?>
 	 =======
 	 ?>
 	 >>>>>>> new-b2b
@@ -1173,14 +1173,14 @@ class Woocommerce {
 		 <td width="1%"></td>
 		 <td class="total">
 			 <?php
-																																																																																																																																										if ( $tax_total ) {
-																																																																																																																																											echo wc_price( $tax_total, array( 'currency' => $order->get_currency() ) );
-																																																																																																																																										}
-																																																																																																																																										?>
+																																																																																																																																																				 if ( $tax_total ) {
+																																																																																																																																																					 echo wc_price( $tax_total, array( 'currency' => $order->get_currency() ) );
+																																																																																																																																																				 }
+																																																																																																																																																				 ?>
 		 </td>
 	 </tr>
 	 <?php
-																																																																																																																																										*/
+																																																																																																																																																				 */
 		}
 
 		if ( $original_total && $from_order && $from_order ) :
@@ -1789,19 +1789,19 @@ class Woocommerce {
 
 		// Check if the address is Vancouver and modify Expedite
 		/*
-																																																																																														if ( isset( $package['destination']['city'] ) && strtolower( $package['destination']['city'] ) === 'vancouver' ) {
-																																																																																															if ( $expedite ) {
-																																																																																																$rates['flat_rate:3']->cost = min( $expedite_cost, $standard_cost, ( isset( $flat_rate->cost ) ? $flat_rate->cost : PHP_INT_MAX ) );
-																																																																																																// Unset other rates to show only Expedite
-																																																																																																unset( $rates['flat_rate:2'], $rates['flat_rate:4'] );
-																																																																																															}
-																																																																																														}
+																																																																																																					if ( isset( $package['destination']['city'] ) && strtolower( $package['destination']['city'] ) === 'vancouver' ) {
+																																																																																																						if ( $expedite ) {
+																																																																																																							$rates['flat_rate:3']->cost = min( $expedite_cost, $standard_cost, ( isset( $flat_rate->cost ) ? $flat_rate->cost : PHP_INT_MAX ) );
+																																																																																																							// Unset other rates to show only Expedite
+																																																																																																							unset( $rates['flat_rate:2'], $rates['flat_rate:4'] );
+																																																																																																						}
+																																																																																																					}
 
 
-																																																																																														if ( is_cart() ) {
-																																																																																															unset( $rates['flat_rate:3'] );
-																																																																																														}
-																																																																																														*/
+																																																																																																					if ( is_cart() ) {
+																																																																																																						unset( $rates['flat_rate:3'] );
+																																																																																																					}
+																																																																																																					*/
 
 		return $rates;
 	}
@@ -3285,6 +3285,7 @@ class Woocommerce {
 					'title' => get_the_title(),
 					'id' => get_the_ID(),
 					'description' => get_field( 'description' ),
+					'enable' => true,
 				);
 			}
 			wp_reset_postdata(); // Reset the global post object so that the rest of the page works correctly
@@ -3298,15 +3299,47 @@ class Woocommerce {
 		}
 		$payments = array();
 		$user_payments = get_field( 'payment_type', 'user_' . $user_id );
+
+		$pending_payment = \NOVA_B2B\Pending_Payment::get_instance();
+		if ( ! $pending_payment ) {
+			return $payments;
+		}
+
+		$disable = $pending_payment->disable_custom_payment_types( $user_id );
+		$overdue_30days = $pending_payment->has_severely_overdue_orders( $user_id );
+		$has_overdue = $pending_payment->has_overdue_pending_payment_orders( $user_id );
+
 		global $post;
 		if ( $user_payments ) :
 
 			foreach ( $user_payments as $post ) :
 				setup_postdata( $post );
+				$enable = true;
+				$description = get_field( 'description' );
+
+				/** if title is Net30, then enable is false */
+				if ( get_the_title() === 'Net 30' || get_the_title() === 'Net30' ) {
+					if ( $disable ) {
+						$enable = false;
+						$limit = $pending_payment->get_pending_limit( $user_id );
+						$currency = get_woocommerce_currency() === 'USD' ? 'USD $' : 'CAD $';
+						$description = "You've hit the {$currency}{$limit} credit limit; please use a credit card or settle outstanding balances.";
+					}
+					if ( $overdue_30days ) {
+						$enable = false;
+						$description = "Your account has 2 invoices overdue beyond the 30-day deadline. Please settle the outstanding balance to restore NET30 eligibility.";
+					}
+					if ( $has_overdue ) {
+						$enable = false;
+						$description = "Your account has 4 or more overdue invoices. Please clear outstanding balances to restore NET30 eligibility.";
+					}
+				}
+
 				$payments[] = array(
 					'title' => get_the_title(),
 					'id' => get_the_ID(),
-					'description' => get_field( 'description' ),
+					'description' => $description,
+					'enable' => $enable,
 				);
 			endforeach;
 			wp_reset_postdata();

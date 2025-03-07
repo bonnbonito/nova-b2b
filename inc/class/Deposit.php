@@ -1404,10 +1404,10 @@ class Deposit {
 
 	public function pending_page_after_content() {
 		?>
-<div class="wrap">
-  <div id="depositTable"></div>
-</div>
-<?php
+		<div class="wrap">
+			<div id="depositTable"></div>
+		</div>
+		<?php
 	}
 
 	public function output_deposit_selection() {
@@ -1421,7 +1421,6 @@ class Deposit {
 			return;
 		}
 
-		$disable = $pending_payment->disable_custom_payment_types( get_current_user_id() );
 
 		$payments_selection = $woo_instance->get_payment_selections();
 
@@ -1434,42 +1433,41 @@ class Deposit {
 		$chosen = empty( $chosen ) ? WC()->checkout->get_value( 'deposit_chosen' ) : $chosen;
 		$chosen = empty( $chosen ) ? '0' : $chosen;
 		?>
-<fieldset id="customPayment">
-  <legend class="px-4 uppercase"><span><?php esc_html_e( 'Payment Type', 'woocommerce' ); ?></span></legend>
-  <div class="grid md:grid-cols-3 gap-4 update_totals_on_change">
-    <div class="cursor-pointer h-full">
-      <label for="payment_0"
-        class="block h-full justify-end p-3 border rounded-md w-full max-w-sm cursor-pointer hover:border-slate-500 hover:bg-slate-200 hover:shadow-lg">
-        <input class="bg-none" id="payment_0" type="radio" name="deposit_chosen" value="0"
-          <?php echo ( '0' == $chosen ? 'checked' : '' ); ?>>
-        <span>Full</span>
+		<fieldset id="customPayment">
+			<legend class="px-4 uppercase"><span><?php esc_html_e( 'Payment Type', 'woocommerce' ); ?></span></legend>
+			<div class="grid md:grid-cols-3 gap-4 update_totals_on_change">
+				<div class="cursor-pointer h-full">
+					<label for="payment_0"
+						class="block h-full justify-end p-3 border rounded-md w-full max-w-sm cursor-pointer hover:border-slate-500 hover:bg-slate-200 hover:shadow-lg">
+						<input class="bg-none" id="payment_0" type="radio" name="deposit_chosen" value="0" <?php echo ( '0' == $chosen ? 'checked' : '' ); ?>>
+						<span>Full</span>
 
-      </label>
-    </div>
-    <?php
+					</label>
+				</div>
+				<?php
 				foreach ( $payments_selection as $key => $selection ) {
+					$enable = $selection['enable'];
 					?>
-    <div class="h-full <?php echo $disable ? 'opacity-50' : 'cursor-pointer'; ?>">
-      <label for="payment_<?php echo $selection['id']; ?>"
-        class="block h-full justify-end p-3 border rounded-md w-full max-w-sm hover:border-slate-500 hover:bg-slate-200 hover:shadow-lg <?php echo $disable ? 'cursor-not-allowed' : 'cursor-pointer'; ?>">
-        <?php if ( ! $disable ) { ?>
-        <input class="bg-none" id="payment_<?php echo $selection['id']; ?>" type="radio" name="deposit_chosen"
-          value="<?php echo $selection['id']; ?>" id="payment_<?php echo $selection['id']; ?>"
-          <?php echo ( $selection['id'] == $chosen ? 'checked' : '' ); ?>>
-        <span><?php echo $selection['title']; ?></span>
-        <span class="text-sm font-body block mt-2"><?php echo $selection['description']; ?></span>
-        <?php } else { ?>
-        <span><?php echo $selection['title']; ?></span>
-        <span class="text-sm font-body block mt-2 normal-case">
-          You've hit the CAD 11,000 (USD 8,150) credit limit; please use a credit card or settle outstanding balances.
-        </span>
-        <?php } ?>
-      </label>
-    </div>
-    <?php } ?>
-  </div>
-</fieldset>
+					<div class="h-full <?php echo ! $enable ? 'opacity-50' : 'cursor-pointer'; ?>">
+						<label for="payment_<?php echo $selection['id']; ?>"
+							class="block h-full justify-end p-3 border rounded-md w-full max-w-sm hover:border-slate-500 hover:bg-slate-200 hover:shadow-lg <?php echo ! $enable ? 'cursor-not-allowed' : 'cursor-pointer'; ?>">
+							<?php if ( $enable ) { ?>
+								<input class="bg-none" id="payment_<?php echo $selection['id']; ?>" type="radio" name="deposit_chosen"
+									value="<?php echo $selection['id']; ?>" id="payment_<?php echo $selection['id']; ?>" <?php echo ( $selection['id'] == $chosen ? 'checked' : '' ); ?>>
+								<span><?php echo $selection['title']; ?></span>
+								<span class="text-sm font-body block mt-2"><?php echo $selection['description']; ?></span>
+							<?php } else { ?>
+								<span><?php echo $selection['title']; ?></span>
+								<span class="text-sm font-body block mt-2 normal-case">
+									<?php echo $selection['description']; ?>
+								</span>
+							<?php } ?>
+						</label>
+					</div>
+				<?php } ?>
+			</div>
+		</fieldset>
 
-<?php
+		<?php
 	}
 }
