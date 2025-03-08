@@ -80,6 +80,14 @@ class Deposit {
 		add_filter( 'woocommerce_email_subject_customer_on_hold_order', array( $this, 'change_combined_oh_hold_email_subject' ), 99, 2 );
 		add_filter( 'woocommerce_email_heading_customer_on_hold_order', array( $this, 'change_combined_oh_hold_email_heading' ), 99, 2 );
 		add_filter( 'kadence_woomail_order_body_text', array( $this, 'change_combined_order_email_content' ), 50, 5 );
+		add_filter( 'gettext', array( $this, 'change_fee_to_credit_text' ), 10, 3 );
+	}
+
+	public function change_fee_to_credit_text( $translated, $text, $domain ) {
+		if ( $domain === 'woocommerce' && $text === 'Add fee' ) {
+			return 'Add fee or credit';
+		}
+		return $translated;
 	}
 
 	public function change_combined_oh_hold_email_subject( $subject, $order ) {
@@ -795,12 +803,22 @@ class Deposit {
 
 		$order = wc_get_order( $order_id );
 
+		$total_fees = $order->get_total_fees();
+
 		$deposit_title = $order->get_meta( '_deposit_chosen_title' );
 		if ( $deposit_title ) {
 			echo '<tr>';
 			echo '<td class="label">Payment Type:</td>';
 			echo '<td width="1%"></td>';
 			echo '<td class="amount">' . $deposit_title . '</td>';
+			echo '</tr>';
+		}
+
+		if ( $total_fees ) {
+			echo '<tr>';
+			echo '<td class="label">Fees:</td>';
+			echo '<td width="1%"></td>';
+			echo '<td class="amount">' . wc_price( $total_fees, array( 'currency' => $order->get_currency() ) ) . '</td>';
 			echo '</tr>';
 		}
 	}
@@ -1262,26 +1280,50 @@ class Deposit {
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'order_payments';
 
+
 		$payments = $wpdb->get_results(
 			$wpdb->prepare( "SELECT amount FROM $table_name WHERE order_id = %d", $order->get_id() )
 		);
 
 		if ( $payments ) {
-			$total = $order->get_total();
+			$total = 0;
+
+			foreach ( $order->get_items() as $item ) {
+				$total += $item->get_total();
+			}
+
+			// Get fees total
+			$fees_total = $order->get_total_fees();
+
+			$shipping = $order->get_shipping_total();
+
+			$taxes = $order->get_taxes();
+			foreach ( $taxes as $tax_item ) {
+				$rate_percent = $tax_item->get_rate_percent() / 100;
+				$total_tax = ( $total + $shipping + $fees_total ) * $rate_percent;
+				$tax_item->set_tax_total( $total_tax );
+			}
+
+			$order->set_discount_tax( $total_tax );
+			$order->set_cart_tax( $total_tax );
+
+
+			/** save __override_tax */
+			$order->update_meta_data( '_override_tax', $total_tax );
+
+
 			$paid = 0.00;
 
 			foreach ( $payments as $payment ) {
 				$paid += $payment->amount;
 			}
 
-			// Get fees total
-			$fees_total = 0;
-			foreach ( $order->get_fees() as $fee ) {
-				$fees_total += $fee->get_total();
-			}
+
+
+
 
 			// Calculate new total including fees
-			$new_total = $total - $paid + $fees_total;
+			$new_total = $total + $shipping + $total_tax + $fees_total - $paid;
 
 			$order->set_total( $new_total );
 			$order->save();
@@ -1377,6 +1419,14 @@ class Deposit {
 		if ( $deposit_title ) {
 			$deposit_amount = get_post_meta( $order->get_id(), '_deposit_amount', true );
 			$new_rows = array();
+
+			$fees_total = 0;
+
+			foreach ( $order->get_fees() as $fee ) {
+				$fees_total += $fee->get_total();
+			}
+
+
 
 			foreach ( $total_rows as $key => $total ) {
 				// Insert the deposit details before the order total

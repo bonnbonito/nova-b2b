@@ -360,7 +360,6 @@ class Woocommerce {
 
 	public function order_get_tax_totals( $tax_totals, $order ) {
 
-		// $_order_tax = $order->get_meta( '_order_tax' );
 
 		foreach ( $tax_totals as $key => $tax_total ) {
 
@@ -369,7 +368,6 @@ class Woocommerce {
 			$tax_totals[ $key ]->amount = $this->calculate_correct_tax( $order, $tax_rate );
 			$tax_totals[ $key ]->formatted_amount = wc_price( $tax_totals[ $key ]->amount, array( 'currency' => $order->get_currency() ) );
 		}
-		// print_r( $tax_totals );
 		return $tax_totals;
 	}
 
@@ -387,11 +385,19 @@ class Woocommerce {
 
 	public function calculate_correct_tax( $order, $tax_rate ) {
 
+		$override_tax = $order->get_meta( '_override_tax' );
+
+		if ( $override_tax ) {
+			return $override_tax;
+		}
+
 		$order_subtotal = $order->get_subtotal();
 		$shipping_total = $order->get_shipping_total();
 
 		// Calculate the subtotal including shipping
 		$subtotal = $order_subtotal + $shipping_total;
+
+
 
 		return floatval( $subtotal * ( $tax_rate / 100 ) );
 	}
@@ -1163,8 +1169,8 @@ class Woocommerce {
 			$tax_rate = $this->get_rate_percent_value_from_order( $from_order_object );
 			$tax_total = $this->calculate_correct_tax( $from_order_object, $tax_rate );
 			/*
-																																																																																																																																														 <<<<<<< HEAD
-																																																																																																																																																				 ?>
+																																																																																																																																																<<<<<<< HEAD
+																																																																																																																																																						?>
 	 =======
 	 ?>
 	 >>>>>>> new-b2b
@@ -1173,14 +1179,14 @@ class Woocommerce {
 		 <td width="1%"></td>
 		 <td class="total">
 			 <?php
-																																																																																																																																																				 if ( $tax_total ) {
-																																																																																																																																																					 echo wc_price( $tax_total, array( 'currency' => $order->get_currency() ) );
-																																																																																																																																																				 }
-																																																																																																																																																				 ?>
+																																																																																																																																																						if ( $tax_total ) {
+																																																																																																																																																							echo wc_price( $tax_total, array( 'currency' => $order->get_currency() ) );
+																																																																																																																																																						}
+																																																																																																																																																						?>
 		 </td>
 	 </tr>
 	 <?php
-																																																																																																																																																				 */
+																																																																																																																																																						*/
 		}
 
 		if ( $original_total && $from_order && $from_order ) :
@@ -1789,19 +1795,19 @@ class Woocommerce {
 
 		// Check if the address is Vancouver and modify Expedite
 		/*
-																																																																																																					if ( isset( $package['destination']['city'] ) && strtolower( $package['destination']['city'] ) === 'vancouver' ) {
-																																																																																																						if ( $expedite ) {
-																																																																																																							$rates['flat_rate:3']->cost = min( $expedite_cost, $standard_cost, ( isset( $flat_rate->cost ) ? $flat_rate->cost : PHP_INT_MAX ) );
-																																																																																																							// Unset other rates to show only Expedite
-																																																																																																							unset( $rates['flat_rate:2'], $rates['flat_rate:4'] );
+																																																																																																						if ( isset( $package['destination']['city'] ) && strtolower( $package['destination']['city'] ) === 'vancouver' ) {
+																																																																																																							if ( $expedite ) {
+																																																																																																								$rates['flat_rate:3']->cost = min( $expedite_cost, $standard_cost, ( isset( $flat_rate->cost ) ? $flat_rate->cost : PHP_INT_MAX ) );
+																																																																																																								// Unset other rates to show only Expedite
+																																																																																																								unset( $rates['flat_rate:2'], $rates['flat_rate:4'] );
+																																																																																																							}
 																																																																																																						}
-																																																																																																					}
 
 
-																																																																																																					if ( is_cart() ) {
-																																																																																																						unset( $rates['flat_rate:3'] );
-																																																																																																					}
-																																																																																																					*/
+																																																																																																						if ( is_cart() ) {
+																																																																																																							unset( $rates['flat_rate:3'] );
+																																																																																																						}
+																																																																																																						*/
 
 		return $rates;
 	}
