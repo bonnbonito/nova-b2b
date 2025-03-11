@@ -138,15 +138,51 @@ class Woocommerce {
 		add_filter( 'woocommerce_get_stock_html', array( $this, 'clearance_minimum_notice' ), 20, 2 );
 		add_filter( 'woocommerce_get_price_html', array( $this, 'modify_price_html' ), 10, 2 );
 		add_filter( 'woocommerce_available_variation', array( $this, 'modify_variation_price_html' ), 10, 3 );
-		add_filter( 'woocommerce_before_calculate_totals', array( $this, 'apply_multiple_items_price' ), 10, 1 );
+
 
 		add_action( 'woocommerce_variation_options_pricing', array( $this, 'multiple_items_field' ), 10, 3 );
-		add_action( 'woocommerce_product_options_pricing', array( $this, 'multiple_items_field_simple' ) );
 		add_action( 'woocommerce_save_product_variation', array( $this, 'save_multiple_items_field' ), 10, 2 );
 		add_action( 'woocommerce_process_product_meta', array( $this, 'save_multiple_items_field_simple' ) );
 
 		add_filter( 'woocommerce_sale_flash', array( $this, 'clearance_sale_flash' ), 10, 3 );
 
+		// Add hooks for multiple items pricing
+		add_action( 'woocommerce_product_options_pricing', [ $this, 'multiple_items_field_simple' ] );
+		add_action( 'woocommerce_process_product_meta', [ $this, 'save_multiple_items_field_simple' ] );
+		add_action( 'woocommerce_variation_options_pricing', [ $this, 'multiple_items_field' ], 10, 3 );
+		add_action( 'woocommerce_save_product_variation', [ $this, 'save_multiple_items_field' ], 10, 2 );
+
+		add_filter( 'woocommerce_product_get_price', array( $this, 'apply_multiple_items_price_filter' ), 999999, 2 );
+		add_filter( 'woocommerce_product_variation_get_price', array( $this, 'apply_multiple_items_price_filter' ), 999999, 2 );
+	}
+
+	public function apply_multiple_items_price_filter( $price, $product ) {
+		// Get cart item quantity if product is in cart
+		$quantity = 0;
+		if ( WC()->cart ) {
+			foreach ( WC()->cart->get_cart() as $cart_item ) {
+				$cart_product_id = $cart_item['variation_id'] ? $cart_item['variation_id'] : $cart_item['product_id'];
+				if ( $cart_product_id === $product->get_id() ) {
+					$quantity = $cart_item['quantity'];
+					break;
+				}
+			}
+		}
+
+		// Get threshold and special price from product meta
+		$threshold = get_post_meta( $product->get_id(), 'multiple_items_threshold', true );
+		$special_price = get_post_meta( $product->get_id(), 'multiple_items_price', true );
+
+		// Apply special price if conditions are met
+		if ( $threshold && $special_price && $quantity >= intval( $threshold ) ) {
+			$currency = get_woocommerce_currency();
+			$special_price = $currency === 'CAD' ?
+				floatval( $special_price ) * NOVA_EXCHANGE_RATE :
+				floatval( $special_price );
+			return $special_price;
+		}
+
+		return $price;
 	}
 
 	public function clearance_sale_flash( $flash, $post, $product ) {
@@ -163,24 +199,26 @@ class Woocommerce {
 	}
 
 	public function apply_multiple_items_price( $cart ) {
-		if ( is_admin() && ! defined( 'DOING_AJAX' ) ) {
-			return;
-		}
-
-		if ( did_action( 'woocommerce_before_calculate_totals' ) >= 2 ) {
+		// Early exit conditions
+		if ( ( is_admin() && ! defined( 'DOING_AJAX' ) ) || did_action( 'woocommerce_before_calculate_totals' ) >= 2 ) {
 			return;
 		}
 
 		foreach ( $cart->get_cart() as $cart_item ) {
+			// Get product ID (works for both simple and variable products)
 			$product_id = $cart_item['variation_id'] ? $cart_item['variation_id'] : $cart_item['product_id'];
 			$quantity = $cart_item['quantity'];
 
+			// Get threshold and special price from product meta
 			$threshold = get_post_meta( $product_id, 'multiple_items_threshold', true );
 			$special_price = get_post_meta( $product_id, 'multiple_items_price', true );
 
+			// Apply special price if conditions are met
 			if ( $threshold && $special_price && $quantity >= intval( $threshold ) ) {
 				$currency = get_woocommerce_currency();
-				$special_price = $currency === 'CAD' ? floatval( $special_price ) * NOVA_EXCHANGE_RATE : floatval( $special_price );
+				$special_price = $currency == 'CAD' ?
+					floatval( $special_price ) * NOVA_EXCHANGE_RATE :
+					floatval( $special_price );
 				$cart_item['data']->set_price( $special_price );
 			}
 		}
@@ -305,7 +343,7 @@ class Woocommerce {
 			$multiple_items_price = $currency === 'CAD' ? floatval( $multiple_items_price ) * NOVA_EXCHANGE_RATE : floatval( $multiple_items_price );
 
 			if ( $multiple_items_threshold && $multiple_items_price ) {
-				$variation_data['availability_html'] = '<p class="clearance-notice stock">' . $multiple_items_threshold . ' for ' . wc_price( $multiple_items_price, array( 'currency' => $currency ) ) . '</p>' . $availability_html;
+				$variation_data['availability_html'] = '<p class="clearance-notice stock">Orders of ' . $multiple_items_threshold . ' or more pieces starts at ' . wc_price( $multiple_items_price, array( 'currency' => $currency ) ) . '</p>' . $availability_html;
 
 				/** check if the $variation->get_id is on cart and quantity is greater than the threshold */
 				foreach ( WC()->cart->get_cart() as $cart_item ) {
@@ -346,7 +384,7 @@ class Woocommerce {
 				}
 
 				// Show regular price with threshold notice
-				return $price . '<p class="clearance-notice stock">' . $threshold . ' for ' .
+				return $price . '<p class="clearance-notice stock">Orders of ' . $threshold . ' or more pieces starts at ' .
 					wc_price( $special_price, array( 'currency' => $currency ) ) . '</p>';
 			}
 		}
@@ -1323,18 +1361,18 @@ class Woocommerce {
 
 		if ( $original_tax_names && $original_tax && $from_order ) {
 			?>
-<tr>
-  <td class="label"><?php echo 'Shipping (' . $original_shipping_method . ')'; ?>:</td>
-  <td width="1%"></td>
-  <td class="total">
-    <?php
+			<tr>
+				<td class="label"><?php echo 'Shipping (' . $original_shipping_method . ')'; ?>:</td>
+				<td width="1%"></td>
+				<td class="total">
+					<?php
 					if ( ! empty( $original_shipping ) ) {
 						echo wc_price( $original_shipping, array( 'currency' => $order->get_currency() ) );
 					}
 					?>
-  </td>
-</tr>
-<?php
+				</td>
+			</tr>
+			<?php
 		}
 
 		if ( $original_tax_names && $original_tax && $from_order ) {
@@ -1342,101 +1380,82 @@ class Woocommerce {
 			$from_order_object = wc_get_order( $from_order );
 			$tax_rate = $this->get_rate_percent_value_from_order( $from_order_object );
 			$tax_total = $this->calculate_correct_tax( $from_order_object, $tax_rate );
-			/*
-																																																																																																																																																																																																			<<<<<<< HEAD
-																																																																																																																																																																																																									?>
-=======
-?>
->>>>>>> new-b2b
-<tr>
-  <td class="label"><?php echo $original_tax_names; ?>:</td>
-  <td width="1%"></td>
-  <td class="total">
-    <?php
-																																																																																																																																																																																																									if ( $tax_total ) {
-																																																																																																																																																																																																										echo wc_price( $tax_total, array( 'currency' => $order->get_currency() ) );
-																																																																																																																																																																																																									}
-																																																																																																																																																																																																									?>
-  </td>
-</tr>
-<?php
-																																																																																																																																																																																																									*/
 		}
 
 		if ( $original_total && $from_order && $from_order ) :
 
 			?>
-<tr>
-  <?php if ( $original_tax_names ) : ?>
-  <td class="label"><?php esc_html_e( 'Overall Total (+shipping & tax)', 'woocommerce' ); ?>:</td>
-  <?php else : ?>
-  <td class="label"><?php esc_html_e( 'Overall Total (+shipping)', 'woocommerce' ); ?>:</td>
-  <?php endif; ?>
-  <td width="1%"></td>
-  <td class="total">
-    <?php
+			<tr>
+				<?php if ( $original_tax_names ) : ?>
+					<td class="label"><?php esc_html_e( 'Overall Total (+shipping & tax)', 'woocommerce' ); ?>:</td>
+				<?php else : ?>
+					<td class="label"><?php esc_html_e( 'Overall Total (+shipping)', 'woocommerce' ); ?>:</td>
+				<?php endif; ?>
+				<td width="1%"></td>
+				<td class="total">
+					<?php
 					if ( ! empty( $original_total ) ) {
 						echo wc_price( $original_total, array( 'currency' => $order->get_currency() ) );
 					}
 					?>
-  </td>
-</tr>
+				</td>
+			</tr>
 
-<?php
+			<?php
 		endif;
 
 		if ( $payment_select ) {
 			?>
-<tr>
-  <td class="label"><?php echo 'Payment Type'; ?>:</td>
-  <td width="1%"></td>
-  <td class="total">
-    <strong><?php echo get_the_title( $payment_select ); ?></strong>
-  </td>
-</tr>
-<?php
+			<tr>
+				<td class="label"><?php echo 'Payment Type'; ?>:</td>
+				<td width="1%"></td>
+				<td class="total">
+					<strong><?php echo get_the_title( $payment_select ); ?></strong>
+				</td>
+			</tr>
+			<?php
 		}
 
 		if ( $deposit_total ) :
 
 			if ( empty( $has_adjusted_duplicate_order_id ) ) :
 				?>
-<tr>
-  <td class="label"><?php esc_html_e( 'Deposit', 'woocommerce' ); ?>:</td>
-  <td width="1%"></td>
-  <td class="total">
-    <?php
+				<tr>
+					<td class="label"><?php esc_html_e( 'Deposit', 'woocommerce' ); ?>:</td>
+					<td width="1%"></td>
+					<td class="total">
+						<?php
 						if ( ! empty( $deposit_total ) ) {
 							echo '-' . wc_price( $deposit_total, array( 'currency' => $order->get_currency() ) );
 						} else {
 							echo wc_price( 0, array( 'currency' => $order->get_currency() ) );
 						}
 						?>
-  </td>
-</tr>
+					</td>
+				</tr>
 
-<?php
+				<?php
 			endif;
 
 		endif;
 
 		if ( $pending_payment && $has_adjusted_duplicate_order_id ) {
 			?>
-<tr>
-  <td class="label"><?php esc_html_e( 'Pending Payment', 'woocommerce' ); ?>:</td>
-  <td width="1%"></td>
-  <td class="total">
-    <?php
+			<tr>
+				<td class="label"><?php esc_html_e( 'Pending Payment', 'woocommerce' ); ?>:</td>
+				<td width="1%"></td>
+				<td class="total">
+					<?php
 					if ( ! empty( $pending_payment ) ) {
 						echo wc_price( $pending_payment, array( 'currency' => $order->get_currency() ) );
 					} else {
 						echo wc_price( 0, array( 'currency' => $order->get_currency() ) );
 					}
 					?>
-  </td>
-</tr>
+				</td>
+			</tr>
 
-<?php
+			<?php
 		}
 	}
 
@@ -1504,22 +1523,22 @@ class Woocommerce {
 
 		// Display the form fields
 		?>
-<p>
-  <label for="shipping_carrier"><?php esc_html_e( 'Shipping Carrier', 'nova-b2b' ); ?></label>
-  <input type="text" name="shipping_carrier" id="shipping_carrier" value="<?php echo esc_attr( $shipping_carrier ); ?>"
-    style="width:100%;" />
-</p>
-<p>
-  <label for="tracking_number"><?php esc_html_e( 'Tracking Number', 'nova-b2b' ); ?></label>
-  <input type="text" name="tracking_number" id="tracking_number" value="<?php echo esc_attr( $tracking_number ); ?>"
-    style="width:100%;" />
-</p>
-<?php if ( 'UPS' === $shipping_carrier && $tracking_number ) : ?>
-<p>
-  <a href="https://www.ups.com/track?track=yes&trackNums=<?php echo esc_attr( $tracking_number ); ?>"
-    target="_blank">UPS Tracking link</a>
-</p>
-<?php
+		<p>
+			<label for="shipping_carrier"><?php esc_html_e( 'Shipping Carrier', 'nova-b2b' ); ?></label>
+			<input type="text" name="shipping_carrier" id="shipping_carrier" value="<?php echo esc_attr( $shipping_carrier ); ?>"
+				style="width:100%;" />
+		</p>
+		<p>
+			<label for="tracking_number"><?php esc_html_e( 'Tracking Number', 'nova-b2b' ); ?></label>
+			<input type="text" name="tracking_number" id="tracking_number" value="<?php echo esc_attr( $tracking_number ); ?>"
+				style="width:100%;" />
+		</p>
+		<?php if ( 'UPS' === $shipping_carrier && $tracking_number ) : ?>
+			<p>
+				<a href="https://www.ups.com/track?track=yes&trackNums=<?php echo esc_attr( $tracking_number ); ?>"
+					target="_blank">UPS Tracking link</a>
+			</p>
+			<?php
 		endif;
 	}
 
@@ -1611,11 +1630,11 @@ class Woocommerce {
 		// print_r( get_post_meta( $post->ID ) );
 
 		?>
-<a href="<?php echo esc_url( $order_edit_url ); ?>" class="button button-primary">View Order</a>
+		<a href="<?php echo esc_url( $order_edit_url ); ?>" class="button button-primary">View Order</a>
 
-<p>Original Total: <?php echo $original_total; ?></p>
+		<p>Original Total: <?php echo $original_total; ?></p>
 
-<?php
+		<?php
 	}
 
 	public function deposit_insert_order_total_row( $total_rows, $order ) {
@@ -1969,19 +1988,19 @@ class Woocommerce {
 
 		// Check if the address is Vancouver and modify Expedite
 		/*
-																																																																																																																																								if ( isset( $package['destination']['city'] ) && strtolower( $package['destination']['city'] ) === 'vancouver' ) {
-																																																																																																																																									if ( $expedite ) {
-																																																																																																																																										$rates['flat_rate:3']->cost = min( $expedite_cost, $standard_cost, ( isset( $flat_rate->cost ) ? $flat_rate->cost : PHP_INT_MAX ) );
-																																																																																																																																										// Unset other rates to show only Expedite
-																																																																																																																																										unset( $rates['flat_rate:2'], $rates['flat_rate:4'] );
-																																																																																																																																									}
-																																																																																																																																								}
+																																																																																																																																																							if ( isset( $package['destination']['city'] ) && strtolower( $package['destination']['city'] ) === 'vancouver' ) {
+																																																																																																																																																								if ( $expedite ) {
+																																																																																																																																																									$rates['flat_rate:3']->cost = min( $expedite_cost, $standard_cost, ( isset( $flat_rate->cost ) ? $flat_rate->cost : PHP_INT_MAX ) );
+																																																																																																																																																									// Unset other rates to show only Expedite
+																																																																																																																																																									unset( $rates['flat_rate:2'], $rates['flat_rate:4'] );
+																																																																																																																																																								}
+																																																																																																																																																							}
 
 
-																																																																																																																																								if ( is_cart() ) {
-																																																																																																																																									unset( $rates['flat_rate:3'] );
-																																																																																																																																								}
-																																																																																																																																								*/
+																																																																																																																																																							if ( is_cart() ) {
+																																																																																																																																																								unset( $rates['flat_rate:3'] );
+																																																																																																																																																							}
+																																																																																																																																																							*/
 
 		return $rates;
 	}
@@ -2081,36 +2100,36 @@ class Woocommerce {
 
 		$signage_query = new WP_Query( $product_cat_list );
 		?>
-<div class="md:flex md:gap-10 p-dropdown-wrap mb-24 mt-10 relative">
-  <div class="p-dropdown cursor-pointer mb-4 md:mb-0">
-    <div id="productCat" class="p-dropdown-current overflow-hidden grow">
-      <div class="p-drowpdown-wrap grow h-[55px] p-[10px] dropdown-trigger" data-open="productCat-list">
-        <div id="productCatCurrent" class="flex grow gap-2 items-center">
-          <div class="selectedWrap flex items-center gap-3">
-            <?php if ( $this->get_parent_ID() ) : ?>
-            <?php $this->output_current_signage( $this->get_parent_ID() ); ?>
-            <?php else : ?>
-            <div class="text-[#D2D2D2]">SELECT OPTION</div>
-            <?php endif; ?>
-          </div>
-          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="8" viewBox="0 0 15 8" fill="none" class="ml-auto">
-            <path d="M13.3516 2L7.8861 6.54054L2.00021 2" stroke="black" stroke-width="2" stroke-linecap="square"
-              stroke-linejoin="round" />
-          </svg>
-        </div>
-      </div>
-    </div>
-    <?php if ( $signage_query->have_posts() ) { ?>
-    <div id="productCat-list" class="hidden shadow-lg">
-      <?php if ( $custom ) : ?>
-      <a class="product-cat-item text-black no-underline" data-signage="<?php echo $custom->ID; ?>"
-        href="<?php echo esc_url( get_the_permalink( $custom->ID ) ); ?>">
-        <?php echo get_the_post_thumbnail( $custom->ID, array( 35, 35 ) ); ?>
-        <?php echo get_the_title( $custom->ID ); ?>
-      </a>
-      <?php endif; ?>
+		<div class="md:flex md:gap-10 p-dropdown-wrap mb-24 mt-10 relative">
+			<div class="p-dropdown cursor-pointer mb-4 md:mb-0">
+				<div id="productCat" class="p-dropdown-current overflow-hidden grow">
+					<div class="p-drowpdown-wrap grow h-[55px] p-[10px] dropdown-trigger" data-open="productCat-list">
+						<div id="productCatCurrent" class="flex grow gap-2 items-center">
+							<div class="selectedWrap flex items-center gap-3">
+								<?php if ( $this->get_parent_ID() ) : ?>
+									<?php $this->output_current_signage( $this->get_parent_ID() ); ?>
+								<?php else : ?>
+									<div class="text-[#D2D2D2]">SELECT OPTION</div>
+								<?php endif; ?>
+							</div>
+							<svg xmlns="http://www.w3.org/2000/svg" width="15" height="8" viewBox="0 0 15 8" fill="none" class="ml-auto">
+								<path d="M13.3516 2L7.8861 6.54054L2.00021 2" stroke="black" stroke-width="2" stroke-linecap="square"
+									stroke-linejoin="round" />
+							</svg>
+						</div>
+					</div>
+				</div>
+				<?php if ( $signage_query->have_posts() ) { ?>
+					<div id="productCat-list" class="hidden shadow-lg">
+						<?php if ( $custom ) : ?>
+							<a class="product-cat-item text-black no-underline" data-signage="<?php echo $custom->ID; ?>"
+								href="<?php echo esc_url( get_the_permalink( $custom->ID ) ); ?>">
+								<?php echo get_the_post_thumbnail( $custom->ID, array( 35, 35 ) ); ?>
+								<?php echo get_the_title( $custom->ID ); ?>
+							</a>
+						<?php endif; ?>
 
-      <?php
+						<?php
 						while ( $signage_query->have_posts() ) {
 							$signage_query->the_post();
 							$link = get_permalink();
@@ -2120,39 +2139,39 @@ class Woocommerce {
 							}
 
 							?>
-      <a class="product-cat-item text-black no-underline" data-signage="<?php echo get_the_ID(); ?>"
-        href="<?php echo esc_url( $link ); ?>">
-        <?php the_post_thumbnail( array( 35, 35 ) ); ?>
-        <?php the_title(); ?>
-      </a>
+							<a class="product-cat-item text-black no-underline" data-signage="<?php echo get_the_ID(); ?>"
+								href="<?php echo esc_url( $link ); ?>">
+								<?php the_post_thumbnail( array( 35, 35 ) ); ?>
+								<?php the_title(); ?>
+							</a>
 
-      <?php
+							<?php
 						}
 						wp_reset_postdata();
 						?>
-    </div>
-    <?php } ?>
-  </div>
+					</div>
+				<?php } ?>
+			</div>
 
-  <div class="p-dropdown cursor-pointer">
-    <div id="novaProduct" class="p-dropdown-current overflow-hidden grow">
-      <div class="p-drowpdown-wrap grow h-[55px] p-[10px] dropdown-trigger" data-open="novaProduct-list">
-        <div id="novaProductCurrent" class="flex grow gap-2 items-center">
-          <div class="selectedWrap flex items-center gap-3">
-            <?php if ( $this->get_signage_ID() ) : ?>
-            <?php $this->output_current_signage( $this->get_signage_ID() ); ?>
-            <?php else : ?>
-            <span class="text-[#D2D2D2]">SELECT OPTION</span>
-            <?php endif; ?>
-          </div>
-          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="8" viewBox="0 0 15 8" fill="none" class="ml-auto">
-            <path d="M13.3516 2L7.8861 6.54054L2.00021 2" stroke="black" stroke-width="2" stroke-linecap="square"
-              stroke-linejoin="round" />
-          </svg>
-        </div>
-      </div>
-    </div>
-    <?php
+			<div class="p-dropdown cursor-pointer">
+				<div id="novaProduct" class="p-dropdown-current overflow-hidden grow">
+					<div class="p-drowpdown-wrap grow h-[55px] p-[10px] dropdown-trigger" data-open="novaProduct-list">
+						<div id="novaProductCurrent" class="flex grow gap-2 items-center">
+							<div class="selectedWrap flex items-center gap-3">
+								<?php if ( $this->get_signage_ID() ) : ?>
+									<?php $this->output_current_signage( $this->get_signage_ID() ); ?>
+								<?php else : ?>
+									<span class="text-[#D2D2D2]">SELECT OPTION</span>
+								<?php endif; ?>
+							</div>
+							<svg xmlns="http://www.w3.org/2000/svg" width="15" height="8" viewBox="0 0 15 8" fill="none" class="ml-auto">
+								<path d="M13.3516 2L7.8861 6.54054L2.00021 2" stroke="black" stroke-width="2" stroke-linecap="square"
+									stroke-linejoin="round" />
+							</svg>
+						</div>
+					</div>
+				</div>
+				<?php
 				$nova_query = new WP_Query(
 					array(
 						'post_type' => 'signage',
@@ -2164,101 +2183,109 @@ class Woocommerce {
 					)
 				);
 				?>
-    <?php if ( $nova_query->have_posts() ) { ?>
-    <div id="novaProduct-list" class="hidden shadow-lg">
+				<?php if ( $nova_query->have_posts() ) { ?>
+					<div id="novaProduct-list" class="hidden shadow-lg">
 
-      <?php
+						<?php
 						while ( $nova_query->have_posts() ) {
 							$nova_query->the_post();
 							?>
-      <a class="product-cat-item text-black no-underline" href="<?php echo esc_url( get_permalink() ); ?>overview">
-        <?php the_post_thumbnail( array( 35, 35 ) ); ?>
-        <?php the_title(); ?>
-      </a>
+							<a class="product-cat-item text-black no-underline" href="<?php echo esc_url( get_permalink() ); ?>overview">
+								<?php the_post_thumbnail( array( 35, 35 ) ); ?>
+								<?php the_title(); ?>
+							</a>
 
-      <?php
+							<?php
 						}
 						wp_reset_postdata();
 						?>
-    </div>
-    <?php } ?>
-  </div>
+					</div>
+				<?php } ?>
+			</div>
 
-  <script>
-  document.addEventListener("DOMContentLoaded", (event) => {
-    const triggers = document.querySelectorAll('.dropdown-trigger');
-    const productCatList = document.getElementById('productCat-list');
-    const novaProductCurrent = document.getElementById('novaProductCurrent');
-    const novaProductList = document.getElementById('novaProduct-list');
-
-
-
-    productCatList.querySelectorAll('.product-cat-item').forEach(item => {
-      item.addEventListener("click", () => {
-        const parentId = item.dataset.signage;
-        const selectWrap = novaProductCurrent.querySelector('.selectedWrap');
-        const currentWrap = productCatCurrent.querySelector('.selectedWrap');
-        const content = item.innerHTML;
-        currentWrap.innerHTML = content;
-
-        selectWrap.innerHTML =
-          '<span class="text-[#D2D2D2]">LOADING...</span>';
-
-        novaProductList.innerHTML = '';
-
-        const data = new FormData();
-        data.append('action', 'populate_signage');
-        data.append('parent_id', parentId);
-        data.append('nonce', NovaMyAccount.nonce);
+			<script>
+				document.addEventListener("DOMContentLoaded", (event) =>
+				{
+					const triggers = document.querySelectorAll('.dropdown-trigger');
+					const productCatList = document.getElementById('productCat-list');
+					const novaProductCurrent = document.getElementById('novaProductCurrent');
+					const novaProductList = document.getElementById('novaProduct-list');
 
 
-        productCatList.classList.add('hidden');
-        novaProductList.classList.add('hidden');
 
-        fetch(NovaMyAccount.ajax_url, {
-            method: 'POST',
-            credentials: 'same-origin',
-            headers: {
-              'Cache-Control': 'no-cache',
-            },
-            body: data,
-          })
-          .then((response) => response.json())
-          .then((data) => {
-            selectWrap.innerHTML =
-              '<span class="text-[#D2D2D2]">SELECT OPTION</span>';
+					productCatList.querySelectorAll('.product-cat-item').forEach(item =>
+					{
+						item.addEventListener("click", () =>
+						{
+							const parentId = item.dataset.signage;
+							const selectWrap = novaProductCurrent.querySelector('.selectedWrap');
+							const currentWrap = productCatCurrent.querySelector('.selectedWrap');
+							const content = item.innerHTML;
+							currentWrap.innerHTML = content;
+
+							selectWrap.innerHTML =
+								'<span class="text-[#D2D2D2]">LOADING...</span>';
+
+							novaProductList.innerHTML = '';
+
+							const data = new FormData();
+							data.append('action', 'populate_signage');
+							data.append('parent_id', parentId);
+							data.append('nonce', NovaMyAccount.nonce);
 
 
-            novaProductList.innerHTML = data['html'];
-          })
-          .catch((error) => console.error('Error:', error))
+							productCatList.classList.add('hidden');
+							novaProductList.classList.add('hidden');
 
-      });
-    });
+							fetch(NovaMyAccount.ajax_url, {
+								method: 'POST',
+								credentials: 'same-origin',
+								headers: {
+									'Cache-Control': 'no-cache',
+								},
+								body: data,
+							})
+								.then((response) => response.json())
+								.then((data) =>
+								{
+									selectWrap.innerHTML =
+										'<span class="text-[#D2D2D2]">SELECT OPTION</span>';
 
-    triggers.forEach(trigger => {
-      trigger.addEventListener('click', e => {
-        e.preventDefault();
-        const open = trigger.dataset.open;
-        const dropdown = document.getElementById(open);
-        dropdown.classList.toggle('hidden');
 
-        document.addEventListener('click', function closeDropdown(event) {
-          const dropdownWrap = document.querySelector('.p-dropdown-wrap');
+									novaProductList.innerHTML = data['html'];
+								})
+								.catch((error) => console.error('Error:', error))
 
-          if ((!dropdown.contains(event.target) && !dropdownWrap.contains(
-              event.target)) && event.target !== trigger) {
-            dropdown.classList.add('hidden');
-            document.removeEventListener('click', closeDropdown);
-          }
-        });
-      });
-    });
-  });
-  </script>
+						});
+					});
 
-</div>
-<?php
+					triggers.forEach(trigger =>
+					{
+						trigger.addEventListener('click', e =>
+						{
+							e.preventDefault();
+							const open = trigger.dataset.open;
+							const dropdown = document.getElementById(open);
+							dropdown.classList.toggle('hidden');
+
+							document.addEventListener('click', function closeDropdown(event)
+							{
+								const dropdownWrap = document.querySelector('.p-dropdown-wrap');
+
+								if ((!dropdown.contains(event.target) && !dropdownWrap.contains(
+									event.target)) && event.target !== trigger)
+								{
+									dropdown.classList.add('hidden');
+									document.removeEventListener('click', closeDropdown);
+								}
+							});
+						});
+					});
+				});
+			</script>
+
+		</div>
+		<?php
 		return ob_get_clean();
 	}
 
@@ -2285,11 +2312,11 @@ class Woocommerce {
 		while ( $nova_query->have_posts() ) {
 			$nova_query->the_post();
 			?>
-<a class="product-cat-item text-black no-underline" href="<?php echo esc_url( get_permalink() ); ?>overview">
-  <?php the_post_thumbnail( array( 35, 35 ) ); ?>
-  <?php the_title(); ?>
-</a>
-<?php
+			<a class="product-cat-item text-black no-underline" href="<?php echo esc_url( get_permalink() ); ?>overview">
+				<?php the_post_thumbnail( array( 35, 35 ) ); ?>
+				<?php the_title(); ?>
+			</a>
+			<?php
 		}
 		wp_reset_postdata();
 
@@ -2314,25 +2341,25 @@ class Woocommerce {
 			while ( have_rows( 'product_guide' ) ) :
 				the_row();
 				?>
-<div class="md:flex gap-20 items-center mb-10 md:mb-20">
-  <?php
+				<div class="md:flex gap-20 items-center mb-10 md:mb-20">
+					<?php
 					$image = get_sub_field( 'image' );
 					?>
-  <div class="md:w-1/3 mb-5 md:mb-0">
-    <h3 class="uppercase"><?php echo get_sub_field( 'title' ); ?></h3>
-    <p class="text-[16px] mb-4"><?php echo get_sub_field( 'content' ); ?></p>
-    <?php if ( get_sub_field( 'link' ) ) : ?>
-    <a href="<?php echo esc_url( get_sub_field( 'link' )['url'] ); ?>"
-      class="text-nova-secondary lowercase underline text-[16px]"><?php echo get_sub_field( 'link' )['title']; ?></a>
-    <?php endif; ?>
-  </div>
-  <div class="md:w-2/3">
-    <a href="<?php echo esc_url( $image['url'] ); ?>"><img class="w-full h-full object-cover aspect-[4/3]"
-        src="<?php echo esc_url( $image['url'] ); ?>" alt="<?php echo esc_attr( $image['alt'] ); ?>" /></a>
-  </div>
-</div>
+					<div class="md:w-1/3 mb-5 md:mb-0">
+						<h3 class="uppercase"><?php echo get_sub_field( 'title' ); ?></h3>
+						<p class="text-[16px] mb-4"><?php echo get_sub_field( 'content' ); ?></p>
+						<?php if ( get_sub_field( 'link' ) ) : ?>
+							<a href="<?php echo esc_url( get_sub_field( 'link' )['url'] ); ?>"
+								class="text-nova-secondary lowercase underline text-[16px]"><?php echo get_sub_field( 'link' )['title']; ?></a>
+						<?php endif; ?>
+					</div>
+					<div class="md:w-2/3">
+						<a href="<?php echo esc_url( $image['url'] ); ?>"><img class="w-full h-full object-cover aspect-[4/3]"
+								src="<?php echo esc_url( $image['url'] ); ?>" alt="<?php echo esc_attr( $image['alt'] ); ?>" /></a>
+					</div>
+				</div>
 
-<?php
+				<?php
 			endwhile;
 		endif;
 		return ob_get_clean();
@@ -2342,23 +2369,23 @@ class Woocommerce {
 		ob_start();
 		if ( have_rows( 'features' ) ) :
 			?>
-<div class="md:flex justify-between product-features-icons gap-12">
-  <?php
+			<div class="md:flex justify-between product-features-icons gap-12">
+				<?php
 				while ( have_rows( 'features' ) ) :
 					the_row();
 					$image = get_sub_field( 'icon' );
 					?>
-  <div class="text-center md:mb-0 mb-[40px] flex-1">
-    <div class="img-wrap h-[55px]">
-      <img class="mx-auto" src="<?php echo esc_url( $image['url'] ); ?>"
-        alt="<?php echo esc_attr( $image['alt'] ); ?>" />
-    </div>
-    <h5 class="uppercase tracking-[1.8px] mt-9"><?php echo get_sub_field( 'name' ); ?></h5>
-  </div>
-  <?php endwhile; ?>
-</div>
+					<div class="text-center md:mb-0 mb-[40px] flex-1">
+						<div class="img-wrap h-[55px]">
+							<img class="mx-auto" src="<?php echo esc_url( $image['url'] ); ?>"
+								alt="<?php echo esc_attr( $image['alt'] ); ?>" />
+						</div>
+						<h5 class="uppercase tracking-[1.8px] mt-9"><?php echo get_sub_field( 'name' ); ?></h5>
+					</div>
+				<?php endwhile; ?>
+			</div>
 
-<?php
+			<?php
 		endif;
 		return ob_get_clean();
 	}
@@ -2399,131 +2426,146 @@ class Woocommerce {
 
 	public function update_quantity_script() {
 		?>
-<script>
-function initializeQuantityButtons() {
-  const cartForm = document.querySelector('form.woocommerce-cart-form');
-  const updateCartButton = document.querySelector('button[name="update_cart"]');
-  const quantityChanges = document.querySelectorAll('.quantity-change');
+		<script>
+			function initializeQuantityButtons()
+			{
+				const cartForm = document.querySelector('form.woocommerce-cart-form');
+				const updateCartButton = document.querySelector('button[name="update_cart"]');
+				const quantityChanges = document.querySelectorAll('.quantity-change');
 
-  quantityChanges.forEach(q => {
-    const decrease = q.querySelector('.decrease');
-    const increase = q.querySelector('.increase');
-    const input = q.querySelector('input.qty');
+				quantityChanges.forEach(q =>
+				{
+					const decrease = q.querySelector('.decrease');
+					const increase = q.querySelector('.increase');
+					const input = q.querySelector('input.qty');
 
-    // Remove existing event listeners
-    increase.removeEventListener('click', increaseClickListener);
-    decrease.removeEventListener('click', decreaseClickListener);
+					// Remove existing event listeners
+					increase.removeEventListener('click', increaseClickListener);
+					decrease.removeEventListener('click', decreaseClickListener);
 
-    // Add new event listeners
-    increase.addEventListener('click', increaseClickListener);
-    decrease.addEventListener('click', decreaseClickListener);
+					// Add new event listeners
+					increase.addEventListener('click', increaseClickListener);
+					decrease.addEventListener('click', decreaseClickListener);
 
-    function increaseClickListener(e) {
-      increaseHandler(e, input);
-    }
+					function increaseClickListener(e)
+					{
+						increaseHandler(e, input);
+					}
 
-    function decreaseClickListener(e) {
-      decreaseHandler(e, input);
-    }
-  });
+					function decreaseClickListener(e)
+					{
+						decreaseHandler(e, input);
+					}
+				});
 
-  function increaseHandler(e, input) {
-    e.preventDefault();
-    let currentValue = parseInt(input.value, 10);
-    input.value = currentValue + 1;
-    updateCartButton.disabled = false;
-  }
+				function increaseHandler(e, input)
+				{
+					e.preventDefault();
+					let currentValue = parseInt(input.value, 10);
+					input.value = currentValue + 1;
+					updateCartButton.disabled = false;
+				}
 
-  function decreaseHandler(e, input) {
-    e.preventDefault();
-    let currentValue = parseInt(input.value, 10);
-    if (currentValue > 1) {
-      input.value = currentValue - 1;
-      updateCartButton.disabled = false;
-    }
-  }
-}
+				function decreaseHandler(e, input)
+				{
+					e.preventDefault();
+					let currentValue = parseInt(input.value, 10);
+					if (currentValue > 1)
+					{
+						input.value = currentValue - 1;
+						updateCartButton.disabled = false;
+					}
+				}
+			}
 
 
-document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
-jQuery(document.body).on('updated_cart_totals', initializeQuantityButtons);
-</script>
-<?php
+			document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
+			jQuery(document.body).on('updated_cart_totals', initializeQuantityButtons);
+		</script>
+		<?php
 	}
 
 	public function update_single_quantity_script() {
 		global $product;
 		?>
-<script>
-function initializeQuantityButtons() {
-  const quantityChanges = document.querySelectorAll('.quantity-change');
-  const currentPrice = '<?php echo $product->get_price(); ?>';
-  const currencySymbol = '<?php echo get_woocommerce_currency_symbol(); ?>';
+		<script>
+			function initializeQuantityButtons()
+			{
+				const quantityChanges = document.querySelectorAll('.quantity-change');
+				const currentPrice = '<?php echo $product->get_price(); ?>';
+				const currencySymbol = '<?php echo get_woocommerce_currency_symbol(); ?>';
 
-  function computePrice(qty) {
+				function computePrice(qty)
+				{
 
-    let computeprice = qty * parseFloat(currentPrice);
-    console.log(computeprice);
-    computeprice = computeprice.toLocaleString('en-US', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    });
+					let computeprice = qty * parseFloat(currentPrice);
+					console.log(computeprice);
+					computeprice = computeprice.toLocaleString('en-US', {
+						minimumFractionDigits: 2,
+						maximumFractionDigits: 2
+					});
 
-    document.getElementById("watchPrice").innerHTML = currencySymbol + computeprice;
+					document.getElementById("watchPrice").innerHTML = currencySymbol + computeprice;
 
-  }
-
-
-  quantityChanges.forEach(q => {
-    const decrease = q.querySelector('.decrease');
-    const increase = q.querySelector('.increase');
-    const input = q.querySelector('input.qty');
-
-    // Remove existing event listeners
-    increase.removeEventListener('click', increaseClickListener);
-    decrease.removeEventListener('click', decreaseClickListener);
-
-    // Add new event listeners
-    increase.addEventListener('click', increaseClickListener);
-    decrease.addEventListener('click', decreaseClickListener);
+				}
 
 
+				quantityChanges.forEach(q =>
+				{
+					const decrease = q.querySelector('.decrease');
+					const increase = q.querySelector('.increase');
+					const input = q.querySelector('input.qty');
 
-    function increaseClickListener(e) {
-      increaseHandler(e, input);
-    }
+					// Remove existing event listeners
+					increase.removeEventListener('click', increaseClickListener);
+					decrease.removeEventListener('click', decreaseClickListener);
 
-    function decreaseClickListener(e) {
-      decreaseHandler(e, input);
-    }
-  });
-
-  function increaseHandler(e, input) {
-    e.preventDefault();
-    let currentValue = parseInt(input.value, 10);
-    input.value = currentValue + 1;
-
-    console.log(input.value);
-
-    computePrice(input.value);
+					// Add new event listeners
+					increase.addEventListener('click', increaseClickListener);
+					decrease.addEventListener('click', decreaseClickListener);
 
 
-  }
 
-  function decreaseHandler(e, input) {
-    e.preventDefault();
-    let currentValue = parseInt(input.value, 10);
-    if (currentValue > 1) {
-      input.value = currentValue - 1;
-      computePrice(input.value)
-    }
-    console.log(input.value);
-  }
-}
+					function increaseClickListener(e)
+					{
+						increaseHandler(e, input);
+					}
 
-document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
-</script>
-<?php
+					function decreaseClickListener(e)
+					{
+						decreaseHandler(e, input);
+					}
+				});
+
+				function increaseHandler(e, input)
+				{
+					e.preventDefault();
+					let currentValue = parseInt(input.value, 10);
+					input.value = currentValue + 1;
+
+					console.log(input.value);
+
+					computePrice(input.value);
+
+
+				}
+
+				function decreaseHandler(e, input)
+				{
+					e.preventDefault();
+					let currentValue = parseInt(input.value, 10);
+					if (currentValue > 1)
+					{
+						input.value = currentValue - 1;
+						computePrice(input.value)
+					}
+					console.log(input.value);
+				}
+			}
+
+			document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
+		</script>
+		<?php
 	}
 
 	public function edit_cart_summary_title() {
@@ -2810,8 +2852,8 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		}
 		$title = apply_filters( 'nova_account_title_filter', $endpoint_title );
 		?>
-<h2 class="pb-4 mb-4 uppercase mt-0"><?php echo $title; ?></h2>
-<?php
+		<h2 class="pb-4 mb-4 uppercase mt-0"><?php echo $title; ?></h2>
+		<?php
 	}
 
 	public function nova_account_navigation() {
@@ -2936,54 +2978,54 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		}
 
 		?>
-<div
-  class="flex flex-col-reverse gap-4 md:flex-row md:items-center md:justify-between border-t border-gray-200 bg-white py-3">
-  <div class="flex justify-center md:flex md:flex-1 md:items-center md:justify-between">
-    <div>
-      <p class="text-sm text-gray-700">
-        <?php
+		<div
+			class="flex flex-col-reverse gap-4 md:flex-row md:items-center md:justify-between border-t border-gray-200 bg-white py-3">
+			<div class="flex justify-center md:flex md:flex-1 md:items-center md:justify-between">
+				<div>
+					<p class="text-sm text-gray-700">
+						<?php
 						$first_result = ( ( $current_page - 1 ) * $per_page ) + 1;
 						$last_result = min( $current_page * $per_page, $total_pages * $per_page, $total_results );
 						?>
-        Showing
-        <span class="font-medium"><?php echo $first_result; ?></span>
-        to
-        <span class="font-medium"><?php echo $last_result; ?></span>
-        of
-        <span class="font-medium"><?php echo $total_results; ?></span>
-        results
-      </p>
-    </div>
-  </div>
-  <div class="flex flex-1 mt-4 md:mt-0 justify-center md:justify-end gap-2 md:gap-4">
-    <?php if ( $current_page > 1 ) : ?>
-    <a href="<?php echo str_replace( '%#%', $current_page - 1, $base_url ); ?>"
-      class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-nova-primary hover:text-white gap-2">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
-        <path fill-rule="evenodd"
-          d="M11.78 5.22a.75.75 0 0 1 0 1.06L8.06 10l3.72 3.72a.75.75 0 1 1-1.06 1.06l-4.25-4.25a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Z"
-          clip-rule="evenodd" />
-      </svg>
-      <span class="ml-1"><?php _e( 'Previous' ); ?></span>
-    </a>
-    <?php endif; ?>
-    <?php if ( $current_page < $total_pages ) : ?>
-    <a href="<?php echo str_replace( '%#%', $current_page + 1, $base_url ); ?>"
-      class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-nova-primary hover:text-white">
-      <span>
-        <?php _e( 'Next' ); ?>
-      </span>
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
-        <path fill-rule="evenodd"
-          d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z"
-          clip-rule="evenodd" />
-      </svg>
-    </a>
-    <?php endif; ?>
-  </div>
+						Showing
+						<span class="font-medium"><?php echo $first_result; ?></span>
+						to
+						<span class="font-medium"><?php echo $last_result; ?></span>
+						of
+						<span class="font-medium"><?php echo $total_results; ?></span>
+						results
+					</p>
+				</div>
+			</div>
+			<div class="flex flex-1 mt-4 md:mt-0 justify-center md:justify-end gap-2 md:gap-4">
+				<?php if ( $current_page > 1 ) : ?>
+					<a href="<?php echo str_replace( '%#%', $current_page - 1, $base_url ); ?>"
+						class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-nova-primary hover:text-white gap-2">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
+							<path fill-rule="evenodd"
+								d="M11.78 5.22a.75.75 0 0 1 0 1.06L8.06 10l3.72 3.72a.75.75 0 1 1-1.06 1.06l-4.25-4.25a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Z"
+								clip-rule="evenodd" />
+						</svg>
+						<span class="ml-1"><?php _e( 'Previous' ); ?></span>
+					</a>
+				<?php endif; ?>
+				<?php if ( $current_page < $total_pages ) : ?>
+					<a href="<?php echo str_replace( '%#%', $current_page + 1, $base_url ); ?>"
+						class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-nova-primary hover:text-white">
+						<span>
+							<?php _e( 'Next' ); ?>
+						</span>
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
+							<path fill-rule="evenodd"
+								d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z"
+								clip-rule="evenodd" />
+						</svg>
+					</a>
+				<?php endif; ?>
+			</div>
 
-</div>
-<?php
+		</div>
+		<?php
 	}
 
 
@@ -3049,25 +3091,25 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 		$archived = $this->get_all_mockups_quantity( 'archived' );
 
 		?>
-<div
-  class="border-b font-title uppercase flex gap-6 md:gap-11 mb-8 whitespace-nowrap overflow-x-auto overflow-y-hidden">
-  <a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/all' ) ); ?>"
-    class="py-4 border-solid border-x-0 border-t-0 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/all'] ) ? 'border-black' : 'border-transparent' ); ?>	text-black">ALL
-    Mockups <span>(<?php echo $all; ?>)</span></a>
-  <a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/drafts' ) ); ?>"
-    class="py-4 border-solid border-x-0 border-t-0 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/drafts'] ) ? 'border-black' : 'border-transparent' ); ?>	text-black">Drafts
-    <span>(<?php echo $drafts; ?>)</a>
-  <a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/processing' ) ); ?>"
-    class="py-4 border-solid border-x-0 border-t-0 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/processing'] ) ? 'border-black' : 'border-transparent' ); ?>	text-black">Processing
-    <span>(<?php echo $processing; ?>)</a>
-  <a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/payments' ) ); ?>"
-    class="py-4 border-solid border-x-0 border-t-0 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/payments'] ) ? 'border-black' : 'border-transparent' ); ?>	text-black">Quoted
-    <span>(<?php echo $quoted; ?>)</a>
-  <a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/archived' ) ); ?>"
-    class="py-4 border-solid border-x-0 border-t-0 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/archived'] ) ? 'border-black' : 'border-transparent' ); ?>	text-black">Archived
-    <span>(<?php echo $archived; ?>)</span></a>
-</div>
-<?php
+		<div
+			class="border-b font-title uppercase flex gap-6 md:gap-11 mb-8 whitespace-nowrap overflow-x-auto overflow-y-hidden">
+			<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/all' ) ); ?>"
+				class="py-4 border-solid border-x-0 border-t-0 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/all'] ) ? 'border-black' : 'border-transparent' ); ?>	text-black">ALL
+				Mockups <span>(<?php echo $all; ?>)</span></a>
+			<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/drafts' ) ); ?>"
+				class="py-4 border-solid border-x-0 border-t-0 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/drafts'] ) ? 'border-black' : 'border-transparent' ); ?>	text-black">Drafts
+				<span>(<?php echo $drafts; ?>)</a>
+			<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/processing' ) ); ?>"
+				class="py-4 border-solid border-x-0 border-t-0 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/processing'] ) ? 'border-black' : 'border-transparent' ); ?>	text-black">Processing
+				<span>(<?php echo $processing; ?>)</a>
+			<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/payments' ) ); ?>"
+				class="py-4 border-solid border-x-0 border-t-0 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/payments'] ) ? 'border-black' : 'border-transparent' ); ?>	text-black">Quoted
+				<span>(<?php echo $quoted; ?>)</a>
+			<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/archived' ) ); ?>"
+				class="py-4 border-solid border-x-0 border-t-0 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/archived'] ) ? 'border-black' : 'border-transparent' ); ?>	text-black">Archived
+				<span>(<?php echo $archived; ?>)</span></a>
+		</div>
+		<?php
 	}
 
 	public function add_mockups_link_my_account( $items ) {
@@ -3092,98 +3134,98 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 	public function nova_product_specs() {
 		if ( have_rows( 'tech_specs_group' ) ) :
 			?>
-<div class="nova_product_specs_group">
-  <?php
+			<div class="nova_product_specs_group">
+				<?php
 				while ( have_rows( 'tech_specs_group' ) ) :
 					the_row();
 					?>
-  <h2><?php echo get_sub_field( 'title' ); ?></h2>
-  <?php
+					<h2><?php echo get_sub_field( 'title' ); ?></h2>
+					<?php
 					if ( have_rows( 'specs' ) ) :
 						?>
-  <div class="spec-group">
-    <?php
+						<div class="spec-group">
+							<?php
 							while ( have_rows( 'specs' ) ) :
 								the_row();
 								?>
-    <div class="spec-item">
-      <div class="spec-label">
-        <?php echo get_sub_field( 'name' ); ?>
-      </div>
-      <div class="spec-value">
-        <?php echo get_sub_field( 'value' ); ?>
-      </div>
-    </div>
+								<div class="spec-item">
+									<div class="spec-label">
+										<?php echo get_sub_field( 'name' ); ?>
+									</div>
+									<div class="spec-value">
+										<?php echo get_sub_field( 'value' ); ?>
+									</div>
+								</div>
 
-    <?php
+								<?php
 							endwhile;
 							?>
-  </div>
-  <?php
+						</div>
+						<?php
 					endif;
 					?>
 
-  <?php endwhile; ?>
-</div>
-<?php
+				<?php endwhile; ?>
+			</div>
+			<?php
 		endif;
 	}
 
 	public function nova_product_faqs() {
 		if ( have_rows( 'faqs' ) ) {
 			?>
-<div id="faqItems" class="has-faq accordion">
-  <h2 class="uppercase text-center mb-10">Frequently asked Questions</h2>
-  <?php
+			<div id="faqItems" class="has-faq accordion">
+				<h2 class="uppercase text-center mb-10">Frequently asked Questions</h2>
+				<?php
 				while ( have_rows( 'faqs' ) ) {
 					the_row();
 					?>
-  <div class="faq-item visible">
-    <p class="faq-question mb-0"><?php echo get_sub_field( 'question' ); ?> <svg width="14" height="14"
-        viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <line x1="7" y1="1" x2="7" y2="13" stroke="black" stroke-width="2" stroke-linecap="round">
-        </line>
-        <line x1="13" y1="7" x2="1" y2="7" stroke="black" stroke-width="2" stroke-linecap="round">
-        </line>
-      </svg></p>
-    <div class="expander">
-      <div class="expander-content">
-        <div class="content-wrapper">
-          <?php if ( get_sub_field( 'answer' ) ) : ?>
-          <div class="post-content-container" style="padding-top: 2em;">
-            <?php echo get_sub_field( 'answer' ); ?>
-          </div>
-          <?php endif; ?>
-        </div>
-      </div>
-    </div>
-  </div>
-  <?php
+					<div class="faq-item visible">
+						<p class="faq-question mb-0"><?php echo get_sub_field( 'question' ); ?> <svg width="14" height="14"
+								viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<line x1="7" y1="1" x2="7" y2="13" stroke="black" stroke-width="2" stroke-linecap="round">
+								</line>
+								<line x1="13" y1="7" x2="1" y2="7" stroke="black" stroke-width="2" stroke-linecap="round">
+								</line>
+							</svg></p>
+						<div class="expander">
+							<div class="expander-content">
+								<div class="content-wrapper">
+									<?php if ( get_sub_field( 'answer' ) ) : ?>
+										<div class="post-content-container" style="padding-top: 2em;">
+											<?php echo get_sub_field( 'answer' ); ?>
+										</div>
+									<?php endif; ?>
+								</div>
+							</div>
+						</div>
+					</div>
+					<?php
 				}
 				?>
-</div>
-<?php
+			</div>
+			<?php
 		}
 	}
 
 	public function myaccount_nav_avatar() {
 		$current_user = wp_get_current_user();
 		?>
-<div class="kadence-account-avatar">
-  <div class="kadence-customer-image">
-    <a class="kt-link-to-gravatar" href="https://gravatar.com/" target="_blank" rel="no"
-      title="<?php echo esc_attr__( 'Update Profile Photo', 'kadence' ); ?>">
-      <?php echo get_avatar( $current_user->ID, 40, null, null, array( 'class' => array( 'rounded-full' ) ) ); ?>
-    </a>
-  </div>
-</div>
-<div class="kadence-customer-name">
-  <h5 class="uppercase mt-2 mb-0 block"><?php echo esc_html( $current_user->display_name ); ?></h5>
-  <div class="block text-[14px] text-black uppercase"><span class="font-title text-[12px]">BUSINESS ID:</span>
-    <?php echo get_field( 'business_id', 'user_' . get_current_user_id() ); ?></div>
-  <a href="<?php echo wp_logout_url( '/' ); ?>" class="text-black text-[10px]">LOG OUT</a>
-</div>
-<?php
+		<div class="kadence-account-avatar">
+			<div class="kadence-customer-image">
+				<a class="kt-link-to-gravatar" href="https://gravatar.com/" target="_blank" rel="no"
+					title="<?php echo esc_attr__( 'Update Profile Photo', 'kadence' ); ?>">
+					<?php echo get_avatar( $current_user->ID, 40, null, null, array( 'class' => array( 'rounded-full' ) ) ); ?>
+				</a>
+			</div>
+		</div>
+		<div class="kadence-customer-name">
+			<h5 class="uppercase mt-2 mb-0 block"><?php echo esc_html( $current_user->display_name ); ?></h5>
+			<div class="block text-[14px] text-black uppercase"><span class="font-title text-[12px]">BUSINESS ID:</span>
+				<?php echo get_field( 'business_id', 'user_' . get_current_user_id() ); ?></div>
+			<a href="<?php echo wp_logout_url( '/' ); ?>" class="text-black text-[10px]">LOG OUT</a>
+		</div>
+		<?php
 	}
 
 	function camelcase_to_regular( $input ) {
@@ -3342,38 +3384,38 @@ document.addEventListener('DOMContentLoaded', initializeQuantityButtons);
 	public function show_details_order( $signage, $quoteID, $subtotal, $product_line ) {
 		ob_start();
 		?>
-<div id="quote-<?php echo $quoteID; ?>" style="display:none;max-width:550px; width: 100%;">
-  <div class="pb-8 mb-8 border-b-nova-light border-b">
-    <h4 class="text-[16px]">QUOTE ID: Q-<?php echo str_pad( $quoteID, 4, '0', STR_PAD_LEFT ); ?></h4>
-    <h4 class="text-[16px]">PRODUCT:
-      <?php echo $product_line; ?>
-    </h4>
-    <?php
+		<div id="quote-<?php echo $quoteID; ?>" style="display:none;max-width:550px; width: 100%;">
+			<div class="pb-8 mb-8 border-b-nova-light border-b">
+				<h4 class="text-[16px]">QUOTE ID: Q-<?php echo str_pad( $quoteID, 4, '0', STR_PAD_LEFT ); ?></h4>
+				<h4 class="text-[16px]">PRODUCT:
+					<?php echo $product_line; ?>
+				</h4>
+				<?php
 				$this->show_project_details( $signage );
 				?>
-  </div>
-  <h6 class="uppercase flex">Subtotal: <span class="ml-auto"><?php echo $subtotal; ?></span></h6>
-</div>
-<?php
+			</div>
+			<h6 class="uppercase flex">Subtotal: <span class="ml-auto"><?php echo $subtotal; ?></span></h6>
+		</div>
+		<?php
 		echo ob_get_clean();
 	}
 
 	public function show_details( $signage, $quoteID, $subtotal ) {
 		ob_start();
 		?>
-<div id="quote-<?php echo $quoteID; ?>" style="display:none;max-width:550px; width: 100%;">
-  <div class="pb-8 mb-8 border-b-nova-light border-b">
-    <h4 class="text-[16px]">QUOTE ID: Q-<?php echo str_pad( $quoteID, 4, '0', STR_PAD_LEFT ); ?></h4>
-    <h4 class="text-[16px] uppercase">PRODUCT:
-      <?php echo ( get_field( 'product', $quoteID ) ? get_field( 'product', $quoteID )->post_title : 'CUSTOM PROJECT' ); ?>
-    </h4>
-    <?php
+		<div id="quote-<?php echo $quoteID; ?>" style="display:none;max-width:550px; width: 100%;">
+			<div class="pb-8 mb-8 border-b-nova-light border-b">
+				<h4 class="text-[16px]">QUOTE ID: Q-<?php echo str_pad( $quoteID, 4, '0', STR_PAD_LEFT ); ?></h4>
+				<h4 class="text-[16px] uppercase">PRODUCT:
+					<?php echo ( get_field( 'product', $quoteID ) ? get_field( 'product', $quoteID )->post_title : 'CUSTOM PROJECT' ); ?>
+				</h4>
+				<?php
 				$this->show_project_details( $signage );
 				?>
-  </div>
-  <h6 class="uppercase flex">Subtotal: <span class="ml-auto"><?php echo $subtotal; ?></span></h6>
-</div>
-<?php
+			</div>
+			<h6 class="uppercase flex">Subtotal: <span class="ml-auto"><?php echo $subtotal; ?></span></h6>
+		</div>
+		<?php
 		echo ob_get_clean();
 	}
 
