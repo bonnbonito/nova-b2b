@@ -138,7 +138,81 @@ class Woocommerce {
 		add_filter( 'woocommerce_get_stock_html', array( $this, 'clearance_minimum_notice' ), 20, 2 );
 		add_filter( 'woocommerce_get_price_html', array( $this, 'modify_price_html' ), 10, 2 );
 		add_filter( 'woocommerce_available_variation', array( $this, 'modify_variation_price_html' ), 10, 3 );
+		add_filter( 'woocommerce_before_calculate_totals', array( $this, 'apply_multiple_items_price' ), 10, 1 );
+
+		add_action( 'woocommerce_variation_options_pricing', array( $this, 'multiple_items_field' ), 10, 3 );
+
 	}
+
+	public function apply_multiple_items_price( $cart ) {
+		if ( is_admin() && ! defined( 'DOING_AJAX' ) ) {
+			return;
+		}
+
+		if ( did_action( 'woocommerce_before_calculate_totals' ) >= 2 ) {
+			return;
+		}
+
+		foreach ( $cart->get_cart() as $cart_item ) {
+			$product_id = $cart_item['variation_id'] ? $cart_item['variation_id'] : $cart_item['product_id'];
+			$quantity = $cart_item['quantity'];
+
+			$threshold = get_post_meta( $product_id, 'multiple_items_threshold', true );
+			$special_price = get_post_meta( $product_id, 'multiple_items_price', true );
+
+			if ( $threshold && $special_price && $quantity >= intval( $threshold ) ) {
+				$currency = get_woocommerce_currency();
+				$special_price = $currency === 'CAD' ? floatval( $special_price ) * NOVA_EXCHANGE_RATE : floatval( $special_price );
+				$cart_item['data']->set_price( $special_price );
+			}
+		}
+	}
+
+	public function multiple_items_field( $loop, $variation_data, $variation ) {
+		// Get values from post meta
+		$threshold = get_post_meta( $variation->ID, 'multiple_items_threshold', true );
+		$price = get_post_meta( $variation->ID, 'multiple_items_price', true );
+
+		woocommerce_wp_text_input(
+			array(
+				'id' => "multiple_items_threshold_{$loop}",
+				'name' => "multiple_items_threshold[{$loop}]",
+				'value' => $threshold,
+				'label' => 'Multiple Items Threshold',
+				'data_type' => 'number',
+				'wrapper_class' => 'form-row form-row-first',
+				'placeholder' => __( 'Multiple Items Threshold', 'woocommerce' ),
+			)
+		);
+
+		woocommerce_wp_text_input(
+			array(
+				'id' => "multiple_items_price_{$loop}",
+				'name' => "multiple_items_price[{$loop}]",
+				'value' => $price,
+				'label' => 'Multiple Items Price',
+				'data_type' => 'price',
+				'wrapper_class' => 'form-row form-row-last',
+				'placeholder' => __( 'Multiple Items Price', 'woocommerce' ),
+			)
+		);
+	}
+
+	public function save_multiple_items_field( $variation_id, $loop ) {
+		// Save threshold
+		if ( isset( $_POST['multiple_items_threshold'][ $loop ] ) ) {
+			$threshold = wc_clean( wp_unslash( $_POST['multiple_items_threshold'][ $loop ] ) );
+			update_post_meta( $variation_id, 'multiple_items_threshold', $threshold );
+		}
+
+		// Save price
+		if ( isset( $_POST['multiple_items_price'][ $loop ] ) ) {
+			$price = wc_clean( wp_unslash( $_POST['multiple_items_price'][ $loop ] ) );
+			update_post_meta( $variation_id, 'multiple_items_price', $price );
+		}
+	}
+
+
 
 	public function modify_variation_price_html( $variation_data, $product, $variation ) {
 		if ( is_product() ) {
@@ -159,6 +233,27 @@ class Woocommerce {
 				$variation_data['max_qty'] = 6;
 				$variation_data['availability_html'] = '<p class="clearance-notice stock">Max order: 6 sets of 10pcs per order</p>' . $availability_html;
 			}
+
+			$multiple_items_threshold = get_post_meta( $variation->get_id(), 'multiple_items_threshold', true );
+			$multiple_items_price = get_post_meta( $variation->get_id(), 'multiple_items_price', true );
+
+			$currency = get_woocommerce_currency();
+			$multiple_items_price = $currency === 'CAD' ? floatval( $multiple_items_price ) * NOVA_EXCHANGE_RATE : floatval( $multiple_items_price );
+
+			if ( $multiple_items_threshold && $multiple_items_price ) {
+				$variation_data['availability_html'] = '<p class="clearance-notice stock">' . $multiple_items_threshold . ' for ' . wc_price( $multiple_items_price, array( 'currency' => $currency ) ) . '</p>' . $availability_html;
+
+				/** check if the $variation->get_id is on cart and quantity is greater than the threshold */
+				foreach ( WC()->cart->get_cart() as $cart_item ) {
+					if ( $cart_item['variation_id'] === $variation->get_id() ) {
+						if ( $cart_item['quantity'] >= $multiple_items_threshold ) {
+							$variation_data['price_html'] = '<p class="price">' . wc_price( $multiple_items_price, array( 'currency' => $currency ) ) . '</p>';
+						}
+					}
+				}
+
+			}
+
 		}
 		return $variation_data;
 	}
@@ -1169,8 +1264,8 @@ class Woocommerce {
 			$tax_rate = $this->get_rate_percent_value_from_order( $from_order_object );
 			$tax_total = $this->calculate_correct_tax( $from_order_object, $tax_rate );
 			/*
-																																																																																																																																																<<<<<<< HEAD
-																																																																																																																																																						?>
+																																																																																																																																																																																					 <<<<<<< HEAD
+																																																																																																																																																																																											 ?>
 	 =======
 	 ?>
 	 >>>>>>> new-b2b
@@ -1179,14 +1274,14 @@ class Woocommerce {
 		 <td width="1%"></td>
 		 <td class="total">
 			 <?php
-																																																																																																																																																						if ( $tax_total ) {
-																																																																																																																																																							echo wc_price( $tax_total, array( 'currency' => $order->get_currency() ) );
-																																																																																																																																																						}
-																																																																																																																																																						?>
+																																																																																																																																																																																											 if ( $tax_total ) {
+																																																																																																																																																																																												 echo wc_price( $tax_total, array( 'currency' => $order->get_currency() ) );
+																																																																																																																																																																																											 }
+																																																																																																																																																																																											 ?>
 		 </td>
 	 </tr>
 	 <?php
-																																																																																																																																																						*/
+																																																																																																																																																																																											 */
 		}
 
 		if ( $original_total && $from_order && $from_order ) :
@@ -1795,19 +1890,19 @@ class Woocommerce {
 
 		// Check if the address is Vancouver and modify Expedite
 		/*
-																																																																																																						if ( isset( $package['destination']['city'] ) && strtolower( $package['destination']['city'] ) === 'vancouver' ) {
-																																																																																																							if ( $expedite ) {
-																																																																																																								$rates['flat_rate:3']->cost = min( $expedite_cost, $standard_cost, ( isset( $flat_rate->cost ) ? $flat_rate->cost : PHP_INT_MAX ) );
-																																																																																																								// Unset other rates to show only Expedite
-																																																																																																								unset( $rates['flat_rate:2'], $rates['flat_rate:4'] );
-																																																																																																							}
-																																																																																																						}
+																																																																																																																															if ( isset( $package['destination']['city'] ) && strtolower( $package['destination']['city'] ) === 'vancouver' ) {
+																																																																																																																																if ( $expedite ) {
+																																																																																																																																	$rates['flat_rate:3']->cost = min( $expedite_cost, $standard_cost, ( isset( $flat_rate->cost ) ? $flat_rate->cost : PHP_INT_MAX ) );
+																																																																																																																																	// Unset other rates to show only Expedite
+																																																																																																																																	unset( $rates['flat_rate:2'], $rates['flat_rate:4'] );
+																																																																																																																																}
+																																																																																																																															}
 
 
-																																																																																																						if ( is_cart() ) {
-																																																																																																							unset( $rates['flat_rate:3'] );
-																																																																																																						}
-																																																																																																						*/
+																																																																																																																															if ( is_cart() ) {
+																																																																																																																																unset( $rates['flat_rate:3'] );
+																																																																																																																															}
+																																																																																																																															*/
 
 		return $rates;
 	}
