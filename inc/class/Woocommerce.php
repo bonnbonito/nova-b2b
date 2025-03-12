@@ -154,6 +154,28 @@ class Woocommerce {
 
 		add_filter( 'woocommerce_product_get_price', array( $this, 'apply_multiple_items_price_filter' ), 999999, 2 );
 		add_filter( 'woocommerce_product_variation_get_price', array( $this, 'apply_multiple_items_price_filter' ), 999999, 2 );
+
+		add_filter( 'body_class', array( $this, 'remove_has_sidebar' ), 20 );
+
+		add_filter( 'nova_login_title', array( $this, 'login_title' ) );
+	}
+
+	public function login_title( $title ) {
+		if ( is_product() && ! is_user_logged_in() ) {
+			ob_start();
+			?>
+			<h3>Log in to view our shop</h3>
+			<?php
+			$title = ob_get_clean();
+		}
+		return $title;
+	}
+
+	public function remove_has_sidebar( $classes ) {
+		if ( is_woocommerce() && ! is_user_logged_in() ) {
+			$classes = array_diff( $classes, array( 'has-sidebar' ) );
+		}
+		return $classes;
 	}
 
 	public function apply_multiple_items_price_filter( $price, $product ) {
@@ -1988,19 +2010,19 @@ class Woocommerce {
 
 		// Check if the address is Vancouver and modify Expedite
 		/*
-																																																																																																																																																							if ( isset( $package['destination']['city'] ) && strtolower( $package['destination']['city'] ) === 'vancouver' ) {
-																																																																																																																																																								if ( $expedite ) {
-																																																																																																																																																									$rates['flat_rate:3']->cost = min( $expedite_cost, $standard_cost, ( isset( $flat_rate->cost ) ? $flat_rate->cost : PHP_INT_MAX ) );
-																																																																																																																																																									// Unset other rates to show only Expedite
-																																																																																																																																																									unset( $rates['flat_rate:2'], $rates['flat_rate:4'] );
-																																																																																																																																																								}
-																																																																																																																																																							}
+																																																																																																																																																												if ( isset( $package['destination']['city'] ) && strtolower( $package['destination']['city'] ) === 'vancouver' ) {
+																																																																																																																																																													if ( $expedite ) {
+																																																																																																																																																														$rates['flat_rate:3']->cost = min( $expedite_cost, $standard_cost, ( isset( $flat_rate->cost ) ? $flat_rate->cost : PHP_INT_MAX ) );
+																																																																																																																																																														// Unset other rates to show only Expedite
+																																																																																																																																																														unset( $rates['flat_rate:2'], $rates['flat_rate:4'] );
+																																																																																																																																																													}
+																																																																																																																																																												}
 
 
-																																																																																																																																																							if ( is_cart() ) {
-																																																																																																																																																								unset( $rates['flat_rate:3'] );
-																																																																																																																																																							}
-																																																																																																																																																							*/
+																																																																																																																																																												if ( is_cart() ) {
+																																																																																																																																																													unset( $rates['flat_rate:3'] );
+																																																																																																																																																												}
+																																																																																																																																																												*/
 
 		return $rates;
 	}
