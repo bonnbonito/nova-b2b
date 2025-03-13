@@ -43,17 +43,22 @@ defined( 'ABSPATH' ) || exit;
 
 <?php
 
-$from_order_id      = $order->get_meta( '_from_order_id' );
-$second_payment     = $order->get_meta( 'second_payment' );
+$from_order_id = $order->get_meta( '_from_order_id' );
+$second_payment = $order->get_meta( 'second_payment' );
 $original_order_ids = $order->get_meta( '_original_order_ids' );
-$order_id           = $order->get_id();
+$has_nova_quote = $order->get_meta( 'has_nova_quote' );
+$order_id = $order->get_id();
 
 if ( empty( $from_order_id ) && empty( $second_payment ) && empty( $original_order_ids ) ) {
 	?>
 <div class="woocommerce-message woocommerce-message--info woocommerce-thankyou-order-details">
+  <?php if ( $has_nova_quote ) : ?>
   <h4>IMPORTANT:</h4>
   <p>You will receive the production drawing and finalized mockup within 24 hours. We'll notify you via email.</p>
   <p>Production will start <strong>only after you approve the mockup</strong>.</p>
+  <?php else : ?>
+  <p>Please check your email for shipping details soon. If you have any questions, feel free to contact us.</p>
+  <?php endif; ?>
 </div>
 <?php
 }

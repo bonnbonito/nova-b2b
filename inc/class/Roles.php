@@ -241,6 +241,8 @@ class Roles {
 				'active' => $this->is_user_quote_active( $user->ID ),
 				'order_total' => $this->get_user_order_total( $user->ID ),
 				'average_order' => $this->get_user_average_order( $user->ID ),
+				'total_pending_payments' => $this->get_user_total_pending_payments_formatted( $user->ID ),
+				'past_payment_due_date' => $this->get_user_past_payment_due_date( $user->ID ),
 			);
 		}
 
@@ -262,12 +264,62 @@ class Roles {
 		);
 	}
 
+	public function get_user_past_payment_due_date( $user_id ) {
+		$orders = wc_get_orders(
+			array(
+				'customer_id' => $user_id,
+				'limit' => 1, // Get all orders
+				'orderby' => 'date',
+				'order' => 'DESC',
+				'meta_key' => 'is_overdue',
+				'meta_compare' => 'EXISTS',
+				'status' => array( 'wc-pending' ),
+			)
+		);
+
+		if ( $orders ) {
+			$order = $orders[0];
+			return $order->get_id();
+		}
+
+		return false;
+	}
+
+	public function get_user_total_pending_payments( $user_id ) {
+		$orders = wc_get_orders(
+			array(
+				'limit' => -1,
+				'customer' => $user_id,
+				'status' => array( 'wc-pending' ),
+				'meta_key' => '_hide_order',
+				'meta_compare' => 'NOT EXISTS',
+			)
+		);
+
+		$total = 0;
+
+		foreach ( $orders as $order ) {
+			$total += (float) $order->get_total();
+		}
+
+		return $total;
+	}
+
+	public function get_user_total_pending_payments_formatted( $user_id ) {
+		$total = $this->get_user_total_pending_payments( $user_id );
+		$country = get_user_meta( $user_id, 'billing_country', true );
+		$total = wc_price( $total, array( 'currency' => $country ) );
+		return $total;
+	}
+
+
 	public function is_user_quote_active( $user_id ) {
 		$four_weeks_ago = date( 'Y-m-d H:i:s', strtotime( '-4 weeks' ) );
 
 		$quotes = new \WP_Query( array(
 			'post_type' => 'nova_quote',
 			'posts_per_page' => 1,
+			'post_status' => array( 'publish', 'checked_out' ),
 			'author' => $user_id,
 			'date_query' => array(
 				'after' => $four_weeks_ago
@@ -280,6 +332,7 @@ class Roles {
 		$quotes = new \WP_Query( array(
 			'post_type' => 'nova_quote',
 			'posts_per_page' => -1,
+			'post_status' => array( 'publish', 'checked_out' ),
 			'meta_query' => array(
 				'relation' => 'AND',
 				array(
@@ -289,8 +342,8 @@ class Roles {
 				),
 				array(
 					'key' => 'quote_status',
-					'value' => 'ready',
-					'compare' => '='
+					'value' => array( 'ready', 'archived' ),
+					'compare' => 'IN'
 				)
 			)
 		) );

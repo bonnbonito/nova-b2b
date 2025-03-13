@@ -427,12 +427,12 @@ class Deposit {
 			$due_date = date( 'M d, Y', $deadline );
 			if ( $current_time > $deadline ) {
 				if ( ! $order->has_status( array( 'completed', 'on-hold', 'trash' ) ) ) {
-					if ( ! $order->get_meta( '_is_overdue' ) ) {
-						update_post_meta( $order->get_id(), '_is_overdue', true );
+					if ( ! $order->get_meta( 'is_overdue' ) ) {
+						update_post_meta( $order->get_id(), 'is_overdue', true );
 					}
 				}
-			} elseif ( $order->get_meta( '_is_overdue' ) ) {
-				update_post_meta( $order->get_id(), '_is_overdue', false );
+			} elseif ( $order->get_meta( 'is_overdue' ) ) {
+				update_post_meta( $order->get_id(), 'is_overdue', false );
 			}
 		}
 	}
