@@ -6,6 +6,7 @@ import UploadFiles from '../../../../UploadFiles';
 import UploadFont from '../../../../UploadFont';
 import useOutsideClick from '../../../../utils/ClickOutside';
 import convert_json from '../../../../utils/ConvertJson';
+import NumberInput from '../../../../NumberInput';
 import {
   mountingDefaultOptions,
   setOptions,
@@ -710,15 +711,7 @@ export function Letters({ item }) {
           </>
         )}
 
-        {!item.hideQuantity && (
-          <Dropdown
-            title="Quantity"
-            onChange={handleOnChangeSets}
-            options={setOptions}
-            value={sets}
-            onlyValue={true}
-          />
-        )}
+        {!item.hideQuantity && <NumberInput title="Quantity" value={sets} onChange={setSets} />}
       </div>
 
       {selectedMounting === STUD_WITH_SPACER && (

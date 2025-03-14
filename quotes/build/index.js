@@ -3240,6 +3240,70 @@ const Note = ({
 
 /***/ }),
 
+/***/ "./src/scripts/NumberInput.js":
+/*!************************************!*\
+  !*** ./src/scripts/NumberInput.js ***!
+  \************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ NumberInput)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _ui_ToolTip__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ui/ToolTip */ "./src/scripts/ui/ToolTip.tsx");
+
+
+function NumberInput({
+  title,
+  onChange,
+  options,
+  value,
+  style,
+  onlyValue,
+  info
+}) {
+  const selectClass = value || onlyValue ? 'text-black' : 'text-[#dddddd]';
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "px-[1px] text-ellipsis overflow-hidden"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "uppercase font-title text-sm tracking-[1.4px] px-2 whitespace-nowrap",
+    title: title
+  }, title && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_ToolTip__WEBPACK_IMPORTED_MODULE_1__.TooltipProvider, {
+    delayDuration: 0
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_ToolTip__WEBPACK_IMPORTED_MODULE_1__.Tooltip, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_ToolTip__WEBPACK_IMPORTED_MODULE_1__.TooltipTrigger, {
+    asChild: true
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "cursor-pointer"
+  }, title, info && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    viewBox: "0 0 16 16",
+    fill: "red",
+    className: "size-4"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    fillRule: "evenodd",
+    d: "M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0ZM9 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM6.75 8a.75.75 0 0 0 0 1.5h.75v1.75a.75.75 0 0 0 1.5 0v-2.5A.75.75 0 0 0 8.25 8h-1.5Z",
+    clipRule: "evenodd"
+  })))), info && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ui_ToolTip__WEBPACK_IMPORTED_MODULE_1__.TooltipContent, {
+    className: "bg-white"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "font-body text-sm normal-case",
+    dangerouslySetInnerHTML: {
+      __html: info
+    }
+  }))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    type: "number",
+    min: "1",
+    className: "w-full py-4 px-2 color-black border-gray-200 text-sm font-bold rounded-md h-[40px]",
+    value: value,
+    onChange: onChange
+  }));
+}
+
+/***/ }),
+
 /***/ "./src/scripts/Prices.js":
 /*!*******************************!*\
   !*** ./src/scripts/Prices.js ***!
@@ -3865,6 +3929,7 @@ function SidebarAdmin({
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "w-full max-h-[calc(100vh-300px)] overflow-y-auto pr-5"
   }, signage.map((item, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Prices__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    key: item.id,
     id: item.id,
     item: item,
     borderTop: index > 0 && 'border-t mt-2'
@@ -11747,11 +11812,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UploadFont__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../UploadFont */ "./src/scripts/UploadFont.js");
 /* harmony import */ var _utils_ClickOutside__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../utils/ClickOutside */ "./src/scripts/utils/ClickOutside.js");
 /* harmony import */ var _utils_ConvertJson__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../utils/ConvertJson */ "./src/scripts/utils/ConvertJson.js");
-/* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
-/* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
-/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
-/* harmony import */ var _options__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../options */ "./src/scripts/products/acrylic/AcryMetal/options.js");
+/* harmony import */ var _NumberInput__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../NumberInput */ "./src/scripts/NumberInput.js");
+/* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
+/* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
+/* harmony import */ var _options__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../options */ "./src/scripts/products/acrylic/AcryMetal/options.js");
+
 
 
 
@@ -11767,7 +11834,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const waterProofOptions = [{
-  option: _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.INDOOR_NOT_WATERPROOF
+  option: _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.INDOOR_NOT_WATERPROOF
 }];
 function Letters({
   item
@@ -11778,12 +11845,12 @@ function Letters({
     setSignage,
     setMissing,
     hasUploadedFile
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_10__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_11__.useAppContext)();
   const [letters, setLetters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letters = item.letters) !== null && _item$letters !== void 0 ? _item$letters : '');
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
   const [font, setFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$font = item.font) !== null && _item$font !== void 0 ? _item$font : '');
   const [openFont, setOpenFont] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_defaults__WEBPACK_IMPORTED_MODULE_11__.INDOOR_NOT_WATERPROOF);
+  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_defaults__WEBPACK_IMPORTED_MODULE_12__.INDOOR_NOT_WATERPROOF);
   const [selectedThickness, setSelectedThickness] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$acrylicThicknes = item.acrylicThickness) !== null && _item$acrylicThicknes !== void 0 ? _item$acrylicThicknes : '');
   const [waterProofSelections, setWaterProofSelections] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(waterProofOptions);
   const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileNames = item.fileNames) !== null && _item$fileNames !== void 0 ? _item$fileNames : []);
@@ -11806,14 +11873,14 @@ function Letters({
   const [usdSinglePrice, setUsdSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdSinglePrice = item.usdSinglePrice) !== null && _item$usdSinglePrice !== void 0 ? _item$usdSinglePrice : 0);
   const [cadSinglePrice, setCadSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadSinglePrice = item.cadSinglePrice) !== null && _item$cadSinglePrice !== void 0 ? _item$cadSinglePrice : 0);
   const [metalFilm, setMetalFilm] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$metalFilm = item.metalFilm) !== null && _item$metalFilm !== void 0 ? _item$metalFilm : '');
-  const [mountingOptions, setMountingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.mountingDefaultOptions);
+  const [mountingOptions, setMountingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.mountingDefaultOptions);
   const [lettersHeight, setLettersHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
     min: 1,
     max: 24
   });
   const [selectedMounting, setSelectedMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
   const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$studLength = item.studLength) !== null && _item$studLength !== void 0 ? _item$studLength : '');
-  const [spacerStandoffOptions, setSpacerStandoffOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.spacerStandoffDefaultOptions);
+  const [spacerStandoffOptions, setSpacerStandoffOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.spacerStandoffDefaultOptions);
   const [spacerStandoffDistance, setSpacerStandoffDistance] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$spacerStandoffD = item.spacerStandoffDistance) !== null && _item$spacerStandoffD !== void 0 ? _item$spacerStandoffD : '');
   const [sets, setSets] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$sets = item.sets) !== null && _item$sets !== void 0 ? _item$sets : 1);
   const fontRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
@@ -11935,20 +12002,20 @@ function Letters({
     const lettersArray = letters.trim().split('');
     const noLowerCase = NovaQuote.no_lowercase.includes(font);
     lettersArray.forEach(letter => {
-      tempTotal += (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_9__.calculateLetterPrice)(letter, baseLetterPrice, noLowerCase);
+      tempTotal += (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_10__.calculateLetterPrice)(letter, baseLetterPrice, noLowerCase);
     });
     if (waterproof) {
-      tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
+      tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
     }
-    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER) {
-      const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_9__.spacerPricing)(tempTotal);
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER) {
+      const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_10__.spacerPricing)(tempTotal);
       tempTotal += parseFloat(spacer.toFixed(2));
     }
-    tempTotal *= _options__WEBPACK_IMPORTED_MODULE_12__.acryMetalPricing;
+    tempTotal *= _options__WEBPACK_IMPORTED_MODULE_13__.acryMetalPricing;
 
     /** if Layered 3D */
     if (item.isLayered) {
-      tempTotal *= _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.ASSEMBLY_FEES;
+      tempTotal *= _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.ASSEMBLY_FEES;
     }
     const total = tempTotal * sets;
     return {
@@ -11968,11 +12035,11 @@ function Letters({
     if (target === 'Plain' || target === 'Double-sided tape') {
       setStudLength('');
     }
-    if (target !== _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER) {
+    if (target !== _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER) {
       setSpacerStandoffDistance('');
     }
     if (target === 'Double-sided tape') {
-      setWaterProofSelections(waterProofOptions.filter(option => option.option == _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.INDOOR_NOT_WATERPROOF));
+      setWaterProofSelections(waterProofOptions.filter(option => option.option == _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.INDOOR_NOT_WATERPROOF));
     } else {
       setWaterProofSelections(waterProofOptions);
     }
@@ -11980,7 +12047,7 @@ function Letters({
   const handleOnChangeWaterproof = e => setWaterproof(e.target.value);
   const handleOnChangeThickness = e => {
     const target = e.target.value;
-    const selected = _options__WEBPACK_IMPORTED_MODULE_12__.thicknessOptions.filter(option => option.value === target);
+    const selected = _options__WEBPACK_IMPORTED_MODULE_13__.thicknessOptions.filter(option => option.value === target);
     setSelectedThickness(() => selected[0]);
     if (parseInt(target) > 11 && parseInt(selectedLetterHeight) === 1) {
       setSelectedLetterHeight('');
@@ -11989,7 +12056,7 @@ function Letters({
       if (parseInt(selectedLetterHeight) > 24) {
         setSelectedLetterHeight('');
       }
-      if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER || selectedMounting === 'Pad' || selectedMounting === 'Pad - Combination All') {
+      if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_MOUNT || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER || selectedMounting === 'Pad' || selectedMounting === 'Pad - Combination All') {
         setSelectedMounting('');
         setStudLength('');
         setSpacerStandoffDistance('');
@@ -12029,18 +12096,18 @@ function Letters({
         setSpacerStandoffDistance(''); // Reset if the distance is invalid for these options
       }
     } else {
-      setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
+      setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
     }
     if (target === '') {
       setSpacerStandoffDistance(''); // Always reset if the target is empty
     }
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    let newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.mountingDefaultOptions;
+    let newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.mountingDefaultOptions;
     if (selectedThickness?.value === '3') {
-      newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.mountingDefaultOptions.filter(option => option.mounting_option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT && option.mounting_option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER && option.mounting_option !== 'Pad' && option.mounting_option !== 'Pad - Combination All');
+      newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.mountingDefaultOptions.filter(option => option.mounting_option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_MOUNT && option.mounting_option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER && option.mounting_option !== 'Pad' && option.mounting_option !== 'Pad - Combination All');
     } else {
-      newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.mountingDefaultOptions;
+      newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.mountingDefaultOptions;
     }
     if (waterproof) {
       if (waterproof === 'Outdoor (Waterproof)') {
@@ -12084,10 +12151,10 @@ function Letters({
     if (!metalFilm) missingFields.push('Select Metal Film');
     if (!waterproof) missingFields.push('Select Environment');
     if (!selectedMounting) missingFields.push('Select Mounting');
-    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT || selectedMounting === 'Pad' || selectedMounting === 'Pad - Combination All') {
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_MOUNT || selectedMounting === 'Pad' || selectedMounting === 'Pad - Combination All') {
       if (!studLength) missingFields.push('Select Stud Length');
     }
-    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER) {
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER) {
       if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (!sets) missingFields.push('Select Quantity');
@@ -12147,9 +12214,9 @@ function Letters({
     } = computePricing();
     if (total && singlePrice) {
       setUsdPrice(total);
-      setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.EXCHANGE_RATE).toFixed(2));
+      setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.EXCHANGE_RATE).toFixed(2));
       setUsdSinglePrice(singlePrice);
-      setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.EXCHANGE_RATE).toFixed(2));
+      setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.EXCHANGE_RATE).toFixed(2));
     } else {
       setUsdPrice(0);
       setUsdSinglePrice(0);
@@ -12211,7 +12278,7 @@ function Letters({
     title: "Acrylic Thickness",
     value: selectedThickness?.value,
     onChange: handleOnChangeThickness,
-    options: _options__WEBPACK_IMPORTED_MODULE_12__.thicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _options__WEBPACK_IMPORTED_MODULE_13__.thicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: thickness.value,
       key: thickness.value,
       defaultValue: thickness === selectedThickness
@@ -12224,7 +12291,7 @@ function Letters({
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Metal Film",
     onChange: e => setMetalFilm(e.target.value),
-    options: _options__WEBPACK_IMPORTED_MODULE_12__.metalFilmOptions.map(film => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _options__WEBPACK_IMPORTED_MODULE_13__.metalFilmOptions.map(film => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: film,
       value: film,
       defaultValue: film == metalFilm
@@ -12248,16 +12315,16 @@ function Letters({
       defaultValue: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: selectedMounting
-  }), (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER || selectedMounting === 'Pad' || selectedMounting === 'Pad - Combination All' || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }), (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER || selectedMounting === 'Pad' || selectedMounting === 'Pad - Combination All' || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_9__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: option.value,
       key: option.value,
       defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
-  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -12266,13 +12333,11 @@ function Letters({
       defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
-  })), !item.hideQuantity && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  })), !item.hideQuantity && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_NumberInput__WEBPACK_IMPORTED_MODULE_8__["default"], {
     title: "Quantity",
-    onChange: handleOnChangeSets,
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.setOptions,
     value: sets,
-    onlyValue: true
-  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    onChange: setSets
+  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-xs text-[#9F9F9F] mb-4"
   }, "*Note: The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid"
@@ -12312,11 +12377,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Dropdown__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../Dropdown */ "./src/scripts/Dropdown.js");
 /* harmony import */ var _UploadFiles__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../UploadFiles */ "./src/scripts/UploadFiles.js");
 /* harmony import */ var _utils_ConvertJson__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../utils/ConvertJson */ "./src/scripts/utils/ConvertJson.js");
-/* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
-/* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
-/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
-/* harmony import */ var _options__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../options */ "./src/scripts/products/acrylic/AcryMetal/options.js");
+/* harmony import */ var _NumberInput__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../NumberInput */ "./src/scripts/NumberInput.js");
+/* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
+/* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
+/* harmony import */ var _options__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../options */ "./src/scripts/products/acrylic/AcryMetal/options.js");
+
 
 
 
@@ -12329,7 +12396,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const waterProofOptions = [{
-  option: _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.INDOOR_NOT_WATERPROOF
+  option: _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.INDOOR_NOT_WATERPROOF
 }];
 function Logo({
   item
@@ -12340,10 +12407,10 @@ function Logo({
     setSignage,
     setMissing,
     hasUploadedFile
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_7__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_8__.useAppContext)();
   const [selectedMounting, setSelectedMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
   const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$studLength = item.studLength) !== null && _item$studLength !== void 0 ? _item$studLength : '');
-  const [spacerStandoffOptions, setSpacerStandoffOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.spacerStandoffDefaultOptions);
+  const [spacerStandoffOptions, setSpacerStandoffOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.spacerStandoffDefaultOptions);
   const [spacerStandoffDistance, setSpacerStandoffDistance] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$spacerStandoffD = item.spacerStandoffDistance) !== null && _item$spacerStandoffD !== void 0 ? _item$spacerStandoffD : '');
   const [waterProofSelections, setWaterProofSelections] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(waterProofOptions);
   const handleonChangeSpacerDistance = e => {
@@ -12376,7 +12443,7 @@ function Logo({
         setSpacerStandoffDistance(''); // Reset if the distance is invalid for these options
       }
     } else {
-      setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
+      setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
     }
     if (target === '') {
       setSpacerStandoffDistance(''); // Always reset if the target is empty
@@ -12407,29 +12474,29 @@ function Logo({
     }, val, "\"");
   }));
   const [comments, setComments] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$comments = item.comments) !== null && _item$comments !== void 0 ? _item$comments : '');
-  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_defaults__WEBPACK_IMPORTED_MODULE_8__.INDOOR_NOT_WATERPROOF);
-  const [mountingOptions, setMountingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.mountingDefaultOptions);
+  const [waterproof, setWaterproof] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_defaults__WEBPACK_IMPORTED_MODULE_9__.INDOOR_NOT_WATERPROOF);
+  const [mountingOptions, setMountingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.mountingDefaultOptions);
   const handleOnChangeMount = e => {
     const target = e.target.value;
     setSelectedMounting(target);
     if (target === 'Plain' || target === 'Double-sided tape') {
       setStudLength('');
     }
-    if (target !== _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.STUD_WITH_SPACER) {
+    if (target !== _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
       setSpacerStandoffDistance('');
     }
     if (target === 'Double-sided tape') {
-      setWaterProofSelections(waterProofOptions.filter(option => option.option === _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.INDOOR_NOT_WATERPROOF));
+      setWaterProofSelections(waterProofOptions.filter(option => option.option === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.INDOOR_NOT_WATERPROOF));
     } else {
       setWaterProofSelections(waterProofOptions);
     }
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    let newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.mountingDefaultOptions;
+    let newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.mountingDefaultOptions;
     if (selectedThickness?.value === '3') {
-      newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.mountingDefaultOptions.filter(option => option.mounting_option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.STUD_MOUNT && option.mounting_option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.STUD_WITH_SPACER && option.mounting_option !== 'Pad' && option.mounting_option !== 'Pad - Combination All');
+      newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.mountingDefaultOptions.filter(option => option.mounting_option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_MOUNT && option.mounting_option !== _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER && option.mounting_option !== 'Pad' && option.mounting_option !== 'Pad - Combination All');
     } else {
-      newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.mountingDefaultOptions;
+      newMountingOptions = _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.mountingDefaultOptions;
     }
     if (waterproof === 'Outdoor (Waterproof)') {
       if (selectedMounting === 'Double-sided tape') {
@@ -12453,10 +12520,10 @@ function Logo({
   }
   const handleOnChangeThickness = e => {
     const target = e.target.value;
-    const selected = _options__WEBPACK_IMPORTED_MODULE_9__.thicknessOptions.filter(option => option.value === target);
+    const selected = _options__WEBPACK_IMPORTED_MODULE_10__.thicknessOptions.filter(option => option.value === target);
     setSelectedThickness(() => selected[0]);
     if (parseInt(target) === 3) {
-      if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.STUD_MOUNT || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.STUD_WITH_SPACER || selectedMounting === 'Pad' || selectedMounting === 'Pad - Combination All') {
+      if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_MOUNT || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER || selectedMounting === 'Pad' || selectedMounting === 'Pad - Combination All') {
         setSelectedMounting('');
         setStudLength('');
         setSpacerStandoffDistance('');
@@ -12545,7 +12612,7 @@ function Logo({
         total: false
       };
     }
-    const logoPricing = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_5__.getLogoPricingTablebyThickness)(`${selectedThickness.value}mm`, logoPricingObject);
+    const logoPricing = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.getLogoPricingTablebyThickness)(`${selectedThickness.value}mm`, logoPricingObject);
     if (logoPricing === undefined) {
       return {
         singlePrice: false,
@@ -12559,17 +12626,17 @@ function Logo({
       tempTotal += baseLogoPricing;
     }
     if (waterproof) {
-      tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
+      tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
     }
-    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.STUD_WITH_SPACER) {
-      const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_5__.spacerPricing)(tempTotal);
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
+      const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.spacerPricing)(tempTotal);
       tempTotal += spacer;
     }
-    tempTotal *= _options__WEBPACK_IMPORTED_MODULE_9__.acryMetalPricing;
+    tempTotal *= _options__WEBPACK_IMPORTED_MODULE_10__.acryMetalPricing;
 
     /** if Layered 3D */
     if (item.isLayered) {
-      tempTotal *= _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.ASSEMBLY_FEES;
+      tempTotal *= _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.ASSEMBLY_FEES;
     }
     const total = tempTotal * sets;
     return {
@@ -12584,9 +12651,9 @@ function Logo({
     } = computePricing();
     if (total && singlePrice) {
       setUsdPrice(total);
-      setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.EXCHANGE_RATE).toFixed(2));
+      setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.EXCHANGE_RATE).toFixed(2));
       setUsdSinglePrice(singlePrice);
-      setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.EXCHANGE_RATE).toFixed(2));
+      setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.EXCHANGE_RATE).toFixed(2));
     } else {
       setUsdPrice(0);
       setCadPrice(0);
@@ -12601,10 +12668,10 @@ function Logo({
     if (!height) missingFields.push('Select Logo Height');
     if (!waterproof) missingFields.push('Select Environment');
     if (!selectedMounting) missingFields.push('Select Mounting');
-    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.STUD_WITH_SPACER || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.STUD_MOUNT || selectedMounting === 'Pad' || selectedMounting === 'Pad - Combination All') {
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_MOUNT || selectedMounting === 'Pad' || selectedMounting === 'Pad - Combination All') {
       if (!studLength) missingFields.push('Select Stud Length');
     }
-    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.STUD_WITH_SPACER) {
+    if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER) {
       if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
     if (!sets) missingFields.push('Select Quantity');
@@ -12653,7 +12720,7 @@ function Logo({
     title: "Acrylic Thickness",
     value: selectedThickness?.value,
     onChange: handleOnChangeThickness,
-    options: _options__WEBPACK_IMPORTED_MODULE_9__.thicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _options__WEBPACK_IMPORTED_MODULE_10__.thicknessOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: thickness.value,
       value: thickness.value,
       defaultValue: thickness === selectedThickness
@@ -12687,7 +12754,7 @@ function Logo({
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Metal Film",
     onChange: e => setMetalFilm(e.target.value),
-    options: _options__WEBPACK_IMPORTED_MODULE_9__.metalFilmOptions.map(film => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _options__WEBPACK_IMPORTED_MODULE_10__.metalFilmOptions.map(film => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: film,
       value: film,
       defaultValue: film == metalFilm
@@ -12711,16 +12778,16 @@ function Logo({
       defaultValue: option.mounting_option === selectedMounting
     }, option.mounting_option)),
     value: selectedMounting
-  }), (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.STUD_WITH_SPACER || selectedMounting === 'Pad' || selectedMounting === 'Pad - Combination All' || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }), (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER || selectedMounting === 'Pad' || selectedMounting === 'Pad - Combination All' || selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: option.value,
       value: option.value,
       defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
-  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -12729,13 +12796,11 @@ function Logo({
       defaultValue: option.value == spacerStandoffDistance
     }, option.value)),
     value: spacerStandoffDistance
-  })), !item.hideQuantity && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  })), !item.hideQuantity && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_NumberInput__WEBPACK_IMPORTED_MODULE_5__["default"], {
     title: "Quantity",
-    onChange: handleOnChangeSets,
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_6__.setOptions,
     value: sets,
-    onlyValue: true
-  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_8__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    onChange: setSets
+  })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-xs text-[#9F9F9F] mb-4"
   }, "*Note: The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid"
@@ -17021,7 +17086,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_select__WEBPACK_IMPORTED_MODULE_47__ = __webpack_require__(/*! react-select */ "./node_modules/react-select/dist/react-select.esm.js");
+/* harmony import */ var react_select__WEBPACK_IMPORTED_MODULE_53__ = __webpack_require__(/*! react-select */ "./node_modules/react-select/dist/react-select.esm.js");
 /* harmony import */ var _SidebarAdmin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../SidebarAdmin */ "./src/scripts/SidebarAdmin.js");
 /* harmony import */ var _Signage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Signage */ "./src/scripts/Signage.js");
 /* harmony import */ var _components_AccordionGroup__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/AccordionGroup */ "./src/scripts/products/combine/components/AccordionGroup.js");
@@ -17033,41 +17098,47 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _acrylic_MetalLaminate_components_Letters__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../acrylic/MetalLaminate/components/Letters */ "./src/scripts/products/acrylic/MetalLaminate/components/Letters.js");
 /* harmony import */ var _acrylic_MetalLaminate_components_Logo__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../acrylic/MetalLaminate/components/Logo */ "./src/scripts/products/acrylic/MetalLaminate/components/Logo.js");
 /* harmony import */ var _acrylic_UvPrintedAcrylic_components_Logo__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../acrylic/UvPrintedAcrylic/components/Logo */ "./src/scripts/products/acrylic/UvPrintedAcrylic/components/Logo.js");
-/* harmony import */ var _metal_FabricatedStainless_components_Letters__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../metal/FabricatedStainless/components/Letters */ "./src/scripts/products/metal/FabricatedStainless/components/Letters.js");
-/* harmony import */ var _metal_FabricatedStainless_components_Logo__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../metal/FabricatedStainless/components/Logo */ "./src/scripts/products/metal/FabricatedStainless/components/Logo.js");
-/* harmony import */ var _metal_LaserCutAluminum_components_Letters__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../metal/LaserCutAluminum/components/Letters */ "./src/scripts/products/metal/LaserCutAluminum/components/Letters.js");
-/* harmony import */ var _metal_LaserCutAluminum_components_Logo__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../metal/LaserCutAluminum/components/Logo */ "./src/scripts/products/metal/LaserCutAluminum/components/Logo.js");
-/* harmony import */ var _metal_LaserCutStainless_components_Letters__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../metal/LaserCutStainless/components/Letters */ "./src/scripts/products/metal/LaserCutStainless/components/Letters.js");
-/* harmony import */ var _metal_LaserCutStainless_components_Logo__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../metal/LaserCutStainless/components/Logo */ "./src/scripts/products/metal/LaserCutStainless/components/Logo.js");
-/* harmony import */ var _metal_channel_AluminumResinFrontBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../metal-channel/AluminumResinFrontBackLit/components/Letters */ "./src/scripts/products/metal-channel/AluminumResinFrontBackLit/components/Letters.js");
-/* harmony import */ var _metal_channel_AluminumResinFrontBackLit_components_Logo__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../metal-channel/AluminumResinFrontBackLit/components/Logo */ "./src/scripts/products/metal-channel/AluminumResinFrontBackLit/components/Logo.js");
-/* harmony import */ var _metal_channel_AluminumResinFrontLit_components_Letters__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ../metal-channel/AluminumResinFrontLit/components/Letters */ "./src/scripts/products/metal-channel/AluminumResinFrontLit/components/Letters.js");
-/* harmony import */ var _metal_channel_AluminumResinFrontLit_components_Logo__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ../metal-channel/AluminumResinFrontLit/components/Logo */ "./src/scripts/products/metal-channel/AluminumResinFrontLit/components/Logo.js");
-/* harmony import */ var _metal_channel_TrimLessBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ../metal-channel/TrimLessBackLit/components/Letters */ "./src/scripts/products/metal-channel/TrimLessBackLit/components/Letters.js");
-/* harmony import */ var _metal_channel_TrimLessBackLit_components_Logo__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ../metal-channel/TrimLessBackLit/components/Logo */ "./src/scripts/products/metal-channel/TrimLessBackLit/components/Logo.js");
-/* harmony import */ var _metal_channel_TrimLessFrontAndBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ../metal-channel/TrimLessFrontAndBackLit/components/Letters */ "./src/scripts/products/metal-channel/TrimLessFrontAndBackLit/components/Letters.js");
-/* harmony import */ var _metal_channel_TrimLessFrontAndBackLit_components_Logo__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ../metal-channel/TrimLessFrontAndBackLit/components/Logo */ "./src/scripts/products/metal-channel/TrimLessFrontAndBackLit/components/Logo.js");
-/* harmony import */ var _metal_channel_TrimLessFrontLit_components_Letters__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ../metal-channel/TrimLessFrontLit/components/Letters */ "./src/scripts/products/metal-channel/TrimLessFrontLit/components/Letters.js");
-/* harmony import */ var _metal_channel_TrimLessFrontLit_components_Logo__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ../metal-channel/TrimLessFrontLit/components/Logo */ "./src/scripts/products/metal-channel/TrimLessFrontLit/components/Logo.js");
-/* harmony import */ var _pvc_PVCMetalLaminate_components_Letters__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ../pvc/PVCMetalLaminate/components/Letters */ "./src/scripts/products/pvc/PVCMetalLaminate/components/Letters.js");
-/* harmony import */ var _pvc_PVCMetalLaminate_components_Logo__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ../pvc/PVCMetalLaminate/components/Logo */ "./src/scripts/products/pvc/PVCMetalLaminate/components/Logo.js");
-/* harmony import */ var _pvc_PVCPainted_components_Letters__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ../pvc/PVCPainted/components/Letters */ "./src/scripts/products/pvc/PVCPainted/components/Letters.js");
-/* harmony import */ var _pvc_PVCPainted_components_Logo__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ../pvc/PVCPainted/components/Logo */ "./src/scripts/products/pvc/PVCPainted/components/Logo.js");
-/* harmony import */ var _pvc_PVCUv_components_Logo__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ../pvc/PVCUv/components/Logo */ "./src/scripts/products/pvc/PVCUv/components/Logo.js");
-/* harmony import */ var _led_neon_FlexNeonSign_components_NeonSign__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ../led-neon/FlexNeonSign/components/NeonSign */ "./src/scripts/products/led-neon/FlexNeonSign/components/NeonSign.js");
-/* harmony import */ var _led_neon_RigidNeonSignNoBacking_components_NeonSign__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ../led-neon/RigidNeonSignNoBacking/components/NeonSign */ "./src/scripts/products/led-neon/RigidNeonSignNoBacking/components/NeonSign.js");
-/* harmony import */ var _led_neon_RigidNeonSignWithBacking_components_NeonSign__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ../led-neon/RigidNeonSignWithBacking/components/NeonSign */ "./src/scripts/products/led-neon/RigidNeonSignWithBacking/components/NeonSign.js");
-/* harmony import */ var _custom_components_Logo__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! ../custom/components/Logo */ "./src/scripts/products/custom/components/Logo.js");
-/* harmony import */ var _acrylic_channel_AcrylicBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ../acrylic-channel/AcrylicBackLit/components/Letters */ "./src/scripts/products/acrylic-channel/AcrylicBackLit/components/Letters.js");
-/* harmony import */ var _acrylic_channel_AcrylicBackLit_components_Logo__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ../acrylic-channel/AcrylicBackLit/components/Logo */ "./src/scripts/products/acrylic-channel/AcrylicBackLit/components/Logo.js");
-/* harmony import */ var _acrylic_channel_AcrylicFrontBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ../acrylic-channel/AcrylicFrontBackLit/components/Letters */ "./src/scripts/products/acrylic-channel/AcrylicFrontBackLit/components/Letters.js");
-/* harmony import */ var _acrylic_channel_AcrylicFrontBackLit_components_Logo__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ../acrylic-channel/AcrylicFrontBackLit/components/Logo */ "./src/scripts/products/acrylic-channel/AcrylicFrontBackLit/components/Logo.js");
-/* harmony import */ var _acrylic_channel_AcrylicFrontLit_components_Letters__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ../acrylic-channel/AcrylicFrontLit/components/Letters */ "./src/scripts/products/acrylic-channel/AcrylicFrontLit/components/Letters.js");
-/* harmony import */ var _acrylic_channel_AcrylicFrontLit_components_Logo__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! ../acrylic-channel/AcrylicFrontLit/components/Logo */ "./src/scripts/products/acrylic-channel/AcrylicFrontLit/components/Logo.js");
-/* harmony import */ var _acrylic_channel_AcrylicFrontSideLit_components_Letters__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! ../acrylic-channel/AcrylicFrontSideLit/components/Letters */ "./src/scripts/products/acrylic-channel/AcrylicFrontSideLit/components/Letters.js");
-/* harmony import */ var _acrylic_channel_AcrylicFrontSideLit_components_Logo__WEBPACK_IMPORTED_MODULE_44__ = __webpack_require__(/*! ../acrylic-channel/AcrylicFrontSideLit/components/Logo */ "./src/scripts/products/acrylic-channel/AcrylicFrontSideLit/components/Logo.js");
-/* harmony import */ var _acrylic_channel_AcrylicSideLit_components_Letters__WEBPACK_IMPORTED_MODULE_45__ = __webpack_require__(/*! ../acrylic-channel/AcrylicSideLit/components/Letters */ "./src/scripts/products/acrylic-channel/AcrylicSideLit/components/Letters.js");
-/* harmony import */ var _acrylic_channel_AcrylicSideLit_components_Logo__WEBPACK_IMPORTED_MODULE_46__ = __webpack_require__(/*! ../acrylic-channel/AcrylicSideLit/components/Logo */ "./src/scripts/products/acrylic-channel/AcrylicSideLit/components/Logo.js");
+/* harmony import */ var _acrylic_AcryMetal_components_Logo__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../acrylic/AcryMetal/components/Logo */ "./src/scripts/products/acrylic/AcryMetal/components/Logo.js");
+/* harmony import */ var _acrylic_AcryMetal_components_Letters__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../acrylic/AcryMetal/components/Letters */ "./src/scripts/products/acrylic/AcryMetal/components/Letters.js");
+/* harmony import */ var _metal_FabricatedStainless_components_Letters__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../metal/FabricatedStainless/components/Letters */ "./src/scripts/products/metal/FabricatedStainless/components/Letters.js");
+/* harmony import */ var _metal_FabricatedStainless_components_Logo__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../metal/FabricatedStainless/components/Logo */ "./src/scripts/products/metal/FabricatedStainless/components/Logo.js");
+/* harmony import */ var _metal_LaserCutAluminum_components_Letters__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../metal/LaserCutAluminum/components/Letters */ "./src/scripts/products/metal/LaserCutAluminum/components/Letters.js");
+/* harmony import */ var _metal_LaserCutAluminum_components_Logo__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../metal/LaserCutAluminum/components/Logo */ "./src/scripts/products/metal/LaserCutAluminum/components/Logo.js");
+/* harmony import */ var _metal_LaserCutStainless_components_Letters__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../metal/LaserCutStainless/components/Letters */ "./src/scripts/products/metal/LaserCutStainless/components/Letters.js");
+/* harmony import */ var _metal_LaserCutStainless_components_Logo__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../metal/LaserCutStainless/components/Logo */ "./src/scripts/products/metal/LaserCutStainless/components/Logo.js");
+/* harmony import */ var _metal_channel_AluminumResinFrontBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ../metal-channel/AluminumResinFrontBackLit/components/Letters */ "./src/scripts/products/metal-channel/AluminumResinFrontBackLit/components/Letters.js");
+/* harmony import */ var _metal_channel_AluminumResinFrontBackLit_components_Logo__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ../metal-channel/AluminumResinFrontBackLit/components/Logo */ "./src/scripts/products/metal-channel/AluminumResinFrontBackLit/components/Logo.js");
+/* harmony import */ var _metal_channel_AluminumResinFrontLit_components_Letters__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ../metal-channel/AluminumResinFrontLit/components/Letters */ "./src/scripts/products/metal-channel/AluminumResinFrontLit/components/Letters.js");
+/* harmony import */ var _metal_channel_AluminumResinFrontLit_components_Logo__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ../metal-channel/AluminumResinFrontLit/components/Logo */ "./src/scripts/products/metal-channel/AluminumResinFrontLit/components/Logo.js");
+/* harmony import */ var _metal_channel_TrimLessBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ../metal-channel/TrimLessBackLit/components/Letters */ "./src/scripts/products/metal-channel/TrimLessBackLit/components/Letters.js");
+/* harmony import */ var _metal_channel_TrimLessBackLit_components_Logo__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ../metal-channel/TrimLessBackLit/components/Logo */ "./src/scripts/products/metal-channel/TrimLessBackLit/components/Logo.js");
+/* harmony import */ var _metal_channel_TrimLessFrontAndBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ../metal-channel/TrimLessFrontAndBackLit/components/Letters */ "./src/scripts/products/metal-channel/TrimLessFrontAndBackLit/components/Letters.js");
+/* harmony import */ var _metal_channel_TrimLessFrontAndBackLit_components_Logo__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ../metal-channel/TrimLessFrontAndBackLit/components/Logo */ "./src/scripts/products/metal-channel/TrimLessFrontAndBackLit/components/Logo.js");
+/* harmony import */ var _metal_channel_TrimLessFrontLit_components_Letters__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ../metal-channel/TrimLessFrontLit/components/Letters */ "./src/scripts/products/metal-channel/TrimLessFrontLit/components/Letters.js");
+/* harmony import */ var _metal_channel_TrimLessFrontLit_components_Logo__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ../metal-channel/TrimLessFrontLit/components/Logo */ "./src/scripts/products/metal-channel/TrimLessFrontLit/components/Logo.js");
+/* harmony import */ var _pvc_PVCMetalLaminate_components_Letters__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ../pvc/PVCMetalLaminate/components/Letters */ "./src/scripts/products/pvc/PVCMetalLaminate/components/Letters.js");
+/* harmony import */ var _pvc_PVCMetalLaminate_components_Logo__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ../pvc/PVCMetalLaminate/components/Logo */ "./src/scripts/products/pvc/PVCMetalLaminate/components/Logo.js");
+/* harmony import */ var _pvc_PVCPainted_components_Letters__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ../pvc/PVCPainted/components/Letters */ "./src/scripts/products/pvc/PVCPainted/components/Letters.js");
+/* harmony import */ var _pvc_PVCPainted_components_Logo__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ../pvc/PVCPainted/components/Logo */ "./src/scripts/products/pvc/PVCPainted/components/Logo.js");
+/* harmony import */ var _pvc_PVCUv_components_Logo__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ../pvc/PVCUv/components/Logo */ "./src/scripts/products/pvc/PVCUv/components/Logo.js");
+/* harmony import */ var _pvc_PVCMetal_components_Logo__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ../pvc/PVCMetal/components/Logo */ "./src/scripts/products/pvc/PVCMetal/components/Logo.js");
+/* harmony import */ var _pvc_PVCMetal_components_Letters__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! ../pvc/PVCMetal/components/Letters */ "./src/scripts/products/pvc/PVCMetal/components/Letters.js");
+/* harmony import */ var _led_neon_FlexNeonSign_components_NeonSign__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ../led-neon/FlexNeonSign/components/NeonSign */ "./src/scripts/products/led-neon/FlexNeonSign/components/NeonSign.js");
+/* harmony import */ var _led_neon_RigidNeonSignNoBacking_components_NeonSign__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ../led-neon/RigidNeonSignNoBacking/components/NeonSign */ "./src/scripts/products/led-neon/RigidNeonSignNoBacking/components/NeonSign.js");
+/* harmony import */ var _led_neon_RigidNeonSignWithBacking_components_NeonSign__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ../led-neon/RigidNeonSignWithBacking/components/NeonSign */ "./src/scripts/products/led-neon/RigidNeonSignWithBacking/components/NeonSign.js");
+/* harmony import */ var _custom_components_Logo__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ../custom/components/Logo */ "./src/scripts/products/custom/components/Logo.js");
+/* harmony import */ var _acrylic_channel_AcrylicBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ../acrylic-channel/AcrylicBackLit/components/Letters */ "./src/scripts/products/acrylic-channel/AcrylicBackLit/components/Letters.js");
+/* harmony import */ var _acrylic_channel_AcrylicBackLit_components_Logo__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! ../acrylic-channel/AcrylicBackLit/components/Logo */ "./src/scripts/products/acrylic-channel/AcrylicBackLit/components/Logo.js");
+/* harmony import */ var _acrylic_channel_AcrylicFrontBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! ../acrylic-channel/AcrylicFrontBackLit/components/Letters */ "./src/scripts/products/acrylic-channel/AcrylicFrontBackLit/components/Letters.js");
+/* harmony import */ var _acrylic_channel_AcrylicFrontBackLit_components_Logo__WEBPACK_IMPORTED_MODULE_44__ = __webpack_require__(/*! ../acrylic-channel/AcrylicFrontBackLit/components/Logo */ "./src/scripts/products/acrylic-channel/AcrylicFrontBackLit/components/Logo.js");
+/* harmony import */ var _acrylic_channel_AcrylicFrontLit_components_Letters__WEBPACK_IMPORTED_MODULE_45__ = __webpack_require__(/*! ../acrylic-channel/AcrylicFrontLit/components/Letters */ "./src/scripts/products/acrylic-channel/AcrylicFrontLit/components/Letters.js");
+/* harmony import */ var _acrylic_channel_AcrylicFrontLit_components_Logo__WEBPACK_IMPORTED_MODULE_46__ = __webpack_require__(/*! ../acrylic-channel/AcrylicFrontLit/components/Logo */ "./src/scripts/products/acrylic-channel/AcrylicFrontLit/components/Logo.js");
+/* harmony import */ var _acrylic_channel_AcrylicFrontSideLit_components_Letters__WEBPACK_IMPORTED_MODULE_47__ = __webpack_require__(/*! ../acrylic-channel/AcrylicFrontSideLit/components/Letters */ "./src/scripts/products/acrylic-channel/AcrylicFrontSideLit/components/Letters.js");
+/* harmony import */ var _acrylic_channel_AcrylicFrontSideLit_components_Logo__WEBPACK_IMPORTED_MODULE_48__ = __webpack_require__(/*! ../acrylic-channel/AcrylicFrontSideLit/components/Logo */ "./src/scripts/products/acrylic-channel/AcrylicFrontSideLit/components/Logo.js");
+/* harmony import */ var _acrylic_channel_AcrylicSideLit_components_Letters__WEBPACK_IMPORTED_MODULE_49__ = __webpack_require__(/*! ../acrylic-channel/AcrylicSideLit/components/Letters */ "./src/scripts/products/acrylic-channel/AcrylicSideLit/components/Letters.js");
+/* harmony import */ var _acrylic_channel_AcrylicSideLit_components_Logo__WEBPACK_IMPORTED_MODULE_50__ = __webpack_require__(/*! ../acrylic-channel/AcrylicSideLit/components/Logo */ "./src/scripts/products/acrylic-channel/AcrylicSideLit/components/Logo.js");
+/* harmony import */ var _wayfinding_EtchedFabricated_components_EtchedSign__WEBPACK_IMPORTED_MODULE_51__ = __webpack_require__(/*! ../wayfinding/EtchedFabricated/components/EtchedSign */ "./src/scripts/products/wayfinding/EtchedFabricated/components/EtchedSign.js");
+/* harmony import */ var _wayfinding_EtchedFlatCut_components_EtchedSign__WEBPACK_IMPORTED_MODULE_52__ = __webpack_require__(/*! ../wayfinding/EtchedFlatCut/components/EtchedSign */ "./src/scripts/products/wayfinding/EtchedFlatCut/components/EtchedSign.js");
 
 
 
@@ -17078,6 +17149,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /*Acrylic */
+
+
 
 
 
@@ -17108,6 +17181,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
 /*LED */
 
 
@@ -17123,6 +17198,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+/** WAYFINDING */
 
 
 const productLines = NovaQuote.product_lines_accordion;
@@ -17172,6 +17250,50 @@ function CombineQuotes() {
   const showComponent = item => {
     let output;
     switch (item.component) {
+      case 'pvcMetal':
+        if (item.type === 'letters') {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_pvc_PVCMetal_components_Letters__WEBPACK_IMPORTED_MODULE_36__.Letters, {
+            key: item.id,
+            item: item,
+            productId: item.product
+          });
+        } else {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_pvc_PVCMetal_components_Logo__WEBPACK_IMPORTED_MODULE_35__.Logo, {
+            key: item.id,
+            item: item,
+            productId: item.product
+          });
+        }
+        break;
+      case 'EtchedFabricated':
+        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wayfinding_EtchedFabricated_components_EtchedSign__WEBPACK_IMPORTED_MODULE_51__.EtchedSign, {
+          key: item.id,
+          item: item,
+          productId: item.product
+        });
+        break;
+      case 'EtchedFlatCut':
+        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wayfinding_EtchedFlatCut_components_EtchedSign__WEBPACK_IMPORTED_MODULE_52__.EtchedSign, {
+          key: item.id,
+          item: item,
+          productId: item.product
+        });
+        break;
+      case 'AcryMetal':
+        if (item.type === 'letters') {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_acrylic_AcryMetal_components_Letters__WEBPACK_IMPORTED_MODULE_13__.Letters, {
+            key: item.id,
+            item: item,
+            productId: item.product
+          });
+        } else {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_acrylic_AcryMetal_components_Logo__WEBPACK_IMPORTED_MODULE_12__.Logo, {
+            key: item.id,
+            item: item,
+            productId: item.product
+          });
+        }
+        break;
       case 'ThreeDLayer':
         output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ThreeDLayer, {
           key: item.id,
@@ -17181,13 +17303,13 @@ function CombineQuotes() {
         break;
       case 'AcrylicSideLit':
         if (item.type === 'letters') {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_acrylic_channel_AcrylicSideLit_components_Letters__WEBPACK_IMPORTED_MODULE_45__.Letters, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_acrylic_channel_AcrylicSideLit_components_Letters__WEBPACK_IMPORTED_MODULE_49__.Letters, {
             key: item.id,
             item: item,
             productId: item.product
           });
         } else {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_acrylic_channel_AcrylicSideLit_components_Logo__WEBPACK_IMPORTED_MODULE_46__.Logo, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_acrylic_channel_AcrylicSideLit_components_Logo__WEBPACK_IMPORTED_MODULE_50__.Logo, {
             key: item.id,
             item: item,
             productId: item.product
@@ -17196,13 +17318,13 @@ function CombineQuotes() {
         break;
       case 'AcrylicFrontSideLit':
         if (item.type === 'letters') {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_acrylic_channel_AcrylicFrontSideLit_components_Letters__WEBPACK_IMPORTED_MODULE_43__.Letters, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_acrylic_channel_AcrylicFrontSideLit_components_Letters__WEBPACK_IMPORTED_MODULE_47__.Letters, {
             key: item.id,
             item: item,
             productId: item.product
           });
         } else {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_acrylic_channel_AcrylicFrontSideLit_components_Logo__WEBPACK_IMPORTED_MODULE_44__.Logo, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_acrylic_channel_AcrylicFrontSideLit_components_Logo__WEBPACK_IMPORTED_MODULE_48__.Logo, {
             key: item.id,
             item: item,
             productId: item.product
@@ -17211,13 +17333,13 @@ function CombineQuotes() {
         break;
       case 'AcrylicFrontBackLit':
         if (item.type === 'letters') {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_acrylic_channel_AcrylicFrontBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_39__.Letters, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_acrylic_channel_AcrylicFrontBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_43__.Letters, {
             key: item.id,
             item: item,
             productId: item.product
           });
         } else {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_acrylic_channel_AcrylicFrontBackLit_components_Logo__WEBPACK_IMPORTED_MODULE_40__.Logo, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_acrylic_channel_AcrylicFrontBackLit_components_Logo__WEBPACK_IMPORTED_MODULE_44__.Logo, {
             key: item.id,
             item: item,
             productId: item.product
@@ -17226,13 +17348,13 @@ function CombineQuotes() {
         break;
       case 'AcrylicBackLit':
         if (item.type === 'letters') {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_acrylic_channel_AcrylicBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_37__.Letters, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_acrylic_channel_AcrylicBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_41__.Letters, {
             key: item.id,
             item: item,
             productId: item.product
           });
         } else {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_acrylic_channel_AcrylicBackLit_components_Logo__WEBPACK_IMPORTED_MODULE_38__.Logo, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_acrylic_channel_AcrylicBackLit_components_Logo__WEBPACK_IMPORTED_MODULE_42__.Logo, {
             key: item.id,
             item: item,
             productId: item.product
@@ -17241,13 +17363,13 @@ function CombineQuotes() {
         break;
       case 'AcrylicFrontLit':
         if (item.type === 'letters') {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_acrylic_channel_AcrylicFrontLit_components_Letters__WEBPACK_IMPORTED_MODULE_41__.Letters, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_acrylic_channel_AcrylicFrontLit_components_Letters__WEBPACK_IMPORTED_MODULE_45__.Letters, {
             key: item.id,
             item: item,
             productId: item.product
           });
         } else {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_acrylic_channel_AcrylicFrontLit_components_Logo__WEBPACK_IMPORTED_MODULE_42__.Logo, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_acrylic_channel_AcrylicFrontLit_components_Logo__WEBPACK_IMPORTED_MODULE_46__.Logo, {
             key: item.id,
             item: item,
             productId: item.product
@@ -17255,28 +17377,28 @@ function CombineQuotes() {
         }
         break;
       case 'CustomProject':
-        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_custom_components_Logo__WEBPACK_IMPORTED_MODULE_36__.Logo, {
+        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_custom_components_Logo__WEBPACK_IMPORTED_MODULE_40__.Logo, {
           key: item.id,
           item: item,
           productId: item.product
         });
         break;
       case 'RigidNeonSignNoBacking':
-        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_led_neon_RigidNeonSignNoBacking_components_NeonSign__WEBPACK_IMPORTED_MODULE_34__.NeonSign, {
+        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_led_neon_RigidNeonSignNoBacking_components_NeonSign__WEBPACK_IMPORTED_MODULE_38__.NeonSign, {
           key: item.id,
           item: item,
           productId: item.product
         });
         break;
       case 'RigidNeonSignWithBacking':
-        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_led_neon_RigidNeonSignWithBacking_components_NeonSign__WEBPACK_IMPORTED_MODULE_35__.NeonSign, {
+        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_led_neon_RigidNeonSignWithBacking_components_NeonSign__WEBPACK_IMPORTED_MODULE_39__.NeonSign, {
           key: item.id,
           item: item,
           productId: item.product
         });
         break;
       case 'FlexNeonSign':
-        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_led_neon_FlexNeonSign_components_NeonSign__WEBPACK_IMPORTED_MODULE_33__.NeonSign, {
+        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_led_neon_FlexNeonSign_components_NeonSign__WEBPACK_IMPORTED_MODULE_37__.NeonSign, {
           key: item.id,
           item: item,
           productId: item.product
@@ -17284,13 +17406,13 @@ function CombineQuotes() {
         break;
       case 'AluminumResinFrontBackLit':
         if (item.type === 'letters') {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_AluminumResinFrontBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_18__.Letters, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_AluminumResinFrontBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_20__.Letters, {
             key: item.id,
             item: item,
             productId: item.product
           });
         } else {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_AluminumResinFrontBackLit_components_Logo__WEBPACK_IMPORTED_MODULE_19__.Logo, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_AluminumResinFrontBackLit_components_Logo__WEBPACK_IMPORTED_MODULE_21__.Logo, {
             key: item.id,
             item: item,
             productId: item.product
@@ -17299,13 +17421,13 @@ function CombineQuotes() {
         break;
       case 'AluminumResinFrontLit':
         if (item.type === 'letters') {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_AluminumResinFrontLit_components_Letters__WEBPACK_IMPORTED_MODULE_20__.Letters, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_AluminumResinFrontLit_components_Letters__WEBPACK_IMPORTED_MODULE_22__.Letters, {
             key: item.id,
             item: item,
             productId: item.product
           });
         } else {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_AluminumResinFrontLit_components_Logo__WEBPACK_IMPORTED_MODULE_21__.Logo, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_AluminumResinFrontLit_components_Logo__WEBPACK_IMPORTED_MODULE_23__.Logo, {
             key: item.id,
             item: item,
             productId: item.product
@@ -17313,7 +17435,7 @@ function CombineQuotes() {
         }
         break;
       case 'PVCUv':
-        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_pvc_PVCUv_components_Logo__WEBPACK_IMPORTED_MODULE_32__.Logo, {
+        output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_pvc_PVCUv_components_Logo__WEBPACK_IMPORTED_MODULE_34__.Logo, {
           key: item.id,
           item: item,
           productId: item.product
@@ -17321,13 +17443,13 @@ function CombineQuotes() {
         break;
       case 'PVCMetalLaminate':
         if (item.type === 'letters') {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_pvc_PVCMetalLaminate_components_Letters__WEBPACK_IMPORTED_MODULE_28__.Letters, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_pvc_PVCMetalLaminate_components_Letters__WEBPACK_IMPORTED_MODULE_30__.Letters, {
             key: item.id,
             item: item,
             productId: item.product
           });
         } else {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_pvc_PVCMetalLaminate_components_Logo__WEBPACK_IMPORTED_MODULE_29__.Logo, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_pvc_PVCMetalLaminate_components_Logo__WEBPACK_IMPORTED_MODULE_31__.Logo, {
             key: item.id,
             item: item,
             productId: item.product
@@ -17336,13 +17458,13 @@ function CombineQuotes() {
         break;
       case 'PVCPainted':
         if (item.type === 'letters') {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_pvc_PVCPainted_components_Letters__WEBPACK_IMPORTED_MODULE_30__.Letters, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_pvc_PVCPainted_components_Letters__WEBPACK_IMPORTED_MODULE_32__.Letters, {
             key: item.id,
             item: item,
             productId: item.product
           });
         } else {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_pvc_PVCPainted_components_Logo__WEBPACK_IMPORTED_MODULE_31__.Logo, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_pvc_PVCPainted_components_Logo__WEBPACK_IMPORTED_MODULE_33__.Logo, {
             key: item.id,
             item: item,
             productId: item.product
@@ -17351,13 +17473,13 @@ function CombineQuotes() {
         break;
       case 'TrimLessFrontAndBackLit':
         if (item.type === 'letters') {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_TrimLessFrontAndBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_24__.Letters, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_TrimLessFrontAndBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_26__.Letters, {
             key: item.id,
             item: item,
             productId: item.product
           });
         } else {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_TrimLessFrontAndBackLit_components_Logo__WEBPACK_IMPORTED_MODULE_25__.Logo, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_TrimLessFrontAndBackLit_components_Logo__WEBPACK_IMPORTED_MODULE_27__.Logo, {
             key: item.id,
             item: item,
             productId: item.product
@@ -17366,13 +17488,13 @@ function CombineQuotes() {
         break;
       case 'TrimLessFrontLit':
         if (item.type === 'letters') {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_TrimLessFrontLit_components_Letters__WEBPACK_IMPORTED_MODULE_26__.Letters, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_TrimLessFrontLit_components_Letters__WEBPACK_IMPORTED_MODULE_28__.Letters, {
             key: item.id,
             item: item,
             productId: item.product
           });
         } else {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_TrimLessFrontLit_components_Logo__WEBPACK_IMPORTED_MODULE_27__.Logo, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_TrimLessFrontLit_components_Logo__WEBPACK_IMPORTED_MODULE_29__.Logo, {
             key: item.id,
             item: item,
             productId: item.product
@@ -17381,13 +17503,13 @@ function CombineQuotes() {
         break;
       case 'TrimLessBackLit':
         if (item.type === 'letters') {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_TrimLessBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_22__.Letters, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_TrimLessBackLit_components_Letters__WEBPACK_IMPORTED_MODULE_24__.Letters, {
             key: item.id,
             item: item,
             productId: item.product
           });
         } else {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_TrimLessBackLit_components_Logo__WEBPACK_IMPORTED_MODULE_23__.Logo, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_channel_TrimLessBackLit_components_Logo__WEBPACK_IMPORTED_MODULE_25__.Logo, {
             key: item.id,
             item: item,
             productId: item.product
@@ -17396,13 +17518,13 @@ function CombineQuotes() {
         break;
       case 'MetalFabricated':
         if (item.type === 'letters') {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_FabricatedStainless_components_Letters__WEBPACK_IMPORTED_MODULE_12__.Letters, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_FabricatedStainless_components_Letters__WEBPACK_IMPORTED_MODULE_14__.Letters, {
             key: item.id,
             item: item,
             productId: item.product
           });
         } else {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_FabricatedStainless_components_Logo__WEBPACK_IMPORTED_MODULE_13__.Logo, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_FabricatedStainless_components_Logo__WEBPACK_IMPORTED_MODULE_15__.Logo, {
             key: item.id,
             item: item,
             productId: item.product
@@ -17411,13 +17533,13 @@ function CombineQuotes() {
         break;
       case 'MetalAluminum':
         if (item.type === 'letters') {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_LaserCutAluminum_components_Letters__WEBPACK_IMPORTED_MODULE_14__.Letters, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_LaserCutAluminum_components_Letters__WEBPACK_IMPORTED_MODULE_16__.Letters, {
             key: item.id,
             item: item,
             productId: item.product
           });
         } else {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_LaserCutAluminum_components_Logo__WEBPACK_IMPORTED_MODULE_15__.Logo, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_LaserCutAluminum_components_Logo__WEBPACK_IMPORTED_MODULE_17__.Logo, {
             key: item.id,
             item: item,
             productId: item.product
@@ -17426,13 +17548,13 @@ function CombineQuotes() {
         break;
       case 'MetalStainless':
         if (item.type === 'letters') {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_LaserCutStainless_components_Letters__WEBPACK_IMPORTED_MODULE_16__.Letters, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_LaserCutStainless_components_Letters__WEBPACK_IMPORTED_MODULE_18__.Letters, {
             key: item.id,
             item: item,
             productId: item.product
           });
         } else {
-          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_LaserCutStainless_components_Logo__WEBPACK_IMPORTED_MODULE_17__.Logo, {
+          output = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_metal_LaserCutStainless_components_Logo__WEBPACK_IMPORTED_MODULE_19__.Logo, {
             key: item.id,
             item: item,
             productId: item.product
@@ -17496,7 +17618,7 @@ function CombineQuotes() {
     className: "border-gray-200 p-4 rounded-md border mb-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "font-title text-lg mb-4"
-  }, "Select Partner:"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_select__WEBPACK_IMPORTED_MODULE_47__["default"], {
+  }, "Select Partner:"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_select__WEBPACK_IMPORTED_MODULE_53__["default"], {
     className: "basic-single",
     classNames: {
       indicatorSeparator: () => 'hidden'
@@ -17514,6 +17636,7 @@ function CombineQuotes() {
     name: "partners"
   })), signage.map((item, index) => {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Signage__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      key: item.id,
       index: index,
       id: item.id,
       item: item,
@@ -17526,10 +17649,14 @@ function CombineQuotes() {
     className: "font-title text-3xl"
   }, "PRODUCT LINES"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: " border-gray-200 p-4 rounded-md border"
-  }, productLines.map(productLine => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_AccordionGroup__WEBPACK_IMPORTED_MODULE_3__["default"], {
-    group: productLine.product_line,
-    products: productLine.products
-  }))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_SidebarAdmin__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }, productLines.map(productLine => {
+    const uniqueKey = `product-line-${productLine.product_line.ID}`;
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_AccordionGroup__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      key: uniqueKey,
+      group: productLine.product_line,
+      products: productLine.products
+    });
+  })))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_SidebarAdmin__WEBPACK_IMPORTED_MODULE_1__["default"], {
     storage: storage
   })));
 }
@@ -17657,26 +17784,29 @@ function AccordionItem({
   products,
   isOpen
 }) {
-  const [open, setOpen] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(isOpen);
+  const [open, setOpen] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const addSignage = (0,_CombineQuoteContext__WEBPACK_IMPORTED_MODULE_2__.useCombineQuote)();
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    isOpen(open);
-  }, [open]);
+  const toggleOpen = () => {
+    const newOpenState = !open;
+    setOpen(newOpenState);
+    isOpen(newOpenState);
+  };
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: open ? 'bg-slate-50' : ''
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: `p-4 font-title uppercase text-lg select-none cursor-pointer bg-white hover:bg-slate-50 flex justify-between items-center ${open && 'bg-slate-50'}`,
-    onClick: () => setOpen(prev => !prev)
+    onClick: toggleOpen
   }, title, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, {
     open: !open
   })), open && products.map(product => {
+    const uniqueKey = `${product.id}-${product.component}`;
     return product.component === 'ThreeDLayer' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(OutputThreeDLayer, {
-      key: product.id,
+      key: uniqueKey,
       product: product,
       addSignage: addSignage,
       title: title
     }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ProductItems, {
-      key: product.id,
+      key: uniqueKey,
       product: product,
       addSignage: addSignage,
       title: title
@@ -17708,6 +17838,7 @@ const ProductItems = ({
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex gap-2"
   }, product.letters && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AddSignage__WEBPACK_IMPORTED_MODULE_4__.AddSignage, {
+    key: `${product.product.ID}-letters`,
     addSignage: addSignage,
     product: product,
     title: title,
@@ -17715,6 +17846,7 @@ const ProductItems = ({
   }, "ADD LETTERS", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "ml-2"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null))), product.logo && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AddSignage__WEBPACK_IMPORTED_MODULE_4__.AddSignage, {
+    key: `${product.product.ID}-logo`,
     addSignage: addSignage,
     product: product,
     title: title,
@@ -17722,13 +17854,23 @@ const ProductItems = ({
   }, "ADD LOGO", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "ml-2"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null))), product.sign && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AddSignage__WEBPACK_IMPORTED_MODULE_4__.AddSignage, {
+    key: `${product.product.ID}-sign`,
     addSignage: addSignage,
     product: product,
     title: title,
     type: "SIGN"
   }, "ADD SIGN", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "ml-2"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null))), product.etched && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AddSignage__WEBPACK_IMPORTED_MODULE_4__.AddSignage, {
+    key: `${product.product.ID}-etched`,
+    addSignage: addSignage,
+    product: product,
+    title: title,
+    type: "ETCHED SIGN"
+  }, "ADD ETCHED SIGN", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "ml-2"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_1__.PlusIcon, null))), product.custom && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AddSignage__WEBPACK_IMPORTED_MODULE_4__.AddSignage, {
+    key: `${product.product.ID}-custom`,
     addSignage: addSignage,
     product: product,
     title: title,
@@ -17803,7 +17945,7 @@ __webpack_require__.r(__webpack_exports__);
 const AddSignage = ({
   addSignage,
   product,
-  type,
+  type = 'CUSTOM',
   title,
   children
 }) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {

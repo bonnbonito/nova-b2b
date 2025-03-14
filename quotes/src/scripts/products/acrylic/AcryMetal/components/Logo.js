@@ -1,8 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Description from '../../../../Description';
 import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
 import convert_json from '../../../../utils/ConvertJson';
+import NumberInput from '../../../../NumberInput';
 import { getLogoPricingTablebyThickness, spacerPricing } from '../../../../utils/Pricing';
 import {
   mountingDefaultOptions,
@@ -591,15 +592,7 @@ export function Logo({ item }) {
           </>
         )}
 
-        {!item.hideQuantity && (
-          <Dropdown
-            title="Quantity"
-            onChange={handleOnChangeSets}
-            options={setOptions}
-            value={sets}
-            onlyValue={true}
-          />
-        )}
+        {!item.hideQuantity && <NumberInput title="Quantity" value={sets} onChange={setSets} />}
       </div>
 
       {selectedMounting === STUD_WITH_SPACER && (
