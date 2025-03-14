@@ -218,7 +218,7 @@ export function Logo({ item }) {
   }, [selectedThickness]);
 
   const handleOnChangeSets = e => {
-    setSets(e.target.value);
+    setSets(Number(e.target.value));
   };
 
   function updateSignage() {
@@ -592,7 +592,9 @@ export function Logo({ item }) {
           </>
         )}
 
-        {!item.hideQuantity && <NumberInput title="Quantity" value={sets} onChange={setSets} />}
+        {!item.hideQuantity && (
+          <NumberInput title="Quantity" value={sets} onChange={handleOnChangeSets} />
+        )}
       </div>
 
       {selectedMounting === STUD_WITH_SPACER && (

@@ -12027,7 +12027,7 @@ function Letters({
   const handleComments = e => setComments(e.target.value);
   const handleSelectFont = value => setFont(value);
   const handleOnChangeSets = e => {
-    setSets(e.target.value);
+    setSets(Number(e.target.value));
   };
   const handleOnChangeMount = e => {
     const target = e.target.value;
@@ -12336,7 +12336,7 @@ function Letters({
   })), !item.hideQuantity && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_NumberInput__WEBPACK_IMPORTED_MODULE_8__["default"], {
     title: "Quantity",
     value: sets,
-    onChange: setSets
+    onChange: handleOnChangeSets
   })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-xs text-[#9F9F9F] mb-4"
   }, "*Note: The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -12544,7 +12544,7 @@ function Logo({
     }
   }, [selectedThickness]);
   const handleOnChangeSets = e => {
-    setSets(e.target.value);
+    setSets(Number(e.target.value));
   };
   function updateSignage() {
     if (!signage.some(sign => sign.id === item.id)) return;
@@ -12799,7 +12799,7 @@ function Logo({
   })), !item.hideQuantity && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_NumberInput__WEBPACK_IMPORTED_MODULE_5__["default"], {
     title: "Quantity",
     value: sets,
-    onChange: setSets
+    onChange: handleOnChangeSets
   })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-xs text-[#9F9F9F] mb-4"
   }, "*Note: The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {

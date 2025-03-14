@@ -262,7 +262,7 @@ export function Letters({ item }) {
   const handleSelectFont = value => setFont(value);
 
   const handleOnChangeSets = e => {
-    setSets(e.target.value);
+    setSets(Number(e.target.value));
   };
 
   const handleOnChangeMount = e => {
@@ -711,7 +711,9 @@ export function Letters({ item }) {
           </>
         )}
 
-        {!item.hideQuantity && <NumberInput title="Quantity" value={sets} onChange={setSets} />}
+        {!item.hideQuantity && (
+          <NumberInput title="Quantity" value={sets} onChange={handleOnChangeSets} />
+        )}
       </div>
 
       {selectedMounting === STUD_WITH_SPACER && (
