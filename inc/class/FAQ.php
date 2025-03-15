@@ -24,6 +24,7 @@ class FAQ {
 	 * Class Constructor.
 	 */
 	public function __construct() {
+		$this->setup_content_filter();
 		add_action( 'kadence_single_content', array( $this, 'element_display' ), 1 );
 		add_shortcode( 'faq_breadcrumbs', array( $this, 'output_breadcrumbs' ) );
 		add_shortcode( 'faq_content', array( $this, 'output_content' ) );
@@ -128,6 +129,25 @@ class FAQ {
 		return ob_get_clean();
 	}
 
+	public function setup_content_filter() {
+		global $wp_embed;
+
+		// First run the default WordPress filters
+		add_filter( 'nova_faq_content', 'wpautop' );
+		add_filter( 'nova_faq_content', 'do_blocks', 9 ); // Run blocks before shortcodes
+		add_filter( 'nova_faq_content', 'wptexturize' );
+		add_filter( 'nova_faq_content', 'convert_chars' );
+		add_filter( 'nova_faq_content', 'convert_smilies' );
+		add_filter( 'nova_faq_content', 'prepend_attachment' );
+
+		// Then run embed and shortcode filters
+		add_filter( 'nova_faq_content', array( $wp_embed, 'run_shortcode' ), 8 );
+		add_filter( 'nova_faq_content', array( $wp_embed, 'autoembed' ), 8 );
+		add_filter( 'nova_faq_content', 'shortcode_unautop' );
+		add_filter( 'nova_faq_content', 'wp_filter_content_tags' );
+		add_filter( 'nova_faq_content', 'do_shortcode', 11 );
+	}
+
 	public function nova_product_faqs() {
 		$faqs = get_field( 'faq_questions' );
 
@@ -150,7 +170,7 @@ class FAQ {
 							<div class="expander-content">
 								<div class="content-wrapper">
 									<div class="post-content-container" style="padding-top: 2em;">
-										<?php echo do_shortcode( $faq->post_content ); ?>
+										<?php echo apply_filters( 'nova_faq_content', $faq->post_content ); ?>
 									</div>
 								</div>
 							</div>
