@@ -4271,30 +4271,42 @@ function UploadFiles({
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
   const fileRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const [accessToken, setAccessToken] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
+  const [isDragging, setIsDragging] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const maxFiles = 5;
-  const handleButtonClick = () => {
-    if (fileNames?.length >= maxFiles) {
-      alert(`You can upload a maximum of ${maxFiles} files.`);
-      return;
-    }
-    fileRef.current.click();
-  };
-  const handleChange = async event => {
-    const totalAllowedUploads = maxFiles - (fileNames?.length || 0); // Calculate how many more files can be uploaded
+  const maxFilesReached = fileNames?.length >= maxFiles;
+  const handleFiles = async files => {
+    const totalAllowedUploads = maxFiles - (fileNames?.length || 0);
     if (totalAllowedUploads <= 0) {
       alert(`You have reached the maximum upload limit of ${maxFiles} files.`);
-      event.target.value = ''; // Reset the file input
       return;
     }
-    const files = Array.from(event.target.files).slice(0, totalAllowedUploads); // Only take as many files as can still be uploaded
-    if (files.length > 0) {
-      for (const file of files) {
+    const validFiles = Array.from(files).slice(0, totalAllowedUploads).filter(file => /\.(pdf|ai|png|jpg|jpeg)$/i.test(file.name));
+    if (validFiles.length > 0) {
+      for (const file of validFiles) {
         await handleFileUpload(file);
       }
-      event.target.value = ''; // Reset the file input after processing
-    } else {
-      console.log('No file to upload');
     }
+  };
+  const handleDragOver = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(e => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  }, []);
+  const handleDragLeave = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(e => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  }, []);
+  const handleDrop = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(e => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+    const droppedFiles = e.dataTransfer.files;
+    handleFiles(droppedFiles);
+  }, []);
+  const handleChange = event => {
+    handleFiles(event.target.files);
+    event.target.value = ''; // Reset input
   };
   const getAccessToken = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(async () => {
     if (accessToken) return accessToken;
@@ -4547,22 +4559,34 @@ function UploadFiles({
     }
   };
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "px-[1px]"
+    className: "px-[1px] col-span-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: `uppercase font-title text-sm tracking-[1.4px] px-2 ${fileError && 'text-red-600'}`
-  }, "UPLOAD PDF/AI FILE"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
-    className: `h-[40px] w-full py-2 px-2 text-center rounded-md text-sm text-white uppercase bg-slate-400 hover:bg-slate-600 font-title leading-[1em] ${fileError && ' border border-solid border-red-600'}`,
-    onClick: handleButtonClick,
-    "aria-label": "Upload design file",
-    disabled: isLoading
-  }, isLoading ? 'Please wait...' : 'Upload Design'), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+  }, "UPLOAD PDF/AI FILE"), !maxFilesReached && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: `border-dashed mt-4 p-4 w-full rounded-md border-2 transition-colors ${isDragging ? 'border-slate-600 bg-slate-400' : 'border-slate-900'} ${fileError && 'border-red-600'} ${maxFilesReached ? 'cursor-not-allowed opacity-50' : isLoading ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:bg-slate-100'}`,
+    onDragOver: !maxFilesReached && !isLoading ? handleDragOver : e => e.preventDefault(),
+    onDragLeave: !maxFilesReached && !isLoading ? handleDragLeave : e => e.preventDefault(),
+    onDrop: !maxFilesReached && !isLoading ? handleDrop : e => e.preventDefault(),
+    onClick: () => !isLoading && !maxFilesReached && fileRef.current?.click(),
+    role: "button",
+    tabIndex: maxFilesReached ? -1 : 0
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "h-full flex flex-col items-center justify-center text-slate-600"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    className: "text-center mb-0"
+  }, isLoading ? 'Uploading...' : 'Drag and drop files here or click to upload'), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    className: "text-sm mt-2 mb-0"
+  }, "Supported formats: PDF, AI, PNG, JPG, JPEG"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    className: "text-sm mb-0"
+  }, "Maximum files: ", maxFiles))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     type: "file",
     ref: fileRef,
     className: "hidden",
-    onChange: handleChange,
+    onChange: !maxFilesReached ? handleChange : undefined,
     accept: ".pdf,.ai,.png,.jpg,.jpeg",
     "aria-label": "File input",
-    multiple: true
+    multiple: true,
+    disabled: maxFilesReached
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "col-span-4 mb-4"
   }, fileNames?.length > 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
