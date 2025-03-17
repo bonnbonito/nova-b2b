@@ -373,6 +373,7 @@ export function Logo({ item }) {
 
   const checkAndAddMissingFields = () => {
     const missingFields = [];
+    console.log('hasuploadedfile', hasUploadedFile);
 
     if (!selectedThickness) missingFields.push('Select Acrylic Thickness');
     if (!width) missingFields.push('Select Logo Width');
@@ -447,6 +448,7 @@ export function Logo({ item }) {
     spacerStandoffDistance,
     hasUploadedFile,
     metalFilm,
+    hasUploadedFile,
   ]);
 
   return (

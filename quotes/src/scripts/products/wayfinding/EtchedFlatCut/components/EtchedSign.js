@@ -1,11 +1,4 @@
-import React, {
-	memo,
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from 'react';
+import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useAppContext } from '../../../../AppProvider';
 import Description from '../../../../Description';
 import Dropdown from '../../../../Dropdown';
@@ -17,693 +10,602 @@ import { quantityDiscount } from '../../../../utils/Pricing';
 import { graphicsStyleOptions } from '../../options';
 
 import {
-	arrayRange,
-	spacerStandoffDefaultOptions,
-	waterProofOptions,
+  arrayRange,
+  spacerStandoffDefaultOptions,
+  waterProofOptions,
 } from '../../../../utils/SignageOptions';
 
-import {
-	EXCHANGE_RATE,
-	INDOOR_NOT_WATERPROOF,
-	STUD_WITH_SPACER,
-} from '../../../../utils/defaults';
+import { EXCHANGE_RATE, INDOOR_NOT_WATERPROOF, STUD_WITH_SPACER } from '../../../../utils/defaults';
 
 import { colorOptions } from '../../../../utils/ColorOptions';
 import ColorsDropdown from '../../../../utils/ColorsDropdown';
 
-const materialOptions = [
-	'Flat Cut Stainless Steel',
-	'Flat Cut Aluminum',
-	'Flat Cut Brass',
-];
+const materialOptions = ['Flat Cut Stainless Steel', 'Flat Cut Aluminum', 'Flat Cut Brass'];
 
 const metalThicknessOptionsDefault = [
-	'1/25" (1mm)',
-	'1/16" (1.6mm)',
-	'1/8" (3mm)',
-	'1/4" (6mm)',
-	'3/8" (9mm)',
+  '1/25" (1mm)',
+  '1/16" (1.6mm)',
+  '1/8" (3mm)',
+  '1/4" (6mm)',
+  '3/8" (9mm)',
 ];
 
 const metalFinishingOptions = [
-	'Stainless Steel Brushed',
-	'Stainless Steel Polished',
-	'Electroplated Gold Brushed',
-	'Electroplated Gold Polished',
-	'Electroplated Black Titanium Brushed',
-	'Electroplated Black Titanium Polished',
-	'Electroplated Bronze Brushed',
-	'Electroplated Red Copper Brushed',
+  'Stainless Steel Brushed',
+  'Stainless Steel Polished',
+  'Electroplated Gold Brushed',
+  'Electroplated Gold Polished',
+  'Electroplated Black Titanium Brushed',
+  'Electroplated Black Titanium Polished',
+  'Electroplated Bronze Brushed',
+  'Electroplated Red Copper Brushed',
 ];
 
 const stainlessFinishing = ['Painted', 'Metal'];
 const aluminumFinishing = ['Painted', 'Brushed', 'Anodized'];
 const brassFinishing = ['Brushed'];
 
-const anodizedColorOptions = [
-	'Black',
-	'Brown',
-	'Clear',
-	'Gold',
-	'Champagne Gold',
-];
+const anodizedColorOptions = ['Black', 'Brown', 'Clear', 'Gold', 'Champagne Gold'];
 
 const anodizedFinishingOptions = ['Sandblasted Matte', 'Brushed Anodized'];
 
 const edgesOptionsDefault = ['Square'];
 
 const mountingOptionsDefault = [
-	'Double sided tape',
-	'Plain',
-	'Welded Stud - 1"',
-	'Pre-drilled Holes',
+  'Double sided tape',
+  'Plain',
+  'Welded Stud - 1"',
+  'Pre-drilled Holes',
 ];
 
-const studLengthOptions = [
-	'1.5" (4cm)',
-	'3.2" (8cm)',
-	'4" (10cm)',
-	'6" (15cm)',
-];
+const studLengthOptions = ['1.5" (4cm)', '3.2" (8cm)', '4" (10cm)', '6" (15cm)'];
 
 export const EtchedSign = ({ item }) => {
-	const { signage, setSignage, setMissing, updateSignageItem } =
-		useAppContext();
-
-	const [fileNames, setFileNames] = useState(item.fileNames ?? []);
-	const [fileUrls, setFileUrls] = useState(item.fileUrls ?? []);
-	const [filePaths, setFilePaths] = useState(item.filePaths ?? []);
-	const [files, setFiles] = useState(item.files ?? []);
-	const [color, setColor] = useState(item.etchedPaintedColor ?? '');
-	const [openColor, setOpenColor] = useState(false);
-	const [customColor, setCustomColor] = useState(item.customColor ?? '');
-	const [width, setWidth] = useState(item.etchedWidth ?? '');
-	const [material, setMaterial] = useState(item.etchedMaterial ?? '');
-	const [height, setHeight] = useState(item.etchedHeight ?? '');
-	const [metalThickness, setMetalThickness] = useState(
-		item.etchedMetalThickness ?? ''
-	);
-	const [metalThicknessOptions, setMetalThicknessOptions] = useState(
-		metalThicknessOptionsDefault
-	);
-	const [finishing, setFinishing] = useState(item.etchedFinishing ?? '');
-	const [etchedMetalFinish, setEtchedMetalFinish] = useState(
-		item.etchedMetalFinish ?? ''
-	);
-	const [spacerStandoffDistance, setSpacerStandoffDistance] = useState(
-		item.spacerStandoffDistance ?? ''
-	);
-	const [spacerStandoffOptions, setSpacerStandoffOptions] = useState(
-		spacerStandoffDefaultOptions
-	);
-	const [finishingOptions, setFinishingOptions] = useState([]);
-	const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
-	const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
-
-	const [usdDiscount, setUsdDiscount] = useState(item.usdDiscount ?? 0);
-	const [usdTotalNoDiscount, setUsdTotalNoDiscount] = useState(
-		item.usdTotalNoDiscount ?? ''
-	);
-	const [cadDiscount, setCadDiscount] = useState(item.cadDiscount ?? 0);
-	const [cadTotalNoDiscount, setCadTotalNoDiscount] = useState(
-		item.cadTotalNoDiscount ?? ''
-	);
-
-	const [widthOptions, setWidthOptions] = useState([]);
-	const [heightOptions, setHeightOptions] = useState([]);
-	const [anodizedColor, setAnodizedColor] = useState(
-		item.etchedAnodizedColor ?? ''
-	);
-
-	const [anodizedFinishing, setAnodizedFinishing] = useState(
-		item.etchedAnodizedFinishing ?? ''
-	);
-
-	const [graphicsStyle, setGraphicsStyle] = useState(
-		item.etchedGraphicsStyle ?? 'Recessed'
-	);
-	const [edges, setEdges] = useState(item.etchedEdges ?? 'Square');
-	const [edgesOptions, setEdgesOptions] = useState(edgesOptionsDefault);
-	const [studLength, setStudLength] = useState(item.studLength ?? '');
-
-	const [usdSinglePrice, setUsdSinglePrice] = useState(
-		item.usdSinglePrice ?? 0
-	);
-	const [cadSinglePrice, setCadSinglePrice] = useState(
-		item.cadSinglePrice ?? 0
-	);
-
-	const [setOptions, setSetOptions] = useState([
-		<option key="1" value="1">
-			1
-		</option>,
-	]);
-	const [quantityDiscountTable, setQuantityDiscountTable] = useState([]);
-
-	const [waterproof, setWaterproof] = useState(
-		item.waterproof ?? INDOOR_NOT_WATERPROOF
-	);
-	const [mounting, setMounting] = useState(item.mounting ?? '');
-	const [mountingOptions, setMountingOptions] = useState(
-		mountingOptionsDefault
-	);
-	const [sets, setSets] = useState(item.sets ?? 1);
-
-	const colorRef = useRef(null);
-
-	const updateSignage = useCallback(() => {
-		const updatedSignage = signage.map((sign) => {
-			if (sign.id === item.id) {
-				return {
-					...sign,
-					waterproof,
-					mounting,
-					etchedMaterial: material,
-					etchedWidth: width,
-					etchedHeight: height,
-					etchedMetalThickness: metalThickness,
-					etchedFinishing: finishing,
-					etchedPaintedColor: color?.name,
-					etchedMetalFinish,
-					etchedAnodizedFinishing: anodizedFinishing,
-					etchedAnodizedColor: anodizedColor,
-					etchedGraphicsStyle: graphicsStyle,
-					studLength,
-					spacerStandoffDistance,
-					etchedEdges: edges,
-					customColor,
-					fileNames,
-					filePaths,
-					fileUrls,
-					files,
-					sets,
-					usdPrice,
-					cadPrice,
-					cadSinglePrice,
-					usdSinglePrice,
-					usdDiscount,
-					usdTotalNoDiscount,
-					cadTotalNoDiscount,
-					cadDiscount,
-				};
-			}
-			return sign;
-		});
-		setSignage(updatedSignage);
-	}, [
-		waterproof,
-		color,
-		edges,
-		customColor,
-		mounting,
-		material,
-		metalThickness,
-		finishing,
-		studLength,
-		spacerStandoffDistance,
-		etchedMetalFinish,
-		anodizedFinishing,
-		graphicsStyle,
-		anodizedColor,
-		fileNames,
-		filePaths,
-		fileUrls,
-		files,
-		sets,
-		width,
-		height,
-		usdPrice,
-		cadPrice,
-		cadSinglePrice,
-		usdSinglePrice,
-		usdDiscount,
-		usdTotalNoDiscount,
-		cadTotalNoDiscount,
-		cadDiscount,
-	]);
-
-	const checkAndAddMissingFields = useCallback(() => {
-		const missingFields = [];
-
-		if (!material) missingFields.push('Select Material');
-
-		if (!width) missingFields.push('Select Width');
-
-		if (!height) missingFields.push('Select Height');
-
-		if (!metalThickness) missingFields.push('Select Metal Thickness');
-
-		if (!finishing) missingFields.push('Select Finishing');
-
-		if (finishing === 'Painted') {
-			if (!color) missingFields.push('Select Painted Color');
-		}
-
-		if (finishing === 'Metal') {
-			if (!etchedMetalFinish) missingFields.push('Select Metal Finishing');
-		}
-
-		if (finishing === 'Anodized') {
-			if (!anodizedColor) missingFields.push('Select Anodized Color');
-			if (!anodizedFinishing) missingFields.push('Select Anodized Finishing');
-		}
-
-		if (color?.name === 'Custom Color' && !customColor) {
-			missingFields.push('Add the Pantone color code of your custom color.');
-		}
-
-		if (!graphicsStyle) missingFields.push('Select Etching Style');
-
-		if (!edges) missingFields.push('Select Edges');
-
-		if (!mounting) missingFields.push('Select Mounting');
-
-		if (
-			metalThickness === '1/4" (6mm)' ||
-			metalThickness === '3/8" (9mm)' ||
-			metalThickness === '1/2" (12mm)'
-		) {
-			if (!studLength) missingFields.push('Select Stud Length');
-		}
-
-		if (!waterproof) missingFields.push('Select Environment');
-
-		if (!sets) missingFields.push('Select Quantity');
-
-		if (!fileUrls || fileUrls.length === 0)
-			missingFields.push('Upload a PDF/AI File');
-
-		setMissing((prevMissing) => {
-			const existingIndex = prevMissing.findIndex(
-				(entry) => entry.id === item.id
-			);
-			if (existingIndex !== -1) {
-				const updatedMissing = [...prevMissing];
-				updatedMissing[existingIndex] = {
-					...updatedMissing[existingIndex],
-					missingFields,
-				};
-				return updatedMissing;
-			} else if (missingFields.length > 0) {
-				return [
-					...prevMissing,
-					{ id: item.id, title: item.title, missingFields },
-				];
-			}
-			return prevMissing;
-		});
-	}, [
-		fileUrls,
-		color,
-		waterproof,
-		mounting,
-		sets,
-		width,
-		height,
-		material,
-		studLength,
-		metalThickness,
-		finishing,
-		etchedMetalFinish,
-		anodizedColor,
-		anodizedFinishing,
-		graphicsStyle,
-		edges,
-		customColor,
-	]);
-
-	const computePricing = () => {
-		if (
-			!width ||
-			!height ||
-			!material ||
-			!metalThickness ||
-			!waterproof ||
-			!sets
-		) {
-			return {
-				singlePrice: false,
-				total: false,
-				totalWithoutDiscount: false,
-				discount: false,
-			};
-		}
-
-		let factor;
-
-		if (material === 'Flat Cut Stainless Steel') {
-			if (metalThickness === '1/25" (1mm)') {
-				factor = 0.29;
-			}
-			if (metalThickness === '1/16" (1.6mm)') {
-				factor = 0.34;
-			}
-			if (metalThickness === '1/8" (3mm)') {
-				factor = 0.49;
-			}
-			if (metalThickness === '1/4" (6mm)') {
-				factor = 0.8;
-			}
-			if (metalThickness === '3/8" (9mm)') {
-				factor = 1.17;
-			}
-		}
-
-		if (material === 'Flat Cut Aluminum') {
-			if (metalThickness === '1/25" (1mm)') {
-				factor = 0.28;
-			}
-			if (metalThickness === '1/16" (1.6mm)') {
-				factor = 0.32;
-			}
-			if (metalThickness === '1/8" (3mm)') {
-				factor = 0.38;
-			}
-			if (metalThickness === '1/4" (6mm)') {
-				factor = 0.59;
-			}
-			if (metalThickness === '3/8" (9mm)') {
-				factor = 0.75;
-			}
-			if (metalThickness === '1/2" (12mm)') {
-				factor = 1;
-			}
-		}
-
-		if (material === 'Flat Cut Brass') {
-			if (metalThickness === '1/25" (1mm)') {
-				factor = 0.36;
-			}
-			if (metalThickness === '1/16" (1.6mm)') {
-				factor = 0.46;
-			}
-			if (metalThickness === '1/8" (3mm)') {
-				factor = 0.63;
-			}
-			if (metalThickness === '1/4" (6mm)') {
-				factor = 1.24;
-			}
-			if (metalThickness === '3/8" (9mm)') {
-				factor = 1.67;
-			}
-		}
-
-		let tempTotal = (parseInt(width) + 1) * (parseInt(height) + 1) * factor;
-
-		tempTotal = tempTotal > 10 ? tempTotal : 10;
-
-		if (parseInt(width) > 20 || parseInt(height) > 20) {
-			tempTotal = tempTotal + 40;
-		}
-
-		if (parseInt(width) > 43 || parseInt(height) > 43) {
-			tempTotal = tempTotal + 100;
-		}
-
-		tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.02;
-
-		if (finishing === 'Polished') {
-			tempTotal *= 1.1;
-		}
-
-		if (finishing === 'Metal') {
-			tempTotal *= 1.2;
-		}
-
-		if (
-			finishing === 'Anodized Brushed' ||
-			finishing === 'Anodized Sandblasted Matte'
-		) {
-			tempTotal *= 1.25;
-		}
-
-		if (graphicsStyle === 'Extra Recessed') {
-			tempTotal *= 1.2;
-		}
-
-		if (graphicsStyle === 'Raised') {
-			tempTotal *= 1.1;
-		}
-
-		if (edges === 'Bevel') {
-			tempTotal *= 1.1;
-		}
-
-		let total = tempTotal * parseInt(sets);
-
-		const discount = quantityDiscount(sets, quantityDiscountTable);
-
-		let totalWithDiscount = total * discount;
-
-		let discountPrice = total - totalWithDiscount;
-
-		return {
-			singlePrice: tempTotal ?? 0,
-			total: totalWithDiscount?.toFixed(2) ?? 0,
-			totalWithoutDiscount: total,
-			discount: discountPrice,
-		};
-	};
-
-	const handleOnChangeSets = (e) => {
-		const value = e.target.value;
-		setSets(value);
-	};
-
-	const handleSelectedMaterial = (e) => {
-		const target = e.target.value;
-		setMaterial(target);
-
-		if (target) {
-			setFinishing('');
-			setColor('');
-			setMounting('');
-
-			if (
-				target === 'Flat Cut Stainless Steel' ||
-				target === 'Flat Cut Aluminum'
-			) {
-				if (target === 'Flat Cut Aluminum') {
-					setFinishingOptions(aluminumFinishing);
-
-					setMetalThicknessOptions([
-						...metalThicknessOptionsDefault,
-						'1/2" (12mm)',
-					]);
-					setEtchedMetalFinish('');
-
-					if (
-						metalThickness === '1/4" (6mm)' ||
-						metalThickness === '3/8" (9mm)' ||
-						metalThickness === '1/2" (12mm)'
-					) {
-						setEdgesOptions(['Square', 'Bevel']);
-						setMountingOptions([
-							'Stud Mount',
-							'Plain',
-							'Pre–drilled Holes',
-							STUD_WITH_SPACER,
-						]);
-					} else {
-						setEdgesOptions(['Square']);
-						setEdges('Square');
-						setMountingOptions(mountingOptionsDefault);
-					}
-				} else {
-					if (metalThickness === '1/2" (12mm)') {
-						setMetalThickness('');
-					}
-					setMetalThicknessOptions(metalThicknessOptionsDefault);
-					setFinishingOptions(stainlessFinishing);
-					setAnodizedColor('');
-					setAnodizedFinishing('');
-					setEdgesOptions(['Square']);
-					setEdges('Square');
-
-					if (
-						metalThickness === '1/25" (1mm)' ||
-						metalThickness === '1/16" (1.6mm)' ||
-						metalThickness === '1/8" (3mm)'
-					) {
-						setMountingOptions(mountingOptionsDefault);
-					} else {
-						setMountingOptions([
-							'Stud Mount',
-							'Plain',
-							'Pre–drilled Holes',
-							STUD_WITH_SPACER,
-						]);
-					}
-				}
-
-				setWidthOptions(arrayRange(2, 94, 1));
-				setHeightOptions(arrayRange(2, 47, 1));
-			} else {
-				if (parseInt(width) > 58) {
-					setWidth('');
-				}
-				if (parseInt(height) > 23) {
-					setHeight('');
-				}
-
-				setWidthOptions(arrayRange(2, 58, 1));
-				setHeightOptions(arrayRange(2, 23, 1));
-				if (metalThickness === '1/2" (12mm)') {
-					setMetalThickness('');
-				}
-				setMetalThicknessOptions(metalThicknessOptionsDefault);
-				setFinishingOptions(brassFinishing);
-				setFinishing('Brushed');
-				setEtchedMetalFinish('');
-				setAnodizedColor('');
-				setAnodizedFinishing('');
-				setEdgesOptions(['Square']);
-				setEdges('Square');
-			}
-		} else {
-			setFinishing('');
-			setFinishingOptions([]);
-		}
-	};
-
-	const handleonChangeStudLength = (e) => {
-		const target = e.target.value;
-		setStudLength(target); // Directly set the value without a callback
-		console.log(target);
-
-		if (target === '1.5" (4cm)') {
-			setSpacerStandoffOptions([{ value: '0.5"' }, { value: '1"' }]);
-			if (!['0.5"', '1"'].includes(spacerStandoffDistance)) {
-				setSpacerStandoffDistance(''); // Reset if not one of the valid options
-			}
-		} else if (['3.2" (8cm)', '4" (10cm)'].includes(target)) {
-			setSpacerStandoffOptions([
-				{ value: '0.5"' },
-				{ value: '1"' },
-				{ value: '1.5"' },
-				{ value: '2"' },
-			]);
-			if (['3.2" (8cm)', '4" (10cm)'].includes(spacerStandoffDistance)) {
-				setSpacerStandoffDistance(''); // Reset if the distance is invalid for these options
-			}
-		} else {
-			setSpacerStandoffOptions(spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
-		}
-
-		if (target === '') {
-			setSpacerStandoffDistance(''); // Always reset if the target is empty
-		}
-	};
-
-	const handleComments = (e) => {
-		updateSignageItem(item.id, 'comments', e.target.value);
-	};
-
-	const handleOnChangeMounting = (e) => {
-		const target = e.target.value;
-		setMounting(target);
-		if (target !== 'Stud Mount' && target !== STUD_WITH_SPACER) {
-			setStudLength('');
-			setSpacerStandoffDistance('');
-		}
-		if (target === 'Stud Mount') {
-			setSpacerStandoffDistance('');
-		}
-	};
-
-	const handleOnChangeWaterproof = (e) => {
-		setWaterproof(e.target.value);
-	};
-
-	const handleonChangeFinishing = (e) => {
-		const target = e.target.value;
-		if (target !== 'Painted') {
-			setColor('');
-			setCustomColor('');
-		}
-
-		if (target !== 'Metal') {
-			setEtchedMetalFinish('');
-		}
-
-		if (target !== 'Anodized' && target !== 'Anodized') {
-			setAnodizedColor('');
-			setAnodizedFinishing('');
-		}
-
-		setFinishing(target);
-	};
-
-	const handleonChangeEtchedMetalFinish = (e) => {
-		const target = e.target.value;
-		setEtchedMetalFinish(target);
-	};
-
-	const handleonChangeAnodized = (e) => {
-		const target = e.target.value;
-		setAnodizedColor(target);
-	};
-
-	const handleonChangeAnodizedFinishing = (e) => {
-		const target = e.target.value;
-		setAnodizedFinishing(target);
-	};
-
-	const handleOnChangeMetalThickness = (e) => {
-		const target = e.target.value;
-		setMetalThickness(target);
-		if (
-			target === '1/4" (6mm)' ||
-			target === '3/8" (9mm)' ||
-			target === '1/2" (12mm)'
-		) {
-			if (material === 'Flat Cut Aluminum') {
-				setEdgesOptions(['Square', 'Bevel']);
-				setMountingOptions([
-					'Stud Mount',
-					'Plain',
-					'Pre–drilled Holes',
-					STUD_WITH_SPACER,
-				]);
-				if (
-					mounting !== 'Stud Mount' &&
-					mounting !== 'Plain' &&
-					mounting !== 'Pre–drilled Holes' &&
-					mounting !== STUD_WITH_SPACER
-				) {
-					setMounting('');
-				}
-			} else {
-				setMountingOptions([
-					'Stud Mount',
-					'Plain',
-					'Pre–drilled Holes',
-					STUD_WITH_SPACER,
-				]);
-				if (
-					mounting !== 'Stud Mount' &&
-					mounting !== 'Plain' &&
-					mounting !== 'Pre–drilled Holes' &&
-					mounting !== STUD_WITH_SPACER
-				) {
-					setMounting('');
-				}
-				setEdgesOptions(['Square']);
-			}
-		} else {
-			setEdgesOptions(['Square']);
-			setEdges('Square');
-			// if mounting is not in mountingOptionsDefault, set blank
-			if (!mountingOptionsDefault.includes(mounting)) {
-				setMounting('');
-			}
-			setMountingOptions(mountingOptionsDefault);
-			setStudLength('');
-			setSpacerStandoffDistance('');
-		}
-	};
-
-	/**
+  const { signage, setSignage, setMissing, updateSignageItem, hasUploadedFile } = useAppContext();
+
+  const [fileNames, setFileNames] = useState(item.fileNames ?? []);
+  const [fileUrls, setFileUrls] = useState(item.fileUrls ?? []);
+  const [filePaths, setFilePaths] = useState(item.filePaths ?? []);
+  const [files, setFiles] = useState(item.files ?? []);
+  const [color, setColor] = useState(item.etchedPaintedColor ?? '');
+  const [openColor, setOpenColor] = useState(false);
+  const [customColor, setCustomColor] = useState(item.customColor ?? '');
+  const [width, setWidth] = useState(item.etchedWidth ?? '');
+  const [material, setMaterial] = useState(item.etchedMaterial ?? '');
+  const [height, setHeight] = useState(item.etchedHeight ?? '');
+  const [metalThickness, setMetalThickness] = useState(item.etchedMetalThickness ?? '');
+  const [metalThicknessOptions, setMetalThicknessOptions] = useState(metalThicknessOptionsDefault);
+  const [finishing, setFinishing] = useState(item.etchedFinishing ?? '');
+  const [etchedMetalFinish, setEtchedMetalFinish] = useState(item.etchedMetalFinish ?? '');
+  const [spacerStandoffDistance, setSpacerStandoffDistance] = useState(
+    item.spacerStandoffDistance ?? ''
+  );
+  const [spacerStandoffOptions, setSpacerStandoffOptions] = useState(spacerStandoffDefaultOptions);
+  const [finishingOptions, setFinishingOptions] = useState([]);
+  const [usdPrice, setUsdPrice] = useState(item.usdPrice ?? 0);
+  const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
+
+  const [usdDiscount, setUsdDiscount] = useState(item.usdDiscount ?? 0);
+  const [usdTotalNoDiscount, setUsdTotalNoDiscount] = useState(item.usdTotalNoDiscount ?? '');
+  const [cadDiscount, setCadDiscount] = useState(item.cadDiscount ?? 0);
+  const [cadTotalNoDiscount, setCadTotalNoDiscount] = useState(item.cadTotalNoDiscount ?? '');
+
+  const [widthOptions, setWidthOptions] = useState([]);
+  const [heightOptions, setHeightOptions] = useState([]);
+  const [anodizedColor, setAnodizedColor] = useState(item.etchedAnodizedColor ?? '');
+
+  const [anodizedFinishing, setAnodizedFinishing] = useState(item.etchedAnodizedFinishing ?? '');
+
+  const [graphicsStyle, setGraphicsStyle] = useState(item.etchedGraphicsStyle ?? 'Recessed');
+  const [edges, setEdges] = useState(item.etchedEdges ?? 'Square');
+  const [edgesOptions, setEdgesOptions] = useState(edgesOptionsDefault);
+  const [studLength, setStudLength] = useState(item.studLength ?? '');
+
+  const [usdSinglePrice, setUsdSinglePrice] = useState(item.usdSinglePrice ?? 0);
+  const [cadSinglePrice, setCadSinglePrice] = useState(item.cadSinglePrice ?? 0);
+
+  const [setOptions, setSetOptions] = useState([
+    <option key="1" value="1">
+      1
+    </option>,
+  ]);
+  const [quantityDiscountTable, setQuantityDiscountTable] = useState([]);
+
+  const [waterproof, setWaterproof] = useState(item.waterproof ?? INDOOR_NOT_WATERPROOF);
+  const [mounting, setMounting] = useState(item.mounting ?? '');
+  const [mountingOptions, setMountingOptions] = useState(mountingOptionsDefault);
+  const [sets, setSets] = useState(item.sets ?? 1);
+
+  const colorRef = useRef(null);
+
+  const updateSignage = useCallback(() => {
+    const updatedSignage = signage.map(sign => {
+      if (sign.id === item.id) {
+        return {
+          ...sign,
+          waterproof,
+          mounting,
+          etchedMaterial: material,
+          etchedWidth: width,
+          etchedHeight: height,
+          etchedMetalThickness: metalThickness,
+          etchedFinishing: finishing,
+          etchedPaintedColor: color?.name,
+          etchedMetalFinish,
+          etchedAnodizedFinishing: anodizedFinishing,
+          etchedAnodizedColor: anodizedColor,
+          etchedGraphicsStyle: graphicsStyle,
+          studLength,
+          spacerStandoffDistance,
+          etchedEdges: edges,
+          customColor,
+          fileNames,
+          filePaths,
+          fileUrls,
+          files,
+          sets,
+          usdPrice,
+          cadPrice,
+          cadSinglePrice,
+          usdSinglePrice,
+          usdDiscount,
+          usdTotalNoDiscount,
+          cadTotalNoDiscount,
+          cadDiscount,
+        };
+      }
+      return sign;
+    });
+    setSignage(updatedSignage);
+  }, [
+    waterproof,
+    color,
+    edges,
+    customColor,
+    mounting,
+    material,
+    metalThickness,
+    finishing,
+    studLength,
+    spacerStandoffDistance,
+    etchedMetalFinish,
+    anodizedFinishing,
+    graphicsStyle,
+    anodizedColor,
+    fileNames,
+    filePaths,
+    fileUrls,
+    files,
+    sets,
+    width,
+    height,
+    usdPrice,
+    cadPrice,
+    cadSinglePrice,
+    usdSinglePrice,
+    usdDiscount,
+    usdTotalNoDiscount,
+    cadTotalNoDiscount,
+    cadDiscount,
+  ]);
+
+  const checkAndAddMissingFields = useCallback(() => {
+    const missingFields = [];
+
+    if (!material) missingFields.push('Select Material');
+
+    if (!width) missingFields.push('Select Width');
+
+    if (!height) missingFields.push('Select Height');
+
+    if (!metalThickness) missingFields.push('Select Metal Thickness');
+
+    if (!finishing) missingFields.push('Select Finishing');
+
+    if (finishing === 'Painted') {
+      if (!color) missingFields.push('Select Painted Color');
+    }
+
+    if (finishing === 'Metal') {
+      if (!etchedMetalFinish) missingFields.push('Select Metal Finishing');
+    }
+
+    if (finishing === 'Anodized') {
+      if (!anodizedColor) missingFields.push('Select Anodized Color');
+      if (!anodizedFinishing) missingFields.push('Select Anodized Finishing');
+    }
+
+    if (color?.name === 'Custom Color' && !customColor) {
+      missingFields.push('Add the Pantone color code of your custom color.');
+    }
+
+    if (!graphicsStyle) missingFields.push('Select Etching Style');
+
+    if (!edges) missingFields.push('Select Edges');
+
+    if (!mounting) missingFields.push('Select Mounting');
+
+    if (
+      metalThickness === '1/4" (6mm)' ||
+      metalThickness === '3/8" (9mm)' ||
+      metalThickness === '1/2" (12mm)'
+    ) {
+      if (!studLength) missingFields.push('Select Stud Length');
+    }
+
+    if (!waterproof) missingFields.push('Select Environment');
+
+    if (!sets) missingFields.push('Select Quantity');
+
+    if (!fileUrls || fileUrls.length === 0) missingFields.push('Upload a PDF/AI File');
+
+    setMissing(prevMissing => {
+      const existingIndex = prevMissing.findIndex(entry => entry.id === item.id);
+      if (existingIndex !== -1) {
+        const updatedMissing = [...prevMissing];
+        updatedMissing[existingIndex] = {
+          ...updatedMissing[existingIndex],
+          missingFields,
+        };
+        return updatedMissing;
+      } else if (missingFields.length > 0) {
+        return [...prevMissing, { id: item.id, title: item.title, missingFields }];
+      }
+      return prevMissing;
+    });
+  }, [
+    fileUrls,
+    color,
+    waterproof,
+    mounting,
+    sets,
+    width,
+    height,
+    material,
+    studLength,
+    metalThickness,
+    finishing,
+    etchedMetalFinish,
+    anodizedColor,
+    anodizedFinishing,
+    graphicsStyle,
+    edges,
+    customColor,
+    hasUploadedFile,
+  ]);
+
+  const computePricing = () => {
+    if (!width || !height || !material || !metalThickness || !waterproof || !sets) {
+      return {
+        singlePrice: false,
+        total: false,
+        totalWithoutDiscount: false,
+        discount: false,
+      };
+    }
+
+    let factor;
+
+    if (material === 'Flat Cut Stainless Steel') {
+      if (metalThickness === '1/25" (1mm)') {
+        factor = 0.29;
+      }
+      if (metalThickness === '1/16" (1.6mm)') {
+        factor = 0.34;
+      }
+      if (metalThickness === '1/8" (3mm)') {
+        factor = 0.49;
+      }
+      if (metalThickness === '1/4" (6mm)') {
+        factor = 0.8;
+      }
+      if (metalThickness === '3/8" (9mm)') {
+        factor = 1.17;
+      }
+    }
+
+    if (material === 'Flat Cut Aluminum') {
+      if (metalThickness === '1/25" (1mm)') {
+        factor = 0.28;
+      }
+      if (metalThickness === '1/16" (1.6mm)') {
+        factor = 0.32;
+      }
+      if (metalThickness === '1/8" (3mm)') {
+        factor = 0.38;
+      }
+      if (metalThickness === '1/4" (6mm)') {
+        factor = 0.59;
+      }
+      if (metalThickness === '3/8" (9mm)') {
+        factor = 0.75;
+      }
+      if (metalThickness === '1/2" (12mm)') {
+        factor = 1;
+      }
+    }
+
+    if (material === 'Flat Cut Brass') {
+      if (metalThickness === '1/25" (1mm)') {
+        factor = 0.36;
+      }
+      if (metalThickness === '1/16" (1.6mm)') {
+        factor = 0.46;
+      }
+      if (metalThickness === '1/8" (3mm)') {
+        factor = 0.63;
+      }
+      if (metalThickness === '1/4" (6mm)') {
+        factor = 1.24;
+      }
+      if (metalThickness === '3/8" (9mm)') {
+        factor = 1.67;
+      }
+    }
+
+    let tempTotal = (parseInt(width) + 1) * (parseInt(height) + 1) * factor;
+
+    tempTotal = tempTotal > 10 ? tempTotal : 10;
+
+    if (parseInt(width) > 20 || parseInt(height) > 20) {
+      tempTotal = tempTotal + 40;
+    }
+
+    if (parseInt(width) > 43 || parseInt(height) > 43) {
+      tempTotal = tempTotal + 100;
+    }
+
+    tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.02;
+
+    if (finishing === 'Polished') {
+      tempTotal *= 1.1;
+    }
+
+    if (finishing === 'Metal') {
+      tempTotal *= 1.2;
+    }
+
+    if (finishing === 'Anodized Brushed' || finishing === 'Anodized Sandblasted Matte') {
+      tempTotal *= 1.25;
+    }
+
+    if (graphicsStyle === 'Extra Recessed') {
+      tempTotal *= 1.2;
+    }
+
+    if (graphicsStyle === 'Raised') {
+      tempTotal *= 1.1;
+    }
+
+    if (edges === 'Bevel') {
+      tempTotal *= 1.1;
+    }
+
+    let total = tempTotal * parseInt(sets);
+
+    const discount = quantityDiscount(sets, quantityDiscountTable);
+
+    let totalWithDiscount = total * discount;
+
+    let discountPrice = total - totalWithDiscount;
+
+    return {
+      singlePrice: tempTotal ?? 0,
+      total: totalWithDiscount?.toFixed(2) ?? 0,
+      totalWithoutDiscount: total,
+      discount: discountPrice,
+    };
+  };
+
+  const handleOnChangeSets = e => {
+    const value = e.target.value;
+    setSets(value);
+  };
+
+  const handleSelectedMaterial = e => {
+    const target = e.target.value;
+    setMaterial(target);
+
+    if (target) {
+      setFinishing('');
+      setColor('');
+      setMounting('');
+
+      if (target === 'Flat Cut Stainless Steel' || target === 'Flat Cut Aluminum') {
+        if (target === 'Flat Cut Aluminum') {
+          setFinishingOptions(aluminumFinishing);
+
+          setMetalThicknessOptions([...metalThicknessOptionsDefault, '1/2" (12mm)']);
+          setEtchedMetalFinish('');
+
+          if (
+            metalThickness === '1/4" (6mm)' ||
+            metalThickness === '3/8" (9mm)' ||
+            metalThickness === '1/2" (12mm)'
+          ) {
+            setEdgesOptions(['Square', 'Bevel']);
+            setMountingOptions(['Stud Mount', 'Plain', 'Pre–drilled Holes', STUD_WITH_SPACER]);
+          } else {
+            setEdgesOptions(['Square']);
+            setEdges('Square');
+            setMountingOptions(mountingOptionsDefault);
+          }
+        } else {
+          if (metalThickness === '1/2" (12mm)') {
+            setMetalThickness('');
+          }
+          setMetalThicknessOptions(metalThicknessOptionsDefault);
+          setFinishingOptions(stainlessFinishing);
+          setAnodizedColor('');
+          setAnodizedFinishing('');
+          setEdgesOptions(['Square']);
+          setEdges('Square');
+
+          if (
+            metalThickness === '1/25" (1mm)' ||
+            metalThickness === '1/16" (1.6mm)' ||
+            metalThickness === '1/8" (3mm)'
+          ) {
+            setMountingOptions(mountingOptionsDefault);
+          } else {
+            setMountingOptions(['Stud Mount', 'Plain', 'Pre–drilled Holes', STUD_WITH_SPACER]);
+          }
+        }
+
+        setWidthOptions(arrayRange(2, 94, 1));
+        setHeightOptions(arrayRange(2, 47, 1));
+      } else {
+        if (parseInt(width) > 58) {
+          setWidth('');
+        }
+        if (parseInt(height) > 23) {
+          setHeight('');
+        }
+
+        setWidthOptions(arrayRange(2, 58, 1));
+        setHeightOptions(arrayRange(2, 23, 1));
+        if (metalThickness === '1/2" (12mm)') {
+          setMetalThickness('');
+        }
+        setMetalThicknessOptions(metalThicknessOptionsDefault);
+        setFinishingOptions(brassFinishing);
+        setFinishing('Brushed');
+        setEtchedMetalFinish('');
+        setAnodizedColor('');
+        setAnodizedFinishing('');
+        setEdgesOptions(['Square']);
+        setEdges('Square');
+      }
+    } else {
+      setFinishing('');
+      setFinishingOptions([]);
+    }
+  };
+
+  const handleonChangeStudLength = e => {
+    const target = e.target.value;
+    setStudLength(target); // Directly set the value without a callback
+    console.log(target);
+
+    if (target === '1.5" (4cm)') {
+      setSpacerStandoffOptions([{ value: '0.5"' }, { value: '1"' }]);
+      if (!['0.5"', '1"'].includes(spacerStandoffDistance)) {
+        setSpacerStandoffDistance(''); // Reset if not one of the valid options
+      }
+    } else if (['3.2" (8cm)', '4" (10cm)'].includes(target)) {
+      setSpacerStandoffOptions([
+        { value: '0.5"' },
+        { value: '1"' },
+        { value: '1.5"' },
+        { value: '2"' },
+      ]);
+      if (['3.2" (8cm)', '4" (10cm)'].includes(spacerStandoffDistance)) {
+        setSpacerStandoffDistance(''); // Reset if the distance is invalid for these options
+      }
+    } else {
+      setSpacerStandoffOptions(spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
+    }
+
+    if (target === '') {
+      setSpacerStandoffDistance(''); // Always reset if the target is empty
+    }
+  };
+
+  const handleComments = e => {
+    updateSignageItem(item.id, 'comments', e.target.value);
+  };
+
+  const handleOnChangeMounting = e => {
+    const target = e.target.value;
+    setMounting(target);
+    if (target !== 'Stud Mount' && target !== STUD_WITH_SPACER) {
+      setStudLength('');
+      setSpacerStandoffDistance('');
+    }
+    if (target === 'Stud Mount') {
+      setSpacerStandoffDistance('');
+    }
+  };
+
+  const handleOnChangeWaterproof = e => {
+    setWaterproof(e.target.value);
+  };
+
+  const handleonChangeFinishing = e => {
+    const target = e.target.value;
+    if (target !== 'Painted') {
+      setColor('');
+      setCustomColor('');
+    }
+
+    if (target !== 'Metal') {
+      setEtchedMetalFinish('');
+    }
+
+    if (target !== 'Anodized' && target !== 'Anodized') {
+      setAnodizedColor('');
+      setAnodizedFinishing('');
+    }
+
+    setFinishing(target);
+  };
+
+  const handleonChangeEtchedMetalFinish = e => {
+    const target = e.target.value;
+    setEtchedMetalFinish(target);
+  };
+
+  const handleonChangeAnodized = e => {
+    const target = e.target.value;
+    setAnodizedColor(target);
+  };
+
+  const handleonChangeAnodizedFinishing = e => {
+    const target = e.target.value;
+    setAnodizedFinishing(target);
+  };
+
+  const handleOnChangeMetalThickness = e => {
+    const target = e.target.value;
+    setMetalThickness(target);
+    if (target === '1/4" (6mm)' || target === '3/8" (9mm)' || target === '1/2" (12mm)') {
+      if (material === 'Flat Cut Aluminum') {
+        setEdgesOptions(['Square', 'Bevel']);
+        setMountingOptions(['Stud Mount', 'Plain', 'Pre–drilled Holes', STUD_WITH_SPACER]);
+        if (
+          mounting !== 'Stud Mount' &&
+          mounting !== 'Plain' &&
+          mounting !== 'Pre–drilled Holes' &&
+          mounting !== STUD_WITH_SPACER
+        ) {
+          setMounting('');
+        }
+      } else {
+        setMountingOptions(['Stud Mount', 'Plain', 'Pre–drilled Holes', STUD_WITH_SPACER]);
+        if (
+          mounting !== 'Stud Mount' &&
+          mounting !== 'Plain' &&
+          mounting !== 'Pre–drilled Holes' &&
+          mounting !== STUD_WITH_SPACER
+        ) {
+          setMounting('');
+        }
+        setEdgesOptions(['Square']);
+      }
+    } else {
+      setEdgesOptions(['Square']);
+      setEdges('Square');
+      // if mounting is not in mountingOptionsDefault, set blank
+      if (!mountingOptionsDefault.includes(mounting)) {
+        setMounting('');
+      }
+      setMountingOptions(mountingOptionsDefault);
+      setStudLength('');
+      setSpacerStandoffDistance('');
+    }
+  };
+
+  /**
 	useEffect(() => {
 		if (quantityDiscountTable.length > 0) {
 			const { singlePrice, total, totalWithoutDiscount, discount } =
@@ -745,315 +647,276 @@ export const EtchedSign = ({ item }) => {
 	]);
 	 */
 
-	useEffect(() => {
-		updateSignage();
-		checkAndAddMissingFields();
-	}, [updateSignage, checkAndAddMissingFields]);
+  useEffect(() => {
+    updateSignage();
+    checkAndAddMissingFields();
+  }, [updateSignage, checkAndAddMissingFields]);
 
-	async function fetchQuantityDiscountPricing() {
-		try {
-			const response = await fetch(
-				NovaQuote.quantity_discount_api + item.product
-			);
-			const data = await response.json();
-			const tableJson = data.pricing_table
-				? convertJson(data.pricing_table)
-				: [];
-			setQuantityDiscountTable(tableJson);
-		} catch (error) {
-			console.error('Error fetching discount table pricing:', error);
-		} finally {
-			setSetOptions(
-				Array.from(
-					{
-						length: 200,
-					},
-					(_, index) => {
-						const val = 1 + index;
-						return (
-							<option key={index} value={val}>
-								{val}
-							</option>
-						);
-					}
-				)
-			);
-		}
-	}
+  async function fetchQuantityDiscountPricing() {
+    try {
+      const response = await fetch(NovaQuote.quantity_discount_api + item.product);
+      const data = await response.json();
+      const tableJson = data.pricing_table ? convertJson(data.pricing_table) : [];
+      setQuantityDiscountTable(tableJson);
+    } catch (error) {
+      console.error('Error fetching discount table pricing:', error);
+    } finally {
+      setSetOptions(
+        Array.from(
+          {
+            length: 200,
+          },
+          (_, index) => {
+            const val = 1 + index;
+            return (
+              <option key={index} value={val}>
+                {val}
+              </option>
+            );
+          }
+        )
+      );
+    }
+  }
 
-	useEffect(() => {
-		fetchQuantityDiscountPricing();
-	}, []);
+  useEffect(() => {
+    fetchQuantityDiscountPricing();
+  }, []);
 
-	return (
-		<>
-			{item.productLine && (
-				<div className="py-4 mb-4">
-					PRODUCT LINE:{' '}
-					<span
-						className="font-title"
-						dangerouslySetInnerHTML={{ __html: item.productLine }}
-					/>
-				</div>
-			)}
-			<div className="quote-grid mb-6">
-				<Dropdown
-					title="Material"
-					onChange={handleSelectedMaterial}
-					options={materialOptions.map((option, index) => (
-						<option
-							key={index}
-							value={option}
-							defaultValue={option === material}
-						>
-							{option}
-						</option>
-					))}
-					value={material}
-				/>
+  return (
+    <>
+      {item.productLine && (
+        <div className="py-4 mb-4">
+          PRODUCT LINE:{' '}
+          <span className="font-title" dangerouslySetInnerHTML={{ __html: item.productLine }} />
+        </div>
+      )}
+      <div className="quote-grid mb-6">
+        <Dropdown
+          title="Material"
+          onChange={handleSelectedMaterial}
+          options={materialOptions.map((option, index) => (
+            <option key={index} value={option} defaultValue={option === material}>
+              {option}
+            </option>
+          ))}
+          value={material}
+        />
 
-				<Dropdown
-					title="Width"
-					value={width}
-					onChange={(e) => setWidth(e.target.value)}
-					options={widthOptions}
-				/>
+        <Dropdown
+          title="Width"
+          value={width}
+          onChange={e => setWidth(e.target.value)}
+          options={widthOptions}
+        />
 
-				<Dropdown
-					title="Height"
-					value={height}
-					onChange={(e) => setHeight(e.target.value)}
-					options={heightOptions}
-				/>
+        <Dropdown
+          title="Height"
+          value={height}
+          onChange={e => setHeight(e.target.value)}
+          options={heightOptions}
+        />
 
-				<Dropdown
-					title="Metal Thickness"
-					value={metalThickness}
-					onChange={handleOnChangeMetalThickness}
-					options={metalThicknessOptions.map((option) => (
-						<option
-							className="lowercase"
-							key={option}
-							value={option}
-							defaultValue={option === metalThickness}
-						>
-							{option}
-						</option>
-					))}
-				/>
+        <Dropdown
+          title="Metal Thickness"
+          value={metalThickness}
+          onChange={handleOnChangeMetalThickness}
+          options={metalThicknessOptions.map(option => (
+            <option
+              className="lowercase"
+              key={option}
+              value={option}
+              defaultValue={option === metalThickness}
+            >
+              {option}
+            </option>
+          ))}
+        />
 
-				<Dropdown
-					title="Finishing"
-					onChange={handleonChangeFinishing}
-					options={finishingOptions.map((option) => (
-						<option
-							key={option}
-							value={option}
-							defaultValue={option === finishing}
-						>
-							{option}
-						</option>
-					))}
-					value={finishing}
-				/>
+        <Dropdown
+          title="Finishing"
+          onChange={handleonChangeFinishing}
+          options={finishingOptions.map(option => (
+            <option key={option} value={option} defaultValue={option === finishing}>
+              {option}
+            </option>
+          ))}
+          value={finishing}
+        />
 
-				{finishing === 'Painted' && (
-					<ColorsDropdown
-						ref={colorRef}
-						title="Painted Color"
-						colorName={color?.name ?? ''}
-						openColor={openColor}
-						toggleColor={() => {
-							setOpenColor((prev) => !prev);
-						}}
-						colorOptions={colorOptions}
-						selectColor={(color) => {
-							setColor(color);
-							setOpenColor(false);
-						}}
-					/>
-				)}
+        {finishing === 'Painted' && (
+          <ColorsDropdown
+            ref={colorRef}
+            title="Painted Color"
+            colorName={color?.name ?? ''}
+            openColor={openColor}
+            toggleColor={() => {
+              setOpenColor(prev => !prev);
+            }}
+            colorOptions={colorOptions}
+            selectColor={color => {
+              setColor(color);
+              setOpenColor(false);
+            }}
+          />
+        )}
 
-				{finishing === 'Metal' && (
-					<Dropdown
-						title="Metal Finishing"
-						onChange={handleonChangeEtchedMetalFinish}
-						options={metalFinishingOptions.map((option) => (
-							<option
-								key={option}
-								value={option}
-								defaultValue={option === etchedMetalFinish}
-							>
-								{option}
-							</option>
-						))}
-						value={etchedMetalFinish}
-					/>
-				)}
+        {finishing === 'Metal' && (
+          <Dropdown
+            title="Metal Finishing"
+            onChange={handleonChangeEtchedMetalFinish}
+            options={metalFinishingOptions.map(option => (
+              <option key={option} value={option} defaultValue={option === etchedMetalFinish}>
+                {option}
+              </option>
+            ))}
+            value={etchedMetalFinish}
+          />
+        )}
 
-				{finishing === 'Anodized' && (
-					<>
-						<Dropdown
-							title="ANODIZED COLOR"
-							onChange={handleonChangeAnodized}
-							options={anodizedColorOptions.map((option) => (
-								<option
-									key={option}
-									value={option}
-									defaultValue={option === anodizedColor}
-								>
-									{option}
-								</option>
-							))}
-							value={anodizedColor}
-						/>
-						<Dropdown
-							title="ANODIZED FINISHING"
-							onChange={handleonChangeAnodizedFinishing}
-							options={anodizedFinishingOptions.map((option) => (
-								<option
-									key={option}
-									value={option}
-									defaultValue={option === anodizedFinishing}
-								>
-									{option}
-								</option>
-							))}
-							value={anodizedFinishing}
-						/>
-					</>
-				)}
+        {finishing === 'Anodized' && (
+          <>
+            <Dropdown
+              title="ANODIZED COLOR"
+              onChange={handleonChangeAnodized}
+              options={anodizedColorOptions.map(option => (
+                <option key={option} value={option} defaultValue={option === anodizedColor}>
+                  {option}
+                </option>
+              ))}
+              value={anodizedColor}
+            />
+            <Dropdown
+              title="ANODIZED FINISHING"
+              onChange={handleonChangeAnodizedFinishing}
+              options={anodizedFinishingOptions.map(option => (
+                <option key={option} value={option} defaultValue={option === anodizedFinishing}>
+                  {option}
+                </option>
+              ))}
+              value={anodizedFinishing}
+            />
+          </>
+        )}
 
-				<Dropdown
-					title="ETCHING STYLE"
-					onChange={(e) => setGraphicsStyle(e.target.value)}
-					options={graphicsStyleOptions.map((option) => (
-						<option
-							key={option}
-							value={option}
-							defaultValue={option === graphicsStyle}
-						>
-							{option}
-						</option>
-					))}
-					value={graphicsStyle}
-				/>
+        <Dropdown
+          title="ETCHING STYLE"
+          onChange={e => setGraphicsStyle(e.target.value)}
+          options={graphicsStyleOptions.map(option => (
+            <option key={option} value={option} defaultValue={option === graphicsStyle}>
+              {option}
+            </option>
+          ))}
+          value={graphicsStyle}
+        />
 
-				<Dropdown
-					title="EDGES"
-					onChange={(e) => setEdges(e.target.value)}
-					options={edgesOptions.map((option) => (
-						<option key={option} value={option} defaultValue={option === edges}>
-							{option}
-						</option>
-					))}
-					value={edges}
-				/>
+        <Dropdown
+          title="EDGES"
+          onChange={e => setEdges(e.target.value)}
+          options={edgesOptions.map(option => (
+            <option key={option} value={option} defaultValue={option === edges}>
+              {option}
+            </option>
+          ))}
+          value={edges}
+        />
 
-				<Dropdown
-					title="Environment"
-					onChange={handleOnChangeWaterproof}
-					options={waterProofOptions.map((option) => (
-						<option
-							key={option.option}
-							value={option.option}
-							defaultValue={option.option === waterproof}
-						>
-							{option.option}
-						</option>
-					))}
-					value={waterproof}
-				/>
+        <Dropdown
+          title="Environment"
+          onChange={handleOnChangeWaterproof}
+          options={waterProofOptions.map(option => (
+            <option
+              key={option.option}
+              value={option.option}
+              defaultValue={option.option === waterproof}
+            >
+              {option.option}
+            </option>
+          ))}
+          value={waterproof}
+        />
 
-				<Dropdown
-					title="Mounting"
-					onChange={handleOnChangeMounting}
-					options={mountingOptions.map((option) => (
-						<option
-							key={option}
-							value={option}
-							defaultValue={option === mounting}
-						>
-							{option}
-						</option>
-					))}
-					value={mounting}
-				/>
-				{(metalThickness === '1/4" (6mm)' ||
-					metalThickness === '3/8" (9mm)' ||
-					metalThickness === '1/2" (12mm)') && (
-					<Dropdown
-						title="STUD LENGTH"
-						onChange={handleonChangeStudLength}
-						options={studLengthOptions.map((option) => (
-							<option
-								key={option}
-								value={option}
-								defaultValue={option === studLength}
-							>
-								{option}
-							</option>
-						))}
-						value={studLength}
-					/>
-				)}
-				{mounting === STUD_WITH_SPACER && (
-					<>
-						<Dropdown
-							title="STANDOFF SPACE"
-							onChange={(e) => setSpacerStandoffDistance(e.target.value)}
-							options={spacerStandoffOptions.map((option) => (
-								<option
-									value={option.value}
-									key={option.value}
-									defaultValue={option.value == spacerStandoffDistance}
-								>
-									{option.value}
-								</option>
-							))}
-							value={spacerStandoffDistance}
-						/>
-					</>
-				)}
+        <Dropdown
+          title="Mounting"
+          onChange={handleOnChangeMounting}
+          options={mountingOptions.map(option => (
+            <option key={option} value={option} defaultValue={option === mounting}>
+              {option}
+            </option>
+          ))}
+          value={mounting}
+        />
+        {(metalThickness === '1/4" (6mm)' ||
+          metalThickness === '3/8" (9mm)' ||
+          metalThickness === '1/2" (12mm)') && (
+          <Dropdown
+            title="STUD LENGTH"
+            onChange={handleonChangeStudLength}
+            options={studLengthOptions.map(option => (
+              <option key={option} value={option} defaultValue={option === studLength}>
+                {option}
+              </option>
+            ))}
+            value={studLength}
+          />
+        )}
+        {mounting === STUD_WITH_SPACER && (
+          <>
+            <Dropdown
+              title="STANDOFF SPACE"
+              onChange={e => setSpacerStandoffDistance(e.target.value)}
+              options={spacerStandoffOptions.map(option => (
+                <option
+                  value={option.value}
+                  key={option.value}
+                  defaultValue={option.value == spacerStandoffDistance}
+                >
+                  {option.value}
+                </option>
+              ))}
+              value={spacerStandoffDistance}
+            />
+          </>
+        )}
 
-				<Dropdown
-					title="Quantity"
-					onChange={handleOnChangeSets}
-					options={setOptions}
-					value={sets}
-					onlyValue={true}
-				/>
-			</div>
-			<div className="quote-grid">
-				{color?.name == 'Custom Color' && (
-					<div className="px-[1px] col-span-4">
-						<label className="uppercase font-title text-sm tracking-[1.4px] px-2">
-							Custom Color
-						</label>
-						<input
-							className="w-full py-4 px-2 border-solid border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400"
-							type="text"
-							value={customColor}
-							onChange={(e) => setCustomColor(e.target.value)}
-							placeholder="ADD THE PANTONE COLOR CODE"
-						/>
-					</div>
-				)}
-				<Description value={item.comments} handleComments={handleComments} />
+        <Dropdown
+          title="Quantity"
+          onChange={handleOnChangeSets}
+          options={setOptions}
+          value={sets}
+          onlyValue={true}
+        />
+      </div>
+      <div className="quote-grid">
+        {color?.name == 'Custom Color' && (
+          <div className="px-[1px] col-span-4">
+            <label className="uppercase font-title text-sm tracking-[1.4px] px-2">
+              Custom Color
+            </label>
+            <input
+              className="w-full py-4 px-2 border-solid border-gray-200 color-black text-sm font-bold rounded-md h-[40px] placeholder:text-slate-400"
+              type="text"
+              value={customColor}
+              onChange={e => setCustomColor(e.target.value)}
+              placeholder="ADD THE PANTONE COLOR CODE"
+            />
+          </div>
+        )}
+        <Description value={item.comments} handleComments={handleComments} />
 
-				<UploadFiles
-					itemId={item.id}
-					setFilePaths={setFilePaths}
-					setFiles={setFiles}
-					filePaths={filePaths}
-					fileUrls={fileUrls}
-					fileNames={fileNames}
-					setFileUrls={setFileUrls}
-					setFileNames={setFileNames}
-				/>
-			</div>
-		</>
-	);
+        <UploadFiles
+          itemId={item.id}
+          setFilePaths={setFilePaths}
+          setFiles={setFiles}
+          filePaths={filePaths}
+          fileUrls={fileUrls}
+          fileNames={fileNames}
+          setFileUrls={setFileUrls}
+          setFileNames={setFileNames}
+        />
+      </div>
+    </>
+  );
 };
 
 export default memo(EtchedSign);

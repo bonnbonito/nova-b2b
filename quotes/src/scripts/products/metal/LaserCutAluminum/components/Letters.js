@@ -33,7 +33,7 @@ import { anodizedPricing, calculateLetterPrice, spacerPricing } from '../../../.
 import { useAppContext } from '../../../../AppProvider';
 
 export function Letters({ item }) {
-  const { signage, setSignage, setMissing } = useAppContext();
+  const { signage, setSignage, setMissing, hasUploadedFile } = useAppContext();
   const [letters, setLetters] = useState(item.letters ?? '');
   const [comments, setComments] = useState(item.comments ?? '');
   const [font, setFont] = useState(item.font ?? '');
@@ -348,39 +348,6 @@ export function Letters({ item }) {
     adjustFontSize();
   }, [letters]);
 
-  useEffect(() => {
-    updateSignage();
-  }, [
-    letters,
-    comments,
-    font,
-    selectedThickness,
-    anodizedFinishing,
-    anodizedColor,
-    mounting,
-    waterproof,
-    color,
-    usdPrice,
-    cadPrice,
-    selectedLetterHeight,
-    fileUrls,
-    fileNames,
-    files,
-    filePaths,
-    fontFileUrl,
-    fontFileName,
-    fontFilePath,
-    fontFile,
-    selectedFinishing,
-    customFont,
-    sets,
-    customColor,
-    studLength,
-    spacerStandoffDistance,
-    usdSinglePrice,
-    cadSinglePrice,
-  ]);
-
   const checkAndAddMissingFields = () => {
     const missingFields = [];
 
@@ -454,27 +421,37 @@ export function Letters({ item }) {
 
   useEffect(() => {
     checkAndAddMissingFields();
+    updateSignage();
   }, [
     letters,
+    comments,
     font,
-    color,
     selectedThickness,
     anodizedFinishing,
     anodizedColor,
     mounting,
     waterproof,
+    color,
+    usdPrice,
+    cadPrice,
     selectedLetterHeight,
     fileUrls,
     fileNames,
     files,
     filePaths,
     fontFileUrl,
+    fontFileName,
+    fontFilePath,
+    fontFile,
     selectedFinishing,
+    customFont,
+    sets,
+    customColor,
     studLength,
     spacerStandoffDistance,
-    customFont,
-    customColor,
-    sets,
+    usdSinglePrice,
+    cadSinglePrice,
+    hasUploadedFile,
   ]);
 
   useEffect(() => {

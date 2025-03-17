@@ -37,7 +37,7 @@ import { calculateLetterPrice, spacerPricing } from '../../../../utils/Pricing';
 import { useAppContext } from '../../../../AppProvider';
 
 export function Letters({ item }) {
-  const { signage, setSignage, setMissing } = useAppContext();
+  const { signage, setSignage, setMissing, hasUploadedFile } = useAppContext();
   const [letters, setLetters] = useState(item.letters ?? '');
   const [comments, setComments] = useState(item.comments ?? '');
   const [font, setFont] = useState(item.font ?? '');
@@ -489,6 +489,7 @@ export function Letters({ item }) {
     spacerStandoffDistance,
     usdSinglePrice,
     cadSinglePrice,
+    hasUploadedFile,
   ]);
 
   useEffect(() => {
