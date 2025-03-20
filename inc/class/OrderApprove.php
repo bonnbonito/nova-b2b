@@ -37,7 +37,7 @@ class OrderApprove {
 		}
 
 		$order_id = isset( $_POST['order_id'] ) ? intval( $_POST['order_id'] ) : 0;
-		$order    = wc_get_order( $order_id );
+		$order = wc_get_order( $order_id );
 		if ( ! $order ) {
 			wp_send_json_error( 'Order not found.' );
 			wp_die();
@@ -45,17 +45,21 @@ class OrderApprove {
 
 		// Get customer email and name.
 		$customer_email = $order->get_billing_email();
-		// Get user email not billing email.
-		$user_email = get_user_by( 'id', $order->get_user_id() )->user_email;
-		if ( $user_email ) {
-			$customer_email = $user_email;
+
+		$additional_recipients = get_post_meta( $order_id, '_additional_recipients', true );
+		if ( ! empty( $additional_recipients ) ) {
+			$customer_email_array = array( $customer_email );
+			$additional_recipients = trim( $additional_recipients );
+			$additional_recipients = explode( ',', $additional_recipients );
+			$customer_email = array_merge( $customer_email_array, $additional_recipients );
 		}
+
 		$customer_name = $order->get_billing_first_name();
 
-		$headers     = array();
-		$headers[]   = 'Content-Type: text/html; charset=UTF-8';
-		$headers[]   = 'From: NOVA Signage <quotes@novasignage.com>';
-		$headers[]   = 'Reply-To: NOVA Signage <quotes@novasignage.com>';
+		$headers = array();
+		$headers[] = 'Content-Type: text/html; charset=UTF-8';
+		$headers[] = 'From: NOVA Signage <quotes@novasignage.com>';
+		$headers[] = 'Reply-To: NOVA Signage <quotes@novasignage.com>';
 		$attachments = array();
 
 		if ( class_exists( '\WPO\WC\PDF_Invoices\Main' ) ) {
@@ -65,9 +69,9 @@ class OrderApprove {
 		$role_instance = \NOVA_B2B\Roles::get_instance();
 
 		if ( $role_instance ) {
-			$subject  = 'Order #' . $order->get_order_number() . '- Please Review Mockup and Production Drawing';
-			$heading  = 'Order #' . $order->get_order_number() . ' is Ready for Review';
-			$message  = '<p>Dear ' . $customer_name . ',</p>' . "\n\n";
+			$subject = 'Order #' . $order->get_order_number() . '- Please Review Mockup and Production Drawing';
+			$heading = 'Order #' . $order->get_order_number() . ' is Ready for Review';
+			$message = '<p>Dear ' . $customer_name . ',</p>' . "\n\n";
 			$message .= '<p>Please review the mockup and production drawing for Order #' . $order->get_order_number() . '. We need your confirmation before the production begins.</p>' . "\n\n";
 			$message .= '<p><strong>MOCKUPS & PRODUCTION DRAWING HERE:</strong><br>';
 			$message .= home_url() . '/review-mockup?order_id=' . $order_id . '</p>';
@@ -95,10 +99,10 @@ class OrderApprove {
 			'order-approve-admin',
 			'OrderApprove',
 			array(
-				'ajax_url'   => admin_url( 'admin-ajax.php' ),
-				'order_id'   => get_the_ID(),
+				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'order_id' => get_the_ID(),
 				'review_url' => home_url() . '/review-mockup?order_id=' . get_the_ID(),
-				'nonce'      => wp_create_nonce( 'order_approve_nonce' ),
+				'nonce' => wp_create_nonce( 'order_approve_nonce' ),
 			)
 		);
 
@@ -122,7 +126,7 @@ class OrderApprove {
 			'order_approve_ajax',
 			array(
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
-				'nonce'    => wp_create_nonce( 'order_approve_nonce' ),
+				'nonce' => wp_create_nonce( 'order_approve_nonce' ),
 			)
 		);
 	}
@@ -136,8 +140,8 @@ class OrderApprove {
 			wp_die();
 		}
 
-		$order_id       = isset( $_POST['order_id'] ) ? intval( $_POST['order_id'] ) : 0;
-		$approve        = isset( $_POST['approve'] ) ? sanitize_text_field( $_POST['approve'] ) : '';
+		$order_id = isset( $_POST['order_id'] ) ? intval( $_POST['order_id'] ) : 0;
+		$approve = isset( $_POST['approve'] ) ? sanitize_text_field( $_POST['approve'] ) : '';
 		$revision_notes = isset( $_POST['revision_notes'] ) ? sanitize_textarea_field( $_POST['revision_notes'] ) : '';
 
 		if ( ! $order_id ) {
@@ -175,8 +179,8 @@ class OrderApprove {
 				wp_send_json_error( 'Please provide revision notes.' );
 				wp_die();
 			}
-			$subject  = '[NOVA INTERNAL] Mockup Review for Order #' . $order_id;
-			$message  = '<p>The customer has requested revisions for Order #' . $order_id . '.</p>' . "\n\n";
+			$subject = '[NOVA INTERNAL] Mockup Review for Order #' . $order_id;
+			$message = '<p>The customer has requested revisions for Order #' . $order_id . '.</p>' . "\n\n";
 			$message .= '<p>View the order here: ' . get_edit_post_link( $order_id ) . '</p>';
 			$message .= '<p>Revision Notes:</p>' . "\n" . nl2br( esc_html( $revision_notes ) );
 			// Optionally add order note
@@ -188,7 +192,7 @@ class OrderApprove {
 
 		// Get customer email and name
 		$customer_email = $order->get_billing_email();
-		$customer_name  = $order->get_billing_first_name() . ' ' . $order->get_billing_last_name();
+		$customer_name = $order->get_billing_first_name() . ' ' . $order->get_billing_last_name();
 
 		// Set email headers with customer's email as the 'From' address
 		$headers = array(
@@ -196,7 +200,7 @@ class OrderApprove {
 			'From: Nova Signage <quotes@novasignage.com>',
 		);
 
-		$headers_admin   = array();
+		$headers_admin = array();
 		$headers_admin[] = 'Content-Type: text/html; charset=UTF-8';
 		$headers_admin[] = 'From: NOVA Signage <noreply@novasignage.com>';
 		$headers_admin[] = 'Reply-To: NOVA Signage <noreply@novasignage.com>';
@@ -208,7 +212,7 @@ class OrderApprove {
 			wp_send_json(
 				array(
 					'success' => true,
-					'action'  => $approve,
+					'action' => $approve,
 					'message' => 'Email sent successfully.',
 				)
 			);

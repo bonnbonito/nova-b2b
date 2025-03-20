@@ -169,6 +169,74 @@ class Woocommerce {
 		add_filter( 'woocommerce_add_cart_item_data', array( $this, 'add_product_comments_to_cart_item' ), 10, 3 );
 		add_filter( 'woocommerce_get_item_data', array( $this, 'display_product_comments_in_cart' ), 10, 2 );
 		add_action( 'woocommerce_checkout_create_order_line_item', array( $this, 'add_product_comments_to_order_items' ), 10, 4 );
+
+		// Add additional recipients field
+		add_action( 'woocommerce_review_order_before_submit', array( $this, 'add_additional_recipients_field' ) );
+		add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'save_additional_recipients_field' ) );
+		add_action( 'woocommerce_checkout_process', array( $this, 'validate_additional_recipients_field' ) );
+
+		// Add Additional Recipients Metabox
+		add_action( 'add_meta_boxes', array( $this, 'add_additional_recipients_metabox' ) );
+		add_action( 'save_post_shop_order', array( $this, 'save_additional_recipients_metabox' ) );
+
+		add_filter( 'woocommerce_email_recipient_customer_processing_order', array( $this, 'add_additional_recipients_to_emails' ), 10, 3 );
+		add_filter( 'woocommerce_email_recipient_customer_completed_order', array( $this, 'add_additional_recipients_to_emails' ), 10, 3 );
+		add_filter( 'woocommerce_email_recipient_customer_shipped_order', array( $this, 'add_additional_recipients_to_emails' ), 10, 3 );
+		//invoices
+		add_filter( 'woocommerce_email_recipient_customer_invoice', array( $this, 'add_additional_recipients_to_emails' ), 10, 3 );
+		//cancelled
+		add_filter( 'woocommerce_email_recipient_customer_cancelled_order', array( $this, 'add_additional_recipients_to_emails' ), 10, 3 );
+		//failed
+		add_filter( 'woocommerce_email_recipient_customer_failed_order', array( $this, 'add_additional_recipients_to_emails' ), 10, 3 );
+	}
+
+	public function add_additional_recipients_field() {
+		woocommerce_form_field( 'additional_recipients', array(
+			'type' => 'email',
+			'class' => array( 'form-row-wide mt-4' ),
+			'label' => __( 'Additional Email Recipients', 'woocommerce' ),
+			'placeholder' => __( 'Enter email addresses separated by commas', 'woocommerce' ),
+			'required' => false,
+		) );
+	}
+
+	public function save_additional_recipients_field( $order_id ) {
+		if ( ! empty( $_POST['additional_recipients'] ) ) {
+			$additional_recipients = sanitize_text_field( $_POST['additional_recipients'] );
+			update_post_meta( $order_id, '_additional_recipients', $additional_recipients );
+		}
+	}
+
+	public function validate_additional_recipients_field() {
+		if ( ! empty( $_POST['additional_recipients'] ) ) {
+			$emails = array_map( 'trim', explode( ',', $_POST['additional_recipients'] ) );
+
+			foreach ( $emails as $email ) {
+				if ( ! is_email( $email ) ) {
+					wc_add_notice( sprintf( __( '"%s" is not a valid email address.', 'woocommerce' ), $email ), 'error' );
+				}
+			}
+		}
+	}
+
+	public function add_additional_recipients_to_emails( $recipient, $order, $email_class ) {
+		// Only proceed if we have an order object
+		if ( ! $order || ! is_a( $order, 'WC_Order' ) ) {
+			return $recipient;
+		}
+
+		$order_id = $order->get_id();
+		$additional_recipients = get_post_meta( $order_id, '_additional_recipients', true );
+
+		if ( ! empty( $additional_recipients ) ) {
+			// If there's already a recipient, add a comma
+			if ( ! empty( $recipient ) ) {
+				$recipient .= ', ';
+			}
+			$recipient .= $additional_recipients;
+		}
+
+		return $recipient;
 	}
 
 	public function login_title( $title ) {
@@ -3672,5 +3740,63 @@ class Woocommerce {
 		}
 	}
 
+	/**
+	 * Add Additional Recipients Metabox
+	 */
+	public function add_additional_recipients_metabox() {
+		add_meta_box(
+			'nova_additional_recipients_metabox',
+			__( 'Additional Email Recipients', 'nova-b2b' ),
+			array( $this, 'nova_additional_recipients_metabox_callback' ),
+			'shop_order',
+			'side',
+			'default'
+		);
+	}
+
+	/**
+	 * Additional Recipients Metabox Callback
+	 *
+	 * @param WP_Post $post Post object.
+	 */
+	public function nova_additional_recipients_metabox_callback( $post ) {
+		$additional_recipients = get_post_meta( $post->ID, '_additional_recipients', true );
+		wp_nonce_field( 'nova_additional_recipients_metabox', 'nova_additional_recipients_metabox_nonce' );
+		?>
+		<p>
+			<label for="additional_recipients"><?php esc_html_e( 'Email addresses separated by commas:', 'nova-b2b' ); ?></label>
+			<textarea id="additional_recipients" name="additional_recipients" class="widefat"
+				rows="3"><?php echo esc_textarea( $additional_recipients ); ?></textarea>
+		</p>
+		<?php
+	}
+
+	/**
+	 * Save Additional Recipients Metabox
+	 *
+	 * @param int $post_id Post ID.
+	 */
+	public function save_additional_recipients_metabox( $post_id ) {
+		if ( ! isset( $_POST['nova_additional_recipients_metabox_nonce'] ) ) {
+			return;
+		}
+
+		if ( ! wp_verify_nonce( $_POST['nova_additional_recipients_metabox_nonce'], 'nova_additional_recipients_metabox' ) ) {
+			return;
+		}
+
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return;
+		}
+
+		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+			return;
+		}
+
+		if ( isset( $_POST['additional_recipients'] ) ) {
+			$additional_recipients = sanitize_text_field( $_POST['additional_recipients'] );
+			update_post_meta( $post_id, '_additional_recipients', $additional_recipients );
+		}
+	}
 
 }
