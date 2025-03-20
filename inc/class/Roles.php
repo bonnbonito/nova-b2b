@@ -69,6 +69,11 @@ class Roles {
 		add_filter( 'user_contactmethods', array( $this, 'add_contact_methods' ), 10, 2 );
 		add_action( 'personal_options_update', array( $this, 'save_additional_billing_email_field' ) );
 		add_action( 'edit_user_profile_update', array( $this, 'save_additional_billing_email_field' ) );
+
+
+		//NOVA Statistics
+		add_action( 'show_user_profile', array( $this, 'add_nova_statistics' ) );
+		add_action( 'edit_user_profile', array( $this, 'add_nova_statistics' ) );
 	}
 
 	public function send_email_to_additional_nova_email( $args ) {
@@ -236,13 +241,13 @@ class Roles {
 				'business_id' => get_user_meta( $user->ID, 'business_id', true ),
 				'emails' => $emails,
 				'country' => $country,
-				'quotes' => $this->get_user_quotes( $user->ID ),
-				'orders' => $this->get_user_orders( $user->ID ),
-				'active' => $this->is_user_quote_active( $user->ID ),
-				'order_total' => $this->get_user_order_total( $user->ID ),
-				'average_order' => $this->get_user_average_order( $user->ID ),
-				'total_pending_payments' => $this->get_user_total_pending_payments_formatted( $user->ID ),
-				'past_payment_due_date' => $this->get_user_past_payment_due_date( $user->ID ),
+				'quotes' => get_user_meta( $user->ID, 'nova_user_quotes', true ),
+				'orders' => get_user_meta( $user->ID, 'nova_user_orders', true ),
+				'active' => get_user_meta( $user->ID, 'nova_user_quote_active', true ),
+				'order_total' => get_user_meta( $user->ID, 'nova_user_order_total', true ),
+				'average_order' => get_user_meta( $user->ID, 'nova_user_average_order', true ),
+				'total_pending_payments' => get_user_meta( $user->ID, 'nova_user_total_pending', true ),
+				'past_payment_due_date' => get_user_meta( $user->ID, 'nova_user_past_due_date', true ),
 			);
 		}
 
@@ -291,14 +296,18 @@ class Roles {
 				'limit' => -1,
 				'customer' => $user_id,
 				'status' => array( 'wc-pending' ),
-				'meta_key' => '_hide_order',
-				'meta_compare' => 'NOT EXISTS',
+
 			)
 		);
+
 
 		$total = 0;
 
 		foreach ( $orders as $order ) {
+			$hide = get_post_meta( $order->get_id(), '_hide_order', true );
+			if ( $hide ) {
+				continue;
+			}
 			$total += (float) $order->get_total();
 		}
 
@@ -308,8 +317,9 @@ class Roles {
 	public function get_user_total_pending_payments_formatted( $user_id ) {
 		$total = $this->get_user_total_pending_payments( $user_id );
 		$country = get_user_meta( $user_id, 'billing_country', true );
-		$total = wc_price( $total, array( 'currency' => $country ) );
-		return $total;
+		$currency_symbol = $country === 'CA' ? 'CAD $' : 'USD $';
+
+		return $currency_symbol . $total;
 	}
 
 
@@ -328,7 +338,7 @@ class Roles {
 
 		return $quotes->have_posts() ? $quotes->posts[0]->post_date : null;
 	}
-	public function get_user_quotes( $user_id ) {
+	public function get_user_quotes_array( $user_id ) {
 		$quotes = new \WP_Query( array(
 			'post_type' => 'nova_quote',
 			'posts_per_page' => -1,
@@ -347,10 +357,19 @@ class Roles {
 				)
 			)
 		) );
-		return $quotes->found_posts;
+
+		//return array of post ids
+		return array_map( function ($quote) {
+			return $quote->ID;
+		}, $quotes->posts );
 	}
 
-	public function get_user_orders( $user_id ) {
+	public function get_user_quotes( $user_id ) {
+		$quotes = $this->get_user_quotes_array( $user_id );
+		return count( $quotes );
+	}
+
+	public function get_user_orders_array( $user_id ) {
 		$orders = wc_get_orders(
 			array(
 				'limit' => -1,
@@ -368,8 +387,13 @@ class Roles {
 			$result[] = $order;
 		}
 
-		return count( $result );
+		return $result;
 
+	}
+
+	public function get_user_orders( $user_id ) {
+		$orders = $this->get_user_orders_array( $user_id );
+		return count( $orders );
 	}
 
 	public function get_user_order_total( $user_id ) {
@@ -629,6 +653,33 @@ class Roles {
 			</script>
 			<?php
 		}
+	}
+
+	public function add_nova_statistics( $user ) {
+		$nova_user_quotes = get_user_meta( $user->ID, 'nova_user_quotes', true );
+		$nova_user_orders = get_user_meta( $user->ID, 'nova_user_orders', true );
+		$nova_user_quote_active = get_user_meta( $user->ID, 'nova_user_quote_active', true );
+		$nova_user_order_total = get_user_meta( $user->ID, 'nova_user_order_total', true );
+		$nova_user_total_pending = get_user_meta( $user->ID, 'nova_user_total_pending', true );
+		$nova_user_past_due_date = get_user_meta( $user->ID, 'nova_user_past_due_date', true );
+		$nova_user_average_order = get_user_meta( $user->ID, 'nova_user_average_order', true );
+		?>
+		<h3>Nova Statistics</h3>
+		<table class="form-table" id="nova-statistics">
+			<tr>
+				<th><label for="nova_statistics">Nova Statistics</label></th>
+				<td>
+					<p>Total Quotes: <?php echo $nova_user_quotes; ?></p>
+					<p>Total Orders: <?php echo $nova_user_orders; ?></p>
+					<p>Quote Active: <?php echo $nova_user_quote_active; ?></p>
+					<p>Order Total: <?php echo $nova_user_order_total; ?></p>
+					<p>Average Order: <?php echo $nova_user_average_order; ?></p>
+					<p>Total Pending: <?php echo $nova_user_total_pending; ?></p>
+					<p>Past Due Date: <?php echo $nova_user_past_due_date; ?></p>
+				</td>
+			</tr>
+		</table>
+		<?php
 	}
 
 	public function add_registration_date_to_profile( $user ) {
@@ -1672,6 +1723,69 @@ class Roles {
 				echo 'Saved business id : ' . $business_id;
 				echo '<br>--------------------------------<br>';
 			}
+
+			// Increment the page number for the next batch
+			++$page;
+			echo 'Next batch ...<br>';
+		}
+		echo 'Done processing';
+	}
+
+	public function regenerate_nova_statistics() {
+		$batch_size = 20; // Process 100 users per batch
+		$page = 0;
+		$processed = true;
+
+		while ( $processed ) {
+			// Fetch a batch of users
+			echo 'Starting ... <br>';
+			$users = get_users(
+				array(
+					'number' => $batch_size,
+					'offset' => $page * $batch_size,
+					'orderby' => 'ID',  // Sort by user ID
+					'order' => 'ASC',    // Ascending order
+				)
+			);
+
+			// If no users are returned, we are done
+			if ( empty( $users ) ) {
+				$processed = false;
+				continue;
+			}
+
+			// Process each user in the current batch
+			foreach ( $users as $user ) {
+				delete_user_meta( $user->ID, 'nova_user_past_due_date' );
+				update_user_meta( $user->ID, 'nova_user_quotes', count( $this->get_user_quotes_array( $user->ID ) ) );
+				update_user_meta( $user->ID, 'nova_user_quotes_array', $this->get_user_quotes_array( $user->ID ) );
+				update_user_meta( $user->ID, 'nova_user_orders', count( $this->get_user_orders_array( $user->ID ) ) );
+				update_user_meta( $user->ID, 'nova_user_quote_active', $this->is_user_quote_active( $user->ID ) );
+				update_user_meta( $user->ID, 'nova_user_order_total', $this->get_user_order_total( $user->ID ) );
+				update_user_meta( $user->ID, 'nova_user_average_order', $this->get_user_average_order( $user->ID ) );
+				update_user_meta( $user->ID, 'nova_user_total_pending', $this->get_user_total_pending_payments_formatted( $user->ID ) );
+				$past_due_date = $this->get_user_past_payment_due_date( $user->ID );
+
+				$due_date = get_user_meta( $past_due_date, 'order_due_date', true );
+
+				if ( $due_date ) {
+					update_user_meta( $user->ID, 'nova_user_past_due_date', $due_date );
+				} else {
+					delete_user_meta( $user->ID, 'nova_user_past_due_date' );
+				}
+
+				echo 'User ' . $user->ID . ' updated <br>';
+				echo 'Nova User Quotes: ' . get_user_meta( $user->ID, 'nova_user_quotes', true ) . '<br>';
+				echo 'Nova User Quotes array ' . implode( ', ', get_user_meta( $user->ID, 'nova_user_quotes_array', true ) ) . '<br>';
+				echo 'Nova User Orders: ' . get_user_meta( $user->ID, 'nova_user_orders', true ) . '<br>';
+				echo 'Nova User Quote Active: ' . get_user_meta( $user->ID, 'nova_user_quote_active', true ) . '<br>';
+				echo 'Nova User Order Total: ' . get_user_meta( $user->ID, 'nova_user_order_total', true ) . '<br>';
+				echo 'Nova User Average Order: ' . get_user_meta( $user->ID, 'nova_user_average_order', true ) . '<br>';
+				echo 'Nova User Total Pending: ' . get_user_meta( $user->ID, 'nova_user_total_pending', true ) . '<br>';
+				echo 'Nova User Past Due Date: ' . get_user_meta( $user->ID, 'nova_user_past_due_date', true ) . '<br>';
+				echo '<br>--------------------------------<br>';
+			}
+
 
 			// Increment the page number for the next batch
 			++$page;

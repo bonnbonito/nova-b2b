@@ -1028,10 +1028,11 @@ class Woocommerce {
 		}
 
 		$computed_tax = $subtotal * $tax_rate;
+		$shipping_tax = $shipping * $tax_rate;
 
 		$order->set_discount_tax( $computed_tax );
 		$order->set_cart_tax( $computed_tax );
-
+		$order->set_shipping_tax( $shipping_tax );
 		// Calculate the new order total
 		$new_total = $subtotal + $computed_tax;
 		$order->set_total( $new_total );

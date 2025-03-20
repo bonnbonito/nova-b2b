@@ -29,7 +29,7 @@ import { useAppContext } from '../../../../AppProvider';
 
 import { colorOptions, metalFinishColors } from '../../../../utils/ColorOptions';
 
-const newMetalFinishColors = [{ name: 'Aluminum Brushed', color: '#ddd' }, ...metalFinishColors];
+const newMetalFinishColors = [...metalFinishColors];
 
 export function Logo({ item }) {
   const { signage, setSignage, setMissing, hasUploadedFile } = useAppContext();

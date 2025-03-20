@@ -4301,7 +4301,9 @@ function UploadFiles({
       alert(`You have reached the maximum upload limit of ${maxFiles} files.`);
       return;
     }
-    const validFiles = Array.from(files).slice(0, totalAllowedUploads).filter(file => /\.(pdf|ai|png|jpg|jpeg)$/i.test(file.name));
+    const validFiles = Array.from(files).slice(0, totalAllowedUploads);
+    // .filter(file => /\.(pdf|ai|png|jpg|jpeg|eps)$/i.test(file.name));
+
     setFiles(prev => [...prev, ...validFiles]);
     console.log(files);
     if (validFiles.length > 0) {
@@ -4625,7 +4627,7 @@ function UploadFiles({
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: `uppercase font-title text-sm tracking-[1.4px] px-2 flex items-center gap-1 cursor-pointer ${fileError && 'text-red-600'}`,
     onClick: () => setOpen(!open)
-  }, "UPLOAD PDF/AI FILE ", open ? openIcon : closeIcon), !open && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "UPLOAD FILES ", open ? openIcon : closeIcon), !open && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "col-span-4"
   }, !maxFilesReached && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: `border-dashed mt-4 p-4 w-full rounded-md border-2 transition-colors ${isDragging ? 'border-slate-600 bg-slate-400' : 'border-slate-900'} ${fileError && 'border-red-600'} ${maxFilesReached ? 'cursor-not-allowed opacity-50' : isLoading ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:bg-slate-100'}`,
@@ -4641,16 +4643,16 @@ function UploadFiles({
     className: "text-center mb-0"
   }, isLoading ? 'Uploading...' : 'Drag and drop files here or click to upload'), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
     className: "text-sm mt-2 mb-0"
-  }, "Supported formats: PDF, AI, PNG, JPG, JPEG"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+  }, "All file types are supported, but PDF, AI, EPS, PNG, JPG, and JPEG are preferred."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
     className: "text-sm mb-0"
   }, "Maximum files: ", maxFiles))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     type: "file",
     ref: fileRef,
     className: "hidden",
     onChange: !maxFilesReached ? handleChange : undefined,
-    accept: ".pdf,.ai,.png,.jpg,.jpeg",
     "aria-label": "File input",
     multiple: true,
+    accept: "*",
     disabled: maxFilesReached
   }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "col-span-4 mb-4"
@@ -15484,10 +15486,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const newMetalFinishColors = [{
-  name: 'Aluminum Brushed',
-  color: '#ddd'
-}, ..._utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.metalFinishColors];
+const newMetalFinishColors = [..._utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__.metalFinishColors];
 
 
 const Letters = ({
@@ -16055,10 +16054,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const newMetalFinishColors = [{
-  name: 'Aluminum Brushed',
-  color: '#ddd'
-}, ..._utils_ColorOptions__WEBPACK_IMPORTED_MODULE_11__.metalFinishColors];
+const newMetalFinishColors = [..._utils_ColorOptions__WEBPACK_IMPORTED_MODULE_11__.metalFinishColors];
 function Logo({
   item
 }) {
@@ -20744,8 +20740,6 @@ const acrylicBackingOptions = [{
 }, {
   option: 'Frosted Clear Acrylic'
 }, {
-  option: 'Clear Acrylic'
-}, {
   option: 'UV Printed PVC'
 }];
 const neonSignsMountingOptions = [{
@@ -20759,8 +20753,6 @@ const rigidBackingOptions = [{
   option: 'Frosted Clear PC'
 }, {
   option: 'Black PC'
-}, {
-  option: 'Clear Acrylic'
 }, {
   option: 'UV Printed on PC'
 }, {

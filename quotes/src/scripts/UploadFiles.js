@@ -55,9 +55,8 @@ export default function UploadFiles({
       return;
     }
 
-    const validFiles = Array.from(files)
-      .slice(0, totalAllowedUploads)
-      .filter(file => /\.(pdf|ai|png|jpg|jpeg)$/i.test(file.name));
+    const validFiles = Array.from(files).slice(0, totalAllowedUploads);
+    // .filter(file => /\.(pdf|ai|png|jpg|jpeg|eps)$/i.test(file.name));
 
     setFiles(prev => [...prev, ...validFiles]);
     console.log(files);
@@ -446,7 +445,7 @@ export default function UploadFiles({
           }`}
           onClick={() => setOpen(!open)}
         >
-          UPLOAD PDF/AI FILE {open ? openIcon : closeIcon}
+          UPLOAD FILES {open ? openIcon : closeIcon}
         </label>
 
         {!open && (
@@ -477,7 +476,10 @@ export default function UploadFiles({
                   <p className="text-center mb-0">
                     {isLoading ? 'Uploading...' : 'Drag and drop files here or click to upload'}
                   </p>
-                  <p className="text-sm mt-2 mb-0">Supported formats: PDF, AI, PNG, JPG, JPEG</p>
+                  <p className="text-sm mt-2 mb-0">
+                    All file types are supported, but PDF, AI, EPS, PNG, JPG, and JPEG are
+                    preferred.
+                  </p>
                   <p className="text-sm mb-0">Maximum files: {maxFiles}</p>
                 </div>
               </div>
@@ -488,9 +490,9 @@ export default function UploadFiles({
               ref={fileRef}
               className="hidden"
               onChange={!maxFilesReached ? handleChange : undefined}
-              accept=".pdf,.ai,.png,.jpg,.jpeg"
               aria-label="File input"
               multiple
+              accept="*"
               disabled={maxFilesReached}
             />
           </div>

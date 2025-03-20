@@ -27,7 +27,7 @@ import {
   STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
 
-const newMetalFinishColors = [{ name: 'Aluminum Brushed', color: '#ddd' }, ...metalFinishColors];
+const newMetalFinishColors = [...metalFinishColors];
 
 import { calculateLetterPrice, spacerPricing } from '../../../../utils/Pricing';
 

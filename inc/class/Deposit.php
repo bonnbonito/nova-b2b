@@ -552,6 +552,8 @@ class Deposit {
 				$key = 'nova_payment_email_key_' . get_row_index();
 				$email_sent = get_post_meta( $order_id, $key, true );
 
+				error_log( 'reminder email for order ' . $order_id . ' ' . $key . ' = ' . $email_sent ? 'sent' : 'not sent' );
+
 				if ( $email_sent ) {
 					continue;
 				}
@@ -1038,7 +1040,7 @@ class Deposit {
 
 			if ( have_rows( 'payment_emails', $deposit_chosen ) ) {
 				while ( have_rows( 'payment_emails', $deposit_chosen ) ) {
-					the_row( 'payment_emails', $deposit_chosen );
+					the_row();
 
 					$row_index = get_row_index();
 					$key = 'nova_payment_email_key_' . $row_index;

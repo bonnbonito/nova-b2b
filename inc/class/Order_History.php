@@ -732,6 +732,7 @@ class Order_History {
 			$due_date = false;
 			$deadline = false;
 			$delivered_date = false;
+			$order_due_date = get_post_meta( $order->get_id(), 'order_due_date', true );
 
 			$manual_delivered_date = get_field( 'manual_delivered_date', $order->get_id() );
 			if ( $manual_delivered_date ) {
@@ -754,6 +755,9 @@ class Order_History {
 				if ( $shipped_date ) {
 					$deadline = strtotime( $shipped_date . ' +' . intval( $days_after_shipping ) . ' days' );
 					$due_date = date( 'M d, Y', $deadline );
+					if ( $order_due_date !== $due_date ) {
+						update_post_meta( $order->get_id(), 'order_due_date', $due_date );
+					}
 					if ( $current_time > $deadline ) {
 						if ( ! $order->has_status( array( 'completed', 'on-hold', 'trash' ) ) ) {
 							$is_overdue = true;
