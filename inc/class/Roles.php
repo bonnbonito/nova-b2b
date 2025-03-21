@@ -410,7 +410,7 @@ class Roles {
 
 		foreach ( $orders as $order ) {
 			$hide = get_post_meta( $order->get_id(), '_hide_order', true );
-			$temporary = get_post_meta( $order->get_ID(), '_is_temporary_combined_order', true );
+			$temporary = get_post_meta( $order->get_id(), '_is_temporary_combined_order', true );
 			if ( $hide || $temporary ) {
 				continue;
 			}
@@ -669,8 +669,8 @@ class Roles {
 			<tr>
 				<th><label for="nova_statistics">Nova Statistics</label></th>
 				<td>
-					<p>Total Quotes: <?php echo $nova_user_quotes; ?></p>
-					<p>Total Orders: <?php echo $nova_user_orders; ?></p>
+					<p>Total Quotes: <?php echo implode( ', ', $nova_user_quotes ); ?></p>
+					<p>Total Orders: <?php echo implode( ', ', $nova_user_orders ); ?></p>
 					<p>Quote Active: <?php echo $nova_user_quote_active; ?></p>
 					<p>Order Total: <?php echo $nova_user_order_total; ?></p>
 					<p>Average Order: <?php echo $nova_user_average_order; ?></p>
@@ -1756,28 +1756,11 @@ class Roles {
 
 			// Process each user in the current batch
 			foreach ( $users as $user ) {
-				delete_user_meta( $user->ID, 'nova_user_past_due_date' );
-				update_user_meta( $user->ID, 'nova_user_quotes', count( $this->get_user_quotes_array( $user->ID ) ) );
-				update_user_meta( $user->ID, 'nova_user_quotes_array', $this->get_user_quotes_array( $user->ID ) );
-				update_user_meta( $user->ID, 'nova_user_orders', count( $this->get_user_orders_array( $user->ID ) ) );
-				update_user_meta( $user->ID, 'nova_user_quote_active', $this->is_user_quote_active( $user->ID ) );
-				update_user_meta( $user->ID, 'nova_user_order_total', $this->get_user_order_total( $user->ID ) );
-				update_user_meta( $user->ID, 'nova_user_average_order', $this->get_user_average_order( $user->ID ) );
-				update_user_meta( $user->ID, 'nova_user_total_pending', $this->get_user_total_pending_payments_formatted( $user->ID ) );
-				$past_due_date = $this->get_user_past_payment_due_date( $user->ID );
-
-				$due_date = get_user_meta( $past_due_date, 'order_due_date', true );
-
-				if ( $due_date ) {
-					update_user_meta( $user->ID, 'nova_user_past_due_date', $due_date );
-				} else {
-					delete_user_meta( $user->ID, 'nova_user_past_due_date' );
-				}
-
+				$this->update_user_quotes_meta( $user );
+				$this->update_user_orders_meta( $user );
 				echo 'User ' . $user->ID . ' updated <br>';
-				echo 'Nova User Quotes: ' . get_user_meta( $user->ID, 'nova_user_quotes', true ) . '<br>';
-				echo 'Nova User Quotes array ' . implode( ', ', get_user_meta( $user->ID, 'nova_user_quotes_array', true ) ) . '<br>';
-				echo 'Nova User Orders: ' . get_user_meta( $user->ID, 'nova_user_orders', true ) . '<br>';
+				echo 'Nova User Quotes: ' . count( get_user_meta( $user->ID, 'nova_user_quotes', true ) ) . '<br>';
+				echo 'Nova User Orders: ' . count( get_user_meta( $user->ID, 'nova_user_orders', true ) ) . '<br>';
 				echo 'Nova User Quote Active: ' . get_user_meta( $user->ID, 'nova_user_quote_active', true ) . '<br>';
 				echo 'Nova User Order Total: ' . get_user_meta( $user->ID, 'nova_user_order_total', true ) . '<br>';
 				echo 'Nova User Average Order: ' . get_user_meta( $user->ID, 'nova_user_average_order', true ) . '<br>';
@@ -1792,5 +1775,25 @@ class Roles {
 			echo 'Next batch ...<br>';
 		}
 		echo 'Done processing';
+	}
+
+	public function update_user_quotes_meta( $user ) {
+		delete_user_meta( $user->ID, 'nova_user_past_due_date' );
+		update_user_meta( $user->ID, 'nova_user_quotes', $this->get_user_quotes_array( $user->ID ) );
+		update_user_meta( $user->ID, 'nova_user_quote_active', $this->is_user_quote_active( $user->ID ) );
+	}
+
+	public function update_user_orders_meta( $user ) {
+		update_user_meta( $user->ID, 'nova_user_orders', $this->get_user_orders_array( $user->ID ) );
+		update_user_meta( $user->ID, 'nova_user_order_total', $this->get_user_order_total( $user->ID ) );
+		update_user_meta( $user->ID, 'nova_user_average_order', $this->get_user_average_order( $user->ID ) );
+		update_user_meta( $user->ID, 'nova_user_total_pending', $this->get_user_total_pending_payments_formatted( $user->ID ) );
+		$past_due_date = $this->get_user_past_payment_due_date( $user->ID );
+		$due_date = get_user_meta( $past_due_date, 'order_due_date', true );
+		if ( $due_date ) {
+			update_user_meta( $user->ID, 'nova_user_past_due_date', $due_date );
+		} else {
+			delete_user_meta( $user->ID, 'nova_user_past_due_date' );
+		}
 	}
 }

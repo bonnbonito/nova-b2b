@@ -76,18 +76,19 @@ class Admin {
 
 		$old_status = get_field( 'quote_status', $quote_id )['value'];
 
+
+
 		update_field( 'quote_status', $value, $quote_id );
 
 		if ( $old_status !== 'ready' && $value === 'ready' ) {
 			do_action( 'quote_to_payment', $quote_id, get_current_user_id() );
-			// $nova_quote_instance = \NOVA_B2B\Nova_Quote::get_instance();
 
-			// if ( $nova_quote_instance ) {
-			// $html     = $nova_quote_instance->html_invoice( $quote_id );
-			// $html_cad = $nova_quote_instance->html_invoice( $quote_id, 'CAD' );
-			// $nova_quote_instance->generate_pdf( $quote_id, $html, 'USD' );
-			// $nova_quote_instance->generate_pdf( $quote_id, $html_cad, 'CAD' );
-			// }
+			$roles = \NOVA_B2B\Roles::get_instance();
+			if ( $roles ) {
+				$partner_id = get_field( 'partner', $quote_id );
+				$user = get_user_by( 'id', $partner_id );
+				$roles->update_user_quotes_meta( $user );
+			}
 		}
 
 		if ( $old_status === 'draft' && $value === 'processing' ) {

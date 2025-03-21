@@ -188,6 +188,16 @@ class Woocommerce {
 		add_filter( 'woocommerce_email_recipient_customer_cancelled_order', array( $this, 'add_additional_recipients_to_emails' ), 10, 3 );
 		//failed
 		add_filter( 'woocommerce_email_recipient_customer_failed_order', array( $this, 'add_additional_recipients_to_emails' ), 10, 3 );
+
+		add_action( 'woocommerce_order_status_changed', array( $this, 'update_user_orders_meta' ), 10, 4 );
+	}
+
+	public function update_user_orders_meta( $order_id, $old_status, $new_status, $order ) {
+		$roles = \NOVA_B2B\Roles::get_instance();
+		if ( $roles ) {
+			$customer_id = $order->get_customer_id();
+			$roles->update_user_orders_meta( $customer_id );
+		}
 	}
 
 	public function add_additional_recipients_field() {
@@ -2705,6 +2715,13 @@ class Woocommerce {
 		if ( $has_nova_quote ) {
 			$order->update_meta_data( 'has_nova_quote', true );
 			$order->save();
+		}
+
+		$roles = \NOVA_B2B\Roles::get_instance();
+		if ( $roles ) {
+			$customer_id = $order->get_customer_id();
+			$user = get_user_by( 'id', $customer_id );
+			$roles->update_user_orders_meta( $user );
 		}
 	}
 
