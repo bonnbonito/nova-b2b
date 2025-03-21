@@ -42,7 +42,7 @@ class Pending_Payment {
 		add_action( 'admin_post_nopriv_delete_pending_payment', array( $this, 'handle_delete_order' ) );
 		add_action( 'admin_post_delete_pending_payment', array( $this, 'handle_delete_order' ) );
 		add_action( 'wp', array( $this, 'schedule_pending_payment_checker' ) );
-		add_action( 'check_pending_payments_action_hook', array( $this, 'check_pending_payments' ) );
+		//add_action( 'check_pending_payments_action_hook', array( $this, 'check_pending_payments' ) ); Disable cron for now
 		add_action( 'admin_post_send_payment_reminder', array( $this, 'handle_send_reminder' ) );
 		add_filter( 'kadence_woomail_order_body_text', array( $this, 'pending_payment_order_email_content' ), 999, 5 );
 		add_action( 'woocommerce_payment_complete', array( $this, 'custom_order_complete' ), 99, 1 );

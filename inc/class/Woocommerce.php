@@ -171,7 +171,7 @@ class Woocommerce {
 		add_action( 'woocommerce_checkout_create_order_line_item', array( $this, 'add_product_comments_to_order_items' ), 10, 4 );
 
 		// Add additional recipients field
-		add_action( 'woocommerce_review_order_before_submit', array( $this, 'add_additional_recipients_field' ) );
+		//add_action( 'woocommerce_review_order_before_submit', array( $this, 'add_additional_recipients_field' ) );
 		add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'save_additional_recipients_field' ) );
 		add_action( 'woocommerce_checkout_process', array( $this, 'validate_additional_recipients_field' ) );
 

@@ -401,7 +401,6 @@ class Deposit {
 				continue;
 			}
 
-			error_log( 'sending payment reminder email for order ' . $order_id );
 
 			$this->send_payment_reminder_email( $order_id );
 
@@ -514,8 +513,16 @@ class Deposit {
 		$shipped_date = $order->get_meta( 'shipped_date' );
 
 		if ( isset( $manual_delivered_date ) && ! empty( $manual_delivered_date ) ) {
-			$shipped_date = $manual_delivered_date;
+			$date_obj = \DateTime::createFromFormat( 'd/m/Y', $manual_delivered_date );
+			if ( $date_obj ) {
+				$delivered_date = $date_obj->format( 'F d, Y' );
+				$shipped_date = $delivered_date;
+
+			}
 		}
+
+
+
 
 		$currency = $order->get_currency();
 		$days_after_shipping = get_field( 'days_after_shipping', $deposit_chosen );
@@ -523,6 +530,7 @@ class Deposit {
 		$payment_date = date( 'F d, Y', $deadline );
 
 		$today = date( 'F d, Y' );
+
 
 		$first_name = $order->get_billing_first_name();
 		$customer_email = $order->get_billing_email();
@@ -544,26 +552,33 @@ class Deposit {
 
 		$pending_total = $order->get_meta( '_pending_amount' );
 
+
+
+
 		if ( have_rows( 'payment_emails', $deposit_chosen ) ) :
 
 			while ( have_rows( 'payment_emails', $deposit_chosen ) ) :
 				the_row();
-				$days = get_sub_field( 'send_after_days' );
+				$days = intval( get_sub_field( 'send_after_days' ) );
 				$key = 'nova_payment_email_key_' . get_row_index();
-				$email_sent = get_post_meta( $order_id, $key, true );
 
-				error_log( 'reminder email for order ' . $order_id . ' ' . $key . ' = ' . $email_sent ? 'sent' : 'not sent' );
+				$email_sent = get_post_meta( $order_id, $key, true );
 
 				if ( $email_sent ) {
 					continue;
 				}
 
-				if ( $days !== false ) {
+				if ( $days ) {
+
 
 					$days_later = strtotime( $shipped_date . ' +' . intval( $days ) . ' days' );
 					$date_later = date( 'F d, Y', $days_later );
 
-					if ( $today == $date_later ) {
+
+
+					if ( strtotime( $today ) == strtotime( $date_later ) ) {
+
+						error_log( 'today: ' . $today . ' date later: ' . $date_later );
 
 						$subject = get_sub_field( 'subject' );
 						$subject = str_replace( '{customer_name}', $first_name, $subject );
@@ -591,44 +606,43 @@ class Deposit {
 
 						$message = str_replace( '{order_details}', $order_details, $message );
 
-						if ( $customer_email ) {
-							$headers = array( 'Content-Type: text/html; charset=UTF-8' );
+						$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
-							$role_instance = \NOVA_B2B\Roles::get_instance();
+						$role_instance = \NOVA_B2B\Roles::get_instance();
 
-							if ( $role_instance ) {
+						if ( $role_instance ) {
 
-								$attachments = array();
+							$attachments = array();
 
-								if ( class_exists( '\WPO\WC\PDF_Invoices\Main' ) ) {
-									$attachments = \WPO\WC\PDF_Invoices\Main::instance()->attach_document_to_email( array(), 'customer_invoice', $order, null );
-								}
-
-								$role_instance->send_email( $customer_email, $subject, $message, $headers, $attachments );
-
+							if ( class_exists( '\WPO\WC\PDF_Invoices\Main' ) ) {
+								$attachments = \WPO\WC\PDF_Invoices\Main::instance()->attach_document_to_email( array(), 'customer_invoice', $order, null );
 							}
 
-							$label = get_sub_field( 'email_label' );
-
-							if ( $label == 'Deadline email' ) {
-								// $this->admin_notification_deadline_email( $original_order, $role_instance, $headers, $first_name, $payment_date, $pending_total );
-
-								$current_overdue = get_user_meta( $user_id, 'overdue_orders', true );
-
-								update_post_meta( $order_id, 'is_overdue', true );
-
-								if ( $current_overdue ) {
-									$current_overdue = explode( ',', $current_overdue );
-									$current_overdue[] = $order_id;
-									update_user_meta( $user_id, 'overdue_orders', implode( ',', $current_overdue ) );
-								} else {
-									update_user_meta( $user_id, 'overdue_orders', $order_id );
-								}
-							}
-
-							update_post_meta( $order_id, $key, 'sent ' . date( 'Y/m/d' ) );
+							$role_instance->send_email( $customer_email, $subject, $message, $headers, $attachments );
 
 						}
+
+						$label = get_sub_field( 'email_label' );
+
+						if ( $label == 'Deadline email' ) {
+							// $this->admin_notification_deadline_email( $original_order, $role_instance, $headers, $first_name, $payment_date, $pending_total );
+
+							$current_overdue = get_user_meta( $user_id, 'overdue_orders', true );
+
+							update_post_meta( $order_id, 'is_overdue', true );
+
+							if ( $current_overdue ) {
+								$current_overdue = explode( ',', $current_overdue );
+								$current_overdue[] = $order_id;
+								update_user_meta( $user_id, 'overdue_orders', implode( ',', $current_overdue ) );
+							} else {
+								update_user_meta( $user_id, 'overdue_orders', $order_id );
+							}
+						}
+
+						update_post_meta( $order_id, $key, 'sent ' . date( 'Y/m/d' ) );
+					} else {
+						delete_post_meta( $order_id, $key );
 					}
 				}
 
@@ -1033,6 +1047,11 @@ class Deposit {
 				$date_obj = \DateTime::createFromFormat( 'd/m/Y', $manual_delivered_date );
 				if ( $date_obj ) {
 					$delivered_date = $date_obj->format( 'F d, Y' );
+
+					$due_date = date( 'Y-m-d', strtotime( '+' . $days . ' days', strtotime( $delivered_date ) ) );
+					$time_diff = human_time_diff( current_time( 'timestamp' ), strtotime( $due_date ) );
+					$ago = strtotime( $due_date ) < current_time( 'timestamp' );
+
 				}
 			}
 

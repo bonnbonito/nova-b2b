@@ -38,6 +38,7 @@ type Order = {
 
 export default function Deposits() {
 	const [orders, setOrders] = useState<Order[]>(NovaDeposits.pending_payments);
+	console.log(NovaDeposits.pending_payments);
 
 	const deleteOrder = (order_id: number) => {
 		const formData = new FormData();

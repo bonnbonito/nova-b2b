@@ -209,6 +209,7 @@ __webpack_require__.r(__webpack_exports__);
 
 function Deposits() {
   const [orders, setOrders] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(NovaDeposits.pending_payments);
+  console.log(NovaDeposits.pending_payments);
   const deleteOrder = order_id => {
     const formData = new FormData();
     formData.append('action', 'delete_pending_payment_order');
