@@ -1056,6 +1056,10 @@ class Deposit {
 			}
 
 			$emails = array();
+			$current_due_date = get_post_meta( $order_id, 'nova_order_due_date', true );
+			if ( $current_due_date !== $due_date ) {
+				update_post_meta( $order_id, 'nova_order_due_date', $due_date );
+			}
 
 			if ( have_rows( 'payment_emails', $deposit_chosen ) ) {
 				while ( have_rows( 'payment_emails', $deposit_chosen ) ) {

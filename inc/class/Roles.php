@@ -218,7 +218,7 @@ class Roles {
 	public function handle_find_business_id( \WP_REST_Request $request ) {
 		$email = $request['email'];
 
-		$users = get_users( array( 'role' => 'partner' ) );
+		$users = get_users();
 
 		foreach ( $users as $user ) {
 
@@ -241,8 +241,8 @@ class Roles {
 				'business_id' => get_user_meta( $user->ID, 'business_id', true ),
 				'emails' => $emails,
 				'country' => $country,
-				'quotes' => get_user_meta( $user->ID, 'nova_user_quotes', true ),
-				'orders' => get_user_meta( $user->ID, 'nova_user_orders', true ),
+				'quotes' => count( get_user_meta( $user->ID, 'nova_user_quotes', true ) ),
+				'orders' => count( get_user_meta( $user->ID, 'nova_user_orders', true ) ),
 				'active' => get_user_meta( $user->ID, 'nova_user_quote_active', true ),
 				'order_total' => get_user_meta( $user->ID, 'nova_user_order_total', true ),
 				'average_order' => get_user_meta( $user->ID, 'nova_user_average_order', true ),
@@ -282,12 +282,29 @@ class Roles {
 			)
 		);
 
+		$due_dates = array();
+
 		if ( $orders ) {
-			$order = $orders[0];
-			return $order->get_id();
+
+			foreach ( $orders as $order ) {
+				$due_date = get_post_meta( $order->get_id(), 'nova_order_due_date', true );
+				if ( $due_date ) {
+					$due_dates[] = strtotime( $due_date );
+				}
+			}
 		}
 
-		return false;
+		//order due dates by time, oldest first
+		asort( $due_dates );
+		$oldest_due_date = $due_dates[0];
+
+		if ( $oldest_due_date ) {
+			$formatted_due_date = date( 'F j, Y', $oldest_due_date );
+			return $formatted_due_date;
+		} else {
+			return false;
+		}
+
 	}
 
 	public function get_user_total_pending_payments( $user_id ) {
@@ -296,7 +313,6 @@ class Roles {
 				'limit' => -1,
 				'customer' => $user_id,
 				'status' => array( 'wc-pending' ),
-
 			)
 		);
 
@@ -1778,7 +1794,6 @@ class Roles {
 	}
 
 	public function update_user_quotes_meta( $user ) {
-		delete_user_meta( $user->ID, 'nova_user_past_due_date' );
 		update_user_meta( $user->ID, 'nova_user_quotes', $this->get_user_quotes_array( $user->ID ) );
 		update_user_meta( $user->ID, 'nova_user_quote_active', $this->is_user_quote_active( $user->ID ) );
 	}
@@ -1789,9 +1804,8 @@ class Roles {
 		update_user_meta( $user->ID, 'nova_user_average_order', $this->get_user_average_order( $user->ID ) );
 		update_user_meta( $user->ID, 'nova_user_total_pending', $this->get_user_total_pending_payments_formatted( $user->ID ) );
 		$past_due_date = $this->get_user_past_payment_due_date( $user->ID );
-		$due_date = get_user_meta( $past_due_date, 'order_due_date', true );
-		if ( $due_date ) {
-			update_user_meta( $user->ID, 'nova_user_past_due_date', $due_date );
+		if ( $past_due_date ) {
+			update_user_meta( $user->ID, 'nova_user_past_due_date', $past_due_date );
 		} else {
 			delete_user_meta( $user->ID, 'nova_user_past_due_date' );
 		}
