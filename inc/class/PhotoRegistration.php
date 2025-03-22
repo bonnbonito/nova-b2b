@@ -189,7 +189,7 @@ class PhotoRegistration {
 
 		ob_start();
 		?>
-		<div id="photoContainer" class="nova-photo-upload-container relative max-w-[400px] mx-auto p-4">
+		<div id="photoContainer" class="nova-photo-upload-container relative max-w-[500px] mx-auto p-4">
 			<div id="loader" class="bg-opacity-40 bg-slate-700 absolute w-full h-full items-center justify-center left-0 top-0"
 				style="display: none;">
 				<span class="flex items-center gap-2 text-white text-lg">
@@ -206,12 +206,28 @@ class PhotoRegistration {
 				<h2 class="text-2xl font-semibold tracking-tight text-center mb-6">Calling Card Upload</h2>
 
 				<div class="nova-photo-button-container flex justify-center gap-4">
-					<button id="open-camera" class="nova-photo-camera-button">
+					<button id="open-camera" class="nova-photo-camera-button flex items-center gap-2">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+							class="size-6">
+							<path stroke-linecap="round" stroke-linejoin="round"
+								d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z" />
+							<path stroke-linecap="round" stroke-linejoin="round"
+								d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z" />
+						</svg>
+
+
 						<?php echo esc_html( $atts['camera_text'] ); ?>
 					</button>
 					<div class="nova-photo-upload-wrapper">
 						<input type="file" id="file-upload" class="nova-photo-input hidden" accept="image/*" />
-						<button type="button" class="nova-photo-upload-button" onclick="document.getElementById('file-upload').click()">
+						<button type="button" class="nova-photo-upload-button flex items-center gap-2"
+							onclick="document.getElementById('file-upload').click()">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+								stroke="currentColor" class="size-6">
+								<path stroke-linecap="round" stroke-linejoin="round"
+									d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+							</svg>
+
 							<?php echo esc_html( $atts['button_text'] ); ?>
 						</button>
 					</div>
@@ -265,6 +281,12 @@ class PhotoRegistration {
 				background: rgba(255, 255, 255, 0.49);
 				top: 0;
 				left: 0;
+			}
+
+			.nova-photo-upload-container {
+				border: 2px dashed rgba(0, 0, 0, .35);
+				margin-bottom: 40px;
+				border-radius: 4px;
 			}
 		</style>
 		<?php

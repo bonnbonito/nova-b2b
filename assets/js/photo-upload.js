@@ -141,8 +141,9 @@ document.addEventListener('DOMContentLoaded', function () {
 				if (zip && parsedData.zip) {
 					zip.value = parsedData.zip;
 				}
+				photoPreview.classList.add('hidden');
 				photoResult.innerHTML =
-					'<p style="text-align: center;">Please double check the details</p>';
+					'<p style="text-align: center; padding-top: 20px;">Please double check the details</p>';
 
 				novaSignUpForm.classList.remove('loading');
 			}
