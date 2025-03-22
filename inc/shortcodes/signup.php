@@ -1,6 +1,8 @@
 <div class="nova-b2b">
-	<form class="nova-signup w-full border-solid border border-nova-light rounded-md px-8 pt-6 pb-8"
-		id="novaSignUpForm">
+
+	<?php echo do_shortcode( '[nova_photo_upload]' ); ?>
+
+	<form class="nova-signup w-full border-solid border border-nova-light rounded-md px-8 pt-6 pb-8" id="novaSignUpForm">
 		<div class="md:flex md:gap-x-20 mb-9">
 			<div class="form-field flex-1 mb-9 md:mb-0">
 				<label class="block mb-2 font-title uppercase" for="firstName">
@@ -195,8 +197,7 @@
 				</label>
 				<input
 					class="appearance-none border-solid border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-xs"
-					id="password" name="password" type="password" placeholder="*******" autocomplete="current-password"
-					required>
+					id="password" name="password" type="password" placeholder="*******" autocomplete="current-password" required>
 			</div>
 		</div>
 
@@ -251,8 +252,8 @@
 			<div class="flex items-center mb-4 w-full">
 				<input id="privacy" type="checkbox" value="yes" name="privacy"
 					class="w-5 h-5 text-nova-primary border-nova-light focus:ring-nova-primary" required>
-				<label for="privacy" class="ms-3 text-sm font-medium text-nova-gray">Yes, I have read the <a
-						class="text-black" href="/privacy-policy" target="_blank">Privacy
+				<label for="privacy" class="ms-3 text-sm font-medium text-nova-gray">Yes, I have read the <a class="text-black"
+						href="/privacy-policy" target="_blank">Privacy
 						Policy.</a><span class="text-red-500">*</span></label>
 			</div>
 		</div>

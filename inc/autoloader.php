@@ -51,6 +51,8 @@ $instances = array(
 	'OrderApprove',
 	'AutoLogin',
 	'ExportOrder',
+	'AI',
+	'PhotoRegistration',
 );
 
 foreach ( $instances as $instance ) {

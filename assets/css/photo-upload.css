@@ -1,0 +1,151 @@
+.nova-photo-upload-container {
+	@apply max-w-2xl mx-auto p-6;
+}
+
+.nova-photo-upload-wrapper {
+	@apply rounded-lg border bg-card text-card-foreground shadow-sm;
+	@apply p-6 space-y-4;
+	@apply relative inline-block;
+}
+
+.nova-photo-input {
+	@apply absolute inset-0 w-full h-full opacity-0 cursor-pointer;
+	@apply z-10;
+}
+
+.nova-photo-input::-webkit-file-upload-button {
+	@apply hidden;
+}
+
+.nova-photo-preview {
+	@apply relative aspect-video w-full overflow-hidden rounded-lg border bg-muted;
+	@apply transition-all duration-200 ease-in-out;
+}
+
+.nova-photo-preview.hidden {
+	@apply opacity-0 pointer-events-none;
+}
+
+.nova-photo-preview:not(.hidden) {
+	@apply opacity-100;
+}
+
+.nova-photo-preview-img {
+	@apply h-full w-full object-cover;
+}
+
+.nova-photo-upload-buttons {
+	@apply flex flex-col sm:flex-row gap-3 justify-center;
+}
+
+.nova-photo-upload-label,
+.nova-photo-camera-label {
+	@apply cursor-pointer;
+}
+
+.nova-photo-upload-button,
+.nova-photo-camera-button,
+.nova-photo-remove {
+	@apply inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors;
+	@apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
+	@apply disabled:pointer-events-none disabled:opacity-50;
+	@apply h-10 px-4 py-2;
+	@apply transition-all duration-200 ease-in-out;
+}
+
+.nova-photo-upload-button {
+	@apply bg-primary text-primary-foreground hover:bg-primary/90;
+}
+
+.nova-photo-camera-button {
+	@apply bg-secondary text-secondary-foreground hover:bg-secondary/80;
+}
+
+.nova-photo-remove {
+	@apply bg-destructive text-destructive-foreground hover:bg-destructive/90;
+}
+
+.nova-photo-error {
+	@apply text-sm text-destructive mt-2;
+}
+
+.nova-photo-progress {
+	@apply h-2 w-full overflow-hidden rounded-full bg-secondary;
+}
+
+.nova-photo-progress-bar {
+	@apply h-full bg-primary transition-all duration-300;
+}
+
+#camera-container {
+	@apply relative aspect-video w-full overflow-hidden rounded-lg border bg-muted;
+}
+
+#video,
+#canvas {
+	@apply absolute inset-0 h-full w-full object-cover;
+}
+
+#photo {
+	@apply h-full w-full object-cover;
+}
+
+#status {
+	@apply text-sm text-muted-foreground text-center mb-4;
+}
+
+#download-link {
+	@apply inline-flex items-center justify-center rounded-md text-sm font-medium;
+	@apply bg-primary text-primary-foreground hover:bg-primary/90;
+	@apply h-10 px-4 py-2;
+	@apply transition-all duration-200 ease-in-out;
+}
+
+/* Modal styles */
+#camera-modal {
+	@apply fixed inset-0 z-50;
+	@apply transition-all duration-200 ease-in-out;
+}
+
+#camera-modal.hidden {
+	@apply opacity-0 pointer-events-none;
+}
+
+#camera-modal:not(.hidden) {
+	@apply opacity-100;
+}
+
+#camera-modal > div:first-child {
+	@apply fixed inset-0 bg-background/80 backdrop-blur-sm;
+	@apply transition-all duration-200 ease-in-out;
+}
+
+#camera-modal > div:last-child {
+	@apply fixed left-[50%] top-[50%] z-50 grid w-full max-w-2xl translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg;
+	@apply transition-all duration-200 ease-in-out;
+	@apply sm:rounded-lg;
+}
+
+/* Button container styles */
+.nova-photo-button-container {
+	@apply flex flex-col sm:flex-row gap-4 justify-center items-center;
+	@apply mb-6;
+}
+
+/* Preview controls */
+.nova-photo-preview-controls {
+	@apply absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2;
+	@apply transition-all duration-200 ease-in-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+	.nova-photo-preview-controls {
+		@apply flex-col w-full px-4;
+	}
+
+	.nova-photo-preview-controls button,
+	.nova-photo-preview-controls a {
+		@apply w-full;
+	}
+}
