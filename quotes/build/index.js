@@ -37637,7 +37637,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const metalThicknessOptions = ['0.5"', '1"', '1.5"', '2"'];
-const electroplatedOptions = ['Stainless Steel Brushed', 'Stainless Steel Polished', 'Electroplated Gold Brushed', 'Electroplated Gold Polished', 'Electroplated Black Titanium Brushed', 'Electroplated Black Titanium Polished', 'Electroplated Bronze Brushed', 'Electroplated Red Copper Brushed'];
+const electroplatedOptions = ['Stainless Steel Brushed', 'Electroplated Gold Brushed', 'Electroplated Black Titanium Brushed', 'Electroplated Bronze Brushed', 'Electroplated Red Copper Brushed'];
 const finishingOptions = ['Painted', 'Metal'];
 const mountingOptions = ['Stud Mount', _utils_defaults__WEBPACK_IMPORTED_MODULE_6__.STUD_WITH_SPACER, 'PVC Backer'];
 const studLengthOptions = ['1.5" (4cm)', '3.2" (8cm)', '4" (10cm)', '6" (15cm)'];
@@ -38247,7 +38247,7 @@ __webpack_require__.r(__webpack_exports__);
 
 const materialOptions = ['Flat Cut Stainless Steel', 'Flat Cut Aluminum', 'Flat Cut Brass'];
 const metalThicknessOptionsDefault = ['1/25" (1mm)', '1/16" (1.6mm)', '1/8" (3mm)', '1/4" (6mm)', '3/8" (9mm)'];
-const metalFinishingOptions = ['Stainless Steel Brushed', 'Stainless Steel Polished', 'Electroplated Gold Brushed', 'Electroplated Gold Polished', 'Electroplated Black Titanium Brushed', 'Electroplated Black Titanium Polished', 'Electroplated Bronze Brushed', 'Electroplated Red Copper Brushed'];
+const metalFinishingOptions = ['Stainless Steel Brushed', 'Electroplated Gold Brushed', 'Electroplated Black Titanium Brushed', 'Electroplated Bronze Brushed', 'Electroplated Red Copper Brushed'];
 const stainlessFinishing = ['Painted', 'Metal'];
 const aluminumFinishing = ['Painted', 'Brushed', 'Anodized'];
 const brassFinishing = ['Brushed'];

@@ -43,12 +43,12 @@ class PhotoRegistration {
 				throw new \Exception( 'AI instance not available' );
 			}
 
-			$grok_api_key = $AI->get_grok_api_key();
+			$grok_api_key = $AI->get_api_key( 'grok' );
 			if ( ! $grok_api_key ) {
 				throw new \Exception( 'API key not available' );
 			}
 
-			$GROK_API_URL = \NOVA_B2B\AI::GROK_API_URL;
+			$GROK_API_URL = $AI->get_api_url( 'grok' );
 
 			// Configure request with proper timeouts and retry logic
 			$max_retries = 3;
@@ -238,7 +238,15 @@ class PhotoRegistration {
 						class="nova-photo-preview-img">
 				</div>
 
-				<div id="nova-photo-result"></div>
+				<div id="nova-photo-result" class="hidden ">
+					<p class="text-green-900 flex items-center gap-2 text-center pt-4 justify-center"><svg
+							xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+							class="size-6">
+							<path stroke-linecap="round" stroke-linejoin="round"
+								d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
+						</svg>
+						Please double check the details</p>
+				</div>
 			</div>
 		</div>
 

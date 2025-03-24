@@ -54,8 +54,8 @@ document.addEventListener('DOMContentLoaded', function () {
 	}
 
 	async function processImage(imageDataURL) {
+		photoResult.classList.add('hidden');
 		loader.style.display = 'flex';
-		photoResult.innerHTML = '';
 		novaSignUpForm.classList.add('loading');
 		let formData = new FormData();
 		formData.append('file', imageDataURL);
@@ -142,8 +142,7 @@ document.addEventListener('DOMContentLoaded', function () {
 					zip.value = parsedData.zip;
 				}
 				photoPreview.classList.add('hidden');
-				photoResult.innerHTML =
-					'<p style="text-align: center; padding-top: 20px;">Please double check the details</p>';
+				photoResult.classList.remove('hidden');
 
 				novaSignUpForm.classList.remove('loading');
 			}

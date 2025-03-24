@@ -32,11 +32,8 @@ const metalThicknessOptionsDefault = [
 
 const metalFinishingOptions = [
   'Stainless Steel Brushed',
-  'Stainless Steel Polished',
   'Electroplated Gold Brushed',
-  'Electroplated Gold Polished',
   'Electroplated Black Titanium Brushed',
-  'Electroplated Black Titanium Polished',
   'Electroplated Bronze Brushed',
   'Electroplated Red Copper Brushed',
 ];

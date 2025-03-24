@@ -23,11 +23,8 @@ const metalThicknessOptions = ['0.5"', '1"', '1.5"', '2"'];
 
 const electroplatedOptions = [
   'Stainless Steel Brushed',
-  'Stainless Steel Polished',
   'Electroplated Gold Brushed',
-  'Electroplated Gold Polished',
   'Electroplated Black Titanium Brushed',
-  'Electroplated Black Titanium Polished',
   'Electroplated Bronze Brushed',
   'Electroplated Red Copper Brushed',
 ];
