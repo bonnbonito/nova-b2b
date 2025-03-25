@@ -295,23 +295,25 @@ export default function CombineQuotes() {
     <CombineQuoteProvider>
       <div className="md:flex gap-6">
         <div className="md:w-3/4 w-full">
-          <div className="border-gray-200 p-4 rounded-md border mb-4">
-            <div className="font-title text-lg mb-4">Select Partner:</div>
-            <Select
-              className="basic-single"
-              classNames={{
-                indicatorSeparator: () => 'hidden',
-              }}
-              classNamePrefix="select"
-              isSearchable={true}
-              isClearable={true}
-              options={partners}
-              onChange={e => {
-                setPartner(() => e?.value ?? NovaQuote.user_id);
-              }}
-              name="partners"
-            />
-          </div>
+          {NovaMyAccount?.is_user_admin && (
+            <div className="border-gray-200 p-4 rounded-md border mb-4">
+              <div className="font-title text-lg mb-4">Select Partner:</div>
+              <Select
+                className="basic-single"
+                classNames={{
+                  indicatorSeparator: () => 'hidden',
+                }}
+                classNamePrefix="select"
+                isSearchable={true}
+                isClearable={true}
+                options={partners}
+                onChange={e => {
+                  setPartner(() => e?.value ?? NovaQuote.user_id);
+                }}
+                name="partners"
+              />
+            </div>
+          )}
 
           {signage.map((item, index) => {
             return (

@@ -17152,22 +17152,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
-/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../AppProvider */ "./src/scripts/AppProvider.tsx");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../AppProvider */ "./src/scripts/AppProvider.tsx");
 
 
 
 
-const CombineQuote = (0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)();
+
+const CombineQuote = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createContext)();
 function useCombineQuote() {
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(CombineQuote);
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useContext)(CombineQuote);
 }
 function CombineQuoteProvider({
   children
 }) {
   const {
+    signage,
     setSignage
-  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
+  } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_2__.useAppContext)();
   function addSignage({
     productLine,
     productId,
@@ -17179,7 +17183,7 @@ function CombineQuoteProvider({
     isCustom = false
   }) {
     const defaultArgs = {
-      id: (0,uuid__WEBPACK_IMPORTED_MODULE_2__["default"])(),
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_3__["default"])(),
       productLine,
       product: productId,
       usdPrice: 0,
@@ -17202,8 +17206,13 @@ function CombineQuoteProvider({
         ...defaultArgs,
         ...args
       };
-
-      // Append the new signage to the array
+      setTimeout(() => {
+        const newElement = document.getElementById(defaultArgs.id);
+        newElement?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+      }, 0);
       return [...prevSignage, newSignage];
     });
   }
@@ -17755,7 +17764,7 @@ function CombineQuotes() {
     className: "md:flex gap-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "md:w-3/4 w-full"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, NovaMyAccount?.is_user_admin && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "border-gray-200 p-4 rounded-md border mb-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "font-title text-lg mb-4"
@@ -18101,6 +18110,7 @@ const AddSignage = ({
       isLayered: false,
       hideQuantity: false
     });
+    console.log('scrolling');
   },
   style: {
     border: '1px solid #d2d2d2d2'
@@ -48233,6 +48243,17 @@ module.exports = window["React"];
 
 "use strict";
 module.exports = window["ReactDOM"];
+
+/***/ }),
+
+/***/ "@wordpress/element":
+/*!*********************************!*\
+  !*** external ["wp","element"] ***!
+  \*********************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = window["wp"]["element"];
 
 /***/ }),
 
