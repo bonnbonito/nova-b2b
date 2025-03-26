@@ -241,13 +241,13 @@ class Roles {
 				'business_id' => get_user_meta( $user->ID, 'business_id', true ),
 				'emails' => $emails,
 				'country' => $country,
-				'quotes' => count( get_user_meta( $user->ID, 'nova_user_quotes', true ) ),
-				'orders' => count( get_user_meta( $user->ID, 'nova_user_orders', true ) ),
-				'active' => get_user_meta( $user->ID, 'nova_user_quote_active', true ),
-				'order_total' => get_user_meta( $user->ID, 'nova_user_order_total', true ),
-				'average_order' => get_user_meta( $user->ID, 'nova_user_average_order', true ),
-				'total_pending_payments' => get_user_meta( $user->ID, 'nova_user_total_pending', true ),
-				'past_payment_due_date' => get_user_meta( $user->ID, 'nova_user_past_due_date', true ),
+				'quotes' => $this->get_user_quotes( $user->ID ),
+				'orders' => $this->get_user_orders( $user->ID ),
+				'active' => $this->is_user_quote_active( $user->ID ),
+				'order_total' => $this->get_user_order_total( $user->ID ),
+				'average_order' => $this->get_user_average_order( $user->ID ),
+				'total_pending_payments' => $this->get_user_total_pending_payments( $user->ID ),
+				'past_payment_due_date' => $this->get_user_past_payment_due_date( $user->ID ),
 			);
 		}
 
