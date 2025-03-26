@@ -66,7 +66,7 @@ function ModalSave({ action, btnClass, label, storage }) {
         }
       }
     }
-  }, [signage]);
+  }, [missing]);
 
   const loadingStatus = () => {
     if (isLoading) {
@@ -144,6 +144,11 @@ function ModalSave({ action, btnClass, label, storage }) {
       formData.append('quote_status', 'draft');
       formData.append('currency', wcumcs_vars_data.currency);
       formData.append('partner', partner ?? NovaQuote.user_id);
+
+      const otherEmail = formRef.current.otherEmail.value;
+      if (otherEmail) {
+        formData.append('other_email', otherEmail);
+      }
 
       if (action === 'update-processing' || action === 'processing') {
         formData.append('quote_status', 'processing');
@@ -263,7 +268,7 @@ function ModalSave({ action, btnClass, label, storage }) {
               </Dialog.Description>
               <form ref={formRef} onSubmit={handleFormSubmit}>
                 <input
-                  className="nline-flex h-[45px] w-full flex-1 items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none focus:shadow-[0_0_0_2px] font-title"
+                  className="inline-flex h-[45px] w-full flex-1 items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none focus:shadow-[0_0_0_2px] font-title"
                   name="quoteTitle"
                   id="quoteTitle"
                   ref={inputRef}
@@ -274,10 +279,23 @@ function ModalSave({ action, btnClass, label, storage }) {
                 />
 
                 {action === 'processing' || action === 'update-processing' ? (
-                  <p className="text-sm mt-4">
-                    <strong>NOTE:</strong> Our team will finalize the pricing for this order once
-                    you click Submit. You CANNOT EDIT this project afterwards.
-                  </p>
+                  <>
+                    <p className="text-sm mt-4">
+                      <strong>NOTE:</strong> Our team will finalize the pricing for this order once
+                      you click Submit. You CANNOT EDIT this project afterwards.
+                    </p>
+                    <label className="mt-4">
+                      <p className="text-sm font-bold mb-2">
+                        Add another email to also receive updates on this project.
+                      </p>
+                      <input
+                        type="email"
+                        name="otherEmail"
+                        placeholder="Email"
+                        className="inline-flex h-[45px] w-full flex-1 items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none focus:shadow-[0_0_0_2px]"
+                      />
+                    </label>
+                  </>
                 ) : (
                   <p className="text-sm mt-4">
                     <strong>NOTE:</strong> You can still edit this product after you click{' '}

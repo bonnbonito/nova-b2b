@@ -2193,7 +2193,7 @@ class Woocommerce {
 		);
 
 		if ( $custom_quote && ! current_user_can( 'administrator' ) ) {
-			$product_cat_list['post__not_in'] = array( $custom_quote->ID );
+			//$product_cat_list['post__not_in'] = array( $custom_quote->ID );
 		}
 
 		$signage_query = new WP_Query( $product_cat_list );

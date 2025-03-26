@@ -2456,7 +2456,6 @@ function AppProvider({
   }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const hasFile = (0,_utils_helpers__WEBPACK_IMPORTED_MODULE_1__.hasFileUploadedCheck)(signage);
-    console.log(hasFile);
     setHasUploadedFile(() => hasFile);
   }, [signage]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(AppContext.Provider, {
@@ -2966,7 +2965,7 @@ function ModalSave({
         }
       }
     }
-  }, [signage]);
+  }, [missing]);
   const loadingStatus = () => {
     if (isLoading) {
       return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_svg_Icons__WEBPACK_IMPORTED_MODULE_2__.LoadingIcon, {
@@ -3040,6 +3039,10 @@ function ModalSave({
       formData.append('quote_status', 'draft');
       formData.append('currency', wcumcs_vars_data.currency);
       formData.append('partner', partner !== null && partner !== void 0 ? partner : NovaQuote.user_id);
+      const otherEmail = formRef.current.otherEmail.value;
+      if (otherEmail) {
+        formData.append('other_email', otherEmail);
+      }
       if (action === 'update-processing' || action === 'processing') {
         formData.append('quote_status', 'processing');
       }
@@ -3137,7 +3140,7 @@ function ModalSave({
     ref: formRef,
     onSubmit: handleFormSubmit
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    className: "nline-flex h-[45px] w-full flex-1 items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none focus:shadow-[0_0_0_2px] font-title",
+    className: "inline-flex h-[45px] w-full flex-1 items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none focus:shadow-[0_0_0_2px] font-title",
     name: "quoteTitle",
     id: "quoteTitle",
     ref: inputRef,
@@ -3145,9 +3148,18 @@ function ModalSave({
     value: title,
     onChange: handleTitleChange,
     disabled: isLoading
-  }), action === 'processing' || action === 'update-processing' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+  }), action === 'processing' || action === 'update-processing' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
     className: "text-sm mt-4"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, "NOTE:"), " Our team will finalize the pricing for this order once you click Submit. You CANNOT EDIT this project afterwards.") : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, "NOTE:"), " Our team will finalize the pricing for this order once you click Submit. You CANNOT EDIT this project afterwards."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "mt-4"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    className: "text-sm font-bold mb-2"
+  }, "Add another email to also receive updates on this project."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    type: "email",
+    name: "otherEmail",
+    placeholder: "Email",
+    className: "inline-flex h-[45px] w-full flex-1 items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none focus:shadow-[0_0_0_2px]"
+  }))) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
     className: "text-sm mt-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, "NOTE:"), " You can still edit this product after you click", ' ', action === 'update' ? 'UPDATE QUOTE' : 'SAVE TO DRAFT', ". Go to MOCKUPS and select DRAFTS."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "mt-[25px] flex justify-end"
@@ -14721,15 +14733,24 @@ function LayeredAcrylicProvider({
     };
     setSignage(prevSignage => {
       let args;
+      const count = prevSignage.length;
       args = {
         type: type.toLowerCase(),
         hideQuantity: true,
-        isLayered: true
+        isLayered: true,
+        title: `Layer ${count + 1}`
       };
       const newSignage = {
         ...defaultArgs,
         ...args
       };
+      setTimeout(() => {
+        const newElement = document.getElementById(defaultArgs.id);
+        newElement?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+      }, 0);
 
       // Append the new signage to the array
       return [...prevSignage, newSignage];
@@ -18110,7 +18131,6 @@ const AddSignage = ({
       isLayered: false,
       hideQuantity: false
     });
-    console.log('scrolling');
   },
   style: {
     border: '1px solid #d2d2d2d2'

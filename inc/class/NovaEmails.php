@@ -820,7 +820,12 @@ class NovaEmails {
 		$edit_post_url = admin_url( 'post.php?post=' . $post_id . '&action=edit' );
 
 		$to = $user_info->user_email;
+
+		$other_email = get_post_meta( $post_id, 'other_email', true );
+
 		$first_name = $user_info->first_name;
+
+
 
 		$subject = 'Revised Quote: (' . $project_name . ') - #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
 
@@ -850,6 +855,9 @@ class NovaEmails {
 		$headers[] = 'Content-Type: text/html; charset=UTF-8';
 		$headers[] = 'From: NOVA Signage <quotes@novasignage.com>';
 		$headers[] = 'Reply-To: NOVA Signage <quotes@novasignage.com>';
+		if ( $other_email ) {
+			$headers[] = 'Cc: ' . $other_email;
+		}
 
 		$role_instance = \NOVA_B2B\Roles::get_instance();
 
@@ -880,6 +888,7 @@ class NovaEmails {
 		$edit_post_url = admin_url( 'post.php?post=' . $post_id . '&action=edit' );
 
 		$to = $user_info->user_email;
+		$other_email = get_post_meta( $post_id, 'other_email', true );
 		$first_name = $user_info->first_name;
 
 		$subject = 'Revised Draft: (' . $project_name . ') - #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
@@ -907,6 +916,9 @@ class NovaEmails {
 		$headers[] = 'Content-Type: text/html; charset=UTF-8';
 		$headers[] = 'From: NOVA Signage <quotes@novasignage.com>';
 		$headers[] = 'Reply-To: NOVA Signage <quotes@novasignage.com>';
+		if ( $other_email ) {
+			$headers[] = 'Cc: ' . $other_email;
+		}
 
 		$role_instance = \NOVA_B2B\Roles::get_instance();
 
@@ -964,6 +976,7 @@ class NovaEmails {
 		$edit_post_url = admin_url( 'post.php?post=' . $post_id . '&action=edit' );
 
 		$to = $user_info->user_email;
+		$other_email = get_post_meta( $post_id, 'other_email', true );
 		$first_name = $user_info->first_name;
 
 		$subject = 'Quote Status Updated: (' . $project_name . ') - #Q-' . str_pad( $post_id, 4, '0', STR_PAD_LEFT );
@@ -994,6 +1007,9 @@ class NovaEmails {
 		$headers[] = 'Content-Type: text/html; charset=UTF-8';
 		$headers[] = 'From: NOVA Signage <quotes@novasignage.com>';
 		$headers[] = 'Reply-To: NOVA Signage <quotes@novasignage.com>';
+		if ( $other_email ) {
+			$headers[] = 'Cc: ' . $other_email;
+		}
 
 		if ( $role_instance ) {
 			$role_instance->send_email( $to, $subject, $message, $headers, array() );

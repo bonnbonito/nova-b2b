@@ -11,8 +11,6 @@ export const AddSignage = ({ addSignage, product, type = 'CUSTOM', title, childr
         isLayered: false,
         hideQuantity: false,
       });
-
-      console.log('scrolling');
     }}
     style={{ border: '1px solid #d2d2d2d2' }}
   >

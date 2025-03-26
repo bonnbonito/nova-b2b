@@ -88,7 +88,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const hasFile = hasFileUploadedCheck(signage);
-    console.log(hasFile);
     setHasUploadedFile(() => hasFile);
   }, [signage]);
 
