@@ -235,19 +235,26 @@ class Roles {
 			$emails_array[] = $user->user_email;
 			$emails_array = array_map( 'strtolower', $emails_array );
 			$emails = array_unique( $emails_array );
+			$nova_user_quotes = get_user_meta( $user->ID, 'nova_user_quotes', true );
+			$nova_user_orders = get_user_meta( $user->ID, 'nova_user_orders', true );
+			$nova_user_quote_active = get_user_meta( $user->ID, 'nova_user_quote_active', true );
+			$nova_user_order_total = get_user_meta( $user->ID, 'nova_user_order_total', true );
+			$nova_user_average_order = get_user_meta( $user->ID, 'nova_user_average_order', true );
+			$nova_user_total_pending = get_user_meta( $user->ID, 'nova_user_total_pending', true );
+			$nova_user_past_due_date = get_user_meta( $user->ID, 'nova_user_past_due_date', true );
 			$results[] = array(
 				'user_id' => $user->ID,
 				'label' => get_user_meta( $user->ID, 'business_id', true ) . ' - ' . get_user_meta( $user->ID, 'business_name', true ),
 				'business_id' => get_user_meta( $user->ID, 'business_id', true ),
 				'emails' => $emails,
 				'country' => $country,
-				'quotes' => $this->get_user_quotes( $user->ID ),
-				'orders' => $this->get_user_orders( $user->ID ),
-				'active' => $this->is_user_quote_active( $user->ID ),
-				'order_total' => $this->get_user_order_total( $user->ID ),
-				'average_order' => $this->get_user_average_order( $user->ID ),
-				'total_pending_payments' => $this->get_user_total_pending_payments( $user->ID ),
-				'past_payment_due_date' => $this->get_user_past_payment_due_date( $user->ID ),
+				'quotes' => is_array( $nova_user_quotes ) ? count( $nova_user_quotes ) : $nova_user_quotes,
+				'orders' => is_array( $nova_user_orders ) ? count( $nova_user_orders ) : $nova_user_orders,
+				'active' => $nova_user_quote_active,
+				'order_total' => $nova_user_order_total,
+				'average_order' => $nova_user_average_order,
+				'total_pending_payments' => $nova_user_total_pending,
+				'past_payment_due_date' => $nova_user_past_due_date,
 			);
 		}
 
