@@ -3112,9 +3112,9 @@ function ModalSave({
         message: 'Failed to save quote. Please try again.'
       });
       console.log(err);
+      setSubmitting(false);
     } finally {
       setIsLoading(false);
-      setSubmitting(false);
       if (storage) {
         localStorage.removeItem(storage);
       }
