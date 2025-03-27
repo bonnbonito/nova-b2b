@@ -4287,7 +4287,7 @@ function UploadFiles({
   const [accessToken, setAccessToken] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const [isDragging, setIsDragging] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [files, setFiles] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [open, setOpen] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(hasUploadedFile);
+  const [open, setOpen] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(true);
   const maxFiles = 5;
   const maxFilesReached = fileNames?.length >= maxFiles;
   const openIcon = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
@@ -4635,12 +4635,17 @@ function UploadFiles({
       setIsLoading(false);
     }
   };
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (hasUploadedFile) {
+      setOpen(false);
+    }
+  }, [hasUploadedFile]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "px-[1px] col-span-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: `uppercase font-title text-sm tracking-[1.4px] px-2 flex items-center gap-1 cursor-pointer ${fileError && 'text-red-600'}`,
     onClick: () => setOpen(!open)
-  }, "UPLOAD FILES ", open ? openIcon : closeIcon), !open && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "UPLOAD FILES ", open ? closeIcon : openIcon), open && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "col-span-4"
   }, !maxFilesReached && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: `border-dashed mt-4 p-4 w-full rounded-md border-2 transition-colors ${isDragging ? 'border-slate-600 bg-slate-400' : 'border-slate-900'} ${fileError && 'border-red-600'} ${maxFilesReached ? 'cursor-not-allowed opacity-50' : isLoading ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:bg-slate-100'}`,
@@ -5618,7 +5623,7 @@ function Letters({
     if (!letters) missingFields.push('Add your Line Text');
     if (!font) missingFields.push('Select Font');
     if (font == 'Custom font') {
-      if (fontFileUrl.length === 0 && fileUrls.length === 0) {
+      if (fontFileUrl.length === 0 && fileUrls.length === 0 && !hasUploadedFile) {
         missingFields.push('Upload your custom font or files.');
       }
     }
@@ -6879,7 +6884,7 @@ function Letters({
     if (!letters) missingFields.push('Add your Line Text');
     if (!font) missingFields.push('Select Font');
     if (font == 'Custom font') {
-      if (fontFileUrl.length === 0 && fileUrls.length === 0) {
+      if (fontFileUrl.length === 0 && fileUrls.length === 0 && !hasUploadedFile) {
         missingFields.push('Upload your custom font or files.');
       }
     }
@@ -8332,7 +8337,7 @@ function Letters({
     if (!letters) missingFields.push('Add your Line Text');
     if (!font) missingFields.push('Select Font');
     if (font == 'Custom font') {
-      if (fontFileUrl.length === 0 && fileUrls.length === 0) {
+      if (fontFileUrl.length === 0 && fileUrls.length === 0 && !hasUploadedFile) {
         missingFields.push('Upload your custom font or files.');
       }
     }
@@ -9645,7 +9650,7 @@ function Letters({
     if (!letters) missingFields.push('Add your Line Text');
     if (!font) missingFields.push('Select Font');
     if (font == 'Custom font') {
-      if (fontFileUrl.length === 0 && fileUrls.length === 0) {
+      if (fontFileUrl.length === 0 && fileUrls.length === 0 && !hasUploadedFile) {
         missingFields.push('Upload your custom font or files.');
       }
     }
@@ -10905,7 +10910,7 @@ function Letters({
     if (!letters) missingFields.push('Add your Line Text');
     if (!font) missingFields.push('Select Font');
     if (font == 'Custom font') {
-      if (fontFileUrl.length === 0 && fileUrls.length === 0) {
+      if (fontFileUrl.length === 0 && fileUrls.length === 0 && !hasUploadedFile) {
         missingFields.push('Upload your custom font or files.');
       }
     }
@@ -12301,7 +12306,7 @@ function Letters({
     if (!letters) missingFields.push('Add your Line Text');
     if (!font) missingFields.push('Select Font');
     if (font == 'Custom font') {
-      if (fontFileUrl.length === 0 && fileUrls.length === 0) {
+      if (fontFileUrl.length === 0 && fileUrls.length === 0 && !hasUploadedFile) {
         missingFields.push('Upload your custom font or files.');
       }
     }
@@ -13783,7 +13788,7 @@ function Letters({
     if (!letters) missingFields.push('Add your Line Text');
     if (!font) missingFields.push('Select Font');
     if (font == 'Custom font') {
-      if (fontFileUrl.length === 0 && fileUrls.length === 0) {
+      if (fontFileUrl.length === 0 && fileUrls.length === 0 && !hasUploadedFile) {
         missingFields.push('Upload your custom font or files.');
       }
     }
@@ -15790,7 +15795,7 @@ const Letters = ({
     if (!letters) missingFields.push('Add Line Text');
     if (!font) missingFields.push('Select Font');
     if (font && font == 'Custom font') {
-      if (fontFileUrl.length === 0 && fileUrls.length === 0) {
+      if (fontFileUrl.length === 0 && fileUrls.length === 0 && !hasUploadedFile) {
         missingFields.push('Upload your custom font or files.');
       }
     }
@@ -21866,7 +21871,7 @@ function Letters({
     if (!letters) missingFields.push('Add Line Text');
     if (!font) missingFields.push('Select Font');
     if (font == 'Custom font') {
-      if (fontFileUrl.length === 0 && fileUrls.length === 0) {
+      if (fontFileUrl.length === 0 && fileUrls.length === 0 && !hasUploadedFile) {
         missingFields.push('Upload your custom font or files.');
       }
     }
@@ -23412,7 +23417,7 @@ function Letters({
     if (!letters) missingFields.push('Add Line Text');
     if (!font) missingFields.push('Select Font');
     if (font == 'Custom font') {
-      if (fontFileUrl.length === 0 && fileUrls.length === 0) {
+      if (fontFileUrl.length === 0 && fileUrls.length === 0 && !hasUploadedFile) {
         missingFields.push('Upload your custom font or files.');
       }
     }
@@ -24889,7 +24894,7 @@ function Letters({
     if (!letters) missingFields.push('Add Line Text');
     if (!font) missingFields.push('Select Font');
     if (font == 'Custom font') {
-      if (fontFileUrl.length === 0 && fileUrls.length === 0) {
+      if (fontFileUrl.length === 0 && fileUrls.length === 0 && !hasUploadedFile) {
         missingFields.push('Upload your custom font or files.');
       }
     }
@@ -26596,7 +26601,7 @@ function Letters({
     if (!letters) missingFields.push('Add Line Text');
     if (!font) missingFields.push('Select Font');
     if (font == 'Custom font') {
-      if (fontFileUrl.length === 0 && fileUrls.length === 0) {
+      if (fontFileUrl.length === 0 && fileUrls.length === 0 && !hasUploadedFile) {
         missingFields.push('Upload your custom font or files.');
       }
     }
@@ -28053,7 +28058,7 @@ function Letters({
     if (!letters) missingFields.push('Add Line Text');
     if (!font) missingFields.push('Select Font');
     if (font == 'Custom font') {
-      if (fontFileUrl.length === 0 && fileUrls.length === 0) {
+      if (fontFileUrl.length === 0 && fileUrls.length === 0 && !hasUploadedFile) {
         missingFields.push('Upload your custom font or files.');
       }
     }
@@ -29541,7 +29546,7 @@ function Letters({
     if (!letters) missingFields.push('Add Line Text');
     if (!font) missingFields.push('Select Font');
     if (font == 'Custom font') {
-      if (fontFileUrl.length === 0 && fileUrls.length === 0) {
+      if (fontFileUrl.length === 0 && fileUrls.length === 0 && !hasUploadedFile) {
         missingFields.push('Upload your custom font or files.');
       }
     }
@@ -30907,7 +30912,7 @@ function Letters({
     if (!letters) missingFields.push('Add Line Text');
     if (!font) missingFields.push('Select Font');
     if (font == 'Custom font') {
-      if (fontFileUrl.length === 0 && fileUrls.length === 0) {
+      if (fontFileUrl.length === 0 && fileUrls.length === 0 && !hasUploadedFile) {
         missingFields.push('Upload your custom font or files.');
       }
     }
@@ -32209,7 +32214,7 @@ function Letters({
     if (!letters) missingFields.push('Add Line Text');
     if (!font) missingFields.push('Select Font');
     if (font == 'Custom font') {
-      if (fontFileUrl.length === 0 && fileUrls.length === 0) {
+      if (fontFileUrl.length === 0 && fileUrls.length === 0 && !hasUploadedFile) {
         missingFields.push('Upload your custom font or files.');
       }
     }
@@ -33679,7 +33684,7 @@ function Letters({
     if (!letters) missingFields.push('Add your Line Text');
     if (!font) missingFields.push('Select Font');
     if (font == 'Custom font') {
-      if (fontFileUrl.length === 0 && fileUrls.length === 0) {
+      if (fontFileUrl.length === 0 && fileUrls.length === 0 && !hasUploadedFile) {
         missingFields.push('Upload your custom font or files.');
       }
     }
@@ -34868,7 +34873,7 @@ function Letters({
     if (!letters) missingFields.push('Add your Line Text');
     if (!font) missingFields.push('Select Font');
     if (font == 'Custom font') {
-      if (fontFileUrl.length === 0 && fileUrls.length === 0) {
+      if (fontFileUrl.length === 0 && fileUrls.length === 0 && !hasUploadedFile) {
         missingFields.push('Upload your custom font or files.');
       }
     }
@@ -36096,7 +36101,7 @@ function Letters({
     if (!letters) missingFields.push('Add your Line Text');
     if (!font) missingFields.push('Select Font');
     if (font == 'Custom font') {
-      if (fontFileUrl.length === 0 && fileUrls.length === 0) {
+      if (fontFileUrl.length === 0 && fileUrls.length === 0 && !hasUploadedFile) {
         missingFields.push('Upload your custom font or files.');
       }
     }
@@ -40665,7 +40670,7 @@ function debounce(func, wait) {
   };
 }
 function hasFileUrls(item) {
-  return item?.fileUrls?.length > 0;
+  return item?.fileUrls?.length || item.fontFileUrl?.length > 0;
 }
 function hasFileUploadedCheck(signage) {
   return signage.some(item => hasFileUrls(item));

@@ -4,7 +4,6 @@ import { Button } from './components/ui/ButtonUI';
 import {
 	Table,
 	TableBody,
-	TableCaption,
 	TableCell,
 	TableHead,
 	TableHeader,
@@ -66,7 +65,6 @@ export default function Deposits() {
 
 	return (
 		<Table>
-			<TableCaption>A list of your recent invoices.</TableCaption>
 			<TableHeader>
 				<TableRow>
 					<TableHead className="w-[100px]">Order</TableHead>

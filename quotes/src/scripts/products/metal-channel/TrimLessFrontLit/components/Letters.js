@@ -399,7 +399,7 @@ export function Letters({ item }) {
     if (!letters) missingFields.push('Add Line Text');
     if (!font) missingFields.push('Select Font');
     if (font == 'Custom font') {
-      if (fontFileUrl.length === 0 && fileUrls.length === 0) {
+      if (fontFileUrl.length === 0 && fileUrls.length === 0 && !hasUploadedFile) {
         missingFields.push('Upload your custom font or files.');
       }
     }

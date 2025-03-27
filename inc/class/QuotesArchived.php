@@ -73,12 +73,25 @@ class QuotesArchived {
 
 		$quotes = get_posts( $args );
 		$thirty_days_ago = date( 'Y-m-d H:i:s', strtotime( '-30 days' ) );
+		$twenty_eight_days_ago = date( 'Y-m-d H:i:s', strtotime( '-28 days' ) );
 
 		foreach ( $quotes as $quote ) {
 			$date_quoted = get_post_meta( $quote->ID, 'date_quoted', true );
+			$reminder_sent = get_post_meta( $quote->ID, 'reminder_sent', true );
+
+			$is_soon = $date_quoted && strtotime( $date_quoted ) <= strtotime( $twenty_eight_days_ago );
+
+			if ( $is_soon ) {
+				update_post_meta( $quote->ID, 'is_soon', true );
+				if ( $reminder_sent !== 'true' ) {
+					$this->send_reminder_email( $quote->ID );
+					update_post_meta( $quote->ID, 'reminder_sent', 'true' );
+				}
+			}
 
 			if ( $date_quoted && strtotime( $date_quoted ) <= strtotime( $thirty_days_ago ) ) {
 				update_post_meta( $quote->ID, 'quote_status', 'archived' );
+				update_post_meta( $quote->ID, 'expired', true );
 
 				// Log the archiving action
 				error_log( sprintf(
@@ -87,6 +100,48 @@ class QuotesArchived {
 					$date_quoted
 				) );
 			}
+		}
+	}
+
+	public function send_reminder_email( $quote_id ) {
+
+		$user_id = get_field( 'partner', $quote_id );
+		$to = get_field( 'partner_email', $quote_id );
+		$other_email = get_post_meta( $quote_id, 'other_email', true );
+
+		$user = get_user_by( 'id', $user_id );
+		$first_name = $user->first_name;
+
+		$project_name = get_field( 'frontend_title', $quote_id );
+		$quote_number = '#Q-' . str_pad( $quote_id, 4, '0', STR_PAD_LEFT );
+
+		$quote_link = home_url() . '/my-account/mockups/view/?qid=' . $quote_id;
+
+		$headers = array();
+		$headers[] = 'Content-Type: text/html; charset=UTF-8';
+		$headers[] = 'From: NOVA Signage <quotes@novasignage.com>';
+		$headers[] = 'Reply-To: NOVA Signage <quotes@novasignage.com>';
+		//if other_email exists, add cc
+		if ( $other_email ) {
+			$headers[] = 'Cc: ' . $other_email;
+		}
+
+		$subject = 'Reminder: ' . $quote_number . ' - Quotation Will Be Archived Soon';
+
+		$message = '<p style="margin-top: 20px;">Hello  ' . $first_name . ',</p>';
+		$message .= '<p>We wanted to remind you that your quotation for <strong>' . $quote_number . ' [' . $project_name . ']</strong> will be archived in 2 days.</p>' . "\n\n";
+		$message .= '<p>If you\'d like to proceed, please go to your quotation and click "Add to Cart".:' . "\n\n</p>";
+		$message .= '<a href="' . $quote_link . '">';
+		$message .= $quote_link . "</a>\n\n";
+		$message .= '<p>If no action is taken, the quote will be marked as Archived.' . "\n\n</p>";
+		$message .= '<p>Need any adjustments or have questions? We\'re here to help!</p>' . "\n\n";
+		$message .= '<p>Thank you,<br>';
+		$message .= 'NOVA Signage Team</p>';
+		$message .= "<br><br><p><em>This is a generated email. You don't need to reply.</em></p>";
+
+		$role_instance = \NOVA_B2B\Roles::get_instance();
+		if ( $role_instance ) {
+			$role_instance->send_email( $to, $subject, $message, $headers, array() );
 		}
 	}
 
@@ -226,13 +281,13 @@ class QuotesArchived {
 	 */
 	public function render_archive_quotes_page() {
 		?>
-		<div class="wrap">
-			<h1>Archive Quotes</h1>
+<div class="wrap">
+  <h1>Archive Quotes</h1>
 
-			<?php if ( isset( $_GET['quoted_dates_added'] ) ) : ?>
-				<div class="notice notice-success is-dismissible">
-					<p>
-						<?php
+  <?php if ( isset( $_GET['quoted_dates_added'] ) ) : ?>
+  <div class="notice notice-success is-dismissible">
+    <p>
+      <?php
 						printf(
 							_n(
 								'Added quoted date to %d quote.',
@@ -243,19 +298,20 @@ class QuotesArchived {
 							intval( $_GET['quoted_dates_added'] )
 						);
 						?>
-					</p>
-				</div>
-			<?php endif; ?>
+    </p>
+  </div>
+  <?php endif; ?>
 
-			<div class="card">
-				<h2>Add Quoted Dates</h2>
-				<p>Click the button below to add quoted dates to all quotes that are marked as "ready" but don't have a quoted date
-					set.</p>
-				<p>The quoted date will be set to the date of the last revision.</p>
-				<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'edit.php?post_type=nova_quote&page=archive-quotes&add_quoted_date=1' ), 'add_quoted_date' ) ); ?>"
-					class="button button-primary">Add Quoted Date</a>
-			</div>
-		</div>
-	<?php
+  <div class="card">
+    <h2>Add Quoted Dates</h2>
+    <p>Click the button below to add quoted dates to all quotes that are marked as "ready" but don't have a quoted
+      date
+      set.</p>
+    <p>The quoted date will be set to the date of the last revision.</p>
+    <a href="<?php echo esc_url( wp_nonce_url( admin_url( 'edit.php?post_type=nova_quote&page=archive-quotes&add_quoted_date=1' ), 'add_quoted_date' ) ); ?>"
+      class="button button-primary">Add Quoted Date</a>
+  </div>
+</div>
+<?php
 	}
 }

@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState, useEffect } from 'react';
 import { useAppContext } from './AppProvider';
 import { processQuote } from './utils/QuoteFunctions';
 
@@ -18,7 +18,7 @@ export default function UploadFiles({
   const [accessToken, setAccessToken] = useState('');
   const [isDragging, setIsDragging] = useState(false);
   const [files, setFiles] = useState([]);
-  const [open, setOpen] = useState(hasUploadedFile);
+  const [open, setOpen] = useState(true);
   const maxFiles = 5;
 
   const maxFilesReached = fileNames?.length >= maxFiles;
@@ -436,6 +436,12 @@ export default function UploadFiles({
     }
   };
 
+  useEffect(() => {
+    if (hasUploadedFile) {
+      setOpen(false);
+    }
+  }, [hasUploadedFile]);
+
   return (
     <>
       <div className="px-[1px] col-span-4">
@@ -445,10 +451,10 @@ export default function UploadFiles({
           }`}
           onClick={() => setOpen(!open)}
         >
-          UPLOAD FILES {open ? openIcon : closeIcon}
+          UPLOAD FILES {open ? closeIcon : openIcon}
         </label>
 
-        {!open && (
+        {open && (
           <div className="col-span-4">
             {!maxFilesReached && (
               <div
