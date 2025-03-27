@@ -203,7 +203,7 @@ class PhotoRegistration {
 				</span>
 			</div>
 			<div class="nova-photo-upload-wrapper">
-				<h2 class="text-2xl font-semibold tracking-tight text-center mb-6">Calling Card Upload</h2>
+				<h2 class="text-2xl font-semibold tracking-tight text-center mb-6">Business Card Upload</h2>
 
 				<div class="nova-photo-button-container flex justify-center gap-4">
 					<button id="open-camera" class="nova-photo-camera-button flex items-center gap-2">
