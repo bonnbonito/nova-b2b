@@ -145,7 +145,7 @@ function ModalSave({ action, btnClass, label, storage }) {
       formData.append('currency', wcumcs_vars_data.currency);
       formData.append('partner', partner ?? NovaQuote.user_id);
 
-      const otherEmail = formRef.current.otherEmail.value;
+      const otherEmail = formRef.current.otherEmail?.value;
       if (otherEmail) {
         formData.append('other_email', otherEmail);
       }
@@ -237,6 +237,7 @@ function ModalSave({ action, btnClass, label, storage }) {
       console.log(err);
     } finally {
       setIsLoading(false);
+      setSubmitting(false);
       if (storage) {
         localStorage.removeItem(storage);
       }

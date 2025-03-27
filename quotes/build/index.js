@@ -3039,7 +3039,7 @@ function ModalSave({
       formData.append('quote_status', 'draft');
       formData.append('currency', wcumcs_vars_data.currency);
       formData.append('partner', partner !== null && partner !== void 0 ? partner : NovaQuote.user_id);
-      const otherEmail = formRef.current.otherEmail.value;
+      const otherEmail = formRef.current.otherEmail?.value;
       if (otherEmail) {
         formData.append('other_email', otherEmail);
       }
@@ -3114,6 +3114,7 @@ function ModalSave({
       console.log(err);
     } finally {
       setIsLoading(false);
+      setSubmitting(false);
       if (storage) {
         localStorage.removeItem(storage);
       }
