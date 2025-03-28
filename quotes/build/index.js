@@ -3534,7 +3534,7 @@ function QuoteView() {
   const {
     standard
   } = (0,_utils_defaults__WEBPACK_IMPORTED_MODULE_3__.shippingRates)(finalPrice, currency);
-  const standardRate = parseFloat(standard.toFixed(2));
+  const standardRate = parseFloat(Number(standard).toFixed(2));
   const estimatedShipping = quotePrice > 0 ? standardRate : 0;
   const priceWithShipping = parseFloat((finalPrice + estimatedShipping).toFixed(2));
   const tax = taxRate ? parseFloat((taxRate.tax_rate / 100).toFixed(2)) : 0;
@@ -3563,7 +3563,7 @@ function QuoteView() {
     className: "flex gap-2 items-center mb-4 "
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h6", {
     className: "m-0 text-nova-primary"
-  }, "STATUS:", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+  }, "STATUS: ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "text-sm"
   }, NovaAccount?.quote_status?.label))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "mb-10 block"
@@ -3814,11 +3814,11 @@ function Sidebar() {
   const totalPrice = currency === 'USD' ? totalUsdPrice : totalCadPrice;
   const totalNoDiscount = currency === 'USD' ? totalNoDiscountUSD : totalNoDiscountCAD;
   const totalDiscount = currency === 'USD' ? totalUsdDiscount : totalCadDiscount;
-  const flatRate = currency === 'USD' ? 14.75 : 14.75 * _utils_defaults__WEBPACK_IMPORTED_MODULE_4__.EXCHANGE_RATE;
+  const flatRate = currency === 'USD' ? NovaQuote.shipping_flat_rate : NovaQuote.shipping_flat_rate * _utils_defaults__WEBPACK_IMPORTED_MODULE_4__.EXCHANGE_RATE;
   const {
     standard
   } = (0,_utils_defaults__WEBPACK_IMPORTED_MODULE_4__.shippingRates)(totalPrice, currency);
-  const standardRate = parseFloat(standard.toFixed(2));
+  const standardRate = standard ? Number(standard).toFixed(2) : 0;
   const estimatedShipping = totalPrice > 0 ? parseFloat(Math.max(flatRate, standardRate)) : 0;
 
   //const taxCompute = parseFloat(totalPrice * tax);
@@ -3928,8 +3928,11 @@ function SidebarAdmin({
   const totalUsdPrice = signage.reduce((acc, item) => acc + parseFloat(item.usdPrice), 0);
   const totalCadPrice = signage.reduce((acc, item) => acc + parseFloat(item.cadPrice), 0);
   const totalPrice = currency === 'USD' ? totalUsdPrice : totalCadPrice;
-  const flatRate = currency === 'USD' ? 14.75 : 14.75 * _utils_defaults__WEBPACK_IMPORTED_MODULE_4__.EXCHANGE_RATE;
-  const standardRate = totalPrice > 0 ? parseFloat(totalPrice * 0.075) : 0;
+  const flatRate = currency === 'USD' ? NovaQuote.shipping_flat_rate : NovaQuote.shipping_flat_rate * _utils_defaults__WEBPACK_IMPORTED_MODULE_4__.EXCHANGE_RATE;
+  const {
+    standard
+  } = (0,_utils_defaults__WEBPACK_IMPORTED_MODULE_4__.shippingRates)(totalPrice, currency);
+  const standardRate = standard ? Number(standard).toFixed(2) : 0;
   const estimatedShipping = totalPrice > 0 ? parseFloat(Math.max(flatRate, standardRate)) : 0;
 
   //const taxCompute = parseFloat(totalPrice * tax);
@@ -12168,6 +12171,9 @@ function Letters({
     lettersArray.forEach(letter => {
       tempTotal += (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_10__.calculateLetterPrice)(letter, baseLetterPrice, noLowerCase);
     });
+    const sizes = [selectedLetterHeight];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_10__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     if (waterproof) {
       tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
     }
@@ -12789,6 +12795,9 @@ function Logo({
     if (baseLogoPricing) {
       tempTotal += baseLogoPricing;
     }
+    const sizes = [width, height];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     if (waterproof) {
       tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
     }
@@ -13641,6 +13650,9 @@ function Letters({
     lettersArray.forEach(letter => {
       tempTotal += (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_9__.calculateLetterPrice)(letter, baseLetterPrice, noLowerCase);
     });
+    const sizes = [selectedLetterHeight];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_9__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     if (waterproof) {
       tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
     }
@@ -14308,6 +14320,9 @@ function Logo({
     if (baseLogoPricing) {
       tempTotal += baseLogoPricing;
     }
+    const sizes = [width, height];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     if (waterproof) {
       tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
     }
@@ -15660,6 +15675,9 @@ const Letters = ({
     lettersArray.forEach(letter => {
       tempTotal += (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_13__.calculateLetterPrice)(letter, baseLetterPrice, noLowerCase);
     });
+    const sizes = [selectedLetterHeight];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_13__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
     tempTotal *= acrylicBase?.name === 'Black' ? 1 : 1.1;
     tempTotal *= _MetalLaminate__WEBPACK_IMPORTED_MODULE_11__.METAL_ACRYLIC_PRICING;
@@ -16165,6 +16183,9 @@ function Logo({
     const computed = logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
     let tempTotal = 0;
     tempTotal += computed;
+    const sizes = [width, height];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_5__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     if (waterproof) {
       tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
     }
@@ -16773,6 +16794,9 @@ function Logo({
     if (computed) {
       tempTotal += computed;
     }
+    const sizes = [width, height];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_5__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     if (waterproof) {
       tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
     }
@@ -39846,6 +39870,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   anodizedPricing: () => (/* binding */ anodizedPricing),
 /* harmony export */   calculateLetterPrice: () => (/* binding */ calculateLetterPrice),
+/* harmony export */   calculateOversizeShippingAddon: () => (/* binding */ calculateOversizeShippingAddon),
 /* harmony export */   getLetterPricingTableByTitle: () => (/* binding */ getLetterPricingTableByTitle),
 /* harmony export */   getLogoPricingTablebyThickness: () => (/* binding */ getLogoPricingTablebyThickness),
 /* harmony export */   quantityDiscount: () => (/* binding */ quantityDiscount),
@@ -39881,6 +39906,14 @@ const calculateLetterPrice = (letter, baseLetterPrice, noLowerCase) => {
   if (letter.match(/[a-z]/)) letterPrice *= noLowerCase ? 1 : 0.8;
   if (letter.match(/[`~"*,.\-']/)) letterPrice *= 0.3;
   return letterPrice;
+};
+const calculateOversizeShippingAddon = (sizes, price) => {
+  const highestSize = Math.max(...sizes.map(size => Number(size)));
+  if (highestSize > 20) {
+    const addon = price * 0.1 < highestSize ? price * 0.1 : highestSize;
+    return addon;
+  }
+  return 0;
 };
 
 /***/ }),
@@ -40613,28 +40646,28 @@ const CLEAR_COLOR = 'Clear';
 const FROSTED_CLEAR_COLOR = 'Frosted Clear';
 const STUD_WITH_SPACER = 'Stud with spacer';
 const STUD_MOUNT = 'Stud Mount';
-const EXCHANGE_RATE = 1.35;
+const EXCHANGE_RATE = NovaQuote.exchange_rate;
 const ASSEMBLY_FEES = 1.1;
 const M4_STUD_WITH_SPACER = 'M4 Stud with Spacer';
 const LIGHTING_INDOOR = 'Low Voltage LED Driver, 6ft open wires, 1:1 blueprint';
 const shippingRates = (total, currency) => {
   let standard, expedite;
-  let flatRate = currency === 'USD' ? 14.75 : 14.75 * EXCHANGE_RATE;
-  let expediateRate = currency === 'USD' ? 29.5 : 29.5 * EXCHANGE_RATE;
-  let minPrice = currency === 'USD' ? 800 : 800 * EXCHANGE_RATE;
+  let flatRate = currency === 'USD' ? NovaQuote.shipping_flat_rate : NovaQuote.shipping_flat_rate * EXCHANGE_RATE;
+  let expeditedRate = currency === 'USD' ? NovaQuote.shipping_expedited_rate : NovaQuote.shipping_expedited_rate * EXCHANGE_RATE;
+  let minPrice = currency === 'USD' ? NovaQuote.shipping_min_price : NovaQuote.shipping_min_price * EXCHANGE_RATE;
   let belowMin = 0;
   let aboveMin = 0;
   let belowMinEx = 0;
   let aboveMinEx = 0;
   if (total < minPrice) {
-    standard = total * 0.09 > flatRate ? total * 0.09 : flatRate;
-    expedite = total * 0.175 > expediateRate ? total * 0.175 : expediateRate;
+    standard = total * NovaQuote.shipping_standard_percentage > flatRate ? total * NovaQuote.shipping_standard_percentage : flatRate;
+    expedite = total * NovaQuote.shipping_expedited_percentage > expeditedRate ? total * NovaQuote.shipping_expedited_percentage : expeditedRate;
   } else {
-    belowMin = minPrice * 0.09;
-    belowMinEx = minPrice * 0.175;
+    belowMin = minPrice * NovaQuote.shipping_standard_percentage;
+    belowMinEx = minPrice * NovaQuote.shipping_expedited_percentage;
     let difference = total - minPrice;
-    aboveMin = difference * 0.08;
-    aboveMinEx = difference * 0.155;
+    aboveMin = difference * NovaQuote.shipping_standard_above_min_percentage;
+    aboveMinEx = difference * NovaQuote.shipping_expedited_above_min_percentage;
     standard = belowMin + aboveMin;
     expedite = belowMinEx + aboveMinEx;
   }

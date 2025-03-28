@@ -4,7 +4,11 @@ import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
 import useOutsideClick from '../../../../utils/ClickOutside';
 import convert_json from '../../../../utils/ConvertJson';
-import { getLogoPricingTablebyThickness, spacerPricing } from '../../../../utils/Pricing';
+import {
+  getLogoPricingTablebyThickness,
+  spacerPricing,
+  calculateOversizeShippingAddon,
+} from '../../../../utils/Pricing';
 import {
   finishingOptions,
   mountingDefaultOptions,
@@ -338,6 +342,11 @@ export function Logo({ item }) {
     if (baseLogoPricing) {
       tempTotal += baseLogoPricing;
     }
+
+    const sizes = [width, height];
+    const oversizeShippingAddon = calculateOversizeShippingAddon(sizes, tempTotal);
+
+    tempTotal += oversizeShippingAddon;
 
     if (waterproof) {
       tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.1;

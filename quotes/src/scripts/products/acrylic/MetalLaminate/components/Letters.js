@@ -29,7 +29,11 @@ import {
 
 const newMetalFinishColors = [...metalFinishColors];
 
-import { calculateLetterPrice, spacerPricing } from '../../../../utils/Pricing';
+import {
+  calculateLetterPrice,
+  spacerPricing,
+  calculateOversizeShippingAddon,
+} from '../../../../utils/Pricing';
 
 import { useAppContext } from '../../../../AppProvider';
 
@@ -201,6 +205,10 @@ export const Letters = ({ item }) => {
     lettersArray.forEach(letter => {
       tempTotal += calculateLetterPrice(letter, baseLetterPrice, noLowerCase);
     });
+
+    const sizes = [selectedLetterHeight];
+    const oversizeShippingAddon = calculateOversizeShippingAddon(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
 
     tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.1;
     tempTotal *= acrylicBase?.name === 'Black' ? 1 : 1.1;

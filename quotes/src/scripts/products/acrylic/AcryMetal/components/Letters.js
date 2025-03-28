@@ -9,12 +9,15 @@ import convert_json from '../../../../utils/ConvertJson';
 import NumberInput from '../../../../NumberInput';
 import {
   mountingDefaultOptions,
-  setOptions,
   spacerStandoffDefaultOptions,
   studLengthOptions,
 } from '../../../../utils/SignageOptions';
 
-import { calculateLetterPrice, spacerPricing } from '../../../../utils/Pricing';
+import {
+  calculateLetterPrice,
+  spacerPricing,
+  calculateOversizeShippingAddon,
+} from '../../../../utils/Pricing';
 
 import { useAppContext } from '../../../../AppProvider';
 
@@ -230,6 +233,10 @@ export function Letters({ item }) {
     lettersArray.forEach(letter => {
       tempTotal += calculateLetterPrice(letter, baseLetterPrice, noLowerCase);
     });
+
+    const sizes = [selectedLetterHeight];
+    const oversizeShippingAddon = calculateOversizeShippingAddon(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
 
     if (waterproof) {
       tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.1;

@@ -1,47 +1,52 @@
 export function getLogoPricingTablebyThickness(thickness, logoPricingObject) {
-	const table = logoPricingObject?.find(
-		(element) => element.logo_pricing.logo_size === thickness
-	);
+  const table = logoPricingObject?.find(element => element.logo_pricing.logo_size === thickness);
 
-	return table ? table.logo_pricing.logo_pricing_table : undefined;
+  return table ? table.logo_pricing.logo_pricing_table : undefined;
 }
 
 export function getLetterPricingTableByTitle(title, letterPricingObject) {
-	const table = letterPricingObject?.find(
-		(element) => element.letter_pricing.title === title
-	);
+  const table = letterPricingObject?.find(element => element.letter_pricing.title === title);
 
-	return table ? table.letter_pricing.letter_pricing_table : undefined;
+  return table ? table.letter_pricing.letter_pricing_table : undefined;
 }
 
 export function spacerPricing(total, maxVal = 25, percent = 0.02) {
-	let spacer = total * percent > maxVal ? maxVal : total * percent;
-	spacer = parseFloat(spacer.toFixed(2));
+  let spacer = total * percent > maxVal ? maxVal : total * percent;
+  spacer = parseFloat(spacer.toFixed(2));
 
-	return spacer;
+  return spacer;
 }
 
 export function anodizedPricing(total, minVal = 30, percent = 0.25) {
-	let price = total * percent < minVal ? minVal : total * percent;
-	price = parseFloat(price.toFixed(2));
+  let price = total * percent < minVal ? minVal : total * percent;
+  price = parseFloat(price.toFixed(2));
 
-	return price;
+  return price;
 }
 
 export const quantityDiscount = (sets, quantityDiscountTable) => {
-	if (!quantityDiscountTable) return 1;
-	const discount = quantityDiscountTable.find(
-		(item) => item.Quantity === sets.toString()
-	);
-	return discount?.Discount ?? 1;
+  if (!quantityDiscountTable) return 1;
+  const discount = quantityDiscountTable.find(item => item.Quantity === sets.toString());
+  return discount?.Discount ?? 1;
 };
 
 export const calculateLetterPrice = (letter, baseLetterPrice, noLowerCase) => {
-	let letterPrice = baseLetterPrice;
+  let letterPrice = baseLetterPrice;
 
-	if (letter === ' ') return 0;
-	if (letter.match(/[a-z]/)) letterPrice *= noLowerCase ? 1 : 0.8;
-	if (letter.match(/[`~"*,.\-']/)) letterPrice *= 0.3;
+  if (letter === ' ') return 0;
+  if (letter.match(/[a-z]/)) letterPrice *= noLowerCase ? 1 : 0.8;
+  if (letter.match(/[`~"*,.\-']/)) letterPrice *= 0.3;
 
-	return letterPrice;
+  return letterPrice;
+};
+
+export const calculateOversizeShippingAddon = (sizes, price) => {
+  const highestSize = Math.max(...sizes.map(size => Number(size)));
+
+  if (highestSize > 20) {
+    const addon = price * 0.1 < highestSize ? price * 0.1 : highestSize;
+    return addon;
+  }
+
+  return 0;
 };

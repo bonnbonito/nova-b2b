@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAppContext } from './AppProvider';
 import ModalSave from './ModalSave';
 import Prices from './Prices';
-import { EXCHANGE_RATE } from './utils/defaults';
+import { EXCHANGE_RATE, shippingRates } from './utils/defaults';
 
 const currency = wcumcs_vars_data.currency;
 
@@ -25,9 +25,14 @@ export default function SidebarAdmin({ storage }) {
 
   const totalPrice = currency === 'USD' ? totalUsdPrice : totalCadPrice;
 
-  const flatRate = currency === 'USD' ? 14.75 : 14.75 * EXCHANGE_RATE;
+  const flatRate =
+    currency === 'USD'
+      ? NovaQuote.shipping_flat_rate
+      : NovaQuote.shipping_flat_rate * EXCHANGE_RATE;
 
-  const standardRate = totalPrice > 0 ? parseFloat(totalPrice * 0.075) : 0;
+  const { standard } = shippingRates(totalPrice, currency);
+
+  const standardRate = standard ? Number(standard).toFixed(2) : 0;
 
   const estimatedShipping = totalPrice > 0 ? parseFloat(Math.max(flatRate, standardRate)) : 0;
 
