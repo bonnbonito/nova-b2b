@@ -232,7 +232,7 @@ class QuotesArchived {
 
 		wp_localize_script(
 			'admin-archive-quotes',
-			'NovaQuote',
+			'NovaQuoteArchive',
 			array(
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
 				'nonce' => wp_create_nonce( 'nova_quote_nonce' ),
@@ -281,13 +281,13 @@ class QuotesArchived {
 	 */
 	public function render_archive_quotes_page() {
 		?>
-<div class="wrap">
-  <h1>Archive Quotes</h1>
+		<div class="wrap">
+			<h1>Archive Quotes</h1>
 
-  <?php if ( isset( $_GET['quoted_dates_added'] ) ) : ?>
-  <div class="notice notice-success is-dismissible">
-    <p>
-      <?php
+			<?php if ( isset( $_GET['quoted_dates_added'] ) ) : ?>
+				<div class="notice notice-success is-dismissible">
+					<p>
+						<?php
 						printf(
 							_n(
 								'Added quoted date to %d quote.',
@@ -298,20 +298,20 @@ class QuotesArchived {
 							intval( $_GET['quoted_dates_added'] )
 						);
 						?>
-    </p>
-  </div>
-  <?php endif; ?>
+					</p>
+				</div>
+			<?php endif; ?>
 
-  <div class="card">
-    <h2>Add Quoted Dates</h2>
-    <p>Click the button below to add quoted dates to all quotes that are marked as "ready" but don't have a quoted
-      date
-      set.</p>
-    <p>The quoted date will be set to the date of the last revision.</p>
-    <a href="<?php echo esc_url( wp_nonce_url( admin_url( 'edit.php?post_type=nova_quote&page=archive-quotes&add_quoted_date=1' ), 'add_quoted_date' ) ); ?>"
-      class="button button-primary">Add Quoted Date</a>
-  </div>
-</div>
-<?php
+			<div class="card">
+				<h2>Add Quoted Dates</h2>
+				<p>Click the button below to add quoted dates to all quotes that are marked as "ready" but don't have a quoted
+					date
+					set.</p>
+				<p>The quoted date will be set to the date of the last revision.</p>
+				<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'edit.php?post_type=nova_quote&page=archive-quotes&add_quoted_date=1' ), 'add_quoted_date' ) ); ?>"
+					class="button button-primary">Add Quoted Date</a>
+			</div>
+		</div>
+		<?php
 	}
 }

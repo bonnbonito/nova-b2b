@@ -1279,30 +1279,11 @@ class Nova_Quote {
 		$signage = get_field( 'signage', $post_id ) ? json_decode( get_field( 'signage', $post_id ) ) : null;
 		$note = get_field( 'note', $post_id );
 
-		$min_price = 800;
-		$flat_rate = 14.75;
-
-		$above_min = 0;
-		$below_min = 0;
-
-		if ( $currency === 'CAD' ) {
-			$flat_rate = 14.75 * NOVA_EXCHANGE_RATE;
-			$min_price = 800 * NOVA_EXCHANGE_RATE;
+		$woocommerce_instance = \NOVA_B2B\Woocommerce::get_instance();
+		$estimated_shipping = 0;
+		if ( $woocommerce_instance ) {
+			$estimated_shipping = $woocommerce_instance->get_estimated_shipping( $final_price );
 		}
-
-		if ( $final_price < $min_price ) {
-			$standard_rate = $final_price * 0.09 > $flat_rate ? $final_price * 0.09 : $flat_rate; // 9%
-		} else {
-
-			$below_min = $min_price * 0.09;
-			$difference = $final_price - $min_price;
-			$above_min = $difference * 0.08;
-
-			$standard_rate = $below_min + $above_min;
-
-		}
-
-		$estimated_shipping = $final_price > 0 ? number_format( max( $flat_rate, $standard_rate ), 2, '.', '' ) : 0;
 
 		$instance = \NOVA_B2B\Scripts::get_instance();
 		$tax_rate = 0;
@@ -2296,6 +2277,13 @@ class Nova_Quote {
 				'project_folder_status' => isset( $_GET['qid'] ) ? $this->get_project_folder() : null,
 				'layered_product_id' => $this->get_id_layer_product(),
 				'tbd_pricing' => get_field( 'tbd', get_the_ID() ),
+				'shipping_flat_rate' => NOVA_SHIPPING_FLAT_RATE,
+				'shipping_standard_percentage' => NOVA_SHIPPING_STANDARD_PERCENTAGE,
+				'shipping_standard_above_min_percentage' => NOVA_SHIPPING_STANDARD_ABOVE_MIN_PERCENTAGE,
+				'shipping_expedited_percentage' => NOVA_SHIPPING_EXPEDITED_PERCENTAGE,
+				'shipping_expedited_above_min_percentage' => NOVA_SHIPPING_EXPEDITED_ABOVE_MIN_PERCENTAGE,
+				'shipping_min_price' => NOVA_SHIPPING_MIN_PRICE,
+				'exchange_rate' => NOVA_EXCHANGE_RATE,
 			)
 		);
 

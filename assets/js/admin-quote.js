@@ -4,7 +4,7 @@ const cadPrice = document.getElementById('cadPrice');
 const finalPriceInput = document.querySelector(
 	'[data-name="final_price"] input'
 );
-const EXCHANGE_RATE = 1.35;
+const EXCHANGE_RATE = QuoteAdmin.exchange_rate;
 
 function displayQuoteDetails() {
 	// Initialize and display the CAD price based on the USD price
@@ -39,17 +39,23 @@ function convertToCAD(usdPrice, exchangeRate) {
 }
 
 function computeShipping(price) {
-	const minPrice = 800;
-	const flatRate = 14.75;
+	const minPrice = QuoteAdmin.shipping_min_price;
+	const flatRate = QuoteAdmin.shipping_flat_rate;
+	const standardPercentage = QuoteAdmin.shipping_standard_percentage;
+	const standardAboveMinPercentage =
+		QuoteAdmin.shipping_standard_above_min_percentage;
 	let aboveMin = 0;
 	let belowMin = 0;
 	let shipping = 0;
-	if (price < 800) {
-		shipping = price * 0.09 > flatRate ? price * 0.09 : flatRate;
+	if (price < minPrice) {
+		shipping =
+			price * standardPercentage > flatRate
+				? price * standardPercentage
+				: flatRate;
 	} else {
-		belowMin = minPrice * 0.09;
+		belowMin = minPrice * standardPercentage;
 		let difference = price - minPrice;
-		aboveMin = difference * 0.08;
+		aboveMin = difference * standardAboveMinPercentage;
 		shipping = belowMin + aboveMin;
 	}
 	return {
@@ -728,10 +734,10 @@ document.addEventListener('DOMContentLoaded', function () {
 	function calculateFromUSDPrice() {
 		let usdPrice = parseFloat(usdPriceInput.value) || 0;
 		let usdShipping = calculateUSDShipping(usdPrice);
-		let cadPrice = usdPrice * 1.35;
-		let cadShipping = usdShipping * 1.35;
+		let cadPrice = usdPrice * EXCHANGE_RATE;
+		let cadShipping = usdShipping * EXCHANGE_RATE;
 		let previewPrice = usdPrice + usdShipping;
-		let previewCadPrice = previewPrice * 1.35;
+		let previewCadPrice = previewPrice * EXCHANGE_RATE;
 
 		usdShippingInput.value = usdShipping;
 		cadPriceInput.value = cadPrice;
@@ -743,10 +749,10 @@ document.addEventListener('DOMContentLoaded', function () {
 	function calculateFromUSDShipping() {
 		let usdShipping = parseFloat(usdShippingInput.value) || 0;
 		let usdPrice = calculatePriceFromShipping(usdShipping);
-		let cadPrice = usdPrice * 1.35;
-		let cadShipping = usdShipping * 1.35;
+		let cadPrice = usdPrice * EXCHANGE_RATE;
+		let cadShipping = usdShipping * EXCHANGE_RATE;
 		let previewPrice = usdPrice + usdShipping;
-		let previewCadPrice = previewPrice * 1.35;
+		let previewCadPrice = previewPrice * EXCHANGE_RATE;
 
 		usdPriceInput.value = usdPrice;
 		cadPriceInput.value = cadPrice;
@@ -757,11 +763,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	function calculateFromCADPrice() {
 		let cadPrice = parseFloat(cadPriceInput.value) || 0;
-		let usdPrice = cadPrice / 1.35;
+		let usdPrice = cadPrice / EXCHANGE_RATE;
 		let usdShipping = calculateUSDShipping(usdPrice);
-		let cadShipping = usdShipping * 1.35;
+		let cadShipping = usdShipping * EXCHANGE_RATE;
 		let previewPrice = usdPrice + usdShipping;
-		let previewCadPrice = previewPrice * 1.35;
+		let previewCadPrice = previewPrice * EXCHANGE_RATE;
 
 		usdPriceInput.value = usdPrice;
 		usdShippingInput.value = usdShipping;
@@ -772,11 +778,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	function calculateFromCADShipping() {
 		let cadShipping = parseFloat(cadShippingInput.value) || 0;
-		let usdShipping = cadShipping / 1.35;
+		let usdShipping = cadShipping / EXCHANGE_RATE;
 		let usdPrice = calculatePriceFromShipping(usdShipping);
-		let cadPrice = usdPrice * 1.35;
+		let cadPrice = usdPrice * EXCHANGE_RATE;
 		let previewPrice = usdPrice + usdShipping;
-		let previewCadPrice = previewPrice * 1.35;
+		let previewCadPrice = previewPrice * EXCHANGE_RATE;
 
 		usdPriceInput.value = usdPrice;
 		usdShippingInput.value = usdShipping;
@@ -790,9 +796,9 @@ document.addEventListener('DOMContentLoaded', function () {
 		let usdShipping = parseFloat(usdShippingInput.value) || 0;
 		let usdPrice = previewPrice - usdShipping;
 		let usdShippingUpdated = calculateUSDShipping(usdPrice);
-		let cadPrice = usdPrice * 1.35;
-		let cadShipping = usdShippingUpdated * 1.35;
-		let previewCadPrice = previewPrice * 1.35;
+		let cadPrice = usdPrice * EXCHANGE_RATE;
+		let cadShipping = usdShippingUpdated * EXCHANGE_RATE;
+		let previewCadPrice = previewPrice * EXCHANGE_RATE;
 
 		usdPriceInput.value = usdPrice;
 		usdShippingInput.value = usdShippingUpdated;
@@ -803,12 +809,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	function calculateFromPreviewCadPrice() {
 		let previewCadPrice = parseFloat(previewCadPriceInput.value) || 0;
-		let previewPrice = previewCadPrice / 1.35;
+		let previewPrice = previewCadPrice / EXCHANGE_RATE;
 		let usdShipping = parseFloat(usdShippingInput.value) || 0;
 		let usdPrice = previewPrice - usdShipping;
 		let usdShippingUpdated = calculateUSDShipping(usdPrice);
-		let cadPrice = usdPrice * 1.35;
-		let cadShipping = usdShippingUpdated * 1.35;
+		let cadPrice = usdPrice * EXCHANGE_RATE;
+		let cadShipping = usdShippingUpdated * EXCHANGE_RATE;
 
 		usdPriceInput.value = usdPrice;
 		usdShippingInput.value = usdShippingUpdated;
@@ -818,15 +824,16 @@ document.addEventListener('DOMContentLoaded', function () {
 	}
 
 	function calculateUSDShipping(usdPrice) {
-		if (usdPrice < 800) {
-			let standard = 14.75;
-			let percentage = usdPrice * 0.09;
+		if (usdPrice < QuoteAdmin.shipping_min_price) {
+			let standard = QuoteAdmin.shipping_flat_rate;
+			let percentage = usdPrice * QuoteAdmin.shipping_standard_percentage;
 			return Math.max(standard, percentage);
 		} else {
-			let minPrice = 800;
-			let belowMin = minPrice * 0.09;
+			let minPrice = QuoteAdmin.shipping_min_price;
+			let belowMin = minPrice * QuoteAdmin.shipping_standard_percentage;
 			let difference = usdPrice - minPrice;
-			let aboveMin = difference * 0.08;
+			let aboveMin =
+				difference * QuoteAdmin.shipping_standard_above_min_percentage;
 			return belowMin + aboveMin;
 		}
 	}
@@ -834,10 +841,15 @@ document.addEventListener('DOMContentLoaded', function () {
 	function calculatePriceFromShipping(usdShipping) {
 		// Approximate reverse calculation based on USD Shipping rules
 		let price = 0;
-		if (usdShipping > 14.75) {
-			price = usdShipping / 0.09; // Assume it's the lower threshold condition
+		if (usdShipping > QuoteAdmin.shipping_flat_rate) {
+			price = usdShipping / QuoteAdmin.shipping_standard_percentage; // Assume it's the lower threshold condition
 		} else {
-			price = 800 + (usdShipping - 800 * 0.09) / 0.08;
+			price =
+				QuoteAdmin.shipping_min_price +
+				(usdShipping -
+					QuoteAdmin.shipping_min_price *
+						QuoteAdmin.shipping_standard_percentage) /
+					QuoteAdmin.shipping_standard_above_min_percentage;
 		}
 		return price;
 	}

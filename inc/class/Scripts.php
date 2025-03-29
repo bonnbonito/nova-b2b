@@ -85,8 +85,8 @@ class Scripts {
 			'nova-registration',
 			'NovaSignUp',
 			array(
-				'ajax_url'    => admin_url( 'admin-ajax.php' ),
-				'nonce'       => wp_create_nonce( 'nova_signup_nonce' ),
+				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'nonce' => wp_create_nonce( 'nova_signup_nonce' ),
 				'success_url' => home_url( 'signup-success' ),
 			)
 		);
@@ -101,8 +101,8 @@ class Scripts {
 			'nova-login',
 			'NovaLogin',
 			array(
-				'ajax_url'      => admin_url( 'admin-ajax.php' ),
-				'nonce'         => wp_create_nonce( 'nova_login_nonce' ),
+				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'nonce' => wp_create_nonce( 'nova_login_nonce' ),
 				'dashboard_url' => home_url( '/my-account' ),
 			)
 		);
@@ -118,15 +118,15 @@ class Scripts {
 			'nova-account',
 			'NovaMyAccount',
 			array(
-				'ajax_url'        => admin_url( 'admin-ajax.php' ),
-				'nonce'           => wp_create_nonce( 'nova_account_nonce' ),
-				'quote'           => $this->get_quote(),
-				'tax_rate'        => $this->get_tax_rate_by_project( $qid ),
-				'country'         => $this->get_customer_country_code(),
-				'state'           => $this->get_customer_state_code(),
+				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'nonce' => wp_create_nonce( 'nova_account_nonce' ),
+				'quote' => $this->get_quote(),
+				'tax_rate' => $this->get_tax_rate_by_project( $qid ),
+				'country' => $this->get_customer_country_code(),
+				'state' => $this->get_customer_state_code(),
 				'current_user_id' => get_current_user_id(),
-				'is_user_admin'   => $this->is_user_admin(),
-				'quote_pdf_url'   => esc_url_raw( home_url( '/customer_invoice/qid/' ) ),
+				'is_user_admin' => $this->is_user_admin(),
+				'quote_pdf_url' => esc_url_raw( home_url( '/customer_invoice/qid/' ) ),
 			)
 		);
 
@@ -196,7 +196,7 @@ class Scripts {
 		// Use global customer as fallback
 		if ( empty( $country_code ) || empty( $state_code ) ) {
 			$country_code = get_user_meta( $user_id, 'shipping_country', true ) ?: $country_code;
-			$state_code   = get_user_meta( $user_id, 'shipping_state', true ) ?: $state_code;
+			$state_code = get_user_meta( $user_id, 'shipping_state', true ) ?: $state_code;
 		}
 
 		try {
@@ -216,7 +216,7 @@ class Scripts {
 			);
 
 			return $tax_rates ? $tax_rates[0] : null;
-		} catch ( \Exception $e ) {
+		} catch (\Exception $e) {
 			// Optionally log the error or handle it as needed
 			return null;
 		}
@@ -239,8 +239,8 @@ class Scripts {
 		if ( ! isset( $_GET['qid'] ) ) {
 			return;
 		}
-			$id         = $_GET['qid'];
-			$partner_id = get_field( 'partner', $id );
+		$id = $_GET['qid'];
+		$partner_id = get_field( 'partner', $id );
 
 		if ( ! isset( $partner_id ) ) {
 			return;
@@ -249,25 +249,25 @@ class Scripts {
 		$user = wp_get_current_user();
 
 		if ( in_array( 'administrator', (array) $user->roles ) || in_array( 'customer_rep', (array) $user->roles ) || get_field( 'partner', $_GET['qid'] ) === get_current_user_id() ) {
-			$product_id   = get_field( 'product', $id );
+			$product_id = get_field( 'product', $id );
 			$product_name = $product_id ? get_the_title( $product_id ) : 'Custom Project';
 			return array(
-				'ID'           => $id,
-				'title'        => get_field( 'frontend_title', $id ),
-				'data'         => get_field( 'signage', $id ),
-				'final_price'  => get_field( 'final_price', $id ),
+				'ID' => $id,
+				'title' => get_field( 'frontend_title', $id ),
+				'data' => get_field( 'signage', $id ),
+				'final_price' => get_field( 'final_price', $id ),
 				'product_name' => $product_name,
-				'material'     => $this->get_material_name( $product_id ),
-				'business_id'  => get_field( 'business_id', 'user_' . $partner_id ),
-				'partner'      => $partner_id,
-				'published'    => get_the_date( 'F j, Y', $id ),
+				'material' => $this->get_material_name( $product_id ),
+				'business_id' => get_field( 'business_id', 'user_' . $partner_id ),
+				'partner' => $partner_id,
+				'published' => get_the_date( 'F j, Y', $id ),
 				'updated_date' => get_the_modified_date( 'F j, Y', $id ),
 				'company_name' => get_field( 'business_name', 'user_' . $partner_id ),
 				'quote_status' => get_field( 'quote_status', $id ),
 				'product_link' => esc_url( get_permalink( $product_id ) ),
 				'product_line' => $product_id,
-				'note'         => get_field( 'note', $id ),
-				'post_status'  => get_post_status( $id ),
+				'note' => get_field( 'note', $id ),
+				'post_status' => get_post_status( $id ),
 			);
 		}
 	}
@@ -342,12 +342,12 @@ class Scripts {
 			'dropbox-api',
 			'DropboxNova',
 			array(
-				'ajax_url'     => admin_url( 'admin-ajax.php' ),
-				'nonce'        => wp_create_nonce( 'dropbox' ),
+				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'nonce' => wp_create_nonce( 'dropbox' ),
 				'redirect_uri' => get_field( 'dropbox_redirect_url', 'option' ),
-				'app_key'      => get_field( 'dropbox_app_key', 'option' ),
-				'secret_key'   => get_field( 'dropbox_secret_key', 'option' ),
-				'token'        => get_field( 'dropbox_token_access', 'option' ),
+				'app_key' => get_field( 'dropbox_app_key', 'option' ),
+				'secret_key' => get_field( 'dropbox_secret_key', 'option' ),
+				'token' => get_field( 'dropbox_token_access', 'option' ),
 			)
 		);
 
@@ -355,13 +355,13 @@ class Scripts {
 			'admin-signage',
 			'AdminSignage',
 			array(
-				'ajax_url'                   => admin_url( 'admin-ajax.php' ),
-				'nonce'                      => wp_create_nonce( 'nova_admin_nonce' ),
-				'ID'                         => isset( $_GET['post'] ) ? $_GET['post'] : 0,
-				'quote_options'              => $this->get_quote_options(),
-				'letter_pricing_table'       => $this->get_letter_pricing_table(),
-				'letter_pricing_tables'      => $this->get_letter_pricing_tables(),
-				'logo_pricing_tables'        => $this->get_logo_pricing_tables(),
+				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'nonce' => wp_create_nonce( 'nova_admin_nonce' ),
+				'ID' => isset( $_GET['post'] ) ? $_GET['post'] : 0,
+				'quote_options' => $this->get_quote_options(),
+				'letter_pricing_table' => $this->get_letter_pricing_table(),
+				'letter_pricing_tables' => $this->get_letter_pricing_tables(),
+				'logo_pricing_tables' => $this->get_logo_pricing_tables(),
 				'multiple_quantity_discount' => $this->get_quantity_discount_table(),
 			)
 		);
@@ -386,18 +386,25 @@ class Scripts {
 			'admin-quote',
 			'QuoteAdmin',
 			array(
-				'signage'               => get_field( 'signage' ),
-				'ajax_url'              => admin_url( 'admin-ajax.php' ),
-				'nonce'                 => wp_create_nonce( 'quote_nonce' ),
-				'dropbox_app_key'       => get_field( 'dropbox_app_key', 'option' ),
-				'dropbox_secret'        => get_field( 'dropbox_secret_key', 'option' ),
-				'dropbox_token'         => get_field( 'dropbox_token_access', 'option' ),
+				'signage' => get_field( 'signage' ),
+				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'nonce' => wp_create_nonce( 'quote_nonce' ),
+				'dropbox_app_key' => get_field( 'dropbox_app_key', 'option' ),
+				'dropbox_secret' => get_field( 'dropbox_secret_key', 'option' ),
+				'dropbox_token' => get_field( 'dropbox_token_access', 'option' ),
 				'dropbox_refresh_token' => get_field( 'dropbox_refresh_token', 'option' ),
-				'quote_id'              => get_the_ID(),
-				'project_id_folder'     => get_field( 'project_id_folder', get_the_ID() ),
-				'partner_business_id'   => get_field( 'business_id', 'user_' . get_field( 'partner', get_the_ID() ) ),
-				'rest_api'              => esc_url_raw( rest_url() . 'nova/v1' ),
-				'get_project_folder'    => get_field( 'project_id_folder', get_the_ID() ),
+				'quote_id' => get_the_ID(),
+				'project_id_folder' => get_field( 'project_id_folder', get_the_ID() ),
+				'partner_business_id' => get_field( 'business_id', 'user_' . get_field( 'partner', get_the_ID() ) ),
+				'rest_api' => esc_url_raw( rest_url() . 'nova/v1' ),
+				'get_project_folder' => get_field( 'project_id_folder', get_the_ID() ),
+				'shipping_flat_rate' => NOVA_SHIPPING_FLAT_RATE,
+				'shipping_standard_percentage' => NOVA_SHIPPING_STANDARD_PERCENTAGE,
+				'shipping_standard_above_min_percentage' => NOVA_SHIPPING_STANDARD_ABOVE_MIN_PERCENTAGE,
+				'shipping_expedited_percentage' => NOVA_SHIPPING_EXPEDITED_PERCENTAGE,
+				'shipping_expedited_above_min_percentage' => NOVA_SHIPPING_EXPEDITED_ABOVE_MIN_PERCENTAGE,
+				'shipping_min_price' => NOVA_SHIPPING_MIN_PRICE,
+				'exchange_rate' => NOVA_EXCHANGE_RATE,
 			)
 		);
 

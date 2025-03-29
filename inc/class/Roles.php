@@ -302,10 +302,11 @@ class Roles {
 		}
 
 		//order due dates by time, oldest first
-		asort( $due_dates );
-		$oldest_due_date = $due_dates[0];
 
-		if ( $oldest_due_date ) {
+
+		if ( ! empty( $due_dates ) ) {
+			asort( $due_dates );
+			$oldest_due_date = $due_dates[0];
 			$formatted_due_date = date( 'F j, Y', $oldest_due_date );
 			return $formatted_due_date;
 		} else {
@@ -587,10 +588,10 @@ class Roles {
 		// Check if the transient is set
 		if ( $message = get_transient( 'send_activation_email_notice' ) ) {
 			?>
-			<div class="notice notice-success is-dismissible">
-				<p><?php echo esc_html( $message ); ?></p>
-			</div>
-			<?php
+<div class="notice notice-success is-dismissible">
+  <p><?php echo esc_html( $message ); ?></p>
+</div>
+<?php
 			// Delete the transient
 			delete_transient( 'send_activation_email_notice' );
 		}
@@ -619,62 +620,57 @@ class Roles {
 		// Check if the user has the 'temporary' role
 		if ( in_array( 'temporary', (array) $user->roles ) ) {
 			?>
-			<h2>Account Activation</h2>
-			<table class="form-table">
-				<tr>
-					<th>
-						<label for="send_activation_email">Send Activation Email</label>
-					</th>
-					<td>
-						<button id="send_activation_email_button" class="button button-primary"
-							data-user-id="<?php echo esc_attr( $user->ID ); ?>">Send Activation Email</button>
-						<span id="activation_email_status"></span>
-					</td>
-				</tr>
-			</table>
-			<script type="text/javascript">
-				document.addEventListener('DOMContentLoaded', function ()
-				{
-					var sendEmailButton = document.getElementById('send_activation_email_button');
-					var statusSpan = document.getElementById('activation_email_status');
+<h2>Account Activation</h2>
+<table class="form-table">
+  <tr>
+    <th>
+      <label for="send_activation_email">Send Activation Email</label>
+    </th>
+    <td>
+      <button id="send_activation_email_button" class="button button-primary"
+        data-user-id="<?php echo esc_attr( $user->ID ); ?>">Send Activation Email</button>
+      <span id="activation_email_status"></span>
+    </td>
+  </tr>
+</table>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', function() {
+  const sendEmailButton = document.getElementById('send_activation_email_button');
+  const statusSpan = document.getElementById('activation_email_status');
 
-					sendEmailButton.addEventListener('click', function ()
-					{
-						var userId = sendEmailButton.getAttribute('data-user-id');
-						statusSpan.textContent = 'Sending...';
+  sendEmailButton.addEventListener('click', function(e) {
+    e.preventDefault();
+    const userId = sendEmailButton.getAttribute('data-user-id');
+    statusSpan.textContent = 'Sending...';
 
-						fetch(ajaxurl, {
-							method: 'POST',
-							headers: {
-								'Content-Type': 'application/x-www-form-urlencoded',
-							},
-							body: new URLSearchParams({
-								action: 'send_activation_email',
-								user_id: userId,
-								nonce: '<?php echo wp_create_nonce( 'send_activation_email_nonce' ); ?>',
-							})
-						})
-							.then(response => response.json())
-							.then(data =>
-							{
-								if (data.success)
-								{
-									statusSpan.textContent = 'Activation email sent.';
-									sendEmailButton.style.display = 'none';
-								} else
-								{
-									statusSpan.textContent = 'Failed to send activation email.';
-								}
-							})
-							.catch(error =>
-							{
-								statusSpan.textContent = 'An error occurred.';
-								console.error('Error:', error);
-							});
-					});
-				});
-			</script>
-			<?php
+    fetch(ajaxurl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          action: 'send_activation_email',
+          user_id: userId,
+          nonce: '<?php echo wp_create_nonce( 'send_activation_email_nonce' ); ?>',
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          statusSpan.textContent = 'Activation email sent.';
+          sendEmailButton.style.display = 'none';
+        } else {
+          statusSpan.textContent = 'Failed to send activation email.';
+        }
+      })
+      .catch(error => {
+        statusSpan.textContent = 'An error occurred.';
+        console.error('Error:', error);
+      });
+  });
+});
+</script>
+<?php
 		}
 	}
 
@@ -687,47 +683,45 @@ class Roles {
 		$nova_user_past_due_date = get_user_meta( $user->ID, 'nova_user_past_due_date', true );
 		$nova_user_average_order = get_user_meta( $user->ID, 'nova_user_average_order', true );
 		?>
-		<h3>Nova Statistics</h3>
-		<table class="form-table" id="nova-statistics">
-			<tr>
-				<th><label for="nova_statistics">Nova Statistics</label></th>
-				<td>
-					<p>Total Quotes: <?php echo implode( ', ', $nova_user_quotes ); ?></p>
-					<p>Total Orders: <?php echo implode( ', ', $nova_user_orders ); ?></p>
-					<p>Quote Active: <?php echo $nova_user_quote_active; ?></p>
-					<p>Order Total: <?php echo $nova_user_order_total; ?></p>
-					<p>Average Order: <?php echo $nova_user_average_order; ?></p>
-					<p>Total Pending: <?php echo $nova_user_total_pending; ?></p>
-					<p>Past Due Date: <?php echo $nova_user_past_due_date; ?></p>
-				</td>
-			</tr>
-		</table>
-		<?php
+<h3>Nova Statistics</h3>
+<table class="form-table" id="nova-statistics">
+  <tr>
+    <th><label for="nova_statistics">Nova Statistics</label></th>
+    <td>
+      <p>Total Quotes: <?php echo implode( ', ', $nova_user_quotes ); ?></p>
+      <p>Total Orders: <?php echo implode( ', ', $nova_user_orders ); ?></p>
+      <p>Quote Active: <?php echo $nova_user_quote_active; ?></p>
+      <p>Order Total: <?php echo $nova_user_order_total; ?></p>
+      <p>Average Order: <?php echo $nova_user_average_order; ?></p>
+      <p>Total Pending: <?php echo $nova_user_total_pending; ?></p>
+      <p>Past Due Date: <?php echo $nova_user_past_due_date; ?></p>
+    </td>
+  </tr>
+</table>
+<?php
 	}
 
 	public function add_registration_date_to_profile( $user ) {
 		?>
-		<h3>Registration Information</h3>
-		<table class="form-table" id="registration-info">
-			<tr>
-				<th><label for="registration_date">Registration Date</label></th>
-				<td>
-					<?php echo date( 'M d, Y', strtotime( $user->user_registered ) ); ?>
-				</td>
-			</tr>
-		</table>
-		<script type="text/javascript">
-			document.addEventListener('DOMContentLoaded', function ()
-			{
-				var regInfo = document.getElementById('registration-info').closest('table');
-				var personalOptions = document.querySelector('.user-rich-editing-wrap').closest('table');
-				if (regInfo && personalOptions)
-				{
-					personalOptions.parentNode.insertBefore(regInfo, personalOptions);
-				}
-			});
-		</script>
-		<?php
+<h3>Registration Information</h3>
+<table class="form-table" id="registration-info">
+  <tr>
+    <th><label for="registration_date">Registration Date</label></th>
+    <td>
+      <?php echo date( 'M d, Y', strtotime( $user->user_registered ) ); ?>
+    </td>
+  </tr>
+</table>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', function() {
+  var regInfo = document.getElementById('registration-info').closest('table');
+  var personalOptions = document.querySelector('.user-rich-editing-wrap').closest('table');
+  if (regInfo && personalOptions) {
+    personalOptions.parentNode.insertBefore(regInfo, personalOptions);
+  }
+});
+</script>
+<?php
 	}
 
 	public function show_registration_date_business_name_column_content( $value, $column_name, $user_id ) {
@@ -887,27 +881,24 @@ class Roles {
 		$screen = get_current_screen();
 		if ( $screen->id === 'users' ) {
 			?>
-			<script type="text/javascript">
-				jQuery(document).ready(function ($)
-				{
-					// Move the row actions from their original location to the 'user_id' column
-					$('#the-list tr').each(function ()
-					{
-						var $this = $(this);
-						var rowActions = $this.find('.row-actions').clone(); // Clone the row actions
-						$this.find('.row-actions').remove(); // Remove the original row actions
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+  // Move the row actions from their original location to the 'user_id' column
+  $('#the-list tr').each(function() {
+    var $this = $(this);
+    var rowActions = $this.find('.row-actions').clone(); // Clone the row actions
+    $this.find('.row-actions').remove(); // Remove the original row actions
 
-						// Check if the 'user_id' column exists and append the cloned row actions
-						var userIDCell = $this.find('td.business_id');
-						if (userIDCell.length)
-						{
-							userIDCell.append(rowActions);
-						}
-					});
-				});
-			</script>
+    // Check if the 'user_id' column exists and append the cloned row actions
+    var userIDCell = $this.find('td.business_id');
+    if (userIDCell.length) {
+      userIDCell.append(rowActions);
+    }
+  });
+});
+</script>
 
-			<?php
+<?php
 		}
 	}
 

@@ -2047,9 +2047,9 @@ class Woocommerce {
 		// Get the total cart cost
 		$cart_total = WC()->cart->cart_contents_total;
 		$currency = get_woocommerce_currency();
-		$flat_rate = 14.75;
-		$expedite_rate = 29.5;
-		$min_price = 800;
+		$flat_rate = NOVA_SHIPPING_FLAT_RATE;
+		$expedite_rate = NOVA_SHIPPING_EXPEDITED_RATE;
+		$min_price = NOVA_SHIPPING_MIN_PRICE;
 		$above_min = 0;
 		$below_min = 0;
 		$above_min_ex = 0;
@@ -2062,17 +2062,17 @@ class Woocommerce {
 		}
 
 		if ( $cart_total < $min_price ) {
-			$standard_cost = $cart_total * 0.09 > $flat_rate ? $cart_total * 0.09 : $flat_rate; // 9%
-			$expedite_cost = $cart_total * 0.175 > $expedite_rate ? $cart_total * 0.175 : $expedite_rate; // 17.5%
+			$standard_cost = $cart_total * NOVA_SHIPPING_STANDARD_PERCENTAGE > $flat_rate ? $cart_total * NOVA_SHIPPING_STANDARD_PERCENTAGE : $flat_rate;
+			$expedite_cost = $cart_total * NOVA_SHIPPING_EXPEDITED_PERCENTAGE > $expedite_rate ? $cart_total * NOVA_SHIPPING_EXPEDITED_PERCENTAGE : $expedite_rate;
 		} else {
 
-			$below_min = $min_price * 0.09; // 9%
-			$below_min_ex = $min_price * 0.175; // 17.5%
+			$below_min = $min_price * NOVA_SHIPPING_STANDARD_PERCENTAGE;
+			$below_min_ex = $min_price * NOVA_SHIPPING_EXPEDITED_PERCENTAGE;
 
 			$diff = $cart_total - $min_price;
 
-			$above_min = $diff * 0.08; // 8%
-			$above_min_ex = $diff * 0.155; // 15.5%
+			$above_min = $diff * NOVA_SHIPPING_STANDARD_ABOVE_MIN_PERCENTAGE;
+			$above_min_ex = $diff * NOVA_SHIPPING_EXPEDITED_ABOVE_MIN_PERCENTAGE;
 
 			$standard_cost = $below_min + $above_min;
 			$expedite_cost = $below_min_ex + $above_min_ex;
@@ -2168,6 +2168,37 @@ class Woocommerce {
 			)
 		);
 		return ! empty( $children );
+	}
+
+	public function get_estimated_shipping( $price ) {
+
+		$currency = get_woocommerce_currency();
+
+		$flat_rate = NOVA_SHIPPING_FLAT_RATE;
+		$min_price = NOVA_SHIPPING_MIN_PRICE;
+		$above_min = 0;
+		$below_min = 0;
+
+		if ( $currency === 'CAD' ) {
+			$flat_rate = NOVA_SHIPPING_FLAT_RATE * NOVA_EXCHANGE_RATE;
+			$min_price = NOVA_SHIPPING_MIN_PRICE * NOVA_EXCHANGE_RATE;
+		}
+
+		if ( $price < $min_price ) {
+			$standard_rate = $price * NOVA_SHIPPING_STANDARD_PERCENTAGE > $flat_rate ? $price * NOVA_SHIPPING_STANDARD_PERCENTAGE : $flat_rate;
+		} else {
+
+			$below_min = $min_price * NOVA_SHIPPING_STANDARD_PERCENTAGE;
+			$difference = $price - $min_price;
+			$above_min = $difference * NOVA_SHIPPING_STANDARD_ABOVE_MIN_PERCENTAGE;
+
+			$standard_rate = $below_min + $above_min;
+		}
+
+		$estimated_shipping = $price > 0 ? number_format( max( $flat_rate, $standard_rate ), 2, '.', '' ) : 0;
+
+		return $estimated_shipping;
+
 	}
 
 

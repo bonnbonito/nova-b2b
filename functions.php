@@ -62,6 +62,34 @@ if ( ! defined( 'NOVA_LIMIT_PENDING_CAD' ) ) {
 	define( 'NOVA_LIMIT_PENDING_CAD', 11000 );
 }
 
+if ( ! defined( 'NOVA_SHIPPING_FLAT_RATE' ) ) {
+	define( 'NOVA_SHIPPING_FLAT_RATE', 15.95 );
+}
+
+if ( ! defined( 'NOVA_SHIPPING_EXPEDITED_RATE' ) ) {
+	define( 'NOVA_SHIPPING_EXPEDITED_RATE', 29.9 );
+}
+
+if ( ! defined( 'NOVA_SHIPPING_STANDARD_PERCENTAGE' ) ) {
+	define( 'NOVA_SHIPPING_STANDARD_PERCENTAGE', 0.11 );
+}
+
+if ( ! defined( 'NOVA_SHIPPING_EXPEDITED_PERCENTAGE' ) ) {
+	define( 'NOVA_SHIPPING_EXPEDITED_PERCENTAGE', 0.18 );
+}
+
+if ( ! defined( 'NOVA_SHIPPING_STANDARD_ABOVE_MIN_PERCENTAGE' ) ) {
+	define( 'NOVA_SHIPPING_STANDARD_ABOVE_MIN_PERCENTAGE', 0.085 );
+}
+
+if ( ! defined( 'NOVA_SHIPPING_EXPEDITED_ABOVE_MIN_PERCENTAGE' ) ) {
+	define( 'NOVA_SHIPPING_EXPEDITED_ABOVE_MIN_PERCENTAGE', 0.155 );
+}
+
+if ( ! defined( 'NOVA_SHIPPING_MIN_PRICE' ) ) {
+	define( 'NOVA_SHIPPING_MIN_PRICE', 800 );
+}
+
 /** if Woocommerce activated */
 if ( class_exists( 'woocommerce' ) ) {
 

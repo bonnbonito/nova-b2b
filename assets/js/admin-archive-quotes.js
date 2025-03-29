@@ -10,12 +10,12 @@ jQuery(document).ready(function ($) {
 		button.prop('disabled', true);
 
 		$.ajax({
-			url: NovaQuote.ajax_url,
+			url: NovaQuoteArchive.ajax_url,
 			type: 'POST',
 			data: {
 				action: 'restore_archived_quote',
 				quote_id: quoteId,
-				nonce: NovaQuote.nonce,
+				nonce: NovaQuoteArchive.nonce,
 			},
 			success: function (response) {
 				if (response.success) {
