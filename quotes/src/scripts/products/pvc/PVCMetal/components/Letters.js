@@ -23,7 +23,11 @@ import {
   STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
 
-import { calculateLetterPrice, spacerPricing } from '../../../../utils/Pricing';
+import {
+  calculateLetterPrice,
+  spacerPricing,
+  calculateOversizeShippingAddon,
+} from '../../../../utils/Pricing';
 
 import { useAppContext } from '../../../../AppProvider';
 
@@ -295,6 +299,10 @@ export function Letters({ item }) {
     }
 
     tempTotal *= pvcMetalPricing;
+
+    const sizes = [selectedLetterHeight];
+    const oversizeShippingAddon = calculateOversizeShippingAddon(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
 
     let total = tempTotal * parseInt(sets);
 

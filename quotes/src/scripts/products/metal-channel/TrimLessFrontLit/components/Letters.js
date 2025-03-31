@@ -29,7 +29,7 @@ import {
   STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
 
-import { spacerPricing } from '../../../../utils/Pricing';
+import { spacerPricing, calculateOversizeShippingAddon } from '../../../../utils/Pricing';
 
 import { useAppContext } from '../../../../AppProvider';
 
@@ -333,6 +333,10 @@ export function Letters({ item }) {
 
     /** minimum price is 89 usd */
     tempTotal = tempTotal < 89 ? 89 : tempTotal;
+
+    const sizes = [selectedLetterHeight];
+    const oversizeShippingAddon = calculateOversizeShippingAddon(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
 
     const total = tempTotal * parseInt(sets);
 

@@ -4,7 +4,7 @@ import Description from '../../../../Description';
 import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
 import { convertJson } from '../../../../utils/ConvertJson';
-import { quantityDiscount } from '../../../../utils/Pricing';
+import { quantityDiscount, calculateOversizeShippingAddon } from '../../../../utils/Pricing';
 import { arrayRange } from '../../../../utils/SignageOptions';
 import { NeonColors } from '../../components/NeonColors';
 import { flexNeonColorOptions } from '../../neonSignOptions';
@@ -275,6 +275,10 @@ export const NeonSign = ({ item }) => {
     }
 
     tempTotal += remotePrice;
+
+    const sizes = [width, height];
+    const oversizeShippingAddon = calculateOversizeShippingAddon(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
 
     let total = tempTotal * parseInt(sets);
 

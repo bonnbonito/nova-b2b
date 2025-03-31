@@ -9,6 +9,7 @@ import {
   anodizedPricing,
   getLogoPricingTablebyThickness,
   spacerPricing,
+  calculateOversizeShippingAddon,
 } from '../../../../utils/Pricing';
 import {
   aluminumFinishingOptions,
@@ -361,6 +362,10 @@ export function Logo({ item }) {
       spacer = parseFloat(spacer.toFixed(2));
       tempTotal += spacer;
     }
+
+    const sizes = [height, width];
+    const oversizeShippingAddon = calculateOversizeShippingAddon(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
 
     const total = tempTotal * sets;
 

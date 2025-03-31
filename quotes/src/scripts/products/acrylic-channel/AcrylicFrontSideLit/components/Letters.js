@@ -12,7 +12,11 @@ import {
   studLengthOptions,
 } from '../../../../utils/SignageOptions';
 
-import { calculateLetterPrice, spacerPricing } from '../../../../utils/Pricing';
+import {
+  calculateLetterPrice,
+  spacerPricing,
+  calculateOversizeShippingAddon,
+} from '../../../../utils/Pricing';
 
 import { ledLightColors } from '../../../metal-channel/metalChannelOptions';
 
@@ -302,6 +306,9 @@ export function Letters({ item }) {
     /* minimum price */
     const minOrderValue = 80;
     tempTotal = tempTotal > minOrderValue ? tempTotal : minOrderValue;
+
+    const oversizeShippingAddon = calculateOversizeShippingAddon([selectedLetterHeight], tempTotal);
+    tempTotal += oversizeShippingAddon;
 
     const total = tempTotal * parseInt(sets);
 

@@ -138,11 +138,6 @@ export function Logo({ item }) {
 
     tempTotal += computed;
 
-    const sizes = [width, height];
-    const oversizeShippingAddon = calculateOversizeShippingAddon(sizes, tempTotal);
-
-    tempTotal += oversizeShippingAddon;
-
     if (waterproof) {
       tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.1;
     }
@@ -157,6 +152,10 @@ export function Logo({ item }) {
 
       tempTotal += spacer;
     }
+
+    const sizes = [width, height];
+    const oversizeShippingAddon = calculateOversizeShippingAddon(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
 
     /** if Layered 3D */
     if (item.isLayered) {

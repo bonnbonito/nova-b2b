@@ -206,10 +206,6 @@ export const Letters = ({ item }) => {
       tempTotal += calculateLetterPrice(letter, baseLetterPrice, noLowerCase);
     });
 
-    const sizes = [selectedLetterHeight];
-    const oversizeShippingAddon = calculateOversizeShippingAddon(sizes, tempTotal);
-    tempTotal += oversizeShippingAddon;
-
     tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.1;
     tempTotal *= acrylicBase?.name === 'Black' ? 1 : 1.1;
     tempTotal *= METAL_ACRYLIC_PRICING;
@@ -219,6 +215,10 @@ export const Letters = ({ item }) => {
       spacer = parseFloat(spacer.toFixed(2));
       tempTotal += parseFloat(spacer.toFixed(2));
     }
+
+    const sizes = [selectedLetterHeight];
+    const oversizeShippingAddon = calculateOversizeShippingAddon(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
 
     /** if Layered 3D */
     if (item.isLayered) {

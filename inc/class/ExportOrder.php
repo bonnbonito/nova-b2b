@@ -576,8 +576,35 @@ class ExportOrder {
 	public function do_sheets_export() {
 		try {
 			$this->export_orders_to_sheets();
+			$this->save_nova_live_orders_to_json();
 		} catch (Exception $e) {
 			error_log( 'Nova Sheets Export Error: ' . $e->getMessage() );
 		}
+	}
+
+	/**
+	 * Save Nova live orders to a JSON file
+	 */
+	public function save_nova_live_orders_to_json() {
+		$orders = $this->get_nova_live_orders();
+
+		if ( empty( $orders ) ) {
+			return false;
+		}
+
+		$json_data = array(
+			'orders' => $orders,
+			'last_updated' => current_time( 'mysql' )
+		);
+
+		$upload_dir = wp_upload_dir();
+		$json_file_path = $upload_dir['basedir'] . '/nova-live-orders.json';
+
+		$result = file_put_contents(
+			$json_file_path,
+			wp_json_encode( $json_data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE )
+		);
+
+		return $result !== false;
 	}
 }

@@ -5,7 +5,12 @@ import UploadFiles from '../../../../UploadFiles';
 import useOutsideClick from '../../../../utils/ClickOutside';
 import { colorOptions } from '../../../../utils/ColorOptions';
 import convert_json from '../../../../utils/ConvertJson';
-import { getLogoPricingTablebyThickness, spacerPricing } from '../../../../utils/Pricing';
+import {
+  getLogoPricingTablebyThickness,
+  spacerPricing,
+  calculateOversizeShippingAddon,
+} from '../../../../utils/Pricing';
+
 import {
   setOptions,
   spacerStandoffDefaultOptions,
@@ -389,6 +394,10 @@ export function Logo({ item }) {
       spacer = parseFloat(spacer.toFixed(2));
       tempTotal += spacer;
     }
+
+    const sizes = [height, width];
+    const oversizeShippingAddon = calculateOversizeShippingAddon(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
 
     const total = tempTotal * sets;
 

@@ -5514,6 +5514,9 @@ function Letters({
     const minOrderValue = 80;
     tempTotal = tempTotal > minOrderValue ? tempTotal : minOrderValue;
     let total = tempTotal * parseInt(sets);
+    const sizes = [selectedLetterHeight];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_9__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
       total: (_total$toFixed = total?.toFixed(2)) !== null && _total$toFixed !== void 0 ? _total$toFixed : 0
@@ -6111,6 +6114,9 @@ function Logo({
     /* minimum price */
     const minOrderValue = 80;
     tempTotal = tempTotal > minOrderValue ? tempTotal : minOrderValue;
+    const sizes = [width, height];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -6844,6 +6850,9 @@ function Letters({
     /* minimum price */
     const minOrderValue = 80;
     tempTotal = tempTotal > minOrderValue ? tempTotal : minOrderValue;
+    const sizes = [selectedLetterHeight];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_9__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal = tempTotal) !== null && _tempTotal !== void 0 ? _tempTotal : 0,
@@ -7554,6 +7563,9 @@ function Logo({
     /* minimum price */
     const minOrderValue = 80;
     tempTotal = tempTotal > minOrderValue ? tempTotal : minOrderValue;
+    const sizes = [width, height];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -8287,6 +8299,9 @@ function Letters({
     /* minimum price */
     const minOrderValue = 80;
     tempTotal = tempTotal > minOrderValue ? tempTotal : minOrderValue;
+    const sizes = [selectedLetterHeight];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_9__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     let total = tempTotal * parseInt(sets);
     const discount = 1;
     let totalWithDiscount = total * discount;
@@ -8968,6 +8983,9 @@ function Logo({
 
     /* minimum price */
     tempTotal = tempTotal > 50 ? tempTotal : 50;
+    const sizes = [width, height];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -9610,6 +9628,8 @@ function Letters({
     /* minimum price */
     const minOrderValue = 80;
     tempTotal = tempTotal > minOrderValue ? tempTotal : minOrderValue;
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_9__.calculateOversizeShippingAddon)([selectedLetterHeight], tempTotal);
+    tempTotal += oversizeShippingAddon;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -10155,6 +10175,9 @@ function Logo({
     /* minimum price */
     const minOrderValue = 80;
     tempTotal = tempTotal > minOrderValue ? tempTotal : minOrderValue;
+    const sizes = [width, height];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -10870,6 +10893,9 @@ function Letters({
     /* minimum price */
     const minOrderValue = 80;
     tempTotal = tempTotal > minOrderValue ? tempTotal : minOrderValue;
+    const sizes = [selectedLetterHeight];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_9__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -11420,6 +11446,9 @@ function Logo({
     /* minimum price */
     const minOrderValue = 80;
     tempTotal = tempTotal < minOrderValue ? minOrderValue : tempTotal;
+    const sizes = [width, height];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -12171,9 +12200,6 @@ function Letters({
     lettersArray.forEach(letter => {
       tempTotal += (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_10__.calculateLetterPrice)(letter, baseLetterPrice, noLowerCase);
     });
-    const sizes = [selectedLetterHeight];
-    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_10__.calculateOversizeShippingAddon)(sizes, tempTotal);
-    tempTotal += oversizeShippingAddon;
     if (waterproof) {
       tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
     }
@@ -12182,6 +12208,9 @@ function Letters({
       tempTotal += parseFloat(spacer.toFixed(2));
     }
     tempTotal *= _options__WEBPACK_IMPORTED_MODULE_13__.acryMetalPricing;
+    const sizes = [selectedLetterHeight];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_10__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
 
     /** if Layered 3D */
     if (item.isLayered) {
@@ -12795,9 +12824,6 @@ function Logo({
     if (baseLogoPricing) {
       tempTotal += baseLogoPricing;
     }
-    const sizes = [width, height];
-    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.calculateOversizeShippingAddon)(sizes, tempTotal);
-    tempTotal += oversizeShippingAddon;
     if (waterproof) {
       tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
     }
@@ -12806,6 +12832,9 @@ function Logo({
       tempTotal += spacer;
     }
     tempTotal *= _options__WEBPACK_IMPORTED_MODULE_10__.acryMetalPricing;
+    const sizes = [width, height];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
 
     /** if Layered 3D */
     if (item.isLayered) {
@@ -13650,9 +13679,6 @@ function Letters({
     lettersArray.forEach(letter => {
       tempTotal += (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_9__.calculateLetterPrice)(letter, baseLetterPrice, noLowerCase);
     });
-    const sizes = [selectedLetterHeight];
-    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_9__.calculateOversizeShippingAddon)(sizes, tempTotal);
-    tempTotal += oversizeShippingAddon;
     if (waterproof) {
       tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
     }
@@ -13667,6 +13693,9 @@ function Letters({
       const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_9__.spacerPricing)(tempTotal);
       tempTotal += parseFloat(spacer.toFixed(2));
     }
+    const sizes = [selectedLetterHeight];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_9__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
 
     /** if Layered 3D */
     if (item.isLayered) {
@@ -14320,9 +14349,6 @@ function Logo({
     if (baseLogoPricing) {
       tempTotal += baseLogoPricing;
     }
-    const sizes = [width, height];
-    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.calculateOversizeShippingAddon)(sizes, tempTotal);
-    tempTotal += oversizeShippingAddon;
     if (waterproof) {
       tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
     }
@@ -14339,6 +14365,9 @@ function Logo({
       const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.spacerPricing)(tempTotal);
       tempTotal += spacer;
     }
+    const sizes = [width, height];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
 
     /** if Layered 3D */
     if (item.isLayered) {
@@ -15675,9 +15704,6 @@ const Letters = ({
     lettersArray.forEach(letter => {
       tempTotal += (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_13__.calculateLetterPrice)(letter, baseLetterPrice, noLowerCase);
     });
-    const sizes = [selectedLetterHeight];
-    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_13__.calculateOversizeShippingAddon)(sizes, tempTotal);
-    tempTotal += oversizeShippingAddon;
     tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
     tempTotal *= acrylicBase?.name === 'Black' ? 1 : 1.1;
     tempTotal *= _MetalLaminate__WEBPACK_IMPORTED_MODULE_11__.METAL_ACRYLIC_PRICING;
@@ -15686,6 +15712,9 @@ const Letters = ({
       spacer = parseFloat(spacer.toFixed(2));
       tempTotal += parseFloat(spacer.toFixed(2));
     }
+    const sizes = [selectedLetterHeight];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_13__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
 
     /** if Layered 3D */
     if (item.isLayered) {
@@ -16183,9 +16212,6 @@ function Logo({
     const computed = logoPricingTable.length > 0 ? logoPricingTable[width - 1][height] : 0;
     let tempTotal = 0;
     tempTotal += computed;
-    const sizes = [width, height];
-    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_5__.calculateOversizeShippingAddon)(sizes, tempTotal);
-    tempTotal += oversizeShippingAddon;
     if (waterproof) {
       tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
     }
@@ -16196,6 +16222,9 @@ function Logo({
       spacer = parseFloat(spacer.toFixed(2));
       tempTotal += spacer;
     }
+    const sizes = [width, height];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_5__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
 
     /** if Layered 3D */
     if (item.isLayered) {
@@ -16794,9 +16823,6 @@ function Logo({
     if (computed) {
       tempTotal += computed;
     }
-    const sizes = [width, height];
-    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_5__.calculateOversizeShippingAddon)(sizes, tempTotal);
-    tempTotal += oversizeShippingAddon;
     if (waterproof) {
       tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
     }
@@ -16808,6 +16834,9 @@ function Logo({
       spacer = parseFloat(spacer.toFixed(2));
       tempTotal += spacer;
     }
+    const sizes = [width, height];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_5__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
 
     /** if Layered 3D */
     if (item.isLayered) {
@@ -19177,6 +19206,9 @@ const NeonSign = ({
       remotePrice = 16;
     }
     tempTotal += remotePrice;
+    const sizes = [width, height];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     let total = tempTotal * parseInt(sets);
     const discount = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.quantityDiscount)(sets, quantityDiscountTable);
     let totalWithDiscount = total * discount;
@@ -19777,6 +19809,9 @@ const NeonSign = ({
       const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.spacerPricing)(tempTotal);
       tempTotal += parseFloat(spacer.toFixed(2));
     }
+    const sizes = [width, height];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     let total = tempTotal * parseInt(sets);
     const discount = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.quantityDiscount)(sets, quantityDiscountTable);
     let totalWithDiscount = total * discount;
@@ -20436,6 +20471,9 @@ const NeonSign = ({
     tempTotal += mountingPrice;
     let remotePrice = remoteControl === 'Yes' ? 16 : 0;
     tempTotal += remotePrice;
+    const sizes = [width, height];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_9__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     let total = tempTotal * parseInt(sets);
     const discount = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_9__.quantityDiscount)(sets, quantityDiscountTable);
     let totalWithDiscount = total * discount;
@@ -22034,6 +22072,9 @@ function Letters({
 
     /** minimum price is 89 usd */
     tempTotal = tempTotal < 89 ? 89 : tempTotal;
+    const sizes = [selectedLetterHeight];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_14__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -22672,6 +22713,9 @@ function Logo({
 
     /** minimum price is 89 usd */
     tempTotal = tempTotal < 89 ? 89 : tempTotal;
+    const sizes = [width, height];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_8__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -23571,6 +23615,9 @@ function Letters({
 
     /** minimum price is 89 usd */
     tempTotal = tempTotal < 89 ? 89 : tempTotal;
+    const sizes = [selectedLetterHeight];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_14__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -24177,6 +24224,9 @@ function Logo({
 
     /** minimum price is 89 usd */
     tempTotal = tempTotal < 89 ? 89 : tempTotal;
+    const sizes = [width, height];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_8__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -24595,13 +24645,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_ColorOptions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../utils/ColorOptions */ "./src/scripts/utils/ColorOptions.js");
 /* harmony import */ var _utils_ColorsDropdown__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../utils/ColorsDropdown */ "./src/scripts/utils/ColorsDropdown.js");
 /* harmony import */ var _utils_ConvertJson__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../../utils/ConvertJson */ "./src/scripts/utils/ConvertJson.js");
-/* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
-/* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
-/* harmony import */ var _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../metalChannelOptions */ "./src/scripts/products/metal-channel/metalChannelOptions.js");
-/* harmony import */ var _metal_metalOptions__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../../../metal/metalOptions */ "./src/scripts/products/metal/metalOptions.js");
-/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
+/* harmony import */ var _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../utils/SignageOptions */ "./src/scripts/utils/SignageOptions.js");
+/* harmony import */ var _metalChannelOptions__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../metalChannelOptions */ "./src/scripts/products/metal-channel/metalChannelOptions.js");
+/* harmony import */ var _metal_metalOptions__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../../metal/metalOptions */ "./src/scripts/products/metal/metalOptions.js");
+/* harmony import */ var _utils_defaults__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../../../../utils/defaults */ "./src/scripts/utils/defaults.js");
+/* harmony import */ var _utils_Pricing__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../../../../utils/Pricing */ "./src/scripts/utils/Pricing.js");
 /* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../../../../AppProvider */ "./src/scripts/AppProvider.tsx");
-
 
 
 
@@ -24668,7 +24717,7 @@ function Letters({
   const [metalFinish, setMetalFinish] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$backLitMetalFin = item.backLitMetalFinish) !== null && _item$backLitMetalFin !== void 0 ? _item$backLitMetalFin : '');
   const [faceReturnColor, setFaceReturnColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$backLitfaceRetu = item.backLitfaceReturnColor) !== null && _item$backLitfaceRetu !== void 0 ? _item$backLitfaceRetu : '');
   const [selectedLetterHeight, setSelectedLetterHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$letterHeight = item.letterHeight) !== null && _item$letterHeight !== void 0 ? _item$letterHeight : '');
-  const [lightingOptions, setLightingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.lightingPackagedOptions);
+  const [lightingOptions, setLightingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_10__.lightingPackagedOptions);
   const [includedItems, setIncludedItems] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const [letterPricingTables, setLetterPricingTables] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
@@ -24692,7 +24741,7 @@ function Letters({
     max: 40
   });
   const [studLength, setStudLength] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$studLength = item.studLength) !== null && _item$studLength !== void 0 ? _item$studLength : '');
-  const [spacerStandoffOptions, setSpacerStandoffOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.spacerStandoffDefaultOptions);
+  const [spacerStandoffOptions, setSpacerStandoffOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_10__.spacerStandoffDefaultOptions);
   const [spacerStandoffDistance, setSpacerStandoffDistance] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$spacerStandoffD = item.spacerStandoffDistance) !== null && _item$spacerStandoffD !== void 0 ? _item$spacerStandoffD : '');
   const [mounting, setMounting] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$mounting = item.mounting) !== null && _item$mounting !== void 0 ? _item$mounting : '');
   const [ledLightColor, setLedLightColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(item.ledLightColor);
@@ -24769,8 +24818,8 @@ function Letters({
   const handleOnChangeMounting = e => {
     const target = e.target.value;
     setMounting(target);
-    if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_WITH_SPACER || target === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_MOUNT) {
-      if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_MOUNT) {
+    if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER || target === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_MOUNT) {
+      if (target === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_MOUNT) {
         setSpacerStandoffDistance('');
       }
     } else {
@@ -24816,7 +24865,7 @@ function Letters({
   };
   const handleOnChangeDepth = e => {
     const target = e.target.value;
-    const selected = _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__.depthOptions.filter(option => option.value === target);
+    const selected = _metalChannelOptions__WEBPACK_IMPORTED_MODULE_11__.depthOptions.filter(option => option.value === target);
     setDepth(() => selected[0]);
     if (parseFloat(target) === 5 && parseInt(selectedLetterHeight) < 6) {
       setSelectedLetterHeight('');
@@ -24892,7 +24941,7 @@ function Letters({
         setSpacerStandoffDistance(''); // Reset if the distance is invalid for these options
       }
     } else {
-      setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
+      setSpacerStandoffOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_10__.spacerStandoffDefaultOptions); // Reset to default if none of the conditions are met
     }
     if (target === '') {
       setSpacerStandoffDistance(''); // Always reset if the target is empty
@@ -24944,11 +24993,11 @@ function Letters({
     if (!waterproof) missingFields.push('Select Environment');
     if (!includedItems) missingFields.push('Select Included Items');
     if (!mounting) missingFields.push('Select Mounting');
-    if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_WITH_SPACER) {
+    if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER) {
       if (!studLength) missingFields.push('Select Stud Length');
       if (!spacerStandoffDistance) missingFields.push('Select Standoff Space');
     }
-    if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_MOUNT) {
+    if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_MOUNT) {
       if (!studLength) missingFields.push('Select Stud Length');
     }
     if (!ledLightColor) missingFields.push('Select LED Light Color');
@@ -24988,7 +25037,7 @@ function Letters({
   }, [letters, depth, comments, font, waterproof, includedItems, color, usdPrice, cadPrice, usdSinglePrice, cadSinglePrice, selectedLetterHeight, ledLightColor, fileUrls, fileNames, files, filePaths, sameColor, customColor, returnCustomColor, returnColor, fontFileUrl, fontFileName, fontFilePath, fontFile, mounting, studLength, spacerStandoffDistance, selectedFinishing, faceReturnColor, metalFinish, acrylicReveal, sets, hasUploadedFile]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (depth?.value && letterPricingTables) {
-      const table = (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_9__["default"])((0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_10__.getLetterPricingTableByTitle)(depth?.depth, letterPricingTables));
+      const table = (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_9__["default"])((0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_14__.getLetterPricingTableByTitle)(depth?.depth, letterPricingTables));
       setLetterPricing(() => table);
       if (depth.value == 8) {
         if (selectedLetterHeight < 9) {
@@ -25044,10 +25093,10 @@ function Letters({
     const lettersArray = letters.trim().split('');
     const noLowerCase = NovaQuote.no_lowercase.includes(font);
     lettersArray.forEach(letter => {
-      tempTotal += (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_10__.calculateLetterPrice)(letter, baseLetterPrice, noLowerCase);
+      tempTotal += (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_14__.calculateLetterPrice)(letter, baseLetterPrice, noLowerCase);
     });
     if (waterproof) {
-      tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.INDOOR_NOT_WATERPROOF ? 1 : 1.03;
+      tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF ? 1 : 1.03;
     }
     if (metalFinish && metalFinish.includes('Polished')) {
       tempTotal *= 1.3;
@@ -25058,14 +25107,17 @@ function Letters({
     if (selectedFinishing === 'Painted' && faceReturnColor === 'Different Color') {
       tempTotal *= 1.1;
     }
-    if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_WITH_SPACER) {
-      let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_10__.spacerPricing)(tempTotal);
+    if (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER) {
+      let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_14__.spacerPricing)(tempTotal);
       spacer = parseFloat(spacer.toFixed(2));
       tempTotal += spacer;
     }
 
     /** minimum price is 89 usd */
     tempTotal = tempTotal < 89 ? 89 : tempTotal;
+    const sizes = [selectedLetterHeight];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_14__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -25079,9 +25131,9 @@ function Letters({
     } = computePricing();
     if (total && singlePrice) {
       setUsdPrice(total);
-      setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.EXCHANGE_RATE).toFixed(2));
+      setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.EXCHANGE_RATE).toFixed(2));
       setUsdSinglePrice(singlePrice);
-      setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.EXCHANGE_RATE).toFixed(2));
+      setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.EXCHANGE_RATE).toFixed(2));
     } else {
       setUsdPrice(0);
       setCadPrice(0);
@@ -25108,15 +25160,15 @@ function Letters({
   }, [color, font, returnColor]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (waterproof) {
-      if (waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.INDOOR_NOT_WATERPROOF) {
-        setIncludedItems(_utils_defaults__WEBPACK_IMPORTED_MODULE_14__.LIGHTING_INDOOR);
-        setLightingOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.lightingPackagedOptions.filter(option => option.value === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.LIGHTING_INDOOR));
+      if (waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF) {
+        setIncludedItems(_utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR);
+        setLightingOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_10__.lightingPackagedOptions.filter(option => option.value === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR));
       } else {
         setIncludedItems('Low Voltage LED Driver, 10ft open wires, 1:1 blueprint');
-        setLightingOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.lightingPackagedOptions.filter(option => option.value !== _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.LIGHTING_INDOOR));
+        setLightingOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_10__.lightingPackagedOptions.filter(option => option.value !== _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.LIGHTING_INDOOR));
       }
     } else {
-      setLightingOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.lightingPackagedOptions);
+      setLightingOptions(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_10__.lightingPackagedOptions);
     }
   }, [waterproof]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -25157,7 +25209,7 @@ function Letters({
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Environment",
     onChange: handleOnChangeWaterproof,
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_10__.waterProofOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: option.option,
       value: option.option,
       defaultValue: option.option == waterproof
@@ -25184,7 +25236,7 @@ function Letters({
     title: "Metal Depth",
     value: depth?.value,
     onChange: handleOnChangeDepth,
-    options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__.depthOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_11__.depthOptions.map(thickness => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: thickness.value,
       value: thickness.value,
       defaultValue: thickness === depth
@@ -25197,7 +25249,7 @@ function Letters({
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Finishing",
     onChange: handleChangeFinishing,
-    options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__.finishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_11__.finishingOptions.map(finishing => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: finishing.value,
       value: finishing.value,
       defaultValue: finishing.value === selectedFinishing
@@ -25206,7 +25258,7 @@ function Letters({
   }), selectedFinishing === 'Metal' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Metal Finish",
     onChange: handelMetalFinishChange,
-    options: _metal_metalOptions__WEBPACK_IMPORTED_MODULE_13__.metalFinishOptions.map(finish => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _metal_metalOptions__WEBPACK_IMPORTED_MODULE_12__.metalFinishOptions.map(finish => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: finish.option,
       value: finish.option,
       defaultValue: finish.option === metalFinish
@@ -25268,7 +25320,7 @@ function Letters({
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "LED Light Color",
     onChange: handleOnChangeLedLight,
-    options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_11__.ledLightColors.map(color => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: color,
       value: color,
       defaultValue: color == ledLightColor
@@ -25277,7 +25329,7 @@ function Letters({
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Acrylic Reveal",
     onChange: handleOnChangeAcrylicReveal,
-    options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__.acrylicRevealOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_11__.acrylicRevealOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: option,
       value: option,
       defaultValue: option == acrylicReveal
@@ -25286,22 +25338,22 @@ function Letters({
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Mounting",
     onChange: handleOnChangeMounting,
-    options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_12__.mountingDefaultOptions.map(mounting => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _metalChannelOptions__WEBPACK_IMPORTED_MODULE_11__.mountingDefaultOptions.map(mounting => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: mounting.value,
       value: mounting.value,
       defaultValue: mounting.value == mounting
     }, mounting.value)),
     value: mounting
-  }), (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_WITH_SPACER || mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }), (mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER || mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_MOUNT) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Stud Length",
     onChange: handleonChangeStudLength,
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_10__.studLengthOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       key: option.value,
       value: option.value,
       defaultValue: option.value == studLength
     }, option.value)),
     value: studLength
-  }), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "STANDOFF SPACE",
     onChange: handleonChangeSpacerDistance,
     options: spacerStandoffOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -25322,10 +25374,10 @@ function Letters({
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_11__.setOptions,
+    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_10__.setOptions,
     value: sets,
     onlyValue: true
-  })), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_14__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  })), mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-xs text-[#9F9F9F] mb-4"
   }, "*Note: The spacer will be black (default) or match the painted sign's color."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-grid"
@@ -25808,6 +25860,9 @@ function Logo({
 
     /** minimum price is 89 usd */
     tempTotal = tempTotal < 89 ? 89 : tempTotal;
+    const sizes = [width, height];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_11__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -26582,6 +26637,9 @@ function Letters({
 
     /** minimum price is 89 usd */
     tempTotal = tempTotal < 89 ? 89 : tempTotal;
+    const sizes = [selectedLetterHeight];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_14__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -27304,6 +27362,9 @@ function Logo({
 
     /** minimum price is 89 usd */
     tempTotal = tempTotal < 89 ? 89 : tempTotal;
+    const sizes = [width, height];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_11__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -28039,6 +28100,9 @@ function Letters({
 
     /** minimum price is 89 usd */
     tempTotal = tempTotal < 89 ? 89 : tempTotal;
+    const sizes = [selectedLetterHeight];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_14__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal = tempTotal) !== null && _tempTotal !== void 0 ? _tempTotal : 0,
@@ -28729,6 +28793,9 @@ function Logo({
 
     /** minimum price is 89 usd */
     tempTotal = tempTotal < 89 ? 89 : tempTotal;
+    const sizes = [width, height];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_11__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -29527,6 +29594,9 @@ function Letters({
       spacer = parseFloat(spacer.toFixed(2));
       tempTotal += spacer;
     }
+    const sizes = [selectedLetterHeight];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_13__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -30222,6 +30292,9 @@ function Logo({
       spacer = parseFloat(spacer.toFixed(2));
       tempTotal += spacer;
     }
+    const sizes = [width, height];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_7__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -30893,6 +30966,9 @@ function Letters({
       spacer = parseFloat(spacer.toFixed(2));
       tempTotal += spacer;
     }
+    const sizes = [selectedLetterHeight];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_12__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -31520,6 +31596,9 @@ function Logo({
       spacer = parseFloat(spacer.toFixed(2));
       tempTotal += spacer;
     }
+    const sizes = [height, width];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_7__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     const total = tempTotal * sets;
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -32195,6 +32274,9 @@ function Letters({
       spacer = parseFloat(spacer.toFixed(2));
       tempTotal += spacer;
     }
+    const sizes = [selectedLetterHeight];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_13__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -32853,6 +32935,9 @@ function Logo({
       spacer = parseFloat(spacer.toFixed(2));
       tempTotal += spacer;
     }
+    const sizes = [height, width];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_7__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     const total = tempTotal * sets;
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -33665,6 +33750,9 @@ function Letters({
       tempTotal += parseFloat(spacer.toFixed(2));
     }
     tempTotal *= _options__WEBPACK_IMPORTED_MODULE_10__.pvcMetalPricing;
+    const sizes = [selectedLetterHeight];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_12__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     let total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -34145,6 +34233,9 @@ function Logo({
       tempTotal += parseFloat(spacer.toFixed(2));
     }
     tempTotal *= _options__WEBPACK_IMPORTED_MODULE_8__.pvcMetalPricing;
+    const sizes = [width, height];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_5__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -34854,6 +34945,9 @@ function Letters({
       const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_13__.spacerPricing)(tempTotal);
       tempTotal += parseFloat(spacer.toFixed(2));
     }
+    const sizes = [selectedLetterHeight];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_13__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     let total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -35392,6 +35486,9 @@ function Logo({
       const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_8__.spacerPricing)(tempTotal);
       tempTotal += parseFloat(spacer.toFixed(2));
     }
+    const sizes = [width, height];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_8__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -36082,6 +36179,9 @@ function Letters({
       const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_13__.spacerPricing)(tempTotal);
       tempTotal += parseFloat(spacer.toFixed(2));
     }
+    const sizes = [selectedLetterHeight];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_13__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     let total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -36631,6 +36731,9 @@ function Logo({
       const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_7__.spacerPricing)(tempTotal);
       tempTotal += parseFloat(spacer.toFixed(2));
     }
+    const sizes = [width, height];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_7__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     const total = tempTotal * parseInt(sets);
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
@@ -37252,6 +37355,9 @@ function Logo({
         tempTotal += spacer;
       }
     }
+    const sizes = [width, height];
+    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_8__.calculateOversizeShippingAddon)(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
     const total = tempTotal * sets;
     return {
       singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,

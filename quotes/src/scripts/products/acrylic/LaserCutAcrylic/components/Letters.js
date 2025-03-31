@@ -231,10 +231,6 @@ export function Letters({ item }) {
       tempTotal += calculateLetterPrice(letter, baseLetterPrice, noLowerCase);
     });
 
-    const sizes = [selectedLetterHeight];
-    const oversizeShippingAddon = calculateOversizeShippingAddon(sizes, tempTotal);
-    tempTotal += oversizeShippingAddon;
-
     if (waterproof) {
       tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.1;
     }
@@ -252,6 +248,10 @@ export function Letters({ item }) {
       const spacer = spacerPricing(tempTotal);
       tempTotal += parseFloat(spacer.toFixed(2));
     }
+
+    const sizes = [selectedLetterHeight];
+    const oversizeShippingAddon = calculateOversizeShippingAddon(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
 
     /** if Layered 3D */
     if (item.isLayered) {

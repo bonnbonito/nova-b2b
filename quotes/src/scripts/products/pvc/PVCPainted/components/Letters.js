@@ -26,7 +26,11 @@ import {
 
 import ColorsDropdown from '../../../../utils/ColorsDropdown';
 
-import { calculateLetterPrice, spacerPricing } from '../../../../utils/Pricing';
+import {
+  calculateLetterPrice,
+  spacerPricing,
+  calculateOversizeShippingAddon,
+} from '../../../../utils/Pricing';
 
 import { useAppContext } from '../../../../AppProvider';
 
@@ -287,6 +291,10 @@ export function Letters({ item }) {
       const spacer = spacerPricing(tempTotal);
       tempTotal += parseFloat(spacer.toFixed(2));
     }
+
+    const sizes = [selectedLetterHeight];
+    const oversizeShippingAddon = calculateOversizeShippingAddon(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
 
     let total = tempTotal * parseInt(sets);
 

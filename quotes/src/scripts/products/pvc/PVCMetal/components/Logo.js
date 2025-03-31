@@ -3,7 +3,11 @@ import Description from '../../../../Description';
 import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
 import convert_json from '../../../../utils/ConvertJson';
-import { getLogoPricingTablebyThickness, spacerPricing } from '../../../../utils/Pricing';
+import {
+  getLogoPricingTablebyThickness,
+  spacerPricing,
+  calculateOversizeShippingAddon,
+} from '../../../../utils/Pricing';
 import {
   setOptions,
   spacerStandoffDefaultOptions,
@@ -280,6 +284,10 @@ export function Logo({ item }) {
     }
 
     tempTotal *= pvcMetalPricing;
+
+    const sizes = [width, height];
+    const oversizeShippingAddon = calculateOversizeShippingAddon(sizes, tempTotal);
+    tempTotal += oversizeShippingAddon;
 
     const total = tempTotal * parseInt(sets);
 
