@@ -53,6 +53,7 @@ $instances = array(
 	'ExportOrder',
 	'AI',
 	'PhotoRegistration',
+	'Zendesk',
 );
 
 foreach ( $instances as $instance ) {
