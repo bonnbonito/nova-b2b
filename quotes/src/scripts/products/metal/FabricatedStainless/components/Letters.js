@@ -314,7 +314,7 @@ export function Letters({ item }) {
     }
 
     if (selectedFinishing === 'UV Printed') {
-      tempTotal *= 1.1;
+      tempTotal *= 1.15;
     }
 
     if (mounting && mounting === STUD_WITH_SPACER) {

@@ -29919,7 +29919,7 @@ function Letters({
       tempTotal *= 1.15;
     }
     if (selectedFinishing === 'UV Printed') {
-      tempTotal *= 1.1;
+      tempTotal *= 1.15;
     }
     if (mounting && mounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER) {
       let spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_13__.spacerPricing)(tempTotal);
