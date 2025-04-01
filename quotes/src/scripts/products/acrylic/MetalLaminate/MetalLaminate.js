@@ -10,7 +10,7 @@ import { Logo } from './components/Logo';
 
 import { useAppContext } from '../../../AppProvider';
 
-import convert_json from '../../../utils/ConvertJson';
+import { convertJson } from '../../../utils/ConvertJson';
 
 export const acrylicBaseOptions = [
   {
@@ -25,6 +25,13 @@ export const METAL_ACRYLIC_PRICING = 1.4;
 
 export default function MetalLaminate() {
   const { signage, setSignage, setTempFolder, tempFolderName } = useAppContext();
+
+  const [quantityDiscountTable, setQuantityDiscountTable] = useState([]);
+  const [setOptions, setSetOptions] = useState([
+    <option key="1" value="1">
+      1
+    </option>,
+  ]);
 
   function setDefaultSignage() {
     setSignage([
@@ -145,15 +152,71 @@ export default function MetalLaminate() {
     }
   }, []);
 
+  useEffect(() => {
+    if (NovaQuote.is_editting === '1') {
+      const currentSignage = JSON.parse(NovaQuote.signage);
+      if (currentSignage) {
+        setSignage(currentSignage);
+      } else {
+        window.location.href = window.location.pathname;
+      }
+    } else {
+      setDefaultSignage();
+    }
+  }, []);
+
+  async function fetchQuantityDiscountPricing() {
+    try {
+      const response = await fetch(NovaQuote.quantity_discount_api + NovaQuote.product);
+      const data = await response.json();
+      const tableJson = data.pricing_table ? convertJson(data.pricing_table) : [];
+      setQuantityDiscountTable(tableJson);
+    } catch (error) {
+      console.error('Error fetching discount table pricing:', error);
+    } finally {
+      setSetOptions(
+        Array.from(
+          {
+            length: 100,
+          },
+          (_, index) => {
+            const val = 1 + index;
+            return (
+              <option key={index} value={val}>
+                {val}
+              </option>
+            );
+          }
+        )
+      );
+    }
+  }
+
+  useEffect(() => {
+    fetchQuantityDiscountPricing();
+  }, []);
+
   return (
     <div className="md:flex gap-6">
       <div className="md:w-3/4 w-full">
         {signage.map((item, index) => (
           <Signage key={item.id} index={index} id={item.id} item={item}>
             {item.type === 'letters' ? (
-              <Letters key={item.id} item={item} productId={item.product} />
+              <Letters
+                key={item.id}
+                item={item}
+                productId={item.product}
+                quantityDiscountTable={quantityDiscountTable}
+                setOptions={setOptions}
+              />
             ) : (
-              <Logo key={item.id} item={item} productId={item.product} />
+              <Logo
+                key={item.id}
+                item={item}
+                productId={item.product}
+                quantityDiscountTable={quantityDiscountTable}
+                setOptions={setOptions}
+              />
             )}
           </Signage>
         ))}

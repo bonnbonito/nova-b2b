@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useAppContext } from '../../../AppProvider';
 import Note from '../../../Note';
@@ -7,9 +7,12 @@ import Signage from '../../../Signage';
 import { PlusIcon } from '../../../svg/Icons';
 import { Letters } from './components/Letters';
 import { Logo } from './components/Logo';
+import { convertJson } from '../../../utils/ConvertJson';
 
 export default function AcryMetal() {
   const { signage, setSignage, setTempFolder, tempFolderName } = useAppContext();
+
+  const [quantityDiscountTable, setQuantityDiscountTable] = useState([]);
 
   function setDefaultSignage() {
     setSignage([
@@ -124,15 +127,40 @@ export default function AcryMetal() {
     }
   }, []);
 
+  async function fetchQuantityDiscountPricing() {
+    try {
+      const response = await fetch(NovaQuote.quantity_discount_api + NovaQuote.product);
+      const data = await response.json();
+      const tableJson = data.pricing_table ? convertJson(data.pricing_table) : [];
+      setQuantityDiscountTable(tableJson);
+    } catch (error) {
+      console.error('Error fetching discount table pricing:', error);
+    }
+  }
+
+  useEffect(() => {
+    fetchQuantityDiscountPricing();
+  }, []);
+
   return (
     <div className="md:flex gap-6">
       <div className="md:w-3/4 w-full">
         {signage.map((item, index) => (
           <Signage key={item.id} index={index} id={item.id} item={item}>
             {item.type === 'letters' ? (
-              <Letters key={item.id} item={item} productId={item.product} />
+              <Letters
+                key={item.id}
+                item={item}
+                productId={item.product}
+                quantityDiscountTable={quantityDiscountTable}
+              />
             ) : (
-              <Logo key={item.id} item={item} productId={item.product} />
+              <Logo
+                key={item.id}
+                item={item}
+                productId={item.product}
+                quantityDiscountTable={quantityDiscountTable}
+              />
             )}
           </Signage>
         ))}

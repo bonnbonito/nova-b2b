@@ -7,12 +7,12 @@ import {
   getLogoPricingTablebyThickness,
   spacerPricing,
   calculateOversizeShippingAddon,
+  quantityDiscount,
 } from '../../../../utils/Pricing';
 
 import {
   finishingOptions,
   mountingDefaultOptions,
-  setOptions,
   spacerStandoffDefaultOptions,
   studLengthOptions,
   thicknessOptions,
@@ -32,7 +32,7 @@ import { useAppContext } from '../../../../AppProvider';
 
 const UV_PRICE = 1.05;
 
-export function Logo({ item }) {
+export function Logo({ item, quantityDiscountTable, setOptions }) {
   const { signage, setSignage, setMissing, hasUploadedFile } = useAppContext();
 
   const [selectedMounting, setSelectedMounting] = useState(item.mounting ?? '');
@@ -44,6 +44,10 @@ export function Logo({ item }) {
   const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
   const [usdSinglePrice, setUsdSinglePrice] = useState(item.usdSinglePrice ?? 0);
   const [cadSinglePrice, setCadSinglePrice] = useState(item.cadSinglePrice ?? 0);
+  const [usdDiscount, setUsdDiscount] = useState(item.usdDiscount ?? 0);
+  const [usdTotalNoDiscount, setUsdTotalNoDiscount] = useState(item.usdTotalNoDiscount ?? '');
+  const [cadDiscount, setCadDiscount] = useState(item.cadDiscount ?? 0);
+  const [cadTotalNoDiscount, setCadTotalNoDiscount] = useState(item.cadTotalNoDiscount ?? '');
 
   const [fileNames, setFileNames] = useState(item.fileNames ?? []);
   const [fileUrls, setFileUrls] = useState(item.fileUrls ?? []);
@@ -138,11 +142,23 @@ export function Logo({ item }) {
       tempTotal *= ASSEMBLY_FEES;
     }
 
-    const total = tempTotal * sets;
+    let total = tempTotal * parseInt(sets);
+
+    const discount = quantityDiscount(sets, quantityDiscountTable);
+
+    console.log(discount);
+
+    let totalWithDiscount = total * discount;
+
+    let discountPrice = total - totalWithDiscount;
+
+    console.log(discountPrice);
 
     return {
-      singlePrice: tempTotal.toFixed(2) ?? 0,
-      total: total.toFixed(2) ?? 0,
+      singlePrice: tempTotal ?? 0,
+      total: totalWithDiscount?.toFixed(2) ?? 0,
+      totalWithoutDiscount: total,
+      discount: discountPrice,
     };
   }
 
@@ -352,6 +368,10 @@ export function Logo({ item }) {
           sets,
           studLength,
           spacerStandoffDistance,
+          usdDiscount,
+          cadDiscount,
+          usdTotalNoDiscount,
+          cadTotalNoDiscount,
         };
       } else {
         return {
@@ -459,17 +479,25 @@ export function Logo({ item }) {
   ]);
 
   useEffect(() => {
-    const { singlePrice, total } = computePricing();
+    const { singlePrice, total, totalWithoutDiscount, discount } = computePricing();
     if (total && singlePrice) {
       setUsdPrice(total);
       setCadPrice((total * EXCHANGE_RATE).toFixed(2));
       setUsdSinglePrice(singlePrice);
       setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
+      setUsdDiscount(discount.toFixed(2));
+      setCadDiscount((discount * EXCHANGE_RATE).toFixed(2));
+      setCadTotalNoDiscount((totalWithoutDiscount * EXCHANGE_RATE).toFixed(2));
+      setUsdTotalNoDiscount(totalWithoutDiscount.toFixed(2));
     } else {
       setUsdPrice(0);
       setCadPrice(0);
       setUsdSinglePrice(0);
       setCadSinglePrice(0);
+      setUsdDiscount('');
+      setCadDiscount('');
+      setCadTotalNoDiscount('');
+      setUsdTotalNoDiscount('');
     }
   }, [
     width,
