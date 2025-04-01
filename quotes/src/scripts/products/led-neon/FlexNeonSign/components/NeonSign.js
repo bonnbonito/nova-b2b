@@ -4,7 +4,7 @@ import Description from '../../../../Description';
 import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
 import { convertJson } from '../../../../utils/ConvertJson';
-import { quantityDiscount, calculateOversizeShippingAddon } from '../../../../utils/Pricing';
+import { quantityDiscount } from '../../../../utils/Pricing';
 import { arrayRange } from '../../../../utils/SignageOptions';
 import { NeonColors } from '../../components/NeonColors';
 import { flexNeonColorOptions } from '../../neonSignOptions';
@@ -231,29 +231,41 @@ export const NeonSign = ({ item }) => {
       };
     }
 
-    let tempTotal =
-      (parseInt(width) + 3) * (parseInt(height) + 3) * 0.1 + parseInt(neonLength) * 6.9 + 10;
+    let X = parseInt(width);
+    let Y = parseInt(height);
+    let L = parseInt(neonLength);
+
+    let tempTotal = (X + 4) * (Y + 4) * 0.11 + L * 6.9 + 10;
 
     /* minimum price */
     tempTotal = tempTotal > 59 ? tempTotal : 59;
 
-    /*oversize surcharge*/
-    tempTotal += parseInt(width) > 41 || parseInt(height) > 41 ? 150 : 0;
+    /* size-based surcharges */
+    const maxDimension = Math.max(X, Y);
+    if (maxDimension > 65) {
+      tempTotal += 250;
+    } else if (maxDimension > 55) {
+      tempTotal += 200;
+    } else if (maxDimension > 40) {
+      tempTotal += 150;
+    } else if (maxDimension > 22) {
+      tempTotal += 30;
+    }
 
     tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.15;
 
     let additional = 0;
 
     if (acrylicBackingOption === 'UV Printed PVC') {
-      additional = parseInt(width) * parseInt(height) * 0.05;
+      additional = X * Y * 0.05;
       tempTotal += additional;
     }
     if (acrylicBackingOption === 'Frosted Clear Acrylic') {
-      additional = parseInt(width) * parseInt(height) * 0.035;
+      additional = X * Y * 0.035;
       tempTotal += additional;
     }
     if (acrylicBackingOption === 'Clear Acrylic') {
-      additional = parseInt(width) * parseInt(height) * 0.04;
+      additional = X * Y * 0.04;
       tempTotal += additional;
     }
 
@@ -275,10 +287,6 @@ export const NeonSign = ({ item }) => {
     }
 
     tempTotal += remotePrice;
-
-    const sizes = [width, height];
-    const oversizeShippingAddon = calculateOversizeShippingAddon(sizes, tempTotal);
-    tempTotal += oversizeShippingAddon;
 
     let total = tempTotal * parseInt(sets);
 
@@ -388,7 +396,7 @@ export const NeonSign = ({ item }) => {
           value={neonLength}
           onChange={e => setNeonLength(e.target.value)}
           options={neonLengthOptions}
-          info="Please only enter a length provided by a designer familiar with neon tracing<br> to ensure accuracy; otherwise, leave it blank, and we’ll calculate it."
+          info="Please only enter a length provided by a designer familiar with neon tracing<br> to ensure accuracy; otherwise, leave it blank, and we'll calculate it."
         />
 
         <NeonColors

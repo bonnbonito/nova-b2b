@@ -19504,25 +19504,37 @@ const NeonSign = ({
         discount: false
       };
     }
-    let tempTotal = (parseInt(width) + 3) * (parseInt(height) + 3) * 0.1 + parseInt(neonLength) * 6.9 + 10;
+    let X = parseInt(width);
+    let Y = parseInt(height);
+    let L = parseInt(neonLength);
+    let tempTotal = (X + 4) * (Y + 4) * 0.11 + L * 6.9 + 10;
 
     /* minimum price */
     tempTotal = tempTotal > 59 ? tempTotal : 59;
 
-    /*oversize surcharge*/
-    tempTotal += parseInt(width) > 41 || parseInt(height) > 41 ? 150 : 0;
+    /* size-based surcharges */
+    const maxDimension = Math.max(X, Y);
+    if (maxDimension > 65) {
+      tempTotal += 250;
+    } else if (maxDimension > 55) {
+      tempTotal += 200;
+    } else if (maxDimension > 40) {
+      tempTotal += 150;
+    } else if (maxDimension > 22) {
+      tempTotal += 30;
+    }
     tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_10__.INDOOR_NOT_WATERPROOF ? 1 : 1.15;
     let additional = 0;
     if (acrylicBackingOption === 'UV Printed PVC') {
-      additional = parseInt(width) * parseInt(height) * 0.05;
+      additional = X * Y * 0.05;
       tempTotal += additional;
     }
     if (acrylicBackingOption === 'Frosted Clear Acrylic') {
-      additional = parseInt(width) * parseInt(height) * 0.035;
+      additional = X * Y * 0.035;
       tempTotal += additional;
     }
     if (acrylicBackingOption === 'Clear Acrylic') {
-      additional = parseInt(width) * parseInt(height) * 0.04;
+      additional = X * Y * 0.04;
       tempTotal += additional;
     }
     let mountingPrice = 0;
@@ -19538,9 +19550,6 @@ const NeonSign = ({
       remotePrice = 16;
     }
     tempTotal += remotePrice;
-    const sizes = [width, height];
-    const oversizeShippingAddon = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.calculateOversizeShippingAddon)(sizes, tempTotal);
-    tempTotal += oversizeShippingAddon;
     let total = tempTotal * parseInt(sets);
     const discount = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.quantityDiscount)(sets, quantityDiscountTable);
     let totalWithDiscount = total * discount;
@@ -19629,7 +19638,7 @@ const NeonSign = ({
     value: neonLength,
     onChange: e => setNeonLength(e.target.value),
     options: neonLengthOptions,
-    info: "Please only enter a length provided by a designer familiar with neon tracing<br> to ensure accuracy; otherwise, leave it blank, and we\u2019ll calculate it."
+    info: "Please only enter a length provided by a designer familiar with neon tracing<br> to ensure accuracy; otherwise, leave it blank, and we'll calculate it."
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_NeonColors__WEBPACK_IMPORTED_MODULE_8__.NeonColors, {
     colorRef: colorRef,
     colors: color,
