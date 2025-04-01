@@ -113,7 +113,7 @@ export function Logo({ item }) {
     }
 
     if (waterproof) {
-      tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.1;
+      tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.02;
     }
 
     if (selectedFinishing) tempTotal *= selectedFinishing === GLOSS_FINISH ? 1.1 : 1;

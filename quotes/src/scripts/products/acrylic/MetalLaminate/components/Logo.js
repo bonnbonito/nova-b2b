@@ -139,7 +139,7 @@ export function Logo({ item }) {
     tempTotal += computed;
 
     if (waterproof) {
-      tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.1;
+      tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.02;
     }
 
     tempTotal *= METAL_ACRYLIC_PRICING;

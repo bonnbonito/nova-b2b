@@ -6,10 +6,10 @@ import UploadFiles from '../../../../UploadFiles';
 import UploadFont from '../../../../UploadFont';
 import useOutsideClick from '../../../../utils/ClickOutside';
 import convert_json from '../../../../utils/ConvertJson';
+
 import {
   finishingOptions,
   mountingDefaultOptions,
-  setOptions,
   spacerStandoffDefaultOptions,
   studLengthOptions,
   thicknessOptions,
@@ -20,6 +20,7 @@ import {
   calculateLetterPrice,
   spacerPricing,
   calculateOversizeShippingAddon,
+  quantityDiscount,
 } from '../../../../utils/Pricing';
 
 import { colorOptions } from '../ColorOptions';
@@ -39,7 +40,7 @@ import {
   STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
 
-export function Letters({ item }) {
+export function Letters({ item, quantityDiscountTable, setOptions }) {
   const { signage, setSignage, setMissing, hasUploadedFile } = useAppContext();
   const [letters, setLetters] = useState(item.letters ?? '');
   const [comments, setComments] = useState(item.comments ?? '');
@@ -76,6 +77,10 @@ export function Letters({ item }) {
   const [cadPrice, setCadPrice] = useState(item.cadPrice ?? 0);
   const [usdSinglePrice, setUsdSinglePrice] = useState(item.usdSinglePrice ?? 0);
   const [cadSinglePrice, setCadSinglePrice] = useState(item.cadSinglePrice ?? 0);
+  const [usdDiscount, setUsdDiscount] = useState(item.usdDiscount ?? 0);
+  const [usdTotalNoDiscount, setUsdTotalNoDiscount] = useState(item.usdTotalNoDiscount ?? '');
+  const [cadDiscount, setCadDiscount] = useState(item.cadDiscount ?? 0);
+  const [cadTotalNoDiscount, setCadTotalNoDiscount] = useState(item.cadTotalNoDiscount ?? '');
 
   const [mountingOptions, setMountingOptions] = useState(mountingDefaultOptions);
 
@@ -179,6 +184,10 @@ export function Letters({ item }) {
       spacerStandoffDistance,
       usdSinglePrice,
       cadSinglePrice,
+      usdDiscount,
+      usdTotalNoDiscount,
+      cadTotalNoDiscount,
+      cadDiscount,
     };
 
     setSignage(prevSignage =>
@@ -232,7 +241,7 @@ export function Letters({ item }) {
     });
 
     if (waterproof) {
-      tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.1;
+      tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.02;
     }
 
     if (selectedFinishing) {
@@ -258,11 +267,21 @@ export function Letters({ item }) {
       tempTotal *= ASSEMBLY_FEES;
     }
 
-    const total = tempTotal * sets;
+    let total = tempTotal * parseInt(sets);
+
+    const discount = quantityDiscount(sets, quantityDiscountTable);
+
+    let totalWithDiscount = total * discount;
+
+    let discountPrice = total - totalWithDiscount;
+
+    console.log(discountPrice);
 
     return {
-      singlePrice: tempTotal.toFixed(2) ?? 0,
-      total: total?.toFixed(2) ?? 0,
+      singlePrice: tempTotal ?? 0,
+      total: totalWithDiscount?.toFixed(2) ?? 0,
+      totalWithoutDiscount: total,
+      discount: discountPrice,
     };
   };
 
@@ -545,17 +564,25 @@ export function Letters({ item }) {
   }, [color, font]);
 
   useEffect(() => {
-    const { singlePrice, total } = computePricing();
+    const { singlePrice, total, totalWithoutDiscount, discount } = computePricing();
     if (total && singlePrice) {
       setUsdPrice(total);
       setCadPrice((total * EXCHANGE_RATE).toFixed(2));
       setUsdSinglePrice(singlePrice);
       setCadSinglePrice((singlePrice * EXCHANGE_RATE).toFixed(2));
+      setUsdDiscount(discount.toFixed(2));
+      setCadDiscount((discount * EXCHANGE_RATE).toFixed(2));
+      setCadTotalNoDiscount((totalWithoutDiscount * EXCHANGE_RATE).toFixed(2));
+      setUsdTotalNoDiscount(totalWithoutDiscount.toFixed(2));
     } else {
       setUsdPrice(0);
       setCadPrice(0);
       setUsdSinglePrice(0);
       setCadSinglePrice(0);
+      setUsdDiscount('');
+      setCadDiscount('');
+      setCadTotalNoDiscount('');
+      setUsdTotalNoDiscount('');
     }
   }, [
     selectedLetterHeight,

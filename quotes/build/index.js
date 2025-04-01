@@ -12201,7 +12201,7 @@ function Letters({
       tempTotal += (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_10__.calculateLetterPrice)(letter, baseLetterPrice, noLowerCase);
     });
     if (waterproof) {
-      tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
+      tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.INDOOR_NOT_WATERPROOF ? 1 : 1.02;
     }
     if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER) {
       const spacer = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_10__.spacerPricing)(tempTotal);
@@ -13281,7 +13281,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
 /* harmony import */ var _AppProvider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../AppProvider */ "./src/scripts/AppProvider.tsx");
 /* harmony import */ var _Note__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Note */ "./src/scripts/Note.js");
 /* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Sidebar */ "./src/scripts/Sidebar.js");
@@ -13289,6 +13289,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _svg_Icons__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../svg/Icons */ "./src/scripts/svg/Icons.js");
 /* harmony import */ var _components_Letters__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/Letters */ "./src/scripts/products/acrylic/LaserCutAcrylic/components/Letters.js");
 /* harmony import */ var _components_Logo__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/Logo */ "./src/scripts/products/acrylic/LaserCutAcrylic/components/Logo.js");
+/* harmony import */ var _utils_ConvertJson__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../utils/ConvertJson */ "./src/scripts/utils/ConvertJson.js");
+
 
 
 
@@ -13306,9 +13308,14 @@ function LaserCutAcrylic() {
     setTempFolder,
     tempFolderName
   } = (0,_AppProvider__WEBPACK_IMPORTED_MODULE_1__.useAppContext)();
+  const [quantityDiscountTable, setQuantityDiscountTable] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  const [setOptions, setSetOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([(0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    key: "1",
+    value: "1"
+  }, "1")]);
   function setDefaultSignage() {
     setSignage([{
-      id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_9__["default"])(),
       type: 'letters',
       title: 'LETTERS 1',
       letters: '',
@@ -13349,8 +13356,31 @@ function LaserCutAcrylic() {
       setDefaultSignage();
     }
   }, []);
+  async function fetchQuantityDiscountPricing() {
+    try {
+      const response = await fetch(NovaQuote.quantity_discount_api + NovaQuote.product);
+      const data = await response.json();
+      const tableJson = data.pricing_table ? (0,_utils_ConvertJson__WEBPACK_IMPORTED_MODULE_8__.convertJson)(data.pricing_table) : [];
+      setQuantityDiscountTable(tableJson);
+    } catch (error) {
+      console.error('Error fetching discount table pricing:', error);
+    } finally {
+      setSetOptions(Array.from({
+        length: 100
+      }, (_, index) => {
+        const val = 1 + index;
+        return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+          key: index,
+          value: val
+        }, val);
+      }));
+    }
+  }
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    fetchQuantityDiscountPricing();
+  }, []);
   const defaultArgs = {
-    id: (0,uuid__WEBPACK_IMPORTED_MODULE_8__["default"])(),
+    id: (0,uuid__WEBPACK_IMPORTED_MODULE_9__["default"])(),
     comments: '',
     mounting: '',
     acrylicThickness: '',
@@ -13416,7 +13446,7 @@ function LaserCutAcrylic() {
   }
 
   /* useEffect(() => {
-  	localStorage.setItem(storage + '-x', JSON.stringify(signage));
+  localStorage.setItem(storage + '-x', JSON.stringify(signage));
   }, [signage]); */
 
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
@@ -13442,11 +13472,15 @@ function LaserCutAcrylic() {
   }, item.type === 'letters' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Letters__WEBPACK_IMPORTED_MODULE_6__.Letters, {
     key: item.id,
     item: item,
-    productId: item.product
+    productId: item.product,
+    quantityDiscountTable: quantityDiscountTable,
+    setOptions: setOptions
   }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Logo__WEBPACK_IMPORTED_MODULE_7__.Logo, {
     key: item.id,
     item: item,
-    productId: item.product
+    productId: item.product,
+    quantityDiscountTable: quantityDiscountTable,
+    setOptions: setOptions
   }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Note__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Note"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
@@ -13512,9 +13546,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function Letters({
-  item
+  item,
+  quantityDiscountTable,
+  setOptions
 }) {
-  var _item$letters, _item$comments, _item$font, _item$color, _item$waterproof, _item$acrylicThicknes, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fileName, _item$fileUrl, _item$filePath, _item$file, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$finishing, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
+  var _item$letters, _item$comments, _item$font, _item$color, _item$waterproof, _item$acrylicThicknes, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$fileName, _item$fileUrl, _item$filePath, _item$file, _item$fontFileName, _item$fontFileUrl, _item$fontFilePath, _item$fontFile, _item$finishing, _item$customColor, _item$letterHeight, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$usdDiscount, _item$usdTotalNoDisco, _item$cadDiscount, _item$cadTotalNoDisco, _item$mounting, _item$studLength, _item$spacerStandoffD, _item$sets;
   const {
     signage,
     setSignage,
@@ -13553,6 +13589,10 @@ function Letters({
   const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadPrice = item.cadPrice) !== null && _item$cadPrice !== void 0 ? _item$cadPrice : 0);
   const [usdSinglePrice, setUsdSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdSinglePrice = item.usdSinglePrice) !== null && _item$usdSinglePrice !== void 0 ? _item$usdSinglePrice : 0);
   const [cadSinglePrice, setCadSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadSinglePrice = item.cadSinglePrice) !== null && _item$cadSinglePrice !== void 0 ? _item$cadSinglePrice : 0);
+  const [usdDiscount, setUsdDiscount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdDiscount = item.usdDiscount) !== null && _item$usdDiscount !== void 0 ? _item$usdDiscount : 0);
+  const [usdTotalNoDiscount, setUsdTotalNoDiscount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdTotalNoDisco = item.usdTotalNoDiscount) !== null && _item$usdTotalNoDisco !== void 0 ? _item$usdTotalNoDisco : '');
+  const [cadDiscount, setCadDiscount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadDiscount = item.cadDiscount) !== null && _item$cadDiscount !== void 0 ? _item$cadDiscount : 0);
+  const [cadTotalNoDiscount, setCadTotalNoDiscount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadTotalNoDisco = item.cadTotalNoDiscount) !== null && _item$cadTotalNoDisco !== void 0 ? _item$cadTotalNoDisco : '');
   const [mountingOptions, setMountingOptions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.mountingDefaultOptions);
   const [lettersHeight, setLettersHeight] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
     min: 2,
@@ -13637,7 +13677,11 @@ function Letters({
       studLength,
       spacerStandoffDistance,
       usdSinglePrice,
-      cadSinglePrice
+      cadSinglePrice,
+      usdDiscount,
+      usdTotalNoDiscount,
+      cadTotalNoDiscount,
+      cadDiscount
     };
     setSignage(prevSignage => prevSignage.map((sign, index) => {
       if (sign.id === item.id) {
@@ -13658,7 +13702,7 @@ function Letters({
     }));
   }
   const computePricing = () => {
-    var _tempTotal$toFixed, _total$toFixed;
+    var _tempTotal, _totalWithDiscount$to;
     if (!letterPricing.length || !selectedLetterHeight || !selectedThickness || !waterproof || !letters.trim().length) {
       return {
         singlePrice: false,
@@ -13680,7 +13724,7 @@ function Letters({
       tempTotal += (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_9__.calculateLetterPrice)(letter, baseLetterPrice, noLowerCase);
     });
     if (waterproof) {
-      tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
+      tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.INDOOR_NOT_WATERPROOF ? 1 : 1.02;
     }
     if (selectedFinishing) {
       tempTotal *= selectedFinishing === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.GLOSS_FINISH ? 1.1 : 1;
@@ -13701,10 +13745,16 @@ function Letters({
     if (item.isLayered) {
       tempTotal *= _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.ASSEMBLY_FEES;
     }
-    const total = tempTotal * sets;
+    let total = tempTotal * parseInt(sets);
+    const discount = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_9__.quantityDiscount)(sets, quantityDiscountTable);
+    let totalWithDiscount = total * discount;
+    let discountPrice = total - totalWithDiscount;
+    console.log(discountPrice);
     return {
-      singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
-      total: (_total$toFixed = total?.toFixed(2)) !== null && _total$toFixed !== void 0 ? _total$toFixed : 0
+      singlePrice: (_tempTotal = tempTotal) !== null && _tempTotal !== void 0 ? _tempTotal : 0,
+      total: (_totalWithDiscount$to = totalWithDiscount?.toFixed(2)) !== null && _totalWithDiscount$to !== void 0 ? _totalWithDiscount$to : 0,
+      totalWithoutDiscount: total,
+      discount: discountPrice
     };
   };
   const handleOnChangeLetters = e => setLetters(() => e.target.value);
@@ -13903,18 +13953,28 @@ function Letters({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const {
       singlePrice,
-      total
+      total,
+      totalWithoutDiscount,
+      discount
     } = computePricing();
     if (total && singlePrice) {
       setUsdPrice(total);
       setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.EXCHANGE_RATE).toFixed(2));
       setUsdSinglePrice(singlePrice);
       setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.EXCHANGE_RATE).toFixed(2));
+      setUsdDiscount(discount.toFixed(2));
+      setCadDiscount((discount * _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.EXCHANGE_RATE).toFixed(2));
+      setCadTotalNoDiscount((totalWithoutDiscount * _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.EXCHANGE_RATE).toFixed(2));
+      setUsdTotalNoDiscount(totalWithoutDiscount.toFixed(2));
     } else {
       setUsdPrice(0);
       setCadPrice(0);
       setUsdSinglePrice(0);
       setCadSinglePrice(0);
+      setUsdDiscount('');
+      setCadDiscount('');
+      setCadTotalNoDiscount('');
+      setUsdTotalNoDiscount('');
     }
   }, [selectedLetterHeight, selectedThickness, selectedFinishing, letters, waterproof, color, sets, font, selectedMounting, letterPricing]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, item.productLine && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -14045,7 +14105,7 @@ function Letters({
   })), !item.hideQuantity && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_8__.setOptions,
+    options: setOptions,
     value: sets,
     onlyValue: true
   })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_13__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -14119,9 +14179,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function Logo({
-  item
+  item,
+  quantityDiscountTable,
+  setOptions
 }) {
-  var _item$mounting, _item$studLength, _item$spacerStandoffD, _item$acrylicThicknes, _item$width, _item$height, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$sets, _item$color, _item$customColor, _item$finishing, _item$comments, _item$waterproof;
+  var _item$mounting, _item$studLength, _item$spacerStandoffD, _item$acrylicThicknes, _item$width, _item$height, _item$usdPrice, _item$cadPrice, _item$usdSinglePrice, _item$cadSinglePrice, _item$usdDiscount, _item$usdTotalNoDisco, _item$cadDiscount, _item$cadTotalNoDisco, _item$fileNames, _item$fileUrls, _item$filePaths, _item$files, _item$sets, _item$color, _item$customColor, _item$finishing, _item$comments, _item$waterproof;
   const {
     signage,
     setSignage,
@@ -14177,6 +14239,10 @@ function Logo({
   const [cadPrice, setCadPrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadPrice = item.cadPrice) !== null && _item$cadPrice !== void 0 ? _item$cadPrice : 0);
   const [usdSinglePrice, setUsdSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdSinglePrice = item.usdSinglePrice) !== null && _item$usdSinglePrice !== void 0 ? _item$usdSinglePrice : 0);
   const [cadSinglePrice, setCadSinglePrice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadSinglePrice = item.cadSinglePrice) !== null && _item$cadSinglePrice !== void 0 ? _item$cadSinglePrice : 0);
+  const [usdDiscount, setUsdDiscount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdDiscount = item.usdDiscount) !== null && _item$usdDiscount !== void 0 ? _item$usdDiscount : 0);
+  const [usdTotalNoDiscount, setUsdTotalNoDiscount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$usdTotalNoDisco = item.usdTotalNoDiscount) !== null && _item$usdTotalNoDisco !== void 0 ? _item$usdTotalNoDisco : '');
+  const [cadDiscount, setCadDiscount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadDiscount = item.cadDiscount) !== null && _item$cadDiscount !== void 0 ? _item$cadDiscount : 0);
+  const [cadTotalNoDiscount, setCadTotalNoDiscount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$cadTotalNoDisco = item.cadTotalNoDiscount) !== null && _item$cadTotalNoDisco !== void 0 ? _item$cadTotalNoDisco : '');
   const [fileNames, setFileNames] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileNames = item.fileNames) !== null && _item$fileNames !== void 0 ? _item$fileNames : []);
   const [fileUrls, setFileUrls] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$fileUrls = item.fileUrls) !== null && _item$fileUrls !== void 0 ? _item$fileUrls : []);
   const [filePaths, setFilePaths] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_item$filePaths = item.filePaths) !== null && _item$filePaths !== void 0 ? _item$filePaths : []);
@@ -14302,7 +14368,11 @@ function Logo({
           studLength,
           spacerStandoffDistance,
           usdSinglePrice,
-          cadSinglePrice
+          cadSinglePrice,
+          usdDiscount,
+          usdTotalNoDiscount,
+          cadTotalNoDiscount,
+          cadDiscount
         };
       } else {
         return {
@@ -14329,7 +14399,7 @@ function Logo({
     fetchLogoPricing();
   }, []);
   function computePricing() {
-    var _tempTotal$toFixed;
+    var _tempTotal, _totalWithDiscount$to;
     if (!width || !height || !selectedThickness || !waterproof || logoPricingObject === null) {
       return {
         singlePrice: false,
@@ -14350,7 +14420,7 @@ function Logo({
       tempTotal += baseLogoPricing;
     }
     if (waterproof) {
-      tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
+      tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.INDOOR_NOT_WATERPROOF ? 1 : 1.02;
     }
     if (selectedFinishing) {
       tempTotal *= selectedFinishing === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.GLOSS_FINISH ? 1.1 : 1;
@@ -14373,27 +14443,43 @@ function Logo({
     if (item.isLayered) {
       tempTotal *= _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.ASSEMBLY_FEES;
     }
-    const total = tempTotal * sets;
+    let total = tempTotal * parseInt(sets);
+    const discount = (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_6__.quantityDiscount)(sets, quantityDiscountTable);
+    let totalWithDiscount = total * discount;
+    let discountPrice = total - totalWithDiscount;
+    console.log(discountPrice);
     return {
-      singlePrice: (_tempTotal$toFixed = tempTotal.toFixed(2)) !== null && _tempTotal$toFixed !== void 0 ? _tempTotal$toFixed : 0,
-      total: total !== null && total !== void 0 ? total : 0
+      singlePrice: (_tempTotal = tempTotal) !== null && _tempTotal !== void 0 ? _tempTotal : 0,
+      total: (_totalWithDiscount$to = totalWithDiscount?.toFixed(2)) !== null && _totalWithDiscount$to !== void 0 ? _totalWithDiscount$to : 0,
+      totalWithoutDiscount: total,
+      discount: discountPrice
     };
   }
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const {
       singlePrice,
-      total
+      total,
+      totalWithoutDiscount,
+      discount
     } = computePricing();
     if (total && singlePrice) {
       setUsdPrice(total);
       setCadPrice((total * _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.EXCHANGE_RATE).toFixed(2));
       setUsdSinglePrice(singlePrice);
       setCadSinglePrice((singlePrice * _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.EXCHANGE_RATE).toFixed(2));
+      setUsdDiscount(discount.toFixed(2));
+      setCadDiscount((discount * _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.EXCHANGE_RATE).toFixed(2));
+      setCadTotalNoDiscount((totalWithoutDiscount * _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.EXCHANGE_RATE).toFixed(2));
+      setUsdTotalNoDiscount(totalWithoutDiscount.toFixed(2));
     } else {
       setUsdPrice(0);
       setCadPrice(0);
       setUsdSinglePrice(0);
       setCadSinglePrice(0);
+      setUsdDiscount('');
+      setCadDiscount('');
+      setCadTotalNoDiscount('');
+      setUsdTotalNoDiscount('');
     }
   }, [width, height, selectedThickness, waterproof, selectedFinishing, sets, color, selectedMounting, logoPricingObject]);
   const checkAndAddMissingFields = () => {
@@ -14544,7 +14630,7 @@ function Logo({
   })), !item.hideQuantity && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
     title: "Quantity",
     onChange: handleOnChangeSets,
-    options: _utils_SignageOptions__WEBPACK_IMPORTED_MODULE_7__.setOptions,
+    options: setOptions,
     value: sets,
     onlyValue: true
   })), selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_11__.STUD_WITH_SPACER && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -15349,7 +15435,7 @@ const acrylicBaseOptions = [{
 }, {
   option: 'Custom (Pantone Code)'
 }];
-const METAL_ACRYLIC_PRICING = 1.3;
+const METAL_ACRYLIC_PRICING = 1.4;
 function MetalLaminate() {
   const {
     signage,
@@ -15462,7 +15548,7 @@ function MetalLaminate() {
   }
 
   /* useEffect(() => {
-  	localStorage.setItem(storage + '-x', JSON.stringify(signage));
+  localStorage.setItem(storage + '-x', JSON.stringify(signage));
   }, [signage]); */
 
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
@@ -15704,7 +15790,7 @@ const Letters = ({
     lettersArray.forEach(letter => {
       tempTotal += (0,_utils_Pricing__WEBPACK_IMPORTED_MODULE_13__.calculateLetterPrice)(letter, baseLetterPrice, noLowerCase);
     });
-    tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
+    tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.INDOOR_NOT_WATERPROOF ? 1 : 1.02;
     tempTotal *= acrylicBase?.name === 'Black' ? 1 : 1.1;
     tempTotal *= _MetalLaminate__WEBPACK_IMPORTED_MODULE_11__.METAL_ACRYLIC_PRICING;
     if (selectedMounting === _utils_defaults__WEBPACK_IMPORTED_MODULE_12__.STUD_WITH_SPACER) {
@@ -16213,7 +16299,7 @@ function Logo({
     let tempTotal = 0;
     tempTotal += computed;
     if (waterproof) {
-      tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
+      tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_9__.INDOOR_NOT_WATERPROOF ? 1 : 1.02;
     }
     tempTotal *= _MetalLaminate__WEBPACK_IMPORTED_MODULE_8__.METAL_ACRYLIC_PRICING;
     tempTotal *= acrylicBase?.name === 'Black' ? 1 : 1.1;
@@ -16824,7 +16910,7 @@ function Logo({
       tempTotal += computed;
     }
     if (waterproof) {
-      tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.INDOOR_NOT_WATERPROOF ? 1 : 1.1;
+      tempTotal *= waterproof === _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.INDOOR_NOT_WATERPROOF ? 1 : 1.02;
     }
     if (selectedFinishing) tempTotal *= selectedFinishing === _utils_defaults__WEBPACK_IMPORTED_MODULE_7__.GLOSS_FINISH ? 1.1 : 1;
     if (baseColor) tempTotal *= baseColor === 'Custom Color' ? UV_PRICE : 1;

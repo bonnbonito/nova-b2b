@@ -2143,6 +2143,11 @@ class Nova_Quote {
 
 		$table = get_field( 'multiple_quantity_discount', $id );
 
+		if ( ! $table ) {
+			$parent_id = wp_get_post_parent_id( $id );
+			$table = get_field( 'multiple_quantity_discount', $parent_id );
+		}
+
 		return $table;
 	}
 

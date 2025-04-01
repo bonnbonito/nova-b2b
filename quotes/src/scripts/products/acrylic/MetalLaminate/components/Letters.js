@@ -206,7 +206,7 @@ export const Letters = ({ item }) => {
       tempTotal += calculateLetterPrice(letter, baseLetterPrice, noLowerCase);
     });
 
-    tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.1;
+    tempTotal *= waterproof === INDOOR_NOT_WATERPROOF ? 1 : 1.02;
     tempTotal *= acrylicBase?.name === 'Black' ? 1 : 1.1;
     tempTotal *= METAL_ACRYLIC_PRICING;
 
