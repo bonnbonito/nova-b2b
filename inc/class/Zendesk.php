@@ -48,17 +48,26 @@ class Zendesk {
 	}
 
 	public function update_order_with_ticket( WP_REST_Request $request ) {
-		$order_id = $request->get_param( 'order_id' );
-		$ticket_id = $request->get_param( 'ticket_id' );
 
-		if ( ! $order_id || ! $ticket_id ) {
-			return new WP_Error( 'missing_parameters', 'Missing order_id or ticket_id', array( 'status' => 400 ) );
+		$payload = $request->get_json_params();
+
+		if ( ! isset( $payload['ticket'] ) || ! isset( $payload['ticket']['id'] ) || ! isset( $payload['ticket']['subject'] ) ) {
+			return new WP_Error( 'missing_parameters', 'Missing ticket id or subject', array( 'status' => 400 ) );
 		}
 
-		$order = wc_get_order( $order_id );
+		$ticket_id = $payload['ticket']['id'];
+		$subject = $payload['ticket']['subject'];
 
+		if ( preg_match( '/#NV(\d+)/', $subject, $matches ) ) {
+			$order_id = $matches[1]; // e.g., "131328"
+		} else {
+			return new WP_Error( 'invalid_subject', 'Could not extract order ID from subject', array( 'status' => 400 ) );
+		}
+
+
+		$order = wc_get_order( $order_id );
 		if ( ! $order ) {
-			return new WP_Error( 'invalid_order', 'Invalid order', array( 'status' => 400 ) );
+			return new WP_Error( 'order_not_found', 'Order not found', array( 'status' => 404 ) );
 		}
 
 		$order->update_meta_data( 'zendesk_ticket_id', $ticket_id );
