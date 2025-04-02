@@ -31,6 +31,7 @@ class Shortcodes {
 		add_shortcode( 'login_title', array( $this, 'login_title' ) );
 	}
 
+
 	public function login_title() {
 		ob_start();
 		if ( ! is_woocommerce() ) {
