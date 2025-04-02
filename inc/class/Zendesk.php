@@ -55,13 +55,12 @@ class Zendesk {
 		if ( ! $subject || ! $ticket_id ) {
 			return new WP_Error( 'missing_parameters', 'Missing subject or ticket_id', array( 'status' => 400 ) );
 		}
-
-		if ( preg_match( '/#NV(\d+)/', $subject, $matches ) ) {
-			$order_id = $matches[1]; // e.g., "131328"
+		// Try to extract order ID from subject
+		if ( preg_match( '/^\[NOVA\]: New order #NV(\d+)$/', $subject, $matches ) ) {
+			$order_id = $matches[1];
 		} else {
 			return new WP_Error( 'invalid_subject', 'Could not extract order ID from subject', array( 'status' => 400 ) );
 		}
-
 
 		$order = wc_get_order( $order_id );
 		if ( ! $order ) {
