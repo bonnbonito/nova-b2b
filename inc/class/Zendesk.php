@@ -49,14 +49,12 @@ class Zendesk {
 
 	public function update_order_with_ticket( WP_REST_Request $request ) {
 
-		$payload = $request->get_json_params();
+		$subject = $request->get_param( 'subject' ); // e.g., "131328"
+		$ticket_id = $request->get_param( 'ticket_id' ); // Zendesk ticket ID
 
-		if ( ! isset( $payload['ticket'] ) || ! isset( $payload['ticket']['id'] ) || ! isset( $payload['ticket']['subject'] ) ) {
-			return new WP_Error( 'missing_parameters', 'Missing ticket id or subject', array( 'status' => 400 ) );
+		if ( ! $subject || ! $ticket_id ) {
+			return new WP_Error( 'missing_parameters', 'Missing subject or ticket_id', array( 'status' => 400 ) );
 		}
-
-		$ticket_id = $payload['ticket']['id'];
-		$subject = $payload['ticket']['subject'];
 
 		if ( preg_match( '/#NV(\d+)/', $subject, $matches ) ) {
 			$order_id = $matches[1]; // e.g., "131328"
