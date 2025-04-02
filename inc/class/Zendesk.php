@@ -49,6 +49,8 @@ class Zendesk {
 
 	public function update_order_with_ticket( WP_REST_Request $request ) {
 
+		error_log( print_r( $request->get_params(), true ) );
+
 		$subject = $request->get_param( 'subject' ); // e.g., "131328"
 		$ticket_id = $request->get_param( 'ticket_id' ); // Zendesk ticket ID
 
