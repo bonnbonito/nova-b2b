@@ -68,6 +68,10 @@ class Zendesk {
 			return new WP_Error( 'order_not_found', 'Order not found', array( 'status' => 404 ) );
 		}
 
+		if ( $order->get_meta( 'zendesk_ticket_id' ) ) {
+			return new WP_Error( 'ticket_already_exists', 'Ticket already exists', array( 'status' => 400 ) );
+		}
+
 		$order->update_meta_data( 'zendesk_ticket_id', $ticket_id );
 		$order->save();
 
