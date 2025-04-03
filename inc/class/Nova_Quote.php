@@ -1698,8 +1698,12 @@ class Nova_Quote {
 			wp_send_json( $status );
 		}
 
+		$editing = false;
+
 		if ( isset( $_POST['quote_id'] ) && isset( $_POST['editing'] ) && $_POST['editing'] === 'edit' ) {
+			$editing = true;
 			$post_id = $_POST['quote_id'];
+
 		} else {
 
 			$partner_id = $_POST['partner'];
@@ -1747,6 +1751,10 @@ class Nova_Quote {
 
 			if ( isset( $_POST['other_email'] ) ) {
 				update_post_meta( $post_id, 'other_email', $_POST['other_email'] );
+			}
+
+			if ( $editing ) {
+				update_post_meta( $post_id, 'editing', 'edit' );
 			}
 
 			update_field( 'frontend_title', $_POST['title'], $post_id );

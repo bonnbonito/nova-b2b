@@ -622,6 +622,8 @@ class NovaEmails {
 
 		$post = get_post( $post_id );
 
+		$editing = get_post_meta( $post_id, 'editing', true );
+
 		$author = get_user_by( 'id', $post->post_author );
 
 		/** if author has a role of 'customer-rep' or 'admin', then return */
@@ -702,7 +704,9 @@ class NovaEmails {
 			$role_instance->send_email( $to_admin, $admin_subject, $to_admin_message, $headers, array() );
 			if ( ! $from_admin ) {
 				$role_instance->send_email( 'joshua@hineon.com', $josh_subject, $to_admin_message, $headers, array() );
-				$role_instance->send_email( 'quotes@novasignage.com', $admin_subject, $to_admin_message, $headers_admin, array() );
+				if ( ! $editing ) {
+					//$role_instance->send_email( 'quotes@novasignage.com', $admin_subject, $to_admin_message, $headers_admin, array() );
+				}
 			}
 		} else {
 			error_log( 'NOVA_B2B\Roles::get_instance() returned null' );
@@ -735,6 +739,10 @@ class NovaEmails {
 		if ( ! $user_id ) {
 			return;
 		}
+
+		$editing = get_post_meta( $post_id, 'editing', true );
+
+		error_log( 'editing: ' . $editing );
 
 		// Retrieve user information
 		$user_info = get_userdata( $user_id );
@@ -798,7 +806,9 @@ class NovaEmails {
 			$role_instance->send_email( $to_admin, $admin_subject, $to_admin_message, $headers, array() );
 			if ( ! $from_admin ) {
 				$role_instance->send_email( 'joshua@hineon.com', $josh_subject, $to_admin_message, $headers, array() );
-				$role_instance->send_email( 'quotes@novasignage.com', $josh_subject, $to_admin_message, $headers, array() );
+				if ( ! $editing ) {
+					$role_instance->send_email( 'quotes@novasignage.com', $josh_subject, $to_admin_message, $headers, array() );
+				}
 			}
 		} else {
 			error_log( 'NOVA_B2B\Roles::get_instance() returned null' );
