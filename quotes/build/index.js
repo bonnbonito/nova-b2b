@@ -39440,7 +39440,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   graphicsStyleOptions: () => (/* binding */ graphicsStyleOptions)
 /* harmony export */ });
-const graphicsStyleOptions = ['Recessed', 'Extra Recessed'];
+const graphicsStyleOptions = ['Recessed', 'Extra Recessed', 'Reversed'];
 
 /***/ }),
 
