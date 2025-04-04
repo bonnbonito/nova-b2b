@@ -193,7 +193,7 @@ class Zendesk {
 		$data = array(
 			'ticket' => array(
 				'comment' => array(
-					'body' => $message,
+					'html_body' => $message,
 					'public' => true,
 				),
 			),

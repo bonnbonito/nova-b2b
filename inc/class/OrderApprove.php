@@ -27,10 +27,10 @@ class OrderApprove {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueu_script' ) );
 		add_action( 'wp_ajax_approve_mockup', array( $this, 'approve_mockup' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueu_scripts' ) );
-		add_action( 'wp_ajax_update_email_mockup', array( $this, 'send_zendesk_reply' ) );
+		add_action( 'wp_ajax_update_email_mockup', array( $this, 'update_email_mockup' ) );
 	}
 
-	public function send_zendesk_reply() {
+	public function update_email_mockup() {
 		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'order_approve_nonce' ) ) {
 			wp_send_json_error( 'Security check failed.' );
 			wp_die();
@@ -45,50 +45,37 @@ class OrderApprove {
 
 		$ticket_id = $_POST['ticket_id'];
 
-		// Get customer email and name.
-		$customer_email = $order->get_billing_email();
-
-		$additional_recipients = get_post_meta( $order_id, '_additional_recipients', true );
-		if ( ! empty( $additional_recipients ) ) {
-			$customer_email_array = array( $customer_email );
-			$additional_recipients = trim( $additional_recipients );
-			$additional_recipients = explode( ',', $additional_recipients );
-			$customer_email = array_merge( $customer_email_array, $additional_recipients );
-		}
+		$to = $_POST['zendesk_user'];
 
 		$customer_name = $order->get_billing_first_name();
 
-		$headers = array();
-		$headers[] = 'Content-Type: text/html; charset=UTF-8';
-		$headers[] = 'From: NOVA Signage <quotes@novasignage.com>';
-		$headers[] = 'Reply-To: NOVA Signage <quotes@novasignage.com>';
 		$attachments = array();
 
 		if ( class_exists( '\WPO\WC\PDF_Invoices\Main' ) ) {
 			$attachments = \WPO\WC\PDF_Invoices\Main::instance()->attach_document_to_email( array(), 'customer_invoice', $order, null );
 		}
 
-		$role_instance = \NOVA_B2B\Roles::get_instance();
+		$zendesk = \NOVA_B2B\Zendesk::get_instance();
 
-		if ( $role_instance ) {
-			$subject = 'Order #' . $order->get_order_number() . '- Please Review Mockup and Production Drawing';
-			$heading = 'Order #' . $order->get_order_number() . ' is Ready for Review';
-			$message = '<p>Dear ' . $customer_name . ',</p>' . "\n\n";
-			$message .= '<p>Please review the mockup and production drawing for Order #' . $order->get_order_number() . '. We need your confirmation before the production begins.</p>' . "\n\n";
-			$message .= '<p><strong>MOCKUPS & PRODUCTION DRAWING HERE:</strong><br>';
+		if ( $zendesk ) {
+
+			$message = 'Dear ' . $customer_name . ',' . "\n\n";
+			$message .= 'Please review the mockup and production drawing for Order #' . $order->get_order_number() . '. We need your confirmation before the production begins.' . "\n\n";
+			$message .= 'MOCKUPS & PRODUCTION DRAWING HERE:';
 			$message .= home_url() . '/review-mockup?order_id=' . $order_id . '</p>';
 			$message .= '<p><strong>Approve if:</strong><br>';
 			$message .= 'All details are correct. Once you approve, changes cannot be made. We will start the production after approval.</p>';
 			$message .= '<p><strong>Revise if:</strong><br>';
 			$message .= 'You need to change a detail. We will revise it based on your comment within 24 business hours.</p>' . "\n\n";
-			$message .= '<p>Best regards,<br>';
-			$message .= 'Nova Signage</p>' . "\n\n";
 
-			$role_instance->send_email( $customer_email, $subject, $message, $headers, $attachments, $heading );
-
+			$zendesk->send_zendesk_reply( $to, $ticket_id, $message );
 			wp_send_json_success( 'Email sent successfully.' );
-			wp_die();
+
 		}
+
+
+		wp_die();
+
 	}
 
 	public function update_email_mockup_old() {
@@ -183,7 +170,7 @@ class OrderApprove {
 		}
 
 
-		wp_register_script( 'order-approve', get_stylesheet_directory_uri() . '/assets/js/order-approve.js', array(), wp_get_theme()->get( 'Version' ), false, false );
+		wp_register_script( 'order-approve', get_stylesheet_directory_uri() . '/assets/js/order-approve.js', array(), wp_get_theme()->get( 'Version' ), false );
 
 		wp_localize_script(
 			'order-approve',
