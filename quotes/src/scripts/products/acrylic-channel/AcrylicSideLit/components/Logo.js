@@ -378,6 +378,7 @@ export function Logo({ item }) {
     width,
     frontOption,
     height,
+    hasUploadedFile,
   ]);
 
   useOutsideClick([colorRef], () => {

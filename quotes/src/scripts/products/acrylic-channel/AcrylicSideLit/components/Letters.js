@@ -462,6 +462,7 @@ export function Letters({ item }) {
     usdSinglePrice,
     cadSinglePrice,
     metalLaminate,
+    hasUploadedFile,
   ]);
 
   if (frontOption === 'Painted') {

@@ -387,6 +387,7 @@ export function Logo({ item }) {
     usdSinglePrice,
     cadSinglePrice,
     backOption,
+    hasUploadedFile,
   ]);
 
   if (frontAcrylicCover === '3M 3630 Vinyl') {

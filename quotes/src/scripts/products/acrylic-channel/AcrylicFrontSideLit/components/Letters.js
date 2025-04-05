@@ -471,6 +471,7 @@ export function Letters({ item }) {
     vinylWhite,
     vinyl3635,
     frontAcrylicCover,
+    hasUploadedFile,
   ]);
 
   if (frontAcrylicCover === '3M 3630 Vinyl') {

@@ -63,7 +63,7 @@ const lettersHeight = {
 };
 
 export function Letters({ item }) {
-  const { signage, setSignage, setMissing } = useAppContext();
+  const { signage, setSignage, setMissing, hasUploadedFile } = useAppContext();
   const [letters, setLetters] = useState(item.letters ?? '');
   const [comments, setComments] = useState(item.comments ?? '');
   const [font, setFont] = useState(item.font ?? '');
@@ -430,6 +430,7 @@ export function Letters({ item }) {
     sets,
     studLength,
     spacerStandoffDistance,
+    hasUploadedFile,
   ]);
 
   useEffect(() => {
@@ -462,6 +463,7 @@ export function Letters({ item }) {
     usdSinglePrice,
     cadSinglePrice,
     includedItems,
+    hasUploadedFile,
   ]);
 
   useOutsideClick([colorRef, fontRef], () => {

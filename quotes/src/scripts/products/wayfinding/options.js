@@ -1,1 +1,1 @@
-export const graphicsStyleOptions = ['Recessed', 'Extra Recessed', 'Reversed'];
+export const graphicsStyleOptions = ['Recessed', 'Extra Recessed'];

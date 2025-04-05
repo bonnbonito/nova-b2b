@@ -65,7 +65,7 @@ const lettersHeight = {
 };
 
 export function Letters({ item }) {
-  const { signage, setSignage, setMissing } = useAppContext();
+  const { signage, setSignage, setMissing, hasUploadedFile } = useAppContext();
   const [letters, setLetters] = useState(item.letters ?? '');
   const [comments, setComments] = useState(item.comments ?? '');
   const [font, setFont] = useState(item.font ?? '');
@@ -507,6 +507,7 @@ export function Letters({ item }) {
     vinyl3635,
     frontBackVinyl,
     frontAcrylicCover,
+    hasUploadedFile,
   ]);
 
   useEffect(() => {
@@ -541,6 +542,7 @@ export function Letters({ item }) {
     ledLightColor,
     usdSinglePrice,
     cadSinglePrice,
+    hasUploadedFile,
     backOption,
   ]);
 

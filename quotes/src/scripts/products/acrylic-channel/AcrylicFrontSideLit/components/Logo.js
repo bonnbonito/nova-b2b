@@ -368,6 +368,7 @@ export function Logo({ item }) {
     frontAcrylicCover,
     width,
     height,
+    hasUploadedFile,
   ]);
 
   useOutsideClick([vinylRef], () => {
