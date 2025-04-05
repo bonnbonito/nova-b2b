@@ -153,6 +153,9 @@ class Zendesk {
 			echo '<br/><a href="https://' . self::ZENDESK_DOMAIN . '/agent/tickets/' . esc_attr( $ticket_id ) . '" target="_blank" class="button button-small" style="margin-top:5px;">View Ticket</a>';
 		}
 		echo '</p>';
+		echo '<style>';
+		echo '#zendesk_ticket_id:target{ border: 2px solid red !important; }';
+		echo '</style>';
 	}
 
 	/**
@@ -198,7 +201,10 @@ class Zendesk {
 		);
 
 		if ( ! empty( $files_urls ) ) {
-
+			$files_tokens = array();
+			foreach ( $files_urls as $file_url ) {
+				$files_tokens[] = $this->upload_files_to_zendesk( $file_url, $email );
+			}
 		}
 
 		$data = array(
@@ -206,6 +212,7 @@ class Zendesk {
 				'comment' => array(
 					'html_body' => $message,
 					'public' => true,
+					'uploads' => $files_tokens,
 				),
 			),
 		);
@@ -233,36 +240,89 @@ class Zendesk {
 		return true;
 	}
 
-	/** Upload files to Zendesk */
-	public function upload_files_to_zendesk( $files_urls, $email ) {
-		$url = 'https://' . self::ZENDESK_DOMAIN . '/api/v2/uploads.json';
+	/**
+	 * Upload files to Zendesk from a Dropbox URL without saving to a temporary file
+	 *
+	 * @param string $file_url Dropbox file URL
+	 * @param string $email
+	 * @return string|WP_Error Upload token or error
+	 */
+	public function upload_files_to_zendesk( $file_url, $email ) {
+		// Step 1: Download the file from Dropbox using wp_remote_get
+		$file_url = str_replace( 'dl=0', 'dl=1', $file_url );
+		$response = wp_remote_get( $file_url, array(
+			'timeout' => 60,
+			'redirection' => 10,
+			'sslverify' => false, // Optional: Disable for testing
+			'headers' => array(
+				'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+				'Accept' => 'application/pdf,application/octet-stream',
+			),
+		) );
+
+		if ( is_wp_error( $response ) ) {
+			error_log( 'Dropbox download failed: ' . $response->get_error_message() );
+			return new WP_Error( 'download_error', 'Failed to download file from Dropbox', array( 'status' => 500 ) );
+		}
+
+		$response_code = wp_remote_retrieve_response_code( $response );
+		if ( $response_code !== 200 ) {
+			error_log( 'Dropbox download failed with code ' . $response_code . ': ' . wp_remote_retrieve_body( $response ) );
+			return new WP_Error( 'download_error', 'Failed to download file from Dropbox', array( 'status' => $response_code ) );
+		}
+
+		$file_content = wp_remote_retrieve_body( $response );
+		if ( empty( $file_content ) ) {
+			error_log( 'Downloaded file content is empty for URL: ' . $file_url );
+			return new WP_Error( 'download_error', 'Downloaded file is empty', array( 'status' => 500 ) );
+		}
+
+		error_log( 'File downloaded successfully. Size: ' . strlen( $file_content ) . ' bytes' );
+
+		// Step 2: Determine MIME type from buffer (no temp file)
+		$finfo = new \finfo( FILEINFO_MIME_TYPE );
+		$mime_type = $finfo->buffer( $file_content );
+		error_log( 'MIME type detected: ' . $mime_type );
+
+		// Step 3: Upload to Zendesk
+		$filename = basename( parse_url( $file_url, PHP_URL_PATH ) ); // e.g., "CABC-S003-MEIGARDEN-2714-3D-Layered-Flat-Cut-Acrylic.pdf"
+		$url = 'https://' . self::ZENDESK_DOMAIN . '/api/v2/uploads.json?filename=' . urlencode( $filename );
 		$headers = array(
 			'Authorization' => 'Basic ' . $this->zendesk_bearer_token( $email ),
-			'Content-Type' => 'application/json',
+			'Content-Type' => $mime_type,
 		);
 
 		$args_upload = array(
 			'method' => 'POST',
 			'headers' => $headers,
-			'body' => json_encode( $data ),
+			'body' => $file_content,
+			'timeout' => 60
 		);
 
 		$upload_response = wp_remote_request( $url, $args_upload );
 
 		if ( is_wp_error( $upload_response ) ) {
-			error_log( print_r( $upload_response, true ) );
+			error_log( 'Zendesk upload failed: ' . $upload_response->get_error_message() );
 			return new WP_Error( 'zendesk_api_error', 'Failed to upload files', array( 'status' => 500 ) );
 		}
 
 		$response_code = wp_remote_retrieve_response_code( $upload_response );
-
-		if ( $response_code !== 200 ) {
-			error_log( print_r( $upload_response, true ) );
+		if ( $response_code !== 201 ) {
+			error_log( 'Zendesk upload failed with code ' . $response_code . ': ' . wp_remote_retrieve_body( $upload_response ) );
 			return new WP_Error( 'zendesk_api_error', 'Failed to upload files', array( 'status' => $response_code ) );
 		}
 
-		/**return token */
-		$response_body = json_decode( $upload_response['body'], true );
+		$response_body = json_decode( wp_remote_retrieve_body( $upload_response ), true );
 		return $response_body['upload']['token'];
+	}
+
+	/**
+	 * Merge multiple pdf files into one pdf file
+	 *
+	 * @param array $files_urls
+	 * @return string
+	 */
+	public function merge_files( $files_urls ) {
+		return false;
 	}
 }

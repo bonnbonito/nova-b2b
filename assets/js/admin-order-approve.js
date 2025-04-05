@@ -1,5 +1,30 @@
 function nova_order_approve() {
 	const reviewLink = document.getElementById('reviewLink');
+	reviewLink.innerHTML = OrderApprove.review_url;
+	if (OrderApprove.ticket_id) {
+		has_zendesk_ticket();
+	} else {
+		const button = document.createElement('a');
+		const sendMockupEmailDiv = document.getElementById('sendMockupEmailDiv');
+		const zendeskTicket = document.getElementById('zendesk_ticket_id');
+		button.id = 'createZendeskTicket';
+		button.className = 'button button-primary';
+		button.textContent = 'Add Zendesk Ticket';
+		button.style.marginTop = '10px';
+		button.href = '#zendesk_ticket_id';
+		sendMockupEmailDiv.appendChild(button);
+	}
+}
+
+if (document.readyState === 'loading') {
+	// Loading hasn't finished yet
+	document.addEventListener('DOMContentLoaded', nova_order_approve);
+} else {
+	// `DOMContentLoaded` has already fired
+	nova_order_approve();
+}
+
+function has_zendesk_ticket() {
 	const sendMockupEmailDiv = document.getElementById('sendMockupEmailDiv');
 	const zendeskUsers = OrderApprove.zendesk_users;
 
@@ -70,8 +95,6 @@ function nova_order_approve() {
 		button.style.display = this.value ? 'inline-block' : 'none';
 	});
 
-	reviewLink.innerHTML = OrderApprove.review_url;
-
 	button.addEventListener('click', async function (event) {
 		event.preventDefault();
 
@@ -112,12 +135,4 @@ function nova_order_approve() {
 			button.textContent = 'Error sending email';
 		}
 	});
-}
-
-if (document.readyState === 'loading') {
-	// Loading hasn't finished yet
-	document.addEventListener('DOMContentLoaded', nova_order_approve);
-} else {
-	// `DOMContentLoaded` has already fired
-	nova_order_approve();
 }
