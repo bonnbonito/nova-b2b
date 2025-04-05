@@ -43,6 +43,51 @@ class OrderApprove {
 			wp_die();
 		}
 
+		$ticket_id = $_POST['ticket_id'];
+
+		$to = $_POST['zendesk_user'];
+
+		$customer_name = $order->get_billing_first_name();
+
+		$files_urls = $this->get_dropbox_url_files( $order_id );
+
+
+		$zendesk = \NOVA_B2B\Zendesk::get_instance();
+
+		if ( $zendesk ) {
+
+			$message = '<p>Dear ' . $customer_name . ',</p>' . "\n\n";
+			$message .= '<p>Please review the mockup and production drawing for Order <strong>#' . $order->get_order_number() . '</strong>.</p><p>We need your confirmation before the production begins.</p><br>' . "\n\n";
+			$message .= '<p>MOCKUPS & PRODUCTION DRAWING HERE:<br>' . "\n\n";
+			$message .= '<a href="' . home_url() . '/review-mockup?order_id=' . $order_id . '">' . home_url() . '/review-mockup?order_id=' . $order_id . '</a>';
+			$message .= '<p><strong>Approve if:</strong><br>';
+			$message .= 'All details are correct. Once you approve, changes cannot be made. We will start the production after approval.</p>';
+			$message .= '<p><strong>Revise if:</strong><br>';
+			$message .= 'You need to change a detail. We will revise it based on your comment within 24 business hours.</p>' . "\n\n";
+
+			$zendesk->send_zendesk_reply( $to, $ticket_id, $message, $files_urls );
+			wp_send_json_success( 'Email sent successfully.' );
+
+		}
+
+
+		wp_die();
+
+	}
+
+	public function update_email_mockup_old() {
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'order_approve_nonce' ) ) {
+			wp_send_json_error( 'Security check failed.' );
+			wp_die();
+		}
+
+		$order_id = isset( $_POST['order_id'] ) ? intval( $_POST['order_id'] ) : 0;
+		$order = wc_get_order( $order_id );
+		if ( ! $order ) {
+			wp_send_json_error( 'Order not found.' );
+			wp_die();
+		}
+
 		// Get customer email and name.
 		$customer_email = $order->get_billing_email();
 
@@ -93,7 +138,7 @@ class OrderApprove {
 	public function admin_enqueu_scripts( $hook ) {
 		/** only order edit page */
 		$screen = get_current_screen();
-		wp_register_script( 'order-approve-admin', get_stylesheet_directory_uri() . '/assets/js/admin-order-approve.js', array(), wp_get_theme()->get( 'Version' ), false, false );
+		wp_register_script( 'order-approve-admin', get_stylesheet_directory_uri() . '/assets/js/admin-order-approve.js', array(), wp_get_theme()->get( 'Version' ), false );
 
 		wp_localize_script(
 			'order-approve-admin',
@@ -103,6 +148,8 @@ class OrderApprove {
 				'order_id' => get_the_ID(),
 				'review_url' => home_url() . '/review-mockup?order_id=' . get_the_ID(),
 				'nonce' => wp_create_nonce( 'order_approve_nonce' ),
+				'zendesk_users' => get_field( 'zendesk_users', 'option' ),
+				'ticket_id' => get_post_meta( get_the_ID(), 'zendesk_ticket_id', true ),
 			)
 		);
 
@@ -119,7 +166,8 @@ class OrderApprove {
 			return;
 		}
 
-		wp_register_script( 'order-approve', get_stylesheet_directory_uri() . '/assets/js/order-approve.js', array(), wp_get_theme()->get( 'Version' ), false, false );
+
+		wp_register_script( 'order-approve', get_stylesheet_directory_uri() . '/assets/js/order-approve.js', array(), wp_get_theme()->get( 'Version' ), false );
 
 		wp_localize_script(
 			'order-approve',
@@ -221,5 +269,16 @@ class OrderApprove {
 		}
 
 		wp_die();
+	}
+
+	public function get_dropbox_url_files( $order_id ) {
+		$dropbox_urls = get_field( 'dropbox_urls', $order_id );
+		$urls = array();
+		if ( ! empty( $dropbox_urls ) ) {
+			foreach ( $dropbox_urls as $url ) {
+				$urls[] = str_replace( '?dl=0', '?dl=1', $url['dropbox_url'] );
+			}
+		}
+		return $urls;
 	}
 }
