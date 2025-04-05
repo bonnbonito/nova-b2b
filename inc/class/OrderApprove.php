@@ -166,7 +166,7 @@ class OrderApprove {
 		$to = 'quotes@novasignage.com';
 
 		if ( $approve === 'approve' ) {
-			$subject = '[NOVA INTERNAL] Approved Mockup for Order #' . $order_id;
+			$subject = '[NOVA INTERNAL] Approved Mockup for Order #NV' . $order_id;
 			$message = '<p>The customer has approved the designs for Order #' . $order->get_order_number() . '.</p>';
 			// Get order edit link
 			$message .= '<p>View the order here: ' . home_url() . '/wp-admin/post.php?post=' . $order_id . '&action=edit' . '</p>';
@@ -179,8 +179,8 @@ class OrderApprove {
 				wp_send_json_error( 'Please provide revision notes.' );
 				wp_die();
 			}
-			$subject = '[NOVA INTERNAL] Mockup Review for Order #' . $order_id;
-			$message = '<p>The customer has requested revisions for Order #' . $order_id . '.</p>' . "\n\n";
+			$subject = '[NOVA INTERNAL] Mockup Review for Order #NV' . $order_id;
+			$message = '<p>The customer has requested revisions for <a href="' . get_edit_post_link( $order_id ) . '"> Order #NV' . $order_id . '</a>.</p>' . "\n\n";
 			$message .= '<p>View the order here: ' . get_edit_post_link( $order_id ) . '</p>';
 			$message .= '<p>Revision Notes:</p>' . "\n" . nl2br( esc_html( $revision_notes ) );
 			// Optionally add order note
