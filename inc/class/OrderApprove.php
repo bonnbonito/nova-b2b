@@ -49,26 +49,23 @@ class OrderApprove {
 
 		$customer_name = $order->get_billing_first_name();
 
-		$attachments = array();
+		$files_urls = $this->get_dropbox_url_files( $order_id );
 
-		if ( class_exists( '\WPO\WC\PDF_Invoices\Main' ) ) {
-			$attachments = \WPO\WC\PDF_Invoices\Main::instance()->attach_document_to_email( array(), 'customer_invoice', $order, null );
-		}
 
 		$zendesk = \NOVA_B2B\Zendesk::get_instance();
 
 		if ( $zendesk ) {
 
-			$message = 'Dear ' . $customer_name . ',' . "\n\n";
-			$message .= 'Please review the mockup and production drawing for Order #' . $order->get_order_number() . '. We need your confirmation before the production begins.' . "\n\n";
-			$message .= 'MOCKUPS & PRODUCTION DRAWING HERE:';
-			$message .= home_url() . '/review-mockup?order_id=' . $order_id . '</p>';
+			$message = '<p>Dear ' . $customer_name . ',</p>' . "\n\n";
+			$message .= '<p>Please review the mockup and production drawing for Order <strong>#' . $order->get_order_number() . '</strong>.</p><p>We need your confirmation before the production begins.</p><br>' . "\n\n";
+			$message .= '<p>MOCKUPS & PRODUCTION DRAWING HERE:<br>' . "\n\n";
+			$message .= '<a href="' . home_url() . '/review-mockup?order_id=' . $order_id . '">' . home_url() . '/review-mockup?order_id=' . $order_id . '</a>';
 			$message .= '<p><strong>Approve if:</strong><br>';
 			$message .= 'All details are correct. Once you approve, changes cannot be made. We will start the production after approval.</p>';
 			$message .= '<p><strong>Revise if:</strong><br>';
 			$message .= 'You need to change a detail. We will revise it based on your comment within 24 business hours.</p>' . "\n\n";
 
-			$zendesk->send_zendesk_reply( $to, $ticket_id, $message );
+			$zendesk->send_zendesk_reply( $to, $ticket_id, $message, $files_urls );
 			wp_send_json_success( 'Email sent successfully.' );
 
 		}
@@ -272,5 +269,16 @@ class OrderApprove {
 		}
 
 		wp_die();
+	}
+
+	public function get_dropbox_url_files( $order_id ) {
+		$dropbox_urls = get_field( 'dropbox_urls', $order_id );
+		$urls = array();
+		if ( ! empty( $dropbox_urls ) ) {
+			foreach ( $dropbox_urls as $url ) {
+				$urls[] = str_replace( '?dl=0', '?dl=1', $url['dropbox_url'] );
+			}
+		}
+		return $urls;
 	}
 }

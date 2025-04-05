@@ -182,13 +182,24 @@ class Zendesk {
 		}
 	}
 
-
-	public function send_zendesk_reply( $email, $ticket_id, $message ) {
+	/**
+	 * Send Zendesk reply
+	 *
+	 * @param string $email
+	 * @param string $ticket_id
+	 * @param string $message
+	 * @return bool|WP_Error
+	 */
+	public function send_zendesk_reply( $email, $ticket_id, $message, $files_urls ) {
 		$url = 'https://' . self::ZENDESK_DOMAIN . '/api/v2/tickets/' . $ticket_id . '.json';
 		$headers = array(
 			'Authorization' => 'Basic ' . $this->zendesk_bearer_token( $email ),
 			'Content-Type' => 'application/json',
 		);
+
+		if ( ! empty( $files_urls ) ) {
+
+		}
 
 		$data = array(
 			'ticket' => array(
@@ -222,4 +233,36 @@ class Zendesk {
 		return true;
 	}
 
+	/** Upload files to Zendesk */
+	public function upload_files_to_zendesk( $files_urls, $email ) {
+		$url = 'https://' . self::ZENDESK_DOMAIN . '/api/v2/uploads.json';
+		$headers = array(
+			'Authorization' => 'Basic ' . $this->zendesk_bearer_token( $email ),
+			'Content-Type' => 'application/json',
+		);
+
+		$args_upload = array(
+			'method' => 'POST',
+			'headers' => $headers,
+			'body' => json_encode( $data ),
+		);
+
+		$upload_response = wp_remote_request( $url, $args_upload );
+
+		if ( is_wp_error( $upload_response ) ) {
+			error_log( print_r( $upload_response, true ) );
+			return new WP_Error( 'zendesk_api_error', 'Failed to upload files', array( 'status' => 500 ) );
+		}
+
+		$response_code = wp_remote_retrieve_response_code( $upload_response );
+
+		if ( $response_code !== 200 ) {
+			error_log( print_r( $upload_response, true ) );
+			return new WP_Error( 'zendesk_api_error', 'Failed to upload files', array( 'status' => $response_code ) );
+		}
+
+		/**return token */
+		$response_body = json_decode( $upload_response['body'], true );
+		return $response_body['upload']['token'];
+	}
 }
