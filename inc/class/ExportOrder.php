@@ -211,8 +211,8 @@ class ExportOrder {
 						'Country' => wp_strip_all_tags( $order->get_billing_country() ),
 						'Currency' => wp_strip_all_tags( $order->get_currency() ),
 						'Item Price' => floatval( $item_total ),
-						'Total Price' => floatval( $order->get_total() ),
-						'Order Date' => wp_strip_all_tags( $order->get_date_created()->format( 'm/d/Y' ) ),
+						'Order Total Price' => floatval( $order->get_total() ),
+						'Order Date' => wp_strip_all_tags( $order->get_date_created()->format( 'F j, Y' ) ),
 						'Payment Type' => wp_strip_all_tags( $payment_type ),
 						'Order Status' => wp_strip_all_tags( $order->get_status() ),
 					);
@@ -586,6 +586,7 @@ class ExportOrder {
 	 * Save Nova live orders to a JSON file
 	 */
 	public function save_nova_live_orders_to_json() {
+		error_log( 'Saving Nova live orders to JSON file' );
 		$orders = $this->get_nova_live_orders();
 
 		if ( empty( $orders ) ) {
@@ -599,6 +600,8 @@ class ExportOrder {
 
 		$upload_dir = wp_upload_dir();
 		$json_file_path = $upload_dir['basedir'] . '/nova-live-orders.json';
+
+		error_log( 'Saving Nova live orders to JSON file: ' . $json_file_path );
 
 		$result = file_put_contents(
 			$json_file_path,

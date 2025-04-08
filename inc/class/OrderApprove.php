@@ -65,8 +65,15 @@ class OrderApprove {
 			$message .= '<p><strong>Revise if:</strong><br>';
 			$message .= 'You need to change a detail. We will revise it based on your comment within 24 business hours.</p>' . "\n\n";
 
-			$zendesk->send_zendesk_reply( $to, $ticket_id, $message, $files_urls );
-			wp_send_json_success( 'Email sent successfully.' );
+			$sent = $zendesk->send_zendesk_reply( $to, $ticket_id, $message, $files_urls );
+			if ( is_wp_error( $sent ) ) {
+				wp_send_json_error( $sent->get_error_message() );
+			} else {
+				$current_user = wp_get_current_user();
+				$order->add_order_note( 'Order approval sent by ' . $current_user->display_name );
+				update_post_meta( $order_id, 'order_approved_by', $current_user->user_email );
+				wp_send_json_success( 'Email sent successfully.' );
+			}
 
 		}
 
@@ -213,9 +220,14 @@ class OrderApprove {
 		// Prepare email content
 		$to = 'quotes@novasignage.com';
 
+		$order_approved_by = get_post_meta( $order_id, 'order_approved_by', true );
+
 		if ( $approve === 'approve' ) {
 			$subject = '[NOVA INTERNAL] Approved Mockup for Order #NV' . $order_id;
 			$message = '<p>The customer has approved the designs for Order #' . $order->get_order_number() . '.</p>';
+			if ( $order_approved_by ) {
+				$message .= '<p>Order approval sent by: ' . $order_approved_by . '</p>';
+			}
 			// Get order edit link
 			$message .= '<p>View the order here: ' . home_url() . '/wp-admin/post.php?post=' . $order_id . '&action=edit' . '</p>';
 			// Optionally add order note
@@ -229,6 +241,9 @@ class OrderApprove {
 			}
 			$subject = '[NOVA INTERNAL] Mockup Review for Order #NV' . $order_id;
 			$message = '<p>The customer has requested revisions for <a href="' . get_edit_post_link( $order_id ) . '"> Order #NV' . $order_id . '</a>.</p>' . "\n\n";
+			if ( $order_approved_by ) {
+				$message .= '<p>Order approval sent by: ' . $order_approved_by . '</p>';
+			}
 			$message .= '<p>View the order here: ' . get_edit_post_link( $order_id ) . '</p>';
 			$message .= '<p>Revision Notes:</p>' . "\n" . nl2br( esc_html( $revision_notes ) );
 			// Optionally add order note
