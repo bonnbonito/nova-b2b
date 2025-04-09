@@ -694,8 +694,12 @@ class Roles {
 			<tr>
 				<th><label for="nova_statistics">Nova Statistics</label></th>
 				<td>
-					<p>Total Quotes: <?php echo implode( ', ', $nova_user_quotes ); ?></p>
-					<p>Total Orders: <?php echo implode( ', ', $nova_user_orders ); ?></p>
+					<p>Total Quotes:
+						<?php echo is_array( $nova_user_quotes ) ? implode( ', ', $nova_user_quotes ) : $nova_user_quotes; ?>
+					</p>
+					<p>Total Orders:
+						<?php echo is_array( $nova_user_orders ) ? implode( ', ', $nova_user_orders ) : $nova_user_orders; ?>
+					</p>
 					<p>Quote Active: <?php echo $nova_user_quote_active; ?></p>
 					<p>Order Total: <?php echo $nova_user_order_total; ?></p>
 					<p>Average Order: <?php echo $nova_user_average_order; ?></p>
@@ -1359,6 +1363,12 @@ class Roles {
 		$firstName = $user_data->first_name;
 		$activation_key = get_user_meta( $user_id, 'account_activation_key', true );
 
+		$current_date = current_time( 'timestamp' );
+		$registration_date = strtotime( $user_data->user_registered );
+		$days_since_registration = floor( ( $current_date - $registration_date ) / ( 60 * 60 * 24 ) );
+
+		update_user_meta( $user_id, 'email_remider_sent', $days_since_registration );
+
 		$subject = 'Activate your NOVA Signage account';
 
 		$message = '<p style="margin-top: 20px;">Hello ' . $firstName . ',</p><p><a href="' . home_url( '/activate' ) . '?pu=' . $user_id . '&key=' . $activation_key . '">PLEASE CLICK TO VERIFY YOUR ACCOUNT.</a></p><p>Thank you,<br>NOVA Signage Team</p>';
@@ -1783,9 +1793,11 @@ class Roles {
 			foreach ( $users as $user ) {
 				$this->update_user_quotes_meta( $user );
 				$this->update_user_orders_meta( $user );
+				$user_quotes = get_user_meta( $user->ID, 'nova_user_quotes', true );
+				$user_orders = get_user_meta( $user->ID, 'nova_user_orders', true );
 				echo 'User ' . $user->ID . ' updated <br>';
-				echo 'Nova User Quotes: ' . count( get_user_meta( $user->ID, 'nova_user_quotes', true ) ) . '<br>';
-				echo 'Nova User Orders: ' . count( get_user_meta( $user->ID, 'nova_user_orders', true ) ) . '<br>';
+				echo 'Nova User Quotes: ' . is_array( $user_quotes ) ? count( $user_quotes ) : $user_quotes . '<br>';
+				echo 'Nova User Orders: ' . is_array( $user_orders ) ? count( $user_orders ) : $user_orders . '<br>';
 				echo 'Nova User Quote Active: ' . get_user_meta( $user->ID, 'nova_user_quote_active', true ) . '<br>';
 				echo 'Nova User Order Total: ' . get_user_meta( $user->ID, 'nova_user_order_total', true ) . '<br>';
 				echo 'Nova User Average Order: ' . get_user_meta( $user->ID, 'nova_user_average_order', true ) . '<br>';
