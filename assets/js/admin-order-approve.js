@@ -27,6 +27,7 @@ if (document.readyState === 'loading') {
 function has_zendesk_ticket() {
 	const sendMockupEmailDiv = document.getElementById('sendMockupEmailDiv');
 	const zendeskUsers = OrderApprove.zendesk_users;
+	const dropboxUrls = OrderApprove.dropbox_urls;
 
 	// Add styles
 	const styles = `
@@ -75,7 +76,12 @@ function has_zendesk_ticket() {
 	selectUsers.innerHTML = `
 		<option value="">Select a Zendesk user...</option>
 		${zendeskUsers
-			.map((user) => `<option value="${user.email}">${user.email}</option>`)
+			.map(
+				(user) =>
+					`<option value="${user.email}" ${
+						user.user === parseInt(OrderApprove.quoted_by) ? 'selected' : ''
+					}>${user.email}</option>`
+			)
 			.join('')}
 	`;
 
@@ -90,6 +96,8 @@ function has_zendesk_ticket() {
 	selectContainer.appendChild(button);
 	sendMockupEmailDiv.appendChild(selectContainer);
 
+	button.style.display = OrderApprove.quoted_by ? 'inline-block' : 'none';
+
 	// Show/hide button based on selection
 	selectUsers.addEventListener('change', function () {
 		button.style.display = this.value ? 'inline-block' : 'none';
@@ -97,6 +105,11 @@ function has_zendesk_ticket() {
 
 	button.addEventListener('click', async function (event) {
 		event.preventDefault();
+
+		if (dropboxUrls.length === 0) {
+			alert('No dropbox urls found');
+			return;
+		}
 
 		/** if disabled, don't do anything */
 		if (button.disabled) {
@@ -131,6 +144,8 @@ function has_zendesk_ticket() {
 		const data = await response.json();
 		if (data.success) {
 			button.textContent = 'Email sent';
+			//reload the page
+			location.reload();
 		} else {
 			button.textContent = 'Error sending email';
 		}

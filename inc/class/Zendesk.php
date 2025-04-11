@@ -35,6 +35,7 @@ class Zendesk {
 		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
 		add_action( 'add_meta_boxes', array( $this, 'add_zendesk_ticket_metabox' ) );
 		add_action( 'save_post_shop_order', array( $this, 'save_zendesk_ticket_metabox' ) );
+
 	}
 
 	/**
@@ -191,9 +192,10 @@ class Zendesk {
 	 * @param string $email
 	 * @param string $ticket_id
 	 * @param string $message
+	 * @param array $files_urls
 	 * @return bool|WP_Error
 	 */
-	public function send_zendesk_reply( $email, $ticket_id, $message, $files_urls ) {
+	public function send_zendesk_reply( $email, $ticket_id, $message, $files_urls = [] ) {
 		$url = 'https://' . self::ZENDESK_DOMAIN . '/api/v2/tickets/' . $ticket_id . '.json';
 		$headers = array(
 			'Authorization' => 'Basic ' . $this->zendesk_bearer_token( $email ),
@@ -207,13 +209,20 @@ class Zendesk {
 			}
 		}
 
+		$comment_array = array(
+			'html_body' => $message,
+			'public' => true,
+		);
+
+		if ( ! empty( $files_tokens ) ) {
+			$comment_array['uploads'] = $files_tokens;
+		}
+
+
+
 		$data = array(
 			'ticket' => array(
-				'comment' => array(
-					'html_body' => $message,
-					'public' => true,
-					'uploads' => $files_tokens,
-				),
+				'comment' => $comment_array,
 			),
 		);
 
@@ -325,4 +334,87 @@ class Zendesk {
 	public function merge_files( $files_urls ) {
 		return false;
 	}
+
+	/**
+	 * Add/Remove a zendesk tag to a ticket
+	 *
+	 * @param string $ticket_id
+	 * @param string $tag
+	 * @param bool $add Add or remove the tag
+	 * @param string $email Email for authentication
+	 * @return bool|WP_Error
+	 */
+	public function update_zendesk_tag( $email, $ticket_id, $tag, $add = true ) {
+		$url = 'https://' . self::ZENDESK_DOMAIN . '/api/v2/tickets/' . $ticket_id . '.json';
+		$headers = array(
+			'Authorization' => 'Basic ' . $this->zendesk_bearer_token( $email ),
+			'Content-Type' => 'application/json',
+		);
+
+		// Get current ticket details
+		$get_args = array(
+			'method' => 'GET',
+			'headers' => $headers,
+		);
+		$get_response = wp_remote_request( $url, $get_args );
+
+		if ( is_wp_error( $get_response ) ) {
+			error_log( 'Zendesk get ticket failed: ' . $get_response->get_error_message() );
+			return new WP_Error( 'zendesk_api_error', 'Failed to get ticket details', array( 'status' => 500 ) );
+		}
+
+		$get_response_code = wp_remote_retrieve_response_code( $get_response );
+		if ( $get_response_code !== 200 ) {
+			error_log( 'Zendesk get ticket failed with code ' . $get_response_code . ': ' . wp_remote_retrieve_body( $get_response ) );
+			return new WP_Error( 'zendesk_api_error', 'Failed to get ticket details', array( 'status' => $get_response_code ) );
+		}
+
+		$ticket_data = json_decode( wp_remote_retrieve_body( $get_response ), true );
+		$current_tags = $ticket_data['ticket']['tags'] ?? array();
+
+		// Add or remove the tag
+		if ( $add ) {
+			if ( ! in_array( $tag, $current_tags ) ) {
+				$current_tags[] = $tag;
+			}
+		} else {
+			$current_tags = array_filter( $current_tags, function ($current_tag) use ($tag) {
+				return $current_tag !== $tag;
+			} );
+			// Re-index array after filter
+			$current_tags = array_values( $current_tags );
+		}
+
+		// Update the ticket tags
+		$update_data = array(
+			'ticket' => array(
+				'tags' => $current_tags,
+			),
+		);
+
+		$put_args = array(
+			'method' => 'PUT',
+			'headers' => $headers,
+			'body' => json_encode( $update_data ),
+		);
+
+		$put_response = wp_remote_request( $url, $put_args );
+
+		if ( is_wp_error( $put_response ) ) {
+			error_log( 'Zendesk update tags failed: ' . $put_response->get_error_message() );
+			return new WP_Error( 'zendesk_api_error', 'Failed to update ticket tags', array( 'status' => 500 ) );
+		}
+
+		$put_response_code = wp_remote_retrieve_response_code( $put_response );
+
+		if ( $put_response_code !== 200 ) {
+			error_log( 'Zendesk update tags failed with code ' . $put_response_code . ': ' . wp_remote_retrieve_body( $put_response ) );
+			return new WP_Error( 'zendesk_api_error', 'Failed to update ticket tags', array( 'status' => $put_response_code ) );
+		}
+
+		return true;
+	}
+
+
+
 }

@@ -28,7 +28,41 @@ class OrderApprove {
 		add_action( 'wp_ajax_approve_mockup', array( $this, 'approve_mockup' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueu_scripts' ) );
 		add_action( 'wp_ajax_update_email_mockup', array( $this, 'update_email_mockup' ) );
+		add_action( 'wp', array( $this, 'setup_notification_cron' ) );
+		add_action( 'check_order_approval_notifications', array( $this, 'process_order_approval_notifications' ) );
+		add_action( 'add_meta_boxes', array( $this, 'add_order_approved_date_metabox' ) );
+		add_action( 'save_post', array( $this, 'save_order_approved_date' ) );
+		add_action( 'order_customer_approved', array( $this, 'order_customer_approved' ) );
 	}
+
+	public function order_customer_approved( $order_id ) {
+		$order = wc_get_order( $order_id );
+		if ( ! $order ) {
+			return;
+		}
+		$to = get_post_meta( $order_id, 'order_approved_email', true );
+		$ticket_id = get_post_meta( $order_id, 'zendesk_ticket_id', true );
+		$zendesk = \NOVA_B2B\Zendesk::get_instance();
+
+		$customer_name = $order->get_billing_first_name();
+
+		$files_urls = $this->get_dropbox_url_files( $order_id );
+
+		$message = '<p>Hi ' . $customer_name . ',</p>' . "\n\n";
+		$message .= '<p>Thank you for approving the mockup for order <strong>#' . $order->get_order_number() . '</strong>. We\'re moving forward with the signage production. </p>' . "\n\n";
+		$message .= '<p>We\'ll promptly notify you once your order is prepared for shipment.</p>' . "\n\n";
+		$message .= '<p>You may reach out to us for any inquiries or assistance.</p>' . "\n\n";
+
+		if ( $zendesk && ! empty( $files_urls ) && ! empty( $to ) && ! empty( $ticket_id ) ) {
+			$sent = $zendesk->send_zendesk_reply( $to, $ticket_id, $message, $files_urls );
+			$zendesk->update_zendesk_tag( $to, $ticket_id, 'order_approved', true );
+
+			if ( $sent ) {
+				$order->add_order_note( 'Order mockup approved by customer.' );
+			}
+		}
+	}
+
 
 	public function update_email_mockup() {
 		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'order_approve_nonce' ) ) {
@@ -49,29 +83,57 @@ class OrderApprove {
 
 		$customer_name = $order->get_billing_first_name();
 
-		$files_urls = $this->get_dropbox_url_files( $order_id );
+		$files_urls = array();
+
+		//$files_urls = $this->get_dropbox_url_files( $order_id );
 
 
 		$zendesk = \NOVA_B2B\Zendesk::get_instance();
 
 		if ( $zendesk ) {
 
-			$message = '<p>Dear ' . $customer_name . ',</p>' . "\n\n";
-			$message .= '<p>Please review the mockup and production drawing for Order <strong>#' . $order->get_order_number() . '</strong>.</p><p>We need your confirmation before the production begins.</p><br>' . "\n\n";
-			$message .= '<p>MOCKUPS & PRODUCTION DRAWING HERE:<br>' . "\n\n";
-			$message .= '<a href="' . home_url() . '/review-mockup?order_id=' . $order_id . '">' . home_url() . '/review-mockup?order_id=' . $order_id . '</a>';
-			$message .= '<p><strong>Approve if:</strong><br>';
-			$message .= 'All details are correct. Once you approve, changes cannot be made. We will start the production after approval.</p>';
-			$message .= '<p><strong>Revise if:</strong><br>';
-			$message .= 'You need to change a detail. We will revise it based on your comment within 24 business hours.</p>' . "\n\n";
+			$revision_notes = get_post_meta( $order_id, 'revision_notes', true );
+
+			if ( empty( $revision_notes ) ) {
+				$message = '<p>Hi ' . $customer_name . ',</p>' . "\n\n";
+				$message .= '<p>Please review the mockup and production drawing for Order <strong>#' . $order->get_order_number() . '</strong>.</p><p>We need your confirmation before the production begins.</p><br>' . "\n\n";
+				$message .= '<p>MOCKUPS & PRODUCTION DRAWING HERE:<br>' . "\n\n";
+				$message .= '<a href="' . home_url() . '/review-mockup?order_id=' . $order_id . '">' . home_url() . '/review-mockup?order_id=' . $order_id . '</a>';
+				$message .= '<p><strong>Approve if:</strong><br>';
+				$message .= 'All details are correct. Once you approve, changes cannot be made. We will start the production after approval.</p>';
+				$message .= '<p><strong>Revise if:</strong><br>';
+				$message .= 'You need to change a detail. We will revise it based on your comment within 24 business hours.</p>' . "\n\n";
+			} else {
+				$message = '<p>Hi ' . $customer_name . ',</p>' . "\n\n";
+				$message .= '<p>We\'ve completed the requested revisions to your mockup and it\'s now ready for your review.</p><br>' . "\n\n";
+				$message .= '<p>Next Steps:<p>';
+				$message .= '<ol>';
+				$message .= '<li>Please review the updated mockup: <a href="' . home_url() . '/review-mockup?order_id=' . $order_id . '">' . home_url() . '/review-mockup?order_id=' . $order_id . '</a></li>';
+				$message .= '<li>Select <strong>Approve</strong> if all details are correct, or add a comment for additional feedback.</li>';
+				$message .= '<li>Once approved, we\'ll move directly to production.</li>';
+				$message .= '</ol>';
+				$message .= '<p>We look forward to your feedback.</p>';
+			}
 
 			$sent = $zendesk->send_zendesk_reply( $to, $ticket_id, $message, $files_urls );
 			if ( is_wp_error( $sent ) ) {
 				wp_send_json_error( $sent->get_error_message() );
 			} else {
+				$current_date = current_time( 'timestamp' );
+				$current_date = date( 'Y-m-d H:i:s', $current_date );
 				$current_user = wp_get_current_user();
 				$order->add_order_note( 'Order approval sent by ' . $current_user->display_name );
+
 				update_post_meta( $order_id, 'order_approved_by', $current_user->user_email );
+				update_post_meta( $order_id, 'order_approved_email', $to );
+				update_post_meta( $order_id, 'order_approved_date', $current_date );
+
+				delete_post_meta( $order_id, 'first_reminder_sent' );
+				delete_post_meta( $order_id, 'second_reminder_sent' );
+				delete_post_meta( $order_id, 'third_reminder_sent' );
+
+				$zendesk->update_zendesk_tag( $to, $ticket_id, 'approval_sent', true );
+
 				wp_send_json_success( 'Email sent successfully.' );
 			}
 
@@ -123,7 +185,7 @@ class OrderApprove {
 		if ( $role_instance ) {
 			$subject = 'Order #' . $order->get_order_number() . '- Please Review Mockup and Production Drawing';
 			$heading = 'Order #' . $order->get_order_number() . ' is Ready for Review';
-			$message = '<p>Dear ' . $customer_name . ',</p>' . "\n\n";
+			$message = '<p>Hi ' . $customer_name . ',</p>' . "\n\n";
 			$message .= '<p>Please review the mockup and production drawing for Order #' . $order->get_order_number() . '. We need your confirmation before the production begins.</p>' . "\n\n";
 			$message .= '<p><strong>MOCKUPS & PRODUCTION DRAWING HERE:</strong><br>';
 			$message .= home_url() . '/review-mockup?order_id=' . $order_id . '</p>';
@@ -147,6 +209,12 @@ class OrderApprove {
 		$screen = get_current_screen();
 		wp_register_script( 'order-approve-admin', get_stylesheet_directory_uri() . '/assets/js/admin-order-approve.js', array(), wp_get_theme()->get( 'Version' ), false );
 
+		$quoted_by = get_post_meta( get_the_ID(), 'quoted_by', true ) ? get_post_meta( get_the_ID(), 'quoted_by', true ) : '';
+
+		if ( isset( $quoted_by ) && is_array( $quoted_by ) ) {
+			$quoted_by = $quoted_by[0];
+		}
+
 		wp_localize_script(
 			'order-approve-admin',
 			'OrderApprove',
@@ -157,6 +225,8 @@ class OrderApprove {
 				'nonce' => wp_create_nonce( 'order_approve_nonce' ),
 				'zendesk_users' => get_field( 'zendesk_users', 'option' ),
 				'ticket_id' => get_post_meta( get_the_ID(), 'zendesk_ticket_id', true ),
+				'quoted_by' => $quoted_by,
+				'dropbox_urls' => $this->get_dropbox_url_files( get_the_ID() ),
 			)
 		);
 
@@ -232,8 +302,11 @@ class OrderApprove {
 			$message .= '<p>View the order here: ' . home_url() . '/wp-admin/post.php?post=' . $order_id . '&action=edit' . '</p>';
 			// Optionally add order note
 			$order->add_order_note( 'Customer approved the designs.' );
-			update_field( 'order_approved', true, $order_id );
-			update_field( 'order_approved_date', date( 'F d, Y' ), $order_id );
+			update_field( 'order_approved_by_customer', true, $order_id );
+			update_field( 'order_approved_by_customer_date', date( 'F d, Y' ), $order_id );
+
+			do_action( 'order_customer_approved', $order_id );
+
 		} elseif ( $approve === 'revision' ) {
 			if ( empty( $revision_notes ) ) {
 				wp_send_json_error( 'Please provide revision notes.' );
@@ -248,6 +321,14 @@ class OrderApprove {
 			$message .= '<p>Revision Notes:</p>' . "\n" . nl2br( esc_html( $revision_notes ) );
 			// Optionally add order note
 			$order->add_order_note( 'Customer requested revisions: ' . $revision_notes );
+
+			update_post_meta( $order_id, 'revision_notes', $revision_notes );
+
+			delete_post_meta( $order_id, 'order_approved_by' );
+			delete_post_meta( $order_id, 'order_approved_email' );
+			delete_post_meta( $order_id, 'order_approved_date' );
+
+			do_action( 'order_customer_revisions_requested', $order_id );
 		} else {
 			wp_send_json_error( 'Invalid selection.' );
 			wp_die();
@@ -295,5 +376,190 @@ class OrderApprove {
 			}
 		}
 		return $urls;
+	}
+
+
+	/**
+	 * Schedule the cron job if it's not already scheduled
+	 */
+	public function setup_notification_cron() {
+		if ( ! wp_next_scheduled( 'check_order_approval_notifications' ) ) {
+			wp_schedule_event( time(), 'daily', 'check_order_approval_notifications' );
+		}
+	}
+
+	/**
+	 * Process order approval notifications
+	 */
+	public function process_order_approval_notifications() {
+		$orders = wc_get_orders( array(
+			'meta_key' => 'order_approved_by',
+			'meta_compare' => 'EXISTS',
+		) );
+
+
+		$zendesk = \NOVA_B2B\Zendesk::get_instance();
+
+		if ( ! $zendesk ) {
+			return;
+		}
+
+		foreach ( $orders as $order ) {
+			$order_id = $order->get_id();
+			$order_approved_date = $order->get_meta( 'order_approved_date' );
+
+			if ( ! $order_approved_date ) {
+				continue;
+			}
+
+			$order_approved_date = strtotime( $order_approved_date );
+			$current_date = current_time( 'timestamp' );
+			$days_since_order_approved = floor( ( $current_date - $order_approved_date ) / ( 60 * 60 * 24 ) );
+			$first_reminder_sent = $order->get_meta( 'first_reminder_sent' );
+			$second_reminder_sent = $order->get_meta( 'second_reminder_sent' );
+			$third_reminder_sent = $order->get_meta( 'third_reminder_sent' );
+			$zendesk_ticket_id = $order->get_meta( 'zendesk_ticket_id' );
+
+			$to = $order->get_meta( 'order_approved_email' ) ? $order->get_meta( 'order_approved_email' ) : 'lok@novasignage.com';
+
+			if ( $days_since_order_approved >= 1 && ! $first_reminder_sent ) {
+
+				$customer_name = $order->get_billing_first_name();
+
+				$files_urls = array();
+
+
+				$message = '<p>Hello ' . $customer_name . ',</p><br>';
+				$message .= '<p>Just a quick reminder to review the mockup and production drawing for your order #' . $order->get_order_number() . '.</p><br/>';
+				$message .= '<p>We need your confirmation to proceed with production.</p><br/>';
+				$message .= '<p><strong>MOCKUPS & PRODUCTION DRAWING HERE:</strong><br>';
+				$message .= home_url() . '/review-mockup?order_id=' . $order_id . '</p>';
+				$message .= '<p><strong>Approve if:</strong><br>';
+				$message .= 'All details are correct. Once approved, no further changes can be made.</p><br>';
+				$message .= '<p><strong>Revise if:</strong><br>';
+				$message .= 'You need changes. We\'ll revise your request within 24 business hours.</p>' . "<br/><br/>";
+				$message .= 'Thank you!<br/>';
+
+
+
+				$order->add_order_note( 'First reminder sent: ' . date( 'F j, Y', $current_date ) );
+				$order->update_meta_data( 'first_reminder_sent', $current_date );
+				$order->save();
+
+				$zendesk->send_zendesk_reply( $to, $zendesk_ticket_id, $message, $files_urls );
+				$zendesk->update_zendesk_tag( $to, $zendesk_ticket_id, 'first_reminder_sent', true );
+
+			}
+
+			if ( $days_since_order_approved >= 3 && ! $second_reminder_sent ) {
+
+				$message = '<p>Hello ' . $customer_name . ',</p><br/>';
+				$message .= '<p>Please review the mockup and production drawing for your order. We’ll wait for your final approval before moving forward with production.</p><br/>';
+				$message .= '<p>We need your confirmation to proceed with production.</p><br/>';
+				$message .= '<p><strong>Review Mockup:</strong> ';
+				$message .= home_url() . '/review-mockup?order_id=' . $order_id . '</p>';
+				$message .= '<p><strong>Approve</strong> if everything looks right.<br>';
+				$message .= '<strong>Request a revision</strong> if any details need changes.</p>';
+				$message .= '<p>We’ll respond to revision requests within 24 business hours.</p>';
+				$message .= '<p>Thanks for your prompt attention!</p>';
+				$message .= '<p>Thank you!</p>';
+
+				$order->add_order_note( 'Second reminder sent: ' . date( 'F j, Y', $current_date ) );
+				$order->update_meta_data( 'second_reminder_sent', $current_date );
+				$order->save();
+
+
+				$zendesk->send_zendesk_reply( $to, $zendesk_ticket_id, $message, $files_urls );
+				$zendesk->update_zendesk_tag( $to, $zendesk_ticket_id, 'second_reminder_sent', true );
+			}
+
+			if ( $days_since_order_approved >= 5 && ! $third_reminder_sent ) {
+
+				$message = '<p>Hello ' . $customer_name . ',</p><br/>';
+				$message .= '<p>This is a final reminder to review the mockup and production drawing for order #' . $order->get_order_number() . '.</p><br/>';
+				$message .= '<p><strong>Review Mockup:</strong> ';
+				$message .= home_url() . '/review-mockup?order_id=' . $order_id . '</p>';
+				$message .= '<p><strong>Approve</strong>  if everything is correct -- production will begin after your approval.<br>';
+				$message .= '<strong>Request a revision</strong> if anything needs to be changed -- our team will update the file within 24 business hours.</p>';
+				$message .= '<p>If the mockups are not approved or revised, our team will follow up with you to confirm the details before proceeding.</p>';
+				$message .= '<p>Let us know if you have any questions. We’re looking forward to your confirmation!</p>';
+
+				$order->add_order_note( 'Third reminder sent: ' . date( 'F j, Y', $current_date ) );
+				$order->update_meta_data( 'third_reminder_sent', $current_date );
+				$order->save();
+
+				$zendesk->send_zendesk_reply( $to, $zendesk_ticket_id, $message, $files_urls );
+				$zendesk->update_zendesk_tag( $to, $zendesk_ticket_id, 'third_reminder_sent', true );
+
+				$role_instance = \NOVA_B2B\Roles::get_instance();
+				if ( $role_instance ) {
+					$customer_id = $order->get_customer_id();
+					$company = get_field( 'business_name', 'user_' . $customer_id ) ? get_field( 'business_name', 'user_' . $customer_id ) : 'None';
+					$business_id = get_field( 'business_id', 'user_' . $customer_id ) ? get_field( 'business_id', 'user_' . $customer_id ) : 'None';
+					$phone = get_field( 'business_phone', 'user_' . $customer_id ) ? get_field( 'business_phone', 'user_' . $customer_id ) : 'None';
+
+					$customer_email = $order->get_billing_email();
+
+					$message = 'Hi,<br/><br/>';
+					$message .= 'The client has not approved, revised, or responded to the mockup and production drawing link after three reminder emails for #' . $order->get_order_number() . '.<br/><br/>';
+					$message .= 'Please reach out to the client via phone or direct contact to confirm their feedback before we proceed with production.</p>' . "\n\n";
+					$message .= '<strong>Client details</strong><br>';
+					$message .= 'Business ID: ' . $business_id . '<br>';
+					$message .= 'Company: ' . $company . '<br>';
+					$message .= 'Email: ' . $customer_email . '<br>';
+					$message .= 'Phone: ' . $phone . '<br>';
+					$message .= 'View order <a href="' . admin_url( 'post.php?post=' . $order_id . '&action=edit' ) . '">here</a>.<br/><br/>';
+
+					$subject = '[NOVA INTERNAL] No Response After 3rd Mockup Reminder - Order #' . $order->get_order_number();
+
+					$role_instance->send_email( 'quotes@novasignage.com', $subject, $message );
+				}
+			}
+		}
+	}
+
+	public function add_order_approved_date_metabox() {
+		// if user id is not 1, return
+		if ( get_current_user_id() !== 1 ) {
+			return;
+		}
+
+		add_meta_box(
+			'order_approved_date_metabox',
+			'Order Approved Date',
+			array( $this, 'render_order_approved_date_metabox' ),
+			'shop_order',
+			'side',
+			'default'
+		);
+	}
+
+	public function render_order_approved_date_metabox( $post ) {
+
+		$order_approved_date = get_post_meta( $post->ID, 'order_approved_date', true );
+
+		if ( ! $order_approved_date ) {
+			return;
+		}
+
+		$input_date = date( 'Y-m-d\TH:i:s', strtotime( $order_approved_date ) );
+
+		?>
+		<label for="order_approved_date">Approved Date:</label>
+		<input type="datetime-local" id="order_approved_date" name="order_approved_date"
+			value="<?php echo esc_attr( $input_date ); ?>" />
+		<?php
+	}
+
+	public function save_order_approved_date( $post_id ) {
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return;
+		}
+
+		if ( isset( $_POST['order_approved_date'] ) ) {
+			$new_date = sanitize_text_field( $_POST['order_approved_date'] );
+			$new_date = date( 'Y-m-d H:i:s', strtotime( $new_date ) );
+			update_post_meta( $post_id, 'order_approved_date', $new_date );
+		}
 	}
 }

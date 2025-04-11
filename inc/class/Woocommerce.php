@@ -2722,10 +2722,17 @@ class Woocommerce {
 	public function nova_checkout_order_created( $order ) {
 		$items = $order->get_items();
 		$has_nova_quote = false;
+		$quoted_by = [];
 
 		foreach ( $items as $item_id => $item ) {
 			$signage = $item->get_meta( 'signage' );
 			$quote_id = $item->get_meta( 'quote_id' );
+
+			$quoted_by_item = get_post_meta( $quote_id, 'quoted_by', true );
+			if ( ! empty( $quoted_by_item ) ) {
+				$quoted_by[] = $quoted_by_item;
+			}
+
 			if ( ! empty( $signage ) && isset( $quote_id ) ) {
 				$has_nova_quote = true;
 				update_field( 'paid', true, $quote_id );
@@ -2745,6 +2752,11 @@ class Woocommerce {
 
 		if ( $has_nova_quote ) {
 			$order->update_meta_data( 'has_nova_quote', true );
+			$order->save();
+		}
+
+		if ( ! empty( $quoted_by ) ) {
+			$order->update_meta_data( 'quoted_by', $quoted_by );
 			$order->save();
 		}
 
@@ -2806,6 +2818,10 @@ class Woocommerce {
 			$item->add_meta_data( 'quote_id', $values['quote_id'] );
 			$item->add_meta_data( 'product', $values['quote_id'] );
 			$item->add_meta_data( 'product_line', $values['product_line'] );
+
+			if ( isset( $values['quoted_by'] ) && ! empty( $values['quoted_by'] ) ) {
+				$item->add_meta_data( 'quoted_by', $values['quoted_by'] );
+			}
 
 			if ( isset( $values['nova_note'] ) && ! empty( $values['nova_note'] ) ) {
 				$item->add_meta_data( 'nova_note', $values['nova_note'] );
@@ -2955,12 +2971,13 @@ class Woocommerce {
 		if ( isset( get_field( 'nova_quote_product', 'option' )->ID ) && get_field( 'nova_quote_product', 'option' )->ID === $product_id && isset( $_POST['nova_title'] ) && isset( $_POST['quote_id'] ) ) {
 			$cart_item_data['nova_title'] = sanitize_text_field( $_POST['nova_title'] );
 			$cart_item_data['signage'] = $_POST['signage'];
-			$cart_item_date['quote_id'] = $_POST['quote_id'];
-			$cart_item_date['product'] = $_POST['product'];
-			$cart_item_date['product_line'] = $_POST['product_line'];
-			$cart_item_date['nova_quote'] = true;
+			$cart_item_data['quote_id'] = $_POST['quote_id'];
+			$cart_item_data['product'] = $_POST['product'];
+			$cart_item_data['product_line'] = $_POST['product_line'];
+			$cart_item_data['quoted_by'] = $_POST['quoted_by'];
+			$cart_item_data['nova_quote'] = true;
 			if ( isset( $_POST['nova_note'] ) ) {
-				$cart_item_date['nova_note'] = $_POST['nova_note'];
+				$cart_item_data['nova_note'] = $_POST['nova_note'];
 			}
 		}
 		return $cart_item_data;
