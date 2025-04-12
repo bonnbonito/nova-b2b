@@ -33,6 +33,71 @@ class OrderApprove {
 		add_action( 'add_meta_boxes', array( $this, 'add_order_approved_date_metabox' ) );
 		add_action( 'save_post', array( $this, 'save_order_approved_date' ) );
 		add_action( 'order_customer_approved', array( $this, 'order_customer_approved' ) );
+		add_action( 'order_customer_approved', array( $this, 'send_slack_message' ), 11, 1 );
+		add_action( 'nova_send_slack_message', array( $this, 'send_scheduled_slack_message' ) );
+		add_action( 'nova_send_scheduled_zendesk_message', array( $this, 'send_scheduled_zendesk_message' ), 10, 5 );
+	}
+
+	public function send_slack_message( $order_id ) {
+		// Schedule the slack message to be sent in 5 seconds
+		if ( ! wp_next_scheduled( 'nova_send_slack_message', array( $order_id ) ) ) {
+			wp_schedule_single_event( time() + 2, 'nova_send_slack_message', array( $order_id ) );
+		}
+	}
+
+	public function send_scheduled_slack_message( $order_id ) {
+		$order = wc_get_order( $order_id );
+		if ( ! $order ) {
+			return;
+		}
+
+		//Get Shipping Method
+		$shipping_method = $order->get_shipping_method();
+		//order number
+		$order_number = '#' . $order->get_order_number();
+		//Payment method
+		$payment = get_post_meta( $order_id, '_deposit_chosen_title', true );
+		$payment_title = $payment ? str_replace( ' ', '', $payment ) : 'Paid';
+
+		$message = $shipping_method . 'Order' . $payment_title . ', ' . $order_number;
+
+
+
+		$slack = \NOVA_B2B\Slack::get_instance();
+		if ( $slack ) {
+			$ts = $slack->send_message( $message );
+
+			//check if the message was sent successfully
+			if ( ! is_wp_error( $ts ) ) {
+
+				$order_approved_email = get_post_meta( $order_id, 'order_approved_email', true );
+
+				$users = get_field( 'zendesk_users', 'option' );
+				$slack_user_id = null;
+				if ( $users ) {
+					$matching_user = current( array_filter( $users, function ($user) use ($order_approved_email) {
+						return $user['email'] === $order_approved_email;
+					} ) );
+					$slack_user_id = $matching_user ? $matching_user['slack_id'] : null;
+				}
+
+				error_log( 'slack_user_id: ' . $slack_user_id );
+
+				if ( $slack_user_id ) {
+					//mention the user in the message
+					$reply_message = '<@' . $slack_user_id . '> ';
+
+					$slack->send_thread_reply( $reply_message, $ts );
+				}
+			}
+		}
+	}
+
+	public function send_scheduled_slack_thread_reply( $message, $thread_ts ) {
+		$slack = \NOVA_B2B\Slack::get_instance();
+		if ( $slack ) {
+			$slack->send_thread_reply( $message, $thread_ts );
+		}
 	}
 
 	public function order_customer_approved( $order_id ) {
@@ -54,10 +119,21 @@ class OrderApprove {
 		$message .= '<p>You may reach out to us for any inquiries or assistance.</p>' . "\n\n";
 
 		if ( $zendesk && ! empty( $files_urls ) && ! empty( $to ) && ! empty( $ticket_id ) ) {
+			update_field( 'order_approved', true, $order_id );
+			if ( ! wp_next_scheduled( 'nova_send_scheduled_zendesk_message', array( $to, $ticket_id, $message, $files_urls, $order_id ) ) ) {
+				wp_schedule_single_event( time() + 1, 'nova_send_scheduled_zendesk_message', array( $to, $ticket_id, $message, $files_urls, $order_id ) );
+			}
+		}
+	}
+
+	public function send_scheduled_zendesk_message( $to, $ticket_id, $message, $files_urls, $order_id ) {
+		$zendesk = \NOVA_B2B\Zendesk::get_instance();
+		if ( $zendesk ) {
 			$sent = $zendesk->send_zendesk_reply( $to, $ticket_id, $message, $files_urls );
 			$zendesk->update_zendesk_tag( $to, $ticket_id, 'order_approved', true );
 
 			if ( $sent ) {
+				$order = wc_get_order( $order_id );
 				$order->add_order_note( 'Order mockup approved by customer.' );
 			}
 		}
@@ -95,24 +171,23 @@ class OrderApprove {
 			$revision_notes = get_post_meta( $order_id, 'revision_notes', true );
 
 			if ( empty( $revision_notes ) ) {
-				$message = '<p>Hi ' . $customer_name . ',</p>' . "\n\n";
-				$message .= '<p>Please review the mockup and production drawing for Order <strong>#' . $order->get_order_number() . '</strong>.</p><p>We need your confirmation before the production begins.</p><br>' . "\n\n";
-				$message .= '<p>MOCKUPS & PRODUCTION DRAWING HERE:<br>' . "\n\n";
-				$message .= '<a href="' . home_url() . '/review-mockup?order_id=' . $order_id . '">' . home_url() . '/review-mockup?order_id=' . $order_id . '</a>';
-				$message .= '<p><strong>Approve if:</strong><br>';
-				$message .= 'All details are correct. Once you approve, changes cannot be made. We will start the production after approval.</p>';
-				$message .= '<p><strong>Revise if:</strong><br>';
-				$message .= 'You need to change a detail. We will revise it based on your comment within 24 business hours.</p>' . "\n\n";
+				$message = "<p>Hi {$customer_name},</p>\n\n";
+				$message .= "<p>Please review the mockup and production drawing for Order <strong>#{$order->get_order_number()}</strong>.</p><p>We need your confirmation before the production begins.</p><br>\n\n";
+				$message .= "<p>MOCKUPS & PRODUCTION DRAWING HERE:<br>\n\n";
+				$message .= "<a href='" . home_url() . "/review-mockup?order_id={$order_id}'>" . home_url() . "/review-mockup?order_id={$order_id}</a></p>";
+				$message .= "<p><strong>Approve if:</strong><br>";
+				$message .= "All details are correct. Once you approve, changes cannot be made. We will start the production after approval.</p>";
+				$message .= "<p><strong>Revise if:</strong><br>";
+				$message .= "You need to change a detail. We will revise it based on your comment within 24 business hours.</p>\n\n";
 			} else {
-				$message = '<p>Hi ' . $customer_name . ',</p>' . "\n\n";
-				$message .= '<p>We\'ve completed the requested revisions to your mockup and it\'s now ready for your review.</p><br>' . "\n\n";
-				$message .= '<p>Next Steps:<p>';
-				$message .= '<ol>';
-				$message .= '<li>Please review the updated mockup: <a href="' . home_url() . '/review-mockup?order_id=' . $order_id . '">' . home_url() . '/review-mockup?order_id=' . $order_id . '</a></li>';
-				$message .= '<li>Select <strong>Approve</strong> if all details are correct, or add a comment for additional feedback.</li>';
-				$message .= '<li>Once approved, we\'ll move directly to production.</li>';
-				$message .= '</ol>';
-				$message .= '<p>We look forward to your feedback.</p>';
+				$message = "<p>Hi {$customer_name},</p>\n\n";
+				$message .= "<p>Please review the mockup and production drawing for Order <strong>#{$order->get_order_number()}</strong>.</p><p>We need your confirmation before the production begins.</p><br>\n\n";
+				$message .= "<p>MOCKUPS & PRODUCTION DRAWING HERE:<br>\n\n";
+				$message .= "<a href='" . home_url() . "/review-mockup?order_id={$order_id}'>" . home_url() . "/review-mockup?order_id={$order_id}</a></p>";
+				$message .= "<p><strong>Approve if:</strong><br>";
+				$message .= "All details are correct. Once you approve, changes cannot be made. We will start the production after approval.</p>";
+				$message .= "<p><strong>Revise if:</strong><br>";
+				$message .= "You need to change a detail. We will revise it based on your comment within 24 business hours.</p>\n\n";
 			}
 
 			$sent = $zendesk->send_zendesk_reply( $to, $ticket_id, $message, $files_urls );
@@ -122,7 +197,7 @@ class OrderApprove {
 				$current_date = current_time( 'timestamp' );
 				$current_date = date( 'Y-m-d H:i:s', $current_date );
 				$current_user = wp_get_current_user();
-				$order->add_order_note( 'Order approval sent by ' . $current_user->display_name );
+				$order->add_order_note( "Order approval sent by {$current_user->display_name}" );
 
 				update_post_meta( $order_id, 'order_approved_by', $current_user->user_email );
 				update_post_meta( $order_id, 'order_approved_email', $to );
@@ -454,13 +529,13 @@ class OrderApprove {
 			if ( $days_since_order_approved >= 3 && ! $second_reminder_sent ) {
 
 				$message = '<p>Hello ' . $customer_name . ',</p><br/>';
-				$message .= '<p>Please review the mockup and production drawing for your order. We’ll wait for your final approval before moving forward with production.</p><br/>';
+				$message .= '<p>Please review the mockup and production drawing for your order. We\'ll wait for your final approval before moving forward with production.</p><br/>';
 				$message .= '<p>We need your confirmation to proceed with production.</p><br/>';
 				$message .= '<p><strong>Review Mockup:</strong> ';
 				$message .= home_url() . '/review-mockup?order_id=' . $order_id . '</p>';
 				$message .= '<p><strong>Approve</strong> if everything looks right.<br>';
 				$message .= '<strong>Request a revision</strong> if any details need changes.</p>';
-				$message .= '<p>We’ll respond to revision requests within 24 business hours.</p>';
+				$message .= '<p>We\'ll respond to revision requests within 24 business hours.</p>';
 				$message .= '<p>Thanks for your prompt attention!</p>';
 				$message .= '<p>Thank you!</p>';
 
@@ -482,7 +557,7 @@ class OrderApprove {
 				$message .= '<p><strong>Approve</strong>  if everything is correct -- production will begin after your approval.<br>';
 				$message .= '<strong>Request a revision</strong> if anything needs to be changed -- our team will update the file within 24 business hours.</p>';
 				$message .= '<p>If the mockups are not approved or revised, our team will follow up with you to confirm the details before proceeding.</p>';
-				$message .= '<p>Let us know if you have any questions. We’re looking forward to your confirmation!</p>';
+				$message .= '<p>Let us know if you have any questions. We\'re looking forward to your confirmation!</p>';
 
 				$order->add_order_note( 'Third reminder sent: ' . date( 'F j, Y', $current_date ) );
 				$order->update_meta_data( 'third_reminder_sent', $current_date );

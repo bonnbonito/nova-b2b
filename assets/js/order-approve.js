@@ -72,15 +72,16 @@ document.addEventListener('DOMContentLoaded', function () {
 			.then((data) => {
 				console.log(data);
 				if (data.success) {
-					// Optionally reset the form or redirect the user
-					reviewForm.reset();
-					reviewMockup.style.display = 'none';
-					console.log(data.action);
-					if (data.action === 'approve') {
-						reviewApproved.style.display = 'block';
-					} else if (data.action === 'revision') {
-						reviewRevised.style.display = 'block';
-					}
+					setTimeout(() => {
+						reviewForm.reset();
+						reviewMockup.style.display = 'none';
+						console.log(data.action);
+						if (data.action === 'approve') {
+							reviewApproved.style.display = 'block';
+						} else if (data.action === 'revision') {
+							reviewRevised.style.display = 'block';
+						}
+					}, 2500);
 				} else {
 					alert('An error occurred: ' + data.data);
 					submitButton.innerHTML = 'Submit';
