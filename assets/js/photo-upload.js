@@ -19,7 +19,21 @@ document.addEventListener('DOMContentLoaded', function () {
 	canvas.height = 480;
 
 	let stream = null;
-	let currentFacingMode = 'user'; // 'user' for front camera, 'environment' for back camera
+	let currentFacingMode = 'user';
+	let cameras = [];
+
+	async function getCameraDevices() {
+		try {
+			const devices = await navigator.mediaDevices.enumerateDevices();
+			cameras = devices.filter((device) => device.kind === 'videoinput');
+			if (switchCameraButton) {
+				switchCameraButton.style.display =
+					cameras.length > 1 ? 'block' : 'none';
+			}
+		} catch (error) {
+			console.error('Error getting cameras:', error);
+		}
+	}
 
 	// Handle file upload
 	fileUploadInput.addEventListener('change', function (e) {
@@ -167,23 +181,38 @@ document.addEventListener('DOMContentLoaded', function () {
 	// Start camera function
 	async function startCamera() {
 		try {
+			await getCameraDevices();
 			statusText.textContent = 'Requesting camera access...';
 			captureButton.disabled = true;
 
-			// Request camera access with HD resolution
-			stream = await navigator.mediaDevices.getUserMedia({
+			if (stream) {
+				stream.getTracks().forEach((track) => track.stop());
+			}
+
+			const constraints = {
 				video: {
-					width: { ideal: 1920 },
-					height: { ideal: 1080 },
-					facingMode: currentFacingMode,
+					facingMode: { exact: currentFacingMode },
 				},
 				audio: false,
-			});
+			};
 
-			// Connect stream to video element
+			try {
+				stream = await navigator.mediaDevices.getUserMedia(constraints);
+			} catch (error) {
+				// If exact constraint fails, try without exact
+				constraints.video.facingMode = currentFacingMode;
+				try {
+					stream = await navigator.mediaDevices.getUserMedia(constraints);
+				} catch (secondError) {
+					// If that fails too, try with basic constraints
+					stream = await navigator.mediaDevices.getUserMedia({
+						video: true,
+						audio: false,
+					});
+				}
+			}
+
 			video.srcObject = stream;
-
-			// Enable take photo button when camera starts
 			video.onloadedmetadata = () => {
 				statusText.textContent =
 					"Camera ready! Click 'Take Photo' to capture an image.";
@@ -193,7 +222,6 @@ document.addEventListener('DOMContentLoaded', function () {
 				}
 			};
 
-			// Handle camera errors
 			video.onerror = (error) => {
 				console.error('Video error:', error);
 				handleCameraError();
@@ -202,6 +230,14 @@ document.addEventListener('DOMContentLoaded', function () {
 			console.error('Error accessing camera:', error);
 			handleCameraError();
 		}
+	}
+
+	async function switchCamera() {
+		if (stream) {
+			stream.getTracks().forEach((track) => track.stop());
+		}
+		currentFacingMode = currentFacingMode === 'user' ? 'environment' : 'user';
+		await startCamera();
 	}
 
 	// Handle camera errors
