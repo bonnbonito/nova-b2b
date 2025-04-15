@@ -18,21 +18,21 @@ document.addEventListener('DOMContentLoaded', function () {
 	canvas.width = 640;
 	canvas.height = 480;
 
-	let stream = null;
 	let shouldFaceUser = true;
+	let stream = null;
 
 	// Check if device is mobile
 	const isMobile =
 		/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
 			navigator.userAgent
 		);
+	const isChrome = /Chrome/i.test(navigator.userAgent);
 
 	// Check if facingMode is supported and show switch button only on mobile
 	const supports = navigator.mediaDevices.getSupportedConstraints();
 	if (switchCameraButton) {
-		switchCameraButton.style.display =
-			supports['facingMode'] && isMobile ? 'block' : 'none';
-		switchCameraButton.disabled = !supports['facingMode'];
+		switchCameraButton.style.display = isMobile ? 'block' : 'none';
+		switchCameraButton.disabled = false;
 	}
 
 	async function startCamera() {
@@ -45,16 +45,36 @@ document.addEventListener('DOMContentLoaded', function () {
 				stream.getTracks().forEach((track) => track.stop());
 			}
 
+			// Chrome on Android needs a different approach
 			const constraints = {
 				audio: false,
-				video: {
-					width: { min: 640, ideal: 1280, max: 1920 },
-					height: { min: 480, ideal: 720, max: 1080 },
-					facingMode: shouldFaceUser ? 'user' : 'environment',
-				},
+				video:
+					isChrome && isMobile
+						? {
+								facingMode: shouldFaceUser ? 'user' : { exact: 'environment' },
+						  }
+						: {
+								facingMode: shouldFaceUser ? 'user' : 'environment',
+						  },
 			};
 
-			stream = await navigator.mediaDevices.getUserMedia(constraints);
+			try {
+				stream = await navigator.mediaDevices.getUserMedia(constraints);
+			} catch (error) {
+				console.error('First attempt failed:', error);
+				// If exact constraint fails on Chrome mobile, try without exact
+				if (isChrome && isMobile) {
+					stream = await navigator.mediaDevices.getUserMedia({
+						audio: false,
+						video: {
+							facingMode: shouldFaceUser ? 'user' : 'environment',
+						},
+					});
+				} else {
+					throw error;
+				}
+			}
+
 			video.srcObject = stream;
 			video.setAttribute('playsinline', true); // Required for iOS
 			await video.play();
@@ -74,14 +94,20 @@ document.addEventListener('DOMContentLoaded', function () {
 	async function switchCamera() {
 		if (!stream) return;
 
-		// Stop all tracks
-		stream.getTracks().forEach((track) => track.stop());
+		try {
+			// Stop all tracks
+			stream.getTracks().forEach((track) => track.stop());
 
-		// Toggle facing mode
-		shouldFaceUser = !shouldFaceUser;
+			// Toggle facing mode
+			shouldFaceUser = !shouldFaceUser;
+			console.log('Switching to:', shouldFaceUser ? 'front' : 'back');
 
-		// Restart camera with new facing mode
-		await startCamera();
+			// Restart camera with new facing mode
+			await startCamera();
+		} catch (error) {
+			console.error('Error switching camera:', error);
+			handleCameraError(error);
+		}
 	}
 
 	// Take photo function
