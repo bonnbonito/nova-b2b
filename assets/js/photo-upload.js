@@ -19,19 +19,142 @@ document.addEventListener('DOMContentLoaded', function () {
 	canvas.height = 480;
 
 	let stream = null;
-	let currentFacingMode = 'user';
-	let cameras = [];
+	let shouldFaceUser = true;
 
-	async function getCameraDevices() {
+	// Check if device is mobile
+	const isMobile =
+		/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+			navigator.userAgent
+		);
+
+	// Check if facingMode is supported and show switch button only on mobile
+	const supports = navigator.mediaDevices.getSupportedConstraints();
+	if (switchCameraButton) {
+		switchCameraButton.style.display =
+			supports['facingMode'] && isMobile ? 'block' : 'none';
+		switchCameraButton.disabled = !supports['facingMode'];
+	}
+
+	async function startCamera() {
 		try {
-			const devices = await navigator.mediaDevices.enumerateDevices();
-			cameras = devices.filter((device) => device.kind === 'videoinput');
+			statusText.textContent = 'Requesting camera access...';
+			captureButton.disabled = true;
+
+			// Stop any existing stream
+			if (stream) {
+				stream.getTracks().forEach((track) => track.stop());
+			}
+
+			const constraints = {
+				audio: false,
+				video: {
+					width: { min: 640, ideal: 1280, max: 1920 },
+					height: { min: 480, ideal: 720, max: 1080 },
+					facingMode: shouldFaceUser ? 'user' : 'environment',
+				},
+			};
+
+			stream = await navigator.mediaDevices.getUserMedia(constraints);
+			video.srcObject = stream;
+			video.setAttribute('playsinline', true); // Required for iOS
+			await video.play();
+
+			statusText.textContent =
+				"Camera ready! Click 'Take Photo' to capture an image.";
+			captureButton.disabled = false;
 			if (switchCameraButton) {
-				switchCameraButton.style.display =
-					cameras.length > 1 ? 'block' : 'none';
+				switchCameraButton.disabled = false;
 			}
 		} catch (error) {
-			console.error('Error getting cameras:', error);
+			console.error('Camera error:', error);
+			handleCameraError(error);
+		}
+	}
+
+	async function switchCamera() {
+		if (!stream) return;
+
+		// Stop all tracks
+		stream.getTracks().forEach((track) => track.stop());
+
+		// Toggle facing mode
+		shouldFaceUser = !shouldFaceUser;
+
+		// Restart camera with new facing mode
+		await startCamera();
+	}
+
+	// Take photo function
+	async function takePhoto() {
+		try {
+			const context = canvas.getContext('2d');
+
+			// Set canvas size to match video dimensions
+			canvas.width = video.videoWidth;
+			canvas.height = video.videoHeight;
+
+			// Draw the video frame
+			context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+			// Convert to data URL
+			const imageDataURL = canvas.toDataURL('image/jpeg', 0.95);
+			photo.src = imageDataURL;
+			photoPreview.classList.remove('hidden');
+
+			// Close modal and stop camera
+			closeCameraModal();
+			await processImage(imageDataURL);
+
+			statusText.textContent =
+				'Photo captured! You can download it or take a new one.';
+		} catch (error) {
+			console.error('Error capturing photo:', error);
+			statusText.textContent = 'Error capturing photo. Please try again.';
+		}
+	}
+
+	function handleCameraError(error) {
+		console.error('Camera error details:', error);
+		let errorMessage =
+			"Error accessing camera. Please ensure you've granted permission and that your device has a camera.";
+
+		if (
+			error.name === 'NotAllowedError' ||
+			error.name === 'PermissionDeniedError'
+		) {
+			errorMessage =
+				'Camera permission was denied. Please allow camera access and try again.';
+		} else if (
+			error.name === 'NotFoundError' ||
+			error.name === 'DevicesNotFoundError'
+		) {
+			errorMessage = 'No camera found on your device.';
+		} else if (
+			error.name === 'NotReadableError' ||
+			error.name === 'TrackStartError'
+		) {
+			errorMessage = 'Camera is in use by another application.';
+		}
+
+		statusText.textContent = errorMessage;
+		captureButton.disabled = true;
+		if (switchCameraButton) {
+			switchCameraButton.disabled = true;
+		}
+	}
+
+	// Open camera modal
+	async function openCameraModal() {
+		cameraModal.classList.remove('hidden');
+		await startCamera();
+	}
+
+	// Close camera modal
+	function closeCameraModal() {
+		cameraModal.classList.add('hidden');
+		if (stream) {
+			stream.getTracks().forEach((track) => track.stop());
+			stream = null;
 		}
 	}
 
@@ -62,12 +185,6 @@ document.addEventListener('DOMContentLoaded', function () {
 		};
 		reader.readAsDataURL(file);
 	});
-
-	// Open camera modal
-	async function openCameraModal() {
-		cameraModal.classList.remove('hidden');
-		await startCamera();
-	}
 
 	async function processImage(imageDataURL) {
 		photoResult.classList.add('hidden');
@@ -166,112 +283,6 @@ document.addEventListener('DOMContentLoaded', function () {
 			console.error('Error processing image:', error);
 			loader.style.display = 'none';
 			novaSignUpForm.classList.remove('loading');
-		}
-	}
-
-	// Close camera modal
-	function closeCameraModal() {
-		cameraModal.classList.add('hidden');
-		if (stream) {
-			stream.getTracks().forEach((track) => track.stop());
-			stream = null;
-		}
-	}
-
-	// Start camera function
-	async function startCamera() {
-		try {
-			await getCameraDevices();
-			statusText.textContent = 'Requesting camera access...';
-			captureButton.disabled = true;
-
-			if (stream) {
-				stream.getTracks().forEach((track) => track.stop());
-			}
-
-			const constraints = {
-				video: {
-					facingMode: { exact: currentFacingMode },
-				},
-				audio: false,
-			};
-
-			try {
-				stream = await navigator.mediaDevices.getUserMedia(constraints);
-			} catch (error) {
-				// If exact constraint fails, try without exact
-				constraints.video.facingMode = currentFacingMode;
-				try {
-					stream = await navigator.mediaDevices.getUserMedia(constraints);
-				} catch (secondError) {
-					// If that fails too, try with basic constraints
-					stream = await navigator.mediaDevices.getUserMedia({
-						video: true,
-						audio: false,
-					});
-				}
-			}
-
-			video.srcObject = stream;
-			video.onloadedmetadata = () => {
-				statusText.textContent =
-					"Camera ready! Click 'Take Photo' to capture an image.";
-				captureButton.disabled = false;
-				if (switchCameraButton) {
-					switchCameraButton.disabled = false;
-				}
-			};
-
-			video.onerror = (error) => {
-				console.error('Video error:', error);
-				handleCameraError();
-			};
-		} catch (error) {
-			console.error('Error accessing camera:', error);
-			handleCameraError();
-		}
-	}
-
-	async function switchCamera() {
-		if (stream) {
-			stream.getTracks().forEach((track) => track.stop());
-		}
-		currentFacingMode = currentFacingMode === 'user' ? 'environment' : 'user';
-		await startCamera();
-	}
-
-	// Handle camera errors
-	function handleCameraError() {
-		statusText.textContent =
-			"Error accessing camera. Please ensure you've granted permission and that your device has a camera.";
-		captureButton.disabled = true;
-		if (stream) {
-			stream.getTracks().forEach((track) => track.stop());
-			stream = null;
-		}
-	}
-
-	// Take photo function
-	async function takePhoto() {
-		try {
-			// Draw current video frame to canvas
-			const context = canvas.getContext('2d');
-			context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-			// Convert canvas to data URL with high quality
-			const imageDataURL = canvas.toDataURL('image/jpeg', 0.95);
-			photo.src = imageDataURL;
-			photoPreview.classList.remove('hidden');
-
-			// Close modal and stop camera
-			closeCameraModal();
-			await processImage(imageDataURL);
-
-			statusText.textContent =
-				'Photo captured! You can download it or take a new one.';
-		} catch (error) {
-			console.error('Error capturing photo:', error);
-			statusText.textContent = 'Error capturing photo. Please try again.';
 		}
 	}
 
