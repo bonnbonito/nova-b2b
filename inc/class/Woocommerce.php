@@ -190,6 +190,32 @@ class Woocommerce {
 		add_filter( 'woocommerce_email_recipient_customer_failed_order', array( $this, 'add_additional_recipients_to_emails' ), 10, 3 );
 
 		add_action( 'woocommerce_order_status_changed', array( $this, 'update_user_orders_meta' ), 10, 4 );
+
+		add_filter( 'gettext', array( $this, 'change_shipping_text' ), 20, 3 );
+
+		add_filter( 'woocommerce_shipping_package_name', array( $this, 'change_shipping_package_name' ), 20, 3 );
+	}
+
+
+	public function change_shipping_package_name( $package_name, $i = 0, $package = array() ) {
+		// If it's the first package (i.e. i = 0), return just "Packaging and Shipping"
+		if ( $i === 0 ) {
+			return _x( 'Packaging and Shipping', 'shipping packages', 'nova-b2b' );
+		}
+
+		return $package_name;
+	}
+
+
+
+	public function change_shipping_text( $translated_text, $text, $domain ) {
+		if ( $text === 'Shipping' && $domain === 'woocommerce' ) {
+			$translated_text = 'Packaging and Shipping';
+		}
+		if ( $text === 'Shipping:' && $domain === 'woocommerce' ) {
+			$translated_text = 'Packaging and Shipping:';
+		}
+		return $translated_text;
 	}
 
 	public function update_user_orders_meta( $order_id, $old_status, $new_status, $order ) {

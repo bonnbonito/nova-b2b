@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	const openCameraButton = document.getElementById('open-camera');
 	const closeCameraButton = document.getElementById('close-camera');
 	const captureButton = document.getElementById('take-photo');
+	const switchCameraButton = document.getElementById('switch-camera');
 	const statusText = document.getElementById('status');
 	const cameraModal = document.getElementById('camera-modal');
 	const photoPreview = document.getElementById('photo-preview');
@@ -18,6 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	canvas.height = 480;
 
 	let stream = null;
+	let currentFacingMode = 'user'; // 'user' for front camera, 'environment' for back camera
 
 	// Handle file upload
 	fileUploadInput.addEventListener('change', function (e) {
@@ -173,7 +175,7 @@ document.addEventListener('DOMContentLoaded', function () {
 				video: {
 					width: { ideal: 1920 },
 					height: { ideal: 1080 },
-					facingMode: 'user',
+					facingMode: currentFacingMode,
 				},
 				audio: false,
 			});
@@ -186,6 +188,9 @@ document.addEventListener('DOMContentLoaded', function () {
 				statusText.textContent =
 					"Camera ready! Click 'Take Photo' to capture an image.";
 				captureButton.disabled = false;
+				if (switchCameraButton) {
+					switchCameraButton.disabled = false;
+				}
 			};
 
 			// Handle camera errors
@@ -267,4 +272,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	openCameraButton.addEventListener('click', openCameraModal);
 	closeCameraButton.addEventListener('click', closeCameraModal);
 	captureButton.addEventListener('click', takePhoto);
+	if (switchCameraButton) {
+		switchCameraButton.addEventListener('click', switchCamera);
+	}
 });

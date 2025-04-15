@@ -87,16 +87,14 @@ class OrderApprove {
 					//mention the user in the message
 					$reply_message = '<@' . $slack_user_id . '> ';
 
-					$slack->send_thread_reply( $reply_message, $ts );
+					//upload files to slack
+					$files = $this->get_dropbox_url_files( $order_id ) ?? [];
+
+					error_log( 'files: ' . print_r( $files, true ) );
+
+					$slack->send_thread_reply( $reply_message, $ts, null, $files );
 				}
 			}
-		}
-	}
-
-	public function send_scheduled_slack_thread_reply( $message, $thread_ts ) {
-		$slack = \NOVA_B2B\Slack::get_instance();
-		if ( $slack ) {
-			$slack->send_thread_reply( $message, $thread_ts );
 		}
 	}
 
@@ -447,7 +445,7 @@ class OrderApprove {
 		$urls = array();
 		if ( ! empty( $dropbox_urls ) ) {
 			foreach ( $dropbox_urls as $url ) {
-				$urls[] = str_replace( '?dl=0', '?dl=1', $url['dropbox_url'] );
+				$urls[] = str_replace( 'dl=0', 'dl=1', $url['dropbox_url'] );
 			}
 		}
 		return $urls;

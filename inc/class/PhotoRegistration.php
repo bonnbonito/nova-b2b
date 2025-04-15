@@ -269,6 +269,9 @@ class PhotoRegistration {
 					<button id="close-camera" class="nova-photo-remove mt-2 sm:mt-0">
 						Cancel
 					</button>
+					<button id="switch-camera" class="nova-photo-upload-button" disabled>
+						Switch Camera
+					</button>
 					<button id="take-photo" class="nova-photo-upload-button" disabled>
 						Take Photo
 					</button>
