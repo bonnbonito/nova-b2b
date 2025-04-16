@@ -168,12 +168,12 @@ class Slack {
 	 */
 	public function send_message( $message, $channel = null, $attachments = [] ) {
 		if ( empty( $this->bot_token ) ) {
+			error_log( 'Slack bot token not configured' );
 			return new \WP_Error( 'slack_error', 'Slack bot token not configured' );
 		}
 
 		if ( empty( $channel ) ) {
 			$channel = $this->slack_channel;
-
 		}
 
 		if ( empty( $channel ) ) {
@@ -194,6 +194,8 @@ class Slack {
 		if ( ! empty( $attachments ) ) {
 			$body['attachments'] = $attachments;
 		}
+
+		error_log( 'Sending message to Slack: ' . print_r( $body, true ) );
 
 		$response = wp_remote_post( 'https://slack.com/api/chat.postMessage', [ 
 			'headers' => [ 
