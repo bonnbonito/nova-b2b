@@ -32,18 +32,16 @@ class OrderApprove {
 		add_action( 'check_order_approval_notifications', array( $this, 'process_order_approval_notifications' ) );
 		add_action( 'add_meta_boxes', array( $this, 'add_order_approved_date_metabox' ) );
 		add_action( 'save_post', array( $this, 'save_order_approved_date' ) );
-		add_action( 'order_customer_approved_action', array( $this, 'order_customer_approved' ) );
-		add_action( 'order_customer_approved_action', array( $this, 'send_slack_message' ) );
+		add_action( 'order_customer_approved', array( $this, 'order_customer_approved' ) );
+		add_action( 'order_customer_approved', array( $this, 'send_slack_message' ), 11, 1 );
 		add_action( 'nova_send_slack_message', array( $this, 'send_scheduled_slack_message' ) );
 		add_action( 'nova_send_scheduled_zendesk_message', array( $this, 'send_scheduled_zendesk_message' ), 10, 5 );
 	}
 
 	public function send_slack_message( $order_id ) {
 		// Schedule the slack message to be sent in 5 seconds
-		error_log( 'Sending slack message for order ' . $order_id );
 		if ( ! wp_next_scheduled( 'nova_send_slack_message', array( $order_id ) ) ) {
-			error_log( 'Scheduling slack message for order ' . $order_id );
-			wp_schedule_single_event( time() + 1, 'nova_send_slack_message', array( $order_id ) );
+			wp_schedule_single_event( time() + 2, 'nova_send_slack_message', array( $order_id ) );
 		}
 	}
 
@@ -120,15 +118,18 @@ class OrderApprove {
 
 		if ( $zendesk && ! empty( $files_urls ) && ! empty( $to ) && ! empty( $ticket_id ) ) {
 			update_field( 'order_approved', true, $order_id );
-			if ( ! wp_next_scheduled( 'nova_send_scheduled_zendesk_message', array( $to, $ticket_id, $message, $files_urls, $order_id ) ) ) {
-				wp_schedule_single_event( time() + 1, 'nova_send_scheduled_zendesk_message', array( $to, $ticket_id, $message, $files_urls, $order_id ) );
-			}
+			$this->send_scheduled_zendesk_message( $to, $ticket_id, $message, $files_urls, $order_id );
+			// if ( ! wp_next_scheduled( 'nova_send_scheduled_zendesk_message', array( $to, $ticket_id, $message, $files_urls, $order_id ) ) ) {
+			// 	wp_schedule_single_event( time() + 1, 'nova_send_scheduled_zendesk_message', array( $to, $ticket_id, $message, $files_urls, $order_id ) );
+			// }
+
 		}
 	}
 
 	public function send_scheduled_zendesk_message( $to, $ticket_id, $message, $files_urls, $order_id ) {
 		$zendesk = \NOVA_B2B\Zendesk::get_instance();
 		if ( $zendesk ) {
+			error_log( 'Sending scheduled zendesk message for order ' . $order_id );
 			$sent = $zendesk->send_zendesk_reply( $to, $ticket_id, $message, $files_urls );
 			$zendesk->update_zendesk_tag( $to, $ticket_id, 'order_approved', true );
 
@@ -380,7 +381,7 @@ class OrderApprove {
 			update_field( 'order_approved_by_customer', true, $order_id );
 			update_field( 'order_approved_by_customer_date', date( 'F d, Y' ), $order_id );
 
-			do_action( 'order_customer_approved_action', $order_id );
+			do_action( 'order_customer_approved', $order_id );
 
 		} elseif ( $approve === 'revision' ) {
 			if ( empty( $revision_notes ) ) {
