@@ -40,8 +40,10 @@ class OrderApprove {
 
 	public function send_slack_message( $order_id ) {
 		// Schedule the slack message to be sent in 5 seconds
+		error_log( 'Sending slack message for order ' . $order_id );
 		if ( ! wp_next_scheduled( 'nova_send_slack_message', array( $order_id ) ) ) {
-			wp_schedule_single_event( time() + 2, 'nova_send_slack_message', array( $order_id ) );
+			error_log( 'Scheduling slack message for order ' . $order_id );
+			wp_schedule_single_event( time() + 1, 'nova_send_slack_message', array( $order_id ) );
 		}
 	}
 
