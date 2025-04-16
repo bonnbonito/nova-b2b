@@ -32,8 +32,8 @@ class OrderApprove {
 		add_action( 'check_order_approval_notifications', array( $this, 'process_order_approval_notifications' ) );
 		add_action( 'add_meta_boxes', array( $this, 'add_order_approved_date_metabox' ) );
 		add_action( 'save_post', array( $this, 'save_order_approved_date' ) );
-		add_action( 'order_customer_approved', array( $this, 'order_customer_approved' ) );
-		add_action( 'order_customer_approved', array( $this, 'send_slack_message' ), 11, 1 );
+		add_action( 'order_customer_approved_action', array( $this, 'order_customer_approved' ) );
+		add_action( 'order_customer_approved_action', array( $this, 'send_slack_message' ) );
 		add_action( 'nova_send_slack_message', array( $this, 'send_scheduled_slack_message' ) );
 		add_action( 'nova_send_scheduled_zendesk_message', array( $this, 'send_scheduled_zendesk_message' ), 10, 5 );
 	}
@@ -378,7 +378,7 @@ class OrderApprove {
 			update_field( 'order_approved_by_customer', true, $order_id );
 			update_field( 'order_approved_by_customer_date', date( 'F d, Y' ), $order_id );
 
-			do_action( 'order_customer_approved', $order_id );
+			do_action( 'order_customer_approved_action', $order_id );
 
 		} elseif ( $approve === 'revision' ) {
 			if ( empty( $revision_notes ) ) {
