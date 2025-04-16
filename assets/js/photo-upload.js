@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	canvas.width = 640;
 	canvas.height = 480;
 
-	let shouldFaceUser = true;
+	let shouldFaceUser = false;
 	let stream = null;
 
 	// Check if device is mobile
