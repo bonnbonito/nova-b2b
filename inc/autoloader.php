@@ -56,6 +56,7 @@ $instances = array(
 	'Zendesk',
 	'UserReminder',
 	'Slack',
+	'Trello',
 );
 
 foreach ( $instances as $instance ) {

@@ -149,7 +149,7 @@ class Roles {
 
 	public function rest_show_all_business_id() {
 		register_rest_route(
-			'nova/v1',
+			NOVA_REST_ROUTE_PREFIX,
 			'/show-all-business-id/',
 			array(
 				'methods' => 'GET',
@@ -159,7 +159,7 @@ class Roles {
 		);
 
 		register_rest_route(
-			'nova/v1',
+			NOVA_REST_ROUTE_PREFIX,
 			'/businessId/(?P<email>[^\/]+)',
 			array(
 				'methods' => 'GET',
@@ -169,7 +169,7 @@ class Roles {
 		);
 
 		register_rest_route(
-			'nova/v1',
+			NOVA_REST_ROUTE_PREFIX,
 			'/businessIdfromId/(?P<id>[^\/]+)',
 			array(
 				'methods' => 'GET',
@@ -179,7 +179,7 @@ class Roles {
 		);
 
 		register_rest_route(
-			'nova/v1',
+			NOVA_REST_ROUTE_PREFIX,
 			'/streakBox/(?P<id>[\w-]+)',
 			array(
 				'methods' => 'GET',

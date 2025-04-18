@@ -243,26 +243,26 @@ class Nova_Quote {
 
 	public function show_dynamic_calculator( $post ) {
 		?>
-<div>
-  <label for="usdPrice">USD Price:</label><br>
-  <input type="number" id="calculatorUsdPrice" step="0.01"><br><br>
+		<div>
+			<label for="usdPrice">USD Price:</label><br>
+			<input type="number" id="calculatorUsdPrice" step="0.01"><br><br>
 
-  <label for="usdShipping">USD Shipping:</label><br>
-  <input type="number" id="calculatorUsdShipping" step="0.01"><br><br>
+			<label for="usdShipping">USD Shipping:</label><br>
+			<input type="number" id="calculatorUsdShipping" step="0.01"><br><br>
 
-  <label for="cadPrice">CAD Price:</label><br>
-  <input type="number" id="calculatorCadPrice" step="0.01"><br><br>
+			<label for="cadPrice">CAD Price:</label><br>
+			<input type="number" id="calculatorCadPrice" step="0.01"><br><br>
 
-  <label for="cadShipping">CAD Shipping:</label><br>
-  <input type="number" id="calculatorCadShipping" step="0.01"><br><br>
+			<label for="cadShipping">CAD Shipping:</label><br>
+			<input type="number" id="calculatorCadShipping" step="0.01"><br><br>
 
-  <label for="calculatorPreviewPrice">USD Price (+ Shipping):</label><br>
-  <input type="number" id="calculatorPreviewPrice" step="0.01"><br><br>
+			<label for="calculatorPreviewPrice">USD Price (+ Shipping):</label><br>
+			<input type="number" id="calculatorPreviewPrice" step="0.01"><br><br>
 
-  <label for="calculatorPreviewCadPrice">CAD Price (+ Shipping):</label><br>
-  <input type="number" id="calculatorPreviewCadPrice" step="0.01"><br><br>
-</div>
-<?php
+			<label for="calculatorPreviewCadPrice">CAD Price (+ Shipping):</label><br>
+			<input type="number" id="calculatorPreviewCadPrice" step="0.01"><br><br>
+		</div>
+		<?php
 	}
 
 	public function generated_product_id( $post_type, $post ) {
@@ -375,11 +375,11 @@ class Nova_Quote {
 			$new_path = '/NOVA-CRM/' . $partner_business_id . '/Q-' . $post->ID;
 			if ( count( $user_folder_arr ) > 0 && $old_folder !== $partner_business_id ) {
 				?>
-<a class="button button-primary button-large mb-4 block" id="updateDropboxFolder" data-btn="updateDropbox"
-  data-id="<?php echo $post->ID; ?>" data-new="<?php echo $new_path; ?>" data-old="<?php echo $old_path; ?>"
-  style="margin-bottom: 10px;">Update
-  Dropbox Folder</a>
-<?php
+				<a class="button button-primary button-large mb-4 block" id="updateDropboxFolder" data-btn="updateDropbox"
+					data-id="<?php echo $post->ID; ?>" data-new="<?php echo $new_path; ?>" data-old="<?php echo $old_path; ?>"
+					style="margin-bottom: 10px;">Update
+					Dropbox Folder</a>
+				<?php
 			}
 		}
 	}
@@ -490,38 +490,40 @@ class Nova_Quote {
 
 	public function nova_admin_mockup_draft_email_callback( $post ) {
 		?>
-<form action="" method="post">
-  <?php wp_nonce_field( 'send_mockup_email_action', 'send_mockup_email_nonce' ); ?>
-  <input type="hidden" name="post_id" value="<?php echo $post->ID; ?>">
-  <input id="sendDraft" type="submit" name="send_mockup_draft_email" class="button button-primary"
-    value="<?php esc_attr_e( 'Send Draft Email', 'nova-b2b' ); ?>">
-</form>
-<script>
-const sendDraft = document.getElementById('sendDraft');
-sendDraft.addEventListener('click', e => {
-  sendDraft.value = "Sending...";
-  sendDraft.attr.disabled = true;
-})
-</script>
-<?php
+		<form action="" method="post">
+			<?php wp_nonce_field( 'send_mockup_email_action', 'send_mockup_email_nonce' ); ?>
+			<input type="hidden" name="post_id" value="<?php echo $post->ID; ?>">
+			<input id="sendDraft" type="submit" name="send_mockup_draft_email" class="button button-primary"
+				value="<?php esc_attr_e( 'Send Draft Email', 'nova-b2b' ); ?>">
+		</form>
+		<script>
+			const sendDraft = document.getElementById('sendDraft');
+			sendDraft.addEventListener('click', e =>
+			{
+				sendDraft.value = "Sending...";
+				sendDraft.attr.disabled = true;
+			})
+		</script>
+		<?php
 	}
 
 	public function nova_admin_mockup_update_email_callback( $post ) {
 		?>
-<form action="" method="post">
-  <?php wp_nonce_field( 'send_mockup_email_action', 'send_mockup_email_nonce' ); ?>
-  <input type="hidden" name="post_id" value="<?php echo $post->ID; ?>">
-  <input id="sendMockup" type="submit" name="send_mockup_update_email" class="button button-primary"
-    value="<?php esc_attr_e( 'Send Mockup Email', 'nova-b2b' ); ?>">
-</form>
-<script>
-const sendMockup = document.getElementById('sendMockup');
-sendMockup.addEventListener('click', e => {
-  sendMockup.value = "Sending...";
-  sendMockup.attr.disabled = true;
-})
-</script>
-<?php
+		<form action="" method="post">
+			<?php wp_nonce_field( 'send_mockup_email_action', 'send_mockup_email_nonce' ); ?>
+			<input type="hidden" name="post_id" value="<?php echo $post->ID; ?>">
+			<input id="sendMockup" type="submit" name="send_mockup_update_email" class="button button-primary"
+				value="<?php esc_attr_e( 'Send Mockup Email', 'nova-b2b' ); ?>">
+		</form>
+		<script>
+			const sendMockup = document.getElementById('sendMockup');
+			sendMockup.addEventListener('click', e =>
+			{
+				sendMockup.value = "Sending...";
+				sendMockup.attr.disabled = true;
+			})
+		</script>
+		<?php
 	}
 
 	public function nova_quote_add_admin_meta_box( $post_type, $post ) {
@@ -555,12 +557,12 @@ sendMockup.addEventListener('click', e => {
 		endif;
 		?>
 
-<a href="<?php echo esc_url( $details ); ?>" target="_blank" class="button button-primary button-large">View Details</a>
-<?php if ( $product_id && $quote_status['value'] != 'ready' ) : ?>
-<br>
-<a style="margin-top: 10px;" href="<?php echo esc_url( $edit_url ); ?>" target="_blank"
-  class="button button-primary button-large">Edit Quote</a>
-<?php
+		<a href="<?php echo esc_url( $details ); ?>" target="_blank" class="button button-primary button-large">View Details</a>
+		<?php if ( $product_id && $quote_status['value'] != 'ready' ) : ?>
+			<br>
+			<a style="margin-top: 10px;" href="<?php echo esc_url( $edit_url ); ?>" target="_blank"
+				class="button button-primary button-large">Edit Quote</a>
+			<?php
 		endif;
 	}
 
@@ -594,22 +596,22 @@ sendMockup.addEventListener('click', e => {
 
 	public function nova_product_instant_quote() {
 		?>
-<?php if ( ! is_user_logged_in() ) : ?>
-<?php echo do_shortcode( '[kadence_element id=" 202"]' ); ?>
-<?php
+		<?php if ( ! is_user_logged_in() ) : ?>
+			<?php echo do_shortcode( '[kadence_element id=" 202"]' ); ?>
+		<?php
 		elseif ( get_field( 'quote_div_id' ) ) :
 			?>
-<div id="QuoteApp"></div>
-<?php
+			<div id="QuoteApp"></div>
+			<?php
 		else :
 			if ( get_post_field( 'post_name', get_the_ID() ) === 'custom-sculpture' ) :
 				?>
-<div id="customSculpture"></div>
-<?php
+				<div id="customSculpture"></div>
+				<?php
 			else :
 				?>
-<div id="customProject"></div>
-<?php
+				<div id="customProject"></div>
+				<?php
 
 			endif;
 		endif;
@@ -654,9 +656,9 @@ sendMockup.addEventListener('click', e => {
 
 		ob_start();
 		?>
-<p>Product: <?php echo $product_name; ?></p>
-<strong>Projects</strong>
-<?php
+		<p>Product: <?php echo $product_name; ?></p>
+		<strong>Projects</strong>
+		<?php
 		echo '<ul>';
 		foreach ( $signage as $project ) {
 			$projectArray = get_object_vars( $project );
@@ -1317,68 +1319,68 @@ sendMockup.addEventListener('click', e => {
 		$estimate_total = $price_with_shipping + $tax_compute;
 		$estimate_total = number_format( $estimate_total, 2, '.', '' );
 		?>
-<style>
-h4,
-h6 {
-  margin-bottom: 0pt;
-  margin-top: 0px;
-}
-</style>
-<table style="margin-bottom: 20px;">
-  <tr>
-    <td style="margin-top: 0; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #000;">
-      <img src="<?php echo get_stylesheet_directory() . '/assets/img/nova-logo.png'; ?>" alt="Nova Signage"
-        style="margin-top: 0;" />
-    </td>
-  </tr>
-  <tr>
-    <td style="padding: 30px;"></td>
-  </tr>
-  <tr>
-    <td>
-      <h4 style="font-size: 14pt; margin-bottom: 0;">QUOTE ID:
-        Q-<?php echo str_pad( $post_id, 4, '0', STR_PAD_LEFT ); ?>
-      </h4>
-      <p style="padding-bottom: 0; margin-bottom: 0;">INITIAL QUOTE REQUESTED ON: <font face="lato">
-          <?php echo get_the_date( 'F j, Y', $post_id ); ?>
-        </font>
-      </p>
-      <p style="padding-bottom: 0; margin-bottom: 0;">LAST QUOTE SAVED: <font face="lato">
-          <?php echo get_the_modified_date( 'F j, Y', $post_id ); ?>
-        </font>
-      </p>
-      <p style="padding-bottom: 0; margin-bottom: 0;">QUOTE NAME: <font face="lato">
-          <?php echo get_field( 'frontend_title', $post_id ); ?>
-        </font>
-      </p>
-      <p style="padding-bottom: 0; margin-bottom: 0;">BUSINESS ID: <font face="lato">
-          <?php echo get_field( 'business_id', 'user_' . $user_id ); ?>
-        </font>
-      </p>
-      <p style="padding-bottom: 0; margin-bottom: 0;">COMPANY NAME: <font face="lato">
-          <?php echo ( get_field( 'business_name', 'user_' . $user_id ) ? get_field( 'business_name', 'user_' . $user_id ) : 'None' ); ?>
-        </font>
-      </p>
-      <?php if ( $instance ) : ?>
-      <p style="padding-bottom: 0; margin-bottom: 0;">MATERIAL: <font face="lato">
-          <?php echo $instance->get_material_name( $product_id ); ?>
-        </font>
-      </p>
-      <?php endif; ?>
-      <p style="padding-bottom: 0; margin-bottom: 40px;">PRODUCT: <font face="lato">
-          <?php echo $product_name; ?>
-        </font>
-      </p>
-    </td>
-  </tr>
+		<style>
+			h4,
+			h6 {
+				margin-bottom: 0pt;
+				margin-top: 0px;
+			}
+		</style>
+		<table style="margin-bottom: 20px;">
+			<tr>
+				<td style="margin-top: 0; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #000;">
+					<img src="<?php echo get_stylesheet_directory() . '/assets/img/nova-logo.png'; ?>" alt="Nova Signage"
+						style="margin-top: 0;" />
+				</td>
+			</tr>
+			<tr>
+				<td style="padding: 30px;"></td>
+			</tr>
+			<tr>
+				<td>
+					<h4 style="font-size: 14pt; margin-bottom: 0;">QUOTE ID:
+						Q-<?php echo str_pad( $post_id, 4, '0', STR_PAD_LEFT ); ?>
+					</h4>
+					<p style="padding-bottom: 0; margin-bottom: 0;">INITIAL QUOTE REQUESTED ON: <font face="lato">
+							<?php echo get_the_date( 'F j, Y', $post_id ); ?>
+						</font>
+					</p>
+					<p style="padding-bottom: 0; margin-bottom: 0;">LAST QUOTE SAVED: <font face="lato">
+							<?php echo get_the_modified_date( 'F j, Y', $post_id ); ?>
+						</font>
+					</p>
+					<p style="padding-bottom: 0; margin-bottom: 0;">QUOTE NAME: <font face="lato">
+							<?php echo get_field( 'frontend_title', $post_id ); ?>
+						</font>
+					</p>
+					<p style="padding-bottom: 0; margin-bottom: 0;">BUSINESS ID: <font face="lato">
+							<?php echo get_field( 'business_id', 'user_' . $user_id ); ?>
+						</font>
+					</p>
+					<p style="padding-bottom: 0; margin-bottom: 0;">COMPANY NAME: <font face="lato">
+							<?php echo ( get_field( 'business_name', 'user_' . $user_id ) ? get_field( 'business_name', 'user_' . $user_id ) : 'None' ); ?>
+						</font>
+					</p>
+					<?php if ( $instance ) : ?>
+						<p style="padding-bottom: 0; margin-bottom: 0;">MATERIAL: <font face="lato">
+								<?php echo $instance->get_material_name( $product_id ); ?>
+							</font>
+						</p>
+					<?php endif; ?>
+					<p style="padding-bottom: 0; margin-bottom: 40px;">PRODUCT: <font face="lato">
+							<?php echo $product_name; ?>
+						</font>
+					</p>
+				</td>
+			</tr>
 
-  <tr>
-    <td cellpadding="10"></td>
-  </tr>
+			<tr>
+				<td cellpadding="10"></td>
+			</tr>
 
-  <tr>
-    <td style="padding-top: 20px; padding-bottom: 20px;">
-      <?php
+			<tr>
+				<td style="padding-top: 20px; padding-bottom: 20px;">
+					<?php
 					foreach ( $signage as $project ) {
 						$projectArray = get_object_vars( $project );
 						$price = $projectArray['usdPrice'];
@@ -1387,12 +1389,12 @@ h6 {
 						}
 
 						?>
-      <table style="margin-top: 40px; margin-bottom: 20px;">
-        <tr style="font-size: 17px; font-weight: bold;">
-          <td><?php echo $projectArray['title']; ?></td>
-          <td style="text-align: right;"><?php echo $currency; ?>$ <?php echo $price; ?></td>
-        </tr>
-        <?php
+						<table style="margin-top: 40px; margin-bottom: 20px;">
+							<tr style="font-size: 17px; font-weight: bold;">
+								<td><?php echo $projectArray['title']; ?></td>
+								<td style="text-align: right;"><?php echo $currency; ?>$ <?php echo $price; ?></td>
+							</tr>
+							<?php
 							if ( isset( $projectArray['letters'] ) && ! empty( $projectArray['letters'] ) ) {
 								$color = '#000000';
 								if ( isset( $projectArray['vinylWhite']->color ) && ! empty( $projectArray['vinylWhite']->color ) ) {
@@ -1403,100 +1405,99 @@ h6 {
 								$face = $projectArray['font'] ? strtolower( str_replace( array( 'regular', ' ', 'bold' ), array( '', '_', 'b' ), $projectArray['font'] ) ) : '';
 								$style = $color . $face;
 								?>
-        <tr>
-          <td colspan="2">
-            <div style="padding: 100px; border-radius: 8px; border: 1px solid #ddd;">
-              <h1 style="text-align: center;">
-                <font size="22" face="<?php echo $face; ?>"
-                  <?php echo ( isset( $projectArray['color'] ) && $projectArray['color']->color ? ' color="' . $projectArray['color']->color . '" ' : '' ); ?>>
-                  <?php echo $projectArray['letters']; ?>
-                </font>
-              </h1>
-            </div>
-          </td>
-        </tr>
-        <?php } ?>
-        <tr>
-          <td colspan="2" style="padding:40px;"></td>
-        </tr>
-      </table>
+								<tr>
+									<td colspan="2">
+										<div style="padding: 100px; border-radius: 8px; border: 1px solid #ddd;">
+											<h1 style="text-align: center;">
+												<font size="22" face="<?php echo $face; ?>" <?php echo ( isset( $projectArray['color'] ) && $projectArray['color']->color ? ' color="' . $projectArray['color']->color . '" ' : '' ); ?>>
+													<?php echo $projectArray['letters']; ?>
+												</font>
+											</h1>
+										</div>
+									</td>
+								</tr>
+							<?php } ?>
+							<tr>
+								<td colspan="2" style="padding:40px;"></td>
+							</tr>
+						</table>
 
-      <?php
+						<?php
 						$this->output_project_item( $project );
 					}
 
 					?>
-    </td>
-  </tr>
-  <?php if ( $note ) : ?>
-  <tr>
-    <td style="font-size:110%;">NOTE:</td>
-  </tr>
-  <tr>
-    <td style="font-family: Arial">
-      <?php echo $note; ?>
-    </td>
-  </tr>
-  <?php endif; ?>
-  <tr>
-    <td></td>
-  </tr>
-  <tr>
-    <td style="padding-top: 20px; border-top: 1px solid #ddd;">
-      <table>
-        <tr>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>
-            <h5 style="font-size: 13pt">ESTIMATED SUBTOTAL:</h5>
-          </td>
-          <td style="text-align: right;">
-            <h5 style="font-size: 13pt"><?php echo $currency; ?>$
-              <?php echo $final_price; ?>
-            </h5>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <h5 style="font-size: 13pt">PACKAGING &amp; SHIPPING:</h5>
-          </td>
-          <td style="text-align: right;">
-            <h5 style="font-size: 13pt"><?php echo $currency; ?>$
-              <?php echo $estimated_shipping; ?>
-            </h5>
-          </td>
-        </tr>
-        <?php if ( $tax ) { ?>
-        <tr>
-          <td>
-            <h5 style="font-size: 13pt"><?php echo $tax_rate_name; ?>:</h5>
-          </td>
-          <td style="text-align: right;">
-            <h5 style="font-size: 13pt"><?php echo $currency; ?>$
-              <?php echo $tax_compute; ?>
-            </h5>
-          </td>
-        </tr>
-        <?php } ?>
-        <tr>
-          <td style="padding-top: 20px; padding-bottom: 20px;">
-            <h4 style="font-size: 14pt;">ESTIMATED TOTAL:
-            </h4>
-          </td>
-          <td style="padding-top: 20px; padding-bottom: 20px; text-align: right;">
-            <h4 style="font-size: 14pt;"><?php echo $currency; ?>$
-              <?php echo $estimate_total; ?>
-            </h4>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
+				</td>
+			</tr>
+			<?php if ( $note ) : ?>
+				<tr>
+					<td style="font-size:110%;">NOTE:</td>
+				</tr>
+				<tr>
+					<td style="font-family: Arial">
+						<?php echo $note; ?>
+					</td>
+				</tr>
+			<?php endif; ?>
+			<tr>
+				<td></td>
+			</tr>
+			<tr>
+				<td style="padding-top: 20px; border-top: 1px solid #ddd;">
+					<table>
+						<tr>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>
+								<h5 style="font-size: 13pt">ESTIMATED SUBTOTAL:</h5>
+							</td>
+							<td style="text-align: right;">
+								<h5 style="font-size: 13pt"><?php echo $currency; ?>$
+									<?php echo $final_price; ?>
+								</h5>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<h5 style="font-size: 13pt">PACKAGING &amp; SHIPPING:</h5>
+							</td>
+							<td style="text-align: right;">
+								<h5 style="font-size: 13pt"><?php echo $currency; ?>$
+									<?php echo $estimated_shipping; ?>
+								</h5>
+							</td>
+						</tr>
+						<?php if ( $tax ) { ?>
+							<tr>
+								<td>
+									<h5 style="font-size: 13pt"><?php echo $tax_rate_name; ?>:</h5>
+								</td>
+								<td style="text-align: right;">
+									<h5 style="font-size: 13pt"><?php echo $currency; ?>$
+										<?php echo $tax_compute; ?>
+									</h5>
+								</td>
+							</tr>
+						<?php } ?>
+						<tr>
+							<td style="padding-top: 20px; padding-bottom: 20px;">
+								<h4 style="font-size: 14pt;">ESTIMATED TOTAL:
+								</h4>
+							</td>
+							<td style="padding-top: 20px; padding-bottom: 20px; text-align: right;">
+								<h4 style="font-size: 14pt;"><?php echo $currency; ?>$
+									<?php echo $estimate_total; ?>
+								</h4>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
 
-<?php
+		<?php
 		return ob_get_clean();
 	}
 
@@ -2119,7 +2120,7 @@ h6 {
 
 	public function nova_rest_pricing_tables() {
 		register_rest_route(
-			'nova/v1',
+			NOVA_REST_ROUTE_PREFIX,
 			'/pricingletters/(?P<id>\d+)',
 			array(
 				'methods' => 'GET',
@@ -2129,7 +2130,7 @@ h6 {
 		);
 
 		register_rest_route(
-			'nova/v1',
+			NOVA_REST_ROUTE_PREFIX,
 			'/multipricingletters/(?P<id>\d+)',
 			array(
 				'methods' => 'GET',
@@ -2139,7 +2140,7 @@ h6 {
 		);
 
 		register_rest_route(
-			'nova/v1',
+			NOVA_REST_ROUTE_PREFIX,
 			'/pricinglogos/(?P<id>\d+)',
 			array(
 				'methods' => 'GET',
@@ -2149,7 +2150,7 @@ h6 {
 		);
 
 		register_rest_route(
-			'nova/v1',
+			NOVA_REST_ROUTE_PREFIX,
 			'/quantity-discount/(?P<id>\d+)',
 			array(
 				'methods' => 'GET',
@@ -2205,7 +2206,7 @@ h6 {
 
 	public function nova_rest_quote_file() {
 		register_rest_route(
-			'nova/v1',
+			NOVA_REST_ROUTE_PREFIX,
 			'/upload-quote-file',
 			array(
 				'methods' => 'POST',
@@ -2263,7 +2264,7 @@ h6 {
 				'logo_pricing_tables' => $this->get_logo_pricing_tables(),
 				'fonts' => $this->get_fonts(),
 				'no_lowercase' => $this->no_lowercase(),
-				'upload_rest' => esc_url_raw( rest_url( '/nova/v1/upload-quote-file' ) ),
+				'upload_rest' => esc_url_raw( rest_url( NOVA_REST_ROUTE_PREFIX . '/upload-quote-file' ) ),
 				'logged_in' => is_user_logged_in(),
 				'user_role' => $this->get_current_user_role_slugs(),
 				'user_id' => $this->get_partner_id(),
@@ -2294,10 +2295,10 @@ h6 {
 				'quote_div_id' => get_field( 'quote_div_id' ),
 				'is_added_to_cart' => $this->is_added_to_cart(),
 				'product_lines_accordion' => get_field( 'product_lines_accordion', 'option' ),
-				'letters_pricing_api' => rest_url() . 'nova/v1/pricingletters/',
-				'letters_multi_pricing_api' => rest_url() . 'nova/v1/multipricingletters/',
-				'logo_pricing_api' => rest_url() . 'nova/v1/pricinglogos/',
-				'quantity_discount_api' => rest_url() . 'nova/v1/quantity-discount/',
+				'letters_pricing_api' => rest_url() . NOVA_REST_ROUTE_PREFIX . '/pricingletters/',
+				'letters_multi_pricing_api' => rest_url() . NOVA_REST_ROUTE_PREFIX . '/multipricingletters/',
+				'logo_pricing_api' => rest_url() . NOVA_REST_ROUTE_PREFIX . '/pricinglogos/',
+				'quantity_discount_api' => rest_url() . NOVA_REST_ROUTE_PREFIX . '/quantity-discount/',
 				'show_all_partners' => $this->show_all_partners(),
 				'product_layers' => get_field( 'product_layers', $this->get_id_layer_product() ),
 				'project_folder_status' => isset( $_GET['qid'] ) ? $this->get_project_folder() : null,
@@ -2641,17 +2642,17 @@ h6 {
 			);
 		}
 		?>
-<div class="wrap">
-  <h1>Update Quote Dates</h1>
-  <?php echo $message; ?>
-  <p>This tool will update the <code>date_quoted</code> meta field for all quotes with status "ready" that don't have a
-    date set. The date will be set to the last revision date.</p>
-  <form method="post" action="">
-    <?php wp_nonce_field( 'update_quote_dates_nonce' ); ?>
-    <p><input type="submit" name="update_quote_dates" class="button button-primary" value="Update Quote Dates"></p>
-  </form>
-</div>
-<?php
+		<div class="wrap">
+			<h1>Update Quote Dates</h1>
+			<?php echo $message; ?>
+			<p>This tool will update the <code>date_quoted</code> meta field for all quotes with status "ready" that don't have a
+				date set. The date will be set to the last revision date.</p>
+			<form method="post" action="">
+				<?php wp_nonce_field( 'update_quote_dates_nonce' ); ?>
+				<p><input type="submit" name="update_quote_dates" class="button button-primary" value="Update Quote Dates"></p>
+			</form>
+		</div>
+		<?php
 	}
 
 	public function dropbox_api() {

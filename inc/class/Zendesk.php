@@ -63,7 +63,7 @@ class Zendesk {
 	 * Register routes
 	 */
 	public function register_routes() {
-		register_rest_route( 'nova/v1', '/update-order', array(
+		register_rest_route( NOVA_REST_ROUTE_PREFIX, '/update-order', array(
 			'methods' => 'POST',
 			'callback' => array( $this, 'update_order_with_ticket' ),
 			'permission_callback' => array( $this, 'check_auth' ),

@@ -117,7 +117,7 @@ class OrderApprove {
 		$message .= '<p>You may reach out to us for any inquiries or assistance.</p>' . "\n\n";
 
 		if ( $zendesk && ! empty( $files_urls ) && ! empty( $to ) && ! empty( $ticket_id ) ) {
-			update_field( 'order_approved', true, $order_id );
+
 			$this->send_scheduled_zendesk_message( $to, $ticket_id, $message, $files_urls, $order_id );
 			// if ( ! wp_next_scheduled( 'nova_send_scheduled_zendesk_message', array( $to, $ticket_id, $message, $files_urls, $order_id ) ) ) {
 			// 	wp_schedule_single_event( time() + 1, 'nova_send_scheduled_zendesk_message', array( $to, $ticket_id, $message, $files_urls, $order_id ) );
@@ -483,8 +483,9 @@ class OrderApprove {
 		foreach ( $orders as $order ) {
 			$order_id = $order->get_id();
 			$order_approved_date = $order->get_meta( 'order_approved_date' );
+			$order_approved_by_customer = get_field( 'order_approved_by_customer', $order_id );
 
-			if ( ! $order_approved_date ) {
+			if ( ! $order_approved_date || $order_approved_by_customer ) {
 				continue;
 			}
 
@@ -496,7 +497,7 @@ class OrderApprove {
 			$third_reminder_sent = $order->get_meta( 'third_reminder_sent' );
 			$zendesk_ticket_id = $order->get_meta( 'zendesk_ticket_id' );
 
-			$to = $order->get_meta( 'order_approved_email' ) ? $order->get_meta( 'order_approved_email' ) : 'lok@novasignage.com';
+			$to = $order->get_meta( 'order_approved_email' ) ? $order->get_meta( 'order_approved_email' ) : 'joshua+nova@novasignage.com';
 
 			if ( $days_since_order_approved >= 1 && ! $first_reminder_sent ) {
 

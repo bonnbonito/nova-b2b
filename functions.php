@@ -90,6 +90,10 @@ if ( ! defined( 'NOVA_SHIPPING_MIN_PRICE' ) ) {
 	define( 'NOVA_SHIPPING_MIN_PRICE', 800 );
 }
 
+if ( ! defined( 'NOVA_REST_ROUTE_PREFIX' ) ) {
+	define( 'NOVA_REST_ROUTE_PREFIX', 'nova/v1' );
+}
+
 /** if Woocommerce activated */
 if ( class_exists( 'woocommerce' ) ) {
 

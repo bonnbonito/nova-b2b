@@ -396,7 +396,7 @@ class Scripts {
 				'quote_id' => get_the_ID(),
 				'project_id_folder' => get_field( 'project_id_folder', get_the_ID() ),
 				'partner_business_id' => get_field( 'business_id', 'user_' . get_field( 'partner', get_the_ID() ) ),
-				'rest_api' => esc_url_raw( rest_url() . 'nova/v1' ),
+				'rest_api' => esc_url_raw( rest_url() . NOVA_REST_ROUTE_PREFIX ),
 				'get_project_folder' => get_field( 'project_id_folder', get_the_ID() ),
 				'shipping_flat_rate' => NOVA_SHIPPING_FLAT_RATE,
 				'shipping_standard_percentage' => NOVA_SHIPPING_STANDARD_PERCENTAGE,

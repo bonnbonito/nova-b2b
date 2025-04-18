@@ -48,8 +48,8 @@ class Streak {
 		$results = $wpdb->get_results( "SELECT * FROM $table_name WHERE email = '' OR email IS NULL" );
 
 		foreach ( $results as $row ) {
-			$id         = $row->id;
-			$boxID      = $row->boxID;
+			$id = $row->id;
+			$boxID = $row->boxID;
 			$project_id = $row->project_id;
 			error_log( 'getting Email ' . $boxID );
 			// Make an API request to get the email for the boxID
@@ -61,7 +61,7 @@ class Streak {
 	public function add_cron_schedule( $schedules ) {
 		$schedules['every_2_minutes'] = array(
 			'interval' => 120,
-			'display'  => 'Every 2 minutes',
+			'display' => 'Every 2 minutes',
 		);
 		return $schedules;
 	}
@@ -76,12 +76,12 @@ class Streak {
 		$results = array();
 
 		foreach ( $users as $user ) {
-			$business_id    = get_user_meta( $user->ID, 'business_id', true );
-			$emails         = get_user_meta( $user->ID, 'employee_emails', true );
-			$emails_array   = $emails ? explode( ',', str_replace( ' ', '', trim( $emails ) ) ) : array();
+			$business_id = get_user_meta( $user->ID, 'business_id', true );
+			$emails = get_user_meta( $user->ID, 'employee_emails', true );
+			$emails_array = $emails ? explode( ',', str_replace( ' ', '', trim( $emails ) ) ) : array();
 			$emails_array[] = $user->user_email;
-			$emails         = array_unique( $emails_array );
-			$country        = get_user_meta( $user->ID, 'billing_country', true ) ? get_user_meta( $user->ID, 'billing_country', true ) : 'NONE';
+			$emails = array_unique( $emails_array );
+			$country = get_user_meta( $user->ID, 'billing_country', true ) ? get_user_meta( $user->ID, 'billing_country', true ) : 'NONE';
 
 			if ( $country == 'CA' ) {
 				$country = 'CAN';
@@ -91,8 +91,8 @@ class Streak {
 
 			$results[] = array(
 				'business_id' => $business_id,
-				'emails'      => $emails,
-				'country'     => $country,
+				'emails' => $emails,
+				'country' => $country,
 			);
 
 			if ( in_array( $email, $emails ) ) {
@@ -105,7 +105,7 @@ class Streak {
 
 	public function get_first_email_from( $insert_id, $boxID, $project_id ) {
 
-		$result  = $this->fetch_streak_box_data( $boxID );
+		$result = $this->fetch_streak_box_data( $boxID );
 		$decoded = json_decode( $result, true );
 
 		if ( isset( $decoded['firstEmailFrom'] ) ) {
@@ -113,16 +113,14 @@ class Streak {
 			$details = $this->get_streak_details_from_email( $decoded['firstEmailFrom'] ) ?: 'NONE';
 			if ( $details && isset( $details[0] ) ) {
 				$business_id = $details[0]['business_id'];
-				$email       = $decoded['firstEmailFrom'];
-				$country     = $details[0]['country'];
+				$email = $decoded['firstEmailFrom'];
+				$country = $details[0]['country'];
 				return $this->update_streak( $insert_id, $boxID, $project_id, $email, $business_id, $country );
 			}
 		}
 	}
 
 	public function populate_streak_details( $insert_id, $boxID ) {
-		//$url       = rest_url() . 'nova/v1/get-streak-box/' . $boxID;
-		//$emailFrom = wp_remote_get( $url );
 
 		$project_id = $this->insert_box_id_sheet( $insert_id, $boxID );
 
@@ -141,7 +139,7 @@ class Streak {
 
 		error_log( 'Fetching data for ' . $boxID . ' with max tries of ' . $max_tries );
 
-		$result  = $this->fetch_streak_box_data( $boxID );
+		$result = $this->fetch_streak_box_data( $boxID );
 		$decoded = json_decode( $result, true );
 
 		if ( isset( $decoded['firstEmailFrom'] ) ) {
@@ -149,8 +147,8 @@ class Streak {
 			$details = $this->get_streak_details_from_email( $decoded['firstEmailFrom'] ) ?: 'NONE';
 			if ( $details && isset( $details[0] ) ) {
 				$business_id = $details[0]['business_id'];
-				$email       = $decoded['firstEmailFrom'];
-				$country     = $details[0]['country'];
+				$email = $decoded['firstEmailFrom'];
+				$country = $details[0]['country'];
 				return $this->update_streak( $insert_id, $boxID, $project_id, $email, $business_id, $country );
 			}
 		} else {
@@ -165,13 +163,13 @@ class Streak {
 		$url = 'https://api.streak.com/api/v1/boxes/' . $boxID;
 
 		$args = array(
-			'method'      => 'GET',
-			'timeout'     => 30,
+			'method' => 'GET',
+			'timeout' => 30,
 			'redirection' => 10,
 			'httpversion' => '1.1',
-			'headers'     => array(
-				'Content-Type'  => 'application/json',
-				'Accept'        => 'application/json',
+			'headers' => array(
+				'Content-Type' => 'application/json',
+				'Accept' => 'application/json',
 				'Authorization' => 'Basic ' . base64_encode( $this->get_streak_api() ),
 			),
 		);
@@ -207,7 +205,7 @@ class Streak {
 	 */
 	public function create_streak_boxes_table() {
 		global $wpdb;
-		$table_name      = $wpdb->prefix . 'streak_boxes';
+		$table_name = $wpdb->prefix . 'streak_boxes';
 		$charset_collate = $wpdb->get_charset_collate();
 
 		$sql = "CREATE TABLE $table_name (
@@ -230,31 +228,31 @@ class Streak {
 	 */
 	public function register_routes() {
 		register_rest_route(
-			'nova/v1',
+			NOVA_REST_ROUTE_PREFIX,
 			'/add-streak-box',
 			array(
-				'methods'             => 'POST',
-				'callback'            => array( $this, 'add_streak_box' ),
+				'methods' => 'POST',
+				'callback' => array( $this, 'add_streak_box' ),
 				'permission_callback' => array( $this, 'check_basic_auth' ),
 			)
 		);
 
 		register_rest_route(
-			'nova/v1',
+			NOVA_REST_ROUTE_PREFIX,
 			'/update-streak-box/(?P<id>\d+)',
 			array(
-				'methods'             => 'POST',
-				'callback'            => array( $this, 'update_streak_box' ),
+				'methods' => 'POST',
+				'callback' => array( $this, 'update_streak_box' ),
 				'permission_callback' => array( $this, 'check_basic_auth' ),
 			)
 		);
 
 		register_rest_route(
-			'nova/v1',
+			NOVA_REST_ROUTE_PREFIX,
 			'/get-streak-box/(?P<id>[\w-]+)',
 			array(
-				'methods'             => 'GET',
-				'callback'            => array( $this, 'get_streak_box' ),
+				'methods' => 'GET',
+				'callback' => array( $this, 'get_streak_box' ),
 				'permission_callback' => '__return_true',
 			)
 		);
@@ -270,14 +268,14 @@ class Streak {
 			if ( isset( $json['firstEmailFrom'] ) ) {
 				return new \WP_REST_Response(
 					array(
-						'status'         => 'success',
+						'status' => 'success',
 						'firstEmailFrom' => $json['firstEmailFrom'],
 					)
 				);
 			} else {
 				return new \WP_REST_Response(
 					array(
-						'status'  => 'error',
+						'status' => 'error',
 						'message' => 'No email found',
 					)
 				);
@@ -285,7 +283,7 @@ class Streak {
 		} else {
 			return new \WP_REST_Response(
 				array(
-					'status'  => 'error',
+					'status' => 'error',
 					'message' => 'Failed to fetch data',
 				),
 				500
@@ -307,7 +305,7 @@ class Streak {
 		if ( $exists ) {
 			return new \WP_REST_Response(
 				array(
-					'status'  => 'error',
+					'status' => 'error',
 					'message' => 'BoxID already exists',
 				),
 				500
@@ -318,7 +316,7 @@ class Streak {
 			$table_name,
 			array(
 				'boxID' => $boxID,
-				'date'  => current_time( 'mysql' ),
+				'date' => current_time( 'mysql' ),
 			)
 		);
 
@@ -335,9 +333,9 @@ class Streak {
 	public function check_basic_auth( $request ) {
 		$headers = getallheaders();
 		if ( isset( $headers['Authorization'] ) ) {
-			list($type, $credentials) = explode( ' ', $headers['Authorization'], 2 );
+			list( $type, $credentials ) = explode( ' ', $headers['Authorization'], 2 );
 			if ( strtolower( $type ) === 'basic' ) {
-				list($user, $password) = explode( ':', base64_decode( $credentials ), 2 );
+				list( $user, $password ) = explode( ':', base64_decode( $credentials ), 2 );
 				if ( $user === 'bonnix' && $password === $this->get_streak_password() ) {
 					return true;
 				}
@@ -367,7 +365,7 @@ class Streak {
 	public function display_streak_boxes() {
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'streak_boxes';
-		$results    = $wpdb->get_results( "SELECT * FROM $table_name" );
+		$results = $wpdb->get_results( "SELECT * FROM $table_name" );
 
 		echo '<div class="wrap">';
 		echo '<h1 class="wp-heading-inline">Streak Boxes</h1>';
@@ -376,7 +374,7 @@ class Streak {
 		echo '<tbody>';
 		foreach ( $results as $row ) {
 			$delete_nonce = wp_create_nonce( 'delete_streak_box_' . $row->id );
-			$delete_url   = admin_url( 'admin-post.php?action=delete_streak_box&id=' . $row->id . '&nonce=' . $delete_nonce );
+			$delete_url = admin_url( 'admin-post.php?action=delete_streak_box&id=' . $row->id . '&nonce=' . $delete_nonce );
 
 			echo '<tr>';
 			echo '<td>' . esc_html( $row->id ) . '</td>';
@@ -431,19 +429,19 @@ class Streak {
 		$table_name = $wpdb->prefix . 'streak_boxes';
 
 		// Sanitize the inputs
-		$id          = intval( $id );
-		$email       = sanitize_email( $email );
+		$id = intval( $id );
+		$email = sanitize_email( $email );
 		$business_id = sanitize_text_field( $business_id );
-		$country     = sanitize_text_field( $country );
+		$country = sanitize_text_field( $country );
 
 		// Update the database
 		$result = $wpdb->update(
 			$table_name,
 			array(
-				'project_id'  => $project_id,
-				'email'       => $email,
+				'project_id' => $project_id,
+				'email' => $email,
 				'business_id' => $business_id,
-				'country'     => $country,
+				'country' => $country,
 			),
 			array( 'id' => $id ),
 			array( '%s', '%s', '%s' ),
@@ -465,10 +463,10 @@ class Streak {
 
 	public function get_project_folder_id( $boxId, $business_id, $country ) {
 		$params = array(
-			'boxId'    => $boxId,
+			'boxId' => $boxId,
 			'isSearch' => 'true',
 		);
-		$url    = $this->get_google_sheet();
+		$url = $this->get_google_sheet();
 
 		$project_folder = wp_remote_get( $url, array( 'body' => $params ) );
 
@@ -477,7 +475,7 @@ class Streak {
 			return false; // indicate failure
 		} else {
 			$project_folder = wp_remote_retrieve_body( $project_folder );
-			$data           = json_decode( $project_folder, true );
+			$data = json_decode( $project_folder, true );
 
 			$project_id = $data['data'][0]['projectId'] ? $data['data'][0]['projectId'] : false;
 
@@ -500,15 +498,15 @@ class Streak {
 		$response = wp_remote_post(
 			$url,
 			array(
-				'body'        => $body,
-				'headers'     => array(
-					'Content-Type'  => 'application/json',
-					'Accept'        => 'application/json',
+				'body' => $body,
+				'headers' => array(
+					'Content-Type' => 'application/json',
+					'Accept' => 'application/json',
 					'Authorization' => 'Basic ' . base64_encode( $this->get_streak_api() ),
 				),
-				'timeout'     => 30,
+				'timeout' => 30,
 				'redirection' => 10,
-				'blocking'    => true,
+				'blocking' => true,
 				'httpversion' => '1.1',
 			)
 		);
@@ -541,15 +539,15 @@ class Streak {
 		$response = wp_remote_post(
 			$url,
 			array(
-				'body'        => $body,
-				'headers'     => array(
-					'Content-Type'  => 'application/json',
-					'Accept'        => 'application/json',
+				'body' => $body,
+				'headers' => array(
+					'Content-Type' => 'application/json',
+					'Accept' => 'application/json',
 					'Authorization' => 'Basic ' . base64_encode( $this->get_streak_api() ),
 				),
-				'timeout'     => 30,
+				'timeout' => 30,
 				'redirection' => 10,
-				'blocking'    => true,
+				'blocking' => true,
 				'httpversion' => '1.1',
 			)
 		);
@@ -581,11 +579,11 @@ class Streak {
 
 	public function update_sheet_sheet( $boxId, $email, $business_id, $country ) {
 		$params = array(
-			'boxId'      => $boxId,
-			'email'      => $email,
+			'boxId' => $boxId,
+			'email' => $email,
 			'businessId' => $business_id,
-			'country'    => $country,
-			'isUpdate'   => 'true',
+			'country' => $country,
+			'isUpdate' => 'true',
 		);
 
 		$url = $this->get_google_sheet() . '?boxId=' . $boxId . '&isUpdate=true' . '&email=' . $email . '&businessId=' . $business_id . '&country=' . $country;
@@ -627,23 +625,23 @@ class Streak {
 	public function update_streak_box( $request ) {
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'streak_boxes';
-		$id         = intval( $request['id'] );
+		$id = intval( $request['id'] );
 
-		$boxID       = sanitize_text_field( $request['boxID'] );
-		$email       = sanitize_email( $request['email'] );
+		$boxID = sanitize_text_field( $request['boxID'] );
+		$email = sanitize_email( $request['email'] );
 		$business_id = sanitize_text_field( $request['business_id'] );
-		$country     = sanitize_text_field( $request['country'] );
-		$project_id  = sanitize_text_field( $request['project_id'] );
+		$country = sanitize_text_field( $request['country'] );
+		$project_id = sanitize_text_field( $request['project_id'] );
 
 		$result = $wpdb->update(
 			$table_name,
 			array(
-				'boxID'       => $boxID,
-				'email'       => $email,
-				'project_id'  => $project_id,
+				'boxID' => $boxID,
+				'email' => $email,
+				'project_id' => $project_id,
 				'business_id' => $business_id,
-				'country'     => $country,
-				'date'        => current_time( 'mysql' ),
+				'country' => $country,
+				'date' => current_time( 'mysql' ),
 			),
 			array( 'id' => $id )
 		);
@@ -651,7 +649,7 @@ class Streak {
 		if ( $result === false ) {
 			return new \WP_REST_Response(
 				array(
-					'status'  => 'error',
+					'status' => 'error',
 					'message' => 'Failed to update',
 				),
 				500

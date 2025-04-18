@@ -82,9 +82,11 @@ class Shortcodes {
 			}
 		}
 
-		$order_approved = get_field( 'order_approved', $order_id );
+		$order_approved = get_field( 'order_approved_by_customer', $order_id );
+		//order status
+		$order_status = $order->get_status();
 
-		if ( $order_approved ) {
+		if ( $order_approved && $order_status == 'completed' ) {
 			return '<div class="alert alert-danger"><p>This order has already been approved.</p></div>';
 		}
 

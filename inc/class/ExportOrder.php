@@ -44,7 +44,7 @@ class ExportOrder {
 	 */
 	public function debug() {
 		$response = wp_remote_get(
-			rest_url( 'nova/v1/nova_orders' ),
+			rest_url( NOVA_REST_ROUTE_PREFIX . '/nova_orders' ),
 			array(
 				'cookies' => $_COOKIE,
 				'headers' => array(
@@ -73,7 +73,7 @@ class ExportOrder {
 	 */
 	public function register_rest_routes() {
 		register_rest_route(
-			'nova/v1',
+			NOVA_REST_ROUTE_PREFIX,
 			'/nova_orders',
 			array(
 				'methods' => 'GET',
@@ -82,7 +82,7 @@ class ExportOrder {
 			)
 		);
 		register_rest_route(
-			'nova/v1',
+			NOVA_REST_ROUTE_PREFIX,
 			'/orders',
 			array(
 				'methods' => 'GET',
