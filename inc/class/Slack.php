@@ -334,6 +334,12 @@ class Slack {
 
 		$file_content = wp_remote_retrieve_body( $file_response );
 		$file_name = basename( parse_url( $file_url, PHP_URL_PATH ) );
+		// This code checks if the file URL contains '.pdf' (case insensitive)
+		// If the URL doesn't contain a PDF reference, it appends '.zip' to the filename
+		// This ensures files are properly recognized in Slack regardless of where the extension appears in the URL
+		if ( ! preg_match( '/\.pdf/i', $file_url ) ) {
+			$file_name .= '.zip';
+		}
 		$file_size = strlen( $file_content );
 
 		if ( $file_size === 0 ) {
