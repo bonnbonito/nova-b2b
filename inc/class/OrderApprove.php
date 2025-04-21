@@ -191,6 +191,10 @@ class OrderApprove {
 				$message .= "You need to change a detail. We will revise it based on your comment within 24 business hours.</p>\n\n";
 			}
 
+			$message .= '<p><br/></p>';
+			$message .= '<p><strong>Design Approval & Liability Release:</strong><br>';
+			$message .= 'By approving the attached production files—whether by electronic confirmation, signature, or “Approved” checkbox—the Client confirms that all details (including but not limited to dimensions, materials, finishes, colors, and mounting methods) are correct and complete. NOVA Signage will manufacture strictly in accordance with these approved files. Any discrepancies, errors, or desired changes identified after approval are the sole responsibility of the Client. Should the Client request revisions post‑approval, NOVA Signage will assess additional charges and extended lead times as necessary. NOVA Signage disclaims all liability for costs, losses, or delays arising from Client‑approved designs.</p>' . "\n\n";
+
 			$sent = $zendesk->send_zendesk_reply( $to, $ticket_id, $message, $files_urls );
 			if ( is_wp_error( $sent ) ) {
 				wp_send_json_error( $sent->get_error_message() );
@@ -264,11 +268,14 @@ class OrderApprove {
 			$message = '<p>Hi ' . $customer_name . ',</p>' . "\n\n";
 			$message .= '<p>Please review the mockup and production drawing for Order #' . $order->get_order_number() . '. We need your confirmation before the production begins.</p>' . "\n\n";
 			$message .= '<p><strong>MOCKUPS & PRODUCTION DRAWING HERE:</strong><br>';
-			$message .= home_url() . '/review-mockup?order_id=' . $order_id . '</p>';
+			$message .= '<a href="' . home_url() . '/review-mockup?order_id=' . $order_id . '">' . home_url() . '/review-mockup?order_id=' . $order_id . '</a></p>';
 			$message .= '<p><strong>Approve if:</strong><br>';
 			$message .= 'All details are correct. Once you approve, changes cannot be made. We will start the production after approval.</p>';
 			$message .= '<p><strong>Revise if:</strong><br>';
 			$message .= 'You need to change a detail. We will revise it based on your comment within 24 business hours.</p>' . "\n\n";
+			$message .= '<p><br/></p>';
+			$message .= '<p><strong>Design Approval & Liability Release:</strong><br>';
+			$message .= 'By approving the attached production files—whether by electronic confirmation, signature, or “Approved” checkbox—the Client confirms that all details (including but not limited to dimensions, materials, finishes, colors, and mounting methods) are correct and complete. NOVA Signage will manufacture strictly in accordance with these approved files. Any discrepancies, errors, or desired changes identified after approval are the sole responsibility of the Client. Should the Client request revisions post‑approval, NOVA Signage will assess additional charges and extended lead times as necessary. NOVA Signage disclaims all liability for costs, losses, or delays arising from Client‑approved designs.</p>' . "\n\n";
 			$message .= '<p>Best regards,<br>';
 			$message .= 'Nova Signage</p>' . "\n\n";
 
@@ -510,12 +517,16 @@ class OrderApprove {
 				$message .= '<p>Just a quick reminder to review the mockup and production drawing for your order #' . $order->get_order_number() . '.</p><br/>';
 				$message .= '<p>We need your confirmation to proceed with production.</p><br/>';
 				$message .= '<p><strong>MOCKUPS & PRODUCTION DRAWING HERE:</strong><br>';
-				$message .= home_url() . '/review-mockup?order_id=' . $order_id . '</p>';
+				$message .= '<a href="' . home_url() . '/review-mockup?order_id=' . $order_id . '">' . home_url() . '/review-mockup?order_id=' . $order_id . '</a></p>';
 				$message .= '<p><strong>Approve if:</strong><br>';
 				$message .= 'All details are correct. Once approved, no further changes can be made.</p><br>';
 				$message .= '<p><strong>Revise if:</strong><br>';
 				$message .= 'You need changes. We\'ll revise your request within 24 business hours.</p>' . "<br/><br/>";
 				$message .= 'Thank you!<br/>';
+
+				$message .= '<p><br/></p>';
+				$message .= '<p><strong>Design Approval & Liability Release:</strong><br>';
+				$message .= 'By approving the attached production files—whether by electronic confirmation, signature, or “Approved” checkbox—the Client confirms that all details (including but not limited to dimensions, materials, finishes, colors, and mounting methods) are correct and complete. NOVA Signage will manufacture strictly in accordance with these approved files. Any discrepancies, errors, or desired changes identified after approval are the sole responsibility of the Client. Should the Client request revisions post‑approval, NOVA Signage will assess additional charges and extended lead times as necessary. NOVA Signage disclaims all liability for costs, losses, or delays arising from Client‑approved designs.</p>' . "\n\n";
 
 
 
@@ -541,6 +552,10 @@ class OrderApprove {
 				$message .= '<p>Thanks for your prompt attention!</p>';
 				$message .= '<p>Thank you!</p>';
 
+				$message .= '<p><br/></p>';
+				$message .= '<p><strong>Design Approval & Liability Release:</strong><br>';
+				$message .= 'By approving the attached production files—whether by electronic confirmation, signature, or “Approved” checkbox—the Client confirms that all details (including but not limited to dimensions, materials, finishes, colors, and mounting methods) are correct and complete. NOVA Signage will manufacture strictly in accordance with these approved files. Any discrepancies, errors, or desired changes identified after approval are the sole responsibility of the Client. Should the Client request revisions post‑approval, NOVA Signage will assess additional charges and extended lead times as necessary. NOVA Signage disclaims all liability for costs, losses, or delays arising from Client‑approved designs.</p>' . "\n\n";
+
 				$order->add_order_note( 'Second reminder sent: ' . date( 'F j, Y', $current_date ) );
 				$order->update_meta_data( 'second_reminder_sent', $current_date );
 				$order->save();
@@ -560,6 +575,10 @@ class OrderApprove {
 				$message .= '<strong>Request a revision</strong> if anything needs to be changed -- our team will update the file within 24 business hours.</p>';
 				$message .= '<p>If the mockups are not approved or revised, our team will follow up with you to confirm the details before proceeding.</p>';
 				$message .= '<p>Let us know if you have any questions. We\'re looking forward to your confirmation!</p>';
+
+				$message .= '<p><br/></p>';
+				$message .= '<p><strong>Design Approval & Liability Release:</strong><br>';
+				$message .= 'By approving the attached production files—whether by electronic confirmation, signature, or “Approved” checkbox—the Client confirms that all details (including but not limited to dimensions, materials, finishes, colors, and mounting methods) are correct and complete. NOVA Signage will manufacture strictly in accordance with these approved files. Any discrepancies, errors, or desired changes identified after approval are the sole responsibility of the Client. Should the Client request revisions post‑approval, NOVA Signage will assess additional charges and extended lead times as necessary. NOVA Signage disclaims all liability for costs, losses, or delays arising from Client‑approved designs.</p>' . "\n\n";
 
 				$order->add_order_note( 'Third reminder sent: ' . date( 'F j, Y', $current_date ) );
 				$order->update_meta_data( 'third_reminder_sent', $current_date );

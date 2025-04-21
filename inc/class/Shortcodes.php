@@ -159,6 +159,19 @@ class Shortcodes {
 						<p>Our team will send an updated mockup within 24 business hours.</p>
 					</div>
 
+					<div class="mt-8 p-4 border border-solid bg-gray-100" id="approve-wrapper" style="display:none;">
+						<h4>Design Approval & Liability Release:</h4>
+						<p>By approving the attached production files—whether by electronic confirmation, signature, or “Approved”
+							checkbox—the Client confirms that all details (including but not limited to dimensions, materials, finishes,
+							colors, and mounting methods) are correct and complete. NOVA Signage will manufacture strictly in accordance
+							with these approved files. Any discrepancies, errors, or desired changes identified after approval are the sole
+							responsibility of the Client. Should the Client request revisions post‑approval, NOVA Signage will assess
+							additional charges and extended lead times as necessary. NOVA Signage disclaims all liability for costs, losses,
+							or delays arising from Client‑approved designs.</p>
+					</div>
+
+
+
 					<button type="submit" class="bg-nova-primary text-white px-4 py-2 rounded-md mt-4">Submit</button>
 				</form>
 			</div>

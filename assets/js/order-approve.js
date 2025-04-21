@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	const reviewForm = document.getElementById('review-form');
 	const approveRadios = document.querySelectorAll('input[name="approve"]');
 	const revisionWrapper = document.getElementById('revision-wrapper');
+	const approveWrapper = document.getElementById('approve-wrapper');
 	const revisionNotes = document.getElementById('revision_notes');
 	const reviewMockup = document.querySelector('.review-mockup');
 	const reviewApproved = document.querySelector('#review-approved');
@@ -13,8 +14,10 @@ document.addEventListener('DOMContentLoaded', function () {
 		radio.addEventListener('change', function () {
 			if (this.value === 'revision') {
 				revisionWrapper.style.display = 'block';
+				approveWrapper.style.display = 'none';
 			} else {
 				revisionWrapper.style.display = 'none';
+				approveWrapper.style.display = 'block';
 				revisionNotes.value = ''; // Clear the notes if "I approve" is selected
 			}
 		});
