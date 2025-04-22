@@ -67,17 +67,17 @@ class Trello {
 		$this->debugging = false;
 
 		if ( $this->debugging ) {
-			error_log( 'Trello Credentials Check: ' . print_r( [ 
+			error_log( 'Trello Credentials Check: ' . print_r( array(
 				'api_key_set' => ! empty( $this->api_key ),
 				'api_token_set' => ! empty( $this->api_token ),
 				'default_list_id_set' => ! empty( $this->default_list_id )
-			], true ) );
+			), true ) );
 		}
 
-		add_action( 'wp', [ $this, 'create_sample_card' ] );
+		add_action( 'wp', array( $this, 'create_sample_card' ) );
 
 		// Register REST route for webhook
-		add_action( 'rest_api_init', [ $this, 'register_webhook_endpoint' ] );
+		add_action( 'rest_api_init', array( $this, 'register_webhook_endpoint' ) );
 	}
 
 	public function create_sample_card() {
@@ -142,8 +142,11 @@ class Trello {
 			}
 		}
 
+		$webhook_url = get_field( 'trello_webhook_url', 'option' );
+
+		$callback_url = $webhook_url ? $webhook_url : get_rest_url( null, NOVA_REST_ROUTE_PREFIX . '/trello-webhook' );
+
 		// Automatically create webhook for this card
-		$callback_url = get_rest_url( null, NOVA_REST_ROUTE_PREFIX . '/trello-webhook' );
 		$webhook = $this->create_webhook(
 			$callback_url,
 			$response['id'],

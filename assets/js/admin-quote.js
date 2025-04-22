@@ -39,6 +39,7 @@ function convertToCAD(usdPrice, exchangeRate) {
 }
 
 function computeShipping(price) {
+	console.log(price);
 	const minPrice = QuoteAdmin.shipping_min_price;
 	const flatRate = QuoteAdmin.shipping_flat_rate;
 	const standardPercentage = QuoteAdmin.shipping_standard_percentage;
@@ -81,7 +82,7 @@ function displayTotalUsdPrice(signage) {
 	const cadPriceDisplay = convertToCAD(totalUsdPrice, EXCHANGE_RATE).toFixed(2);
 
 	const { shipping, cadShipping, previewPrice, previewCadPrice } =
-		computeShipping(totalUsdPrice.toFixed(2));
+		computeShipping(parseFloat(totalUsdPrice.toFixed(2)));
 
 	const totalPriceElement = document.createElement('div');
 	totalPriceElement.className = 'total-signage-price';
