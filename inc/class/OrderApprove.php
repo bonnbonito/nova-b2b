@@ -32,7 +32,7 @@ class OrderApprove {
 		add_action( 'check_order_approval_notifications', array( $this, 'process_order_approval_notifications' ) );
 		add_action( 'add_meta_boxes', array( $this, 'add_order_approved_date_metabox' ) );
 		add_action( 'save_post', array( $this, 'save_order_approved_date' ) );
-		add_action( 'order_customer_approved', array( $this, 'order_customer_approved' ) );
+		add_action( 'order_customer_approved', array( $this, 'order_customer_approved_function' ) );
 		add_action( 'order_customer_approved', array( $this, 'send_slack_message' ), 11, 1 );
 		add_action( 'order_customer_approved', array( $this, 'send_trello_message' ), 12, 1 );
 		add_action( 'nova_send_slack_message', array( $this, 'send_scheduled_slack_message' ) );
@@ -127,7 +127,7 @@ class OrderApprove {
 
 	}
 
-	public function order_customer_approved( $order_id ) {
+	public function order_customer_approved_function( $order_id ) {
 		$order = wc_get_order( $order_id );
 		if ( ! $order ) {
 			return;
