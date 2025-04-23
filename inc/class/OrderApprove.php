@@ -34,13 +34,41 @@ class OrderApprove {
 		add_action( 'save_post', array( $this, 'save_order_approved_date' ) );
 		add_action( 'order_customer_approved', array( $this, 'order_customer_approved' ) );
 		add_action( 'order_customer_approved', array( $this, 'send_slack_message' ), 11, 1 );
+		add_action( 'order_customer_approved', array( $this, 'send_trello_message' ), 12, 1 );
 		add_action( 'nova_send_slack_message', array( $this, 'send_scheduled_slack_message' ) );
+		add_action( 'nova_send_trello_message', array( $this, 'send_scheduled_trello_message' ) );
 		add_action( 'nova_send_scheduled_zendesk_message', array( $this, 'send_scheduled_zendesk_message' ), 10, 5 );
 	}
 
 	public function send_slack_message( $order_id ) {
 		if ( ! wp_next_scheduled( 'nova_send_slack_message', array( $order_id ) ) ) {
 			wp_schedule_single_event( time() + 1, 'nova_send_slack_message', array( $order_id ) );
+		}
+	}
+
+	public function send_trello_message( $order_id ) {
+		if ( ! wp_next_scheduled( 'nova_send_trello_message', array( $order_id ) ) ) {
+			wp_schedule_single_event( time() + 1, 'nova_send_trello_message', array( $order_id ) );
+		}
+	}
+
+	public function send_scheduled_trello_message( $order_id ) {
+		$order = wc_get_order( $order_id );
+		if ( ! $order ) {
+			return;
+		}
+
+		error_log( 'Sending scheduled trello message for order ' . $order_id );
+
+		$trello = \NOVA_B2B\Trello::get_instance();
+		$files = $this->get_dropbox_url_files( $order_id ) ?? [];
+
+		if ( $trello ) {
+			$name = $order->get_order_number();
+			$desc = 'Order approved by customer';
+			$options = '';
+			$attachments = $files;
+			$trello->create_card( $trello->default_list_id, $name, $desc, $options, $attachments, $order_id );
 		}
 	}
 
@@ -63,7 +91,6 @@ class OrderApprove {
 
 
 		$slack = \NOVA_B2B\Slack::get_instance();
-		$trello = \NOVA_B2B\Trello::get_instance();
 		if ( $slack ) {
 			$ts = $slack->send_message( $message );
 
@@ -97,13 +124,7 @@ class OrderApprove {
 			}
 		}
 
-		if ( $trello ) {
-			$name = $order->get_order_number();
-			$desc = 'Order approved by customer';
-			$options = '';
-			$attachments = $files;
-			$trello->create_card( $trello->default_list_id, $name, $desc, $options, $attachments, $order_id );
-		}
+
 	}
 
 	public function order_customer_approved( $order_id ) {
