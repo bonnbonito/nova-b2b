@@ -74,7 +74,7 @@ class Trello {
 			), true ) );
 		}
 
-		add_action( 'wp', array( $this, 'create_sample_card' ) );
+		//add_action( 'wp', array( $this, 'create_sample_card' ) );
 
 		// Register REST route for webhook
 		add_action( 'rest_api_init', array( $this, 'register_webhook_endpoint' ) );
@@ -114,7 +114,7 @@ class Trello {
 	 * @param array  $attachments Array of attachments [['path' => '/path/to/file', 'name' => 'filename.ext']].
 	 * @return array|WP_Error Card object containing id, name, desc, url, etc. or WP_Error on failure
 	 */
-	public function create_card( $list_id, $name, $desc = '', $options = [], $attachments = [] ) {
+	public function create_card( $list_id, $name, $desc = '', $options = [], $attachments = [], $order_id = null ) {
 		$endpoint = "/cards";
 		$params = array_merge( [ 
 			'idList' => $list_id,
@@ -142,6 +142,11 @@ class Trello {
 			}
 		}
 
+		if ( $order_id ) {
+			//save the card id to meta
+			update_post_meta( $order_id, 'trello_card_id', $response['id'] );
+		}
+
 		$webhook_url = get_field( 'trello_webhook_url', 'option' );
 
 		$callback_url = $webhook_url ? $webhook_url : get_rest_url( null, NOVA_REST_ROUTE_PREFIX . '/trello-webhook' );
@@ -155,6 +160,11 @@ class Trello {
 
 		if ( is_wp_error( $webhook ) ) {
 			error_log( 'Failed to create webhook for card: ' . $webhook->get_error_message() );
+		}
+
+		if ( $webhook ) {
+			//save the webhook id to meta
+			update_post_meta( $order_id, 'trello_webhook_id', $webhook['id'] );
 		}
 
 		return $response;

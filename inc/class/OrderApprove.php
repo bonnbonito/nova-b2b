@@ -39,9 +39,8 @@ class OrderApprove {
 	}
 
 	public function send_slack_message( $order_id ) {
-		// Schedule the slack message to be sent in 5 seconds
 		if ( ! wp_next_scheduled( 'nova_send_slack_message', array( $order_id ) ) ) {
-			wp_schedule_single_event( time() + 2, 'nova_send_slack_message', array( $order_id ) );
+			wp_schedule_single_event( time() + 1, 'nova_send_slack_message', array( $order_id ) );
 		}
 	}
 
@@ -64,6 +63,7 @@ class OrderApprove {
 
 
 		$slack = \NOVA_B2B\Slack::get_instance();
+		$trello = \NOVA_B2B\Trello::get_instance();
 		if ( $slack ) {
 			$ts = $slack->send_message( $message );
 
@@ -96,6 +96,14 @@ class OrderApprove {
 				}
 			}
 		}
+
+		if ( $trello ) {
+			$name = $order->get_order_number();
+			$desc = 'Order approved by customer';
+			$options = '';
+			$attachments = $files;
+			$trello->create_card( $trello->default_list_id, $name, $desc, $options, $attachments, $order_id );
+		}
 	}
 
 	public function order_customer_approved( $order_id ) {
@@ -103,6 +111,13 @@ class OrderApprove {
 		if ( ! $order ) {
 			return;
 		}
+
+		$disable_zendesk = get_field( 'disable_zendesk_ticket', $order_id );
+
+		if ( $disable_zendesk ) {
+			return;
+		}
+
 		$to = get_post_meta( $order_id, 'order_approved_email', true );
 		$ticket_id = get_post_meta( $order_id, 'zendesk_ticket_id', true );
 		$zendesk = \NOVA_B2B\Zendesk::get_instance();
@@ -491,6 +506,11 @@ class OrderApprove {
 			$order_id = $order->get_id();
 			$order_approved_date = $order->get_meta( 'order_approved_date' );
 			$order_approved_by_customer = get_field( 'order_approved_by_customer', $order_id );
+			$disable_zendesk = get_field( 'disable_zendesk_ticket', $order_id );
+
+			if ( $disable_zendesk ) {
+				continue;
+			}
 
 			if ( ! $order_approved_date || $order_approved_by_customer ) {
 				continue;
