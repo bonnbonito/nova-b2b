@@ -33,14 +33,14 @@ class Trello {
 	 *
 	 * @var string
 	 */
-	private $api_url = 'https://api.trello.com/1';
+	public $api_url = 'https://api.trello.com/1';
 
 	/**
 	 * Trello Default List ID
 	 *
 	 * @var string
 	 */
-	private $default_list_id;
+	public $default_list_id;
 
 	/**
 	 * Instance Control
@@ -64,7 +64,7 @@ class Trello {
 		$this->api_key = get_field( 'trello_api_key', 'option' );
 		$this->api_token = get_field( 'trello_api_token', 'option' );
 		$this->default_list_id = get_field( 'trello_default_list_id', 'option' );
-		$this->debugging = false;
+		$this->debugging = true;
 
 		if ( $this->debugging ) {
 			error_log( 'Trello Credentials Check: ' . print_r( array(
@@ -115,6 +115,9 @@ class Trello {
 	 * @return array|WP_Error Card object containing id, name, desc, url, etc. or WP_Error on failure
 	 */
 	public function create_card( $list_id, $name, $desc = '', $options = [], $attachments = [], $order_id = null ) {
+		if ( $this->debugging ) {
+			error_log( 'Create card called with attachments: ' . print_r( $attachments, true ) );
+		}
 		$endpoint = "/cards";
 		$params = array_merge( [ 
 			'idList' => $list_id,
@@ -133,9 +136,26 @@ class Trello {
 		}
 
 		// Attach files if any
-		if ( ! empty( $attachments ) ) {
+		if ( ! empty( $attachments ) && is_array( $attachments ) ) {
 			foreach ( $attachments as $attachment ) {
-				$attach_result = $this->attach_file_to_card( $response['id'], $attachment['path'], $attachment['name'] );
+				if ( ! is_array( $attachment ) && filter_var( $attachment, FILTER_VALIDATE_URL ) ) {
+					// Handle direct URL strings
+					$attach_result = $this->attach_file_to_card( $response['id'], $attachment );
+					if ( is_wp_error( $attach_result ) ) {
+						error_log( 'Failed to attach URL to card: ' . $attach_result->get_error_message() );
+					}
+					continue;
+				}
+
+				if ( ! is_array( $attachment ) || ( ! isset( $attachment['path'] ) && ! isset( $attachment['url'] ) ) ) {
+					error_log( 'Invalid attachment format: ' . print_r( $attachment, true ) );
+					continue;
+				}
+
+				$file_path = isset( $attachment['url'] ) ? $attachment['url'] : $attachment['path'];
+				$file_name = isset( $attachment['name'] ) ? $attachment['name'] : '';
+
+				$attach_result = $this->attach_file_to_card( $response['id'], $file_path, $file_name );
 				if ( is_wp_error( $attach_result ) ) {
 					error_log( 'Failed to attach file to card: ' . $attach_result->get_error_message() );
 				}
@@ -170,6 +190,37 @@ class Trello {
 		return $response;
 	}
 
+	private function download_file_from_url( $url ) {
+		// Convert Dropbox shared link to direct download
+		if ( strpos( $url, 'dropbox.com' ) !== false ) {
+			// If URL doesn't end with ?dl=1, add it
+			if ( strpos( $url, '?dl=1' ) === false ) {
+				$url = str_replace( '?dl=0', '', $url ); // Remove dl=0 if present
+				$url = rtrim( $url, '/' );
+				$url .= '?dl=1';
+			}
+		}
+
+		$tmp_file = download_url( $url );
+		if ( is_wp_error( $tmp_file ) ) {
+			error_log( 'Failed to download file: ' . $tmp_file->get_error_message() );
+			return $tmp_file;
+		}
+		return $tmp_file;
+	}
+
+	private function get_file_extension_from_url( $url ) {
+		$path = parse_url( $url, PHP_URL_PATH );
+		$ext = pathinfo( $path, PATHINFO_EXTENSION );
+
+		// If no extension or unknown extension, determine based on URL pattern
+		if ( empty( $ext ) || ! in_array( strtolower( $ext ), [ 'pdf', 'zip' ] ) ) {
+			return strpos( $url, '.pdf' ) !== false ? 'pdf' : 'zip';
+		}
+
+		return strtolower( $ext );
+	}
+
 	/**
 	 * Attach a file to a card
 	 *
@@ -179,12 +230,31 @@ class Trello {
 	 * @return array|WP_Error
 	 */
 	public function attach_file_to_card( $card_id, $file_path, $file_name = '' ) {
+		if ( $this->debugging ) {
+			error_log( 'Attach file to card called with file_path: ' . $file_path );
+		}
+
+		// Handle URL attachments
+		if ( filter_var( $file_path, FILTER_VALIDATE_URL ) ) {
+			$ext = $this->get_file_extension_from_url( $file_path );
+			$tmp_file = $this->download_file_from_url( $file_path );
+			if ( is_wp_error( $tmp_file ) ) {
+				return $tmp_file;
+			}
+			$file_path = $tmp_file;
+			$file_name = $file_name ?: basename( parse_url( $file_path, PHP_URL_PATH ) );
+
+			// Add extension if filename doesn't have one
+			if ( ! pathinfo( $file_name, PATHINFO_EXTENSION ) ) {
+				$file_name .= '.' . $ext;
+			}
+		}
+
 		if ( ! file_exists( $file_path ) ) {
 			return new WP_Error( 'file_not_found', 'File not found: ' . $file_path );
 		}
 
 		// Get file info
-		$file_name = empty( $file_name ) ? basename( $file_path ) : $file_name;
 		$mime_type = mime_content_type( $file_path );
 		$file_content = file_get_contents( $file_path );
 

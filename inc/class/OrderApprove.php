@@ -66,7 +66,7 @@ class OrderApprove {
 		if ( $trello ) {
 			$name = $order->get_order_number();
 			$desc = 'Order approved by customer';
-			$options = '';
+			$options = array();
 			$attachments = $files;
 			$trello->create_card( $trello->default_list_id, $name, $desc, $options, $attachments, $order_id );
 		}
@@ -75,6 +75,12 @@ class OrderApprove {
 	public function send_scheduled_slack_message( $order_id ) {
 		$order = wc_get_order( $order_id );
 		if ( ! $order ) {
+			return;
+		}
+
+		$disable_zendesk = get_field( 'disable_zendesk_ticket', $order_id );
+
+		if ( $disable_zendesk ) {
 			return;
 		}
 
