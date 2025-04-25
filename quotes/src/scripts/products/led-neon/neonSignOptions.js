@@ -10,6 +10,9 @@ export const acrylicBackingOptions = [
   {
     option: 'UV Printed PVC',
   },
+  {
+    option: 'UV Printed Frosted Clear Acrylic',
+  },
 ];
 
 export const neonSignsMountingOptions = [

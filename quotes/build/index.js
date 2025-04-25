@@ -21184,6 +21184,8 @@ const acrylicBackingOptions = [{
   option: 'Frosted Clear Acrylic'
 }, {
   option: 'UV Printed PVC'
+}, {
+  option: 'UV Printed Frosted Clear Acrylic'
 }];
 const neonSignsMountingOptions = [{
   option: 'Standard Nails'
