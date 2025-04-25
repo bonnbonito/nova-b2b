@@ -195,7 +195,7 @@ class Zendesk {
 	 * @param array $files_urls
 	 * @return bool|WP_Error
 	 */
-	public function send_zendesk_reply( $email, $ticket_id, $message, $files_urls = [] ) {
+	public function send_zendesk_reply( $email, $ticket_id, $message, $files_urls = [], $public = true ) {
 		$url = 'https://' . self::ZENDESK_DOMAIN . '/api/v2/tickets/' . $ticket_id . '.json';
 		$headers = array(
 			'Authorization' => 'Basic ' . $this->zendesk_bearer_token( $email ),
@@ -211,7 +211,7 @@ class Zendesk {
 
 		$comment_array = array(
 			'html_body' => $message,
-			'public' => true,
+			'public' => $public,
 		);
 
 		if ( ! empty( $files_tokens ) ) {
@@ -415,6 +415,107 @@ class Zendesk {
 		return true;
 	}
 
+	/**
+	 * Get ticket details from Zendesk
+	 *
+	 * @param string $email Email for authentication
+	 * @param string $ticket_id Zendesk ticket ID
+	 * @return array|WP_Error Ticket details or error
+	 */
+	public function get_ticket_details( $email, $ticket_id ) {
+		$url = 'https://' . self::ZENDESK_DOMAIN . '/api/v2/tickets/' . $ticket_id . '.json';
+		$headers = array(
+			'Authorization' => 'Basic ' . $this->zendesk_bearer_token( $email ),
+			'Content-Type' => 'application/json',
+		);
 
+		$args = array(
+			'method' => 'GET',
+			'headers' => $headers,
+		);
+
+		$response = wp_remote_request( $url, $args );
+
+		if ( is_wp_error( $response ) ) {
+			error_log( 'Zendesk get ticket failed: ' . $response->get_error_message() );
+			return new WP_Error( 'zendesk_api_error', 'Failed to get ticket details', array( 'status' => 500 ) );
+		}
+
+		$response_code = wp_remote_retrieve_response_code( $response );
+		if ( $response_code !== 200 ) {
+			error_log( 'Zendesk get ticket failed with code ' . $response_code . ': ' . wp_remote_retrieve_body( $response ) );
+			return new WP_Error( 'zendesk_api_error', 'Failed to get ticket details', array( 'status' => $response_code ) );
+		}
+
+		return json_decode( wp_remote_retrieve_body( $response ), true );
+	}
+
+	/**
+	 * Get user details from Zendesk
+	 *
+	 * @param string $email Email for authentication
+	 * @param string $user_id Zendesk user ID
+	 * @return array|WP_Error User details or error
+	 */
+	public function get_user_details( $email, $user_id ) {
+		$url = 'https://' . self::ZENDESK_DOMAIN . '/api/v2/users/' . $user_id . '.json';
+		$headers = array(
+			'Authorization' => 'Basic ' . $this->zendesk_bearer_token( $email ),
+			'Content-Type' => 'application/json',
+		);
+
+		$args = array(
+			'method' => 'GET',
+			'headers' => $headers,
+		);
+
+		$response = wp_remote_request( $url, $args );
+
+		if ( is_wp_error( $response ) ) {
+			error_log( 'Zendesk get user failed: ' . $response->get_error_message() );
+			return new WP_Error( 'zendesk_api_error', 'Failed to get user details', array( 'status' => 500 ) );
+		}
+
+		$response_code = wp_remote_retrieve_response_code( $response );
+		if ( $response_code !== 200 ) {
+			error_log( 'Zendesk get user failed with code ' . $response_code . ': ' . wp_remote_retrieve_body( $response ) );
+			return new WP_Error( 'zendesk_api_error', 'Failed to get user details', array( 'status' => $response_code ) );
+		}
+
+		return json_decode( wp_remote_retrieve_body( $response ), true );
+	}
+
+	/**
+	 * Get requester's first name from Zendesk ticket or WooCommerce order
+	 *
+	 * @param string $email Email for authentication
+	 * @param string $ticket_id Zendesk ticket ID
+	 * @param int    $order_id WooCommerce order ID
+	 * @return string Customer's first name
+	 */
+	public function get_requester_first_name( $email, $ticket_id, $order_id ) {
+		$ticket_data = $this->get_ticket_details( $email, $ticket_id );
+		if ( ! is_wp_error( $ticket_data ) ) {
+			$requester_id = $ticket_data['ticket']['requester_id'];
+			$user_data = $this->get_user_details( $email, $requester_id );
+
+			if ( ! is_wp_error( $user_data ) && ! empty( $user_data['user']['first_name'] ) ) {
+				return $user_data['user']['first_name'];
+			}
+		}
+
+		// Fallback to WooCommerce customer name
+		$order = wc_get_order( $order_id );
+		if ( $order ) {
+			$first_name = $order->get_billing_first_name();
+			if ( ! empty( $first_name ) ) {
+				return $first_name;
+			}
+			// If no billing first name, return full billing name
+			return $order->get_formatted_billing_full_name();
+		}
+
+		return '';
+	}
 
 }

@@ -151,3 +151,57 @@ function has_zendesk_ticket() {
 		}
 	});
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+	// Handle resend slack message button
+	const resendButton = document.getElementById('resend-slack-message');
+	if (resendButton) {
+		resendButton.addEventListener('click', function () {
+			const button = this;
+			const spinner = button.nextElementSibling;
+			const statusDiv = document.querySelector('.slack-message-status');
+			const orderId = button.dataset.orderId;
+
+			button.disabled = true;
+			spinner.classList.add('is-active');
+			statusDiv.innerHTML = '';
+
+			fetch(OrderApprove.ajax_url, {
+				method: 'POST',
+				credentials: 'same-origin',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+					'Cache-Control': 'no-cache',
+				},
+				body: new URLSearchParams({
+					action: 'resend_slack_message',
+					order_id: orderId,
+					nonce: OrderApprove.resend_slack_nonce,
+				}),
+			})
+				.then((response) => response.json())
+				.then((data) => {
+					if (data.success) {
+						statusDiv.innerHTML =
+							'<div class="notice notice-success"><p>' +
+							data.data +
+							'</p></div>';
+						setTimeout(() => {
+							location.reload();
+						}, 1500);
+					} else {
+						statusDiv.innerHTML =
+							'<div class="notice notice-error"><p>' + data.data + '</p></div>';
+					}
+				})
+				.catch(() => {
+					statusDiv.innerHTML =
+						'<div class="notice notice-error"><p>Error sending Slack message</p></div>';
+				})
+				.finally(() => {
+					button.disabled = false;
+					spinner.classList.remove('is-active');
+				});
+		});
+	}
+});

@@ -29,6 +29,13 @@ class Trello {
 	private $api_token;
 
 	/**
+	 * Trello API Secret
+	 *
+	 * @var string
+	 */
+	private $api_secret;
+
+	/**
 	 * Trello API Base URL
 	 *
 	 * @var string
@@ -64,7 +71,8 @@ class Trello {
 		$this->api_key = get_field( 'trello_api_key', 'option' );
 		$this->api_token = get_field( 'trello_api_token', 'option' );
 		$this->default_list_id = get_field( 'trello_default_list_id', 'option' );
-		$this->debugging = true;
+		$this->api_secret = get_field( 'trello_secret_key', 'option' );
+		$this->debugging = false;
 
 		if ( $this->debugging ) {
 			error_log( 'Trello Credentials Check: ' . print_r( array(
@@ -191,34 +199,66 @@ class Trello {
 	}
 
 	private function download_file_from_url( $url ) {
-		// Convert Dropbox shared link to direct download
-		if ( strpos( $url, 'dropbox.com' ) !== false ) {
-			// If URL doesn't end with ?dl=1, add it
-			if ( strpos( $url, '?dl=1' ) === false ) {
-				$url = str_replace( '?dl=0', '', $url ); // Remove dl=0 if present
-				$url = rtrim( $url, '/' );
-				$url .= '?dl=1';
-			}
+		// Simple Dropbox URL conversion
+		$url = str_replace( 'dl=0', 'dl=1', $url );
+
+		// Get original filename from URL
+		$filename = basename( parse_url( $url, PHP_URL_PATH ) );
+		// Remove query parameters if present
+		$filename = preg_replace( '/\?.*/', '', $filename );
+
+		// Create temporary file with original name
+		$tmp_dir = get_temp_dir();
+		$tmp_file = $tmp_dir . wp_unique_filename( $tmp_dir, $filename );
+
+		// Download file with proper headers
+		$response = wp_remote_get( $url, array(
+			'timeout' => 60,
+			'redirection' => 10,
+			'sslverify' => false,
+			'headers' => array(
+				'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+				'Accept' => 'application/pdf,application/octet-stream',
+			),
+		) );
+
+		if ( is_wp_error( $response ) ) {
+			error_log( 'Dropbox download failed: ' . $response->get_error_message() );
+			return $response;
 		}
 
-		$tmp_file = download_url( $url );
-		if ( is_wp_error( $tmp_file ) ) {
-			error_log( 'Failed to download file: ' . $tmp_file->get_error_message() );
-			return $tmp_file;
+		$response_code = wp_remote_retrieve_response_code( $response );
+		if ( $response_code !== 200 ) {
+			error_log( 'Dropbox download failed with code ' . $response_code . ': ' . wp_remote_retrieve_body( $response ) );
+			return new WP_Error( 'download_error', 'Failed to download file from Dropbox', array( 'status' => $response_code ) );
 		}
+
+		$file_content = wp_remote_retrieve_body( $response );
+		if ( empty( $file_content ) ) {
+			return new WP_Error( 'download_error', 'Downloaded file is empty' );
+		}
+
+		if ( file_put_contents( $tmp_file, $file_content ) === false ) {
+			return new WP_Error( 'file_write_error', 'Could not write to temporary file' );
+		}
+
+		if ( $this->debugging ) {
+			error_log( 'File downloaded successfully to: ' . $tmp_file );
+		}
+
 		return $tmp_file;
 	}
 
 	private function get_file_extension_from_url( $url ) {
-		$path = parse_url( $url, PHP_URL_PATH );
-		$ext = pathinfo( $path, PATHINFO_EXTENSION );
+		$filename = basename( parse_url( $url, PHP_URL_PATH ) );
+		$ext = pathinfo( $filename, PATHINFO_EXTENSION );
 
-		// If no extension or unknown extension, determine based on URL pattern
-		if ( empty( $ext ) || ! in_array( strtolower( $ext ), [ 'pdf', 'zip' ] ) ) {
-			return strpos( $url, '.pdf' ) !== false ? 'pdf' : 'zip';
+		if ( ! empty( $ext ) ) {
+			return strtolower( $ext );
 		}
 
-		return strtolower( $ext );
+		// Fallback
+		return strpos( $url, '.pdf' ) !== false ? 'pdf' : 'zip';
 	}
 
 	/**
@@ -275,15 +315,48 @@ class Trello {
 
 		// Make request
 		$endpoint = "/cards/" . $card_id . "/attachments";
-		$args = [ 
-			'method' => 'POST',
-			'headers' => [ 
-				'Content-Type' => 'multipart/form-data; boundary=' . $boundary,
-			],
-			'body' => $payload,
-		];
+		$url = $this->api_url . $endpoint;
 
-		return $this->make_request( 'POST', $endpoint, [], $args );
+		// Add authentication parameters to URL
+		$url = add_query_arg( array(
+			'key' => $this->api_key,
+			'token' => $this->api_token
+		), $url );
+
+		$args = array(
+			'method' => 'POST',
+			'headers' => array(
+				'Content-Type' => 'multipart/form-data; boundary=' . $boundary
+			),
+			'body' => $payload,
+			'timeout' => 60
+		);
+
+		if ( $this->debugging ) {
+			error_log( 'Trello upload request URL: ' . $url );
+			error_log( 'Trello upload request args: ' . print_r( $args, true ) );
+		}
+
+		$response = wp_remote_request( $url, $args );
+
+		// Clean up temporary file if it was created from URL
+		if ( filter_var( $file_path, FILTER_VALIDATE_URL ) ) {
+			@unlink( $tmp_file );
+		}
+
+		if ( is_wp_error( $response ) ) {
+			error_log( 'Trello upload failed: ' . $response->get_error_message() );
+			return $response;
+		}
+
+		$response_code = wp_remote_retrieve_response_code( $response );
+		if ( $response_code !== 200 ) {
+			$body = wp_remote_retrieve_body( $response );
+			error_log( 'Trello upload failed with code ' . $response_code . ': ' . $body );
+			return new WP_Error( 'trello_api_error', 'Failed to upload file', array( 'status' => $response_code, 'body' => $body ) );
+		}
+
+		return json_decode( wp_remote_retrieve_body( $response ), true );
 	}
 
 	/**
@@ -449,19 +522,28 @@ class Trello {
 	 * @param WP_REST_Request $request Request object.
 	 * @return bool
 	 */
-	public function verify_webhook( $request ) {
+	public function verify_webhook( WP_REST_Request $request ) {
 		// Get Trello's signature
 		$signature = $request->get_header( 'X-Trello-Webhook' );
 		if ( empty( $signature ) ) {
+			error_log( 'Trello webhook verification failed: Missing signature' );
 			return false;
 		}
 
 		// Get request body
 		$content = $request->get_body();
-		$base_url = $request->get_header( 'X-Trello-Webhook-URL' );
 
-		// Calculate expected signature
-		$expected = hash_hmac( 'sha1', $content . $base_url, $this->api_key );
+		// Get callback URL from request body
+		$data = json_decode( $content, true );
+		if ( ! isset( $data['webhook']['callbackURL'] ) ) {
+			error_log( 'Trello webhook verification failed: Missing callbackURL in webhook data' );
+			return false;
+		}
+		$callback_url = $data['webhook']['callbackURL'];
+
+		// Calculate expected signature using content + callback URL
+		$payload = $content . $callback_url;
+		$expected = base64_encode( hash_hmac( 'sha1', $payload, $this->api_secret, true ) );
 
 		// Compare signatures
 		return hash_equals( $signature, $expected );
@@ -476,6 +558,7 @@ class Trello {
 	public function handle_webhook( $request ) {
 		$payload = $request->get_json_params();
 
+
 		// Get action details
 		$action = isset( $payload['action'] ) ? $payload['action'] : null;
 		$model = isset( $payload['model'] ) ? $payload['model'] : null;
@@ -489,24 +572,53 @@ class Trello {
 			error_log( 'Trello Webhook Action: ' . print_r( $action, true ) );
 		}
 
+		// Find associated order
+		$card_id = $action['data']['card']['id'];
+
+		error_log( 'Trello Webhook Card ID: ' . $card_id );
+
+		$args = array(
+			'post_type' => 'shop_order',
+			'meta_key' => 'trello_card_id',
+			'meta_value' => $card_id,
+			'meta_compare' => '=',
+			'post_status' => 'any',
+			'posts_per_page' => 1,
+		);
+
+		$orders = get_posts( $args );
+
+
+		if ( ! empty( $orders ) ) {
+			$order_id = $orders[0]->ID;
+
+			// Get existing actions
+			$trello_actions = get_post_meta( $order_id, 'trello_actions', true );
+			if ( ! is_array( $trello_actions ) ) {
+				$trello_actions = array();
+			}
+
+			// Add new action with timestamp
+			$action['timestamp'] = current_time( 'mysql' );
+			$trello_actions[] = $action;
+
+			// Save updated actions
+			update_post_meta( $order_id, 'trello_actions', $trello_actions );
+		}
+
 		// Handle different action types
 		switch ( $action['type'] ) {
 			case 'createCard':
-				// Handle card creation
 				$this->handle_card_created( $action );
 				break;
 
 			case 'updateCard':
-				// Handle card updates
 				$this->handle_card_updated( $action );
 				break;
 
 			case 'deleteCard':
-				// Handle card deletion
 				$this->handle_card_deleted( $action );
 				break;
-
-			// Add more cases as needed
 		}
 
 		return new WP_REST_Response( [ 'status' => 'success' ], 200 );
@@ -540,12 +652,7 @@ class Trello {
 			$new_list_id = $card_data['idList'];
 			$old_list_id = $old_data['idList'];
 
-			error_log( 'Card Moved: ' . print_r( [ 
-				'card_id' => $card_data['id'],
-				'card_name' => $card_data['name'],
-				'from_list' => $old_list_id,
-				'to_list' => $new_list_id
-			], true ) );
+
 
 			// You can add custom logic here for list moves
 			// For example:
@@ -556,13 +663,9 @@ class Trello {
 		}
 		// Handle other types of updates
 		else {
-			error_log( 'Card Updated: ' . print_r( [ 
-				'card' => $card_data,
-				'changed_fields' => $old_data
-			], true ) );
 
-			do_action( 'trello_card_updated', $card_data, $old_data );
 		}
+		do_action( 'trello_card_updated', $card_data, $old_data );
 	}
 
 	/**
@@ -577,5 +680,16 @@ class Trello {
 			error_log( 'Card Deleted: ' . print_r( $card_data, true ) );
 		}
 		// Add your custom logic here
+	}
+
+	/**
+	 * Get Trello actions for an order
+	 * 
+	 * @param int $order_id WooCommerce order ID
+	 * @return array Array of Trello actions
+	 */
+	public function get_order_trello_actions( $order_id ) {
+		$actions = get_post_meta( $order_id, 'trello_actions', true );
+		return is_array( $actions ) ? $actions : array();
 	}
 }

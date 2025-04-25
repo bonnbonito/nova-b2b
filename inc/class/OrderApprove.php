@@ -31,6 +31,7 @@ class OrderApprove {
 		add_action( 'wp', array( $this, 'setup_notification_cron' ) );
 		add_action( 'check_order_approval_notifications', array( $this, 'process_order_approval_notifications' ) );
 		add_action( 'add_meta_boxes', array( $this, 'add_order_approved_date_metabox' ) );
+		add_action( 'add_meta_boxes', array( $this, 'add_slack_message_metabox' ) );
 		add_action( 'save_post', array( $this, 'save_order_approved_date' ) );
 		add_action( 'order_customer_approved', array( $this, 'order_customer_approved_function' ) );
 		add_action( 'order_customer_approved', array( $this, 'send_slack_message' ), 11, 1 );
@@ -38,6 +39,7 @@ class OrderApprove {
 		add_action( 'nova_send_slack_message', array( $this, 'send_scheduled_slack_message' ) );
 		add_action( 'nova_send_trello_message', array( $this, 'send_scheduled_trello_message' ) );
 		add_action( 'nova_send_scheduled_zendesk_message', array( $this, 'send_scheduled_zendesk_message' ), 10, 5 );
+		add_action( 'wp_ajax_resend_slack_message', array( $this, 'resend_slack_message' ) );
 	}
 
 	public function send_slack_message( $order_id ) {
@@ -105,6 +107,8 @@ class OrderApprove {
 
 				$order_approved_email = get_post_meta( $order_id, 'order_approved_email', true );
 
+				update_post_meta( $order_id, 'slack_message_sent', current_time( 'timestamp' ) );
+
 				$users = get_field( 'zendesk_users', 'option' );
 				$slack_user_id = null;
 				if ( $users ) {
@@ -125,7 +129,13 @@ class OrderApprove {
 
 					error_log( 'files: ' . print_r( $files, true ) );
 
-					$slack->send_thread_reply( $reply_message, $ts, null, $files );
+					$sent = $slack->send_thread_reply( $reply_message, $ts, null, $files );
+
+					if ( $sent ) {
+						update_post_meta( $order_id, 'slack_message_with_files_sent', current_time( 'timestamp' ) );
+					} else {
+						error_log( 'Error sending slack message: ' . $sent->get_error_message() );
+					}
 				}
 			}
 		}
@@ -235,7 +245,7 @@ class OrderApprove {
 
 			$message .= '<p><br/></p>';
 			$message .= '<p><strong>Design Approval & Liability Release:</strong><br>';
-			$message .= 'By approving the attached production files—whether by electronic confirmation, signature, or “Approved” checkbox—the Client confirms that all details (including but not limited to dimensions, materials, finishes, colors, and mounting methods) are correct and complete. NOVA Signage will manufacture strictly in accordance with these approved files. Any discrepancies, errors, or desired changes identified after approval are the sole responsibility of the Client. Should the Client request revisions post‑approval, NOVA Signage will assess additional charges and extended lead times as necessary. NOVA Signage disclaims all liability for costs, losses, or delays arising from Client‑approved designs.</p>' . "\n\n";
+			$message .= 'By approving the attached production files—whether by electronic confirmation, signature, or "Approved" checkbox—the Client confirms that all details (including but not limited to dimensions, materials, finishes, colors, and mounting methods) are correct and complete. NOVA Signage will manufacture strictly in accordance with these approved files. Any discrepancies, errors, or desired changes identified after approval are the sole responsibility of the Client. Should the Client request revisions post‑approval, NOVA Signage will assess additional charges and extended lead times as necessary. NOVA Signage disclaims all liability for costs, losses, or delays arising from Client‑approved designs.</p>' . "\n\n";
 
 			$sent = $zendesk->send_zendesk_reply( $to, $ticket_id, $message, $files_urls );
 			if ( is_wp_error( $sent ) ) {
@@ -317,7 +327,7 @@ class OrderApprove {
 			$message .= 'You need to change a detail. We will revise it based on your comment within 24 business hours.</p>' . "\n\n";
 			$message .= '<p><br/></p>';
 			$message .= '<p><strong>Design Approval & Liability Release:</strong><br>';
-			$message .= 'By approving the attached production files—whether by electronic confirmation, signature, or “Approved” checkbox—the Client confirms that all details (including but not limited to dimensions, materials, finishes, colors, and mounting methods) are correct and complete. NOVA Signage will manufacture strictly in accordance with these approved files. Any discrepancies, errors, or desired changes identified after approval are the sole responsibility of the Client. Should the Client request revisions post‑approval, NOVA Signage will assess additional charges and extended lead times as necessary. NOVA Signage disclaims all liability for costs, losses, or delays arising from Client‑approved designs.</p>' . "\n\n";
+			$message .= 'By approving the attached production files—whether by electronic confirmation, signature, or "Approved" checkbox—the Client confirms that all details (including but not limited to dimensions, materials, finishes, colors, and mounting methods) are correct and complete. NOVA Signage will manufacture strictly in accordance with these approved files. Any discrepancies, errors, or desired changes identified after approval are the sole responsibility of the Client. Should the Client request revisions post‑approval, NOVA Signage will assess additional charges and extended lead times as necessary. NOVA Signage disclaims all liability for costs, losses, or delays arising from Client‑approved designs.</p>' . "\n\n";
 			$message .= '<p>Best regards,<br>';
 			$message .= 'Nova Signage</p>' . "\n\n";
 
@@ -348,6 +358,7 @@ class OrderApprove {
 				'order_id' => get_the_ID(),
 				'review_url' => home_url() . '/review-mockup?order_id=' . get_the_ID(),
 				'nonce' => wp_create_nonce( 'order_approve_nonce' ),
+				'resend_slack_nonce' => wp_create_nonce( 'resend_slack_message_nonce' ),
 				'zendesk_users' => get_field( 'zendesk_users', 'option' ),
 				'ticket_id' => get_post_meta( get_the_ID(), 'zendesk_ticket_id', true ),
 				'quoted_by' => $quoted_by,
@@ -406,25 +417,24 @@ class OrderApprove {
 		}
 
 		// Ensure the current user owns the order or an admin
-		$current_user = wp_get_current_user();
 		if ( $order->get_user_id() != get_current_user_id() ) {
 			wp_send_json_error( 'You are not authorized to access this order.' );
 			wp_die();
 		}
 
 		// Prepare email content
-		$to = 'quotes@novasignage.com';
+
+		$edit_link = get_edit_post_link( $order_id );
 
 		$order_approved_by = get_post_meta( $order_id, 'order_approved_by', true );
 
 		if ( $approve === 'approve' ) {
-			$subject = '[NOVA INTERNAL] Approved Mockup for Order #NV' . $order_id;
 			$message = '<p>The customer has approved the designs for Order #' . $order->get_order_number() . '.</p>';
 			if ( $order_approved_by ) {
 				$message .= '<p>Order approval sent by: ' . $order_approved_by . '</p>';
 			}
 			// Get order edit link
-			$message .= '<p>View the order here: ' . home_url() . '/wp-admin/post.php?post=' . $order_id . '&action=edit' . '</p>';
+			$message .= '<p>View the order here: <a href="' . $edit_link . '">' . $edit_link . '</a></p>';
 			// Optionally add order note
 			$order->add_order_note( 'Customer approved the designs.' );
 			update_field( 'order_approved_by_customer', true, $order_id );
@@ -437,12 +447,11 @@ class OrderApprove {
 				wp_send_json_error( 'Please provide revision notes.' );
 				wp_die();
 			}
-			$subject = '[NOVA INTERNAL] Mockup Review for Order #NV' . $order_id;
 			$message = '<p>The customer has requested revisions for <a href="' . get_edit_post_link( $order_id ) . '"> Order #NV' . $order_id . '</a>.</p>' . "\n\n";
 			if ( $order_approved_by ) {
 				$message .= '<p>Order approval sent by: ' . $order_approved_by . '</p>';
 			}
-			$message .= '<p>View the order here: ' . get_edit_post_link( $order_id ) . '</p>';
+			$message .= '<p>View the order here: <a href="' . $edit_link . '">' . $edit_link . '</a></p>';
 			$message .= '<p>Revision Notes:</p>' . "\n" . nl2br( esc_html( $revision_notes ) );
 			// Optionally add order note
 			$order->add_order_note( 'Customer requested revisions: ' . $revision_notes );
@@ -459,36 +468,28 @@ class OrderApprove {
 			wp_die();
 		}
 
-		// Get customer email and name
-		$customer_email = $order->get_billing_email();
-		$customer_name = $order->get_billing_first_name() . ' ' . $order->get_billing_last_name();
 
 		// Set email headers with customer's email as the 'From' address
-		$headers = array(
-			'Content-Type: text/html; charset=UTF-8',
-			'From: Nova Signage <quotes@novasignage.com>',
-		);
 
-		$headers_admin = array();
-		$headers_admin[] = 'Content-Type: text/html; charset=UTF-8';
-		$headers_admin[] = 'From: NOVA Signage <noreply@novasignage.com>';
-		$headers_admin[] = 'Reply-To: NOVA Signage <noreply@novasignage.com>';
+		$zendesk = \NOVA_B2B\Zendesk::get_instance();
 
-		// Send the email
-		$mail_sent = wp_mail( $to, $subject, $message, $headers_admin );
+		if ( $zendesk ) {
+			$to = $order->get_meta( 'order_approved_email' ) ? $order->get_meta( 'order_approved_email' ) : 'joshua+nova@novasignage.com';
+			$ticket_id = get_post_meta( $order_id, 'zendesk_ticket_id', true );
+			$sent = $zendesk->send_zendesk_reply( $to, $ticket_id, $message, [], false );
 
-		if ( $mail_sent ) {
-			wp_send_json(
-				array(
-					'success' => true,
-					'action' => $approve,
-					'message' => 'Email sent successfully.',
-				)
-			);
-		} else {
-			wp_send_json_error( 'Failed to send email.' );
+			if ( $sent ) {
+				wp_send_json(
+					array(
+						'success' => true,
+						'action' => $approve,
+						'message' => 'Zendesk private note added.',
+					)
+				);
+			} else {
+				wp_send_json_error( 'Failed adding zendesk note.' );
+			}
 		}
-
 		wp_die();
 	}
 
@@ -573,7 +574,7 @@ class OrderApprove {
 
 				$message .= '<p><br/></p>';
 				$message .= '<p><strong>Design Approval & Liability Release:</strong><br>';
-				$message .= 'By approving the attached production files—whether by electronic confirmation, signature, or “Approved” checkbox—the Client confirms that all details (including but not limited to dimensions, materials, finishes, colors, and mounting methods) are correct and complete. NOVA Signage will manufacture strictly in accordance with these approved files. Any discrepancies, errors, or desired changes identified after approval are the sole responsibility of the Client. Should the Client request revisions post‑approval, NOVA Signage will assess additional charges and extended lead times as necessary. NOVA Signage disclaims all liability for costs, losses, or delays arising from Client‑approved designs.</p>' . "\n\n";
+				$message .= 'By approving the attached production files—whether by electronic confirmation, signature, or "Approved" checkbox—the Client confirms that all details (including but not limited to dimensions, materials, finishes, colors, and mounting methods) are correct and complete. NOVA Signage will manufacture strictly in accordance with these approved files. Any discrepancies, errors, or desired changes identified after approval are the sole responsibility of the Client. Should the Client request revisions post‑approval, NOVA Signage will assess additional charges and extended lead times as necessary. NOVA Signage disclaims all liability for costs, losses, or delays arising from Client‑approved designs.</p>' . "\n\n";
 
 
 
@@ -601,7 +602,7 @@ class OrderApprove {
 
 				$message .= '<p><br/></p>';
 				$message .= '<p><strong>Design Approval & Liability Release:</strong><br>';
-				$message .= 'By approving the attached production files—whether by electronic confirmation, signature, or “Approved” checkbox—the Client confirms that all details (including but not limited to dimensions, materials, finishes, colors, and mounting methods) are correct and complete. NOVA Signage will manufacture strictly in accordance with these approved files. Any discrepancies, errors, or desired changes identified after approval are the sole responsibility of the Client. Should the Client request revisions post‑approval, NOVA Signage will assess additional charges and extended lead times as necessary. NOVA Signage disclaims all liability for costs, losses, or delays arising from Client‑approved designs.</p>' . "\n\n";
+				$message .= 'By approving the attached production files—whether by electronic confirmation, signature, or "Approved" checkbox—the Client confirms that all details (including but not limited to dimensions, materials, finishes, colors, and mounting methods) are correct and complete. NOVA Signage will manufacture strictly in accordance with these approved files. Any discrepancies, errors, or desired changes identified after approval are the sole responsibility of the Client. Should the Client request revisions post‑approval, NOVA Signage will assess additional charges and extended lead times as necessary. NOVA Signage disclaims all liability for costs, losses, or delays arising from Client‑approved designs.</p>' . "\n\n";
 
 				$order->add_order_note( 'Second reminder sent: ' . date( 'F j, Y', $current_date ) );
 				$order->update_meta_data( 'second_reminder_sent', $current_date );
@@ -625,7 +626,7 @@ class OrderApprove {
 
 				$message .= '<p><br/></p>';
 				$message .= '<p><strong>Design Approval & Liability Release:</strong><br>';
-				$message .= 'By approving the attached production files—whether by electronic confirmation, signature, or “Approved” checkbox—the Client confirms that all details (including but not limited to dimensions, materials, finishes, colors, and mounting methods) are correct and complete. NOVA Signage will manufacture strictly in accordance with these approved files. Any discrepancies, errors, or desired changes identified after approval are the sole responsibility of the Client. Should the Client request revisions post‑approval, NOVA Signage will assess additional charges and extended lead times as necessary. NOVA Signage disclaims all liability for costs, losses, or delays arising from Client‑approved designs.</p>' . "\n\n";
+				$message .= 'By approving the attached production files—whether by electronic confirmation, signature, or "Approved" checkbox—the Client confirms that all details (including but not limited to dimensions, materials, finishes, colors, and mounting methods) are correct and complete. NOVA Signage will manufacture strictly in accordance with these approved files. Any discrepancies, errors, or desired changes identified after approval are the sole responsibility of the Client. Should the Client request revisions post‑approval, NOVA Signage will assess additional charges and extended lead times as necessary. NOVA Signage disclaims all liability for costs, losses, or delays arising from Client‑approved designs.</p>' . "\n\n";
 
 				$order->add_order_note( 'Third reminder sent: ' . date( 'F j, Y', $current_date ) );
 				$order->update_meta_data( 'third_reminder_sent', $current_date );
@@ -704,5 +705,46 @@ class OrderApprove {
 			$new_date = date( 'Y-m-d H:i:s', strtotime( $new_date ) );
 			update_post_meta( $post_id, 'order_approved_date', $new_date );
 		}
+	}
+
+	public function add_slack_message_metabox() {
+		add_meta_box(
+			'slack_message_metabox',
+			'Slack Message Status',
+			array( $this, 'render_slack_message_metabox' ),
+			'shop_order',
+			'side',
+			'default'
+		);
+	}
+
+	public function render_slack_message_metabox( $post ) {
+		$slack_message_sent = get_post_meta( $post->ID, 'slack_message_sent', true );
+		$date_format = get_option( 'date_format' ) . ' ' . get_option( 'time_format' );
+
+		wp_nonce_field( 'resend_slack_message_nonce', 'resend_slack_message_nonce' );
+
+		if ( $slack_message_sent ) {
+			echo '<p><strong>Last Sent:</strong> ' . date( $date_format, $slack_message_sent ) . '</p>';
+		} else {
+			echo '<p>No Slack message has been sent yet.</p>';
+		}
+
+		echo '<button type="button" class="button" id="resend-slack-message" data-order-id="' . esc_attr( $post->ID ) . '">Resend Slack Message</button>';
+		echo '<span class="spinner" style="float:none;"></span>';
+		echo '<div class="slack-message-status"></div>';
+	}
+
+	public function resend_slack_message() {
+		check_ajax_referer( 'resend_slack_message_nonce', 'nonce' );
+
+		$order_id = isset( $_POST['order_id'] ) ? intval( $_POST['order_id'] ) : 0;
+
+		if ( ! $order_id ) {
+			wp_send_json_error( 'Invalid order ID' );
+		}
+
+		$this->send_scheduled_slack_message( $order_id );
+		wp_send_json_success( 'Slack message sent successfully' );
 	}
 }
