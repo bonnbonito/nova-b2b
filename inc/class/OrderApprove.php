@@ -32,6 +32,7 @@ class OrderApprove {
 		add_action( 'check_order_approval_notifications', array( $this, 'process_order_approval_notifications' ) );
 		add_action( 'add_meta_boxes', array( $this, 'add_order_approved_date_metabox' ) );
 		add_action( 'add_meta_boxes', array( $this, 'add_slack_message_metabox' ) );
+		add_action( 'add_meta_boxes', array( $this, 'add_trello_card_metabox' ) );
 		add_action( 'save_post', array( $this, 'save_order_approved_date' ) );
 		add_action( 'order_customer_approved', array( $this, 'order_customer_approved_function' ) );
 		add_action( 'order_customer_approved', array( $this, 'send_slack_message' ), 11, 1 );
@@ -40,6 +41,7 @@ class OrderApprove {
 		add_action( 'nova_send_trello_message', array( $this, 'send_scheduled_trello_message' ) );
 		add_action( 'nova_send_scheduled_zendesk_message', array( $this, 'send_scheduled_zendesk_message' ), 10, 5 );
 		add_action( 'wp_ajax_resend_slack_message', array( $this, 'resend_slack_message' ) );
+		add_action( 'wp_ajax_resend_trello_message', array( $this, 'resend_trello_message' ) );
 	}
 
 	public function send_slack_message( $order_id ) {
@@ -359,6 +361,7 @@ class OrderApprove {
 				'review_url' => home_url() . '/review-mockup?order_id=' . get_the_ID(),
 				'nonce' => wp_create_nonce( 'order_approve_nonce' ),
 				'resend_slack_nonce' => wp_create_nonce( 'resend_slack_message_nonce' ),
+				'resend_trello_nonce' => wp_create_nonce( 'resend_trello_message_nonce' ),
 				'zendesk_users' => get_field( 'zendesk_users', 'option' ),
 				'ticket_id' => get_post_meta( get_the_ID(), 'zendesk_ticket_id', true ),
 				'quoted_by' => $quoted_by,
@@ -746,5 +749,52 @@ class OrderApprove {
 
 		$this->send_scheduled_slack_message( $order_id );
 		wp_send_json_success( 'Slack message sent successfully' );
+	}
+
+	public function add_trello_card_metabox() {
+		add_meta_box(
+			'trello_card_metabox',
+			'Trello Card Status',
+			array( $this, 'render_trello_card_metabox' ),
+			'shop_order',
+			'side',
+			'default'
+		);
+	}
+
+	public function render_trello_card_metabox( $post ) {
+		$trello_card_id = get_post_meta( $post->ID, 'trello_card_id', true );
+		$trello_webhook_id = get_post_meta( $post->ID, 'trello_webhook_id', true );
+
+		wp_nonce_field( 'resend_trello_message_nonce', 'resend_trello_message_nonce' );
+
+		if ( $trello_card_id ) {
+			echo '<p><strong>Trello Card ID:</strong> ' . esc_html( $trello_card_id ) . '</p>';
+		} else {
+			echo '<p>No Trello card has been created yet.</p>';
+		}
+
+		echo '<button type="button" class="button" id="resend-trello-message" data-order-id="' . esc_attr( $post->ID ) . '">Create Trello Card</button>';
+		echo '<span class="spinner" style="float:none;"></span>';
+		echo '<div class="trello-message-status"></div>';
+
+		if ( $trello_webhook_id ) {
+			echo '<p><strong>Trello Webhook ID:</strong> ' . esc_html( $trello_webhook_id ) . '</p>';
+		} else {
+			echo '<p>No Trello webhook has been created yet.</p>';
+		}
+	}
+
+	public function resend_trello_message() {
+		check_ajax_referer( 'resend_trello_message_nonce', 'nonce' );
+
+		$order_id = isset( $_POST['order_id'] ) ? intval( $_POST['order_id'] ) : 0;
+
+		if ( ! $order_id ) {
+			wp_send_json_error( 'Invalid order ID' );
+		}
+
+		$this->send_scheduled_trello_message( $order_id );
+		wp_send_json_success( 'Trello card created successfully' );
 	}
 }

@@ -173,6 +173,18 @@ class Trello {
 		if ( $order_id ) {
 			//save the card id to meta
 			update_post_meta( $order_id, 'trello_card_id', $response['id'] );
+			$this->create_webhook_for_order( $order_id, $name, $response['id'] );
+		}
+
+		return $response;
+
+	}
+
+	public function create_webhook_for_order( $order_id, $name, $trello_card_id ) {
+
+		//dont create webhook if WP_ENVIRONMENT_TYPE is local
+		if ( 'local' === WP_ENVIRONMENT_TYPE ) {
+			return;
 		}
 
 		$webhook_url = get_field( 'trello_webhook_url', 'option' );
@@ -182,7 +194,7 @@ class Trello {
 		// Automatically create webhook for this card
 		$webhook = $this->create_webhook(
 			$callback_url,
-			$response['id'],
+			$trello_card_id,
 			'Auto-created webhook for card: ' . $name
 		);
 
@@ -195,7 +207,12 @@ class Trello {
 			update_post_meta( $order_id, 'trello_webhook_id', $webhook['id'] );
 		}
 
-		return $response;
+		if ( is_wp_error( $webhook ) ) {
+			return $webhook;
+		}
+
+		return $webhook['id'];
+
 	}
 
 	private function download_file_from_url( $url ) {
