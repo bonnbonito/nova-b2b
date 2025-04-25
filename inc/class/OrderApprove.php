@@ -722,6 +722,12 @@ class OrderApprove {
 	}
 
 	public function render_slack_message_metabox( $post ) {
+		$order_approved_by_customer = get_field( 'order_approved', $post->ID );
+		if ( ! $order_approved_by_customer ) {
+			echo '<p>Order not approved yet by customer.</p>';
+			return;
+		}
+
 		$slack_message_sent = get_post_meta( $post->ID, 'slack_message_sent', true );
 		$date_format = get_option( 'date_format' ) . ' ' . get_option( 'time_format' );
 
@@ -763,6 +769,13 @@ class OrderApprove {
 	}
 
 	public function render_trello_card_metabox( $post ) {
+		$order_approved_by_customer = get_field( 'order_approved', $post->ID );
+
+		if ( ! $order_approved_by_customer ) {
+			echo '<p>Order not approved yet by customer.</p>';
+			return;
+		}
+
 		$trello_card_id = get_post_meta( $post->ID, 'trello_card_id', true );
 		$trello_webhook_id = get_post_meta( $post->ID, 'trello_webhook_id', true );
 
