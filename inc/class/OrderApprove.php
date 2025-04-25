@@ -189,7 +189,7 @@ class OrderApprove {
 
 			if ( $sent ) {
 				$order = wc_get_order( $order_id );
-				$order->add_order_note( 'Order mockup approved by customer.' );
+				$order->add_order_note( 'Order approval zendesk message sent.' );
 			}
 		}
 	}
@@ -722,7 +722,7 @@ class OrderApprove {
 	}
 
 	public function render_slack_message_metabox( $post ) {
-		$order_approved_by_customer = get_field( 'order_approved', $post->ID );
+		$order_approved_by_customer = get_field( 'order_approved_by_customer', $post->ID );
 		if ( ! $order_approved_by_customer ) {
 			echo '<p>Order not approved yet by customer.</p>';
 			return;
@@ -768,8 +768,8 @@ class OrderApprove {
 		);
 	}
 
-	public function render_trello_card_metabox( $post ) {
-		$order_approved_by_customer = get_field( 'order_approved', $post->ID );
+	public function render_trello_card_metabox( $post ): void {
+		$order_approved_by_customer = get_field( 'order_approved_by_customer', $post->ID );
 
 		if ( ! $order_approved_by_customer ) {
 			echo '<p>Order not approved yet by customer.</p>';
