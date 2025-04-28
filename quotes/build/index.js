@@ -41104,7 +41104,8 @@ const ASSEMBLY_FEES = 1.1;
 const M4_STUD_WITH_SPACER = 'M4 Stud with Spacer';
 const LIGHTING_INDOOR = 'Low Voltage LED Driver, 6ft open wires, 1:1 blueprint';
 const shippingRates = (total, currency) => {
-  let customShipping = NovaMyAccount.quote.custom_shipping_usd_value;
+  var _NovaMyAccount$quote$;
+  let customShipping = (_NovaMyAccount$quote$ = NovaMyAccount?.quote?.custom_shipping_usd_value) !== null && _NovaMyAccount$quote$ !== void 0 ? _NovaMyAccount$quote$ : false;
   let standard, expedite;
   let flatRate = currency === 'USD' ? NovaQuote.shipping_flat_rate : NovaQuote.shipping_flat_rate * EXCHANGE_RATE;
   let expeditedRate = currency === 'USD' ? NovaQuote.shipping_expedited_rate : NovaQuote.shipping_expedited_rate * EXCHANGE_RATE;

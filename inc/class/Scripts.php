@@ -266,7 +266,7 @@ class Scripts {
 				'quote_status' => get_field( 'quote_status', $id ),
 				'product_link' => esc_url( get_permalink( $product_id ) ),
 				'product_line' => $product_id,
-				'custom_shipping_usd_value' => get_field( 'custom_shipping_usd_value', $id ),
+				'custom_shipping_usd_value' => get_field( 'custom_shipping_usd_value', $id ) ? get_field( 'custom_shipping_usd_value', $id ) : null,
 				'note' => get_field( 'note', $id ),
 				'post_status' => get_post_status( $id ),
 			);
