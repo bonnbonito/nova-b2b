@@ -1,0 +1,103 @@
+.timeline-container {
+	position: relative;
+	padding: 1rem 1em 1em 0;
+}
+
+.timeline-line {
+	position: absolute;
+	left: 2rem;
+	top: 0;
+	height: 100%;
+	width: 2px;
+	background-color: rgb(229 231 235);
+	transform: translateX(-50%);
+}
+
+.timeline-item {
+	position: relative;
+	display: flex;
+	margin-bottom: 2rem;
+	min-height: 3rem;
+}
+
+.timeline-item:last-child {
+	margin-bottom: 0;
+}
+
+.timeline-item.active .timeline-dot {
+	background-color: var(--nova-primary, #f22e00);
+}
+
+.flex.gap-4 {
+	display: flex;
+	gap: 1rem;
+}
+
+.flex-1 {
+	flex: 1;
+}
+
+.timeline-item.inactive .timeline-dot {
+	background-color: rgb(209 213 219);
+}
+
+.timeline-dot {
+	position: absolute;
+	left: 2rem;
+	transform: translateX(-50%);
+	width: 16px;
+	height: 16px;
+	border-radius: 9999px;
+	border: 3px solid white;
+	box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+	top: 4px;
+}
+
+.timeline-content {
+	padding-left: 3rem;
+	flex: 1;
+}
+
+.timeline-date {
+	font-size: 0.875rem;
+	color: rgb(107 114 128);
+	margin-top: 0.25rem;
+}
+
+.timeline-title {
+	font-weight: 500;
+	color: rgb(17 24 39);
+	line-height: 1.5;
+	margin-top: 5px;
+}
+
+.timeline-description {
+	font-size: 0.875rem;
+	color: rgb(75 85 99);
+	margin-top: 0.25rem;
+}
+
+.mark-received-btn {
+	margin-top: 10px;
+	background-color: #f22e00;
+	color: #fff;
+	padding: 10px;
+	width: 100%;
+	border-radius: 5px;
+	cursor: pointer;
+	border: none;
+	font-size: 16px;
+}
+
+.mark-received-btn:hover {
+	background-color: #d92b00;
+}
+
+.grid {
+	display: grid;
+	gap: 1rem;
+}
+
+.edit-lead-time-container label {
+	display: block;
+}

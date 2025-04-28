@@ -50,6 +50,13 @@ class Trello {
 	public $default_list_id;
 
 	/**
+	 * Trello Default Board ID
+	 *
+	 * @var string
+	 */
+	public $default_board_id;
+
+	/**
 	 * Instance Control
 	 */
 	public static function get_instance() {
@@ -71,6 +78,7 @@ class Trello {
 		$this->api_key = get_field( 'trello_api_key', 'option' );
 		$this->api_token = get_field( 'trello_api_token', 'option' );
 		$this->default_list_id = get_field( 'trello_default_list_id', 'option' );
+		$this->default_board_id = get_field( 'trello_default_board_id', 'option' );
 		$this->api_secret = get_field( 'trello_secret_key', 'option' );
 		$this->debugging = false;
 
@@ -78,7 +86,8 @@ class Trello {
 			error_log( 'Trello Credentials Check: ' . print_r( array(
 				'api_key_set' => ! empty( $this->api_key ),
 				'api_token_set' => ! empty( $this->api_token ),
-				'default_list_id_set' => ! empty( $this->default_list_id )
+				'default_list_id_set' => ! empty( $this->default_list_id ),
+				'default_board_id_set' => ! empty( $this->default_board_id )
 			), true ) );
 		}
 
@@ -626,15 +635,15 @@ class Trello {
 		// Handle different action types
 		switch ( $action['type'] ) {
 			case 'createCard':
-				$this->handle_card_created( $action );
+				$this->handle_card_created( $action, $order_id );
 				break;
 
 			case 'updateCard':
-				$this->handle_card_updated( $action );
+				$this->handle_card_updated( $action, $order_id );
 				break;
 
 			case 'deleteCard':
-				$this->handle_card_deleted( $action );
+				$this->handle_card_deleted( $action, $order_id );
 				break;
 		}
 
@@ -646,7 +655,7 @@ class Trello {
 	 *
 	 * @param array $action Action data from webhook.
 	 */
-	private function handle_card_created( $action ) {
+	private function handle_card_created( $action, $order_id ) {
 		// Implement card creation handling
 		$card_data = $action['data']['card'];
 		if ( $this->debugging ) {
@@ -660,7 +669,7 @@ class Trello {
 	 *
 	 * @param array $action Action data from webhook.
 	 */
-	private function handle_card_updated( $action ) {
+	private function handle_card_updated( $action, $order_id ) {
 		$card_data = $action['data']['card'];
 		$old_data = $action['data']['old'];
 
@@ -669,20 +678,13 @@ class Trello {
 			$new_list_id = $card_data['idList'];
 			$old_list_id = $old_data['idList'];
 
-
-
-			// You can add custom logic here for list moves
-			// For example:
-			// - Trigger notifications
-			// - Update related data
-			// - Sync with other systems
-			do_action( 'trello_card_moved', $card_data, $old_list_id, $new_list_id );
+			do_action( 'trello_card_moved', $card_data, $old_list_id, $new_list_id, $order_id );
 		}
 		// Handle other types of updates
 		else {
 
+			do_action( 'trello_card_updated', $card_data, $old_data, $order_id );
 		}
-		do_action( 'trello_card_updated', $card_data, $old_data );
 	}
 
 	/**
@@ -690,7 +692,7 @@ class Trello {
 	 *
 	 * @param array $action Action data from webhook.
 	 */
-	private function handle_card_deleted( $action ) {
+	private function handle_card_deleted( $action, $order_id ) {
 		// Implement card deletion handling
 		$card_data = $action['data']['card'];
 		if ( $this->debugging ) {

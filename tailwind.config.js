@@ -9,6 +9,8 @@ module.exports = {
 		'./woocommerce/*.php',
 		'./quotes/build/*.{php,js}',
 		'./statements/build/*.{php,js,ts,tsx}',
+		'./inc/class/*.php',
+		'./templates/**/*.php',
 	],
 	theme: {
 		extend: {

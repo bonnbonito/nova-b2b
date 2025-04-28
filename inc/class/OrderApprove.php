@@ -262,6 +262,9 @@ class OrderApprove {
 				update_post_meta( $order_id, 'order_approved_email', $to );
 				update_post_meta( $order_id, 'order_approved_date', $current_date );
 
+				do_action( 'order_approval_sent', $order_id );
+
+
 				delete_post_meta( $order_id, 'first_reminder_sent' );
 				delete_post_meta( $order_id, 'second_reminder_sent' );
 				delete_post_meta( $order_id, 'third_reminder_sent' );

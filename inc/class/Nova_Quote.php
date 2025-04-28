@@ -1296,7 +1296,16 @@ class Nova_Quote {
 		$woocommerce_instance = \NOVA_B2B\Woocommerce::get_instance();
 		$estimated_shipping = 0;
 		if ( $woocommerce_instance ) {
-			$estimated_shipping = $woocommerce_instance->get_estimated_shipping( $final_price );
+			$estimated_shipping = $woocommerce_instance->get_estimated_shipping( $final_price, $post_id );
+		}
+
+		$custom_shipping = get_field( 'custom_shipping_usd_value', $post_id );
+		if ( $custom_shipping ) {
+			$estimated_shipping = floatval( $custom_shipping );
+			if ( $currency === 'CAD' ) {
+				$estimated_shipping *= NOVA_EXCHANGE_RATE;
+			}
+			$estimated_shipping = number_format( $estimated_shipping, 2, '.', '' );
 		}
 
 		$instance = \NOVA_B2B\Scripts::get_instance();

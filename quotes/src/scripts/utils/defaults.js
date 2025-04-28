@@ -10,6 +10,7 @@ export const M4_STUD_WITH_SPACER = 'M4 Stud with Spacer';
 export const LIGHTING_INDOOR = 'Low Voltage LED Driver, 6ft open wires, 1:1 blueprint';
 
 export const shippingRates = (total, currency) => {
+  let customShipping = NovaMyAccount.quote.custom_shipping_usd_value;
   let standard, expedite;
   let flatRate =
     currency === 'USD'
@@ -48,6 +49,14 @@ export const shippingRates = (total, currency) => {
     standard = belowMin + aboveMin;
     expedite = belowMinEx + aboveMinEx;
   }
+
+  if (customShipping) {
+    standard = customShipping;
+    if (currency === 'CAD') {
+      standard *= EXCHANGE_RATE;
+    }
+  }
+
   return {
     standard,
     expedite,

@@ -2126,6 +2126,27 @@ class Woocommerce {
 			}
 		}
 
+		/* check if product inside cart has custom shipping usd value and if its only one product in cart and quantity is 1 */
+		$custom_shipping = null;
+		$product_count = count( WC()->cart->get_cart() );
+		if ( $product_count === 1 ) {
+			foreach ( WC()->cart->get_cart() as $cart_item ) {
+				$product = $cart_item['data'];
+				$product_id = $product->get_id();
+				$field = get_field( 'custom_shipping_usd_value', $product_id );
+				if ( $field ) {
+					$value = floatval( $field );
+					if ( $currency === 'CAD' ) {
+						$value *= NOVA_EXCHANGE_RATE;
+					}
+					$custom_shipping = $value;
+				}
+			}
+			if ( $custom_shipping !== null && isset( $rates['flat_rate:2'] ) ) {
+				$rates['flat_rate:2']->cost = $custom_shipping;
+			}
+		}
+
 		return $rates;
 	}
 
@@ -2196,7 +2217,7 @@ class Woocommerce {
 		return ! empty( $children );
 	}
 
-	public function get_estimated_shipping( $price ) {
+	public function get_estimated_shipping( $price, $post_id = null ) {
 
 		$currency = get_woocommerce_currency();
 
@@ -2222,6 +2243,17 @@ class Woocommerce {
 		}
 
 		$estimated_shipping = $price > 0 ? number_format( max( $flat_rate, $standard_rate ), 2, '.', '' ) : 0;
+
+		if ( $post_id ) {
+			$custom_shipping = get_field( 'custom_shipping_usd_value', $post_id );
+			if ( $custom_shipping ) {
+				$estimated_shipping = floatval( $custom_shipping );
+				if ( $currency === 'CAD' ) {
+					$estimated_shipping *= NOVA_EXCHANGE_RATE;
+				}
+				$estimated_shipping = number_format( $estimated_shipping, 2, '.', '' );
+			}
+		}
 
 		return $estimated_shipping;
 
