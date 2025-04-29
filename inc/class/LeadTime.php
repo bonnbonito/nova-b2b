@@ -389,6 +389,10 @@ class LeadTime {
 		}
 
 		$initial_status = $this->lead_time_status();
+		$initial_status['order_received']['timestamp'] = current_time( 'timestamp' );
+		$initial_status['order_received']['is_active'] = true;
+
+		error_log( 'initial_status: ' . json_encode( $initial_status ) );
 
 		update_post_meta( $order_id, 'lead_time_status', $initial_status );
 	}
@@ -654,6 +658,9 @@ class LeadTime {
 		}
 
 		foreach ( $lead_time_status as $status_key => &$status_data ) {
+			if ( $status_key === 'order_received' ) {
+				continue;
+			}
 			$lead_time = 'lead_time_' . $status_key;
 			$description = 'description_' . $status_key;
 			$customer_description = 'customer_description_' . $status_key;
@@ -669,9 +676,10 @@ class LeadTime {
 				$status_data['customer_description'] = sanitize_textarea_field( $_POST[ $customer_description ] );
 			}
 
-			// Set is_active to false by default if not in POST data
 			$status_data['is_active'] = isset( $_POST[ $is_active ] );
 		}
+
+		error_log( 'save_lead_time: ' . json_encode( $lead_time_status ) );
 
 		update_post_meta( $order_id, 'lead_time_status', $lead_time_status );
 	}

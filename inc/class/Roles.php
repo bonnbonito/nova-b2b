@@ -1824,6 +1824,9 @@ class Roles {
 	}
 
 	public function update_user_orders_meta( $user ) {
+		if ( ! $user ) {
+			return;
+		}
 		update_user_meta( $user->ID, 'nova_user_orders', $this->get_user_orders_array( $user->ID ) );
 		update_user_meta( $user->ID, 'nova_user_order_total', $this->get_user_order_total( $user->ID ) );
 		update_user_meta( $user->ID, 'nova_user_average_order', $this->get_user_average_order( $user->ID ) );
