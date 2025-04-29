@@ -24,12 +24,6 @@ class LeadTime {
 	 */
 	private $option_group = 'lead_time_settings';
 
-	/**
-	 * Trello instance
-	 *
-	 * @var Trello
-	 */
-	private $trello;
 
 	/**
 	 * Instance Control
@@ -358,7 +352,15 @@ class LeadTime {
 			throw new \Exception( __( 'Trello board ID not configured', 'nova-b2b' ) );
 		}
 
-		$url = $this->trello->api_url . "/boards/{$board_id}/lists";
+		$trello = \NOVA_B2B\Trello::get_instance();
+
+		if ( ! $trello ) {
+			throw new \Exception( __( 'Trello instance not found', 'nova-b2b' ) );
+		}
+
+		$url = $trello->api_url . "/boards/{$board_id}/lists";
+
+
 		$response = wp_remote_get( add_query_arg( array(
 			'key' => get_field( 'trello_api_key', 'option' ),
 			'token' => get_field( 'trello_api_token', 'option' )
