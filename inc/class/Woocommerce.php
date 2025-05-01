@@ -41,6 +41,7 @@ class Woocommerce {
 		add_action( 'woocommerce_account_mockups-processing_endpoint', array( $this, 'mockups_processing_content' ) );
 		add_action( 'woocommerce_account_mockups-payments_endpoint', array( $this, 'mockups_payments_content' ) );
 		add_action( 'woocommerce_account_mockups-archived_endpoint', array( $this, 'mockups_archived_content' ) );
+		add_action( 'woocommerce_account_mockups-trash_endpoint', array( $this, 'mockups_trash_content' ) );
 		add_action( 'woocommerce_account_mockups-view_endpoint', array( $this, 'mockups_view_content' ) );
 		add_filter( 'woocommerce_endpoint_mockups_title', array( $this, 'mockups_endpoint_title' ), 10, 2 );
 		add_action( 'init', array( $this, 'add_nested_mockups_rewrite_rules' ) );
@@ -3056,6 +3057,7 @@ class Woocommerce {
 			case 'mockups-processing':
 			case 'mockups-payments':
 			case 'mockups-view':
+			case 'mockups-trash':
 				$endpoint_title = 'Mockups';
 				break;
 			case 'edit-account':
@@ -3088,6 +3090,7 @@ class Woocommerce {
 		add_rewrite_endpoint( 'mockups-processing', EP_ROOT | EP_PAGES );
 		add_rewrite_endpoint( 'mockups-payments', EP_ROOT | EP_PAGES );
 		add_rewrite_endpoint( 'mockups-view', EP_ROOT | EP_PAGES );
+		add_rewrite_endpoint( 'mockups-trash', EP_ROOT | EP_PAGES );
 	}
 
 	public function add_mockups_endpoints( $items ) {
@@ -3103,6 +3106,7 @@ class Woocommerce {
 				$new_items['mockups-archived'] = 'Mockups Archived';
 				$new_items['mockups-view'] = 'View Mockup';
 				$new_items['invoice-history'] = 'Account History';
+				$new_items['mockups-trash'] = 'Trash';
 			}
 		}
 
@@ -3130,7 +3134,7 @@ class Woocommerce {
 			),
 		);
 
-		if ( $quote_status ) {
+		if ( $quote_status && $quote_status !== 'trash' ) {
 			$meta_query[] = array(
 				'key' => 'quote_status',
 				'value' => $quote_status,
@@ -3138,10 +3142,12 @@ class Woocommerce {
 			);
 		}
 
+		$post_status = $quote_status === 'trash' ? 'trash' : 'publish';
+
 		$query_args = array(
 			'post_type' => 'nova_quote',
 			'meta_query' => $meta_query,
-			'post_status' => 'publish',
+			'post_status' => $post_status,
 			'posts_per_page' => $per_page,
 			'paged' => $paged,
 		);
@@ -3263,6 +3269,10 @@ class Woocommerce {
 		$this->mockups_content( 'archived' );
 	}
 
+	public function mockups_trash_content() {
+		$this->mockups_content( 'trash' );
+	}
+
 	public function add_mockups_content() {
 		$this->mockups_content();
 	}
@@ -3279,7 +3289,7 @@ class Woocommerce {
 			),
 		);
 
-		if ( $hook != 'all' ) {
+		if ( $hook != 'all' && $hook != 'trash' ) {
 			$meta_query[] = array(
 				'key' => 'quote_status',
 				'value' => $hook,
@@ -3287,11 +3297,17 @@ class Woocommerce {
 			);
 		}
 
+		if ( $hook == 'trash' ) {
+			$post_status = 'trash';
+		} else {
+			$post_status = 'publish';
+		}
+
 		$query = new WP_Query(
 			array(
 				'post_type' => 'nova_quote',
 				'meta_query' => $meta_query,
-				'post_status' => 'publish',
+				'post_status' => $post_status,
 				'posts_per_page' => -1,
 			)
 		);
@@ -3307,7 +3323,7 @@ class Woocommerce {
 		$processing = $this->get_all_mockups_quantity( 'processing' );
 		$quoted = $this->get_all_mockups_quantity( 'ready' );
 		$archived = $this->get_all_mockups_quantity( 'archived' );
-
+		$trash = $this->get_all_mockups_quantity( 'trash' );
 		?>
 		<div
 			class="border-b font-title uppercase flex gap-6 md:gap-11 mb-8 whitespace-nowrap overflow-x-auto overflow-y-hidden">
@@ -3326,6 +3342,9 @@ class Woocommerce {
 			<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/archived' ) ); ?>"
 				class="py-4 border-solid border-x-0 border-t-0 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/archived'] ) ? 'border-black' : 'border-transparent' ); ?>	text-black">Archived
 				<span>(<?php echo $archived; ?>)</span></a>
+			<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/trash' ) ); ?>"
+				class="py-4 border-solid border-x-0 border-t-0 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/trash'] ) ? 'border-black' : 'border-transparent' ); ?>	text-black">Trash
+				<span>(<?php echo $trash; ?>)</span></a>
 		</div>
 		<?php
 	}
@@ -3343,6 +3362,7 @@ class Woocommerce {
 		$vars['mockups-archived'] = 'mockups/archived';
 		$vars['mockups-processing'] = 'mockups/processing';
 		$vars['mockups-payments'] = 'mockups/payments';
+		$vars['mockups-trash'] = 'mockups/trash';
 		$vars['mockups-view'] = 'mockups/view';
 		$vars['invoice-history'] = 'invoice-history';
 		$vars[] = 'paged';

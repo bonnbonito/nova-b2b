@@ -88,6 +88,21 @@ class Nova_Quote {
 		//add_action( 'admin_menu', array( $this, 'add_quote_dates_page' ) );
 		add_action( 'add_meta_boxes', array( $this, 'add_other_email_meta_box' ) );
 		add_action( 'save_post', array( $this, 'save_other_email_meta' ) );
+
+		//ajax restore quote
+		add_action( 'wp_ajax_restore_quote', array( $this, 'restore_quote' ) );
+	}
+
+	public function restore_quote() {
+		$quote_id = $_POST['quote_id'];
+		$quote = get_post( $quote_id );
+		$quote->post_status = 'publish';
+		wp_update_post( $quote );
+		wp_send_json_success(
+			array(
+				'message' => 'Quote restored successfully',
+			)
+		);
 	}
 
 	public function pdf_rewrite_rules() {
@@ -1058,28 +1073,40 @@ class Nova_Quote {
 		// Get product ID before deletion (for reference only)
 		$product_id = get_post_meta( $post_id, 'nova_product_generated_id', true );
 
-		// Try to trash the post
-		$trashed = wp_trash_post( $post_id );
+		$post_status = get_post_status( $post_id );
 
-		if ( $trashed ) {
-			$status['status'] = 'success';
-			$status['code'] = 2;
-
-			// Clear the entire cart - much faster than looping through items
-			if ( function_exists( 'WC' ) && isset( WC()->cart ) ) {
-				WC()->cart->empty_cart();
-				$status['cart_cleared'] = true;
-
-				if ( $product_id ) {
-					$status['product_id'] = absint( $product_id );
-				}
+		if ( $post_status === 'trash' ) {
+			//delete forever
+			$trashed = wp_delete_post( $post_id, true );
+			if ( $trashed ) {
+				$status['status'] = 'success';
+				$status['code'] = 2;
+				$status['message'] = 'Quote deleted successfully';
 			}
-
-			// Log the successful deletion
-			error_log( sprintf( 'Quote #%d successfully moved to trash by user #%d', $post_id, get_current_user_id() ) );
 		} else {
-			$status['error'] = __( 'Failed to delete quote.', 'nova-b2b' );
-			$status['code'] = 4;
+			// Try to trash the post
+			$trashed = wp_trash_post( $post_id );
+
+			if ( $trashed ) {
+				$status['status'] = 'success';
+				$status['code'] = 2;
+
+				// Clear the entire cart - much faster than looping through items
+				if ( function_exists( 'WC' ) && isset( WC()->cart ) ) {
+					WC()->cart->empty_cart();
+					$status['cart_cleared'] = true;
+
+					if ( $product_id ) {
+						$status['product_id'] = absint( $product_id );
+					}
+				}
+
+				// Log the successful deletion
+				error_log( sprintf( 'Quote #%d successfully moved to trash by user #%d', $post_id, get_current_user_id() ) );
+			} else {
+				$status['error'] = __( 'Failed to delete quote.', 'nova-b2b' );
+				$status['code'] = 4;
+			}
 		}
 
 		wp_send_json( $status );

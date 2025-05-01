@@ -6,6 +6,7 @@ use WP_Error;
 use WP_REST_Response;
 use WP_REST_Request;
 
+
 class Trello {
 	/**
 	 * Instance of this class
@@ -190,11 +191,6 @@ class Trello {
 	}
 
 	public function create_webhook_for_order( $order_id, $name, $trello_card_id ) {
-
-		//dont create webhook if WP_ENVIRONMENT_TYPE is local
-		if ( 'local' === WP_ENVIRONMENT_TYPE ) {
-			return;
-		}
 
 		$webhook_url = get_field( 'trello_webhook_url', 'option' );
 
