@@ -172,6 +172,7 @@ class LeadTime {
 				'lead_time' => '',
 				'external' => true,
 				'is_active' => true,
+				'has_lead_time' => false,
 				'timestamp' => current_time( 'timestamp' ),
 			),
 			'waiting_for_drawing' => array(
@@ -182,6 +183,7 @@ class LeadTime {
 				'lead_time' => '',
 				'external' => true,
 				'is_active' => false,
+				'has_lead_time' => false,
 				'timestamp' => null,
 			),
 			'drawing_approved' => array(
@@ -192,6 +194,7 @@ class LeadTime {
 				'lead_time' => '',
 				'external' => true,
 				'is_active' => false,
+				'has_lead_time' => false,
 				'timestamp' => null,
 			),
 			'in_production' => array(
@@ -202,6 +205,7 @@ class LeadTime {
 				'lead_time' => '',
 				'external' => true,
 				'is_active' => false,
+				'has_lead_time' => true,
 				'timestamp' => null,
 			),
 			'dhl_tracking' => array(
@@ -212,6 +216,7 @@ class LeadTime {
 				'lead_time' => '',
 				'external' => false,
 				'is_active' => false,
+				'has_lead_time' => true,
 				'timestamp' => null,
 			),
 			'received_the_product' => array(
@@ -222,6 +227,7 @@ class LeadTime {
 				'lead_time' => '',
 				'external' => true,
 				'is_active' => false,
+				'has_lead_time' => false,
 				'timestamp' => null,
 			),
 			'shipped' => array(
@@ -232,6 +238,7 @@ class LeadTime {
 				'lead_time' => '',
 				'external' => true,
 				'is_active' => false,
+				'has_lead_time' => false,
 				'timestamp' => null,
 			),
 			'delivered' => array(
@@ -242,11 +249,12 @@ class LeadTime {
 				'lead_time' => '',
 				'external' => true,
 				'is_active' => false,
+				'has_lead_time' => false,
 				'timestamp' => null,
 			),
 		);
 
-		return $status;
+		return apply_filters( 'nova_lead_time_status', $status );
 	}
 
 	/**
@@ -576,6 +584,9 @@ class LeadTime {
 	}
 
 	public function editing_status_lead_time( $status_key, $status_data ) {
+		if ( 'in_production' !== $status_key && 'dhl_tracking' !== $status_key ) {
+			return;
+		}
 		?>
 		<div class="grid gap-2 edit-lead-time-container">
 			<div>
@@ -588,14 +599,14 @@ class LeadTime {
 			<div>
 				<label
 					for="description_<?php echo esc_attr( $status_key ); ?>"><?php esc_html_e( 'Description:', 'nova-b2b' ); ?></label>
-				<textarea class="timeline-lead-time-input"
+				<textarea class="timeline-lead-time-textarea"
 					name="description_<?php echo esc_attr( $status_key ); ?>"><?php echo esc_textarea( $status_data['description'] ); ?></textarea>
 			</div>
 
 			<div>
 				<label
 					for="customer_description_<?php echo esc_attr( $status_key ); ?>"><?php esc_html_e( 'Customer Description:', 'nova-b2b' ); ?></label>
-				<textarea class="timeline-lead-time-input"
+				<textarea class="timeline-lead-time-textarea"
 					name="customer_description_<?php echo esc_attr( $status_key ); ?>"><?php echo esc_textarea( $status_data['customer_description'] ); ?></textarea>
 			</div>
 		</div>
@@ -612,7 +623,7 @@ class LeadTime {
 	/**
 	 * Render lead time status
 	 * 
-	 * @param WP_Post $post Post object
+	 * @param \WP_Post $post Post object
 	 */
 	public function render_lead_time_status( $post ) {
 		$lead_time_status = get_post_meta( $post->ID, 'lead_time_status', true );

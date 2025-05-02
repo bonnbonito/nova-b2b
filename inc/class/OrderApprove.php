@@ -184,7 +184,11 @@ class OrderApprove {
 		$zendesk = \NOVA_B2B\Zendesk::get_instance();
 		if ( $zendesk ) {
 			error_log( 'Sending scheduled zendesk message for order ' . $order_id );
-			$sent = $zendesk->send_zendesk_reply( $to, $ticket_id, $message, $files_urls );
+			$cc_emails = get_post_meta( $order_id, '_additional_recipients', true );
+			$cc_emails = explode( ',', $cc_emails );
+			$cc_emails = array_map( 'trim', $cc_emails );
+
+			$sent = $zendesk->send_zendesk_reply( $to, $ticket_id, $message, $files_urls, true, $cc_emails );
 			$zendesk->update_zendesk_tag( $to, $ticket_id, 'order_approved', true );
 
 			if ( $sent ) {
@@ -227,7 +231,7 @@ class OrderApprove {
 
 			if ( empty( $revision_notes ) ) {
 				$message = "<p>Hi {$customer_name},</p>\n\n";
-				$message .= "<p>Please review the mockup and production drawing for Order <strong>#{$order->get_order_number()}</strong>.</p><p>We need your confirmation before the production begins.</p><br>\n\n";
+				$message .= "<p>Please review the mockup and production drawing for Order <strong>{$order->get_order_number()}</strong>.</p><p>We need your confirmation before the production begins.</p><br>\n\n";
 				$message .= "<p>MOCKUPS & PRODUCTION DRAWING HERE:<br>\n\n";
 				$message .= "<a href='" . home_url() . "/review-mockup?order_id={$order_id}'>" . home_url() . "/review-mockup?order_id={$order_id}</a></p>";
 				$message .= "<p><strong>Approve if:</strong><br>";
@@ -236,7 +240,7 @@ class OrderApprove {
 				$message .= "You need to change a detail. We will revise it based on your comment within 24 business hours.</p>\n\n";
 			} else {
 				$message = "<p>Hi {$customer_name},</p>\n\n";
-				$message .= "<p>Please review the mockup and production drawing for Order <strong>#{$order->get_order_number()}</strong>.</p><p>We need your confirmation before the production begins.</p><br>\n\n";
+				$message .= "<p>Please review the mockup and production drawing for Order <strong>{$order->get_order_number()}</strong>.</p><p>We need your confirmation before the production begins.</p><br>\n\n";
 				$message .= "<p>MOCKUPS & PRODUCTION DRAWING HERE:<br>\n\n";
 				$message .= "<a href='" . home_url() . "/review-mockup?order_id={$order_id}'>" . home_url() . "/review-mockup?order_id={$order_id}</a></p>";
 				$message .= "<p><strong>Approve if:</strong><br>";
@@ -245,11 +249,16 @@ class OrderApprove {
 				$message .= "You need to change a detail. We will revise it based on your comment within 24 business hours.</p>\n\n";
 			}
 
+			$cc_emails = get_post_meta( $order_id, '_additional_recipients', true );
+			$cc_emails = explode( ',', $cc_emails );
+			$cc_emails = array_map( 'trim', $cc_emails );
+
 			$message .= '<p><br/></p>';
 			$message .= '<p><strong>Design Approval & Liability Release:</strong><br>';
 			$message .= 'By approving the attached production files—whether by electronic confirmation, signature, or "Approved" checkbox—the Client confirms that all details (including but not limited to dimensions, materials, finishes, colors, and mounting methods) are correct and complete. NOVA Signage will manufacture strictly in accordance with these approved files. Any discrepancies, errors, or desired changes identified after approval are the sole responsibility of the Client. Should the Client request revisions post‑approval, NOVA Signage will assess additional charges and extended lead times as necessary. NOVA Signage disclaims all liability for costs, losses, or delays arising from Client‑approved designs.</p>' . "\n\n";
 
-			$sent = $zendesk->send_zendesk_reply( $to, $ticket_id, $message, $files_urls );
+			$public = true;
+			$sent = $zendesk->send_zendesk_reply( $to, $ticket_id, $message, $files_urls, $public, $cc_emails );
 			if ( is_wp_error( $sent ) ) {
 				wp_send_json_error( $sent->get_error_message() );
 			} else {
@@ -323,7 +332,7 @@ class OrderApprove {
 			$subject = 'Order #' . $order->get_order_number() . '- Please Review Mockup and Production Drawing';
 			$heading = 'Order #' . $order->get_order_number() . ' is Ready for Review';
 			$message = '<p>Hi ' . $customer_name . ',</p>' . "\n\n";
-			$message .= '<p>Please review the mockup and production drawing for Order #' . $order->get_order_number() . '. We need your confirmation before the production begins.</p>' . "\n\n";
+			$message .= '<p>Please review the mockup and production drawing for Order ' . $order->get_order_number() . '. We need your confirmation before the production begins.</p>' . "\n\n";
 			$message .= '<p><strong>MOCKUPS & PRODUCTION DRAWING HERE:</strong><br>';
 			$message .= '<a href="' . home_url() . '/review-mockup?order_id=' . $order_id . '">' . home_url() . '/review-mockup?order_id=' . $order_id . '</a></p>';
 			$message .= '<p><strong>Approve if:</strong><br>';
@@ -435,7 +444,7 @@ class OrderApprove {
 		$order_approved_by = get_post_meta( $order_id, 'order_approved_by', true );
 
 		if ( $approve === 'approve' ) {
-			$message = '<p>The customer has approved the designs for Order #' . $order->get_order_number() . '.</p>';
+			$message = '<p>The customer has approved the designs for Order ' . $order->get_order_number() . '.</p>';
 			if ( $order_approved_by ) {
 				$message .= '<p>Order approval sent by: ' . $order_approved_by . '</p>';
 			}
@@ -453,7 +462,7 @@ class OrderApprove {
 				wp_send_json_error( 'Please provide revision notes.' );
 				wp_die();
 			}
-			$message = '<p>The customer has requested revisions for <a href="' . get_edit_post_link( $order_id ) . '"> Order #NV' . $order_id . '</a>.</p>' . "\n\n";
+			$message = '<p>The customer has requested revisions for <a href="' . get_edit_post_link( $order_id ) . '"> Order NV' . $order_id . '</a>.</p>' . "\n\n";
 			if ( $order_approved_by ) {
 				$message .= '<p>Order approval sent by: ' . $order_approved_by . '</p>';
 			}
@@ -482,7 +491,10 @@ class OrderApprove {
 		if ( $zendesk ) {
 			$to = $order->get_meta( 'order_approved_email' ) ? $order->get_meta( 'order_approved_email' ) : 'joshua+nova@novasignage.com';
 			$ticket_id = get_post_meta( $order_id, 'zendesk_ticket_id', true );
-			$sent = $zendesk->send_zendesk_reply( $to, $ticket_id, $message, [], false );
+			$cc_emails = get_post_meta( $order_id, '_additional_recipients', true );
+			$cc_emails = explode( ',', $cc_emails );
+			$cc_emails = array_map( 'trim', $cc_emails );
+			$sent = $zendesk->send_zendesk_reply( $to, $ticket_id, $message, [], false, $cc_emails );
 
 			if ( $sent ) {
 				wp_send_json(
@@ -560,6 +572,10 @@ class OrderApprove {
 
 			$to = $order->get_meta( 'order_approved_email' ) ? $order->get_meta( 'order_approved_email' ) : 'joshua+nova@novasignage.com';
 
+			$cc_emails = get_post_meta( $order_id, '_additional_recipients', true );
+			$cc_emails = explode( ',', $cc_emails );
+			$cc_emails = array_map( 'trim', $cc_emails );
+
 			if ( $days_since_order_approved >= 1 && ! $first_reminder_sent ) {
 
 				$customer_name = $order->get_billing_first_name();
@@ -568,7 +584,7 @@ class OrderApprove {
 
 
 				$message = '<p>Hello ' . $customer_name . ',</p><br>';
-				$message .= '<p>Just a quick reminder to review the mockup and production drawing for your order #' . $order->get_order_number() . '.</p><br/>';
+				$message .= '<p>Just a quick reminder to review the mockup and production drawing for your order ' . $order->get_order_number() . '.</p><br/>';
 				$message .= '<p>We need your confirmation to proceed with production.</p><br/>';
 				$message .= '<p><strong>MOCKUPS & PRODUCTION DRAWING HERE:</strong><br>';
 				$message .= '<a href="' . home_url() . '/review-mockup?order_id=' . $order_id . '">' . home_url() . '/review-mockup?order_id=' . $order_id . '</a></p>';
@@ -588,7 +604,9 @@ class OrderApprove {
 				$order->update_meta_data( 'first_reminder_sent', $current_date );
 				$order->save();
 
-				$zendesk->send_zendesk_reply( $to, $zendesk_ticket_id, $message, $files_urls );
+
+
+				$zendesk->send_zendesk_reply( $to, $zendesk_ticket_id, $message, $files_urls, true, $cc_emails );
 				$zendesk->update_zendesk_tag( $to, $zendesk_ticket_id, 'first_reminder_sent', true );
 
 			}
@@ -615,14 +633,14 @@ class OrderApprove {
 				$order->save();
 
 
-				$zendesk->send_zendesk_reply( $to, $zendesk_ticket_id, $message, $files_urls );
+				$zendesk->send_zendesk_reply( $to, $zendesk_ticket_id, $message, $files_urls, true, $cc_emails );
 				$zendesk->update_zendesk_tag( $to, $zendesk_ticket_id, 'second_reminder_sent', true );
 			}
 
 			if ( $days_since_order_approved >= 5 && ! $third_reminder_sent ) {
 
 				$message = '<p>Hello ' . $customer_name . ',</p><br/>';
-				$message .= '<p>This is a final reminder to review the mockup and production drawing for order #' . $order->get_order_number() . '.</p><br/>';
+				$message .= '<p>This is a final reminder to review the mockup and production drawing for order ' . $order->get_order_number() . '.</p><br/>';
 				$message .= '<p><strong>Review Mockup:</strong> ';
 				$message .= home_url() . '/review-mockup?order_id=' . $order_id . '</p>';
 				$message .= '<p><strong>Approve</strong>  if everything is correct -- production will begin after your approval.<br>';
@@ -638,7 +656,7 @@ class OrderApprove {
 				$order->update_meta_data( 'third_reminder_sent', $current_date );
 				$order->save();
 
-				$zendesk->send_zendesk_reply( $to, $zendesk_ticket_id, $message, $files_urls );
+				$zendesk->send_zendesk_reply( $to, $zendesk_ticket_id, $message, $files_urls, true, $cc_emails );
 				$zendesk->update_zendesk_tag( $to, $zendesk_ticket_id, 'third_reminder_sent', true );
 
 				$role_instance = \NOVA_B2B\Roles::get_instance();
@@ -651,7 +669,7 @@ class OrderApprove {
 					$customer_email = $order->get_billing_email();
 
 					$message = 'Hi,<br/><br/>';
-					$message .= 'The client has not approved, revised, or responded to the mockup and production drawing link after three reminder emails for #' . $order->get_order_number() . '.<br/><br/>';
+					$message .= 'The client has not approved, revised, or responded to the mockup and production drawing link after three reminder emails for ' . $order->get_order_number() . '.<br/><br/>';
 					$message .= 'Please reach out to the client via phone or direct contact to confirm their feedback before we proceed with production.</p>' . "\n\n";
 					$message .= '<strong>Client details</strong><br>';
 					$message .= 'Business ID: ' . $business_id . '<br>';

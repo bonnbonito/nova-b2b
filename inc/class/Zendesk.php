@@ -193,9 +193,11 @@ class Zendesk {
 	 * @param string $ticket_id
 	 * @param string $message
 	 * @param array $files_urls
+	 * @param bool $public
+	 * @param array $cc_emails
 	 * @return bool|WP_Error
 	 */
-	public function send_zendesk_reply( $email, $ticket_id, $message, $files_urls = [], $public = true ) {
+	public function send_zendesk_reply( $email, $ticket_id, $message, $files_urls = [], $public = true, $collaborators = [] ) {
 		$url = 'https://' . self::ZENDESK_DOMAIN . '/api/v2/tickets/' . $ticket_id . '.json';
 		$headers = array(
 			'Authorization' => 'Basic ' . $this->zendesk_bearer_token( $email ),
@@ -218,12 +220,16 @@ class Zendesk {
 			$comment_array['uploads'] = $files_tokens;
 		}
 
+		$ticket_array = array(
+			'comment' => $comment_array,
+		);
 
+		if ( ! empty( $collaborators ) ) {
+			$ticket_array['collaborators'] = $collaborators;
+		}
 
 		$data = array(
-			'ticket' => array(
-				'comment' => $comment_array,
-			),
+			'ticket' => $ticket_array,
 		);
 
 		$args_ticket = array(

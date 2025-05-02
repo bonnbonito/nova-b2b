@@ -205,15 +205,12 @@ class Trello {
 
 		if ( is_wp_error( $webhook ) ) {
 			error_log( 'Failed to create webhook for card: ' . $webhook->get_error_message() );
+			return;
 		}
 
 		if ( $webhook ) {
 			//save the webhook id to meta
 			update_post_meta( $order_id, 'trello_webhook_id', $webhook['id'] );
-		}
-
-		if ( is_wp_error( $webhook ) ) {
-			return $webhook;
 		}
 
 		return $webhook['id'];

@@ -333,6 +333,8 @@ class Slack {
 		}
 
 		$file_content = wp_remote_retrieve_body( $file_response );
+
+
 		$file_name = basename( parse_url( $file_url, PHP_URL_PATH ) );
 		// This code checks if the file URL contains '.pdf' (case insensitive)
 		// If the URL doesn't contain a PDF reference, it appends '.zip' to the filename
@@ -340,6 +342,13 @@ class Slack {
 		if ( ! preg_match( '/\.pdf/i', $file_url ) ) {
 			$file_name .= '.zip';
 		}
+
+		//if $file_name does not end with .pdf or .zip, add .zip to the end
+		if ( ! preg_match( '/\.pdf|\.zip/i', $file_name ) ) {
+			$file_name .= '.zip';
+		}
+
+
 		$file_size = strlen( $file_content );
 
 		if ( $file_size === 0 ) {
