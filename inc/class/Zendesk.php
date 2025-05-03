@@ -280,6 +280,7 @@ class Zendesk {
 			return new WP_Error( 'download_error', 'Failed to download file from Dropbox', array( 'status' => 500 ) );
 		}
 
+
 		$response_code = wp_remote_retrieve_response_code( $response );
 		if ( $response_code !== 200 ) {
 			error_log( 'Dropbox download failed with code ' . $response_code . ': ' . wp_remote_retrieve_body( $response ) );
@@ -292,15 +293,21 @@ class Zendesk {
 			return new WP_Error( 'download_error', 'Downloaded file is empty', array( 'status' => 500 ) );
 		}
 
-		error_log( 'File downloaded successfully. Size: ' . strlen( $file_content ) . ' bytes' );
 
 		// Step 2: Determine MIME type from buffer (no temp file)
 		$finfo = new \finfo( FILEINFO_MIME_TYPE );
 		$mime_type = $finfo->buffer( $file_content );
 		error_log( 'MIME type detected: ' . $mime_type );
 
+
 		// Step 3: Upload to Zendesk
 		$filename = basename( parse_url( $file_url, PHP_URL_PATH ) ); // e.g., "CABC-S003-MEIGARDEN-2714-3D-Layered-Flat-Cut-Acrylic.pdf"
+
+		// if $filename does not end with .pdf or .zip, add .zip to the end
+		if ( ! preg_match( '/\.pdf|\.zip/i', $filename ) ) {
+			$filename .= '.zip';
+		}
+
 		$url = 'https://' . self::ZENDESK_DOMAIN . '/api/v2/uploads.json?filename=' . urlencode( $filename );
 		$headers = array(
 			'Authorization' => 'Basic ' . $this->zendesk_bearer_token( $email ),
