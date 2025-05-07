@@ -3342,9 +3342,7 @@ class Woocommerce {
 			<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/archived' ) ); ?>"
 				class="py-4 border-solid border-x-0 border-t-0 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/archived'] ) ? 'border-black' : 'border-transparent' ); ?>	text-black">Archived
 				<span>(<?php echo $archived; ?>)</span></a>
-			<a href="<?php echo esc_url( wc_get_endpoint_url( 'mockups/trash' ) ); ?>"
-				class="py-4 border-solid border-x-0 border-t-0 border-b-4 <?php echo ( isset( $wp_query->query_vars['mockups/trash'] ) ? 'border-black' : 'border-transparent' ); ?>	text-black">Trash
-				<span>(<?php echo $trash; ?>)</span></a>
+
 		</div>
 		<?php
 	}

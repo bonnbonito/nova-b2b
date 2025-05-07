@@ -6,7 +6,7 @@ import UploadFiles from '../../../../UploadFiles';
 import UploadFont from '../../../../UploadFont';
 import useOutsideClick from '../../../../utils/ClickOutside';
 import convert_json from '../../../../utils/ConvertJson';
-
+import { convertJson } from '../../../../utils/ConvertJson';
 import {
   finishingOptions,
   mountingDefaultOptions,
@@ -40,7 +40,7 @@ import {
   STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
 
-export function Letters({ item, quantityDiscountTable, setOptions }) {
+export function Letters({ item }) {
   const { signage, setSignage, setMissing, hasUploadedFile } = useAppContext();
   const [letters, setLetters] = useState(item.letters ?? '');
   const [comments, setComments] = useState(item.comments ?? '');
@@ -103,6 +103,45 @@ export function Letters({ item, quantityDiscountTable, setOptions }) {
   const fontRef = useRef(null);
 
   const [letterPricing, setLetterPricing] = useState([]);
+
+  const [quantityDiscountTable, setQuantityDiscountTable] = useState([]);
+  const [setOptions, setSetOptions] = useState([
+    <option key="1" value="1">
+      1
+    </option>,
+  ]);
+
+  async function fetchQuantityDiscountPricing() {
+    try {
+      console.log(item.product);
+      const response = await fetch(NovaQuote.quantity_discount_api + item.product);
+      const data = await response.json();
+      const tableJson = data.pricing_table ? convertJson(data.pricing_table) : [];
+      setQuantityDiscountTable(tableJson);
+    } catch (error) {
+      console.error('Error fetching discount table pricing:', error);
+    } finally {
+      setSetOptions(
+        Array.from(
+          {
+            length: 100,
+          },
+          (_, index) => {
+            const val = 1 + index;
+            return (
+              <option key={index} value={val}>
+                {val}
+              </option>
+            );
+          }
+        )
+      );
+    }
+  }
+
+  useEffect(() => {
+    fetchQuantityDiscountPricing();
+  }, []);
 
   useEffect(() => {
     async function fetchLetterPricing() {

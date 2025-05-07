@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useAppContext } from '../../../AppProvider';
 import Note from '../../../Note';
@@ -7,17 +7,9 @@ import Signage from '../../../Signage';
 import { PlusIcon } from '../../../svg/Icons';
 import { Letters } from './components/Letters';
 import { Logo } from './components/Logo';
-import { convertJson } from '../../../utils/ConvertJson';
 
 export default function LaserCutAcrylic() {
   const { signage, setSignage, setTempFolder, tempFolderName } = useAppContext();
-
-  const [quantityDiscountTable, setQuantityDiscountTable] = useState([]);
-  const [setOptions, setSetOptions] = useState([
-    <option key="1" value="1">
-      1
-    </option>,
-  ]);
 
   function setDefaultSignage() {
     setSignage([
@@ -61,37 +53,6 @@ export default function LaserCutAcrylic() {
     } else {
       setDefaultSignage();
     }
-  }, []);
-
-  async function fetchQuantityDiscountPricing() {
-    try {
-      const response = await fetch(NovaQuote.quantity_discount_api + NovaQuote.product);
-      const data = await response.json();
-      const tableJson = data.pricing_table ? convertJson(data.pricing_table) : [];
-      setQuantityDiscountTable(tableJson);
-    } catch (error) {
-      console.error('Error fetching discount table pricing:', error);
-    } finally {
-      setSetOptions(
-        Array.from(
-          {
-            length: 100,
-          },
-          (_, index) => {
-            const val = 1 + index;
-            return (
-              <option key={index} value={val}>
-                {val}
-              </option>
-            );
-          }
-        )
-      );
-    }
-  }
-
-  useEffect(() => {
-    fetchQuantityDiscountPricing();
   }, []);
 
   const defaultArgs = {
@@ -177,21 +138,9 @@ export default function LaserCutAcrylic() {
         {signage.map((item, index) => (
           <Signage key={item.id} index={index} id={item.id} item={item}>
             {item.type === 'letters' ? (
-              <Letters
-                key={item.id}
-                item={item}
-                productId={item.product}
-                quantityDiscountTable={quantityDiscountTable}
-                setOptions={setOptions}
-              />
+              <Letters key={item.id} item={item} productId={item.product} />
             ) : (
-              <Logo
-                key={item.id}
-                item={item}
-                productId={item.product}
-                quantityDiscountTable={quantityDiscountTable}
-                setOptions={setOptions}
-              />
+              <Logo key={item.id} item={item} productId={item.product} />
             )}
           </Signage>
         ))}

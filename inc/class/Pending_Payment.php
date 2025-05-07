@@ -1896,8 +1896,10 @@ class Pending_Payment {
 		$pending_sum = $this->get_pending_payments_sum_total( $customer_id );
 		$limit = $this->get_pending_limit( $customer_id );
 
-		return $pending_sum > $limit;
+		// Get cart total as float value
+		$cart_total = WC()->cart ? WC()->cart->get_total( 'edit' ) : 0;
 
+		return $pending_sum + floatval( $cart_total ) > $limit;
 	}
 
 	public function has_overdue_pending_payment_orders( $customer_id ) {

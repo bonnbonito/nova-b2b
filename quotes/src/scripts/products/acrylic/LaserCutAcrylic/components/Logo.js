@@ -4,6 +4,7 @@ import Dropdown from '../../../../Dropdown';
 import UploadFiles from '../../../../UploadFiles';
 import useOutsideClick from '../../../../utils/ClickOutside';
 import convert_json from '../../../../utils/ConvertJson';
+import { convertJson } from '../../../../utils/ConvertJson';
 import {
   getLogoPricingTablebyThickness,
   spacerPricing,
@@ -36,7 +37,7 @@ import {
   STUD_WITH_SPACER,
 } from '../../../../utils/defaults';
 
-export function Logo({ item, quantityDiscountTable, setOptions }) {
+export function Logo({ item }) {
   const { signage, setSignage, setMissing, hasUploadedFile } = useAppContext();
 
   const [selectedMounting, setSelectedMounting] = useState(item.mounting ?? '');
@@ -127,6 +128,45 @@ export function Logo({ item, quantityDiscountTable, setOptions }) {
       }
     )
   );
+
+  const [quantityDiscountTable, setQuantityDiscountTable] = useState([]);
+  const [setOptions, setSetOptions] = useState([
+    <option key="1" value="1">
+      1
+    </option>,
+  ]);
+
+  async function fetchQuantityDiscountPricing() {
+    try {
+      console.log(item.product);
+      const response = await fetch(NovaQuote.quantity_discount_api + item.product);
+      const data = await response.json();
+      const tableJson = data.pricing_table ? convertJson(data.pricing_table) : [];
+      setQuantityDiscountTable(tableJson);
+    } catch (error) {
+      console.error('Error fetching discount table pricing:', error);
+    } finally {
+      setSetOptions(
+        Array.from(
+          {
+            length: 100,
+          },
+          (_, index) => {
+            const val = 1 + index;
+            return (
+              <option key={index} value={val}>
+                {val}
+              </option>
+            );
+          }
+        )
+      );
+    }
+  }
+
+  useEffect(() => {
+    fetchQuantityDiscountPricing();
+  }, []);
 
   const [comments, setComments] = useState(item.comments ?? '');
   const [waterproof, setWaterproof] = useState(item.waterproof ?? '');
