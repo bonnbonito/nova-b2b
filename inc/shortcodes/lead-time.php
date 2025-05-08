@@ -53,7 +53,7 @@ if ( empty( $order_number ) || ! $order ) {
 			'delivered' => [ 'icon' => '🏠', 'label' => 'Delivered' ]
 		];
 		?>
-		<h3 class="text-center text-2xl font-bold mb-4">Lead Time of Order #<?php echo $order_number; ?></h3>
+		<h3 class="text-center text-2xl font-bold mb-4">Lead Time of Order #NV<?php echo $order_number; ?></h3>
 		<div class="max-w-2xl mx-auto p-8 bg-white rounded-xl shadow-lg">
 			<?php foreach ( $status_config as $key => $config ) :
 				if ( ! isset( $order_lead_time[ $key ] ) )
@@ -67,7 +67,7 @@ if ( empty( $order_number ) || ! $order ) {
 				$icon_class = $is_active ? 'text-white' : 'text-gray-400';
 				$is_last = $key === 'delivered';
 				?>
-				<div class="flex relative group">
+				<div class="flex relative group <?php echo $is_active ? 'opacity-100' : 'opacity-30'; ?>">
 					<?php if ( ! $is_last ) : ?>
 						<div class="absolute left-6 top-10 bottom-0 w-0.5 <?php echo $active_class; ?>"></div>
 					<?php endif; ?>
