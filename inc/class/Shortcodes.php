@@ -29,6 +29,7 @@ class Shortcodes {
 		add_shortcode( 'custom_project', array( $this, 'custom_project' ) );
 		add_shortcode( 'review_mockup', array( $this, 'review_mockup' ) );
 		add_shortcode( 'login_title', array( $this, 'login_title' ) );
+		add_shortcode( 'lead_time', array( $this, 'lead_time' ) );
 	}
 
 
@@ -291,6 +292,14 @@ class Shortcodes {
 		ob_start();
 
 		require NOVA_DIR_PATH . '/inc/shortcodes/loginform.php';
+
+		return ob_get_clean();
+	}
+
+	public function lead_time() {
+		ob_start();
+
+		require NOVA_DIR_PATH . '/inc/shortcodes/lead-time.php';
 
 		return ob_get_clean();
 	}

@@ -202,7 +202,7 @@ class LeadTime {
 				'customer_label' => __( 'In Production', 'nova-b2b' ),
 				'customer_description' => '',
 				'description' => '',
-				'lead_time' => '',
+				'lead_time' => 12,
 				'external' => true,
 				'is_active' => false,
 				'has_lead_time' => true,
